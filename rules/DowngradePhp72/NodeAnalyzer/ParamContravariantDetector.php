@@ -12,20 +12,10 @@ use Rector\NodeNameResolver\NodeNameResolver;
 
 final class ParamContravariantDetector
 {
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var NodeRepository
-     */
-    private $nodeRepository;
-
-    public function __construct(NodeNameResolver $nodeNameResolver, NodeRepository $nodeRepository)
-    {
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->nodeRepository = $nodeRepository;
+    public function __construct(
+        private NodeNameResolver $nodeNameResolver,
+        private NodeRepository $nodeRepository
+    ) {
     }
 
     public function hasParentMethod(ClassMethod $classMethod, Scope $scope): bool

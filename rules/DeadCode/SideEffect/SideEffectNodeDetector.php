@@ -23,20 +23,10 @@ final class SideEffectNodeDetector
      */
     private const SIDE_EFFECT_NODE_TYPES = [Encapsed::class, New_::class, Concat::class, PropertyFetch::class];
 
-    /**
-     * @var PureFunctionDetector
-     */
-    private $pureFunctionDetector;
-
-    /**
-     * @var NodeTypeResolver
-     */
-    private $nodeTypeResolver;
-
-    public function __construct(NodeTypeResolver $nodeTypeResolver, PureFunctionDetector $pureFunctionDetector)
-    {
-        $this->pureFunctionDetector = $pureFunctionDetector;
-        $this->nodeTypeResolver = $nodeTypeResolver;
+    public function __construct(
+        private NodeTypeResolver $nodeTypeResolver,
+        private PureFunctionDetector $pureFunctionDetector
+    ) {
     }
 
     public function detect(Expr $expr): bool

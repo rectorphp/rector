@@ -6,26 +6,11 @@ namespace Rector\Transform\ValueObject;
 
 final class StringToClassConstant
 {
-    /**
-     * @var string
-     */
-    private $string;
-
-    /**
-     * @var string
-     */
-    private $class;
-
-    /**
-     * @var string
-     */
-    private $constant;
-
-    public function __construct(string $string, string $class, string $constant)
-    {
-        $this->string = $string;
-        $this->class = $class;
-        $this->constant = $constant;
+    public function __construct(
+        private string $string,
+        private string $class,
+        private string $constant
+    ) {
     }
 
     public function getString(): string

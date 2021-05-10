@@ -8,26 +8,11 @@ use PHPStan\Type\ObjectType;
 
 final class DimFetchAssignToMethodCall
 {
-    /**
-     * @var string
-     */
-    private $listClass;
-
-    /**
-     * @var string
-     */
-    private $itemClass;
-
-    /**
-     * @var string
-     */
-    private $addMethod;
-
-    public function __construct(string $listClass, string $itemClass, string $addMethod)
-    {
-        $this->listClass = $listClass;
-        $this->itemClass = $itemClass;
-        $this->addMethod = $addMethod;
+    public function __construct(
+        private string $listClass,
+        private string $itemClass,
+        private string $addMethod
+    ) {
     }
 
     public function getListObjectType(): ObjectType

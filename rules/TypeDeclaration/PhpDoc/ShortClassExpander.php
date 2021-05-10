@@ -21,20 +21,10 @@ final class ShortClassExpander
      */
     private const CLASS_CONST_REGEX = '#::class#';
 
-    /**
-     * @var ReflectionProvider
-     */
-    private $reflectionProvider;
-
-    /**
-     * @var ObjectTypeSpecifier
-     */
-    private $objectTypeSpecifier;
-
-    public function __construct(ReflectionProvider $reflectionProvider, ObjectTypeSpecifier $objectTypeSpecifier)
-    {
-        $this->reflectionProvider = $reflectionProvider;
-        $this->objectTypeSpecifier = $objectTypeSpecifier;
+    public function __construct(
+        private ReflectionProvider $reflectionProvider,
+        private ObjectTypeSpecifier $objectTypeSpecifier
+    ) {
     }
 
     public function resolveFqnTargetEntity(string $targetEntity, Node $node): string

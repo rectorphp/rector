@@ -26,16 +26,11 @@ final class StaticCallToFuncCallRector extends AbstractRector implements Configu
     public const STATIC_CALLS_TO_FUNCTIONS = 'static_calls_to_functions';
 
     /**
-     * @var StaticCallToFuncCall[]
+     * @param StaticCallToFuncCall[] $staticCallsToFunctions
      */
-    private $staticCallsToFunctions = [];
-
-    /**
-     * @param StaticCallToFuncCall[] $staticCallToFunctions
-     */
-    public function __construct(array $staticCallToFunctions = [])
-    {
-        $this->staticCallsToFunctions = $staticCallToFunctions;
+    public function __construct(
+        private array $staticCallsToFunctions = []
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

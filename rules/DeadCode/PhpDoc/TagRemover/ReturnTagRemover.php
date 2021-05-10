@@ -12,14 +12,9 @@ use Rector\DeadCode\PhpDoc\DeadReturnTagValueNodeAnalyzer;
 
 final class ReturnTagRemover
 {
-    /**
-     * @var DeadReturnTagValueNodeAnalyzer
-     */
-    private $deadReturnTagValueNodeAnalyzer;
-
-    public function __construct(DeadReturnTagValueNodeAnalyzer $deadReturnTagValueNodeAnalyzer)
-    {
-        $this->deadReturnTagValueNodeAnalyzer = $deadReturnTagValueNodeAnalyzer;
+    public function __construct(
+        private DeadReturnTagValueNodeAnalyzer $deadReturnTagValueNodeAnalyzer
+    ) {
     }
 
     public function removeReturnTagIfUseless(PhpDocInfo $phpDocInfo, FunctionLike $functionLike): void

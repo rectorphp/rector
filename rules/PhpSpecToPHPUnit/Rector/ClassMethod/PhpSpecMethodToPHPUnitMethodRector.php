@@ -18,22 +18,10 @@ use Rector\PhpSpecToPHPUnit\Rector\AbstractPhpSpecToPHPUnitRector;
  */
 final class PhpSpecMethodToPHPUnitMethodRector extends AbstractPhpSpecToPHPUnitRector
 {
-    /**
-     * @var PhpSpecRenaming
-     */
-    private $phpSpecRenaming;
-
-    /**
-     * @var PHPUnitTypeDeclarationDecorator
-     */
-    private $phpUnitTypeDeclarationDecorator;
-
     public function __construct(
-        PHPUnitTypeDeclarationDecorator $phpUnitTypeDeclarationDecorator,
-        PhpSpecRenaming $phpSpecRenaming
+        private PHPUnitTypeDeclarationDecorator $phpUnitTypeDeclarationDecorator,
+        private PhpSpecRenaming $phpSpecRenaming
     ) {
-        $this->phpSpecRenaming = $phpSpecRenaming;
-        $this->phpUnitTypeDeclarationDecorator = $phpUnitTypeDeclarationDecorator;
     }
 
     /**

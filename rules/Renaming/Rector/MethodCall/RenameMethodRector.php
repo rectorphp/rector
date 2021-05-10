@@ -40,22 +40,10 @@ final class RenameMethodRector extends AbstractRector implements ConfigurableRec
      */
     private $methodCallRenames = [];
 
-    /**
-     * @var ClassManipulator
-     */
-    private $classManipulator;
-
-    /**
-     * @var MethodCallRenameCollector
-     */
-    private $methodCallRenameCollector;
-
     public function __construct(
-        ClassManipulator $classManipulator,
-        MethodCallRenameCollector $methodCallRenameCollector
+        private ClassManipulator $classManipulator,
+        private MethodCallRenameCollector $methodCallRenameCollector
     ) {
-        $this->classManipulator = $classManipulator;
-        $this->methodCallRenameCollector = $methodCallRenameCollector;
     }
 
     public function getRuleDefinition(): RuleDefinition

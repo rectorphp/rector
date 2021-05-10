@@ -9,34 +9,14 @@ use PHPStan\Type\ObjectType;
 final class ReplaceStringWithClassConstant
 {
     /**
-     * @var string
-     */
-    private $class;
-
-    /**
-     * @var string
-     */
-    private $method;
-
-    /**
-     * @var class-string
-     */
-    private $classWithConstants;
-
-    /**
-     * @var int
-     */
-    private $argPosition;
-
-    /**
      * @param class-string $classWithConstants
      */
-    public function __construct(string $class, string $method, int $argPosition, string $classWithConstants)
-    {
-        $this->class = $class;
-        $this->method = $method;
-        $this->classWithConstants = $classWithConstants;
-        $this->argPosition = $argPosition;
+    public function __construct(
+        private string $class,
+        private string $method,
+        private int $argPosition,
+        private string $classWithConstants
+    ) {
     }
 
     public function getObjectType(): ObjectType

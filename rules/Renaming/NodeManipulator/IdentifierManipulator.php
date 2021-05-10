@@ -23,14 +23,9 @@ use Webmozart\Assert\Assert;
  */
 final class IdentifierManipulator
 {
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    public function __construct(NodeNameResolver $nodeNameResolver)
-    {
-        $this->nodeNameResolver = $nodeNameResolver;
+    public function __construct(
+        private NodeNameResolver $nodeNameResolver
+    ) {
     }
 
     /**

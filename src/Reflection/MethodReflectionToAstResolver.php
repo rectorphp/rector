@@ -16,33 +16,15 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class MethodReflectionToAstResolver
 {
     /**
-     * @var FileInfoParser
-     */
-    private $fileInfoParser;
-
-    /**
-     * @var BetterNodeFinder
-     */
-    private $betterNodeFinder;
-
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
      * @var array<string, array<string, ClassMethod>>
      */
     private $analyzedMethodsInFileName = [];
 
     public function __construct(
-        FileInfoParser $fileInfoParser,
-        BetterNodeFinder $betterNodeFinder,
-        NodeNameResolver $nodeNameResolver
+        private FileInfoParser $fileInfoParser,
+        private BetterNodeFinder $betterNodeFinder,
+        private NodeNameResolver $nodeNameResolver
     ) {
-        $this->fileInfoParser = $fileInfoParser;
-        $this->betterNodeFinder = $betterNodeFinder;
-        $this->nodeNameResolver = $nodeNameResolver;
     }
 
     public function resolveProjectClassMethod(PhpMethodReflection $phpMethodReflection): ?ClassMethod

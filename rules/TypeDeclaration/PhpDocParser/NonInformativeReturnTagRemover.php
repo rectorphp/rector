@@ -48,20 +48,10 @@ final class NonInformativeReturnTagRemover
         ObjectWithoutClassType::class => ['object'],
     ];
 
-    /**
-     * @var PhpDocInfoFactory
-     */
-    private $phpDocInfoFactory;
-
-    /**
-     * @var TypeChecker
-     */
-    private $typeChecker;
-
-    public function __construct(PhpDocInfoFactory $phpDocInfoFactory, TypeChecker $typeChecker)
-    {
-        $this->phpDocInfoFactory = $phpDocInfoFactory;
-        $this->typeChecker = $typeChecker;
+    public function __construct(
+        private PhpDocInfoFactory $phpDocInfoFactory,
+        private TypeChecker $typeChecker
+    ) {
     }
 
     /**

@@ -8,32 +8,12 @@ use PHPStan\Type\ObjectType;
 
 final class ValueObjectWrapArg
 {
-    /**
-     * @var string
-     */
-    private $objectType;
-
-    /**
-     * @var string
-     */
-    private $methodName;
-
-    /**
-     * @var int
-     */
-    private $argPosition;
-
-    /**
-     * @var string
-     */
-    private $newType;
-
-    public function __construct(string $objectType, string $methodName, int $argPosition, string $newType)
-    {
-        $this->objectType = $objectType;
-        $this->methodName = $methodName;
-        $this->argPosition = $argPosition;
-        $this->newType = $newType;
+    public function __construct(
+        private string $objectType,
+        private string $methodName,
+        private int $argPosition,
+        private string $newType
+    ) {
     }
 
     public function getObjectType(): ObjectType

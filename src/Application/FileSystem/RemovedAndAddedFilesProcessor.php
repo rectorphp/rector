@@ -14,43 +14,13 @@ use Symplify\SmartFileSystem\SmartFileSystem;
  */
 final class RemovedAndAddedFilesProcessor
 {
-    /**
-     * @var RemovedAndAddedFilesCollector
-     */
-    private $removedAndAddedFilesCollector;
-
-    /**
-     * @var Configuration
-     */
-    private $configuration;
-
-    /**
-     * @var SymfonyStyle
-     */
-    private $symfonyStyle;
-
-    /**
-     * @var NodesWithFileDestinationPrinter
-     */
-    private $nodesWithFileDestinationPrinter;
-
-    /**
-     * @var SmartFileSystem
-     */
-    private $smartFileSystem;
-
     public function __construct(
-        Configuration $configuration,
-        SmartFileSystem $smartFileSystem,
-        NodesWithFileDestinationPrinter $nodesWithFileDestinationPrinter,
-        RemovedAndAddedFilesCollector $removedAndAddedFilesCollector,
-        SymfonyStyle $symfonyStyle
+        private Configuration $configuration,
+        private SmartFileSystem $smartFileSystem,
+        private NodesWithFileDestinationPrinter $nodesWithFileDestinationPrinter,
+        private RemovedAndAddedFilesCollector $removedAndAddedFilesCollector,
+        private SymfonyStyle $symfonyStyle
     ) {
-        $this->removedAndAddedFilesCollector = $removedAndAddedFilesCollector;
-        $this->configuration = $configuration;
-        $this->symfonyStyle = $symfonyStyle;
-        $this->nodesWithFileDestinationPrinter = $nodesWithFileDestinationPrinter;
-        $this->smartFileSystem = $smartFileSystem;
     }
 
     public function run(): void

@@ -13,22 +13,10 @@ use Rector\TypeDeclaration\TypeInferer\SplArrayFixedTypeNarrower;
 
 final class SplFixedArrayParamTypeInferer implements ParamTypeInfererInterface
 {
-    /**
-     * @var SplArrayFixedTypeNarrower
-     */
-    private $splArrayFixedTypeNarrower;
-
-    /**
-     * @var NodeTypeResolver
-     */
-    private $nodeTypeResolver;
-
     public function __construct(
-        SplArrayFixedTypeNarrower $splArrayFixedTypeNarrower,
-        NodeTypeResolver $nodeTypeResolver
+        private SplArrayFixedTypeNarrower $splArrayFixedTypeNarrower,
+        private NodeTypeResolver $nodeTypeResolver
     ) {
-        $this->splArrayFixedTypeNarrower = $splArrayFixedTypeNarrower;
-        $this->nodeTypeResolver = $nodeTypeResolver;
     }
 
     public function inferParam(Param $param): Type

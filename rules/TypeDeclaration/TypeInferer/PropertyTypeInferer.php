@@ -26,48 +26,18 @@ final class PropertyTypeInferer
     private $propertyTypeInferers = [];
 
     /**
-     * @var DefaultValuePropertyTypeInferer
-     */
-    private $defaultValuePropertyTypeInferer;
-
-    /**
-     * @var TypeFactory
-     */
-    private $typeFactory;
-
-    /**
-     * @var DoctrineTypeAnalyzer
-     */
-    private $doctrineTypeAnalyzer;
-
-    /**
-     * @var VarDocPropertyTypeInferer
-     */
-    private $varDocPropertyTypeInferer;
-
-    /**
-     * @var GenericClassStringTypeNormalizer
-     */
-    private $genericClassStringTypeNormalizer;
-
-    /**
      * @param PropertyTypeInfererInterface[] $propertyTypeInferers
      */
     public function __construct(
         TypeInfererSorter $typeInfererSorter,
-        GenericClassStringTypeNormalizer $genericClassStringTypeNormalizer,
-        DefaultValuePropertyTypeInferer $defaultValuePropertyTypeInferer,
-        VarDocPropertyTypeInferer $varDocPropertyTypeInferer,
-        TypeFactory $typeFactory,
-        DoctrineTypeAnalyzer $doctrineTypeAnalyzer,
+        private GenericClassStringTypeNormalizer $genericClassStringTypeNormalizer,
+        private DefaultValuePropertyTypeInferer $defaultValuePropertyTypeInferer,
+        private VarDocPropertyTypeInferer $varDocPropertyTypeInferer,
+        private TypeFactory $typeFactory,
+        private DoctrineTypeAnalyzer $doctrineTypeAnalyzer,
         array $propertyTypeInferers
     ) {
         $this->propertyTypeInferers = $typeInfererSorter->sort($propertyTypeInferers);
-        $this->defaultValuePropertyTypeInferer = $defaultValuePropertyTypeInferer;
-        $this->typeFactory = $typeFactory;
-        $this->doctrineTypeAnalyzer = $doctrineTypeAnalyzer;
-        $this->varDocPropertyTypeInferer = $varDocPropertyTypeInferer;
-        $this->genericClassStringTypeNormalizer = $genericClassStringTypeNormalizer;
     }
 
     public function inferProperty(Property $property): Type

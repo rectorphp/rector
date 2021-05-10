@@ -19,36 +19,12 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class ChangeLocalPropertyToVariableRector extends AbstractRector
 {
-    /**
-     * @var ClassManipulator
-     */
-    private $classManipulator;
-
-    /**
-     * @var PropertyFetchWithVariableReplacer
-     */
-    private $propertyFetchWithVariableReplacer;
-
-    /**
-     * @var PropertyFetchByMethodAnalyzer
-     */
-    private $propertyFetchByMethodAnalyzer;
-
-    /**
-     * @var ClassAnalyzer
-     */
-    private $classAnalyzer;
-
     public function __construct(
-        ClassManipulator $classManipulator,
-        PropertyFetchWithVariableReplacer $propertyFetchWithVariableReplacer,
-        PropertyFetchByMethodAnalyzer $propertyFetchByMethodAnalyzer,
-        ClassAnalyzer $classAnalyzer
+        private ClassManipulator $classManipulator,
+        private PropertyFetchWithVariableReplacer $propertyFetchWithVariableReplacer,
+        private PropertyFetchByMethodAnalyzer $propertyFetchByMethodAnalyzer,
+        private ClassAnalyzer $classAnalyzer
     ) {
-        $this->classManipulator = $classManipulator;
-        $this->propertyFetchWithVariableReplacer = $propertyFetchWithVariableReplacer;
-        $this->propertyFetchByMethodAnalyzer = $propertyFetchByMethodAnalyzer;
-        $this->classAnalyzer = $classAnalyzer;
     }
 
     public function getRuleDefinition(): RuleDefinition

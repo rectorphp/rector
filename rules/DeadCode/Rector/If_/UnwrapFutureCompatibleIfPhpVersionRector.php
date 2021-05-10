@@ -20,20 +20,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class UnwrapFutureCompatibleIfPhpVersionRector extends AbstractRector
 {
-    /**
-     * @var ConditionEvaluator
-     */
-    private $conditionEvaluator;
-
-    /**
-     * @var ConditionResolver
-     */
-    private $conditionResolver;
-
-    public function __construct(ConditionEvaluator $conditionEvaluator, ConditionResolver $conditionResolver)
-    {
-        $this->conditionEvaluator = $conditionEvaluator;
-        $this->conditionResolver = $conditionResolver;
+    public function __construct(
+        private ConditionEvaluator $conditionEvaluator,
+        private ConditionResolver $conditionResolver
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

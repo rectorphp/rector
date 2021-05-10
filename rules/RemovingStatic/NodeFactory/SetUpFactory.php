@@ -10,14 +10,9 @@ use Rector\Core\ValueObject\MethodName;
 
 final class SetUpFactory
 {
-    /**
-     * @var NodeFactory
-     */
-    private $nodeFactory;
-
-    public function __construct(NodeFactory $nodeFactory)
-    {
-        $this->nodeFactory = $nodeFactory;
+    public function __construct(
+        private NodeFactory $nodeFactory
+    ) {
     }
 
     public function createParentStaticCall(): Expression

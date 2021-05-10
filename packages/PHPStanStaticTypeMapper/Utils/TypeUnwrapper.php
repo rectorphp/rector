@@ -12,14 +12,9 @@ use Rector\StaticTypeMapper\TypeFactory\UnionTypeFactory;
 
 final class TypeUnwrapper
 {
-    /**
-     * @var UnionTypeFactory
-     */
-    private $unionTypeFactory;
-
-    public function __construct(UnionTypeFactory $unionTypeFactory)
-    {
-        $this->unionTypeFactory = $unionTypeFactory;
+    public function __construct(
+        private UnionTypeFactory $unionTypeFactory
+    ) {
     }
 
     /**

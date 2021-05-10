@@ -23,20 +23,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class ParamTypeToAssertTypeRector extends AbstractRector
 {
-    /**
-     * @var ClassConstFetchFactory
-     */
-    private $classConstFetchFactory;
-
-    /**
-     * @var SubTypeAnalyzer
-     */
-    private $subTypeAnalyzer;
-
-    public function __construct(ClassConstFetchFactory $classConstFetchFactory, SubTypeAnalyzer $subTypeAnalyzer)
-    {
-        $this->classConstFetchFactory = $classConstFetchFactory;
-        $this->subTypeAnalyzer = $subTypeAnalyzer;
+    public function __construct(
+        private ClassConstFetchFactory $classConstFetchFactory,
+        private SubTypeAnalyzer $subTypeAnalyzer
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

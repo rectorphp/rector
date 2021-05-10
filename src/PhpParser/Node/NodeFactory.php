@@ -90,57 +90,15 @@ final class NodeFactory
      */
     private const REFERENCES = [self::REFERENCE_STATIC, self::REFERENCE_PARENT, self::REFERENCE_SELF];
 
-    /**
-     * @var BuilderFactory
-     */
-    private $builderFactory;
-
-    /**
-     * @var StaticTypeMapper
-     */
-    private $staticTypeMapper;
-
-    /**
-     * @var PhpDocInfoFactory
-     */
-    private $phpDocInfoFactory;
-
-    /**
-     * @var PhpVersionProvider
-     */
-    private $phpVersionProvider;
-
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var PhpDocTypeChanger
-     */
-    private $phpDocTypeChanger;
-
-    /**
-     * @var CurrentNodeProvider
-     */
-    private $currentNodeProvider;
-
     public function __construct(
-        BuilderFactory $builderFactory,
-        PhpDocInfoFactory $phpDocInfoFactory,
-        PhpVersionProvider $phpVersionProvider,
-        StaticTypeMapper $staticTypeMapper,
-        NodeNameResolver $nodeNameResolver,
-        PhpDocTypeChanger $phpDocTypeChanger,
-        CurrentNodeProvider $currentNodeProvider
+        private BuilderFactory $builderFactory,
+        private PhpDocInfoFactory $phpDocInfoFactory,
+        private PhpVersionProvider $phpVersionProvider,
+        private StaticTypeMapper $staticTypeMapper,
+        private NodeNameResolver $nodeNameResolver,
+        private PhpDocTypeChanger $phpDocTypeChanger,
+        private CurrentNodeProvider $currentNodeProvider
     ) {
-        $this->builderFactory = $builderFactory;
-        $this->staticTypeMapper = $staticTypeMapper;
-        $this->phpDocInfoFactory = $phpDocInfoFactory;
-        $this->phpVersionProvider = $phpVersionProvider;
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->phpDocTypeChanger = $phpDocTypeChanger;
-        $this->currentNodeProvider = $currentNodeProvider;
     }
 
     /**

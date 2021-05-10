@@ -16,20 +16,10 @@ use Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNod
  */
 final class StaticDoctrineAnnotationParser
 {
-    /**
-     * @var PlainValueParser
-     */
-    private $plainValueParser;
-
-    /**
-     * @var ArrayParser
-     */
-    private $arrayParser;
-
-    public function __construct(PlainValueParser $plainValueParser, ArrayParser $arrayParser)
-    {
-        $this->plainValueParser = $plainValueParser;
-        $this->arrayParser = $arrayParser;
+    public function __construct(
+        private PlainValueParser $plainValueParser,
+        private ArrayParser $arrayParser
+    ) {
     }
 
     /**

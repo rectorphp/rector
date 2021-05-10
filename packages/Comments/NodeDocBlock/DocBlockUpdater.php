@@ -18,14 +18,9 @@ final class DocBlockUpdater
      */
     public const SPACE_OR_ASTERISK_REGEX = '#(\s|\*)+#';
 
-    /**
-     * @var PhpDocInfoPrinter
-     */
-    private $phpDocInfoPrinter;
-
-    public function __construct(PhpDocInfoPrinter $phpDocInfoPrinter)
-    {
-        $this->phpDocInfoPrinter = $phpDocInfoPrinter;
+    public function __construct(
+        private PhpDocInfoPrinter $phpDocInfoPrinter
+    ) {
     }
 
     public function updateNodeWithPhpDocInfo(Node $node): void

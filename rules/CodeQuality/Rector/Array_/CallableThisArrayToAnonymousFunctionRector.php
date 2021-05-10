@@ -29,22 +29,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class CallableThisArrayToAnonymousFunctionRector extends AbstractRector
 {
-    /**
-     * @var CallableClassMethodMatcher
-     */
-    private $callableClassMethodMatcher;
-
-    /**
-     * @var AnonymousFunctionFactory
-     */
-    private $anonymousFunctionFactory;
-
     public function __construct(
-        CallableClassMethodMatcher $callableClassMethodMatcher,
-        AnonymousFunctionFactory $anonymousFunctionFactory
+        private CallableClassMethodMatcher $callableClassMethodMatcher,
+        private AnonymousFunctionFactory $anonymousFunctionFactory
     ) {
-        $this->callableClassMethodMatcher = $callableClassMethodMatcher;
-        $this->anonymousFunctionFactory = $anonymousFunctionFactory;
     }
 
     public function getRuleDefinition(): RuleDefinition

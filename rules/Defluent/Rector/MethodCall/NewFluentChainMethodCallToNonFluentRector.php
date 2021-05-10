@@ -27,36 +27,12 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class NewFluentChainMethodCallToNonFluentRector extends AbstractRector
 {
-    /**
-     * @var TypeChecker
-     */
-    private $typeChecker;
-
-    /**
-     * @var FluentNodeRemover
-     */
-    private $fluentNodeRemover;
-
-    /**
-     * @var AssignAndRootExprAndNodesToAddMatcher
-     */
-    private $assignAndRootExprAndNodesToAddMatcher;
-
-    /**
-     * @var FluentMethodCallSkipper
-     */
-    private $fluentMethodCallSkipper;
-
     public function __construct(
-        TypeChecker $typeChecker,
-        FluentNodeRemover $fluentNodeRemover,
-        AssignAndRootExprAndNodesToAddMatcher $assignAndRootExprAndNodesToAddMatcher,
-        FluentMethodCallSkipper $fluentMethodCallSkipper
+        private TypeChecker $typeChecker,
+        private FluentNodeRemover $fluentNodeRemover,
+        private AssignAndRootExprAndNodesToAddMatcher $assignAndRootExprAndNodesToAddMatcher,
+        private FluentMethodCallSkipper $fluentMethodCallSkipper
     ) {
-        $this->typeChecker = $typeChecker;
-        $this->fluentNodeRemover = $fluentNodeRemover;
-        $this->assignAndRootExprAndNodesToAddMatcher = $assignAndRootExprAndNodesToAddMatcher;
-        $this->fluentMethodCallSkipper = $fluentMethodCallSkipper;
     }
 
     public function getRuleDefinition(): RuleDefinition

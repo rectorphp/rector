@@ -14,45 +14,15 @@ use Symplify\SmartFileSystem\SmartFileSystem;
 final class ApplicationFileProcessor
 {
     /**
-     * @var FileProcessorInterface[]
-     */
-    private $fileProcessors = [];
-
-    /**
-     * @var SmartFileSystem
-     */
-    private $smartFileSystem;
-
-    /**
-     * @var Configuration
-     */
-    private $configuration;
-
-    /**
-     * @var FileDiffFileDecorator
-     */
-    private $fileDiffFileDecorator;
-
-    /**
-     * @var FileFormatter
-     */
-    private $fileFormatter;
-
-    /**
      * @param FileProcessorInterface[] $fileProcessors
      */
     public function __construct(
-        Configuration $configuration,
-        SmartFileSystem $smartFileSystem,
-        FileDiffFileDecorator $fileDiffFileDecorator,
-        FileFormatter $fileFormatter,
-        array $fileProcessors = []
+        private Configuration $configuration,
+        private SmartFileSystem $smartFileSystem,
+        private FileDiffFileDecorator $fileDiffFileDecorator,
+        private FileFormatter $fileFormatter,
+        private array $fileProcessors = []
     ) {
-        $this->fileProcessors = $fileProcessors;
-        $this->smartFileSystem = $smartFileSystem;
-        $this->configuration = $configuration;
-        $this->fileDiffFileDecorator = $fileDiffFileDecorator;
-        $this->fileFormatter = $fileFormatter;
     }
 
     /**

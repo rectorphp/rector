@@ -9,32 +9,12 @@ use PHPStan\Type\Type;
 
 final class AddParamTypeDeclaration
 {
-    /**
-     * @var string
-     */
-    private $className;
-
-    /**
-     * @var string
-     */
-    private $methodName;
-
-    /**
-     * @var int
-     */
-    private $position;
-
-    /**
-     * @var Type
-     */
-    private $paramType;
-
-    public function __construct(string $className, string $methodName, int $position, Type $paramType)
-    {
-        $this->className = $className;
-        $this->methodName = $methodName;
-        $this->position = $position;
-        $this->paramType = $paramType;
+    public function __construct(
+        private string $className,
+        private string $methodName,
+        private int $position,
+        private Type $paramType
+    ) {
     }
 
     public function getObjectType(): ObjectType

@@ -17,20 +17,10 @@ use Rector\Php71\ValueObject\TwoNodeMatch;
 
 final class IsArrayAndDualCheckToAble
 {
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var BinaryOpManipulator
-     */
-    private $binaryOpManipulator;
-
-    public function __construct(BinaryOpManipulator $binaryOpManipulator, NodeNameResolver $nodeNameResolver)
-    {
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->binaryOpManipulator = $binaryOpManipulator;
+    public function __construct(
+        private BinaryOpManipulator $binaryOpManipulator,
+        private NodeNameResolver $nodeNameResolver
+    ) {
     }
 
     public function processBooleanOr(BooleanOr $booleanOr, string $type, string $newMethodName): ?FuncCall

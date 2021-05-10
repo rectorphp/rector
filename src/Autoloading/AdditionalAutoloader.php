@@ -15,29 +15,11 @@ use Symplify\SmartFileSystem\FileSystemGuard;
  */
 final class AdditionalAutoloader
 {
-    /**
-     * @var FileSystemGuard
-     */
-    private $fileSystemGuard;
-
-    /**
-     * @var ParameterProvider
-     */
-    private $parameterProvider;
-
-    /**
-     * @var DynamicSourceLocatorDecorator
-     */
-    private $dynamicSourceLocatorDecorator;
-
     public function __construct(
-        FileSystemGuard $fileSystemGuard,
-        ParameterProvider $parameterProvider,
-        DynamicSourceLocatorDecorator $dynamicSourceLocatorDecorator
+        private FileSystemGuard $fileSystemGuard,
+        private ParameterProvider $parameterProvider,
+        private DynamicSourceLocatorDecorator $dynamicSourceLocatorDecorator
     ) {
-        $this->fileSystemGuard = $fileSystemGuard;
-        $this->parameterProvider = $parameterProvider;
-        $this->dynamicSourceLocatorDecorator = $dynamicSourceLocatorDecorator;
     }
 
     public function autoloadInput(InputInterface $input): void

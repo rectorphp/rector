@@ -11,29 +11,11 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class CachedFileInfoFilterAndReporter
 {
-    /**
-     * @var Configuration
-     */
-    private $configuration;
-
-    /**
-     * @var ChangedFilesDetector
-     */
-    private $changedFilesDetector;
-
-    /**
-     * @var UnchangedFilesFilter
-     */
-    private $unchangedFilesFilter;
-
     public function __construct(
-        Configuration $configuration,
-        ChangedFilesDetector $changedFilesDetector,
-        UnchangedFilesFilter $unchangedFilesFilter
+        private Configuration $configuration,
+        private ChangedFilesDetector $changedFilesDetector,
+        private UnchangedFilesFilter $unchangedFilesFilter
     ) {
-        $this->configuration = $configuration;
-        $this->changedFilesDetector = $changedFilesDetector;
-        $this->unchangedFilesFilter = $unchangedFilesFilter;
     }
 
     /**

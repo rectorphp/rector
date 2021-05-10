@@ -16,14 +16,9 @@ use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 
 final class FloatTypeMapper implements TypeMapperInterface
 {
-    /**
-     * @var PhpVersionProvider
-     */
-    private $phpVersionProvider;
-
-    public function __construct(PhpVersionProvider $phpVersionProvider)
-    {
-        $this->phpVersionProvider = $phpVersionProvider;
+    public function __construct(
+        private PhpVersionProvider $phpVersionProvider
+    ) {
     }
 
     /**

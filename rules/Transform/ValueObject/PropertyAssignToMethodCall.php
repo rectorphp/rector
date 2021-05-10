@@ -8,26 +8,11 @@ use PHPStan\Type\ObjectType;
 
 final class PropertyAssignToMethodCall
 {
-    /**
-     * @var string
-     */
-    private $class;
-
-    /**
-     * @var string
-     */
-    private $oldPropertyName;
-
-    /**
-     * @var string
-     */
-    private $newMethodName;
-
-    public function __construct(string $class, string $oldPropertyName, string $newMethodName)
-    {
-        $this->class = $class;
-        $this->oldPropertyName = $oldPropertyName;
-        $this->newMethodName = $newMethodName;
+    public function __construct(
+        private string $class,
+        private string $oldPropertyName,
+        private string $newMethodName
+    ) {
     }
 
     public function getObjectType(): ObjectType

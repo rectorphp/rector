@@ -8,7 +8,6 @@ use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use PHPStan\PhpDocParser\Lexer\Lexer;
-use PHPStan\PhpDocParser\Parser\PhpDocParser;
 use Rector\BetterPhpDocParser\Annotation\AnnotationNaming;
 use Rector\BetterPhpDocParser\Contract\PhpDocNodeFactoryInterface;
 use Rector\BetterPhpDocParser\PhpDocNodeMapper;
@@ -24,61 +23,19 @@ use Rector\StaticTypeMapper\StaticTypeMapper;
 final class PhpDocInfoFactory
 {
     /**
-     * @var PhpDocParser
-     */
-    private $betterPhpDocParser;
-
-    /**
-     * @var Lexer
-     */
-    private $lexer;
-
-    /**
-     * @var CurrentNodeProvider
-     */
-    private $currentNodeProvider;
-
-    /**
-     * @var StaticTypeMapper
-     */
-    private $staticTypeMapper;
-
-    /**
-     * @var PhpDocNodeMapper
-     */
-    private $phpDocNodeMapper;
-
-    /**
-     * @var AnnotationNaming
-     */
-    private $annotationNaming;
-
-    /**
-     * @var RectorChangeCollector
-     */
-    private $rectorChangeCollector;
-
-    /**
      * @var array<string, PhpDocInfo>
      */
     private $phpDocInfosByObjectHash = [];
 
     public function __construct(
-        PhpDocNodeMapper $phpDocNodeMapper,
-        CurrentNodeProvider $currentNodeProvider,
-        Lexer $lexer,
-        BetterPhpDocParser $betterPhpDocParser,
-        StaticTypeMapper $staticTypeMapper,
-        AnnotationNaming $annotationNaming,
-        RectorChangeCollector $rectorChangeCollector
+        private PhpDocNodeMapper $phpDocNodeMapper,
+        private CurrentNodeProvider $currentNodeProvider,
+        private Lexer $lexer,
+        private BetterPhpDocParser $betterPhpDocParser,
+        private StaticTypeMapper $staticTypeMapper,
+        private AnnotationNaming $annotationNaming,
+        private RectorChangeCollector $rectorChangeCollector
     ) {
-        $this->betterPhpDocParser = $betterPhpDocParser;
-        $this->lexer = $lexer;
-        $this->currentNodeProvider = $currentNodeProvider;
-        $this->staticTypeMapper = $staticTypeMapper;
-        $this->phpDocNodeMapper = $phpDocNodeMapper;
-        $this->annotationNaming = $annotationNaming;
-        $this->rectorChangeCollector = $rectorChangeCollector;
     }
 
     public function createFromNodeOrEmpty(Node $node): PhpDocInfo

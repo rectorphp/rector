@@ -8,26 +8,11 @@ use PHPStan\Type\ObjectType;
 
 final class CallableInMethodCallToVariable
 {
-    /**
-     * @var string
-     */
-    private $classType;
-
-    /**
-     * @var string
-     */
-    private $methodName;
-
-    /**
-     * @var int
-     */
-    private $argumentPosition;
-
-    public function __construct(string $classType, string $methodName, int $argumentPosition)
-    {
-        $this->classType = $classType;
-        $this->methodName = $methodName;
-        $this->argumentPosition = $argumentPosition;
+    public function __construct(
+        private string $classType,
+        private string $methodName,
+        private int $argumentPosition
+    ) {
     }
 
     public function getObjectType(): ObjectType

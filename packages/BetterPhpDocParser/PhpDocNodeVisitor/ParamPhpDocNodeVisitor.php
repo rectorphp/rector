@@ -13,14 +13,9 @@ use Symplify\SimplePhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor;
 
 final class ParamPhpDocNodeVisitor extends AbstractPhpDocNodeVisitor implements BasePhpDocNodeVisitorInterface
 {
-    /**
-     * @var AttributeMirrorer
-     */
-    private $attributeMirrorer;
-
-    public function __construct(AttributeMirrorer $attributeMirrorer)
-    {
-        $this->attributeMirrorer = $attributeMirrorer;
+    public function __construct(
+        private AttributeMirrorer $attributeMirrorer
+    ) {
     }
 
     public function enterNode(Node $node): ?Node

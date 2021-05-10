@@ -11,29 +11,11 @@ use Rector\PostRector\Application\PostFileProcessor;
 
 final class NodesWithFileDestinationPrinter
 {
-    /**
-     * @var PostFileProcessor
-     */
-    private $postFileProcessor;
-
-    /**
-     * @var Lexer
-     */
-    private $lexer;
-
-    /**
-     * @var BetterStandardPrinter
-     */
-    private $betterStandardPrinter;
-
     public function __construct(
-        BetterStandardPrinter $betterStandardPrinter,
-        Lexer $lexer,
-        PostFileProcessor $postFileProcessor
+        private BetterStandardPrinter $betterStandardPrinter,
+        private Lexer $lexer,
+        private PostFileProcessor $postFileProcessor
     ) {
-        $this->postFileProcessor = $postFileProcessor;
-        $this->lexer = $lexer;
-        $this->betterStandardPrinter = $betterStandardPrinter;
     }
 
     public function printNodesWithFileDestination(FileWithNodesInterface $fileWithNodes): string

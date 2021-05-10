@@ -11,20 +11,10 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class NodeComparator
 {
-    /**
-     * @var CommentRemover
-     */
-    private $commentRemover;
-
-    /**
-     * @var BetterStandardPrinter
-     */
-    private $betterStandardPrinter;
-
-    public function __construct(CommentRemover $commentRemover, BetterStandardPrinter $betterStandardPrinter)
-    {
-        $this->commentRemover = $commentRemover;
-        $this->betterStandardPrinter = $betterStandardPrinter;
+    public function __construct(
+        private CommentRemover $commentRemover,
+        private BetterStandardPrinter $betterStandardPrinter
+    ) {
     }
 
     /**

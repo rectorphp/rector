@@ -9,14 +9,9 @@ use Symplify\SimplePhpDocParser\PhpDocNodeTraverser;
 
 final class RenamingPhpDocNodeVisitorFactory
 {
-    /**
-     * @var ClassRenamePhpDocNodeVisitor
-     */
-    private $classRenamePhpDocNodeVisitor;
-
-    public function __construct(ClassRenamePhpDocNodeVisitor $classRenamePhpDocNodeVisitor)
-    {
-        $this->classRenamePhpDocNodeVisitor = $classRenamePhpDocNodeVisitor;
+    public function __construct(
+        private ClassRenamePhpDocNodeVisitor $classRenamePhpDocNodeVisitor
+    ) {
     }
 
     public function create(): PhpDocNodeTraverser

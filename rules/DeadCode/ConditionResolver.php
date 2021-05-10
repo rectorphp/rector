@@ -21,36 +21,12 @@ use Rector\NodeNameResolver\NodeNameResolver;
 
 final class ConditionResolver
 {
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var ValueResolver
-     */
-    private $valueResolver;
-
-    /**
-     * @var PhpVersionProvider
-     */
-    private $phpVersionProvider;
-
-    /**
-     * @var PhpVersionFactory
-     */
-    private $phpVersionFactory;
-
     public function __construct(
-        NodeNameResolver $nodeNameResolver,
-        PhpVersionProvider $phpVersionProvider,
-        ValueResolver $valueResolver,
-        PhpVersionFactory $phpVersionFactory
+        private NodeNameResolver $nodeNameResolver,
+        private PhpVersionProvider $phpVersionProvider,
+        private ValueResolver $valueResolver,
+        private PhpVersionFactory $phpVersionFactory
     ) {
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->valueResolver = $valueResolver;
-        $this->phpVersionProvider = $phpVersionProvider;
-        $this->phpVersionFactory = $phpVersionFactory;
     }
 
     public function resolveFromExpr(Expr $expr): ?ConditionInterface

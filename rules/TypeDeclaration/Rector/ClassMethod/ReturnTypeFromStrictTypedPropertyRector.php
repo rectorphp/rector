@@ -25,14 +25,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class ReturnTypeFromStrictTypedPropertyRector extends AbstractRector
 {
-    /**
-     * @var TypeFactory
-     */
-    private $typeFactory;
-
-    public function __construct(TypeFactory $typeFactory)
-    {
-        $this->typeFactory = $typeFactory;
+    public function __construct(
+        private TypeFactory $typeFactory
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

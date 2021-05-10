@@ -6,26 +6,11 @@ namespace Rector\Transform\ValueObject;
 
 final class FuncCallToStaticCall
 {
-    /**
-     * @var string
-     */
-    private $oldFuncName;
-
-    /**
-     * @var string
-     */
-    private $newClassName;
-
-    /**
-     * @var string
-     */
-    private $newMethodName;
-
-    public function __construct(string $oldFuncName, string $newClassName, string $newMethodName)
-    {
-        $this->oldFuncName = $oldFuncName;
-        $this->newClassName = $newClassName;
-        $this->newMethodName = $newMethodName;
+    public function __construct(
+        private string $oldFuncName,
+        private string $newClassName,
+        private string $newMethodName
+    ) {
     }
 
     public function getOldFuncName(): string

@@ -19,43 +19,13 @@ use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer\ReturnTagReturnTypeInfe
 
 final class GetterPropertyTypeInferer implements PropertyTypeInfererInterface
 {
-    /**
-     * @var ReturnedNodesReturnTypeInferer
-     */
-    private $returnedNodesReturnTypeInferer;
-
-    /**
-     * @var ReturnTagReturnTypeInferer
-     */
-    private $returnTagReturnTypeInferer;
-
-    /**
-     * @var FunctionLikeReturnTypeResolver
-     */
-    private $functionLikeReturnTypeResolver;
-
-    /**
-     * @var ClassMethodAndPropertyAnalyzer
-     */
-    private $classMethodAndPropertyAnalyzer;
-
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
     public function __construct(
-        ReturnTagReturnTypeInferer $returnTagReturnTypeInferer,
-        ReturnedNodesReturnTypeInferer $returnedNodesReturnTypeInferer,
-        FunctionLikeReturnTypeResolver $functionLikeReturnTypeResolver,
-        ClassMethodAndPropertyAnalyzer $classMethodAndPropertyAnalyzer,
-        NodeNameResolver $nodeNameResolver
+        private ReturnTagReturnTypeInferer $returnTagReturnTypeInferer,
+        private ReturnedNodesReturnTypeInferer $returnedNodesReturnTypeInferer,
+        private FunctionLikeReturnTypeResolver $functionLikeReturnTypeResolver,
+        private ClassMethodAndPropertyAnalyzer $classMethodAndPropertyAnalyzer,
+        private NodeNameResolver $nodeNameResolver
     ) {
-        $this->returnedNodesReturnTypeInferer = $returnedNodesReturnTypeInferer;
-        $this->returnTagReturnTypeInferer = $returnTagReturnTypeInferer;
-        $this->functionLikeReturnTypeResolver = $functionLikeReturnTypeResolver;
-        $this->classMethodAndPropertyAnalyzer = $classMethodAndPropertyAnalyzer;
-        $this->nodeNameResolver = $nodeNameResolver;
     }
 
     public function inferProperty(Property $property): Type

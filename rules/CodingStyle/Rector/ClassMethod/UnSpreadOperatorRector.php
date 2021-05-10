@@ -19,14 +19,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class UnSpreadOperatorRector extends AbstractRector
 {
-    /**
-     * @var SpreadVariablesCollector
-     */
-    private $spreadVariablesCollector;
-
-    public function __construct(SpreadVariablesCollector $spreadVariablesCollector)
-    {
-        $this->spreadVariablesCollector = $spreadVariablesCollector;
+    public function __construct(
+        private SpreadVariablesCollector $spreadVariablesCollector
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

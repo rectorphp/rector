@@ -31,14 +31,9 @@ final class ConsecutiveNullCompareReturnsToNullCoalesceQueueRector extends Abstr
      */
     private $coalescingNodes = [];
 
-    /**
-     * @var IfManipulator
-     */
-    private $ifManipulator;
-
-    public function __construct(IfManipulator $ifManipulator)
-    {
-        $this->ifManipulator = $ifManipulator;
+    public function __construct(
+        private IfManipulator $ifManipulator
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

@@ -43,31 +43,13 @@ final class MultiParentingToAbstractDependencyRector extends AbstractRector impl
      */
     private $injectObjectTypes = [];
 
-    /**
-     * @var ClassMethodNodeRemover
-     */
-    private $classMethodNodeRemover;
-
-    /**
-     * @var InjectMethodFactory
-     */
-    private $injectMethodFactory;
-
-    /**
-     * @var ClassInsertManipulator
-     */
-    private $classInsertManipulator;
-
     public function __construct(
-        ClassMethodNodeRemover $classMethodNodeRemover,
-        InjectMethodFactory $injectMethodFactory,
+        private ClassMethodNodeRemover $classMethodNodeRemover,
+        private InjectMethodFactory $injectMethodFactory,
         PhpDocInfoFactory $phpDocInfoFactory,
-        ClassInsertManipulator $classInsertManipulator
+        private ClassInsertManipulator $classInsertManipulator
     ) {
-        $this->injectMethodFactory = $injectMethodFactory;
-        $this->classMethodNodeRemover = $classMethodNodeRemover;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
-        $this->classInsertManipulator = $classInsertManipulator;
     }
 
     public function getRuleDefinition(): RuleDefinition

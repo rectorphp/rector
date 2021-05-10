@@ -7,22 +7,12 @@ namespace Rector\Arguments\ValueObject;
 final class SwapFuncCallArguments
 {
     /**
-     * @var string
-     */
-    private $function;
-
-    /**
-     * @var array<int, int>
-     */
-    private $order = [];
-
-    /**
      * @param array<int, int> $order
      */
-    public function __construct(string $function, array $order)
-    {
-        $this->function = $function;
-        $this->order = $order;
+    public function __construct(
+        private string $function,
+        private array $order
+    ) {
     }
 
     public function getFunction(): string

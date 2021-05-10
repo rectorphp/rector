@@ -18,43 +18,13 @@ use Rector\PostRector\DependencyInjection\PropertyAdder;
 
 final class PropertyConstructorInjectionManipulator
 {
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var PhpDocInfoFactory
-     */
-    private $phpDocInfoFactory;
-
-    /**
-     * @var PhpDocTypeChanger
-     */
-    private $phpDocTypeChanger;
-
-    /**
-     * @var PhpDocTagRemover
-     */
-    private $phpDocTagRemover;
-
-    /**
-     * @var PropertyAdder
-     */
-    private $propertyAdder;
-
     public function __construct(
-        NodeNameResolver $nodeNameResolver,
-        PhpDocInfoFactory $phpDocInfoFactory,
-        PhpDocTypeChanger $phpDocTypeChanger,
-        PhpDocTagRemover $phpDocTagRemover,
-        PropertyAdder $propertyAdder
+        private NodeNameResolver $nodeNameResolver,
+        private PhpDocInfoFactory $phpDocInfoFactory,
+        private PhpDocTypeChanger $phpDocTypeChanger,
+        private PhpDocTagRemover $phpDocTagRemover,
+        private PropertyAdder $propertyAdder
     ) {
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->phpDocInfoFactory = $phpDocInfoFactory;
-        $this->phpDocTypeChanger = $phpDocTypeChanger;
-        $this->phpDocTagRemover = $phpDocTagRemover;
-        $this->propertyAdder = $propertyAdder;
     }
 
     public function refactor(

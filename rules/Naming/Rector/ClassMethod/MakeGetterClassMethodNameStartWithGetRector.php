@@ -27,20 +27,10 @@ final class MakeGetterClassMethodNameStartWithGetRector extends AbstractRector
      */
     private const GETTER_NAME_PATTERN = '#^(is|should|has|was|must|get|provide|__)#';
 
-    /**
-     * @var MethodNameResolver
-     */
-    private $methodNameResolver;
-
-    /**
-     * @var MethodCallRenamer
-     */
-    private $methodCallRenamer;
-
-    public function __construct(MethodNameResolver $methodNameResolver, MethodCallRenamer $methodCallRenamer)
-    {
-        $this->methodNameResolver = $methodNameResolver;
-        $this->methodCallRenamer = $methodCallRenamer;
+    public function __construct(
+        private MethodNameResolver $methodNameResolver,
+        private MethodCallRenamer $methodCallRenamer
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

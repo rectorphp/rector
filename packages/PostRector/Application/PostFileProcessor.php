@@ -21,33 +21,15 @@ final class PostFileProcessor
     private $postRectors = [];
 
     /**
-     * @var Skipper
-     */
-    private $skipper;
-
-    /**
-     * @var CurrentRectorProvider
-     */
-    private $currentRectorProvider;
-
-    /**
-     * @var CurrentFileProvider
-     */
-    private $currentFileProvider;
-
-    /**
      * @param PostRectorInterface[] $postRectors
      */
     public function __construct(
-        Skipper $skipper,
-        CurrentFileProvider $currentFileProvider,
-        CurrentRectorProvider $currentRectorProvider,
+        private Skipper $skipper,
+        private CurrentFileProvider $currentFileProvider,
+        private CurrentRectorProvider $currentRectorProvider,
         array $postRectors
     ) {
         $this->postRectors = $this->sortByPriority($postRectors);
-        $this->skipper = $skipper;
-        $this->currentRectorProvider = $currentRectorProvider;
-        $this->currentFileProvider = $currentFileProvider;
     }
 
     /**

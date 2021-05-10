@@ -16,14 +16,9 @@ use Rector\FileFormatter\ValueObjectFactory\EditorConfigConfigurationBuilder;
  */
 final class XmlFileFormatter implements FileFormatterInterface
 {
-    /**
-     * @var Formatter
-     */
-    private $xmlFormatter;
-
-    public function __construct(Formatter $xmlFormatter)
-    {
-        $this->xmlFormatter = $xmlFormatter;
+    public function __construct(
+        private Formatter $xmlFormatter
+    ) {
     }
 
     public function supports(File $file): bool

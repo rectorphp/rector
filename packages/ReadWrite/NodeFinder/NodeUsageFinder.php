@@ -17,43 +17,13 @@ use Rector\NodeNestingScope\NodeFinder\ScopeAwareNodeFinder;
 
 final class NodeUsageFinder
 {
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var BetterNodeFinder
-     */
-    private $betterNodeFinder;
-
-    /**
-     * @var NodeRepository
-     */
-    private $nodeRepository;
-
-    /**
-     * @var ScopeAwareNodeFinder
-     */
-    private $scopeAwareNodeFinder;
-
-    /**
-     * @var NodeComparator
-     */
-    private $nodeComparator;
-
     public function __construct(
-        NodeNameResolver $nodeNameResolver,
-        BetterNodeFinder $betterNodeFinder,
-        NodeRepository $nodeRepository,
-        ScopeAwareNodeFinder $scopeAwareNodeFinder,
-        NodeComparator $nodeComparator
+        private NodeNameResolver $nodeNameResolver,
+        private BetterNodeFinder $betterNodeFinder,
+        private NodeRepository $nodeRepository,
+        private ScopeAwareNodeFinder $scopeAwareNodeFinder,
+        private NodeComparator $nodeComparator
     ) {
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->betterNodeFinder = $betterNodeFinder;
-        $this->nodeRepository = $nodeRepository;
-        $this->scopeAwareNodeFinder = $scopeAwareNodeFinder;
-        $this->nodeComparator = $nodeComparator;
     }
 
     /**

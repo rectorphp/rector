@@ -24,20 +24,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class SimplifyIfReturnBoolRector extends AbstractRector
 {
-    /**
-     * @var CommentsMerger
-     */
-    private $commentsMerger;
-
-    /**
-     * @var ExprBoolCaster
-     */
-    private $exprBoolCaster;
-
-    public function __construct(CommentsMerger $commentsMerger, ExprBoolCaster $exprBoolCaster)
-    {
-        $this->commentsMerger = $commentsMerger;
-        $this->exprBoolCaster = $exprBoolCaster;
+    public function __construct(
+        private CommentsMerger $commentsMerger,
+        private ExprBoolCaster $exprBoolCaster
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

@@ -12,22 +12,10 @@ use Rector\DeadCode\PhpDoc\DeadParamTagValueNodeAnalyzer;
 
 final class ParamTagRemover
 {
-    /**
-     * @var DeadParamTagValueNodeAnalyzer
-     */
-    private $deadParamTagValueNodeAnalyzer;
-
-    /**
-     * @var PhpDocTagRemover
-     */
-    private $phpDocTagRemover;
-
     public function __construct(
-        DeadParamTagValueNodeAnalyzer $deadParamTagValueNodeAnalyzer,
-        PhpDocTagRemover $phpDocTagRemover
+        private DeadParamTagValueNodeAnalyzer $deadParamTagValueNodeAnalyzer,
+        private PhpDocTagRemover $phpDocTagRemover
     ) {
-        $this->deadParamTagValueNodeAnalyzer = $deadParamTagValueNodeAnalyzer;
-        $this->phpDocTagRemover = $phpDocTagRemover;
     }
 
     public function removeParamTagsIfUseless(PhpDocInfo $phpDocInfo, FunctionLike $functionLike): void

@@ -10,14 +10,9 @@ use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
 
 final class DeadVarTagValueNodeAnalyzer
 {
-    /**
-     * @var TypeComparator
-     */
-    private $typeComparator;
-
-    public function __construct(TypeComparator $typeComparator)
-    {
-        $this->typeComparator = $typeComparator;
+    public function __construct(
+        private TypeComparator $typeComparator
+    ) {
     }
 
     public function isDead(VarTagValueNode $varTagValueNode, Property $property): bool

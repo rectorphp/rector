@@ -20,13 +20,11 @@ final class ReplacePackageAndVersion implements VersionAwareInterface
      */
     private $newPackageName;
 
-    /**
-     * @var string
-     */
-    private $version;
-
-    public function __construct(string $oldPackageName, string $newPackageName, string $version)
-    {
+    public function __construct(
+        string $oldPackageName,
+        string $newPackageName,
+        private string $version
+    ) {
         Assert::notSame(
             $oldPackageName,
             $newPackageName,
@@ -35,7 +33,6 @@ final class ReplacePackageAndVersion implements VersionAwareInterface
 
         $this->oldPackageName = $oldPackageName;
         $this->newPackageName = $newPackageName;
-        $this->version = $version;
     }
 
     public function getOldPackageName(): string

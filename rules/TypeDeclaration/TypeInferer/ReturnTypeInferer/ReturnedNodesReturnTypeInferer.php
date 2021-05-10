@@ -31,50 +31,14 @@ use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
 final class ReturnedNodesReturnTypeInferer implements ReturnTypeInfererInterface
 {
-    /**
-     * @var SilentVoidResolver
-     */
-    private $silentVoidResolver;
-
-    /**
-     * @var NodeTypeResolver
-     */
-    private $nodeTypeResolver;
-
-    /**
-     * @var SimpleCallableNodeTraverser
-     */
-    private $simpleCallableNodeTraverser;
-
-    /**
-     * @var TypeFactory
-     */
-    private $typeFactory;
-
-    /**
-     * @var SplArrayFixedTypeNarrower
-     */
-    private $splArrayFixedTypeNarrower;
-
-    /**
-     * @var NodeRepository
-     */
-    private $nodeRepository;
-
     public function __construct(
-        SilentVoidResolver $silentVoidResolver,
-        NodeTypeResolver $nodeTypeResolver,
-        SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
-        TypeFactory $typeFactory,
-        SplArrayFixedTypeNarrower $splArrayFixedTypeNarrower,
-        NodeRepository $nodeRepository
+        private SilentVoidResolver $silentVoidResolver,
+        private NodeTypeResolver $nodeTypeResolver,
+        private SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
+        private TypeFactory $typeFactory,
+        private SplArrayFixedTypeNarrower $splArrayFixedTypeNarrower,
+        private NodeRepository $nodeRepository
     ) {
-        $this->silentVoidResolver = $silentVoidResolver;
-        $this->nodeTypeResolver = $nodeTypeResolver;
-        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
-        $this->typeFactory = $typeFactory;
-        $this->splArrayFixedTypeNarrower = $splArrayFixedTypeNarrower;
-        $this->nodeRepository = $nodeRepository;
     }
 
     /**

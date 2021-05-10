@@ -24,50 +24,14 @@ use Rector\TypeDeclaration\TypeNormalizer;
 
 final class TypeComparator
 {
-    /**
-     * @var TypeHasher
-     */
-    private $typeHasher;
-
-    /**
-     * @var TypeNormalizer
-     */
-    private $typeNormalizer;
-
-    /**
-     * @var StaticTypeMapper
-     */
-    private $staticTypeMapper;
-
-    /**
-     * @var ArrayTypeComparator
-     */
-    private $arrayTypeComparator;
-
-    /**
-     * @var ScalarTypeComparator
-     */
-    private $scalarTypeComparator;
-
-    /**
-     * @var TypeFactory
-     */
-    private $typeFactory;
-
     public function __construct(
-        TypeHasher $typeHasher,
-        TypeNormalizer $typeNormalizer,
-        StaticTypeMapper $staticTypeMapper,
-        ArrayTypeComparator $arrayTypeComparator,
-        ScalarTypeComparator $scalarTypeComparator,
-        TypeFactory $typeFactory
+        private TypeHasher $typeHasher,
+        private TypeNormalizer $typeNormalizer,
+        private StaticTypeMapper $staticTypeMapper,
+        private ArrayTypeComparator $arrayTypeComparator,
+        private ScalarTypeComparator $scalarTypeComparator,
+        private TypeFactory $typeFactory
     ) {
-        $this->typeHasher = $typeHasher;
-        $this->typeNormalizer = $typeNormalizer;
-        $this->staticTypeMapper = $staticTypeMapper;
-        $this->arrayTypeComparator = $arrayTypeComparator;
-        $this->scalarTypeComparator = $scalarTypeComparator;
-        $this->typeFactory = $typeFactory;
     }
 
     public function areTypesEqual(Type $firstType, Type $secondType): bool

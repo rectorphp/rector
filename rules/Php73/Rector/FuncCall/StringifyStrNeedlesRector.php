@@ -34,14 +34,9 @@ final class StringifyStrNeedlesRector extends AbstractRector
         'stristr',
     ];
 
-    /**
-     * @var NodeTypeAnalyzer
-     */
-    private $nodeTypeAnalyzer;
-
-    public function __construct(NodeTypeAnalyzer $nodeTypeAnalyzer)
-    {
-        $this->nodeTypeAnalyzer = $nodeTypeAnalyzer;
+    public function __construct(
+        private NodeTypeAnalyzer $nodeTypeAnalyzer
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

@@ -11,14 +11,9 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ScopeFactory
 {
-    /**
-     * @var PHPStanScopeFactory
-     */
-    private $phpStanScopeFactory;
-
-    public function __construct(PHPStanScopeFactory $phpStanScopeFactory)
-    {
-        $this->phpStanScopeFactory = $phpStanScopeFactory;
+    public function __construct(
+        private PHPStanScopeFactory $phpStanScopeFactory
+    ) {
     }
 
     public function createFromFile(SmartFileInfo $fileInfo): MutatingScope

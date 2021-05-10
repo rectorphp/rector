@@ -12,34 +12,15 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 final class CountableTypeAnalyzer
 {
     /**
-     * @var ArrayTypeAnalyzer
-     */
-    private $arrayTypeAnalyzer;
-
-    /**
-     * @var PregMatchTypeCorrector
-     */
-    private $pregMatchTypeCorrector;
-
-    /**
-     * @var NodeTypeResolver
-     */
-    private $nodeTypeResolver;
-
-    /**
      * @var ObjectType[]
      */
     private $countableObjectTypes = [];
 
     public function __construct(
-        ArrayTypeAnalyzer $arrayTypeAnalyzer,
-        NodeTypeResolver $nodeTypeResolver,
-        PregMatchTypeCorrector $pregMatchTypeCorrector
+        private ArrayTypeAnalyzer $arrayTypeAnalyzer,
+        private NodeTypeResolver $nodeTypeResolver,
+        private PregMatchTypeCorrector $pregMatchTypeCorrector
     ) {
-        $this->arrayTypeAnalyzer = $arrayTypeAnalyzer;
-        $this->pregMatchTypeCorrector = $pregMatchTypeCorrector;
-        $this->nodeTypeResolver = $nodeTypeResolver;
-
         $this->countableObjectTypes = [
             new ObjectType('Countable'),
             new ObjectType('SimpleXMLElement'),

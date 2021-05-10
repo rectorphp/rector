@@ -20,29 +20,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class MakeBoolPropertyRespectIsHasWasMethodNamingRector extends AbstractRector
 {
-    /**
-     * @var PropertyRenameFactory
-     */
-    private $propertyRenameFactory;
-
-    /**
-     * @var BoolPropertyRenamer
-     */
-    private $boolPropertyRenamer;
-
-    /**
-     * @var BoolPropertyExpectedNameResolver
-     */
-    private $boolPropertyExpectedNameResolver;
-
     public function __construct(
-        BoolPropertyRenamer $boolPropertyRenamer,
-        PropertyRenameFactory $propertyRenameFactory,
-        BoolPropertyExpectedNameResolver $boolPropertyExpectedNameResolver
+        private BoolPropertyRenamer $boolPropertyRenamer,
+        private PropertyRenameFactory $propertyRenameFactory,
+        private BoolPropertyExpectedNameResolver $boolPropertyExpectedNameResolver
     ) {
-        $this->propertyRenameFactory = $propertyRenameFactory;
-        $this->boolPropertyRenamer = $boolPropertyRenamer;
-        $this->boolPropertyExpectedNameResolver = $boolPropertyExpectedNameResolver;
     }
 
     public function getRuleDefinition(): RuleDefinition

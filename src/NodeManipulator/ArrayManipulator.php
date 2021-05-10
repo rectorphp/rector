@@ -12,14 +12,9 @@ use Rector\ChangesReporting\Collector\RectorChangeCollector;
 
 final class ArrayManipulator
 {
-    /**
-     * @var RectorChangeCollector
-     */
-    private $rectorChangeCollector;
-
-    public function __construct(RectorChangeCollector $rectorChangeCollector)
-    {
-        $this->rectorChangeCollector = $rectorChangeCollector;
+    public function __construct(
+        private RectorChangeCollector $rectorChangeCollector
+    ) {
     }
 
     public function isArrayOnlyScalarValues(Array_ $array): bool

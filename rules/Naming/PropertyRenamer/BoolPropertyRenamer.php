@@ -10,22 +10,10 @@ use Rector\Naming\ValueObject\PropertyRename;
 
 final class BoolPropertyRenamer
 {
-    /**
-     * @var BoolPropertyConflictingNameGuard
-     */
-    private $boolPropertyConflictingNameGuard;
-
-    /**
-     * @var PropertyRenamer
-     */
-    private $propertyRenamer;
-
     public function __construct(
-        BoolPropertyConflictingNameGuard $boolPropertyConflictingNameGuard,
-        PropertyRenamer $propertyRenamer
+        private BoolPropertyConflictingNameGuard $boolPropertyConflictingNameGuard,
+        private PropertyRenamer $propertyRenamer
     ) {
-        $this->boolPropertyConflictingNameGuard = $boolPropertyConflictingNameGuard;
-        $this->propertyRenamer = $propertyRenamer;
     }
 
     public function rename(PropertyRename $propertyRename): ?Property

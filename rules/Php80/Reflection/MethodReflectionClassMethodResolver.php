@@ -11,22 +11,10 @@ use Rector\Core\Reflection\MethodReflectionToAstResolver;
 
 final class MethodReflectionClassMethodResolver
 {
-    /**
-     * @var ReflectionProvider
-     */
-    private $reflectionProvider;
-
-    /**
-     * @var MethodReflectionToAstResolver
-     */
-    private $methodReflectionToAstResolver;
-
     public function __construct(
-        ReflectionProvider $reflectionProvider,
-        MethodReflectionToAstResolver $methodReflectionToAstResolver
+        private ReflectionProvider $reflectionProvider,
+        private MethodReflectionToAstResolver $methodReflectionToAstResolver
     ) {
-        $this->reflectionProvider = $reflectionProvider;
-        $this->methodReflectionToAstResolver = $methodReflectionToAstResolver;
     }
 
     public function resolve(string $className, string $methodName): ?ClassMethod

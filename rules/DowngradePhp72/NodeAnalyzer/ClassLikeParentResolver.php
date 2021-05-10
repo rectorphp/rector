@@ -11,14 +11,9 @@ use Rector\NodeCollector\NodeCollector\NodeRepository;
 
 final class ClassLikeParentResolver
 {
-    /**
-     * @var NodeRepository
-     */
-    private $nodeRepository;
-
-    public function __construct(NodeRepository $nodeRepository)
-    {
-        $this->nodeRepository = $nodeRepository;
+    public function __construct(
+        private NodeRepository $nodeRepository
+    ) {
     }
 
     /**

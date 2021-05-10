@@ -20,22 +20,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class MoveInterfacesToContractNamespaceDirectoryRector extends AbstractRector
 {
-    /**
-     * @var NetteControlFactoryInterfaceAnalyzer
-     */
-    private $netteControlFactoryInterfaceAnalyzer;
-
-    /**
-     * @var AddedFileWithNodesFactory
-     */
-    private $addedFileWithNodesFactory;
-
     public function __construct(
-        NetteControlFactoryInterfaceAnalyzer $netteControlFactoryInterfaceAnalyzer,
-        AddedFileWithNodesFactory $addedFileWithNodesFactory
+        private NetteControlFactoryInterfaceAnalyzer $netteControlFactoryInterfaceAnalyzer,
+        private AddedFileWithNodesFactory $addedFileWithNodesFactory
     ) {
-        $this->netteControlFactoryInterfaceAnalyzer = $netteControlFactoryInterfaceAnalyzer;
-        $this->addedFileWithNodesFactory = $addedFileWithNodesFactory;
     }
 
     public function getRuleDefinition(): RuleDefinition

@@ -10,16 +10,11 @@ use Rector\Naming\Contract\RenameValueObjectInterface;
 final class PropertyRenameGuard
 {
     /**
-     * @var ConflictingNameGuardInterface[]
-     */
-    private $conflictingNameGuards = [];
-
-    /**
      * @param ConflictingNameGuardInterface[] $conflictingNameGuards
      */
-    public function __construct(array $conflictingNameGuards)
-    {
-        $this->conflictingNameGuards = $conflictingNameGuards;
+    public function __construct(
+        private array $conflictingNameGuards
+    ) {
     }
 
     public function shouldSkip(RenameValueObjectInterface $renameValueObject): bool

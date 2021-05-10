@@ -12,22 +12,10 @@ use Rector\NodeNameResolver\NodeNameResolver;
 
 final class UnusedParameterResolver
 {
-    /**
-     * @var ClassMethodManipulator
-     */
-    private $classMethodManipulator;
-
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
     public function __construct(
-        ClassMethodManipulator $classMethodManipulator,
-        NodeNameResolver $nodeNameResolver
+        private ClassMethodManipulator $classMethodManipulator,
+        private NodeNameResolver $nodeNameResolver
     ) {
-        $this->classMethodManipulator = $classMethodManipulator;
-        $this->nodeNameResolver = $nodeNameResolver;
     }
 
     /**

@@ -14,22 +14,12 @@ use Rector\Core\ValueObject\Application\File;
 final class FileFactory
 {
     /**
-     * @var FileProcessorInterface[]
-     */
-    private $fileProcessors = [];
-
-    /**
-     * @var FilesFinder
-     */
-    private $filesFinder;
-
-    /**
      * @param FileProcessorInterface[] $fileProcessors
      */
-    public function __construct(FilesFinder $filesFinder, array $fileProcessors)
-    {
-        $this->fileProcessors = $fileProcessors;
-        $this->filesFinder = $filesFinder;
+    public function __construct(
+        private FilesFinder $filesFinder,
+        private array $fileProcessors
+    ) {
     }
 
     /**

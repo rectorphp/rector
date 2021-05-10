@@ -15,23 +15,12 @@ use Symplify\PackageBuilder\Console\ShellCode;
 final class ShowCommand extends Command
 {
     /**
-     * @var SymfonyStyle
-     */
-    private $symfonyStyle;
-
-    /**
-     * @var RectorInterface[]
-     */
-    private $rectors = [];
-
-    /**
      * @param RectorInterface[] $rectors
      */
-    public function __construct(SymfonyStyle $symfonyStyle, array $rectors)
-    {
-        $this->symfonyStyle = $symfonyStyle;
-        $this->rectors = $rectors;
-
+    public function __construct(
+        private SymfonyStyle $symfonyStyle,
+        private array $rectors
+    ) {
         parent::__construct();
     }
 

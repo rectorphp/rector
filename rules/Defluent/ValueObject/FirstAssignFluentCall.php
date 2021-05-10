@@ -12,21 +12,15 @@ use Rector\Defluent\Contract\ValueObject\RootExprAwareInterface;
 
 final class FirstAssignFluentCall extends AbstractRootExpr implements RootExprAwareInterface, FirstCallFactoryAwareInterface
 {
-    /**
-     * @var FluentMethodCalls
-     */
-    private $fluentMethodCalls;
-
     public function __construct(
         Expr $assignExpr,
         Expr $rootExpr,
         bool $isFirstCallFactory,
-        FluentMethodCalls $fluentMethodCalls
+        private FluentMethodCalls $fluentMethodCalls
     ) {
         $this->assignExpr = $assignExpr;
         $this->rootExpr = $rootExpr;
         $this->isFirstCallFactory = $isFirstCallFactory;
-        $this->fluentMethodCalls = $fluentMethodCalls;
     }
 
     public function getAssignExpr(): Expr

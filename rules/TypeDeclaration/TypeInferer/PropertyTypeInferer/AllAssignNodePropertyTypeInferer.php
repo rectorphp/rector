@@ -15,22 +15,10 @@ use Rector\TypeDeclaration\TypeInferer\AssignToPropertyTypeInferer;
 
 final class AllAssignNodePropertyTypeInferer implements PropertyTypeInfererInterface
 {
-    /**
-     * @var AssignToPropertyTypeInferer
-     */
-    private $assignToPropertyTypeInferer;
-
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
     public function __construct(
-        AssignToPropertyTypeInferer $assignToPropertyTypeInferer,
-        NodeNameResolver $nodeNameResolver
+        private AssignToPropertyTypeInferer $assignToPropertyTypeInferer,
+        private NodeNameResolver $nodeNameResolver
     ) {
-        $this->assignToPropertyTypeInferer = $assignToPropertyTypeInferer;
-        $this->nodeNameResolver = $nodeNameResolver;
     }
 
     public function inferProperty(Property $property): Type

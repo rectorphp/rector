@@ -26,36 +26,12 @@ final class DoctrineRelationPropertyTypeInferer implements PropertyTypeInfererIn
      */
     private const COLLECTION_TYPE = 'Doctrine\Common\Collections\Collection';
 
-    /**
-     * @var TypeFactory
-     */
-    private $typeFactory;
-
-    /**
-     * @var PhpDocInfoFactory
-     */
-    private $phpDocInfoFactory;
-
-    /**
-     * @var ShortClassExpander
-     */
-    private $shortClassExpander;
-
-    /**
-     * @var ClassAnnotationMatcher
-     */
-    private $classAnnotationMatcher;
-
     public function __construct(
-        TypeFactory $typeFactory,
-        PhpDocInfoFactory $phpDocInfoFactory,
-        ShortClassExpander $shortClassExpander,
-        ClassAnnotationMatcher $classAnnotationMatcher
+        private TypeFactory $typeFactory,
+        private PhpDocInfoFactory $phpDocInfoFactory,
+        private ShortClassExpander $shortClassExpander,
+        private ClassAnnotationMatcher $classAnnotationMatcher
     ) {
-        $this->typeFactory = $typeFactory;
-        $this->phpDocInfoFactory = $phpDocInfoFactory;
-        $this->shortClassExpander = $shortClassExpander;
-        $this->classAnnotationMatcher = $classAnnotationMatcher;
     }
 
     public function inferProperty(Property $property): Type

@@ -20,14 +20,9 @@ use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
  */
 final class ClassLikeNameClassNameImportSkipVoter implements ClassNameImportSkipVoterInterface
 {
-    /**
-     * @var ShortNameResolver
-     */
-    private $shortNameResolver;
-
-    public function __construct(ShortNameResolver $shortNameResolver)
-    {
-        $this->shortNameResolver = $shortNameResolver;
+    public function __construct(
+        private ShortNameResolver $shortNameResolver
+    ) {
     }
 
     public function shouldSkip(FullyQualifiedObjectType $fullyQualifiedObjectType, Node $node): bool

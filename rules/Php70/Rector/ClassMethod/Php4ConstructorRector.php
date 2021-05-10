@@ -28,14 +28,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class Php4ConstructorRector extends AbstractRector
 {
-    /**
-     * @var Php4ConstructorClassMethodAnalyzer
-     */
-    private $php4ConstructorClassMethodAnalyzer;
-
-    public function __construct(Php4ConstructorClassMethodAnalyzer $php4ConstructorClassMethodAnalyzer)
-    {
-        $this->php4ConstructorClassMethodAnalyzer = $php4ConstructorClassMethodAnalyzer;
+    public function __construct(
+        private Php4ConstructorClassMethodAnalyzer $php4ConstructorClassMethodAnalyzer
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

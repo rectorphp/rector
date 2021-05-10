@@ -16,14 +16,9 @@ final class MergeImportedRectorConfigureCallValuesCompilerPass implements Compil
      */
     private const CONFIGURE_METHOD_NAME = 'configure';
 
-    /**
-     * @var ConfigureCallValuesCollector
-     */
-    private $configureCallValuesCollector;
-
-    public function __construct(ConfigureCallValuesCollector $configureCallValuesCollector)
-    {
-        $this->configureCallValuesCollector = $configureCallValuesCollector;
+    public function __construct(
+        private ConfigureCallValuesCollector $configureCallValuesCollector
+    ) {
     }
 
     public function process(ContainerBuilder $containerBuilder): void

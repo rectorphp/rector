@@ -12,20 +12,10 @@ use Symplify\SmartFileSystem\SmartFileSystem;
 
 final class SimplePhpParser
 {
-    /**
-     * @var Parser
-     */
-    private $parser;
-
-    /**
-     * @var SmartFileSystem
-     */
-    private $smartFileSystem;
-
-    public function __construct(Parser $parser, SmartFileSystem $smartFileSystem)
-    {
-        $this->parser = $parser;
-        $this->smartFileSystem = $smartFileSystem;
+    public function __construct(
+        private Parser $parser,
+        private SmartFileSystem $smartFileSystem
+    ) {
     }
 
     /**

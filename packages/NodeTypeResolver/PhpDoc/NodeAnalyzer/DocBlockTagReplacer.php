@@ -11,14 +11,9 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 
 final class DocBlockTagReplacer
 {
-    /**
-     * @var AnnotationNaming
-     */
-    private $annotationNaming;
-
-    public function __construct(AnnotationNaming $annotationNaming)
-    {
-        $this->annotationNaming = $annotationNaming;
+    public function __construct(
+        private AnnotationNaming $annotationNaming
+    ) {
     }
 
     public function replaceTagByAnother(PhpDocInfo $phpDocInfo, string $oldTag, string $newTag): void

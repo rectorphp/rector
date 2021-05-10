@@ -30,14 +30,9 @@ final class GetClassToInstanceOfRector extends AbstractRector
      */
     private const NO_NAMESPACED_CLASSNAMES = ['self', 'static'];
 
-    /**
-     * @var BinaryOpManipulator
-     */
-    private $binaryOpManipulator;
-
-    public function __construct(BinaryOpManipulator $binaryOpManipulator)
-    {
-        $this->binaryOpManipulator = $binaryOpManipulator;
+    public function __construct(
+        private BinaryOpManipulator $binaryOpManipulator
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

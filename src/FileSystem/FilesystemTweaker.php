@@ -9,14 +9,9 @@ use Symplify\SmartFileSystem\FileSystemGuard;
 
 final class FilesystemTweaker
 {
-    /**
-     * @var FileSystemGuard
-     */
-    private $fileSystemGuard;
-
-    public function __construct(FileSystemGuard $fileSystemGuard)
-    {
-        $this->fileSystemGuard = $fileSystemGuard;
+    public function __construct(
+        private FileSystemGuard $fileSystemGuard
+    ) {
     }
 
     /**

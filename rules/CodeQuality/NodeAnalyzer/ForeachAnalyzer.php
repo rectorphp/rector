@@ -19,43 +19,13 @@ use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
 final class ForeachAnalyzer
 {
-    /**
-     * @var NodeComparator
-     */
-    private $nodeComparator;
-
-    /**
-     * @var ForAnalyzer
-     */
-    private $forAnalyzer;
-
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var SimpleCallableNodeTraverser
-     */
-    private $simpleCallableNodeTraverser;
-
-    /**
-     * @var BetterNodeFinder
-     */
-    private $betterNodeFinder;
-
     public function __construct(
-        NodeComparator $nodeComparator,
-        ForAnalyzer $forAnalyzer,
-        NodeNameResolver $nodeNameResolver,
-        SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
-        BetterNodeFinder $betterNodeFinder
+        private NodeComparator $nodeComparator,
+        private ForAnalyzer $forAnalyzer,
+        private NodeNameResolver $nodeNameResolver,
+        private SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
+        private BetterNodeFinder $betterNodeFinder
     ) {
-        $this->nodeComparator = $nodeComparator;
-        $this->forAnalyzer = $forAnalyzer;
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
-        $this->betterNodeFinder = $betterNodeFinder;
     }
 
     /**

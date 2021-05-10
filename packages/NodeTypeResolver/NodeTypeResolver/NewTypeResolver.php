@@ -22,29 +22,11 @@ use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 
 final class NewTypeResolver implements NodeTypeResolverInterface
 {
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var ClassAnalyzer
-     */
-    private $classAnalyzer;
-
-    /**
-     * @var UnionTypeFactory
-     */
-    private $unionTypeFactory;
-
     public function __construct(
-        NodeNameResolver $nodeNameResolver,
-        ClassAnalyzer $classAnalyzer,
-        UnionTypeFactory $unionTypeFactory
+        private NodeNameResolver $nodeNameResolver,
+        private ClassAnalyzer $classAnalyzer,
+        private UnionTypeFactory $unionTypeFactory
     ) {
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->classAnalyzer = $classAnalyzer;
-        $this->unionTypeFactory = $unionTypeFactory;
     }
 
     /**

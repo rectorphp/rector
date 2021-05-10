@@ -32,29 +32,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class CreateFunctionToAnonymousFunctionRector extends AbstractRector
 {
-    /**
-     * @var InlineCodeParser
-     */
-    private $inlineCodeParser;
-
-    /**
-     * @var AnonymousFunctionFactory
-     */
-    private $anonymousFunctionFactory;
-
-    /**
-     * @var ReservedKeywordAnalyzer
-     */
-    private $reservedKeywordAnalyzer;
-
     public function __construct(
-        InlineCodeParser $inlineCodeParser,
-        AnonymousFunctionFactory $anonymousFunctionFactory,
-        ReservedKeywordAnalyzer $reservedKeywordAnalyzer
+        private InlineCodeParser $inlineCodeParser,
+        private AnonymousFunctionFactory $anonymousFunctionFactory,
+        private ReservedKeywordAnalyzer $reservedKeywordAnalyzer
     ) {
-        $this->inlineCodeParser = $inlineCodeParser;
-        $this->anonymousFunctionFactory = $anonymousFunctionFactory;
-        $this->reservedKeywordAnalyzer = $reservedKeywordAnalyzer;
     }
 
     public function getRuleDefinition(): RuleDefinition

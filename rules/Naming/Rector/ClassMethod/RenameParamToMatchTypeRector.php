@@ -28,43 +28,13 @@ final class RenameParamToMatchTypeRector extends AbstractRector
      */
     private $hasChanged = false;
 
-    /**
-     * @var ExpectedNameResolver
-     */
-    private $expectedNameResolver;
-
-    /**
-     * @var BreakingVariableRenameGuard
-     */
-    private $breakingVariableRenameGuard;
-
-    /**
-     * @var ParamRenamer
-     */
-    private $paramRenamer;
-
-    /**
-     * @var ParamRenameFactory
-     */
-    private $paramRenameFactory;
-
-    /**
-     * @var MatchParamTypeExpectedNameResolver
-     */
-    private $matchParamTypeExpectedNameResolver;
-
     public function __construct(
-        BreakingVariableRenameGuard $breakingVariableRenameGuard,
-        ExpectedNameResolver $expectedNameResolver,
-        MatchParamTypeExpectedNameResolver $matchParamTypeExpectedNameResolver,
-        ParamRenameFactory $paramRenameFactory,
-        ParamRenamer $paramRenamer
+        private BreakingVariableRenameGuard $breakingVariableRenameGuard,
+        private ExpectedNameResolver $expectedNameResolver,
+        private MatchParamTypeExpectedNameResolver $matchParamTypeExpectedNameResolver,
+        private ParamRenameFactory $paramRenameFactory,
+        private ParamRenamer $paramRenamer
     ) {
-        $this->expectedNameResolver = $expectedNameResolver;
-        $this->breakingVariableRenameGuard = $breakingVariableRenameGuard;
-        $this->paramRenameFactory = $paramRenameFactory;
-        $this->paramRenamer = $paramRenamer;
-        $this->matchParamTypeExpectedNameResolver = $matchParamTypeExpectedNameResolver;
     }
 
     public function getRuleDefinition(): RuleDefinition

@@ -11,20 +11,10 @@ use Rector\ReadWrite\NodeFinder\NodeUsageFinder;
 
 final class PropertyFetchReadNodeAnalyzer implements ReadNodeAnalyzerInterface
 {
-    /**
-     * @var ReadExprAnalyzer
-     */
-    private $readExprAnalyzer;
-
-    /**
-     * @var NodeUsageFinder
-     */
-    private $nodeUsageFinder;
-
-    public function __construct(ReadExprAnalyzer $readExprAnalyzer, NodeUsageFinder $nodeUsageFinder)
-    {
-        $this->readExprAnalyzer = $readExprAnalyzer;
-        $this->nodeUsageFinder = $nodeUsageFinder;
+    public function __construct(
+        private ReadExprAnalyzer $readExprAnalyzer,
+        private NodeUsageFinder $nodeUsageFinder
+    ) {
     }
 
     public function supports(Node $node): bool

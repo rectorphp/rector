@@ -20,22 +20,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class DowngradeSelfTypeDeclarationRector extends AbstractRector
 {
-    /**
-     * @var PhpDocFromTypeDeclarationDecorator
-     */
-    private $phpDocFromTypeDeclarationDecorator;
-
-    /**
-     * @var ReflectionProvider
-     */
-    private $reflectionProvider;
-
     public function __construct(
-        PhpDocFromTypeDeclarationDecorator $phpDocFromTypeDeclarationDecorator,
-        ReflectionProvider $reflectionProvider
+        private PhpDocFromTypeDeclarationDecorator $phpDocFromTypeDeclarationDecorator,
+        private ReflectionProvider $reflectionProvider
     ) {
-        $this->phpDocFromTypeDeclarationDecorator = $phpDocFromTypeDeclarationDecorator;
-        $this->reflectionProvider = $reflectionProvider;
     }
 
     /**

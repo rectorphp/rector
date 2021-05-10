@@ -40,20 +40,10 @@ final class MethodCallToVariableNameResolver
      */
     private const VALID_STRING_VARIABLE_REGEX = '#^[a-z_]\w*$#';
 
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var ExpectedNameResolver
-     */
-    private $expectedNameResolver;
-
-    public function __construct(NodeNameResolver $nodeNameResolver, ExpectedNameResolver $expectedNameResolver)
-    {
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->expectedNameResolver = $expectedNameResolver;
+    public function __construct(
+        private NodeNameResolver $nodeNameResolver,
+        private ExpectedNameResolver $expectedNameResolver
+    ) {
     }
 
     /**

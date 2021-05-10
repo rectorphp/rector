@@ -48,29 +48,11 @@ final class OrderMethodsByVisibilityRector extends AbstractRector
         MethodName::TEAR_DOWN,
     ];
 
-    /**
-     * @var OrderChangeAnalyzer
-     */
-    private $orderChangeAnalyzer;
-
-    /**
-     * @var StmtOrder
-     */
-    private $stmtOrder;
-
-    /**
-     * @var StmtVisibilitySorter
-     */
-    private $stmtVisibilitySorter;
-
     public function __construct(
-        OrderChangeAnalyzer $orderChangeAnalyzer,
-        StmtOrder $stmtOrder,
-        StmtVisibilitySorter $stmtVisibilitySorter
+        private OrderChangeAnalyzer $orderChangeAnalyzer,
+        private StmtOrder $stmtOrder,
+        private StmtVisibilitySorter $stmtVisibilitySorter
     ) {
-        $this->orderChangeAnalyzer = $orderChangeAnalyzer;
-        $this->stmtOrder = $stmtOrder;
-        $this->stmtVisibilitySorter = $stmtVisibilitySorter;
     }
 
     public function getRuleDefinition(): RuleDefinition

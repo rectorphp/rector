@@ -16,14 +16,9 @@ use Rector\FileFormatter\ValueObjectFactory\EditorConfigConfigurationBuilder;
  */
 final class JsonFileFormatter implements FileFormatterInterface
 {
-    /**
-     * @var PrinterInterface
-     */
-    private $jsonPrinter;
-
-    public function __construct(PrinterInterface $jsonPrinter)
-    {
-        $this->jsonPrinter = $jsonPrinter;
+    public function __construct(
+        private PrinterInterface $jsonPrinter
+    ) {
     }
 
     public function supports(File $file): bool

@@ -28,36 +28,12 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class RemoveSetterOnlyPropertyAndMethodCallRector extends AbstractRector
 {
-    /**
-     * @var PropertyManipulator
-     */
-    private $propertyManipulator;
-
-    /**
-     * @var VendorLockResolver
-     */
-    private $vendorLockResolver;
-
-    /**
-     * @var PropertyFetchFinder
-     */
-    private $propertyFetchFinder;
-
-    /**
-     * @var ComplexNodeRemover
-     */
-    private $complexNodeRemover;
-
     public function __construct(
-        PropertyManipulator $propertyManipulator,
-        VendorLockResolver $vendorLockResolver,
-        PropertyFetchFinder $propertyFetchFinder,
-        ComplexNodeRemover $complexNodeRemover
+        private PropertyManipulator $propertyManipulator,
+        private VendorLockResolver $vendorLockResolver,
+        private PropertyFetchFinder $propertyFetchFinder,
+        private ComplexNodeRemover $complexNodeRemover
     ) {
-        $this->propertyManipulator = $propertyManipulator;
-        $this->vendorLockResolver = $vendorLockResolver;
-        $this->propertyFetchFinder = $propertyFetchFinder;
-        $this->complexNodeRemover = $complexNodeRemover;
     }
 
     public function getRuleDefinition(): RuleDefinition

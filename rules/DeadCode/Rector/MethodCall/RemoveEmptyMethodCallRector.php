@@ -27,14 +27,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class RemoveEmptyMethodCallRector extends AbstractRector
 {
-    /**
-     * @var ClassReflectionToAstResolver
-     */
-    private $classReflectionToAstResolver;
-
-    public function __construct(ClassReflectionToAstResolver $classReflectionToAstResolver)
-    {
-        $this->classReflectionToAstResolver = $classReflectionToAstResolver;
+    public function __construct(
+        private ClassReflectionToAstResolver $classReflectionToAstResolver
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

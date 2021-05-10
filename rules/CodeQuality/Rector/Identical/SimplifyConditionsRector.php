@@ -22,20 +22,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class SimplifyConditionsRector extends AbstractRector
 {
-    /**
-     * @var AssignAndBinaryMap
-     */
-    private $assignAndBinaryMap;
-
-    /**
-     * @var BinaryOpManipulator
-     */
-    private $binaryOpManipulator;
-
-    public function __construct(AssignAndBinaryMap $assignAndBinaryMap, BinaryOpManipulator $binaryOpManipulator)
-    {
-        $this->assignAndBinaryMap = $assignAndBinaryMap;
-        $this->binaryOpManipulator = $binaryOpManipulator;
+    public function __construct(
+        private AssignAndBinaryMap $assignAndBinaryMap,
+        private BinaryOpManipulator $binaryOpManipulator
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

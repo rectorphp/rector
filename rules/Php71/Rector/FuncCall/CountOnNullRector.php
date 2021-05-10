@@ -39,20 +39,10 @@ final class CountOnNullRector extends AbstractRector
      */
     private const ALREADY_CHANGED_ON_COUNT = 'already_changed_on_count';
 
-    /**
-     * @var CountableTypeAnalyzer
-     */
-    private $countableTypeAnalyzer;
-
-    /**
-     * @var CountableAnalyzer
-     */
-    private $countableAnalyzer;
-
-    public function __construct(CountableTypeAnalyzer $countableTypeAnalyzer, CountableAnalyzer $countableAnalyzer)
-    {
-        $this->countableTypeAnalyzer = $countableTypeAnalyzer;
-        $this->countableAnalyzer = $countableAnalyzer;
+    public function __construct(
+        private CountableTypeAnalyzer $countableTypeAnalyzer,
+        private CountableAnalyzer $countableAnalyzer
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

@@ -19,14 +19,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class DefluentReturnMethodCallRector extends AbstractRector
 {
-    /**
-     * @var FluentChainMethodCallNodeAnalyzer
-     */
-    private $fluentChainMethodCallNodeAnalyzer;
-
-    public function __construct(FluentChainMethodCallNodeAnalyzer $fluentChainMethodCallNodeAnalyzer)
-    {
-        $this->fluentChainMethodCallNodeAnalyzer = $fluentChainMethodCallNodeAnalyzer;
+    public function __construct(
+        private FluentChainMethodCallNodeAnalyzer $fluentChainMethodCallNodeAnalyzer
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

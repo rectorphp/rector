@@ -35,14 +35,9 @@ final class RenameNamespaceRector extends AbstractRector implements Configurable
      */
     private $oldToNewNamespaces = [];
 
-    /**
-     * @var NamespaceMatcher
-     */
-    private $namespaceMatcher;
-
-    public function __construct(NamespaceMatcher $namespaceMatcher)
-    {
-        $this->namespaceMatcher = $namespaceMatcher;
+    public function __construct(
+        private NamespaceMatcher $namespaceMatcher
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

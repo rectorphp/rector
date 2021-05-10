@@ -43,36 +43,12 @@ final class ManualJsonStringToJsonEncodeArrayRector extends AbstractRector
      */
     private const JSON_STRING_REGEX = '#{(.*?\:.*?)}#s';
 
-    /**
-     * @var ConcatJoiner
-     */
-    private $concatJoiner;
-
-    /**
-     * @var ConcatManipulator
-     */
-    private $concatManipulator;
-
-    /**
-     * @var JsonEncodeStaticCallFactory
-     */
-    private $jsonEncodeStaticCallFactory;
-
-    /**
-     * @var JsonArrayFactory
-     */
-    private $jsonArrayFactory;
-
     public function __construct(
-        ConcatJoiner $concatJoiner,
-        ConcatManipulator $concatManipulator,
-        JsonEncodeStaticCallFactory $jsonEncodeStaticCallFactory,
-        JsonArrayFactory $jsonArrayFactory
+        private ConcatJoiner $concatJoiner,
+        private ConcatManipulator $concatManipulator,
+        private JsonEncodeStaticCallFactory $jsonEncodeStaticCallFactory,
+        private JsonArrayFactory $jsonArrayFactory
     ) {
-        $this->concatJoiner = $concatJoiner;
-        $this->concatManipulator = $concatManipulator;
-        $this->jsonEncodeStaticCallFactory = $jsonEncodeStaticCallFactory;
-        $this->jsonArrayFactory = $jsonArrayFactory;
     }
 
     public function getRuleDefinition(): RuleDefinition

@@ -12,20 +12,10 @@ use Rector\NodeCollector\NodeCollector\NodeRepository;
 
 final class StaticAnalyzer
 {
-    /**
-     * @var NodeRepository
-     */
-    private $nodeRepository;
-
-    /**
-     * @var ReflectionProvider
-     */
-    private $reflectionProvider;
-
-    public function __construct(NodeRepository $nodeRepository, ReflectionProvider $reflectionProvider)
-    {
-        $this->nodeRepository = $nodeRepository;
-        $this->reflectionProvider = $reflectionProvider;
+    public function __construct(
+        private NodeRepository $nodeRepository,
+        private ReflectionProvider $reflectionProvider
+    ) {
     }
 
     public function isStaticMethod(string $methodName, string $className): bool

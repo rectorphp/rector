@@ -16,29 +16,11 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 
 final class CountableAnalyzer
 {
-    /**
-     * @var NodeTypeResolver
-     */
-    private $nodeTypeResolver;
-
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var ReflectionProvider
-     */
-    private $reflectionProvider;
-
     public function __construct(
-        NodeTypeResolver $nodeTypeResolver,
-        NodeNameResolver $nodeNameResolver,
-        ReflectionProvider $reflectionProvider
+        private NodeTypeResolver $nodeTypeResolver,
+        private NodeNameResolver $nodeNameResolver,
+        private ReflectionProvider $reflectionProvider
     ) {
-        $this->nodeTypeResolver = $nodeTypeResolver;
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->reflectionProvider = $reflectionProvider;
     }
 
     public function isCastableArrayType(Expr $expr): bool

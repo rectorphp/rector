@@ -20,22 +20,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class ActionInjectionToConstructorInjectionRector extends AbstractRector
 {
-    /**
-     * @var VariablesToPropertyFetchCollection
-     */
-    private $variablesToPropertyFetchCollection;
-
-    /**
-     * @var ServiceMapProvider
-     */
-    private $applicationServiceMapProvider;
-
     public function __construct(
-        ServiceMapProvider $applicationServiceMapProvider,
-        VariablesToPropertyFetchCollection $variablesToPropertyFetchCollection
+        private ServiceMapProvider $applicationServiceMapProvider,
+        private VariablesToPropertyFetchCollection $variablesToPropertyFetchCollection
     ) {
-        $this->variablesToPropertyFetchCollection = $variablesToPropertyFetchCollection;
-        $this->applicationServiceMapProvider = $applicationServiceMapProvider;
     }
 
     public function getRuleDefinition(): RuleDefinition

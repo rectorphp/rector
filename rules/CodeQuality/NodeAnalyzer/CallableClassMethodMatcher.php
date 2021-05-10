@@ -22,36 +22,12 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 
 final class CallableClassMethodMatcher
 {
-    /**
-     * @var ValueResolver
-     */
-    private $valueResolver;
-
-    /**
-     * @var NodeTypeResolver
-     */
-    private $nodeTypeResolver;
-
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var ReflectionProvider
-     */
-    private $reflectionProvider;
-
     public function __construct(
-        ValueResolver $valueResolver,
-        NodeTypeResolver $nodeTypeResolver,
-        NodeNameResolver $nodeNameResolver,
-        ReflectionProvider $reflectionProvider
+        private ValueResolver $valueResolver,
+        private NodeTypeResolver $nodeTypeResolver,
+        private NodeNameResolver $nodeNameResolver,
+        private ReflectionProvider $reflectionProvider
     ) {
-        $this->valueResolver = $valueResolver;
-        $this->nodeTypeResolver = $nodeTypeResolver;
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->reflectionProvider = $reflectionProvider;
     }
 
     /**

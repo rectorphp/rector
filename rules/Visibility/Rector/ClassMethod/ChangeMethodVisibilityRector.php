@@ -30,14 +30,9 @@ final class ChangeMethodVisibilityRector extends AbstractRector implements Confi
      */
     private $methodVisibilities = [];
 
-    /**
-     * @var ParentClassScopeResolver
-     */
-    private $parentClassScopeResolver;
-
-    public function __construct(ParentClassScopeResolver $parentClassScopeResolver)
-    {
-        $this->parentClassScopeResolver = $parentClassScopeResolver;
+    public function __construct(
+        private ParentClassScopeResolver $parentClassScopeResolver
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

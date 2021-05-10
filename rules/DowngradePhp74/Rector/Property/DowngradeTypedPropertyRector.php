@@ -16,14 +16,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class DowngradeTypedPropertyRector extends AbstractRector
 {
-    /**
-     * @var PhpDocTypeChanger
-     */
-    private $phpDocTypeChanger;
-
-    public function __construct(PhpDocTypeChanger $phpDocTypeChanger)
-    {
-        $this->phpDocTypeChanger = $phpDocTypeChanger;
+    public function __construct(
+        private PhpDocTypeChanger $phpDocTypeChanger
+    ) {
     }
 
     /**

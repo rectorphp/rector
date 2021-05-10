@@ -36,14 +36,9 @@ final class NewLine
         self::CARRIAGE_RETURN_LINE_FEED => "\r\n",
     ];
 
-    /**
-     * @var string
-     */
-    private $string;
-
-    private function __construct(string $string)
-    {
-        $this->string = $string;
+    private function __construct(
+        private string $string
+    ) {
     }
 
     public function __toString(): string

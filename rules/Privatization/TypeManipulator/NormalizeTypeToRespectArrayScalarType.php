@@ -13,14 +13,9 @@ use Rector\NodeNameResolver\NodeNameResolver;
 
 final class NormalizeTypeToRespectArrayScalarType
 {
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    public function __construct(NodeNameResolver $nodeNameResolver)
-    {
-        $this->nodeNameResolver = $nodeNameResolver;
+    public function __construct(
+        private NodeNameResolver $nodeNameResolver
+    ) {
     }
 
     public function normalizeToArray(Type $type, ?Node $returnNode): Type

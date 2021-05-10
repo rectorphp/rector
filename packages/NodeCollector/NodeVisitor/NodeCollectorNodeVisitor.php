@@ -12,29 +12,11 @@ use Rector\NodeCollector\NodeCollector\ParsedPropertyFetchNodeCollector;
 
 final class NodeCollectorNodeVisitor extends NodeVisitorAbstract
 {
-    /**
-     * @var NodeRepository
-     */
-    private $nodeRepository;
-
-    /**
-     * @var ParsedNodeCollector
-     */
-    private $parsedNodeCollector;
-
-    /**
-     * @var ParsedPropertyFetchNodeCollector
-     */
-    private $parsedPropertyFetchNodeCollector;
-
     public function __construct(
-        NodeRepository $nodeRepository,
-        ParsedNodeCollector $parsedNodeCollector,
-        ParsedPropertyFetchNodeCollector $parsedPropertyFetchNodeCollector
+        private NodeRepository $nodeRepository,
+        private ParsedNodeCollector $parsedNodeCollector,
+        private ParsedPropertyFetchNodeCollector $parsedPropertyFetchNodeCollector
     ) {
-        $this->nodeRepository = $nodeRepository;
-        $this->parsedNodeCollector = $parsedNodeCollector;
-        $this->parsedPropertyFetchNodeCollector = $parsedPropertyFetchNodeCollector;
     }
 
     public function enterNode(Node $node)

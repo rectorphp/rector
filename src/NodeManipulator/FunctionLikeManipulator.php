@@ -14,29 +14,11 @@ use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
 final class FunctionLikeManipulator
 {
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var SimpleCallableNodeTraverser
-     */
-    private $simpleCallableNodeTraverser;
-
-    /**
-     * @var PropertyFetchAnalyzer
-     */
-    private $propertyFetchAnalyzer;
-
     public function __construct(
-        SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
-        NodeNameResolver $nodeNameResolver,
-        PropertyFetchAnalyzer $propertyFetchAnalyzer
+        private SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
+        private NodeNameResolver $nodeNameResolver,
+        private PropertyFetchAnalyzer $propertyFetchAnalyzer
     ) {
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
-        $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
     }
 
     /**

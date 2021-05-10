@@ -25,20 +25,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class VarConstantCommentRector extends AbstractRector
 {
-    /**
-     * @var TypeComparator
-     */
-    private $typeComparator;
-
-    /**
-     * @var PhpDocTypeChanger
-     */
-    private $phpDocTypeChanger;
-
-    public function __construct(TypeComparator $typeComparator, PhpDocTypeChanger $phpDocTypeChanger)
-    {
-        $this->typeComparator = $typeComparator;
-        $this->phpDocTypeChanger = $phpDocTypeChanger;
+    public function __construct(
+        private TypeComparator $typeComparator,
+        private PhpDocTypeChanger $phpDocTypeChanger
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

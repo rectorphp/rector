@@ -35,14 +35,9 @@ final class ThrowWithPreviousExceptionRector extends AbstractRector
      */
     private const DEFAULT_EXCEPTION_ARGUMENT_POSITION = 2;
 
-    /**
-     * @var ReflectionProvider
-     */
-    private $reflectionProvider;
-
-    public function __construct(ReflectionProvider $reflectionProvider)
-    {
-        $this->reflectionProvider = $reflectionProvider;
+    public function __construct(
+        private ReflectionProvider $reflectionProvider
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

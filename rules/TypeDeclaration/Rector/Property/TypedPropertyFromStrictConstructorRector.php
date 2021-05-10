@@ -20,22 +20,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class TypedPropertyFromStrictConstructorRector extends AbstractRector
 {
-    /**
-     * @var ConstructorPropertyTypeInferer
-     */
-    private $constructorPropertyTypeInferer;
-
-    /**
-     * @var VarTagRemover
-     */
-    private $varTagRemover;
-
     public function __construct(
-        ConstructorPropertyTypeInferer $constructorPropertyTypeInferer,
-        VarTagRemover $varTagRemover
+        private ConstructorPropertyTypeInferer $constructorPropertyTypeInferer,
+        private VarTagRemover $varTagRemover
     ) {
-        $this->constructorPropertyTypeInferer = $constructorPropertyTypeInferer;
-        $this->varTagRemover = $varTagRemover;
     }
 
     public function getRuleDefinition(): RuleDefinition

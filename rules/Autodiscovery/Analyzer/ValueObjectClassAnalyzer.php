@@ -21,43 +21,13 @@ final class ValueObjectClassAnalyzer
      */
     private $valueObjectStatusByClassName = [];
 
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var NodeTypeResolver
-     */
-    private $nodeTypeResolver;
-
-    /**
-     * @var PhpDocInfoFactory
-     */
-    private $phpDocInfoFactory;
-
-    /**
-     * @var NodeRepository
-     */
-    private $nodeRepository;
-
-    /**
-     * @var ClassAnalyzer
-     */
-    private $classAnalyzer;
-
     public function __construct(
-        NodeNameResolver $nodeNameResolver,
-        NodeTypeResolver $nodeTypeResolver,
-        PhpDocInfoFactory $phpDocInfoFactory,
-        NodeRepository $nodeRepository,
-        ClassAnalyzer $classAnalyzer
+        private NodeNameResolver $nodeNameResolver,
+        private NodeTypeResolver $nodeTypeResolver,
+        private PhpDocInfoFactory $phpDocInfoFactory,
+        private NodeRepository $nodeRepository,
+        private ClassAnalyzer $classAnalyzer
     ) {
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->nodeTypeResolver = $nodeTypeResolver;
-        $this->phpDocInfoFactory = $phpDocInfoFactory;
-        $this->nodeRepository = $nodeRepository;
-        $this->classAnalyzer = $classAnalyzer;
     }
 
     public function isValueObjectClass(Class_ $class): bool

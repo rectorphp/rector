@@ -18,29 +18,11 @@ final class JsonOutputFormatter implements OutputFormatterInterface
      */
     public const NAME = 'json';
 
-    /**
-     * @var Configuration
-     */
-    private $configuration;
-
-    /**
-     * @var SmartFileSystem
-     */
-    private $smartFileSystem;
-
-    /**
-     * @var RectorsChangelogResolver
-     */
-    private $rectorsChangelogResolver;
-
     public function __construct(
-        Configuration $configuration,
-        SmartFileSystem $smartFileSystem,
-        RectorsChangelogResolver $rectorsChangelogResolver
+        private Configuration $configuration,
+        private SmartFileSystem $smartFileSystem,
+        private RectorsChangelogResolver $rectorsChangelogResolver
     ) {
-        $this->configuration = $configuration;
-        $this->smartFileSystem = $smartFileSystem;
-        $this->rectorsChangelogResolver = $rectorsChangelogResolver;
     }
 
     public function getName(): string

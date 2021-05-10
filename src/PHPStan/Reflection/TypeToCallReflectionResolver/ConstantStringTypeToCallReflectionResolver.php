@@ -28,14 +28,9 @@ final class ConstantStringTypeToCallReflectionResolver implements TypeToCallRefl
      */
     private const STATIC_METHOD_REGEX = '#^(?<class>[a-zA-Z_\\x7f-\\xff\\\\][a-zA-Z0-9_\\x7f-\\xff\\\\]*)::(?<method>[a-zA-Z_\\x7f-\\xff][a-zA-Z0-9_\\x7f-\\xff]*)\\z#';
 
-    /**
-     * @var ReflectionProvider
-     */
-    private $reflectionProvider;
-
-    public function __construct(ReflectionProvider $reflectionProvider)
-    {
-        $this->reflectionProvider = $reflectionProvider;
+    public function __construct(
+        private ReflectionProvider $reflectionProvider
+    ) {
     }
 
     public function supports(Type $type): bool

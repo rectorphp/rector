@@ -8,14 +8,9 @@ use Rector\Core\Contract\Rector\RectorInterface;
 
 final class RectorsChangelogResolver
 {
-    /**
-     * @var AnnotationExtractor
-     */
-    private $annotationExtractor;
-
-    public function __construct(AnnotationExtractor $annotationExtractor)
-    {
-        $this->annotationExtractor = $annotationExtractor;
+    public function __construct(
+        private AnnotationExtractor $annotationExtractor
+    ) {
     }
 
     /**

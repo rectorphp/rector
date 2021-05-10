@@ -27,57 +27,15 @@ use Symplify\SmartFileSystem\SmartFileSystem;
 
 final class FunctionLikeReflectionParser
 {
-    /**
-     * @var Parser
-     */
-    private $parser;
-
-    /**
-     * @var SmartFileSystem
-     */
-    private $smartFileSystem;
-
-    /**
-     * @var NodeFinder
-     */
-    private $nodeFinder;
-
-    /**
-     * @var NodeScopeAndMetadataDecorator
-     */
-    private $nodeScopeAndMetadataDecorator;
-
-    /**
-     * @var NodeTypeResolver
-     */
-    private $nodeTypeResolver;
-
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var ReflectionProvider
-     */
-    private $reflectionProvider;
-
     public function __construct(
-        Parser $parser,
-        SmartFileSystem $smartFileSystem,
-        NodeFinder $nodeFinder,
-        NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator,
-        NodeTypeResolver $nodeTypeResolver,
-        NodeNameResolver $nodeNameResolver,
-        ReflectionProvider $reflectionProvider
+        private Parser $parser,
+        private SmartFileSystem $smartFileSystem,
+        private NodeFinder $nodeFinder,
+        private NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator,
+        private NodeTypeResolver $nodeTypeResolver,
+        private NodeNameResolver $nodeNameResolver,
+        private ReflectionProvider $reflectionProvider
     ) {
-        $this->parser = $parser;
-        $this->smartFileSystem = $smartFileSystem;
-        $this->nodeFinder = $nodeFinder;
-        $this->nodeScopeAndMetadataDecorator = $nodeScopeAndMetadataDecorator;
-        $this->nodeTypeResolver = $nodeTypeResolver;
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->reflectionProvider = $reflectionProvider;
     }
 
     public function parseMethodReflection(MethodReflection $methodReflection): ?ClassMethod

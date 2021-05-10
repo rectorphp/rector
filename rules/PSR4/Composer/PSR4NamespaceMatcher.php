@@ -12,14 +12,9 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class PSR4NamespaceMatcher implements PSR4AutoloadNamespaceMatcherInterface
 {
-    /**
-     * @var PSR4AutoloadPathsProvider
-     */
-    private $psr4AutoloadPathsProvider;
-
-    public function __construct(PSR4AutoloadPathsProvider $psr4AutoloadPathsProvider)
-    {
-        $this->psr4AutoloadPathsProvider = $psr4AutoloadPathsProvider;
+    public function __construct(
+        private PSR4AutoloadPathsProvider $psr4AutoloadPathsProvider
+    ) {
     }
 
     public function getExpectedNamespace(File $file, Node $node): ?string

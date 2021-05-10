@@ -35,12 +35,6 @@ final class PhpDocInfoPrinter
 
     /**
      * @var string
-     * @see https://regex101.com/r/Jzqzpw/1
-     */
-    private const MISSING_NEWLINE_REGEX = '#([^\s])\*/$#';
-
-    /**
-     * @var string
      * @see https://regex101.com/r/mVmOCY/2
      */
     private const OPENING_DOCBLOCK_REGEX = '#^(/\*\*)#';
@@ -94,52 +88,23 @@ final class PhpDocInfoPrinter
     private $phpDocInfo;
 
     /**
-     * @var EmptyPhpDocDetector
-     */
-    private $emptyPhpDocDetector;
-
-    /**
-     * @var DocBlockInliner
-     */
-    private $docBlockInliner;
-
-    /**
-     * @var RemoveNodesStartAndEndResolver
-     */
-    private $removeNodesStartAndEndResolver;
-
-    /**
-     * @var ChangedPhpDocNodeVisitor
-     */
-    private $changedPhpDocNodeVisitor;
-
-    /**
      * @var PhpDocNodeTraverser
      */
     private $changedPhpDocNodeTraverser;
 
     public function __construct(
-        EmptyPhpDocDetector $emptyPhpDocDetector,
-        DocBlockInliner $docBlockInliner,
-        RemoveNodesStartAndEndResolver $removeNodesStartAndEndResolver,
-        ChangedPhpDocNodeVisitor $changedPhpDocNodeVisitor,
+        private EmptyPhpDocDetector $emptyPhpDocDetector,
+        private DocBlockInliner $docBlockInliner,
+        private RemoveNodesStartAndEndResolver $removeNodesStartAndEndResolver,
+        private ChangedPhpDocNodeVisitor $changedPhpDocNodeVisitor,
         ChangedPhpDocNodeTraverserFactory $changedPhpDocNodeTraverserFactory
     ) {
-        $this->emptyPhpDocDetector = $emptyPhpDocDetector;
-        $this->docBlockInliner = $docBlockInliner;
-        $this->removeNodesStartAndEndResolver = $removeNodesStartAndEndResolver;
-        $this->changedPhpDocNodeVisitor = $changedPhpDocNodeVisitor;
-
         $this->changedPhpDocNodeTraverser = $changedPhpDocNodeTraverserFactory->create();
     }
 
     public function printNew(PhpDocInfo $phpDocInfo): string
     {
         $docContent = (string) $phpDocInfo->getPhpDocNode();
-
-        // fix missing newline in the end of docblock - keep BC compatible for both cases until phpstan with phpdoc-parser 0.5.2 is released
-        $docContent = Strings::replace($docContent, self::MISSING_NEWLINE_REGEX, "$1\n */");
-
         if ($phpDocInfo->isSingleLine()) {
             return $this->docBlockInliner->inline($docContent);
         }

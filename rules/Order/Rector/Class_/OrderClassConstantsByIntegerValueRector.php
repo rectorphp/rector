@@ -19,20 +19,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class OrderClassConstantsByIntegerValueRector extends AbstractRector
 {
-    /**
-     * @var OrderChangeAnalyzer
-     */
-    private $orderChangeAnalyzer;
-
-    /**
-     * @var StmtOrder
-     */
-    private $stmtOrder;
-
-    public function __construct(OrderChangeAnalyzer $orderChangeAnalyzer, StmtOrder $stmtOrder)
-    {
-        $this->orderChangeAnalyzer = $orderChangeAnalyzer;
-        $this->stmtOrder = $stmtOrder;
+    public function __construct(
+        private OrderChangeAnalyzer $orderChangeAnalyzer,
+        private StmtOrder $stmtOrder
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

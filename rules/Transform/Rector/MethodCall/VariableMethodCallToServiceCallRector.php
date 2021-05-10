@@ -34,14 +34,9 @@ final class VariableMethodCallToServiceCallRector extends AbstractRector impleme
      */
     private $variableMethodCallsToServiceCalls = [];
 
-    /**
-     * @var PropertyNaming
-     */
-    private $propertyNaming;
-
-    public function __construct(PropertyNaming $propertyNaming)
-    {
-        $this->propertyNaming = $propertyNaming;
+    public function __construct(
+        private PropertyNaming $propertyNaming
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

@@ -58,69 +58,26 @@ final class NodeTypeResolver
     private $nodeTypeResolvers = [];
 
     /**
-     * @var ObjectTypeSpecifier
-     */
-    private $objectTypeSpecifier;
-
-    /**
      * @var ArrayTypeAnalyzer
      */
     private $arrayTypeAnalyzer;
 
     /**
-     * @var ClassAnalyzer
-     */
-    private $classAnalyzer;
-
-    /**
-     * @var GenericClassStringTypeCorrector
-     */
-    private $genericClassStringTypeCorrector;
-
-    /**
-     * @var ReflectionProvider
-     */
-    private $reflectionProvider;
-
-    /**
-     * @var HasOffsetTypeCorrector
-     */
-    private $hasOffsetTypeCorrector;
-
-    /**
-     * @var IdentifierTypeResolver
-     */
-    private $identifierTypeResolver;
-
-    /**
-     * @var RenamedClassesDataCollector
-     */
-    private $renamedClassesDataCollector;
-
-    /**
      * @param NodeTypeResolverInterface[] $nodeTypeResolvers
      */
     public function __construct(
-        ObjectTypeSpecifier $objectTypeSpecifier,
-        ClassAnalyzer $classAnalyzer,
-        GenericClassStringTypeCorrector $genericClassStringTypeCorrector,
-        ReflectionProvider $reflectionProvider,
-        HasOffsetTypeCorrector $hasOffsetTypeCorrector,
-        IdentifierTypeResolver $identifierTypeResolver,
-        RenamedClassesDataCollector $renamedClassesDataCollector,
+        private ObjectTypeSpecifier $objectTypeSpecifier,
+        private ClassAnalyzer $classAnalyzer,
+        private GenericClassStringTypeCorrector $genericClassStringTypeCorrector,
+        private ReflectionProvider $reflectionProvider,
+        private HasOffsetTypeCorrector $hasOffsetTypeCorrector,
+        private IdentifierTypeResolver $identifierTypeResolver,
+        private RenamedClassesDataCollector $renamedClassesDataCollector,
         array $nodeTypeResolvers
     ) {
         foreach ($nodeTypeResolvers as $nodeTypeResolver) {
             $this->addNodeTypeResolver($nodeTypeResolver);
         }
-
-        $this->objectTypeSpecifier = $objectTypeSpecifier;
-        $this->classAnalyzer = $classAnalyzer;
-        $this->genericClassStringTypeCorrector = $genericClassStringTypeCorrector;
-        $this->reflectionProvider = $reflectionProvider;
-        $this->hasOffsetTypeCorrector = $hasOffsetTypeCorrector;
-        $this->identifierTypeResolver = $identifierTypeResolver;
-        $this->renamedClassesDataCollector = $renamedClassesDataCollector;
     }
 
     /**

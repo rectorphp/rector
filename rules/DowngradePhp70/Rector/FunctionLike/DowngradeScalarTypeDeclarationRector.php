@@ -34,14 +34,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class DowngradeScalarTypeDeclarationRector extends AbstractRector
 {
-    /**
-     * @var PhpDocFromTypeDeclarationDecorator
-     */
-    private $phpDocFromTypeDeclarationDecorator;
-
-    public function __construct(PhpDocFromTypeDeclarationDecorator $phpDocFromTypeDeclarationDecorator)
-    {
-        $this->phpDocFromTypeDeclarationDecorator = $phpDocFromTypeDeclarationDecorator;
+    public function __construct(
+        private PhpDocFromTypeDeclarationDecorator $phpDocFromTypeDeclarationDecorator
+    ) {
     }
 
     /**

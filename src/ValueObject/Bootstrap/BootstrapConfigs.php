@@ -9,22 +9,12 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class BootstrapConfigs
 {
     /**
-     * @var SmartFileInfo|null
-     */
-    private $mainConfigFileInfo;
-
-    /**
-     * @var SmartFileInfo[]
-     */
-    private $setConfigFileInfos = [];
-
-    /**
      * @param SmartFileInfo[] $setConfigFileInfos
      */
-    public function __construct(?SmartFileInfo $mainConfigFileInfo, array $setConfigFileInfos)
-    {
-        $this->mainConfigFileInfo = $mainConfigFileInfo;
-        $this->setConfigFileInfos = $setConfigFileInfos;
+    public function __construct(
+        private ?SmartFileInfo $mainConfigFileInfo,
+        private array $setConfigFileInfos
+    ) {
     }
 
     public function getMainConfigFileInfo(): ?SmartFileInfo

@@ -19,36 +19,12 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class PregMatchTypeCorrector
 {
-    /**
-     * @var BetterNodeFinder
-     */
-    private $betterNodeFinder;
-
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var NodeComparator
-     */
-    private $nodeComparator;
-
-    /**
-     * @var ParentScopeFinder
-     */
-    private $parentScopeFinder;
-
     public function __construct(
-        BetterNodeFinder $betterNodeFinder,
-        NodeNameResolver $nodeNameResolver,
-        ParentScopeFinder $parentScopeFinder,
-        NodeComparator $nodeComparator
+        private BetterNodeFinder $betterNodeFinder,
+        private NodeNameResolver $nodeNameResolver,
+        private ParentScopeFinder $parentScopeFinder,
+        private NodeComparator $nodeComparator
     ) {
-        $this->betterNodeFinder = $betterNodeFinder;
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->parentScopeFinder = $parentScopeFinder;
-        $this->nodeComparator = $nodeComparator;
     }
 
     /**

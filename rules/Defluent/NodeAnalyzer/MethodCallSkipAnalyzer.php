@@ -10,22 +10,10 @@ use Rector\Defluent\Skipper\FluentMethodCallSkipper;
 
 final class MethodCallSkipAnalyzer
 {
-    /**
-     * @var FluentMethodCallSkipper
-     */
-    private $fluentMethodCallSkipper;
-
-    /**
-     * @var FluentChainMethodCallNodeAnalyzer
-     */
-    private $fluentChainMethodCallNodeAnalyzer;
-
     public function __construct(
-        FluentMethodCallSkipper $fluentMethodCallSkipper,
-        FluentChainMethodCallNodeAnalyzer $fluentChainMethodCallNodeAnalyzer
+        private FluentMethodCallSkipper $fluentMethodCallSkipper,
+        private FluentChainMethodCallNodeAnalyzer $fluentChainMethodCallNodeAnalyzer
     ) {
-        $this->fluentMethodCallSkipper = $fluentMethodCallSkipper;
-        $this->fluentChainMethodCallNodeAnalyzer = $fluentChainMethodCallNodeAnalyzer;
     }
 
     public function shouldSkipMethodCallIncludingNew(MethodCall $methodCall): bool

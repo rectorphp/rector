@@ -10,14 +10,9 @@ use Rector\NodeNameResolver\NodeNameResolver;
 
 final class ClassMethodVisibilityGuard
 {
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    public function __construct(NodeNameResolver $nodeNameResolver)
-    {
-        $this->nodeNameResolver = $nodeNameResolver;
+    public function __construct(
+        private NodeNameResolver $nodeNameResolver
+    ) {
     }
 
     public function isClassMethodVisibilityGuardedByParent(

@@ -13,16 +13,11 @@ use Rector\Core\Contract\PHPStan\Reflection\TypeToCallReflectionResolver\TypeToC
 final class TypeToCallReflectionResolverRegistry
 {
     /**
-     * @var TypeToCallReflectionResolverInterface[]
-     */
-    private $resolvers = [];
-
-    /**
      * @param TypeToCallReflectionResolverInterface[] $resolvers
      */
-    public function __construct(array $resolvers)
-    {
-        $this->resolvers = $resolvers;
+    public function __construct(
+        private array $resolvers
+    ) {
     }
 
     /**

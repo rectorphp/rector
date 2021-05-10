@@ -15,22 +15,10 @@ use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
 final class PropertyFetchRenamer
 {
-    /**
-     * @var SimpleCallableNodeTraverser
-     */
-    private $simpleCallableNodeTraverser;
-
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
     public function __construct(
-        SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
-        NodeNameResolver $nodeNameResolver
+        private SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
+        private NodeNameResolver $nodeNameResolver
     ) {
-        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
-        $this->nodeNameResolver = $nodeNameResolver;
     }
 
     public function renamePropertyFetchesInClass(ClassLike $classLike, string $currentName, string $expectedName): void

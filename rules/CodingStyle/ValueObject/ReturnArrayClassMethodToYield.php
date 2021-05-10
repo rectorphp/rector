@@ -8,20 +8,10 @@ use PHPStan\Type\ObjectType;
 
 final class ReturnArrayClassMethodToYield
 {
-    /**
-     * @var string
-     */
-    private $type;
-
-    /**
-     * @var string
-     */
-    private $method;
-
-    public function __construct(string $type, string $method)
-    {
-        $this->type = $type;
-        $this->method = $method;
+    public function __construct(
+        private string $type,
+        private string $method
+    ) {
     }
 
     public function getObjectType(): ObjectType

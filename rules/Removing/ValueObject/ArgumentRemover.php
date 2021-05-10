@@ -9,34 +9,14 @@ use PHPStan\Type\ObjectType;
 final class ArgumentRemover
 {
     /**
-     * @var string
-     */
-    private $class;
-
-    /**
-     * @var string
-     */
-    private $method;
-
-    /**
-     * @var int
-     */
-    private $position;
-
-    /**
-     * @var mixed
-     */
-    private $value;
-
-    /**
      * @param mixed $value
      */
-    public function __construct(string $class, string $method, int $position, $value)
-    {
-        $this->class = $class;
-        $this->method = $method;
-        $this->position = $position;
-        $this->value = $value;
+    public function __construct(
+        private string $class,
+        private string $method,
+        private int $position,
+        private $value
+    ) {
     }
 
     public function getObjectType(): ObjectType

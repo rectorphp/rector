@@ -12,29 +12,11 @@ use Rector\Privatization\Reflection\ClassConstantsResolver;
 
 final class ClassConstantFetchValueFactory
 {
-    /**
-     * @var ValueResolver
-     */
-    private $valueResolver;
-
-    /**
-     * @var NodeFactory
-     */
-    private $nodeFactory;
-
-    /**
-     * @var ClassConstantsResolver
-     */
-    private $classConstantsResolver;
-
     public function __construct(
-        ValueResolver $valueResolver,
-        NodeFactory $nodeFactory,
-        ClassConstantsResolver $classConstantsResolver
+        private ValueResolver $valueResolver,
+        private NodeFactory $nodeFactory,
+        private ClassConstantsResolver $classConstantsResolver
     ) {
-        $this->valueResolver = $valueResolver;
-        $this->nodeFactory = $nodeFactory;
-        $this->classConstantsResolver = $classConstantsResolver;
     }
 
     /**

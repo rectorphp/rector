@@ -25,43 +25,13 @@ use Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker;
 
 final class VarTagRemover
 {
-    /**
-     * @var DoctrineTypeAnalyzer
-     */
-    private $doctrineTypeAnalyzer;
-
-    /**
-     * @var StaticTypeMapper
-     */
-    private $staticTypeMapper;
-
-    /**
-     * @var PhpDocInfoFactory
-     */
-    private $phpDocInfoFactory;
-
-    /**
-     * @var ClassLikeExistenceChecker
-     */
-    private $classLikeExistenceChecker;
-
-    /**
-     * @var DeadVarTagValueNodeAnalyzer
-     */
-    private $deadVarTagValueNodeAnalyzer;
-
     public function __construct(
-        DoctrineTypeAnalyzer $doctrineTypeAnalyzer,
-        StaticTypeMapper $staticTypeMapper,
-        PhpDocInfoFactory $phpDocInfoFactory,
-        ClassLikeExistenceChecker $classLikeExistenceChecker,
-        DeadVarTagValueNodeAnalyzer $deadVarTagValueNodeAnalyzer
+        private DoctrineTypeAnalyzer $doctrineTypeAnalyzer,
+        private StaticTypeMapper $staticTypeMapper,
+        private PhpDocInfoFactory $phpDocInfoFactory,
+        private ClassLikeExistenceChecker $classLikeExistenceChecker,
+        private DeadVarTagValueNodeAnalyzer $deadVarTagValueNodeAnalyzer
     ) {
-        $this->doctrineTypeAnalyzer = $doctrineTypeAnalyzer;
-        $this->staticTypeMapper = $staticTypeMapper;
-        $this->phpDocInfoFactory = $phpDocInfoFactory;
-        $this->classLikeExistenceChecker = $classLikeExistenceChecker;
-        $this->deadVarTagValueNodeAnalyzer = $deadVarTagValueNodeAnalyzer;
     }
 
     public function removeVarTagIfUseless(PhpDocInfo $phpDocInfo, Property $property): void

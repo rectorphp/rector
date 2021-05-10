@@ -30,29 +30,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class ChangeReadOnlyVariableWithDefaultValueToConstantRector extends AbstractRector
 {
-    /**
-     * @var ClassMethodAssignManipulator
-     */
-    private $classMethodAssignManipulator;
-
-    /**
-     * @var VarAnnotationManipulator
-     */
-    private $varAnnotationManipulator;
-
-    /**
-     * @var PropertyToAddCollector
-     */
-    private $propertyToAddCollector;
-
     public function __construct(
-        ClassMethodAssignManipulator $classMethodAssignManipulator,
-        VarAnnotationManipulator $varAnnotationManipulator,
-        PropertyToAddCollector $propertyToAddCollector
+        private ClassMethodAssignManipulator $classMethodAssignManipulator,
+        private VarAnnotationManipulator $varAnnotationManipulator,
+        private PropertyToAddCollector $propertyToAddCollector
     ) {
-        $this->classMethodAssignManipulator = $classMethodAssignManipulator;
-        $this->varAnnotationManipulator = $varAnnotationManipulator;
-        $this->propertyToAddCollector = $propertyToAddCollector;
     }
 
     public function getRuleDefinition(): RuleDefinition

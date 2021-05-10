@@ -17,29 +17,11 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class InvertedIfFactory
 {
-    /**
-     * @var BetterNodeFinder
-     */
-    private $betterNodeFinder;
-
-    /**
-     * @var ConditionInverter
-     */
-    private $conditionInverter;
-
-    /**
-     * @var ContextAnalyzer
-     */
-    private $contextAnalyzer;
-
     public function __construct(
-        BetterNodeFinder $betterNodeFinder,
-        ConditionInverter $conditionInverter,
-        ContextAnalyzer $contextAnalyzer
+        private BetterNodeFinder $betterNodeFinder,
+        private ConditionInverter $conditionInverter,
+        private ContextAnalyzer $contextAnalyzer
     ) {
-        $this->betterNodeFinder = $betterNodeFinder;
-        $this->conditionInverter = $conditionInverter;
-        $this->contextAnalyzer = $contextAnalyzer;
     }
 
     /**

@@ -9,28 +9,13 @@ use PhpParser\Node\Expr\MethodCall;
 final class FluentMethodCalls
 {
     /**
-     * @var MethodCall[]
-     */
-    private $fluentMethodCalls = [];
-
-    /**
-     * @var MethodCall
-     */
-    private $rootMethodCall;
-
-    /**
-     * @var MethodCall
-     */
-    private $lastMethodCall;
-
-    /**
      * @param MethodCall[] $fluentMethodCalls
      */
-    public function __construct(MethodCall $rootMethodCall, array $fluentMethodCalls, MethodCall $lastMethodCall)
-    {
-        $this->rootMethodCall = $rootMethodCall;
-        $this->fluentMethodCalls = $fluentMethodCalls;
-        $this->lastMethodCall = $lastMethodCall;
+    public function __construct(
+        private MethodCall $rootMethodCall,
+        private array $fluentMethodCalls,
+        private MethodCall $lastMethodCall
+    ) {
     }
 
     public function getRootMethodCall(): MethodCall

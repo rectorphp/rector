@@ -16,29 +16,11 @@ use Rector\NodeNameResolver\NodeNameResolver;
 
 final class ForeachMatcher
 {
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var CallMatcher
-     */
-    private $callMatcher;
-
-    /**
-     * @var BetterNodeFinder
-     */
-    private $betterNodeFinder;
-
     public function __construct(
-        NodeNameResolver $nodeNameResolver,
-        CallMatcher $callMatcher,
-        BetterNodeFinder $betterNodeFinder
+        private NodeNameResolver $nodeNameResolver,
+        private CallMatcher $callMatcher,
+        private BetterNodeFinder $betterNodeFinder
     ) {
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->callMatcher = $callMatcher;
-        $this->betterNodeFinder = $betterNodeFinder;
     }
 
     public function match(Foreach_ $foreach): ?VariableAndCallForeach

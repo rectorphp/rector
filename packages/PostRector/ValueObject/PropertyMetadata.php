@@ -8,26 +8,11 @@ use PHPStan\Type\Type;
 
 final class PropertyMetadata
 {
-    /**
-     * @var string
-     */
-    private $name;
-
-    /**
-     * @var Type|null
-     */
-    private $type;
-
-    /**
-     * @var int
-     */
-    private $flags;
-
-    public function __construct(string $name, ?Type $type, int $flags)
-    {
-        $this->name = $name;
-        $this->type = $type;
-        $this->flags = $flags;
+    public function __construct(
+        private string $name,
+        private ?Type $type,
+        private int $flags
+    ) {
     }
 
     public function getName(): string

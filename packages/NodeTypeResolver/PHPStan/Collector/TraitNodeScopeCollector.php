@@ -16,14 +16,9 @@ final class TraitNodeScopeCollector
      */
     private $scopeByTraitNodeHash = [];
 
-    /**
-     * @var BetterStandardPrinter
-     */
-    private $betterStandardPrinter;
-
-    public function __construct(BetterStandardPrinter $betterStandardPrinter)
-    {
-        $this->betterStandardPrinter = $betterStandardPrinter;
+    public function __construct(
+        private BetterStandardPrinter $betterStandardPrinter
+    ) {
     }
 
     public function addForTraitAndNode(string $traitName, Node $node, Scope $scope): void

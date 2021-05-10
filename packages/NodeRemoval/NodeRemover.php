@@ -20,22 +20,10 @@ use Rector\PostRector\Collector\NodesToRemoveCollector;
 
 final class NodeRemover
 {
-    /**
-     * @var NodesToRemoveCollector
-     */
-    private $nodesToRemoveCollector;
-
-    /**
-     * @var RectorChangeCollector
-     */
-    private $rectorChangeCollector;
-
     public function __construct(
-        NodesToRemoveCollector $nodesToRemoveCollector,
-        RectorChangeCollector $rectorChangeCollector
+        private NodesToRemoveCollector $nodesToRemoveCollector,
+        private RectorChangeCollector $rectorChangeCollector
     ) {
-        $this->nodesToRemoveCollector = $nodesToRemoveCollector;
-        $this->rectorChangeCollector = $rectorChangeCollector;
     }
 
     public function removeNode(Node $node): void

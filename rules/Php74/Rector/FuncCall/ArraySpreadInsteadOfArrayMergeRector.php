@@ -29,14 +29,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class ArraySpreadInsteadOfArrayMergeRector extends AbstractRector
 {
-    /**
-     * @var ArrayTypeAnalyzer
-     */
-    private $arrayTypeAnalyzer;
-
-    public function __construct(ArrayTypeAnalyzer $arrayTypeAnalyzer)
-    {
-        $this->arrayTypeAnalyzer = $arrayTypeAnalyzer;
+    public function __construct(
+        private ArrayTypeAnalyzer $arrayTypeAnalyzer
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

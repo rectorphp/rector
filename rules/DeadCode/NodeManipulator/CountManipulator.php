@@ -17,20 +17,10 @@ use Rector\NodeNameResolver\NodeNameResolver;
 
 final class CountManipulator
 {
-    /**
-     * @var NodeComparator
-     */
-    private $nodeComparator;
-
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    public function __construct(NodeNameResolver $nodeNameResolver, NodeComparator $nodeComparator)
-    {
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->nodeComparator = $nodeComparator;
+    public function __construct(
+        private NodeNameResolver $nodeNameResolver,
+        private NodeComparator $nodeComparator
+    ) {
     }
 
     public function isCounterHigherThanOne(Node $node, Expr $expr): bool

@@ -34,20 +34,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class ReturnTypeFromStrictTypedCallRector extends AbstractRector
 {
-    /**
-     * @var ReflectionTypeResolver
-     */
-    private $reflectionTypeResolver;
-
-    /**
-     * @var TypeNodeUnwrapper
-     */
-    private $typeNodeUnwrapper;
-
-    public function __construct(ReflectionTypeResolver $reflectionTypeResolver, TypeNodeUnwrapper $typeNodeUnwrapper)
-    {
-        $this->reflectionTypeResolver = $reflectionTypeResolver;
-        $this->typeNodeUnwrapper = $typeNodeUnwrapper;
+    public function __construct(
+        private ReflectionTypeResolver $reflectionTypeResolver,
+        private TypeNodeUnwrapper $typeNodeUnwrapper
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

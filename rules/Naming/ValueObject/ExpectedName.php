@@ -6,20 +6,10 @@ namespace Rector\Naming\ValueObject;
 
 final class ExpectedName
 {
-    /**
-     * @var string
-     */
-    private $name;
-
-    /**
-     * @var string
-     */
-    private $singularized;
-
-    public function __construct(string $name, string $singularized)
-    {
-        $this->name = $name;
-        $this->singularized = $singularized;
+    public function __construct(
+        private string $name,
+        private string $singularized
+    ) {
     }
 
     public function getName(): string

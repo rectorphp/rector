@@ -28,29 +28,11 @@ final class PropertyFetchByMethodAnalyzer
      */
     private const SCOPE_CHANGING_NODE_TYPES = [Do_::class, While_::class, If_::class, Else_::class];
 
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var PropertyFetchAnalyzer
-     */
-    private $propertyFetchAnalyzer;
-
-    /**
-     * @var SimpleCallableNodeTraverser
-     */
-    private $simpleCallableNodeTraverser;
-
     public function __construct(
-        NodeNameResolver $nodeNameResolver,
-        PropertyFetchAnalyzer $propertyFetchAnalyzer,
-        SimpleCallableNodeTraverser $simpleCallableNodeTraverser
+        private NodeNameResolver $nodeNameResolver,
+        private PropertyFetchAnalyzer $propertyFetchAnalyzer,
+        private SimpleCallableNodeTraverser $simpleCallableNodeTraverser
     ) {
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
-        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
     }
 
     /**

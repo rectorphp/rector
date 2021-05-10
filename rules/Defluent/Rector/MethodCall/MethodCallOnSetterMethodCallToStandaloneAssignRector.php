@@ -23,43 +23,13 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class MethodCallOnSetterMethodCallToStandaloneAssignRector extends AbstractRector
 {
-    /**
-     * @var NewFluentChainMethodCallNodeAnalyzer
-     */
-    private $newFluentChainMethodCallNodeAnalyzer;
-
-    /**
-     * @var VariableFromNewFactory
-     */
-    private $variableFromNewFactory;
-
-    /**
-     * @var NonFluentChainMethodCallFactory
-     */
-    private $nonFluentChainMethodCallFactory;
-
-    /**
-     * @var FluentMethodCallSkipper
-     */
-    private $fluentMethodCallSkipper;
-
-    /**
-     * @var FluentChainMethodCallNodeAnalyzer
-     */
-    private $fluentChainMethodCallNodeAnalyzer;
-
     public function __construct(
-        NewFluentChainMethodCallNodeAnalyzer $newFluentChainMethodCallNodeAnalyzer,
-        VariableFromNewFactory $variableFromNewFactory,
-        NonFluentChainMethodCallFactory $nonFluentChainMethodCallFactory,
-        FluentMethodCallSkipper $fluentMethodCallSkipper,
-        FluentChainMethodCallNodeAnalyzer $fluentChainMethodCallNodeAnalyzer
+        private NewFluentChainMethodCallNodeAnalyzer $newFluentChainMethodCallNodeAnalyzer,
+        private VariableFromNewFactory $variableFromNewFactory,
+        private NonFluentChainMethodCallFactory $nonFluentChainMethodCallFactory,
+        private FluentMethodCallSkipper $fluentMethodCallSkipper,
+        private FluentChainMethodCallNodeAnalyzer $fluentChainMethodCallNodeAnalyzer
     ) {
-        $this->newFluentChainMethodCallNodeAnalyzer = $newFluentChainMethodCallNodeAnalyzer;
-        $this->variableFromNewFactory = $variableFromNewFactory;
-        $this->nonFluentChainMethodCallFactory = $nonFluentChainMethodCallFactory;
-        $this->fluentMethodCallSkipper = $fluentMethodCallSkipper;
-        $this->fluentChainMethodCallNodeAnalyzer = $fluentChainMethodCallNodeAnalyzer;
     }
 
     public function getRuleDefinition(): RuleDefinition

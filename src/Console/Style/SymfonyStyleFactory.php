@@ -13,14 +13,9 @@ use Symplify\PackageBuilder\Reflection\PrivatesCaller;
 
 final class SymfonyStyleFactory
 {
-    /**
-     * @var PrivatesCaller
-     */
-    private $privatesCaller;
-
-    public function __construct(PrivatesCaller $privatesCaller)
-    {
-        $this->privatesCaller = $privatesCaller;
+    public function __construct(
+        private PrivatesCaller $privatesCaller
+    ) {
     }
 
     public function create(): SymfonyStyle

@@ -15,43 +15,13 @@ use Rector\Defluent\ValueObject\AssignAndRootExprAndNodesToAdd;
 
 final class AssignAndRootExprAndNodesToAddMatcher
 {
-    /**
-     * @var FluentChainMethodCallNodeAnalyzer
-     */
-    private $fluentChainMethodCallNodeAnalyzer;
-
-    /**
-     * @var NonFluentChainMethodCallFactory
-     */
-    private $nonFluentChainMethodCallFactory;
-
-    /**
-     * @var FluentMethodCallSkipper
-     */
-    private $fluentMethodCallSkipper;
-
-    /**
-     * @var FluentChainMethodCallRootExtractor
-     */
-    private $fluentChainMethodCallRootExtractor;
-
-    /**
-     * @var SameClassMethodCallAnalyzer
-     */
-    private $sameClassMethodCallAnalyzer;
-
     public function __construct(
-        FluentChainMethodCallNodeAnalyzer $fluentChainMethodCallNodeAnalyzer,
-        FluentChainMethodCallRootExtractor $fluentChainMethodCallRootExtractor,
-        NonFluentChainMethodCallFactory $nonFluentChainMethodCallFactory,
-        SameClassMethodCallAnalyzer $sameClassMethodCallAnalyzer,
-        FluentMethodCallSkipper $fluentMethodCallSkipper
+        private FluentChainMethodCallNodeAnalyzer $fluentChainMethodCallNodeAnalyzer,
+        private FluentChainMethodCallRootExtractor $fluentChainMethodCallRootExtractor,
+        private NonFluentChainMethodCallFactory $nonFluentChainMethodCallFactory,
+        private SameClassMethodCallAnalyzer $sameClassMethodCallAnalyzer,
+        private FluentMethodCallSkipper $fluentMethodCallSkipper
     ) {
-        $this->fluentChainMethodCallNodeAnalyzer = $fluentChainMethodCallNodeAnalyzer;
-        $this->fluentChainMethodCallRootExtractor = $fluentChainMethodCallRootExtractor;
-        $this->nonFluentChainMethodCallFactory = $nonFluentChainMethodCallFactory;
-        $this->sameClassMethodCallAnalyzer = $sameClassMethodCallAnalyzer;
-        $this->fluentMethodCallSkipper = $fluentMethodCallSkipper;
     }
 
     public function match(MethodCall $methodCall, string $kind): ?AssignAndRootExprAndNodesToAdd

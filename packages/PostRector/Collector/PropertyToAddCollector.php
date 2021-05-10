@@ -20,11 +20,6 @@ final class PropertyToAddCollector implements NodeCollectorInterface
     private $constantsByClass = [];
 
     /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
      * @var array<string, PropertyMetadata[]>
      */
     private $propertiesByClass = [];
@@ -34,15 +29,10 @@ final class PropertyToAddCollector implements NodeCollectorInterface
      */
     private $propertiesWithoutConstructorByClass = [];
 
-    /**
-     * @var RectorChangeCollector
-     */
-    private $rectorChangeCollector;
-
-    public function __construct(NodeNameResolver $nodeNameResolver, RectorChangeCollector $rectorChangeCollector)
-    {
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->rectorChangeCollector = $rectorChangeCollector;
+    public function __construct(
+        private NodeNameResolver $nodeNameResolver,
+        private RectorChangeCollector $rectorChangeCollector
+    ) {
     }
 
     public function isActive(): bool

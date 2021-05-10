@@ -9,41 +9,16 @@ use PHPStan\Type\ObjectType;
 final class ArgumentDefaultValueReplacer
 {
     /**
-     * @var string
-     */
-    private $class;
-
-    /**
-     * @var string
-     */
-    private $method;
-
-    /**
-     * @var int
-     */
-    private $position;
-
-    /**
-     * @var mixed
-     */
-    private $valueBefore;
-
-    /**
-     * @var mixed
-     */
-    private $valueAfter;
-
-    /**
      * @param mixed $valueBefore
      * @param mixed $valueAfter
      */
-    public function __construct(string $class, string $method, int $position, $valueBefore, $valueAfter)
-    {
-        $this->class = $class;
-        $this->method = $method;
-        $this->position = $position;
-        $this->valueBefore = $valueBefore;
-        $this->valueAfter = $valueAfter;
+    public function __construct(
+        private string $class,
+        private string $method,
+        private int $position,
+        private $valueBefore,
+        private $valueAfter
+    ) {
     }
 
     public function getObjectType(): ObjectType

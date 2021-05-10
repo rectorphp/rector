@@ -22,22 +22,10 @@ final class DocAliasResolver
      */
     private const DOC_ALIAS_REGEX = '#\@(?<possible_alias>\w+)(\\\\)?#s';
 
-    /**
-     * @var SimpleCallableNodeTraverser
-     */
-    private $simpleCallableNodeTraverser;
-
-    /**
-     * @var PhpDocInfoFactory
-     */
-    private $phpDocInfoFactory;
-
     public function __construct(
-        SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
-        PhpDocInfoFactory $phpDocInfoFactory
+        private SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
+        private PhpDocInfoFactory $phpDocInfoFactory
     ) {
-        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
-        $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
 
     /**

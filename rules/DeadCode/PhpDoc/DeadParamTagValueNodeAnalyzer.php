@@ -13,20 +13,10 @@ use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
 
 final class DeadParamTagValueNodeAnalyzer
 {
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var TypeComparator
-     */
-    private $typeComparator;
-
-    public function __construct(NodeNameResolver $nodeNameResolver, TypeComparator $typeComparator)
-    {
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->typeComparator = $typeComparator;
+    public function __construct(
+        private NodeNameResolver $nodeNameResolver,
+        private TypeComparator $typeComparator
+    ) {
     }
 
     public function isDead(ParamTagValueNode $paramTagValueNode, FunctionLike $functionLike): bool

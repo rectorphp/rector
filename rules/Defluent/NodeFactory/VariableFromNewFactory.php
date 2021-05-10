@@ -11,14 +11,9 @@ use Rector\Naming\Naming\VariableNaming;
 
 final class VariableFromNewFactory
 {
-    /**
-     * @var VariableNaming
-     */
-    private $variableNaming;
-
-    public function __construct(VariableNaming $variableNaming)
-    {
-        $this->variableNaming = $variableNaming;
+    public function __construct(
+        private VariableNaming $variableNaming
+    ) {
     }
 
     public function create(New_ $new): Variable

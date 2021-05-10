@@ -17,14 +17,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class CombineIfRector extends AbstractRector
 {
-    /**
-     * @var CommentsMerger
-     */
-    private $commentsMerger;
-
-    public function __construct(CommentsMerger $commentsMerger)
-    {
-        $this->commentsMerger = $commentsMerger;
+    public function __construct(
+        private CommentsMerger $commentsMerger
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

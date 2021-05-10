@@ -32,14 +32,9 @@ final class UseNodesToAddCollector implements NodeCollectorInterface
      */
     private $useImportTypesInFilePath = [];
 
-    /**
-     * @var CurrentFileProvider
-     */
-    private $currentFileProvider;
-
-    public function __construct(CurrentFileProvider $currentFileProvider)
-    {
-        $this->currentFileProvider = $currentFileProvider;
+    public function __construct(
+        private CurrentFileProvider $currentFileProvider
+    ) {
     }
 
     public function isActive(): bool

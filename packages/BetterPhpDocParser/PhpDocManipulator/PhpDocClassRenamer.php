@@ -12,14 +12,9 @@ use Rector\BetterPhpDocParser\PhpDocParser\ClassAnnotationMatcher;
 
 final class PhpDocClassRenamer
 {
-    /**
-     * @var ClassAnnotationMatcher
-     */
-    private $classAnnotationMatcher;
-
-    public function __construct(ClassAnnotationMatcher $classAnnotationMatcher)
-    {
-        $this->classAnnotationMatcher = $classAnnotationMatcher;
+    public function __construct(
+        private ClassAnnotationMatcher $classAnnotationMatcher
+    ) {
     }
 
     /**

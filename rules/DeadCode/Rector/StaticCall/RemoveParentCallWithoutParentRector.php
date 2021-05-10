@@ -22,29 +22,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class RemoveParentCallWithoutParentRector extends AbstractRector
 {
-    /**
-     * @var ClassMethodManipulator
-     */
-    private $classMethodManipulator;
-
-    /**
-     * @var ParentClassScopeResolver
-     */
-    private $parentClassScopeResolver;
-
-    /**
-     * @var ClassAnalyzer
-     */
-    private $classAnalyzer;
-
     public function __construct(
-        ClassMethodManipulator $classMethodManipulator,
-        ParentClassScopeResolver $parentClassScopeResolver,
-        ClassAnalyzer $classAnalyzer
+        private ClassMethodManipulator $classMethodManipulator,
+        private ParentClassScopeResolver $parentClassScopeResolver,
+        private ClassAnalyzer $classAnalyzer
     ) {
-        $this->classMethodManipulator = $classMethodManipulator;
-        $this->parentClassScopeResolver = $parentClassScopeResolver;
-        $this->classAnalyzer = $classAnalyzer;
     }
 
     public function getRuleDefinition(): RuleDefinition

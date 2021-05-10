@@ -14,14 +14,9 @@ use Rector\Defluent\ValueObject\FluentMethodCalls;
 
 final class SeparateReturnMethodCallFactory
 {
-    /**
-     * @var FirstMethodCallVarResolver
-     */
-    private $firstMethodCallVarResolver;
-
-    public function __construct(FirstMethodCallVarResolver $firstMethodCallVarResolver)
-    {
-        $this->firstMethodCallVarResolver = $firstMethodCallVarResolver;
+    public function __construct(
+        private FirstMethodCallVarResolver $firstMethodCallVarResolver
+    ) {
     }
 
     /**

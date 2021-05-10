@@ -27,14 +27,9 @@ use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
 
 final class TypeFactory
 {
-    /**
-     * @var UnionTypeFactory
-     */
-    private $unionTypeFactory;
-
-    public function __construct(UnionTypeFactory $unionTypeFactory)
-    {
-        $this->unionTypeFactory = $unionTypeFactory;
+    public function __construct(
+        private UnionTypeFactory $unionTypeFactory
+    ) {
     }
 
     /**

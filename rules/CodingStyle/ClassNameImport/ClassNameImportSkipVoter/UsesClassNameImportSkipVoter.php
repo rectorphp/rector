@@ -18,14 +18,9 @@ use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
  */
 final class UsesClassNameImportSkipVoter implements ClassNameImportSkipVoterInterface
 {
-    /**
-     * @var UseNodesToAddCollector
-     */
-    private $useNodesToAddCollector;
-
-    public function __construct(UseNodesToAddCollector $useNodesToAddCollector)
-    {
-        $this->useNodesToAddCollector = $useNodesToAddCollector;
+    public function __construct(
+        private UseNodesToAddCollector $useNodesToAddCollector
+    ) {
     }
 
     public function shouldSkip(FullyQualifiedObjectType $fullyQualifiedObjectType, Node $node): bool

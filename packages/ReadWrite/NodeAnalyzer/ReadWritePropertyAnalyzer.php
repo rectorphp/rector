@@ -24,36 +24,12 @@ use Webmozart\Assert\Assert;
 
 final class ReadWritePropertyAnalyzer
 {
-    /**
-     * @var VariableToConstantGuard
-     */
-    private $variableToConstantGuard;
-
-    /**
-     * @var AssignManipulator
-     */
-    private $assignManipulator;
-
-    /**
-     * @var ReadExprAnalyzer
-     */
-    private $readExprAnalyzer;
-
-    /**
-     * @var BetterNodeFinder
-     */
-    private $betterNodeFinder;
-
     public function __construct(
-        VariableToConstantGuard $variableToConstantGuard,
-        AssignManipulator $assignManipulator,
-        ReadExprAnalyzer $readExprAnalyzer,
-        BetterNodeFinder $betterNodeFinder
+        private VariableToConstantGuard $variableToConstantGuard,
+        private AssignManipulator $assignManipulator,
+        private ReadExprAnalyzer $readExprAnalyzer,
+        private BetterNodeFinder $betterNodeFinder
     ) {
-        $this->variableToConstantGuard = $variableToConstantGuard;
-        $this->assignManipulator = $assignManipulator;
-        $this->readExprAnalyzer = $readExprAnalyzer;
-        $this->betterNodeFinder = $betterNodeFinder;
     }
 
     /**

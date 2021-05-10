@@ -13,20 +13,10 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class ControllerClassMethodManipulator
 {
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var PhpDocInfoFactory
-     */
-    private $phpDocInfoFactory;
-
-    public function __construct(NodeNameResolver $nodeNameResolver, PhpDocInfoFactory $phpDocInfoFactory)
-    {
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->phpDocInfoFactory = $phpDocInfoFactory;
+    public function __construct(
+        private NodeNameResolver $nodeNameResolver,
+        private PhpDocInfoFactory $phpDocInfoFactory
+    ) {
     }
 
     public function isControllerClassMethodWithBehaviorAnnotation(ClassMethod $classMethod): bool

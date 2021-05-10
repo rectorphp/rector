@@ -16,29 +16,11 @@ use Rector\TypeDeclaration\TypeInferer\AssignToPropertyTypeInferer;
 
 final class SetterNodeReturnTypeInferer implements ReturnTypeInfererInterface
 {
-    /**
-     * @var FunctionLikeManipulator
-     */
-    private $functionLikeManipulator;
-
-    /**
-     * @var AssignToPropertyTypeInferer
-     */
-    private $assignToPropertyTypeInferer;
-
-    /**
-     * @var TypeFactory
-     */
-    private $typeFactory;
-
     public function __construct(
-        AssignToPropertyTypeInferer $assignToPropertyTypeInferer,
-        FunctionLikeManipulator $functionLikeManipulator,
-        TypeFactory $typeFactory
+        private AssignToPropertyTypeInferer $assignToPropertyTypeInferer,
+        private FunctionLikeManipulator $functionLikeManipulator,
+        private TypeFactory $typeFactory
     ) {
-        $this->functionLikeManipulator = $functionLikeManipulator;
-        $this->assignToPropertyTypeInferer = $assignToPropertyTypeInferer;
-        $this->typeFactory = $typeFactory;
     }
 
     public function inferFunctionLike(FunctionLike $functionLike): Type

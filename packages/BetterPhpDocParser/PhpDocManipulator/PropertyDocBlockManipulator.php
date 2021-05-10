@@ -12,14 +12,9 @@ use Rector\Naming\ValueObject\ParamRename;
 
 final class PropertyDocBlockManipulator
 {
-    /**
-     * @var PhpDocInfoFactory
-     */
-    private $phpDocInfoFactory;
-
-    public function __construct(PhpDocInfoFactory $phpDocInfoFactory)
-    {
-        $this->phpDocInfoFactory = $phpDocInfoFactory;
+    public function __construct(
+        private PhpDocInfoFactory $phpDocInfoFactory
+    ) {
     }
 
     /**

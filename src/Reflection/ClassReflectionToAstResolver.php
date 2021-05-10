@@ -15,36 +15,12 @@ use Symplify\SmartFileSystem\SmartFileSystem;
 
 final class ClassReflectionToAstResolver
 {
-    /**
-     * @var Parser
-     */
-    private $parser;
-
-    /**
-     * @var SmartFileSystem
-     */
-    private $smartFileSystem;
-
-    /**
-     * @var BetterNodeFinder
-     */
-    private $betterNodeFinder;
-
-    /**
-     * @var ReflectionProvider
-     */
-    private $reflectionProvider;
-
     public function __construct(
-        Parser $parser,
-        SmartFileSystem $smartFileSystem,
-        BetterNodeFinder $betterNodeFinder,
-        ReflectionProvider $reflectionProvider
+        private Parser $parser,
+        private SmartFileSystem $smartFileSystem,
+        private BetterNodeFinder $betterNodeFinder,
+        private ReflectionProvider $reflectionProvider
     ) {
-        $this->parser = $parser;
-        $this->smartFileSystem = $smartFileSystem;
-        $this->betterNodeFinder = $betterNodeFinder;
-        $this->reflectionProvider = $reflectionProvider;
     }
 
     public function getClassFromObjectType(ObjectType $objectType): ?Class_

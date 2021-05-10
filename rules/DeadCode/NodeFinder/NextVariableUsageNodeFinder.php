@@ -17,43 +17,13 @@ use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
 final class NextVariableUsageNodeFinder
 {
-    /**
-     * @var SimpleCallableNodeTraverser
-     */
-    private $simpleCallableNodeTraverser;
-
-    /**
-     * @var NodeComparator
-     */
-    private $nodeComparator;
-
-    /**
-     * @var ParentScopeFinder
-     */
-    private $parentScopeFinder;
-
-    /**
-     * @var BetterNodeFinder
-     */
-    private $betterNodeFinder;
-
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
     public function __construct(
-        BetterNodeFinder $betterNodeFinder,
-        SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
-        NodeNameResolver $nodeNameResolver,
-        ParentScopeFinder $parentScopeFinder,
-        NodeComparator $nodeComparator
+        private BetterNodeFinder $betterNodeFinder,
+        private SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
+        private NodeNameResolver $nodeNameResolver,
+        private ParentScopeFinder $parentScopeFinder,
+        private NodeComparator $nodeComparator
     ) {
-        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
-        $this->parentScopeFinder = $parentScopeFinder;
-        $this->betterNodeFinder = $betterNodeFinder;
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->nodeComparator = $nodeComparator;
     }
 
     public function find(Assign $assign): ?Node

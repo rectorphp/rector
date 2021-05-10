@@ -33,64 +33,16 @@ final class LocalPropertyAnalyzer
      */
     private const LARAVEL_COLLECTION_CLASS = 'Illuminate\Support\Collection';
 
-    /**
-     * @var SimpleCallableNodeTraverser
-     */
-    private $simpleCallableNodeTraverser;
-
-    /**
-     * @var ClassAnalyzer
-     */
-    private $classAnalyzer;
-
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var BetterNodeFinder
-     */
-    private $betterNodeFinder;
-
-    /**
-     * @var ArrayDimFetchTypeResolver
-     */
-    private $arrayDimFetchTypeResolver;
-
-    /**
-     * @var NodeTypeResolver
-     */
-    private $nodeTypeResolver;
-
-    /**
-     * @var PropertyFetchAnalyzer
-     */
-    private $propertyFetchAnalyzer;
-
-    /**
-     * @var TypeFactory
-     */
-    private $typeFactory;
-
     public function __construct(
-        SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
-        ClassAnalyzer $classAnalyzer,
-        NodeNameResolver $nodeNameResolver,
-        BetterNodeFinder $betterNodeFinder,
-        ArrayDimFetchTypeResolver $arrayDimFetchTypeResolver,
-        NodeTypeResolver $nodeTypeResolver,
-        PropertyFetchAnalyzer $propertyFetchAnalyzer,
-        TypeFactory $typeFactory
+        private SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
+        private ClassAnalyzer $classAnalyzer,
+        private NodeNameResolver $nodeNameResolver,
+        private BetterNodeFinder $betterNodeFinder,
+        private ArrayDimFetchTypeResolver $arrayDimFetchTypeResolver,
+        private NodeTypeResolver $nodeTypeResolver,
+        private PropertyFetchAnalyzer $propertyFetchAnalyzer,
+        private TypeFactory $typeFactory
     ) {
-        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
-        $this->classAnalyzer = $classAnalyzer;
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->betterNodeFinder = $betterNodeFinder;
-        $this->arrayDimFetchTypeResolver = $arrayDimFetchTypeResolver;
-        $this->nodeTypeResolver = $nodeTypeResolver;
-        $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
-        $this->typeFactory = $typeFactory;
     }
 
     /**

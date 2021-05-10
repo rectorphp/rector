@@ -24,29 +24,11 @@ use Rector\StaticTypeMapper\StaticTypeMapper;
 
 final class AnonymousFunctionFactory
 {
-    /**
-     * @var NodeFactory
-     */
-    private $nodeFactory;
-
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var StaticTypeMapper
-     */
-    private $staticTypeMapper;
-
     public function __construct(
-        NodeFactory $nodeFactory,
-        NodeNameResolver $nodeNameResolver,
-        StaticTypeMapper $staticTypeMapper
+        private NodeFactory $nodeFactory,
+        private NodeNameResolver $nodeNameResolver,
+        private StaticTypeMapper $staticTypeMapper
     ) {
-        $this->nodeFactory = $nodeFactory;
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->staticTypeMapper = $staticTypeMapper;
     }
 
     /**

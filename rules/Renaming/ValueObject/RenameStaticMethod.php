@@ -8,32 +8,12 @@ use PHPStan\Type\ObjectType;
 
 final class RenameStaticMethod
 {
-    /**
-     * @var string
-     */
-    private $oldClass;
-
-    /**
-     * @var string
-     */
-    private $oldMethod;
-
-    /**
-     * @var string
-     */
-    private $newClass;
-
-    /**
-     * @var string
-     */
-    private $newMethod;
-
-    public function __construct(string $oldClass, string $oldMethod, string $newClass, string $newMethod)
-    {
-        $this->oldClass = $oldClass;
-        $this->oldMethod = $oldMethod;
-        $this->newClass = $newClass;
-        $this->newMethod = $newMethod;
+    public function __construct(
+        private string $oldClass,
+        private string $oldMethod,
+        private string $newClass,
+        private string $newMethod
+    ) {
     }
 
     public function getOldObjectType(): ObjectType

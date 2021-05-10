@@ -9,34 +9,14 @@ use PHPStan\Type\ObjectType;
 final class MethodCallToAnotherMethodCallWithArguments
 {
     /**
-     * @var string
-     */
-    private $type;
-
-    /**
-     * @var string
-     */
-    private $oldMethod;
-
-    /**
-     * @var string
-     */
-    private $newMethod;
-
-    /**
-     * @var mixed[]
-     */
-    private $newArguments = [];
-
-    /**
      * @param mixed[] $newArguments
      */
-    public function __construct(string $type, string $oldMethod, string $newMethod, array $newArguments)
-    {
-        $this->type = $type;
-        $this->oldMethod = $oldMethod;
-        $this->newMethod = $newMethod;
-        $this->newArguments = $newArguments;
+    public function __construct(
+        private string $type,
+        private string $oldMethod,
+        private string $newMethod,
+        private array $newArguments
+    ) {
     }
 
     public function getObjectType(): ObjectType

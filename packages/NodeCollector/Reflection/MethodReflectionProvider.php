@@ -25,29 +25,11 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 
 final class MethodReflectionProvider
 {
-    /**
-     * @var NodeTypeResolver
-     */
-    private $nodeTypeResolver;
-
-    /**
-     * @var ReflectionProvider
-     */
-    private $reflectionProvider;
-
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
     public function __construct(
-        NodeTypeResolver $nodeTypeResolver,
-        NodeNameResolver $nodeNameResolver,
-        ReflectionProvider $reflectionProvider
+        private NodeTypeResolver $nodeTypeResolver,
+        private NodeNameResolver $nodeNameResolver,
+        private ReflectionProvider $reflectionProvider
     ) {
-        $this->nodeTypeResolver = $nodeTypeResolver;
-        $this->reflectionProvider = $reflectionProvider;
-        $this->nodeNameResolver = $nodeNameResolver;
     }
 
     /**

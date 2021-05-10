@@ -15,14 +15,9 @@ use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
  */
 final class PHPUnitTypeDeclarationDecorator
 {
-    /**
-     * @var ReflectionProvider
-     */
-    private $reflectionProvider;
-
-    public function __construct(ReflectionProvider $reflectionProvider)
-    {
-        $this->reflectionProvider = $reflectionProvider;
+    public function __construct(
+        private ReflectionProvider $reflectionProvider
+    ) {
     }
 
     public function decorate(ClassMethod $classMethod): void

@@ -27,50 +27,14 @@ use Rector\NodeNameResolver\NodeNameResolver;
 
 final class IfManipulator
 {
-    /**
-     * @var StmtsManipulator
-     */
-    private $stmtsManipulator;
-
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var BetterNodeFinder
-     */
-    private $betterNodeFinder;
-
-    /**
-     * @var ValueResolver
-     */
-    private $valueResolver;
-
-    /**
-     * @var ConditionInverter
-     */
-    private $conditionInverter;
-
-    /**
-     * @var NodeComparator
-     */
-    private $nodeComparator;
-
     public function __construct(
-        BetterNodeFinder $betterNodeFinder,
-        NodeNameResolver $nodeNameResolver,
-        StmtsManipulator $stmtsManipulator,
-        ValueResolver $valueResolver,
-        ConditionInverter $conditionInverter,
-        NodeComparator $nodeComparator
+        private BetterNodeFinder $betterNodeFinder,
+        private NodeNameResolver $nodeNameResolver,
+        private StmtsManipulator $stmtsManipulator,
+        private ValueResolver $valueResolver,
+        private ConditionInverter $conditionInverter,
+        private NodeComparator $nodeComparator
     ) {
-        $this->stmtsManipulator = $stmtsManipulator;
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->betterNodeFinder = $betterNodeFinder;
-        $this->valueResolver = $valueResolver;
-        $this->conditionInverter = $conditionInverter;
-        $this->nodeComparator = $nodeComparator;
     }
 
     /**

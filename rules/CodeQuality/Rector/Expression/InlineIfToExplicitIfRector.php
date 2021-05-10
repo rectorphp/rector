@@ -25,14 +25,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class InlineIfToExplicitIfRector extends AbstractRector
 {
-    /**
-     * @var BinaryOpManipulator
-     */
-    private $binaryOpManipulator;
-
-    public function __construct(BinaryOpManipulator $binaryOpManipulator)
-    {
-        $this->binaryOpManipulator = $binaryOpManipulator;
+    public function __construct(
+        private BinaryOpManipulator $binaryOpManipulator
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

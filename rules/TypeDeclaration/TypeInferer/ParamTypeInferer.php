@@ -13,24 +13,12 @@ use Rector\TypeDeclaration\TypeAnalyzer\GenericClassStringTypeNormalizer;
 final class ParamTypeInferer
 {
     /**
-     * @var ParamTypeInfererInterface[]
-     */
-    private $paramTypeInferers = [];
-
-    /**
-     * @var GenericClassStringTypeNormalizer
-     */
-    private $genericClassStringTypeNormalizer;
-
-    /**
      * @param ParamTypeInfererInterface[] $paramTypeInferers
      */
     public function __construct(
-        GenericClassStringTypeNormalizer $genericClassStringTypeNormalizer,
-        array $paramTypeInferers
+        private GenericClassStringTypeNormalizer $genericClassStringTypeNormalizer,
+        private array $paramTypeInferers
     ) {
-        $this->paramTypeInferers = $paramTypeInferers;
-        $this->genericClassStringTypeNormalizer = $genericClassStringTypeNormalizer;
     }
 
     public function inferParam(Param $param): Type

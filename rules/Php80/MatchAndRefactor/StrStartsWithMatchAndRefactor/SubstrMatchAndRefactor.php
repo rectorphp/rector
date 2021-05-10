@@ -18,36 +18,12 @@ use Rector\Php80\ValueObject\StrStartsWith;
 
 final class SubstrMatchAndRefactor implements StrStartWithMatchAndRefactorInterface
 {
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var ValueResolver
-     */
-    private $valueResolver;
-
-    /**
-     * @var NodeComparator
-     */
-    private $nodeComparator;
-
-    /**
-     * @var StrStartsWithFuncCallFactory
-     */
-    private $strStartsWithFuncCallFactory;
-
     public function __construct(
-        NodeNameResolver $nodeNameResolver,
-        ValueResolver $valueResolver,
-        NodeComparator $nodeComparator,
-        StrStartsWithFuncCallFactory $strStartsWithFuncCallFactory
+        private NodeNameResolver $nodeNameResolver,
+        private ValueResolver $valueResolver,
+        private NodeComparator $nodeComparator,
+        private StrStartsWithFuncCallFactory $strStartsWithFuncCallFactory
     ) {
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->valueResolver = $valueResolver;
-        $this->nodeComparator = $nodeComparator;
-        $this->strStartsWithFuncCallFactory = $strStartsWithFuncCallFactory;
     }
 
     /**

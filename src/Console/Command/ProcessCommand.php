@@ -31,94 +31,21 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ProcessCommand extends Command
 {
-    /**
-     * @var AdditionalAutoloader
-     */
-    private $additionalAutoloader;
-
-    /**
-     * @var Configuration
-     */
-    private $configuration;
-
-    /**
-     * @var OutputFormatterCollector
-     */
-    private $outputFormatterCollector;
-
-    /**
-     * @var PhpFilesFinder
-     */
-    private $phpFilesFinder;
-
-    /**
-     * @var ChangedFilesDetector
-     */
-    private $changedFilesDetector;
-
-    /**
-     * @var MissingRectorRulesReporter
-     */
-    private $missingRectorRulesReporter;
-
-    /**
-     * @var ApplicationFileProcessor
-     */
-    private $applicationFileProcessor;
-
-    /**
-     * @var FileFactory
-     */
-    private $fileFactory;
-
-    /**
-     * @var BootstrapFilesIncluder
-     */
-    private $bootstrapFilesIncluder;
-
-    /**
-     * @var ProcessResultFactory
-     */
-    private $processResultFactory;
-
-    /**
-     * @var NodeScopeResolver
-     */
-    private $nodeScopeResolver;
-
-    /**
-     * @var DynamicSourceLocatorDecorator
-     */
-    private $dynamicSourceLocatorDecorator;
-
     public function __construct(
-        AdditionalAutoloader $additionalAutoloader,
-        ChangedFilesDetector $changedFilesDetector,
-        Configuration $configuration,
-        OutputFormatterCollector $outputFormatterCollector,
-        PhpFilesFinder $phpFilesFinder,
-        MissingRectorRulesReporter $missingRectorRulesReporter,
-        ApplicationFileProcessor $applicationFileProcessor,
-        FileFactory $fileFactory,
-        BootstrapFilesIncluder $bootstrapFilesIncluder,
-        ProcessResultFactory $processResultFactory,
-        NodeScopeResolver $nodeScopeResolver,
-        DynamicSourceLocatorDecorator $dynamicSourceLocatorDecorator
+        private AdditionalAutoloader $additionalAutoloader,
+        private ChangedFilesDetector $changedFilesDetector,
+        private Configuration $configuration,
+        private OutputFormatterCollector $outputFormatterCollector,
+        private PhpFilesFinder $phpFilesFinder,
+        private MissingRectorRulesReporter $missingRectorRulesReporter,
+        private ApplicationFileProcessor $applicationFileProcessor,
+        private FileFactory $fileFactory,
+        private BootstrapFilesIncluder $bootstrapFilesIncluder,
+        private ProcessResultFactory $processResultFactory,
+        private NodeScopeResolver $nodeScopeResolver,
+        private DynamicSourceLocatorDecorator $dynamicSourceLocatorDecorator
     ) {
-        $this->additionalAutoloader = $additionalAutoloader;
-        $this->configuration = $configuration;
-        $this->outputFormatterCollector = $outputFormatterCollector;
-        $this->changedFilesDetector = $changedFilesDetector;
-        $this->phpFilesFinder = $phpFilesFinder;
-        $this->missingRectorRulesReporter = $missingRectorRulesReporter;
-
         parent::__construct();
-        $this->applicationFileProcessor = $applicationFileProcessor;
-        $this->fileFactory = $fileFactory;
-        $this->bootstrapFilesIncluder = $bootstrapFilesIncluder;
-        $this->processResultFactory = $processResultFactory;
-        $this->nodeScopeResolver = $nodeScopeResolver;
-        $this->dynamicSourceLocatorDecorator = $dynamicSourceLocatorDecorator;
     }
 
     protected function configure(): void

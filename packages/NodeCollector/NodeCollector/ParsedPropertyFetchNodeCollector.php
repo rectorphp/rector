@@ -26,20 +26,10 @@ final class ParsedPropertyFetchNodeCollector
      */
     private $propertyFetchesByTypeAndName = [];
 
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var NodeTypeResolver
-     */
-    private $nodeTypeResolver;
-
-    public function __construct(NodeNameResolver $nodeNameResolver, NodeTypeResolver $nodeTypeResolver)
-    {
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->nodeTypeResolver = $nodeTypeResolver;
+    public function __construct(
+        private NodeNameResolver $nodeNameResolver,
+        private NodeTypeResolver $nodeTypeResolver
+    ) {
     }
 
     public function collect(Node $node): void

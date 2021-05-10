@@ -11,14 +11,9 @@ use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
 final class CommentsMerger
 {
-    /**
-     * @var SimpleCallableNodeTraverser
-     */
-    private $simpleCallableNodeTraverser;
-
-    public function __construct(SimpleCallableNodeTraverser $simpleCallableNodeTraverser)
-    {
-        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
+    public function __construct(
+        private SimpleCallableNodeTraverser $simpleCallableNodeTraverser
+    ) {
     }
 
     /**

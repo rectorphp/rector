@@ -15,14 +15,9 @@ use Rector\FileFormatter\ValueObjectFactory\EditorConfigConfigurationBuilder;
  */
 final class EditorConfigIdiosyncraticParser implements EditorConfigParserInterface
 {
-    /**
-     * @var EditorConfig
-     */
-    private $editorConfig;
-
-    public function __construct(EditorConfig $editorConfig)
-    {
-        $this->editorConfig = $editorConfig;
+    public function __construct(
+        private EditorConfig $editorConfig
+    ) {
     }
 
     public function extractConfigurationForFile(

@@ -8,26 +8,11 @@ use PHPStan\Type\ObjectType;
 
 final class UnsetAndIssetToMethodCall
 {
-    /**
-     * @var string
-     */
-    private $type;
-
-    /**
-     * @var string
-     */
-    private $issetMethodCall;
-
-    /**
-     * @var string
-     */
-    private $unsedMethodCall;
-
-    public function __construct(string $type, string $issetMethodCall, string $unsedMethodCall)
-    {
-        $this->type = $type;
-        $this->issetMethodCall = $issetMethodCall;
-        $this->unsedMethodCall = $unsedMethodCall;
+    public function __construct(
+        private string $type,
+        private string $issetMethodCall,
+        private string $unsedMethodCall
+    ) {
     }
 
     public function getObjectType(): ObjectType

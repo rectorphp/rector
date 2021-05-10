@@ -14,36 +14,12 @@ use Rector\VendorLocker\NodeVendorLocker\PropertyTypeVendorLockResolver;
 
 final class VendorLockResolver
 {
-    /**
-     * @var ClassMethodReturnVendorLockResolver
-     */
-    private $classMethodReturnVendorLockResolver;
-
-    /**
-     * @var ClassMethodParamVendorLockResolver
-     */
-    private $classMethodParamVendorLockResolver;
-
-    /**
-     * @var PropertyTypeVendorLockResolver
-     */
-    private $propertyTypeVendorLockResolver;
-
-    /**
-     * @var ClassMethodVendorLockResolver
-     */
-    private $classMethodVendorLockResolver;
-
     public function __construct(
-        ClassMethodParamVendorLockResolver $classMethodParamVendorLockResolver,
-        ClassMethodReturnVendorLockResolver $classMethodReturnVendorLockResolver,
-        ClassMethodVendorLockResolver $classMethodVendorLockResolver,
-        PropertyTypeVendorLockResolver $propertyTypeVendorLockResolver
+        private ClassMethodParamVendorLockResolver $classMethodParamVendorLockResolver,
+        private ClassMethodReturnVendorLockResolver $classMethodReturnVendorLockResolver,
+        private ClassMethodVendorLockResolver $classMethodVendorLockResolver,
+        private PropertyTypeVendorLockResolver $propertyTypeVendorLockResolver
     ) {
-        $this->classMethodReturnVendorLockResolver = $classMethodReturnVendorLockResolver;
-        $this->classMethodParamVendorLockResolver = $classMethodParamVendorLockResolver;
-        $this->propertyTypeVendorLockResolver = $propertyTypeVendorLockResolver;
-        $this->classMethodVendorLockResolver = $classMethodVendorLockResolver;
     }
 
     public function isClassMethodParamLockedIn(Node $node): bool

@@ -33,14 +33,9 @@ final class RemoveAnnotationRector extends AbstractRector implements Configurabl
      */
     private $annotationsToRemove = [];
 
-    /**
-     * @var PhpDocTagRemover
-     */
-    private $phpDocTagRemover;
-
-    public function __construct(PhpDocTagRemover $phpDocTagRemover)
-    {
-        $this->phpDocTagRemover = $phpDocTagRemover;
+    public function __construct(
+        private PhpDocTagRemover $phpDocTagRemover
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

@@ -7,23 +7,13 @@ namespace Rector\Order\ValueObject;
 final class SortedClassMethodsAndOriginalClassMethods
 {
     /**
-     * @var array<int, string>
-     */
-    private $sortedClassMethods = [];
-
-    /**
-     * @var array<int, string>
-     */
-    private $originalClassMethods = [];
-
-    /**
      * @param array<int, string> $sortedClassMethods
      * @param array<int, string> $originalClassMethods
      */
-    public function __construct(array $sortedClassMethods, array $originalClassMethods)
-    {
-        $this->sortedClassMethods = $sortedClassMethods;
-        $this->originalClassMethods = $originalClassMethods;
+    public function __construct(
+        private array $sortedClassMethods,
+        private array $originalClassMethods
+    ) {
     }
 
     /**

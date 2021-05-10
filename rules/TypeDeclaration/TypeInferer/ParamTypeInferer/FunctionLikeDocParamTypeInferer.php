@@ -18,29 +18,11 @@ use Rector\TypeDeclaration\Contract\TypeInferer\ParamTypeInfererInterface;
 
 final class FunctionLikeDocParamTypeInferer implements ParamTypeInfererInterface
 {
-    /**
-     * @var PhpDocInfoFactory
-     */
-    private $phpDocInfoFactory;
-
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var BetterNodeFinder
-     */
-    private $betterNodeFinder;
-
     public function __construct(
-        NodeNameResolver $nodeNameResolver,
-        PhpDocInfoFactory $phpDocInfoFactory,
-        BetterNodeFinder $betterNodeFinder
+        private NodeNameResolver $nodeNameResolver,
+        private PhpDocInfoFactory $phpDocInfoFactory,
+        private BetterNodeFinder $betterNodeFinder
     ) {
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->phpDocInfoFactory = $phpDocInfoFactory;
-        $this->betterNodeFinder = $betterNodeFinder;
     }
 
     public function inferParam(Param $param): Type

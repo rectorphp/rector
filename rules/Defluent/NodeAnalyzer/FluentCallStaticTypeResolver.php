@@ -9,20 +9,10 @@ use PHPStan\Reflection\ReflectionProvider;
 
 final class FluentCallStaticTypeResolver
 {
-    /**
-     * @var ExprStringTypeResolver
-     */
-    private $exprStringTypeResolver;
-
-    /**
-     * @var ReflectionProvider
-     */
-    private $reflectionProvider;
-
-    public function __construct(ExprStringTypeResolver $exprStringTypeResolver, ReflectionProvider $reflectionProvider)
-    {
-        $this->exprStringTypeResolver = $exprStringTypeResolver;
-        $this->reflectionProvider = $reflectionProvider;
+    public function __construct(
+        private ExprStringTypeResolver $exprStringTypeResolver,
+        private ReflectionProvider $reflectionProvider
+    ) {
     }
 
     /**

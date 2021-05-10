@@ -27,14 +27,9 @@ final class FunctionSupportResolver
         PhpVersion::PHP_74 => ['get_mangled_object_vars', 'mb_str_split', 'password_algos'],
     ];
 
-    /**
-     * @var PhpVersionProvider
-     */
-    private $phpVersionProvider;
-
-    public function __construct(PhpVersionProvider $phpVersionProvider)
-    {
-        $this->phpVersionProvider = $phpVersionProvider;
+    public function __construct(
+        private PhpVersionProvider $phpVersionProvider
+    ) {
     }
 
     public function isFunctionSupported(string $desiredFunction): bool

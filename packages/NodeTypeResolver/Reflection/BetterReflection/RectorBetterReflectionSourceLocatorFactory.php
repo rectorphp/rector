@@ -11,22 +11,10 @@ use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocator\Intermedia
 
 final class RectorBetterReflectionSourceLocatorFactory
 {
-    /**
-     * @var BetterReflectionSourceLocatorFactory
-     */
-    private $betterReflectionSourceLocatorFactory;
-
-    /**
-     * @var IntermediateSourceLocator
-     */
-    private $intermediateSourceLocator;
-
     public function __construct(
-        BetterReflectionSourceLocatorFactory $betterReflectionSourceLocatorFactory,
-        IntermediateSourceLocator $intermediateSourceLocator
+        private BetterReflectionSourceLocatorFactory $betterReflectionSourceLocatorFactory,
+        private IntermediateSourceLocator $intermediateSourceLocator
     ) {
-        $this->betterReflectionSourceLocatorFactory = $betterReflectionSourceLocatorFactory;
-        $this->intermediateSourceLocator = $intermediateSourceLocator;
     }
 
     public function create(): MemoizingSourceLocator

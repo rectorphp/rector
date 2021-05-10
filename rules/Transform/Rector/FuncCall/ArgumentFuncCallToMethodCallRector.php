@@ -50,20 +50,10 @@ final class ArgumentFuncCallToMethodCallRector extends AbstractRector implements
      */
     private $arrayFunctionsToMethodCalls = [];
 
-    /**
-     * @var PropertyNaming
-     */
-    private $propertyNaming;
-
-    /**
-     * @var ArrayTypeAnalyzer
-     */
-    private $arrayTypeAnalyzer;
-
-    public function __construct(ArrayTypeAnalyzer $arrayTypeAnalyzer, PropertyNaming $propertyNaming)
-    {
-        $this->propertyNaming = $propertyNaming;
-        $this->arrayTypeAnalyzer = $arrayTypeAnalyzer;
+    public function __construct(
+        private ArrayTypeAnalyzer $arrayTypeAnalyzer,
+        private PropertyNaming $propertyNaming
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

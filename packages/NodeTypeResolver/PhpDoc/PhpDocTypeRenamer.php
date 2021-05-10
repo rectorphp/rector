@@ -12,22 +12,10 @@ use Rector\Renaming\ValueObject\PseudoNamespaceToNamespace;
 
 final class PhpDocTypeRenamer
 {
-    /**
-     * @var UnderscoreRenamePhpDocNodeVisitor
-     */
-    private $underscoreRenamePhpDocNodeVisitor;
-
-    /**
-     * @var UnderscorePhpDocNodeTraverserFactory
-     */
-    private $underscorePhpDocNodeTraverserFactory;
-
     public function __construct(
-        UnderscorePhpDocNodeTraverserFactory $underscorePhpDocNodeTraverserFactory,
-        UnderscoreRenamePhpDocNodeVisitor $underscoreRenamePhpDocNodeVisitor
+        private UnderscorePhpDocNodeTraverserFactory $underscorePhpDocNodeTraverserFactory,
+        private UnderscoreRenamePhpDocNodeVisitor $underscoreRenamePhpDocNodeVisitor
     ) {
-        $this->underscoreRenamePhpDocNodeVisitor = $underscoreRenamePhpDocNodeVisitor;
-        $this->underscorePhpDocNodeTraverserFactory = $underscorePhpDocNodeTraverserFactory;
     }
 
     public function changeUnderscoreType(

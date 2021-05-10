@@ -16,36 +16,12 @@ use Symplify\SmartFileSystem\SmartFileSystem;
 
 final class FactoryClassPrinter
 {
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var SmartFileSystem
-     */
-    private $smartFileSystem;
-
-    /**
-     * @var BetterStandardPrinter
-     */
-    private $betterStandardPrinter;
-
-    /**
-     * @var CurrentFileProvider
-     */
-    private $currentFileProvider;
-
     public function __construct(
-        BetterStandardPrinter $betterStandardPrinter,
-        SmartFileSystem $smartFileSystem,
-        NodeNameResolver $nodeNameResolver,
-        CurrentFileProvider $currentFileProvider
+        private BetterStandardPrinter $betterStandardPrinter,
+        private SmartFileSystem $smartFileSystem,
+        private NodeNameResolver $nodeNameResolver,
+        private CurrentFileProvider $currentFileProvider
     ) {
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->betterStandardPrinter = $betterStandardPrinter;
-        $this->smartFileSystem = $smartFileSystem;
-        $this->currentFileProvider = $currentFileProvider;
     }
 
     public function printFactoryForClass(Class_ $factoryClass, Class_ $oldClass): void

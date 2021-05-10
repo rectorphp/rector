@@ -39,22 +39,10 @@ final class UnionTypeCommonTypeNarrower
         RectorInterface::class => [RectorInterface::class],
     ];
 
-    /**
-     * @var GenericClassStringTypeCorrector
-     */
-    private $genericClassStringTypeCorrector;
-
-    /**
-     * @var ReflectionProvider
-     */
-    private $reflectionProvider;
-
     public function __construct(
-        GenericClassStringTypeCorrector $genericClassStringTypeCorrector,
-        ReflectionProvider $reflectionProvider
+        private GenericClassStringTypeCorrector $genericClassStringTypeCorrector,
+        private ReflectionProvider $reflectionProvider
     ) {
-        $this->genericClassStringTypeCorrector = $genericClassStringTypeCorrector;
-        $this->reflectionProvider = $reflectionProvider;
     }
 
     public function narrowToSharedObjectType(UnionType $unionType): ?ObjectType

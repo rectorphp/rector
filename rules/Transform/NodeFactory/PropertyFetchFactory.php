@@ -11,14 +11,9 @@ use Rector\Naming\Naming\PropertyNaming;
 
 final class PropertyFetchFactory
 {
-    /**
-     * @var PropertyNaming
-     */
-    private $propertyNaming;
-
-    public function __construct(PropertyNaming $propertyNaming)
-    {
-        $this->propertyNaming = $propertyNaming;
+    public function __construct(
+        private PropertyNaming $propertyNaming
+    ) {
     }
 
     public function createFromType(ObjectType $objectType): PropertyFetch

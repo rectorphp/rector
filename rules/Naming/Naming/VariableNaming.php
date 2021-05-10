@@ -28,29 +28,11 @@ use Stringy\Stringy;
 
 final class VariableNaming
 {
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var ValueResolver
-     */
-    private $valueResolver;
-
-    /**
-     * @var NodeTypeResolver
-     */
-    private $nodeTypeResolver;
-
     public function __construct(
-        NodeNameResolver $nodeNameResolver,
-        ValueResolver $valueResolver,
-        NodeTypeResolver $nodeTypeResolver
+        private NodeNameResolver $nodeNameResolver,
+        private ValueResolver $valueResolver,
+        private NodeTypeResolver $nodeTypeResolver
     ) {
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->valueResolver = $valueResolver;
-        $this->nodeTypeResolver = $nodeTypeResolver;
     }
 
     public function resolveFromNode(Node $node): ?string

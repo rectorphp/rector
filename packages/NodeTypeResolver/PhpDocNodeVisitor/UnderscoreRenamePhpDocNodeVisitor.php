@@ -16,11 +16,6 @@ use Symplify\SimplePhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor;
 final class UnderscoreRenamePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
 {
     /**
-     * @var StaticTypeMapper
-     */
-    private $staticTypeMapper;
-
-    /**
      * @var PseudoNamespaceToNamespace|null
      */
     private $pseudoNamespaceToNamespace;
@@ -30,9 +25,9 @@ final class UnderscoreRenamePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
      */
     private $currentPhpParserNode;
 
-    public function __construct(StaticTypeMapper $staticTypeMapper)
-    {
-        $this->staticTypeMapper = $staticTypeMapper;
+    public function __construct(
+        private StaticTypeMapper $staticTypeMapper
+    ) {
     }
 
     public function beforeTraverse(Node $node): void

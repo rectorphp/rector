@@ -24,14 +24,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class SimplifyUselessVariableRector extends AbstractRector
 {
-    /**
-     * @var AssignAndBinaryMap
-     */
-    private $assignAndBinaryMap;
-
-    public function __construct(AssignAndBinaryMap $assignAndBinaryMap)
-    {
-        $this->assignAndBinaryMap = $assignAndBinaryMap;
+    public function __construct(
+        private AssignAndBinaryMap $assignAndBinaryMap
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

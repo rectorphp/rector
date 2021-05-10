@@ -21,20 +21,10 @@ final class DateTimeAtNamingConventionGuard implements ConflictingNameGuardInter
      */
     private const AT_NAMING_REGEX = '#[\w+]At$#';
 
-    /**
-     * @var NodeTypeResolver
-     */
-    private $nodeTypeResolver;
-
-    /**
-     * @var TypeUnwrapper
-     */
-    private $typeUnwrapper;
-
-    public function __construct(NodeTypeResolver $nodeTypeResolver, TypeUnwrapper $typeUnwrapper)
-    {
-        $this->nodeTypeResolver = $nodeTypeResolver;
-        $this->typeUnwrapper = $typeUnwrapper;
+    public function __construct(
+        private NodeTypeResolver $nodeTypeResolver,
+        private TypeUnwrapper $typeUnwrapper
+    ) {
     }
 
     /**

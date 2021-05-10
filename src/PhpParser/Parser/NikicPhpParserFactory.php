@@ -10,20 +10,10 @@ use PhpParser\ParserFactory;
 
 final class NikicPhpParserFactory
 {
-    /**
-     * @var Lexer
-     */
-    private $lexer;
-
-    /**
-     * @var ParserFactory
-     */
-    private $parserFactory;
-
-    public function __construct(Lexer $lexer, ParserFactory $parserFactory)
-    {
-        $this->lexer = $lexer;
-        $this->parserFactory = $parserFactory;
+    public function __construct(
+        private Lexer $lexer,
+        private ParserFactory $parserFactory
+    ) {
     }
 
     public function create(): Parser

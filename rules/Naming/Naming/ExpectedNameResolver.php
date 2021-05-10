@@ -28,36 +28,12 @@ use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 
 final class ExpectedNameResolver
 {
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var PropertyNaming
-     */
-    private $propertyNaming;
-
-    /**
-     * @var NodeTypeResolver
-     */
-    private $nodeTypeResolver;
-
-    /**
-     * @var MatchParamTypeExpectedNameResolver
-     */
-    private $matchParamTypeExpectedNameResolver;
-
     public function __construct(
-        NodeNameResolver $nodeNameResolver,
-        NodeTypeResolver $nodeTypeResolver,
-        PropertyNaming $propertyNaming,
-        MatchParamTypeExpectedNameResolver $matchParamTypeExpectedNameResolver
+        private NodeNameResolver $nodeNameResolver,
+        private NodeTypeResolver $nodeTypeResolver,
+        private PropertyNaming $propertyNaming,
+        private MatchParamTypeExpectedNameResolver $matchParamTypeExpectedNameResolver
     ) {
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->propertyNaming = $propertyNaming;
-        $this->nodeTypeResolver = $nodeTypeResolver;
-        $this->matchParamTypeExpectedNameResolver = $matchParamTypeExpectedNameResolver;
     }
 
     public function resolveForParamIfNotYet(Param $param): ?string

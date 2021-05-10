@@ -42,14 +42,9 @@ final class StringClassNameToClassConstantRector extends AbstractRector implemen
         'Exception',
     ];
 
-    /**
-     * @var ClassLikeExistenceChecker
-     */
-    private $classLikeExistenceChecker;
-
-    public function __construct(ClassLikeExistenceChecker $classLikeExistenceChecker)
-    {
-        $this->classLikeExistenceChecker = $classLikeExistenceChecker;
+    public function __construct(
+        private ClassLikeExistenceChecker $classLikeExistenceChecker
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

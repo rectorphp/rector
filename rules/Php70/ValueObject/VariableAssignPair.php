@@ -17,23 +17,13 @@ use PhpParser\Node\Expr\Variable;
 final class VariableAssignPair
 {
     /**
-     * @var Variable|ArrayDimFetch|PropertyFetch|StaticPropertyFetch
-     */
-    private $variable;
-
-    /**
-     * @var Assign|AssignOp|AssignRef
-     */
-    private $assign;
-
-    /**
      * @param Variable|ArrayDimFetch|PropertyFetch|StaticPropertyFetch $variable
-     * @param Assign|AssignOp|AssignRef $node
+     * @param Assign|AssignOp|AssignRef $assign
      */
-    public function __construct(Node $variable, Node $node)
-    {
-        $this->variable = $variable;
-        $this->assign = $node;
+    public function __construct(
+        private Node $variable,
+        private Node $assign
+    ) {
     }
 
     /**

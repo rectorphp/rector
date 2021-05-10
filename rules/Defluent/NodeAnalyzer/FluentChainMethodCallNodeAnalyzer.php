@@ -35,36 +35,12 @@ final class FluentChainMethodCallNodeAnalyzer
      */
     private const KNOWN_FACTORY_FLUENT_TYPES = ['PHPStan\Analyser\MutatingScope'];
 
-    /**
-     * @var NodeTypeResolver
-     */
-    private $nodeTypeResolver;
-
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var NodeFinder
-     */
-    private $nodeFinder;
-
-    /**
-     * @var MethodCallToClassMethodParser
-     */
-    private $methodCallToClassMethodParser;
-
     public function __construct(
-        NodeNameResolver $nodeNameResolver,
-        NodeTypeResolver $nodeTypeResolver,
-        NodeFinder $nodeFinder,
-        MethodCallToClassMethodParser $methodCallToClassMethodParser
+        private NodeNameResolver $nodeNameResolver,
+        private NodeTypeResolver $nodeTypeResolver,
+        private NodeFinder $nodeFinder,
+        private MethodCallToClassMethodParser $methodCallToClassMethodParser
     ) {
-        $this->nodeTypeResolver = $nodeTypeResolver;
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->nodeFinder = $nodeFinder;
-        $this->methodCallToClassMethodParser = $methodCallToClassMethodParser;
     }
 
     /**

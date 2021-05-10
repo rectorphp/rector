@@ -11,14 +11,9 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 
 final class NewFluentChainMethodCallNodeAnalyzer
 {
-    /**
-     * @var NodeTypeResolver
-     */
-    private $nodeTypeResolver;
-
-    public function __construct(NodeTypeResolver $nodeTypeResolver)
-    {
-        $this->nodeTypeResolver = $nodeTypeResolver;
+    public function __construct(
+        private NodeTypeResolver $nodeTypeResolver
+    ) {
     }
 
     public function isNewMethodCallReturningSelf(MethodCall $methodCall): bool

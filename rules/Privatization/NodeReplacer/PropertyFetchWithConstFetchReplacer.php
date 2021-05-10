@@ -18,43 +18,13 @@ use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
 final class PropertyFetchWithConstFetchReplacer
 {
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var SimpleCallableNodeTraverser
-     */
-    private $simpleCallableNodeTraverser;
-
-    /**
-     * @var PropertyFetchAnalyzer
-     */
-    private $propertyFetchAnalyzer;
-
-    /**
-     * @var ConstantNaming
-     */
-    private $constantNaming;
-
-    /**
-     * @var NodeFactory
-     */
-    private $nodeFactory;
-
     public function __construct(
-        NodeNameResolver $nodeNameResolver,
-        SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
-        PropertyFetchAnalyzer $propertyFetchAnalyzer,
-        ConstantNaming $constantNaming,
-        NodeFactory $nodeFactory
+        private NodeNameResolver $nodeNameResolver,
+        private SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
+        private PropertyFetchAnalyzer $propertyFetchAnalyzer,
+        private ConstantNaming $constantNaming,
+        private NodeFactory $nodeFactory
     ) {
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
-        $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
-        $this->constantNaming = $constantNaming;
-        $this->nodeFactory = $nodeFactory;
     }
 
     public function replace(Class_ $class, Property $property): void

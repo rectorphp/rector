@@ -9,28 +9,13 @@ use PHPStan\Type\ObjectType;
 final class ClassConstFetchToValue
 {
     /**
-     * @var string
-     */
-    private $class;
-
-    /**
-     * @var string
-     */
-    private $constant;
-
-    /**
-     * @var mixed
-     */
-    private $value;
-
-    /**
      * @param mixed $value
      */
-    public function __construct(string $class, string $constant, $value)
-    {
-        $this->class = $class;
-        $this->constant = $constant;
-        $this->value = $value;
+    public function __construct(
+        private string $class,
+        private string $constant,
+        private $value
+    ) {
     }
 
     public function getObjectType(): ObjectType

@@ -26,14 +26,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class FormerNullableArgumentToScalarTypedRector extends AbstractRector
 {
-    /**
-     * @var CallTypeAnalyzer
-     */
-    private $callTypeAnalyzer;
-
-    public function __construct(CallTypeAnalyzer $callTypeAnalyzer)
-    {
-        $this->callTypeAnalyzer = $callTypeAnalyzer;
+    public function __construct(
+        private CallTypeAnalyzer $callTypeAnalyzer
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

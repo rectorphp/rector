@@ -32,36 +32,12 @@ final class ClassMethodReturnTypeOverrideGuard
         'PhpParser\NodeVisitor' => ['enterNode', 'leaveNode', 'beforeTraverse', 'afterTraverse'],
     ];
 
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var ReflectionProvider
-     */
-    private $reflectionProvider;
-
-    /**
-     * @var FamilyRelationsAnalyzer
-     */
-    private $familyRelationsAnalyzer;
-
-    /**
-     * @var BetterNodeFinder
-     */
-    private $betterNodeFinder;
-
     public function __construct(
-        NodeNameResolver $nodeNameResolver,
-        ReflectionProvider $reflectionProvider,
-        FamilyRelationsAnalyzer $familyRelationsAnalyzer,
-        BetterNodeFinder $betterNodeFinder
+        private NodeNameResolver $nodeNameResolver,
+        private ReflectionProvider $reflectionProvider,
+        private FamilyRelationsAnalyzer $familyRelationsAnalyzer,
+        private BetterNodeFinder $betterNodeFinder
     ) {
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->reflectionProvider = $reflectionProvider;
-        $this->familyRelationsAnalyzer = $familyRelationsAnalyzer;
-        $this->betterNodeFinder = $betterNodeFinder;
     }
 
     public function shouldSkipClassMethod(ClassMethod $classMethod): bool

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Naming;
 
-use Nette\Utils\Strings;
 use Rector\Renaming\ValueObject\RenamedNamespace;
 
 final class NamespaceMatcher
@@ -18,7 +17,7 @@ final class NamespaceMatcher
 
         /** @var string $oldNamespace */
         foreach ($oldToNewNamespace as $oldNamespace => $newNamespace) {
-            if (Strings::startsWith($name, $oldNamespace)) {
+            if (str_starts_with($name, $oldNamespace)) {
                 return new RenamedNamespace($name, $oldNamespace, $newNamespace);
             }
         }

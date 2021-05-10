@@ -8,20 +8,10 @@ use PHPStan\Type\Type;
 
 final class OldToNewType
 {
-    /**
-     * @var Type
-     */
-    private $oldType;
-
-    /**
-     * @var Type
-     */
-    private $newType;
-
-    public function __construct(Type $oldType, Type $newType)
-    {
-        $this->oldType = $oldType;
-        $this->newType = $newType;
+    public function __construct(
+        private Type $oldType,
+        private Type $newType
+    ) {
     }
 
     public function getOldType(): Type

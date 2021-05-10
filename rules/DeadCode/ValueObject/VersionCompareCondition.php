@@ -8,26 +8,11 @@ use Rector\DeadCode\Contract\ConditionInterface;
 
 final class VersionCompareCondition implements ConditionInterface
 {
-    /**
-     * @var int
-     */
-    private $firstVersion;
-
-    /**
-     * @var int
-     */
-    private $secondVersion;
-
-    /**
-     * @var string|null
-     */
-    private $compareSign;
-
-    public function __construct(int $firstVersion, int $secondVersion, ?string $compareSign)
-    {
-        $this->firstVersion = $firstVersion;
-        $this->secondVersion = $secondVersion;
-        $this->compareSign = $compareSign;
+    public function __construct(
+        private int $firstVersion,
+        private int $secondVersion,
+        private ?string $compareSign
+    ) {
     }
 
     public function getFirstVersion(): int

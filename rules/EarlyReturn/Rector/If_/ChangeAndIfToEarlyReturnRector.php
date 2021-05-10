@@ -26,36 +26,12 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class ChangeAndIfToEarlyReturnRector extends AbstractRector
 {
-    /**
-     * @var IfManipulator
-     */
-    private $ifManipulator;
-
-    /**
-     * @var InvertedIfFactory
-     */
-    private $invertedIfFactory;
-
-    /**
-     * @var ContextAnalyzer
-     */
-    private $contextAnalyzer;
-
-    /**
-     * @var BooleanAndAnalyzer
-     */
-    private $booleanAndAnalyzer;
-
     public function __construct(
-        IfManipulator $ifManipulator,
-        InvertedIfFactory $invertedIfFactory,
-        ContextAnalyzer $contextAnalyzer,
-        BooleanAndAnalyzer $booleanAndAnalyzer
+        private IfManipulator $ifManipulator,
+        private InvertedIfFactory $invertedIfFactory,
+        private ContextAnalyzer $contextAnalyzer,
+        private BooleanAndAnalyzer $booleanAndAnalyzer
     ) {
-        $this->ifManipulator = $ifManipulator;
-        $this->invertedIfFactory = $invertedIfFactory;
-        $this->contextAnalyzer = $contextAnalyzer;
-        $this->booleanAndAnalyzer = $booleanAndAnalyzer;
     }
 
     public function getRuleDefinition(): RuleDefinition

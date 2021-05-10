@@ -14,20 +14,10 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class ParentClassMethodTypeOverrideGuard
 {
-    /**
-     * @var NodeRepository
-     */
-    private $nodeRepository;
-
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    public function __construct(NodeRepository $nodeRepository, NodeNameResolver $nodeNameResolver)
-    {
-        $this->nodeRepository = $nodeRepository;
-        $this->nodeNameResolver = $nodeNameResolver;
+    public function __construct(
+        private NodeRepository $nodeRepository,
+        private NodeNameResolver $nodeNameResolver
+    ) {
     }
 
     public function hasParentMethodOutsideVendor(ClassMethod $classMethod): bool

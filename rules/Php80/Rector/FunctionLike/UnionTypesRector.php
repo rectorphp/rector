@@ -28,36 +28,12 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class UnionTypesRector extends AbstractRector
 {
-    /**
-     * @var ClassMethodParamVendorLockResolver
-     */
-    private $classMethodParamVendorLockResolver;
-
-    /**
-     * @var ReturnTagRemover
-     */
-    private $returnTagRemover;
-
-    /**
-     * @var ParamTagRemover
-     */
-    private $paramTagRemover;
-
-    /**
-     * @var UnionTypeAnalyzer
-     */
-    private $unionTypeAnalyzer;
-
     public function __construct(
-        ReturnTagRemover $returnTagRemover,
-        ParamTagRemover $paramTagRemover,
-        ClassMethodParamVendorLockResolver $classMethodParamVendorLockResolver,
-        UnionTypeAnalyzer $unionTypeAnalyzer
+        private ReturnTagRemover $returnTagRemover,
+        private ParamTagRemover $paramTagRemover,
+        private ClassMethodParamVendorLockResolver $classMethodParamVendorLockResolver,
+        private UnionTypeAnalyzer $unionTypeAnalyzer
     ) {
-        $this->returnTagRemover = $returnTagRemover;
-        $this->paramTagRemover = $paramTagRemover;
-        $this->classMethodParamVendorLockResolver = $classMethodParamVendorLockResolver;
-        $this->unionTypeAnalyzer = $unionTypeAnalyzer;
     }
 
     public function getRuleDefinition(): RuleDefinition

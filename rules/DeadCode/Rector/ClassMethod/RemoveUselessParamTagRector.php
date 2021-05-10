@@ -18,22 +18,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class RemoveUselessParamTagRector extends AbstractRector
 {
-    /**
-     * @var DeadParamTagValueNodeAnalyzer
-     */
-    private $deadParamTagValueNodeAnalyzer;
-
-    /**
-     * @var PhpDocTagRemover
-     */
-    private $phpDocTagRemover;
-
     public function __construct(
-        DeadParamTagValueNodeAnalyzer $deadParamTagValueNodeAnalyzer,
-        PhpDocTagRemover $phpDocTagRemover
+        private DeadParamTagValueNodeAnalyzer $deadParamTagValueNodeAnalyzer,
+        private PhpDocTagRemover $phpDocTagRemover
     ) {
-        $this->deadParamTagValueNodeAnalyzer = $deadParamTagValueNodeAnalyzer;
-        $this->phpDocTagRemover = $phpDocTagRemover;
     }
 
     public function getRuleDefinition(): RuleDefinition

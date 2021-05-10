@@ -19,57 +19,15 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 final class NameImportingPostRector extends AbstractPostRector
 {
-    /**
-     * @var ParameterProvider
-     */
-    private $parameterProvider;
-
-    /**
-     * @var NameImporter
-     */
-    private $nameImporter;
-
-    /**
-     * @var DocBlockNameImporter
-     */
-    private $docBlockNameImporter;
-
-    /**
-     * @var ClassNameImportSkipper
-     */
-    private $classNameImportSkipper;
-
-    /**
-     * @var PhpDocInfoFactory
-     */
-    private $phpDocInfoFactory;
-
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var ReflectionProvider
-     */
-    private $reflectionProvider;
-
     public function __construct(
-        ParameterProvider $parameterProvider,
-        NameImporter $nameImporter,
-        DocBlockNameImporter $docBlockNameImporter,
-        ClassNameImportSkipper $classNameImportSkipper,
-        PhpDocInfoFactory $phpDocInfoFactory,
-        NodeNameResolver $nodeNameResolver,
-        ReflectionProvider $reflectionProvider
+        private ParameterProvider $parameterProvider,
+        private NameImporter $nameImporter,
+        private DocBlockNameImporter $docBlockNameImporter,
+        private ClassNameImportSkipper $classNameImportSkipper,
+        private PhpDocInfoFactory $phpDocInfoFactory,
+        private NodeNameResolver $nodeNameResolver,
+        private ReflectionProvider $reflectionProvider
     ) {
-        $this->parameterProvider = $parameterProvider;
-        $this->nameImporter = $nameImporter;
-        $this->docBlockNameImporter = $docBlockNameImporter;
-        $this->classNameImportSkipper = $classNameImportSkipper;
-        $this->phpDocInfoFactory = $phpDocInfoFactory;
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->reflectionProvider = $reflectionProvider;
     }
 
     public function enterNode(Node $node): ?Node

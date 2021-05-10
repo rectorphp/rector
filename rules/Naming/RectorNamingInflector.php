@@ -15,14 +15,9 @@ final class RectorNamingInflector
      */
     private const DATA_INFO_SUFFIX_REGEX = '#^(?<prefix>.+)(?<suffix>Data|Info)$#';
 
-    /**
-     * @var Inflector
-     */
-    private $inflector;
-
-    public function __construct(Inflector $inflector)
-    {
-        $this->inflector = $inflector;
+    public function __construct(
+        private Inflector $inflector
+    ) {
     }
 
     public function singularize(string $name): string

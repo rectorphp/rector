@@ -24,14 +24,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class FixClassCaseSensitivityNameRector extends AbstractRector
 {
-    /**
-     * @var ReflectionProvider
-     */
-    private $reflectionProvider;
-
-    public function __construct(ReflectionProvider $reflectionProvider)
-    {
-        $this->reflectionProvider = $reflectionProvider;
+    public function __construct(
+        private ReflectionProvider $reflectionProvider
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

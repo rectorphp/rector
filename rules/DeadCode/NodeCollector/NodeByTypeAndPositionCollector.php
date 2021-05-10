@@ -14,20 +14,10 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class NodeByTypeAndPositionCollector
 {
-    /**
-     * @var FlowOfControlLocator
-     */
-    private $flowOfControlLocator;
-
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    public function __construct(FlowOfControlLocator $flowOfControlLocator, NodeNameResolver $nodeNameResolver)
-    {
-        $this->flowOfControlLocator = $flowOfControlLocator;
-        $this->nodeNameResolver = $nodeNameResolver;
+    public function __construct(
+        private FlowOfControlLocator $flowOfControlLocator,
+        private NodeNameResolver $nodeNameResolver
+    ) {
     }
 
     /**

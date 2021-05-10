@@ -13,36 +13,12 @@ use Rector\NodeNameResolver\NodeNameResolver;
 
 final class ParentChildClassMethodTypeResolver
 {
-    /**
-     * @var NativeTypeClassTreeResolver
-     */
-    private $nativeTypeClassTreeResolver;
-
-    /**
-     * @var NodeRepository
-     */
-    private $nodeRepository;
-
-    /**
-     * @var ReflectionProvider
-     */
-    private $reflectionProvider;
-
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
     public function __construct(
-        NativeTypeClassTreeResolver $nativeTypeClassTreeResolver,
-        NodeRepository $nodeRepository,
-        ReflectionProvider $reflectionProvider,
-        NodeNameResolver $nodeNameResolver
+        private NativeTypeClassTreeResolver $nativeTypeClassTreeResolver,
+        private NodeRepository $nodeRepository,
+        private ReflectionProvider $reflectionProvider,
+        private NodeNameResolver $nodeNameResolver
     ) {
-        $this->nativeTypeClassTreeResolver = $nativeTypeClassTreeResolver;
-        $this->nodeRepository = $nodeRepository;
-        $this->reflectionProvider = $reflectionProvider;
-        $this->nodeNameResolver = $nodeNameResolver;
     }
 
     /**

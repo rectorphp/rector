@@ -23,26 +23,11 @@ final class CondAndExpr
      */
     public const TYPE_RETURN = 'return';
 
-    /**
-     * @var string
-     */
-    private $kind;
-
-    /**
-     * @var Expr
-     */
-    private $expr;
-
-    /**
-     * @var Expr|null
-     */
-    private $condExpr;
-
-    public function __construct(?Expr $condExpr, Expr $expr, string $kind)
-    {
-        $this->condExpr = $condExpr;
-        $this->expr = $expr;
-        $this->kind = $kind;
+    public function __construct(
+        private ?Expr $condExpr,
+        private Expr $expr,
+        private string $kind
+    ) {
     }
 
     public function getExpr(): Expr

@@ -19,20 +19,10 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class PropertyFetchAnalyzer
 {
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var BetterNodeFinder
-     */
-    private $betterNodeFinder;
-
-    public function __construct(NodeNameResolver $nodeNameResolver, BetterNodeFinder $betterNodeFinder)
-    {
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->betterNodeFinder = $betterNodeFinder;
+    public function __construct(
+        private NodeNameResolver $nodeNameResolver,
+        private BetterNodeFinder $betterNodeFinder
+    ) {
     }
 
     public function isLocalPropertyFetch(Node $node): bool

@@ -23,22 +23,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class ChangeSingletonToServiceRector extends AbstractRector
 {
-    /**
-     * @var SingletonClassMethodAnalyzer
-     */
-    private $singletonClassMethodAnalyzer;
-
-    /**
-     * @var ClassAnalyzer
-     */
-    private $classAnalyzer;
-
     public function __construct(
-        SingletonClassMethodAnalyzer $singletonClassMethodAnalyzer,
-        ClassAnalyzer $classAnalyzer
+        private SingletonClassMethodAnalyzer $singletonClassMethodAnalyzer,
+        private ClassAnalyzer $classAnalyzer
     ) {
-        $this->singletonClassMethodAnalyzer = $singletonClassMethodAnalyzer;
-        $this->classAnalyzer = $classAnalyzer;
     }
 
     public function getRuleDefinition(): RuleDefinition

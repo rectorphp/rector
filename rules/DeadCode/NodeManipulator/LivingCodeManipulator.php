@@ -34,14 +34,9 @@ use Rector\PostRector\Collector\NodesToAddCollector;
 
 final class LivingCodeManipulator
 {
-    /**
-     * @var NodesToAddCollector
-     */
-    private $nodesToAddCollector;
-
-    public function __construct(NodesToAddCollector $nodesToAddCollector)
-    {
-        $this->nodesToAddCollector = $nodesToAddCollector;
+    public function __construct(
+        private NodesToAddCollector $nodesToAddCollector
+    ) {
     }
 
     public function addLivingCodeBeforeNode(Expr $expr, Node $addBeforeThisNode): void

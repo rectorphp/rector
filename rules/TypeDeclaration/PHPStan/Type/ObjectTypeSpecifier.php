@@ -23,14 +23,9 @@ use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
 
 final class ObjectTypeSpecifier
 {
-    /**
-     * @var ReflectionProvider
-     */
-    private $reflectionProvider;
-
-    public function __construct(ReflectionProvider $reflectionProvider)
-    {
-        $this->reflectionProvider = $reflectionProvider;
+    public function __construct(
+        private ReflectionProvider $reflectionProvider
+    ) {
     }
 
     /**

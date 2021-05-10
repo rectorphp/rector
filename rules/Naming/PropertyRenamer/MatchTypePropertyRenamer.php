@@ -10,22 +10,10 @@ use Rector\Naming\ValueObject\PropertyRename;
 
 final class MatchTypePropertyRenamer
 {
-    /**
-     * @var MatchPropertyTypeConflictingNameGuard
-     */
-    private $matchPropertyTypeConflictingNameGuard;
-
-    /**
-     * @var PropertyRenamer
-     */
-    private $propertyRenamer;
-
     public function __construct(
-        PropertyRenamer $propertyRenamer,
-        MatchPropertyTypeConflictingNameGuard $matchPropertyTypeConflictingNameGuard
+        private PropertyRenamer $propertyRenamer,
+        private MatchPropertyTypeConflictingNameGuard $matchPropertyTypeConflictingNameGuard
     ) {
-        $this->matchPropertyTypeConflictingNameGuard = $matchPropertyTypeConflictingNameGuard;
-        $this->propertyRenamer = $propertyRenamer;
     }
 
     public function rename(PropertyRename $propertyRename): ?Property

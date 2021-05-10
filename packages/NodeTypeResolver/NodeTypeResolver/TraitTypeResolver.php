@@ -18,14 +18,9 @@ use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
  */
 final class TraitTypeResolver implements NodeTypeResolverInterface
 {
-    /**
-     * @var ReflectionProvider
-     */
-    private $reflectionProvider;
-
-    public function __construct(ReflectionProvider $reflectionProvider)
-    {
-        $this->reflectionProvider = $reflectionProvider;
+    public function __construct(
+        private ReflectionProvider $reflectionProvider
+    ) {
     }
 
     /**

@@ -19,14 +19,9 @@ final class ClassAnalyzer
      */
     private const ANONYMOUS_CLASS_REGEX = '#AnonymousClass\w+$#';
 
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    public function __construct(NodeNameResolver $nodeNameResolver)
-    {
-        $this->nodeNameResolver = $nodeNameResolver;
+    public function __construct(
+        private NodeNameResolver $nodeNameResolver
+    ) {
     }
 
     public function isAnonymousClass(Node $node): bool

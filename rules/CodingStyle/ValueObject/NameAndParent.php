@@ -11,22 +11,12 @@ use PhpParser\Node\Name;
 final class NameAndParent
 {
     /**
-     * @var Node
-     */
-    private $parentNode;
-
-    /**
-     * @var Name|Identifier
-     */
-    private $nameNode;
-
-    /**
      * @param Name|Identifier $nameNode
      */
-    public function __construct(Node $nameNode, Node $parentNode)
-    {
-        $this->nameNode = $nameNode;
-        $this->parentNode = $parentNode;
+    public function __construct(
+        private Node $nameNode,
+        private Node $parentNode
+    ) {
     }
 
     /**

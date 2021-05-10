@@ -36,22 +36,10 @@ final class GetAndSetToMethodCallRector extends AbstractRector implements Config
      */
     private $getAndSetToMethodCalls = [];
 
-    /**
-     * @var PropertyFetchAnalyzer
-     */
-    private $propertyFetchAnalyzer;
-
-    /**
-     * @var MagicPropertyFetchAnalyzer
-     */
-    private $magicPropertyFetchAnalyzer;
-
     public function __construct(
-        PropertyFetchAnalyzer $propertyFetchAnalyzer,
-        MagicPropertyFetchAnalyzer $magicPropertyFetchAnalyzer
+        private PropertyFetchAnalyzer $propertyFetchAnalyzer,
+        private MagicPropertyFetchAnalyzer $magicPropertyFetchAnalyzer
     ) {
-        $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
-        $this->magicPropertyFetchAnalyzer = $magicPropertyFetchAnalyzer;
     }
 
     public function getRuleDefinition(): RuleDefinition

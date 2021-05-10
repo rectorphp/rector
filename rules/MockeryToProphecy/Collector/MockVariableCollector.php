@@ -15,20 +15,10 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class MockVariableCollector
 {
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var ValueResolver
-     */
-    private $valueResolver;
-
-    public function __construct(NodeNameResolver $nodeNameResolver, ValueResolver $valueResolver)
-    {
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->valueResolver = $valueResolver;
+    public function __construct(
+        private NodeNameResolver $nodeNameResolver,
+        private ValueResolver $valueResolver
+    ) {
     }
 
     /**

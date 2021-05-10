@@ -18,29 +18,11 @@ use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
 final class JsonArrayFactory
 {
-    /**
-     * @var NodeFactory
-     */
-    private $nodeFactory;
-
-    /**
-     * @var ImplodeAnalyzer
-     */
-    private $implodeAnalyzer;
-
-    /**
-     * @var SimpleCallableNodeTraverser
-     */
-    private $simpleCallableNodeTraverser;
-
     public function __construct(
-        NodeFactory $nodeFactory,
-        ImplodeAnalyzer $implodeAnalyzer,
-        SimpleCallableNodeTraverser $simpleCallableNodeTraverser
+        private NodeFactory $nodeFactory,
+        private ImplodeAnalyzer $implodeAnalyzer,
+        private SimpleCallableNodeTraverser $simpleCallableNodeTraverser
     ) {
-        $this->nodeFactory = $nodeFactory;
-        $this->implodeAnalyzer = $implodeAnalyzer;
-        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
     }
 
     public function createFromJsonString(string $stringValue): Array_

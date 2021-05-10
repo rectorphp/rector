@@ -37,50 +37,14 @@ final class BreakingVariableRenameGuard
      */
     private const AT_NAMING_REGEX = '#[\w+]At$#';
 
-    /**
-     * @var BetterNodeFinder
-     */
-    private $betterNodeFinder;
-
-    /**
-     * @var ConflictingNameResolver
-     */
-    private $conflictingNameResolver;
-
-    /**
-     * @var OverridenExistingNamesResolver
-     */
-    private $overridenExistingNamesResolver;
-
-    /**
-     * @var NodeTypeResolver
-     */
-    private $nodeTypeResolver;
-
-    /**
-     * @var TypeUnwrapper
-     */
-    private $typeUnwrapper;
-
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
     public function __construct(
-        BetterNodeFinder $betterNodeFinder,
-        ConflictingNameResolver $conflictingNameResolver,
-        NodeTypeResolver $nodeTypeResolver,
-        OverridenExistingNamesResolver $overridenExistingNamesResolver,
-        TypeUnwrapper $typeUnwrapper,
-        NodeNameResolver $nodeNameResolver
+        private BetterNodeFinder $betterNodeFinder,
+        private ConflictingNameResolver $conflictingNameResolver,
+        private NodeTypeResolver $nodeTypeResolver,
+        private OverridenExistingNamesResolver $overridenExistingNamesResolver,
+        private TypeUnwrapper $typeUnwrapper,
+        private NodeNameResolver $nodeNameResolver
     ) {
-        $this->betterNodeFinder = $betterNodeFinder;
-        $this->conflictingNameResolver = $conflictingNameResolver;
-        $this->overridenExistingNamesResolver = $overridenExistingNamesResolver;
-        $this->nodeTypeResolver = $nodeTypeResolver;
-        $this->typeUnwrapper = $typeUnwrapper;
-        $this->nodeNameResolver = $nodeNameResolver;
     }
 
     /**

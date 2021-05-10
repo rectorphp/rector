@@ -28,18 +28,13 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class SimplifyForeachToCoalescingRector extends AbstractRector
 {
     /**
-     * @var ForeachManipulator
-     */
-    private $foreachManipulator;
-
-    /**
      * @var Return_|null
      */
     private $return;
 
-    public function __construct(ForeachManipulator $foreachManipulator)
-    {
-        $this->foreachManipulator = $foreachManipulator;
+    public function __construct(
+        private ForeachManipulator $foreachManipulator
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

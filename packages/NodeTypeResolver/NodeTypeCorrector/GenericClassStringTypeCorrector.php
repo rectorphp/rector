@@ -13,14 +13,9 @@ use PHPStan\Type\TypeTraverser;
 
 final class GenericClassStringTypeCorrector
 {
-    /**
-     * @var ReflectionProvider
-     */
-    private $reflectionProvider;
-
-    public function __construct(ReflectionProvider $reflectionProvider)
-    {
-        $this->reflectionProvider = $reflectionProvider;
+    public function __construct(
+        private ReflectionProvider $reflectionProvider
+    ) {
     }
 
     public function correct(Type $mainType): Type

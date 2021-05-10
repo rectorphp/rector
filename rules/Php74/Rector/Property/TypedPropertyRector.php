@@ -48,43 +48,13 @@ final class TypedPropertyRector extends AbstractRector implements ConfigurableRe
      */
     private $classLikeTypeOnly = false;
 
-    /**
-     * @var PropertyTypeInferer
-     */
-    private $propertyTypeInferer;
-
-    /**
-     * @var VendorLockResolver
-     */
-    private $vendorLockResolver;
-
-    /**
-     * @var DoctrineTypeAnalyzer
-     */
-    private $doctrineTypeAnalyzer;
-
-    /**
-     * @var VarTagRemover
-     */
-    private $varTagRemover;
-
-    /**
-     * @var ReflectionProvider
-     */
-    private $reflectionProvider;
-
     public function __construct(
-        PropertyTypeInferer $propertyTypeInferer,
-        VendorLockResolver $vendorLockResolver,
-        DoctrineTypeAnalyzer $doctrineTypeAnalyzer,
-        VarTagRemover $varTagRemover,
-        ReflectionProvider $reflectionProvider
+        private PropertyTypeInferer $propertyTypeInferer,
+        private VendorLockResolver $vendorLockResolver,
+        private DoctrineTypeAnalyzer $doctrineTypeAnalyzer,
+        private VarTagRemover $varTagRemover,
+        private ReflectionProvider $reflectionProvider
     ) {
-        $this->propertyTypeInferer = $propertyTypeInferer;
-        $this->vendorLockResolver = $vendorLockResolver;
-        $this->doctrineTypeAnalyzer = $doctrineTypeAnalyzer;
-        $this->varTagRemover = $varTagRemover;
-        $this->reflectionProvider = $reflectionProvider;
     }
 
     public function getRuleDefinition(): RuleDefinition

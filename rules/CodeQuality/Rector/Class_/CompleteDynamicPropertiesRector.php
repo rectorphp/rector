@@ -26,43 +26,13 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class CompleteDynamicPropertiesRector extends AbstractRector
 {
-    /**
-     * @var MissingPropertiesFactory
-     */
-    private $missingPropertiesFactory;
-
-    /**
-     * @var LocalPropertyAnalyzer
-     */
-    private $localPropertyAnalyzer;
-
-    /**
-     * @var ClassLikeAnalyzer
-     */
-    private $classLikeAnalyzer;
-
-    /**
-     * @var ReflectionProvider
-     */
-    private $reflectionProvider;
-
-    /**
-     * @var ClassAnalyzer
-     */
-    private $classAnalyzer;
-
     public function __construct(
-        MissingPropertiesFactory $missingPropertiesFactory,
-        LocalPropertyAnalyzer $localPropertyAnalyzer,
-        ClassLikeAnalyzer $classLikeAnalyzer,
-        ReflectionProvider $reflectionProvider,
-        ClassAnalyzer $classAnalyzer
+        private MissingPropertiesFactory $missingPropertiesFactory,
+        private LocalPropertyAnalyzer $localPropertyAnalyzer,
+        private ClassLikeAnalyzer $classLikeAnalyzer,
+        private ReflectionProvider $reflectionProvider,
+        private ClassAnalyzer $classAnalyzer
     ) {
-        $this->missingPropertiesFactory = $missingPropertiesFactory;
-        $this->localPropertyAnalyzer = $localPropertyAnalyzer;
-        $this->classLikeAnalyzer = $classLikeAnalyzer;
-        $this->reflectionProvider = $reflectionProvider;
-        $this->classAnalyzer = $classAnalyzer;
     }
 
     public function getRuleDefinition(): RuleDefinition

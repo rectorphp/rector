@@ -26,20 +26,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class ChangeNestedForeachIfsToEarlyContinueRector extends AbstractRector
 {
-    /**
-     * @var IfManipulator
-     */
-    private $ifManipulator;
-
-    /**
-     * @var ConditionInverter
-     */
-    private $conditionInverter;
-
-    public function __construct(ConditionInverter $conditionInverter, IfManipulator $ifManipulator)
-    {
-        $this->ifManipulator = $ifManipulator;
-        $this->conditionInverter = $conditionInverter;
+    public function __construct(
+        private ConditionInverter $conditionInverter,
+        private IfManipulator $ifManipulator
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

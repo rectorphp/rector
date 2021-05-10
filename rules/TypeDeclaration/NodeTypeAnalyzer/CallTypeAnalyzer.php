@@ -19,29 +19,11 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 
 final class CallTypeAnalyzer
 {
-    /**
-     * @var ReflectionProvider
-     */
-    private $reflectionProvider;
-
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var NodeTypeResolver
-     */
-    private $nodeTypeResolver;
-
     public function __construct(
-        ReflectionProvider $reflectionProvider,
-        NodeNameResolver $nodeNameResolver,
-        NodeTypeResolver $nodeTypeResolver
+        private ReflectionProvider $reflectionProvider,
+        private NodeNameResolver $nodeNameResolver,
+        private NodeTypeResolver $nodeTypeResolver
     ) {
-        $this->reflectionProvider = $reflectionProvider;
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->nodeTypeResolver = $nodeTypeResolver;
     }
 
     /**

@@ -6,36 +6,12 @@ namespace Rector\Transform\ValueObject;
 
 final class ArgumentFuncCallToMethodCall
 {
-    /**
-     * @var string
-     */
-    private $function;
-
-    /**
-     * @var string
-     */
-    private $class;
-
-    /**
-     * @var string|null
-     */
-    private $methodIfNoArgs;
-
-    /**
-     * @var string|null
-     */
-    private $methodIfArgs;
-
     public function __construct(
-        string $function,
-        string $class,
-        ?string $methodIfArgs = null,
-        ?string $methodIfNoArgs = null
+        private string $function,
+        private string $class,
+        private ?string $methodIfArgs = null,
+        private ?string $methodIfNoArgs = null
     ) {
-        $this->function = $function;
-        $this->class = $class;
-        $this->methodIfArgs = $methodIfArgs;
-        $this->methodIfNoArgs = $methodIfNoArgs;
     }
 
     public function getFunction(): string

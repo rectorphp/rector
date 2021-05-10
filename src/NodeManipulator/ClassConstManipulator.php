@@ -17,43 +17,13 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class ClassConstManipulator
 {
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var BetterNodeFinder
-     */
-    private $betterNodeFinder;
-
-    /**
-     * @var NodeComparator
-     */
-    private $nodeComparator;
-
-    /**
-     * @var ClassManipulator
-     */
-    private $classManipulator;
-
-    /**
-     * @var NodeRepository
-     */
-    private $nodeRepository;
-
     public function __construct(
-        BetterNodeFinder $betterNodeFinder,
-        ClassManipulator $classManipulator,
-        NodeNameResolver $nodeNameResolver,
-        NodeRepository $nodeRepository,
-        NodeComparator $nodeComparator
+        private BetterNodeFinder $betterNodeFinder,
+        private ClassManipulator $classManipulator,
+        private NodeNameResolver $nodeNameResolver,
+        private NodeRepository $nodeRepository,
+        private NodeComparator $nodeComparator
     ) {
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->betterNodeFinder = $betterNodeFinder;
-        $this->classManipulator = $classManipulator;
-        $this->nodeRepository = $nodeRepository;
-        $this->nodeComparator = $nodeComparator;
     }
 
     public function hasClassConstFetch(ClassConst $classConst): bool

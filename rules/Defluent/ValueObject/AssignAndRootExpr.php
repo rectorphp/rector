@@ -14,20 +14,14 @@ use Rector\Defluent\Contract\ValueObject\RootExprAwareInterface;
 
 final class AssignAndRootExpr extends AbstractRootExpr implements RootExprAwareInterface, FirstCallFactoryAwareInterface
 {
-    /**
-     * @var Variable|null
-     */
-    private $silentVariable;
-
     public function __construct(
         Expr $assignExpr,
         Expr $rootExpr,
-        ?Variable $silentVariable = null,
+        private ?Variable $silentVariable = null,
         bool $isFirstCallFactory = false
     ) {
         $this->assignExpr = $assignExpr;
         $this->rootExpr = $rootExpr;
-        $this->silentVariable = $silentVariable;
         $this->isFirstCallFactory = $isFirstCallFactory;
     }
 

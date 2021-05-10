@@ -8,26 +8,11 @@ use PHPStan\Type\ObjectType;
 
 final class ChangeConstantVisibility
 {
-    /**
-     * @var string
-     */
-    private $class;
-
-    /**
-     * @var string
-     */
-    private $constant;
-
-    /**
-     * @var int
-     */
-    private $visibility;
-
-    public function __construct(string $class, string $constant, int $visibility)
-    {
-        $this->class = $class;
-        $this->constant = $constant;
-        $this->visibility = $visibility;
+    public function __construct(
+        private string $class,
+        private string $constant,
+        private int $visibility
+    ) {
     }
 
     public function getObjectType(): ObjectType

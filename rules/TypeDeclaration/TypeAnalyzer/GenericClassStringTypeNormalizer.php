@@ -13,14 +13,9 @@ use PHPStan\Type\TypeTraverser;
 
 final class GenericClassStringTypeNormalizer
 {
-    /**
-     * @var ReflectionProvider
-     */
-    private $reflectionProvider;
-
-    public function __construct(ReflectionProvider $reflectionProvider)
-    {
-        $this->reflectionProvider = $reflectionProvider;
+    public function __construct(
+        private ReflectionProvider $reflectionProvider
+    ) {
     }
 
     public function normalize(Type $type): Type

@@ -33,71 +33,17 @@ use Symplify\PackageBuilder\Php\TypeChecker;
  */
 final class PropertyManipulator
 {
-    /**
-     * @var BetterNodeFinder
-     */
-    private $betterNodeFinder;
-
-    /**
-     * @var AssignManipulator
-     */
-    private $assignManipulator;
-
-    /**
-     * @var VariableToConstantGuard
-     */
-    private $variableToConstantGuard;
-
-    /**
-     * @var ReadWritePropertyAnalyzer
-     */
-    private $readWritePropertyAnalyzer;
-
-    /**
-     * @var PhpDocInfoFactory
-     */
-    private $phpDocInfoFactory;
-
-    /**
-     * @var TypeChecker
-     */
-    private $typeChecker;
-
-    /**
-     * @var PropertyFetchFinder
-     */
-    private $propertyFetchFinder;
-
-    /**
-     * @var NodeRepository
-     */
-    private $nodeRepository;
-
-    /**
-     * @var FunctionLikeReflectionParser
-     */
-    private $functionLikeReflectionParser;
-
     public function __construct(
-        AssignManipulator $assignManipulator,
-        BetterNodeFinder $betterNodeFinder,
-        VariableToConstantGuard $variableToConstantGuard,
-        ReadWritePropertyAnalyzer $readWritePropertyAnalyzer,
-        PhpDocInfoFactory $phpDocInfoFactory,
-        TypeChecker $typeChecker,
-        PropertyFetchFinder $propertyFetchFinder,
-        NodeRepository $nodeRepository,
-        FunctionLikeReflectionParser $functionLikeReflectionParser
+        private AssignManipulator $assignManipulator,
+        private BetterNodeFinder $betterNodeFinder,
+        private VariableToConstantGuard $variableToConstantGuard,
+        private ReadWritePropertyAnalyzer $readWritePropertyAnalyzer,
+        private PhpDocInfoFactory $phpDocInfoFactory,
+        private TypeChecker $typeChecker,
+        private PropertyFetchFinder $propertyFetchFinder,
+        private NodeRepository $nodeRepository,
+        private FunctionLikeReflectionParser $functionLikeReflectionParser
     ) {
-        $this->betterNodeFinder = $betterNodeFinder;
-        $this->assignManipulator = $assignManipulator;
-        $this->variableToConstantGuard = $variableToConstantGuard;
-        $this->readWritePropertyAnalyzer = $readWritePropertyAnalyzer;
-        $this->phpDocInfoFactory = $phpDocInfoFactory;
-        $this->typeChecker = $typeChecker;
-        $this->propertyFetchFinder = $propertyFetchFinder;
-        $this->nodeRepository = $nodeRepository;
-        $this->functionLikeReflectionParser = $functionLikeReflectionParser;
     }
 
     public function isPropertyUsedInReadContext(Property $property): bool

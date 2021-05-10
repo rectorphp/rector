@@ -10,14 +10,9 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 
 final class VarDocPropertyTypeInferer
 {
-    /**
-     * @var PhpDocInfoFactory
-     */
-    private $phpDocInfoFactory;
-
-    public function __construct(PhpDocInfoFactory $phpDocInfoFactory)
-    {
-        $this->phpDocInfoFactory = $phpDocInfoFactory;
+    public function __construct(
+        private PhpDocInfoFactory $phpDocInfoFactory
+    ) {
     }
 
     public function inferProperty(Property $property): Type

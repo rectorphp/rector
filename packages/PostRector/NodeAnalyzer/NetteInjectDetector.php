@@ -12,29 +12,11 @@ use Rector\NodeNameResolver\NodeNameResolver;
 
 final class NetteInjectDetector
 {
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var PhpDocInfoFactory
-     */
-    private $phpDocInfoFactory;
-
-    /**
-     * @var ReflectionProvider
-     */
-    private $reflectionProvider;
-
     public function __construct(
-        NodeNameResolver $nodeNameResolver,
-        PhpDocInfoFactory $phpDocInfoFactory,
-        ReflectionProvider $reflectionProvider
+        private NodeNameResolver $nodeNameResolver,
+        private PhpDocInfoFactory $phpDocInfoFactory,
+        private ReflectionProvider $reflectionProvider
     ) {
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->phpDocInfoFactory = $phpDocInfoFactory;
-        $this->reflectionProvider = $reflectionProvider;
     }
 
     public function isNetteInjectPreferred(Class_ $class): bool

@@ -9,14 +9,9 @@ use PhpParser\Node\Expr;
 
 final class MethodNameResolver
 {
-    /**
-     * @var VariableNaming
-     */
-    private $variableNaming;
-
-    public function __construct(VariableNaming $variableNaming)
-    {
-        $this->variableNaming = $variableNaming;
+    public function __construct(
+        private VariableNaming $variableNaming
+    ) {
     }
 
     public function resolveGetterFromReturnedExpr(Expr $expr): ?string

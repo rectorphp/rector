@@ -8,26 +8,11 @@ use PHPStan\Type\ObjectType;
 
 final class SingleToManyMethod
 {
-    /**
-     * @var string
-     */
-    private $class;
-
-    /**
-     * @var string
-     */
-    private $singleMethodName;
-
-    /**
-     * @var string
-     */
-    private $manyMethodName;
-
-    public function __construct(string $class, string $singleMethodName, string $manyMethodName)
-    {
-        $this->class = $class;
-        $this->singleMethodName = $singleMethodName;
-        $this->manyMethodName = $manyMethodName;
+    public function __construct(
+        private string $class,
+        private string $singleMethodName,
+        private string $manyMethodName
+    ) {
     }
 
     public function getObjectType(): ObjectType

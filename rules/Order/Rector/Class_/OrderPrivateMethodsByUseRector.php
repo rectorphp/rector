@@ -27,14 +27,9 @@ final class OrderPrivateMethodsByUseRector extends AbstractRector
      */
     private const MAX_ATTEMPTS = 5;
 
-    /**
-     * @var StmtOrder
-     */
-    private $stmtOrder;
-
-    public function __construct(StmtOrder $stmtOrder)
-    {
-        $this->stmtOrder = $stmtOrder;
+    public function __construct(
+        private StmtOrder $stmtOrder
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

@@ -15,20 +15,10 @@ use Rector\Privatization\Naming\ConstantNaming;
 
 final class ClassConstantFactory
 {
-    /**
-     * @var ConstantNaming
-     */
-    private $constantNaming;
-
-    /**
-     * @var PhpDocInfoFactory
-     */
-    private $phpDocInfoFactory;
-
-    public function __construct(ConstantNaming $constantNaming, PhpDocInfoFactory $phpDocInfoFactory)
-    {
-        $this->constantNaming = $constantNaming;
-        $this->phpDocInfoFactory = $phpDocInfoFactory;
+    public function __construct(
+        private ConstantNaming $constantNaming,
+        private PhpDocInfoFactory $phpDocInfoFactory
+    ) {
     }
 
     public function createFromProperty(Property $property): ClassConst

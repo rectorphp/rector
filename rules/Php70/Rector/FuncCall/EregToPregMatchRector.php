@@ -41,14 +41,9 @@ final class EregToPregMatchRector extends AbstractRector
         'spliti' => 'preg_split',
     ];
 
-    /**
-     * @var EregToPcreTransformer
-     */
-    private $eregToPcreTransformer;
-
-    public function __construct(EregToPcreTransformer $eregToPcreTransformer)
-    {
-        $this->eregToPcreTransformer = $eregToPcreTransformer;
+    public function __construct(
+        private EregToPcreTransformer $eregToPcreTransformer
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

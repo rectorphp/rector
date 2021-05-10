@@ -18,14 +18,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class RemoveDeadStmtRector extends AbstractRector
 {
-    /**
-     * @var LivingCodeManipulator
-     */
-    private $livingCodeManipulator;
-
-    public function __construct(LivingCodeManipulator $livingCodeManipulator)
-    {
-        $this->livingCodeManipulator = $livingCodeManipulator;
+    public function __construct(
+        private LivingCodeManipulator $livingCodeManipulator
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

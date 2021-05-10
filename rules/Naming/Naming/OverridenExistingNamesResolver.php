@@ -21,29 +21,11 @@ final class OverridenExistingNamesResolver
      */
     private $overridenExistingVariableNamesByClassMethod = [];
 
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var BetterNodeFinder
-     */
-    private $betterNodeFinder;
-
-    /**
-     * @var ArrayFilter
-     */
-    private $arrayFilter;
-
     public function __construct(
-        ArrayFilter $arrayFilter,
-        BetterNodeFinder $betterNodeFinder,
-        NodeNameResolver $nodeNameResolver
+        private ArrayFilter $arrayFilter,
+        private BetterNodeFinder $betterNodeFinder,
+        private NodeNameResolver $nodeNameResolver
     ) {
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->betterNodeFinder = $betterNodeFinder;
-        $this->arrayFilter = $arrayFilter;
     }
 
     /**

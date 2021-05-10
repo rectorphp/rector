@@ -40,36 +40,12 @@ final class RemoveUnusedAliasRector extends AbstractRector
      */
     private $resolvedDocPossibleAliases = [];
 
-    /**
-     * @var DocAliasResolver
-     */
-    private $docAliasResolver;
-
-    /**
-     * @var UseNameAliasToNameResolver
-     */
-    private $useNameAliasToNameResolver;
-
-    /**
-     * @var UseManipulator
-     */
-    private $useManipulator;
-
-    /**
-     * @var NameRenamer
-     */
-    private $nameRenamer;
-
     public function __construct(
-        DocAliasResolver $docAliasResolver,
-        UseManipulator $useManipulator,
-        UseNameAliasToNameResolver $useNameAliasToNameResolver,
-        NameRenamer $nameRenamer
+        private DocAliasResolver $docAliasResolver,
+        private UseManipulator $useManipulator,
+        private UseNameAliasToNameResolver $useNameAliasToNameResolver,
+        private NameRenamer $nameRenamer
     ) {
-        $this->docAliasResolver = $docAliasResolver;
-        $this->useNameAliasToNameResolver = $useNameAliasToNameResolver;
-        $this->useManipulator = $useManipulator;
-        $this->nameRenamer = $nameRenamer;
     }
 
     public function getRuleDefinition(): RuleDefinition

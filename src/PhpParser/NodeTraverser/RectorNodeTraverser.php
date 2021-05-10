@@ -14,16 +14,6 @@ use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 final class RectorNodeTraverser extends NodeTraverser
 {
     /**
-     * @var PhpRectorInterface[]
-     */
-    private $phpRectors = [];
-
-    /**
-     * @var NodeFinder
-     */
-    private $nodeFinder;
-
-    /**
      * @var bool
      */
     private $areNodeVisitorsPrepared = false;
@@ -31,10 +21,10 @@ final class RectorNodeTraverser extends NodeTraverser
     /**
      * @param PhpRectorInterface[] $phpRectors
      */
-    public function __construct(array $phpRectors, NodeFinder $nodeFinder)
-    {
-        $this->phpRectors = $phpRectors;
-        $this->nodeFinder = $nodeFinder;
+    public function __construct(
+        private array $phpRectors,
+        private NodeFinder $nodeFinder
+    ) {
     }
 
     /**

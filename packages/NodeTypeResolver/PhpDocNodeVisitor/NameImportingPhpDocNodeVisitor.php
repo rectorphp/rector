@@ -21,40 +21,16 @@ use Symplify\SimplePhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor;
 final class NameImportingPhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
 {
     /**
-     * @var StaticTypeMapper
-     */
-    private $staticTypeMapper;
-
-    /**
-     * @var ParameterProvider
-     */
-    private $parameterProvider;
-
-    /**
-     * @var ClassNameImportSkipper
-     */
-    private $classNameImportSkipper;
-
-    /**
-     * @var UseNodesToAddCollector
-     */
-    private $useNodesToAddCollector;
-
-    /**
      * @var PhpParserNode|null
      */
     private $currentPhpParserNode;
 
     public function __construct(
-        StaticTypeMapper $staticTypeMapper,
-        ParameterProvider $parameterProvider,
-        ClassNameImportSkipper $classNameImportSkipper,
-        UseNodesToAddCollector $useNodesToAddCollector
+        private StaticTypeMapper $staticTypeMapper,
+        private ParameterProvider $parameterProvider,
+        private ClassNameImportSkipper $classNameImportSkipper,
+        private UseNodesToAddCollector $useNodesToAddCollector
     ) {
-        $this->staticTypeMapper = $staticTypeMapper;
-        $this->parameterProvider = $parameterProvider;
-        $this->classNameImportSkipper = $classNameImportSkipper;
-        $this->useNodesToAddCollector = $useNodesToAddCollector;
     }
 
     public function beforeTraverse(Node $node): void

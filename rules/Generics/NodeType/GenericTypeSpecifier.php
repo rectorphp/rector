@@ -13,22 +13,10 @@ use Rector\StaticTypeMapper\StaticTypeMapper;
 
 final class GenericTypeSpecifier
 {
-    /**
-     * @var StaticTypeMapper
-     */
-    private $staticTypeMapper;
-
-    /**
-     * @var ExtendsTemplateTypeMapFallbackFactory
-     */
-    private $extendsTemplateTypeMapFallbackFactory;
-
     public function __construct(
-        StaticTypeMapper $staticTypeMapper,
-        ExtendsTemplateTypeMapFallbackFactory $extendsTemplateTypeMapFallbackFactory
+        private StaticTypeMapper $staticTypeMapper,
+        private ExtendsTemplateTypeMapFallbackFactory $extendsTemplateTypeMapFallbackFactory
     ) {
-        $this->staticTypeMapper = $staticTypeMapper;
-        $this->extendsTemplateTypeMapFallbackFactory = $extendsTemplateTypeMapFallbackFactory;
     }
 
     /**

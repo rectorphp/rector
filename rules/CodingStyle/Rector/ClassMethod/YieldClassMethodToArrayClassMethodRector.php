@@ -31,22 +31,12 @@ final class YieldClassMethodToArrayClassMethodRector extends AbstractRector impl
     public const METHODS_BY_TYPE = 'methods_by_type';
 
     /**
-     * @var array<class-string, string[]>
-     */
-    private $methodsByType = [];
-
-    /**
-     * @var NodeTransformer
-     */
-    private $nodeTransformer;
-
-    /**
      * @param array<class-string, string[]> $methodsByType
      */
-    public function __construct(NodeTransformer $nodeTransformer, array $methodsByType = [])
-    {
-        $this->methodsByType = $methodsByType;
-        $this->nodeTransformer = $nodeTransformer;
+    public function __construct(
+        private NodeTransformer $nodeTransformer,
+        private array $methodsByType = []
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

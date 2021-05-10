@@ -108,14 +108,9 @@ final class PureFunctionDetector
         'json_encode', 'json_decode', 'json_last_error',
     ];
 
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    public function __construct(NodeNameResolver $nodeNameResolver)
-    {
-        $this->nodeNameResolver = $nodeNameResolver;
+    public function __construct(
+        private NodeNameResolver $nodeNameResolver
+    ) {
     }
 
     public function detect(FuncCall $funcCall): bool

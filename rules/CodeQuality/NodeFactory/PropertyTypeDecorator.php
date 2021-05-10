@@ -18,36 +18,12 @@ use Rector\StaticTypeMapper\StaticTypeMapper;
 
 final class PropertyTypeDecorator
 {
-    /**
-     * @var PhpVersionProvider
-     */
-    private $phpVersionProvider;
-
-    /**
-     * @var StaticTypeMapper
-     */
-    private $staticTypeMapper;
-
-    /**
-     * @var PhpDocTypeChanger
-     */
-    private $phpDocTypeChanger;
-
-    /**
-     * @var PhpDocInfoFactory
-     */
-    private $phpDocInfoFactory;
-
     public function __construct(
-        PhpVersionProvider $phpVersionProvider,
-        StaticTypeMapper $staticTypeMapper,
-        PhpDocTypeChanger $phpDocTypeChanger,
-        PhpDocInfoFactory $phpDocInfoFactory
+        private PhpVersionProvider $phpVersionProvider,
+        private StaticTypeMapper $staticTypeMapper,
+        private PhpDocTypeChanger $phpDocTypeChanger,
+        private PhpDocInfoFactory $phpDocInfoFactory
     ) {
-        $this->phpVersionProvider = $phpVersionProvider;
-        $this->staticTypeMapper = $staticTypeMapper;
-        $this->phpDocTypeChanger = $phpDocTypeChanger;
-        $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
 
     public function decorateProperty(Property $property, Type $propertyType): void

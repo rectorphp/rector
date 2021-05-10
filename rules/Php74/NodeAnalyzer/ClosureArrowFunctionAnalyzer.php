@@ -15,20 +15,10 @@ use Rector\Core\PhpParser\Node\BetterNodeFinder;
 
 final class ClosureArrowFunctionAnalyzer
 {
-    /**
-     * @var BetterNodeFinder
-     */
-    private $betterNodeFinder;
-
-    /**
-     * @var NodeComparator
-     */
-    private $nodeComparator;
-
-    public function __construct(BetterNodeFinder $betterNodeFinder, NodeComparator $nodeComparator)
-    {
-        $this->betterNodeFinder = $betterNodeFinder;
-        $this->nodeComparator = $nodeComparator;
+    public function __construct(
+        private BetterNodeFinder $betterNodeFinder,
+        private NodeComparator $nodeComparator
+    ) {
     }
 
     public function matchArrowFunctionExpr(Closure $closure): ?Expr

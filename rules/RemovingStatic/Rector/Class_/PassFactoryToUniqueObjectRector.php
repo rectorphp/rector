@@ -37,43 +37,13 @@ final class PassFactoryToUniqueObjectRector extends AbstractRector implements Co
      */
     private $serviceObjectTypes = [];
 
-    /**
-     * @var PropertyNaming
-     */
-    private $propertyNaming;
-
-    /**
-     * @var UniqueObjectOrServiceDetector
-     */
-    private $uniqueObjectOrServiceDetector;
-
-    /**
-     * @var UniqueObjectFactoryFactory
-     */
-    private $uniqueObjectFactoryFactory;
-
-    /**
-     * @var FactoryClassPrinter
-     */
-    private $factoryClassPrinter;
-
-    /**
-     * @var StaticTypesInClassResolver
-     */
-    private $staticTypesInClassResolver;
-
     public function __construct(
-        StaticTypesInClassResolver $staticTypesInClassResolver,
-        PropertyNaming $propertyNaming,
-        UniqueObjectOrServiceDetector $uniqueObjectOrServiceDetector,
-        UniqueObjectFactoryFactory $uniqueObjectFactoryFactory,
-        FactoryClassPrinter $factoryClassPrinter
+        private StaticTypesInClassResolver $staticTypesInClassResolver,
+        private PropertyNaming $propertyNaming,
+        private UniqueObjectOrServiceDetector $uniqueObjectOrServiceDetector,
+        private UniqueObjectFactoryFactory $uniqueObjectFactoryFactory,
+        private FactoryClassPrinter $factoryClassPrinter
     ) {
-        $this->propertyNaming = $propertyNaming;
-        $this->uniqueObjectOrServiceDetector = $uniqueObjectOrServiceDetector;
-        $this->uniqueObjectFactoryFactory = $uniqueObjectFactoryFactory;
-        $this->factoryClassPrinter = $factoryClassPrinter;
-        $this->staticTypesInClassResolver = $staticTypesInClassResolver;
     }
 
     public function getRuleDefinition(): RuleDefinition

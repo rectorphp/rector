@@ -31,29 +31,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class SimplifyIfNullableReturnRector extends AbstractRector
 {
-    /**
-     * @var IfManipulator
-     */
-    private $ifManipulator;
-
-    /**
-     * @var AssignVariableTypeResolver
-     */
-    private $assignVariableTypeResolver;
-
-    /**
-     * @var VarTagRemover
-     */
-    private $varTagRemover;
-
     public function __construct(
-        IfManipulator $ifManipulator,
-        AssignVariableTypeResolver $assignVariableTypeResolver,
-        VarTagRemover $varTagRemover
+        private IfManipulator $ifManipulator,
+        private AssignVariableTypeResolver $assignVariableTypeResolver,
+        private VarTagRemover $varTagRemover
     ) {
-        $this->ifManipulator = $ifManipulator;
-        $this->assignVariableTypeResolver = $assignVariableTypeResolver;
-        $this->varTagRemover = $varTagRemover;
     }
 
     public function getRuleDefinition(): RuleDefinition

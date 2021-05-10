@@ -50,14 +50,9 @@ final class Indent
      */
     private const PARSE_INDENT_REGEX = '/^(?P<indent>( +|\t+)).*/m';
 
-    /**
-     * @var string
-     */
-    private $string;
-
-    private function __construct(string $string)
-    {
-        $this->string = $string;
+    private function __construct(
+        private string $string
+    ) {
     }
 
     public function __toString(): string

@@ -28,14 +28,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class ReturnNeverTypeRector extends AbstractRector
 {
-    /**
-     * @var ParentClassMethodTypeOverrideGuard
-     */
-    private $parentClassMethodTypeOverrideGuard;
-
-    public function __construct(ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard)
-    {
-        $this->parentClassMethodTypeOverrideGuard = $parentClassMethodTypeOverrideGuard;
+    public function __construct(
+        private ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

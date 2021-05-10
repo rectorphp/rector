@@ -11,20 +11,10 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 
 final class TraitTypeAnalyzer
 {
-    /**
-     * @var NodeTypeResolver
-     */
-    private $nodeTypeResolver;
-
-    /**
-     * @var ReflectionProvider
-     */
-    private $reflectionProvider;
-
-    public function __construct(NodeTypeResolver $nodeTypeResolver, ReflectionProvider $reflectionProvider)
-    {
-        $this->nodeTypeResolver = $nodeTypeResolver;
-        $this->reflectionProvider = $reflectionProvider;
+    public function __construct(
+        private NodeTypeResolver $nodeTypeResolver,
+        private ReflectionProvider $reflectionProvider
+    ) {
     }
 
     public function isTraitType(Type $type): bool

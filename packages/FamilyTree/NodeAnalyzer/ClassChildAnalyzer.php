@@ -10,14 +10,9 @@ use Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer;
 
 final class ClassChildAnalyzer
 {
-    /**
-     * @var FamilyRelationsAnalyzer
-     */
-    private $familyRelationsAnalyzer;
-
-    public function __construct(FamilyRelationsAnalyzer $familyRelationsAnalyzer)
-    {
-        $this->familyRelationsAnalyzer = $familyRelationsAnalyzer;
+    public function __construct(
+        private FamilyRelationsAnalyzer $familyRelationsAnalyzer
+    ) {
     }
 
     public function hasChildClassMethod(ClassReflection $classReflection, string $methodName): bool

@@ -23,29 +23,11 @@ final class VariableToConstantGuard
      */
     private $referencePositionsByFunctionName = [];
 
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var ReflectionProvider
-     */
-    private $reflectionProvider;
-
-    /**
-     * @var PrivatesAccessor
-     */
-    private $privatesAccessor;
-
     public function __construct(
-        NodeNameResolver $nodeNameResolver,
-        ReflectionProvider $reflectionProvider,
-        PrivatesAccessor $privatesAccessor
+        private NodeNameResolver $nodeNameResolver,
+        private ReflectionProvider $reflectionProvider,
+        private PrivatesAccessor $privatesAccessor
     ) {
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->reflectionProvider = $reflectionProvider;
-        $this->privatesAccessor = $privatesAccessor;
     }
 
     public function isReadArg(Arg $arg): bool

@@ -10,14 +10,9 @@ use Rector\NodeNameResolver\NodeNameResolver;
 
 final class InstanceOfUniqueKeyResolver
 {
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    public function __construct(NodeNameResolver $nodeNameResolver)
-    {
-        $this->nodeNameResolver = $nodeNameResolver;
+    public function __construct(
+        private NodeNameResolver $nodeNameResolver
+    ) {
     }
 
     public function resolve(Instanceof_ $instanceof): ?string

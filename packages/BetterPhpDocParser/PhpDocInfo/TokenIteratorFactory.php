@@ -16,20 +16,10 @@ final class TokenIteratorFactory
      */
     private const INDEX = 'index';
 
-    /**
-     * @var Lexer
-     */
-    private $lexer;
-
-    /**
-     * @var PrivatesAccessor
-     */
-    private $privatesAccessor;
-
-    public function __construct(Lexer $lexer, PrivatesAccessor $privatesAccessor)
-    {
-        $this->lexer = $lexer;
-        $this->privatesAccessor = $privatesAccessor;
+    public function __construct(
+        private Lexer $lexer,
+        private PrivatesAccessor $privatesAccessor
+    ) {
     }
 
     public function create(string $content): BetterTokenIterator

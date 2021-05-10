@@ -18,20 +18,10 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 
 final class UselessIfCondBeforeForeachDetector
 {
-    /**
-     * @var NodeTypeResolver
-     */
-    private $nodeTypeResolver;
-
-    /**
-     * @var NodeComparator
-     */
-    private $nodeComparator;
-
-    public function __construct(NodeTypeResolver $nodeTypeResolver, NodeComparator $nodeComparator)
-    {
-        $this->nodeTypeResolver = $nodeTypeResolver;
-        $this->nodeComparator = $nodeComparator;
+    public function __construct(
+        private NodeTypeResolver $nodeTypeResolver,
+        private NodeComparator $nodeComparator
+    ) {
     }
 
     /**

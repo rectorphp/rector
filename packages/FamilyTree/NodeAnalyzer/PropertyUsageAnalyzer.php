@@ -18,36 +18,12 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class PropertyUsageAnalyzer
 {
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var BetterNodeFinder
-     */
-    private $betterNodeFinder;
-
-    /**
-     * @var FamilyRelationsAnalyzer
-     */
-    private $familyRelationsAnalyzer;
-
-    /**
-     * @var NodeRepository
-     */
-    private $nodeRepository;
-
     public function __construct(
-        BetterNodeFinder $betterNodeFinder,
-        FamilyRelationsAnalyzer $familyRelationsAnalyzer,
-        NodeNameResolver $nodeNameResolver,
-        NodeRepository $nodeRepository
+        private BetterNodeFinder $betterNodeFinder,
+        private FamilyRelationsAnalyzer $familyRelationsAnalyzer,
+        private NodeNameResolver $nodeNameResolver,
+        private NodeRepository $nodeRepository
     ) {
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->betterNodeFinder = $betterNodeFinder;
-        $this->familyRelationsAnalyzer = $familyRelationsAnalyzer;
-        $this->nodeRepository = $nodeRepository;
     }
 
     public function isPropertyFetchedInChildClass(Property $property): bool

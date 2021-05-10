@@ -45,36 +45,12 @@ final class InlineCodeParser
      */
     private const ENDING_SEMI_COLON_REGEX = '#;(\s+)?$#';
 
-    /**
-     * @var Parser
-     */
-    private $parser;
-
-    /**
-     * @var NodeScopeAndMetadataDecorator
-     */
-    private $nodeScopeAndMetadataDecorator;
-
-    /**
-     * @var BetterStandardPrinter
-     */
-    private $betterStandardPrinter;
-
-    /**
-     * @var SmartFileSystem
-     */
-    private $smartFileSystem;
-
     public function __construct(
-        BetterStandardPrinter $betterStandardPrinter,
-        NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator,
-        Parser $parser,
-        SmartFileSystem $smartFileSystem
+        private BetterStandardPrinter $betterStandardPrinter,
+        private NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator,
+        private Parser $parser,
+        private SmartFileSystem $smartFileSystem
     ) {
-        $this->parser = $parser;
-        $this->betterStandardPrinter = $betterStandardPrinter;
-        $this->nodeScopeAndMetadataDecorator = $nodeScopeAndMetadataDecorator;
-        $this->smartFileSystem = $smartFileSystem;
     }
 
     /**

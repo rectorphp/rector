@@ -27,29 +27,11 @@ final class VariableTypeResolver implements NodeTypeResolverInterface
      */
     private const PARENT_NODE_ATTRIBUTES = [AttributeKey::PARENT_NODE, AttributeKey::METHOD_NODE];
 
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var TraitNodeScopeCollector
-     */
-    private $traitNodeScopeCollector;
-
-    /**
-     * @var PhpDocInfoFactory
-     */
-    private $phpDocInfoFactory;
-
     public function __construct(
-        NodeNameResolver $nodeNameResolver,
-        TraitNodeScopeCollector $traitNodeScopeCollector,
-        PhpDocInfoFactory $phpDocInfoFactory
+        private NodeNameResolver $nodeNameResolver,
+        private TraitNodeScopeCollector $traitNodeScopeCollector,
+        private PhpDocInfoFactory $phpDocInfoFactory
     ) {
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->traitNodeScopeCollector = $traitNodeScopeCollector;
-        $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
 
     /**

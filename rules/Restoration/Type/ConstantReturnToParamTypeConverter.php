@@ -16,14 +16,9 @@ use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 
 final class ConstantReturnToParamTypeConverter
 {
-    /**
-     * @var TypeFactory
-     */
-    private $typeFactory;
-
-    public function __construct(TypeFactory $typeFactory)
-    {
-        $this->typeFactory = $typeFactory;
+    public function __construct(
+        private TypeFactory $typeFactory
+    ) {
     }
 
     public function convert(Type $type): Type

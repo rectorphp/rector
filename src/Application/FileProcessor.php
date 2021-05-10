@@ -13,43 +13,13 @@ use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
 
 final class FileProcessor
 {
-    /**
-     * @var Parser
-     */
-    private $parser;
-
-    /**
-     * @var Lexer
-     */
-    private $lexer;
-
-    /**
-     * @var RectorNodeTraverser
-     */
-    private $rectorNodeTraverser;
-
-    /**
-     * @var NodeScopeAndMetadataDecorator
-     */
-    private $nodeScopeAndMetadataDecorator;
-
-    /**
-     * @var AffectedFilesCollector
-     */
-    private $affectedFilesCollector;
-
     public function __construct(
-        AffectedFilesCollector $affectedFilesCollector,
-        Lexer $lexer,
-        NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator,
-        Parser $parser,
-        RectorNodeTraverser $rectorNodeTraverser
+        private AffectedFilesCollector $affectedFilesCollector,
+        private Lexer $lexer,
+        private NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator,
+        private Parser $parser,
+        private RectorNodeTraverser $rectorNodeTraverser
     ) {
-        $this->parser = $parser;
-        $this->lexer = $lexer;
-        $this->rectorNodeTraverser = $rectorNodeTraverser;
-        $this->nodeScopeAndMetadataDecorator = $nodeScopeAndMetadataDecorator;
-        $this->affectedFilesCollector = $affectedFilesCollector;
     }
 
     public function parseFileInfoToLocalCache(File $file): void

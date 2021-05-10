@@ -22,38 +22,14 @@ use Rector\NodeNameResolver\Regex\RegexPatternDetector;
 final class NodeNameResolver
 {
     /**
-     * @var NodeNameResolverInterface[]
-     */
-    private $nodeNameResolvers = [];
-
-    /**
-     * @var RegexPatternDetector
-     */
-    private $regexPatternDetector;
-
-    /**
-     * @var ClassNaming
-     */
-    private $classNaming;
-
-    /**
-     * @var InvalidNameNodeReporter
-     */
-    private $invalidNameNodeReporter;
-
-    /**
      * @param NodeNameResolverInterface[] $nodeNameResolvers
      */
     public function __construct(
-        RegexPatternDetector $regexPatternDetector,
-        ClassNaming $classNaming,
-        InvalidNameNodeReporter $invalidNameNodeReporter,
-        array $nodeNameResolvers = []
+        private RegexPatternDetector $regexPatternDetector,
+        private ClassNaming $classNaming,
+        private InvalidNameNodeReporter $invalidNameNodeReporter,
+        private array $nodeNameResolvers = []
     ) {
-        $this->regexPatternDetector = $regexPatternDetector;
-        $this->nodeNameResolvers = $nodeNameResolvers;
-        $this->classNaming = $classNaming;
-        $this->invalidNameNodeReporter = $invalidNameNodeReporter;
     }
 
     /**

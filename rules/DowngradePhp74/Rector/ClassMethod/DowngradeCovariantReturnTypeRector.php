@@ -29,29 +29,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class DowngradeCovariantReturnTypeRector extends AbstractRector
 {
-    /**
-     * @var PhpDocTypeChanger
-     */
-    private $phpDocTypeChanger;
-
-    /**
-     * @var PrivatesCaller
-     */
-    private $privatesCaller;
-
-    /**
-     * @var ReturnTagRemover
-     */
-    private $returnTagRemover;
-
     public function __construct(
-        PhpDocTypeChanger $phpDocTypeChanger,
-        PrivatesCaller $privatesCaller,
-        ReturnTagRemover $returnTagRemover
+        private PhpDocTypeChanger $phpDocTypeChanger,
+        private PrivatesCaller $privatesCaller,
+        private ReturnTagRemover $returnTagRemover
     ) {
-        $this->phpDocTypeChanger = $phpDocTypeChanger;
-        $this->privatesCaller = $privatesCaller;
-        $this->returnTagRemover = $returnTagRemover;
     }
 
     public function getRuleDefinition(): RuleDefinition

@@ -18,29 +18,11 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class MethodCallManipulator
 {
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var BetterNodeFinder
-     */
-    private $betterNodeFinder;
-
-    /**
-     * @var FluentChainMethodCallNodeAnalyzer
-     */
-    private $fluentChainMethodCallNodeAnalyzer;
-
     public function __construct(
-        BetterNodeFinder $betterNodeFinder,
-        NodeNameResolver $nodeNameResolver,
-        FluentChainMethodCallNodeAnalyzer $fluentChainMethodCallNodeAnalyzer
+        private BetterNodeFinder $betterNodeFinder,
+        private NodeNameResolver $nodeNameResolver,
+        private FluentChainMethodCallNodeAnalyzer $fluentChainMethodCallNodeAnalyzer
     ) {
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->betterNodeFinder = $betterNodeFinder;
-        $this->fluentChainMethodCallNodeAnalyzer = $fluentChainMethodCallNodeAnalyzer;
     }
 
     /**

@@ -13,22 +13,10 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class PropertyTypeVendorLockResolver
 {
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var FamilyRelationsAnalyzer
-     */
-    private $familyRelationsAnalyzer;
-
     public function __construct(
-        NodeNameResolver $nodeNameResolver,
-        FamilyRelationsAnalyzer $familyRelationsAnalyzer
+        private NodeNameResolver $nodeNameResolver,
+        private FamilyRelationsAnalyzer $familyRelationsAnalyzer
     ) {
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->familyRelationsAnalyzer = $familyRelationsAnalyzer;
     }
 
     public function isVendorLocked(Property $property): bool

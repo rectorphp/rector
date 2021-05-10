@@ -6,32 +6,12 @@ namespace Rector\Transform\ValueObject;
 
 final class ArrayFuncCallToMethodCall
 {
-    /**
-     * @var string
-     */
-    private $function;
-
-    /**
-     * @var string
-     */
-    private $class;
-
-    /**
-     * @var string
-     */
-    private $arrayMethod;
-
-    /**
-     * @var string
-     */
-    private $nonArrayMethod;
-
-    public function __construct(string $function, string $class, string $arrayMethod, string $nonArrayMethod)
-    {
-        $this->function = $function;
-        $this->class = $class;
-        $this->arrayMethod = $arrayMethod;
-        $this->nonArrayMethod = $nonArrayMethod;
+    public function __construct(
+        private string $function,
+        private string $class,
+        private string $arrayMethod,
+        private string $nonArrayMethod
+    ) {
     }
 
     public function getFunction(): string

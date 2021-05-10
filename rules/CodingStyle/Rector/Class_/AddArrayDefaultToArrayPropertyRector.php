@@ -29,22 +29,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class AddArrayDefaultToArrayPropertyRector extends AbstractRector
 {
-    /**
-     * @var PropertyFetchAnalyzer
-     */
-    private $propertyFetchAnalyzer;
-
-    /**
-     * @var IterableTypeAnalyzer
-     */
-    private $iterableTypeAnalyzer;
-
     public function __construct(
-        PropertyFetchAnalyzer $propertyFetchAnalyzer,
-        IterableTypeAnalyzer $iterableTypeAnalyzer
+        private PropertyFetchAnalyzer $propertyFetchAnalyzer,
+        private IterableTypeAnalyzer $iterableTypeAnalyzer
     ) {
-        $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
-        $this->iterableTypeAnalyzer = $iterableTypeAnalyzer;
     }
 
     public function getRuleDefinition(): RuleDefinition

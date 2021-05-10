@@ -18,43 +18,13 @@ use Rector\PostRector\Collector\PropertyToAddCollector;
 
 final class PropertyAdder
 {
-    /**
-     * @var NodeTypeResolver
-     */
-    private $nodeTypeResolver;
-
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var PropertyToAddCollector
-     */
-    private $propertyToAddCollector;
-
-    /**
-     * @var RectorChangeCollector
-     */
-    private $rectorChangeCollector;
-
-    /**
-     * @var PropertyNaming
-     */
-    private $propertyNaming;
-
     public function __construct(
-        NodeTypeResolver $nodeTypeResolver,
-        NodeNameResolver $nodeNameResolver,
-        PropertyToAddCollector $propertyToAddCollector,
-        RectorChangeCollector $rectorChangeCollector,
-        PropertyNaming $propertyNaming
+        private NodeTypeResolver $nodeTypeResolver,
+        private NodeNameResolver $nodeNameResolver,
+        private PropertyToAddCollector $propertyToAddCollector,
+        private RectorChangeCollector $rectorChangeCollector,
+        private PropertyNaming $propertyNaming
     ) {
-        $this->nodeTypeResolver = $nodeTypeResolver;
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->propertyToAddCollector = $propertyToAddCollector;
-        $this->rectorChangeCollector = $rectorChangeCollector;
-        $this->propertyNaming = $propertyNaming;
     }
 
     public function addPropertyToCollector(Property $property): void

@@ -29,24 +29,14 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ChangeSwitchToMatchRector extends AbstractRector
 {
     /**
-     * @var SwitchExprsResolver
-     */
-    private $switchExprsResolver;
-
-    /**
-     * @var SwitchAnalyzer
-     */
-    private $switchAnalyzer;
-
-    /**
      * @var Expr|null
      */
     private $assignExpr;
 
-    public function __construct(SwitchExprsResolver $switchExprsResolver, SwitchAnalyzer $switchAnalyzer)
-    {
-        $this->switchExprsResolver = $switchExprsResolver;
-        $this->switchAnalyzer = $switchAnalyzer;
+    public function __construct(
+        private SwitchExprsResolver $switchExprsResolver,
+        private SwitchAnalyzer $switchAnalyzer
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

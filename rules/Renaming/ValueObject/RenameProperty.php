@@ -8,26 +8,11 @@ use PHPStan\Type\ObjectType;
 
 final class RenameProperty
 {
-    /**
-     * @var string
-     */
-    private $type;
-
-    /**
-     * @var string
-     */
-    private $oldProperty;
-
-    /**
-     * @var string
-     */
-    private $newProperty;
-
-    public function __construct(string $type, string $oldProperty, string $newProperty)
-    {
-        $this->type = $type;
-        $this->oldProperty = $oldProperty;
-        $this->newProperty = $newProperty;
+    public function __construct(
+        private string $type,
+        private string $oldProperty,
+        private string $newProperty
+    ) {
     }
 
     public function getObjectType(): ObjectType

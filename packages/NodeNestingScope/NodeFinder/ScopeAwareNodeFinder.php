@@ -15,14 +15,9 @@ final class ScopeAwareNodeFinder
      */
     private $isBreakingNodeFoundFirst = false;
 
-    /**
-     * @var BetterNodeFinder
-     */
-    private $betterNodeFinder;
-
-    public function __construct(BetterNodeFinder $betterNodeFinder)
-    {
-        $this->betterNodeFinder = $betterNodeFinder;
+    public function __construct(
+        private BetterNodeFinder $betterNodeFinder
+    ) {
     }
 
     /**

@@ -12,29 +12,11 @@ use Rector\NodeNameResolver\NodeNameResolver;
 
 final class PreviousVariableAssignNodeFinder
 {
-    /**
-     * @var BetterNodeFinder
-     */
-    private $betterNodeFinder;
-
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var NodeComparator
-     */
-    private $nodeComparator;
-
     public function __construct(
-        BetterNodeFinder $betterNodeFinder,
-        NodeNameResolver $nodeNameResolver,
-        NodeComparator $nodeComparator
+        private BetterNodeFinder $betterNodeFinder,
+        private NodeNameResolver $nodeNameResolver,
+        private NodeComparator $nodeComparator
     ) {
-        $this->betterNodeFinder = $betterNodeFinder;
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->nodeComparator = $nodeComparator;
     }
 
     public function find(Assign $assign): ?Node

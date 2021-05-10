@@ -22,29 +22,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class ReturnBinaryOrToEarlyReturnRector extends AbstractRector
 {
-    /**
-     * @var IfManipulator
-     */
-    private $ifManipulator;
-
-    /**
-     * @var AssignAndBinaryMap
-     */
-    private $assignAndBinaryMap;
-
-    /**
-     * @var CallAnalyzer
-     */
-    private $callAnalyzer;
-
     public function __construct(
-        IfManipulator $ifManipulator,
-        AssignAndBinaryMap $assignAndBinaryMap,
-        CallAnalyzer $callAnalyzer
+        private IfManipulator $ifManipulator,
+        private AssignAndBinaryMap $assignAndBinaryMap,
+        private CallAnalyzer $callAnalyzer
     ) {
-        $this->ifManipulator = $ifManipulator;
-        $this->assignAndBinaryMap = $assignAndBinaryMap;
-        $this->callAnalyzer = $callAnalyzer;
     }
 
     public function getRuleDefinition(): RuleDefinition

@@ -20,20 +20,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class ForeachItemsAssignToEmptyArrayToAssignRector extends AbstractRector
 {
-    /**
-     * @var NodeUsageFinder
-     */
-    private $nodeUsageFinder;
-
-    /**
-     * @var ForeachAnalyzer
-     */
-    private $foreachAnalyzer;
-
-    public function __construct(NodeUsageFinder $nodeUsageFinder, ForeachAnalyzer $foreachAnalyzer)
-    {
-        $this->nodeUsageFinder = $nodeUsageFinder;
-        $this->foreachAnalyzer = $foreachAnalyzer;
+    public function __construct(
+        private NodeUsageFinder $nodeUsageFinder,
+        private ForeachAnalyzer $foreachAnalyzer
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

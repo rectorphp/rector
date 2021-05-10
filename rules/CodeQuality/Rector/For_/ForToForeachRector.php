@@ -31,11 +31,6 @@ final class ForToForeachRector extends AbstractRector
     private const COUNT = 'count';
 
     /**
-     * @var Inflector
-     */
-    private $inflector;
-
-    /**
      * @var string|null
      */
     private $keyValueName;
@@ -55,31 +50,12 @@ final class ForToForeachRector extends AbstractRector
      */
     private $iteratedExpr;
 
-    /**
-     * @var ForAnalyzer
-     */
-    private $forAnalyzer;
-
-    /**
-     * @var ForeachFactory
-     */
-    private $foreachFactory;
-
-    /**
-     * @var ForeachAnalyzer
-     */
-    private $foreachAnalyzer;
-
     public function __construct(
-        Inflector $inflector,
-        ForAnalyzer $forAnalyzer,
-        ForeachFactory $foreachFactory,
-        ForeachAnalyzer $foreachAnalyzer
+        private Inflector $inflector,
+        private ForAnalyzer $forAnalyzer,
+        private ForeachFactory $foreachFactory,
+        private ForeachAnalyzer $foreachAnalyzer
     ) {
-        $this->inflector = $inflector;
-        $this->forAnalyzer = $forAnalyzer;
-        $this->foreachFactory = $foreachFactory;
-        $this->foreachAnalyzer = $foreachAnalyzer;
     }
 
     public function getRuleDefinition(): RuleDefinition

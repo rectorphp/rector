@@ -9,20 +9,10 @@ use PHPStan\Type\Generic\TemplateTypeMap;
 
 final class ChildParentClassReflections
 {
-    /**
-     * @var ClassReflection
-     */
-    private $childClassReflection;
-
-    /**
-     * @var ClassReflection
-     */
-    private $parentClassReflection;
-
-    public function __construct(ClassReflection $childClassReflection, ClassReflection $parentClassReflection)
-    {
-        $this->childClassReflection = $childClassReflection;
-        $this->parentClassReflection = $parentClassReflection;
+    public function __construct(
+        private ClassReflection $childClassReflection,
+        private ClassReflection $parentClassReflection
+    ) {
     }
 
     public function getChildClassReflection(): ClassReflection

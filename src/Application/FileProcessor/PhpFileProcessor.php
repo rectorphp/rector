@@ -39,90 +39,24 @@ final class PhpFileProcessor implements FileProcessorInterface
     private const PROGRESS_BAR_STEP_MULTIPLIER = 4;
 
     /**
-     * @var Configuration
-     */
-    private $configuration;
-
-    /**
      * @var File[]
      */
     private $notParsedFiles = [];
 
-    /**
-     * @var SymfonyStyle
-     */
-    private $symfonyStyle;
-
-    /**
-     * @var FileProcessor
-     */
-    private $fileProcessor;
-
-    /**
-     * @var RemovedAndAddedFilesCollector
-     */
-    private $removedAndAddedFilesCollector;
-
-    /**
-     * @var RemovedAndAddedFilesProcessor
-     */
-    private $removedAndAddedFilesProcessor;
-
-    /**
-     * @var PrivatesAccessor
-     */
-    private $privatesAccessor;
-
-    /**
-     * @var FileDiffFileDecorator
-     */
-    private $fileDiffFileDecorator;
-
-    /**
-     * @var CurrentFileProvider
-     */
-    private $currentFileProvider;
-
-    /**
-     * @var FormatPerservingPrinter
-     */
-    private $formatPerservingPrinter;
-
-    /**
-     * @var PostFileProcessor
-     */
-    private $postFileProcessor;
-
-    /**
-     * @var ErrorFactory
-     */
-    private $errorFactory;
-
     public function __construct(
-        Configuration $configuration,
-        FormatPerservingPrinter $formatPerservingPrinter,
-        FileProcessor $fileProcessor,
-        RemovedAndAddedFilesCollector $removedAndAddedFilesCollector,
-        RemovedAndAddedFilesProcessor $removedAndAddedFilesProcessor,
-        SymfonyStyle $symfonyStyle,
-        PrivatesAccessor $privatesAccessor,
-        FileDiffFileDecorator $fileDiffFileDecorator,
-        CurrentFileProvider $currentFileProvider,
-        PostFileProcessor $postFileProcessor,
-        ErrorFactory $errorFactory
+        private Configuration $configuration,
+        private FormatPerservingPrinter $formatPerservingPrinter,
+        private FileProcessor $fileProcessor,
+        private RemovedAndAddedFilesCollector $removedAndAddedFilesCollector,
+        private RemovedAndAddedFilesProcessor $removedAndAddedFilesProcessor,
+        private SymfonyStyle $symfonyStyle,
+        private PrivatesAccessor $privatesAccessor,
+        private FileDiffFileDecorator $fileDiffFileDecorator,
+        private CurrentFileProvider $currentFileProvider,
+        private PostFileProcessor $postFileProcessor,
+        private ErrorFactory $errorFactory
     ) {
-        $this->symfonyStyle = $symfonyStyle;
         $this->configuration = $configuration;
-        $this->fileProcessor = $fileProcessor;
-        $this->removedAndAddedFilesCollector = $removedAndAddedFilesCollector;
-        $this->removedAndAddedFilesProcessor = $removedAndAddedFilesProcessor;
-        $this->privatesAccessor = $privatesAccessor;
-        $this->fileDiffFileDecorator = $fileDiffFileDecorator;
-        $this->configuration = $configuration;
-        $this->currentFileProvider = $currentFileProvider;
-        $this->formatPerservingPrinter = $formatPerservingPrinter;
-        $this->postFileProcessor = $postFileProcessor;
-        $this->errorFactory = $errorFactory;
     }
 
     /**

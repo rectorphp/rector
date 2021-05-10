@@ -15,45 +15,15 @@ use Rector\Naming\Contract\RenameParamValueObjectInterface;
 final class ParamRename implements RenameParamValueObjectInterface
 {
     /**
-     * @var string
-     */
-    private $expectedName;
-
-    /**
-     * @var string
-     */
-    private $currentName;
-
-    /**
-     * @var Param
-     */
-    private $param;
-
-    /**
-     * @var Variable
-     */
-    private $variable;
-
-    /**
-     * @var ClassMethod|Function_|Closure
-     */
-    private $functionLike;
-
-    /**
      * @param ClassMethod|Function_|Closure $functionLike
      */
     public function __construct(
-        string $currentName,
-        string $expectedName,
-        Param $param,
-        Variable $variable,
-        FunctionLike $functionLike
+        private string $currentName,
+        private string $expectedName,
+        private Param $param,
+        private Variable $variable,
+        private FunctionLike $functionLike
     ) {
-        $this->param = $param;
-        $this->variable = $variable;
-        $this->expectedName = $expectedName;
-        $this->currentName = $currentName;
-        $this->functionLike = $functionLike;
     }
 
     public function getCurrentName(): string

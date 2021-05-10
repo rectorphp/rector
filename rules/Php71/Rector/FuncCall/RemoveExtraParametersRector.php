@@ -26,14 +26,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class RemoveExtraParametersRector extends AbstractRector
 {
-    /**
-     * @var CallReflectionResolver
-     */
-    private $callReflectionResolver;
-
-    public function __construct(CallReflectionResolver $callReflectionResolver)
-    {
-        $this->callReflectionResolver = $callReflectionResolver;
+    public function __construct(
+        private CallReflectionResolver $callReflectionResolver
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

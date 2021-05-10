@@ -17,14 +17,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class RemoveUselessReturnTagRector extends AbstractRector
 {
-    /**
-     * @var ReturnTagRemover
-     */
-    private $returnTagRemover;
-
-    public function __construct(ReturnTagRemover $returnTagRemover)
-    {
-        $this->returnTagRemover = $returnTagRemover;
+    public function __construct(
+        private ReturnTagRemover $returnTagRemover
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

@@ -21,43 +21,13 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class CurrentAndParentClassMethodComparator
 {
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var NodeComparator
-     */
-    private $nodeComparator;
-
-    /**
-     * @var MethodReflectionProvider
-     */
-    private $methodReflectionProvider;
-
-    /**
-     * @var ParameterDefaultsComparator
-     */
-    private $parameterDefaultsComparator;
-
-    /**
-     * @var ParameterTypeComparator
-     */
-    private $parameterTypeComparator;
-
     public function __construct(
-        NodeNameResolver $nodeNameResolver,
-        MethodReflectionProvider $methodReflectionProvider,
-        ParameterDefaultsComparator $parameterDefaultsComparator,
-        ParameterTypeComparator $parameterTypeComparator,
-        NodeComparator $nodeComparator
+        private NodeNameResolver $nodeNameResolver,
+        private MethodReflectionProvider $methodReflectionProvider,
+        private ParameterDefaultsComparator $parameterDefaultsComparator,
+        private ParameterTypeComparator $parameterTypeComparator,
+        private NodeComparator $nodeComparator
     ) {
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->methodReflectionProvider = $methodReflectionProvider;
-        $this->parameterDefaultsComparator = $parameterDefaultsComparator;
-        $this->parameterTypeComparator = $parameterTypeComparator;
-        $this->nodeComparator = $nodeComparator;
     }
 
     public function isParentCallMatching(ClassMethod $classMethod, StaticCall $staticCall): bool

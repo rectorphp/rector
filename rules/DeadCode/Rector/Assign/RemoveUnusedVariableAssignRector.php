@@ -31,36 +31,12 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class RemoveUnusedVariableAssignRector extends AbstractRector
 {
-    /**
-     * @var ReservedKeywordAnalyzer
-     */
-    private $reservedKeywordAnalyzer;
-
-    /**
-     * @var CompactFuncCallAnalyzer
-     */
-    private $compactFuncCallAnalyzer;
-
-    /**
-     * @var ConditionSearcher
-     */
-    private $conditionSearcher;
-
-    /**
-     * @var UsedVariableNameAnalyzer
-     */
-    private $usedVariableNameAnalyzer;
-
     public function __construct(
-        ReservedKeywordAnalyzer $reservedKeywordAnalyzer,
-        CompactFuncCallAnalyzer $compactFuncCallAnalyzer,
-        ConditionSearcher $conditionSearcher,
-        UsedVariableNameAnalyzer $usedVariableNameAnalyzer
+        private ReservedKeywordAnalyzer $reservedKeywordAnalyzer,
+        private CompactFuncCallAnalyzer $compactFuncCallAnalyzer,
+        private ConditionSearcher $conditionSearcher,
+        private UsedVariableNameAnalyzer $usedVariableNameAnalyzer
     ) {
-        $this->reservedKeywordAnalyzer = $reservedKeywordAnalyzer;
-        $this->compactFuncCallAnalyzer = $compactFuncCallAnalyzer;
-        $this->conditionSearcher = $conditionSearcher;
-        $this->usedVariableNameAnalyzer = $usedVariableNameAnalyzer;
     }
 
     public function getRuleDefinition(): RuleDefinition

@@ -19,22 +19,10 @@ use Symplify\SimplePhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor;
 
 final class TemplatePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor implements BasePhpDocNodeVisitorInterface
 {
-    /**
-     * @var CurrentTokenIteratorProvider
-     */
-    private $currentTokenIteratorProvider;
-
-    /**
-     * @var AttributeMirrorer
-     */
-    private $attributeMirrorer;
-
     public function __construct(
-        CurrentTokenIteratorProvider $currentTokenIteratorProvider,
-        AttributeMirrorer $attributeMirrorer
+        private CurrentTokenIteratorProvider $currentTokenIteratorProvider,
+        private AttributeMirrorer $attributeMirrorer
     ) {
-        $this->currentTokenIteratorProvider = $currentTokenIteratorProvider;
-        $this->attributeMirrorer = $attributeMirrorer;
     }
 
     public function enterNode(Node $node): ?Node

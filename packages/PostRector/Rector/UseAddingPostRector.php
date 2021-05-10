@@ -20,50 +20,14 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 final class UseAddingPostRector extends AbstractPostRector
 {
-    /**
-     * @var UseImportsAdder
-     */
-    private $useImportsAdder;
-
-    /**
-     * @var BetterNodeFinder
-     */
-    private $betterNodeFinder;
-
-    /**
-     * @var UseImportsRemover
-     */
-    private $useImportsRemover;
-
-    /**
-     * @var TypeFactory
-     */
-    private $typeFactory;
-
-    /**
-     * @var UseNodesToAddCollector
-     */
-    private $useNodesToAddCollector;
-
-    /**
-     * @var CurrentFileProvider
-     */
-    private $currentFileProvider;
-
     public function __construct(
-        BetterNodeFinder $betterNodeFinder,
-        TypeFactory $typeFactory,
-        UseImportsAdder $useImportsAdder,
-        UseImportsRemover $useImportsRemover,
-        UseNodesToAddCollector $useNodesToAddCollector,
-        CurrentFileProvider $currentFileProvider
+        private BetterNodeFinder $betterNodeFinder,
+        private TypeFactory $typeFactory,
+        private UseImportsAdder $useImportsAdder,
+        private UseImportsRemover $useImportsRemover,
+        private UseNodesToAddCollector $useNodesToAddCollector,
+        private CurrentFileProvider $currentFileProvider
     ) {
-        $this->useImportsAdder = $useImportsAdder;
-        $this->betterNodeFinder = $betterNodeFinder;
-        $this->useImportsRemover = $useImportsRemover;
-        $this->typeFactory = $typeFactory;
-        $this->useNodesToAddCollector = $useNodesToAddCollector;
-        $this->currentFileProvider = $currentFileProvider;
     }
 
     /**

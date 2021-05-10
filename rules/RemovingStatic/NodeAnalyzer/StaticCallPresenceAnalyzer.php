@@ -15,20 +15,10 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 
 final class StaticCallPresenceAnalyzer
 {
-    /**
-     * @var BetterNodeFinder
-     */
-    private $betterNodeFinder;
-
-    /**
-     * @var NodeTypeResolver
-     */
-    private $nodeTypeResolver;
-
-    public function __construct(BetterNodeFinder $betterNodeFinder, NodeTypeResolver $nodeTypeResolver)
-    {
-        $this->betterNodeFinder = $betterNodeFinder;
-        $this->nodeTypeResolver = $nodeTypeResolver;
+    public function __construct(
+        private BetterNodeFinder $betterNodeFinder,
+        private NodeTypeResolver $nodeTypeResolver
+    ) {
     }
 
     public function hasMethodStaticCallOnType(ClassMethod $classMethod, ObjectType $objectType): bool

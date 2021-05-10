@@ -22,22 +22,10 @@ final class ConstructorAssignDetector
      */
     private const IS_FIRST_LEVEL_STATEMENT = 'first_level_stmt';
 
-    /**
-     * @var PropertyAssignMatcher
-     */
-    private $propertyAssignMatcher;
-
-    /**
-     * @var SimpleCallableNodeTraverser
-     */
-    private $simpleCallableNodeTraverser;
-
     public function __construct(
-        PropertyAssignMatcher $propertyAssignMatcher,
-        SimpleCallableNodeTraverser $simpleCallableNodeTraverser
+        private PropertyAssignMatcher $propertyAssignMatcher,
+        private SimpleCallableNodeTraverser $simpleCallableNodeTraverser
     ) {
-        $this->propertyAssignMatcher = $propertyAssignMatcher;
-        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
     }
 
     public function isPropertyAssigned(ClassLike $classLike, string $propertyName): bool

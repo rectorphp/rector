@@ -11,29 +11,11 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class PhpFilesFinder
 {
-    /**
-     * @var FilesFinder
-     */
-    private $filesFinder;
-
-    /**
-     * @var Configuration
-     */
-    private $configuration;
-
-    /**
-     * @var CachedFileInfoFilterAndReporter
-     */
-    private $cachedFileInfoFilterAndReporter;
-
     public function __construct(
-        FilesFinder $filesFinder,
-        Configuration $configuration,
-        CachedFileInfoFilterAndReporter $cachedFileInfoFilterAndReporter
+        private FilesFinder $filesFinder,
+        private Configuration $configuration,
+        private CachedFileInfoFilterAndReporter $cachedFileInfoFilterAndReporter
     ) {
-        $this->filesFinder = $filesFinder;
-        $this->configuration = $configuration;
-        $this->cachedFileInfoFilterAndReporter = $cachedFileInfoFilterAndReporter;
     }
 
     /**

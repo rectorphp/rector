@@ -38,64 +38,16 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class ReturnTypeDeclarationRector extends AbstractRector
 {
-    /**
-     * @var ReturnTypeInferer
-     */
-    private $returnTypeInferer;
-
-    /**
-     * @var ReturnTypeAlreadyAddedChecker
-     */
-    private $returnTypeAlreadyAddedChecker;
-
-    /**
-     * @var NonInformativeReturnTagRemover
-     */
-    private $nonInformativeReturnTagRemover;
-
-    /**
-     * @var ChildReturnPopulator
-     */
-    private $childReturnPopulator;
-
-    /**
-     * @var ClassMethodReturnTypeOverrideGuard
-     */
-    private $classMethodReturnTypeOverrideGuard;
-
-    /**
-     * @var VendorLockResolver
-     */
-    private $vendorLockResolver;
-
-    /**
-     * @var PhpParserTypeAnalyzer
-     */
-    private $phpParserTypeAnalyzer;
-
-    /**
-     * @var ObjectTypeComparator
-     */
-    private $objectTypeComparator;
-
     public function __construct(
-        ReturnTypeInferer $returnTypeInferer,
-        ChildReturnPopulator $childReturnPopulator,
-        ReturnTypeAlreadyAddedChecker $returnTypeAlreadyAddedChecker,
-        NonInformativeReturnTagRemover $nonInformativeReturnTagRemover,
-        ClassMethodReturnTypeOverrideGuard $classMethodReturnTypeOverrideGuard,
-        VendorLockResolver $vendorLockResolver,
-        PhpParserTypeAnalyzer $phpParserTypeAnalyzer,
-        ObjectTypeComparator $objectTypeComparator
+        private ReturnTypeInferer $returnTypeInferer,
+        private ChildReturnPopulator $childReturnPopulator,
+        private ReturnTypeAlreadyAddedChecker $returnTypeAlreadyAddedChecker,
+        private NonInformativeReturnTagRemover $nonInformativeReturnTagRemover,
+        private ClassMethodReturnTypeOverrideGuard $classMethodReturnTypeOverrideGuard,
+        private VendorLockResolver $vendorLockResolver,
+        private PhpParserTypeAnalyzer $phpParserTypeAnalyzer,
+        private ObjectTypeComparator $objectTypeComparator
     ) {
-        $this->returnTypeInferer = $returnTypeInferer;
-        $this->returnTypeAlreadyAddedChecker = $returnTypeAlreadyAddedChecker;
-        $this->nonInformativeReturnTagRemover = $nonInformativeReturnTagRemover;
-        $this->childReturnPopulator = $childReturnPopulator;
-        $this->classMethodReturnTypeOverrideGuard = $classMethodReturnTypeOverrideGuard;
-        $this->vendorLockResolver = $vendorLockResolver;
-        $this->phpParserTypeAnalyzer = $phpParserTypeAnalyzer;
-        $this->objectTypeComparator = $objectTypeComparator;
     }
 
     /**

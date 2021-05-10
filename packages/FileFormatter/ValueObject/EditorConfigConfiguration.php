@@ -9,26 +9,11 @@ namespace Rector\FileFormatter\ValueObject;
  */
 final class EditorConfigConfiguration
 {
-    /**
-     * @var NewLine
-     */
-    private $newLine;
-
-    /**
-     * @var bool
-     */
-    private $insertFinalNewline = false;
-
-    /**
-     * @var Indent
-     */
-    private $indent;
-
-    public function __construct(Indent $indent, NewLine $newLine, bool $insertFinalNewline)
-    {
-        $this->indent = $indent;
-        $this->newLine = $newLine;
-        $this->insertFinalNewline = $insertFinalNewline;
+    public function __construct(
+        private Indent $indent,
+        private NewLine $newLine,
+        private bool $insertFinalNewline
+    ) {
     }
 
     public function getNewLine(): string

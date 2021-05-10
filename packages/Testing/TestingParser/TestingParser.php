@@ -15,36 +15,12 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class TestingParser
 {
-    /**
-     * @var ParameterProvider
-     */
-    private $parameterProvider;
-
-    /**
-     * @var Parser
-     */
-    private $parser;
-
-    /**
-     * @var NodeScopeAndMetadataDecorator
-     */
-    private $nodeScopeAndMetadataDecorator;
-
-    /**
-     * @var BetterNodeFinder
-     */
-    private $betterNodeFinder;
-
     public function __construct(
-        ParameterProvider $parameterProvider,
-        Parser $parser,
-        NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator,
-        BetterNodeFinder $betterNodeFinder
+        private ParameterProvider $parameterProvider,
+        private Parser $parser,
+        private NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator,
+        private BetterNodeFinder $betterNodeFinder
     ) {
-        $this->parameterProvider = $parameterProvider;
-        $this->parser = $parser;
-        $this->nodeScopeAndMetadataDecorator = $nodeScopeAndMetadataDecorator;
-        $this->betterNodeFinder = $betterNodeFinder;
     }
 
     /**

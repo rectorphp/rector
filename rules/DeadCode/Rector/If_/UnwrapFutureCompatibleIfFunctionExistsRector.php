@@ -21,20 +21,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class UnwrapFutureCompatibleIfFunctionExistsRector extends AbstractRector
 {
-    /**
-     * @var IfManipulator
-     */
-    private $ifManipulator;
-
-    /**
-     * @var FunctionSupportResolver
-     */
-    private $functionSupportResolver;
-
-    public function __construct(FunctionSupportResolver $functionSupportResolver, IfManipulator $ifManipulator)
-    {
-        $this->ifManipulator = $ifManipulator;
-        $this->functionSupportResolver = $functionSupportResolver;
+    public function __construct(
+        private FunctionSupportResolver $functionSupportResolver,
+        private IfManipulator $ifManipulator
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

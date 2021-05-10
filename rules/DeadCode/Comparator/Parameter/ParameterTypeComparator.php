@@ -10,14 +10,9 @@ use Rector\NodeCollector\Reflection\MethodReflectionProvider;
 
 final class ParameterTypeComparator
 {
-    /**
-     * @var MethodReflectionProvider
-     */
-    private $methodReflectionProvider;
-
-    public function __construct(MethodReflectionProvider $methodReflectionProvider)
-    {
-        $this->methodReflectionProvider = $methodReflectionProvider;
+    public function __construct(
+        private MethodReflectionProvider $methodReflectionProvider
+    ) {
     }
 
     public function compareCurrentClassMethodAndParentStaticCall(

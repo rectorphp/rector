@@ -34,57 +34,15 @@ use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
 final class ConstructorPropertyTypeInferer implements PropertyTypeInfererInterface
 {
-    /**
-     * @var ClassMethodPropertyFetchManipulator
-     */
-    private $classMethodPropertyFetchManipulator;
-
-    /**
-     * @var ReflectionProvider
-     */
-    private $reflectionProvider;
-
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var SimpleCallableNodeTraverser
-     */
-    private $simpleCallableNodeTraverser;
-
-    /**
-     * @var TypeFactory
-     */
-    private $typeFactory;
-
-    /**
-     * @var StaticTypeMapper
-     */
-    private $staticTypeMapper;
-
-    /**
-     * @var NodeTypeResolver
-     */
-    private $nodeTypeResolver;
-
     public function __construct(
-        ClassMethodPropertyFetchManipulator $classMethodPropertyFetchManipulator,
-        ReflectionProvider $reflectionProvider,
-        NodeNameResolver $nodeNameResolver,
-        SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
-        TypeFactory $typeFactory,
-        StaticTypeMapper $staticTypeMapper,
-        NodeTypeResolver $nodeTypeResolver
+        private ClassMethodPropertyFetchManipulator $classMethodPropertyFetchManipulator,
+        private ReflectionProvider $reflectionProvider,
+        private NodeNameResolver $nodeNameResolver,
+        private SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
+        private TypeFactory $typeFactory,
+        private StaticTypeMapper $staticTypeMapper,
+        private NodeTypeResolver $nodeTypeResolver
     ) {
-        $this->classMethodPropertyFetchManipulator = $classMethodPropertyFetchManipulator;
-        $this->reflectionProvider = $reflectionProvider;
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
-        $this->typeFactory = $typeFactory;
-        $this->staticTypeMapper = $staticTypeMapper;
-        $this->nodeTypeResolver = $nodeTypeResolver;
     }
 
     public function inferProperty(Property $property): Type

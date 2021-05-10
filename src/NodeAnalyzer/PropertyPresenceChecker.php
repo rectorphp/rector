@@ -13,29 +13,11 @@ use ReflectionProperty;
 
 final class PropertyPresenceChecker
 {
-    /**
-     * @var PromotedPropertyResolver
-     */
-    private $promotedPropertyResolver;
-
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var ReflectionProvider
-     */
-    private $reflectionProvider;
-
     public function __construct(
-        PromotedPropertyResolver $promotedPropertyResolver,
-        NodeNameResolver $nodeNameResolver,
-        ReflectionProvider $reflectionProvider
+        private PromotedPropertyResolver $promotedPropertyResolver,
+        private NodeNameResolver $nodeNameResolver,
+        private ReflectionProvider $reflectionProvider
     ) {
-        $this->promotedPropertyResolver = $promotedPropertyResolver;
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->reflectionProvider = $reflectionProvider;
     }
 
     /**

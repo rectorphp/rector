@@ -8,26 +8,11 @@ use PHPStan\Type\ObjectType;
 
 final class RenameAnnotation
 {
-    /**
-     * @var string
-     */
-    private $type;
-
-    /**
-     * @var string
-     */
-    private $oldAnnotation;
-
-    /**
-     * @var string
-     */
-    private $newAnnotation;
-
-    public function __construct(string $type, string $oldAnnotation, string $newAnnotation)
-    {
-        $this->type = $type;
-        $this->oldAnnotation = $oldAnnotation;
-        $this->newAnnotation = $newAnnotation;
+    public function __construct(
+        private string $type,
+        private string $oldAnnotation,
+        private string $newAnnotation
+    ) {
     }
 
     public function getObjectType(): ObjectType

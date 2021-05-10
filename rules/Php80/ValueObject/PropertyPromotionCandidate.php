@@ -10,26 +10,11 @@ use PhpParser\Node\Stmt\Property;
 
 final class PropertyPromotionCandidate
 {
-    /**
-     * @var Property
-     */
-    private $property;
-
-    /**
-     * @var Assign
-     */
-    private $assign;
-
-    /**
-     * @var Param
-     */
-    private $param;
-
-    public function __construct(Property $property, Assign $assign, Param $param)
-    {
-        $this->property = $property;
-        $this->assign = $assign;
-        $this->param = $param;
+    public function __construct(
+        private Property $property,
+        private Assign $assign,
+        private Param $param
+    ) {
     }
 
     public function getProperty(): Property

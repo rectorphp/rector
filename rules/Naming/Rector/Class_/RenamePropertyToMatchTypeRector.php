@@ -32,43 +32,13 @@ final class RenamePropertyToMatchTypeRector extends AbstractRector
      */
     private $hasChanged = false;
 
-    /**
-     * @var PropertyRenameFactory
-     */
-    private $propertyRenameFactory;
-
-    /**
-     * @var MatchTypePropertyRenamer
-     */
-    private $matchTypePropertyRenamer;
-
-    /**
-     * @var MatchPropertyTypeExpectedNameResolver
-     */
-    private $matchPropertyTypeExpectedNameResolver;
-
-    /**
-     * @var MatchParamTypeExpectedNameResolver
-     */
-    private $matchParamTypeExpectedNameResolver;
-
-    /**
-     * @var PropertyFetchRenamer
-     */
-    private $propertyFetchRenamer;
-
     public function __construct(
-        MatchTypePropertyRenamer $matchTypePropertyRenamer,
-        PropertyRenameFactory $propertyRenameFactory,
-        MatchPropertyTypeExpectedNameResolver $matchPropertyTypeExpectedNameResolver,
-        MatchParamTypeExpectedNameResolver $matchParamTypeExpectedNameResolver,
-        PropertyFetchRenamer $propertyFetchRenamer
+        private MatchTypePropertyRenamer $matchTypePropertyRenamer,
+        private PropertyRenameFactory $propertyRenameFactory,
+        private MatchPropertyTypeExpectedNameResolver $matchPropertyTypeExpectedNameResolver,
+        private MatchParamTypeExpectedNameResolver $matchParamTypeExpectedNameResolver,
+        private PropertyFetchRenamer $propertyFetchRenamer
     ) {
-        $this->propertyRenameFactory = $propertyRenameFactory;
-        $this->matchTypePropertyRenamer = $matchTypePropertyRenamer;
-        $this->matchPropertyTypeExpectedNameResolver = $matchPropertyTypeExpectedNameResolver;
-        $this->matchParamTypeExpectedNameResolver = $matchParamTypeExpectedNameResolver;
-        $this->propertyFetchRenamer = $propertyFetchRenamer;
     }
 
     public function getRuleDefinition(): RuleDefinition

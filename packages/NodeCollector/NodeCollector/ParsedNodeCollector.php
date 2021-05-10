@@ -72,29 +72,11 @@ final class ParsedNodeCollector
      */
     private $staticCalls = [];
 
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var ParentClassScopeResolver
-     */
-    private $parentClassScopeResolver;
-
-    /**
-     * @var ClassAnalyzer
-     */
-    private $classAnalyzer;
-
     public function __construct(
-        NodeNameResolver $nodeNameResolver,
-        ParentClassScopeResolver $parentClassScopeResolver,
-        ClassAnalyzer $classAnalyzer
+        private NodeNameResolver $nodeNameResolver,
+        private ParentClassScopeResolver $parentClassScopeResolver,
+        private ClassAnalyzer $classAnalyzer
     ) {
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->parentClassScopeResolver = $parentClassScopeResolver;
-        $this->classAnalyzer = $classAnalyzer;
     }
 
     /**

@@ -11,22 +11,12 @@ use Rector\FileSystemRector\Contract\FileWithNodesInterface;
 final class AddedFileWithNodes implements AddedFileInterface, FileWithNodesInterface
 {
     /**
-     * @var string
-     */
-    private $filePath;
-
-    /**
-     * @var Node[]
-     */
-    private $nodes = [];
-
-    /**
      * @param Node[] $nodes
      */
-    public function __construct(string $filePath, array $nodes)
-    {
-        $this->filePath = $filePath;
-        $this->nodes = $nodes;
+    public function __construct(
+        private string $filePath,
+        private array $nodes
+    ) {
     }
 
     public function getFilePath(): string

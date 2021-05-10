@@ -24,26 +24,14 @@ final class PlainValueParser
     private $staticDoctrineAnnotationParser;
 
     /**
-     * @var ClassAnnotationMatcher
-     */
-    private $classAnnotationMatcher;
-
-    /**
-     * @var CurrentNodeProvider
-     */
-    private $currentNodeProvider;
-
-    /**
      * @var ArrayParser
      */
     private $arrayParser;
 
     public function __construct(
-        ClassAnnotationMatcher $classAnnotationMatcher,
-        CurrentNodeProvider $currentNodeProvider
+        private ClassAnnotationMatcher $classAnnotationMatcher,
+        private CurrentNodeProvider $currentNodeProvider
     ) {
-        $this->classAnnotationMatcher = $classAnnotationMatcher;
-        $this->currentNodeProvider = $currentNodeProvider;
     }
 
     /**

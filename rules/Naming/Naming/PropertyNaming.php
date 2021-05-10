@@ -60,50 +60,14 @@ final class PropertyNaming
      */
     private const GET_PREFIX_REGEX = '#^get(?<root_name>[A-Z].+)#';
 
-    /**
-     * @var TypeUnwrapper
-     */
-    private $typeUnwrapper;
-
-    /**
-     * @var RectorNamingInflector
-     */
-    private $rectorNamingInflector;
-
-    /**
-     * @var BetterNodeFinder
-     */
-    private $betterNodeFinder;
-
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var NodeTypeResolver
-     */
-    private $nodeTypeResolver;
-
-    /**
-     * @var ReflectionProvider
-     */
-    private $reflectionProvider;
-
     public function __construct(
-        TypeUnwrapper $typeUnwrapper,
-        RectorNamingInflector $rectorNamingInflector,
-        BetterNodeFinder $betterNodeFinder,
-        NodeNameResolver $nodeNameResolver,
-        NodeTypeResolver $nodeTypeResolver,
-        ReflectionProvider $reflectionProvider
+        private TypeUnwrapper $typeUnwrapper,
+        private RectorNamingInflector $rectorNamingInflector,
+        private BetterNodeFinder $betterNodeFinder,
+        private NodeNameResolver $nodeNameResolver,
+        private NodeTypeResolver $nodeTypeResolver,
+        private ReflectionProvider $reflectionProvider
     ) {
-        $this->typeUnwrapper = $typeUnwrapper;
-        $this->rectorNamingInflector = $rectorNamingInflector;
-        $this->betterNodeFinder = $betterNodeFinder;
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->nodeTypeResolver = $nodeTypeResolver;
-        $this->reflectionProvider = $reflectionProvider;
     }
 
     public function getExpectedNameFromMethodName(string $methodName): ?ExpectedName

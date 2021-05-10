@@ -20,43 +20,13 @@ use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
  */
 final class NullTypeAssignDetector
 {
-    /**
-     * @var ScopeNestingComparator
-     */
-    private $scopeNestingComparator;
-
-    /**
-     * @var DoctrineTypeAnalyzer
-     */
-    private $doctrineTypeAnalyzer;
-
-    /**
-     * @var NodeTypeResolver
-     */
-    private $nodeTypeResolver;
-
-    /**
-     * @var PropertyAssignMatcher
-     */
-    private $propertyAssignMatcher;
-
-    /**
-     * @var SimpleCallableNodeTraverser
-     */
-    private $simpleCallableNodeTraverser;
-
     public function __construct(
-        ScopeNestingComparator $scopeNestingComparator,
-        DoctrineTypeAnalyzer $doctrineTypeAnalyzer,
-        NodeTypeResolver $nodeTypeResolver,
-        PropertyAssignMatcher $propertyAssignMatcher,
-        SimpleCallableNodeTraverser $simpleCallableNodeTraverser
+        private ScopeNestingComparator $scopeNestingComparator,
+        private DoctrineTypeAnalyzer $doctrineTypeAnalyzer,
+        private NodeTypeResolver $nodeTypeResolver,
+        private PropertyAssignMatcher $propertyAssignMatcher,
+        private SimpleCallableNodeTraverser $simpleCallableNodeTraverser
     ) {
-        $this->scopeNestingComparator = $scopeNestingComparator;
-        $this->doctrineTypeAnalyzer = $doctrineTypeAnalyzer;
-        $this->nodeTypeResolver = $nodeTypeResolver;
-        $this->propertyAssignMatcher = $propertyAssignMatcher;
-        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
     }
 
     public function detect(ClassLike $classLike, string $propertyName): ?bool

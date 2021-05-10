@@ -10,20 +10,10 @@ use Rector\Core\PhpParser\Node\NodeFactory;
 
 final class MissingPropertiesFactory
 {
-    /**
-     * @var NodeFactory
-     */
-    private $nodeFactory;
-
-    /**
-     * @var PropertyTypeDecorator
-     */
-    private $propertyTypeDecorator;
-
-    public function __construct(NodeFactory $nodeFactory, PropertyTypeDecorator $propertyTypeDecorator)
-    {
-        $this->nodeFactory = $nodeFactory;
-        $this->propertyTypeDecorator = $propertyTypeDecorator;
+    public function __construct(
+        private NodeFactory $nodeFactory,
+        private PropertyTypeDecorator $propertyTypeDecorator
+    ) {
     }
 
     /**

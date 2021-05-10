@@ -21,43 +21,13 @@ use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
 final class PropertyNodeParamTypeInferer implements ParamTypeInfererInterface
 {
-    /**
-     * @var PropertyFetchAnalyzer
-     */
-    private $propertyFetchAnalyzer;
-
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var SimpleCallableNodeTraverser
-     */
-    private $simpleCallableNodeTraverser;
-
-    /**
-     * @var NodeTypeResolver
-     */
-    private $nodeTypeResolver;
-
-    /**
-     * @var TypeFactory
-     */
-    private $typeFactory;
-
     public function __construct(
-        PropertyFetchAnalyzer $propertyFetchAnalyzer,
-        NodeNameResolver $nodeNameResolver,
-        SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
-        NodeTypeResolver $nodeTypeResolver,
-        TypeFactory $typeFactory
+        private PropertyFetchAnalyzer $propertyFetchAnalyzer,
+        private NodeNameResolver $nodeNameResolver,
+        private SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
+        private NodeTypeResolver $nodeTypeResolver,
+        private TypeFactory $typeFactory
     ) {
-        $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
-        $this->nodeTypeResolver = $nodeTypeResolver;
-        $this->typeFactory = $typeFactory;
     }
 
     public function inferParam(Param $param): Type

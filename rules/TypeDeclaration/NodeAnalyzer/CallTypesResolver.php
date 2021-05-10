@@ -19,20 +19,10 @@ use Rector\TypeDeclaration\ValueObject\TypeStrictness;
 
 final class CallTypesResolver
 {
-    /**
-     * @var NodeTypeResolver
-     */
-    private $nodeTypeResolver;
-
-    /**
-     * @var TypeFactory
-     */
-    private $typeFactory;
-
-    public function __construct(NodeTypeResolver $nodeTypeResolver, TypeFactory $typeFactory)
-    {
-        $this->nodeTypeResolver = $nodeTypeResolver;
-        $this->typeFactory = $typeFactory;
+    public function __construct(
+        private NodeTypeResolver $nodeTypeResolver,
+        private TypeFactory $typeFactory
+    ) {
     }
 
     /**

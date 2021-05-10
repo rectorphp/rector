@@ -6,26 +6,11 @@ namespace Rector\PHPStanStaticTypeMapper\ValueObject;
 
 final class UnionTypeAnalysis
 {
-    /**
-     * @var bool
-     */
-    private $isNullableType = false;
-
-    /**
-     * @var bool
-     */
-    private $hasIterable = false;
-
-    /**
-     * @var bool
-     */
-    private $hasArray = false;
-
-    public function __construct(bool $isNullableType, bool $hasIterable, bool $hasArray)
-    {
-        $this->isNullableType = $isNullableType;
-        $this->hasIterable = $hasIterable;
-        $this->hasArray = $hasArray;
+    public function __construct(
+        private bool $isNullableType,
+        private bool $hasIterable,
+        private bool $hasArray
+    ) {
     }
 
     public function isNullableType(): bool

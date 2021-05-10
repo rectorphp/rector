@@ -39,21 +39,10 @@ final class ReturnArrayClassMethodToYieldRector extends AbstractRector implement
      */
     private $methodsToYields = [];
 
-    /**
-     * @var NodeTransformer
-     */
-    private $nodeTransformer;
-
-    /**
-     * @var CommentsMerger
-     */
-    private $commentsMerger;
-
-    public function __construct(NodeTransformer $nodeTransformer, CommentsMerger $commentsMerger)
-    {
-        $this->nodeTransformer = $nodeTransformer;
-        $this->commentsMerger = $commentsMerger;
-
+    public function __construct(
+        private NodeTransformer $nodeTransformer,
+        private CommentsMerger $commentsMerger
+    ) {
         // default values
         $this->methodsToYields = [
             new ReturnArrayClassMethodToYield('PHPUnit\Framework\TestCase', 'provideData'),

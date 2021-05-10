@@ -19,24 +19,14 @@ use Symplify\SimplePhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor;
 final class ClassRenamePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
 {
     /**
-     * @var StaticTypeMapper
-     */
-    private $staticTypeMapper;
-
-    /**
-     * @var CurrentNodeProvider
-     */
-    private $currentNodeProvider;
-
-    /**
      * @var OldToNewType[]
      */
     private $oldToNewTypes = [];
 
-    public function __construct(StaticTypeMapper $staticTypeMapper, CurrentNodeProvider $currentNodeProvider)
-    {
-        $this->staticTypeMapper = $staticTypeMapper;
-        $this->currentNodeProvider = $currentNodeProvider;
+    public function __construct(
+        private StaticTypeMapper $staticTypeMapper,
+        private CurrentNodeProvider $currentNodeProvider
+    ) {
     }
 
     public function beforeTraverse(Node $node): void

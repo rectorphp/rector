@@ -21,29 +21,11 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 
 final class SingletonClassMethodAnalyzer
 {
-    /**
-     * @var NodeComparator
-     */
-    private $nodeComparator;
-
-    /**
-     * @var NodeTypeResolver
-     */
-    private $nodeTypeResolver;
-
-    /**
-     * @var ValueResolver
-     */
-    private $valueResolver;
-
     public function __construct(
-        NodeTypeResolver $nodeTypeResolver,
-        ValueResolver $valueResolver,
-        NodeComparator $nodeComparator
+        private NodeTypeResolver $nodeTypeResolver,
+        private ValueResolver $valueResolver,
+        private NodeComparator $nodeComparator
     ) {
-        $this->nodeTypeResolver = $nodeTypeResolver;
-        $this->valueResolver = $valueResolver;
-        $this->nodeComparator = $nodeComparator;
     }
 
     /**

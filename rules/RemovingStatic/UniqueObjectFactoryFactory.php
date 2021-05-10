@@ -31,50 +31,14 @@ use Symplify\Astral\ValueObject\NodeBuilder\ParamBuilder;
 
 final class UniqueObjectFactoryFactory
 {
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var PropertyNaming
-     */
-    private $propertyNaming;
-
-    /**
-     * @var StaticTypeMapper
-     */
-    private $staticTypeMapper;
-
-    /**
-     * @var NodeFactory
-     */
-    private $nodeFactory;
-
-    /**
-     * @var PhpDocTypeChanger
-     */
-    private $phpDocTypeChanger;
-
-    /**
-     * @var PhpDocInfoFactory
-     */
-    private $phpDocInfoFactory;
-
     public function __construct(
-        NodeFactory $nodeFactory,
-        NodeNameResolver $nodeNameResolver,
-        PropertyNaming $propertyNaming,
-        StaticTypeMapper $staticTypeMapper,
-        PhpDocTypeChanger $phpDocTypeChanger,
-        PhpDocInfoFactory $phpDocInfoFactory
+        private NodeFactory $nodeFactory,
+        private NodeNameResolver $nodeNameResolver,
+        private PropertyNaming $propertyNaming,
+        private StaticTypeMapper $staticTypeMapper,
+        private PhpDocTypeChanger $phpDocTypeChanger,
+        private PhpDocInfoFactory $phpDocInfoFactory
     ) {
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->propertyNaming = $propertyNaming;
-        $this->staticTypeMapper = $staticTypeMapper;
-        $this->nodeFactory = $nodeFactory;
-        $this->phpDocTypeChanger = $phpDocTypeChanger;
-        $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
 
     public function createFactoryClass(Class_ $class, ObjectType $objectType): Class_

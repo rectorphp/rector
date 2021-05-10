@@ -33,20 +33,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class RemoveAlwaysTrueConditionSetInConstructorRector extends AbstractRector
 {
-    /**
-     * @var StaticTypeAnalyzer
-     */
-    private $staticTypeAnalyzer;
-
-    /**
-     * @var TypeFactory
-     */
-    private $typeFactory;
-
-    public function __construct(StaticTypeAnalyzer $staticTypeAnalyzer, TypeFactory $typeFactory)
-    {
-        $this->staticTypeAnalyzer = $staticTypeAnalyzer;
-        $this->typeFactory = $typeFactory;
+    public function __construct(
+        private StaticTypeAnalyzer $staticTypeAnalyzer,
+        private TypeFactory $typeFactory
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

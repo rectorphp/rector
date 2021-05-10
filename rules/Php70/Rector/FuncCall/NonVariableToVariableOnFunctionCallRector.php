@@ -38,29 +38,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class NonVariableToVariableOnFunctionCallRector extends AbstractRector
 {
-    /**
-     * @var CallReflectionResolver
-     */
-    private $callReflectionResolver;
-
-    /**
-     * @var VariableNaming
-     */
-    private $variableNaming;
-
-    /**
-     * @var ParentScopeFinder
-     */
-    private $parentScopeFinder;
-
     public function __construct(
-        CallReflectionResolver $callReflectionResolver,
-        VariableNaming $variableNaming,
-        ParentScopeFinder $parentScopeFinder
+        private CallReflectionResolver $callReflectionResolver,
+        private VariableNaming $variableNaming,
+        private ParentScopeFinder $parentScopeFinder
     ) {
-        $this->callReflectionResolver = $callReflectionResolver;
-        $this->variableNaming = $variableNaming;
-        $this->parentScopeFinder = $parentScopeFinder;
     }
 
     public function getRuleDefinition(): RuleDefinition

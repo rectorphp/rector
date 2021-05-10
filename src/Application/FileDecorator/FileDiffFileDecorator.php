@@ -10,14 +10,9 @@ use Rector\Core\ValueObject\Application\File;
 
 final class FileDiffFileDecorator implements FileDecoratorInterface
 {
-    /**
-     * @var FileDiffFactory
-     */
-    private $fileDiffFactory;
-
-    public function __construct(FileDiffFactory $fileDiffFactory)
-    {
-        $this->fileDiffFactory = $fileDiffFactory;
+    public function __construct(
+        private FileDiffFactory $fileDiffFactory
+    ) {
     }
 
     /**

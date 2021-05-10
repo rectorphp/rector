@@ -9,15 +9,13 @@ use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 
 final class SpacingAwareTemplateTagValueNode extends TemplateTagValueNode
 {
-    /**
-     * @var string
-     */
-    private $preposition;
-
-    public function __construct(string $name, ?TypeNode $typeNode, string $description, string $preposition)
-    {
+    public function __construct(
+        string $name,
+        ?TypeNode $typeNode,
+        string $description,
+        private string $preposition
+    ) {
         parent::__construct($name, $typeNode, $description);
-        $this->preposition = $preposition;
     }
 
     public function __toString(): string

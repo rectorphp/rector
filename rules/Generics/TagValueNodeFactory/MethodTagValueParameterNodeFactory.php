@@ -11,14 +11,9 @@ use Rector\StaticTypeMapper\StaticTypeMapper;
 
 final class MethodTagValueParameterNodeFactory
 {
-    /**
-     * @var StaticTypeMapper
-     */
-    private $staticTypeMapper;
-
-    public function __construct(StaticTypeMapper $staticTypeMapper)
-    {
-        $this->staticTypeMapper = $staticTypeMapper;
+    public function __construct(
+        private StaticTypeMapper $staticTypeMapper
+    ) {
     }
 
     public function createFromParamReflection(ParameterReflection $parameterReflection): MethodTagValueParameterNode

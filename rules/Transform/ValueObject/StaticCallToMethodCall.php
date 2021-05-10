@@ -11,32 +11,12 @@ use PHPStan\Type\ObjectType;
 
 final class StaticCallToMethodCall
 {
-    /**
-     * @var string
-     */
-    private $staticClass;
-
-    /**
-     * @var string
-     */
-    private $staticMethod;
-
-    /**
-     * @var string
-     */
-    private $classType;
-
-    /**
-     * @var string
-     */
-    private $methodName;
-
-    public function __construct(string $staticClass, string $staticMethod, string $classType, string $methodName)
-    {
-        $this->staticClass = $staticClass;
-        $this->staticMethod = $staticMethod;
-        $this->classType = $classType;
-        $this->methodName = $methodName;
+    public function __construct(
+        private string $staticClass,
+        private string $staticMethod,
+        private string $classType,
+        private string $methodName
+    ) {
     }
 
     public function getClassObjectType(): ObjectType

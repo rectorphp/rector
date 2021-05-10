@@ -19,29 +19,11 @@ use Rector\Naming\Naming\VariableNaming;
 
 final class NonFluentChainMethodCallFactory
 {
-    /**
-     * @var FluentChainMethodCallNodeAnalyzer
-     */
-    private $fluentChainMethodCallNodeAnalyzer;
-
-    /**
-     * @var VariableNaming
-     */
-    private $variableNaming;
-
-    /**
-     * @var FirstMethodCallVarResolver
-     */
-    private $firstMethodCallVarResolver;
-
     public function __construct(
-        FluentChainMethodCallNodeAnalyzer $fluentChainMethodCallNodeAnalyzer,
-        VariableNaming $variableNaming,
-        FirstMethodCallVarResolver $firstMethodCallVarResolver
+        private FluentChainMethodCallNodeAnalyzer $fluentChainMethodCallNodeAnalyzer,
+        private VariableNaming $variableNaming,
+        private FirstMethodCallVarResolver $firstMethodCallVarResolver
     ) {
-        $this->fluentChainMethodCallNodeAnalyzer = $fluentChainMethodCallNodeAnalyzer;
-        $this->variableNaming = $variableNaming;
-        $this->firstMethodCallVarResolver = $firstMethodCallVarResolver;
     }
 
     /**

@@ -13,29 +13,11 @@ use Rector\NodeNameResolver\NodeNameResolver;
 
 final class MatchPropertyTypeConflictingNameGuard
 {
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var ArrayFilter
-     */
-    private $arrayFilter;
-
-    /**
-     * @var MatchPropertyTypeExpectedNameResolver
-     */
-    private $matchPropertyTypeExpectedNameResolver;
-
     public function __construct(
-        MatchPropertyTypeExpectedNameResolver $matchPropertyTypeExpectedNameResolver,
-        NodeNameResolver $nodeNameResolver,
-        ArrayFilter $arrayFilter
+        private MatchPropertyTypeExpectedNameResolver $matchPropertyTypeExpectedNameResolver,
+        private NodeNameResolver $nodeNameResolver,
+        private ArrayFilter $arrayFilter
     ) {
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->arrayFilter = $arrayFilter;
-        $this->matchPropertyTypeExpectedNameResolver = $matchPropertyTypeExpectedNameResolver;
     }
 
     /**

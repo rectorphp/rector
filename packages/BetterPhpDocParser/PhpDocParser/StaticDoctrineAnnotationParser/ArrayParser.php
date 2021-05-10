@@ -12,14 +12,9 @@ use Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator;
  */
 final class ArrayParser
 {
-    /**
-     * @var PlainValueParser
-     */
-    private $plainValueParser;
-
-    public function __construct(PlainValueParser $plainValueParser)
-    {
-        $this->plainValueParser = $plainValueParser;
+    public function __construct(
+        private PlainValueParser $plainValueParser
+    ) {
     }
 
     /**

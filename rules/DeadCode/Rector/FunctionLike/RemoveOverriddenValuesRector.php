@@ -22,29 +22,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class RemoveOverriddenValuesRector extends AbstractRector
 {
-    /**
-     * @var ContextAnalyzer
-     */
-    private $contextAnalyzer;
-
-    /**
-     * @var NodeByTypeAndPositionCollector
-     */
-    private $nodeByTypeAndPositionCollector;
-
-    /**
-     * @var VariableUseFinder
-     */
-    private $variableUseFinder;
-
     public function __construct(
-        ContextAnalyzer $contextAnalyzer,
-        NodeByTypeAndPositionCollector $nodeByTypeAndPositionCollector,
-        VariableUseFinder $variableUseFinder
+        private ContextAnalyzer $contextAnalyzer,
+        private NodeByTypeAndPositionCollector $nodeByTypeAndPositionCollector,
+        private VariableUseFinder $variableUseFinder
     ) {
-        $this->contextAnalyzer = $contextAnalyzer;
-        $this->nodeByTypeAndPositionCollector = $nodeByTypeAndPositionCollector;
-        $this->variableUseFinder = $variableUseFinder;
     }
 
     public function getRuleDefinition(): RuleDefinition

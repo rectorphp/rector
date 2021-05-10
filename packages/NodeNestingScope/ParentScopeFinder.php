@@ -14,14 +14,9 @@ use Rector\Core\PhpParser\Node\BetterNodeFinder;
 
 final class ParentScopeFinder
 {
-    /**
-     * @var BetterNodeFinder
-     */
-    private $betterNodeFinder;
-
-    public function __construct(BetterNodeFinder $betterNodeFinder)
-    {
-        $this->betterNodeFinder = $betterNodeFinder;
+    public function __construct(
+        private BetterNodeFinder $betterNodeFinder
+    ) {
     }
 
     /**

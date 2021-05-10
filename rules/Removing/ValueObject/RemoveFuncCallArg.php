@@ -6,20 +6,10 @@ namespace Rector\Removing\ValueObject;
 
 final class RemoveFuncCallArg
 {
-    /**
-     * @var string
-     */
-    private $function;
-
-    /**
-     * @var int
-     */
-    private $argumentPosition;
-
-    public function __construct(string $function, int $argumentPosition)
-    {
-        $this->function = $function;
-        $this->argumentPosition = $argumentPosition;
+    public function __construct(
+        private string $function,
+        private int $argumentPosition
+    ) {
     }
 
     public function getFunction(): string

@@ -17,29 +17,11 @@ use Rector\TypeDeclaration\NodeAnalyzer\ClassMethodAndPropertyAnalyzer;
 
 final class GetterTypeDeclarationPropertyTypeInferer implements PropertyTypeInfererInterface
 {
-    /**
-     * @var FunctionLikeReturnTypeResolver
-     */
-    private $functionLikeReturnTypeResolver;
-
-    /**
-     * @var ClassMethodAndPropertyAnalyzer
-     */
-    private $classMethodAndPropertyAnalyzer;
-
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
     public function __construct(
-        FunctionLikeReturnTypeResolver $functionLikeReturnTypeResolver,
-        ClassMethodAndPropertyAnalyzer $classMethodAndPropertyAnalyzer,
-        NodeNameResolver $nodeNameResolver
+        private FunctionLikeReturnTypeResolver $functionLikeReturnTypeResolver,
+        private ClassMethodAndPropertyAnalyzer $classMethodAndPropertyAnalyzer,
+        private NodeNameResolver $nodeNameResolver
     ) {
-        $this->functionLikeReturnTypeResolver = $functionLikeReturnTypeResolver;
-        $this->classMethodAndPropertyAnalyzer = $classMethodAndPropertyAnalyzer;
-        $this->nodeNameResolver = $nodeNameResolver;
     }
 
     public function inferProperty(Property $property): Type

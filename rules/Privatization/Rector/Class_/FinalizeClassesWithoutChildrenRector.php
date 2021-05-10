@@ -16,14 +16,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class FinalizeClassesWithoutChildrenRector extends AbstractRector
 {
-    /**
-     * @var ClassAnalyzer
-     */
-    private $classAnalyzer;
-
-    public function __construct(ClassAnalyzer $classAnalyzer)
-    {
-        $this->classAnalyzer = $classAnalyzer;
+    public function __construct(
+        private ClassAnalyzer $classAnalyzer
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

@@ -19,14 +19,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class RemoveUnusedConstructorParamRector extends AbstractRector
 {
-    /**
-     * @var ParamAnalyzer
-     */
-    private $paramAnalyzer;
-
-    public function __construct(ParamAnalyzer $paramAnalyzer)
-    {
-        $this->paramAnalyzer = $paramAnalyzer;
+    public function __construct(
+        private ParamAnalyzer $paramAnalyzer
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

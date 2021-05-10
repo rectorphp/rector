@@ -22,43 +22,13 @@ use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
 final class VariableRenamer
 {
-    /**
-     * @var SimpleCallableNodeTraverser
-     */
-    private $simpleCallableNodeTraverser;
-
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var VarTagValueNodeRenamer
-     */
-    private $varTagValueNodeRenamer;
-
-    /**
-     * @var PhpDocInfoFactory
-     */
-    private $phpDocInfoFactory;
-
-    /**
-     * @var BetterNodeFinder
-     */
-    private $betterNodeFinder;
-
     public function __construct(
-        SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
-        NodeNameResolver $nodeNameResolver,
-        VarTagValueNodeRenamer $varTagValueNodeRenamer,
-        PhpDocInfoFactory $phpDocInfoFactory,
-        BetterNodeFinder $betterNodeFinder
+        private SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
+        private NodeNameResolver $nodeNameResolver,
+        private VarTagValueNodeRenamer $varTagValueNodeRenamer,
+        private PhpDocInfoFactory $phpDocInfoFactory,
+        private BetterNodeFinder $betterNodeFinder
     ) {
-        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->varTagValueNodeRenamer = $varTagValueNodeRenamer;
-        $this->phpDocInfoFactory = $phpDocInfoFactory;
-        $this->betterNodeFinder = $betterNodeFinder;
     }
 
     /**

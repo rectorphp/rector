@@ -27,14 +27,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class ParamTypeFromStrictTypedPropertyRector extends AbstractRector
 {
-    /**
-     * @var ReflectionTypeResolver
-     */
-    private $reflectionTypeResolver;
-
-    public function __construct(ReflectionTypeResolver $reflectionTypeResolver)
-    {
-        $this->reflectionTypeResolver = $reflectionTypeResolver;
+    public function __construct(
+        private ReflectionTypeResolver $reflectionTypeResolver
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

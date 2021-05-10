@@ -12,14 +12,9 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class SameClassMethodCallAnalyzer
 {
-    /**
-     * @var NodeRepository
-     */
-    private $nodeRepository;
-
-    public function __construct(NodeRepository $nodeRepository)
-    {
-        $this->nodeRepository = $nodeRepository;
+    public function __construct(
+        private NodeRepository $nodeRepository
+    ) {
     }
 
     /**

@@ -19,20 +19,10 @@ use Rector\TypeDeclaration\TypeNormalizer;
 
 final class AdvancedArrayAnalyzer
 {
-    /**
-     * @var TypeNormalizer
-     */
-    private $typeNormalizer;
-
-    /**
-     * @var PhpDocInfoFactory
-     */
-    private $phpDocInfoFactory;
-
-    public function __construct(TypeNormalizer $typeNormalizer, PhpDocInfoFactory $phpDocInfoFactory)
-    {
-        $this->typeNormalizer = $typeNormalizer;
-        $this->phpDocInfoFactory = $phpDocInfoFactory;
+    public function __construct(
+        private TypeNormalizer $typeNormalizer,
+        private PhpDocInfoFactory $phpDocInfoFactory
+    ) {
     }
 
     public function isClassStringArrayByStringArrayOverride(ArrayType $arrayType, ClassMethod $classMethod): bool

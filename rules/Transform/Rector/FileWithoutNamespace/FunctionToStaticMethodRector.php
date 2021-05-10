@@ -27,29 +27,11 @@ use Symplify\SmartFileSystem\SmartFileInfo;
  */
 final class FunctionToStaticMethodRector extends AbstractRector
 {
-    /**
-     * @var ClassNaming
-     */
-    private $classNaming;
-
-    /**
-     * @var StaticMethodClassFactory
-     */
-    private $staticMethodClassFactory;
-
-    /**
-     * @var FullyQualifiedNameResolver
-     */
-    private $fullyQualifiedNameResolver;
-
     public function __construct(
-        ClassNaming $classNaming,
-        StaticMethodClassFactory $staticMethodClassFactory,
-        FullyQualifiedNameResolver $fullyQualifiedNameResolver
+        private ClassNaming $classNaming,
+        private StaticMethodClassFactory $staticMethodClassFactory,
+        private FullyQualifiedNameResolver $fullyQualifiedNameResolver
     ) {
-        $this->classNaming = $classNaming;
-        $this->staticMethodClassFactory = $staticMethodClassFactory;
-        $this->fullyQualifiedNameResolver = $fullyQualifiedNameResolver;
     }
 
     public function getRuleDefinition(): RuleDefinition

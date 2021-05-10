@@ -19,29 +19,11 @@ use Rector\NodeNameResolver\NodeNameResolver;
 
 final class BeConstructedWithAssignFactory
 {
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var ValueResolver
-     */
-    private $valueResolver;
-
-    /**
-     * @var NodeFactory
-     */
-    private $nodeFactory;
-
     public function __construct(
-        NodeNameResolver $nodeNameResolver,
-        ValueResolver $valueResolver,
-        NodeFactory $nodeFactory
+        private NodeNameResolver $nodeNameResolver,
+        private ValueResolver $valueResolver,
+        private NodeFactory $nodeFactory
     ) {
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->valueResolver = $valueResolver;
-        $this->nodeFactory = $nodeFactory;
     }
 
     public function create(MethodCall $methodCall, string $testedClass, PropertyFetch $propertyFetch): ?Assign

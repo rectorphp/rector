@@ -26,14 +26,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class DowngradeTrailingCommasInParamUseRector extends AbstractRector
 {
-    /**
-     * @var FollowedByCommaAnalyzer
-     */
-    private $followedByCommaAnalyzer;
-
-    public function __construct(FollowedByCommaAnalyzer $followedByCommaAnalyzer)
-    {
-        $this->followedByCommaAnalyzer = $followedByCommaAnalyzer;
+    public function __construct(
+        private FollowedByCommaAnalyzer $followedByCommaAnalyzer
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

@@ -33,36 +33,12 @@ final class PhpSpecClassToPHPUnitClassRector extends AbstractPhpSpecToPHPUnitRec
      */
     private $testedObjectType;
 
-    /**
-     * @var PhpSpecRenaming
-     */
-    private $phpSpecRenaming;
-
-    /**
-     * @var LetManipulator
-     */
-    private $letManipulator;
-
-    /**
-     * @var ClassInsertManipulator
-     */
-    private $classInsertManipulator;
-
-    /**
-     * @var SetUpClassMethodFactory
-     */
-    private $setUpClassMethodFactory;
-
     public function __construct(
-        ClassInsertManipulator $classInsertManipulator,
-        LetManipulator $letManipulator,
-        PhpSpecRenaming $phpSpecRenaming,
-        SetUpClassMethodFactory $setUpClassMethodFactory
+        private ClassInsertManipulator $classInsertManipulator,
+        private LetManipulator $letManipulator,
+        private PhpSpecRenaming $phpSpecRenaming,
+        private SetUpClassMethodFactory $setUpClassMethodFactory
     ) {
-        $this->phpSpecRenaming = $phpSpecRenaming;
-        $this->letManipulator = $letManipulator;
-        $this->classInsertManipulator = $classInsertManipulator;
-        $this->setUpClassMethodFactory = $setUpClassMethodFactory;
     }
 
     /**

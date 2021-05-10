@@ -38,20 +38,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class MoveVariableDeclarationNearReferenceRector extends AbstractRector
 {
-    /**
-     * @var ScopeAwareNodeFinder
-     */
-    private $scopeAwareNodeFinder;
-
-    /**
-     * @var PureFunctionDetector
-     */
-    private $pureFunctionDetector;
-
-    public function __construct(ScopeAwareNodeFinder $scopeAwareNodeFinder, PureFunctionDetector $pureFunctionDetector)
-    {
-        $this->scopeAwareNodeFinder = $scopeAwareNodeFinder;
-        $this->pureFunctionDetector = $pureFunctionDetector;
+    public function __construct(
+        private ScopeAwareNodeFinder $scopeAwareNodeFinder,
+        private PureFunctionDetector $pureFunctionDetector
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

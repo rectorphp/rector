@@ -8,7 +8,6 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use Rector\BetterPhpDocParser\Contract\BasePhpDocNodeVisitorInterface;
 use Rector\BetterPhpDocParser\DataProvider\CurrentTokenIteratorProvider;
 use Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator;
-use Symplify\SimplePhpDocParser\Contract\PhpDocNodeVisitorInterface;
 use Symplify\SimplePhpDocParser\PhpDocNodeTraverser;
 use Symplify\SimplePhpDocParser\PhpDocNodeVisitor\CloningPhpDocNodeVisitor;
 use Symplify\SimplePhpDocParser\PhpDocNodeVisitor\ParentConnectingPhpDocNodeVisitor;
@@ -19,38 +18,14 @@ use Symplify\SimplePhpDocParser\PhpDocNodeVisitor\ParentConnectingPhpDocNodeVisi
 final class PhpDocNodeMapper
 {
     /**
-     * @var PhpDocNodeVisitorInterface[]
-     */
-    private $phpDocNodeVisitors = [];
-
-    /**
-     * @var CurrentTokenIteratorProvider
-     */
-    private $currentTokenIteratorProvider;
-
-    /**
-     * @var ParentConnectingPhpDocNodeVisitor
-     */
-    private $parentConnectingPhpDocNodeVisitor;
-
-    /**
-     * @var CloningPhpDocNodeVisitor
-     */
-    private $cloningPhpDocNodeVisitor;
-
-    /**
      * @param BasePhpDocNodeVisitorInterface[] $phpDocNodeVisitors
      */
     public function __construct(
-        CurrentTokenIteratorProvider $currentTokenIteratorProvider,
-        ParentConnectingPhpDocNodeVisitor $parentConnectingPhpDocNodeVisitor,
-        CloningPhpDocNodeVisitor $cloningPhpDocNodeVisitor,
-        array $phpDocNodeVisitors
+        private CurrentTokenIteratorProvider $currentTokenIteratorProvider,
+        private ParentConnectingPhpDocNodeVisitor $parentConnectingPhpDocNodeVisitor,
+        private CloningPhpDocNodeVisitor $cloningPhpDocNodeVisitor,
+        private array $phpDocNodeVisitors
     ) {
-        $this->phpDocNodeVisitors = $phpDocNodeVisitors;
-        $this->currentTokenIteratorProvider = $currentTokenIteratorProvider;
-        $this->parentConnectingPhpDocNodeVisitor = $parentConnectingPhpDocNodeVisitor;
-        $this->cloningPhpDocNodeVisitor = $cloningPhpDocNodeVisitor;
     }
 
     public function transform(PhpDocNode $phpDocNode, BetterTokenIterator $betterTokenIterator): void

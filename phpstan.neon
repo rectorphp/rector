@@ -497,3 +497,11 @@ parameters:
 
         # temporary out of order after rector-src extract
         - '#Class like namespace "Rector\\(.*?)" does not follow PSR\-4 configuration in composer\.json#'
+
+        # temporary out of order after rector-src extract
+        - '#Class like namespace "Rector\\(.*?)" does not follow PSR\-4 configuration in composer\.json#'
+
+        # bug in PHP 8, fix in dev-main
+        -
+            message: '#Do not call parent method if parent method is empty#'
+            path: packages/BetterPhpDocParser/PhpDoc/DoctrineAnnotationTagValueNode.php

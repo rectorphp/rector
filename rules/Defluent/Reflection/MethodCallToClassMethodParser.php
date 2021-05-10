@@ -14,36 +14,12 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 
 final class MethodCallToClassMethodParser
 {
-    /**
-     * @var NodeTypeResolver
-     */
-    private $nodeTypeResolver;
-
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var ReflectionProvider
-     */
-    private $reflectionProvider;
-
-    /**
-     * @var FunctionLikeReflectionParser
-     */
-    private $functionLikeReflectionParser;
-
     public function __construct(
-        NodeTypeResolver $nodeTypeResolver,
-        NodeNameResolver $nodeNameResolver,
-        ReflectionProvider $reflectionProvider,
-        FunctionLikeReflectionParser $functionLikeReflectionParser
+        private NodeTypeResolver $nodeTypeResolver,
+        private NodeNameResolver $nodeNameResolver,
+        private ReflectionProvider $reflectionProvider,
+        private FunctionLikeReflectionParser $functionLikeReflectionParser
     ) {
-        $this->nodeTypeResolver = $nodeTypeResolver;
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->reflectionProvider = $reflectionProvider;
-        $this->functionLikeReflectionParser = $functionLikeReflectionParser;
     }
 
     public function parseMethodCall(MethodCall $methodCall): ?ClassMethod

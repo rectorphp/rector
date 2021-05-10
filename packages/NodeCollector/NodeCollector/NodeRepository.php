@@ -71,61 +71,19 @@ final class NodeRepository
     private $arrayCallablesByTypeAndMethod = [];
 
     /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var NodeTypeResolver
-     */
-    private $nodeTypeResolver;
-
-    /**
-     * @var ArrayCallableMethodReferenceAnalyzer
-     */
-    private $arrayCallableMethodReferenceAnalyzer;
-
-    /**
-     * @var ParsedPropertyFetchNodeCollector
-     */
-    private $parsedPropertyFetchNodeCollector;
-
-    /**
-     * @var ParsedNodeCollector
-     */
-    private $parsedNodeCollector;
-
-    /**
-     * @var TypeUnwrapper
-     */
-    private $typeUnwrapper;
-
-    /**
      * @var array<string, Attribute[]>
      */
     private $attributes = [];
 
-    /**
-     * @var ReflectionProvider
-     */
-    private $reflectionProvider;
-
     public function __construct(
-        ArrayCallableMethodReferenceAnalyzer $arrayCallableMethodReferenceAnalyzer,
-        ParsedPropertyFetchNodeCollector $parsedPropertyFetchNodeCollector,
-        NodeNameResolver $nodeNameResolver,
-        ParsedNodeCollector $parsedNodeCollector,
-        TypeUnwrapper $typeUnwrapper,
-        ReflectionProvider $reflectionProvider,
-        NodeTypeResolver $nodeTypeResolver
+        private ArrayCallableMethodReferenceAnalyzer $arrayCallableMethodReferenceAnalyzer,
+        private ParsedPropertyFetchNodeCollector $parsedPropertyFetchNodeCollector,
+        private NodeNameResolver $nodeNameResolver,
+        private ParsedNodeCollector $parsedNodeCollector,
+        private TypeUnwrapper $typeUnwrapper,
+        private ReflectionProvider $reflectionProvider,
+        private NodeTypeResolver $nodeTypeResolver
     ) {
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->arrayCallableMethodReferenceAnalyzer = $arrayCallableMethodReferenceAnalyzer;
-        $this->parsedPropertyFetchNodeCollector = $parsedPropertyFetchNodeCollector;
-        $this->parsedNodeCollector = $parsedNodeCollector;
-        $this->typeUnwrapper = $typeUnwrapper;
-        $this->reflectionProvider = $reflectionProvider;
-        $this->nodeTypeResolver = $nodeTypeResolver;
     }
 
     public function collect(Node $node): void

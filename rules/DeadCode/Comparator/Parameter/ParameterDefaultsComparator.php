@@ -19,14 +19,9 @@ use Rector\Core\PhpParser\Node\Value\ValueResolver;
 
 final class ParameterDefaultsComparator
 {
-    /**
-     * @var ValueResolver
-     */
-    private $valueResolver;
-
-    public function __construct(ValueResolver $valueResolver)
-    {
-        $this->valueResolver = $valueResolver;
+    public function __construct(
+        private ValueResolver $valueResolver
+    ) {
     }
 
     public function areDefaultValuesDifferent(ParameterReflection $parameterReflection, Param $param): bool

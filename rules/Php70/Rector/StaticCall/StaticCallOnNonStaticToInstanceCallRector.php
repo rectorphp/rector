@@ -28,36 +28,12 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class StaticCallOnNonStaticToInstanceCallRector extends AbstractRector
 {
-    /**
-     * @var ClassMethodManipulator
-     */
-    private $classMethodManipulator;
-
-    /**
-     * @var StaticAnalyzer
-     */
-    private $staticAnalyzer;
-
-    /**
-     * @var ReflectionProvider
-     */
-    private $reflectionProvider;
-
-    /**
-     * @var ParentClassScopeResolver
-     */
-    private $parentClassScopeResolver;
-
     public function __construct(
-        ClassMethodManipulator $classMethodManipulator,
-        StaticAnalyzer $staticAnalyzer,
-        ReflectionProvider $reflectionProvider,
-        ParentClassScopeResolver $parentClassScopeResolver
+        private ClassMethodManipulator $classMethodManipulator,
+        private StaticAnalyzer $staticAnalyzer,
+        private ReflectionProvider $reflectionProvider,
+        private ParentClassScopeResolver $parentClassScopeResolver
     ) {
-        $this->classMethodManipulator = $classMethodManipulator;
-        $this->staticAnalyzer = $staticAnalyzer;
-        $this->reflectionProvider = $reflectionProvider;
-        $this->parentClassScopeResolver = $parentClassScopeResolver;
     }
 
     public function getRuleDefinition(): RuleDefinition

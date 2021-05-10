@@ -21,20 +21,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class RemoveUnusedPrivatePropertyRector extends AbstractRector
 {
-    /**
-     * @var PropertyManipulator
-     */
-    private $propertyManipulator;
-
-    /**
-     * @var ComplexNodeRemover
-     */
-    private $complexNodeRemover;
-
-    public function __construct(PropertyManipulator $propertyManipulator, ComplexNodeRemover $complexNodeRemover)
-    {
-        $this->propertyManipulator = $propertyManipulator;
-        $this->complexNodeRemover = $complexNodeRemover;
+    public function __construct(
+        private PropertyManipulator $propertyManipulator,
+        private ComplexNodeRemover $complexNodeRemover
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

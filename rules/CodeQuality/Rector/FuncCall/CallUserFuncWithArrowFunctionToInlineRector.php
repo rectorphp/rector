@@ -20,14 +20,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class CallUserFuncWithArrowFunctionToInlineRector extends AbstractRector
 {
-    /**
-     * @var ClosureArrowFunctionAnalyzer
-     */
-    private $closureArrowFunctionAnalyzer;
-
-    public function __construct(ClosureArrowFunctionAnalyzer $closureArrowFunctionAnalyzer)
-    {
-        $this->closureArrowFunctionAnalyzer = $closureArrowFunctionAnalyzer;
+    public function __construct(
+        private ClosureArrowFunctionAnalyzer $closureArrowFunctionAnalyzer
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

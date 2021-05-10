@@ -14,14 +14,9 @@ use Rector\Core\PhpParser\Node\Value\ValueResolver;
 
 final class CompactConverter
 {
-    /**
-     * @var ValueResolver
-     */
-    private $valueResolver;
-
-    public function __construct(ValueResolver $valueResolver)
-    {
-        $this->valueResolver = $valueResolver;
+    public function __construct(
+        private ValueResolver $valueResolver
+    ) {
     }
 
     public function hasAllArgumentsNamed(FuncCall $funcCall): bool

@@ -23,20 +23,10 @@ final class ClassInsertManipulator
      */
     private const BEFORE_TRAIT_TYPES = [TraitUse::class, Property::class, ClassMethod::class];
 
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var NodeFactory
-     */
-    private $nodeFactory;
-
-    public function __construct(NodeFactory $nodeFactory, NodeNameResolver $nodeNameResolver)
-    {
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->nodeFactory = $nodeFactory;
+    public function __construct(
+        private NodeFactory $nodeFactory,
+        private NodeNameResolver $nodeNameResolver
+    ) {
     }
 
     /**

@@ -22,22 +22,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class AddParamTypeFromCallersRector extends AbstractRector
 {
-    /**
-     * @var CallTypesResolver
-     */
-    private $callTypesResolver;
-
-    /**
-     * @var ClassMethodParamTypeCompleter
-     */
-    private $classMethodParamTypeCompleter;
-
     public function __construct(
-        CallTypesResolver $callTypesResolver,
-        ClassMethodParamTypeCompleter $classMethodParamTypeCompleter
+        private CallTypesResolver $callTypesResolver,
+        private ClassMethodParamTypeCompleter $classMethodParamTypeCompleter
     ) {
-        $this->callTypesResolver = $callTypesResolver;
-        $this->classMethodParamTypeCompleter = $classMethodParamTypeCompleter;
     }
 
     public function getRuleDefinition(): RuleDefinition

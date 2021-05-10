@@ -6,26 +6,11 @@ namespace Rector\Renaming\ValueObject;
 
 final class RenamedNamespace
 {
-    /**
-     * @var string
-     */
-    private $oldNamespace;
-
-    /**
-     * @var string
-     */
-    private $newNamespace;
-
-    /**
-     * @var string
-     */
-    private $currentName;
-
-    public function __construct(string $currentNamespaceName, string $oldNamespace, string $newNamespace)
-    {
-        $this->currentName = $currentNamespaceName;
-        $this->oldNamespace = $oldNamespace;
-        $this->newNamespace = $newNamespace;
+    public function __construct(
+        private string $currentName,
+        private string $oldNamespace,
+        private string $newNamespace
+    ) {
     }
 
     public function getNameInNewNamespace(): string

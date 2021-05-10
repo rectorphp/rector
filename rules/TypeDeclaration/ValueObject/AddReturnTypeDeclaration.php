@@ -9,26 +9,11 @@ use PHPStan\Type\Type;
 
 final class AddReturnTypeDeclaration
 {
-    /**
-     * @var string
-     */
-    private $class;
-
-    /**
-     * @var string
-     */
-    private $method;
-
-    /**
-     * @var Type
-     */
-    private $returnType;
-
-    public function __construct(string $class, string $method, Type $returnType)
-    {
-        $this->class = $class;
-        $this->method = $method;
-        $this->returnType = $returnType;
+    public function __construct(
+        private string $class,
+        private string $method,
+        private Type $returnType
+    ) {
     }
 
     public function getClass(): string

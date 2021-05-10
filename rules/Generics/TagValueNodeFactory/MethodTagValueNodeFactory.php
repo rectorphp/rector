@@ -21,22 +21,10 @@ use Rector\StaticTypeMapper\StaticTypeMapper;
 
 final class MethodTagValueNodeFactory
 {
-    /**
-     * @var MethodTagValueParameterNodeFactory
-     */
-    private $methodTagValueParameterNodeFactory;
-
-    /**
-     * @var StaticTypeMapper
-     */
-    private $staticTypeMapper;
-
     public function __construct(
-        StaticTypeMapper $staticTypeMapper,
-        MethodTagValueParameterNodeFactory $methodTagValueParameterNodeFactory
+        private StaticTypeMapper $staticTypeMapper,
+        private MethodTagValueParameterNodeFactory $methodTagValueParameterNodeFactory
     ) {
-        $this->methodTagValueParameterNodeFactory = $methodTagValueParameterNodeFactory;
-        $this->staticTypeMapper = $staticTypeMapper;
     }
 
     public function createFromMethodReflectionAndReturnTagValueNode(

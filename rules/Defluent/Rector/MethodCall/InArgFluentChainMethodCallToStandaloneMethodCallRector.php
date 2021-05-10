@@ -26,50 +26,14 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class InArgFluentChainMethodCallToStandaloneMethodCallRector extends AbstractRector
 {
-    /**
-     * @var NewFluentChainMethodCallNodeAnalyzer
-     */
-    private $newFluentChainMethodCallNodeAnalyzer;
-
-    /**
-     * @var VariableFromNewFactory
-     */
-    private $variableFromNewFactory;
-
-    /**
-     * @var FluentMethodCallAsArgFactory
-     */
-    private $fluentMethodCallAsArgFactory;
-
-    /**
-     * @var AssignAndRootExprAndNodesToAddMatcher
-     */
-    private $assignAndRootExprAndNodesToAddMatcher;
-
-    /**
-     * @var FluentChainMethodCallNodeAnalyzer
-     */
-    private $fluentChainMethodCallNodeAnalyzer;
-
-    /**
-     * @var NonFluentChainMethodCallFactory
-     */
-    private $nonFluentChainMethodCallFactory;
-
     public function __construct(
-        NewFluentChainMethodCallNodeAnalyzer $newFluentChainMethodCallNodeAnalyzer,
-        VariableFromNewFactory $variableFromNewFactory,
-        FluentMethodCallAsArgFactory $fluentMethodCallAsArgFactory,
-        AssignAndRootExprAndNodesToAddMatcher $assignAndRootExprAndNodesToAddMatcher,
-        FluentChainMethodCallNodeAnalyzer $fluentChainMethodCallNodeAnalyzer,
-        NonFluentChainMethodCallFactory $nonFluentChainMethodCallFactory
+        private NewFluentChainMethodCallNodeAnalyzer $newFluentChainMethodCallNodeAnalyzer,
+        private VariableFromNewFactory $variableFromNewFactory,
+        private FluentMethodCallAsArgFactory $fluentMethodCallAsArgFactory,
+        private AssignAndRootExprAndNodesToAddMatcher $assignAndRootExprAndNodesToAddMatcher,
+        private FluentChainMethodCallNodeAnalyzer $fluentChainMethodCallNodeAnalyzer,
+        private NonFluentChainMethodCallFactory $nonFluentChainMethodCallFactory
     ) {
-        $this->newFluentChainMethodCallNodeAnalyzer = $newFluentChainMethodCallNodeAnalyzer;
-        $this->variableFromNewFactory = $variableFromNewFactory;
-        $this->fluentMethodCallAsArgFactory = $fluentMethodCallAsArgFactory;
-        $this->assignAndRootExprAndNodesToAddMatcher = $assignAndRootExprAndNodesToAddMatcher;
-        $this->fluentChainMethodCallNodeAnalyzer = $fluentChainMethodCallNodeAnalyzer;
-        $this->nonFluentChainMethodCallFactory = $nonFluentChainMethodCallFactory;
     }
 
     public function getRuleDefinition(): RuleDefinition

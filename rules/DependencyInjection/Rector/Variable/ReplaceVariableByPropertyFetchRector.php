@@ -20,14 +20,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class ReplaceVariableByPropertyFetchRector extends AbstractRector
 {
-    /**
-     * @var VariablesToPropertyFetchCollection
-     */
-    private $variablesToPropertyFetchCollection;
-
-    public function __construct(VariablesToPropertyFetchCollection $variablesToPropertyFetchCollection)
-    {
-        $this->variablesToPropertyFetchCollection = $variablesToPropertyFetchCollection;
+    public function __construct(
+        private VariablesToPropertyFetchCollection $variablesToPropertyFetchCollection
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

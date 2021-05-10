@@ -15,14 +15,9 @@ use Rector\StaticTypeMapper\StaticTypeMapper;
 
 final class SelfContainerFactory
 {
-    /**
-     * @var StaticTypeMapper
-     */
-    private $staticTypeMapper;
-
-    public function __construct(StaticTypeMapper $staticTypeMapper)
-    {
-        $this->staticTypeMapper = $staticTypeMapper;
+    public function __construct(
+        private StaticTypeMapper $staticTypeMapper
+    ) {
     }
 
     public function createGetTypeMethodCall(ObjectType $objectType): MethodCall

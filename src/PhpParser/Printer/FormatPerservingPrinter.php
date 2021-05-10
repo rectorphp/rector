@@ -16,20 +16,10 @@ use Symplify\SmartFileSystem\SmartFileSystem;
  */
 final class FormatPerservingPrinter
 {
-    /**
-     * @var SmartFileSystem
-     */
-    private $smartFileSystem;
-
-    /**
-     * @var BetterStandardPrinter
-     */
-    private $betterStandardPrinter;
-
-    public function __construct(BetterStandardPrinter $betterStandardPrinter, SmartFileSystem $smartFileSystem)
-    {
-        $this->betterStandardPrinter = $betterStandardPrinter;
-        $this->smartFileSystem = $smartFileSystem;
+    public function __construct(
+        private BetterStandardPrinter $betterStandardPrinter,
+        private SmartFileSystem $smartFileSystem
+    ) {
     }
 
     /**

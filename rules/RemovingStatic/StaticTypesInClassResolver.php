@@ -13,22 +13,10 @@ use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
 final class StaticTypesInClassResolver
 {
-    /**
-     * @var SimpleCallableNodeTraverser
-     */
-    private $simpleCallableNodeTraverser;
-
-    /**
-     * @var NodeTypeResolver
-     */
-    private $nodeTypeResolver;
-
     public function __construct(
-        SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
-        NodeTypeResolver $nodeTypeResolver
+        private SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
+        private NodeTypeResolver $nodeTypeResolver
     ) {
-        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
-        $this->nodeTypeResolver = $nodeTypeResolver;
     }
 
     /**

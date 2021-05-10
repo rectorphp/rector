@@ -11,14 +11,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 final class NodeToReplacePostRector extends AbstractPostRector
 {
-    /**
-     * @var NodesToReplaceCollector
-     */
-    private $nodesToReplaceCollector;
-
-    public function __construct(NodesToReplaceCollector $nodesToReplaceCollector)
-    {
-        $this->nodesToReplaceCollector = $nodesToReplaceCollector;
+    public function __construct(
+        private NodesToReplaceCollector $nodesToReplaceCollector
+    ) {
     }
 
     public function getPriority(): int

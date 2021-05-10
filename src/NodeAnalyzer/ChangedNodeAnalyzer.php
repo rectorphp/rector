@@ -12,14 +12,9 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class ChangedNodeAnalyzer
 {
-    /**
-     * @var NodeComparator
-     */
-    private $nodeComparator;
-
-    public function __construct(NodeComparator $nodeComparator)
-    {
-        $this->nodeComparator = $nodeComparator;
+    public function __construct(
+        private NodeComparator $nodeComparator
+    ) {
     }
 
     public function hasNodeChanged(Node $originalNode, Node $node): bool

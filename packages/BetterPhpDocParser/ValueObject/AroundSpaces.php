@@ -6,20 +6,10 @@ namespace Rector\BetterPhpDocParser\ValueObject;
 
 final class AroundSpaces
 {
-    /**
-     * @var string
-     */
-    private $closingSpace;
-
-    /**
-     * @var string
-     */
-    private $openingSpace;
-
-    public function __construct(string $closingSpace, string $openingSpace)
-    {
-        $this->closingSpace = $closingSpace;
-        $this->openingSpace = $openingSpace;
+    public function __construct(
+        private string $closingSpace,
+        private string $openingSpace
+    ) {
     }
 
     public function getClosingSpace(): string

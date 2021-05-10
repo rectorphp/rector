@@ -22,36 +22,12 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class RemoveUnusedAssignVariableRector extends AbstractRector
 {
-    /**
-     * @var SideEffectNodeDetector
-     */
-    private $sideEffectNodeDetector;
-
-    /**
-     * @var PreviousVariableAssignNodeFinder
-     */
-    private $previousVariableAssignNodeFinder;
-
-    /**
-     * @var ScopeNestingComparator
-     */
-    private $scopeNestingComparator;
-
-    /**
-     * @var NextVariableUsageNodeFinder
-     */
-    private $nextVariableUsageNodeFinder;
-
     public function __construct(
-        NextVariableUsageNodeFinder $nextVariableUsageNodeFinder,
-        PreviousVariableAssignNodeFinder $previousVariableAssignNodeFinder,
-        ScopeNestingComparator $scopeNestingComparator,
-        SideEffectNodeDetector $sideEffectNodeDetector
+        private NextVariableUsageNodeFinder $nextVariableUsageNodeFinder,
+        private PreviousVariableAssignNodeFinder $previousVariableAssignNodeFinder,
+        private ScopeNestingComparator $scopeNestingComparator,
+        private SideEffectNodeDetector $sideEffectNodeDetector
     ) {
-        $this->sideEffectNodeDetector = $sideEffectNodeDetector;
-        $this->previousVariableAssignNodeFinder = $previousVariableAssignNodeFinder;
-        $this->scopeNestingComparator = $scopeNestingComparator;
-        $this->nextVariableUsageNodeFinder = $nextVariableUsageNodeFinder;
     }
 
     /**

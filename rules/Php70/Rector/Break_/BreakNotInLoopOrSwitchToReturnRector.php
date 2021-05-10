@@ -20,14 +20,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class BreakNotInLoopOrSwitchToReturnRector extends AbstractRector
 {
-    /**
-     * @var ContextAnalyzer
-     */
-    private $contextAnalyzer;
-
-    public function __construct(ContextAnalyzer $contextAnalyzer)
-    {
-        $this->contextAnalyzer = $contextAnalyzer;
+    public function __construct(
+        private ContextAnalyzer $contextAnalyzer
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

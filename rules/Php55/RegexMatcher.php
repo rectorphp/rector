@@ -25,14 +25,9 @@ final class RegexMatcher
      */
     private const LETTER_SUFFIX_REGEX = '#(?<modifiers>\w+)$#';
 
-    /**
-     * @var ValueResolver
-     */
-    private $valueResolver;
-
-    public function __construct(ValueResolver $valueResolver)
-    {
-        $this->valueResolver = $valueResolver;
+    public function __construct(
+        private ValueResolver $valueResolver
+    ) {
     }
 
     public function resolvePatternExpressionWithoutEIfFound(Expr $expr): ?Expr

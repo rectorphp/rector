@@ -28,50 +28,14 @@ use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
  */
 final class FluentChainMethodCallRootExtractor
 {
-    /**
-     * @var PropertyNaming
-     */
-    private $propertyNaming;
-
-    /**
-     * @var BetterNodeFinder
-     */
-    private $betterNodeFinder;
-
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var VariableNaming
-     */
-    private $variableNaming;
-
-    /**
-     * @var ExprStringTypeResolver
-     */
-    private $exprStringTypeResolver;
-
-    /**
-     * @var NodeTypeResolver
-     */
-    private $nodeTypeResolver;
-
     public function __construct(
-        BetterNodeFinder $betterNodeFinder,
-        NodeNameResolver $nodeNameResolver,
-        PropertyNaming $propertyNaming,
-        VariableNaming $variableNaming,
-        ExprStringTypeResolver $exprStringTypeResolver,
-        NodeTypeResolver $nodeTypeResolver
+        private BetterNodeFinder $betterNodeFinder,
+        private NodeNameResolver $nodeNameResolver,
+        private PropertyNaming $propertyNaming,
+        private VariableNaming $variableNaming,
+        private ExprStringTypeResolver $exprStringTypeResolver,
+        private NodeTypeResolver $nodeTypeResolver
     ) {
-        $this->propertyNaming = $propertyNaming;
-        $this->betterNodeFinder = $betterNodeFinder;
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->variableNaming = $variableNaming;
-        $this->exprStringTypeResolver = $exprStringTypeResolver;
-        $this->nodeTypeResolver = $nodeTypeResolver;
     }
 
     /**

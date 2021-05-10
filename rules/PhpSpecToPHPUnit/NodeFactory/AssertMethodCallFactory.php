@@ -16,33 +16,15 @@ use Rector\NodeNameResolver\NodeNameResolver;
 final class AssertMethodCallFactory
 {
     /**
-     * @var NodeFactory
-     */
-    private $nodeFactory;
-
-    /**
      * @var bool
      */
     private $isBoolAssert = false;
 
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var ValueResolver
-     */
-    private $valueResolver;
-
     public function __construct(
-        NodeFactory $nodeFactory,
-        NodeNameResolver $nodeNameResolver,
-        ValueResolver $valueResolver
+        private NodeFactory $nodeFactory,
+        private NodeNameResolver $nodeNameResolver,
+        private ValueResolver $valueResolver
     ) {
-        $this->nodeFactory = $nodeFactory;
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->valueResolver = $valueResolver;
     }
 
     public function createAssertMethod(

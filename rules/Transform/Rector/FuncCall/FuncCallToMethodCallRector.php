@@ -32,14 +32,9 @@ final class FuncCallToMethodCallRector extends AbstractRector implements Configu
      */
     private $funcNameToMethodCallNames = [];
 
-    /**
-     * @var FuncCallStaticCallToMethodCallAnalyzer
-     */
-    private $funcCallStaticCallToMethodCallAnalyzer;
-
-    public function __construct(FuncCallStaticCallToMethodCallAnalyzer $funcCallStaticCallToMethodCallAnalyzer)
-    {
-        $this->funcCallStaticCallToMethodCallAnalyzer = $funcCallStaticCallToMethodCallAnalyzer;
+    public function __construct(
+        private FuncCallStaticCallToMethodCallAnalyzer $funcCallStaticCallToMethodCallAnalyzer
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

@@ -8,26 +8,11 @@ use PHPStan\Type\ObjectType;
 
 final class StaticCallToFuncCall
 {
-    /**
-     * @var string
-     */
-    private $class;
-
-    /**
-     * @var string
-     */
-    private $method;
-
-    /**
-     * @var string
-     */
-    private $function;
-
-    public function __construct(string $class, string $method, string $function)
-    {
-        $this->class = $class;
-        $this->method = $method;
-        $this->function = $function;
+    public function __construct(
+        private string $class,
+        private string $method,
+        private string $function
+    ) {
     }
 
     public function getObjectType(): ObjectType

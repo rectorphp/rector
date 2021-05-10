@@ -10,14 +10,9 @@ use Rector\Core\ValueObject\Application\RectorError;
 
 final class ErrorFactory
 {
-    /**
-     * @var ExceptionCorrector
-     */
-    private $exceptionCorrector;
-
-    public function __construct(ExceptionCorrector $exceptionCorrector)
-    {
-        $this->exceptionCorrector = $exceptionCorrector;
+    public function __construct(
+        private ExceptionCorrector $exceptionCorrector
+    ) {
     }
 
     public function createAutoloadError(AnalysedCodeException $analysedCodeException): RectorError

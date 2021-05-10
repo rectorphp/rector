@@ -12,20 +12,10 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class FileInfoParser
 {
-    /**
-     * @var Parser
-     */
-    private $parser;
-
-    /**
-     * @var NodeScopeAndMetadataDecorator
-     */
-    private $nodeScopeAndMetadataDecorator;
-
-    public function __construct(NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator, Parser $parser)
-    {
-        $this->parser = $parser;
-        $this->nodeScopeAndMetadataDecorator = $nodeScopeAndMetadataDecorator;
+    public function __construct(
+        private NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator,
+        private Parser $parser
+    ) {
     }
 
     /**

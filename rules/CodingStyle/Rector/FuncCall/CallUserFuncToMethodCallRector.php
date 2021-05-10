@@ -20,14 +20,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class CallUserFuncToMethodCallRector extends AbstractRector
 {
-    /**
-     * @var ArrayCallableToMethodCallFactory
-     */
-    private $arrayCallableToMethodCallFactory;
-
-    public function __construct(ArrayCallableToMethodCallFactory $arrayCallableToMethodCallFactory)
-    {
-        $this->arrayCallableToMethodCallFactory = $arrayCallableToMethodCallFactory;
+    public function __construct(
+        private ArrayCallableToMethodCallFactory $arrayCallableToMethodCallFactory
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

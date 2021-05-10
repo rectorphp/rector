@@ -9,22 +9,15 @@ use Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\AbstractValu
 final class DoctrineAnnotationTagValueNode extends AbstractValuesAwareNode
 {
     /**
-     * @var string
-     */
-    private $annotationClass;
-
-    /**
      * @param array<mixed, mixed> $values
      */
     public function __construct(
-        // values
-        string $annotationClass,
+        private string $annotationClass,
         ?string $originalContent = null,
         array $values = [],
         ?string $silentKey = null
     ) {
         $this->hasChanged = true;
-        $this->annotationClass = $annotationClass;
 
         parent::__construct($values, $originalContent, $silentKey);
     }

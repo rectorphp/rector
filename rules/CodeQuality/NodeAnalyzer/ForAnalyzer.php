@@ -30,36 +30,12 @@ final class ForAnalyzer
      */
     private const COUNT = 'count';
 
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var BetterNodeFinder
-     */
-    private $betterNodeFinder;
-
-    /**
-     * @var NodeComparator
-     */
-    private $nodeComparator;
-
-    /**
-     * @var AssignManipulator
-     */
-    private $assignManipulator;
-
     public function __construct(
-        NodeNameResolver $nodeNameResolver,
-        BetterNodeFinder $betterNodeFinder,
-        AssignManipulator $assignManipulator,
-        NodeComparator $nodeComparator
+        private NodeNameResolver $nodeNameResolver,
+        private BetterNodeFinder $betterNodeFinder,
+        private AssignManipulator $assignManipulator,
+        private NodeComparator $nodeComparator
     ) {
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->betterNodeFinder = $betterNodeFinder;
-        $this->assignManipulator = $assignManipulator;
-        $this->nodeComparator = $nodeComparator;
     }
 
     /**

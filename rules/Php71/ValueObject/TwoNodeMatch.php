@@ -8,20 +8,10 @@ use PhpParser\Node\Expr;
 
 final class TwoNodeMatch
 {
-    /**
-     * @var Expr
-     */
-    private $firstExpr;
-
-    /**
-     * @var Expr
-     */
-    private $secondExpr;
-
-    public function __construct(Expr $firstExpr, Expr $secondExpr)
-    {
-        $this->firstExpr = $firstExpr;
-        $this->secondExpr = $secondExpr;
+    public function __construct(
+        private Expr $firstExpr,
+        private Expr $secondExpr
+    ) {
     }
 
     public function getFirstExpr(): Expr

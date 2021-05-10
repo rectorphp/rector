@@ -14,29 +14,11 @@ use Symplify\SmartFileSystem\FileSystemFilter;
  */
 final class DynamicSourceLocatorDecorator
 {
-    /**
-     * @var FileSystemFilter
-     */
-    private $fileSystemFilter;
-
-    /**
-     * @var DynamicSourceLocatorProvider
-     */
-    private $dynamicSourceLocatorProvider;
-
-    /**
-     * @var PhpFilesFinder
-     */
-    private $phpFilesFinder;
-
     public function __construct(
-        FileSystemFilter $fileSystemFilter,
-        DynamicSourceLocatorProvider $dynamicSourceLocatorProvider,
-        PhpFilesFinder $phpFilesFinder
+        private FileSystemFilter $fileSystemFilter,
+        private DynamicSourceLocatorProvider $dynamicSourceLocatorProvider,
+        private PhpFilesFinder $phpFilesFinder
     ) {
-        $this->fileSystemFilter = $fileSystemFilter;
-        $this->dynamicSourceLocatorProvider = $dynamicSourceLocatorProvider;
-        $this->phpFilesFinder = $phpFilesFinder;
     }
 
     /**

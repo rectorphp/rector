@@ -23,20 +23,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class ThisCallOnStaticMethodToStaticCallRector extends AbstractRector
 {
-    /**
-     * @var StaticAnalyzer
-     */
-    private $staticAnalyzer;
-
-    /**
-     * @var MethodReflectionProvider
-     */
-    private $methodReflectionProvider;
-
-    public function __construct(StaticAnalyzer $staticAnalyzer, MethodReflectionProvider $methodReflectionProvider)
-    {
-        $this->staticAnalyzer = $staticAnalyzer;
-        $this->methodReflectionProvider = $methodReflectionProvider;
+    public function __construct(
+        private StaticAnalyzer $staticAnalyzer,
+        private MethodReflectionProvider $methodReflectionProvider
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

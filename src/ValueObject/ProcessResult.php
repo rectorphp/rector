@@ -25,39 +25,21 @@ final class ProcessResult
     private $errors = [];
 
     /**
-     * @var int
-     */
-    private $addedFilesCount;
-
-    /**
-     * @var int
-     */
-    private $removedFilesCount;
-
-    /**
-     * @var int
-     */
-    private $removedNodeCount;
-
-    /**
      * @param FileDiff[] $fileDiffs
      * @param RectorError[] $errors
      */
     public function __construct(
         array $fileDiffs,
         array $errors,
-        int $addedFilesCount,
-        int $removedFilesCount,
-        int $removedNodeCount
+        private int $addedFilesCount,
+        private int $removedFilesCount,
+        private int $removedNodeCount
     ) {
         Assert::allIsAOf($fileDiffs, FileDiff::class);
         Assert::allIsAOf($errors, RectorError::class);
 
         $this->fileDiffs = $fileDiffs;
         $this->errors = $errors;
-        $this->addedFilesCount = $addedFilesCount;
-        $this->removedFilesCount = $removedFilesCount;
-        $this->removedNodeCount = $removedNodeCount;
     }
 
     /**

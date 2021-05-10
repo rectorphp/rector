@@ -11,14 +11,9 @@ use Rector\Naming\ValueObject\PropertyRename;
 
 final class HasMagicGetSetGuard implements ConflictingNameGuardInterface
 {
-    /**
-     * @var ReflectionProvider
-     */
-    private $reflectionProvider;
-
-    public function __construct(ReflectionProvider $reflectionProvider)
-    {
-        $this->reflectionProvider = $reflectionProvider;
+    public function __construct(
+        private ReflectionProvider $reflectionProvider
+    ) {
     }
 
     /**

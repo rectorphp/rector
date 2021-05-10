@@ -9,14 +9,9 @@ use Symplify\SimplePhpDocParser\PhpDocNodeTraverser;
 
 final class UnderscorePhpDocNodeTraverserFactory
 {
-    /**
-     * @var UnderscoreRenamePhpDocNodeVisitor
-     */
-    private $underscoreRenamePhpDocNodeVisitor;
-
-    public function __construct(UnderscoreRenamePhpDocNodeVisitor $underscoreRenamePhpDocNodeVisitor)
-    {
-        $this->underscoreRenamePhpDocNodeVisitor = $underscoreRenamePhpDocNodeVisitor;
+    public function __construct(
+        private UnderscoreRenamePhpDocNodeVisitor $underscoreRenamePhpDocNodeVisitor
+    ) {
     }
 
     public function create(): PhpDocNodeTraverser

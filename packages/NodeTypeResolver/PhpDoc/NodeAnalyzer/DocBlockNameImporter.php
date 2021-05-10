@@ -11,22 +11,10 @@ use Rector\NodeTypeResolver\PhpDocNodeVisitor\NameImportingPhpDocNodeVisitor;
 
 final class DocBlockNameImporter
 {
-    /**
-     * @var NameImportingPhpDocNodeVisitor
-     */
-    private $nameImportingPhpDocNodeVisitor;
-
-    /**
-     * @var ImportingPhpDocNodeTraverserFactory
-     */
-    private $importingPhpDocNodeTraverserFactory;
-
     public function __construct(
-        NameImportingPhpDocNodeVisitor $nameImportingPhpDocNodeVisitor,
-        ImportingPhpDocNodeTraverserFactory $importingPhpDocNodeTraverserFactory
+        private NameImportingPhpDocNodeVisitor $nameImportingPhpDocNodeVisitor,
+        private ImportingPhpDocNodeTraverserFactory $importingPhpDocNodeTraverserFactory
     ) {
-        $this->nameImportingPhpDocNodeVisitor = $nameImportingPhpDocNodeVisitor;
-        $this->importingPhpDocNodeTraverserFactory = $importingPhpDocNodeTraverserFactory;
     }
 
     public function importNames(PhpDocNode $phpDocNode, Node $node): void

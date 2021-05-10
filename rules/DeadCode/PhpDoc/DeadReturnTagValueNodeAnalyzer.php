@@ -11,14 +11,9 @@ use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
 
 final class DeadReturnTagValueNodeAnalyzer
 {
-    /**
-     * @var TypeComparator
-     */
-    private $typeComparator;
-
-    public function __construct(TypeComparator $typeComparator)
-    {
-        $this->typeComparator = $typeComparator;
+    public function __construct(
+        private TypeComparator $typeComparator
+    ) {
     }
 
     public function isDead(ReturnTagValueNode $returnTagValueNode, FunctionLike $functionLike): bool

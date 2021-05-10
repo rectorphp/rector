@@ -17,20 +17,10 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class VarAnnotationManipulator
 {
-    /**
-     * @var PhpDocInfoFactory
-     */
-    private $phpDocInfoFactory;
-
-    /**
-     * @var PhpDocTypeChanger
-     */
-    private $phpDocTypeChanger;
-
-    public function __construct(PhpDocInfoFactory $phpDocInfoFactory, PhpDocTypeChanger $phpDocTypeChanger)
-    {
-        $this->phpDocInfoFactory = $phpDocInfoFactory;
-        $this->phpDocTypeChanger = $phpDocTypeChanger;
+    public function __construct(
+        private PhpDocInfoFactory $phpDocInfoFactory,
+        private PhpDocTypeChanger $phpDocTypeChanger
+    ) {
     }
 
     public function decorateNodeWithInlineVarType(

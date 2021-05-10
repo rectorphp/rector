@@ -22,14 +22,9 @@ final class ClassAnnotationMatcher
      */
     private $fullyQualifiedNameByHash = [];
 
-    /**
-     * @var ReflectionProvider
-     */
-    private $reflectionProvider;
-
-    public function __construct(ReflectionProvider $reflectionProvider)
-    {
-        $this->reflectionProvider = $reflectionProvider;
+    public function __construct(
+        private ReflectionProvider $reflectionProvider
+    ) {
     }
 
     public function resolveTagFullyQualifiedName(string $tag, Node $node): string

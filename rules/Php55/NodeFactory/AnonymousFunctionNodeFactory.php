@@ -27,20 +27,10 @@ final class AnonymousFunctionNodeFactory
      */
     private const DIM_FETCH_REGEX = '#(\\$|\\\\|\\x0)(?<number>\d+)#';
 
-    /**
-     * @var Parser
-     */
-    private $parser;
-
-    /**
-     * @var SimpleCallableNodeTraverser
-     */
-    private $simpleCallableNodeTraverser;
-
-    public function __construct(SimpleCallableNodeTraverser $simpleCallableNodeTraverser, Parser $parser)
-    {
-        $this->parser = $parser;
-        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
+    public function __construct(
+        private SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
+        private Parser $parser
+    ) {
     }
 
     public function createAnonymousFunctionFromString(Expr $expr): ?Closure

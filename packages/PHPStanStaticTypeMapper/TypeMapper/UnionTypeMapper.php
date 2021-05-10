@@ -40,43 +40,13 @@ final class UnionTypeMapper implements TypeMapperInterface
      */
     private $phpStanStaticTypeMapper;
 
-    /**
-     * @var PhpVersionProvider
-     */
-    private $phpVersionProvider;
-
-    /**
-     * @var UnionTypeAnalyzer
-     */
-    private $unionTypeAnalyzer;
-
-    /**
-     * @var DoctrineTypeAnalyzer
-     */
-    private $doctrineTypeAnalyzer;
-
-    /**
-     * @var BoolUnionTypeAnalyzer
-     */
-    private $boolUnionTypeAnalyzer;
-
-    /**
-     * @var UnionTypeCommonTypeNarrower
-     */
-    private $unionTypeCommonTypeNarrower;
-
     public function __construct(
-        DoctrineTypeAnalyzer $doctrineTypeAnalyzer,
-        PhpVersionProvider $phpVersionProvider,
-        UnionTypeAnalyzer $unionTypeAnalyzer,
-        BoolUnionTypeAnalyzer $boolUnionTypeAnalyzer,
-        UnionTypeCommonTypeNarrower $unionTypeCommonTypeNarrower
+        private DoctrineTypeAnalyzer $doctrineTypeAnalyzer,
+        private PhpVersionProvider $phpVersionProvider,
+        private UnionTypeAnalyzer $unionTypeAnalyzer,
+        private BoolUnionTypeAnalyzer $boolUnionTypeAnalyzer,
+        private UnionTypeCommonTypeNarrower $unionTypeCommonTypeNarrower
     ) {
-        $this->phpVersionProvider = $phpVersionProvider;
-        $this->unionTypeAnalyzer = $unionTypeAnalyzer;
-        $this->doctrineTypeAnalyzer = $doctrineTypeAnalyzer;
-        $this->boolUnionTypeAnalyzer = $boolUnionTypeAnalyzer;
-        $this->unionTypeCommonTypeNarrower = $unionTypeCommonTypeNarrower;
     }
 
     /**

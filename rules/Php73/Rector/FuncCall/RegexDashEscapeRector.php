@@ -41,14 +41,9 @@ final class RegexDashEscapeRector extends AbstractRector
      */
     private const RIGHT_HAND_UNESCAPED_DASH_REGEX = '#(?<!\[)-(\\\\(w|s|d)[^\?]*?)\]#i';
 
-    /**
-     * @var RegexPatternArgumentManipulator
-     */
-    private $regexPatternArgumentManipulator;
-
-    public function __construct(RegexPatternArgumentManipulator $regexPatternArgumentManipulator)
-    {
-        $this->regexPatternArgumentManipulator = $regexPatternArgumentManipulator;
+    public function __construct(
+        private RegexPatternArgumentManipulator $regexPatternArgumentManipulator
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

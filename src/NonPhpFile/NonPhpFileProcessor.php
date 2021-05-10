@@ -16,16 +16,11 @@ use Rector\Core\ValueObject\StaticNonPhpFileSuffixes;
 final class NonPhpFileProcessor implements FileProcessorInterface
 {
     /**
-     * @var NonPhpRectorInterface[]
-     */
-    private $nonPhpRectors = [];
-
-    /**
      * @param NonPhpRectorInterface[] $nonPhpRectors
      */
-    public function __construct(array $nonPhpRectors)
-    {
-        $this->nonPhpRectors = $nonPhpRectors;
+    public function __construct(
+        private array $nonPhpRectors
+    ) {
     }
 
     /**

@@ -37,14 +37,9 @@ final class AddParamTypeDeclarationRector extends AbstractRector implements Conf
      */
     private $parameterTypehints = [];
 
-    /**
-     * @var TypeComparator
-     */
-    private $typeComparator;
-
-    public function __construct(TypeComparator $typeComparator)
-    {
-        $this->typeComparator = $typeComparator;
+    public function __construct(
+        private TypeComparator $typeComparator
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

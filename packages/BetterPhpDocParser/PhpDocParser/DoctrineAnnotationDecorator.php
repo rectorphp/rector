@@ -22,43 +22,13 @@ use Rector\Core\Exception\ShouldNotHappenException;
 
 final class DoctrineAnnotationDecorator
 {
-    /**
-     * @var CurrentNodeProvider
-     */
-    private $currentNodeProvider;
-
-    /**
-     * @var ClassAnnotationMatcher
-     */
-    private $classAnnotationMatcher;
-
-    /**
-     * @var StaticDoctrineAnnotationParser
-     */
-    private $staticDoctrineAnnotationParser;
-
-    /**
-     * @var TokenIteratorFactory
-     */
-    private $tokenIteratorFactory;
-
-    /**
-     * @var AttributeMirrorer
-     */
-    private $attributeMirrorer;
-
     public function __construct(
-        CurrentNodeProvider $currentNodeProvider,
-        ClassAnnotationMatcher $classAnnotationMatcher,
-        StaticDoctrineAnnotationParser $staticDoctrineAnnotationParser,
-        TokenIteratorFactory $tokenIteratorFactory,
-        AttributeMirrorer $attributeMirrorer
+        private CurrentNodeProvider $currentNodeProvider,
+        private ClassAnnotationMatcher $classAnnotationMatcher,
+        private StaticDoctrineAnnotationParser $staticDoctrineAnnotationParser,
+        private TokenIteratorFactory $tokenIteratorFactory,
+        private AttributeMirrorer $attributeMirrorer
     ) {
-        $this->currentNodeProvider = $currentNodeProvider;
-        $this->classAnnotationMatcher = $classAnnotationMatcher;
-        $this->staticDoctrineAnnotationParser = $staticDoctrineAnnotationParser;
-        $this->tokenIteratorFactory = $tokenIteratorFactory;
-        $this->attributeMirrorer = $attributeMirrorer;
     }
 
     public function decorate(PhpDocNode $phpDocNode): void

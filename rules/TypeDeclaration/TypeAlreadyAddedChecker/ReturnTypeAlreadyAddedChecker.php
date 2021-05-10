@@ -34,29 +34,11 @@ final class ReturnTypeAlreadyAddedChecker
      */
     private const FOREACHABLE_TYPES = ['iterable', 'Iterator', 'Traversable', 'array'];
 
-    /**
-     * @var StaticTypeMapper
-     */
-    private $staticTypeMapper;
-
-    /**
-     * @var NodeComparator
-     */
-    private $nodeComparator;
-
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
     public function __construct(
-        NodeNameResolver $nodeNameResolver,
-        StaticTypeMapper $staticTypeMapper,
-        NodeComparator $nodeComparator
+        private NodeNameResolver $nodeNameResolver,
+        private StaticTypeMapper $staticTypeMapper,
+        private NodeComparator $nodeComparator
     ) {
-        $this->staticTypeMapper = $staticTypeMapper;
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->nodeComparator = $nodeComparator;
     }
 
     /**

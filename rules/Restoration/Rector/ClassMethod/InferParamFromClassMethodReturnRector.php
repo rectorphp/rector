@@ -39,29 +39,11 @@ final class InferParamFromClassMethodReturnRector extends AbstractRector impleme
      */
     private $inferParamFromClassMethodReturn = [];
 
-    /**
-     * @var ReturnTypeInferer
-     */
-    private $returnTypeInferer;
-
-    /**
-     * @var ConstantReturnToParamTypeConverter
-     */
-    private $constantReturnToParamTypeConverter;
-
-    /**
-     * @var PhpDocTypeChanger
-     */
-    private $phpDocTypeChanger;
-
     public function __construct(
-        ReturnTypeInferer $returnTypeInferer,
-        ConstantReturnToParamTypeConverter $constantReturnToParamTypeConverter,
-        PhpDocTypeChanger $phpDocTypeChanger
+        private ReturnTypeInferer $returnTypeInferer,
+        private ConstantReturnToParamTypeConverter $constantReturnToParamTypeConverter,
+        private PhpDocTypeChanger $phpDocTypeChanger
     ) {
-        $this->returnTypeInferer = $returnTypeInferer;
-        $this->constantReturnToParamTypeConverter = $constantReturnToParamTypeConverter;
-        $this->phpDocTypeChanger = $phpDocTypeChanger;
     }
 
     public function getRuleDefinition(): RuleDefinition

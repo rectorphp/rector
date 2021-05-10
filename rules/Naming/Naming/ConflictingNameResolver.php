@@ -21,43 +21,13 @@ final class ConflictingNameResolver
      */
     private $conflictingVariableNamesByClassMethod = [];
 
-    /**
-     * @var ExpectedNameResolver
-     */
-    private $expectedNameResolver;
-
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var BetterNodeFinder
-     */
-    private $betterNodeFinder;
-
-    /**
-     * @var ArrayFilter
-     */
-    private $arrayFilter;
-
-    /**
-     * @var MatchParamTypeExpectedNameResolver
-     */
-    private $matchParamTypeExpectedNameResolver;
-
     public function __construct(
-        ArrayFilter $arrayFilter,
-        BetterNodeFinder $betterNodeFinder,
-        ExpectedNameResolver $expectedNameResolver,
-        NodeNameResolver $nodeNameResolver,
-        MatchParamTypeExpectedNameResolver $matchParamTypeExpectedNameResolver
+        private ArrayFilter $arrayFilter,
+        private BetterNodeFinder $betterNodeFinder,
+        private ExpectedNameResolver $expectedNameResolver,
+        private NodeNameResolver $nodeNameResolver,
+        private MatchParamTypeExpectedNameResolver $matchParamTypeExpectedNameResolver
     ) {
-        $this->expectedNameResolver = $expectedNameResolver;
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->betterNodeFinder = $betterNodeFinder;
-        $this->arrayFilter = $arrayFilter;
-        $this->matchParamTypeExpectedNameResolver = $matchParamTypeExpectedNameResolver;
     }
 
     /**

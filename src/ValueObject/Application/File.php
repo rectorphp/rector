@@ -16,16 +16,6 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class File
 {
     /**
-     * @var SmartFileInfo
-     */
-    private $smartFileInfo;
-
-    /**
-     * @var string
-     */
-    private $fileContent;
-
-    /**
      * @var bool
      */
     private $hasChanged = false;
@@ -65,10 +55,10 @@ final class File
      */
     private $rectorErrors = [];
 
-    public function __construct(SmartFileInfo $smartFileInfo, string $fileContent)
-    {
-        $this->smartFileInfo = $smartFileInfo;
-        $this->fileContent = $fileContent;
+    public function __construct(
+        private SmartFileInfo $smartFileInfo,
+        private string $fileContent
+    ) {
         $this->originalFileContent = $fileContent;
     }
 

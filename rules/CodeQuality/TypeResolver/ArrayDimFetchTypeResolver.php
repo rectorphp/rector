@@ -14,14 +14,9 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 
 final class ArrayDimFetchTypeResolver
 {
-    /**
-     * @var NodeTypeResolver
-     */
-    private $nodeTypeResolver;
-
-    public function __construct(NodeTypeResolver $nodeTypeResolver)
-    {
-        $this->nodeTypeResolver = $nodeTypeResolver;
+    public function __construct(
+        private NodeTypeResolver $nodeTypeResolver
+    ) {
     }
 
     public function resolve(ArrayDimFetch $arrayDimFetch): ArrayType

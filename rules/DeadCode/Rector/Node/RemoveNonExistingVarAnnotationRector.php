@@ -51,20 +51,10 @@ final class RemoveNonExistingVarAnnotationRector extends AbstractRector
         Nop::class,
     ];
 
-    /**
-     * @var TypeChecker
-     */
-    private $typeChecker;
-
-    /**
-     * @var CommentRemover
-     */
-    private $commentRemover;
-
-    public function __construct(TypeChecker $typeChecker, CommentRemover $commentRemover)
-    {
-        $this->typeChecker = $typeChecker;
-        $this->commentRemover = $commentRemover;
+    public function __construct(
+        private TypeChecker $typeChecker,
+        private CommentRemover $commentRemover
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

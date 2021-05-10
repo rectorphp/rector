@@ -21,22 +21,10 @@ final class InvalidNameNodeReporter
      */
     private const FILE = 'file';
 
-    /**
-     * @var CurrentFileProvider
-     */
-    private $currentFileProvider;
-
-    /**
-     * @var BetterStandardPrinter
-     */
-    private $betterStandardPrinter;
-
     public function __construct(
-        CurrentFileProvider $currentFileProvider,
-        BetterStandardPrinter $betterStandardPrinter
+        private CurrentFileProvider $currentFileProvider,
+        private BetterStandardPrinter $betterStandardPrinter
     ) {
-        $this->currentFileProvider = $currentFileProvider;
-        $this->betterStandardPrinter = $betterStandardPrinter;
     }
 
     /**

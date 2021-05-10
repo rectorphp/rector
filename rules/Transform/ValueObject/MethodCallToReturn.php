@@ -8,20 +8,10 @@ use PHPStan\Type\ObjectType;
 
 final class MethodCallToReturn
 {
-    /**
-     * @var string
-     */
-    private $class;
-
-    /**
-     * @var string
-     */
-    private $method;
-
-    public function __construct(string $class, string $method)
-    {
-        $this->class = $class;
-        $this->method = $method;
+    public function __construct(
+        private string $class,
+        private string $method
+    ) {
     }
 
     public function getObjectType(): ObjectType

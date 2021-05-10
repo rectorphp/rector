@@ -39,43 +39,13 @@ final class AssignManipulator
         PostInc::class,
     ];
 
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var NodeComparator
-     */
-    private $nodeComparator;
-
-    /**
-     * @var BetterNodeFinder
-     */
-    private $betterNodeFinder;
-
-    /**
-     * @var PropertyFetchAnalyzer
-     */
-    private $propertyFetchAnalyzer;
-
-    /**
-     * @var TypeChecker
-     */
-    private $typeChecker;
-
     public function __construct(
-        NodeNameResolver $nodeNameResolver,
-        NodeComparator $nodeComparator,
-        BetterNodeFinder $betterNodeFinder,
-        PropertyFetchAnalyzer $propertyFetchAnalyzer,
-        TypeChecker $typeChecker
+        private NodeNameResolver $nodeNameResolver,
+        private NodeComparator $nodeComparator,
+        private BetterNodeFinder $betterNodeFinder,
+        private PropertyFetchAnalyzer $propertyFetchAnalyzer,
+        private TypeChecker $typeChecker
     ) {
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->betterNodeFinder = $betterNodeFinder;
-        $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
-        $this->typeChecker = $typeChecker;
-        $this->nodeComparator = $nodeComparator;
     }
 
     /**

@@ -32,14 +32,9 @@ final class SimplifyRegexPatternRector extends AbstractRector
         '[\r\n\t\f\v ]' => '\s',
     ];
 
-    /**
-     * @var RegexPatternArgumentManipulator
-     */
-    private $regexPatternArgumentManipulator;
-
-    public function __construct(RegexPatternArgumentManipulator $regexPatternArgumentManipulator)
-    {
-        $this->regexPatternArgumentManipulator = $regexPatternArgumentManipulator;
+    public function __construct(
+        private RegexPatternArgumentManipulator $regexPatternArgumentManipulator
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

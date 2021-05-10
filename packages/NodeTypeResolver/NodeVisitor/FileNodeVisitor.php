@@ -14,14 +14,9 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
  */
 final class FileNodeVisitor extends NodeVisitorAbstract
 {
-    /**
-     * @var File
-     */
-    private $file;
-
-    public function __construct(File $file)
-    {
-        $this->file = $file;
+    public function __construct(
+        private File $file
+    ) {
     }
 
     /**

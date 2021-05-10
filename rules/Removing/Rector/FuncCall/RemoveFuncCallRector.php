@@ -30,14 +30,9 @@ final class RemoveFuncCallRector extends AbstractRector implements ConfigurableR
      */
     private $removeFuncCalls = [];
 
-    /**
-     * @var BreakingRemovalGuard
-     */
-    private $breakingRemovalGuard;
-
-    public function __construct(BreakingRemovalGuard $breakingRemovalGuard)
-    {
-        $this->breakingRemovalGuard = $breakingRemovalGuard;
+    public function __construct(
+        private BreakingRemovalGuard $breakingRemovalGuard
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

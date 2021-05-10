@@ -29,20 +29,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class ForeachToInArrayRector extends AbstractRector
 {
-    /**
-     * @var BinaryOpManipulator
-     */
-    private $binaryOpManipulator;
-
-    /**
-     * @var CommentsMerger
-     */
-    private $commentsMerger;
-
-    public function __construct(BinaryOpManipulator $binaryOpManipulator, CommentsMerger $commentsMerger)
-    {
-        $this->binaryOpManipulator = $binaryOpManipulator;
-        $this->commentsMerger = $commentsMerger;
+    public function __construct(
+        private BinaryOpManipulator $binaryOpManipulator,
+        private CommentsMerger $commentsMerger
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

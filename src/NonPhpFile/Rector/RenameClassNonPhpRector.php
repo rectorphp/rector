@@ -35,26 +35,14 @@ final class RenameClassNonPhpRector implements NonPhpRectorInterface, Configurab
     private const STANDALONE_CLASS_SUFFIX_REGEX = '(?=::)#';
 
     /**
-     * @var RenamedClassesDataCollector
-     */
-    private $renamedClassesDataCollector;
-
-    /**
-     * @var RenamedClassesCollector
-     */
-    private $renamedClassesCollector;
-
-    /**
      * @var array<string, string>
      */
     private $renameClasses = [];
 
     public function __construct(
-        RenamedClassesDataCollector $renamedClassesDataCollector,
-        RenamedClassesCollector $renamedClassesCollector
+        private RenamedClassesDataCollector $renamedClassesDataCollector,
+        private RenamedClassesCollector $renamedClassesCollector
     ) {
-        $this->renamedClassesDataCollector = $renamedClassesDataCollector;
-        $this->renamedClassesCollector = $renamedClassesCollector;
     }
 
     public function getRuleDefinition(): RuleDefinition

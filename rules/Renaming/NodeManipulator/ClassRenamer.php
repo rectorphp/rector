@@ -40,78 +40,18 @@ final class ClassRenamer
      */
     private $alreadyProcessedClasses = [];
 
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var SimpleCallableNodeTraverser
-     */
-    private $simpleCallableNodeTraverser;
-
-    /**
-     * @var PhpDocClassRenamer
-     */
-    private $phpDocClassRenamer;
-
-    /**
-     * @var ClassNaming
-     */
-    private $classNaming;
-
-    /**
-     * @var BetterNodeFinder
-     */
-    private $betterNodeFinder;
-
-    /**
-     * @var PhpDocInfoFactory
-     */
-    private $phpDocInfoFactory;
-
-    /**
-     * @var DocBlockClassRenamer
-     */
-    private $docBlockClassRenamer;
-
-    /**
-     * @var ReflectionProvider
-     */
-    private $reflectionProvider;
-
-    /**
-     * @var NodeRemover
-     */
-    private $nodeRemover;
-
-    /**
-     * @var ParameterProvider
-     */
-    private $parameterProvider;
-
     public function __construct(
-        BetterNodeFinder $betterNodeFinder,
-        SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
-        ClassNaming $classNaming,
-        NodeNameResolver $nodeNameResolver,
-        PhpDocClassRenamer $phpDocClassRenamer,
-        PhpDocInfoFactory $phpDocInfoFactory,
-        DocBlockClassRenamer $docBlockClassRenamer,
-        ReflectionProvider $reflectionProvider,
-        NodeRemover $nodeRemover,
-        ParameterProvider $parameterProvider
+        private BetterNodeFinder $betterNodeFinder,
+        private SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
+        private ClassNaming $classNaming,
+        private NodeNameResolver $nodeNameResolver,
+        private PhpDocClassRenamer $phpDocClassRenamer,
+        private PhpDocInfoFactory $phpDocInfoFactory,
+        private DocBlockClassRenamer $docBlockClassRenamer,
+        private ReflectionProvider $reflectionProvider,
+        private NodeRemover $nodeRemover,
+        private ParameterProvider $parameterProvider
     ) {
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
-        $this->phpDocClassRenamer = $phpDocClassRenamer;
-        $this->classNaming = $classNaming;
-        $this->betterNodeFinder = $betterNodeFinder;
-        $this->phpDocInfoFactory = $phpDocInfoFactory;
-        $this->docBlockClassRenamer = $docBlockClassRenamer;
-        $this->reflectionProvider = $reflectionProvider;
-        $this->nodeRemover = $nodeRemover;
-        $this->parameterProvider = $parameterProvider;
     }
 
     /**

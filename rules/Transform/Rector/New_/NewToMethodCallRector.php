@@ -35,14 +35,9 @@ final class NewToMethodCallRector extends AbstractRector implements Configurable
      */
     private $newsToMethodCalls = [];
 
-    /**
-     * @var ClassNaming
-     */
-    private $classNaming;
-
-    public function __construct(ClassNaming $classNaming)
-    {
-        $this->classNaming = $classNaming;
+    public function __construct(
+        private ClassNaming $classNaming
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

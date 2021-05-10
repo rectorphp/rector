@@ -32,20 +32,10 @@ final class NullsafeOperatorRector extends AbstractRector
      */
     private const NAME = 'name';
 
-    /**
-     * @var IfManipulator
-     */
-    private $ifManipulator;
-
-    /**
-     * @var NullsafeManipulator
-     */
-    private $nullsafeManipulator;
-
-    public function __construct(IfManipulator $ifManipulator, NullsafeManipulator $nullsafeManipulator)
-    {
-        $this->ifManipulator = $ifManipulator;
-        $this->nullsafeManipulator = $nullsafeManipulator;
+    public function __construct(
+        private IfManipulator $ifManipulator,
+        private NullsafeManipulator $nullsafeManipulator
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

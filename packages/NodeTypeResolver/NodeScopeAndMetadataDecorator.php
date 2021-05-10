@@ -21,64 +21,16 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class NodeScopeAndMetadataDecorator
 {
-    /**
-     * @var PHPStanNodeScopeResolver
-     */
-    private $phpStanNodeScopeResolver;
-
-    /**
-     * @var CloningVisitor
-     */
-    private $cloningVisitor;
-
-    /**
-     * @var FunctionMethodAndClassNodeVisitor
-     */
-    private $functionMethodAndClassNodeVisitor;
-
-    /**
-     * @var NamespaceNodeVisitor
-     */
-    private $namespaceNodeVisitor;
-
-    /**
-     * @var StatementNodeVisitor
-     */
-    private $statementNodeVisitor;
-
-    /**
-     * @var NodeCollectorNodeVisitor
-     */
-    private $nodeCollectorNodeVisitor;
-
-    /**
-     * @var NodeConnectingVisitor
-     */
-    private $nodeConnectingVisitor;
-
-    /**
-     * @var FunctionLikeParamArgPositionNodeVisitor
-     */
-    private $functionLikeParamArgPositionNodeVisitor;
-
     public function __construct(
-        CloningVisitor $cloningVisitor,
-        FunctionMethodAndClassNodeVisitor $functionMethodAndClassNodeVisitor,
-        NamespaceNodeVisitor $namespaceNodeVisitor,
-        NodeCollectorNodeVisitor $nodeCollectorNodeVisitor,
-        PHPStanNodeScopeResolver $phpStanNodeScopeResolver,
-        StatementNodeVisitor $statementNodeVisitor,
-        NodeConnectingVisitor $nodeConnectingVisitor,
-        FunctionLikeParamArgPositionNodeVisitor $functionLikeParamArgPositionNodeVisitor
+        private CloningVisitor $cloningVisitor,
+        private FunctionMethodAndClassNodeVisitor $functionMethodAndClassNodeVisitor,
+        private NamespaceNodeVisitor $namespaceNodeVisitor,
+        private NodeCollectorNodeVisitor $nodeCollectorNodeVisitor,
+        private PHPStanNodeScopeResolver $phpStanNodeScopeResolver,
+        private StatementNodeVisitor $statementNodeVisitor,
+        private NodeConnectingVisitor $nodeConnectingVisitor,
+        private FunctionLikeParamArgPositionNodeVisitor $functionLikeParamArgPositionNodeVisitor
     ) {
-        $this->phpStanNodeScopeResolver = $phpStanNodeScopeResolver;
-        $this->cloningVisitor = $cloningVisitor;
-        $this->functionMethodAndClassNodeVisitor = $functionMethodAndClassNodeVisitor;
-        $this->namespaceNodeVisitor = $namespaceNodeVisitor;
-        $this->statementNodeVisitor = $statementNodeVisitor;
-        $this->nodeCollectorNodeVisitor = $nodeCollectorNodeVisitor;
-        $this->nodeConnectingVisitor = $nodeConnectingVisitor;
-        $this->functionLikeParamArgPositionNodeVisitor = $functionLikeParamArgPositionNodeVisitor;
     }
 
     /**

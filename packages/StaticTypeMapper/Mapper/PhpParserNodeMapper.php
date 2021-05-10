@@ -14,16 +14,11 @@ use Rector\StaticTypeMapper\Contract\PhpParser\PhpParserNodeMapperInterface;
 final class PhpParserNodeMapper
 {
     /**
-     * @var PhpParserNodeMapperInterface[]
-     */
-    private $phpParserNodeMappers = [];
-
-    /**
      * @param PhpParserNodeMapperInterface[] $phpParserNodeMappers
      */
-    public function __construct(array $phpParserNodeMappers)
-    {
-        $this->phpParserNodeMappers = $phpParserNodeMappers;
+    public function __construct(
+        private array $phpParserNodeMappers
+    ) {
     }
 
     public function mapToPHPStanType(Node $node): Type

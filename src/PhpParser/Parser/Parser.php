@@ -16,20 +16,10 @@ final class Parser
      */
     private $nodesByFile = [];
 
-    /**
-     * @var NikicParser
-     */
-    private $nikicParser;
-
-    /**
-     * @var SmartFileSystem
-     */
-    private $smartFileSystem;
-
-    public function __construct(NikicParser $nikicParser, SmartFileSystem $smartFileSystem)
-    {
-        $this->nikicParser = $nikicParser;
-        $this->smartFileSystem = $smartFileSystem;
+    public function __construct(
+        private NikicParser $nikicParser,
+        private SmartFileSystem $smartFileSystem
+    ) {
     }
 
     /**

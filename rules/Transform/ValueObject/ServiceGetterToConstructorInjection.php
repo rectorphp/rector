@@ -8,26 +8,11 @@ use PHPStan\Type\ObjectType;
 
 final class ServiceGetterToConstructorInjection
 {
-    /**
-     * @var string
-     */
-    private $oldType;
-
-    /**
-     * @var string
-     */
-    private $oldMethod;
-
-    /**
-     * @var string
-     */
-    private $serviceType;
-
-    public function __construct(string $oldType, string $oldMethod, string $serviceType)
-    {
-        $this->oldType = $oldType;
-        $this->oldMethod = $oldMethod;
-        $this->serviceType = $serviceType;
+    public function __construct(
+        private string $oldType,
+        private string $oldMethod,
+        private string $serviceType
+    ) {
     }
 
     public function getOldObjectType(): ObjectType

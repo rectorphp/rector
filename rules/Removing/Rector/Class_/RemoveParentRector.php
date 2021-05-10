@@ -28,14 +28,9 @@ final class RemoveParentRector extends AbstractRector implements ConfigurableRec
      */
     private $parentClassesToRemove = [];
 
-    /**
-     * @var ParentClassScopeResolver
-     */
-    private $parentClassScopeResolver;
-
-    public function __construct(ParentClassScopeResolver $parentClassScopeResolver)
-    {
-        $this->parentClassScopeResolver = $parentClassScopeResolver;
+    public function __construct(
+        private ParentClassScopeResolver $parentClassScopeResolver
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

@@ -11,22 +11,10 @@ use Rector\Naming\VariableRenamer;
 
 final class ParamRenamer
 {
-    /**
-     * @var VariableRenamer
-     */
-    private $variableRenamer;
-
-    /**
-     * @var PropertyDocBlockManipulator
-     */
-    private $propertyDocBlockManipulator;
-
     public function __construct(
-        VariableRenamer $variableRenamer,
-        PropertyDocBlockManipulator $propertyDocBlockManipulator
+        private VariableRenamer $variableRenamer,
+        private PropertyDocBlockManipulator $propertyDocBlockManipulator
     ) {
-        $this->variableRenamer = $variableRenamer;
-        $this->propertyDocBlockManipulator = $propertyDocBlockManipulator;
     }
 
     public function rename(ParamRename $paramRename): void

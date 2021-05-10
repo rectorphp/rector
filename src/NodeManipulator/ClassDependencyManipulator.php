@@ -25,64 +25,16 @@ use Rector\PostRector\ValueObject\PropertyMetadata;
 
 final class ClassDependencyManipulator
 {
-    /**
-     * @var ClassMethodAssignManipulator
-     */
-    private $classMethodAssignManipulator;
-
-    /**
-     * @var NodeFactory
-     */
-    private $nodeFactory;
-
-    /**
-     * @var ChildAndParentClassManipulator
-     */
-    private $childAndParentClassManipulator;
-
-    /**
-     * @var StmtsManipulator
-     */
-    private $stmtsManipulator;
-
-    /**
-     * @var ClassInsertManipulator
-     */
-    private $classInsertManipulator;
-
-    /**
-     * @var PhpVersionProvider
-     */
-    private $phpVersionProvider;
-
-    /**
-     * @var PropertyPresenceChecker
-     */
-    private $propertyPresenceChecker;
-
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
     public function __construct(
-        ChildAndParentClassManipulator $childAndParentClassManipulator,
-        ClassInsertManipulator $classInsertManipulator,
-        ClassMethodAssignManipulator $classMethodAssignManipulator,
-        NodeFactory $nodeFactory,
-        StmtsManipulator $stmtsManipulator,
-        PhpVersionProvider $phpVersionProvider,
-        PropertyPresenceChecker $propertyPresenceChecker,
-        NodeNameResolver $nodeNameResolver
+        private ChildAndParentClassManipulator $childAndParentClassManipulator,
+        private ClassInsertManipulator $classInsertManipulator,
+        private ClassMethodAssignManipulator $classMethodAssignManipulator,
+        private NodeFactory $nodeFactory,
+        private StmtsManipulator $stmtsManipulator,
+        private PhpVersionProvider $phpVersionProvider,
+        private PropertyPresenceChecker $propertyPresenceChecker,
+        private NodeNameResolver $nodeNameResolver
     ) {
-        $this->classMethodAssignManipulator = $classMethodAssignManipulator;
-        $this->nodeFactory = $nodeFactory;
-        $this->childAndParentClassManipulator = $childAndParentClassManipulator;
-        $this->stmtsManipulator = $stmtsManipulator;
-        $this->classInsertManipulator = $classInsertManipulator;
-        $this->phpVersionProvider = $phpVersionProvider;
-        $this->propertyPresenceChecker = $propertyPresenceChecker;
-        $this->nodeNameResolver = $nodeNameResolver;
     }
 
     public function addConstructorDependency(Class_ $class, PropertyMetadata $propertyMetadata): void

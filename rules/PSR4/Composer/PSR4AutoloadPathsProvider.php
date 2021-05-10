@@ -14,14 +14,9 @@ final class PSR4AutoloadPathsProvider
      */
     private $cachedComposerJsonPSR4AutoloadPaths = [];
 
-    /**
-     * @var JsonFileSystem
-     */
-    private $jsonFileSystem;
-
-    public function __construct(JsonFileSystem $jsonFileSystem)
-    {
-        $this->jsonFileSystem = $jsonFileSystem;
+    public function __construct(
+        private JsonFileSystem $jsonFileSystem
+    ) {
     }
 
     /**

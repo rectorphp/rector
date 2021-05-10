@@ -16,14 +16,9 @@ final class RenamedClassesCollector
      */
     private $oldToNewClass = [];
 
-    /**
-     * @var RenamedClassesDataCollector
-     */
-    private $renamedClassesDataCollector;
-
-    public function __construct(RenamedClassesDataCollector $renamedClassesDataCollector)
-    {
-        $this->renamedClassesDataCollector = $renamedClassesDataCollector;
+    public function __construct(
+        private RenamedClassesDataCollector $renamedClassesDataCollector
+    ) {
     }
 
     public function addClassRename(string $oldClass, string $newClass): void

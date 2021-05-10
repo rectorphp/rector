@@ -23,14 +23,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class DowngradePropertyPromotionRector extends AbstractRector
 {
-    /**
-     * @var ClassInsertManipulator
-     */
-    private $classInsertManipulator;
-
-    public function __construct(ClassInsertManipulator $classInsertManipulator)
-    {
-        $this->classInsertManipulator = $classInsertManipulator;
+    public function __construct(
+        private ClassInsertManipulator $classInsertManipulator
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

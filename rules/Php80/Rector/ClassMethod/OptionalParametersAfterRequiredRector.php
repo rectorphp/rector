@@ -25,29 +25,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class OptionalParametersAfterRequiredRector extends AbstractRector
 {
-    /**
-     * @var RequireOptionalParamResolver
-     */
-    private $requireOptionalParamResolver;
-
-    /**
-     * @var ArgumentSorter
-     */
-    private $argumentSorter;
-
-    /**
-     * @var MethodReflectionClassMethodResolver
-     */
-    private $methodReflectionClassMethodResolver;
-
     public function __construct(
-        RequireOptionalParamResolver $requireOptionalParamResolver,
-        ArgumentSorter $argumentSorter,
-        MethodReflectionClassMethodResolver $methodReflectionClassMethodResolver
+        private RequireOptionalParamResolver $requireOptionalParamResolver,
+        private ArgumentSorter $argumentSorter,
+        private MethodReflectionClassMethodResolver $methodReflectionClassMethodResolver
     ) {
-        $this->requireOptionalParamResolver = $requireOptionalParamResolver;
-        $this->argumentSorter = $argumentSorter;
-        $this->methodReflectionClassMethodResolver = $methodReflectionClassMethodResolver;
     }
 
     public function getRuleDefinition(): RuleDefinition

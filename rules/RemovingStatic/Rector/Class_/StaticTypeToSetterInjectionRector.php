@@ -36,20 +36,10 @@ final class StaticTypeToSetterInjectionRector extends AbstractRector implements 
      */
     private $staticTypes = [];
 
-    /**
-     * @var PropertyNaming
-     */
-    private $propertyNaming;
-
-    /**
-     * @var PhpDocTypeChanger
-     */
-    private $phpDocTypeChanger;
-
-    public function __construct(PropertyNaming $propertyNaming, PhpDocTypeChanger $phpDocTypeChanger)
-    {
-        $this->propertyNaming = $propertyNaming;
-        $this->phpDocTypeChanger = $phpDocTypeChanger;
+    public function __construct(
+        private PropertyNaming $propertyNaming,
+        private PhpDocTypeChanger $phpDocTypeChanger
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

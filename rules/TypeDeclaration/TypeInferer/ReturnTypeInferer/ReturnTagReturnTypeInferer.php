@@ -14,14 +14,9 @@ use Rector\TypeDeclaration\Contract\TypeInferer\ReturnTypeInfererInterface;
 
 final class ReturnTagReturnTypeInferer implements ReturnTypeInfererInterface
 {
-    /**
-     * @var PhpDocInfoFactory
-     */
-    private $phpDocInfoFactory;
-
-    public function __construct(PhpDocInfoFactory $phpDocInfoFactory)
-    {
-        $this->phpDocInfoFactory = $phpDocInfoFactory;
+    public function __construct(
+        private PhpDocInfoFactory $phpDocInfoFactory
+    ) {
     }
 
     /**

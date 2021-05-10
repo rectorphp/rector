@@ -19,36 +19,12 @@ use Rector\TypeDeclaration\ValueObject\NewType;
 
 final class ChildParamPopulator
 {
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var RectorChangeCollector
-     */
-    private $rectorChangeCollector;
-
-    /**
-     * @var NodeRepository
-     */
-    private $nodeRepository;
-
-    /**
-     * @var ChildTypeResolver
-     */
-    private $childTypeResolver;
-
     public function __construct(
-        NodeNameResolver $nodeNameResolver,
-        RectorChangeCollector $rectorChangeCollector,
-        NodeRepository $nodeRepository,
-        ChildTypeResolver $childTypeResolver
+        private NodeNameResolver $nodeNameResolver,
+        private RectorChangeCollector $rectorChangeCollector,
+        private NodeRepository $nodeRepository,
+        private ChildTypeResolver $childTypeResolver
     ) {
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->rectorChangeCollector = $rectorChangeCollector;
-        $this->nodeRepository = $nodeRepository;
-        $this->childTypeResolver = $childTypeResolver;
     }
 
     /**

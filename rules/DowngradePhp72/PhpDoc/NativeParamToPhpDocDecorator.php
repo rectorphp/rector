@@ -17,43 +17,13 @@ use Rector\StaticTypeMapper\StaticTypeMapper;
 
 final class NativeParamToPhpDocDecorator
 {
-    /**
-     * @var PhpDocInfoFactory
-     */
-    private $phpDocInfoFactory;
-
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var StaticTypeMapper
-     */
-    private $staticTypeMapper;
-
-    /**
-     * @var PhpDocTypeChanger
-     */
-    private $phpDocTypeChanger;
-
-    /**
-     * @var ValueResolver
-     */
-    private $valueResolver;
-
     public function __construct(
-        PhpDocInfoFactory $phpDocInfoFactory,
-        NodeNameResolver $nodeNameResolver,
-        StaticTypeMapper $staticTypeMapper,
-        PhpDocTypeChanger $phpDocTypeChanger,
-        ValueResolver $valueResolver
+        private PhpDocInfoFactory $phpDocInfoFactory,
+        private NodeNameResolver $nodeNameResolver,
+        private StaticTypeMapper $staticTypeMapper,
+        private PhpDocTypeChanger $phpDocTypeChanger,
+        private ValueResolver $valueResolver
     ) {
-        $this->phpDocInfoFactory = $phpDocInfoFactory;
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->staticTypeMapper = $staticTypeMapper;
-        $this->phpDocTypeChanger = $phpDocTypeChanger;
-        $this->valueResolver = $valueResolver;
     }
 
     public function decorate(ClassMethod $classMethod, Param $param): void

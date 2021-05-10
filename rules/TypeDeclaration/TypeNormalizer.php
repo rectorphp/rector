@@ -27,20 +27,10 @@ final class TypeNormalizer
      */
     private $collectedNestedArrayTypes = [];
 
-    /**
-     * @var TypeFactory
-     */
-    private $typeFactory;
-
-    /**
-     * @var UnionTypeFactory
-     */
-    private $unionTypeFactory;
-
-    public function __construct(TypeFactory $typeFactory, UnionTypeFactory $unionTypeFactory)
-    {
-        $this->typeFactory = $typeFactory;
-        $this->unionTypeFactory = $unionTypeFactory;
+    public function __construct(
+        private TypeFactory $typeFactory,
+        private UnionTypeFactory $unionTypeFactory
+    ) {
     }
 
     public function convertConstantArrayTypeToArrayType(ConstantArrayType $constantArrayType): ?ArrayType

@@ -19,14 +19,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class AddClosureReturnTypeRector extends AbstractRector
 {
-    /**
-     * @var ReturnTypeInferer
-     */
-    private $returnTypeInferer;
-
-    public function __construct(ReturnTypeInferer $returnTypeInferer)
-    {
-        $this->returnTypeInferer = $returnTypeInferer;
+    public function __construct(
+        private ReturnTypeInferer $returnTypeInferer
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

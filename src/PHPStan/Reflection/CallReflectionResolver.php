@@ -28,36 +28,12 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 
 final class CallReflectionResolver
 {
-    /**
-     * @var ReflectionProvider
-     */
-    private $reflectionProvider;
-
-    /**
-     * @var NodeTypeResolver
-     */
-    private $nodeTypeResolver;
-
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var TypeToCallReflectionResolverRegistry
-     */
-    private $typeToCallReflectionResolverRegistry;
-
     public function __construct(
-        NodeNameResolver $nodeNameResolver,
-        NodeTypeResolver $nodeTypeResolver,
-        ReflectionProvider $reflectionProvider,
-        TypeToCallReflectionResolverRegistry $typeToCallReflectionResolverRegistry
+        private NodeNameResolver $nodeNameResolver,
+        private NodeTypeResolver $nodeTypeResolver,
+        private ReflectionProvider $reflectionProvider,
+        private TypeToCallReflectionResolverRegistry $typeToCallReflectionResolverRegistry
     ) {
-        $this->reflectionProvider = $reflectionProvider;
-        $this->nodeTypeResolver = $nodeTypeResolver;
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->typeToCallReflectionResolverRegistry = $typeToCallReflectionResolverRegistry;
     }
 
     public function resolveConstructor(New_ $new): ?MethodReflection

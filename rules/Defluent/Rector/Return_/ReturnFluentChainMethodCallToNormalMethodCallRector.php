@@ -26,50 +26,14 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class ReturnFluentChainMethodCallToNormalMethodCallRector extends AbstractRector
 {
-    /**
-     * @var ReturnFluentMethodCallFactory
-     */
-    private $returnFluentMethodCallFactory;
-
-    /**
-     * @var FluentMethodCallsFactory
-     */
-    private $fluentMethodCallsFactory;
-
-    /**
-     * @var SeparateReturnMethodCallFactory
-     */
-    private $separateReturnMethodCallFactory;
-
-    /**
-     * @var FluentNodeRemover
-     */
-    private $fluentNodeRemover;
-
-    /**
-     * @var MethodCallSkipAnalyzer
-     */
-    private $methodCallSkipAnalyzer;
-
-    /**
-     * @var FluentMethodCallSkipper
-     */
-    private $fluentMethodCallSkipper;
-
     public function __construct(
-        ReturnFluentMethodCallFactory $returnFluentMethodCallFactory,
-        FluentMethodCallsFactory $fluentMethodCallsFactory,
-        SeparateReturnMethodCallFactory $separateReturnMethodCallFactory,
-        FluentNodeRemover $fluentNodeRemover,
-        MethodCallSkipAnalyzer $methodCallSkipAnalyzer,
-        FluentMethodCallSkipper $fluentMethodCallSkipper
+        private ReturnFluentMethodCallFactory $returnFluentMethodCallFactory,
+        private FluentMethodCallsFactory $fluentMethodCallsFactory,
+        private SeparateReturnMethodCallFactory $separateReturnMethodCallFactory,
+        private FluentNodeRemover $fluentNodeRemover,
+        private MethodCallSkipAnalyzer $methodCallSkipAnalyzer,
+        private FluentMethodCallSkipper $fluentMethodCallSkipper
     ) {
-        $this->returnFluentMethodCallFactory = $returnFluentMethodCallFactory;
-        $this->fluentMethodCallsFactory = $fluentMethodCallsFactory;
-        $this->separateReturnMethodCallFactory = $separateReturnMethodCallFactory;
-        $this->fluentNodeRemover = $fluentNodeRemover;
-        $this->methodCallSkipAnalyzer = $methodCallSkipAnalyzer;
-        $this->fluentMethodCallSkipper = $fluentMethodCallSkipper;
     }
 
     public function getRuleDefinition(): RuleDefinition

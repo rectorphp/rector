@@ -8,26 +8,11 @@ use PHPStan\Type\ObjectType;
 
 final class ReplaceParentCallByPropertyCall
 {
-    /**
-     * @var string
-     */
-    private $class;
-
-    /**
-     * @var string
-     */
-    private $method;
-
-    /**
-     * @var string
-     */
-    private $property;
-
-    public function __construct(string $class, string $method, string $property)
-    {
-        $this->class = $class;
-        $this->method = $method;
-        $this->property = $property;
+    public function __construct(
+        private string $class,
+        private string $method,
+        private string $property
+    ) {
     }
 
     public function getObjectType(): ObjectType

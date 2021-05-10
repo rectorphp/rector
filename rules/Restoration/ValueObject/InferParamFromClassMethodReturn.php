@@ -6,26 +6,11 @@ namespace Rector\Restoration\ValueObject;
 
 final class InferParamFromClassMethodReturn
 {
-    /**
-     * @var string
-     */
-    private $class;
-
-    /**
-     * @var string
-     */
-    private $paramMethod;
-
-    /**
-     * @var string
-     */
-    private $returnMethod;
-
-    public function __construct(string $class, string $paramMethod, string $returnMethod)
-    {
-        $this->class = $class;
-        $this->paramMethod = $paramMethod;
-        $this->returnMethod = $returnMethod;
+    public function __construct(
+        private string $class,
+        private string $paramMethod,
+        private string $returnMethod
+    ) {
     }
 
     public function getClass(): string

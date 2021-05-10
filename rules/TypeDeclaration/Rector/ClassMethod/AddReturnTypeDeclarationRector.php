@@ -32,14 +32,9 @@ final class AddReturnTypeDeclarationRector extends AbstractRector implements Con
      */
     private $methodReturnTypes = [];
 
-    /**
-     * @var TypeComparator
-     */
-    private $typeComparator;
-
-    public function __construct(TypeComparator $typeComparator)
-    {
-        $this->typeComparator = $typeComparator;
+    public function __construct(
+        private TypeComparator $typeComparator
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

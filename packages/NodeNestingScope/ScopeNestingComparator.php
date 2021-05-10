@@ -17,24 +17,14 @@ use Rector\NodeNestingScope\ValueObject\ControlStructure;
 final class ScopeNestingComparator
 {
     /**
-     * @var BetterNodeFinder
-     */
-    private $betterNodeFinder;
-
-    /**
-     * @var NodeComparator
-     */
-    private $nodeComparator;
-
-    /**
      * @var Expr[]
      */
     private $doubleIfBranchExprs = [];
 
-    public function __construct(BetterNodeFinder $betterNodeFinder, NodeComparator $nodeComparator)
-    {
-        $this->betterNodeFinder = $betterNodeFinder;
-        $this->nodeComparator = $nodeComparator;
+    public function __construct(
+        private BetterNodeFinder $betterNodeFinder,
+        private NodeComparator $nodeComparator
+    ) {
     }
 
     public function areReturnScopeNested(Return_ $return, Node $secondNodeScopeNode): bool

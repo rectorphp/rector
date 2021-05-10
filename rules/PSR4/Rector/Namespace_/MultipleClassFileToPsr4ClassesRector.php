@@ -22,22 +22,10 @@ use Symplify\SmartFileSystem\SmartFileInfo;
  */
 final class MultipleClassFileToPsr4ClassesRector extends AbstractRector
 {
-    /**
-     * @var NamespaceManipulator
-     */
-    private $namespaceManipulator;
-
-    /**
-     * @var FileInfoDeletionAnalyzer
-     */
-    private $fileInfoDeletionAnalyzer;
-
     public function __construct(
-        NamespaceManipulator $namespaceManipulator,
-        FileInfoDeletionAnalyzer $fileInfoDeletionAnalyzer
+        private NamespaceManipulator $namespaceManipulator,
+        private FileInfoDeletionAnalyzer $fileInfoDeletionAnalyzer
     ) {
-        $this->namespaceManipulator = $namespaceManipulator;
-        $this->fileInfoDeletionAnalyzer = $fileInfoDeletionAnalyzer;
     }
 
     public function getRuleDefinition(): RuleDefinition

@@ -13,14 +13,9 @@ use Rector\Generics\ValueObject\ChildParentClassReflections;
 
 final class UnnededMethodTagValueNodeFilter
 {
-    /**
-     * @var ClassMethodAnalyzer
-     */
-    private $classMethodAnalyzer;
-
-    public function __construct(ClassMethodAnalyzer $classMethodAnalyzer)
-    {
-        $this->classMethodAnalyzer = $classMethodAnalyzer;
+    public function __construct(
+        private ClassMethodAnalyzer $classMethodAnalyzer
+    ) {
     }
 
     /**

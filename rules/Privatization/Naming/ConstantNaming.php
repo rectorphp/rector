@@ -10,14 +10,9 @@ use Stringy\Stringy;
 
 final class ConstantNaming
 {
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    public function __construct(NodeNameResolver $nodeNameResolver)
-    {
-        $this->nodeNameResolver = $nodeNameResolver;
+    public function __construct(
+        private NodeNameResolver $nodeNameResolver
+    ) {
     }
 
     public function createFromProperty(PropertyProperty $propertyProperty): string

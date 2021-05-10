@@ -12,22 +12,12 @@ use Symplify\PackageBuilder\Console\ShellCode;
 final class MissingRectorRulesReporter
 {
     /**
-     * @var SymfonyStyle
-     */
-    private $symfonyStyle;
-
-    /**
-     * @var RectorInterface[]
-     */
-    private $rectors = [];
-
-    /**
      * @param RectorInterface[] $rectors
      */
-    public function __construct(array $rectors, SymfonyStyle $symfonyStyle)
-    {
-        $this->symfonyStyle = $symfonyStyle;
-        $this->rectors = $rectors;
+    public function __construct(
+        private array $rectors,
+        private SymfonyStyle $symfonyStyle
+    ) {
     }
 
     public function reportIfMissing(): ?int

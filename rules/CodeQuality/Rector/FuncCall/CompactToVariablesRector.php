@@ -27,29 +27,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class CompactToVariablesRector extends AbstractRector
 {
-    /**
-     * @var CompactConverter
-     */
-    private $compactConverter;
-
-    /**
-     * @var ArrayItemsAnalyzer
-     */
-    private $arrayItemsAnalyzer;
-
-    /**
-     * @var ArrayCompacter
-     */
-    private $arrayCompacter;
-
     public function __construct(
-        CompactConverter $compactConverter,
-        ArrayItemsAnalyzer $arrayItemsAnalyzer,
-        ArrayCompacter $arrayCompacter
+        private CompactConverter $compactConverter,
+        private ArrayItemsAnalyzer $arrayItemsAnalyzer,
+        private ArrayCompacter $arrayCompacter
     ) {
-        $this->compactConverter = $compactConverter;
-        $this->arrayItemsAnalyzer = $arrayItemsAnalyzer;
-        $this->arrayCompacter = $arrayCompacter;
     }
 
     public function getRuleDefinition(): RuleDefinition

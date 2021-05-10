@@ -35,20 +35,10 @@ final class NewToConstructorInjectionRector extends AbstractRector implements Co
      */
     private $constructorInjectionObjectTypes = [];
 
-    /**
-     * @var PropertyFetchFactory
-     */
-    private $propertyFetchFactory;
-
-    /**
-     * @var PropertyNaming
-     */
-    private $propertyNaming;
-
-    public function __construct(PropertyFetchFactory $propertyFetchFactory, PropertyNaming $propertyNaming)
-    {
-        $this->propertyFetchFactory = $propertyFetchFactory;
-        $this->propertyNaming = $propertyNaming;
+    public function __construct(
+        private PropertyFetchFactory $propertyFetchFactory,
+        private PropertyNaming $propertyNaming
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

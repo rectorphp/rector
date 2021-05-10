@@ -9,14 +9,9 @@ use Symplify\SimplePhpDocParser\PhpDocNodeTraverser;
 
 final class ChangedPhpDocNodeTraverserFactory
 {
-    /**
-     * @var ChangedPhpDocNodeVisitor
-     */
-    private $changedPhpDocNodeVisitor;
-
-    public function __construct(ChangedPhpDocNodeVisitor $changedPhpDocNodeVisitor)
-    {
-        $this->changedPhpDocNodeVisitor = $changedPhpDocNodeVisitor;
+    public function __construct(
+        private ChangedPhpDocNodeVisitor $changedPhpDocNodeVisitor
+    ) {
     }
 
     public function create(): PhpDocNodeTraverser

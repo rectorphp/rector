@@ -28,20 +28,10 @@ final class MakeIsserClassMethodNameStartWithIsRector extends AbstractRector
      */
     private const ISSER_NAME_REGEX = '#^(is|has|was|must|does|have|should|__)#';
 
-    /**
-     * @var MethodNameResolver
-     */
-    private $methodNameResolver;
-
-    /**
-     * @var MethodCallRenamer
-     */
-    private $methodCallRenamer;
-
-    public function __construct(MethodNameResolver $methodNameResolver, MethodCallRenamer $methodCallRenamer)
-    {
-        $this->methodNameResolver = $methodNameResolver;
-        $this->methodCallRenamer = $methodCallRenamer;
+    public function __construct(
+        private MethodNameResolver $methodNameResolver,
+        private MethodCallRenamer $methodCallRenamer
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

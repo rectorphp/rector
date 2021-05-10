@@ -34,61 +34,19 @@ use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 final class ClassMethodAssignManipulator
 {
     /**
-     * @var VariableManipulator
-     */
-    private $variableManipulator;
-
-    /**
-     * @var SimpleCallableNodeTraverser
-     */
-    private $simpleCallableNodeTraverser;
-
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var NodeFactory
-     */
-    private $nodeFactory;
-
-    /**
-     * @var BetterNodeFinder
-     */
-    private $betterNodeFinder;
-
-    /**
-     * @var NodeComparator
-     */
-    private $nodeComparator;
-
-    /**
-     * @var CallReflectionResolver
-     */
-    private $callReflectionResolver;
-
-    /**
      * @var array<string, string[]>
      */
     private $alreadyAddedClassMethodNames = [];
 
     public function __construct(
-        BetterNodeFinder $betterNodeFinder,
-        SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
-        NodeFactory $nodeFactory,
-        NodeNameResolver $nodeNameResolver,
-        VariableManipulator $variableManipulator,
-        CallReflectionResolver $callReflectionResolver,
-        NodeComparator $nodeComparator
+        private BetterNodeFinder $betterNodeFinder,
+        private SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
+        private NodeFactory $nodeFactory,
+        private NodeNameResolver $nodeNameResolver,
+        private VariableManipulator $variableManipulator,
+        private CallReflectionResolver $callReflectionResolver,
+        private NodeComparator $nodeComparator
     ) {
-        $this->variableManipulator = $variableManipulator;
-        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->nodeFactory = $nodeFactory;
-        $this->betterNodeFinder = $betterNodeFinder;
-        $this->callReflectionResolver = $callReflectionResolver;
-        $this->nodeComparator = $nodeComparator;
     }
 
     /**

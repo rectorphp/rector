@@ -12,6 +12,7 @@ use Rector\Core\ValueObject\PhpVersion;
 use Rector\DeadCode\Rector\Stmt\RemoveUnreachableStatementRector;
 use Rector\Nette\Set\NetteSetList;
 use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
+use Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector;
 use Rector\PHPUnit\Rector\Class_\AddSeeTestAnnotationRector;
 use Rector\PHPUnit\Set\PHPUnitSetList;
 use Rector\Privatization\Rector\Property\PrivatizeLocalPropertyToPrivatePropertyRector;
@@ -24,37 +25,41 @@ use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     // include sets
-    $containerConfigurator->import(SetList::CODING_STYLE);
-    $containerConfigurator->import(SetList::CODE_QUALITY);
-    $containerConfigurator->import(SetList::CODE_QUALITY_STRICT);
-    $containerConfigurator->import(SetList::DEAD_CODE);
-    $containerConfigurator->import(SetList::PRIVATIZATION);
-    $containerConfigurator->import(SetList::NAMING);
-    $containerConfigurator->import(SetList::TYPE_DECLARATION);
-    $containerConfigurator->import(SetList::PHP_71);
-    $containerConfigurator->import(SetList::PHP_72);
-    $containerConfigurator->import(SetList::PHP_73);
-    $containerConfigurator->import(SetList::EARLY_RETURN);
-    $containerConfigurator->import(SetList::TYPE_DECLARATION_STRICT);
-    $containerConfigurator->import(NetteSetList::NETTE_UTILS_CODE_QUALITY);
-    $containerConfigurator->import(PHPUnitSetList::PHPUNIT_CODE_QUALITY);
+//    $containerConfigurator->import(SetList::CODING_STYLE);
+//    $containerConfigurator->import(SetList::CODE_QUALITY);
+//    $containerConfigurator->import(SetList::CODE_QUALITY_STRICT);
+//    $containerConfigurator->import(SetList::DEAD_CODE);
+//    $containerConfigurator->import(SetList::PRIVATIZATION);
+//    $containerConfigurator->import(SetList::NAMING);
+//    $containerConfigurator->import(SetList::TYPE_DECLARATION);
+//    $containerConfigurator->import(SetList::PHP_71);
+//    $containerConfigurator->import(SetList::PHP_72);
+//    $containerConfigurator->import(SetList::PHP_73);
+//    $containerConfigurator->import(SetList::EARLY_RETURN);
+//    $containerConfigurator->import(SetList::TYPE_DECLARATION_STRICT);
+//    $containerConfigurator->import(NetteSetList::NETTE_UTILS_CODE_QUALITY);
+//    $containerConfigurator->import(PHPUnitSetList::PHPUNIT_CODE_QUALITY);
 
     $services = $containerConfigurator->services();
 
-    $configuration = ValueObjectInliner::inline([
-        new InferParamFromClassMethodReturn(AbstractRector::class, 'refactor', 'getNodeTypes'),
-    ]);
-    $services->set(InferParamFromClassMethodReturnRector::class)
-        ->call('configure', [[
-            InferParamFromClassMethodReturnRector::INFER_PARAMS_FROM_CLASS_METHOD_RETURNS => $configuration,
-        ]]);
-
-    $services->set(PreferThisOrSelfMethodCallRector::class)
-        ->call('configure', [[
-            PreferThisOrSelfMethodCallRector::TYPE_TO_PREFERENCE => [
-                TestCase::class => PreferenceSelfThis::PREFER_THIS,
-            ],
-        ]]);
+    $services->set(ClassPropertyAssignToConstructorPromotionRector::class);
+//
+//    $configuration = ValueObjectInliner::inline([
+//        new InferParamFromClassMethodReturn(AbstractRector::class, 'refactor', 'getNodeTypes'),
+//    ]);
+//    $services->set(InferParamFromClassMethodReturnRector::class)
+//        ->call('configure', [[
+//            InferParamFromClassMethodReturnRector::INFER_PARAMS_FROM_CLASS_METHOD_RETURNS => $configuration,
+//        ]]);
+//
+//    $services->set(ClassPropertyAssignToConstructorPromotionRector::class);
+//
+//    $services->set(PreferThisOrSelfMethodCallRector::class)
+//        ->call('configure', [[
+//            PreferThisOrSelfMethodCallRector::TYPE_TO_PREFERENCE => [
+//                TestCase::class => PreferenceSelfThis::PREFER_THIS,
+//            ],
+//        ]]);
 
     $parameters = $containerConfigurator->parameters();
 

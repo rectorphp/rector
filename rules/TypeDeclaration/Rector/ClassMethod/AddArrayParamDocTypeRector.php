@@ -24,29 +24,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class AddArrayParamDocTypeRector extends AbstractRector
 {
-    /**
-     * @var ParamTypeInferer
-     */
-    private $paramTypeInferer;
-
-    /**
-     * @var PhpDocTypeChanger
-     */
-    private $phpDocTypeChanger;
-
-    /**
-     * @var ParamTagRemover
-     */
-    private $paramTagRemover;
-
     public function __construct(
-        ParamTypeInferer $paramTypeInferer,
-        PhpDocTypeChanger $phpDocTypeChanger,
-        ParamTagRemover $paramTagRemover
+        private ParamTypeInferer $paramTypeInferer,
+        private PhpDocTypeChanger $phpDocTypeChanger,
+        private ParamTagRemover $paramTagRemover
     ) {
-        $this->paramTypeInferer = $paramTypeInferer;
-        $this->phpDocTypeChanger = $phpDocTypeChanger;
-        $this->paramTagRemover = $paramTagRemover;
     }
 
     public function getRuleDefinition(): RuleDefinition

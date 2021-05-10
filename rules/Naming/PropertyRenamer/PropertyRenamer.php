@@ -11,22 +11,10 @@ use Rector\Naming\ValueObject\PropertyRename;
 
 final class PropertyRenamer
 {
-    /**
-     * @var PropertyFetchRenamer
-     */
-    private $propertyFetchRenamer;
-
-    /**
-     * @var PropertyRenameGuard
-     */
-    private $propertyRenameGuard;
-
     public function __construct(
-        PropertyRenameGuard $propertyRenameGuard,
-        PropertyFetchRenamer $propertyFetchRenamer
+        private PropertyRenameGuard $propertyRenameGuard,
+        private PropertyFetchRenamer $propertyFetchRenamer
     ) {
-        $this->propertyRenameGuard = $propertyRenameGuard;
-        $this->propertyFetchRenamer = $propertyFetchRenamer;
     }
 
     public function rename(PropertyRename $propertyRename): ?Property

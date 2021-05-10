@@ -8,20 +8,10 @@ use Rector\Core\Contract\Rector\RectorInterface;
 
 final class RectorWithLineChange
 {
-    /**
-     * @var int
-     */
-    private $line;
-
-    /**
-     * @var RectorInterface
-     */
-    private $rector;
-
-    public function __construct(RectorInterface $rector, int $line)
-    {
-        $this->rector = $rector;
-        $this->line = $line;
+    public function __construct(
+        private RectorInterface $rector,
+        private int $line
+    ) {
     }
 
     /**

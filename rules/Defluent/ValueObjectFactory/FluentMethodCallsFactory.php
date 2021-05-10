@@ -11,22 +11,10 @@ use Rector\Defluent\ValueObject\FluentMethodCalls;
 
 final class FluentMethodCallsFactory
 {
-    /**
-     * @var FluentChainMethodCallNodeAnalyzer
-     */
-    private $fluentChainMethodCallNodeAnalyzer;
-
-    /**
-     * @var SameClassMethodCallAnalyzer
-     */
-    private $sameClassMethodCallAnalyzer;
-
     public function __construct(
-        FluentChainMethodCallNodeAnalyzer $fluentChainMethodCallNodeAnalyzer,
-        SameClassMethodCallAnalyzer $sameClassMethodCallAnalyzer
+        private FluentChainMethodCallNodeAnalyzer $fluentChainMethodCallNodeAnalyzer,
+        private SameClassMethodCallAnalyzer $sameClassMethodCallAnalyzer
     ) {
-        $this->fluentChainMethodCallNodeAnalyzer = $fluentChainMethodCallNodeAnalyzer;
-        $this->sameClassMethodCallAnalyzer = $sameClassMethodCallAnalyzer;
     }
 
     public function createFromLastMethodCall(MethodCall $lastMethodCall): ?FluentMethodCalls

@@ -13,29 +13,11 @@ use Symplify\ComposerJsonManipulator\ComposerJsonFactory;
  */
 final class ProjectComposerJsonPhpVersionResolver
 {
-    /**
-     * @var ComposerJsonFactory
-     */
-    private $composerJsonFactory;
-
-    /**
-     * @var VersionParser
-     */
-    private $versionParser;
-
-    /**
-     * @var PhpVersionFactory
-     */
-    private $phpVersionFactory;
-
     public function __construct(
-        ComposerJsonFactory $composerJsonFactory,
-        VersionParser $versionParser,
-        PhpVersionFactory $phpVersionFactory
+        private ComposerJsonFactory $composerJsonFactory,
+        private VersionParser $versionParser,
+        private PhpVersionFactory $phpVersionFactory
     ) {
-        $this->composerJsonFactory = $composerJsonFactory;
-        $this->versionParser = $versionParser;
-        $this->phpVersionFactory = $phpVersionFactory;
     }
 
     public function resolve(string $composerJson): ?int

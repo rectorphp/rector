@@ -14,14 +14,9 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class FuncCallNameResolver implements NodeNameResolverInterface
 {
-    /**
-     * @var ReflectionProvider
-     */
-    private $reflectionProvider;
-
-    public function __construct(ReflectionProvider $reflectionProvider)
-    {
-        $this->reflectionProvider = $reflectionProvider;
+    public function __construct(
+        private ReflectionProvider $reflectionProvider
+    ) {
     }
 
     /**

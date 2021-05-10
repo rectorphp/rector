@@ -29,57 +29,15 @@ final class NameImporter
      */
     private $aliasedUses = [];
 
-    /**
-     * @var StaticTypeMapper
-     */
-    private $staticTypeMapper;
-
-    /**
-     * @var AliasUsesResolver
-     */
-    private $aliasUsesResolver;
-
-    /**
-     * @var ClassNameImportSkipper
-     */
-    private $classNameImportSkipper;
-
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var ParameterProvider
-     */
-    private $parameterProvider;
-
-    /**
-     * @var UseNodesToAddCollector
-     */
-    private $useNodesToAddCollector;
-
-    /**
-     * @var ReflectionProvider
-     */
-    private $reflectionProvider;
-
     public function __construct(
-        AliasUsesResolver $aliasUsesResolver,
-        ClassNameImportSkipper $classNameImportSkipper,
-        NodeNameResolver $nodeNameResolver,
-        ParameterProvider $parameterProvider,
-        StaticTypeMapper $staticTypeMapper,
-        UseNodesToAddCollector $useNodesToAddCollector,
-        ReflectionProvider $reflectionProvider
+        private AliasUsesResolver $aliasUsesResolver,
+        private ClassNameImportSkipper $classNameImportSkipper,
+        private NodeNameResolver $nodeNameResolver,
+        private ParameterProvider $parameterProvider,
+        private StaticTypeMapper $staticTypeMapper,
+        private UseNodesToAddCollector $useNodesToAddCollector,
+        private ReflectionProvider $reflectionProvider
     ) {
-        $this->staticTypeMapper = $staticTypeMapper;
-        $this->aliasUsesResolver = $aliasUsesResolver;
-        $this->classNameImportSkipper = $classNameImportSkipper;
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->parameterProvider = $parameterProvider;
-        $this->useNodesToAddCollector = $useNodesToAddCollector;
-        $this->reflectionProvider = $reflectionProvider;
     }
 
     public function importName(Name $name): ?Name

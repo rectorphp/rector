@@ -53,11 +53,6 @@ final class EregToPcreTransformer
     private const MAXIMAL_NUMBER_PART = 'maximal_number';
 
     /**
-     * @var string
-     */
-    private $pcreDelimiter;
-
-    /**
      * @var string[]
      */
     private $icache = [];
@@ -71,9 +66,9 @@ final class EregToPcreTransformer
      * Change this via services configuratoin in rector.php if you need it
      * Single type is chosen to prevent every regular with different delimiter.
      */
-    public function __construct(string $pcreDelimiter = '#')
-    {
-        $this->pcreDelimiter = $pcreDelimiter;
+    public function __construct(
+        private string $pcreDelimiter = '#'
+    ) {
     }
 
     public function transform(string $ereg, bool $isCaseInsensitive): string

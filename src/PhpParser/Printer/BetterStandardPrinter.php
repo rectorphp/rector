@@ -70,21 +70,11 @@ final class BetterStandardPrinter extends Standard
     private $tabOrSpaceIndentCharacter = ' ';
 
     /**
-     * @var DocBlockUpdater
-     */
-    private $docBlockUpdater;
-
-    /**
-     * @var IndentCharacterDetector
-     */
-    private $indentCharacterDetector;
-
-    /**
      * @param mixed[] $options
      */
     public function __construct(
-        IndentCharacterDetector $indentCharacterDetector,
-        DocBlockUpdater $docBlockUpdater,
+        private IndentCharacterDetector $indentCharacterDetector,
+        private DocBlockUpdater $docBlockUpdater,
         array $options = []
     ) {
         parent::__construct($options);
@@ -94,9 +84,6 @@ final class BetterStandardPrinter extends Standard
         $this->insertionMap['Stmt_ClassMethod->returnType'] = [')', false, ': ', null];
         $this->insertionMap['Stmt_Function->returnType'] = [')', false, ': ', null];
         $this->insertionMap['Expr_Closure->returnType'] = [')', false, ': ', null];
-
-        $this->indentCharacterDetector = $indentCharacterDetector;
-        $this->docBlockUpdater = $docBlockUpdater;
     }
 
     /**

@@ -21,14 +21,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class NarrowUnionTypeDocRector extends AbstractRector
 {
-    /**
-     * @var UnionTypeAnalyzer
-     */
-    private $unionTypeAnalyzer;
-
-    public function __construct(UnionTypeAnalyzer $unionTypeAnalyzer)
-    {
-        $this->unionTypeAnalyzer = $unionTypeAnalyzer;
+    public function __construct(
+        private UnionTypeAnalyzer $unionTypeAnalyzer
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

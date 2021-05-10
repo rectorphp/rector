@@ -30,27 +30,15 @@ final class BetterPhpDocParser extends PhpDocParser
      */
     private $privatesCaller;
 
-    /**
-     * @var DoctrineAnnotationDecorator
-     */
-    private $doctrineAnnotationDecorator;
-
-    /**
-     * @var TokenIteratorFactory
-     */
-    private $tokenIteratorFactory;
-
     public function __construct(
         TypeParser $typeParser,
         ConstExprParser $constExprParser,
-        TokenIteratorFactory $tokenIteratorFactory,
-        DoctrineAnnotationDecorator $doctrineAnnotationDecorator
+        private TokenIteratorFactory $tokenIteratorFactory,
+        private DoctrineAnnotationDecorator $doctrineAnnotationDecorator
     ) {
         parent::__construct($typeParser, $constExprParser);
 
         $this->privatesCaller = new PrivatesCaller();
-        $this->doctrineAnnotationDecorator = $doctrineAnnotationDecorator;
-        $this->tokenIteratorFactory = $tokenIteratorFactory;
     }
 
     public function parse(TokenIterator $tokenIterator): PhpDocNode

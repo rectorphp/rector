@@ -23,57 +23,15 @@ use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
 final class AssignToPropertyTypeInferer
 {
-    /**
-     * @var ConstructorAssignDetector
-     */
-    private $constructorAssignDetector;
-
-    /**
-     * @var PropertyAssignMatcher
-     */
-    private $propertyAssignMatcher;
-
-    /**
-     * @var PropertyDefaultAssignDetector
-     */
-    private $propertyDefaultAssignDetector;
-
-    /**
-     * @var NullTypeAssignDetector
-     */
-    private $nullTypeAssignDetector;
-
-    /**
-     * @var SimpleCallableNodeTraverser
-     */
-    private $simpleCallableNodeTraverser;
-
-    /**
-     * @var TypeFactory
-     */
-    private $typeFactory;
-
-    /**
-     * @var NodeTypeResolver
-     */
-    private $nodeTypeResolver;
-
     public function __construct(
-        ConstructorAssignDetector $constructorAssignDetector,
-        PropertyAssignMatcher $propertyAssignMatcher,
-        PropertyDefaultAssignDetector $propertyDefaultAssignDetector,
-        NullTypeAssignDetector $nullTypeAssignDetector,
-        SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
-        TypeFactory $typeFactory,
-        NodeTypeResolver $nodeTypeResolver
+        private ConstructorAssignDetector $constructorAssignDetector,
+        private PropertyAssignMatcher $propertyAssignMatcher,
+        private PropertyDefaultAssignDetector $propertyDefaultAssignDetector,
+        private NullTypeAssignDetector $nullTypeAssignDetector,
+        private SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
+        private TypeFactory $typeFactory,
+        private NodeTypeResolver $nodeTypeResolver
     ) {
-        $this->constructorAssignDetector = $constructorAssignDetector;
-        $this->propertyAssignMatcher = $propertyAssignMatcher;
-        $this->propertyDefaultAssignDetector = $propertyDefaultAssignDetector;
-        $this->nullTypeAssignDetector = $nullTypeAssignDetector;
-        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
-        $this->typeFactory = $typeFactory;
-        $this->nodeTypeResolver = $nodeTypeResolver;
     }
 
     public function inferPropertyInClassLike(string $propertyName, ClassLike $classLike): Type

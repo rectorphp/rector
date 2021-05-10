@@ -9,26 +9,11 @@ use PHPStan\Type\Type;
 
 final class NestedArrayType
 {
-    /**
-     * @var int
-     */
-    private $arrayNestingLevel;
-
-    /**
-     * @var Type
-     */
-    private $type;
-
-    /**
-     * @var Type|null
-     */
-    private $keyType;
-
-    public function __construct(Type $valueType, int $arrayNestingLevel, ?Type $keyType = null)
-    {
-        $this->type = $valueType;
-        $this->arrayNestingLevel = $arrayNestingLevel;
-        $this->keyType = $keyType;
+    public function __construct(
+        private Type $type,
+        private int $arrayNestingLevel,
+        private ?Type $keyType = null
+    ) {
     }
 
     public function getType(): Type

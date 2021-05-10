@@ -17,29 +17,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 final class NodeRemovingPostRector extends AbstractPostRector
 {
-    /**
-     * @var NodesToRemoveCollector
-     */
-    private $nodesToRemoveCollector;
-
-    /**
-     * @var NodeFactory
-     */
-    private $nodeFactory;
-
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
     public function __construct(
-        NodeFactory $nodeFactory,
-        NodeNameResolver $nodeNameResolver,
-        NodesToRemoveCollector $nodesToRemoveCollector
+        private NodeFactory $nodeFactory,
+        private NodeNameResolver $nodeNameResolver,
+        private NodesToRemoveCollector $nodesToRemoveCollector
     ) {
-        $this->nodesToRemoveCollector = $nodesToRemoveCollector;
-        $this->nodeFactory = $nodeFactory;
-        $this->nodeNameResolver = $nodeNameResolver;
     }
 
     public function getPriority(): int

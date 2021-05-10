@@ -14,22 +14,10 @@ use Rector\Core\ValueObject\Application\File;
 
 final class RectorChangeCollector
 {
-    /**
-     * @var CurrentRectorProvider
-     */
-    private $currentRectorProvider;
-
-    /**
-     * @var CurrentFileProvider
-     */
-    private $currentFileProvider;
-
     public function __construct(
-        CurrentRectorProvider $currentRectorProvider,
-        CurrentFileProvider $currentFileProvider
+        private CurrentRectorProvider $currentRectorProvider,
+        private CurrentFileProvider $currentFileProvider
     ) {
-        $this->currentRectorProvider = $currentRectorProvider;
-        $this->currentFileProvider = $currentFileProvider;
     }
 
     public function notifyNodeFileInfo(Node $node): void

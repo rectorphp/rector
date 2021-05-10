@@ -97,43 +97,13 @@ final class PhpSpecPromisesToPHPUnitAssertRector extends AbstractPhpSpecToPHPUni
      */
     private $testedObjectPropertyFetch;
 
-    /**
-     * @var PhpSpecRenaming
-     */
-    private $phpSpecRenaming;
-
-    /**
-     * @var MatchersManipulator
-     */
-    private $matchersManipulator;
-
-    /**
-     * @var AssertMethodCallFactory
-     */
-    private $assertMethodCallFactory;
-
-    /**
-     * @var BeConstructedWithAssignFactory
-     */
-    private $beConstructedWithAssignFactory;
-
-    /**
-     * @var DuringMethodCallFactory
-     */
-    private $duringMethodCallFactory;
-
     public function __construct(
-        MatchersManipulator $matchersManipulator,
-        PhpSpecRenaming $phpSpecRenaming,
-        AssertMethodCallFactory $assertMethodCallFactory,
-        BeConstructedWithAssignFactory $beConstructedWithAssignFactory,
-        DuringMethodCallFactory $duringMethodCallFactory
+        private MatchersManipulator $matchersManipulator,
+        private PhpSpecRenaming $phpSpecRenaming,
+        private AssertMethodCallFactory $assertMethodCallFactory,
+        private BeConstructedWithAssignFactory $beConstructedWithAssignFactory,
+        private DuringMethodCallFactory $duringMethodCallFactory
     ) {
-        $this->phpSpecRenaming = $phpSpecRenaming;
-        $this->matchersManipulator = $matchersManipulator;
-        $this->assertMethodCallFactory = $assertMethodCallFactory;
-        $this->beConstructedWithAssignFactory = $beConstructedWithAssignFactory;
-        $this->duringMethodCallFactory = $duringMethodCallFactory;
     }
 
     /**

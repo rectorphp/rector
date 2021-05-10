@@ -26,47 +26,17 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class NodesToRemoveCollector implements NodeCollectorInterface
 {
     /**
-     * @var AffectedFilesCollector
-     */
-    private $affectedFilesCollector;
-
-    /**
-     * @var BreakingRemovalGuard
-     */
-    private $breakingRemovalGuard;
-
-    /**
      * @var Stmt[]|Node[]
      */
     private $nodesToRemove = [];
 
-    /**
-     * @var BetterNodeFinder
-     */
-    private $betterNodeFinder;
-
-    /**
-     * @var NodeComparator
-     */
-    private $nodeComparator;
-
-    /**
-     * @var CurrentFileProvider
-     */
-    private $currentFileProvider;
-
     public function __construct(
-        AffectedFilesCollector $affectedFilesCollector,
-        BreakingRemovalGuard $breakingRemovalGuard,
-        BetterNodeFinder $betterNodeFinder,
-        NodeComparator $nodeComparator,
-        CurrentFileProvider $currentFileProvider
+        private AffectedFilesCollector $affectedFilesCollector,
+        private BreakingRemovalGuard $breakingRemovalGuard,
+        private BetterNodeFinder $betterNodeFinder,
+        private NodeComparator $nodeComparator,
+        private CurrentFileProvider $currentFileProvider
     ) {
-        $this->affectedFilesCollector = $affectedFilesCollector;
-        $this->breakingRemovalGuard = $breakingRemovalGuard;
-        $this->betterNodeFinder = $betterNodeFinder;
-        $this->nodeComparator = $nodeComparator;
-        $this->currentFileProvider = $currentFileProvider;
     }
 
     public function addNodeToRemove(Node $node): void

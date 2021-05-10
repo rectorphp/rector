@@ -21,43 +21,13 @@ final class VariableNodeUse
      */
     public const TYPE_ASSIGN = 'assign';
 
-    /**
-     * @var int
-     */
-    private $startTokenPosition;
-
-    /**
-     * @var string
-     */
-    private $variableName;
-
-    /**
-     * @var string
-     */
-    private $type;
-
-    /**
-     * @var Variable
-     */
-    private $variable;
-
-    /**
-     * @var string|null
-     */
-    private $nestingHash;
-
     public function __construct(
-        int $startTokenPosition,
-        string $variableName,
-        string $type,
-        Variable $variable,
-        ?string $nestingHash = null
+        private int $startTokenPosition,
+        private string $variableName,
+        private string $type,
+        private Variable $variable,
+        private ?string $nestingHash = null
     ) {
-        $this->startTokenPosition = $startTokenPosition;
-        $this->variableName = $variableName;
-        $this->type = $type;
-        $this->variable = $variable;
-        $this->nestingHash = $nestingHash;
     }
 
     public function isName(string $name): bool

@@ -27,14 +27,9 @@ final class StringableForToStringRector extends AbstractRector
      */
     private const STRINGABLE = 'Stringable';
 
-    /**
-     * @var ClassManipulator
-     */
-    private $classManipulator;
-
-    public function __construct(ClassManipulator $classManipulator)
-    {
-        $this->classManipulator = $classManipulator;
+    public function __construct(
+        private ClassManipulator $classManipulator
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

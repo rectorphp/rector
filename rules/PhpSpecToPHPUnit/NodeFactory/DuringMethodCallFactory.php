@@ -15,20 +15,10 @@ use Rector\PostRector\Collector\NodesToAddCollector;
 
 final class DuringMethodCallFactory
 {
-    /**
-     * @var ValueResolver
-     */
-    private $valueResolver;
-
-    /**
-     * @var NodesToAddCollector
-     */
-    private $nodesToAddCollector;
-
-    public function __construct(ValueResolver $valueResolver, NodesToAddCollector $nodesToAddCollector)
-    {
-        $this->valueResolver = $valueResolver;
-        $this->nodesToAddCollector = $nodesToAddCollector;
+    public function __construct(
+        private ValueResolver $valueResolver,
+        private NodesToAddCollector $nodesToAddCollector
+    ) {
     }
 
     public function create(MethodCall $methodCall, PropertyFetch $propertyFetch): MethodCall

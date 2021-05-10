@@ -11,20 +11,10 @@ use Rector\Core\ValueObject\Application\File;
 
 final class UseNameAliasToNameResolver
 {
-    /**
-     * @var ShortNameResolver
-     */
-    private $shortNameResolver;
-
-    /**
-     * @var ClassNaming
-     */
-    private $classNaming;
-
-    public function __construct(ClassNaming $classNaming, ShortNameResolver $shortNameResolver)
-    {
-        $this->shortNameResolver = $shortNameResolver;
-        $this->classNaming = $classNaming;
+    public function __construct(
+        private ClassNaming $classNaming,
+        private ShortNameResolver $shortNameResolver
+    ) {
     }
 
     /**

@@ -43,14 +43,9 @@ final class ArrayKeyFirstLastRector extends AbstractRector
         'end' => self::ARRAY_KEY_LAST,
     ];
 
-    /**
-     * @var ReflectionProvider
-     */
-    private $reflectionProvider;
-
-    public function __construct(ReflectionProvider $reflectionProvider)
-    {
-        $this->reflectionProvider = $reflectionProvider;
+    public function __construct(
+        private ReflectionProvider $reflectionProvider
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

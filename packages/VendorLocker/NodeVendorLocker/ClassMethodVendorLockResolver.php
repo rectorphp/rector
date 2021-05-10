@@ -14,22 +14,10 @@ use Rector\VendorLocker\Reflection\MethodReflectionContractAnalyzer;
 
 final class ClassMethodVendorLockResolver
 {
-    /**
-     * @var MethodReflectionContractAnalyzer
-     */
-    private $methodReflectionContractAnalyzer;
-
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
     public function __construct(
-        MethodReflectionContractAnalyzer $methodReflectionContractAnalyzer,
-        NodeNameResolver $nodeNameResolver
+        private MethodReflectionContractAnalyzer $methodReflectionContractAnalyzer,
+        private NodeNameResolver $nodeNameResolver
     ) {
-        $this->methodReflectionContractAnalyzer = $methodReflectionContractAnalyzer;
-        $this->nodeNameResolver = $nodeNameResolver;
     }
 
     /**

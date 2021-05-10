@@ -12,20 +12,10 @@ use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
 
 final class ExprStringTypeResolver
 {
-    /**
-     * @var NodeTypeResolver
-     */
-    private $nodeTypeResolver;
-
-    /**
-     * @var TypeUnwrapper
-     */
-    private $typeUnwrapper;
-
-    public function __construct(NodeTypeResolver $nodeTypeResolver, TypeUnwrapper $typeUnwrapper)
-    {
-        $this->nodeTypeResolver = $nodeTypeResolver;
-        $this->typeUnwrapper = $typeUnwrapper;
+    public function __construct(
+        private NodeTypeResolver $nodeTypeResolver,
+        private TypeUnwrapper $typeUnwrapper
+    ) {
     }
 
     public function resolve(Expr $expr): ?string

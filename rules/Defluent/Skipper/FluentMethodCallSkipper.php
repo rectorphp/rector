@@ -38,36 +38,12 @@ final class FluentMethodCallSkipper
         'DateTimeInterface',
     ];
 
-    /**
-     * @var FluentCallStaticTypeResolver
-     */
-    private $fluentCallStaticTypeResolver;
-
-    /**
-     * @var SameClassMethodCallAnalyzer
-     */
-    private $sameClassMethodCallAnalyzer;
-
-    /**
-     * @var FluentChainMethodCallNodeAnalyzer
-     */
-    private $fluentChainMethodCallNodeAnalyzer;
-
-    /**
-     * @var GetterMethodCallAnalyzer
-     */
-    private $getterMethodCallAnalyzer;
-
     public function __construct(
-        FluentCallStaticTypeResolver $fluentCallStaticTypeResolver,
-        SameClassMethodCallAnalyzer $sameClassMethodCallAnalyzer,
-        FluentChainMethodCallNodeAnalyzer $fluentChainMethodCallNodeAnalyzer,
-        GetterMethodCallAnalyzer $getterMethodCallAnalyzer
+        private FluentCallStaticTypeResolver $fluentCallStaticTypeResolver,
+        private SameClassMethodCallAnalyzer $sameClassMethodCallAnalyzer,
+        private FluentChainMethodCallNodeAnalyzer $fluentChainMethodCallNodeAnalyzer,
+        private GetterMethodCallAnalyzer $getterMethodCallAnalyzer
     ) {
-        $this->fluentCallStaticTypeResolver = $fluentCallStaticTypeResolver;
-        $this->sameClassMethodCallAnalyzer = $sameClassMethodCallAnalyzer;
-        $this->fluentChainMethodCallNodeAnalyzer = $fluentChainMethodCallNodeAnalyzer;
-        $this->getterMethodCallAnalyzer = $getterMethodCallAnalyzer;
     }
 
     public function shouldSkipRootMethodCall(MethodCall $methodCall): bool

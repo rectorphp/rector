@@ -49,50 +49,14 @@ final class PHPUnitStaticToKernelTestCaseGetRector extends AbstractRector implem
      */
     private $newPropertyObjectTypes = [];
 
-    /**
-     * @var PropertyNaming
-     */
-    private $propertyNaming;
-
-    /**
-     * @var ClassInsertManipulator
-     */
-    private $classInsertManipulator;
-
-    /**
-     * @var SetUpClassMethodFactory
-     */
-    private $setUpClassMethodFactory;
-
-    /**
-     * @var SetUpFactory
-     */
-    private $setUpFactory;
-
-    /**
-     * @var SelfContainerFactory
-     */
-    private $selfContainerFactory;
-
-    /**
-     * @var SetUpClassMethodUpdater
-     */
-    private $setUpClassMethodUpdater;
-
     public function __construct(
-        PropertyNaming $propertyNaming,
-        ClassInsertManipulator $classInsertManipulator,
-        SetUpClassMethodFactory $setUpClassMethodFactory,
-        SetUpFactory $setUpFactory,
-        SelfContainerFactory $selfContainerFactory,
-        SetUpClassMethodUpdater $setUpClassMethodUpdater
+        private PropertyNaming $propertyNaming,
+        private ClassInsertManipulator $classInsertManipulator,
+        private SetUpClassMethodFactory $setUpClassMethodFactory,
+        private SetUpFactory $setUpFactory,
+        private SelfContainerFactory $selfContainerFactory,
+        private SetUpClassMethodUpdater $setUpClassMethodUpdater
     ) {
-        $this->propertyNaming = $propertyNaming;
-        $this->classInsertManipulator = $classInsertManipulator;
-        $this->setUpClassMethodFactory = $setUpClassMethodFactory;
-        $this->setUpFactory = $setUpFactory;
-        $this->selfContainerFactory = $selfContainerFactory;
-        $this->setUpClassMethodUpdater = $setUpClassMethodUpdater;
     }
 
     public function getRuleDefinition(): RuleDefinition

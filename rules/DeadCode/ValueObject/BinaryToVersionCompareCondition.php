@@ -9,31 +9,13 @@ use Rector\DeadCode\Contract\ConditionInterface;
 final class BinaryToVersionCompareCondition implements ConditionInterface
 {
     /**
-     * @var string
-     */
-    private $binaryClass;
-
-    /**
-     * @var VersionCompareCondition
-     */
-    private $versionCompareCondition;
-
-    /**
-     * @var mixed
-     */
-    private $expectedValue;
-
-    /**
      * @param mixed $expectedValue
      */
     public function __construct(
-        VersionCompareCondition $versionCompareCondition,
-        string $binaryClass,
-        $expectedValue
+        private VersionCompareCondition $versionCompareCondition,
+        private string $binaryClass,
+        private $expectedValue
     ) {
-        $this->versionCompareCondition = $versionCompareCondition;
-        $this->binaryClass = $binaryClass;
-        $this->expectedValue = $expectedValue;
     }
 
     public function getVersionCompareCondition(): VersionCompareCondition

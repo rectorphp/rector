@@ -30,43 +30,13 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class DowngradeParameterTypeWideningRector extends AbstractRector
 {
-    /**
-     * @var ClassLikeWithTraitsClassMethodResolver
-     */
-    private $classLikeWithTraitsClassMethodResolver;
-
-    /**
-     * @var ParentChildClassMethodTypeResolver
-     */
-    private $parentChildClassMethodTypeResolver;
-
-    /**
-     * @var NativeParamToPhpDocDecorator
-     */
-    private $nativeParamToPhpDocDecorator;
-
-    /**
-     * @var ParamContravariantDetector
-     */
-    private $paramContravariantDetector;
-
-    /**
-     * @var TypeFactory
-     */
-    private $typeFactory;
-
     public function __construct(
-        ClassLikeWithTraitsClassMethodResolver $classLikeWithTraitsClassMethodResolver,
-        ParentChildClassMethodTypeResolver $parentChildClassMethodTypeResolver,
-        NativeParamToPhpDocDecorator $nativeParamToPhpDocDecorator,
-        ParamContravariantDetector $paramContravariantDetector,
-        TypeFactory $typeFactory
+        private ClassLikeWithTraitsClassMethodResolver $classLikeWithTraitsClassMethodResolver,
+        private ParentChildClassMethodTypeResolver $parentChildClassMethodTypeResolver,
+        private NativeParamToPhpDocDecorator $nativeParamToPhpDocDecorator,
+        private ParamContravariantDetector $paramContravariantDetector,
+        private TypeFactory $typeFactory
     ) {
-        $this->classLikeWithTraitsClassMethodResolver = $classLikeWithTraitsClassMethodResolver;
-        $this->parentChildClassMethodTypeResolver = $parentChildClassMethodTypeResolver;
-        $this->nativeParamToPhpDocDecorator = $nativeParamToPhpDocDecorator;
-        $this->paramContravariantDetector = $paramContravariantDetector;
-        $this->typeFactory = $typeFactory;
     }
 
     public function getRuleDefinition(): RuleDefinition

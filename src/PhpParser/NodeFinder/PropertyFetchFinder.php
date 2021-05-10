@@ -16,29 +16,11 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class PropertyFetchFinder
 {
-    /**
-     * @var NodeRepository
-     */
-    private $nodeRepository;
-
-    /**
-     * @var BetterNodeFinder
-     */
-    private $betterNodeFinder;
-
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
     public function __construct(
-        NodeRepository $nodeRepository,
-        BetterNodeFinder $betterNodeFinder,
-        NodeNameResolver $nodeNameResolver
+        private NodeRepository $nodeRepository,
+        private BetterNodeFinder $betterNodeFinder,
+        private NodeNameResolver $nodeNameResolver
     ) {
-        $this->nodeRepository = $nodeRepository;
-        $this->betterNodeFinder = $betterNodeFinder;
-        $this->nodeNameResolver = $nodeNameResolver;
     }
 
     /**

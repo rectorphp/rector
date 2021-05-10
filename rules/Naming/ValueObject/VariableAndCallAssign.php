@@ -18,46 +18,16 @@ use PhpParser\Node\Stmt\Function_;
 final class VariableAndCallAssign
 {
     /**
-     * @var string
-     */
-    private $variableName;
-
-    /**
-     * @var Variable
-     */
-    private $variable;
-
-    /**
-     * @var Assign
-     */
-    private $assign;
-
-    /**
-     * @var FuncCall|MethodCall|StaticCall
-     */
-    private $call;
-
-    /**
-     * @var ClassMethod|Function_|Closure
-     */
-    private $functionLike;
-
-    /**
-     * @param FuncCall|StaticCall|MethodCall $expr
+     * @param FuncCall|StaticCall|MethodCall $call
      * @param ClassMethod|Function_|Closure $functionLike
      */
     public function __construct(
-        Variable $variable,
-        Expr $expr,
-        Assign $assign,
-        string $variableName,
-        FunctionLike $functionLike
+        private Variable $variable,
+        private Expr $call,
+        private Assign $assign,
+        private string $variableName,
+        private FunctionLike $functionLike
     ) {
-        $this->variable = $variable;
-        $this->call = $expr;
-        $this->variableName = $variableName;
-        $this->functionLike = $functionLike;
-        $this->assign = $assign;
     }
 
     public function getVariable(): Variable

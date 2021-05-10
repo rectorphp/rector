@@ -21,14 +21,9 @@ final class ClosureTypeMapper implements TypeMapperInterface, PHPStanStaticTypeM
      */
     private $phpStanStaticTypeMapper;
 
-    /**
-     * @var CallableTypeMapper
-     */
-    private $callableTypeMapper;
-
-    public function __construct(CallableTypeMapper $callableTypeMapper)
-    {
-        $this->callableTypeMapper = $callableTypeMapper;
+    public function __construct(
+        private CallableTypeMapper $callableTypeMapper
+    ) {
     }
 
     /**

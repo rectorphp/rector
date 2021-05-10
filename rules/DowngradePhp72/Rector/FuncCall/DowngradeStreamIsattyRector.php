@@ -23,14 +23,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class DowngradeStreamIsattyRector extends AbstractRector
 {
-    /**
-     * @var InlineCodeParser
-     */
-    private $inlineCodeParser;
-
-    public function __construct(InlineCodeParser $inlineCodeParser)
-    {
-        $this->inlineCodeParser = $inlineCodeParser;
+    public function __construct(
+        private InlineCodeParser $inlineCodeParser
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

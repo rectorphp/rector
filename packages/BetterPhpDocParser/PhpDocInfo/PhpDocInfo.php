@@ -56,70 +56,27 @@ final class PhpDocInfo
     /**
      * @var PhpDocNode
      */
-    private $phpDocNode;
-
-    /**
-     * @var PhpDocNode
-     */
     private $originalPhpDocNode;
-
-    /**
-     * @var StaticTypeMapper
-     */
-    private $staticTypeMapper;
-
-    /**
-     * @var \PhpParser\Node
-     */
-    private $node;
 
     /**
      * @var bool
      */
     private $hasChanged = false;
 
-    /**
-     * @var AnnotationNaming
-     */
-    private $annotationNaming;
-
-    /**
-     * @var CurrentNodeProvider
-     */
-    private $currentNodeProvider;
-
-    /**
-     * @var RectorChangeCollector
-     */
-    private $rectorChangeCollector;
-
-    /**
-     * @var BetterTokenIterator
-     */
-    private $betterTokenIterator;
-
     public function __construct(
-        PhpDocNode $phpDocNode,
-        BetterTokenIterator $betterTokenIterator,
-        StaticTypeMapper $staticTypeMapper,
-        \PhpParser\Node $node,
-        AnnotationNaming $annotationNaming,
-        CurrentNodeProvider $currentNodeProvider,
-        RectorChangeCollector $rectorChangeCollector
+        private PhpDocNode $phpDocNode,
+        private BetterTokenIterator $betterTokenIterator,
+        private StaticTypeMapper $staticTypeMapper,
+        private \PhpParser\Node $node,
+        private AnnotationNaming $annotationNaming,
+        private CurrentNodeProvider $currentNodeProvider,
+        private RectorChangeCollector $rectorChangeCollector
     ) {
-        $this->phpDocNode = $phpDocNode;
-        $this->betterTokenIterator = $betterTokenIterator;
         $this->originalPhpDocNode = clone $phpDocNode;
 
         if (! $betterTokenIterator->containsTokenType(Lexer::TOKEN_PHPDOC_EOL)) {
             $this->isSingleLine = true;
         }
-
-        $this->staticTypeMapper = $staticTypeMapper;
-        $this->node = $node;
-        $this->annotationNaming = $annotationNaming;
-        $this->currentNodeProvider = $currentNodeProvider;
-        $this->rectorChangeCollector = $rectorChangeCollector;
     }
 
     public function addPhpDocTagNode(PhpDocChildNode $phpDocChildNode): void

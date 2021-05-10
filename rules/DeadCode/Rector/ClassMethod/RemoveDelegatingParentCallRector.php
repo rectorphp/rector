@@ -22,14 +22,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class RemoveDelegatingParentCallRector extends AbstractRector
 {
-    /**
-     * @var CurrentAndParentClassMethodComparator
-     */
-    private $currentAndParentClassMethodComparator;
-
-    public function __construct(CurrentAndParentClassMethodComparator $currentAndParentClassMethodComparator)
-    {
-        $this->currentAndParentClassMethodComparator = $currentAndParentClassMethodComparator;
+    public function __construct(
+        private CurrentAndParentClassMethodComparator $currentAndParentClassMethodComparator
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

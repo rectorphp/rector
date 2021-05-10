@@ -13,36 +13,12 @@ use Rector\PostRector\Collector\NodesToReplaceCollector;
 
 final class AssignRemover
 {
-    /**
-     * @var NodesToReplaceCollector
-     */
-    private $nodesToReplaceCollector;
-
-    /**
-     * @var RectorChangeCollector
-     */
-    private $rectorChangeCollector;
-
-    /**
-     * @var NodeRemover
-     */
-    private $nodeRemover;
-
-    /**
-     * @var LivingCodeManipulator
-     */
-    private $livingCodeManipulator;
-
     public function __construct(
-        NodesToReplaceCollector $nodesToReplaceCollector,
-        RectorChangeCollector $rectorChangeCollector,
-        NodeRemover $nodeRemover,
-        LivingCodeManipulator $livingCodeManipulator
+        private NodesToReplaceCollector $nodesToReplaceCollector,
+        private RectorChangeCollector $rectorChangeCollector,
+        private NodeRemover $nodeRemover,
+        private LivingCodeManipulator $livingCodeManipulator
     ) {
-        $this->nodesToReplaceCollector = $nodesToReplaceCollector;
-        $this->rectorChangeCollector = $rectorChangeCollector;
-        $this->nodeRemover = $nodeRemover;
-        $this->livingCodeManipulator = $livingCodeManipulator;
     }
 
     public function removeAssignNode(Assign $assign): void

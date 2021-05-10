@@ -12,14 +12,9 @@ use Rector\Core\NodeManipulator\BinaryOpManipulator;
 
 final class ConditionInverter
 {
-    /**
-     * @var BinaryOpManipulator
-     */
-    private $binaryOpManipulator;
-
-    public function __construct(BinaryOpManipulator $binaryOpManipulator)
-    {
-        $this->binaryOpManipulator = $binaryOpManipulator;
+    public function __construct(
+        private BinaryOpManipulator $binaryOpManipulator
+    ) {
     }
 
     public function createInvertedCondition(Expr $expr): Expr

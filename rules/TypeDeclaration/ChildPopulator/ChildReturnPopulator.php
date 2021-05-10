@@ -15,29 +15,11 @@ use Rector\TypeDeclaration\NodeTypeAnalyzer\ChildTypeResolver;
 
 final class ChildReturnPopulator
 {
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var NodeRepository
-     */
-    private $nodeRepository;
-
-    /**
-     * @var ChildTypeResolver
-     */
-    private $childTypeResolver;
-
     public function __construct(
-        NodeNameResolver $nodeNameResolver,
-        NodeRepository $nodeRepository,
-        ChildTypeResolver $childTypeResolver
+        private NodeNameResolver $nodeNameResolver,
+        private NodeRepository $nodeRepository,
+        private ChildTypeResolver $childTypeResolver
     ) {
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->nodeRepository = $nodeRepository;
-        $this->childTypeResolver = $childTypeResolver;
     }
 
     /**

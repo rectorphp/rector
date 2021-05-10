@@ -6,20 +6,10 @@ namespace Rector\Restoration\ValueObject;
 
 final class CompleteImportForPartialAnnotation
 {
-    /**
-     * @var string
-     */
-    private $use;
-
-    /**
-     * @var string
-     */
-    private $alias;
-
-    public function __construct(string $use, string $alias)
-    {
-        $this->use = $use;
-        $this->alias = $alias;
+    public function __construct(
+        private string $use,
+        private string $alias
+    ) {
     }
 
     public function getUse(): string

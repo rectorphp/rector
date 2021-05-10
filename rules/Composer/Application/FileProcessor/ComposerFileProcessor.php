@@ -15,31 +15,13 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class ComposerFileProcessor implements FileProcessorInterface
 {
     /**
-     * @var ComposerJsonFactory
-     */
-    private $composerJsonFactory;
-
-    /**
-     * @var ComposerJsonPrinter
-     */
-    private $composerJsonPrinter;
-
-    /**
-     * @var ComposerRectorInterface[]
-     */
-    private $composerRectors = [];
-
-    /**
      * @param ComposerRectorInterface[] $composerRectors
      */
     public function __construct(
-        ComposerJsonFactory $composerJsonFactory,
-        ComposerJsonPrinter $composerJsonPrinter,
-        array $composerRectors
+        private ComposerJsonFactory $composerJsonFactory,
+        private ComposerJsonPrinter $composerJsonPrinter,
+        private array $composerRectors
     ) {
-        $this->composerJsonFactory = $composerJsonFactory;
-        $this->composerJsonPrinter = $composerJsonPrinter;
-        $this->composerRectors = $composerRectors;
     }
 
     /**

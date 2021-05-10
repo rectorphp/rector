@@ -26,64 +26,16 @@ use Rector\PostRector\Collector\NodesToRemoveCollector;
 
 final class ComplexNodeRemover
 {
-    /**
-     * @var NodeComparator
-     */
-    private $nodeComparator;
-
-    /**
-     * @var ClassMethodRemover
-     */
-    private $classMethodRemover;
-
-    /**
-     * @var AssignRemover
-     */
-    private $assignRemover;
-
-    /**
-     * @var PropertyFetchFinder
-     */
-    private $propertyFetchFinder;
-
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var BetterNodeFinder
-     */
-    private $betterNodeFinder;
-
-    /**
-     * @var NodeRemover
-     */
-    private $nodeRemover;
-
-    /**
-     * @var NodesToRemoveCollector
-     */
-    private $nodesToRemoveCollector;
-
     public function __construct(
-        ClassMethodRemover $classMethodRemover,
-        AssignRemover $assignRemover,
-        PropertyFetchFinder $propertyFetchFinder,
-        NodeNameResolver $nodeNameResolver,
-        BetterNodeFinder $betterNodeFinder,
-        NodeRemover $nodeRemover,
-        NodesToRemoveCollector $nodesToRemoveCollector,
-        NodeComparator $nodeComparator
+        private ClassMethodRemover $classMethodRemover,
+        private AssignRemover $assignRemover,
+        private PropertyFetchFinder $propertyFetchFinder,
+        private NodeNameResolver $nodeNameResolver,
+        private BetterNodeFinder $betterNodeFinder,
+        private NodeRemover $nodeRemover,
+        private NodesToRemoveCollector $nodesToRemoveCollector,
+        private NodeComparator $nodeComparator
     ) {
-        $this->classMethodRemover = $classMethodRemover;
-        $this->assignRemover = $assignRemover;
-        $this->propertyFetchFinder = $propertyFetchFinder;
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->betterNodeFinder = $betterNodeFinder;
-        $this->nodeRemover = $nodeRemover;
-        $this->nodesToRemoveCollector = $nodesToRemoveCollector;
-        $this->nodeComparator = $nodeComparator;
     }
 
     public function removeClassMethodAndUsages(ClassMethod $classMethod): void

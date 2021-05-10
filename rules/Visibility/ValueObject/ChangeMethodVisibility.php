@@ -6,26 +6,11 @@ namespace Rector\Visibility\ValueObject;
 
 final class ChangeMethodVisibility
 {
-    /**
-     * @var string
-     */
-    private $class;
-
-    /**
-     * @var string
-     */
-    private $method;
-
-    /**
-     * @var int
-     */
-    private $visibility;
-
-    public function __construct(string $class, string $method, int $visibility)
-    {
-        $this->class = $class;
-        $this->method = $method;
-        $this->visibility = $visibility;
+    public function __construct(
+        private string $class,
+        private string $method,
+        private int $visibility
+    ) {
     }
 
     public function getClass(): string

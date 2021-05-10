@@ -29,29 +29,11 @@ final class PropertyFetchTypeResolver implements NodeTypeResolverInterface
      */
     private $nodeTypeResolver;
 
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var TraitNodeScopeCollector
-     */
-    private $traitNodeScopeCollector;
-
-    /**
-     * @var ReflectionProvider
-     */
-    private $reflectionProvider;
-
     public function __construct(
-        NodeNameResolver $nodeNameResolver,
-        TraitNodeScopeCollector $traitNodeScopeCollector,
-        ReflectionProvider $reflectionProvider
+        private NodeNameResolver $nodeNameResolver,
+        private TraitNodeScopeCollector $traitNodeScopeCollector,
+        private ReflectionProvider $reflectionProvider
     ) {
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->traitNodeScopeCollector = $traitNodeScopeCollector;
-        $this->reflectionProvider = $reflectionProvider;
     }
 
     /**

@@ -21,22 +21,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class NormalizeNamespaceByPSR4ComposerAutoloadRector extends AbstractRector
 {
-    /**
-     * @var PSR4AutoloadNamespaceMatcherInterface
-     */
-    private $psr4AutoloadNamespaceMatcher;
-
-    /**
-     * @var FullyQualifyStmtsAnalyzer
-     */
-    private $fullyQualifyStmtsAnalyzer;
-
     public function __construct(
-        PSR4AutoloadNamespaceMatcherInterface $psr4AutoloadNamespaceMatcher,
-        FullyQualifyStmtsAnalyzer $fullyQualifyStmtsAnalyzer
+        private PSR4AutoloadNamespaceMatcherInterface $psr4AutoloadNamespaceMatcher,
+        private FullyQualifyStmtsAnalyzer $fullyQualifyStmtsAnalyzer
     ) {
-        $this->psr4AutoloadNamespaceMatcher = $psr4AutoloadNamespaceMatcher;
-        $this->fullyQualifyStmtsAnalyzer = $fullyQualifyStmtsAnalyzer;
     }
 
     public function getRuleDefinition(): RuleDefinition

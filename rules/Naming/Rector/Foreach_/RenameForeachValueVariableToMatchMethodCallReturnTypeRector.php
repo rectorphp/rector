@@ -21,43 +21,13 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class RenameForeachValueVariableToMatchMethodCallReturnTypeRector extends AbstractRector
 {
-    /**
-     * @var ExpectedNameResolver
-     */
-    private $expectedNameResolver;
-
-    /**
-     * @var VariableRenamer
-     */
-    private $variableRenamer;
-
-    /**
-     * @var ForeachMatcher
-     */
-    private $varValueAndCallForeachMatcher;
-
-    /**
-     * @var BreakingVariableRenameGuard
-     */
-    private $breakingVariableRenameGuard;
-
-    /**
-     * @var NamingConventionAnalyzer
-     */
-    private $namingConventionAnalyzer;
-
     public function __construct(
-        BreakingVariableRenameGuard $breakingVariableRenameGuard,
-        ExpectedNameResolver $expectedNameResolver,
-        NamingConventionAnalyzer $namingConventionAnalyzer,
-        VariableRenamer $variableRenamer,
-        ForeachMatcher $foreachMatcher
+        private BreakingVariableRenameGuard $breakingVariableRenameGuard,
+        private ExpectedNameResolver $expectedNameResolver,
+        private NamingConventionAnalyzer $namingConventionAnalyzer,
+        private VariableRenamer $variableRenamer,
+        private ForeachMatcher $varValueAndCallForeachMatcher
     ) {
-        $this->expectedNameResolver = $expectedNameResolver;
-        $this->variableRenamer = $variableRenamer;
-        $this->breakingVariableRenameGuard = $breakingVariableRenameGuard;
-        $this->namingConventionAnalyzer = $namingConventionAnalyzer;
-        $this->varValueAndCallForeachMatcher = $foreachMatcher;
     }
 
     public function getRuleDefinition(): RuleDefinition

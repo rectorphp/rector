@@ -17,14 +17,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class RemoveDuplicatedInstanceOfRector extends AbstractRector
 {
-    /**
-     * @var InstanceOfUniqueKeyResolver
-     */
-    private $instanceOfUniqueKeyResolver;
-
-    public function __construct(InstanceOfUniqueKeyResolver $instanceOfUniqueKeyResolver)
-    {
-        $this->instanceOfUniqueKeyResolver = $instanceOfUniqueKeyResolver;
+    public function __construct(
+        private InstanceOfUniqueKeyResolver $instanceOfUniqueKeyResolver
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

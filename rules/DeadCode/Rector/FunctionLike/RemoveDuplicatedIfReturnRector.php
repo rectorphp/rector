@@ -25,23 +25,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class RemoveDuplicatedIfReturnRector extends AbstractRector
 {
-    /**
-     * @var IfManipulator
-     */
-    private $ifManipulator;
-
-    /**
-     * @var ModifiedVariableNamesCollector
-     */
-    private $modifiedVariableNamesCollector;
-
     public function __construct(
-        IfManipulator $ifManipulator,
-        ModifiedVariableNamesCollector $modifiedVariableNamesCollector,
+        private IfManipulator $ifManipulator,
+        private ModifiedVariableNamesCollector $modifiedVariableNamesCollector,
         NodeComparator $nodeComparator
     ) {
-        $this->ifManipulator = $ifManipulator;
-        $this->modifiedVariableNamesCollector = $modifiedVariableNamesCollector;
         $this->nodeComparator = $nodeComparator;
     }
 

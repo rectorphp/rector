@@ -14,20 +14,10 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class PropertyVisibilityVendorLockResolver
 {
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var FamilyRelationsAnalyzer
-     */
-    private $familyRelationsAnalyzer;
-
-    public function __construct(NodeNameResolver $nodeNameResolver, FamilyRelationsAnalyzer $familyRelationsAnalyzer)
-    {
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->familyRelationsAnalyzer = $familyRelationsAnalyzer;
+    public function __construct(
+        private NodeNameResolver $nodeNameResolver,
+        private FamilyRelationsAnalyzer $familyRelationsAnalyzer
+    ) {
     }
 
     /**

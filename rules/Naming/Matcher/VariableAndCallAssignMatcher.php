@@ -17,29 +17,11 @@ use Rector\NodeNameResolver\NodeNameResolver;
 
 final class VariableAndCallAssignMatcher
 {
-    /**
-     * @var CallMatcher
-     */
-    private $callMatcher;
-
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var BetterNodeFinder
-     */
-    private $betterNodeFinder;
-
     public function __construct(
-        CallMatcher $callMatcher,
-        NodeNameResolver $nodeNameResolver,
-        BetterNodeFinder $betterNodeFinder
+        private CallMatcher $callMatcher,
+        private NodeNameResolver $nodeNameResolver,
+        private BetterNodeFinder $betterNodeFinder
     ) {
-        $this->callMatcher = $callMatcher;
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->betterNodeFinder = $betterNodeFinder;
     }
 
     public function match(Assign $assign): ?VariableAndCallAssign

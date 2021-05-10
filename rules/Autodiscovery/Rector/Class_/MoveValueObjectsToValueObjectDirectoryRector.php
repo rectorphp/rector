@@ -64,22 +64,10 @@ final class MoveValueObjectsToValueObjectDirectoryRector extends AbstractRector 
      */
     private $suffixes = [];
 
-    /**
-     * @var AddedFileWithNodesFactory
-     */
-    private $addedFileWithNodesFactory;
-
-    /**
-     * @var ValueObjectClassAnalyzer
-     */
-    private $valueObjectClassAnalyzer;
-
     public function __construct(
-        AddedFileWithNodesFactory $addedFileWithNodesFactory,
-        ValueObjectClassAnalyzer $valueObjectClassAnalyzer
+        private AddedFileWithNodesFactory $addedFileWithNodesFactory,
+        private ValueObjectClassAnalyzer $valueObjectClassAnalyzer
     ) {
-        $this->addedFileWithNodesFactory = $addedFileWithNodesFactory;
-        $this->valueObjectClassAnalyzer = $valueObjectClassAnalyzer;
     }
 
     public function getRuleDefinition(): RuleDefinition

@@ -49,29 +49,11 @@ final class RepeatedLiteralToClassConstantRector extends AbstractRector
      */
     private const SLASH_AND_DASH_REGEX = '#[-\\\/]#';
 
-    /**
-     * @var ClassInsertManipulator
-     */
-    private $classInsertManipulator;
-
-    /**
-     * @var ScopeAwareNodeFinder
-     */
-    private $scopeAwareNodeFinder;
-
-    /**
-     * @var ReservedKeywordAnalyzer
-     */
-    private $reservedKeywordAnalyzer;
-
     public function __construct(
-        ClassInsertManipulator $classInsertManipulator,
-        ReservedKeywordAnalyzer $reservedKeywordAnalyzer,
-        ScopeAwareNodeFinder $scopeAwareNodeFinder
+        private ClassInsertManipulator $classInsertManipulator,
+        private ReservedKeywordAnalyzer $reservedKeywordAnalyzer,
+        private ScopeAwareNodeFinder $scopeAwareNodeFinder
     ) {
-        $this->classInsertManipulator = $classInsertManipulator;
-        $this->scopeAwareNodeFinder = $scopeAwareNodeFinder;
-        $this->reservedKeywordAnalyzer = $reservedKeywordAnalyzer;
     }
 
     public function getRuleDefinition(): RuleDefinition

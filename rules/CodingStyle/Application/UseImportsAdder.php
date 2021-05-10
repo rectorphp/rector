@@ -17,14 +17,9 @@ use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 
 final class UseImportsAdder
 {
-    /**
-     * @var UsedImportsResolver
-     */
-    private $usedImportsResolver;
-
-    public function __construct(UsedImportsResolver $usedImportsResolver)
-    {
-        $this->usedImportsResolver = $usedImportsResolver;
+    public function __construct(
+        private UsedImportsResolver $usedImportsResolver
+    ) {
     }
 
     /**

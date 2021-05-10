@@ -24,14 +24,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class StrEndsWithRector extends AbstractRector
 {
-    /**
-     * @var BinaryOpAnalyzer
-     */
-    private $binaryOpAnalyzer;
-
-    public function __construct(BinaryOpAnalyzer $binaryOpAnalyzer)
-    {
-        $this->binaryOpAnalyzer = $binaryOpAnalyzer;
+    public function __construct(
+        private BinaryOpAnalyzer $binaryOpAnalyzer
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

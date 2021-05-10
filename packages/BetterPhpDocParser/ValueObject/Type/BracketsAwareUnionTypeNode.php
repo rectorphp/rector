@@ -10,18 +10,13 @@ use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
 final class BracketsAwareUnionTypeNode extends UnionTypeNode
 {
     /**
-     * @var bool
-     */
-    private $isWrappedInBrackets = false;
-
-    /**
      * @param TypeNode[] $types
      */
-    public function __construct(array $types, bool $isWrappedInBrackets = false)
-    {
+    public function __construct(
+        array $types,
+        private bool $isWrappedInBrackets = false
+    ) {
         parent::__construct($types);
-
-        $this->isWrappedInBrackets = $isWrappedInBrackets;
     }
 
     /**

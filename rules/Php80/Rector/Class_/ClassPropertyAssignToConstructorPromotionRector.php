@@ -27,29 +27,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class ClassPropertyAssignToConstructorPromotionRector extends AbstractRector
 {
-    /**
-     * @var PromotedPropertyResolver
-     */
-    private $promotedPropertyResolver;
-
-    /**
-     * @var VariableRenamer
-     */
-    private $variableRenamer;
-
-    /**
-     * @var VarTagRemover
-     */
-    private $varTagRemover;
-
     public function __construct(
-        PromotedPropertyResolver $promotedPropertyResolver,
-        VariableRenamer $variableRenamer,
-        VarTagRemover $varTagRemover
+        private PromotedPropertyResolver $promotedPropertyResolver,
+        private VariableRenamer $variableRenamer,
+        private VarTagRemover $varTagRemover
     ) {
-        $this->promotedPropertyResolver = $promotedPropertyResolver;
-        $this->variableRenamer = $variableRenamer;
-        $this->varTagRemover = $varTagRemover;
     }
 
     public function getRuleDefinition(): RuleDefinition

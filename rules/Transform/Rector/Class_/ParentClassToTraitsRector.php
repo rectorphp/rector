@@ -34,20 +34,10 @@ final class ParentClassToTraitsRector extends AbstractRector implements Configur
      */
     private $parentClassToTraits = [];
 
-    /**
-     * @var ClassInsertManipulator
-     */
-    private $classInsertManipulator;
-
-    /**
-     * @var ClassAnalyzer
-     */
-    private $classAnalyzer;
-
-    public function __construct(ClassInsertManipulator $classInsertManipulator, ClassAnalyzer $classAnalyzer)
-    {
-        $this->classInsertManipulator = $classInsertManipulator;
-        $this->classAnalyzer = $classAnalyzer;
+    public function __construct(
+        private ClassInsertManipulator $classInsertManipulator,
+        private ClassAnalyzer $classAnalyzer
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

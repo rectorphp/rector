@@ -9,32 +9,12 @@ use PhpParser\Node\Expr\FuncCall;
 
 final class StrStartsWith
 {
-    /**
-     * @var bool
-     */
-    private $isPositive = false;
-
-    /**
-     * @var FuncCall
-     */
-    private $funcCall;
-
-    /**
-     * @var Expr
-     */
-    private $haystackExpr;
-
-    /**
-     * @var Expr
-     */
-    private $needleExpr;
-
-    public function __construct(FuncCall $funcCall, Expr $haystackExpr, Expr $needleExpr, bool $isPositive)
-    {
-        $this->funcCall = $funcCall;
-        $this->haystackExpr = $haystackExpr;
-        $this->isPositive = $isPositive;
-        $this->needleExpr = $needleExpr;
+    public function __construct(
+        private FuncCall $funcCall,
+        private Expr $haystackExpr,
+        private Expr $needleExpr,
+        private bool $isPositive
+    ) {
     }
 
     public function getFuncCall(): FuncCall

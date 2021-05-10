@@ -35,57 +35,15 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class AddArrayReturnDocTypeRector extends AbstractRector
 {
-    /**
-     * @var ReturnTypeInferer
-     */
-    private $returnTypeInferer;
-
-    /**
-     * @var ClassMethodReturnTypeOverrideGuard
-     */
-    private $classMethodReturnTypeOverrideGuard;
-
-    /**
-     * @var AdvancedArrayAnalyzer
-     */
-    private $advancedArrayAnalyzer;
-
-    /**
-     * @var PhpDocTypeChanger
-     */
-    private $phpDocTypeChanger;
-
-    /**
-     * @var NormalizeTypeToRespectArrayScalarType
-     */
-    private $normalizeTypeToRespectArrayScalarType;
-
-    /**
-     * @var ReturnTagRemover
-     */
-    private $returnTagRemover;
-
-    /**
-     * @var DetailedTypeAnalyzer
-     */
-    private $detailedTypeAnalyzer;
-
     public function __construct(
-        ReturnTypeInferer $returnTypeInferer,
-        ClassMethodReturnTypeOverrideGuard $classMethodReturnTypeOverrideGuard,
-        AdvancedArrayAnalyzer $advancedArrayAnalyzer,
-        PhpDocTypeChanger $phpDocTypeChanger,
-        NormalizeTypeToRespectArrayScalarType $normalizeTypeToRespectArrayScalarType,
-        ReturnTagRemover $returnTagRemover,
-        DetailedTypeAnalyzer $detailedTypeAnalyzer
+        private ReturnTypeInferer $returnTypeInferer,
+        private ClassMethodReturnTypeOverrideGuard $classMethodReturnTypeOverrideGuard,
+        private AdvancedArrayAnalyzer $advancedArrayAnalyzer,
+        private PhpDocTypeChanger $phpDocTypeChanger,
+        private NormalizeTypeToRespectArrayScalarType $normalizeTypeToRespectArrayScalarType,
+        private ReturnTagRemover $returnTagRemover,
+        private DetailedTypeAnalyzer $detailedTypeAnalyzer
     ) {
-        $this->returnTypeInferer = $returnTypeInferer;
-        $this->classMethodReturnTypeOverrideGuard = $classMethodReturnTypeOverrideGuard;
-        $this->advancedArrayAnalyzer = $advancedArrayAnalyzer;
-        $this->phpDocTypeChanger = $phpDocTypeChanger;
-        $this->normalizeTypeToRespectArrayScalarType = $normalizeTypeToRespectArrayScalarType;
-        $this->returnTagRemover = $returnTagRemover;
-        $this->detailedTypeAnalyzer = $detailedTypeAnalyzer;
     }
 
     public function getRuleDefinition(): RuleDefinition

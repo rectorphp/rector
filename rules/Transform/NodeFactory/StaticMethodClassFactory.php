@@ -12,20 +12,10 @@ use Symplify\Astral\ValueObject\NodeBuilder\ClassBuilder;
 
 final class StaticMethodClassFactory
 {
-    /**
-     * @var ClassMethodFactory
-     */
-    private $classMethodFactory;
-
-    /**
-     * @var ClassNaming
-     */
-    private $classNaming;
-
-    public function __construct(ClassMethodFactory $classMethodFactory, ClassNaming $classNaming)
-    {
-        $this->classMethodFactory = $classMethodFactory;
-        $this->classNaming = $classNaming;
+    public function __construct(
+        private ClassMethodFactory $classMethodFactory,
+        private ClassNaming $classNaming
+    ) {
     }
 
     /**

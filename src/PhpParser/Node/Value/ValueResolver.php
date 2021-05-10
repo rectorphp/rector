@@ -29,47 +29,17 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 final class ValueResolver
 {
     /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
      * @var ConstExprEvaluator
      */
     private $constExprEvaluator;
 
-    /**
-     * @var NodeTypeResolver
-     */
-    private $nodeTypeResolver;
-
-    /**
-     * @var ConstFetchAnalyzer
-     */
-    private $constFetchAnalyzer;
-
-    /**
-     * @var ReflectionProvider
-     */
-    private $reflectionProvider;
-
-    /**
-     * @var CurrentFileProvider
-     */
-    private $currentFileProvider;
-
     public function __construct(
-        NodeNameResolver $nodeNameResolver,
-        NodeTypeResolver $nodeTypeResolver,
-        ConstFetchAnalyzer $constFetchAnalyzer,
-        ReflectionProvider $reflectionProvider,
-        CurrentFileProvider $currentFileProvider
+        private NodeNameResolver $nodeNameResolver,
+        private NodeTypeResolver $nodeTypeResolver,
+        private ConstFetchAnalyzer $constFetchAnalyzer,
+        private ReflectionProvider $reflectionProvider,
+        private CurrentFileProvider $currentFileProvider
     ) {
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->nodeTypeResolver = $nodeTypeResolver;
-        $this->constFetchAnalyzer = $constFetchAnalyzer;
-        $this->reflectionProvider = $reflectionProvider;
-        $this->currentFileProvider = $currentFileProvider;
     }
 
     /**

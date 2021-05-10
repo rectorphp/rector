@@ -30,37 +30,12 @@ use Rector\StaticTypeMapper\PhpDoc\PhpDocTypeMapper;
  */
 final class StaticTypeMapper
 {
-    /**
-     * @var PHPStanStaticTypeMapper
-     */
-    private $phpStanStaticTypeMapper;
-
-    /**
-     * @var PhpParserNodeMapper
-     */
-    private $phpParserNodeMapper;
-
-    /**
-     * @var PhpDocTypeMapper
-     */
-    private $phpDocTypeMapper;
-
-    /**
-     * @var NameScopeFactory
-     */
-    private $nameScopeFactory;
-
     public function __construct(
-        NameScopeFactory $nameScopeFactory,
-        PHPStanStaticTypeMapper $phpStanStaticTypeMapper,
-        PhpDocTypeMapper $phpDocTypeMapper,
-        PhpParserNodeMapper $phpParserNodeMapper
+        private NameScopeFactory $nameScopeFactory,
+        private PHPStanStaticTypeMapper $phpStanStaticTypeMapper,
+        private PhpDocTypeMapper $phpDocTypeMapper,
+        private PhpParserNodeMapper $phpParserNodeMapper
     ) {
-        $this->phpStanStaticTypeMapper = $phpStanStaticTypeMapper;
-        $this->phpParserNodeMapper = $phpParserNodeMapper;
-        $this->phpDocTypeMapper = $phpDocTypeMapper;
-        $this->nameScopeFactory = $nameScopeFactory;
-
         $this->nameScopeFactory->setStaticTypeMapper($this);
     }
 

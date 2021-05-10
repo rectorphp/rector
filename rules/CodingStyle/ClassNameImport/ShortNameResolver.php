@@ -44,47 +44,17 @@ final class ShortNameResolver
     private $shortNamesByFilePath = [];
 
     /**
-     * @var SimpleCallableNodeTraverser
-     */
-    private $simpleCallableNodeTraverser;
-
-    /**
      * @var PhpDocInfoFactory
      */
     private $phpDocInfoFactory;
 
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var NodeFinder
-     */
-    private $nodeFinder;
-
-    /**
-     * @var ReflectionProvider
-     */
-    private $reflectionProvider;
-
-    /**
-     * @var BetterNodeFinder
-     */
-    private $betterNodeFinder;
-
     public function __construct(
-        SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
-        NodeNameResolver $nodeNameResolver,
-        NodeFinder $nodeFinder,
-        ReflectionProvider $reflectionProvider,
-        BetterNodeFinder $betterNodeFinder
+        private SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
+        private NodeNameResolver $nodeNameResolver,
+        private NodeFinder $nodeFinder,
+        private ReflectionProvider $reflectionProvider,
+        private BetterNodeFinder $betterNodeFinder
     ) {
-        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->nodeFinder = $nodeFinder;
-        $this->reflectionProvider = $reflectionProvider;
-        $this->betterNodeFinder = $betterNodeFinder;
     }
 
     /**

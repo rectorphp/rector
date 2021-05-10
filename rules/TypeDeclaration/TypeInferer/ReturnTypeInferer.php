@@ -21,27 +21,15 @@ final class ReturnTypeInferer
     private $returnTypeInferers = [];
 
     /**
-     * @var TypeNormalizer
-     */
-    private $typeNormalizer;
-
-    /**
-     * @var GenericClassStringTypeNormalizer
-     */
-    private $genericClassStringTypeNormalizer;
-
-    /**
      * @param ReturnTypeInfererInterface[] $returnTypeInferers
      */
     public function __construct(
         array $returnTypeInferers,
-        TypeNormalizer $typeNormalizer,
+        private TypeNormalizer $typeNormalizer,
         TypeInfererSorter $typeInfererSorter,
-        GenericClassStringTypeNormalizer $genericClassStringTypeNormalizer
+        private GenericClassStringTypeNormalizer $genericClassStringTypeNormalizer
     ) {
         $this->returnTypeInferers = $typeInfererSorter->sort($returnTypeInferers);
-        $this->typeNormalizer = $typeNormalizer;
-        $this->genericClassStringTypeNormalizer = $genericClassStringTypeNormalizer;
     }
 
     public function inferFunctionLike(FunctionLike $functionLike): Type

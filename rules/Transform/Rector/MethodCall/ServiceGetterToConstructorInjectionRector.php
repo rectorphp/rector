@@ -37,20 +37,10 @@ final class ServiceGetterToConstructorInjectionRector extends AbstractRector imp
      */
     private $methodCallToServices = [];
 
-    /**
-     * @var PropertyNaming
-     */
-    private $propertyNaming;
-
-    /**
-     * @var ClassAnalyzer
-     */
-    private $classAnalyzer;
-
-    public function __construct(PropertyNaming $propertyNaming, ClassAnalyzer $classAnalyzer)
-    {
-        $this->propertyNaming = $propertyNaming;
-        $this->classAnalyzer = $classAnalyzer;
+    public function __construct(
+        private PropertyNaming $propertyNaming,
+        private ClassAnalyzer $classAnalyzer
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

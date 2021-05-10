@@ -9,32 +9,12 @@ use Rector\Order\Contract\RankeableInterface;
 
 final class PropertyRankeable implements RankeableInterface
 {
-    /**
-     * @var string
-     */
-    private $name;
-
-    /**
-     * @var int
-     */
-    private $visibility;
-
-    /**
-     * @var int
-     */
-    private $position;
-
-    /**
-     * @var Property
-     */
-    private $property;
-
-    public function __construct(string $name, int $visibility, Property $property, int $position)
-    {
-        $this->name = $name;
-        $this->visibility = $visibility;
-        $this->property = $property;
-        $this->position = $position;
+    public function __construct(
+        private string $name,
+        private int $visibility,
+        private Property $property,
+        private int $position
+    ) {
     }
 
     public function getName(): string

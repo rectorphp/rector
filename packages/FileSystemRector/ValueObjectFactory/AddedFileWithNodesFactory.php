@@ -21,43 +21,13 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class AddedFileWithNodesFactory
 {
-    /**
-     * @var BetterNodeFinder
-     */
-    private $betterNodeFinder;
-
-    /**
-     * @var FileRelocationResolver
-     */
-    private $fileRelocationResolver;
-
-    /**
-     * @var CategoryNamespaceProvider
-     */
-    private $categoryNamespaceProvider;
-
-    /**
-     * @var RenamedClassesCollector
-     */
-    private $renamedClassesCollector;
-
-    /**
-     * @var FileInfoDeletionAnalyzer
-     */
-    private $fileInfoDeletionAnalyzer;
-
     public function __construct(
-        BetterNodeFinder $betterNodeFinder,
-        CategoryNamespaceProvider $categoryNamespaceProvider,
-        FileRelocationResolver $fileRelocationResolver,
-        RenamedClassesCollector $renamedClassesCollector,
-        FileInfoDeletionAnalyzer $fileInfoDeletionAnalyzer
+        private BetterNodeFinder $betterNodeFinder,
+        private CategoryNamespaceProvider $categoryNamespaceProvider,
+        private FileRelocationResolver $fileRelocationResolver,
+        private RenamedClassesCollector $renamedClassesCollector,
+        private FileInfoDeletionAnalyzer $fileInfoDeletionAnalyzer
     ) {
-        $this->betterNodeFinder = $betterNodeFinder;
-        $this->fileRelocationResolver = $fileRelocationResolver;
-        $this->categoryNamespaceProvider = $categoryNamespaceProvider;
-        $this->renamedClassesCollector = $renamedClassesCollector;
-        $this->fileInfoDeletionAnalyzer = $fileInfoDeletionAnalyzer;
     }
 
     public function createWithDesiredGroup(

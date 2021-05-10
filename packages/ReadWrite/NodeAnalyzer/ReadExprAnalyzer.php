@@ -11,16 +11,11 @@ use Rector\ReadWrite\Contract\ReadNodeAnalyzerInterface;
 final class ReadExprAnalyzer
 {
     /**
-     * @var ReadNodeAnalyzerInterface[]
-     */
-    private $readNodeAnalyzers = [];
-
-    /**
      * @param ReadNodeAnalyzerInterface[] $readNodeAnalyzers
      */
-    public function __construct(array $readNodeAnalyzers)
-    {
-        $this->readNodeAnalyzers = $readNodeAnalyzers;
+    public function __construct(
+        private array $readNodeAnalyzers
+    ) {
     }
 
     /**

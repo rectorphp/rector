@@ -35,11 +35,6 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class RectorKernel extends Kernel
 {
     /**
-     * @var SmartFileInfo[]
-     */
-    private $configFileInfos = [];
-
-    /**
      * @var ConfigureCallValuesCollector
      */
     private $configureCallValuesCollector;
@@ -47,10 +42,12 @@ final class RectorKernel extends Kernel
     /**
      * @param SmartFileInfo[] $configFileInfos
      */
-    public function __construct(string $environment, bool $debug, array $configFileInfos)
-    {
+    public function __construct(
+        string $environment,
+        bool $debug,
+        private array $configFileInfos
+    ) {
         $this->configureCallValuesCollector = new ConfigureCallValuesCollector();
-        $this->configFileInfos = $configFileInfos;
 
         parent::__construct($environment, $debug);
     }

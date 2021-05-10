@@ -9,45 +9,15 @@ use PHPStan\Type\ObjectType;
 final class PropertyFetchToMethodCall
 {
     /**
-     * @var string
-     */
-    private $oldType;
-
-    /**
-     * @var string
-     */
-    private $oldProperty;
-
-    /**
-     * @var string
-     */
-    private $newGetMethod;
-
-    /**
-     * @var mixed[]
-     */
-    private $newGetArguments = [];
-
-    /**
-     * @var string|null
-     */
-    private $newSetMethod;
-
-    /**
      * @param mixed[] $newGetArguments
      */
     public function __construct(
-        string $oldType,
-        string $oldProperty,
-        string $newGetMethod,
-        ?string $newSetMethod = null,
-        array $newGetArguments = []
+        private string $oldType,
+        private string $oldProperty,
+        private string $newGetMethod,
+        private ?string $newSetMethod = null,
+        private array $newGetArguments = []
     ) {
-        $this->oldType = $oldType;
-        $this->oldProperty = $oldProperty;
-        $this->newGetMethod = $newGetMethod;
-        $this->newSetMethod = $newSetMethod;
-        $this->newGetArguments = $newGetArguments;
     }
 
     public function getOldObjectType(): ObjectType

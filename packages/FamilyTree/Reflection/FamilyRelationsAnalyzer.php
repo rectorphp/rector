@@ -10,20 +10,10 @@ use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 
 final class FamilyRelationsAnalyzer
 {
-    /**
-     * @var ReflectionProvider
-     */
-    private $reflectionProvider;
-
-    /**
-     * @var PrivatesAccessor
-     */
-    private $privatesAccessor;
-
-    public function __construct(ReflectionProvider $reflectionProvider, PrivatesAccessor $privatesAccessor)
-    {
-        $this->reflectionProvider = $reflectionProvider;
-        $this->privatesAccessor = $privatesAccessor;
+    public function __construct(
+        private ReflectionProvider $reflectionProvider,
+        private PrivatesAccessor $privatesAccessor
+    ) {
     }
 
     /**

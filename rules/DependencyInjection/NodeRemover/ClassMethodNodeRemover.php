@@ -18,29 +18,11 @@ use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
 final class ClassMethodNodeRemover
 {
-    /**
-     * @var NodesToRemoveCollector
-     */
-    private $nodesToRemoveCollector;
-
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var SimpleCallableNodeTraverser
-     */
-    private $simpleCallableNodeTraverser;
-
     public function __construct(
-        SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
-        NodeNameResolver $nodeNameResolver,
-        NodesToRemoveCollector $nodesToRemoveCollector
+        private SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
+        private NodeNameResolver $nodeNameResolver,
+        private NodesToRemoveCollector $nodesToRemoveCollector
     ) {
-        $this->nodesToRemoveCollector = $nodesToRemoveCollector;
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
     }
 
     public function removeClassMethodIfUseless(ClassMethod $classMethod): void

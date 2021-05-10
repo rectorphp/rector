@@ -13,22 +13,10 @@ use Rector\TypeDeclaration\FunctionLikeReturnTypeResolver;
 
 final class ReturnTypeDeclarationReturnTypeInferer implements ReturnTypeInfererInterface
 {
-    /**
-     * @var FunctionLikeReturnTypeResolver
-     */
-    private $functionLikeReturnTypeResolver;
-
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
     public function __construct(
-        FunctionLikeReturnTypeResolver $functionLikeReturnTypeResolver,
-        NodeNameResolver $nodeNameResolver
+        private FunctionLikeReturnTypeResolver $functionLikeReturnTypeResolver,
+        private NodeNameResolver $nodeNameResolver
     ) {
-        $this->functionLikeReturnTypeResolver = $functionLikeReturnTypeResolver;
-        $this->nodeNameResolver = $nodeNameResolver;
     }
 
     public function inferFunctionLike(FunctionLike $functionLike): Type

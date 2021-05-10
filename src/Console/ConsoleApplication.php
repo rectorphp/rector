@@ -33,7 +33,7 @@ final class ConsoleApplication extends Application
     {
         try {
             $version = $configuration->getPrettyVersion();
-        } catch (OutOfBoundsException $outOfBoundsException) {
+        } catch (OutOfBoundsException) {
             $version = 'Unknown';
         }
 

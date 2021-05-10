@@ -21,14 +21,9 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class SilentVoidResolver
 {
-    /**
-     * @var BetterNodeFinder
-     */
-    private $betterNodeFinder;
-
-    public function __construct(BetterNodeFinder $betterNodeFinder)
-    {
-        $this->betterNodeFinder = $betterNodeFinder;
+    public function __construct(
+        private BetterNodeFinder $betterNodeFinder
+    ) {
     }
 
     /**

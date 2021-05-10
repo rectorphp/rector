@@ -16,29 +16,11 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 
 final class ReturnFluentMethodCallFactory
 {
-    /**
-     * @var FluentChainMethodCallRootExtractor
-     */
-    private $fluentChainMethodCallRootExtractor;
-
-    /**
-     * @var NodeTypeResolver
-     */
-    private $nodeTypeResolver;
-
-    /**
-     * @var PropertyNaming
-     */
-    private $propertyNaming;
-
     public function __construct(
-        FluentChainMethodCallRootExtractor $fluentChainMethodCallRootExtractor,
-        NodeTypeResolver $nodeTypeResolver,
-        PropertyNaming $propertyNaming
+        private FluentChainMethodCallRootExtractor $fluentChainMethodCallRootExtractor,
+        private NodeTypeResolver $nodeTypeResolver,
+        private PropertyNaming $propertyNaming
     ) {
-        $this->fluentChainMethodCallRootExtractor = $fluentChainMethodCallRootExtractor;
-        $this->nodeTypeResolver = $nodeTypeResolver;
-        $this->propertyNaming = $propertyNaming;
     }
 
     public function createFromFluentMethodCalls(FluentMethodCalls $fluentMethodCalls): ?FirstAssignFluentCall

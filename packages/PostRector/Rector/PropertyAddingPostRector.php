@@ -19,43 +19,13 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class PropertyAddingPostRector extends AbstractPostRector
 {
-    /**
-     * @var ClassDependencyManipulator
-     */
-    private $classDependencyManipulator;
-
-    /**
-     * @var ClassInsertManipulator
-     */
-    private $classInsertManipulator;
-
-    /**
-     * @var PropertyToAddCollector
-     */
-    private $propertyToAddCollector;
-
-    /**
-     * @var NetteInjectDetector
-     */
-    private $netteInjectDetector;
-
-    /**
-     * @var ClassAnalyzer
-     */
-    private $classAnalyzer;
-
     public function __construct(
-        ClassDependencyManipulator $classDependencyManipulator,
-        ClassInsertManipulator $classInsertManipulator,
-        NetteInjectDetector $netteInjectDetector,
-        PropertyToAddCollector $propertyToAddCollector,
-        ClassAnalyzer $classAnalyzer
+        private ClassDependencyManipulator $classDependencyManipulator,
+        private ClassInsertManipulator $classInsertManipulator,
+        private NetteInjectDetector $netteInjectDetector,
+        private PropertyToAddCollector $propertyToAddCollector,
+        private ClassAnalyzer $classAnalyzer
     ) {
-        $this->classDependencyManipulator = $classDependencyManipulator;
-        $this->classInsertManipulator = $classInsertManipulator;
-        $this->propertyToAddCollector = $propertyToAddCollector;
-        $this->netteInjectDetector = $netteInjectDetector;
-        $this->classAnalyzer = $classAnalyzer;
     }
 
     public function getPriority(): int

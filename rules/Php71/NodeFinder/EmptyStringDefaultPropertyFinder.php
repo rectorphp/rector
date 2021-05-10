@@ -16,18 +16,13 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class EmptyStringDefaultPropertyFinder
 {
     /**
-     * @var BetterNodeFinder
-     */
-    private $betterNodeFinder;
-
-    /**
      * @var array<string, PropertyProperty[]>
      */
     private $propertyPropertiesByClassName = [];
 
-    public function __construct(BetterNodeFinder $betterNodeFinder)
-    {
-        $this->betterNodeFinder = $betterNodeFinder;
+    public function __construct(
+        private BetterNodeFinder $betterNodeFinder
+    ) {
     }
 
     /**

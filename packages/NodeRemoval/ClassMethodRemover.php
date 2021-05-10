@@ -15,29 +15,11 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class ClassMethodRemover
 {
-    /**
-     * @var NodeRepository
-     */
-    private $nodeRepository;
-
-    /**
-     * @var NodeRemover
-     */
-    private $nodeRemover;
-
-    /**
-     * @var LivingCodeManipulator
-     */
-    private $livingCodeManipulator;
-
     public function __construct(
-        NodeRepository $nodeRepository,
-        NodeRemover $nodeRemover,
-        LivingCodeManipulator $livingCodeManipulator
+        private NodeRepository $nodeRepository,
+        private NodeRemover $nodeRemover,
+        private LivingCodeManipulator $livingCodeManipulator
     ) {
-        $this->nodeRepository = $nodeRepository;
-        $this->nodeRemover = $nodeRemover;
-        $this->livingCodeManipulator = $livingCodeManipulator;
     }
 
     public function removeClassMethodAndUsages(ClassMethod $classMethod): void

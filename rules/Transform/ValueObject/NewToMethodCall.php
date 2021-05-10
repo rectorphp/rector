@@ -8,26 +8,11 @@ use PHPStan\Type\ObjectType;
 
 final class NewToMethodCall
 {
-    /**
-     * @var string
-     */
-    private $newType;
-
-    /**
-     * @var string
-     */
-    private $serviceType;
-
-    /**
-     * @var string
-     */
-    private $serviceMethod;
-
-    public function __construct(string $newType, string $serviceType, string $serviceMethod)
-    {
-        $this->newType = $newType;
-        $this->serviceType = $serviceType;
-        $this->serviceMethod = $serviceMethod;
+    public function __construct(
+        private string $newType,
+        private string $serviceType,
+        private string $serviceMethod
+    ) {
     }
 
     public function getNewObjectType(): ObjectType

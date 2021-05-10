@@ -16,20 +16,10 @@ use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 
 final class NativeTypeClassTreeResolver
 {
-    /**
-     * @var StaticTypeMapper
-     */
-    private $staticTypeMapper;
-
-    /**
-     * @var PrivatesAccessor
-     */
-    private $privatesAccessor;
-
-    public function __construct(StaticTypeMapper $staticTypeMapper, PrivatesAccessor $privatesAccessor)
-    {
-        $this->staticTypeMapper = $staticTypeMapper;
-        $this->privatesAccessor = $privatesAccessor;
+    public function __construct(
+        private StaticTypeMapper $staticTypeMapper,
+        private PrivatesAccessor $privatesAccessor
+    ) {
     }
 
     public function resolveParameterReflectionType(

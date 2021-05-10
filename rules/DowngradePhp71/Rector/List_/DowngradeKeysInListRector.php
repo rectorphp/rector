@@ -26,20 +26,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class DowngradeKeysInListRector extends AbstractRector
 {
-    /**
-     * @var InflectorSingularResolver
-     */
-    private $inflectorSingularResolver;
-
-    /**
-     * @var ForeachAnalyzer
-     */
-    private $foreachAnalyzer;
-
-    public function __construct(InflectorSingularResolver $inflectorSingularResolver, ForeachAnalyzer $foreachAnalyzer)
-    {
-        $this->inflectorSingularResolver = $inflectorSingularResolver;
-        $this->foreachAnalyzer = $foreachAnalyzer;
+    public function __construct(
+        private InflectorSingularResolver $inflectorSingularResolver,
+        private ForeachAnalyzer $foreachAnalyzer
+    ) {
     }
 
     /**

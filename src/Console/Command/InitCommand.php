@@ -19,38 +19,14 @@ use Symplify\SmartFileSystem\SmartFileSystem;
 final class InitCommand extends Command
 {
     /**
-     * @var FileSystemGuard
-     */
-    private $fileSystemGuard;
-
-    /**
-     * @var SmartFileSystem
-     */
-    private $smartFileSystem;
-
-    /**
-     * @var SymfonyStyle
-     */
-    private $symfonyStyle;
-
-    /**
-     * @var TemplateResolverInterface[]
-     */
-    private $templateResolvers = [];
-
-    /**
      * @param TemplateResolverInterface[] $templateResolvers
      */
     public function __construct(
-        FileSystemGuard $fileSystemGuard,
-        SmartFileSystem $smartFileSystem,
-        SymfonyStyle $symfonyStyle,
-        array $templateResolvers
+        private FileSystemGuard $fileSystemGuard,
+        private SmartFileSystem $smartFileSystem,
+        private SymfonyStyle $symfonyStyle,
+        private array $templateResolvers
     ) {
-        $this->fileSystemGuard = $fileSystemGuard;
-        $this->smartFileSystem = $smartFileSystem;
-        $this->symfonyStyle = $symfonyStyle;
-        $this->templateResolvers = $templateResolvers;
         parent::__construct();
     }
 

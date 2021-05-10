@@ -38,14 +38,9 @@ final class AssignArrayToStringRector extends AbstractRector
      */
     private $emptyStringProperties = [];
 
-    /**
-     * @var EmptyStringDefaultPropertyFinder
-     */
-    private $emptyStringDefaultPropertyFinder;
-
-    public function __construct(EmptyStringDefaultPropertyFinder $emptyStringDefaultPropertyFinder)
-    {
-        $this->emptyStringDefaultPropertyFinder = $emptyStringDefaultPropertyFinder;
+    public function __construct(
+        private EmptyStringDefaultPropertyFinder $emptyStringDefaultPropertyFinder
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

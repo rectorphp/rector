@@ -9,14 +9,9 @@ use Rector\Composer\Contract\VersionAwareInterface;
 
 final class VersionGuard
 {
-    /**
-     * @var VersionParser
-     */
-    private $versionParser;
-
-    public function __construct(VersionParser $versionParser)
-    {
-        $this->versionParser = $versionParser;
+    public function __construct(
+        private VersionParser $versionParser
+    ) {
     }
 
     /**

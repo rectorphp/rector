@@ -27,14 +27,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class TokenGetAllToObjectRector extends AbstractRector
 {
-    /**
-     * @var TokenManipulator
-     */
-    private $tokenManipulator;
-
-    public function __construct(TokenManipulator $ifArrayTokenManipulator)
-    {
-        $this->tokenManipulator = $ifArrayTokenManipulator;
+    public function __construct(
+        private TokenManipulator $tokenManipulator
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

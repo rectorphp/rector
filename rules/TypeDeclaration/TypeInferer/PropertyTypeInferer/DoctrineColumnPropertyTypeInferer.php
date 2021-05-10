@@ -34,20 +34,10 @@ final class DoctrineColumnPropertyTypeInferer implements PropertyTypeInfererInte
      */
     private $doctrineTypeToScalarType = [];
 
-    /**
-     * @var TypeFactory
-     */
-    private $typeFactory;
-
-    /**
-     * @var PhpDocInfoFactory
-     */
-    private $phpDocInfoFactory;
-
-    public function __construct(TypeFactory $typeFactory, PhpDocInfoFactory $phpDocInfoFactory)
-    {
-        $this->typeFactory = $typeFactory;
-
+    public function __construct(
+        private TypeFactory $typeFactory,
+        private PhpDocInfoFactory $phpDocInfoFactory
+    ) {
         $this->doctrineTypeToScalarType = [
             'tinyint' => new BooleanType(),
             // integers
@@ -84,8 +74,6 @@ final class DoctrineColumnPropertyTypeInferer implements PropertyTypeInfererInte
             'time' => new ObjectType(self::DATE_TIME_INTERFACE),
             'year' => new ObjectType(self::DATE_TIME_INTERFACE),
         ];
-
-        $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
 
     public function inferProperty(Property $property): Type

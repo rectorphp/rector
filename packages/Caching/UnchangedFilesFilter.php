@@ -9,14 +9,9 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class UnchangedFilesFilter
 {
-    /**
-     * @var ChangedFilesDetector
-     */
-    private $changedFilesDetector;
-
-    public function __construct(ChangedFilesDetector $changedFilesDetector)
-    {
-        $this->changedFilesDetector = $changedFilesDetector;
+    public function __construct(
+        private ChangedFilesDetector $changedFilesDetector
+    ) {
     }
 
     /**

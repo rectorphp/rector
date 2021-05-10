@@ -28,22 +28,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class ArrayThisCallToThisMethodCallRector extends AbstractRector
 {
-    /**
-     * @var ArrayCallableMethodReferenceAnalyzer
-     */
-    private $arrayCallableMethodReferenceAnalyzer;
-
-    /**
-     * @var ReflectionProvider
-     */
-    private $reflectionProvider;
-
     public function __construct(
-        ArrayCallableMethodReferenceAnalyzer $arrayCallableMethodReferenceAnalyzer,
-        ReflectionProvider $reflectionProvider
+        private ArrayCallableMethodReferenceAnalyzer $arrayCallableMethodReferenceAnalyzer,
+        private ReflectionProvider $reflectionProvider
     ) {
-        $this->arrayCallableMethodReferenceAnalyzer = $arrayCallableMethodReferenceAnalyzer;
-        $this->reflectionProvider = $reflectionProvider;
     }
 
     public function getRuleDefinition(): RuleDefinition

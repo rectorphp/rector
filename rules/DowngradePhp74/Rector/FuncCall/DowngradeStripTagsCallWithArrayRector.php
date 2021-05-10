@@ -31,14 +31,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class DowngradeStripTagsCallWithArrayRector extends AbstractRector
 {
-    /**
-     * @var VariableNaming
-     */
-    private $variableNaming;
-
-    public function __construct(VariableNaming $variableNaming)
-    {
-        $this->variableNaming = $variableNaming;
+    public function __construct(
+        private VariableNaming $variableNaming
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

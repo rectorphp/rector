@@ -26,29 +26,11 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 
 final class ArrayTypeAnalyzer
 {
-    /**
-     * @var NodeTypeResolver
-     */
-    private $nodeTypeResolver;
-
-    /**
-     * @var PregMatchTypeCorrector
-     */
-    private $pregMatchTypeCorrector;
-
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
     public function __construct(
-        NodeNameResolver $nodeNameResolver,
-        NodeTypeResolver $nodeTypeResolver,
-        PregMatchTypeCorrector $pregMatchTypeCorrector
+        private NodeNameResolver $nodeNameResolver,
+        private NodeTypeResolver $nodeTypeResolver,
+        private PregMatchTypeCorrector $pregMatchTypeCorrector
     ) {
-        $this->nodeTypeResolver = $nodeTypeResolver;
-        $this->pregMatchTypeCorrector = $pregMatchTypeCorrector;
-        $this->nodeNameResolver = $nodeNameResolver;
     }
 
     public function isArrayType(Node $node): bool

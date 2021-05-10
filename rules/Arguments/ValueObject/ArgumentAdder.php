@@ -9,59 +9,17 @@ use PHPStan\Type\ObjectType;
 final class ArgumentAdder
 {
     /**
-     * @var string
-     */
-    private $class;
-
-    /**
-     * @var string
-     */
-    private $method;
-
-    /**
-     * @var int
-     */
-    private $position;
-
-    /**
-     * @var string|null
-     */
-    private $argumentName;
-
-    /**
-     * @var mixed|null
-     */
-    private $argumentDefaultValue;
-
-    /**
-     * @var string|null
-     */
-    private $argumentType;
-
-    /**
-     * @var string|null
-     */
-    private $scope;
-
-    /**
      * @param mixed|null $argumentDefaultValue
      */
     public function __construct(
-        string $class,
-        string $method,
-        int $position,
-        ?string $argumentName = null,
-        $argumentDefaultValue = null,
-        ?string $argumentType = null,
-        ?string $scope = null
+        private string $class,
+        private string $method,
+        private int $position,
+        private ?string $argumentName = null,
+        private $argumentDefaultValue = null,
+        private ?string $argumentType = null,
+        private ?string $scope = null
     ) {
-        $this->class = $class;
-        $this->method = $method;
-        $this->position = $position;
-        $this->argumentName = $argumentName;
-        $this->argumentDefaultValue = $argumentDefaultValue;
-        $this->argumentType = $argumentType;
-        $this->scope = $scope;
     }
 
     public function getObjectType(): ObjectType

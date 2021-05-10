@@ -15,14 +15,9 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
  */
 final class CommentRemover
 {
-    /**
-     * @var CommentRemovingNodeTraverser
-     */
-    private $commentRemovingNodeTraverser;
-
-    public function __construct(CommentRemovingNodeTraverser $commentRemovingNodeTraverser)
-    {
-        $this->commentRemovingNodeTraverser = $commentRemovingNodeTraverser;
+    public function __construct(
+        private CommentRemovingNodeTraverser $commentRemovingNodeTraverser
+    ) {
     }
 
     /**

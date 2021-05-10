@@ -22,57 +22,15 @@ use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
 final class VariableManipulator
 {
-    /**
-     * @var SimpleCallableNodeTraverser
-     */
-    private $simpleCallableNodeTraverser;
-
-    /**
-     * @var AssignManipulator
-     */
-    private $assignManipulator;
-
-    /**
-     * @var NodeComparator
-     */
-    private $nodeComparator;
-
-    /**
-     * @var BetterNodeFinder
-     */
-    private $betterNodeFinder;
-
-    /**
-     * @var ArrayManipulator
-     */
-    private $arrayManipulator;
-
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var VariableToConstantGuard
-     */
-    private $variableToConstantGuard;
-
     public function __construct(
-        ArrayManipulator $arrayManipulator,
-        AssignManipulator $assignManipulator,
-        BetterNodeFinder $betterNodeFinder,
-        SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
-        NodeNameResolver $nodeNameResolver,
-        VariableToConstantGuard $variableToConstantGuard,
-        NodeComparator $nodeComparator
+        private ArrayManipulator $arrayManipulator,
+        private AssignManipulator $assignManipulator,
+        private BetterNodeFinder $betterNodeFinder,
+        private SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
+        private NodeNameResolver $nodeNameResolver,
+        private VariableToConstantGuard $variableToConstantGuard,
+        private NodeComparator $nodeComparator
     ) {
-        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
-        $this->assignManipulator = $assignManipulator;
-        $this->betterNodeFinder = $betterNodeFinder;
-        $this->arrayManipulator = $arrayManipulator;
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->variableToConstantGuard = $variableToConstantGuard;
-        $this->nodeComparator = $nodeComparator;
     }
 
     /**

@@ -24,22 +24,10 @@ use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 
 final class NameNodeMapper implements PhpParserNodeMapperInterface
 {
-    /**
-     * @var RenamedClassesCollector
-     */
-    private $renamedClassesCollector;
-
-    /**
-     * @var ReflectionProvider
-     */
-    private $reflectionProvider;
-
     public function __construct(
-        RenamedClassesCollector $renamedClassesCollector,
-        ReflectionProvider $reflectionProvider
+        private RenamedClassesCollector $renamedClassesCollector,
+        private ReflectionProvider $reflectionProvider
     ) {
-        $this->renamedClassesCollector = $renamedClassesCollector;
-        $this->reflectionProvider = $reflectionProvider;
     }
 
     /**

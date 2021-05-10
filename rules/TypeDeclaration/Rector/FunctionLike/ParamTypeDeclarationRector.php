@@ -34,43 +34,13 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class ParamTypeDeclarationRector extends AbstractRector
 {
-    /**
-     * @var ParamTypeInferer
-     */
-    private $paramTypeInferer;
-
-    /**
-     * @var ChildParamPopulator
-     */
-    private $childParamPopulator;
-
-    /**
-     * @var TraitTypeAnalyzer
-     */
-    private $traitTypeAnalyzer;
-
-    /**
-     * @var ParamTagRemover
-     */
-    private $paramTagRemover;
-
-    /**
-     * @var VendorLockResolver
-     */
-    private $vendorLockResolver;
-
     public function __construct(
-        VendorLockResolver $vendorLockResolver,
-        ChildParamPopulator $childParamPopulator,
-        ParamTypeInferer $paramTypeInferer,
-        TraitTypeAnalyzer $traitTypeAnalyzer,
-        ParamTagRemover $paramTagRemover
+        private VendorLockResolver $vendorLockResolver,
+        private ChildParamPopulator $childParamPopulator,
+        private ParamTypeInferer $paramTypeInferer,
+        private TraitTypeAnalyzer $traitTypeAnalyzer,
+        private ParamTagRemover $paramTagRemover
     ) {
-        $this->paramTypeInferer = $paramTypeInferer;
-        $this->childParamPopulator = $childParamPopulator;
-        $this->traitTypeAnalyzer = $traitTypeAnalyzer;
-        $this->paramTagRemover = $paramTagRemover;
-        $this->vendorLockResolver = $vendorLockResolver;
     }
 
     /**

@@ -14,22 +14,10 @@ use Symplify\PackageBuilder\Parameter\ParameterProvider;
  */
 final class PhpVersionProvider
 {
-    /**
-     * @var ParameterProvider
-     */
-    private $parameterProvider;
-
-    /**
-     * @var ProjectComposerJsonPhpVersionResolver
-     */
-    private $projectComposerJsonPhpVersionResolver;
-
     public function __construct(
-        ParameterProvider $parameterProvider,
-        ProjectComposerJsonPhpVersionResolver $projectComposerJsonPhpVersionResolver
+        private ParameterProvider $parameterProvider,
+        private ProjectComposerJsonPhpVersionResolver $projectComposerJsonPhpVersionResolver
     ) {
-        $this->parameterProvider = $parameterProvider;
-        $this->projectComposerJsonPhpVersionResolver = $projectComposerJsonPhpVersionResolver;
     }
 
     public function provide(): int

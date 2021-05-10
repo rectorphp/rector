@@ -84,14 +84,9 @@ final class SensitiveConstantNameRector extends AbstractRector
         'NULL',
     ];
 
-    /**
-     * @var ReflectionProvider
-     */
-    private $reflectionProvider;
-
-    public function __construct(ReflectionProvider $reflectionProvider)
-    {
-        $this->reflectionProvider = $reflectionProvider;
+    public function __construct(
+        private ReflectionProvider $reflectionProvider
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

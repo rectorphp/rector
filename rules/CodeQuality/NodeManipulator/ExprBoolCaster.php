@@ -18,36 +18,12 @@ use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
 
 final class ExprBoolCaster
 {
-    /**
-     * @var NodeTypeResolver
-     */
-    private $nodeTypeResolver;
-
-    /**
-     * @var TypeUnwrapper
-     */
-    private $typeUnwrapper;
-
-    /**
-     * @var StaticTypeAnalyzer
-     */
-    private $staticTypeAnalyzer;
-
-    /**
-     * @var NodeFactory
-     */
-    private $nodeFactory;
-
     public function __construct(
-        NodeTypeResolver $nodeTypeResolver,
-        TypeUnwrapper $typeUnwrapper,
-        StaticTypeAnalyzer $staticTypeAnalyzer,
-        NodeFactory $nodeFactory
+        private NodeTypeResolver $nodeTypeResolver,
+        private TypeUnwrapper $typeUnwrapper,
+        private StaticTypeAnalyzer $staticTypeAnalyzer,
+        private NodeFactory $nodeFactory
     ) {
-        $this->nodeTypeResolver = $nodeTypeResolver;
-        $this->typeUnwrapper = $typeUnwrapper;
-        $this->staticTypeAnalyzer = $staticTypeAnalyzer;
-        $this->nodeFactory = $nodeFactory;
     }
 
     public function boolCastOrNullCompareIfNeeded(Expr $expr): Expr

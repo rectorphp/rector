@@ -34,20 +34,10 @@ final class ContextAnalyzer
      */
     private const LOOP_NODES = [For_::class, Foreach_::class, While_::class, Do_::class, Switch_::class];
 
-    /**
-     * @var BetterNodeFinder
-     */
-    private $betterNodeFinder;
-
-    /**
-     * @var NodeTypeResolver
-     */
-    private $nodeTypeResolver;
-
-    public function __construct(BetterNodeFinder $betterNodeFinder, NodeTypeResolver $nodeTypeResolver)
-    {
-        $this->betterNodeFinder = $betterNodeFinder;
-        $this->nodeTypeResolver = $nodeTypeResolver;
+    public function __construct(
+        private BetterNodeFinder $betterNodeFinder,
+        private NodeTypeResolver $nodeTypeResolver
+    ) {
     }
 
     public function isInLoop(Node $node): bool

@@ -6,43 +6,13 @@ namespace Rector\PHPOffice\ValueObject;
 
 final class ConditionalSetValue
 {
-    /**
-     * @var string
-     */
-    private $oldMethod;
-
-    /**
-     * @var string
-     */
-    private $newGetMethod;
-
-    /**
-     * @var int
-     */
-    private $argPosition;
-
-    /**
-     * @var string
-     */
-    private $newSetMethod;
-
-    /**
-     * @var bool
-     */
-    private $hasRow = false;
-
     public function __construct(
-        string $oldMethod,
-        string $newGetMethod,
-        string $newSetMethod,
-        int $argPosition,
-        bool $hasRow
+        private string $oldMethod,
+        private string $newGetMethod,
+        private string $newSetMethod,
+        private int $argPosition,
+        private bool $hasRow
     ) {
-        $this->oldMethod = $oldMethod;
-        $this->newGetMethod = $newGetMethod;
-        $this->argPosition = $argPosition;
-        $this->newSetMethod = $newSetMethod;
-        $this->hasRow = $hasRow;
     }
 
     public function getOldMethod(): string

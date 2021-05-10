@@ -13,14 +13,9 @@ use Rector\StaticTypeMapper\StaticTypeMapper;
 
 final class PhpParserTypeAnalyzer
 {
-    /**
-     * @var StaticTypeMapper
-     */
-    private $staticTypeMapper;
-
-    public function __construct(StaticTypeMapper $staticTypeMapper)
-    {
-        $this->staticTypeMapper = $staticTypeMapper;
+    public function __construct(
+        private StaticTypeMapper $staticTypeMapper
+    ) {
     }
 
     /**

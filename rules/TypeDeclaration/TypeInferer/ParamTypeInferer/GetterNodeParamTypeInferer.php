@@ -22,43 +22,13 @@ use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
 final class GetterNodeParamTypeInferer implements ParamTypeInfererInterface
 {
-    /**
-     * @var PropertyFetchAnalyzer
-     */
-    private $propertyFetchAnalyzer;
-
-    /**
-     * @var PropertyFetchAssignManipulator
-     */
-    private $propertyFetchAssignManipulator;
-
-    /**
-     * @var PhpDocInfoFactory
-     */
-    private $phpDocInfoFactory;
-
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var SimpleCallableNodeTraverser
-     */
-    private $simpleCallableNodeTraverser;
-
     public function __construct(
-        PropertyFetchAssignManipulator $propertyFetchAssignManipulator,
-        PropertyFetchAnalyzer $propertyFetchAnalyzer,
-        PhpDocInfoFactory $phpDocInfoFactory,
-        NodeNameResolver $nodeNameResolver,
-        SimpleCallableNodeTraverser $simpleCallableNodeTraverser
+        private PropertyFetchAssignManipulator $propertyFetchAssignManipulator,
+        private PropertyFetchAnalyzer $propertyFetchAnalyzer,
+        private PhpDocInfoFactory $phpDocInfoFactory,
+        private NodeNameResolver $nodeNameResolver,
+        private SimpleCallableNodeTraverser $simpleCallableNodeTraverser
     ) {
-        $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
-        $this->propertyFetchAssignManipulator = $propertyFetchAssignManipulator;
-        $this->phpDocInfoFactory = $phpDocInfoFactory;
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
     }
 
     public function inferParam(Param $param): Type

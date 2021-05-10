@@ -19,22 +19,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class IsCountableRector extends AbstractRector
 {
-    /**
-     * @var IsArrayAndDualCheckToAble
-     */
-    private $isArrayAndDualCheckToAble;
-
-    /**
-     * @var ReflectionProvider
-     */
-    private $reflectionProvider;
-
     public function __construct(
-        IsArrayAndDualCheckToAble $isArrayAndDualCheckToAble,
-        ReflectionProvider $reflectionProvider
+        private IsArrayAndDualCheckToAble $isArrayAndDualCheckToAble,
+        private ReflectionProvider $reflectionProvider
     ) {
-        $this->isArrayAndDualCheckToAble = $isArrayAndDualCheckToAble;
-        $this->reflectionProvider = $reflectionProvider;
     }
 
     public function getRuleDefinition(): RuleDefinition

@@ -12,29 +12,11 @@ use Rector\NodeNameResolver\NodeNameResolver;
 
 final class BoolPropertyConflictingNameGuard
 {
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var ArrayFilter
-     */
-    private $arrayFilter;
-
-    /**
-     * @var BoolPropertyExpectedNameResolver
-     */
-    private $boolPropertyExpectedNameResolver;
-
     public function __construct(
-        BoolPropertyExpectedNameResolver $boolPropertyExpectedNameResolver,
-        NodeNameResolver $nodeNameResolver,
-        ArrayFilter $arrayFilter
+        private BoolPropertyExpectedNameResolver $boolPropertyExpectedNameResolver,
+        private NodeNameResolver $nodeNameResolver,
+        private ArrayFilter $arrayFilter
     ) {
-        $this->boolPropertyExpectedNameResolver = $boolPropertyExpectedNameResolver;
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->arrayFilter = $arrayFilter;
     }
 
     public function isConflicting(PropertyRename $propertyRename): bool

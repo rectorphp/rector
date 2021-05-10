@@ -11,38 +11,14 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class FileDiff
 {
     /**
-     * @var string
-     */
-    private $diff;
-
-    /**
-     * @var string
-     */
-    private $diffConsoleFormatted;
-
-    /**
-     * @var RectorWithLineChange[]
-     */
-    private $rectorWithLineChanges = [];
-
-    /**
-     * @var SmartFileInfo
-     */
-    private $smartFileInfo;
-
-    /**
      * @param RectorWithLineChange[] $rectorWithLineChanges
      */
     public function __construct(
-        SmartFileInfo $smartFileInfo,
-        string $diff,
-        string $diffConsoleFormatted,
-        array $rectorWithLineChanges = []
+        private SmartFileInfo $smartFileInfo,
+        private string $diff,
+        private string $diffConsoleFormatted,
+        private array $rectorWithLineChanges = []
     ) {
-        $this->smartFileInfo = $smartFileInfo;
-        $this->diff = $diff;
-        $this->rectorWithLineChanges = $rectorWithLineChanges;
-        $this->diffConsoleFormatted = $diffConsoleFormatted;
     }
 
     public function getDiff(): string

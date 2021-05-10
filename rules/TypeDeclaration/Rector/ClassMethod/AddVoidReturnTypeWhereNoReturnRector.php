@@ -20,14 +20,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class AddVoidReturnTypeWhereNoReturnRector extends AbstractRector
 {
-    /**
-     * @var SilentVoidResolver
-     */
-    private $silentVoidResolver;
-
-    public function __construct(SilentVoidResolver $silentVoidResolver)
-    {
-        $this->silentVoidResolver = $silentVoidResolver;
+    public function __construct(
+        private SilentVoidResolver $silentVoidResolver
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

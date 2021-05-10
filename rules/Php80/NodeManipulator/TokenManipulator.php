@@ -31,54 +31,18 @@ use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 final class TokenManipulator
 {
     /**
-     * @var SimpleCallableNodeTraverser
-     */
-    private $simpleCallableNodeTraverser;
-
-    /**
-     * @var ValueResolver
-     */
-    private $valueResolver;
-
-    /**
-     * @var NodeComparator
-     */
-    private $nodeComparator;
-
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var NodeTypeResolver
-     */
-    private $nodeTypeResolver;
-
-    /**
-     * @var NodesToRemoveCollector
-     */
-    private $nodesToRemoveCollector;
-
-    /**
      * @var Expr|null
      */
     private $assignedNameExpr;
 
     public function __construct(
-        SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
-        NodeNameResolver $nodeNameResolver,
-        NodeTypeResolver $nodeTypeResolver,
-        NodesToRemoveCollector $nodesToRemoveCollector,
-        ValueResolver $valueResolver,
-        NodeComparator $nodeComparator
+        private SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
+        private NodeNameResolver $nodeNameResolver,
+        private NodeTypeResolver $nodeTypeResolver,
+        private NodesToRemoveCollector $nodesToRemoveCollector,
+        private ValueResolver $valueResolver,
+        private NodeComparator $nodeComparator
     ) {
-        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
-        $this->valueResolver = $valueResolver;
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->nodeTypeResolver = $nodeTypeResolver;
-        $this->nodesToRemoveCollector = $nodesToRemoveCollector;
-        $this->nodeComparator = $nodeComparator;
     }
 
     /**

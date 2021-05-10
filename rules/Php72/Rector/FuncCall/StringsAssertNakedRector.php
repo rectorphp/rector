@@ -21,14 +21,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class StringsAssertNakedRector extends AbstractRector
 {
-    /**
-     * @var Parser
-     */
-    private $parser;
-
-    public function __construct(Parser $parser)
-    {
-        $this->parser = $parser;
+    public function __construct(
+        private Parser $parser
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

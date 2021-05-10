@@ -21,33 +21,18 @@ abstract class AbstractValuesAwareNode implements PhpDocTagValueNode
     private const UNQUOTED_VALUE_REGEX = '#"(?<content>.*?)"#';
 
     /**
-     * @var mixed[]
-     */
-    protected $values = [];
-
-    /**
      * @var bool
      */
     protected $hasChanged = false;
 
     /**
-     * @var string|null
-     */
-    protected $silentKey;
-
-    /**
-     * @var string|null
-     */
-    protected $originalContent;
-
-    /**
      * @param mixed[] $values
      */
-    public function __construct(array $values = [], ?string $originalContent = null, ?string $silentKey = null)
-    {
-        $this->values = $values;
-        $this->originalContent = $originalContent;
-        $this->silentKey = $silentKey;
+    public function __construct(
+        protected array $values = [],
+        protected ?string $originalContent = null,
+        protected ?string $silentKey = null
+    ) {
     }
 
     public function removeValue(string $key): void

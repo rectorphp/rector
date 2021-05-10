@@ -19,14 +19,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class StringifyDefineRector extends AbstractRector
 {
-    /**
-     * @var StringTypeAnalyzer
-     */
-    private $stringTypeAnalyzer;
-
-    public function __construct(StringTypeAnalyzer $stringTypeAnalyzer)
-    {
-        $this->stringTypeAnalyzer = $stringTypeAnalyzer;
+    public function __construct(
+        private StringTypeAnalyzer $stringTypeAnalyzer
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

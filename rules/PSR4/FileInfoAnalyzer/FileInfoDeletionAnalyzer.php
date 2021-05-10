@@ -18,20 +18,10 @@ final class FileInfoDeletionAnalyzer
      */
     private const TESTING_PREFIX_REGEX = '#input_(.*?)_#';
 
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var ClassNaming
-     */
-    private $classNaming;
-
-    public function __construct(NodeNameResolver $nodeNameResolver, ClassNaming $classNaming)
-    {
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->classNaming = $classNaming;
+    public function __construct(
+        private NodeNameResolver $nodeNameResolver,
+        private ClassNaming $classNaming
+    ) {
     }
 
     public function isClassLikeAndFileInfoMatch(File $file, ClassLike $classLike): bool

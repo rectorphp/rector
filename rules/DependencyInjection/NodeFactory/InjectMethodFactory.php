@@ -20,43 +20,13 @@ use Symplify\Astral\ValueObject\NodeBuilder\ParamBuilder;
 
 final class InjectMethodFactory
 {
-    /**
-     * @var PhpDocInfoFactory
-     */
-    private $phpDocInfoFactory;
-
-    /**
-     * @var PropertyNaming
-     */
-    private $propertyNaming;
-
-    /**
-     * @var ClassNaming
-     */
-    private $classNaming;
-
-    /**
-     * @var TypeFactory
-     */
-    private $typeFactory;
-
-    /**
-     * @var NodeFactory
-     */
-    private $nodeFactory;
-
     public function __construct(
-        ClassNaming $classNaming,
-        NodeFactory $nodeFactory,
-        PhpDocInfoFactory $phpDocInfoFactory,
-        PropertyNaming $propertyNaming,
-        TypeFactory $typeFactory
+        private ClassNaming $classNaming,
+        private NodeFactory $nodeFactory,
+        private PhpDocInfoFactory $phpDocInfoFactory,
+        private PropertyNaming $propertyNaming,
+        private TypeFactory $typeFactory
     ) {
-        $this->phpDocInfoFactory = $phpDocInfoFactory;
-        $this->propertyNaming = $propertyNaming;
-        $this->classNaming = $classNaming;
-        $this->typeFactory = $typeFactory;
-        $this->nodeFactory = $nodeFactory;
     }
 
     /**

@@ -25,20 +25,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class ChangeIfElseValueAssignToEarlyReturnRector extends AbstractRector
 {
-    /**
-     * @var IfManipulator
-     */
-    private $ifManipulator;
-
-    /**
-     * @var StmtsManipulator
-     */
-    private $stmtsManipulator;
-
-    public function __construct(IfManipulator $ifManipulator, StmtsManipulator $stmtsManipulator)
-    {
-        $this->ifManipulator = $ifManipulator;
-        $this->stmtsManipulator = $stmtsManipulator;
+    public function __construct(
+        private IfManipulator $ifManipulator,
+        private StmtsManipulator $stmtsManipulator
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

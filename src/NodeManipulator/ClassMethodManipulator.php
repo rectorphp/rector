@@ -24,43 +24,13 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 
 final class ClassMethodManipulator
 {
-    /**
-     * @var BetterNodeFinder
-     */
-    private $betterNodeFinder;
-
-    /**
-     * @var NodeTypeResolver
-     */
-    private $nodeTypeResolver;
-
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var NodeComparator
-     */
-    private $nodeComparator;
-
-    /**
-     * @var FuncCallManipulator
-     */
-    private $funcCallManipulator;
-
     public function __construct(
-        BetterNodeFinder $betterNodeFinder,
-        NodeNameResolver $nodeNameResolver,
-        NodeTypeResolver $nodeTypeResolver,
-        NodeComparator $nodeComparator,
-        FuncCallManipulator $funcCallManipulator
+        private BetterNodeFinder $betterNodeFinder,
+        private NodeNameResolver $nodeNameResolver,
+        private NodeTypeResolver $nodeTypeResolver,
+        private NodeComparator $nodeComparator,
+        private FuncCallManipulator $funcCallManipulator
     ) {
-        $this->betterNodeFinder = $betterNodeFinder;
-        $this->nodeTypeResolver = $nodeTypeResolver;
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->nodeComparator = $nodeComparator;
-        $this->funcCallManipulator = $funcCallManipulator;
     }
 
     public function isParameterUsedInClassMethod(Param $param, ClassMethod $classMethod): bool

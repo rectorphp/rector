@@ -9,22 +9,12 @@ use PHPStan\Type\ObjectType;
 final class ParentClassToTraits
 {
     /**
-     * @var string
-     */
-    private $parentType;
-
-    /**
-     * @var string[]
-     */
-    private $traitNames = [];
-
-    /**
      * @param string[] $traitNames
      */
-    public function __construct(string $parentType, array $traitNames)
-    {
-        $this->parentType = $parentType;
-        $this->traitNames = $traitNames;
+    public function __construct(
+        private string $parentType,
+        private array $traitNames
+    ) {
     }
 
     public function getParentObjectType(): ObjectType

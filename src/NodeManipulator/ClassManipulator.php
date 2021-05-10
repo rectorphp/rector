@@ -18,29 +18,11 @@ use Rector\PostRector\Collector\NodesToRemoveCollector;
 
 final class ClassManipulator
 {
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var NodesToRemoveCollector
-     */
-    private $nodesToRemoveCollector;
-
-    /**
-     * @var ReflectionProvider
-     */
-    private $reflectionProvider;
-
     public function __construct(
-        NodeNameResolver $nodeNameResolver,
-        NodesToRemoveCollector $nodesToRemoveCollector,
-        ReflectionProvider $reflectionProvider
+        private NodeNameResolver $nodeNameResolver,
+        private NodesToRemoveCollector $nodesToRemoveCollector,
+        private ReflectionProvider $reflectionProvider
     ) {
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->nodesToRemoveCollector = $nodesToRemoveCollector;
-        $this->reflectionProvider = $reflectionProvider;
     }
 
     /**

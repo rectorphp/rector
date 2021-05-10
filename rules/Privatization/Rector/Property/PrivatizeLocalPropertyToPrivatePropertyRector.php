@@ -33,31 +33,18 @@ final class PrivatizeLocalPropertyToPrivatePropertyRector extends AbstractRector
     ];
 
     /**
-     * @var PropertyVisibilityVendorLockResolver
-     */
-    private $propertyVisibilityVendorLockResolver;
-
-    /**
      * @var ObjectType[]
      */
     private $excludedObjectTypes = [];
 
-    /**
-     * @var ClassAnalyzer
-     */
-    private $classAnalyzer;
-
     public function __construct(
-        PropertyVisibilityVendorLockResolver $propertyVisibilityVendorLockResolver,
-        ClassAnalyzer $classAnalyzer
+        private PropertyVisibilityVendorLockResolver $propertyVisibilityVendorLockResolver,
+        private ClassAnalyzer $classAnalyzer
     ) {
-        $this->propertyVisibilityVendorLockResolver = $propertyVisibilityVendorLockResolver;
-
         $this->excludedObjectTypes = [
             new ObjectType('PHPUnit\Framework\TestCase'),
             new ObjectType('PHP_CodeSniffer\Sniffs\Sniff'),
         ];
-        $this->classAnalyzer = $classAnalyzer;
     }
 
     public function getRuleDefinition(): RuleDefinition

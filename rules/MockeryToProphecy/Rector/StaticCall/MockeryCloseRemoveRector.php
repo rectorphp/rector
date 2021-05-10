@@ -17,14 +17,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class MockeryCloseRemoveRector extends AbstractRector
 {
-    /**
-     * @var TestsNodeAnalyzer
-     */
-    private $testsNodeAnalyzer;
-
-    public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer)
-    {
-        $this->testsNodeAnalyzer = $testsNodeAnalyzer;
+    public function __construct(
+        private TestsNodeAnalyzer $testsNodeAnalyzer
+    ) {
     }
 
     /**

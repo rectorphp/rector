@@ -13,14 +13,9 @@ use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 
 final class TypeWithClassNameTypeMapper implements TypeMapperInterface
 {
-    /**
-     * @var StringTypeMapper
-     */
-    private $stringTypeMapper;
-
-    public function __construct(StringTypeMapper $stringTypeMapper)
-    {
-        $this->stringTypeMapper = $stringTypeMapper;
+    public function __construct(
+        private StringTypeMapper $stringTypeMapper
+    ) {
     }
 
     /**

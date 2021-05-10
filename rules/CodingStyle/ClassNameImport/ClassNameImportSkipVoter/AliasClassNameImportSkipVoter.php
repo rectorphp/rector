@@ -21,14 +21,9 @@ use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
  */
 final class AliasClassNameImportSkipVoter implements ClassNameImportSkipVoterInterface
 {
-    /**
-     * @var AliasUsesResolver
-     */
-    private $aliasUsesResolver;
-
-    public function __construct(AliasUsesResolver $aliasUsesResolver)
-    {
-        $this->aliasUsesResolver = $aliasUsesResolver;
+    public function __construct(
+        private AliasUsesResolver $aliasUsesResolver
+    ) {
     }
 
     public function shouldSkip(FullyQualifiedObjectType $fullyQualifiedObjectType, Node $node): bool

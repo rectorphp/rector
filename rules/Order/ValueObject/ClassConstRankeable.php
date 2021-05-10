@@ -8,26 +8,11 @@ use Rector\Order\Contract\RankeableInterface;
 
 final class ClassConstRankeable implements RankeableInterface
 {
-    /**
-     * @var string
-     */
-    private $name;
-
-    /**
-     * @var int
-     */
-    private $visibility;
-
-    /**
-     * @var int
-     */
-    private $position;
-
-    public function __construct(string $name, int $visibility, int $position)
-    {
-        $this->name = $name;
-        $this->visibility = $visibility;
-        $this->position = $position;
+    public function __construct(
+        private string $name,
+        private int $visibility,
+        private int $position
+    ) {
     }
 
     public function getName(): string

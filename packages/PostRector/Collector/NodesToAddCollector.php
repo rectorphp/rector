@@ -28,29 +28,11 @@ final class NodesToAddCollector implements NodeCollectorInterface
      */
     private $nodesToAddBefore = [];
 
-    /**
-     * @var BetterNodeFinder
-     */
-    private $betterNodeFinder;
-
-    /**
-     * @var RectorChangeCollector
-     */
-    private $rectorChangeCollector;
-
-    /**
-     * @var BetterStandardPrinter
-     */
-    private $betterStandardPrinter;
-
     public function __construct(
-        BetterNodeFinder $betterNodeFinder,
-        RectorChangeCollector $rectorChangeCollector,
-        BetterStandardPrinter $betterStandardPrinter
+        private BetterNodeFinder $betterNodeFinder,
+        private RectorChangeCollector $rectorChangeCollector,
+        private BetterStandardPrinter $betterStandardPrinter
     ) {
-        $this->betterNodeFinder = $betterNodeFinder;
-        $this->rectorChangeCollector = $rectorChangeCollector;
-        $this->betterStandardPrinter = $betterStandardPrinter;
     }
 
     public function isActive(): bool

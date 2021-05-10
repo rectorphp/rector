@@ -20,43 +20,13 @@ use Rector\StaticTypeMapper\StaticTypeMapper;
 
 final class PhpDocFromTypeDeclarationDecorator
 {
-    /**
-     * @var StaticTypeMapper
-     */
-    private $staticTypeMapper;
-
-    /**
-     * @var PhpDocInfoFactory
-     */
-    private $phpDocInfoFactory;
-
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var PhpDocTypeChanger
-     */
-    private $phpDocTypeChanger;
-
-    /**
-     * @var TypeUnwrapper
-     */
-    private $typeUnwrapper;
-
     public function __construct(
-        StaticTypeMapper $staticTypeMapper,
-        PhpDocInfoFactory $phpDocInfoFactory,
-        NodeNameResolver $nodeNameResolver,
-        PhpDocTypeChanger $phpDocTypeChanger,
-        TypeUnwrapper $typeUnwrapper
+        private StaticTypeMapper $staticTypeMapper,
+        private PhpDocInfoFactory $phpDocInfoFactory,
+        private NodeNameResolver $nodeNameResolver,
+        private PhpDocTypeChanger $phpDocTypeChanger,
+        private TypeUnwrapper $typeUnwrapper
     ) {
-        $this->staticTypeMapper = $staticTypeMapper;
-        $this->phpDocInfoFactory = $phpDocInfoFactory;
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->phpDocTypeChanger = $phpDocTypeChanger;
-        $this->typeUnwrapper = $typeUnwrapper;
     }
 
     /**

@@ -24,36 +24,12 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class GenericsPHPStormMethodAnnotationRector extends AbstractRector
 {
-    /**
-     * @var ClassGenericMethodResolver
-     */
-    private $classGenericMethodResolver;
-
-    /**
-     * @var GenericTypeSpecifier
-     */
-    private $genericTypeSpecifier;
-
-    /**
-     * @var GenericClassReflectionAnalyzer
-     */
-    private $genericClassReflectionAnalyzer;
-
-    /**
-     * @var UnnededMethodTagValueNodeFilter
-     */
-    private $unnededMethodTagValueNodeFilter;
-
     public function __construct(
-        ClassGenericMethodResolver $classGenericMethodResolver,
-        GenericTypeSpecifier $genericTypeSpecifier,
-        GenericClassReflectionAnalyzer $genericClassReflectionAnalyzer,
-        UnnededMethodTagValueNodeFilter $unnededMethodTagValueNodeFilter
+        private ClassGenericMethodResolver $classGenericMethodResolver,
+        private GenericTypeSpecifier $genericTypeSpecifier,
+        private GenericClassReflectionAnalyzer $genericClassReflectionAnalyzer,
+        private UnnededMethodTagValueNodeFilter $unnededMethodTagValueNodeFilter
     ) {
-        $this->classGenericMethodResolver = $classGenericMethodResolver;
-        $this->genericTypeSpecifier = $genericTypeSpecifier;
-        $this->genericClassReflectionAnalyzer = $genericClassReflectionAnalyzer;
-        $this->unnededMethodTagValueNodeFilter = $unnededMethodTagValueNodeFilter;
     }
 
     public function getRuleDefinition(): RuleDefinition

@@ -11,20 +11,10 @@ use Symplify\ConsoleColorDiff\Console\Output\ConsoleDiffer;
 
 final class FileDiffFactory
 {
-    /**
-     * @var DefaultDiffer
-     */
-    private $defaultDiffer;
-
-    /**
-     * @var ConsoleDiffer
-     */
-    private $consoleDiffer;
-
-    public function __construct(DefaultDiffer $defaultDiffer, ConsoleDiffer $consoleDiffer)
-    {
-        $this->defaultDiffer = $defaultDiffer;
-        $this->consoleDiffer = $consoleDiffer;
+    public function __construct(
+        private DefaultDiffer $defaultDiffer,
+        private ConsoleDiffer $consoleDiffer
+    ) {
     }
 
     public function createFileDiff(File $file, string $oldContent, string $newContent): FileDiff

@@ -23,14 +23,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class WhileEachToForeachRector extends AbstractRector
 {
-    /**
-     * @var AssignManipulator
-     */
-    private $assignManipulator;
-
-    public function __construct(AssignManipulator $assignManipulator)
-    {
-        $this->assignManipulator = $assignManipulator;
+    public function __construct(
+        private AssignManipulator $assignManipulator
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

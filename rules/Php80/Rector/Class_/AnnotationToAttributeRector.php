@@ -40,22 +40,10 @@ final class AnnotationToAttributeRector extends AbstractRector implements Config
      */
     private $annotationsToAttributes = [];
 
-    /**
-     * @var PhpAttributeGroupFactory
-     */
-    private $phpAttributeGroupFactory;
-
-    /**
-     * @var PhpDocTagRemover
-     */
-    private $phpDocTagRemover;
-
     public function __construct(
-        PhpAttributeGroupFactory $phpAttributeGroupFactory,
-        PhpDocTagRemover $phpDocTagRemover
+        private PhpAttributeGroupFactory $phpAttributeGroupFactory,
+        private PhpDocTagRemover $phpDocTagRemover
     ) {
-        $this->phpAttributeGroupFactory = $phpAttributeGroupFactory;
-        $this->phpDocTagRemover = $phpDocTagRemover;
     }
 
     public function getRuleDefinition(): RuleDefinition

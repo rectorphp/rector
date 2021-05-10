@@ -23,36 +23,12 @@ use Symplify\PackageBuilder\Reflection\PrivatesCaller;
 
 final class ReflectionTypeResolver
 {
-    /**
-     * @var NodeTypeResolver
-     */
-    private $nodeTypeResolver;
-
-    /**
-     * @var ReflectionProvider
-     */
-    private $reflectionProvider;
-
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var PrivatesCaller
-     */
-    private $privatesCaller;
-
     public function __construct(
-        NodeTypeResolver $nodeTypeResolver,
-        ReflectionProvider $reflectionProvider,
-        NodeNameResolver $nodeNameResolver,
-        PrivatesCaller $privatesCaller
+        private NodeTypeResolver $nodeTypeResolver,
+        private ReflectionProvider $reflectionProvider,
+        private NodeNameResolver $nodeNameResolver,
+        private PrivatesCaller $privatesCaller
     ) {
-        $this->nodeTypeResolver = $nodeTypeResolver;
-        $this->reflectionProvider = $reflectionProvider;
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->privatesCaller = $privatesCaller;
     }
 
     public function resolveMethodCallReturnType(MethodCall $methodCall): ?Type

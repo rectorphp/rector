@@ -17,22 +17,12 @@ use Rector\StaticTypeMapper\Contract\PhpDocParser\PhpDocTypeMapperInterface;
 final class PhpDocTypeMapper
 {
     /**
-     * @var PhpDocTypeMapperInterface[]
-     */
-    private $phpDocTypeMappers = [];
-
-    /**
-     * @var TypeNodeResolver
-     */
-    private $typeNodeResolver;
-
-    /**
      * @param PhpDocTypeMapperInterface[] $phpDocTypeMappers
      */
-    public function __construct(array $phpDocTypeMappers, TypeNodeResolver $typeNodeResolver)
-    {
-        $this->phpDocTypeMappers = $phpDocTypeMappers;
-        $this->typeNodeResolver = $typeNodeResolver;
+    public function __construct(
+        private array $phpDocTypeMappers,
+        private TypeNodeResolver $typeNodeResolver
+    ) {
     }
 
     public function mapToPHPStanType(TypeNode $typeNode, Node $node, NameScope $nameScope): Type

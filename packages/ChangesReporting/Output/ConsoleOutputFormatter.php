@@ -27,29 +27,11 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
      */
     private const ON_LINE_REGEX = '# on line #';
 
-    /**
-     * @var OutputStyleInterface
-     */
-    private $outputStyle;
-
-    /**
-     * @var Configuration
-     */
-    private $configuration;
-
-    /**
-     * @var RectorsChangelogResolver
-     */
-    private $rectorsChangelogResolver;
-
     public function __construct(
-        Configuration $configuration,
-        OutputStyleInterface $outputStyle,
-        RectorsChangelogResolver $rectorsChangelogResolver
+        private Configuration $configuration,
+        private OutputStyleInterface $outputStyle,
+        private RectorsChangelogResolver $rectorsChangelogResolver
     ) {
-        $this->outputStyle = $outputStyle;
-        $this->configuration = $configuration;
-        $this->rectorsChangelogResolver = $rectorsChangelogResolver;
     }
 
     public function report(ProcessResult $processResult): void

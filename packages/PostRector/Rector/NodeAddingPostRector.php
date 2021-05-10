@@ -22,14 +22,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class NodeAddingPostRector extends AbstractPostRector
 {
-    /**
-     * @var NodesToAddCollector
-     */
-    private $nodesToAddCollector;
-
-    public function __construct(NodesToAddCollector $nodesToAddCollector)
-    {
-        $this->nodesToAddCollector = $nodesToAddCollector;
+    public function __construct(
+        private NodesToAddCollector $nodesToAddCollector
+    ) {
     }
 
     public function getPriority(): int

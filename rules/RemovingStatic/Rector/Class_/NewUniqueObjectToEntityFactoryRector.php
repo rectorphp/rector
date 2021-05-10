@@ -53,20 +53,10 @@ final class NewUniqueObjectToEntityFactoryRector extends AbstractRector implemen
      */
     private $classesUsingTypes = [];
 
-    /**
-     * @var PropertyNaming
-     */
-    private $propertyNaming;
-
-    /**
-     * @var StaticTypesInClassResolver
-     */
-    private $staticTypesInClassResolver;
-
-    public function __construct(PropertyNaming $propertyNaming, StaticTypesInClassResolver $staticTypesInClassResolver)
-    {
-        $this->propertyNaming = $propertyNaming;
-        $this->staticTypesInClassResolver = $staticTypesInClassResolver;
+    public function __construct(
+        private PropertyNaming $propertyNaming,
+        private StaticTypesInClassResolver $staticTypesInClassResolver
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

@@ -22,20 +22,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class PregReplaceEModifierRector extends AbstractRector
 {
-    /**
-     * @var RegexMatcher
-     */
-    private $regexMatcher;
-
-    /**
-     * @var AnonymousFunctionNodeFactory
-     */
-    private $anonymousFunctionNodeFactory;
-
-    public function __construct(AnonymousFunctionNodeFactory $anonymousFunctionNodeFactory, RegexMatcher $regexMatcher)
-    {
-        $this->regexMatcher = $regexMatcher;
-        $this->anonymousFunctionNodeFactory = $anonymousFunctionNodeFactory;
+    public function __construct(
+        private AnonymousFunctionNodeFactory $anonymousFunctionNodeFactory,
+        private RegexMatcher $regexMatcher
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

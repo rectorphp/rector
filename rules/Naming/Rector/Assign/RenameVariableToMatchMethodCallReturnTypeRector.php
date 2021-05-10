@@ -32,71 +32,17 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class RenameVariableToMatchMethodCallReturnTypeRector extends AbstractRector
 {
-    /**
-     * @var ExpectedNameResolver
-     */
-    private $expectedNameResolver;
-
-    /**
-     * @var VariableRenamer
-     */
-    private $variableRenamer;
-
-    /**
-     * @var BreakingVariableRenameGuard
-     */
-    private $breakingVariableRenameGuard;
-
-    /**
-     * @var VariableAndCallAssignMatcher
-     */
-    private $variableAndCallAssignMatcher;
-
-    /**
-     * @var NamingConventionAnalyzer
-     */
-    private $namingConventionAnalyzer;
-
-    /**
-     * @var VarTagValueNodeRenamer
-     */
-    private $varTagValueNodeRenamer;
-
-    /**
-     * @var TypeUnwrapper
-     */
-    private $typeUnwrapper;
-
-    /**
-     * @var ReflectionProvider
-     */
-    private $reflectionProvider;
-
-    /**
-     * @var FamilyRelationsAnalyzer
-     */
-    private $familyRelationsAnalyzer;
-
     public function __construct(
-        BreakingVariableRenameGuard $breakingVariableRenameGuard,
-        ExpectedNameResolver $expectedNameResolver,
-        NamingConventionAnalyzer $namingConventionAnalyzer,
-        VarTagValueNodeRenamer $varTagValueNodeRenamer,
-        VariableAndCallAssignMatcher $variableAndCallAssignMatcher,
-        VariableRenamer $variableRenamer,
-        TypeUnwrapper $typeUnwrapper,
-        ReflectionProvider $reflectionProvider,
-        FamilyRelationsAnalyzer $familyRelationsAnalyzer
+        private BreakingVariableRenameGuard $breakingVariableRenameGuard,
+        private ExpectedNameResolver $expectedNameResolver,
+        private NamingConventionAnalyzer $namingConventionAnalyzer,
+        private VarTagValueNodeRenamer $varTagValueNodeRenamer,
+        private VariableAndCallAssignMatcher $variableAndCallAssignMatcher,
+        private VariableRenamer $variableRenamer,
+        private TypeUnwrapper $typeUnwrapper,
+        private ReflectionProvider $reflectionProvider,
+        private FamilyRelationsAnalyzer $familyRelationsAnalyzer
     ) {
-        $this->expectedNameResolver = $expectedNameResolver;
-        $this->variableRenamer = $variableRenamer;
-        $this->breakingVariableRenameGuard = $breakingVariableRenameGuard;
-        $this->variableAndCallAssignMatcher = $variableAndCallAssignMatcher;
-        $this->namingConventionAnalyzer = $namingConventionAnalyzer;
-        $this->varTagValueNodeRenamer = $varTagValueNodeRenamer;
-        $this->typeUnwrapper = $typeUnwrapper;
-        $this->reflectionProvider = $reflectionProvider;
-        $this->familyRelationsAnalyzer = $familyRelationsAnalyzer;
     }
 
     public function getRuleDefinition(): RuleDefinition

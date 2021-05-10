@@ -21,18 +21,13 @@ use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
 final class ObjectWithoutClassTypeMapper implements TypeMapperInterface, PHPStanStaticTypeMapperAwareInterface
 {
     /**
-     * @var PhpVersionProvider
-     */
-    private $phpVersionProvider;
-
-    /**
      * @var PHPStanStaticTypeMapper
      */
     private $phpStanStaticTypeMapper;
 
-    public function __construct(PhpVersionProvider $phpVersionProvider)
-    {
-        $this->phpVersionProvider = $phpVersionProvider;
+    public function __construct(
+        private PhpVersionProvider $phpVersionProvider
+    ) {
     }
 
     /**

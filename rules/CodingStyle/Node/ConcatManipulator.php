@@ -12,22 +12,10 @@ use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
 final class ConcatManipulator
 {
-    /**
-     * @var NodeComparator
-     */
-    private $nodeComparator;
-
-    /**
-     * @var SimpleCallableNodeTraverser
-     */
-    private $simpleCallableNodeTraverser;
-
     public function __construct(
-        SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
-        NodeComparator $nodeComparator
+        private SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
+        private NodeComparator $nodeComparator
     ) {
-        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
-        $this->nodeComparator = $nodeComparator;
     }
 
     public function getFirstConcatItem(Concat $concat): Expr

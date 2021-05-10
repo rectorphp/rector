@@ -19,14 +19,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class ArrowFunctionToAnonymousFunctionRector extends AbstractRector
 {
-    /**
-     * @var AnonymousFunctionFactory
-     */
-    private $anonymousFunctionFactory;
-
-    public function __construct(AnonymousFunctionFactory $anonymousFunctionFactory)
-    {
-        $this->anonymousFunctionFactory = $anonymousFunctionFactory;
+    public function __construct(
+        private AnonymousFunctionFactory $anonymousFunctionFactory
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

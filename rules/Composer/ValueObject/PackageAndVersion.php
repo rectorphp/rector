@@ -8,20 +8,10 @@ use Rector\Composer\Contract\VersionAwareInterface;
 
 final class PackageAndVersion implements VersionAwareInterface
 {
-    /**
-     * @var string
-     */
-    private $packageName;
-
-    /**
-     * @var string
-     */
-    private $version;
-
-    public function __construct(string $packageName, string $version)
-    {
-        $this->packageName = $packageName;
-        $this->version = $version;
+    public function __construct(
+        private string $packageName,
+        private string $version
+    ) {
     }
 
     public function getPackageName(): string

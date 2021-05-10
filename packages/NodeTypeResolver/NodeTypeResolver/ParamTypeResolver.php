@@ -29,16 +29,6 @@ use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 final class ParamTypeResolver implements NodeTypeResolverInterface
 {
     /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var SimpleCallableNodeTraverser
-     */
-    private $simpleCallableNodeTraverser;
-
-    /**
      * @var NodeTypeResolver
      */
     private $nodeTypeResolver;
@@ -48,19 +38,11 @@ final class ParamTypeResolver implements NodeTypeResolverInterface
      */
     private $staticTypeMapper;
 
-    /**
-     * @var PhpDocInfoFactory
-     */
-    private $phpDocInfoFactory;
-
     public function __construct(
-        SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
-        NodeNameResolver $nodeNameResolver,
-        PhpDocInfoFactory $phpDocInfoFactory
+        private SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
+        private NodeNameResolver $nodeNameResolver,
+        private PhpDocInfoFactory $phpDocInfoFactory
     ) {
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
-        $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
 
     /**

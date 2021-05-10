@@ -12,20 +12,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 final class ClassRenamingPostRector extends AbstractPostRector
 {
-    /**
-     * @var RenamedClassesCollector
-     */
-    private $renamedClassesCollector;
-
-    /**
-     * @var ClassRenamer
-     */
-    private $classRenamer;
-
-    public function __construct(ClassRenamer $classRenamer, RenamedClassesCollector $renamedClassesCollector)
-    {
-        $this->renamedClassesCollector = $renamedClassesCollector;
-        $this->classRenamer = $classRenamer;
+    public function __construct(
+        private ClassRenamer $classRenamer,
+        private RenamedClassesCollector $renamedClassesCollector
+    ) {
     }
 
     public function getPriority(): int

@@ -19,14 +19,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class ChangeOrIfContinueToMultiContinueRector extends AbstractRector
 {
-    /**
-     * @var IfManipulator
-     */
-    private $ifManipulator;
-
-    public function __construct(IfManipulator $ifManipulator)
-    {
-        $this->ifManipulator = $ifManipulator;
+    public function __construct(
+        private IfManipulator $ifManipulator
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

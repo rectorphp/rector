@@ -11,14 +11,9 @@ use Throwable;
 
 final class BootstrapFilesIncluder
 {
-    /**
-     * @var ParameterProvider
-     */
-    private $parameterProvider;
-
-    public function __construct(ParameterProvider $parameterProvider)
-    {
-        $this->parameterProvider = $parameterProvider;
+    public function __construct(
+        private ParameterProvider $parameterProvider
+    ) {
     }
 
     /**

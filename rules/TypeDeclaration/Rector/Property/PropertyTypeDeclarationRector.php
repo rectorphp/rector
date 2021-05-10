@@ -19,20 +19,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class PropertyTypeDeclarationRector extends AbstractRector
 {
-    /**
-     * @var PropertyTypeInferer
-     */
-    private $propertyTypeInferer;
-
-    /**
-     * @var PhpDocTypeChanger
-     */
-    private $phpDocTypeChanger;
-
-    public function __construct(PropertyTypeInferer $propertyTypeInferer, PhpDocTypeChanger $phpDocTypeChanger)
-    {
-        $this->propertyTypeInferer = $propertyTypeInferer;
-        $this->phpDocTypeChanger = $phpDocTypeChanger;
+    public function __construct(
+        private PropertyTypeInferer $propertyTypeInferer,
+        private PhpDocTypeChanger $phpDocTypeChanger
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

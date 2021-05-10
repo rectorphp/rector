@@ -10,22 +10,12 @@ use PhpParser\Node\Stmt\Return_;
 final class AssignAndRootExprAndNodesToAdd
 {
     /**
-     * @var array<Expr|Return_>
-     */
-    private $nodesToAdd = [];
-
-    /**
-     * @var AssignAndRootExpr
-     */
-    private $assignAndRootExpr;
-
-    /**
      * @param array<Expr|Return_> $nodesToAdd
      */
-    public function __construct(AssignAndRootExpr $assignAndRootExpr, array $nodesToAdd)
-    {
-        $this->assignAndRootExpr = $assignAndRootExpr;
-        $this->nodesToAdd = $nodesToAdd;
+    public function __construct(
+        private AssignAndRootExpr $assignAndRootExpr,
+        private array $nodesToAdd
+    ) {
     }
 
     /**

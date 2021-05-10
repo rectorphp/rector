@@ -22,29 +22,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class ChangeReadOnlyPropertyWithDefaultValueToConstantRector extends AbstractRector
 {
-    /**
-     * @var PropertyManipulator
-     */
-    private $propertyManipulator;
-
-    /**
-     * @var ClassConstantFactory
-     */
-    private $classConstantFactory;
-
-    /**
-     * @var PropertyFetchWithConstFetchReplacer
-     */
-    private $propertyFetchWithConstFetchReplacer;
-
     public function __construct(
-        PropertyManipulator $propertyManipulator,
-        ClassConstantFactory $classConstantFactory,
-        PropertyFetchWithConstFetchReplacer $propertyFetchWithConstFetchReplacer
+        private PropertyManipulator $propertyManipulator,
+        private ClassConstantFactory $classConstantFactory,
+        private PropertyFetchWithConstFetchReplacer $propertyFetchWithConstFetchReplacer
     ) {
-        $this->propertyManipulator = $propertyManipulator;
-        $this->classConstantFactory = $classConstantFactory;
-        $this->propertyFetchWithConstFetchReplacer = $propertyFetchWithConstFetchReplacer;
     }
 
     public function getRuleDefinition(): RuleDefinition

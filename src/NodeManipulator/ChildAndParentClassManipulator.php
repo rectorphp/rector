@@ -17,50 +17,14 @@ use Rector\NodeNameResolver\NodeNameResolver;
 
 final class ChildAndParentClassManipulator
 {
-    /**
-     * @var NodeFactory
-     */
-    private $nodeFactory;
-
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var NodeRepository
-     */
-    private $nodeRepository;
-
-    /**
-     * @var PromotedPropertyParamCleaner
-     */
-    private $promotedPropertyParamCleaner;
-
-    /**
-     * @var ReflectionProvider
-     */
-    private $reflectionProvider;
-
-    /**
-     * @var ParentClassScopeResolver
-     */
-    private $parentClassScopeResolver;
-
     public function __construct(
-        NodeFactory $nodeFactory,
-        NodeNameResolver $nodeNameResolver,
-        NodeRepository $nodeRepository,
-        PromotedPropertyParamCleaner $promotedPropertyParamCleaner,
-        ReflectionProvider $reflectionProvider,
-        ParentClassScopeResolver $parentClassScopeResolver
+        private NodeFactory $nodeFactory,
+        private NodeNameResolver $nodeNameResolver,
+        private NodeRepository $nodeRepository,
+        private PromotedPropertyParamCleaner $promotedPropertyParamCleaner,
+        private ReflectionProvider $reflectionProvider,
+        private ParentClassScopeResolver $parentClassScopeResolver
     ) {
-        $this->nodeFactory = $nodeFactory;
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->nodeRepository = $nodeRepository;
-        $this->promotedPropertyParamCleaner = $promotedPropertyParamCleaner;
-        $this->reflectionProvider = $reflectionProvider;
-        $this->parentClassScopeResolver = $parentClassScopeResolver;
     }
 
     /**

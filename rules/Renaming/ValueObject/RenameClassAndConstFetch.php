@@ -9,32 +9,12 @@ use Rector\Renaming\Contract\RenameClassConstFetchInterface;
 
 final class RenameClassAndConstFetch implements RenameClassConstFetchInterface
 {
-    /**
-     * @var string
-     */
-    private $oldClass;
-
-    /**
-     * @var string
-     */
-    private $oldConstant;
-
-    /**
-     * @var string
-     */
-    private $newConstant;
-
-    /**
-     * @var string
-     */
-    private $newClass;
-
-    public function __construct(string $oldClass, string $oldConstant, string $newClass, string $newConstant)
-    {
-        $this->oldClass = $oldClass;
-        $this->oldConstant = $oldConstant;
-        $this->newConstant = $newConstant;
-        $this->newClass = $newClass;
+    public function __construct(
+        private string $oldClass,
+        private string $oldConstant,
+        private string $newClass,
+        private string $newConstant
+    ) {
     }
 
     public function getOldObjectType(): ObjectType

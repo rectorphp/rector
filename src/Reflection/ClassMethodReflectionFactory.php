@@ -12,14 +12,9 @@ use ReflectionMethod;
 
 final class ClassMethodReflectionFactory
 {
-    /**
-     * @var ReflectionProvider
-     */
-    private $reflectionProvider;
-
-    public function __construct(ReflectionProvider $reflectionProvider)
-    {
-        $this->reflectionProvider = $reflectionProvider;
+    public function __construct(
+        private ReflectionProvider $reflectionProvider
+    ) {
     }
 
     public function createFromPHPStanTypeAndMethodName(Type $type, string $methodName): ?ReflectionMethod

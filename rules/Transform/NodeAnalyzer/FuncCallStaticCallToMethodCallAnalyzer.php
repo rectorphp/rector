@@ -22,50 +22,14 @@ use Rector\Transform\NodeTypeAnalyzer\TypeProvidingExprFromClassResolver;
 
 final class FuncCallStaticCallToMethodCallAnalyzer
 {
-    /**
-     * @var TypeProvidingExprFromClassResolver
-     */
-    private $typeProvidingExprFromClassResolver;
-
-    /**
-     * @var PropertyNaming
-     */
-    private $propertyNaming;
-
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var NodeFactory
-     */
-    private $nodeFactory;
-
-    /**
-     * @var PropertyFetchFactory
-     */
-    private $propertyFetchFactory;
-
-    /**
-     * @var PropertyAdder
-     */
-    private $propertyAdder;
-
     public function __construct(
-        TypeProvidingExprFromClassResolver $typeProvidingExprFromClassResolver,
-        PropertyNaming $propertyNaming,
-        NodeNameResolver $nodeNameResolver,
-        NodeFactory $nodeFactory,
-        PropertyFetchFactory $propertyFetchFactory,
-        PropertyAdder $propertyAdder
+        private TypeProvidingExprFromClassResolver $typeProvidingExprFromClassResolver,
+        private PropertyNaming $propertyNaming,
+        private NodeNameResolver $nodeNameResolver,
+        private NodeFactory $nodeFactory,
+        private PropertyFetchFactory $propertyFetchFactory,
+        private PropertyAdder $propertyAdder
     ) {
-        $this->typeProvidingExprFromClassResolver = $typeProvidingExprFromClassResolver;
-        $this->propertyNaming = $propertyNaming;
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->nodeFactory = $nodeFactory;
-        $this->propertyFetchFactory = $propertyFetchFactory;
-        $this->propertyAdder = $propertyAdder;
     }
 
     /**

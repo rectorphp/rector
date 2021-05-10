@@ -38,14 +38,9 @@ final class DateTimeToDateTimeInterfaceRector extends AbstractRector
         'add', 'modify', MethodName::SET_STATE, 'setDate', 'setISODate', 'setTime', 'setTimestamp', 'setTimezone', 'sub',
     ];
 
-    /**
-     * @var PhpDocTypeChanger
-     */
-    private $phpDocTypeChanger;
-
-    public function __construct(PhpDocTypeChanger $phpDocTypeChanger)
-    {
-        $this->phpDocTypeChanger = $phpDocTypeChanger;
+    public function __construct(
+        private PhpDocTypeChanger $phpDocTypeChanger
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

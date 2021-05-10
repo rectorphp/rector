@@ -21,14 +21,9 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
  */
 final class ExclusionManager
 {
-    /**
-     * @var PhpDocInfoFactory
-     */
-    private $phpDocInfoFactory;
-
-    public function __construct(PhpDocInfoFactory $phpDocInfoFactory)
-    {
-        $this->phpDocInfoFactory = $phpDocInfoFactory;
+    public function __construct(
+        private PhpDocInfoFactory $phpDocInfoFactory
+    ) {
     }
 
     public function isNodeSkippedByRector(Node $node, PhpRectorInterface $phpRector): bool

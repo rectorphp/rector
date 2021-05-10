@@ -22,14 +22,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class RemoveUnusedPrivateClassConstantRector extends AbstractRector
 {
-    /**
-     * @var ClassConstManipulator
-     */
-    private $classConstManipulator;
-
-    public function __construct(ClassConstManipulator $classConstManipulator)
-    {
-        $this->classConstManipulator = $classConstManipulator;
+    public function __construct(
+        private ClassConstManipulator $classConstManipulator
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

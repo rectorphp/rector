@@ -17,22 +17,10 @@ use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
 final class ArrayDimFetchRenamer
 {
-    /**
-     * @var SimpleCallableNodeTraverser
-     */
-    private $simpleCallableNodeTraverser;
-
-    /**
-     * @var NodeComparator
-     */
-    private $nodeComparator;
-
     public function __construct(
-        SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
-        NodeComparator $nodeComparator
+        private SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
+        private NodeComparator $nodeComparator
     ) {
-        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
-        $this->nodeComparator = $nodeComparator;
     }
 
     /**

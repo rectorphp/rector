@@ -12,29 +12,11 @@ use Rector\ReadWrite\NodeFinder\NodeUsageFinder;
 
 final class VariableReadNodeAnalyzer implements ReadNodeAnalyzerInterface
 {
-    /**
-     * @var ParentScopeFinder
-     */
-    private $parentScopeFinder;
-
-    /**
-     * @var NodeUsageFinder
-     */
-    private $nodeUsageFinder;
-
-    /**
-     * @var ReadExprAnalyzer
-     */
-    private $readExprAnalyzer;
-
     public function __construct(
-        ParentScopeFinder $parentScopeFinder,
-        NodeUsageFinder $nodeUsageFinder,
-        ReadExprAnalyzer $readExprAnalyzer
+        private ParentScopeFinder $parentScopeFinder,
+        private NodeUsageFinder $nodeUsageFinder,
+        private ReadExprAnalyzer $readExprAnalyzer
     ) {
-        $this->parentScopeFinder = $parentScopeFinder;
-        $this->nodeUsageFinder = $nodeUsageFinder;
-        $this->readExprAnalyzer = $readExprAnalyzer;
     }
 
     public function supports(Node $node): bool

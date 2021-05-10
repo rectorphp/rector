@@ -34,36 +34,12 @@ final class FilesFinder
      */
     private $fileInfosBySourceAndSuffixes = [];
 
-    /**
-     * @var FilesystemTweaker
-     */
-    private $filesystemTweaker;
-
-    /**
-     * @var FinderSanitizer
-     */
-    private $finderSanitizer;
-
-    /**
-     * @var FileSystemFilter
-     */
-    private $fileSystemFilter;
-
-    /**
-     * @var SkippedPathsResolver
-     */
-    private $skippedPathsResolver;
-
     public function __construct(
-        FilesystemTweaker $filesystemTweaker,
-        FinderSanitizer $finderSanitizer,
-        FileSystemFilter $fileSystemFilter,
-        SkippedPathsResolver $skippedPathsResolver
+        private FilesystemTweaker $filesystemTweaker,
+        private FinderSanitizer $finderSanitizer,
+        private FileSystemFilter $fileSystemFilter,
+        private SkippedPathsResolver $skippedPathsResolver
     ) {
-        $this->filesystemTweaker = $filesystemTweaker;
-        $this->finderSanitizer = $finderSanitizer;
-        $this->fileSystemFilter = $fileSystemFilter;
-        $this->skippedPathsResolver = $skippedPathsResolver;
     }
 
     /**

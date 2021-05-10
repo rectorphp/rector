@@ -8,26 +8,11 @@ use PHPStan\Type\ObjectType;
 
 final class WrapReturn
 {
-    /**
-     * @var string
-     */
-    private $type;
-
-    /**
-     * @var string
-     */
-    private $method;
-
-    /**
-     * @var bool
-     */
-    private $isArrayWrap = false;
-
-    public function __construct(string $type, string $method, bool $isArrayWrap)
-    {
-        $this->type = $type;
-        $this->method = $method;
-        $this->isArrayWrap = $isArrayWrap;
+    public function __construct(
+        private string $type,
+        private string $method,
+        private bool $isArrayWrap
+    ) {
     }
 
     public function getObjectType(): ObjectType

@@ -14,22 +14,10 @@ use Symplify\SimplePhpDocParser\ValueObject\Ast\PhpDoc\SimplePhpDocNode;
 
 final class ClassGenericMethodResolver
 {
-    /**
-     * @var SimplePhpDocParser
-     */
-    private $simplePhpDocParser;
-
-    /**
-     * @var MethodTagValueNodeFactory
-     */
-    private $methodTagValueNodeFactory;
-
     public function __construct(
-        SimplePhpDocParser $simplePhpDocParser,
-        MethodTagValueNodeFactory $methodTagValueNodeFactory
+        private SimplePhpDocParser $simplePhpDocParser,
+        private MethodTagValueNodeFactory $methodTagValueNodeFactory
     ) {
-        $this->simplePhpDocParser = $simplePhpDocParser;
-        $this->methodTagValueNodeFactory = $methodTagValueNodeFactory;
     }
 
     /**

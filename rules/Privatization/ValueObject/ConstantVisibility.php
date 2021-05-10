@@ -6,26 +6,11 @@ namespace Rector\Privatization\ValueObject;
 
 final class ConstantVisibility
 {
-    /**
-     * @var bool
-     */
-    private $isPublic = false;
-
-    /**
-     * @var bool
-     */
-    private $isProtected = false;
-
-    /**
-     * @var bool
-     */
-    private $isPrivate = false;
-
-    public function __construct(bool $isPublic, bool $isProtected, bool $isPrivate)
-    {
-        $this->isPublic = $isPublic;
-        $this->isProtected = $isProtected;
-        $this->isPrivate = $isPrivate;
+    public function __construct(
+        private bool $isPublic,
+        private bool $isProtected,
+        private bool $isPrivate
+    ) {
     }
 
     public function isPublic(): bool
