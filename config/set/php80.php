@@ -7,7 +7,6 @@ use Rector\Arguments\Rector\ClassMethod\ArgumentAdderRector;
 use Rector\Arguments\ValueObject\ArgumentAdder;
 use Rector\DeadCode\Rector\StaticCall\RemoveParentCallWithoutParentRector;
 use Rector\Php80\Rector\Catch_\RemoveUnusedVariableInCatchRector;
-use Rector\Php80\Rector\Class_\AnnotationToAttributeRector;
 use Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector;
 use Rector\Php80\Rector\Class_\StringableForToStringRector;
 use Rector\Php80\Rector\ClassMethod\FinalPrivateToPrivateVisibilityRector;
@@ -22,6 +21,8 @@ use Rector\Php80\Rector\NotIdentical\StrContainsRector;
 use Rector\Php80\Rector\Switch_\ChangeSwitchToMatchRector;
 use Rector\Php80\Rector\Ternary\GetDebugTypeRector;
 use Rector\Renaming\Rector\FuncCall\RenameFunctionRector;
+use Rector\Transform\Rector\StaticCall\StaticCallToFuncCallRector;
+use Rector\Transform\ValueObject\StaticCallToFuncCall;
 use RectorPrefix20210510\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 return static function (\RectorPrefix20210510\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
@@ -30,8 +31,8 @@ return static function (\RectorPrefix20210510\Symfony\Component\DependencyInject
     $services->set(\Rector\Php80\Rector\NotIdentical\StrContainsRector::class);
     $services->set(\Rector\Php80\Rector\Identical\StrStartsWithRector::class);
     $services->set(\Rector\Php80\Rector\Identical\StrEndsWithRector::class);
+    $services->set(\Rector\Transform\Rector\StaticCall\StaticCallToFuncCallRector::class)->call('configure', [\Rector\Transform\Rector\StaticCall\StaticCallToFuncCallRector::STATIC_CALLS_TO_FUNCTIONS => \Symplify\SymfonyPhpConfig\ValueObjectInliner::inline([new \Rector\Transform\ValueObject\StaticCallToFuncCall('Nette\\Utils\\Strings', 'startsWith', 'str_starts_with'), new \Rector\Transform\ValueObject\StaticCallToFuncCall('Nette\\Utils\\Strings', 'endsWith', 'str_ends_with'), new \Rector\Transform\ValueObject\StaticCallToFuncCall('Nette\\Utils\\Strings', 'contains', 'str_contains')])]);
     $services->set(\Rector\Php80\Rector\Class_\StringableForToStringRector::class);
-    $services->set(\Rector\Php80\Rector\Class_\AnnotationToAttributeRector::class);
     $services->set(\Rector\Php80\Rector\FuncCall\ClassOnObjectRector::class);
     $services->set(\Rector\Php80\Rector\Ternary\GetDebugTypeRector::class);
     $services->set(\Rector\Php80\Rector\FuncCall\TokenGetAllToObjectRector::class);
