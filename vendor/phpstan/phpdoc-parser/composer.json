@@ -1,0 +1,44 @@
+{
+    "name": "phpstan\/phpdoc-parser",
+    "description": "PHPDoc parser with support for nullable, intersection and generic types",
+    "license": "MIT",
+    "require": {
+        "php": "^7.1 || ^8.0"
+    },
+    "require-dev": {
+        "phing\/phing": "^2.16.3",
+        "php-parallel-lint\/php-parallel-lint": "^1.2",
+        "phpstan\/extension-installer": "^1.0",
+        "phpstan\/phpstan": "^0.12.60",
+        "phpstan\/phpstan-strict-rules": "^0.12.5",
+        "phpunit\/phpunit": "^7.5.20",
+        "symfony\/process": "^5.2"
+    },
+    "config": {
+        "platform": {
+            "php": "7.4.6"
+        },
+        "sort-packages": true
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.5-dev"
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "PHPStan\\PhpDocParser\\": [
+                "src\/"
+            ]
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "PHPStan\\PhpDocParser\\": [
+                "tests\/PHPStan"
+            ]
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

@@ -1,0 +1,41 @@
+PhpDocMethod
+  = AnnotationName IsStatic? MethodReturnType? MethodName MethodParameters? Description?
+
+AnnotationName
+  = '@method'
+
+IsStatic
+  = 'static'
+
+MethodReturnType
+  = Type
+
+MethodName
+  = [a-zA-Z_\127-\255][a-zA-Z0-9_\127-\255]*
+
+MethodParameters
+  = '(' MethodParametersInner? ')'
+
+MethodParametersInner
+  = MethodParameter (',' MethodParameter)*
+
+MethodParameter
+  = MethodParameterType? IsReference? IsVariaric? MethodParameterName MethodParameterDefaultValue?
+
+MethodParameterType
+  = Type
+
+IsReference
+  = '&'
+
+IsVariaric
+  = '...'
+
+MethodParameterName
+  = '$' [a-zA-Z_\127-\255][a-zA-Z0-9_\127-\255]*
+
+MethodParameterDefaultValue
+  = '=' PhpConstantExpr
+
+Description
+  = .+ # TODO: exclude EOL or another PhpDocTag start

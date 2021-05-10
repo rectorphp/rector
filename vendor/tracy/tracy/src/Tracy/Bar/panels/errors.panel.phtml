@@ -1,0 +1,27 @@
+<?php
+
+/**
+ * Debug Bar: panel "error" template.
+ *
+ * This file is part of the Tracy (https://tracy.nette.org)
+ * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
+ */
+
+declare(strict_types=1);
+
+namespace Tracy;
+
+?>
+<h1>Errors</h1>
+
+<div class="tracy-inner">
+<table class="tracy-sortable">
+<tr><th>Count</th><th>Error</th></tr>
+<?php foreach ($data as $item => $count): list($file, $line, $message) = explode('|', $item, 3) ?>
+<tr>
+	<td class="tracy-right"><?= $count ? "$count\xC3\x97" : '' ?></td>
+	<td><pre><?= Helpers::escapeHtml($message), ' in ', Helpers::editorLink($file, (int) $line) ?></pre></td>
+</tr>
+<?php endforeach ?>
+</table>
+</div>

@@ -1,0 +1,30 @@
+{
+    "name": "shanethehat\/pretty-xml",
+    "description": "Library for pretty-printing XML",
+    "type": "library",
+    "license": "MIT",
+    "keywords": [
+        "xml",
+        "pretty"
+    ],
+    "require-dev": {
+        "phpspec\/phpspec": "~2.0",
+        "behat\/behat": "~3.0",
+        "bossa\/phpspec2-expect": "*"
+    },
+    "authors": [
+        {
+            "name": "Shane Auckland",
+            "email": "shane.auckland@gmail.com",
+            "homepage": "http:\/\/shaneauckland.co.uk"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "RectorPrefix20210510\\PrettyXml\\": "src\/PrettyXml\/"
+        }
+    },
+    "config": {
+        "bin-dir": "bin"
+    }
+}

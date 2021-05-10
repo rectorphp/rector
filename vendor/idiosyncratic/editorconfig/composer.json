@@ -1,0 +1,37 @@
+{
+    "name": "idiosyncratic\/editorconfig",
+    "description": "PHP implementation of EditorConfig",
+    "type": "library",
+    "license": "ISC",
+    "authors": [
+        {
+            "name": "Jason Silkey",
+            "email": "jason@jasonsilkey.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.3"
+    },
+    "require-dev": {
+        "idiosyncratic\/devtools": "^0.2"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "config": {
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "optimize-autoloader": true,
+        "discard-changes": true,
+        "bin-dir": "bin"
+    },
+    "autoload": {
+        "psr-4": {
+            "RectorPrefix20210510\\Idiosyncratic\\EditorConfig\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "RectorPrefix20210510\\Idiosyncratic\\EditorConfig\\": "tests"
+        }
+    }
+}

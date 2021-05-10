@@ -1,0 +1,3 @@
+# this config has extensions, that helps PHPStan inside Rector to resolve more precise types
+includes:
+    - vendor/phpstan/phpstan-nette/extension.neon

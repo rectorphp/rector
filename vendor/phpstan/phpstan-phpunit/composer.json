@@ -1,0 +1,50 @@
+{
+    "name": "phpstan\/phpstan-phpunit",
+    "type": "phpstan-extension",
+    "description": "PHPUnit extensions and rules for PHPStan",
+    "license": [
+        "MIT"
+    ],
+    "require": {
+        "php": "^7.1 || ^8.0",
+        "phpstan\/phpstan": "^0.12.60"
+    },
+    "conflict": {
+        "phpunit\/phpunit": "<7.0"
+    },
+    "require-dev": {
+        "php-parallel-lint\/php-parallel-lint": "^1.2",
+        "phing\/phing": "^2.16.3",
+        "phpstan\/phpstan-strict-rules": "^0.12.6",
+        "phpunit\/phpunit": "^7.5.20"
+    },
+    "config": {
+        "platform": {
+            "php": "7.4.6"
+        },
+        "sort-packages": true
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.12-dev"
+        },
+        "phpstan": {
+            "includes": [
+                "extension.neon",
+                "rules.neon"
+            ]
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "PHPStan\\": "src\/"
+        }
+    },
+    "autoload-dev": {
+        "classmap": [
+            "tests\/"
+        ]
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

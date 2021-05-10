@@ -1,0 +1,53 @@
+{
+    "name": "nette\/finder",
+    "description": "\ud83d\udd0d Nette Finder: find files and directories with an intuitive API.",
+    "keywords": [
+        "nette",
+        "filesystem",
+        "iterator",
+        "glob"
+    ],
+    "homepage": "https:\/\/nette.org",
+    "license": [
+        "BSD-3-Clause",
+        "GPL-2.0",
+        "GPL-3.0"
+    ],
+    "authors": [
+        {
+            "name": "David Grudl",
+            "homepage": "https:\/\/davidgrudl.com"
+        },
+        {
+            "name": "Nette Community",
+            "homepage": "https:\/\/nette.org\/contributors"
+        }
+    ],
+    "require": {
+        "php": ">=7.1",
+        "nette\/utils": "^2.4 || ^3.0"
+    },
+    "require-dev": {
+        "nette\/tester": "^2.0",
+        "tracy\/tracy": "^2.3",
+        "phpstan\/phpstan": "^0.12"
+    },
+    "conflict": {
+        "nette\/nette": "<2.2"
+    },
+    "autoload": {
+        "classmap": [
+            "src\/"
+        ]
+    },
+    "minimum-stability": "dev",
+    "scripts": {
+        "phpstan": "phpstan analyse --level 5 src",
+        "tester": "tester tests -s"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.5-dev"
+        }
+    }
+}

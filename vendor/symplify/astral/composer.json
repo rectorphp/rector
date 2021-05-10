@@ -1,0 +1,35 @@
+{
+    "name": "symplify\/astral",
+    "description": "Toolking for smart daily work with AST",
+    "license": "MIT",
+    "require": {
+        "php": ">=7.3",
+        "nette\/utils": "^3.2",
+        "symfony\/dependency-injection": "^5.2",
+        "symplify\/autowire-array-parameter": "^9.3.1",
+        "symfony\/http-kernel": "^4.4|^5.2",
+        "nikic\/php-parser": "4.10.4",
+        "symplify\/package-builder": "^9.3.1"
+    },
+    "require-dev": {
+        "symplify\/easy-testing": "^9.3.1",
+        "phpunit\/phpunit": "^9.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "RectorPrefix20210510\\Symplify\\Astral\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "RectorPrefix20210510\\Symplify\\Astral\\Tests\\": "tests"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-main": "9.4-dev"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

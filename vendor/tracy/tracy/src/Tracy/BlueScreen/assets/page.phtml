@@ -1,0 +1,56 @@
+<?php
+
+/**
+ * Debugger bluescreen template.
+ *
+ * This file is part of the Tracy (https://tracy.nette.org)
+ * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
+ *
+ * @param  array $exception
+ * @param  string $title
+ * @param  string $nonce
+ * @return void
+ */
+
+declare(strict_types=1);
+
+namespace Tracy;
+
+$code = $exception->getCode() ? ' #' . $exception->getCode() : '';
+$nonceAttr = $nonce ? ' nonce="' . Helpers::escapeHtml($nonce) . '"' : '';
+?><!DOCTYPE html><!-- "' --></textarea></script></style></pre></xmp></a></iframe></noembed></noframes></noscript></option></select></template></title></table>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="robots" content="noindex">
+	<meta name="generator" content="Tracy by Nette Framework">
+
+	<title><?= Helpers::escapeHtml($title . ': ' . $exception->getMessage() . $code) ?></title>
+	<!-- in <?= str_replace('--', '- ', Helpers::escapeHtml($exception->getFile() . ':' . $exception->getLine())) ?> -->
+	<?php if ($ex = $exception->getPrevious()): ?>
+<!--<?php do { echo str_replace('--', '- ', Helpers::escapeHtml("\n\tcaused by " . Helpers::getClass($ex) . ': ' . $ex->getMessage() . ($ex->getCode() ? ' #' . $ex->getCode() : ''))); } while ($ex = $ex->getPrevious()); ?> -->
+	<?php endif ?>
+
+	<style class="tracy-debug">
+	<?= str_replace('</', '<\/', $css) ?>
+	</style>
+</head>
+
+
+<body>
+<?php require __DIR__ . '/content.phtml' ?>
+
+<script<?= $nonceAttr ?>>
+'use strict';
+<?php
+array_map(function ($file) { echo '(function(){', str_replace(['<!--', '</s'], ['<\!--', '<\/s'], Helpers::minifyJs(file_get_contents($file))), '})();'; }, [
+	__DIR__ . '/../../Toggle/toggle.js',
+	__DIR__ . '/../../TableSort/table-sort.js',
+	__DIR__ . '/../../Dumper/assets/dumper.js',
+	__DIR__ . '/bluescreen.js',
+]);
+?>
+Tracy.BlueScreen.init();
+</script>
+</body>
+</html>

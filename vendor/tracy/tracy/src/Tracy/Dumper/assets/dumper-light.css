@@ -1,0 +1,145 @@
+/**
+ * This file is part of the Tracy (https://tracy.nette.org)
+ */
+
+.tracy-dump.tracy-light {
+	text-align: left;
+	color: #444;
+	background: #fdf9e2;
+	border-radius: 4px;
+	padding: 1em;
+	margin: 1em 0;
+	word-break: break-all;
+	white-space: pre-wrap;
+}
+
+.tracy-dump.tracy-light div {
+	padding-left: 2.5ex;
+}
+
+.tracy-dump.tracy-light div div {
+	border-left: 1px solid rgba(0, 0, 0, .1);
+	margin-left: .5ex;
+}
+
+.tracy-dump.tracy-light div div:hover {
+	border-left-color: rgba(0, 0, 0, .25);
+}
+
+.tracy-light .tracy-dump-location {
+	color: gray;
+	font-size: 80%;
+	text-decoration: none;
+	background: none;
+	opacity: .5;
+	float: right;
+	cursor: pointer;
+}
+
+.tracy-light .tracy-dump-location:hover,
+.tracy-light .tracy-dump-location:focus {
+	opacity: 1;
+}
+
+.tracy-light .tracy-dump-array,
+.tracy-light .tracy-dump-object {
+	color: #C22;
+	user-select: text;
+}
+
+.tracy-light .tracy-dump-string {
+	color: #35D;
+	white-space: break-spaces;
+}
+
+.tracy-light div.tracy-dump-string {
+	position: relative;
+	padding-left: 3.5ex;
+}
+
+.tracy-light .tracy-dump-lq {
+	margin-left: calc(-1ex - 1px);
+}
+
+.tracy-light div.tracy-dump-string:before {
+	content: '';
+	position: absolute;
+	left: calc(3ex - 1px);
+	top: 1.5em;
+	bottom: 0;
+	border-left: 1px solid rgba(0, 0, 0, .1);
+}
+
+.tracy-light .tracy-dump-virtual span,
+.tracy-light .tracy-dump-dynamic span,
+.tracy-light .tracy-dump-string span {
+	color: rgba(0, 0, 0, 0.5);
+}
+
+.tracy-light .tracy-dump-virtual i,
+.tracy-light .tracy-dump-dynamic i,
+.tracy-light .tracy-dump-string i {
+	font-size: 80%;
+	font-style: normal;
+	color: rgba(0, 0, 0, 0.5);
+	user-select: none;
+}
+
+.tracy-light .tracy-dump-number {
+	color: #090;
+}
+
+.tracy-light .tracy-dump-null,
+.tracy-light .tracy-dump-bool {
+	color: #850;
+}
+
+.tracy-light .tracy-dump-virtual {
+	font-style: italic;
+}
+
+.tracy-light .tracy-dump-public::after {
+	content: ' pub';
+}
+
+.tracy-light .tracy-dump-protected::after {
+	content: ' pro';
+}
+
+.tracy-light .tracy-dump-private::after {
+	content: ' pri';
+}
+
+.tracy-light .tracy-dump-public::after,
+.tracy-light .tracy-dump-protected::after,
+.tracy-light .tracy-dump-private::after,
+.tracy-light .tracy-dump-hash {
+	font-size: 85%;
+	color: rgba(0, 0, 0, 0.5);
+}
+
+.tracy-light .tracy-dump-indent {
+	display: none;
+}
+
+.tracy-light .tracy-dump-highlight {
+	background: #C22;
+	color: white;
+	border-radius: 2px;
+	padding: 0 2px;
+	margin: 0 -2px;
+}
+
+span[data-tracy-href] {
+	border-bottom: 1px dotted rgba(0, 0, 0, .2);
+}
+
+.tracy-light .tracy-dump-flash {
+	animation: tracy-dump-flash .2s ease;
+}
+
+@keyframes tracy-dump-flash {
+	0% {
+		background: #c0c0c033;
+	}
+}

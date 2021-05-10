@@ -1,0 +1,26 @@
+includes:
+	- extension.neon
+	- rules.neon
+	- vendor/phpstan/phpstan-strict-rules/rules.neon
+	- phar://phpstan.phar/conf/bleedingEdge.neon
+
+parameters:
+	excludes_analyse:
+		- tests/*/data/*
+
+services:
+	scopeIsInClass:
+		class: PHPStan\Internal\ScopeIsInClassTypeSpecifyingExtension
+		arguments:
+			isInMethodName: isInClass
+			removeNullMethodName: getClassReflection
+		tags:
+			- phpstan.typeSpecifier.methodTypeSpecifyingExtension
+
+	scopeIsInTrait:
+		class: PHPStan\Internal\ScopeIsInClassTypeSpecifyingExtension
+		arguments:
+			isInMethodName: isInTrait
+			removeNullMethodName: getTraitReflection
+		tags:
+			- phpstan.typeSpecifier.methodTypeSpecifyingExtension

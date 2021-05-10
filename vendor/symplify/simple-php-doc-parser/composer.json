@@ -1,0 +1,34 @@
+{
+    "name": "symplify\/simple-php-doc-parser",
+    "description": "Service integration of phpstan\/phpdoc-parser, with few extra goodies for practical simple use",
+    "license": "MIT",
+    "require": {
+        "php": ">=7.3",
+        "phpstan\/phpdoc-parser": "^0.5",
+        "symfony\/dependency-injection": "^5.2",
+        "symfony\/config": "^4.4|^5.2",
+        "symfony\/http-kernel": "^4.4|^5.2",
+        "symplify\/package-builder": "^9.3.1"
+    },
+    "require-dev": {
+        "phpunit\/phpunit": "^9.5",
+        "symplify\/easy-testing": "^9.3.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "RectorPrefix20210510\\Symplify\\SimplePhpDocParser\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "RectorPrefix20210510\\Symplify\\SimplePhpDocParser\\Tests\\": "tests"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-main": "9.4-dev"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

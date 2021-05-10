@@ -1,0 +1,14 @@
+parameters:
+    paths:
+        - src
+        - tests
+
+    level: max
+
+    excludes_analyse:
+        - '*tests/*/Source/*'
+
+    ignoreErrors:
+        - '#Unable to resolve the template type T in call to method Rector\\Core\\PhpParser\\Node\\BetterNodeFinder\:\:findParentTypes\(\)#'
+        # requires an extension probably
+        - '#Method Rector\\NetteToSymfony\\Rector\\ClassMethod\\RouterListToControllerAnnotationsRector\:\:resolveAssignRouteNodes\(\) should return array<PhpParser\\Node\\Expr\\Assign\> but returns array<PhpParser\\Node\>#'

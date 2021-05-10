@@ -1,0 +1,15 @@
+parameters:
+    # see https://github.com/rectorphp/rector/issues/3490#issue-634342324
+    featureToggles:
+        disableRuntimeReflectionProvider: false
+
+services:
+    - Rector\NodeTypeResolver\Reflection\BetterReflection\RectorBetterReflectionSourceLocatorFactory
+    - Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocator\IntermediateSourceLocator
+    - Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider
+
+    # basically decorates native PHPStan source locator with a dynamic source locator that is also available in Rector DI
+    betterReflectionSourceLocator:
+        class: PHPStan\BetterReflection\SourceLocator\Type\SourceLocator
+        factory: ['@Rector\NodeTypeResolver\Reflection\BetterReflection\RectorBetterReflectionSourceLocatorFactory', 'create']
+        autowired: false

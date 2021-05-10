@@ -1,0 +1,7 @@
+{
+    "require-dev": {
+        "consistence\/coding-standard": "^3.10",
+        "dealerdirect\/phpcodesniffer-composer-installer": "^0.7.0",
+        "slevomat\/coding-standard": "^6.4"
+    }
+}

@@ -1,0 +1,31 @@
+{
+    "name": "symplify\/autowire-array-parameter",
+    "description": "Autowire array parameters for your Symfony applications",
+    "license": "MIT",
+    "require": {
+        "php": ">=7.3",
+        "nette\/utils": "^3.2",
+        "symfony\/dependency-injection": "^5.2",
+        "symplify\/package-builder": "^9.3.1"
+    },
+    "require-dev": {
+        "phpunit\/phpunit": "^9.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "RectorPrefix20210510\\Symplify\\AutowireArrayParameter\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "RectorPrefix20210510\\Symplify\\AutowireArrayParameter\\Tests\\": "tests"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-main": "9.4-dev"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

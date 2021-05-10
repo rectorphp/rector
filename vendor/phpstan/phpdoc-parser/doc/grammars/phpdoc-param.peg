@@ -1,0 +1,14 @@
+PhpDocParam
+  = AnnotationName Type IsVariadic? ParameterName Description?
+
+AnnotationName
+  = '@param'
+
+IsVariaric
+  = '...'
+
+ParameterName
+  = '$' [a-zA-Z_\127-\255][a-zA-Z0-9_\127-\255]*
+
+Description
+  = .+ # TODO: exclude EOL or another PhpDocTag start

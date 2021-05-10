@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<ruleset name="PHPStan PHPUnit extensions and rules">
+	<rule ref="build-cs/vendor/consistence/coding-standard/Consistence/ruleset.xml">
+		<exclude name="Squiz.Functions.GlobalFunction.Found"/>
+		<exclude name="SlevomatCodingStandard.Namespaces.FullyQualifiedClassNameAfterKeyword"/>
+		<exclude name="SlevomatCodingStandard.Namespaces.FullyQualifiedClassNameInAnnotation"/>
+		<exclude name="SlevomatCodingStandard.Namespaces.FullyQualifiedExceptions"/>
+		<exclude name="SlevomatCodingStandard.Namespaces.ReferenceUsedNamesOnly"/>
+	</rule>
+	<rule ref="SlevomatCodingStandard.Namespaces.AlphabeticallySortedUses">
+		<properties>
+			<property name="caseSensitive" value="false"/>
+		</properties>
+	</rule>
+	<rule ref="SlevomatCodingStandard.TypeHints.DeclareStrictTypes">
+		<properties>
+			<property name="newlinesCountBetweenOpenTagAndDeclare" value="0"/>
+		</properties>
+	</rule>
+	<rule ref="SlevomatCodingStandard.TypeHints.ParameterTypeHint">
+		<properties>
+			<property name="usefulAnnotations" type="array" value="
+				@dataProvider,
+				@requires
+			"/>
+		</properties>
+		<exclude name="SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingTraversableParameterTypeHintSpecification"/>
+		<exclude name="SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingTraversableReturnTypeHintSpecification"/>
+	</rule>
+	<rule ref="SlevomatCodingStandard.TypeHints.PropertyTypeHint">
+		<properties>
+			<property name="enableNativeTypeHint" value="false"/>
+		</properties>
+		<exclude name="SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingTraversableTypeHintSpecification"/>
+	</rule>
+	<rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHint">
+		<properties>
+			<property name="enableObjectTypeHint" value="false"/>
+		</properties>
+		<exclude name="SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingTraversableTypeHintSpecification"/>
+	</rule>
+	<rule ref="SlevomatCodingStandard.ControlStructures.AssignmentInCondition"/>
+	<rule ref="SlevomatCodingStandard.Operators.DisallowEqualOperators"/>
+	<rule ref="SlevomatCodingStandard.ControlStructures.EarlyExit"/>
+	<rule ref="SlevomatCodingStandard.Classes.SuperfluousAbstractClassNaming"/>
+	<rule ref="SlevomatCodingStandard.Classes.SuperfluousInterfaceNaming"/>
+	<!-- <rule ref="SlevomatCodingStandard.ControlStructures.DisallowShortTernaryOperator"/>-->
+	<!-- <rule ref="SlevomatCodingStandard.Namespaces.RequireOneNamespaceInFile"/> -->
+	<!-- <rule ref="SlevomatCodingStandard.PHP.ShortList"/> -->
+	<rule ref="SlevomatCodingStandard.Files.TypeNameMatchesFileName">
+		<properties>
+			<property name="rootNamespaces" type="array" value="src=>PHPStan,tests=>PHPStan"/>
+		</properties>
+	</rule>
+	<exclude-pattern>tests/*/data</exclude-pattern>
+</ruleset>

@@ -1,0 +1,364 @@
+<?php
+
+/**
+ * Debugger bluescreen template.
+ *
+ * This file is part of the Tracy (https://tracy.nette.org)
+ * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
+ *
+ * @param  array $exception
+ * @param  array[] $actions
+ * @param  array $info
+ * @param  string $title
+ * @param  string $source
+ * @param  array $lastError
+ * @param  array $httpHeaders
+ * @param  callable $dump
+ * @return void
+ */
+
+declare(strict_types=1);
+
+namespace Tracy;
+
+$code = $exception->getCode() ? ' #' . $exception->getCode() : '';
+
+?>
+<div id="tracy-bs" itemscope>
+	<a id="tracy-bs-toggle" href="#" class="tracy-toggle"></a>
+	<div class="tracy-bs-main">
+		<div id="tracy-bs-error" class="panel">
+			<?php if ($exception->getMessage()): ?><p><?= Helpers::encodeString($title . $code, self::MAX_MESSAGE_LENGTH) ?></p><?php endif ?>
+
+
+			<h1><span><?= $this->formatMessage($exception) ?></span>
+			<?php foreach ($actions as $item): ?>
+			<a href="<?= Helpers::escapeHtml($item['link']) ?>" class="action"<?= empty($item['external']) ? '' : ' target="_blank" rel="noreferrer noopener"'?>><?= Helpers::escapeHtml($item['label']) ?>&#x25ba;</a>
+			<?php endforeach ?></h1>
+		</div>
+
+		<?php if ($prev = $exception->getPrevious()): ?>
+		<div class="caused">
+			<a href="#tracyCaused">Caused by <?= Helpers::escapeHtml(Helpers::getClass($prev)) ?></a>
+		</div>
+		<?php endif ?>
+
+
+		<?php $ex = $exception; $level = 0; ?>
+		<?php do { ?>
+
+			<?php if ($level++): ?>
+			<div class="panel"<?php if ($level === 2) echo ' id="tracyCaused"' ?>>
+			<h2><a data-tracy-ref="^+" class="tracy-toggle<?= ($collapsed = $level > 2) ? ' tracy-collapsed' : '' ?>">Caused by</a></h2>
+
+			<div class="<?= $collapsed ? 'tracy-collapsed ' : '' ?>inner">
+				<div class="panel">
+					<h2><?= Helpers::escapeHtml(Helpers::getClass($ex) . ($ex->getCode() ? ' #' . $ex->getCode() : '')) ?></h2>
+
+					<h2><?= $this->formatMessage($ex) ?></h2>
+				</div>
+			<?php endif ?>
+
+
+			<?php foreach ($this->renderPanels($ex) as $panel): ?>
+			<div class="panel">
+				<h2><a data-tracy-ref="^+" class="tracy-toggle"><?= Helpers::escapeHtml($panel->tab) ?></a></h2>
+
+				<div class="inner">
+				<?= $panel->panel ?>
+			</div></div>
+			<?php endforeach ?>
+
+
+			<?php $stack = $ex->getTrace(); $expanded = null ?>
+			<?php if ((!$exception instanceof \ErrorException || in_array($exception->getSeverity(), [E_USER_NOTICE, E_USER_WARNING, E_USER_DEPRECATED], true)) && $this->isCollapsed($ex->getFile())) {
+				foreach ($stack as $key => $row) {
+					if (isset($row['file']) && !$this->isCollapsed($row['file'])) { $expanded = $key; break; }
+				}
+			} ?>
+
+			<div class="panel">
+			<h2><a data-tracy-ref="^+" class="tracy-toggle<?= ($collapsed = $expanded !== null) ? ' tracy-collapsed' : '' ?>">Source file</a></h2>
+
+			<div class="<?= $collapsed ? 'tracy-collapsed ' : '' ?>inner">
+				<p><b>File:</b> <?= Helpers::editorLink($ex->getFile(), $ex->getLine()) ?></p>
+				<?php if (is_file($ex->getFile())): ?><?= self::highlightFile($ex->getFile(), $ex->getLine()) ?><?php endif ?>
+			</div></div>
+
+
+			<?php if (isset($stack[0]['class']) && $stack[0]['class'] === 'Tracy\Debugger' && ($stack[0]['function'] === 'shutdownHandler' || $stack[0]['function'] === 'errorHandler')) unset($stack[0]) ?>
+			<?php if ($stack): ?>
+			<div class="panel">
+				<h2><a data-tracy-ref="^+" class="tracy-toggle">Call stack</a></h2>
+
+				<div class="inner">
+				<ol>
+					<?php foreach ($stack as $key => $row): ?>
+					<li><p>
+
+					<?php if (isset($row['file']) && is_file($row['file'])): ?>
+						<?= Helpers::editorLink($row['file'], $row['line']) ?>
+					<?php else: ?>
+						<i>inner-code</i><?php if (isset($row['line'])) echo ':', $row['line'] ?>
+					<?php endif ?>
+
+					<?php if (isset($row['file']) && is_file($row['file'])): ?><a data-tracy-ref="^p + .file" class="tracy-toggle<?php if ($expanded !== $key) echo ' tracy-collapsed' ?>">source</a>&nbsp; <?php endif ?>
+
+					<?php
+						if (isset($row['class'])) echo '<b>', Helpers::escapeHtml($row['class'] . $row['type']), '</b>';
+						echo '<b>', Helpers::escapeHtml($row['function']), '</b> (';
+						if (!empty($row['args'])): ?><a data-tracy-ref="^p + .args" class="tracy-toggle tracy-collapsed">arguments</a><?php endif ?>)
+					</p>
+
+					<?php if (isset($row['file']) && is_file($row['file'])): ?>
+						<div class="<?php if ($expanded !== $key) echo 'tracy-collapsed ' ?>file"><?= self::highlightFile($row['file'], $row['line']) ?></div>
+					<?php endif ?>
+
+
+					<?php if (!empty($row['args'])): ?>
+						<div class="tracy-collapsed outer args">
+						<table>
+						<?php
+						try {
+							$r = isset($row['class']) ? new \ReflectionMethod($row['class'], $row['function']) : new \ReflectionFunction($row['function']);
+							$params = $r->getParameters();
+						} catch (\Exception $e) {
+							$params = [];
+						}
+						foreach ($row['args'] as $k => $v) {
+							$argName = isset($params[$k]) && !$params[$k]->isVariadic() ? $params[$k]->name : $k;
+							echo '<tr><th>', Helpers::escapeHtml((is_string($argName) ? '$' : '#') . $argName), '</th><td>';
+							echo $dump($v, (string) $argName);
+							echo "</td></tr>\n";
+						}
+						?>
+						</table>
+						</div>
+					<?php endif ?>
+					</li>
+					<?php endforeach ?>
+				</ol>
+			</div></div>
+			<?php endif ?>
+
+
+			<?php if ($ex instanceof \ErrorException && isset($ex->context) && is_array($ex->context)):?>
+			<div class="panel">
+			<h2><a data-tracy-ref="^+" class="tracy-toggle tracy-collapsed">Variables</a></h2>
+
+			<div class="tracy-collapsed inner">
+			<div class="outer">
+			<table class="tracy-sortable">
+			<?php
+			foreach ($ex->context as $k => $v) {
+				echo '<tr><th>$', Helpers::escapeHtml($k), '</th><td>', $dump($v, $k), "</td></tr>\n";
+			}
+			?>
+			</table>
+			</div>
+			</div></div>
+			<?php endif ?>
+
+		<?php } while ($ex = $ex->getPrevious()); ?>
+		<?php while (--$level) echo '</div></div>' ?>
+
+
+		<?php if (count((array) $exception) > count((array) new \Exception)):?>
+		<div class="panel">
+		<h2><a data-tracy-ref="^+" class="tracy-toggle tracy-collapsed">Exception</a></h2>
+		<div class="tracy-collapsed inner">
+		<?= $dump($exception) ?>
+		</div></div>
+		<?php endif ?>
+
+
+		<?php if ($lastError): ?>
+		<div class="panel">
+		<h2><a data-tracy-ref="^+" class="tracy-toggle tracy-collapsed">Last muted error</a></h2>
+		<div class="tracy-collapsed inner">
+
+		<h3><?= Helpers::errorTypeToString($lastError['type']) ?>: <?= Helpers::escapeHtml($lastError['message']) ?></h3>
+		<?php if (isset($lastError['file']) && is_file($lastError['file'])): ?>
+			<p><?= Helpers::editorLink($lastError['file'], $lastError['line']) ?></p>
+			<div><?= self::highlightFile($lastError['file'], $lastError['line']) ?></div>
+		<?php else: ?>
+			<p><i>inner-code</i><?php if (isset($lastError['line'])) echo ':', $lastError['line'] ?></p>
+		<?php endif ?>
+
+		</div></div>
+		<?php endif ?>
+
+
+		<?php $bottomPanels = [] ?>
+		<?php foreach ($this->renderPanels(null) as $panel): ?>
+		<?php if (!empty($panel->bottom)) { $bottomPanels[] = $panel; continue; } ?>
+		<?php $collapsedClass = !isset($panel->collapsed) || $panel->collapsed ? ' tracy-collapsed' : ''; ?>
+		<div class="panel">
+			<h2><a data-tracy-ref="^+" class="tracy-toggle<?= $collapsedClass ?>"><?= Helpers::escapeHtml($panel->tab) ?></a></h2>
+
+			<div class="inner<?= $collapsedClass ?>">
+			<?= $panel->panel ?>
+		</div></div>
+		<?php endforeach ?>
+
+
+		<?php if ($showEnvironment):?>
+		<div class="panel">
+		<h2><a data-tracy-ref="^+" class="tracy-toggle tracy-collapsed">Environment</a></h2>
+
+		<div class="tracy-collapsed inner">
+			<h3><a data-tracy-ref="^+" class="tracy-toggle">$_SERVER</a></h3>
+			<div class="outer">
+			<table class="tracy-sortable">
+			<?php
+			foreach ($_SERVER as $k => $v) echo '<tr><th>', Helpers::escapeHtml($k), '</th><td>', $dump($v, $k), "</td></tr>\n";
+			?>
+			</table>
+			</div>
+
+
+			<h3><a data-tracy-ref="^+" class="tracy-toggle">$_SESSION</a></h3>
+			<div class="outer">
+			<?php if (empty($_SESSION)):?>
+			<p><i>empty</i></p>
+			<?php else: ?>
+			<table class="tracy-sortable">
+			<?php
+			foreach ($_SESSION as $k => $v) echo '<tr><th>', Helpers::escapeHtml($k), '</th><td>', $k === '__NF' ? '<i>Nette Session</i>' : $dump($v, $k), "</td></tr>\n";
+			?>
+			</table>
+			<?php endif ?>
+			</div>
+
+
+			<?php if (!empty($_SESSION['__NF']['DATA'])):?>
+			<h3><a data-tracy-ref="^+" class="tracy-toggle">Nette Session</a></h3>
+			<div class="outer">
+			<table class="tracy-sortable">
+			<?php
+			foreach ($_SESSION['__NF']['DATA'] as $k => $v) echo '<tr><th>', Helpers::escapeHtml($k), '</th><td>', $dump($v, $k), "</td></tr>\n";
+			?>
+			</table>
+			</div>
+			<?php endif ?>
+
+
+			<?php
+			$list = get_defined_constants(true);
+			if (!empty($list['user'])):?>
+			<h3><a data-tracy-ref="^+" class="tracy-toggle tracy-collapsed">Constants</a></h3>
+			<div class="outer tracy-collapsed">
+			<table class="tracy-sortable">
+			<?php
+			foreach ($list['user'] as $k => $v) {
+				echo '<tr><th>', Helpers::escapeHtml($k), '</th>';
+				echo '<td>', $dump($v, $k), "</td></tr>\n";
+			}
+			?>
+			</table>
+			</div>
+			<?php endif ?>
+
+
+			<h3><a data-tracy-ref="^+" class="tracy-toggle tracy-collapsed">Configuration options</a></h3>
+			<div class="outer tracy-collapsed">
+			<?php $this->renderPhpInfo() ?>
+			</div>
+		</div></div>
+		<?php endif ?>
+
+
+		<?php if (PHP_SAPI === 'cli'): ?>
+		<div class="panel">
+		<h2><a data-tracy-ref="^+" class="tracy-toggle tracy-collapsed">CLI request</a></h2>
+
+		<div class="tracy-collapsed inner">
+			<h3>Process ID <?= Helpers::escapeHtml(getmypid()) ?></h3>
+			<pre>php<?= Helpers::escapeHtml(explode('):', $source, 2)[1]) ?></pre>
+
+			<h3>Arguments</h3>
+			<div class="outer">
+			<table>
+			<?php
+			foreach ($_SERVER['argv'] as $k => $v) echo '<tr><th>', Helpers::escapeHtml($k), '</th><td>', Helpers::escapeHtml($v), "</td></tr>\n";
+			?>
+			</table>
+			</div>
+		</div></div>
+
+
+		<?php else: ?>
+		<div class="panel">
+		<h2><a data-tracy-ref="^+" class="tracy-toggle tracy-collapsed">HTTP request</a></h2>
+
+		<div class="tracy-collapsed inner">
+			<h3><?= Helpers::escapeHtml($_SERVER['REQUEST_METHOD'] ?? 'URL') ?></h3>
+			<p><a href="<?= Helpers::escapeHtml($source) ?>" target="_blank" rel="noreferrer noopener"><?= Helpers::escapeHtml($source) ?></a></p>
+
+			<h3>Headers</h3>
+			<div class="outer">
+			<table class="tracy-sortable">
+			<?php
+			foreach ($httpHeaders as $k => $v) echo '<tr><th>', Helpers::escapeHtml($k), '</th><td>', Helpers::escapeHtml($v), "</td></tr>\n";
+			?>
+			</table>
+			</div>
+
+
+			<?php foreach (['_GET', '_POST', '_COOKIE'] as $name): ?>
+			<h3>$<?= Helpers::escapeHtml($name) ?></h3>
+			<?php if (empty($GLOBALS[$name])):?>
+			<p><i>empty</i></p>
+			<?php else: ?>
+			<div class="outer">
+			<table class="tracy-sortable">
+			<?php
+			foreach ($GLOBALS[$name] as $k => $v) echo '<tr><th>', Helpers::escapeHtml($k), '</th><td>', $dump($v, $k), "</td></tr>\n";
+			?>
+			</table>
+			</div>
+			<?php endif ?>
+			<?php endforeach ?>
+		</div></div>
+
+
+		<div class="panel">
+		<h2><a data-tracy-ref="^+" class="tracy-toggle tracy-collapsed">HTTP response</a></h2>
+
+		<div class="tracy-collapsed inner">
+			<h3>Headers</h3>
+			<?php if (headers_list()): ?>
+			<div class="outer">
+			<table class="tracy-sortable">
+			<?php
+			foreach (headers_list() as $s) { $s = explode(':', $s, 2); echo '<tr><th>', Helpers::escapeHtml($s[0]), '</th><td>', Helpers::escapeHtml(trim($s[1])), "</td></tr>\n"; }
+			?>
+			</table>
+			</div>
+			<?php else: ?>
+			<p><i>no headers</i></p>
+			<?php endif ?>
+		</div></div>
+		<?php endif ?>
+
+
+		<?php foreach ($bottomPanels as $panel): ?>
+		<div class="panel">
+			<h2><a data-tracy-ref="^+" class="tracy-toggle"><?= Helpers::escapeHtml($panel->tab) ?></a></h2>
+
+			<div class="inner">
+			<?= $panel->panel ?>
+		</div></div>
+		<?php endforeach ?>
+
+		<footer>
+			<ul>
+				<li><b><a href="https://github.com/sponsors/dg" target="_blank" rel="noreferrer noopener">Please support Tracy via a donation 💙️</a></b></li>
+				<li>Report generated at <?= date('Y/m/d H:i:s') ?></li>
+				<?php foreach ($info as $item): ?><li><?= Helpers::escapeHtml($item) ?></li><?php endforeach ?>
+			</ul>
+			<div class="footer-logo"><a href="https://tracy.nette.org" rel="noreferrer"></a></div>
+		</footer>
+	</div>
+	<meta itemprop=tracy-snapshot content=<?= Dumper::formatSnapshotAttribute($snapshot) ?>>
+</div>

@@ -1,0 +1,290 @@
+/**
+ * This file is part of the Tracy (https://tracy.nette.org)
+ */
+
+#tracy-bs {
+	font: 9pt/1.5 Verdana, sans-serif;
+	background: white;
+	color: #333;
+	position: absolute;
+	z-index: 20000;
+	left: 0;
+	top: 0;
+	width: 100%;
+	text-align: left;
+}
+
+#tracy-bs a {
+	text-decoration: none;
+	color: #328ADC;
+	padding: 2px 4px;
+	margin: -2px -4px;
+}
+
+#tracy-bs a + a {
+	margin-left: 0;
+}
+
+#tracy-bs a:hover,
+#tracy-bs a:focus {
+	color: #085AA3;
+}
+
+#tracy-bs-toggle {
+	position: absolute;
+	right: .5em;
+	top: .5em;
+	text-decoration: none;
+	background: #CD1818;
+	color: white !important;
+	padding: 3px;
+}
+
+.tracy-bs-main {
+	display: flex;
+	flex-direction: column;
+	min-height: 100vh;
+}
+
+.tracy-bs-main.tracy-collapsed {
+	display: none;
+}
+
+#tracy-bs div.panel:last-of-type {
+	flex: 1;
+}
+
+#tracy-bs-error {
+	background: #CD1818;
+	color: white;
+	font-size: 13pt;
+}
+
+#tracy-bs-error::selection,
+#tracy-bs-error ::selection {
+	color: black !important;
+	background: #FDF5CE !important;
+}
+
+#tracy-bs-error a {
+	color: #ffefa1 !important;
+}
+
+#tracy-bs-error span span {
+	font-size: 80%;
+	color: rgba(255, 255, 255, 0.5);
+	text-shadow: none;
+}
+
+#tracy-bs-error a.action {
+	color: white !important;
+	opacity: 0;
+	font-size: .7em;
+	border-bottom: none !important;
+}
+
+#tracy-bs-error:hover a.action {
+	opacity: .6;
+}
+
+#tracy-bs-error a.action:hover {
+	opacity: 1;
+}
+
+#tracy-bs-error i {
+	color: #ffefa1;
+	font-style: normal;
+}
+
+#tracy-bs h1 {
+	font-size: 15pt;
+	font-weight: normal;
+	text-shadow: 1px 1px 2px rgba(0, 0, 0, .3);
+	margin: .7em 0;
+}
+
+#tracy-bs h1 span {
+	white-space: pre-wrap;
+}
+
+#tracy-bs h2 {
+	font-size: 14pt;
+	font-weight: normal;
+	margin: .6em 0;
+}
+
+#tracy-bs h3 {
+	font-size: 10pt;
+	font-weight: bold;
+	margin: 1em 0;
+	padding: 0;
+}
+
+#tracy-bs p,
+#tracy-bs pre {
+	margin: .8em 0
+}
+
+#tracy-bs pre,
+#tracy-bs code,
+#tracy-bs table {
+	font: 9pt/1.5 Consolas, monospace !important;
+}
+
+#tracy-bs pre,
+#tracy-bs table {
+	background: #FDF5CE;
+	padding: .4em .7em;
+	border: 1px dotted silver;
+	overflow: auto;
+}
+
+#tracy-bs table pre {
+	padding: 0;
+	margin: 0;
+	border: none;
+}
+
+#tracy-bs table {
+	border-collapse: collapse;
+	width: 100%;
+	margin-bottom: 1em;
+}
+
+#tracy-bs td,
+#tracy-bs th {
+	vertical-align: top;
+	text-align: left;
+	padding: 2px 6px;
+	border: 1px solid #e6dfbf;
+}
+
+#tracy-bs th {
+	font-weight: bold;
+}
+
+#tracy-bs tr > :first-child {
+	width: 20%;
+}
+
+#tracy-bs tr:nth-child(2n),
+#tracy-bs tr:nth-child(2n) pre {
+	background-color: #F7F0CB;
+}
+
+#tracy-bs ol {
+	margin: 1em 0;
+	padding-left: 2.5em;
+}
+
+#tracy-bs ul {
+	font-size: 7pt;
+	padding: 2em 3em;
+	margin: 1em 0 0;
+	color: #777;
+	background: #F6F5F3;
+	border-top: 1px solid #DDD;
+	list-style: none;
+}
+
+#tracy-bs .footer-logo a {
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	width: 100px;
+	height: 50px;
+	background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFoAAAAUBAMAAAD/1DctAAAAMFBMVEWupZzj39rEvbTy8O3X0sz9/PvGwLu8tavQysHq6OS0rKP5+Pbd2dT29fPMxbzPx8DKErMJAAAACXBIWXMAAAsTAAALEwEAmpwYAAACGUlEQVQoFX3TQWgTQRQA0MWLIJJDYehBTykhG5ERTx56K1u8eEhCYtomE7x5L4iLh0ViF7egewuFFqSIYE6hIHsIYQ6CQSg9CDKn4QsNCRlB59C74J/ZNHW1+An5+bOPyf6/s46oz2P+A0yIeZZ2ieEHi6TOnLKTxvWq+b52mxlVO3xnM1s7xLX1504XQH65OnW2dBqn7cCkYsFsfYsWpyY/2salmFTpEyzeR8zosYqMdiPDXdyU52K1wgEa/SjGpdEwUAxqvRfckQCDOyFearsEHe2grvkh/cFAHKvdtI3lcVceKQIOFpv+FOZaNPQBwJZLPp+hfrvT5JZXaUFsR8zqQc9qSgAharkfS5M/5F6nGJJAtXq/eLr3ucZpHccSxOOIPaQhtHohpCH2Xu6rLmQ0djnr4/+J3C6v+AW8/XWYxwYNdlhWj/P5fPSTQwVr0T9lGxdaBCqErNZaqYnEwbkjEB3NasGF3lPdrHa1nnxNOMgj0+neePUPjd2v/qVvUv29ifvc19huQ48qwXShy/9o8o3OSk0cs37mOFd0Ydgvsf/oZEnPVtggfd66lORn9mDyyzXU13SRtH2L6aR5T/snGAcZPfAXz5J1YlJWBEuxdMYqQecpBrlM49xAbmqyHA+xlA1FxBtqT2xmJoNXZlIt74ZBLeJ9ZGDqByNI7p543idzJ23vXEv7IgnsxiS+eNtwNbFdLq7+Bi4wQ0I4SVb9AAAAAElFTkSuQmCC') no-repeat;
+	opacity: .6;
+	padding: 0;
+	margin: 0;
+}
+
+#tracy-bs .footer-logo a:hover,
+#tracy-bs .footer-logo a:focus {
+	opacity: 1;
+	transition: opacity 0.1s;
+}
+
+
+#tracy-bs div.panel {
+	padding: 1px 25px;
+}
+
+#tracy-bs div.inner {
+	background: #F4F3F1;
+	padding: .1em 1em 1em;
+	border-radius: 8px;
+}
+
+#tracy-bs .outer {
+	overflow: auto;
+}
+
+#tracy-bs.mac .outer {
+	padding-bottom: 12px;
+}
+
+
+/* source code */
+#tracy-bs pre.code > div {
+	min-width: 100%;
+	float: left;
+	white-space: pre;
+}
+
+#tracy-bs .highlight {
+	background: #CD1818;
+	color: white;
+	font-weight: bold;
+	font-style: normal;
+	display: block;
+	padding: 0 .4em;
+	margin: 0 -.4em;
+}
+
+#tracy-bs .line {
+	color: #9F9C7F;
+	font-weight: normal;
+	font-style: normal;
+}
+
+#tracy-bs a.tracy-editor {
+	color: inherit;
+	border-bottom: 1px dotted rgba(0, 0, 0, .3);
+	border-radius: 3px;
+}
+
+#tracy-bs a.tracy-editor:hover {
+	background: #0001;
+}
+
+#tracy-bs span[data-tracy-href] {
+	border-bottom: 1px dotted rgba(0, 0, 0, .3);
+}
+
+#tracy-bs .tracy-dump-whitespace {
+	color: #0003;
+}
+
+#tracy-bs .caused {
+	float: right;
+	padding: .3em .6em;
+	background: #df8075;
+	border-radius: 0 0 0 8px;
+	white-space: nowrap;
+}
+
+#tracy-bs .caused a {
+	color: white;
+}
+
+#tracy-bs .args tr:first-child > * {
+	position: relative;
+}
+
+#tracy-bs .args tr:first-child td:before {
+	position: absolute;
+	right: .3em;
+	content: 'may not be true';
+	opacity: .4;
+}

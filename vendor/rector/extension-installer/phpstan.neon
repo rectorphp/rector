@@ -1,0 +1,12 @@
+parameters:
+    level: max
+
+    paths:
+        - src
+        - tests
+
+    ignoreErrors:
+        # mostly mocking
+        -
+            message: '#Do not use chained method calls\. Put each on separated lines#'
+            path: tests

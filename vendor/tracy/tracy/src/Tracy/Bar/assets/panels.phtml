@@ -1,0 +1,35 @@
+<?php
+
+/**
+ * Debug Bar panels template.
+ *
+ * This file is part of the Tracy (http://tracy.nette.org)
+ * Copyright (c) 2004 David Grudl (http://davidgrudl.com)
+ *
+ * @param  string  $type
+ * @param  array  $panels
+ */
+
+declare(strict_types=1);
+
+namespace Tracy;
+
+use Tracy\Helpers;
+
+$icons = '
+	<div class="tracy-icons">
+		<a href="#" data-tracy-action="window" title="open in window">&curren;</a>
+		<a href="#" data-tracy-action="close" title="close window">&times;</a>
+	</div>
+';
+
+echo '<div itemscope>';
+
+foreach ($panels as $panel) {
+	$content = $panel->panel ? ($panel->panel . "\n" . $icons) : '';
+	$class = 'tracy-panel ' . ($type === 'ajax' ? '' : 'tracy-panel-persist') . ' tracy-panel-' . $type; ?>
+	<div class="<?= $class ?>" id="tracy-debug-panel-<?= $panel->id ?>" data-tracy-content='<?= str_replace(['&', "'"], ['&amp;', '&#039;'], $content) ?>'></div><?php
+}
+
+echo '<meta itemprop=tracy-snapshot content=', Dumper::formatSnapshotAttribute(Dumper::$liveSnapshot), '>';
+echo '</div>';

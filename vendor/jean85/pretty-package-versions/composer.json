@@ -1,0 +1,43 @@
+{
+    "name": "jean85\/pretty-package-versions",
+    "description": "A wrapper for ocramius\/package-versions to get pretty versions strings",
+    "type": "library",
+    "require": {
+        "php": "^7.0|^8.0",
+        "composer\/package-versions-deprecated": "^1.8.0"
+    },
+    "require-dev": {
+        "phpunit\/phpunit": "^6.0|^8.5|^9.2"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Alessandro Lai",
+            "email": "alessandro.lai85@gmail.com"
+        }
+    ],
+    "support": {
+        "issues": "https:\/\/github.com\/Jean85\/pretty-package-versions\/issues"
+    },
+    "keywords": [
+        "package",
+        "versions",
+        "composer",
+        "release"
+    ],
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.x-dev"
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "RectorPrefix20210510\\Jean85\\": "src\/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "RectorPrefix20210510\\Tests\\": "tests"
+        }
+    }
+}

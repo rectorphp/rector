@@ -1,0 +1,25 @@
+# see https://github.com/dear-github/dear-github/issues/84#issuecomment-696475017
+name: 'Split Repository'
+
+on:
+    pull_request: null
+
+jobs:
+    lockdown:
+        runs-on: ubuntu-latest
+        steps:
+            -
+                # see https://github.com/marketplace/actions/repo-lockdown
+                uses: dessant/repo-lockdown@v2
+                with:
+                    github-token: ${{ secrets.ACCESS_TOKEN }}
+                    pr-comment: |
+                        Hi, thank you for your contribution.
+
+                        Unfortunately, this repository is read-only. It's a split from our main monorepo repository.
+
+                        We'd like to kindly ask you to move the contribution there - https://github.com/symplify/symplify.
+
+                        We'll check it, review it and give you feed back right way.
+
+                        Thank you

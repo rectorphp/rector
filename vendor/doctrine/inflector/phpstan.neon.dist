@@ -1,0 +1,13 @@
+includes:
+    - vendor/phpstan/phpstan-phpunit/extension.neon
+    - vendor/phpstan/phpstan-phpunit/rules.neon
+    - vendor/phpstan/phpstan-strict-rules/rules.neon
+
+parameters:
+    level: 7
+    paths:
+      - lib
+      - tests
+
+    excludes_analyse:
+        - %rootDir%/../../../tests/Doctrine/Tests/Common/*

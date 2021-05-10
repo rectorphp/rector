@@ -1,0 +1,59 @@
+{
+    "name": "ergebnis\/json-printer",
+    "type": "library",
+    "description": "Provides a JSON printer, allowing for flexible indentation.",
+    "keywords": [
+        "json",
+        "printer",
+        "formatter"
+    ],
+    "homepage": "https:\/\/github.com\/ergebnis\/json-printer",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Andreas M\u00f6ller",
+            "email": "am@localheinz.com"
+        }
+    ],
+    "require": {
+        "php": "^7.2 || ^8.0",
+        "ext-json": "*",
+        "ext-mbstring": "*"
+    },
+    "require-dev": {
+        "ergebnis\/license": "^1.0.0",
+        "ergebnis\/php-cs-fixer-config": "^2.2.1",
+        "ergebnis\/phpstan-rules": "~0.15.2",
+        "ergebnis\/test-util": "^1.1.0",
+        "infection\/infection": "~0.15.3",
+        "phpstan\/extension-installer": "^1.0.4",
+        "phpstan\/phpstan": "~0.12.40",
+        "phpstan\/phpstan-deprecation-rules": "~0.12.5",
+        "phpstan\/phpstan-phpunit": "~0.12.16",
+        "phpstan\/phpstan-strict-rules": "~0.12.4",
+        "phpunit\/phpunit": "^8.5.8",
+        "psalm\/plugin-phpunit": "~0.11.0",
+        "vimeo\/psalm": "^3.14.2"
+    },
+    "config": {
+        "platform": {
+            "php": "7.2.33"
+        },
+        "preferred-install": "dist",
+        "sort-packages": true
+    },
+    "autoload": {
+        "psr-4": {
+            "RectorPrefix20210510\\Ergebnis\\Json\\Printer\\": "src\/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "RectorPrefix20210510\\Ergebnis\\Json\\Printer\\Test\\": "test\/"
+        }
+    },
+    "support": {
+        "issues": "https:\/\/github.com\/ergebnis\/json-printer\/issues",
+        "source": "https:\/\/github.com\/ergebnis\/json-printer"
+    }
+}

@@ -1,0 +1,20 @@
+<?php
+
+/**
+ * Debug Bar: tab "info" template.
+ *
+ * This file is part of the Tracy (https://tracy.nette.org)
+ * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
+ */
+
+declare(strict_types=1);
+
+namespace Tracy;
+
+$this->time = microtime(true) - Debugger::$time;
+
+?>
+<span title="Execution time">
+<svg viewBox="0 0 2048 2048"><path fill="#86bbf0" d="m640 1153.6v639.3h-256v-639.3z"/><path fill="#6ba9e6" d="m1024 254.68v1538.2h-256v-1538.2z"/><path fill="#4f96dc" d="m1408 897.57v894.3h-256v-894.3z"/><path fill="#3987d4" d="m1792 513.08v1279.8h-256v-1279.8z"/>
+</svg><span class="tracy-label"><?= number_format($this->time * 1000, 1, '.', ' ') ?> ms</span>
+</span>

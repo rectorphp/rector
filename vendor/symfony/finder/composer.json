@@ -1,0 +1,30 @@
+{
+    "name": "symfony\/finder",
+    "type": "library",
+    "description": "Finds files and directories via an intuitive fluent interface",
+    "keywords": [],
+    "homepage": "https:\/\/symfony.com",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Fabien Potencier",
+            "email": "fabien@symfony.com"
+        },
+        {
+            "name": "Symfony Community",
+            "homepage": "https:\/\/symfony.com\/contributors"
+        }
+    ],
+    "require": {
+        "php": ">=7.2.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "RectorPrefix20210510\\Symfony\\Component\\Finder\\": ""
+        },
+        "exclude-from-classmap": [
+            "\/Tests\/"
+        ]
+    },
+    "minimum-stability": "dev"
+}

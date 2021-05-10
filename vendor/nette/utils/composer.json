@@ -1,0 +1,71 @@
+{
+    "name": "nette\/utils",
+    "description": "\ud83d\udee0  Nette Utils: lightweight utilities for string & array manipulation, image handling, safe JSON encoding\/decoding, validation, slug or strong password generating etc.",
+    "keywords": [
+        "nette",
+        "images",
+        "json",
+        "password",
+        "validation",
+        "utility",
+        "string",
+        "array",
+        "core",
+        "slugify",
+        "utf-8",
+        "unicode",
+        "paginator",
+        "datetime"
+    ],
+    "homepage": "https:\/\/nette.org",
+    "license": [
+        "BSD-3-Clause",
+        "GPL-2.0-only",
+        "GPL-3.0-only"
+    ],
+    "authors": [
+        {
+            "name": "David Grudl",
+            "homepage": "https:\/\/davidgrudl.com"
+        },
+        {
+            "name": "Nette Community",
+            "homepage": "https:\/\/nette.org\/contributors"
+        }
+    ],
+    "require": {
+        "php": ">=7.2 <8.1"
+    },
+    "require-dev": {
+        "nette\/tester": "~2.0",
+        "tracy\/tracy": "^2.3",
+        "phpstan\/phpstan": "^0.12"
+    },
+    "conflict": {
+        "nette\/di": "<3.0.6"
+    },
+    "suggest": {
+        "ext-iconv": "to use Strings::webalize(), toAscii(), chr() and reverse()",
+        "ext-json": "to use Nette\\Utils\\Json",
+        "ext-intl": "to use Strings::webalize(), toAscii(), normalize() and compare()",
+        "ext-mbstring": "to use Strings::lower() etc...",
+        "ext-xml": "to use Strings::length() etc. when mbstring is not available",
+        "ext-gd": "to use Image",
+        "ext-tokenizer": "to use Nette\\Utils\\Reflection::getUseStatements()"
+    },
+    "autoload": {
+        "classmap": [
+            "src\/"
+        ]
+    },
+    "minimum-stability": "dev",
+    "scripts": {
+        "phpstan": "phpstan analyse",
+        "tester": "tester tests -s"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "3.2-dev"
+        }
+    }
+}

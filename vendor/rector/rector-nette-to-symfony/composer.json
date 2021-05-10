@@ -1,0 +1,51 @@
+{
+    "name": "rector\/rector-nette-to-symfony",
+    "type": "rector-extension",
+    "description": "Generate Rector rules from command line",
+    "license": "MIT",
+    "require": {
+        "php": ">=7.3",
+        "rector\/rector": "^0.10.19",
+        "rector\/rector-nette": "^0.10.9"
+    },
+    "require-dev": {
+        "phpunit\/phpunit": "^9.5",
+        "symplify\/phpstan-rules": "^9.3",
+        "symplify\/phpstan-extensions": "^9.3",
+        "symplify\/easy-coding-standard": "^9.3",
+        "phpstan\/phpstan-nette": "^0.12.16",
+        "symplify\/rule-doc-generator": "^9.3",
+        "phpstan\/extension-installer": "^1.1",
+        "rector\/rector-phpstan-rules": "^0.1",
+        "nette\/application": "^3.1",
+        "symfony\/form": "^5.2",
+        "nette\/forms": "^3.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Rector\\NetteToSymfony\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Rector\\NetteToSymfony\\Tests\\": "tests"
+        },
+        "classmap": [
+            "stubs"
+        ]
+    },
+    "scripts": {
+        "check-cs": "vendor\/bin\/ecs check --ansi",
+        "fix-cs": "vendor\/bin\/ecs check --fix --ansi",
+        "phpstan": "vendor\/bin\/phpstan analyse --ansi --error-format symplify"
+    },
+    "extra": {
+        "rector": {
+            "includes": [
+                "config\/config.php"
+            ]
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

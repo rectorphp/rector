@@ -1,0 +1,129 @@
+<?php
+
+/**
+ * Debug Bar: panel "info" template.
+ *
+ * This file is part of the Tracy (https://tracy.nette.org)
+ * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
+ */
+
+declare(strict_types=1);
+
+namespace Tracy;
+
+if (isset($this->cpuUsage) && $this->time) {
+	foreach (getrusage() as $key => $val) {
+		$this->cpuUsage[$key] -= $val;
+	}
+	$userUsage = -round(($this->cpuUsage['ru_utime.tv_sec'] * 1e6 + $this->cpuUsage['ru_utime.tv_usec']) / $this->time / 10000);
+	$systemUsage = -round(($this->cpuUsage['ru_stime.tv_sec'] * 1e6 + $this->cpuUsage['ru_stime.tv_usec']) / $this->time / 10000);
+}
+
+$countClasses = function (array $list): int {
+	return count(array_filter($list, function (string $name): bool {
+		return (new \ReflectionClass($name))->isUserDefined();
+	}));
+};
+
+$ipFormatter = static function (?string $ip): ?string {
+	if ($ip === '127.0.0.1' || $ip === '::1') {
+		$ip .= ' (localhost)';
+	}
+	return $ip;
+};
+
+$opcache = function_exists('opcache_get_status') ? @opcache_get_status() : null; // @ can be restricted
+$cachedFiles = isset($opcache['scripts']) ? array_intersect(array_keys($opcache['scripts']), get_included_files()) : [];
+$jit = $opcache['jit'] ?? null;
+
+$info = [
+	'Execution time' => number_format($this->time * 1000, 1, '.', ' ') . ' ms',
+	'CPU usage user + system' => isset($userUsage) ? (int) $userUsage . ' % + ' . (int) $systemUsage . ' %' : null,
+	'Peak of allocated memory' => number_format(memory_get_peak_usage() / 1000000, 2, '.', ' ') . ' MB',
+	'Included files' => count(get_included_files()),
+	'Classes + interfaces + traits' => $countClasses(get_declared_classes()) . ' + '
+		. $countClasses(get_declared_interfaces()) . ' + ' . $countClasses(get_declared_traits()),
+	'OPcache' => $opcache ? round(count($cachedFiles) * 100 / count(get_included_files())) . ' % cached' : '–',
+	'JIT' => empty($jit['buffer_size']) ? '–' : round(($jit['buffer_size'] - $jit['buffer_free']) / $jit['buffer_size'] * 100) . ' % used',
+	'Your IP' => $ipFormatter($_SERVER['REMOTE_ADDR'] ?? null),
+	'Server IP' => $ipFormatter($_SERVER['SERVER_ADDR'] ?? null),
+	'HTTP method / response code' => isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] . ' / ' . http_response_code() : null,
+	'PHP' => PHP_VERSION,
+	'Xdebug' => extension_loaded('xdebug') ? phpversion('xdebug') : null,
+	'Tracy' => Debugger::VERSION,
+	'Server' => $_SERVER['SERVER_SOFTWARE'] ?? null,
+];
+
+$info = array_map('strval', array_filter($info + (array) $this->data));
+
+$packages = $devPackages = [];
+if (class_exists('Composer\Autoload\ClassLoader', false)) {
+	$baseDir = (function () {
+		@include dirname((new \ReflectionClass('Composer\Autoload\ClassLoader'))->getFileName()) . '/autoload_psr4.php'; // @ may not exist
+		return $baseDir;
+	})();
+	$composer = @json_decode((string) file_get_contents($baseDir . '/composer.lock')); // @ may not exist or be valid
+	list($packages, $devPackages) = [(array) @$composer->packages, (array) @$composer->{'packages-dev'}]; // @ keys may not exist
+	foreach ([&$packages, &$devPackages] as &$items) {
+		array_walk($items, function($package) {
+			$package->hash = $package->source->reference ?? $package->dist->reference ?? null;
+		}, $items);
+		usort($items, function ($a, $b): int { return $a->name <=> $b->name; });
+	}
+}
+
+?>
+<style class="tracy-debug">
+	#tracy-debug .tracy-InfoPanel td {
+		white-space: nowrap;
+	}
+	#tracy-debug .tracy-InfoPanel td:nth-child(2) {
+		font-weight: bold;
+		width: 30%;
+	}
+	#tracy-debug .tracy-InfoPanel td[colspan='2'] b {
+		float: right;
+		margin-left: 2em;
+	}
+</style>
+
+<h1>System info</h1>
+
+<div class="tracy-inner tracy-InfoPanel">
+<div class="tracy-inner-container">
+<table class="tracy-sortable">
+<?php foreach ($info as $key => $val): ?>
+<tr>
+<?php if (strlen($val) > 25): ?>
+	<td colspan=2><?= Helpers::escapeHtml($key) ?> <b><?= Helpers::escapeHtml($val) ?></b></td>
+<?php else: ?>
+	<td><?= Helpers::escapeHtml($key) ?></td><td><?= Helpers::escapeHtml($val) ?></td>
+<?php endif ?>
+</tr>
+<?php endforeach ?>
+</table>
+
+<?php if ($packages || $devPackages): ?>
+	<h2><a class="tracy-toggle tracy-collapsed" data-tracy-ref="^div .tracy-InfoPanel-packages">Composer Packages (<?= count($packages), $devPackages ? ' + ' . count($devPackages) . ' dev' : '' ?>)</a></h2>
+
+	<div class="tracy-InfoPanel-packages tracy-collapsed">
+	<?php if ($packages): ?>
+	<table class="tracy-sortable">
+	<?php foreach ($packages as $package): ?>
+		<tr><td><?= Helpers::escapeHtml($package->name) ?></td><td><?= Helpers::escapeHtml($package->version . (strpos($package->version, 'dev') !== false && $package->hash ? ' #' . substr($package->hash, 0, 4) : '')) ?></td></tr>
+	<?php endforeach ?>
+	</table>
+	<?php endif ?>
+
+	<?php if ($devPackages): ?>
+	<h2>Dev Packages</h2>
+	<table class="tracy-sortable">
+	<?php foreach ($devPackages as $package): ?>
+		<tr><td><?= Helpers::escapeHtml($package->name) ?></td><td><?= Helpers::escapeHtml($package->version . (strpos($package->version, 'dev') !== false && $package->hash ? ' #' . substr($package->hash, 0, 4) : '')) ?></td></tr>
+	<?php endforeach ?>
+	</table>
+	<?php endif ?>
+	</div>
+<?php endif ?>
+</div>
+</div>
