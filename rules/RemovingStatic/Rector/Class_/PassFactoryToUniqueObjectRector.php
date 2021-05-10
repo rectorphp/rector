@@ -22,7 +22,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\RemovingStatic\Rector\Class_\PassFactoryToEntityRector\PassFactoryToEntityRectorTest
  */
-final class PassFactoryToUniqueObjectRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
+final class PassFactoryToUniqueObjectRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
      * @api
@@ -53,7 +53,7 @@ final class PassFactoryToUniqueObjectRector extends \Rector\Core\Rector\Abstract
      * @var StaticTypesInClassResolver
      */
     private $staticTypesInClassResolver;
-    public function __construct(\Rector\RemovingStatic\StaticTypesInClassResolver $staticTypesInClassResolver, \Rector\Naming\Naming\PropertyNaming $propertyNaming, \Rector\RemovingStatic\UniqueObjectOrServiceDetector $uniqueObjectOrServiceDetector, \Rector\RemovingStatic\UniqueObjectFactoryFactory $uniqueObjectFactoryFactory, \Rector\RemovingStatic\Printer\FactoryClassPrinter $factoryClassPrinter)
+    public function __construct(StaticTypesInClassResolver $staticTypesInClassResolver, PropertyNaming $propertyNaming, UniqueObjectOrServiceDetector $uniqueObjectOrServiceDetector, UniqueObjectFactoryFactory $uniqueObjectFactoryFactory, FactoryClassPrinter $factoryClassPrinter)
     {
         $this->propertyNaming = $propertyNaming;
         $this->uniqueObjectOrServiceDetector = $uniqueObjectOrServiceDetector;
@@ -61,9 +61,9 @@ final class PassFactoryToUniqueObjectRector extends \Rector\Core\Rector\Abstract
         $this->factoryClassPrinter = $factoryClassPrinter;
         $this->staticTypesInClassResolver = $staticTypesInClassResolver;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Convert new X/Static::call() to factories in entities, pass them via constructor to each other', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Convert new X/Static::call() to factories in entities, pass them via constructor to each other', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 <?php
 
 namespace RectorPrefix20210510;
@@ -72,7 +72,7 @@ class SomeClass
 {
     public function run()
     {
-        return new \RectorPrefix20210510\AnotherClass();
+        return new AnotherClass();
     }
 }
 \class_alias('SomeClass', 'SomeClass', \false);
@@ -80,7 +80,7 @@ class AnotherClass
 {
     public function someFun()
     {
-        return \RectorPrefix20210510\StaticClass::staticMethod();
+        return StaticClass::staticMethod();
     }
 }
 \class_alias('AnotherClass', 'AnotherClass', \false);
@@ -137,14 +137,14 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Class_::class, \PhpParser\Node\Expr\StaticCall::class];
+        return [Class_::class, StaticCall::class];
     }
     /**
      * @param StaticCall|Class_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        if ($node instanceof \PhpParser\Node\Stmt\Class_) {
+        if ($node instanceof Class_) {
             return $this->refactorClass($node);
         }
         foreach ($this->serviceObjectTypes as $serviceObjectType) {
@@ -153,8 +153,8 @@ CODE_SAMPLE
             }
             // is this object created via new somewhere else? use factory!
             $variableName = $this->propertyNaming->fqnToVariableName($serviceObjectType);
-            $thisPropertyFetch = new \PhpParser\Node\Expr\PropertyFetch(new \PhpParser\Node\Expr\Variable('this'), $variableName);
-            return new \PhpParser\Node\Expr\MethodCall($thisPropertyFetch, $node->name, $node->args);
+            $thisPropertyFetch = new PropertyFetch(new Variable('this'), $variableName);
+            return new MethodCall($thisPropertyFetch, $node->name, $node->args);
         }
         return $node;
     }
@@ -165,10 +165,10 @@ CODE_SAMPLE
     {
         $typesToServices = $configuration[self::TYPES_TO_SERVICES] ?? [];
         foreach ($typesToServices as $typeToService) {
-            $this->serviceObjectTypes[] = new \PHPStan\Type\ObjectType($typeToService);
+            $this->serviceObjectTypes[] = new ObjectType($typeToService);
         }
     }
-    private function refactorClass(\PhpParser\Node\Stmt\Class_ $class) : \PhpParser\Node\Stmt\Class_
+    private function refactorClass(Class_ $class) : Class_
     {
         $staticTypesInClass = $this->staticTypesInClassResolver->collectStaticCallTypeInClass($class, $this->serviceObjectTypes);
         foreach ($staticTypesInClass as $staticTypeInClass) {

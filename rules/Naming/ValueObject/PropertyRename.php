@@ -7,7 +7,7 @@ use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\PropertyProperty;
 use Rector\Naming\Contract\RenamePropertyValueObjectInterface;
-final class PropertyRename implements \Rector\Naming\Contract\RenamePropertyValueObjectInterface
+final class PropertyRename implements RenamePropertyValueObjectInterface
 {
     /**
      * @var string
@@ -33,7 +33,7 @@ final class PropertyRename implements \Rector\Naming\Contract\RenamePropertyValu
      * @var PropertyProperty
      */
     private $propertyProperty;
-    public function __construct(\PhpParser\Node\Stmt\Property $property, string $expectedName, string $currentName, \PhpParser\Node\Stmt\ClassLike $classLike, string $classLikeName, \PhpParser\Node\Stmt\PropertyProperty $propertyProperty)
+    public function __construct(Property $property, string $expectedName, string $currentName, ClassLike $classLike, string $classLikeName, PropertyProperty $propertyProperty)
     {
         $this->property = $property;
         $this->expectedName = $expectedName;
@@ -42,7 +42,7 @@ final class PropertyRename implements \Rector\Naming\Contract\RenamePropertyValu
         $this->classLikeName = $classLikeName;
         $this->propertyProperty = $propertyProperty;
     }
-    public function getProperty() : \PhpParser\Node\Stmt\Property
+    public function getProperty() : Property
     {
         return $this->property;
     }
@@ -62,7 +62,7 @@ final class PropertyRename implements \Rector\Naming\Contract\RenamePropertyValu
     {
         return $this->currentName === $this->expectedName;
     }
-    public function getClassLike() : \PhpParser\Node\Stmt\ClassLike
+    public function getClassLike() : ClassLike
     {
         return $this->classLike;
     }
@@ -70,7 +70,7 @@ final class PropertyRename implements \Rector\Naming\Contract\RenamePropertyValu
     {
         return $this->classLikeName;
     }
-    public function getPropertyProperty() : \PhpParser\Node\Stmt\PropertyProperty
+    public function getPropertyProperty() : PropertyProperty
     {
         return $this->propertyProperty;
     }

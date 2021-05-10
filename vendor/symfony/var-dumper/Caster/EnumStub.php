@@ -16,7 +16,7 @@ use RectorPrefix20210510\Symfony\Component\VarDumper\Cloner\Stub;
  *
  * @author Nicolas Grekas <p@tchwork.com>
  */
-class EnumStub extends \RectorPrefix20210510\Symfony\Component\VarDumper\Cloner\Stub
+class EnumStub extends Stub
 {
     public $dumpKeys = \true;
     public function __construct(array $values, bool $dumpKeys = \true)

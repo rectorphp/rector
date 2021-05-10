@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace Rector\FileFormatter\Exception;
 
 use UnexpectedValueException;
-final class ParseIndentException extends \UnexpectedValueException
+final class ParseIndentException extends UnexpectedValueException
 {
     /**
      * @return $this

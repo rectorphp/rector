@@ -39,9 +39,9 @@ final class ModalToGetSet
         $this->minimalSetterArgumentCount = $minimalSetterArgumentCount;
         $this->firstArgumentType = $firstArgumentType;
     }
-    public function getObjectType() : \PHPStan\Type\ObjectType
+    public function getObjectType() : ObjectType
     {
-        return new \PHPStan\Type\ObjectType($this->type);
+        return new ObjectType($this->type);
     }
     public function getUnprefixedMethod() : string
     {

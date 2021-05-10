@@ -21,19 +21,19 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\CodeQuality\Rector\Expression\InlineIfToExplicitIfRector\InlineIfToExplicitIfRectorTest
  */
-final class InlineIfToExplicitIfRector extends \Rector\Core\Rector\AbstractRector
+final class InlineIfToExplicitIfRector extends AbstractRector
 {
     /**
      * @var BinaryOpManipulator
      */
     private $binaryOpManipulator;
-    public function __construct(\Rector\Core\NodeManipulator\BinaryOpManipulator $binaryOpManipulator)
+    public function __construct(BinaryOpManipulator $binaryOpManipulator)
     {
         $this->binaryOpManipulator = $binaryOpManipulator;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change inline if to explicit if', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change inline if to explicit if', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -64,36 +64,36 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Expression::class];
+        return [Expression::class];
     }
     /**
      * @param Expression $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        if ($node->expr instanceof \PhpParser\Node\Expr\BinaryOp\BooleanAnd) {
+        if ($node->expr instanceof BooleanAnd) {
             return $this->processExplicitIf($node);
         }
-        if ($node->expr instanceof \PhpParser\Node\Expr\BinaryOp\BooleanOr) {
+        if ($node->expr instanceof BooleanOr) {
             return $this->processExplicitIf($node);
         }
         return null;
     }
-    private function processExplicitIf(\PhpParser\Node\Stmt\Expression $expression) : ?\PhpParser\Node
+    private function processExplicitIf(Expression $expression) : ?Node
     {
         /** @var BooleanAnd|BooleanOr $booleanExpr */
         $booleanExpr = $expression->expr;
         $leftStaticType = $this->getStaticType($booleanExpr->left);
-        if (!$leftStaticType instanceof \PHPStan\Type\BooleanType) {
+        if (!$leftStaticType instanceof BooleanType) {
             return null;
         }
-        if (!$booleanExpr->right instanceof \PhpParser\Node\Expr\Assign && !$booleanExpr->right instanceof \PhpParser\Node\Expr\AssignOp) {
+        if (!$booleanExpr->right instanceof Assign && !$booleanExpr->right instanceof AssignOp) {
             return null;
         }
         /** @var Expr $expr */
-        $expr = $booleanExpr instanceof \PhpParser\Node\Expr\BinaryOp\BooleanAnd ? $booleanExpr->left : $this->binaryOpManipulator->inverseNode($booleanExpr->left);
-        $if = new \PhpParser\Node\Stmt\If_($expr);
-        $if->stmts[] = new \PhpParser\Node\Stmt\Expression($booleanExpr->right);
+        $expr = $booleanExpr instanceof BooleanAnd ? $booleanExpr->left : $this->binaryOpManipulator->inverseNode($booleanExpr->left);
+        $if = new If_($expr);
+        $if->stmts[] = new Expression($booleanExpr->right);
         $this->mirrorComments($if, $expression);
         return $if;
     }

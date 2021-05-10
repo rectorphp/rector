@@ -27,21 +27,21 @@ final class ArgumentAddingScope
      * @var NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
+    public function __construct(NodeNameResolver $nodeNameResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
     }
     /**
      * @param MethodCall|StaticCall $expr
      */
-    public function isInCorrectScope(\PhpParser\Node\Expr $expr, \Rector\Arguments\ValueObject\ArgumentAdder $argumentAdder) : bool
+    public function isInCorrectScope(Expr $expr, ArgumentAdder $argumentAdder) : bool
     {
         if ($argumentAdder->getScope() === null) {
             return \true;
         }
         $scope = $argumentAdder->getScope();
-        if ($expr instanceof \PhpParser\Node\Expr\StaticCall) {
-            if (!$expr->class instanceof \PhpParser\Node\Name) {
+        if ($expr instanceof StaticCall) {
+            if (!$expr->class instanceof Name) {
                 return \false;
             }
             if ($this->nodeNameResolver->isName($expr->class, 'parent')) {

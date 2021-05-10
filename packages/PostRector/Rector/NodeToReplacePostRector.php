@@ -13,7 +13,7 @@ final class NodeToReplacePostRector extends \Rector\PostRector\Rector\AbstractPo
      * @var NodesToReplaceCollector
      */
     private $nodesToReplaceCollector;
-    public function __construct(\Rector\PostRector\Collector\NodesToReplaceCollector $nodesToReplaceCollector)
+    public function __construct(NodesToReplaceCollector $nodesToReplaceCollector)
     {
         $this->nodesToReplaceCollector = $nodesToReplaceCollector;
     }
@@ -21,7 +21,7 @@ final class NodeToReplacePostRector extends \Rector\PostRector\Rector\AbstractPo
     {
         return 1100;
     }
-    public function leaveNode(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function leaveNode(Node $node) : ?Node
     {
         foreach ($this->nodesToReplaceCollector->getNodes() as [$nodeToFind, $replacement]) {
             if ($node === $nodeToFind) {
@@ -30,9 +30,9 @@ final class NodeToReplacePostRector extends \Rector\PostRector\Rector\AbstractPo
         }
         return null;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Replaces nodes on weird positions', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Replaces nodes on weird positions', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($value)

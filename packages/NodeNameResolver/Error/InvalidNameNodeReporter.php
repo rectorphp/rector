@@ -26,7 +26,7 @@ final class InvalidNameNodeReporter
      * @var BetterStandardPrinter
      */
     private $betterStandardPrinter;
-    public function __construct(\Rector\Core\Provider\CurrentFileProvider $currentFileProvider, \Rector\Core\PhpParser\Printer\BetterStandardPrinter $betterStandardPrinter)
+    public function __construct(CurrentFileProvider $currentFileProvider, BetterStandardPrinter $betterStandardPrinter)
     {
         $this->currentFileProvider = $currentFileProvider;
         $this->betterStandardPrinter = $betterStandardPrinter;
@@ -34,11 +34,11 @@ final class InvalidNameNodeReporter
     /**
      * @param MethodCall|StaticCall $node
      */
-    public function reportInvalidNodeForName(\PhpParser\Node $node) : void
+    public function reportInvalidNodeForName(Node $node) : void
     {
         $message = \sprintf('Pick more specific node than "%s", e.g. "$node->name"', \get_class($node));
         $file = $this->currentFileProvider->getFile();
-        if ($file instanceof \Rector\Core\ValueObject\Application\File) {
+        if ($file instanceof File) {
             $smartFileInfo = $file->getSmartFileInfo();
             $message .= \PHP_EOL . \PHP_EOL;
             $message .= \sprintf('Caused in "%s" file on line %d on code "%s"', $smartFileInfo->getRelativeFilePathFromCwd(), $node->getStartLine(), $this->betterStandardPrinter->print($node));
@@ -48,7 +48,7 @@ final class InvalidNameNodeReporter
         if ($rectorBacktrace) {
             // issues to find the file in prefixed
             if (\file_exists($rectorBacktrace[self::FILE])) {
-                $smartFileInfo = new \Symplify\SmartFileSystem\SmartFileInfo($rectorBacktrace[self::FILE]);
+                $smartFileInfo = new SmartFileInfo($rectorBacktrace[self::FILE]);
                 $fileAndLine = $smartFileInfo->getRelativeFilePathFromCwd() . ':' . $rectorBacktrace['line'];
             } else {
                 $fileAndLine = $rectorBacktrace[self::FILE] . ':' . $rectorBacktrace['line'];
@@ -56,7 +56,7 @@ final class InvalidNameNodeReporter
             $message .= \PHP_EOL . \PHP_EOL;
             $message .= \sprintf('Look at "%s"', $fileAndLine);
         }
-        throw new \Rector\Core\Exception\ShouldNotHappenException($message);
+        throw new ShouldNotHappenException($message);
     }
     /**
      * @param mixed[] $backtrace
@@ -69,7 +69,7 @@ final class InvalidNameNodeReporter
                 continue;
             }
             // match a Rector class
-            if (!\is_a($singleBacktrace['object'], \Rector\Core\Contract\Rector\RectorInterface::class)) {
+            if (!\is_a($singleBacktrace['object'], RectorInterface::class)) {
                 continue;
             }
             return $singleBacktrace;

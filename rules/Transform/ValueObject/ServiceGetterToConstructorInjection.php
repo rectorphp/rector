@@ -24,9 +24,9 @@ final class ServiceGetterToConstructorInjection
         $this->oldMethod = $oldMethod;
         $this->serviceType = $serviceType;
     }
-    public function getOldObjectType() : \PHPStan\Type\ObjectType
+    public function getOldObjectType() : ObjectType
     {
-        return new \PHPStan\Type\ObjectType($this->oldType);
+        return new ObjectType($this->oldType);
     }
     public function getOldMethod() : string
     {

@@ -20,7 +20,7 @@ use RectorPrefix20210510\Symfony\Component\HttpKernel\KernelEvents;
  *
  * @final
  */
-class AddRequestFormatsListener implements \RectorPrefix20210510\Symfony\Component\EventDispatcher\EventSubscriberInterface
+class AddRequestFormatsListener implements EventSubscriberInterface
 {
     protected $formats;
     public function __construct(array $formats)
@@ -30,7 +30,7 @@ class AddRequestFormatsListener implements \RectorPrefix20210510\Symfony\Compone
     /**
      * Adds request formats.
      */
-    public function onKernelRequest(\RectorPrefix20210510\Symfony\Component\HttpKernel\Event\RequestEvent $event)
+    public function onKernelRequest(RequestEvent $event)
     {
         $request = $event->getRequest();
         foreach ($this->formats as $format => $mimeTypes) {
@@ -42,6 +42,6 @@ class AddRequestFormatsListener implements \RectorPrefix20210510\Symfony\Compone
      */
     public static function getSubscribedEvents() : array
     {
-        return [\RectorPrefix20210510\Symfony\Component\HttpKernel\KernelEvents::REQUEST => ['onKernelRequest', 100]];
+        return [KernelEvents::REQUEST => ['onKernelRequest', 100]];
     }
 }

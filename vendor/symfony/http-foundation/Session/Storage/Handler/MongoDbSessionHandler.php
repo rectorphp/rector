@@ -18,7 +18,7 @@ namespace RectorPrefix20210510\Symfony\Component\HttpFoundation\Session\Storage\
  * @see https://packagist.org/packages/mongodb/mongodb
  * @see https://php.net/mongodb
  */
-class MongoDbSessionHandler extends \RectorPrefix20210510\Symfony\Component\HttpFoundation\Session\Storage\Handler\AbstractSessionHandler
+class MongoDbSessionHandler extends AbstractSessionHandler
 {
     private $mongo;
     /**

@@ -16,11 +16,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Laravel\Tests\Rector\Class_\PropertyDeferToDeferrableProviderToRector\PropertyDeferToDeferrableProviderToRectorTest
  */
-final class PropertyDeferToDeferrableProviderToRector extends \Rector\Core\Rector\AbstractRector
+final class PropertyDeferToDeferrableProviderToRector extends AbstractRector
 {
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change deprecated $defer = true; to Illuminate\\Contracts\\Support\\DeferrableProvider interface', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change deprecated $defer = true; to Illuminate\\Contracts\\Support\\DeferrableProvider interface', [new CodeSample(<<<'CODE_SAMPLE'
 use Illuminate\Support\ServiceProvider;
 
 final class SomeServiceProvider extends ServiceProvider
@@ -46,25 +46,25 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Class_::class];
+        return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        if (!$this->isObjectType($node, new \PHPStan\Type\ObjectType('Illuminate\\Support\\ServiceProvider'))) {
+        if (!$this->isObjectType($node, new ObjectType('Illuminate\\Support\\ServiceProvider'))) {
             return null;
         }
         $deferProperty = $this->matchDeferWithFalseProperty($node);
-        if (!$deferProperty instanceof \PhpParser\Node\Stmt\Property) {
+        if (!$deferProperty instanceof Property) {
             return null;
         }
         $this->removeNode($deferProperty);
-        $node->implements[] = new \PhpParser\Node\Name\FullyQualified('Illuminate\\Contracts\\Support\\DeferrableProvider');
+        $node->implements[] = new FullyQualified('Illuminate\\Contracts\\Support\\DeferrableProvider');
         return $node;
     }
-    private function matchDeferWithFalseProperty(\PhpParser\Node\Stmt\Class_ $class) : ?\PhpParser\Node\Stmt\Property
+    private function matchDeferWithFalseProperty(Class_ $class) : ?Property
     {
         foreach ($class->getProperties() as $property) {
             if (!$this->isName($property, 'defer')) {

@@ -54,12 +54,12 @@ use RectorPrefix20210510\Symplify\Skipper\Skipper\Skipper;
 /**
  * @see \Rector\Testing\PHPUnit\AbstractRectorTestCase
  */
-abstract class AbstractRector extends \PhpParser\NodeVisitorAbstract implements \Rector\Core\Contract\Rector\PhpRectorInterface
+abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorInterface
 {
     /**
      * @var string[]
      */
-    private const ATTRIBUTES_TO_MIRROR = [\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE, \Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME, \Rector\NodeTypeResolver\Node\AttributeKey::METHOD_NODE, \Rector\NodeTypeResolver\Node\AttributeKey::USE_NODES, \Rector\NodeTypeResolver\Node\AttributeKey::SCOPE, \Rector\NodeTypeResolver\Node\AttributeKey::RESOLVED_NAME, \Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE, \Rector\NodeTypeResolver\Node\AttributeKey::CURRENT_STATEMENT, \Rector\NodeTypeResolver\Node\AttributeKey::PREVIOUS_STATEMENT];
+    private const ATTRIBUTES_TO_MIRROR = [AttributeKey::CLASS_NODE, AttributeKey::CLASS_NAME, AttributeKey::METHOD_NODE, AttributeKey::USE_NODES, AttributeKey::SCOPE, AttributeKey::RESOLVED_NAME, AttributeKey::PARENT_NODE, AttributeKey::CURRENT_STATEMENT, AttributeKey::PREVIOUS_STATEMENT];
     /**
      * @var NodeNameResolver
      */
@@ -183,7 +183,7 @@ abstract class AbstractRector extends \PhpParser\NodeVisitorAbstract implements 
     /**
      * @required
      */
-    public function autowireAbstractRector(\Rector\PostRector\Collector\NodesToRemoveCollector $nodesToRemoveCollector, \Rector\PostRector\Collector\NodesToAddCollector $nodesToAddCollector, \Rector\ChangesReporting\Collector\RectorChangeCollector $rectorChangeCollector, \Rector\NodeRemoval\NodeRemover $nodeRemover, \Rector\PostRector\DependencyInjection\PropertyAdder $propertyAdder, \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector $removedAndAddedFilesCollector, \Rector\Core\PhpParser\Printer\BetterStandardPrinter $betterStandardPrinter, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \RectorPrefix20210510\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\Privatization\NodeManipulator\VisibilityManipulator $visibilityManipulator, \Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \RectorPrefix20210510\Symfony\Component\Console\Style\SymfonyStyle $symfonyStyle, \Rector\Core\Php\PhpVersionProvider $phpVersionProvider, \Rector\Core\Exclusion\ExclusionManager $exclusionManager, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \RectorPrefix20210510\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \Rector\Core\Logging\CurrentRectorProvider $currentRectorProvider, \Rector\Core\Configuration\CurrentNodeProvider $currentNodeProvider, \RectorPrefix20210510\Symplify\Skipper\Skipper\Skipper $skipper, \Rector\Core\PhpParser\Node\Value\ValueResolver $valueResolver, \Rector\NodeCollector\NodeCollector\NodeRepository $nodeRepository, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator, \Rector\Core\Provider\CurrentFileProvider $currentFileProvider, \Rector\Core\NodeAnalyzer\ChangedNodeAnalyzer $changedNodeAnalyzer) : void
+    public function autowireAbstractRector(NodesToRemoveCollector $nodesToRemoveCollector, NodesToAddCollector $nodesToAddCollector, RectorChangeCollector $rectorChangeCollector, NodeRemover $nodeRemover, PropertyAdder $propertyAdder, RemovedAndAddedFilesCollector $removedAndAddedFilesCollector, BetterStandardPrinter $betterStandardPrinter, NodeNameResolver $nodeNameResolver, NodeTypeResolver $nodeTypeResolver, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, VisibilityManipulator $visibilityManipulator, NodeFactory $nodeFactory, PhpDocInfoFactory $phpDocInfoFactory, SymfonyStyle $symfonyStyle, PhpVersionProvider $phpVersionProvider, ExclusionManager $exclusionManager, StaticTypeMapper $staticTypeMapper, ParameterProvider $parameterProvider, CurrentRectorProvider $currentRectorProvider, CurrentNodeProvider $currentNodeProvider, Skipper $skipper, ValueResolver $valueResolver, NodeRepository $nodeRepository, BetterNodeFinder $betterNodeFinder, NodeComparator $nodeComparator, CurrentFileProvider $currentFileProvider, ChangedNodeAnalyzer $changedNodeAnalyzer) : void
     {
         $this->nodesToRemoveCollector = $nodesToRemoveCollector;
         $this->nodesToAddCollector = $nodesToAddCollector;
@@ -221,8 +221,8 @@ abstract class AbstractRector extends \PhpParser\NodeVisitorAbstract implements 
         $this->previousAppliedClass = null;
         // workaround for file around refactor()
         $file = $this->currentFileProvider->getFile();
-        if (!$file instanceof \Rector\Core\ValueObject\Application\File) {
-            throw new \Rector\Core\Exception\ShouldNotHappenException('File is missing');
+        if (!$file instanceof File) {
+            throw new ShouldNotHappenException('File is missing');
         }
         $this->file = $file;
         return parent::beforeTraverse($nodes);
@@ -230,7 +230,7 @@ abstract class AbstractRector extends \PhpParser\NodeVisitorAbstract implements 
     /**
      * @return Expression|Node|Node[]|null
      */
-    public final function enterNode(\PhpParser\Node $node)
+    public final function enterNode(Node $node)
     {
         $nodeClass = \get_class($node);
         if (!$this->isMatchingNodeType($nodeClass)) {
@@ -245,7 +245,7 @@ abstract class AbstractRector extends \PhpParser\NodeVisitorAbstract implements 
         // show current Rector class on --debug
         $this->printDebugApplying();
         $originalAttributes = $node->getAttributes();
-        $originalNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NODE) ?? clone $node;
+        $originalNode = $node->getAttribute(AttributeKey::ORIGINAL_NODE) ?? clone $node;
         $node = $this->refactor($node);
         if (\is_array($node)) {
             $originalNodeHash = \spl_object_hash($originalNode);
@@ -259,49 +259,49 @@ abstract class AbstractRector extends \PhpParser\NodeVisitorAbstract implements 
             return $originalNode;
         }
         // nothing to change → continue
-        if (!$node instanceof \PhpParser\Node) {
+        if (!$node instanceof Node) {
             return null;
         }
         // changed!
         if ($this->changedNodeAnalyzer->hasNodeChanged($originalNode, $node)) {
-            $rectorWithLineChange = new \Rector\ChangesReporting\ValueObject\RectorWithLineChange($this, $originalNode->getLine());
+            $rectorWithLineChange = new RectorWithLineChange($this, $originalNode->getLine());
             $this->file->addRectorClassWithLine($rectorWithLineChange);
             // update parents relations
             $this->connectParentNodes($node);
             $this->mirrorAttributes($originalAttributes, $node);
         }
         // if stmt ("$value;") was replaced by expr ("$value"), add the ending ";" (Expression) to prevent breaking the code
-        if ($originalNode instanceof \PhpParser\Node\Stmt && $node instanceof \PhpParser\Node\Expr) {
-            return new \PhpParser\Node\Stmt\Expression($node);
+        if ($originalNode instanceof Stmt && $node instanceof Expr) {
+            return new Expression($node);
         }
         return $node;
     }
-    public function leaveNode(\PhpParser\Node $node)
+    public function leaveNode(Node $node)
     {
         $objectHash = \spl_object_hash($node);
         // update parents relations
         return $this->nodesToReturn[$objectHash] ?? null;
     }
-    protected function isName(\PhpParser\Node $node, string $name) : bool
+    protected function isName(Node $node, string $name) : bool
     {
         return $this->nodeNameResolver->isName($node, $name);
     }
     /**
      * @param string[] $names
      */
-    protected function isNames(\PhpParser\Node $node, array $names) : bool
+    protected function isNames(Node $node, array $names) : bool
     {
         return $this->nodeNameResolver->isNames($node, $names);
     }
-    protected function getName(\PhpParser\Node $node) : ?string
+    protected function getName(Node $node) : ?string
     {
         return $this->nodeNameResolver->getName($node);
     }
-    protected function isObjectType(\PhpParser\Node $node, \PHPStan\Type\ObjectType $objectType) : bool
+    protected function isObjectType(Node $node, ObjectType $objectType) : bool
     {
         return $this->nodeTypeResolver->isObjectType($node, $objectType);
     }
-    protected function getStaticType(\PhpParser\Node $node) : \PHPStan\Type\Type
+    protected function getStaticType(Node $node) : Type
     {
         return $this->nodeTypeResolver->getStaticType($node);
     }
@@ -309,7 +309,7 @@ abstract class AbstractRector extends \PhpParser\NodeVisitorAbstract implements 
      * @deprecated
      * Use getStaticType() instead, as single method to get types
      */
-    protected function getObjectType(\PhpParser\Node $node) : \PHPStan\Type\Type
+    protected function getObjectType(Node $node) : Type
     {
         return $this->nodeTypeResolver->resolve($node);
     }
@@ -331,31 +331,31 @@ abstract class AbstractRector extends \PhpParser\NodeVisitorAbstract implements 
     {
         return $this->phpVersionProvider->isAtLeastPhpVersion($version);
     }
-    protected function mirrorComments(\PhpParser\Node $newNode, \PhpParser\Node $oldNode) : void
+    protected function mirrorComments(Node $newNode, Node $oldNode) : void
     {
-        $newNode->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PHP_DOC_INFO, $oldNode->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PHP_DOC_INFO));
-        $newNode->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::COMMENTS, $oldNode->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::COMMENTS));
+        $newNode->setAttribute(AttributeKey::PHP_DOC_INFO, $oldNode->getAttribute(AttributeKey::PHP_DOC_INFO));
+        $newNode->setAttribute(AttributeKey::COMMENTS, $oldNode->getAttribute(AttributeKey::COMMENTS));
     }
     /**
      * @param Stmt[] $stmts
      */
-    protected function unwrapStmts(array $stmts, \PhpParser\Node $node) : void
+    protected function unwrapStmts(array $stmts, Node $node) : void
     {
         // move /* */ doc block from if to first element to keep it
         $currentPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         foreach ($stmts as $key => $ifStmt) {
             if ($key === 0) {
-                $ifStmt->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PHP_DOC_INFO, $currentPhpDocInfo);
+                $ifStmt->setAttribute(AttributeKey::PHP_DOC_INFO, $currentPhpDocInfo);
                 // move // comments
-                $ifStmt->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::COMMENTS, $node->getComments());
+                $ifStmt->setAttribute(AttributeKey::COMMENTS, $node->getComments());
             }
             $this->addNodeAfterNode($ifStmt, $node);
         }
     }
     protected function isOpenSourceProjectType() : bool
     {
-        $projectType = $this->parameterProvider->provideStringParameter(\Rector\Core\Configuration\Option::PROJECT_TYPE);
-        return $projectType === \Rector\Core\ValueObject\ProjectType::OPEN_SOURCE;
+        $projectType = $this->parameterProvider->provideStringParameter(Option::PROJECT_TYPE);
+        return $projectType === ProjectType::OPEN_SOURCE;
     }
     /**
      * @param Arg[] $currentArgs
@@ -365,13 +365,13 @@ abstract class AbstractRector extends \PhpParser\NodeVisitorAbstract implements 
     protected function appendArgs(array $currentArgs, array $appendingArgs) : array
     {
         foreach ($appendingArgs as $appendingArg) {
-            $currentArgs[] = new \PhpParser\Node\Arg($appendingArg->value);
+            $currentArgs[] = new Arg($appendingArg->value);
         }
         return $currentArgs;
     }
-    protected function unwrapExpression(\PhpParser\Node\Stmt $stmt) : \PhpParser\Node
+    protected function unwrapExpression(Stmt $stmt) : Node
     {
-        if ($stmt instanceof \PhpParser\Node\Stmt\Expression) {
+        if ($stmt instanceof Expression) {
             return $stmt->expr;
         }
         return $stmt;
@@ -380,7 +380,7 @@ abstract class AbstractRector extends \PhpParser\NodeVisitorAbstract implements 
      * @deprecated Use refactor() return of [] or directly $nodesToAddCollector
      * @param Node[] $newNodes
      */
-    protected function addNodesAfterNode(array $newNodes, \PhpParser\Node $positionNode) : void
+    protected function addNodesAfterNode(array $newNodes, Node $positionNode) : void
     {
         $this->nodesToAddCollector->addNodesAfterNode($newNodes, $positionNode);
     }
@@ -388,36 +388,36 @@ abstract class AbstractRector extends \PhpParser\NodeVisitorAbstract implements 
      * @param Node[] $newNodes
      * @deprecated Use refactor() return of [] or directly $nodesToAddCollector
      */
-    protected function addNodesBeforeNode(array $newNodes, \PhpParser\Node $positionNode) : void
+    protected function addNodesBeforeNode(array $newNodes, Node $positionNode) : void
     {
         $this->nodesToAddCollector->addNodesBeforeNode($newNodes, $positionNode);
     }
     /**
      * @deprecated Use refactor() return of [] or directly $nodesToAddCollector
      */
-    protected function addNodeAfterNode(\PhpParser\Node $newNode, \PhpParser\Node $positionNode) : void
+    protected function addNodeAfterNode(Node $newNode, Node $positionNode) : void
     {
         $this->nodesToAddCollector->addNodeAfterNode($newNode, $positionNode);
     }
     /**
      * @deprecated Use refactor() return of [] or directly $nodesToAddCollector
      */
-    protected function addNodeBeforeNode(\PhpParser\Node $newNode, \PhpParser\Node $positionNode) : void
+    protected function addNodeBeforeNode(Node $newNode, Node $positionNode) : void
     {
         $this->nodesToAddCollector->addNodeBeforeNode($newNode, $positionNode);
     }
-    protected function addConstructorDependencyToClass(\PhpParser\Node\Stmt\Class_ $class, \PHPStan\Type\Type $propertyType, string $propertyName, int $propertyFlags = 0) : void
+    protected function addConstructorDependencyToClass(Class_ $class, Type $propertyType, string $propertyName, int $propertyFlags = 0) : void
     {
         $this->propertyAdder->addConstructorDependencyToClass($class, $propertyType, $propertyName, $propertyFlags);
     }
-    protected function removeNode(\PhpParser\Node $node) : void
+    protected function removeNode(Node $node) : void
     {
         $this->nodeRemover->removeNode($node);
     }
     /**
      * @param Class_|ClassMethod|Function_ $nodeWithStatements
      */
-    protected function removeNodeFromStatements(\PhpParser\Node $nodeWithStatements, \PhpParser\Node $nodeToRemove) : void
+    protected function removeNodeFromStatements(Node $nodeWithStatements, Node $nodeToRemove) : void
     {
         $this->nodeRemover->removeNodeFromStatements($nodeWithStatements, $nodeToRemove);
     }
@@ -440,7 +440,7 @@ abstract class AbstractRector extends \PhpParser\NodeVisitorAbstract implements 
         }
         return \false;
     }
-    private function shouldSkipCurrentNode(\PhpParser\Node $node) : bool
+    private function shouldSkipCurrentNode(Node $node) : bool
     {
         if ($this->nodesToRemoveCollector->isNodeRemoved($node)) {
             return \true;
@@ -467,10 +467,10 @@ abstract class AbstractRector extends \PhpParser\NodeVisitorAbstract implements 
     /**
      * @param array<string, mixed> $originalAttributes
      */
-    private function mirrorAttributes(array $originalAttributes, \PhpParser\Node $newNode) : void
+    private function mirrorAttributes(array $originalAttributes, Node $newNode) : void
     {
-        if ($newNode instanceof \PhpParser\Node\Name) {
-            $newNode->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::RESOLVED_NAME, $newNode->toString());
+        if ($newNode instanceof Name) {
+            $newNode->setAttribute(AttributeKey::RESOLVED_NAME, $newNode->toString());
         }
         foreach ($originalAttributes as $attributeName => $oldAttributeValue) {
             if (!\in_array($attributeName, self::ATTRIBUTES_TO_MIRROR, \true)) {
@@ -485,8 +485,8 @@ abstract class AbstractRector extends \PhpParser\NodeVisitorAbstract implements 
     private function connectParentNodes($node) : void
     {
         $nodes = \is_array($node) ? $node : [$node];
-        $nodeTraverser = new \PhpParser\NodeTraverser();
-        $nodeTraverser->addVisitor(new \PhpParser\NodeVisitor\ParentConnectingVisitor());
+        $nodeTraverser = new NodeTraverser();
+        $nodeTraverser->addVisitor(new ParentConnectingVisitor());
         $nodeTraverser->traverse($nodes);
     }
 }

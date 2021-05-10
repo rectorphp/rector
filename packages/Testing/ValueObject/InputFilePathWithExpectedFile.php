@@ -15,16 +15,16 @@ final class InputFilePathWithExpectedFile
      * @var AddedFileWithContent
      */
     private $addedFileWithContent;
-    public function __construct(string $inputFilePath, \Rector\FileSystemRector\ValueObject\AddedFileWithContent $addedFileWithContent)
+    public function __construct(string $inputFilePath, AddedFileWithContent $addedFileWithContent)
     {
         $this->inputFilePath = $inputFilePath;
         $this->addedFileWithContent = $addedFileWithContent;
     }
-    public function getInputFileInfo() : \Symplify\SmartFileSystem\SmartFileInfo
+    public function getInputFileInfo() : SmartFileInfo
     {
-        return new \Symplify\SmartFileSystem\SmartFileInfo($this->inputFilePath);
+        return new SmartFileInfo($this->inputFilePath);
     }
-    public function getAddedFileWithContent() : \Rector\FileSystemRector\ValueObject\AddedFileWithContent
+    public function getAddedFileWithContent() : AddedFileWithContent
     {
         return $this->addedFileWithContent;
     }

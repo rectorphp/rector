@@ -15,20 +15,20 @@ final class UnwrapClosureFactory
     /**
      * @return Node[]
      */
-    public function createAssign(\PhpParser\Node\Expr\Variable $resultVariable, \PhpParser\Node\Arg $arg) : array
+    public function createAssign(Variable $resultVariable, Arg $arg) : array
     {
         $argValue = $arg->value;
-        if ($argValue instanceof \PhpParser\Node\Expr\Closure) {
+        if ($argValue instanceof Closure) {
             $unwrappedNodes = $argValue->getStmts();
             \end($argValue->stmts);
             $lastStmtKey = \key($argValue->stmts);
             $lastStmt = $argValue->stmts[$lastStmtKey];
-            if ($lastStmt instanceof \PhpParser\Node\Stmt\Return_ && $lastStmt->expr !== null) {
+            if ($lastStmt instanceof Return_ && $lastStmt->expr !== null) {
                 unset($unwrappedNodes[$lastStmtKey]);
-                $unwrappedNodes[] = new \PhpParser\Node\Expr\Assign($resultVariable, $lastStmt->expr);
+                $unwrappedNodes[] = new Assign($resultVariable, $lastStmt->expr);
             }
             return $unwrappedNodes;
         }
-        throw new \Rector\Core\Exception\ShouldNotHappenException();
+        throw new ShouldNotHappenException();
     }
 }

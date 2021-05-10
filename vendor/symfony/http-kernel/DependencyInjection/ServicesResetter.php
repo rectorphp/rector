@@ -19,7 +19,7 @@ use RectorPrefix20210510\Symfony\Contracts\Service\ResetInterface;
  *
  * @internal
  */
-class ServicesResetter implements \RectorPrefix20210510\Symfony\Contracts\Service\ResetInterface
+class ServicesResetter implements ResetInterface
 {
     private $resettableServices;
     private $resetMethods;

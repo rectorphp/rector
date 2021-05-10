@@ -17,7 +17,7 @@ use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
  *
  * SomeClass::callThis();
  */
-final class FullyQualifiedNameClassNameImportSkipVoter implements \Rector\CodingStyle\Contract\ClassNameImport\ClassNameImportSkipVoterInterface
+final class FullyQualifiedNameClassNameImportSkipVoter implements ClassNameImportSkipVoterInterface
 {
     /**
      * @var ShortNameResolver
@@ -27,12 +27,12 @@ final class FullyQualifiedNameClassNameImportSkipVoter implements \Rector\Coding
      * @var CurrentFileProvider
      */
     private $currentFileProvider;
-    public function __construct(\Rector\CodingStyle\ClassNameImport\ShortNameResolver $shortNameResolver, \Rector\Core\Provider\CurrentFileProvider $currentFileProvider)
+    public function __construct(ShortNameResolver $shortNameResolver, CurrentFileProvider $currentFileProvider)
     {
         $this->shortNameResolver = $shortNameResolver;
         $this->currentFileProvider = $currentFileProvider;
     }
-    public function shouldSkip(\Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType $fullyQualifiedObjectType, \PhpParser\Node $node) : bool
+    public function shouldSkip(FullyQualifiedObjectType $fullyQualifiedObjectType, Node $node) : bool
     {
         // "new X" or "X::static()"
         $file = $this->currentFileProvider->getFile();

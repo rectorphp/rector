@@ -15,7 +15,7 @@ namespace RectorPrefix20210510\Symfony\Component\HttpKernel\CacheWarmer;
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-interface CacheWarmerInterface extends \RectorPrefix20210510\Symfony\Component\HttpKernel\CacheWarmer\WarmableInterface
+interface CacheWarmerInterface extends WarmableInterface
 {
     /**
      * Checks whether this warmer is optional or not.

@@ -8,10 +8,10 @@ use PhpParser\Node\Expr\Assign;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 final class ArrayDimFetchAnalyzer
 {
-    public function isBeingAssignedOrInitialized(\PhpParser\Node\Expr\ArrayDimFetch $arrayDimFetch) : bool
+    public function isBeingAssignedOrInitialized(ArrayDimFetch $arrayDimFetch) : bool
     {
-        $parent = $arrayDimFetch->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-        if (!$parent instanceof \PhpParser\Node\Expr\Assign) {
+        $parent = $arrayDimFetch->getAttribute(AttributeKey::PARENT_NODE);
+        if (!$parent instanceof Assign) {
             return \false;
         }
         if ($parent->var === $arrayDimFetch) {

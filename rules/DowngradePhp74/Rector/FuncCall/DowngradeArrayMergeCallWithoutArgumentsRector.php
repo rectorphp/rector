@@ -13,11 +13,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\DowngradePhp74\Rector\FuncCall\DowngradeArrayMergeCallWithoutArgumentsRector\DowngradeArrayMergeCallWithoutArgumentsRectorTest
  */
-final class DowngradeArrayMergeCallWithoutArgumentsRector extends \Rector\Core\Rector\AbstractRector
+final class DowngradeArrayMergeCallWithoutArgumentsRector extends AbstractRector
 {
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Add missing param to `array_merge` and `array_merge_recursive`', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add missing param to `array_merge` and `array_merge_recursive`', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -44,20 +44,20 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\FuncCall::class];
+        return [FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if (!$this->shouldRefactor($node)) {
             return null;
         }
-        $node->args = [new \PhpParser\Node\Arg(new \PhpParser\Node\Expr\Array_())];
+        $node->args = [new Arg(new Array_())];
         return $node;
     }
-    private function shouldRefactor(\PhpParser\Node\Expr\FuncCall $funcCall) : bool
+    private function shouldRefactor(FuncCall $funcCall) : bool
     {
         if (!$this->isNames($funcCall, ['array_merge', 'array_merge_recursive'])) {
             return \false;

@@ -38,7 +38,7 @@ final class DoctrineDocBlockResolver
      * @var ShortClassExpander
      */
     private $shortClassExpander;
-    public function __construct(\Rector\NodeCollector\NodeCollector\NodeRepository $nodeRepository, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\TypeDeclaration\PhpDoc\ShortClassExpander $shortClassExpander)
+    public function __construct(NodeRepository $nodeRepository, PhpDocInfoFactory $phpDocInfoFactory, ReflectionProvider $reflectionProvider, ShortClassExpander $shortClassExpander)
     {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->nodeRepository = $nodeRepository;
@@ -50,33 +50,33 @@ final class DoctrineDocBlockResolver
      */
     public function isDoctrineEntityClass($class) : bool
     {
-        if ($class instanceof \PhpParser\Node\Stmt\Class_) {
+        if ($class instanceof Class_) {
             return $this->isDoctrineEntityClassNode($class);
         }
         if (\is_string($class)) {
             return $this->isStringClassEntity($class);
         }
-        throw new \Rector\Core\Exception\ShouldNotHappenException();
+        throw new ShouldNotHappenException();
     }
-    public function getTargetEntity(\PhpParser\Node\Stmt\Property $property) : ?string
+    public function getTargetEntity(Property $property) : ?string
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
         $doctrineAnnotationTagValueNode = $phpDocInfo->getByAnnotationClasses(['Doctrine\\ORM\\Mapping\\OneToMany', 'Doctrine\\ORM\\Mapping\\ManyToMany', 'Doctrine\\ORM\\Mapping\\OneToOne', 'Doctrine\\ORM\\Mapping\\ManyToOne']);
-        if (!$doctrineAnnotationTagValueNode instanceof \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode) {
+        if (!$doctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
             return null;
         }
         $targetEntity = $doctrineAnnotationTagValueNode->getValue('targetEntity');
         return $this->shortClassExpander->resolveFqnTargetEntity($targetEntity, $property);
     }
-    public function isInDoctrineEntityClass(\PhpParser\Node $node) : bool
+    public function isInDoctrineEntityClass(Node $node) : bool
     {
-        $classLike = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
-        if (!$classLike instanceof \PhpParser\Node\Stmt\Class_) {
+        $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
+        if (!$classLike instanceof Class_) {
             return \false;
         }
         return $this->isDoctrineEntityClass($classLike);
     }
-    private function isDoctrineEntityClassNode(\PhpParser\Node\Stmt\Class_ $class) : bool
+    private function isDoctrineEntityClassNode(Class_ $class) : bool
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($class);
         return $phpDocInfo->hasByAnnotationClasses(['Doctrine\\ORM\\Mapping\\Entity', 'Doctrine\\ORM\\Mapping\\Embeddable']);
@@ -92,10 +92,10 @@ final class DoctrineDocBlockResolver
         }
         $classReflection = $this->reflectionProvider->getClass($class);
         $resolvedPhpDocBlock = $classReflection->getResolvedPhpDoc();
-        if (!$resolvedPhpDocBlock instanceof \PHPStan\PhpDoc\ResolvedPhpDocBlock) {
+        if (!$resolvedPhpDocBlock instanceof ResolvedPhpDocBlock) {
             return \false;
         }
         // dummy check of 3rd party code without running it
-        return (bool) \RectorPrefix20210510\Nette\Utils\Strings::match($resolvedPhpDocBlock->getPhpDocString(), self::ORM_ENTITY_EMBEDDABLE_SHORT_ANNOTATION_REGEX);
+        return (bool) Strings::match($resolvedPhpDocBlock->getPhpDocString(), self::ORM_ENTITY_EMBEDDABLE_SHORT_ANNOTATION_REGEX);
     }
 }

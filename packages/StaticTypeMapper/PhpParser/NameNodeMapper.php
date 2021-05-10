@@ -20,7 +20,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PSR4\Collector\RenamedClassesCollector;
 use Rector\StaticTypeMapper\Contract\PhpParser\PhpParserNodeMapperInterface;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
-final class NameNodeMapper implements \Rector\StaticTypeMapper\Contract\PhpParser\PhpParserNodeMapperInterface
+final class NameNodeMapper implements PhpParserNodeMapperInterface
 {
     /**
      * @var RenamedClassesCollector
@@ -30,7 +30,7 @@ final class NameNodeMapper implements \Rector\StaticTypeMapper\Contract\PhpParse
      * @var ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(\Rector\PSR4\Collector\RenamedClassesCollector $renamedClassesCollector, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
+    public function __construct(RenamedClassesCollector $renamedClassesCollector, ReflectionProvider $reflectionProvider)
     {
         $this->renamedClassesCollector = $renamedClassesCollector;
         $this->reflectionProvider = $reflectionProvider;
@@ -40,16 +40,16 @@ final class NameNodeMapper implements \Rector\StaticTypeMapper\Contract\PhpParse
      */
     public function getNodeType() : string
     {
-        return \PhpParser\Node\Name::class;
+        return Name::class;
     }
     /**
      * @param Name $node
      */
-    public function mapToPHPStan(\PhpParser\Node $node) : \PHPStan\Type\Type
+    public function mapToPHPStan(Node $node) : Type
     {
         $name = $node->toString();
         if ($this->isExistingClass($name)) {
-            return new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType($name);
+            return new FullyQualifiedObjectType($name);
         }
         if (\in_array($name, ['static', 'self'], \true)) {
             return $this->createClassReferenceType($node, $name);
@@ -65,41 +65,41 @@ final class NameNodeMapper implements \Rector\StaticTypeMapper\Contract\PhpParse
         $oldToNewClasses = $this->renamedClassesCollector->getOldToNewClasses();
         return \in_array($name, $oldToNewClasses, \true);
     }
-    private function createClassReferenceType(\PhpParser\Node\Name $name, string $reference) : \PHPStan\Type\Type
+    private function createClassReferenceType(Name $name, string $reference) : Type
     {
-        $className = $name->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);
+        $className = $name->getAttribute(AttributeKey::CLASS_NAME);
         if ($className === null) {
-            return new \PHPStan\Type\MixedType();
+            return new MixedType();
         }
         if ($reference === 'static') {
-            return new \PHPStan\Type\StaticType($className);
+            return new StaticType($className);
         }
         if ($this->reflectionProvider->hasClass($className)) {
             $classReflection = $this->reflectionProvider->getClass($className);
-            return new \PHPStan\Type\ThisType($classReflection);
+            return new ThisType($classReflection);
         }
-        return new \PHPStan\Type\ThisType($className);
+        return new ThisType($className);
     }
-    private function createScalarType(string $name) : \PHPStan\Type\Type
+    private function createScalarType(string $name) : Type
     {
         if ($name === 'array') {
-            return new \PHPStan\Type\ArrayType(new \PHPStan\Type\MixedType(), new \PHPStan\Type\MixedType());
+            return new ArrayType(new MixedType(), new MixedType());
         }
         if ($name === 'int') {
-            return new \PHPStan\Type\IntegerType();
+            return new IntegerType();
         }
         if ($name === 'float') {
-            return new \PHPStan\Type\FloatType();
+            return new FloatType();
         }
         if ($name === 'string') {
-            return new \PHPStan\Type\StringType();
+            return new StringType();
         }
         if ($name === 'false') {
-            return new \PHPStan\Type\Constant\ConstantBooleanType(\false);
+            return new ConstantBooleanType(\false);
         }
         if ($name === 'bool') {
-            return new \PHPStan\Type\BooleanType();
+            return new BooleanType();
         }
-        return new \PHPStan\Type\MixedType();
+        return new MixedType();
     }
 }

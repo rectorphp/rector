@@ -15,7 +15,7 @@ namespace RectorPrefix20210510\Symfony\Component\VarDumper\Caster;
  *
  * @author Nicolas Grekas <p@tchwork.com>
  */
-class FrameStub extends \RectorPrefix20210510\Symfony\Component\VarDumper\Caster\EnumStub
+class FrameStub extends EnumStub
 {
     public $keepArgs;
     public $inTraceStub;

@@ -38,7 +38,7 @@ final class PhpDocFromTypeDeclarationDecorator
      * @var TypeUnwrapper
      */
     private $typeUnwrapper;
-    public function __construct(\Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger, \Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper $typeUnwrapper)
+    public function __construct(StaticTypeMapper $staticTypeMapper, PhpDocInfoFactory $phpDocInfoFactory, NodeNameResolver $nodeNameResolver, PhpDocTypeChanger $phpDocTypeChanger, TypeUnwrapper $typeUnwrapper)
     {
         $this->staticTypeMapper = $staticTypeMapper;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
@@ -50,7 +50,7 @@ final class PhpDocFromTypeDeclarationDecorator
      * @param ClassMethod|Function_|Closure $functionLike
      * @return bool True if node was changed
      */
-    public function decorate(\PhpParser\Node\FunctionLike $functionLike) : bool
+    public function decorate(FunctionLike $functionLike) : bool
     {
         if ($functionLike->returnType === null) {
             return \false;
@@ -65,7 +65,7 @@ final class PhpDocFromTypeDeclarationDecorator
      * @param ClassMethod|Function_ $functionLike
      * @param array<class-string<Type>> $requiredTypes
      */
-    public function decorateParam(\PhpParser\Node\Param $param, \PhpParser\Node\FunctionLike $functionLike, array $requiredTypes) : void
+    public function decorateParam(Param $param, FunctionLike $functionLike, array $requiredTypes) : void
     {
         if ($param->type === null) {
             return;
@@ -79,7 +79,7 @@ final class PhpDocFromTypeDeclarationDecorator
     /**
      * @param ClassMethod|Function_ $functionLike
      */
-    public function decorateParamWithSpecificType(\PhpParser\Node\Param $param, \PhpParser\Node\FunctionLike $functionLike, \PHPStan\Type\Type $requireType) : void
+    public function decorateParamWithSpecificType(Param $param, FunctionLike $functionLike, Type $requireType) : void
     {
         if ($param->type === null) {
             return;
@@ -94,7 +94,7 @@ final class PhpDocFromTypeDeclarationDecorator
      * @param ClassMethod|Function_|Closure $functionLike
      * @return bool True if node was changed
      */
-    public function decorateReturnWithSpecificType(\PhpParser\Node\FunctionLike $functionLike, \PHPStan\Type\Type $requireType) : bool
+    public function decorateReturnWithSpecificType(FunctionLike $functionLike, Type $requireType) : bool
     {
         if ($functionLike->returnType === null) {
             return \false;
@@ -104,11 +104,11 @@ final class PhpDocFromTypeDeclarationDecorator
         }
         return $this->decorate($functionLike);
     }
-    private function isTypeMatchOrSubType(\PhpParser\Node $typeNode, \PHPStan\Type\Type $requireType) : bool
+    private function isTypeMatchOrSubType(Node $typeNode, Type $requireType) : bool
     {
         $returnType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($typeNode);
         // cover nullable union types
-        if ($returnType instanceof \PHPStan\Type\UnionType) {
+        if ($returnType instanceof UnionType) {
             $returnType = $this->typeUnwrapper->unwrapNullableType($returnType);
         }
         return \is_a($returnType, \get_class($requireType), \true);
@@ -116,7 +116,7 @@ final class PhpDocFromTypeDeclarationDecorator
     /**
      * @param ClassMethod|Function_ $functionLike
      */
-    private function moveParamTypeToParamDoc(\PhpParser\Node\FunctionLike $functionLike, \PhpParser\Node\Param $param, \PHPStan\Type\Type $type) : void
+    private function moveParamTypeToParamDoc(FunctionLike $functionLike, Param $param, Type $type) : void
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($functionLike);
         $paramName = $this->nodeNameResolver->getName($param);
@@ -126,7 +126,7 @@ final class PhpDocFromTypeDeclarationDecorator
     /**
      * @param array<class-string<Type>> $requiredTypes
      */
-    private function isMatchingType(\PHPStan\Type\Type $type, array $requiredTypes) : bool
+    private function isMatchingType(Type $type, array $requiredTypes) : bool
     {
         foreach ($requiredTypes as $requiredType) {
             if (\is_a($type, $requiredType, \true)) {

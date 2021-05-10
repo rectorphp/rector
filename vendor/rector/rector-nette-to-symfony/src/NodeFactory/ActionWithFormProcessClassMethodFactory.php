@@ -20,36 +20,36 @@ final class ActionWithFormProcessClassMethodFactory
      * @var NodeFactory
      */
     private $nodeFactory;
-    public function __construct(\Rector\Core\PhpParser\Node\NodeFactory $nodeFactory)
+    public function __construct(NodeFactory $nodeFactory)
     {
         $this->nodeFactory = $nodeFactory;
     }
-    public function create(string $formTypeClass) : \PhpParser\Node\Stmt\ClassMethod
+    public function create(string $formTypeClass) : ClassMethod
     {
         $classMethod = $this->nodeFactory->createPublicMethod('actionSomeForm');
-        $requestVariable = new \PhpParser\Node\Expr\Variable('request');
-        $classMethod->params[] = new \PhpParser\Node\Param($requestVariable, null, new \PhpParser\Node\Name\FullyQualified('Symfony\\Component\\HttpFoundation\\Request'));
-        $classMethod->returnType = new \PhpParser\Node\Name\FullyQualified('Symfony\\Component\\HttpFoundation\\Response');
-        $formVariable = new \PhpParser\Node\Expr\Variable('form');
+        $requestVariable = new Variable('request');
+        $classMethod->params[] = new Param($requestVariable, null, new FullyQualified('Symfony\\Component\\HttpFoundation\\Request'));
+        $classMethod->returnType = new FullyQualified('Symfony\\Component\\HttpFoundation\\Response');
+        $formVariable = new Variable('form');
         $assign = $this->createFormInstanceAssign($formTypeClass, $formVariable);
-        $classMethod->stmts[] = new \PhpParser\Node\Stmt\Expression($assign);
-        $handleRequestMethodCall = new \PhpParser\Node\Expr\MethodCall($formVariable, 'handleRequest', [new \PhpParser\Node\Arg($requestVariable)]);
-        $classMethod->stmts[] = new \PhpParser\Node\Stmt\Expression($handleRequestMethodCall);
+        $classMethod->stmts[] = new Expression($assign);
+        $handleRequestMethodCall = new MethodCall($formVariable, 'handleRequest', [new Arg($requestVariable)]);
+        $classMethod->stmts[] = new Expression($handleRequestMethodCall);
         $booleanAnd = $this->createFormIsSuccessAndIsValid($formVariable);
-        $classMethod->stmts[] = new \PhpParser\Node\Stmt\If_($booleanAnd);
+        $classMethod->stmts[] = new If_($booleanAnd);
         return $classMethod;
     }
-    private function createFormInstanceAssign(string $formTypeClass, \PhpParser\Node\Expr\Variable $formVariable) : \PhpParser\Node\Expr\Assign
+    private function createFormInstanceAssign(string $formTypeClass, Variable $formVariable) : Assign
     {
         $classConstFetch = $this->nodeFactory->createClassConstReference($formTypeClass);
-        $args = [new \PhpParser\Node\Arg($classConstFetch)];
-        $createFormMethodCall = new \PhpParser\Node\Expr\MethodCall(new \PhpParser\Node\Expr\Variable('this'), 'createForm', $args);
-        return new \PhpParser\Node\Expr\Assign($formVariable, $createFormMethodCall);
+        $args = [new Arg($classConstFetch)];
+        $createFormMethodCall = new MethodCall(new Variable('this'), 'createForm', $args);
+        return new Assign($formVariable, $createFormMethodCall);
     }
-    private function createFormIsSuccessAndIsValid(\PhpParser\Node\Expr\Variable $formVariable) : \PhpParser\Node\Expr\BinaryOp\BooleanAnd
+    private function createFormIsSuccessAndIsValid(Variable $formVariable) : BooleanAnd
     {
-        $isSuccessMethodCall = new \PhpParser\Node\Expr\MethodCall($formVariable, 'isSuccess');
-        $isValidMethodCall = new \PhpParser\Node\Expr\MethodCall($formVariable, 'isValid');
-        return new \PhpParser\Node\Expr\BinaryOp\BooleanAnd($isSuccessMethodCall, $isValidMethodCall);
+        $isSuccessMethodCall = new MethodCall($formVariable, 'isSuccess');
+        $isValidMethodCall = new MethodCall($formVariable, 'isValid');
+        return new BooleanAnd($isSuccessMethodCall, $isValidMethodCall);
     }
 }

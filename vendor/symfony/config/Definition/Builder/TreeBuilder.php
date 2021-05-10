@@ -16,19 +16,19 @@ use RectorPrefix20210510\Symfony\Component\Config\Definition\NodeInterface;
  *
  * @author Johannes M. Schmitt <schmittjoh@gmail.com>
  */
-class TreeBuilder implements \RectorPrefix20210510\Symfony\Component\Config\Definition\Builder\NodeParentInterface
+class TreeBuilder implements NodeParentInterface
 {
     protected $tree;
     protected $root;
-    public function __construct(string $name, string $type = 'array', \RectorPrefix20210510\Symfony\Component\Config\Definition\Builder\NodeBuilder $builder = null)
+    public function __construct(string $name, string $type = 'array', NodeBuilder $builder = null)
     {
-        $builder = $builder ?? new \RectorPrefix20210510\Symfony\Component\Config\Definition\Builder\NodeBuilder();
+        $builder = $builder ?? new NodeBuilder();
         $this->root = $builder->node($name, $type)->setParent($this);
     }
     /**
      * @return NodeDefinition|ArrayNodeDefinition The root node (as an ArrayNodeDefinition when the type is 'array')
      */
-    public function getRootNode() : \RectorPrefix20210510\Symfony\Component\Config\Definition\Builder\NodeDefinition
+    public function getRootNode() : NodeDefinition
     {
         return $this->root;
     }

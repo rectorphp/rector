@@ -21,11 +21,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @see https://3v4l.org/ObNQZ
  * @see \Rector\Tests\Php71\Rector\BinaryOp\BinaryOpBetweenNumberAndStringRector\BinaryOpBetweenNumberAndStringRectorTest
  */
-final class BinaryOpBetweenNumberAndStringRector extends \Rector\Core\Rector\AbstractRector
+final class BinaryOpBetweenNumberAndStringRector extends AbstractRector
 {
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change binary operation between some number + string to PHP 7.1 compatible version', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change binary operation between some number + string to PHP 7.1 compatible version', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -52,40 +52,40 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\BinaryOp::class];
+        return [BinaryOp::class];
     }
     /**
      * @param BinaryOp $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        if ($node instanceof \PhpParser\Node\Expr\BinaryOp\Concat) {
+        if ($node instanceof Concat) {
             return null;
         }
-        if ($node instanceof \PhpParser\Node\Expr\BinaryOp\Coalesce) {
+        if ($node instanceof Coalesce) {
             return null;
         }
         if ($this->isStringOrStaticNonNumbericString($node->left) && $this->nodeTypeResolver->isNumberType($node->right)) {
-            $node->left = new \PhpParser\Node\Scalar\LNumber(0);
+            $node->left = new LNumber(0);
             return $node;
         }
         if ($this->isStringOrStaticNonNumbericString($node->right) && $this->nodeTypeResolver->isNumberType($node->left)) {
-            $node->right = new \PhpParser\Node\Scalar\LNumber(0);
+            $node->right = new LNumber(0);
             return $node;
         }
         return null;
     }
-    private function isStringOrStaticNonNumbericString(\PhpParser\Node\Expr $expr) : bool
+    private function isStringOrStaticNonNumbericString(Expr $expr) : bool
     {
         // replace only scalar values, not variables/constants/etc.
-        if (!$expr instanceof \PhpParser\Node\Scalar && !$expr instanceof \PhpParser\Node\Expr\Variable) {
+        if (!$expr instanceof Scalar && !$expr instanceof Variable) {
             return \false;
         }
         $value = null;
         $exprStaticType = $this->getStaticType($expr);
-        if ($expr instanceof \PhpParser\Node\Scalar\String_) {
+        if ($expr instanceof String_) {
             $value = $expr->value;
-        } elseif ($exprStaticType instanceof \PHPStan\Type\Constant\ConstantStringType) {
+        } elseif ($exprStaticType instanceof ConstantStringType) {
             $value = $exprStaticType->getValue();
         } else {
             return \false;

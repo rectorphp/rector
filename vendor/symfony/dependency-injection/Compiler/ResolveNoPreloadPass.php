@@ -18,7 +18,7 @@ use RectorPrefix20210510\Symfony\Component\DependencyInjection\Reference;
  *
  * @author Nicolas Grekas <p@tchwork.com>
  */
-class ResolveNoPreloadPass extends \RectorPrefix20210510\Symfony\Component\DependencyInjection\Compiler\AbstractRecursivePass
+class ResolveNoPreloadPass extends AbstractRecursivePass
 {
     private const DO_PRELOAD_TAG = '.container.do_preload';
     private $tagName;
@@ -30,7 +30,7 @@ class ResolveNoPreloadPass extends \RectorPrefix20210510\Symfony\Component\Depen
     /**
      * {@inheritdoc}
      */
-    public function process(\RectorPrefix20210510\Symfony\Component\DependencyInjection\ContainerBuilder $container)
+    public function process(ContainerBuilder $container)
     {
         $this->container = $container;
         try {
@@ -63,7 +63,7 @@ class ResolveNoPreloadPass extends \RectorPrefix20210510\Symfony\Component\Depen
      */
     protected function processValue($value, bool $isRoot = \false)
     {
-        if ($value instanceof \RectorPrefix20210510\Symfony\Component\DependencyInjection\Reference && \RectorPrefix20210510\Symfony\Component\DependencyInjection\ContainerBuilder::IGNORE_ON_UNINITIALIZED_REFERENCE !== $value->getInvalidBehavior() && $this->container->hasDefinition($id = (string) $value)) {
+        if ($value instanceof Reference && ContainerBuilder::IGNORE_ON_UNINITIALIZED_REFERENCE !== $value->getInvalidBehavior() && $this->container->hasDefinition($id = (string) $value)) {
             $definition = $this->container->getDefinition($id);
             if (!isset($this->resolvedIds[$id]) && (!$definition->isPublic() || $definition->isPrivate())) {
                 $this->resolvedIds[$id] = \true;
@@ -71,7 +71,7 @@ class ResolveNoPreloadPass extends \RectorPrefix20210510\Symfony\Component\Depen
             }
             return $value;
         }
-        if (!$value instanceof \RectorPrefix20210510\Symfony\Component\DependencyInjection\Definition) {
+        if (!$value instanceof Definition) {
             return parent::processValue($value, $isRoot);
         }
         if ($value->hasTag($this->tagName) || $value->isDeprecated() || $value->hasErrors()) {

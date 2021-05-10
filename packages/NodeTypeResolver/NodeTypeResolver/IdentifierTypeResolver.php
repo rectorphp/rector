@@ -12,20 +12,20 @@ use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 final class IdentifierTypeResolver
 {
-    public function resolve(\PhpParser\Node\Identifier $identifier) : \PHPStan\Type\Type
+    public function resolve(Identifier $identifier) : Type
     {
         if ($identifier->toLowerString() === 'string') {
-            return new \PHPStan\Type\StringType();
+            return new StringType();
         }
         if ($identifier->toLowerString() === 'bool') {
-            return new \PHPStan\Type\BooleanType();
+            return new BooleanType();
         }
         if ($identifier->toLowerString() === 'int') {
-            return new \PHPStan\Type\IntegerType();
+            return new IntegerType();
         }
         if ($identifier->toLowerString() === 'float') {
-            return new \PHPStan\Type\FloatType();
+            return new FloatType();
         }
-        return new \PHPStan\Type\MixedType();
+        return new MixedType();
     }
 }

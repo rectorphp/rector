@@ -13,6 +13,6 @@ namespace RectorPrefix20210510\Symfony\Component\Console\Exception;
 /**
  * @author Jérôme Tamarelle <jerome@tamarelle.net>
  */
-class LogicException extends \LogicException implements \RectorPrefix20210510\Symfony\Component\Console\Exception\ExceptionInterface
+class LogicException extends \LogicException implements ExceptionInterface
 {
 }

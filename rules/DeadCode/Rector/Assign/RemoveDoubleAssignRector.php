@@ -21,19 +21,19 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\DeadCode\Rector\Assign\RemoveDoubleAssignRector\RemoveDoubleAssignRectorTest
  */
-final class RemoveDoubleAssignRector extends \Rector\Core\Rector\AbstractRector
+final class RemoveDoubleAssignRector extends AbstractRector
 {
     /**
      * @var ScopeNestingComparator
      */
     private $scopeNestingComparator;
-    public function __construct(\Rector\NodeNestingScope\ScopeNestingComparator $scopeNestingComparator)
+    public function __construct(ScopeNestingComparator $scopeNestingComparator)
     {
         $this->scopeNestingComparator = $scopeNestingComparator;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Simplify useless double assigns', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Simplify useless double assigns', [new CodeSample(<<<'CODE_SAMPLE'
 $value = 1;
 $value = 1;
 CODE_SAMPLE
@@ -44,21 +44,21 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\Assign::class];
+        return [Assign::class];
     }
     /**
      * @param Assign $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        if (!$node->var instanceof \PhpParser\Node\Expr\Variable && !$node->var instanceof \PhpParser\Node\Expr\PropertyFetch && !$node->var instanceof \PhpParser\Node\Expr\StaticPropertyFetch) {
+        if (!$node->var instanceof Variable && !$node->var instanceof PropertyFetch && !$node->var instanceof StaticPropertyFetch) {
             return null;
         }
-        $previousStatement = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PREVIOUS_STATEMENT);
-        if (!$previousStatement instanceof \PhpParser\Node\Stmt\Expression) {
+        $previousStatement = $node->getAttribute(AttributeKey::PREVIOUS_STATEMENT);
+        if (!$previousStatement instanceof Expression) {
             return null;
         }
-        if (!$previousStatement->expr instanceof \PhpParser\Node\Expr\Assign) {
+        if (!$previousStatement->expr instanceof Assign) {
             return null;
         }
         if (!$this->nodeComparator->areNodesEqual($previousStatement->expr->var, $node->var)) {
@@ -77,25 +77,25 @@ CODE_SAMPLE
         $this->removeNode($previousStatement);
         return $node;
     }
-    private function isCall(\PhpParser\Node\Expr $expr) : bool
+    private function isCall(Expr $expr) : bool
     {
-        return $expr instanceof \PhpParser\Node\Expr\FuncCall || $expr instanceof \PhpParser\Node\Expr\StaticCall || $expr instanceof \PhpParser\Node\Expr\MethodCall;
+        return $expr instanceof FuncCall || $expr instanceof StaticCall || $expr instanceof MethodCall;
     }
-    private function shouldSkipForDifferentScope(\PhpParser\Node\Expr\Assign $assign, \PhpParser\Node\Stmt\Expression $expression) : bool
+    private function shouldSkipForDifferentScope(Assign $assign, Expression $expression) : bool
     {
         if (!$this->areInSameClassMethod($assign, $expression)) {
             return \true;
         }
         return !$this->scopeNestingComparator->areScopeNestingEqual($assign, $expression);
     }
-    private function isSelfReferencing(\PhpParser\Node\Expr\Assign $assign) : bool
+    private function isSelfReferencing(Assign $assign) : bool
     {
-        return (bool) $this->betterNodeFinder->findFirst($assign->expr, function (\PhpParser\Node $subNode) use($assign) : bool {
+        return (bool) $this->betterNodeFinder->findFirst($assign->expr, function (Node $subNode) use($assign) : bool {
             return $this->nodeComparator->areNodesEqual($assign->var, $subNode);
         });
     }
-    private function areInSameClassMethod(\PhpParser\Node\Expr\Assign $assign, \PhpParser\Node\Stmt\Expression $previousExpression) : bool
+    private function areInSameClassMethod(Assign $assign, Expression $previousExpression) : bool
     {
-        return $this->nodeComparator->areNodesEqual($assign->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::METHOD_NODE), $previousExpression->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::METHOD_NODE));
+        return $this->nodeComparator->areNodesEqual($assign->getAttribute(AttributeKey::METHOD_NODE), $previousExpression->getAttribute(AttributeKey::METHOD_NODE));
     }
 }

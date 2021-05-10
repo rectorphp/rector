@@ -27,19 +27,19 @@ final class VariableAndCallAssignMatcher
      * @var BetterNodeFinder
      */
     private $betterNodeFinder;
-    public function __construct(\Rector\Naming\Matcher\CallMatcher $callMatcher, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
+    public function __construct(\Rector\Naming\Matcher\CallMatcher $callMatcher, NodeNameResolver $nodeNameResolver, BetterNodeFinder $betterNodeFinder)
     {
         $this->callMatcher = $callMatcher;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->betterNodeFinder = $betterNodeFinder;
     }
-    public function match(\PhpParser\Node\Expr\Assign $assign) : ?\Rector\Naming\ValueObject\VariableAndCallAssign
+    public function match(Assign $assign) : ?VariableAndCallAssign
     {
         $call = $this->callMatcher->matchCall($assign);
         if ($call === null) {
             return null;
         }
-        if (!$assign->var instanceof \PhpParser\Node\Expr\Variable) {
+        if (!$assign->var instanceof Variable) {
             return null;
         }
         $variableName = $this->nodeNameResolver->getName($assign->var);
@@ -47,16 +47,16 @@ final class VariableAndCallAssignMatcher
             return null;
         }
         $functionLike = $this->getFunctionLike($assign);
-        if (!$functionLike instanceof \PhpParser\Node\FunctionLike) {
+        if (!$functionLike instanceof FunctionLike) {
             return null;
         }
-        return new \Rector\Naming\ValueObject\VariableAndCallAssign($assign->var, $call, $assign, $variableName, $functionLike);
+        return new VariableAndCallAssign($assign->var, $call, $assign, $variableName, $functionLike);
     }
     /**
      * @return ClassMethod|Function_|Closure|null
      */
-    private function getFunctionLike(\PhpParser\Node\Expr\Assign $assign) : ?\PhpParser\Node
+    private function getFunctionLike(Assign $assign) : ?Node
     {
-        return $this->betterNodeFinder->findParentTypes($assign, [\PhpParser\Node\Expr\Closure::class, \PhpParser\Node\Stmt\ClassMethod::class, \PhpParser\Node\Stmt\Function_::class]);
+        return $this->betterNodeFinder->findParentTypes($assign, [Closure::class, ClassMethod::class, Function_::class]);
     }
 }

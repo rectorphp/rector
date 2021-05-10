@@ -16,7 +16,7 @@ use RectorPrefix20210510\Symfony\Component\DependencyInjection\Extension\Extensi
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-abstract class Extension extends \RectorPrefix20210510\Symfony\Component\DependencyInjection\Extension\Extension
+abstract class Extension extends BaseExtension
 {
     private $annotatedClasses = [];
     /**

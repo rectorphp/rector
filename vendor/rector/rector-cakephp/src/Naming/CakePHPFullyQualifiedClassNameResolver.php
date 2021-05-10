@@ -34,7 +34,7 @@ final class CakePHPFullyQualifiedClassNameResolver
      * @var ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(\Rector\CakePHP\ImplicitNameResolver $implicitNameResolver, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
+    public function __construct(ImplicitNameResolver $implicitNameResolver, ReflectionProvider $reflectionProvider)
     {
         $this->implicitNameResolver = $implicitNameResolver;
         $this->reflectionProvider = $reflectionProvider;
@@ -52,8 +52,8 @@ final class CakePHPFullyQualifiedClassNameResolver
         }
         // Chop Lib out as locations moves those files to the top level.
         // But only if Lib is not the last folder.
-        if (\RectorPrefix20210510\Nette\Utils\Strings::match($pseudoNamespace, self::LIB_NAMESPACE_PART_REGEX)) {
-            $pseudoNamespace = \RectorPrefix20210510\Nette\Utils\Strings::replace($pseudoNamespace, '#\\\\Lib#', '');
+        if (Strings::match($pseudoNamespace, self::LIB_NAMESPACE_PART_REGEX)) {
+            $pseudoNamespace = Strings::replace($pseudoNamespace, '#\\\\Lib#', '');
         }
         // B. is Cake native class?
         $cakePhpVersion = 'Cake\\' . $pseudoNamespace . '\\' . $shortClass;
@@ -61,13 +61,13 @@ final class CakePHPFullyQualifiedClassNameResolver
             return $cakePhpVersion;
         }
         // C. is not plugin nor lib custom App class?
-        if (\RectorPrefix20210510\Nette\Utils\Strings::contains($pseudoNamespace, '\\') && !\RectorPrefix20210510\Nette\Utils\Strings::match($pseudoNamespace, self::PLUGIN_OR_LIB_REGEX)) {
+        if (Strings::contains($pseudoNamespace, '\\') && !Strings::match($pseudoNamespace, self::PLUGIN_OR_LIB_REGEX)) {
             return 'App\\' . $pseudoNamespace . '\\' . $shortClass;
         }
         return $pseudoNamespace . '\\' . $shortClass;
     }
     private function normalizeFileSystemSlashes(string $pseudoNamespace) : string
     {
-        return \RectorPrefix20210510\Nette\Utils\Strings::replace($pseudoNamespace, self::SLASH_REGEX, '\\');
+        return Strings::replace($pseudoNamespace, self::SLASH_REGEX, '\\');
     }
 }

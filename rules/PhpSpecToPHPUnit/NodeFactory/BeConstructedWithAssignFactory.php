@@ -29,42 +29,42 @@ final class BeConstructedWithAssignFactory
      * @var NodeFactory
      */
     private $nodeFactory;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\Value\ValueResolver $valueResolver, \Rector\Core\PhpParser\Node\NodeFactory $nodeFactory)
+    public function __construct(NodeNameResolver $nodeNameResolver, ValueResolver $valueResolver, NodeFactory $nodeFactory)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->valueResolver = $valueResolver;
         $this->nodeFactory = $nodeFactory;
     }
-    public function create(\PhpParser\Node\Expr\MethodCall $methodCall, string $testedClass, \PhpParser\Node\Expr\PropertyFetch $propertyFetch) : ?\PhpParser\Node\Expr\Assign
+    public function create(MethodCall $methodCall, string $testedClass, PropertyFetch $propertyFetch) : ?Assign
     {
         if ($this->nodeNameResolver->isName($methodCall->name, 'beConstructedWith')) {
-            $new = new \PhpParser\Node\Expr\New_(new \PhpParser\Node\Name\FullyQualified($testedClass));
+            $new = new New_(new FullyQualified($testedClass));
             $new->args = $methodCall->args;
-            return new \PhpParser\Node\Expr\Assign($propertyFetch, $new);
+            return new Assign($propertyFetch, $new);
         }
         if ($this->nodeNameResolver->isName($methodCall->name, 'beConstructedThrough')) {
             $methodName = $this->valueResolver->getValue($methodCall->args[0]->value);
             $staticCall = $this->nodeFactory->createStaticCall($testedClass, $methodName);
             $this->moveConstructorArguments($methodCall, $staticCall);
-            return new \PhpParser\Node\Expr\Assign($propertyFetch, $staticCall);
+            return new Assign($propertyFetch, $staticCall);
         }
         return null;
     }
-    private function moveConstructorArguments(\PhpParser\Node\Expr\MethodCall $methodCall, \PhpParser\Node\Expr\StaticCall $staticCall) : void
+    private function moveConstructorArguments(MethodCall $methodCall, StaticCall $staticCall) : void
     {
         if (!isset($methodCall->args[1])) {
             return;
         }
-        if (!$methodCall->args[1]->value instanceof \PhpParser\Node\Expr\Array_) {
+        if (!$methodCall->args[1]->value instanceof Array_) {
             return;
         }
         /** @var Array_ $array */
         $array = $methodCall->args[1]->value;
         foreach ($array->items as $arrayItem) {
-            if (!$arrayItem instanceof \PhpParser\Node\Expr\ArrayItem) {
+            if (!$arrayItem instanceof ArrayItem) {
                 continue;
             }
-            $staticCall->args[] = new \PhpParser\Node\Arg($arrayItem->value);
+            $staticCall->args[] = new Arg($arrayItem->value);
         }
     }
 }

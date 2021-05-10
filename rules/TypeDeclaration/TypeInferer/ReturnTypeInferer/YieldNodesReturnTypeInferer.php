@@ -20,7 +20,7 @@ use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedGenericObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\TypeDeclaration\Contract\TypeInferer\ReturnTypeInfererInterface;
 use RectorPrefix20210510\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
-final class YieldNodesReturnTypeInferer implements \Rector\TypeDeclaration\Contract\TypeInferer\ReturnTypeInfererInterface
+final class YieldNodesReturnTypeInferer implements ReturnTypeInfererInterface
 {
     /**
      * @var NodeTypeResolver
@@ -34,7 +34,7 @@ final class YieldNodesReturnTypeInferer implements \Rector\TypeDeclaration\Contr
      * @var SimpleCallableNodeTraverser
      */
     private $simpleCallableNodeTraverser;
-    public function __construct(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory $typeFactory, \RectorPrefix20210510\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser)
+    public function __construct(NodeTypeResolver $nodeTypeResolver, TypeFactory $typeFactory, SimpleCallableNodeTraverser $simpleCallableNodeTraverser)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->typeFactory = $typeFactory;
@@ -43,29 +43,29 @@ final class YieldNodesReturnTypeInferer implements \Rector\TypeDeclaration\Contr
     /**
      * @param ClassMethod|Function_|Closure $functionLike
      */
-    public function inferFunctionLike(\PhpParser\Node\FunctionLike $functionLike) : \PHPStan\Type\Type
+    public function inferFunctionLike(FunctionLike $functionLike) : Type
     {
         $yieldNodes = $this->findCurrentScopeYieldNodes($functionLike);
         if ($yieldNodes === []) {
-            return new \PHPStan\Type\MixedType();
+            return new MixedType();
         }
         $types = [];
         foreach ($yieldNodes as $yieldNode) {
             $value = $this->resolveYieldValue($yieldNode);
-            if (!$value instanceof \PhpParser\Node\Expr) {
+            if (!$value instanceof Expr) {
                 continue;
             }
             $resolvedType = $this->nodeTypeResolver->getStaticType($value);
-            if ($resolvedType instanceof \PHPStan\Type\MixedType) {
+            if ($resolvedType instanceof MixedType) {
                 continue;
             }
             $types[] = $resolvedType;
         }
         if ($types === []) {
-            return new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType('Iterator');
+            return new FullyQualifiedObjectType('Iterator');
         }
         $types = $this->typeFactory->createMixedPassedOrUnionType($types);
-        return new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedGenericObjectType('Iterator', [$types]);
+        return new FullyQualifiedGenericObjectType('Iterator', [$types]);
     }
     public function getPriority() : int
     {
@@ -74,15 +74,15 @@ final class YieldNodesReturnTypeInferer implements \Rector\TypeDeclaration\Contr
     /**
      * @return Yield_[]|YieldFrom[]
      */
-    private function findCurrentScopeYieldNodes(\PhpParser\Node\FunctionLike $functionLike) : array
+    private function findCurrentScopeYieldNodes(FunctionLike $functionLike) : array
     {
         $yieldNodes = [];
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $functionLike->getStmts(), function (\PhpParser\Node $node) use(&$yieldNodes) : ?int {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $functionLike->getStmts(), function (Node $node) use(&$yieldNodes) : ?int {
             // skip nested scope
-            if ($node instanceof \PhpParser\Node\FunctionLike) {
-                return \PhpParser\NodeTraverser::DONT_TRAVERSE_CHILDREN;
+            if ($node instanceof FunctionLike) {
+                return NodeTraverser::DONT_TRAVERSE_CHILDREN;
             }
-            if (!$node instanceof \PhpParser\Node\Expr\Yield_ && !$node instanceof \PhpParser\Node\Expr\YieldFrom) {
+            if (!$node instanceof Yield_ && !$node instanceof YieldFrom) {
                 return null;
             }
             $yieldNodes[] = $node;
@@ -93,9 +93,9 @@ final class YieldNodesReturnTypeInferer implements \Rector\TypeDeclaration\Contr
     /**
      * @param Yield_|YieldFrom $yieldExpr
      */
-    private function resolveYieldValue(\PhpParser\Node\Expr $yieldExpr) : ?\PhpParser\Node\Expr
+    private function resolveYieldValue(Expr $yieldExpr) : ?Expr
     {
-        if ($yieldExpr instanceof \PhpParser\Node\Expr\Yield_) {
+        if ($yieldExpr instanceof Yield_) {
             return $yieldExpr->value;
         }
         return $yieldExpr->expr;

@@ -19,7 +19,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php80\Rector\Identical\StrStartsWithRector\StrStartsWithRectorTest
  */
-final class StrStartsWithRector extends \Rector\Core\Rector\AbstractRector
+final class StrStartsWithRector extends AbstractRector
 {
     /**
      * @var StrStartWithMatchAndRefactorInterface[]
@@ -32,9 +32,9 @@ final class StrStartsWithRector extends \Rector\Core\Rector\AbstractRector
     {
         $this->strStartWithMatchAndRefactors = $strStartWithMatchAndRefactors;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change helper functions to str_starts_with()', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change helper functions to str_starts_with()', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -63,16 +63,16 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\BinaryOp\Identical::class, \PhpParser\Node\Expr\BinaryOp\NotIdentical::class];
+        return [Identical::class, NotIdentical::class];
     }
     /**
      * @param Identical|NotIdentical $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         foreach ($this->strStartWithMatchAndRefactors as $strStartWithMatchAndRefactor) {
             $strStartsWithValueObject = $strStartWithMatchAndRefactor->match($node);
-            if (!$strStartsWithValueObject instanceof \Rector\Php80\ValueObject\StrStartsWith) {
+            if (!$strStartsWithValueObject instanceof StrStartsWith) {
                 continue;
             }
             return $strStartWithMatchAndRefactor->refactorStrStartsWith($strStartsWithValueObject);

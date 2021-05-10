@@ -26,27 +26,27 @@ final class ShortClassExpander
      * @var ObjectTypeSpecifier
      */
     private $objectTypeSpecifier;
-    public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\TypeDeclaration\PHPStan\Type\ObjectTypeSpecifier $objectTypeSpecifier)
+    public function __construct(ReflectionProvider $reflectionProvider, ObjectTypeSpecifier $objectTypeSpecifier)
     {
         $this->reflectionProvider = $reflectionProvider;
         $this->objectTypeSpecifier = $objectTypeSpecifier;
     }
-    public function resolveFqnTargetEntity(string $targetEntity, \PhpParser\Node $node) : string
+    public function resolveFqnTargetEntity(string $targetEntity, Node $node) : string
     {
         $targetEntity = $this->getCleanedUpTargetEntity($targetEntity);
         if ($this->reflectionProvider->hasClass($targetEntity)) {
             return $targetEntity;
         }
-        $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
-        if (!$scope instanceof \PHPStan\Analyser\Scope) {
+        $scope = $node->getAttribute(AttributeKey::SCOPE);
+        if (!$scope instanceof Scope) {
             return $targetEntity;
         }
         $namespacedTargetEntity = $scope->getNamespace() . '\\' . $targetEntity;
         if ($this->reflectionProvider->hasClass($namespacedTargetEntity)) {
             return $namespacedTargetEntity;
         }
-        $resolvedType = $this->objectTypeSpecifier->narrowToFullyQualifiedOrAliasedObjectType($node, new \PHPStan\Type\ObjectType($targetEntity));
-        if ($resolvedType instanceof \Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType) {
+        $resolvedType = $this->objectTypeSpecifier->narrowToFullyQualifiedOrAliasedObjectType($node, new ObjectType($targetEntity));
+        if ($resolvedType instanceof ShortenedObjectType) {
             return $resolvedType->getFullyQualifiedName();
         }
         // probably tested class
@@ -54,6 +54,6 @@ final class ShortClassExpander
     }
     private function getCleanedUpTargetEntity(string $targetEntity) : string
     {
-        return \RectorPrefix20210510\Nette\Utils\Strings::replace($targetEntity, self::CLASS_CONST_REGEX, '');
+        return Strings::replace($targetEntity, self::CLASS_CONST_REGEX, '');
     }
 }

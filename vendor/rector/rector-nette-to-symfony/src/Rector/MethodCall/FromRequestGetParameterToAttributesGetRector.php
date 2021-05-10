@@ -17,11 +17,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\NetteToSymfony\Tests\Rector\MethodCall\FromRequestGetParameterToAttributesGetRector\FromRequestGetParameterToAttributesGetRectorTest
  */
-final class FromRequestGetParameterToAttributesGetRector extends \Rector\Core\Rector\AbstractRector
+final class FromRequestGetParameterToAttributesGetRector extends AbstractRector
 {
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Changes "getParameter()" to "attributes->get()" from Nette to Symfony', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Changes "getParameter()" to "attributes->get()" from Nette to Symfony', [new CodeSample(<<<'CODE_SAMPLE'
 use Nette\Request;
 
 final class SomeController
@@ -50,22 +50,22 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\MethodCall::class];
+        return [MethodCall::class];
     }
     /**
      * @param MethodCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        if (!$this->isObjectType($node->var, new \PHPStan\Type\ObjectType('Nette\\Application\\Request'))) {
+        if (!$this->isObjectType($node->var, new ObjectType('Nette\\Application\\Request'))) {
             return null;
         }
         if (!$this->isName($node->name, 'getParameter')) {
             return null;
         }
-        $requestAttributesPropertyFetch = new \PhpParser\Node\Expr\PropertyFetch($node->var, 'attributes');
+        $requestAttributesPropertyFetch = new PropertyFetch($node->var, 'attributes');
         $node->var = $requestAttributesPropertyFetch;
-        $node->name = new \PhpParser\Node\Identifier('get');
+        $node->name = new Identifier('get');
         return $node;
     }
 }

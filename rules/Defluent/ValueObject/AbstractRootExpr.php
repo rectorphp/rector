@@ -11,7 +11,7 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Defluent\Contract\ValueObject\FirstCallFactoryAwareInterface;
 use Rector\Defluent\Contract\ValueObject\RootExprAwareInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-abstract class AbstractRootExpr implements \Rector\Defluent\Contract\ValueObject\RootExprAwareInterface, \Rector\Defluent\Contract\ValueObject\FirstCallFactoryAwareInterface
+abstract class AbstractRootExpr implements RootExprAwareInterface, FirstCallFactoryAwareInterface
 {
     /**
      * @var bool
@@ -25,39 +25,39 @@ abstract class AbstractRootExpr implements \Rector\Defluent\Contract\ValueObject
      * @var Expr
      */
     protected $assignExpr;
-    public function createFirstAssign() : \PhpParser\Node\Expr\Assign
+    public function createFirstAssign() : Assign
     {
         if ($this->isFirstCallFactory && $this->getFirstAssign() !== null) {
             return $this->createFactoryAssign();
         }
         return $this->createAssign($this->assignExpr, $this->rootExpr);
     }
-    protected function createAssign(\PhpParser\Node\Expr $assignVar, \PhpParser\Node\Expr $assignExpr) : \PhpParser\Node\Expr\Assign
+    protected function createAssign(Expr $assignVar, Expr $assignExpr) : Assign
     {
         if ($assignVar === $assignExpr) {
-            throw new \Rector\Core\Exception\ShouldNotHappenException();
+            throw new ShouldNotHappenException();
         }
-        return new \PhpParser\Node\Expr\Assign($assignVar, $assignExpr);
+        return new Assign($assignVar, $assignExpr);
     }
-    protected function getFirstAssign() : ?\PhpParser\Node\Expr\Assign
+    protected function getFirstAssign() : ?Assign
     {
-        $currentStmt = $this->assignExpr->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CURRENT_STATEMENT);
-        if (!$currentStmt instanceof \PhpParser\Node\Stmt\Expression) {
+        $currentStmt = $this->assignExpr->getAttribute(AttributeKey::CURRENT_STATEMENT);
+        if (!$currentStmt instanceof Expression) {
             return null;
         }
         $currentExpr = $currentStmt->expr;
-        if ($currentExpr instanceof \PhpParser\Node\Expr\Assign) {
+        if ($currentExpr instanceof Assign) {
             return $currentExpr;
         }
         return null;
     }
-    private function createFactoryAssign() : \PhpParser\Node\Expr\Assign
+    private function createFactoryAssign() : Assign
     {
         /** @var Assign $firstAssign */
         $firstAssign = $this->getFirstAssign();
         $currentMethodCall = $firstAssign->expr;
-        if (!$currentMethodCall instanceof \PhpParser\Node\Expr\MethodCall) {
-            throw new \Rector\Core\Exception\ShouldNotHappenException();
+        if (!$currentMethodCall instanceof MethodCall) {
+            throw new ShouldNotHappenException();
         }
         $currentMethodCall = $this->resolveLastMethodCall($currentMethodCall);
         // ensure var and expr are different
@@ -65,9 +65,9 @@ abstract class AbstractRootExpr implements \Rector\Defluent\Contract\ValueObject
         $assignExpr = $currentMethodCall;
         return $this->createAssign($assignVar, $assignExpr);
     }
-    private function resolveLastMethodCall(\PhpParser\Node\Expr\MethodCall $currentMethodCall) : \PhpParser\Node\Expr\MethodCall
+    private function resolveLastMethodCall(MethodCall $currentMethodCall) : MethodCall
     {
-        while ($currentMethodCall->var instanceof \PhpParser\Node\Expr\MethodCall) {
+        while ($currentMethodCall->var instanceof MethodCall) {
             $currentMethodCall = $currentMethodCall->var;
         }
         return $currentMethodCall;

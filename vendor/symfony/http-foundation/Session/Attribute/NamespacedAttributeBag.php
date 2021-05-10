@@ -16,7 +16,7 @@ namespace RectorPrefix20210510\Symfony\Component\HttpFoundation\Session\Attribut
  *
  * @author Drak <drak@zikula.org>
  */
-class NamespacedAttributeBag extends \RectorPrefix20210510\Symfony\Component\HttpFoundation\Session\Attribute\AttributeBag
+class NamespacedAttributeBag extends AttributeBag
 {
     private $namespaceCharacter;
     /**

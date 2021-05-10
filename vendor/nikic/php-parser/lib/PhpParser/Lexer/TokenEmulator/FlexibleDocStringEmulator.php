@@ -13,7 +13,7 @@ final class FlexibleDocStringEmulator extends \PhpParser\Lexer\TokenEmulator\Tok
 REGEX;
     public function getPhpVersion() : string
     {
-        return \PhpParser\Lexer\Emulative::PHP_7_3;
+        return Emulative::PHP_7_3;
     }
     public function isEmulationNeeded(string $code) : bool
     {

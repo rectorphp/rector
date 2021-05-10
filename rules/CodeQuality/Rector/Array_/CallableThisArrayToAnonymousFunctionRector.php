@@ -25,7 +25,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\CodeQuality\Rector\Array_\CallableThisArrayToAnonymousFunctionRector\CallableThisArrayToAnonymousFunctionRectorTest
  */
-final class CallableThisArrayToAnonymousFunctionRector extends \Rector\Core\Rector\AbstractRector
+final class CallableThisArrayToAnonymousFunctionRector extends AbstractRector
 {
     /**
      * @var CallableClassMethodMatcher
@@ -35,14 +35,14 @@ final class CallableThisArrayToAnonymousFunctionRector extends \Rector\Core\Rect
      * @var AnonymousFunctionFactory
      */
     private $anonymousFunctionFactory;
-    public function __construct(\Rector\CodeQuality\NodeAnalyzer\CallableClassMethodMatcher $callableClassMethodMatcher, \Rector\CodeQuality\NodeFactory\AnonymousFunctionFactory $anonymousFunctionFactory)
+    public function __construct(CallableClassMethodMatcher $callableClassMethodMatcher, AnonymousFunctionFactory $anonymousFunctionFactory)
     {
         $this->callableClassMethodMatcher = $callableClassMethodMatcher;
         $this->anonymousFunctionFactory = $anonymousFunctionFactory;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Convert [$this, "method"] to proper anonymous function', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Convert [$this, "method"] to proper anonymous function', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -85,39 +85,39 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\Array_::class];
+        return [Array_::class];
     }
     /**
      * @param Array_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if ($this->shouldSkipArray($node)) {
             return null;
         }
         $firstArrayItem = $node->items[0];
-        if (!$firstArrayItem instanceof \PhpParser\Node\Expr\ArrayItem) {
+        if (!$firstArrayItem instanceof ArrayItem) {
             return null;
         }
         $objectVariable = $firstArrayItem->value;
-        if (!$objectVariable instanceof \PhpParser\Node\Expr\Variable && !$objectVariable instanceof \PhpParser\Node\Expr\PropertyFetch) {
+        if (!$objectVariable instanceof Variable && !$objectVariable instanceof PropertyFetch) {
             return null;
         }
         $secondArrayItem = $node->items[1];
-        if (!$secondArrayItem instanceof \PhpParser\Node\Expr\ArrayItem) {
+        if (!$secondArrayItem instanceof ArrayItem) {
             return null;
         }
         $methodName = $secondArrayItem->value;
-        if (!$methodName instanceof \PhpParser\Node\Scalar\String_) {
+        if (!$methodName instanceof String_) {
             return null;
         }
         $phpMethodReflection = $this->callableClassMethodMatcher->match($objectVariable, $methodName);
-        if (!$phpMethodReflection instanceof \PHPStan\Reflection\Php\PhpMethodReflection) {
+        if (!$phpMethodReflection instanceof PhpMethodReflection) {
             return null;
         }
         return $this->anonymousFunctionFactory->create($phpMethodReflection, $objectVariable);
     }
-    private function shouldSkipArray(\PhpParser\Node\Expr\Array_ $array) : bool
+    private function shouldSkipArray(Array_ $array) : bool
     {
         // callback is exactly "[$two, 'items']"
         if (\count($array->items) !== 2) {
@@ -135,14 +135,14 @@ CODE_SAMPLE
     /**
      * @param string[] $functionNames
      */
-    private function isCallbackAtFunctionNames(\PhpParser\Node\Expr\Array_ $array, array $functionNames) : bool
+    private function isCallbackAtFunctionNames(Array_ $array, array $functionNames) : bool
     {
-        $parentNode = $array->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-        if (!$parentNode instanceof \PhpParser\Node\Arg) {
+        $parentNode = $array->getAttribute(AttributeKey::PARENT_NODE);
+        if (!$parentNode instanceof Arg) {
             return \false;
         }
-        $parentParentNode = $parentNode->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-        if (!$parentParentNode instanceof \PhpParser\Node\Expr\FuncCall) {
+        $parentParentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
+        if (!$parentParentNode instanceof FuncCall) {
             return \false;
         }
         return $this->isNames($parentParentNode, $functionNames);

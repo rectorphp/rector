@@ -22,7 +22,7 @@ use RectorPrefix20210510\Symfony\Contracts\Service\ResetInterface;
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class Profiler implements \RectorPrefix20210510\Symfony\Contracts\Service\ResetInterface
+class Profiler implements ResetInterface
 {
     private $storage;
     /**
@@ -32,7 +32,7 @@ class Profiler implements \RectorPrefix20210510\Symfony\Contracts\Service\ResetI
     private $logger;
     private $initiallyEnabled = \true;
     private $enabled = \true;
-    public function __construct(\RectorPrefix20210510\Symfony\Component\HttpKernel\Profiler\ProfilerStorageInterface $storage, \RectorPrefix20210510\Psr\Log\LoggerInterface $logger = null, bool $enable = \true)
+    public function __construct(ProfilerStorageInterface $storage, LoggerInterface $logger = null, bool $enable = \true)
     {
         $this->storage = $storage;
         $this->logger = $logger;
@@ -57,7 +57,7 @@ class Profiler implements \RectorPrefix20210510\Symfony\Contracts\Service\ResetI
      *
      * @return Profile|null A Profile instance
      */
-    public function loadProfileFromResponse(\RectorPrefix20210510\Symfony\Component\HttpFoundation\Response $response)
+    public function loadProfileFromResponse(Response $response)
     {
         if (!($token = $response->headers->get('X-Debug-Token'))) {
             return null;
@@ -78,11 +78,11 @@ class Profiler implements \RectorPrefix20210510\Symfony\Contracts\Service\ResetI
      *
      * @return bool
      */
-    public function saveProfile(\RectorPrefix20210510\Symfony\Component\HttpKernel\Profiler\Profile $profile)
+    public function saveProfile(Profile $profile)
     {
         // late collect
         foreach ($profile->getCollectors() as $collector) {
-            if ($collector instanceof \RectorPrefix20210510\Symfony\Component\HttpKernel\DataCollector\LateDataCollectorInterface) {
+            if ($collector instanceof LateDataCollectorInterface) {
                 $collector->lateCollect();
             }
         }
@@ -118,19 +118,19 @@ class Profiler implements \RectorPrefix20210510\Symfony\Contracts\Service\ResetI
      *
      * @return Profile|null A Profile instance or null if the profiler is disabled
      */
-    public function collect(\RectorPrefix20210510\Symfony\Component\HttpFoundation\Request $request, \RectorPrefix20210510\Symfony\Component\HttpFoundation\Response $response, \Throwable $exception = null)
+    public function collect(Request $request, Response $response, \Throwable $exception = null)
     {
         if (\false === $this->enabled) {
             return null;
         }
-        $profile = new \RectorPrefix20210510\Symfony\Component\HttpKernel\Profiler\Profile(\substr(\hash('sha256', \uniqid(\mt_rand(), \true)), 0, 6));
+        $profile = new Profile(\substr(\hash('sha256', \uniqid(\mt_rand(), \true)), 0, 6));
         $profile->setTime(\time());
         $profile->setUrl($request->getUri());
         $profile->setMethod($request->getMethod());
         $profile->setStatusCode($response->getStatusCode());
         try {
             $profile->setIp($request->getClientIp());
-        } catch (\RectorPrefix20210510\Symfony\Component\HttpFoundation\Exception\ConflictingHeadersException $e) {
+        } catch (ConflictingHeadersException $e) {
             $profile->setIp('Unknown');
         }
         if ($prevToken = $response->headers->get('X-Debug-Token')) {
@@ -175,7 +175,7 @@ class Profiler implements \RectorPrefix20210510\Symfony\Contracts\Service\ResetI
     /**
      * Adds a Collector.
      */
-    public function add(\RectorPrefix20210510\Symfony\Component\HttpKernel\DataCollector\DataCollectorInterface $collector)
+    public function add(DataCollectorInterface $collector)
     {
         $this->collectors[$collector->getName()] = $collector;
     }

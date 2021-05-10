@@ -14,7 +14,7 @@ use RectorPrefix20210510\Psr\EventDispatcher\EventDispatcherInterface as PsrEven
 /**
  * Allows providing hooks on domain-specific lifecycles by dispatching events.
  */
-interface EventDispatcherInterface extends \RectorPrefix20210510\Psr\EventDispatcher\EventDispatcherInterface
+interface EventDispatcherInterface extends PsrEventDispatcherInterface
 {
     /**
      * Dispatches an event to all registered listeners.

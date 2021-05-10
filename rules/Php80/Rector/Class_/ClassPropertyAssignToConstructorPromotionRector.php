@@ -23,7 +23,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector\ClassPropertyAssignToConstructorPromotionRectorTest
  */
-final class ClassPropertyAssignToConstructorPromotionRector extends \Rector\Core\Rector\AbstractRector
+final class ClassPropertyAssignToConstructorPromotionRector extends AbstractRector
 {
     /**
      * @var PromotedPropertyResolver
@@ -37,15 +37,15 @@ final class ClassPropertyAssignToConstructorPromotionRector extends \Rector\Core
      * @var VarTagRemover
      */
     private $varTagRemover;
-    public function __construct(\Rector\Php80\NodeResolver\PromotedPropertyResolver $promotedPropertyResolver, \Rector\Naming\VariableRenamer $variableRenamer, \Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover $varTagRemover)
+    public function __construct(PromotedPropertyResolver $promotedPropertyResolver, VariableRenamer $variableRenamer, VarTagRemover $varTagRemover)
     {
         $this->promotedPropertyResolver = $promotedPropertyResolver;
         $this->variableRenamer = $variableRenamer;
         $this->varTagRemover = $varTagRemover;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change simple property init and assign to constructor promotion', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change simple property init and assign to constructor promotion', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public float $someVariable;
@@ -71,19 +71,19 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Class_::class];
+        return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         $promotionCandidates = $this->promotedPropertyResolver->resolveFromClass($node);
         if ($promotionCandidates === []) {
             return null;
         }
         /** @var ClassMethod $constructClassMethod */
-        $constructClassMethod = $node->getMethod(\Rector\Core\ValueObject\MethodName::CONSTRUCT);
+        $constructClassMethod = $node->getMethod(MethodName::CONSTRUCT);
         $classMethodPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($constructClassMethod);
         foreach ($promotionCandidates as $promotionCandidate) {
             // does property have some useful annotations?
@@ -102,11 +102,11 @@ CODE_SAMPLE
             $oldName = $this->getName($param->var);
             $this->variableRenamer->renameVariableInFunctionLike($constructClassMethod, null, $oldName, $propertyName);
             $paramTagValueNode = $classMethodPhpDocInfo->getParamTagValueNodeByName($paramName);
-            if (!$paramTagValueNode instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode) {
+            if (!$paramTagValueNode instanceof ParamTagValueNode) {
                 $this->decorateParamWithPropertyPhpDocInfo($property, $param);
             } elseif ($paramTagValueNode->parameterName !== '$' . $propertyName) {
                 $paramTagValueNode->parameterName = '$' . $propertyName;
-                $paramTagValueNode->setAttribute(\Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey::ORIG_NODE, null);
+                $paramTagValueNode->setAttribute(PhpDocAttributeKey::ORIG_NODE, null);
             }
             // property name has higher priority
             $propertyName = $this->getName($property);
@@ -116,18 +116,18 @@ CODE_SAMPLE
         }
         return $node;
     }
-    private function processNullableType(\PhpParser\Node\Stmt\Property $property, \PhpParser\Node\Param $param) : void
+    private function processNullableType(Property $property, Param $param) : void
     {
         if ($this->nodeTypeResolver->isNullableType($property)) {
             $objectType = $this->getObjectType($property);
             $param->type = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($objectType);
         }
     }
-    private function decorateParamWithPropertyPhpDocInfo(\PhpParser\Node\Stmt\Property $property, \PhpParser\Node\Param $param) : void
+    private function decorateParamWithPropertyPhpDocInfo(Property $property, Param $param) : void
     {
         $propertyPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
         $propertyPhpDocInfo->markAsChanged();
-        $param->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PHP_DOC_INFO, $propertyPhpDocInfo);
+        $param->setAttribute(AttributeKey::PHP_DOC_INFO, $propertyPhpDocInfo);
         // make sure the docblock is useful
         if ($param->type === null) {
             return;

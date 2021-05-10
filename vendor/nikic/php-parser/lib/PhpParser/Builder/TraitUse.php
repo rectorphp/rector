@@ -7,7 +7,7 @@ use PhpParser\Builder;
 use PhpParser\BuilderHelpers;
 use PhpParser\Node;
 use PhpParser\Node\Stmt;
-class TraitUse implements \PhpParser\Builder
+class TraitUse implements Builder
 {
     protected $traits = [];
     protected $adaptations = [];
@@ -31,7 +31,7 @@ class TraitUse implements \PhpParser\Builder
      */
     public function and($trait)
     {
-        $this->traits[] = \PhpParser\BuilderHelpers::normalizeName($trait);
+        $this->traits[] = BuilderHelpers::normalizeName($trait);
         return $this;
     }
     /**
@@ -43,8 +43,8 @@ class TraitUse implements \PhpParser\Builder
      */
     public function with($adaptation)
     {
-        $adaptation = \PhpParser\BuilderHelpers::normalizeNode($adaptation);
-        if (!$adaptation instanceof \PhpParser\Node\Stmt\TraitUseAdaptation) {
+        $adaptation = BuilderHelpers::normalizeNode($adaptation);
+        if (!$adaptation instanceof Stmt\TraitUseAdaptation) {
             throw new \LogicException('Adaptation must have type TraitUseAdaptation');
         }
         $this->adaptations[] = $adaptation;
@@ -55,8 +55,8 @@ class TraitUse implements \PhpParser\Builder
      *
      * @return Node The built node
      */
-    public function getNode() : \PhpParser\Node
+    public function getNode() : Node
     {
-        return new \PhpParser\Node\Stmt\TraitUse($this->traits, $this->adaptations);
+        return new Stmt\TraitUse($this->traits, $this->adaptations);
     }
 }

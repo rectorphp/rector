@@ -16,7 +16,7 @@ use RectorPrefix20210510\Symfony\Component\Config\Definition\Exception\InvalidDe
  *
  * @author David Jeanmonod <david.jeanmonod@gmail.com>
  */
-abstract class NumericNodeDefinition extends \RectorPrefix20210510\Symfony\Component\Config\Definition\Builder\ScalarNodeDefinition
+abstract class NumericNodeDefinition extends ScalarNodeDefinition
 {
     protected $min;
     protected $max;
@@ -61,6 +61,6 @@ abstract class NumericNodeDefinition extends \RectorPrefix20210510\Symfony\Compo
      */
     public function cannotBeEmpty()
     {
-        throw new \RectorPrefix20210510\Symfony\Component\Config\Definition\Exception\InvalidDefinitionException('->cannotBeEmpty() is not applicable to NumericNodeDefinition.');
+        throw new InvalidDefinitionException('->cannotBeEmpty() is not applicable to NumericNodeDefinition.');
     }
 }

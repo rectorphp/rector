@@ -27,20 +27,20 @@ final class AssignRemover
      * @var LivingCodeManipulator
      */
     private $livingCodeManipulator;
-    public function __construct(\Rector\PostRector\Collector\NodesToReplaceCollector $nodesToReplaceCollector, \Rector\ChangesReporting\Collector\RectorChangeCollector $rectorChangeCollector, \Rector\NodeRemoval\NodeRemover $nodeRemover, \Rector\DeadCode\NodeManipulator\LivingCodeManipulator $livingCodeManipulator)
+    public function __construct(NodesToReplaceCollector $nodesToReplaceCollector, RectorChangeCollector $rectorChangeCollector, \Rector\NodeRemoval\NodeRemover $nodeRemover, LivingCodeManipulator $livingCodeManipulator)
     {
         $this->nodesToReplaceCollector = $nodesToReplaceCollector;
         $this->rectorChangeCollector = $rectorChangeCollector;
         $this->nodeRemover = $nodeRemover;
         $this->livingCodeManipulator = $livingCodeManipulator;
     }
-    public function removeAssignNode(\PhpParser\Node\Expr\Assign $assign) : void
+    public function removeAssignNode(Assign $assign) : void
     {
-        $currentStatement = $assign->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CURRENT_STATEMENT);
+        $currentStatement = $assign->getAttribute(AttributeKey::CURRENT_STATEMENT);
         $this->livingCodeManipulator->addLivingCodeBeforeNode($assign->var, $currentStatement);
         /** @var Assign $assign */
-        $parent = $assign->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-        if ($parent instanceof \PhpParser\Node\Stmt\Expression) {
+        $parent = $assign->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parent instanceof Expression) {
             $this->nodeRemover->removeNode($assign);
         } else {
             $this->nodesToReplaceCollector->addReplaceNodeWithAnotherNode($assign, $assign->expr);

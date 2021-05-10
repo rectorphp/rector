@@ -20,7 +20,7 @@ use RectorPrefix20210510\Symplify\SmartFileSystem\SmartFileSystem;
  *
  * @see \Rector\Symfony\Tests\Rector\Attribute\ExtractAttributeRouteNameConstantsRector\ExtractAttributeRouteNameConstantsRectorTest
  */
-final class ExtractAttributeRouteNameConstantsRector extends \Rector\Core\Rector\AbstractRector
+final class ExtractAttributeRouteNameConstantsRector extends AbstractRector
 {
     /**
      * @var string
@@ -46,16 +46,16 @@ final class ExtractAttributeRouteNameConstantsRector extends \Rector\Core\Rector
      * @var SmartFileSystem
      */
     private $smartFileSystem;
-    public function __construct(\Rector\Symfony\NodeFactory\RouteNameClassFactory $routeNameClassFactory, \Rector\Symfony\ConstantNameAndValueMatcher $constantNameAndValueMatcher, \Rector\Symfony\ConstantNameAndValueResolver $constantNameAndValueResolver, \RectorPrefix20210510\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem)
+    public function __construct(RouteNameClassFactory $routeNameClassFactory, ConstantNameAndValueMatcher $constantNameAndValueMatcher, ConstantNameAndValueResolver $constantNameAndValueResolver, SmartFileSystem $smartFileSystem)
     {
         $this->routeNameClassFactory = $routeNameClassFactory;
         $this->constantNameAndValueMatcher = $constantNameAndValueMatcher;
         $this->constantNameAndValueResolver = $constantNameAndValueResolver;
         $this->smartFileSystem = $smartFileSystem;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Extract #[Route] attribute name argument from string to constant', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ExtraFileCodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Extract #[Route] attribute name argument from string to constant', [new ExtraFileCodeSample(<<<'CODE_SAMPLE'
 use Symfony\Component\Routing\Annotation\Route;
 
 class SomeClass
@@ -93,12 +93,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Attribute::class];
+        return [Attribute::class];
     }
     /**
      * @param Attribute $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if (!$this->isName($node->name, 'Symfony\\Component\\Routing\\Annotation\\Route')) {
             return null;
@@ -109,10 +109,10 @@ CODE_SAMPLE
                 continue;
             }
             $constantNameAndValue = $this->constantNameAndValueMatcher->matchFromArg($arg, 'ROUTE_');
-            if (!$constantNameAndValue instanceof \Rector\Symfony\ValueObject\ConstantNameAndValue) {
+            if (!$constantNameAndValue instanceof ConstantNameAndValue) {
                 continue;
             }
-            $arg->value = $this->nodeFactory->createClassConstFetch(\Rector\Symfony\ValueObject\ClassName::ROUTE_CLASS_NAME, $constantNameAndValue->getName());
+            $arg->value = $this->nodeFactory->createClassConstFetch(ClassName::ROUTE_CLASS_NAME, $constantNameAndValue->getName());
         }
         return $node;
     }
@@ -128,7 +128,7 @@ CODE_SAMPLE
         $routeAttributes = $this->nodeRepository->findAttributes('Symfony\\Component\\Routing\\Annotation\\Route');
         $constantNameAndValues = $this->constantNameAndValueResolver->resolveFromAttributes($routeAttributes, 'ROUTE_');
         $namespace = $this->routeNameClassFactory->create($constantNameAndValues, self::ROUTE_NAME_FILE_LOCATION);
-        $addedFileWithNodes = new \Rector\FileSystemRector\ValueObject\AddedFileWithNodes(self::ROUTE_NAME_FILE_LOCATION, [$namespace]);
+        $addedFileWithNodes = new AddedFileWithNodes(self::ROUTE_NAME_FILE_LOCATION, [$namespace]);
         $this->removedAndAddedFilesCollector->addAddedFile($addedFileWithNodes);
         $this->isRouteNameValueObjectCreated = \true;
     }

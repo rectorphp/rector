@@ -21,19 +21,19 @@ final class ClassMethodReturnVendorLockResolver
      * @var NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(\Rector\VendorLocker\Reflection\MethodReflectionContractAnalyzer $methodReflectionContractAnalyzer, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
+    public function __construct(MethodReflectionContractAnalyzer $methodReflectionContractAnalyzer, NodeNameResolver $nodeNameResolver)
     {
         $this->methodReflectionContractAnalyzer = $methodReflectionContractAnalyzer;
         $this->nodeNameResolver = $nodeNameResolver;
     }
-    public function isVendorLocked(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
+    public function isVendorLocked(ClassMethod $classMethod) : bool
     {
-        $scope = $classMethod->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
-        if (!$scope instanceof \PHPStan\Analyser\Scope) {
+        $scope = $classMethod->getAttribute(AttributeKey::SCOPE);
+        if (!$scope instanceof Scope) {
             return \false;
         }
         $classReflection = $scope->getClassReflection();
-        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
+        if (!$classReflection instanceof ClassReflection) {
             return \false;
         }
         if (\count($classReflection->getAncestors()) === 1) {
@@ -48,7 +48,7 @@ final class ClassMethodReturnVendorLockResolver
         }
         return $this->methodReflectionContractAnalyzer->hasInterfaceContract($classReflection, $methodName);
     }
-    private function isVendorLockedByParentClass(\PHPStan\Reflection\ClassReflection $classReflection, string $methodName) : bool
+    private function isVendorLockedByParentClass(ClassReflection $classReflection, string $methodName) : bool
     {
         foreach ($classReflection->getParents() as $parentClassReflections) {
             if (!$parentClassReflections->hasMethod($methodName)) {
@@ -56,11 +56,11 @@ final class ClassMethodReturnVendorLockResolver
             }
             $parentClassMethodReflection = $parentClassReflections->getNativeMethod($methodName);
             $parametersAcceptor = $parentClassMethodReflection->getVariants()[0];
-            if (!$parametersAcceptor instanceof \PHPStan\Reflection\FunctionVariantWithPhpDocs) {
+            if (!$parametersAcceptor instanceof FunctionVariantWithPhpDocs) {
                 continue;
             }
             // here we count only on strict types, not on docs
-            return !$parametersAcceptor->getNativeReturnType() instanceof \PHPStan\Type\MixedType;
+            return !$parametersAcceptor->getNativeReturnType() instanceof MixedType;
         }
         return \false;
     }

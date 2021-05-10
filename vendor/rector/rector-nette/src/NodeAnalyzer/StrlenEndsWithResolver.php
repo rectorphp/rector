@@ -23,7 +23,7 @@ final class StrlenEndsWithResolver
      * @var NodeComparator
      */
     private $nodeComparator;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator)
+    public function __construct(NodeNameResolver $nodeNameResolver, NodeComparator $nodeComparator)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeComparator = $nodeComparator;
@@ -31,31 +31,31 @@ final class StrlenEndsWithResolver
     /**
      * @param Identical|NotIdentical $binaryOp
      */
-    public function resolveBinaryOpForFunction(\PhpParser\Node\Expr\BinaryOp $binaryOp) : ?\Rector\Nette\ValueObject\ContentExprAndNeedleExpr
+    public function resolveBinaryOpForFunction(BinaryOp $binaryOp) : ?ContentExprAndNeedleExpr
     {
-        if ($binaryOp->left instanceof \PhpParser\Node\Expr\Variable) {
+        if ($binaryOp->left instanceof Variable) {
             return $this->matchContentExprAndNeedleExpr($binaryOp->right, $binaryOp->left);
         }
-        if ($binaryOp->right instanceof \PhpParser\Node\Expr\Variable) {
+        if ($binaryOp->right instanceof Variable) {
             return $this->matchContentExprAndNeedleExpr($binaryOp->left, $binaryOp->right);
         }
         return null;
     }
-    public function matchContentExprAndNeedleExpr(\PhpParser\Node $node, \PhpParser\Node\Expr\Variable $variable) : ?\Rector\Nette\ValueObject\ContentExprAndNeedleExpr
+    public function matchContentExprAndNeedleExpr(Node $node, Variable $variable) : ?ContentExprAndNeedleExpr
     {
-        if (!$node instanceof \PhpParser\Node\Expr\FuncCall) {
+        if (!$node instanceof FuncCall) {
             return null;
         }
         if (!$this->nodeNameResolver->isName($node, 'substr')) {
             return null;
         }
         /** @var FuncCall $node */
-        if (!$node->args[1]->value instanceof \PhpParser\Node\Expr\UnaryMinus) {
+        if (!$node->args[1]->value instanceof UnaryMinus) {
             return null;
         }
         /** @var UnaryMinus $unaryMinus */
         $unaryMinus = $node->args[1]->value;
-        if (!$unaryMinus->expr instanceof \PhpParser\Node\Expr\FuncCall) {
+        if (!$unaryMinus->expr instanceof FuncCall) {
             return null;
         }
         if (!$this->nodeNameResolver->isName($unaryMinus->expr, 'strlen')) {
@@ -64,7 +64,7 @@ final class StrlenEndsWithResolver
         /** @var FuncCall $strlenFuncCall */
         $strlenFuncCall = $unaryMinus->expr;
         if ($this->nodeComparator->areNodesEqual($strlenFuncCall->args[0]->value, $variable)) {
-            return new \Rector\Nette\ValueObject\ContentExprAndNeedleExpr($node->args[0]->value, $strlenFuncCall->args[0]->value);
+            return new ContentExprAndNeedleExpr($node->args[0]->value, $strlenFuncCall->args[0]->value);
         }
         return null;
     }

@@ -12,7 +12,7 @@ namespace RectorPrefix20210510\Symfony\Component\HttpFoundation\Test\Constraint;
 
 use RectorPrefix20210510\PHPUnit\Framework\Constraint\Constraint;
 use RectorPrefix20210510\Symfony\Component\HttpFoundation\Request;
-final class RequestAttributeValueSame extends \RectorPrefix20210510\PHPUnit\Framework\Constraint\Constraint
+final class RequestAttributeValueSame extends Constraint
 {
     private $name;
     private $value;

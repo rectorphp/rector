@@ -11,13 +11,13 @@ final class GetterMethodCallAnalyzer
      * @var NodeTypeResolver
      */
     private $nodeTypeResolver;
-    public function __construct(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver)
+    public function __construct(NodeTypeResolver $nodeTypeResolver)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
-    public function isGetterMethodCall(\PhpParser\Node\Expr\MethodCall $methodCall) : bool
+    public function isGetterMethodCall(MethodCall $methodCall) : bool
     {
-        if ($methodCall->var instanceof \PhpParser\Node\Expr\MethodCall) {
+        if ($methodCall->var instanceof MethodCall) {
             return \false;
         }
         $methodCallStaticType = $this->nodeTypeResolver->getStaticType($methodCall);

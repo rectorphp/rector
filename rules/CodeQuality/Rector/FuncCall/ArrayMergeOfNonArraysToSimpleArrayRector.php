@@ -17,11 +17,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\CodeQuality\Rector\FuncCall\ArrayMergeOfNonArraysToSimpleArrayRector\ArrayMergeOfNonArraysToSimpleArrayRectorTest
  */
-final class ArrayMergeOfNonArraysToSimpleArrayRector extends \Rector\Core\Rector\AbstractRector
+final class ArrayMergeOfNonArraysToSimpleArrayRector extends AbstractRector
 {
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change array_merge of non arrays to array directly', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change array_merge of non arrays to array directly', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function go()
@@ -52,27 +52,27 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\FuncCall::class];
+        return [FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if (!$this->isName($node, 'array_merge')) {
             return null;
         }
-        $array = new \PhpParser\Node\Expr\Array_();
+        $array = new Array_();
         foreach ($node->args as $arg) {
             $nestedArrayItem = $arg->value;
-            if (!$nestedArrayItem instanceof \PhpParser\Node\Expr\Array_) {
+            if (!$nestedArrayItem instanceof Array_) {
                 return null;
             }
             foreach ($nestedArrayItem->items as $nestedArrayItemItem) {
                 if ($nestedArrayItemItem === null) {
                     continue;
                 }
-                $array->items[] = new \PhpParser\Node\Expr\ArrayItem($nestedArrayItemItem->value, $nestedArrayItemItem->key);
+                $array->items[] = new ArrayItem($nestedArrayItemItem->value, $nestedArrayItemItem->key);
             }
         }
         return $array;

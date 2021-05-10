@@ -17,35 +17,35 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\CodeQuality\Rector\Ternary\UnnecessaryTernaryExpressionRector\UnnecessaryTernaryExpressionRectorTest
  */
-final class UnnecessaryTernaryExpressionRector extends \Rector\Core\Rector\AbstractRector
+final class UnnecessaryTernaryExpressionRector extends AbstractRector
 {
     /**
      * @var AssignAndBinaryMap
      */
     private $assignAndBinaryMap;
-    public function __construct(\Rector\Core\PhpParser\Node\AssignAndBinaryMap $assignAndBinaryMap)
+    public function __construct(AssignAndBinaryMap $assignAndBinaryMap)
     {
         $this->assignAndBinaryMap = $assignAndBinaryMap;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove unnecessary ternary expressions.', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample('$foo === $bar ? true : false;', '$foo === $bar;')]);
+        return new RuleDefinition('Remove unnecessary ternary expressions.', [new CodeSample('$foo === $bar ? true : false;', '$foo === $bar;')]);
     }
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\Ternary::class];
+        return [Ternary::class];
     }
     /**
      * @param Ternary $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         /** @var Ternary $ternaryExpression */
         $ternaryExpression = $node;
-        if (!$ternaryExpression->if instanceof \PhpParser\Node\Expr) {
+        if (!$ternaryExpression->if instanceof Expr) {
             return null;
         }
         $ifExpression = $ternaryExpression->if;
@@ -57,7 +57,7 @@ final class UnnecessaryTernaryExpressionRector extends \Rector\Core\Rector\Abstr
             return null;
         }
         $condition = $ternaryExpression->cond;
-        if (!$condition instanceof \PhpParser\Node\Expr\BinaryOp) {
+        if (!$condition instanceof BinaryOp) {
             return $this->processNonBinaryCondition($ifExpression, $elseExpression, $condition);
         }
         if ($this->valueResolver->isNull($ifExpression)) {
@@ -77,7 +77,7 @@ final class UnnecessaryTernaryExpressionRector extends \Rector\Core\Rector\Abstr
         }
         return new $inversedBinaryClass($binaryOperation->left, $binaryOperation->right);
     }
-    private function processNonBinaryCondition(\PhpParser\Node\Expr $ifExpression, \PhpParser\Node\Expr $elseExpression, \PhpParser\Node\Expr $condition) : ?\PhpParser\Node
+    private function processNonBinaryCondition(Expr $ifExpression, Expr $elseExpression, Expr $condition) : ?Node
     {
         if ($this->valueResolver->isTrue($ifExpression) && $this->valueResolver->isFalse($elseExpression)) {
             return $this->processTrueIfExpressionWithFalseElseExpression($condition);
@@ -90,24 +90,24 @@ final class UnnecessaryTernaryExpressionRector extends \Rector\Core\Rector\Abstr
         }
         return $this->processFalseIfExpressionWithTrueElseExpression($condition);
     }
-    private function processTrueIfExpressionWithFalseElseExpression(\PhpParser\Node\Expr $expr) : \PhpParser\Node\Expr
+    private function processTrueIfExpressionWithFalseElseExpression(Expr $expr) : Expr
     {
-        if ($this->nodeTypeResolver->isStaticType($expr, \PHPStan\Type\BooleanType::class)) {
+        if ($this->nodeTypeResolver->isStaticType($expr, BooleanType::class)) {
             return $expr;
         }
-        return new \PhpParser\Node\Expr\Cast\Bool_($expr);
+        return new Bool_($expr);
     }
-    private function processFalseIfExpressionWithTrueElseExpression(\PhpParser\Node\Expr $expr) : \PhpParser\Node\Expr
+    private function processFalseIfExpressionWithTrueElseExpression(Expr $expr) : Expr
     {
-        if ($expr instanceof \PhpParser\Node\Expr\BooleanNot) {
-            if ($this->nodeTypeResolver->isStaticType($expr->expr, \PHPStan\Type\BooleanType::class)) {
+        if ($expr instanceof BooleanNot) {
+            if ($this->nodeTypeResolver->isStaticType($expr->expr, BooleanType::class)) {
                 return $expr->expr;
             }
-            return new \PhpParser\Node\Expr\Cast\Bool_($expr->expr);
+            return new Bool_($expr->expr);
         }
-        if ($this->nodeTypeResolver->isStaticType($expr, \PHPStan\Type\BooleanType::class)) {
-            return new \PhpParser\Node\Expr\BooleanNot($expr);
+        if ($this->nodeTypeResolver->isStaticType($expr, BooleanType::class)) {
+            return new BooleanNot($expr);
         }
-        return new \PhpParser\Node\Expr\BooleanNot(new \PhpParser\Node\Expr\Cast\Bool_($expr));
+        return new BooleanNot(new Bool_($expr));
     }
 }

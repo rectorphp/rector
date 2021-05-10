@@ -17,14 +17,14 @@ final class FileDiffFactory
      * @var ConsoleDiffer
      */
     private $consoleDiffer;
-    public function __construct(\Rector\Core\Differ\DefaultDiffer $defaultDiffer, \RectorPrefix20210510\Symplify\ConsoleColorDiff\Console\Output\ConsoleDiffer $consoleDiffer)
+    public function __construct(DefaultDiffer $defaultDiffer, ConsoleDiffer $consoleDiffer)
     {
         $this->defaultDiffer = $defaultDiffer;
         $this->consoleDiffer = $consoleDiffer;
     }
-    public function createFileDiff(\Rector\Core\ValueObject\Application\File $file, string $oldContent, string $newContent) : \Rector\Core\ValueObject\Reporting\FileDiff
+    public function createFileDiff(File $file, string $oldContent, string $newContent) : FileDiff
     {
         // always keep the most recent diff
-        return new \Rector\Core\ValueObject\Reporting\FileDiff($file->getSmartFileInfo(), $this->defaultDiffer->diff($oldContent, $newContent), $this->consoleDiffer->diff($oldContent, $newContent), $file->getRectorWithLineChanges());
+        return new FileDiff($file->getSmartFileInfo(), $this->defaultDiffer->diff($oldContent, $newContent), $this->consoleDiffer->diff($oldContent, $newContent), $file->getRectorWithLineChanges());
     }
 }

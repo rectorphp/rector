@@ -7,7 +7,7 @@ use RectorPrefix20210510\Idiosyncratic\EditorConfig\Exception\InvalidValue;
 use function in_array;
 use function is_string;
 use function strtolower;
-final class IndentStyle extends \RectorPrefix20210510\Idiosyncratic\EditorConfig\Declaration\Declaration
+final class IndentStyle extends Declaration
 {
     public function getName() : string
     {
@@ -18,8 +18,8 @@ final class IndentStyle extends \RectorPrefix20210510\Idiosyncratic\EditorConfig
      */
     public function validateValue($value) : void
     {
-        if (\is_string($value) === \false || \in_array(\strtolower($value), ['tab', 'space']) === \false) {
-            throw new \RectorPrefix20210510\Idiosyncratic\EditorConfig\Exception\InvalidValue($this->getStringValue(), $this->getName());
+        if (is_string($value) === \false || in_array(strtolower($value), ['tab', 'space']) === \false) {
+            throw new InvalidValue($this->getStringValue(), $this->getName());
         }
     }
 }

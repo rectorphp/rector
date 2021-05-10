@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace PhpParser\Node\Scalar;
 
 use PhpParser\Node\Scalar;
-class DNumber extends \PhpParser\Node\Scalar
+class DNumber extends Scalar
 {
     /** @var float Number value */
     public $value;

@@ -42,7 +42,7 @@ if (\class_exists(\RectorPrefix20210510\Symfony\Component\HttpKernel\Kernel::cla
 
                     <div class="help-link">
                         <a href="https://symfony.com/doc/<?php 
-    echo \RectorPrefix20210510\Symfony\Component\HttpKernel\Kernel::VERSION;
+    echo Symfony\Component\HttpKernel\Kernel::VERSION;
     ?>/index.html">
                             <span class="icon"><?php 
     echo $this->include('assets/images/icon-book.svg');

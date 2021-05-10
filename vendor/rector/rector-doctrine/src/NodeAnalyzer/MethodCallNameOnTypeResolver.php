@@ -23,7 +23,7 @@ final class MethodCallNameOnTypeResolver
      * @var NodeTypeResolver
      */
     private $nodeTypeResolver;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \RectorPrefix20210510\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver)
+    public function __construct(NodeNameResolver $nodeNameResolver, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, NodeTypeResolver $nodeTypeResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
@@ -32,11 +32,11 @@ final class MethodCallNameOnTypeResolver
     /**
      * @return string[]
      */
-    public function resolve(\PhpParser\Node $node, \PHPStan\Type\ObjectType $objectType) : array
+    public function resolve(Node $node, ObjectType $objectType) : array
     {
         $methodNames = [];
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($node, function (\PhpParser\Node $node) use(&$methodNames, $objectType) {
-            if (!$node instanceof \PhpParser\Node\Expr\MethodCall) {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($node, function (Node $node) use(&$methodNames, $objectType) {
+            if (!$node instanceof MethodCall) {
                 return null;
             }
             if (!$this->nodeTypeResolver->isObjectType($node->var, $objectType)) {

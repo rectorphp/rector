@@ -19,7 +19,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\DowngradePhp71\Rector\FunctionLike\DowngradeNullableTypeDeclarationRector\DowngradeNullableTypeDeclarationRectorTest
  */
-final class DowngradeNullableTypeDeclarationRector extends \Rector\Core\Rector\AbstractRector
+final class DowngradeNullableTypeDeclarationRector extends AbstractRector
 {
     /**
      * @var PhpDocTypeChanger
@@ -29,7 +29,7 @@ final class DowngradeNullableTypeDeclarationRector extends \Rector\Core\Rector\A
      * @var PhpDocFromTypeDeclarationDecorator
      */
     private $phpDocFromTypeDeclarationDecorator;
-    public function __construct(\Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger, \Rector\DowngradePhp71\TypeDeclaration\PhpDocFromTypeDeclarationDecorator $phpDocFromTypeDeclarationDecorator)
+    public function __construct(PhpDocTypeChanger $phpDocTypeChanger, PhpDocFromTypeDeclarationDecorator $phpDocFromTypeDeclarationDecorator)
     {
         $this->phpDocTypeChanger = $phpDocTypeChanger;
         $this->phpDocFromTypeDeclarationDecorator = $phpDocFromTypeDeclarationDecorator;
@@ -39,11 +39,11 @@ final class DowngradeNullableTypeDeclarationRector extends \Rector\Core\Rector\A
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Function_::class, \PhpParser\Node\Stmt\ClassMethod::class, \PhpParser\Node\Expr\Closure::class];
+        return [Function_::class, ClassMethod::class, Closure::class];
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove the nullable type params, add @param tags instead', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove the nullable type params, add @param tags instead', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run(?string $input): ?string
@@ -68,7 +68,7 @@ CODE_SAMPLE
     /**
      * @param ClassMethod|Function_|Closure $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         $hasChanged = \false;
         foreach ($node->params as $param) {
@@ -76,7 +76,7 @@ CODE_SAMPLE
                 $hasChanged = \true;
             }
         }
-        if ($node->returnType instanceof \PhpParser\Node\NullableType && $this->phpDocFromTypeDeclarationDecorator->decorate($node)) {
+        if ($node->returnType instanceof NullableType && $this->phpDocFromTypeDeclarationDecorator->decorate($node)) {
             $hasChanged = \true;
         }
         if ($hasChanged) {
@@ -84,7 +84,7 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function isNullableParam(\PhpParser\Node\Param $param) : bool
+    private function isNullableParam(Param $param) : bool
     {
         if ($param->variadic) {
             return \false;
@@ -93,12 +93,12 @@ CODE_SAMPLE
             return \false;
         }
         // Check it is the union type
-        return $param->type instanceof \PhpParser\Node\NullableType;
+        return $param->type instanceof NullableType;
     }
     /**
      * @param ClassMethod|Function_|Closure $functionLike
      */
-    private function refactorParamType(\PhpParser\Node\Param $param, \PhpParser\Node\FunctionLike $functionLike) : bool
+    private function refactorParamType(Param $param, FunctionLike $functionLike) : bool
     {
         if (!$this->isNullableParam($param)) {
             return \false;
@@ -110,7 +110,7 @@ CODE_SAMPLE
     /**
      * @param ClassMethod|Function_|Closure $functionLike
      */
-    private function decorateWithDocBlock(\PhpParser\Node\FunctionLike $functionLike, \PhpParser\Node\Param $param) : void
+    private function decorateWithDocBlock(FunctionLike $functionLike, Param $param) : void
     {
         if ($param->type === null) {
             return;
@@ -118,7 +118,7 @@ CODE_SAMPLE
         $type = $this->staticTypeMapper->mapPhpParserNodePHPStanType($param->type);
         $paramName = $this->getName($param->var);
         if ($paramName === null) {
-            throw new \Rector\Core\Exception\ShouldNotHappenException();
+            throw new ShouldNotHappenException();
         }
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($functionLike);
         $this->phpDocTypeChanger->changeParamType($phpDocInfo, $type, $param, $paramName);

@@ -19,58 +19,58 @@ use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
 final class TypeHasher
 {
-    public function areTypesEqual(\PHPStan\Type\Type $firstType, \PHPStan\Type\Type $secondType) : bool
+    public function areTypesEqual(Type $firstType, Type $secondType) : bool
     {
         return $this->createTypeHash($firstType) === $this->createTypeHash($secondType);
     }
-    private function createTypeHash(\PHPStan\Type\Type $type) : string
+    private function createTypeHash(Type $type) : string
     {
-        if ($type instanceof \PHPStan\Type\MixedType) {
+        if ($type instanceof MixedType) {
             return \serialize($type) . $type->isExplicitMixed();
         }
-        if ($type instanceof \PHPStan\Type\ArrayType) {
+        if ($type instanceof ArrayType) {
             return $this->createTypeHash($type->getItemType()) . $this->createTypeHash($type->getKeyType()) . '[]';
         }
-        if ($type instanceof \PHPStan\Type\Generic\GenericObjectType) {
-            return $type->describe(\PHPStan\Type\VerbosityLevel::precise());
+        if ($type instanceof GenericObjectType) {
+            return $type->describe(VerbosityLevel::precise());
         }
-        if ($type instanceof \PHPStan\Type\TypeWithClassName) {
+        if ($type instanceof TypeWithClassName) {
             return $this->resolveUniqueTypeWithClassNameHash($type);
         }
-        if ($type instanceof \PHPStan\Type\ConstantType) {
+        if ($type instanceof ConstantType) {
             return \get_class($type) . $type->getValue();
         }
-        if ($type instanceof \PHPStan\Type\UnionType) {
+        if ($type instanceof UnionType) {
             return $this->createUnionTypeHash($type);
         }
-        return $type->describe(\PHPStan\Type\VerbosityLevel::value());
+        return $type->describe(VerbosityLevel::value());
     }
-    private function resolveUniqueTypeWithClassNameHash(\PHPStan\Type\TypeWithClassName $typeWithClassName) : string
+    private function resolveUniqueTypeWithClassNameHash(TypeWithClassName $typeWithClassName) : string
     {
-        if ($typeWithClassName instanceof \Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType) {
+        if ($typeWithClassName instanceof ShortenedObjectType) {
             return $typeWithClassName->getFullyQualifiedName();
         }
-        if ($typeWithClassName instanceof \Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType) {
+        if ($typeWithClassName instanceof AliasedObjectType) {
             return $typeWithClassName->getFullyQualifiedClass();
         }
         return $typeWithClassName->getClassName();
     }
-    private function createUnionTypeHash(\PHPStan\Type\UnionType $unionType) : string
+    private function createUnionTypeHash(UnionType $unionType) : string
     {
-        $sortedTypes = \PHPStan\Type\UnionTypeHelper::sortTypes($unionType->getTypes());
-        $sortedUnionType = new \PHPStan\Type\UnionType($sortedTypes);
-        $booleanType = new \PHPStan\Type\BooleanType();
+        $sortedTypes = UnionTypeHelper::sortTypes($unionType->getTypes());
+        $sortedUnionType = new UnionType($sortedTypes);
+        $booleanType = new BooleanType();
         if ($booleanType->isSuperTypeOf($unionType)->yes()) {
-            return $booleanType->describe(\PHPStan\Type\VerbosityLevel::precise());
+            return $booleanType->describe(VerbosityLevel::precise());
         }
         $normalizedUnionType = clone $sortedUnionType;
         // change alias to non-alias
-        $normalizedUnionType = \PHPStan\Type\TypeTraverser::map($normalizedUnionType, function (\PHPStan\Type\Type $type, callable $callable) : Type {
-            if (!$type instanceof \Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType) {
+        $normalizedUnionType = TypeTraverser::map($normalizedUnionType, function (Type $type, callable $callable) : Type {
+            if (!$type instanceof AliasedObjectType) {
                 return $callable($type);
             }
-            return new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType($type->getFullyQualifiedClass());
+            return new FullyQualifiedObjectType($type->getFullyQualifiedClass());
         });
-        return $normalizedUnionType->describe(\PHPStan\Type\VerbosityLevel::cache());
+        return $normalizedUnionType->describe(VerbosityLevel::cache());
     }
 }

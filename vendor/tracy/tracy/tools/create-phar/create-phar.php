@@ -44,18 +44,18 @@ foreach ($iterator = new \RecursiveIteratorIterator(new \RecursiveDirectoryItera
         $s = \php_strip_whitespace($file->getPathname());
     }
     if ($file->getExtension() === 'js') {
-        $s = \RectorPrefix20210510\compressJs($s);
+        $s = compressJs($s);
     } elseif ($file->getExtension() === 'css') {
-        $s = \RectorPrefix20210510\compressCss($s);
+        $s = compressCss($s);
     } elseif ($file->getExtension() === 'phtml') {
         $s = \preg_replace_callback('#(<(script|style).*(?<![?=])>)(.*)(</)#Uis', function ($m) : string {
             [, $begin, $type, $s, $end] = $m;
             if ($s === '' || \strpos($s, '<?') !== \false) {
                 return $m[0];
             } elseif ($type === 'script') {
-                $s = \RectorPrefix20210510\compressJs($s);
+                $s = compressJs($s);
             } elseif ($type === 'style') {
-                $s = \RectorPrefix20210510\compressCss($s);
+                $s = compressCss($s);
             }
             return $begin . $s . $end;
         }, $s);

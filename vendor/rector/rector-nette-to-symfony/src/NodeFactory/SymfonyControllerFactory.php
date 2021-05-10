@@ -20,24 +20,24 @@ final class SymfonyControllerFactory
      * @var ActionWithFormProcessClassMethodFactory
      */
     private $actionWithFormProcessClassMethodFactory;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NetteToSymfony\NodeFactory\ActionWithFormProcessClassMethodFactory $actionWithFormProcessClassMethodFactory)
+    public function __construct(NodeNameResolver $nodeNameResolver, \Rector\NetteToSymfony\NodeFactory\ActionWithFormProcessClassMethodFactory $actionWithFormProcessClassMethodFactory)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->actionWithFormProcessClassMethodFactory = $actionWithFormProcessClassMethodFactory;
     }
-    public function createNamespace(\PhpParser\Node\Stmt\Class_ $node, \PhpParser\Node\Stmt\Class_ $formTypeClass) : ?\PhpParser\Node\Stmt\Namespace_
+    public function createNamespace(Class_ $node, Class_ $formTypeClass) : ?Namespace_
     {
-        $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
-        if (!$scope instanceof \PHPStan\Analyser\Scope) {
+        $scope = $node->getAttribute(AttributeKey::SCOPE);
+        if (!$scope instanceof Scope) {
             return null;
         }
         /** @var string $namespaceName */
         $namespaceName = $scope->getNamespace();
-        $formControllerClass = new \PhpParser\Node\Stmt\Class_('SomeFormController');
-        $formControllerClass->extends = new \PhpParser\Node\Name\FullyQualified('Symfony\\Bundle\\FrameworkBundle\\Controller\\AbstractController');
+        $formControllerClass = new Class_('SomeFormController');
+        $formControllerClass->extends = new FullyQualified('Symfony\\Bundle\\FrameworkBundle\\Controller\\AbstractController');
         $formTypeClass = $namespaceName . '\\' . $this->nodeNameResolver->getName($formTypeClass);
         $formControllerClass->stmts[] = $this->actionWithFormProcessClassMethodFactory->create($formTypeClass);
-        $namespace = new \PhpParser\Node\Stmt\Namespace_(new \PhpParser\Node\Name($namespaceName));
+        $namespace = new Namespace_(new Name($namespaceName));
         $namespace->stmts[] = $formControllerClass;
         return $namespace;
     }

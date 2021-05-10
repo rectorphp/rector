@@ -29,18 +29,18 @@ trait LockableTrait
      */
     private function lock(string $name = null, bool $blocking = \false) : bool
     {
-        if (!\class_exists(\RectorPrefix20210510\Symfony\Component\Lock\Store\SemaphoreStore::class)) {
-            throw new \RectorPrefix20210510\Symfony\Component\Console\Exception\LogicException('To enable the locking feature you must install the symfony/lock component.');
+        if (!\class_exists(SemaphoreStore::class)) {
+            throw new LogicException('To enable the locking feature you must install the symfony/lock component.');
         }
         if (null !== $this->lock) {
-            throw new \RectorPrefix20210510\Symfony\Component\Console\Exception\LogicException('A lock is already in place.');
+            throw new LogicException('A lock is already in place.');
         }
-        if (\RectorPrefix20210510\Symfony\Component\Lock\Store\SemaphoreStore::isSupported()) {
-            $store = new \RectorPrefix20210510\Symfony\Component\Lock\Store\SemaphoreStore();
+        if (SemaphoreStore::isSupported()) {
+            $store = new SemaphoreStore();
         } else {
-            $store = new \RectorPrefix20210510\Symfony\Component\Lock\Store\FlockStore();
+            $store = new FlockStore();
         }
-        $this->lock = (new \RectorPrefix20210510\Symfony\Component\Lock\LockFactory($store))->createLock($name ?: $this->getName());
+        $this->lock = (new LockFactory($store))->createLock($name ?: $this->getName());
         if (!$this->lock->acquire($blocking)) {
             $this->lock = null;
             return \false;

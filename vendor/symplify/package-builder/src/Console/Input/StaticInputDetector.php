@@ -8,7 +8,7 @@ final class StaticInputDetector
 {
     public static function isDebug() : bool
     {
-        $argvInput = new \RectorPrefix20210510\Symfony\Component\Console\Input\ArgvInput();
+        $argvInput = new ArgvInput();
         return $argvInput->hasParameterOption(['--debug', '-v', '-vv', '-vvv']);
     }
 }

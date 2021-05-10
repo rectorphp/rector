@@ -13,15 +13,15 @@ final class ArrayUnionResponseTypeAnalyzer
     /**
      * @param class-string $className
      */
-    public function isArrayUnionResponseType(\PHPStan\Type\Type $type, string $className) : bool
+    public function isArrayUnionResponseType(Type $type, string $className) : bool
     {
-        if (!$type instanceof \PHPStan\Type\UnionType) {
+        if (!$type instanceof UnionType) {
             return \false;
         }
         $hasArrayType = \false;
         $hasResponseType = \false;
         foreach ($type->getTypes() as $unionedType) {
-            if ($unionedType instanceof \PHPStan\Type\ArrayType) {
+            if ($unionedType instanceof ArrayType) {
                 $hasArrayType = \true;
                 continue;
             }
@@ -39,12 +39,12 @@ final class ArrayUnionResponseTypeAnalyzer
     /**
      * @param class-string $className
      */
-    private function isTypeOfClassName(\PHPStan\Type\Type $type, string $className) : bool
+    private function isTypeOfClassName(Type $type, string $className) : bool
     {
-        if (!$type instanceof \PHPStan\Type\TypeWithClassName) {
+        if (!$type instanceof TypeWithClassName) {
             return \false;
         }
-        $objectType = new \PHPStan\Type\ObjectType($className);
+        $objectType = new ObjectType($className);
         return $objectType->isSuperTypeOf($type)->yes();
     }
 }

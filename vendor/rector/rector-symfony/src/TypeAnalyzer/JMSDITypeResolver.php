@@ -39,7 +39,7 @@ final class JMSDITypeResolver
      * @var CurrentFileProvider
      */
     private $currentFileProvider;
-    public function __construct(\Rector\Symfony\DataProvider\ServiceMapProvider $serviceMapProvider, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\Provider\CurrentFileProvider $currentFileProvider)
+    public function __construct(ServiceMapProvider $serviceMapProvider, PhpDocInfoFactory $phpDocInfoFactory, ReflectionProvider $reflectionProvider, NodeNameResolver $nodeNameResolver, CurrentFileProvider $currentFileProvider)
     {
         $this->serviceMapProvider = $serviceMapProvider;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
@@ -47,45 +47,45 @@ final class JMSDITypeResolver
         $this->nodeNameResolver = $nodeNameResolver;
         $this->currentFileProvider = $currentFileProvider;
     }
-    public function resolve(\PhpParser\Node\Stmt\Property $property, \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode) : \PHPStan\Type\Type
+    public function resolve(Property $property, DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode) : Type
     {
         $serviceMap = $this->serviceMapProvider->provide();
         $serviceName = ($doctrineAnnotationTagValueNode->getValueWithoutQuotes('serviceName') ?: $doctrineAnnotationTagValueNode->getSilentValue()) ?: $this->nodeNameResolver->getName($property);
         if ($serviceName) {
             $serviceType = $this->resolveFromServiceName($serviceName, $serviceMap);
-            if (!$serviceType instanceof \PHPStan\Type\MixedType) {
+            if (!$serviceType instanceof MixedType) {
                 return $serviceType;
             }
         }
         // 3. service is in @var annotation
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
         $varType = $phpDocInfo->getVarType();
-        if (!$varType instanceof \PHPStan\Type\MixedType) {
+        if (!$varType instanceof MixedType) {
             return $varType;
         }
         // the @var is missing and service name was not found → report it
         $this->reportServiceNotFound($serviceName, $property);
-        return new \PHPStan\Type\MixedType();
+        return new MixedType();
     }
-    private function reportServiceNotFound(?string $serviceName, \PhpParser\Node\Stmt\Property $property) : void
+    private function reportServiceNotFound(?string $serviceName, Property $property) : void
     {
         if ($serviceName !== null) {
             return;
         }
         $file = $this->currentFileProvider->getFile();
-        if (!$file instanceof \Rector\Core\ValueObject\Application\File) {
-            throw new \Rector\Core\Exception\ShouldNotHappenException();
+        if (!$file instanceof File) {
+            throw new ShouldNotHappenException();
         }
         $errorMessage = \sprintf('Service "%s" was not found in DI Container of your Symfony App.', $serviceName);
-        $rectorError = new \Rector\Core\ValueObject\Application\RectorError($errorMessage, $property->getLine());
+        $rectorError = new RectorError($errorMessage, $property->getLine());
         $file->addRectorError($rectorError);
     }
-    private function resolveFromServiceName(string $serviceName, \Rector\Symfony\ValueObject\ServiceMap\ServiceMap $serviceMap) : \PHPStan\Type\Type
+    private function resolveFromServiceName(string $serviceName, ServiceMap $serviceMap) : Type
     {
         // 1. service name-type
         if ($this->reflectionProvider->hasClass($serviceName)) {
             // single class service
-            return new \PHPStan\Type\ObjectType($serviceName);
+            return new ObjectType($serviceName);
         }
         // 2. service name
         if ($serviceMap->hasService($serviceName)) {
@@ -94,6 +94,6 @@ final class JMSDITypeResolver
                 return $serviceType;
             }
         }
-        return new \PHPStan\Type\MixedType();
+        return new MixedType();
     }
 }

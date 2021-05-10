@@ -7,7 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
 use Rector\NodeNameResolver\Contract\NodeNameResolverInterface;
 use Rector\NodeNameResolver\NodeNameResolver;
-final class ClassConstFetchNameResolver implements \Rector\NodeNameResolver\Contract\NodeNameResolverInterface
+final class ClassConstFetchNameResolver implements NodeNameResolverInterface
 {
     /**
      * @var NodeNameResolver
@@ -16,7 +16,7 @@ final class ClassConstFetchNameResolver implements \Rector\NodeNameResolver\Cont
     /**
      * @required
      */
-    public function autowireClassConstFetchNameResolver(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver) : void
+    public function autowireClassConstFetchNameResolver(NodeNameResolver $nodeNameResolver) : void
     {
         $this->nodeNameResolver = $nodeNameResolver;
     }
@@ -25,12 +25,12 @@ final class ClassConstFetchNameResolver implements \Rector\NodeNameResolver\Cont
      */
     public function getNode() : string
     {
-        return \PhpParser\Node\Expr\ClassConstFetch::class;
+        return ClassConstFetch::class;
     }
     /**
      * @param ClassConstFetch $node
      */
-    public function resolve(\PhpParser\Node $node) : ?string
+    public function resolve(Node $node) : ?string
     {
         $class = $this->nodeNameResolver->getName($node->class);
         $name = $this->nodeNameResolver->getName($node->name);

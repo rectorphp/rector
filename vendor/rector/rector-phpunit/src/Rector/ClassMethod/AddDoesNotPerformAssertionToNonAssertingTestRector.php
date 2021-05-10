@@ -23,7 +23,7 @@ use Symplify\SmartFileSystem\SmartFileInfo;
  *
  * @see \Rector\PHPUnit\Tests\Rector\ClassMethod\AddDoesNotPerformAssertionToNonAssertingTestRector\AddDoesNotPerformAssertionToNonAssertingTestRectorTest
  */
-final class AddDoesNotPerformAssertionToNonAssertingTestRector extends \Rector\Core\Rector\AbstractRector
+final class AddDoesNotPerformAssertionToNonAssertingTestRector extends AbstractRector
 {
     /**
      * @var int
@@ -55,15 +55,15 @@ final class AddDoesNotPerformAssertionToNonAssertingTestRector extends \Rector\C
      * @var TestsNodeAnalyzer
      */
     private $testsNodeAnalyzer;
-    public function __construct(\Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer $testsNodeAnalyzer, \Rector\Core\Reflection\ClassMethodReflectionFactory $classMethodReflectionFactory, \Rector\FileSystemRector\Parser\FileInfoParser $fileInfoParser)
+    public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer, ClassMethodReflectionFactory $classMethodReflectionFactory, FileInfoParser $fileInfoParser)
     {
         $this->fileInfoParser = $fileInfoParser;
         $this->classMethodReflectionFactory = $classMethodReflectionFactory;
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Tests without assertion will have @doesNotPerformAssertion', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Tests without assertion will have @doesNotPerformAssertion', [new CodeSample(<<<'CODE_SAMPLE'
 use PHPUnit\Framework\TestCase;
 
 class SomeClass extends TestCase
@@ -95,12 +95,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\ClassMethod::class];
+        return [ClassMethod::class];
     }
     /**
      * @param ClassMethod $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         $this->classMethodNestingLevel = 0;
         if ($this->shouldSkipClassMethod($node)) {
@@ -109,7 +109,7 @@ CODE_SAMPLE
         $this->addDoesNotPerformAssertions($node);
         return $node;
     }
-    private function shouldSkipClassMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
+    private function shouldSkipClassMethod(ClassMethod $classMethod) : bool
     {
         if (!$this->testsNodeAnalyzer->isInTestClass($classMethod)) {
             return \true;
@@ -123,12 +123,12 @@ CODE_SAMPLE
         }
         return $this->containsAssertCall($classMethod);
     }
-    private function addDoesNotPerformAssertions(\PhpParser\Node\Stmt\ClassMethod $classMethod) : void
+    private function addDoesNotPerformAssertions(ClassMethod $classMethod) : void
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
-        $phpDocInfo->addPhpDocTagNode(new \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode('@doesNotPerformAssertions', new \PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode('')));
+        $phpDocInfo->addPhpDocTagNode(new PhpDocTagNode('@doesNotPerformAssertions', new GenericTagValueNode('')));
     }
-    private function containsAssertCall(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
+    private function containsAssertCall(ClassMethod $classMethod) : bool
     {
         ++$this->classMethodNestingLevel;
         // probably no assert method in the end
@@ -150,10 +150,10 @@ CODE_SAMPLE
         $this->containsAssertCallByClassMethod[$cacheHash] = $hasNestedAssertCall;
         return $hasNestedAssertCall;
     }
-    private function hasDirectAssertCall(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
+    private function hasDirectAssertCall(ClassMethod $classMethod) : bool
     {
-        return (bool) $this->betterNodeFinder->findFirst((array) $classMethod->stmts, function (\PhpParser\Node $node) : bool {
-            if ($node instanceof \PhpParser\Node\Expr\MethodCall) {
+        return (bool) $this->betterNodeFinder->findFirst((array) $classMethod->stmts, function (Node $node) : bool {
+            if ($node instanceof MethodCall) {
                 return $this->isNames($node->name, [
                     // phpunit
                     '*assert',
@@ -162,7 +162,7 @@ CODE_SAMPLE
                     'setExpectedException*',
                 ]);
             }
-            if ($node instanceof \PhpParser\Node\Expr\StaticCall) {
+            if ($node instanceof StaticCall) {
                 return $this->isNames($node->name, [
                     // phpunit
                     '*assert',
@@ -174,12 +174,12 @@ CODE_SAMPLE
             return \false;
         });
     }
-    private function hasNestedAssertCall(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
+    private function hasNestedAssertCall(ClassMethod $classMethod) : bool
     {
         $currentClassMethod = $classMethod;
         // over and over the same method :/
-        return (bool) $this->betterNodeFinder->findFirst((array) $classMethod->stmts, function (\PhpParser\Node $node) use($currentClassMethod) : bool {
-            if (!$node instanceof \PhpParser\Node\Expr\MethodCall && !$node instanceof \PhpParser\Node\Expr\StaticCall) {
+        return (bool) $this->betterNodeFinder->findFirst((array) $classMethod->stmts, function (Node $node) use($currentClassMethod) : bool {
+            if (!$node instanceof MethodCall && !$node instanceof StaticCall) {
                 return \false;
             }
             $classMethod = $this->findClassMethod($node);
@@ -196,14 +196,14 @@ CODE_SAMPLE
     /**
      * @param MethodCall|StaticCall $node
      */
-    private function findClassMethod(\PhpParser\Node $node) : ?\PhpParser\Node\Stmt\ClassMethod
+    private function findClassMethod(Node $node) : ?ClassMethod
     {
-        if ($node instanceof \PhpParser\Node\Expr\MethodCall) {
+        if ($node instanceof MethodCall) {
             $classMethod = $this->nodeRepository->findClassMethodByMethodCall($node);
             if ($classMethod !== null) {
                 return $classMethod;
             }
-        } elseif ($node instanceof \PhpParser\Node\Expr\StaticCall) {
+        } elseif ($node instanceof StaticCall) {
             $classMethod = $this->nodeRepository->findClassMethodByStaticCall($node);
             if ($classMethod !== null) {
                 return $classMethod;
@@ -215,20 +215,20 @@ CODE_SAMPLE
     /**
      * @param MethodCall|StaticCall $node
      */
-    private function findClassMethodByParsingReflection(\PhpParser\Node $node) : ?\PhpParser\Node\Stmt\ClassMethod
+    private function findClassMethodByParsingReflection(Node $node) : ?ClassMethod
     {
         $methodName = $this->getName($node->name);
         if ($methodName === null) {
             return null;
         }
-        if ($node instanceof \PhpParser\Node\Expr\MethodCall) {
+        if ($node instanceof MethodCall) {
             $objectType = $this->getObjectType($node->var);
         } else {
             // StaticCall
             $objectType = $this->getObjectType($node->class);
         }
         $reflectionMethod = $this->classMethodReflectionFactory->createFromPHPStanTypeAndMethodName($objectType, $methodName);
-        if (!$reflectionMethod instanceof \ReflectionMethod) {
+        if (!$reflectionMethod instanceof ReflectionMethod) {
             return null;
         }
         $fileName = $reflectionMethod->getFileName();
@@ -240,17 +240,17 @@ CODE_SAMPLE
         }
         return $this->findClassMethodInFile($fileName, $methodName);
     }
-    private function findClassMethodInFile(string $fileName, string $methodName) : ?\PhpParser\Node\Stmt\ClassMethod
+    private function findClassMethodInFile(string $fileName, string $methodName) : ?ClassMethod
     {
         // skip already anayzed method to prevent cycling
         if (isset($this->analyzedMethodsInFileName[$fileName][$methodName])) {
             return $this->analyzedMethodsInFileName[$fileName][$methodName];
         }
-        $smartFileInfo = new \Symplify\SmartFileSystem\SmartFileInfo($fileName);
+        $smartFileInfo = new SmartFileInfo($fileName);
         $examinedMethodNodes = $this->fileInfoParser->parseFileInfoToNodesAndDecorate($smartFileInfo);
         /** @var ClassMethod|null $examinedClassMethod */
-        $examinedClassMethod = $this->betterNodeFinder->findFirst($examinedMethodNodes, function (\PhpParser\Node $node) use($methodName) : bool {
-            if (!$node instanceof \PhpParser\Node\Stmt\ClassMethod) {
+        $examinedClassMethod = $this->betterNodeFinder->findFirst($examinedMethodNodes, function (Node $node) use($methodName) : bool {
+            if (!$node instanceof ClassMethod) {
                 return \false;
             }
             return $this->isName($node, $methodName);

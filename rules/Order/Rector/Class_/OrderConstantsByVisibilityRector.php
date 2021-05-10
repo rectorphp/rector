@@ -15,7 +15,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\Order\Rector\Class_\OrderConstantsByVisibilityRector\OrderConstantsByVisibilityRectorTest
  */
-final class OrderConstantsByVisibilityRector extends \Rector\Core\Rector\AbstractRector
+final class OrderConstantsByVisibilityRector extends AbstractRector
 {
     /**
      * @var OrderChangeAnalyzer
@@ -29,15 +29,15 @@ final class OrderConstantsByVisibilityRector extends \Rector\Core\Rector\Abstrac
      * @var StmtVisibilitySorter
      */
     private $stmtVisibilitySorter;
-    public function __construct(\Rector\Order\Order\OrderChangeAnalyzer $orderChangeAnalyzer, \Rector\Order\StmtOrder $stmtOrder, \Rector\Order\StmtVisibilitySorter $stmtVisibilitySorter)
+    public function __construct(OrderChangeAnalyzer $orderChangeAnalyzer, StmtOrder $stmtOrder, StmtVisibilitySorter $stmtVisibilitySorter)
     {
         $this->orderChangeAnalyzer = $orderChangeAnalyzer;
         $this->stmtOrder = $stmtOrder;
         $this->stmtVisibilitySorter = $stmtVisibilitySorter;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Orders constants by visibility', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Orders constants by visibility', [new CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
 {
     private const PRIVATE_CONST = 'private';
@@ -60,14 +60,14 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Class_::class];
+        return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        $currentClassConstsOrder = $this->stmtOrder->getStmtsOfTypeOrder($node, \PhpParser\Node\Stmt\ClassConst::class);
+        $currentClassConstsOrder = $this->stmtOrder->getStmtsOfTypeOrder($node, ClassConst::class);
         $classConstsInDesiredOrder = $this->stmtVisibilitySorter->sortConstants($node);
         $oldToNewKeys = $this->stmtOrder->createOldToNewKeys($classConstsInDesiredOrder, $currentClassConstsOrder);
         if (!$this->orderChangeAnalyzer->hasOrderChanged($oldToNewKeys)) {

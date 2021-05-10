@@ -44,25 +44,25 @@ final class VariableNaming
      * @var ValueResolver
      */
     private $valueResolver;
-    public function __construct(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\Value\ValueResolver $valueResolver)
+    public function __construct(NodeTypeResolver $nodeTypeResolver, NodeNameResolver $nodeNameResolver, ValueResolver $valueResolver)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->valueResolver = $valueResolver;
     }
-    public function resolveFromNodeWithScopeCountAndFallbackName(\PhpParser\Node\Expr $expr, \PHPStan\Analyser\Scope $scope, string $fallbackName) : string
+    public function resolveFromNodeWithScopeCountAndFallbackName(Expr $expr, Scope $scope, string $fallbackName) : string
     {
         $name = $this->resolveFromNode($expr);
         if ($name === null) {
             $name = $fallbackName;
         }
-        if (\RectorPrefix20210510\Nette\Utils\Strings::contains($name, '\\')) {
-            $name = (string) \RectorPrefix20210510\Nette\Utils\Strings::after($name, '\\', -1);
+        if (Strings::contains($name, '\\')) {
+            $name = (string) Strings::after($name, '\\', -1);
         }
         $countedValueName = $this->createCountedValueName($name, $scope);
         return \lcfirst($countedValueName);
     }
-    public function createCountedValueName(string $valueName, ?\PHPStan\Analyser\Scope $scope) : string
+    public function createCountedValueName(string $valueName, ?Scope $scope) : string
     {
         if ($scope === null) {
             return $valueName;
@@ -80,50 +80,50 @@ final class VariableNaming
         }
         return $valueName;
     }
-    public function resolveFromNodeAndType(\PhpParser\Node $node, \PHPStan\Type\Type $type) : ?string
+    public function resolveFromNodeAndType(Node $node, Type $type) : ?string
     {
         $variableName = $this->resolveBareFromNode($node);
         if ($variableName === null) {
             return null;
         }
         // adjust static to specific class
-        if ($variableName === 'this' && $type instanceof \PHPStan\Type\ThisType) {
+        if ($variableName === 'this' && $type instanceof ThisType) {
             $shortClassName = $this->nodeNameResolver->getShortName($type->getClassName());
             $variableName = \lcfirst($shortClassName);
         }
-        $stringy = new \RectorPrefix20210510\Stringy\Stringy($variableName);
+        $stringy = new Stringy($variableName);
         return (string) $stringy->camelize();
     }
-    public function resolveFromFuncCallFirstArgumentWithSuffix(\PhpParser\Node\Expr\FuncCall $funcCall, string $suffix, string $fallbackName, ?\PHPStan\Analyser\Scope $scope) : string
+    public function resolveFromFuncCallFirstArgumentWithSuffix(FuncCall $funcCall, string $suffix, string $fallbackName, ?Scope $scope) : string
     {
         $bareName = $this->resolveBareFuncCallArgumentName($funcCall, $fallbackName, $suffix);
         return $this->createCountedValueName($bareName, $scope);
     }
-    private function resolveFromNode(\PhpParser\Node $node) : ?string
+    private function resolveFromNode(Node $node) : ?string
     {
         $nodeType = $this->nodeTypeResolver->getStaticType($node);
         return $this->resolveFromNodeAndType($node, $nodeType);
     }
-    private function unwrapNode(\PhpParser\Node $node) : ?\PhpParser\Node
+    private function unwrapNode(Node $node) : ?Node
     {
-        if ($node instanceof \PhpParser\Node\Arg) {
+        if ($node instanceof Arg) {
             return $node->value;
         }
-        if ($node instanceof \PhpParser\Node\Expr\Cast) {
+        if ($node instanceof Cast) {
             return $node->expr;
         }
-        if ($node instanceof \PhpParser\Node\Expr\Ternary) {
+        if ($node instanceof Ternary) {
             return $node->if;
         }
         return $node;
     }
-    private function resolveParamNameFromArrayDimFetch(\PhpParser\Node\Expr\ArrayDimFetch $arrayDimFetch) : ?string
+    private function resolveParamNameFromArrayDimFetch(ArrayDimFetch $arrayDimFetch) : ?string
     {
-        while ($arrayDimFetch instanceof \PhpParser\Node\Expr\ArrayDimFetch) {
-            if ($arrayDimFetch->dim instanceof \PhpParser\Node\Scalar) {
+        while ($arrayDimFetch instanceof ArrayDimFetch) {
+            if ($arrayDimFetch->dim instanceof Scalar) {
                 $valueName = $this->nodeNameResolver->getName($arrayDimFetch->var);
                 $dimName = $this->valueResolver->getValue($arrayDimFetch->dim);
-                $stringy = new \RectorPrefix20210510\Stringy\Stringy($dimName);
+                $stringy = new Stringy($dimName);
                 $dimName = (string) $stringy->upperCamelize();
                 return $valueName . $dimName;
             }
@@ -131,50 +131,50 @@ final class VariableNaming
         }
         return $this->resolveBareFromNode($arrayDimFetch);
     }
-    private function resolveBareFromNode(\PhpParser\Node $node) : ?string
+    private function resolveBareFromNode(Node $node) : ?string
     {
         $node = $this->unwrapNode($node);
-        if ($node instanceof \PhpParser\Node\Expr\ArrayDimFetch) {
+        if ($node instanceof ArrayDimFetch) {
             return $this->resolveParamNameFromArrayDimFetch($node);
         }
-        if ($node instanceof \PhpParser\Node\Expr\PropertyFetch) {
+        if ($node instanceof PropertyFetch) {
             return $this->resolveFromPropertyFetch($node);
         }
-        if ($node instanceof \PhpParser\Node\Expr\MethodCall || $node instanceof \PhpParser\Node\Expr\NullsafeMethodCall || $node instanceof \PhpParser\Node\Expr\StaticCall) {
+        if ($node instanceof MethodCall || $node instanceof NullsafeMethodCall || $node instanceof StaticCall) {
             return $this->resolveFromMethodCall($node);
         }
-        if ($node instanceof \PhpParser\Node\Expr\New_) {
+        if ($node instanceof New_) {
             return $this->resolveFromNew($node);
         }
-        if ($node instanceof \PhpParser\Node\Expr\FuncCall) {
+        if ($node instanceof FuncCall) {
             return $this->resolveFromNode($node->name);
         }
-        if (!$node instanceof \PhpParser\Node) {
-            throw new \Rector\Core\Exception\NotImplementedYetException();
+        if (!$node instanceof Node) {
+            throw new NotImplementedYetException();
         }
         $paramName = $this->nodeNameResolver->getName($node);
         if ($paramName !== null) {
             return $paramName;
         }
-        if ($node instanceof \PhpParser\Node\Scalar\String_) {
+        if ($node instanceof String_) {
             return $node->value;
         }
         return null;
     }
-    private function resolveFromNew(\PhpParser\Node\Expr\New_ $new) : string
+    private function resolveFromNew(New_ $new) : string
     {
-        if ($new->class instanceof \PhpParser\Node\Name) {
+        if ($new->class instanceof Name) {
             $className = $this->nodeNameResolver->getName($new->class);
             return $this->nodeNameResolver->getShortName($className);
         }
-        throw new \Rector\Core\Exception\NotImplementedYetException();
+        throw new NotImplementedYetException();
     }
     /**
      * @param MethodCall|NullsafeMethodCall|StaticCall $node
      */
-    private function resolveFromMethodCall(\PhpParser\Node $node) : ?string
+    private function resolveFromMethodCall(Node $node) : ?string
     {
-        if ($node->name instanceof \PhpParser\Node\Expr\MethodCall) {
+        if ($node->name instanceof MethodCall) {
             return $this->resolveFromMethodCall($node->name);
         }
         $methodName = $this->nodeNameResolver->getName($node->name);
@@ -183,25 +183,25 @@ final class VariableNaming
         }
         return $methodName;
     }
-    private function resolveFromPropertyFetch(\PhpParser\Node\Expr\PropertyFetch $propertyFetch) : string
+    private function resolveFromPropertyFetch(PropertyFetch $propertyFetch) : string
     {
         $varName = $this->nodeNameResolver->getName($propertyFetch->var);
         if (!\is_string($varName)) {
-            throw new \Rector\Core\Exception\NotImplementedYetException();
+            throw new NotImplementedYetException();
         }
         $propertyName = $this->nodeNameResolver->getName($propertyFetch->name);
         if (!\is_string($propertyName)) {
-            throw new \Rector\Core\Exception\NotImplementedYetException();
+            throw new NotImplementedYetException();
         }
         if ($varName === 'this') {
             return $propertyName;
         }
         return $varName . \ucfirst($propertyName);
     }
-    private function resolveBareFuncCallArgumentName(\PhpParser\Node\Expr\FuncCall $funcCall, string $fallbackName, string $suffix) : string
+    private function resolveBareFuncCallArgumentName(FuncCall $funcCall, string $fallbackName, string $suffix) : string
     {
         $argumentValue = $funcCall->args[0]->value;
-        if ($argumentValue instanceof \PhpParser\Node\Expr\MethodCall || $argumentValue instanceof \PhpParser\Node\Expr\StaticCall) {
+        if ($argumentValue instanceof MethodCall || $argumentValue instanceof StaticCall) {
             $name = $this->nodeNameResolver->getName($argumentValue->name);
         } else {
             $name = $this->nodeNameResolver->getName($argumentValue);

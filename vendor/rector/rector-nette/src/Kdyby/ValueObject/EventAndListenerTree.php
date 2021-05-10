@@ -45,7 +45,7 @@ final class EventAndListenerTree
      * @param array<class-string, ClassMethod[]> $listenerMethodsByEventSubscriberClass
      * @param GetterMethodBlueprint[] $getterMethodsBlueprints
      */
-    public function __construct(\PhpParser\Node\Expr\MethodCall $magicDispatchMethodCall, ?\PhpParser\Node\Stmt\Property $onMagicProperty, string $eventClassName, string $eventFileLocation, \PhpParser\Node\Stmt\Namespace_ $eventClassInNamespace, \PhpParser\Node\Expr\MethodCall $eventDispatcherDispatchMethodCall, array $listenerMethodsByEventSubscriberClass, array $getterMethodsBlueprints)
+    public function __construct(MethodCall $magicDispatchMethodCall, ?Property $onMagicProperty, string $eventClassName, string $eventFileLocation, Namespace_ $eventClassInNamespace, MethodCall $eventDispatcherDispatchMethodCall, array $listenerMethodsByEventSubscriberClass, array $getterMethodsBlueprints)
     {
         $this->magicDispatchMethodCall = $magicDispatchMethodCall;
         $this->onMagicProperty = $onMagicProperty;
@@ -67,7 +67,7 @@ final class EventAndListenerTree
     {
         return $this->listenerMethodsByEventSubscriberClass[$className] ?? [];
     }
-    public function getOnMagicProperty() : ?\PhpParser\Node\Stmt\Property
+    public function getOnMagicProperty() : ?Property
     {
         return $this->onMagicProperty;
     }
@@ -75,15 +75,15 @@ final class EventAndListenerTree
     {
         return $this->eventFileLocation;
     }
-    public function getMagicDispatchMethodCall() : \PhpParser\Node\Expr\MethodCall
+    public function getMagicDispatchMethodCall() : MethodCall
     {
         return $this->magicDispatchMethodCall;
     }
-    public function getEventClassInNamespace() : \PhpParser\Node\Stmt\Namespace_
+    public function getEventClassInNamespace() : Namespace_
     {
         return $this->eventClassInNamespace;
     }
-    public function getEventDispatcherDispatchMethodCall() : \PhpParser\Node\Expr\MethodCall
+    public function getEventDispatcherDispatchMethodCall() : MethodCall
     {
         return $this->eventDispatcherDispatchMethodCall;
     }

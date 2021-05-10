@@ -8,18 +8,18 @@ use PHPStan\PhpDocParser\Ast\Type\CallableTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
 use Rector\PHPStanStaticTypeMapper\TypeMapper\ArrayTypeMapper;
-final class SpacingAwareArrayTypeNode extends \PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode
+final class SpacingAwareArrayTypeNode extends ArrayTypeNode
 {
     public function __toString() : string
     {
-        if ($this->type instanceof \PHPStan\PhpDocParser\Ast\Type\CallableTypeNode) {
+        if ($this->type instanceof CallableTypeNode) {
             return \sprintf('(%s)[]', (string) $this->type);
         }
         $typeAsString = (string) $this->type;
         if ($this->isGenericArrayCandidate($this->type)) {
             return \sprintf('array<%s>', $typeAsString);
         }
-        if ($this->type instanceof \PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode) {
+        if ($this->type instanceof ArrayTypeNode) {
             return $this->printArrayType($this->type);
         }
         if ($this->type instanceof \Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareUnionTypeNode) {
@@ -27,14 +27,14 @@ final class SpacingAwareArrayTypeNode extends \PHPStan\PhpDocParser\Ast\Type\Arr
         }
         return $typeAsString . '[]';
     }
-    private function isGenericArrayCandidate(\PHPStan\PhpDocParser\Ast\Type\TypeNode $typeNode) : bool
+    private function isGenericArrayCandidate(TypeNode $typeNode) : bool
     {
-        if (!$this->getAttribute(\Rector\PHPStanStaticTypeMapper\TypeMapper\ArrayTypeMapper::HAS_GENERIC_TYPE_PARENT)) {
+        if (!$this->getAttribute(ArrayTypeMapper::HAS_GENERIC_TYPE_PARENT)) {
             return \false;
         }
-        return $typeNode instanceof \PHPStan\PhpDocParser\Ast\Type\UnionTypeNode || $typeNode instanceof \PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
+        return $typeNode instanceof UnionTypeNode || $typeNode instanceof ArrayTypeNode;
     }
-    private function printArrayType(\PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode $arrayTypeNode) : string
+    private function printArrayType(ArrayTypeNode $arrayTypeNode) : string
     {
         $typeAsString = (string) $arrayTypeNode;
         $singleTypesAsString = \explode('|', $typeAsString);

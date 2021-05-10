@@ -23,19 +23,19 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\DeadCode\Rector\MethodCall\RemoveEmptyMethodCallRector\RemoveEmptyMethodCallRectorTest
  */
-final class RemoveEmptyMethodCallRector extends \Rector\Core\Rector\AbstractRector
+final class RemoveEmptyMethodCallRector extends AbstractRector
 {
     /**
      * @var ClassReflectionToAstResolver
      */
     private $classReflectionToAstResolver;
-    public function __construct(\Rector\Core\Reflection\ClassReflectionToAstResolver $classReflectionToAstResolver)
+    public function __construct(ClassReflectionToAstResolver $classReflectionToAstResolver)
     {
         $this->classReflectionToAstResolver = $classReflectionToAstResolver;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove empty method call', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove empty method call', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function callThis()
@@ -63,22 +63,22 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\MethodCall::class];
+        return [MethodCall::class];
     }
     /**
      * @param MethodCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        $scope = $node->var->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
-        if (!$scope instanceof \PHPStan\Analyser\Scope) {
+        $scope = $node->var->getAttribute(AttributeKey::SCOPE);
+        if (!$scope instanceof Scope) {
             return null;
         }
         $type = $scope->getType($node->var);
-        if ($type instanceof \PHPStan\Type\ThisType) {
+        if ($type instanceof ThisType) {
             $type = $type->getStaticObjectType();
         }
-        if (!$type instanceof \PHPStan\Type\ObjectType) {
+        if (!$type instanceof ObjectType) {
             return null;
         }
         $class = $this->classReflectionToAstResolver->getClassFromObjectType($type);
@@ -86,22 +86,22 @@ CODE_SAMPLE
             return null;
         }
         // if->cond cannot removed, it has to be replaced with false, see https://3v4l.org/U9S9i
-        $parent = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-        if ($parent instanceof \PhpParser\Node\Stmt\If_ && $parent->cond === $node) {
+        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parent instanceof If_ && $parent->cond === $node) {
             return $this->nodeFactory->createFalse();
         }
-        if ($parent instanceof \PhpParser\Node\Expr\Assign) {
+        if ($parent instanceof Assign) {
             return $this->nodeFactory->createFalse();
         }
-        if ($parent instanceof \PhpParser\Node\Expr\ArrowFunction && $this->nodeComparator->areNodesEqual($parent->expr, $node)) {
+        if ($parent instanceof ArrowFunction && $this->nodeComparator->areNodesEqual($parent->expr, $node)) {
             return $this->processArrowFunction($parent, $node);
         }
         $this->removeNode($node);
         return $node;
     }
-    private function shouldSkipClassMethod(?\PhpParser\Node\Stmt\Class_ $class, \PhpParser\Node\Expr\MethodCall $methodCall) : bool
+    private function shouldSkipClassMethod(?Class_ $class, MethodCall $methodCall) : bool
     {
-        if (!$class instanceof \PhpParser\Node\Stmt\Class_) {
+        if (!$class instanceof Class_) {
             return \true;
         }
         $methodName = $this->getName($methodCall->name);
@@ -109,7 +109,7 @@ CODE_SAMPLE
             return \true;
         }
         $classMethod = $class->getMethod($methodName);
-        if (!$classMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
+        if (!$classMethod instanceof ClassMethod) {
             return \true;
         }
         if ($classMethod->isAbstract()) {
@@ -117,10 +117,10 @@ CODE_SAMPLE
         }
         return \count((array) $classMethod->stmts) !== 0;
     }
-    private function processArrowFunction(\PhpParser\Node\Expr\ArrowFunction $arrowFunction, \PhpParser\Node\Expr\MethodCall $methodCall) : \PhpParser\Node\Expr
+    private function processArrowFunction(ArrowFunction $arrowFunction, MethodCall $methodCall) : Expr
     {
-        $parentOfParent = $arrowFunction->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-        if ($parentOfParent instanceof \PhpParser\Node\Stmt\Expression) {
+        $parentOfParent = $arrowFunction->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parentOfParent instanceof Expression) {
             $this->removeNode($arrowFunction);
             return $methodCall;
         }

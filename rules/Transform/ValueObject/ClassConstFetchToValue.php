@@ -27,9 +27,9 @@ final class ClassConstFetchToValue
         $this->constant = $constant;
         $this->value = $value;
     }
-    public function getObjectType() : \PHPStan\Type\ObjectType
+    public function getObjectType() : ObjectType
     {
-        return new \PHPStan\Type\ObjectType($this->class);
+        return new ObjectType($this->class);
     }
     public function getConstant() : string
     {

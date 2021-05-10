@@ -12,7 +12,7 @@ final class RequireOptionalParamResolver
      * @param ClassMethod $functionLike
      * @return Param[]
      */
-    public function resolve(\PhpParser\Node\FunctionLike $functionLike) : array
+    public function resolve(FunctionLike $functionLike) : array
     {
         $optionalParams = [];
         $requireParams = [];

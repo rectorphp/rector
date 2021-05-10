@@ -22,21 +22,21 @@ final class PreviousVariableAssignNodeFinder
      * @var NodeComparator
      */
     private $nodeComparator;
-    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator)
+    public function __construct(BetterNodeFinder $betterNodeFinder, NodeNameResolver $nodeNameResolver, NodeComparator $nodeComparator)
     {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeComparator = $nodeComparator;
     }
-    public function find(\PhpParser\Node\Expr\Assign $assign) : ?\PhpParser\Node
+    public function find(Assign $assign) : ?Node
     {
         $currentAssign = $assign;
         $variableName = $this->nodeNameResolver->getName($assign->var);
         if ($variableName === null) {
             return null;
         }
-        return $this->betterNodeFinder->findFirstPrevious($assign, function (\PhpParser\Node $node) use($variableName, $currentAssign) : bool {
-            if (!$node instanceof \PhpParser\Node\Expr\Assign) {
+        return $this->betterNodeFinder->findFirstPrevious($assign, function (Node $node) use($variableName, $currentAssign) : bool {
+            if (!$node instanceof Assign) {
                 return \false;
             }
             // skip self

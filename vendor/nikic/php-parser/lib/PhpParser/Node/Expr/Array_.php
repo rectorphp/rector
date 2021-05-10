@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace PhpParser\Node\Expr;
 
 use PhpParser\Node\Expr;
-class Array_ extends \PhpParser\Node\Expr
+class Array_ extends Expr
 {
     // For use in "kind" attribute
     const KIND_LONG = 1;

@@ -35,7 +35,7 @@ final class NodeUsageFinder
      * @var NodeComparator
      */
     private $nodeComparator;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\NodeCollector\NodeCollector\NodeRepository $nodeRepository, \Rector\NodeNestingScope\NodeFinder\ScopeAwareNodeFinder $scopeAwareNodeFinder, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator)
+    public function __construct(NodeNameResolver $nodeNameResolver, BetterNodeFinder $betterNodeFinder, NodeRepository $nodeRepository, ScopeAwareNodeFinder $scopeAwareNodeFinder, NodeComparator $nodeComparator)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->betterNodeFinder = $betterNodeFinder;
@@ -47,14 +47,14 @@ final class NodeUsageFinder
      * @param Node[] $nodes
      * @return Variable[]
      */
-    public function findVariableUsages(array $nodes, \PhpParser\Node\Expr\Variable $variable) : array
+    public function findVariableUsages(array $nodes, Variable $variable) : array
     {
         $variableName = $this->nodeNameResolver->getName($variable);
         if ($variableName === null) {
             return [];
         }
-        return $this->betterNodeFinder->find($nodes, function (\PhpParser\Node $node) use($variable, $variableName) : bool {
-            if (!$node instanceof \PhpParser\Node\Expr\Variable) {
+        return $this->betterNodeFinder->find($nodes, function (Node $node) use($variable, $variableName) : bool {
+            if (!$node instanceof Variable) {
                 return \false;
             }
             if ($node === $variable) {
@@ -66,7 +66,7 @@ final class NodeUsageFinder
     /**
      * @return PropertyFetch[]
      */
-    public function findPropertyFetchUsages(\PhpParser\Node\Expr\PropertyFetch $desiredPropertyFetch) : array
+    public function findPropertyFetchUsages(PropertyFetch $desiredPropertyFetch) : array
     {
         $propertyFetches = $this->nodeRepository->findPropertyFetchesByPropertyFetch($desiredPropertyFetch);
         $propertyFetchesWithoutPropertyFetch = [];
@@ -78,14 +78,14 @@ final class NodeUsageFinder
         }
         return $propertyFetchesWithoutPropertyFetch;
     }
-    public function findPreviousForeachNodeUsage(\PhpParser\Node\Stmt\Foreach_ $foreach, \PhpParser\Node\Expr $expr) : ?\PhpParser\Node
+    public function findPreviousForeachNodeUsage(Foreach_ $foreach, Expr $expr) : ?Node
     {
-        return $this->scopeAwareNodeFinder->findParent($foreach, function (\PhpParser\Node $node) use($expr) : bool {
+        return $this->scopeAwareNodeFinder->findParent($foreach, function (Node $node) use($expr) : bool {
             // skip itself
             if ($node === $expr) {
                 return \false;
             }
             return $this->nodeComparator->areNodesEqual($node, $expr);
-        }, [\PhpParser\Node\Stmt\Foreach_::class]);
+        }, [Foreach_::class]);
     }
 }

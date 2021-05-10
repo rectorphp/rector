@@ -14,7 +14,7 @@ use Rector\Php80\Contract\StrStartWithMatchAndRefactorInterface;
 use Rector\Php80\NodeFactory\StrStartsWithFuncCallFactory;
 use Rector\Php80\ValueObject\StrStartsWith;
 use Rector\Php80\ValueObjectFactory\StrStartsWithFactory;
-final class StrncmpMatchAndRefactor implements \Rector\Php80\Contract\StrStartWithMatchAndRefactorInterface
+final class StrncmpMatchAndRefactor implements StrStartWithMatchAndRefactorInterface
 {
     /**
      * @var string
@@ -36,7 +36,7 @@ final class StrncmpMatchAndRefactor implements \Rector\Php80\Contract\StrStartWi
      * @var StrStartsWithFuncCallFactory
      */
     private $strStartsWithFuncCallFactory;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Php80\ValueObjectFactory\StrStartsWithFactory $strStartsWithFactory, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator, \Rector\Php80\NodeFactory\StrStartsWithFuncCallFactory $strStartsWithFuncCallFactory)
+    public function __construct(NodeNameResolver $nodeNameResolver, StrStartsWithFactory $strStartsWithFactory, NodeComparator $nodeComparator, StrStartsWithFuncCallFactory $strStartsWithFuncCallFactory)
     {
         $this->strStartsWithFactory = $strStartsWithFactory;
         $this->nodeNameResolver = $nodeNameResolver;
@@ -46,13 +46,13 @@ final class StrncmpMatchAndRefactor implements \Rector\Php80\Contract\StrStartWi
     /**
      * @param Identical|NotIdentical $binaryOp
      */
-    public function match(\PhpParser\Node\Expr\BinaryOp $binaryOp) : ?\Rector\Php80\ValueObject\StrStartsWith
+    public function match(BinaryOp $binaryOp) : ?StrStartsWith
     {
-        $isPositive = $binaryOp instanceof \PhpParser\Node\Expr\BinaryOp\Identical;
-        if ($binaryOp->left instanceof \PhpParser\Node\Expr\FuncCall && $this->nodeNameResolver->isName($binaryOp->left, self::FUNCTION_NAME)) {
+        $isPositive = $binaryOp instanceof Identical;
+        if ($binaryOp->left instanceof FuncCall && $this->nodeNameResolver->isName($binaryOp->left, self::FUNCTION_NAME)) {
             return $this->strStartsWithFactory->createFromFuncCall($binaryOp->left, $isPositive);
         }
-        if (!$binaryOp->right instanceof \PhpParser\Node\Expr\FuncCall) {
+        if (!$binaryOp->right instanceof FuncCall) {
             return null;
         }
         if (!$this->nodeNameResolver->isName($binaryOp->right, self::FUNCTION_NAME)) {
@@ -60,12 +60,12 @@ final class StrncmpMatchAndRefactor implements \Rector\Php80\Contract\StrStartWi
         }
         return $this->strStartsWithFactory->createFromFuncCall($binaryOp->right, $isPositive);
     }
-    public function refactorStrStartsWith(\Rector\Php80\ValueObject\StrStartsWith $strStartsWith) : ?\PhpParser\Node
+    public function refactorStrStartsWith(StrStartsWith $strStartsWith) : ?Node
     {
         $strncmpFuncCall = $strStartsWith->getFuncCall();
         $needleExpr = $strStartsWith->getNeedleExpr();
         $secondArgumentValue = $strncmpFuncCall->args[2]->value;
-        if (!$secondArgumentValue instanceof \PhpParser\Node\Expr\FuncCall) {
+        if (!$secondArgumentValue instanceof FuncCall) {
             return null;
         }
         if (!$this->nodeNameResolver->isName($secondArgumentValue, 'strlen')) {

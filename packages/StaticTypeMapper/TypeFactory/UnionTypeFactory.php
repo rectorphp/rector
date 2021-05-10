@@ -13,17 +13,17 @@ final class UnionTypeFactory
     /**
      * @param string[]|Type[] $types
      */
-    public function createUnionObjectType(array $types) : \PHPStan\Type\UnionType
+    public function createUnionObjectType(array $types) : UnionType
     {
         $objectTypes = [];
         foreach ($types as $type) {
-            $objectTypes[] = $type instanceof \PHPStan\Type\Type ? $type : new \PHPStan\Type\ObjectType($type);
+            $objectTypes[] = $type instanceof Type ? $type : new ObjectType($type);
         }
         // this is needed to prevent missing broker static fatal error, for tests with missing class
-        $reflectionClass = new \ReflectionClass(\PHPStan\Type\UnionType::class);
+        $reflectionClass = new ReflectionClass(UnionType::class);
         /** @var UnionType $unionType */
         $unionType = $reflectionClass->newInstanceWithoutConstructor();
-        $privatesAccessor = new \RectorPrefix20210510\Symplify\PackageBuilder\Reflection\PrivatesAccessor();
+        $privatesAccessor = new PrivatesAccessor();
         $privatesAccessor->setPrivateProperty($unionType, 'types', $objectTypes);
         return $unionType;
     }

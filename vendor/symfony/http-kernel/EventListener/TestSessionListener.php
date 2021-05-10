@@ -19,15 +19,15 @@ use RectorPrefix20210510\Symfony\Component\HttpFoundation\Session\SessionInterfa
  *
  * @final
  */
-class TestSessionListener extends \RectorPrefix20210510\Symfony\Component\HttpKernel\EventListener\AbstractTestSessionListener
+class TestSessionListener extends AbstractTestSessionListener
 {
     private $container;
-    public function __construct(\RectorPrefix20210510\Psr\Container\ContainerInterface $container, array $sessionOptions = [])
+    public function __construct(ContainerInterface $container, array $sessionOptions = [])
     {
         $this->container = $container;
         parent::__construct($sessionOptions);
     }
-    protected function getSession() : ?\RectorPrefix20210510\Symfony\Component\HttpFoundation\Session\SessionInterface
+    protected function getSession() : ?SessionInterface
     {
         if (!$this->container->has('session')) {
             return null;

@@ -16,19 +16,19 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\DependencyInjection\Rector\Class_\ActionInjectionToConstructorInjectionRector\ActionInjectionToConstructorInjectionRectorTest
  */
-final class ReplaceVariableByPropertyFetchRector extends \Rector\Core\Rector\AbstractRector
+final class ReplaceVariableByPropertyFetchRector extends AbstractRector
 {
     /**
      * @var VariablesToPropertyFetchCollection
      */
     private $variablesToPropertyFetchCollection;
-    public function __construct(\Rector\DependencyInjection\Collector\VariablesToPropertyFetchCollection $variablesToPropertyFetchCollection)
+    public function __construct(VariablesToPropertyFetchCollection $variablesToPropertyFetchCollection)
     {
         $this->variablesToPropertyFetchCollection = $variablesToPropertyFetchCollection;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Turns variable in controller action to property fetch, as follow up to action injection variable to property change.', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Turns variable in controller action to property fetch, as follow up to action injection variable to property change.', [new CodeSample(<<<'CODE_SAMPLE'
 final class SomeController
 {
     /**
@@ -73,12 +73,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\Variable::class];
+        return [Variable::class];
     }
     /**
      * @param Variable $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if (!$this->isInControllerActionMethod($node)) {
             return null;
@@ -95,18 +95,18 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function isInControllerActionMethod(\PhpParser\Node\Expr\Variable $variable) : bool
+    private function isInControllerActionMethod(Variable $variable) : bool
     {
         /** @var string|null $className */
-        $className = $variable->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);
+        $className = $variable->getAttribute(AttributeKey::CLASS_NAME);
         if ($className === null) {
             return \false;
         }
-        if (!\RectorPrefix20210510\Nette\Utils\Strings::endsWith($className, 'Controller')) {
+        if (!Strings::endsWith($className, 'Controller')) {
             return \false;
         }
-        $classMethod = $variable->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::METHOD_NODE);
-        if (!$classMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
+        $classMethod = $variable->getAttribute(AttributeKey::METHOD_NODE);
+        if (!$classMethod instanceof ClassMethod) {
             return \false;
         }
         // is probably in controller action

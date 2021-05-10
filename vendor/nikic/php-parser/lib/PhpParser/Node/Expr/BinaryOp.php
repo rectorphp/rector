@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace PhpParser\Node\Expr;
 
 use PhpParser\Node\Expr;
-abstract class BinaryOp extends \PhpParser\Node\Expr
+abstract class BinaryOp extends Expr
 {
     /** @var Expr The left hand side expression */
     public $left;
@@ -17,7 +17,7 @@ abstract class BinaryOp extends \PhpParser\Node\Expr
      * @param Expr  $right      The right hand side expression
      * @param array $attributes Additional attributes
      */
-    public function __construct(\PhpParser\Node\Expr $left, \PhpParser\Node\Expr $right, array $attributes = [])
+    public function __construct(Expr $left, Expr $right, array $attributes = [])
     {
         $this->attributes = $attributes;
         $this->left = $left;

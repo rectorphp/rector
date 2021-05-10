@@ -24,10 +24,10 @@ final class EditorConfig
         $configFiles = $this->locateConfigFiles($path);
         $root = \false;
         $configuration = [];
-        $configFile = \array_pop($configFiles);
+        $configFile = array_pop($configFiles);
         while ($configFile !== null) {
-            $configuration = \array_merge($configuration, $configFile->getConfigForPath($path));
-            $configFile = \array_pop($configFiles);
+            $configuration = array_merge($configuration, $configFile->getConfigForPath($path));
+            $configFile = array_pop($configFiles);
         }
         foreach ($configuration as $key => $declaration) {
             if ($declaration->getValue() !== null) {
@@ -40,7 +40,7 @@ final class EditorConfig
     public function printConfigForPath(string $path) : string
     {
         $config = $this->getConfigForPath($path);
-        return \implode("\n", $config);
+        return implode("\n", $config);
     }
     /**
      * @return array<EditorConfigFile>
@@ -51,21 +51,21 @@ final class EditorConfig
         $stop = \false;
         $parent = '';
         while ($parent !== $path) {
-            $editorConfigFile = \realpath(\sprintf('%s%s.editorconfig', $path, \DIRECTORY_SEPARATOR));
-            if ($editorConfigFile !== \false && \is_file($editorConfigFile) && \is_readable($editorConfigFile)) {
+            $editorConfigFile = realpath(sprintf('%s%s.editorconfig', $path, \DIRECTORY_SEPARATOR));
+            if ($editorConfigFile !== \false && is_file($editorConfigFile) && is_readable($editorConfigFile)) {
                 $file = $this->getConfigFile($editorConfigFile);
                 $files[] = $file;
                 if ($file->isRoot() === \true) {
                     break;
                 }
             }
-            $path = \dirname($path);
-            $parent = \dirname($path);
+            $path = dirname($path);
+            $parent = dirname($path);
         }
         return $files;
     }
-    private function getConfigFile(string $path) : \RectorPrefix20210510\Idiosyncratic\EditorConfig\EditorConfigFile
+    private function getConfigFile(string $path) : EditorConfigFile
     {
-        return $this->configFiles[$path] ?? ($this->configFiles[$path] = new \RectorPrefix20210510\Idiosyncratic\EditorConfig\EditorConfigFile($path));
+        return $this->configFiles[$path] ?? ($this->configFiles[$path] = new EditorConfigFile($path));
     }
 }

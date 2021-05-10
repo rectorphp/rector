@@ -18,19 +18,19 @@ use RectorPrefix20210510\Symfony\Component\HttpKernel\ControllerMetadata\Argumen
  *
  * @author Iltar van der Berg <kjarli@gmail.com>
  */
-final class RequestValueResolver implements \RectorPrefix20210510\Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface
+final class RequestValueResolver implements ArgumentValueResolverInterface
 {
     /**
      * {@inheritdoc}
      */
-    public function supports(\RectorPrefix20210510\Symfony\Component\HttpFoundation\Request $request, \RectorPrefix20210510\Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata $argument) : bool
+    public function supports(Request $request, ArgumentMetadata $argument) : bool
     {
-        return \RectorPrefix20210510\Symfony\Component\HttpFoundation\Request::class === $argument->getType() || \is_subclass_of($argument->getType(), \RectorPrefix20210510\Symfony\Component\HttpFoundation\Request::class);
+        return Request::class === $argument->getType() || \is_subclass_of($argument->getType(), Request::class);
     }
     /**
      * {@inheritdoc}
      */
-    public function resolve(\RectorPrefix20210510\Symfony\Component\HttpFoundation\Request $request, \RectorPrefix20210510\Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata $argument) : iterable
+    public function resolve(Request $request, ArgumentMetadata $argument) : iterable
     {
         (yield $request);
     }

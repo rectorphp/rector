@@ -19,7 +19,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\PHPUnit\Tests\Rector\MethodCall\SpecificAssertContainsRector\SpecificAssertContainsRectorTest
  */
-final class SpecificAssertContainsRector extends \Rector\Core\Rector\AbstractRector
+final class SpecificAssertContainsRector extends AbstractRector
 {
     /**
      * @var array<string, string>
@@ -29,13 +29,13 @@ final class SpecificAssertContainsRector extends \Rector\Core\Rector\AbstractRec
      * @var TestsNodeAnalyzer
      */
     private $testsNodeAnalyzer;
-    public function __construct(\Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer $testsNodeAnalyzer)
+    public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer)
     {
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change assertContains()/assertNotContains() method to new string and iterable alternatives', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change assertContains()/assertNotContains() method to new string and iterable alternatives', [new CodeSample(<<<'CODE_SAMPLE'
 final class SomeTest extends \PHPUnit\Framework\TestCase
 {
     public function test()
@@ -62,12 +62,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\MethodCall::class, \PhpParser\Node\Expr\StaticCall::class];
+        return [MethodCall::class, StaticCall::class];
     }
     /**
      * @param MethodCall|StaticCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if (!$this->testsNodeAnalyzer->isPHPUnitMethodCallNames($node, ['assertContains', 'assertNotContains'])) {
             return null;
@@ -77,19 +77,19 @@ CODE_SAMPLE
         }
         $methodName = $this->getName($node->name);
         $newMethodName = self::OLD_TO_NEW_METHOD_NAMES[$methodName];
-        $node->name = new \PhpParser\Node\Identifier($newMethodName);
+        $node->name = new Identifier($newMethodName);
         return $node;
     }
-    private function isPossiblyStringType(\PhpParser\Node\Expr $expr) : bool
+    private function isPossiblyStringType(Expr $expr) : bool
     {
         $exprType = $this->getStaticType($expr);
-        if ($exprType instanceof \PHPStan\Type\UnionType) {
+        if ($exprType instanceof UnionType) {
             foreach ($exprType->getTypes() as $unionedType) {
-                if ($unionedType instanceof \PHPStan\Type\StringType) {
+                if ($unionedType instanceof StringType) {
                     return \true;
                 }
             }
         }
-        return $exprType instanceof \PHPStan\Type\StringType;
+        return $exprType instanceof StringType;
     }
 }

@@ -11,7 +11,7 @@ final class UnchangedFilesFilter
      * @var ChangedFilesDetector
      */
     private $changedFilesDetector;
-    public function __construct(\Rector\Caching\Detector\ChangedFilesDetector $changedFilesDetector)
+    public function __construct(ChangedFilesDetector $changedFilesDetector)
     {
         $this->changedFilesDetector = $changedFilesDetector;
     }

@@ -18,18 +18,18 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\DowngradePhp70\Rector\FuncCall\DowngradeSessionStartArrayOptionsRector\DowngradeSessionStartArrayOptionsRectorTest
  */
-final class DowngradeSessionStartArrayOptionsRector extends \Rector\Core\Rector\AbstractRector
+final class DowngradeSessionStartArrayOptionsRector extends AbstractRector
 {
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\FuncCall::class];
+        return [FuncCall::class];
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Move array option of session_start($options) to before statement\'s ini_set()', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Move array option of session_start($options) to before statement\'s ini_set()', [new CodeSample(<<<'CODE_SAMPLE'
 session_start([
     'cache_limiter' => 'private',
 ]);
@@ -43,33 +43,33 @@ CODE_SAMPLE
     /**
      * @param FuncCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if ($this->shouldSkip($node)) {
             return null;
         }
-        $currentStatement = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CURRENT_STATEMENT);
+        $currentStatement = $node->getAttribute(AttributeKey::CURRENT_STATEMENT);
         /** @var Array_ $options */
         $options = $node->args[0]->value;
         foreach ($options->items as $option) {
-            if (!$option instanceof \PhpParser\Node\Expr\ArrayItem) {
+            if (!$option instanceof ArrayItem) {
                 return null;
             }
-            if (!$option->key instanceof \PhpParser\Node\Scalar\String_) {
+            if (!$option->key instanceof String_) {
                 return null;
             }
-            if (!$this->valueResolver->isTrueOrFalse($option->value) && !$option->value instanceof \PhpParser\Node\Scalar\String_) {
+            if (!$this->valueResolver->isTrueOrFalse($option->value) && !$option->value instanceof String_) {
                 return null;
             }
-            $sessionKey = new \PhpParser\Node\Scalar\String_('session.' . $option->key->value);
-            $funcName = new \PhpParser\Node\Name('ini_set');
-            $iniSet = new \PhpParser\Node\Expr\FuncCall($funcName, [new \PhpParser\Node\Arg($sessionKey), new \PhpParser\Node\Arg($option->value)]);
-            $this->addNodeBeforeNode(new \PhpParser\Node\Stmt\Expression($iniSet), $currentStatement);
+            $sessionKey = new String_('session.' . $option->key->value);
+            $funcName = new Name('ini_set');
+            $iniSet = new FuncCall($funcName, [new Arg($sessionKey), new Arg($option->value)]);
+            $this->addNodeBeforeNode(new Expression($iniSet), $currentStatement);
         }
         unset($node->args[0]);
         return $node;
     }
-    private function shouldSkip(\PhpParser\Node\Expr\FuncCall $funcCall) : bool
+    private function shouldSkip(FuncCall $funcCall) : bool
     {
         if (!$this->isName($funcCall, 'session_start')) {
             return \true;
@@ -77,6 +77,6 @@ CODE_SAMPLE
         if (!isset($funcCall->args[0])) {
             return \true;
         }
-        return !$funcCall->args[0]->value instanceof \PhpParser\Node\Expr\Array_;
+        return !$funcCall->args[0]->value instanceof Array_;
     }
 }

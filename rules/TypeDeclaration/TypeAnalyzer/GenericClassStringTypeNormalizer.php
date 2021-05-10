@@ -15,14 +15,14 @@ final class GenericClassStringTypeNormalizer
      * @var ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider)
+    public function __construct(ReflectionProvider $reflectionProvider)
     {
         $this->reflectionProvider = $reflectionProvider;
     }
-    public function normalize(\PHPStan\Type\Type $type) : \PHPStan\Type\Type
+    public function normalize(Type $type) : Type
     {
-        return \PHPStan\Type\TypeTraverser::map($type, function (\PHPStan\Type\Type $type, $callback) : Type {
-            if (!$type instanceof \PHPStan\Type\Constant\ConstantStringType) {
+        return TypeTraverser::map($type, function (Type $type, $callback) : Type {
+            if (!$type instanceof ConstantStringType) {
                 return $callback($type);
             }
             // skip string that look like classe
@@ -32,7 +32,7 @@ final class GenericClassStringTypeNormalizer
             if (!$this->reflectionProvider->hasClass($type->getValue())) {
                 return $callback($type);
             }
-            return new \PHPStan\Type\Generic\GenericClassStringType(new \PHPStan\Type\ObjectType($type->getValue()));
+            return new GenericClassStringType(new ObjectType($type->getValue()));
         });
     }
 }

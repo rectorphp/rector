@@ -17,7 +17,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Transform\Rector\StaticCall\StaticCallToNewRector\StaticCallToNewRectorTest
  */
-final class StaticCallToNewRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
+final class StaticCallToNewRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
      * @var string
@@ -27,9 +27,9 @@ final class StaticCallToNewRector extends \Rector\Core\Rector\AbstractRector imp
      * @var StaticCallToNew[]
      */
     private $staticCallsToNews = [];
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change static call to new instance', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change static call to new instance', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -47,19 +47,19 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, [self::STATIC_CALLS_TO_NEWS => [new \Rector\Transform\ValueObject\StaticCallToNew('JsonResponse', 'create')]])]);
+, [self::STATIC_CALLS_TO_NEWS => [new StaticCallToNew('JsonResponse', 'create')]])]);
     }
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\StaticCall::class];
+        return [StaticCall::class];
     }
     /**
      * @param Node\Expr\StaticCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         foreach ($this->staticCallsToNews as $staticCallToNews) {
             if (!$this->isName($node->class, $staticCallToNews->getClass())) {
@@ -72,7 +72,7 @@ CODE_SAMPLE
             if ($class === null) {
                 continue;
             }
-            return new \PhpParser\Node\Expr\New_(new \PhpParser\Node\Name\FullyQualified($class));
+            return new New_(new FullyQualified($class));
         }
         return $node;
     }

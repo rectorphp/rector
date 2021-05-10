@@ -13,11 +13,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\PHPUnit\Tests\Rector\MethodCall\GetMockBuilderGetMockToCreateMockRector\GetMockBuilderGetMockToCreateMockRectorTest
  */
-final class GetMockBuilderGetMockToCreateMockRector extends \Rector\Core\Rector\AbstractRector
+final class GetMockBuilderGetMockToCreateMockRector extends AbstractRector
 {
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove getMockBuilder() to createMock()', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove getMockBuilder() to createMock()', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeTest extends \PHPUnit\Framework\TestCase
 {
     public function test()
@@ -44,21 +44,21 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\MethodCall::class];
+        return [MethodCall::class];
     }
     /**
      * @param MethodCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if (!$this->isName($node->name, 'getMock')) {
             return null;
         }
-        if (!$node->var instanceof \PhpParser\Node\Expr\MethodCall) {
+        if (!$node->var instanceof MethodCall) {
             return null;
         }
         $getMockBuilderMethodCall = $this->isName($node->var->name, 'disableOriginalConstructor') ? $node->var->var : $node->var;
-        if (!$getMockBuilderMethodCall instanceof \PhpParser\Node\Expr\MethodCall) {
+        if (!$getMockBuilderMethodCall instanceof MethodCall) {
             return null;
         }
         if (!$this->isName($getMockBuilderMethodCall->name, 'getMockBuilder')) {
@@ -66,6 +66,6 @@ CODE_SAMPLE
         }
         $args = $getMockBuilderMethodCall->args;
         $thisVariable = $getMockBuilderMethodCall->var;
-        return new \PhpParser\Node\Expr\MethodCall($thisVariable, 'createMock', $args);
+        return new MethodCall($thisVariable, 'createMock', $args);
     }
 }

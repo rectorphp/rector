@@ -17,14 +17,14 @@ final class TraitTypeAnalyzer
      * @var ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
+    public function __construct(NodeTypeResolver $nodeTypeResolver, ReflectionProvider $reflectionProvider)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->reflectionProvider = $reflectionProvider;
     }
-    public function isTraitType(\PHPStan\Type\Type $type) : bool
+    public function isTraitType(Type $type) : bool
     {
-        if (!$type instanceof \PHPStan\Type\TypeWithClassName) {
+        if (!$type instanceof TypeWithClassName) {
             return \false;
         }
         $fullyQualifiedName = $this->nodeTypeResolver->getFullyQualifiedClassName($type);

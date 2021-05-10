@@ -29,12 +29,12 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @changelog https://github.com/phpstan/phpstan/commit/d17e459fd9b45129c5deafe12bca56f30ea5ee99#diff-9f3541876405623b0d18631259763dc1
  */
-final class RemoveNonExistingVarAnnotationRector extends \Rector\Core\Rector\AbstractRector
+final class RemoveNonExistingVarAnnotationRector extends AbstractRector
 {
     /**
      * @var array<class-string<Node>>
      */
-    private const NODES_TO_MATCH = [\PhpParser\Node\Expr\Assign::class, \PhpParser\Node\Expr\AssignRef::class, \PhpParser\Node\Stmt\Foreach_::class, \PhpParser\Node\Stmt\Static_::class, \PhpParser\Node\Stmt\Echo_::class, \PhpParser\Node\Stmt\Return_::class, \PhpParser\Node\Stmt\Expression::class, \PhpParser\Node\Stmt\Throw_::class, \PhpParser\Node\Stmt\If_::class, \PhpParser\Node\Stmt\While_::class, \PhpParser\Node\Stmt\Switch_::class, \PhpParser\Node\Stmt\Nop::class];
+    private const NODES_TO_MATCH = [Assign::class, AssignRef::class, Foreach_::class, Static_::class, Echo_::class, Return_::class, Expression::class, Throw_::class, If_::class, While_::class, Switch_::class, Nop::class];
     /**
      * @var TypeChecker
      */
@@ -43,14 +43,14 @@ final class RemoveNonExistingVarAnnotationRector extends \Rector\Core\Rector\Abs
      * @var CommentRemover
      */
     private $commentRemover;
-    public function __construct(\RectorPrefix20210510\Symplify\PackageBuilder\Php\TypeChecker $typeChecker, \Rector\Comments\CommentRemover $commentRemover)
+    public function __construct(TypeChecker $typeChecker, CommentRemover $commentRemover)
     {
         $this->typeChecker = $typeChecker;
         $this->commentRemover = $commentRemover;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Removes non-existing @var annotations above the code', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Removes non-existing @var annotations above the code', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function get()
@@ -76,16 +76,16 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node::class];
+        return [Node::class];
     }
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if ($this->shouldSkip($node)) {
             return null;
         }
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         $varTagValueNode = $phpDocInfo->getVarTagValueNode();
-        if (!$varTagValueNode instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode) {
+        if (!$varTagValueNode instanceof VarTagValueNode) {
             return null;
         }
         $variableName = \ltrim($varTagValueNode->variableName, '$');
@@ -93,16 +93,16 @@ CODE_SAMPLE
             return null;
         }
         $comments = $node->getComments();
-        if (isset($comments[1]) && $comments[1] instanceof \PhpParser\Comment) {
+        if (isset($comments[1]) && $comments[1] instanceof Comment) {
             $this->commentRemover->rollbackComments($node, $comments[1]);
             return $node;
         }
-        $phpDocInfo->removeByType(\PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode::class);
+        $phpDocInfo->removeByType(VarTagValueNode::class);
         return $node;
     }
-    private function shouldSkip(\PhpParser\Node $node) : bool
+    private function shouldSkip(Node $node) : bool
     {
-        if (!$node instanceof \PhpParser\Node\Stmt\Nop) {
+        if (!$node instanceof Nop) {
             return !$this->typeChecker->isInstanceOf($node, self::NODES_TO_MATCH);
         }
         if (\count($node->getComments()) <= 1) {
@@ -110,10 +110,10 @@ CODE_SAMPLE
         }
         return \true;
     }
-    private function hasVariableName(\PhpParser\Node $node, string $variableName) : bool
+    private function hasVariableName(Node $node, string $variableName) : bool
     {
-        return (bool) $this->betterNodeFinder->findFirst($node, function (\PhpParser\Node $node) use($variableName) : bool {
-            if (!$node instanceof \PhpParser\Node\Expr\Variable) {
+        return (bool) $this->betterNodeFinder->findFirst($node, function (Node $node) use($variableName) : bool {
+            if (!$node instanceof Variable) {
                 return \false;
             }
             return $this->isName($node, $variableName);

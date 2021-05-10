@@ -20,7 +20,7 @@ final class RouteNameClassFactory
      * @var ComposerNamespaceMatcher
      */
     private $composerNamespaceMatcher;
-    public function __construct(\Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\Symfony\Composer\ComposerNamespaceMatcher $composerNamespaceMatcher)
+    public function __construct(NodeFactory $nodeFactory, ComposerNamespaceMatcher $composerNamespaceMatcher)
     {
         $this->nodeFactory = $nodeFactory;
         $this->composerNamespaceMatcher = $composerNamespaceMatcher;
@@ -28,13 +28,13 @@ final class RouteNameClassFactory
     /**
      * @param ConstantNameAndValue[] $constantNamesAndValues
      */
-    public function create(array $constantNamesAndValues, string $fileLocation) : \PhpParser\Node\Stmt\Namespace_
+    public function create(array $constantNamesAndValues, string $fileLocation) : Namespace_
     {
-        $classBuilder = new \RectorPrefix20210510\Symplify\Astral\ValueObject\NodeBuilder\ClassBuilder(\Rector\Symfony\ValueObject\ClassName::ROUTE_CLASS_SHORT_NAME);
+        $classBuilder = new ClassBuilder(ClassName::ROUTE_CLASS_SHORT_NAME);
         $classBuilder->makeFinal();
         $namespaceName = $this->composerNamespaceMatcher->matchNamespaceForLocation($fileLocation);
         if ($namespaceName === null) {
-            $namespaceName = \Rector\Symfony\ValueObject\ClassName::ROUTE_NAME_NAMESPACE;
+            $namespaceName = ClassName::ROUTE_NAME_NAMESPACE;
         } else {
             $namespaceName .= '\\ValueObject\\Routing';
         }
@@ -42,7 +42,7 @@ final class RouteNameClassFactory
             $classConst = $this->nodeFactory->createPublicClassConst($constantNameAndValue->getName(), $constantNameAndValue->getValue());
             $classBuilder->addStmt($classConst);
         }
-        $namespaceBuilder = new \RectorPrefix20210510\Symplify\Astral\ValueObject\NodeBuilder\NamespaceBuilder($namespaceName);
+        $namespaceBuilder = new NamespaceBuilder($namespaceName);
         $namespaceBuilder->addStmt($classBuilder->getNode());
         return $namespaceBuilder->getNode();
     }

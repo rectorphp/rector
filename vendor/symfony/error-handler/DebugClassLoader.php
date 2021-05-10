@@ -163,7 +163,7 @@ class DebugClassLoader
         foreach ($offsets as $getSymbols => $i) {
             $symbols = $getSymbols();
             for (; $i < \count($symbols); ++$i) {
-                if (!\is_subclass_of($symbols[$i], \RectorPrefix20210510\PHPUnit\Framework\MockObject\MockObject::class) && !\is_subclass_of($symbols[$i], \RectorPrefix20210510\Prophecy\Prophecy\ProphecySubjectInterface::class) && !\is_subclass_of($symbols[$i], \RectorPrefix20210510\Doctrine\Persistence\Proxy::class) && !\is_subclass_of($symbols[$i], \RectorPrefix20210510\ProxyManager\Proxy\ProxyInterface::class) && !\is_subclass_of($symbols[$i], \RectorPrefix20210510\Doctrine\Common\Persistence\Proxy::class) && !\is_subclass_of($symbols[$i], \RectorPrefix20210510\Mockery\MockInterface::class)) {
+                if (!\is_subclass_of($symbols[$i], MockObject::class) && !\is_subclass_of($symbols[$i], ProphecySubjectInterface::class) && !\is_subclass_of($symbols[$i], Proxy::class) && !\is_subclass_of($symbols[$i], ProxyInterface::class) && !\is_subclass_of($symbols[$i], LegacyProxy::class) && !\is_subclass_of($symbols[$i], MockInterface::class)) {
                     $loader->checkClass($symbols[$i]);
                 }
             }
@@ -443,7 +443,7 @@ class DebugClassLoader
                     $finalOrInternal = \true;
                 }
             }
-            if ($finalOrInternal || $method->isConstructor() || \false === \strpos($doc, '@param') || \RectorPrefix20210510\PHPUnit\Framework\MockObject\Matcher\StatelessInvocation::class === $class) {
+            if ($finalOrInternal || $method->isConstructor() || \false === \strpos($doc, '@param') || StatelessInvocation::class === $class) {
                 continue;
             }
             if (!\preg_match_all('#\\n\\s+\\* @param +((?(?!callable *\\().*?|callable *\\(.*\\).*?))(?<= )\\$([a-zA-Z0-9_\\x7f-\\xff]++)#', $doc, $matches, \PREG_SET_ORDER)) {

@@ -24,9 +24,9 @@ final class SingleToManyMethod
         $this->singleMethodName = $singleMethodName;
         $this->manyMethodName = $manyMethodName;
     }
-    public function getObjectType() : \PHPStan\Type\ObjectType
+    public function getObjectType() : ObjectType
     {
-        return new \PHPStan\Type\ObjectType($this->class);
+        return new ObjectType($this->class);
     }
     public function getSingleMethodName() : string
     {

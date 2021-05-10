@@ -18,7 +18,7 @@ final class GetterMethodBlueprint
      * @var Node|null
      */
     private $returnTypeNode;
-    public function __construct(string $methodName, ?\PhpParser\Node $returnTypeNode, string $variableName)
+    public function __construct(string $methodName, ?Node $returnTypeNode, string $variableName)
     {
         $this->methodName = $methodName;
         $this->returnTypeNode = $returnTypeNode;
@@ -28,7 +28,7 @@ final class GetterMethodBlueprint
     {
         return $this->methodName;
     }
-    public function getReturnTypeNode() : ?\PhpParser\Node
+    public function getReturnTypeNode() : ?Node
     {
         return $this->returnTypeNode;
     }

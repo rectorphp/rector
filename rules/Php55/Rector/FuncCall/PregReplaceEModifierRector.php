@@ -18,7 +18,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php55\Rector\FuncCall\PregReplaceEModifierRector\PregReplaceEModifierRectorTest
  */
-final class PregReplaceEModifierRector extends \Rector\Core\Rector\AbstractRector
+final class PregReplaceEModifierRector extends AbstractRector
 {
     /**
      * @var RegexMatcher
@@ -28,14 +28,14 @@ final class PregReplaceEModifierRector extends \Rector\Core\Rector\AbstractRecto
      * @var AnonymousFunctionNodeFactory
      */
     private $anonymousFunctionNodeFactory;
-    public function __construct(\Rector\Php55\NodeFactory\AnonymousFunctionNodeFactory $anonymousFunctionNodeFactory, \Rector\Php55\RegexMatcher $regexMatcher)
+    public function __construct(AnonymousFunctionNodeFactory $anonymousFunctionNodeFactory, RegexMatcher $regexMatcher)
     {
         $this->regexMatcher = $regexMatcher;
         $this->anonymousFunctionNodeFactory = $anonymousFunctionNodeFactory;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('The /e modifier is no longer supported, use preg_replace_callback instead', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('The /e modifier is no longer supported, use preg_replace_callback instead', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -62,27 +62,27 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\FuncCall::class];
+        return [FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if (!$this->isName($node, 'preg_replace')) {
             return null;
         }
         $firstArgumentValue = $node->args[0]->value;
         $patternWithoutE = $this->regexMatcher->resolvePatternExpressionWithoutEIfFound($firstArgumentValue);
-        if (!$patternWithoutE instanceof \PhpParser\Node\Expr) {
+        if (!$patternWithoutE instanceof Expr) {
             return null;
         }
         $secondArgumentValue = $node->args[1]->value;
         $anonymousFunction = $this->anonymousFunctionNodeFactory->createAnonymousFunctionFromString($secondArgumentValue);
-        if (!$anonymousFunction instanceof \PhpParser\Node\Expr\Closure) {
+        if (!$anonymousFunction instanceof Closure) {
             return null;
         }
-        $node->name = new \PhpParser\Node\Name('preg_replace_callback');
+        $node->name = new Name('preg_replace_callback');
         $node->args[0]->value = $patternWithoutE;
         $node->args[1]->value = $anonymousFunction;
         return $node;

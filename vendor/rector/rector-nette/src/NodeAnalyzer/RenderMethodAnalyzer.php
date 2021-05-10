@@ -17,7 +17,7 @@ final class RenderMethodAnalyzer
      * @var BetterNodeFinder
      */
     private $betterNodeFinder;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
+    public function __construct(NodeNameResolver $nodeNameResolver, BetterNodeFinder $betterNodeFinder)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->betterNodeFinder = $betterNodeFinder;
@@ -25,10 +25,10 @@ final class RenderMethodAnalyzer
     /**
      * @return MethodCall[]
      */
-    public function machRenderMethodCalls(\PhpParser\Node\Stmt\ClassMethod $classMethod) : array
+    public function machRenderMethodCalls(ClassMethod $classMethod) : array
     {
         /** @var MethodCall[] $methodsCalls */
-        $methodsCalls = $this->betterNodeFinder->findInstanceOf((array) $classMethod->stmts, \PhpParser\Node\Expr\MethodCall::class);
+        $methodsCalls = $this->betterNodeFinder->findInstanceOf((array) $classMethod->stmts, MethodCall::class);
         $renderMethodCalls = [];
         foreach ($methodsCalls as $methodCall) {
             if ($this->nodeNameResolver->isName($methodCall->name, 'render')) {

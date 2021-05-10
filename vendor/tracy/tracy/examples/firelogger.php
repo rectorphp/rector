@@ -7,24 +7,24 @@ require __DIR__ . '/../src/tracy.php';
 use RectorPrefix20210510\Tracy\Debugger;
 $arr = [10, 20, ['key1' => 'val1', 'key2' => \true]];
 // will show in FireLogger
-\RectorPrefix20210510\Tracy\Debugger::fireLog('Hello World');
-\RectorPrefix20210510\Tracy\Debugger::fireLog($arr);
+Debugger::fireLog('Hello World');
+Debugger::fireLog($arr);
 function first($arg1, $arg2)
 {
-    \RectorPrefix20210510\second(\true, \false);
+    second(\true, \false);
 }
 function second($arg1, $arg2)
 {
-    \RectorPrefix20210510\third([1, 2, 3]);
+    third([1, 2, 3]);
 }
 function third($arg1)
 {
     throw new \Exception('The my exception', 123);
 }
 try {
-    \RectorPrefix20210510\first(10, 'any string');
+    first(10, 'any string');
 } catch (\Exception $e) {
-    \RectorPrefix20210510\Tracy\Debugger::fireLog($e);
+    Debugger::fireLog($e);
 }
 ?>
 <!DOCTYPE html><link rel="stylesheet" href="assets/style.css">

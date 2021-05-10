@@ -19,7 +19,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog http://cleancode.blog/2017/07/20/how-to-avoid-many-instances-in-singleton-pattern/
  * @see \Rector\Tests\Transform\Rector\Class_\ChangeSingletonToServiceRector\ChangeSingletonToServiceRectorTest
  */
-final class ChangeSingletonToServiceRector extends \Rector\Core\Rector\AbstractRector
+final class ChangeSingletonToServiceRector extends AbstractRector
 {
     /**
      * @var SingletonClassMethodAnalyzer
@@ -29,14 +29,14 @@ final class ChangeSingletonToServiceRector extends \Rector\Core\Rector\AbstractR
      * @var ClassAnalyzer
      */
     private $classAnalyzer;
-    public function __construct(\Rector\Transform\NodeAnalyzer\SingletonClassMethodAnalyzer $singletonClassMethodAnalyzer, \Rector\Core\NodeAnalyzer\ClassAnalyzer $classAnalyzer)
+    public function __construct(SingletonClassMethodAnalyzer $singletonClassMethodAnalyzer, ClassAnalyzer $classAnalyzer)
     {
         $this->singletonClassMethodAnalyzer = $singletonClassMethodAnalyzer;
         $this->classAnalyzer = $classAnalyzer;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change singleton class to normal class that can be registered as a service', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change singleton class to normal class that can be registered as a service', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     private static $instance;
@@ -70,48 +70,48 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Class_::class];
+        return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if ($this->classAnalyzer->isAnonymousClass($node)) {
             return null;
         }
         $propertyAndClassMethodName = $this->matchStaticPropertyFetchAndGetSingletonMethodName($node);
-        if (!$propertyAndClassMethodName instanceof \Rector\Transform\ValueObject\PropertyAndClassMethodName) {
+        if (!$propertyAndClassMethodName instanceof PropertyAndClassMethodName) {
             return null;
         }
         return $this->refactorClassStmts($node, $propertyAndClassMethodName);
     }
-    private function matchStaticPropertyFetchAndGetSingletonMethodName(\PhpParser\Node\Stmt\Class_ $class) : ?\Rector\Transform\ValueObject\PropertyAndClassMethodName
+    private function matchStaticPropertyFetchAndGetSingletonMethodName(Class_ $class) : ?PropertyAndClassMethodName
     {
         foreach ($class->getMethods() as $classMethod) {
             if (!$classMethod->isStatic()) {
                 continue;
             }
             $staticPropertyFetch = $this->singletonClassMethodAnalyzer->matchStaticPropertyFetch($classMethod);
-            if (!$staticPropertyFetch instanceof \PhpParser\Node\Expr\StaticPropertyFetch) {
+            if (!$staticPropertyFetch instanceof StaticPropertyFetch) {
                 return null;
             }
             /** @var string $propertyName */
             $propertyName = $this->getName($staticPropertyFetch);
             /** @var string $classMethodName */
             $classMethodName = $this->getName($classMethod);
-            return new \Rector\Transform\ValueObject\PropertyAndClassMethodName($propertyName, $classMethodName);
+            return new PropertyAndClassMethodName($propertyName, $classMethodName);
         }
         return null;
     }
-    private function refactorClassStmts(\PhpParser\Node\Stmt\Class_ $class, \Rector\Transform\ValueObject\PropertyAndClassMethodName $propertyAndClassMethodName) : \PhpParser\Node\Stmt\Class_
+    private function refactorClassStmts(Class_ $class, PropertyAndClassMethodName $propertyAndClassMethodName) : Class_
     {
         foreach ($class->getMethods() as $classMethod) {
             if ($this->isName($classMethod, $propertyAndClassMethodName->getClassMethodName())) {
                 $this->removeNodeFromStatements($class, $classMethod);
                 continue;
             }
-            if (!$this->isNames($classMethod, [\Rector\Core\ValueObject\MethodName::CONSTRUCT, \Rector\Core\ValueObject\MethodName::CLONE, '__wakeup'])) {
+            if (!$this->isNames($classMethod, [MethodName::CONSTRUCT, MethodName::CLONE, '__wakeup'])) {
                 continue;
             }
             if ($classMethod->isPublic()) {
@@ -127,7 +127,7 @@ CODE_SAMPLE
         $this->removePropertyByName($class, $propertyAndClassMethodName->getPropertyName());
         return $class;
     }
-    private function removePropertyByName(\PhpParser\Node\Stmt\Class_ $class, string $propertyName) : void
+    private function removePropertyByName(Class_ $class, string $propertyName) : void
     {
         foreach ($class->getProperties() as $property) {
             if (!$this->isName($property, $propertyName)) {

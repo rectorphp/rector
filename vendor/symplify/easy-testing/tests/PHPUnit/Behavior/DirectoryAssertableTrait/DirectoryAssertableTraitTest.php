@@ -7,7 +7,7 @@ use RectorPrefix20210510\PHPUnit\Framework\ExpectationFailedException;
 use RectorPrefix20210510\PHPUnit\Framework\TestCase;
 use RectorPrefix20210510\Symplify\EasyTesting\PHPUnit\Behavior\DirectoryAssertableTrait;
 use Throwable;
-final class DirectoryAssertableTraitTest extends \RectorPrefix20210510\PHPUnit\Framework\TestCase
+final class DirectoryAssertableTraitTest extends TestCase
 {
     use DirectoryAssertableTrait;
     public function testSuccess() : void
@@ -19,9 +19,9 @@ final class DirectoryAssertableTraitTest extends \RectorPrefix20210510\PHPUnit\F
         $throwable = null;
         try {
             $this->assertDirectoryEquals(__DIR__ . '/Fixture/first_directory', __DIR__ . '/Fixture/third_directory');
-        } catch (\Throwable $throwable) {
+        } catch (Throwable $throwable) {
         } finally {
-            $this->assertInstanceOf(\RectorPrefix20210510\PHPUnit\Framework\ExpectationFailedException::class, $throwable);
+            $this->assertInstanceOf(ExpectationFailedException::class, $throwable);
         }
     }
 }

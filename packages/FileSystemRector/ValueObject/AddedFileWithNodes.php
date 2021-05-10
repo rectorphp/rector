@@ -6,7 +6,7 @@ namespace Rector\FileSystemRector\ValueObject;
 use PhpParser\Node;
 use Rector\FileSystemRector\Contract\AddedFileInterface;
 use Rector\FileSystemRector\Contract\FileWithNodesInterface;
-final class AddedFileWithNodes implements \Rector\FileSystemRector\Contract\AddedFileInterface, \Rector\FileSystemRector\Contract\FileWithNodesInterface
+final class AddedFileWithNodes implements AddedFileInterface, FileWithNodesInterface
 {
     /**
      * @var string

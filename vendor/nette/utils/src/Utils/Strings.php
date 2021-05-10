@@ -38,9 +38,9 @@ class Strings
     public static function chr(int $code) : string
     {
         if ($code < 0 || $code >= 0xd800 && $code <= 0xdfff || $code > 0x10ffff) {
-            throw new \RectorPrefix20210510\Nette\InvalidArgumentException('Code point must be in range 0x0 to 0xD7FF or 0xE000 to 0x10FFFF.');
+            throw new Nette\InvalidArgumentException('Code point must be in range 0x0 to 0xD7FF or 0xE000 to 0x10FFFF.');
         } elseif (!\extension_loaded('iconv')) {
-            throw new \RectorPrefix20210510\Nette\NotSupportedException(__METHOD__ . '() requires ICONV extension that is not loaded.');
+            throw new Nette\NotSupportedException(__METHOD__ . '() requires ICONV extension that is not loaded.');
         }
         return \iconv('UTF-32BE', 'UTF-8//IGNORE', \pack('N', $code));
     }
@@ -49,14 +49,14 @@ class Strings
      */
     public static function startsWith(string $haystack, string $needle) : bool
     {
-        return \strncmp($haystack, $needle, \strlen($needle)) === 0;
+        return \strncmp($haystack, $needle, strlen($needle)) === 0;
     }
     /**
      * Ends the $haystack string with the suffix $needle?
      */
     public static function endsWith(string $haystack, string $needle) : bool
     {
-        return $needle === '' || \substr($haystack, -\strlen($needle)) === $needle;
+        return $needle === '' || \substr($haystack, -strlen($needle)) === $needle;
     }
     /**
      * Does $haystack contain $needle?
@@ -75,7 +75,7 @@ class Strings
             return \mb_substr($s, $start, $length, 'UTF-8');
             // MB is much faster
         } elseif (!\extension_loaded('iconv')) {
-            throw new \RectorPrefix20210510\Nette\NotSupportedException(__METHOD__ . '() requires extension ICONV or MBSTRING, neither is loaded.');
+            throw new Nette\NotSupportedException(__METHOD__ . '() requires extension ICONV or MBSTRING, neither is loaded.');
         } elseif ($length === null) {
             $length = self::length($s);
         } elseif ($start < 0 && $length < 0) {
@@ -278,7 +278,7 @@ class Strings
     public static function findPrefix(array $strings) : string
     {
         $first = \array_shift($strings);
-        for ($i = 0; $i < \strlen($first); $i++) {
+        for ($i = 0; $i < strlen($first); $i++) {
             foreach ($strings as $s) {
                 if (!isset($s[$i]) || $first[$i] !== $s[$i]) {
                     while ($i && $first[$i - 1] >= "€" && $first[$i] >= "€" && $first[$i] < "À") {
@@ -296,7 +296,7 @@ class Strings
      */
     public static function length(string $s) : int
     {
-        return \function_exists('mb_strlen') ? \mb_strlen($s, 'UTF-8') : \strlen(\utf8_decode($s));
+        return \function_exists('mb_strlen') ? \mb_strlen($s, 'UTF-8') : strlen(\utf8_decode($s));
     }
     /**
      * Removes all left and right side spaces (or the characters passed as second argument) from a UTF-8 encoded string.
@@ -330,7 +330,7 @@ class Strings
     public static function reverse(string $s) : string
     {
         if (!\extension_loaded('iconv')) {
-            throw new \RectorPrefix20210510\Nette\NotSupportedException(__METHOD__ . '() requires ICONV extension that is not loaded.');
+            throw new Nette\NotSupportedException(__METHOD__ . '() requires ICONV extension that is not loaded.');
         }
         return \iconv('UTF-32LE', 'UTF-8', \strrev(\iconv('UTF-8', 'UTF-32BE', $s)));
     }
@@ -350,7 +350,7 @@ class Strings
     public static function after(string $haystack, string $needle, int $nth = 1) : ?string
     {
         $pos = self::pos($haystack, $needle, $nth);
-        return $pos === null ? null : \substr($haystack, $pos + \strlen($needle));
+        return $pos === null ? null : \substr($haystack, $pos + strlen($needle));
     }
     /**
      * Returns position in bytes of $nth occurence of $needle in $haystack or null if the $needle was not found.
@@ -377,7 +377,7 @@ class Strings
                 $pos++;
             }
         } else {
-            $len = \strlen($haystack);
+            $len = strlen($haystack);
             if ($needle === '') {
                 return $len;
             }
@@ -386,7 +386,7 @@ class Strings
                 $pos--;
             }
         }
-        return \RectorPrefix20210510\Nette\Utils\Helpers::falseToNull($pos);
+        return Helpers::falseToNull($pos);
     }
     /**
      * Splits a string into array by the regular expression.
@@ -402,7 +402,7 @@ class Strings
      */
     public static function match(string $subject, string $pattern, int $flags = 0, int $offset = 0) : ?array
     {
-        if ($offset > \strlen($subject)) {
+        if ($offset > strlen($subject)) {
             return null;
         }
         return self::pcre('preg_match', [$pattern, $subject, &$m, $flags, $offset]) ? $m : null;
@@ -413,7 +413,7 @@ class Strings
      */
     public static function matchAll(string $subject, string $pattern, int $flags = 0, int $offset = 0) : array
     {
-        if ($offset > \strlen($subject)) {
+        if ($offset > strlen($subject)) {
             return [];
         }
         self::pcre('preg_match_all', [$pattern, $subject, &$m, $flags & \PREG_PATTERN_ORDER ? $flags : $flags | \PREG_SET_ORDER, $offset]);
@@ -426,12 +426,12 @@ class Strings
      */
     public static function replace(string $subject, $pattern, $replacement = '', int $limit = -1) : string
     {
-        if (\is_object($replacement) || \is_array($replacement)) {
+        if (is_object($replacement) || is_array($replacement)) {
             if (!\is_callable($replacement, \false, $textual)) {
-                throw new \RectorPrefix20210510\Nette\InvalidStateException("Callback '{$textual}' is not callable.");
+                throw new Nette\InvalidStateException("Callback '{$textual}' is not callable.");
             }
             return self::pcre('preg_replace_callback', [$pattern, $replacement, $subject, $limit]);
-        } elseif (\is_array($pattern) && \is_string(\key($pattern))) {
+        } elseif (is_array($pattern) && \is_string(\key($pattern))) {
             $replacement = \array_values($pattern);
             $pattern = \array_keys($pattern);
         }
@@ -440,12 +440,12 @@ class Strings
     /** @internal */
     public static function pcre(string $func, array $args)
     {
-        $res = \RectorPrefix20210510\Nette\Utils\Callback::invokeSafe($func, $args, function (string $message) use($args) : void {
+        $res = Callback::invokeSafe($func, $args, function (string $message) use($args) : void {
             // compile-time error, not detectable by preg_last_error
-            throw new \RectorPrefix20210510\Nette\Utils\RegexpException($message . ' in pattern: ' . \implode(' or ', (array) $args[0]));
+            throw new RegexpException($message . ' in pattern: ' . \implode(' or ', (array) $args[0]));
         });
         if (($code = \preg_last_error()) && ($res === null || !\in_array($func, ['preg_filter', 'preg_replace_callback', 'preg_replace'], \true))) {
-            throw new \RectorPrefix20210510\Nette\Utils\RegexpException((\RectorPrefix20210510\Nette\Utils\RegexpException::MESSAGES[$code] ?? 'Unknown error') . ' (pattern: ' . \implode(' or ', (array) $args[0]) . ')', $code);
+            throw new RegexpException((RegexpException::MESSAGES[$code] ?? 'Unknown error') . ' (pattern: ' . \implode(' or ', (array) $args[0]) . ')', $code);
         }
         return $res;
     }

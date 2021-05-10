@@ -15,7 +15,7 @@ namespace RectorPrefix20210510\Symfony\Component\Console\Exception;
  *
  * @author Jérôme Tamarelle <jerome@tamarelle.net>
  */
-class CommandNotFoundException extends \InvalidArgumentException implements \RectorPrefix20210510\Symfony\Component\Console\Exception\ExceptionInterface
+class CommandNotFoundException extends \InvalidArgumentException implements ExceptionInterface
 {
     private $alternatives;
     /**

@@ -20,7 +20,7 @@ final class PrivatesCaller
     {
         $this->ensureIsNotNull($object, __METHOD__);
         if (\is_string($object)) {
-            $reflectionClass = new \ReflectionClass($object);
+            $reflectionClass = new ReflectionClass($object);
             $object = $reflectionClass->newInstanceWithoutConstructor();
         }
         $methodReflection = $this->createAccessibleMethodReflection($object, $methodName);
@@ -34,7 +34,7 @@ final class PrivatesCaller
     {
         $this->ensureIsNotNull($object, __METHOD__);
         if (\is_string($object)) {
-            $reflectionClass = new \ReflectionClass($object);
+            $reflectionClass = new ReflectionClass($object);
             $object = $reflectionClass->newInstanceWithoutConstructor();
         }
         $methodReflection = $this->createAccessibleMethodReflection($object, $methodName);
@@ -44,9 +44,9 @@ final class PrivatesCaller
     /**
      * @param object $object
      */
-    private function createAccessibleMethodReflection($object, string $methodName) : \ReflectionMethod
+    private function createAccessibleMethodReflection($object, string $methodName) : ReflectionMethod
     {
-        $reflectionMethod = new \ReflectionMethod(\get_class($object), $methodName);
+        $reflectionMethod = new ReflectionMethod(\get_class($object), $methodName);
         $reflectionMethod->setAccessible(\true);
         return $reflectionMethod;
     }
@@ -59,6 +59,6 @@ final class PrivatesCaller
             return;
         }
         $errorMessage = \sprintf('Value passed to "%s()" method cannot be null', $location);
-        throw new \RectorPrefix20210510\Symplify\SymplifyKernel\Exception\ShouldNotHappenException($errorMessage);
+        throw new ShouldNotHappenException($errorMessage);
     }
 }

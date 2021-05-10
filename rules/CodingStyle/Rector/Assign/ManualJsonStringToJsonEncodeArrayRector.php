@@ -27,7 +27,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\CodingStyle\Rector\Assign\ManualJsonStringToJsonEncodeArrayRector\ManualJsonStringToJsonEncodeArrayRectorTest
  */
-final class ManualJsonStringToJsonEncodeArrayRector extends \Rector\Core\Rector\AbstractRector
+final class ManualJsonStringToJsonEncodeArrayRector extends AbstractRector
 {
     /**
      * @var string
@@ -55,16 +55,16 @@ final class ManualJsonStringToJsonEncodeArrayRector extends \Rector\Core\Rector\
      * @var JsonArrayFactory
      */
     private $jsonArrayFactory;
-    public function __construct(\Rector\CodingStyle\Node\ConcatJoiner $concatJoiner, \Rector\CodingStyle\Node\ConcatManipulator $concatManipulator, \Rector\CodingStyle\NodeFactory\JsonEncodeStaticCallFactory $jsonEncodeStaticCallFactory, \Rector\CodingStyle\NodeFactory\JsonArrayFactory $jsonArrayFactory)
+    public function __construct(ConcatJoiner $concatJoiner, ConcatManipulator $concatManipulator, JsonEncodeStaticCallFactory $jsonEncodeStaticCallFactory, JsonArrayFactory $jsonArrayFactory)
     {
         $this->concatJoiner = $concatJoiner;
         $this->concatManipulator = $concatManipulator;
         $this->jsonEncodeStaticCallFactory = $jsonEncodeStaticCallFactory;
         $this->jsonArrayFactory = $jsonArrayFactory;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Add extra space before new assign set', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add extra space before new assign set', [new CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run()
@@ -95,22 +95,22 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\Assign::class];
+        return [Assign::class];
     }
     /**
      * @param Assign $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        if ($node->expr instanceof \PhpParser\Node\Scalar\String_) {
+        if ($node->expr instanceof String_) {
             $stringValue = $node->expr->value;
             // A. full json string
             $isJsonString = $this->isJsonString($stringValue);
             if ($isJsonString) {
                 $jsonArray = $this->jsonArrayFactory->createFromJsonString($stringValue);
                 $jsonEncodeAssign = $this->jsonEncodeStaticCallFactory->createFromArray($node->var, $jsonArray);
-                $jsonDataVariable = new \PhpParser\Node\Expr\Variable('jsonData');
-                $jsonDataAssign = new \PhpParser\Node\Expr\Assign($jsonDataVariable, $jsonArray);
+                $jsonDataVariable = new Variable('jsonData');
+                $jsonDataAssign = new Assign($jsonDataVariable, $jsonArray);
                 $this->addNodeBeforeNode($jsonDataAssign, $node);
                 return $jsonEncodeAssign;
             }
@@ -119,10 +119,10 @@ CODE_SAMPLE
             $stringValue .= $concatExpressionJoinData->getString();
             return $this->removeNodesAndCreateJsonEncodeFromStringValue($concatExpressionJoinData->getNodesToRemove(), $stringValue, $concatExpressionJoinData->getPlaceholdersToNodes(), $node);
         }
-        if ($node->expr instanceof \PhpParser\Node\Expr\BinaryOp\Concat) {
+        if ($node->expr instanceof Concat) {
             // process only first concat
-            $parentNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-            if ($parentNode instanceof \PhpParser\Node\Expr\BinaryOp\Concat) {
+            $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+            if ($parentNode instanceof Concat) {
                 return null;
             }
             $concatStringAndPlaceholders = $this->concatJoiner->joinToStringAndPlaceholderNodes($node->expr);
@@ -137,24 +137,24 @@ CODE_SAMPLE
     }
     private function isJsonString(string $stringValue) : bool
     {
-        if (!(bool) \RectorPrefix20210510\Nette\Utils\Strings::match($stringValue, self::JSON_STRING_REGEX)) {
+        if (!(bool) Strings::match($stringValue, self::JSON_STRING_REGEX)) {
             return \false;
         }
         try {
-            return (bool) \RectorPrefix20210510\Nette\Utils\Json::decode($stringValue, \RectorPrefix20210510\Nette\Utils\Json::FORCE_ARRAY);
-        } catch (\RectorPrefix20210510\Nette\Utils\JsonException $jsonException) {
+            return (bool) Json::decode($stringValue, Json::FORCE_ARRAY);
+        } catch (JsonException $jsonException) {
             return \false;
         }
     }
-    private function collectContentAndPlaceholderNodesFromNextExpressions(\PhpParser\Node\Expr\Assign $assign) : \Rector\CodingStyle\ValueObject\ConcatExpressionJoinData
+    private function collectContentAndPlaceholderNodesFromNextExpressions(Assign $assign) : ConcatExpressionJoinData
     {
-        $concatExpressionJoinData = new \Rector\CodingStyle\ValueObject\ConcatExpressionJoinData();
+        $concatExpressionJoinData = new ConcatExpressionJoinData();
         $currentNode = $assign;
         while ($nextExprAndConcatItem = $this->matchNextExprAssignConcatToSameVariable($assign->var, $currentNode)) {
             $concatItemNode = $nextExprAndConcatItem->getConcatItemNode();
-            if ($concatItemNode instanceof \PhpParser\Node\Scalar\String_) {
+            if ($concatItemNode instanceof String_) {
                 $concatExpressionJoinData->addString($concatItemNode->value);
-            } elseif ($concatItemNode instanceof \PhpParser\Node\Expr\BinaryOp\Concat) {
+            } elseif ($concatItemNode instanceof Concat) {
                 $joinToStringAndPlaceholderNodes = $this->concatJoiner->joinToStringAndPlaceholderNodes($concatItemNode);
                 $content = $joinToStringAndPlaceholderNodes->getContent();
                 $concatExpressionJoinData->addString($content);
@@ -162,7 +162,7 @@ CODE_SAMPLE
                     /** @var string $placeholder */
                     $concatExpressionJoinData->addPlaceholderToNode($placeholder, $expr);
                 }
-            } elseif ($concatItemNode instanceof \PhpParser\Node\Expr) {
+            } elseif ($concatItemNode instanceof Expr) {
                 $objectHash = '____' . \spl_object_hash($concatItemNode) . '____';
                 $concatExpressionJoinData->addString($objectHash);
                 $concatExpressionJoinData->addPlaceholderToNode($objectHash, $concatItemNode);
@@ -170,7 +170,7 @@ CODE_SAMPLE
             $concatExpressionJoinData->addNodeToRemove($nextExprAndConcatItem->getRemovedExpr());
             // jump to next one
             $currentNode = $this->getNextExpression($currentNode);
-            if (!$currentNode instanceof \PhpParser\Node) {
+            if (!$currentNode instanceof Node) {
                 return $concatExpressionJoinData;
             }
         }
@@ -180,39 +180,39 @@ CODE_SAMPLE
      * @param Node[] $nodesToRemove
      * @param Expr[] $placeholderNodes
      */
-    private function removeNodesAndCreateJsonEncodeFromStringValue(array $nodesToRemove, string $stringValue, array $placeholderNodes, \PhpParser\Node\Expr\Assign $assign) : ?\PhpParser\Node\Expr\Assign
+    private function removeNodesAndCreateJsonEncodeFromStringValue(array $nodesToRemove, string $stringValue, array $placeholderNodes, Assign $assign) : ?Assign
     {
-        $stringValue = \RectorPrefix20210510\Nette\Utils\Strings::replace($stringValue, self::UNQUOTED_OBJECT_HASH_REGEX, '$1"$2"');
+        $stringValue = Strings::replace($stringValue, self::UNQUOTED_OBJECT_HASH_REGEX, '$1"$2"');
         if (!$this->isJsonString($stringValue)) {
             return null;
         }
         $this->removeNodes($nodesToRemove);
         $jsonArray = $this->jsonArrayFactory->createFromJsonStringAndPlaceholders($stringValue, $placeholderNodes);
-        $jsonDataVariable = new \PhpParser\Node\Expr\Variable('jsonData');
-        $jsonDataAssign = new \PhpParser\Node\Expr\Assign($jsonDataVariable, $jsonArray);
+        $jsonDataVariable = new Variable('jsonData');
+        $jsonDataAssign = new Assign($jsonDataVariable, $jsonArray);
         $this->addNodeBeforeNode($jsonDataAssign, $assign);
         return $this->jsonEncodeStaticCallFactory->createFromArray($assign->var, $jsonArray);
     }
     /**
      * @param Assign|ConcatAssign $currentNode
      */
-    private function matchNextExprAssignConcatToSameVariable(\PhpParser\Node\Expr $expr, \PhpParser\Node $currentNode) : ?\Rector\CodingStyle\ValueObject\NodeToRemoveAndConcatItem
+    private function matchNextExprAssignConcatToSameVariable(Expr $expr, Node $currentNode) : ?NodeToRemoveAndConcatItem
     {
         $nextExpression = $this->getNextExpression($currentNode);
-        if (!$nextExpression instanceof \PhpParser\Node\Stmt\Expression) {
+        if (!$nextExpression instanceof Expression) {
             return null;
         }
         $nextExpressionNode = $nextExpression->expr;
-        if ($nextExpressionNode instanceof \PhpParser\Node\Expr\AssignOp\Concat) {
+        if ($nextExpressionNode instanceof ConcatAssign) {
             // is assign to same variable?
             if (!$this->nodeComparator->areNodesEqual($expr, $nextExpressionNode->var)) {
                 return null;
             }
-            return new \Rector\CodingStyle\ValueObject\NodeToRemoveAndConcatItem($nextExpressionNode, $nextExpressionNode->expr);
+            return new NodeToRemoveAndConcatItem($nextExpressionNode, $nextExpressionNode->expr);
         }
         // $value = $value . '...';
-        if ($nextExpressionNode instanceof \PhpParser\Node\Expr\Assign) {
-            if (!$nextExpressionNode->expr instanceof \PhpParser\Node\Expr\BinaryOp\Concat) {
+        if ($nextExpressionNode instanceof Assign) {
+            if (!$nextExpressionNode->expr instanceof Concat) {
                 return null;
             }
             // is assign to same variable?
@@ -226,16 +226,16 @@ CODE_SAMPLE
             }
             // return all but first node
             $allButFirstConcatItem = $this->concatManipulator->removeFirstItemFromConcat($nextExpressionNode->expr);
-            return new \Rector\CodingStyle\ValueObject\NodeToRemoveAndConcatItem($nextExpressionNode, $allButFirstConcatItem);
+            return new NodeToRemoveAndConcatItem($nextExpressionNode, $allButFirstConcatItem);
         }
         return null;
     }
-    private function getNextExpression(\PhpParser\Node $node) : ?\PhpParser\Node
+    private function getNextExpression(Node $node) : ?Node
     {
-        $currentExpression = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CURRENT_STATEMENT);
-        if (!$currentExpression instanceof \PhpParser\Node\Stmt\Expression) {
+        $currentExpression = $node->getAttribute(AttributeKey::CURRENT_STATEMENT);
+        if (!$currentExpression instanceof Expression) {
             return null;
         }
-        return $currentExpression->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::NEXT_NODE);
+        return $currentExpression->getAttribute(AttributeKey::NEXT_NODE);
     }
 }

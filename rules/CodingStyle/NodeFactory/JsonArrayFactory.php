@@ -28,21 +28,21 @@ final class JsonArrayFactory
      * @var SimpleCallableNodeTraverser
      */
     private $simpleCallableNodeTraverser;
-    public function __construct(\Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\CodingStyle\NodeAnalyzer\ImplodeAnalyzer $implodeAnalyzer, \RectorPrefix20210510\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser)
+    public function __construct(NodeFactory $nodeFactory, ImplodeAnalyzer $implodeAnalyzer, SimpleCallableNodeTraverser $simpleCallableNodeTraverser)
     {
         $this->nodeFactory = $nodeFactory;
         $this->implodeAnalyzer = $implodeAnalyzer;
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
     }
-    public function createFromJsonString(string $stringValue) : \PhpParser\Node\Expr\Array_
+    public function createFromJsonString(string $stringValue) : Array_
     {
-        $array = \RectorPrefix20210510\Nette\Utils\Json::decode($stringValue, \RectorPrefix20210510\Nette\Utils\Json::FORCE_ARRAY);
+        $array = Json::decode($stringValue, Json::FORCE_ARRAY);
         return $this->nodeFactory->createArray($array);
     }
     /**
      * @param Expr[] $placeholderNodes
      */
-    public function createFromJsonStringAndPlaceholders(string $jsonString, array $placeholderNodes) : \PhpParser\Node\Expr\Array_
+    public function createFromJsonStringAndPlaceholders(string $jsonString, array $placeholderNodes) : Array_
     {
         $jsonArray = $this->createFromJsonString($jsonString);
         $this->replaceNodeObjectHashPlaceholdersWithNodes($jsonArray, $placeholderNodes);
@@ -51,14 +51,14 @@ final class JsonArrayFactory
     /**
      * @param Expr[] $placeholderNodes
      */
-    private function replaceNodeObjectHashPlaceholdersWithNodes(\PhpParser\Node\Expr\Array_ $array, array $placeholderNodes) : void
+    private function replaceNodeObjectHashPlaceholdersWithNodes(Array_ $array, array $placeholderNodes) : void
     {
         // traverse and replace placeholder by original nodes
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($array, function (\PhpParser\Node $node) use($placeholderNodes) : ?Expr {
-            if ($node instanceof \PhpParser\Node\Expr\Array_ && \count($node->items) === 1) {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($array, function (Node $node) use($placeholderNodes) : ?Expr {
+            if ($node instanceof Array_ && \count($node->items) === 1) {
                 $onlyItem = $node->items[0];
-                if (!$onlyItem instanceof \PhpParser\Node\Expr\ArrayItem) {
-                    throw new \Rector\Core\Exception\ShouldNotHappenException();
+                if (!$onlyItem instanceof ArrayItem) {
+                    throw new ShouldNotHappenException();
                 }
                 $placeholderNode = $this->matchPlaceholderNode($onlyItem->value, $placeholderNodes);
                 if ($placeholderNode && $this->implodeAnalyzer->isImplodeToJson($placeholderNode)) {
@@ -72,9 +72,9 @@ final class JsonArrayFactory
     /**
      * @param Expr[] $placeholderNodes
      */
-    private function matchPlaceholderNode(\PhpParser\Node $node, array $placeholderNodes) : ?\PhpParser\Node\Expr
+    private function matchPlaceholderNode(Node $node, array $placeholderNodes) : ?Expr
     {
-        if (!$node instanceof \PhpParser\Node\Scalar\String_) {
+        if (!$node instanceof String_) {
             return null;
         }
         return $placeholderNodes[$node->value] ?? null;

@@ -21,18 +21,18 @@ final class ClosureArrowFunctionAnalyzer
      * @var NodeComparator
      */
     private $nodeComparator;
-    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator)
+    public function __construct(BetterNodeFinder $betterNodeFinder, NodeComparator $nodeComparator)
     {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->nodeComparator = $nodeComparator;
     }
-    public function matchArrowFunctionExpr(\PhpParser\Node\Expr\Closure $closure) : ?\PhpParser\Node\Expr
+    public function matchArrowFunctionExpr(Closure $closure) : ?Expr
     {
         if (\count($closure->stmts) !== 1) {
             return null;
         }
         $onlyStmt = $closure->stmts[0];
-        if (!$onlyStmt instanceof \PhpParser\Node\Stmt\Return_) {
+        if (!$onlyStmt instanceof Return_) {
             return null;
         }
         /** @var Return_ $return */
@@ -45,13 +45,13 @@ final class ClosureArrowFunctionAnalyzer
         }
         return $return->expr;
     }
-    private function shouldSkipForUsedReferencedValue(\PhpParser\Node\Expr\Closure $closure, \PhpParser\Node\Expr $expr) : bool
+    private function shouldSkipForUsedReferencedValue(Closure $closure, Expr $expr) : bool
     {
         $referencedValues = $this->resolveReferencedUseVariablesFromClosure($closure);
         if ($referencedValues === []) {
             return \false;
         }
-        return (bool) $this->betterNodeFinder->findFirst([$expr], function (\PhpParser\Node $node) use($referencedValues) : bool {
+        return (bool) $this->betterNodeFinder->findFirst([$expr], function (Node $node) use($referencedValues) : bool {
             foreach ($referencedValues as $referencedValue) {
                 if ($this->nodeComparator->areNodesEqual($node, $referencedValue)) {
                     return \true;
@@ -63,7 +63,7 @@ final class ClosureArrowFunctionAnalyzer
     /**
      * @return Variable[]
      */
-    private function resolveReferencedUseVariablesFromClosure(\PhpParser\Node\Expr\Closure $closure) : array
+    private function resolveReferencedUseVariablesFromClosure(Closure $closure) : array
     {
         $referencedValues = [];
         /** @var ClosureUse $use */

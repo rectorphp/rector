@@ -22,7 +22,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\DowngradePhp71\Rector\List_\DowngradeKeysInListRector\DowngradeKeysInListRectorTest
  */
-final class DowngradeKeysInListRector extends \Rector\Core\Rector\AbstractRector
+final class DowngradeKeysInListRector extends AbstractRector
 {
     /**
      * @var InflectorSingularResolver
@@ -32,7 +32,7 @@ final class DowngradeKeysInListRector extends \Rector\Core\Rector\AbstractRector
      * @var ForeachAnalyzer
      */
     private $foreachAnalyzer;
-    public function __construct(\Rector\Naming\ExpectedNameResolver\InflectorSingularResolver $inflectorSingularResolver, \Rector\CodeQuality\NodeAnalyzer\ForeachAnalyzer $foreachAnalyzer)
+    public function __construct(InflectorSingularResolver $inflectorSingularResolver, ForeachAnalyzer $foreachAnalyzer)
     {
         $this->inflectorSingularResolver = $inflectorSingularResolver;
         $this->foreachAnalyzer = $foreachAnalyzer;
@@ -42,11 +42,11 @@ final class DowngradeKeysInListRector extends \Rector\Core\Rector\AbstractRector
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\List_::class, \PhpParser\Node\Expr\Array_::class];
+        return [List_::class, Array_::class];
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Extract keys in list to its own variable assignment', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Extract keys in list to its own variable assignment', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run(): void
@@ -78,29 +78,29 @@ CODE_SAMPLE
     /**
      * @param List_|Array_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        $parent = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-        if (!$parent instanceof \PhpParser\Node) {
+        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
+        if (!$parent instanceof Node) {
             return null;
         }
-        $parentExpression = $parent->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-        if (!$parentExpression instanceof \PhpParser\Node) {
+        $parentExpression = $parent->getAttribute(AttributeKey::PARENT_NODE);
+        if (!$parentExpression instanceof Node) {
             return null;
         }
         $assignExpressions = $this->processExtractToItsOwnVariable($node, $parent, $parentExpression);
         if ($assignExpressions === []) {
             return null;
         }
-        if ($parent instanceof \PhpParser\Node\Expr\Assign) {
+        if ($parent instanceof Assign) {
             $this->mirrorComments($assignExpressions[0], $parentExpression);
             $this->addNodesBeforeNode($assignExpressions, $node);
             $this->removeNode($parentExpression);
             return $node;
         }
-        if ($parent instanceof \PhpParser\Node\Stmt\Foreach_) {
+        if ($parent instanceof Foreach_) {
             $newValueVar = $this->getNewValueVar($parent);
-            $parent->valueVar = new \PhpParser\Node\Expr\Variable($newValueVar);
+            $parent->valueVar = new Variable($newValueVar);
             $stmts = $parent->stmts;
             if ($stmts === []) {
                 $parent->stmts = $assignExpressions;
@@ -115,22 +115,22 @@ CODE_SAMPLE
      * @param List_|Array_ $node
      * @return Expression[]
      */
-    private function processExtractToItsOwnVariable(\PhpParser\Node $node, \PhpParser\Node $parent, \PhpParser\Node $parentExpression) : array
+    private function processExtractToItsOwnVariable(Node $node, Node $parent, Node $parentExpression) : array
     {
         $items = $node->items;
         $assignExpressions = [];
         foreach ($items as $item) {
-            if (!$item instanceof \PhpParser\Node\Expr\ArrayItem) {
+            if (!$item instanceof ArrayItem) {
                 return [];
             }
             /** keyed and not keyed cannot be mixed, return early */
-            if (!$item->key instanceof \PhpParser\Node\Expr) {
+            if (!$item->key instanceof Expr) {
                 return [];
             }
-            if ($parentExpression instanceof \PhpParser\Node\Stmt\Expression && $parent instanceof \PhpParser\Node\Expr\Assign && $parent->var === $node) {
-                $assignExpressions[] = new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign($item->value, new \PhpParser\Node\Expr\ArrayDimFetch($parent->expr, $item->key)));
+            if ($parentExpression instanceof Expression && $parent instanceof Assign && $parent->var === $node) {
+                $assignExpressions[] = new Expression(new Assign($item->value, new ArrayDimFetch($parent->expr, $item->key)));
             }
-            if (!$parent instanceof \PhpParser\Node\Stmt\Foreach_) {
+            if (!$parent instanceof Foreach_) {
                 continue;
             }
             if ($parent->valueVar !== $node) {
@@ -140,13 +140,13 @@ CODE_SAMPLE
         }
         return $assignExpressions;
     }
-    private function getExpressionFromForeachValue(\PhpParser\Node\Stmt\Foreach_ $foreach, \PhpParser\Node\Expr\ArrayItem $arrayItem) : \PhpParser\Node\Stmt\Expression
+    private function getExpressionFromForeachValue(Foreach_ $foreach, ArrayItem $arrayItem) : Expression
     {
         $newValueVar = $this->getNewValueVar($foreach);
-        $assign = new \PhpParser\Node\Expr\Assign($arrayItem->value, new \PhpParser\Node\Expr\ArrayDimFetch(new \PhpParser\Node\Expr\Variable($newValueVar), $arrayItem->key));
-        return new \PhpParser\Node\Stmt\Expression($assign);
+        $assign = new Assign($arrayItem->value, new ArrayDimFetch(new Variable($newValueVar), $arrayItem->key));
+        return new Expression($assign);
     }
-    private function getNewValueVar(\PhpParser\Node\Stmt\Foreach_ $foreach, ?string $newValueVar = null) : string
+    private function getNewValueVar(Foreach_ $foreach, ?string $newValueVar = null) : string
     {
         if ($newValueVar === null) {
             $newValueVar = $this->inflectorSingularResolver->resolve((string) $this->getName($foreach->expr));

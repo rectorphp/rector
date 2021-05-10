@@ -23,7 +23,7 @@ final class ProjectComposerJsonPhpVersionResolver
      * @var PhpVersionFactory
      */
     private $phpVersionFactory;
-    public function __construct(\RectorPrefix20210510\Symplify\ComposerJsonManipulator\ComposerJsonFactory $composerJsonFactory, \RectorPrefix20210510\Composer\Semver\VersionParser $versionParser, \Rector\Core\Util\PhpVersionFactory $phpVersionFactory)
+    public function __construct(ComposerJsonFactory $composerJsonFactory, VersionParser $versionParser, PhpVersionFactory $phpVersionFactory)
     {
         $this->composerJsonFactory = $composerJsonFactory;
         $this->versionParser = $versionParser;

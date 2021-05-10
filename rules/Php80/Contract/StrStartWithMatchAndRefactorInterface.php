@@ -10,9 +10,9 @@ use PhpParser\Node\Expr\FuncCall;
 use Rector\Php80\ValueObject\StrStartsWith;
 interface StrStartWithMatchAndRefactorInterface
 {
-    public function match(\PhpParser\Node\Expr\BinaryOp $binaryOp) : ?\Rector\Php80\ValueObject\StrStartsWith;
+    public function match(BinaryOp $binaryOp) : ?StrStartsWith;
     /**
      * @return FuncCall|BooleanNot|null
      */
-    public function refactorStrStartsWith(\Rector\Php80\ValueObject\StrStartsWith $strStartsWith) : ?\PhpParser\Node;
+    public function refactorStrStartsWith(StrStartsWith $strStartsWith) : ?Node;
 }

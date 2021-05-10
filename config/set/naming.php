@@ -13,15 +13,15 @@ use Rector\Naming\Rector\Foreach_\RenameForeachValueVariableToMatchExprVariableR
 use Rector\Naming\Rector\Foreach_\RenameForeachValueVariableToMatchMethodCallReturnTypeRector;
 use Rector\Naming\Rector\Property\MakeBoolPropertyRespectIsHasWasMethodNamingRector;
 use RectorPrefix20210510\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-return static function (\RectorPrefix20210510\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
+return static function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
-    $services->set(\Rector\Naming\Rector\ClassMethod\RenameParamToMatchTypeRector::class);
-    $services->set(\Rector\Naming\Rector\Class_\RenamePropertyToMatchTypeRector::class);
-    $services->set(\Rector\Naming\Rector\ClassMethod\RenameVariableToMatchNewTypeRector::class);
-    $services->set(\Rector\Naming\Rector\Assign\RenameVariableToMatchMethodCallReturnTypeRector::class);
-    $services->set(\Rector\Naming\Rector\ClassMethod\MakeGetterClassMethodNameStartWithGetRector::class);
-    $services->set(\Rector\Naming\Rector\ClassMethod\MakeIsserClassMethodNameStartWithIsRector::class);
-    $services->set(\Rector\Naming\Rector\Foreach_\RenameForeachValueVariableToMatchMethodCallReturnTypeRector::class);
-    $services->set(\Rector\Naming\Rector\Property\MakeBoolPropertyRespectIsHasWasMethodNamingRector::class);
-    $services->set(\Rector\Naming\Rector\Foreach_\RenameForeachValueVariableToMatchExprVariableRector::class);
+    $services->set(RenameParamToMatchTypeRector::class);
+    $services->set(RenamePropertyToMatchTypeRector::class);
+    $services->set(RenameVariableToMatchNewTypeRector::class);
+    $services->set(RenameVariableToMatchMethodCallReturnTypeRector::class);
+    $services->set(MakeGetterClassMethodNameStartWithGetRector::class);
+    $services->set(MakeIsserClassMethodNameStartWithIsRector::class);
+    $services->set(RenameForeachValueVariableToMatchMethodCallReturnTypeRector::class);
+    $services->set(MakeBoolPropertyRespectIsHasWasMethodNamingRector::class);
+    $services->set(RenameForeachValueVariableToMatchExprVariableRector::class);
 };

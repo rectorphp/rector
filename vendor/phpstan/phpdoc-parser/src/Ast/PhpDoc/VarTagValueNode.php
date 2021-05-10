@@ -14,7 +14,7 @@ class VarTagValueNode implements \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValue
     public $variableName;
     /** @var string (may be empty) */
     public $description;
-    public function __construct(\PHPStan\PhpDocParser\Ast\Type\TypeNode $type, string $variableName, string $description)
+    public function __construct(TypeNode $type, string $variableName, string $description)
     {
         $this->type = $type;
         $this->variableName = $variableName;

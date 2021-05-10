@@ -24,7 +24,7 @@ final class NodeAddingPostRector extends \Rector\PostRector\Rector\AbstractPostR
      * @var NodesToAddCollector
      */
     private $nodesToAddCollector;
-    public function __construct(\Rector\PostRector\Collector\NodesToAddCollector $nodesToAddCollector)
+    public function __construct(NodesToAddCollector $nodesToAddCollector)
     {
         $this->nodesToAddCollector = $nodesToAddCollector;
     }
@@ -35,7 +35,7 @@ final class NodeAddingPostRector extends \Rector\PostRector\Rector\AbstractPostR
     /**
      * @return array<int|string, Node>|Node
      */
-    public function leaveNode(\PhpParser\Node $node)
+    public function leaveNode(Node $node)
     {
         $newNodes = [$node];
         $nodesToAddAfter = $this->nodesToAddCollector->getNodesToAddAfterNode($node);
@@ -53,9 +53,9 @@ final class NodeAddingPostRector extends \Rector\PostRector\Rector\AbstractPostR
         }
         return $newNodes;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Add nodes on weird positions', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add nodes on weird positions', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($value)

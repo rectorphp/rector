@@ -58,7 +58,7 @@ final class Indent
     {
         $validIndent = \preg_match(self::VALID_INDENT_REGEX, $string);
         if ($validIndent !== 1) {
-            throw \Rector\FileFormatter\Exception\InvalidIndentStringException::fromString($string);
+            throw InvalidIndentStringException::fromString($string);
         }
         return new self($string);
     }
@@ -82,10 +82,10 @@ final class Indent
     public static function fromSizeAndStyle(int $size, string $style)
     {
         if ($size < self::MINIMUM_SIZE) {
-            throw \Rector\FileFormatter\Exception\InvalidIndentSizeException::fromSizeAndMinimumSize($size, self::MINIMUM_SIZE);
+            throw InvalidIndentSizeException::fromSizeAndMinimumSize($size, self::MINIMUM_SIZE);
         }
         if (!\array_key_exists($style, self::CHARACTERS)) {
-            throw \Rector\FileFormatter\Exception\InvalidIndentStyleException::fromStyleAndAllowedStyles($style, \array_keys(self::CHARACTERS));
+            throw InvalidIndentStyleException::fromStyleAndAllowedStyles($style, \array_keys(self::CHARACTERS));
         }
         $value = \str_repeat(self::CHARACTERS[$style], $size);
         return new self($value);
@@ -99,7 +99,7 @@ final class Indent
         if ($validIndent === 1) {
             return self::fromString($match['indent']);
         }
-        throw \Rector\FileFormatter\Exception\ParseIndentException::fromString($string);
+        throw ParseIndentException::fromString($string);
     }
     public function getIndentSize() : int
     {
@@ -115,6 +115,6 @@ final class Indent
     }
     private function startsWithSpace() : bool
     {
-        return \RectorPrefix20210510\Nette\Utils\Strings::startsWith($this->string, ' ');
+        return Strings::startsWith($this->string, ' ');
     }
 }

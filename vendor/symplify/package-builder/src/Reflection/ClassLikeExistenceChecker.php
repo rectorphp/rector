@@ -36,7 +36,7 @@ final class ClassLikeExistenceChecker
         if (\in_array($classLikeName, $this->sensitiveNonExistingClasses, \true)) {
             return \false;
         }
-        $reflectionClass = new \ReflectionClass($classLikeName);
+        $reflectionClass = new ReflectionClass($classLikeName);
         if ($classLikeName !== $reflectionClass->getName()) {
             $this->sensitiveNonExistingClasses[] = $classLikeName;
             return \false;

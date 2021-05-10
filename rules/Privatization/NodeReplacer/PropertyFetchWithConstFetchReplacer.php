@@ -36,7 +36,7 @@ final class PropertyFetchWithConstFetchReplacer
      * @var NodeFactory
      */
     private $nodeFactory;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \RectorPrefix20210510\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer $propertyFetchAnalyzer, \Rector\Privatization\Naming\ConstantNaming $constantNaming, \Rector\Core\PhpParser\Node\NodeFactory $nodeFactory)
+    public function __construct(NodeNameResolver $nodeNameResolver, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, PropertyFetchAnalyzer $propertyFetchAnalyzer, ConstantNaming $constantNaming, NodeFactory $nodeFactory)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
@@ -44,12 +44,12 @@ final class PropertyFetchWithConstFetchReplacer
         $this->constantNaming = $constantNaming;
         $this->nodeFactory = $nodeFactory;
     }
-    public function replace(\PhpParser\Node\Stmt\Class_ $class, \PhpParser\Node\Stmt\Property $property) : void
+    public function replace(Class_ $class, Property $property) : void
     {
         $propertyProperty = $property->props[0];
         $propertyName = $this->nodeNameResolver->getName($property);
         $constantName = $this->constantNaming->createFromProperty($propertyProperty);
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($class, function (\PhpParser\Node $node) use($propertyName, $constantName) : ?ClassConstFetch {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($class, function (Node $node) use($propertyName, $constantName) : ?ClassConstFetch {
             if (!$this->propertyFetchAnalyzer->isLocalPropertyFetch($node)) {
                 return null;
             }

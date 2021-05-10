@@ -16,7 +16,7 @@ namespace RectorPrefix20210510\Symfony\Component\Console\Input;
  *
  * @author Robin Chalas <robin.chalas@gmail.com>
  */
-interface StreamableInputInterface extends \RectorPrefix20210510\Symfony\Component\Console\Input\InputInterface
+interface StreamableInputInterface extends InputInterface
 {
     /**
      * Sets the input stream to read from when interacting with the user.

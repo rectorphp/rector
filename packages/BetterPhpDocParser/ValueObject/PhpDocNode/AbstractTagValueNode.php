@@ -10,11 +10,11 @@ use Rector\Core\Exception\ShouldNotHappenException;
  * @deprecated
  * Just for back compatibility
  */
-abstract class AbstractTagValueNode implements \PHPStan\PhpDocParser\Ast\Node
+abstract class AbstractTagValueNode implements Node
 {
     use NodeAttributes;
     public function __toString() : string
     {
-        throw new \Rector\Core\Exception\ShouldNotHappenException('Implement in child class');
+        throw new ShouldNotHappenException('Implement in child class');
     }
 }

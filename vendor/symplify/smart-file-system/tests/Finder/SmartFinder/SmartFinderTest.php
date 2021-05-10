@@ -8,7 +8,7 @@ use RectorPrefix20210510\PHPUnit\Framework\TestCase;
 use RectorPrefix20210510\Symplify\SmartFileSystem\FileSystemFilter;
 use RectorPrefix20210510\Symplify\SmartFileSystem\Finder\FinderSanitizer;
 use RectorPrefix20210510\Symplify\SmartFileSystem\Finder\SmartFinder;
-final class SmartFinderTest extends \RectorPrefix20210510\PHPUnit\Framework\TestCase
+final class SmartFinderTest extends TestCase
 {
     /**
      * @var SmartFinder
@@ -16,7 +16,7 @@ final class SmartFinderTest extends \RectorPrefix20210510\PHPUnit\Framework\Test
     private $smartFinder;
     protected function setUp() : void
     {
-        $this->smartFinder = new \RectorPrefix20210510\Symplify\SmartFileSystem\Finder\SmartFinder(new \RectorPrefix20210510\Symplify\SmartFileSystem\Finder\FinderSanitizer(), new \RectorPrefix20210510\Symplify\SmartFileSystem\FileSystemFilter());
+        $this->smartFinder = new SmartFinder(new FinderSanitizer(), new FileSystemFilter());
     }
     /**
      * @param string[] $paths
@@ -27,7 +27,7 @@ final class SmartFinderTest extends \RectorPrefix20210510\PHPUnit\Framework\Test
         $fileInfos = $this->smartFinder->find($paths, $suffix);
         $this->assertCount($expectedCount, $fileInfos);
     }
-    public function provideData() : \Iterator
+    public function provideData() : Iterator
     {
         (yield [[__DIR__ . '/Fixture'], '*.twig', 2]);
         (yield [[__DIR__ . '/Fixture'], '*.txt', 1]);

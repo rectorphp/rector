@@ -38,9 +38,9 @@ final class ArgumentDefaultValueReplacer
         $this->valueBefore = $valueBefore;
         $this->valueAfter = $valueAfter;
     }
-    public function getObjectType() : \PHPStan\Type\ObjectType
+    public function getObjectType() : ObjectType
     {
-        return new \PHPStan\Type\ObjectType($this->class);
+        return new ObjectType($this->class);
     }
     public function getMethod() : string
     {

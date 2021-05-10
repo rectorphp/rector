@@ -24,9 +24,9 @@ trait ParentTrait
     public final function parent(string $parent)
     {
         if (!$this->allowParent) {
-            throw new \RectorPrefix20210510\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException(\sprintf('A parent cannot be defined when either "_instanceof" or "_defaults" are also defined for service prototype "%s".', $this->id));
+            throw new InvalidArgumentException(\sprintf('A parent cannot be defined when either "_instanceof" or "_defaults" are also defined for service prototype "%s".', $this->id));
         }
-        if ($this->definition instanceof \RectorPrefix20210510\Symfony\Component\DependencyInjection\ChildDefinition) {
+        if ($this->definition instanceof ChildDefinition) {
             $this->definition->setParent($parent);
         } else {
             // cast Definition to ChildDefinition

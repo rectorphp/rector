@@ -10,17 +10,17 @@ use PhpParser\Node\Stmt\Foreach_;
 use Rector\Core\Exception\ShouldNotHappenException;
 final class ForeachFactory
 {
-    public function createFromFor(\PhpParser\Node\Stmt\For_ $for, string $iteratedVariableName, ?\PhpParser\Node\Expr $iteratedExpr, ?string $keyValueName) : \PhpParser\Node\Stmt\Foreach_
+    public function createFromFor(For_ $for, string $iteratedVariableName, ?Expr $iteratedExpr, ?string $keyValueName) : Foreach_
     {
         if ($iteratedExpr === null) {
-            throw new \Rector\Core\Exception\ShouldNotHappenException();
+            throw new ShouldNotHappenException();
         }
         if ($keyValueName === null) {
-            throw new \Rector\Core\Exception\ShouldNotHappenException();
+            throw new ShouldNotHappenException();
         }
-        $foreach = new \PhpParser\Node\Stmt\Foreach_($iteratedExpr, new \PhpParser\Node\Expr\Variable($iteratedVariableName));
+        $foreach = new Foreach_($iteratedExpr, new Variable($iteratedVariableName));
         $foreach->stmts = $for->stmts;
-        $foreach->keyVar = new \PhpParser\Node\Expr\Variable($keyValueName);
+        $foreach->keyVar = new Variable($keyValueName);
         return $foreach;
     }
 }

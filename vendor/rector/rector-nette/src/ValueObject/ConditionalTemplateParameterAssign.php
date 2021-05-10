@@ -14,12 +14,12 @@ final class ConditionalTemplateParameterAssign
      * @var string
      */
     private $parameterName;
-    public function __construct(\PhpParser\Node\Expr\Assign $assign, string $parameterName)
+    public function __construct(Assign $assign, string $parameterName)
     {
         $this->assign = $assign;
         $this->parameterName = $parameterName;
     }
-    public function getAssign() : \PhpParser\Node\Expr\Assign
+    public function getAssign() : Assign
     {
         return $this->assign;
     }

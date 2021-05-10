@@ -8,7 +8,7 @@ final class MatchTokenEmulator extends \PhpParser\Lexer\TokenEmulator\KeywordEmu
 {
     public function getPhpVersion() : string
     {
-        return \PhpParser\Lexer\Emulative::PHP_8_0;
+        return Emulative::PHP_8_0;
     }
     public function getKeywordString() : string
     {

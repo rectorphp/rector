@@ -18,7 +18,7 @@ final class PackageVersionProvider
         try {
             $version = $this->getVersion($packageName, 'symplify/symplify');
             return $version->getPrettyVersion() ?: 'Unknown';
-        } catch (\OutOfBoundsException|\RectorPrefix20210510\PharIo\Version\InvalidVersionException $exceptoin) {
+        } catch (OutOfBoundsException|InvalidVersionException $exceptoin) {
             return 'Unknown';
         }
     }
@@ -28,12 +28,12 @@ final class PackageVersionProvider
      * @see https://github.com/symplify/symplify/pull/2901#issuecomment-771536136
      * @see https://github.com/Jean85/pretty-package-versions/pull/16#issuecomment-620550459
      */
-    private function getVersion(string $packageName, string $replacingPackageName) : \RectorPrefix20210510\Jean85\Version
+    private function getVersion(string $packageName, string $replacingPackageName) : Version
     {
         try {
-            return \RectorPrefix20210510\Jean85\PrettyVersions::getVersion($packageName);
-        } catch (\OutOfBoundsException|\RectorPrefix20210510\Jean85\Exception\ReplacedPackageException $exception) {
-            return \RectorPrefix20210510\Jean85\PrettyVersions::getVersion($replacingPackageName);
+            return PrettyVersions::getVersion($packageName);
+        } catch (OutOfBoundsException|ReplacedPackageException $exception) {
+            return PrettyVersions::getVersion($replacingPackageName);
         }
     }
 }

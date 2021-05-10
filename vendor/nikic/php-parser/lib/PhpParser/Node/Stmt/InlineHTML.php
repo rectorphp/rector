@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace PhpParser\Node\Stmt;
 
 use PhpParser\Node\Stmt;
-class InlineHTML extends \PhpParser\Node\Stmt
+class InlineHTML extends Stmt
 {
     /** @var string String */
     public $value;

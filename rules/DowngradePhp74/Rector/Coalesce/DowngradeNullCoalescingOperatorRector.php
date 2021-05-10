@@ -14,11 +14,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://wiki.php.net/rfc/null_coalesce_equal_operator
  * @see \Rector\Tests\DowngradePhp74\Rector\Coalesce\DowngradeNullCoalescingOperatorRector\DowngradeNullCoalescingOperatorRectorTest
  */
-final class DowngradeNullCoalescingOperatorRector extends \Rector\Core\Rector\AbstractRector
+final class DowngradeNullCoalescingOperatorRector extends AbstractRector
 {
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove null coalescing operator ??=', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove null coalescing operator ??=', [new CodeSample(<<<'CODE_SAMPLE'
 $array = [];
 $array['user_id'] ??= 'value';
 CODE_SAMPLE
@@ -33,13 +33,13 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\AssignOp\Coalesce::class];
+        return [AssignCoalesce::class];
     }
     /**
      * @param AssignCoalesce $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        return new \PhpParser\Node\Expr\Assign($node->var, new \PhpParser\Node\Expr\BinaryOp\Coalesce($node->var, $node->expr));
+        return new Assign($node->var, new Coalesce($node->var, $node->expr));
     }
 }

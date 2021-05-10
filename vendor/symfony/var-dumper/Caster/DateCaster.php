@@ -21,24 +21,24 @@ use RectorPrefix20210510\Symfony\Component\VarDumper\Cloner\Stub;
 class DateCaster
 {
     private const PERIOD_LIMIT = 3;
-    public static function castDateTime(\DateTimeInterface $d, array $a, \RectorPrefix20210510\Symfony\Component\VarDumper\Cloner\Stub $stub, bool $isNested, int $filter)
+    public static function castDateTime(\DateTimeInterface $d, array $a, Stub $stub, bool $isNested, int $filter)
     {
-        $prefix = \RectorPrefix20210510\Symfony\Component\VarDumper\Caster\Caster::PREFIX_VIRTUAL;
+        $prefix = Caster::PREFIX_VIRTUAL;
         $location = $d->getTimezone()->getLocation();
         $fromNow = (new \DateTime())->diff($d);
         $title = $d->format('l, F j, Y') . "\n" . self::formatInterval($fromNow) . ' from now' . ($location ? $d->format('I') ? "\nDST On" : "\nDST Off" : '');
-        unset($a[\RectorPrefix20210510\Symfony\Component\VarDumper\Caster\Caster::PREFIX_DYNAMIC . 'date'], $a[\RectorPrefix20210510\Symfony\Component\VarDumper\Caster\Caster::PREFIX_DYNAMIC . 'timezone'], $a[\RectorPrefix20210510\Symfony\Component\VarDumper\Caster\Caster::PREFIX_DYNAMIC . 'timezone_type']);
-        $a[$prefix . 'date'] = new \RectorPrefix20210510\Symfony\Component\VarDumper\Caster\ConstStub(self::formatDateTime($d, $location ? ' e (P)' : ' P'), $title);
+        unset($a[Caster::PREFIX_DYNAMIC . 'date'], $a[Caster::PREFIX_DYNAMIC . 'timezone'], $a[Caster::PREFIX_DYNAMIC . 'timezone_type']);
+        $a[$prefix . 'date'] = new ConstStub(self::formatDateTime($d, $location ? ' e (P)' : ' P'), $title);
         $stub->class .= $d->format(' @U');
         return $a;
     }
-    public static function castInterval(\DateInterval $interval, array $a, \RectorPrefix20210510\Symfony\Component\VarDumper\Cloner\Stub $stub, bool $isNested, int $filter)
+    public static function castInterval(\DateInterval $interval, array $a, Stub $stub, bool $isNested, int $filter)
     {
         $now = new \DateTimeImmutable();
         $numberOfSeconds = $now->add($interval)->getTimestamp() - $now->getTimestamp();
         $title = \number_format($numberOfSeconds, 0, '.', ' ') . 's';
-        $i = [\RectorPrefix20210510\Symfony\Component\VarDumper\Caster\Caster::PREFIX_VIRTUAL . 'interval' => new \RectorPrefix20210510\Symfony\Component\VarDumper\Caster\ConstStub(self::formatInterval($interval), $title)];
-        return $filter & \RectorPrefix20210510\Symfony\Component\VarDumper\Caster\Caster::EXCLUDE_VERBOSE ? $i : $i + $a;
+        $i = [Caster::PREFIX_VIRTUAL . 'interval' => new ConstStub(self::formatInterval($interval), $title)];
+        return $filter & Caster::EXCLUDE_VERBOSE ? $i : $i + $a;
     }
     private static function formatInterval(\DateInterval $i) : string
     {
@@ -54,15 +54,15 @@ class DateCaster
         $format = '%R ' === $format ? '0s' : $format;
         return $i->format(\rtrim($format));
     }
-    public static function castTimeZone(\DateTimeZone $timeZone, array $a, \RectorPrefix20210510\Symfony\Component\VarDumper\Cloner\Stub $stub, bool $isNested, int $filter)
+    public static function castTimeZone(\DateTimeZone $timeZone, array $a, Stub $stub, bool $isNested, int $filter)
     {
         $location = $timeZone->getLocation();
         $formatted = (new \DateTime('now', $timeZone))->format($location ? 'e (P)' : 'P');
         $title = $location && \extension_loaded('intl') ? \Locale::getDisplayRegion('-' . $location['country_code']) : '';
-        $z = [\RectorPrefix20210510\Symfony\Component\VarDumper\Caster\Caster::PREFIX_VIRTUAL . 'timezone' => new \RectorPrefix20210510\Symfony\Component\VarDumper\Caster\ConstStub($formatted, $title)];
-        return $filter & \RectorPrefix20210510\Symfony\Component\VarDumper\Caster\Caster::EXCLUDE_VERBOSE ? $z : $z + $a;
+        $z = [Caster::PREFIX_VIRTUAL . 'timezone' => new ConstStub($formatted, $title)];
+        return $filter & Caster::EXCLUDE_VERBOSE ? $z : $z + $a;
     }
-    public static function castPeriod(\DatePeriod $p, array $a, \RectorPrefix20210510\Symfony\Component\VarDumper\Cloner\Stub $stub, bool $isNested, int $filter)
+    public static function castPeriod(\DatePeriod $p, array $a, Stub $stub, bool $isNested, int $filter)
     {
         $dates = [];
         foreach (clone $p as $i => $d) {
@@ -74,8 +74,8 @@ class DateCaster
             $dates[] = \sprintf('%s) %s', $i + 1, self::formatDateTime($d));
         }
         $period = \sprintf('every %s, from %s (%s) %s', self::formatInterval($p->getDateInterval()), self::formatDateTime($p->getStartDate()), $p->include_start_date ? 'included' : 'excluded', ($end = $p->getEndDate()) ? 'to ' . self::formatDateTime($end) : 'recurring ' . $p->recurrences . ' time/s');
-        $p = [\RectorPrefix20210510\Symfony\Component\VarDumper\Caster\Caster::PREFIX_VIRTUAL . 'period' => new \RectorPrefix20210510\Symfony\Component\VarDumper\Caster\ConstStub($period, \implode("\n", $dates))];
-        return $filter & \RectorPrefix20210510\Symfony\Component\VarDumper\Caster\Caster::EXCLUDE_VERBOSE ? $p : $p + $a;
+        $p = [Caster::PREFIX_VIRTUAL . 'period' => new ConstStub($period, \implode("\n", $dates))];
+        return $filter & Caster::EXCLUDE_VERBOSE ? $p : $p + $a;
     }
     private static function formatDateTime(\DateTimeInterface $d, string $extra = '') : string
     {

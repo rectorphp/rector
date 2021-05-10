@@ -19,81 +19,81 @@ use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Traversable;
 final class UnionTypeAnalyzer
 {
-    public function analyseForNullableAndIterable(\PHPStan\Type\UnionType $unionType) : ?\Rector\PHPStanStaticTypeMapper\ValueObject\UnionTypeAnalysis
+    public function analyseForNullableAndIterable(UnionType $unionType) : ?UnionTypeAnalysis
     {
         $isNullableType = \false;
         $hasIterable = \false;
         $hasArray = \false;
         foreach ($unionType->getTypes() as $unionedType) {
-            if ($unionedType instanceof \PHPStan\Type\IterableType) {
+            if ($unionedType instanceof IterableType) {
                 $hasIterable = \true;
                 continue;
             }
-            if ($unionedType instanceof \PHPStan\Type\ArrayType) {
+            if ($unionedType instanceof ArrayType) {
                 $hasArray = \true;
                 continue;
             }
-            if ($unionedType instanceof \PHPStan\Type\NullType) {
+            if ($unionedType instanceof NullType) {
                 $isNullableType = \true;
                 continue;
             }
-            if ($unionedType instanceof \PHPStan\Type\ObjectType && $unionedType->getClassName() === \Traversable::class) {
+            if ($unionedType instanceof ObjectType && $unionedType->getClassName() === Traversable::class) {
                 $hasIterable = \true;
                 continue;
             }
             return null;
         }
-        return new \Rector\PHPStanStaticTypeMapper\ValueObject\UnionTypeAnalysis($isNullableType, $hasIterable, $hasArray);
+        return new UnionTypeAnalysis($isNullableType, $hasIterable, $hasArray);
     }
-    public function hasTypeClassNameOnly(\PHPStan\Type\UnionType $unionType) : bool
+    public function hasTypeClassNameOnly(UnionType $unionType) : bool
     {
         foreach ($unionType->getTypes() as $unionedType) {
-            if (!$unionedType instanceof \PHPStan\Type\TypeWithClassName) {
+            if (!$unionedType instanceof TypeWithClassName) {
                 return \false;
             }
         }
         return \true;
     }
-    public function hasObjectWithoutClassType(\PHPStan\Type\UnionType $unionType) : bool
+    public function hasObjectWithoutClassType(UnionType $unionType) : bool
     {
         $types = $unionType->getTypes();
         foreach ($types as $type) {
-            if ($type instanceof \PHPStan\Type\ObjectWithoutClassType) {
+            if ($type instanceof ObjectWithoutClassType) {
                 return \true;
             }
         }
         return \false;
     }
-    public function hasObjectWithoutClassTypeWithOnlyFullyQualifiedObjectType(\PHPStan\Type\UnionType $unionType) : bool
+    public function hasObjectWithoutClassTypeWithOnlyFullyQualifiedObjectType(UnionType $unionType) : bool
     {
         $types = $unionType->getTypes();
         foreach ($types as $type) {
-            if ($type instanceof \PHPStan\Type\ObjectWithoutClassType) {
+            if ($type instanceof ObjectWithoutClassType) {
                 continue;
             }
-            if (!$type instanceof \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType) {
+            if (!$type instanceof FullyQualifiedObjectType) {
                 return \false;
             }
         }
         return \true;
     }
-    public function isScalar(\PHPStan\Type\UnionType $unionType) : bool
+    public function isScalar(UnionType $unionType) : bool
     {
         $types = $unionType->getTypes();
         if (\count($types) !== 4) {
             return \false;
         }
         foreach ($types as $type) {
-            if ($type instanceof \PHPStan\Type\StringType) {
+            if ($type instanceof StringType) {
                 continue;
             }
-            if ($type instanceof \PHPStan\Type\FloatType) {
+            if ($type instanceof FloatType) {
                 continue;
             }
-            if ($type instanceof \PHPStan\Type\IntegerType) {
+            if ($type instanceof IntegerType) {
                 continue;
             }
-            if ($type instanceof \PHPStan\Type\BooleanType) {
+            if ($type instanceof BooleanType) {
                 continue;
             }
             return \false;

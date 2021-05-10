@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace PhpParser\Node\Stmt;
 
 use PhpParser\Node;
-class Unset_ extends \PhpParser\Node\Stmt
+class Unset_ extends Node\Stmt
 {
     /** @var Node\Expr[] Variables to unset */
     public $vars;

@@ -16,7 +16,7 @@ namespace RectorPrefix20210510\Symfony\Component\Config\Resource;
  *
  * @author Matthias Pigulla <mp@webfactory.de>
  */
-interface SelfCheckingResourceInterface extends \RectorPrefix20210510\Symfony\Component\Config\Resource\ResourceInterface
+interface SelfCheckingResourceInterface extends ResourceInterface
 {
     /**
      * Returns true if the resource has not been updated since the given timestamp.

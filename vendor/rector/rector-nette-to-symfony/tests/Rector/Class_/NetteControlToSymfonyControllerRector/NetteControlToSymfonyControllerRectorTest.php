@@ -6,19 +6,19 @@ namespace Rector\NetteToSymfony\Tests\Rector\Class_\NetteControlToSymfonyControl
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
-final class NetteControlToSymfonyControllerRectorTest extends \Rector\Testing\PHPUnit\AbstractRectorTestCase
+final class NetteControlToSymfonyControllerRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(\Symplify\SmartFileSystem\SmartFileInfo $fileInfo) : void
+    public function test(SmartFileInfo $fileInfo) : void
     {
         $this->doTestFileInfo($fileInfo);
     }
     /**
      * @return Iterator<SmartFileInfo>
      */
-    public function provideData() : \Iterator
+    public function provideData() : Iterator
     {
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }

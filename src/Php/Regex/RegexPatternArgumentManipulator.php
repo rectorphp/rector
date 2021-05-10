@@ -30,7 +30,7 @@ final class RegexPatternArgumentManipulator
     /**
      * @var array<string, array<string, int>>
      */
-    private const STATIC_METHODS_WITH_PATTERNS_TO_ARGUMENT_POSITION = [\RectorPrefix20210510\Nette\Utils\Strings::class => ['match' => 1, 'matchAll' => 1, 'replace' => 1, 'split' => 1]];
+    private const STATIC_METHODS_WITH_PATTERNS_TO_ARGUMENT_POSITION = [Strings::class => ['match' => 1, 'matchAll' => 1, 'replace' => 1, 'split' => 1]];
     /**
      * @var NodeTypeResolver
      */
@@ -51,7 +51,7 @@ final class RegexPatternArgumentManipulator
      * @var NodeComparator
      */
     private $nodeComparator;
-    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\NodeCollector\NodeCollector\NodeRepository $nodeRepository, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator)
+    public function __construct(BetterNodeFinder $betterNodeFinder, NodeNameResolver $nodeNameResolver, NodeTypeResolver $nodeTypeResolver, NodeRepository $nodeRepository, NodeComparator $nodeComparator)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->nodeNameResolver = $nodeNameResolver;
@@ -62,12 +62,12 @@ final class RegexPatternArgumentManipulator
     /**
      * @return String_[]
      */
-    public function matchCallArgumentWithRegexPattern(\PhpParser\Node\Expr $expr) : array
+    public function matchCallArgumentWithRegexPattern(Expr $expr) : array
     {
-        if ($expr instanceof \PhpParser\Node\Expr\FuncCall) {
+        if ($expr instanceof FuncCall) {
             return $this->processFuncCall($expr);
         }
-        if ($expr instanceof \PhpParser\Node\Expr\StaticCall) {
+        if ($expr instanceof StaticCall) {
             return $this->processStaticCall($expr);
         }
         return [];
@@ -75,7 +75,7 @@ final class RegexPatternArgumentManipulator
     /**
      * @return String_[]
      */
-    private function processFuncCall(\PhpParser\Node\Expr\FuncCall $funcCall) : array
+    private function processFuncCall(FuncCall $funcCall) : array
     {
         foreach (self::FUNCTIONS_WITH_PATTERNS_TO_ARGUMENT_POSITION as $functionName => $argumentPosition) {
             if (!$this->nodeNameResolver->isName($funcCall, $functionName)) {
@@ -91,10 +91,10 @@ final class RegexPatternArgumentManipulator
     /**
      * @return String_[]
      */
-    private function processStaticCall(\PhpParser\Node\Expr\StaticCall $staticCall) : array
+    private function processStaticCall(StaticCall $staticCall) : array
     {
         foreach (self::STATIC_METHODS_WITH_PATTERNS_TO_ARGUMENT_POSITION as $type => $methodNamesToArgumentPosition) {
-            if (!$this->nodeTypeResolver->isObjectType($staticCall->class, new \PHPStan\Type\ObjectType($type))) {
+            if (!$this->nodeTypeResolver->isObjectType($staticCall->class, new ObjectType($type))) {
                 continue;
             }
             foreach ($methodNamesToArgumentPosition as $methodName => $argumentPosition) {
@@ -112,22 +112,22 @@ final class RegexPatternArgumentManipulator
     /**
      * @return String_[]
      */
-    private function resolveArgumentValues(\PhpParser\Node\Expr $expr) : array
+    private function resolveArgumentValues(Expr $expr) : array
     {
-        if ($expr instanceof \PhpParser\Node\Scalar\String_) {
+        if ($expr instanceof String_) {
             return [$expr];
         }
-        if ($expr instanceof \PhpParser\Node\Expr\Variable) {
+        if ($expr instanceof Variable) {
             $strings = [];
             $assignNodes = $this->findAssignerForVariable($expr);
             foreach ($assignNodes as $assignNode) {
-                if ($assignNode->expr instanceof \PhpParser\Node\Scalar\String_) {
+                if ($assignNode->expr instanceof String_) {
                     $strings[] = $assignNode->expr;
                 }
             }
             return $strings;
         }
-        if ($expr instanceof \PhpParser\Node\Expr\ClassConstFetch) {
+        if ($expr instanceof ClassConstFetch) {
             return $this->resolveClassConstFetchValue($expr);
         }
         return [];
@@ -135,14 +135,14 @@ final class RegexPatternArgumentManipulator
     /**
      * @return Assign[]
      */
-    private function findAssignerForVariable(\PhpParser\Node\Expr\Variable $variable) : array
+    private function findAssignerForVariable(Variable $variable) : array
     {
-        $classMethod = $variable->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::METHOD_NODE);
-        if (!$classMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
+        $classMethod = $variable->getAttribute(AttributeKey::METHOD_NODE);
+        if (!$classMethod instanceof ClassMethod) {
             return [];
         }
-        return $this->betterNodeFinder->find([$classMethod], function (\PhpParser\Node $node) use($variable) : ?Assign {
-            if (!$node instanceof \PhpParser\Node\Expr\Assign) {
+        return $this->betterNodeFinder->find([$classMethod], function (Node $node) use($variable) : ?Assign {
+            if (!$node instanceof Assign) {
                 return null;
             }
             if (!$this->nodeComparator->areNodesEqual($node->var, $variable)) {
@@ -154,13 +154,13 @@ final class RegexPatternArgumentManipulator
     /**
      * @return String_[]
      */
-    private function resolveClassConstFetchValue(\PhpParser\Node\Expr\ClassConstFetch $classConstFetch) : array
+    private function resolveClassConstFetchValue(ClassConstFetch $classConstFetch) : array
     {
         $classConstNode = $this->nodeRepository->findClassConstByClassConstFetch($classConstFetch);
-        if (!$classConstNode instanceof \PhpParser\Node\Stmt\ClassConst) {
+        if (!$classConstNode instanceof ClassConst) {
             return [];
         }
-        if ($classConstNode->consts[0]->value instanceof \PhpParser\Node\Scalar\String_) {
+        if ($classConstNode->consts[0]->value instanceof String_) {
             return [$classConstNode->consts[0]->value];
         }
         return [];

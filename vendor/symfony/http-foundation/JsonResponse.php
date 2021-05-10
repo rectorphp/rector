@@ -21,7 +21,7 @@ namespace RectorPrefix20210510\Symfony\Component\HttpFoundation;
  *
  * @author Igor Wiedler <igor@wiedler.ch>
  */
-class JsonResponse extends \RectorPrefix20210510\Symfony\Component\HttpFoundation\Response
+class JsonResponse extends Response
 {
     protected $data;
     protected $callback;

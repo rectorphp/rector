@@ -16,13 +16,13 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 /**
  * @see \Rector\Tests\NodeTypeResolver\PerNodeTypeResolver\NameTypeResolver\NameTypeResolverTest
  */
-final class NameTypeResolver implements \Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface
+final class NameTypeResolver implements NodeTypeResolverInterface
 {
     /**
      * @var ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider)
+    public function __construct(ReflectionProvider $reflectionProvider)
     {
         $this->reflectionProvider = $reflectionProvider;
     }
@@ -31,50 +31,50 @@ final class NameTypeResolver implements \Rector\NodeTypeResolver\Contract\NodeTy
      */
     public function getNodeClasses() : array
     {
-        return [\PhpParser\Node\Name::class, \PhpParser\Node\Name\FullyQualified::class];
+        return [Name::class, FullyQualified::class];
     }
     /**
      * @param Name $node
      */
-    public function resolve(\PhpParser\Node $node) : \PHPStan\Type\Type
+    public function resolve(Node $node) : Type
     {
         if ($node->toString() === 'parent') {
             return $this->resolveParent($node);
         }
         $fullyQualifiedName = $this->resolveFullyQualifiedName($node);
-        return new \PHPStan\Type\ObjectType($fullyQualifiedName);
+        return new ObjectType($fullyQualifiedName);
     }
     /**
      * @return ObjectType|UnionType|MixedType
      */
-    private function resolveParent(\PhpParser\Node\Name $name) : \PHPStan\Type\Type
+    private function resolveParent(Name $name) : Type
     {
-        $className = $name->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);
+        $className = $name->getAttribute(AttributeKey::CLASS_NAME);
         if ($className === null) {
-            return new \PHPStan\Type\MixedType();
+            return new MixedType();
         }
         if (!$this->reflectionProvider->hasClass($className)) {
-            return new \PHPStan\Type\MixedType();
+            return new MixedType();
         }
         $classReflection = $this->reflectionProvider->getClass($className);
         $parentClassObjectTypes = [];
         foreach ($classReflection->getParents() as $parentClassReflection) {
-            $parentClassObjectTypes[] = new \PHPStan\Type\ObjectType($parentClassReflection->getName());
+            $parentClassObjectTypes[] = new ObjectType($parentClassReflection->getName());
         }
         if ($parentClassObjectTypes === []) {
-            return new \PHPStan\Type\MixedType();
+            return new MixedType();
         }
         if (\count($parentClassObjectTypes) === 1) {
             return $parentClassObjectTypes[0];
         }
-        return new \PHPStan\Type\UnionType($parentClassObjectTypes);
+        return new UnionType($parentClassObjectTypes);
     }
-    private function resolveFullyQualifiedName(\PhpParser\Node\Name $name) : string
+    private function resolveFullyQualifiedName(Name $name) : string
     {
         $nameValue = $name->toString();
         if (\in_array($nameValue, ['self', 'static', 'this'], \true)) {
             /** @var string|null $class */
-            $class = $name->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);
+            $class = $name->getAttribute(AttributeKey::CLASS_NAME);
             if ($class === null) {
                 // anonymous class probably
                 return 'Anonymous';
@@ -82,8 +82,8 @@ final class NameTypeResolver implements \Rector\NodeTypeResolver\Contract\NodeTy
             return $class;
         }
         /** @var Name|null $resolvedNameNode */
-        $resolvedNameNode = $name->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::RESOLVED_NAME);
-        if ($resolvedNameNode instanceof \PhpParser\Node\Name) {
+        $resolvedNameNode = $name->getAttribute(AttributeKey::RESOLVED_NAME);
+        if ($resolvedNameNode instanceof Name) {
             return $resolvedNameNode->toString();
         }
         return $nameValue;

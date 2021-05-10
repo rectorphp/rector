@@ -22,7 +22,7 @@ class ExprBuilder
     protected $node;
     public $ifPart;
     public $thenPart;
-    public function __construct(\RectorPrefix20210510\Symfony\Component\Config\Definition\Builder\NodeDefinition $node)
+    public function __construct(NodeDefinition $node)
     {
         $this->node = $node;
     }
@@ -193,7 +193,7 @@ class ExprBuilder
     public function thenUnset()
     {
         $this->thenPart = function ($v) {
-            throw new \RectorPrefix20210510\Symfony\Component\Config\Definition\Exception\UnsetKeyException('Unsetting key.');
+            throw new UnsetKeyException('Unsetting key.');
         };
         return $this;
     }

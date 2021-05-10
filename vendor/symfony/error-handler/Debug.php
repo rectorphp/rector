@@ -17,7 +17,7 @@ namespace RectorPrefix20210510\Symfony\Component\ErrorHandler;
  */
 class Debug
 {
-    public static function enable() : \RectorPrefix20210510\Symfony\Component\ErrorHandler\ErrorHandler
+    public static function enable() : ErrorHandler
     {
         \error_reporting(-1);
         if (!\in_array(\PHP_SAPI, ['cli', 'phpdbg'], \true)) {
@@ -30,7 +30,7 @@ class Debug
         \ini_set('assert.active', 1);
         \ini_set('assert.warning', 0);
         \ini_set('assert.exception', 1);
-        \RectorPrefix20210510\Symfony\Component\ErrorHandler\DebugClassLoader::enable();
-        return \RectorPrefix20210510\Symfony\Component\ErrorHandler\ErrorHandler::register(new \RectorPrefix20210510\Symfony\Component\ErrorHandler\ErrorHandler(new \RectorPrefix20210510\Symfony\Component\ErrorHandler\BufferingLogger(), \true));
+        DebugClassLoader::enable();
+        return ErrorHandler::register(new ErrorHandler(new BufferingLogger(), \true));
     }
 }

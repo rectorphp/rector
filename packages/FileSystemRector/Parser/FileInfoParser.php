@@ -18,7 +18,7 @@ final class FileInfoParser
      * @var NodeScopeAndMetadataDecorator
      */
     private $nodeScopeAndMetadataDecorator;
-    public function __construct(\Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator, \Rector\Core\PhpParser\Parser\Parser $parser)
+    public function __construct(NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator, Parser $parser)
     {
         $this->parser = $parser;
         $this->nodeScopeAndMetadataDecorator = $nodeScopeAndMetadataDecorator;
@@ -26,10 +26,10 @@ final class FileInfoParser
     /**
      * @return Node[]
      */
-    public function parseFileInfoToNodesAndDecorate(\Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo) : array
+    public function parseFileInfoToNodesAndDecorate(SmartFileInfo $smartFileInfo) : array
     {
         $oldStmts = $this->parser->parseFileInfo($smartFileInfo);
-        $file = new \Rector\Core\ValueObject\Application\File($smartFileInfo, $smartFileInfo->getContents());
+        $file = new File($smartFileInfo, $smartFileInfo->getContents());
         return $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile($file, $oldStmts, $smartFileInfo);
     }
 }

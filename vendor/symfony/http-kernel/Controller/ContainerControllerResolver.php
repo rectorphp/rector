@@ -19,10 +19,10 @@ use RectorPrefix20210510\Symfony\Component\DependencyInjection\Container;
  * @author Fabien Potencier <fabien@symfony.com>
  * @author Maxime Steinhausser <maxime.steinhausser@gmail.com>
  */
-class ContainerControllerResolver extends \RectorPrefix20210510\Symfony\Component\HttpKernel\Controller\ControllerResolver
+class ContainerControllerResolver extends ControllerResolver
 {
     protected $container;
-    public function __construct(\RectorPrefix20210510\Psr\Container\ContainerInterface $container, \RectorPrefix20210510\Psr\Log\LoggerInterface $logger = null)
+    public function __construct(ContainerInterface $container, LoggerInterface $logger = null)
     {
         $this->container = $container;
         parent::__construct($logger);
@@ -56,7 +56,7 @@ class ContainerControllerResolver extends \RectorPrefix20210510\Symfony\Componen
     }
     private function throwExceptionIfControllerWasRemoved(string $controller, \Throwable $previous)
     {
-        if ($this->container instanceof \RectorPrefix20210510\Symfony\Component\DependencyInjection\Container && isset($this->container->getRemovedIds()[$controller])) {
+        if ($this->container instanceof Container && isset($this->container->getRemovedIds()[$controller])) {
             throw new \InvalidArgumentException(\sprintf('Controller "%s" cannot be fetched from the container because it is private. Did you forget to tag the service with "controller.service_arguments"?', $controller), 0, $previous);
         }
     }

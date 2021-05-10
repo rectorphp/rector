@@ -13,16 +13,16 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\CodingStyle\Rector\String_\SymplifyQuoteEscapeRector\SymplifyQuoteEscapeRectorTest
  */
-final class SymplifyQuoteEscapeRector extends \Rector\Core\Rector\AbstractRector
+final class SymplifyQuoteEscapeRector extends AbstractRector
 {
     /**
      * @var string
      * @see https://regex101.com/r/qEkCe9/2
      */
     private const ESCAPED_CHAR_REGEX = '#\\\\|\\$|\\n|\\t#sim';
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Prefer quote that are not inside the string', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Prefer quote that are not inside the string', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -49,51 +49,51 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Scalar\String_::class];
+        return [String_::class];
     }
     /**
      * @param String_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         $doubleQuoteCount = \substr_count($node->value, '"');
         $singleQuoteCount = \substr_count($node->value, "'");
-        $kind = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::KIND);
-        if ($kind === \PhpParser\Node\Scalar\String_::KIND_SINGLE_QUOTED) {
+        $kind = $node->getAttribute(AttributeKey::KIND);
+        if ($kind === String_::KIND_SINGLE_QUOTED) {
             $this->processSingleQuoted($node, $doubleQuoteCount, $singleQuoteCount);
         }
-        $quoteKind = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::KIND);
-        if ($quoteKind === \PhpParser\Node\Scalar\String_::KIND_DOUBLE_QUOTED) {
+        $quoteKind = $node->getAttribute(AttributeKey::KIND);
+        if ($quoteKind === String_::KIND_DOUBLE_QUOTED) {
             $this->processDoubleQuoted($node, $singleQuoteCount, $doubleQuoteCount);
         }
         return $node;
     }
-    private function processSingleQuoted(\PhpParser\Node\Scalar\String_ $string, int $doubleQuoteCount, int $singleQuoteCount) : void
+    private function processSingleQuoted(String_ $string, int $doubleQuoteCount, int $singleQuoteCount) : void
     {
         if ($doubleQuoteCount === 0 && $singleQuoteCount > 0) {
             // contains chars that will be newly escaped
             if ($this->isMatchEscapedChars($string->value)) {
                 return;
             }
-            $string->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::KIND, \PhpParser\Node\Scalar\String_::KIND_DOUBLE_QUOTED);
+            $string->setAttribute(AttributeKey::KIND, String_::KIND_DOUBLE_QUOTED);
             // invoke override
-            $string->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NODE, null);
+            $string->setAttribute(AttributeKey::ORIGINAL_NODE, null);
         }
     }
-    private function processDoubleQuoted(\PhpParser\Node\Scalar\String_ $string, int $singleQuoteCount, int $doubleQuoteCount) : void
+    private function processDoubleQuoted(String_ $string, int $singleQuoteCount, int $doubleQuoteCount) : void
     {
         if ($singleQuoteCount === 0 && $doubleQuoteCount > 0) {
             // contains chars that will be newly escaped
             if ($this->isMatchEscapedChars($string->value)) {
                 return;
             }
-            $string->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::KIND, \PhpParser\Node\Scalar\String_::KIND_SINGLE_QUOTED);
+            $string->setAttribute(AttributeKey::KIND, String_::KIND_SINGLE_QUOTED);
             // invoke override
-            $string->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NODE, null);
+            $string->setAttribute(AttributeKey::ORIGINAL_NODE, null);
         }
     }
     private function isMatchEscapedChars(string $string) : bool
     {
-        return (bool) \RectorPrefix20210510\Nette\Utils\Strings::match($string, self::ESCAPED_CHAR_REGEX);
+        return (bool) Strings::match($string, self::ESCAPED_CHAR_REGEX);
     }
 }

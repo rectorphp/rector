@@ -18,16 +18,16 @@ use RectorPrefix20210510\Symfony\Component\VarDumper\Cloner\VarCloner;
  *
  * @author Maxime Steinhausser <maxime.steinhausser@gmail.com>
  */
-final class RequestContextProvider implements \RectorPrefix20210510\Symfony\Component\VarDumper\Dumper\ContextProvider\ContextProviderInterface
+final class RequestContextProvider implements ContextProviderInterface
 {
     private $requestStack;
     private $cloner;
-    public function __construct(\RectorPrefix20210510\Symfony\Component\HttpFoundation\RequestStack $requestStack)
+    public function __construct(RequestStack $requestStack)
     {
         $this->requestStack = $requestStack;
-        $this->cloner = new \RectorPrefix20210510\Symfony\Component\VarDumper\Cloner\VarCloner();
+        $this->cloner = new VarCloner();
         $this->cloner->setMaxItems(0);
-        $this->cloner->addCasters(\RectorPrefix20210510\Symfony\Component\VarDumper\Caster\ReflectionCaster::UNSET_CLOSURE_FILE_INFO);
+        $this->cloner->addCasters(ReflectionCaster::UNSET_CLOSURE_FILE_INFO);
     }
     public function getContext() : ?array
     {

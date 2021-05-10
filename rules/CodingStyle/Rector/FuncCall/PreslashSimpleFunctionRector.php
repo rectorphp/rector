@@ -15,11 +15,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\CodingStyle\Rector\FuncCall\PreslashSimpleFunctionRector\PreslashSimpleFunctionRectorTest
  */
-final class PreslashSimpleFunctionRector extends \Rector\Core\Rector\AbstractRector
+final class PreslashSimpleFunctionRector extends AbstractRector
 {
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Add pre-slash to short named functions to improve performance', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add pre-slash to short named functions to improve performance', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function shorten($value)
@@ -44,24 +44,24 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\FuncCall::class];
+        return [FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        if ($node->name instanceof \PhpParser\Node\Name\FullyQualified) {
+        if ($node->name instanceof FullyQualified) {
             return null;
         }
         $functionName = $this->getName($node);
         if ($functionName === null) {
             return null;
         }
-        if (\RectorPrefix20210510\Nette\Utils\Strings::contains($functionName, '\\')) {
+        if (Strings::contains($functionName, '\\')) {
             return null;
         }
-        $node->name = new \PhpParser\Node\Name\FullyQualified($functionName);
+        $node->name = new FullyQualified($functionName);
         return $node;
     }
 }

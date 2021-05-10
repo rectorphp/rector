@@ -19,7 +19,7 @@ final class NameAndParent
     /**
      * @param Name|Identifier $nameNode
      */
-    public function __construct(\PhpParser\Node $nameNode, \PhpParser\Node $parentNode)
+    public function __construct(Node $nameNode, Node $parentNode)
     {
         $this->nameNode = $nameNode;
         $this->parentNode = $parentNode;
@@ -27,11 +27,11 @@ final class NameAndParent
     /**
      * @return Name|Identifier
      */
-    public function getNameNode() : \PhpParser\Node
+    public function getNameNode() : Node
     {
         return $this->nameNode;
     }
-    public function getParentNode() : \PhpParser\Node
+    public function getParentNode() : Node
     {
         return $this->parentNode;
     }

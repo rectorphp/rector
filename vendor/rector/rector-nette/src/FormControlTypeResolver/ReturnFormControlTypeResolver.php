@@ -11,7 +11,7 @@ use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Nette\Contract\FormControlTypeResolverInterface;
 use Rector\Nette\Contract\MethodNamesByInputNamesResolverAwareInterface;
 use Rector\Nette\NodeResolver\MethodNamesByInputNamesResolver;
-final class ReturnFormControlTypeResolver implements \Rector\Nette\Contract\FormControlTypeResolverInterface, \Rector\Nette\Contract\MethodNamesByInputNamesResolverAwareInterface
+final class ReturnFormControlTypeResolver implements FormControlTypeResolverInterface, MethodNamesByInputNamesResolverAwareInterface
 {
     /**
      * @var BetterNodeFinder
@@ -21,28 +21,28 @@ final class ReturnFormControlTypeResolver implements \Rector\Nette\Contract\Form
      * @var MethodNamesByInputNamesResolver
      */
     private $methodNamesByInputNamesResolver;
-    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
+    public function __construct(BetterNodeFinder $betterNodeFinder)
     {
         $this->betterNodeFinder = $betterNodeFinder;
     }
     /**
      * @return array<string, string>
      */
-    public function resolve(\PhpParser\Node $node) : array
+    public function resolve(Node $node) : array
     {
-        if (!$node instanceof \PhpParser\Node\Stmt\Return_) {
+        if (!$node instanceof Return_) {
             return [];
         }
-        if (!$node->expr instanceof \PhpParser\Node\Expr\Variable) {
+        if (!$node->expr instanceof Variable) {
             return [];
         }
         $initialAssign = $this->betterNodeFinder->findPreviousAssignToExpr($node->expr);
-        if (!$initialAssign instanceof \PhpParser\Node\Expr\Assign) {
+        if (!$initialAssign instanceof Assign) {
             return [];
         }
         return $this->methodNamesByInputNamesResolver->resolveExpr($node);
     }
-    public function setResolver(\Rector\Nette\NodeResolver\MethodNamesByInputNamesResolver $methodNamesByInputNamesResolver) : void
+    public function setResolver(MethodNamesByInputNamesResolver $methodNamesByInputNamesResolver) : void
     {
         $this->methodNamesByInputNamesResolver = $methodNamesByInputNamesResolver;
     }

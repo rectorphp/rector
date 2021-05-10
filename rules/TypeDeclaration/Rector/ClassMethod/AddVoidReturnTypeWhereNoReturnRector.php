@@ -16,19 +16,19 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\TypeDeclaration\Rector\ClassMethod\AddVoidReturnTypeWhereNoReturnRector\AddVoidReturnTypeWhereNoReturnRectorTest
  */
-final class AddVoidReturnTypeWhereNoReturnRector extends \Rector\Core\Rector\AbstractRector
+final class AddVoidReturnTypeWhereNoReturnRector extends AbstractRector
 {
     /**
      * @var SilentVoidResolver
      */
     private $silentVoidResolver;
-    public function __construct(\Rector\TypeDeclaration\TypeInferer\SilentVoidResolver $silentVoidResolver)
+    public function __construct(SilentVoidResolver $silentVoidResolver)
     {
         $this->silentVoidResolver = $silentVoidResolver;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Add return type void to function like without any return', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add return type void to function like without any return', [new CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function getValues()
@@ -55,26 +55,26 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\ClassMethod::class, \PhpParser\Node\Stmt\Function_::class, \PhpParser\Node\Expr\Closure::class];
+        return [ClassMethod::class, Function_::class, Closure::class];
     }
     /**
      * @param ClassMethod|Function_|Closure $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        if (!$this->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::VOID_TYPE)) {
+        if (!$this->isAtLeastPhpVersion(PhpVersionFeature::VOID_TYPE)) {
             return null;
         }
         if ($node->returnType !== null) {
             return null;
         }
-        if ($node instanceof \PhpParser\Node\Stmt\ClassMethod && ($node->isMagic() || $node->isAbstract())) {
+        if ($node instanceof ClassMethod && ($node->isMagic() || $node->isAbstract())) {
             return null;
         }
         if (!$this->silentVoidResolver->hasExlusiveVoid($node)) {
             return null;
         }
-        $node->returnType = new \PhpParser\Node\Identifier('void');
+        $node->returnType = new Identifier('void');
         return $node;
     }
 }

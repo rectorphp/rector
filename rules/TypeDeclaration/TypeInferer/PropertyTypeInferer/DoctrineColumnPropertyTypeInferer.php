@@ -17,7 +17,7 @@ use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\TypeDeclaration\Contract\TypeInferer\PropertyTypeInfererInterface;
-final class DoctrineColumnPropertyTypeInferer implements \Rector\TypeDeclaration\Contract\TypeInferer\PropertyTypeInfererInterface
+final class DoctrineColumnPropertyTypeInferer implements PropertyTypeInfererInterface
 {
     /**
      * @var string
@@ -38,67 +38,67 @@ final class DoctrineColumnPropertyTypeInferer implements \Rector\TypeDeclaration
      * @var PhpDocInfoFactory
      */
     private $phpDocInfoFactory;
-    public function __construct(\Rector\NodeTypeResolver\PHPStan\Type\TypeFactory $typeFactory, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory)
+    public function __construct(TypeFactory $typeFactory, PhpDocInfoFactory $phpDocInfoFactory)
     {
         $this->typeFactory = $typeFactory;
         $this->doctrineTypeToScalarType = [
-            'tinyint' => new \PHPStan\Type\BooleanType(),
+            'tinyint' => new BooleanType(),
             // integers
-            'smallint' => new \PHPStan\Type\IntegerType(),
-            'mediumint' => new \PHPStan\Type\IntegerType(),
-            'int' => new \PHPStan\Type\IntegerType(),
-            'integer' => new \PHPStan\Type\IntegerType(),
-            'bigint' => new \PHPStan\Type\IntegerType(),
-            'numeric' => new \PHPStan\Type\IntegerType(),
+            'smallint' => new IntegerType(),
+            'mediumint' => new IntegerType(),
+            'int' => new IntegerType(),
+            'integer' => new IntegerType(),
+            'bigint' => new IntegerType(),
+            'numeric' => new IntegerType(),
             // floats
-            'decimal' => new \PHPStan\Type\FloatType(),
-            'float' => new \PHPStan\Type\FloatType(),
-            'double' => new \PHPStan\Type\FloatType(),
-            'real' => new \PHPStan\Type\FloatType(),
+            'decimal' => new FloatType(),
+            'float' => new FloatType(),
+            'double' => new FloatType(),
+            'real' => new FloatType(),
             // strings
-            'tinytext' => new \PHPStan\Type\StringType(),
-            'mediumtext' => new \PHPStan\Type\StringType(),
-            'longtext' => new \PHPStan\Type\StringType(),
-            'text' => new \PHPStan\Type\StringType(),
-            'varchar' => new \PHPStan\Type\StringType(),
-            'string' => new \PHPStan\Type\StringType(),
-            'char' => new \PHPStan\Type\StringType(),
-            'longblob' => new \PHPStan\Type\StringType(),
-            'blob' => new \PHPStan\Type\StringType(),
-            'mediumblob' => new \PHPStan\Type\StringType(),
-            'tinyblob' => new \PHPStan\Type\StringType(),
-            'binary' => new \PHPStan\Type\StringType(),
-            'varbinary' => new \PHPStan\Type\StringType(),
-            'set' => new \PHPStan\Type\StringType(),
+            'tinytext' => new StringType(),
+            'mediumtext' => new StringType(),
+            'longtext' => new StringType(),
+            'text' => new StringType(),
+            'varchar' => new StringType(),
+            'string' => new StringType(),
+            'char' => new StringType(),
+            'longblob' => new StringType(),
+            'blob' => new StringType(),
+            'mediumblob' => new StringType(),
+            'tinyblob' => new StringType(),
+            'binary' => new StringType(),
+            'varbinary' => new StringType(),
+            'set' => new StringType(),
             // date time objects
-            'date' => new \PHPStan\Type\ObjectType(self::DATE_TIME_INTERFACE),
-            'datetime' => new \PHPStan\Type\ObjectType(self::DATE_TIME_INTERFACE),
-            'timestamp' => new \PHPStan\Type\ObjectType(self::DATE_TIME_INTERFACE),
-            'time' => new \PHPStan\Type\ObjectType(self::DATE_TIME_INTERFACE),
-            'year' => new \PHPStan\Type\ObjectType(self::DATE_TIME_INTERFACE),
+            'date' => new ObjectType(self::DATE_TIME_INTERFACE),
+            'datetime' => new ObjectType(self::DATE_TIME_INTERFACE),
+            'timestamp' => new ObjectType(self::DATE_TIME_INTERFACE),
+            'time' => new ObjectType(self::DATE_TIME_INTERFACE),
+            'year' => new ObjectType(self::DATE_TIME_INTERFACE),
         ];
         $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
-    public function inferProperty(\PhpParser\Node\Stmt\Property $property) : \PHPStan\Type\Type
+    public function inferProperty(Property $property) : Type
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
         $doctrineAnnotationTagValueNode = $phpDocInfo->getByAnnotationClass('Doctrine\\ORM\\Mapping\\Column');
-        if (!$doctrineAnnotationTagValueNode instanceof \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode) {
-            return new \PHPStan\Type\MixedType();
+        if (!$doctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
+            return new MixedType();
         }
         $type = $doctrineAnnotationTagValueNode->getValueWithoutQuotes('type');
         if ($type === null) {
-            return new \PHPStan\Type\MixedType();
+            return new MixedType();
         }
         $scalarType = $this->doctrineTypeToScalarType[$type] ?? null;
-        if (!$scalarType instanceof \PHPStan\Type\Type) {
-            return new \PHPStan\Type\MixedType();
+        if (!$scalarType instanceof Type) {
+            return new MixedType();
         }
         $types = [$scalarType];
         $isNullable = $doctrineAnnotationTagValueNode->getValue('nullable');
         // is nullable?
-        if ($isNullable instanceof \PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprTrueNode) {
-            $types[] = new \PHPStan\Type\NullType();
+        if ($isNullable instanceof ConstExprTrueNode) {
+            $types[] = new NullType();
         }
         return $this->typeFactory->createMixedPassedOrUnionType($types);
     }

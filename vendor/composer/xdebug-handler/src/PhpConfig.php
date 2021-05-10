@@ -57,7 +57,7 @@ class PhpConfig
      */
     private function getDataAndReset()
     {
-        if ($data = \RectorPrefix20210510\Composer\XdebugHandler\XdebugHandler::getRestartSettings()) {
+        if ($data = XdebugHandler::getRestartSettings()) {
             $this->updateEnv('PHPRC', $data['phprc']);
             $this->updateEnv('PHP_INI_SCAN_DIR', $data['scanDir']);
         }
@@ -71,6 +71,6 @@ class PhpConfig
      */
     private function updateEnv($name, $value)
     {
-        \RectorPrefix20210510\Composer\XdebugHandler\Process::setEnv($name, \false !== $value ? $value : null);
+        Process::setEnv($name, \false !== $value ? $value : null);
     }
 }

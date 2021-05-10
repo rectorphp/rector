@@ -21,7 +21,7 @@ use RectorPrefix20210510\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Transform\Rector\ClassMethod\SingleToManyMethodRector\SingleToManyMethodRectorTest
  */
-final class SingleToManyMethodRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
+final class SingleToManyMethodRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
      * @api
@@ -36,13 +36,13 @@ final class SingleToManyMethodRector extends \Rector\Core\Rector\AbstractRector 
      * @var PhpDocTypeChanger
      */
     private $phpDocTypeChanger;
-    public function __construct(\Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger)
+    public function __construct(PhpDocTypeChanger $phpDocTypeChanger)
     {
         $this->phpDocTypeChanger = $phpDocTypeChanger;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change method that returns single value to multiple values', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change method that returns single value to multiple values', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function getNode(): string
@@ -63,22 +63,22 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, [self::SINGLES_TO_MANY_METHODS => [new \Rector\Transform\ValueObject\SingleToManyMethod('SomeClass', 'getNode', 'getNodes')]])]);
+, [self::SINGLES_TO_MANY_METHODS => [new SingleToManyMethod('SomeClass', 'getNode', 'getNodes')]])]);
     }
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\ClassMethod::class];
+        return [ClassMethod::class];
     }
     /**
      * @param ClassMethod $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        $classLike = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
-        if (!$classLike instanceof \PhpParser\Node\Stmt\ClassLike) {
+        $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
+        if (!$classLike instanceof ClassLike) {
             return null;
         }
         foreach ($this->singleToManyMethods as $singleToManyMethod) {
@@ -88,9 +88,9 @@ CODE_SAMPLE
             if (!$this->isName($node, $singleToManyMethod->getSingleMethodName())) {
                 continue;
             }
-            $node->name = new \PhpParser\Node\Identifier($singleToManyMethod->getManyMethodName());
+            $node->name = new Identifier($singleToManyMethod->getManyMethodName());
             $this->keepOldReturnTypeInDocBlock($node);
-            $node->returnType = new \PhpParser\Node\Identifier('array');
+            $node->returnType = new Identifier('array');
             $this->wrapReturnValueToArray($node);
             return $node;
         }
@@ -102,10 +102,10 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $singleToManyMethods = $configuration[self::SINGLES_TO_MANY_METHODS] ?? [];
-        \RectorPrefix20210510\Webmozart\Assert\Assert::allIsInstanceOf($singleToManyMethods, \Rector\Transform\ValueObject\SingleToManyMethod::class);
+        Assert::allIsInstanceOf($singleToManyMethods, SingleToManyMethod::class);
         $this->singleToManyMethods = $singleToManyMethods;
     }
-    private function keepOldReturnTypeInDocBlock(\PhpParser\Node\Stmt\ClassMethod $classMethod) : void
+    private function keepOldReturnTypeInDocBlock(ClassMethod $classMethod) : void
     {
         // keep old return type in the docblock
         $oldReturnType = $classMethod->returnType;
@@ -113,14 +113,14 @@ CODE_SAMPLE
             return;
         }
         $staticType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($oldReturnType);
-        $arrayType = new \PHPStan\Type\ArrayType(new \PHPStan\Type\MixedType(), $staticType);
+        $arrayType = new ArrayType(new MixedType(), $staticType);
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
         $this->phpDocTypeChanger->changeReturnType($phpDocInfo, $arrayType);
     }
-    private function wrapReturnValueToArray(\PhpParser\Node\Stmt\ClassMethod $classMethod) : void
+    private function wrapReturnValueToArray(ClassMethod $classMethod) : void
     {
-        $this->traverseNodesWithCallable((array) $classMethod->stmts, function (\PhpParser\Node $node) {
-            if (!$node instanceof \PhpParser\Node\Stmt\Return_) {
+        $this->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) {
+            if (!$node instanceof Return_) {
                 return null;
             }
             $node->expr = $this->nodeFactory->createArray([$node->expr]);

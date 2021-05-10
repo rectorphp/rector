@@ -14,11 +14,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @see https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.2.md#httpfoundation
  * @see \Rector\Symfony\Tests\Rector\StaticCall\BinaryFileResponseCreateToNewInstanceRector\BinaryFileResponseCreateToNewInstanceRectorTest
  */
-final class BinaryFileResponseCreateToNewInstanceRector extends \Rector\Core\Rector\AbstractRector
+final class BinaryFileResponseCreateToNewInstanceRector extends AbstractRector
 {
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change deprecated BinaryFileResponse::create() to use __construct() instead', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change deprecated BinaryFileResponse::create() to use __construct() instead', [new CodeSample(<<<'CODE_SAMPLE'
 use Symfony\Component\HttpFoundation;
 
 class SomeClass
@@ -47,14 +47,14 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\StaticCall::class];
+        return [StaticCall::class];
     }
     /**
      * @param StaticCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        if (!$node->class instanceof \PhpParser\Node\Name) {
+        if (!$node->class instanceof Name) {
             return null;
         }
         if (!$this->isName($node->class, 'Symfony\\Component\\HttpFoundation\\BinaryFileResponse')) {
@@ -67,6 +67,6 @@ CODE_SAMPLE
         if ($args === []) {
             $args[] = $this->nodeFactory->createArg($this->nodeFactory->createNull());
         }
-        return new \PhpParser\Node\Expr\New_($node->class, $args);
+        return new New_($node->class, $args);
     }
 }

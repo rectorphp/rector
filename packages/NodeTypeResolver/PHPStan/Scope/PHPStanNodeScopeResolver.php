@@ -77,7 +77,7 @@ final class PHPStanNodeScopeResolver
      * @var SymfonyStyle
      */
     private $symfonyStyle;
-    public function __construct(\Rector\Caching\Detector\ChangedFilesDetector $changedFilesDetector, \Rector\Core\Configuration\Configuration $configuration, \Rector\Caching\FileSystem\DependencyResolver $dependencyResolver, \PHPStan\Analyser\NodeScopeResolver $nodeScopeResolver, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\NodeTypeResolver\PHPStan\Scope\NodeVisitor\RemoveDeepChainMethodCallNodeVisitor $removeDeepChainMethodCallNodeVisitor, \Rector\NodeTypeResolver\PHPStan\Scope\ScopeFactory $scopeFactory, \RectorPrefix20210510\Symfony\Component\Console\Style\SymfonyStyle $symfonyStyle, \Rector\NodeTypeResolver\PHPStan\Collector\TraitNodeScopeCollector $traitNodeScopeCollector)
+    public function __construct(ChangedFilesDetector $changedFilesDetector, Configuration $configuration, DependencyResolver $dependencyResolver, NodeScopeResolver $nodeScopeResolver, ReflectionProvider $reflectionProvider, RemoveDeepChainMethodCallNodeVisitor $removeDeepChainMethodCallNodeVisitor, \Rector\NodeTypeResolver\PHPStan\Scope\ScopeFactory $scopeFactory, SymfonyStyle $symfonyStyle, TraitNodeScopeCollector $traitNodeScopeCollector)
     {
         $this->scopeFactory = $scopeFactory;
         $this->nodeScopeResolver = $nodeScopeResolver;
@@ -93,13 +93,13 @@ final class PHPStanNodeScopeResolver
      * @param Node[] $nodes
      * @return Node[]
      */
-    public function processNodes(array $nodes, \Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo) : array
+    public function processNodes(array $nodes, SmartFileInfo $smartFileInfo) : array
     {
         $this->removeDeepChainMethodCallNodes($nodes);
         $scope = $this->scopeFactory->createFromFile($smartFileInfo);
         $this->dependentFiles = [];
         // skip chain method calls, performance issue: https://github.com/phpstan/phpstan/issues/254
-        $nodeCallback = function (\PhpParser\Node $node, \PHPStan\Analyser\Scope $scope) : void {
+        $nodeCallback = function (Node $node, Scope $scope) : void {
             // traversing trait inside class that is using it scope (from referenced) - the trait traversed by Rector is different (directly from parsed file)
             if ($scope->isInTrait()) {
                 /** @var ClassReflection $classReflection */
@@ -110,17 +110,17 @@ final class PHPStanNodeScopeResolver
             }
             // the class reflection is resolved AFTER entering to class node
             // so we need to get it from the first after this one
-            if ($node instanceof \PhpParser\Node\Stmt\Class_ || $node instanceof \PhpParser\Node\Stmt\Interface_) {
+            if ($node instanceof Class_ || $node instanceof Interface_) {
                 /** @var Scope $scope */
                 $scope = $this->resolveClassOrInterfaceScope($node, $scope);
             }
             // special case for unreachable nodes
-            if ($node instanceof \PHPStan\Node\UnreachableStatementNode) {
+            if ($node instanceof UnreachableStatementNode) {
                 $originalNode = $node->getOriginalStatement();
-                $originalNode->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::IS_UNREACHABLE, \true);
-                $originalNode->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE, $scope);
+                $originalNode->setAttribute(AttributeKey::IS_UNREACHABLE, \true);
+                $originalNode->setAttribute(AttributeKey::SCOPE, $scope);
             } else {
-                $node->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE, $scope);
+                $node->setAttribute(AttributeKey::SCOPE, $scope);
             }
         };
         foreach ($nodes as $node) {
@@ -136,18 +136,18 @@ final class PHPStanNodeScopeResolver
      */
     private function removeDeepChainMethodCallNodes(array $nodes) : void
     {
-        $nodeTraverser = new \PhpParser\NodeTraverser();
+        $nodeTraverser = new NodeTraverser();
         $nodeTraverser->addVisitor($this->removeDeepChainMethodCallNodeVisitor);
         $nodeTraverser->traverse($nodes);
     }
     /**
      * @param Class_|Interface_ $classLike
      */
-    private function resolveClassOrInterfaceScope(\PhpParser\Node\Stmt\ClassLike $classLike, \PHPStan\Analyser\Scope $scope) : \PHPStan\Analyser\Scope
+    private function resolveClassOrInterfaceScope(ClassLike $classLike, Scope $scope) : Scope
     {
         $className = $this->resolveClassName($classLike);
         // is anonymous class? - not possible to enter it since PHPStan 0.12.33, see https://github.com/phpstan/phpstan-src/commit/e87fb0ec26f9c8552bbeef26a868b1e5d8185e91
-        if ($classLike instanceof \PhpParser\Node\Stmt\Class_ && \RectorPrefix20210510\Nette\Utils\Strings::match($className, self::ANONYMOUS_CLASS_START_REGEX)) {
+        if ($classLike instanceof Class_ && Strings::match($className, self::ANONYMOUS_CLASS_START_REGEX)) {
             $classReflection = $this->reflectionProvider->getAnonymousClassReflection($classLike, $scope);
         } elseif (!$this->reflectionProvider->hasClass($className)) {
             return $scope;
@@ -157,7 +157,7 @@ final class PHPStanNodeScopeResolver
         /** @var MutatingScope $scope */
         return $scope->enterClass($classReflection);
     }
-    private function resolveDependentFiles(\PhpParser\Node $node, \PHPStan\Analyser\MutatingScope $mutatingScope) : void
+    private function resolveDependentFiles(Node $node, MutatingScope $mutatingScope) : void
     {
         if (!$this->configuration->isCacheEnabled()) {
             return;
@@ -167,14 +167,14 @@ final class PHPStanNodeScopeResolver
             foreach ($dependentFiles as $dependentFile) {
                 $this->dependentFiles[] = $dependentFile;
             }
-        } catch (\PHPStan\AnalysedCodeException $analysedCodeException) {
+        } catch (AnalysedCodeException $analysedCodeException) {
             // @ignoreException
         }
     }
     /**
      * @param string[] $dependentFiles
      */
-    private function reportCacheDebugAndSaveDependentFiles(\Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo, array $dependentFiles) : void
+    private function reportCacheDebugAndSaveDependentFiles(SmartFileInfo $smartFileInfo, array $dependentFiles) : void
     {
         if (!$this->configuration->isCacheEnabled()) {
             return;
@@ -186,20 +186,20 @@ final class PHPStanNodeScopeResolver
     /**
      * @param Class_|Interface_|Trait_ $classLike
      */
-    private function resolveClassName(\PhpParser\Node\Stmt\ClassLike $classLike) : string
+    private function resolveClassName(ClassLike $classLike) : string
     {
         if (\property_exists($classLike, 'namespacedName')) {
             return (string) $classLike->namespacedName;
         }
         if ($classLike->name === null) {
-            throw new \Rector\Core\Exception\ShouldNotHappenException();
+            throw new ShouldNotHappenException();
         }
         return $classLike->name->toString();
     }
     /**
      * @param string[] $dependentFiles
      */
-    private function reportCacheDebug(\Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo, array $dependentFiles) : void
+    private function reportCacheDebug(SmartFileInfo $smartFileInfo, array $dependentFiles) : void
     {
         if (!$this->configuration->isCacheDebug()) {
             return;

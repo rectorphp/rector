@@ -12,11 +12,11 @@ final class ClassChildAnalyzer
      * @var FamilyRelationsAnalyzer
      */
     private $familyRelationsAnalyzer;
-    public function __construct(\Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer $familyRelationsAnalyzer)
+    public function __construct(FamilyRelationsAnalyzer $familyRelationsAnalyzer)
     {
         $this->familyRelationsAnalyzer = $familyRelationsAnalyzer;
     }
-    public function hasChildClassMethod(\PHPStan\Reflection\ClassReflection $classReflection, string $methodName) : bool
+    public function hasChildClassMethod(ClassReflection $classReflection, string $methodName) : bool
     {
         $childrenClassReflections = $this->familyRelationsAnalyzer->getChildrenOfClassReflection($classReflection);
         foreach ($childrenClassReflections as $childClassReflection) {
@@ -24,7 +24,7 @@ final class ClassChildAnalyzer
                 continue;
             }
             $constructorReflectionMethod = $childClassReflection->getNativeMethod($methodName);
-            if (!$constructorReflectionMethod instanceof \PHPStan\Reflection\Php\PhpMethodReflection) {
+            if (!$constructorReflectionMethod instanceof PhpMethodReflection) {
                 continue;
             }
             $methodDeclaringClassReflection = $constructorReflectionMethod->getDeclaringClass();
@@ -34,14 +34,14 @@ final class ClassChildAnalyzer
         }
         return \false;
     }
-    public function hasParentClassMethod(\PHPStan\Reflection\ClassReflection $classReflection, string $methodName) : bool
+    public function hasParentClassMethod(ClassReflection $classReflection, string $methodName) : bool
     {
         foreach ($classReflection->getParents() as $parentClassReflections) {
             if (!$parentClassReflections->hasMethod($methodName)) {
                 continue;
             }
             $constructMethodReflection = $parentClassReflections->getNativeMethod($methodName);
-            if (!$constructMethodReflection instanceof \PHPStan\Reflection\Php\PhpMethodReflection) {
+            if (!$constructMethodReflection instanceof PhpMethodReflection) {
                 continue;
             }
             $methodDeclaringMethodClass = $constructMethodReflection->getDeclaringClass();

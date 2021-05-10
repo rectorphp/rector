@@ -20,17 +20,17 @@ use RectorPrefix20210510\Symfony\Component\HttpKernel\ControllerMetadata\Argumen
  *
  * @author Nicolas Grekas <p@tchwork.com>
  */
-final class ServiceValueResolver implements \RectorPrefix20210510\Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface
+final class ServiceValueResolver implements ArgumentValueResolverInterface
 {
     private $container;
-    public function __construct(\RectorPrefix20210510\Psr\Container\ContainerInterface $container)
+    public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
     }
     /**
      * {@inheritdoc}
      */
-    public function supports(\RectorPrefix20210510\Symfony\Component\HttpFoundation\Request $request, \RectorPrefix20210510\Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata $argument) : bool
+    public function supports(Request $request, ArgumentMetadata $argument) : bool
     {
         $controller = $request->attributes->get('_controller');
         if (\is_array($controller) && \is_callable($controller, \true) && \is_string($controller[0])) {
@@ -49,7 +49,7 @@ final class ServiceValueResolver implements \RectorPrefix20210510\Symfony\Compon
     /**
      * {@inheritdoc}
      */
-    public function resolve(\RectorPrefix20210510\Symfony\Component\HttpFoundation\Request $request, \RectorPrefix20210510\Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata $argument) : iterable
+    public function resolve(Request $request, ArgumentMetadata $argument) : iterable
     {
         if (\is_array($controller = $request->attributes->get('_controller'))) {
             $controller = $controller[0] . '::' . $controller[1];
@@ -63,7 +63,7 @@ final class ServiceValueResolver implements \RectorPrefix20210510\Symfony\Compon
         }
         try {
             (yield $this->container->get($controller)->get($argument->getName()));
-        } catch (\RectorPrefix20210510\Symfony\Component\DependencyInjection\Exception\RuntimeException $e) {
+        } catch (RuntimeException $e) {
             $what = \sprintf('argument $%s of "%s()"', $argument->getName(), $controller);
             $message = \preg_replace('/service "\\.service_locator\\.[^"]++"/', $what, $e->getMessage());
             if ($e->getMessage() === $message) {

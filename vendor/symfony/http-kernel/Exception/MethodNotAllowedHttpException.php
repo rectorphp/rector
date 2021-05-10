@@ -13,7 +13,7 @@ namespace RectorPrefix20210510\Symfony\Component\HttpKernel\Exception;
 /**
  * @author Kris Wallsmith <kris@symfony.com>
  */
-class MethodNotAllowedHttpException extends \RectorPrefix20210510\Symfony\Component\HttpKernel\Exception\HttpException
+class MethodNotAllowedHttpException extends HttpException
 {
     /**
      * @param string[]        $allow    An array of allowed methods

@@ -6,50 +6,50 @@ namespace RectorPrefix20210510\Idiosyncratic\EditorConfig;
 use RectorPrefix20210510\Idiosyncratic\EditorConfig\Exception\InvalidValue;
 use RectorPrefix20210510\PHPUnit\Framework\TestCase;
 use RuntimeException;
-class EditorConfigFileTest extends \RectorPrefix20210510\PHPUnit\Framework\TestCase
+class EditorConfigFileTest extends TestCase
 {
     public function testParseEditorConfigFile() : void
     {
         $path = __DIR__ . '/data/editorconfig';
-        $file = new \RectorPrefix20210510\Idiosyncratic\EditorConfig\EditorConfigFile($path);
-        $this->assertInstanceOf(\RectorPrefix20210510\Idiosyncratic\EditorConfig\EditorConfigFile::class, $file);
+        $file = new EditorConfigFile($path);
+        $this->assertInstanceOf(EditorConfigFile::class, $file);
         $this->assertFalse($file->isRoot());
         $this->assertEquals($path, $file->getPath());
     }
     public function testGetPath() : void
     {
         $path = __DIR__ . '/data/editorconfig';
-        $file = new \RectorPrefix20210510\Idiosyncratic\EditorConfig\EditorConfigFile($path);
+        $file = new EditorConfigFile($path);
         $this->assertEquals($path, $file->getPath());
     }
     public function testEmptyFile() : void
     {
         $path = __DIR__ . '/data/empty_editorconfig';
-        $file = new \RectorPrefix20210510\Idiosyncratic\EditorConfig\EditorConfigFile($path);
+        $file = new EditorConfigFile($path);
         $this->assertEquals('', \trim((string) $file));
     }
     public function testRootFile() : void
     {
         $path = __DIR__ . '/data/root_editorconfig';
-        $file = new \RectorPrefix20210510\Idiosyncratic\EditorConfig\EditorConfigFile($path);
+        $file = new EditorConfigFile($path);
         $this->assertTrue($file->isRoot());
         $this->assertTrue(\strpos((string) $file, 'root=true') === 0);
     }
     public function testInvalidRootValue() : void
     {
         $path = __DIR__ . '/data/invalid_root_editorconfig';
-        $this->expectException(\RectorPrefix20210510\Idiosyncratic\EditorConfig\Exception\InvalidValue::class);
-        $file = new \RectorPrefix20210510\Idiosyncratic\EditorConfig\EditorConfigFile($path);
+        $this->expectException(InvalidValue::class);
+        $file = new EditorConfigFile($path);
     }
     public function testFileDoesNotExist() : void
     {
-        $this->expectException(\RuntimeException::class);
-        $file = new \RectorPrefix20210510\Idiosyncratic\EditorConfig\EditorConfigFile(__DIR__);
+        $this->expectException(RuntimeException::class);
+        $file = new EditorConfigFile(__DIR__);
     }
     public function testEmptyIndentSize() : void
     {
         $path = __DIR__ . '/data/editorconfig';
-        $file = new \RectorPrefix20210510\Idiosyncratic\EditorConfig\EditorConfigFile($path);
+        $file = new EditorConfigFile($path);
         $config = $file->getConfigForPath(__DIR__);
         $this->assertFalse(isset($config['indent_size']));
     }
@@ -59,7 +59,7 @@ class EditorConfigFileTest extends \RectorPrefix20210510\PHPUnit\Framework\TestC
     public function testGetConfigForPath(string $pathToFile, int $expectedIndentSize) : void
     {
         $path = __DIR__ . '/data/editorconfig';
-        $file = new \RectorPrefix20210510\Idiosyncratic\EditorConfig\EditorConfigFile($path);
+        $file = new EditorConfigFile($path);
         $config = $file->getConfigForPath($pathToFile);
         $this->assertEquals($expectedIndentSize, $config['indent_size']->getValue());
     }

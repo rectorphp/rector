@@ -21,7 +21,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Nette\Tests\Kdyby\Rector\MethodCall\ReplaceEventManagerWithEventSubscriberRector\ReplaceEventManagerWithEventSubscriberRectorTest
  */
-final class ReplaceEventManagerWithEventSubscriberRector extends \Rector\Core\Rector\AbstractRector
+final class ReplaceEventManagerWithEventSubscriberRector extends AbstractRector
 {
     /**
      * @var EventClassNaming
@@ -31,14 +31,14 @@ final class ReplaceEventManagerWithEventSubscriberRector extends \Rector\Core\Re
      * @var EventValueObjectClassFactory
      */
     private $eventValueObjectClassFactory;
-    public function __construct(\Rector\Nette\Kdyby\Naming\EventClassNaming $eventClassNaming, \Rector\Nette\Kdyby\NodeFactory\EventValueObjectClassFactory $eventValueObjectClassFactory)
+    public function __construct(EventClassNaming $eventClassNaming, EventValueObjectClassFactory $eventValueObjectClassFactory)
     {
         $this->eventClassNaming = $eventClassNaming;
         $this->eventValueObjectClassFactory = $eventValueObjectClassFactory;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change Kdyby EventManager to EventDispatcher', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change Kdyby EventManager to EventDispatcher', [new CodeSample(<<<'CODE_SAMPLE'
 use Kdyby\Events\EventManager;
 
 final class SomeClass
@@ -89,36 +89,36 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\MethodCall::class];
+        return [MethodCall::class];
     }
     /**
      * @param MethodCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if ($this->shouldSkip($node)) {
             return null;
         }
-        $node->name = new \PhpParser\Node\Identifier('dispatch');
+        $node->name = new Identifier('dispatch');
         $oldArgs = $node->args;
         $node->args = [];
         $eventReference = $oldArgs[0]->value;
         $classAndStaticProperty = $this->valueResolver->getValue($eventReference, \true);
         $eventClassName = $this->eventClassNaming->createEventClassNameFromClassPropertyReference($classAndStaticProperty);
         $args = $this->createNewArgs($oldArgs);
-        $new = new \PhpParser\Node\Expr\New_(new \PhpParser\Node\Name\FullyQualified($eventClassName), $args);
-        $node->args[] = new \PhpParser\Node\Arg($new);
+        $new = new New_(new FullyQualified($eventClassName), $args);
+        $node->args[] = new Arg($new);
         // 3. create new event class with args
         $eventClassInNamespace = $this->eventValueObjectClassFactory->create($eventClassName, $args);
         $fileInfo = $this->file->getSmartFileInfo();
         $eventFileLocation = $this->eventClassNaming->resolveEventFileLocationFromClassNameAndFileInfo($eventClassName, $fileInfo);
-        $addedFileWithNodes = new \Rector\FileSystemRector\ValueObject\AddedFileWithNodes($eventFileLocation, [$eventClassInNamespace]);
+        $addedFileWithNodes = new AddedFileWithNodes($eventFileLocation, [$eventClassInNamespace]);
         $this->removedAndAddedFilesCollector->addAddedFile($addedFileWithNodes);
         return $node;
     }
-    private function shouldSkip(\PhpParser\Node\Expr\MethodCall $methodCall) : bool
+    private function shouldSkip(MethodCall $methodCall) : bool
     {
-        if (!$this->isObjectType($methodCall->var, new \PHPStan\Type\ObjectType('Kdyby\\Events\\EventManager'))) {
+        if (!$this->isObjectType($methodCall->var, new ObjectType('Kdyby\\Events\\EventManager'))) {
             return \true;
         }
         return !$this->isName($methodCall->name, 'dispatchEvent');
@@ -130,18 +130,18 @@ CODE_SAMPLE
     private function createNewArgs(array $oldArgs) : array
     {
         $args = [];
-        if ($oldArgs[1]->value instanceof \PhpParser\Node\Expr\New_) {
+        if ($oldArgs[1]->value instanceof New_) {
             /** @var New_ $new */
             $new = $oldArgs[1]->value;
             $array = $new->args[0]->value;
-            if (!$array instanceof \PhpParser\Node\Expr\Array_) {
+            if (!$array instanceof Array_) {
                 return [];
             }
             foreach ($array->items as $arrayItem) {
-                if (!$arrayItem instanceof \PhpParser\Node\Expr\ArrayItem) {
+                if (!$arrayItem instanceof ArrayItem) {
                     continue;
                 }
-                $args[] = new \PhpParser\Node\Arg($arrayItem->value);
+                $args[] = new Arg($arrayItem->value);
             }
         }
         return $args;

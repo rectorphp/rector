@@ -25,14 +25,14 @@ final class CountableTypeAnalyzer
      * @var ObjectType[]
      */
     private $countableObjectTypes = [];
-    public function __construct(\Rector\NodeTypeResolver\TypeAnalyzer\ArrayTypeAnalyzer $arrayTypeAnalyzer, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\NodeTypeResolver\NodeTypeCorrector\PregMatchTypeCorrector $pregMatchTypeCorrector)
+    public function __construct(\Rector\NodeTypeResolver\TypeAnalyzer\ArrayTypeAnalyzer $arrayTypeAnalyzer, NodeTypeResolver $nodeTypeResolver, PregMatchTypeCorrector $pregMatchTypeCorrector)
     {
         $this->arrayTypeAnalyzer = $arrayTypeAnalyzer;
         $this->pregMatchTypeCorrector = $pregMatchTypeCorrector;
         $this->nodeTypeResolver = $nodeTypeResolver;
-        $this->countableObjectTypes = [new \PHPStan\Type\ObjectType('Countable'), new \PHPStan\Type\ObjectType('SimpleXMLElement'), new \PHPStan\Type\ObjectType('ResourceBundle')];
+        $this->countableObjectTypes = [new ObjectType('Countable'), new ObjectType('SimpleXMLElement'), new ObjectType('ResourceBundle')];
     }
-    public function isCountableType(\PhpParser\Node $node) : bool
+    public function isCountableType(Node $node) : bool
     {
         $nodeType = $this->nodeTypeResolver->resolve($node);
         $nodeType = $this->pregMatchTypeCorrector->correct($node, $nodeType);

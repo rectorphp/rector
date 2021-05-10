@@ -26,7 +26,7 @@ use RectorPrefix20210510\Symfony\Component\HttpKernel\KernelEvents;
  *
  * @final
  */
-class DebugHandlersListener implements \RectorPrefix20210510\Symfony\Component\EventDispatcher\EventSubscriberInterface
+class DebugHandlersListener implements EventSubscriberInterface
 {
     private $earlyHandler;
     private $exceptionHandler;
@@ -47,7 +47,7 @@ class DebugHandlersListener implements \RectorPrefix20210510\Symfony\Component\E
      * @param string|FileLinkFormatter|null $fileLinkFormat   The format for links to source files
      * @param bool                          $scope            Enables/disables scoping mode
      */
-    public function __construct(callable $exceptionHandler = null, \RectorPrefix20210510\Psr\Log\LoggerInterface $logger = null, $levels = \E_ALL, ?int $throwAt = \E_ALL, bool $scream = \true, $fileLinkFormat = null, bool $scope = \true, \RectorPrefix20210510\Psr\Log\LoggerInterface $deprecationLogger = null)
+    public function __construct(callable $exceptionHandler = null, LoggerInterface $logger = null, $levels = \E_ALL, ?int $throwAt = \E_ALL, bool $scream = \true, $fileLinkFormat = null, bool $scope = \true, LoggerInterface $deprecationLogger = null)
     {
         $handler = \set_exception_handler('var_dump');
         $this->earlyHandler = \is_array($handler) ? $handler[0] : null;
@@ -67,20 +67,20 @@ class DebugHandlersListener implements \RectorPrefix20210510\Symfony\Component\E
      */
     public function configure($event = null)
     {
-        if ($event instanceof \RectorPrefix20210510\Symfony\Component\Console\Event\ConsoleEvent && !\in_array(\PHP_SAPI, ['cli', 'phpdbg'], \true)) {
+        if ($event instanceof ConsoleEvent && !\in_array(\PHP_SAPI, ['cli', 'phpdbg'], \true)) {
             return;
         }
-        if (!$event instanceof \RectorPrefix20210510\Symfony\Component\HttpKernel\Event\KernelEvent ? !$this->firstCall : !$event->isMasterRequest()) {
+        if (!$event instanceof KernelEvent ? !$this->firstCall : !$event->isMasterRequest()) {
             return;
         }
         $this->firstCall = $this->hasTerminatedWithException = \false;
         $handler = \set_exception_handler('var_dump');
         $handler = \is_array($handler) ? $handler[0] : null;
         \restore_exception_handler();
-        if (!$handler instanceof \RectorPrefix20210510\Symfony\Component\ErrorHandler\ErrorHandler) {
+        if (!$handler instanceof ErrorHandler) {
             $handler = $this->earlyHandler;
         }
-        if ($handler instanceof \RectorPrefix20210510\Symfony\Component\ErrorHandler\ErrorHandler) {
+        if ($handler instanceof ErrorHandler) {
             if ($this->logger || $this->deprecationLogger) {
                 $this->setDefaultLoggers($handler);
                 if (\is_array($this->levels)) {
@@ -106,7 +106,7 @@ class DebugHandlersListener implements \RectorPrefix20210510\Symfony\Component\E
             }
         }
         if (!$this->exceptionHandler) {
-            if ($event instanceof \RectorPrefix20210510\Symfony\Component\HttpKernel\Event\KernelEvent) {
+            if ($event instanceof KernelEvent) {
                 if (\method_exists($kernel = $event->getKernel(), 'terminateWithException')) {
                     $request = $event->getRequest();
                     $hasRun =& $this->hasTerminatedWithException;
@@ -118,9 +118,9 @@ class DebugHandlersListener implements \RectorPrefix20210510\Symfony\Component\E
                         $kernel->terminateWithException($e, $request);
                     };
                 }
-            } elseif ($event instanceof \RectorPrefix20210510\Symfony\Component\Console\Event\ConsoleEvent && ($app = $event->getCommand()->getApplication())) {
+            } elseif ($event instanceof ConsoleEvent && ($app = $event->getCommand()->getApplication())) {
                 $output = $event->getOutput();
-                if ($output instanceof \RectorPrefix20210510\Symfony\Component\Console\Output\ConsoleOutputInterface) {
+                if ($output instanceof ConsoleOutputInterface) {
                     $output = $output->getErrorOutput();
                 }
                 $this->exceptionHandler = static function (\Throwable $e) use($app, $output) {
@@ -129,13 +129,13 @@ class DebugHandlersListener implements \RectorPrefix20210510\Symfony\Component\E
             }
         }
         if ($this->exceptionHandler) {
-            if ($handler instanceof \RectorPrefix20210510\Symfony\Component\ErrorHandler\ErrorHandler) {
+            if ($handler instanceof ErrorHandler) {
                 $handler->setExceptionHandler($this->exceptionHandler);
             }
             $this->exceptionHandler = null;
         }
     }
-    private function setDefaultLoggers(\RectorPrefix20210510\Symfony\Component\ErrorHandler\ErrorHandler $handler) : void
+    private function setDefaultLoggers(ErrorHandler $handler) : void
     {
         if (\is_array($this->levels)) {
             $levelsDeprecatedOnly = [];
@@ -162,9 +162,9 @@ class DebugHandlersListener implements \RectorPrefix20210510\Symfony\Component\E
     }
     public static function getSubscribedEvents() : array
     {
-        $events = [\RectorPrefix20210510\Symfony\Component\HttpKernel\KernelEvents::REQUEST => ['configure', 2048]];
+        $events = [KernelEvents::REQUEST => ['configure', 2048]];
         if (\defined('Symfony\\Component\\Console\\ConsoleEvents::COMMAND')) {
-            $events[\RectorPrefix20210510\Symfony\Component\Console\ConsoleEvents::COMMAND] = ['configure', 2048];
+            $events[ConsoleEvents::COMMAND] = ['configure', 2048];
         }
         return $events;
     }

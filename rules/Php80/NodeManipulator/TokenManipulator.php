@@ -56,7 +56,7 @@ final class TokenManipulator
      * @var Expr|null
      */
     private $assignedNameExpr;
-    public function __construct(\RectorPrefix20210510\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\PostRector\Collector\NodesToRemoveCollector $nodesToRemoveCollector, \Rector\Core\PhpParser\Node\Value\ValueResolver $valueResolver, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator)
+    public function __construct(SimpleCallableNodeTraverser $simpleCallableNodeTraverser, NodeNameResolver $nodeNameResolver, NodeTypeResolver $nodeTypeResolver, NodesToRemoveCollector $nodesToRemoveCollector, ValueResolver $valueResolver, NodeComparator $nodeComparator)
     {
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->valueResolver = $valueResolver;
@@ -68,50 +68,50 @@ final class TokenManipulator
     /**
      * @param Node[] $nodes
      */
-    public function refactorArrayToken(array $nodes, \PhpParser\Node\Expr $singleTokenExpr) : void
+    public function refactorArrayToken(array $nodes, Expr $singleTokenExpr) : void
     {
         $this->replaceTokenDimFetchZeroWithGetTokenName($nodes, $singleTokenExpr);
         // replace "$token[1]"; with "$token->value"
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($nodes, function (\PhpParser\Node $node) : ?PropertyFetch {
-            if (!$node instanceof \PhpParser\Node\Expr\ArrayDimFetch) {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($nodes, function (Node $node) : ?PropertyFetch {
+            if (!$node instanceof ArrayDimFetch) {
                 return null;
             }
             if (!$this->isArrayDimFetchWithDimIntegerValue($node, 1)) {
                 return null;
             }
             $tokenStaticType = $this->nodeTypeResolver->getStaticType($node->var);
-            if (!$tokenStaticType instanceof \PHPStan\Type\ArrayType) {
+            if (!$tokenStaticType instanceof ArrayType) {
                 return null;
             }
-            return new \PhpParser\Node\Expr\PropertyFetch($node->var, 'text');
+            return new PropertyFetch($node->var, 'text');
         });
     }
     /**
      * @param Node[] $nodes
      */
-    public function refactorNonArrayToken(array $nodes, \PhpParser\Node\Expr $singleTokenExpr) : void
+    public function refactorNonArrayToken(array $nodes, Expr $singleTokenExpr) : void
     {
         // replace "$content = $token;" → "$content = $token->text;"
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($nodes, function (\PhpParser\Node $node) use($singleTokenExpr) {
-            if (!$node instanceof \PhpParser\Node\Expr\Assign) {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($nodes, function (Node $node) use($singleTokenExpr) {
+            if (!$node instanceof Assign) {
                 return null;
             }
             if (!$this->nodeComparator->areNodesEqual($node->expr, $singleTokenExpr)) {
                 return null;
             }
             $tokenStaticType = $this->nodeTypeResolver->getStaticType($node->expr);
-            if ($tokenStaticType instanceof \PHPStan\Type\ArrayType) {
+            if ($tokenStaticType instanceof ArrayType) {
                 return null;
             }
-            $node->expr = new \PhpParser\Node\Expr\PropertyFetch($singleTokenExpr, 'text');
+            $node->expr = new PropertyFetch($singleTokenExpr, 'text');
         });
         // replace "$name = null;" → "$name = $token->getTokenName();"
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($nodes, function (\PhpParser\Node $node) use($singleTokenExpr) : ?Assign {
-            if (!$node instanceof \PhpParser\Node\Expr\Assign) {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($nodes, function (Node $node) use($singleTokenExpr) : ?Assign {
+            if (!$node instanceof Assign) {
                 return null;
             }
             $tokenStaticType = $this->nodeTypeResolver->getStaticType($node->expr);
-            if ($tokenStaticType instanceof \PHPStan\Type\ArrayType) {
+            if ($tokenStaticType instanceof ArrayType) {
                 return null;
             }
             if ($this->assignedNameExpr === null) {
@@ -123,21 +123,21 @@ final class TokenManipulator
             if (!$this->valueResolver->isValue($node->expr, 'null')) {
                 return null;
             }
-            $node->expr = new \PhpParser\Node\Expr\MethodCall($singleTokenExpr, 'getTokenName');
+            $node->expr = new MethodCall($singleTokenExpr, 'getTokenName');
             return $node;
         });
     }
     /**
      * @param Node[] $nodes
      */
-    public function refactorTokenIsKind(array $nodes, \PhpParser\Node\Expr $singleTokenExpr) : void
+    public function refactorTokenIsKind(array $nodes, Expr $singleTokenExpr) : void
     {
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($nodes, function (\PhpParser\Node $node) use($singleTokenExpr) : ?MethodCall {
-            if (!$node instanceof \PhpParser\Node\Expr\BinaryOp\Identical) {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($nodes, function (Node $node) use($singleTokenExpr) : ?MethodCall {
+            if (!$node instanceof Identical) {
                 return null;
             }
             $arrayDimFetchAndConstFetch = $this->matchArrayDimFetchAndConstFetch($node);
-            if (!$arrayDimFetchAndConstFetch instanceof \Rector\Php80\ValueObject\ArrayDimFetchAndConstFetch) {
+            if (!$arrayDimFetchAndConstFetch instanceof ArrayDimFetchAndConstFetch) {
                 return null;
             }
             if (!$this->isArrayDimFetchWithDimIntegerValue($arrayDimFetchAndConstFetch->getArrayDimFetch(), 0)) {
@@ -152,7 +152,7 @@ final class TokenManipulator
             if ($constName === null) {
                 return null;
             }
-            if (!\RectorPrefix20210510\Nette\Utils\Strings::match($constName, '#^T_#')) {
+            if (!Strings::match($constName, '#^T_#')) {
                 return null;
             }
             return $this->createIsTConstTypeMethodCall($arrayDimFetch, $arrayDimFetchAndConstFetch->getConstFetch());
@@ -161,10 +161,10 @@ final class TokenManipulator
     /**
      * @param Node[] $nodes
      */
-    public function removeIsArray(array $nodes, \PhpParser\Node\Expr\Variable $singleTokenVariable) : void
+    public function removeIsArray(array $nodes, Variable $singleTokenVariable) : void
     {
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($nodes, function (\PhpParser\Node $node) use($singleTokenVariable) {
-            if (!$node instanceof \PhpParser\Node\Expr\FuncCall) {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($nodes, function (Node $node) use($singleTokenVariable) {
+            if (!$node instanceof FuncCall) {
                 return null;
             }
             if (!$this->nodeNameResolver->isName($node, 'is_array')) {
@@ -186,21 +186,21 @@ final class TokenManipulator
      *
      * @param Node[] $nodes
      */
-    private function replaceTokenDimFetchZeroWithGetTokenName(array $nodes, \PhpParser\Node\Expr $singleTokenExpr) : void
+    private function replaceTokenDimFetchZeroWithGetTokenName(array $nodes, Expr $singleTokenExpr) : void
     {
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($nodes, function (\PhpParser\Node $node) use($singleTokenExpr) : ?MethodCall {
-            if (!$node instanceof \PhpParser\Node\Expr\FuncCall) {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($nodes, function (Node $node) use($singleTokenExpr) : ?MethodCall {
+            if (!$node instanceof FuncCall) {
                 return null;
             }
             if (!$this->nodeNameResolver->isName($node, 'token_name')) {
                 return null;
             }
             $possibleTokenArray = $node->args[0]->value;
-            if (!$possibleTokenArray instanceof \PhpParser\Node\Expr\ArrayDimFetch) {
+            if (!$possibleTokenArray instanceof ArrayDimFetch) {
                 return null;
             }
             $tokenStaticType = $this->nodeTypeResolver->getStaticType($possibleTokenArray->var);
-            if (!$tokenStaticType instanceof \PHPStan\Type\ArrayType) {
+            if (!$tokenStaticType instanceof ArrayType) {
                 return null;
             }
             if ($possibleTokenArray->dim === null) {
@@ -213,57 +213,57 @@ final class TokenManipulator
                 return null;
             }
             // save token variable name for later
-            $parentNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-            if ($parentNode instanceof \PhpParser\Node\Expr\Assign) {
+            $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+            if ($parentNode instanceof Assign) {
                 $this->assignedNameExpr = $parentNode->var;
             }
-            return new \PhpParser\Node\Expr\MethodCall($singleTokenExpr, 'getTokenName');
+            return new MethodCall($singleTokenExpr, 'getTokenName');
         });
     }
-    private function isArrayDimFetchWithDimIntegerValue(\PhpParser\Node\Expr\ArrayDimFetch $arrayDimFetch, int $value) : bool
+    private function isArrayDimFetchWithDimIntegerValue(ArrayDimFetch $arrayDimFetch, int $value) : bool
     {
         if ($arrayDimFetch->dim === null) {
             return \false;
         }
         return $this->valueResolver->isValue($arrayDimFetch->dim, $value);
     }
-    private function matchArrayDimFetchAndConstFetch(\PhpParser\Node\Expr\BinaryOp\Identical $identical) : ?\Rector\Php80\ValueObject\ArrayDimFetchAndConstFetch
+    private function matchArrayDimFetchAndConstFetch(Identical $identical) : ?ArrayDimFetchAndConstFetch
     {
-        if ($identical->left instanceof \PhpParser\Node\Expr\ArrayDimFetch && $identical->right instanceof \PhpParser\Node\Expr\ConstFetch) {
-            return new \Rector\Php80\ValueObject\ArrayDimFetchAndConstFetch($identical->left, $identical->right);
+        if ($identical->left instanceof ArrayDimFetch && $identical->right instanceof ConstFetch) {
+            return new ArrayDimFetchAndConstFetch($identical->left, $identical->right);
         }
-        if (!$identical->right instanceof \PhpParser\Node\Expr\ArrayDimFetch) {
+        if (!$identical->right instanceof ArrayDimFetch) {
             return null;
         }
-        if (!$identical->left instanceof \PhpParser\Node\Expr\ConstFetch) {
+        if (!$identical->left instanceof ConstFetch) {
             return null;
         }
-        return new \Rector\Php80\ValueObject\ArrayDimFetchAndConstFetch($identical->right, $identical->left);
+        return new ArrayDimFetchAndConstFetch($identical->right, $identical->left);
     }
-    private function createIsTConstTypeMethodCall(\PhpParser\Node\Expr\ArrayDimFetch $arrayDimFetch, \PhpParser\Node\Expr\ConstFetch $constFetch) : \PhpParser\Node\Expr\MethodCall
+    private function createIsTConstTypeMethodCall(ArrayDimFetch $arrayDimFetch, ConstFetch $constFetch) : MethodCall
     {
-        return new \PhpParser\Node\Expr\MethodCall($arrayDimFetch->var, 'is', [new \PhpParser\Node\Arg($constFetch)]);
+        return new MethodCall($arrayDimFetch->var, 'is', [new Arg($constFetch)]);
     }
-    private function shouldSkipNodeRemovalForPartOfIf(\PhpParser\Node\Expr\FuncCall $funcCall) : bool
+    private function shouldSkipNodeRemovalForPartOfIf(FuncCall $funcCall) : bool
     {
-        $parentNode = $funcCall->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        $parentNode = $funcCall->getAttribute(AttributeKey::PARENT_NODE);
         // cannot remove x from if(x)
-        if ($parentNode instanceof \PhpParser\Node\Stmt\If_ && $parentNode->cond === $funcCall) {
+        if ($parentNode instanceof If_ && $parentNode->cond === $funcCall) {
             return \true;
         }
-        if ($parentNode instanceof \PhpParser\Node\Expr\BooleanNot) {
-            $parentParentNode = $parentNode->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-            if ($parentParentNode instanceof \PhpParser\Node\Stmt\If_) {
+        if ($parentNode instanceof BooleanNot) {
+            $parentParentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
+            if ($parentParentNode instanceof If_) {
                 $parentParentNode->cond = $parentNode;
                 return \true;
             }
         }
         return \false;
     }
-    private function matchParentNodeInCaseOfIdenticalTrue(\PhpParser\Node\Expr\FuncCall $funcCall) : \PhpParser\Node\Expr
+    private function matchParentNodeInCaseOfIdenticalTrue(FuncCall $funcCall) : Expr
     {
-        $parentNode = $funcCall->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-        if ($parentNode instanceof \PhpParser\Node\Expr\BinaryOp\Identical) {
+        $parentNode = $funcCall->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parentNode instanceof Identical) {
             $isRightValueTrue = $this->valueResolver->isValue($parentNode->right, \true);
             if ($parentNode->left === $funcCall && $isRightValueTrue) {
                 return $parentNode;

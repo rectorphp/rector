@@ -19,7 +19,7 @@ namespace RectorPrefix20210510\Symfony\Component\Config;
  *
  * @author Matthias Pigulla <mp@webfactory.de>
  */
-class ConfigCacheFactory implements \RectorPrefix20210510\Symfony\Component\Config\ConfigCacheFactoryInterface
+class ConfigCacheFactory implements ConfigCacheFactoryInterface
 {
     private $debug;
     /**
@@ -34,7 +34,7 @@ class ConfigCacheFactory implements \RectorPrefix20210510\Symfony\Component\Conf
      */
     public function cache(string $file, callable $callback)
     {
-        $cache = new \RectorPrefix20210510\Symfony\Component\Config\ConfigCache($file, $this->debug);
+        $cache = new ConfigCache($file, $this->debug);
         if (!$cache->isFresh()) {
             $callback($cache);
         }

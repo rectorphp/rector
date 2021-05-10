@@ -27,7 +27,7 @@ final class OnFormVariableMethodCallsCollector
      * @var NodeComparator
      */
     private $nodeComparator;
-    public function __construct(\RectorPrefix20210510\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator)
+    public function __construct(SimpleCallableNodeTraverser $simpleCallableNodeTraverser, NodeTypeResolver $nodeTypeResolver, NodeComparator $nodeComparator)
     {
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->nodeTypeResolver = $nodeTypeResolver;
@@ -36,10 +36,10 @@ final class OnFormVariableMethodCallsCollector
     /**
      * @return MethodCall[]
      */
-    public function collectFromClassMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod) : array
+    public function collectFromClassMethod(ClassMethod $classMethod) : array
     {
         $newFormVariable = $this->resolveNewFormVariable($classMethod);
-        if (!$newFormVariable instanceof \PhpParser\Node\Expr) {
+        if (!$newFormVariable instanceof Expr) {
             return [];
         }
         return $this->collectOnFormVariableMethodCalls($classMethod, $newFormVariable);
@@ -48,29 +48,29 @@ final class OnFormVariableMethodCallsCollector
      * Matches:
      * $form = new Form;
      */
-    private function resolveNewFormVariable(\PhpParser\Node\Stmt\ClassMethod $classMethod) : ?\PhpParser\Node\Expr
+    private function resolveNewFormVariable(ClassMethod $classMethod) : ?Expr
     {
         $newFormVariable = null;
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $classMethod->getStmts(), function (\PhpParser\Node $node) use(&$newFormVariable) : ?int {
-            if (!$node instanceof \PhpParser\Node\Expr\Assign) {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $classMethod->getStmts(), function (Node $node) use(&$newFormVariable) : ?int {
+            if (!$node instanceof Assign) {
                 return null;
             }
-            if (!$this->nodeTypeResolver->isObjectType($node->expr, new \PHPStan\Type\ObjectType('Nette\\Application\\UI\\Form'))) {
+            if (!$this->nodeTypeResolver->isObjectType($node->expr, new ObjectType('Nette\\Application\\UI\\Form'))) {
                 return null;
             }
             $newFormVariable = $node->var;
-            return \PhpParser\NodeTraverser::STOP_TRAVERSAL;
+            return NodeTraverser::STOP_TRAVERSAL;
         });
         return $newFormVariable;
     }
     /**
      * @return MethodCall[]
      */
-    private function collectOnFormVariableMethodCalls(\PhpParser\Node\Stmt\ClassMethod $classMethod, \PhpParser\Node\Expr $expr) : array
+    private function collectOnFormVariableMethodCalls(ClassMethod $classMethod, Expr $expr) : array
     {
         $onFormVariableMethodCalls = [];
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $classMethod->getStmts(), function (\PhpParser\Node $node) use($expr, &$onFormVariableMethodCalls) {
-            if (!$node instanceof \PhpParser\Node\Expr\MethodCall) {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $classMethod->getStmts(), function (Node $node) use($expr, &$onFormVariableMethodCalls) {
+            if (!$node instanceof MethodCall) {
                 return null;
             }
             if (!$this->nodeComparator->areNodesEqual($node->var, $expr)) {

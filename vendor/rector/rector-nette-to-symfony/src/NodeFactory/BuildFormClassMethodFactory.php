@@ -15,15 +15,15 @@ final class BuildFormClassMethodFactory
      * @var NodeFactory
      */
     private $nodeFactory;
-    public function __construct(\Rector\Core\PhpParser\Node\NodeFactory $nodeFactory)
+    public function __construct(NodeFactory $nodeFactory)
     {
         $this->nodeFactory = $nodeFactory;
     }
-    public function create(\PhpParser\Node\Expr\Variable $formBuilderVariable) : \PhpParser\Node\Stmt\ClassMethod
+    public function create(Variable $formBuilderVariable) : ClassMethod
     {
         $buildFormClassMethod = $this->nodeFactory->createPublicMethod('buildForm');
-        $buildFormClassMethod->params[] = new \PhpParser\Node\Param($formBuilderVariable, null, new \PhpParser\Node\Name\FullyQualified('Symfony\\Component\\Form\\FormBuilderInterface'));
-        $buildFormClassMethod->params[] = new \PhpParser\Node\Param(new \PhpParser\Node\Expr\Variable('options'), null, new \PhpParser\Node\Identifier('array'));
+        $buildFormClassMethod->params[] = new Param($formBuilderVariable, null, new FullyQualified('Symfony\\Component\\Form\\FormBuilderInterface'));
+        $buildFormClassMethod->params[] = new Param(new Variable('options'), null, new Identifier('array'));
         return $buildFormClassMethod;
     }
 }

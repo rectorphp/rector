@@ -16,15 +16,15 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\Order\Rector\Class_\OrderFirstLevelClassStatementsRector\OrderFirstLevelClassStatementsRectorTest
  */
-final class OrderFirstLevelClassStatementsRector extends \Rector\Core\Rector\AbstractRector
+final class OrderFirstLevelClassStatementsRector extends AbstractRector
 {
     /**
      * @var array<string, int>
      */
-    private const TYPE_TO_RANK = [\PhpParser\Node\Stmt\ClassMethod::class => 3, \PhpParser\Node\Stmt\Property::class => 2, \PhpParser\Node\Stmt\ClassConst::class => 1];
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    private const TYPE_TO_RANK = [ClassMethod::class => 3, Property::class => 2, ClassConst::class => 1];
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Orders first level Class statements', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Orders first level Class statements', [new CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function functionName();
@@ -49,12 +49,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Class_::class, \PhpParser\Node\Stmt\Trait_::class];
+        return [Class_::class, Trait_::class];
     }
     /**
      * @param Class_|Trait_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         $node->stmts = $this->getStmtsInDesiredPosition($node->stmts);
         return $node;
@@ -65,12 +65,12 @@ CODE_SAMPLE
      */
     private function getStmtsInDesiredPosition(array $stmts) : array
     {
-        \uasort($stmts, function (\PhpParser\Node\Stmt $firstStmt, \PhpParser\Node\Stmt $secondStmt) : int {
+        \uasort($stmts, function (Stmt $firstStmt, Stmt $secondStmt) : int {
             return [$this->resolveClassElementRank($firstStmt), $firstStmt->getLine()] <=> [$this->resolveClassElementRank($secondStmt), $secondStmt->getLine()];
         });
         return $stmts;
     }
-    private function resolveClassElementRank(\PhpParser\Node\Stmt $stmt) : int
+    private function resolveClassElementRank(Stmt $stmt) : int
     {
         foreach (self::TYPE_TO_RANK as $type => $rank) {
             if (\is_a($stmt, $type, \true)) {

@@ -16,7 +16,7 @@ use RectorPrefix20210510\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Transform\Rector\Assign\PropertyAssignToMethodCallRector\PropertyAssignToMethodCallRectorTest
  */
-final class PropertyAssignToMethodCallRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
+final class PropertyAssignToMethodCallRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
      * @var string
@@ -26,9 +26,9 @@ final class PropertyAssignToMethodCallRector extends \Rector\Core\Rector\Abstrac
      * @var PropertyAssignToMethodCall[]
      */
     private $propertyAssignsToMethodCalls = [];
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Turns property assign of specific type and property name to method call', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Turns property assign of specific type and property name to method call', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 $someObject = new SomeClass;
 $someObject->oldProperty = false;
 CODE_SAMPLE
@@ -36,21 +36,21 @@ CODE_SAMPLE
 $someObject = new SomeClass;
 $someObject->newMethodCall(false);
 CODE_SAMPLE
-, [self::PROPERTY_ASSIGNS_TO_METHODS_CALLS => [new \Rector\Transform\ValueObject\PropertyAssignToMethodCall('SomeClass', 'oldProperty', 'newMethodCall')]])]);
+, [self::PROPERTY_ASSIGNS_TO_METHODS_CALLS => [new PropertyAssignToMethodCall('SomeClass', 'oldProperty', 'newMethodCall')]])]);
     }
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\Assign::class];
+        return [Assign::class];
     }
     /**
      * @param Assign $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        if (!$node->var instanceof \PhpParser\Node\Expr\PropertyFetch) {
+        if (!$node->var instanceof PropertyFetch) {
             return null;
         }
         $propertyFetchNode = $node->var;
@@ -73,7 +73,7 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $propertyAssignsToMethodCalls = $configuration[self::PROPERTY_ASSIGNS_TO_METHODS_CALLS] ?? [];
-        \RectorPrefix20210510\Webmozart\Assert\Assert::allIsInstanceOf($propertyAssignsToMethodCalls, \Rector\Transform\ValueObject\PropertyAssignToMethodCall::class);
+        Assert::allIsInstanceOf($propertyAssignsToMethodCalls, PropertyAssignToMethodCall::class);
         $this->propertyAssignsToMethodCalls = $propertyAssignsToMethodCalls;
     }
 }

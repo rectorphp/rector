@@ -4,6 +4,6 @@ declare (strict_types=1);
 namespace RectorPrefix20210510\Symplify\PackageBuilder\Exception;
 
 use Exception;
-final class FilePathNotAbsoluteException extends \Exception
+final class FilePathNotAbsoluteException extends Exception
 {
 }

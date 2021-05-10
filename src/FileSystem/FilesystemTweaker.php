@@ -11,7 +11,7 @@ final class FilesystemTweaker
      * @var FileSystemGuard
      */
     private $fileSystemGuard;
-    public function __construct(\RectorPrefix20210510\Symplify\SmartFileSystem\FileSystemGuard $fileSystemGuard)
+    public function __construct(FileSystemGuard $fileSystemGuard)
     {
         $this->fileSystemGuard = $fileSystemGuard;
     }
@@ -26,7 +26,7 @@ final class FilesystemTweaker
         $absoluteDirectories = [];
         foreach ($directories as $directory) {
             // is fnmatch for directories
-            if (\RectorPrefix20210510\Nette\Utils\Strings::contains($directory, '*')) {
+            if (Strings::contains($directory, '*')) {
                 $foundDirectories = $this->foundDirectoriesInGlob($directory);
                 $absoluteDirectories = \array_merge($absoluteDirectories, $foundDirectories);
             } else {

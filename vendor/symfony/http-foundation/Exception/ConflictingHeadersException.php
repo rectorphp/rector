@@ -15,6 +15,6 @@ namespace RectorPrefix20210510\Symfony\Component\HttpFoundation\Exception;
  *
  * @author Magnus Nordlander <magnus@fervo.se>
  */
-class ConflictingHeadersException extends \UnexpectedValueException implements \RectorPrefix20210510\Symfony\Component\HttpFoundation\Exception\RequestExceptionInterface
+class ConflictingHeadersException extends \UnexpectedValueException implements RequestExceptionInterface
 {
 }

@@ -17,21 +17,21 @@ final class PropertyRenameFactory
      * @var NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
+    public function __construct(NodeNameResolver $nodeNameResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
     }
-    public function createFromExpectedName(\PhpParser\Node\Stmt\Property $property, string $expectedName) : ?\Rector\Naming\ValueObject\PropertyRename
+    public function createFromExpectedName(Property $property, string $expectedName) : ?PropertyRename
     {
         $currentName = $this->nodeNameResolver->getName($property);
-        $propertyClassLike = $property->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
-        if (!$propertyClassLike instanceof \PhpParser\Node\Stmt\ClassLike) {
+        $propertyClassLike = $property->getAttribute(AttributeKey::CLASS_NODE);
+        if (!$propertyClassLike instanceof ClassLike) {
             return null;
         }
-        $propertyClassLikeName = $property->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);
+        $propertyClassLikeName = $property->getAttribute(AttributeKey::CLASS_NAME);
         if ($propertyClassLikeName === null) {
             return null;
         }
-        return new \Rector\Naming\ValueObject\PropertyRename($property, $expectedName, $currentName, $propertyClassLike, $propertyClassLikeName, $property->props[0]);
+        return new PropertyRename($property, $expectedName, $currentName, $propertyClassLike, $propertyClassLikeName, $property->props[0]);
     }
 }

@@ -25,14 +25,14 @@ use RectorPrefix20210510\Symfony\Component\HttpKernel\HttpKernelInterface;
  *
  * @author Bernhard Schussek <bschussek@gmail.com>
  */
-final class ExceptionEvent extends \RectorPrefix20210510\Symfony\Component\HttpKernel\Event\RequestEvent
+final class ExceptionEvent extends RequestEvent
 {
     private $throwable;
     /**
      * @var bool
      */
     private $allowCustomResponseCode = \false;
-    public function __construct(\RectorPrefix20210510\Symfony\Component\HttpKernel\HttpKernelInterface $kernel, \RectorPrefix20210510\Symfony\Component\HttpFoundation\Request $request, int $requestType, \Throwable $e)
+    public function __construct(HttpKernelInterface $kernel, Request $request, int $requestType, \Throwable $e)
     {
         parent::__construct($kernel, $request, $requestType);
         $this->setThrowable($e);

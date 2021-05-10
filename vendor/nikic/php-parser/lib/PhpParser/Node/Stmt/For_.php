@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace PhpParser\Node\Stmt;
 
 use PhpParser\Node;
-class For_ extends \PhpParser\Node\Stmt
+class For_ extends Node\Stmt
 {
     /** @var Node\Expr[] Init expressions */
     public $init;

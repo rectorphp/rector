@@ -518,12 +518,12 @@ abstract class ParserAbstract implements \PhpParser\Parser
      *
      * @return Expr\StaticCall
      */
-    protected function fixupPhp5StaticPropCall($prop, array $args, array $attributes) : \PhpParser\Node\Expr\StaticCall
+    protected function fixupPhp5StaticPropCall($prop, array $args, array $attributes) : Expr\StaticCall
     {
         if ($prop instanceof \PhpParser\Node\Expr\StaticPropertyFetch) {
-            $name = $prop->name instanceof \PhpParser\Node\VarLikeIdentifier ? $prop->name->toString() : $prop->name;
-            $var = new \PhpParser\Node\Expr\Variable($name, $prop->name->getAttributes());
-            return new \PhpParser\Node\Expr\StaticCall($prop->class, $var, $args, $attributes);
+            $name = $prop->name instanceof VarLikeIdentifier ? $prop->name->toString() : $prop->name;
+            $var = new Expr\Variable($name, $prop->name->getAttributes());
+            return new Expr\StaticCall($prop->class, $var, $args, $attributes);
         } elseif ($prop instanceof \PhpParser\Node\Expr\ArrayDimFetch) {
             $tmp = $prop;
             while ($tmp->var instanceof \PhpParser\Node\Expr\ArrayDimFetch) {
@@ -538,9 +538,9 @@ abstract class ParserAbstract implements \PhpParser\Parser
                 $tmp = $tmp->var;
                 $this->fixupStartAttributes($tmp, $staticProp->name);
             }
-            $name = $staticProp->name instanceof \PhpParser\Node\VarLikeIdentifier ? $staticProp->name->toString() : $staticProp->name;
-            $tmp->var = new \PhpParser\Node\Expr\Variable($name, $staticProp->name->getAttributes());
-            return new \PhpParser\Node\Expr\StaticCall($staticProp->class, $prop, $args, $attributes);
+            $name = $staticProp->name instanceof VarLikeIdentifier ? $staticProp->name->toString() : $staticProp->name;
+            $tmp->var = new Expr\Variable($name, $staticProp->name->getAttributes());
+            return new Expr\StaticCall($staticProp->class, $prop, $args, $attributes);
         } else {
             throw new \Exception();
         }
@@ -554,7 +554,7 @@ abstract class ParserAbstract implements \PhpParser\Parser
             }
         }
     }
-    protected function handleBuiltinTypes(\PhpParser\Node\Name $name)
+    protected function handleBuiltinTypes(Name $name)
     {
         $builtinTypes = ['bool' => \true, 'int' => \true, 'float' => \true, 'string' => \true, 'iterable' => \true, 'void' => \true, 'object' => \true, 'null' => \true, 'false' => \true, 'mixed' => \true];
         if (!$name->isUnqualified()) {
@@ -581,21 +581,21 @@ abstract class ParserAbstract implements \PhpParser\Parser
     {
         $cast = \strtolower($cast);
         if (\strpos($cast, 'float') !== \false) {
-            return \PhpParser\Node\Expr\Cast\Double::KIND_FLOAT;
+            return Double::KIND_FLOAT;
         }
         if (\strpos($cast, 'real') !== \false) {
-            return \PhpParser\Node\Expr\Cast\Double::KIND_REAL;
+            return Double::KIND_REAL;
         }
-        return \PhpParser\Node\Expr\Cast\Double::KIND_DOUBLE;
+        return Double::KIND_DOUBLE;
     }
     protected function parseLNumber($str, $attributes, $allowInvalidOctal = \false)
     {
         try {
-            return \PhpParser\Node\Scalar\LNumber::fromString($str, $attributes, $allowInvalidOctal);
+            return LNumber::fromString($str, $attributes, $allowInvalidOctal);
         } catch (\PhpParser\Error $error) {
             $this->emitError($error);
             // Use dummy value
-            return new \PhpParser\Node\Scalar\LNumber(0, $attributes);
+            return new LNumber(0, $attributes);
         }
     }
     /**
@@ -609,13 +609,13 @@ abstract class ParserAbstract implements \PhpParser\Parser
     protected function parseNumString(string $str, array $attributes)
     {
         if (!\preg_match('/^(?:0|-?[1-9][0-9]*)$/', $str)) {
-            return new \PhpParser\Node\Scalar\String_($str, $attributes);
+            return new String_($str, $attributes);
         }
         $num = +$str;
         if (!\is_int($num)) {
-            return new \PhpParser\Node\Scalar\String_($str, $attributes);
+            return new String_($str, $attributes);
         }
-        return new \PhpParser\Node\Scalar\LNumber($num, $attributes);
+        return new LNumber($num, $attributes);
     }
     protected function stripIndentation(string $string, int $indentLen, string $indentChar, bool $newlineAtStart, bool $newlineAtEnd, array $attributes)
     {
@@ -637,7 +637,7 @@ abstract class ParserAbstract implements \PhpParser\Parser
     }
     protected function parseDocString(string $startToken, $contents, string $endToken, array $attributes, array $endTokenAttributes, bool $parseUnicodeEscape)
     {
-        $kind = \strpos($startToken, "'") === \false ? \PhpParser\Node\Scalar\String_::KIND_HEREDOC : \PhpParser\Node\Scalar\String_::KIND_NOWDOC;
+        $kind = \strpos($startToken, "'") === \false ? String_::KIND_HEREDOC : String_::KIND_NOWDOC;
         $regex = '/\\A[bB]?<<<[ \\t]*[\'"]?([a-zA-Z_\\x7f-\\xff][a-zA-Z0-9_\\x7f-\\xff]*)[\'"]?(?:\\r\\n|\\n|\\r)\\z/';
         $result = \preg_match($regex, $startToken, $matches);
         \assert($result === 1);
@@ -659,14 +659,14 @@ abstract class ParserAbstract implements \PhpParser\Parser
         $indentChar = $indentHasSpaces ? " " : "\t";
         if (\is_string($contents)) {
             if ($contents === '') {
-                return new \PhpParser\Node\Scalar\String_('', $attributes);
+                return new String_('', $attributes);
             }
             $contents = $this->stripIndentation($contents, $indentLen, $indentChar, \true, \true, $attributes);
             $contents = \preg_replace('~(\\r\\n|\\n|\\r)\\z~', '', $contents);
-            if ($kind === \PhpParser\Node\Scalar\String_::KIND_HEREDOC) {
-                $contents = \PhpParser\Node\Scalar\String_::parseEscapeSequences($contents, null, $parseUnicodeEscape);
+            if ($kind === String_::KIND_HEREDOC) {
+                $contents = String_::parseEscapeSequences($contents, null, $parseUnicodeEscape);
             }
-            return new \PhpParser\Node\Scalar\String_($contents, $attributes);
+            return new String_($contents, $attributes);
         } else {
             \assert(\count($contents) > 0);
             if (!$contents[0] instanceof \PhpParser\Node\Scalar\EncapsedStringPart) {
@@ -678,7 +678,7 @@ abstract class ParserAbstract implements \PhpParser\Parser
                 if ($part instanceof \PhpParser\Node\Scalar\EncapsedStringPart) {
                     $isLast = $i === \count($contents) - 1;
                     $part->value = $this->stripIndentation($part->value, $indentLen, $indentChar, $i === 0, $isLast, $part->getAttributes());
-                    $part->value = \PhpParser\Node\Scalar\String_::parseEscapeSequences($part->value, null, $parseUnicodeEscape);
+                    $part->value = String_::parseEscapeSequences($part->value, null, $parseUnicodeEscape);
                     if ($isLast) {
                         $part->value = \preg_replace('~(\\r\\n|\\n|\\r)\\z~', '', $part->value);
                     }
@@ -688,7 +688,7 @@ abstract class ParserAbstract implements \PhpParser\Parser
                 }
                 $newContents[] = $part;
             }
-            return new \PhpParser\Node\Scalar\Encapsed($newContents, $attributes);
+            return new Encapsed($newContents, $attributes);
         }
     }
     /**
@@ -722,35 +722,35 @@ abstract class ParserAbstract implements \PhpParser\Parser
     {
         // Jumping through some hoops here because verifyModifier() is also used elsewhere
         try {
-            \PhpParser\Node\Stmt\Class_::verifyModifier($a, $b);
+            Class_::verifyModifier($a, $b);
         } catch (\PhpParser\Error $error) {
             $error->setAttributes($this->getAttributesAt($modifierPos));
             $this->emitError($error);
         }
     }
-    protected function checkParam(\PhpParser\Node\Param $node)
+    protected function checkParam(Param $node)
     {
         if ($node->variadic && null !== $node->default) {
             $this->emitError(new \PhpParser\Error('Variadic parameter cannot have a default value', $node->default->getAttributes()));
         }
     }
-    protected function checkTryCatch(\PhpParser\Node\Stmt\TryCatch $node)
+    protected function checkTryCatch(TryCatch $node)
     {
         if (empty($node->catches) && null === $node->finally) {
             $this->emitError(new \PhpParser\Error('Cannot use try without catch or finally', $node->getAttributes()));
         }
     }
-    protected function checkNamespace(\PhpParser\Node\Stmt\Namespace_ $node)
+    protected function checkNamespace(Namespace_ $node)
     {
         if (null !== $node->stmts) {
             foreach ($node->stmts as $stmt) {
-                if ($stmt instanceof \PhpParser\Node\Stmt\Namespace_) {
+                if ($stmt instanceof Namespace_) {
                     $this->emitError(new \PhpParser\Error('Namespace declarations cannot be nested', $stmt->getAttributes()));
                 }
             }
         }
     }
-    protected function checkClass(\PhpParser\Node\Stmt\Class_ $node, $namePos)
+    protected function checkClass(Class_ $node, $namePos)
     {
         if (null !== $node->name && $node->name->isSpecialClassName()) {
             $this->emitError(new \PhpParser\Error(\sprintf('Cannot use \'%s\' as class name as it is reserved', $node->name), $this->getAttributesAt($namePos)));
@@ -764,7 +764,7 @@ abstract class ParserAbstract implements \PhpParser\Parser
             }
         }
     }
-    protected function checkInterface(\PhpParser\Node\Stmt\Interface_ $node, $namePos)
+    protected function checkInterface(Interface_ $node, $namePos)
     {
         if (null !== $node->name && $node->name->isSpecialClassName()) {
             $this->emitError(new \PhpParser\Error(\sprintf('Cannot use \'%s\' as class name as it is reserved', $node->name), $this->getAttributesAt($namePos)));
@@ -775,9 +775,9 @@ abstract class ParserAbstract implements \PhpParser\Parser
             }
         }
     }
-    protected function checkClassMethod(\PhpParser\Node\Stmt\ClassMethod $node, $modifierPos)
+    protected function checkClassMethod(ClassMethod $node, $modifierPos)
     {
-        if ($node->flags & \PhpParser\Node\Stmt\Class_::MODIFIER_STATIC) {
+        if ($node->flags & Class_::MODIFIER_STATIC) {
             switch ($node->name->toLowerString()) {
                 case '__construct':
                     $this->emitError(new \PhpParser\Error(\sprintf('Constructor %s() cannot be static', $node->name), $this->getAttributesAt($modifierPos)));
@@ -791,28 +791,28 @@ abstract class ParserAbstract implements \PhpParser\Parser
             }
         }
     }
-    protected function checkClassConst(\PhpParser\Node\Stmt\ClassConst $node, $modifierPos)
+    protected function checkClassConst(ClassConst $node, $modifierPos)
     {
-        if ($node->flags & \PhpParser\Node\Stmt\Class_::MODIFIER_STATIC) {
+        if ($node->flags & Class_::MODIFIER_STATIC) {
             $this->emitError(new \PhpParser\Error("Cannot use 'static' as constant modifier", $this->getAttributesAt($modifierPos)));
         }
-        if ($node->flags & \PhpParser\Node\Stmt\Class_::MODIFIER_ABSTRACT) {
+        if ($node->flags & Class_::MODIFIER_ABSTRACT) {
             $this->emitError(new \PhpParser\Error("Cannot use 'abstract' as constant modifier", $this->getAttributesAt($modifierPos)));
         }
-        if ($node->flags & \PhpParser\Node\Stmt\Class_::MODIFIER_FINAL) {
+        if ($node->flags & Class_::MODIFIER_FINAL) {
             $this->emitError(new \PhpParser\Error("Cannot use 'final' as constant modifier", $this->getAttributesAt($modifierPos)));
         }
     }
-    protected function checkProperty(\PhpParser\Node\Stmt\Property $node, $modifierPos)
+    protected function checkProperty(Property $node, $modifierPos)
     {
-        if ($node->flags & \PhpParser\Node\Stmt\Class_::MODIFIER_ABSTRACT) {
+        if ($node->flags & Class_::MODIFIER_ABSTRACT) {
             $this->emitError(new \PhpParser\Error('Properties cannot be declared abstract', $this->getAttributesAt($modifierPos)));
         }
-        if ($node->flags & \PhpParser\Node\Stmt\Class_::MODIFIER_FINAL) {
+        if ($node->flags & Class_::MODIFIER_FINAL) {
             $this->emitError(new \PhpParser\Error('Properties cannot be declared final', $this->getAttributesAt($modifierPos)));
         }
     }
-    protected function checkUseUse(\PhpParser\Node\Stmt\UseUse $node, $namePos)
+    protected function checkUseUse(UseUse $node, $namePos)
     {
         if ($node->alias && $node->alias->isSpecialClassName()) {
             $this->emitError(new \PhpParser\Error(\sprintf('Cannot use %s as %s because \'%2$s\' is a special class name', $node->name, $node->alias), $this->getAttributesAt($namePos)));

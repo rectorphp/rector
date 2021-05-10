@@ -8,7 +8,7 @@ use RectorPrefix20210510\Symplify\SetConfigResolver\Contract\SetProviderInterfac
 use RectorPrefix20210510\Symplify\SetConfigResolver\Exception\SetNotFoundException;
 use RectorPrefix20210510\Symplify\SetConfigResolver\ValueObject\Set;
 use RectorPrefix20210510\Symplify\SymplifyKernel\Exception\ShouldNotHappenException;
-abstract class AbstractSetProvider implements \RectorPrefix20210510\Symplify\SetConfigResolver\Contract\SetProviderInterface
+abstract class AbstractSetProvider implements SetProviderInterface
 {
     /**
      * @return string[]
@@ -22,7 +22,7 @@ abstract class AbstractSetProvider implements \RectorPrefix20210510\Symplify\Set
         }
         return $setNames;
     }
-    public function provideByName(string $desiredSetName) : ?\RectorPrefix20210510\Symplify\SetConfigResolver\ValueObject\Set
+    public function provideByName(string $desiredSetName) : ?Set
     {
         // 1. name-based approach
         $sets = $this->provide();
@@ -45,16 +45,16 @@ abstract class AbstractSetProvider implements \RectorPrefix20210510\Symplify\Set
                 }
                 return $set;
             }
-        } catch (\RectorPrefix20210510\Symplify\SymplifyKernel\Exception\ShouldNotHappenException $shouldNotHappenException) {
+        } catch (ShouldNotHappenException $shouldNotHappenException) {
         }
         $message = \sprintf('Set "%s" was not found', $desiredSetName);
-        throw new \RectorPrefix20210510\Symplify\SetConfigResolver\Exception\SetNotFoundException($message, $desiredSetName, $this->provideSetNames());
+        throw new SetNotFoundException($message, $desiredSetName, $this->provideSetNames());
     }
     private function resolveSetUniquePathId(string $setPath) : string
     {
-        $setPath = \RectorPrefix20210510\Nette\Utils\Strings::after($setPath, \DIRECTORY_SEPARATOR, -2);
+        $setPath = Strings::after($setPath, \DIRECTORY_SEPARATOR, -2);
         if ($setPath === null) {
-            throw new \RectorPrefix20210510\Symplify\SymplifyKernel\Exception\ShouldNotHappenException();
+            throw new ShouldNotHappenException();
         }
         return $setPath;
     }

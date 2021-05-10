@@ -53,7 +53,7 @@ final class EventAndListenerTreeProvider
      * @var GetSubscribedEventsClassMethodProvider
      */
     private $getSubscribedEventsClassMethodProvider;
-    public function __construct(\Rector\Nette\Kdyby\NodeFactory\DispatchMethodCallFactory $dispatchMethodCallFactory, \Rector\Nette\Kdyby\Naming\EventClassNaming $eventClassNaming, \Rector\Nette\Kdyby\NodeFactory\EventValueObjectClassFactory $eventValueObjectClassFactory, \Rector\Nette\Kdyby\DataProvider\GetSubscribedEventsClassMethodProvider $getSubscribedEventsClassMethodProvider, \Rector\Nette\Kdyby\NodeResolver\ListeningMethodsCollector $listeningMethodsCollector, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Nette\Kdyby\DataProvider\OnPropertyMagicCallProvider $onPropertyMagicCallProvider)
+    public function __construct(DispatchMethodCallFactory $dispatchMethodCallFactory, EventClassNaming $eventClassNaming, EventValueObjectClassFactory $eventValueObjectClassFactory, \Rector\Nette\Kdyby\DataProvider\GetSubscribedEventsClassMethodProvider $getSubscribedEventsClassMethodProvider, ListeningMethodsCollector $listeningMethodsCollector, NodeNameResolver $nodeNameResolver, \Rector\Nette\Kdyby\DataProvider\OnPropertyMagicCallProvider $onPropertyMagicCallProvider)
     {
         $this->onPropertyMagicCallProvider = $onPropertyMagicCallProvider;
         $this->listeningMethodsCollector = $listeningMethodsCollector;
@@ -63,7 +63,7 @@ final class EventAndListenerTreeProvider
         $this->dispatchMethodCallFactory = $dispatchMethodCallFactory;
         $this->getSubscribedEventsClassMethodProvider = $getSubscribedEventsClassMethodProvider;
     }
-    public function matchMethodCall(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\Rector\Nette\Kdyby\ValueObject\EventAndListenerTree
+    public function matchMethodCall(MethodCall $methodCall) : ?EventAndListenerTree
     {
         $this->initializeEventAndListenerTrees();
         foreach ($this->eventAndListenerTrees as $eventAndListenerTree) {
@@ -84,7 +84,7 @@ final class EventAndListenerTreeProvider
     }
     private function initializeEventAndListenerTrees() : void
     {
-        if ($this->eventAndListenerTrees !== [] && !\Rector\Testing\PHPUnit\StaticPHPUnitEnvironment::isPHPUnitRun()) {
+        if ($this->eventAndListenerTrees !== [] && !StaticPHPUnitEnvironment::isPHPUnitRun()) {
             return;
         }
         $this->eventAndListenerTrees = [];
@@ -96,16 +96,16 @@ final class EventAndListenerTreeProvider
             $dispatchMethodCall = $this->dispatchMethodCallFactory->createFromEventClassName($eventClassName);
             // getter names by variable name and type
             $getterMethodsBlueprints = $this->resolveGetterMethodBlueprint($eventClassInNamespace);
-            $eventAndListenerTree = new \Rector\Nette\Kdyby\ValueObject\EventAndListenerTree($methodCall, $magicProperty, $eventClassName, $eventFileLocation, $eventClassInNamespace, $dispatchMethodCall, $this->getListeningClassMethodsInEventSubscriberByClass($eventClassName), $getterMethodsBlueprints);
+            $eventAndListenerTree = new EventAndListenerTree($methodCall, $magicProperty, $eventClassName, $eventFileLocation, $eventClassInNamespace, $dispatchMethodCall, $this->getListeningClassMethodsInEventSubscriberByClass($eventClassName), $getterMethodsBlueprints);
             $this->eventAndListenerTrees[] = $eventAndListenerTree;
         }
     }
-    private function resolveMagicProperty(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\PhpParser\Node\Stmt\Property
+    private function resolveMagicProperty(MethodCall $methodCall) : ?Property
     {
         /** @var string $methodName */
         $methodName = $this->nodeNameResolver->getName($methodCall->name);
         /** @var Class_ $classLike */
-        $classLike = $methodCall->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
+        $classLike = $methodCall->getAttribute(AttributeKey::CLASS_NODE);
         return $classLike->getProperty($methodName);
     }
     /**
@@ -116,8 +116,8 @@ final class EventAndListenerTreeProvider
         $listeningClassMethodsByClass = [];
         foreach ($this->getSubscribedEventsClassMethodProvider->provide() as $getSubscribedClassMethod) {
             /** @var class-string $className */
-            $className = $getSubscribedClassMethod->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);
-            $listeningClassMethods = $this->listeningMethodsCollector->classMethodsListeningToEventClass($getSubscribedClassMethod, \Rector\Nette\Kdyby\NodeResolver\ListeningMethodsCollector::EVENT_TYPE_CUSTOM, $eventClassName);
+            $className = $getSubscribedClassMethod->getAttribute(AttributeKey::CLASS_NAME);
+            $listeningClassMethods = $this->listeningMethodsCollector->classMethodsListeningToEventClass($getSubscribedClassMethod, ListeningMethodsCollector::EVENT_TYPE_CUSTOM, $eventClassName);
             $listeningClassMethodsByClass[$className] = $listeningClassMethods;
         }
         return $listeningClassMethodsByClass;
@@ -125,7 +125,7 @@ final class EventAndListenerTreeProvider
     /**
      * @return GetterMethodBlueprint[]
      */
-    private function resolveGetterMethodBlueprint(\PhpParser\Node\Stmt\Namespace_ $eventClassInNamespace) : array
+    private function resolveGetterMethodBlueprint(Namespace_ $eventClassInNamespace) : array
     {
         /** @var Class_ $eventClass */
         $eventClass = $eventClassInNamespace->stmts[0];
@@ -143,7 +143,7 @@ final class EventAndListenerTreeProvider
             $classMethodName = $this->nodeNameResolver->getName($classMethod);
             /** @var string $variableName */
             $variableName = $this->nodeNameResolver->getName($propertyFetch->name);
-            $getterMethodBlueprints[] = new \Rector\Nette\Kdyby\ValueObject\GetterMethodBlueprint($classMethodName, $classMethod->returnType, $variableName);
+            $getterMethodBlueprints[] = new GetterMethodBlueprint($classMethodName, $classMethod->returnType, $variableName);
         }
         return $getterMethodBlueprints;
     }

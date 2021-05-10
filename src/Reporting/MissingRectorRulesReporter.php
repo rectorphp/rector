@@ -20,21 +20,21 @@ final class MissingRectorRulesReporter
     /**
      * @param RectorInterface[] $rectors
      */
-    public function __construct(array $rectors, \RectorPrefix20210510\Symfony\Component\Console\Style\SymfonyStyle $symfonyStyle)
+    public function __construct(array $rectors, SymfonyStyle $symfonyStyle)
     {
         $this->symfonyStyle = $symfonyStyle;
         $this->rectors = $rectors;
     }
     public function reportIfMissing() : ?int
     {
-        $activeRectors = \array_filter($this->rectors, function (\Rector\Core\Contract\Rector\RectorInterface $rector) : bool {
-            return !$rector instanceof \Rector\PostRector\Contract\Rector\PostRectorInterface;
+        $activeRectors = \array_filter($this->rectors, function (RectorInterface $rector) : bool {
+            return !$rector instanceof PostRectorInterface;
         });
         if ($activeRectors !== []) {
             return null;
         }
         $this->report();
-        return \RectorPrefix20210510\Symplify\PackageBuilder\Console\ShellCode::ERROR;
+        return ShellCode::ERROR;
     }
     public function report() : void
     {

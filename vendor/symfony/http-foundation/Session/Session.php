@@ -17,14 +17,14 @@ use RectorPrefix20210510\Symfony\Component\HttpFoundation\Session\Flash\FlashBag
 use RectorPrefix20210510\Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage;
 use RectorPrefix20210510\Symfony\Component\HttpFoundation\Session\Storage\SessionStorageInterface;
 // Help opcache.preload discover always-needed symbols
-\class_exists(\RectorPrefix20210510\Symfony\Component\HttpFoundation\Session\Attribute\AttributeBag::class);
-\class_exists(\RectorPrefix20210510\Symfony\Component\HttpFoundation\Session\Flash\FlashBag::class);
-\class_exists(\RectorPrefix20210510\Symfony\Component\HttpFoundation\Session\SessionBagProxy::class);
+\class_exists(AttributeBag::class);
+\class_exists(FlashBag::class);
+\class_exists(SessionBagProxy::class);
 /**
  * @author Fabien Potencier <fabien@symfony.com>
  * @author Drak <drak@zikula.org>
  */
-class Session implements \RectorPrefix20210510\Symfony\Component\HttpFoundation\Session\SessionInterface, \IteratorAggregate, \Countable
+class Session implements SessionInterface, \IteratorAggregate, \Countable
 {
     protected $storage;
     private $flashName;
@@ -32,14 +32,14 @@ class Session implements \RectorPrefix20210510\Symfony\Component\HttpFoundation\
     private $data = [];
     private $usageIndex = 0;
     private $usageReporter;
-    public function __construct(\RectorPrefix20210510\Symfony\Component\HttpFoundation\Session\Storage\SessionStorageInterface $storage = null, \RectorPrefix20210510\Symfony\Component\HttpFoundation\Session\Attribute\AttributeBagInterface $attributes = null, \RectorPrefix20210510\Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface $flashes = null, callable $usageReporter = null)
+    public function __construct(SessionStorageInterface $storage = null, AttributeBagInterface $attributes = null, FlashBagInterface $flashes = null, callable $usageReporter = null)
     {
-        $this->storage = $storage ?? new \RectorPrefix20210510\Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage();
+        $this->storage = $storage ?? new NativeSessionStorage();
         $this->usageReporter = $usageReporter;
-        $attributes = $attributes ?? new \RectorPrefix20210510\Symfony\Component\HttpFoundation\Session\Attribute\AttributeBag();
+        $attributes = $attributes ?? new AttributeBag();
         $this->attributeName = $attributes->getName();
         $this->registerBag($attributes);
-        $flashes = $flashes ?? new \RectorPrefix20210510\Symfony\Component\HttpFoundation\Session\Flash\FlashBag();
+        $flashes = $flashes ?? new FlashBag();
         $this->flashName = $flashes->getName();
         $this->registerBag($flashes);
     }
@@ -212,9 +212,9 @@ class Session implements \RectorPrefix20210510\Symfony\Component\HttpFoundation\
     /**
      * {@inheritdoc}
      */
-    public function registerBag(\RectorPrefix20210510\Symfony\Component\HttpFoundation\Session\SessionBagInterface $bag)
+    public function registerBag(SessionBagInterface $bag)
     {
-        $this->storage->registerBag(new \RectorPrefix20210510\Symfony\Component\HttpFoundation\Session\SessionBagProxy($bag, $this->data, $this->usageIndex, $this->usageReporter));
+        $this->storage->registerBag(new SessionBagProxy($bag, $this->data, $this->usageIndex, $this->usageReporter));
     }
     /**
      * {@inheritdoc}
@@ -238,7 +238,7 @@ class Session implements \RectorPrefix20210510\Symfony\Component\HttpFoundation\
      *
      * Note that this method was added to help with IDE autocompletion.
      */
-    private function getAttributeBag() : \RectorPrefix20210510\Symfony\Component\HttpFoundation\Session\Attribute\AttributeBagInterface
+    private function getAttributeBag() : AttributeBagInterface
     {
         return $this->getBag($this->attributeName);
     }

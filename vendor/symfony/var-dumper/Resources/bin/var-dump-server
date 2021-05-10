@@ -27,19 +27,19 @@ function includeIfExists(string $file) : bool
 {
     return \file_exists($file) && (include $file);
 }
-if (!\RectorPrefix20210510\includeIfExists(__DIR__ . '/../../../../autoload.php') && !\RectorPrefix20210510\includeIfExists(__DIR__ . '/../../vendor/autoload.php') && !\RectorPrefix20210510\includeIfExists(__DIR__ . '/../../../../../../vendor/autoload.php')) {
+if (!includeIfExists(__DIR__ . '/../../../../autoload.php') && !includeIfExists(__DIR__ . '/../../vendor/autoload.php') && !includeIfExists(__DIR__ . '/../../../../../../vendor/autoload.php')) {
     \fwrite(\STDERR, 'Install dependencies using Composer.' . \PHP_EOL);
     exit(1);
 }
-if (!\class_exists(\RectorPrefix20210510\Symfony\Component\Console\Application::class)) {
+if (!\class_exists(Application::class)) {
     \fwrite(\STDERR, 'You need the "symfony/console" component in order to run the VarDumper server.' . \PHP_EOL);
     exit(1);
 }
-$input = new \RectorPrefix20210510\Symfony\Component\Console\Input\ArgvInput();
-$output = new \RectorPrefix20210510\Symfony\Component\Console\Output\ConsoleOutput();
+$input = new ArgvInput();
+$output = new ConsoleOutput();
 $defaultHost = '127.0.0.1:9912';
 $host = $input->getParameterOption(['--host'], $_SERVER['VAR_DUMPER_SERVER'] ?? $defaultHost, \true);
-$logger = \interface_exists(\RectorPrefix20210510\Psr\Log\LoggerInterface::class) ? new \RectorPrefix20210510\Symfony\Component\Console\Logger\ConsoleLogger($output->getErrorOutput()) : null;
-$app = new \RectorPrefix20210510\Symfony\Component\Console\Application();
-$app->getDefinition()->addOption(new \RectorPrefix20210510\Symfony\Component\Console\Input\InputOption('--host', null, \RectorPrefix20210510\Symfony\Component\Console\Input\InputOption::VALUE_REQUIRED, 'The address the server should listen to', $defaultHost));
-$app->add($command = new \RectorPrefix20210510\Symfony\Component\VarDumper\Command\ServerDumpCommand(new \RectorPrefix20210510\Symfony\Component\VarDumper\Server\DumpServer($host, $logger)))->getApplication()->setDefaultCommand($command->getName(), \true)->run($input, $output);
+$logger = \interface_exists(LoggerInterface::class) ? new ConsoleLogger($output->getErrorOutput()) : null;
+$app = new Application();
+$app->getDefinition()->addOption(new InputOption('--host', null, InputOption::VALUE_REQUIRED, 'The address the server should listen to', $defaultHost));
+$app->add($command = new ServerDumpCommand(new DumpServer($host, $logger)))->getApplication()->setDefaultCommand($command->getName(), \true)->run($input, $output);

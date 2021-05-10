@@ -16,7 +16,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\Visibility\Rector\Property\ChangePropertyVisibilityRector\ChangePropertyVisibilityRectorTest
  */
-final class ChangePropertyVisibilityRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
+final class ChangePropertyVisibilityRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
      * @var string
@@ -26,9 +26,9 @@ final class ChangePropertyVisibilityRector extends \Rector\Core\Rector\AbstractR
      * @var array<string, array<string, int>>
      */
     private $propertyToVisibilityByClass = [];
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change visibility of property from parent class.', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change visibility of property from parent class.', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 class FrameworkClass
 {
     protected $someProperty;
@@ -50,26 +50,26 @@ class MyClass extends FrameworkClass
     protected $someProperty;
 }
 CODE_SAMPLE
-, [self::PROPERTY_TO_VISIBILITY_BY_CLASS => ['FrameworkClass' => ['someProperty' => \Rector\Core\ValueObject\Visibility::PROTECTED]]])]);
+, [self::PROPERTY_TO_VISIBILITY_BY_CLASS => ['FrameworkClass' => ['someProperty' => Visibility::PROTECTED]]])]);
     }
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Property::class];
+        return [Property::class];
     }
     /**
      * @param Property $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        $classLike = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
-        if (!$classLike instanceof \PhpParser\Node\Stmt\ClassLike) {
+        $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
+        if (!$classLike instanceof ClassLike) {
             return null;
         }
         foreach ($this->propertyToVisibilityByClass as $type => $propertyToVisibility) {
-            if (!$this->isObjectType($classLike, new \PHPStan\Type\ObjectType($type))) {
+            if (!$this->isObjectType($classLike, new ObjectType($type))) {
                 continue;
             }
             foreach ($propertyToVisibility as $property => $visibility) {

@@ -5,13 +5,13 @@ namespace Rector\PostRector\Collector;
 
 use PhpParser\Node;
 use Rector\PostRector\Contract\Collector\NodeCollectorInterface;
-final class NodesToReplaceCollector implements \Rector\PostRector\Contract\Collector\NodeCollectorInterface
+final class NodesToReplaceCollector implements NodeCollectorInterface
 {
     /**
      * @var Node[][]
      */
     private $nodesToReplace = [];
-    public function addReplaceNodeWithAnotherNode(\PhpParser\Node $node, \PhpParser\Node $replaceWith) : void
+    public function addReplaceNodeWithAnotherNode(Node $node, Node $replaceWith) : void
     {
         $this->nodesToReplace[] = [$node, $replaceWith];
     }

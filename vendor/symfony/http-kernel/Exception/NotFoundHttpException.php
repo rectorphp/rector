@@ -13,7 +13,7 @@ namespace RectorPrefix20210510\Symfony\Component\HttpKernel\Exception;
 /**
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class NotFoundHttpException extends \RectorPrefix20210510\Symfony\Component\HttpKernel\Exception\HttpException
+class NotFoundHttpException extends HttpException
 {
     /**
      * @param string|null     $message  The internal exception message

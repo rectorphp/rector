@@ -15,7 +15,7 @@ namespace RectorPrefix20210510\Symfony\Component\HttpKernel\Exception;
  *
  * @author Kris Wallsmith <kris@symfony.com>
  */
-class HttpException extends \RuntimeException implements \RectorPrefix20210510\Symfony\Component\HttpKernel\Exception\HttpExceptionInterface
+class HttpException extends \RuntimeException implements HttpExceptionInterface
 {
     private $statusCode;
     private $headers;

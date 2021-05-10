@@ -17,7 +17,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\PSR4\Rector\FileWithoutNamespace\NormalizeNamespaceByPSR4ComposerAutoloadRector\NormalizeNamespaceByPSR4ComposerAutoloadRectorTest
  */
-final class NormalizeNamespaceByPSR4ComposerAutoloadRector extends \Rector\Core\Rector\AbstractRector
+final class NormalizeNamespaceByPSR4ComposerAutoloadRector extends AbstractRector
 {
     /**
      * @var PSR4AutoloadNamespaceMatcherInterface
@@ -27,15 +27,15 @@ final class NormalizeNamespaceByPSR4ComposerAutoloadRector extends \Rector\Core\
      * @var FullyQualifyStmtsAnalyzer
      */
     private $fullyQualifyStmtsAnalyzer;
-    public function __construct(\Rector\PSR4\Contract\PSR4AutoloadNamespaceMatcherInterface $psr4AutoloadNamespaceMatcher, \Rector\PSR4\NodeManipulator\FullyQualifyStmtsAnalyzer $fullyQualifyStmtsAnalyzer)
+    public function __construct(PSR4AutoloadNamespaceMatcherInterface $psr4AutoloadNamespaceMatcher, FullyQualifyStmtsAnalyzer $fullyQualifyStmtsAnalyzer)
     {
         $this->psr4AutoloadNamespaceMatcher = $psr4AutoloadNamespaceMatcher;
         $this->fullyQualifyStmtsAnalyzer = $fullyQualifyStmtsAnalyzer;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        $description = \sprintf('Adds namespace to namespace-less files or correct namespace to match PSR-4 in `composer.json` autoload section. Run with combination with "%s"', \Rector\PSR4\Rector\Namespace_\MultipleClassFileToPsr4ClassesRector::class);
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition($description, [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ComposerJsonAwareCodeSample(<<<'CODE_SAMPLE'
+        $description = \sprintf('Adds namespace to namespace-less files or correct namespace to match PSR-4 in `composer.json` autoload section. Run with combination with "%s"', MultipleClassFileToPsr4ClassesRector::class);
+        return new RuleDefinition($description, [new ComposerJsonAwareCodeSample(<<<'CODE_SAMPLE'
 // src/SomeClass.php
 
 class SomeClass
@@ -67,43 +67,43 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Namespace_::class, \Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace::class];
+        return [Namespace_::class, FileWithoutNamespace::class];
     }
     /**
      * @param FileWithoutNamespace|Namespace_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         $expectedNamespace = $this->psr4AutoloadNamespaceMatcher->getExpectedNamespace($this->file, $node);
         if ($expectedNamespace === null) {
             return null;
         }
         // is namespace and already correctly named?
-        if ($node instanceof \PhpParser\Node\Stmt\Namespace_ && $this->isName($node, $expectedNamespace)) {
+        if ($node instanceof Namespace_ && $this->isName($node, $expectedNamespace)) {
             return null;
         }
         // to put declare_strict types on correct place
-        if ($node instanceof \Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace) {
+        if ($node instanceof FileWithoutNamespace) {
             return $this->refactorFileWithoutNamespace($node, $expectedNamespace);
         }
-        $node->name = new \PhpParser\Node\Name($expectedNamespace);
+        $node->name = new Name($expectedNamespace);
         $this->fullyQualifyStmtsAnalyzer->process($node->stmts);
         return $node;
     }
-    private function refactorFileWithoutNamespace(\Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace $fileWithoutNamespace, string $expectedNamespace) : \Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace
+    private function refactorFileWithoutNamespace(FileWithoutNamespace $fileWithoutNamespace, string $expectedNamespace) : FileWithoutNamespace
     {
         $nodes = $fileWithoutNamespace->stmts;
         $nodesWithStrictTypesThenNamespace = [];
         foreach ($nodes as $key => $fileWithoutNamespace) {
-            if ($fileWithoutNamespace instanceof \PhpParser\Node\Stmt\Declare_) {
+            if ($fileWithoutNamespace instanceof Declare_) {
                 $nodesWithStrictTypesThenNamespace[] = $fileWithoutNamespace;
                 unset($nodes[$key]);
             }
         }
-        $namespace = new \PhpParser\Node\Stmt\Namespace_(new \PhpParser\Node\Name($expectedNamespace), $nodes);
+        $namespace = new Namespace_(new Name($expectedNamespace), $nodes);
         $nodesWithStrictTypesThenNamespace[] = $namespace;
         $this->fullyQualifyStmtsAnalyzer->process($nodes);
         // @todo update to a new class node, like FileWithNamespace
-        return new \Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace($nodesWithStrictTypesThenNamespace);
+        return new FileWithoutNamespace($nodesWithStrictTypesThenNamespace);
     }
 }

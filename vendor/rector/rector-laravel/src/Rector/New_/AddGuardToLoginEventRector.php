@@ -18,11 +18,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Laravel\Tests\Rector\New_\AddGuardToLoginEventRector\AddGuardToLoginEventRectorTest
  */
-final class AddGuardToLoginEventRector extends \Rector\Core\Rector\AbstractRector
+final class AddGuardToLoginEventRector extends AbstractRector
 {
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Add new $guard argument to Illuminate\\Auth\\Events\\Login', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add new $guard argument to Illuminate\\Auth\\Events\\Login', [new CodeSample(<<<'CODE_SAMPLE'
 use Illuminate\Auth\Events\Login;
 
 final class SomeClass
@@ -52,12 +52,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\New_::class];
+        return [New_::class];
     }
     /**
      * @param New_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if (!$this->isName($node->class, 'Illuminate\\Auth\\Events\\Login')) {
             return null;
@@ -65,15 +65,15 @@ CODE_SAMPLE
         if (\count($node->args) === 3) {
             return null;
         }
-        $guardVariable = new \PhpParser\Node\Expr\Variable('guard');
+        $guardVariable = new Variable('guard');
         $assign = $this->createGuardAssign($guardVariable);
         $this->addNodeBeforeNode($assign, $node);
-        $node->args = \array_merge([new \PhpParser\Node\Arg($guardVariable)], $node->args);
+        $node->args = \array_merge([new Arg($guardVariable)], $node->args);
         return $node;
     }
-    private function createGuardAssign(\PhpParser\Node\Expr\Variable $guardVariable) : \PhpParser\Node\Expr\Assign
+    private function createGuardAssign(Variable $guardVariable) : Assign
     {
-        $string = new \PhpParser\Node\Scalar\String_('auth.defaults.guard');
-        return new \PhpParser\Node\Expr\Assign($guardVariable, $this->nodeFactory->createFuncCall('config', [$string]));
+        $string = new String_('auth.defaults.guard');
+        return new Assign($guardVariable, $this->nodeFactory->createFuncCall('config', [$string]));
     }
 }

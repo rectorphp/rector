@@ -15,23 +15,23 @@ final class ChildParentClassReflections
      * @var ClassReflection
      */
     private $parentClassReflection;
-    public function __construct(\PHPStan\Reflection\ClassReflection $childClassReflection, \PHPStan\Reflection\ClassReflection $parentClassReflection)
+    public function __construct(ClassReflection $childClassReflection, ClassReflection $parentClassReflection)
     {
         $this->childClassReflection = $childClassReflection;
         $this->parentClassReflection = $parentClassReflection;
     }
-    public function getChildClassReflection() : \PHPStan\Reflection\ClassReflection
+    public function getChildClassReflection() : ClassReflection
     {
         return $this->childClassReflection;
     }
-    public function getParentClassReflection() : \PHPStan\Reflection\ClassReflection
+    public function getParentClassReflection() : ClassReflection
     {
         return $this->parentClassReflection;
     }
     /**
      * Child class has priority with template map
      */
-    public function getTemplateTypeMap() : \PHPStan\Type\Generic\TemplateTypeMap
+    public function getTemplateTypeMap() : TemplateTypeMap
     {
         $parentClassTemplateTypeMap = $this->parentClassReflection->getTemplateTypeMap();
         $childClassTemplateTypeMap = $this->childClassReflection->getTemplateTypeMap();

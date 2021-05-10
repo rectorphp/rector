@@ -14,6 +14,6 @@ if (!\function_exists('RectorPrefix20210510\\Stringy\\create')) {
      */
     function create($str, $encoding = null)
     {
-        return new \RectorPrefix20210510\Stringy\Stringy($str, $encoding);
+        return new Stringy($str, $encoding);
     }
 }

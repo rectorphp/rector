@@ -21,7 +21,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php80\Rector\ClassMethod\OptionalParametersAfterRequiredRector\OptionalParametersAfterRequiredRectorTest
  */
-final class OptionalParametersAfterRequiredRector extends \Rector\Core\Rector\AbstractRector
+final class OptionalParametersAfterRequiredRector extends AbstractRector
 {
     /**
      * @var RequireOptionalParamResolver
@@ -35,15 +35,15 @@ final class OptionalParametersAfterRequiredRector extends \Rector\Core\Rector\Ab
      * @var MethodReflectionClassMethodResolver
      */
     private $methodReflectionClassMethodResolver;
-    public function __construct(\Rector\Php80\NodeResolver\RequireOptionalParamResolver $requireOptionalParamResolver, \Rector\Php80\NodeResolver\ArgumentSorter $argumentSorter, \Rector\Php80\Reflection\MethodReflectionClassMethodResolver $methodReflectionClassMethodResolver)
+    public function __construct(RequireOptionalParamResolver $requireOptionalParamResolver, ArgumentSorter $argumentSorter, MethodReflectionClassMethodResolver $methodReflectionClassMethodResolver)
     {
         $this->requireOptionalParamResolver = $requireOptionalParamResolver;
         $this->argumentSorter = $argumentSorter;
         $this->methodReflectionClassMethodResolver = $methodReflectionClassMethodResolver;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Move required parameters after optional ones', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Move required parameters after optional ones', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeObject
 {
     public function run($optional = 1, $required)
@@ -66,22 +66,22 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\ClassMethod::class, \PhpParser\Node\Expr\New_::class, \PhpParser\Node\Expr\MethodCall::class];
+        return [ClassMethod::class, New_::class, MethodCall::class];
     }
     /**
      * @param ClassMethod|New_|MethodCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        if ($node instanceof \PhpParser\Node\Stmt\ClassMethod) {
+        if ($node instanceof ClassMethod) {
             return $this->refactorClassMethod($node);
         }
-        if ($node instanceof \PhpParser\Node\Expr\New_) {
+        if ($node instanceof New_) {
             return $this->refactorNew($node);
         }
         return $this->refactorMethodCall($node);
     }
-    private function refactorClassMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod) : ?\PhpParser\Node\Stmt\ClassMethod
+    private function refactorClassMethod(ClassMethod $classMethod) : ?ClassMethod
     {
         if ($classMethod->params === []) {
             return null;
@@ -93,17 +93,17 @@ CODE_SAMPLE
         $classMethod->params = $expectedOrderParams;
         return $classMethod;
     }
-    private function refactorNew(\PhpParser\Node\Expr\New_ $new) : ?\PhpParser\Node\Expr\New_
+    private function refactorNew(New_ $new) : ?New_
     {
         if ($new->args === []) {
             return null;
         }
         $newClassType = $this->nodeTypeResolver->resolve($new->class);
-        if (!$newClassType instanceof \PHPStan\Type\TypeWithClassName) {
+        if (!$newClassType instanceof TypeWithClassName) {
             return null;
         }
-        $classMethod = $this->methodReflectionClassMethodResolver->resolve($newClassType->getClassName(), \Rector\Core\ValueObject\MethodName::CONSTRUCT);
-        if (!$classMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
+        $classMethod = $this->methodReflectionClassMethodResolver->resolve($newClassType->getClassName(), MethodName::CONSTRUCT);
+        if (!$classMethod instanceof ClassMethod) {
             return null;
         }
         $expectedOrderedParams = $this->requireOptionalParamResolver->resolve($classMethod);
@@ -120,15 +120,15 @@ CODE_SAMPLE
         $new->args = $newArgs;
         return $new;
     }
-    private function refactorMethodCall(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\PhpParser\Node\Expr\MethodCall
+    private function refactorMethodCall(MethodCall $methodCall) : ?MethodCall
     {
         $classMethod = $this->nodeRepository->findClassMethodByMethodCall($methodCall);
-        if (!$classMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
+        if (!$classMethod instanceof ClassMethod) {
             return null;
         }
         // because parameters can be already changed
-        $originalClassMethod = $classMethod->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NODE);
-        if (!$originalClassMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
+        $originalClassMethod = $classMethod->getAttribute(AttributeKey::ORIGINAL_NODE);
+        if (!$originalClassMethod instanceof ClassMethod) {
             return null;
         }
         $expectedOrderedParams = $this->requireOptionalParamResolver->resolve($originalClassMethod);

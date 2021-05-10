@@ -24,12 +24,12 @@ final class RectorConfigsResolver
     public function __construct()
     {
         $this->setConfigResolver = new \Rector\Core\Bootstrap\SetConfigResolver();
-        $this->configResolver = new \RectorPrefix20210510\Symplify\SetConfigResolver\ConfigResolver();
+        $this->configResolver = new ConfigResolver();
     }
     /**
      * @return SmartFileInfo[]
      */
-    public function resolveFromConfigFileInfo(\Symplify\SmartFileSystem\SmartFileInfo $configFileInfo) : array
+    public function resolveFromConfigFileInfo(SmartFileInfo $configFileInfo) : array
     {
         $hash = \sha1_file($configFileInfo->getRealPath());
         if ($hash === \false) {
@@ -43,19 +43,19 @@ final class RectorConfigsResolver
         $this->resolvedConfigFileInfos[$hash] = $configFileInfos;
         return $configFileInfos;
     }
-    public function provide() : \Rector\Core\ValueObject\Bootstrap\BootstrapConfigs
+    public function provide() : BootstrapConfigs
     {
-        $argvInput = new \RectorPrefix20210510\Symfony\Component\Console\Input\ArgvInput();
+        $argvInput = new ArgvInput();
         $mainConfigFileInfo = $this->configResolver->resolveFromInputWithFallback($argvInput, ['rector.php']);
-        $configFileInfos = $mainConfigFileInfo instanceof \Symplify\SmartFileSystem\SmartFileInfo ? $this->resolveFromConfigFileInfo($mainConfigFileInfo) : [];
+        $configFileInfos = $mainConfigFileInfo instanceof SmartFileInfo ? $this->resolveFromConfigFileInfo($mainConfigFileInfo) : [];
         $configFileInfos = $this->appendRectorRecipeConfig($argvInput, $configFileInfos);
-        return new \Rector\Core\ValueObject\Bootstrap\BootstrapConfigs($mainConfigFileInfo, $configFileInfos);
+        return new BootstrapConfigs($mainConfigFileInfo, $configFileInfos);
     }
     /**
      * @param SmartFileInfo[] $configFileInfos
      * @return SmartFileInfo[]
      */
-    private function appendRectorRecipeConfig(\RectorPrefix20210510\Symfony\Component\Console\Input\ArgvInput $argvInput, array $configFileInfos) : array
+    private function appendRectorRecipeConfig(ArgvInput $argvInput, array $configFileInfos) : array
     {
         if ($argvInput->getFirstArgument() !== 'generate') {
             return $configFileInfos;
@@ -63,7 +63,7 @@ final class RectorConfigsResolver
         // autoload rector recipe file if present, just for \Rector\RectorGenerator\Command\GenerateCommand
         $rectorRecipeFilePath = \getcwd() . '/rector-recipe.php';
         if (\file_exists($rectorRecipeFilePath)) {
-            $configFileInfos[] = new \Symplify\SmartFileSystem\SmartFileInfo($rectorRecipeFilePath);
+            $configFileInfos[] = new SmartFileInfo($rectorRecipeFilePath);
         }
         return $configFileInfos;
     }

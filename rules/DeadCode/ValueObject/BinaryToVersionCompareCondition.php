@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace Rector\DeadCode\ValueObject;
 
 use Rector\DeadCode\Contract\ConditionInterface;
-final class BinaryToVersionCompareCondition implements \Rector\DeadCode\Contract\ConditionInterface
+final class BinaryToVersionCompareCondition implements ConditionInterface
 {
     /**
      * @var string

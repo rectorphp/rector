@@ -27,5 +27,5 @@ interface EditorConfigParserInterface
      * @var string
      */
     public const TAB_WIDTH = 'tab_width';
-    public function extractConfigurationForFile(\Rector\Core\ValueObject\Application\File $file, \Rector\FileFormatter\ValueObjectFactory\EditorConfigConfigurationBuilder $editorConfigConfigurationBuilder) : \Rector\FileFormatter\ValueObject\EditorConfigConfiguration;
+    public function extractConfigurationForFile(File $file, EditorConfigConfigurationBuilder $editorConfigConfigurationBuilder) : EditorConfigConfiguration;
 }

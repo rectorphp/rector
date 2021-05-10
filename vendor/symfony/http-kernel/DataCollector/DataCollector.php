@@ -24,7 +24,7 @@ use RectorPrefix20210510\Symfony\Component\VarDumper\Cloner\VarCloner;
  * @author Fabien Potencier <fabien@symfony.com>
  * @author Bernhard Schussek <bschussek@symfony.com>
  */
-abstract class DataCollector implements \RectorPrefix20210510\Symfony\Component\HttpKernel\DataCollector\DataCollectorInterface
+abstract class DataCollector implements DataCollectorInterface
 {
     /**
      * @var array|Data
@@ -46,11 +46,11 @@ abstract class DataCollector implements \RectorPrefix20210510\Symfony\Component\
      */
     protected function cloneVar($var)
     {
-        if ($var instanceof \RectorPrefix20210510\Symfony\Component\VarDumper\Cloner\Data) {
+        if ($var instanceof Data) {
             return $var;
         }
         if (null === $this->cloner) {
-            $this->cloner = new \RectorPrefix20210510\Symfony\Component\VarDumper\Cloner\VarCloner();
+            $this->cloner = new VarCloner();
             $this->cloner->setMaxItems(-1);
             $this->cloner->addCasters($this->getCasters());
         }
@@ -61,16 +61,16 @@ abstract class DataCollector implements \RectorPrefix20210510\Symfony\Component\
      */
     protected function getCasters()
     {
-        $casters = ['*' => function ($v, array $a, \RectorPrefix20210510\Symfony\Component\VarDumper\Cloner\Stub $s, $isNested) {
-            if (!$v instanceof \RectorPrefix20210510\Symfony\Component\VarDumper\Cloner\Stub) {
+        $casters = ['*' => function ($v, array $a, Stub $s, $isNested) {
+            if (!$v instanceof Stub) {
                 foreach ($a as $k => $v) {
-                    if (\is_object($v) && !$v instanceof \DateTimeInterface && !$v instanceof \RectorPrefix20210510\Symfony\Component\VarDumper\Cloner\Stub) {
-                        $a[$k] = new \RectorPrefix20210510\Symfony\Component\VarDumper\Caster\CutStub($v);
+                    if (\is_object($v) && !$v instanceof \DateTimeInterface && !$v instanceof Stub) {
+                        $a[$k] = new CutStub($v);
                     }
                 }
             }
             return $a;
-        }] + \RectorPrefix20210510\Symfony\Component\VarDumper\Caster\ReflectionCaster::UNSET_CLOSURE_FILE_INFO;
+        }] + ReflectionCaster::UNSET_CLOSURE_FILE_INFO;
         return $casters;
     }
     /**

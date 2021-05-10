@@ -7,6 +7,6 @@ use RectorPrefix20210510\Symplify\SymplifyKernel\HttpKernel\AbstractSymplifyKern
 /**
  * For testing
  */
-final class OnlyForTestsKernel extends \RectorPrefix20210510\Symplify\SymplifyKernel\HttpKernel\AbstractSymplifyKernel
+final class OnlyForTestsKernel extends AbstractSymplifyKernel
 {
 }

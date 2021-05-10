@@ -17,7 +17,7 @@ final class StartAndEnd
     public function __construct(int $start, int $end)
     {
         if ($end < $start) {
-            throw new \Rector\Core\Exception\ShouldNotHappenException();
+            throw new ShouldNotHappenException();
         }
         $this->start = $start;
         $this->end = $end;

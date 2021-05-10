@@ -27,7 +27,7 @@ final class FileDiff
     /**
      * @param RectorWithLineChange[] $rectorWithLineChanges
      */
-    public function __construct(\Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo, string $diff, string $diffConsoleFormatted, array $rectorWithLineChanges = [])
+    public function __construct(SmartFileInfo $smartFileInfo, string $diff, string $diffConsoleFormatted, array $rectorWithLineChanges = [])
     {
         $this->smartFileInfo = $smartFileInfo;
         $this->diff = $diff;
@@ -46,7 +46,7 @@ final class FileDiff
     {
         return $this->smartFileInfo->getRelativeFilePath();
     }
-    public function getFileInfo() : \Symplify\SmartFileSystem\SmartFileInfo
+    public function getFileInfo() : SmartFileInfo
     {
         return $this->smartFileInfo;
     }

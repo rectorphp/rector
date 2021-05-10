@@ -17,11 +17,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\EarlyReturn\Rector\If_\RemoveAlwaysElseRector\RemoveAlwaysElseRectorTest
  */
-final class RemoveAlwaysElseRector extends \Rector\Core\Rector\AbstractRector
+final class RemoveAlwaysElseRector extends AbstractRector
 {
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Split if statement, when if condition always break execution flow', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Split if statement, when if condition always break execution flow', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($value)
@@ -54,18 +54,18 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\If_::class];
+        return [If_::class];
     }
     /**
      * @param If_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if ($this->doesLastStatementBreakFlow($node)) {
             return null;
         }
         if ($node->elseifs !== []) {
-            $if = new \PhpParser\Node\Stmt\If_($node->cond);
+            $if = new If_($node->cond);
             $if->stmts = $node->stmts;
             $this->addNodeBeforeNode($if, $node);
             /** @var ElseIf_ $firstElseIf */
@@ -82,9 +82,9 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function doesLastStatementBreakFlow(\PhpParser\Node\Stmt\If_ $if) : bool
+    private function doesLastStatementBreakFlow(If_ $if) : bool
     {
         $lastStmt = \end($if->stmts);
-        return !($lastStmt instanceof \PhpParser\Node\Stmt\Return_ || $lastStmt instanceof \PhpParser\Node\Stmt\Throw_ || $lastStmt instanceof \PhpParser\Node\Stmt\Continue_ || $lastStmt instanceof \PhpParser\Node\Stmt\Expression && $lastStmt->expr instanceof \PhpParser\Node\Expr\Exit_);
+        return !($lastStmt instanceof Return_ || $lastStmt instanceof Throw_ || $lastStmt instanceof Continue_ || $lastStmt instanceof Expression && $lastStmt->expr instanceof Exit_);
     }
 }

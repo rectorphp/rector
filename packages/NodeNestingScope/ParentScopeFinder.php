@@ -16,15 +16,15 @@ final class ParentScopeFinder
      * @var BetterNodeFinder
      */
     private $betterNodeFinder;
-    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
+    public function __construct(BetterNodeFinder $betterNodeFinder)
     {
         $this->betterNodeFinder = $betterNodeFinder;
     }
     /**
      * @return ClassMethod|Function_|Class_|Namespace_|Closure|null
      */
-    public function find(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function find(Node $node) : ?Node
     {
-        return $this->betterNodeFinder->findParentTypes($node, [\PhpParser\Node\Expr\Closure::class, \PhpParser\Node\Stmt\Function_::class, \PhpParser\Node\Stmt\ClassMethod::class, \PhpParser\Node\Stmt\Class_::class, \PhpParser\Node\Stmt\Namespace_::class]);
+        return $this->betterNodeFinder->findParentTypes($node, [Closure::class, Function_::class, ClassMethod::class, Class_::class, Namespace_::class]);
     }
 }

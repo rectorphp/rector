@@ -14,19 +14,19 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\DeadCode\Rector\Expression\RemoveDeadStmtRector\RemoveDeadStmtRectorTest
  */
-final class RemoveDeadStmtRector extends \Rector\Core\Rector\AbstractRector
+final class RemoveDeadStmtRector extends AbstractRector
 {
     /**
      * @var LivingCodeManipulator
      */
     private $livingCodeManipulator;
-    public function __construct(\Rector\DeadCode\NodeManipulator\LivingCodeManipulator $livingCodeManipulator)
+    public function __construct(LivingCodeManipulator $livingCodeManipulator)
     {
         $this->livingCodeManipulator = $livingCodeManipulator;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Removes dead code statements', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Removes dead code statements', [new CodeSample(<<<'CODE_SAMPLE'
 $value = 5;
 $value;
 CODE_SAMPLE
@@ -40,13 +40,13 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Expression::class];
+        return [Expression::class];
     }
     /**
      * @param Expression $node
      * @return Node[]|Node|null
      */
-    public function refactor(\PhpParser\Node $node)
+    public function refactor(Node $node)
     {
         $livingCode = $this->livingCodeManipulator->keepLivingCodeFromExpr($node->expr);
         if ($livingCode === []) {
@@ -56,17 +56,17 @@ CODE_SAMPLE
         $node->expr = $firstExpr;
         $newNodes = [];
         foreach ($livingCode as $singleLivingCode) {
-            $newNodes[] = new \PhpParser\Node\Stmt\Expression($singleLivingCode);
+            $newNodes[] = new Expression($singleLivingCode);
         }
         $newNodes[] = $node;
         return $newNodes;
     }
-    private function removeNodeAndKeepComments(\PhpParser\Node\Stmt\Expression $expression) : ?\PhpParser\Node
+    private function removeNodeAndKeepComments(Expression $expression) : ?Node
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($expression);
         if ($expression->getComments() !== []) {
-            $nop = new \PhpParser\Node\Stmt\Nop();
-            $nop->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PHP_DOC_INFO, $phpDocInfo);
+            $nop = new Nop();
+            $nop->setAttribute(AttributeKey::PHP_DOC_INFO, $phpDocInfo);
             $this->phpDocInfoFactory->createFromNode($nop);
             return $nop;
         }

@@ -23,11 +23,11 @@ final class ClassAnnotationMatcher
      * @var ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider)
+    public function __construct(ReflectionProvider $reflectionProvider)
     {
         $this->reflectionProvider = $reflectionProvider;
     }
-    public function resolveTagFullyQualifiedName(string $tag, \PhpParser\Node $node) : string
+    public function resolveTagFullyQualifiedName(string $tag, Node $node) : string
     {
         $uniqueHash = $tag . \spl_object_hash($node);
         if (isset($this->fullyQualifiedNameByHash[$uniqueHash])) {
@@ -35,7 +35,7 @@ final class ClassAnnotationMatcher
         }
         $tag = \ltrim($tag, '@');
         /** @var Use_[] $uses */
-        $uses = (array) $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::USE_NODES);
+        $uses = (array) $node->getAttribute(AttributeKey::USE_NODES);
         $fullyQualifiedClass = $this->resolveFullyQualifiedClass($uses, $node, $tag);
         $this->fullyQualifiedNameByHash[$uniqueHash] = $fullyQualifiedClass;
         return $fullyQualifiedClass;
@@ -43,10 +43,10 @@ final class ClassAnnotationMatcher
     /**
      * @param Use_[] $uses
      */
-    private function resolveFullyQualifiedClass(array $uses, \PhpParser\Node $node, string $tag) : string
+    private function resolveFullyQualifiedClass(array $uses, Node $node, string $tag) : string
     {
-        $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
-        if ($scope instanceof \PHPStan\Analyser\Scope) {
+        $scope = $node->getAttribute(AttributeKey::SCOPE);
+        if ($scope instanceof Scope) {
             $namespace = $scope->getNamespace();
             if ($namespace !== null) {
                 $namespacedTag = $namespace . '\\' . $tag;
@@ -72,19 +72,19 @@ final class ClassAnnotationMatcher
         }
         return null;
     }
-    private function isUseMatchingName(string $tag, \PhpParser\Node\Stmt\UseUse $useUse) : bool
+    private function isUseMatchingName(string $tag, UseUse $useUse) : bool
     {
         $shortName = $useUse->alias !== null ? $useUse->alias->name : $useUse->name->getLast();
         $shortNamePattern = \preg_quote($shortName, '#');
-        return (bool) \RectorPrefix20210510\Nette\Utils\Strings::match($tag, '#' . $shortNamePattern . '(\\\\[\\w]+)?#i');
+        return (bool) Strings::match($tag, '#' . $shortNamePattern . '(\\\\[\\w]+)?#i');
     }
-    private function resolveName(string $tag, \PhpParser\Node\Stmt\UseUse $useUse) : string
+    private function resolveName(string $tag, UseUse $useUse) : string
     {
         if ($useUse->alias === null) {
             return $useUse->name->toString();
         }
-        $unaliasedShortClass = \RectorPrefix20210510\Nette\Utils\Strings::substring($tag, \RectorPrefix20210510\Nette\Utils\Strings::length($useUse->alias->toString()));
-        if (\RectorPrefix20210510\Nette\Utils\Strings::startsWith($unaliasedShortClass, '\\')) {
+        $unaliasedShortClass = Strings::substring($tag, Strings::length($useUse->alias->toString()));
+        if (Strings::startsWith($unaliasedShortClass, '\\')) {
             return $useUse->name . $unaliasedShortClass;
         }
         return $useUse->name . '\\' . $unaliasedShortClass;

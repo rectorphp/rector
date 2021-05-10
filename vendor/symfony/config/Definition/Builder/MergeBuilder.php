@@ -20,7 +20,7 @@ class MergeBuilder
     protected $node;
     public $allowFalse = \false;
     public $allowOverwrite = \true;
-    public function __construct(\RectorPrefix20210510\Symfony\Component\Config\Definition\Builder\NodeDefinition $node)
+    public function __construct(NodeDefinition $node)
     {
         $this->node = $node;
     }

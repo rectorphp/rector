@@ -31,7 +31,7 @@ use Rector\PHPStanStaticTypeMapper\TypeAnalyzer\BoolUnionTypeAnalyzer;
 use Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeAnalyzer;
 use Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeCommonTypeNarrower;
 use Rector\PHPStanStaticTypeMapper\ValueObject\UnionTypeAnalysis;
-final class UnionTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface
+final class UnionTypeMapper implements TypeMapperInterface
 {
     /**
      * @var PHPStanStaticTypeMapper
@@ -57,7 +57,7 @@ final class UnionTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\
      * @var UnionTypeCommonTypeNarrower
      */
     private $unionTypeCommonTypeNarrower;
-    public function __construct(\Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer $doctrineTypeAnalyzer, \Rector\Core\Php\PhpVersionProvider $phpVersionProvider, \Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeAnalyzer $unionTypeAnalyzer, \Rector\PHPStanStaticTypeMapper\TypeAnalyzer\BoolUnionTypeAnalyzer $boolUnionTypeAnalyzer, \Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeCommonTypeNarrower $unionTypeCommonTypeNarrower)
+    public function __construct(DoctrineTypeAnalyzer $doctrineTypeAnalyzer, PhpVersionProvider $phpVersionProvider, UnionTypeAnalyzer $unionTypeAnalyzer, BoolUnionTypeAnalyzer $boolUnionTypeAnalyzer, UnionTypeCommonTypeNarrower $unionTypeCommonTypeNarrower)
     {
         $this->phpVersionProvider = $phpVersionProvider;
         $this->unionTypeAnalyzer = $unionTypeAnalyzer;
@@ -68,7 +68,7 @@ final class UnionTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\
     /**
      * @required
      */
-    public function autowireUnionTypeMapper(\Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper $phpStanStaticTypeMapper) : void
+    public function autowireUnionTypeMapper(PHPStanStaticTypeMapper $phpStanStaticTypeMapper) : void
     {
         $this->phpStanStaticTypeMapper = $phpStanStaticTypeMapper;
     }
@@ -77,66 +77,66 @@ final class UnionTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\
      */
     public function getNodeClass() : string
     {
-        return \PHPStan\Type\UnionType::class;
+        return UnionType::class;
     }
     /**
      * @param UnionType $type
      */
-    public function mapToPHPStanPhpDocTypeNode(\PHPStan\Type\Type $type) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
+    public function mapToPHPStanPhpDocTypeNode(Type $type) : TypeNode
     {
         $unionTypesNodes = [];
         $skipIterable = $this->shouldSkipIterable($type);
         foreach ($type->getTypes() as $unionedType) {
-            if ($unionedType instanceof \PHPStan\Type\IterableType && $skipIterable) {
+            if ($unionedType instanceof IterableType && $skipIterable) {
                 continue;
             }
             $unionTypesNodes[] = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($unionedType);
         }
         $unionTypesNodes = \array_unique($unionTypesNodes);
-        return new \Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareUnionTypeNode($unionTypesNodes);
+        return new BracketsAwareUnionTypeNode($unionTypesNodes);
     }
     /**
      * @param UnionType $type
      */
-    public function mapToPhpParserNode(\PHPStan\Type\Type $type, ?string $kind = null) : ?\PhpParser\Node
+    public function mapToPhpParserNode(Type $type, ?string $kind = null) : ?Node
     {
         $arrayNode = $this->matchArrayTypes($type);
         if ($arrayNode !== null) {
             return $arrayNode;
         }
-        if ($this->boolUnionTypeAnalyzer->isNullableBoolUnionType($type) && !$this->phpVersionProvider->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::UNION_TYPES)) {
-            return new \PhpParser\Node\NullableType(new \PhpParser\Node\Name('bool'));
+        if ($this->boolUnionTypeAnalyzer->isNullableBoolUnionType($type) && !$this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::UNION_TYPES)) {
+            return new NullableType(new Name('bool'));
         }
-        if (!$this->phpVersionProvider->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::UNION_TYPES) && $this->isFalseBoolUnion($type)) {
+        if (!$this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::UNION_TYPES) && $this->isFalseBoolUnion($type)) {
             // return new Bool
-            return new \PhpParser\Node\Name('bool');
+            return new Name('bool');
         }
         // special case for nullable
         $nullabledType = $this->matchTypeForNullableUnionType($type);
-        if (!$nullabledType instanceof \PHPStan\Type\Type) {
+        if (!$nullabledType instanceof Type) {
             // use first unioned type in case of unioned object types
             return $this->matchTypeForUnionedObjectTypes($type);
         }
         // void cannot be nullable
-        if ($nullabledType instanceof \PHPStan\Type\VoidType) {
+        if ($nullabledType instanceof VoidType) {
             return null;
         }
         $nullabledTypeNode = $this->phpStanStaticTypeMapper->mapToPhpParserNode($nullabledType);
-        if (!$nullabledTypeNode instanceof \PhpParser\Node) {
+        if (!$nullabledTypeNode instanceof Node) {
             return null;
         }
-        if ($nullabledTypeNode instanceof \PhpParser\Node\NullableType) {
+        if ($nullabledTypeNode instanceof NullableType) {
             return $nullabledTypeNode;
         }
-        if ($nullabledTypeNode instanceof \PhpParser\Node\UnionType) {
-            throw new \Rector\Core\Exception\ShouldNotHappenException();
+        if ($nullabledTypeNode instanceof PhpParserUnionType) {
+            throw new ShouldNotHappenException();
         }
-        return new \PhpParser\Node\NullableType($nullabledTypeNode);
+        return new NullableType($nullabledTypeNode);
     }
-    private function shouldSkipIterable(\PHPStan\Type\UnionType $unionType) : bool
+    private function shouldSkipIterable(UnionType $unionType) : bool
     {
         $unionTypeAnalysis = $this->unionTypeAnalyzer->analyseForNullableAndIterable($unionType);
-        if (!$unionTypeAnalysis instanceof \Rector\PHPStanStaticTypeMapper\ValueObject\UnionTypeAnalysis) {
+        if (!$unionTypeAnalysis instanceof UnionTypeAnalysis) {
             return \false;
         }
         if (!$unionTypeAnalysis->hasIterable()) {
@@ -147,29 +147,29 @@ final class UnionTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\
     /**
      * @return Name|NullableType|null
      */
-    private function matchArrayTypes(\PHPStan\Type\UnionType $unionType) : ?\PhpParser\Node
+    private function matchArrayTypes(UnionType $unionType) : ?Node
     {
         $unionTypeAnalysis = $this->unionTypeAnalyzer->analyseForNullableAndIterable($unionType);
-        if (!$unionTypeAnalysis instanceof \Rector\PHPStanStaticTypeMapper\ValueObject\UnionTypeAnalysis) {
+        if (!$unionTypeAnalysis instanceof UnionTypeAnalysis) {
             return null;
         }
         $type = $unionTypeAnalysis->hasIterable() ? 'iterable' : 'array';
         if ($unionTypeAnalysis->isNullableType()) {
-            return new \PhpParser\Node\NullableType($type);
+            return new NullableType($type);
         }
-        return new \PhpParser\Node\Name($type);
+        return new Name($type);
     }
-    private function matchTypeForNullableUnionType(\PHPStan\Type\UnionType $unionType) : ?\PHPStan\Type\Type
+    private function matchTypeForNullableUnionType(UnionType $unionType) : ?Type
     {
         if (\count($unionType->getTypes()) !== 2) {
             return null;
         }
         $firstType = $unionType->getTypes()[0];
         $secondType = $unionType->getTypes()[1];
-        if ($firstType instanceof \PHPStan\Type\NullType) {
+        if ($firstType instanceof NullType) {
             return $secondType;
         }
-        if ($secondType instanceof \PHPStan\Type\NullType) {
+        if ($secondType instanceof NullType) {
             return $firstType;
         }
         return null;
@@ -177,38 +177,38 @@ final class UnionTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\
     /**
      * @return Name|FullyQualified|PhpParserUnionType|null
      */
-    private function matchTypeForUnionedObjectTypes(\PHPStan\Type\UnionType $unionType) : ?\PhpParser\Node
+    private function matchTypeForUnionedObjectTypes(UnionType $unionType) : ?Node
     {
         $phpParserUnionType = $this->matchPhpParserUnionType($unionType);
         if ($phpParserUnionType !== null) {
-            if (!$this->phpVersionProvider->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::UNION_TYPES)) {
+            if (!$this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::UNION_TYPES)) {
                 // maybe all one type?
                 if ($this->boolUnionTypeAnalyzer->isBoolUnionType($unionType)) {
-                    return new \PhpParser\Node\Name('bool');
+                    return new Name('bool');
                 }
                 return null;
             }
             return $phpParserUnionType;
         }
         if ($this->boolUnionTypeAnalyzer->isBoolUnionType($unionType)) {
-            return new \PhpParser\Node\Name('bool');
+            return new Name('bool');
         }
         // the type should be compatible with all other types, e.g. A extends B, B
         $compatibleObjectType = $this->resolveCompatibleObjectCandidate($unionType);
-        if (!$compatibleObjectType instanceof \PHPStan\Type\ObjectType) {
+        if (!$compatibleObjectType instanceof ObjectType) {
             return null;
         }
-        return new \PhpParser\Node\Name\FullyQualified($compatibleObjectType->getClassName());
+        return new FullyQualified($compatibleObjectType->getClassName());
     }
-    private function matchPhpParserUnionType(\PHPStan\Type\UnionType $unionType) : ?\PhpParser\Node\UnionType
+    private function matchPhpParserUnionType(UnionType $unionType) : ?PhpParserUnionType
     {
-        if (!$this->phpVersionProvider->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::UNION_TYPES)) {
+        if (!$this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::UNION_TYPES)) {
             return null;
         }
         $phpParserUnionedTypes = [];
         foreach ($unionType->getTypes() as $unionedType) {
             // void type is not allowed in union
-            if ($unionedType instanceof \PHPStan\Type\VoidType) {
+            if ($unionedType instanceof VoidType) {
                 return null;
             }
             /** @var Identifier|Name|null $phpParserNode */
@@ -218,24 +218,24 @@ final class UnionTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\
             }
             $phpParserUnionedTypes[] = $phpParserNode;
         }
-        return new \PhpParser\Node\UnionType($phpParserUnionedTypes);
+        return new PhpParserUnionType($phpParserUnionedTypes);
     }
-    private function resolveCompatibleObjectCandidate(\PHPStan\Type\UnionType $unionType) : ?\PHPStan\Type\TypeWithClassName
+    private function resolveCompatibleObjectCandidate(UnionType $unionType) : ?TypeWithClassName
     {
         if ($this->doctrineTypeAnalyzer->isDoctrineCollectionWithIterableUnionType($unionType)) {
-            return new \PHPStan\Type\ObjectType('Doctrine\\Common\\Collections\\Collection');
+            return new ObjectType('Doctrine\\Common\\Collections\\Collection');
         }
         if (!$this->unionTypeAnalyzer->hasTypeClassNameOnly($unionType)) {
             return null;
         }
         $sharedTypeWithClassName = $this->matchTwoObjectTypes($unionType);
-        if ($sharedTypeWithClassName instanceof \PHPStan\Type\TypeWithClassName) {
+        if ($sharedTypeWithClassName instanceof TypeWithClassName) {
             return $this->correctObjectType($sharedTypeWithClassName);
         }
         // find least common denominator
         return $this->unionTypeCommonTypeNarrower->narrowToSharedObjectType($unionType);
     }
-    private function matchTwoObjectTypes(\PHPStan\Type\UnionType $unionType) : ?\PHPStan\Type\TypeWithClassName
+    private function matchTwoObjectTypes(UnionType $unionType) : ?TypeWithClassName
     {
         /** @var TypeWithClassName $unionedType */
         foreach ($unionType->getTypes() as $unionedType) {
@@ -249,30 +249,30 @@ final class UnionTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\
         }
         return null;
     }
-    private function areTypeWithClassNamesRelated(\PHPStan\Type\TypeWithClassName $firstType, \PHPStan\Type\TypeWithClassName $secondType) : bool
+    private function areTypeWithClassNamesRelated(TypeWithClassName $firstType, TypeWithClassName $secondType) : bool
     {
         if ($firstType->accepts($secondType, \false)->yes()) {
             return \true;
         }
         return $secondType->accepts($firstType, \false)->yes();
     }
-    private function correctObjectType(\PHPStan\Type\TypeWithClassName $typeWithClassName) : \PHPStan\Type\TypeWithClassName
+    private function correctObjectType(TypeWithClassName $typeWithClassName) : TypeWithClassName
     {
-        if ($typeWithClassName->getClassName() === \PhpParser\NodeAbstract::class) {
-            return new \PHPStan\Type\ObjectType('PhpParser\\Node');
+        if ($typeWithClassName->getClassName() === NodeAbstract::class) {
+            return new ObjectType('PhpParser\\Node');
         }
-        if ($typeWithClassName->getClassName() === \Rector\Core\Rector\AbstractRector::class) {
-            return new \PHPStan\Type\ObjectType('Rector\\Core\\Contract\\Rector\\RectorInterface');
+        if ($typeWithClassName->getClassName() === AbstractRector::class) {
+            return new ObjectType('Rector\\Core\\Contract\\Rector\\RectorInterface');
         }
         return $typeWithClassName;
     }
-    private function isFalseBoolUnion(\PHPStan\Type\UnionType $unionType) : bool
+    private function isFalseBoolUnion(UnionType $unionType) : bool
     {
         if (\count($unionType->getTypes()) !== 2) {
             return \false;
         }
         foreach ($unionType->getTypes() as $unionedType) {
-            if ($unionedType instanceof \PHPStan\Type\Constant\ConstantBooleanType) {
+            if ($unionedType instanceof ConstantBooleanType) {
                 continue;
             }
             return \false;

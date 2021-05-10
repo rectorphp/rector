@@ -13,29 +13,29 @@ use Rector\PHPUnit\ValueObject\DataProviderClassMethodRecipe;
 use RectorPrefix20210510\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
 final class DataProviderClassMethodFactory
 {
-    public function createFromRecipe(\Rector\PHPUnit\ValueObject\DataProviderClassMethodRecipe $dataProviderClassMethodRecipe) : \PhpParser\Node\Stmt\ClassMethod
+    public function createFromRecipe(DataProviderClassMethodRecipe $dataProviderClassMethodRecipe) : ClassMethod
     {
-        $methodBuilder = new \RectorPrefix20210510\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder($dataProviderClassMethodRecipe->getMethodName());
+        $methodBuilder = new MethodBuilder($dataProviderClassMethodRecipe->getMethodName());
         $methodBuilder->makePublic();
         $classMethod = $methodBuilder->getNode();
         foreach ($dataProviderClassMethodRecipe->getArgs() as $arg) {
             $value = $arg->value;
-            if (!$value instanceof \PhpParser\Node\Expr\Array_) {
+            if (!$value instanceof Array_) {
                 continue;
             }
             foreach ($value->items as $arrayItem) {
-                if (!$arrayItem instanceof \PhpParser\Node\Expr\ArrayItem) {
+                if (!$arrayItem instanceof ArrayItem) {
                     continue;
                 }
-                $returnStatement = new \PhpParser\Node\Expr\Yield_(new \PhpParser\Node\Expr\Array_([new \PhpParser\Node\Expr\ArrayItem($arrayItem->value)]));
-                $classMethod->stmts[] = new \PhpParser\Node\Stmt\Expression($returnStatement);
+                $returnStatement = new Yield_(new Array_([new ArrayItem($arrayItem->value)]));
+                $classMethod->stmts[] = new Expression($returnStatement);
             }
         }
         $this->decorateClassMethodWithReturnTypeAndTag($classMethod);
         return $classMethod;
     }
-    private function decorateClassMethodWithReturnTypeAndTag(\PhpParser\Node\Stmt\ClassMethod $classMethod) : void
+    private function decorateClassMethodWithReturnTypeAndTag(ClassMethod $classMethod) : void
     {
-        $classMethod->returnType = new \PhpParser\Node\Name\FullyQualified('Iterator');
+        $classMethod->returnType = new FullyQualified('Iterator');
     }
 }

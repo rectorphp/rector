@@ -18,20 +18,20 @@ final class NetteCacheFactory
      * @var SmartFileSystem
      */
     private $smartFileSystem;
-    public function __construct(\RectorPrefix20210510\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \RectorPrefix20210510\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem)
+    public function __construct(ParameterProvider $parameterProvider, SmartFileSystem $smartFileSystem)
     {
         $this->parameterProvider = $parameterProvider;
         $this->smartFileSystem = $smartFileSystem;
     }
-    public function create() : \RectorPrefix20210510\Nette\Caching\Cache
+    public function create() : Cache
     {
-        $cacheDirectory = $this->parameterProvider->provideStringParameter(\Rector\Core\Configuration\Option::CACHE_DIR);
+        $cacheDirectory = $this->parameterProvider->provideStringParameter(Option::CACHE_DIR);
         // ensure cache directory exists
         if (!$this->smartFileSystem->exists($cacheDirectory)) {
             $this->smartFileSystem->mkdir($cacheDirectory);
         }
-        $fileStorage = new \RectorPrefix20210510\Nette\Caching\Storages\FileStorage($cacheDirectory);
+        $fileStorage = new FileStorage($cacheDirectory);
         // namespace is unique per project
-        return new \RectorPrefix20210510\Nette\Caching\Cache($fileStorage, \getcwd());
+        return new Cache($fileStorage, \getcwd());
     }
 }

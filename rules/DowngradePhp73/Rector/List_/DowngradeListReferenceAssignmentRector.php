@@ -22,7 +22,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://wiki.php.net/rfc/list_reference_assignment
  * @see \Rector\Tests\DowngradePhp73\Rector\List_\DowngradeListReferenceAssignmentRector\DowngradeListReferenceAssignmentRectorTest
  */
-final class DowngradeListReferenceAssignmentRector extends \Rector\Core\Rector\AbstractRector
+final class DowngradeListReferenceAssignmentRector extends AbstractRector
 {
     /**
      * @var int
@@ -32,9 +32,9 @@ final class DowngradeListReferenceAssignmentRector extends \Rector\Core\Rector\A
      * @var int
      */
     private const ANY = 1;
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Convert the list reference assignment to its equivalent PHP 7.2 code', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Convert the list reference assignment to its equivalent PHP 7.2 code', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($string)
@@ -73,19 +73,19 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\List_::class, \PhpParser\Node\Expr\Array_::class];
+        return [List_::class, Array_::class];
     }
     /**
      * @param List_|Array_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if (!$this->shouldRefactor($node)) {
             return null;
         }
         // Get all the params passed by reference
         /** @var Assign $parentNode */
-        $parentNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
         /** @var Variable $exprVariable */
         $exprVariable = $parentNode->expr;
         // Count number of params by ref on the right side, to remove them later on
@@ -103,13 +103,13 @@ CODE_SAMPLE
      * @param List_|Array_ $node
      * @return List_|Array_|null
      */
-    public function removeStaleParams(\PhpParser\Node $node, int $rightSideRemovableParamsCount) : ?\PhpParser\Node
+    public function removeStaleParams(Node $node, int $rightSideRemovableParamsCount) : ?Node
     {
         $nodeItemsCount = \count($node->items);
         if ($rightSideRemovableParamsCount === $nodeItemsCount) {
             // Remove the parent Assign node
             /** @var Assign $parentNode */
-            $parentNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+            $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
             $this->removeNode($parentNode);
             return null;
         }
@@ -121,17 +121,17 @@ CODE_SAMPLE
     /**
      * @param List_|Array_ $node
      */
-    private function shouldRefactor(\PhpParser\Node $node) : bool
+    private function shouldRefactor(Node $node) : bool
     {
-        $parentNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
         // Check it follows `list(...) = $foo`
-        if (!$parentNode instanceof \PhpParser\Node\Expr\Assign) {
+        if (!$parentNode instanceof Assign) {
             return \false;
         }
         if ($parentNode->var !== $node) {
             return \false;
         }
-        if (!$parentNode->expr instanceof \PhpParser\Node\Expr\Variable) {
+        if (!$parentNode->expr instanceof Variable) {
             return \false;
         }
         return $this->hasAnyItemByRef($node->items);
@@ -150,12 +150,12 @@ CODE_SAMPLE
         for ($i = $listItemsCount - 1; $i >= 0; --$i) {
             $listItem = $listItems[$i];
             // Also include null items, since they can be removed
-            if (!$listItem instanceof \PhpParser\Node\Expr\ArrayItem || $listItem->byRef) {
+            if (!$listItem instanceof ArrayItem || $listItem->byRef) {
                 ++$count;
                 continue;
             }
             // If it is a nested list, check if all its items are by reference
-            $isNested = $listItem->value instanceof \PhpParser\Node\Expr\List_ || $listItem->value instanceof \PhpParser\Node\Expr\Array_;
+            $isNested = $listItem->value instanceof List_ || $listItem->value instanceof Array_;
             if ($isNested) {
                 /** @var List_|Array_ $nestedList */
                 $nestedList = $listItem->value;
@@ -174,27 +174,27 @@ CODE_SAMPLE
      * @param (int|string)[] $nestedArrayIndexes
      * @return AssignRef[]
      */
-    private function createAssignRefArrayFromListReferences(array $listItems, \PhpParser\Node\Expr\Variable $exprVariable, array $nestedArrayIndexes) : array
+    private function createAssignRefArrayFromListReferences(array $listItems, Variable $exprVariable, array $nestedArrayIndexes) : array
     {
         // After filtering, their original position is kept in the array
         $newNodes = [];
         foreach ($listItems as $position => $listItem) {
-            if (!$listItem instanceof \PhpParser\Node\Expr\ArrayItem) {
+            if (!$listItem instanceof ArrayItem) {
                 continue;
             }
-            if ($listItem->value instanceof \PhpParser\Node\Expr\Variable && !$listItem->byRef) {
+            if ($listItem->value instanceof Variable && !$listItem->byRef) {
                 continue;
             }
             // Access the key, if provided, or the position otherwise
             $key = $this->getArrayItemKey($listItem, $position);
             // Either the item is a variable, or a nested list
-            if ($listItem->value instanceof \PhpParser\Node\Expr\Variable) {
+            if ($listItem->value instanceof Variable) {
                 /** @var Variable $itemVariable */
                 $itemVariable = $listItem->value;
                 // Remove the reference in the present node
                 $listItem->byRef = \false;
                 // In its place, assign the value by reference on a new node
-                $assignVariable = new \PhpParser\Node\Expr\Variable($itemVariable->name);
+                $assignVariable = new Variable($itemVariable->name);
                 $newNodes[] = $this->createAssignRefWithArrayDimFetch($assignVariable, $exprVariable, $nestedArrayIndexes, $key);
                 continue;
             }
@@ -233,12 +233,12 @@ CODE_SAMPLE
      * @param int|string $position
      * @return int|string
      */
-    private function getArrayItemKey(\PhpParser\Node\Expr\ArrayItem $arrayItem, $position)
+    private function getArrayItemKey(ArrayItem $arrayItem, $position)
     {
-        if ($arrayItem->key instanceof \PhpParser\Node\Scalar\String_) {
+        if ($arrayItem->key instanceof String_) {
             return $arrayItem->key->value;
         }
-        if ($arrayItem->key instanceof \PhpParser\Node\Scalar\LNumber) {
+        if ($arrayItem->key instanceof LNumber) {
             return $arrayItem->key->value;
         }
         return $position;
@@ -248,16 +248,16 @@ CODE_SAMPLE
      * @param (string|int)[] $nestedArrayIndexes The path to build nested lists
      * @param string|int $arrayIndex
      */
-    private function createAssignRefWithArrayDimFetch(\PhpParser\Node\Expr\Variable $assignVariable, \PhpParser\Node\Expr\Variable $exprVariable, array $nestedArrayIndexes, $arrayIndex) : \PhpParser\Node\Expr\AssignRef
+    private function createAssignRefWithArrayDimFetch(Variable $assignVariable, Variable $exprVariable, array $nestedArrayIndexes, $arrayIndex) : AssignRef
     {
         $nestedExprVariable = $exprVariable;
         foreach ($nestedArrayIndexes as $nestedArrayIndex) {
-            $nestedArrayIndexDim = \PhpParser\BuilderHelpers::normalizeValue($nestedArrayIndex);
-            $nestedExprVariable = new \PhpParser\Node\Expr\ArrayDimFetch($nestedExprVariable, $nestedArrayIndexDim);
+            $nestedArrayIndexDim = BuilderHelpers::normalizeValue($nestedArrayIndex);
+            $nestedExprVariable = new ArrayDimFetch($nestedExprVariable, $nestedArrayIndexDim);
         }
-        $dim = \PhpParser\BuilderHelpers::normalizeValue($arrayIndex);
-        $arrayDimFetch = new \PhpParser\Node\Expr\ArrayDimFetch($nestedExprVariable, $dim);
-        return new \PhpParser\Node\Expr\AssignRef($assignVariable, $arrayDimFetch);
+        $dim = BuilderHelpers::normalizeValue($arrayIndex);
+        $arrayDimFetch = new ArrayDimFetch($nestedExprVariable, $dim);
+        return new AssignRef($assignVariable, $arrayDimFetch);
     }
     /**
      * @param array<ArrayItem|null> $arrayItems
@@ -281,10 +281,10 @@ CODE_SAMPLE
      * Indicate if the item is a variable by reference,
      * or a nested list containing variables by reference
      */
-    private function isItemByRef(\PhpParser\Node\Expr\ArrayItem $arrayItem, int $condition) : bool
+    private function isItemByRef(ArrayItem $arrayItem, int $condition) : bool
     {
         // Check if the item is a nested list/nested array destructuring
-        $isNested = $arrayItem->value instanceof \PhpParser\Node\Expr\List_ || $arrayItem->value instanceof \PhpParser\Node\Expr\Array_;
+        $isNested = $arrayItem->value instanceof List_ || $arrayItem->value instanceof Array_;
         if ($isNested) {
             // Recursive call
             /** @var List_|Array_ $nestedList */
@@ -295,7 +295,7 @@ CODE_SAMPLE
             // $condition === self::ANY
             return $this->hasAnyItemByRef($nestedList->items);
         }
-        if (!$arrayItem->value instanceof \PhpParser\Node\Expr\Variable) {
+        if (!$arrayItem->value instanceof Variable) {
             return \false;
         }
         return $arrayItem->byRef;

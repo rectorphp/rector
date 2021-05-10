@@ -17,7 +17,7 @@ namespace RectorPrefix20210510\Symfony\Component\Config\Resource;
  *
  * @final
  */
-class DirectoryResource implements \RectorPrefix20210510\Symfony\Component\Config\Resource\SelfCheckingResourceInterface
+class DirectoryResource implements SelfCheckingResourceInterface
 {
     private $resource;
     private $pattern;

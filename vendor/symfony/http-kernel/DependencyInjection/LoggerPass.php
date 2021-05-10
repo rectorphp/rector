@@ -19,17 +19,17 @@ use RectorPrefix20210510\Symfony\Component\HttpKernel\Log\Logger;
  *
  * @author Kévin Dunglas <dunglas@gmail.com>
  */
-class LoggerPass implements \RectorPrefix20210510\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface
+class LoggerPass implements CompilerPassInterface
 {
     /**
      * {@inheritdoc}
      */
-    public function process(\RectorPrefix20210510\Symfony\Component\DependencyInjection\ContainerBuilder $container)
+    public function process(ContainerBuilder $container)
     {
-        $container->setAlias(\RectorPrefix20210510\Psr\Log\LoggerInterface::class, 'logger')->setPublic(\false);
+        $container->setAlias(LoggerInterface::class, 'logger')->setPublic(\false);
         if ($container->has('logger')) {
             return;
         }
-        $container->register('logger', \RectorPrefix20210510\Symfony\Component\HttpKernel\Log\Logger::class)->setPublic(\false);
+        $container->register('logger', Logger::class)->setPublic(\false);
     }
 }

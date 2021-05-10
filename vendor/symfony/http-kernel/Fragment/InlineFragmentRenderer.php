@@ -23,11 +23,11 @@ use RectorPrefix20210510\Symfony\Contracts\EventDispatcher\EventDispatcherInterf
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class InlineFragmentRenderer extends \RectorPrefix20210510\Symfony\Component\HttpKernel\Fragment\RoutableFragmentRenderer
+class InlineFragmentRenderer extends RoutableFragmentRenderer
 {
     private $kernel;
     private $dispatcher;
-    public function __construct(\RectorPrefix20210510\Symfony\Component\HttpKernel\HttpKernelInterface $kernel, \RectorPrefix20210510\Symfony\Contracts\EventDispatcher\EventDispatcherInterface $dispatcher = null)
+    public function __construct(HttpKernelInterface $kernel, EventDispatcherInterface $dispatcher = null)
     {
         $this->kernel = $kernel;
         $this->dispatcher = $dispatcher;
@@ -39,10 +39,10 @@ class InlineFragmentRenderer extends \RectorPrefix20210510\Symfony\Component\Htt
      *
      *  * alt: an alternative URI to render in case of an error
      */
-    public function render($uri, \RectorPrefix20210510\Symfony\Component\HttpFoundation\Request $request, array $options = [])
+    public function render($uri, Request $request, array $options = [])
     {
         $reference = null;
-        if ($uri instanceof \RectorPrefix20210510\Symfony\Component\HttpKernel\Controller\ControllerReference) {
+        if ($uri instanceof ControllerReference) {
             $reference = $uri;
             // Remove attributes from the generated URI because if not, the Symfony
             // routing system will use them to populate the Request attributes. We don't
@@ -66,16 +66,16 @@ class InlineFragmentRenderer extends \RectorPrefix20210510\Symfony\Component\Htt
         }
         $level = \ob_get_level();
         try {
-            return \RectorPrefix20210510\Symfony\Component\HttpKernel\HttpCache\SubRequestHandler::handle($this->kernel, $subRequest, \RectorPrefix20210510\Symfony\Component\HttpKernel\HttpKernelInterface::SUB_REQUEST, \false);
+            return SubRequestHandler::handle($this->kernel, $subRequest, HttpKernelInterface::SUB_REQUEST, \false);
         } catch (\Exception $e) {
             // we dispatch the exception event to trigger the logging
             // the response that comes back is ignored
             if (isset($options['ignore_errors']) && $options['ignore_errors'] && $this->dispatcher) {
-                $event = new \RectorPrefix20210510\Symfony\Component\HttpKernel\Event\ExceptionEvent($this->kernel, $request, \RectorPrefix20210510\Symfony\Component\HttpKernel\HttpKernelInterface::SUB_REQUEST, $e);
-                $this->dispatcher->dispatch($event, \RectorPrefix20210510\Symfony\Component\HttpKernel\KernelEvents::EXCEPTION);
+                $event = new ExceptionEvent($this->kernel, $request, HttpKernelInterface::SUB_REQUEST, $e);
+                $this->dispatcher->dispatch($event, KernelEvents::EXCEPTION);
             }
             // let's clean up the output buffers that were created by the sub-request
-            \RectorPrefix20210510\Symfony\Component\HttpFoundation\Response::closeOutputBuffers($level, \false);
+            Response::closeOutputBuffers($level, \false);
             if (isset($options['alt'])) {
                 $alt = $options['alt'];
                 unset($options['alt']);
@@ -84,16 +84,16 @@ class InlineFragmentRenderer extends \RectorPrefix20210510\Symfony\Component\Htt
             if (!isset($options['ignore_errors']) || !$options['ignore_errors']) {
                 throw $e;
             }
-            return new \RectorPrefix20210510\Symfony\Component\HttpFoundation\Response();
+            return new Response();
         }
     }
-    protected function createSubRequest($uri, \RectorPrefix20210510\Symfony\Component\HttpFoundation\Request $request)
+    protected function createSubRequest($uri, Request $request)
     {
         $cookies = $request->cookies->all();
         $server = $request->server->all();
         unset($server['HTTP_IF_MODIFIED_SINCE']);
         unset($server['HTTP_IF_NONE_MATCH']);
-        $subRequest = \RectorPrefix20210510\Symfony\Component\HttpFoundation\Request::create($uri, 'get', [], $cookies, [], $server);
+        $subRequest = Request::create($uri, 'get', [], $cookies, [], $server);
         if ($request->headers->has('Surrogate-Capability')) {
             $subRequest->headers->set('Surrogate-Capability', $request->headers->get('Surrogate-Capability'));
         }
@@ -101,7 +101,7 @@ class InlineFragmentRenderer extends \RectorPrefix20210510\Symfony\Component\Htt
         if (null === $setSession) {
             $setSession = \Closure::bind(static function ($subRequest, $request) {
                 $subRequest->session = $request->session;
-            }, null, \RectorPrefix20210510\Symfony\Component\HttpFoundation\Request::class);
+            }, null, Request::class);
         }
         $setSession($subRequest, $request);
         if ($request->get('_format')) {

@@ -8,7 +8,7 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\HttpKernel\RectorKernel;
 use RectorPrefix20210510\Symfony\Component\DependencyInjection\ContainerInterface;
 use Symplify\SmartFileSystem\SmartFileInfo;
-abstract class AbstractTestCase extends \PHPUnit\Framework\TestCase
+abstract class AbstractTestCase extends TestCase
 {
     /**
      * @var array<string, RectorKernel>
@@ -32,7 +32,7 @@ abstract class AbstractTestCase extends \PHPUnit\Framework\TestCase
             $rectorKernel = self::$kernelsByHash[$configsHash];
             self::$currentContainer = $rectorKernel->getContainer();
         } else {
-            $rectorKernel = new \Rector\Core\HttpKernel\RectorKernel('test_' . $configsHash, \true, $configFileInfos);
+            $rectorKernel = new RectorKernel('test_' . $configsHash, \true, $configFileInfos);
             $rectorKernel->boot();
             self::$kernelsByHash[$configsHash] = $rectorKernel;
             self::$currentContainer = $rectorKernel->getContainer();
@@ -48,7 +48,7 @@ abstract class AbstractTestCase extends \PHPUnit\Framework\TestCase
     protected function getService(string $type) : object
     {
         if (self::$currentContainer === null) {
-            throw new \Rector\Core\Exception\ShouldNotHappenException('First, create container with "bootWithConfigFileInfos([...])"');
+            throw new ShouldNotHappenException('First, create container with "bootWithConfigFileInfos([...])"');
         }
         return self::$currentContainer->get($type);
     }

@@ -7,7 +7,7 @@ use RectorPrefix20210510\Symplify\EasyTesting\Finder\FixtureFinder;
 use RectorPrefix20210510\Symplify\EasyTesting\HttpKernel\EasyTestingKernel;
 use RectorPrefix20210510\Symplify\EasyTesting\MissplacedSkipPrefixResolver;
 use RectorPrefix20210510\Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
-final class MissingSkipPrefixResolverTest extends \RectorPrefix20210510\Symplify\PackageBuilder\Testing\AbstractKernelTestCase
+final class MissingSkipPrefixResolverTest extends AbstractKernelTestCase
 {
     /**
      * @var MissplacedSkipPrefixResolver
@@ -19,9 +19,9 @@ final class MissingSkipPrefixResolverTest extends \RectorPrefix20210510\Symplify
     private $fixtureFinder;
     protected function setUp() : void
     {
-        $this->bootKernel(\RectorPrefix20210510\Symplify\EasyTesting\HttpKernel\EasyTestingKernel::class);
-        $this->missplacedSkipPrefixResolver = $this->getService(\RectorPrefix20210510\Symplify\EasyTesting\MissplacedSkipPrefixResolver::class);
-        $this->fixtureFinder = $this->getService(\RectorPrefix20210510\Symplify\EasyTesting\Finder\FixtureFinder::class);
+        $this->bootKernel(EasyTestingKernel::class);
+        $this->missplacedSkipPrefixResolver = $this->getService(MissplacedSkipPrefixResolver::class);
+        $this->fixtureFinder = $this->getService(FixtureFinder::class);
     }
     public function test() : void
     {

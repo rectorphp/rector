@@ -27,7 +27,7 @@ final class DependencyResolver
      * @var PrivatesAccessor
      */
     private $privatesAccessor;
-    public function __construct(\PHPStan\Analyser\NodeScopeResolver $nodeScopeResolver, \PHPStan\Dependency\DependencyResolver $phpStanDependencyResolver, \PHPStan\File\FileHelper $fileHelper, \RectorPrefix20210510\Symplify\PackageBuilder\Reflection\PrivatesAccessor $privatesAccessor)
+    public function __construct(NodeScopeResolver $nodeScopeResolver, PHPStanDependencyResolver $phpStanDependencyResolver, FileHelper $fileHelper, PrivatesAccessor $privatesAccessor)
     {
         $this->fileHelper = $fileHelper;
         $this->phpStanDependencyResolver = $phpStanDependencyResolver;
@@ -37,7 +37,7 @@ final class DependencyResolver
     /**
      * @return string[]
      */
-    public function resolveDependencies(\PhpParser\Node $node, \PHPStan\Analyser\MutatingScope $mutatingScope) : array
+    public function resolveDependencies(Node $node, MutatingScope $mutatingScope) : array
     {
         $analysedFileAbsolutesPaths = $this->privatesAccessor->getPrivateProperty($this->nodeScopeResolver, 'analysedFiles');
         $dependencyFiles = [];

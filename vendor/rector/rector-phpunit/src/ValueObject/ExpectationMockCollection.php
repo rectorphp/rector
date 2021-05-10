@@ -97,7 +97,7 @@ final class ExpectationMockCollection
         $previousMethod = '';
         foreach ($this->expectationMocks as $expectationMock) {
             $methodArgument = $expectationMock->getMethodArguments()[0];
-            if ($methodArgument !== null && $methodArgument->value instanceof \PhpParser\Node\Scalar\String_) {
+            if ($methodArgument !== null && $methodArgument->value instanceof String_) {
                 if ($previousMethod === '') {
                     $previousMethod = $methodArgument->value->value;
                 }

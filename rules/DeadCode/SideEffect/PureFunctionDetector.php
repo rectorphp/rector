@@ -214,11 +214,11 @@ final class PureFunctionDetector
      * @var NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
+    public function __construct(NodeNameResolver $nodeNameResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
     }
-    public function detect(\PhpParser\Node\Expr\FuncCall $funcCall) : bool
+    public function detect(FuncCall $funcCall) : bool
     {
         return !$this->nodeNameResolver->isNames($funcCall, self::IMPURE_FUNCTIONS);
     }

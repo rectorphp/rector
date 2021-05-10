@@ -8,19 +8,19 @@ use RectorPrefix20210510\Symplify\SimplePhpDocParser\Contract\PhpDocNodeVisitorI
 /**
  * Inspired by https://github.com/nikic/PHP-Parser/blob/master/lib/PhpParser/NodeVisitorAbstract.php
  */
-abstract class AbstractPhpDocNodeVisitor implements \RectorPrefix20210510\Symplify\SimplePhpDocParser\Contract\PhpDocNodeVisitorInterface
+abstract class AbstractPhpDocNodeVisitor implements PhpDocNodeVisitorInterface
 {
-    public function beforeTraverse(\PHPStan\PhpDocParser\Ast\Node $node) : void
+    public function beforeTraverse(Node $node) : void
     {
     }
-    public function enterNode(\PHPStan\PhpDocParser\Ast\Node $node) : ?\PHPStan\PhpDocParser\Ast\Node
+    public function enterNode(Node $node) : ?Node
     {
         return null;
     }
-    public function leaveNode(\PHPStan\PhpDocParser\Ast\Node $node) : void
+    public function leaveNode(Node $node) : void
     {
     }
-    public function afterTraverse(\PHPStan\PhpDocParser\Ast\Node $node) : void
+    public function afterTraverse(Node $node) : void
     {
     }
 }

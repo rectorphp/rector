@@ -47,9 +47,9 @@ final class ArgumentAdder
         $this->argumentType = $argumentType;
         $this->scope = $scope;
     }
-    public function getObjectType() : \PHPStan\Type\ObjectType
+    public function getObjectType() : ObjectType
     {
-        return new \PHPStan\Type\ObjectType($this->class);
+        return new ObjectType($this->class);
     }
     public function getMethod() : string
     {

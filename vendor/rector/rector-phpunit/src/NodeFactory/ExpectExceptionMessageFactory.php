@@ -31,7 +31,7 @@ final class ExpectExceptionMessageFactory
      * @var TestsNodeAnalyzer
      */
     private $testsNodeAnalyzer;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\PHPUnit\NodeFactory\ArgumentShiftingFactory $argumentShiftingFactory, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer $testsNodeAnalyzer)
+    public function __construct(NodeNameResolver $nodeNameResolver, \Rector\PHPUnit\NodeFactory\ArgumentShiftingFactory $argumentShiftingFactory, NodeComparator $nodeComparator, NodeTypeResolver $nodeTypeResolver, TestsNodeAnalyzer $testsNodeAnalyzer)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->argumentShiftingFactory = $argumentShiftingFactory;
@@ -39,13 +39,13 @@ final class ExpectExceptionMessageFactory
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
     }
-    public function create(\PhpParser\Node\Expr\MethodCall $methodCall, \PhpParser\Node\Expr\Variable $exceptionVariable) : ?\PhpParser\Node\Expr\MethodCall
+    public function create(MethodCall $methodCall, Variable $exceptionVariable) : ?MethodCall
     {
         if (!$this->testsNodeAnalyzer->isPHPUnitMethodCallNames($methodCall, ['assertSame', 'assertEquals'])) {
             return null;
         }
         $secondArgument = $methodCall->args[1]->value;
-        if (!$secondArgument instanceof \PhpParser\Node\Expr\MethodCall) {
+        if (!$secondArgument instanceof MethodCall) {
             return null;
         }
         if (!$this->nodeComparator->areNodesEqual($secondArgument->var, $exceptionVariable)) {

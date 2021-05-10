@@ -37,7 +37,7 @@ class NotSupportedException extends \LogicException
 /**
  * The exception that is thrown when a requested method or operation is deprecated.
  */
-class DeprecatedException extends \RectorPrefix20210510\Nette\NotSupportedException
+class DeprecatedException extends NotSupportedException
 {
 }
 /**
@@ -55,13 +55,13 @@ class IOException extends \RuntimeException
 /**
  * The exception that is thrown when accessing a file that does not exist on disk.
  */
-class FileNotFoundException extends \RectorPrefix20210510\Nette\IOException
+class FileNotFoundException extends IOException
 {
 }
 /**
  * The exception that is thrown when part of a file or directory cannot be found.
  */
-class DirectoryNotFoundException extends \RectorPrefix20210510\Nette\IOException
+class DirectoryNotFoundException extends IOException
 {
 }
 /**

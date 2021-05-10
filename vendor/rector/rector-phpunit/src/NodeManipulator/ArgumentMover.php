@@ -11,7 +11,7 @@ final class ArgumentMover
     /**
      * @param MethodCall|StaticCall $node
      */
-    public function removeFirst(\PhpParser\Node $node) : void
+    public function removeFirst(Node $node) : void
     {
         $methodArguments = $node->args;
         \array_shift($methodArguments);

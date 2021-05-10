@@ -15,7 +15,7 @@ namespace RectorPrefix20210510\Symfony\Component\HttpKernel\Exception;
  *
  * @see http://tools.ietf.org/html/rfc6585
  */
-class PreconditionRequiredHttpException extends \RectorPrefix20210510\Symfony\Component\HttpKernel\Exception\HttpException
+class PreconditionRequiredHttpException extends HttpException
 {
     /**
      * @param string|null     $message  The internal exception message

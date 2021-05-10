@@ -11,17 +11,17 @@ use Rector\FileFormatter\ValueObjectFactory\EditorConfigConfigurationBuilder;
 /**
  * @see \Rector\Tests\FileFormatter\EditorConfig\EditorConfigIdiosyncraticParser\EditorConfigIdiosyncraticParserTest
  */
-final class EditorConfigIdiosyncraticParser implements \Rector\FileFormatter\Contract\EditorConfig\EditorConfigParserInterface
+final class EditorConfigIdiosyncraticParser implements EditorConfigParserInterface
 {
     /**
      * @var EditorConfig
      */
     private $editorConfig;
-    public function __construct(\RectorPrefix20210510\Idiosyncratic\EditorConfig\EditorConfig $editorConfig)
+    public function __construct(EditorConfig $editorConfig)
     {
         $this->editorConfig = $editorConfig;
     }
-    public function extractConfigurationForFile(\Rector\Core\ValueObject\Application\File $file, \Rector\FileFormatter\ValueObjectFactory\EditorConfigConfigurationBuilder $editorConfigConfigurationBuilder) : \Rector\FileFormatter\ValueObject\EditorConfigConfiguration
+    public function extractConfigurationForFile(File $file, EditorConfigConfigurationBuilder $editorConfigConfigurationBuilder) : EditorConfigConfiguration
     {
         $smartFileInfo = $file->getSmartFileInfo();
         $configuration = $this->editorConfig->getConfigForPath($smartFileInfo->getRealPath());

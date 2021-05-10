@@ -27,27 +27,27 @@ final class ConstructorAssignDetector
      * @var SimpleCallableNodeTraverser
      */
     private $simpleCallableNodeTraverser;
-    public function __construct(\Rector\TypeDeclaration\Matcher\PropertyAssignMatcher $propertyAssignMatcher, \RectorPrefix20210510\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser)
+    public function __construct(PropertyAssignMatcher $propertyAssignMatcher, SimpleCallableNodeTraverser $simpleCallableNodeTraverser)
     {
         $this->propertyAssignMatcher = $propertyAssignMatcher;
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
     }
-    public function isPropertyAssigned(\PhpParser\Node\Stmt\ClassLike $classLike, string $propertyName) : bool
+    public function isPropertyAssigned(ClassLike $classLike, string $propertyName) : bool
     {
-        $constructClassMethod = $classLike->getMethod(\Rector\Core\ValueObject\MethodName::CONSTRUCT);
-        if (!$constructClassMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
+        $constructClassMethod = $classLike->getMethod(MethodName::CONSTRUCT);
+        if (!$constructClassMethod instanceof ClassMethod) {
             return \false;
         }
         $isAssignedInConstructor = \false;
         foreach ((array) $constructClassMethod->stmts as $methodStmt) {
             $methodStmt->setAttribute(self::IS_FIRST_LEVEL_STATEMENT, \true);
-            if ($methodStmt instanceof \PhpParser\Node\Stmt\Expression) {
+            if ($methodStmt instanceof Expression) {
                 $methodStmt->expr->setAttribute(self::IS_FIRST_LEVEL_STATEMENT, \true);
             }
         }
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $constructClassMethod->stmts, function (\PhpParser\Node $node) use($propertyName, &$isAssignedInConstructor) : ?int {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $constructClassMethod->stmts, function (Node $node) use($propertyName, &$isAssignedInConstructor) : ?int {
             $expr = $this->matchAssignExprToPropertyName($node, $propertyName);
-            if (!$expr instanceof \PhpParser\Node\Expr) {
+            if (!$expr instanceof Expr) {
                 return null;
             }
             /** @var Assign $assign */
@@ -58,13 +58,13 @@ final class ConstructorAssignDetector
                 return null;
             }
             $isAssignedInConstructor = \true;
-            return \PhpParser\NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
+            return NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
         });
         return $isAssignedInConstructor;
     }
-    private function matchAssignExprToPropertyName(\PhpParser\Node $node, string $propertyName) : ?\PhpParser\Node\Expr
+    private function matchAssignExprToPropertyName(Node $node, string $propertyName) : ?Expr
     {
-        if (!$node instanceof \PhpParser\Node\Expr\Assign) {
+        if (!$node instanceof Assign) {
             return null;
         }
         return $this->propertyAssignMatcher->matchPropertyAssignExpr($node, $propertyName);

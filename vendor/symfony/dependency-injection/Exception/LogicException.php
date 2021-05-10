@@ -13,6 +13,6 @@ namespace RectorPrefix20210510\Symfony\Component\DependencyInjection\Exception;
 /**
  * Base LogicException for Dependency Injection component.
  */
-class LogicException extends \LogicException implements \RectorPrefix20210510\Symfony\Component\DependencyInjection\Exception\ExceptionInterface
+class LogicException extends \LogicException implements ExceptionInterface
 {
 }

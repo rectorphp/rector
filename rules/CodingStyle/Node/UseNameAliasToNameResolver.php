@@ -17,7 +17,7 @@ final class UseNameAliasToNameResolver
      * @var ClassNaming
      */
     private $classNaming;
-    public function __construct(\Rector\CodingStyle\Naming\ClassNaming $classNaming, \Rector\CodingStyle\ClassNameImport\ShortNameResolver $shortNameResolver)
+    public function __construct(ClassNaming $classNaming, ShortNameResolver $shortNameResolver)
     {
         $this->shortNameResolver = $shortNameResolver;
         $this->classNaming = $classNaming;
@@ -25,7 +25,7 @@ final class UseNameAliasToNameResolver
     /**
      * @return array<string, string[]>
      */
-    public function resolve(\Rector\Core\ValueObject\Application\File $file, \PhpParser\Node\Stmt\Use_ $use) : array
+    public function resolve(File $file, Use_ $use) : array
     {
         $useNamesAliasToName = [];
         $shortNames = $this->shortNameResolver->resolveForNode($file);

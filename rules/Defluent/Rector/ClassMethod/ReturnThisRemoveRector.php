@@ -19,19 +19,19 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\Defluent\Rector\ClassMethod\ReturnThisRemoveRector\ReturnThisRemoveRectorTest
  */
-final class ReturnThisRemoveRector extends \Rector\Core\Rector\AbstractRector
+final class ReturnThisRemoveRector extends AbstractRector
 {
     /**
      * @var ParentClassMethodTypeOverrideGuard
      */
     private $parentClassMethodTypeOverrideGuard;
-    public function __construct(\Rector\Defluent\ConflictGuard\ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard)
+    public function __construct(ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard)
     {
         $this->parentClassMethodTypeOverrideGuard = $parentClassMethodTypeOverrideGuard;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Removes "return $this;" from *fluent interfaces* for specified classes.', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Removes "return $this;" from *fluent interfaces* for specified classes.', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeExampleClass
 {
     public function someFunction()
@@ -64,63 +64,63 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\ClassMethod::class];
+        return [ClassMethod::class];
     }
     /**
      * @param ClassMethod $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         $returnThis = $this->matchSingleReturnThis($node);
-        if (!$returnThis instanceof \PhpParser\Node\Stmt\Return_) {
+        if (!$returnThis instanceof Return_) {
             return null;
         }
         if ($this->shouldSkip($returnThis, $node)) {
             return null;
         }
         $this->removeNode($returnThis);
-        $classMethod = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::METHOD_NODE);
-        if (!$classMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
-            throw new \Rector\Core\Exception\ShouldNotHappenException();
+        $classMethod = $node->getAttribute(AttributeKey::METHOD_NODE);
+        if (!$classMethod instanceof ClassMethod) {
+            throw new ShouldNotHappenException();
         }
-        if ($this->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::VOID_TYPE)) {
-            $classMethod->returnType = new \PhpParser\Node\Identifier('void');
+        if ($this->isAtLeastPhpVersion(PhpVersionFeature::VOID_TYPE)) {
+            $classMethod->returnType = new Identifier('void');
         }
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
-        $phpDocInfo->removeByType(\PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode::class);
+        $phpDocInfo->removeByType(ReturnTagValueNode::class);
         return null;
     }
     /**
      * Matches only 1st level "return $this;"
      */
-    private function matchSingleReturnThis(\PhpParser\Node\Stmt\ClassMethod $classMethod) : ?\PhpParser\Node\Stmt\Return_
+    private function matchSingleReturnThis(ClassMethod $classMethod) : ?Return_
     {
         /** @var Return_[] $returns */
-        $returns = $this->betterNodeFinder->findInstanceOf($classMethod, \PhpParser\Node\Stmt\Return_::class);
+        $returns = $this->betterNodeFinder->findInstanceOf($classMethod, Return_::class);
         // can be only 1 return
         if (\count($returns) !== 1) {
             return null;
         }
         $return = $returns[0];
-        if (!$return->expr instanceof \PhpParser\Node\Expr\Variable) {
+        if (!$return->expr instanceof Variable) {
             return null;
         }
         if (!$this->nodeNameResolver->isName($return->expr, 'this')) {
             return null;
         }
-        $parentNode = $return->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        $parentNode = $return->getAttribute(AttributeKey::PARENT_NODE);
         if ($parentNode !== $classMethod) {
             return null;
         }
         return $return;
     }
-    private function shouldSkip(\PhpParser\Node\Stmt\Return_ $return, \PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
+    private function shouldSkip(Return_ $return, ClassMethod $classMethod) : bool
     {
         if ($this->parentClassMethodTypeOverrideGuard->hasParentMethodOutsideVendor($classMethod)) {
             return \true;
         }
         if ($return->expr === null) {
-            throw new \Rector\Core\Exception\ShouldNotHappenException();
+            throw new ShouldNotHappenException();
         }
         return \false;
     }

@@ -17,19 +17,19 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Symfony\Tests\Rector\ClassMethod\FormTypeGetParentRector\FormTypeGetParentRectorTest
  */
-final class FormTypeGetParentRector extends \Rector\Core\Rector\AbstractRector
+final class FormTypeGetParentRector extends AbstractRector
 {
     /**
      * @var FormTypeStringToTypeProvider
      */
     private $formTypeStringToTypeProvider;
-    public function __construct(\Rector\Symfony\FormHelper\FormTypeStringToTypeProvider $formTypeStringToTypeProvider)
+    public function __construct(FormTypeStringToTypeProvider $formTypeStringToTypeProvider)
     {
         $this->formTypeStringToTypeProvider = $formTypeStringToTypeProvider;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Turns string Form Type references to their CONSTANT alternatives in `getParent()` and `getExtendedType()` methods in Form in Symfony', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Turns string Form Type references to their CONSTANT alternatives in `getParent()` and `getExtendedType()` methods in Form in Symfony', [new CodeSample(<<<'CODE_SAMPLE'
 use Symfony\Component\Form\AbstractType;
 
 class SomeType extends AbstractType
@@ -51,7 +51,7 @@ class SomeType extends AbstractType
     }
 }
 CODE_SAMPLE
-), new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+), new CodeSample(<<<'CODE_SAMPLE'
 use Symfony\Component\Form\AbstractTypeExtension;
 
 class SomeExtension extends AbstractTypeExtension
@@ -80,24 +80,24 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\ClassMethod::class];
+        return [ClassMethod::class];
     }
     /**
      * @param ClassMethod $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if (!$this->isClassAndMethodMatch($node)) {
             return null;
         }
-        $this->traverseNodesWithCallable((array) $node->stmts, function (\PhpParser\Node $node) : ?Node {
-            if (!$node instanceof \PhpParser\Node\Stmt\Return_) {
+        $this->traverseNodesWithCallable((array) $node->stmts, function (Node $node) : ?Node {
+            if (!$node instanceof Return_) {
                 return null;
             }
             if ($node->expr === null) {
                 return null;
             }
-            if (!$node->expr instanceof \PhpParser\Node\Scalar\String_) {
+            if (!$node->expr instanceof String_) {
                 return null;
             }
             $this->replaceStringWIthFormTypeClassConstIfFound($node->expr->value, $node);
@@ -105,21 +105,21 @@ CODE_SAMPLE
         });
         return null;
     }
-    private function isClassAndMethodMatch(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
+    private function isClassAndMethodMatch(ClassMethod $classMethod) : bool
     {
-        $classLike = $classMethod->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
-        if (!$classLike instanceof \PhpParser\Node\Stmt\Class_) {
+        $classLike = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
+        if (!$classLike instanceof Class_) {
             return \false;
         }
-        if ($this->isObjectType($classLike, new \PHPStan\Type\ObjectType('Symfony\\Component\\Form\\AbstractType'))) {
+        if ($this->isObjectType($classLike, new ObjectType('Symfony\\Component\\Form\\AbstractType'))) {
             return $this->isName($classMethod->name, 'getParent');
         }
-        if ($this->isObjectType($classMethod, new \PHPStan\Type\ObjectType('Symfony\\Component\\Form\\AbstractTypeExtension'))) {
+        if ($this->isObjectType($classMethod, new ObjectType('Symfony\\Component\\Form\\AbstractTypeExtension'))) {
             return $this->isName($classMethod->name, 'getExtendedType');
         }
         return \false;
     }
-    private function replaceStringWIthFormTypeClassConstIfFound(string $stringValue, \PhpParser\Node\Stmt\Return_ $return) : void
+    private function replaceStringWIthFormTypeClassConstIfFound(string $stringValue, Return_ $return) : void
     {
         $formClass = $this->formTypeStringToTypeProvider->matchClassForNameWithPrefix($stringValue);
         if ($formClass === null) {

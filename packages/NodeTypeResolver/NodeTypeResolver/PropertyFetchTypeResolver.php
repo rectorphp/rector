@@ -20,7 +20,7 @@ use Rector\NodeTypeResolver\PHPStan\Collector\TraitNodeScopeCollector;
 /**
  * @see \Rector\Tests\NodeTypeResolver\PerNodeTypeResolver\PropertyFetchTypeResolver\PropertyFetchTypeResolverTest
  */
-final class PropertyFetchTypeResolver implements \Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface
+final class PropertyFetchTypeResolver implements NodeTypeResolverInterface
 {
     /**
      * @var NodeTypeResolver
@@ -38,7 +38,7 @@ final class PropertyFetchTypeResolver implements \Rector\NodeTypeResolver\Contra
      * @var ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeTypeResolver\PHPStan\Collector\TraitNodeScopeCollector $traitNodeScopeCollector, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
+    public function __construct(NodeNameResolver $nodeNameResolver, TraitNodeScopeCollector $traitNodeScopeCollector, ReflectionProvider $reflectionProvider)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->traitNodeScopeCollector = $traitNodeScopeCollector;
@@ -47,7 +47,7 @@ final class PropertyFetchTypeResolver implements \Rector\NodeTypeResolver\Contra
     /**
      * @required
      */
-    public function autowirePropertyFetchTypeResolver(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver) : void
+    public function autowirePropertyFetchTypeResolver(NodeTypeResolver $nodeTypeResolver) : void
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
@@ -56,61 +56,61 @@ final class PropertyFetchTypeResolver implements \Rector\NodeTypeResolver\Contra
      */
     public function getNodeClasses() : array
     {
-        return [\PhpParser\Node\Expr\PropertyFetch::class];
+        return [PropertyFetch::class];
     }
     /**
      * @param PropertyFetch $node
      */
-    public function resolve(\PhpParser\Node $node) : \PHPStan\Type\Type
+    public function resolve(Node $node) : Type
     {
         // compensate 3rd party non-analysed property reflection
         $vendorPropertyType = $this->getVendorPropertyFetchType($node);
-        if (!$vendorPropertyType instanceof \PHPStan\Type\MixedType) {
+        if (!$vendorPropertyType instanceof MixedType) {
             return $vendorPropertyType;
         }
         /** @var Scope|null $scope */
-        $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
-        if (!$scope instanceof \PHPStan\Analyser\Scope) {
-            $classNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
-            if ($classNode instanceof \PhpParser\Node\Stmt\Trait_) {
+        $scope = $node->getAttribute(AttributeKey::SCOPE);
+        if (!$scope instanceof Scope) {
+            $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
+            if ($classNode instanceof Trait_) {
                 /** @var string $traitName */
-                $traitName = $classNode->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);
+                $traitName = $classNode->getAttribute(AttributeKey::CLASS_NAME);
                 $scope = $this->traitNodeScopeCollector->getScopeForTraitAndNode($traitName, $node);
             }
         }
-        if (!$scope instanceof \PHPStan\Analyser\Scope) {
-            $classNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
+        if (!$scope instanceof Scope) {
+            $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
             // fallback to class, since property fetches are not scoped by PHPStan
-            if ($classNode instanceof \PhpParser\Node\Stmt\ClassLike) {
-                $scope = $classNode->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
+            if ($classNode instanceof ClassLike) {
+                $scope = $classNode->getAttribute(AttributeKey::SCOPE);
             }
-            if (!$scope instanceof \PHPStan\Analyser\Scope) {
-                return new \PHPStan\Type\MixedType();
+            if (!$scope instanceof Scope) {
+                return new MixedType();
             }
         }
         return $scope->getType($node);
     }
-    private function getVendorPropertyFetchType(\PhpParser\Node\Expr\PropertyFetch $propertyFetch) : \PHPStan\Type\Type
+    private function getVendorPropertyFetchType(PropertyFetch $propertyFetch) : Type
     {
         // 3rd party code
         $propertyName = $this->nodeNameResolver->getName($propertyFetch->name);
         if ($propertyName === null) {
-            return new \PHPStan\Type\MixedType();
+            return new MixedType();
         }
         $varType = $this->nodeTypeResolver->resolve($propertyFetch->var);
-        if (!$varType instanceof \PHPStan\Type\ObjectType) {
-            return new \PHPStan\Type\MixedType();
+        if (!$varType instanceof ObjectType) {
+            return new MixedType();
         }
         if (!$this->reflectionProvider->hasClass($varType->getClassName())) {
-            return new \PHPStan\Type\MixedType();
+            return new MixedType();
         }
         $classReflection = $this->reflectionProvider->getClass($varType->getClassName());
         if (!$classReflection->hasProperty($propertyName)) {
-            return new \PHPStan\Type\MixedType();
+            return new MixedType();
         }
-        $propertyFetchScope = $propertyFetch->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
+        $propertyFetchScope = $propertyFetch->getAttribute(AttributeKey::SCOPE);
         if ($propertyFetchScope === null) {
-            return new \PHPStan\Type\MixedType();
+            return new MixedType();
         }
         $propertyReflection = $classReflection->getProperty($propertyName, $propertyFetchScope);
         return $propertyReflection->getReadableType();

@@ -20,7 +20,7 @@ final class UrlHelper
 {
     private $requestStack;
     private $requestContext;
-    public function __construct(\RectorPrefix20210510\Symfony\Component\HttpFoundation\RequestStack $requestStack, \RectorPrefix20210510\Symfony\Component\Routing\RequestContext $requestContext = null)
+    public function __construct(RequestStack $requestStack, RequestContext $requestContext = null)
     {
         $this->requestStack = $requestStack;
         $this->requestContext = $requestContext;

@@ -16,7 +16,7 @@ final class MissingPropertiesFactory
      * @var PropertyTypeDecorator
      */
     private $propertyTypeDecorator;
-    public function __construct(\Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\CodeQuality\NodeFactory\PropertyTypeDecorator $propertyTypeDecorator)
+    public function __construct(NodeFactory $nodeFactory, \Rector\CodeQuality\NodeFactory\PropertyTypeDecorator $propertyTypeDecorator)
     {
         $this->nodeFactory = $nodeFactory;
         $this->propertyTypeDecorator = $propertyTypeDecorator;

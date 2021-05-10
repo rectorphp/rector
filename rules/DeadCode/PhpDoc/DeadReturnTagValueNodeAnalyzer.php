@@ -13,11 +13,11 @@ final class DeadReturnTagValueNodeAnalyzer
      * @var TypeComparator
      */
     private $typeComparator;
-    public function __construct(\Rector\NodeTypeResolver\TypeComparator\TypeComparator $typeComparator)
+    public function __construct(TypeComparator $typeComparator)
     {
         $this->typeComparator = $typeComparator;
     }
-    public function isDead(\PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode $returnTagValueNode, \PhpParser\Node\FunctionLike $functionLike) : bool
+    public function isDead(ReturnTagValueNode $returnTagValueNode, FunctionLike $functionLike) : bool
     {
         $returnType = $functionLike->getReturnType();
         if ($returnType === null) {
@@ -26,7 +26,7 @@ final class DeadReturnTagValueNodeAnalyzer
         if (!$this->typeComparator->arePhpParserAndPhpStanPhpDocTypesEqual($returnType, $returnTagValueNode->type, $functionLike)) {
             return \false;
         }
-        if ($returnTagValueNode->type instanceof \PHPStan\PhpDocParser\Ast\Type\GenericTypeNode) {
+        if ($returnTagValueNode->type instanceof GenericTypeNode) {
             return \false;
         }
         return $returnTagValueNode->description === '';

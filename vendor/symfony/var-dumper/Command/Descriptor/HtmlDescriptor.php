@@ -20,15 +20,15 @@ use RectorPrefix20210510\Symfony\Component\VarDumper\Dumper\HtmlDumper;
  *
  * @final
  */
-class HtmlDescriptor implements \RectorPrefix20210510\Symfony\Component\VarDumper\Command\Descriptor\DumpDescriptorInterface
+class HtmlDescriptor implements DumpDescriptorInterface
 {
     private $dumper;
     private $initialized = \false;
-    public function __construct(\RectorPrefix20210510\Symfony\Component\VarDumper\Dumper\HtmlDumper $dumper)
+    public function __construct(HtmlDumper $dumper)
     {
         $this->dumper = $dumper;
     }
-    public function describe(\RectorPrefix20210510\Symfony\Component\Console\Output\OutputInterface $output, \RectorPrefix20210510\Symfony\Component\VarDumper\Cloner\Data $data, array $context, int $clientId) : void
+    public function describe(OutputInterface $output, Data $data, array $context, int $clientId) : void
     {
         if (!$this->initialized) {
             $styles = \file_get_contents(__DIR__ . '/../../Resources/css/htmlDescriptor.css');

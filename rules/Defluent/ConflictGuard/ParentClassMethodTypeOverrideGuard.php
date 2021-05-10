@@ -20,19 +20,19 @@ final class ParentClassMethodTypeOverrideGuard
      * @var NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(\Rector\NodeCollector\NodeCollector\NodeRepository $nodeRepository, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
+    public function __construct(NodeRepository $nodeRepository, NodeNameResolver $nodeNameResolver)
     {
         $this->nodeRepository = $nodeRepository;
         $this->nodeNameResolver = $nodeNameResolver;
     }
-    public function hasParentMethodOutsideVendor(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
+    public function hasParentMethodOutsideVendor(ClassMethod $classMethod) : bool
     {
-        $scope = $classMethod->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
-        if (!$scope instanceof \PHPStan\Analyser\Scope) {
+        $scope = $classMethod->getAttribute(AttributeKey::SCOPE);
+        if (!$scope instanceof Scope) {
             return \false;
         }
         $classReflection = $scope->getClassReflection();
-        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
+        if (!$classReflection instanceof ClassReflection) {
             return \false;
         }
         $methodName = $classMethod->name->toString();
@@ -45,37 +45,37 @@ final class ParentClassMethodTypeOverrideGuard
             }
             $parentClassMethodReflection = $ancestorClassReflection->getMethod($methodName, $scope);
             $parentClassMethod = $this->nodeRepository->findClassMethodByMethodReflection($parentClassMethodReflection);
-            if (!$parentClassMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
+            if (!$parentClassMethod instanceof ClassMethod) {
                 return \true;
             }
         }
         return \false;
     }
-    public function isReturnTypeChangeAllowed(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
+    public function isReturnTypeChangeAllowed(ClassMethod $classMethod) : bool
     {
         // make sure return type is not protected by parent contract
         $parentClassMethodReflection = $this->getParentClassMethod($classMethod);
         // nothign to check
-        if (!$parentClassMethodReflection instanceof \PHPStan\Reflection\MethodReflection) {
+        if (!$parentClassMethodReflection instanceof MethodReflection) {
             return \true;
         }
         $parentClassMethod = $this->nodeRepository->findClassMethodByMethodReflection($parentClassMethodReflection);
         // if null, we're unable to override → skip it
-        if (!$parentClassMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
+        if (!$parentClassMethod instanceof ClassMethod) {
             return \true;
         }
         return $parentClassMethod->returnType === null;
     }
-    private function getParentClassMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod) : ?\PHPStan\Reflection\MethodReflection
+    private function getParentClassMethod(ClassMethod $classMethod) : ?MethodReflection
     {
-        $scope = $classMethod->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
-        if (!$scope instanceof \PHPStan\Analyser\Scope) {
+        $scope = $classMethod->getAttribute(AttributeKey::SCOPE);
+        if (!$scope instanceof Scope) {
             return null;
         }
         /** @var string $methodName */
         $methodName = $this->nodeNameResolver->getName($classMethod);
         $classReflection = $scope->getClassReflection();
-        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
+        if (!$classReflection instanceof ClassReflection) {
             return null;
         }
         foreach ($classReflection->getAncestors() as $parentClassReflection) {

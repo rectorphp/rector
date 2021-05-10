@@ -7,7 +7,7 @@ use PhpParser\Node;
 /**
  * @property Node\Name $namespacedName Namespaced name (if using NameResolver)
  */
-abstract class ClassLike extends \PhpParser\Node\Stmt
+abstract class ClassLike extends Node\Stmt
 {
     /** @var Node\Identifier|null Name */
     public $name;

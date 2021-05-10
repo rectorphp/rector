@@ -21,21 +21,21 @@ use RectorPrefix20210510\Symfony\Component\HttpKernel\Kernel;
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class AddAnnotatedClassesToCachePass implements \RectorPrefix20210510\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface
+class AddAnnotatedClassesToCachePass implements CompilerPassInterface
 {
     private $kernel;
-    public function __construct(\RectorPrefix20210510\Symfony\Component\HttpKernel\Kernel $kernel)
+    public function __construct(Kernel $kernel)
     {
         $this->kernel = $kernel;
     }
     /**
      * {@inheritdoc}
      */
-    public function process(\RectorPrefix20210510\Symfony\Component\DependencyInjection\ContainerBuilder $container)
+    public function process(ContainerBuilder $container)
     {
         $annotatedClasses = $this->kernel->getAnnotatedClassesToCompile();
         foreach ($container->getExtensions() as $extension) {
-            if ($extension instanceof \RectorPrefix20210510\Symfony\Component\HttpKernel\DependencyInjection\Extension) {
+            if ($extension instanceof Extension) {
                 $annotatedClasses = \array_merge($annotatedClasses, $extension->getAnnotatedClassesToCompile());
             }
         }
@@ -76,10 +76,10 @@ class AddAnnotatedClassesToCachePass implements \RectorPrefix20210510\Symfony\Co
             if (!\is_array($function)) {
                 continue;
             }
-            if ($function[0] instanceof \RectorPrefix20210510\Symfony\Component\ErrorHandler\DebugClassLoader || $function[0] instanceof \RectorPrefix20210510\Symfony\Component\Debug\DebugClassLoader) {
+            if ($function[0] instanceof DebugClassLoader || $function[0] instanceof LegacyDebugClassLoader) {
                 $function = $function[0]->getClassLoader();
             }
-            if (\is_array($function) && $function[0] instanceof \RectorPrefix20210510\Composer\Autoload\ClassLoader) {
+            if (\is_array($function) && $function[0] instanceof ClassLoader) {
                 $classes += \array_filter($function[0]->getClassMap());
             }
         }

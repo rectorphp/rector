@@ -18,7 +18,7 @@ final class PropertyRenameGuard
     {
         $this->conflictingNameGuards = $conflictingNameGuards;
     }
-    public function shouldSkip(\Rector\Naming\Contract\RenameValueObjectInterface $renameValueObject) : bool
+    public function shouldSkip(RenameValueObjectInterface $renameValueObject) : bool
     {
         foreach ($this->conflictingNameGuards as $conflictingNameGuard) {
             if ($conflictingNameGuard->isConflicting($renameValueObject)) {

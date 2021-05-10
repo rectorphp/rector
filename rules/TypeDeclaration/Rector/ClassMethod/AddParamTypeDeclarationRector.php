@@ -23,7 +23,7 @@ use RectorPrefix20210510\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector\AddParamTypeDeclarationRectorTest
  */
-final class AddParamTypeDeclarationRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
+final class AddParamTypeDeclarationRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
      * @var string
@@ -37,14 +37,14 @@ final class AddParamTypeDeclarationRector extends \Rector\Core\Rector\AbstractRe
      * @var TypeComparator
      */
     private $typeComparator;
-    public function __construct(\Rector\NodeTypeResolver\TypeComparator\TypeComparator $typeComparator)
+    public function __construct(TypeComparator $typeComparator)
     {
         $this->typeComparator = $typeComparator;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        $configuration = [self::PARAMETER_TYPEHINTS => [new \Rector\TypeDeclaration\ValueObject\AddParamTypeDeclaration('SomeClass', 'process', 0, new \PHPStan\Type\StringType())]];
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Add param types where needed', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        $configuration = [self::PARAMETER_TYPEHINTS => [new AddParamTypeDeclaration('SomeClass', 'process', 0, new StringType())]];
+        return new RuleDefinition('Add param types where needed', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function process($name)
@@ -67,18 +67,18 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\ClassMethod::class];
+        return [ClassMethod::class];
     }
     /**
      * @param ClassMethod $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if ($this->shouldSkip($node)) {
             return null;
         }
         /** @var ClassLike $classLike */
-        $classLike = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
+        $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
         foreach ($this->parameterTypehints as $parameterTypehint) {
             if (!$this->isObjectType($classLike, $parameterTypehint->getObjectType())) {
                 continue;
@@ -96,25 +96,25 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $parameterTypehints = $configuration[self::PARAMETER_TYPEHINTS] ?? [];
-        \RectorPrefix20210510\Webmozart\Assert\Assert::allIsInstanceOf($parameterTypehints, \Rector\TypeDeclaration\ValueObject\AddParamTypeDeclaration::class);
+        Assert::allIsInstanceOf($parameterTypehints, AddParamTypeDeclaration::class);
         $this->parameterTypehints = $parameterTypehints;
     }
-    private function shouldSkip(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
+    private function shouldSkip(ClassMethod $classMethod) : bool
     {
         // skip class methods without args
         if ($classMethod->params === []) {
             return \true;
         }
-        $classLike = $classMethod->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
-        if (!$classLike instanceof \PhpParser\Node\Stmt\ClassLike) {
+        $classLike = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
+        if (!$classLike instanceof ClassLike) {
             return \true;
         }
         // skip traits
-        if ($classLike instanceof \PhpParser\Node\Stmt\Trait_) {
+        if ($classLike instanceof Trait_) {
             return \true;
         }
         // skip class without parents/interfaces
-        if ($classLike instanceof \PhpParser\Node\Stmt\Class_) {
+        if ($classLike instanceof Class_) {
             if ($classLike->implements !== []) {
                 return \false;
             }
@@ -127,15 +127,15 @@ CODE_SAMPLE
         /** @var Interface_ $classLike */
         return !(bool) $classLike->extends;
     }
-    private function refactorClassMethodWithTypehintByParameterPosition(\PhpParser\Node\Stmt\ClassMethod $classMethod, \Rector\TypeDeclaration\ValueObject\AddParamTypeDeclaration $addParamTypeDeclaration) : void
+    private function refactorClassMethodWithTypehintByParameterPosition(ClassMethod $classMethod, AddParamTypeDeclaration $addParamTypeDeclaration) : void
     {
         $parameter = $classMethod->params[$addParamTypeDeclaration->getPosition()] ?? null;
-        if (!$parameter instanceof \PhpParser\Node\Param) {
+        if (!$parameter instanceof Param) {
             return;
         }
         $this->refactorParameter($parameter, $addParamTypeDeclaration);
     }
-    private function refactorParameter(\PhpParser\Node\Param $param, \Rector\TypeDeclaration\ValueObject\AddParamTypeDeclaration $addParamTypeDeclaration) : void
+    private function refactorParameter(Param $param, AddParamTypeDeclaration $addParamTypeDeclaration) : void
     {
         // already set → no change
         if ($param->type !== null) {
@@ -145,7 +145,7 @@ CODE_SAMPLE
             }
         }
         // remove it
-        if ($addParamTypeDeclaration->getParamType() instanceof \PHPStan\Type\MixedType) {
+        if ($addParamTypeDeclaration->getParamType() instanceof MixedType) {
             $param->type = null;
             return;
         }

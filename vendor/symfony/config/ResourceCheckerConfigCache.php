@@ -19,7 +19,7 @@ use RectorPrefix20210510\Symfony\Component\Filesystem\Filesystem;
  *
  * @author Matthias Pigulla <mp@webfactory.de>
  */
-class ResourceCheckerConfigCache implements \RectorPrefix20210510\Symfony\Component\Config\ConfigCacheInterface
+class ResourceCheckerConfigCache implements ConfigCacheInterface
 {
     /**
      * @var string
@@ -107,18 +107,18 @@ class ResourceCheckerConfigCache implements \RectorPrefix20210510\Symfony\Compon
     {
         $mode = 0666;
         $umask = \umask();
-        $filesystem = new \RectorPrefix20210510\Symfony\Component\Filesystem\Filesystem();
+        $filesystem = new Filesystem();
         $filesystem->dumpFile($this->file, $content);
         try {
             $filesystem->chmod($this->file, $mode, $umask);
-        } catch (\RectorPrefix20210510\Symfony\Component\Filesystem\Exception\IOException $e) {
+        } catch (IOException $e) {
             // discard chmod failure (some filesystem may not support it)
         }
         if (null !== $metadata) {
             $filesystem->dumpFile($this->getMetaFile(), \serialize($metadata));
             try {
                 $filesystem->chmod($this->getMetaFile(), $mode, $umask);
-            } catch (\RectorPrefix20210510\Symfony\Component\Filesystem\Exception\IOException $e) {
+            } catch (IOException $e) {
                 // discard chmod failure (some filesystem may not support it)
             }
         }

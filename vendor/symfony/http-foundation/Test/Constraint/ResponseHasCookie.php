@@ -13,7 +13,7 @@ namespace RectorPrefix20210510\Symfony\Component\HttpFoundation\Test\Constraint;
 use RectorPrefix20210510\PHPUnit\Framework\Constraint\Constraint;
 use RectorPrefix20210510\Symfony\Component\HttpFoundation\Cookie;
 use RectorPrefix20210510\Symfony\Component\HttpFoundation\Response;
-final class ResponseHasCookie extends \RectorPrefix20210510\PHPUnit\Framework\Constraint\Constraint
+final class ResponseHasCookie extends Constraint
 {
     private $name;
     private $path;
@@ -56,10 +56,10 @@ final class ResponseHasCookie extends \RectorPrefix20210510\PHPUnit\Framework\Co
     {
         return 'the Response ' . $this->toString();
     }
-    private function getCookie(\RectorPrefix20210510\Symfony\Component\HttpFoundation\Response $response) : ?\RectorPrefix20210510\Symfony\Component\HttpFoundation\Cookie
+    private function getCookie(Response $response) : ?Cookie
     {
         $cookies = $response->headers->getCookies();
-        $filteredCookies = \array_filter($cookies, function (\RectorPrefix20210510\Symfony\Component\HttpFoundation\Cookie $cookie) {
+        $filteredCookies = \array_filter($cookies, function (Cookie $cookie) {
             return $cookie->getName() === $this->name && $cookie->getPath() === $this->path && $cookie->getDomain() === $this->domain;
         });
         return \reset($filteredCookies) ?: null;

@@ -26,25 +26,25 @@ class ErrorController
     private $kernel;
     private $controller;
     private $errorRenderer;
-    public function __construct(\RectorPrefix20210510\Symfony\Component\HttpKernel\HttpKernelInterface $kernel, $controller, \RectorPrefix20210510\Symfony\Component\ErrorHandler\ErrorRenderer\ErrorRendererInterface $errorRenderer)
+    public function __construct(HttpKernelInterface $kernel, $controller, ErrorRendererInterface $errorRenderer)
     {
         $this->kernel = $kernel;
         $this->controller = $controller;
         $this->errorRenderer = $errorRenderer;
     }
-    public function __invoke(\Throwable $exception) : \RectorPrefix20210510\Symfony\Component\HttpFoundation\Response
+    public function __invoke(\Throwable $exception) : Response
     {
         $exception = $this->errorRenderer->render($exception);
-        return new \RectorPrefix20210510\Symfony\Component\HttpFoundation\Response($exception->getAsString(), $exception->getStatusCode(), $exception->getHeaders());
+        return new Response($exception->getAsString(), $exception->getStatusCode(), $exception->getHeaders());
     }
-    public function preview(\RectorPrefix20210510\Symfony\Component\HttpFoundation\Request $request, int $code) : \RectorPrefix20210510\Symfony\Component\HttpFoundation\Response
+    public function preview(Request $request, int $code) : Response
     {
         /*
          * This Request mimics the parameters set by
          * \Symfony\Component\HttpKernel\EventListener\ErrorListener::duplicateRequest, with
          * the additional "showException" flag.
          */
-        $subRequest = $request->duplicate(null, null, ['_controller' => $this->controller, 'exception' => new \RectorPrefix20210510\Symfony\Component\HttpKernel\Exception\HttpException($code, 'This is a sample exception.'), 'logger' => null, 'showException' => \false]);
-        return $this->kernel->handle($subRequest, \RectorPrefix20210510\Symfony\Component\HttpKernel\HttpKernelInterface::SUB_REQUEST);
+        $subRequest = $request->duplicate(null, null, ['_controller' => $this->controller, 'exception' => new HttpException($code, 'This is a sample exception.'), 'logger' => null, 'showException' => \false]);
+        return $this->kernel->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
     }
 }

@@ -7,6 +7,6 @@ use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Param;
 interface RenameParamValueObjectInterface extends \Rector\Naming\Contract\RenameValueObjectInterface
 {
-    public function getFunctionLike() : \PhpParser\Node\FunctionLike;
-    public function getParam() : \PhpParser\Node\Param;
+    public function getFunctionLike() : FunctionLike;
+    public function getParam() : Param;
 }

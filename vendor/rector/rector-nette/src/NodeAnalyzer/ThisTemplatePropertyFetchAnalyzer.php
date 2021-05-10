@@ -14,13 +14,13 @@ final class ThisTemplatePropertyFetchAnalyzer
      * @var NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
+    public function __construct(NodeNameResolver $nodeNameResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
     }
-    public function resolveTemplateParameterNameFromAssign(\PhpParser\Node\Expr\Assign $assign) : ?string
+    public function resolveTemplateParameterNameFromAssign(Assign $assign) : ?string
     {
-        if (!$assign->var instanceof \PhpParser\Node\Expr\PropertyFetch) {
+        if (!$assign->var instanceof PropertyFetch) {
             return null;
         }
         $propertyFetch = $assign->var;
@@ -32,12 +32,12 @@ final class ThisTemplatePropertyFetchAnalyzer
     /**
      * $this->template->someKey => "someKey"
      */
-    public function matchThisTemplateKey(\PhpParser\Node\Expr $expr) : ?string
+    public function matchThisTemplateKey(Expr $expr) : ?string
     {
-        if (!$expr instanceof \PhpParser\Node\Expr\PropertyFetch) {
+        if (!$expr instanceof PropertyFetch) {
             return null;
         }
-        if (!$expr->var instanceof \PhpParser\Node\Expr\PropertyFetch) {
+        if (!$expr->var instanceof PropertyFetch) {
             return null;
         }
         if (!$this->nodeNameResolver->isName($expr->var, 'template')) {
@@ -50,12 +50,12 @@ final class ThisTemplatePropertyFetchAnalyzer
      *
      * $template
      */
-    public function isTemplatePropertyFetch(\PhpParser\Node\Expr $expr) : bool
+    public function isTemplatePropertyFetch(Expr $expr) : bool
     {
-        if (!$expr instanceof \PhpParser\Node\Expr\PropertyFetch) {
+        if (!$expr instanceof PropertyFetch) {
             return \false;
         }
-        if (!$expr->var instanceof \PhpParser\Node\Expr\Variable) {
+        if (!$expr->var instanceof Variable) {
             return \false;
         }
         if (!$this->nodeNameResolver->isName($expr->var, 'this')) {

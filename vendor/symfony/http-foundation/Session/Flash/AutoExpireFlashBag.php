@@ -15,7 +15,7 @@ namespace RectorPrefix20210510\Symfony\Component\HttpFoundation\Session\Flash;
  *
  * @author Drak <drak@zikula.org>
  */
-class AutoExpireFlashBag implements \RectorPrefix20210510\Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface
+class AutoExpireFlashBag implements FlashBagInterface
 {
     private $name = 'flashes';
     private $flashes = ['display' => [], 'new' => []];

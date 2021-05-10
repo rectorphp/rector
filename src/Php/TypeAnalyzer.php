@@ -27,7 +27,7 @@ final class TypeAnalyzer
     private $phpSupportedTypes = ['string', 'bool', 'int', 'null', 'array', 'false', 'true', 'mixed', 'iterable', 'float', 'self', 'parent', 'callable', 'void'];
     public function __construct(\Rector\Core\Php\PhpVersionProvider $phpVersionProvider)
     {
-        if ($phpVersionProvider->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::OBJECT_TYPE)) {
+        if ($phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::OBJECT_TYPE)) {
             $this->phpSupportedTypes[] = 'object';
         }
     }
@@ -38,7 +38,7 @@ final class TypeAnalyzer
         foreach ($types as $type) {
             $type = \strtolower($type);
             // remove [] from arrays
-            $type = \RectorPrefix20210510\Nette\Utils\Strings::replace($type, self::SQUARE_BRACKET_REGEX, '');
+            $type = Strings::replace($type, self::SQUARE_BRACKET_REGEX, '');
             if (\in_array($type, $reservedTypes, \true)) {
                 return \true;
             }
@@ -60,7 +60,7 @@ final class TypeAnalyzer
         if ($loweredType === 'callback') {
             return 'callable';
         }
-        if (\RectorPrefix20210510\Nette\Utils\Strings::match($loweredType, self::ARRAY_TYPE_REGEX)) {
+        if (Strings::match($loweredType, self::ARRAY_TYPE_REGEX)) {
             return 'array';
         }
         return $type;

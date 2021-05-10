@@ -19,7 +19,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\CodeQualityStrict\Rector\ClassMethod\ParamTypeToAssertTypeRector\ParamTypeToAssertTypeRectorTest
  */
-final class ParamTypeToAssertTypeRector extends \Rector\Core\Rector\AbstractRector
+final class ParamTypeToAssertTypeRector extends AbstractRector
 {
     /**
      * @var ClassConstFetchFactory
@@ -29,14 +29,14 @@ final class ParamTypeToAssertTypeRector extends \Rector\Core\Rector\AbstractRect
      * @var SubTypeAnalyzer
      */
     private $subTypeAnalyzer;
-    public function __construct(\Rector\CodeQualityStrict\NodeFactory\ClassConstFetchFactory $classConstFetchFactory, \Rector\CodeQualityStrict\TypeAnalyzer\SubTypeAnalyzer $subTypeAnalyzer)
+    public function __construct(ClassConstFetchFactory $classConstFetchFactory, SubTypeAnalyzer $subTypeAnalyzer)
     {
         $this->classConstFetchFactory = $classConstFetchFactory;
         $this->subTypeAnalyzer = $subTypeAnalyzer;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Turn @param type to assert type', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Turn @param type to assert type', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     /**
@@ -67,12 +67,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\ClassMethod::class];
+        return [ClassMethod::class];
     }
     /**
      * @param ClassMethod $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         /** @var Type[] $docParamTypes */
@@ -99,12 +99,12 @@ CODE_SAMPLE
         }
         return $this->processAddTypeAssert($node, $toBeProcessedTypes);
     }
-    private function isExclusivelyObjectType(\PHPStan\Type\Type $type) : bool
+    private function isExclusivelyObjectType(Type $type) : bool
     {
-        if ($type instanceof \PHPStan\Type\ObjectType) {
+        if ($type instanceof ObjectType) {
             return \true;
         }
-        if ($type instanceof \PHPStan\Type\UnionType) {
+        if ($type instanceof UnionType) {
             foreach ($type->getTypes() as $unionedType) {
                 if (!$this->isExclusivelyObjectType($unionedType)) {
                     return \false;
@@ -119,7 +119,7 @@ CODE_SAMPLE
      * @param ObjectType|UnionType $type
      * @return ObjectType|UnionType
      */
-    private function getToBeProcessedTypes(array $params, string $key, \PHPStan\Type\Type $type) : ?\PHPStan\Type\Type
+    private function getToBeProcessedTypes(array $params, string $key, Type $type) : ?Type
     {
         foreach ($params as $param) {
             $paramName = \ltrim($key, '$');
@@ -144,12 +144,12 @@ CODE_SAMPLE
     /**
      * @param array<string, ObjectType|UnionType> $toBeProcessedTypes
      */
-    private function processAddTypeAssert(\PhpParser\Node\Stmt\ClassMethod $classMethod, array $toBeProcessedTypes) : \PhpParser\Node\Stmt\ClassMethod
+    private function processAddTypeAssert(ClassMethod $classMethod, array $toBeProcessedTypes) : ClassMethod
     {
         $assertStatements = [];
         foreach ($toBeProcessedTypes as $variableName => $requiredType) {
             $classConstFetches = $this->classConstFetchFactory->createFromType($requiredType);
-            $arguments = [new \PhpParser\Node\Expr\Variable($variableName)];
+            $arguments = [new Variable($variableName)];
             if (\count($classConstFetches) > 1) {
                 $arguments[] = $classConstFetches;
                 $methodName = 'isAnyOf';
@@ -159,14 +159,14 @@ CODE_SAMPLE
             }
             $args = $this->nodeFactory->createArgs($arguments);
             $staticCall = $this->nodeFactory->createStaticCall('Webmozart\\Assert\\Assert', $methodName, $args);
-            $assertStatements[] = new \PhpParser\Node\Stmt\Expression($staticCall);
+            $assertStatements[] = new Expression($staticCall);
         }
         return $this->addStatements($classMethod, $assertStatements);
     }
     /**
      * @param Expression[] $assertStatements
      */
-    private function addStatements(\PhpParser\Node\Stmt\ClassMethod $classMethod, array $assertStatements) : \PhpParser\Node\Stmt\ClassMethod
+    private function addStatements(ClassMethod $classMethod, array $assertStatements) : ClassMethod
     {
         if (!isset($classMethod->stmts[0])) {
             foreach ($assertStatements as $assertStatement) {

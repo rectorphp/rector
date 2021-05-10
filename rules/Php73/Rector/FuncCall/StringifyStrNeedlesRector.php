@@ -14,7 +14,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://wiki.php.net/rfc/deprecations_php_7_3#string_search_functions_with_integer_needle
  * @see \Rector\Tests\Php73\Rector\FuncCall\StringifyStrNeedlesRector\StringifyStrNeedlesRectorTest
  */
-final class StringifyStrNeedlesRector extends \Rector\Core\Rector\AbstractRector
+final class StringifyStrNeedlesRector extends AbstractRector
 {
     /**
      * @var string[]
@@ -24,13 +24,13 @@ final class StringifyStrNeedlesRector extends \Rector\Core\Rector\AbstractRector
      * @var NodeTypeAnalyzer
      */
     private $nodeTypeAnalyzer;
-    public function __construct(\Rector\Php73\NodeTypeAnalyzer\NodeTypeAnalyzer $nodeTypeAnalyzer)
+    public function __construct(NodeTypeAnalyzer $nodeTypeAnalyzer)
     {
         $this->nodeTypeAnalyzer = $nodeTypeAnalyzer;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Makes needles explicit strings', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Makes needles explicit strings', [new CodeSample(<<<'CODE_SAMPLE'
 $needle = 5;
 $fivePosition = strpos('725', $needle);
 CODE_SAMPLE
@@ -45,12 +45,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\FuncCall::class];
+        return [FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if (!$this->isNames($node, self::NEEDLE_STRING_SENSITIVE_FUNCTIONS)) {
             return null;
@@ -60,10 +60,10 @@ CODE_SAMPLE
         if ($this->nodeTypeAnalyzer->isStringTypeExpr($needleArgNode)) {
             return null;
         }
-        if ($needleArgNode instanceof \PhpParser\Node\Expr\Cast\String_) {
+        if ($needleArgNode instanceof String_) {
             return null;
         }
-        $node->args[1]->value = new \PhpParser\Node\Expr\Cast\String_($node->args[1]->value);
+        $node->args[1]->value = new String_($node->args[1]->value);
         return $node;
     }
 }

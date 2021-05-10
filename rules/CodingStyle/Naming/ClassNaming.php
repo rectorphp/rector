@@ -31,48 +31,48 @@ final class ClassNaming
      */
     public function getShortName($name) : string
     {
-        if ($name instanceof \PhpParser\Node\Stmt\ClassLike) {
+        if ($name instanceof ClassLike) {
             if ($name->name === null) {
                 return '';
             }
             return $this->getShortName($name->name);
         }
-        if ($name instanceof \PhpParser\Node\Name || $name instanceof \PhpParser\Node\Identifier) {
+        if ($name instanceof Name || $name instanceof Identifier) {
             $name = $name->toString();
         }
         $name = \trim($name, '\\');
-        return \RectorPrefix20210510\Nette\Utils\Strings::after($name, '\\', -1) ?: $name;
+        return Strings::after($name, '\\', -1) ?: $name;
     }
     public function getNamespace(string $fullyQualifiedName) : ?string
     {
         $fullyQualifiedName = \trim($fullyQualifiedName, '\\');
-        return \RectorPrefix20210510\Nette\Utils\Strings::before($fullyQualifiedName, '\\', -1) ?: null;
+        return Strings::before($fullyQualifiedName, '\\', -1) ?: null;
     }
-    public function getNameFromFileInfo(\Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo) : string
+    public function getNameFromFileInfo(SmartFileInfo $smartFileInfo) : string
     {
         $basenameWithoutSuffix = $smartFileInfo->getBasenameWithoutSuffix();
         // remove PHPUnit fixture file prefix
-        if (\Rector\Testing\PHPUnit\StaticPHPUnitEnvironment::isPHPUnitRun()) {
-            $basenameWithoutSuffix = \RectorPrefix20210510\Nette\Utils\Strings::replace($basenameWithoutSuffix, self::INPUT_HASH_NAMING_REGEX, '');
+        if (StaticPHPUnitEnvironment::isPHPUnitRun()) {
+            $basenameWithoutSuffix = Strings::replace($basenameWithoutSuffix, self::INPUT_HASH_NAMING_REGEX, '');
         }
-        $stringy = new \RectorPrefix20210510\Stringy\Stringy($basenameWithoutSuffix);
+        $stringy = new Stringy($basenameWithoutSuffix);
         return (string) $stringy->upperCamelize();
     }
     /**
      * "some_function" → "someFunction"
      */
-    public function createMethodNameFromFunction(\PhpParser\Node\Stmt\Function_ $function) : string
+    public function createMethodNameFromFunction(Function_ $function) : string
     {
         $functionName = (string) $function->name;
-        $stringy = new \RectorPrefix20210510\Stringy\Stringy($functionName);
+        $stringy = new Stringy($functionName);
         return (string) $stringy->camelize();
     }
     public function replaceSuffix(string $content, string $oldSuffix, string $newSuffix) : string
     {
-        if (!\RectorPrefix20210510\Nette\Utils\Strings::endsWith($content, $oldSuffix)) {
+        if (!Strings::endsWith($content, $oldSuffix)) {
             return $content . $newSuffix;
         }
-        $contentWithoutOldSuffix = \RectorPrefix20210510\Nette\Utils\Strings::substring($content, 0, -\RectorPrefix20210510\Nette\Utils\Strings::length($oldSuffix));
+        $contentWithoutOldSuffix = Strings::substring($content, 0, -Strings::length($oldSuffix));
         return $contentWithoutOldSuffix . $newSuffix;
     }
 }

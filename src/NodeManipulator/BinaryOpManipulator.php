@@ -18,7 +18,7 @@ final class BinaryOpManipulator
      * @var AssignAndBinaryMap
      */
     private $assignAndBinaryMap;
-    public function __construct(\Rector\Core\PhpParser\Node\AssignAndBinaryMap $assignAndBinaryMap)
+    public function __construct(AssignAndBinaryMap $assignAndBinaryMap)
     {
         $this->assignAndBinaryMap = $assignAndBinaryMap;
     }
@@ -29,14 +29,14 @@ final class BinaryOpManipulator
      * @param callable|class-string<Node> $firstCondition
      * @param callable|class-string<Node> $secondCondition
      */
-    public function matchFirstAndSecondConditionNode(\PhpParser\Node\Expr\BinaryOp $binaryOp, $firstCondition, $secondCondition) : ?\Rector\Php71\ValueObject\TwoNodeMatch
+    public function matchFirstAndSecondConditionNode(BinaryOp $binaryOp, $firstCondition, $secondCondition) : ?TwoNodeMatch
     {
         $this->validateCondition($firstCondition);
         $this->validateCondition($secondCondition);
         $firstCondition = $this->normalizeCondition($firstCondition);
         $secondCondition = $this->normalizeCondition($secondCondition);
         if ($firstCondition($binaryOp->left, $binaryOp->right) && $secondCondition($binaryOp->right, $binaryOp->left)) {
-            return new \Rector\Php71\ValueObject\TwoNodeMatch($binaryOp->left, $binaryOp->right);
+            return new TwoNodeMatch($binaryOp->left, $binaryOp->right);
         }
         if (!$firstCondition($binaryOp->right, $binaryOp->left)) {
             return null;
@@ -44,15 +44,15 @@ final class BinaryOpManipulator
         if (!$secondCondition($binaryOp->left, $binaryOp->right)) {
             return null;
         }
-        return new \Rector\Php71\ValueObject\TwoNodeMatch($binaryOp->right, $binaryOp->left);
+        return new TwoNodeMatch($binaryOp->right, $binaryOp->left);
     }
-    public function inverseBinaryOp(\PhpParser\Node\Expr\BinaryOp $binaryOp) : ?\PhpParser\Node\Expr\BinaryOp
+    public function inverseBinaryOp(BinaryOp $binaryOp) : ?BinaryOp
     {
         // no nesting
-        if ($binaryOp->left instanceof \PhpParser\Node\Expr\BinaryOp\BooleanOr) {
+        if ($binaryOp->left instanceof BooleanOr) {
             return null;
         }
-        if ($binaryOp->right instanceof \PhpParser\Node\Expr\BinaryOp\BooleanOr) {
+        if ($binaryOp->right instanceof BooleanOr) {
             return null;
         }
         $inversedNodeClass = $this->resolveInversedNodeClass($binaryOp);
@@ -63,13 +63,13 @@ final class BinaryOpManipulator
         $secondInversedNode = $this->inverseNode($binaryOp->right);
         return new $inversedNodeClass($firstInversedNode, $secondInversedNode);
     }
-    public function invertCondition(\PhpParser\Node\Expr\BinaryOp $binaryOp) : ?\PhpParser\Node\Expr\BinaryOp
+    public function invertCondition(BinaryOp $binaryOp) : ?BinaryOp
     {
         // no nesting
-        if ($binaryOp->left instanceof \PhpParser\Node\Expr\BinaryOp\BooleanOr) {
+        if ($binaryOp->left instanceof BooleanOr) {
             return null;
         }
-        if ($binaryOp->right instanceof \PhpParser\Node\Expr\BinaryOp\BooleanOr) {
+        if ($binaryOp->right instanceof BooleanOr) {
             return null;
         }
         $inversedNodeClass = $this->resolveInversedNodeClass($binaryOp);
@@ -78,18 +78,18 @@ final class BinaryOpManipulator
         }
         return new $inversedNodeClass($binaryOp->left, $binaryOp->right);
     }
-    public function inverseNode(\PhpParser\Node\Expr $expr) : \PhpParser\Node
+    public function inverseNode(Expr $expr) : Node
     {
-        if ($expr instanceof \PhpParser\Node\Expr\BinaryOp) {
+        if ($expr instanceof BinaryOp) {
             $inversedBinaryOp = $this->assignAndBinaryMap->getInversed($expr);
             if ($inversedBinaryOp) {
                 return new $inversedBinaryOp($expr->left, $expr->right);
             }
         }
-        if ($expr instanceof \PhpParser\Node\Expr\BooleanNot) {
+        if ($expr instanceof BooleanNot) {
             return $expr->expr;
         }
-        return new \PhpParser\Node\Expr\BooleanNot($expr);
+        return new BooleanNot($expr);
     }
     /**
      * @param callable|class-string<Node> $firstCondition
@@ -99,10 +99,10 @@ final class BinaryOpManipulator
         if (\is_callable($firstCondition)) {
             return;
         }
-        if (\is_a($firstCondition, \PhpParser\Node::class, \true)) {
+        if (\is_a($firstCondition, Node::class, \true)) {
             return;
         }
-        throw new \Rector\Core\Exception\ShouldNotHappenException();
+        throw new ShouldNotHappenException();
     }
     /**
      * @param callable|class-string<Node> $condition
@@ -112,18 +112,18 @@ final class BinaryOpManipulator
         if (\is_callable($condition)) {
             return $condition;
         }
-        return function (\PhpParser\Node $node) use($condition) : bool {
+        return function (Node $node) use($condition) : bool {
             return \is_a($node, $condition, \true);
         };
     }
-    private function resolveInversedNodeClass(\PhpParser\Node\Expr\BinaryOp $binaryOp) : ?string
+    private function resolveInversedNodeClass(BinaryOp $binaryOp) : ?string
     {
         $inversedNodeClass = $this->assignAndBinaryMap->getInversed($binaryOp);
         if ($inversedNodeClass !== null) {
             return $inversedNodeClass;
         }
-        if ($binaryOp instanceof \PhpParser\Node\Expr\BinaryOp\BooleanOr) {
-            return \PhpParser\Node\Expr\BinaryOp\BooleanAnd::class;
+        if ($binaryOp instanceof BooleanOr) {
+            return BooleanAnd::class;
         }
         return null;
     }

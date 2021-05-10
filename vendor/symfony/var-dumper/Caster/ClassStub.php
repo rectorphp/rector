@@ -16,7 +16,7 @@ use RectorPrefix20210510\Symfony\Component\VarDumper\Cloner\Stub;
  *
  * @author Nicolas Grekas <p@tchwork.com>
  */
-class ClassStub extends \RectorPrefix20210510\Symfony\Component\VarDumper\Caster\ConstStub
+class ClassStub extends ConstStub
 {
     /**
      * @param string   $identifier A PHP identifier, e.g. a class, method, interface, etc. name
@@ -56,8 +56,8 @@ class ClassStub extends \RectorPrefix20210510\Symfony\Component\VarDumper\Caster
                 }, $identifier);
             }
             if (null !== $callable && $r instanceof \ReflectionFunctionAbstract) {
-                $s = \RectorPrefix20210510\Symfony\Component\VarDumper\Caster\ReflectionCaster::castFunctionAbstract($r, [], new \RectorPrefix20210510\Symfony\Component\VarDumper\Cloner\Stub(), \true, \RectorPrefix20210510\Symfony\Component\VarDumper\Caster\Caster::EXCLUDE_VERBOSE);
-                $s = \RectorPrefix20210510\Symfony\Component\VarDumper\Caster\ReflectionCaster::getSignature($s);
+                $s = ReflectionCaster::castFunctionAbstract($r, [], new Stub(), \true, Caster::EXCLUDE_VERBOSE);
+                $s = ReflectionCaster::getSignature($s);
                 if ('()' === \substr($identifier, -2)) {
                     $this->value = \substr_replace($identifier, $s, -2);
                 } else {

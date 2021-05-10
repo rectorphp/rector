@@ -16,7 +16,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @see https://github.com/sebastianbergmann/phpunit/issues/3426
  * @see \Rector\PHPUnit\Tests\Rector\MethodCall\SpecificAssertContainsWithoutIdentityRector\SpecificAssertContainsWithoutIdentityRectorTest
  */
-final class SpecificAssertContainsWithoutIdentityRector extends \Rector\Core\Rector\AbstractRector
+final class SpecificAssertContainsWithoutIdentityRector extends AbstractRector
 {
     /**
      * @var array<string, array<string, string>>
@@ -26,13 +26,13 @@ final class SpecificAssertContainsWithoutIdentityRector extends \Rector\Core\Rec
      * @var TestsNodeAnalyzer
      */
     private $testsNodeAnalyzer;
-    public function __construct(\Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer $testsNodeAnalyzer)
+    public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer)
     {
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change assertContains()/assertNotContains() with non-strict comparison to new specific alternatives', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change assertContains()/assertNotContains() with non-strict comparison to new specific alternatives', [new CodeSample(<<<'CODE_SAMPLE'
 final class SomeTest extends \PHPUnit\Framework\TestCase
 {
     public function test()
@@ -61,18 +61,18 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\MethodCall::class, \PhpParser\Node\Expr\StaticCall::class];
+        return [MethodCall::class, StaticCall::class];
     }
     /**
      * @param MethodCall|StaticCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if (!$this->testsNodeAnalyzer->isPHPUnitMethodCallNames($node, ['assertContains', 'assertNotContains'])) {
             return null;
         }
         //when second argument is string: do nothing
-        if ($this->nodeTypeResolver->isStaticType($node->args[1]->value, \PHPStan\Type\StringType::class)) {
+        if ($this->nodeTypeResolver->isStaticType($node->args[1]->value, StringType::class)) {
             return null;
         }
         //when less then 5 arguments given: do nothing
@@ -88,7 +88,7 @@ CODE_SAMPLE
         }
         /* here we search for element of array without identity check  and we can replace functions */
         $methodName = $this->getName($node->name);
-        $node->name = new \PhpParser\Node\Identifier(self::OLD_METHODS_NAMES_TO_NEW_NAMES['string'][$methodName]);
+        $node->name = new Identifier(self::OLD_METHODS_NAMES_TO_NEW_NAMES['string'][$methodName]);
         unset($node->args[3], $node->args[4]);
         return $node;
     }

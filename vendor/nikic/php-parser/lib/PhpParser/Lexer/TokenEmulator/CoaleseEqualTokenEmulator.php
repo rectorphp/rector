@@ -8,7 +8,7 @@ final class CoaleseEqualTokenEmulator extends \PhpParser\Lexer\TokenEmulator\Tok
 {
     public function getPhpVersion() : string
     {
-        return \PhpParser\Lexer\Emulative::PHP_7_4;
+        return Emulative::PHP_7_4;
     }
     public function isEmulationNeeded(string $code) : bool
     {

@@ -15,7 +15,7 @@ namespace RectorPrefix20210510\Symfony\Component\Console\Question;
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class ConfirmationQuestion extends \RectorPrefix20210510\Symfony\Component\Console\Question\Question
+class ConfirmationQuestion extends Question
 {
     private $trueAnswerRegex;
     /**

@@ -17,7 +17,7 @@ namespace RectorPrefix20210510\Symfony\Component\Console\Helper;
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class DebugFormatterHelper extends \RectorPrefix20210510\Symfony\Component\Console\Helper\Helper
+class DebugFormatterHelper extends Helper
 {
     private $colors = ['black', 'red', 'green', 'yellow', 'blue', 'magenta', 'cyan', 'white', 'default'];
     private $started = [];

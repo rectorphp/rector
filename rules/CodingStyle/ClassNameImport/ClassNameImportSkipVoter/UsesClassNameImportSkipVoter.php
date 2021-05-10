@@ -14,17 +14,17 @@ use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
  * if there is already:
  * - use App\Another\Product
  */
-final class UsesClassNameImportSkipVoter implements \Rector\CodingStyle\Contract\ClassNameImport\ClassNameImportSkipVoterInterface
+final class UsesClassNameImportSkipVoter implements ClassNameImportSkipVoterInterface
 {
     /**
      * @var UseNodesToAddCollector
      */
     private $useNodesToAddCollector;
-    public function __construct(\Rector\PostRector\Collector\UseNodesToAddCollector $useNodesToAddCollector)
+    public function __construct(UseNodesToAddCollector $useNodesToAddCollector)
     {
         $this->useNodesToAddCollector = $useNodesToAddCollector;
     }
-    public function shouldSkip(\Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType $fullyQualifiedObjectType, \PhpParser\Node $node) : bool
+    public function shouldSkip(FullyQualifiedObjectType $fullyQualifiedObjectType, Node $node) : bool
     {
         $useImportTypes = $this->useNodesToAddCollector->getUseImportTypesByNode($node);
         foreach ($useImportTypes as $useImportType) {

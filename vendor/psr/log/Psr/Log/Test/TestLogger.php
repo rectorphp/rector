@@ -53,7 +53,7 @@ use RectorPrefix20210510\Psr\Log\AbstractLogger;
  * @method bool hasInfoThatPasses($message)
  * @method bool hasDebugThatPasses($message)
  */
-class TestLogger extends \RectorPrefix20210510\Psr\Log\AbstractLogger
+class TestLogger extends AbstractLogger
 {
     /**
      * @var array

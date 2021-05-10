@@ -21,8 +21,8 @@ if (!class_exists('SomeTestCase', false) && !interface_exists('SomeTestCase', fa
 if (!class_exists('CheckoutEntityFactory', false) && !interface_exists('CheckoutEntityFactory', false) && !trait_exists('CheckoutEntityFactory', false)) {
     spl_autoload_call('RectorPrefix20210510\CheckoutEntityFactory');
 }
-if (!class_exists('ComposerAutoloaderInit0d8f5778c3330823d654b51370d9977e', false) && !interface_exists('ComposerAutoloaderInit0d8f5778c3330823d654b51370d9977e', false) && !trait_exists('ComposerAutoloaderInit0d8f5778c3330823d654b51370d9977e', false)) {
-    spl_autoload_call('RectorPrefix20210510\ComposerAutoloaderInit0d8f5778c3330823d654b51370d9977e');
+if (!class_exists('ComposerAutoloaderInitad02c013a99cdf5e02a32afd097b3965', false) && !interface_exists('ComposerAutoloaderInitad02c013a99cdf5e02a32afd097b3965', false) && !trait_exists('ComposerAutoloaderInitad02c013a99cdf5e02a32afd097b3965', false)) {
+    spl_autoload_call('RectorPrefix20210510\ComposerAutoloaderInitad02c013a99cdf5e02a32afd097b3965');
 }
 if (!class_exists('Doctrine\Inflector\Inflector', false) && !interface_exists('Doctrine\Inflector\Inflector', false) && !trait_exists('Doctrine\Inflector\Inflector', false)) {
     spl_autoload_call('RectorPrefix20210510\Doctrine\Inflector\Inflector');
@@ -92,9 +92,9 @@ if (!function_exists('print_node')) {
         return \RectorPrefix20210510\print_node(...func_get_args());
     }
 }
-if (!function_exists('composerRequire0d8f5778c3330823d654b51370d9977e')) {
-    function composerRequire0d8f5778c3330823d654b51370d9977e() {
-        return \RectorPrefix20210510\composerRequire0d8f5778c3330823d654b51370d9977e(...func_get_args());
+if (!function_exists('composerRequiread02c013a99cdf5e02a32afd097b3965')) {
+    function composerRequiread02c013a99cdf5e02a32afd097b3965() {
+        return \RectorPrefix20210510\composerRequiread02c013a99cdf5e02a32afd097b3965(...func_get_args());
     }
 }
 if (!function_exists('parseArgs')) {
@@ -165,6 +165,11 @@ if (!function_exists('expect')) {
 if (!function_exists('setproctitle')) {
     function setproctitle() {
         return \RectorPrefix20210510\setproctitle(...func_get_args());
+    }
+}
+if (!function_exists('xdebug_info')) {
+    function xdebug_info() {
+        return \RectorPrefix20210510\xdebug_info(...func_get_args());
     }
 }
 if (!function_exists('trigger_deprecation')) {

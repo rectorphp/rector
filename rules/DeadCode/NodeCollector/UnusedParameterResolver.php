@@ -18,7 +18,7 @@ final class UnusedParameterResolver
      * @var NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(\Rector\Core\NodeManipulator\ClassMethodManipulator $classMethodManipulator, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
+    public function __construct(ClassMethodManipulator $classMethodManipulator, NodeNameResolver $nodeNameResolver)
     {
         $this->classMethodManipulator = $classMethodManipulator;
         $this->nodeNameResolver = $nodeNameResolver;
@@ -26,7 +26,7 @@ final class UnusedParameterResolver
     /**
      * @return Param[]
      */
-    public function resolve(\PhpParser\Node\Stmt\ClassMethod $classMethod) : array
+    public function resolve(ClassMethod $classMethod) : array
     {
         $unusedParameters = [];
         foreach ($classMethod->params as $i => $param) {
@@ -37,7 +37,7 @@ final class UnusedParameterResolver
             }
             if ($this->classMethodManipulator->isParameterUsedInClassMethod($param, $classMethod)) {
                 // reset to keep order of removed arguments, if not construtctor - probably autowired
-                if (!$this->nodeNameResolver->isName($classMethod, \Rector\Core\ValueObject\MethodName::CONSTRUCT)) {
+                if (!$this->nodeNameResolver->isName($classMethod, MethodName::CONSTRUCT)) {
                     $unusedParameters = [];
                 }
                 continue;

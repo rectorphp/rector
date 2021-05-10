@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace Rector\CakePHP\Set;
 
 use Rector\Set\Contract\SetListInterface;
-final class CakePHPSetList implements \Rector\Set\Contract\SetListInterface
+final class CakePHPSetList implements SetListInterface
 {
     /**
      * @var string

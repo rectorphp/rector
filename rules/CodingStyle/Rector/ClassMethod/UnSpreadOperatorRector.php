@@ -15,19 +15,19 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\CodingStyle\Rector\ClassMethod\UnSpreadOperatorRector\UnSpreadOperatorRectorTest
  */
-final class UnSpreadOperatorRector extends \Rector\Core\Rector\AbstractRector
+final class UnSpreadOperatorRector extends AbstractRector
 {
     /**
      * @var SpreadVariablesCollector
      */
     private $spreadVariablesCollector;
-    public function __construct(\Rector\CodingStyle\NodeAnalyzer\SpreadVariablesCollector $spreadVariablesCollector)
+    public function __construct(SpreadVariablesCollector $spreadVariablesCollector)
     {
         $this->spreadVariablesCollector = $spreadVariablesCollector;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove spread operator', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove spread operator', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run(...$array)
@@ -60,19 +60,19 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\ClassMethod::class, \PhpParser\Node\Expr\MethodCall::class];
+        return [ClassMethod::class, MethodCall::class];
     }
     /**
      * @param ClassMethod|MethodCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        if ($node instanceof \PhpParser\Node\Stmt\ClassMethod) {
+        if ($node instanceof ClassMethod) {
             return $this->processUnspreadOperatorClassMethodParams($node);
         }
         return $this->processUnspreadOperatorMethodCallArgs($node);
     }
-    private function processUnspreadOperatorClassMethodParams(\PhpParser\Node\Stmt\ClassMethod $classMethod) : ?\PhpParser\Node\Stmt\ClassMethod
+    private function processUnspreadOperatorClassMethodParams(ClassMethod $classMethod) : ?ClassMethod
     {
         $spreadParams = $this->spreadVariablesCollector->resolveFromClassMethod($classMethod);
         if ($spreadParams === []) {
@@ -80,14 +80,14 @@ CODE_SAMPLE
         }
         foreach ($spreadParams as $spreadParam) {
             $spreadParam->variadic = \false;
-            $spreadParam->type = new \PhpParser\Node\Identifier('array');
+            $spreadParam->type = new Identifier('array');
         }
         return $classMethod;
     }
-    private function processUnspreadOperatorMethodCallArgs(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\PhpParser\Node\Expr\MethodCall
+    private function processUnspreadOperatorMethodCallArgs(MethodCall $methodCall) : ?MethodCall
     {
         $classMethod = $this->nodeRepository->findClassMethodByMethodCall($methodCall);
-        if (!$classMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
+        if (!$classMethod instanceof ClassMethod) {
             return null;
         }
         $spreadParams = $this->spreadVariablesCollector->resolveFromClassMethod($classMethod);
@@ -108,13 +108,13 @@ CODE_SAMPLE
         if ($hasUnpacked) {
             return $methodCall;
         }
-        $methodCall->args[$firstSpreadParamPosition] = new \PhpParser\Node\Arg($this->nodeFactory->createArray($variadicArgs));
+        $methodCall->args[$firstSpreadParamPosition] = new Arg($this->nodeFactory->createArray($variadicArgs));
         return $methodCall;
     }
     /**
      * @return Arg[]
      */
-    private function resolveVariadicArgsByVariadicParams(\PhpParser\Node\Expr\MethodCall $methodCall, int $firstSpreadParamPosition) : array
+    private function resolveVariadicArgsByVariadicParams(MethodCall $methodCall, int $firstSpreadParamPosition) : array
     {
         $variadicArgs = [];
         foreach ($methodCall->args as $position => $arg) {

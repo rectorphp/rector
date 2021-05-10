@@ -16,7 +16,7 @@ use RectorPrefix20210510\Symfony\Component\HttpFoundation\Session\SessionBagInte
  *
  * @author Drak <drak@zikula.org>
  */
-interface AttributeBagInterface extends \RectorPrefix20210510\Symfony\Component\HttpFoundation\Session\SessionBagInterface
+interface AttributeBagInterface extends SessionBagInterface
 {
     /**
      * Checks if an attribute is defined.

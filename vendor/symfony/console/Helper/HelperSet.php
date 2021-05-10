@@ -33,7 +33,7 @@ class HelperSet implements \IteratorAggregate
             $this->set($helper, \is_int($alias) ? null : $alias);
         }
     }
-    public function set(\RectorPrefix20210510\Symfony\Component\Console\Helper\HelperInterface $helper, string $alias = null)
+    public function set(HelperInterface $helper, string $alias = null)
     {
         $this->helpers[$helper->getName()] = $helper;
         if (null !== $alias) {
@@ -60,11 +60,11 @@ class HelperSet implements \IteratorAggregate
     public function get(string $name)
     {
         if (!$this->has($name)) {
-            throw new \RectorPrefix20210510\Symfony\Component\Console\Exception\InvalidArgumentException(\sprintf('The helper "%s" is not defined.', $name));
+            throw new InvalidArgumentException(\sprintf('The helper "%s" is not defined.', $name));
         }
         return $this->helpers[$name];
     }
-    public function setCommand(\RectorPrefix20210510\Symfony\Component\Console\Command\Command $command = null)
+    public function setCommand(Command $command = null)
     {
         $this->command = $command;
     }

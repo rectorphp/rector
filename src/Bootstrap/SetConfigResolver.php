@@ -16,10 +16,10 @@ final class SetConfigResolver
     /**
      * @return SmartFileInfo[]
      */
-    public function resolve(\Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo) : array
+    public function resolve(SmartFileInfo $smartFileInfo) : array
     {
-        $containerBuilder = new \RectorPrefix20210510\Symfony\Component\DependencyInjection\ContainerBuilder();
-        $phpFileLoader = new \RectorPrefix20210510\Symfony\Component\DependencyInjection\Loader\PhpFileLoader($containerBuilder, new \RectorPrefix20210510\Symfony\Component\Config\FileLocator());
+        $containerBuilder = new ContainerBuilder();
+        $phpFileLoader = new PhpFileLoader($containerBuilder, new FileLocator());
         $phpFileLoader->load($smartFileInfo->getRealPath());
         if (!$containerBuilder->hasParameter(self::SETS)) {
             return [];
@@ -35,7 +35,7 @@ final class SetConfigResolver
     {
         $setFileInfos = [];
         foreach ($sets as $set) {
-            $setFileInfos[] = new \Symplify\SmartFileSystem\SmartFileInfo($set);
+            $setFileInfos[] = new SmartFileInfo($set);
         }
         return $setFileInfos;
     }

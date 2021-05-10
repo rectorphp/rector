@@ -14,7 +14,7 @@ use Rector\PhpSpecToPHPUnit\Rector\AbstractPhpSpecToPHPUnitRector;
 /**
  * @see \Rector\Tests\PhpSpecToPHPUnit\Rector\Variable\PhpSpecToPHPUnitRector\PhpSpecToPHPUnitRectorTest
  */
-final class PhpSpecMethodToPHPUnitMethodRector extends \Rector\PhpSpecToPHPUnit\Rector\AbstractPhpSpecToPHPUnitRector
+final class PhpSpecMethodToPHPUnitMethodRector extends AbstractPhpSpecToPHPUnitRector
 {
     /**
      * @var PhpSpecRenaming
@@ -24,7 +24,7 @@ final class PhpSpecMethodToPHPUnitMethodRector extends \Rector\PhpSpecToPHPUnit\
      * @var PHPUnitTypeDeclarationDecorator
      */
     private $phpUnitTypeDeclarationDecorator;
-    public function __construct(\Rector\PhpSpecToPHPUnit\PHPUnitTypeDeclarationDecorator $phpUnitTypeDeclarationDecorator, \Rector\PhpSpecToPHPUnit\Naming\PhpSpecRenaming $phpSpecRenaming)
+    public function __construct(PHPUnitTypeDeclarationDecorator $phpUnitTypeDeclarationDecorator, PhpSpecRenaming $phpSpecRenaming)
     {
         $this->phpSpecRenaming = $phpSpecRenaming;
         $this->phpUnitTypeDeclarationDecorator = $phpUnitTypeDeclarationDecorator;
@@ -34,22 +34,22 @@ final class PhpSpecMethodToPHPUnitMethodRector extends \Rector\PhpSpecToPHPUnit\
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\ClassMethod::class];
+        return [ClassMethod::class];
     }
     /**
      * @param ClassMethod $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if (!$this->isInPhpSpecBehavior($node)) {
             return null;
         }
         if ($this->isName($node, 'letGo')) {
-            $node->name = new \PhpParser\Node\Identifier(\Rector\Core\ValueObject\MethodName::TEAR_DOWN);
+            $node->name = new Identifier(MethodName::TEAR_DOWN);
             $this->visibilityManipulator->makeProtected($node);
             $this->phpUnitTypeDeclarationDecorator->decorate($node);
         } elseif ($this->isName($node, 'let')) {
-            $node->name = new \PhpParser\Node\Identifier(\Rector\Core\ValueObject\MethodName::SET_UP);
+            $node->name = new Identifier(MethodName::SET_UP);
             $this->visibilityManipulator->makeProtected($node);
             $this->phpUnitTypeDeclarationDecorator->decorate($node);
         } else {
@@ -57,7 +57,7 @@ final class PhpSpecMethodToPHPUnitMethodRector extends \Rector\PhpSpecToPHPUnit\
         }
         return $node;
     }
-    private function processTestMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod) : void
+    private function processTestMethod(ClassMethod $classMethod) : void
     {
         // special case, @see https://johannespichler.com/writing-custom-phpspec-matchers/
         if ($this->isName($classMethod, 'getMatchers')) {
@@ -68,7 +68,7 @@ final class PhpSpecMethodToPHPUnitMethodRector extends \Rector\PhpSpecToPHPUnit\
         // reorder instantiation + expected exception
         $previousStmt = null;
         foreach ((array) $classMethod->stmts as $key => $stmt) {
-            if ($previousStmt && \RectorPrefix20210510\Nette\Utils\Strings::contains($this->print($stmt), 'duringInstantiation') && \RectorPrefix20210510\Nette\Utils\Strings::contains($this->print($previousStmt), 'beConstructedThrough')) {
+            if ($previousStmt && Strings::contains($this->print($stmt), 'duringInstantiation') && Strings::contains($this->print($previousStmt), 'beConstructedThrough')) {
                 $classMethod->stmts[$key - 1] = $stmt;
                 $classMethod->stmts[$key] = $previousStmt;
             }

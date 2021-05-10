@@ -18,26 +18,26 @@ final class SymfonyStyleFactory
     private $privatesCaller;
     public function __construct()
     {
-        $this->privatesCaller = new \RectorPrefix20210510\Symplify\PackageBuilder\Reflection\PrivatesCaller();
+        $this->privatesCaller = new PrivatesCaller();
     }
-    public function create() : \RectorPrefix20210510\Symfony\Component\Console\Style\SymfonyStyle
+    public function create() : SymfonyStyle
     {
         // to prevent missing argv indexes
         if (!isset($_SERVER['argv'])) {
             $_SERVER['argv'] = [];
         }
-        $argvInput = new \RectorPrefix20210510\Symfony\Component\Console\Input\ArgvInput();
-        $consoleOutput = new \RectorPrefix20210510\Symfony\Component\Console\Output\ConsoleOutput();
+        $argvInput = new ArgvInput();
+        $consoleOutput = new ConsoleOutput();
         // to configure all -v, -vv, -vvv options without memory-lock to Application run() arguments
-        $this->privatesCaller->callPrivateMethod(new \RectorPrefix20210510\Symfony\Component\Console\Application(), 'configureIO', [$argvInput, $consoleOutput]);
+        $this->privatesCaller->callPrivateMethod(new Application(), 'configureIO', [$argvInput, $consoleOutput]);
         // --debug is called
         if ($argvInput->hasParameterOption('--debug')) {
-            $consoleOutput->setVerbosity(\RectorPrefix20210510\Symfony\Component\Console\Output\OutputInterface::VERBOSITY_DEBUG);
+            $consoleOutput->setVerbosity(OutputInterface::VERBOSITY_DEBUG);
         }
         // disable output for tests
-        if (\RectorPrefix20210510\Symplify\EasyTesting\PHPUnit\StaticPHPUnitEnvironment::isPHPUnitRun()) {
-            $consoleOutput->setVerbosity(\RectorPrefix20210510\Symfony\Component\Console\Output\OutputInterface::VERBOSITY_QUIET);
+        if (StaticPHPUnitEnvironment::isPHPUnitRun()) {
+            $consoleOutput->setVerbosity(OutputInterface::VERBOSITY_QUIET);
         }
-        return new \RectorPrefix20210510\Symfony\Component\Console\Style\SymfonyStyle($argvInput, $consoleOutput);
+        return new SymfonyStyle($argvInput, $consoleOutput);
     }
 }

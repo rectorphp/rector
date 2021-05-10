@@ -21,11 +21,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Symfony\Tests\Rector\ClassMethod\RemoveDefaultGetBlockPrefixRector\RemoveDefaultGetBlockPrefixRectorTest
  */
-final class RemoveDefaultGetBlockPrefixRector extends \Rector\Core\Rector\AbstractRector
+final class RemoveDefaultGetBlockPrefixRector extends AbstractRector
 {
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Rename `getBlockPrefix()` if it returns the default value - class to underscore, e.g. UserFormType = user_form', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Rename `getBlockPrefix()` if it returns the default value - class to underscore, e.g. UserFormType = user_form', [new CodeSample(<<<'CODE_SAMPLE'
 use Symfony\Component\Form\AbstractType;
 
 class TaskType extends AbstractType
@@ -50,30 +50,30 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\ClassMethod::class];
+        return [ClassMethod::class];
     }
     /**
      * @param ClassMethod $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if (!$this->isObjectMethodNameMatch($node)) {
             return null;
         }
         $returnedExpr = $this->resolveOnlyStmtReturnExpr($node);
-        if (!$returnedExpr instanceof \PhpParser\Node\Expr) {
+        if (!$returnedExpr instanceof Expr) {
             return null;
         }
         $returnedValue = $this->valueResolver->getValue($returnedExpr);
-        $className = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);
+        $className = $node->getAttribute(AttributeKey::CLASS_NAME);
         if (!\is_string($className)) {
             return null;
         }
         $shortClassName = $this->nodeNameResolver->getShortName($className);
-        if (\RectorPrefix20210510\Nette\Utils\Strings::endsWith($shortClassName, 'Type')) {
-            $shortClassName = (string) \RectorPrefix20210510\Nette\Utils\Strings::before($shortClassName, 'Type');
+        if (Strings::endsWith($shortClassName, 'Type')) {
+            $shortClassName = (string) Strings::before($shortClassName, 'Type');
         }
-        $stringy = new \RectorPrefix20210510\Stringy\Stringy($shortClassName);
+        $stringy = new Stringy($shortClassName);
         $underscoredClassShortName = (string) $stringy->underscored();
         if ($underscoredClassShortName !== $returnedValue) {
             return null;
@@ -81,13 +81,13 @@ CODE_SAMPLE
         $this->removeNode($node);
         return null;
     }
-    private function isObjectMethodNameMatch(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
+    private function isObjectMethodNameMatch(ClassMethod $classMethod) : bool
     {
-        $classLike = $classMethod->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
-        if (!$classLike instanceof \PhpParser\Node\Stmt\Class_) {
+        $classLike = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
+        if (!$classLike instanceof Class_) {
             return \false;
         }
-        if (!$this->isObjectType($classMethod, new \PHPStan\Type\ObjectType('Symfony\\Component\\Form\\AbstractType'))) {
+        if (!$this->isObjectType($classMethod, new ObjectType('Symfony\\Component\\Form\\AbstractType'))) {
             return \false;
         }
         return $this->isName($classMethod->name, 'getBlockPrefix');
@@ -95,16 +95,16 @@ CODE_SAMPLE
     /**
      * return <$thisValue>;
      */
-    private function resolveOnlyStmtReturnExpr(\PhpParser\Node\Stmt\ClassMethod $classMethod) : ?\PhpParser\Node\Expr
+    private function resolveOnlyStmtReturnExpr(ClassMethod $classMethod) : ?Expr
     {
         if (\count((array) $classMethod->stmts) !== 1) {
             return null;
         }
         if (!isset($classMethod->stmts[0])) {
-            throw new \Rector\Core\Exception\ShouldNotHappenException();
+            throw new ShouldNotHappenException();
         }
         $onlyStmt = $classMethod->stmts[0];
-        if (!$onlyStmt instanceof \PhpParser\Node\Stmt\Return_) {
+        if (!$onlyStmt instanceof Return_) {
             return null;
         }
         return $onlyStmt->expr;

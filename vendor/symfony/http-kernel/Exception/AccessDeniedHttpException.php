@@ -14,7 +14,7 @@ namespace RectorPrefix20210510\Symfony\Component\HttpKernel\Exception;
  * @author Fabien Potencier <fabien@symfony.com>
  * @author Christophe Coevoet <stof@notk.org>
  */
-class AccessDeniedHttpException extends \RectorPrefix20210510\Symfony\Component\HttpKernel\Exception\HttpException
+class AccessDeniedHttpException extends HttpException
 {
     /**
      * @param string|null     $message  The internal exception message

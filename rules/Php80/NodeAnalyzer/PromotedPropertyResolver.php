@@ -12,10 +12,10 @@ final class PromotedPropertyResolver
     /**
      * @return Param[]
      */
-    public function resolveFromClass(\PhpParser\Node\Stmt\Class_ $class) : array
+    public function resolveFromClass(Class_ $class) : array
     {
-        $constructClassMethod = $class->getMethod(\Rector\Core\ValueObject\MethodName::CONSTRUCT);
-        if (!$constructClassMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
+        $constructClassMethod = $class->getMethod(MethodName::CONSTRUCT);
+        if (!$constructClassMethod instanceof ClassMethod) {
             return [];
         }
         $promotedPropertyParams = [];

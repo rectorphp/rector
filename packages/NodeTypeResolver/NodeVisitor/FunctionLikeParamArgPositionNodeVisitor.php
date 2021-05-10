@@ -11,21 +11,21 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\FunctionLike;
 use PhpParser\NodeVisitorAbstract;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-final class FunctionLikeParamArgPositionNodeVisitor extends \PhpParser\NodeVisitorAbstract
+final class FunctionLikeParamArgPositionNodeVisitor extends NodeVisitorAbstract
 {
     /**
      * @return Node
      */
-    public function enterNode(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function enterNode(Node $node) : ?Node
     {
-        if ($node instanceof \PhpParser\Node\FunctionLike) {
+        if ($node instanceof FunctionLike) {
             foreach ($node->getParams() as $position => $param) {
-                $param->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARAMETER_POSITION, $position);
+                $param->setAttribute(AttributeKey::PARAMETER_POSITION, $position);
             }
         }
-        if ($node instanceof \PhpParser\Node\Expr\MethodCall || $node instanceof \PhpParser\Node\Expr\StaticCall || $node instanceof \PhpParser\Node\Expr\FuncCall || $node instanceof \PhpParser\Node\Expr\New_) {
+        if ($node instanceof MethodCall || $node instanceof StaticCall || $node instanceof FuncCall || $node instanceof New_) {
             foreach ($node->args as $position => $arg) {
-                $arg->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ARGUMENT_POSITION, $position);
+                $arg->setAttribute(AttributeKey::ARGUMENT_POSITION, $position);
             }
         }
         return $node;

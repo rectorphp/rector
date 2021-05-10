@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace PhpParser\Node\Stmt\TraitUseAdaptation;
 
 use PhpParser\Node;
-class Precedence extends \PhpParser\Node\Stmt\TraitUseAdaptation
+class Precedence extends Node\Stmt\TraitUseAdaptation
 {
     /** @var Node\Name[] Overwritten traits */
     public $insteadof;
@@ -16,11 +16,11 @@ class Precedence extends \PhpParser\Node\Stmt\TraitUseAdaptation
      * @param Node\Name[]            $insteadof   Overwritten traits
      * @param array                  $attributes  Additional attributes
      */
-    public function __construct(\PhpParser\Node\Name $trait, $method, array $insteadof, array $attributes = [])
+    public function __construct(Node\Name $trait, $method, array $insteadof, array $attributes = [])
     {
         $this->attributes = $attributes;
         $this->trait = $trait;
-        $this->method = \is_string($method) ? new \PhpParser\Node\Identifier($method) : $method;
+        $this->method = \is_string($method) ? new Node\Identifier($method) : $method;
         $this->insteadof = $insteadof;
     }
     public function getSubNodeNames() : array

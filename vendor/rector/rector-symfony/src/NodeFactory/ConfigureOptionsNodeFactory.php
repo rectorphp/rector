@@ -21,21 +21,21 @@ final class ConfigureOptionsNodeFactory
     /**
      * @param array<string, Arg> $namesToArgs
      */
-    public function create(array $namesToArgs) : \PhpParser\Node\Stmt\ClassMethod
+    public function create(array $namesToArgs) : ClassMethod
     {
         $resolverParam = $this->createParam();
         $args = $this->createArgs($namesToArgs);
-        $setDefaultsMethodCall = new \PhpParser\Node\Expr\MethodCall($resolverParam->var, new \PhpParser\Node\Identifier('setDefaults'), $args);
-        $methodBuilder = new \RectorPrefix20210510\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder('configureOptions');
+        $setDefaultsMethodCall = new MethodCall($resolverParam->var, new Identifier('setDefaults'), $args);
+        $methodBuilder = new MethodBuilder('configureOptions');
         $methodBuilder->makePublic();
         $methodBuilder->addParam($resolverParam);
         $methodBuilder->addStmt($setDefaultsMethodCall);
         return $methodBuilder->getNode();
     }
-    private function createParam() : \PhpParser\Node\Param
+    private function createParam() : Param
     {
-        $paramBuilder = new \RectorPrefix20210510\Symplify\Astral\ValueObject\NodeBuilder\ParamBuilder('resolver');
-        $paramBuilder->setType(new \PhpParser\Node\Name\FullyQualified('Symfony\\Component\\OptionsResolver\\OptionsResolver'));
+        $paramBuilder = new ParamBuilder('resolver');
+        $paramBuilder->setType(new FullyQualified('Symfony\\Component\\OptionsResolver\\OptionsResolver'));
         return $paramBuilder->getNode();
     }
     /**
@@ -44,14 +44,14 @@ final class ConfigureOptionsNodeFactory
      */
     private function createArgs(array $namesToArgs) : array
     {
-        $array = new \PhpParser\Node\Expr\Array_();
+        $array = new Array_();
         foreach (\array_keys($namesToArgs) as $optionName) {
-            $array->items[] = new \PhpParser\Node\Expr\ArrayItem($this->createNull(), new \PhpParser\Node\Scalar\String_($optionName));
+            $array->items[] = new ArrayItem($this->createNull(), new String_($optionName));
         }
-        return [new \PhpParser\Node\Arg($array)];
+        return [new Arg($array)];
     }
-    private function createNull() : \PhpParser\Node\Expr\ConstFetch
+    private function createNull() : ConstFetch
     {
-        return new \PhpParser\Node\Expr\ConstFetch(new \PhpParser\Node\Name('null'));
+        return new ConstFetch(new Name('null'));
     }
 }

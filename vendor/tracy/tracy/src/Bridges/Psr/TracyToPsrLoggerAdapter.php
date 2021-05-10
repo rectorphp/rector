@@ -12,19 +12,19 @@ use RectorPrefix20210510\Tracy;
 /**
  * Tracy\ILogger to Psr\Log\LoggerInterface adapter.
  */
-class TracyToPsrLoggerAdapter extends \RectorPrefix20210510\Psr\Log\AbstractLogger
+class TracyToPsrLoggerAdapter extends Psr\Log\AbstractLogger
 {
     /** PSR-3 log level to Tracy logger level mapping */
-    private const LEVEL_MAP = [\RectorPrefix20210510\Psr\Log\LogLevel::EMERGENCY => \RectorPrefix20210510\Tracy\ILogger::CRITICAL, \RectorPrefix20210510\Psr\Log\LogLevel::ALERT => \RectorPrefix20210510\Tracy\ILogger::CRITICAL, \RectorPrefix20210510\Psr\Log\LogLevel::CRITICAL => \RectorPrefix20210510\Tracy\ILogger::CRITICAL, \RectorPrefix20210510\Psr\Log\LogLevel::ERROR => \RectorPrefix20210510\Tracy\ILogger::ERROR, \RectorPrefix20210510\Psr\Log\LogLevel::WARNING => \RectorPrefix20210510\Tracy\ILogger::WARNING, \RectorPrefix20210510\Psr\Log\LogLevel::NOTICE => \RectorPrefix20210510\Tracy\ILogger::WARNING, \RectorPrefix20210510\Psr\Log\LogLevel::INFO => \RectorPrefix20210510\Tracy\ILogger::INFO, \RectorPrefix20210510\Psr\Log\LogLevel::DEBUG => \RectorPrefix20210510\Tracy\ILogger::DEBUG];
+    private const LEVEL_MAP = [Psr\Log\LogLevel::EMERGENCY => Tracy\ILogger::CRITICAL, Psr\Log\LogLevel::ALERT => Tracy\ILogger::CRITICAL, Psr\Log\LogLevel::CRITICAL => Tracy\ILogger::CRITICAL, Psr\Log\LogLevel::ERROR => Tracy\ILogger::ERROR, Psr\Log\LogLevel::WARNING => Tracy\ILogger::WARNING, Psr\Log\LogLevel::NOTICE => Tracy\ILogger::WARNING, Psr\Log\LogLevel::INFO => Tracy\ILogger::INFO, Psr\Log\LogLevel::DEBUG => Tracy\ILogger::DEBUG];
     /** @var Tracy\ILogger */
     private $tracyLogger;
-    public function __construct(\RectorPrefix20210510\Tracy\ILogger $tracyLogger)
+    public function __construct(Tracy\ILogger $tracyLogger)
     {
         $this->tracyLogger = $tracyLogger;
     }
     public function log($level, $message, array $context = [])
     {
-        $level = self::LEVEL_MAP[$level] ?? \RectorPrefix20210510\Tracy\ILogger::ERROR;
+        $level = self::LEVEL_MAP[$level] ?? Tracy\ILogger::ERROR;
         if (isset($context['exception']) && $context['exception'] instanceof \Throwable) {
             $this->tracyLogger->log($context['exception'], $level);
             unset($context['exception']);

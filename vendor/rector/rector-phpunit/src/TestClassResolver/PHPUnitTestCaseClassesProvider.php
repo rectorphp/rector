@@ -19,7 +19,7 @@ final class PHPUnitTestCaseClassesProvider
      * @var RobotLoaderFactory
      */
     private $robotLoaderFactory;
-    public function __construct(\Rector\PHPUnit\Composer\ComposerAutoloadedDirectoryProvider $composerAutoloadedDirectoryProvider, \Rector\PHPUnit\RobotLoader\RobotLoaderFactory $robotLoaderFactory)
+    public function __construct(ComposerAutoloadedDirectoryProvider $composerAutoloadedDirectoryProvider, RobotLoaderFactory $robotLoaderFactory)
     {
         $this->composerAutoloadedDirectoryProvider = $composerAutoloadedDirectoryProvider;
         $this->robotLoaderFactory = $robotLoaderFactory;

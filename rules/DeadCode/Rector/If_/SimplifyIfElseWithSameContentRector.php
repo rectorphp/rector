@@ -13,11 +13,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\DeadCode\Rector\If_\SimplifyIfElseWithSameContentRector\SimplifyIfElseWithSameContentRectorTest
  */
-final class SimplifyIfElseWithSameContentRector extends \Rector\Core\Rector\AbstractRector
+final class SimplifyIfElseWithSameContentRector extends AbstractRector
 {
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove if/else if they have same content', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove if/else if they have same content', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -46,12 +46,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\If_::class];
+        return [If_::class];
     }
     /**
      * @param If_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if ($node->else === null) {
             return null;
@@ -65,7 +65,7 @@ CODE_SAMPLE
         $this->removeNode($node);
         return $node;
     }
-    private function isIfWithConstantReturns(\PhpParser\Node\Stmt\If_ $if) : bool
+    private function isIfWithConstantReturns(If_ $if) : bool
     {
         $possibleContents = [];
         $possibleContents[] = $this->print($if->stmts);
@@ -73,8 +73,8 @@ CODE_SAMPLE
             $possibleContents[] = $this->print($elseif->stmts);
         }
         $else = $if->else;
-        if (!$else instanceof \PhpParser\Node\Stmt\Else_) {
-            throw new \Rector\Core\Exception\ShouldNotHappenException();
+        if (!$else instanceof Else_) {
+            throw new ShouldNotHappenException();
         }
         $possibleContents[] = $this->print($else->stmts);
         $uniqueContents = \array_unique($possibleContents);

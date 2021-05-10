@@ -26,31 +26,31 @@ final class ReturnFluentMethodCallFactory
      * @var PropertyNaming
      */
     private $propertyNaming;
-    public function __construct(\Rector\Defluent\NodeAnalyzer\FluentChainMethodCallRootExtractor $fluentChainMethodCallRootExtractor, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\Naming\Naming\PropertyNaming $propertyNaming)
+    public function __construct(FluentChainMethodCallRootExtractor $fluentChainMethodCallRootExtractor, NodeTypeResolver $nodeTypeResolver, PropertyNaming $propertyNaming)
     {
         $this->fluentChainMethodCallRootExtractor = $fluentChainMethodCallRootExtractor;
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->propertyNaming = $propertyNaming;
     }
-    public function createFromFluentMethodCalls(\Rector\Defluent\ValueObject\FluentMethodCalls $fluentMethodCalls) : ?\Rector\Defluent\ValueObject\FirstAssignFluentCall
+    public function createFromFluentMethodCalls(FluentMethodCalls $fluentMethodCalls) : ?FirstAssignFluentCall
     {
         $rootMethodCall = $fluentMethodCalls->getRootMethodCall();
         // this means the 1st method creates different object then it runs on
         // e.g. $sheet->getRow(), creates a "Row" object
         $isFirstMethodCallFactory = $this->fluentChainMethodCallRootExtractor->resolveIsFirstMethodCallFactory($rootMethodCall);
         $lastMethodCall = $fluentMethodCalls->getRootMethodCall();
-        if ($lastMethodCall->var instanceof \PhpParser\Node\Expr\PropertyFetch) {
+        if ($lastMethodCall->var instanceof PropertyFetch) {
             $assignExpr = $lastMethodCall->var;
         } else {
             // we need a variable to assign the stuff into
             // the method call, does not belong to the
             $staticType = $this->nodeTypeResolver->getStaticType($rootMethodCall);
-            if (!$staticType instanceof \PHPStan\Type\ObjectType) {
+            if (!$staticType instanceof ObjectType) {
                 return null;
             }
             $variableName = $this->propertyNaming->fqnToVariableName($staticType);
-            $assignExpr = new \PhpParser\Node\Expr\Variable($variableName);
+            $assignExpr = new Variable($variableName);
         }
-        return new \Rector\Defluent\ValueObject\FirstAssignFluentCall($assignExpr, $rootMethodCall, $isFirstMethodCallFactory, $fluentMethodCalls);
+        return new FirstAssignFluentCall($assignExpr, $rootMethodCall, $isFirstMethodCallFactory, $fluentMethodCalls);
     }
 }

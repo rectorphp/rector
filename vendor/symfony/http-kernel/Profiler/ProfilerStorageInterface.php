@@ -42,13 +42,13 @@ interface ProfilerStorageInterface
      *
      * @return Profile|null The profile associated with token
      */
-    public function read(string $token) : ?\RectorPrefix20210510\Symfony\Component\HttpKernel\Profiler\Profile;
+    public function read(string $token) : ?Profile;
     /**
      * Saves a Profile.
      *
      * @return bool Write operation successful
      */
-    public function write(\RectorPrefix20210510\Symfony\Component\HttpKernel\Profiler\Profile $profile) : bool;
+    public function write(Profile $profile) : bool;
     /**
      * Purges all data from the database.
      */

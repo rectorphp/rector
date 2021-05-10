@@ -32,9 +32,9 @@ final class MethodCallToAnotherMethodCallWithArguments
         $this->newMethod = $newMethod;
         $this->newArguments = $newArguments;
     }
-    public function getObjectType() : \PHPStan\Type\ObjectType
+    public function getObjectType() : ObjectType
     {
-        return new \PHPStan\Type\ObjectType($this->type);
+        return new ObjectType($this->type);
     }
     public function getOldMethod() : string
     {

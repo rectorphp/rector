@@ -14,7 +14,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://wiki.php.net/rfc/flexible_heredoc_nowdoc_syntaxes
  * @see \Rector\Tests\Php73\Rector\String_\SensitiveHereNowDocRector\SensitiveHereNowDocRectorTest
  */
-final class SensitiveHereNowDocRector extends \Rector\Core\Rector\AbstractRector
+final class SensitiveHereNowDocRector extends AbstractRector
 {
     /**
      * @var string
@@ -24,9 +24,9 @@ final class SensitiveHereNowDocRector extends \Rector\Core\Rector\AbstractRector
      * @var string
      */
     private const ATTRIBUTE_DOC_LABEL = 'docLabel';
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Changes heredoc/nowdoc that contains closing word to safe wrapper name', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Changes heredoc/nowdoc that contains closing word to safe wrapper name', [new CodeSample(<<<'CODE_SAMPLE'
 $value = <<<A
     A
 A
@@ -43,26 +43,26 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Scalar\String_::class];
+        return [String_::class];
     }
     /**
      * @param String_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        $kind = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::KIND);
-        if (!\in_array($kind, [\PhpParser\Node\Scalar\String_::KIND_HEREDOC, \PhpParser\Node\Scalar\String_::KIND_NOWDOC], \true)) {
+        $kind = $node->getAttribute(AttributeKey::KIND);
+        if (!\in_array($kind, [String_::KIND_HEREDOC, String_::KIND_NOWDOC], \true)) {
             return null;
         }
         // the doc label is not in the string → ok
         /** @var string $docLabel */
         $docLabel = $node->getAttribute(self::ATTRIBUTE_DOC_LABEL);
-        if (!\RectorPrefix20210510\Nette\Utils\Strings::contains($node->value, $docLabel)) {
+        if (!Strings::contains($node->value, $docLabel)) {
             return null;
         }
         $node->setAttribute(self::ATTRIBUTE_DOC_LABEL, $this->uniquateDocLabel($node->value, $docLabel));
         // invoke redraw
-        $node->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NODE, null);
+        $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
         return $node;
     }
     private function uniquateDocLabel(string $value, string $docLabel) : string
@@ -70,7 +70,7 @@ CODE_SAMPLE
         $docLabel .= self::WRAP_SUFFIX;
         $docLabelCounterTemplate = $docLabel . '_%d';
         $i = 0;
-        while (\RectorPrefix20210510\Nette\Utils\Strings::contains($value, $docLabel)) {
+        while (Strings::contains($value, $docLabel)) {
             $docLabel = \sprintf($docLabelCounterTemplate, ++$i);
         }
         return $docLabel;

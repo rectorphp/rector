@@ -15,7 +15,7 @@ final class NumericLiteralSeparatorEmulator extends \PhpParser\Lexer\TokenEmulat
     const NUMBER = '~' . self::FLOAT . '|' . self::BIN . '|' . self::HEX . '|' . self::DEC . '~iA';
     public function getPhpVersion() : string
     {
-        return \PhpParser\Lexer\Emulative::PHP_7_4;
+        return Emulative::PHP_7_4;
     }
     public function isEmulationNeeded(string $code) : bool
     {

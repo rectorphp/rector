@@ -7,7 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Property;
 use Rector\NodeNameResolver\Contract\NodeNameResolverInterface;
 use Rector\NodeNameResolver\NodeNameResolver;
-final class PropertyNameResolver implements \Rector\NodeNameResolver\Contract\NodeNameResolverInterface
+final class PropertyNameResolver implements NodeNameResolverInterface
 {
     /**
      * @var NodeNameResolver
@@ -16,7 +16,7 @@ final class PropertyNameResolver implements \Rector\NodeNameResolver\Contract\No
     /**
      * @required
      */
-    public function autowirePropertyNameResolver(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver) : void
+    public function autowirePropertyNameResolver(NodeNameResolver $nodeNameResolver) : void
     {
         $this->nodeNameResolver = $nodeNameResolver;
     }
@@ -25,12 +25,12 @@ final class PropertyNameResolver implements \Rector\NodeNameResolver\Contract\No
      */
     public function getNode() : string
     {
-        return \PhpParser\Node\Stmt\Property::class;
+        return Property::class;
     }
     /**
      * @param Property $node
      */
-    public function resolve(\PhpParser\Node $node) : ?string
+    public function resolve(Node $node) : ?string
     {
         if ($node->props === []) {
             return null;

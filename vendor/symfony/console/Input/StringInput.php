@@ -20,7 +20,7 @@ use RectorPrefix20210510\Symfony\Component\Console\Exception\InvalidArgumentExce
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class StringInput extends \RectorPrefix20210510\Symfony\Component\Console\Input\ArgvInput
+class StringInput extends ArgvInput
 {
     public const REGEX_STRING = '([^\\s]+?)(?:\\s|(?<!\\\\)"|(?<!\\\\)\'|$)';
     public const REGEX_QUOTED_STRING = '(?:"([^"\\\\]*(?:\\\\.[^"\\\\]*)*)"|\'([^\'\\\\]*(?:\\\\.[^\'\\\\]*)*)\')';
@@ -52,7 +52,7 @@ class StringInput extends \RectorPrefix20210510\Symfony\Component\Console\Input\
                 $tokens[] = \stripcslashes($match[1]);
             } else {
                 // should never happen
-                throw new \RectorPrefix20210510\Symfony\Component\Console\Exception\InvalidArgumentException(\sprintf('Unable to parse input near "... %s ...".', \substr($input, $cursor, 10)));
+                throw new InvalidArgumentException(\sprintf('Unable to parse input near "... %s ...".', \substr($input, $cursor, 10)));
             }
             $cursor += \strlen($match[0]);
         }

@@ -13,23 +13,23 @@ use PHPStan\Type\Type;
  */
 final class ScalarTypeComparator
 {
-    public function areEqualScalar(\PHPStan\Type\Type $firstType, \PHPStan\Type\Type $secondType) : bool
+    public function areEqualScalar(Type $firstType, Type $secondType) : bool
     {
-        if ($firstType instanceof \PHPStan\Type\StringType && $secondType instanceof \PHPStan\Type\StringType) {
+        if ($firstType instanceof StringType && $secondType instanceof StringType) {
             // prevents "class-string" vs "string"
             $firstTypeClass = \get_class($firstType);
             $secondTypeClass = \get_class($secondType);
             return $firstTypeClass === $secondTypeClass;
         }
-        if ($firstType instanceof \PHPStan\Type\IntegerType && $secondType instanceof \PHPStan\Type\IntegerType) {
+        if ($firstType instanceof IntegerType && $secondType instanceof IntegerType) {
             return \true;
         }
-        if ($firstType instanceof \PHPStan\Type\FloatType && $secondType instanceof \PHPStan\Type\FloatType) {
+        if ($firstType instanceof FloatType && $secondType instanceof FloatType) {
             return \true;
         }
-        if (!$firstType instanceof \PHPStan\Type\BooleanType) {
+        if (!$firstType instanceof BooleanType) {
             return \false;
         }
-        return $secondType instanceof \PHPStan\Type\BooleanType;
+        return $secondType instanceof BooleanType;
     }
 }

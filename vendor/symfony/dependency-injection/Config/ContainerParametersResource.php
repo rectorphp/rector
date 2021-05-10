@@ -18,7 +18,7 @@ use RectorPrefix20210510\Symfony\Component\Config\Resource\ResourceInterface;
  *
  * @final
  */
-class ContainerParametersResource implements \RectorPrefix20210510\Symfony\Component\Config\Resource\ResourceInterface
+class ContainerParametersResource implements ResourceInterface
 {
     private $parameters;
     /**

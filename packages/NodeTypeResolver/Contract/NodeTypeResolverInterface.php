@@ -11,5 +11,5 @@ interface NodeTypeResolverInterface
      * @return array<class-string<Node>>
      */
     public function getNodeClasses() : array;
-    public function resolve(\PhpParser\Node $node) : \PHPStan\Type\Type;
+    public function resolve(Node $node) : Type;
 }

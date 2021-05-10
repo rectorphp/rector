@@ -13,7 +13,7 @@ namespace RectorPrefix20210510\Symfony\Component\HttpKernel\CacheClearer;
 /**
  * @author Nicolas Grekas <p@tchwork.com>
  */
-class Psr6CacheClearer implements \RectorPrefix20210510\Symfony\Component\HttpKernel\CacheClearer\CacheClearerInterface
+class Psr6CacheClearer implements CacheClearerInterface
 {
     private $pools = [];
     public function __construct(array $pools = [])

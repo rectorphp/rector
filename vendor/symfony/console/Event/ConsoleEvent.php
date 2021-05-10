@@ -19,12 +19,12 @@ use RectorPrefix20210510\Symfony\Contracts\EventDispatcher\Event;
  *
  * @author Francesco Levorato <git@flevour.net>
  */
-class ConsoleEvent extends \RectorPrefix20210510\Symfony\Contracts\EventDispatcher\Event
+class ConsoleEvent extends Event
 {
     protected $command;
     private $input;
     private $output;
-    public function __construct(\RectorPrefix20210510\Symfony\Component\Console\Command\Command $command = null, \RectorPrefix20210510\Symfony\Component\Console\Input\InputInterface $input, \RectorPrefix20210510\Symfony\Component\Console\Output\OutputInterface $output)
+    public function __construct(Command $command = null, InputInterface $input, OutputInterface $output)
     {
         $this->command = $command;
         $this->input = $input;

@@ -15,7 +15,7 @@ namespace RectorPrefix20210510\Symfony\Component\HttpFoundation;
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class RequestMatcher implements \RectorPrefix20210510\Symfony\Component\HttpFoundation\RequestMatcherInterface
+class RequestMatcher implements RequestMatcherInterface
 {
     /**
      * @var string|null
@@ -134,7 +134,7 @@ class RequestMatcher implements \RectorPrefix20210510\Symfony\Component\HttpFoun
     /**
      * {@inheritdoc}
      */
-    public function matches(\RectorPrefix20210510\Symfony\Component\HttpFoundation\Request $request)
+    public function matches(Request $request)
     {
         if ($this->schemes && !\in_array($request->getScheme(), $this->schemes, \true)) {
             return \false;
@@ -160,7 +160,7 @@ class RequestMatcher implements \RectorPrefix20210510\Symfony\Component\HttpFoun
         if (null !== $this->port && 0 < $this->port && $request->getPort() !== $this->port) {
             return \false;
         }
-        if (\RectorPrefix20210510\Symfony\Component\HttpFoundation\IpUtils::checkIp($request->getClientIp(), $this->ips)) {
+        if (IpUtils::checkIp($request->getClientIp(), $this->ips)) {
             return \true;
         }
         // Note to future implementors: add additional checks above the

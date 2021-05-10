@@ -16,7 +16,7 @@ use RectorPrefix20210510\Symfony\Component\VarDumper\Cloner\Stub;
  *
  * @author Nicolas Grekas <p@tchwork.com>
  */
-class CutStub extends \RectorPrefix20210510\Symfony\Component\VarDumper\Cloner\Stub
+class CutStub extends Stub
 {
     public function __construct($value)
     {
@@ -26,7 +26,7 @@ class CutStub extends \RectorPrefix20210510\Symfony\Component\VarDumper\Cloner\S
                 $this->type = self::TYPE_OBJECT;
                 $this->class = \get_class($value);
                 if ($value instanceof \Closure) {
-                    \RectorPrefix20210510\Symfony\Component\VarDumper\Caster\ReflectionCaster::castClosure($value, [], $this, \true, \RectorPrefix20210510\Symfony\Component\VarDumper\Caster\Caster::EXCLUDE_VERBOSE);
+                    ReflectionCaster::castClosure($value, [], $this, \true, Caster::EXCLUDE_VERBOSE);
                 }
                 $this->cut = -1;
                 break;

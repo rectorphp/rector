@@ -23,5 +23,5 @@ interface DescriptorInterface
      *
      * @param object $object
      */
-    public function describe(\RectorPrefix20210510\Symfony\Component\Console\Output\OutputInterface $output, $object, array $options = []);
+    public function describe(OutputInterface $output, $object, array $options = []);
 }

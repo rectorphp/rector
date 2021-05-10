@@ -16,13 +16,13 @@ final class RectorNamingInflector
      * @var Inflector
      */
     private $inflector;
-    public function __construct(\RectorPrefix20210510\Doctrine\Inflector\Inflector $inflector)
+    public function __construct(Inflector $inflector)
     {
         $this->inflector = $inflector;
     }
     public function singularize(string $name) : string
     {
-        $matches = \RectorPrefix20210510\Nette\Utils\Strings::match($name, self::DATA_INFO_SUFFIX_REGEX);
+        $matches = Strings::match($name, self::DATA_INFO_SUFFIX_REGEX);
         if ($matches === null) {
             return $this->inflector->singularize($name);
         }

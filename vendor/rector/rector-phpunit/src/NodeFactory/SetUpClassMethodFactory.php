@@ -25,7 +25,7 @@ final class SetUpClassMethodFactory
      * @var SetUpFactory
      */
     private $setUpFactory;
-    public function __construct(\Rector\PhpSpecToPHPUnit\PHPUnitTypeDeclarationDecorator $phpUnitTypeDeclarationDecorator, \Rector\PHPUnit\NodeManipulator\StmtManipulator $stmtManipulator, \Rector\RemovingStatic\NodeFactory\SetUpFactory $setUpFactory)
+    public function __construct(PHPUnitTypeDeclarationDecorator $phpUnitTypeDeclarationDecorator, StmtManipulator $stmtManipulator, SetUpFactory $setUpFactory)
     {
         $this->phpUnitTypeDeclarationDecorator = $phpUnitTypeDeclarationDecorator;
         $this->stmtManipulator = $stmtManipulator;
@@ -34,10 +34,10 @@ final class SetUpClassMethodFactory
     /**
      * @param Stmt[]|Expr[] $stmts
      */
-    public function createSetUpMethod(array $stmts) : \PhpParser\Node\Stmt\ClassMethod
+    public function createSetUpMethod(array $stmts) : ClassMethod
     {
         $stmts = $this->stmtManipulator->normalizeStmts($stmts);
-        $classMethodBuilder = new \RectorPrefix20210510\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder(\Rector\Core\ValueObject\MethodName::SET_UP);
+        $classMethodBuilder = new MethodBuilder(MethodName::SET_UP);
         $classMethodBuilder->makeProtected();
         $classMethodBuilder->addStmt($this->setUpFactory->createParentStaticCall());
         $classMethodBuilder->addStmts($stmts);

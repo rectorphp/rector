@@ -13,14 +13,14 @@ namespace RectorPrefix20210510\Nette\Neon;
  */
 final class Neon
 {
-    public const BLOCK = \RectorPrefix20210510\Nette\Neon\Encoder::BLOCK;
+    public const BLOCK = Encoder::BLOCK;
     public const CHAIN = '!!chain';
     /**
      * Returns value converted to NEON. The flag can be Neon::BLOCK, which will create multiline output.
      */
     public static function encode($value, int $flags = 0) : string
     {
-        $encoder = new \RectorPrefix20210510\Nette\Neon\Encoder();
+        $encoder = new Encoder();
         return $encoder->encode($value, $flags);
     }
     /**
@@ -30,7 +30,7 @@ final class Neon
      */
     public static function decode(string $input)
     {
-        $decoder = new \RectorPrefix20210510\Nette\Neon\Decoder();
+        $decoder = new Decoder();
         return $decoder->decode($input);
     }
 }

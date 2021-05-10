@@ -6,7 +6,7 @@ namespace PhpParser\Node\Expr;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Name;
 use PhpParser\Node\VarLikeIdentifier;
-class StaticPropertyFetch extends \PhpParser\Node\Expr
+class StaticPropertyFetch extends Expr
 {
     /** @var Name|Expr Class name */
     public $class;
@@ -23,7 +23,7 @@ class StaticPropertyFetch extends \PhpParser\Node\Expr
     {
         $this->attributes = $attributes;
         $this->class = $class;
-        $this->name = \is_string($name) ? new \PhpParser\Node\VarLikeIdentifier($name) : $name;
+        $this->name = \is_string($name) ? new VarLikeIdentifier($name) : $name;
     }
     public function getSubNodeNames() : array
     {

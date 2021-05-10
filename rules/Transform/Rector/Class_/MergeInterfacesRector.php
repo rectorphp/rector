@@ -17,7 +17,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Transform\Rector\Class_\MergeInterfacesRector\MergeInterfacesRectorTest
  */
-final class MergeInterfacesRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
+final class MergeInterfacesRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
      * @api
@@ -28,9 +28,9 @@ final class MergeInterfacesRector extends \Rector\Core\Rector\AbstractRector imp
      * @var array<string, string>
      */
     private $oldToNewInterfaces = [];
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Merges old interface to a new one, that already has its methods', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Merges old interface to a new one, that already has its methods', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 class SomeClass implements SomeInterface, SomeOldInterface
 {
 }
@@ -47,12 +47,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Class_::class];
+        return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if ($node->implements === []) {
             return null;
@@ -63,7 +63,7 @@ CODE_SAMPLE
                 continue;
             }
             $interface = $this->getName($implement);
-            $node->implements[$key] = new \PhpParser\Node\Name($this->oldToNewInterfaces[$interface]);
+            $node->implements[$key] = new Name($this->oldToNewInterfaces[$interface]);
         }
         $this->makeImplementsUnique($node);
         return $node;
@@ -75,7 +75,7 @@ CODE_SAMPLE
     {
         $this->oldToNewInterfaces = $configuration[self::OLD_TO_NEW_INTERFACES] ?? [];
     }
-    private function makeImplementsUnique(\PhpParser\Node\Stmt\Class_ $class) : void
+    private function makeImplementsUnique(Class_ $class) : void
     {
         $alreadyAddedNames = [];
         foreach ($class->implements as $key => $name) {

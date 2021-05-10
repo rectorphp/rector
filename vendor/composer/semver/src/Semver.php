@@ -28,10 +28,10 @@ class Semver
     public static function satisfies($version, $constraints)
     {
         if (null === self::$versionParser) {
-            self::$versionParser = new \RectorPrefix20210510\Composer\Semver\VersionParser();
+            self::$versionParser = new VersionParser();
         }
         $versionParser = self::$versionParser;
-        $provider = new \RectorPrefix20210510\Composer\Semver\Constraint\Constraint('==', $versionParser->normalize($version));
+        $provider = new Constraint('==', $versionParser->normalize($version));
         $parsedConstraints = $versionParser->parseConstraints($constraints);
         return $parsedConstraints->matches($provider);
     }
@@ -46,7 +46,7 @@ class Semver
     public static function satisfiedBy(array $versions, $constraints)
     {
         $versions = \array_filter($versions, function ($version) use($constraints) {
-            return \RectorPrefix20210510\Composer\Semver\Semver::satisfies($version, $constraints);
+            return Semver::satisfies($version, $constraints);
         });
         return \array_values($versions);
     }
@@ -81,7 +81,7 @@ class Semver
     private static function usort(array $versions, $direction)
     {
         if (null === self::$versionParser) {
-            self::$versionParser = new \RectorPrefix20210510\Composer\Semver\VersionParser();
+            self::$versionParser = new VersionParser();
         }
         $versionParser = self::$versionParser;
         $normalized = array();
@@ -96,7 +96,7 @@ class Semver
             if ($left[0] === $right[0]) {
                 return 0;
             }
-            if (\RectorPrefix20210510\Composer\Semver\Comparator::lessThan($left[0], $right[0])) {
+            if (Comparator::lessThan($left[0], $right[0])) {
                 return -$direction;
             }
             return $direction;

@@ -6,15 +6,15 @@ namespace RectorPrefix20210510\Symplify\SymplifyKernel\Tests\Console\AbstractSym
 use RectorPrefix20210510\Symfony\Component\Console\Application;
 use RectorPrefix20210510\Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
 use RectorPrefix20210510\Symplify\SymplifyKernel\Tests\HttpKernel\OnlyForTestsKernel;
-final class AutowiredConsoleApplicationTest extends \RectorPrefix20210510\Symplify\PackageBuilder\Testing\AbstractKernelTestCase
+final class AutowiredConsoleApplicationTest extends AbstractKernelTestCase
 {
     protected function setUp() : void
     {
-        $this->bootKernel(\RectorPrefix20210510\Symplify\SymplifyKernel\Tests\HttpKernel\OnlyForTestsKernel::class);
+        $this->bootKernel(OnlyForTestsKernel::class);
     }
     public function test() : void
     {
-        $application = $this->getService(\RectorPrefix20210510\Symfony\Component\Console\Application::class);
-        $this->assertInstanceOf(\RectorPrefix20210510\Symfony\Component\Console\Application::class, $application);
+        $application = $this->getService(Application::class);
+        $this->assertInstanceOf(Application::class, $application);
     }
 }

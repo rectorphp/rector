@@ -21,7 +21,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\RemovingStatic\Rector\StaticPropertyFetch\DesiredStaticPropertyFetchTypeToDynamicRector\DesiredStaticPropertyFetchTypeToDynamicRectorTest
  */
-final class DesiredStaticPropertyFetchTypeToDynamicRector extends \Rector\Core\Rector\AbstractRector
+final class DesiredStaticPropertyFetchTypeToDynamicRector extends AbstractRector
 {
     /**
      * @var ObjectType[]
@@ -31,17 +31,17 @@ final class DesiredStaticPropertyFetchTypeToDynamicRector extends \Rector\Core\R
      * @var PropertyNaming
      */
     private $propertyNaming;
-    public function __construct(\Rector\Naming\Naming\PropertyNaming $propertyNaming, \RectorPrefix20210510\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider)
+    public function __construct(PropertyNaming $propertyNaming, ParameterProvider $parameterProvider)
     {
-        $typesToRemoveStaticFrom = $parameterProvider->provideArrayParameter(\Rector\Core\Configuration\Option::TYPES_TO_REMOVE_STATIC_FROM);
+        $typesToRemoveStaticFrom = $parameterProvider->provideArrayParameter(Option::TYPES_TO_REMOVE_STATIC_FROM);
         foreach ($typesToRemoveStaticFrom as $typeToRemoveStaticFrom) {
-            $this->staticObjectTypes[] = new \PHPStan\Type\ObjectType($typeToRemoveStaticFrom);
+            $this->staticObjectTypes[] = new ObjectType($typeToRemoveStaticFrom);
         }
         $this->propertyNaming = $propertyNaming;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change defined static service to dynamic one', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change defined static service to dynamic one', [new CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run()
@@ -66,26 +66,26 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\StaticPropertyFetch::class];
+        return [StaticPropertyFetch::class];
     }
     /**
      * @param StaticPropertyFetch $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         /** @var Scope $scope */
-        $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
+        $scope = $node->getAttribute(AttributeKey::SCOPE);
         $classReflection = $scope->getClassReflection();
-        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
+        if (!$classReflection instanceof ClassReflection) {
             return null;
         }
-        $classObjectType = new \PHPStan\Type\ObjectType($classReflection->getName());
+        $classObjectType = new ObjectType($classReflection->getName());
         // A. remove local fetch
         foreach ($this->staticObjectTypes as $staticObjectType) {
             if (!$staticObjectType->isSuperTypeOf($classObjectType)->yes()) {
                 continue;
             }
-            return new \PhpParser\Node\Expr\PropertyFetch(new \PhpParser\Node\Expr\Variable('this'), $node->name);
+            return new PropertyFetch(new Variable('this'), $node->name);
         }
         // B. external property fetch
         foreach ($this->staticObjectTypes as $staticObjectType) {
@@ -94,10 +94,10 @@ CODE_SAMPLE
             }
             $propertyName = $this->propertyNaming->fqnToVariableName($staticObjectType);
             /** @var Class_ $class */
-            $class = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
+            $class = $node->getAttribute(AttributeKey::CLASS_NODE);
             $this->addConstructorDependencyToClass($class, $staticObjectType, $propertyName);
-            $objectPropertyFetch = new \PhpParser\Node\Expr\PropertyFetch(new \PhpParser\Node\Expr\Variable('this'), $propertyName);
-            return new \PhpParser\Node\Expr\PropertyFetch($objectPropertyFetch, $node->name);
+            $objectPropertyFetch = new PropertyFetch(new Variable('this'), $propertyName);
+            return new PropertyFetch($objectPropertyFetch, $node->name);
         }
         return null;
     }

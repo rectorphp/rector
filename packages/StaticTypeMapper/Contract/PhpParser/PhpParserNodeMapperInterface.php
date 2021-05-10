@@ -11,5 +11,5 @@ interface PhpParserNodeMapperInterface
      * @return class-string<Node>
      */
     public function getNodeType() : string;
-    public function mapToPHPStan(\PhpParser\Node $node) : \PHPStan\Type\Type;
+    public function mapToPHPStan(Node $node) : Type;
 }

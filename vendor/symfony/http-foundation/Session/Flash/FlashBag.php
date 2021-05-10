@@ -15,7 +15,7 @@ namespace RectorPrefix20210510\Symfony\Component\HttpFoundation\Session\Flash;
  *
  * @author Drak <drak@zikula.org>
  */
-class FlashBag implements \RectorPrefix20210510\Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface
+class FlashBag implements FlashBagInterface
 {
     private $name = 'flashes';
     private $flashes = [];

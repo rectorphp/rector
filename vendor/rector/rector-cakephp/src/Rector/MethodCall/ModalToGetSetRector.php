@@ -19,7 +19,7 @@ use RectorPrefix20210510\Webmozart\Assert\Assert;
  *
  * @see \aRector\CakePHP\Tests\Rector\MethodCall\ModalToGetSetRector\ModalToGetSetRectorTest
  */
-final class ModalToGetSetRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
+final class ModalToGetSetRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
      * @var string
@@ -29,9 +29,9 @@ final class ModalToGetSetRector extends \Rector\Core\Rector\AbstractRector imple
      * @var ModalToGetSet[]
      */
     private $unprefixedMethodsToGetSet = [];
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Changes combined set/get `value()` to specific `getValue()` or `setValue(x)`.', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Changes combined set/get `value()` to specific `getValue()` or `setValue(x)`.', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 $object = new InstanceConfigTrait;
 
 $config = $object->config();
@@ -49,35 +49,35 @@ $config = $object->getConfig('key');
 $object->setConfig('key', 'value');
 $object->setConfig(['key' => 'value']);
 CODE_SAMPLE
-, [self::UNPREFIXED_METHODS_TO_GET_SET => [new \Rector\CakePHP\ValueObject\ModalToGetSet('InstanceConfigTrait', 'config', 'getConfig', 'setConfig')]])]);
+, [self::UNPREFIXED_METHODS_TO_GET_SET => [new ModalToGetSet('InstanceConfigTrait', 'config', 'getConfig', 'setConfig')]])]);
     }
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\MethodCall::class];
+        return [MethodCall::class];
     }
     /**
      * @param MethodCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         $unprefixedMethodToGetSet = $this->matchTypeAndMethodName($node);
-        if (!$unprefixedMethodToGetSet instanceof \Rector\CakePHP\ValueObject\ModalToGetSet) {
+        if (!$unprefixedMethodToGetSet instanceof ModalToGetSet) {
             return null;
         }
         $newName = $this->resolveNewMethodNameByCondition($node, $unprefixedMethodToGetSet);
-        $node->name = new \PhpParser\Node\Identifier($newName);
+        $node->name = new Identifier($newName);
         return $node;
     }
     public function configure(array $configuration) : void
     {
         $unprefixedMethodsToGetSet = $configuration[self::UNPREFIXED_METHODS_TO_GET_SET] ?? [];
-        \RectorPrefix20210510\Webmozart\Assert\Assert::allIsInstanceOf($unprefixedMethodsToGetSet, \Rector\CakePHP\ValueObject\ModalToGetSet::class);
+        Assert::allIsInstanceOf($unprefixedMethodsToGetSet, ModalToGetSet::class);
         $this->unprefixedMethodsToGetSet = $unprefixedMethodsToGetSet;
     }
-    private function matchTypeAndMethodName(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\Rector\CakePHP\ValueObject\ModalToGetSet
+    private function matchTypeAndMethodName(MethodCall $methodCall) : ?ModalToGetSet
     {
         foreach ($this->unprefixedMethodsToGetSet as $unprefixedMethodToGetSet) {
             if (!$this->isObjectType($methodCall->var, $unprefixedMethodToGetSet->getObjectType())) {
@@ -90,7 +90,7 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function resolveNewMethodNameByCondition(\PhpParser\Node\Expr\MethodCall $methodCall, \Rector\CakePHP\ValueObject\ModalToGetSet $modalToGetSet) : string
+    private function resolveNewMethodNameByCondition(MethodCall $methodCall, ModalToGetSet $modalToGetSet) : string
     {
         if (\count($methodCall->args) >= $modalToGetSet->getMinimalSetterArgumentCount()) {
             return $modalToGetSet->getSetMethod();
@@ -104,7 +104,7 @@ CODE_SAMPLE
         }
         $firstArgumentType = $modalToGetSet->getFirstArgumentType();
         $argumentValue = $methodCall->args[0]->value;
-        if ($firstArgumentType === 'array' && $argumentValue instanceof \PhpParser\Node\Expr\Array_) {
+        if ($firstArgumentType === 'array' && $argumentValue instanceof Array_) {
             return $modalToGetSet->getSetMethod();
         }
         return $modalToGetSet->getGetMethod();

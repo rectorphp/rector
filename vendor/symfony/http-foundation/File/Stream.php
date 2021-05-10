@@ -15,7 +15,7 @@ namespace RectorPrefix20210510\Symfony\Component\HttpFoundation\File;
  *
  * @author Nicolas Grekas <p@tchwork.com>
  */
-class Stream extends \RectorPrefix20210510\Symfony\Component\HttpFoundation\File\File
+class Stream extends File
 {
     /**
      * {@inheritdoc}

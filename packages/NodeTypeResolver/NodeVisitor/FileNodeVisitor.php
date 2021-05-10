@@ -10,22 +10,22 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 /**
  * Useful for modification of class outside current node tree
  */
-final class FileNodeVisitor extends \PhpParser\NodeVisitorAbstract
+final class FileNodeVisitor extends NodeVisitorAbstract
 {
     /**
      * @var File
      */
     private $file;
-    public function __construct(\Rector\Core\ValueObject\Application\File $file)
+    public function __construct(File $file)
     {
         $this->file = $file;
     }
     /**
      * @return Node
      */
-    public function enterNode(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function enterNode(Node $node) : ?Node
     {
-        $node->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::FILE, $this->file);
+        $node->setAttribute(AttributeKey::FILE, $this->file);
         return $node;
     }
 }

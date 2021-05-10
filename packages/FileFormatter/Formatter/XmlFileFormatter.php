@@ -12,22 +12,22 @@ use Rector\FileFormatter\ValueObjectFactory\EditorConfigConfigurationBuilder;
 /**
  * @see \Rector\Tests\FileFormatter\Formatter\XmlFileFormatter\XmlFileFormatterTest
  */
-final class XmlFileFormatter implements \Rector\FileFormatter\Contract\Formatter\FileFormatterInterface
+final class XmlFileFormatter implements FileFormatterInterface
 {
     /**
      * @var Formatter
      */
     private $xmlFormatter;
-    public function __construct(\RectorPrefix20210510\PrettyXml\Formatter $xmlFormatter)
+    public function __construct(Formatter $xmlFormatter)
     {
         $this->xmlFormatter = $xmlFormatter;
     }
-    public function supports(\Rector\Core\ValueObject\Application\File $file) : bool
+    public function supports(File $file) : bool
     {
         $smartFileInfo = $file->getSmartFileInfo();
         return $smartFileInfo->getExtension() === 'xml';
     }
-    public function format(\Rector\Core\ValueObject\Application\File $file, \Rector\FileFormatter\ValueObject\EditorConfigConfiguration $editorConfigConfiguration) : void
+    public function format(File $file, EditorConfigConfiguration $editorConfigConfiguration) : void
     {
         $this->xmlFormatter->setIndentCharacter($editorConfigConfiguration->getIndentStyleCharacter());
         $this->xmlFormatter->setIndentSize($editorConfigConfiguration->getIndentSize());
@@ -35,10 +35,10 @@ final class XmlFileFormatter implements \Rector\FileFormatter\Contract\Formatter
         $newFileContent .= $editorConfigConfiguration->getFinalNewline();
         $file->changeFileContent($newFileContent);
     }
-    public function createDefaultEditorConfigConfigurationBuilder() : \Rector\FileFormatter\ValueObjectFactory\EditorConfigConfigurationBuilder
+    public function createDefaultEditorConfigConfigurationBuilder() : EditorConfigConfigurationBuilder
     {
-        $editorConfigConfigurationBuilder = \Rector\FileFormatter\ValueObjectFactory\EditorConfigConfigurationBuilder::anEditorConfigConfiguration();
-        $editorConfigConfigurationBuilder->withIndent(\Rector\FileFormatter\ValueObject\Indent::createTabWithSize(1));
+        $editorConfigConfigurationBuilder = EditorConfigConfigurationBuilder::anEditorConfigConfiguration();
+        $editorConfigConfigurationBuilder->withIndent(Indent::createTabWithSize(1));
         return $editorConfigConfigurationBuilder;
     }
 }

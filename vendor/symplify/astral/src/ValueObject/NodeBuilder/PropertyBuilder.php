@@ -7,6 +7,6 @@ use PhpParser\Builder\Property;
 /**
  * Fixed duplicated naming in php-parser and prevents confusion
  */
-final class PropertyBuilder extends \PhpParser\Builder\Property
+final class PropertyBuilder extends Property
 {
 }

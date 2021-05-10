@@ -36,9 +36,9 @@ final class FallbackVersions
      */
     public static function getVersion(string $packageName) : string
     {
-        $versions = \iterator_to_array(self::getVersions(self::getPackageData()));
-        if (!\array_key_exists($packageName, $versions)) {
-            throw new \OutOfBoundsException('Required package "' . $packageName . '" is not installed: check your ./vendor/composer/installed.json and/or ./composer.lock files');
+        $versions = iterator_to_array(self::getVersions(self::getPackageData()));
+        if (!array_key_exists($packageName, $versions)) {
+            throw new OutOfBoundsException('Required package "' . $packageName . '" is not installed: check your ./vendor/composer/installed.json and/or ./composer.lock files');
         }
         return $versions[$packageName];
     }
@@ -51,21 +51,21 @@ final class FallbackVersions
     {
         $checkedPaths = [
             // The top-level project's ./vendor/composer/installed.json
-            \getcwd() . '/vendor/composer/installed.json',
+            getcwd() . '/vendor/composer/installed.json',
             __DIR__ . '/../../../../composer/installed.json',
             // The top-level project's ./composer.lock
-            \getcwd() . '/composer.lock',
+            getcwd() . '/composer.lock',
             __DIR__ . '/../../../../../composer.lock',
             // This package's composer.lock
             __DIR__ . '/../../composer.lock',
         ];
         $packageData = [];
         foreach ($checkedPaths as $path) {
-            if (!\file_exists($path)) {
+            if (!file_exists($path)) {
                 continue;
             }
-            $data = \json_decode(\file_get_contents($path), \true);
-            switch (\basename($path)) {
+            $data = json_decode(file_get_contents($path), \true);
+            switch (basename($path)) {
                 case 'installed.json':
                     // composer 2.x installed.json format
                     if (isset($data['packages'])) {
@@ -82,9 +82,9 @@ final class FallbackVersions
             }
         }
         if ($packageData !== []) {
-            return \array_merge(...$packageData);
+            return array_merge(...$packageData);
         }
-        throw new \UnexpectedValueException(\sprintf('PackageVersions could not locate the `vendor/composer/installed.json` or your `composer.lock` ' . 'location. This is assumed to be in %s. If you customized your composer vendor directory and ran composer ' . 'installation with --no-scripts, or if you deployed without the required composer files, PackageVersions ' . 'can\'t detect installed versions.', \json_encode($checkedPaths)));
+        throw new UnexpectedValueException(sprintf('PackageVersions could not locate the `vendor/composer/installed.json` or your `composer.lock` ' . 'location. This is assumed to be in %s. If you customized your composer vendor directory and ran composer ' . 'installation with --no-scripts, or if you deployed without the required composer files, PackageVersions ' . 'can\'t detect installed versions.', json_encode($checkedPaths)));
     }
     /**
      * @param mixed[] $packageData
@@ -93,7 +93,7 @@ final class FallbackVersions
      *
      * @psalm-return Generator<string, string>
      */
-    private static function getVersions(array $packageData) : \Generator
+    private static function getVersions(array $packageData) : Generator
     {
         foreach ($packageData as $package) {
             (yield $package['name'] => $package['version'] . '@' . ($package['source']['reference'] ?? $package['dist']['reference'] ?? ''));

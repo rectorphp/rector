@@ -16,19 +16,19 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\CodeQuality\Rector\FuncCall\CallUserFuncWithArrowFunctionToInlineRector\CallUserFuncWithArrowFunctionToInlineRectorTest
  */
-final class CallUserFuncWithArrowFunctionToInlineRector extends \Rector\Core\Rector\AbstractRector
+final class CallUserFuncWithArrowFunctionToInlineRector extends AbstractRector
 {
     /**
      * @var ClosureArrowFunctionAnalyzer
      */
     private $closureArrowFunctionAnalyzer;
-    public function __construct(\Rector\Php74\NodeAnalyzer\ClosureArrowFunctionAnalyzer $closureArrowFunctionAnalyzer)
+    public function __construct(ClosureArrowFunctionAnalyzer $closureArrowFunctionAnalyzer)
     {
         $this->closureArrowFunctionAnalyzer = $closureArrowFunctionAnalyzer;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Refactor call_user_func() with arrow function to direct call', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Refactor call_user_func() with arrow function to direct call', [new CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run()
@@ -53,12 +53,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\FuncCall::class];
+        return [FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if (!$this->isName($node, 'call_user_func')) {
             return null;
@@ -68,10 +68,10 @@ CODE_SAMPLE
         }
         // change the node
         $firstArgValue = $node->args[0]->value;
-        if ($firstArgValue instanceof \PhpParser\Node\Expr\ArrowFunction) {
+        if ($firstArgValue instanceof ArrowFunction) {
             return $firstArgValue->expr;
         }
-        if ($firstArgValue instanceof \PhpParser\Node\Expr\Closure) {
+        if ($firstArgValue instanceof Closure) {
             return $this->closureArrowFunctionAnalyzer->matchArrowFunctionExpr($firstArgValue);
         }
         return null;

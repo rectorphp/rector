@@ -5,14 +5,14 @@ namespace RectorPrefix20210510\Doctrine\Inflector\Rules\Turkish;
 
 use RectorPrefix20210510\Doctrine\Inflector\GenericLanguageInflectorFactory;
 use RectorPrefix20210510\Doctrine\Inflector\Rules\Ruleset;
-final class InflectorFactory extends \RectorPrefix20210510\Doctrine\Inflector\GenericLanguageInflectorFactory
+final class InflectorFactory extends GenericLanguageInflectorFactory
 {
-    protected function getSingularRuleset() : \RectorPrefix20210510\Doctrine\Inflector\Rules\Ruleset
+    protected function getSingularRuleset() : Ruleset
     {
-        return \RectorPrefix20210510\Doctrine\Inflector\Rules\Turkish\Rules::getSingularRuleset();
+        return Rules::getSingularRuleset();
     }
-    protected function getPluralRuleset() : \RectorPrefix20210510\Doctrine\Inflector\Rules\Ruleset
+    protected function getPluralRuleset() : Ruleset
     {
-        return \RectorPrefix20210510\Doctrine\Inflector\Rules\Turkish\Rules::getPluralRuleset();
+        return Rules::getPluralRuleset();
     }
 }

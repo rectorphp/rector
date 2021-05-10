@@ -22,7 +22,7 @@ use RectorPrefix20210510\Symfony\Component\DependencyInjection\Exception\LogicEx
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-abstract class Extension implements \RectorPrefix20210510\Symfony\Component\DependencyInjection\Extension\ExtensionInterface, \RectorPrefix20210510\Symfony\Component\DependencyInjection\Extension\ConfigurationExtensionInterface
+abstract class Extension implements ExtensionInterface, ConfigurationExtensionInterface
 {
     private $processedConfigs = [];
     /**
@@ -63,15 +63,15 @@ abstract class Extension implements \RectorPrefix20210510\Symfony\Component\Depe
     {
         $className = static::class;
         if ('Extension' != \substr($className, -9)) {
-            throw new \RectorPrefix20210510\Symfony\Component\DependencyInjection\Exception\BadMethodCallException('This extension does not follow the naming convention; you must overwrite the getAlias() method.');
+            throw new BadMethodCallException('This extension does not follow the naming convention; you must overwrite the getAlias() method.');
         }
         $classBaseName = \substr(\strrchr($className, '\\'), 1, -9);
-        return \RectorPrefix20210510\Symfony\Component\DependencyInjection\Container::underscore($classBaseName);
+        return Container::underscore($classBaseName);
     }
     /**
      * {@inheritdoc}
      */
-    public function getConfiguration(array $config, \RectorPrefix20210510\Symfony\Component\DependencyInjection\ContainerBuilder $container)
+    public function getConfiguration(array $config, ContainerBuilder $container)
     {
         $class = static::class;
         if (\false !== \strpos($class, "\0")) {
@@ -83,17 +83,17 @@ abstract class Extension implements \RectorPrefix20210510\Symfony\Component\Depe
         if (!$class) {
             return null;
         }
-        if (!$class->implementsInterface(\RectorPrefix20210510\Symfony\Component\Config\Definition\ConfigurationInterface::class)) {
-            throw new \RectorPrefix20210510\Symfony\Component\DependencyInjection\Exception\LogicException(\sprintf('The extension configuration class "%s" must implement "%s".', $class->getName(), \RectorPrefix20210510\Symfony\Component\Config\Definition\ConfigurationInterface::class));
+        if (!$class->implementsInterface(ConfigurationInterface::class)) {
+            throw new LogicException(\sprintf('The extension configuration class "%s" must implement "%s".', $class->getName(), ConfigurationInterface::class));
         }
         if (!($constructor = $class->getConstructor()) || !$constructor->getNumberOfRequiredParameters()) {
             return $class->newInstance();
         }
         return null;
     }
-    protected final function processConfiguration(\RectorPrefix20210510\Symfony\Component\Config\Definition\ConfigurationInterface $configuration, array $configs) : array
+    protected final function processConfiguration(ConfigurationInterface $configuration, array $configs) : array
     {
-        $processor = new \RectorPrefix20210510\Symfony\Component\Config\Definition\Processor();
+        $processor = new Processor();
         return $this->processedConfigs[] = $processor->processConfiguration($configuration, $configs);
     }
     /**
@@ -112,10 +112,10 @@ abstract class Extension implements \RectorPrefix20210510\Symfony\Component\Depe
      *
      * @throws InvalidArgumentException When the config is not enableable
      */
-    protected function isConfigEnabled(\RectorPrefix20210510\Symfony\Component\DependencyInjection\ContainerBuilder $container, array $config)
+    protected function isConfigEnabled(ContainerBuilder $container, array $config)
     {
         if (!\array_key_exists('enabled', $config)) {
-            throw new \RectorPrefix20210510\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException("The config array has no 'enabled' key.");
+            throw new InvalidArgumentException("The config array has no 'enabled' key.");
         }
         return (bool) $container->getParameterBag()->resolveValue($config['enabled']);
     }

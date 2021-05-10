@@ -11,13 +11,13 @@ final class ChangedPhpDocNodeTraverserFactory
      * @var ChangedPhpDocNodeVisitor
      */
     private $changedPhpDocNodeVisitor;
-    public function __construct(\Rector\BetterPhpDocParser\PhpDocNodeVisitor\ChangedPhpDocNodeVisitor $changedPhpDocNodeVisitor)
+    public function __construct(ChangedPhpDocNodeVisitor $changedPhpDocNodeVisitor)
     {
         $this->changedPhpDocNodeVisitor = $changedPhpDocNodeVisitor;
     }
-    public function create() : \RectorPrefix20210510\Symplify\SimplePhpDocParser\PhpDocNodeTraverser
+    public function create() : PhpDocNodeTraverser
     {
-        $changedPhpDocNodeTraverser = new \RectorPrefix20210510\Symplify\SimplePhpDocParser\PhpDocNodeTraverser();
+        $changedPhpDocNodeTraverser = new PhpDocNodeTraverser();
         $changedPhpDocNodeTraverser->addPhpDocNodeVisitor($this->changedPhpDocNodeVisitor);
         return $changedPhpDocNodeTraverser;
     }

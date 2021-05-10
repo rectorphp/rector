@@ -20,7 +20,7 @@ final class RepositoryAssignFactory
      * @var NodeFactory
      */
     private $nodeFactory;
-    public function __construct(\Rector\Doctrine\NodeAnalyzer\EntityObjectTypeResolver $entityObjectTypeResolver, \Rector\Core\PhpParser\Node\NodeFactory $nodeFactory)
+    public function __construct(EntityObjectTypeResolver $entityObjectTypeResolver, NodeFactory $nodeFactory)
     {
         $this->entityObjectTypeResolver = $entityObjectTypeResolver;
         $this->nodeFactory = $nodeFactory;
@@ -28,16 +28,16 @@ final class RepositoryAssignFactory
     /**
      * Creates: "$this->repository = $entityManager->getRepository(SomeEntityClass::class)"
      */
-    public function create(\PhpParser\Node\Stmt\Class_ $repositoryClass) : \PhpParser\Node\Expr\Assign
+    public function create(Class_ $repositoryClass) : Assign
     {
         $entityObjectType = $this->entityObjectTypeResolver->resolveFromRepositoryClass($repositoryClass);
-        $repositoryClassName = (string) $repositoryClass->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);
-        if (!$entityObjectType instanceof \PHPStan\Type\TypeWithClassName) {
-            throw new \Rector\Core\Exception\ShouldNotHappenException(\sprintf('An entity was not found for "%s" repository.', $repositoryClassName));
+        $repositoryClassName = (string) $repositoryClass->getAttribute(AttributeKey::CLASS_NAME);
+        if (!$entityObjectType instanceof TypeWithClassName) {
+            throw new ShouldNotHappenException(\sprintf('An entity was not found for "%s" repository.', $repositoryClassName));
         }
         $classConstFetch = $this->nodeFactory->createClassConstReference($entityObjectType->getClassName());
         $methodCall = $this->nodeFactory->createMethodCall('entityManager', 'getRepository', [$classConstFetch]);
-        $methodCall->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE, $repositoryClassName);
+        $methodCall->setAttribute(AttributeKey::CLASS_NODE, $repositoryClassName);
         return $this->nodeFactory->createPropertyAssignmentWithExpr('repository', $methodCall);
     }
 }

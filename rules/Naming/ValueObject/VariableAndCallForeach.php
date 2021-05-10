@@ -34,21 +34,21 @@ final class VariableAndCallForeach
      * @param FuncCall|StaticCall|MethodCall $expr
      * @param ClassMethod|Function_|Closure $functionLike
      */
-    public function __construct(\PhpParser\Node\Expr\Variable $variable, \PhpParser\Node\Expr $expr, string $variableName, \PhpParser\Node\FunctionLike $functionLike)
+    public function __construct(Variable $variable, Expr $expr, string $variableName, FunctionLike $functionLike)
     {
         $this->variable = $variable;
         $this->call = $expr;
         $this->variableName = $variableName;
         $this->functionLike = $functionLike;
     }
-    public function getVariable() : \PhpParser\Node\Expr\Variable
+    public function getVariable() : Variable
     {
         return $this->variable;
     }
     /**
      * @return FuncCall|StaticCall|MethodCall
      */
-    public function getCall() : \PhpParser\Node\Expr
+    public function getCall() : Expr
     {
         return $this->call;
     }
@@ -59,7 +59,7 @@ final class VariableAndCallForeach
     /**
      * @return ClassMethod|Function_|Closure
      */
-    public function getFunctionLike() : \PhpParser\Node\FunctionLike
+    public function getFunctionLike() : FunctionLike
     {
         return $this->functionLike;
     }

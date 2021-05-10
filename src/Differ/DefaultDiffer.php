@@ -13,8 +13,8 @@ final class DefaultDiffer
     private $differ;
     public function __construct()
     {
-        $strictUnifiedDiffOutputBuilder = new \RectorPrefix20210510\SebastianBergmann\Diff\Output\StrictUnifiedDiffOutputBuilder(['fromFile' => 'Original', 'toFile' => 'New']);
-        $this->differ = new \RectorPrefix20210510\SebastianBergmann\Diff\Differ($strictUnifiedDiffOutputBuilder);
+        $strictUnifiedDiffOutputBuilder = new StrictUnifiedDiffOutputBuilder(['fromFile' => 'Original', 'toFile' => 'New']);
+        $this->differ = new Differ($strictUnifiedDiffOutputBuilder);
     }
     public function diff(string $old, string $new) : string
     {

@@ -6,10 +6,10 @@ namespace RectorPrefix20210510\Symplify\ConsolePackageBuilder\Bundle;
 use RectorPrefix20210510\Symfony\Component\DependencyInjection\ContainerBuilder;
 use RectorPrefix20210510\Symfony\Component\HttpKernel\Bundle\Bundle;
 use RectorPrefix20210510\Symplify\ConsolePackageBuilder\DependencyInjection\CompilerPass\NamelessConsoleCommandCompilerPass;
-final class NamelessConsoleCommandBundle extends \RectorPrefix20210510\Symfony\Component\HttpKernel\Bundle\Bundle
+final class NamelessConsoleCommandBundle extends Bundle
 {
-    public function build(\RectorPrefix20210510\Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder) : void
+    public function build(ContainerBuilder $containerBuilder) : void
     {
-        $containerBuilder->addCompilerPass(new \RectorPrefix20210510\Symplify\ConsolePackageBuilder\DependencyInjection\CompilerPass\NamelessConsoleCommandCompilerPass());
+        $containerBuilder->addCompilerPass(new NamelessConsoleCommandCompilerPass());
     }
 }

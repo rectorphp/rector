@@ -14,11 +14,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\DeadCode\Rector\Return_\RemoveDeadConditionAboveReturnRector\RemoveDeadConditionAboveReturnRectorTest
  */
-final class RemoveDeadConditionAboveReturnRector extends \Rector\Core\Rector\AbstractRector
+final class RemoveDeadConditionAboveReturnRector extends AbstractRector
 {
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove dead condition above return', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove dead condition above return', [new CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function go()
@@ -47,21 +47,21 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Return_::class];
+        return [Return_::class];
     }
     /**
      * @param Return_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        $previousNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PREVIOUS_NODE);
-        if (!$previousNode instanceof \PhpParser\Node\Stmt\If_) {
+        $previousNode = $node->getAttribute(AttributeKey::PREVIOUS_NODE);
+        if (!$previousNode instanceof If_) {
             return null;
         }
         if ($previousNode->elseifs !== []) {
             return null;
         }
-        if ($previousNode->else instanceof \PhpParser\Node\Stmt\Else_) {
+        if ($previousNode->else instanceof Else_) {
             return null;
         }
         $countStmt = \count($previousNode->stmts);
@@ -73,7 +73,7 @@ CODE_SAMPLE
             return null;
         }
         $stmt = $previousNode->stmts[0];
-        if (!$stmt instanceof \PhpParser\Node\Stmt\Return_) {
+        if (!$stmt instanceof Return_) {
             return null;
         }
         if (!$this->nodeComparator->areNodesEqual($stmt, $node)) {

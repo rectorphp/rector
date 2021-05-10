@@ -43,7 +43,7 @@ final class TypeProvidingExprFromClassResolver
      * @var PropertyNaming
      */
     private $propertyNaming;
-    public function __construct(\Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper $typeUnwrapper, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Naming\Naming\PropertyNaming $propertyNaming)
+    public function __construct(TypeUnwrapper $typeUnwrapper, ReflectionProvider $reflectionProvider, NodeNameResolver $nodeNameResolver, PropertyNaming $propertyNaming)
     {
         $this->typeUnwrapper = $typeUnwrapper;
         $this->reflectionProvider = $reflectionProvider;
@@ -54,9 +54,9 @@ final class TypeProvidingExprFromClassResolver
      * @param ClassMethod|Function_ $functionLike
      * @return MethodCall|PropertyFetch|Variable|null
      */
-    public function resolveTypeProvidingExprFromClass(\PhpParser\Node\Stmt\Class_ $class, \PhpParser\Node\FunctionLike $functionLike, \PHPStan\Type\ObjectType $objectType) : ?\PhpParser\Node\Expr
+    public function resolveTypeProvidingExprFromClass(Class_ $class, FunctionLike $functionLike, ObjectType $objectType) : ?Expr
     {
-        $className = $class->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);
+        $className = $class->getAttribute(AttributeKey::CLASS_NAME);
         if ($className === null) {
             return null;
         }
@@ -67,8 +67,8 @@ final class TypeProvidingExprFromClassResolver
             return $methodCallProvidingType;
         }
         // B. match existing property
-        $scope = $class->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
-        if (!$scope instanceof \PHPStan\Analyser\Scope) {
+        $scope = $class->getAttribute(AttributeKey::SCOPE);
+        if (!$scope instanceof Scope) {
             return null;
         }
         $propertyFetch = $this->resolvePropertyFetchProvidingType($classReflection, $scope, $objectType);
@@ -78,20 +78,20 @@ final class TypeProvidingExprFromClassResolver
         // C. param in constructor?
         return $this->resolveConstructorParamProvidingType($functionLike, $objectType);
     }
-    private function resolveMethodCallProvidingType(\PHPStan\Reflection\ClassReflection $classReflection, \PHPStan\Type\ObjectType $objectType) : ?\PhpParser\Node\Expr\MethodCall
+    private function resolveMethodCallProvidingType(ClassReflection $classReflection, ObjectType $objectType) : ?MethodCall
     {
         foreach ($classReflection->getNativeMethods() as $methodReflection) {
-            $functionVariant = \PHPStan\Reflection\ParametersAcceptorSelector::selectSingle($methodReflection->getVariants());
+            $functionVariant = ParametersAcceptorSelector::selectSingle($methodReflection->getVariants());
             $returnType = $functionVariant->getReturnType();
             if (!$this->isMatchingType($returnType, $objectType)) {
                 continue;
             }
-            $thisVariable = new \PhpParser\Node\Expr\Variable('this');
-            return new \PhpParser\Node\Expr\MethodCall($thisVariable, $methodReflection->getName());
+            $thisVariable = new Variable('this');
+            return new MethodCall($thisVariable, $methodReflection->getName());
         }
         return null;
     }
-    private function resolvePropertyFetchProvidingType(\PHPStan\Reflection\ClassReflection $classReflection, \PHPStan\Analyser\Scope $scope, \PHPStan\Type\ObjectType $objectType) : ?\PhpParser\Node\Expr\PropertyFetch
+    private function resolvePropertyFetchProvidingType(ClassReflection $classReflection, Scope $scope, ObjectType $objectType) : ?PropertyFetch
     {
         $reflectionClass = $classReflection->getNativeReflection();
         foreach ($reflectionClass->getProperties() as $reflectionProperty) {
@@ -101,28 +101,28 @@ final class TypeProvidingExprFromClassResolver
             if (!$this->isMatchingType($readableType, $objectType)) {
                 continue;
             }
-            return new \PhpParser\Node\Expr\PropertyFetch(new \PhpParser\Node\Expr\Variable('this'), $reflectionProperty->getName());
+            return new PropertyFetch(new Variable('this'), $reflectionProperty->getName());
         }
         return null;
     }
-    private function resolveConstructorParamProvidingType(\PhpParser\Node\FunctionLike $functionLike, \PHPStan\Type\ObjectType $objectType) : ?\PhpParser\Node\Expr\Variable
+    private function resolveConstructorParamProvidingType(FunctionLike $functionLike, ObjectType $objectType) : ?Variable
     {
-        if (!$functionLike instanceof \PhpParser\Node\Stmt\ClassMethod) {
+        if (!$functionLike instanceof ClassMethod) {
             return null;
         }
-        if (!$this->nodeNameResolver->isName($functionLike, \Rector\Core\ValueObject\MethodName::CONSTRUCT)) {
+        if (!$this->nodeNameResolver->isName($functionLike, MethodName::CONSTRUCT)) {
             return null;
         }
         $variableName = $this->propertyNaming->fqnToVariableName($objectType);
-        return new \PhpParser\Node\Expr\Variable($variableName);
+        return new Variable($variableName);
     }
-    private function isMatchingType(\PHPStan\Type\Type $readableType, \PHPStan\Type\ObjectType $objectType) : bool
+    private function isMatchingType(Type $readableType, ObjectType $objectType) : bool
     {
-        if ($readableType instanceof \PHPStan\Type\MixedType) {
+        if ($readableType instanceof MixedType) {
             return \false;
         }
         $readableType = $this->typeUnwrapper->unwrapNullableType($readableType);
-        if (!$readableType instanceof \PHPStan\Type\TypeWithClassName) {
+        if (!$readableType instanceof TypeWithClassName) {
             return \false;
         }
         return $readableType->equals($objectType);

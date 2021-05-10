@@ -18,26 +18,26 @@ use RectorPrefix20210510\Symfony\Component\DependencyInjection\Definition;
  *
  * @final
  */
-class NullDumper implements \RectorPrefix20210510\Symfony\Component\DependencyInjection\LazyProxy\PhpDumper\DumperInterface
+class NullDumper implements DumperInterface
 {
     /**
      * {@inheritdoc}
      */
-    public function isProxyCandidate(\RectorPrefix20210510\Symfony\Component\DependencyInjection\Definition $definition) : bool
+    public function isProxyCandidate(Definition $definition) : bool
     {
         return \false;
     }
     /**
      * {@inheritdoc}
      */
-    public function getProxyFactoryCode(\RectorPrefix20210510\Symfony\Component\DependencyInjection\Definition $definition, string $id, string $factoryCode) : string
+    public function getProxyFactoryCode(Definition $definition, string $id, string $factoryCode) : string
     {
         return '';
     }
     /**
      * {@inheritdoc}
      */
-    public function getProxyCode(\RectorPrefix20210510\Symfony\Component\DependencyInjection\Definition $definition) : string
+    public function getProxyCode(Definition $definition) : string
     {
         return '';
     }

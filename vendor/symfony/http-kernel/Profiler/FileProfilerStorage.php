@@ -15,7 +15,7 @@ namespace RectorPrefix20210510\Symfony\Component\HttpKernel\Profiler;
  *
  * @author Alexandre Salomé <alexandre.salome@gmail.com>
  */
-class FileProfilerStorage implements \RectorPrefix20210510\Symfony\Component\HttpKernel\Profiler\ProfilerStorageInterface
+class FileProfilerStorage implements ProfilerStorageInterface
 {
     /**
      * Folder where profiler data are stored.
@@ -90,7 +90,7 @@ class FileProfilerStorage implements \RectorPrefix20210510\Symfony\Component\Htt
     /**
      * {@inheritdoc}
      */
-    public function read(string $token) : ?\RectorPrefix20210510\Symfony\Component\HttpKernel\Profiler\Profile
+    public function read(string $token) : ?Profile
     {
         if (!$token || !\file_exists($file = $this->getFilename($token))) {
             return null;
@@ -105,7 +105,7 @@ class FileProfilerStorage implements \RectorPrefix20210510\Symfony\Component\Htt
      *
      * @throws \RuntimeException
      */
-    public function write(\RectorPrefix20210510\Symfony\Component\HttpKernel\Profiler\Profile $profile) : bool
+    public function write(Profile $profile) : bool
     {
         $file = $this->getFilename($profile->getToken());
         $profileIndexed = \is_file($file);
@@ -120,7 +120,7 @@ class FileProfilerStorage implements \RectorPrefix20210510\Symfony\Component\Htt
         // when there are errors in sub-requests, the parent and/or children tokens
         // may equal the profile token, resulting in infinite loops
         $parentToken = $profile->getParentToken() !== $profileToken ? $profile->getParentToken() : null;
-        $childrenToken = \array_filter(\array_map(function (\RectorPrefix20210510\Symfony\Component\HttpKernel\Profiler\Profile $p) use($profileToken) {
+        $childrenToken = \array_filter(\array_map(function (Profile $p) use($profileToken) {
             return $profileToken !== $p->getToken() ? $p->getToken() : null;
         }, $profile->getChildren()));
         // Store profile
@@ -202,9 +202,9 @@ class FileProfilerStorage implements \RectorPrefix20210510\Symfony\Component\Htt
         }
         return '' === $line ? null : $line;
     }
-    protected function createProfileFromData(string $token, array $data, \RectorPrefix20210510\Symfony\Component\HttpKernel\Profiler\Profile $parent = null)
+    protected function createProfileFromData(string $token, array $data, Profile $parent = null)
     {
-        $profile = new \RectorPrefix20210510\Symfony\Component\HttpKernel\Profiler\Profile($token);
+        $profile = new Profile($token);
         $profile->setIp($data['ip']);
         $profile->setMethod($data['method']);
         $profile->setUrl($data['url']);

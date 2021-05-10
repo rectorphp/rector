@@ -15,11 +15,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\CodeQuality\Rector\Identical\SimplifyBoolIdenticalTrueRector\SimplifyBoolIdenticalTrueRectorTest
  */
-final class SimplifyBoolIdenticalTrueRector extends \Rector\Core\Rector\AbstractRector
+final class SimplifyBoolIdenticalTrueRector extends AbstractRector
 {
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Symplify bool value compare to true or false', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Symplify bool value compare to true or false', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run(bool $value, string $items)
@@ -46,17 +46,17 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\BinaryOp\Identical::class, \PhpParser\Node\Expr\BinaryOp\NotIdentical::class];
+        return [Identical::class, NotIdentical::class];
     }
     /**
      * @param Identical|NotIdentical $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        if ($this->nodeTypeResolver->isStaticType($node->left, \PHPStan\Type\BooleanType::class) && !$this->valueResolver->isTrueOrFalse($node->left)) {
+        if ($this->nodeTypeResolver->isStaticType($node->left, BooleanType::class) && !$this->valueResolver->isTrueOrFalse($node->left)) {
             return $this->processBoolTypeToNotBool($node, $node->left, $node->right);
         }
-        if (!$this->nodeTypeResolver->isStaticType($node->right, \PHPStan\Type\BooleanType::class)) {
+        if (!$this->nodeTypeResolver->isStaticType($node->right, BooleanType::class)) {
             return null;
         }
         if ($this->valueResolver->isTrueOrFalse($node->right)) {
@@ -64,37 +64,37 @@ CODE_SAMPLE
         }
         return $this->processBoolTypeToNotBool($node, $node->right, $node->left);
     }
-    private function processBoolTypeToNotBool(\PhpParser\Node $node, \PhpParser\Node\Expr $leftExpr, \PhpParser\Node\Expr $rightExpr) : ?\PhpParser\Node\Expr
+    private function processBoolTypeToNotBool(Node $node, Expr $leftExpr, Expr $rightExpr) : ?Expr
     {
-        if ($node instanceof \PhpParser\Node\Expr\BinaryOp\Identical) {
+        if ($node instanceof Identical) {
             return $this->refactorIdentical($leftExpr, $rightExpr);
         }
-        if ($node instanceof \PhpParser\Node\Expr\BinaryOp\NotIdentical) {
+        if ($node instanceof NotIdentical) {
             return $this->refactorNotIdentical($leftExpr, $rightExpr);
         }
         return null;
     }
-    private function refactorIdentical(\PhpParser\Node\Expr $leftExpr, \PhpParser\Node\Expr $rightExpr) : ?\PhpParser\Node\Expr
+    private function refactorIdentical(Expr $leftExpr, Expr $rightExpr) : ?Expr
     {
         if ($this->valueResolver->isTrue($rightExpr)) {
             return $leftExpr;
         }
         if ($this->valueResolver->isFalse($rightExpr)) {
             // prevent !!
-            if ($leftExpr instanceof \PhpParser\Node\Expr\BooleanNot) {
+            if ($leftExpr instanceof BooleanNot) {
                 return $leftExpr->expr;
             }
-            return new \PhpParser\Node\Expr\BooleanNot($leftExpr);
+            return new BooleanNot($leftExpr);
         }
         return null;
     }
-    private function refactorNotIdentical(\PhpParser\Node\Expr $leftExpr, \PhpParser\Node\Expr $rightExpr) : ?\PhpParser\Node\Expr
+    private function refactorNotIdentical(Expr $leftExpr, Expr $rightExpr) : ?Expr
     {
         if ($this->valueResolver->isFalse($rightExpr)) {
             return $leftExpr;
         }
         if ($this->valueResolver->isTrue($rightExpr)) {
-            return new \PhpParser\Node\Expr\BooleanNot($leftExpr);
+            return new BooleanNot($leftExpr);
         }
         return null;
     }

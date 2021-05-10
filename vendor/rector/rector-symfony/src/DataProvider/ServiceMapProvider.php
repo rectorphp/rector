@@ -23,12 +23,12 @@ final class ServiceMapProvider
      * @var ServiceMapFactory
      */
     private $serviceMapFactory;
-    public function __construct(\RectorPrefix20210510\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \Rector\Symfony\ValueObjectFactory\ServiceMapFactory $serviceMapFactory)
+    public function __construct(ParameterProvider $parameterProvider, ServiceMapFactory $serviceMapFactory)
     {
         $this->parameterProvider = $parameterProvider;
         $this->serviceMapFactory = $serviceMapFactory;
     }
-    public function provide() : \Rector\Symfony\ValueObject\ServiceMap\ServiceMap
+    public function provide() : ServiceMap
     {
         $symfonyContainerXmlPath = (string) $this->parameterProvider->provideParameter(self::SYMFONY_CONTAINER_XML_PATH_PARAMETER);
         if ($symfonyContainerXmlPath === '') {

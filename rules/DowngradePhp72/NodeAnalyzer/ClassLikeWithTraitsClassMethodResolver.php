@@ -17,7 +17,7 @@ final class ClassLikeWithTraitsClassMethodResolver
      * @var NodeRepository
      */
     private $nodeRepository;
-    public function __construct(\Rector\NodeCollector\NodeCollector\NodeRepository $nodeRepository)
+    public function __construct(NodeRepository $nodeRepository)
     {
         $this->nodeRepository = $nodeRepository;
     }
@@ -25,20 +25,20 @@ final class ClassLikeWithTraitsClassMethodResolver
      * @param Class_|Interface_ $classLike
      * @return ClassMethod[]
      */
-    public function resolve(\PhpParser\Node\Stmt\ClassLike $classLike) : array
+    public function resolve(ClassLike $classLike) : array
     {
-        $scope = $classLike->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
-        if (!$scope instanceof \PHPStan\Analyser\Scope) {
+        $scope = $classLike->getAttribute(AttributeKey::SCOPE);
+        if (!$scope instanceof Scope) {
             return [];
         }
         $classReflection = $scope->getClassReflection();
-        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
+        if (!$classReflection instanceof ClassReflection) {
             return [];
         }
         $classMethods = [];
         foreach ($classReflection->getAncestors() as $ancestorClassReflection) {
             $ancestorClassLike = $this->nodeRepository->findClassLike($ancestorClassReflection->getName());
-            if (!$ancestorClassLike instanceof \PhpParser\Node\Stmt\ClassLike) {
+            if (!$ancestorClassLike instanceof ClassLike) {
                 continue;
             }
             $classMethods = \array_merge($classMethods, $ancestorClassLike->getMethods());

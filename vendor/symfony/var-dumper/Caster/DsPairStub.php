@@ -14,10 +14,10 @@ use RectorPrefix20210510\Symfony\Component\VarDumper\Cloner\Stub;
 /**
  * @author Nicolas Grekas <p@tchwork.com>
  */
-class DsPairStub extends \RectorPrefix20210510\Symfony\Component\VarDumper\Cloner\Stub
+class DsPairStub extends Stub
 {
     public function __construct($key, $value)
     {
-        $this->value = [\RectorPrefix20210510\Symfony\Component\VarDumper\Caster\Caster::PREFIX_VIRTUAL . 'key' => $key, \RectorPrefix20210510\Symfony\Component\VarDumper\Caster\Caster::PREFIX_VIRTUAL . 'value' => $value];
+        $this->value = [Caster::PREFIX_VIRTUAL . 'key' => $key, Caster::PREFIX_VIRTUAL . 'value' => $value];
     }
 }

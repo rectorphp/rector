@@ -17,7 +17,7 @@ class Interval
     private $start;
     /** @var Constraint */
     private $end;
-    public function __construct(\RectorPrefix20210510\Composer\Semver\Constraint\Constraint $start, \RectorPrefix20210510\Composer\Semver\Constraint\Constraint $end)
+    public function __construct(Constraint $start, Constraint $end)
     {
         $this->start = $start;
         $this->end = $end;
@@ -43,7 +43,7 @@ class Interval
     {
         static $zero;
         if (null === $zero) {
-            $zero = new \RectorPrefix20210510\Composer\Semver\Constraint\Constraint('>=', '0.0.0.0-dev');
+            $zero = new Constraint('>=', '0.0.0.0-dev');
         }
         return $zero;
     }
@@ -54,7 +54,7 @@ class Interval
     {
         static $positiveInfinity;
         if (null === $positiveInfinity) {
-            $positiveInfinity = new \RectorPrefix20210510\Composer\Semver\Constraint\Constraint('<', \PHP_INT_MAX . '.0.0.0');
+            $positiveInfinity = new Constraint('<', \PHP_INT_MAX . '.0.0.0');
         }
         return $positiveInfinity;
     }

@@ -15,7 +15,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\Php71\Rector\BooleanOr\IsIterableRector\IsIterableRectorTest
  */
-final class IsIterableRector extends \Rector\Core\Rector\AbstractRector
+final class IsIterableRector extends AbstractRector
 {
     /**
      * @var IsArrayAndDualCheckToAble
@@ -25,26 +25,26 @@ final class IsIterableRector extends \Rector\Core\Rector\AbstractRector
      * @var ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(\Rector\Php71\IsArrayAndDualCheckToAble $isArrayAndDualCheckToAble, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
+    public function __construct(IsArrayAndDualCheckToAble $isArrayAndDualCheckToAble, ReflectionProvider $reflectionProvider)
     {
         $this->isArrayAndDualCheckToAble = $isArrayAndDualCheckToAble;
         $this->reflectionProvider = $reflectionProvider;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Changes is_array + Traversable check to is_iterable', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample('is_array($foo) || $foo instanceof Traversable;', 'is_iterable($foo);')]);
+        return new RuleDefinition('Changes is_array + Traversable check to is_iterable', [new CodeSample('is_array($foo) || $foo instanceof Traversable;', 'is_iterable($foo);')]);
     }
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\BinaryOp\BooleanOr::class];
+        return [BooleanOr::class];
     }
     /**
      * @param BooleanOr $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if ($this->shouldSkip()) {
             return null;
@@ -53,9 +53,9 @@ final class IsIterableRector extends \Rector\Core\Rector\AbstractRector
     }
     private function shouldSkip() : bool
     {
-        if ($this->reflectionProvider->hasFunction(new \PhpParser\Node\Name('is_iterable'), null)) {
+        if ($this->reflectionProvider->hasFunction(new Name('is_iterable'), null)) {
             return \false;
         }
-        return !$this->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::IS_ITERABLE);
+        return !$this->isAtLeastPhpVersion(PhpVersionFeature::IS_ITERABLE);
     }
 }

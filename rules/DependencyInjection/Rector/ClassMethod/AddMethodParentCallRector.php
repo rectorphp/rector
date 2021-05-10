@@ -18,7 +18,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\DependencyInjection\Rector\ClassMethod\AddMethodParentCallRector\AddMethodParentCallRectorTest
  */
-final class AddMethodParentCallRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
+final class AddMethodParentCallRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
      * @var string
@@ -28,9 +28,9 @@ final class AddMethodParentCallRector extends \Rector\Core\Rector\AbstractRector
      * @var array<string, string>
      */
     private $methodByParentTypes = [];
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Add method parent call, in case new parent method is added', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add method parent call, in case new parent method is added', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 class SunshineCommand extends ParentClassWithNewConstructor
 {
     public function __construct()
@@ -50,28 +50,28 @@ class SunshineCommand extends ParentClassWithNewConstructor
     }
 }
 CODE_SAMPLE
-, [self::METHODS_BY_PARENT_TYPES => ['ParentClassWithNewConstructor' => \Rector\Core\ValueObject\MethodName::CONSTRUCT]])]);
+, [self::METHODS_BY_PARENT_TYPES => ['ParentClassWithNewConstructor' => MethodName::CONSTRUCT]])]);
     }
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\ClassMethod::class];
+        return [ClassMethod::class];
     }
     /**
      * @param ClassMethod $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        $classLike = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
-        if (!$classLike instanceof \PhpParser\Node\Stmt\ClassLike) {
+        $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
+        if (!$classLike instanceof ClassLike) {
             return null;
         }
         /** @var string $className */
-        $className = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);
+        $className = $node->getAttribute(AttributeKey::CLASS_NAME);
         foreach ($this->methodByParentTypes as $type => $method) {
-            if (!$this->isObjectType($classLike, new \PHPStan\Type\ObjectType($type))) {
+            if (!$this->isObjectType($classLike, new ObjectType($type))) {
                 continue;
             }
             // not itself
@@ -93,25 +93,25 @@ CODE_SAMPLE
     {
         $this->methodByParentTypes = $configuration[self::METHODS_BY_PARENT_TYPES] ?? [];
     }
-    private function shouldSkipMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod, string $method) : bool
+    private function shouldSkipMethod(ClassMethod $classMethod, string $method) : bool
     {
         if (!$this->isName($classMethod, $method)) {
             return \true;
         }
         return $this->hasParentCallOfMethod($classMethod, $method);
     }
-    private function createParentStaticCall(string $method) : \PhpParser\Node\Stmt\Expression
+    private function createParentStaticCall(string $method) : Expression
     {
         $staticCall = $this->nodeFactory->createStaticCall('parent', $method);
-        return new \PhpParser\Node\Stmt\Expression($staticCall);
+        return new Expression($staticCall);
     }
     /**
      * Looks for "parent::<methodName>
      */
-    private function hasParentCallOfMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod, string $method) : bool
+    private function hasParentCallOfMethod(ClassMethod $classMethod, string $method) : bool
     {
-        return (bool) $this->betterNodeFinder->findFirst((array) $classMethod->stmts, function (\PhpParser\Node $node) use($method) : bool {
-            if (!$node instanceof \PhpParser\Node\Expr\StaticCall) {
+        return (bool) $this->betterNodeFinder->findFirst((array) $classMethod->stmts, function (Node $node) use($method) : bool {
+            if (!$node instanceof StaticCall) {
                 return \false;
             }
             if (!$this->isName($node->class, 'parent')) {

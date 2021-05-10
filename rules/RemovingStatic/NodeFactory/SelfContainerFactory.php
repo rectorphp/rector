@@ -17,19 +17,19 @@ final class SelfContainerFactory
      * @var StaticTypeMapper
      */
     private $staticTypeMapper;
-    public function __construct(\Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper)
+    public function __construct(StaticTypeMapper $staticTypeMapper)
     {
         $this->staticTypeMapper = $staticTypeMapper;
     }
-    public function createGetTypeMethodCall(\PHPStan\Type\ObjectType $objectType) : \PhpParser\Node\Expr\MethodCall
+    public function createGetTypeMethodCall(ObjectType $objectType) : MethodCall
     {
-        $staticPropertyFetch = new \PhpParser\Node\Expr\StaticPropertyFetch(new \PhpParser\Node\Name('self'), 'container');
-        $getMethodCall = new \PhpParser\Node\Expr\MethodCall($staticPropertyFetch, 'get');
+        $staticPropertyFetch = new StaticPropertyFetch(new Name('self'), 'container');
+        $getMethodCall = new MethodCall($staticPropertyFetch, 'get');
         $className = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($objectType);
-        if (!$className instanceof \PhpParser\Node\Name) {
-            throw new \Rector\Core\Exception\ShouldNotHappenException();
+        if (!$className instanceof Name) {
+            throw new ShouldNotHappenException();
         }
-        $getMethodCall->args[] = new \PhpParser\Node\Arg(new \PhpParser\Node\Expr\ClassConstFetch($className, 'class'));
+        $getMethodCall->args[] = new Arg(new ClassConstFetch($className, 'class'));
         return $getMethodCall;
     }
 }

@@ -6,7 +6,7 @@ namespace Rector\Composer\Contract\Rector;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Contract\Rector\RectorInterface;
 use RectorPrefix20210510\Symplify\ComposerJsonManipulator\ValueObject\ComposerJson;
-interface ComposerRectorInterface extends \Rector\Core\Contract\Rector\RectorInterface, \Rector\Core\Contract\Rector\ConfigurableRectorInterface
+interface ComposerRectorInterface extends RectorInterface, ConfigurableRectorInterface
 {
-    public function refactor(\RectorPrefix20210510\Symplify\ComposerJsonManipulator\ValueObject\ComposerJson $composerJson) : void;
+    public function refactor(ComposerJson $composerJson) : void;
 }

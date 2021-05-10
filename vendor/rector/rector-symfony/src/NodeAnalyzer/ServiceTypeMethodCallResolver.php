@@ -22,25 +22,25 @@ final class ServiceTypeMethodCallResolver
      * @var NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(\Rector\Symfony\DataProvider\ServiceMapProvider $serviceMapProvider, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
+    public function __construct(ServiceMapProvider $serviceMapProvider, NodeNameResolver $nodeNameResolver)
     {
         $this->serviceMapProvider = $serviceMapProvider;
         $this->nodeNameResolver = $nodeNameResolver;
     }
-    public function resolve(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\PHPStan\Type\Type
+    public function resolve(MethodCall $methodCall) : ?Type
     {
         if (!isset($methodCall->args[0])) {
-            return new \PHPStan\Type\MixedType();
+            return new MixedType();
         }
         $argument = $methodCall->args[0]->value;
         $serviceMap = $this->serviceMapProvider->provide();
-        if ($argument instanceof \PhpParser\Node\Scalar\String_) {
+        if ($argument instanceof String_) {
             return $serviceMap->getServiceType($argument->value);
         }
-        if ($argument instanceof \PhpParser\Node\Expr\ClassConstFetch && $argument->class instanceof \PhpParser\Node\Name) {
+        if ($argument instanceof ClassConstFetch && $argument->class instanceof Name) {
             $className = $this->nodeNameResolver->getName($argument->class);
-            return new \PHPStan\Type\ObjectType($className);
+            return new ObjectType($className);
         }
-        return new \PHPStan\Type\MixedType();
+        return new MixedType();
     }
 }

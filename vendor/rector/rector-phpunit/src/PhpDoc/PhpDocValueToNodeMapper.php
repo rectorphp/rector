@@ -19,14 +19,14 @@ final class PhpDocValueToNodeMapper
      * @var ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(\Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
+    public function __construct(NodeFactory $nodeFactory, ReflectionProvider $reflectionProvider)
     {
         $this->nodeFactory = $nodeFactory;
         $this->reflectionProvider = $reflectionProvider;
     }
-    public function mapGenericTagValueNode(\PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode $genericTagValueNode) : \PhpParser\Node\Expr
+    public function mapGenericTagValueNode(GenericTagValueNode $genericTagValueNode) : Expr
     {
-        if (\RectorPrefix20210510\Nette\Utils\Strings::contains($genericTagValueNode->value, '::')) {
+        if (Strings::contains($genericTagValueNode->value, '::')) {
             [$class, $constant] = \explode('::', $genericTagValueNode->value);
             return $this->nodeFactory->createShortClassConstFetch($class, $constant);
         }
@@ -34,6 +34,6 @@ final class PhpDocValueToNodeMapper
         if ($this->reflectionProvider->hasClass($reference)) {
             return $this->nodeFactory->createClassConstReference($reference);
         }
-        return new \PhpParser\Node\Scalar\String_($reference);
+        return new String_($reference);
     }
 }

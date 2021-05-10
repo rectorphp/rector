@@ -16,12 +16,12 @@ final class BoolPropertyRenamer
      * @var PropertyRenamer
      */
     private $propertyRenamer;
-    public function __construct(\Rector\Naming\Guard\PropertyConflictingNameGuard\BoolPropertyConflictingNameGuard $boolPropertyConflictingNameGuard, \Rector\Naming\PropertyRenamer\PropertyRenamer $propertyRenamer)
+    public function __construct(BoolPropertyConflictingNameGuard $boolPropertyConflictingNameGuard, \Rector\Naming\PropertyRenamer\PropertyRenamer $propertyRenamer)
     {
         $this->boolPropertyConflictingNameGuard = $boolPropertyConflictingNameGuard;
         $this->propertyRenamer = $propertyRenamer;
     }
-    public function rename(\Rector\Naming\ValueObject\PropertyRename $propertyRename) : ?\PhpParser\Node\Stmt\Property
+    public function rename(PropertyRename $propertyRename) : ?Property
     {
         if ($this->boolPropertyConflictingNameGuard->isConflicting($propertyRename)) {
             return null;

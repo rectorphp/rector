@@ -9,7 +9,7 @@ use Exception;
 use InvalidArgumentException;
 use IteratorAggregate;
 use OutOfBoundsException;
-class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
+class Stringy implements Countable, IteratorAggregate, ArrayAccess
 {
     /**
      * An instance's string.
@@ -39,9 +39,9 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
     public function __construct($str = '', $encoding = null)
     {
         if (\is_array($str)) {
-            throw new \InvalidArgumentException('Passed value cannot be an array');
+            throw new InvalidArgumentException('Passed value cannot be an array');
         } elseif (\is_object($str) && !\method_exists($str, '__toString')) {
-            throw new \InvalidArgumentException('Passed object must have a __toString method');
+            throw new InvalidArgumentException('Passed object must have a __toString method');
         }
         $this->str = (string) $str;
         $this->encoding = $encoding ?: \mb_internal_encoding();
@@ -384,7 +384,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
      */
     public function getIterator()
     {
-        return new \ArrayIterator($this->chars());
+        return new ArrayIterator($this->chars());
     }
     /**
      * Returns true if the string contains a lower case char, false
@@ -747,7 +747,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
         $offset = (int) $offset;
         $length = $this->length();
         if ($offset >= 0 && $length <= $offset || $length < \abs($offset)) {
-            throw new \OutOfBoundsException('No character exists at the index');
+            throw new OutOfBoundsException('No character exists at the index');
         }
         return \mb_substr($this->str, $offset, 1, $this->encoding);
     }
@@ -762,7 +762,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
     public function offsetSet($offset, $value)
     {
         // Stringy is immutable, cannot directly set char
-        throw new \Exception('Stringy object is immutable, cannot modify char');
+        throw new Exception('Stringy object is immutable, cannot modify char');
     }
     /**
      * Implements part of the ArrayAccess interface, but throws an exception
@@ -774,7 +774,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
     public function offsetUnset($offset)
     {
         // Don't allow directly modifying the string
-        throw new \Exception('Stringy object is immutable, cannot unset char');
+        throw new Exception('Stringy object is immutable, cannot unset char');
     }
     /**
      * Pads the string to a given length with $padStr. If length is less than
@@ -793,7 +793,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
     public function pad($length, $padStr = ' ', $padType = 'right')
     {
         if (!\in_array($padType, ['left', 'right', 'both'])) {
-            throw new \InvalidArgumentException('Pad expects $padType ' . "to be one of 'left', 'right' or 'both'");
+            throw new InvalidArgumentException('Pad expects $padType ' . "to be one of 'left', 'right' or 'both'");
         }
         switch ($padType) {
             case 'left':
@@ -1199,7 +1199,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
             if ($ignore && \in_array($match[0], $ignore)) {
                 return $match[0];
             }
-            $stringy = new \RectorPrefix20210510\Stringy\Stringy($match[0], $encoding);
+            $stringy = new Stringy($match[0], $encoding);
             return (string) $stringy->toLowerCase()->upperCaseFirst();
         }, $stringy->str);
         return $stringy;

@@ -17,11 +17,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\Privatization\Rector\MethodCall\PrivatizeLocalGetterToPropertyRector\PrivatizeLocalGetterToPropertyRectorTest
  */
-final class PrivatizeLocalGetterToPropertyRector extends \Rector\Core\Rector\AbstractRector
+final class PrivatizeLocalGetterToPropertyRector extends AbstractRector
 {
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Privatize getter of local property to property', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Privatize getter of local property to property', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     private $some;
@@ -60,21 +60,21 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\MethodCall::class];
+        return [MethodCall::class];
     }
     /**
      * @param MethodCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        if (!$node->var instanceof \PhpParser\Node\Expr\Variable) {
+        if (!$node->var instanceof Variable) {
             return null;
         }
         if (!$this->nodeNameResolver->isName($node->var, 'this')) {
             return null;
         }
-        $classLike = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
-        if (!$classLike instanceof \PhpParser\Node\Stmt\Class_) {
+        $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
+        if (!$classLike instanceof Class_) {
             return null;
         }
         $methodName = $this->getName($node->name);
@@ -82,23 +82,23 @@ CODE_SAMPLE
             return null;
         }
         $classMethod = $classLike->getMethod($methodName);
-        if (!$classMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
+        if (!$classMethod instanceof ClassMethod) {
             return null;
         }
         return $this->matchLocalPropertyFetchInGetterMethod($classMethod);
     }
-    private function matchLocalPropertyFetchInGetterMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod) : ?\PhpParser\Node\Expr\PropertyFetch
+    private function matchLocalPropertyFetchInGetterMethod(ClassMethod $classMethod) : ?PropertyFetch
     {
         $stmts = (array) $classMethod->stmts;
         if (\count($stmts) !== 1) {
             return null;
         }
         $onlyStmt = $stmts[0] ?? null;
-        if (!$onlyStmt instanceof \PhpParser\Node\Stmt\Return_) {
+        if (!$onlyStmt instanceof Return_) {
             return null;
         }
         $returnedExpr = $onlyStmt->expr;
-        if (!$returnedExpr instanceof \PhpParser\Node\Expr\PropertyFetch) {
+        if (!$returnedExpr instanceof PropertyFetch) {
             return null;
         }
         return $returnedExpr;

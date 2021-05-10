@@ -21,13 +21,13 @@ final class FluentMethodCalls
     /**
      * @param MethodCall[] $fluentMethodCalls
      */
-    public function __construct(\PhpParser\Node\Expr\MethodCall $rootMethodCall, array $fluentMethodCalls, \PhpParser\Node\Expr\MethodCall $lastMethodCall)
+    public function __construct(MethodCall $rootMethodCall, array $fluentMethodCalls, MethodCall $lastMethodCall)
     {
         $this->rootMethodCall = $rootMethodCall;
         $this->fluentMethodCalls = $fluentMethodCalls;
         $this->lastMethodCall = $lastMethodCall;
     }
-    public function getRootMethodCall() : \PhpParser\Node\Expr\MethodCall
+    public function getRootMethodCall() : MethodCall
     {
         return $this->rootMethodCall;
     }
@@ -38,7 +38,7 @@ final class FluentMethodCalls
     {
         return $this->fluentMethodCalls;
     }
-    public function getLastMethodCall() : \PhpParser\Node\Expr\MethodCall
+    public function getLastMethodCall() : MethodCall
     {
         return $this->lastMethodCall;
     }

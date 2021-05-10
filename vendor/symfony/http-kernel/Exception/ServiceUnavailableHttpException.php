@@ -13,7 +13,7 @@ namespace RectorPrefix20210510\Symfony\Component\HttpKernel\Exception;
 /**
  * @author Ben Ramsey <ben@benramsey.com>
  */
-class ServiceUnavailableHttpException extends \RectorPrefix20210510\Symfony\Component\HttpKernel\Exception\HttpException
+class ServiceUnavailableHttpException extends HttpException
 {
     /**
      * @param int|string|null $retryAfter The number of seconds or HTTP-date after which the request may be retried

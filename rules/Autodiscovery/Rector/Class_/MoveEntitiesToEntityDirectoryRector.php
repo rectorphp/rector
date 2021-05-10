@@ -17,7 +17,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Autodiscovery\Rector\Class_\MoveEntitiesToEntityDirectoryRector\MoveEntitiesToEntityDirectoryRectorTest
  */
-final class MoveEntitiesToEntityDirectoryRector extends \Rector\Core\Rector\AbstractRector
+final class MoveEntitiesToEntityDirectoryRector extends AbstractRector
 {
     /**
      * @var string
@@ -32,14 +32,14 @@ final class MoveEntitiesToEntityDirectoryRector extends \Rector\Core\Rector\Abst
      * @var AddedFileWithNodesFactory
      */
     private $addedFileWithNodesFactory;
-    public function __construct(\Rector\Doctrine\PhpDocParser\DoctrineDocBlockResolver $doctrineDocBlockResolver, \Rector\FileSystemRector\ValueObjectFactory\AddedFileWithNodesFactory $addedFileWithNodesFactory)
+    public function __construct(DoctrineDocBlockResolver $doctrineDocBlockResolver, AddedFileWithNodesFactory $addedFileWithNodesFactory)
     {
         $this->doctrineDocBlockResolver = $doctrineDocBlockResolver;
         $this->addedFileWithNodesFactory = $addedFileWithNodesFactory;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Move entities to Entity namespace', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Move entities to Entity namespace', [new CodeSample(<<<'CODE_SAMPLE'
 // file: app/Controller/Product.php
 
 namespace App\Controller;
@@ -74,23 +74,23 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Class_::class];
+        return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if (!$this->doctrineDocBlockResolver->isDoctrineEntityClass($node)) {
             return null;
         }
         // is entity in expected directory?
         $smartFileInfo = $this->file->getSmartFileInfo();
-        if (\RectorPrefix20210510\Nette\Utils\Strings::match($smartFileInfo->getRealPath(), self::ENTITY_PATH_REGEX)) {
+        if (Strings::match($smartFileInfo->getRealPath(), self::ENTITY_PATH_REGEX)) {
             return null;
         }
         $addedFileWithNodes = $this->addedFileWithNodesFactory->createWithDesiredGroup($smartFileInfo, $this->file, 'Entity');
-        if (!$addedFileWithNodes instanceof \Rector\FileSystemRector\ValueObject\AddedFileWithNodes) {
+        if (!$addedFileWithNodes instanceof AddedFileWithNodes) {
             return null;
         }
         $this->removedAndAddedFilesCollector->removeFile($smartFileInfo);

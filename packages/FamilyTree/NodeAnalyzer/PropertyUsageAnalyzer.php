@@ -32,26 +32,26 @@ final class PropertyUsageAnalyzer
      * @var NodeRepository
      */
     private $nodeRepository;
-    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer $familyRelationsAnalyzer, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeCollector\NodeCollector\NodeRepository $nodeRepository)
+    public function __construct(BetterNodeFinder $betterNodeFinder, FamilyRelationsAnalyzer $familyRelationsAnalyzer, NodeNameResolver $nodeNameResolver, NodeRepository $nodeRepository)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->familyRelationsAnalyzer = $familyRelationsAnalyzer;
         $this->nodeRepository = $nodeRepository;
     }
-    public function isPropertyFetchedInChildClass(\PhpParser\Node\Stmt\Property $property) : bool
+    public function isPropertyFetchedInChildClass(Property $property) : bool
     {
-        $className = $property->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);
+        $className = $property->getAttribute(AttributeKey::CLASS_NAME);
         if ($className === null) {
             return \false;
         }
-        $scope = $property->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
-        if (!$scope instanceof \PHPStan\Analyser\Scope) {
+        $scope = $property->getAttribute(AttributeKey::SCOPE);
+        if (!$scope instanceof Scope) {
             return \false;
         }
         $classReflection = $scope->getClassReflection();
-        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
-            throw new \Rector\Core\Exception\ShouldNotHappenException();
+        if (!$classReflection instanceof ClassReflection) {
+            throw new ShouldNotHappenException();
         }
         if ($classReflection->isClass() && $classReflection->isFinal()) {
             return \false;
@@ -60,10 +60,10 @@ final class PropertyUsageAnalyzer
         $childrenClassReflections = $this->familyRelationsAnalyzer->getChildrenOfClassReflection($classReflection);
         foreach ($childrenClassReflections as $childClassReflection) {
             $childClass = $this->nodeRepository->findClass($childClassReflection->getName());
-            if (!$childClass instanceof \PhpParser\Node\Stmt\Class_) {
+            if (!$childClass instanceof Class_) {
                 continue;
             }
-            $isPropertyFetched = (bool) $this->betterNodeFinder->findFirst($childClass->stmts, function (\PhpParser\Node $node) use($propertyName) : bool {
+            $isPropertyFetched = (bool) $this->betterNodeFinder->findFirst($childClass->stmts, function (Node $node) use($propertyName) : bool {
                 return $this->nodeNameResolver->isLocalPropertyFetchNamed($node, $propertyName);
             });
             if ($isPropertyFetched) {

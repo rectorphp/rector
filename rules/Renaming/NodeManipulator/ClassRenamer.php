@@ -77,7 +77,7 @@ final class ClassRenamer
      * @var ParameterProvider
      */
     private $parameterProvider;
-    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \RectorPrefix20210510\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\CodingStyle\Naming\ClassNaming $classNaming, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocClassRenamer $phpDocClassRenamer, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockClassRenamer $docBlockClassRenamer, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\NodeRemoval\NodeRemover $nodeRemover, \RectorPrefix20210510\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider)
+    public function __construct(BetterNodeFinder $betterNodeFinder, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, ClassNaming $classNaming, NodeNameResolver $nodeNameResolver, PhpDocClassRenamer $phpDocClassRenamer, PhpDocInfoFactory $phpDocInfoFactory, DocBlockClassRenamer $docBlockClassRenamer, ReflectionProvider $reflectionProvider, NodeRemover $nodeRemover, ParameterProvider $parameterProvider)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
@@ -93,20 +93,20 @@ final class ClassRenamer
     /**
      * @param array<string, string> $oldToNewClasses
      */
-    public function renameNode(\PhpParser\Node $node, array $oldToNewClasses) : ?\PhpParser\Node
+    public function renameNode(Node $node, array $oldToNewClasses) : ?Node
     {
         $oldToNewTypes = [];
         foreach ($oldToNewClasses as $oldClass => $newClass) {
-            $oldToNewTypes[] = new \Rector\NodeTypeResolver\ValueObject\OldToNewType(new \PHPStan\Type\ObjectType($oldClass), new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType($newClass));
+            $oldToNewTypes[] = new OldToNewType(new ObjectType($oldClass), new FullyQualifiedObjectType($newClass));
         }
         $this->refactorPhpDoc($node, $oldToNewTypes, $oldToNewClasses);
-        if ($node instanceof \PhpParser\Node\Name) {
+        if ($node instanceof Name) {
             return $this->refactorName($node, $oldToNewClasses);
         }
-        if ($node instanceof \PhpParser\Node\Stmt\Namespace_) {
+        if ($node instanceof Namespace_) {
             return $this->refactorNamespace($node, $oldToNewClasses);
         }
-        if ($node instanceof \PhpParser\Node\Stmt\ClassLike) {
+        if ($node instanceof ClassLike) {
             return $this->refactorClassLike($node, $oldToNewClasses);
         }
         return null;
@@ -115,10 +115,10 @@ final class ClassRenamer
      * @param OldToNewType[] $oldToNewTypes
      * @param array<string, string> $oldToNewClasses
      */
-    private function refactorPhpDoc(\PhpParser\Node $node, array $oldToNewTypes, array $oldToNewClasses) : void
+    private function refactorPhpDoc(Node $node, array $oldToNewTypes, array $oldToNewClasses) : void
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
-        if (!$phpDocInfo->hasByTypes(\Rector\BetterPhpDocParser\ValueObject\NodeTypes::TYPE_AWARE_NODES) && !$phpDocInfo->hasByAnnotationClasses(\Rector\BetterPhpDocParser\ValueObject\NodeTypes::TYPE_AWARE_DOCTRINE_ANNOTATION_CLASSES)) {
+        if (!$phpDocInfo->hasByTypes(NodeTypes::TYPE_AWARE_NODES) && !$phpDocInfo->hasByAnnotationClasses(NodeTypes::TYPE_AWARE_DOCTRINE_ANNOTATION_CLASSES)) {
             return;
         }
         $this->docBlockClassRenamer->renamePhpDocType($phpDocInfo, $oldToNewTypes);
@@ -127,7 +127,7 @@ final class ClassRenamer
     /**
      * @param array<string, string> $oldToNewClasses
      */
-    private function refactorName(\PhpParser\Node\Name $name, array $oldToNewClasses) : ?\PhpParser\Node\Name
+    private function refactorName(Name $name, array $oldToNewClasses) : ?Name
     {
         $stringName = $this->nodeNameResolver->getName($name);
         $newName = $oldToNewClasses[$stringName] ?? null;
@@ -137,36 +137,36 @@ final class ClassRenamer
         if (!$this->isClassToInterfaceValidChange($name, $newName)) {
             return null;
         }
-        $parentNode = $name->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        $parentNode = $name->getAttribute(AttributeKey::PARENT_NODE);
         // no need to preslash "use \SomeNamespace" of imported namespace
-        if ($parentNode instanceof \PhpParser\Node\Stmt\UseUse && ($parentNode->type === \PhpParser\Node\Stmt\Use_::TYPE_NORMAL || $parentNode->type === \PhpParser\Node\Stmt\Use_::TYPE_UNKNOWN)) {
+        if ($parentNode instanceof UseUse && ($parentNode->type === Use_::TYPE_NORMAL || $parentNode->type === Use_::TYPE_UNKNOWN)) {
             // no need to rename imports, they will be handled by autoimport and coding standard
             // also they might cause some rename
             return null;
         }
         $last = $name->getLast();
-        $newFullyQualified = new \PhpParser\Node\Name\FullyQualified($newName);
+        $newFullyQualified = new FullyQualified($newName);
         $newNameLastName = $newFullyQualified->getLast();
-        $importNames = $this->parameterProvider->provideBoolParameter(\Rector\Core\Configuration\Option::AUTO_IMPORT_NAMES);
+        $importNames = $this->parameterProvider->provideBoolParameter(Option::AUTO_IMPORT_NAMES);
         if ($this->shouldRemoveUseName($last, $newNameLastName, $importNames)) {
             $this->removeUseName($name);
         }
-        return new \PhpParser\Node\Name\FullyQualified($newName);
+        return new FullyQualified($newName);
     }
-    private function removeUseName(\PhpParser\Node\Name $oldName) : void
+    private function removeUseName(Name $oldName) : void
     {
-        $uses = $this->betterNodeFinder->findFirstPreviousOfNode($oldName, function (\PhpParser\Node $node) use($oldName) : bool {
-            return $node instanceof \PhpParser\Node\Stmt\UseUse && $this->nodeNameResolver->areNamesEqual($node, $oldName);
+        $uses = $this->betterNodeFinder->findFirstPreviousOfNode($oldName, function (Node $node) use($oldName) : bool {
+            return $node instanceof UseUse && $this->nodeNameResolver->areNamesEqual($node, $oldName);
         });
-        if (!$uses instanceof \PhpParser\Node\Stmt\UseUse) {
+        if (!$uses instanceof UseUse) {
             return;
         }
         if ($uses->alias !== null) {
             return;
         }
         // ios the only one? Remove whole use instead to avoid "use ;" constructions
-        $parentUse = $uses->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-        if ($parentUse instanceof \PhpParser\Node\Stmt\Use_ && \count($parentUse->uses) === 1) {
+        $parentUse = $uses->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parentUse instanceof Use_ && \count($parentUse->uses) === 1) {
             $this->nodeRemover->removeNode($parentUse);
         } else {
             $this->nodeRemover->removeNode($uses);
@@ -175,14 +175,14 @@ final class ClassRenamer
     /**
      * @param array<string, string> $oldToNewClasses
      */
-    private function refactorNamespace(\PhpParser\Node\Stmt\Namespace_ $namespace, array $oldToNewClasses) : ?\PhpParser\Node
+    private function refactorNamespace(Namespace_ $namespace, array $oldToNewClasses) : ?Node
     {
         $name = $this->nodeNameResolver->getName($namespace);
         if ($name === null) {
             return null;
         }
         $classLike = $this->getClassOfNamespaceToRefactor($namespace, $oldToNewClasses);
-        if (!$classLike instanceof \PhpParser\Node\Stmt\ClassLike) {
+        if (!$classLike instanceof ClassLike) {
             return null;
         }
         $currentName = $this->nodeNameResolver->getName($classLike);
@@ -193,16 +193,16 @@ final class ClassRenamer
         $newNamespace = $this->classNaming->getNamespace($newClassFullyQualified);
         // Renaming to class without namespace (example MyNamespace\DateTime -> DateTimeImmutable)
         if (!$newNamespace) {
-            $classLike->name = new \PhpParser\Node\Identifier($newClassFullyQualified);
+            $classLike->name = new Identifier($newClassFullyQualified);
             return $classLike;
         }
-        $namespace->name = new \PhpParser\Node\Name($newNamespace);
+        $namespace->name = new Name($newNamespace);
         return $namespace;
     }
     /**
      * @param array<string, string> $oldToNewClasses
      */
-    private function refactorClassLike(\PhpParser\Node\Stmt\ClassLike $classLike, array $oldToNewClasses) : ?\PhpParser\Node
+    private function refactorClassLike(ClassLike $classLike, array $oldToNewClasses) : ?Node
     {
         // rename interfaces
         $this->renameClassImplements($classLike, $oldToNewClasses);
@@ -225,13 +225,13 @@ final class ClassRenamer
         if ($this->isClassAboutToBeDuplicated($newName)) {
             return null;
         }
-        $classLike->name = new \PhpParser\Node\Identifier($newClassNamePart);
+        $classLike->name = new Identifier($newClassNamePart);
         $classNamingGetNamespace = $this->classNaming->getNamespace($name);
         // Old class did not have any namespace, we need to wrap class with Namespace_ node
         if ($newNamespacePart && !$classNamingGetNamespace) {
             $this->changeNameToFullyQualifiedName($classLike);
-            $nameNode = new \PhpParser\Node\Name($newNamespacePart);
-            return new \PhpParser\Node\Stmt\Namespace_($nameNode, [$classLike]);
+            $nameNode = new Name($newNamespacePart);
+            return new Namespace_($nameNode, [$classLike]);
         }
         return $classLike;
     }
@@ -247,22 +247,22 @@ final class ClassRenamer
      * - implements SomeInterface
      * - implements SomeClass
      */
-    private function isClassToInterfaceValidChange(\PhpParser\Node\Name $name, string $newClassName) : bool
+    private function isClassToInterfaceValidChange(Name $name, string $newClassName) : bool
     {
         if (!$this->reflectionProvider->hasClass($newClassName)) {
             return \true;
         }
         $classReflection = $this->reflectionProvider->getClass($newClassName);
         // ensure new is not with interface
-        $parentNode = $name->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-        if ($parentNode instanceof \PhpParser\Node\Expr\New_ && $classReflection->isInterface()) {
+        $parentNode = $name->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parentNode instanceof New_ && $classReflection->isInterface()) {
             return \false;
         }
-        if ($parentNode instanceof \PhpParser\Node\Stmt\Class_) {
+        if ($parentNode instanceof Class_) {
             return $this->isValidClassNameChange($name, $parentNode, $classReflection);
         }
         // prevent to change to import, that already exists
-        if ($parentNode instanceof \PhpParser\Node\Stmt\UseUse) {
+        if ($parentNode instanceof UseUse) {
             return $this->isValidUseImportChange($newClassName, $parentNode);
         }
         return \true;
@@ -270,57 +270,57 @@ final class ClassRenamer
     /**
      * @param array<string, string> $oldToNewClasses
      */
-    private function getClassOfNamespaceToRefactor(\PhpParser\Node\Stmt\Namespace_ $namespace, array $oldToNewClasses) : ?\PhpParser\Node\Stmt\ClassLike
+    private function getClassOfNamespaceToRefactor(Namespace_ $namespace, array $oldToNewClasses) : ?ClassLike
     {
-        $foundClass = $this->betterNodeFinder->findFirst($namespace, function (\PhpParser\Node $node) use($oldToNewClasses) : bool {
-            if (!$node instanceof \PhpParser\Node\Stmt\ClassLike) {
+        $foundClass = $this->betterNodeFinder->findFirst($namespace, function (Node $node) use($oldToNewClasses) : bool {
+            if (!$node instanceof ClassLike) {
                 return \false;
             }
             $classLikeName = $this->nodeNameResolver->getName($node);
             return isset($oldToNewClasses[$classLikeName]);
         });
-        return $foundClass instanceof \PhpParser\Node\Stmt\ClassLike ? $foundClass : null;
+        return $foundClass instanceof ClassLike ? $foundClass : null;
     }
     /**
      * @param string[] $oldToNewClasses
      */
-    private function renameClassImplements(\PhpParser\Node\Stmt\ClassLike $classLike, array $oldToNewClasses) : void
+    private function renameClassImplements(ClassLike $classLike, array $oldToNewClasses) : void
     {
-        if (!$classLike instanceof \PhpParser\Node\Stmt\Class_) {
+        if (!$classLike instanceof Class_) {
             return;
         }
         /** @var Scope|null $scope */
-        $scope = $classLike->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
+        $scope = $classLike->getAttribute(AttributeKey::SCOPE);
         $classLike->implements = \array_unique($classLike->implements);
         foreach ($classLike->implements as $key => $implementName) {
-            $virtualNode = $implementName->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::VIRTUAL_NODE);
+            $virtualNode = $implementName->getAttribute(AttributeKey::VIRTUAL_NODE);
             if (!$virtualNode) {
                 continue;
             }
-            $namespaceName = $scope instanceof \PHPStan\Analyser\Scope ? $scope->getNamespace() : null;
+            $namespaceName = $scope instanceof Scope ? $scope->getNamespace() : null;
             $fullyQualifiedName = $namespaceName . '\\' . $implementName->toString();
             $newName = $oldToNewClasses[$fullyQualifiedName] ?? null;
             if ($newName === null) {
                 continue;
             }
-            $classLike->implements[$key] = new \PhpParser\Node\Name\FullyQualified($newName);
+            $classLike->implements[$key] = new FullyQualified($newName);
         }
     }
     private function isClassAboutToBeDuplicated(string $newName) : bool
     {
         return $this->reflectionProvider->hasClass($newName);
     }
-    private function changeNameToFullyQualifiedName(\PhpParser\Node\Stmt\ClassLike $classLike) : void
+    private function changeNameToFullyQualifiedName(ClassLike $classLike) : void
     {
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($classLike, function (\PhpParser\Node $node) {
-            if (!$node instanceof \PhpParser\Node\Name\FullyQualified) {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($classLike, function (Node $node) {
+            if (!$node instanceof FullyQualified) {
                 return null;
             }
             // invoke override
-            $node->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NODE, null);
+            $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
         });
     }
-    private function isValidClassNameChange(\PhpParser\Node\Name $name, \PhpParser\Node\Stmt\Class_ $class, \PHPStan\Reflection\ClassReflection $classReflection) : bool
+    private function isValidClassNameChange(Name $name, Class_ $class, ClassReflection $classReflection) : bool
     {
         if ($class->extends === $name) {
             // is class to interface?
@@ -334,10 +334,10 @@ final class ClassRenamer
         // is interface to class?
         return !(\in_array($name, $class->implements, \true) && $classReflection->isClass());
     }
-    private function isValidUseImportChange(string $newName, \PhpParser\Node\Stmt\UseUse $useUse) : bool
+    private function isValidUseImportChange(string $newName, UseUse $useUse) : bool
     {
         /** @var Use_[]|null $useNodes */
-        $useNodes = $useUse->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::USE_NODES);
+        $useNodes = $useUse->getAttribute(AttributeKey::USE_NODES);
         if ($useNodes === null) {
             return \true;
         }

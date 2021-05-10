@@ -11,13 +11,13 @@ use PHPStan\PhpDocParser\Ast\Type\TypeNode;
  */
 final class TypeNodeAnalyzer
 {
-    public function isIntersectionAndNotNullable(\PHPStan\PhpDocParser\Ast\Type\TypeNode $typeNode) : bool
+    public function isIntersectionAndNotNullable(TypeNode $typeNode) : bool
     {
-        if (!$typeNode instanceof \PHPStan\PhpDocParser\Ast\Type\IntersectionTypeNode) {
+        if (!$typeNode instanceof IntersectionTypeNode) {
             return \false;
         }
         foreach ($typeNode->types as $subType) {
-            if ($subType instanceof \PHPStan\PhpDocParser\Ast\Type\NullableTypeNode) {
+            if ($subType instanceof NullableTypeNode) {
                 return \false;
             }
         }

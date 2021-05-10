@@ -23,10 +23,10 @@ final class ServiceMap
     {
         return isset($this->services[$id]);
     }
-    public function getServiceType(string $id) : ?\PHPStan\Type\Type
+    public function getServiceType(string $id) : ?Type
     {
         $serviceDefinition = $this->getService($id);
-        if (!$serviceDefinition instanceof \Rector\Symfony\ValueObject\ServiceDefinition) {
+        if (!$serviceDefinition instanceof ServiceDefinition) {
             return null;
         }
         $class = $serviceDefinition->getClass();
@@ -36,9 +36,9 @@ final class ServiceMap
         /** @var string[] $interfaces */
         $interfaces = (array) \class_implements($class);
         foreach ($interfaces as $interface) {
-            return new \PHPStan\Type\ObjectType($interface);
+            return new ObjectType($interface);
         }
-        return new \PHPStan\Type\ObjectType($class);
+        return new ObjectType($class);
     }
     /**
      * @return ServiceDefinition[]
@@ -57,7 +57,7 @@ final class ServiceMap
         }
         return $servicesWithTag;
     }
-    private function getService(string $id) : ?\Rector\Symfony\ValueObject\ServiceDefinition
+    private function getService(string $id) : ?ServiceDefinition
     {
         return $this->services[$id] ?? null;
     }

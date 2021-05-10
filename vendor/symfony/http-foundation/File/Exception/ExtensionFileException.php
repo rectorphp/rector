@@ -15,6 +15,6 @@ namespace RectorPrefix20210510\Symfony\Component\HttpFoundation\File\Exception;
  *
  * @author Florent Mata <florentmata@gmail.com>
  */
-class ExtensionFileException extends \RectorPrefix20210510\Symfony\Component\HttpFoundation\File\Exception\FileException
+class ExtensionFileException extends FileException
 {
 }

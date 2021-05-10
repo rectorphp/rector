@@ -54,7 +54,7 @@ final class NameImporter
      * @var ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(\Rector\CodingStyle\ClassNameImport\AliasUsesResolver $aliasUsesResolver, \Rector\CodingStyle\ClassNameImport\ClassNameImportSkipper $classNameImportSkipper, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \RectorPrefix20210510\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \Rector\PostRector\Collector\UseNodesToAddCollector $useNodesToAddCollector, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
+    public function __construct(AliasUsesResolver $aliasUsesResolver, ClassNameImportSkipper $classNameImportSkipper, NodeNameResolver $nodeNameResolver, ParameterProvider $parameterProvider, StaticTypeMapper $staticTypeMapper, UseNodesToAddCollector $useNodesToAddCollector, ReflectionProvider $reflectionProvider)
     {
         $this->staticTypeMapper = $staticTypeMapper;
         $this->aliasUsesResolver = $aliasUsesResolver;
@@ -64,7 +64,7 @@ final class NameImporter
         $this->useNodesToAddCollector = $useNodesToAddCollector;
         $this->reflectionProvider = $reflectionProvider;
     }
-    public function importName(\PhpParser\Node\Name $name) : ?\PhpParser\Node\Name
+    public function importName(Name $name) : ?Name
     {
         if ($this->shouldSkipName($name)) {
             return null;
@@ -73,15 +73,15 @@ final class NameImporter
             return null;
         }
         $staticType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($name);
-        if (!$staticType instanceof \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType) {
+        if (!$staticType instanceof FullyQualifiedObjectType) {
             return null;
         }
         $this->aliasedUses = $this->aliasUsesResolver->resolveForNode($name);
         return $this->importNameAndCollectNewUseStatement($name, $staticType);
     }
-    private function shouldSkipName(\PhpParser\Node\Name $name) : bool
+    private function shouldSkipName(Name $name) : bool
     {
-        $virtualNode = $name->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::VIRTUAL_NODE);
+        $virtualNode = $name->getAttribute(AttributeKey::VIRTUAL_NODE);
         if ($virtualNode) {
             return \true;
         }
@@ -98,7 +98,7 @@ final class NameImporter
             return \true;
         }
         // Importing root namespace classes (like \DateTime) is optional
-        $importShortClasses = $this->parameterProvider->provideParameter(\Rector\Core\Configuration\Option::IMPORT_SHORT_CLASSES);
+        $importShortClasses = $this->parameterProvider->provideParameter(Option::IMPORT_SHORT_CLASSES);
         if (!$importShortClasses) {
             $name = $this->nodeNameResolver->getName($name);
             if ($name !== null && \substr_count($name, '\\') === 0) {
@@ -107,7 +107,7 @@ final class NameImporter
         }
         return \false;
     }
-    private function importNameAndCollectNewUseStatement(\PhpParser\Node\Name $name, \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType $fullyQualifiedObjectType) : ?\PhpParser\Node\Name
+    private function importNameAndCollectNewUseStatement(Name $name, FullyQualifiedObjectType $fullyQualifiedObjectType) : ?Name
     {
         // the same end is already imported → skip
         if ($this->classNameImportSkipper->shouldSkipNameForFullyQualifiedObjectType($name, $fullyQualifiedObjectType)) {
@@ -133,37 +133,37 @@ final class NameImporter
      * - namespace name
      * - use import name
      */
-    private function isNamespaceOrUseImportName(\PhpParser\Node\Name $name) : bool
+    private function isNamespaceOrUseImportName(Name $name) : bool
     {
-        $parentNode = $name->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-        if ($parentNode instanceof \PhpParser\Node\Stmt\Namespace_) {
+        $parentNode = $name->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parentNode instanceof Namespace_) {
             return \true;
         }
-        return $parentNode instanceof \PhpParser\Node\Stmt\UseUse;
+        return $parentNode instanceof UseUse;
     }
-    private function isFunctionOrConstantImportWithSingleName(\PhpParser\Node\Name $name) : bool
+    private function isFunctionOrConstantImportWithSingleName(Name $name) : bool
     {
-        $parentNode = $name->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        $parentNode = $name->getAttribute(AttributeKey::PARENT_NODE);
         $fullName = $name->toString();
-        $autoImportNames = $this->parameterProvider->provideParameter(\Rector\Core\Configuration\Option::AUTO_IMPORT_NAMES);
-        if ($autoImportNames && !$parentNode instanceof \PhpParser\Node && !\RectorPrefix20210510\Nette\Utils\Strings::contains($fullName, '\\') && $this->reflectionProvider->hasFunction(new \PhpParser\Node\Name($fullName), null)) {
+        $autoImportNames = $this->parameterProvider->provideParameter(Option::AUTO_IMPORT_NAMES);
+        if ($autoImportNames && !$parentNode instanceof Node && !Strings::contains($fullName, '\\') && $this->reflectionProvider->hasFunction(new Name($fullName), null)) {
             return \true;
         }
-        if ($parentNode instanceof \PhpParser\Node\Expr\ConstFetch) {
+        if ($parentNode instanceof ConstFetch) {
             return \count($name->parts) === 1;
         }
-        if ($parentNode instanceof \PhpParser\Node\Expr\FuncCall) {
+        if ($parentNode instanceof FuncCall) {
             return \count($name->parts) === 1;
         }
         return \false;
     }
-    private function addUseImport(\PhpParser\Node\Name $name, \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType $fullyQualifiedObjectType) : void
+    private function addUseImport(Name $name, FullyQualifiedObjectType $fullyQualifiedObjectType) : void
     {
         if ($this->useNodesToAddCollector->hasImport($name, $fullyQualifiedObjectType)) {
             return;
         }
-        $parentNode = $name->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-        if ($parentNode instanceof \PhpParser\Node\Expr\FuncCall) {
+        $parentNode = $name->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parentNode instanceof FuncCall) {
             $this->useNodesToAddCollector->addFunctionUseImport($name, $fullyQualifiedObjectType);
         } else {
             $this->useNodesToAddCollector->addUseImport($name, $fullyQualifiedObjectType);

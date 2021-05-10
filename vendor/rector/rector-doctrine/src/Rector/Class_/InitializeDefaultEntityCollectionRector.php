@@ -18,19 +18,19 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Doctrine\Tests\Rector\Class_\InitializeDefaultEntityCollectionRector\InitializeDefaultEntityCollectionRectorTest
  */
-final class InitializeDefaultEntityCollectionRector extends \Rector\Core\Rector\AbstractRector
+final class InitializeDefaultEntityCollectionRector extends AbstractRector
 {
     /**
      * @var ClassDependencyManipulator
      */
     private $classDependencyManipulator;
-    public function __construct(\Rector\Core\NodeManipulator\ClassDependencyManipulator $classDependencyManipulator)
+    public function __construct(ClassDependencyManipulator $classDependencyManipulator)
     {
         $this->classDependencyManipulator = $classDependencyManipulator;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Initialize collection property in Entity constructor', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Initialize collection property in Entity constructor', [new CodeSample(<<<'CODE_SAMPLE'
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -70,12 +70,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Class_::class];
+        return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         if (!$phpDocInfo->hasByAnnotationClass('Doctrine\\ORM\\Mapping\\Entity')) {
@@ -92,7 +92,7 @@ CODE_SAMPLE
     /**
      * @return string[]
      */
-    private function resolveToManyPropertyNames(\PhpParser\Node\Stmt\Class_ $class) : array
+    private function resolveToManyPropertyNames(Class_ $class) : array
     {
         $collectionPropertyNames = [];
         foreach ($class->getProperties() as $property) {
@@ -122,11 +122,11 @@ CODE_SAMPLE
         }
         return $assigns;
     }
-    private function createPropertyArrayCollectionAssign(string $toManyPropertyName) : \PhpParser\Node\Stmt\Expression
+    private function createPropertyArrayCollectionAssign(string $toManyPropertyName) : Expression
     {
         $propertyFetch = $this->nodeFactory->createPropertyFetch('this', $toManyPropertyName);
-        $new = new \PhpParser\Node\Expr\New_(new \PhpParser\Node\Name\FullyQualified('Doctrine\\Common\\Collections\\ArrayCollection'));
-        $assign = new \PhpParser\Node\Expr\Assign($propertyFetch, $new);
-        return new \PhpParser\Node\Stmt\Expression($assign);
+        $new = new New_(new FullyQualified('Doctrine\\Common\\Collections\\ArrayCollection'));
+        $assign = new Assign($propertyFetch, $new);
+        return new Expression($assign);
     }
 }

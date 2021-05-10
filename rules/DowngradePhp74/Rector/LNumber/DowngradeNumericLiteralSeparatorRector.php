@@ -16,11 +16,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\DowngradePhp74\Rector\LNumber\DowngradeNumericLiteralSeparatorRector\DowngradeNumericLiteralSeparatorRectorTest
  */
-final class DowngradeNumericLiteralSeparatorRector extends \Rector\Core\Rector\AbstractRector
+final class DowngradeNumericLiteralSeparatorRector extends AbstractRector
 {
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove "_" as thousands separator in numbers', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove "_" as thousands separator in numbers', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -47,19 +47,19 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Scalar\LNumber::class, \PhpParser\Node\Scalar\DNumber::class];
+        return [LNumber::class, DNumber::class];
     }
     /**
      * @param LNumber|DNumber $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if (!$this->shouldRefactor($node)) {
             return null;
         }
         $numberNode = clone $node;
         $numberNodeValue = (string) $numberNode->value;
-        if (\RectorPrefix20210510\Nette\Utils\Strings::contains($numberNodeValue, '+')) {
+        if (Strings::contains($numberNodeValue, '+')) {
             return null;
         }
         $node->value = (string) $node->value;
@@ -70,7 +70,7 @@ CODE_SAMPLE
          * by adding ".0" at the end (eg: 0.0).
          * Then, add it again.
          */
-        if ($node instanceof \PhpParser\Node\Scalar\DNumber && !\RectorPrefix20210510\Nette\Utils\Strings::contains($node->value, '.')) {
+        if ($node instanceof DNumber && !Strings::contains($node->value, '.')) {
             $node->value .= '.0';
         }
         return $node;
@@ -78,11 +78,11 @@ CODE_SAMPLE
     /**
      * @param LNumber|DNumber $node
      */
-    public function shouldRefactor(\PhpParser\Node $node) : bool
+    public function shouldRefactor(Node $node) : bool
     {
         // "_" notation can be applied to decimal numbers only
-        if ($node instanceof \PhpParser\Node\Scalar\LNumber) {
-            return $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::KIND) === \PhpParser\Node\Scalar\LNumber::KIND_DEC;
+        if ($node instanceof LNumber) {
+            return $node->getAttribute(AttributeKey::KIND) === LNumber::KIND_DEC;
         }
         return \true;
     }

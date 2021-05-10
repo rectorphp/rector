@@ -15,17 +15,17 @@ final class RepositoryTypeFactory
      * @var NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
+    public function __construct(NodeNameResolver $nodeNameResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
     }
-    public function createRepositoryPropertyType(\PhpParser\Node\Expr $entityReferenceExpr) : \PHPStan\Type\Generic\GenericObjectType
+    public function createRepositoryPropertyType(Expr $entityReferenceExpr) : GenericObjectType
     {
-        if (!$entityReferenceExpr instanceof \PhpParser\Node\Expr\ClassConstFetch) {
-            throw new \Rector\Core\Exception\NotImplementedYetException();
+        if (!$entityReferenceExpr instanceof ClassConstFetch) {
+            throw new NotImplementedYetException();
         }
         /** @var string $className */
         $className = $this->nodeNameResolver->getName($entityReferenceExpr->class);
-        return new \PHPStan\Type\Generic\GenericObjectType('Doctrine\\ORM\\EntityRepository', [new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType($className)]);
+        return new GenericObjectType('Doctrine\\ORM\\EntityRepository', [new FullyQualifiedObjectType($className)]);
     }
 }

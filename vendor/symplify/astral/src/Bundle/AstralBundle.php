@@ -7,14 +7,14 @@ use RectorPrefix20210510\Symfony\Component\DependencyInjection\ContainerBuilder;
 use RectorPrefix20210510\Symfony\Component\HttpKernel\Bundle\Bundle;
 use RectorPrefix20210510\Symplify\Astral\DependencyInjection\Extension\AstralExtension;
 use RectorPrefix20210510\Symplify\AutowireArrayParameter\DependencyInjection\CompilerPass\AutowireArrayParameterCompilerPass;
-final class AstralBundle extends \RectorPrefix20210510\Symfony\Component\HttpKernel\Bundle\Bundle
+final class AstralBundle extends Bundle
 {
-    public function build(\RectorPrefix20210510\Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder) : void
+    public function build(ContainerBuilder $containerBuilder) : void
     {
-        $containerBuilder->addCompilerPass(new \RectorPrefix20210510\Symplify\AutowireArrayParameter\DependencyInjection\CompilerPass\AutowireArrayParameterCompilerPass());
+        $containerBuilder->addCompilerPass(new AutowireArrayParameterCompilerPass());
     }
     protected function createContainerExtension() : ?\RectorPrefix20210510\Symfony\Component\DependencyInjection\Extension\ExtensionInterface
     {
-        return new \RectorPrefix20210510\Symplify\Astral\DependencyInjection\Extension\AstralExtension();
+        return new AstralExtension();
     }
 }

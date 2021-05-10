@@ -23,7 +23,7 @@ use RectorPrefix20210510\Symfony\Component\HttpFoundation\Session\SessionBagInte
  * @author Bulat Shakirzyanov <mallluhuct@gmail.com>
  * @author Drak <drak@zikula.org>
  */
-class MockArraySessionStorage implements \RectorPrefix20210510\Symfony\Component\HttpFoundation\Session\Storage\SessionStorageInterface
+class MockArraySessionStorage implements SessionStorageInterface
 {
     /**
      * @var string
@@ -53,7 +53,7 @@ class MockArraySessionStorage implements \RectorPrefix20210510\Symfony\Component
      * @var array|SessionBagInterface[]
      */
     protected $bags = [];
-    public function __construct(string $name = 'MOCKSESSID', \RectorPrefix20210510\Symfony\Component\HttpFoundation\Session\Storage\MetadataBag $metaBag = null)
+    public function __construct(string $name = 'MOCKSESSID', MetadataBag $metaBag = null)
     {
         $this->name = $name;
         $this->setMetadataBag($metaBag);
@@ -148,7 +148,7 @@ class MockArraySessionStorage implements \RectorPrefix20210510\Symfony\Component
     /**
      * {@inheritdoc}
      */
-    public function registerBag(\RectorPrefix20210510\Symfony\Component\HttpFoundation\Session\SessionBagInterface $bag)
+    public function registerBag(SessionBagInterface $bag)
     {
         $this->bags[$bag->getName()] = $bag;
     }
@@ -172,10 +172,10 @@ class MockArraySessionStorage implements \RectorPrefix20210510\Symfony\Component
     {
         return $this->started;
     }
-    public function setMetadataBag(\RectorPrefix20210510\Symfony\Component\HttpFoundation\Session\Storage\MetadataBag $bag = null)
+    public function setMetadataBag(MetadataBag $bag = null)
     {
         if (null === $bag) {
-            $bag = new \RectorPrefix20210510\Symfony\Component\HttpFoundation\Session\Storage\MetadataBag();
+            $bag = new MetadataBag();
         }
         $this->metadataBag = $bag;
     }

@@ -20,17 +20,17 @@ final class ClassAnalyzer
      * @var NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
+    public function __construct(NodeNameResolver $nodeNameResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
     }
-    public function isAnonymousClass(\PhpParser\Node $node) : bool
+    public function isAnonymousClass(Node $node) : bool
     {
-        if (!$node instanceof \PhpParser\Node\Stmt\Class_) {
+        if (!$node instanceof Class_) {
             return \false;
         }
-        $parent = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-        if (!$parent instanceof \PhpParser\Node\Expr\New_) {
+        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
+        if (!$parent instanceof New_) {
             return \false;
         }
         if ($node->isAnonymous()) {
@@ -41,6 +41,6 @@ final class ClassAnalyzer
             return \true;
         }
         // match PHPStan pattern for anonymous classes
-        return (bool) \RectorPrefix20210510\Nette\Utils\Strings::match($className, self::ANONYMOUS_CLASS_REGEX);
+        return (bool) Strings::match($className, self::ANONYMOUS_CLASS_REGEX);
     }
 }

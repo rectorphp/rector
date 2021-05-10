@@ -12,71 +12,71 @@ final class Factory
     /**
      * @param mixed $value
      */
-    public function getDeclaration(string $name, $value) : \RectorPrefix20210510\Idiosyncratic\EditorConfig\Declaration\Declaration
+    public function getDeclaration(string $name, $value) : Declaration
     {
         if ($value === 'unset') {
-            return new \RectorPrefix20210510\Idiosyncratic\EditorConfig\Declaration\UnsetDeclaration($name);
+            return new UnsetDeclaration($name);
         }
-        $method = \sprintf('get%s', \ucwords(\str_replace(['-', '_'], '', $name)));
-        if (\method_exists($this, $method) === \true) {
+        $method = sprintf('get%s', ucwords(str_replace(['-', '_'], '', $name)));
+        if (method_exists($this, $method) === \true) {
             return $this->{$method}($value);
         }
-        return new \RectorPrefix20210510\Idiosyncratic\EditorConfig\Declaration\GenericDeclaration($name, $value);
+        return new GenericDeclaration($name, $value);
     }
     /**
      * @param mixed $value
      */
-    public function getIndentStyle($value) : \RectorPrefix20210510\Idiosyncratic\EditorConfig\Declaration\IndentStyle
+    public function getIndentStyle($value) : IndentStyle
     {
-        return new \RectorPrefix20210510\Idiosyncratic\EditorConfig\Declaration\IndentStyle($value);
+        return new IndentStyle($value);
     }
     /**
      * @param mixed $value
      */
-    public function getCharset($value) : \RectorPrefix20210510\Idiosyncratic\EditorConfig\Declaration\Charset
+    public function getCharset($value) : Charset
     {
-        return new \RectorPrefix20210510\Idiosyncratic\EditorConfig\Declaration\Charset($value);
+        return new Charset($value);
     }
     /**
      * @param mixed $value
      */
-    public function getEndOfLine($value) : \RectorPrefix20210510\Idiosyncratic\EditorConfig\Declaration\EndOfLine
+    public function getEndOfLine($value) : EndOfLine
     {
-        return new \RectorPrefix20210510\Idiosyncratic\EditorConfig\Declaration\EndOfLine($value);
+        return new EndOfLine($value);
     }
     /**
      * @param mixed $value
      */
-    public function getInsertFinalNewline($value) : \RectorPrefix20210510\Idiosyncratic\EditorConfig\Declaration\InsertFinalNewline
+    public function getInsertFinalNewline($value) : InsertFinalNewline
     {
-        return new \RectorPrefix20210510\Idiosyncratic\EditorConfig\Declaration\InsertFinalNewline($value);
+        return new InsertFinalNewline($value);
     }
     /**
      * @param mixed $value
      */
-    public function getTrimTrailingWhitespace($value) : \RectorPrefix20210510\Idiosyncratic\EditorConfig\Declaration\TrimTrailingWhitespace
+    public function getTrimTrailingWhitespace($value) : TrimTrailingWhitespace
     {
-        return new \RectorPrefix20210510\Idiosyncratic\EditorConfig\Declaration\TrimTrailingWhitespace($value);
+        return new TrimTrailingWhitespace($value);
     }
     /**
      * @param mixed $value
      */
-    public function getIndentSize($value) : \RectorPrefix20210510\Idiosyncratic\EditorConfig\Declaration\IndentSize
+    public function getIndentSize($value) : IndentSize
     {
-        return new \RectorPrefix20210510\Idiosyncratic\EditorConfig\Declaration\IndentSize($value);
+        return new IndentSize($value);
     }
     /**
      * @param mixed $value
      */
-    public function getTabWidth($value) : \RectorPrefix20210510\Idiosyncratic\EditorConfig\Declaration\TabWidth
+    public function getTabWidth($value) : TabWidth
     {
-        return new \RectorPrefix20210510\Idiosyncratic\EditorConfig\Declaration\TabWidth($value);
+        return new TabWidth($value);
     }
     /**
      * @param mixed $value
      */
-    public function getMaxLineLength($value) : \RectorPrefix20210510\Idiosyncratic\EditorConfig\Declaration\MaxLineLength
+    public function getMaxLineLength($value) : MaxLineLength
     {
-        return new \RectorPrefix20210510\Idiosyncratic\EditorConfig\Declaration\MaxLineLength($value);
+        return new MaxLineLength($value);
     }
 }

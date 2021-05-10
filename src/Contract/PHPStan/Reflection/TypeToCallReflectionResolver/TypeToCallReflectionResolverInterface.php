@@ -9,9 +9,9 @@ use PHPStan\Reflection\MethodReflection;
 use PHPStan\Type\Type;
 interface TypeToCallReflectionResolverInterface
 {
-    public function supports(\PHPStan\Type\Type $type) : bool;
+    public function supports(Type $type) : bool;
     /**
      * @return FunctionReflection|MethodReflection|null
      */
-    public function resolve(\PHPStan\Type\Type $type, \PHPStan\Reflection\ClassMemberAccessAnswerer $classMemberAccessAnswerer);
+    public function resolve(Type $type, ClassMemberAccessAnswerer $classMemberAccessAnswerer);
 }

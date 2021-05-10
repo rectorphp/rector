@@ -14,21 +14,21 @@ final class ReturnTagRemover
      * @var DeadReturnTagValueNodeAnalyzer
      */
     private $deadReturnTagValueNodeAnalyzer;
-    public function __construct(\Rector\DeadCode\PhpDoc\DeadReturnTagValueNodeAnalyzer $deadReturnTagValueNodeAnalyzer)
+    public function __construct(DeadReturnTagValueNodeAnalyzer $deadReturnTagValueNodeAnalyzer)
     {
         $this->deadReturnTagValueNodeAnalyzer = $deadReturnTagValueNodeAnalyzer;
     }
-    public function removeReturnTagIfUseless(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo, \PhpParser\Node\FunctionLike $functionLike) : void
+    public function removeReturnTagIfUseless(PhpDocInfo $phpDocInfo, FunctionLike $functionLike) : void
     {
         // remove existing type
         $returnTagValueNode = $phpDocInfo->getReturnTagValue();
-        if (!$returnTagValueNode instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode) {
+        if (!$returnTagValueNode instanceof ReturnTagValueNode) {
             return;
         }
         $isReturnTagValueDead = $this->deadReturnTagValueNodeAnalyzer->isDead($returnTagValueNode, $functionLike);
         if (!$isReturnTagValueDead) {
             return;
         }
-        $phpDocInfo->removeByType(\PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode::class);
+        $phpDocInfo->removeByType(ReturnTagValueNode::class);
     }
 }

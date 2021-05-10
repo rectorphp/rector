@@ -25,8 +25,8 @@ final class Uninflected
      */
     private static function getDefault() : iterable
     {
-        (yield new \RectorPrefix20210510\Doctrine\Inflector\Rules\Pattern('barn'));
-        (yield new \RectorPrefix20210510\Doctrine\Inflector\Rules\Pattern('fjell'));
-        (yield new \RectorPrefix20210510\Doctrine\Inflector\Rules\Pattern('hus'));
+        (yield new Pattern('barn'));
+        (yield new Pattern('fjell'));
+        (yield new Pattern('hus'));
     }
 }

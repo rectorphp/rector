@@ -29,7 +29,7 @@ final class CallTypeAnalyzer
      * @var NodeTypeResolver
      */
     private $nodeTypeResolver;
-    public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver)
+    public function __construct(ReflectionProvider $reflectionProvider, NodeNameResolver $nodeNameResolver, NodeTypeResolver $nodeTypeResolver)
     {
         $this->reflectionProvider = $reflectionProvider;
         $this->nodeNameResolver = $nodeNameResolver;
@@ -39,10 +39,10 @@ final class CallTypeAnalyzer
      * @param MethodCall|StaticCall $node
      * @return Type[]
      */
-    public function resolveMethodParameterTypes(\PhpParser\Node $node) : array
+    public function resolveMethodParameterTypes(Node $node) : array
     {
         $callerType = $this->resolveCallerType($node);
-        if (!$callerType instanceof \PHPStan\Type\TypeWithClassName) {
+        if (!$callerType instanceof TypeWithClassName) {
             return [];
         }
         $callerClassName = $callerType->getClassName();
@@ -51,9 +51,9 @@ final class CallTypeAnalyzer
     /**
      * @param StaticCall|MethodCall $node
      */
-    private function resolveCallerType(\PhpParser\Node $node) : \PHPStan\Type\Type
+    private function resolveCallerType(Node $node) : Type
     {
-        if ($node instanceof \PhpParser\Node\Expr\MethodCall) {
+        if ($node instanceof MethodCall) {
             return $this->nodeTypeResolver->getStaticType($node->var);
         }
         return $this->nodeTypeResolver->resolve($node->class);
@@ -62,15 +62,15 @@ final class CallTypeAnalyzer
      * @param MethodCall|StaticCall $node
      * @return Type[]
      */
-    private function getMethodParameterTypes(string $className, \PhpParser\Node $node) : array
+    private function getMethodParameterTypes(string $className, Node $node) : array
     {
         $classReflection = $this->reflectionProvider->getClass($className);
         $methodName = $this->nodeNameResolver->getName($node->name);
         if (!$methodName) {
             return [];
         }
-        $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
-        if (!$scope instanceof \PHPStan\Analyser\Scope) {
+        $scope = $node->getAttribute(AttributeKey::SCOPE);
+        if (!$scope instanceof Scope) {
             return [];
         }
         // method not found
@@ -78,7 +78,7 @@ final class CallTypeAnalyzer
             return [];
         }
         $methodReflection = $classReflection->getMethod($methodName, $scope);
-        $parametersAcceptor = \PHPStan\Reflection\ParametersAcceptorSelector::selectSingle($methodReflection->getVariants());
+        $parametersAcceptor = ParametersAcceptorSelector::selectSingle($methodReflection->getVariants());
         $parameterTypes = [];
         /** @var ParameterReflection $parameterReflection */
         foreach ($parametersAcceptor->getParameters() as $parameterReflection) {

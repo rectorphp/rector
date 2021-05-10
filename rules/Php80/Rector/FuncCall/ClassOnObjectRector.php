@@ -16,11 +16,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php80\Rector\FuncCall\ClassOnObjectRector\ClassOnObjectRectorTest
  */
-final class ClassOnObjectRector extends \Rector\Core\Rector\AbstractRector
+final class ClassOnObjectRector extends AbstractRector
 {
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change get_class($object) to faster $object::class', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change get_class($object) to faster $object::class', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($object)
@@ -45,23 +45,23 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\FuncCall::class];
+        return [FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        if (!$this->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::CLASS_ON_OBJECT)) {
+        if (!$this->isAtLeastPhpVersion(PhpVersionFeature::CLASS_ON_OBJECT)) {
             return null;
         }
         if (!$this->nodeNameResolver->isName($node, 'get_class')) {
             return null;
         }
         if (!isset($node->args[0])) {
-            return new \PhpParser\Node\Expr\ClassConstFetch(new \PhpParser\Node\Name('self'), 'class');
+            return new ClassConstFetch(new Name('self'), 'class');
         }
         $object = $node->args[0]->value;
-        return new \PhpParser\Node\Expr\ClassConstFetch($object, 'class');
+        return new ClassConstFetch($object, 'class');
     }
 }

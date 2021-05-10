@@ -30,7 +30,7 @@ final class PromotedPropertyResolver
      * @var BetterNodeFinder
      */
     private $betterNodeFinder;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator)
+    public function __construct(NodeNameResolver $nodeNameResolver, BetterNodeFinder $betterNodeFinder, NodeComparator $nodeComparator)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->betterNodeFinder = $betterNodeFinder;
@@ -39,10 +39,10 @@ final class PromotedPropertyResolver
     /**
      * @return PropertyPromotionCandidate[]
      */
-    public function resolveFromClass(\PhpParser\Node\Stmt\Class_ $class) : array
+    public function resolveFromClass(Class_ $class) : array
     {
-        $constructClassMethod = $class->getMethod(\Rector\Core\ValueObject\MethodName::CONSTRUCT);
-        if (!$constructClassMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
+        $constructClassMethod = $class->getMethod(MethodName::CONSTRUCT);
+        if (!$constructClassMethod instanceof ClassMethod) {
             return [];
         }
         $propertyPromotionCandidates = [];
@@ -51,24 +51,24 @@ final class PromotedPropertyResolver
                 continue;
             }
             $propertyPromotionCandidate = $this->matchPropertyPromotionCandidate($property, $constructClassMethod);
-            if (!$propertyPromotionCandidate instanceof \Rector\Php80\ValueObject\PropertyPromotionCandidate) {
+            if (!$propertyPromotionCandidate instanceof PropertyPromotionCandidate) {
                 continue;
             }
             $propertyPromotionCandidates[] = $propertyPromotionCandidate;
         }
         return $propertyPromotionCandidates;
     }
-    private function matchPropertyPromotionCandidate(\PhpParser\Node\Stmt\Property $property, \PhpParser\Node\Stmt\ClassMethod $constructClassMethod) : ?\Rector\Php80\ValueObject\PropertyPromotionCandidate
+    private function matchPropertyPromotionCandidate(Property $property, ClassMethod $constructClassMethod) : ?PropertyPromotionCandidate
     {
         $onlyProperty = $property->props[0];
         $propertyName = $this->nodeNameResolver->getName($onlyProperty);
         $firstParamAsVariable = $this->resolveFirstParamUses($constructClassMethod);
         // match property name to assign in constructor
         foreach ((array) $constructClassMethod->stmts as $stmt) {
-            if ($stmt instanceof \PhpParser\Node\Stmt\Expression) {
+            if ($stmt instanceof Expression) {
                 $stmt = $stmt->expr;
             }
-            if (!$stmt instanceof \PhpParser\Node\Expr\Assign) {
+            if (!$stmt instanceof Assign) {
                 continue;
             }
             $assign = $stmt;
@@ -78,43 +78,43 @@ final class PromotedPropertyResolver
             // 1. is param
             // @todo 2. is default value
             $assignedExpr = $assign->expr;
-            if (!$assignedExpr instanceof \PhpParser\Node\Expr\Variable) {
+            if (!$assignedExpr instanceof Variable) {
                 continue;
             }
             $matchedParam = $this->matchClassMethodParamByAssignedVariable($constructClassMethod, $assignedExpr);
-            if (!$matchedParam instanceof \PhpParser\Node\Param) {
+            if (!$matchedParam instanceof Param) {
                 continue;
             }
             // is param used above assign?
             if ($this->isParamUsedBeforeAssign($assignedExpr, $firstParamAsVariable)) {
                 continue;
             }
-            return new \Rector\Php80\ValueObject\PropertyPromotionCandidate($property, $assign, $matchedParam);
+            return new PropertyPromotionCandidate($property, $assign, $matchedParam);
         }
         return null;
     }
     /**
      * @return array<string, int>
      */
-    private function resolveFirstParamUses(\PhpParser\Node\Stmt\ClassMethod $classMethod) : array
+    private function resolveFirstParamUses(ClassMethod $classMethod) : array
     {
         $paramByFirstUsage = [];
         foreach ($classMethod->params as $param) {
             $paramName = $this->nodeNameResolver->getName($param);
-            $firstParamVariable = $this->betterNodeFinder->findFirst((array) $classMethod->stmts, function (\PhpParser\Node $node) use($paramName) : bool {
-                if (!$node instanceof \PhpParser\Node\Expr\Variable) {
+            $firstParamVariable = $this->betterNodeFinder->findFirst((array) $classMethod->stmts, function (Node $node) use($paramName) : bool {
+                if (!$node instanceof Variable) {
                     return \false;
                 }
                 return $this->nodeNameResolver->isName($node, $paramName);
             });
-            if (!$firstParamVariable instanceof \PhpParser\Node) {
+            if (!$firstParamVariable instanceof Node) {
                 continue;
             }
             $paramByFirstUsage[$paramName] = $firstParamVariable->getStartTokenPos();
         }
         return $paramByFirstUsage;
     }
-    private function matchClassMethodParamByAssignedVariable(\PhpParser\Node\Stmt\ClassMethod $classMethod, \PhpParser\Node\Expr\Variable $variable) : ?\PhpParser\Node\Param
+    private function matchClassMethodParamByAssignedVariable(ClassMethod $classMethod, Variable $variable) : ?Param
     {
         foreach ($classMethod->params as $param) {
             if (!$this->nodeComparator->areNodesEqual($variable, $param->var)) {
@@ -127,7 +127,7 @@ final class PromotedPropertyResolver
     /**
      * @param array<string, int> $firstParamAsVariable
      */
-    private function isParamUsedBeforeAssign(\PhpParser\Node\Expr\Variable $variable, array $firstParamAsVariable) : bool
+    private function isParamUsedBeforeAssign(Variable $variable, array $firstParamAsVariable) : bool
     {
         $variableName = $this->nodeNameResolver->getName($variable);
         $firstVariablePosition = $firstParamAsVariable[$variableName] ?? null;

@@ -17,7 +17,7 @@ namespace RectorPrefix20210510\Symfony\Component\HttpKernel\CacheWarmer;
  *
  * @final
  */
-class CacheWarmerAggregate implements \RectorPrefix20210510\Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerInterface
+class CacheWarmerAggregate implements CacheWarmerInterface
 {
     private $warmers;
     private $debug;

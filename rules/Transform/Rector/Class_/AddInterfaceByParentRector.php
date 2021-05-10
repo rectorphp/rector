@@ -16,7 +16,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\Transform\Rector\Class_\AddInterfaceByParentRector\AddInterfaceByParentRectorTest
  */
-final class AddInterfaceByParentRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
+final class AddInterfaceByParentRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
      * @var string
@@ -26,9 +26,9 @@ final class AddInterfaceByParentRector extends \Rector\Core\Rector\AbstractRecto
      * @var array<string, string>
      */
     private $interfaceByParent = [];
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Add interface by parent', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add interface by parent', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 class SomeClass extends SomeParent
 {
 
@@ -47,17 +47,17 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Class_::class];
+        return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         /** @var Scope $scope */
-        $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
+        $scope = $node->getAttribute(AttributeKey::SCOPE);
         $classReflection = $scope->getClassReflection();
-        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
+        if (!$classReflection instanceof ClassReflection) {
             return null;
         }
         $parentClassReflection = $classReflection->getParentClass();
@@ -73,7 +73,7 @@ CODE_SAMPLE
                     continue 2;
                 }
             }
-            $node->implements[] = new \PhpParser\Node\Name\FullyQualified($interfaceName);
+            $node->implements[] = new FullyQualified($interfaceName);
         }
         return $node;
     }

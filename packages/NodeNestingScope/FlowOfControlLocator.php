@@ -10,16 +10,16 @@ use PhpParser\Node\Stmt\Expression;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 final class FlowOfControlLocator
 {
-    public function resolveNestingHashFromFunctionLike(\PhpParser\Node\FunctionLike $functionLike, \PhpParser\Node $checkedNode) : string
+    public function resolveNestingHashFromFunctionLike(FunctionLike $functionLike, Node $checkedNode) : string
     {
         $nestingHash = \spl_object_hash($functionLike) . '__';
         $currentNode = $checkedNode;
         $previous = $currentNode;
-        while ($currentNode = $currentNode->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE)) {
-            if ($currentNode instanceof \PhpParser\Node\Stmt\Expression) {
+        while ($currentNode = $currentNode->getAttribute(AttributeKey::PARENT_NODE)) {
+            if ($currentNode instanceof Expression) {
                 continue;
             }
-            if (!$currentNode instanceof \PhpParser\Node) {
+            if (!$currentNode instanceof Node) {
                 continue;
             }
             if ($functionLike === $currentNode) {
@@ -32,9 +32,9 @@ final class FlowOfControlLocator
         }
         return $nestingHash;
     }
-    private function resolveBinaryOpNestingHash(\PhpParser\Node $currentNode, \PhpParser\Node $previous) : string
+    private function resolveBinaryOpNestingHash(Node $currentNode, Node $previous) : string
     {
-        if (!$currentNode instanceof \PhpParser\Node\Expr\BinaryOp) {
+        if (!$currentNode instanceof BinaryOp) {
             return '';
         }
         // left && right have differnt nesting

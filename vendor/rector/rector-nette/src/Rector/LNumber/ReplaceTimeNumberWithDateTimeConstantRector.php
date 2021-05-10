@@ -12,16 +12,16 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Nette\Tests\Rector\LNumber\ReplaceTimeNumberWithDateTimeConstantRector\ReplaceTimeNumberWithDateTimeConstantRectorTest
  */
-final class ReplaceTimeNumberWithDateTimeConstantRector extends \Rector\Core\Rector\AbstractRector
+final class ReplaceTimeNumberWithDateTimeConstantRector extends AbstractRector
 {
     /**
      * @noRector
      * @var array<int, string>
      */
-    private const NUMBER_TO_CONSTANT_NAME = [\RectorPrefix20210510\Nette\Utils\DateTime::HOUR => 'HOUR', \RectorPrefix20210510\Nette\Utils\DateTime::DAY => 'DAY', \RectorPrefix20210510\Nette\Utils\DateTime::WEEK => 'WEEK', \RectorPrefix20210510\Nette\Utils\DateTime::MONTH => 'MONTH', \RectorPrefix20210510\Nette\Utils\DateTime::YEAR => 'YEAR'];
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    private const NUMBER_TO_CONSTANT_NAME = [DateTime::HOUR => 'HOUR', DateTime::DAY => 'DAY', DateTime::WEEK => 'WEEK', DateTime::MONTH => 'MONTH', DateTime::YEAR => 'YEAR'];
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Replace time numbers with Nette\\Utils\\DateTime constants', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Replace time numbers with Nette\\Utils\\DateTime constants', [new CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run()
@@ -46,12 +46,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Scalar\LNumber::class];
+        return [LNumber::class];
     }
     /**
      * @param LNumber $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         $number = $node->value;
         $constantName = self::NUMBER_TO_CONSTANT_NAME[$number] ?? null;

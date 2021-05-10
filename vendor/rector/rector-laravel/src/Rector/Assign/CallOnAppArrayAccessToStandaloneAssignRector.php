@@ -18,7 +18,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Laravel\Tests\Rector\Assign\CallOnAppArrayAccessToStandaloneAssignRector\CallOnAppArrayAccessToStandaloneAssignRectorTest
  */
-final class CallOnAppArrayAccessToStandaloneAssignRector extends \Rector\Core\Rector\AbstractRector
+final class CallOnAppArrayAccessToStandaloneAssignRector extends AbstractRector
 {
     /**
      * @var ServiceNameTypeAndVariableName[]
@@ -28,9 +28,9 @@ final class CallOnAppArrayAccessToStandaloneAssignRector extends \Rector\Core\Re
      * @var AppAssignFactory
      */
     private $appAssignFactory;
-    public function __construct(\Rector\Laravel\NodeFactory\AppAssignFactory $appAssignFactory)
+    public function __construct(AppAssignFactory $appAssignFactory)
     {
-        $this->serviceNameTypeAndVariableNames[] = new \Rector\Laravel\ValueObject\ServiceNameTypeAndVariableName('validator', 'Illuminate\\Validation\\Factory', 'validationFactory');
+        $this->serviceNameTypeAndVariableNames[] = new ServiceNameTypeAndVariableName('validator', 'Illuminate\\Validation\\Factory', 'validationFactory');
         $this->appAssignFactory = $appAssignFactory;
     }
     /**
@@ -38,26 +38,26 @@ final class CallOnAppArrayAccessToStandaloneAssignRector extends \Rector\Core\Re
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\Assign::class];
+        return [Assign::class];
     }
     /**
      * @param Assign $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        if (!$node->expr instanceof \PhpParser\Node\Expr\MethodCall) {
+        if (!$node->expr instanceof MethodCall) {
             return null;
         }
         $methodCall = $node->expr;
-        if (!$methodCall->var instanceof \PhpParser\Node\Expr\ArrayDimFetch) {
+        if (!$methodCall->var instanceof ArrayDimFetch) {
             return null;
         }
         $arrayDimFetch = $methodCall->var;
-        if (!$this->isObjectType($arrayDimFetch->var, new \PHPStan\Type\ObjectType('Illuminate\\Contracts\\Foundation\\Application'))) {
+        if (!$this->isObjectType($arrayDimFetch->var, new ObjectType('Illuminate\\Contracts\\Foundation\\Application'))) {
             return null;
         }
         $arrayDimFetchDim = $methodCall->var->dim;
-        if (!$arrayDimFetchDim instanceof \PhpParser\Node\Expr) {
+        if (!$arrayDimFetchDim instanceof Expr) {
             return null;
         }
         foreach ($this->serviceNameTypeAndVariableNames as $serviceNameTypeAndVariableName) {
@@ -66,14 +66,14 @@ final class CallOnAppArrayAccessToStandaloneAssignRector extends \Rector\Core\Re
             }
             $assignExpression = $this->appAssignFactory->createAssignExpression($serviceNameTypeAndVariableName, $methodCall->var);
             $this->addNodeBeforeNode($assignExpression, $node);
-            $methodCall->var = new \PhpParser\Node\Expr\Variable($serviceNameTypeAndVariableName->getVariableName());
+            $methodCall->var = new Variable($serviceNameTypeAndVariableName->getVariableName());
             return $node;
         }
         return null;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Replace magical call on $this->app["something"] to standalone type assign variable', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Replace magical call on $this->app["something"] to standalone type assign variable', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     /**

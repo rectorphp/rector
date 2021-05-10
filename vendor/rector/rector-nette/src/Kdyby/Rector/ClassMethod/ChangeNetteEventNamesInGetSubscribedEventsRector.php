@@ -21,7 +21,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Nette\Tests\Kdyby\Rector\ClassMethod\ChangeNetteEventNamesInGetSubscribedEventsRector\ChangeNetteEventNamesInGetSubscribedEventsRectorTest
  */
-final class ChangeNetteEventNamesInGetSubscribedEventsRector extends \Rector\Core\Rector\AbstractRector
+final class ChangeNetteEventNamesInGetSubscribedEventsRector extends AbstractRector
 {
     /**
      * @var GetSubscribedEventsArrayManipulator
@@ -39,16 +39,16 @@ final class ChangeNetteEventNamesInGetSubscribedEventsRector extends \Rector\Cor
      * @var GetSubscribedEventsClassMethodAnalyzer
      */
     private $getSubscribedEventsClassMethodAnalyzer;
-    public function __construct(\Rector\Nette\Kdyby\NodeManipulator\GetSubscribedEventsArrayManipulator $getSubscribedEventsArrayManipulator, \Rector\Nette\Kdyby\NodeManipulator\ListeningClassMethodArgumentManipulator $listeningClassMethodArgumentManipulator, \Rector\Nette\Kdyby\NodeResolver\ListeningMethodsCollector $listeningMethodsCollector, \Rector\Nette\Kdyby\NodeAnalyzer\GetSubscribedEventsClassMethodAnalyzer $getSubscribedEventsClassMethodAnalyzer)
+    public function __construct(GetSubscribedEventsArrayManipulator $getSubscribedEventsArrayManipulator, ListeningClassMethodArgumentManipulator $listeningClassMethodArgumentManipulator, ListeningMethodsCollector $listeningMethodsCollector, GetSubscribedEventsClassMethodAnalyzer $getSubscribedEventsClassMethodAnalyzer)
     {
         $this->getSubscribedEventsArrayManipulator = $getSubscribedEventsArrayManipulator;
         $this->listeningClassMethodArgumentManipulator = $listeningClassMethodArgumentManipulator;
         $this->listeningMethodsCollector = $listeningMethodsCollector;
         $this->getSubscribedEventsClassMethodAnalyzer = $getSubscribedEventsClassMethodAnalyzer;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change EventSubscriber from Kdyby to Contributte', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change EventSubscriber from Kdyby to Contributte', [new CodeSample(<<<'CODE_SAMPLE'
 use Kdyby\Events\Subscriber;
 use Nette\Application\Application;
 use Nette\Application\UI\Presenter;
@@ -98,40 +98,40 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\ClassMethod::class];
+        return [ClassMethod::class];
     }
     /**
      * @param ClassMethod $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if (!$this->getSubscribedEventsClassMethodAnalyzer->detect($node)) {
             return null;
         }
         $this->visibilityManipulator->makeStatic($node);
         $this->refactorEventNames($node);
-        $listeningClassMethods = $this->listeningMethodsCollector->collectFromClassAndGetSubscribedEventClassMethod($node, \Rector\Nette\Kdyby\NodeResolver\ListeningMethodsCollector::EVENT_TYPE_CONTRIBUTTE);
+        $listeningClassMethods = $this->listeningMethodsCollector->collectFromClassAndGetSubscribedEventClassMethod($node, ListeningMethodsCollector::EVENT_TYPE_CONTRIBUTTE);
         $this->listeningClassMethodArgumentManipulator->change($listeningClassMethods);
         return $node;
     }
-    private function refactorEventNames(\PhpParser\Node\Stmt\ClassMethod $classMethod) : void
+    private function refactorEventNames(ClassMethod $classMethod) : void
     {
-        $this->traverseNodesWithCallable((array) $classMethod->stmts, function (\PhpParser\Node $node) {
-            if (!$node instanceof \PhpParser\Node\Stmt\Return_) {
+        $this->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) {
+            if (!$node instanceof Return_) {
                 return null;
             }
             if ($node->expr === null) {
                 return null;
             }
             $returnedExpr = $node->expr;
-            if (!$returnedExpr instanceof \PhpParser\Node\Expr\Array_) {
+            if (!$returnedExpr instanceof Array_) {
                 return null;
             }
             $this->refactorArrayWithEventTable($returnedExpr);
             $this->getSubscribedEventsArrayManipulator->change($returnedExpr);
         });
     }
-    private function refactorArrayWithEventTable(\PhpParser\Node\Expr\Array_ $array) : void
+    private function refactorArrayWithEventTable(Array_ $array) : void
     {
         foreach ($array->items as $arrayItem) {
             if ($arrayItem === null) {
@@ -142,15 +142,15 @@ CODE_SAMPLE
             }
             $methodName = $this->resolveMethodNameFromKdybyEventName($arrayItem->value);
             $arrayItem->key = $arrayItem->value;
-            $arrayItem->value = new \PhpParser\Node\Scalar\String_($methodName);
+            $arrayItem->value = new String_($methodName);
         }
     }
-    private function resolveMethodNameFromKdybyEventName(\PhpParser\Node\Expr $expr) : string
+    private function resolveMethodNameFromKdybyEventName(Expr $expr) : string
     {
         $kdybyEventName = $this->valueResolver->getValue($expr);
-        if (\RectorPrefix20210510\Nette\Utils\Strings::contains($kdybyEventName, '::')) {
-            return (string) \RectorPrefix20210510\Nette\Utils\Strings::after($kdybyEventName, '::', -1);
+        if (Strings::contains($kdybyEventName, '::')) {
+            return (string) Strings::after($kdybyEventName, '::', -1);
         }
-        throw new \Rector\Core\Exception\NotImplementedYetException($kdybyEventName);
+        throw new NotImplementedYetException($kdybyEventName);
     }
 }

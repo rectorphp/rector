@@ -14,7 +14,7 @@ use RectorPrefix20210510\Symfony\Component\DependencyInjection\Definition;
 /**
  * @author Nicolas Grekas <p@tchwork.com>
  */
-class InlineServiceConfigurator extends \RectorPrefix20210510\Symfony\Component\DependencyInjection\Loader\Configurator\AbstractConfigurator
+class InlineServiceConfigurator extends AbstractConfigurator
 {
     public const FACTORY = 'service';
     use Traits\ArgumentTrait;
@@ -31,7 +31,7 @@ class InlineServiceConfigurator extends \RectorPrefix20210510\Symfony\Component\
     private $id = '[inline]';
     private $allowParent = \true;
     private $path = null;
-    public function __construct(\RectorPrefix20210510\Symfony\Component\DependencyInjection\Definition $definition)
+    public function __construct(Definition $definition)
     {
         $this->definition = $definition;
     }

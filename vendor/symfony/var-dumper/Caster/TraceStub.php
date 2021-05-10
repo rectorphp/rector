@@ -16,7 +16,7 @@ use RectorPrefix20210510\Symfony\Component\VarDumper\Cloner\Stub;
  *
  * @author Nicolas Grekas <p@tchwork.com>
  */
-class TraceStub extends \RectorPrefix20210510\Symfony\Component\VarDumper\Cloner\Stub
+class TraceStub extends Stub
 {
     public $keepArgs;
     public $sliceOffset;

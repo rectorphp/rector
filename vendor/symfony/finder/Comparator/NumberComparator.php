@@ -31,7 +31,7 @@ namespace RectorPrefix20210510\Symfony\Component\Finder\Comparator;
  *
  * @see http://physics.nist.gov/cuu/Units/binary.html
  */
-class NumberComparator extends \RectorPrefix20210510\Symfony\Component\Finder\Comparator\Comparator
+class NumberComparator extends Comparator
 {
     /**
      * @param string|int $test A comparison string or an integer

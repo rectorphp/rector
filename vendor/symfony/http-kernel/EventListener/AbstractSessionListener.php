@@ -34,18 +34,18 @@ use RectorPrefix20210510\Symfony\Component\HttpKernel\KernelEvents;
  *
  * @internal
  */
-abstract class AbstractSessionListener implements \RectorPrefix20210510\Symfony\Component\EventDispatcher\EventSubscriberInterface
+abstract class AbstractSessionListener implements EventSubscriberInterface
 {
     public const NO_AUTO_CACHE_CONTROL_HEADER = 'Symfony-Session-NoAutoCacheControl';
     protected $container;
     private $sessionUsageStack = [];
     private $debug;
-    public function __construct(\RectorPrefix20210510\Psr\Container\ContainerInterface $container = null, bool $debug = \false)
+    public function __construct(ContainerInterface $container = null, bool $debug = \false)
     {
         $this->container = $container;
         $this->debug = $debug;
     }
-    public function onKernelRequest(\RectorPrefix20210510\Symfony\Component\HttpKernel\Event\RequestEvent $event)
+    public function onKernelRequest(RequestEvent $event)
     {
         if (!$event->isMasterRequest()) {
             return;
@@ -58,9 +58,9 @@ abstract class AbstractSessionListener implements \RectorPrefix20210510\Symfony\
             });
         }
         $session = $this->container && $this->container->has('initialized_session') ? $this->container->get('initialized_session') : null;
-        $this->sessionUsageStack[] = $session instanceof \RectorPrefix20210510\Symfony\Component\HttpFoundation\Session\Session ? $session->getUsageIndex() : 0;
+        $this->sessionUsageStack[] = $session instanceof Session ? $session->getUsageIndex() : 0;
     }
-    public function onKernelResponse(\RectorPrefix20210510\Symfony\Component\HttpKernel\Event\ResponseEvent $event)
+    public function onKernelResponse(ResponseEvent $event)
     {
         if (!$event->isMasterRequest()) {
             return;
@@ -100,7 +100,7 @@ abstract class AbstractSessionListener implements \RectorPrefix20210510\Symfony\
              */
             $session->save();
         }
-        if ($session instanceof \RectorPrefix20210510\Symfony\Component\HttpFoundation\Session\Session ? $session->getUsageIndex() === \end($this->sessionUsageStack) : !$session->isStarted()) {
+        if ($session instanceof Session ? $session->getUsageIndex() === \end($this->sessionUsageStack) : !$session->isStarted()) {
             return;
         }
         if ($autoCacheControl) {
@@ -110,13 +110,13 @@ abstract class AbstractSessionListener implements \RectorPrefix20210510\Symfony\
             return;
         }
         if ($this->debug) {
-            throw new \RectorPrefix20210510\Symfony\Component\HttpKernel\Exception\UnexpectedSessionUsageException('Session was used while the request was declared stateless.');
+            throw new UnexpectedSessionUsageException('Session was used while the request was declared stateless.');
         }
         if ($this->container->has('logger')) {
             $this->container->get('logger')->warning('Session was used while the request was declared stateless.');
         }
     }
-    public function onFinishRequest(\RectorPrefix20210510\Symfony\Component\HttpKernel\Event\FinishRequestEvent $event)
+    public function onFinishRequest(FinishRequestEvent $event)
     {
         if ($event->isMasterRequest()) {
             \array_pop($this->sessionUsageStack);
@@ -147,15 +147,15 @@ abstract class AbstractSessionListener implements \RectorPrefix20210510\Symfony\
         if ($session->isStarted()) {
             $session->save();
         }
-        throw new \RectorPrefix20210510\Symfony\Component\HttpKernel\Exception\UnexpectedSessionUsageException('Session was used while the request was declared stateless.');
+        throw new UnexpectedSessionUsageException('Session was used while the request was declared stateless.');
     }
     public static function getSubscribedEvents() : array
     {
         return [
-            \RectorPrefix20210510\Symfony\Component\HttpKernel\KernelEvents::REQUEST => ['onKernelRequest', 128],
+            KernelEvents::REQUEST => ['onKernelRequest', 128],
             // low priority to come after regular response listeners, but higher than StreamedResponseListener
-            \RectorPrefix20210510\Symfony\Component\HttpKernel\KernelEvents::RESPONSE => ['onKernelResponse', -1000],
-            \RectorPrefix20210510\Symfony\Component\HttpKernel\KernelEvents::FINISH_REQUEST => ['onFinishRequest'],
+            KernelEvents::RESPONSE => ['onKernelResponse', -1000],
+            KernelEvents::FINISH_REQUEST => ['onFinishRequest'],
         ];
     }
     /**

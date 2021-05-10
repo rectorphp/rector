@@ -17,7 +17,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Symfony\Tests\Rector\BinaryOp\ResponseStatusCodeRector\ResponseStatusCodeRectorTest
  */
-final class ResponseStatusCodeRector extends \Rector\Core\Rector\AbstractRector
+final class ResponseStatusCodeRector extends AbstractRector
 {
     /**
      * @var array<int, string>
@@ -29,11 +29,11 @@ final class ResponseStatusCodeRector extends \Rector\Core\Rector\AbstractRector
     private $responseObjectType;
     public function __construct()
     {
-        $this->responseObjectType = new \PHPStan\Type\ObjectType('Symfony\\Component\\HttpFoundation\\Response');
+        $this->responseObjectType = new ObjectType('Symfony\\Component\\HttpFoundation\\Response');
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Turns status code numbers to constants', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Turns status code numbers to constants', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeController
 {
     public function index()
@@ -64,19 +64,19 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\BinaryOp::class, \PhpParser\Node\Expr\MethodCall::class];
+        return [BinaryOp::class, MethodCall::class];
     }
     /**
      * @param BinaryOp|MethodCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        if ($node instanceof \PhpParser\Node\Expr\MethodCall) {
+        if ($node instanceof MethodCall) {
             return $this->processMethodCall($node);
         }
         return $this->processBinaryOp($node);
     }
-    private function processMethodCall(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\PhpParser\Node\Expr\MethodCall
+    private function processMethodCall(MethodCall $methodCall) : ?MethodCall
     {
         if (!$this->isObjectType($methodCall->var, $this->responseObjectType)) {
             return null;
@@ -85,34 +85,34 @@ CODE_SAMPLE
             return null;
         }
         $statusCode = $methodCall->args[0]->value;
-        if (!$statusCode instanceof \PhpParser\Node\Scalar\LNumber) {
+        if (!$statusCode instanceof LNumber) {
             return null;
         }
         if (!isset(self::CODE_TO_CONST[$statusCode->value])) {
             return null;
         }
         $classConstFetch = $this->nodeFactory->createClassConstFetch($this->responseObjectType->getClassName(), self::CODE_TO_CONST[$statusCode->value]);
-        $methodCall->args[0] = new \PhpParser\Node\Arg($classConstFetch);
+        $methodCall->args[0] = new Arg($classConstFetch);
         return $methodCall;
     }
-    private function processBinaryOp(\PhpParser\Node\Expr\BinaryOp $binaryOp) : ?\PhpParser\Node\Expr\BinaryOp
+    private function processBinaryOp(BinaryOp $binaryOp) : ?BinaryOp
     {
         if (!$this->isGetStatusMethod($binaryOp->left) && !$this->isGetStatusMethod($binaryOp->right)) {
             return null;
         }
-        if ($binaryOp->right instanceof \PhpParser\Node\Scalar\LNumber && $this->isGetStatusMethod($binaryOp->left)) {
+        if ($binaryOp->right instanceof LNumber && $this->isGetStatusMethod($binaryOp->left)) {
             $binaryOp->right = $this->convertNumberToConstant($binaryOp->right);
             return $binaryOp;
         }
-        if ($binaryOp->left instanceof \PhpParser\Node\Scalar\LNumber && $this->isGetStatusMethod($binaryOp->right)) {
+        if ($binaryOp->left instanceof LNumber && $this->isGetStatusMethod($binaryOp->right)) {
             $binaryOp->left = $this->convertNumberToConstant($binaryOp->left);
             return $binaryOp;
         }
         return null;
     }
-    private function isGetStatusMethod(\PhpParser\Node $node) : bool
+    private function isGetStatusMethod(Node $node) : bool
     {
-        if (!$node instanceof \PhpParser\Node\Expr\MethodCall) {
+        if (!$node instanceof MethodCall) {
             return \false;
         }
         if (!$this->isObjectType($node->var, $this->responseObjectType)) {
@@ -123,7 +123,7 @@ CODE_SAMPLE
     /**
      * @return ClassConstFetch|LNumber
      */
-    private function convertNumberToConstant(\PhpParser\Node\Scalar\LNumber $lNumber) : \PhpParser\Node\Expr
+    private function convertNumberToConstant(LNumber $lNumber) : Expr
     {
         if (!isset(self::CODE_TO_CONST[$lNumber->value])) {
             return $lNumber;

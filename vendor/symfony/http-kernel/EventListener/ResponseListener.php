@@ -20,7 +20,7 @@ use RectorPrefix20210510\Symfony\Component\HttpKernel\KernelEvents;
  *
  * @final
  */
-class ResponseListener implements \RectorPrefix20210510\Symfony\Component\EventDispatcher\EventSubscriberInterface
+class ResponseListener implements EventSubscriberInterface
 {
     private $charset;
     public function __construct(string $charset)
@@ -30,7 +30,7 @@ class ResponseListener implements \RectorPrefix20210510\Symfony\Component\EventD
     /**
      * Filters the Response.
      */
-    public function onKernelResponse(\RectorPrefix20210510\Symfony\Component\HttpKernel\Event\ResponseEvent $event)
+    public function onKernelResponse(ResponseEvent $event)
     {
         if (!$event->isMasterRequest()) {
             return;
@@ -43,6 +43,6 @@ class ResponseListener implements \RectorPrefix20210510\Symfony\Component\EventD
     }
     public static function getSubscribedEvents() : array
     {
-        return [\RectorPrefix20210510\Symfony\Component\HttpKernel\KernelEvents::RESPONSE => 'onKernelResponse'];
+        return [KernelEvents::RESPONSE => 'onKernelResponse'];
     }
 }

@@ -18,11 +18,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\CodingStyle\Rector\Assign\SplitDoubleAssignRector\SplitDoubleAssignRectorTest
  */
-final class SplitDoubleAssignRector extends \Rector\Core\Rector\AbstractRector
+final class SplitDoubleAssignRector extends AbstractRector
 {
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Split multiple inline assigns to each own lines default value, to prevent undefined array issues', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Split multiple inline assigns to each own lines default value, to prevent undefined array issues', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -48,40 +48,40 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\Assign::class];
+        return [Assign::class];
     }
     /**
      * @param Assign $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        $parent = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-        if (!$parent instanceof \PhpParser\Node\Stmt\Expression) {
+        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
+        if (!$parent instanceof Expression) {
             return null;
         }
-        if (!$node->expr instanceof \PhpParser\Node\Expr\Assign) {
+        if (!$node->expr instanceof Assign) {
             return null;
         }
-        $newAssign = new \PhpParser\Node\Expr\Assign($node->var, $node->expr->expr);
+        $newAssign = new Assign($node->var, $node->expr->expr);
         if (!$this->isExprCallOrNew($node->expr->expr)) {
             $this->addNodeAfterNode($node->expr, $node);
             return $newAssign;
         }
-        $varAssign = new \PhpParser\Node\Expr\Assign($node->expr->var, $node->var);
-        $this->addNodeBeforeNode(new \PhpParser\Node\Stmt\Expression($newAssign), $node);
+        $varAssign = new Assign($node->expr->var, $node->var);
+        $this->addNodeBeforeNode(new Expression($newAssign), $node);
         return $varAssign;
     }
-    private function isExprCallOrNew(\PhpParser\Node\Expr $expr) : bool
+    private function isExprCallOrNew(Expr $expr) : bool
     {
-        if ($expr instanceof \PhpParser\Node\Expr\MethodCall) {
+        if ($expr instanceof MethodCall) {
             return \true;
         }
-        if ($expr instanceof \PhpParser\Node\Expr\StaticCall) {
+        if ($expr instanceof StaticCall) {
             return \true;
         }
-        if ($expr instanceof \PhpParser\Node\Expr\FuncCall) {
+        if ($expr instanceof FuncCall) {
             return \true;
         }
-        return $expr instanceof \PhpParser\Node\Expr\New_;
+        return $expr instanceof New_;
     }
 }

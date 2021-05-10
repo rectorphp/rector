@@ -19,7 +19,7 @@ final class PregMatchAllAnalyzer
      * @param Arg[] $args
      * @return Arg[]
      */
-    public function compensateEnforcedFlag(string $methodName, \PhpParser\Node\Expr\FuncCall $funcCall, array $args) : array
+    public function compensateEnforcedFlag(string $methodName, FuncCall $funcCall, array $args) : array
     {
         if ($methodName !== 'matchAll') {
             return $args;
@@ -27,9 +27,9 @@ final class PregMatchAllAnalyzer
         if (\count($funcCall->args) !== 3) {
             return $args;
         }
-        $constFetch = new \PhpParser\Node\Expr\ConstFetch(new \PhpParser\Node\Name('PREG_SET_ORDER'));
-        $minus = new \PhpParser\Node\Expr\BinaryOp\Minus($constFetch, new \PhpParser\Node\Scalar\LNumber(1));
-        $args[] = new \PhpParser\Node\Arg($minus);
+        $constFetch = new ConstFetch(new Name('PREG_SET_ORDER'));
+        $minus = new Minus($constFetch, new LNumber(1));
+        $args[] = new Arg($minus);
         return $args;
     }
 }

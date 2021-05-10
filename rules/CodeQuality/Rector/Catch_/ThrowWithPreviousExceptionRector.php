@@ -26,7 +26,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://github.com/thecodingmachine/phpstan-strict-rules/blob/e3d746a61d38993ca2bc2e2fcda7012150de120c/src/Rules/Exceptions/ThrowMustBundlePreviousExceptionRule.php#L83
  * @see \Rector\Tests\CodeQuality\Rector\Catch_\ThrowWithPreviousExceptionRector\ThrowWithPreviousExceptionRectorTest
  */
-final class ThrowWithPreviousExceptionRector extends \Rector\Core\Rector\AbstractRector
+final class ThrowWithPreviousExceptionRector extends AbstractRector
 {
     /**
      * @var int
@@ -36,13 +36,13 @@ final class ThrowWithPreviousExceptionRector extends \Rector\Core\Rector\Abstrac
      * @var ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider)
+    public function __construct(ReflectionProvider $reflectionProvider)
     {
         $this->reflectionProvider = $reflectionProvider;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('When throwing into a catch block, checks that the previous exception is passed to the new throw clause', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('When throwing into a catch block, checks that the previous exception is passed to the new throw clause', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -75,32 +75,32 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Catch_::class];
+        return [Catch_::class];
     }
     /**
      * @param Catch_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         $caughtThrowableVariable = $node->var;
-        if (!$caughtThrowableVariable instanceof \PhpParser\Node\Expr\Variable) {
+        if (!$caughtThrowableVariable instanceof Variable) {
             return null;
         }
-        $this->traverseNodesWithCallable($node->stmts, function (\PhpParser\Node $node) use($caughtThrowableVariable) : ?int {
-            if (!$node instanceof \PhpParser\Node\Stmt\Throw_) {
+        $this->traverseNodesWithCallable($node->stmts, function (Node $node) use($caughtThrowableVariable) : ?int {
+            if (!$node instanceof Throw_) {
                 return null;
             }
             return $this->refactorThrow($node, $caughtThrowableVariable);
         });
         return $node;
     }
-    private function refactorThrow(\PhpParser\Node\Stmt\Throw_ $throw, \PhpParser\Node\Expr\Variable $catchedThrowableVariable) : ?int
+    private function refactorThrow(Throw_ $throw, Variable $catchedThrowableVariable) : ?int
     {
-        if (!$throw->expr instanceof \PhpParser\Node\Expr\New_) {
+        if (!$throw->expr instanceof New_) {
             return null;
         }
         $new = $throw->expr;
-        if (!$new->class instanceof \PhpParser\Node\Name) {
+        if (!$new->class instanceof Name) {
             return null;
         }
         $exceptionArgumentPosition = $this->resolveExceptionArgumentPosition($new->class);
@@ -113,36 +113,36 @@ CODE_SAMPLE
         }
         if (!isset($new->args[0])) {
             // get previous message
-            $new->args[0] = new \PhpParser\Node\Arg(new \PhpParser\Node\Expr\MethodCall($catchedThrowableVariable, 'getMessage'));
+            $new->args[0] = new Arg(new MethodCall($catchedThrowableVariable, 'getMessage'));
         }
         if (!isset($new->args[1])) {
             // get previous code
-            $new->args[1] = new \PhpParser\Node\Arg(new \PhpParser\Node\Expr\MethodCall($catchedThrowableVariable, 'getCode'));
+            $new->args[1] = new Arg(new MethodCall($catchedThrowableVariable, 'getCode'));
         }
         $arg1 = $new->args[1];
-        if ($arg1->name instanceof \PhpParser\Node\Identifier && $arg1->name->toString() === 'previous') {
-            $new->args[1] = new \PhpParser\Node\Arg(new \PhpParser\Node\Expr\MethodCall($catchedThrowableVariable, 'getCode'));
+        if ($arg1->name instanceof Identifier && $arg1->name->toString() === 'previous') {
+            $new->args[1] = new Arg(new MethodCall($catchedThrowableVariable, 'getCode'));
             $new->args[$exceptionArgumentPosition] = $arg1;
         } else {
-            $new->args[$exceptionArgumentPosition] = new \PhpParser\Node\Arg($catchedThrowableVariable);
+            $new->args[$exceptionArgumentPosition] = new Arg($catchedThrowableVariable);
         }
         // null the node, to fix broken format preserving printers, see https://github.com/rectorphp/rector/issues/5576
-        $new->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NODE, null);
+        $new->setAttribute(AttributeKey::ORIGINAL_NODE, null);
         // nothing more to add
-        return \PhpParser\NodeTraverser::DONT_TRAVERSE_CHILDREN;
+        return NodeTraverser::DONT_TRAVERSE_CHILDREN;
     }
-    private function resolveExceptionArgumentPosition(\PhpParser\Node\Name $exceptionName) : ?int
+    private function resolveExceptionArgumentPosition(Name $exceptionName) : ?int
     {
         $className = $this->getName($exceptionName);
         // is native exception?
-        if (!\RectorPrefix20210510\Nette\Utils\Strings::contains($className, '\\')) {
+        if (!Strings::contains($className, '\\')) {
             return self::DEFAULT_EXCEPTION_ARGUMENT_POSITION;
         }
         if (!$this->reflectionProvider->hasClass($className)) {
             return self::DEFAULT_EXCEPTION_ARGUMENT_POSITION;
         }
         $classReflection = $this->reflectionProvider->getClass($className);
-        $construct = $classReflection->hasMethod(\Rector\Core\ValueObject\MethodName::CONSTRUCT);
+        $construct = $classReflection->hasMethod(MethodName::CONSTRUCT);
         if (!$construct) {
             return self::DEFAULT_EXCEPTION_ARGUMENT_POSITION;
         }
@@ -150,10 +150,10 @@ CODE_SAMPLE
         $parametersAcceptor = $constructorReflectionMethod->getVariants()[0];
         foreach ($parametersAcceptor->getParameters() as $position => $parameterReflection) {
             $parameterType = $parameterReflection->getType();
-            if (!$parameterType instanceof \PHPStan\Type\TypeWithClassName) {
+            if (!$parameterType instanceof TypeWithClassName) {
                 continue;
             }
-            $objectType = new \PHPStan\Type\ObjectType('Throwable');
+            $objectType = new ObjectType('Throwable');
             if ($objectType->isSuperTypeOf($parameterType)->no()) {
                 continue;
             }

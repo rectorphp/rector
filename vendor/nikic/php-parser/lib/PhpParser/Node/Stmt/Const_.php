@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace PhpParser\Node\Stmt;
 
 use PhpParser\Node;
-class Const_ extends \PhpParser\Node\Stmt
+class Const_ extends Node\Stmt
 {
     /** @var Node\Const_[] Constant declarations */
     public $consts;

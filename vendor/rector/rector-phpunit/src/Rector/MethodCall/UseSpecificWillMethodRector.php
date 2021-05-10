@@ -17,7 +17,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @see https://github.com/symfony/symfony/pull/29685/files
  * @see \Rector\PHPUnit\Tests\Rector\MethodCall\UseSpecificWillMethodRector\UseSpecificWillMethodRectorTest
  */
-final class UseSpecificWillMethodRector extends \Rector\Core\Rector\AbstractRector
+final class UseSpecificWillMethodRector extends AbstractRector
 {
     /**
      * @var array<string, string>
@@ -27,13 +27,13 @@ final class UseSpecificWillMethodRector extends \Rector\Core\Rector\AbstractRect
      * @var TestsNodeAnalyzer
      */
     private $testsNodeAnalyzer;
-    public function __construct(\Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer $testsNodeAnalyzer)
+    public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer)
     {
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Changes ->will($this->xxx()) to one specific method', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Changes ->will($this->xxx()) to one specific method', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass extends PHPUnit\Framework\TestCase
 {
     public function test()
@@ -66,18 +66,18 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\MethodCall::class, \PhpParser\Node\Expr\StaticCall::class];
+        return [MethodCall::class, StaticCall::class];
     }
     /**
      * @param MethodCall|StaticCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if (!$this->testsNodeAnalyzer->isInTestClass($node)) {
             return null;
         }
-        $callerNode = $node instanceof \PhpParser\Node\Expr\StaticCall ? $node->class : $node->var;
-        if (!$this->isObjectType($callerNode, new \PHPStan\Type\ObjectType('PHPUnit\\Framework\\MockObject\\Builder\\InvocationMocker'))) {
+        $callerNode = $node instanceof StaticCall ? $node->class : $node->var;
+        if (!$this->isObjectType($callerNode, new ObjectType('PHPUnit\\Framework\\MockObject\\Builder\\InvocationMocker'))) {
             return null;
         }
         if ($this->isName($node->name, 'with')) {
@@ -92,10 +92,10 @@ CODE_SAMPLE
      * @param MethodCall|StaticCall $node
      * @return MethodCall|StaticCall
      */
-    private function processWithCall(\PhpParser\Node $node) : \PhpParser\Node
+    private function processWithCall(Node $node) : Node
     {
         foreach ($node->args as $i => $argNode) {
-            if (!$argNode->value instanceof \PhpParser\Node\Expr\MethodCall) {
+            if (!$argNode->value instanceof MethodCall) {
                 continue;
             }
             $methodCall = $argNode->value;
@@ -110,9 +110,9 @@ CODE_SAMPLE
      * @param MethodCall|StaticCall $node
      * @return MethodCall|StaticCall|null
      */
-    private function processWillCall(\PhpParser\Node $node) : ?\PhpParser\Node
+    private function processWillCall(Node $node) : ?Node
     {
-        if (!$node->args[0]->value instanceof \PhpParser\Node\Expr\MethodCall) {
+        if (!$node->args[0]->value instanceof MethodCall) {
             return null;
         }
         $nestedMethodCall = $node->args[0]->value;
@@ -120,7 +120,7 @@ CODE_SAMPLE
             if (!$this->isName($nestedMethodCall->name, $oldMethodName)) {
                 continue;
             }
-            $node->name = new \PhpParser\Node\Identifier($newParentMethodName);
+            $node->name = new Identifier($newParentMethodName);
             // move args up
             $node->args = $nestedMethodCall->args;
             return $node;

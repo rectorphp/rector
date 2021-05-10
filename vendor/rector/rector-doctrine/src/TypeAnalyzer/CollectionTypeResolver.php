@@ -29,15 +29,15 @@ final class CollectionTypeResolver
      * @var ShortClassExpander
      */
     private $shortClassExpander;
-    public function __construct(\Rector\StaticTypeMapper\Naming\NameScopeFactory $nameScopeFactory, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \Rector\TypeDeclaration\PhpDoc\ShortClassExpander $shortClassExpander)
+    public function __construct(NameScopeFactory $nameScopeFactory, PhpDocInfoFactory $phpDocInfoFactory, ShortClassExpander $shortClassExpander)
     {
         $this->nameScopeFactory = $nameScopeFactory;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->shortClassExpander = $shortClassExpander;
     }
-    public function resolveFromTypeNode(\PHPStan\PhpDocParser\Ast\Type\TypeNode $typeNode, \PhpParser\Node $node) : ?\Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType
+    public function resolveFromTypeNode(TypeNode $typeNode, Node $node) : ?FullyQualifiedObjectType
     {
-        if ($typeNode instanceof \PHPStan\PhpDocParser\Ast\Type\UnionTypeNode) {
+        if ($typeNode instanceof UnionTypeNode) {
             foreach ($typeNode->types as $unionedTypeNode) {
                 $resolvedUnionedType = $this->resolveFromTypeNode($unionedTypeNode, $node);
                 if ($resolvedUnionedType !== null) {
@@ -45,25 +45,25 @@ final class CollectionTypeResolver
                 }
             }
         }
-        if ($typeNode instanceof \PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode && $typeNode->type instanceof \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode) {
+        if ($typeNode instanceof ArrayTypeNode && $typeNode->type instanceof IdentifierTypeNode) {
             $nameScope = $this->nameScopeFactory->createNameScopeFromNode($node);
             $fullyQualifiedName = $nameScope->resolveStringName($typeNode->type->name);
-            return new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType($fullyQualifiedName);
+            return new FullyQualifiedObjectType($fullyQualifiedName);
         }
         return null;
     }
-    public function resolveFromOneToManyProperty(\PhpParser\Node\Stmt\Property $property) : ?\Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType
+    public function resolveFromOneToManyProperty(Property $property) : ?FullyQualifiedObjectType
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
         $doctrineAnnotationTagValueNode = $phpDocInfo->getByAnnotationClass('Doctrine\\ORM\\Mapping\\OneToMany');
-        if (!$doctrineAnnotationTagValueNode instanceof \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode) {
+        if (!$doctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
             return null;
         }
         $targetEntity = $doctrineAnnotationTagValueNode->getValueWithoutQuotes('targetEntity');
         if ($targetEntity === null) {
-            throw new \Rector\Core\Exception\ShouldNotHappenException();
+            throw new ShouldNotHappenException();
         }
         $fullyQualifiedTargetEntity = $this->shortClassExpander->resolveFqnTargetEntity($targetEntity, $property);
-        return new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType($fullyQualifiedTargetEntity);
+        return new FullyQualifiedObjectType($fullyQualifiedTargetEntity);
     }
 }

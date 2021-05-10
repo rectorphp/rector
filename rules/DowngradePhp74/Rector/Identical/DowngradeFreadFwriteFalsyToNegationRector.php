@@ -14,15 +14,15 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\DowngradePhp74\Rector\Identical\DowngradeFreadFwriteFalsyToNegationRector\DowngradeFreadFwriteFalsyToNegationRectorTest
  */
-final class DowngradeFreadFwriteFalsyToNegationRector extends \Rector\Core\Rector\AbstractRector
+final class DowngradeFreadFwriteFalsyToNegationRector extends AbstractRector
 {
     /**
      * @var string[]
      */
     private const FUNC_FREAD_FWRITE = ['fread', 'fwrite'];
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Changes fread() or fwrite() compare to false to negation check', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Changes fread() or fwrite() compare to false to negation check', [new CodeSample(<<<'CODE_SAMPLE'
 fread($handle, $length) === false;
 fwrite($fp, '1') === false;
 CODE_SAMPLE
@@ -37,28 +37,28 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\BinaryOp\Identical::class];
+        return [Identical::class];
     }
     /**
      * @param Identical $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         $compareValue = $this->getCompareValue($node);
-        if (!$compareValue instanceof \PhpParser\Node\Expr) {
+        if (!$compareValue instanceof Expr) {
             return null;
         }
         if (!$this->valueResolver->isFalse($compareValue)) {
             return null;
         }
-        return new \PhpParser\Node\Expr\BooleanNot($this->getFunction($node));
+        return new BooleanNot($this->getFunction($node));
     }
-    private function getCompareValue(\PhpParser\Node\Expr\BinaryOp\Identical $identical) : ?\PhpParser\Node\Expr
+    private function getCompareValue(Identical $identical) : ?Expr
     {
-        if ($identical->left instanceof \PhpParser\Node\Expr\FuncCall && $this->isNames($identical->left, self::FUNC_FREAD_FWRITE)) {
+        if ($identical->left instanceof FuncCall && $this->isNames($identical->left, self::FUNC_FREAD_FWRITE)) {
             return $identical->right;
         }
-        if (!$identical->right instanceof \PhpParser\Node\Expr\FuncCall) {
+        if (!$identical->right instanceof FuncCall) {
             return null;
         }
         if (!$this->isNames($identical->right, self::FUNC_FREAD_FWRITE)) {
@@ -66,10 +66,10 @@ CODE_SAMPLE
         }
         return $identical->left;
     }
-    private function getFunction(\PhpParser\Node\Expr\BinaryOp\Identical $identical) : \PhpParser\Node\Expr\FuncCall
+    private function getFunction(Identical $identical) : FuncCall
     {
         /** @var FuncCall $funcCall */
-        $funcCall = $identical->left instanceof \PhpParser\Node\Expr\FuncCall ? $identical->left : $identical->right;
+        $funcCall = $identical->left instanceof FuncCall ? $identical->left : $identical->right;
         return $funcCall;
     }
 }

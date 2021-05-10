@@ -25,12 +25,12 @@ final class PhpDocTypeMapper
     /**
      * @param PhpDocTypeMapperInterface[] $phpDocTypeMappers
      */
-    public function __construct(array $phpDocTypeMappers, \PHPStan\PhpDoc\TypeNodeResolver $typeNodeResolver)
+    public function __construct(array $phpDocTypeMappers, TypeNodeResolver $typeNodeResolver)
     {
         $this->phpDocTypeMappers = $phpDocTypeMappers;
         $this->typeNodeResolver = $typeNodeResolver;
     }
-    public function mapToPHPStanType(\PHPStan\PhpDocParser\Ast\Type\TypeNode $typeNode, \PhpParser\Node $node, \PHPStan\Analyser\NameScope $nameScope) : \PHPStan\Type\Type
+    public function mapToPHPStanType(TypeNode $typeNode, Node $node, NameScope $nameScope) : Type
     {
         foreach ($this->phpDocTypeMappers as $phpDocTypeMapper) {
             if (!\is_a($typeNode, $phpDocTypeMapper->getNodeType())) {

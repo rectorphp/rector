@@ -14,7 +14,7 @@ use PhpParser\NodeVisitorAbstract;
  * node can be accessed through <code>$node->getAttribute('previous')</code>,
  * and the next node can be accessed through <code>$node->getAttribute('next')</code>.
  */
-final class NodeConnectingVisitor extends \PhpParser\NodeVisitorAbstract
+final class NodeConnectingVisitor extends NodeVisitorAbstract
 {
     /**
      * @var Node[]
@@ -29,7 +29,7 @@ final class NodeConnectingVisitor extends \PhpParser\NodeVisitorAbstract
         $this->stack = [];
         $this->previous = null;
     }
-    public function enterNode(\PhpParser\Node $node)
+    public function enterNode(Node $node)
     {
         if (!empty($this->stack)) {
             $node->setAttribute('parent', $this->stack[\count($this->stack) - 1]);
@@ -40,7 +40,7 @@ final class NodeConnectingVisitor extends \PhpParser\NodeVisitorAbstract
         }
         $this->stack[] = $node;
     }
-    public function leaveNode(\PhpParser\Node $node)
+    public function leaveNode(Node $node)
     {
         $this->previous = $node;
         \array_pop($this->stack);

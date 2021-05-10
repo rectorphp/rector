@@ -10,6 +10,6 @@
  */
 namespace RectorPrefix20210510\Symfony\Component\ErrorHandler\Error;
 
-class OutOfMemoryError extends \RectorPrefix20210510\Symfony\Component\ErrorHandler\Error\FatalError
+class OutOfMemoryError extends FatalError
 {
 }

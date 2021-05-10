@@ -24,9 +24,9 @@ final class RenameProperty
         $this->oldProperty = $oldProperty;
         $this->newProperty = $newProperty;
     }
-    public function getObjectType() : \PHPStan\Type\ObjectType
+    public function getObjectType() : ObjectType
     {
-        return new \PHPStan\Type\ObjectType($this->type);
+        return new ObjectType($this->type);
     }
     public function getOldProperty() : string
     {

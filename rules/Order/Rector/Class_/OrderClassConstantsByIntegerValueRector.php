@@ -15,7 +15,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\Order\Rector\Class_\OrderClassConstantsByIntegerValueRector\OrderClassConstantsByIntegerValueRectorTest
  */
-final class OrderClassConstantsByIntegerValueRector extends \Rector\Core\Rector\AbstractRector
+final class OrderClassConstantsByIntegerValueRector extends AbstractRector
 {
     /**
      * @var OrderChangeAnalyzer
@@ -25,14 +25,14 @@ final class OrderClassConstantsByIntegerValueRector extends \Rector\Core\Rector\
      * @var StmtOrder
      */
     private $stmtOrder;
-    public function __construct(\Rector\Order\Order\OrderChangeAnalyzer $orderChangeAnalyzer, \Rector\Order\StmtOrder $stmtOrder)
+    public function __construct(OrderChangeAnalyzer $orderChangeAnalyzer, StmtOrder $stmtOrder)
     {
         $this->orderChangeAnalyzer = $orderChangeAnalyzer;
         $this->stmtOrder = $stmtOrder;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Order class constant order by their integer value', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Order class constant order by their integer value', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     const MODE_ON = 0;
@@ -59,12 +59,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Class_::class];
+        return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         $numericClassConstsByKey = $this->resolveClassConstByPosition($node);
         if ($numericClassConstsByKey === []) {
@@ -83,18 +83,18 @@ CODE_SAMPLE
     /**
      * @return ClassConst[]
      */
-    private function resolveClassConstByPosition(\PhpParser\Node\Stmt\Class_ $class) : array
+    private function resolveClassConstByPosition(Class_ $class) : array
     {
         $classConstConstsByValue = [];
         foreach ($class->stmts as $key => $classStmt) {
-            if (!$classStmt instanceof \PhpParser\Node\Stmt\ClassConst) {
+            if (!$classStmt instanceof ClassConst) {
                 continue;
             }
             if (\count($classStmt->consts) !== 1) {
                 continue;
             }
             $classConstConst = $classStmt->consts[0];
-            if (!$classConstConst->value instanceof \PhpParser\Node\Scalar\LNumber) {
+            if (!$classConstConst->value instanceof LNumber) {
                 continue;
             }
             $classConstConstsByValue[$key] = $classStmt;

@@ -23,7 +23,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\Naming\Rector\Class_\RenamePropertyToMatchTypeRector\RenamePropertyToMatchTypeRectorTest
  */
-final class RenamePropertyToMatchTypeRector extends \Rector\Core\Rector\AbstractRector
+final class RenamePropertyToMatchTypeRector extends AbstractRector
 {
     /**
      * @var bool
@@ -49,7 +49,7 @@ final class RenamePropertyToMatchTypeRector extends \Rector\Core\Rector\Abstract
      * @var PropertyFetchRenamer
      */
     private $propertyFetchRenamer;
-    public function __construct(\Rector\Naming\PropertyRenamer\MatchTypePropertyRenamer $matchTypePropertyRenamer, \Rector\Naming\ValueObjectFactory\PropertyRenameFactory $propertyRenameFactory, \Rector\Naming\ExpectedNameResolver\MatchPropertyTypeExpectedNameResolver $matchPropertyTypeExpectedNameResolver, \Rector\Naming\ExpectedNameResolver\MatchParamTypeExpectedNameResolver $matchParamTypeExpectedNameResolver, \Rector\Naming\PropertyRenamer\PropertyFetchRenamer $propertyFetchRenamer)
+    public function __construct(MatchTypePropertyRenamer $matchTypePropertyRenamer, PropertyRenameFactory $propertyRenameFactory, MatchPropertyTypeExpectedNameResolver $matchPropertyTypeExpectedNameResolver, MatchParamTypeExpectedNameResolver $matchParamTypeExpectedNameResolver, PropertyFetchRenamer $propertyFetchRenamer)
     {
         $this->propertyRenameFactory = $propertyRenameFactory;
         $this->matchTypePropertyRenamer = $matchTypePropertyRenamer;
@@ -57,9 +57,9 @@ final class RenamePropertyToMatchTypeRector extends \Rector\Core\Rector\Abstract
         $this->matchParamTypeExpectedNameResolver = $matchParamTypeExpectedNameResolver;
         $this->propertyFetchRenamer = $propertyFetchRenamer;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Rename property and method param to match its type', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Rename property and method param to match its type', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     /**
@@ -94,12 +94,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Class_::class, \PhpParser\Node\Stmt\Interface_::class];
+        return [Class_::class, Interface_::class];
     }
     /**
      * @param Class_|Interface_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         $this->refactorClassProperties($node);
         $this->renamePropertyPromotion($node);
@@ -108,7 +108,7 @@ CODE_SAMPLE
         }
         return $node;
     }
-    private function refactorClassProperties(\PhpParser\Node\Stmt\ClassLike $classLike) : void
+    private function refactorClassProperties(ClassLike $classLike) : void
     {
         foreach ($classLike->getProperties() as $property) {
             $expectedPropertyName = $this->matchPropertyTypeExpectedNameResolver->resolve($property);
@@ -116,23 +116,23 @@ CODE_SAMPLE
                 continue;
             }
             $propertyRename = $this->propertyRenameFactory->createFromExpectedName($property, $expectedPropertyName);
-            if (!$propertyRename instanceof \Rector\Naming\ValueObject\PropertyRename) {
+            if (!$propertyRename instanceof PropertyRename) {
                 continue;
             }
             $renameProperty = $this->matchTypePropertyRenamer->rename($propertyRename);
-            if (!$renameProperty instanceof \PhpParser\Node\Stmt\Property) {
+            if (!$renameProperty instanceof Property) {
                 continue;
             }
             $this->hasChanged = \true;
         }
     }
-    private function renamePropertyPromotion(\PhpParser\Node\Stmt\ClassLike $classLike) : void
+    private function renamePropertyPromotion(ClassLike $classLike) : void
     {
-        if (!$this->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::PROPERTY_PROMOTION)) {
+        if (!$this->isAtLeastPhpVersion(PhpVersionFeature::PROPERTY_PROMOTION)) {
             return;
         }
-        $constructClassMethod = $classLike->getMethod(\Rector\Core\ValueObject\MethodName::CONSTRUCT);
-        if (!$constructClassMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
+        $constructClassMethod = $classLike->getMethod(MethodName::CONSTRUCT);
+        if (!$constructClassMethod instanceof ClassMethod) {
             return;
         }
         foreach ($constructClassMethod->params as $param) {

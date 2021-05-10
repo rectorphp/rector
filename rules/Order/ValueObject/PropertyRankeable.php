@@ -5,7 +5,7 @@ namespace Rector\Order\ValueObject;
 
 use PhpParser\Node\Stmt\Property;
 use Rector\Order\Contract\RankeableInterface;
-final class PropertyRankeable implements \Rector\Order\Contract\RankeableInterface
+final class PropertyRankeable implements RankeableInterface
 {
     /**
      * @var string
@@ -23,7 +23,7 @@ final class PropertyRankeable implements \Rector\Order\Contract\RankeableInterfa
      * @var Property
      */
     private $property;
-    public function __construct(string $name, int $visibility, \PhpParser\Node\Stmt\Property $property, int $position)
+    public function __construct(string $name, int $visibility, Property $property, int $position)
     {
         $this->name = $name;
         $this->visibility = $visibility;

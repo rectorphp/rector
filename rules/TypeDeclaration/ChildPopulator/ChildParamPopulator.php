@@ -33,7 +33,7 @@ final class ChildParamPopulator
      * @var ChildTypeResolver
      */
     private $childTypeResolver;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\ChangesReporting\Collector\RectorChangeCollector $rectorChangeCollector, \Rector\NodeCollector\NodeCollector\NodeRepository $nodeRepository, \Rector\TypeDeclaration\NodeTypeAnalyzer\ChildTypeResolver $childTypeResolver)
+    public function __construct(NodeNameResolver $nodeNameResolver, RectorChangeCollector $rectorChangeCollector, NodeRepository $nodeRepository, ChildTypeResolver $childTypeResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->rectorChangeCollector = $rectorChangeCollector;
@@ -44,13 +44,13 @@ final class ChildParamPopulator
      * Add typehint to all children
      * @param ClassMethod|Function_ $functionLike
      */
-    public function populateChildClassMethod(\PhpParser\Node\FunctionLike $functionLike, int $position, \PHPStan\Type\Type $paramType) : void
+    public function populateChildClassMethod(FunctionLike $functionLike, int $position, Type $paramType) : void
     {
-        if (!$functionLike instanceof \PhpParser\Node\Stmt\ClassMethod) {
+        if (!$functionLike instanceof ClassMethod) {
             return;
         }
         /** @var string|null $className */
-        $className = $functionLike->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);
+        $className = $functionLike->getAttribute(AttributeKey::CLASS_NAME);
         // anonymous class
         if ($className === null) {
             return;
@@ -58,7 +58,7 @@ final class ChildParamPopulator
         $childrenClassLikes = $this->nodeRepository->findClassesAndInterfacesByType($className);
         // update their methods as well
         foreach ($childrenClassLikes as $childClassLike) {
-            if ($childClassLike instanceof \PhpParser\Node\Stmt\Class_) {
+            if ($childClassLike instanceof Class_) {
                 $usedTraits = $this->nodeRepository->findUsedTraitsInClass($childClassLike);
                 foreach ($usedTraits as $usedTrait) {
                     $this->addParamTypeToMethod($usedTrait, $position, $functionLike, $paramType);
@@ -67,11 +67,11 @@ final class ChildParamPopulator
             $this->addParamTypeToMethod($childClassLike, $position, $functionLike, $paramType);
         }
     }
-    private function addParamTypeToMethod(\PhpParser\Node\Stmt\ClassLike $classLike, int $position, \PhpParser\Node\Stmt\ClassMethod $classMethod, \PHPStan\Type\Type $paramType) : void
+    private function addParamTypeToMethod(ClassLike $classLike, int $position, ClassMethod $classMethod, Type $paramType) : void
     {
         $methodName = $this->nodeNameResolver->getName($classMethod);
         $currentClassMethod = $classLike->getMethod($methodName);
-        if (!$currentClassMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
+        if (!$currentClassMethod instanceof ClassMethod) {
             return;
         }
         if (!isset($currentClassMethod->params[$position])) {
@@ -88,7 +88,7 @@ final class ChildParamPopulator
         }
         // let the method know it was changed now
         $paramNode->type = $resolvedChildType;
-        $paramNode->type->setAttribute(\Rector\TypeDeclaration\ValueObject\NewType::HAS_NEW_INHERITED_TYPE, \true);
+        $paramNode->type->setAttribute(NewType::HAS_NEW_INHERITED_TYPE, \true);
         $this->rectorChangeCollector->notifyNodeFileInfo($paramNode);
     }
 }

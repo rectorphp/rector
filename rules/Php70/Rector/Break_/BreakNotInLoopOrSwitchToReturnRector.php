@@ -16,19 +16,19 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @see https://3v4l.org/Qtelt
  * @see \Rector\Tests\Php70\Rector\Break_\BreakNotInLoopOrSwitchToReturnRector\BreakNotInLoopOrSwitchToReturnRectorTest
  */
-final class BreakNotInLoopOrSwitchToReturnRector extends \Rector\Core\Rector\AbstractRector
+final class BreakNotInLoopOrSwitchToReturnRector extends AbstractRector
 {
     /**
      * @var ContextAnalyzer
      */
     private $contextAnalyzer;
-    public function __construct(\Rector\NodeNestingScope\ContextAnalyzer $contextAnalyzer)
+    public function __construct(ContextAnalyzer $contextAnalyzer)
     {
         $this->contextAnalyzer = $contextAnalyzer;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Convert break outside for/foreach/switch context to return', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Convert break outside for/foreach/switch context to return', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -61,18 +61,18 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Break_::class];
+        return [Break_::class];
     }
     /**
      * @param Break_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if ($this->contextAnalyzer->isInLoop($node)) {
             return null;
         }
         if ($this->contextAnalyzer->isInIf($node)) {
-            return new \PhpParser\Node\Stmt\Return_();
+            return new Return_();
         }
         $this->removeNode($node);
         return $node;

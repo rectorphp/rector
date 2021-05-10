@@ -15,9 +15,9 @@ class ShouldCallParentMethodsRule implements \PHPStan\Rules\Rule
 {
     public function getNodeType() : string
     {
-        return \PHPStan\Node\InClassMethodNode::class;
+        return InClassMethodNode::class;
     }
-    public function processNode(\PhpParser\Node $node, \PHPStan\Analyser\Scope $scope) : array
+    public function processNode(Node $node, Scope $scope) : array
     {
         $methodName = $node->getOriginalNode()->name->name;
         if (!\in_array(\strtolower($methodName), ['setup', 'teardown'], \true)) {
@@ -26,7 +26,7 @@ class ShouldCallParentMethodsRule implements \PHPStan\Rules\Rule
         if ($scope->getClassReflection() === null) {
             return [];
         }
-        if (!$scope->getClassReflection()->isSubclassOf(\RectorPrefix20210510\PHPUnit\Framework\TestCase::class)) {
+        if (!$scope->getClassReflection()->isSubclassOf(TestCase::class)) {
             return [];
         }
         $parentClass = $scope->getClassReflection()->getParentClass();
@@ -37,12 +37,12 @@ class ShouldCallParentMethodsRule implements \PHPStan\Rules\Rule
             return [];
         }
         $parentMethod = $parentClass->getNativeMethod($methodName);
-        if ($parentMethod->getDeclaringClass()->getName() === \RectorPrefix20210510\PHPUnit\Framework\TestCase::class) {
+        if ($parentMethod->getDeclaringClass()->getName() === TestCase::class) {
             return [];
         }
         $hasParentCall = $this->hasParentClassCall($node->getOriginalNode()->getStmts(), \strtolower($methodName));
         if (!$hasParentCall) {
-            return [\PHPStan\Rules\RuleErrorBuilder::message(\sprintf('Missing call to parent::%s() method.', $methodName))->build()];
+            return [RuleErrorBuilder::message(\sprintf('Missing call to parent::%s() method.', $methodName))->build()];
         }
         return [];
     }
@@ -58,20 +58,20 @@ class ShouldCallParentMethodsRule implements \PHPStan\Rules\Rule
             return \false;
         }
         foreach ($stmts as $stmt) {
-            if (!$stmt instanceof \PhpParser\Node\Stmt\Expression) {
+            if (!$stmt instanceof Node\Stmt\Expression) {
                 continue;
             }
-            if (!$stmt->expr instanceof \PhpParser\Node\Expr\StaticCall) {
+            if (!$stmt->expr instanceof Node\Expr\StaticCall) {
                 continue;
             }
-            if (!$stmt->expr->class instanceof \PhpParser\Node\Name) {
+            if (!$stmt->expr->class instanceof Node\Name) {
                 continue;
             }
             $class = (string) $stmt->expr->class;
             if (\strtolower($class) !== 'parent') {
                 continue;
             }
-            if (!$stmt->expr->name instanceof \PhpParser\Node\Identifier) {
+            if (!$stmt->expr->name instanceof Node\Identifier) {
                 continue;
             }
             if (\strtolower($stmt->expr->name->name) === $methodName) {

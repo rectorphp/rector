@@ -13,7 +13,7 @@ namespace RectorPrefix20210510\Composer\Semver\Constraint;
 /**
  * Blackhole of constraints, nothing escapes it
  */
-class MatchNoneConstraint implements \RectorPrefix20210510\Composer\Semver\Constraint\ConstraintInterface
+class MatchNoneConstraint implements ConstraintInterface
 {
     /** @var string|null */
     protected $prettyString;
@@ -22,7 +22,7 @@ class MatchNoneConstraint implements \RectorPrefix20210510\Composer\Semver\Const
      *
      * @return bool
      */
-    public function matches(\RectorPrefix20210510\Composer\Semver\Constraint\ConstraintInterface $provider)
+    public function matches(ConstraintInterface $provider)
     {
         return \false;
     }
@@ -59,13 +59,13 @@ class MatchNoneConstraint implements \RectorPrefix20210510\Composer\Semver\Const
      */
     public function getUpperBound()
     {
-        return new \RectorPrefix20210510\Composer\Semver\Constraint\Bound('0.0.0.0-dev', \false);
+        return new Bound('0.0.0.0-dev', \false);
     }
     /**
      * {@inheritDoc}
      */
     public function getLowerBound()
     {
-        return new \RectorPrefix20210510\Composer\Semver\Constraint\Bound('0.0.0.0-dev', \false);
+        return new Bound('0.0.0.0-dev', \false);
     }
 }

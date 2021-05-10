@@ -27,7 +27,7 @@ final class Section
     /**
      * @param array<string, mixed> $declarations
      */
-    public function __construct(string $globPrefix, string $glob, array $declarations, \RectorPrefix20210510\Idiosyncratic\EditorConfig\Declaration\Factory $declarationFactory)
+    public function __construct(string $globPrefix, string $glob, array $declarations, Factory $declarationFactory)
     {
         $this->globPrefix = $globPrefix;
         $this->glob = $glob;
@@ -36,7 +36,7 @@ final class Section
     }
     public function __toString() : string
     {
-        return \sprintf("[%s]\n%s\n", $this->glob, \implode("\n", $this->getDeclarations()));
+        return sprintf("[%s]\n%s\n", $this->glob, implode("\n", $this->getDeclarations()));
     }
     /**
      * @return array<string, mixed>
@@ -47,11 +47,11 @@ final class Section
     }
     public function matches(string $path) : bool
     {
-        if (\preg_match('#{(.*)}#', $this->glob) === 1) {
+        if (preg_match('#{(.*)}#', $this->glob) === 1) {
             return $this->matchesWithCurlBracesExpansion($path);
         }
-        $pattern = \sprintf('%s%s', $this->globPrefix, $this->glob);
-        return \fnmatch($pattern, $path);
+        $pattern = sprintf('%s%s', $this->globPrefix, $this->glob);
+        return fnmatch($pattern, $path);
     }
     /**
      * @param array<string, mixed> $declarations
@@ -78,24 +78,24 @@ final class Section
         if (isset($this->declarations[$property]) === \true) {
             return $this->declarations[$property];
         }
-        $trace = \debug_backtrace();
-        throw new \ErrorException(\sprintf('Undefined property: %s in %s on line %s', $property, $trace[0]['file'], $trace[0]['line']));
+        $trace = debug_backtrace();
+        throw new ErrorException(sprintf('Undefined property: %s in %s on line %s', $property, $trace[0]['file'], $trace[0]['line']));
     }
     public function __isset(string $property) : bool
     {
-        return \array_key_exists($property, $this->declarations);
+        return array_key_exists($property, $this->declarations);
     }
     private function matchesWithCurlBracesExpansion(string $path) : bool
     {
-        \preg_match_all('#(?<prefix>.*){(?<subpattern>.*)}#', $this->glob, $matches, \PREG_SET_ORDER);
+        preg_match_all('#(?<prefix>.*){(?<subpattern>.*)}#', $this->glob, $matches, \PREG_SET_ORDER);
         foreach ($matches as $match) {
-            if (\array_key_exists('subpattern', $match) === \false) {
+            if (array_key_exists('subpattern', $match) === \false) {
                 continue;
             }
-            $subPatterns = \explode(',', $match['subpattern']);
+            $subPatterns = explode(',', $match['subpattern']);
             foreach ($subPatterns as $subPattern) {
-                $pattern = \sprintf('%s%s', $this->globPrefix, $match['prefix'] . $subPattern);
-                if (\fnmatch($pattern, $path)) {
+                $pattern = sprintf('%s%s', $this->globPrefix, $match['prefix'] . $subPattern);
+                if (fnmatch($pattern, $path)) {
                     return \true;
                 }
             }

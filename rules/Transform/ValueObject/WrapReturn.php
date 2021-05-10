@@ -24,9 +24,9 @@ final class WrapReturn
         $this->method = $method;
         $this->isArrayWrap = $isArrayWrap;
     }
-    public function getObjectType() : \PHPStan\Type\ObjectType
+    public function getObjectType() : ObjectType
     {
-        return new \PHPStan\Type\ObjectType($this->type);
+        return new ObjectType($this->type);
     }
     public function getMethod() : string
     {

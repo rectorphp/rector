@@ -14,21 +14,21 @@ final class EventSubscriberMethodNamesResolver
      * @var SimpleCallableNodeTraverser
      */
     private $simpleCallableNodeTraverser;
-    public function __construct(\RectorPrefix20210510\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser)
+    public function __construct(SimpleCallableNodeTraverser $simpleCallableNodeTraverser)
     {
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
     }
     /**
      * @return string[]
      */
-    public function resolveFromClassMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod) : array
+    public function resolveFromClassMethod(ClassMethod $classMethod) : array
     {
         $methodNames = [];
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $classMethod->stmts, function (\PhpParser\Node $node) use(&$methodNames) {
-            if (!$node instanceof \PhpParser\Node\Expr\ArrayItem) {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) use(&$methodNames) {
+            if (!$node instanceof ArrayItem) {
                 return null;
             }
-            if (!$node->value instanceof \PhpParser\Node\Scalar\String_) {
+            if (!$node->value instanceof String_) {
                 return null;
             }
             $methodNames[] = $node->value->value;

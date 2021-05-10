@@ -5,7 +5,7 @@ namespace PHPStan\PhpDocParser\Ast\PhpDoc;
 
 use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\NodeAttributes;
-class PhpDocNode implements \PHPStan\PhpDocParser\Ast\Node
+class PhpDocNode implements Node
 {
     use NodeAttributes;
     /** @var PhpDocChildNode[] */

@@ -15,19 +15,19 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\Defluent\Rector\Return_\DefluentReturnMethodCallRector\DefluentReturnMethodCallRectorTest
  */
-final class DefluentReturnMethodCallRector extends \Rector\Core\Rector\AbstractRector
+final class DefluentReturnMethodCallRector extends AbstractRector
 {
     /**
      * @var FluentChainMethodCallNodeAnalyzer
      */
     private $fluentChainMethodCallNodeAnalyzer;
-    public function __construct(\Rector\Defluent\NodeAnalyzer\FluentChainMethodCallNodeAnalyzer $fluentChainMethodCallNodeAnalyzer)
+    public function __construct(FluentChainMethodCallNodeAnalyzer $fluentChainMethodCallNodeAnalyzer)
     {
         $this->fluentChainMethodCallNodeAnalyzer = $fluentChainMethodCallNodeAnalyzer;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Turns return of fluent, to standalone call line and return of value', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Turns return of fluent, to standalone call line and return of value', [new CodeSample(<<<'CODE_SAMPLE'
 $someClass = new SomeClass();
 return $someClass->someFunction();
 CODE_SAMPLE
@@ -43,25 +43,25 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Return_::class];
+        return [Return_::class];
     }
     /**
      * @param Return_ $node
      * @return null|Expression[]|Return_[]
      */
-    public function refactor(\PhpParser\Node $node)
+    public function refactor(Node $node)
     {
-        if (!$node->expr instanceof \PhpParser\Node\Expr\MethodCall) {
+        if (!$node->expr instanceof MethodCall) {
             return null;
         }
         $methodCall = $node->expr;
-        if (!$methodCall->var instanceof \PhpParser\Node\Expr\Variable) {
+        if (!$methodCall->var instanceof Variable) {
             return null;
         }
         if (!$this->fluentChainMethodCallNodeAnalyzer->isFluentClassMethodOfMethodCall($methodCall)) {
             return null;
         }
-        $variableReturn = new \PhpParser\Node\Stmt\Return_($methodCall->var);
-        return [new \PhpParser\Node\Stmt\Expression($methodCall), $variableReturn];
+        $variableReturn = new Return_($methodCall->var);
+        return [new Expression($methodCall), $variableReturn];
     }
 }

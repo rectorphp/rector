@@ -17,10 +17,10 @@ use RectorPrefix20210510\Symfony\Component\DependencyInjection\Reference;
  *
  * @author Nicolas Grekas <p@tchwork.com>
  */
-class ServiceClosureArgument implements \RectorPrefix20210510\Symfony\Component\DependencyInjection\Argument\ArgumentInterface
+class ServiceClosureArgument implements ArgumentInterface
 {
     private $values;
-    public function __construct(\RectorPrefix20210510\Symfony\Component\DependencyInjection\Reference $reference)
+    public function __construct(Reference $reference)
     {
         $this->values = [$reference];
     }
@@ -36,8 +36,8 @@ class ServiceClosureArgument implements \RectorPrefix20210510\Symfony\Component\
      */
     public function setValues(array $values)
     {
-        if ([0] !== \array_keys($values) || !($values[0] instanceof \RectorPrefix20210510\Symfony\Component\DependencyInjection\Reference || null === $values[0])) {
-            throw new \RectorPrefix20210510\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException('A ServiceClosureArgument must hold one and only one Reference.');
+        if ([0] !== \array_keys($values) || !($values[0] instanceof Reference || null === $values[0])) {
+            throw new InvalidArgumentException('A ServiceClosureArgument must hold one and only one Reference.');
         }
         $this->values = $values;
     }

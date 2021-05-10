@@ -25,7 +25,7 @@ use RectorPrefix20210510\SebastianBergmann\Diff\Differ;
 /**
  * Builds a diff string representation in unified diff format in chunks.
  */
-final class UnifiedDiffOutputBuilder extends \RectorPrefix20210510\SebastianBergmann\Diff\Output\AbstractChunkOutputBuilder
+final class UnifiedDiffOutputBuilder extends AbstractChunkOutputBuilder
 {
     /**
      * @var bool
@@ -54,31 +54,31 @@ final class UnifiedDiffOutputBuilder extends \RectorPrefix20210510\SebastianBerg
     }
     public function getDiff(array $diff) : string
     {
-        $buffer = \fopen('php://memory', 'r+b');
+        $buffer = fopen('php://memory', 'r+b');
         if ('' !== $this->header) {
-            \fwrite($buffer, $this->header);
-            if ("\n" !== \substr($this->header, -1, 1)) {
-                \fwrite($buffer, "\n");
+            fwrite($buffer, $this->header);
+            if ("\n" !== substr($this->header, -1, 1)) {
+                fwrite($buffer, "\n");
             }
         }
-        if (0 !== \count($diff)) {
+        if (0 !== count($diff)) {
             $this->writeDiffHunks($buffer, $diff);
         }
-        $diff = \stream_get_contents($buffer, -1, 0);
-        \fclose($buffer);
+        $diff = stream_get_contents($buffer, -1, 0);
+        fclose($buffer);
         // If the diff is non-empty and last char is not a linebreak: add it.
         // This might happen when both the `from` and `to` do not have a trailing linebreak
-        $last = \substr($diff, -1);
-        return 0 !== \strlen($diff) && "\n" !== $last && "\r" !== $last ? $diff . "\n" : $diff;
+        $last = substr($diff, -1);
+        return 0 !== strlen($diff) && "\n" !== $last && "\r" !== $last ? $diff . "\n" : $diff;
     }
     private function writeDiffHunks($output, array $diff) : void
     {
         // detect "No newline at end of file" and insert into `$diff` if needed
-        $upperLimit = \count($diff);
+        $upperLimit = count($diff);
         if (0 === $diff[$upperLimit - 1][1]) {
-            $lc = \substr($diff[$upperLimit - 1][0], -1);
+            $lc = substr($diff[$upperLimit - 1][0], -1);
             if ("\n" !== $lc) {
-                \array_splice($diff, $upperLimit, 0, [["\n\\ No newline at end of file\n", \RectorPrefix20210510\SebastianBergmann\Diff\Differ::NO_LINE_END_EOF_WARNING]]);
+                array_splice($diff, $upperLimit, 0, [["\n\\ No newline at end of file\n", Differ::NO_LINE_END_EOF_WARNING]]);
             }
         } else {
             // search back for the last `+` and `-` line,
@@ -87,18 +87,18 @@ final class UnifiedDiffOutputBuilder extends \RectorPrefix20210510\SebastianBerg
             for ($i = $upperLimit - 1; $i >= 0; --$i) {
                 if (isset($toFind[$diff[$i][1]])) {
                     unset($toFind[$diff[$i][1]]);
-                    $lc = \substr($diff[$i][0], -1);
+                    $lc = substr($diff[$i][0], -1);
                     if ("\n" !== $lc) {
-                        \array_splice($diff, $i + 1, 0, [["\n\\ No newline at end of file\n", \RectorPrefix20210510\SebastianBergmann\Diff\Differ::NO_LINE_END_EOF_WARNING]]);
+                        array_splice($diff, $i + 1, 0, [["\n\\ No newline at end of file\n", Differ::NO_LINE_END_EOF_WARNING]]);
                     }
-                    if (!\count($toFind)) {
+                    if (!count($toFind)) {
                         break;
                     }
                 }
             }
         }
         // write hunks to output buffer
-        $cutOff = \max($this->commonLineThreshold, $this->contextLines);
+        $cutOff = max($this->commonLineThreshold, $this->contextLines);
         $hunkCapture = \false;
         $sameCount = $toRange = $fromRange = 0;
         $toStart = $fromStart = 1;
@@ -136,16 +136,16 @@ final class UnifiedDiffOutputBuilder extends \RectorPrefix20210510\SebastianBerg
                 continue;
             }
             $sameCount = 0;
-            if ($entry[1] === \RectorPrefix20210510\SebastianBergmann\Diff\Differ::NO_LINE_END_EOF_WARNING) {
+            if ($entry[1] === Differ::NO_LINE_END_EOF_WARNING) {
                 continue;
             }
             if (\false === $hunkCapture) {
                 $hunkCapture = $i;
             }
-            if (\RectorPrefix20210510\SebastianBergmann\Diff\Differ::ADDED === $entry[1]) {
+            if (Differ::ADDED === $entry[1]) {
                 ++$toRange;
             }
-            if (\RectorPrefix20210510\SebastianBergmann\Diff\Differ::REMOVED === $entry[1]) {
+            if (Differ::REMOVED === $entry[1]) {
                 ++$fromRange;
             }
         }
@@ -157,7 +157,7 @@ final class UnifiedDiffOutputBuilder extends \RectorPrefix20210510\SebastianBerg
         $contextStartOffset = $hunkCapture - $this->contextLines < 0 ? $hunkCapture : $this->contextLines;
         // prevent trying to write out more common lines than there are in the diff _and_
         // do not write more than configured through the context lines
-        $contextEndOffset = \min($sameCount, $this->contextLines);
+        $contextEndOffset = min($sameCount, $this->contextLines);
         $fromRange -= $sameCount;
         $toRange -= $sameCount;
         $this->writeHunk($diff, $hunkCapture - $contextStartOffset, $i - $sameCount + $contextEndOffset + 1, $fromStart - $contextStartOffset, $fromRange + $contextStartOffset + $contextEndOffset, $toStart - $contextStartOffset, $toRange + $contextStartOffset + $contextEndOffset, $output);
@@ -165,31 +165,31 @@ final class UnifiedDiffOutputBuilder extends \RectorPrefix20210510\SebastianBerg
     private function writeHunk(array $diff, int $diffStartIndex, int $diffEndIndex, int $fromStart, int $fromRange, int $toStart, int $toRange, $output) : void
     {
         if ($this->addLineNumbers) {
-            \fwrite($output, '@@ -' . $fromStart);
+            fwrite($output, '@@ -' . $fromStart);
             if (!$this->collapseRanges || 1 !== $fromRange) {
-                \fwrite($output, ',' . $fromRange);
+                fwrite($output, ',' . $fromRange);
             }
-            \fwrite($output, ' +' . $toStart);
+            fwrite($output, ' +' . $toStart);
             if (!$this->collapseRanges || 1 !== $toRange) {
-                \fwrite($output, ',' . $toRange);
+                fwrite($output, ',' . $toRange);
             }
-            \fwrite($output, " @@\n");
+            fwrite($output, " @@\n");
         } else {
-            \fwrite($output, "@@ @@\n");
+            fwrite($output, "@@ @@\n");
         }
         for ($i = $diffStartIndex; $i < $diffEndIndex; ++$i) {
-            if ($diff[$i][1] === \RectorPrefix20210510\SebastianBergmann\Diff\Differ::ADDED) {
-                \fwrite($output, '+' . $diff[$i][0]);
-            } elseif ($diff[$i][1] === \RectorPrefix20210510\SebastianBergmann\Diff\Differ::REMOVED) {
-                \fwrite($output, '-' . $diff[$i][0]);
-            } elseif ($diff[$i][1] === \RectorPrefix20210510\SebastianBergmann\Diff\Differ::OLD) {
-                \fwrite($output, ' ' . $diff[$i][0]);
-            } elseif ($diff[$i][1] === \RectorPrefix20210510\SebastianBergmann\Diff\Differ::NO_LINE_END_EOF_WARNING) {
-                \fwrite($output, "\n");
+            if ($diff[$i][1] === Differ::ADDED) {
+                fwrite($output, '+' . $diff[$i][0]);
+            } elseif ($diff[$i][1] === Differ::REMOVED) {
+                fwrite($output, '-' . $diff[$i][0]);
+            } elseif ($diff[$i][1] === Differ::OLD) {
+                fwrite($output, ' ' . $diff[$i][0]);
+            } elseif ($diff[$i][1] === Differ::NO_LINE_END_EOF_WARNING) {
+                fwrite($output, "\n");
                 // $diff[$i][0]
             } else {
                 /* Not changed (old) Differ::OLD or Warning Differ::DIFF_LINE_END_WARNING */
-                \fwrite($output, ' ' . $diff[$i][0]);
+                fwrite($output, ' ' . $diff[$i][0]);
             }
         }
     }

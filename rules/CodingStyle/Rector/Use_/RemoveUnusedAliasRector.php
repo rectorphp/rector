@@ -21,7 +21,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\CodingStyle\Rector\Use_\RemoveUnusedAliasRector\RemoveUnusedAliasRectorTest
  */
-final class RemoveUnusedAliasRector extends \Rector\Core\Rector\AbstractRector
+final class RemoveUnusedAliasRector extends AbstractRector
 {
     /**
      * @var NameAndParent[][]
@@ -51,16 +51,16 @@ final class RemoveUnusedAliasRector extends \Rector\Core\Rector\AbstractRector
      * @var NameRenamer
      */
     private $nameRenamer;
-    public function __construct(\Rector\CodingStyle\Node\DocAliasResolver $docAliasResolver, \Rector\CodingStyle\Node\UseManipulator $useManipulator, \Rector\CodingStyle\Node\UseNameAliasToNameResolver $useNameAliasToNameResolver, \Rector\CodingStyle\Naming\NameRenamer $nameRenamer)
+    public function __construct(DocAliasResolver $docAliasResolver, UseManipulator $useManipulator, UseNameAliasToNameResolver $useNameAliasToNameResolver, NameRenamer $nameRenamer)
     {
         $this->docAliasResolver = $docAliasResolver;
         $this->useNameAliasToNameResolver = $useNameAliasToNameResolver;
         $this->useManipulator = $useManipulator;
         $this->nameRenamer = $nameRenamer;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Removes unused use aliases. Keep annotation aliases like "Doctrine\\ORM\\Mapping as ORM" to keep convention format', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Removes unused use aliases. Keep annotation aliases like "Doctrine\\ORM\\Mapping as ORM" to keep convention format', [new CodeSample(<<<'CODE_SAMPLE'
 use Symfony\Kernel as BaseKernel;
 
 class SomeClass extends BaseKernel
@@ -81,18 +81,18 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Use_::class];
+        return [Use_::class];
     }
     /**
      * @param Use_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if ($this->shouldSkipUse($node)) {
             return null;
         }
         $searchNode = $this->resolveSearchNode($node);
-        if (!$searchNode instanceof \PhpParser\Node) {
+        if (!$searchNode instanceof Node) {
             return null;
         }
         $this->resolvedNodeNames = $this->useManipulator->resolveUsedNameNodes($searchNode);
@@ -122,22 +122,22 @@ CODE_SAMPLE
         }
         return $node;
     }
-    private function shouldSkipUse(\PhpParser\Node\Stmt\Use_ $use) : bool
+    private function shouldSkipUse(Use_ $use) : bool
     {
         // skip cases without namespace, problematic to analyse
-        $namespace = $this->betterNodeFinder->findParentType($use, \PhpParser\Node\Stmt\Namespace_::class);
-        if (!$namespace instanceof \PhpParser\Node) {
+        $namespace = $this->betterNodeFinder->findParentType($use, Namespace_::class);
+        if (!$namespace instanceof Node) {
             return \true;
         }
         return !$this->hasUseAlias($use);
     }
-    private function resolveSearchNode(\PhpParser\Node\Stmt\Use_ $use) : ?\PhpParser\Node
+    private function resolveSearchNode(Use_ $use) : ?Node
     {
-        $searchNode = $use->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        $searchNode = $use->getAttribute(AttributeKey::PARENT_NODE);
         if ($searchNode !== null) {
             return $searchNode;
         }
-        return $use->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::NEXT_NODE);
+        return $use->getAttribute(AttributeKey::NEXT_NODE);
     }
     /**
      * @param string[] $values
@@ -147,7 +147,7 @@ CODE_SAMPLE
     {
         return \array_map('strtolower', $values);
     }
-    private function shouldSkip(\PhpParser\Node\Stmt\Use_ $use, \PhpParser\Node\Name $name, string $lastName, string $aliasName) : bool
+    private function shouldSkip(Use_ $use, Name $name, string $lastName, string $aliasName) : bool
     {
         // PHP is case insensitive
         $loweredLastName = \strtolower($lastName);
@@ -160,17 +160,17 @@ CODE_SAMPLE
         if (\in_array($loweredAliasName, $this->resolvedDocPossibleAliases, \true)) {
             return \true;
         }
-        return (bool) $this->betterNodeFinder->findFirstNext($use, function (\PhpParser\Node $node) use($name) : bool {
-            if (!$node instanceof \PhpParser\Node\Expr\ClassConstFetch) {
+        return (bool) $this->betterNodeFinder->findFirstNext($use, function (Node $node) use($name) : bool {
+            if (!$node instanceof ClassConstFetch) {
                 return \false;
             }
-            if (!$node->class instanceof \PhpParser\Node\Name) {
+            if (!$node->class instanceof Name) {
                 return \false;
             }
             return $node->class->toString() === $name->toString();
         });
     }
-    private function refactorAliasName(string $aliasName, string $lastName, \PhpParser\Node\Stmt\UseUse $useUse) : void
+    private function refactorAliasName(string $aliasName, string $lastName, UseUse $useUse) : void
     {
         // only alias name is used → use last name directly
         $lowerAliasName = \strtolower($aliasName);
@@ -185,7 +185,7 @@ CODE_SAMPLE
         $this->nameRenamer->renameNameNode($this->resolvedNodeNames[$lowerAliasName], $lastName);
         $useUse->alias = null;
     }
-    private function hasUseAlias(\PhpParser\Node\Stmt\Use_ $use) : bool
+    private function hasUseAlias(Use_ $use) : bool
     {
         foreach ($use->uses as $useUse) {
             if ($useUse->alias !== null) {

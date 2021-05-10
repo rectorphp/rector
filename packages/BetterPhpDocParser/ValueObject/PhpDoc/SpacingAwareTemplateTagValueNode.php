@@ -5,13 +5,13 @@ namespace Rector\BetterPhpDocParser\ValueObject\PhpDoc;
 
 use PHPStan\PhpDocParser\Ast\PhpDoc\TemplateTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
-final class SpacingAwareTemplateTagValueNode extends \PHPStan\PhpDocParser\Ast\PhpDoc\TemplateTagValueNode
+final class SpacingAwareTemplateTagValueNode extends TemplateTagValueNode
 {
     /**
      * @var string
      */
     private $preposition;
-    public function __construct(string $name, ?\PHPStan\PhpDocParser\Ast\Type\TypeNode $typeNode, string $description, string $preposition)
+    public function __construct(string $name, ?TypeNode $typeNode, string $description, string $preposition)
     {
         parent::__construct($name, $typeNode, $description);
         $this->preposition = $preposition;

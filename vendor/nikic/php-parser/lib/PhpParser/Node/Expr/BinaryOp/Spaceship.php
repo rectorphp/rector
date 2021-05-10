@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace PhpParser\Node\Expr\BinaryOp;
 
 use PhpParser\Node\Expr\BinaryOp;
-class Spaceship extends \PhpParser\Node\Expr\BinaryOp
+class Spaceship extends BinaryOp
 {
     public function getOperatorSigil() : string
     {

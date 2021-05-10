@@ -15,11 +15,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @see https://3v4l.org/69mpd
  * @see \Rector\Tests\Php74\Rector\FuncCall\ArrayKeyExistsOnPropertyRector\ArrayKeyExistsOnPropertyRectorTest
  */
-final class ArrayKeyExistsOnPropertyRector extends \Rector\Core\Rector\AbstractRector
+final class ArrayKeyExistsOnPropertyRector extends AbstractRector
 {
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change array_key_exists() on property to property_exists()', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change array_key_exists() on property to property_exists()', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
      public $value;
@@ -44,20 +44,20 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\FuncCall::class];
+        return [FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if (!$this->isName($node, 'array_key_exists')) {
             return null;
         }
-        if (!$this->getStaticType($node->args[1]->value) instanceof \PHPStan\Type\ObjectType) {
+        if (!$this->getStaticType($node->args[1]->value) instanceof ObjectType) {
             return null;
         }
-        $node->name = new \PhpParser\Node\Name('property_exists');
+        $node->name = new Name('property_exists');
         $node->args = \array_reverse($node->args);
         return $node;
     }

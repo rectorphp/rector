@@ -16,7 +16,7 @@ final class ComposerNamespaceMatcher
      * @var ComposerJsonFactory
      */
     private $composerJsonFactory;
-    public function __construct(\RectorPrefix20210510\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \RectorPrefix20210510\Symplify\ComposerJsonManipulator\ComposerJsonFactory $composerJsonFactory)
+    public function __construct(SmartFileSystem $smartFileSystem, ComposerJsonFactory $composerJsonFactory)
     {
         $this->smartFileSystem = $smartFileSystem;
         $this->composerJsonFactory = $composerJsonFactory;
@@ -34,7 +34,7 @@ final class ComposerNamespaceMatcher
                 $directory = [$directory];
             }
             foreach ($directory as $singleDirectory) {
-                if (!\RectorPrefix20210510\Nette\Utils\Strings::startsWith($path, $singleDirectory)) {
+                if (!Strings::startsWith($path, $singleDirectory)) {
                     continue;
                 }
                 return \rtrim($namespace, '\\');

@@ -12,7 +12,7 @@ class TypeAliasTagValueNode implements \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTa
     public $alias;
     /** @var TypeNode */
     public $type;
-    public function __construct(string $alias, \PHPStan\PhpDocParser\Ast\Type\TypeNode $type)
+    public function __construct(string $alias, TypeNode $type)
     {
         $this->alias = $alias;
         $this->type = $type;

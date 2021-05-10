@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace Rector\Symfony\Set;
 
 use Rector\Set\Contract\SetListInterface;
-final class TwigSetList implements \Rector\Set\Contract\SetListInterface
+final class TwigSetList implements SetListInterface
 {
     /**
      * @var string

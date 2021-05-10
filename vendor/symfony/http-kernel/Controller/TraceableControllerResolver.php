@@ -15,11 +15,11 @@ use RectorPrefix20210510\Symfony\Component\Stopwatch\Stopwatch;
 /**
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class TraceableControllerResolver implements \RectorPrefix20210510\Symfony\Component\HttpKernel\Controller\ControllerResolverInterface
+class TraceableControllerResolver implements ControllerResolverInterface
 {
     private $resolver;
     private $stopwatch;
-    public function __construct(\RectorPrefix20210510\Symfony\Component\HttpKernel\Controller\ControllerResolverInterface $resolver, \RectorPrefix20210510\Symfony\Component\Stopwatch\Stopwatch $stopwatch)
+    public function __construct(ControllerResolverInterface $resolver, Stopwatch $stopwatch)
     {
         $this->resolver = $resolver;
         $this->stopwatch = $stopwatch;
@@ -27,7 +27,7 @@ class TraceableControllerResolver implements \RectorPrefix20210510\Symfony\Compo
     /**
      * {@inheritdoc}
      */
-    public function getController(\RectorPrefix20210510\Symfony\Component\HttpFoundation\Request $request)
+    public function getController(Request $request)
     {
         $e = $this->stopwatch->start('controller.get_callable');
         $ret = $this->resolver->getController($request);

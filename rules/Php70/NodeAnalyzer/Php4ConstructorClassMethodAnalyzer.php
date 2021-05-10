@@ -9,10 +9,10 @@ use PHPStan\Reflection\ClassReflection;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 final class Php4ConstructorClassMethodAnalyzer
 {
-    public function detect(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
+    public function detect(ClassMethod $classMethod) : bool
     {
-        $scope = $classMethod->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
-        if (!$scope instanceof \PHPStan\Analyser\Scope) {
+        $scope = $classMethod->getAttribute(AttributeKey::SCOPE);
+        if (!$scope instanceof Scope) {
             return \false;
         }
         // catch only classes without namespace
@@ -26,7 +26,7 @@ final class Php4ConstructorClassMethodAnalyzer
             return \false;
         }
         $classReflection = $scope->getClassReflection();
-        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
+        if (!$classReflection instanceof ClassReflection) {
             return \false;
         }
         return !$classReflection->isAnonymous();

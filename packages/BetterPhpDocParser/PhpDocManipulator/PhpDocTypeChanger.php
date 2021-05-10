@@ -28,13 +28,13 @@ final class PhpDocTypeChanger
      * @var ParamPhpDocNodeFactory
      */
     private $paramPhpDocNodeFactory;
-    public function __construct(\Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \Rector\NodeTypeResolver\TypeComparator\TypeComparator $typeComparator, \Rector\TypeDeclaration\PhpDocParser\ParamPhpDocNodeFactory $paramPhpDocNodeFactory)
+    public function __construct(StaticTypeMapper $staticTypeMapper, TypeComparator $typeComparator, ParamPhpDocNodeFactory $paramPhpDocNodeFactory)
     {
         $this->typeComparator = $typeComparator;
         $this->staticTypeMapper = $staticTypeMapper;
         $this->paramPhpDocNodeFactory = $paramPhpDocNodeFactory;
     }
-    public function changeVarType(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo, \PHPStan\Type\Type $newType) : void
+    public function changeVarType(PhpDocInfo $phpDocInfo, Type $newType) : void
     {
         // better skip, could crash hard
         if ($phpDocInfo->hasInvalidTag('@var')) {
@@ -45,7 +45,7 @@ final class PhpDocTypeChanger
             return;
         }
         // prevent existing type override by mixed
-        if (!$phpDocInfo->getVarType() instanceof \PHPStan\Type\MixedType && $newType instanceof \PHPStan\Type\Constant\ConstantArrayType && $newType->getItemType() instanceof \PHPStan\Type\NeverType) {
+        if (!$phpDocInfo->getVarType() instanceof MixedType && $newType instanceof ConstantArrayType && $newType->getItemType() instanceof NeverType) {
             return;
         }
         // override existing type
@@ -56,11 +56,11 @@ final class PhpDocTypeChanger
             $currentVarTagValueNode->type = $newPHPStanPhpDocType;
         } else {
             // add completely new one
-            $varTagValueNode = new \PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode($newPHPStanPhpDocType, '', '');
+            $varTagValueNode = new VarTagValueNode($newPHPStanPhpDocType, '', '');
             $phpDocInfo->addTagValueNode($varTagValueNode);
         }
     }
-    public function changeReturnType(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo, \PHPStan\Type\Type $newType) : void
+    public function changeReturnType(PhpDocInfo $phpDocInfo, Type $newType) : void
     {
         // better not touch this, can crash
         if ($phpDocInfo->hasInvalidTag('@return')) {
@@ -78,11 +78,11 @@ final class PhpDocTypeChanger
             $currentReturnTagValueNode->type = $newPHPStanPhpDocType;
         } else {
             // add completely new one
-            $returnTagValueNode = new \PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode($newPHPStanPhpDocType, '');
+            $returnTagValueNode = new ReturnTagValueNode($newPHPStanPhpDocType, '');
             $phpDocInfo->addTagValueNode($returnTagValueNode);
         }
     }
-    public function changeParamType(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo, \PHPStan\Type\Type $newType, \PhpParser\Node\Param $param, string $paramName) : void
+    public function changeParamType(PhpDocInfo $phpDocInfo, Type $newType, Param $param, string $paramName) : void
     {
         // better skip, could crash hard
         if ($phpDocInfo->hasInvalidTag('@param')) {

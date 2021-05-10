@@ -16,19 +16,19 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\CodingStyle\Rector\FuncCall\CallUserFuncToMethodCallRector\CallUserFuncToMethodCallRectorTest
  */
-final class CallUserFuncToMethodCallRector extends \Rector\Core\Rector\AbstractRector
+final class CallUserFuncToMethodCallRector extends AbstractRector
 {
     /**
      * @var ArrayCallableToMethodCallFactory
      */
     private $arrayCallableToMethodCallFactory;
-    public function __construct(\Rector\CodingStyle\NodeFactory\ArrayCallableToMethodCallFactory $arrayCallableToMethodCallFactory)
+    public function __construct(ArrayCallableToMethodCallFactory $arrayCallableToMethodCallFactory)
     {
         $this->arrayCallableToMethodCallFactory = $arrayCallableToMethodCallFactory;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Refactor call_user_func() on known class method to a method call', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Refactor call_user_func() on known class method to a method call', [new CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run()
@@ -53,22 +53,22 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\FuncCall::class];
+        return [FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if (!$this->isName($node, 'call_user_func')) {
             return null;
         }
         $firstArgValue = $node->args[0]->value;
-        if (!$firstArgValue instanceof \PhpParser\Node\Expr\Array_) {
+        if (!$firstArgValue instanceof Array_) {
             return null;
         }
         $methodCall = $this->arrayCallableToMethodCallFactory->create($firstArgValue);
-        if (!$methodCall instanceof \PhpParser\Node\Expr\MethodCall) {
+        if (!$methodCall instanceof MethodCall) {
             return null;
         }
         $originalArgs = $node->args;

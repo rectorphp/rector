@@ -20,12 +20,12 @@ use RectorPrefix20210510\Symfony\Component\HttpKernel\KernelEvents;
  *
  * @final
  */
-class ValidateRequestListener implements \RectorPrefix20210510\Symfony\Component\EventDispatcher\EventSubscriberInterface
+class ValidateRequestListener implements EventSubscriberInterface
 {
     /**
      * Performs the validation.
      */
-    public function onKernelRequest(\RectorPrefix20210510\Symfony\Component\HttpKernel\Event\RequestEvent $event)
+    public function onKernelRequest(RequestEvent $event)
     {
         if (!$event->isMasterRequest()) {
             return;
@@ -41,6 +41,6 @@ class ValidateRequestListener implements \RectorPrefix20210510\Symfony\Component
      */
     public static function getSubscribedEvents() : array
     {
-        return [\RectorPrefix20210510\Symfony\Component\HttpKernel\KernelEvents::REQUEST => [['onKernelRequest', 256]]];
+        return [KernelEvents::REQUEST => [['onKernelRequest', 256]]];
     }
 }

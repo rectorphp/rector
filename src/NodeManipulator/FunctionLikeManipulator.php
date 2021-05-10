@@ -24,7 +24,7 @@ final class FunctionLikeManipulator
      * @var PropertyFetchAnalyzer
      */
     private $propertyFetchAnalyzer;
-    public function __construct(\RectorPrefix20210510\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer $propertyFetchAnalyzer)
+    public function __construct(SimpleCallableNodeTraverser $simpleCallableNodeTraverser, NodeNameResolver $nodeNameResolver, PropertyFetchAnalyzer $propertyFetchAnalyzer)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
@@ -33,15 +33,15 @@ final class FunctionLikeManipulator
     /**
      * @return string[]
      */
-    public function getReturnedLocalPropertyNames(\PhpParser\Node\FunctionLike $functionLike) : array
+    public function getReturnedLocalPropertyNames(FunctionLike $functionLike) : array
     {
         // process only class methods
-        if ($functionLike instanceof \PhpParser\Node\Stmt\Function_) {
+        if ($functionLike instanceof Function_) {
             return [];
         }
         $returnedLocalPropertyNames = [];
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($functionLike, function (\PhpParser\Node $node) use(&$returnedLocalPropertyNames) {
-            if (!$node instanceof \PhpParser\Node\Stmt\Return_) {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($functionLike, function (Node $node) use(&$returnedLocalPropertyNames) {
+            if (!$node instanceof Return_) {
                 return null;
             }
             if ($node->expr === null) {

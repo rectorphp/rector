@@ -25,11 +25,11 @@ final class ContextAnalyzer
      * Nodes that break the scope they way up, e.g. class method
      * @var array<class-string<FunctionLike>>
      */
-    private const BREAK_NODES = [\PhpParser\Node\FunctionLike::class, \PhpParser\Node\Stmt\ClassMethod::class];
+    private const BREAK_NODES = [FunctionLike::class, ClassMethod::class];
     /**
      * @var array<class-string<Stmt>>
      */
-    private const LOOP_NODES = [\PhpParser\Node\Stmt\For_::class, \PhpParser\Node\Stmt\Foreach_::class, \PhpParser\Node\Stmt\While_::class, \PhpParser\Node\Stmt\Do_::class, \PhpParser\Node\Stmt\Switch_::class];
+    private const LOOP_NODES = [For_::class, Foreach_::class, While_::class, Do_::class, Switch_::class];
     /**
      * @var BetterNodeFinder
      */
@@ -38,16 +38,16 @@ final class ContextAnalyzer
      * @var NodeTypeResolver
      */
     private $nodeTypeResolver;
-    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver)
+    public function __construct(BetterNodeFinder $betterNodeFinder, NodeTypeResolver $nodeTypeResolver)
     {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
-    public function isInLoop(\PhpParser\Node $node) : bool
+    public function isInLoop(Node $node) : bool
     {
         $stopNodes = \array_merge(self::LOOP_NODES, self::BREAK_NODES);
         $firstParent = $this->betterNodeFinder->findParentTypes($node, $stopNodes);
-        if (!$firstParent instanceof \PhpParser\Node) {
+        if (!$firstParent instanceof Node) {
             return \false;
         }
         foreach (self::LOOP_NODES as $type) {
@@ -57,32 +57,32 @@ final class ContextAnalyzer
         }
         return \false;
     }
-    public function isInIf(\PhpParser\Node $node) : bool
+    public function isInIf(Node $node) : bool
     {
-        $breakNodes = \array_merge([\PhpParser\Node\Stmt\If_::class], self::BREAK_NODES);
+        $breakNodes = \array_merge([If_::class], self::BREAK_NODES);
         $previousNode = $this->betterNodeFinder->findParentTypes($node, $breakNodes);
-        if (!$previousNode instanceof \PhpParser\Node) {
+        if (!$previousNode instanceof Node) {
             return \false;
         }
-        return $previousNode instanceof \PhpParser\Node\Stmt\If_;
+        return $previousNode instanceof If_;
     }
-    public function isHasAssignWithIndirectReturn(\PhpParser\Node $node, \PhpParser\Node\Stmt\If_ $if) : bool
+    public function isHasAssignWithIndirectReturn(Node $node, If_ $if) : bool
     {
         $loopNodes = self::LOOP_NODES;
         foreach ($loopNodes as $loopNode) {
-            $loopObjectType = new \PHPStan\Type\ObjectType($loopNode);
+            $loopObjectType = new ObjectType($loopNode);
             $parentType = $this->nodeTypeResolver->resolve($node);
             $superType = $parentType->isSuperTypeOf($loopObjectType);
             $isLoopType = $superType->yes();
             if (!$isLoopType) {
                 continue;
             }
-            $next = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::NEXT_NODE);
-            if ($next instanceof \PhpParser\Node) {
-                if ($next instanceof \PhpParser\Node\Stmt\Return_ && $next->expr === null) {
+            $next = $node->getAttribute(AttributeKey::NEXT_NODE);
+            if ($next instanceof Node) {
+                if ($next instanceof Return_ && $next->expr === null) {
                     continue;
                 }
-                $hasAssign = (bool) $this->betterNodeFinder->findInstanceOf($if->stmts, \PhpParser\Node\Expr\Assign::class);
+                $hasAssign = (bool) $this->betterNodeFinder->findInstanceOf($if->stmts, Assign::class);
                 if (!$hasAssign) {
                     continue;
                 }

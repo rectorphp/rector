@@ -24,7 +24,7 @@ use RectorPrefix20210510\Symfony\Component\HttpKernel\Bundle\BundleInterface;
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-interface KernelInterface extends \RectorPrefix20210510\Symfony\Component\HttpKernel\HttpKernelInterface
+interface KernelInterface extends HttpKernelInterface
 {
     /**
      * Returns an array of bundles to register.
@@ -35,7 +35,7 @@ interface KernelInterface extends \RectorPrefix20210510\Symfony\Component\HttpKe
     /**
      * Loads the container configuration.
      */
-    public function registerContainerConfiguration(\RectorPrefix20210510\Symfony\Component\Config\Loader\LoaderInterface $loader);
+    public function registerContainerConfiguration(LoaderInterface $loader);
     /**
      * Boots the current kernel.
      */

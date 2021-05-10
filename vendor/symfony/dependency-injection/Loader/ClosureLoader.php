@@ -19,10 +19,10 @@ use RectorPrefix20210510\Symfony\Component\DependencyInjection\ContainerBuilder;
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class ClosureLoader extends \RectorPrefix20210510\Symfony\Component\Config\Loader\Loader
+class ClosureLoader extends Loader
 {
     private $container;
-    public function __construct(\RectorPrefix20210510\Symfony\Component\DependencyInjection\ContainerBuilder $container)
+    public function __construct(ContainerBuilder $container)
     {
         $this->container = $container;
     }

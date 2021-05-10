@@ -16,24 +16,24 @@ final class NodeTypeAnalyzer
      * @var NodeTypeResolver
      */
     private $nodeTypeResolver;
-    public function __construct(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver)
+    public function __construct(NodeTypeResolver $nodeTypeResolver)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
-    public function isStringTypeExpr(\PhpParser\Node\Expr $expr) : bool
+    public function isStringTypeExpr(Expr $expr) : bool
     {
         $staticType = $this->nodeTypeResolver->getStaticType($expr);
         return $this->isStringType($staticType);
     }
-    private function isStringType(\PHPStan\Type\Type $type) : bool
+    private function isStringType(Type $type) : bool
     {
-        if ($type instanceof \PHPStan\Type\StringType) {
+        if ($type instanceof StringType) {
             return \true;
         }
-        if ($type instanceof \PHPStan\Type\Accessory\AccessoryNumericStringType) {
+        if ($type instanceof AccessoryNumericStringType) {
             return \true;
         }
-        if ($type instanceof \PHPStan\Type\IntersectionType || $type instanceof \PHPStan\Type\UnionType) {
+        if ($type instanceof IntersectionType || $type instanceof UnionType) {
             foreach ($type->getTypes() as $innerType) {
                 if (!$this->isStringType($innerType)) {
                     return \false;

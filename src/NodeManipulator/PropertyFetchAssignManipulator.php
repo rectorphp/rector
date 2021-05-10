@@ -19,7 +19,7 @@ final class PropertyFetchAssignManipulator
      * @var SimpleCallableNodeTraverser
      */
     private $simpleCallableNodeTraverser;
-    public function __construct(\RectorPrefix20210510\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
+    public function __construct(SimpleCallableNodeTraverser $simpleCallableNodeTraverser, NodeNameResolver $nodeNameResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
@@ -27,11 +27,11 @@ final class PropertyFetchAssignManipulator
     /**
      * @return string[]
      */
-    public function getPropertyNamesOfAssignOfVariable(\PhpParser\Node $node, string $paramName) : array
+    public function getPropertyNamesOfAssignOfVariable(Node $node, string $paramName) : array
     {
         $propertyNames = [];
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($node, function (\PhpParser\Node $node) use($paramName, &$propertyNames) {
-            if (!$node instanceof \PhpParser\Node\Expr\Assign) {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($node, function (Node $node) use($paramName, &$propertyNames) {
+            if (!$node instanceof Assign) {
                 return null;
             }
             if (!$this->isVariableAssignToThisPropertyFetch($node, $paramName)) {
@@ -50,15 +50,15 @@ final class PropertyFetchAssignManipulator
      * Matches:
      * "$this->someValue = $<variableName>;"
      */
-    private function isVariableAssignToThisPropertyFetch(\PhpParser\Node\Expr\Assign $assign, string $variableName) : bool
+    private function isVariableAssignToThisPropertyFetch(Assign $assign, string $variableName) : bool
     {
-        if (!$assign->expr instanceof \PhpParser\Node\Expr\Variable) {
+        if (!$assign->expr instanceof Variable) {
             return \false;
         }
         if (!$this->nodeNameResolver->isName($assign->expr, $variableName)) {
             return \false;
         }
-        if (!$assign->var instanceof \PhpParser\Node\Expr\PropertyFetch) {
+        if (!$assign->var instanceof PropertyFetch) {
             return \false;
         }
         $propertyFetch = $assign->var;

@@ -19,7 +19,7 @@ final class StaticTypesInClassResolver
      * @var NodeTypeResolver
      */
     private $nodeTypeResolver;
-    public function __construct(\RectorPrefix20210510\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver)
+    public function __construct(SimpleCallableNodeTraverser $simpleCallableNodeTraverser, NodeTypeResolver $nodeTypeResolver)
     {
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->nodeTypeResolver = $nodeTypeResolver;
@@ -28,11 +28,11 @@ final class StaticTypesInClassResolver
      * @param ObjectType[] $objectTypes
      * @return ObjectType[]
      */
-    public function collectStaticCallTypeInClass(\PhpParser\Node\Stmt\Class_ $class, array $objectTypes) : array
+    public function collectStaticCallTypeInClass(Class_ $class, array $objectTypes) : array
     {
         $staticTypesInClass = [];
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($class->stmts, function (\PhpParser\Node $class) use($objectTypes, &$staticTypesInClass) {
-            if (!$class instanceof \PhpParser\Node\Expr\StaticCall) {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($class->stmts, function (Node $class) use($objectTypes, &$staticTypesInClass) {
+            if (!$class instanceof StaticCall) {
                 return null;
             }
             foreach ($objectTypes as $objectType) {

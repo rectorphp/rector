@@ -25,9 +25,9 @@ final class Random
         }, $charlist), 3);
         $chLen = \strlen($charlist);
         if ($length < 1) {
-            throw new \RectorPrefix20210510\Nette\InvalidArgumentException('Length must be greater than zero.');
+            throw new Nette\InvalidArgumentException('Length must be greater than zero.');
         } elseif ($chLen < 2) {
-            throw new \RectorPrefix20210510\Nette\InvalidArgumentException('Character list must contain at least two chars.');
+            throw new Nette\InvalidArgumentException('Character list must contain at least two chars.');
         }
         $res = '';
         for ($i = 0; $i < $length; $i++) {

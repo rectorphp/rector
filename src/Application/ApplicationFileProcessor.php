@@ -34,7 +34,7 @@ final class ApplicationFileProcessor
     /**
      * @param FileProcessorInterface[] $fileProcessors
      */
-    public function __construct(\Rector\Core\Configuration\Configuration $configuration, \RectorPrefix20210510\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \Rector\Core\Application\FileDecorator\FileDiffFileDecorator $fileDiffFileDecorator, \Rector\FileFormatter\FileFormatter $fileFormatter, array $fileProcessors = [])
+    public function __construct(Configuration $configuration, SmartFileSystem $smartFileSystem, FileDiffFileDecorator $fileDiffFileDecorator, FileFormatter $fileFormatter, array $fileProcessors = [])
     {
         $this->fileProcessors = $fileProcessors;
         $this->smartFileSystem = $smartFileSystem;
@@ -58,7 +58,7 @@ final class ApplicationFileProcessor
     private function processFiles(array $files) : void
     {
         foreach ($this->fileProcessors as $fileProcessor) {
-            $supportedFiles = \array_filter($files, function (\Rector\Core\ValueObject\Application\File $file) use($fileProcessor) : bool {
+            $supportedFiles = \array_filter($files, function (File $file) use($fileProcessor) : bool {
                 return $fileProcessor->supports($file);
             });
             $fileProcessor->process($supportedFiles);
@@ -79,7 +79,7 @@ final class ApplicationFileProcessor
             $this->printFile($file);
         }
     }
-    private function printFile(\Rector\Core\ValueObject\Application\File $file) : void
+    private function printFile(File $file) : void
     {
         $smartFileInfo = $file->getSmartFileInfo();
         $this->smartFileSystem->dumpFile($smartFileInfo->getPathname(), $file->getFileContent());

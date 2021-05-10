@@ -13,7 +13,7 @@ namespace RectorPrefix20210510\Symfony\Component\HttpKernel\Exception;
 /**
  * @author Ben Ramsey <ben@benramsey.com>
  */
-class UnauthorizedHttpException extends \RectorPrefix20210510\Symfony\Component\HttpKernel\Exception\HttpException
+class UnauthorizedHttpException extends HttpException
 {
     /**
      * @param string          $challenge WWW-Authenticate challenge string

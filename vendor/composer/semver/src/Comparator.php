@@ -96,7 +96,7 @@ class Comparator
      */
     public static function compare($version1, $operator, $version2)
     {
-        $constraint = new \RectorPrefix20210510\Composer\Semver\Constraint\Constraint($operator, $version2);
-        return $constraint->matchSpecific(new \RectorPrefix20210510\Composer\Semver\Constraint\Constraint('==', $version1), \true);
+        $constraint = new Constraint($operator, $version2);
+        return $constraint->matchSpecific(new Constraint('==', $version1), \true);
     }
 }

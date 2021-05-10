@@ -12,16 +12,16 @@ class Patterns
     private $patterns;
     /** @var string */
     private $regex;
-    public function __construct(\RectorPrefix20210510\Doctrine\Inflector\Rules\Pattern ...$patterns)
+    public function __construct(Pattern ...$patterns)
     {
         $this->patterns = $patterns;
-        $patterns = \array_map(static function (\RectorPrefix20210510\Doctrine\Inflector\Rules\Pattern $pattern) : string {
+        $patterns = array_map(static function (Pattern $pattern) : string {
             return $pattern->getPattern();
         }, $this->patterns);
-        $this->regex = '/^(?:' . \implode('|', $patterns) . ')$/i';
+        $this->regex = '/^(?:' . implode('|', $patterns) . ')$/i';
     }
     public function matches(string $word) : bool
     {
-        return \preg_match($this->regex, $word, $regs) === 1;
+        return preg_match($this->regex, $word, $regs) === 1;
     }
 }

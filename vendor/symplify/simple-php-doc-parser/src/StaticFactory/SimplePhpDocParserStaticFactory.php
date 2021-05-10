@@ -10,9 +10,9 @@ use PHPStan\PhpDocParser\Parser\TypeParser;
 use RectorPrefix20210510\Symplify\SimplePhpDocParser\SimplePhpDocParser;
 final class SimplePhpDocParserStaticFactory
 {
-    public static function create() : \RectorPrefix20210510\Symplify\SimplePhpDocParser\SimplePhpDocParser
+    public static function create() : SimplePhpDocParser
     {
-        $phpDocParser = new \PHPStan\PhpDocParser\Parser\PhpDocParser(new \PHPStan\PhpDocParser\Parser\TypeParser(), new \PHPStan\PhpDocParser\Parser\ConstExprParser());
-        return new \RectorPrefix20210510\Symplify\SimplePhpDocParser\SimplePhpDocParser($phpDocParser, new \PHPStan\PhpDocParser\Lexer\Lexer());
+        $phpDocParser = new PhpDocParser(new TypeParser(), new ConstExprParser());
+        return new SimplePhpDocParser($phpDocParser, new Lexer());
     }
 }

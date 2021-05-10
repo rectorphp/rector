@@ -13,16 +13,16 @@ final class MethodCallRenamer
      * @var NodeRepository
      */
     private $nodeRepository;
-    public function __construct(\Rector\NodeCollector\NodeCollector\NodeRepository $nodeRepository)
+    public function __construct(NodeRepository $nodeRepository)
     {
         $this->nodeRepository = $nodeRepository;
     }
-    public function updateClassMethodCalls(\PhpParser\Node\Stmt\ClassMethod $classMethod, string $desiredMethodName) : void
+    public function updateClassMethodCalls(ClassMethod $classMethod, string $desiredMethodName) : void
     {
         /** @var MethodCall[] $methodCalls */
         $methodCalls = $this->nodeRepository->findCallsByClassMethod($classMethod);
         foreach ($methodCalls as $methodCall) {
-            $methodCall->name = new \PhpParser\Node\Identifier($desiredMethodName);
+            $methodCall->name = new Identifier($desiredMethodName);
         }
     }
 }

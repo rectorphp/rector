@@ -11,9 +11,9 @@ use RectorPrefix20210510\Symfony\Component\DependencyInjection\ContainerBuilder;
  * This compiler pass removed Rectors skipped in `SKIP` parameters.
  * It uses Skipper from Symplify - https://github.com/symplify/skipper
  */
-final class RemoveSkippedRectorsCompilerPass implements \RectorPrefix20210510\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface
+final class RemoveSkippedRectorsCompilerPass implements CompilerPassInterface
 {
-    public function process(\RectorPrefix20210510\Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder) : void
+    public function process(ContainerBuilder $containerBuilder) : void
     {
         $skippedRectorClasses = $this->resolveSkippedRectorClasses($containerBuilder);
         foreach ($containerBuilder->getDefinitions() as $id => $definition) {
@@ -29,9 +29,9 @@ final class RemoveSkippedRectorsCompilerPass implements \RectorPrefix20210510\Sy
     /**
      * @return string[]
      */
-    private function resolveSkippedRectorClasses(\RectorPrefix20210510\Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder) : array
+    private function resolveSkippedRectorClasses(ContainerBuilder $containerBuilder) : array
     {
-        $skipParameters = (array) $containerBuilder->getParameter(\Rector\Core\Configuration\Option::SKIP);
+        $skipParameters = (array) $containerBuilder->getParameter(Option::SKIP);
         return \array_filter($skipParameters, function ($element) : bool {
             return $this->isRectorClass($element);
         });
@@ -44,6 +44,6 @@ final class RemoveSkippedRectorsCompilerPass implements \RectorPrefix20210510\Sy
         if (!\is_string($element)) {
             return \false;
         }
-        return \is_a($element, \Rector\Core\Contract\Rector\RectorInterface::class, \true);
+        return \is_a($element, RectorInterface::class, \true);
     }
 }

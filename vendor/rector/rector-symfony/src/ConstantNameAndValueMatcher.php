@@ -14,24 +14,24 @@ final class ConstantNameAndValueMatcher
      * @var ValueResolver
      */
     private $valueResolver;
-    public function __construct(\Rector\Core\PhpParser\Node\Value\ValueResolver $valueResolver)
+    public function __construct(ValueResolver $valueResolver)
     {
         $this->valueResolver = $valueResolver;
     }
-    public function matchFromArg(\PhpParser\Node\Arg $arg, string $prefixForNumeric) : ?\Rector\Symfony\ValueObject\ConstantNameAndValue
+    public function matchFromArg(Arg $arg, string $prefixForNumeric) : ?ConstantNameAndValue
     {
-        if ($arg->value instanceof \PhpParser\Node\Expr\ClassConstFetch) {
+        if ($arg->value instanceof ClassConstFetch) {
             return null;
         }
         $argumentValue = $this->valueResolver->getValue($arg->value);
         if (!\is_string($argumentValue)) {
             return null;
         }
-        $stringy = new \RectorPrefix20210510\Stringy\Stringy($argumentValue);
+        $stringy = new Stringy($argumentValue);
         $constantName = (string) $stringy->underscored()->toUpperCase();
         if (!\ctype_alpha($constantName[0])) {
             $constantName = $prefixForNumeric . $constantName;
         }
-        return new \Rector\Symfony\ValueObject\ConstantNameAndValue($constantName, $argumentValue);
+        return new ConstantNameAndValue($constantName, $argumentValue);
     }
 }

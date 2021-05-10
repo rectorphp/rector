@@ -15,7 +15,7 @@ namespace RectorPrefix20210510\Symfony\Component\DependencyInjection\Argument;
  *
  * @author Titouan Galopin <galopintitouan@gmail.com>
  */
-class IteratorArgument implements \RectorPrefix20210510\Symfony\Component\DependencyInjection\Argument\ArgumentInterface
+class IteratorArgument implements ArgumentInterface
 {
     use ReferenceSetArgumentTrait;
 }

@@ -20,11 +20,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\CodingStyle\Rector\ClassMethod\FuncGetArgsToVariadicParamRector\FuncGetArgsToVariadicParamRectorTest
  */
-final class FuncGetArgsToVariadicParamRector extends \Rector\Core\Rector\AbstractRector
+final class FuncGetArgsToVariadicParamRector extends AbstractRector
 {
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Refactor func_get_args() in to a variadic param', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Refactor func_get_args() in to a variadic param', [new CodeSample(<<<'CODE_SAMPLE'
 function run()
 {
     $args = \func_get_args();
@@ -42,24 +42,24 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\ClassMethod::class, \PhpParser\Node\Stmt\Function_::class];
+        return [ClassMethod::class, Function_::class];
     }
     /**
      * @param ClassMethod|Function_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        if (!$this->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::VARIADIC_PARAM)) {
+        if (!$this->isAtLeastPhpVersion(PhpVersionFeature::VARIADIC_PARAM)) {
             return null;
         }
         if ($node->params !== []) {
             return null;
         }
         $assign = $this->matchFuncGetArgsVariableAssign($node);
-        if (!$assign instanceof \PhpParser\Node\Expr\Assign) {
+        if (!$assign instanceof Assign) {
             return null;
         }
-        if ($assign->var instanceof \PhpParser\Node\Expr\Variable) {
+        if ($assign->var instanceof Variable) {
             $variableName = $this->getName($assign->var);
             if ($variableName === null) {
                 return null;
@@ -67,7 +67,7 @@ CODE_SAMPLE
             $this->removeNode($assign);
         } else {
             $variableName = 'args';
-            $assign->expr = new \PhpParser\Node\Expr\Variable('args');
+            $assign->expr = new Variable('args');
         }
         $node->params[] = $this->createVariadicParam($variableName);
         return $node;
@@ -75,12 +75,12 @@ CODE_SAMPLE
     /**
      * @param ClassMethod|Function_ $functionLike
      */
-    private function matchFuncGetArgsVariableAssign(\PhpParser\Node\FunctionLike $functionLike) : ?\PhpParser\Node\Expr\Assign
+    private function matchFuncGetArgsVariableAssign(FunctionLike $functionLike) : ?Assign
     {
         /** @var Assign[] $assigns */
-        $assigns = $this->betterNodeFinder->findInstanceOf((array) $functionLike->stmts, \PhpParser\Node\Expr\Assign::class);
+        $assigns = $this->betterNodeFinder->findInstanceOf((array) $functionLike->stmts, Assign::class);
         foreach ($assigns as $assign) {
-            if (!$assign->expr instanceof \PhpParser\Node\Expr\FuncCall) {
+            if (!$assign->expr instanceof FuncCall) {
                 continue;
             }
             if (!$this->isName($assign->expr, 'func_get_args')) {
@@ -90,9 +90,9 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function createVariadicParam(string $variableName) : \PhpParser\Node\Param
+    private function createVariadicParam(string $variableName) : Param
     {
-        $variable = new \PhpParser\Node\Expr\Variable($variableName);
-        return new \PhpParser\Node\Param($variable, null, null, \false, \true);
+        $variable = new Variable($variableName);
+        return new Param($variable, null, null, \false, \true);
     }
 }

@@ -12,14 +12,14 @@ final class ConstantNaming
      * @var NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
+    public function __construct(NodeNameResolver $nodeNameResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
     }
-    public function createFromProperty(\PhpParser\Node\Stmt\PropertyProperty $propertyProperty) : string
+    public function createFromProperty(PropertyProperty $propertyProperty) : string
     {
         $propertyName = $this->nodeNameResolver->getName($propertyProperty);
-        $stringy = new \RectorPrefix20210510\Stringy\Stringy($propertyName);
+        $stringy = new Stringy($propertyName);
         return (string) $stringy->underscored()->toUpperCase();
     }
 }

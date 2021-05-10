@@ -16,24 +16,24 @@ final class FluentNodeRemover
      * @var NodeRemover
      */
     private $nodeRemover;
-    public function __construct(\Rector\NodeRemoval\NodeRemover $nodeRemover)
+    public function __construct(NodeRemover $nodeRemover)
     {
         $this->nodeRemover = $nodeRemover;
     }
     /**
      * @param MethodCall|Return_ $node
      */
-    public function removeCurrentNode(\PhpParser\Node $node) : void
+    public function removeCurrentNode(Node $node) : void
     {
-        $parent = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-        if ($parent instanceof \PhpParser\Node\Expr\Assign) {
+        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parent instanceof Assign) {
             $this->nodeRemover->removeNode($parent);
             return;
         }
         // part of method call
-        if ($parent instanceof \PhpParser\Node\Arg) {
-            $parentParent = $parent->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-            if ($parentParent instanceof \PhpParser\Node\Expr\MethodCall) {
+        if ($parent instanceof Arg) {
+            $parentParent = $parent->getAttribute(AttributeKey::PARENT_NODE);
+            if ($parentParent instanceof MethodCall) {
                 $this->nodeRemover->removeNode($parentParent);
             }
             return;

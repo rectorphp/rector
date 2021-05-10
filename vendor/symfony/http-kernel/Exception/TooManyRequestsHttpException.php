@@ -15,7 +15,7 @@ namespace RectorPrefix20210510\Symfony\Component\HttpKernel\Exception;
  *
  * @see http://tools.ietf.org/html/rfc6585
  */
-class TooManyRequestsHttpException extends \RectorPrefix20210510\Symfony\Component\HttpKernel\Exception\HttpException
+class TooManyRequestsHttpException extends HttpException
 {
     /**
      * @param int|string|null $retryAfter The number of seconds or HTTP-date after which the request may be retried

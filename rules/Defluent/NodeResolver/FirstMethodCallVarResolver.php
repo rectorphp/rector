@@ -12,7 +12,7 @@ final class FirstMethodCallVarResolver
     /**
      * @param FirstAssignFluentCall|AssignAndRootExpr $firstCallFactoryAware
      */
-    public function resolve(\Rector\Defluent\Contract\ValueObject\FirstCallFactoryAwareInterface $firstCallFactoryAware, int $key) : \PhpParser\Node\Expr
+    public function resolve(FirstCallFactoryAwareInterface $firstCallFactoryAware, int $key) : Expr
     {
         if (!$firstCallFactoryAware->isFirstCallFactory()) {
             return $firstCallFactoryAware->getCallerExpr();

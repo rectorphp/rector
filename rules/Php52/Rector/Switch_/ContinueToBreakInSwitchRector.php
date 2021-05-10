@@ -19,11 +19,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://stackoverflow.com/a/12349889/1348344
  * @see \Rector\Tests\Php52\Rector\Switch_\ContinueToBreakInSwitchRector\ContinueToBreakInSwitchRectorTest
  */
-final class ContinueToBreakInSwitchRector extends \Rector\Core\Rector\AbstractRector
+final class ContinueToBreakInSwitchRector extends AbstractRector
 {
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Use break instead of continue in switch statements', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Use break instead of continue in switch statements', [new CodeSample(<<<'CODE_SAMPLE'
 function some_run($value)
 {
     switch ($value) {
@@ -56,16 +56,16 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Switch_::class];
+        return [Switch_::class];
     }
     /**
      * @param Switch_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         foreach ($node->cases as $case) {
             foreach ($case->stmts as $key => $caseStmt) {
-                if (!$caseStmt instanceof \PhpParser\Node\Stmt\Continue_) {
+                if (!$caseStmt instanceof Continue_) {
                     continue;
                 }
                 $case->stmts[$key] = $this->processContinueStatement($caseStmt);
@@ -73,33 +73,33 @@ CODE_SAMPLE
         }
         return $node;
     }
-    private function processContinueStatement(\PhpParser\Node\Stmt\Continue_ $continue) : \PhpParser\Node\Stmt
+    private function processContinueStatement(Continue_ $continue) : Stmt
     {
         if ($continue->num === null) {
-            return new \PhpParser\Node\Stmt\Break_();
+            return new Break_();
         }
-        if ($continue->num instanceof \PhpParser\Node\Scalar\LNumber) {
+        if ($continue->num instanceof LNumber) {
             $continueNumber = $this->valueResolver->getValue($continue->num);
             if ($continueNumber <= 1) {
-                return new \PhpParser\Node\Stmt\Break_();
+                return new Break_();
             }
-        } elseif ($continue->num instanceof \PhpParser\Node\Expr\Variable) {
+        } elseif ($continue->num instanceof Variable) {
             return $this->processVariableNum($continue, $continue->num);
         }
         return $continue;
     }
-    private function processVariableNum(\PhpParser\Node\Stmt\Continue_ $continue, \PhpParser\Node\Expr\Variable $numVariable) : \PhpParser\Node\Stmt
+    private function processVariableNum(Continue_ $continue, Variable $numVariable) : Stmt
     {
         $staticType = $this->getStaticType($numVariable);
-        if (!$staticType instanceof \PHPStan\Type\ConstantType) {
+        if (!$staticType instanceof ConstantType) {
             return $continue;
         }
-        if (!$staticType instanceof \PHPStan\Type\Constant\ConstantIntegerType) {
+        if (!$staticType instanceof ConstantIntegerType) {
             return $continue;
         }
         if ($staticType->getValue() > 1) {
             return $continue;
         }
-        return new \PhpParser\Node\Stmt\Break_();
+        return new Break_();
     }
 }

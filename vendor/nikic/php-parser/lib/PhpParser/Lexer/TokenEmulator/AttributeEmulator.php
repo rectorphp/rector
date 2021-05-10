@@ -8,7 +8,7 @@ final class AttributeEmulator extends \PhpParser\Lexer\TokenEmulator\TokenEmulat
 {
     public function getPhpVersion() : string
     {
-        return \PhpParser\Lexer\Emulative::PHP_8_0;
+        return Emulative::PHP_8_0;
     }
     public function isEmulationNeeded(string $code) : bool
     {

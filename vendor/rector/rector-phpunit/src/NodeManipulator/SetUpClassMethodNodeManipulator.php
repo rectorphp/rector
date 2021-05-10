@@ -18,7 +18,7 @@ final class SetUpClassMethodNodeManipulator
      * @var StmtManipulator
      */
     private $stmtManipulator;
-    public function __construct(\Rector\PHPUnit\NodeFactory\SetUpClassMethodFactory $setUpClassMethodFactory, \Rector\PHPUnit\NodeManipulator\StmtManipulator $stmtManipulator)
+    public function __construct(SetUpClassMethodFactory $setUpClassMethodFactory, \Rector\PHPUnit\NodeManipulator\StmtManipulator $stmtManipulator)
     {
         $this->setUpClassMethodFactory = $setUpClassMethodFactory;
         $this->stmtManipulator = $stmtManipulator;
@@ -26,10 +26,10 @@ final class SetUpClassMethodNodeManipulator
     /**
      * @param Stmt[]|Expr[] $stmts
      */
-    public function decorateOrCreate(\PhpParser\Node\Stmt\Class_ $class, array $stmts) : void
+    public function decorateOrCreate(Class_ $class, array $stmts) : void
     {
         $stmts = $this->stmtManipulator->normalizeStmts($stmts);
-        $setUpClassMethod = $class->getMethod(\Rector\Core\ValueObject\MethodName::SET_UP);
+        $setUpClassMethod = $class->getMethod(MethodName::SET_UP);
         if ($setUpClassMethod === null) {
             $setUpClassMethod = $this->setUpClassMethodFactory->createSetUpMethod($stmts);
             $class->stmts = \array_merge([$setUpClassMethod], $class->stmts);

@@ -30,7 +30,7 @@ final class BundleClassResolver
      * @var ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Parser\Parser $parser, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
+    public function __construct(BetterNodeFinder $betterNodeFinder, NodeNameResolver $nodeNameResolver, Parser $parser, ReflectionProvider $reflectionProvider)
     {
         $this->parser = $parser;
         $this->betterNodeFinder = $betterNodeFinder;
@@ -66,11 +66,11 @@ final class BundleClassResolver
     }
     private function resolveClassNameFromFilePath(string $filePath) : ?string
     {
-        $fileInfo = new \Symplify\SmartFileSystem\SmartFileInfo($filePath);
+        $fileInfo = new SmartFileInfo($filePath);
         $nodes = $this->parser->parseFileInfo($fileInfo);
         $this->addFullyQualifiedNamesToNodes($nodes);
         $classLike = $this->betterNodeFinder->findFirstNonAnonymousClass($nodes);
-        if (!$classLike instanceof \PhpParser\Node\Stmt\ClassLike) {
+        if (!$classLike instanceof ClassLike) {
             return null;
         }
         return $this->nodeNameResolver->getName($classLike);
@@ -80,8 +80,8 @@ final class BundleClassResolver
      */
     private function addFullyQualifiedNamesToNodes(array $nodes) : void
     {
-        $nodeTraverser = new \PhpParser\NodeTraverser();
-        $nameResolver = new \PhpParser\NodeVisitor\NameResolver();
+        $nodeTraverser = new NodeTraverser();
+        $nameResolver = new NameResolver();
         $nodeTraverser->addVisitor($nameResolver);
         $nodeTraverser->traverse($nodes);
     }

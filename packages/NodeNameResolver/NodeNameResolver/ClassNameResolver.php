@@ -8,7 +8,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use Rector\NodeNameResolver\Contract\NodeNameResolverInterface;
 use Rector\NodeNameResolver\NodeNameResolver;
-final class ClassNameResolver implements \Rector\NodeNameResolver\Contract\NodeNameResolverInterface
+final class ClassNameResolver implements NodeNameResolverInterface
 {
     /**
      * @var NodeNameResolver
@@ -17,7 +17,7 @@ final class ClassNameResolver implements \Rector\NodeNameResolver\Contract\NodeN
     /**
      * @required
      */
-    public function autowireClassNameResolver(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver) : void
+    public function autowireClassNameResolver(NodeNameResolver $nodeNameResolver) : void
     {
         $this->nodeNameResolver = $nodeNameResolver;
     }
@@ -26,12 +26,12 @@ final class ClassNameResolver implements \Rector\NodeNameResolver\Contract\NodeN
      */
     public function getNode() : string
     {
-        return \PhpParser\Node\Stmt\ClassLike::class;
+        return ClassLike::class;
     }
     /**
      * @param Class_ $node
      */
-    public function resolve(\PhpParser\Node $node) : ?string
+    public function resolve(Node $node) : ?string
     {
         if (\property_exists($node, 'namespacedName')) {
             return $node->namespacedName->toString();

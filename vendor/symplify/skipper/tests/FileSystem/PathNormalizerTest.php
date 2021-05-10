@@ -7,7 +7,7 @@ use Iterator;
 use RectorPrefix20210510\Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
 use RectorPrefix20210510\Symplify\Skipper\FileSystem\PathNormalizer;
 use RectorPrefix20210510\Symplify\Skipper\HttpKernel\SkipperKernel;
-final class PathNormalizerTest extends \RectorPrefix20210510\Symplify\PackageBuilder\Testing\AbstractKernelTestCase
+final class PathNormalizerTest extends AbstractKernelTestCase
 {
     /**
      * @var PathNormalizer
@@ -15,8 +15,8 @@ final class PathNormalizerTest extends \RectorPrefix20210510\Symplify\PackageBui
     private $pathNormalizer;
     protected function setUp() : void
     {
-        $this->bootKernel(\RectorPrefix20210510\Symplify\Skipper\HttpKernel\SkipperKernel::class);
-        $this->pathNormalizer = $this->getService(\RectorPrefix20210510\Symplify\Skipper\FileSystem\PathNormalizer::class);
+        $this->bootKernel(SkipperKernel::class);
+        $this->pathNormalizer = $this->getService(PathNormalizer::class);
     }
     /**
      * @dataProvider providePaths
@@ -26,7 +26,7 @@ final class PathNormalizerTest extends \RectorPrefix20210510\Symplify\PackageBui
         $normalizedPath = $this->pathNormalizer->normalizeForFnmatch($path);
         $this->assertSame($expectedNormalizedPath, $normalizedPath);
     }
-    public function providePaths() : \Iterator
+    public function providePaths() : Iterator
     {
         (yield ['path/with/no/asterisk', 'path/with/no/asterisk']);
         (yield ['*path/with/asterisk/begin', '*path/with/asterisk/begin*']);

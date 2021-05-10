@@ -13,11 +13,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @see https://3v4l.org/SG0Wu
  * @see \Rector\Tests\DeadCode\Rector\Array_\RemoveDuplicatedArrayKeyRector\RemoveDuplicatedArrayKeyRectorTest
  */
-final class RemoveDuplicatedArrayKeyRector extends \Rector\Core\Rector\AbstractRector
+final class RemoveDuplicatedArrayKeyRector extends AbstractRector
 {
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove duplicated key in defined arrays.', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove duplicated key in defined arrays.', [new CodeSample(<<<'CODE_SAMPLE'
 $item = [
     1 => 'A',
     1 => 'B'
@@ -35,12 +35,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\Array_::class];
+        return [Array_::class];
     }
     /**
      * @param Array_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         $arrayItemsWithDuplicatedKey = $this->getArrayItemsWithDuplicatedKey($node);
         if ($arrayItemsWithDuplicatedKey === []) {
@@ -56,11 +56,11 @@ CODE_SAMPLE
     /**
      * @return ArrayItem[][]
      */
-    private function getArrayItemsWithDuplicatedKey(\PhpParser\Node\Expr\Array_ $array) : array
+    private function getArrayItemsWithDuplicatedKey(Array_ $array) : array
     {
         $arrayItemsByKeys = [];
         foreach ($array->items as $arrayItem) {
-            if (!$arrayItem instanceof \PhpParser\Node\Expr\ArrayItem) {
+            if (!$arrayItem instanceof ArrayItem) {
                 continue;
             }
             if ($arrayItem->key === null) {

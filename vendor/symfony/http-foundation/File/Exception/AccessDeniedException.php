@@ -15,7 +15,7 @@ namespace RectorPrefix20210510\Symfony\Component\HttpFoundation\File\Exception;
  *
  * @author Bernhard Schussek <bschussek@gmail.com>
  */
-class AccessDeniedException extends \RectorPrefix20210510\Symfony\Component\HttpFoundation\File\Exception\FileException
+class AccessDeniedException extends FileException
 {
     public function __construct(string $path)
     {

@@ -27,7 +27,7 @@ final class ExpectationAnalyzer
      * @var ConsecutiveAssertionFactory
      */
     private $consecutiveAssertionFactory;
-    public function __construct(\Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer $testsNodeAnalyzer, \Rector\PHPUnit\NodeFactory\ConsecutiveAssertionFactory $consecutiveAssertionFactory)
+    public function __construct(\Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer $testsNodeAnalyzer, ConsecutiveAssertionFactory $consecutiveAssertionFactory)
     {
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
         $this->consecutiveAssertionFactory = $consecutiveAssertionFactory;
@@ -35,9 +35,9 @@ final class ExpectationAnalyzer
     /**
      * @param Expression[] $stmts
      */
-    public function getExpectationsFromExpressions(array $stmts) : \Rector\PHPUnit\ValueObject\ExpectationMockCollection
+    public function getExpectationsFromExpressions(array $stmts) : ExpectationMockCollection
     {
-        $expectationMockCollection = new \Rector\PHPUnit\ValueObject\ExpectationMockCollection();
+        $expectationMockCollection = new ExpectationMockCollection();
         foreach ($stmts as $stmt) {
             /** @var MethodCall $expr */
             $expr = $stmt->expr;
@@ -58,17 +58,17 @@ final class ExpectationAnalyzer
             }
             $atArg = $expectsValue->args[0];
             $atValue = $atArg->value;
-            if (!$atValue instanceof \PhpParser\Node\Scalar\LNumber) {
+            if (!$atValue instanceof LNumber) {
                 continue;
             }
-            if (!($expects->var instanceof \PhpParser\Node\Expr\Variable || $expects->var instanceof \PhpParser\Node\Expr\PropertyFetch)) {
+            if (!($expects->var instanceof Variable || $expects->var instanceof PropertyFetch)) {
                 continue;
             }
-            $expectationMockCollection->add(new \Rector\PHPUnit\ValueObject\ExpectationMock($expects->var, $method->args, $atValue->value, $this->getWill($expr), $this->getWithArgs($method->var), $stmt));
+            $expectationMockCollection->add(new ExpectationMock($expects->var, $method->args, $atValue->value, $this->getWill($expr), $this->getWithArgs($method->var), $stmt));
         }
         return $expectationMockCollection;
     }
-    public function isValidExpectsCall(\PhpParser\Node\Expr\MethodCall $methodCall) : bool
+    public function isValidExpectsCall(MethodCall $methodCall) : bool
     {
         if (!$this->testsNodeAnalyzer->isInPHPUnitMethodCallName($methodCall, 'expects')) {
             return \false;
@@ -78,7 +78,7 @@ final class ExpectationAnalyzer
         }
         return \true;
     }
-    public function isValidAtCall(\PhpParser\Node\Expr\MethodCall $methodCall) : bool
+    public function isValidAtCall(MethodCall $methodCall) : bool
     {
         if (!$this->testsNodeAnalyzer->isInPHPUnitMethodCallName($methodCall, 'at')) {
             return \false;
@@ -88,23 +88,23 @@ final class ExpectationAnalyzer
         }
         return \true;
     }
-    private function getMethod(\PhpParser\Node\Expr\MethodCall $methodCall) : \PhpParser\Node\Expr\MethodCall
+    private function getMethod(MethodCall $methodCall) : MethodCall
     {
-        if ($this->testsNodeAnalyzer->isPHPUnitMethodCallNames($methodCall, self::PROCESSABLE_WILL_STATEMENTS) && $methodCall->var instanceof \PhpParser\Node\Expr\MethodCall) {
+        if ($this->testsNodeAnalyzer->isPHPUnitMethodCallNames($methodCall, self::PROCESSABLE_WILL_STATEMENTS) && $methodCall->var instanceof MethodCall) {
             return $methodCall->var;
         }
         return $methodCall;
     }
-    private function getWill(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\PhpParser\Node\Expr
+    private function getWill(MethodCall $methodCall) : ?Expr
     {
         if (!$this->testsNodeAnalyzer->isPHPUnitMethodCallNames($methodCall, self::PROCESSABLE_WILL_STATEMENTS)) {
             return null;
         }
         return $this->consecutiveAssertionFactory->createWillReturn($methodCall);
     }
-    private function getExpects(\PhpParser\Node\Expr $expr, \PhpParser\Node\Expr\MethodCall $methodCall) : \PhpParser\Node\Expr
+    private function getExpects(Expr $expr, MethodCall $methodCall) : Expr
     {
-        if (!$expr instanceof \PhpParser\Node\Expr\MethodCall) {
+        if (!$expr instanceof MethodCall) {
             return $methodCall;
         }
         if (!$this->testsNodeAnalyzer->isInPHPUnitMethodCallName($expr, 'with')) {
@@ -115,15 +115,15 @@ final class ExpectationAnalyzer
     /**
      * @return array<int, Expr|null>
      */
-    private function getWithArgs(\PhpParser\Node\Expr $expr) : array
+    private function getWithArgs(Expr $expr) : array
     {
         if (!$this->testsNodeAnalyzer->isInPHPUnitMethodCallName($expr, 'with')) {
             return [null];
         }
-        if (!$expr instanceof \PhpParser\Node\Expr\MethodCall) {
+        if (!$expr instanceof MethodCall) {
             return [null];
         }
-        return \array_map(static function (\PhpParser\Node\Arg $arg) : Expr {
+        return \array_map(static function (Arg $arg) : Expr {
             return $arg->value;
         }, $expr->args);
     }

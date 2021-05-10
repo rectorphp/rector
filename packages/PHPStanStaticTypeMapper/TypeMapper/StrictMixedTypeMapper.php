@@ -10,7 +10,7 @@ use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\StrictMixedType;
 use PHPStan\Type\Type;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
-final class StrictMixedTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface
+final class StrictMixedTypeMapper implements TypeMapperInterface
 {
     /**
      * @var string
@@ -21,20 +21,20 @@ final class StrictMixedTypeMapper implements \Rector\PHPStanStaticTypeMapper\Con
      */
     public function getNodeClass() : string
     {
-        return \PHPStan\Type\StrictMixedType::class;
+        return StrictMixedType::class;
     }
     /**
      * @param StrictMixedType $type
      */
-    public function mapToPHPStanPhpDocTypeNode(\PHPStan\Type\Type $type) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
+    public function mapToPHPStanPhpDocTypeNode(Type $type) : TypeNode
     {
-        return new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode(self::MIXED);
+        return new IdentifierTypeNode(self::MIXED);
     }
     /**
      * @param StrictMixedType $type
      */
-    public function mapToPhpParserNode(\PHPStan\Type\Type $type, ?string $kind = null) : ?\PhpParser\Node
+    public function mapToPhpParserNode(Type $type, ?string $kind = null) : ?Node
     {
-        return new \PhpParser\Node\Name(self::MIXED);
+        return new Name(self::MIXED);
     }
 }

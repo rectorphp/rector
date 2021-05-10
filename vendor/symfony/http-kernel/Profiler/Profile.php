@@ -223,7 +223,7 @@ class Profile
     /**
      * Adds a Collector.
      */
-    public function addCollector(\RectorPrefix20210510\Symfony\Component\HttpKernel\DataCollector\DataCollectorInterface $collector)
+    public function addCollector(DataCollectorInterface $collector)
     {
         $this->collectors[$collector->getName()] = $collector;
     }

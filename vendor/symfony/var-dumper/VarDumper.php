@@ -49,27 +49,27 @@ class VarDumper
     }
     private static function register() : void
     {
-        $cloner = new \RectorPrefix20210510\Symfony\Component\VarDumper\Cloner\VarCloner();
-        $cloner->addCasters(\RectorPrefix20210510\Symfony\Component\VarDumper\Caster\ReflectionCaster::UNSET_CLOSURE_FILE_INFO);
+        $cloner = new VarCloner();
+        $cloner->addCasters(ReflectionCaster::UNSET_CLOSURE_FILE_INFO);
         $format = $_SERVER['VAR_DUMPER_FORMAT'] ?? null;
         switch (\true) {
             case 'html' === $format:
-                $dumper = new \RectorPrefix20210510\Symfony\Component\VarDumper\Dumper\HtmlDumper();
+                $dumper = new HtmlDumper();
                 break;
             case 'cli' === $format:
-                $dumper = new \RectorPrefix20210510\Symfony\Component\VarDumper\Dumper\CliDumper();
+                $dumper = new CliDumper();
                 break;
             case 'server' === $format:
             case 'tcp' === \parse_url($format, \PHP_URL_SCHEME):
                 $host = 'server' === $format ? $_SERVER['VAR_DUMPER_SERVER'] ?? '127.0.0.1:9912' : $format;
-                $dumper = \in_array(\PHP_SAPI, ['cli', 'phpdbg'], \true) ? new \RectorPrefix20210510\Symfony\Component\VarDumper\Dumper\CliDumper() : new \RectorPrefix20210510\Symfony\Component\VarDumper\Dumper\HtmlDumper();
-                $dumper = new \RectorPrefix20210510\Symfony\Component\VarDumper\Dumper\ServerDumper($host, $dumper, self::getDefaultContextProviders());
+                $dumper = \in_array(\PHP_SAPI, ['cli', 'phpdbg'], \true) ? new CliDumper() : new HtmlDumper();
+                $dumper = new ServerDumper($host, $dumper, self::getDefaultContextProviders());
                 break;
             default:
-                $dumper = \in_array(\PHP_SAPI, ['cli', 'phpdbg'], \true) ? new \RectorPrefix20210510\Symfony\Component\VarDumper\Dumper\CliDumper() : new \RectorPrefix20210510\Symfony\Component\VarDumper\Dumper\HtmlDumper();
+                $dumper = \in_array(\PHP_SAPI, ['cli', 'phpdbg'], \true) ? new CliDumper() : new HtmlDumper();
         }
-        if (!$dumper instanceof \RectorPrefix20210510\Symfony\Component\VarDumper\Dumper\ServerDumper) {
-            $dumper = new \RectorPrefix20210510\Symfony\Component\VarDumper\Dumper\ContextualizedDumper($dumper, [new \RectorPrefix20210510\Symfony\Component\VarDumper\Dumper\ContextProvider\SourceContextProvider()]);
+        if (!$dumper instanceof ServerDumper) {
+            $dumper = new ContextualizedDumper($dumper, [new SourceContextProvider()]);
         }
         self::$handler = function ($var) use($cloner, $dumper) {
             $dumper->dump($cloner->cloneVar($var));
@@ -78,12 +78,12 @@ class VarDumper
     private static function getDefaultContextProviders() : array
     {
         $contextProviders = [];
-        if (!\in_array(\PHP_SAPI, ['cli', 'phpdbg'], \true) && \class_exists(\RectorPrefix20210510\Symfony\Component\HttpFoundation\Request::class)) {
-            $requestStack = new \RectorPrefix20210510\Symfony\Component\HttpFoundation\RequestStack();
-            $requestStack->push(\RectorPrefix20210510\Symfony\Component\HttpFoundation\Request::createFromGlobals());
-            $contextProviders['request'] = new \RectorPrefix20210510\Symfony\Component\VarDumper\Dumper\ContextProvider\RequestContextProvider($requestStack);
+        if (!\in_array(\PHP_SAPI, ['cli', 'phpdbg'], \true) && \class_exists(Request::class)) {
+            $requestStack = new RequestStack();
+            $requestStack->push(Request::createFromGlobals());
+            $contextProviders['request'] = new RequestContextProvider($requestStack);
         }
-        $fileLinkFormatter = \class_exists(\RectorPrefix20210510\Symfony\Component\HttpKernel\Debug\FileLinkFormatter::class) ? new \RectorPrefix20210510\Symfony\Component\HttpKernel\Debug\FileLinkFormatter(null, $requestStack ?? null) : null;
-        return $contextProviders + ['cli' => new \RectorPrefix20210510\Symfony\Component\VarDumper\Dumper\ContextProvider\CliContextProvider(), 'source' => new \RectorPrefix20210510\Symfony\Component\VarDumper\Dumper\ContextProvider\SourceContextProvider(null, null, $fileLinkFormatter)];
+        $fileLinkFormatter = \class_exists(FileLinkFormatter::class) ? new FileLinkFormatter(null, $requestStack ?? null) : null;
+        return $contextProviders + ['cli' => new CliContextProvider(), 'source' => new SourceContextProvider(null, null, $fileLinkFormatter)];
     }
 }

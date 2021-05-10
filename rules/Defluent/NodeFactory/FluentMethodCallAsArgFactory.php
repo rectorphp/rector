@@ -9,14 +9,14 @@ use PhpParser\Node\Expr\Variable;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 final class FluentMethodCallAsArgFactory
 {
-    public function createFluentAsArg(\PhpParser\Node\Expr\MethodCall $methodCall, \PhpParser\Node\Expr\Variable $variable) : \PhpParser\Node\Expr\MethodCall
+    public function createFluentAsArg(MethodCall $methodCall, Variable $variable) : MethodCall
     {
         /** @var Arg $parent */
-        $parent = $methodCall->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        $parent = $methodCall->getAttribute(AttributeKey::PARENT_NODE);
         /** @var MethodCall $parentParent */
-        $parentParent = $parent->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-        $lastMethodCall = new \PhpParser\Node\Expr\MethodCall($parentParent->var, $parentParent->name);
-        $lastMethodCall->args[] = new \PhpParser\Node\Arg($variable);
+        $parentParent = $parent->getAttribute(AttributeKey::PARENT_NODE);
+        $lastMethodCall = new MethodCall($parentParent->var, $parentParent->name);
+        $lastMethodCall->args[] = new Arg($variable);
         return $lastMethodCall;
     }
 }

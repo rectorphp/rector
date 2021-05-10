@@ -14,7 +14,7 @@ use RectorPrefix20210510\Symfony\Component\Cache\Marshaller\MarshallerInterface;
 /**
  * @author Ahmed TAILOULOUTE <ahmed.tailouloute@gmail.com>
  */
-class IdentityMarshaller implements \RectorPrefix20210510\Symfony\Component\Cache\Marshaller\MarshallerInterface
+class IdentityMarshaller implements MarshallerInterface
 {
     /**
      * {@inheritdoc}

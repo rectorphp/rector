@@ -17,7 +17,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\DeadCode\Rector\If_\UnwrapFutureCompatibleIfFunctionExistsRector\UnwrapFutureCompatibleIfFunctionExistsRectorTest
  */
-final class UnwrapFutureCompatibleIfFunctionExistsRector extends \Rector\Core\Rector\AbstractRector
+final class UnwrapFutureCompatibleIfFunctionExistsRector extends AbstractRector
 {
     /**
      * @var IfManipulator
@@ -27,14 +27,14 @@ final class UnwrapFutureCompatibleIfFunctionExistsRector extends \Rector\Core\Re
      * @var FunctionSupportResolver
      */
     private $functionSupportResolver;
-    public function __construct(\Rector\DeadCode\FeatureSupport\FunctionSupportResolver $functionSupportResolver, \Rector\Core\NodeManipulator\IfManipulator $ifManipulator)
+    public function __construct(FunctionSupportResolver $functionSupportResolver, IfManipulator $ifManipulator)
     {
         $this->ifManipulator = $ifManipulator;
         $this->functionSupportResolver = $functionSupportResolver;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove functions exists if with else for always existing', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove functions exists if with else for always existing', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -65,12 +65,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\If_::class];
+        return [If_::class];
     }
     /**
      * @param If_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -92,13 +92,13 @@ CODE_SAMPLE
         $this->removeNode($node);
         return null;
     }
-    private function shouldSkip(\PhpParser\Node\Stmt\If_ $if) : bool
+    private function shouldSkip(If_ $if) : bool
     {
-        $classLike = $if->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
-        if (!$classLike instanceof \PhpParser\Node\Stmt\ClassLike) {
+        $classLike = $if->getAttribute(AttributeKey::CLASS_NODE);
+        if (!$classLike instanceof ClassLike) {
             return \false;
         }
         // skip rector rules, as they decided if function exists in that particular projects
-        return $this->isObjectType($classLike, new \PHPStan\Type\ObjectType('Rector\\Core\\Contract\\Rector\\RectorInterface'));
+        return $this->isObjectType($classLike, new ObjectType('Rector\\Core\\Contract\\Rector\\RectorInterface'));
     }
 }

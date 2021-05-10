@@ -61,7 +61,7 @@ final class Configuration
      * @var BootstrapConfigs|null
      */
     private $bootstrapConfigs;
-    public function __construct(\RectorPrefix20210510\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider)
+    public function __construct(ParameterProvider $parameterProvider)
     {
         $this->isCacheEnabled = (bool) $parameterProvider->provideParameter(\Rector\Core\Configuration\Option::ENABLE_CACHE);
         $this->fileExtensions = (array) $parameterProvider->provideParameter(\Rector\Core\Configuration\Option::FILE_EXTENSIONS);
@@ -71,7 +71,7 @@ final class Configuration
     /**
      * Needs to run in the start of the life cycle, since the rest of workflow uses it.
      */
-    public function resolveFromInput(\RectorPrefix20210510\Symfony\Component\Console\Input\InputInterface $input) : void
+    public function resolveFromInput(InputInterface $input) : void
     {
         $this->isDryRun = (bool) $input->getOption(\Rector\Core\Configuration\Option::OPTION_DRY_RUN);
         $this->shouldClearCache = (bool) $input->getOption(\Rector\Core\Configuration\Option::OPTION_CLEAR_CACHE);
@@ -91,7 +91,7 @@ final class Configuration
     }
     public function getPrettyVersion() : string
     {
-        $version = \RectorPrefix20210510\Jean85\PrettyVersions::getVersion('rector/rector');
+        $version = PrettyVersions::getVersion('rector/rector');
         return $version->getPrettyVersion();
     }
     /**
@@ -156,17 +156,17 @@ final class Configuration
             return;
         }
         $message = \sprintf('Path "%s" for "$parameters->set(Option::%s, ...);" in your config was not found. Correct it', $symfonyContainerXmlPath, 'SYMFONY_CONTAINER_XML_PATH_PARAMETER');
-        throw new \Rector\Core\Exception\Configuration\InvalidConfigurationException($message);
+        throw new InvalidConfigurationException($message);
     }
     public function shouldHideClutter() : bool
     {
-        return $this->outputFormat !== \Rector\ChangesReporting\Output\ConsoleOutputFormatter::NAME;
+        return $this->outputFormat !== ConsoleOutputFormatter::NAME;
     }
     public function shouldShowDiffs() : bool
     {
         return $this->showDiffs;
     }
-    public function setBootstrapConfigs(\Rector\Core\ValueObject\Bootstrap\BootstrapConfigs $bootstrapConfigs) : void
+    public function setBootstrapConfigs(BootstrapConfigs $bootstrapConfigs) : void
     {
         $this->bootstrapConfigs = $bootstrapConfigs;
     }
@@ -176,19 +176,19 @@ final class Configuration
             return null;
         }
         $mainConfigFileInfo = $this->bootstrapConfigs->getMainConfigFileInfo();
-        if (!$mainConfigFileInfo instanceof \Symplify\SmartFileSystem\SmartFileInfo) {
+        if (!$mainConfigFileInfo instanceof SmartFileInfo) {
             return null;
         }
         return $mainConfigFileInfo->getRelativeFilePathFromCwd();
     }
-    private function canShowProgressBar(\RectorPrefix20210510\Symfony\Component\Console\Input\InputInterface $input) : bool
+    private function canShowProgressBar(InputInterface $input) : bool
     {
         $noProgressBar = (bool) $input->getOption(\Rector\Core\Configuration\Option::OPTION_NO_PROGRESS_BAR);
         if ($noProgressBar) {
             return \false;
         }
         $optionOutputFormat = $input->getOption(\Rector\Core\Configuration\Option::OPTION_OUTPUT_FORMAT);
-        return $optionOutputFormat === \Rector\ChangesReporting\Output\ConsoleOutputFormatter::NAME;
+        return $optionOutputFormat === ConsoleOutputFormatter::NAME;
     }
     private function sanitizeOutputFileValue(?string $outputFileOption) : ?string
     {
@@ -205,7 +205,7 @@ final class Configuration
     {
         // fixes bash edge-case that to merges string with space to one
         foreach ($commandLinePaths as $commandLinePath) {
-            if (\RectorPrefix20210510\Nette\Utils\Strings::contains($commandLinePath, ' ')) {
+            if (Strings::contains($commandLinePath, ' ')) {
                 $commandLinePaths = \explode(' ', $commandLinePath);
             }
         }

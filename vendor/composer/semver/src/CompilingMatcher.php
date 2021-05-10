@@ -22,7 +22,7 @@ class CompilingMatcher
     /**
      * @phpstan-var array<Constraint::OP_*, string>
      */
-    private static $transOpInt = array(\RectorPrefix20210510\Composer\Semver\Constraint\Constraint::OP_EQ => '==', \RectorPrefix20210510\Composer\Semver\Constraint\Constraint::OP_LT => '<', \RectorPrefix20210510\Composer\Semver\Constraint\Constraint::OP_LE => '<=', \RectorPrefix20210510\Composer\Semver\Constraint\Constraint::OP_GT => '>', \RectorPrefix20210510\Composer\Semver\Constraint\Constraint::OP_GE => '>=', \RectorPrefix20210510\Composer\Semver\Constraint\Constraint::OP_NE => '!=');
+    private static $transOpInt = array(Constraint::OP_EQ => '==', Constraint::OP_LT => '<', Constraint::OP_LE => '<=', Constraint::OP_GT => '>', Constraint::OP_GE => '>=', Constraint::OP_NE => '!=');
     /**
      * Evaluates the expression: $constraint match $operator $version
      *
@@ -33,13 +33,13 @@ class CompilingMatcher
      *
      * @return mixed
      */
-    public static function match(\RectorPrefix20210510\Composer\Semver\Constraint\ConstraintInterface $constraint, $operator, $version)
+    public static function match(ConstraintInterface $constraint, $operator, $version)
     {
         if (self::$enabled === null) {
             self::$enabled = !\in_array('eval', \explode(',', \ini_get('disable_functions')), \true);
         }
         if (!self::$enabled) {
-            return $constraint->matches(new \RectorPrefix20210510\Composer\Semver\Constraint\Constraint(self::$transOpInt[$operator], $version));
+            return $constraint->matches(new Constraint(self::$transOpInt[$operator], $version));
         }
         $cacheKey = $operator . $constraint;
         if (!isset(self::$compiledCheckerCache[$cacheKey])) {

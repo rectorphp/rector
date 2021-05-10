@@ -34,4 +34,4 @@ interface Storage
      */
     function clean(array $conditions) : void;
 }
-\class_exists(\RectorPrefix20210510\Nette\Caching\IStorage::class);
+\class_exists(IStorage::class);

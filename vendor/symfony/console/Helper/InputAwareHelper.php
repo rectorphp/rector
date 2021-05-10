@@ -17,13 +17,13 @@ use RectorPrefix20210510\Symfony\Component\Console\Input\InputInterface;
  *
  * @author Wouter J <waldio.webdesign@gmail.com>
  */
-abstract class InputAwareHelper extends \RectorPrefix20210510\Symfony\Component\Console\Helper\Helper implements \RectorPrefix20210510\Symfony\Component\Console\Input\InputAwareInterface
+abstract class InputAwareHelper extends Helper implements InputAwareInterface
 {
     protected $input;
     /**
      * {@inheritdoc}
      */
-    public function setInput(\RectorPrefix20210510\Symfony\Component\Console\Input\InputInterface $input)
+    public function setInput(InputInterface $input)
     {
         $this->input = $input;
     }

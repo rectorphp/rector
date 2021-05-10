@@ -13,11 +13,11 @@ final class NewFluentChainMethodCallNodeAnalyzer
      * @var NodeTypeResolver
      */
     private $nodeTypeResolver;
-    public function __construct(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver)
+    public function __construct(NodeTypeResolver $nodeTypeResolver)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
-    public function isNewMethodCallReturningSelf(\PhpParser\Node\Expr\MethodCall $methodCall) : bool
+    public function isNewMethodCallReturningSelf(MethodCall $methodCall) : bool
     {
         $newStaticType = $this->nodeTypeResolver->getStaticType($methodCall->var);
         $methodCallStaticType = $this->nodeTypeResolver->getStaticType($methodCall);
@@ -29,17 +29,17 @@ final class NewFluentChainMethodCallNodeAnalyzer
      *
      * $this->setItem(new Item) // → returns "Item"
      */
-    public function matchNewInFluentSetterMethodCall(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\PhpParser\Node\Expr\New_
+    public function matchNewInFluentSetterMethodCall(MethodCall $methodCall) : ?New_
     {
         if (\count($methodCall->args) !== 1) {
             return null;
         }
         $onlyArgValue = $methodCall->args[0]->value;
-        if (!$onlyArgValue instanceof \PhpParser\Node\Expr\New_) {
+        if (!$onlyArgValue instanceof New_) {
             return null;
         }
         $newType = $this->nodeTypeResolver->resolve($onlyArgValue);
-        if ($newType instanceof \PHPStan\Type\MixedType) {
+        if ($newType instanceof MixedType) {
             return null;
         }
         $parentMethodCallReturnType = $this->nodeTypeResolver->resolve($methodCall);

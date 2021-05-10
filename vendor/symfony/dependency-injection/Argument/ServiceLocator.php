@@ -16,7 +16,7 @@ use RectorPrefix20210510\Symfony\Component\DependencyInjection\ServiceLocator as
  *
  * @internal
  */
-class ServiceLocator extends \RectorPrefix20210510\Symfony\Component\DependencyInjection\ServiceLocator
+class ServiceLocator extends BaseServiceLocator
 {
     private $factory;
     private $serviceMap;

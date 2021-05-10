@@ -17,7 +17,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\DeadCode\Rector\Property\RemoveUnusedPrivatePropertyRector\RemoveUnusedPrivatePropertyRectorTest
  */
-final class RemoveUnusedPrivatePropertyRector extends \Rector\Core\Rector\AbstractRector
+final class RemoveUnusedPrivatePropertyRector extends AbstractRector
 {
     /**
      * @var PropertyManipulator
@@ -27,14 +27,14 @@ final class RemoveUnusedPrivatePropertyRector extends \Rector\Core\Rector\Abstra
      * @var ComplexNodeRemover
      */
     private $complexNodeRemover;
-    public function __construct(\Rector\Core\NodeManipulator\PropertyManipulator $propertyManipulator, \Rector\Removing\NodeManipulator\ComplexNodeRemover $complexNodeRemover)
+    public function __construct(PropertyManipulator $propertyManipulator, ComplexNodeRemover $complexNodeRemover)
     {
         $this->propertyManipulator = $propertyManipulator;
         $this->complexNodeRemover = $complexNodeRemover;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove unused private properties', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove unused private properties', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     private $property;
@@ -52,12 +52,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Property::class];
+        return [Property::class];
     }
     /**
      * @param Property $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if ($this->shouldSkipProperty($node)) {
             return null;
@@ -68,7 +68,7 @@ CODE_SAMPLE
         $this->complexNodeRemover->removePropertyAndUsages($node);
         return $node;
     }
-    private function shouldSkipProperty(\PhpParser\Node\Stmt\Property $property) : bool
+    private function shouldSkipProperty(Property $property) : bool
     {
         if (\count($property->props) !== 1) {
             return \true;
@@ -77,7 +77,7 @@ CODE_SAMPLE
             return \true;
         }
         /** @var Class_|Interface_|Trait_|null $classLike */
-        $classLike = $property->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
-        return !$classLike instanceof \PhpParser\Node\Stmt\Class_;
+        $classLike = $property->getAttribute(AttributeKey::CLASS_NODE);
+        return !$classLike instanceof Class_;
     }
 }

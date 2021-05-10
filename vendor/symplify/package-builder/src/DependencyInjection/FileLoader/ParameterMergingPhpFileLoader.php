@@ -12,15 +12,15 @@ use RectorPrefix20210510\Symplify\PackageBuilder\Yaml\ParametersMerger;
  * - https://github.com/symfony/symfony/issues/26713
  * - https://github.com/symfony/symfony/pull/21313#issuecomment-372037445
  */
-final class ParameterMergingPhpFileLoader extends \RectorPrefix20210510\Symfony\Component\DependencyInjection\Loader\PhpFileLoader
+final class ParameterMergingPhpFileLoader extends PhpFileLoader
 {
     /**
      * @var ParametersMerger
      */
     private $parametersMerger;
-    public function __construct(\RectorPrefix20210510\Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder, \RectorPrefix20210510\Symfony\Component\Config\FileLocatorInterface $fileLocator)
+    public function __construct(ContainerBuilder $containerBuilder, FileLocatorInterface $fileLocator)
     {
-        $this->parametersMerger = new \RectorPrefix20210510\Symplify\PackageBuilder\Yaml\ParametersMerger();
+        $this->parametersMerger = new ParametersMerger();
         parent::__construct($containerBuilder, $fileLocator);
     }
     /**

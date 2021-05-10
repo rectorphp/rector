@@ -12,7 +12,7 @@ use RectorPrefix20210510\Nette\Caching\Cache;
 /**
  * SQLite storage.
  */
-class SQLiteStorage implements \RectorPrefix20210510\Nette\Caching\Storage, \RectorPrefix20210510\Nette\Caching\BulkReader
+class SQLiteStorage implements Nette\Caching\Storage, Nette\Caching\BulkReader
 {
     use Nette\SmartObject;
     /** @var \PDO */
@@ -78,12 +78,12 @@ class SQLiteStorage implements \RectorPrefix20210510\Nette\Caching\Storage, \Rec
     }
     public function write(string $key, $data, array $dependencies) : void
     {
-        $expire = isset($dependencies[\RectorPrefix20210510\Nette\Caching\Cache::EXPIRATION]) ? $dependencies[\RectorPrefix20210510\Nette\Caching\Cache::EXPIRATION] + \time() : null;
-        $slide = isset($dependencies[\RectorPrefix20210510\Nette\Caching\Cache::SLIDING]) ? $dependencies[\RectorPrefix20210510\Nette\Caching\Cache::EXPIRATION] : null;
+        $expire = isset($dependencies[Cache::EXPIRATION]) ? $dependencies[Cache::EXPIRATION] + \time() : null;
+        $slide = isset($dependencies[Cache::SLIDING]) ? $dependencies[Cache::EXPIRATION] : null;
         $this->pdo->exec('BEGIN TRANSACTION');
         $this->pdo->prepare('REPLACE INTO cache (key, data, expire, slide) VALUES (?, ?, ?, ?)')->execute([$key, \serialize($data), $expire, $slide]);
-        if (!empty($dependencies[\RectorPrefix20210510\Nette\Caching\Cache::TAGS])) {
-            foreach ($dependencies[\RectorPrefix20210510\Nette\Caching\Cache::TAGS] as $tag) {
+        if (!empty($dependencies[Cache::TAGS])) {
+            foreach ($dependencies[Cache::TAGS] as $tag) {
                 $arr[] = $key;
                 $arr[] = $tag;
             }
@@ -97,13 +97,13 @@ class SQLiteStorage implements \RectorPrefix20210510\Nette\Caching\Storage, \Rec
     }
     public function clean(array $conditions) : void
     {
-        if (!empty($conditions[\RectorPrefix20210510\Nette\Caching\Cache::ALL])) {
+        if (!empty($conditions[Cache::ALL])) {
             $this->pdo->prepare('DELETE FROM cache')->execute();
         } else {
             $sql = 'DELETE FROM cache WHERE expire < ?';
             $args = [\time()];
-            if (!empty($conditions[\RectorPrefix20210510\Nette\Caching\Cache::TAGS])) {
-                $tags = $conditions[\RectorPrefix20210510\Nette\Caching\Cache::TAGS];
+            if (!empty($conditions[Cache::TAGS])) {
+                $tags = $conditions[Cache::TAGS];
                 $sql .= ' OR key IN (SELECT key FROM tags WHERE tag IN (?' . \str_repeat(',?', \count($tags) - 1) . '))';
                 $args = \array_merge($args, $tags);
             }

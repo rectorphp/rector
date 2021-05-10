@@ -16,7 +16,7 @@ use RectorPrefix20210510\Symfony\Component\Config\Exception\LoaderLoadException;
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-abstract class Loader implements \RectorPrefix20210510\Symfony\Component\Config\Loader\LoaderInterface
+abstract class Loader implements LoaderInterface
 {
     protected $resolver;
     /**
@@ -29,7 +29,7 @@ abstract class Loader implements \RectorPrefix20210510\Symfony\Component\Config\
     /**
      * {@inheritdoc}
      */
-    public function setResolver(\RectorPrefix20210510\Symfony\Component\Config\Loader\LoaderResolverInterface $resolver)
+    public function setResolver(LoaderResolverInterface $resolver)
     {
         $this->resolver = $resolver;
     }
@@ -62,7 +62,7 @@ abstract class Loader implements \RectorPrefix20210510\Symfony\Component\Config\
         }
         $loader = null === $this->resolver ? \false : $this->resolver->resolve($resource, $type);
         if (\false === $loader) {
-            throw new \RectorPrefix20210510\Symfony\Component\Config\Exception\LoaderLoadException($resource, null, 0, null, $type);
+            throw new LoaderLoadException($resource, null, 0, null, $type);
         }
         return $loader;
     }

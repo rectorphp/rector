@@ -24,7 +24,7 @@ final class TypeToCallReflectionResolverRegistry
     /**
      * @return FunctionReflection|MethodReflection|null
      */
-    public function resolve(\PHPStan\Type\Type $type, \PHPStan\Analyser\Scope $scope)
+    public function resolve(Type $type, Scope $scope)
     {
         foreach ($this->resolvers as $resolver) {
             if (!$resolver->supports($type)) {

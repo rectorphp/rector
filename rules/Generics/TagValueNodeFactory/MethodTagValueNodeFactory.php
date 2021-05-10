@@ -27,18 +27,18 @@ final class MethodTagValueNodeFactory
      * @var StaticTypeMapper
      */
     private $staticTypeMapper;
-    public function __construct(\Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \Rector\Generics\TagValueNodeFactory\MethodTagValueParameterNodeFactory $methodTagValueParameterNodeFactory)
+    public function __construct(StaticTypeMapper $staticTypeMapper, \Rector\Generics\TagValueNodeFactory\MethodTagValueParameterNodeFactory $methodTagValueParameterNodeFactory)
     {
         $this->methodTagValueParameterNodeFactory = $methodTagValueParameterNodeFactory;
         $this->staticTypeMapper = $staticTypeMapper;
     }
-    public function createFromMethodReflectionAndReturnTagValueNode(\PHPStan\Reflection\MethodReflection $methodReflection, \PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode $returnTagValueNode, \Rector\Generics\ValueObject\ChildParentClassReflections $childParentClassReflections) : \PHPStan\PhpDocParser\Ast\PhpDoc\MethodTagValueNode
+    public function createFromMethodReflectionAndReturnTagValueNode(MethodReflection $methodReflection, ReturnTagValueNode $returnTagValueNode, ChildParentClassReflections $childParentClassReflections) : MethodTagValueNode
     {
         $templateTypeMap = $childParentClassReflections->getTemplateTypeMap();
         $returnTagTypeNode = $this->resolveReturnTagTypeNode($returnTagValueNode, $templateTypeMap);
         $parameterReflections = $methodReflection->getVariants()[0]->getParameters();
         $stringParameters = $this->resolveStringParameters($parameterReflections);
-        return new \PHPStan\PhpDocParser\Ast\PhpDoc\MethodTagValueNode(\false, $returnTagTypeNode, $methodReflection->getName(), $stringParameters, '');
+        return new MethodTagValueNode(\false, $returnTagTypeNode, $methodReflection->getName(), $stringParameters, '');
     }
     /**
      * @param ParameterReflection[] $parameterReflections
@@ -52,38 +52,38 @@ final class MethodTagValueNodeFactory
         }
         return $stringParameters;
     }
-    private function resolveReturnTagTypeNode(\PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode $returnTagValueNode, \PHPStan\Type\Generic\TemplateTypeMap $templateTypeMap) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
+    private function resolveReturnTagTypeNode(ReturnTagValueNode $returnTagValueNode, TemplateTypeMap $templateTypeMap) : TypeNode
     {
         $returnTagTypeNode = $returnTagValueNode->type;
-        if ($returnTagValueNode->type instanceof \PHPStan\PhpDocParser\Ast\Type\UnionTypeNode) {
+        if ($returnTagValueNode->type instanceof UnionTypeNode) {
             return $this->resolveUnionTypeNode($returnTagValueNode->type, $templateTypeMap);
         }
-        if ($returnTagValueNode->type instanceof \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode) {
+        if ($returnTagValueNode->type instanceof IdentifierTypeNode) {
             return $this->resolveIdentifierTypeNode($returnTagValueNode->type, $templateTypeMap, $returnTagTypeNode);
         }
         return $returnTagTypeNode;
     }
-    private function resolveUnionTypeNode(\PHPStan\PhpDocParser\Ast\Type\UnionTypeNode $unionTypeNode, \PHPStan\Type\Generic\TemplateTypeMap $templateTypeMap) : \PHPStan\PhpDocParser\Ast\Type\UnionTypeNode
+    private function resolveUnionTypeNode(UnionTypeNode $unionTypeNode, TemplateTypeMap $templateTypeMap) : UnionTypeNode
     {
         $resolvedTypes = [];
         foreach ($unionTypeNode->types as $unionedTypeNode) {
-            if ($unionedTypeNode instanceof \PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode) {
-                if (!$unionedTypeNode->type instanceof \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode) {
-                    throw new \Rector\Core\Exception\ShouldNotHappenException();
+            if ($unionedTypeNode instanceof ArrayTypeNode) {
+                if (!$unionedTypeNode->type instanceof IdentifierTypeNode) {
+                    throw new ShouldNotHappenException();
                 }
                 $resolvedType = $this->resolveIdentifierTypeNode($unionedTypeNode->type, $templateTypeMap, $unionedTypeNode);
-                $resolvedTypes[] = new \PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode($resolvedType);
-            } elseif ($unionedTypeNode instanceof \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode) {
+                $resolvedTypes[] = new ArrayTypeNode($resolvedType);
+            } elseif ($unionedTypeNode instanceof IdentifierTypeNode) {
                 $resolvedTypes[] = $this->resolveIdentifierTypeNode($unionedTypeNode, $templateTypeMap, $unionedTypeNode);
             }
         }
-        return new \PHPStan\PhpDocParser\Ast\Type\UnionTypeNode($resolvedTypes);
+        return new UnionTypeNode($resolvedTypes);
     }
-    private function resolveIdentifierTypeNode(\PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode $identifierTypeNode, \PHPStan\Type\Generic\TemplateTypeMap $templateTypeMap, \PHPStan\PhpDocParser\Ast\Type\TypeNode $fallbackTypeNode) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
+    private function resolveIdentifierTypeNode(IdentifierTypeNode $identifierTypeNode, TemplateTypeMap $templateTypeMap, TypeNode $fallbackTypeNode) : TypeNode
     {
         $typeName = $identifierTypeNode->name;
         $genericType = $templateTypeMap->getType($typeName);
-        if ($genericType instanceof \PHPStan\Type\Type) {
+        if ($genericType instanceof Type) {
             return $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($genericType);
         }
         return $fallbackTypeNode;

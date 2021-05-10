@@ -50,7 +50,7 @@ final class FluentChainMethodCallRootExtractor
      * @var NodeTypeResolver
      */
     private $nodeTypeResolver;
-    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Naming\Naming\PropertyNaming $propertyNaming, \Rector\Naming\Naming\VariableNaming $variableNaming, \Rector\Defluent\NodeAnalyzer\ExprStringTypeResolver $exprStringTypeResolver, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver)
+    public function __construct(BetterNodeFinder $betterNodeFinder, NodeNameResolver $nodeNameResolver, PropertyNaming $propertyNaming, VariableNaming $variableNaming, \Rector\Defluent\NodeAnalyzer\ExprStringTypeResolver $exprStringTypeResolver, NodeTypeResolver $nodeTypeResolver)
     {
         $this->propertyNaming = $propertyNaming;
         $this->betterNodeFinder = $betterNodeFinder;
@@ -62,19 +62,19 @@ final class FluentChainMethodCallRootExtractor
     /**
      * @param MethodCall[] $methodCalls
      */
-    public function extractFromMethodCalls(array $methodCalls, string $kind) : ?\Rector\Defluent\ValueObject\AssignAndRootExpr
+    public function extractFromMethodCalls(array $methodCalls, string $kind) : ?AssignAndRootExpr
     {
         // we need at least 2 method call for fluent
         if (\count($methodCalls) < 2) {
             return null;
         }
         foreach ($methodCalls as $methodCall) {
-            if ($methodCall->var instanceof \PhpParser\Node\Expr\Variable || $methodCall->var instanceof \PhpParser\Node\Expr\PropertyFetch) {
+            if ($methodCall->var instanceof Variable || $methodCall->var instanceof PropertyFetch) {
                 return $this->createAssignAndRootExprForVariableOrPropertyFetch($methodCall);
             }
-            if ($methodCall->var instanceof \PhpParser\Node\Expr\New_) {
+            if ($methodCall->var instanceof New_) {
                 // direct = no parent
-                if ($kind === \Rector\Defluent\ValueObject\FluentCallsKind::IN_ARGS) {
+                if ($kind === FluentCallsKind::IN_ARGS) {
                     return $this->resolveKindInArgs($methodCall);
                 }
                 return $this->matchMethodCallOnNew($methodCall->var);
@@ -87,13 +87,13 @@ final class FluentChainMethodCallRootExtractor
      * A. FLUENT: $cook->bake()->serve() // only "Cook"
      * B. FACTORY: $food = $cook->bake()->warmUp(); // only "Food"
      */
-    public function resolveIsFirstMethodCallFactory(\PhpParser\Node\Expr\MethodCall $methodCall) : bool
+    public function resolveIsFirstMethodCallFactory(MethodCall $methodCall) : bool
     {
         $variableStaticType = $this->exprStringTypeResolver->resolve($methodCall->var);
         $calledMethodStaticType = $this->exprStringTypeResolver->resolve($methodCall);
         // get next method call
-        $nextMethodCall = $methodCall->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-        if (!$nextMethodCall instanceof \PhpParser\Node\Expr\MethodCall) {
+        $nextMethodCall = $methodCall->getAttribute(AttributeKey::PARENT_NODE);
+        if (!$nextMethodCall instanceof MethodCall) {
             return \false;
         }
         $nestedCallStaticType = $this->exprStringTypeResolver->resolve($nextMethodCall);
@@ -105,50 +105,50 @@ final class FluentChainMethodCallRootExtractor
         }
         return $variableStaticType !== $calledMethodStaticType;
     }
-    private function createAssignAndRootExprForVariableOrPropertyFetch(\PhpParser\Node\Expr\MethodCall $methodCall) : \Rector\Defluent\ValueObject\AssignAndRootExpr
+    private function createAssignAndRootExprForVariableOrPropertyFetch(MethodCall $methodCall) : AssignAndRootExpr
     {
         $isFirstCallFactory = $this->resolveIsFirstMethodCallFactory($methodCall);
         // the method call, does not belong to the
         $staticType = $this->nodeTypeResolver->getStaticType($methodCall);
-        $parentNode = $methodCall->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        $parentNode = $methodCall->getAttribute(AttributeKey::PARENT_NODE);
         // no assign
-        if ($parentNode instanceof \PhpParser\Node\Stmt\Expression) {
+        if ($parentNode instanceof Expression) {
             $variableName = $this->propertyNaming->fqnToVariableName($staticType);
             // the assign expresison must be break
             // pesuero code bsaed on type
-            $variable = new \PhpParser\Node\Expr\Variable($variableName);
-            return new \Rector\Defluent\ValueObject\AssignAndRootExpr($methodCall->var, $methodCall->var, $variable, $isFirstCallFactory);
+            $variable = new Variable($variableName);
+            return new AssignAndRootExpr($methodCall->var, $methodCall->var, $variable, $isFirstCallFactory);
         }
-        return new \Rector\Defluent\ValueObject\AssignAndRootExpr($methodCall->var, $methodCall->var, null, $isFirstCallFactory);
+        return new AssignAndRootExpr($methodCall->var, $methodCall->var, null, $isFirstCallFactory);
     }
-    private function resolveKindInArgs(\PhpParser\Node\Expr\MethodCall $methodCall) : \Rector\Defluent\ValueObject\AssignAndRootExpr
+    private function resolveKindInArgs(MethodCall $methodCall) : AssignAndRootExpr
     {
         $variableName = $this->variableNaming->resolveFromNode($methodCall->var);
         if ($variableName === null) {
-            throw new \Rector\Core\Exception\ShouldNotHappenException();
+            throw new ShouldNotHappenException();
         }
-        $silentVariable = new \PhpParser\Node\Expr\Variable($variableName);
-        return new \Rector\Defluent\ValueObject\AssignAndRootExpr($methodCall->var, $methodCall->var, $silentVariable);
+        $silentVariable = new Variable($variableName);
+        return new AssignAndRootExpr($methodCall->var, $methodCall->var, $silentVariable);
     }
-    private function matchMethodCallOnNew(\PhpParser\Node\Expr\New_ $new) : ?\Rector\Defluent\ValueObject\AssignAndRootExpr
+    private function matchMethodCallOnNew(New_ $new) : ?AssignAndRootExpr
     {
         // we need assigned left variable here
-        $previousAssignOrReturn = $this->betterNodeFinder->findFirstPreviousOfTypes($new, [\PhpParser\Node\Expr\Assign::class, \PhpParser\Node\Stmt\Return_::class]);
-        if ($previousAssignOrReturn instanceof \PhpParser\Node\Expr\Assign) {
-            return new \Rector\Defluent\ValueObject\AssignAndRootExpr($previousAssignOrReturn->var, $new);
+        $previousAssignOrReturn = $this->betterNodeFinder->findFirstPreviousOfTypes($new, [Assign::class, Return_::class]);
+        if ($previousAssignOrReturn instanceof Assign) {
+            return new AssignAndRootExpr($previousAssignOrReturn->var, $new);
         }
-        if ($previousAssignOrReturn instanceof \PhpParser\Node\Stmt\Return_) {
+        if ($previousAssignOrReturn instanceof Return_) {
             $className = $this->nodeNameResolver->getName($new->class);
             if ($className === null) {
                 return null;
             }
-            $fullyQualifiedObjectType = new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType($className);
+            $fullyQualifiedObjectType = new FullyQualifiedObjectType($className);
             $expectedName = $this->propertyNaming->getExpectedNameFromType($fullyQualifiedObjectType);
-            if (!$expectedName instanceof \Rector\Naming\ValueObject\ExpectedName) {
+            if (!$expectedName instanceof ExpectedName) {
                 return null;
             }
-            $variable = new \PhpParser\Node\Expr\Variable($expectedName->getName());
-            return new \Rector\Defluent\ValueObject\AssignAndRootExpr($new, $new, $variable);
+            $variable = new Variable($expectedName->getName());
+            return new AssignAndRootExpr($new, $new, $variable);
         }
         // no assign, just standalone call
         return null;

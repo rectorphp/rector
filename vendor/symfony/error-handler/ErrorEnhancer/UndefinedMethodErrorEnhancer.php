@@ -15,14 +15,14 @@ use RectorPrefix20210510\Symfony\Component\ErrorHandler\Error\UndefinedMethodErr
 /**
  * @author Grégoire Pineau <lyrixx@lyrixx.info>
  */
-class UndefinedMethodErrorEnhancer implements \RectorPrefix20210510\Symfony\Component\ErrorHandler\ErrorEnhancer\ErrorEnhancerInterface
+class UndefinedMethodErrorEnhancer implements ErrorEnhancerInterface
 {
     /**
      * {@inheritdoc}
      */
     public function enhance(\Throwable $error) : ?\Throwable
     {
-        if ($error instanceof \RectorPrefix20210510\Symfony\Component\ErrorHandler\Error\FatalError) {
+        if ($error instanceof FatalError) {
             return null;
         }
         $message = $error->getMessage();
@@ -35,7 +35,7 @@ class UndefinedMethodErrorEnhancer implements \RectorPrefix20210510\Symfony\Comp
         $message = \sprintf('Attempted to call an undefined method named "%s" of class "%s".', $methodName, $className);
         if ('' === $methodName || !\class_exists($className) || null === ($methods = \get_class_methods($className))) {
             // failed to get the class or its methods on which an unknown method was called (for example on an anonymous class)
-            return new \RectorPrefix20210510\Symfony\Component\ErrorHandler\Error\UndefinedMethodError($message, $error);
+            return new UndefinedMethodError($message, $error);
         }
         $candidates = [];
         foreach ($methods as $definedMethodName) {
@@ -54,6 +54,6 @@ class UndefinedMethodErrorEnhancer implements \RectorPrefix20210510\Symfony\Comp
             }
             $message .= "\nDid you mean to call " . $candidates;
         }
-        return new \RectorPrefix20210510\Symfony\Component\ErrorHandler\Error\UndefinedMethodError($message, $error);
+        return new UndefinedMethodError($message, $error);
     }
 }

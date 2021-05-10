@@ -8,8 +8,8 @@ use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\PropertyProperty;
 interface RenamePropertyValueObjectInterface extends \Rector\Naming\Contract\RenameValueObjectInterface
 {
-    public function getClassLike() : \PhpParser\Node\Stmt\ClassLike;
+    public function getClassLike() : ClassLike;
     public function getClassLikeName() : string;
-    public function getProperty() : \PhpParser\Node\Stmt\Property;
-    public function getPropertyProperty() : \PhpParser\Node\Stmt\PropertyProperty;
+    public function getProperty() : Property;
+    public function getPropertyProperty() : PropertyProperty;
 }

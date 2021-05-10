@@ -14,7 +14,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\NetteToSymfony\Tests\Rector\Class_\RenameTesterTestToPHPUnitToTestFileRector\RenameTesterTestToPHPUnitToTestFileRectorTest
  */
-final class RenameTesterTestToPHPUnitToTestFileRector extends \Rector\Core\Rector\AbstractRector
+final class RenameTesterTestToPHPUnitToTestFileRector extends AbstractRector
 {
     /**
      * @var string
@@ -30,13 +30,13 @@ final class RenameTesterTestToPHPUnitToTestFileRector extends \Rector\Core\Recto
      * @var FileInfoDeletionAnalyzer
      */
     private $fileInfoDeletionAnalyzer;
-    public function __construct(\Rector\PSR4\FileInfoAnalyzer\FileInfoDeletionAnalyzer $fileInfoDeletionAnalyzer)
+    public function __construct(FileInfoDeletionAnalyzer $fileInfoDeletionAnalyzer)
     {
         $this->fileInfoDeletionAnalyzer = $fileInfoDeletionAnalyzer;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Rename "*.phpt" file to "*Test.php" file', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Rename "*.phpt" file to "*Test.php" file', [new CodeSample(<<<'CODE_SAMPLE'
 // tests/SomeTestCase.phpt
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
@@ -49,16 +49,16 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Class_::class];
+        return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         $smartFileInfo = $this->file->getSmartFileInfo();
         $oldRealPath = $smartFileInfo->getRealPath();
-        if (!\RectorPrefix20210510\Nette\Utils\Strings::endsWith($oldRealPath, '.phpt')) {
+        if (!Strings::endsWith($oldRealPath, '.phpt')) {
             return null;
         }
         $newRealPath = $this->createNewRealPath($oldRealPath);
@@ -66,19 +66,19 @@ CODE_SAMPLE
             return null;
         }
         $this->removedAndAddedFilesCollector->removeFile($smartFileInfo);
-        $addedFileWithContent = new \Rector\FileSystemRector\ValueObject\AddedFileWithContent($newRealPath, $smartFileInfo->getContents());
+        $addedFileWithContent = new AddedFileWithContent($newRealPath, $smartFileInfo->getContents());
         $this->removedAndAddedFilesCollector->addAddedFile($addedFileWithContent);
         return null;
     }
     private function createNewRealPath(string $oldRealPath) : string
     {
         // file suffix
-        $newRealPath = \RectorPrefix20210510\Nette\Utils\Strings::replace($oldRealPath, self::PHPT_SUFFIX_REGEX, '.php');
+        $newRealPath = Strings::replace($oldRealPath, self::PHPT_SUFFIX_REGEX, '.php');
         // cleanup tests prefix
         $newRealPath = $this->fileInfoDeletionAnalyzer->clearNameFromTestingPrefix($newRealPath);
         // Test suffix
-        if (!\RectorPrefix20210510\Nette\Utils\Strings::endsWith($newRealPath, 'Test.php')) {
-            return \RectorPrefix20210510\Nette\Utils\Strings::replace($newRealPath, self::PHP_SUFFIX_REGEX, 'Test.php');
+        if (!Strings::endsWith($newRealPath, 'Test.php')) {
+            return Strings::replace($newRealPath, self::PHP_SUFFIX_REGEX, 'Test.php');
         }
         return $newRealPath;
     }

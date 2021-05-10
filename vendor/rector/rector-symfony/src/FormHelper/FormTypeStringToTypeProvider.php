@@ -20,15 +20,15 @@ final class FormTypeStringToTypeProvider
      * @var ServiceMapProvider
      */
     private $serviceMapProvider;
-    public function __construct(\Rector\Symfony\DataProvider\ServiceMapProvider $serviceMapProvider)
+    public function __construct(ServiceMapProvider $serviceMapProvider)
     {
         $this->serviceMapProvider = $serviceMapProvider;
     }
     public function matchClassForNameWithPrefix(string $name) : ?string
     {
         $nameToTypeMap = $this->getNameToTypeMap();
-        if (\RectorPrefix20210510\Nette\Utils\Strings::startsWith($name, 'form.type.')) {
-            $name = \RectorPrefix20210510\Nette\Utils\Strings::substring($name, \strlen('form.type.'));
+        if (Strings::startsWith($name, 'form.type.')) {
+            $name = Strings::substring($name, \strlen('form.type.'));
         }
         return $nameToTypeMap[$name] ?? null;
     }
@@ -52,7 +52,7 @@ final class FormTypeStringToTypeProvider
         $formTypeServiceDefinitions = $serviceMap->getServicesByTag('form.type');
         foreach ($formTypeServiceDefinitions as $formTypeServiceDefinition) {
             $formTypeTag = $formTypeServiceDefinition->getTag('form.type');
-            if (!$formTypeTag instanceof \Rector\Symfony\Contract\Tag\TagInterface) {
+            if (!$formTypeTag instanceof TagInterface) {
                 continue;
             }
             $alias = $formTypeTag->getData()['alias'] ?? null;

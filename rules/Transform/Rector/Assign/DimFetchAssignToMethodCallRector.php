@@ -18,7 +18,7 @@ use RectorPrefix20210510\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Transform\Rector\Assign\DimFetchAssignToMethodCallRector\DimFetchAssignToMethodCallRectorTest
  */
-final class DimFetchAssignToMethodCallRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
+final class DimFetchAssignToMethodCallRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
      * @var string
@@ -28,9 +28,9 @@ final class DimFetchAssignToMethodCallRector extends \Rector\Core\Rector\Abstrac
      * @var DimFetchAssignToMethodCall[]
      */
     private $dimFetchAssignToMethodCalls = [];
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change magic array access add to $list[], to explicit $list->addMethod(...)', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change magic array access add to $list[], to explicit $list->addMethod(...)', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 use Nette\Application\Routers\Route;
 use Nette\Application\Routers\RouteList;
 
@@ -55,35 +55,35 @@ class RouterFactory
     }
 }
 CODE_SAMPLE
-, [self::DIM_FETCH_ASSIGN_TO_METHOD_CALL => [new \Rector\Transform\ValueObject\DimFetchAssignToMethodCall('Nette\\Application\\Routers\\RouteList', 'Nette\\Application\\Routers\\Route', 'addRoute')]])]);
+, [self::DIM_FETCH_ASSIGN_TO_METHOD_CALL => [new DimFetchAssignToMethodCall('Nette\\Application\\Routers\\RouteList', 'Nette\\Application\\Routers\\Route', 'addRoute')]])]);
     }
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\Assign::class];
+        return [Assign::class];
     }
     /**
      * @param Assign $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        if (!$node->var instanceof \PhpParser\Node\Expr\ArrayDimFetch) {
+        if (!$node->var instanceof ArrayDimFetch) {
             return null;
         }
         $arrayDimFetch = $node->var;
-        if (!$arrayDimFetch->var instanceof \PhpParser\Node\Expr\Variable) {
+        if (!$arrayDimFetch->var instanceof Variable) {
             return null;
         }
-        if (!$node->expr instanceof \PhpParser\Node\Expr\New_) {
+        if (!$node->expr instanceof New_) {
             return null;
         }
         $dimFetchAssignToMethodCall = $this->findDimFetchAssignToMethodCall($node);
-        if (!$dimFetchAssignToMethodCall instanceof \Rector\Transform\ValueObject\DimFetchAssignToMethodCall) {
+        if (!$dimFetchAssignToMethodCall instanceof DimFetchAssignToMethodCall) {
             return null;
         }
-        return new \PhpParser\Node\Expr\MethodCall($arrayDimFetch->var, $dimFetchAssignToMethodCall->getAddMethod(), $node->expr->args);
+        return new MethodCall($arrayDimFetch->var, $dimFetchAssignToMethodCall->getAddMethod(), $node->expr->args);
     }
     /**
      * @param array<string, DimFetchAssignToMethodCall[]> $configuration
@@ -91,10 +91,10 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $dimFetchAssignToMethodCalls = $configuration[self::DIM_FETCH_ASSIGN_TO_METHOD_CALL] ?? [];
-        \RectorPrefix20210510\Webmozart\Assert\Assert::allIsInstanceOf($dimFetchAssignToMethodCalls, \Rector\Transform\ValueObject\DimFetchAssignToMethodCall::class);
+        Assert::allIsInstanceOf($dimFetchAssignToMethodCalls, DimFetchAssignToMethodCall::class);
         $this->dimFetchAssignToMethodCalls = $dimFetchAssignToMethodCalls;
     }
-    private function findDimFetchAssignToMethodCall(\PhpParser\Node\Expr\Assign $assign) : ?\Rector\Transform\ValueObject\DimFetchAssignToMethodCall
+    private function findDimFetchAssignToMethodCall(Assign $assign) : ?DimFetchAssignToMethodCall
     {
         /** @var ArrayDimFetch $arrayDimFetch */
         $arrayDimFetch = $assign->var;

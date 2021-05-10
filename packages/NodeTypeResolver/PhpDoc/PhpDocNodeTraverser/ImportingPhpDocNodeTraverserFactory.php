@@ -11,13 +11,13 @@ final class ImportingPhpDocNodeTraverserFactory
      * @var NameImportingPhpDocNodeVisitor
      */
     private $nameImportingPhpDocNodeVisitor;
-    public function __construct(\Rector\NodeTypeResolver\PhpDocNodeVisitor\NameImportingPhpDocNodeVisitor $nameImportingPhpDocNodeVisitor)
+    public function __construct(NameImportingPhpDocNodeVisitor $nameImportingPhpDocNodeVisitor)
     {
         $this->nameImportingPhpDocNodeVisitor = $nameImportingPhpDocNodeVisitor;
     }
-    public function create() : \RectorPrefix20210510\Symplify\SimplePhpDocParser\PhpDocNodeTraverser
+    public function create() : PhpDocNodeTraverser
     {
-        $phpDocNodeTraverser = new \RectorPrefix20210510\Symplify\SimplePhpDocParser\PhpDocNodeTraverser();
+        $phpDocNodeTraverser = new PhpDocNodeTraverser();
         $phpDocNodeTraverser->addPhpDocNodeVisitor($this->nameImportingPhpDocNodeVisitor);
         return $phpDocNodeTraverser;
     }

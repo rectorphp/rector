@@ -25,56 +25,56 @@ final class AdvancedArrayAnalyzer
      * @var PhpDocInfoFactory
      */
     private $phpDocInfoFactory;
-    public function __construct(\Rector\TypeDeclaration\TypeNormalizer $typeNormalizer, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory)
+    public function __construct(TypeNormalizer $typeNormalizer, PhpDocInfoFactory $phpDocInfoFactory)
     {
         $this->typeNormalizer = $typeNormalizer;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
-    public function isClassStringArrayByStringArrayOverride(\PHPStan\Type\ArrayType $arrayType, \PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
+    public function isClassStringArrayByStringArrayOverride(ArrayType $arrayType, ClassMethod $classMethod) : bool
     {
-        if (!$arrayType instanceof \PHPStan\Type\Constant\ConstantArrayType) {
+        if (!$arrayType instanceof ConstantArrayType) {
             return \false;
         }
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
         $arrayType = $this->typeNormalizer->convertConstantArrayTypeToArrayType($arrayType);
-        if (!$arrayType instanceof \PHPStan\Type\ArrayType) {
+        if (!$arrayType instanceof ArrayType) {
             return \false;
         }
         $currentReturnType = $phpDocInfo->getReturnType();
-        if (!$currentReturnType instanceof \PHPStan\Type\ArrayType) {
+        if (!$currentReturnType instanceof ArrayType) {
             return \false;
         }
-        if (!$currentReturnType->getItemType() instanceof \PHPStan\Type\ClassStringType) {
+        if (!$currentReturnType->getItemType() instanceof ClassStringType) {
             return \false;
         }
-        return $arrayType->getItemType() instanceof \PHPStan\Type\StringType;
+        return $arrayType->getItemType() instanceof StringType;
     }
-    public function isMixedOfSpecificOverride(\PHPStan\Type\ArrayType $arrayType, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo) : bool
+    public function isMixedOfSpecificOverride(ArrayType $arrayType, PhpDocInfo $phpDocInfo) : bool
     {
-        if (!$arrayType->getItemType() instanceof \PHPStan\Type\MixedType) {
+        if (!$arrayType->getItemType() instanceof MixedType) {
             return \false;
         }
         $currentReturnType = $phpDocInfo->getReturnType();
-        return $currentReturnType instanceof \PHPStan\Type\ArrayType;
+        return $currentReturnType instanceof ArrayType;
     }
-    public function isMoreSpecificArrayTypeOverride(\PHPStan\Type\Type $newType, \PhpParser\Node\Stmt\ClassMethod $classMethod, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo) : bool
+    public function isMoreSpecificArrayTypeOverride(Type $newType, ClassMethod $classMethod, PhpDocInfo $phpDocInfo) : bool
     {
-        if (!$newType instanceof \PHPStan\Type\Constant\ConstantArrayType) {
+        if (!$newType instanceof ConstantArrayType) {
             return \false;
         }
-        if (!$newType->getItemType() instanceof \PHPStan\Type\NeverType) {
+        if (!$newType->getItemType() instanceof NeverType) {
             return \false;
         }
         $phpDocReturnType = $phpDocInfo->getReturnType();
-        if (!$phpDocReturnType instanceof \PHPStan\Type\ArrayType) {
+        if (!$phpDocReturnType instanceof ArrayType) {
             return \false;
         }
-        return !$phpDocReturnType->getItemType() instanceof \PHPStan\Type\VoidType;
+        return !$phpDocReturnType->getItemType() instanceof VoidType;
     }
-    public function isNewAndCurrentTypeBothCallable(\PHPStan\Type\ArrayType $newArrayType, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo) : bool
+    public function isNewAndCurrentTypeBothCallable(ArrayType $newArrayType, PhpDocInfo $phpDocInfo) : bool
     {
         $currentReturnType = $phpDocInfo->getReturnType();
-        if (!$currentReturnType instanceof \PHPStan\Type\ArrayType) {
+        if (!$currentReturnType instanceof ArrayType) {
             return \false;
         }
         if (!$newArrayType->getItemType()->isCallable()->yes()) {

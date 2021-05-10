@@ -57,5 +57,5 @@ final class ConsoleEvents
      *
      * These aliases can be consumed by RegisterListenersPass.
      */
-    public const ALIASES = [\RectorPrefix20210510\Symfony\Component\Console\Event\ConsoleCommandEvent::class => self::COMMAND, \RectorPrefix20210510\Symfony\Component\Console\Event\ConsoleErrorEvent::class => self::ERROR, \RectorPrefix20210510\Symfony\Component\Console\Event\ConsoleSignalEvent::class => self::SIGNAL, \RectorPrefix20210510\Symfony\Component\Console\Event\ConsoleTerminateEvent::class => self::TERMINATE];
+    public const ALIASES = [ConsoleCommandEvent::class => self::COMMAND, ConsoleErrorEvent::class => self::ERROR, ConsoleSignalEvent::class => self::SIGNAL, ConsoleTerminateEvent::class => self::TERMINATE];
 }

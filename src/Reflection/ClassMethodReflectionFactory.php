@@ -14,21 +14,21 @@ final class ClassMethodReflectionFactory
      * @var ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider)
+    public function __construct(ReflectionProvider $reflectionProvider)
     {
         $this->reflectionProvider = $reflectionProvider;
     }
-    public function createFromPHPStanTypeAndMethodName(\PHPStan\Type\Type $type, string $methodName) : ?\ReflectionMethod
+    public function createFromPHPStanTypeAndMethodName(Type $type, string $methodName) : ?ReflectionMethod
     {
-        if ($type instanceof \PHPStan\Type\ThisType) {
+        if ($type instanceof ThisType) {
             $type = $type->getStaticObjectType();
         }
-        if (!$type instanceof \PHPStan\Type\TypeWithClassName) {
+        if (!$type instanceof TypeWithClassName) {
             return null;
         }
         return $this->createReflectionMethodIfExists($type, $methodName);
     }
-    public function createReflectionMethodIfExists(\PHPStan\Type\TypeWithClassName $typeWithClassName, string $method) : ?\ReflectionMethod
+    public function createReflectionMethodIfExists(TypeWithClassName $typeWithClassName, string $method) : ?ReflectionMethod
     {
         if (!$this->reflectionProvider->hasClass($typeWithClassName->getClassName())) {
             return null;

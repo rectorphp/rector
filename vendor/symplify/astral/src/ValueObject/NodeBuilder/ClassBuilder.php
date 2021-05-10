@@ -7,6 +7,6 @@ use PhpParser\Builder\Class_;
 /**
  * Fixed duplicated naming in php-parser and prevents confusion
  */
-final class ClassBuilder extends \PhpParser\Builder\Class_
+final class ClassBuilder extends Class_
 {
 }

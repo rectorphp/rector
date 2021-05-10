@@ -17,7 +17,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\EarlyReturn\Rector\Return_\ReturnBinaryAndToEarlyReturnRector\ReturnBinaryAndToEarlyReturnRectorTest
  */
-final class ReturnBinaryAndToEarlyReturnRector extends \Rector\Core\Rector\AbstractRector
+final class ReturnBinaryAndToEarlyReturnRector extends AbstractRector
 {
     /**
      * @var IfManipulator
@@ -31,15 +31,15 @@ final class ReturnBinaryAndToEarlyReturnRector extends \Rector\Core\Rector\Abstr
      * @var CallAnalyzer
      */
     private $callAnalyzer;
-    public function __construct(\Rector\Core\NodeManipulator\IfManipulator $ifManipulator, \Rector\Core\PhpParser\Node\AssignAndBinaryMap $assignAndBinaryMap, \Rector\Core\NodeAnalyzer\CallAnalyzer $callAnalyzer)
+    public function __construct(IfManipulator $ifManipulator, AssignAndBinaryMap $assignAndBinaryMap, CallAnalyzer $callAnalyzer)
     {
         $this->ifManipulator = $ifManipulator;
         $this->assignAndBinaryMap = $assignAndBinaryMap;
         $this->callAnalyzer = $callAnalyzer;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Changes Single return of && to early returns', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Changes Single return of && to early returns', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function accept()
@@ -67,14 +67,14 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Return_::class];
+        return [Return_::class];
     }
     /**
      * @param Return_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        if (!$node->expr instanceof \PhpParser\Node\Expr\BinaryOp\BooleanAnd) {
+        if (!$node->expr instanceof BooleanAnd) {
             return null;
         }
         $left = $node->expr->left;
@@ -89,7 +89,7 @@ CODE_SAMPLE
         /** @var BooleanAnd $booleanAnd */
         $booleanAnd = $node->expr;
         $lastReturnExpr = $this->assignAndBinaryMap->getTruthyExpr($booleanAnd->right);
-        $this->addNodeBeforeNode(new \PhpParser\Node\Stmt\Return_($lastReturnExpr), $node);
+        $this->addNodeBeforeNode(new Return_($lastReturnExpr), $node);
         $this->removeNode($node);
         return $node;
     }
@@ -97,24 +97,24 @@ CODE_SAMPLE
      * @param If_[] $ifNegations
      * @return If_[]
      */
-    private function createMultipleIfsNegation(\PhpParser\Node\Expr $expr, \PhpParser\Node\Stmt\Return_ $return, array $ifNegations) : array
+    private function createMultipleIfsNegation(Expr $expr, Return_ $return, array $ifNegations) : array
     {
-        while ($expr instanceof \PhpParser\Node\Expr\BinaryOp\BooleanAnd) {
+        while ($expr instanceof BooleanAnd) {
             $ifNegations = \array_merge($ifNegations, $this->collectLeftBooleanAndToIfs($expr, $return, $ifNegations));
-            $ifNegations[] = $this->ifManipulator->createIfNegation($expr->right, new \PhpParser\Node\Stmt\Return_($this->nodeFactory->createFalse()));
+            $ifNegations[] = $this->ifManipulator->createIfNegation($expr->right, new Return_($this->nodeFactory->createFalse()));
             $expr = $expr->right;
         }
-        return $ifNegations + [$this->ifManipulator->createIfNegation($expr, new \PhpParser\Node\Stmt\Return_($this->nodeFactory->createFalse()))];
+        return $ifNegations + [$this->ifManipulator->createIfNegation($expr, new Return_($this->nodeFactory->createFalse()))];
     }
     /**
      * @param If_[] $ifNegations
      * @return If_[]
      */
-    private function collectLeftBooleanAndToIfs(\PhpParser\Node\Expr\BinaryOp\BooleanAnd $booleanAnd, \PhpParser\Node\Stmt\Return_ $return, array $ifNegations) : array
+    private function collectLeftBooleanAndToIfs(BooleanAnd $booleanAnd, Return_ $return, array $ifNegations) : array
     {
         $left = $booleanAnd->left;
-        if (!$left instanceof \PhpParser\Node\Expr\BinaryOp\BooleanAnd) {
-            return [$this->ifManipulator->createIfNegation($left, new \PhpParser\Node\Stmt\Return_($this->nodeFactory->createFalse()))];
+        if (!$left instanceof BooleanAnd) {
+            return [$this->ifManipulator->createIfNegation($left, new Return_($this->nodeFactory->createFalse()))];
         }
         return $this->createMultipleIfsNegation($left, $return, $ifNegations);
     }

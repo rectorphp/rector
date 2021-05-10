@@ -30,12 +30,12 @@ class Trait_ extends \PhpParser\Builder\Declaration
      */
     public function addStmt($stmt)
     {
-        $stmt = \PhpParser\BuilderHelpers::normalizeNode($stmt);
-        if ($stmt instanceof \PhpParser\Node\Stmt\Property) {
+        $stmt = BuilderHelpers::normalizeNode($stmt);
+        if ($stmt instanceof Stmt\Property) {
             $this->properties[] = $stmt;
-        } elseif ($stmt instanceof \PhpParser\Node\Stmt\ClassMethod) {
+        } elseif ($stmt instanceof Stmt\ClassMethod) {
             $this->methods[] = $stmt;
-        } elseif ($stmt instanceof \PhpParser\Node\Stmt\TraitUse) {
+        } elseif ($stmt instanceof Stmt\TraitUse) {
             $this->uses[] = $stmt;
         } else {
             throw new \LogicException(\sprintf('Unexpected node of type "%s"', $stmt->getType()));
@@ -47,8 +47,8 @@ class Trait_ extends \PhpParser\Builder\Declaration
      *
      * @return Stmt\Trait_ The built interface node
      */
-    public function getNode() : \PhpParser\Node
+    public function getNode() : PhpParser\Node
     {
-        return new \PhpParser\Node\Stmt\Trait_($this->name, ['stmts' => \array_merge($this->uses, $this->properties, $this->methods)], $this->attributes);
+        return new Stmt\Trait_($this->name, ['stmts' => \array_merge($this->uses, $this->properties, $this->methods)], $this->attributes);
     }
 }

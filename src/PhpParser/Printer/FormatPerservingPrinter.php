@@ -22,7 +22,7 @@ final class FormatPerservingPrinter
      * @var BetterStandardPrinter
      */
     private $betterStandardPrinter;
-    public function __construct(\Rector\Core\PhpParser\Printer\BetterStandardPrinter $betterStandardPrinter, \RectorPrefix20210510\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem)
+    public function __construct(\Rector\Core\PhpParser\Printer\BetterStandardPrinter $betterStandardPrinter, SmartFileSystem $smartFileSystem)
     {
         $this->betterStandardPrinter = $betterStandardPrinter;
         $this->smartFileSystem = $smartFileSystem;
@@ -32,30 +32,30 @@ final class FormatPerservingPrinter
      * @param Node[] $oldStmts
      * @param Node[] $oldTokens
      */
-    public function printToFile(\Symplify\SmartFileSystem\SmartFileInfo $fileInfo, array $newStmts, array $oldStmts, array $oldTokens) : string
+    public function printToFile(SmartFileInfo $fileInfo, array $newStmts, array $oldStmts, array $oldTokens) : string
     {
         $newContent = $this->betterStandardPrinter->printFormatPreserving($newStmts, $oldStmts, $oldTokens);
         $this->smartFileSystem->dumpFile($fileInfo->getRealPath(), $newContent);
         $this->smartFileSystem->chmod($fileInfo->getRealPath(), $fileInfo->getPerms());
         return $newContent;
     }
-    public function printParsedStmstAndTokensToString(\Rector\Core\ValueObject\Application\File $file) : string
+    public function printParsedStmstAndTokensToString(File $file) : string
     {
         $newStmts = $this->resolveNewStmts($file);
         return $this->betterStandardPrinter->printFormatPreserving($newStmts, $file->getOldStmts(), $file->getOldTokens());
     }
-    public function printParsedStmstAndTokens(\Rector\Core\ValueObject\Application\File $file) : string
+    public function printParsedStmstAndTokens(File $file) : string
     {
         return $this->printToFile($file->getSmartFileInfo(), $file->getNewStmts(), $file->getOldStmts(), $file->getOldTokens());
     }
     /**
      * @return Stmt[]|mixed[]
      */
-    private function resolveNewStmts(\Rector\Core\ValueObject\Application\File $file) : array
+    private function resolveNewStmts(File $file) : array
     {
         if (\count($file->getNewStmts()) === 1) {
             $onlyStmt = $file->getNewStmts()[0];
-            if ($onlyStmt instanceof \Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace) {
+            if ($onlyStmt instanceof FileWithoutNamespace) {
                 return $onlyStmt->stmts;
             }
         }

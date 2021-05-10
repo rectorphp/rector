@@ -6,7 +6,7 @@ namespace RectorPrefix20210510\Symplify\SmartFileSystem\Tests\SmartFileSystem;
 use RectorPrefix20210510\PHPUnit\Framework\TestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 use RectorPrefix20210510\Symplify\SmartFileSystem\SmartFileSystem;
-final class SmartFileSystemTest extends \RectorPrefix20210510\PHPUnit\Framework\TestCase
+final class SmartFileSystemTest extends TestCase
 {
     /**
      * @var SmartFileSystem
@@ -14,11 +14,11 @@ final class SmartFileSystemTest extends \RectorPrefix20210510\PHPUnit\Framework\
     private $smartFileSystem;
     protected function setUp() : void
     {
-        $this->smartFileSystem = new \RectorPrefix20210510\Symplify\SmartFileSystem\SmartFileSystem();
+        $this->smartFileSystem = new SmartFileSystem();
     }
     public function testReadFileToSmartFileInfo() : void
     {
         $readFileToSmartFileInfo = $this->smartFileSystem->readFileToSmartFileInfo(__DIR__ . '/Source/file.txt');
-        $this->assertInstanceof(\Symplify\SmartFileSystem\SmartFileInfo::class, $readFileToSmartFileInfo);
+        $this->assertInstanceof(SmartFileInfo::class, $readFileToSmartFileInfo);
     }
 }

@@ -18,7 +18,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Laravel\Tests\Rector\ClassMethod\AddParentBootToModelClassMethodRector\AddParentBootToModelClassMethodRectorTest
  */
-final class AddParentBootToModelClassMethodRector extends \Rector\Core\Rector\AbstractRector
+final class AddParentBootToModelClassMethodRector extends AbstractRector
 {
     /**
      * @var string
@@ -28,13 +28,13 @@ final class AddParentBootToModelClassMethodRector extends \Rector\Core\Rector\Ab
      * @var StaticCallAnalyzer
      */
     private $staticCallAnalyzer;
-    public function __construct(\Rector\Nette\NodeAnalyzer\StaticCallAnalyzer $staticCallAnalyzer)
+    public function __construct(StaticCallAnalyzer $staticCallAnalyzer)
     {
         $this->staticCallAnalyzer = $staticCallAnalyzer;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Add parent::boot(); call to boot() class method in child of Illuminate\\Database\\Eloquent\\Model', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add parent::boot(); call to boot() class method in child of Illuminate\\Database\\Eloquent\\Model', [new CodeSample(<<<'CODE_SAMPLE'
 use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
@@ -62,25 +62,25 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\ClassMethod::class];
+        return [ClassMethod::class];
     }
     /**
      * @param ClassMethod $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        $classLike = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
-        if (!$classLike instanceof \PhpParser\Node\Stmt\ClassLike) {
+        $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
+        if (!$classLike instanceof ClassLike) {
             return null;
         }
-        if (!$this->isObjectType($classLike, new \PHPStan\Type\ObjectType('Illuminate\\Database\\Eloquent\\Model'))) {
+        if (!$this->isObjectType($classLike, new ObjectType('Illuminate\\Database\\Eloquent\\Model'))) {
             return null;
         }
         if (!$this->isName($node->name, self::BOOT)) {
             return null;
         }
         foreach ((array) $node->stmts as $key => $classMethodStmt) {
-            if ($classMethodStmt instanceof \PhpParser\Node\Stmt\Expression) {
+            if ($classMethodStmt instanceof Expression) {
                 $classMethodStmt = $classMethodStmt->expr;
             }
             // is in the 1st position? → only correct place
@@ -96,7 +96,7 @@ CODE_SAMPLE
         }
         // missing, we need to add one
         $staticCall = $this->nodeFactory->createStaticCall('parent', self::BOOT);
-        $parentStaticCallExpression = new \PhpParser\Node\Stmt\Expression($staticCall);
+        $parentStaticCallExpression = new Expression($staticCall);
         $node->stmts = \array_merge([$parentStaticCallExpression], (array) $node->stmts);
         return $node;
     }

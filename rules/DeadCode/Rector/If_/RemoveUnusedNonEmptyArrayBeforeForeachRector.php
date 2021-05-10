@@ -15,7 +15,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\DeadCode\Rector\If_\RemoveUnusedNonEmptyArrayBeforeForeachRector\RemoveUnusedNonEmptyArrayBeforeForeachRectorTest
  */
-final class RemoveUnusedNonEmptyArrayBeforeForeachRector extends \Rector\Core\Rector\AbstractRector
+final class RemoveUnusedNonEmptyArrayBeforeForeachRector extends AbstractRector
 {
     /**
      * @var IfManipulator
@@ -29,15 +29,15 @@ final class RemoveUnusedNonEmptyArrayBeforeForeachRector extends \Rector\Core\Re
      * @var CountManipulator
      */
     private $countManipulator;
-    public function __construct(\Rector\DeadCode\NodeManipulator\CountManipulator $countManipulator, \Rector\Core\NodeManipulator\IfManipulator $ifManipulator, \Rector\DeadCode\UselessIfCondBeforeForeachDetector $uselessIfCondBeforeForeachDetector)
+    public function __construct(CountManipulator $countManipulator, IfManipulator $ifManipulator, UselessIfCondBeforeForeachDetector $uselessIfCondBeforeForeachDetector)
     {
         $this->ifManipulator = $ifManipulator;
         $this->uselessIfCondBeforeForeachDetector = $uselessIfCondBeforeForeachDetector;
         $this->countManipulator = $countManipulator;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove unused if check to non-empty array before foreach of the array', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove unused if check to non-empty array before foreach of the array', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -70,21 +70,21 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\If_::class];
+        return [If_::class];
     }
     /**
      * @param If_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if (!$this->isUselessBeforeForeachCheck($node)) {
             return null;
         }
         return $node->stmts[0];
     }
-    private function isUselessBeforeForeachCheck(\PhpParser\Node\Stmt\If_ $if) : bool
+    private function isUselessBeforeForeachCheck(If_ $if) : bool
     {
-        if (!$this->ifManipulator->isIfWithOnly($if, \PhpParser\Node\Stmt\Foreach_::class)) {
+        if (!$this->ifManipulator->isIfWithOnly($if, Foreach_::class)) {
             return \false;
         }
         /** @var Foreach_ $foreach */

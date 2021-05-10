@@ -20,7 +20,7 @@ use RectorPrefix20210510\Webmozart\Assert\Assert;
  *
  * @see \Rector\Tests\Transform\Rector\Class_\ParentClassToTraitsRector\ParentClassToTraitsRectorTest
  */
-final class ParentClassToTraitsRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
+final class ParentClassToTraitsRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
      * @var string
@@ -38,14 +38,14 @@ final class ParentClassToTraitsRector extends \Rector\Core\Rector\AbstractRector
      * @var ClassAnalyzer
      */
     private $classAnalyzer;
-    public function __construct(\Rector\Core\NodeManipulator\ClassInsertManipulator $classInsertManipulator, \Rector\Core\NodeAnalyzer\ClassAnalyzer $classAnalyzer)
+    public function __construct(ClassInsertManipulator $classInsertManipulator, ClassAnalyzer $classAnalyzer)
     {
         $this->classInsertManipulator = $classInsertManipulator;
         $this->classAnalyzer = $classAnalyzer;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Replaces parent class to specific traits', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Replaces parent class to specific traits', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 class SomeClass extends Nette\Object
 {
 }
@@ -63,12 +63,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Class_::class];
+        return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if ($node->extends === null) {
             return null;
@@ -94,10 +94,10 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $parentClassToTraits = $configuration[self::PARENT_CLASS_TO_TRAITS] ?? [];
-        \RectorPrefix20210510\Webmozart\Assert\Assert::allIsInstanceOf($parentClassToTraits, \Rector\Transform\ValueObject\ParentClassToTraits::class);
+        Assert::allIsInstanceOf($parentClassToTraits, ParentClassToTraits::class);
         $this->parentClassToTraits = $parentClassToTraits;
     }
-    private function removeParentClass(\PhpParser\Node\Stmt\Class_ $class) : void
+    private function removeParentClass(Class_ $class) : void
     {
         $class->extends = null;
     }

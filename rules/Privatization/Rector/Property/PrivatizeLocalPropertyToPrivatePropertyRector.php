@@ -17,7 +17,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\Privatization\Rector\Property\PrivatizeLocalPropertyToPrivatePropertyRector\PrivatizeLocalPropertyToPrivatePropertyRectorTest
  */
-final class PrivatizeLocalPropertyToPrivatePropertyRector extends \Rector\Core\Rector\AbstractRector
+final class PrivatizeLocalPropertyToPrivatePropertyRector extends AbstractRector
 {
     /**
      * @var string[]
@@ -41,15 +41,15 @@ final class PrivatizeLocalPropertyToPrivatePropertyRector extends \Rector\Core\R
      * @var ClassAnalyzer
      */
     private $classAnalyzer;
-    public function __construct(\Rector\VendorLocker\NodeVendorLocker\PropertyVisibilityVendorLockResolver $propertyVisibilityVendorLockResolver, \Rector\Core\NodeAnalyzer\ClassAnalyzer $classAnalyzer)
+    public function __construct(PropertyVisibilityVendorLockResolver $propertyVisibilityVendorLockResolver, ClassAnalyzer $classAnalyzer)
     {
         $this->propertyVisibilityVendorLockResolver = $propertyVisibilityVendorLockResolver;
-        $this->excludedObjectTypes = [new \PHPStan\Type\ObjectType('PHPUnit\\Framework\\TestCase'), new \PHPStan\Type\ObjectType('PHP_CodeSniffer\\Sniffs\\Sniff')];
+        $this->excludedObjectTypes = [new ObjectType('PHPUnit\\Framework\\TestCase'), new ObjectType('PHP_CodeSniffer\\Sniffs\\Sniff')];
         $this->classAnalyzer = $classAnalyzer;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Privatize local-only property to private property', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Privatize local-only property to private property', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public $value;
@@ -78,12 +78,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Property::class];
+        return [Property::class];
     }
     /**
      * @param Property $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -91,10 +91,10 @@ CODE_SAMPLE
         $propertyFetches = $this->nodeRepository->findPropertyFetchesByProperty($node);
         $usedPropertyFetchClassNames = [];
         foreach ($propertyFetches as $propertyFetch) {
-            $usedPropertyFetchClassNames[] = $propertyFetch->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);
+            $usedPropertyFetchClassNames[] = $propertyFetch->getAttribute(AttributeKey::CLASS_NAME);
         }
         $usedPropertyFetchClassNames = \array_unique($usedPropertyFetchClassNames);
-        $propertyClassName = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);
+        $propertyClassName = $node->getAttribute(AttributeKey::CLASS_NAME);
         // has external usage
         if ($usedPropertyFetchClassNames !== [] && [$propertyClassName] !== $usedPropertyFetchClassNames) {
             return null;
@@ -102,10 +102,10 @@ CODE_SAMPLE
         $this->visibilityManipulator->makePrivate($node);
         return $node;
     }
-    private function shouldSkip(\PhpParser\Node\Stmt\Property $property) : bool
+    private function shouldSkip(Property $property) : bool
     {
-        $classLike = $property->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
-        if (!$classLike instanceof \PhpParser\Node\Stmt\ClassLike) {
+        $classLike = $property->getAttribute(AttributeKey::CLASS_NODE);
+        if (!$classLike instanceof ClassLike) {
             return \true;
         }
         if ($this->shouldSkipClass($classLike)) {
@@ -124,9 +124,9 @@ CODE_SAMPLE
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
         return $phpDocInfo->hasByNames(self::TAGS_REQUIRING_PUBLIC_PROPERTY);
     }
-    private function shouldSkipClass(\PhpParser\Node\Stmt\ClassLike $classLike) : bool
+    private function shouldSkipClass(ClassLike $classLike) : bool
     {
-        if (!$classLike instanceof \PhpParser\Node\Stmt\Class_) {
+        if (!$classLike instanceof Class_) {
             return \true;
         }
         if ($this->classAnalyzer->isAnonymousClass($classLike)) {
@@ -140,7 +140,7 @@ CODE_SAMPLE
         }
         return $this->isOpenSourceProjectType();
     }
-    private function shouldSkipProperty(\PhpParser\Node\Stmt\Property $property) : bool
+    private function shouldSkipProperty(Property $property) : bool
     {
         // already private
         if ($property->isPrivate()) {

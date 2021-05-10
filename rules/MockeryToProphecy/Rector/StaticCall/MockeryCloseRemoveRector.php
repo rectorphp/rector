@@ -13,13 +13,13 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\MockeryToProphecy\Rector\StaticCall\MockeryToProphecyRector\MockeryToProphecyRectorTest
  */
-final class MockeryCloseRemoveRector extends \Rector\Core\Rector\AbstractRector
+final class MockeryCloseRemoveRector extends AbstractRector
 {
     /**
      * @var TestsNodeAnalyzer
      */
     private $testsNodeAnalyzer;
-    public function __construct(\Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer $testsNodeAnalyzer)
+    public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer)
     {
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
     }
@@ -28,18 +28,18 @@ final class MockeryCloseRemoveRector extends \Rector\Core\Rector\AbstractRector
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\StaticCall::class];
+        return [StaticCall::class];
     }
     /**
      * @param StaticCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if (!$this->testsNodeAnalyzer->isInTestClass($node)) {
             return null;
         }
         $callerType = $this->nodeTypeResolver->resolve($node->class);
-        if (!$callerType->isSuperTypeOf(new \PHPStan\Type\ObjectType('Mockery'))->yes()) {
+        if (!$callerType->isSuperTypeOf(new ObjectType('Mockery'))->yes()) {
             return null;
         }
         if (!$this->isName($node->name, 'close')) {
@@ -48,9 +48,9 @@ final class MockeryCloseRemoveRector extends \Rector\Core\Rector\AbstractRector
         $this->removeNode($node);
         return null;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Removes mockery close from test classes', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Removes mockery close from test classes', [new CodeSample(<<<'CODE_SAMPLE'
 public function tearDown() : void
 {
     \Mockery::close();

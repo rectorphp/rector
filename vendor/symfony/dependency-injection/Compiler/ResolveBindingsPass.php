@@ -23,7 +23,7 @@ use RectorPrefix20210510\Symfony\Component\DependencyInjection\TypedReference;
 /**
  * @author Guilhem Niot <guilhem.niot@gmail.com>
  */
-class ResolveBindingsPass extends \RectorPrefix20210510\Symfony\Component\DependencyInjection\Compiler\AbstractRecursivePass
+class ResolveBindingsPass extends AbstractRecursivePass
 {
     private $usedBindings = [];
     private $unusedBindings = [];
@@ -31,7 +31,7 @@ class ResolveBindingsPass extends \RectorPrefix20210510\Symfony\Component\Depend
     /**
      * {@inheritdoc}
      */
-    public function process(\RectorPrefix20210510\Symfony\Component\DependencyInjection\ContainerBuilder $container)
+    public function process(ContainerBuilder $container)
     {
         $this->usedBindings = $container->getRemovedBindingIds();
         try {
@@ -51,9 +51,9 @@ class ResolveBindingsPass extends \RectorPrefix20210510\Symfony\Component\Depend
                 if ($argumentName) {
                     $message .= \sprintf('named "%s" ', $argumentName);
                 }
-                if (\RectorPrefix20210510\Symfony\Component\DependencyInjection\Argument\BoundArgument::DEFAULTS_BINDING === $bindingType) {
+                if (BoundArgument::DEFAULTS_BINDING === $bindingType) {
                     $message .= 'under "_defaults"';
-                } elseif (\RectorPrefix20210510\Symfony\Component\DependencyInjection\Argument\BoundArgument::INSTANCEOF_BINDING === $bindingType) {
+                } elseif (BoundArgument::INSTANCEOF_BINDING === $bindingType) {
                     $message .= 'under "_instanceof"';
                 } else {
                     $message .= \sprintf('for service "%s"', $serviceId);
@@ -68,7 +68,7 @@ class ResolveBindingsPass extends \RectorPrefix20210510\Symfony\Component\Depend
                 foreach ($this->errorMessages as $m) {
                     $message .= "\n - " . $m;
                 }
-                throw new \RectorPrefix20210510\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException($message);
+                throw new InvalidArgumentException($message);
             }
         } finally {
             $this->usedBindings = [];
@@ -81,7 +81,7 @@ class ResolveBindingsPass extends \RectorPrefix20210510\Symfony\Component\Depend
      */
     protected function processValue($value, bool $isRoot = \false)
     {
-        if ($value instanceof \RectorPrefix20210510\Symfony\Component\DependencyInjection\TypedReference && $value->getType() === (string) $value) {
+        if ($value instanceof TypedReference && $value->getType() === (string) $value) {
             // Already checked
             $bindings = $this->container->getDefinition($this->currentId)->getBindings();
             $name = $value->getName();
@@ -93,7 +93,7 @@ class ResolveBindingsPass extends \RectorPrefix20210510\Symfony\Component\Depend
             }
             return parent::processValue($value, $isRoot);
         }
-        if (!$value instanceof \RectorPrefix20210510\Symfony\Component\DependencyInjection\Definition || !($bindings = $value->getBindings())) {
+        if (!$value instanceof Definition || !($bindings = $value->getBindings())) {
             return parent::processValue($value, $isRoot);
         }
         $bindingNames = [];
@@ -111,8 +111,8 @@ class ResolveBindingsPass extends \RectorPrefix20210510\Symfony\Component\Depend
             if (!isset($m[1])) {
                 continue;
             }
-            if (null !== $bindingValue && !$bindingValue instanceof \RectorPrefix20210510\Symfony\Component\DependencyInjection\Reference && !$bindingValue instanceof \RectorPrefix20210510\Symfony\Component\DependencyInjection\Definition && !$bindingValue instanceof \RectorPrefix20210510\Symfony\Component\DependencyInjection\Argument\TaggedIteratorArgument && !$bindingValue instanceof \RectorPrefix20210510\Symfony\Component\DependencyInjection\Argument\ServiceLocatorArgument) {
-                throw new \RectorPrefix20210510\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException(\sprintf('Invalid value for binding key "%s" for service "%s": expected null, "%s", "%s", "%s" or ServiceLocatorArgument, "%s" given.', $key, $this->currentId, \RectorPrefix20210510\Symfony\Component\DependencyInjection\Reference::class, \RectorPrefix20210510\Symfony\Component\DependencyInjection\Definition::class, \RectorPrefix20210510\Symfony\Component\DependencyInjection\Argument\TaggedIteratorArgument::class, \get_debug_type($bindingValue)));
+            if (null !== $bindingValue && !$bindingValue instanceof Reference && !$bindingValue instanceof Definition && !$bindingValue instanceof TaggedIteratorArgument && !$bindingValue instanceof ServiceLocatorArgument) {
+                throw new InvalidArgumentException(\sprintf('Invalid value for binding key "%s" for service "%s": expected null, "%s", "%s", "%s" or ServiceLocatorArgument, "%s" given.', $key, $this->currentId, Reference::class, Definition::class, TaggedIteratorArgument::class, \get_debug_type($bindingValue)));
             }
         }
         if ($value->isAbstract()) {
@@ -123,7 +123,7 @@ class ResolveBindingsPass extends \RectorPrefix20210510\Symfony\Component\Depend
             if ($constructor = $this->getConstructor($value, \false)) {
                 $calls[] = [$constructor, $value->getArguments()];
             }
-        } catch (\RectorPrefix20210510\Symfony\Component\DependencyInjection\Exception\RuntimeException $e) {
+        } catch (RuntimeException $e) {
             $this->errorMessages[] = $e->getMessage();
             $this->container->getDefinition($this->currentId)->addError($e->getMessage());
             return parent::processValue($value, $isRoot);
@@ -135,7 +135,7 @@ class ResolveBindingsPass extends \RectorPrefix20210510\Symfony\Component\Depend
             } else {
                 try {
                     $reflectionMethod = $this->getReflectionMethod($value, $method);
-                } catch (\RectorPrefix20210510\Symfony\Component\DependencyInjection\Exception\RuntimeException $e) {
+                } catch (RuntimeException $e) {
                     if ($value->getFactory()) {
                         continue;
                     }
@@ -146,7 +146,7 @@ class ResolveBindingsPass extends \RectorPrefix20210510\Symfony\Component\Depend
                 if (\array_key_exists($key, $arguments) && '' !== $arguments[$key]) {
                     continue;
                 }
-                $typeHint = \RectorPrefix20210510\Symfony\Component\DependencyInjection\LazyProxy\ProxyHelper::getTypeHint($reflectionMethod, $parameter);
+                $typeHint = ProxyHelper::getTypeHint($reflectionMethod, $parameter);
                 if (\array_key_exists($k = \ltrim($typeHint, '\\') . ' $' . $parameter->name, $bindings)) {
                     $arguments[$key] = $this->getBindingValue($bindings[$k]);
                     continue;
@@ -184,7 +184,7 @@ class ResolveBindingsPass extends \RectorPrefix20210510\Symfony\Component\Depend
     /**
      * @return mixed
      */
-    private function getBindingValue(\RectorPrefix20210510\Symfony\Component\DependencyInjection\Argument\BoundArgument $binding)
+    private function getBindingValue(BoundArgument $binding)
     {
         [$bindingValue, $bindingId] = $binding->getValues();
         $this->usedBindings[$bindingId] = \true;

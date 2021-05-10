@@ -30,13 +30,13 @@ final class OnLogoutClassMethodFactory
      * @var ParamAnalyzer
      */
     private $paramAnalyzer;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Symfony\NodeFactory\BareLogoutClassMethodFactory $bareLogoutClassMethodFactory, \Rector\Core\NodeAnalyzer\ParamAnalyzer $paramAnalyzer)
+    public function __construct(NodeNameResolver $nodeNameResolver, \Rector\Symfony\NodeFactory\BareLogoutClassMethodFactory $bareLogoutClassMethodFactory, ParamAnalyzer $paramAnalyzer)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->bareLogoutClassMethodFactory = $bareLogoutClassMethodFactory;
         $this->paramAnalyzer = $paramAnalyzer;
     }
-    public function createFromLogoutClassMethod(\PhpParser\Node\Stmt\ClassMethod $logoutClassMethod) : \PhpParser\Node\Stmt\ClassMethod
+    public function createFromLogoutClassMethod(ClassMethod $logoutClassMethod) : ClassMethod
     {
         $classMethod = $this->bareLogoutClassMethodFactory->create();
         $assignStmts = $this->createAssignStmtFromOldClassMethod($logoutClassMethod);
@@ -46,7 +46,7 @@ final class OnLogoutClassMethodFactory
     /**
      * @return Stmt[]
      */
-    private function createAssignStmtFromOldClassMethod(\PhpParser\Node\Stmt\ClassMethod $onLogoutSuccessClassMethod) : array
+    private function createAssignStmtFromOldClassMethod(ClassMethod $onLogoutSuccessClassMethod) : array
     {
         $usedParams = $this->resolveUsedParams($onLogoutSuccessClassMethod);
         return $this->createAssignStmts($usedParams);
@@ -54,7 +54,7 @@ final class OnLogoutClassMethodFactory
     /**
      * @return Param[]
      */
-    private function resolveUsedParams(\PhpParser\Node\Stmt\ClassMethod $logoutClassMethod) : array
+    private function resolveUsedParams(ClassMethod $logoutClassMethod) : array
     {
         $usedParams = [];
         foreach ($logoutClassMethod->params as $oldParam) {
@@ -71,15 +71,15 @@ final class OnLogoutClassMethodFactory
      */
     private function createAssignStmts(array $params) : array
     {
-        $logoutEventVariable = new \PhpParser\Node\Expr\Variable('logoutEvent');
+        $logoutEventVariable = new Variable('logoutEvent');
         $assignStmts = [];
         foreach ($params as $param) {
             foreach (self::PARAMETER_TO_GETTER_NAMES as $parameterName => $getterName) {
                 if (!$this->nodeNameResolver->isName($param, $parameterName)) {
                     continue;
                 }
-                $assign = new \PhpParser\Node\Expr\Assign($param->var, new \PhpParser\Node\Expr\MethodCall($logoutEventVariable, $getterName));
-                $assignStmts[] = new \PhpParser\Node\Stmt\Expression($assign);
+                $assign = new Assign($param->var, new MethodCall($logoutEventVariable, $getterName));
+                $assignStmts[] = new Expression($assign);
             }
         }
         return $assignStmts;

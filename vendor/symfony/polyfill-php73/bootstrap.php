@@ -17,15 +17,15 @@ if (\PHP_VERSION_ID >= 70300) {
 if (!\function_exists('is_countable')) {
     function is_countable($value)
     {
-        return \is_array($value) || $value instanceof \Countable || $value instanceof \ResourceBundle || $value instanceof \RectorPrefix20210510\SimpleXmlElement;
+        return \is_array($value) || $value instanceof \Countable || $value instanceof \ResourceBundle || $value instanceof SimpleXmlElement;
     }
 }
 if (!\function_exists('hrtime')) {
     require_once __DIR__ . '/Php73.php';
-    \RectorPrefix20210510\Symfony\Polyfill\Php73\Php73::$startAt = (int) \microtime(\true);
+    p\Php73::$startAt = (int) \microtime(\true);
     function hrtime($as_number = \false)
     {
-        return \RectorPrefix20210510\Symfony\Polyfill\Php73\Php73::hrtime($as_number);
+        return p\Php73::hrtime($as_number);
     }
 }
 if (!\function_exists('array_key_first')) {

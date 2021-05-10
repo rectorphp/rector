@@ -23,19 +23,19 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Symfony\Tests\Rector\Class_\MakeCommandLazyRector\MakeCommandLazyRectorTest
  */
-final class MakeCommandLazyRector extends \Rector\Core\Rector\AbstractRector
+final class MakeCommandLazyRector extends AbstractRector
 {
     /**
      * @var ParamAnalyzer
      */
     private $paramAnalyzer;
-    public function __construct(\Rector\Core\NodeAnalyzer\ParamAnalyzer $paramAnalyzer)
+    public function __construct(ParamAnalyzer $paramAnalyzer)
     {
         $this->paramAnalyzer = $paramAnalyzer;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Make Symfony commands lazy', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Make Symfony commands lazy', [new CodeSample(<<<'CODE_SAMPLE'
 use Symfony\Component\Console\Command\Command
 
 class SunshineCommand extends Command
@@ -64,59 +64,59 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Class_::class];
+        return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        if (!$this->isObjectType($node, new \PHPStan\Type\ObjectType('Symfony\\Component\\Console\\Command\\Command'))) {
+        if (!$this->isObjectType($node, new ObjectType('Symfony\\Component\\Console\\Command\\Command'))) {
             return null;
         }
         $commandName = $this->resolveCommandNameAndRemove($node);
-        if (!$commandName instanceof \PhpParser\Node) {
+        if (!$commandName instanceof Node) {
             return null;
         }
         $defaultNameProperty = $this->nodeFactory->createStaticProtectedPropertyWithDefault('defaultName', $commandName);
         $node->stmts = \array_merge([$defaultNameProperty], $node->stmts);
         return $node;
     }
-    private function resolveCommandNameAndRemove(\PhpParser\Node\Stmt\Class_ $class) : ?\PhpParser\Node
+    private function resolveCommandNameAndRemove(Class_ $class) : ?Node
     {
         $commandName = $this->resolveCommandNameFromConstructor($class);
-        if (!$commandName instanceof \PhpParser\Node) {
+        if (!$commandName instanceof Node) {
             $commandName = $this->resolveCommandNameFromSetName($class);
         }
         $this->removeConstructorIfHasOnlySetNameMethodCall($class);
         return $commandName;
     }
-    private function resolveCommandNameFromConstructor(\PhpParser\Node\Stmt\Class_ $class) : ?\PhpParser\Node
+    private function resolveCommandNameFromConstructor(Class_ $class) : ?Node
     {
         $commandName = null;
-        $this->traverseNodesWithCallable($class->stmts, function (\PhpParser\Node $node) use(&$commandName) {
-            if (!$node instanceof \PhpParser\Node\Expr\StaticCall) {
+        $this->traverseNodesWithCallable($class->stmts, function (Node $node) use(&$commandName) {
+            if (!$node instanceof StaticCall) {
                 return null;
             }
-            if (!$this->isObjectType($node->class, new \PHPStan\Type\ObjectType('Symfony\\Component\\Console\\Command\\Command'))) {
+            if (!$this->isObjectType($node->class, new ObjectType('Symfony\\Component\\Console\\Command\\Command'))) {
                 return null;
             }
             $commandName = $this->matchCommandNameNodeInConstruct($node);
-            if (!$commandName instanceof \PhpParser\Node\Expr) {
+            if (!$commandName instanceof Expr) {
                 return null;
             }
             \array_shift($node->args);
         });
         return $commandName;
     }
-    private function resolveCommandNameFromSetName(\PhpParser\Node\Stmt\Class_ $class) : ?\PhpParser\Node
+    private function resolveCommandNameFromSetName(Class_ $class) : ?Node
     {
         $commandName = null;
-        $this->traverseNodesWithCallable($class->stmts, function (\PhpParser\Node $node) use(&$commandName) {
-            if (!$node instanceof \PhpParser\Node\Expr\MethodCall) {
+        $this->traverseNodesWithCallable($class->stmts, function (Node $node) use(&$commandName) {
+            if (!$node instanceof MethodCall) {
                 return null;
             }
-            if (!$this->isObjectType($node->var, new \PHPStan\Type\ObjectType('Symfony\\Component\\Console\\Command\\Command'))) {
+            if (!$this->isObjectType($node->var, new ObjectType('Symfony\\Component\\Console\\Command\\Command'))) {
                 return null;
             }
             if (!$this->isName($node->name, 'setName')) {
@@ -124,21 +124,21 @@ CODE_SAMPLE
             }
             $commandName = $node->args[0]->value;
             $commandNameStaticType = $this->getStaticType($commandName);
-            if (!$commandNameStaticType instanceof \PHPStan\Type\StringType) {
+            if (!$commandNameStaticType instanceof StringType) {
                 return null;
             }
             // is chain call? → remove by variable nulling
-            if ($node->var instanceof \PhpParser\Node\Expr\MethodCall) {
+            if ($node->var instanceof MethodCall) {
                 return $node->var;
             }
             $this->removeNode($node);
         });
         return $commandName;
     }
-    private function removeConstructorIfHasOnlySetNameMethodCall(\PhpParser\Node\Stmt\Class_ $class) : void
+    private function removeConstructorIfHasOnlySetNameMethodCall(Class_ $class) : void
     {
-        $constructClassMethod = $class->getMethod(\Rector\Core\ValueObject\MethodName::CONSTRUCT);
-        if (!$constructClassMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
+        $constructClassMethod = $class->getMethod(MethodName::CONSTRUCT);
+        if (!$constructClassMethod instanceof ClassMethod) {
             return;
         }
         $stmts = (array) $constructClassMethod->stmts;
@@ -150,17 +150,17 @@ CODE_SAMPLE
             return;
         }
         $onlyNode = $stmts[0];
-        if ($onlyNode instanceof \PhpParser\Node\Stmt\Expression) {
+        if ($onlyNode instanceof Expression) {
             $onlyNode = $onlyNode->expr;
         }
         /** @var Expr|null $onlyNode */
         if ($onlyNode === null) {
             return;
         }
-        if (!$onlyNode instanceof \PhpParser\Node\Expr\StaticCall) {
+        if (!$onlyNode instanceof StaticCall) {
             return;
         }
-        if (!$this->isName($onlyNode->name, \Rector\Core\ValueObject\MethodName::CONSTRUCT)) {
+        if (!$this->isName($onlyNode->name, MethodName::CONSTRUCT)) {
             return;
         }
         if ($onlyNode->args !== []) {
@@ -168,16 +168,16 @@ CODE_SAMPLE
         }
         $this->removeNode($constructClassMethod);
     }
-    private function matchCommandNameNodeInConstruct(\PhpParser\Node\Expr\StaticCall $staticCall) : ?\PhpParser\Node\Expr
+    private function matchCommandNameNodeInConstruct(StaticCall $staticCall) : ?Expr
     {
-        if (!$this->isName($staticCall->name, \Rector\Core\ValueObject\MethodName::CONSTRUCT)) {
+        if (!$this->isName($staticCall->name, MethodName::CONSTRUCT)) {
             return null;
         }
         if (\count($staticCall->args) < 1) {
             return null;
         }
         $staticType = $this->getStaticType($staticCall->args[0]->value);
-        if (!$staticType instanceof \PHPStan\Type\StringType) {
+        if (!$staticType instanceof StringType) {
             return null;
         }
         return $staticCall->args[0]->value;

@@ -12,7 +12,7 @@ final class ArgumentAndParameterFactory
     private $privatesAccessor;
     public function __construct()
     {
-        $this->privatesAccessor = new \RectorPrefix20210510\Symplify\PackageBuilder\Reflection\PrivatesAccessor();
+        $this->privatesAccessor = new PrivatesAccessor();
     }
     /**
      * @param array<string, mixed> $arguments

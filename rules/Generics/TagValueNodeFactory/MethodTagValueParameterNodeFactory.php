@@ -13,19 +13,19 @@ final class MethodTagValueParameterNodeFactory
      * @var StaticTypeMapper
      */
     private $staticTypeMapper;
-    public function __construct(\Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper)
+    public function __construct(StaticTypeMapper $staticTypeMapper)
     {
         $this->staticTypeMapper = $staticTypeMapper;
     }
-    public function createFromParamReflection(\PHPStan\Reflection\ParameterReflection $parameterReflection) : \PHPStan\PhpDocParser\Ast\PhpDoc\MethodTagValueParameterNode
+    public function createFromParamReflection(ParameterReflection $parameterReflection) : MethodTagValueParameterNode
     {
         $parameterType = $parameterReflection->getType();
-        if ($parameterType instanceof \PHPStan\Type\MixedType && !$parameterType->isExplicitMixed()) {
+        if ($parameterType instanceof MixedType && !$parameterType->isExplicitMixed()) {
             $parameterTypeNode = null;
         } else {
             $parameterTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($parameterType);
         }
-        return new \PHPStan\PhpDocParser\Ast\PhpDoc\MethodTagValueParameterNode(
+        return new MethodTagValueParameterNode(
             $parameterTypeNode,
             $parameterReflection->passedByReference()->yes(),
             $parameterReflection->isVariadic(),

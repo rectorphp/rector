@@ -7,12 +7,12 @@ use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
 final class SubTypeAnalyzer
 {
-    public function isObjectSubType(\PHPStan\Type\Type $checkedType, \PHPStan\Type\Type $mainType) : bool
+    public function isObjectSubType(Type $checkedType, Type $mainType) : bool
     {
-        if (!$checkedType instanceof \PHPStan\Type\TypeWithClassName) {
+        if (!$checkedType instanceof TypeWithClassName) {
             return \false;
         }
-        if (!$mainType instanceof \PHPStan\Type\TypeWithClassName) {
+        if (!$mainType instanceof TypeWithClassName) {
             return \false;
         }
         // parent type to all objects

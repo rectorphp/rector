@@ -11,7 +11,7 @@ use RectorPrefix20210510\Nette;
 /**
  * Memory cache storage.
  */
-class MemoryStorage implements \RectorPrefix20210510\Nette\Caching\Storage
+class MemoryStorage implements Nette\Caching\Storage
 {
     use Nette\SmartObject;
     /** @var array */
@@ -33,7 +33,7 @@ class MemoryStorage implements \RectorPrefix20210510\Nette\Caching\Storage
     }
     public function clean(array $conditions) : void
     {
-        if (!empty($conditions[\RectorPrefix20210510\Nette\Caching\Cache::ALL])) {
+        if (!empty($conditions[Nette\Caching\Cache::ALL])) {
             $this->data = [];
         }
     }

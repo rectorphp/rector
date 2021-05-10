@@ -22,7 +22,7 @@ final class PhpParserNodeMapper
     {
         $this->phpParserNodeMappers = $phpParserNodeMappers;
     }
-    public function mapToPHPStanType(\PhpParser\Node $node) : \PHPStan\Type\Type
+    public function mapToPHPStanType(Node $node) : Type
     {
         foreach ($this->phpParserNodeMappers as $phpParserNodeMapper) {
             if (!\is_a($node, $phpParserNodeMapper->getNodeType())) {
@@ -30,13 +30,13 @@ final class PhpParserNodeMapper
             }
             // do not let Expr collect all the types
             // note: can be solve later with priorities on mapper interface, making this last
-            if ($phpParserNodeMapper->getNodeType() !== \PhpParser\Node\Expr::class) {
+            if ($phpParserNodeMapper->getNodeType() !== Expr::class) {
                 return $phpParserNodeMapper->mapToPHPStan($node);
             }
-            if (!$node instanceof \PhpParser\Node\Scalar\String_) {
+            if (!$node instanceof String_) {
                 return $phpParserNodeMapper->mapToPHPStan($node);
             }
         }
-        throw new \Rector\Core\Exception\NotImplementedYetException(\get_class($node));
+        throw new NotImplementedYetException(\get_class($node));
     }
 }

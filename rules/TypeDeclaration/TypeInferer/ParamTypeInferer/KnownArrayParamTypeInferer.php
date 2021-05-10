@@ -13,7 +13,7 @@ use PHPStan\Type\Type;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\TypeDeclaration\Contract\TypeInferer\ParamTypeInfererInterface;
-final class KnownArrayParamTypeInferer implements \Rector\TypeDeclaration\Contract\TypeInferer\ParamTypeInfererInterface
+final class KnownArrayParamTypeInferer implements ParamTypeInfererInterface
 {
     /**
      * @var NodeNameResolver
@@ -23,30 +23,30 @@ final class KnownArrayParamTypeInferer implements \Rector\TypeDeclaration\Contra
      * @var ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
+    public function __construct(NodeNameResolver $nodeNameResolver, ReflectionProvider $reflectionProvider)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->reflectionProvider = $reflectionProvider;
     }
-    public function inferParam(\PhpParser\Node\Param $param) : \PHPStan\Type\Type
+    public function inferParam(Param $param) : Type
     {
-        $classLike = $param->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
-        if (!$classLike instanceof \PhpParser\Node\Stmt\Class_) {
-            return new \PHPStan\Type\MixedType();
+        $classLike = $param->getAttribute(AttributeKey::CLASS_NODE);
+        if (!$classLike instanceof Class_) {
+            return new MixedType();
         }
         $className = $this->nodeNameResolver->getName($classLike);
         if (!$className) {
-            return new \PHPStan\Type\MixedType();
+            return new MixedType();
         }
         if (!$this->reflectionProvider->hasClass($className)) {
-            return new \PHPStan\Type\MixedType();
+            return new MixedType();
         }
         $classReflection = $this->reflectionProvider->getClass($className);
         $paramName = $this->nodeNameResolver->getName($param);
         // @todo create map later
         if ($paramName === 'configs' && $classReflection->isSubclassOf('Symfony\\Component\\DependencyInjection\\Extension\\Extension')) {
-            return new \PHPStan\Type\ArrayType(new \PHPStan\Type\MixedType(), new \PHPStan\Type\StringType());
+            return new ArrayType(new MixedType(), new StringType());
         }
-        return new \PHPStan\Type\MixedType();
+        return new MixedType();
     }
 }

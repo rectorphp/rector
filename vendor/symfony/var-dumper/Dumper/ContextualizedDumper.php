@@ -15,19 +15,19 @@ use RectorPrefix20210510\Symfony\Component\VarDumper\Dumper\ContextProvider\Cont
 /**
  * @author Kévin Thérage <therage.kevin@gmail.com>
  */
-class ContextualizedDumper implements \RectorPrefix20210510\Symfony\Component\VarDumper\Dumper\DataDumperInterface
+class ContextualizedDumper implements DataDumperInterface
 {
     private $wrappedDumper;
     private $contextProviders;
     /**
      * @param ContextProviderInterface[] $contextProviders
      */
-    public function __construct(\RectorPrefix20210510\Symfony\Component\VarDumper\Dumper\DataDumperInterface $wrappedDumper, array $contextProviders)
+    public function __construct(DataDumperInterface $wrappedDumper, array $contextProviders)
     {
         $this->wrappedDumper = $wrappedDumper;
         $this->contextProviders = $contextProviders;
     }
-    public function dump(\RectorPrefix20210510\Symfony\Component\VarDumper\Cloner\Data $data)
+    public function dump(Data $data)
     {
         $context = [];
         foreach ($this->contextProviders as $contextProvider) {

@@ -13,7 +13,7 @@ namespace RectorPrefix20210510\Symfony\Component\DependencyInjection\Argument;
 /**
  * @author Guilhem Niot <guilhem.niot@gmail.com>
  */
-final class BoundArgument implements \RectorPrefix20210510\Symfony\Component\DependencyInjection\Argument\ArgumentInterface
+final class BoundArgument implements ArgumentInterface
 {
     public const SERVICE_BINDING = 0;
     public const DEFAULTS_BINDING = 1;

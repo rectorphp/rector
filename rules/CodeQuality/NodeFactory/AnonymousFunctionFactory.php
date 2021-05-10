@@ -34,7 +34,7 @@ final class AnonymousFunctionFactory
      * @var StaticTypeMapper
      */
     private $staticTypeMapper;
-    public function __construct(\Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper)
+    public function __construct(NodeFactory $nodeFactory, NodeNameResolver $nodeNameResolver, StaticTypeMapper $staticTypeMapper)
     {
         $this->nodeFactory = $nodeFactory;
         $this->nodeNameResolver = $nodeNameResolver;
@@ -43,27 +43,27 @@ final class AnonymousFunctionFactory
     /**
      * @param Variable|PropertyFetch $expr
      */
-    public function create(\PHPStan\Reflection\Php\PhpMethodReflection $phpMethodReflection, \PhpParser\Node\Expr $expr) : \PhpParser\Node\Expr\Closure
+    public function create(PhpMethodReflection $phpMethodReflection, Expr $expr) : Closure
     {
         /** @var FunctionVariantWithPhpDocs $functionVariantWithPhpDoc */
         $functionVariantWithPhpDoc = $phpMethodReflection->getVariants()[0];
-        $anonymousFunction = new \PhpParser\Node\Expr\Closure();
+        $anonymousFunction = new Closure();
         $newParams = $this->createParams($functionVariantWithPhpDoc->getParameters());
         $anonymousFunction->params = $newParams;
-        $innerMethodCall = new \PhpParser\Node\Expr\MethodCall($expr, $phpMethodReflection->getName());
+        $innerMethodCall = new MethodCall($expr, $phpMethodReflection->getName());
         $innerMethodCall->args = $this->nodeFactory->createArgsFromParams($newParams);
-        if (!$functionVariantWithPhpDoc->getReturnType() instanceof \PHPStan\Type\MixedType) {
+        if (!$functionVariantWithPhpDoc->getReturnType() instanceof MixedType) {
             $returnType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($functionVariantWithPhpDoc->getReturnType());
             $anonymousFunction->returnType = $returnType;
         }
         // does method return something?
-        if (!$functionVariantWithPhpDoc->getReturnType() instanceof \PHPStan\Type\VoidType) {
-            $anonymousFunction->stmts[] = new \PhpParser\Node\Stmt\Return_($innerMethodCall);
+        if (!$functionVariantWithPhpDoc->getReturnType() instanceof VoidType) {
+            $anonymousFunction->stmts[] = new Return_($innerMethodCall);
         } else {
-            $anonymousFunction->stmts[] = new \PhpParser\Node\Stmt\Expression($innerMethodCall);
+            $anonymousFunction->stmts[] = new Expression($innerMethodCall);
         }
-        if ($expr instanceof \PhpParser\Node\Expr\Variable && !$this->nodeNameResolver->isName($expr, 'this')) {
-            $anonymousFunction->uses[] = new \PhpParser\Node\Expr\ClosureUse($expr);
+        if ($expr instanceof Variable && !$this->nodeNameResolver->isName($expr, 'this')) {
+            $anonymousFunction->uses[] = new ClosureUse($expr);
         }
         return $anonymousFunction;
     }
@@ -75,8 +75,8 @@ final class AnonymousFunctionFactory
     {
         $params = [];
         foreach ($parameterReflections as $parameterReflection) {
-            $param = new \PhpParser\Node\Param(new \PhpParser\Node\Expr\Variable($parameterReflection->getName()));
-            if (!$parameterReflection->getType() instanceof \PHPStan\Type\MixedType) {
+            $param = new Param(new Variable($parameterReflection->getName()));
+            if (!$parameterReflection->getType() instanceof MixedType) {
                 $paramType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($parameterReflection->getType());
                 $param->type = $paramType;
             }

@@ -13,11 +13,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Nette\Tests\Rector\MethodCall\RequestGetCookieDefaultArgumentToCoalesceRector\RequestGetCookieDefaultArgumentToCoalesceRectorTest
  */
-final class RequestGetCookieDefaultArgumentToCoalesceRector extends \Rector\Core\Rector\AbstractRector
+final class RequestGetCookieDefaultArgumentToCoalesceRector extends AbstractRector
 {
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Add removed Nette\\Http\\Request::getCookies() default value as coalesce', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add removed Nette\\Http\\Request::getCookies() default value as coalesce', [new CodeSample(<<<'CODE_SAMPLE'
 use Nette\Http\Request;
 
 class SomeClass
@@ -46,14 +46,14 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\MethodCall::class];
+        return [MethodCall::class];
     }
     /**
      * @param MethodCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        if (!$this->isObjectType($node->var, new \PHPStan\Type\ObjectType('Nette\\Http\\Request'))) {
+        if (!$this->isObjectType($node->var, new ObjectType('Nette\\Http\\Request'))) {
             return null;
         }
         if (!$this->isName($node->name, 'getCookie')) {
@@ -65,6 +65,6 @@ CODE_SAMPLE
         }
         $defaultValue = $node->args[1]->value;
         unset($node->args[1]);
-        return new \PhpParser\Node\Expr\BinaryOp\Coalesce($node, $defaultValue);
+        return new Coalesce($node, $defaultValue);
     }
 }

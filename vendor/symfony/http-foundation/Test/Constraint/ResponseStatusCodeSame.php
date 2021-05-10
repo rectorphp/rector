@@ -12,7 +12,7 @@ namespace RectorPrefix20210510\Symfony\Component\HttpFoundation\Test\Constraint;
 
 use RectorPrefix20210510\PHPUnit\Framework\Constraint\Constraint;
 use RectorPrefix20210510\Symfony\Component\HttpFoundation\Response;
-final class ResponseStatusCodeSame extends \RectorPrefix20210510\PHPUnit\Framework\Constraint\Constraint
+final class ResponseStatusCodeSame extends Constraint
 {
     private $statusCode;
     public function __construct(int $statusCode)

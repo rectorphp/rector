@@ -23,10 +23,10 @@ class TableCellStyle
     public function __construct(array $options = [])
     {
         if ($diff = \array_diff(\array_keys($options), \array_keys($this->options))) {
-            throw new \RectorPrefix20210510\Symfony\Component\Console\Exception\InvalidArgumentException(\sprintf('The TableCellStyle does not support the following options: \'%s\'.', \implode('\', \'', $diff)));
+            throw new InvalidArgumentException(\sprintf('The TableCellStyle does not support the following options: \'%s\'.', \implode('\', \'', $diff)));
         }
         if (isset($options['align']) && !\array_key_exists($options['align'], $this->alignMap)) {
-            throw new \RectorPrefix20210510\Symfony\Component\Console\Exception\InvalidArgumentException(\sprintf('Wrong align value. Value must be following: \'%s\'.', \implode('\', \'', \array_keys($this->alignMap))));
+            throw new InvalidArgumentException(\sprintf('Wrong align value. Value must be following: \'%s\'.', \implode('\', \'', \array_keys($this->alignMap))));
         }
         $this->options = \array_merge($this->options, $options);
     }

@@ -9,13 +9,13 @@ use RectorPrefix20210510\Symfony\Component\Console\Style\SymfonyStyle;
  * This services helps to abstract from Symfony, and allow custom output formatters to use this Rector internal class.
  * It is very helpful while scoping Rector from analysed project.
  */
-final class RectorOutputStyle implements \Rector\Core\Contract\Console\OutputStyleInterface
+final class RectorOutputStyle implements OutputStyleInterface
 {
     /**
      * @var SymfonyStyle
      */
     private $symfonyStyle;
-    public function __construct(\RectorPrefix20210510\Symfony\Component\Console\Style\SymfonyStyle $symfonyStyle)
+    public function __construct(SymfonyStyle $symfonyStyle)
     {
         $this->symfonyStyle = $symfonyStyle;
     }

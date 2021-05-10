@@ -67,7 +67,7 @@ final class PropertyManipulator
      * @var FunctionLikeReflectionParser
      */
     private $functionLikeReflectionParser;
-    public function __construct(\Rector\Core\NodeManipulator\AssignManipulator $assignManipulator, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\ReadWrite\Guard\VariableToConstantGuard $variableToConstantGuard, \Rector\ReadWrite\NodeAnalyzer\ReadWritePropertyAnalyzer $readWritePropertyAnalyzer, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \RectorPrefix20210510\Symplify\PackageBuilder\Php\TypeChecker $typeChecker, \Rector\Core\PhpParser\NodeFinder\PropertyFetchFinder $propertyFetchFinder, \Rector\NodeCollector\NodeCollector\NodeRepository $nodeRepository, \Rector\Core\Reflection\FunctionLikeReflectionParser $functionLikeReflectionParser)
+    public function __construct(\Rector\Core\NodeManipulator\AssignManipulator $assignManipulator, BetterNodeFinder $betterNodeFinder, VariableToConstantGuard $variableToConstantGuard, ReadWritePropertyAnalyzer $readWritePropertyAnalyzer, PhpDocInfoFactory $phpDocInfoFactory, TypeChecker $typeChecker, PropertyFetchFinder $propertyFetchFinder, NodeRepository $nodeRepository, FunctionLikeReflectionParser $functionLikeReflectionParser)
     {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->assignManipulator = $assignManipulator;
@@ -79,7 +79,7 @@ final class PropertyManipulator
         $this->nodeRepository = $nodeRepository;
         $this->functionLikeReflectionParser = $functionLikeReflectionParser;
     }
-    public function isPropertyUsedInReadContext(\PhpParser\Node\Stmt\Property $property) : bool
+    public function isPropertyUsedInReadContext(Property $property) : bool
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
         if ($phpDocInfo->hasByAnnotationClasses(['Doctrine\\ORM\\*', 'JMS\\Serializer\\Annotation\\Type'])) {
@@ -93,18 +93,18 @@ final class PropertyManipulator
         }
         // has classLike $this->$variable call?
         /** @var ClassLike $classLike */
-        $classLike = $property->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
-        return (bool) $this->betterNodeFinder->findFirst($classLike->stmts, function (\PhpParser\Node $node) : bool {
-            if (!$node instanceof \PhpParser\Node\Expr\PropertyFetch) {
+        $classLike = $property->getAttribute(AttributeKey::CLASS_NODE);
+        return (bool) $this->betterNodeFinder->findFirst($classLike->stmts, function (Node $node) : bool {
+            if (!$node instanceof PropertyFetch) {
                 return \false;
             }
             if (!$this->readWritePropertyAnalyzer->isRead($node)) {
                 return \false;
             }
-            return $node->name instanceof \PhpParser\Node\Expr;
+            return $node->name instanceof Expr;
         });
     }
-    public function isPropertyChangeable(\PhpParser\Node\Stmt\Property $property) : bool
+    public function isPropertyChangeable(Property $property) : bool
     {
         $propertyFetches = $this->propertyFetchFinder->findPrivatePropertyFetches($property);
         foreach ($propertyFetches as $propertyFetch) {
@@ -117,25 +117,25 @@ final class PropertyManipulator
     /**
      * @param PropertyFetch|StaticPropertyFetch $expr
      */
-    private function isChangeableContext(\PhpParser\Node\Expr $expr) : bool
+    private function isChangeableContext(Expr $expr) : bool
     {
-        $parent = $expr->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-        if (!$parent instanceof \PhpParser\Node) {
+        $parent = $expr->getAttribute(AttributeKey::PARENT_NODE);
+        if (!$parent instanceof Node) {
             return \false;
         }
-        if ($this->typeChecker->isInstanceOf($parent, [\PhpParser\Node\Expr\PreInc::class, \PhpParser\Node\Expr\PreDec::class, \PhpParser\Node\Expr\PostInc::class, \PhpParser\Node\Expr\PostDec::class])) {
-            $parent = $parent->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        if ($this->typeChecker->isInstanceOf($parent, [PreInc::class, PreDec::class, PostInc::class, PostDec::class])) {
+            $parent = $parent->getAttribute(AttributeKey::PARENT_NODE);
         }
-        if (!$parent instanceof \PhpParser\Node) {
+        if (!$parent instanceof Node) {
             return \false;
         }
-        if ($parent instanceof \PhpParser\Node\Arg) {
+        if ($parent instanceof Arg) {
             $readArg = $this->variableToConstantGuard->isReadArg($parent);
             if (!$readArg) {
                 return \true;
             }
-            $caller = $parent->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-            if ($caller instanceof \PhpParser\Node\Expr\MethodCall || $caller instanceof \PhpParser\Node\Expr\StaticCall) {
+            $caller = $parent->getAttribute(AttributeKey::PARENT_NODE);
+            if ($caller instanceof MethodCall || $caller instanceof StaticCall) {
                 return $this->isFoundByRefParam($caller);
             }
         }
@@ -144,13 +144,13 @@ final class PropertyManipulator
     /**
      * @param MethodCall|StaticCall $node
      */
-    private function isFoundByRefParam(\PhpParser\Node $node) : bool
+    private function isFoundByRefParam(Node $node) : bool
     {
-        $classMethod = $node instanceof \PhpParser\Node\Expr\MethodCall ? $this->nodeRepository->findClassMethodByMethodCall($node) : $this->nodeRepository->findClassMethodByStaticCall($node);
-        if (!$classMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
+        $classMethod = $node instanceof MethodCall ? $this->nodeRepository->findClassMethodByMethodCall($node) : $this->nodeRepository->findClassMethodByStaticCall($node);
+        if (!$classMethod instanceof ClassMethod) {
             $classMethod = $this->functionLikeReflectionParser->parseCaller($node);
         }
-        if (!$classMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
+        if (!$classMethod instanceof ClassMethod) {
             return \false;
         }
         $params = $classMethod->getParams();

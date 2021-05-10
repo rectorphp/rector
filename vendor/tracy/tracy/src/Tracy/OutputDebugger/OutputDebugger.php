@@ -54,7 +54,7 @@ final class OutputDebugger
                 $t += ['class' => '', 'type' => '', 'function' => ''];
                 $stack[] = "{$t['class']}{$t['type']}{$t['function']}()" . (isset($t['file'], $t['line']) ? ' in ' . \basename($t['file']) . ":{$t['line']}" : '');
             }
-            $res .= '<span title="' . \RectorPrefix20210510\Tracy\Helpers::escapeHtml(\implode("\n", $stack)) . '">' . \RectorPrefix20210510\Tracy\Helpers::editorLink($item[0], $item[1]) . ' ' . \str_replace(self::BOM, '<big>BOM</big>', \RectorPrefix20210510\Tracy\Dumper::toHtml($item[2])) . "</span><br>\n";
+            $res .= '<span title="' . Helpers::escapeHtml(\implode("\n", $stack)) . '">' . Helpers::editorLink($item[0], $item[1]) . ' ' . \str_replace(self::BOM, '<big>BOM</big>', Dumper::toHtml($item[2])) . "</span><br>\n";
         }
         return $res . '</code>';
     }

@@ -16,7 +16,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://github.com/php/php-src/pull/3941/files#diff-7e3a1a5df28a1cbd8c0fb6db68f243da
  * @see \Rector\Tests\Php74\Rector\Function_\ReservedFnFunctionRector\ReservedFnFunctionRectorTest
  */
-final class ReservedFnFunctionRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
+final class ReservedFnFunctionRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
      * @api
@@ -27,9 +27,9 @@ final class ReservedFnFunctionRector extends \Rector\Core\Rector\AbstractRector 
      * @var string[]
      */
     private $reservedNamesToNewOnes = [];
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change fn() function name, since it will be reserved keyword', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change fn() function name, since it will be reserved keyword', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -64,21 +64,21 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Function_::class, \PhpParser\Node\Expr\FuncCall::class];
+        return [Function_::class, FuncCall::class];
     }
     /**
      * @param Function_|FuncCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         foreach ($this->reservedNamesToNewOnes as $reservedName => $newName) {
             if (!$this->isName($node->name, $reservedName)) {
                 continue;
             }
-            if ($node instanceof \PhpParser\Node\Expr\FuncCall) {
-                $node->name = new \PhpParser\Node\Name($newName);
+            if ($node instanceof FuncCall) {
+                $node->name = new Name($newName);
             } else {
-                $node->name = new \PhpParser\Node\Identifier($newName);
+                $node->name = new Identifier($newName);
             }
             return $node;
         }

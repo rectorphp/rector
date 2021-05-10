@@ -6,9 +6,9 @@ namespace Rector\NetteToSymfony\Tests\Rector\MethodCall\NetteFormToSymfonyFormRe
 use RectorPrefix20210510\Nette\Application\IPresenter;
 use RectorPrefix20210510\Nette\Application\IResponse;
 use RectorPrefix20210510\Nette\Application\Request;
-abstract class NettePresenter implements \RectorPrefix20210510\Nette\Application\IPresenter
+abstract class NettePresenter implements IPresenter
 {
-    public function run(\RectorPrefix20210510\Nette\Application\Request $request) : \RectorPrefix20210510\Nette\Application\IResponse
+    public function run(Request $request) : IResponse
     {
     }
 }

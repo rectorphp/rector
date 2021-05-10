@@ -21,19 +21,19 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\CodingStyle\Rector\FuncCall\CallUserFuncArrayToVariadicRector\CallUserFuncArrayToVariadicRectorTest
  */
-final class CallUserFuncArrayToVariadicRector extends \Rector\Core\Rector\AbstractRector
+final class CallUserFuncArrayToVariadicRector extends AbstractRector
 {
     /**
      * @var ArrayCallableToMethodCallFactory
      */
     private $arrayCallableToMethodCallFactory;
-    public function __construct(\Rector\CodingStyle\NodeFactory\ArrayCallableToMethodCallFactory $arrayCallableToMethodCallFactory)
+    public function __construct(ArrayCallableToMethodCallFactory $arrayCallableToMethodCallFactory)
     {
         $this->arrayCallableToMethodCallFactory = $arrayCallableToMethodCallFactory;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Replace call_user_func_array() with variadic', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Replace call_user_func_array() with variadic', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -58,14 +58,14 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\FuncCall::class];
+        return [FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        if (!$this->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::ARRAY_SPREAD)) {
+        if (!$this->isAtLeastPhpVersion(PhpVersionFeature::ARRAY_SPREAD)) {
             return null;
         }
         if (!$this->isName($node, 'call_user_func_array')) {
@@ -73,33 +73,33 @@ CODE_SAMPLE
         }
         $firstArgValue = $node->args[0]->value;
         $secondArgValue = $node->args[1]->value;
-        if ($firstArgValue instanceof \PhpParser\Node\Scalar\String_) {
+        if ($firstArgValue instanceof String_) {
             $functionName = $this->valueResolver->getValue($firstArgValue);
             return $this->createFuncCall($secondArgValue, $functionName);
         }
         // method call
-        if ($firstArgValue instanceof \PhpParser\Node\Expr\Array_) {
+        if ($firstArgValue instanceof Array_) {
             return $this->createMethodCall($firstArgValue, $secondArgValue);
         }
         return null;
     }
-    private function createFuncCall(\PhpParser\Node\Expr $expr, string $functionName) : \PhpParser\Node\Expr\FuncCall
+    private function createFuncCall(Expr $expr, string $functionName) : FuncCall
     {
         $args = [];
         $args[] = $this->createUnpackedArg($expr);
         return $this->nodeFactory->createFuncCall($functionName, $args);
     }
-    private function createMethodCall(\PhpParser\Node\Expr\Array_ $array, \PhpParser\Node\Expr $secondExpr) : ?\PhpParser\Node\Expr\MethodCall
+    private function createMethodCall(Array_ $array, Expr $secondExpr) : ?MethodCall
     {
         $methodCall = $this->arrayCallableToMethodCallFactory->create($array);
-        if (!$methodCall instanceof \PhpParser\Node\Expr\MethodCall) {
+        if (!$methodCall instanceof MethodCall) {
             return null;
         }
         $methodCall->args[] = $this->createUnpackedArg($secondExpr);
         return $methodCall;
     }
-    private function createUnpackedArg(\PhpParser\Node\Expr $expr) : \PhpParser\Node\Arg
+    private function createUnpackedArg(Expr $expr) : Arg
     {
-        return new \PhpParser\Node\Arg($expr, \false, \true);
+        return new Arg($expr, \false, \true);
     }
 }

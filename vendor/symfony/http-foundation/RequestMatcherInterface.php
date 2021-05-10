@@ -22,5 +22,5 @@ interface RequestMatcherInterface
      *
      * @return bool true if the request matches, false otherwise
      */
-    public function matches(\RectorPrefix20210510\Symfony\Component\HttpFoundation\Request $request);
+    public function matches(Request $request);
 }

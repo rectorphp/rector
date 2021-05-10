@@ -8,7 +8,7 @@ use PhpParser\Node\Stmt\Break_;
 use PhpParser\Node\Stmt\Switch_;
 final class SwitchAnalyzer
 {
-    public function hasEachCaseBreak(\PhpParser\Node\Stmt\Switch_ $switch) : bool
+    public function hasEachCaseBreak(Switch_ $switch) : bool
     {
         $totalCases = \count($switch->cases);
         if ($totalCases === 1) {
@@ -19,7 +19,7 @@ final class SwitchAnalyzer
                 return \true;
             }
             foreach ($case->stmts as $caseStmt) {
-                if ($caseStmt instanceof \PhpParser\Node\Stmt\Break_) {
+                if ($caseStmt instanceof Break_) {
                     continue 2;
                 }
             }
@@ -27,11 +27,11 @@ final class SwitchAnalyzer
         }
         return \true;
     }
-    public function hasEachCaseSingleStmt(\PhpParser\Node\Stmt\Switch_ $switch) : bool
+    public function hasEachCaseSingleStmt(Switch_ $switch) : bool
     {
         foreach ($switch->cases as $case) {
-            $stmtsWithoutBreak = \array_filter($case->stmts, function (\PhpParser\Node $node) : bool {
-                return !$node instanceof \PhpParser\Node\Stmt\Break_;
+            $stmtsWithoutBreak = \array_filter($case->stmts, function (Node $node) : bool {
+                return !$node instanceof Break_;
             });
             if (\count($stmtsWithoutBreak) !== 1) {
                 return \false;

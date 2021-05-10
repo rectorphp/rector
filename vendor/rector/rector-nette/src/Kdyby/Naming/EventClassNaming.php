@@ -25,7 +25,7 @@ final class EventClassNaming
      * @var ClassNaming
      */
     private $classNaming;
-    public function __construct(\Rector\CodingStyle\Naming\ClassNaming $classNaming, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
+    public function __construct(ClassNaming $classNaming, NodeNameResolver $nodeNameResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->classNaming = $classNaming;
@@ -33,24 +33,24 @@ final class EventClassNaming
     /**
      * "App\SomeNamespace\SomeClass::onUpload" → "App\SomeNamespace\Event\SomeClassUploadEvent"
      */
-    public function createEventClassNameFromMethodCall(\PhpParser\Node\Expr\MethodCall $methodCall) : string
+    public function createEventClassNameFromMethodCall(MethodCall $methodCall) : string
     {
         $shortEventClassName = $this->getShortEventClassName($methodCall);
         /** @var string $className */
-        $className = $methodCall->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);
+        $className = $methodCall->getAttribute(AttributeKey::CLASS_NAME);
         return $this->prependShortClassEventWithNamespace($shortEventClassName, $className);
     }
-    public function resolveEventFileLocationFromMethodCall(\PhpParser\Node\Expr\MethodCall $methodCall) : string
+    public function resolveEventFileLocationFromMethodCall(MethodCall $methodCall) : string
     {
         $shortEventClassName = $this->getShortEventClassName($methodCall);
-        $scope = $methodCall->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
-        if (!$scope instanceof \PHPStan\Analyser\Scope) {
-            throw new \Rector\Core\Exception\ShouldNotHappenException();
+        $scope = $methodCall->getAttribute(AttributeKey::SCOPE);
+        if (!$scope instanceof Scope) {
+            throw new ShouldNotHappenException();
         }
         $directory = \dirname($scope->getFile());
         return $directory . \DIRECTORY_SEPARATOR . self::EVENT . \DIRECTORY_SEPARATOR . $shortEventClassName . '.php';
     }
-    public function resolveEventFileLocationFromClassNameAndFileInfo(string $className, \Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo) : string
+    public function resolveEventFileLocationFromClassNameAndFileInfo(string $className, SmartFileInfo $smartFileInfo) : string
     {
         $shortClassName = $this->nodeNameResolver->getShortName($className);
         return $smartFileInfo->getPath() . \DIRECTORY_SEPARATOR . self::EVENT . \DIRECTORY_SEPARATOR . $shortClassName . '.php';
@@ -66,17 +66,17 @@ final class EventClassNaming
         $shortEventClass = $this->createShortEventClassNameFromClassAndProperty($class, $property);
         return $this->prependShortClassEventWithNamespace($shortEventClass, $class);
     }
-    private function getShortEventClassName(\PhpParser\Node\Expr\MethodCall $methodCall) : string
+    private function getShortEventClassName(MethodCall $methodCall) : string
     {
         /** @var string $methodName */
         $methodName = $this->nodeNameResolver->getName($methodCall->name);
         /** @var string $className */
-        $className = $methodCall->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);
+        $className = $methodCall->getAttribute(AttributeKey::CLASS_NAME);
         return $this->createShortEventClassNameFromClassAndProperty($className, $methodName);
     }
     private function prependShortClassEventWithNamespace(string $shortEventClassName, string $orinalClassName) : string
     {
-        $namespaceAbove = \RectorPrefix20210510\Nette\Utils\Strings::before($orinalClassName, '\\', -1);
+        $namespaceAbove = Strings::before($orinalClassName, '\\', -1);
         return $namespaceAbove . '\\Event\\' . $shortEventClassName;
     }
     /**
@@ -86,7 +86,7 @@ final class EventClassNaming
     {
         $shortClassName = $this->classNaming->getShortName($class);
         // "onMagic" => "Magic"
-        $shortPropertyName = \RectorPrefix20210510\Nette\Utils\Strings::substring($property, \strlen('on'));
+        $shortPropertyName = Strings::substring($property, \strlen('on'));
         return $shortClassName . $shortPropertyName . self::EVENT;
     }
 }

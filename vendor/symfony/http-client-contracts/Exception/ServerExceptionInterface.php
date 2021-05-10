@@ -15,6 +15,6 @@ namespace RectorPrefix20210510\Symfony\Contracts\HttpClient\Exception;
  *
  * @author Nicolas Grekas <p@tchwork.com>
  */
-interface ServerExceptionInterface extends \RectorPrefix20210510\Symfony\Contracts\HttpClient\Exception\HttpExceptionInterface
+interface ServerExceptionInterface extends HttpExceptionInterface
 {
 }

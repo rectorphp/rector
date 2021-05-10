@@ -15,7 +15,7 @@ use Rector\TypeDeclaration\FunctionLikeReturnTypeResolver;
 use Rector\TypeDeclaration\NodeAnalyzer\ClassMethodAndPropertyAnalyzer;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer\ReturnedNodesReturnTypeInferer;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer\ReturnTagReturnTypeInferer;
-final class GetterPropertyTypeInferer implements \Rector\TypeDeclaration\Contract\TypeInferer\PropertyTypeInfererInterface
+final class GetterPropertyTypeInferer implements PropertyTypeInfererInterface
 {
     /**
      * @var ReturnedNodesReturnTypeInferer
@@ -37,7 +37,7 @@ final class GetterPropertyTypeInferer implements \Rector\TypeDeclaration\Contrac
      * @var NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(\Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer\ReturnTagReturnTypeInferer $returnTagReturnTypeInferer, \Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer\ReturnedNodesReturnTypeInferer $returnedNodesReturnTypeInferer, \Rector\TypeDeclaration\FunctionLikeReturnTypeResolver $functionLikeReturnTypeResolver, \Rector\TypeDeclaration\NodeAnalyzer\ClassMethodAndPropertyAnalyzer $classMethodAndPropertyAnalyzer, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
+    public function __construct(ReturnTagReturnTypeInferer $returnTagReturnTypeInferer, ReturnedNodesReturnTypeInferer $returnedNodesReturnTypeInferer, FunctionLikeReturnTypeResolver $functionLikeReturnTypeResolver, ClassMethodAndPropertyAnalyzer $classMethodAndPropertyAnalyzer, NodeNameResolver $nodeNameResolver)
     {
         $this->returnedNodesReturnTypeInferer = $returnedNodesReturnTypeInferer;
         $this->returnTagReturnTypeInferer = $returnTagReturnTypeInferer;
@@ -45,12 +45,12 @@ final class GetterPropertyTypeInferer implements \Rector\TypeDeclaration\Contrac
         $this->classMethodAndPropertyAnalyzer = $classMethodAndPropertyAnalyzer;
         $this->nodeNameResolver = $nodeNameResolver;
     }
-    public function inferProperty(\PhpParser\Node\Stmt\Property $property) : \PHPStan\Type\Type
+    public function inferProperty(Property $property) : Type
     {
-        $classLike = $property->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
-        if (!$classLike instanceof \PhpParser\Node\Stmt\Class_) {
+        $classLike = $property->getAttribute(AttributeKey::CLASS_NODE);
+        if (!$classLike instanceof Class_) {
             // anonymous class
-            return new \PHPStan\Type\MixedType();
+            return new MixedType();
         }
         /** @var string $propertyName */
         $propertyName = $this->nodeNameResolver->getName($property);
@@ -59,24 +59,24 @@ final class GetterPropertyTypeInferer implements \Rector\TypeDeclaration\Contrac
                 continue;
             }
             $returnType = $this->inferClassMethodReturnType($classMethod);
-            if (!$returnType instanceof \PHPStan\Type\MixedType) {
+            if (!$returnType instanceof MixedType) {
                 return $returnType;
             }
         }
-        return new \PHPStan\Type\MixedType();
+        return new MixedType();
     }
     public function getPriority() : int
     {
         return 1700;
     }
-    private function inferClassMethodReturnType(\PhpParser\Node\Stmt\ClassMethod $classMethod) : \PHPStan\Type\Type
+    private function inferClassMethodReturnType(ClassMethod $classMethod) : Type
     {
         $returnTypeDeclarationType = $this->functionLikeReturnTypeResolver->resolveFunctionLikeReturnTypeToPHPStanType($classMethod);
-        if (!$returnTypeDeclarationType instanceof \PHPStan\Type\MixedType) {
+        if (!$returnTypeDeclarationType instanceof MixedType) {
             return $returnTypeDeclarationType;
         }
         $inferedType = $this->returnedNodesReturnTypeInferer->inferFunctionLike($classMethod);
-        if (!$inferedType instanceof \PHPStan\Type\MixedType) {
+        if (!$inferedType instanceof MixedType) {
             return $inferedType;
         }
         return $this->returnTagReturnTypeInferer->inferFunctionLike($classMethod);

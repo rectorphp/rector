@@ -6,7 +6,7 @@ namespace RectorPrefix20210510\Symplify\SymplifyKernel\Console;
 use RectorPrefix20210510\Symfony\Component\Console\Application;
 use RectorPrefix20210510\Symfony\Component\Console\Command\Command;
 use RectorPrefix20210510\Symplify\PackageBuilder\Console\Command\CommandNaming;
-abstract class AbstractSymplifyConsoleApplication extends \RectorPrefix20210510\Symfony\Component\Console\Application
+abstract class AbstractSymplifyConsoleApplication extends Application
 {
     /**
      * @var CommandNaming
@@ -17,7 +17,7 @@ abstract class AbstractSymplifyConsoleApplication extends \RectorPrefix20210510\
      */
     public function __construct(array $commands, string $name = 'UNKNOWN', string $version = 'UNKNOWN')
     {
-        $this->commandNaming = new \RectorPrefix20210510\Symplify\PackageBuilder\Console\Command\CommandNaming();
+        $this->commandNaming = new CommandNaming();
         $this->addCommands($commands);
         parent::__construct($name, $version);
     }

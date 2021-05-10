@@ -15,11 +15,11 @@ final class SetUpClassMethodUpdater
      * @var NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
+    public function __construct(NodeNameResolver $nodeNameResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
     }
-    public function updateSetUpMethod(\PhpParser\Node\Stmt\ClassMethod $setupClassMethod, \PhpParser\Node\Stmt\Expression $parentSetupStaticCall, \PhpParser\Node\Stmt\Expression $assign) : void
+    public function updateSetUpMethod(ClassMethod $setupClassMethod, Expression $parentSetupStaticCall, Expression $assign) : void
     {
         $parentSetUpStaticCallPosition = $this->getParentSetUpStaticCallPosition($setupClassMethod);
         if ($parentSetUpStaticCallPosition === null) {
@@ -29,22 +29,22 @@ final class SetUpClassMethodUpdater
             \array_splice($setupClassMethod->stmts, $parentSetUpStaticCallPosition + 1, 0, [$assign]);
         }
     }
-    private function getParentSetUpStaticCallPosition(\PhpParser\Node\Stmt\ClassMethod $setupClassMethod) : ?int
+    private function getParentSetUpStaticCallPosition(ClassMethod $setupClassMethod) : ?int
     {
         foreach ((array) $setupClassMethod->stmts as $position => $methodStmt) {
-            if ($methodStmt instanceof \PhpParser\Node\Stmt\Expression) {
+            if ($methodStmt instanceof Expression) {
                 $methodStmt = $methodStmt->expr;
             }
-            if (!$methodStmt instanceof \PhpParser\Node\Expr\StaticCall) {
+            if (!$methodStmt instanceof StaticCall) {
                 continue;
             }
-            if (!$methodStmt->class instanceof \PhpParser\Node\Name) {
+            if (!$methodStmt->class instanceof Name) {
                 continue;
             }
             if (!$this->nodeNameResolver->isName($methodStmt->class, 'parent')) {
                 continue;
             }
-            if (!$this->nodeNameResolver->isName($methodStmt->name, \Rector\Core\ValueObject\MethodName::SET_UP)) {
+            if (!$this->nodeNameResolver->isName($methodStmt->name, MethodName::SET_UP)) {
                 continue;
             }
             return $position;

@@ -7,7 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt;
 use PhpParser\NodeVisitorAbstract;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-final class StatementNodeVisitor extends \PhpParser\NodeVisitorAbstract
+final class StatementNodeVisitor extends NodeVisitorAbstract
 {
     /**
      * @var Stmt|null
@@ -22,29 +22,29 @@ final class StatementNodeVisitor extends \PhpParser\NodeVisitorAbstract
         $this->previousStmt = null;
         return null;
     }
-    public function enterNode(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function enterNode(Node $node) : ?Node
     {
-        $parent = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-        if (!$parent instanceof \PhpParser\Node) {
-            if (!$node instanceof \PhpParser\Node\Stmt) {
+        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
+        if (!$parent instanceof Node) {
+            if (!$node instanceof Stmt) {
                 return null;
             }
-            $node->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PREVIOUS_STATEMENT, $this->previousStmt);
-            $node->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CURRENT_STATEMENT, $node);
+            $node->setAttribute(AttributeKey::PREVIOUS_STATEMENT, $this->previousStmt);
+            $node->setAttribute(AttributeKey::CURRENT_STATEMENT, $node);
             $this->previousStmt = $node;
         }
         if (\property_exists($node, 'stmts')) {
             $previous = $node;
             foreach ((array) $node->stmts as $stmt) {
-                $stmt->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PREVIOUS_STATEMENT, $previous);
-                $stmt->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CURRENT_STATEMENT, $stmt);
+                $stmt->setAttribute(AttributeKey::PREVIOUS_STATEMENT, $previous);
+                $stmt->setAttribute(AttributeKey::CURRENT_STATEMENT, $stmt);
                 $previous = $stmt;
             }
         }
-        $currentStmt = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CURRENT_STATEMENT);
+        $currentStmt = $node->getAttribute(AttributeKey::CURRENT_STATEMENT);
         if ($parent && !$currentStmt) {
-            $node->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PREVIOUS_STATEMENT, $parent->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PREVIOUS_STATEMENT));
-            $node->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CURRENT_STATEMENT, $parent->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CURRENT_STATEMENT));
+            $node->setAttribute(AttributeKey::PREVIOUS_STATEMENT, $parent->getAttribute(AttributeKey::PREVIOUS_STATEMENT));
+            $node->setAttribute(AttributeKey::CURRENT_STATEMENT, $parent->getAttribute(AttributeKey::CURRENT_STATEMENT));
         }
         return null;
     }

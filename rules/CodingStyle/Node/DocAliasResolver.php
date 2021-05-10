@@ -27,7 +27,7 @@ final class DocAliasResolver
      * @var PhpDocInfoFactory
      */
     private $phpDocInfoFactory;
-    public function __construct(\RectorPrefix20210510\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory)
+    public function __construct(SimpleCallableNodeTraverser $simpleCallableNodeTraverser, PhpDocInfoFactory $phpDocInfoFactory)
     {
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
@@ -35,18 +35,18 @@ final class DocAliasResolver
     /**
      * @return string[]
      */
-    public function resolve(\PhpParser\Node $node) : array
+    public function resolve(Node $node) : array
     {
         $possibleDocAliases = [];
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($node, function (\PhpParser\Node $node) use(&$possibleDocAliases) : void {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($node, function (Node $node) use(&$possibleDocAliases) : void {
             $docComment = $node->getDocComment();
-            if (!$docComment instanceof \PhpParser\Comment\Doc) {
+            if (!$docComment instanceof Doc) {
                 return;
             }
             $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
             $possibleDocAliases = $this->collectVarType($phpDocInfo, $possibleDocAliases);
             // e.g. "use Dotrine\ORM\Mapping as ORM" etc.
-            $matches = \RectorPrefix20210510\Nette\Utils\Strings::matchAll($docComment->getText(), self::DOC_ALIAS_REGEX);
+            $matches = Strings::matchAll($docComment->getText(), self::DOC_ALIAS_REGEX);
             foreach ($matches as $match) {
                 $possibleDocAliases[] = $match['possible_alias'];
             }
@@ -57,7 +57,7 @@ final class DocAliasResolver
      * @param string[] $possibleDocAliases
      * @return string[]
      */
-    private function collectVarType(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo, array $possibleDocAliases) : array
+    private function collectVarType(PhpDocInfo $phpDocInfo, array $possibleDocAliases) : array
     {
         $possibleDocAliases = $this->appendPossibleAliases($phpDocInfo->getVarType(), $possibleDocAliases);
         $possibleDocAliases = $this->appendPossibleAliases($phpDocInfo->getReturnType(), $possibleDocAliases);
@@ -70,12 +70,12 @@ final class DocAliasResolver
      * @param string[] $possibleDocAliases
      * @return string[]
      */
-    private function appendPossibleAliases(\PHPStan\Type\Type $varType, array $possibleDocAliases) : array
+    private function appendPossibleAliases(Type $varType, array $possibleDocAliases) : array
     {
-        if ($varType instanceof \Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType) {
+        if ($varType instanceof AliasedObjectType) {
             $possibleDocAliases[] = $varType->getClassName();
         }
-        if ($varType instanceof \PHPStan\Type\UnionType) {
+        if ($varType instanceof UnionType) {
             foreach ($varType->getTypes() as $type) {
                 $possibleDocAliases = $this->appendPossibleAliases($type, $possibleDocAliases);
             }

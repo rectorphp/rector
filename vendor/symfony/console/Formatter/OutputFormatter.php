@@ -17,7 +17,7 @@ use RectorPrefix20210510\Symfony\Component\Console\Exception\InvalidArgumentExce
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  * @author Roland Franssen <franssen.roland@gmail.com>
  */
-class OutputFormatter implements \RectorPrefix20210510\Symfony\Component\Console\Formatter\WrappableOutputFormatterInterface
+class OutputFormatter implements WrappableOutputFormatterInterface
 {
     private $decorated;
     private $styles = [];
@@ -62,14 +62,14 @@ class OutputFormatter implements \RectorPrefix20210510\Symfony\Component\Console
     public function __construct(bool $decorated = \false, array $styles = [])
     {
         $this->decorated = $decorated;
-        $this->setStyle('error', new \RectorPrefix20210510\Symfony\Component\Console\Formatter\OutputFormatterStyle('white', 'red'));
-        $this->setStyle('info', new \RectorPrefix20210510\Symfony\Component\Console\Formatter\OutputFormatterStyle('green'));
-        $this->setStyle('comment', new \RectorPrefix20210510\Symfony\Component\Console\Formatter\OutputFormatterStyle('yellow'));
-        $this->setStyle('question', new \RectorPrefix20210510\Symfony\Component\Console\Formatter\OutputFormatterStyle('black', 'cyan'));
+        $this->setStyle('error', new OutputFormatterStyle('white', 'red'));
+        $this->setStyle('info', new OutputFormatterStyle('green'));
+        $this->setStyle('comment', new OutputFormatterStyle('yellow'));
+        $this->setStyle('question', new OutputFormatterStyle('black', 'cyan'));
         foreach ($styles as $name => $style) {
             $this->setStyle($name, $style);
         }
-        $this->styleStack = new \RectorPrefix20210510\Symfony\Component\Console\Formatter\OutputFormatterStyleStack();
+        $this->styleStack = new OutputFormatterStyleStack();
     }
     /**
      * {@inheritdoc}
@@ -88,7 +88,7 @@ class OutputFormatter implements \RectorPrefix20210510\Symfony\Component\Console
     /**
      * {@inheritdoc}
      */
-    public function setStyle(string $name, \RectorPrefix20210510\Symfony\Component\Console\Formatter\OutputFormatterStyleInterface $style)
+    public function setStyle(string $name, OutputFormatterStyleInterface $style)
     {
         $this->styles[\strtolower($name)] = $style;
     }
@@ -105,7 +105,7 @@ class OutputFormatter implements \RectorPrefix20210510\Symfony\Component\Console
     public function getStyle(string $name)
     {
         if (!$this->hasStyle($name)) {
-            throw new \RectorPrefix20210510\Symfony\Component\Console\Exception\InvalidArgumentException(\sprintf('Undefined style: "%s".', $name));
+            throw new InvalidArgumentException(\sprintf('Undefined style: "%s".', $name));
         }
         return $this->styles[\strtolower($name)];
     }
@@ -168,7 +168,7 @@ class OutputFormatter implements \RectorPrefix20210510\Symfony\Component\Console
     /**
      * Tries to create new style instance from string.
      */
-    private function createStyleFromString(string $string) : ?\RectorPrefix20210510\Symfony\Component\Console\Formatter\OutputFormatterStyleInterface
+    private function createStyleFromString(string $string) : ?OutputFormatterStyleInterface
     {
         if (isset($this->styles[$string])) {
             return $this->styles[$string];
@@ -176,7 +176,7 @@ class OutputFormatter implements \RectorPrefix20210510\Symfony\Component\Console
         if (!\preg_match_all('/([^=]+)=([^;]+)(;|$)/', $string, $matches, \PREG_SET_ORDER)) {
             return null;
         }
-        $style = new \RectorPrefix20210510\Symfony\Component\Console\Formatter\OutputFormatterStyle();
+        $style = new OutputFormatterStyle();
         foreach ($matches as $match) {
             \array_shift($match);
             $match[0] = \strtolower($match[0]);

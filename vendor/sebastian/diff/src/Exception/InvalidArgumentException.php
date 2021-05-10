@@ -11,6 +11,6 @@ declare (strict_types=1);
  */
 namespace RectorPrefix20210510\SebastianBergmann\Diff;
 
-class InvalidArgumentException extends \InvalidArgumentException implements \RectorPrefix20210510\SebastianBergmann\Diff\Exception
+class InvalidArgumentException extends \InvalidArgumentException implements Exception
 {
 }

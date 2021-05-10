@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace Rector\NetteToSymfony\Set;
 
 use Rector\Set\Contract\SetListInterface;
-final class NetteToSymfonySetList implements \Rector\Set\Contract\SetListInterface
+final class NetteToSymfonySetList implements SetListInterface
 {
     /**
      * @var string

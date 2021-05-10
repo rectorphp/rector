@@ -16,7 +16,7 @@ use RectorPrefix20210510\Psr\Log\AbstractLogger;
  *
  * @author Nicolas Grekas <p@tchwork.com>
  */
-class BufferingLogger extends \RectorPrefix20210510\Psr\Log\AbstractLogger
+class BufferingLogger extends AbstractLogger
 {
     private $logs = [];
     public function log($level, $message, array $context = []) : void

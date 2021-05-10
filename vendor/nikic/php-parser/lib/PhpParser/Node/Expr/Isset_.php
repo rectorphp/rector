@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace PhpParser\Node\Expr;
 
 use PhpParser\Node\Expr;
-class Isset_ extends \PhpParser\Node\Expr
+class Isset_ extends Expr
 {
     /** @var Expr[] Variables */
     public $vars;

@@ -13,11 +13,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Nette\Tests\Rector\MethodCall\ConvertAddUploadWithThirdArgumentTrueToAddMultiUploadRector\ConvertAddUploadWithThirdArgumentTrueToAddMultiUploadRectorTest
  */
-final class ConvertAddUploadWithThirdArgumentTrueToAddMultiUploadRector extends \Rector\Core\Rector\AbstractRector
+final class ConvertAddUploadWithThirdArgumentTrueToAddMultiUploadRector extends AbstractRector
 {
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('convert addUpload() with 3rd argument true to addMultiUpload()', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('convert addUpload() with 3rd argument true to addMultiUpload()', [new CodeSample(<<<'CODE_SAMPLE'
 $form = new Nette\Forms\Form();
 $form->addUpload('...', '...', true);
 CODE_SAMPLE
@@ -32,14 +32,14 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\MethodCall::class];
+        return [MethodCall::class];
     }
     /**
      * @param MethodCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        if (!$this->isObjectType($node->var, new \PHPStan\Type\ObjectType('Nette\\Forms\\Form'))) {
+        if (!$this->isObjectType($node->var, new ObjectType('Nette\\Forms\\Form'))) {
             return null;
         }
         if (!$this->isName($node->name, 'addUpload')) {
@@ -50,7 +50,7 @@ CODE_SAMPLE
             return null;
         }
         if ($this->valueResolver->isTrue($node->args[2]->value)) {
-            $node->name = new \PhpParser\Node\Identifier('addMultiUpload');
+            $node->name = new Identifier('addMultiUpload');
             unset($node->args[2]);
             return $node;
         }

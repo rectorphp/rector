@@ -27,7 +27,7 @@ interface FragmentRendererInterface
      *
      * @return Response A Response instance
      */
-    public function render($uri, \RectorPrefix20210510\Symfony\Component\HttpFoundation\Request $request, array $options = []);
+    public function render($uri, Request $request, array $options = []);
     /**
      * Gets the name of the strategy.
      *

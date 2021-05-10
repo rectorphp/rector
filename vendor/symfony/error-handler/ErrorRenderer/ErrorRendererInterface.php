@@ -21,5 +21,5 @@ interface ErrorRendererInterface
     /**
      * Renders a Throwable as a FlattenException.
      */
-    public function render(\Throwable $exception) : \RectorPrefix20210510\Symfony\Component\ErrorHandler\Exception\FlattenException;
+    public function render(\Throwable $exception) : FlattenException;
 }

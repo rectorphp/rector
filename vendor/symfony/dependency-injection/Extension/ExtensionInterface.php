@@ -23,7 +23,7 @@ interface ExtensionInterface
      *
      * @throws \InvalidArgumentException When provided tag is not defined in this extension
      */
-    public function load(array $configs, \RectorPrefix20210510\Symfony\Component\DependencyInjection\ContainerBuilder $container);
+    public function load(array $configs, ContainerBuilder $container);
     /**
      * Returns the namespace to be used for this extension (XML namespace).
      *

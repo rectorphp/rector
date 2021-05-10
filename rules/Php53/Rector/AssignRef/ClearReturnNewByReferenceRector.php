@@ -14,11 +14,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @see https://3v4l.org/UJN6H
  * @see \Rector\Tests\Php53\Rector\AssignRef\ClearReturnNewByReferenceRector\ClearReturnNewByReferenceRectorTest
  */
-final class ClearReturnNewByReferenceRector extends \Rector\Core\Rector\AbstractRector
+final class ClearReturnNewByReferenceRector extends AbstractRector
 {
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove reference from "$assign = &new Value;"', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove reference from "$assign = &new Value;"', [new CodeSample(<<<'CODE_SAMPLE'
 $assign = &new Value;
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
@@ -31,16 +31,16 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\AssignRef::class];
+        return [AssignRef::class];
     }
     /**
      * @param AssignRef $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        if (!$node->expr instanceof \PhpParser\Node\Expr\New_) {
+        if (!$node->expr instanceof New_) {
             return null;
         }
-        return new \PhpParser\Node\Expr\Assign($node->var, $node->expr);
+        return new Assign($node->var, $node->expr);
     }
 }

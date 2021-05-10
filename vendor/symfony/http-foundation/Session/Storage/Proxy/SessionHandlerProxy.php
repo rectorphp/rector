@@ -13,7 +13,7 @@ namespace RectorPrefix20210510\Symfony\Component\HttpFoundation\Session\Storage\
 /**
  * @author Drak <drak@zikula.org>
  */
-class SessionHandlerProxy extends \RectorPrefix20210510\Symfony\Component\HttpFoundation\Session\Storage\Proxy\AbstractProxy implements \SessionHandlerInterface, \SessionUpdateTimestampHandlerInterface
+class SessionHandlerProxy extends AbstractProxy implements \SessionHandlerInterface, \SessionUpdateTimestampHandlerInterface
 {
     protected $handler;
     public function __construct(\SessionHandlerInterface $handler)

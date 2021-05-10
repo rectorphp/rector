@@ -17,7 +17,7 @@ final class NodeComparator
      * @var BetterStandardPrinter
      */
     private $betterStandardPrinter;
-    public function __construct(\Rector\Comments\CommentRemover $commentRemover, \Rector\Core\PhpParser\Printer\BetterStandardPrinter $betterStandardPrinter)
+    public function __construct(CommentRemover $commentRemover, BetterStandardPrinter $betterStandardPrinter)
     {
         $this->commentRemover = $commentRemover;
         $this->betterStandardPrinter = $betterStandardPrinter;
@@ -43,15 +43,15 @@ final class NodeComparator
     /**
      * @param Node[] $availableNodes
      */
-    public function isNodeEqual(\PhpParser\Node $singleNode, array $availableNodes) : bool
+    public function isNodeEqual(Node $singleNode, array $availableNodes) : bool
     {
         // remove comments, only content is relevant
         $singleNode = clone $singleNode;
-        $singleNode->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::COMMENTS, null);
+        $singleNode->setAttribute(AttributeKey::COMMENTS, null);
         foreach ($availableNodes as $availableNode) {
             // remove comments, only content is relevant
             $availableNode = clone $availableNode;
-            $availableNode->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::COMMENTS, null);
+            $availableNode->setAttribute(AttributeKey::COMMENTS, null);
             if ($this->areNodesEqual($singleNode, $availableNode)) {
                 return \true;
             }
@@ -61,7 +61,7 @@ final class NodeComparator
     /**
      * Checks even clone nodes
      */
-    public function areSameNode(\PhpParser\Node $firstNode, \PhpParser\Node $secondNode) : bool
+    public function areSameNode(Node $firstNode, Node $secondNode) : bool
     {
         if ($firstNode === $secondNode) {
             return \true;

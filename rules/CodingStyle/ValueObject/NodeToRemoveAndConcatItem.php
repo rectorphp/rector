@@ -15,16 +15,16 @@ final class NodeToRemoveAndConcatItem
      * @var Node
      */
     private $concatItemNode;
-    public function __construct(\PhpParser\Node\Expr $removedExpr, \PhpParser\Node $concatItemNode)
+    public function __construct(Expr $removedExpr, Node $concatItemNode)
     {
         $this->removedExpr = $removedExpr;
         $this->concatItemNode = $concatItemNode;
     }
-    public function getRemovedExpr() : \PhpParser\Node\Expr
+    public function getRemovedExpr() : Expr
     {
         return $this->removedExpr;
     }
-    public function getConcatItemNode() : \PhpParser\Node
+    public function getConcatItemNode() : Node
     {
         return $this->concatItemNode;
     }

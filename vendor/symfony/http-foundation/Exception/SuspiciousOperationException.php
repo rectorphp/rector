@@ -14,6 +14,6 @@ namespace RectorPrefix20210510\Symfony\Component\HttpFoundation\Exception;
  * Raised when a user has performed an operation that should be considered
  * suspicious from a security perspective.
  */
-class SuspiciousOperationException extends \UnexpectedValueException implements \RectorPrefix20210510\Symfony\Component\HttpFoundation\Exception\RequestExceptionInterface
+class SuspiciousOperationException extends \UnexpectedValueException implements RequestExceptionInterface
 {
 }

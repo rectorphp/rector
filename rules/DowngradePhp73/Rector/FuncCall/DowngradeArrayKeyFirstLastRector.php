@@ -14,11 +14,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\DowngradePhp73\Rector\FuncCall\DowngradeArrayKeyFirstLastRector\DowngradeArrayKeyFirstLastRectorTest
  */
-final class DowngradeArrayKeyFirstLastRector extends \Rector\Core\Rector\AbstractRector
+final class DowngradeArrayKeyFirstLastRector extends AbstractRector
 {
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Downgrade array_key_first() and array_key_last() functions', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Downgrade array_key_first() and array_key_last() functions', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($items)
@@ -44,12 +44,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\FuncCall::class];
+        return [FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if ($this->isName($node, 'array_key_first')) {
             return $this->refactorArrayKeyFirst($node);
@@ -59,20 +59,20 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function refactorArrayKeyFirst(\PhpParser\Node\Expr\FuncCall $funcCall) : \PhpParser\Node\Expr\FuncCall
+    private function refactorArrayKeyFirst(FuncCall $funcCall) : FuncCall
     {
         $array = $funcCall->args[0]->value;
         $resetFuncCall = $this->nodeFactory->createFuncCall('reset', [$array]);
         $this->addNodeBeforeNode($resetFuncCall, $funcCall);
-        $funcCall->name = new \PhpParser\Node\Name('key');
+        $funcCall->name = new Name('key');
         return $funcCall;
     }
-    private function refactorArrayKeyLast(\PhpParser\Node\Expr\FuncCall $funcCall) : \PhpParser\Node\Expr\FuncCall
+    private function refactorArrayKeyLast(FuncCall $funcCall) : FuncCall
     {
         $array = $funcCall->args[0]->value;
         $resetFuncCall = $this->nodeFactory->createFuncCall('end', [$array]);
         $this->addNodeBeforeNode($resetFuncCall, $funcCall);
-        $funcCall->name = new \PhpParser\Node\Name('key');
+        $funcCall->name = new Name('key');
         return $funcCall;
     }
 }

@@ -21,20 +21,20 @@ final class EmptyStringDefaultPropertyFinder
      * @var array<string, PropertyProperty[]>
      */
     private $propertyPropertiesByClassName = [];
-    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
+    public function __construct(BetterNodeFinder $betterNodeFinder)
     {
         $this->betterNodeFinder = $betterNodeFinder;
     }
     /**
      * @return PropertyProperty[]
      */
-    public function find(\PhpParser\Node\Expr\Assign $assign) : array
+    public function find(Assign $assign) : array
     {
-        $classLike = $assign->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
-        if (!$classLike instanceof \PhpParser\Node\Stmt\Class_) {
+        $classLike = $assign->getAttribute(AttributeKey::CLASS_NODE);
+        if (!$classLike instanceof Class_) {
             return [];
         }
-        $className = $assign->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);
+        $className = $assign->getAttribute(AttributeKey::CLASS_NAME);
         if (!\is_string($className)) {
             return [];
         }
@@ -42,8 +42,8 @@ final class EmptyStringDefaultPropertyFinder
             return $this->propertyPropertiesByClassName[$className];
         }
         /** @var PropertyProperty[] $propertyProperties */
-        $propertyProperties = $this->betterNodeFinder->find($classLike, function (\PhpParser\Node $node) : bool {
-            if (!$node instanceof \PhpParser\Node\Stmt\PropertyProperty) {
+        $propertyProperties = $this->betterNodeFinder->find($classLike, function (Node $node) : bool {
+            if (!$node instanceof PropertyProperty) {
                 return \false;
             }
             if ($node->default === null) {
@@ -54,9 +54,9 @@ final class EmptyStringDefaultPropertyFinder
         $this->propertyPropertiesByClassName[$className] = $propertyProperties;
         return $propertyProperties;
     }
-    private function isEmptyString(\PhpParser\Node\Expr $expr) : bool
+    private function isEmptyString(Expr $expr) : bool
     {
-        if (!$expr instanceof \PhpParser\Node\Scalar\String_) {
+        if (!$expr instanceof String_) {
             return \false;
         }
         return $expr->value === '';

@@ -7,7 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Param;
 use Rector\NodeNameResolver\Contract\NodeNameResolverInterface;
 use Rector\NodeNameResolver\NodeNameResolver;
-final class ParamNameResolver implements \Rector\NodeNameResolver\Contract\NodeNameResolverInterface
+final class ParamNameResolver implements NodeNameResolverInterface
 {
     /**
      * @var NodeNameResolver
@@ -16,7 +16,7 @@ final class ParamNameResolver implements \Rector\NodeNameResolver\Contract\NodeN
     /**
      * @required
      */
-    public function autowireParamNameResolver(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver) : void
+    public function autowireParamNameResolver(NodeNameResolver $nodeNameResolver) : void
     {
         $this->nodeNameResolver = $nodeNameResolver;
     }
@@ -25,12 +25,12 @@ final class ParamNameResolver implements \Rector\NodeNameResolver\Contract\NodeN
      */
     public function getNode() : string
     {
-        return \PhpParser\Node\Param::class;
+        return Param::class;
     }
     /**
      * @param Param $node
      */
-    public function resolve(\PhpParser\Node $node) : ?string
+    public function resolve(Node $node) : ?string
     {
         return $this->nodeNameResolver->getName($node->var);
     }

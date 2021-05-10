@@ -14,33 +14,33 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Expression;
 final class ValueAssignFactory
 {
-    public function createDefaultDateTimeAssign(string $propertyName) : \PhpParser\Node\Stmt\Expression
+    public function createDefaultDateTimeAssign(string $propertyName) : Expression
     {
         $propertyFetch = $this->createPropertyFetch($propertyName);
-        $assign = new \PhpParser\Node\Expr\Assign($propertyFetch, $this->createNewDateTime());
-        return new \PhpParser\Node\Stmt\Expression($assign);
+        $assign = new Assign($propertyFetch, $this->createNewDateTime());
+        return new Expression($assign);
     }
-    public function createDefaultDateTimeWithValueAssign(string $propertyName, \PhpParser\Node\Expr $defaultExpr) : \PhpParser\Node\Stmt\Expression
+    public function createDefaultDateTimeWithValueAssign(string $propertyName, Expr $defaultExpr) : Expression
     {
         $propertyFetch = $this->createPropertyFetch($propertyName);
         $newDateTime = $this->createNewDateTime();
         $this->addDateTimeArgumentIfNotDefault($defaultExpr, $newDateTime);
-        $assign = new \PhpParser\Node\Expr\Assign($propertyFetch, $newDateTime);
-        return new \PhpParser\Node\Stmt\Expression($assign);
+        $assign = new Assign($propertyFetch, $newDateTime);
+        return new Expression($assign);
     }
-    private function createPropertyFetch(string $propertyName) : \PhpParser\Node\Expr\PropertyFetch
+    private function createPropertyFetch(string $propertyName) : PropertyFetch
     {
-        return new \PhpParser\Node\Expr\PropertyFetch(new \PhpParser\Node\Expr\Variable('this'), $propertyName);
+        return new PropertyFetch(new Variable('this'), $propertyName);
     }
-    private function createNewDateTime() : \PhpParser\Node\Expr\New_
+    private function createNewDateTime() : New_
     {
-        return new \PhpParser\Node\Expr\New_(new \PhpParser\Node\Name\FullyQualified('DateTime'));
+        return new New_(new FullyQualified('DateTime'));
     }
-    private function addDateTimeArgumentIfNotDefault(\PhpParser\Node\Expr $defaultExpr, \PhpParser\Node\Expr\New_ $dateTimeNew) : void
+    private function addDateTimeArgumentIfNotDefault(Expr $defaultExpr, New_ $dateTimeNew) : void
     {
-        if ($defaultExpr instanceof \PhpParser\Node\Scalar\String_ && ($defaultExpr->value === 'now' || $defaultExpr->value === 'now()')) {
+        if ($defaultExpr instanceof String_ && ($defaultExpr->value === 'now' || $defaultExpr->value === 'now()')) {
             return;
         }
-        $dateTimeNew->args[] = new \PhpParser\Node\Arg($defaultExpr);
+        $dateTimeNew->args[] = new Arg($defaultExpr);
     }
 }

@@ -19,7 +19,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @see https://github.com/sebastianbergmann/phpunit/tree/master/src/Runner/Hook
  * @see \Rector\PHPUnit\Tests\Rector\Class_\TestListenerToHooksRector\TestListenerToHooksRectorTest
  */
-final class TestListenerToHooksRector extends \Rector\Core\Rector\AbstractRector
+final class TestListenerToHooksRector extends AbstractRector
 {
     /**
      * @var array<string, array<class-string|string>>
@@ -38,9 +38,9 @@ final class TestListenerToHooksRector extends \Rector\Core\Rector\AbstractRector
         'startTestSuite' => ['PHPUnit\\Runner\\BeforeFirstTestHook', 'executeBeforeFirstTest'],
         'endTestSuite' => ['PHPUnit\\Runner\\AfterLastTestHook', 'executeAfterLastTest'],
     ];
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Refactor "*TestListener.php" to particular "*Hook.php" files', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Refactor "*TestListener.php" to particular "*Hook.php" files', [new CodeSample(<<<'CODE_SAMPLE'
 namespace App\Tests;
 
 use PHPUnit\Framework\TestListener;
@@ -115,16 +115,16 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Class_::class];
+        return [Class_::class];
     }
     /**
      * Process Node of matched type
      *
      * @param Class_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        if (!$this->isObjectType($node, new \PHPStan\Type\ObjectType('PHPUnit\\Framework\\TestListener'))) {
+        if (!$this->isObjectType($node, new ObjectType('PHPUnit\\Framework\\TestListener'))) {
             return null;
         }
         foreach ($node->implements as $implement) {
@@ -137,7 +137,7 @@ CODE_SAMPLE
         }
         return $node;
     }
-    private function processClassMethod(\PhpParser\Node\Stmt\Class_ $class, \PhpParser\Node\Stmt\ClassMethod $classMethod) : void
+    private function processClassMethod(Class_ $class, ClassMethod $classMethod) : void
     {
         foreach (self::LISTENER_METHOD_TO_HOOK_INTERFACES as $methodName => $hookClassAndMethod) {
             /** @var string $methodName */
@@ -148,8 +148,8 @@ CODE_SAMPLE
             if ($classMethod->stmts === [] || $classMethod->stmts === null) {
                 $this->removeNode($classMethod);
             } else {
-                $class->implements[] = new \PhpParser\Node\Name\FullyQualified($hookClassAndMethod[0]);
-                $classMethod->name = new \PhpParser\Node\Identifier($hookClassAndMethod[1]);
+                $class->implements[] = new FullyQualified($hookClassAndMethod[0]);
+                $classMethod->name = new Identifier($hookClassAndMethod[1]);
             }
         }
     }

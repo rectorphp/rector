@@ -11,14 +11,14 @@ final class ClassLikeAnalyzer
      * @var NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
+    public function __construct(NodeNameResolver $nodeNameResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
     }
     /**
      * @return string[]
      */
-    public function resolvePropertyNames(\PhpParser\Node\Stmt\Class_ $class) : array
+    public function resolvePropertyNames(Class_ $class) : array
     {
         $propertyNames = [];
         foreach ($class->getProperties() as $property) {

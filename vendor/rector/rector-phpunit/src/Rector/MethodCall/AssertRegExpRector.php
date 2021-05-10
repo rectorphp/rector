@@ -19,7 +19,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\PHPUnit\Tests\Rector\MethodCall\AssertRegExpRector\AssertRegExpRectorTest
  */
-final class AssertRegExpRector extends \Rector\Core\Rector\AbstractRector
+final class AssertRegExpRector extends AbstractRector
 {
     /**
      * @var string
@@ -41,32 +41,32 @@ final class AssertRegExpRector extends \Rector\Core\Rector\AbstractRector
      * @var TestsNodeAnalyzer
      */
     private $testsNodeAnalyzer;
-    public function __construct(\Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer $testsNodeAnalyzer)
+    public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer)
     {
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Turns `preg_match` comparisons to their method name alternatives in PHPUnit TestCase', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample('$this->assertSame(1, preg_match("/^Message for ".*"\\.$/", $string), $message);', '$this->assertRegExp("/^Message for ".*"\\.$/", $string, $message);'), new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample('$this->assertEquals(false, preg_match("/^Message for ".*"\\.$/", $string), $message);', '$this->assertNotRegExp("/^Message for ".*"\\.$/", $string, $message);')]);
+        return new RuleDefinition('Turns `preg_match` comparisons to their method name alternatives in PHPUnit TestCase', [new CodeSample('$this->assertSame(1, preg_match("/^Message for ".*"\\.$/", $string), $message);', '$this->assertRegExp("/^Message for ".*"\\.$/", $string, $message);'), new CodeSample('$this->assertEquals(false, preg_match("/^Message for ".*"\\.$/", $string), $message);', '$this->assertNotRegExp("/^Message for ".*"\\.$/", $string, $message);')]);
     }
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\MethodCall::class, \PhpParser\Node\Expr\StaticCall::class];
+        return [MethodCall::class, StaticCall::class];
     }
     /**
      * @param MethodCall|StaticCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if (!$this->testsNodeAnalyzer->isPHPUnitMethodCallNames($node, [self::ASSERT_SAME, self::ASSERT_EQUALS, self::ASSERT_NOT_SAME, self::ASSERT_NOT_EQUALS])) {
             return null;
         }
         /** @var FuncCall|Node $secondArgumentValue */
         $secondArgumentValue = $node->args[1]->value;
-        if (!$secondArgumentValue instanceof \PhpParser\Node\Expr\FuncCall) {
+        if (!$secondArgumentValue instanceof FuncCall) {
             return null;
         }
         if (!$this->isName($secondArgumentValue, 'preg_match')) {
@@ -82,32 +82,32 @@ final class AssertRegExpRector extends \Rector\Core\Rector\AbstractRector
         $this->moveFunctionArgumentsUp($node);
         return $node;
     }
-    private function resolveOldCondition(\PhpParser\Node\Expr $expr) : int
+    private function resolveOldCondition(Expr $expr) : int
     {
-        if ($expr instanceof \PhpParser\Node\Scalar\LNumber) {
+        if ($expr instanceof LNumber) {
             return $expr->value;
         }
-        if ($expr instanceof \PhpParser\Node\Expr\ConstFetch) {
+        if ($expr instanceof ConstFetch) {
             return $this->valueResolver->isTrue($expr) ? 1 : 0;
         }
-        throw new \Rector\Core\Exception\ShouldNotHappenException();
+        throw new ShouldNotHappenException();
     }
     /**
      * @param MethodCall|StaticCall $node
      */
-    private function renameMethod(\PhpParser\Node $node, string $oldMethodName, int $oldCondition) : void
+    private function renameMethod(Node $node, string $oldMethodName, int $oldCondition) : void
     {
         if (\in_array($oldMethodName, [self::ASSERT_SAME, self::ASSERT_EQUALS], \true) && $oldCondition === 1 || \in_array($oldMethodName, [self::ASSERT_NOT_SAME, self::ASSERT_NOT_EQUALS], \true) && $oldCondition === 0) {
-            $node->name = new \PhpParser\Node\Identifier('assertRegExp');
+            $node->name = new Identifier('assertRegExp');
         }
         if (\in_array($oldMethodName, [self::ASSERT_SAME, self::ASSERT_EQUALS], \true) && $oldCondition === 0 || \in_array($oldMethodName, [self::ASSERT_NOT_SAME, self::ASSERT_NOT_EQUALS], \true) && $oldCondition === 1) {
-            $node->name = new \PhpParser\Node\Identifier('assertNotRegExp');
+            $node->name = new Identifier('assertNotRegExp');
         }
     }
     /**
      * @param MethodCall|StaticCall $node
      */
-    private function moveFunctionArgumentsUp(\PhpParser\Node $node) : void
+    private function moveFunctionArgumentsUp(Node $node) : void
     {
         $oldArguments = $node->args;
         /** @var FuncCall $pregMatchFunction */

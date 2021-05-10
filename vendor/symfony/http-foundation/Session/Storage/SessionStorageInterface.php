@@ -110,7 +110,7 @@ interface SessionStorageInterface
     /**
      * Registers a SessionBagInterface for use.
      */
-    public function registerBag(\RectorPrefix20210510\Symfony\Component\HttpFoundation\Session\SessionBagInterface $bag);
+    public function registerBag(SessionBagInterface $bag);
     /**
      * @return MetadataBag
      */

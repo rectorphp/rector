@@ -23,7 +23,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @see https://3v4l.org/8GJEs
  * @see \Rector\Tests\CodeQuality\Rector\FuncCall\CompactToVariablesRector\CompactToVariablesRectorTest
  */
-final class CompactToVariablesRector extends \Rector\Core\Rector\AbstractRector
+final class CompactToVariablesRector extends AbstractRector
 {
     /**
      * @var CompactConverter
@@ -37,15 +37,15 @@ final class CompactToVariablesRector extends \Rector\Core\Rector\AbstractRector
      * @var ArrayCompacter
      */
     private $arrayCompacter;
-    public function __construct(\Rector\CodeQuality\CompactConverter $compactConverter, \Rector\CodeQuality\NodeAnalyzer\ArrayItemsAnalyzer $arrayItemsAnalyzer, \Rector\CodeQuality\NodeAnalyzer\ArrayCompacter $arrayCompacter)
+    public function __construct(CompactConverter $compactConverter, ArrayItemsAnalyzer $arrayItemsAnalyzer, ArrayCompacter $arrayCompacter)
     {
         $this->compactConverter = $compactConverter;
         $this->arrayItemsAnalyzer = $arrayItemsAnalyzer;
         $this->arrayCompacter = $arrayCompacter;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change compact() call to own array', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change compact() call to own array', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -76,12 +76,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\FuncCall::class];
+        return [FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if (!$this->isName($node, 'compact')) {
             return null;
@@ -91,28 +91,28 @@ CODE_SAMPLE
         }
         $firstValue = $node->args[0]->value;
         $firstValueStaticType = $this->getStaticType($firstValue);
-        if (!$firstValueStaticType instanceof \PHPStan\Type\Constant\ConstantArrayType) {
+        if (!$firstValueStaticType instanceof ConstantArrayType) {
             return null;
         }
-        if ($firstValueStaticType->getItemType() instanceof \PHPStan\Type\MixedType) {
+        if ($firstValueStaticType->getItemType() instanceof MixedType) {
             return null;
         }
         return $this->refactorAssignArray($firstValue, $node);
     }
-    private function refactorAssignedArray(\PhpParser\Node\Expr\Assign $assign, \PhpParser\Node\Expr\FuncCall $funcCall, \PhpParser\Node\Expr $expr) : ?\PhpParser\Node\Expr
+    private function refactorAssignedArray(Assign $assign, FuncCall $funcCall, Expr $expr) : ?Expr
     {
-        if (!$assign->expr instanceof \PhpParser\Node\Expr\Array_) {
+        if (!$assign->expr instanceof Array_) {
             return null;
         }
         $array = $assign->expr;
-        $assignScope = $assign->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
-        if (!$assignScope instanceof \PHPStan\Analyser\Scope) {
+        $assignScope = $assign->getAttribute(AttributeKey::SCOPE);
+        if (!$assignScope instanceof Scope) {
             return null;
         }
         $isCompactOfUndefinedVariables = $this->arrayItemsAnalyzer->hasArrayExclusiveDefinedVariableNames($array, $assignScope);
         if ($isCompactOfUndefinedVariables) {
-            $funcCallScope = $funcCall->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
-            if (!$funcCallScope instanceof \PHPStan\Analyser\Scope) {
+            $funcCallScope = $funcCall->getAttribute(AttributeKey::SCOPE);
+            if (!$funcCallScope instanceof Scope) {
                 return null;
             }
             $isCompactOfDefinedVariables = $this->arrayItemsAnalyzer->hasArrayExclusiveUndefinedVariableNames($array, $funcCallScope);
@@ -124,15 +124,15 @@ CODE_SAMPLE
         $this->removeNode($assign);
         $this->arrayCompacter->compactStringToVariableArray($array);
         $assignVariable = $funcCall->args[0]->value;
-        $preAssign = new \PhpParser\Node\Expr\Assign($assignVariable, $array);
-        $currentStatement = $funcCall->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CURRENT_STATEMENT);
+        $preAssign = new Assign($assignVariable, $array);
+        $currentStatement = $funcCall->getAttribute(AttributeKey::CURRENT_STATEMENT);
         $this->addNodeBeforeNode($preAssign, $currentStatement);
         return $expr;
     }
-    private function refactorAssignArray(\PhpParser\Node\Expr $expr, \PhpParser\Node\Expr\FuncCall $funcCall) : ?\PhpParser\Node\Expr
+    private function refactorAssignArray(Expr $expr, FuncCall $funcCall) : ?Expr
     {
         $previousAssign = $this->betterNodeFinder->findPreviousAssignToExpr($expr);
-        if (!$previousAssign instanceof \PhpParser\Node\Expr\Assign) {
+        if (!$previousAssign instanceof Assign) {
             return null;
         }
         return $this->refactorAssignedArray($previousAssign, $funcCall, $expr);

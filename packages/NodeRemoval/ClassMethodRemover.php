@@ -25,18 +25,18 @@ final class ClassMethodRemover
      * @var LivingCodeManipulator
      */
     private $livingCodeManipulator;
-    public function __construct(\Rector\NodeCollector\NodeCollector\NodeRepository $nodeRepository, \Rector\NodeRemoval\NodeRemover $nodeRemover, \Rector\DeadCode\NodeManipulator\LivingCodeManipulator $livingCodeManipulator)
+    public function __construct(NodeRepository $nodeRepository, \Rector\NodeRemoval\NodeRemover $nodeRemover, LivingCodeManipulator $livingCodeManipulator)
     {
         $this->nodeRepository = $nodeRepository;
         $this->nodeRemover = $nodeRemover;
         $this->livingCodeManipulator = $livingCodeManipulator;
     }
-    public function removeClassMethodAndUsages(\PhpParser\Node\Stmt\ClassMethod $classMethod) : void
+    public function removeClassMethodAndUsages(ClassMethod $classMethod) : void
     {
         $this->nodeRemover->removeNode($classMethod);
         $calls = $this->nodeRepository->findCallsByClassMethod($classMethod);
         foreach ($calls as $call) {
-            if ($call instanceof \Rector\NodeCollector\ValueObject\ArrayCallable) {
+            if ($call instanceof ArrayCallable) {
                 continue;
             }
             $this->removeMethodCall($call);
@@ -45,9 +45,9 @@ final class ClassMethodRemover
     /**
      * @param MethodCall|StaticCall $node
      */
-    private function removeMethodCall(\PhpParser\Node $node) : void
+    private function removeMethodCall(Node $node) : void
     {
-        $currentStatement = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CURRENT_STATEMENT);
+        $currentStatement = $node->getAttribute(AttributeKey::CURRENT_STATEMENT);
         foreach ($node->args as $arg) {
             $this->livingCodeManipulator->addLivingCodeBeforeNode($arg->value, $currentStatement);
         }

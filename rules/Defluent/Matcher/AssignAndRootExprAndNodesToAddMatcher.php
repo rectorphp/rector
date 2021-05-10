@@ -33,7 +33,7 @@ final class AssignAndRootExprAndNodesToAddMatcher
      * @var SameClassMethodCallAnalyzer
      */
     private $sameClassMethodCallAnalyzer;
-    public function __construct(\Rector\Defluent\NodeAnalyzer\FluentChainMethodCallNodeAnalyzer $fluentChainMethodCallNodeAnalyzer, \Rector\Defluent\NodeAnalyzer\FluentChainMethodCallRootExtractor $fluentChainMethodCallRootExtractor, \Rector\Defluent\NodeFactory\NonFluentChainMethodCallFactory $nonFluentChainMethodCallFactory, \Rector\Defluent\NodeAnalyzer\SameClassMethodCallAnalyzer $sameClassMethodCallAnalyzer, \Rector\Defluent\Skipper\FluentMethodCallSkipper $fluentMethodCallSkipper)
+    public function __construct(FluentChainMethodCallNodeAnalyzer $fluentChainMethodCallNodeAnalyzer, FluentChainMethodCallRootExtractor $fluentChainMethodCallRootExtractor, NonFluentChainMethodCallFactory $nonFluentChainMethodCallFactory, SameClassMethodCallAnalyzer $sameClassMethodCallAnalyzer, FluentMethodCallSkipper $fluentMethodCallSkipper)
     {
         $this->fluentChainMethodCallNodeAnalyzer = $fluentChainMethodCallNodeAnalyzer;
         $this->fluentChainMethodCallRootExtractor = $fluentChainMethodCallRootExtractor;
@@ -41,20 +41,20 @@ final class AssignAndRootExprAndNodesToAddMatcher
         $this->sameClassMethodCallAnalyzer = $sameClassMethodCallAnalyzer;
         $this->fluentMethodCallSkipper = $fluentMethodCallSkipper;
     }
-    public function match(\PhpParser\Node\Expr\MethodCall $methodCall, string $kind) : ?\Rector\Defluent\ValueObject\AssignAndRootExprAndNodesToAdd
+    public function match(MethodCall $methodCall, string $kind) : ?AssignAndRootExprAndNodesToAdd
     {
         $chainMethodCalls = $this->fluentChainMethodCallNodeAnalyzer->collectAllMethodCallsInChain($methodCall);
         if (!$this->sameClassMethodCallAnalyzer->haveSingleClass($chainMethodCalls)) {
             return null;
         }
         $assignAndRootExpr = $this->fluentChainMethodCallRootExtractor->extractFromMethodCalls($chainMethodCalls, $kind);
-        if (!$assignAndRootExpr instanceof \Rector\Defluent\ValueObject\AssignAndRootExpr) {
+        if (!$assignAndRootExpr instanceof AssignAndRootExpr) {
             return null;
         }
         if ($this->fluentMethodCallSkipper->shouldSkipMethodCalls($assignAndRootExpr, $chainMethodCalls)) {
             return null;
         }
         $nodesToAdd = $this->nonFluentChainMethodCallFactory->createFromAssignObjectAndMethodCalls($assignAndRootExpr, $chainMethodCalls, $kind);
-        return new \Rector\Defluent\ValueObject\AssignAndRootExprAndNodesToAdd($assignAndRootExpr, $nodesToAdd);
+        return new AssignAndRootExprAndNodesToAdd($assignAndRootExpr, $nodesToAdd);
     }
 }

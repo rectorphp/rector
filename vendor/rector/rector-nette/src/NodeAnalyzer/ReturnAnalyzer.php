@@ -18,15 +18,15 @@ final class ReturnAnalyzer
      * @var ScopeNestingComparator
      */
     private $scopeNestingComparator;
-    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\NodeNestingScope\ScopeNestingComparator $scopeNestingComparator)
+    public function __construct(BetterNodeFinder $betterNodeFinder, ScopeNestingComparator $scopeNestingComparator)
     {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->scopeNestingComparator = $scopeNestingComparator;
     }
-    public function findLastClassMethodReturn(\PhpParser\Node\Stmt\ClassMethod $classMethod) : ?\PhpParser\Node\Stmt\Return_
+    public function findLastClassMethodReturn(ClassMethod $classMethod) : ?Return_
     {
         /** @var Return_[] $returns */
-        $returns = $this->betterNodeFinder->findInstanceOf($classMethod, \PhpParser\Node\Stmt\Return_::class);
+        $returns = $this->betterNodeFinder->findInstanceOf($classMethod, Return_::class);
         // put the latest first
         $returns = \array_reverse($returns);
         foreach ($returns as $return) {
@@ -36,9 +36,9 @@ final class ReturnAnalyzer
         }
         return null;
     }
-    public function isBeforeLastReturn(\PhpParser\Node\Expr\Assign $assign, ?\PhpParser\Node\Stmt\Return_ $lastReturn) : bool
+    public function isBeforeLastReturn(Assign $assign, ?Return_ $lastReturn) : bool
     {
-        if (!$lastReturn instanceof \PhpParser\Node\Stmt\Return_) {
+        if (!$lastReturn instanceof Return_) {
             return \true;
         }
         return $lastReturn->getStartTokenPos() < $assign->getStartTokenPos();

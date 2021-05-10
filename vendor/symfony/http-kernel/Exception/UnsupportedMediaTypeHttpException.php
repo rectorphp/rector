@@ -13,7 +13,7 @@ namespace RectorPrefix20210510\Symfony\Component\HttpKernel\Exception;
 /**
  * @author Ben Ramsey <ben@benramsey.com>
  */
-class UnsupportedMediaTypeHttpException extends \RectorPrefix20210510\Symfony\Component\HttpKernel\Exception\HttpException
+class UnsupportedMediaTypeHttpException extends HttpException
 {
     /**
      * @param string|null     $message  The internal exception message

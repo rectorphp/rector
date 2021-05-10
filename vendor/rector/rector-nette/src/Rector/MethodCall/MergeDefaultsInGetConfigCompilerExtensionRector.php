@@ -13,11 +13,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Nette\Tests\Rector\MethodCall\MergeDefaultsInGetConfigCompilerExtensionRector\MergeDefaultsInGetConfigCompilerExtensionRectorTest
  */
-final class MergeDefaultsInGetConfigCompilerExtensionRector extends \Rector\Core\Rector\AbstractRector
+final class MergeDefaultsInGetConfigCompilerExtensionRector extends AbstractRector
 {
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change $this->getConfig($defaults) to array_merge', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change $this->getConfig($defaults) to array_merge', [new CodeSample(<<<'CODE_SAMPLE'
 use Nette\DI\CompilerExtension;
 
 final class SomeExtension extends CompilerExtension
@@ -54,14 +54,14 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\MethodCall::class];
+        return [MethodCall::class];
     }
     /**
      * @param MethodCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        if (!$this->isObjectType($node->var, new \PHPStan\Type\ObjectType('Nette\\DI\\CompilerExtension'))) {
+        if (!$this->isObjectType($node->var, new ObjectType('Nette\\DI\\CompilerExtension'))) {
             return null;
         }
         if (!$this->isName($node->name, 'getConfig')) {
@@ -70,7 +70,7 @@ CODE_SAMPLE
         if (\count($node->args) !== 1) {
             return null;
         }
-        $getConfigMethodCall = new \PhpParser\Node\Expr\MethodCall(new \PhpParser\Node\Expr\Variable('this'), 'getConfig');
+        $getConfigMethodCall = new MethodCall(new Variable('this'), 'getConfig');
         $firstArgValue = $node->args[0]->value;
         return $this->nodeFactory->createFuncCall('array_merge', [$firstArgValue, $getConfigMethodCall]);
     }

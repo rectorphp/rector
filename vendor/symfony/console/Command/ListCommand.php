@@ -20,14 +20,14 @@ use RectorPrefix20210510\Symfony\Component\Console\Output\OutputInterface;
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class ListCommand extends \RectorPrefix20210510\Symfony\Component\Console\Command\Command
+class ListCommand extends Command
 {
     /**
      * {@inheritdoc}
      */
     protected function configure()
     {
-        $this->setName('list')->setDefinition([new \RectorPrefix20210510\Symfony\Component\Console\Input\InputArgument('namespace', \RectorPrefix20210510\Symfony\Component\Console\Input\InputArgument::OPTIONAL, 'The namespace name'), new \RectorPrefix20210510\Symfony\Component\Console\Input\InputOption('raw', null, \RectorPrefix20210510\Symfony\Component\Console\Input\InputOption::VALUE_NONE, 'To output raw command list'), new \RectorPrefix20210510\Symfony\Component\Console\Input\InputOption('format', null, \RectorPrefix20210510\Symfony\Component\Console\Input\InputOption::VALUE_REQUIRED, 'The output format (txt, xml, json, or md)', 'txt')])->setDescription('List commands')->setHelp(<<<'EOF'
+        $this->setName('list')->setDefinition([new InputArgument('namespace', InputArgument::OPTIONAL, 'The namespace name'), new InputOption('raw', null, InputOption::VALUE_NONE, 'To output raw command list'), new InputOption('format', null, InputOption::VALUE_REQUIRED, 'The output format (txt, xml, json, or md)', 'txt')])->setDescription('List commands')->setHelp(<<<'EOF'
 The <info>%command.name%</info> command lists all commands:
 
   <info>%command.full_name%</info>
@@ -49,9 +49,9 @@ EOF
     /**
      * {@inheritdoc}
      */
-    protected function execute(\RectorPrefix20210510\Symfony\Component\Console\Input\InputInterface $input, \RectorPrefix20210510\Symfony\Component\Console\Output\OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $helper = new \RectorPrefix20210510\Symfony\Component\Console\Helper\DescriptorHelper();
+        $helper = new DescriptorHelper();
         $helper->describe($output, $this->getApplication(), ['format' => $input->getOption('format'), 'raw_text' => $input->getOption('raw'), 'namespace' => $input->getArgument('namespace')]);
         return 0;
     }

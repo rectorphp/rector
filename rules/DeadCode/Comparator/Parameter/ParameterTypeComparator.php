@@ -12,11 +12,11 @@ final class ParameterTypeComparator
      * @var MethodReflectionProvider
      */
     private $methodReflectionProvider;
-    public function __construct(\Rector\NodeCollector\Reflection\MethodReflectionProvider $methodReflectionProvider)
+    public function __construct(MethodReflectionProvider $methodReflectionProvider)
     {
         $this->methodReflectionProvider = $methodReflectionProvider;
     }
-    public function compareCurrentClassMethodAndParentStaticCall(\PhpParser\Node\Stmt\ClassMethod $classMethod, \PhpParser\Node\Expr\StaticCall $staticCall) : bool
+    public function compareCurrentClassMethodAndParentStaticCall(ClassMethod $classMethod, StaticCall $staticCall) : bool
     {
         $currentParameterTypes = $this->methodReflectionProvider->provideParameterTypesByClassMethod($classMethod);
         $parentParameterTypes = $this->methodReflectionProvider->provideParameterTypesByStaticCall($staticCall);

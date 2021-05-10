@@ -13,6 +13,6 @@ namespace RectorPrefix20210510\Symfony\Component\HttpFoundation\Exception;
 /**
  * Raised when a user sends a malformed request.
  */
-class BadRequestException extends \UnexpectedValueException implements \RectorPrefix20210510\Symfony\Component\HttpFoundation\Exception\RequestExceptionInterface
+class BadRequestException extends \UnexpectedValueException implements RequestExceptionInterface
 {
 }

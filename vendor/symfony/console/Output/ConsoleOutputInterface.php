@@ -16,7 +16,7 @@ namespace RectorPrefix20210510\Symfony\Component\Console\Output;
  *
  * @author Dariusz Górecki <darek.krk@gmail.com>
  */
-interface ConsoleOutputInterface extends \RectorPrefix20210510\Symfony\Component\Console\Output\OutputInterface
+interface ConsoleOutputInterface extends OutputInterface
 {
     /**
      * Gets the OutputInterface for errors.
@@ -24,6 +24,6 @@ interface ConsoleOutputInterface extends \RectorPrefix20210510\Symfony\Component
      * @return OutputInterface
      */
     public function getErrorOutput();
-    public function setErrorOutput(\RectorPrefix20210510\Symfony\Component\Console\Output\OutputInterface $error);
-    public function section() : \RectorPrefix20210510\Symfony\Component\Console\Output\ConsoleSectionOutput;
+    public function setErrorOutput(OutputInterface $error);
+    public function section() : ConsoleSectionOutput;
 }

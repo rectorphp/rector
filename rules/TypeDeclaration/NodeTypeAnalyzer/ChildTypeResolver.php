@@ -19,20 +19,20 @@ final class ChildTypeResolver
      * @var StaticTypeMapper
      */
     private $staticTypeMapper;
-    public function __construct(\Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper)
+    public function __construct(StaticTypeMapper $staticTypeMapper)
     {
         $this->staticTypeMapper = $staticTypeMapper;
     }
     /**
      * @return Name|NullableType|UnionType|null
      */
-    public function resolveChildTypeNode(\PHPStan\Type\Type $type) : ?\PhpParser\Node
+    public function resolveChildTypeNode(Type $type) : ?Node
     {
-        if ($type instanceof \PHPStan\Type\MixedType) {
+        if ($type instanceof MixedType) {
             return null;
         }
-        if ($type instanceof \Rector\StaticTypeMapper\ValueObject\Type\SelfObjectType || $type instanceof \PHPStan\Type\StaticType) {
-            $type = new \PHPStan\Type\ObjectType($type->getClassName());
+        if ($type instanceof SelfObjectType || $type instanceof StaticType) {
+            $type = new ObjectType($type->getClassName());
         }
         return $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type);
     }

@@ -18,7 +18,7 @@ use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\StaticTypeMapper\TypeFactory\UnionTypeFactory;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
-final class NewTypeResolver implements \Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface
+final class NewTypeResolver implements NodeTypeResolverInterface
 {
     /**
      * @var NodeNameResolver
@@ -32,7 +32,7 @@ final class NewTypeResolver implements \Rector\NodeTypeResolver\Contract\NodeTyp
      * @var UnionTypeFactory
      */
     private $unionTypeFactory;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\NodeAnalyzer\ClassAnalyzer $classAnalyzer, \Rector\StaticTypeMapper\TypeFactory\UnionTypeFactory $unionTypeFactory)
+    public function __construct(NodeNameResolver $nodeNameResolver, ClassAnalyzer $classAnalyzer, UnionTypeFactory $unionTypeFactory)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->classAnalyzer = $classAnalyzer;
@@ -43,53 +43,53 @@ final class NewTypeResolver implements \Rector\NodeTypeResolver\Contract\NodeTyp
      */
     public function getNodeClasses() : array
     {
-        return [\PhpParser\Node\Expr\New_::class];
+        return [New_::class];
     }
     /**
      * @param New_ $node
      */
-    public function resolve(\PhpParser\Node $node) : \PHPStan\Type\Type
+    public function resolve(Node $node) : Type
     {
-        if ($node->class instanceof \PhpParser\Node\Name) {
+        if ($node->class instanceof Name) {
             $className = $this->nodeNameResolver->getName($node->class);
             if (!\in_array($className, ['self', 'parent'], \true)) {
-                return new \PHPStan\Type\ObjectType($className);
+                return new ObjectType($className);
             }
         }
         $isAnonymousClass = $this->classAnalyzer->isAnonymousClass($node->class);
         if ($isAnonymousClass) {
             return $this->resolveAnonymousClassType($node);
         }
-        $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
-        if (!$scope instanceof \PHPStan\Analyser\Scope) {
+        $scope = $node->getAttribute(AttributeKey::SCOPE);
+        if (!$scope instanceof Scope) {
             // new node probably
-            return new \PHPStan\Type\MixedType();
+            return new MixedType();
         }
         return $scope->getType($node);
     }
-    private function resolveAnonymousClassType(\PhpParser\Node\Expr\New_ $new) : \PHPStan\Type\ObjectWithoutClassType
+    private function resolveAnonymousClassType(New_ $new) : ObjectWithoutClassType
     {
-        if (!$new->class instanceof \PhpParser\Node\Stmt\Class_) {
-            return new \PHPStan\Type\ObjectWithoutClassType();
+        if (!$new->class instanceof Class_) {
+            return new ObjectWithoutClassType();
         }
         $types = [];
         /** @var Class_ $class */
         $class = $new->class;
         if ($class->extends !== null) {
             $parentClass = (string) $class->extends;
-            $types[] = new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType($parentClass);
+            $types[] = new FullyQualifiedObjectType($parentClass);
         }
         foreach ($class->implements as $implement) {
             $parentClass = (string) $implement;
-            $types[] = new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType($parentClass);
+            $types[] = new FullyQualifiedObjectType($parentClass);
         }
         if (\count($types) > 1) {
             $unionType = $this->unionTypeFactory->createUnionObjectType($types);
-            return new \PHPStan\Type\ObjectWithoutClassType($unionType);
+            return new ObjectWithoutClassType($unionType);
         }
         if (\count($types) === 1) {
-            return new \PHPStan\Type\ObjectWithoutClassType($types[0]);
+            return new ObjectWithoutClassType($types[0]);
         }
-        return new \PHPStan\Type\ObjectWithoutClassType();
+        return new ObjectWithoutClassType();
     }
 }

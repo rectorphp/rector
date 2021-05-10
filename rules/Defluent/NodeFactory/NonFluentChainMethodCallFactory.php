@@ -29,7 +29,7 @@ final class NonFluentChainMethodCallFactory
      * @var FirstMethodCallVarResolver
      */
     private $firstMethodCallVarResolver;
-    public function __construct(\Rector\Defluent\NodeAnalyzer\FluentChainMethodCallNodeAnalyzer $fluentChainMethodCallNodeAnalyzer, \Rector\Naming\Naming\VariableNaming $variableNaming, \Rector\Defluent\NodeResolver\FirstMethodCallVarResolver $firstMethodCallVarResolver)
+    public function __construct(FluentChainMethodCallNodeAnalyzer $fluentChainMethodCallNodeAnalyzer, VariableNaming $variableNaming, FirstMethodCallVarResolver $firstMethodCallVarResolver)
     {
         $this->fluentChainMethodCallNodeAnalyzer = $fluentChainMethodCallNodeAnalyzer;
         $this->variableNaming = $variableNaming;
@@ -38,21 +38,21 @@ final class NonFluentChainMethodCallFactory
     /**
      * @return Expression[]
      */
-    public function createFromNewAndRootMethodCall(\PhpParser\Node\Expr\New_ $new, \PhpParser\Node\Expr\MethodCall $rootMethodCall) : array
+    public function createFromNewAndRootMethodCall(New_ $new, MethodCall $rootMethodCall) : array
     {
         $variableName = $this->variableNaming->resolveFromNode($new);
         if ($variableName === null) {
-            throw new \Rector\Core\Exception\ShouldNotHappenException();
+            throw new ShouldNotHappenException();
         }
-        $newVariable = new \PhpParser\Node\Expr\Variable($variableName);
+        $newVariable = new Variable($variableName);
         $newStmts = [];
         $newStmts[] = $this->createAssignExpression($newVariable, $new);
         // resolve chain calls
         $chainMethodCalls = $this->fluentChainMethodCallNodeAnalyzer->collectAllMethodCallsInChainWithoutRootOne($rootMethodCall);
         $chainMethodCalls = \array_reverse($chainMethodCalls);
         foreach ($chainMethodCalls as $chainMethodCall) {
-            $methodCall = new \PhpParser\Node\Expr\MethodCall($newVariable, $chainMethodCall->name, $chainMethodCall->args);
-            $newStmts[] = new \PhpParser\Node\Stmt\Expression($methodCall);
+            $methodCall = new MethodCall($newVariable, $chainMethodCall->name, $chainMethodCall->args);
+            $newStmts[] = new Expression($methodCall);
         }
         return $newStmts;
     }
@@ -60,7 +60,7 @@ final class NonFluentChainMethodCallFactory
      * @param MethodCall[] $chainMethodCalls
      * @return Assign[]|MethodCall[]|Return_[]
      */
-    public function createFromAssignObjectAndMethodCalls(\Rector\Defluent\ValueObject\AssignAndRootExpr $assignAndRootExpr, array $chainMethodCalls, string $kind) : array
+    public function createFromAssignObjectAndMethodCalls(AssignAndRootExpr $assignAndRootExpr, array $chainMethodCalls, string $kind) : array
     {
         $nodesToAdd = [];
         $isNewNodeNeeded = $this->isNewNodeNeeded($assignAndRootExpr);
@@ -69,17 +69,17 @@ final class NonFluentChainMethodCallFactory
         }
         $decoupledMethodCalls = $this->createNonFluentMethodCalls($chainMethodCalls, $assignAndRootExpr, $isNewNodeNeeded);
         $nodesToAdd = \array_merge($nodesToAdd, $decoupledMethodCalls);
-        if ($assignAndRootExpr->getSilentVariable() !== null && $kind !== \Rector\Defluent\ValueObject\FluentCallsKind::IN_ARGS) {
+        if ($assignAndRootExpr->getSilentVariable() !== null && $kind !== FluentCallsKind::IN_ARGS) {
             $nodesToAdd[] = $assignAndRootExpr->getReturnSilentVariable();
         }
         return $nodesToAdd;
     }
-    private function createAssignExpression(\PhpParser\Node\Expr\Variable $newVariable, \PhpParser\Node\Expr\New_ $new) : \PhpParser\Node\Stmt\Expression
+    private function createAssignExpression(Variable $newVariable, New_ $new) : Expression
     {
-        $assign = new \PhpParser\Node\Expr\Assign($newVariable, $new);
-        return new \PhpParser\Node\Stmt\Expression($assign);
+        $assign = new Assign($newVariable, $new);
+        return new Expression($assign);
     }
-    private function isNewNodeNeeded(\Rector\Defluent\ValueObject\AssignAndRootExpr $assignAndRootExpr) : bool
+    private function isNewNodeNeeded(AssignAndRootExpr $assignAndRootExpr) : bool
     {
         if ($assignAndRootExpr->isFirstCallFactory()) {
             return \true;
@@ -87,13 +87,13 @@ final class NonFluentChainMethodCallFactory
         if ($assignAndRootExpr->getRootExpr() === $assignAndRootExpr->getAssignExpr()) {
             return \false;
         }
-        return $assignAndRootExpr->getRootExpr() instanceof \PhpParser\Node\Expr\New_;
+        return $assignAndRootExpr->getRootExpr() instanceof New_;
     }
     /**
      * @param MethodCall[] $chainMethodCalls
      * @return Assign[]|MethodCall[]
      */
-    private function createNonFluentMethodCalls(array $chainMethodCalls, \Rector\Defluent\ValueObject\AssignAndRootExpr $assignAndRootExpr, bool $isNewNodeNeeded) : array
+    private function createNonFluentMethodCalls(array $chainMethodCalls, AssignAndRootExpr $assignAndRootExpr, bool $isNewNodeNeeded) : array
     {
         $decoupledMethodCalls = [];
         \end($chainMethodCalls);
@@ -106,8 +106,8 @@ final class NonFluentChainMethodCallFactory
             $chainMethodCall->var = $this->firstMethodCallVarResolver->resolve($assignAndRootExpr, $key);
             $decoupledMethodCalls[] = $chainMethodCall;
         }
-        if ($assignAndRootExpr->getRootExpr() instanceof \PhpParser\Node\Expr\New_ && $assignAndRootExpr->getSilentVariable() !== null) {
-            $decoupledMethodCalls[] = new \PhpParser\Node\Expr\Assign($assignAndRootExpr->getSilentVariable(), $assignAndRootExpr->getRootExpr());
+        if ($assignAndRootExpr->getRootExpr() instanceof New_ && $assignAndRootExpr->getSilentVariable() !== null) {
+            $decoupledMethodCalls[] = new Assign($assignAndRootExpr->getSilentVariable(), $assignAndRootExpr->getRootExpr());
         }
         return \array_reverse($decoupledMethodCalls);
     }

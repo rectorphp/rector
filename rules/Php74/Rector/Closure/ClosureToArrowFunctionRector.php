@@ -17,19 +17,19 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php74\Rector\Closure\ClosureToArrowFunctionRector\ClosureToArrowFunctionRectorTest
  */
-final class ClosureToArrowFunctionRector extends \Rector\Core\Rector\AbstractRector
+final class ClosureToArrowFunctionRector extends AbstractRector
 {
     /**
      * @var ClosureArrowFunctionAnalyzer
      */
     private $closureArrowFunctionAnalyzer;
-    public function __construct(\Rector\Php74\NodeAnalyzer\ClosureArrowFunctionAnalyzer $closureArrowFunctionAnalyzer)
+    public function __construct(ClosureArrowFunctionAnalyzer $closureArrowFunctionAnalyzer)
     {
         $this->closureArrowFunctionAnalyzer = $closureArrowFunctionAnalyzer;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change closure to arrow function', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change closure to arrow function', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($meetups)
@@ -56,21 +56,21 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\Closure::class];
+        return [Closure::class];
     }
     /**
      * @param Closure $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        if (!$this->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::ARROW_FUNCTION)) {
+        if (!$this->isAtLeastPhpVersion(PhpVersionFeature::ARROW_FUNCTION)) {
             return null;
         }
         $returnExpr = $this->closureArrowFunctionAnalyzer->matchArrowFunctionExpr($node);
-        if (!$returnExpr instanceof \PhpParser\Node\Expr) {
+        if (!$returnExpr instanceof Expr) {
             return null;
         }
-        $arrowFunction = new \PhpParser\Node\Expr\ArrowFunction();
+        $arrowFunction = new ArrowFunction();
         $arrowFunction->params = $node->params;
         $arrowFunction->returnType = $node->returnType;
         $arrowFunction->byRef = $node->byRef;

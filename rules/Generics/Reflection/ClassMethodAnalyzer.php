@@ -7,7 +7,7 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 final class ClassMethodAnalyzer
 {
-    public function hasClassMethodDirectly(\PHPStan\Reflection\ClassReflection $classReflection, string $methodName, \PHPStan\Analyser\Scope $scope) : bool
+    public function hasClassMethodDirectly(ClassReflection $classReflection, string $methodName, Scope $scope) : bool
     {
         if (!$classReflection->hasMethod($methodName)) {
             return \false;

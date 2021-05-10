@@ -13,15 +13,15 @@ final class AssignVariableTypeResolver
      * @var NodeTypeResolver
      */
     private $nodeTypeResolver;
-    public function __construct(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver)
+    public function __construct(NodeTypeResolver $nodeTypeResolver)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
-    public function resolve(\PhpParser\Node\Expr\Assign $assign) : \PHPStan\Type\Type
+    public function resolve(Assign $assign) : Type
     {
         $variableType = $this->nodeTypeResolver->resolve($assign->var);
         $exprType = $this->nodeTypeResolver->resolve($assign->expr);
-        if ($exprType instanceof \PHPStan\Type\UnionType) {
+        if ($exprType instanceof UnionType) {
             $variableType = $exprType;
         }
         return $variableType;

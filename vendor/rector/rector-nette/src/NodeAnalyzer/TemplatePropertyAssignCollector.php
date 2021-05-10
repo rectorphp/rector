@@ -46,28 +46,28 @@ final class TemplatePropertyAssignCollector
      * @var ConditionalTemplateParameterAssign[]
      */
     private $conditionalTemplateParameterAssigns = [];
-    public function __construct(\Rector\NodeNestingScope\ScopeNestingComparator $scopeNestingComparator, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Nette\NodeAnalyzer\ThisTemplatePropertyFetchAnalyzer $thisTemplatePropertyFetchAnalyzer, \Rector\Nette\NodeAnalyzer\ReturnAnalyzer $returnAnalyzer)
+    public function __construct(ScopeNestingComparator $scopeNestingComparator, BetterNodeFinder $betterNodeFinder, \Rector\Nette\NodeAnalyzer\ThisTemplatePropertyFetchAnalyzer $thisTemplatePropertyFetchAnalyzer, \Rector\Nette\NodeAnalyzer\ReturnAnalyzer $returnAnalyzer)
     {
         $this->scopeNestingComparator = $scopeNestingComparator;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->thisTemplatePropertyFetchAnalyzer = $thisTemplatePropertyFetchAnalyzer;
         $this->returnAnalyzer = $returnAnalyzer;
     }
-    public function collect(\PhpParser\Node\Stmt\ClassMethod $classMethod) : \Rector\Nette\ValueObject\TemplateParametersAssigns
+    public function collect(ClassMethod $classMethod) : TemplateParametersAssigns
     {
         $this->alwaysTemplateParameterAssigns = [];
         $this->conditionalTemplateParameterAssigns = [];
         $this->lastReturn = $this->returnAnalyzer->findLastClassMethodReturn($classMethod);
         /** @var Assign[] $assigns */
-        $assigns = $this->betterNodeFinder->findInstanceOf((array) $classMethod->stmts, \PhpParser\Node\Expr\Assign::class);
+        $assigns = $this->betterNodeFinder->findInstanceOf((array) $classMethod->stmts, Assign::class);
         foreach ($assigns as $assign) {
             $this->collectVariableFromAssign($assign);
         }
-        return new \Rector\Nette\ValueObject\TemplateParametersAssigns($this->alwaysTemplateParameterAssigns, $this->conditionalTemplateParameterAssigns);
+        return new TemplateParametersAssigns($this->alwaysTemplateParameterAssigns, $this->conditionalTemplateParameterAssigns);
     }
-    private function collectVariableFromAssign(\PhpParser\Node\Expr\Assign $assign) : void
+    private function collectVariableFromAssign(Assign $assign) : void
     {
-        if (!$assign->var instanceof \PhpParser\Node\Expr\PropertyFetch) {
+        if (!$assign->var instanceof PropertyFetch) {
             return;
         }
         $parameterName = $this->thisTemplatePropertyFetchAnalyzer->resolveTemplateParameterNameFromAssign($assign);
@@ -76,22 +76,22 @@ final class TemplatePropertyAssignCollector
         }
         $propertyFetch = $assign->var;
         /** @var array<class-string<\PhpParser\Node>> $nodeTypes */
-        $nodeTypes = \Rector\NodeNestingScope\ValueObject\ControlStructure::CONDITIONAL_NODE_SCOPE_TYPES + [\PhpParser\Node\FunctionLike::class];
+        $nodeTypes = ControlStructure::CONDITIONAL_NODE_SCOPE_TYPES + [FunctionLike::class];
         $foundParent = $this->betterNodeFinder->findParentTypes($propertyFetch->var, $nodeTypes);
         if ($foundParent && $this->scopeNestingComparator->isInBothIfElseBranch($foundParent, $propertyFetch)) {
-            $this->conditionalTemplateParameterAssigns[] = new \Rector\Nette\ValueObject\ConditionalTemplateParameterAssign($assign, $parameterName);
+            $this->conditionalTemplateParameterAssigns[] = new ConditionalTemplateParameterAssign($assign, $parameterName);
             return;
         }
-        if ($foundParent instanceof \PhpParser\Node\Stmt\If_) {
+        if ($foundParent instanceof If_) {
             return;
         }
-        if ($foundParent instanceof \PhpParser\Node\Stmt\Else_) {
+        if ($foundParent instanceof Else_) {
             return;
         }
         // there is a return before this assign, to do not remove it and keep ti
         if (!$this->returnAnalyzer->isBeforeLastReturn($assign, $this->lastReturn)) {
             return;
         }
-        $this->alwaysTemplateParameterAssigns[] = new \Rector\Nette\ValueObject\AlwaysTemplateParameterAssign($assign, $parameterName, $assign->expr);
+        $this->alwaysTemplateParameterAssigns[] = new AlwaysTemplateParameterAssign($assign, $parameterName, $assign->expr);
     }
 }

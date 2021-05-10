@@ -19,7 +19,7 @@ use RectorPrefix20210510\Symfony\Component\HttpFoundation\Response;
  *
  * @final
  */
-class MemoryDataCollector extends \RectorPrefix20210510\Symfony\Component\HttpKernel\DataCollector\DataCollector implements \RectorPrefix20210510\Symfony\Component\HttpKernel\DataCollector\LateDataCollectorInterface
+class MemoryDataCollector extends DataCollector implements LateDataCollectorInterface
 {
     public function __construct()
     {
@@ -28,7 +28,7 @@ class MemoryDataCollector extends \RectorPrefix20210510\Symfony\Component\HttpKe
     /**
      * {@inheritdoc}
      */
-    public function collect(\RectorPrefix20210510\Symfony\Component\HttpFoundation\Request $request, \RectorPrefix20210510\Symfony\Component\HttpFoundation\Response $response, \Throwable $exception = null)
+    public function collect(Request $request, Response $response, \Throwable $exception = null)
     {
         $this->updateMemoryUsage();
     }

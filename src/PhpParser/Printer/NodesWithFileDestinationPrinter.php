@@ -21,13 +21,13 @@ final class NodesWithFileDestinationPrinter
      * @var BetterStandardPrinter
      */
     private $betterStandardPrinter;
-    public function __construct(\Rector\Core\PhpParser\Printer\BetterStandardPrinter $betterStandardPrinter, \PhpParser\Lexer $lexer, \Rector\PostRector\Application\PostFileProcessor $postFileProcessor)
+    public function __construct(\Rector\Core\PhpParser\Printer\BetterStandardPrinter $betterStandardPrinter, Lexer $lexer, PostFileProcessor $postFileProcessor)
     {
         $this->postFileProcessor = $postFileProcessor;
         $this->lexer = $lexer;
         $this->betterStandardPrinter = $betterStandardPrinter;
     }
-    public function printNodesWithFileDestination(\Rector\FileSystemRector\Contract\FileWithNodesInterface $fileWithNodes) : string
+    public function printNodesWithFileDestination(FileWithNodesInterface $fileWithNodes) : string
     {
         $nodes = $this->postFileProcessor->traverse($fileWithNodes->getNodes());
         $prettyPrintContent = $this->betterStandardPrinter->prettyPrintFile($nodes);
@@ -40,7 +40,7 @@ final class NodesWithFileDestinationPrinter
     {
         $tokens = $this->lexer->getTokens();
         $lastToken = \array_pop($tokens);
-        if ($lastToken && isset($lastToken[1]) && \RectorPrefix20210510\Nette\Utils\Strings::contains($lastToken[1], "\n")) {
+        if ($lastToken && isset($lastToken[1]) && Strings::contains($lastToken[1], "\n")) {
             $prettyPrintContent = \trim($prettyPrintContent) . \PHP_EOL;
         }
         return $prettyPrintContent;

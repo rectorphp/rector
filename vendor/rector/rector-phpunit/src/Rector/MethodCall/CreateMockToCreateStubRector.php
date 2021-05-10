@@ -20,7 +20,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\PHPUnit\Tests\Rector\MethodCall\CreateMockToCreateStubRector\CreateMockToCreateStubRectorTest
  */
-final class CreateMockToCreateStubRector extends \Rector\Core\Rector\AbstractRector
+final class CreateMockToCreateStubRector extends AbstractRector
 {
     /**
      * @var MethodCallManipulator
@@ -30,14 +30,14 @@ final class CreateMockToCreateStubRector extends \Rector\Core\Rector\AbstractRec
      * @var TestsNodeAnalyzer
      */
     private $testsNodeAnalyzer;
-    public function __construct(\Rector\Core\NodeManipulator\MethodCallManipulator $methodCallManipulator, \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer $testsNodeAnalyzer)
+    public function __construct(MethodCallManipulator $methodCallManipulator, TestsNodeAnalyzer $testsNodeAnalyzer)
     {
         $this->methodCallManipulator = $methodCallManipulator;
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Replaces createMock() with createStub() when relevant', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Replaces createMock() with createStub() when relevant', [new CodeSample(<<<'CODE_SAMPLE'
 use PHPUnit\Framework\TestCase
 
 class MyTest extends TestCase
@@ -86,12 +86,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\MethodCall::class];
+        return [MethodCall::class];
     }
     /**
      * @param MethodCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if (!$this->testsNodeAnalyzer->isInTestClass($node)) {
             return null;
@@ -99,19 +99,19 @@ CODE_SAMPLE
         if (!$this->isName($node->name, 'createMock')) {
             return null;
         }
-        $parentNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-        if (!$parentNode instanceof \PhpParser\Node\Expr\Assign) {
+        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+        if (!$parentNode instanceof Assign) {
             return null;
         }
         $mockVariable = $parentNode->var;
-        if (!$mockVariable instanceof \PhpParser\Node\Expr\Variable) {
+        if (!$mockVariable instanceof Variable) {
             return null;
         }
         $methodCallNamesOnVariable = $this->methodCallManipulator->findMethodCallNamesOnVariable($mockVariable);
         if (\in_array('expects', $methodCallNamesOnVariable, \true)) {
             return null;
         }
-        $node->name = new \PhpParser\Node\Identifier('createStub');
+        $node->name = new Identifier('createStub');
         return $node;
     }
 }

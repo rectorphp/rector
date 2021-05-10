@@ -29,16 +29,16 @@ final class SetterClassMethodAnalyzer
      * @var NodeRepository
      */
     private $nodeRepository;
-    public function __construct(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeCollector\NodeCollector\NodeRepository $nodeRepository)
+    public function __construct(NodeTypeResolver $nodeTypeResolver, NodeNameResolver $nodeNameResolver, NodeRepository $nodeRepository)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeRepository = $nodeRepository;
     }
-    public function matchNullalbeClassMethodProperty(\PhpParser\Node\Stmt\ClassMethod $classMethod) : ?\PhpParser\Node\Stmt\Property
+    public function matchNullalbeClassMethodProperty(ClassMethod $classMethod) : ?Property
     {
         $propertyFetch = $this->matchNullalbeClassMethodPropertyFetch($classMethod);
-        if (!$propertyFetch instanceof \PhpParser\Node\Expr\PropertyFetch) {
+        if (!$propertyFetch instanceof PropertyFetch) {
             return null;
         }
         return $this->nodeRepository->findPropertyByPropertyFetch($propertyFetch);
@@ -48,20 +48,20 @@ final class SetterClassMethodAnalyzer
      *
      * public function setSomething(?Type $someValue); { <$this->someProperty> = $someValue; }
      */
-    private function matchNullalbeClassMethodPropertyFetch(\PhpParser\Node\Stmt\ClassMethod $classMethod) : ?\PhpParser\Node\Expr\PropertyFetch
+    private function matchNullalbeClassMethodPropertyFetch(ClassMethod $classMethod) : ?PropertyFetch
     {
         $propertyFetch = $this->matchSetterOnlyPropertyFetch($classMethod);
-        if (!$propertyFetch instanceof \PhpParser\Node\Expr\PropertyFetch) {
+        if (!$propertyFetch instanceof PropertyFetch) {
             return null;
         }
         // is nullable param
         $onlyParam = $classMethod->params[0];
-        if (!$this->nodeTypeResolver->isNullableTypeOfSpecificType($onlyParam, \PHPStan\Type\ObjectType::class)) {
+        if (!$this->nodeTypeResolver->isNullableTypeOfSpecificType($onlyParam, ObjectType::class)) {
             return null;
         }
         return $propertyFetch;
     }
-    private function matchSetterOnlyPropertyFetch(\PhpParser\Node\Stmt\ClassMethod $classMethod) : ?\PhpParser\Node\Expr\PropertyFetch
+    private function matchSetterOnlyPropertyFetch(ClassMethod $classMethod) : ?PropertyFetch
     {
         if (\count($classMethod->params) !== 1) {
             return null;
@@ -71,16 +71,16 @@ final class SetterClassMethodAnalyzer
             return null;
         }
         $onlyStmt = $stmts[0] ?? null;
-        if (!$onlyStmt instanceof \PhpParser\Node\Stmt) {
+        if (!$onlyStmt instanceof Stmt) {
             return null;
         }
-        if ($onlyStmt instanceof \PhpParser\Node\Stmt\Expression) {
+        if ($onlyStmt instanceof Expression) {
             $onlyStmt = $onlyStmt->expr;
         }
-        if (!$onlyStmt instanceof \PhpParser\Node\Expr\Assign) {
+        if (!$onlyStmt instanceof Assign) {
             return null;
         }
-        if (!$onlyStmt->var instanceof \PhpParser\Node\Expr\PropertyFetch) {
+        if (!$onlyStmt->var instanceof PropertyFetch) {
             return null;
         }
         $propertyFetch = $onlyStmt->var;
@@ -89,9 +89,9 @@ final class SetterClassMethodAnalyzer
         }
         return $propertyFetch;
     }
-    private function isVariableName(?\PhpParser\Node $node, string $name) : bool
+    private function isVariableName(?Node $node, string $name) : bool
     {
-        if (!$node instanceof \PhpParser\Node\Expr\Variable) {
+        if (!$node instanceof Variable) {
             return \false;
         }
         return $this->nodeNameResolver->isName($node, $name);

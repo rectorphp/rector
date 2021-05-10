@@ -31,7 +31,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\TypeDeclaration\Rector\ClassMethod\AddArrayReturnDocTypeRector\AddArrayReturnDocTypeRectorTest
  */
-final class AddArrayReturnDocTypeRector extends \Rector\Core\Rector\AbstractRector
+final class AddArrayReturnDocTypeRector extends AbstractRector
 {
     /**
      * @var ReturnTypeInferer
@@ -61,7 +61,7 @@ final class AddArrayReturnDocTypeRector extends \Rector\Core\Rector\AbstractRect
      * @var DetailedTypeAnalyzer
      */
     private $detailedTypeAnalyzer;
-    public function __construct(\Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer $returnTypeInferer, \Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnTypeOverrideGuard $classMethodReturnTypeOverrideGuard, \Rector\TypeDeclaration\TypeAnalyzer\AdvancedArrayAnalyzer $advancedArrayAnalyzer, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger, \Rector\Privatization\TypeManipulator\NormalizeTypeToRespectArrayScalarType $normalizeTypeToRespectArrayScalarType, \Rector\DeadCode\PhpDoc\TagRemover\ReturnTagRemover $returnTagRemover, \Rector\TypeDeclaration\NodeTypeAnalyzer\DetailedTypeAnalyzer $detailedTypeAnalyzer)
+    public function __construct(ReturnTypeInferer $returnTypeInferer, ClassMethodReturnTypeOverrideGuard $classMethodReturnTypeOverrideGuard, AdvancedArrayAnalyzer $advancedArrayAnalyzer, PhpDocTypeChanger $phpDocTypeChanger, NormalizeTypeToRespectArrayScalarType $normalizeTypeToRespectArrayScalarType, ReturnTagRemover $returnTagRemover, DetailedTypeAnalyzer $detailedTypeAnalyzer)
     {
         $this->returnTypeInferer = $returnTypeInferer;
         $this->classMethodReturnTypeOverrideGuard = $classMethodReturnTypeOverrideGuard;
@@ -71,9 +71,9 @@ final class AddArrayReturnDocTypeRector extends \Rector\Core\Rector\AbstractRect
         $this->returnTagRemover = $returnTagRemover;
         $this->detailedTypeAnalyzer = $detailedTypeAnalyzer;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Adds @return annotation to array parameters inferred from the rest of the code', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Adds @return annotation to array parameters inferred from the rest of the code', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     /**
@@ -111,18 +111,18 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\ClassMethod::class];
+        return [ClassMethod::class];
     }
     /**
      * @param ClassMethod $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         if ($this->shouldSkip($node, $phpDocInfo)) {
             return null;
         }
-        $inferredReturnType = $this->returnTypeInferer->inferFunctionLikeWithExcludedInferers($node, [\Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer\ReturnTypeDeclarationReturnTypeInferer::class]);
+        $inferredReturnType = $this->returnTypeInferer->inferFunctionLikeWithExcludedInferers($node, [ReturnTypeDeclarationReturnTypeInferer::class]);
         $inferredReturnType = $this->normalizeTypeToRespectArrayScalarType->normalizeToArray($inferredReturnType, $node->returnType);
         $currentReturnType = $phpDocInfo->getReturnType();
         if ($this->classMethodReturnTypeOverrideGuard->shouldSkipClassMethodOldTypeWithNewType($currentReturnType, $inferredReturnType)) {
@@ -133,13 +133,13 @@ CODE_SAMPLE
         }
         $this->phpDocTypeChanger->changeReturnType($phpDocInfo, $inferredReturnType);
         if ($phpDocInfo->hasChanged()) {
-            $node->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::HAS_PHP_DOC_INFO_JUST_CHANGED, \true);
+            $node->setAttribute(AttributeKey::HAS_PHP_DOC_INFO_JUST_CHANGED, \true);
             $this->returnTagRemover->removeReturnTagIfUseless($phpDocInfo, $node);
             return $node;
         }
         return null;
     }
-    private function shouldSkip(\PhpParser\Node\Stmt\ClassMethod $classMethod, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo) : bool
+    private function shouldSkip(ClassMethod $classMethod, PhpDocInfo $phpDocInfo) : bool
     {
         if ($this->shouldSkipClassMethod($classMethod)) {
             return \true;
@@ -148,29 +148,29 @@ CODE_SAMPLE
             return \true;
         }
         $currentPhpDocReturnType = $phpDocInfo->getReturnType();
-        if ($currentPhpDocReturnType instanceof \PHPStan\Type\ArrayType && $currentPhpDocReturnType->getItemType() instanceof \PHPStan\Type\MixedType) {
+        if ($currentPhpDocReturnType instanceof ArrayType && $currentPhpDocReturnType->getItemType() instanceof MixedType) {
             return \true;
         }
         if ($this->hasInheritDoc($classMethod)) {
             return \true;
         }
-        return $currentPhpDocReturnType instanceof \PHPStan\Type\IterableType;
+        return $currentPhpDocReturnType instanceof IterableType;
     }
     /**
      * @deprecated
      * @todo merge to
      * @see \Rector\TypeDeclaration\TypeAlreadyAddedChecker\ReturnTypeAlreadyAddedChecker
      */
-    private function shouldSkipType(\PHPStan\Type\Type $newType, \PHPStan\Type\Type $currentType, \PhpParser\Node\Stmt\ClassMethod $classMethod, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo) : bool
+    private function shouldSkipType(Type $newType, Type $currentType, ClassMethod $classMethod, PhpDocInfo $phpDocInfo) : bool
     {
-        if ($newType instanceof \PHPStan\Type\ArrayType && $this->shouldSkipArrayType($newType, $classMethod, $phpDocInfo)) {
+        if ($newType instanceof ArrayType && $this->shouldSkipArrayType($newType, $classMethod, $phpDocInfo)) {
             return \true;
         }
         if ($this->detailedTypeAnalyzer->isTooDetailed($newType)) {
             return \true;
         }
         // not an array type
-        if ($newType instanceof \PHPStan\Type\VoidType) {
+        if ($newType instanceof VoidType) {
             return \true;
         }
         if ($this->advancedArrayAnalyzer->isMoreSpecificArrayTypeOverride($newType, $classMethod, $phpDocInfo)) {
@@ -181,7 +181,7 @@ CODE_SAMPLE
         }
         return $this->detailedTypeAnalyzer->isTooDetailed($newType);
     }
-    private function shouldSkipClassMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
+    private function shouldSkipClassMethod(ClassMethod $classMethod) : bool
     {
         if ($this->classMethodReturnTypeOverrideGuard->shouldSkipClassMethod($classMethod)) {
             return \true;
@@ -191,30 +191,30 @@ CODE_SAMPLE
         }
         return !$this->isNames($classMethod->returnType, ['array', 'iterable', 'Iterator']);
     }
-    private function hasArrayShapeNode(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
+    private function hasArrayShapeNode(ClassMethod $classMethod) : bool
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
         $returnTagValueNode = $phpDocInfo->getReturnTagValue();
-        if (!$returnTagValueNode instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode) {
+        if (!$returnTagValueNode instanceof ReturnTagValueNode) {
             return \false;
         }
-        if ($returnTagValueNode->type instanceof \PHPStan\PhpDocParser\Ast\Type\GenericTypeNode) {
+        if ($returnTagValueNode->type instanceof GenericTypeNode) {
             return \true;
         }
-        if ($returnTagValueNode->type instanceof \PHPStan\PhpDocParser\Ast\Type\ArrayShapeNode) {
+        if ($returnTagValueNode->type instanceof ArrayShapeNode) {
             return \true;
         }
-        if (!$returnTagValueNode->type instanceof \PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode) {
+        if (!$returnTagValueNode->type instanceof ArrayTypeNode) {
             return \false;
         }
-        return $returnTagValueNode->type->type instanceof \PHPStan\PhpDocParser\Ast\Type\ArrayShapeNode;
+        return $returnTagValueNode->type->type instanceof ArrayShapeNode;
     }
-    private function hasInheritDoc(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
+    private function hasInheritDoc(ClassMethod $classMethod) : bool
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
         return $phpDocInfo->hasInheritDoc();
     }
-    private function shouldSkipArrayType(\PHPStan\Type\ArrayType $arrayType, \PhpParser\Node\Stmt\ClassMethod $classMethod, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo) : bool
+    private function shouldSkipArrayType(ArrayType $arrayType, ClassMethod $classMethod, PhpDocInfo $phpDocInfo) : bool
     {
         if ($this->advancedArrayAnalyzer->isNewAndCurrentTypeBothCallable($arrayType, $phpDocInfo)) {
             return \true;
@@ -224,11 +224,11 @@ CODE_SAMPLE
         }
         return $this->advancedArrayAnalyzer->isMixedOfSpecificOverride($arrayType, $phpDocInfo);
     }
-    private function isGenericTypeToMixedTypeOverride(\PHPStan\Type\Type $newType, \PHPStan\Type\Type $currentType) : bool
+    private function isGenericTypeToMixedTypeOverride(Type $newType, Type $currentType) : bool
     {
-        if ($newType instanceof \PHPStan\Type\Generic\GenericObjectType && $currentType instanceof \PHPStan\Type\MixedType) {
+        if ($newType instanceof GenericObjectType && $currentType instanceof MixedType) {
             $types = $newType->getTypes();
-            if ($types[0] instanceof \PHPStan\Type\MixedType && $types[1] instanceof \PHPStan\Type\ArrayType) {
+            if ($types[0] instanceof MixedType && $types[1] instanceof ArrayType) {
                 return \true;
             }
         }

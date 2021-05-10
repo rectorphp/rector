@@ -27,7 +27,7 @@ final class AnonymousFunctionFactory
      * @var BetterNodeFinder
      */
     private $betterNodeFinder;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
+    public function __construct(NodeNameResolver $nodeNameResolver, BetterNodeFinder $betterNodeFinder)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->betterNodeFinder = $betterNodeFinder;
@@ -37,15 +37,15 @@ final class AnonymousFunctionFactory
      * @param Stmt[] $stmts
      * @param Identifier|Name|NullableType|UnionType|null $returnTypeNode
      */
-    public function create(array $params, array $stmts, ?\PhpParser\Node $returnTypeNode) : \PhpParser\Node\Expr\Closure
+    public function create(array $params, array $stmts, ?Node $returnTypeNode) : Closure
     {
         $useVariables = $this->createUseVariablesFromParams($stmts, $params);
-        $anonymousFunctionNode = new \PhpParser\Node\Expr\Closure();
+        $anonymousFunctionNode = new Closure();
         $anonymousFunctionNode->params = $params;
         foreach ($useVariables as $useVariable) {
-            $anonymousFunctionNode->uses[] = new \PhpParser\Node\Expr\ClosureUse($useVariable);
+            $anonymousFunctionNode->uses[] = new ClosureUse($useVariable);
         }
-        if ($returnTypeNode instanceof \PhpParser\Node) {
+        if ($returnTypeNode instanceof Node) {
             $anonymousFunctionNode->returnType = $returnTypeNode;
         }
         $anonymousFunctionNode->stmts = $stmts;
@@ -62,7 +62,7 @@ final class AnonymousFunctionFactory
         foreach ($paramNodes as $paramNode) {
             $paramNames[] = $this->nodeNameResolver->getName($paramNode);
         }
-        $variableNodes = $this->betterNodeFinder->findInstanceOf($nodes, \PhpParser\Node\Expr\Variable::class);
+        $variableNodes = $this->betterNodeFinder->findInstanceOf($nodes, Variable::class);
         /** @var Variable[] $filteredVariables */
         $filteredVariables = [];
         $alreadyAssignedVariables = [];
@@ -78,8 +78,8 @@ final class AnonymousFunctionFactory
             if (\in_array($variableName, $paramNames, \true)) {
                 continue;
             }
-            $parentNode = $variableNode->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-            if ($parentNode instanceof \PhpParser\Node\Expr\Assign) {
+            $parentNode = $variableNode->getAttribute(AttributeKey::PARENT_NODE);
+            if ($parentNode instanceof Assign) {
                 $alreadyAssignedVariables[] = $variableName;
             }
             if ($this->nodeNameResolver->isNames($variableNode, $alreadyAssignedVariables)) {

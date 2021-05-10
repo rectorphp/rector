@@ -16,16 +16,16 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\CodeQuality\Rector\FuncCall\AddPregQuoteDelimiterRector\AddPregQuoteDelimiterRectorTest
  */
-final class AddPregQuoteDelimiterRector extends \Rector\Core\Rector\AbstractRector
+final class AddPregQuoteDelimiterRector extends AbstractRector
 {
     /**
      * @var string
      * @see https://www.php.net/manual/en/reference.pcre.pattern.modifiers.php
      */
     private const ALL_MODIFIERS = 'imsxeADSUXJu';
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Add preg_quote delimiter when missing', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add preg_quote delimiter when missing', [new CodeSample(<<<'CODE_SAMPLE'
 '#' . preg_quote('name') . '#';
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
@@ -38,12 +38,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\FuncCall::class];
+        return [FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if (!$this->isName($node, 'preg_quote')) {
             return null;
@@ -56,43 +56,43 @@ CODE_SAMPLE
         if ($delimiter === null) {
             return null;
         }
-        $node->args[1] = new \PhpParser\Node\Arg(new \PhpParser\Node\Scalar\String_($delimiter));
+        $node->args[1] = new Arg(new String_($delimiter));
         return $node;
     }
-    private function determineDelimiter(\PhpParser\Node\Expr\FuncCall $funcCall) : ?string
+    private function determineDelimiter(FuncCall $funcCall) : ?string
     {
         $concat = $this->getUppermostConcat($funcCall);
-        if (!$concat instanceof \PhpParser\Node\Expr\BinaryOp\Concat) {
+        if (!$concat instanceof Concat) {
             return null;
         }
         $leftMostConcatNode = $concat->left;
-        while ($leftMostConcatNode instanceof \PhpParser\Node\Expr\BinaryOp\Concat) {
+        while ($leftMostConcatNode instanceof Concat) {
             $leftMostConcatNode = $leftMostConcatNode->left;
         }
         $rightMostConcatNode = $concat->right;
-        while ($rightMostConcatNode instanceof \PhpParser\Node\Expr\BinaryOp\Concat) {
+        while ($rightMostConcatNode instanceof Concat) {
             $rightMostConcatNode = $rightMostConcatNode->right;
         }
-        if (!$leftMostConcatNode instanceof \PhpParser\Node\Scalar\String_) {
+        if (!$leftMostConcatNode instanceof String_) {
             return null;
         }
-        $possibleLeftDelimiter = \RectorPrefix20210510\Nette\Utils\Strings::substring($leftMostConcatNode->value, 0, 1);
-        if (!$rightMostConcatNode instanceof \PhpParser\Node\Scalar\String_) {
+        $possibleLeftDelimiter = Strings::substring($leftMostConcatNode->value, 0, 1);
+        if (!$rightMostConcatNode instanceof String_) {
             return null;
         }
-        $possibleRightDelimiter = \RectorPrefix20210510\Nette\Utils\Strings::substring(\rtrim($rightMostConcatNode->value, self::ALL_MODIFIERS), -1, 1);
+        $possibleRightDelimiter = Strings::substring(\rtrim($rightMostConcatNode->value, self::ALL_MODIFIERS), -1, 1);
         if ($possibleLeftDelimiter === $possibleRightDelimiter) {
             return $possibleLeftDelimiter;
         }
         return null;
     }
-    private function getUppermostConcat(\PhpParser\Node\Expr\FuncCall $funcCall) : ?\PhpParser\Node\Expr\BinaryOp\Concat
+    private function getUppermostConcat(FuncCall $funcCall) : ?Concat
     {
         $upperMostConcat = null;
-        $parent = $funcCall->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-        while ($parent instanceof \PhpParser\Node\Expr\BinaryOp\Concat) {
+        $parent = $funcCall->getAttribute(AttributeKey::PARENT_NODE);
+        while ($parent instanceof Concat) {
             $upperMostConcat = $parent;
-            $parent = $parent->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+            $parent = $parent->getAttribute(AttributeKey::PARENT_NODE);
         }
         return $upperMostConcat;
     }

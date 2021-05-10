@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace PhpParser\Node\Stmt;
 
 use PhpParser\Node;
-class Global_ extends \PhpParser\Node\Stmt
+class Global_ extends Node\Stmt
 {
     /** @var Node\Expr[] Variables */
     public $vars;

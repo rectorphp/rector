@@ -10,6 +10,6 @@ namespace RectorPrefix20210510\Nette\Caching\Storages;
 /**
  * @deprecated
  */
-class NewMemcachedStorage extends \RectorPrefix20210510\Nette\Caching\Storages\MemcachedStorage
+class NewMemcachedStorage extends MemcachedStorage
 {
 }

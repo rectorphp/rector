@@ -17,13 +17,13 @@ use RectorPrefix20210510\Symfony\Component\String\UnicodeString;
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-abstract class Helper implements \RectorPrefix20210510\Symfony\Component\Console\Helper\HelperInterface
+abstract class Helper implements HelperInterface
 {
     protected $helperSet = null;
     /**
      * {@inheritdoc}
      */
-    public function setHelperSet(\RectorPrefix20210510\Symfony\Component\Console\Helper\HelperSet $helperSet = null)
+    public function setHelperSet(HelperSet $helperSet = null)
     {
         $this->helperSet = $helperSet;
     }
@@ -53,7 +53,7 @@ abstract class Helper implements \RectorPrefix20210510\Symfony\Component\Console
     {
         $string ?? ($string = '');
         if (\preg_match('//u', $string)) {
-            return (new \RectorPrefix20210510\Symfony\Component\String\UnicodeString($string))->width(\false);
+            return (new UnicodeString($string))->width(\false);
         }
         if (\false === ($encoding = \mb_detect_encoding($string, null, \true))) {
             return \strlen($string);
@@ -70,7 +70,7 @@ abstract class Helper implements \RectorPrefix20210510\Symfony\Component\Console
     {
         $string ?? ($string = '');
         if (\preg_match('//u', $string)) {
-            return (new \RectorPrefix20210510\Symfony\Component\String\UnicodeString($string))->length();
+            return (new UnicodeString($string))->length();
         }
         if (\false === ($encoding = \mb_detect_encoding($string, null, \true))) {
             return \strlen($string);
@@ -117,11 +117,11 @@ abstract class Helper implements \RectorPrefix20210510\Symfony\Component\Console
         }
         return \sprintf('%d B', $memory);
     }
-    public static function strlenWithoutDecoration(\RectorPrefix20210510\Symfony\Component\Console\Formatter\OutputFormatterInterface $formatter, ?string $string)
+    public static function strlenWithoutDecoration(OutputFormatterInterface $formatter, ?string $string)
     {
         return self::width(self::removeDecoration($formatter, $string));
     }
-    public static function removeDecoration(\RectorPrefix20210510\Symfony\Component\Console\Formatter\OutputFormatterInterface $formatter, ?string $string)
+    public static function removeDecoration(OutputFormatterInterface $formatter, ?string $string)
     {
         $isDecorated = $formatter->isDecorated();
         $formatter->setDecorated(\false);

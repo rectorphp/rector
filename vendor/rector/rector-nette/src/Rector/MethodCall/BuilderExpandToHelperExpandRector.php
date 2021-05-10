@@ -19,11 +19,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Nette\Tests\Rector\MethodCall\BuilderExpandToHelperExpandRector\BuilderExpandToHelperExpandRectorTest
  */
-final class BuilderExpandToHelperExpandRector extends \Rector\Core\Rector\AbstractRector
+final class BuilderExpandToHelperExpandRector extends AbstractRector
 {
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change containerBuilder->expand() to static call with parameters', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change containerBuilder->expand() to static call with parameters', [new CodeSample(<<<'CODE_SAMPLE'
 use Nette\DI\CompilerExtension;
 
 final class SomeClass extends CompilerExtension
@@ -52,23 +52,23 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\MethodCall::class];
+        return [MethodCall::class];
     }
     /**
      * @param MethodCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        if (!$this->isObjectType($node->var, new \PHPStan\Type\ObjectType('Nette\\DI\\ContainerBuilder'))) {
+        if (!$this->isObjectType($node->var, new ObjectType('Nette\\DI\\ContainerBuilder'))) {
             return null;
         }
         if (!$this->isName($node->name, 'expand')) {
             return null;
         }
         $args = $node->args;
-        $getContainerBuilderMethodCall = new \PhpParser\Node\Expr\MethodCall(new \PhpParser\Node\Expr\Variable('this'), 'getContainerBuilder');
-        $parametersPropertyFetch = new \PhpParser\Node\Expr\PropertyFetch($getContainerBuilderMethodCall, 'parameters');
-        $args[] = new \PhpParser\Node\Arg($parametersPropertyFetch);
-        return new \PhpParser\Node\Expr\StaticCall(new \PhpParser\Node\Name\FullyQualified('Nette\\DI\\Helpers'), 'expand', $args);
+        $getContainerBuilderMethodCall = new MethodCall(new Variable('this'), 'getContainerBuilder');
+        $parametersPropertyFetch = new PropertyFetch($getContainerBuilderMethodCall, 'parameters');
+        $args[] = new Arg($parametersPropertyFetch);
+        return new StaticCall(new FullyQualified('Nette\\DI\\Helpers'), 'expand', $args);
     }
 }

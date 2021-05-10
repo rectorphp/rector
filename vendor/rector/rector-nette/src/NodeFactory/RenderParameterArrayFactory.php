@@ -10,18 +10,18 @@ use PhpParser\Node\Scalar\String_;
 use Rector\Nette\Contract\ValueObject\ParameterArrayInterface;
 final class RenderParameterArrayFactory
 {
-    public function createArray(\Rector\Nette\Contract\ValueObject\ParameterArrayInterface $parameterArray) : ?\PhpParser\Node\Expr\Array_
+    public function createArray(ParameterArrayInterface $parameterArray) : ?Array_
     {
         $arrayItems = [];
         foreach ($parameterArray->getTemplateVariables() as $name => $expr) {
-            $arrayItems[] = new \PhpParser\Node\Expr\ArrayItem($expr, new \PhpParser\Node\Scalar\String_($name));
+            $arrayItems[] = new ArrayItem($expr, new String_($name));
         }
         foreach ($parameterArray->getConditionalVariableNames() as $variableName) {
-            $arrayItems[] = new \PhpParser\Node\Expr\ArrayItem(new \PhpParser\Node\Expr\Variable($variableName), new \PhpParser\Node\Scalar\String_($variableName));
+            $arrayItems[] = new ArrayItem(new Variable($variableName), new String_($variableName));
         }
         if ($arrayItems === []) {
             return null;
         }
-        return new \PhpParser\Node\Expr\Array_($arrayItems);
+        return new Array_($arrayItems);
     }
 }

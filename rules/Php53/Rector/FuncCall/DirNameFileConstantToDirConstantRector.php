@@ -14,11 +14,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\Php53\Rector\FuncCall\DirNameFileConstantToDirConstantRector\DirNameFileConstantToDirConstantRectorTest
  */
-final class DirNameFileConstantToDirConstantRector extends \Rector\Core\Rector\AbstractRector
+final class DirNameFileConstantToDirConstantRector extends AbstractRector
 {
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Convert dirname(__FILE__) to __DIR__', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Convert dirname(__FILE__) to __DIR__', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -43,14 +43,14 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\FuncCall::class];
+        return [FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        if (!$this->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::DIR_CONSTANT)) {
+        if (!$this->isAtLeastPhpVersion(PhpVersionFeature::DIR_CONSTANT)) {
             return null;
         }
         if (!$this->isName($node, 'dirname')) {
@@ -60,9 +60,9 @@ CODE_SAMPLE
             return null;
         }
         $firstArgValue = $node->args[0]->value;
-        if (!$firstArgValue instanceof \PhpParser\Node\Scalar\MagicConst\File) {
+        if (!$firstArgValue instanceof File) {
             return null;
         }
-        return new \PhpParser\Node\Scalar\MagicConst\Dir();
+        return new Dir();
     }
 }

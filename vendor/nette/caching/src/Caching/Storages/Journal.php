@@ -22,4 +22,4 @@ interface Journal
      */
     function clean(array $conditions) : ?array;
 }
-\class_exists(\RectorPrefix20210510\Nette\Caching\Storages\IJournal::class);
+\class_exists(IJournal::class);

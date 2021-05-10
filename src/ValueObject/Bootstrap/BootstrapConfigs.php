@@ -17,12 +17,12 @@ final class BootstrapConfigs
     /**
      * @param SmartFileInfo[] $setConfigFileInfos
      */
-    public function __construct(?\Symplify\SmartFileSystem\SmartFileInfo $mainConfigFileInfo, array $setConfigFileInfos)
+    public function __construct(?SmartFileInfo $mainConfigFileInfo, array $setConfigFileInfos)
     {
         $this->mainConfigFileInfo = $mainConfigFileInfo;
         $this->setConfigFileInfos = $setConfigFileInfos;
     }
-    public function getMainConfigFileInfo() : ?\Symplify\SmartFileSystem\SmartFileInfo
+    public function getMainConfigFileInfo() : ?SmartFileInfo
     {
         return $this->mainConfigFileInfo;
     }

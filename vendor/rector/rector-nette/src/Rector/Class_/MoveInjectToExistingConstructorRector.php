@@ -17,7 +17,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Nette\Tests\Rector\Class_\MoveInjectToExistingConstructorRector\MoveInjectToExistingConstructorRectorTest
  */
-final class MoveInjectToExistingConstructorRector extends \Rector\Core\Rector\AbstractRector
+final class MoveInjectToExistingConstructorRector extends AbstractRector
 {
     /**
      * @var PropertyUsageAnalyzer
@@ -27,14 +27,14 @@ final class MoveInjectToExistingConstructorRector extends \Rector\Core\Rector\Ab
      * @var PhpDocTagRemover
      */
     private $phpDocTagRemover;
-    public function __construct(\Rector\FamilyTree\NodeAnalyzer\PropertyUsageAnalyzer $propertyUsageAnalyzer, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover $phpDocTagRemover)
+    public function __construct(PropertyUsageAnalyzer $propertyUsageAnalyzer, PhpDocTagRemover $phpDocTagRemover)
     {
         $this->propertyUsageAnalyzer = $propertyUsageAnalyzer;
         $this->phpDocTagRemover = $phpDocTagRemover;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Move @inject properties to constructor, if there already is one', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Move @inject properties to constructor, if there already is one', [new CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
 {
     /**
@@ -81,26 +81,26 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Class_::class];
+        return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         $injectProperties = $this->getInjectProperties($node);
         if ($injectProperties === []) {
             return null;
         }
-        $constructClassMethod = $node->getMethod(\Rector\Core\ValueObject\MethodName::CONSTRUCT);
-        if (!$constructClassMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
+        $constructClassMethod = $node->getMethod(MethodName::CONSTRUCT);
+        if (!$constructClassMethod instanceof ClassMethod) {
             return null;
         }
         foreach ($injectProperties as $injectProperty) {
             $this->removeInjectAnnotation($injectProperty);
             $this->changePropertyVisibility($injectProperty);
             $this->propertyAdder->addPropertyToCollector($injectProperty);
-            if ($this->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::PROPERTY_PROMOTION)) {
+            if ($this->isAtLeastPhpVersion(PhpVersionFeature::PROPERTY_PROMOTION)) {
                 $this->removeNode($injectProperty);
             }
         }
@@ -109,13 +109,13 @@ CODE_SAMPLE
     /**
      * @return Property[]
      */
-    private function getInjectProperties(\PhpParser\Node\Stmt\Class_ $class) : array
+    private function getInjectProperties(Class_ $class) : array
     {
-        return \array_filter($class->getProperties(), function (\PhpParser\Node\Stmt\Property $property) : bool {
+        return \array_filter($class->getProperties(), function (Property $property) : bool {
             return $this->isInjectProperty($property);
         });
     }
-    private function removeInjectAnnotation(\PhpParser\Node\Stmt\Property $property) : void
+    private function removeInjectAnnotation(Property $property) : void
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
         $injectTagValueNode = $phpDocInfo->getByName('inject');
@@ -123,7 +123,7 @@ CODE_SAMPLE
             $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $injectTagValueNode);
         }
     }
-    private function changePropertyVisibility(\PhpParser\Node\Stmt\Property $injectProperty) : void
+    private function changePropertyVisibility(Property $injectProperty) : void
     {
         if ($this->propertyUsageAnalyzer->isPropertyFetchedInChildClass($injectProperty)) {
             $this->visibilityManipulator->makeProtected($injectProperty);
@@ -131,7 +131,7 @@ CODE_SAMPLE
             $this->visibilityManipulator->makePrivate($injectProperty);
         }
     }
-    private function isInjectProperty(\PhpParser\Node\Stmt\Property $property) : bool
+    private function isInjectProperty(Property $property) : bool
     {
         if (!$property->isPublic()) {
             return \false;

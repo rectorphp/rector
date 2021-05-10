@@ -13,32 +13,32 @@ final class ObjectTypeComparator
      * E.g. current E, new type A, E extends A → true
      * Also for closure/callable, iterable/Traversable/Iterator/Generator
      */
-    public function isCurrentObjectTypeSubType(\PHPStan\Type\Type $currentType, \PHPStan\Type\Type $newType) : bool
+    public function isCurrentObjectTypeSubType(Type $currentType, Type $newType) : bool
     {
-        if ($newType instanceof \PHPStan\Type\ObjectWithoutClassType && $currentType instanceof \PHPStan\Type\ObjectType) {
+        if ($newType instanceof ObjectWithoutClassType && $currentType instanceof ObjectType) {
             return \true;
         }
         if ($this->isBothCallable($currentType, $newType)) {
             return \true;
         }
-        if (!$currentType instanceof \PHPStan\Type\ObjectType) {
+        if (!$currentType instanceof ObjectType) {
             return \false;
         }
-        if (!$newType instanceof \PHPStan\Type\ObjectType) {
+        if (!$newType instanceof ObjectType) {
             return \false;
         }
         return $newType->isSuperTypeOf($currentType)->yes();
     }
-    private function isBothCallable(\PHPStan\Type\Type $currentType, \PHPStan\Type\Type $newType) : bool
+    private function isBothCallable(Type $currentType, Type $newType) : bool
     {
-        if ($currentType instanceof \PHPStan\Type\CallableType && $this->isClosure($newType)) {
+        if ($currentType instanceof CallableType && $this->isClosure($newType)) {
             return \true;
         }
-        return $newType instanceof \PHPStan\Type\CallableType && $this->isClosure($currentType);
+        return $newType instanceof CallableType && $this->isClosure($currentType);
     }
-    private function isClosure(\PHPStan\Type\Type $type) : bool
+    private function isClosure(Type $type) : bool
     {
-        $closureObjectType = new \PHPStan\Type\ObjectType('Closure');
+        $closureObjectType = new ObjectType('Closure');
         return $closureObjectType->equals($type);
     }
 }

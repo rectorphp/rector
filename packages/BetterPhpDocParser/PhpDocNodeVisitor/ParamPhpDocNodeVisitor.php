@@ -9,25 +9,25 @@ use Rector\BetterPhpDocParser\Attributes\AttributeMirrorer;
 use Rector\BetterPhpDocParser\Contract\BasePhpDocNodeVisitorInterface;
 use Rector\BetterPhpDocParser\ValueObject\PhpDoc\VariadicAwareParamTagValueNode;
 use RectorPrefix20210510\Symplify\SimplePhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor;
-final class ParamPhpDocNodeVisitor extends \RectorPrefix20210510\Symplify\SimplePhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor implements \Rector\BetterPhpDocParser\Contract\BasePhpDocNodeVisitorInterface
+final class ParamPhpDocNodeVisitor extends AbstractPhpDocNodeVisitor implements BasePhpDocNodeVisitorInterface
 {
     /**
      * @var AttributeMirrorer
      */
     private $attributeMirrorer;
-    public function __construct(\Rector\BetterPhpDocParser\Attributes\AttributeMirrorer $attributeMirrorer)
+    public function __construct(AttributeMirrorer $attributeMirrorer)
     {
         $this->attributeMirrorer = $attributeMirrorer;
     }
-    public function enterNode(\PHPStan\PhpDocParser\Ast\Node $node) : ?\PHPStan\PhpDocParser\Ast\Node
+    public function enterNode(Node $node) : ?Node
     {
-        if (!$node instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode) {
+        if (!$node instanceof ParamTagValueNode) {
             return null;
         }
-        if ($node instanceof \Rector\BetterPhpDocParser\ValueObject\PhpDoc\VariadicAwareParamTagValueNode) {
+        if ($node instanceof VariadicAwareParamTagValueNode) {
             return null;
         }
-        $variadicAwareParamTagValueNode = new \Rector\BetterPhpDocParser\ValueObject\PhpDoc\VariadicAwareParamTagValueNode($node->type, $node->isVariadic, $node->parameterName, $node->description);
+        $variadicAwareParamTagValueNode = new VariadicAwareParamTagValueNode($node->type, $node->isVariadic, $node->parameterName, $node->description);
         $this->attributeMirrorer->mirror($node, $variadicAwareParamTagValueNode);
         return $variadicAwareParamTagValueNode;
     }

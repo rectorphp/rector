@@ -61,17 +61,17 @@ class FlattenException
         $e = new static();
         $e->setMessage($exception->getMessage());
         $e->setCode($exception->getCode());
-        if ($exception instanceof \RectorPrefix20210510\Symfony\Component\HttpKernel\Exception\HttpExceptionInterface) {
+        if ($exception instanceof HttpExceptionInterface) {
             $statusCode = $exception->getStatusCode();
             $headers = \array_merge($headers, $exception->getHeaders());
-        } elseif ($exception instanceof \RectorPrefix20210510\Symfony\Component\HttpFoundation\Exception\RequestExceptionInterface) {
+        } elseif ($exception instanceof RequestExceptionInterface) {
             $statusCode = 400;
         }
         if (null === $statusCode) {
             $statusCode = 500;
         }
-        if (\class_exists(\RectorPrefix20210510\Symfony\Component\HttpFoundation\Response::class) && isset(\RectorPrefix20210510\Symfony\Component\HttpFoundation\Response::$statusTexts[$statusCode])) {
-            $statusText = \RectorPrefix20210510\Symfony\Component\HttpFoundation\Response::$statusTexts[$statusCode];
+        if (\class_exists(Response::class) && isset(Response::$statusTexts[$statusCode])) {
+            $statusText = Response::$statusTexts[$statusCode];
         } else {
             $statusText = 'Whoops, looks like something went wrong.';
         }

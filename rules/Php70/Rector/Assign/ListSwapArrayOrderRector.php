@@ -16,36 +16,36 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog http://php.net/manual/en/migration70.incompatible.php#migration70.incompatible.variable-handling.list
  * @see \Rector\Tests\Php70\Rector\Assign\ListSwapArrayOrderRector\ListSwapArrayOrderRectorTest
  */
-final class ListSwapArrayOrderRector extends \Rector\Core\Rector\AbstractRector
+final class ListSwapArrayOrderRector extends AbstractRector
 {
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('list() assigns variables in reverse order - relevant in array assign', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample('list($a[], $a[]) = [1, 2];', 'list($a[], $a[]) = array_reverse([1, 2]);')]);
+        return new RuleDefinition('list() assigns variables in reverse order - relevant in array assign', [new CodeSample('list($a[], $a[]) = [1, 2];', 'list($a[], $a[]) = array_reverse([1, 2]);')]);
     }
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\Assign::class];
+        return [Assign::class];
     }
     /**
      * @param Assign $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        if (!$this->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::LIST_SWAP_ORDER)) {
+        if (!$this->isAtLeastPhpVersion(PhpVersionFeature::LIST_SWAP_ORDER)) {
             return null;
         }
-        if (!$node->var instanceof \PhpParser\Node\Expr\List_) {
+        if (!$node->var instanceof List_) {
             return null;
         }
         $printedVariables = [];
         foreach ($node->var->items as $arrayItem) {
-            if (!$arrayItem instanceof \PhpParser\Node\Expr\ArrayItem) {
+            if (!$arrayItem instanceof ArrayItem) {
                 continue;
             }
-            if ($arrayItem->value instanceof \PhpParser\Node\Expr\ArrayDimFetch && $arrayItem->value->dim === null) {
+            if ($arrayItem->value instanceof ArrayDimFetch && $arrayItem->value->dim === null) {
                 $printedVariables[] = $this->print($arrayItem->value->var);
             } else {
                 return null;

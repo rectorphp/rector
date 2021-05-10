@@ -11,7 +11,7 @@ use PHPStan\Reflection\BetterReflection\SourceLocator\OptimizedSingleFileSourceL
 use Rector\NodeTypeResolver\Contract\SourceLocatorProviderInterface;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use Symplify\SmartFileSystem\SmartFileInfo;
-final class DynamicSourceLocatorProvider implements \Rector\NodeTypeResolver\Contract\SourceLocatorProviderInterface
+final class DynamicSourceLocatorProvider implements SourceLocatorProviderInterface
 {
     /**
      * @var string[]
@@ -29,11 +29,11 @@ final class DynamicSourceLocatorProvider implements \Rector\NodeTypeResolver\Con
      * @var SourceLocator|null
      */
     private $cachedSourceLocator;
-    public function __construct(\PHPStan\Reflection\BetterReflection\SourceLocator\FileNodesFetcher $fileNodesFetcher)
+    public function __construct(FileNodesFetcher $fileNodesFetcher)
     {
         $this->fileNodesFetcher = $fileNodesFetcher;
     }
-    public function setFileInfo(\Symplify\SmartFileSystem\SmartFileInfo $fileInfo) : void
+    public function setFileInfo(SmartFileInfo $fileInfo) : void
     {
         $this->files = [$fileInfo->getRealPath()];
     }
@@ -44,21 +44,21 @@ final class DynamicSourceLocatorProvider implements \Rector\NodeTypeResolver\Con
     {
         $this->files = \array_merge($this->files, $files);
     }
-    public function provide() : \PHPStan\BetterReflection\SourceLocator\Type\SourceLocator
+    public function provide() : SourceLocator
     {
         // do not cache for PHPUnit, as in test every fixture is different
-        $isPHPUnitRun = \Rector\Testing\PHPUnit\StaticPHPUnitEnvironment::isPHPUnitRun();
+        $isPHPUnitRun = StaticPHPUnitEnvironment::isPHPUnitRun();
         if ($this->cachedSourceLocator && $isPHPUnitRun === \false) {
             return $this->cachedSourceLocator;
         }
         $sourceLocators = [];
         foreach ($this->files as $file) {
-            $sourceLocators[] = new \PHPStan\Reflection\BetterReflection\SourceLocator\OptimizedSingleFileSourceLocator($this->fileNodesFetcher, $file);
+            $sourceLocators[] = new OptimizedSingleFileSourceLocator($this->fileNodesFetcher, $file);
         }
         foreach ($this->filesByDirectory as $files) {
-            $sourceLocators[] = new \PHPStan\Reflection\BetterReflection\SourceLocator\OptimizedDirectorySourceLocator($this->fileNodesFetcher, $files);
+            $sourceLocators[] = new OptimizedDirectorySourceLocator($this->fileNodesFetcher, $files);
         }
-        $this->cachedSourceLocator = new \PHPStan\BetterReflection\SourceLocator\Type\AggregateSourceLocator($sourceLocators);
+        $this->cachedSourceLocator = new AggregateSourceLocator($sourceLocators);
         return $this->cachedSourceLocator;
     }
     /**

@@ -18,7 +18,7 @@ final class StaticAnalyzer
      * @var ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(\Rector\NodeCollector\NodeCollector\NodeRepository $nodeRepository, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
+    public function __construct(NodeRepository $nodeRepository, ReflectionProvider $reflectionProvider)
     {
         $this->nodeRepository = $nodeRepository;
         $this->reflectionProvider = $reflectionProvider;
@@ -45,12 +45,12 @@ final class StaticAnalyzer
         $methodReflection = $classReflection->getNativeMethod($methodName);
         return $methodReflection->isStatic();
     }
-    private function hasStaticAnnotation(string $methodName, \PHPStan\Reflection\ClassReflection $classReflection) : bool
+    private function hasStaticAnnotation(string $methodName, ClassReflection $classReflection) : bool
     {
         $resolvedPhpDocBlock = $classReflection->getResolvedPhpDoc();
-        if (!$resolvedPhpDocBlock instanceof \PHPStan\PhpDoc\ResolvedPhpDocBlock) {
+        if (!$resolvedPhpDocBlock instanceof ResolvedPhpDocBlock) {
             return \false;
         }
-        return (bool) \RectorPrefix20210510\Nette\Utils\Strings::match($resolvedPhpDocBlock->getPhpDocString(), '#@method\\s*static\\s*(.*?)\\b' . $methodName . '\\b#');
+        return (bool) Strings::match($resolvedPhpDocBlock->getPhpDocString(), '#@method\\s*static\\s*(.*?)\\b' . $methodName . '\\b#');
     }
 }

@@ -18,15 +18,15 @@ final class ParamContravariantDetector
      * @var NodeRepository
      */
     private $nodeRepository;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeCollector\NodeCollector\NodeRepository $nodeRepository)
+    public function __construct(NodeNameResolver $nodeNameResolver, NodeRepository $nodeRepository)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeRepository = $nodeRepository;
     }
-    public function hasParentMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod, \PHPStan\Analyser\Scope $scope) : bool
+    public function hasParentMethod(ClassMethod $classMethod, Scope $scope) : bool
     {
         $classReflection = $scope->getClassReflection();
-        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
+        if (!$classReflection instanceof ClassReflection) {
             return \false;
         }
         foreach ($classReflection->getAncestors() as $ancestorClassReflection) {
@@ -40,10 +40,10 @@ final class ParamContravariantDetector
         }
         return \false;
     }
-    public function hasChildMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod, \PHPStan\Analyser\Scope $classScope) : bool
+    public function hasChildMethod(ClassMethod $classMethod, Scope $classScope) : bool
     {
         $classReflection = $classScope->getClassReflection();
-        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
+        if (!$classReflection instanceof ClassReflection) {
             return \false;
         }
         $methodName = $this->nodeNameResolver->getName($classMethod);

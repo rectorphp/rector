@@ -18,11 +18,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\NetteToSymfony\Tests\Rector\Class_\NetteTesterClassToPHPUnitClassRector\NetteTesterClassToPHPUnitClassRectorTest
  */
-final class NetteTesterClassToPHPUnitClassRector extends \Rector\Core\Rector\AbstractRector
+final class NetteTesterClassToPHPUnitClassRector extends AbstractRector
 {
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Migrate Nette Tester test case to PHPUnit', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Migrate Nette Tester test case to PHPUnit', [new CodeSample(<<<'CODE_SAMPLE'
 namespace KdybyTests\Doctrine;
 
 use Tester\TestCase;
@@ -65,52 +65,52 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Class_::class, \PhpParser\Node\Expr\Include_::class, \PhpParser\Node\Expr\MethodCall::class];
+        return [Class_::class, Include_::class, MethodCall::class];
     }
     /**
      * @param Class_|Include_|MethodCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        if ($node instanceof \PhpParser\Node\Expr\Include_) {
+        if ($node instanceof Include_) {
             $this->processAboveTestInclude($node);
             return null;
         }
-        if ($node instanceof \PhpParser\Node\Expr\MethodCall) {
+        if ($node instanceof MethodCall) {
             $this->processUnderTestRun($node);
             return null;
         }
-        if (!$this->isObjectType($node, new \PHPStan\Type\ObjectType('Tester\\TestCase'))) {
+        if (!$this->isObjectType($node, new ObjectType('Tester\\TestCase'))) {
             return null;
         }
         $this->processExtends($node);
         $this->processMethods($node);
         return $node;
     }
-    private function processAboveTestInclude(\PhpParser\Node\Expr\Include_ $include) : void
+    private function processAboveTestInclude(Include_ $include) : void
     {
-        $classLike = $include->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
-        if (!$classLike instanceof \PhpParser\Node\Stmt\ClassLike) {
+        $classLike = $include->getAttribute(AttributeKey::CLASS_NODE);
+        if (!$classLike instanceof ClassLike) {
             $this->removeNode($include);
         }
     }
-    private function processUnderTestRun(\PhpParser\Node\Expr\MethodCall $methodCall) : void
+    private function processUnderTestRun(MethodCall $methodCall) : void
     {
-        if (!$this->isObjectType($methodCall->var, new \PHPStan\Type\ObjectType('Tester\\TestCase'))) {
+        if (!$this->isObjectType($methodCall->var, new ObjectType('Tester\\TestCase'))) {
             return;
         }
         if ($this->isName($methodCall->name, 'run')) {
             $this->removeNode($methodCall);
         }
     }
-    private function processExtends(\PhpParser\Node\Stmt\Class_ $class) : void
+    private function processExtends(Class_ $class) : void
     {
-        $class->extends = new \PhpParser\Node\Name\FullyQualified('PHPUnit\\Framework\\TestCase');
+        $class->extends = new FullyQualified('PHPUnit\\Framework\\TestCase');
     }
-    private function processMethods(\PhpParser\Node\Stmt\Class_ $class) : void
+    private function processMethods(Class_ $class) : void
     {
         foreach ($class->getMethods() as $classMethod) {
-            if ($this->isNames($classMethod, [\Rector\Core\ValueObject\MethodName::SET_UP, \Rector\Core\ValueObject\MethodName::TEAR_DOWN])) {
+            if ($this->isNames($classMethod, [MethodName::SET_UP, MethodName::TEAR_DOWN])) {
                 $this->visibilityManipulator->makeProtected($classMethod);
             }
         }

@@ -10,6 +10,6 @@
  */
 namespace RectorPrefix20210510\Symfony\Component\String\Exception;
 
-class InvalidArgumentException extends \InvalidArgumentException implements \RectorPrefix20210510\Symfony\Component\String\Exception\ExceptionInterface
+class InvalidArgumentException extends \InvalidArgumentException implements ExceptionInterface
 {
 }

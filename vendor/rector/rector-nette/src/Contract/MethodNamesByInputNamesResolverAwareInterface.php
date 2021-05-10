@@ -6,5 +6,5 @@ namespace Rector\Nette\Contract;
 use Rector\Nette\NodeResolver\MethodNamesByInputNamesResolver;
 interface MethodNamesByInputNamesResolverAwareInterface
 {
-    public function setResolver(\Rector\Nette\NodeResolver\MethodNamesByInputNamesResolver $methodNamesByInputNamesResolver) : void;
+    public function setResolver(MethodNamesByInputNamesResolver $methodNamesByInputNamesResolver) : void;
 }

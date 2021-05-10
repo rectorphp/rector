@@ -6,7 +6,7 @@ namespace RectorPrefix20210510\Symplify\Skipper\Tests\SkipCriteriaResolver\Skipp
 use RectorPrefix20210510\Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
 use RectorPrefix20210510\Symplify\Skipper\HttpKernel\SkipperKernel;
 use RectorPrefix20210510\Symplify\Skipper\SkipCriteriaResolver\SkippedPathsResolver;
-final class SkippedPathsResolverTest extends \RectorPrefix20210510\Symplify\PackageBuilder\Testing\AbstractKernelTestCase
+final class SkippedPathsResolverTest extends AbstractKernelTestCase
 {
     /**
      * @var SkippedPathsResolver
@@ -14,8 +14,8 @@ final class SkippedPathsResolverTest extends \RectorPrefix20210510\Symplify\Pack
     private $skippedPathsResolver;
     protected function setUp() : void
     {
-        $this->bootKernelWithConfigs(\RectorPrefix20210510\Symplify\Skipper\HttpKernel\SkipperKernel::class, [__DIR__ . '/config/config.php']);
-        $this->skippedPathsResolver = $this->getService(\RectorPrefix20210510\Symplify\Skipper\SkipCriteriaResolver\SkippedPathsResolver::class);
+        $this->bootKernelWithConfigs(SkipperKernel::class, [__DIR__ . '/config/config.php']);
+        $this->skippedPathsResolver = $this->getService(SkippedPathsResolver::class);
     }
     public function test() : void
     {

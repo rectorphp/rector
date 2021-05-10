@@ -7,7 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Use_;
 use Rector\NodeNameResolver\Contract\NodeNameResolverInterface;
 use Rector\NodeNameResolver\NodeNameResolver;
-final class UseNameResolver implements \Rector\NodeNameResolver\Contract\NodeNameResolverInterface
+final class UseNameResolver implements NodeNameResolverInterface
 {
     /**
      * @var NodeNameResolver
@@ -16,7 +16,7 @@ final class UseNameResolver implements \Rector\NodeNameResolver\Contract\NodeNam
     /**
      * @required
      */
-    public function autowireUseNameResolver(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver) : void
+    public function autowireUseNameResolver(NodeNameResolver $nodeNameResolver) : void
     {
         $this->nodeNameResolver = $nodeNameResolver;
     }
@@ -25,12 +25,12 @@ final class UseNameResolver implements \Rector\NodeNameResolver\Contract\NodeNam
      */
     public function getNode() : string
     {
-        return \PhpParser\Node\Stmt\Use_::class;
+        return Use_::class;
     }
     /**
      * @param Use_ $node
      */
-    public function resolve(\PhpParser\Node $node) : ?string
+    public function resolve(Node $node) : ?string
     {
         if ($node->uses === []) {
             return null;

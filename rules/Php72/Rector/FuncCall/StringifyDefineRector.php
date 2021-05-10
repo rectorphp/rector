@@ -15,19 +15,19 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @see https://3v4l.org/YiTeP
  * @see \Rector\Tests\Php72\Rector\FuncCall\StringifyDefineRector\StringifyDefineRectorTest
  */
-final class StringifyDefineRector extends \Rector\Core\Rector\AbstractRector
+final class StringifyDefineRector extends AbstractRector
 {
     /**
      * @var StringTypeAnalyzer
      */
     private $stringTypeAnalyzer;
-    public function __construct(\Rector\NodeTypeResolver\TypeAnalyzer\StringTypeAnalyzer $stringTypeAnalyzer)
+    public function __construct(StringTypeAnalyzer $stringTypeAnalyzer)
     {
         $this->stringTypeAnalyzer = $stringTypeAnalyzer;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Make first argument of define() string', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Make first argument of define() string', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run(int $a)
@@ -54,12 +54,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\FuncCall::class];
+        return [FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if (!$this->isName($node, 'define')) {
             return null;
@@ -67,12 +67,12 @@ CODE_SAMPLE
         if ($this->stringTypeAnalyzer->isStringOrUnionStringOnlyType($node->args[0]->value)) {
             return null;
         }
-        if ($node->args[0]->value instanceof \PhpParser\Node\Expr\ConstFetch) {
+        if ($node->args[0]->value instanceof ConstFetch) {
             $nodeName = $this->getName($node->args[0]->value);
             if ($nodeName === null) {
                 return null;
             }
-            $node->args[0]->value = new \PhpParser\Node\Scalar\String_($nodeName);
+            $node->args[0]->value = new String_($nodeName);
         }
         return $node;
     }

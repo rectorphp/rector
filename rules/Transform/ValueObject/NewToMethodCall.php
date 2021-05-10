@@ -24,13 +24,13 @@ final class NewToMethodCall
         $this->serviceType = $serviceType;
         $this->serviceMethod = $serviceMethod;
     }
-    public function getNewObjectType() : \PHPStan\Type\ObjectType
+    public function getNewObjectType() : ObjectType
     {
-        return new \PHPStan\Type\ObjectType($this->newType);
+        return new ObjectType($this->newType);
     }
-    public function getServiceObjectType() : \PHPStan\Type\ObjectType
+    public function getServiceObjectType() : ObjectType
     {
-        return new \PHPStan\Type\ObjectType($this->serviceType);
+        return new ObjectType($this->serviceType);
     }
     public function getServiceMethod() : string
     {

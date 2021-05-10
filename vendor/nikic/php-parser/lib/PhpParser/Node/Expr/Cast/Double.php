@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace PhpParser\Node\Expr\Cast;
 
 use PhpParser\Node\Expr\Cast;
-class Double extends \PhpParser\Node\Expr\Cast
+class Double extends Cast
 {
     // For use in "kind" attribute
     const KIND_DOUBLE = 1;

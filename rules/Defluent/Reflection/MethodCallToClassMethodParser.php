@@ -28,17 +28,17 @@ final class MethodCallToClassMethodParser
      * @var FunctionLikeReflectionParser
      */
     private $functionLikeReflectionParser;
-    public function __construct(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\Core\Reflection\FunctionLikeReflectionParser $functionLikeReflectionParser)
+    public function __construct(NodeTypeResolver $nodeTypeResolver, NodeNameResolver $nodeNameResolver, ReflectionProvider $reflectionProvider, FunctionLikeReflectionParser $functionLikeReflectionParser)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->reflectionProvider = $reflectionProvider;
         $this->functionLikeReflectionParser = $functionLikeReflectionParser;
     }
-    public function parseMethodCall(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\PhpParser\Node\Stmt\ClassMethod
+    public function parseMethodCall(MethodCall $methodCall) : ?ClassMethod
     {
         $callerStaticType = $this->nodeTypeResolver->getStaticType($methodCall->var);
-        if (!$callerStaticType instanceof \PHPStan\Type\TypeWithClassName) {
+        if (!$callerStaticType instanceof TypeWithClassName) {
             return null;
         }
         $callerClassReflection = $this->reflectionProvider->getClass($callerStaticType->getClassName());
