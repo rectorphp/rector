@@ -3,11 +3,13 @@
 name: Build Scoped Rector PHP 7.0
 
 on:
-    push:
-        branches:
-            - main
-        tags:
-            - '*'
+#    push:
+#        branches:
+#            - main
+#        tags:
+#            - '*'
+    pull_request:
+        - php70-*
 
 env:
     # see https://github.com/composer/composer/issues/9368#issuecomment-718112361
