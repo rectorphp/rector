@@ -7,7 +7,7 @@
     "license": "MIT",
     "homepage": "https://getrector.org",
     "require": {
-        "php": "^7.3|^8.0",
+        "php": "^8.0",
         "ext-dom": "*",
         "ext-json": "*",
         "composer/semver": "^3.2",
@@ -63,6 +63,9 @@
         "symplify/phpstan-extensions": "^9.3",
         "symplify/phpstan-rules": "^9.3",
         "symplify/rule-doc-generator": "^9.3"
+    },
+    "replace": {
+        "rector/rector": "self.version"
     },
     "autoload": {
         "psr-4": {
