@@ -17,7 +17,7 @@ use RectorPrefix20210510\Symfony\Component\VarDumper\Cloner\DumperInterface;
  *
  * @author Nicolas Grekas <p@tchwork.com>
  */
-abstract class AbstractDumper implements DataDumperInterface, DumperInterface
+abstract class AbstractDumper implements \RectorPrefix20210510\Symfony\Component\VarDumper\Dumper\DataDumperInterface, \RectorPrefix20210510\Symfony\Component\VarDumper\Cloner\DumperInterface
 {
     public const DUMP_LIGHT_ARRAY = 1;
     public const DUMP_STRING_LENGTH = 2;
@@ -103,7 +103,7 @@ abstract class AbstractDumper implements DataDumperInterface, DumperInterface
      *
      * @return string|null The dump as string when $output is true
      */
-    public function dump(Data $data, $output = null)
+    public function dump(\RectorPrefix20210510\Symfony\Component\VarDumper\Cloner\Data $data, $output = null)
     {
         $this->decimalPoint = \localeconv();
         $this->decimalPoint = $this->decimalPoint['decimal_point'];

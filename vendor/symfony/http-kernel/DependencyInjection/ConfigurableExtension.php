@@ -23,17 +23,17 @@ use RectorPrefix20210510\Symfony\Component\DependencyInjection\ContainerBuilder;
  *
  * @author Johannes M. Schmitt <schmittjoh@gmail.com>
  */
-abstract class ConfigurableExtension extends Extension
+abstract class ConfigurableExtension extends \RectorPrefix20210510\Symfony\Component\HttpKernel\DependencyInjection\Extension
 {
     /**
      * {@inheritdoc}
      */
-    public final function load(array $configs, ContainerBuilder $container)
+    public final function load(array $configs, \RectorPrefix20210510\Symfony\Component\DependencyInjection\ContainerBuilder $container)
     {
         $this->loadInternal($this->processConfiguration($this->getConfiguration($configs, $container), $configs), $container);
     }
     /**
      * Configures the passed container according to the merged configuration.
      */
-    protected abstract function loadInternal(array $mergedConfig, ContainerBuilder $container);
+    protected abstract function loadInternal(array $mergedConfig, \RectorPrefix20210510\Symfony\Component\DependencyInjection\ContainerBuilder $container);
 }

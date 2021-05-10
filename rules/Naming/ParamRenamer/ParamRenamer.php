@@ -17,12 +17,12 @@ final class ParamRenamer
      * @var PropertyDocBlockManipulator
      */
     private $propertyDocBlockManipulator;
-    public function __construct(VariableRenamer $variableRenamer, PropertyDocBlockManipulator $propertyDocBlockManipulator)
+    public function __construct(\Rector\Naming\VariableRenamer $variableRenamer, \Rector\BetterPhpDocParser\PhpDocManipulator\PropertyDocBlockManipulator $propertyDocBlockManipulator)
     {
         $this->variableRenamer = $variableRenamer;
         $this->propertyDocBlockManipulator = $propertyDocBlockManipulator;
     }
-    public function rename(ParamRename $paramRename) : void
+    public function rename(\Rector\Naming\ValueObject\ParamRename $paramRename) : void
     {
         // 1. rename param
         $paramRename->getVariable()->name = $paramRename->getExpectedName();

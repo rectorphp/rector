@@ -31,11 +31,11 @@ final class EditorConfigFile
     private $sections = [];
     /** @var Factory */
     private $declarationFactory;
-    public function __construct(string $path, ?Factory $declarationFactory = null)
+    public function __construct(string $path, ?\RectorPrefix20210510\Idiosyncratic\EditorConfig\Declaration\Factory $declarationFactory = null)
     {
-        $this->declarationFactory = $declarationFactory ?? new Factory();
-        if (is_file($path) === \false || is_readable($path) === \false) {
-            throw new RuntimeException(sprintf('File %s does not exist or is not readable', $path));
+        $this->declarationFactory = $declarationFactory ?? new \RectorPrefix20210510\Idiosyncratic\EditorConfig\Declaration\Factory();
+        if (\is_file($path) === \false || \is_readable($path) === \false) {
+            throw new \RuntimeException(\sprintf('File %s does not exist or is not readable', $path));
         }
         $content = $this->cleanContent($path);
         $this->path = $path;
@@ -48,7 +48,7 @@ final class EditorConfigFile
         foreach ($this->sections as $section) {
             $sections[] = (string) $section;
         }
-        return sprintf('%s%s', $preamble, implode("\n", $sections));
+        return \sprintf('%s%s', $preamble, \implode("\n", $sections));
     }
     public function isRoot() : bool
     {
@@ -68,47 +68,47 @@ final class EditorConfigFile
             if ($section->matches($path) === \false) {
                 continue;
             }
-            $configuration = array_merge($configuration, $section->getDeclarations());
+            $configuration = \array_merge($configuration, $section->getDeclarations());
         }
         return $configuration;
     }
     private function parse(string $content) : void
     {
         $this->fileContent = $content;
-        $content = preg_replace('/^\\s/m', '', $this->fileContent) ?? $this->fileContent;
+        $content = \preg_replace('/^\\s/m', '', $this->fileContent) ?? $this->fileContent;
         $parsedContent = $this->parseIniString($content);
         if (isset($parsedContent['root']) === \true) {
             $this->setIsRoot($parsedContent['root']);
         }
         foreach ($parsedContent as $glob => $declarations) {
-            if (is_array($declarations) === \false) {
+            if (\is_array($declarations) === \false) {
                 continue;
             }
-            $this->sections[] = new Section($this->getGlobPrefix($glob), $glob, $declarations, $this->declarationFactory);
+            $this->sections[] = new \RectorPrefix20210510\Idiosyncratic\EditorConfig\Section($this->getGlobPrefix($glob), $glob, $declarations, $this->declarationFactory);
         }
     }
     private function setIsRoot(string $isRoot) : void
     {
-        if (in_array($isRoot, ['true', 'false']) === \false) {
-            throw new InvalidValue('root', $isRoot);
+        if (\in_array($isRoot, ['true', 'false']) === \false) {
+            throw new \RectorPrefix20210510\Idiosyncratic\EditorConfig\Exception\InvalidValue('root', $isRoot);
         }
         $this->isRoot = $isRoot === 'true';
     }
     private function getGlobPrefix(string $glob) : string
     {
-        return strpos($glob, '/') === 0 ? dirname($this->path) : '**/';
+        return \strpos($glob, '/') === 0 ? \dirname($this->path) : '**/';
     }
     /**
      * @return array<string, mixed>
      */
     private function parseIniString(string $content) : array
     {
-        $parsedContent = parse_ini_string($content, \true, \INI_SCANNER_RAW);
-        return is_array($parsedContent) === \true ? $parsedContent : [];
+        $parsedContent = \parse_ini_string($content, \true, \INI_SCANNER_RAW);
+        return \is_array($parsedContent) === \true ? $parsedContent : [];
     }
     private function cleanContent(string $path) : string
     {
-        $content = file_get_contents($path);
-        return preg_replace('/#.*$/m', '', $content) ?? $content;
+        $content = \file_get_contents($path);
+        return \preg_replace('/#.*$/m', '', $content) ?? $content;
     }
 }

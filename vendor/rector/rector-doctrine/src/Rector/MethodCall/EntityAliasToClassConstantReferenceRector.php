@@ -15,7 +15,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Doctrine\Tests\Rector\MethodCall\EntityAliasToClassConstantReferenceRector\EntityAliasToClassConstantReferenceRectorTest
  */
-final class EntityAliasToClassConstantReferenceRector extends AbstractRector implements ConfigurableRectorInterface
+final class EntityAliasToClassConstantReferenceRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
      * @api
@@ -32,11 +32,11 @@ final class EntityAliasToClassConstantReferenceRector extends AbstractRector imp
     private $aliasesToNamespaces = [];
     public function __construct()
     {
-        $this->doctrineManagerRegistryObjectTypes = [new ObjectType('Doctrine\\ORM\\EntityManagerInterface'), new ObjectType('Doctrine\\Persistence\\ObjectManager'), new ObjectType('Doctrine\\Common\\Persistence\\ObjectManager'), new ObjectType('Doctrine\\Persistence\\ManagerRegistry'), new ObjectType('Doctrine\\Common\\Persistence\\ManagerRegistry')];
+        $this->doctrineManagerRegistryObjectTypes = [new \PHPStan\Type\ObjectType('Doctrine\\ORM\\EntityManagerInterface'), new \PHPStan\Type\ObjectType('Doctrine\\Persistence\\ObjectManager'), new \PHPStan\Type\ObjectType('Doctrine\\Common\\Persistence\\ObjectManager'), new \PHPStan\Type\ObjectType('Doctrine\\Persistence\\ManagerRegistry'), new \PHPStan\Type\ObjectType('Doctrine\\Common\\Persistence\\ManagerRegistry')];
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Replaces doctrine alias with class.', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Replaces doctrine alias with class.', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
 $entityManager = new Doctrine\ORM\EntityManager();
 $entityManager->getRepository("AppBundle:Post");
 CODE_SAMPLE
@@ -51,12 +51,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [MethodCall::class];
+        return [\PhpParser\Node\Expr\MethodCall::class];
     }
     /**
      * @param MethodCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$this->nodeTypeResolver->isObjectTypes($node->var, $this->doctrineManagerRegistryObjectTypes)) {
             return null;
@@ -67,7 +67,7 @@ CODE_SAMPLE
         if (!isset($node->args[0])) {
             return null;
         }
-        if (!$node->args[0]->value instanceof String_) {
+        if (!$node->args[0]->value instanceof \PhpParser\Node\Scalar\String_) {
             return null;
         }
         /** @var String_ $stringNode */
@@ -96,7 +96,7 @@ CODE_SAMPLE
     }
     private function isAlias(string $name) : bool
     {
-        return Strings::contains($name, ':');
+        return \RectorPrefix20210510\Nette\Utils\Strings::contains($name, ':');
     }
     private function hasAlias(string $name) : bool
     {

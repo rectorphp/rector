@@ -21,16 +21,16 @@ final class RightAssignTemplateRemover
      * @var NodeRemover
      */
     private $nodeRemover;
-    public function __construct(BetterNodeFinder $betterNodeFinder, \Rector\Nette\NodeAnalyzer\ThisTemplatePropertyFetchAnalyzer $thisTemplatePropertyFetchAnalyzer, NodeRemover $nodeRemover)
+    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Nette\NodeAnalyzer\ThisTemplatePropertyFetchAnalyzer $thisTemplatePropertyFetchAnalyzer, \Rector\NodeRemoval\NodeRemover $nodeRemover)
     {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->thisTemplatePropertyFetchAnalyzer = $thisTemplatePropertyFetchAnalyzer;
         $this->nodeRemover = $nodeRemover;
     }
-    public function removeInClassMethod(ClassMethod $classMethod) : void
+    public function removeInClassMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod) : void
     {
         /** @var Assign[] $assigns */
-        $assigns = $this->betterNodeFinder->findInstanceOf($classMethod, Assign::class);
+        $assigns = $this->betterNodeFinder->findInstanceOf($classMethod, \PhpParser\Node\Expr\Assign::class);
         foreach ($assigns as $assign) {
             if (!$this->thisTemplatePropertyFetchAnalyzer->isTemplatePropertyFetch($assign->expr)) {
                 return;

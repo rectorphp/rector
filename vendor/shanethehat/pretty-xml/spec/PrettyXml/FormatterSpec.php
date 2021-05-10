@@ -3,7 +3,7 @@
 namespace RectorPrefix20210510\spec\PrettyXml;
 
 use RectorPrefix20210510\PhpSpec\ObjectBehavior;
-class FormatterSpec extends ObjectBehavior
+class FormatterSpec extends \RectorPrefix20210510\PhpSpec\ObjectBehavior
 {
     function it_should_indent_a_nested_element()
     {

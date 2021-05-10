@@ -6,16 +6,16 @@ namespace RectorPrefix20210510\Symplify\Astral\NodeNameResolver;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use RectorPrefix20210510\Symplify\Astral\Contract\NodeNameResolverInterface;
-final class ArgNodeNameResolver implements NodeNameResolverInterface
+final class ArgNodeNameResolver implements \RectorPrefix20210510\Symplify\Astral\Contract\NodeNameResolverInterface
 {
-    public function match(Node $node) : bool
+    public function match(\PhpParser\Node $node) : bool
     {
-        return $node instanceof Arg;
+        return $node instanceof \PhpParser\Node\Arg;
     }
     /**
      * @param Arg $node
      */
-    public function resolve(Node $node) : ?string
+    public function resolve(\PhpParser\Node $node) : ?string
     {
         if ($node->name === null) {
             return null;

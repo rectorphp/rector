@@ -10,19 +10,19 @@
  */
 namespace RectorPrefix20210510\Symfony\Component\DependencyInjection\Compiler;
 
-trigger_deprecation('symfony/dependency-injection', '5.2', 'The "%s" class is deprecated.', ResolvePrivatesPass::class);
+trigger_deprecation('symfony/dependency-injection', '5.2', 'The "%s" class is deprecated.', \RectorPrefix20210510\Symfony\Component\DependencyInjection\Compiler\ResolvePrivatesPass::class);
 use RectorPrefix20210510\Symfony\Component\DependencyInjection\ContainerBuilder;
 /**
  * @author Nicolas Grekas <p@tchwork.com>
  *
  * @deprecated since Symfony 5.2
  */
-class ResolvePrivatesPass implements CompilerPassInterface
+class ResolvePrivatesPass implements \RectorPrefix20210510\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface
 {
     /**
      * {@inheritdoc}
      */
-    public function process(ContainerBuilder $container)
+    public function process(\RectorPrefix20210510\Symfony\Component\DependencyInjection\ContainerBuilder $container)
     {
         foreach ($container->getDefinitions() as $id => $definition) {
             if ($definition->isPrivate()) {

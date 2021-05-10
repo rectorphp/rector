@@ -18,11 +18,11 @@ use RectorPrefix20210510\Symfony\Component\Console\Output\OutputInterface;
  *
  * @author Wouter de Jong <wouter@wouterj.nl>
  */
-final class ConsoleErrorEvent extends ConsoleEvent
+final class ConsoleErrorEvent extends \RectorPrefix20210510\Symfony\Component\Console\Event\ConsoleEvent
 {
     private $error;
     private $exitCode;
-    public function __construct(InputInterface $input, OutputInterface $output, \Throwable $error, Command $command = null)
+    public function __construct(\RectorPrefix20210510\Symfony\Component\Console\Input\InputInterface $input, \RectorPrefix20210510\Symfony\Component\Console\Output\OutputInterface $output, \Throwable $error, \RectorPrefix20210510\Symfony\Component\Console\Command\Command $command = null)
     {
         parent::__construct($command, $input, $output);
         $this->error = $error;

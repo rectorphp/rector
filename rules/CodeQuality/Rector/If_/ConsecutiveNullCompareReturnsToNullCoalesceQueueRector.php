@@ -17,7 +17,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\CodeQuality\Rector\If_\ConsecutiveNullCompareReturnsToNullCoalesceQueueRector\ConsecutiveNullCompareReturnsToNullCoalesceQueueRectorTest
  */
-final class ConsecutiveNullCompareReturnsToNullCoalesceQueueRector extends AbstractRector
+final class ConsecutiveNullCompareReturnsToNullCoalesceQueueRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var Node[]
@@ -31,13 +31,13 @@ final class ConsecutiveNullCompareReturnsToNullCoalesceQueueRector extends Abstr
      * @var IfManipulator
      */
     private $ifManipulator;
-    public function __construct(IfManipulator $ifManipulator)
+    public function __construct(\Rector\Core\NodeManipulator\IfManipulator $ifManipulator)
     {
         $this->ifManipulator = $ifManipulator;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Change multiple null compares to ?? queue', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change multiple null compares to ?? queue', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -70,25 +70,25 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [If_::class];
+        return [\PhpParser\Node\Stmt\If_::class];
     }
     /**
      * @param If_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if (!$this->isAtLeastPhpVersion(PhpVersionFeature::NULL_COALESCE)) {
+        if (!$this->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::NULL_COALESCE)) {
             return null;
         }
         $this->reset();
         $currentNode = $node;
         while ($currentNode !== null) {
-            if ($currentNode instanceof If_) {
+            if ($currentNode instanceof \PhpParser\Node\Stmt\If_) {
                 $comparedNode = $this->ifManipulator->matchIfNotNullReturnValue($currentNode);
                 if ($comparedNode !== null) {
                     $this->coalescingNodes[] = $comparedNode;
                     $this->nodesToRemove[] = $currentNode;
-                    $currentNode = $currentNode->getAttribute(AttributeKey::NEXT_NODE);
+                    $currentNode = $currentNode->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::NEXT_NODE);
                     continue;
                 }
                 return null;
@@ -111,9 +111,9 @@ CODE_SAMPLE
         $this->coalescingNodes = [];
         $this->nodesToRemove = [];
     }
-    private function isReturnNull(Node $node) : bool
+    private function isReturnNull(\PhpParser\Node $node) : bool
     {
-        if (!$node instanceof Return_) {
+        if (!$node instanceof \PhpParser\Node\Stmt\Return_) {
             return \false;
         }
         if ($node->expr === null) {
@@ -124,16 +124,16 @@ CODE_SAMPLE
     /**
      * @param Expr[] $coalescingNodes
      */
-    private function createReturnCoalesceNode(array $coalescingNodes) : Return_
+    private function createReturnCoalesceNode(array $coalescingNodes) : \PhpParser\Node\Stmt\Return_
     {
         /** @var Expr $left */
         $left = \array_shift($coalescingNodes);
         /** @var Expr $right */
         $right = \array_shift($coalescingNodes);
-        $coalesceNode = new Coalesce($left, $right);
+        $coalesceNode = new \PhpParser\Node\Expr\BinaryOp\Coalesce($left, $right);
         foreach ($coalescingNodes as $coalescingNode) {
-            $coalesceNode = new Coalesce($coalesceNode, $coalescingNode);
+            $coalesceNode = new \PhpParser\Node\Expr\BinaryOp\Coalesce($coalesceNode, $coalescingNode);
         }
-        return new Return_($coalesceNode);
+        return new \PhpParser\Node\Stmt\Return_($coalesceNode);
     }
 }

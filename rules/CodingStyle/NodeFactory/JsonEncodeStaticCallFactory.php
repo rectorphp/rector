@@ -20,7 +20,7 @@ final class JsonEncodeStaticCallFactory
      * @var NodeFactory
      */
     private $nodeFactory;
-    public function __construct(NodeFactory $nodeFactory)
+    public function __construct(\Rector\Core\PhpParser\Node\NodeFactory $nodeFactory)
     {
         $this->nodeFactory = $nodeFactory;
     }
@@ -30,10 +30,10 @@ final class JsonEncodeStaticCallFactory
      * $jsonData = ['...'];
      * $json = Nette\Utils\Json::encode($jsonData);
      */
-    public function createFromArray(Expr $assignExpr, Array_ $jsonArray) : Assign
+    public function createFromArray(\PhpParser\Node\Expr $assignExpr, \PhpParser\Node\Expr\Array_ $jsonArray) : \PhpParser\Node\Expr\Assign
     {
-        $jsonDataAssign = new Assign($assignExpr, $jsonArray);
-        $jsonDataVariable = new Variable('jsonData');
+        $jsonDataAssign = new \PhpParser\Node\Expr\Assign($assignExpr, $jsonArray);
+        $jsonDataVariable = new \PhpParser\Node\Expr\Variable('jsonData');
         $jsonDataAssign->expr = $this->nodeFactory->createStaticCall('Nette\\Utils\\Json', 'encode', [$jsonDataVariable]);
         return $jsonDataAssign;
     }

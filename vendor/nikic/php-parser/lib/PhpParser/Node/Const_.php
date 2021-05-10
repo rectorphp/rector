@@ -7,7 +7,7 @@ use PhpParser\NodeAbstract;
 /**
  * @property Name $namespacedName Namespaced name (for global constants, if using NameResolver)
  */
-class Const_ extends NodeAbstract
+class Const_ extends \PhpParser\NodeAbstract
 {
     /** @var Identifier Name */
     public $name;

@@ -15,7 +15,7 @@ final class NamingConventionAnalyzer
      * @var NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(NodeNameResolver $nodeNameResolver)
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
     }
@@ -28,7 +28,7 @@ final class NamingConventionAnalyzer
      *
      * @param FuncCall|StaticCall|MethodCall $expr
      */
-    public function isCallMatchingVariableName(Expr $expr, string $currentName, string $expectedName) : bool
+    public function isCallMatchingVariableName(\PhpParser\Node\Expr $expr, string $currentName, string $expectedName) : bool
     {
         // skip "$call = $method->call();" based conventions
         $callName = $this->nodeNameResolver->getName($expr->name);
@@ -36,6 +36,6 @@ final class NamingConventionAnalyzer
             return \true;
         }
         // starts with or ends with
-        return (bool) Strings::match($currentName, '#^(' . $expectedName . '|' . $expectedName . '$)#i');
+        return (bool) \RectorPrefix20210510\Nette\Utils\Strings::match($currentName, '#^(' . $expectedName . '|' . $expectedName . '$)#i');
     }
 }

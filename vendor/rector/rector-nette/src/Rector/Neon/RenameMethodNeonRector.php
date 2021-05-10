@@ -13,7 +13,7 @@ use RectorPrefix20210510\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Nette\Tests\Rector\Neon\RenameMethodNeonRector\RenameMethodNeonRectorTest
  */
-final class RenameMethodNeonRector implements NeonRectorInterface, ConfigurableRectorInterface
+final class RenameMethodNeonRector implements \Rector\Nette\Contract\Rector\NeonRectorInterface, \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
      * @var string
@@ -23,9 +23,9 @@ final class RenameMethodNeonRector implements NeonRectorInterface, ConfigurableR
      * @var MethodCallRename[]
      */
     private $methodCallRenames = [];
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Renames method calls in NEON configs', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Renames method calls in NEON configs', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
 services:
     -
         class: SomeClass
@@ -39,7 +39,7 @@ services:
         setup:
             - newCall
 CODE_SAMPLE
-, [self::RENAME_METHODS => [new MethodCallRename('SomeClass', 'oldCall', 'newCall')]])]);
+, [self::RENAME_METHODS => [new \Rector\Renaming\ValueObject\MethodCallRename('SomeClass', 'oldCall', 'newCall')]])]);
     }
     /**
      * @param array<string, MethodCallRename[]> $configuration
@@ -47,7 +47,7 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $methodCallRenames = $configuration[self::RENAME_METHODS] ?? [];
-        Assert::allIsInstanceOf($methodCallRenames, MethodCallRename::class);
+        \RectorPrefix20210510\Webmozart\Assert\Assert::allIsInstanceOf($methodCallRenames, \Rector\Renaming\ValueObject\MethodCallRename::class);
         $this->methodCallRenames = $methodCallRenames;
     }
     public function changeContent(string $content) : string
@@ -59,7 +59,7 @@ CODE_SAMPLE
             $oldMethodName = $methodCallRename->getOldMethod();
             $newMethodName = $methodCallRename->getNewMethod();
             $pattern = '#\\n(.*?)(class|factory): ' . $className . '(\\n|\\((.*?)\\)\\n)\\1setup:(.*?)- ' . $oldMethodName . '\\(#s';
-            if (Strings::match($content, $pattern)) {
+            if (\RectorPrefix20210510\Nette\Utils\Strings::match($content, $pattern)) {
                 $content = \str_replace($oldMethodName . '(', $newMethodName . '(', $content);
             }
         }

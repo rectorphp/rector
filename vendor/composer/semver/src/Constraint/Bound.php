@@ -59,7 +59,7 @@ class Bound
      *
      * @return bool
      */
-    public function compareTo(Bound $other, $operator)
+    public function compareTo(\RectorPrefix20210510\Composer\Semver\Constraint\Bound $other, $operator)
     {
         if (!\in_array($operator, array('<', '>'), \true)) {
             throw new \InvalidArgumentException('Does not support any other operator other than > or <.');
@@ -85,13 +85,13 @@ class Bound
      */
     public static function zero()
     {
-        return new Bound('0.0.0.0-dev', \true);
+        return new \RectorPrefix20210510\Composer\Semver\Constraint\Bound('0.0.0.0-dev', \true);
     }
     /**
      * @return self
      */
     public static function positiveInfinity()
     {
-        return new Bound(\PHP_INT_MAX . '.0.0.0', \false);
+        return new \RectorPrefix20210510\Composer\Semver\Constraint\Bound(\PHP_INT_MAX . '.0.0.0', \false);
     }
 }

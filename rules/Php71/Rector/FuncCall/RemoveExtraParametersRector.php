@@ -22,38 +22,38 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php71\Rector\FuncCall\RemoveExtraParametersRector\RemoveExtraParametersRectorTest
  */
-final class RemoveExtraParametersRector extends AbstractRector
+final class RemoveExtraParametersRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var CallReflectionResolver
      */
     private $callReflectionResolver;
-    public function __construct(CallReflectionResolver $callReflectionResolver)
+    public function __construct(\Rector\Core\PHPStan\Reflection\CallReflectionResolver $callReflectionResolver)
     {
         $this->callReflectionResolver = $callReflectionResolver;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Remove extra parameters', [new CodeSample('strlen("asdf", 1);', 'strlen("asdf");')]);
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove extra parameters', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample('strlen("asdf", 1);', 'strlen("asdf");')]);
     }
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [FuncCall::class, MethodCall::class, StaticCall::class];
+        return [\PhpParser\Node\Expr\FuncCall::class, \PhpParser\Node\Expr\MethodCall::class, \PhpParser\Node\Expr\StaticCall::class];
     }
     /**
      * @param FuncCall|MethodCall|StaticCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($this->shouldSkip($node)) {
             return null;
         }
         // unreliable count of arguments
         $functionLikeReflection = $this->callReflectionResolver->resolveCall($node);
-        if ($functionLikeReflection instanceof UnionTypeMethodReflection) {
+        if ($functionLikeReflection instanceof \PHPStan\Reflection\Type\UnionTypeMethodReflection) {
             return null;
         }
         if ($functionLikeReflection === null) {
@@ -72,13 +72,13 @@ final class RemoveExtraParametersRector extends AbstractRector
     /**
      * @param FuncCall|MethodCall|StaticCall $node
      */
-    private function shouldSkip(Node $node) : bool
+    private function shouldSkip(\PhpParser\Node $node) : bool
     {
         if ($node->args === []) {
             return \true;
         }
-        if ($node instanceof StaticCall) {
-            if (!$node->class instanceof Name) {
+        if ($node instanceof \PhpParser\Node\Expr\StaticCall) {
+            if (!$node->class instanceof \PhpParser\Node\Name) {
                 return \true;
             }
             if ($this->isName($node->class, 'parent')) {

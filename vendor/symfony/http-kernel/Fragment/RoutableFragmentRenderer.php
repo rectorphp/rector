@@ -18,7 +18,7 @@ use RectorPrefix20210510\Symfony\Component\HttpKernel\EventListener\FragmentList
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-abstract class RoutableFragmentRenderer implements FragmentRendererInterface
+abstract class RoutableFragmentRenderer implements \RectorPrefix20210510\Symfony\Component\HttpKernel\Fragment\FragmentRendererInterface
 {
     private $fragmentPath = '/_fragment';
     /**
@@ -38,7 +38,7 @@ abstract class RoutableFragmentRenderer implements FragmentRendererInterface
      *
      * @return string A fragment URI
      */
-    protected function generateFragmentUri(ControllerReference $reference, Request $request, bool $absolute = \false, bool $strict = \true)
+    protected function generateFragmentUri(\RectorPrefix20210510\Symfony\Component\HttpKernel\Controller\ControllerReference $reference, \RectorPrefix20210510\Symfony\Component\HttpFoundation\Request $request, bool $absolute = \false, bool $strict = \true)
     {
         if ($strict) {
             $this->checkNonScalar($reference->attributes);

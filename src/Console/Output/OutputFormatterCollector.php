@@ -20,7 +20,7 @@ final class OutputFormatterCollector
             $this->outputFormatters[$outputFormatter->getName()] = $outputFormatter;
         }
     }
-    public function getByName(string $name) : OutputFormatterInterface
+    public function getByName(string $name) : \Rector\ChangesReporting\Contract\Output\OutputFormatterInterface
     {
         $this->ensureOutputFormatExists($name);
         return $this->outputFormatters[$name];
@@ -37,6 +37,6 @@ final class OutputFormatterCollector
         if (isset($this->outputFormatters[$name])) {
             return;
         }
-        throw new InvalidConfigurationException(\sprintf('Output formatter "%s" was not found. Pick one of "%s".', $name, \implode('", "', $this->getNames())));
+        throw new \Rector\Core\Exception\Configuration\InvalidConfigurationException(\sprintf('Output formatter "%s" was not found. Pick one of "%s".', $name, \implode('", "', $this->getNames())));
     }
 }

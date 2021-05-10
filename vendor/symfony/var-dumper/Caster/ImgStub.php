@@ -13,7 +13,7 @@ namespace RectorPrefix20210510\Symfony\Component\VarDumper\Caster;
 /**
  * @author Grégoire Pineau <lyrixx@lyrixx.info>
  */
-class ImgStub extends ConstStub
+class ImgStub extends \RectorPrefix20210510\Symfony\Component\VarDumper\Caster\ConstStub
 {
     public function __construct(string $data, string $contentType, string $size = '')
     {

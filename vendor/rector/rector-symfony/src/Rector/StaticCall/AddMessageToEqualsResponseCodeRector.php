@@ -17,11 +17,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Symfony\Tests\Rector\StaticCall\AddMessageToEqualsResponseCodeRector\AddMessageToEqualsResponseCodeRectorTest
  */
-final class AddMessageToEqualsResponseCodeRector extends AbstractRector
+final class AddMessageToEqualsResponseCodeRector extends \Rector\Core\Rector\AbstractRector
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Add response content to response code assert, so it is easier to debug', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Add response content to response code assert, so it is easier to debug', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -59,12 +59,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [StaticCall::class, MethodCall::class];
+        return [\PhpParser\Node\Expr\StaticCall::class, \PhpParser\Node\Expr\MethodCall::class];
     }
     /**
      * @param StaticCall|MethodCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$this->isName($node->name, 'assertEquals')) {
             return null;
@@ -77,30 +77,30 @@ CODE_SAMPLE
             return null;
         }
         $parentVariable = $this->getParentOfGetStatusCode($node->args[1]->value);
-        if (!$parentVariable instanceof Expr) {
+        if (!$parentVariable instanceof \PhpParser\Node\Expr) {
             return null;
         }
-        $getContentMethodCall = new MethodCall($parentVariable, 'getContent');
-        $node->args[2] = new Arg($getContentMethodCall);
+        $getContentMethodCall = new \PhpParser\Node\Expr\MethodCall($parentVariable, 'getContent');
+        $node->args[2] = new \PhpParser\Node\Arg($getContentMethodCall);
         return $node;
     }
     /**
      * $this->assertX(Response::SOME_STATUS)
      */
-    private function isHttpRequestArgument(Expr $expr) : bool
+    private function isHttpRequestArgument(\PhpParser\Node\Expr $expr) : bool
     {
-        if (!$expr instanceof ClassConstFetch) {
+        if (!$expr instanceof \PhpParser\Node\Expr\ClassConstFetch) {
             return \false;
         }
-        return $this->isObjectType($expr->class, new ObjectType('Symfony\\Component\\HttpFoundation\\Response'));
+        return $this->isObjectType($expr->class, new \PHPStan\Type\ObjectType('Symfony\\Component\\HttpFoundation\\Response'));
     }
     /**
      * @return Variable|MethodCall|Expr|null
      */
-    private function getParentOfGetStatusCode(Expr $expr) : ?Node
+    private function getParentOfGetStatusCode(\PhpParser\Node\Expr $expr) : ?\PhpParser\Node
     {
         $currentNode = $expr;
-        while ($currentNode instanceof MethodCall) {
+        while ($currentNode instanceof \PhpParser\Node\Expr\MethodCall) {
             if ($this->isName($currentNode->name, 'getStatusCode')) {
                 return $currentNode->var;
             }

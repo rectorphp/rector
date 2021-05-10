@@ -5,7 +5,7 @@ namespace RectorPrefix20210510\Symplify\PackageBuilder\DependencyInjection\Compi
 
 use RectorPrefix20210510\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use RectorPrefix20210510\Symfony\Component\DependencyInjection\ContainerBuilder;
-final class AutowireInterfacesCompilerPass implements CompilerPassInterface
+final class AutowireInterfacesCompilerPass implements \RectorPrefix20210510\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface
 {
     /**
      * @var string[]
@@ -18,7 +18,7 @@ final class AutowireInterfacesCompilerPass implements CompilerPassInterface
     {
         $this->typesToAutowire = $typesToAutowire;
     }
-    public function process(ContainerBuilder $containerBuilder) : void
+    public function process(\RectorPrefix20210510\Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder) : void
     {
         $containerBuilderDefinitions = $containerBuilder->getDefinitions();
         foreach ($containerBuilderDefinitions as $definition) {

@@ -8,13 +8,13 @@ use Rector\Core\DependencyInjection\Collector\ConfigureCallValuesCollector;
 use RectorPrefix20210510\Symfony\Component\Config\FileLocatorInterface;
 use RectorPrefix20210510\Symfony\Component\DependencyInjection\ContainerBuilder;
 use RectorPrefix20210510\Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
-final class ConfigurableCallValuesCollectingPhpFileLoader extends PhpFileLoader
+final class ConfigurableCallValuesCollectingPhpFileLoader extends \RectorPrefix20210510\Symfony\Component\DependencyInjection\Loader\PhpFileLoader
 {
     /**
      * @var ConfigureCallValuesCollector
      */
     private $configureCallValuesCollector;
-    public function __construct(ContainerBuilder $containerBuilder, FileLocatorInterface $fileLocator, ConfigureCallValuesCollector $configureCallValuesCollector)
+    public function __construct(\RectorPrefix20210510\Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder, \RectorPrefix20210510\Symfony\Component\Config\FileLocatorInterface $fileLocator, \Rector\Core\DependencyInjection\Collector\ConfigureCallValuesCollector $configureCallValuesCollector)
     {
         $this->configureCallValuesCollector = $configureCallValuesCollector;
         parent::__construct($containerBuilder, $fileLocator);
@@ -41,7 +41,7 @@ final class ConfigurableCallValuesCollectingPhpFileLoader extends PhpFileLoader
     {
         foreach ($this->container->getDefinitions() as $class => $definition) {
             /** @var string $class */
-            if (!\is_a($class, ConfigurableRectorInterface::class, \true)) {
+            if (!\is_a($class, \Rector\Core\Contract\Rector\ConfigurableRectorInterface::class, \true)) {
                 continue;
             }
             $this->configureCallValuesCollector->collectFromServiceAndClassName($class, $definition);

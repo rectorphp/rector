@@ -18,7 +18,7 @@ use RectorPrefix20210510\Symfony\Contracts\Service\ServiceSubscriberInterface;
  *
  * @final
  */
-class ReflectionClassResource implements SelfCheckingResourceInterface
+class ReflectionClassResource implements \RectorPrefix20210510\Symfony\Component\Config\Resource\SelfCheckingResourceInterface
 {
     private $files = [];
     private $className;
@@ -166,18 +166,18 @@ class ReflectionClassResource implements SelfCheckingResourceInterface
         if ($class->isAbstract() || $class->isInterface() || $class->isTrait()) {
             return;
         }
-        if (\interface_exists(EventSubscriberInterface::class, \false) && $class->isSubclassOf(EventSubscriberInterface::class)) {
-            (yield EventSubscriberInterface::class);
+        if (\interface_exists(\RectorPrefix20210510\Symfony\Component\EventDispatcher\EventSubscriberInterface::class, \false) && $class->isSubclassOf(\RectorPrefix20210510\Symfony\Component\EventDispatcher\EventSubscriberInterface::class)) {
+            (yield \RectorPrefix20210510\Symfony\Component\EventDispatcher\EventSubscriberInterface::class);
             (yield \print_r($class->name::getSubscribedEvents(), \true));
         }
-        if (\interface_exists(MessageSubscriberInterface::class, \false) && $class->isSubclassOf(MessageSubscriberInterface::class)) {
-            (yield MessageSubscriberInterface::class);
+        if (\interface_exists(\RectorPrefix20210510\Symfony\Component\Messenger\Handler\MessageSubscriberInterface::class, \false) && $class->isSubclassOf(\RectorPrefix20210510\Symfony\Component\Messenger\Handler\MessageSubscriberInterface::class)) {
+            (yield \RectorPrefix20210510\Symfony\Component\Messenger\Handler\MessageSubscriberInterface::class);
             foreach ($class->name::getHandledMessages() as $key => $value) {
                 (yield $key . \print_r($value, \true));
             }
         }
-        if (\interface_exists(ServiceSubscriberInterface::class, \false) && $class->isSubclassOf(ServiceSubscriberInterface::class)) {
-            (yield ServiceSubscriberInterface::class);
+        if (\interface_exists(\RectorPrefix20210510\Symfony\Contracts\Service\ServiceSubscriberInterface::class, \false) && $class->isSubclassOf(\RectorPrefix20210510\Symfony\Contracts\Service\ServiceSubscriberInterface::class)) {
+            (yield \RectorPrefix20210510\Symfony\Contracts\Service\ServiceSubscriberInterface::class);
             (yield \print_r($class->name::getSubscribedServices(), \true));
         }
     }

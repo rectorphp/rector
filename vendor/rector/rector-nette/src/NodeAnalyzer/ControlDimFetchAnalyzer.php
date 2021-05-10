@@ -16,32 +16,32 @@ final class ControlDimFetchAnalyzer
      * @var NodeTypeResolver
      */
     private $nodeTypeResolver;
-    public function __construct(NodeTypeResolver $nodeTypeResolver)
+    public function __construct(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
-    public function matchNameOnFormOrControlVariable(Node $node) : ?string
+    public function matchNameOnFormOrControlVariable(\PhpParser\Node $node) : ?string
     {
-        return $this->matchNameOnVariableType($node, new ObjectType('Nette\\Application\\UI\\Form'));
+        return $this->matchNameOnVariableType($node, new \PHPStan\Type\ObjectType('Nette\\Application\\UI\\Form'));
     }
-    public function matchNameOnControlVariable(Node $node) : ?string
+    public function matchNameOnControlVariable(\PhpParser\Node $node) : ?string
     {
-        return $this->matchNameOnVariableType($node, new ObjectType('Nette\\Application\\UI\\Control'));
+        return $this->matchNameOnVariableType($node, new \PHPStan\Type\ObjectType('Nette\\Application\\UI\\Control'));
     }
-    public function matchName(Node $node) : ?string
+    public function matchName(\PhpParser\Node $node) : ?string
     {
-        if (!$node instanceof ArrayDimFetch) {
+        if (!$node instanceof \PhpParser\Node\Expr\ArrayDimFetch) {
             return null;
         }
-        if (!$this->isVariableTypes($node->var, [new ObjectType('Nette\\ComponentModel\\IContainer')])) {
+        if (!$this->isVariableTypes($node->var, [new \PHPStan\Type\ObjectType('Nette\\ComponentModel\\IContainer')])) {
             return null;
         }
-        if (!$node->dim instanceof String_) {
+        if (!$node->dim instanceof \PhpParser\Node\Scalar\String_) {
             return null;
         }
         return $node->dim->value;
     }
-    private function matchNameOnVariableType(Node $node, ObjectType $objectType) : ?string
+    private function matchNameOnVariableType(\PhpParser\Node $node, \PHPStan\Type\ObjectType $objectType) : ?string
     {
         $matchedName = $this->matchName($node);
         if ($matchedName === null) {
@@ -56,9 +56,9 @@ final class ControlDimFetchAnalyzer
     /**
      * @param ObjectType[] $objectTypes
      */
-    private function isVariableTypes(Node $node, array $objectTypes) : bool
+    private function isVariableTypes(\PhpParser\Node $node, array $objectTypes) : bool
     {
-        if (!$node instanceof Variable) {
+        if (!$node instanceof \PhpParser\Node\Expr\Variable) {
             return \false;
         }
         foreach ($objectTypes as $objectType) {

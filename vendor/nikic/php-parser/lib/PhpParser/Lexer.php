@@ -403,18 +403,18 @@ class Lexer
         for ($i = 256; $i < 1000; ++$i) {
             if (\T_DOUBLE_COLON === $i) {
                 // T_DOUBLE_COLON is equivalent to T_PAAMAYIM_NEKUDOTAYIM
-                $tokenMap[$i] = Tokens::T_PAAMAYIM_NEKUDOTAYIM;
+                $tokenMap[$i] = \PhpParser\Parser\Tokens::T_PAAMAYIM_NEKUDOTAYIM;
             } elseif (\T_OPEN_TAG_WITH_ECHO === $i) {
                 // T_OPEN_TAG_WITH_ECHO with dropped T_OPEN_TAG results in T_ECHO
-                $tokenMap[$i] = Tokens::T_ECHO;
+                $tokenMap[$i] = \PhpParser\Parser\Tokens::T_ECHO;
             } elseif (\T_CLOSE_TAG === $i) {
                 // T_CLOSE_TAG is equivalent to ';'
                 $tokenMap[$i] = \ord(';');
             } elseif ('UNKNOWN' !== ($name = \token_name($i))) {
                 if ('T_HASHBANG' === $name) {
                     // HHVM uses a special token for #! hashbang lines
-                    $tokenMap[$i] = Tokens::T_INLINE_HTML;
-                } elseif (\defined($name = Tokens::class . '::' . $name)) {
+                    $tokenMap[$i] = \PhpParser\Parser\Tokens::T_INLINE_HTML;
+                } elseif (\defined($name = \PhpParser\Parser\Tokens::class . '::' . $name)) {
                     // Other tokens can be mapped directly
                     $tokenMap[$i] = \constant($name);
                 }
@@ -422,21 +422,21 @@ class Lexer
         }
         // HHVM uses a special token for numbers that overflow to double
         if (\defined('T_ONUMBER')) {
-            $tokenMap[\T_ONUMBER] = Tokens::T_DNUMBER;
+            $tokenMap[\T_ONUMBER] = \PhpParser\Parser\Tokens::T_DNUMBER;
         }
         // HHVM also has a separate token for the __COMPILER_HALT_OFFSET__ constant
         if (\defined('T_COMPILER_HALT_OFFSET')) {
-            $tokenMap[\T_COMPILER_HALT_OFFSET] = Tokens::T_STRING;
+            $tokenMap[\T_COMPILER_HALT_OFFSET] = \PhpParser\Parser\Tokens::T_STRING;
         }
         // Assign tokens for which we define compatibility constants, as token_name() does not know them.
-        $tokenMap[\T_FN] = Tokens::T_FN;
-        $tokenMap[\T_COALESCE_EQUAL] = Tokens::T_COALESCE_EQUAL;
-        $tokenMap[\T_NAME_QUALIFIED] = Tokens::T_NAME_QUALIFIED;
-        $tokenMap[\T_NAME_FULLY_QUALIFIED] = Tokens::T_NAME_FULLY_QUALIFIED;
-        $tokenMap[\T_NAME_RELATIVE] = Tokens::T_NAME_RELATIVE;
-        $tokenMap[\T_MATCH] = Tokens::T_MATCH;
-        $tokenMap[\T_NULLSAFE_OBJECT_OPERATOR] = Tokens::T_NULLSAFE_OBJECT_OPERATOR;
-        $tokenMap[\T_ATTRIBUTE] = Tokens::T_ATTRIBUTE;
+        $tokenMap[\T_FN] = \PhpParser\Parser\Tokens::T_FN;
+        $tokenMap[\T_COALESCE_EQUAL] = \PhpParser\Parser\Tokens::T_COALESCE_EQUAL;
+        $tokenMap[\T_NAME_QUALIFIED] = \PhpParser\Parser\Tokens::T_NAME_QUALIFIED;
+        $tokenMap[\T_NAME_FULLY_QUALIFIED] = \PhpParser\Parser\Tokens::T_NAME_FULLY_QUALIFIED;
+        $tokenMap[\T_NAME_RELATIVE] = \PhpParser\Parser\Tokens::T_NAME_RELATIVE;
+        $tokenMap[\T_MATCH] = \PhpParser\Parser\Tokens::T_MATCH;
+        $tokenMap[\T_NULLSAFE_OBJECT_OPERATOR] = \PhpParser\Parser\Tokens::T_NULLSAFE_OBJECT_OPERATOR;
+        $tokenMap[\T_ATTRIBUTE] = \PhpParser\Parser\Tokens::T_ATTRIBUTE;
         return $tokenMap;
     }
     private function createIdentifierTokenMap() : array

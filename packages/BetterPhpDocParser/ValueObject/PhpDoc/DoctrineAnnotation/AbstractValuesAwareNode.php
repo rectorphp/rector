@@ -8,7 +8,7 @@ use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\NodeAttributes;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
-abstract class AbstractValuesAwareNode implements PhpDocTagValueNode
+abstract class AbstractValuesAwareNode implements \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode
 {
     use NodeAttributes;
     /**
@@ -51,7 +51,7 @@ abstract class AbstractValuesAwareNode implements PhpDocTagValueNode
         unset($this->values[$key]);
         unset($this->values[$quotedKey]);
         // invoke reprint
-        $this->setAttribute(PhpDocAttributeKey::ORIG_NODE, null);
+        $this->setAttribute(\Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey::ORIG_NODE, null);
     }
     /**
      * @return mixed[]
@@ -79,14 +79,14 @@ abstract class AbstractValuesAwareNode implements PhpDocTagValueNode
     {
         // is quoted?
         if (isset($this->values[$key])) {
-            $isQuoted = (bool) Strings::match($this->values[$key], self::UNQUOTED_VALUE_REGEX);
+            $isQuoted = (bool) \RectorPrefix20210510\Nette\Utils\Strings::match($this->values[$key], self::UNQUOTED_VALUE_REGEX);
             if ($isQuoted) {
                 $value = '"' . $value . '"';
             }
         }
         $this->values[$key] = $value;
         // invoke reprint
-        $this->setAttribute(PhpDocAttributeKey::ORIG_NODE, null);
+        $this->setAttribute(\Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey::ORIG_NODE, null);
     }
     /**
      * @param string|int $key
@@ -106,14 +106,14 @@ abstract class AbstractValuesAwareNode implements PhpDocTagValueNode
     public function changeSilentValue($value) : void
     {
         // is quoted?
-        $isQuoted = (bool) Strings::match($this->values[0], self::UNQUOTED_VALUE_REGEX);
+        $isQuoted = (bool) \RectorPrefix20210510\Nette\Utils\Strings::match($this->values[0], self::UNQUOTED_VALUE_REGEX);
         if ($isQuoted) {
             $value = '"' . $value . '"';
         }
         $this->values[0] = $value;
         $this->hasChanged = \true;
         // invoke reprint
-        $this->setAttribute(PhpDocAttributeKey::ORIG_NODE, null);
+        $this->setAttribute(\Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey::ORIG_NODE, null);
     }
     /**
      * @return mixed|null
@@ -152,7 +152,7 @@ abstract class AbstractValuesAwareNode implements PhpDocTagValueNode
         if (!\is_string($value)) {
             return $value;
         }
-        $matches = Strings::match($value, self::UNQUOTED_VALUE_REGEX);
+        $matches = \RectorPrefix20210510\Nette\Utils\Strings::match($value, self::UNQUOTED_VALUE_REGEX);
         if ($matches === null) {
             return $value;
         }

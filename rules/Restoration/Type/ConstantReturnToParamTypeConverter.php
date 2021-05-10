@@ -18,17 +18,17 @@ final class ConstantReturnToParamTypeConverter
      * @var TypeFactory
      */
     private $typeFactory;
-    public function __construct(TypeFactory $typeFactory)
+    public function __construct(\Rector\NodeTypeResolver\PHPStan\Type\TypeFactory $typeFactory)
     {
         $this->typeFactory = $typeFactory;
     }
-    public function convert(Type $type) : Type
+    public function convert(\PHPStan\Type\Type $type) : \PHPStan\Type\Type
     {
-        if ($type instanceof UnionType) {
-            $flattenReturnTypes = TypeUtils::flattenTypes($type);
+        if ($type instanceof \PHPStan\Type\UnionType) {
+            $flattenReturnTypes = \PHPStan\Type\TypeUtils::flattenTypes($type);
             $unionedTypes = [];
             foreach ($flattenReturnTypes as $flattenReturnType) {
-                if ($flattenReturnType instanceof ArrayType) {
+                if ($flattenReturnType instanceof \PHPStan\Type\ArrayType) {
                     $unionedTypes[] = $flattenReturnType->getItemType();
                 }
             }
@@ -36,33 +36,33 @@ final class ConstantReturnToParamTypeConverter
             foreach ($unionedTypes as $unionedType) {
                 $resolvedTypes[] = $this->convert($unionedType);
             }
-            return new UnionType($resolvedTypes);
+            return new \PHPStan\Type\UnionType($resolvedTypes);
         }
-        if ($type instanceof ConstantStringType) {
+        if ($type instanceof \PHPStan\Type\Constant\ConstantStringType) {
             return $this->unwrapConstantTypeToObjectType($type);
         }
-        if ($type instanceof ArrayType) {
+        if ($type instanceof \PHPStan\Type\ArrayType) {
             return $this->unwrapConstantTypeToObjectType($type);
         }
-        return new MixedType();
+        return new \PHPStan\Type\MixedType();
     }
-    private function unwrapConstantTypeToObjectType(Type $type) : Type
+    private function unwrapConstantTypeToObjectType(\PHPStan\Type\Type $type) : \PHPStan\Type\Type
     {
-        if ($type instanceof ArrayType) {
+        if ($type instanceof \PHPStan\Type\ArrayType) {
             return $this->unwrapConstantTypeToObjectType($type->getItemType());
         }
-        if ($type instanceof ConstantStringType) {
-            return new ObjectType($type->getValue());
+        if ($type instanceof \PHPStan\Type\Constant\ConstantStringType) {
+            return new \PHPStan\Type\ObjectType($type->getValue());
         }
-        if ($type instanceof GenericClassStringType && $type->getGenericType() instanceof ObjectType) {
+        if ($type instanceof \PHPStan\Type\Generic\GenericClassStringType && $type->getGenericType() instanceof \PHPStan\Type\ObjectType) {
             return $type->getGenericType();
         }
-        if ($type instanceof UnionType) {
+        if ($type instanceof \PHPStan\Type\UnionType) {
             return $this->unwrapUnionType($type);
         }
-        return new MixedType();
+        return new \PHPStan\Type\MixedType();
     }
-    private function unwrapUnionType(UnionType $unionType) : Type
+    private function unwrapUnionType(\PHPStan\Type\UnionType $unionType) : \PHPStan\Type\Type
     {
         $types = [];
         foreach ($unionType->getTypes() as $unionedType) {

@@ -22,9 +22,9 @@ final class ParentClassToTraits
         $this->parentType = $parentType;
         $this->traitNames = $traitNames;
     }
-    public function getParentObjectType() : ObjectType
+    public function getParentObjectType() : \PHPStan\Type\ObjectType
     {
-        return new ObjectType($this->parentType);
+        return new \PHPStan\Type\ObjectType($this->parentType);
     }
     /**
      * @return string[]

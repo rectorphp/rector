@@ -26,7 +26,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\DowngradePhp72\Rector\Class_\DowngradeParameterTypeWideningRector\DowngradeParameterTypeWideningRectorTest
  */
-final class DowngradeParameterTypeWideningRector extends AbstractRector
+final class DowngradeParameterTypeWideningRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var ClassLikeWithTraitsClassMethodResolver
@@ -48,7 +48,7 @@ final class DowngradeParameterTypeWideningRector extends AbstractRector
      * @var TypeFactory
      */
     private $typeFactory;
-    public function __construct(ClassLikeWithTraitsClassMethodResolver $classLikeWithTraitsClassMethodResolver, ParentChildClassMethodTypeResolver $parentChildClassMethodTypeResolver, NativeParamToPhpDocDecorator $nativeParamToPhpDocDecorator, ParamContravariantDetector $paramContravariantDetector, TypeFactory $typeFactory)
+    public function __construct(\Rector\DowngradePhp72\NodeAnalyzer\ClassLikeWithTraitsClassMethodResolver $classLikeWithTraitsClassMethodResolver, \Rector\DowngradePhp72\NodeAnalyzer\ParentChildClassMethodTypeResolver $parentChildClassMethodTypeResolver, \Rector\DowngradePhp72\PhpDoc\NativeParamToPhpDocDecorator $nativeParamToPhpDocDecorator, \Rector\DowngradePhp72\NodeAnalyzer\ParamContravariantDetector $paramContravariantDetector, \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory $typeFactory)
     {
         $this->classLikeWithTraitsClassMethodResolver = $classLikeWithTraitsClassMethodResolver;
         $this->parentChildClassMethodTypeResolver = $parentChildClassMethodTypeResolver;
@@ -56,9 +56,9 @@ final class DowngradeParameterTypeWideningRector extends AbstractRector
         $this->paramContravariantDetector = $paramContravariantDetector;
         $this->typeFactory = $typeFactory;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Change param type to match the lowest type in whole family tree', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change param type to match the lowest type in whole family tree', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 interface SomeInterface
 {
     public function test(array $input);
@@ -94,15 +94,15 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Class_::class, Interface_::class];
+        return [\PhpParser\Node\Stmt\Class_::class, \PhpParser\Node\Stmt\Interface_::class];
     }
     /**
      * @param Class_|Interface_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        $scope = $node->getAttribute(AttributeKey::SCOPE);
-        if (!$scope instanceof Scope) {
+        $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
+        if (!$scope instanceof \PHPStan\Analyser\Scope) {
             return null;
         }
         if ($this->isEmptyClassReflection($scope)) {
@@ -127,10 +127,10 @@ CODE_SAMPLE
     /**
      * The topmost class is the source of truth, so we go only down to avoid up/down collission
      */
-    private function refactorClassMethod(ClassMethod $classMethod, Scope $scope) : ?ClassMethod
+    private function refactorClassMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod, \PHPStan\Analyser\Scope $scope) : ?\PhpParser\Node\Stmt\ClassMethod
     {
         $classReflection = $scope->getClassReflection();
-        if (!$classReflection instanceof ClassReflection) {
+        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
             return null;
         }
         /** @var string $methodName */
@@ -138,7 +138,7 @@ CODE_SAMPLE
         $hasChanged = \false;
         foreach ($classMethod->params as $position => $param) {
             if (!\is_int($position)) {
-                throw new ShouldNotHappenException();
+                throw new \Rector\Core\Exception\ShouldNotHappenException();
             }
             // Resolve the types in:
             // - all ancestors + their descendant classes
@@ -156,11 +156,11 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function removeParamTypeFromMethod(ClassMethod $classMethod, Param $param) : void
+    private function removeParamTypeFromMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod, \PhpParser\Node\Param $param) : void
     {
         // It already has no type => nothing to do - check original param, as it could have been removed by this rule
-        $originalParam = $param->getAttribute(AttributeKey::ORIGINAL_NODE);
-        if ($originalParam instanceof Param) {
+        $originalParam = $param->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NODE);
+        if ($originalParam instanceof \PhpParser\Node\Param) {
             if ($originalParam->type === null) {
                 return;
             }
@@ -171,7 +171,7 @@ CODE_SAMPLE
         $this->nativeParamToPhpDocDecorator->decorate($classMethod, $param);
         $param->type = null;
     }
-    private function skipClassMethod(ClassMethod $classMethod, Scope $classScope) : bool
+    private function skipClassMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod, \PHPStan\Analyser\Scope $classScope) : bool
     {
         if ($classMethod->isMagic()) {
             return \true;
@@ -184,10 +184,10 @@ CODE_SAMPLE
         }
         return !$this->paramContravariantDetector->hasParentMethod($classMethod, $classScope);
     }
-    private function isEmptyClassReflection(Scope $scope) : bool
+    private function isEmptyClassReflection(\PHPStan\Analyser\Scope $scope) : bool
     {
         $classReflection = $scope->getClassReflection();
-        if (!$classReflection instanceof ClassReflection) {
+        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
             return \true;
         }
         if ($classReflection->isInterface()) {

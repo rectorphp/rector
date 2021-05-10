@@ -17,7 +17,7 @@ final class AliasUsesResolver
      * @var BetterNodeFinder
      */
     private $betterNodeFinder;
-    public function __construct(\Rector\CodingStyle\ClassNameImport\UseImportsTraverser $useImportsTraverser, BetterNodeFinder $betterNodeFinder)
+    public function __construct(\Rector\CodingStyle\ClassNameImport\UseImportsTraverser $useImportsTraverser, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
     {
         $this->useImportsTraverser = $useImportsTraverser;
         $this->betterNodeFinder = $betterNodeFinder;
@@ -25,12 +25,12 @@ final class AliasUsesResolver
     /**
      * @return string[]
      */
-    public function resolveForNode(Node $node) : array
+    public function resolveForNode(\PhpParser\Node $node) : array
     {
-        if (!$node instanceof Namespace_) {
-            $node = $this->betterNodeFinder->findParentType($node, Namespace_::class);
+        if (!$node instanceof \PhpParser\Node\Stmt\Namespace_) {
+            $node = $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Stmt\Namespace_::class);
         }
-        if ($node instanceof Namespace_) {
+        if ($node instanceof \PhpParser\Node\Stmt\Namespace_) {
             return $this->resolveForNamespace($node);
         }
         return [];
@@ -38,10 +38,10 @@ final class AliasUsesResolver
     /**
      * @return string[]
      */
-    private function resolveForNamespace(Namespace_ $namespace) : array
+    private function resolveForNamespace(\PhpParser\Node\Stmt\Namespace_ $namespace) : array
     {
         $aliasedUses = [];
-        $this->useImportsTraverser->traverserStmts($namespace->stmts, function (UseUse $useUse, string $name) use(&$aliasedUses) : void {
+        $this->useImportsTraverser->traverserStmts($namespace->stmts, function (\PhpParser\Node\Stmt\UseUse $useUse, string $name) use(&$aliasedUses) : void {
             if ($useUse->alias === null) {
                 return;
             }

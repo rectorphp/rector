@@ -15,7 +15,7 @@ namespace RectorPrefix20210510\Symfony\Component\VarDumper\Caster;
  *
  * @author Nicolas Grekas <p@tchwork.com>
  */
-class LinkStub extends ConstStub
+class LinkStub extends \RectorPrefix20210510\Symfony\Component\VarDumper\Caster\ConstStub
 {
     public $inVendor = \false;
     private static $vendorRoots;

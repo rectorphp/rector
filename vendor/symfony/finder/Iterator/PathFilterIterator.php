@@ -16,7 +16,7 @@ namespace RectorPrefix20210510\Symfony\Component\Finder\Iterator;
  * @author Fabien Potencier  <fabien@symfony.com>
  * @author Włodzimierz Gajda <gajdaw@gajdaw.pl>
  */
-class PathFilterIterator extends MultiplePcreFilterIterator
+class PathFilterIterator extends \RectorPrefix20210510\Symfony\Component\Finder\Iterator\MultiplePcreFilterIterator
 {
     /**
      * Filters the iterator values.

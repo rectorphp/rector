@@ -25,54 +25,54 @@ final class RegexMatcher
      * @var ValueResolver
      */
     private $valueResolver;
-    public function __construct(ValueResolver $valueResolver)
+    public function __construct(\Rector\Core\PhpParser\Node\Value\ValueResolver $valueResolver)
     {
         $this->valueResolver = $valueResolver;
     }
-    public function resolvePatternExpressionWithoutEIfFound(Expr $expr) : ?Expr
+    public function resolvePatternExpressionWithoutEIfFound(\PhpParser\Node\Expr $expr) : ?\PhpParser\Node\Expr
     {
-        if ($expr instanceof String_) {
+        if ($expr instanceof \PhpParser\Node\Scalar\String_) {
             $pattern = $this->valueResolver->getValue($expr);
             if (!\is_string($pattern)) {
                 return null;
             }
             $delimiter = $pattern[0];
             if (!\is_string($delimiter)) {
-                throw new ShouldNotHappenException();
+                throw new \Rector\Core\Exception\ShouldNotHappenException();
             }
             /** @var string $modifiers */
-            $modifiers = Strings::after($pattern, $delimiter, -1);
-            if (!Strings::contains($modifiers, 'e')) {
+            $modifiers = \RectorPrefix20210510\Nette\Utils\Strings::after($pattern, $delimiter, -1);
+            if (!\RectorPrefix20210510\Nette\Utils\Strings::contains($modifiers, 'e')) {
                 return null;
             }
             $patternWithoutE = $this->createPatternWithoutE($pattern, $delimiter, $modifiers);
-            return new String_($patternWithoutE);
+            return new \PhpParser\Node\Scalar\String_($patternWithoutE);
         }
-        if ($expr instanceof Concat) {
+        if ($expr instanceof \PhpParser\Node\Expr\BinaryOp\Concat) {
             return $this->matchConcat($expr);
         }
         return null;
     }
     private function createPatternWithoutE(string $pattern, string $delimiter, string $modifiers) : string
     {
-        $modifiersWithoutE = Strings::replace($modifiers, '#e#', '');
-        return Strings::before($pattern, $delimiter, -1) . $delimiter . $modifiersWithoutE;
+        $modifiersWithoutE = \RectorPrefix20210510\Nette\Utils\Strings::replace($modifiers, '#e#', '');
+        return \RectorPrefix20210510\Nette\Utils\Strings::before($pattern, $delimiter, -1) . $delimiter . $modifiersWithoutE;
     }
-    private function matchConcat(Concat $concat) : ?Expr
+    private function matchConcat(\PhpParser\Node\Expr\BinaryOp\Concat $concat) : ?\PhpParser\Node\Expr
     {
         $lastItem = $concat->right;
-        if (!$lastItem instanceof String_) {
+        if (!$lastItem instanceof \PhpParser\Node\Scalar\String_) {
             return null;
         }
-        $matches = Strings::match($lastItem->value, self::LETTER_SUFFIX_REGEX);
+        $matches = \RectorPrefix20210510\Nette\Utils\Strings::match($lastItem->value, self::LETTER_SUFFIX_REGEX);
         if (!isset($matches['modifiers'])) {
             return null;
         }
-        if (!Strings::contains($matches['modifiers'], 'e')) {
+        if (!\RectorPrefix20210510\Nette\Utils\Strings::contains($matches['modifiers'], 'e')) {
             return null;
         }
         // replace last "e" in the code
-        $lastItem->value = Strings::replace($lastItem->value, self::LAST_E_REGEX, '$1$2');
+        $lastItem->value = \RectorPrefix20210510\Nette\Utils\Strings::replace($lastItem->value, self::LAST_E_REGEX, '$1$2');
         return $concat;
     }
 }

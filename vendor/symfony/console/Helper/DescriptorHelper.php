@@ -22,7 +22,7 @@ use RectorPrefix20210510\Symfony\Component\Console\Output\OutputInterface;
  *
  * @author Jean-François Simon <contact@jfsimon.fr>
  */
-class DescriptorHelper extends Helper
+class DescriptorHelper extends \RectorPrefix20210510\Symfony\Component\Console\Helper\Helper
 {
     /**
      * @var DescriptorInterface[]
@@ -30,7 +30,7 @@ class DescriptorHelper extends Helper
     private $descriptors = [];
     public function __construct()
     {
-        $this->register('txt', new TextDescriptor())->register('xml', new XmlDescriptor())->register('json', new JsonDescriptor())->register('md', new MarkdownDescriptor());
+        $this->register('txt', new \RectorPrefix20210510\Symfony\Component\Console\Descriptor\TextDescriptor())->register('xml', new \RectorPrefix20210510\Symfony\Component\Console\Descriptor\XmlDescriptor())->register('json', new \RectorPrefix20210510\Symfony\Component\Console\Descriptor\JsonDescriptor())->register('md', new \RectorPrefix20210510\Symfony\Component\Console\Descriptor\MarkdownDescriptor());
     }
     /**
      * Describes an object if supported.
@@ -42,11 +42,11 @@ class DescriptorHelper extends Helper
      * @throws InvalidArgumentException when the given format is not supported
      * @param object|null $object
      */
-    public function describe(OutputInterface $output, $object, array $options = [])
+    public function describe(\RectorPrefix20210510\Symfony\Component\Console\Output\OutputInterface $output, $object, array $options = [])
     {
         $options = \array_merge(['raw_text' => \false, 'format' => 'txt'], $options);
         if (!isset($this->descriptors[$options['format']])) {
-            throw new InvalidArgumentException(\sprintf('Unsupported format "%s".', $options['format']));
+            throw new \RectorPrefix20210510\Symfony\Component\Console\Exception\InvalidArgumentException(\sprintf('Unsupported format "%s".', $options['format']));
         }
         $descriptor = $this->descriptors[$options['format']];
         $descriptor->describe($output, $object, $options);
@@ -56,7 +56,7 @@ class DescriptorHelper extends Helper
      *
      * @return $this
      */
-    public function register(string $format, DescriptorInterface $descriptor)
+    public function register(string $format, \RectorPrefix20210510\Symfony\Component\Console\Descriptor\DescriptorInterface $descriptor)
     {
         $this->descriptors[$format] = $descriptor;
         return $this;

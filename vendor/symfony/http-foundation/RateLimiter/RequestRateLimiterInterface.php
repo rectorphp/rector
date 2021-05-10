@@ -24,6 +24,6 @@ use RectorPrefix20210510\Symfony\Component\RateLimiter\RateLimit;
  */
 interface RequestRateLimiterInterface
 {
-    public function consume(Request $request) : RateLimit;
-    public function reset(Request $request) : void;
+    public function consume(\RectorPrefix20210510\Symfony\Component\HttpFoundation\Request $request) : \RectorPrefix20210510\Symfony\Component\RateLimiter\RateLimit;
+    public function reset(\RectorPrefix20210510\Symfony\Component\HttpFoundation\Request $request) : void;
 }

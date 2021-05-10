@@ -23,23 +23,23 @@ final class VariadicFunctionLikeDetector
      * @var SimpleCallableNodeTraverser
      */
     private $simpleCallableNodeTraverser;
-    public function __construct(SimpleCallableNodeTraverser $simpleCallableNodeTraverser, NodeNameResolver $nodeNameResolver)
+    public function __construct(\RectorPrefix20210510\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
     }
-    public function isVariadic(FunctionLike $functionLike) : bool
+    public function isVariadic(\PhpParser\Node\FunctionLike $functionLike) : bool
     {
         $isVariadic = \false;
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $functionLike->getStmts(), function (Node $node) use(&$isVariadic) : ?int {
-            if (!$node instanceof FuncCall) {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $functionLike->getStmts(), function (\PhpParser\Node $node) use(&$isVariadic) : ?int {
+            if (!$node instanceof \PhpParser\Node\Expr\FuncCall) {
                 return null;
             }
             if (!$this->nodeNameResolver->isNames($node, self::VARIADIC_FUNCTION_NAMES)) {
                 return null;
             }
             $isVariadic = \true;
-            return NodeTraverser::STOP_TRAVERSAL;
+            return \PhpParser\NodeTraverser::STOP_TRAVERSAL;
         });
         return $isVariadic;
     }

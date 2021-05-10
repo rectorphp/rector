@@ -18,7 +18,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\PHPUnit\Tests\Rector\MethodCall\AssertPropertyExistsRector\AssertPropertyExistsRectorTest
  */
-final class AssertPropertyExistsRector extends AbstractRector
+final class AssertPropertyExistsRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var array<string, string>
@@ -36,53 +36,53 @@ final class AssertPropertyExistsRector extends AbstractRector
      * @var TestsNodeAnalyzer
      */
     private $testsNodeAnalyzer;
-    public function __construct(IdentifierManipulator $identifierManipulator, TestsNodeAnalyzer $testsNodeAnalyzer)
+    public function __construct(\Rector\Renaming\NodeManipulator\IdentifierManipulator $identifierManipulator, \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer $testsNodeAnalyzer)
     {
         $this->identifierManipulator = $identifierManipulator;
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Turns `property_exists` comparisons to their method name alternatives in PHPUnit TestCase', [new CodeSample('$this->assertTrue(property_exists(new Class, "property"), "message");', '$this->assertClassHasAttribute("property", "Class", "message");'), new CodeSample('$this->assertFalse(property_exists(new Class, "property"), "message");', '$this->assertClassNotHasAttribute("property", "Class", "message");')]);
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Turns `property_exists` comparisons to their method name alternatives in PHPUnit TestCase', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample('$this->assertTrue(property_exists(new Class, "property"), "message");', '$this->assertClassHasAttribute("property", "Class", "message");'), new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample('$this->assertFalse(property_exists(new Class, "property"), "message");', '$this->assertClassNotHasAttribute("property", "Class", "message");')]);
     }
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [MethodCall::class, StaticCall::class];
+        return [\PhpParser\Node\Expr\MethodCall::class, \PhpParser\Node\Expr\StaticCall::class];
     }
     /**
      * @param MethodCall|StaticCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$this->testsNodeAnalyzer->isPHPUnitMethodCallNames($node, ['assertTrue', 'assertFalse'])) {
             return null;
         }
         $firstArgumentValue = $node->args[0]->value;
-        if (!$firstArgumentValue instanceof FuncCall) {
+        if (!$firstArgumentValue instanceof \PhpParser\Node\Expr\FuncCall) {
             return null;
         }
         if (!$this->isName($firstArgumentValue, 'property_exists')) {
             return null;
         }
         $propertyExistsMethodCall = $node->args[0]->value;
-        if (!$propertyExistsMethodCall instanceof FuncCall) {
+        if (!$propertyExistsMethodCall instanceof \PhpParser\Node\Expr\FuncCall) {
             return null;
         }
         $firstArgument = $propertyExistsMethodCall->args[0];
         $secondArgument = $propertyExistsMethodCall->args[1];
-        if ($firstArgument->value instanceof Variable) {
-            $secondArg = new Variable($firstArgument->value->name);
+        if ($firstArgument->value instanceof \PhpParser\Node\Expr\Variable) {
+            $secondArg = new \PhpParser\Node\Expr\Variable($firstArgument->value->name);
             $map = self::RENAME_METHODS_WITH_OBJECT_MAP;
-        } elseif ($firstArgument->value instanceof New_) {
+        } elseif ($firstArgument->value instanceof \PhpParser\Node\Expr\New_) {
             $secondArg = $this->getName($firstArgument->value->class);
             $map = self::RENAME_METHODS_WITH_CLASS_MAP;
         } else {
             return null;
         }
-        if (!$secondArgument->value instanceof String_) {
+        if (!$secondArgument->value instanceof \PhpParser\Node\Scalar\String_) {
             return null;
         }
         unset($node->args[0]);

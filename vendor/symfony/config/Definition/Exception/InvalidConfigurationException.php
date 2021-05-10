@@ -16,7 +16,7 @@ namespace RectorPrefix20210510\Symfony\Component\Config\Definition\Exception;
  *
  * @author Johannes M. Schmitt <schmittjoh@gmail.com>
  */
-class InvalidConfigurationException extends Exception
+class InvalidConfigurationException extends \RectorPrefix20210510\Symfony\Component\Config\Definition\Exception\Exception
 {
     private $path;
     private $containsHints = \false;

@@ -12,17 +12,17 @@ final class HasOffsetTypeCorrector
     /**
      * HasOffsetType breaks array mixed type, so we better get rid of it
      */
-    public function correct(Type $type) : Type
+    public function correct(\PHPStan\Type\Type $type) : \PHPStan\Type\Type
     {
-        if (!$type instanceof IntersectionType) {
+        if (!$type instanceof \PHPStan\Type\IntersectionType) {
             return $type;
         }
         $clearTypes = [];
         foreach ($type->getTypes() as $intersectionedType) {
-            if ($intersectionedType instanceof HasOffsetType) {
+            if ($intersectionedType instanceof \PHPStan\Type\Accessory\HasOffsetType) {
                 continue;
             }
-            if ($intersectionedType instanceof NonEmptyArrayType) {
+            if ($intersectionedType instanceof \PHPStan\Type\Accessory\NonEmptyArrayType) {
                 continue;
             }
             $clearTypes[] = $intersectionedType;
@@ -30,6 +30,6 @@ final class HasOffsetTypeCorrector
         if (\count($clearTypes) === 1) {
             return $clearTypes[0];
         }
-        return new IntersectionType($clearTypes);
+        return new \PHPStan\Type\IntersectionType($clearTypes);
     }
 }

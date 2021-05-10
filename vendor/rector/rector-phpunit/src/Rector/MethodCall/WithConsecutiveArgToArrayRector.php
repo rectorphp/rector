@@ -23,7 +23,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\PHPUnit\Tests\Rector\MethodCall\WithConsecutiveArgToArrayRector\WithConsecutiveArgToArrayRectorTest
  */
-final class WithConsecutiveArgToArrayRector extends AbstractRector
+final class WithConsecutiveArgToArrayRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var MethodCallManipulator
@@ -33,14 +33,14 @@ final class WithConsecutiveArgToArrayRector extends AbstractRector
      * @var ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(MethodCallManipulator $methodCallManipulator, ReflectionProvider $reflectionProvider)
+    public function __construct(\Rector\Core\NodeManipulator\MethodCallManipulator $methodCallManipulator, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
     {
         $this->methodCallManipulator = $methodCallManipulator;
         $this->reflectionProvider = $reflectionProvider;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Split withConsecutive() arg to array', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Split withConsecutive() arg to array', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($one, $two)
@@ -87,12 +87,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [MethodCall::class];
+        return [\PhpParser\Node\Expr\MethodCall::class];
     }
     /**
      * @param MethodCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$this->isName($node->name, 'withConsecutive')) {
             return null;
@@ -101,7 +101,7 @@ CODE_SAMPLE
             return null;
         }
         // is a mock?
-        if (!$this->isObjectType($node, new ObjectType('PHPUnit\\Framework\\MockObject\\Builder\\InvocationMocker'))) {
+        if (!$this->isObjectType($node, new \PHPStan\Type\ObjectType('PHPUnit\\Framework\\MockObject\\Builder\\InvocationMocker'))) {
             return null;
         }
         $mockClass = $this->inferMockedClassName($node);
@@ -128,33 +128,33 @@ CODE_SAMPLE
         // split into chunks of X parameters
         $valueChunks = \array_chunk($values, $numberOfParameters);
         foreach ($valueChunks as $valueChunk) {
-            $node->args[] = new Arg($this->nodeFactory->createArray($valueChunk));
+            $node->args[] = new \PhpParser\Node\Arg($this->nodeFactory->createArray($valueChunk));
         }
         return $node;
     }
-    private function areAllArgArrayTypes(MethodCall $methodCall) : bool
+    private function areAllArgArrayTypes(\PhpParser\Node\Expr\MethodCall $methodCall) : bool
     {
         foreach ($methodCall->args as $arg) {
             $argumentStaticType = $this->getStaticType($arg->value);
-            if ($argumentStaticType instanceof ArrayType) {
+            if ($argumentStaticType instanceof \PHPStan\Type\ArrayType) {
                 continue;
             }
             return \false;
         }
         return \true;
     }
-    private function inferMockedClassName(MethodCall $methodCall) : ?string
+    private function inferMockedClassName(\PhpParser\Node\Expr\MethodCall $methodCall) : ?string
     {
         $variable = $this->findRootVariableOfChainCall($methodCall);
-        if (!$variable instanceof Variable) {
+        if (!$variable instanceof \PhpParser\Node\Expr\Variable) {
             return null;
         }
         // look for "$this->createMock(X)"
         $assignToVariable = $this->methodCallManipulator->findAssignToVariable($variable);
-        if (!$assignToVariable instanceof Assign) {
+        if (!$assignToVariable instanceof \PhpParser\Node\Expr\Assign) {
             return null;
         }
-        if ($assignToVariable->expr instanceof MethodCall) {
+        if ($assignToVariable->expr instanceof \PhpParser\Node\Expr\MethodCall) {
             /** @var MethodCall $assignedMethodCall */
             $assignedMethodCall = $assignToVariable->expr;
             if ($this->isName($assignedMethodCall->var, 'this') && $this->isName($assignedMethodCall->name, 'createMock')) {
@@ -164,7 +164,7 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function inferMockedMethodName(MethodCall $methodCall) : string
+    private function inferMockedMethodName(\PhpParser\Node\Expr\MethodCall $methodCall) : string
     {
         $previousMethodCalls = $this->methodCallManipulator->findMethodCallsIncludingChain($methodCall);
         foreach ($previousMethodCalls as $previouMethodCall) {
@@ -172,17 +172,17 @@ CODE_SAMPLE
                 continue;
             }
             $firstArgumentValue = $previouMethodCall->args[0]->value;
-            if (!$firstArgumentValue instanceof String_) {
+            if (!$firstArgumentValue instanceof \PhpParser\Node\Scalar\String_) {
                 continue;
             }
             return $firstArgumentValue->value;
         }
-        throw new ShouldNotHappenException();
+        throw new \Rector\Core\Exception\ShouldNotHappenException();
     }
-    private function findRootVariableOfChainCall(MethodCall $methodCall) : ?Variable
+    private function findRootVariableOfChainCall(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\PhpParser\Node\Expr\Variable
     {
         $currentMethodCallee = $methodCall->var;
-        while (!$currentMethodCallee instanceof Variable) {
+        while (!$currentMethodCallee instanceof \PhpParser\Node\Expr\Variable) {
             $currentMethodCallee = $currentMethodCallee->var;
         }
         return $currentMethodCallee;

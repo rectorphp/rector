@@ -18,11 +18,11 @@ final class PhpDocNodeTraverser
      * @var PhpDocNodeVisitorInterface[]
      */
     private $phpDocNodeVisitors = [];
-    public function addPhpDocNodeVisitor(PhpDocNodeVisitorInterface $phpDocNodeVisitor) : void
+    public function addPhpDocNodeVisitor(\RectorPrefix20210510\Symplify\SimplePhpDocParser\Contract\PhpDocNodeVisitorInterface $phpDocNodeVisitor) : void
     {
         $this->phpDocNodeVisitors[] = $phpDocNodeVisitor;
     }
-    public function traverse(Node $node) : void
+    public function traverse(\PHPStan\PhpDocParser\Ast\Node $node) : void
     {
         foreach ($this->phpDocNodeVisitors as $phpDocNodeVisitor) {
             $phpDocNodeVisitor->beforeTraverse($node);
@@ -32,9 +32,9 @@ final class PhpDocNodeTraverser
             $phpDocNodeVisitor->afterTraverse($node);
         }
     }
-    public function traverseWithCallable(Node $node, string $docContent, callable $callable) : Node
+    public function traverseWithCallable(\PHPStan\PhpDocParser\Ast\Node $node, string $docContent, callable $callable) : \PHPStan\PhpDocParser\Ast\Node
     {
-        $callablePhpDocNodeVisitor = new CallablePhpDocNodeVisitor($callable, $docContent);
+        $callablePhpDocNodeVisitor = new \RectorPrefix20210510\Symplify\SimplePhpDocParser\PhpDocNodeVisitor\CallablePhpDocNodeVisitor($callable, $docContent);
         $this->addPhpDocNodeVisitor($callablePhpDocNodeVisitor);
         $this->traverse($node);
         return $node;
@@ -44,17 +44,17 @@ final class PhpDocNodeTraverser
      * @param TNode $node
      * @return TNode
      */
-    private function traverseNode(Node $node) : Node
+    private function traverseNode(\PHPStan\PhpDocParser\Ast\Node $node) : \PHPStan\PhpDocParser\Ast\Node
     {
         $subNodeNames = \array_keys(\get_object_vars($node));
         foreach ($subNodeNames as $subNodeName) {
             $subNode =& $node->{$subNodeName};
             if (\is_array($subNode)) {
                 $subNode = $this->traverseArray($subNode);
-            } elseif ($subNode instanceof Node) {
+            } elseif ($subNode instanceof \PHPStan\PhpDocParser\Ast\Node) {
                 foreach ($this->phpDocNodeVisitors as $phpDocNodeVisitor) {
                     $return = $phpDocNodeVisitor->enterNode($subNode);
-                    if ($return instanceof Node) {
+                    if ($return instanceof \PHPStan\PhpDocParser\Ast\Node) {
                         $subNode = $return;
                     }
                 }
@@ -74,12 +74,12 @@ final class PhpDocNodeTraverser
     {
         foreach ($nodes as &$node) {
             // can be string or something else
-            if (!$node instanceof Node) {
+            if (!$node instanceof \PHPStan\PhpDocParser\Ast\Node) {
                 continue;
             }
             foreach ($this->phpDocNodeVisitors as $phpDocNodeVisitor) {
                 $return = $phpDocNodeVisitor->enterNode($node);
-                if ($return instanceof Node) {
+                if ($return instanceof \PHPStan\PhpDocParser\Ast\Node) {
                     $node = $return;
                 }
             }

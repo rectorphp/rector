@@ -37,9 +37,9 @@ final class VariableMethodCallToServiceCall
         $this->serviceType = $serviceType;
         $this->serviceMethodName = $serviceMethodName;
     }
-    public function getVariableObjectType() : ObjectType
+    public function getVariableObjectType() : \PHPStan\Type\ObjectType
     {
-        return new ObjectType($this->variableType);
+        return new \PHPStan\Type\ObjectType($this->variableType);
     }
     public function getMethodName() : string
     {

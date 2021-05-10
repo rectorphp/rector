@@ -18,7 +18,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\PHPUnit\Tests\Rector\Class_\AddSeeTestAnnotationRector\AddSeeTestAnnotationRectorTest
  */
-final class AddSeeTestAnnotationRector extends AbstractRector
+final class AddSeeTestAnnotationRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var string
@@ -36,15 +36,15 @@ final class AddSeeTestAnnotationRector extends AbstractRector
      * @var PhpDocTagRemover
      */
     private $phpDocTagRemover;
-    public function __construct(TestClassResolver $testClassResolver, ReflectionProvider $reflectionProvider, PhpDocTagRemover $phpDocTagRemover)
+    public function __construct(\Rector\PHPUnit\TestClassResolver\TestClassResolver $testClassResolver, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover $phpDocTagRemover)
     {
         $this->testClassResolver = $testClassResolver;
         $this->reflectionProvider = $reflectionProvider;
         $this->phpDocTagRemover = $phpDocTagRemover;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Add @see annotation test of the class for faster jump to test. Make it FQN, so it stays in the annotation, not in the PHP source code.', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Add @see annotation test of the class for faster jump to test. Make it FQN, so it stays in the annotation, not in the PHP source code.', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeService
 {
 }
@@ -76,12 +76,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Class_::class];
+        return [\PhpParser\Node\Stmt\Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $testCaseClassName = $this->testClassResolver->resolveFromClass($node);
         if ($testCaseClassName === null) {
@@ -99,7 +99,7 @@ CODE_SAMPLE
         $phpDocInfo->addPhpDocTagNode($newSeeTagNode);
         return $node;
     }
-    private function shouldSkipClass(Class_ $class, string $testCaseClassName) : bool
+    private function shouldSkipClass(\PhpParser\Node\Stmt\Class_ $class, string $testCaseClassName) : bool
     {
         // we are in the test case
         if ($this->isName($class, '*Test')) {
@@ -110,7 +110,7 @@ CODE_SAMPLE
         $seePhpDocTagNodes = $phpDocInfo->getTagsByName(self::SEE);
         // is the @see annotation already added
         foreach ($seePhpDocTagNodes as $seePhpDocTagNode) {
-            if (!$seePhpDocTagNode->value instanceof GenericTagValueNode) {
+            if (!$seePhpDocTagNode->value instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode) {
                 continue;
             }
             /** @var GenericTagValueNode $genericTagValueNode */
@@ -122,16 +122,16 @@ CODE_SAMPLE
         }
         return \false;
     }
-    private function createSeePhpDocTagNode(string $className) : PhpDocTagNode
+    private function createSeePhpDocTagNode(string $className) : \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode
     {
-        return new PhpDocTagNode('@see', new GenericTagValueNode('\\' . $className));
+        return new \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode('@see', new \PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode('\\' . $className));
     }
-    private function hasAlreadySeeAnnotation(PhpDocInfo $phpDocInfo, string $testCaseClassName) : bool
+    private function hasAlreadySeeAnnotation(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo, string $testCaseClassName) : bool
     {
         /** @var PhpDocTagNode[] $seePhpDocTagNodes */
         $seePhpDocTagNodes = $phpDocInfo->getTagsByName(self::SEE);
         foreach ($seePhpDocTagNodes as $seePhpDocTagNode) {
-            if (!$seePhpDocTagNode->value instanceof GenericTagValueNode) {
+            if (!$seePhpDocTagNode->value instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode) {
                 continue;
             }
             $possibleClassName = $seePhpDocTagNode->value->value;
@@ -142,12 +142,12 @@ CODE_SAMPLE
         }
         return \false;
     }
-    private function removeNonExistingClassSeeAnnotation(PhpDocInfo $phpDocInfo) : void
+    private function removeNonExistingClassSeeAnnotation(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo) : void
     {
         $seePhpDocTagNodes = $phpDocInfo->getTagsByName(self::SEE);
         /** @var PhpDocTagNode[] $seePhpDocTagNodes */
         foreach ($seePhpDocTagNodes as $seePhpDocTagNode) {
-            if (!$seePhpDocTagNode->value instanceof GenericTagValueNode) {
+            if (!$seePhpDocTagNode->value instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode) {
                 continue;
             }
             $possibleClassName = $seePhpDocTagNode->value->value;
@@ -163,9 +163,9 @@ CODE_SAMPLE
     }
     private function isSeeTestCaseClass(string $possibleClassName) : bool
     {
-        if (!Strings::startsWith($possibleClassName, '\\')) {
+        if (!\RectorPrefix20210510\Nette\Utils\Strings::startsWith($possibleClassName, '\\')) {
             return \false;
         }
-        return Strings::endsWith($possibleClassName, 'Test');
+        return \RectorPrefix20210510\Nette\Utils\Strings::endsWith($possibleClassName, 'Test');
     }
 }

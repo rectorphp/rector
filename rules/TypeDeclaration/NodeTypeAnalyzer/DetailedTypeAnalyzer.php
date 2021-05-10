@@ -13,20 +13,20 @@ final class DetailedTypeAnalyzer
      * @var int
      */
     private const MAX_NUMBER_OF_TYPES = 3;
-    public function isTooDetailed(Type $type) : bool
+    public function isTooDetailed(\PHPStan\Type\Type $type) : bool
     {
-        if ($type instanceof UnionType) {
+        if ($type instanceof \PHPStan\Type\UnionType) {
             return \count($type->getTypes()) > self::MAX_NUMBER_OF_TYPES;
         }
-        if ($type instanceof ConstantArrayType) {
+        if ($type instanceof \PHPStan\Type\Constant\ConstantArrayType) {
             return \count($type->getValueTypes()) > self::MAX_NUMBER_OF_TYPES;
         }
-        if ($type instanceof GenericObjectType) {
+        if ($type instanceof \PHPStan\Type\Generic\GenericObjectType) {
             return $this->isTooDetailedGenericObjectType($type);
         }
         return \false;
     }
-    private function isTooDetailedGenericObjectType(GenericObjectType $genericObjectType) : bool
+    private function isTooDetailedGenericObjectType(\PHPStan\Type\Generic\GenericObjectType $genericObjectType) : bool
     {
         if (\count($genericObjectType->getTypes()) !== 1) {
             return \false;

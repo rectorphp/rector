@@ -31,7 +31,7 @@ final class FileProcessor
      * @var AffectedFilesCollector
      */
     private $affectedFilesCollector;
-    public function __construct(AffectedFilesCollector $affectedFilesCollector, Lexer $lexer, NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator, Parser $parser, RectorNodeTraverser $rectorNodeTraverser)
+    public function __construct(\Rector\ChangesReporting\Collector\AffectedFilesCollector $affectedFilesCollector, \PhpParser\Lexer $lexer, \Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator, \Rector\Core\PhpParser\Parser\Parser $parser, \Rector\Core\PhpParser\NodeTraverser\RectorNodeTraverser $rectorNodeTraverser)
     {
         $this->parser = $parser;
         $this->lexer = $lexer;
@@ -39,7 +39,7 @@ final class FileProcessor
         $this->nodeScopeAndMetadataDecorator = $nodeScopeAndMetadataDecorator;
         $this->affectedFilesCollector = $affectedFilesCollector;
     }
-    public function parseFileInfoToLocalCache(File $file) : void
+    public function parseFileInfoToLocalCache(\Rector\Core\ValueObject\Application\File $file) : void
     {
         // store tokens by absolute path, so we don't have to print them right now
         $smartFileInfo = $file->getSmartFileInfo();
@@ -48,7 +48,7 @@ final class FileProcessor
         $newStmts = $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile($file, $oldStmts, $smartFileInfo);
         $file->hydrateStmtsAndTokens($newStmts, $oldStmts, $oldTokens);
     }
-    public function refactor(File $file) : void
+    public function refactor(\Rector\Core\ValueObject\Application\File $file) : void
     {
         $newStmts = $this->rectorNodeTraverser->traverse($file->getNewStmts());
         $file->changeNewStmts($newStmts);

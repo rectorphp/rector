@@ -18,7 +18,7 @@ use RectorPrefix20210510\Symfony\Component\HttpFoundation\Session\SessionBagInte
  *
  * @author Drak <drak@zikula.org>
  */
-class MetadataBag implements SessionBagInterface
+class MetadataBag implements \RectorPrefix20210510\Symfony\Component\HttpFoundation\Session\SessionBagInterface
 {
     public const CREATED = 'c';
     public const UPDATED = 'u';

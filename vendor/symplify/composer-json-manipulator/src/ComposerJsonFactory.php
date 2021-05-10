@@ -17,105 +17,105 @@ final class ComposerJsonFactory
      * @var JsonFileManager
      */
     private $jsonFileManager;
-    public function __construct(JsonFileManager $jsonFileManager)
+    public function __construct(\RectorPrefix20210510\Symplify\ComposerJsonManipulator\FileSystem\JsonFileManager $jsonFileManager)
     {
         $this->jsonFileManager = $jsonFileManager;
     }
-    public function createFromString(string $jsonString) : ComposerJson
+    public function createFromString(string $jsonString) : \RectorPrefix20210510\Symplify\ComposerJsonManipulator\ValueObject\ComposerJson
     {
-        $jsonArray = Json::decode($jsonString, Json::FORCE_ARRAY);
+        $jsonArray = \RectorPrefix20210510\Nette\Utils\Json::decode($jsonString, \RectorPrefix20210510\Nette\Utils\Json::FORCE_ARRAY);
         return $this->createFromArray($jsonArray);
     }
-    public function createFromFileInfo(SmartFileInfo $smartFileInfo) : ComposerJson
+    public function createFromFileInfo(\Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo) : \RectorPrefix20210510\Symplify\ComposerJsonManipulator\ValueObject\ComposerJson
     {
         $jsonArray = $this->jsonFileManager->loadFromFilePath($smartFileInfo->getRealPath());
         $composerJson = $this->createFromArray($jsonArray);
         $composerJson->setOriginalFileInfo($smartFileInfo);
         return $composerJson;
     }
-    public function createFromFilePath(string $filePath) : ComposerJson
+    public function createFromFilePath(string $filePath) : \RectorPrefix20210510\Symplify\ComposerJsonManipulator\ValueObject\ComposerJson
     {
         $jsonArray = $this->jsonFileManager->loadFromFilePath($filePath);
         $composerJson = $this->createFromArray($jsonArray);
-        $fileInfo = new SmartFileInfo($filePath);
+        $fileInfo = new \Symplify\SmartFileSystem\SmartFileInfo($filePath);
         $composerJson->setOriginalFileInfo($fileInfo);
         return $composerJson;
     }
-    public function createEmpty() : ComposerJson
+    public function createEmpty() : \RectorPrefix20210510\Symplify\ComposerJsonManipulator\ValueObject\ComposerJson
     {
-        return new ComposerJson();
+        return new \RectorPrefix20210510\Symplify\ComposerJsonManipulator\ValueObject\ComposerJson();
     }
     /**
      * @param mixed[] $jsonArray
      */
-    public function createFromArray(array $jsonArray) : ComposerJson
+    public function createFromArray(array $jsonArray) : \RectorPrefix20210510\Symplify\ComposerJsonManipulator\ValueObject\ComposerJson
     {
-        $composerJson = new ComposerJson();
-        if (isset($jsonArray[ComposerJsonSection::CONFIG])) {
-            $composerJson->setConfig($jsonArray[ComposerJsonSection::CONFIG]);
+        $composerJson = new \RectorPrefix20210510\Symplify\ComposerJsonManipulator\ValueObject\ComposerJson();
+        if (isset($jsonArray[\RectorPrefix20210510\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::CONFIG])) {
+            $composerJson->setConfig($jsonArray[\RectorPrefix20210510\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::CONFIG]);
         }
-        if (isset($jsonArray[ComposerJsonSection::NAME])) {
-            $composerJson->setName($jsonArray[ComposerJsonSection::NAME]);
+        if (isset($jsonArray[\RectorPrefix20210510\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::NAME])) {
+            $composerJson->setName($jsonArray[\RectorPrefix20210510\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::NAME]);
         }
-        if (isset($jsonArray[ComposerJsonSection::TYPE])) {
-            $composerJson->setType($jsonArray[ComposerJsonSection::TYPE]);
+        if (isset($jsonArray[\RectorPrefix20210510\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::TYPE])) {
+            $composerJson->setType($jsonArray[\RectorPrefix20210510\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::TYPE]);
         }
-        if (isset($jsonArray[ComposerJsonSection::AUTHORS])) {
-            $composerJson->setAuthors($jsonArray[ComposerJsonSection::AUTHORS]);
+        if (isset($jsonArray[\RectorPrefix20210510\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::AUTHORS])) {
+            $composerJson->setAuthors($jsonArray[\RectorPrefix20210510\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::AUTHORS]);
         }
-        if (isset($jsonArray[ComposerJsonSection::DESCRIPTION])) {
-            $composerJson->setDescription($jsonArray[ComposerJsonSection::DESCRIPTION]);
+        if (isset($jsonArray[\RectorPrefix20210510\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::DESCRIPTION])) {
+            $composerJson->setDescription($jsonArray[\RectorPrefix20210510\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::DESCRIPTION]);
         }
-        if (isset($jsonArray[ComposerJsonSection::KEYWORDS])) {
-            $composerJson->setKeywords($jsonArray[ComposerJsonSection::KEYWORDS]);
+        if (isset($jsonArray[\RectorPrefix20210510\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::KEYWORDS])) {
+            $composerJson->setKeywords($jsonArray[\RectorPrefix20210510\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::KEYWORDS]);
         }
-        if (isset($jsonArray[ComposerJsonSection::HOMEPAGE])) {
-            $composerJson->setHomepage($jsonArray[ComposerJsonSection::HOMEPAGE]);
+        if (isset($jsonArray[\RectorPrefix20210510\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::HOMEPAGE])) {
+            $composerJson->setHomepage($jsonArray[\RectorPrefix20210510\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::HOMEPAGE]);
         }
-        if (isset($jsonArray[ComposerJsonSection::LICENSE])) {
-            $composerJson->setLicense($jsonArray[ComposerJsonSection::LICENSE]);
+        if (isset($jsonArray[\RectorPrefix20210510\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::LICENSE])) {
+            $composerJson->setLicense($jsonArray[\RectorPrefix20210510\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::LICENSE]);
         }
-        if (isset($jsonArray[ComposerJsonSection::BIN])) {
-            $composerJson->setBin($jsonArray[ComposerJsonSection::BIN]);
+        if (isset($jsonArray[\RectorPrefix20210510\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::BIN])) {
+            $composerJson->setBin($jsonArray[\RectorPrefix20210510\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::BIN]);
         }
-        if (isset($jsonArray[ComposerJsonSection::REQUIRE])) {
-            $composerJson->setRequire($jsonArray[ComposerJsonSection::REQUIRE]);
+        if (isset($jsonArray[\RectorPrefix20210510\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::REQUIRE])) {
+            $composerJson->setRequire($jsonArray[\RectorPrefix20210510\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::REQUIRE]);
         }
-        if (isset($jsonArray[ComposerJsonSection::REQUIRE_DEV])) {
-            $composerJson->setRequireDev($jsonArray[ComposerJsonSection::REQUIRE_DEV]);
+        if (isset($jsonArray[\RectorPrefix20210510\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::REQUIRE_DEV])) {
+            $composerJson->setRequireDev($jsonArray[\RectorPrefix20210510\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::REQUIRE_DEV]);
         }
-        if (isset($jsonArray[ComposerJsonSection::AUTOLOAD])) {
-            $composerJson->setAutoload($jsonArray[ComposerJsonSection::AUTOLOAD]);
+        if (isset($jsonArray[\RectorPrefix20210510\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::AUTOLOAD])) {
+            $composerJson->setAutoload($jsonArray[\RectorPrefix20210510\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::AUTOLOAD]);
         }
-        if (isset($jsonArray[ComposerJsonSection::AUTOLOAD_DEV])) {
-            $composerJson->setAutoloadDev($jsonArray[ComposerJsonSection::AUTOLOAD_DEV]);
+        if (isset($jsonArray[\RectorPrefix20210510\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::AUTOLOAD_DEV])) {
+            $composerJson->setAutoloadDev($jsonArray[\RectorPrefix20210510\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::AUTOLOAD_DEV]);
         }
-        if (isset($jsonArray[ComposerJsonSection::REPLACE])) {
-            $composerJson->setReplace($jsonArray[ComposerJsonSection::REPLACE]);
+        if (isset($jsonArray[\RectorPrefix20210510\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::REPLACE])) {
+            $composerJson->setReplace($jsonArray[\RectorPrefix20210510\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::REPLACE]);
         }
-        if (isset($jsonArray[ComposerJsonSection::EXTRA])) {
-            $composerJson->setExtra($jsonArray[ComposerJsonSection::EXTRA]);
+        if (isset($jsonArray[\RectorPrefix20210510\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::EXTRA])) {
+            $composerJson->setExtra($jsonArray[\RectorPrefix20210510\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::EXTRA]);
         }
-        if (isset($jsonArray[ComposerJsonSection::SCRIPTS])) {
-            $composerJson->setScripts($jsonArray[ComposerJsonSection::SCRIPTS]);
+        if (isset($jsonArray[\RectorPrefix20210510\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::SCRIPTS])) {
+            $composerJson->setScripts($jsonArray[\RectorPrefix20210510\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::SCRIPTS]);
         }
-        if (isset($jsonArray[ComposerJsonSection::SCRIPTS_DESCRIPTIONS])) {
-            $composerJson->setScriptsDescriptions($jsonArray[ComposerJsonSection::SCRIPTS_DESCRIPTIONS]);
+        if (isset($jsonArray[\RectorPrefix20210510\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::SCRIPTS_DESCRIPTIONS])) {
+            $composerJson->setScriptsDescriptions($jsonArray[\RectorPrefix20210510\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::SCRIPTS_DESCRIPTIONS]);
         }
-        if (isset($jsonArray[ComposerJsonSection::MINIMUM_STABILITY])) {
-            $composerJson->setMinimumStability($jsonArray[ComposerJsonSection::MINIMUM_STABILITY]);
+        if (isset($jsonArray[\RectorPrefix20210510\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::MINIMUM_STABILITY])) {
+            $composerJson->setMinimumStability($jsonArray[\RectorPrefix20210510\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::MINIMUM_STABILITY]);
         }
-        if (isset($jsonArray[ComposerJsonSection::PREFER_STABLE])) {
-            $composerJson->setPreferStable($jsonArray[ComposerJsonSection::PREFER_STABLE]);
+        if (isset($jsonArray[\RectorPrefix20210510\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::PREFER_STABLE])) {
+            $composerJson->setPreferStable($jsonArray[\RectorPrefix20210510\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::PREFER_STABLE]);
         }
-        if (isset($jsonArray[ComposerJsonSection::CONFLICT])) {
-            $composerJson->setConflicts($jsonArray[ComposerJsonSection::CONFLICT]);
+        if (isset($jsonArray[\RectorPrefix20210510\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::CONFLICT])) {
+            $composerJson->setConflicts($jsonArray[\RectorPrefix20210510\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::CONFLICT]);
         }
-        if (isset($jsonArray[ComposerJsonSection::REPOSITORIES])) {
-            $composerJson->setRepositories($jsonArray[ComposerJsonSection::REPOSITORIES]);
+        if (isset($jsonArray[\RectorPrefix20210510\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::REPOSITORIES])) {
+            $composerJson->setRepositories($jsonArray[\RectorPrefix20210510\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::REPOSITORIES]);
         }
-        if (isset($jsonArray[ComposerJsonSection::VERSION])) {
-            $composerJson->setVersion($jsonArray[ComposerJsonSection::VERSION]);
+        if (isset($jsonArray[\RectorPrefix20210510\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::VERSION])) {
+            $composerJson->setVersion($jsonArray[\RectorPrefix20210510\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::VERSION]);
         }
         $orderedKeys = \array_keys($jsonArray);
         $composerJson->setOrderedKeys($orderedKeys);

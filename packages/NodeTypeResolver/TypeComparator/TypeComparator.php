@@ -46,7 +46,7 @@ final class TypeComparator
      * @var TypeFactory
      */
     private $typeFactory;
-    public function __construct(TypeHasher $typeHasher, TypeNormalizer $typeNormalizer, StaticTypeMapper $staticTypeMapper, \Rector\NodeTypeResolver\TypeComparator\ArrayTypeComparator $arrayTypeComparator, \Rector\NodeTypeResolver\TypeComparator\ScalarTypeComparator $scalarTypeComparator, TypeFactory $typeFactory)
+    public function __construct(\Rector\NodeTypeResolver\PHPStan\TypeHasher $typeHasher, \Rector\TypeDeclaration\TypeNormalizer $typeNormalizer, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \Rector\NodeTypeResolver\TypeComparator\ArrayTypeComparator $arrayTypeComparator, \Rector\NodeTypeResolver\TypeComparator\ScalarTypeComparator $scalarTypeComparator, \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory $typeFactory)
     {
         $this->typeHasher = $typeHasher;
         $this->typeNormalizer = $typeNormalizer;
@@ -55,7 +55,7 @@ final class TypeComparator
         $this->scalarTypeComparator = $scalarTypeComparator;
         $this->typeFactory = $typeFactory;
     }
-    public function areTypesEqual(Type $firstType, Type $secondType) : bool
+    public function areTypesEqual(\PHPStan\Type\Type $firstType, \PHPStan\Type\Type $secondType) : bool
     {
         if ($this->scalarTypeComparator->areEqualScalar($firstType, $secondType)) {
             return \true;
@@ -75,7 +75,7 @@ final class TypeComparator
         // is template of
         return $this->areArrayTypeWithSingleObjectChildToParent($firstType, $secondType);
     }
-    public function arePhpParserAndPhpStanPhpDocTypesEqual(Node $phpParserNode, TypeNode $phpStanDocTypeNode, Node $node) : bool
+    public function arePhpParserAndPhpStanPhpDocTypesEqual(\PhpParser\Node $phpParserNode, \PHPStan\PhpDocParser\Ast\Type\TypeNode $phpStanDocTypeNode, \PhpParser\Node $node) : bool
     {
         $phpParserNodeType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($phpParserNode);
         $phpStanDocType = $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType($phpStanDocTypeNode, $node);
@@ -84,28 +84,28 @@ final class TypeComparator
         $phpStanDocType = $this->normalizeConstantBooleanType($phpStanDocType);
         return $this->areTypesEqual($phpParserNodeType, $phpStanDocType);
     }
-    public function isSubtype(Type $checkedType, Type $mainType) : bool
+    public function isSubtype(\PHPStan\Type\Type $checkedType, \PHPStan\Type\Type $mainType) : bool
     {
-        if ($mainType instanceof MixedType) {
+        if ($mainType instanceof \PHPStan\Type\MixedType) {
             return \false;
         }
-        if (!$mainType instanceof ArrayType) {
+        if (!$mainType instanceof \PHPStan\Type\ArrayType) {
             return $mainType->isSuperTypeOf($checkedType)->yes();
         }
-        if (!$checkedType instanceof ArrayType) {
+        if (!$checkedType instanceof \PHPStan\Type\ArrayType) {
             return $mainType->isSuperTypeOf($checkedType)->yes();
         }
         return $this->arrayTypeComparator->isSubtype($checkedType, $mainType);
     }
-    private function areAliasedObjectMatchingFqnObject(Type $firstType, Type $secondType) : bool
+    private function areAliasedObjectMatchingFqnObject(\PHPStan\Type\Type $firstType, \PHPStan\Type\Type $secondType) : bool
     {
-        if ($firstType instanceof AliasedObjectType && $secondType instanceof ObjectType && $firstType->getFullyQualifiedClass() === $secondType->getClassName()) {
+        if ($firstType instanceof \Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType && $secondType instanceof \PHPStan\Type\ObjectType && $firstType->getFullyQualifiedClass() === $secondType->getClassName()) {
             return \true;
         }
-        if (!$secondType instanceof AliasedObjectType) {
+        if (!$secondType instanceof \Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType) {
             return \false;
         }
-        if (!$firstType instanceof ObjectType) {
+        if (!$firstType instanceof \PHPStan\Type\ObjectType) {
             return \false;
         }
         return $secondType->getFullyQualifiedClass() === $firstType->getClassName();
@@ -113,12 +113,12 @@ final class TypeComparator
     /**
      * E.g. class A extends B, class B → A[] is subtype of B[] → keep A[]
      */
-    private function areArrayTypeWithSingleObjectChildToParent(Type $firstType, Type $secondType) : bool
+    private function areArrayTypeWithSingleObjectChildToParent(\PHPStan\Type\Type $firstType, \PHPStan\Type\Type $secondType) : bool
     {
-        if (!$firstType instanceof ArrayType) {
+        if (!$firstType instanceof \PHPStan\Type\ArrayType) {
             return \false;
         }
-        if (!$secondType instanceof ArrayType) {
+        if (!$secondType instanceof \PHPStan\Type\ArrayType) {
             return \false;
         }
         $firstArrayItemType = $firstType->getItemType();
@@ -126,18 +126,18 @@ final class TypeComparator
         if ($this->isMutualObjectSubtypes($firstArrayItemType, $secondArrayItemType)) {
             return \true;
         }
-        if (!$firstArrayItemType instanceof GenericClassStringType) {
+        if (!$firstArrayItemType instanceof \PHPStan\Type\Generic\GenericClassStringType) {
             return \false;
         }
-        if (!$secondArrayItemType instanceof GenericClassStringType) {
+        if (!$secondArrayItemType instanceof \PHPStan\Type\Generic\GenericClassStringType) {
             return \false;
         }
         // @todo resolve later better with template map, @see https://github.com/symplify/symplify/pull/3034/commits/4f6be8b87e52117b1aa1613b9b689ae958a9d6f4
-        return $firstArrayItemType->getGenericType() instanceof ObjectType && $secondArrayItemType->getGenericType() instanceof ObjectType;
+        return $firstArrayItemType->getGenericType() instanceof \PHPStan\Type\ObjectType && $secondArrayItemType->getGenericType() instanceof \PHPStan\Type\ObjectType;
     }
-    private function isMutualObjectSubtypes(Type $firstArrayItemType, Type $secondArrayItemType) : bool
+    private function isMutualObjectSubtypes(\PHPStan\Type\Type $firstArrayItemType, \PHPStan\Type\Type $secondArrayItemType) : bool
     {
-        if ($firstArrayItemType instanceof ObjectType && $secondArrayItemType instanceof ObjectType) {
+        if ($firstArrayItemType instanceof \PHPStan\Type\ObjectType && $secondArrayItemType instanceof \PHPStan\Type\ObjectType) {
             if ($firstArrayItemType->isSuperTypeOf($secondArrayItemType)->yes()) {
                 return \true;
             }
@@ -147,9 +147,9 @@ final class TypeComparator
         }
         return \false;
     }
-    private function normalizeSingleUnionType(Type $type) : Type
+    private function normalizeSingleUnionType(\PHPStan\Type\Type $type) : \PHPStan\Type\Type
     {
-        if ($type instanceof UnionType) {
+        if ($type instanceof \PHPStan\Type\UnionType) {
             $uniqueTypes = $this->typeFactory->uniquateTypes($type->getTypes());
             if (\count($uniqueTypes) === 1) {
                 return $uniqueTypes[0];
@@ -157,22 +157,22 @@ final class TypeComparator
         }
         return $type;
     }
-    private function areArrayUnionConstantEqualTypes(Type $firstType, Type $secondType) : bool
+    private function areArrayUnionConstantEqualTypes(\PHPStan\Type\Type $firstType, \PHPStan\Type\Type $secondType) : bool
     {
-        if (!$firstType instanceof ArrayType) {
+        if (!$firstType instanceof \PHPStan\Type\ArrayType) {
             return \false;
         }
-        if (!$secondType instanceof ArrayType) {
+        if (!$secondType instanceof \PHPStan\Type\ArrayType) {
             return \false;
         }
         $firstKeyType = $this->normalizeSingleUnionType($firstType->getKeyType());
         $secondKeyType = $this->normalizeSingleUnionType($secondType->getKeyType());
         // mixed and integer type are mutual replaceable in practise
-        if ($firstKeyType instanceof MixedType) {
-            $firstKeyType = new IntegerType();
+        if ($firstKeyType instanceof \PHPStan\Type\MixedType) {
+            $firstKeyType = new \PHPStan\Type\IntegerType();
         }
-        if ($secondKeyType instanceof MixedType) {
-            $secondKeyType = new IntegerType();
+        if ($secondKeyType instanceof \PHPStan\Type\MixedType) {
+            $secondKeyType = new \PHPStan\Type\IntegerType();
         }
         if (!$this->areTypesEqual($firstKeyType, $secondKeyType)) {
             return \false;
@@ -181,11 +181,11 @@ final class TypeComparator
         $secondArrayType = $this->normalizeSingleUnionType($secondType->getItemType());
         return $this->areTypesEqual($firstArrayType, $secondArrayType);
     }
-    private function normalizeConstantBooleanType(Type $type) : Type
+    private function normalizeConstantBooleanType(\PHPStan\Type\Type $type) : \PHPStan\Type\Type
     {
-        return TypeTraverser::map($type, function (Type $type, callable $callable) : Type {
-            if ($type instanceof ConstantBooleanType) {
-                return new BooleanType();
+        return \PHPStan\Type\TypeTraverser::map($type, function (\PHPStan\Type\Type $type, callable $callable) : Type {
+            if ($type instanceof \PHPStan\Type\Constant\ConstantBooleanType) {
+                return new \PHPStan\Type\BooleanType();
             }
             return $callable($type);
         });

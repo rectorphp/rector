@@ -19,7 +19,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Doctrine\Tests\Rector\Property\MakeEntityDateTimePropertyDateTimeInterfaceRector\MakeEntityDateTimePropertyDateTimeInterfaceRectorTest
  */
-final class MakeEntityDateTimePropertyDateTimeInterfaceRector extends AbstractRector
+final class MakeEntityDateTimePropertyDateTimeInterfaceRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var SetterClassMethodAnalyzer
@@ -33,15 +33,15 @@ final class MakeEntityDateTimePropertyDateTimeInterfaceRector extends AbstractRe
      * @var PropertyTypeInferer
      */
     private $propertyTypeInferer;
-    public function __construct(SetterClassMethodAnalyzer $setterClassMethodAnalyzer, PropertyTypeManipulator $propertyTypeManipulator, PropertyTypeInferer $propertyTypeInferer)
+    public function __construct(\Rector\Doctrine\NodeAnalyzer\SetterClassMethodAnalyzer $setterClassMethodAnalyzer, \Rector\Doctrine\NodeManipulator\PropertyTypeManipulator $propertyTypeManipulator, \Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer $propertyTypeInferer)
     {
         $this->setterClassMethodAnalyzer = $setterClassMethodAnalyzer;
         $this->propertyTypeManipulator = $propertyTypeManipulator;
         $this->propertyTypeInferer = $propertyTypeInferer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Make maker bundle generate DateTime property accept DateTimeInterface too', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Make maker bundle generate DateTime property accept DateTimeInterface too', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -86,22 +86,22 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Property::class];
+        return [\PhpParser\Node\Stmt\Property::class];
     }
     /**
      * @param Property $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $inferredType = $this->propertyTypeInferer->inferProperty($node);
-        if ($inferredType instanceof UnionType) {
-            $inferredType = TypeCombinator::removeNull($inferredType);
+        if ($inferredType instanceof \PHPStan\Type\UnionType) {
+            $inferredType = \PHPStan\Type\TypeCombinator::removeNull($inferredType);
         }
-        $dateTimeObjectType = new ObjectType('DateTimeInterface');
+        $dateTimeObjectType = new \PHPStan\Type\ObjectType('DateTimeInterface');
         if (!$dateTimeObjectType->equals($inferredType)) {
             return null;
         }
-        if (!$this->isObjectType($node, new ObjectType('DateTime'))) {
+        if (!$this->isObjectType($node, new \PHPStan\Type\ObjectType('DateTime'))) {
             return null;
         }
         $this->propertyTypeManipulator->changePropertyType($node, 'DateTime', 'DateTimeInterface');

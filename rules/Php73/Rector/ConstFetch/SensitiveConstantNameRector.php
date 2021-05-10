@@ -17,7 +17,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php73\Rector\ConstFetch\SensitiveConstantNameRector\SensitiveConstantNameRectorTest
  */
-final class SensitiveConstantNameRector extends AbstractRector
+final class SensitiveConstantNameRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @see http://php.net/manual/en/reserved.constants.php
@@ -28,13 +28,13 @@ final class SensitiveConstantNameRector extends AbstractRector
      * @var ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(ReflectionProvider $reflectionProvider)
+    public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider)
     {
         $this->reflectionProvider = $reflectionProvider;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Changes case insensitive constants to sensitive ones.', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Changes case insensitive constants to sensitive ones.', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 define('FOO', 42, true);
 var_dump(FOO);
 var_dump(foo);
@@ -51,12 +51,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [ConstFetch::class];
+        return [\PhpParser\Node\Expr\ConstFetch::class];
     }
     /**
      * @param ConstFetch $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $constantName = $this->getName($node);
         if ($constantName === null) {
@@ -68,15 +68,15 @@ CODE_SAMPLE
             return null;
         }
         // constant is defined in current lower/upper case
-        $scope = $node->getAttribute(AttributeKey::SCOPE);
-        if ($this->reflectionProvider->hasConstant(new Name($constantName), $scope)) {
+        $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
+        if ($this->reflectionProvider->hasConstant(new \PhpParser\Node\Name($constantName), $scope)) {
             return null;
         }
         // is uppercase, all good
         if ($constantName === $uppercasedConstantName) {
             return null;
         }
-        $node->name = new FullyQualified($uppercasedConstantName);
+        $node->name = new \PhpParser\Node\Name\FullyQualified($uppercasedConstantName);
         return $node;
     }
 }

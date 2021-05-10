@@ -20,7 +20,7 @@ final class PropertyVisibilityVendorLockResolver
      * @var FamilyRelationsAnalyzer
      */
     private $familyRelationsAnalyzer;
-    public function __construct(NodeNameResolver $nodeNameResolver, FamilyRelationsAnalyzer $familyRelationsAnalyzer)
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer $familyRelationsAnalyzer)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->familyRelationsAnalyzer = $familyRelationsAnalyzer;
@@ -32,10 +32,10 @@ final class PropertyVisibilityVendorLockResolver
      * Prevents:
      * - changing visibility conflicting with children
      */
-    public function isParentLockedProperty(Property $property) : bool
+    public function isParentLockedProperty(\PhpParser\Node\Stmt\Property $property) : bool
     {
         $classReflection = $this->resolveClassReflection($property);
-        if (!$classReflection instanceof ClassReflection) {
+        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
             return \false;
         }
         $propertyName = $this->nodeNameResolver->getName($property);
@@ -46,10 +46,10 @@ final class PropertyVisibilityVendorLockResolver
         }
         return \false;
     }
-    public function isChildLockedProperty(Property $property) : bool
+    public function isChildLockedProperty(\PhpParser\Node\Stmt\Property $property) : bool
     {
         $classReflection = $this->resolveClassReflection($property);
-        if (!$classReflection instanceof ClassReflection) {
+        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
             return \false;
         }
         $propertyName = $this->nodeNameResolver->getName($property);
@@ -64,10 +64,10 @@ final class PropertyVisibilityVendorLockResolver
         }
         return \false;
     }
-    private function resolveClassReflection(Node $node) : ?ClassReflection
+    private function resolveClassReflection(\PhpParser\Node $node) : ?\PHPStan\Reflection\ClassReflection
     {
-        $scope = $node->getAttribute(AttributeKey::SCOPE);
-        if (!$scope instanceof Scope) {
+        $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
+        if (!$scope instanceof \PHPStan\Analyser\Scope) {
             return null;
         }
         return $scope->getClassReflection();

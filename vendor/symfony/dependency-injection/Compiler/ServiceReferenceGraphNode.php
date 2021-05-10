@@ -34,11 +34,11 @@ class ServiceReferenceGraphNode
         $this->id = $id;
         $this->value = $value;
     }
-    public function addInEdge(ServiceReferenceGraphEdge $edge)
+    public function addInEdge(\RectorPrefix20210510\Symfony\Component\DependencyInjection\Compiler\ServiceReferenceGraphEdge $edge)
     {
         $this->inEdges[] = $edge;
     }
-    public function addOutEdge(ServiceReferenceGraphEdge $edge)
+    public function addOutEdge(\RectorPrefix20210510\Symfony\Component\DependencyInjection\Compiler\ServiceReferenceGraphEdge $edge)
     {
         $this->outEdges[] = $edge;
     }
@@ -49,7 +49,7 @@ class ServiceReferenceGraphNode
      */
     public function isAlias()
     {
-        return $this->value instanceof Alias;
+        return $this->value instanceof \RectorPrefix20210510\Symfony\Component\DependencyInjection\Alias;
     }
     /**
      * Checks if the value of this node is a Definition.
@@ -58,7 +58,7 @@ class ServiceReferenceGraphNode
      */
     public function isDefinition()
     {
-        return $this->value instanceof Definition;
+        return $this->value instanceof \RectorPrefix20210510\Symfony\Component\DependencyInjection\Definition;
     }
     /**
      * Returns the identifier.

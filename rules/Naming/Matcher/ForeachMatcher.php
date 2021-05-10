@@ -26,19 +26,19 @@ final class ForeachMatcher
      * @var BetterNodeFinder
      */
     private $betterNodeFinder;
-    public function __construct(NodeNameResolver $nodeNameResolver, \Rector\Naming\Matcher\CallMatcher $callMatcher, BetterNodeFinder $betterNodeFinder)
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Naming\Matcher\CallMatcher $callMatcher, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->callMatcher = $callMatcher;
         $this->betterNodeFinder = $betterNodeFinder;
     }
-    public function match(Foreach_ $foreach) : ?VariableAndCallForeach
+    public function match(\PhpParser\Node\Stmt\Foreach_ $foreach) : ?\Rector\Naming\ValueObject\VariableAndCallForeach
     {
         $call = $this->callMatcher->matchCall($foreach);
         if ($call === null) {
             return null;
         }
-        if (!$foreach->valueVar instanceof Variable) {
+        if (!$foreach->valueVar instanceof \PhpParser\Node\Expr\Variable) {
             return null;
         }
         $functionLike = $this->getFunctionLike($foreach);
@@ -49,13 +49,13 @@ final class ForeachMatcher
         if ($variableName === null) {
             return null;
         }
-        return new VariableAndCallForeach($foreach->valueVar, $call, $variableName, $functionLike);
+        return new \Rector\Naming\ValueObject\VariableAndCallForeach($foreach->valueVar, $call, $variableName, $functionLike);
     }
     /**
      * @return ClassMethod|Function_|Closure|null
      */
-    private function getFunctionLike(Foreach_ $foreach) : ?Node
+    private function getFunctionLike(\PhpParser\Node\Stmt\Foreach_ $foreach) : ?\PhpParser\Node
     {
-        return $this->betterNodeFinder->findParentTypes($foreach, [Closure::class, ClassMethod::class, Function_::class]);
+        return $this->betterNodeFinder->findParentTypes($foreach, [\PhpParser\Node\Expr\Closure::class, \PhpParser\Node\Stmt\ClassMethod::class, \PhpParser\Node\Stmt\Function_::class]);
     }
 }

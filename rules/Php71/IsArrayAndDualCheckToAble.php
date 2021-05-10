@@ -23,15 +23,15 @@ final class IsArrayAndDualCheckToAble
      * @var BinaryOpManipulator
      */
     private $binaryOpManipulator;
-    public function __construct(BinaryOpManipulator $binaryOpManipulator, NodeNameResolver $nodeNameResolver)
+    public function __construct(\Rector\Core\NodeManipulator\BinaryOpManipulator $binaryOpManipulator, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->binaryOpManipulator = $binaryOpManipulator;
     }
-    public function processBooleanOr(BooleanOr $booleanOr, string $type, string $newMethodName) : ?FuncCall
+    public function processBooleanOr(\PhpParser\Node\Expr\BinaryOp\BooleanOr $booleanOr, string $type, string $newMethodName) : ?\PhpParser\Node\Expr\FuncCall
     {
-        $twoNodeMatch = $this->binaryOpManipulator->matchFirstAndSecondConditionNode($booleanOr, Instanceof_::class, FuncCall::class);
-        if (!$twoNodeMatch instanceof TwoNodeMatch) {
+        $twoNodeMatch = $this->binaryOpManipulator->matchFirstAndSecondConditionNode($booleanOr, \PhpParser\Node\Expr\Instanceof_::class, \PhpParser\Node\Expr\FuncCall::class);
+        if (!$twoNodeMatch instanceof \Rector\Php71\ValueObject\TwoNodeMatch) {
             return null;
         }
         /** @var Instanceof_ $instanceOf */
@@ -39,7 +39,7 @@ final class IsArrayAndDualCheckToAble
         /** @var FuncCall $funcCall */
         $funcCall = $twoNodeMatch->getSecondExpr();
         $instanceOfClass = $instanceOf->class;
-        if ($instanceOfClass instanceof Expr) {
+        if ($instanceOfClass instanceof \PhpParser\Node\Expr) {
             return null;
         }
         if ((string) $instanceOfClass !== $type) {
@@ -49,12 +49,12 @@ final class IsArrayAndDualCheckToAble
             return null;
         }
         // both use same var
-        if (!$funcCall->args[0]->value instanceof Variable) {
+        if (!$funcCall->args[0]->value instanceof \PhpParser\Node\Expr\Variable) {
             return null;
         }
         /** @var Variable $firstVarNode */
         $firstVarNode = $funcCall->args[0]->value;
-        if (!$instanceOf->expr instanceof Variable) {
+        if (!$instanceOf->expr instanceof \PhpParser\Node\Expr\Variable) {
             return null;
         }
         /** @var Variable $secondVarNode */
@@ -63,6 +63,6 @@ final class IsArrayAndDualCheckToAble
         if ($firstVarNode->name !== $secondVarNode->name) {
             return null;
         }
-        return new FuncCall(new Name($newMethodName), [new Arg($firstVarNode)]);
+        return new \PhpParser\Node\Expr\FuncCall(new \PhpParser\Node\Name($newMethodName), [new \PhpParser\Node\Arg($firstVarNode)]);
     }
 }

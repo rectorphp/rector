@@ -24,9 +24,9 @@ final class ChangeConstantVisibility
         $this->constant = $constant;
         $this->visibility = $visibility;
     }
-    public function getObjectType() : ObjectType
+    public function getObjectType() : \PHPStan\Type\ObjectType
     {
-        return new ObjectType($this->class);
+        return new \PHPStan\Type\ObjectType($this->class);
     }
     public function getConstant() : string
     {

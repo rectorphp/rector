@@ -16,7 +16,7 @@ use RectorPrefix20210510\Symfony\Component\Config\Definition\Exception\InvalidTy
  *
  * @author Jeanmonod David <david.jeanmonod@gmail.com>
  */
-class FloatNode extends NumericNode
+class FloatNode extends \RectorPrefix20210510\Symfony\Component\Config\Definition\NumericNode
 {
     /**
      * {@inheritdoc}
@@ -28,7 +28,7 @@ class FloatNode extends NumericNode
             $value = (float) $value;
         }
         if (!\is_float($value)) {
-            $ex = new InvalidTypeException(\sprintf('Invalid type for path "%s". Expected "float", but got "%s".', $this->getPath(), \get_debug_type($value)));
+            $ex = new \RectorPrefix20210510\Symfony\Component\Config\Definition\Exception\InvalidTypeException(\sprintf('Invalid type for path "%s". Expected "float", but got "%s".', $this->getPath(), \get_debug_type($value)));
             if ($hint = $this->getInfo()) {
                 $ex->addHint($hint);
             }

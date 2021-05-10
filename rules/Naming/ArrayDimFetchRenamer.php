@@ -23,7 +23,7 @@ final class ArrayDimFetchRenamer
      * @var NodeComparator
      */
     private $nodeComparator;
-    public function __construct(SimpleCallableNodeTraverser $simpleCallableNodeTraverser, NodeComparator $nodeComparator)
+    public function __construct(\RectorPrefix20210510\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator)
     {
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->nodeComparator = $nodeComparator;
@@ -31,24 +31,24 @@ final class ArrayDimFetchRenamer
     /**
      * @see \Rector\Naming\Rector\Class_\RenamePropertyToMatchTypeRector::renameVariableInClassMethod
      */
-    public function renameToVariable(ClassMethod $classMethod, ArrayDimFetch $arrayDimFetch, string $variableName) : void
+    public function renameToVariable(\PhpParser\Node\Stmt\ClassMethod $classMethod, \PhpParser\Node\Expr\ArrayDimFetch $arrayDimFetch, string $variableName) : void
     {
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) use($arrayDimFetch, $variableName) {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $classMethod->stmts, function (\PhpParser\Node $node) use($arrayDimFetch, $variableName) {
             // do not rename element above
             if ($node->getLine() <= $arrayDimFetch->getLine()) {
                 return null;
             }
             if ($this->isScopeNesting($node)) {
-                return NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
+                return \PhpParser\NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
             }
             if (!$this->nodeComparator->areNodesEqual($node, $arrayDimFetch)) {
                 return null;
             }
-            return new Variable($variableName);
+            return new \PhpParser\Node\Expr\Variable($variableName);
         });
     }
-    private function isScopeNesting(Node $node) : bool
+    private function isScopeNesting(\PhpParser\Node $node) : bool
     {
-        return $node instanceof Closure || $node instanceof Function_ || $node instanceof ArrowFunction;
+        return $node instanceof \PhpParser\Node\Expr\Closure || $node instanceof \PhpParser\Node\Stmt\Function_ || $node instanceof \PhpParser\Node\Expr\ArrowFunction;
     }
 }

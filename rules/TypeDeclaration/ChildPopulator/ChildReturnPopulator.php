@@ -25,7 +25,7 @@ final class ChildReturnPopulator
      * @var ChildTypeResolver
      */
     private $childTypeResolver;
-    public function __construct(NodeNameResolver $nodeNameResolver, NodeRepository $nodeRepository, ChildTypeResolver $childTypeResolver)
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeCollector\NodeCollector\NodeRepository $nodeRepository, \Rector\TypeDeclaration\NodeTypeAnalyzer\ChildTypeResolver $childTypeResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeRepository = $nodeRepository;
@@ -34,11 +34,11 @@ final class ChildReturnPopulator
     /**
      * Add typehint to all children class methods
      */
-    public function populateChildren(ClassMethod $classMethod, Type $returnType) : void
+    public function populateChildren(\PhpParser\Node\Stmt\ClassMethod $classMethod, \PHPStan\Type\Type $returnType) : void
     {
-        $className = $classMethod->getAttribute(AttributeKey::CLASS_NAME);
+        $className = $classMethod->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);
         if (!\is_string($className)) {
-            throw new ShouldNotHappenException();
+            throw new \Rector\Core\Exception\ShouldNotHappenException();
         }
         $childrenClassLikes = $this->nodeRepository->findChildrenOfClass($className);
         if ($childrenClassLikes === []) {
@@ -53,11 +53,11 @@ final class ChildReturnPopulator
             $this->addReturnTypeToChildMethod($childClassLike, $classMethod, $returnType);
         }
     }
-    private function addReturnTypeToChildMethod(ClassLike $classLike, ClassMethod $classMethod, Type $returnType) : void
+    private function addReturnTypeToChildMethod(\PhpParser\Node\Stmt\ClassLike $classLike, \PhpParser\Node\Stmt\ClassMethod $classMethod, \PHPStan\Type\Type $returnType) : void
     {
         $methodName = $this->nodeNameResolver->getName($classMethod);
         $currentClassMethod = $classLike->getMethod($methodName);
-        if (!$currentClassMethod instanceof ClassMethod) {
+        if (!$currentClassMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
             return;
         }
         $resolvedChildTypeNode = $this->childTypeResolver->resolveChildTypeNode($returnType);
@@ -66,6 +66,6 @@ final class ChildReturnPopulator
         }
         $currentClassMethod->returnType = $resolvedChildTypeNode;
         // make sure the type is not overridden
-        $currentClassMethod->returnType->setAttribute(AttributeKey::DO_NOT_CHANGE, \true);
+        $currentClassMethod->returnType->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::DO_NOT_CHANGE, \true);
     }
 }

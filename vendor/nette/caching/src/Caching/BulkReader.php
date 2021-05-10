@@ -18,4 +18,4 @@ interface BulkReader
      */
     function bulkRead(array $keys) : array;
 }
-\class_exists(IBulkReader::class);
+\class_exists(\RectorPrefix20210510\Nette\Caching\IBulkReader::class);

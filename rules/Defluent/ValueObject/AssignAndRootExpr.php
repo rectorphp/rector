@@ -10,39 +10,39 @@ use PhpParser\Node\Stmt\Return_;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Defluent\Contract\ValueObject\FirstCallFactoryAwareInterface;
 use Rector\Defluent\Contract\ValueObject\RootExprAwareInterface;
-final class AssignAndRootExpr extends \Rector\Defluent\ValueObject\AbstractRootExpr implements RootExprAwareInterface, FirstCallFactoryAwareInterface
+final class AssignAndRootExpr extends \Rector\Defluent\ValueObject\AbstractRootExpr implements \Rector\Defluent\Contract\ValueObject\RootExprAwareInterface, \Rector\Defluent\Contract\ValueObject\FirstCallFactoryAwareInterface
 {
     /**
      * @var Variable|null
      */
     private $silentVariable;
-    public function __construct(Expr $assignExpr, Expr $rootExpr, ?Variable $silentVariable = null, bool $isFirstCallFactory = \false)
+    public function __construct(\PhpParser\Node\Expr $assignExpr, \PhpParser\Node\Expr $rootExpr, ?\PhpParser\Node\Expr\Variable $silentVariable = null, bool $isFirstCallFactory = \false)
     {
         $this->assignExpr = $assignExpr;
         $this->rootExpr = $rootExpr;
         $this->silentVariable = $silentVariable;
         $this->isFirstCallFactory = $isFirstCallFactory;
     }
-    public function getAssignExpr() : Expr
+    public function getAssignExpr() : \PhpParser\Node\Expr
     {
         return $this->assignExpr;
     }
-    public function getRootExpr() : Expr
+    public function getRootExpr() : \PhpParser\Node\Expr
     {
         return $this->rootExpr;
     }
-    public function getSilentVariable() : ?Variable
+    public function getSilentVariable() : ?\PhpParser\Node\Expr\Variable
     {
         return $this->silentVariable;
     }
-    public function getReturnSilentVariable() : Return_
+    public function getReturnSilentVariable() : \PhpParser\Node\Stmt\Return_
     {
-        if (!$this->silentVariable instanceof Variable) {
-            throw new ShouldNotHappenException();
+        if (!$this->silentVariable instanceof \PhpParser\Node\Expr\Variable) {
+            throw new \Rector\Core\Exception\ShouldNotHappenException();
         }
-        return new Return_($this->silentVariable);
+        return new \PhpParser\Node\Stmt\Return_($this->silentVariable);
     }
-    public function getCallerExpr() : Expr
+    public function getCallerExpr() : \PhpParser\Node\Expr
     {
         if ($this->silentVariable !== null) {
             return $this->silentVariable;
@@ -53,10 +53,10 @@ final class AssignAndRootExpr extends \Rector\Defluent\ValueObject\AbstractRootE
     {
         return $this->isFirstCallFactory;
     }
-    public function getFactoryAssignVariable() : Expr
+    public function getFactoryAssignVariable() : \PhpParser\Node\Expr
     {
         $firstAssign = $this->getFirstAssign();
-        if (!$firstAssign instanceof Assign) {
+        if (!$firstAssign instanceof \PhpParser\Node\Expr\Assign) {
             return $this->getCallerExpr();
         }
         return $firstAssign->var;

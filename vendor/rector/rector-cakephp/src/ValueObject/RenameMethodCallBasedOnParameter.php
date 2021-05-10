@@ -41,8 +41,8 @@ final class RenameMethodCallBasedOnParameter
     {
         return $this->newMethod;
     }
-    public function getOldObjectType() : ObjectType
+    public function getOldObjectType() : \PHPStan\Type\ObjectType
     {
-        return new ObjectType($this->oldClass);
+        return new \PHPStan\Type\ObjectType($this->oldClass);
     }
 }

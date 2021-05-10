@@ -27,7 +27,7 @@ class RequestStack
      * This method should generally not be called directly as the stack
      * management should be taken care of by the application itself.
      */
-    public function push(Request $request)
+    public function push(\RectorPrefix20210510\Symfony\Component\HttpFoundation\Request $request)
     {
         $this->requests[] = $request;
     }

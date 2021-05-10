@@ -15,7 +15,7 @@ namespace RectorPrefix20210510\Symfony\Component\DependencyInjection;
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-interface TaggedContainerInterface extends ContainerInterface
+interface TaggedContainerInterface extends \RectorPrefix20210510\Symfony\Component\DependencyInjection\ContainerInterface
 {
     /**
      * Returns service ids for a given tag.

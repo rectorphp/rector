@@ -27,7 +27,7 @@ final class ParentChildClassMethodTypeResolver
      * @var NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(\Rector\DowngradePhp72\NodeAnalyzer\NativeTypeClassTreeResolver $nativeTypeClassTreeResolver, NodeRepository $nodeRepository, ReflectionProvider $reflectionProvider, NodeNameResolver $nodeNameResolver)
+    public function __construct(\Rector\DowngradePhp72\NodeAnalyzer\NativeTypeClassTreeResolver $nativeTypeClassTreeResolver, \Rector\NodeCollector\NodeCollector\NodeRepository $nodeRepository, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
     {
         $this->nativeTypeClassTreeResolver = $nativeTypeClassTreeResolver;
         $this->nodeRepository = $nodeRepository;
@@ -37,7 +37,7 @@ final class ParentChildClassMethodTypeResolver
     /**
      * @return array<class-string, Type>
      */
-    public function resolve(ClassReflection $classReflection, string $methodName, int $paramPosition, Scope $scope) : array
+    public function resolve(\PHPStan\Reflection\ClassReflection $classReflection, string $methodName, int $paramPosition, \PHPStan\Analyser\Scope $scope) : array
     {
         $parameterTypesByClassName = [];
         // include types of class scope in case of trait
@@ -62,11 +62,11 @@ final class ParentChildClassMethodTypeResolver
     /**
      * @return array<class-string, Type>
      */
-    private function resolveInterfaceTypeByClassName(Scope $scope, string $methodName, int $position) : array
+    private function resolveInterfaceTypeByClassName(\PHPStan\Analyser\Scope $scope, string $methodName, int $position) : array
     {
         $typesByClassName = [];
         $currentClassReflection = $scope->getClassReflection();
-        if (!$currentClassReflection instanceof ClassReflection) {
+        if (!$currentClassReflection instanceof \PHPStan\Reflection\ClassReflection) {
             return [];
         }
         foreach ($currentClassReflection->getInterfaces() as $interfaceClassReflection) {
@@ -81,7 +81,7 @@ final class ParentChildClassMethodTypeResolver
     /**
      * @return array<class-string, Type>
      */
-    private function collectInterfaceImplenters(ClassReflection $ancestorClassReflection, string $methodName, int $paramPosition) : array
+    private function collectInterfaceImplenters(\PHPStan\Reflection\ClassReflection $ancestorClassReflection, string $methodName, int $paramPosition) : array
     {
         $parameterTypesByClassName = [];
         $interfaceImplementerClassLikes = $this->nodeRepository->findClassesAndInterfacesByType($ancestorClassReflection->getName());

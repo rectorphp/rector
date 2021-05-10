@@ -11,13 +11,13 @@ final class SpreadVariablesCollector
     /**
      * @return array<int, Param>
      */
-    public function resolveFromClassMethod(ClassMethod $classMethod) : array
+    public function resolveFromClassMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod) : array
     {
         $spreadParams = [];
         foreach ($classMethod->params as $key => $param) {
             // prevent race-condition removal on class method
-            $originalParam = $param->getAttribute(AttributeKey::ORIGINAL_NODE);
-            if (!$originalParam instanceof Param) {
+            $originalParam = $param->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NODE);
+            if (!$originalParam instanceof \PhpParser\Node\Param) {
                 continue;
             }
             if (!$originalParam->variadic) {

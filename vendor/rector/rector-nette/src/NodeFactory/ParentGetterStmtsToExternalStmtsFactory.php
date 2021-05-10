@@ -28,7 +28,7 @@ final class ParentGetterStmtsToExternalStmtsFactory
      * @var NodeComparator
      */
     private $nodeComparator;
-    public function __construct(NodeTypeResolver $nodeTypeResolver, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, NodeComparator $nodeComparator)
+    public function __construct(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \RectorPrefix20210510\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
@@ -42,17 +42,17 @@ final class ParentGetterStmtsToExternalStmtsFactory
     {
         $userExpression = null;
         foreach ($getUserStmts as $key => $getUserStmt) {
-            if (!$getUserStmt instanceof Expression) {
+            if (!$getUserStmt instanceof \PhpParser\Node\Stmt\Expression) {
                 continue;
             }
             $getUserStmt = $getUserStmt->expr;
-            if (!$getUserStmt instanceof Assign) {
+            if (!$getUserStmt instanceof \PhpParser\Node\Expr\Assign) {
                 continue;
             }
-            if (!$getUserStmt->expr instanceof StaticCall) {
+            if (!$getUserStmt->expr instanceof \PhpParser\Node\Expr\StaticCall) {
                 continue;
             }
-            if (!$this->nodeTypeResolver->isObjectType($getUserStmt->expr, new ObjectType('Nette\\Security\\User'))) {
+            if (!$this->nodeTypeResolver->isObjectType($getUserStmt->expr, new \PHPStan\Type\ObjectType('Nette\\Security\\User'))) {
                 continue;
             }
             $userExpression = $getUserStmt->var;
@@ -64,11 +64,11 @@ final class ParentGetterStmtsToExternalStmtsFactory
             return [];
         }
         // stmts without assign
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($getUserStmts, function (Node $node) use($userExpression) : ?MethodCall {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($getUserStmts, function (\PhpParser\Node $node) use($userExpression) : ?MethodCall {
             if (!$this->nodeComparator->areNodesEqual($node, $userExpression)) {
                 return null;
             }
-            return new MethodCall(new Variable('this'), 'getUser');
+            return new \PhpParser\Node\Expr\MethodCall(new \PhpParser\Node\Expr\Variable('this'), 'getUser');
         });
         return $getUserStmts;
     }
@@ -79,7 +79,7 @@ final class ParentGetterStmtsToExternalStmtsFactory
     private function removeReturn(array $stmts) : array
     {
         foreach ($stmts as $key => $stmt) {
-            if (!$stmt instanceof Return_) {
+            if (!$stmt instanceof \PhpParser\Node\Stmt\Return_) {
                 continue;
             }
             unset($stmts[$key]);

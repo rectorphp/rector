@@ -24,7 +24,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\DeadCode\Rector\Property\RemoveSetterOnlyPropertyAndMethodCallRector\RemoveSetterOnlyPropertyAndMethodCallRectorTest
  */
-final class RemoveSetterOnlyPropertyAndMethodCallRector extends AbstractRector
+final class RemoveSetterOnlyPropertyAndMethodCallRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var PropertyManipulator
@@ -42,16 +42,16 @@ final class RemoveSetterOnlyPropertyAndMethodCallRector extends AbstractRector
      * @var ComplexNodeRemover
      */
     private $complexNodeRemover;
-    public function __construct(PropertyManipulator $propertyManipulator, VendorLockResolver $vendorLockResolver, PropertyFetchFinder $propertyFetchFinder, ComplexNodeRemover $complexNodeRemover)
+    public function __construct(\Rector\Core\NodeManipulator\PropertyManipulator $propertyManipulator, \Rector\VendorLocker\VendorLockResolver $vendorLockResolver, \Rector\Core\PhpParser\NodeFinder\PropertyFetchFinder $propertyFetchFinder, \Rector\Removing\NodeManipulator\ComplexNodeRemover $complexNodeRemover)
     {
         $this->propertyManipulator = $propertyManipulator;
         $this->vendorLockResolver = $vendorLockResolver;
         $this->propertyFetchFinder = $propertyFetchFinder;
         $this->complexNodeRemover = $complexNodeRemover;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Removes method that set values that are never used', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Removes method that set values that are never used', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     private $name;
@@ -91,12 +91,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Property::class];
+        return [\PhpParser\Node\Stmt\Property::class];
     }
     /**
      * @param Property $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($this->shouldSkipProperty($node)) {
             return null;
@@ -117,7 +117,7 @@ CODE_SAMPLE
         }
         return $node;
     }
-    private function shouldSkipProperty(Property $property) : bool
+    private function shouldSkipProperty(\PhpParser\Node\Stmt\Property $property) : bool
     {
         if (\count($property->props) !== 1) {
             return \true;
@@ -126,14 +126,14 @@ CODE_SAMPLE
             return \true;
         }
         /** @var Class_|Interface_|Trait_|null $classLike */
-        $classLike = $property->getAttribute(AttributeKey::CLASS_NODE);
+        $classLike = $property->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
         if ($classLike === null) {
             return \true;
         }
-        if ($classLike instanceof Trait_) {
+        if ($classLike instanceof \PhpParser\Node\Stmt\Trait_) {
             return \true;
         }
-        if ($classLike instanceof Interface_) {
+        if ($classLike instanceof \PhpParser\Node\Stmt\Interface_) {
             return \true;
         }
         return $this->propertyManipulator->isPropertyUsedInReadContext($property);
@@ -146,12 +146,12 @@ CODE_SAMPLE
     {
         $classMethodsToCheck = [];
         foreach ($propertyFetches as $propertyFetch) {
-            $classMethod = $propertyFetch->getAttribute(AttributeKey::METHOD_NODE);
-            if (!$classMethod instanceof ClassMethod) {
-                throw new ShouldNotHappenException();
+            $classMethod = $propertyFetch->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::METHOD_NODE);
+            if (!$classMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
+                throw new \Rector\Core\Exception\ShouldNotHappenException();
             }
             // this rector does not remove empty constructors
-            if ($this->nodeNameResolver->isName($classMethod, MethodName::CONSTRUCT)) {
+            if ($this->nodeNameResolver->isName($classMethod, \Rector\Core\ValueObject\MethodName::CONSTRUCT)) {
                 continue;
             }
             $methodName = $this->getName($classMethod);
@@ -174,7 +174,7 @@ CODE_SAMPLE
         }
         return $vendorLockedClassMethodsNames;
     }
-    private function hasMethodSomeStmtsLeft(ClassMethod $classMethod) : bool
+    private function hasMethodSomeStmtsLeft(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
     {
         foreach ((array) $classMethod->stmts as $stmt) {
             if (!$this->nodesToRemoveCollector->isNodeRemoved($stmt)) {

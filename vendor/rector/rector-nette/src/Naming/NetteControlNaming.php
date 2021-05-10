@@ -9,16 +9,16 @@ final class NetteControlNaming
 {
     public function createVariableName(string $shortName) : string
     {
-        $stringy = new Stringy($shortName);
+        $stringy = new \RectorPrefix20210510\Stringy\Stringy($shortName);
         $variableName = (string) $stringy->camelize();
-        if (Strings::endsWith($variableName, 'Form')) {
+        if (\RectorPrefix20210510\Nette\Utils\Strings::endsWith($variableName, 'Form')) {
             return $variableName;
         }
         return $variableName . 'Control';
     }
     public function createCreateComponentClassMethodName(string $shortName) : string
     {
-        $stringy = new Stringy($shortName);
+        $stringy = new \RectorPrefix20210510\Stringy\Stringy($shortName);
         $componentName = (string) $stringy->upperCamelize();
         return 'createComponent' . $componentName;
     }

@@ -27,9 +27,9 @@ final class NewArgToMethodCall
         $this->value = $value;
         $this->methodCall = $methodCall;
     }
-    public function getObjectType() : ObjectType
+    public function getObjectType() : \PHPStan\Type\ObjectType
     {
-        return new ObjectType($this->type);
+        return new \PHPStan\Type\ObjectType($this->type);
     }
     /**
      * @return mixed

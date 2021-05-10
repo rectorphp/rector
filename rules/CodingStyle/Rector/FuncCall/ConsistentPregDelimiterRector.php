@@ -17,7 +17,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\CodingStyle\Rector\FuncCall\ConsistentPregDelimiterRector\ConsistentPregDelimiterRectorTest
  */
-final class ConsistentPregDelimiterRector extends AbstractRector implements ConfigurableRectorInterface
+final class ConsistentPregDelimiterRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
      * @api
@@ -45,9 +45,9 @@ final class ConsistentPregDelimiterRector extends AbstractRector implements Conf
      * @var string
      */
     private $delimiter = '#';
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Replace PREG delimiter with configured one', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Replace PREG delimiter with configured one', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -74,18 +74,18 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [FuncCall::class, StaticCall::class];
+        return [\PhpParser\Node\Expr\FuncCall::class, \PhpParser\Node\Expr\StaticCall::class];
     }
     /**
      * @param FuncCall|StaticCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if ($node instanceof FuncCall) {
+        if ($node instanceof \PhpParser\Node\Expr\FuncCall) {
             return $this->refactorFuncCall($node);
         }
         foreach (self::STATIC_METHODS_WITH_REGEX_PATTERN as $type => $methodsToPositions) {
-            if (!$this->isObjectType($node->class, new ObjectType($type))) {
+            if (!$this->isObjectType($node->class, new \PHPStan\Type\ObjectType($type))) {
                 continue;
             }
             foreach ($methodsToPositions as $method => $position) {
@@ -102,7 +102,7 @@ CODE_SAMPLE
     {
         $this->delimiter = $configuration[self::DELIMITER] ?? '#';
     }
-    private function refactorFuncCall(FuncCall $funcCall) : ?FuncCall
+    private function refactorFuncCall(\PhpParser\Node\Expr\FuncCall $funcCall) : ?\PhpParser\Node\Expr\FuncCall
     {
         foreach (self::FUNCTIONS_WITH_REGEX_PATTERN as $function => $position) {
             if (!$this->isName($funcCall, $function)) {
@@ -113,15 +113,15 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function refactorArgument(Arg $arg) : void
+    private function refactorArgument(\PhpParser\Node\Arg $arg) : void
     {
-        if (!$arg->value instanceof String_) {
+        if (!$arg->value instanceof \PhpParser\Node\Scalar\String_) {
             return;
         }
         /** @var String_ $string */
         $string = $arg->value;
         $value = $string->value;
-        $string->value = Strings::replace($value, self::INNER_REGEX, function (array $match) : string {
+        $string->value = \RectorPrefix20210510\Nette\Utils\Strings::replace($value, self::INNER_REGEX, function (array $match) : string {
             $innerPattern = $match['content'];
             $positionDelimiter = \strpos($innerPattern, $this->delimiter);
             if ($positionDelimiter > 0) {

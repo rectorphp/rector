@@ -14,11 +14,11 @@ use RectorPrefix20210510\Symfony\Component\DependencyInjection\ContainerBuilder;
 /**
  * @author Nicolas Grekas <p@tchwork.com>
  */
-class ParametersConfigurator extends AbstractConfigurator
+class ParametersConfigurator extends \RectorPrefix20210510\Symfony\Component\DependencyInjection\Loader\Configurator\AbstractConfigurator
 {
     public const FACTORY = 'parameters';
     private $container;
-    public function __construct(ContainerBuilder $container)
+    public function __construct(\RectorPrefix20210510\Symfony\Component\DependencyInjection\ContainerBuilder $container)
     {
         $this->container = $container;
     }

@@ -11,11 +11,11 @@ use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
 use PHPStan\Type\NeverType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
-class MockObjectTypeNodeResolverExtension implements TypeNodeResolverExtension, TypeNodeResolverAwareExtension
+class MockObjectTypeNodeResolverExtension implements \PHPStan\PhpDoc\TypeNodeResolverExtension, \PHPStan\PhpDoc\TypeNodeResolverAwareExtension
 {
     /** @var TypeNodeResolver */
     private $typeNodeResolver;
-    public function setTypeNodeResolver(TypeNodeResolver $typeNodeResolver) : void
+    public function setTypeNodeResolver(\PHPStan\PhpDoc\TypeNodeResolver $typeNodeResolver) : void
     {
         $this->typeNodeResolver = $typeNodeResolver;
     }
@@ -23,20 +23,20 @@ class MockObjectTypeNodeResolverExtension implements TypeNodeResolverExtension, 
     {
         return 'phpunit-v1';
     }
-    public function resolve(TypeNode $typeNode, \PHPStan\Analyser\NameScope $nameScope) : ?Type
+    public function resolve(\PHPStan\PhpDocParser\Ast\Type\TypeNode $typeNode, \PHPStan\Analyser\NameScope $nameScope) : ?\PHPStan\Type\Type
     {
-        if (!$typeNode instanceof UnionTypeNode) {
+        if (!$typeNode instanceof \PHPStan\PhpDocParser\Ast\Type\UnionTypeNode) {
             return null;
         }
         static $mockClassNames = ['PHPUnit_Framework_MockObject_MockObject' => \true, 'RectorPrefix20210510\\PHPUnit\\Framework\\MockObject\\MockObject' => \true];
         $types = $this->typeNodeResolver->resolveMultiple($typeNode->types, $nameScope);
         foreach ($types as $type) {
-            if (!$type instanceof TypeWithClassName) {
+            if (!$type instanceof \PHPStan\Type\TypeWithClassName) {
                 continue;
             }
             if (\array_key_exists($type->getClassName(), $mockClassNames)) {
                 $resultType = \PHPStan\Type\TypeCombinator::intersect(...$types);
-                if ($resultType instanceof NeverType) {
+                if ($resultType instanceof \PHPStan\Type\NeverType) {
                     continue;
                 }
                 return $resultType;

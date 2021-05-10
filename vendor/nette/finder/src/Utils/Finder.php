@@ -32,7 +32,7 @@ class Finder implements \IteratorAggregate, \Countable
     /** @var array filter for recursive traversing */
     private $exclude = [];
     /** @var int */
-    private $order = RecursiveIteratorIterator::SELF_FIRST;
+    private $order = \RecursiveIteratorIterator::SELF_FIRST;
     /** @var int */
     private $maxDepth = -1;
     /** @var array */
@@ -75,7 +75,7 @@ class Finder implements \IteratorAggregate, \Countable
     {
         $this->cursor =& $this->groups[];
         $pattern = self::buildPattern($masks);
-        $this->filter(function (RecursiveDirectoryIterator $file) use($type, $pattern) : bool {
+        $this->filter(function (\RecursiveDirectoryIterator $file) use($type, $pattern) : bool {
             return !$file->isDot() && $file->{$type}() && (!$pattern || \preg_match($pattern, '/' . \strtr($file->getSubPathName(), '\\', '/')));
         });
         return $this;
@@ -98,7 +98,7 @@ class Finder implements \IteratorAggregate, \Countable
     public function from(...$paths)
     {
         if ($this->paths) {
-            throw new Nette\InvalidStateException('Directory to search has already been specified.');
+            throw new \RectorPrefix20210510\Nette\InvalidStateException('Directory to search has already been specified.');
         }
         $this->paths = \is_array($paths[0]) ? $paths[0] : $paths;
         $this->cursor =& $this->exclude;
@@ -110,7 +110,7 @@ class Finder implements \IteratorAggregate, \Countable
      */
     public function childFirst()
     {
-        $this->order = RecursiveIteratorIterator::CHILD_FIRST;
+        $this->order = \RecursiveIteratorIterator::CHILD_FIRST;
         return $this;
     }
     /**
@@ -149,7 +149,7 @@ class Finder implements \IteratorAggregate, \Countable
     public function getIterator() : \Iterator
     {
         if (!$this->paths) {
-            throw new Nette\InvalidStateException('Call in() or from() to specify directory to search.');
+            throw new \RectorPrefix20210510\Nette\InvalidStateException('Call in() or from() to specify directory to search.');
         } elseif (\count($this->paths) === 1) {
             return $this->buildIterator((string) $this->paths[0]);
         } else {
@@ -165,9 +165,9 @@ class Finder implements \IteratorAggregate, \Countable
      */
     private function buildIterator(string $path) : \Iterator
     {
-        $iterator = new RecursiveDirectoryIterator($path, RecursiveDirectoryIterator::FOLLOW_SYMLINKS);
+        $iterator = new \RecursiveDirectoryIterator($path, \RecursiveDirectoryIterator::FOLLOW_SYMLINKS);
         if ($this->exclude) {
-            $iterator = new \RecursiveCallbackFilterIterator($iterator, function ($foo, $bar, RecursiveDirectoryIterator $file) : bool {
+            $iterator = new \RecursiveCallbackFilterIterator($iterator, function ($foo, $bar, \RecursiveDirectoryIterator $file) : bool {
                 if (!$file->isDot() && !$file->isFile()) {
                     foreach ($this->exclude as $filter) {
                         if (!$filter($file)) {
@@ -179,7 +179,7 @@ class Finder implements \IteratorAggregate, \Countable
             });
         }
         if ($this->maxDepth !== 0) {
-            $iterator = new RecursiveIteratorIterator($iterator, $this->order);
+            $iterator = new \RecursiveIteratorIterator($iterator, $this->order);
             $iterator->setMaxDepth($this->maxDepth);
         }
         $iterator = new \CallbackFilterIterator($iterator, function ($foo, $bar, \Iterator $file) : bool {
@@ -210,7 +210,7 @@ class Finder implements \IteratorAggregate, \Countable
         $masks = $masks && \is_array($masks[0]) ? $masks[0] : $masks;
         $pattern = self::buildPattern($masks);
         if ($pattern) {
-            $this->filter(function (RecursiveDirectoryIterator $file) use($pattern) : bool {
+            $this->filter(function (\RecursiveDirectoryIterator $file) use($pattern) : bool {
                 return !\preg_match($pattern, '/' . \strtr($file->getSubPathName(), '\\', '/'));
             });
         }
@@ -245,14 +245,14 @@ class Finder implements \IteratorAggregate, \Countable
         if (\func_num_args() === 1) {
             // in $operator is predicate
             if (!\preg_match('#^(?:([=<>!]=?|<>)\\s*)?((?:\\d*\\.)?\\d+)\\s*(K|M|G|)B?$#Di', $operator, $matches)) {
-                throw new Nette\InvalidArgumentException('Invalid size predicate format.');
+                throw new \RectorPrefix20210510\Nette\InvalidArgumentException('Invalid size predicate format.');
             }
             [, $operator, $size, $unit] = $matches;
             static $units = ['' => 1, 'k' => 1000.0, 'm' => 1000000.0, 'g' => 1000000000.0];
             $size *= $units[\strtolower($unit)];
             $operator = $operator ?: '=';
         }
-        return $this->filter(function (RecursiveDirectoryIterator $file) use($operator, $size) : bool {
+        return $this->filter(function (\RecursiveDirectoryIterator $file) use($operator, $size) : bool {
             return self::compare($file->getSize(), $operator, $size);
         });
     }
@@ -267,13 +267,13 @@ class Finder implements \IteratorAggregate, \Countable
         if (\func_num_args() === 1) {
             // in $operator is predicate
             if (!\preg_match('#^(?:([=<>!]=?|<>)\\s*)?(.+)$#Di', $operator, $matches)) {
-                throw new Nette\InvalidArgumentException('Invalid date predicate format.');
+                throw new \RectorPrefix20210510\Nette\InvalidArgumentException('Invalid date predicate format.');
             }
             [, $operator, $date] = $matches;
             $operator = $operator ?: '=';
         }
-        $date = DateTime::from($date)->format('U');
-        return $this->filter(function (RecursiveDirectoryIterator $file) use($operator, $date) : bool {
+        $date = \RectorPrefix20210510\Nette\Utils\DateTime::from($date)->format('U');
+        return $this->filter(function (\RecursiveDirectoryIterator $file) use($operator, $date) : bool {
             return self::compare($file->getMTime(), $operator, $date);
         });
     }
@@ -299,13 +299,13 @@ class Finder implements \IteratorAggregate, \Countable
             case '<>':
                 return $l != $r;
             default:
-                throw new Nette\InvalidArgumentException("Unknown operator {$operator}.");
+                throw new \RectorPrefix20210510\Nette\InvalidArgumentException("Unknown operator {$operator}.");
         }
     }
     /********************* extension methods ****************d*g**/
     public function __call(string $name, array $args)
     {
-        return isset(self::$extMethods[$name]) ? self::$extMethods[$name]($this, ...$args) : Nette\Utils\ObjectHelpers::strictCall(\get_class($this), $name, \array_keys(self::$extMethods));
+        return isset(self::$extMethods[$name]) ? self::$extMethods[$name]($this, ...$args) : \RectorPrefix20210510\Nette\Utils\ObjectHelpers::strictCall(\get_class($this), $name, \array_keys(self::$extMethods));
     }
     public static function extensionMethod(string $name, callable $callback) : void
     {

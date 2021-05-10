@@ -25,20 +25,20 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\CodingStyle\Rector\FuncCall\VersionCompareFuncCallToConstantRector\VersionCompareFuncCallToConstantRectorTest
  */
-final class VersionCompareFuncCallToConstantRector extends AbstractRector
+final class VersionCompareFuncCallToConstantRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var array<string, class-string<BinaryOp>>
      */
-    private const OPERATOR_TO_COMPARISON = ['=' => Identical::class, '==' => Identical::class, 'eq' => Identical::class, '!=' => NotIdentical::class, '<>' => NotIdentical::class, 'ne' => NotIdentical::class, '>' => Greater::class, 'gt' => Greater::class, '<' => Smaller::class, 'lt' => Smaller::class, '>=' => GreaterOrEqual::class, 'ge' => GreaterOrEqual::class, '<=' => SmallerOrEqual::class, 'le' => SmallerOrEqual::class];
+    private const OPERATOR_TO_COMPARISON = ['=' => \PhpParser\Node\Expr\BinaryOp\Identical::class, '==' => \PhpParser\Node\Expr\BinaryOp\Identical::class, 'eq' => \PhpParser\Node\Expr\BinaryOp\Identical::class, '!=' => \PhpParser\Node\Expr\BinaryOp\NotIdentical::class, '<>' => \PhpParser\Node\Expr\BinaryOp\NotIdentical::class, 'ne' => \PhpParser\Node\Expr\BinaryOp\NotIdentical::class, '>' => \PhpParser\Node\Expr\BinaryOp\Greater::class, 'gt' => \PhpParser\Node\Expr\BinaryOp\Greater::class, '<' => \PhpParser\Node\Expr\BinaryOp\Smaller::class, 'lt' => \PhpParser\Node\Expr\BinaryOp\Smaller::class, '>=' => \PhpParser\Node\Expr\BinaryOp\GreaterOrEqual::class, 'ge' => \PhpParser\Node\Expr\BinaryOp\GreaterOrEqual::class, '<=' => \PhpParser\Node\Expr\BinaryOp\SmallerOrEqual::class, 'le' => \PhpParser\Node\Expr\BinaryOp\SmallerOrEqual::class];
     /**
      * @var string
      * @see https://regex101.com/r/yl9g25/1
      */
     private const SEMANTIC_VERSION_REGEX = '#^\\d+\\.\\d+\\.\\d+$#';
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Changes use of call to version compare function to use of PHP version constant', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Changes use of call to version compare function to use of PHP version constant', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -63,12 +63,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [FuncCall::class];
+        return [\PhpParser\Node\Expr\FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$this->isName($node, 'version_compare')) {
             return null;
@@ -86,29 +86,29 @@ CODE_SAMPLE
         $comparisonClass = self::OPERATOR_TO_COMPARISON[$operator->value];
         return new $comparisonClass($left, $right);
     }
-    private function isPhpVersionConstant(Expr $expr) : bool
+    private function isPhpVersionConstant(\PhpParser\Node\Expr $expr) : bool
     {
-        if (!$expr instanceof ConstFetch) {
+        if (!$expr instanceof \PhpParser\Node\Expr\ConstFetch) {
             return \false;
         }
         return $expr->name->toString() === 'PHP_VERSION';
     }
-    private function getNewNodeForArg(Expr $expr) : Expr
+    private function getNewNodeForArg(\PhpParser\Node\Expr $expr) : \PhpParser\Node\Expr
     {
         if ($this->isPhpVersionConstant($expr)) {
-            return new ConstFetch(new Name('PHP_VERSION_ID'));
+            return new \PhpParser\Node\Expr\ConstFetch(new \PhpParser\Node\Name('PHP_VERSION_ID'));
         }
         return $this->getVersionNumberFormVersionString($expr);
     }
-    private function getVersionNumberFormVersionString(Expr $expr) : LNumber
+    private function getVersionNumberFormVersionString(\PhpParser\Node\Expr $expr) : \PhpParser\Node\Scalar\LNumber
     {
-        if (!$expr instanceof String_) {
-            throw new ShouldNotHappenException();
+        if (!$expr instanceof \PhpParser\Node\Scalar\String_) {
+            throw new \Rector\Core\Exception\ShouldNotHappenException();
         }
-        if (!Strings::match($expr->value, self::SEMANTIC_VERSION_REGEX)) {
-            throw new ShouldNotHappenException();
+        if (!\RectorPrefix20210510\Nette\Utils\Strings::match($expr->value, self::SEMANTIC_VERSION_REGEX)) {
+            throw new \Rector\Core\Exception\ShouldNotHappenException();
         }
         $versionParts = \explode('.', $expr->value);
-        return new LNumber((int) $versionParts[0] * 10000 + (int) $versionParts[1] * 100 + (int) $versionParts[2]);
+        return new \PhpParser\Node\Scalar\LNumber((int) $versionParts[0] * 10000 + (int) $versionParts[1] * 100 + (int) $versionParts[2]);
     }
 }

@@ -22,29 +22,29 @@ final class FunctionLikeFirstLevelStatementResolver
      * @var BetterNodeFinder
      */
     private $betterNodeFinder;
-    public function __construct(ParentScopeFinder $parentScopeFinder, BetterNodeFinder $betterNodeFinder)
+    public function __construct(\Rector\NodeNestingScope\ParentScopeFinder $parentScopeFinder, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
     {
         $this->parentScopeFinder = $parentScopeFinder;
         $this->betterNodeFinder = $betterNodeFinder;
     }
-    public function resolveFirstLevelStatement(Node $node) : Node
+    public function resolveFirstLevelStatement(\PhpParser\Node $node) : \PhpParser\Node
     {
         $multiplierClosure = $this->matchMultiplierClosure($node);
         /** @var ClassMethod|Closure|null $functionLike */
         $functionLike = $multiplierClosure ?? $this->parentScopeFinder->find($node);
         if ($functionLike === null) {
-            throw new ShouldNotHappenException();
+            throw new \Rector\Core\Exception\ShouldNotHappenException();
         }
-        $currentStatement = $node->getAttribute(AttributeKey::CURRENT_STATEMENT);
-        if (!$currentStatement instanceof Node) {
-            throw new ShouldNotHappenException();
+        $currentStatement = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CURRENT_STATEMENT);
+        if (!$currentStatement instanceof \PhpParser\Node) {
+            throw new \Rector\Core\Exception\ShouldNotHappenException();
         }
         while (!\in_array($currentStatement, (array) $functionLike->stmts, \true)) {
-            $parent = $currentStatement->getAttribute(AttributeKey::PARENT_NODE);
-            if (!$parent instanceof Node) {
-                throw new ShouldNotHappenException();
+            $parent = $currentStatement->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+            if (!$parent instanceof \PhpParser\Node) {
+                throw new \Rector\Core\Exception\ShouldNotHappenException();
             }
-            $currentStatement = $parent->getAttribute(AttributeKey::CURRENT_STATEMENT);
+            $currentStatement = $parent->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CURRENT_STATEMENT);
         }
         return $currentStatement;
     }
@@ -53,18 +53,18 @@ final class FunctionLikeFirstLevelStatementResolver
      *
      * @see https://doc.nette.org/en/3.0/multiplier
      */
-    private function matchMultiplierClosure(Node $node) : ?Closure
+    private function matchMultiplierClosure(\PhpParser\Node $node) : ?\PhpParser\Node\Expr\Closure
     {
-        $closure = $this->betterNodeFinder->findParentType($node, Closure::class);
-        if (!$closure instanceof Closure) {
+        $closure = $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Expr\Closure::class);
+        if (!$closure instanceof \PhpParser\Node\Expr\Closure) {
             return null;
         }
-        $parent = $closure->getAttribute(AttributeKey::PARENT_NODE);
-        if (!$parent instanceof Arg) {
+        $parent = $closure->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        if (!$parent instanceof \PhpParser\Node\Arg) {
             return null;
         }
-        $parentParent = $parent->getAttribute(AttributeKey::PARENT_NODE);
-        if (!$parentParent instanceof New_) {
+        $parentParent = $parent->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        if (!$parentParent instanceof \PhpParser\Node\Expr\New_) {
             return null;
         }
         return $closure;

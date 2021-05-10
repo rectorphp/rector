@@ -17,20 +17,20 @@ final class FormVariableInputNameTypeResolver
     {
         $this->methodNamesByInputNamesResolver = $methodNamesByInputNamesResolver;
     }
-    public function resolveControlTypeByInputName(Expr $formOrControlExpr, string $inputName) : string
+    public function resolveControlTypeByInputName(\PhpParser\Node\Expr $formOrControlExpr, string $inputName) : string
     {
         $methodNamesByInputNames = $this->methodNamesByInputNamesResolver->resolveExpr($formOrControlExpr);
         $formAddMethodName = $methodNamesByInputNames[$inputName] ?? null;
         if ($formAddMethodName === null) {
             $message = \sprintf('Type was not found for "%s" input name', $inputName);
-            throw new ShouldNotHappenException($message);
+            throw new \Rector\Core\Exception\ShouldNotHappenException($message);
         }
-        foreach (NetteFormMethodNameToControlType::METHOD_NAME_TO_CONTROL_TYPE as $methodName => $controlType) {
+        foreach (\Rector\Nette\ValueObject\NetteFormMethodNameToControlType::METHOD_NAME_TO_CONTROL_TYPE as $methodName => $controlType) {
             if ($methodName !== $formAddMethodName) {
                 continue;
             }
             return $controlType;
         }
-        throw new NotImplementedYetException($formAddMethodName);
+        throw new \Rector\Core\Exception\NotImplementedYetException($formAddMethodName);
     }
 }

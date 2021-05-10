@@ -11,7 +11,7 @@ use Rector\PSR4\Collector\RenamedClassesCollector;
 use Symplify\RuleDocGenerator\Contract\ConfigurableRuleInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-final class RenameClassNonPhpRector implements NonPhpRectorInterface, ConfigurableRuleInterface, ConfigurableRectorInterface
+final class RenameClassNonPhpRector implements \Rector\Core\Contract\Rector\NonPhpRectorInterface, \Symplify\RuleDocGenerator\Contract\ConfigurableRuleInterface, \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
      * @var string
@@ -41,14 +41,14 @@ final class RenameClassNonPhpRector implements NonPhpRectorInterface, Configurab
      * @var array<string, string>
      */
     private $renameClasses = [];
-    public function __construct(RenamedClassesDataCollector $renamedClassesDataCollector, RenamedClassesCollector $renamedClassesCollector)
+    public function __construct(\Rector\Core\Configuration\RenamedClassesDataCollector $renamedClassesDataCollector, \Rector\PSR4\Collector\RenamedClassesCollector $renamedClassesCollector)
     {
         $this->renamedClassesDataCollector = $renamedClassesDataCollector;
         $this->renamedClassesCollector = $renamedClassesCollector;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Change class names and just renamed classes in non-PHP files, NEON, YAML, TWIG, LATTE, blade etc. mostly with regular expressions', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change class names and just renamed classes in non-PHP files, NEON, YAML, TWIG, LATTE, blade etc. mostly with regular expressions', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
 services:
     - SomeOldClass
 CODE_SAMPLE
@@ -79,7 +79,7 @@ CODE_SAMPLE
         foreach ($classRenames as $oldClass => $newClass) {
             // the old class is without slashes, it can make mess as similar to a word in the text, so we have to be more strict about it
             $oldClassRegex = $this->createOldClassRegex($oldClass);
-            $newContent = Strings::replace($newContent, $oldClassRegex, function (array $match) use($newClass) : string {
+            $newContent = \RectorPrefix20210510\Nette\Utils\Strings::replace($newContent, $oldClassRegex, function (array $match) use($newClass) : string {
                 return ($match['extra_space'] ?? '') . $newClass;
             });
         }
@@ -95,7 +95,7 @@ CODE_SAMPLE
     {
         foreach ($classRenames as $oldClass => $newClass) {
             // to prevent no slash override
-            if (!Strings::contains($oldClass, '\\')) {
+            if (!\RectorPrefix20210510\Nette\Utils\Strings::contains($oldClass, '\\')) {
                 continue;
             }
             $doubleSlashOldClass = \str_replace('\\', '\\\\', $oldClass);
@@ -113,7 +113,7 @@ CODE_SAMPLE
     }
     private function createOldClassRegex(string $oldClass) : string
     {
-        if (!Strings::contains($oldClass, '\\')) {
+        if (!\RectorPrefix20210510\Nette\Utils\Strings::contains($oldClass, '\\')) {
             return self::STANDALONE_CLASS_PREFIX_REGEX . \preg_quote($oldClass, '#') . self::STANDALONE_CLASS_SUFFIX_REGEX;
         }
         return '#' . \preg_quote($oldClass, '#') . '#';

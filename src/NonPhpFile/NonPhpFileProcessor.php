@@ -11,7 +11,7 @@ use Rector\Core\ValueObject\StaticNonPhpFileSuffixes;
 /**
  * @see \Rector\Tests\Renaming\Rector\Name\RenameClassRector\RenameNonPhpTest
  */
-final class NonPhpFileProcessor implements FileProcessorInterface
+final class NonPhpFileProcessor implements \Rector\Core\Contract\Processor\FileProcessorInterface
 {
     /**
      * @var NonPhpRectorInterface[]
@@ -33,12 +33,12 @@ final class NonPhpFileProcessor implements FileProcessorInterface
             $this->processFile($file);
         }
     }
-    public function supports(File $file) : bool
+    public function supports(\Rector\Core\ValueObject\Application\File $file) : bool
     {
         $smartFileInfo = $file->getSmartFileInfo();
         // bug in path extension
         foreach ($this->getSupportedFileExtensions() as $supportedFileExtension) {
-            if (Strings::endsWith($smartFileInfo->getPathname(), '.' . $supportedFileExtension)) {
+            if (\RectorPrefix20210510\Nette\Utils\Strings::endsWith($smartFileInfo->getPathname(), '.' . $supportedFileExtension)) {
                 return \true;
             }
         }
@@ -46,9 +46,9 @@ final class NonPhpFileProcessor implements FileProcessorInterface
     }
     public function getSupportedFileExtensions() : array
     {
-        return StaticNonPhpFileSuffixes::SUFFIXES;
+        return \Rector\Core\ValueObject\StaticNonPhpFileSuffixes::SUFFIXES;
     }
-    private function processFile(File $file) : void
+    private function processFile(\Rector\Core\ValueObject\Application\File $file) : void
     {
         foreach ($this->nonPhpRectors as $nonPhpRector) {
             $newFileContent = $nonPhpRector->refactorFileContent($file->getFileContent());

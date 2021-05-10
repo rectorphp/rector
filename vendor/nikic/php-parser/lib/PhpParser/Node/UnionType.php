@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace PhpParser\Node;
 
 use PhpParser\NodeAbstract;
-class UnionType extends NodeAbstract
+class UnionType extends \PhpParser\NodeAbstract
 {
     /** @var (Identifier|Name)[] Types */
     public $types;

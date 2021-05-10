@@ -11,7 +11,7 @@ use RectorPrefix20210510\Nette;
 /**
  * Cache dummy storage.
  */
-class DevNullStorage implements Nette\Caching\Storage
+class DevNullStorage implements \RectorPrefix20210510\Nette\Caching\Storage
 {
     use Nette\SmartObject;
     public function read(string $key)

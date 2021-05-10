@@ -16,12 +16,12 @@ use RectorPrefix20210510\Symfony\Component\HttpFoundation\Session\Storage\Proxy\
  *
  * @author Drak <drak@zikula.org>
  */
-class PhpBridgeSessionStorage extends NativeSessionStorage
+class PhpBridgeSessionStorage extends \RectorPrefix20210510\Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage
 {
     /**
      * @param AbstractProxy|\SessionHandlerInterface|null $handler
      */
-    public function __construct($handler = null, MetadataBag $metaBag = null)
+    public function __construct($handler = null, \RectorPrefix20210510\Symfony\Component\HttpFoundation\Session\Storage\MetadataBag $metaBag = null)
     {
         if (!\extension_loaded('session')) {
             throw new \LogicException('PHP extension "session" is required.');

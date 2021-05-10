@@ -17,7 +17,7 @@ namespace RectorPrefix20210510\Symfony\Component\Config\Resource;
  *
  * @final
  */
-class ComposerResource implements SelfCheckingResourceInterface
+class ComposerResource implements \RectorPrefix20210510\Symfony\Component\Config\Resource\SelfCheckingResourceInterface
 {
     private $vendors;
     private static $runtimeVendors;

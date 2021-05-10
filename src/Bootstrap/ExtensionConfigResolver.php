@@ -17,18 +17,18 @@ final class ExtensionConfigResolver
         if (!\class_exists('Rector\\RectorInstaller\\GeneratedConfig')) {
             return $configFileInfos;
         }
-        $generatedConfigReflectionClass = new ReflectionClass('Rector\\RectorInstaller\\GeneratedConfig');
+        $generatedConfigReflectionClass = new \ReflectionClass('Rector\\RectorInstaller\\GeneratedConfig');
         if ($generatedConfigReflectionClass->getFileName() === \false) {
             return $configFileInfos;
         }
         $generatedConfigDirectory = \dirname($generatedConfigReflectionClass->getFileName());
-        foreach (GeneratedConfig::EXTENSIONS as $extensionConfig) {
+        foreach (\Rector\RectorInstaller\GeneratedConfig::EXTENSIONS as $extensionConfig) {
             foreach ($extensionConfig['extra']['includes'] ?? [] as $includedFile) {
                 $includedFilePath = $this->resolveIncludeFilePath($extensionConfig, $generatedConfigDirectory, $includedFile);
                 if ($includedFilePath === null) {
                     $includedFilePath = \sprintf('%s/%s', $extensionConfig['install_path'], $includedFile);
                 }
-                $configFileInfos[] = new SmartFileInfo($includedFilePath);
+                $configFileInfos[] = new \Symplify\SmartFileSystem\SmartFileInfo($includedFilePath);
             }
         }
         return $configFileInfos;

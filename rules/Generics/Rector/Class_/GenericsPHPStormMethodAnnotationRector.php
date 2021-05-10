@@ -20,7 +20,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Generics\Rector\Class_\GenericsPHPStormMethodAnnotationRector\GenericsPHPStormMethodAnnotationRectorTest
  */
-final class GenericsPHPStormMethodAnnotationRector extends AbstractRector
+final class GenericsPHPStormMethodAnnotationRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var ClassGenericMethodResolver
@@ -38,16 +38,16 @@ final class GenericsPHPStormMethodAnnotationRector extends AbstractRector
      * @var UnnededMethodTagValueNodeFilter
      */
     private $unnededMethodTagValueNodeFilter;
-    public function __construct(ClassGenericMethodResolver $classGenericMethodResolver, GenericTypeSpecifier $genericTypeSpecifier, GenericClassReflectionAnalyzer $genericClassReflectionAnalyzer, UnnededMethodTagValueNodeFilter $unnededMethodTagValueNodeFilter)
+    public function __construct(\Rector\Generics\Reflection\ClassGenericMethodResolver $classGenericMethodResolver, \Rector\Generics\NodeType\GenericTypeSpecifier $genericTypeSpecifier, \Rector\Generics\Reflection\GenericClassReflectionAnalyzer $genericClassReflectionAnalyzer, \Rector\Generics\Filter\UnnededMethodTagValueNodeFilter $unnededMethodTagValueNodeFilter)
     {
         $this->classGenericMethodResolver = $classGenericMethodResolver;
         $this->genericTypeSpecifier = $genericTypeSpecifier;
         $this->genericClassReflectionAnalyzer = $genericClassReflectionAnalyzer;
         $this->unnededMethodTagValueNodeFilter = $unnededMethodTagValueNodeFilter;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Complete PHPStorm @method annotations, to make it understand the PHPStan/Psalm generics', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Complete PHPStorm @method annotations, to make it understand the PHPStan/Psalm generics', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 /**
  * @template TEntity as object
  */
@@ -99,19 +99,19 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Class_::class];
+        return [\PhpParser\Node\Stmt\Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        $scope = $node->getAttribute(AttributeKey::SCOPE);
-        if (!$scope instanceof Scope) {
+        $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
+        if (!$scope instanceof \PHPStan\Analyser\Scope) {
             return null;
         }
         $childParentClassReflections = $this->genericClassReflectionAnalyzer->resolveChildParent($node);
-        if (!$childParentClassReflections instanceof ChildParentClassReflections) {
+        if (!$childParentClassReflections instanceof \Rector\Generics\ValueObject\ChildParentClassReflections) {
             return null;
         }
         // resolve generic method from parent

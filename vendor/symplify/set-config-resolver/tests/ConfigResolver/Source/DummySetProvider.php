@@ -7,7 +7,7 @@ use RectorPrefix20210510\Symplify\SetConfigResolver\Contract\SetProviderInterfac
 use RectorPrefix20210510\Symplify\SetConfigResolver\Provider\AbstractSetProvider;
 use RectorPrefix20210510\Symplify\SetConfigResolver\ValueObject\Set;
 use Symplify\SmartFileSystem\SmartFileInfo;
-final class DummySetProvider extends AbstractSetProvider implements SetProviderInterface
+final class DummySetProvider extends \RectorPrefix20210510\Symplify\SetConfigResolver\Provider\AbstractSetProvider implements \RectorPrefix20210510\Symplify\SetConfigResolver\Contract\SetProviderInterface
 {
     /**
      * @var Set[]
@@ -15,7 +15,7 @@ final class DummySetProvider extends AbstractSetProvider implements SetProviderI
     private $sets = [];
     public function __construct()
     {
-        $this->sets[] = new Set('some_php_set', new SmartFileInfo(__DIR__ . '/../Source/some_php_set.php'));
+        $this->sets[] = new \RectorPrefix20210510\Symplify\SetConfigResolver\ValueObject\Set('some_php_set', new \Symplify\SmartFileSystem\SmartFileInfo(__DIR__ . '/../Source/some_php_set.php'));
     }
     /**
      * @return Set[]

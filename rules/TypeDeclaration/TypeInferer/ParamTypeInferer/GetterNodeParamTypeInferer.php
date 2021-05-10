@@ -18,7 +18,7 @@ use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\TypeDeclaration\Contract\TypeInferer\ParamTypeInfererInterface;
 use RectorPrefix20210510\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
-final class GetterNodeParamTypeInferer implements ParamTypeInfererInterface
+final class GetterNodeParamTypeInferer implements \Rector\TypeDeclaration\Contract\TypeInferer\ParamTypeInfererInterface
 {
     /**
      * @var PropertyFetchAnalyzer
@@ -40,7 +40,7 @@ final class GetterNodeParamTypeInferer implements ParamTypeInfererInterface
      * @var SimpleCallableNodeTraverser
      */
     private $simpleCallableNodeTraverser;
-    public function __construct(PropertyFetchAssignManipulator $propertyFetchAssignManipulator, PropertyFetchAnalyzer $propertyFetchAnalyzer, PhpDocInfoFactory $phpDocInfoFactory, NodeNameResolver $nodeNameResolver, SimpleCallableNodeTraverser $simpleCallableNodeTraverser)
+    public function __construct(\Rector\Core\NodeManipulator\PropertyFetchAssignManipulator $propertyFetchAssignManipulator, \Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer $propertyFetchAnalyzer, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \RectorPrefix20210510\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser)
     {
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
         $this->propertyFetchAssignManipulator = $propertyFetchAssignManipulator;
@@ -48,24 +48,24 @@ final class GetterNodeParamTypeInferer implements ParamTypeInfererInterface
         $this->nodeNameResolver = $nodeNameResolver;
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
     }
-    public function inferParam(Param $param) : Type
+    public function inferParam(\PhpParser\Node\Param $param) : \PHPStan\Type\Type
     {
-        $classLike = $param->getAttribute(AttributeKey::CLASS_NODE);
-        if (!$classLike instanceof Class_) {
-            return new MixedType();
+        $classLike = $param->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
+        if (!$classLike instanceof \PhpParser\Node\Stmt\Class_) {
+            return new \PHPStan\Type\MixedType();
         }
         /** @var ClassMethod $classMethod */
-        $classMethod = $param->getAttribute(AttributeKey::PARENT_NODE);
+        $classMethod = $param->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
         /** @var string $paramName */
         $paramName = $this->nodeNameResolver->getName($param);
         $propertyNames = $this->propertyFetchAssignManipulator->getPropertyNamesOfAssignOfVariable($classMethod, $paramName);
         if ($propertyNames === []) {
-            return new MixedType();
+            return new \PHPStan\Type\MixedType();
         }
-        $returnType = new MixedType();
+        $returnType = new \PHPStan\Type\MixedType();
         // resolve property assigns
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($classLike, function (Node $node) use($propertyNames, &$returnType) : ?int {
-            if (!$node instanceof Return_) {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($classLike, function (\PhpParser\Node $node) use($propertyNames, &$returnType) : ?int {
+            if (!$node instanceof \PhpParser\Node\Stmt\Return_) {
                 return null;
             }
             if ($node->expr === null) {
@@ -76,17 +76,17 @@ final class GetterNodeParamTypeInferer implements ParamTypeInfererInterface
                 return null;
             }
             // what is return type?
-            $classMethod = $node->getAttribute(AttributeKey::METHOD_NODE);
-            if (!$classMethod instanceof ClassMethod) {
+            $classMethod = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::METHOD_NODE);
+            if (!$classMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
                 return null;
             }
             $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
             $methodReturnType = $phpDocInfo->getReturnType();
-            if ($methodReturnType instanceof MixedType) {
+            if ($methodReturnType instanceof \PHPStan\Type\MixedType) {
                 return null;
             }
             $returnType = $methodReturnType;
-            return NodeTraverser::STOP_TRAVERSAL;
+            return \PhpParser\NodeTraverser::STOP_TRAVERSAL;
         });
         return $returnType;
     }

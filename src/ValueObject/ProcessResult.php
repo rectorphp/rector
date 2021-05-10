@@ -38,8 +38,8 @@ final class ProcessResult
      */
     public function __construct(array $fileDiffs, array $errors, int $addedFilesCount, int $removedFilesCount, int $removedNodeCount)
     {
-        Assert::allIsAOf($fileDiffs, FileDiff::class);
-        Assert::allIsAOf($errors, RectorError::class);
+        \RectorPrefix20210510\Webmozart\Assert\Assert::allIsAOf($fileDiffs, \Rector\Core\ValueObject\Reporting\FileDiff::class);
+        \RectorPrefix20210510\Webmozart\Assert\Assert::allIsAOf($errors, \Rector\Core\ValueObject\Application\RectorError::class);
         $this->fileDiffs = $fileDiffs;
         $this->errors = $errors;
         $this->addedFilesCount = $addedFilesCount;

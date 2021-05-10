@@ -38,7 +38,7 @@ use RectorPrefix20210510\Symfony\Component\Routing\RequestContextAwareInterface;
  *
  * @final
  */
-class RouterListener implements EventSubscriberInterface
+class RouterListener implements \RectorPrefix20210510\Symfony\Component\EventDispatcher\EventSubscriberInterface
 {
     private $matcher;
     private $context;
@@ -53,12 +53,12 @@ class RouterListener implements EventSubscriberInterface
      *
      * @throws \InvalidArgumentException
      */
-    public function __construct($matcher, RequestStack $requestStack, RequestContext $context = null, LoggerInterface $logger = null, string $projectDir = null, bool $debug = \true)
+    public function __construct($matcher, \RectorPrefix20210510\Symfony\Component\HttpFoundation\RequestStack $requestStack, \RectorPrefix20210510\Symfony\Component\Routing\RequestContext $context = null, \RectorPrefix20210510\Psr\Log\LoggerInterface $logger = null, string $projectDir = null, bool $debug = \true)
     {
-        if (!$matcher instanceof UrlMatcherInterface && !$matcher instanceof RequestMatcherInterface) {
+        if (!$matcher instanceof \RectorPrefix20210510\Symfony\Component\Routing\Matcher\UrlMatcherInterface && !$matcher instanceof \RectorPrefix20210510\Symfony\Component\Routing\Matcher\RequestMatcherInterface) {
             throw new \InvalidArgumentException('Matcher must either implement UrlMatcherInterface or RequestMatcherInterface.');
         }
-        if (null === $context && !$matcher instanceof RequestContextAwareInterface) {
+        if (null === $context && !$matcher instanceof \RectorPrefix20210510\Symfony\Component\Routing\RequestContextAwareInterface) {
             throw new \InvalidArgumentException('You must either pass a RequestContext or the matcher must implement RequestContextAwareInterface.');
         }
         $this->matcher = $matcher;
@@ -68,13 +68,13 @@ class RouterListener implements EventSubscriberInterface
         $this->projectDir = $projectDir;
         $this->debug = $debug;
     }
-    private function setCurrentRequest(Request $request = null)
+    private function setCurrentRequest(\RectorPrefix20210510\Symfony\Component\HttpFoundation\Request $request = null)
     {
         if (null !== $request) {
             try {
                 $this->context->fromRequest($request);
             } catch (\UnexpectedValueException $e) {
-                throw new BadRequestHttpException($e->getMessage(), $e, $e->getCode());
+                throw new \RectorPrefix20210510\Symfony\Component\HttpKernel\Exception\BadRequestHttpException($e->getMessage(), $e, $e->getCode());
             }
         }
     }
@@ -82,11 +82,11 @@ class RouterListener implements EventSubscriberInterface
      * After a sub-request is done, we need to reset the routing context to the parent request so that the URL generator
      * operates on the correct context again.
      */
-    public function onKernelFinishRequest(FinishRequestEvent $event)
+    public function onKernelFinishRequest(\RectorPrefix20210510\Symfony\Component\HttpKernel\Event\FinishRequestEvent $event)
     {
         $this->setCurrentRequest($this->requestStack->getParentRequest());
     }
-    public function onKernelRequest(RequestEvent $event)
+    public function onKernelRequest(\RectorPrefix20210510\Symfony\Component\HttpKernel\Event\RequestEvent $event)
     {
         $request = $event->getRequest();
         $this->setCurrentRequest($request);
@@ -97,7 +97,7 @@ class RouterListener implements EventSubscriberInterface
         // add attributes based on the request (routing)
         try {
             // matching a request is more powerful than matching a URL path + context, so try that first
-            if ($this->matcher instanceof RequestMatcherInterface) {
+            if ($this->matcher instanceof \RectorPrefix20210510\Symfony\Component\Routing\Matcher\RequestMatcherInterface) {
                 $parameters = $this->matcher->matchRequest($request);
             } else {
                 $parameters = $this->matcher->match($request->getPathInfo());
@@ -108,37 +108,37 @@ class RouterListener implements EventSubscriberInterface
             $request->attributes->add($parameters);
             unset($parameters['_route'], $parameters['_controller']);
             $request->attributes->set('_route_params', $parameters);
-        } catch (ResourceNotFoundException $e) {
+        } catch (\RectorPrefix20210510\Symfony\Component\Routing\Exception\ResourceNotFoundException $e) {
             $message = \sprintf('No route found for "%s %s"', $request->getMethod(), $request->getPathInfo());
             if ($referer = $request->headers->get('referer')) {
                 $message .= \sprintf(' (from "%s")', $referer);
             }
-            throw new NotFoundHttpException($message, $e);
-        } catch (MethodNotAllowedException $e) {
+            throw new \RectorPrefix20210510\Symfony\Component\HttpKernel\Exception\NotFoundHttpException($message, $e);
+        } catch (\RectorPrefix20210510\Symfony\Component\Routing\Exception\MethodNotAllowedException $e) {
             $message = \sprintf('No route found for "%s %s": Method Not Allowed (Allow: %s)', $request->getMethod(), $request->getPathInfo(), \implode(', ', $e->getAllowedMethods()));
-            throw new MethodNotAllowedHttpException($e->getAllowedMethods(), $message, $e);
+            throw new \RectorPrefix20210510\Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException($e->getAllowedMethods(), $message, $e);
         }
     }
-    public function onKernelException(ExceptionEvent $event)
+    public function onKernelException(\RectorPrefix20210510\Symfony\Component\HttpKernel\Event\ExceptionEvent $event)
     {
-        if (!$this->debug || !($e = $event->getThrowable()) instanceof NotFoundHttpException) {
+        if (!$this->debug || !($e = $event->getThrowable()) instanceof \RectorPrefix20210510\Symfony\Component\HttpKernel\Exception\NotFoundHttpException) {
             return;
         }
-        if ($e->getPrevious() instanceof NoConfigurationException) {
+        if ($e->getPrevious() instanceof \RectorPrefix20210510\Symfony\Component\Routing\Exception\NoConfigurationException) {
             $event->setResponse($this->createWelcomeResponse());
         }
     }
     public static function getSubscribedEvents() : array
     {
-        return [KernelEvents::REQUEST => [['onKernelRequest', 32]], KernelEvents::FINISH_REQUEST => [['onKernelFinishRequest', 0]], KernelEvents::EXCEPTION => ['onKernelException', -64]];
+        return [\RectorPrefix20210510\Symfony\Component\HttpKernel\KernelEvents::REQUEST => [['onKernelRequest', 32]], \RectorPrefix20210510\Symfony\Component\HttpKernel\KernelEvents::FINISH_REQUEST => [['onKernelFinishRequest', 0]], \RectorPrefix20210510\Symfony\Component\HttpKernel\KernelEvents::EXCEPTION => ['onKernelException', -64]];
     }
-    private function createWelcomeResponse() : Response
+    private function createWelcomeResponse() : \RectorPrefix20210510\Symfony\Component\HttpFoundation\Response
     {
-        $version = Kernel::VERSION;
+        $version = \RectorPrefix20210510\Symfony\Component\HttpKernel\Kernel::VERSION;
         $projectDir = \realpath($this->projectDir) . \DIRECTORY_SEPARATOR;
-        $docVersion = \substr(Kernel::VERSION, 0, 3);
+        $docVersion = \substr(\RectorPrefix20210510\Symfony\Component\HttpKernel\Kernel::VERSION, 0, 3);
         \ob_start();
         include \dirname(__DIR__) . '/Resources/welcome.html.php';
-        return new Response(\ob_get_clean(), Response::HTTP_NOT_FOUND);
+        return new \RectorPrefix20210510\Symfony\Component\HttpFoundation\Response(\ob_get_clean(), \RectorPrefix20210510\Symfony\Component\HttpFoundation\Response::HTTP_NOT_FOUND);
     }
 }

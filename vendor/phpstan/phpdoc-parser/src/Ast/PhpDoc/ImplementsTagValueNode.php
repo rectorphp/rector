@@ -12,7 +12,7 @@ class ImplementsTagValueNode implements \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocT
     public $type;
     /** @var string (may be empty) */
     public $description;
-    public function __construct(GenericTypeNode $type, string $description)
+    public function __construct(\PHPStan\PhpDocParser\Ast\Type\GenericTypeNode $type, string $description)
     {
         $this->type = $type;
         $this->description = $description;

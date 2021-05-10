@@ -31,7 +31,7 @@ final class FileFormatter
     /**
      * @param FileFormatterInterface[] $fileFormatters
      */
-    public function __construct(EditorConfigParserInterface $editorConfigParser, ParameterProvider $parameterProvider, array $fileFormatters = [])
+    public function __construct(\Rector\FileFormatter\Contract\EditorConfig\EditorConfigParserInterface $editorConfigParser, \RectorPrefix20210510\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, array $fileFormatters = [])
     {
         $this->editorConfigParser = $editorConfigParser;
         $this->fileFormatters = $fileFormatters;
@@ -57,23 +57,23 @@ final class FileFormatter
             }
         }
     }
-    private function sniffOriginalFileContent(File $file, EditorConfigConfigurationBuilder $editorConfigConfigurationBuilder) : void
+    private function sniffOriginalFileContent(\Rector\Core\ValueObject\Application\File $file, \Rector\FileFormatter\ValueObjectFactory\EditorConfigConfigurationBuilder $editorConfigConfigurationBuilder) : void
     {
         // Try to sniff into the original content to get the indentation and new line
         try {
-            $indent = Indent::fromContent($file->getOriginalFileContent());
+            $indent = \Rector\FileFormatter\ValueObject\Indent::fromContent($file->getOriginalFileContent());
             $editorConfigConfigurationBuilder->withIndent($indent);
-        } catch (ParseIndentException $parseIndentException) {
+        } catch (\Rector\FileFormatter\Exception\ParseIndentException $parseIndentException) {
         }
         try {
-            $newLine = NewLine::fromContent($file->getOriginalFileContent());
+            $newLine = \Rector\FileFormatter\ValueObject\NewLine::fromContent($file->getOriginalFileContent());
             $editorConfigConfigurationBuilder->withNewLine($newLine);
-        } catch (InvalidNewLineStringException $invalidNewLineStringException) {
+        } catch (\Rector\FileFormatter\Exception\InvalidNewLineStringException $invalidNewLineStringException) {
         }
     }
-    private function createEditorConfiguration(File $file, EditorConfigConfigurationBuilder $editorConfigConfigurationBuilder) : EditorConfigConfiguration
+    private function createEditorConfiguration(\Rector\Core\ValueObject\Application\File $file, \Rector\FileFormatter\ValueObjectFactory\EditorConfigConfigurationBuilder $editorConfigConfigurationBuilder) : \Rector\FileFormatter\ValueObject\EditorConfigConfiguration
     {
-        if (!$this->parameterProvider->provideBoolParameter(Option::ENABLE_EDITORCONFIG)) {
+        if (!$this->parameterProvider->provideBoolParameter(\Rector\Core\Configuration\Option::ENABLE_EDITORCONFIG)) {
             return $editorConfigConfigurationBuilder->build();
         }
         return $this->editorConfigParser->extractConfigurationForFile($file, $editorConfigConfigurationBuilder);

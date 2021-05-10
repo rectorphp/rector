@@ -15,7 +15,7 @@ namespace RectorPrefix20210510\Symfony\Component\HttpFoundation\Session\Storage\
  *
  * @author Nicolas Grekas <p@tchwork.com>
  */
-class StrictSessionHandler extends AbstractSessionHandler
+class StrictSessionHandler extends \RectorPrefix20210510\Symfony\Component\HttpFoundation\Session\Storage\Handler\AbstractSessionHandler
 {
     private $handler;
     private $doDestroy;

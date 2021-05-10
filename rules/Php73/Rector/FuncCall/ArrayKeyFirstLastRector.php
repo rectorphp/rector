@@ -21,7 +21,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php73\Rector\FuncCall\ArrayKeyFirstLastRector\ArrayKeyFirstLastRectorTest
  */
-final class ArrayKeyFirstLastRector extends AbstractRector
+final class ArrayKeyFirstLastRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var string
@@ -39,20 +39,20 @@ final class ArrayKeyFirstLastRector extends AbstractRector
      * @var ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(ReflectionProvider $reflectionProvider)
+    public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider)
     {
         $this->reflectionProvider = $reflectionProvider;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Make use of array_key_first() and array_key_last()', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Make use of array_key_first() and array_key_last()', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 reset($items);
 $firstKey = key($items);
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
 $firstKey = array_key_first($items);
 CODE_SAMPLE
-), new CodeSample(<<<'CODE_SAMPLE'
+), new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 end($items);
 $lastKey = key($items);
 CODE_SAMPLE
@@ -66,23 +66,23 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [FuncCall::class];
+        return [\PhpParser\Node\Expr\FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($this->shouldSkip($node)) {
             return null;
         }
         $nextExpression = $this->getNextExpression($node);
-        if (!$nextExpression instanceof Node) {
+        if (!$nextExpression instanceof \PhpParser\Node) {
             return null;
         }
         $resetOrEndFuncCall = $node;
-        $keyFuncCall = $this->betterNodeFinder->findFirst($nextExpression, function (Node $node) use($resetOrEndFuncCall) : bool {
-            if (!$node instanceof FuncCall) {
+        $keyFuncCall = $this->betterNodeFinder->findFirst($nextExpression, function (\PhpParser\Node $node) use($resetOrEndFuncCall) : bool {
+            if (!$node instanceof \PhpParser\Node\Expr\FuncCall) {
                 return \false;
             }
             if (!$this->isName($node, 'key')) {
@@ -90,33 +90,33 @@ CODE_SAMPLE
             }
             return $this->nodeComparator->areNodesEqual($resetOrEndFuncCall->args[0], $node->args[0]);
         });
-        if (!$keyFuncCall instanceof FuncCall) {
+        if (!$keyFuncCall instanceof \PhpParser\Node\Expr\FuncCall) {
             return null;
         }
         $newName = self::PREVIOUS_TO_NEW_FUNCTIONS[$this->getName($node)];
-        $keyFuncCall->name = new Name($newName);
+        $keyFuncCall->name = new \PhpParser\Node\Name($newName);
         $this->removeNode($node);
         return $node;
     }
-    private function shouldSkip(FuncCall $funcCall) : bool
+    private function shouldSkip(\PhpParser\Node\Expr\FuncCall $funcCall) : bool
     {
         if (!$this->isNames($funcCall, ['reset', 'end'])) {
             return \true;
         }
-        if ($this->isAtLeastPhpVersion(PhpVersionFeature::ARRAY_KEY_FIRST_LAST)) {
+        if ($this->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::ARRAY_KEY_FIRST_LAST)) {
             return \false;
         }
-        if (!$this->reflectionProvider->hasFunction(new Name(self::ARRAY_KEY_FIRST), null)) {
+        if (!$this->reflectionProvider->hasFunction(new \PhpParser\Node\Name(self::ARRAY_KEY_FIRST), null)) {
             return \true;
         }
-        return !$this->reflectionProvider->hasFunction(new Name(self::ARRAY_KEY_LAST), null);
+        return !$this->reflectionProvider->hasFunction(new \PhpParser\Node\Name(self::ARRAY_KEY_LAST), null);
     }
-    private function getNextExpression(FuncCall $funcCall) : ?Node
+    private function getNextExpression(\PhpParser\Node\Expr\FuncCall $funcCall) : ?\PhpParser\Node
     {
-        $currentExpression = $funcCall->getAttribute(AttributeKey::CURRENT_STATEMENT);
-        if (!$currentExpression instanceof Expression) {
+        $currentExpression = $funcCall->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CURRENT_STATEMENT);
+        if (!$currentExpression instanceof \PhpParser\Node\Stmt\Expression) {
             return null;
         }
-        return $currentExpression->getAttribute(AttributeKey::NEXT_NODE);
+        return $currentExpression->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::NEXT_NODE);
     }
 }

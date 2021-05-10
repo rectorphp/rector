@@ -45,5 +45,5 @@ interface LoaderInterface
     /**
      * Sets the loader resolver.
      */
-    public function setResolver(LoaderResolverInterface $resolver);
+    public function setResolver(\RectorPrefix20210510\Symfony\Component\Config\Loader\LoaderResolverInterface $resolver);
 }

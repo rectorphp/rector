@@ -27,7 +27,7 @@ final class UseManipulator
      * @var NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(BetterNodeFinder $betterNodeFinder, NodeNameResolver $nodeNameResolver)
+    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
     {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->nodeNameResolver = $nodeNameResolver;
@@ -35,7 +35,7 @@ final class UseManipulator
     /**
      * @return NameAndParent[][]
      */
-    public function resolveUsedNameNodes(Node $node) : array
+    public function resolveUsedNameNodes(\PhpParser\Node $node) : array
     {
         $this->resolvedNodeNames = [];
         $this->resolveUsedNames($node);
@@ -43,49 +43,49 @@ final class UseManipulator
         $this->resolveTraitUseNames($node);
         return $this->resolvedNodeNames;
     }
-    private function resolveUsedNames(Node $node) : void
+    private function resolveUsedNames(\PhpParser\Node $node) : void
     {
         /** @var Name[] $namedNodes */
-        $namedNodes = $this->betterNodeFinder->findInstanceOf($node, Name::class);
+        $namedNodes = $this->betterNodeFinder->findInstanceOf($node, \PhpParser\Node\Name::class);
         foreach ($namedNodes as $namedNode) {
             /** node name before becoming FQN - attribute from @see NameResolver */
-            $originalName = $namedNode->getAttribute(AttributeKey::ORIGINAL_NAME);
-            if (!$originalName instanceof Name) {
+            $originalName = $namedNode->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NAME);
+            if (!$originalName instanceof \PhpParser\Node\Name) {
                 continue;
             }
-            $parentNode = $namedNode->getAttribute(AttributeKey::PARENT_NODE);
-            if (!$parentNode instanceof Node) {
-                throw new ShouldNotHappenException();
+            $parentNode = $namedNode->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+            if (!$parentNode instanceof \PhpParser\Node) {
+                throw new \Rector\Core\Exception\ShouldNotHappenException();
             }
-            $this->resolvedNodeNames[$originalName->toString()][] = new NameAndParent($namedNode, $parentNode);
+            $this->resolvedNodeNames[$originalName->toString()][] = new \Rector\CodingStyle\ValueObject\NameAndParent($namedNode, $parentNode);
         }
     }
-    private function resolveUsedClassNames(Node $searchNode) : void
+    private function resolveUsedClassNames(\PhpParser\Node $searchNode) : void
     {
         /** @var ClassLike[] $classLikes */
         $classLikes = $this->betterNodeFinder->findClassLikes([$searchNode]);
         foreach ($classLikes as $classLike) {
             $classLikeName = $classLike->name;
-            if (!$classLikeName instanceof Identifier) {
+            if (!$classLikeName instanceof \PhpParser\Node\Identifier) {
                 continue;
             }
             $name = $this->nodeNameResolver->getName($classLikeName);
             if ($name === null) {
                 continue;
             }
-            $this->resolvedNodeNames[$name][] = new NameAndParent($classLikeName, $classLike);
+            $this->resolvedNodeNames[$name][] = new \Rector\CodingStyle\ValueObject\NameAndParent($classLikeName, $classLike);
         }
     }
-    private function resolveTraitUseNames(Node $searchNode) : void
+    private function resolveTraitUseNames(\PhpParser\Node $searchNode) : void
     {
         /** @var Identifier[] $identifiers */
-        $identifiers = $this->betterNodeFinder->findInstanceOf($searchNode, Identifier::class);
+        $identifiers = $this->betterNodeFinder->findInstanceOf($searchNode, \PhpParser\Node\Identifier::class);
         foreach ($identifiers as $identifier) {
-            $parentNode = $identifier->getAttribute(AttributeKey::PARENT_NODE);
-            if (!$parentNode instanceof UseUse) {
+            $parentNode = $identifier->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+            if (!$parentNode instanceof \PhpParser\Node\Stmt\UseUse) {
                 continue;
             }
-            $this->resolvedNodeNames[$identifier->name][] = new NameAndParent($identifier, $parentNode);
+            $this->resolvedNodeNames[$identifier->name][] = new \Rector\CodingStyle\ValueObject\NameAndParent($identifier, $parentNode);
         }
     }
 }

@@ -18,7 +18,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\Restoration\Rector\Namespace_\CompleteImportForPartialAnnotationRector\CompleteImportForPartialAnnotationRectorTest
  */
-final class CompleteImportForPartialAnnotationRector extends AbstractRector implements ConfigurableRectorInterface
+final class CompleteImportForPartialAnnotationRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
      * @api
@@ -29,9 +29,9 @@ final class CompleteImportForPartialAnnotationRector extends AbstractRector impl
      * @var CompleteImportForPartialAnnotation[]
      */
     private $useImportsToRestore = [];
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('In case you have accidentally removed use imports but code still contains partial use statements, this will save you', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('In case you have accidentally removed use imports but code still contains partial use statements, this will save you', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     /**
@@ -51,27 +51,27 @@ class SomeClass
     public $id;
 }
 CODE_SAMPLE
-, [self::USE_IMPORTS_TO_RESTORE => [new CompleteImportForPartialAnnotation('Doctrine\\ORM\\Mapping', 'ORM')]])]);
+, [self::USE_IMPORTS_TO_RESTORE => [new \Rector\Restoration\ValueObject\CompleteImportForPartialAnnotation('Doctrine\\ORM\\Mapping', 'ORM')]])]);
     }
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [Namespace_::class];
+        return [\PhpParser\Node\Stmt\Namespace_::class];
     }
     /**
      * @param Namespace_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        $class = $this->betterNodeFinder->findFirstInstanceOf($node->stmts, Class_::class);
-        if (!$class instanceof Class_) {
+        $class = $this->betterNodeFinder->findFirstInstanceOf($node->stmts, \PhpParser\Node\Stmt\Class_::class);
+        if (!$class instanceof \PhpParser\Node\Stmt\Class_) {
             return null;
         }
         foreach ($this->useImportsToRestore as $useImportToRestore) {
             $annotationToSeek = '#\\*\\s+\\@' . $useImportToRestore->getAlias() . '#';
-            if (!Strings::match($this->print($class), $annotationToSeek)) {
+            if (!\RectorPrefix20210510\Nette\Utils\Strings::match($this->print($class), $annotationToSeek)) {
                 continue;
             }
             $node = $this->addImportToNamespaceIfMissing($node, $useImportToRestore);
@@ -83,13 +83,13 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $default = [new CompleteImportForPartialAnnotation('Doctrine\\ORM\\Mapping', 'ORM'), new CompleteImportForPartialAnnotation('Symfony\\Component\\Validator\\Constraints', 'Assert'), new CompleteImportForPartialAnnotation('JMS\\Serializer\\Annotation', 'Serializer')];
+        $default = [new \Rector\Restoration\ValueObject\CompleteImportForPartialAnnotation('Doctrine\\ORM\\Mapping', 'ORM'), new \Rector\Restoration\ValueObject\CompleteImportForPartialAnnotation('Symfony\\Component\\Validator\\Constraints', 'Assert'), new \Rector\Restoration\ValueObject\CompleteImportForPartialAnnotation('JMS\\Serializer\\Annotation', 'Serializer')];
         $this->useImportsToRestore = \array_merge($configuration[self::USE_IMPORTS_TO_RESTORE] ?? [], $default);
     }
-    private function addImportToNamespaceIfMissing(Namespace_ $namespace, CompleteImportForPartialAnnotation $completeImportForPartialAnnotation) : Namespace_
+    private function addImportToNamespaceIfMissing(\PhpParser\Node\Stmt\Namespace_ $namespace, \Rector\Restoration\ValueObject\CompleteImportForPartialAnnotation $completeImportForPartialAnnotation) : \PhpParser\Node\Stmt\Namespace_
     {
         foreach ($namespace->stmts as $stmt) {
-            if (!$stmt instanceof Use_) {
+            if (!$stmt instanceof \PhpParser\Node\Stmt\Use_) {
                 continue;
             }
             $useUse = $stmt->uses[0];
@@ -104,9 +104,9 @@ CODE_SAMPLE
         }
         return $this->addImportToNamespace($namespace, $completeImportForPartialAnnotation);
     }
-    private function addImportToNamespace(Namespace_ $namespace, CompleteImportForPartialAnnotation $completeImportForPartialAnnotation) : Namespace_
+    private function addImportToNamespace(\PhpParser\Node\Stmt\Namespace_ $namespace, \Rector\Restoration\ValueObject\CompleteImportForPartialAnnotation $completeImportForPartialAnnotation) : \PhpParser\Node\Stmt\Namespace_
     {
-        $useBuilder = new UseBuilder($completeImportForPartialAnnotation->getUse());
+        $useBuilder = new \RectorPrefix20210510\Symplify\Astral\ValueObject\NodeBuilder\UseBuilder($completeImportForPartialAnnotation->getUse());
         if ($completeImportForPartialAnnotation->getAlias() !== '') {
             $useBuilder->as($completeImportForPartialAnnotation->getAlias());
         }

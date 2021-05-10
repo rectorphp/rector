@@ -20,21 +20,21 @@ final class PropertyPromotionCandidate
      * @var Param
      */
     private $param;
-    public function __construct(Property $property, Assign $assign, Param $param)
+    public function __construct(\PhpParser\Node\Stmt\Property $property, \PhpParser\Node\Expr\Assign $assign, \PhpParser\Node\Param $param)
     {
         $this->property = $property;
         $this->assign = $assign;
         $this->param = $param;
     }
-    public function getProperty() : Property
+    public function getProperty() : \PhpParser\Node\Stmt\Property
     {
         return $this->property;
     }
-    public function getAssign() : Assign
+    public function getAssign() : \PhpParser\Node\Expr\Assign
     {
         return $this->assign;
     }
-    public function getParam() : Param
+    public function getParam() : \PhpParser\Node\Param
     {
         return $this->param;
     }

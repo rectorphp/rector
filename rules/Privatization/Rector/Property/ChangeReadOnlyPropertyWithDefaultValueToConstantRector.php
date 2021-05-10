@@ -18,7 +18,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\Privatization\Rector\Property\ChangeReadOnlyPropertyWithDefaultValueToConstantRector\ChangeReadOnlyPropertyWithDefaultValueToConstantRectorTest
  */
-final class ChangeReadOnlyPropertyWithDefaultValueToConstantRector extends AbstractRector
+final class ChangeReadOnlyPropertyWithDefaultValueToConstantRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var PropertyManipulator
@@ -32,15 +32,15 @@ final class ChangeReadOnlyPropertyWithDefaultValueToConstantRector extends Abstr
      * @var PropertyFetchWithConstFetchReplacer
      */
     private $propertyFetchWithConstFetchReplacer;
-    public function __construct(PropertyManipulator $propertyManipulator, ClassConstantFactory $classConstantFactory, PropertyFetchWithConstFetchReplacer $propertyFetchWithConstFetchReplacer)
+    public function __construct(\Rector\Core\NodeManipulator\PropertyManipulator $propertyManipulator, \Rector\Privatization\NodeFactory\ClassConstantFactory $classConstantFactory, \Rector\Privatization\NodeReplacer\PropertyFetchWithConstFetchReplacer $propertyFetchWithConstFetchReplacer)
     {
         $this->propertyManipulator = $propertyManipulator;
         $this->classConstantFactory = $classConstantFactory;
         $this->propertyFetchWithConstFetchReplacer = $propertyFetchWithConstFetchReplacer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Change property with read only status with default value to constant', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change property with read only status with default value to constant', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     /**
@@ -85,12 +85,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Property::class];
+        return [\PhpParser\Node\Stmt\Property::class];
     }
     /**
      * @param Property $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -109,19 +109,19 @@ CODE_SAMPLE
             return null;
         }
         /** @var Class_ $classLike */
-        $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
+        $classLike = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
         $this->propertyFetchWithConstFetchReplacer->replace($classLike, $node);
         return $this->classConstantFactory->createFromProperty($node);
     }
-    private function shouldSkip(Property $property) : bool
+    private function shouldSkip(\PhpParser\Node\Stmt\Property $property) : bool
     {
         if (\count($property->props) !== 1) {
             return \true;
         }
-        $classLike = $property->getAttribute(AttributeKey::CLASS_NODE);
-        if (!$classLike instanceof Class_) {
+        $classLike = $property->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
+        if (!$classLike instanceof \PhpParser\Node\Stmt\Class_) {
             return \true;
         }
-        return $this->isObjectType($classLike, new ObjectType('PHP_CodeSniffer\\Sniffs\\Sniff'));
+        return $this->isObjectType($classLike, new \PHPStan\Type\ObjectType('PHP_CodeSniffer\\Sniffs\\Sniff'));
     }
 }

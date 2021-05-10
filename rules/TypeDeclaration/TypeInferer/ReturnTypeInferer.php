@@ -28,43 +28,43 @@ final class ReturnTypeInferer
     /**
      * @param ReturnTypeInfererInterface[] $returnTypeInferers
      */
-    public function __construct(array $returnTypeInferers, TypeNormalizer $typeNormalizer, TypeInfererSorter $typeInfererSorter, GenericClassStringTypeNormalizer $genericClassStringTypeNormalizer)
+    public function __construct(array $returnTypeInferers, \Rector\TypeDeclaration\TypeNormalizer $typeNormalizer, \Rector\TypeDeclaration\Sorter\TypeInfererSorter $typeInfererSorter, \Rector\TypeDeclaration\TypeAnalyzer\GenericClassStringTypeNormalizer $genericClassStringTypeNormalizer)
     {
         $this->returnTypeInferers = $typeInfererSorter->sort($returnTypeInferers);
         $this->typeNormalizer = $typeNormalizer;
         $this->genericClassStringTypeNormalizer = $genericClassStringTypeNormalizer;
     }
-    public function inferFunctionLike(FunctionLike $functionLike) : Type
+    public function inferFunctionLike(\PhpParser\Node\FunctionLike $functionLike) : \PHPStan\Type\Type
     {
         return $this->inferFunctionLikeWithExcludedInferers($functionLike, []);
     }
     /**
      * @param array<class-string<ReturnTypeInfererInterface>> $excludedInferers
      */
-    public function inferFunctionLikeWithExcludedInferers(FunctionLike $functionLike, array $excludedInferers) : Type
+    public function inferFunctionLikeWithExcludedInferers(\PhpParser\Node\FunctionLike $functionLike, array $excludedInferers) : \PHPStan\Type\Type
     {
         foreach ($this->returnTypeInferers as $returnTypeInferer) {
             if ($this->shouldSkipExcludedTypeInferer($returnTypeInferer, $excludedInferers)) {
                 continue;
             }
             $originalType = $returnTypeInferer->inferFunctionLike($functionLike);
-            if ($originalType instanceof MixedType) {
+            if ($originalType instanceof \PHPStan\Type\MixedType) {
                 continue;
             }
             $type = $this->typeNormalizer->normalizeArrayTypeAndArrayNever($originalType);
             // in case of void, check return type of children methods
-            if ($type instanceof MixedType) {
+            if ($type instanceof \PHPStan\Type\MixedType) {
                 continue;
             }
             // normalize ConstStringType to ClassStringType
             return $this->genericClassStringTypeNormalizer->normalize($type);
         }
-        return new MixedType();
+        return new \PHPStan\Type\MixedType();
     }
     /**
      * @param array<class-string<ReturnTypeInfererInterface>> $excludedInferers
      */
-    private function shouldSkipExcludedTypeInferer(ReturnTypeInfererInterface $returnTypeInferer, array $excludedInferers) : bool
+    private function shouldSkipExcludedTypeInferer(\Rector\TypeDeclaration\Contract\TypeInferer\ReturnTypeInfererInterface $returnTypeInferer, array $excludedInferers) : bool
     {
         foreach ($excludedInferers as $excludedInferer) {
             if (\is_a($returnTypeInferer, $excludedInferer)) {

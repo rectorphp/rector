@@ -32,7 +32,7 @@ final class PostFileProcessor
     /**
      * @param PostRectorInterface[] $postRectors
      */
-    public function __construct(Skipper $skipper, CurrentFileProvider $currentFileProvider, CurrentRectorProvider $currentRectorProvider, array $postRectors)
+    public function __construct(\RectorPrefix20210510\Symplify\Skipper\Skipper\Skipper $skipper, \Rector\Core\Provider\CurrentFileProvider $currentFileProvider, \Rector\Core\Logging\CurrentRectorProvider $currentRectorProvider, array $postRectors)
     {
         $this->postRectors = $this->sortByPriority($postRectors);
         $this->skipper = $skipper;
@@ -50,7 +50,7 @@ final class PostFileProcessor
                 continue;
             }
             $this->currentRectorProvider->changeCurrentRector($postRector);
-            $nodeTraverser = new NodeTraverser();
+            $nodeTraverser = new \PhpParser\NodeTraverser();
             $nodeTraverser->addVisitor($postRector);
             $nodes = $nodeTraverser->traverse($nodes);
         }
@@ -65,17 +65,17 @@ final class PostFileProcessor
         $postRectorsByPriority = [];
         foreach ($postRectors as $postRector) {
             if (isset($postRectorsByPriority[$postRector->getPriority()])) {
-                throw new ShouldNotHappenException();
+                throw new \Rector\Core\Exception\ShouldNotHappenException();
             }
             $postRectorsByPriority[$postRector->getPriority()] = $postRector;
         }
         \krsort($postRectorsByPriority);
         return $postRectorsByPriority;
     }
-    private function shouldSkipPostRector(PostRectorInterface $postRector) : bool
+    private function shouldSkipPostRector(\Rector\PostRector\Contract\Rector\PostRectorInterface $postRector) : bool
     {
         $file = $this->currentFileProvider->getFile();
-        if (!$file instanceof File) {
+        if (!$file instanceof \Rector\Core\ValueObject\Application\File) {
             return \false;
         }
         $smartFileInfo = $file->getSmartFileInfo();

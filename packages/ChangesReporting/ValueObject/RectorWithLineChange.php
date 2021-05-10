@@ -14,7 +14,7 @@ final class RectorWithLineChange
      * @var RectorInterface
      */
     private $rector;
-    public function __construct(RectorInterface $rector, int $line)
+    public function __construct(\Rector\Core\Contract\Rector\RectorInterface $rector, int $line)
     {
         $this->rector = $rector;
         $this->line = $line;

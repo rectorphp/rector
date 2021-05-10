@@ -8,7 +8,7 @@ use RectorPrefix20210510\Symplify\SetConfigResolver\Contract\SetProviderInterfac
 use RectorPrefix20210510\Symplify\SetConfigResolver\Exception\SetNotFoundException;
 use RectorPrefix20210510\Symplify\SetConfigResolver\ValueObject\Set;
 use RectorPrefix20210510\Symplify\SymplifyKernel\Exception\ShouldNotHappenException;
-abstract class AbstractSetProvider implements SetProviderInterface
+abstract class AbstractSetProvider implements \RectorPrefix20210510\Symplify\SetConfigResolver\Contract\SetProviderInterface
 {
     /**
      * @return string[]
@@ -22,7 +22,7 @@ abstract class AbstractSetProvider implements SetProviderInterface
         }
         return $setNames;
     }
-    public function provideByName(string $desiredSetName) : ?Set
+    public function provideByName(string $desiredSetName) : ?\RectorPrefix20210510\Symplify\SetConfigResolver\ValueObject\Set
     {
         // 1. name-based approach
         $sets = $this->provide();
@@ -45,16 +45,16 @@ abstract class AbstractSetProvider implements SetProviderInterface
                 }
                 return $set;
             }
-        } catch (ShouldNotHappenException $shouldNotHappenException) {
+        } catch (\RectorPrefix20210510\Symplify\SymplifyKernel\Exception\ShouldNotHappenException $shouldNotHappenException) {
         }
         $message = \sprintf('Set "%s" was not found', $desiredSetName);
-        throw new SetNotFoundException($message, $desiredSetName, $this->provideSetNames());
+        throw new \RectorPrefix20210510\Symplify\SetConfigResolver\Exception\SetNotFoundException($message, $desiredSetName, $this->provideSetNames());
     }
     private function resolveSetUniquePathId(string $setPath) : string
     {
-        $setPath = Strings::after($setPath, \DIRECTORY_SEPARATOR, -2);
+        $setPath = \RectorPrefix20210510\Nette\Utils\Strings::after($setPath, \DIRECTORY_SEPARATOR, -2);
         if ($setPath === null) {
-            throw new ShouldNotHappenException();
+            throw new \RectorPrefix20210510\Symplify\SymplifyKernel\Exception\ShouldNotHappenException();
         }
         return $setPath;
     }

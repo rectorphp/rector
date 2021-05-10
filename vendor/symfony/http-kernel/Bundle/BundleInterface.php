@@ -18,7 +18,7 @@ use RectorPrefix20210510\Symfony\Component\DependencyInjection\Extension\Extensi
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-interface BundleInterface extends ContainerAwareInterface
+interface BundleInterface extends \RectorPrefix20210510\Symfony\Component\DependencyInjection\ContainerAwareInterface
 {
     /**
      * Boots the Bundle.
@@ -33,7 +33,7 @@ interface BundleInterface extends ContainerAwareInterface
      *
      * It is only ever called once when the cache is empty.
      */
-    public function build(ContainerBuilder $container);
+    public function build(\RectorPrefix20210510\Symfony\Component\DependencyInjection\ContainerBuilder $container);
     /**
      * Returns the container extension that should be implicitly loaded.
      *

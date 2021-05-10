@@ -10,7 +10,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\Composer\Rector\RemovePackageComposerRector\RemovePackageComposerRectorTest
  */
-final class RemovePackageComposerRector implements ComposerRectorInterface
+final class RemovePackageComposerRector implements \Rector\Composer\Contract\Rector\ComposerRectorInterface
 {
     /**
      * @var string
@@ -20,15 +20,15 @@ final class RemovePackageComposerRector implements ComposerRectorInterface
      * @var string[]
      */
     private $packageNames = [];
-    public function refactor(ComposerJson $composerJson) : void
+    public function refactor(\RectorPrefix20210510\Symplify\ComposerJsonManipulator\ValueObject\ComposerJson $composerJson) : void
     {
         foreach ($this->packageNames as $packageName) {
             $composerJson->removePackage($packageName);
         }
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Remove package from "require" and "require-dev" in `composer.json`', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove package from "require" and "require-dev" in `composer.json`', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
 {
     "require": {
         "symfony/console": "^3.4"

@@ -17,7 +17,7 @@ class Helpers
      */
     public static function editorLink(string $file, int $line = null) : string
     {
-        $file = \strtr($origFile = $file, Debugger::$editorMapping);
+        $file = \strtr($origFile = $file, \RectorPrefix20210510\Tracy\Debugger::$editorMapping);
         if ($editor = self::editorUri($origFile, $line)) {
             $file = \strtr($file, '\\', '/');
             if (\preg_match('#(^[a-z]:)?/.{1,40}$#i', $file, $m) && \strlen($file) > \strlen($m[0])) {
@@ -34,10 +34,10 @@ class Helpers
      */
     public static function editorUri(string $file, int $line = null, string $action = 'open', string $search = '', string $replace = '') : ?string
     {
-        if (Debugger::$editor && $file && ($action === 'create' || \is_file($file))) {
+        if (\RectorPrefix20210510\Tracy\Debugger::$editor && $file && ($action === 'create' || \is_file($file))) {
             $file = \strtr($file, '/', \DIRECTORY_SEPARATOR);
-            $file = \strtr($file, Debugger::$editorMapping);
-            return \strtr(Debugger::$editor, ['%action' => $action, '%file' => \rawurlencode($file), '%line' => $line ?: 1, '%search' => \rawurlencode($search), '%replace' => \rawurlencode($replace)]);
+            $file = \strtr($file, \RectorPrefix20210510\Tracy\Debugger::$editorMapping);
+            return \strtr(\RectorPrefix20210510\Tracy\Debugger::$editor, ['%action' => $action, '%file' => \rawurlencode($file), '%line' => $line ?: 1, '%search' => \rawurlencode($search), '%replace' => \rawurlencode($replace)]);
         }
         return null;
     }

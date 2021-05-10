@@ -32,9 +32,9 @@ final class StaticCallToMethodCall
         $this->classType = $classType;
         $this->methodName = $methodName;
     }
-    public function getClassObjectType() : ObjectType
+    public function getClassObjectType() : \PHPStan\Type\ObjectType
     {
-        return new ObjectType($this->classType);
+        return new \PHPStan\Type\ObjectType($this->classType);
     }
     public function getClassType() : string
     {
@@ -44,16 +44,16 @@ final class StaticCallToMethodCall
     {
         return $this->methodName;
     }
-    public function isStaticCallMatch(StaticCall $staticCall) : bool
+    public function isStaticCallMatch(\PhpParser\Node\Expr\StaticCall $staticCall) : bool
     {
-        if (!$staticCall->class instanceof Name) {
+        if (!$staticCall->class instanceof \PhpParser\Node\Name) {
             return \false;
         }
         $staticCallClassName = $staticCall->class->toString();
         if ($staticCallClassName !== $this->staticClass) {
             return \false;
         }
-        if (!$staticCall->name instanceof Identifier) {
+        if (!$staticCall->name instanceof \PhpParser\Node\Identifier) {
             return \false;
         }
         // all methods

@@ -30,7 +30,7 @@ final class OverridenExistingNamesResolver
      * @var ArrayFilter
      */
     private $arrayFilter;
-    public function __construct(ArrayFilter $arrayFilter, BetterNodeFinder $betterNodeFinder, NodeNameResolver $nodeNameResolver)
+    public function __construct(\Rector\Naming\PhpArray\ArrayFilter $arrayFilter, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->betterNodeFinder = $betterNodeFinder;
@@ -39,18 +39,18 @@ final class OverridenExistingNamesResolver
     /**
      * @param ClassMethod|Function_|Closure $functionLike
      */
-    public function checkNameInClassMethodForNew(string $variableName, FunctionLike $functionLike) : bool
+    public function checkNameInClassMethodForNew(string $variableName, \PhpParser\Node\FunctionLike $functionLike) : bool
     {
         $overridenVariableNames = $this->resolveOveriddenNamesForNew($functionLike);
         return \in_array($variableName, $overridenVariableNames, \true);
     }
-    public function checkNameInClassMethodForParam(string $expectedName, ClassMethod $classMethod) : bool
+    public function checkNameInClassMethodForParam(string $expectedName, \PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
     {
         /** @var Assign[] $assigns */
-        $assigns = $this->betterNodeFinder->findInstanceOf((array) $classMethod->stmts, Assign::class);
+        $assigns = $this->betterNodeFinder->findInstanceOf((array) $classMethod->stmts, \PhpParser\Node\Expr\Assign::class);
         $usedVariableNames = [];
         foreach ($assigns as $assign) {
-            if (!$assign->var instanceof Variable) {
+            if (!$assign->var instanceof \PhpParser\Node\Expr\Variable) {
                 continue;
             }
             $variableName = $this->nodeNameResolver->getName($assign->var);
@@ -65,7 +65,7 @@ final class OverridenExistingNamesResolver
      * @param ClassMethod|Function_|Closure $functionLike
      * @return string[]
      */
-    private function resolveOveriddenNamesForNew(FunctionLike $functionLike) : array
+    private function resolveOveriddenNamesForNew(\PhpParser\Node\FunctionLike $functionLike) : array
     {
         $classMethodHash = \spl_object_hash($functionLike);
         if (isset($this->overridenExistingVariableNamesByClassMethod[$classMethodHash])) {
@@ -73,7 +73,7 @@ final class OverridenExistingNamesResolver
         }
         $currentlyUsedNames = [];
         /** @var Assign[] $assigns */
-        $assigns = $this->betterNodeFinder->findInstanceOf((array) $functionLike->stmts, Assign::class);
+        $assigns = $this->betterNodeFinder->findInstanceOf((array) $functionLike->stmts, \PhpParser\Node\Expr\Assign::class);
         foreach ($assigns as $assign) {
             /** @var Variable $assignVariable */
             $assignVariable = $assign->var;

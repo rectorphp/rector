@@ -15,7 +15,7 @@ class AssertSameBooleanExpectedRule implements \PHPStan\Rules\Rule
     {
         return \PhpParser\NodeAbstract::class;
     }
-    public function processNode(Node $node, Scope $scope) : array
+    public function processNode(\PhpParser\Node $node, \PHPStan\Analyser\Scope $scope) : array
     {
         if (!\PHPStan\Rules\PHPUnit\AssertRuleHelper::isMethodOrStaticCallOnAssert($node, $scope)) {
             return [];
@@ -25,11 +25,11 @@ class AssertSameBooleanExpectedRule implements \PHPStan\Rules\Rule
         if (\count($node->args) < 2) {
             return [];
         }
-        if (!$node->name instanceof Node\Identifier || \strtolower($node->name->name) !== 'assertsame') {
+        if (!$node->name instanceof \PhpParser\Node\Identifier || \strtolower($node->name->name) !== 'assertsame') {
             return [];
         }
         $leftType = $scope->getType($node->args[0]->value);
-        if (!$leftType instanceof ConstantBooleanType) {
+        if (!$leftType instanceof \PHPStan\Type\Constant\ConstantBooleanType) {
             return [];
         }
         if ($leftType->getValue()) {

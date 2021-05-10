@@ -17,7 +17,7 @@ final class RemovedAndAddedFilesCollector
      * @var AddedFileInterface[]
      */
     private $addedFiles = [];
-    public function removeFile(SmartFileInfo $smartFileInfo) : void
+    public function removeFile(\Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo) : void
     {
         $this->removedFileInfos[] = $smartFileInfo;
     }
@@ -28,7 +28,7 @@ final class RemovedAndAddedFilesCollector
     {
         return $this->removedFileInfos;
     }
-    public function isFileRemoved(SmartFileInfo $smartFileInfo) : bool
+    public function isFileRemoved(\Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo) : bool
     {
         foreach ($this->removedFileInfos as $removedFileInfo) {
             if ($removedFileInfo->getPathname() !== $smartFileInfo->getPathname()) {
@@ -38,7 +38,7 @@ final class RemovedAndAddedFilesCollector
         }
         return \false;
     }
-    public function addAddedFile(AddedFileInterface $addedFile) : void
+    public function addAddedFile(\Rector\FileSystemRector\Contract\AddedFileInterface $addedFile) : void
     {
         $this->addedFiles[] = $addedFile;
     }
@@ -47,8 +47,8 @@ final class RemovedAndAddedFilesCollector
      */
     public function getAddedFilesWithContent() : array
     {
-        return \array_filter($this->addedFiles, function (AddedFileInterface $addedFile) : bool {
-            return $addedFile instanceof AddedFileWithContent;
+        return \array_filter($this->addedFiles, function (\Rector\FileSystemRector\Contract\AddedFileInterface $addedFile) : bool {
+            return $addedFile instanceof \Rector\FileSystemRector\ValueObject\AddedFileWithContent;
         });
     }
     /**
@@ -56,8 +56,8 @@ final class RemovedAndAddedFilesCollector
      */
     public function getAddedFilesWithNodes() : array
     {
-        return \array_filter($this->addedFiles, function (AddedFileInterface $addedFile) : bool {
-            return $addedFile instanceof AddedFileWithNodes;
+        return \array_filter($this->addedFiles, function (\Rector\FileSystemRector\Contract\AddedFileInterface $addedFile) : bool {
+            return $addedFile instanceof \Rector\FileSystemRector\ValueObject\AddedFileWithNodes;
         });
     }
     public function getAffectedFilesCount() : int

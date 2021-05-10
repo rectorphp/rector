@@ -21,7 +21,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\RemovingStatic\Rector\Class_\DesiredClassTypeToDynamicRector\DesiredClassTypeToDynamicRectorTest
  */
-final class DesiredClassTypeToDynamicRector extends AbstractRector
+final class DesiredClassTypeToDynamicRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var ObjectType[]
@@ -35,18 +35,18 @@ final class DesiredClassTypeToDynamicRector extends AbstractRector
      * @var StaticCallPresenceAnalyzer
      */
     private $staticCallPresenceAnalyzer;
-    public function __construct(PropertyNaming $propertyNaming, StaticCallPresenceAnalyzer $staticCallPresenceAnalyzer, ParameterProvider $parameterProvider)
+    public function __construct(\Rector\Naming\Naming\PropertyNaming $propertyNaming, \Rector\RemovingStatic\NodeAnalyzer\StaticCallPresenceAnalyzer $staticCallPresenceAnalyzer, \RectorPrefix20210510\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider)
     {
-        $typesToRemoveStaticFrom = $parameterProvider->provideArrayParameter(Option::TYPES_TO_REMOVE_STATIC_FROM);
+        $typesToRemoveStaticFrom = $parameterProvider->provideArrayParameter(\Rector\Core\Configuration\Option::TYPES_TO_REMOVE_STATIC_FROM);
         foreach ($typesToRemoveStaticFrom as $typeToRemoveStaticFrom) {
-            $this->staticObjectTypes[] = new ObjectType($typeToRemoveStaticFrom);
+            $this->staticObjectTypes[] = new \PHPStan\Type\ObjectType($typeToRemoveStaticFrom);
         }
         $this->propertyNaming = $propertyNaming;
         $this->staticCallPresenceAnalyzer = $staticCallPresenceAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Change full static service, to dynamic one', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change full static service, to dynamic one', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class AnotherClass
 {
     public function run()
@@ -105,12 +105,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Class_::class];
+        return [\PhpParser\Node\Stmt\Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         foreach ($this->staticObjectTypes as $staticObjectType) {
             // do not any dependencies to class itself
@@ -126,10 +126,10 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function completeDependencyToConstructorOnly(Class_ $class, ObjectType $objectType) : void
+    private function completeDependencyToConstructorOnly(\PhpParser\Node\Stmt\Class_ $class, \PHPStan\Type\ObjectType $objectType) : void
     {
-        $constructClassMethod = $class->getMethod(MethodName::CONSTRUCT);
-        if (!$constructClassMethod instanceof ClassMethod) {
+        $constructClassMethod = $class->getMethod(\Rector\Core\ValueObject\MethodName::CONSTRUCT);
+        if (!$constructClassMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
             return;
         }
         $hasStaticCall = $this->staticCallPresenceAnalyzer->hasMethodStaticCallOnType($constructClassMethod, $objectType);
@@ -142,7 +142,7 @@ CODE_SAMPLE
         }
         $constructClassMethod->params[] = $this->createParam($propertyExpectedName, $objectType);
     }
-    private function isTypeAlreadyInParamMethod(ClassMethod $classMethod, ObjectType $objectType) : bool
+    private function isTypeAlreadyInParamMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod, \PHPStan\Type\ObjectType $objectType) : bool
     {
         foreach ($classMethod->getParams() as $param) {
             if ($param->type === null) {
@@ -154,8 +154,8 @@ CODE_SAMPLE
         }
         return \false;
     }
-    private function createParam(string $propertyName, ObjectType $objectType) : Param
+    private function createParam(string $propertyName, \PHPStan\Type\ObjectType $objectType) : \PhpParser\Node\Param
     {
-        return new Param(new Variable($propertyName), null, new FullyQualified($objectType->getClassName()));
+        return new \PhpParser\Node\Param(new \PhpParser\Node\Expr\Variable($propertyName), null, new \PhpParser\Node\Name\FullyQualified($objectType->getClassName()));
     }
 }

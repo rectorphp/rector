@@ -22,7 +22,7 @@ final class ModifiedVariableNamesCollector
      * @var NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(SimpleCallableNodeTraverser $simpleCallableNodeTraverser, NodeNameResolver $nodeNameResolver)
+    public function __construct(\RectorPrefix20210510\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
     {
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->nodeNameResolver = $nodeNameResolver;
@@ -30,7 +30,7 @@ final class ModifiedVariableNamesCollector
     /**
      * @return string[]
      */
-    public function collectModifiedVariableNames(Stmt $stmt) : array
+    public function collectModifiedVariableNames(\PhpParser\Node\Stmt $stmt) : array
     {
         $argNames = $this->collectFromArgs($stmt);
         $assignNames = $this->collectFromAssigns($stmt);
@@ -39,11 +39,11 @@ final class ModifiedVariableNamesCollector
     /**
      * @return string[]
      */
-    private function collectFromArgs(Stmt $stmt) : array
+    private function collectFromArgs(\PhpParser\Node\Stmt $stmt) : array
     {
         $variableNames = [];
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($stmt, function (Node $node) use(&$variableNames) {
-            if (!$node instanceof Arg) {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($stmt, function (\PhpParser\Node $node) use(&$variableNames) {
+            if (!$node instanceof \PhpParser\Node\Arg) {
                 return null;
             }
             if (!$this->isVariableChangedInReference($node)) {
@@ -60,14 +60,14 @@ final class ModifiedVariableNamesCollector
     /**
      * @return string[]
      */
-    private function collectFromAssigns(Stmt $stmt) : array
+    private function collectFromAssigns(\PhpParser\Node\Stmt $stmt) : array
     {
         $modifiedVariableNames = [];
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($stmt, function (Node $node) use(&$modifiedVariableNames) {
-            if (!$node instanceof Assign) {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($stmt, function (\PhpParser\Node $node) use(&$modifiedVariableNames) {
+            if (!$node instanceof \PhpParser\Node\Expr\Assign) {
                 return null;
             }
-            if (!$node->var instanceof Variable) {
+            if (!$node->var instanceof \PhpParser\Node\Expr\Variable) {
                 return null;
             }
             $variableName = $this->nodeNameResolver->getName($node->var);
@@ -78,10 +78,10 @@ final class ModifiedVariableNamesCollector
         });
         return $modifiedVariableNames;
     }
-    private function isVariableChangedInReference(Arg $arg) : bool
+    private function isVariableChangedInReference(\PhpParser\Node\Arg $arg) : bool
     {
-        $parentNode = $arg->getAttribute(AttributeKey::PARENT_NODE);
-        if (!$parentNode instanceof FuncCall) {
+        $parentNode = $arg->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        if (!$parentNode instanceof \PhpParser\Node\Expr\FuncCall) {
             return \false;
         }
         return $this->nodeNameResolver->isNames($parentNode, ['array_shift', 'array_pop']);

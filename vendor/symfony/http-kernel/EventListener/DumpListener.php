@@ -21,12 +21,12 @@ use RectorPrefix20210510\Symfony\Component\VarDumper\VarDumper;
  *
  * @author Nicolas Grekas <p@tchwork.com>
  */
-class DumpListener implements EventSubscriberInterface
+class DumpListener implements \RectorPrefix20210510\Symfony\Component\EventDispatcher\EventSubscriberInterface
 {
     private $cloner;
     private $dumper;
     private $connection;
-    public function __construct(ClonerInterface $cloner, DataDumperInterface $dumper, Connection $connection = null)
+    public function __construct(\RectorPrefix20210510\Symfony\Component\VarDumper\Cloner\ClonerInterface $cloner, \RectorPrefix20210510\Symfony\Component\VarDumper\Dumper\DataDumperInterface $dumper, \RectorPrefix20210510\Symfony\Component\VarDumper\Server\Connection $connection = null)
     {
         $this->cloner = $cloner;
         $this->dumper = $dumper;
@@ -37,7 +37,7 @@ class DumpListener implements EventSubscriberInterface
         $cloner = $this->cloner;
         $dumper = $this->dumper;
         $connection = $this->connection;
-        VarDumper::setHandler(static function ($var) use($cloner, $dumper, $connection) {
+        \RectorPrefix20210510\Symfony\Component\VarDumper\VarDumper::setHandler(static function ($var) use($cloner, $dumper, $connection) {
             $data = $cloner->cloneVar($var);
             if (!$connection || !$connection->write($data)) {
                 $dumper->dump($data);
@@ -46,10 +46,10 @@ class DumpListener implements EventSubscriberInterface
     }
     public static function getSubscribedEvents()
     {
-        if (!\class_exists(ConsoleEvents::class)) {
+        if (!\class_exists(\RectorPrefix20210510\Symfony\Component\Console\ConsoleEvents::class)) {
             return [];
         }
         // Register early to have a working dump() as early as possible
-        return [ConsoleEvents::COMMAND => ['configure', 1024]];
+        return [\RectorPrefix20210510\Symfony\Component\Console\ConsoleEvents::COMMAND => ['configure', 1024]];
     }
 }

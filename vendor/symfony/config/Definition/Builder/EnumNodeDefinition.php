@@ -16,7 +16,7 @@ use RectorPrefix20210510\Symfony\Component\Config\Definition\EnumNode;
  *
  * @author Johannes M. Schmitt <schmittjoh@gmail.com>
  */
-class EnumNodeDefinition extends ScalarNodeDefinition
+class EnumNodeDefinition extends \RectorPrefix20210510\Symfony\Component\Config\Definition\Builder\ScalarNodeDefinition
 {
     private $values;
     /**
@@ -43,6 +43,6 @@ class EnumNodeDefinition extends ScalarNodeDefinition
         if (null === $this->values) {
             throw new \RuntimeException('You must call ->values() on enum nodes.');
         }
-        return new EnumNode($this->name, $this->parent, $this->values, $this->pathSeparator);
+        return new \RectorPrefix20210510\Symfony\Component\Config\Definition\EnumNode($this->name, $this->parent, $this->values, $this->pathSeparator);
     }
 }

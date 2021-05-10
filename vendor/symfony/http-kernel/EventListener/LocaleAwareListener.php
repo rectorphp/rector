@@ -21,23 +21,23 @@ use RectorPrefix20210510\Symfony\Contracts\Translation\LocaleAwareInterface;
  *
  * @author Pierre Bobiet <pierrebobiet@gmail.com>
  */
-class LocaleAwareListener implements EventSubscriberInterface
+class LocaleAwareListener implements \RectorPrefix20210510\Symfony\Component\EventDispatcher\EventSubscriberInterface
 {
     private $localeAwareServices;
     private $requestStack;
     /**
      * @param LocaleAwareInterface[] $localeAwareServices
      */
-    public function __construct(iterable $localeAwareServices, RequestStack $requestStack)
+    public function __construct(iterable $localeAwareServices, \RectorPrefix20210510\Symfony\Component\HttpFoundation\RequestStack $requestStack)
     {
         $this->localeAwareServices = $localeAwareServices;
         $this->requestStack = $requestStack;
     }
-    public function onKernelRequest(RequestEvent $event) : void
+    public function onKernelRequest(\RectorPrefix20210510\Symfony\Component\HttpKernel\Event\RequestEvent $event) : void
     {
         $this->setLocale($event->getRequest()->getLocale(), $event->getRequest()->getDefaultLocale());
     }
-    public function onKernelFinishRequest(FinishRequestEvent $event) : void
+    public function onKernelFinishRequest(\RectorPrefix20210510\Symfony\Component\HttpKernel\Event\FinishRequestEvent $event) : void
     {
         if (null === ($parentRequest = $this->requestStack->getParentRequest())) {
             foreach ($this->localeAwareServices as $service) {
@@ -51,8 +51,8 @@ class LocaleAwareListener implements EventSubscriberInterface
     {
         return [
             // must be registered after the Locale listener
-            KernelEvents::REQUEST => [['onKernelRequest', 15]],
-            KernelEvents::FINISH_REQUEST => [['onKernelFinishRequest', -15]],
+            \RectorPrefix20210510\Symfony\Component\HttpKernel\KernelEvents::REQUEST => [['onKernelRequest', 15]],
+            \RectorPrefix20210510\Symfony\Component\HttpKernel\KernelEvents::FINISH_REQUEST => [['onKernelFinishRequest', -15]],
         ];
     }
     private function setLocale(string $locale, string $defaultLocale) : void

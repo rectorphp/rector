@@ -23,7 +23,7 @@ final class ClassNameImportSkipper
     {
         $this->classNameImportSkipVoters = $classNameImportSkipVoters;
     }
-    public function shouldSkipNameForFullyQualifiedObjectType(Node $node, FullyQualifiedObjectType $fullyQualifiedObjectType) : bool
+    public function shouldSkipNameForFullyQualifiedObjectType(\PhpParser\Node $node, \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType $fullyQualifiedObjectType) : bool
     {
         foreach ($this->classNameImportSkipVoters as $classNameImportSkipVoter) {
             if ($classNameImportSkipVoter->shouldSkip($fullyQualifiedObjectType, $node)) {
@@ -32,18 +32,18 @@ final class ClassNameImportSkipper
         }
         return \false;
     }
-    public function isShortNameInUseStatement(Name $name) : bool
+    public function isShortNameInUseStatement(\PhpParser\Node\Name $name) : bool
     {
         $longName = $name->toString();
-        if (Strings::contains($longName, '\\')) {
+        if (\RectorPrefix20210510\Nette\Utils\Strings::contains($longName, '\\')) {
             return \false;
         }
         return $this->isFoundInUse($name);
     }
-    public function isFoundInUse(Name $name) : bool
+    public function isFoundInUse(\PhpParser\Node\Name $name) : bool
     {
         /** @var Use_[] $uses */
-        $uses = (array) $name->getAttribute(AttributeKey::USE_NODES);
+        $uses = (array) $name->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::USE_NODES);
         foreach ($uses as $use) {
             foreach ($use->uses as $useUse) {
                 if ($useUse->name->getLast() !== $name->getLast()) {

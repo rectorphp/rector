@@ -14,21 +14,21 @@ final class ClassMethodParamVendorLockResolver
      * @var NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(NodeNameResolver $nodeNameResolver)
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
     }
-    public function isVendorLocked(ClassMethod $classMethod) : bool
+    public function isVendorLocked(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
     {
         if ($classMethod->isMagic()) {
             return \true;
         }
-        $scope = $classMethod->getAttribute(AttributeKey::SCOPE);
-        if (!$scope instanceof Scope) {
+        $scope = $classMethod->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
+        if (!$scope instanceof \PHPStan\Analyser\Scope) {
             return \false;
         }
         $classReflection = $scope->getClassReflection();
-        if (!$classReflection instanceof ClassReflection) {
+        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
             return \false;
         }
         $methodName = $this->nodeNameResolver->getName($classMethod);

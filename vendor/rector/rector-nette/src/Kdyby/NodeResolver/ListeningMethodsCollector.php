@@ -42,7 +42,7 @@ final class ListeningMethodsCollector
      * @var EventClassNaming
      */
     private $eventClassNaming;
-    public function __construct(SimpleCallableNodeTraverser $simpleCallableNodeTraverser, EventClassNaming $eventClassNaming, ValueResolver $valueResolver)
+    public function __construct(\RectorPrefix20210510\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\Nette\Kdyby\Naming\EventClassNaming $eventClassNaming, \Rector\Core\PhpParser\Node\Value\ValueResolver $valueResolver)
     {
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->valueResolver = $valueResolver;
@@ -51,17 +51,17 @@ final class ListeningMethodsCollector
     /**
      * @return EventClassAndClassMethod[]
      */
-    public function collectFromClassAndGetSubscribedEventClassMethod(ClassMethod $getSubscribedEventsClassMethod, string $type) : array
+    public function collectFromClassAndGetSubscribedEventClassMethod(\PhpParser\Node\Stmt\ClassMethod $getSubscribedEventsClassMethod, string $type) : array
     {
         /** @var Class_ $classLike */
-        $classLike = $getSubscribedEventsClassMethod->getAttribute(AttributeKey::CLASS_NODE);
+        $classLike = $getSubscribedEventsClassMethod->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
         $this->eventClassesAndClassMethods = [];
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $getSubscribedEventsClassMethod->stmts, function (Node $node) use($classLike, $type) {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $getSubscribedEventsClassMethod->stmts, function (\PhpParser\Node $node) use($classLike, $type) {
             $classMethod = $this->matchClassMethodByArrayItem($node, $classLike);
-            if (!$classMethod instanceof ClassMethod) {
+            if (!$classMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
                 return null;
             }
-            if (!$node instanceof ArrayItem) {
+            if (!$node instanceof \PhpParser\Node\Expr\ArrayItem) {
                 return;
             }
             if ($node->key === null) {
@@ -73,11 +73,11 @@ final class ListeningMethodsCollector
                 $this->resolveContributeEventClassAndSubscribedClassMethod($eventClass, $classMethod);
                 return null;
             }
-            if (!$node instanceof ArrayItem) {
-                throw new ShouldNotHappenException();
+            if (!$node instanceof \PhpParser\Node\Expr\ArrayItem) {
+                throw new \Rector\Core\Exception\ShouldNotHappenException();
             }
             $eventClassAndClassMethod = $this->resolveCustomClassMethodAndEventClass($node, $classLike, $eventClass);
-            if (!$eventClassAndClassMethod instanceof EventClassAndClassMethod) {
+            if (!$eventClassAndClassMethod instanceof \Rector\Nette\Kdyby\ValueObject\EventClassAndClassMethod) {
                 return null;
             }
             $this->eventClassesAndClassMethods[] = $eventClassAndClassMethod;
@@ -88,7 +88,7 @@ final class ListeningMethodsCollector
     /**
      * @return ClassMethod[]
      */
-    public function classMethodsListeningToEventClass(ClassMethod $getSubscribedEventsClassMethod, string $type, string $eventClassName) : array
+    public function classMethodsListeningToEventClass(\PhpParser\Node\Stmt\ClassMethod $getSubscribedEventsClassMethod, string $type, string $eventClassName) : array
     {
         $eventClassesAndClassMethods = $this->collectFromClassAndGetSubscribedEventClassMethod($getSubscribedEventsClassMethod, $type);
         $classMethods = [];
@@ -100,9 +100,9 @@ final class ListeningMethodsCollector
         }
         return $classMethods;
     }
-    private function matchClassMethodByArrayItem(Node $node, Class_ $class) : ?ClassMethod
+    private function matchClassMethodByArrayItem(\PhpParser\Node $node, \PhpParser\Node\Stmt\Class_ $class) : ?\PhpParser\Node\Stmt\ClassMethod
     {
-        if (!$node instanceof ArrayItem) {
+        if (!$node instanceof \PhpParser\Node\Expr\ArrayItem) {
             return null;
         }
         if ($node->key === null) {
@@ -110,29 +110,29 @@ final class ListeningMethodsCollector
         }
         return $this->matchClassMethodByNodeValue($class, $node->value);
     }
-    private function resolveContributeEventClassAndSubscribedClassMethod(string $eventClass, ClassMethod $classMethod) : void
+    private function resolveContributeEventClassAndSubscribedClassMethod(string $eventClass, \PhpParser\Node\Stmt\ClassMethod $classMethod) : void
     {
-        $contributeEventClasses = NetteEventToContributeEventClass::PROPERTY_TO_EVENT_CLASS;
+        $contributeEventClasses = \Rector\Nette\Kdyby\ValueObject\NetteEventToContributeEventClass::PROPERTY_TO_EVENT_CLASS;
         if (!\in_array($eventClass, $contributeEventClasses, \true)) {
             return;
         }
-        $this->eventClassesAndClassMethods[] = new EventClassAndClassMethod($eventClass, $classMethod);
+        $this->eventClassesAndClassMethods[] = new \Rector\Nette\Kdyby\ValueObject\EventClassAndClassMethod($eventClass, $classMethod);
     }
-    private function resolveCustomClassMethodAndEventClass(ArrayItem $arrayItem, Class_ $class, string $eventClass) : ?EventClassAndClassMethod
+    private function resolveCustomClassMethodAndEventClass(\PhpParser\Node\Expr\ArrayItem $arrayItem, \PhpParser\Node\Stmt\Class_ $class, string $eventClass) : ?\Rector\Nette\Kdyby\ValueObject\EventClassAndClassMethod
     {
         // custom method name
         $classMethodName = $this->valueResolver->getValue($arrayItem->value);
         $classMethod = $class->getMethod($classMethodName);
-        if (Strings::contains($eventClass, '::')) {
+        if (\RectorPrefix20210510\Nette\Utils\Strings::contains($eventClass, '::')) {
             [$dispatchingClass, $property] = \explode('::', $eventClass);
             $eventClass = $this->eventClassNaming->createEventClassNameFromClassAndProperty($dispatchingClass, $property);
         }
-        if (!$classMethod instanceof ClassMethod) {
+        if (!$classMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
             return null;
         }
-        return new EventClassAndClassMethod($eventClass, $classMethod);
+        return new \Rector\Nette\Kdyby\ValueObject\EventClassAndClassMethod($eventClass, $classMethod);
     }
-    private function matchClassMethodByNodeValue(Class_ $class, Expr $expr) : ?ClassMethod
+    private function matchClassMethodByNodeValue(\PhpParser\Node\Stmt\Class_ $class, \PhpParser\Node\Expr $expr) : ?\PhpParser\Node\Stmt\ClassMethod
     {
         $possibleMethodName = $this->valueResolver->getValue($expr);
         if (!\is_string($possibleMethodName)) {

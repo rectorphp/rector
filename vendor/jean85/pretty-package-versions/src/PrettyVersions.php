@@ -6,16 +6,16 @@ use RectorPrefix20210510\PackageVersions\Versions;
 class PrettyVersions
 {
     const SHORT_COMMIT_LENGTH = 7;
-    public static function getVersion(string $packageName) : Version
+    public static function getVersion(string $packageName) : \RectorPrefix20210510\Jean85\Version
     {
-        return new Version($packageName, Versions::getVersion($packageName));
+        return new \RectorPrefix20210510\Jean85\Version($packageName, \RectorPrefix20210510\PackageVersions\Versions::getVersion($packageName));
     }
     public static function getRootPackageName() : string
     {
-        return Versions::ROOT_PACKAGE_NAME;
+        return \RectorPrefix20210510\PackageVersions\Versions::ROOT_PACKAGE_NAME;
     }
-    public static function getRootPackageVersion() : Version
+    public static function getRootPackageVersion() : \RectorPrefix20210510\Jean85\Version
     {
-        return self::getVersion(Versions::ROOT_PACKAGE_NAME);
+        return self::getVersion(\RectorPrefix20210510\PackageVersions\Versions::ROOT_PACKAGE_NAME);
     }
 }

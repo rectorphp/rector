@@ -25,11 +25,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @see https://github.com/symfony/symfony/pull/33775/files
  * @see \Rector\Symfony\Tests\Rector\ClassMethod\ConsoleExecuteReturnIntRector\ConsoleExecuteReturnIntRectorTest
  */
-final class ConsoleExecuteReturnIntRector extends AbstractRector
+final class ConsoleExecuteReturnIntRector extends \Rector\Core\Rector\AbstractRector
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Returns int from Command::execute command', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Returns int from Command::execute command', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeCommand extends Command
 {
     public function execute(InputInterface $input, OutputInterface $output)
@@ -54,54 +54,54 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [ClassMethod::class];
+        return [\PhpParser\Node\Stmt\ClassMethod::class];
     }
     /**
      * @param ClassMethod $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$this->isName($node, 'execute')) {
             return null;
         }
-        $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
-        if (!$classLike instanceof Class_) {
+        $classLike = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
+        if (!$classLike instanceof \PhpParser\Node\Stmt\Class_) {
             return null;
         }
-        if (!$this->isObjectType($classLike, new ObjectType('Symfony\\Component\\Console\\Command\\Command'))) {
+        if (!$this->isObjectType($classLike, new \PHPStan\Type\ObjectType('Symfony\\Component\\Console\\Command\\Command'))) {
             return null;
         }
         $this->refactorReturnTypeDeclaration($node);
         $this->addReturn0ToMethod($node);
         return $node;
     }
-    private function refactorReturnTypeDeclaration(ClassMethod $classMethod) : void
+    private function refactorReturnTypeDeclaration(\PhpParser\Node\Stmt\ClassMethod $classMethod) : void
     {
         // already set
         if ($classMethod->returnType !== null && $this->isName($classMethod->returnType, 'int')) {
             return;
         }
-        $classMethod->returnType = new Identifier('int');
+        $classMethod->returnType = new \PhpParser\Node\Identifier('int');
     }
-    private function addReturn0ToMethod(ClassMethod $classMethod) : void
+    private function addReturn0ToMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod) : void
     {
         $hasReturn = \false;
-        $this->traverseNodesWithCallable((array) $classMethod->getStmts(), function (Node $node) use($classMethod, &$hasReturn) : ?int {
-            if ($node instanceof FunctionLike) {
-                return NodeTraverser::DONT_TRAVERSE_CHILDREN;
+        $this->traverseNodesWithCallable((array) $classMethod->getStmts(), function (\PhpParser\Node $node) use($classMethod, &$hasReturn) : ?int {
+            if ($node instanceof \PhpParser\Node\FunctionLike) {
+                return \PhpParser\NodeTraverser::DONT_TRAVERSE_CHILDREN;
             }
-            $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-            if ($parentNode instanceof Node && $this->isReturnWithExprIntEquals($parentNode, $node)) {
+            $parentNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+            if ($parentNode instanceof \PhpParser\Node && $this->isReturnWithExprIntEquals($parentNode, $node)) {
                 $hasReturn = \true;
                 return null;
             }
-            if (!$node instanceof Return_) {
+            if (!$node instanceof \PhpParser\Node\Stmt\Return_) {
                 return null;
             }
-            if ($node->expr instanceof Int_) {
+            if ($node->expr instanceof \PhpParser\Node\Expr\Cast\Int_) {
                 return null;
             }
-            if ($node->expr instanceof Ternary && $this->isIntegerTernaryIfElse($node->expr)) {
+            if ($node->expr instanceof \PhpParser\Node\Expr\Ternary && $this->isIntegerTernaryIfElse($node->expr)) {
                 $hasReturn = \true;
                 return null;
             }
@@ -114,71 +114,71 @@ CODE_SAMPLE
         });
         $this->processReturn0ToMethod($hasReturn, $classMethod);
     }
-    private function isIntegerTernaryIfElse(Ternary $ternary) : bool
+    private function isIntegerTernaryIfElse(\PhpParser\Node\Expr\Ternary $ternary) : bool
     {
         /** @var Expr|null $if */
         $if = $ternary->if;
-        if (!$if instanceof Expr) {
+        if (!$if instanceof \PhpParser\Node\Expr) {
             $if = $ternary->cond;
         }
         /** @var Expr $else */
         $else = $ternary->else;
         $ifType = $this->getStaticType($if);
         $elseType = $this->getStaticType($else);
-        return $ifType instanceof IntegerType && $elseType instanceof IntegerType;
+        return $ifType instanceof \PHPStan\Type\IntegerType && $elseType instanceof \PHPStan\Type\IntegerType;
     }
-    private function processReturn0ToMethod(bool $hasReturn, ClassMethod $classMethod) : void
+    private function processReturn0ToMethod(bool $hasReturn, \PhpParser\Node\Stmt\ClassMethod $classMethod) : void
     {
         if ($hasReturn) {
             return;
         }
-        $classMethod->stmts[] = new Return_(new LNumber(0));
+        $classMethod->stmts[] = new \PhpParser\Node\Stmt\Return_(new \PhpParser\Node\Scalar\LNumber(0));
     }
-    private function isReturnWithExprIntEquals(Node $parentNode, Node $node) : bool
+    private function isReturnWithExprIntEquals(\PhpParser\Node $parentNode, \PhpParser\Node $node) : bool
     {
-        if (!$parentNode instanceof Return_) {
+        if (!$parentNode instanceof \PhpParser\Node\Stmt\Return_) {
             return \false;
         }
         if (!$this->nodeComparator->areNodesEqual($parentNode->expr, $node)) {
             return \false;
         }
-        return $node instanceof Int_;
+        return $node instanceof \PhpParser\Node\Expr\Cast\Int_;
     }
-    private function setReturnTo0InsteadOfNull(Return_ $return) : void
+    private function setReturnTo0InsteadOfNull(\PhpParser\Node\Stmt\Return_ $return) : void
     {
         if ($return->expr === null) {
-            $return->expr = new LNumber(0);
+            $return->expr = new \PhpParser\Node\Scalar\LNumber(0);
             return;
         }
         if ($this->valueResolver->isNull($return->expr)) {
-            $return->expr = new LNumber(0);
+            $return->expr = new \PhpParser\Node\Scalar\LNumber(0);
             return;
         }
-        if ($return->expr instanceof Coalesce && $this->valueResolver->isNull($return->expr->right)) {
-            $return->expr->right = new LNumber(0);
+        if ($return->expr instanceof \PhpParser\Node\Expr\BinaryOp\Coalesce && $this->valueResolver->isNull($return->expr->right)) {
+            $return->expr->right = new \PhpParser\Node\Scalar\LNumber(0);
             return;
         }
-        if ($return->expr instanceof Ternary) {
+        if ($return->expr instanceof \PhpParser\Node\Expr\Ternary) {
             $hasChanged = $this->isSuccessfulRefactorTernaryReturn($return->expr);
             if ($hasChanged) {
                 return;
             }
         }
         $staticType = $this->getStaticType($return->expr);
-        if (!$staticType instanceof IntegerType) {
-            $return->expr = new Int_($return->expr);
+        if (!$staticType instanceof \PHPStan\Type\IntegerType) {
+            $return->expr = new \PhpParser\Node\Expr\Cast\Int_($return->expr);
             return;
         }
     }
-    private function isSuccessfulRefactorTernaryReturn(Ternary $ternary) : bool
+    private function isSuccessfulRefactorTernaryReturn(\PhpParser\Node\Expr\Ternary $ternary) : bool
     {
         $hasChanged = \false;
         if ($ternary->if && $this->valueResolver->isNull($ternary->if)) {
-            $ternary->if = new LNumber(0);
+            $ternary->if = new \PhpParser\Node\Scalar\LNumber(0);
             $hasChanged = \true;
         }
         if ($this->valueResolver->isNull($ternary->else)) {
-            $ternary->else = new LNumber(0);
+            $ternary->else = new \PhpParser\Node\Scalar\LNumber(0);
             $hasChanged = \true;
         }
         return $hasChanged;

@@ -22,9 +22,9 @@ final class NormalToFluent
         $this->class = $class;
         $this->methodNames = $methodNames;
     }
-    public function getObjectType() : ObjectType
+    public function getObjectType() : \PHPStan\Type\ObjectType
     {
-        return new ObjectType($this->class);
+        return new \PHPStan\Type\ObjectType($this->class);
     }
     /**
      * @return string[]

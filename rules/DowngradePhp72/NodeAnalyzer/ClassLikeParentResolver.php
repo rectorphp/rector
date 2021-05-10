@@ -13,23 +13,23 @@ final class ClassLikeParentResolver
      * @var NodeRepository
      */
     private $nodeRepository;
-    public function __construct(NodeRepository $nodeRepository)
+    public function __construct(\Rector\NodeCollector\NodeCollector\NodeRepository $nodeRepository)
     {
         $this->nodeRepository = $nodeRepository;
     }
     /**
      * @return array<Class_|Interface_>
      */
-    public function resolveFromClassReflection(ClassReflection $classReflection) : array
+    public function resolveFromClassReflection(\PHPStan\Reflection\ClassReflection $classReflection) : array
     {
         $parentClassLikes = [];
         foreach ($classReflection->getAncestors() as $ancestorClassReflectoin) {
             $parentClass = $this->nodeRepository->findClass($ancestorClassReflectoin->getName());
-            if ($parentClass instanceof Class_) {
+            if ($parentClass instanceof \PhpParser\Node\Stmt\Class_) {
                 $parentClassLikes[] = $parentClass;
             }
             $parentInterface = $this->nodeRepository->findInterface($ancestorClassReflectoin->getName());
-            if ($parentInterface instanceof Interface_) {
+            if ($parentInterface instanceof \PhpParser\Node\Stmt\Interface_) {
                 $parentClassLikes[] = $parentInterface;
             }
         }

@@ -21,10 +21,10 @@ use RectorPrefix20210510\Symfony\Component\Console\Exception\InvalidOptionExcept
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class ArrayInput extends Input
+class ArrayInput extends \RectorPrefix20210510\Symfony\Component\Console\Input\Input
 {
     private $parameters;
-    public function __construct(array $parameters, InputDefinition $definition = null)
+    public function __construct(array $parameters, \RectorPrefix20210510\Symfony\Component\Console\Input\InputDefinition $definition = null)
     {
         $this->parameters = $parameters;
         parent::__construct($definition);
@@ -131,7 +131,7 @@ class ArrayInput extends Input
     private function addShortOption(string $shortcut, $value)
     {
         if (!$this->definition->hasShortcut($shortcut)) {
-            throw new InvalidOptionException(\sprintf('The "-%s" option does not exist.', $shortcut));
+            throw new \RectorPrefix20210510\Symfony\Component\Console\Exception\InvalidOptionException(\sprintf('The "-%s" option does not exist.', $shortcut));
         }
         $this->addLongOption($this->definition->getOptionForShortcut($shortcut)->getName(), $value);
     }
@@ -144,12 +144,12 @@ class ArrayInput extends Input
     private function addLongOption(string $name, $value)
     {
         if (!$this->definition->hasOption($name)) {
-            throw new InvalidOptionException(\sprintf('The "--%s" option does not exist.', $name));
+            throw new \RectorPrefix20210510\Symfony\Component\Console\Exception\InvalidOptionException(\sprintf('The "--%s" option does not exist.', $name));
         }
         $option = $this->definition->getOption($name);
         if (null === $value) {
             if ($option->isValueRequired()) {
-                throw new InvalidOptionException(\sprintf('The "--%s" option requires a value.', $name));
+                throw new \RectorPrefix20210510\Symfony\Component\Console\Exception\InvalidOptionException(\sprintf('The "--%s" option requires a value.', $name));
             }
             if (!$option->isValueOptional()) {
                 $value = \true;
@@ -168,7 +168,7 @@ class ArrayInput extends Input
     private function addArgument($name, $value)
     {
         if (!$this->definition->hasArgument($name)) {
-            throw new InvalidArgumentException(\sprintf('The "%s" argument does not exist.', $name));
+            throw new \RectorPrefix20210510\Symfony\Component\Console\Exception\InvalidArgumentException(\sprintf('The "%s" argument does not exist.', $name));
         }
         $this->arguments[$name] = $value;
     }

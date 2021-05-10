@@ -18,11 +18,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @see https://3v4l.org/5HMVE
  * @see \Rector\Tests\Php73\Rector\FuncCall\JsonThrowOnErrorRector\JsonThrowOnErrorRectorTest
  */
-final class JsonThrowOnErrorRector extends AbstractRector
+final class JsonThrowOnErrorRector extends \Rector\Core\Rector\AbstractRector
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Adds JSON_THROW_ON_ERROR to json_encode() and json_decode() to throw JsonException on error', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Adds JSON_THROW_ON_ERROR to json_encode() and json_decode() to throw JsonException on error', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 json_encode($content);
 json_decode($json);
 CODE_SAMPLE
@@ -37,14 +37,14 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [FuncCall::class];
+        return [\PhpParser\Node\Expr\FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if (!$this->isAtLeastPhpVersion(PhpVersionFeature::JSON_EXCEPTION)) {
+        if (!$this->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::JSON_EXCEPTION)) {
             return null;
         }
         if ($this->shouldSkip($node)) {
@@ -58,43 +58,43 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function shouldSkip(FuncCall $funcCall) : bool
+    private function shouldSkip(\PhpParser\Node\Expr\FuncCall $funcCall) : bool
     {
         if (!$this->isNames($funcCall, ['json_encode', 'json_decode'])) {
             return \true;
         }
-        return (bool) $this->betterNodeFinder->findFirstNext($funcCall, function (Node $node) : bool {
-            if (!$node instanceof FuncCall) {
+        return (bool) $this->betterNodeFinder->findFirstNext($funcCall, function (\PhpParser\Node $node) : bool {
+            if (!$node instanceof \PhpParser\Node\Expr\FuncCall) {
                 return \false;
             }
             return $this->isNames($node, ['json_last_error', 'json_last_error_msg']);
         });
     }
-    private function processJsonEncode(FuncCall $funcCall) : ?FuncCall
+    private function processJsonEncode(\PhpParser\Node\Expr\FuncCall $funcCall) : ?\PhpParser\Node\Expr\FuncCall
     {
         if (isset($funcCall->args[1])) {
             return null;
         }
-        $funcCall->args[1] = new Arg($this->createConstFetch('JSON_THROW_ON_ERROR'));
+        $funcCall->args[1] = new \PhpParser\Node\Arg($this->createConstFetch('JSON_THROW_ON_ERROR'));
         return $funcCall;
     }
-    private function processJsonDecode(FuncCall $funcCall) : ?FuncCall
+    private function processJsonDecode(\PhpParser\Node\Expr\FuncCall $funcCall) : ?\PhpParser\Node\Expr\FuncCall
     {
         if (isset($funcCall->args[3])) {
             return null;
         }
         // set default to inter-args
         if (!isset($funcCall->args[1])) {
-            $funcCall->args[1] = new Arg($this->nodeFactory->createNull());
+            $funcCall->args[1] = new \PhpParser\Node\Arg($this->nodeFactory->createNull());
         }
         if (!isset($funcCall->args[2])) {
-            $funcCall->args[2] = new Arg(new LNumber(512));
+            $funcCall->args[2] = new \PhpParser\Node\Arg(new \PhpParser\Node\Scalar\LNumber(512));
         }
-        $funcCall->args[3] = new Arg($this->createConstFetch('JSON_THROW_ON_ERROR'));
+        $funcCall->args[3] = new \PhpParser\Node\Arg($this->createConstFetch('JSON_THROW_ON_ERROR'));
         return $funcCall;
     }
-    private function createConstFetch(string $name) : ConstFetch
+    private function createConstFetch(string $name) : \PhpParser\Node\Expr\ConstFetch
     {
-        return new ConstFetch(new Name($name));
+        return new \PhpParser\Node\Expr\ConstFetch(new \PhpParser\Node\Name($name));
     }
 }

@@ -25,7 +25,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php70\Rector\FuncCall\EregToPregMatchRector\EregToPregMatchRectorTest
  */
-final class EregToPregMatchRector extends AbstractRector
+final class EregToPregMatchRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var array<string, string>
@@ -35,25 +35,25 @@ final class EregToPregMatchRector extends AbstractRector
      * @var EregToPcreTransformer
      */
     private $eregToPcreTransformer;
-    public function __construct(EregToPcreTransformer $eregToPcreTransformer)
+    public function __construct(\Rector\Php70\EregToPcreTransformer $eregToPcreTransformer)
     {
         $this->eregToPcreTransformer = $eregToPcreTransformer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Changes ereg*() to preg*() calls', [new CodeSample('ereg("hi")', 'preg_match("#hi#");')]);
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Changes ereg*() to preg*() calls', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample('ereg("hi")', 'preg_match("#hi#");')]);
     }
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [FuncCall::class];
+        return [\PhpParser\Node\Expr\FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $functionName = $this->getName($node);
         if ($functionName === null) {
@@ -63,34 +63,34 @@ final class EregToPregMatchRector extends AbstractRector
             return null;
         }
         $patternNode = $node->args[0]->value;
-        if ($patternNode instanceof String_) {
+        if ($patternNode instanceof \PhpParser\Node\Scalar\String_) {
             $this->processStringPattern($node, $patternNode, $functionName);
-        } elseif ($patternNode instanceof Variable) {
+        } elseif ($patternNode instanceof \PhpParser\Node\Expr\Variable) {
             $this->processVariablePattern($node, $patternNode, $functionName);
         }
         $this->processSplitLimitArgument($node, $functionName);
-        $node->name = new Name(self::OLD_NAMES_TO_NEW_ONES[$functionName]);
+        $node->name = new \PhpParser\Node\Name(self::OLD_NAMES_TO_NEW_ONES[$functionName]);
         // ereg|eregi 3rd argument return value fix
         if (\in_array($functionName, ['ereg', 'eregi'], \true) && isset($node->args[2])) {
-            $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-            if ($parentNode instanceof Assign) {
+            $parentNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+            if ($parentNode instanceof \PhpParser\Node\Expr\Assign) {
                 return $this->createTernaryWithStrlenOfFirstMatch($node);
             }
         }
         return $node;
     }
-    private function processStringPattern(FuncCall $funcCall, String_ $string, string $functionName) : void
+    private function processStringPattern(\PhpParser\Node\Expr\FuncCall $funcCall, \PhpParser\Node\Scalar\String_ $string, string $functionName) : void
     {
         $pattern = $string->value;
         $pattern = $this->eregToPcreTransformer->transform($pattern, $this->isCaseInsensitiveFunction($functionName));
-        $funcCall->args[0]->value = new String_($pattern);
+        $funcCall->args[0]->value = new \PhpParser\Node\Scalar\String_($pattern);
     }
-    private function processVariablePattern(FuncCall $funcCall, Variable $variable, string $functionName) : void
+    private function processVariablePattern(\PhpParser\Node\Expr\FuncCall $funcCall, \PhpParser\Node\Expr\Variable $variable, string $functionName) : void
     {
-        $pregQuotePatternNode = $this->nodeFactory->createFuncCall('preg_quote', [new Arg($variable), new Arg(new String_('#'))]);
-        $startConcat = new Concat(new String_('#'), $pregQuotePatternNode);
+        $pregQuotePatternNode = $this->nodeFactory->createFuncCall('preg_quote', [new \PhpParser\Node\Arg($variable), new \PhpParser\Node\Arg(new \PhpParser\Node\Scalar\String_('#'))]);
+        $startConcat = new \PhpParser\Node\Expr\BinaryOp\Concat(new \PhpParser\Node\Scalar\String_('#'), $pregQuotePatternNode);
         $endDelimiter = $this->isCaseInsensitiveFunction($functionName) ? '#mi' : '#m';
-        $concat = new Concat($startConcat, new String_($endDelimiter));
+        $concat = new \PhpParser\Node\Expr\BinaryOp\Concat($startConcat, new \PhpParser\Node\Scalar\String_($endDelimiter));
         $funcCall->args[0]->value = $concat;
     }
     /**
@@ -99,16 +99,16 @@ final class EregToPregMatchRector extends AbstractRector
      * ↓
      * preg_split('# #', 'hey Tom', 1);
      */
-    private function processSplitLimitArgument(FuncCall $funcCall, string $functionName) : void
+    private function processSplitLimitArgument(\PhpParser\Node\Expr\FuncCall $funcCall, string $functionName) : void
     {
-        if (!Strings::startsWith($functionName, 'split')) {
+        if (!\RectorPrefix20210510\Nette\Utils\Strings::startsWith($functionName, 'split')) {
             return;
         }
         // 3rd argument - $limit, 0 → 1
         if (!isset($funcCall->args[2])) {
             return;
         }
-        if (!$funcCall->args[2]->value instanceof LNumber) {
+        if (!$funcCall->args[2]->value instanceof \PhpParser\Node\Scalar\LNumber) {
             return;
         }
         /** @var LNumber $limitNumberNode */
@@ -118,17 +118,17 @@ final class EregToPregMatchRector extends AbstractRector
         }
         $limitNumberNode->value = 1;
     }
-    private function createTernaryWithStrlenOfFirstMatch(FuncCall $funcCall) : Ternary
+    private function createTernaryWithStrlenOfFirstMatch(\PhpParser\Node\Expr\FuncCall $funcCall) : \PhpParser\Node\Expr\Ternary
     {
-        $arrayDimFetch = new ArrayDimFetch($funcCall->args[2]->value, new LNumber(0));
+        $arrayDimFetch = new \PhpParser\Node\Expr\ArrayDimFetch($funcCall->args[2]->value, new \PhpParser\Node\Scalar\LNumber(0));
         $strlenFuncCall = $this->nodeFactory->createFuncCall('strlen', [$arrayDimFetch]);
-        return new Ternary($funcCall, $strlenFuncCall, $this->nodeFactory->createFalse());
+        return new \PhpParser\Node\Expr\Ternary($funcCall, $strlenFuncCall, $this->nodeFactory->createFalse());
     }
     private function isCaseInsensitiveFunction(string $functionName) : bool
     {
-        if (Strings::contains($functionName, 'eregi')) {
+        if (\RectorPrefix20210510\Nette\Utils\Strings::contains($functionName, 'eregi')) {
             return \true;
         }
-        return Strings::contains($functionName, 'spliti');
+        return \RectorPrefix20210510\Nette\Utils\Strings::contains($functionName, 'spliti');
     }
 }

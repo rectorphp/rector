@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace PhpParser\Node\Stmt;
 
 use PhpParser\Node;
-class Echo_ extends Node\Stmt
+class Echo_ extends \PhpParser\Node\Stmt
 {
     /** @var Node\Expr[] Expressions */
     public $exprs;

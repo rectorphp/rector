@@ -26,9 +26,9 @@ interface ResponseCacheStrategyInterface
     /**
      * Adds a Response.
      */
-    public function add(Response $response);
+    public function add(\RectorPrefix20210510\Symfony\Component\HttpFoundation\Response $response);
     /**
      * Updates the Response HTTP headers based on the embedded Responses.
      */
-    public function update(Response $response);
+    public function update(\RectorPrefix20210510\Symfony\Component\HttpFoundation\Response $response);
 }

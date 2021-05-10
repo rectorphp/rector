@@ -30,13 +30,13 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\DowngradePhp70\Rector\FunctionLike\DowngradeScalarTypeDeclarationRector\DowngradeScalarTypeDeclarationRectorTest
  */
-final class DowngradeScalarTypeDeclarationRector extends AbstractRector
+final class DowngradeScalarTypeDeclarationRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var PhpDocFromTypeDeclarationDecorator
      */
     private $phpDocFromTypeDeclarationDecorator;
-    public function __construct(PhpDocFromTypeDeclarationDecorator $phpDocFromTypeDeclarationDecorator)
+    public function __construct(\Rector\DowngradePhp71\TypeDeclaration\PhpDocFromTypeDeclarationDecorator $phpDocFromTypeDeclarationDecorator)
     {
         $this->phpDocFromTypeDeclarationDecorator = $phpDocFromTypeDeclarationDecorator;
     }
@@ -45,11 +45,11 @@ final class DowngradeScalarTypeDeclarationRector extends AbstractRector
      */
     public function getNodeTypes() : array
     {
-        return [Function_::class, ClassMethod::class];
+        return [\PhpParser\Node\Stmt\Function_::class, \PhpParser\Node\Stmt\ClassMethod::class];
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Remove the type params and return type, add @param and @return tags instead', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove the type params and return type, add @param and @return tags instead', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run(string $input): string
@@ -74,16 +74,16 @@ CODE_SAMPLE
     /**
      * @param Function_|ClassMethod $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $recastAssigns = [];
         foreach ($node->params as $param) {
             if ($param->type === null) {
                 continue;
             }
-            $this->phpDocFromTypeDeclarationDecorator->decorateParam($param, $node, [StringType::class, IntegerType::class, BooleanType::class, FloatType::class]);
+            $this->phpDocFromTypeDeclarationDecorator->decorateParam($param, $node, [\PHPStan\Type\StringType::class, \PHPStan\Type\IntegerType::class, \PHPStan\Type\BooleanType::class, \PHPStan\Type\FloatType::class]);
             $recastAssign = $this->resolveRecastAssign($param, $node);
-            if ($recastAssign instanceof Expression) {
+            if ($recastAssign instanceof \PhpParser\Node\Stmt\Expression) {
                 $recastAssigns[] = $recastAssign;
             }
         }
@@ -98,7 +98,7 @@ CODE_SAMPLE
     /**
      * @param Function_|ClassMethod $functionLike
      */
-    private function resolveRecastAssign(Param $param, FunctionLike $functionLike) : ?Expression
+    private function resolveRecastAssign(\PhpParser\Node\Param $param, \PhpParser\Node\FunctionLike $functionLike) : ?\PhpParser\Node\Stmt\Expression
     {
         if ($functionLike->stmts === null) {
             return null;
@@ -110,28 +110,28 @@ CODE_SAMPLE
         // @see https://twitter.com/VotrubaT/status/1390974218108538887
         /** @var string $paramName */
         $paramName = $this->getName($param->var);
-        $variable = new Variable($paramName);
+        $variable = new \PhpParser\Node\Expr\Variable($paramName);
         $paramType = $this->getStaticType($param);
         $recastedVariable = $this->recastVariabletIfScalarType($variable, $paramType);
-        if (!$recastedVariable instanceof Cast) {
+        if (!$recastedVariable instanceof \PhpParser\Node\Expr\Cast) {
             return null;
         }
-        $assign = new Assign($variable, $recastedVariable);
-        return new Expression($assign);
+        $assign = new \PhpParser\Node\Expr\Assign($variable, $recastedVariable);
+        return new \PhpParser\Node\Stmt\Expression($assign);
     }
-    private function recastVariabletIfScalarType(Variable $variable, Type $type) : ?Cast
+    private function recastVariabletIfScalarType(\PhpParser\Node\Expr\Variable $variable, \PHPStan\Type\Type $type) : ?\PhpParser\Node\Expr\Cast
     {
-        if ($type instanceof StringType) {
-            return new String_($variable);
+        if ($type instanceof \PHPStan\Type\StringType) {
+            return new \PhpParser\Node\Expr\Cast\String_($variable);
         }
-        if ($type instanceof IntegerType) {
-            return new Int_($variable);
+        if ($type instanceof \PHPStan\Type\IntegerType) {
+            return new \PhpParser\Node\Expr\Cast\Int_($variable);
         }
-        if ($type instanceof FloatType) {
-            return new Double($variable);
+        if ($type instanceof \PHPStan\Type\FloatType) {
+            return new \PhpParser\Node\Expr\Cast\Double($variable);
         }
-        if ($type instanceof BooleanType) {
-            return new Bool_($variable);
+        if ($type instanceof \PHPStan\Type\BooleanType) {
+            return new \PhpParser\Node\Expr\Cast\Bool_($variable);
         }
         return null;
     }

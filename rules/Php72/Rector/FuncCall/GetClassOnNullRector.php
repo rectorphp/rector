@@ -20,11 +20,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php72\Rector\FuncCall\GetClassOnNullRector\GetClassOnNullRectorTest
  */
-final class GetClassOnNullRector extends AbstractRector
+final class GetClassOnNullRector extends \Rector\Core\Rector\AbstractRector
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Null is no more allowed in get_class()', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Null is no more allowed in get_class()', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function getItem()
@@ -51,20 +51,20 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [FuncCall::class];
+        return [\PhpParser\Node\Expr\FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$this->isName($node, 'get_class')) {
             return null;
         }
         $firstArgValue = $node->args[0]->value;
         // only relevant inside the class
-        $scope = $node->getAttribute(AttributeKey::SCOPE);
-        if (!$scope instanceof Scope) {
+        $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
+        if (!$scope instanceof \PHPStan\Analyser\Scope) {
             return null;
         }
         if (!$scope->isInClass()) {
@@ -74,26 +74,26 @@ CODE_SAMPLE
         if ($this->shouldSkip($node)) {
             return null;
         }
-        if (!$this->nodeTypeResolver->isNullableType($firstArgValue) && !$this->nodeTypeResolver->isStaticType($firstArgValue, NullType::class)) {
+        if (!$this->nodeTypeResolver->isNullableType($firstArgValue) && !$this->nodeTypeResolver->isStaticType($firstArgValue, \PHPStan\Type\NullType::class)) {
             return null;
         }
-        $notIdentical = new NotIdentical($firstArgValue, $this->nodeFactory->createNull());
+        $notIdentical = new \PhpParser\Node\Expr\BinaryOp\NotIdentical($firstArgValue, $this->nodeFactory->createNull());
         $funcCall = $this->createGetClassFuncCall($node);
         $selfClassConstFetch = $this->nodeFactory->createClassConstReference('self');
-        return new Ternary($notIdentical, $funcCall, $selfClassConstFetch);
+        return new \PhpParser\Node\Expr\Ternary($notIdentical, $funcCall, $selfClassConstFetch);
     }
-    private function shouldSkip(FuncCall $funcCall) : bool
+    private function shouldSkip(\PhpParser\Node\Expr\FuncCall $funcCall) : bool
     {
-        $isJustAdded = (bool) $funcCall->getAttribute(AttributeKey::DO_NOT_CHANGE);
+        $isJustAdded = (bool) $funcCall->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::DO_NOT_CHANGE);
         if ($isJustAdded) {
             return \true;
         }
-        $classLike = $funcCall->getAttribute(AttributeKey::CLASS_NODE);
-        if (!$classLike instanceof Class_) {
+        $classLike = $funcCall->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
+        if (!$classLike instanceof \PhpParser\Node\Stmt\Class_) {
             return \true;
         }
-        $parent = $funcCall->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parent instanceof Ternary) {
+        $parent = $funcCall->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        if ($parent instanceof \PhpParser\Node\Expr\Ternary) {
             if ($this->isIdenticalToNotNull($funcCall, $parent)) {
                 return \true;
             }
@@ -101,18 +101,18 @@ CODE_SAMPLE
         }
         return \false;
     }
-    private function createGetClassFuncCall(FuncCall $oldFuncCall) : FuncCall
+    private function createGetClassFuncCall(\PhpParser\Node\Expr\FuncCall $oldFuncCall) : \PhpParser\Node\Expr\FuncCall
     {
-        $funcCall = new FuncCall($oldFuncCall->name, $oldFuncCall->args);
-        $funcCall->setAttribute(AttributeKey::DO_NOT_CHANGE, \true);
+        $funcCall = new \PhpParser\Node\Expr\FuncCall($oldFuncCall->name, $oldFuncCall->args);
+        $funcCall->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::DO_NOT_CHANGE, \true);
         return $funcCall;
     }
     /**
      * E.g. "$value === [!null] ? get_class($value)"
      */
-    private function isIdenticalToNotNull(FuncCall $funcCall, Ternary $ternary) : bool
+    private function isIdenticalToNotNull(\PhpParser\Node\Expr\FuncCall $funcCall, \PhpParser\Node\Expr\Ternary $ternary) : bool
     {
-        if (!$ternary->cond instanceof Identical) {
+        if (!$ternary->cond instanceof \PhpParser\Node\Expr\BinaryOp\Identical) {
             return \false;
         }
         if ($this->nodeComparator->areNodesEqual($ternary->cond->left, $funcCall->args[0]->value) && !$this->valueResolver->isNull($ternary->cond->right)) {
@@ -126,9 +126,9 @@ CODE_SAMPLE
     /**
      * E.g. "$value !== null ? get_class($value)"
      */
-    private function isNotIdenticalToNull(FuncCall $funcCall, Ternary $ternary) : bool
+    private function isNotIdenticalToNull(\PhpParser\Node\Expr\FuncCall $funcCall, \PhpParser\Node\Expr\Ternary $ternary) : bool
     {
-        if (!$ternary->cond instanceof NotIdentical) {
+        if (!$ternary->cond instanceof \PhpParser\Node\Expr\BinaryOp\NotIdentical) {
             return \false;
         }
         if ($this->nodeComparator->areNodesEqual($ternary->cond->left, $funcCall->args[0]->value) && $this->valueResolver->isNull($ternary->cond->right)) {

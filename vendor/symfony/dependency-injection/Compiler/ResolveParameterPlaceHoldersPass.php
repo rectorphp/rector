@@ -18,7 +18,7 @@ use RectorPrefix20210510\Symfony\Component\DependencyInjection\Exception\Paramet
  *
  * @author Johannes M. Schmitt <schmittjoh@gmail.com>
  */
-class ResolveParameterPlaceHoldersPass extends AbstractRecursivePass
+class ResolveParameterPlaceHoldersPass extends \RectorPrefix20210510\Symfony\Component\DependencyInjection\Compiler\AbstractRecursivePass
 {
     private $bag;
     private $resolveArrays;
@@ -33,7 +33,7 @@ class ResolveParameterPlaceHoldersPass extends AbstractRecursivePass
      *
      * @throws ParameterNotFoundException
      */
-    public function process(ContainerBuilder $container)
+    public function process(\RectorPrefix20210510\Symfony\Component\DependencyInjection\ContainerBuilder $container)
     {
         $this->bag = $container->getParameterBag();
         try {
@@ -44,7 +44,7 @@ class ResolveParameterPlaceHoldersPass extends AbstractRecursivePass
                 $aliases[$this->bag->resolveValue($name)] = $target;
             }
             $container->setAliases($aliases);
-        } catch (ParameterNotFoundException $e) {
+        } catch (\RectorPrefix20210510\Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException $e) {
             $e->setSourceId($this->currentId);
             throw $e;
         }
@@ -56,7 +56,7 @@ class ResolveParameterPlaceHoldersPass extends AbstractRecursivePass
         if (\is_string($value)) {
             try {
                 $v = $this->bag->resolveValue($value);
-            } catch (ParameterNotFoundException $e) {
+            } catch (\RectorPrefix20210510\Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException $e) {
                 if ($this->throwOnResolveException) {
                     throw $e;
                 }
@@ -65,7 +65,7 @@ class ResolveParameterPlaceHoldersPass extends AbstractRecursivePass
             }
             return $this->resolveArrays || !$v || !\is_array($v) ? $v : $value;
         }
-        if ($value instanceof Definition) {
+        if ($value instanceof \RectorPrefix20210510\Symfony\Component\DependencyInjection\Definition) {
             $value->setBindings($this->processValue($value->getBindings()));
             $changes = $value->getChanges();
             if (isset($changes['class'])) {

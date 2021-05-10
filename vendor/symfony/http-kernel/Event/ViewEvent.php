@@ -21,7 +21,7 @@ use RectorPrefix20210510\Symfony\Component\HttpKernel\HttpKernelInterface;
  *
  * @author Bernhard Schussek <bschussek@gmail.com>
  */
-final class ViewEvent extends RequestEvent
+final class ViewEvent extends \RectorPrefix20210510\Symfony\Component\HttpKernel\Event\RequestEvent
 {
     /**
      * The return value of the controller.
@@ -29,7 +29,7 @@ final class ViewEvent extends RequestEvent
      * @var mixed
      */
     private $controllerResult;
-    public function __construct(HttpKernelInterface $kernel, Request $request, int $requestType, $controllerResult)
+    public function __construct(\RectorPrefix20210510\Symfony\Component\HttpKernel\HttpKernelInterface $kernel, \RectorPrefix20210510\Symfony\Component\HttpFoundation\Request $request, int $requestType, $controllerResult)
     {
         parent::__construct($kernel, $request, $requestType);
         $this->controllerResult = $controllerResult;

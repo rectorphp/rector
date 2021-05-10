@@ -14,12 +14,12 @@ use RectorPrefix20210510\Symfony\Component\DependencyInjection\ContainerInterfac
 /**
  * @author Nicolas Grekas <p@tchwork.com>
  */
-class ReferenceConfigurator extends AbstractConfigurator
+class ReferenceConfigurator extends \RectorPrefix20210510\Symfony\Component\DependencyInjection\Loader\Configurator\AbstractConfigurator
 {
     /** @internal */
     protected $id;
     /** @internal */
-    protected $invalidBehavior = ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE;
+    protected $invalidBehavior = \RectorPrefix20210510\Symfony\Component\DependencyInjection\ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE;
     public function __construct(string $id)
     {
         $this->id = $id;
@@ -29,7 +29,7 @@ class ReferenceConfigurator extends AbstractConfigurator
      */
     public final function ignoreOnInvalid()
     {
-        $this->invalidBehavior = ContainerInterface::IGNORE_ON_INVALID_REFERENCE;
+        $this->invalidBehavior = \RectorPrefix20210510\Symfony\Component\DependencyInjection\ContainerInterface::IGNORE_ON_INVALID_REFERENCE;
         return $this;
     }
     /**
@@ -37,7 +37,7 @@ class ReferenceConfigurator extends AbstractConfigurator
      */
     public final function nullOnInvalid()
     {
-        $this->invalidBehavior = ContainerInterface::NULL_ON_INVALID_REFERENCE;
+        $this->invalidBehavior = \RectorPrefix20210510\Symfony\Component\DependencyInjection\ContainerInterface::NULL_ON_INVALID_REFERENCE;
         return $this;
     }
     /**
@@ -45,7 +45,7 @@ class ReferenceConfigurator extends AbstractConfigurator
      */
     public final function ignoreOnUninitialized()
     {
-        $this->invalidBehavior = ContainerInterface::IGNORE_ON_UNINITIALIZED_REFERENCE;
+        $this->invalidBehavior = \RectorPrefix20210510\Symfony\Component\DependencyInjection\ContainerInterface::IGNORE_ON_UNINITIALIZED_REFERENCE;
         return $this;
     }
     /**

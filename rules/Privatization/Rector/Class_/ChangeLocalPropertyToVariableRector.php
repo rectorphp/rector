@@ -15,7 +15,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\Privatization\Rector\Class_\ChangeLocalPropertyToVariableRector\ChangeLocalPropertyToVariableRectorTest
  */
-final class ChangeLocalPropertyToVariableRector extends AbstractRector
+final class ChangeLocalPropertyToVariableRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var ClassManipulator
@@ -33,16 +33,16 @@ final class ChangeLocalPropertyToVariableRector extends AbstractRector
      * @var ClassAnalyzer
      */
     private $classAnalyzer;
-    public function __construct(ClassManipulator $classManipulator, PropertyFetchWithVariableReplacer $propertyFetchWithVariableReplacer, PropertyFetchByMethodAnalyzer $propertyFetchByMethodAnalyzer, ClassAnalyzer $classAnalyzer)
+    public function __construct(\Rector\Core\NodeManipulator\ClassManipulator $classManipulator, \Rector\Privatization\NodeReplacer\PropertyFetchWithVariableReplacer $propertyFetchWithVariableReplacer, \Rector\Privatization\NodeAnalyzer\PropertyFetchByMethodAnalyzer $propertyFetchByMethodAnalyzer, \Rector\Core\NodeAnalyzer\ClassAnalyzer $classAnalyzer)
     {
         $this->classManipulator = $classManipulator;
         $this->propertyFetchWithVariableReplacer = $propertyFetchWithVariableReplacer;
         $this->propertyFetchByMethodAnalyzer = $propertyFetchByMethodAnalyzer;
         $this->classAnalyzer = $classAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Change local property used in single method to local variable', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change local property used in single method to local variable', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     private $count;
@@ -70,12 +70,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Class_::class];
+        return [\PhpParser\Node\Stmt\Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($this->classAnalyzer->isAnonymousClass($node)) {
             return null;

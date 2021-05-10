@@ -15,7 +15,7 @@ use RectorPrefix20210510\Symplify\PackageBuilder\Parameter\ParameterProvider;
 /**
  * Skips performance trap in PHPStan: https://github.com/phpstan/phpstan/issues/254
  */
-final class RemoveDeepChainMethodCallNodeVisitor extends NodeVisitorAbstract
+final class RemoveDeepChainMethodCallNodeVisitor extends \PhpParser\NodeVisitorAbstract
 {
     /**
      * @var int
@@ -29,21 +29,21 @@ final class RemoveDeepChainMethodCallNodeVisitor extends NodeVisitorAbstract
      * @var Expression|null
      */
     private $removingExpression;
-    public function __construct(BetterNodeFinder $betterNodeFinder, ParameterProvider $parameterProvider)
+    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \RectorPrefix20210510\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider)
     {
         $this->betterNodeFinder = $betterNodeFinder;
-        $this->nestedChainMethodCallLimit = (int) $parameterProvider->provideParameter(Option::NESTED_CHAIN_METHOD_CALL_LIMIT);
+        $this->nestedChainMethodCallLimit = (int) $parameterProvider->provideParameter(\Rector\Core\Configuration\Option::NESTED_CHAIN_METHOD_CALL_LIMIT);
     }
-    public function enterNode(Node $node) : ?int
+    public function enterNode(\PhpParser\Node $node) : ?int
     {
-        if (!$node instanceof Expression) {
+        if (!$node instanceof \PhpParser\Node\Stmt\Expression) {
             return null;
         }
-        if ($node->expr instanceof MethodCall && $node->expr->var instanceof MethodCall) {
-            $nestedChainMethodCalls = $this->betterNodeFinder->findInstanceOf([$node->expr], MethodCall::class);
+        if ($node->expr instanceof \PhpParser\Node\Expr\MethodCall && $node->expr->var instanceof \PhpParser\Node\Expr\MethodCall) {
+            $nestedChainMethodCalls = $this->betterNodeFinder->findInstanceOf([$node->expr], \PhpParser\Node\Expr\MethodCall::class);
             if (\count($nestedChainMethodCalls) > $this->nestedChainMethodCallLimit) {
                 $this->removingExpression = $node;
-                return NodeTraverser::DONT_TRAVERSE_CHILDREN;
+                return \PhpParser\NodeTraverser::DONT_TRAVERSE_CHILDREN;
             }
         }
         return null;
@@ -51,11 +51,11 @@ final class RemoveDeepChainMethodCallNodeVisitor extends NodeVisitorAbstract
     /**
      * @return Nop|Node
      */
-    public function leaveNode(Node $node)
+    public function leaveNode(\PhpParser\Node $node)
     {
         if ($node === $this->removingExpression) {
             // keep any node, so we don't remove it permanently
-            $nop = new Nop();
+            $nop = new \PhpParser\Node\Stmt\Nop();
             $nop->setAttributes($node->getAttributes());
             return $nop;
         }

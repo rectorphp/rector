@@ -13,23 +13,23 @@ final class ControllerMethodAnalyzer
      * @var ParentClassScopeResolver
      */
     private $parentClassScopeResolver;
-    public function __construct(ParentClassScopeResolver $parentClassScopeResolver)
+    public function __construct(\Rector\NodeCollector\ScopeResolver\ParentClassScopeResolver $parentClassScopeResolver)
     {
         $this->parentClassScopeResolver = $parentClassScopeResolver;
     }
     /**
      * Detect if is <some>Action() in Controller
      */
-    public function isAction(Node $node) : bool
+    public function isAction(\PhpParser\Node $node) : bool
     {
-        if (!$node instanceof ClassMethod) {
+        if (!$node instanceof \PhpParser\Node\Stmt\ClassMethod) {
             return \false;
         }
         $parentClassName = (string) $this->parentClassScopeResolver->resolveParentClassName($node);
-        if (Strings::endsWith($parentClassName, 'Controller')) {
+        if (\RectorPrefix20210510\Nette\Utils\Strings::endsWith($parentClassName, 'Controller')) {
             return \true;
         }
-        if (Strings::endsWith((string) $node->name, 'Action')) {
+        if (\RectorPrefix20210510\Nette\Utils\Strings::endsWith((string) $node->name, 'Action')) {
             return \true;
         }
         return $node->isPublic();

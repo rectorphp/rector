@@ -26,5 +26,5 @@ interface ArgumentResolverInterface
      *
      * @throws \RuntimeException When no value could be provided for a required argument
      */
-    public function getArguments(Request $request, callable $controller);
+    public function getArguments(\RectorPrefix20210510\Symfony\Component\HttpFoundation\Request $request, callable $controller);
 }

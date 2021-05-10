@@ -234,7 +234,7 @@ class HeaderBag implements \IteratorAggregate, \Countable
     protected function getCacheControlHeader()
     {
         \ksort($this->cacheControl);
-        return HeaderUtils::toString($this->cacheControl, ',');
+        return \RectorPrefix20210510\Symfony\Component\HttpFoundation\HeaderUtils::toString($this->cacheControl, ',');
     }
     /**
      * Parses a Cache-Control HTTP header.
@@ -243,7 +243,7 @@ class HeaderBag implements \IteratorAggregate, \Countable
      */
     protected function parseCacheControl(string $header)
     {
-        $parts = HeaderUtils::split($header, ',=');
-        return HeaderUtils::combine($parts);
+        $parts = \RectorPrefix20210510\Symfony\Component\HttpFoundation\HeaderUtils::split($header, ',=');
+        return \RectorPrefix20210510\Symfony\Component\HttpFoundation\HeaderUtils::combine($parts);
     }
 }

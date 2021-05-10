@@ -21,7 +21,7 @@ use RectorPrefix20210510\Symfony\Component\HttpKernel\Fragment\FragmentRendererI
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class FragmentRendererPass implements CompilerPassInterface
+class FragmentRendererPass implements \RectorPrefix20210510\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface
 {
     private $handlerService;
     private $rendererTag;
@@ -30,7 +30,7 @@ class FragmentRendererPass implements CompilerPassInterface
         $this->handlerService = $handlerService;
         $this->rendererTag = $rendererTag;
     }
-    public function process(ContainerBuilder $container)
+    public function process(\RectorPrefix20210510\Symfony\Component\DependencyInjection\ContainerBuilder $container)
     {
         if (!$container->hasDefinition($this->handlerService)) {
             return;
@@ -41,15 +41,15 @@ class FragmentRendererPass implements CompilerPassInterface
             $def = $container->getDefinition($id);
             $class = $container->getParameterBag()->resolveValue($def->getClass());
             if (!($r = $container->getReflectionClass($class))) {
-                throw new InvalidArgumentException(\sprintf('Class "%s" used for service "%s" cannot be found.', $class, $id));
+                throw new \RectorPrefix20210510\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException(\sprintf('Class "%s" used for service "%s" cannot be found.', $class, $id));
             }
-            if (!$r->isSubclassOf(FragmentRendererInterface::class)) {
-                throw new InvalidArgumentException(\sprintf('Service "%s" must implement interface "%s".', $id, FragmentRendererInterface::class));
+            if (!$r->isSubclassOf(\RectorPrefix20210510\Symfony\Component\HttpKernel\Fragment\FragmentRendererInterface::class)) {
+                throw new \RectorPrefix20210510\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException(\sprintf('Service "%s" must implement interface "%s".', $id, \RectorPrefix20210510\Symfony\Component\HttpKernel\Fragment\FragmentRendererInterface::class));
             }
             foreach ($tags as $tag) {
-                $renderers[$tag['alias']] = new Reference($id);
+                $renderers[$tag['alias']] = new \RectorPrefix20210510\Symfony\Component\DependencyInjection\Reference($id);
             }
         }
-        $definition->replaceArgument(0, ServiceLocatorTagPass::register($container, $renderers));
+        $definition->replaceArgument(0, \RectorPrefix20210510\Symfony\Component\DependencyInjection\Compiler\ServiceLocatorTagPass::register($container, $renderers));
     }
 }

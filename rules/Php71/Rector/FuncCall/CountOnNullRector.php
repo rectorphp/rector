@@ -30,7 +30,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php71\Rector\FuncCall\CountOnNullRector\CountOnNullRectorTest
  */
-final class CountOnNullRector extends AbstractRector
+final class CountOnNullRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var string
@@ -44,14 +44,14 @@ final class CountOnNullRector extends AbstractRector
      * @var CountableAnalyzer
      */
     private $countableAnalyzer;
-    public function __construct(CountableTypeAnalyzer $countableTypeAnalyzer, CountableAnalyzer $countableAnalyzer)
+    public function __construct(\Rector\NodeTypeResolver\TypeAnalyzer\CountableTypeAnalyzer $countableTypeAnalyzer, \Rector\Php71\NodeAnalyzer\CountableAnalyzer $countableAnalyzer)
     {
         $this->countableTypeAnalyzer = $countableTypeAnalyzer;
         $this->countableAnalyzer = $countableAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Changes count() on null to safe ternary check', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Changes count() on null to safe ternary check', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 $values = null;
 $count = count($values);
 CODE_SAMPLE
@@ -66,12 +66,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [FuncCall::class];
+        return [\PhpParser\Node\Expr\FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -82,33 +82,33 @@ CODE_SAMPLE
         }
         // this can lead to false positive by phpstan, but that's best we can do
         $onlyValueType = $this->getStaticType($countedNode);
-        if ($onlyValueType instanceof ArrayType) {
+        if ($onlyValueType instanceof \PHPStan\Type\ArrayType) {
             if (!$this->countableAnalyzer->isCastableArrayType($countedNode)) {
                 return null;
             }
             return $this->castToArray($countedNode, $node);
         }
-        if ($this->nodeTypeResolver->isNullableTypeOfSpecificType($countedNode, ArrayType::class)) {
+        if ($this->nodeTypeResolver->isNullableTypeOfSpecificType($countedNode, \PHPStan\Type\ArrayType::class)) {
             return $this->castToArray($countedNode, $node);
         }
-        if ($this->nodeTypeResolver->isNullableType($countedNode) || $this->nodeTypeResolver->isStaticType($countedNode, NullType::class)) {
-            $identical = new Identical($countedNode, $this->nodeFactory->createNull());
-            $ternary = new Ternary($identical, new LNumber(0), $node);
+        if ($this->nodeTypeResolver->isNullableType($countedNode) || $this->nodeTypeResolver->isStaticType($countedNode, \PHPStan\Type\NullType::class)) {
+            $identical = new \PhpParser\Node\Expr\BinaryOp\Identical($countedNode, $this->nodeFactory->createNull());
+            $ternary = new \PhpParser\Node\Expr\Ternary($identical, new \PhpParser\Node\Scalar\LNumber(0), $node);
             // prevent infinity loop re-resolution
             $node->setAttribute(self::ALREADY_CHANGED_ON_COUNT, \true);
             return $ternary;
         }
-        if ($this->isAtLeastPhpVersion(PhpVersionFeature::IS_COUNTABLE)) {
-            $conditionNode = new FuncCall(new Name('is_countable'), [new Arg($countedNode)]);
+        if ($this->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::IS_COUNTABLE)) {
+            $conditionNode = new \PhpParser\Node\Expr\FuncCall(new \PhpParser\Node\Name('is_countable'), [new \PhpParser\Node\Arg($countedNode)]);
         } else {
-            $instanceof = new Instanceof_($countedNode, new FullyQualified('Countable'));
-            $conditionNode = new BooleanOr($this->nodeFactory->createFuncCall('is_array', [new Arg($countedNode)]), $instanceof);
+            $instanceof = new \PhpParser\Node\Expr\Instanceof_($countedNode, new \PhpParser\Node\Name\FullyQualified('Countable'));
+            $conditionNode = new \PhpParser\Node\Expr\BinaryOp\BooleanOr($this->nodeFactory->createFuncCall('is_array', [new \PhpParser\Node\Arg($countedNode)]), $instanceof);
         }
         // prevent infinity loop re-resolution
         $node->setAttribute(self::ALREADY_CHANGED_ON_COUNT, \true);
-        return new Ternary($conditionNode, $node, new LNumber(0));
+        return new \PhpParser\Node\Expr\Ternary($conditionNode, $node, new \PhpParser\Node\Scalar\LNumber(0));
     }
-    private function shouldSkip(FuncCall $funcCall) : bool
+    private function shouldSkip(\PhpParser\Node\Expr\FuncCall $funcCall) : bool
     {
         if (!$this->isName($funcCall, 'count')) {
             return \true;
@@ -118,21 +118,21 @@ CODE_SAMPLE
         if ($alreadyChangedOnCount) {
             return \true;
         }
-        $parentNode = $funcCall->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parentNode instanceof Ternary) {
+        $parentNode = $funcCall->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        if ($parentNode instanceof \PhpParser\Node\Expr\Ternary) {
             return \true;
         }
         if (!isset($funcCall->args[0])) {
             return \true;
         }
         // skip node in trait, as impossible to analyse
-        $classLike = $funcCall->getAttribute(AttributeKey::CLASS_NODE);
-        return $classLike instanceof Trait_;
+        $classLike = $funcCall->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
+        return $classLike instanceof \PhpParser\Node\Stmt\Trait_;
     }
-    private function castToArray(Expr $countedExpr, FuncCall $funcCall) : FuncCall
+    private function castToArray(\PhpParser\Node\Expr $countedExpr, \PhpParser\Node\Expr\FuncCall $funcCall) : \PhpParser\Node\Expr\FuncCall
     {
-        $castArray = new Array_($countedExpr);
-        $funcCall->args = [new Arg($castArray)];
+        $castArray = new \PhpParser\Node\Expr\Cast\Array_($countedExpr);
+        $funcCall->args = [new \PhpParser\Node\Arg($castArray)];
         return $funcCall;
     }
 }

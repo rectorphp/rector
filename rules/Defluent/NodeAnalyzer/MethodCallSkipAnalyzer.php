@@ -16,17 +16,17 @@ final class MethodCallSkipAnalyzer
      * @var FluentChainMethodCallNodeAnalyzer
      */
     private $fluentChainMethodCallNodeAnalyzer;
-    public function __construct(FluentMethodCallSkipper $fluentMethodCallSkipper, \Rector\Defluent\NodeAnalyzer\FluentChainMethodCallNodeAnalyzer $fluentChainMethodCallNodeAnalyzer)
+    public function __construct(\Rector\Defluent\Skipper\FluentMethodCallSkipper $fluentMethodCallSkipper, \Rector\Defluent\NodeAnalyzer\FluentChainMethodCallNodeAnalyzer $fluentChainMethodCallNodeAnalyzer)
     {
         $this->fluentMethodCallSkipper = $fluentMethodCallSkipper;
         $this->fluentChainMethodCallNodeAnalyzer = $fluentChainMethodCallNodeAnalyzer;
     }
-    public function shouldSkipMethodCallIncludingNew(MethodCall $methodCall) : bool
+    public function shouldSkipMethodCallIncludingNew(\PhpParser\Node\Expr\MethodCall $methodCall) : bool
     {
         if ($this->fluentMethodCallSkipper->shouldSkipRootMethodCall($methodCall)) {
             return \true;
         }
         $chainRootExpr = $this->fluentChainMethodCallNodeAnalyzer->resolveRootExpr($methodCall);
-        return $chainRootExpr instanceof New_;
+        return $chainRootExpr instanceof \PhpParser\Node\Expr\New_;
     }
 }

@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace Rector\Symfony\Set;
 
 use Rector\Set\Contract\SetListInterface;
-final class JMSSetList implements SetListInterface
+final class JMSSetList implements \Rector\Set\Contract\SetListInterface
 {
     /**
      * @var string

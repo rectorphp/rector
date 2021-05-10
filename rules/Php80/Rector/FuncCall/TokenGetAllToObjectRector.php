@@ -23,19 +23,19 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php80\Rector\FuncCall\TokenGetAllToObjectRector\TokenGetAllToObjectRectorTest
  */
-final class TokenGetAllToObjectRector extends AbstractRector
+final class TokenGetAllToObjectRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var TokenManipulator
      */
     private $tokenManipulator;
-    public function __construct(TokenManipulator $ifArrayTokenManipulator)
+    public function __construct(\Rector\Php80\NodeManipulator\TokenManipulator $ifArrayTokenManipulator)
     {
         $this->tokenManipulator = $ifArrayTokenManipulator;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Complete missing constructor dependency instance by type', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Complete missing constructor dependency instance by type', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run()
@@ -73,12 +73,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [FuncCall::class];
+        return [\PhpParser\Node\Expr\FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$this->nodeNameResolver->isName($node, 'token_get_all')) {
             return null;
@@ -86,14 +86,14 @@ CODE_SAMPLE
         $this->refactorTokensVariable($node);
         return $this->nodeFactory->createStaticCall('PhpToken', 'getAll', $node->args);
     }
-    private function refactorTokensVariable(FuncCall $funcCall) : void
+    private function refactorTokensVariable(\PhpParser\Node\Expr\FuncCall $funcCall) : void
     {
-        $assign = $funcCall->getAttribute(AttributeKey::PARENT_NODE);
-        if (!$assign instanceof Assign) {
+        $assign = $funcCall->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        if (!$assign instanceof \PhpParser\Node\Expr\Assign) {
             return;
         }
         /** @var ClassMethod|Function_|null $classMethodOrFunction */
-        $classMethodOrFunction = $this->betterNodeFinder->findParentTypes($funcCall, [ClassMethod::class, Function_::class]);
+        $classMethodOrFunction = $this->betterNodeFinder->findParentTypes($funcCall, [\PhpParser\Node\Stmt\ClassMethod::class, \PhpParser\Node\Stmt\Function_::class]);
         if ($classMethodOrFunction === null) {
             return;
         }
@@ -103,7 +103,7 @@ CODE_SAMPLE
     /**
      * @param ClassMethod|Function_ $functionLike
      */
-    private function replaceGetNameOrGetValue(FunctionLike $functionLike, Expr $assignedExpr) : void
+    private function replaceGetNameOrGetValue(\PhpParser\Node\FunctionLike $functionLike, \PhpParser\Node\Expr $assignedExpr) : void
     {
         $tokensForeaches = $this->findForeachesOverTokenVariable($functionLike, $assignedExpr);
         foreach ($tokensForeaches as $tokenForeach) {
@@ -114,28 +114,28 @@ CODE_SAMPLE
      * @param ClassMethod|Function_ $functionLike
      * @return Foreach_[]
      */
-    private function findForeachesOverTokenVariable(FunctionLike $functionLike, Expr $assignedExpr) : array
+    private function findForeachesOverTokenVariable(\PhpParser\Node\FunctionLike $functionLike, \PhpParser\Node\Expr $assignedExpr) : array
     {
-        return $this->betterNodeFinder->find((array) $functionLike->stmts, function (Node $node) use($assignedExpr) : bool {
-            if (!$node instanceof Foreach_) {
+        return $this->betterNodeFinder->find((array) $functionLike->stmts, function (\PhpParser\Node $node) use($assignedExpr) : bool {
+            if (!$node instanceof \PhpParser\Node\Stmt\Foreach_) {
                 return \false;
             }
             return $this->nodeComparator->areNodesEqual($node->expr, $assignedExpr);
         });
     }
-    private function refactorTokenInForeach(Foreach_ $tokensForeach) : void
+    private function refactorTokenInForeach(\PhpParser\Node\Stmt\Foreach_ $tokensForeach) : void
     {
         $singleToken = $tokensForeach->valueVar;
-        if (!$singleToken instanceof Variable) {
+        if (!$singleToken instanceof \PhpParser\Node\Expr\Variable) {
             return;
         }
-        $this->traverseNodesWithCallable($tokensForeach, function (Node $node) use($singleToken) {
+        $this->traverseNodesWithCallable($tokensForeach, function (\PhpParser\Node $node) use($singleToken) {
             $this->tokenManipulator->refactorArrayToken([$node], $singleToken);
             $this->tokenManipulator->refactorNonArrayToken([$node], $singleToken);
             $this->tokenManipulator->refactorTokenIsKind([$node], $singleToken);
             $this->tokenManipulator->removeIsArray([$node], $singleToken);
             // drop if "If_" node not needed
-            if ($node instanceof If_ && $node->else !== null) {
+            if ($node instanceof \PhpParser\Node\Stmt\If_ && $node->else !== null) {
                 if (!$this->nodeComparator->areNodesEqual($node->stmts, $node->else->stmts)) {
                     return null;
                 }

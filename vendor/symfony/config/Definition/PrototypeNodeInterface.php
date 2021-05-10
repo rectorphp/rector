@@ -15,7 +15,7 @@ namespace RectorPrefix20210510\Symfony\Component\Config\Definition;
  *
  * @author Johannes M. Schmitt <schmittjoh@gmail.com>
  */
-interface PrototypeNodeInterface extends NodeInterface
+interface PrototypeNodeInterface extends \RectorPrefix20210510\Symfony\Component\Config\Definition\NodeInterface
 {
     /**
      * Sets the name of the node.

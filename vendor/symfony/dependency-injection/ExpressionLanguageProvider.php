@@ -20,7 +20,7 @@ use RectorPrefix20210510\Symfony\Component\ExpressionLanguage\ExpressionFunction
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class ExpressionLanguageProvider implements ExpressionFunctionProviderInterface
+class ExpressionLanguageProvider implements \RectorPrefix20210510\Symfony\Component\ExpressionLanguage\ExpressionFunctionProviderInterface
 {
     private $serviceCompiler;
     public function __construct(callable $serviceCompiler = null)
@@ -29,11 +29,11 @@ class ExpressionLanguageProvider implements ExpressionFunctionProviderInterface
     }
     public function getFunctions()
     {
-        return [new ExpressionFunction('service', $this->serviceCompiler ?: function ($arg) {
+        return [new \RectorPrefix20210510\Symfony\Component\ExpressionLanguage\ExpressionFunction('service', $this->serviceCompiler ?: function ($arg) {
             return \sprintf('$this->get(%s)', $arg);
         }, function (array $variables, $value) {
             return $variables['container']->get($value);
-        }), new ExpressionFunction('parameter', function ($arg) {
+        }), new \RectorPrefix20210510\Symfony\Component\ExpressionLanguage\ExpressionFunction('parameter', function ($arg) {
             return \sprintf('$this->getParameter(%s)', $arg);
         }, function (array $variables, $value) {
             return $variables['container']->getParameter($value);

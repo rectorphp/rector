@@ -15,7 +15,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\Php73\Rector\BinaryOr\IsCountableRector\IsCountableRectorTest
  */
-final class IsCountableRector extends AbstractRector
+final class IsCountableRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var IsArrayAndDualCheckToAble
@@ -25,14 +25,14 @@ final class IsCountableRector extends AbstractRector
      * @var ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(IsArrayAndDualCheckToAble $isArrayAndDualCheckToAble, ReflectionProvider $reflectionProvider)
+    public function __construct(\Rector\Php71\IsArrayAndDualCheckToAble $isArrayAndDualCheckToAble, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
     {
         $this->isArrayAndDualCheckToAble = $isArrayAndDualCheckToAble;
         $this->reflectionProvider = $reflectionProvider;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Changes is_array + Countable check to is_countable', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Changes is_array + Countable check to is_countable', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 is_array($foo) || $foo instanceof Countable;
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
@@ -45,12 +45,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [BooleanOr::class];
+        return [\PhpParser\Node\Expr\BinaryOp\BooleanOr::class];
     }
     /**
      * @param BooleanOr $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($this->shouldSkip()) {
             return null;
@@ -59,9 +59,9 @@ CODE_SAMPLE
     }
     private function shouldSkip() : bool
     {
-        if ($this->reflectionProvider->hasFunction(new Name('is_countable'), null)) {
+        if ($this->reflectionProvider->hasFunction(new \PhpParser\Node\Name('is_countable'), null)) {
             return \false;
         }
-        return $this->isAtLeastPhpVersion(PhpVersionFeature::IS_COUNTABLE);
+        return $this->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::IS_COUNTABLE);
     }
 }

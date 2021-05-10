@@ -46,7 +46,7 @@ final class NewLine
         $validNewLineRegularExpression = '/^(?>\\r\\n|\\n|\\r)$/';
         $validNewLine = \preg_match($validNewLineRegularExpression, $string);
         if ($validNewLine !== 1) {
-            throw InvalidNewLineStringException::fromString($string);
+            throw \Rector\FileFormatter\Exception\InvalidNewLineStringException::fromString($string);
         }
         return new self($string);
     }
@@ -70,7 +70,7 @@ final class NewLine
         if (!\array_key_exists($endOfLine, self::ALLOWED_END_OF_LINE)) {
             $allowedEndOfLineValues = \array_keys(self::ALLOWED_END_OF_LINE);
             $message = \sprintf('The endOfLine "%s" is not allowed. Allowed are "%s"', $endOfLine, \implode(',', $allowedEndOfLineValues));
-            throw InvalidNewLineStringException::create($message);
+            throw \Rector\FileFormatter\Exception\InvalidNewLineStringException::create($message);
         }
         return self::fromSingleCharacter(self::ALLOWED_END_OF_LINE[$endOfLine]);
     }

@@ -23,7 +23,7 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 /**
  * @see \Rector\Tests\Transform\Rector\FileWithoutNamespace\FunctionToStaticMethodRector\FunctionToStaticMethodRectorTest
  */
-final class FunctionToStaticMethodRector extends AbstractRector
+final class FunctionToStaticMethodRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var ClassNaming
@@ -37,15 +37,15 @@ final class FunctionToStaticMethodRector extends AbstractRector
      * @var FullyQualifiedNameResolver
      */
     private $fullyQualifiedNameResolver;
-    public function __construct(ClassNaming $classNaming, StaticMethodClassFactory $staticMethodClassFactory, FullyQualifiedNameResolver $fullyQualifiedNameResolver)
+    public function __construct(\Rector\CodingStyle\Naming\ClassNaming $classNaming, \Rector\Transform\NodeFactory\StaticMethodClassFactory $staticMethodClassFactory, \Rector\Transform\Naming\FullyQualifiedNameResolver $fullyQualifiedNameResolver)
     {
         $this->classNaming = $classNaming;
         $this->staticMethodClassFactory = $staticMethodClassFactory;
         $this->fullyQualifiedNameResolver = $fullyQualifiedNameResolver;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Change functions to static calls, so composer can autoload them', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change functions to static calls, so composer can autoload them', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 function some_function()
 {
 }
@@ -69,15 +69,15 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [FileWithoutNamespace::class, Namespace_::class];
+        return [\Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace::class, \PhpParser\Node\Stmt\Namespace_::class];
     }
     /**
      * @param FileWithoutNamespace|Namespace_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         /** @var Function_[] $functions */
-        $functions = $this->betterNodeFinder->findInstanceOf($node, Function_::class);
+        $functions = $this->betterNodeFinder->findInstanceOf($node, \PhpParser\Node\Stmt\Function_::class);
         if ($functions === []) {
             return null;
         }
@@ -107,7 +107,7 @@ CODE_SAMPLE
                 continue;
             }
             $methodName = $this->classNaming->createMethodNameFromFunction($function);
-            $functionsToStaticCalls[] = new FunctionToStaticCall($functionName, $className, $methodName);
+            $functionsToStaticCalls[] = new \Rector\Transform\ValueObject\FunctionToStaticCall($functionName, $className, $methodName);
         }
         return $functionsToStaticCalls;
     }
@@ -118,8 +118,8 @@ CODE_SAMPLE
      */
     private function replaceFuncCallsWithStaticCalls(array $stmts, array $functionsToStaticCalls) : array
     {
-        $this->traverseNodesWithCallable($stmts, function (Node $node) use($functionsToStaticCalls) : ?StaticCall {
-            if (!$node instanceof FuncCall) {
+        $this->traverseNodesWithCallable($stmts, function (\PhpParser\Node $node) use($functionsToStaticCalls) : ?StaticCall {
+            if (!$node instanceof \PhpParser\Node\Expr\FuncCall) {
                 return null;
             }
             foreach ($functionsToStaticCalls as $functionToStaticCall) {
@@ -137,21 +137,21 @@ CODE_SAMPLE
     /**
      * @param Namespace_|FileWithoutNamespace $node
      */
-    private function printStaticMethodClass(SmartFileInfo $smartFileInfo, string $shortClassName, Node $node, Class_ $class) : void
+    private function printStaticMethodClass(\Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo, string $shortClassName, \PhpParser\Node $node, \PhpParser\Node\Stmt\Class_ $class) : void
     {
         $classFileDestination = $smartFileInfo->getPath() . \DIRECTORY_SEPARATOR . $shortClassName . '.php';
         $nodesToPrint = [$this->resolveNodeToPrint($node, $class)];
-        $addedFileWithNodes = new AddedFileWithNodes($classFileDestination, $nodesToPrint);
+        $addedFileWithNodes = new \Rector\FileSystemRector\ValueObject\AddedFileWithNodes($classFileDestination, $nodesToPrint);
         $this->removedAndAddedFilesCollector->addAddedFile($addedFileWithNodes);
     }
     /**
      * @param Namespace_|FileWithoutNamespace $node
      * @return Namespace_|Class_
      */
-    private function resolveNodeToPrint(Node $node, Class_ $class) : Stmt
+    private function resolveNodeToPrint(\PhpParser\Node $node, \PhpParser\Node\Stmt\Class_ $class) : \PhpParser\Node\Stmt
     {
-        if ($node instanceof Namespace_) {
-            return new Namespace_($node->name, [$class]);
+        if ($node instanceof \PhpParser\Node\Stmt\Namespace_) {
+            return new \PhpParser\Node\Stmt\Namespace_($node->name, [$class]);
         }
         return $class;
     }

@@ -20,7 +20,7 @@ use RectorPrefix20210510\Symfony\Component\HttpFoundation\Response;
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class Store implements StoreInterface
+class Store implements \RectorPrefix20210510\Symfony\Component\HttpKernel\HttpCache\StoreInterface
 {
     protected $root;
     private $keyCache;
@@ -54,7 +54,7 @@ class Store implements StoreInterface
      *
      * @return bool|string true if the lock is acquired, the path to the current lock otherwise
      */
-    public function lock(Request $request)
+    public function lock(\RectorPrefix20210510\Symfony\Component\HttpFoundation\Request $request)
     {
         $key = $this->getCacheKey($request);
         if (!isset($this->locks[$key])) {
@@ -76,7 +76,7 @@ class Store implements StoreInterface
      *
      * @return bool False if the lock file does not exist or cannot be unlocked, true otherwise
      */
-    public function unlock(Request $request)
+    public function unlock(\RectorPrefix20210510\Symfony\Component\HttpFoundation\Request $request)
     {
         $key = $this->getCacheKey($request);
         if (isset($this->locks[$key])) {
@@ -87,7 +87,7 @@ class Store implements StoreInterface
         }
         return \false;
     }
-    public function isLocked(Request $request)
+    public function isLocked(\RectorPrefix20210510\Symfony\Component\HttpFoundation\Request $request)
     {
         $key = $this->getCacheKey($request);
         if (isset($this->locks[$key])) {
@@ -109,7 +109,7 @@ class Store implements StoreInterface
      *
      * @return Response|null A Response instance, or null if no cache entry was found
      */
-    public function lookup(Request $request)
+    public function lookup(\RectorPrefix20210510\Symfony\Component\HttpFoundation\Request $request)
     {
         $key = $this->getCacheKey($request);
         if (!($entries = $this->getMetadata($key))) {
@@ -145,7 +145,7 @@ class Store implements StoreInterface
      *
      * @throws \RuntimeException
      */
-    public function write(Request $request, Response $response)
+    public function write(\RectorPrefix20210510\Symfony\Component\HttpFoundation\Request $request, \RectorPrefix20210510\Symfony\Component\HttpFoundation\Response $response)
     {
         $key = $this->getCacheKey($request);
         $storedEnv = $this->persistRequest($request);
@@ -193,7 +193,7 @@ class Store implements StoreInterface
      *
      * @return string
      */
-    protected function generateContentDigest(Response $response)
+    protected function generateContentDigest(\RectorPrefix20210510\Symfony\Component\HttpFoundation\Response $response)
     {
         return 'en' . \hash('sha256', $response->getContent());
     }
@@ -202,7 +202,7 @@ class Store implements StoreInterface
      *
      * @throws \RuntimeException
      */
-    public function invalidate(Request $request)
+    public function invalidate(\RectorPrefix20210510\Symfony\Component\HttpFoundation\Request $request)
     {
         $modified = \false;
         $key = $this->getCacheKey($request);
@@ -276,7 +276,7 @@ class Store implements StoreInterface
      */
     private function doPurge(string $url) : bool
     {
-        $key = $this->getCacheKey(Request::create($url));
+        $key = $this->getCacheKey(\RectorPrefix20210510\Symfony\Component\HttpFoundation\Request::create($url));
         if (isset($this->locks[$key])) {
             \flock($this->locks[$key], \LOCK_UN);
             \fclose($this->locks[$key]);
@@ -353,14 +353,14 @@ class Store implements StoreInterface
      *
      * @return string A key for the given Request
      */
-    protected function generateCacheKey(Request $request)
+    protected function generateCacheKey(\RectorPrefix20210510\Symfony\Component\HttpFoundation\Request $request)
     {
         return 'md' . \hash('sha256', $request->getUri());
     }
     /**
      * Returns a cache key for the given Request.
      */
-    private function getCacheKey(Request $request) : string
+    private function getCacheKey(\RectorPrefix20210510\Symfony\Component\HttpFoundation\Request $request) : string
     {
         if (isset($this->keyCache[$request])) {
             return $this->keyCache[$request];
@@ -370,14 +370,14 @@ class Store implements StoreInterface
     /**
      * Persists the Request HTTP headers.
      */
-    private function persistRequest(Request $request) : array
+    private function persistRequest(\RectorPrefix20210510\Symfony\Component\HttpFoundation\Request $request) : array
     {
         return $request->headers->all();
     }
     /**
      * Persists the Response HTTP headers.
      */
-    private function persistResponse(Response $response) : array
+    private function persistResponse(\RectorPrefix20210510\Symfony\Component\HttpFoundation\Response $response) : array
     {
         $headers = $response->headers->all();
         $headers['X-Status'] = [$response->getStatusCode()];
@@ -386,13 +386,13 @@ class Store implements StoreInterface
     /**
      * Restores a Response from the HTTP headers and body.
      */
-    private function restoreResponse(array $headers, string $path = null) : Response
+    private function restoreResponse(array $headers, string $path = null) : \RectorPrefix20210510\Symfony\Component\HttpFoundation\Response
     {
         $status = $headers['X-Status'][0];
         unset($headers['X-Status']);
         if (null !== $path) {
             $headers['X-Body-File'] = [$path];
         }
-        return new Response($path, $status, $headers);
+        return new \RectorPrefix20210510\Symfony\Component\HttpFoundation\Response($path, $status, $headers);
     }
 }

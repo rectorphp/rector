@@ -12,7 +12,7 @@ namespace RectorPrefix20210510\Symfony\Component\HttpFoundation\Test\Constraint;
 
 use RectorPrefix20210510\PHPUnit\Framework\Constraint\Constraint;
 use RectorPrefix20210510\Symfony\Component\HttpFoundation\Response;
-final class ResponseIsRedirected extends Constraint
+final class ResponseIsRedirected extends \RectorPrefix20210510\PHPUnit\Framework\Constraint\Constraint
 {
     /**
      * {@inheritdoc}

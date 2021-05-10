@@ -7,6 +7,6 @@ use PhpParser\Builder\TraitUse;
 /**
  * Fixed duplicated naming in php-parser and prevents confusion
  */
-final class TraitUseBuilder extends TraitUse
+final class TraitUseBuilder extends \PhpParser\Builder\TraitUse
 {
 }

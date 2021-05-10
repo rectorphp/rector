@@ -20,7 +20,7 @@ use RectorPrefix20210510\Symfony\Component\HttpFoundation\Response;
  *
  * @author Bernhard Schussek <bschussek@gmail.com>
  */
-class RequestEvent extends KernelEvent
+class RequestEvent extends \RectorPrefix20210510\Symfony\Component\HttpKernel\Event\KernelEvent
 {
     private $response;
     /**
@@ -35,7 +35,7 @@ class RequestEvent extends KernelEvent
     /**
      * Sets a response and stops event propagation.
      */
-    public function setResponse(Response $response)
+    public function setResponse(\RectorPrefix20210510\Symfony\Component\HttpFoundation\Response $response)
     {
         $this->response = $response;
         $this->stopPropagation();

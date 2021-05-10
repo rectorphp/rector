@@ -16,7 +16,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Autodiscovery\Rector\Interface_\MoveInterfacesToContractNamespaceDirectoryRector\MoveInterfacesToContractNamespaceDirectoryRectorTest
  */
-final class MoveInterfacesToContractNamespaceDirectoryRector extends AbstractRector
+final class MoveInterfacesToContractNamespaceDirectoryRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var NetteControlFactoryInterfaceAnalyzer
@@ -26,14 +26,14 @@ final class MoveInterfacesToContractNamespaceDirectoryRector extends AbstractRec
      * @var AddedFileWithNodesFactory
      */
     private $addedFileWithNodesFactory;
-    public function __construct(NetteControlFactoryInterfaceAnalyzer $netteControlFactoryInterfaceAnalyzer, AddedFileWithNodesFactory $addedFileWithNodesFactory)
+    public function __construct(\Rector\NetteToSymfony\NodeAnalyzer\NetteControlFactoryInterfaceAnalyzer $netteControlFactoryInterfaceAnalyzer, \Rector\FileSystemRector\ValueObjectFactory\AddedFileWithNodesFactory $addedFileWithNodesFactory)
     {
         $this->netteControlFactoryInterfaceAnalyzer = $netteControlFactoryInterfaceAnalyzer;
         $this->addedFileWithNodesFactory = $addedFileWithNodesFactory;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Move interface to "Contract" namespace', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Move interface to "Contract" namespace', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 // file: app/Exception/Rule.php
 
 namespace App\Exception;
@@ -58,18 +58,18 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Interface_::class];
+        return [\PhpParser\Node\Stmt\Interface_::class];
     }
     /**
      * @param Interface_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($this->netteControlFactoryInterfaceAnalyzer->isComponentFactoryInterface($node)) {
             return null;
         }
         $addedFileWithNodes = $this->addedFileWithNodesFactory->createWithDesiredGroup($this->file->getSmartFileInfo(), $this->file, 'Contract');
-        if (!$addedFileWithNodes instanceof AddedFileWithNodes) {
+        if (!$addedFileWithNodes instanceof \Rector\FileSystemRector\ValueObject\AddedFileWithNodes) {
             return null;
         }
         $this->removedAndAddedFilesCollector->removeFile($this->file->getSmartFileInfo());

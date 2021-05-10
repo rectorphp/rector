@@ -24,13 +24,13 @@ final class PHPStanStaticTypeMapper
     public function __construct(array $typeMappers)
     {
         foreach ($typeMappers as $typeMapper) {
-            if ($typeMapper instanceof PHPStanStaticTypeMapperAwareInterface) {
+            if ($typeMapper instanceof \Rector\PHPStanStaticTypeMapper\Contract\PHPStanStaticTypeMapperAwareInterface) {
                 $typeMapper->setPHPStanStaticTypeMapper($this);
             }
         }
         $this->typeMappers = $typeMappers;
     }
-    public function mapToPHPStanPhpDocTypeNode(Type $type) : TypeNode
+    public function mapToPHPStanPhpDocTypeNode(\PHPStan\Type\Type $type) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
     {
         foreach ($this->typeMappers as $typeMapper) {
             if (!\is_a($type, $typeMapper->getNodeClass(), \true)) {
@@ -38,12 +38,12 @@ final class PHPStanStaticTypeMapper
             }
             return $typeMapper->mapToPHPStanPhpDocTypeNode($type);
         }
-        throw new NotImplementedYetException(__METHOD__ . ' for ' . \get_class($type));
+        throw new \Rector\Core\Exception\NotImplementedYetException(__METHOD__ . ' for ' . \get_class($type));
     }
     /**
      * @return Name|NullableType|PhpParserUnionType|null
      */
-    public function mapToPhpParserNode(Type $type, ?string $kind = null) : ?Node
+    public function mapToPhpParserNode(\PHPStan\Type\Type $type, ?string $kind = null) : ?\PhpParser\Node
     {
         foreach ($this->typeMappers as $typeMapper) {
             if (!\is_a($type, $typeMapper->getNodeClass(), \true)) {
@@ -51,6 +51,6 @@ final class PHPStanStaticTypeMapper
             }
             return $typeMapper->mapToPhpParserNode($type, $kind);
         }
-        throw new NotImplementedYetException(__METHOD__ . ' for ' . \get_class($type));
+        throw new \Rector\Core\Exception\NotImplementedYetException(__METHOD__ . ' for ' . \get_class($type));
     }
 }

@@ -17,12 +17,12 @@ final class ExpectExceptionFactory
      * @var TestsNodeAnalyzer
      */
     private $testsNodeAnalyzer;
-    public function __construct(NodeNameResolver $nodeNameResolver, TestsNodeAnalyzer $testsNodeAnalyzer)
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer $testsNodeAnalyzer)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
     }
-    public function create(MethodCall $methodCall, Variable $variable) : ?MethodCall
+    public function create(\PhpParser\Node\Expr\MethodCall $methodCall, \PhpParser\Node\Expr\Variable $variable) : ?\PhpParser\Node\Expr\MethodCall
     {
         if (!$this->testsNodeAnalyzer->isInPHPUnitMethodCallName($methodCall, 'assertInstanceOf')) {
             return null;
@@ -35,6 +35,6 @@ final class ExpectExceptionFactory
         if (!$this->nodeNameResolver->isName($variable, $argumentVariableName)) {
             return null;
         }
-        return new MethodCall($methodCall->var, 'expectException', [$methodCall->args[0]]);
+        return new \PhpParser\Node\Expr\MethodCall($methodCall->var, 'expectException', [$methodCall->args[0]]);
     }
 }

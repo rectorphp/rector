@@ -15,7 +15,7 @@ namespace RectorPrefix20210510\Composer\Semver\Constraint;
  *
  * This constraint matches everything.
  */
-class MatchAllConstraint implements ConstraintInterface
+class MatchAllConstraint implements \RectorPrefix20210510\Composer\Semver\Constraint\ConstraintInterface
 {
     /** @var string|null */
     protected $prettyString;
@@ -24,7 +24,7 @@ class MatchAllConstraint implements ConstraintInterface
      *
      * @return bool
      */
-    public function matches(ConstraintInterface $provider)
+    public function matches(\RectorPrefix20210510\Composer\Semver\Constraint\ConstraintInterface $provider)
     {
         return \true;
     }
@@ -61,13 +61,13 @@ class MatchAllConstraint implements ConstraintInterface
      */
     public function getUpperBound()
     {
-        return Bound::positiveInfinity();
+        return \RectorPrefix20210510\Composer\Semver\Constraint\Bound::positiveInfinity();
     }
     /**
      * {@inheritDoc}
      */
     public function getLowerBound()
     {
-        return Bound::zero();
+        return \RectorPrefix20210510\Composer\Semver\Constraint\Bound::zero();
     }
 }

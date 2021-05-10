@@ -13,19 +13,19 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\DeadCode\Rector\BinaryOp\RemoveDuplicatedInstanceOfRector\RemoveDuplicatedInstanceOfRectorTest
  */
-final class RemoveDuplicatedInstanceOfRector extends AbstractRector
+final class RemoveDuplicatedInstanceOfRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var InstanceOfUniqueKeyResolver
      */
     private $instanceOfUniqueKeyResolver;
-    public function __construct(InstanceOfUniqueKeyResolver $instanceOfUniqueKeyResolver)
+    public function __construct(\Rector\DeadCode\NodeAnalyzer\InstanceOfUniqueKeyResolver $instanceOfUniqueKeyResolver)
     {
         $this->instanceOfUniqueKeyResolver = $instanceOfUniqueKeyResolver;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Remove duplicated instanceof in one call', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove duplicated instanceof in one call', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($value)
@@ -52,12 +52,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [BinaryOp::class];
+        return [\PhpParser\Node\Expr\BinaryOp::class];
     }
     /**
      * @param BinaryOp $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $duplicatedInstanceOfs = $this->resolveDuplicatedInstancesOf($node);
         if ($duplicatedInstanceOfs === []) {
@@ -69,11 +69,11 @@ CODE_SAMPLE
     /**
      * @return Instanceof_[]
      */
-    private function resolveDuplicatedInstancesOf(BinaryOp $binaryOp) : array
+    private function resolveDuplicatedInstancesOf(\PhpParser\Node\Expr\BinaryOp $binaryOp) : array
     {
         $duplicatedInstanceOfs = [];
         /** @var Instanceof_[] $instanceOfs */
-        $instanceOfs = $this->betterNodeFinder->findInstanceOf($binaryOp, Instanceof_::class);
+        $instanceOfs = $this->betterNodeFinder->findInstanceOf($binaryOp, \PhpParser\Node\Expr\Instanceof_::class);
         $uniqueInstanceOfKeys = [];
         foreach ($instanceOfs as $instanceOf) {
             $uniqueKey = $this->instanceOfUniqueKeyResolver->resolve($instanceOf);

@@ -9,7 +9,7 @@ use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
-final class TypeWithClassNameTypeMapper implements TypeMapperInterface
+final class TypeWithClassNameTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface
 {
     /**
      * @var StringTypeMapper
@@ -24,19 +24,19 @@ final class TypeWithClassNameTypeMapper implements TypeMapperInterface
      */
     public function getNodeClass() : string
     {
-        return TypeWithClassName::class;
+        return \PHPStan\Type\TypeWithClassName::class;
     }
     /**
      * @param TypeWithClassName $type
      */
-    public function mapToPHPStanPhpDocTypeNode(Type $type) : TypeNode
+    public function mapToPHPStanPhpDocTypeNode(\PHPStan\Type\Type $type) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
     {
-        return new IdentifierTypeNode('string-class');
+        return new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode('string-class');
     }
     /**
      * @param TypeWithClassName $type
      */
-    public function mapToPhpParserNode(Type $type, ?string $kind = null) : ?Node
+    public function mapToPhpParserNode(\PHPStan\Type\Type $type, ?string $kind = null) : ?\PhpParser\Node
     {
         return $this->stringTypeMapper->mapToPhpParserNode($type, $kind);
     }

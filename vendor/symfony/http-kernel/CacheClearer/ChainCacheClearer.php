@@ -17,7 +17,7 @@ namespace RectorPrefix20210510\Symfony\Component\HttpKernel\CacheClearer;
  *
  * @final
  */
-class ChainCacheClearer implements CacheClearerInterface
+class ChainCacheClearer implements \RectorPrefix20210510\Symfony\Component\HttpKernel\CacheClearer\CacheClearerInterface
 {
     private $clearers;
     public function __construct(iterable $clearers = [])

@@ -118,15 +118,15 @@ class StaticStringy
     public static function __callStatic($name, $arguments)
     {
         if (!static::$methodArgs) {
-            $stringyClass = new ReflectionClass('RectorPrefix20210510\\Stringy\\Stringy');
-            $methods = $stringyClass->getMethods(ReflectionMethod::IS_PUBLIC);
+            $stringyClass = new \ReflectionClass('RectorPrefix20210510\\Stringy\\Stringy');
+            $methods = $stringyClass->getMethods(\ReflectionMethod::IS_PUBLIC);
             foreach ($methods as $method) {
                 $params = $method->getNumberOfParameters() + 2;
                 static::$methodArgs[$method->name] = $params;
             }
         }
         if (!isset(static::$methodArgs[$name])) {
-            throw new BadMethodCallException($name . ' is not a valid method');
+            throw new \BadMethodCallException($name . ' is not a valid method');
         }
         $numArgs = \count($arguments);
         $str = $numArgs ? $arguments[0] : '';
@@ -137,10 +137,10 @@ class StaticStringy
             $args = \array_slice($arguments, 1);
             $encoding = null;
         }
-        $stringy = Stringy::create($str, $encoding);
+        $stringy = \RectorPrefix20210510\Stringy\Stringy::create($str, $encoding);
         $result = \call_user_func_array([$stringy, $name], $args);
         $cast = function ($val) {
-            if (\is_object($val) && $val instanceof Stringy) {
+            if (\is_object($val) && $val instanceof \RectorPrefix20210510\Stringy\Stringy) {
                 return (string) $val;
             } else {
                 return $val;

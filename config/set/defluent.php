@@ -14,16 +14,16 @@ use Rector\Defluent\Rector\Return_\ReturnNewFluentChainMethodCallToNonFluentRect
 use RectorPrefix20210510\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 // @see https://ocramius.github.io/blog/fluent-interfaces-are-evil/
 // @see https://www.yegor256.com/2018/03/13/fluent-interfaces.html
-return static function (ContainerConfigurator $containerConfigurator) : void {
+return static function (\RectorPrefix20210510\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     // variable/property
-    $services->set(FluentChainMethodCallToNormalMethodCallRector::class);
-    $services->set(ReturnFluentChainMethodCallToNormalMethodCallRector::class);
+    $services->set(\Rector\Defluent\Rector\MethodCall\FluentChainMethodCallToNormalMethodCallRector::class);
+    $services->set(\Rector\Defluent\Rector\Return_\ReturnFluentChainMethodCallToNormalMethodCallRector::class);
     // new
-    $services->set(NewFluentChainMethodCallToNonFluentRector::class);
-    $services->set(ReturnNewFluentChainMethodCallToNonFluentRector::class);
-    $services->set(ReturnThisRemoveRector::class);
-    $services->set(DefluentReturnMethodCallRector::class);
-    $services->set(MethodCallOnSetterMethodCallToStandaloneAssignRector::class);
-    $services->set(InArgFluentChainMethodCallToStandaloneMethodCallRector::class);
+    $services->set(\Rector\Defluent\Rector\MethodCall\NewFluentChainMethodCallToNonFluentRector::class);
+    $services->set(\Rector\Defluent\Rector\Return_\ReturnNewFluentChainMethodCallToNonFluentRector::class);
+    $services->set(\Rector\Defluent\Rector\ClassMethod\ReturnThisRemoveRector::class);
+    $services->set(\Rector\Defluent\Rector\Return_\DefluentReturnMethodCallRector::class);
+    $services->set(\Rector\Defluent\Rector\MethodCall\MethodCallOnSetterMethodCallToStandaloneAssignRector::class);
+    $services->set(\Rector\Defluent\Rector\MethodCall\InArgFluentChainMethodCallToStandaloneMethodCallRector::class);
 };

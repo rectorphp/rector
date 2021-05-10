@@ -8,7 +8,7 @@ use PhpParser\Node\Expr\Variable;
 use Rector\NodeNestingScope\ParentScopeFinder;
 use Rector\ReadWrite\Contract\ReadNodeAnalyzerInterface;
 use Rector\ReadWrite\NodeFinder\NodeUsageFinder;
-final class VariableReadNodeAnalyzer implements ReadNodeAnalyzerInterface
+final class VariableReadNodeAnalyzer implements \Rector\ReadWrite\Contract\ReadNodeAnalyzerInterface
 {
     /**
      * @var ParentScopeFinder
@@ -22,20 +22,20 @@ final class VariableReadNodeAnalyzer implements ReadNodeAnalyzerInterface
      * @var ReadExprAnalyzer
      */
     private $readExprAnalyzer;
-    public function __construct(ParentScopeFinder $parentScopeFinder, NodeUsageFinder $nodeUsageFinder, \Rector\ReadWrite\ReadNodeAnalyzer\ReadExprAnalyzer $readExprAnalyzer)
+    public function __construct(\Rector\NodeNestingScope\ParentScopeFinder $parentScopeFinder, \Rector\ReadWrite\NodeFinder\NodeUsageFinder $nodeUsageFinder, \Rector\ReadWrite\ReadNodeAnalyzer\ReadExprAnalyzer $readExprAnalyzer)
     {
         $this->parentScopeFinder = $parentScopeFinder;
         $this->nodeUsageFinder = $nodeUsageFinder;
         $this->readExprAnalyzer = $readExprAnalyzer;
     }
-    public function supports(Node $node) : bool
+    public function supports(\PhpParser\Node $node) : bool
     {
-        return $node instanceof Variable;
+        return $node instanceof \PhpParser\Node\Expr\Variable;
     }
     /**
      * @param Variable $node
      */
-    public function isRead(Node $node) : bool
+    public function isRead(\PhpParser\Node $node) : bool
     {
         $parentScope = $this->parentScopeFinder->find($node);
         if ($parentScope === null) {

@@ -9,25 +9,25 @@ use Rector\BetterPhpDocParser\Attributes\AttributeMirrorer;
 use Rector\BetterPhpDocParser\Contract\BasePhpDocNodeVisitorInterface;
 use Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareIntersectionTypeNode;
 use RectorPrefix20210510\Symplify\SimplePhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor;
-final class IntersectionTypeNodePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor implements BasePhpDocNodeVisitorInterface
+final class IntersectionTypeNodePhpDocNodeVisitor extends \RectorPrefix20210510\Symplify\SimplePhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor implements \Rector\BetterPhpDocParser\Contract\BasePhpDocNodeVisitorInterface
 {
     /**
      * @var AttributeMirrorer
      */
     private $attributeMirrorer;
-    public function __construct(AttributeMirrorer $attributeMirrorer)
+    public function __construct(\Rector\BetterPhpDocParser\Attributes\AttributeMirrorer $attributeMirrorer)
     {
         $this->attributeMirrorer = $attributeMirrorer;
     }
-    public function enterNode(Node $node) : ?Node
+    public function enterNode(\PHPStan\PhpDocParser\Ast\Node $node) : ?\PHPStan\PhpDocParser\Ast\Node
     {
-        if (!$node instanceof IntersectionTypeNode) {
+        if (!$node instanceof \PHPStan\PhpDocParser\Ast\Type\IntersectionTypeNode) {
             return null;
         }
-        if ($node instanceof BracketsAwareIntersectionTypeNode) {
+        if ($node instanceof \Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareIntersectionTypeNode) {
             return null;
         }
-        $bracketsAwareIntersectionTypeNode = new BracketsAwareIntersectionTypeNode($node->types);
+        $bracketsAwareIntersectionTypeNode = new \Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareIntersectionTypeNode($node->types);
         $this->attributeMirrorer->mirror($node, $bracketsAwareIntersectionTypeNode);
         return $bracketsAwareIntersectionTypeNode;
     }

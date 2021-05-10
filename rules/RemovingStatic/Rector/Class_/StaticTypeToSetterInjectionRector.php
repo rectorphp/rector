@@ -21,7 +21,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\RemovingStatic\Rector\Class_\StaticTypeToSetterInjectionRector\StaticTypeToSetterInjectionRectorTest
  */
-final class StaticTypeToSetterInjectionRector extends AbstractRector implements ConfigurableRectorInterface
+final class StaticTypeToSetterInjectionRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
      * @api
@@ -40,15 +40,15 @@ final class StaticTypeToSetterInjectionRector extends AbstractRector implements 
      * @var PhpDocTypeChanger
      */
     private $phpDocTypeChanger;
-    public function __construct(PropertyNaming $propertyNaming, PhpDocTypeChanger $phpDocTypeChanger)
+    public function __construct(\Rector\Naming\Naming\PropertyNaming $propertyNaming, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger)
     {
         $this->propertyNaming = $propertyNaming;
         $this->phpDocTypeChanger = $phpDocTypeChanger;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
         // custom made only for Elasticr
-        return new RuleDefinition('Changes types to setter injection', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Changes types to setter injection', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
 <?php
 
 namespace RectorPrefix20210510;
@@ -57,7 +57,7 @@ final class CheckoutEntityFactory
 {
     public function run()
     {
-        return SomeStaticClass::go();
+        return \RectorPrefix20210510\SomeStaticClass::go();
     }
 }
 \class_alias('CheckoutEntityFactory', 'CheckoutEntityFactory', \false);
@@ -73,7 +73,7 @@ final class CheckoutEntityFactory
      * @var SomeStaticClass
      */
     private $someStaticClass;
-    public function setSomeStaticClass(SomeStaticClass $someStaticClass)
+    public function setSomeStaticClass(\RectorPrefix20210510\SomeStaticClass $someStaticClass)
     {
         $this->someStaticClass = $someStaticClass;
     }
@@ -91,24 +91,24 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Class_::class, StaticCall::class];
+        return [\PhpParser\Node\Stmt\Class_::class, \PhpParser\Node\Expr\StaticCall::class];
     }
     /**
      * @param StaticCall|Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if ($node instanceof Class_) {
+        if ($node instanceof \PhpParser\Node\Stmt\Class_) {
             return $this->processClass($node);
         }
         foreach ($this->staticTypes as $staticType) {
-            $objectType = new ObjectType($staticType);
+            $objectType = new \PHPStan\Type\ObjectType($staticType);
             if (!$this->isObjectType($node->class, $objectType)) {
                 continue;
             }
             $variableName = $this->propertyNaming->fqnToVariableName($objectType);
-            $propertyFetch = new PropertyFetch(new Variable('this'), $variableName);
-            return new MethodCall($propertyFetch, $node->name, $node->args);
+            $propertyFetch = new \PhpParser\Node\Expr\PropertyFetch(new \PhpParser\Node\Expr\Variable('this'), $variableName);
+            return new \PhpParser\Node\Expr\MethodCall($propertyFetch, $node->name, $node->args);
         }
         return null;
     }
@@ -119,18 +119,18 @@ CODE_SAMPLE
     {
         $this->staticTypes = $configuration[self::STATIC_TYPES] ?? [];
     }
-    private function processClass(Class_ $class) : Class_
+    private function processClass(\PhpParser\Node\Stmt\Class_ $class) : \PhpParser\Node\Stmt\Class_
     {
         foreach ($this->staticTypes as $implements => $staticType) {
-            $objectType = new ObjectType($staticType);
-            $containsEntityFactoryStaticCall = (bool) $this->betterNodeFinder->findFirst($class->stmts, function (Node $node) use($objectType) : bool {
+            $objectType = new \PHPStan\Type\ObjectType($staticType);
+            $containsEntityFactoryStaticCall = (bool) $this->betterNodeFinder->findFirst($class->stmts, function (\PhpParser\Node $node) use($objectType) : bool {
                 return $this->isEntityFactoryStaticCall($node, $objectType);
             });
             if (!$containsEntityFactoryStaticCall) {
                 continue;
             }
             if (\is_string($implements)) {
-                $class->implements[] = new FullyQualified($implements);
+                $class->implements[] = new \PhpParser\Node\Name\FullyQualified($implements);
             }
             $variableName = $this->propertyNaming->fqnToVariableName($objectType);
             $setEntityFactoryMethod = $this->nodeFactory->createSetterClassMethod($variableName, $objectType);
@@ -142,9 +142,9 @@ CODE_SAMPLE
         }
         return $class;
     }
-    private function isEntityFactoryStaticCall(Node $node, ObjectType $objectType) : bool
+    private function isEntityFactoryStaticCall(\PhpParser\Node $node, \PHPStan\Type\ObjectType $objectType) : bool
     {
-        if (!$node instanceof StaticCall) {
+        if (!$node instanceof \PhpParser\Node\Expr\StaticCall) {
             return \false;
         }
         return $this->isObjectType($node->class, $objectType);

@@ -19,13 +19,13 @@ final class NestedArrayType
      * @var Type|null
      */
     private $keyType;
-    public function __construct(Type $valueType, int $arrayNestingLevel, ?Type $keyType = null)
+    public function __construct(\PHPStan\Type\Type $valueType, int $arrayNestingLevel, ?\PHPStan\Type\Type $keyType = null)
     {
         $this->type = $valueType;
         $this->arrayNestingLevel = $arrayNestingLevel;
         $this->keyType = $keyType;
     }
-    public function getType() : Type
+    public function getType() : \PHPStan\Type\Type
     {
         return $this->type;
     }
@@ -33,8 +33,8 @@ final class NestedArrayType
     {
         return $this->arrayNestingLevel;
     }
-    public function getKeyType() : Type
+    public function getKeyType() : \PHPStan\Type\Type
     {
-        return $this->keyType ?: new MixedType();
+        return $this->keyType ?: new \PHPStan\Type\MixedType();
     }
 }

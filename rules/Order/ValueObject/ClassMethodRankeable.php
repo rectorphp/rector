@@ -5,7 +5,7 @@ namespace Rector\Order\ValueObject;
 
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Order\Contract\RankeableInterface;
-final class ClassMethodRankeable implements RankeableInterface
+final class ClassMethodRankeable implements \Rector\Order\Contract\RankeableInterface
 {
     /**
      * @var string
@@ -23,7 +23,7 @@ final class ClassMethodRankeable implements RankeableInterface
      * @var ClassMethod
      */
     private $classMethod;
-    public function __construct(string $name, int $visibility, int $position, ClassMethod $classMethod)
+    public function __construct(string $name, int $visibility, int $position, \PhpParser\Node\Stmt\ClassMethod $classMethod)
     {
         $this->name = $name;
         $this->visibility = $visibility;

@@ -22,7 +22,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Defluent\Rector\Return_\ReturnFluentChainMethodCallToNormalMethodCallRector\ReturnFluentChainMethodCallToNormalMethodCallRectorTest
  */
-final class ReturnFluentChainMethodCallToNormalMethodCallRector extends AbstractRector
+final class ReturnFluentChainMethodCallToNormalMethodCallRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var ReturnFluentMethodCallFactory
@@ -48,7 +48,7 @@ final class ReturnFluentChainMethodCallToNormalMethodCallRector extends Abstract
      * @var FluentMethodCallSkipper
      */
     private $fluentMethodCallSkipper;
-    public function __construct(ReturnFluentMethodCallFactory $returnFluentMethodCallFactory, FluentMethodCallsFactory $fluentMethodCallsFactory, SeparateReturnMethodCallFactory $separateReturnMethodCallFactory, FluentNodeRemover $fluentNodeRemover, MethodCallSkipAnalyzer $methodCallSkipAnalyzer, FluentMethodCallSkipper $fluentMethodCallSkipper)
+    public function __construct(\Rector\Defluent\NodeFactory\ReturnFluentMethodCallFactory $returnFluentMethodCallFactory, \Rector\Defluent\ValueObjectFactory\FluentMethodCallsFactory $fluentMethodCallsFactory, \Rector\Defluent\NodeFactory\SeparateReturnMethodCallFactory $separateReturnMethodCallFactory, \Rector\Symfony\NodeAnalyzer\FluentNodeRemover $fluentNodeRemover, \Rector\Defluent\NodeAnalyzer\MethodCallSkipAnalyzer $methodCallSkipAnalyzer, \Rector\Defluent\Skipper\FluentMethodCallSkipper $fluentMethodCallSkipper)
     {
         $this->returnFluentMethodCallFactory = $returnFluentMethodCallFactory;
         $this->fluentMethodCallsFactory = $fluentMethodCallsFactory;
@@ -57,9 +57,9 @@ final class ReturnFluentChainMethodCallToNormalMethodCallRector extends Abstract
         $this->methodCallSkipAnalyzer = $methodCallSkipAnalyzer;
         $this->fluentMethodCallSkipper = $fluentMethodCallSkipper;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Turns fluent interface calls to classic ones.', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Turns fluent interface calls to classic ones.', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 $someClass = new SomeClass();
 
 return $someClass->someFunction()
@@ -79,15 +79,15 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Return_::class];
+        return [\PhpParser\Node\Stmt\Return_::class];
     }
     /**
      * @param Return_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $methodCall = $this->matchReturnMethodCall($node);
-        if (!$methodCall instanceof MethodCall) {
+        if (!$methodCall instanceof \PhpParser\Node\Expr\MethodCall) {
             return null;
         }
         if ($this->methodCallSkipAnalyzer->shouldSkipMethodCallIncludingNew($methodCall)) {
@@ -104,14 +104,14 @@ CODE_SAMPLE
     /**
      * @return Node[]
      */
-    private function createStandaloneNodesToAddFromReturnFluentMethodCalls(MethodCall $methodCall) : array
+    private function createStandaloneNodesToAddFromReturnFluentMethodCalls(\PhpParser\Node\Expr\MethodCall $methodCall) : array
     {
         $fluentMethodCalls = $this->fluentMethodCallsFactory->createFromLastMethodCall($methodCall);
-        if (!$fluentMethodCalls instanceof FluentMethodCalls) {
+        if (!$fluentMethodCalls instanceof \Rector\Defluent\ValueObject\FluentMethodCalls) {
             return [];
         }
         $firstAssignFluentCall = $this->returnFluentMethodCallFactory->createFromFluentMethodCalls($fluentMethodCalls);
-        if (!$firstAssignFluentCall instanceof FirstAssignFluentCall) {
+        if (!$firstAssignFluentCall instanceof \Rector\Defluent\ValueObject\FirstAssignFluentCall) {
             return [];
         }
         // should be skipped?
@@ -120,10 +120,10 @@ CODE_SAMPLE
         }
         return $this->separateReturnMethodCallFactory->createReturnFromFirstAssignFluentCallAndFluentMethodCalls($firstAssignFluentCall, $fluentMethodCalls);
     }
-    private function matchReturnMethodCall(Return_ $return) : ?MethodCall
+    private function matchReturnMethodCall(\PhpParser\Node\Stmt\Return_ $return) : ?\PhpParser\Node\Expr\MethodCall
     {
         $returnExpr = $return->expr;
-        if (!$returnExpr instanceof MethodCall) {
+        if (!$returnExpr instanceof \PhpParser\Node\Expr\MethodCall) {
             return null;
         }
         return $returnExpr;

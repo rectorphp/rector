@@ -5,7 +5,7 @@ namespace Rector\Core\Contract\Rector;
 
 use PhpParser\Node;
 use PhpParser\NodeVisitor;
-interface PhpRectorInterface extends NodeVisitor, \Rector\Core\Contract\Rector\RectorInterface
+interface PhpRectorInterface extends \PhpParser\NodeVisitor, \Rector\Core\Contract\Rector\RectorInterface
 {
     /**
      * List of nodes this class checks, classes that implements \PhpParser\Node
@@ -18,5 +18,5 @@ interface PhpRectorInterface extends NodeVisitor, \Rector\Core\Contract\Rector\R
      * Process Node of matched type
      * @return Node|Node[]|null
      */
-    public function refactor(Node $node);
+    public function refactor(\PhpParser\Node $node);
 }

@@ -15,6 +15,6 @@ namespace RectorPrefix20210510\Symfony\Contracts\HttpClient\Exception;
  *
  * @author Nicolas Grekas <p@tchwork.com>
  */
-interface TimeoutExceptionInterface extends TransportExceptionInterface
+interface TimeoutExceptionInterface extends \RectorPrefix20210510\Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
 {
 }

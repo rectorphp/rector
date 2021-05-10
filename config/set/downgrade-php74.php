@@ -17,19 +17,19 @@ use Rector\DowngradePhp74\Rector\Identical\DowngradeFreadFwriteFalsyToNegationRe
 use Rector\DowngradePhp74\Rector\LNumber\DowngradeNumericLiteralSeparatorRector;
 use Rector\DowngradePhp74\Rector\Property\DowngradeTypedPropertyRector;
 use RectorPrefix20210510\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-return static function (ContainerConfigurator $containerConfigurator) : void {
+return static function (\RectorPrefix20210510\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
     $parameters = $containerConfigurator->parameters();
-    $parameters->set(Option::PHP_VERSION_FEATURES, PhpVersion::PHP_73);
+    $parameters->set(\Rector\Core\Configuration\Option::PHP_VERSION_FEATURES, \Rector\Core\ValueObject\PhpVersion::PHP_73);
     $services = $containerConfigurator->services();
-    $services->set(DowngradeTypedPropertyRector::class);
-    $services->set(ArrowFunctionToAnonymousFunctionRector::class);
-    $services->set(DowngradeCovariantReturnTypeRector::class);
-    $services->set(DowngradeContravariantArgumentTypeRector::class);
-    $services->set(DowngradeNullCoalescingOperatorRector::class);
-    $services->set(DowngradeNumericLiteralSeparatorRector::class);
-    $services->set(DowngradeStripTagsCallWithArrayRector::class);
-    $services->set(DowngradeArraySpreadRector::class);
-    $services->set(DowngradeArrayMergeCallWithoutArgumentsRector::class);
-    $services->set(DowngradeFreadFwriteFalsyToNegationRector::class);
-    $services->set(DowngradeSelfTypeDeclarationRector::class);
+    $services->set(\Rector\DowngradePhp74\Rector\Property\DowngradeTypedPropertyRector::class);
+    $services->set(\Rector\DowngradePhp74\Rector\ArrowFunction\ArrowFunctionToAnonymousFunctionRector::class);
+    $services->set(\Rector\DowngradePhp74\Rector\ClassMethod\DowngradeCovariantReturnTypeRector::class);
+    $services->set(\Rector\DowngradePhp74\Rector\ClassMethod\DowngradeContravariantArgumentTypeRector::class);
+    $services->set(\Rector\DowngradePhp74\Rector\Coalesce\DowngradeNullCoalescingOperatorRector::class);
+    $services->set(\Rector\DowngradePhp74\Rector\LNumber\DowngradeNumericLiteralSeparatorRector::class);
+    $services->set(\Rector\DowngradePhp74\Rector\FuncCall\DowngradeStripTagsCallWithArrayRector::class);
+    $services->set(\Rector\DowngradePhp74\Rector\Array_\DowngradeArraySpreadRector::class);
+    $services->set(\Rector\DowngradePhp74\Rector\FuncCall\DowngradeArrayMergeCallWithoutArgumentsRector::class);
+    $services->set(\Rector\DowngradePhp74\Rector\Identical\DowngradeFreadFwriteFalsyToNegationRector::class);
+    $services->set(\Rector\DowngradePhp74\Rector\ClassMethod\DowngradeSelfTypeDeclarationRector::class);
 };

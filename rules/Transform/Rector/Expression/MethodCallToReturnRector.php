@@ -17,7 +17,7 @@ use RectorPrefix20210510\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Transform\Rector\Expression\MethodCallToReturnRector\MethodCallToReturnRectorTest
  */
-final class MethodCallToReturnRector extends AbstractRector implements ConfigurableRectorInterface
+final class MethodCallToReturnRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
      * @var string
@@ -27,9 +27,9 @@ final class MethodCallToReturnRector extends AbstractRector implements Configura
      * @var MethodCallToReturn[]
      */
     private $methodCallWraps = [];
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Wrap method call to return', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Wrap method call to return', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -64,14 +64,14 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Expression::class];
+        return [\PhpParser\Node\Stmt\Expression::class];
     }
     /**
      * @param Expression $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if (!$node->expr instanceof MethodCall) {
+        if (!$node->expr instanceof \PhpParser\Node\Expr\MethodCall) {
             return null;
         }
         $methodCall = $node->expr;
@@ -83,12 +83,12 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $methodCallWraps = $configuration[self::METHOD_CALL_WRAPS] ?? [];
-        Assert::allIsInstanceOf($methodCallWraps, MethodCallToReturn::class);
+        \RectorPrefix20210510\Webmozart\Assert\Assert::allIsInstanceOf($methodCallWraps, \Rector\Transform\ValueObject\MethodCallToReturn::class);
         $this->methodCallWraps = $methodCallWraps;
     }
-    private function refactorMethodCall(MethodCall $methodCall) : ?Node
+    private function refactorMethodCall(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\PhpParser\Node
     {
-        $parent = $methodCall->getAttribute(AttributeKey::PARENT_NODE);
+        $parent = $methodCall->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
         foreach ($this->methodCallWraps as $methodCallWrap) {
             if (!$this->isObjectType($methodCall->var, $methodCallWrap->getObjectType())) {
                 continue;
@@ -97,10 +97,10 @@ CODE_SAMPLE
                 continue;
             }
             // already wrapped
-            if ($parent instanceof Return_) {
+            if ($parent instanceof \PhpParser\Node\Stmt\Return_) {
                 continue;
             }
-            return new Return_($methodCall);
+            return new \PhpParser\Node\Stmt\Return_($methodCall);
         }
         return null;
     }

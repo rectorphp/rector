@@ -19,4 +19,4 @@ interface Translator
      */
     function translate($message, ...$parameters) : string;
 }
-\interface_exists(Nette\Localization\ITranslator::class);
+\interface_exists(\RectorPrefix20210510\Nette\Localization\Nette\Localization\ITranslator::class);

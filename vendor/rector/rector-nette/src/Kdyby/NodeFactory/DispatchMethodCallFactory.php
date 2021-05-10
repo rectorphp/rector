@@ -14,16 +14,16 @@ final class DispatchMethodCallFactory
      * @var ClassNaming
      */
     private $classNaming;
-    public function __construct(ClassNaming $classNaming)
+    public function __construct(\Rector\CodingStyle\Naming\ClassNaming $classNaming)
     {
         $this->classNaming = $classNaming;
     }
-    public function createFromEventClassName(string $eventClassName) : MethodCall
+    public function createFromEventClassName(string $eventClassName) : \PhpParser\Node\Expr\MethodCall
     {
         $shortEventClassName = $this->classNaming->getVariableName($eventClassName);
-        $eventDispatcherPropertyFetch = new PropertyFetch(new Variable('this'), 'eventDispatcher');
-        $dispatchMethodCall = new MethodCall($eventDispatcherPropertyFetch, 'dispatch');
-        $dispatchMethodCall->args[] = new Arg(new Variable($shortEventClassName));
+        $eventDispatcherPropertyFetch = new \PhpParser\Node\Expr\PropertyFetch(new \PhpParser\Node\Expr\Variable('this'), 'eventDispatcher');
+        $dispatchMethodCall = new \PhpParser\Node\Expr\MethodCall($eventDispatcherPropertyFetch, 'dispatch');
+        $dispatchMethodCall->args[] = new \PhpParser\Node\Arg(new \PhpParser\Node\Expr\Variable($shortEventClassName));
         return $dispatchMethodCall;
     }
 }

@@ -7,19 +7,19 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Param;
 use RectorPrefix20210510\Symplify\Astral\Contract\NodeNameResolverInterface;
-final class ParamNodeNameResolver implements NodeNameResolverInterface
+final class ParamNodeNameResolver implements \RectorPrefix20210510\Symplify\Astral\Contract\NodeNameResolverInterface
 {
-    public function match(Node $node) : bool
+    public function match(\PhpParser\Node $node) : bool
     {
-        return $node instanceof Param;
+        return $node instanceof \PhpParser\Node\Param;
     }
     /**
      * @param Param $node
      */
-    public function resolve(Node $node) : ?string
+    public function resolve(\PhpParser\Node $node) : ?string
     {
         $paramName = $node->var->name;
-        if ($paramName instanceof Expr) {
+        if ($paramName instanceof \PhpParser\Node\Expr) {
             return null;
         }
         return $paramName;

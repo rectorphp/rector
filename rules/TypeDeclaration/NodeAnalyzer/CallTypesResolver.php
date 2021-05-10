@@ -25,7 +25,7 @@ final class CallTypesResolver
      * @var TypeFactory
      */
     private $typeFactory;
-    public function __construct(NodeTypeResolver $nodeTypeResolver, TypeFactory $typeFactory)
+    public function __construct(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory $typeFactory)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->typeFactory = $typeFactory;
@@ -36,7 +36,7 @@ final class CallTypesResolver
      */
     public function resolveStrictTypesFromCalls(array $calls) : array
     {
-        return $this->resolveTypesFromCalls($calls, TypeStrictness::STRICTNESS_TYPE_DECLARATION);
+        return $this->resolveTypesFromCalls($calls, \Rector\TypeDeclaration\ValueObject\TypeStrictness::STRICTNESS_TYPE_DECLARATION);
     }
     /**
      * @param MethodCall[]|StaticCall[]|ArrayCallable[] $calls
@@ -44,7 +44,7 @@ final class CallTypesResolver
      */
     public function resolveWeakTypesFromCalls(array $calls) : array
     {
-        return $this->resolveTypesFromCalls($calls, TypeStrictness::STRICTNESS_DOCBLOCK);
+        return $this->resolveTypesFromCalls($calls, \Rector\TypeDeclaration\ValueObject\TypeStrictness::STRICTNESS_DOCBLOCK);
     }
     /**
      * @param MethodCall[]|StaticCall[]|ArrayCallable[] $calls
@@ -54,7 +54,7 @@ final class CallTypesResolver
     {
         $staticTypesByArgumentPosition = [];
         foreach ($calls as $call) {
-            if (!$call instanceof StaticCall && !$call instanceof MethodCall) {
+            if (!$call instanceof \PhpParser\Node\Expr\StaticCall && !$call instanceof \PhpParser\Node\Expr\MethodCall) {
                 continue;
             }
             foreach ($call->args as $position => $arg) {
@@ -65,9 +65,9 @@ final class CallTypesResolver
         // unite to single type
         return $this->unionToSingleType($staticTypesByArgumentPosition);
     }
-    private function resolveArgValueType(string $strictnessLevel, Arg $arg) : Type
+    private function resolveArgValueType(string $strictnessLevel, \PhpParser\Node\Arg $arg) : \PHPStan\Type\Type
     {
-        if ($strictnessLevel === TypeStrictness::STRICTNESS_TYPE_DECLARATION) {
+        if ($strictnessLevel === \Rector\TypeDeclaration\ValueObject\TypeStrictness::STRICTNESS_TYPE_DECLARATION) {
             $argValueType = $this->nodeTypeResolver->getNativeType($arg->value);
         } else {
             $argValueType = $this->nodeTypeResolver->resolve($arg->value);
@@ -75,10 +75,10 @@ final class CallTypesResolver
         // "self" in another object is not correct, this make it independent
         return $this->correctSelfType($argValueType);
     }
-    private function correctSelfType(Type $argValueType) : Type
+    private function correctSelfType(\PHPStan\Type\Type $argValueType) : \PHPStan\Type\Type
     {
-        if ($argValueType instanceof ThisType) {
-            return new ObjectType($argValueType->getClassName());
+        if ($argValueType instanceof \PHPStan\Type\ThisType) {
+            return new \PHPStan\Type\ObjectType($argValueType->getClassName());
         }
         return $argValueType;
     }
@@ -97,9 +97,9 @@ final class CallTypesResolver
         }
         return $staticTypeByArgumentPosition;
     }
-    private function narrowParentObjectTreeToSingleObjectChildType(Type $type) : Type
+    private function narrowParentObjectTreeToSingleObjectChildType(\PHPStan\Type\Type $type) : \PHPStan\Type\Type
     {
-        if (!$type instanceof UnionType) {
+        if (!$type instanceof \PHPStan\Type\UnionType) {
             return $type;
         }
         if (!$this->isTypeWithClassNameOnly($type)) {
@@ -108,7 +108,7 @@ final class CallTypesResolver
         /** @var TypeWithClassName $firstUnionedType */
         $firstUnionedType = $type->getTypes()[0];
         foreach ($type->getTypes() as $unionedType) {
-            if (!$unionedType instanceof TypeWithClassName) {
+            if (!$unionedType instanceof \PHPStan\Type\TypeWithClassName) {
                 return $type;
             }
             if ($unionedType->isSuperTypeOf($firstUnionedType)->yes()) {
@@ -117,10 +117,10 @@ final class CallTypesResolver
         }
         return $firstUnionedType;
     }
-    private function isTypeWithClassNameOnly(UnionType $unionType) : bool
+    private function isTypeWithClassNameOnly(\PHPStan\Type\UnionType $unionType) : bool
     {
         foreach ($unionType->getTypes() as $unionedType) {
-            if (!$unionedType instanceof TypeWithClassName) {
+            if (!$unionedType instanceof \PHPStan\Type\TypeWithClassName) {
                 return \false;
             }
         }

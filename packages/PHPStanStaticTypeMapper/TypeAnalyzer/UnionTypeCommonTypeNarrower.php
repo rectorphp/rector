@@ -26,7 +26,7 @@ final class UnionTypeCommonTypeNarrower
      *
      * @var array<string, array<class-string<Node>|class-string<\PHPStan\PhpDocParser\Ast\Node>|class-string<RectorInterface>>>
      */
-    private const PRIORITY_TYPES = [ClassLike::class => [ClassLike::class], FunctionLike::class => [FunctionLike::class], BinaryOp::class => [BinaryOp::class, Expr::class], Expr::class => [Node::class, Expr::class], Stmt::class => [Node::class, Stmt::class], PhpDocTagValueNode::class => [PhpDocTagValueNode::class, \PHPStan\PhpDocParser\Ast\Node::class], Node::class => [Node::class], RectorInterface::class => [RectorInterface::class]];
+    private const PRIORITY_TYPES = [\PhpParser\Node\Stmt\ClassLike::class => [\PhpParser\Node\Stmt\ClassLike::class], \PhpParser\Node\FunctionLike::class => [\PhpParser\Node\FunctionLike::class], \PhpParser\Node\Expr\BinaryOp::class => [\PhpParser\Node\Expr\BinaryOp::class, \PhpParser\Node\Expr::class], \PhpParser\Node\Expr::class => [\PhpParser\Node::class, \PhpParser\Node\Expr::class], \PhpParser\Node\Stmt::class => [\PhpParser\Node::class, \PhpParser\Node\Stmt::class], \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode::class => [\PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode::class, \PHPStan\PhpDocParser\Ast\Node::class], \PhpParser\Node::class => [\PhpParser\Node::class], \Rector\Core\Contract\Rector\RectorInterface::class => [\Rector\Core\Contract\Rector\RectorInterface::class]];
     /**
      * @var GenericClassStringTypeCorrector
      */
@@ -35,41 +35,41 @@ final class UnionTypeCommonTypeNarrower
      * @var ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(GenericClassStringTypeCorrector $genericClassStringTypeCorrector, ReflectionProvider $reflectionProvider)
+    public function __construct(\Rector\NodeTypeResolver\NodeTypeCorrector\GenericClassStringTypeCorrector $genericClassStringTypeCorrector, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
     {
         $this->genericClassStringTypeCorrector = $genericClassStringTypeCorrector;
         $this->reflectionProvider = $reflectionProvider;
     }
-    public function narrowToSharedObjectType(UnionType $unionType) : ?ObjectType
+    public function narrowToSharedObjectType(\PHPStan\Type\UnionType $unionType) : ?\PHPStan\Type\ObjectType
     {
         $sharedTypes = $this->narrowToSharedTypes($unionType);
         if ($sharedTypes !== []) {
             foreach (self::PRIORITY_TYPES as $winningType => $groupTypes) {
                 $intersectedGroupTypes = \array_intersect($groupTypes, $sharedTypes);
                 if ($intersectedGroupTypes === $groupTypes) {
-                    return new ObjectType($winningType);
+                    return new \PHPStan\Type\ObjectType($winningType);
                 }
             }
             $firstSharedType = $sharedTypes[0];
-            return new ObjectType($firstSharedType);
+            return new \PHPStan\Type\ObjectType($firstSharedType);
         }
         return null;
     }
     /**
      * @return GenericClassStringType|UnionType
      */
-    public function narrowToGenericClassStringType(UnionType $unionType) : Type
+    public function narrowToGenericClassStringType(\PHPStan\Type\UnionType $unionType) : \PHPStan\Type\Type
     {
         $availableTypes = [];
         foreach ($unionType->getTypes() as $unionedType) {
-            if ($unionedType instanceof ConstantStringType) {
+            if ($unionedType instanceof \PHPStan\Type\Constant\ConstantStringType) {
                 $unionedType = $this->genericClassStringTypeCorrector->correct($unionedType);
             }
-            if (!$unionedType instanceof GenericClassStringType) {
+            if (!$unionedType instanceof \PHPStan\Type\Generic\GenericClassStringType) {
                 return $unionType;
             }
             $genericClassStrings = [];
-            if ($unionedType->getGenericType() instanceof ObjectType) {
+            if ($unionedType->getGenericType() instanceof \PHPStan\Type\ObjectType) {
                 $parentClassReflections = $this->resolveClassParentClassesAndInterfaces($unionedType->getGenericType());
                 foreach ($parentClassReflections as $parentClassReflection) {
                     $genericClassStrings[] = $parentClassReflection->getName();
@@ -78,7 +78,7 @@ final class UnionTypeCommonTypeNarrower
             $availableTypes[] = $genericClassStrings;
         }
         $genericClassStringType = $this->createGenericClassStringType($availableTypes);
-        if ($genericClassStringType instanceof GenericClassStringType) {
+        if ($genericClassStringType instanceof \PHPStan\Type\Generic\GenericClassStringType) {
             return $genericClassStringType;
         }
         return $unionType;
@@ -86,11 +86,11 @@ final class UnionTypeCommonTypeNarrower
     /**
      * @return string[]
      */
-    private function narrowToSharedTypes(UnionType $unionType) : array
+    private function narrowToSharedTypes(\PHPStan\Type\UnionType $unionType) : array
     {
         $availableTypes = [];
         foreach ($unionType->getTypes() as $unionedType) {
-            if (!$unionedType instanceof ObjectType) {
+            if (!$unionedType instanceof \PHPStan\Type\ObjectType) {
                 return [];
             }
             $typeClassReflections = $this->resolveClassParentClassesAndInterfaces($unionedType);
@@ -108,7 +108,7 @@ final class UnionTypeCommonTypeNarrower
     /**
      * @return ClassReflection[]
      */
-    private function resolveClassParentClassesAndInterfaces(ObjectType $objectType) : array
+    private function resolveClassParentClassesAndInterfaces(\PHPStan\Type\ObjectType $objectType) : array
     {
         if (!$this->reflectionProvider->hasClass($objectType->getClassName())) {
             return [];
@@ -136,18 +136,18 @@ final class UnionTypeCommonTypeNarrower
     /**
      * @param string[][] $availableTypes
      */
-    private function createGenericClassStringType(array $availableTypes) : ?GenericClassStringType
+    private function createGenericClassStringType(array $availableTypes) : ?\PHPStan\Type\Generic\GenericClassStringType
     {
         $sharedTypes = $this->narrowAvailableTypes($availableTypes);
         if ($sharedTypes !== []) {
             foreach (self::PRIORITY_TYPES as $winningType => $groupTypes) {
                 $intersectedGroupTypes = \array_intersect($groupTypes, $sharedTypes);
                 if ($intersectedGroupTypes === $groupTypes) {
-                    return new GenericClassStringType(new ObjectType($winningType));
+                    return new \PHPStan\Type\Generic\GenericClassStringType(new \PHPStan\Type\ObjectType($winningType));
                 }
             }
             $firstSharedType = $sharedTypes[0];
-            return new GenericClassStringType(new ObjectType($firstSharedType));
+            return new \PHPStan\Type\Generic\GenericClassStringType(new \PHPStan\Type\ObjectType($firstSharedType));
         }
         return null;
     }
@@ -157,7 +157,7 @@ final class UnionTypeCommonTypeNarrower
      */
     private function filterOutNativeClassReflections(array $classReflections) : array
     {
-        return \array_filter($classReflections, function (ClassReflection $classReflection) : bool {
+        return \array_filter($classReflections, function (\PHPStan\Reflection\ClassReflection $classReflection) : bool {
             return !$classReflection->isBuiltin();
         });
     }

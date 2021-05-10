@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace PhpParser\Node\Scalar\MagicConst;
 
 use PhpParser\Node\Scalar\MagicConst;
-class Function_ extends MagicConst
+class Function_ extends \PhpParser\Node\Scalar\MagicConst
 {
     public function getName() : string
     {

@@ -5,7 +5,7 @@ namespace Rector\BetterPhpDocParser\ValueObject\Type;
 
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
-final class BracketsAwareUnionTypeNode extends UnionTypeNode
+final class BracketsAwareUnionTypeNode extends \PHPStan\PhpDocParser\Ast\Type\UnionTypeNode
 {
     /**
      * @var bool

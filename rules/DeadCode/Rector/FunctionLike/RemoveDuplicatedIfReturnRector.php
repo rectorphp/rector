@@ -21,7 +21,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\DeadCode\Rector\FunctionLike\RemoveDuplicatedIfReturnRector\RemoveDuplicatedIfReturnRectorTest
  */
-final class RemoveDuplicatedIfReturnRector extends AbstractRector
+final class RemoveDuplicatedIfReturnRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var IfManipulator
@@ -31,15 +31,15 @@ final class RemoveDuplicatedIfReturnRector extends AbstractRector
      * @var ModifiedVariableNamesCollector
      */
     private $modifiedVariableNamesCollector;
-    public function __construct(IfManipulator $ifManipulator, ModifiedVariableNamesCollector $modifiedVariableNamesCollector, NodeComparator $nodeComparator)
+    public function __construct(\Rector\Core\NodeManipulator\IfManipulator $ifManipulator, \Rector\DeadCode\NodeCollector\ModifiedVariableNamesCollector $modifiedVariableNamesCollector, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator)
     {
         $this->ifManipulator = $ifManipulator;
         $this->modifiedVariableNamesCollector = $modifiedVariableNamesCollector;
         $this->nodeComparator = $nodeComparator;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Remove duplicated if stmt with return in function/method body', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove duplicated if stmt with return in function/method body', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($value)
@@ -76,12 +76,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [FunctionLike::class];
+        return [\PhpParser\Node\FunctionLike::class];
     }
     /**
      * @param FunctionLike $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $ifWithOnlyReturnsByHash = $this->collectDuplicatedIfWithOnlyReturnByHash($node);
         if ($ifWithOnlyReturnsByHash === []) {
@@ -99,12 +99,12 @@ CODE_SAMPLE
     /**
      * @return If_[][]
      */
-    private function collectDuplicatedIfWithOnlyReturnByHash(FunctionLike $functionLike) : array
+    private function collectDuplicatedIfWithOnlyReturnByHash(\PhpParser\Node\FunctionLike $functionLike) : array
     {
         $ifWithOnlyReturnsByHash = [];
         $modifiedVariableNames = [];
         foreach ((array) $functionLike->getStmts() as $stmt) {
-            if (!$this->ifManipulator->isIfWithOnly($stmt, Return_::class)) {
+            if (!$this->ifManipulator->isIfWithOnly($stmt, \PhpParser\Node\Stmt\Return_::class)) {
                 // variable modification
                 $modifiedVariableNames = \array_merge($modifiedVariableNames, $this->modifiedVariableNamesCollector->collectModifiedVariableNames($stmt));
                 continue;
@@ -121,21 +121,21 @@ CODE_SAMPLE
     /**
      * @param string[] $modifiedVariableNames
      */
-    private function containsVariableNames(Stmt $stmt, array $modifiedVariableNames) : bool
+    private function containsVariableNames(\PhpParser\Node\Stmt $stmt, array $modifiedVariableNames) : bool
     {
         if ($modifiedVariableNames === []) {
             return \false;
         }
         $containsVariableNames = \false;
-        $this->traverseNodesWithCallable($stmt, function (Node $node) use($modifiedVariableNames, &$containsVariableNames) : ?int {
-            if (!$node instanceof Variable) {
+        $this->traverseNodesWithCallable($stmt, function (\PhpParser\Node $node) use($modifiedVariableNames, &$containsVariableNames) : ?int {
+            if (!$node instanceof \PhpParser\Node\Expr\Variable) {
                 return null;
             }
             if (!$this->isNames($node, $modifiedVariableNames)) {
                 return null;
             }
             $containsVariableNames = \true;
-            return NodeTraverser::STOP_TRAVERSAL;
+            return \PhpParser\NodeTraverser::STOP_TRAVERSAL;
         });
         return $containsVariableNames;
     }

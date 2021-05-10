@@ -22,7 +22,7 @@ final class ReadExprAnalyzer
     /**
      * Is the value read or used for read purpose (at least, not only)
      */
-    public function isExprRead(Expr $expr) : bool
+    public function isExprRead(\PhpParser\Node\Expr $expr) : bool
     {
         foreach ($this->readNodeAnalyzers as $readNodeAnalyzer) {
             if (!$readNodeAnalyzer->supports($expr)) {
@@ -30,6 +30,6 @@ final class ReadExprAnalyzer
             }
             return $readNodeAnalyzer->isRead($expr);
         }
-        throw new NotImplementedYetException(\get_class($expr));
+        throw new \Rector\Core\Exception\NotImplementedYetException(\get_class($expr));
     }
 }

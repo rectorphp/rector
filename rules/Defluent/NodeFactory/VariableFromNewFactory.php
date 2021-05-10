@@ -13,16 +13,16 @@ final class VariableFromNewFactory
      * @var VariableNaming
      */
     private $variableNaming;
-    public function __construct(VariableNaming $variableNaming)
+    public function __construct(\Rector\Naming\Naming\VariableNaming $variableNaming)
     {
         $this->variableNaming = $variableNaming;
     }
-    public function create(New_ $new) : Variable
+    public function create(\PhpParser\Node\Expr\New_ $new) : \PhpParser\Node\Expr\Variable
     {
         $variableName = $this->variableNaming->resolveFromNode($new);
         if ($variableName === null) {
-            throw new ShouldNotHappenException();
+            throw new \Rector\Core\Exception\ShouldNotHappenException();
         }
-        return new Variable($variableName);
+        return new \PhpParser\Node\Expr\Variable($variableName);
     }
 }

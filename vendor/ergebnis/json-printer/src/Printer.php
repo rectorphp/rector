@@ -11,7 +11,7 @@ declare (strict_types=1);
  */
 namespace RectorPrefix20210510\Ergebnis\Json\Printer;
 
-final class Printer implements PrinterInterface
+final class Printer implements \RectorPrefix20210510\Ergebnis\Json\Printer\PrinterInterface
 {
     /**
      * This code is adopted from composer/composer (originally licensed under MIT by Nils Adermann <naderman@naderman.de>

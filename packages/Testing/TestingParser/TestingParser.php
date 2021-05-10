@@ -29,7 +29,7 @@ final class TestingParser
      * @var BetterNodeFinder
      */
     private $betterNodeFinder;
-    public function __construct(ParameterProvider $parameterProvider, Parser $parser, NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator, BetterNodeFinder $betterNodeFinder)
+    public function __construct(\RectorPrefix20210510\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \Rector\Core\PhpParser\Parser\Parser $parser, \Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
     {
         $this->parameterProvider = $parameterProvider;
         $this->parser = $parser;
@@ -43,10 +43,10 @@ final class TestingParser
     {
         // autoload file
         require_once $file;
-        $smartFileInfo = new SmartFileInfo($file);
-        $this->parameterProvider->changeParameter(Option::SOURCE, [$file]);
+        $smartFileInfo = new \Symplify\SmartFileSystem\SmartFileInfo($file);
+        $this->parameterProvider->changeParameter(\Rector\Core\Configuration\Option::SOURCE, [$file]);
         $nodes = $this->parser->parseFileInfo($smartFileInfo);
-        $file = new File($smartFileInfo, $smartFileInfo->getContents());
+        $file = new \Rector\Core\ValueObject\Application\File($smartFileInfo, $smartFileInfo->getContents());
         return $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile($file, $nodes, $smartFileInfo);
     }
     /**

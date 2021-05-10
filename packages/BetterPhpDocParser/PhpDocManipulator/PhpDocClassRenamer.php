@@ -14,7 +14,7 @@ final class PhpDocClassRenamer
      * @var ClassAnnotationMatcher
      */
     private $classAnnotationMatcher;
-    public function __construct(ClassAnnotationMatcher $classAnnotationMatcher)
+    public function __construct(\Rector\BetterPhpDocParser\PhpDocParser\ClassAnnotationMatcher $classAnnotationMatcher)
     {
         $this->classAnnotationMatcher = $classAnnotationMatcher;
     }
@@ -24,7 +24,7 @@ final class PhpDocClassRenamer
      *
      * @param string[] $oldToNewClasses
      */
-    public function changeTypeInAnnotationTypes(Node $node, PhpDocInfo $phpDocInfo, array $oldToNewClasses) : void
+    public function changeTypeInAnnotationTypes(\PhpParser\Node $node, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo, array $oldToNewClasses) : void
     {
         $this->processAssertChoiceTagValueNode($oldToNewClasses, $phpDocInfo);
         $this->processDoctrineRelationTagValueNode($node, $oldToNewClasses, $phpDocInfo);
@@ -33,10 +33,10 @@ final class PhpDocClassRenamer
     /**
      * @param array<string, string> $oldToNewClasses
      */
-    private function processAssertChoiceTagValueNode(array $oldToNewClasses, PhpDocInfo $phpDocInfo) : void
+    private function processAssertChoiceTagValueNode(array $oldToNewClasses, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo) : void
     {
         $assertChoiceTagValueNode = $phpDocInfo->getByAnnotationClass('Symfony\\Component\\Validator\\Constraints\\Choice');
-        if (!$assertChoiceTagValueNode instanceof DoctrineAnnotationTagValueNode) {
+        if (!$assertChoiceTagValueNode instanceof \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode) {
             return;
         }
         $callback = $assertChoiceTagValueNode->getValueWithoutQuotes('callback');
@@ -55,10 +55,10 @@ final class PhpDocClassRenamer
     /**
      * @param array<string, string> $oldToNewClasses
      */
-    private function processDoctrineRelationTagValueNode(Node $node, array $oldToNewClasses, PhpDocInfo $phpDocInfo) : void
+    private function processDoctrineRelationTagValueNode(\PhpParser\Node $node, array $oldToNewClasses, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo) : void
     {
         $doctrineAnnotationTagValueNode = $phpDocInfo->getByAnnotationClasses(['Doctrine\\ORM\\Mapping\\OneToMany', 'Doctrine\\ORM\\Mapping\\ManyToMany', 'Doctrine\\ORM\\Mapping\\Embedded']);
-        if (!$doctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
+        if (!$doctrineAnnotationTagValueNode instanceof \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode) {
             return;
         }
         $this->processDoctrineToMany($doctrineAnnotationTagValueNode, $node, $oldToNewClasses);
@@ -66,10 +66,10 @@ final class PhpDocClassRenamer
     /**
      * @param array<string, string> $oldToNewClasses
      */
-    private function processSerializerTypeTagValueNode(array $oldToNewClasses, PhpDocInfo $phpDocInfo) : void
+    private function processSerializerTypeTagValueNode(array $oldToNewClasses, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo) : void
     {
         $doctrineAnnotationTagValueNode = $phpDocInfo->getByAnnotationClass('JMS\\Serializer\\Annotation\\Type');
-        if (!$doctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
+        if (!$doctrineAnnotationTagValueNode instanceof \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode) {
             return;
         }
         foreach ($oldToNewClasses as $oldClass => $newClass) {
@@ -79,7 +79,7 @@ final class PhpDocClassRenamer
                     $doctrineAnnotationTagValueNode->changeSilentValue($newClass);
                     continue;
                 }
-                $newContent = Strings::replace($className, '#\\b' . \preg_quote($oldClass, '#') . '\\b#', $newClass);
+                $newContent = \RectorPrefix20210510\Nette\Utils\Strings::replace($className, '#\\b' . \preg_quote($oldClass, '#') . '\\b#', $newClass);
                 if ($newContent === $className) {
                     continue;
                 }
@@ -96,7 +96,7 @@ final class PhpDocClassRenamer
     /**
      * @param array<string, string> $oldToNewClasses
      */
-    private function processDoctrineToMany(DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode, Node $node, array $oldToNewClasses) : void
+    private function processDoctrineToMany(\Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode, \PhpParser\Node $node, array $oldToNewClasses) : void
     {
         if ($doctrineAnnotationTagValueNode->getAnnotationClass() === 'Doctrine\\ORM\\Mapping\\Embedded') {
             $classKey = 'class';

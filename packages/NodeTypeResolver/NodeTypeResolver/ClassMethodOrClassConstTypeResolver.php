@@ -13,7 +13,7 @@ use PHPStan\Type\Type;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
-final class ClassMethodOrClassConstTypeResolver implements NodeTypeResolverInterface
+final class ClassMethodOrClassConstTypeResolver implements \Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface
 {
     /**
      * @var NodeTypeResolver
@@ -22,7 +22,7 @@ final class ClassMethodOrClassConstTypeResolver implements NodeTypeResolverInter
     /**
      * @required
      */
-    public function autowireClassMethodOrClassConstTypeResolver(NodeTypeResolver $nodeTypeResolver) : void
+    public function autowireClassMethodOrClassConstTypeResolver(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver) : void
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
@@ -31,17 +31,17 @@ final class ClassMethodOrClassConstTypeResolver implements NodeTypeResolverInter
      */
     public function getNodeClasses() : array
     {
-        return [ClassMethod::class, ClassConst::class];
+        return [\PhpParser\Node\Stmt\ClassMethod::class, \PhpParser\Node\Stmt\ClassConst::class];
     }
     /**
      * @param ClassMethod|ClassConst $node
      */
-    public function resolve(Node $node) : Type
+    public function resolve(\PhpParser\Node $node) : \PHPStan\Type\Type
     {
-        $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
-        if (!$classLike instanceof ClassLike) {
+        $classLike = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
+        if (!$classLike instanceof \PhpParser\Node\Stmt\ClassLike) {
             // anonymous class
-            return new ObjectWithoutClassType();
+            return new \PHPStan\Type\ObjectWithoutClassType();
         }
         return $this->nodeTypeResolver->resolve($classLike);
     }

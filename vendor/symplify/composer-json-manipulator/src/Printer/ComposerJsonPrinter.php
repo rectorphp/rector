@@ -12,18 +12,18 @@ final class ComposerJsonPrinter
      * @var JsonFileManager
      */
     private $jsonFileManager;
-    public function __construct(JsonFileManager $jsonFileManager)
+    public function __construct(\RectorPrefix20210510\Symplify\ComposerJsonManipulator\FileSystem\JsonFileManager $jsonFileManager)
     {
         $this->jsonFileManager = $jsonFileManager;
     }
-    public function printToString(ComposerJson $composerJson) : string
+    public function printToString(\RectorPrefix20210510\Symplify\ComposerJsonManipulator\ValueObject\ComposerJson $composerJson) : string
     {
         return $this->jsonFileManager->encodeJsonToFileContent($composerJson->getJsonArray());
     }
     /**
      * @param string|SmartFileInfo $targetFile
      */
-    public function print(ComposerJson $composerJson, $targetFile) : string
+    public function print(\RectorPrefix20210510\Symplify\ComposerJsonManipulator\ValueObject\ComposerJson $composerJson, $targetFile) : string
     {
         if (\is_string($targetFile)) {
             return $this->jsonFileManager->printComposerJsonToFilePath($composerJson, $targetFile);

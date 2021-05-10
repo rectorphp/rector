@@ -15,11 +15,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\CodingStyle\Rector\Plus\UseIncrementAssignRector\UseIncrementAssignRectorTest
  */
-final class UseIncrementAssignRector extends AbstractRector
+final class UseIncrementAssignRector extends \Rector\Core\Rector\AbstractRector
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Use ++ increment instead of `$var += 1`', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Use ++ increment instead of `$var += 1`', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -44,22 +44,22 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Plus::class, Minus::class];
+        return [\PhpParser\Node\Expr\AssignOp\Plus::class, \PhpParser\Node\Expr\AssignOp\Minus::class];
     }
     /**
      * @param Plus|Minus $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if (!$node->expr instanceof LNumber) {
+        if (!$node->expr instanceof \PhpParser\Node\Scalar\LNumber) {
             return null;
         }
         if ($node->expr->value !== 1) {
             return null;
         }
-        if ($node instanceof Plus) {
-            return new PreInc($node->var);
+        if ($node instanceof \PhpParser\Node\Expr\AssignOp\Plus) {
+            return new \PhpParser\Node\Expr\PreInc($node->var);
         }
-        return new PreDec($node->var);
+        return new \PhpParser\Node\Expr\PreDec($node->var);
     }
 }

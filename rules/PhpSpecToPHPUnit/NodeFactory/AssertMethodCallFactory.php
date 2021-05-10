@@ -29,13 +29,13 @@ final class AssertMethodCallFactory
      * @var ValueResolver
      */
     private $valueResolver;
-    public function __construct(NodeFactory $nodeFactory, NodeNameResolver $nodeNameResolver, ValueResolver $valueResolver)
+    public function __construct(\Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\Value\ValueResolver $valueResolver)
     {
         $this->nodeFactory = $nodeFactory;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->valueResolver = $valueResolver;
     }
-    public function createAssertMethod(string $name, Expr $value, ?Expr $expected, PropertyFetch $testedObjectPropertyFetch) : MethodCall
+    public function createAssertMethod(string $name, \PhpParser\Node\Expr $value, ?\PhpParser\Node\Expr $expected, \PhpParser\Node\Expr\PropertyFetch $testedObjectPropertyFetch) : \PhpParser\Node\Expr\MethodCall
     {
         $this->isBoolAssert = \false;
         // special case with bool!
@@ -44,12 +44,12 @@ final class AssertMethodCallFactory
         }
         $assetMethodCall = $this->nodeFactory->createMethodCall('this', $name);
         if (!$this->isBoolAssert && $expected) {
-            $assetMethodCall->args[] = new Arg($this->thisToTestedObjectPropertyFetch($expected, $testedObjectPropertyFetch));
+            $assetMethodCall->args[] = new \PhpParser\Node\Arg($this->thisToTestedObjectPropertyFetch($expected, $testedObjectPropertyFetch));
         }
-        $assetMethodCall->args[] = new Arg($this->thisToTestedObjectPropertyFetch($value, $testedObjectPropertyFetch));
+        $assetMethodCall->args[] = new \PhpParser\Node\Arg($this->thisToTestedObjectPropertyFetch($value, $testedObjectPropertyFetch));
         return $assetMethodCall;
     }
-    private function resolveBoolMethodName(string $name, Expr $expr) : string
+    private function resolveBoolMethodName(string $name, \PhpParser\Node\Expr $expr) : string
     {
         if (!$this->valueResolver->isTrueOrFalse($expr)) {
             return $name;
@@ -65,9 +65,9 @@ final class AssertMethodCallFactory
         }
         return $name;
     }
-    private function thisToTestedObjectPropertyFetch(Expr $expr, PropertyFetch $propertyFetch) : Expr
+    private function thisToTestedObjectPropertyFetch(\PhpParser\Node\Expr $expr, \PhpParser\Node\Expr\PropertyFetch $propertyFetch) : \PhpParser\Node\Expr
     {
-        if (!$expr instanceof Variable) {
+        if (!$expr instanceof \PhpParser\Node\Expr\Variable) {
             return $expr;
         }
         if (!$this->nodeNameResolver->isName($expr, 'this')) {

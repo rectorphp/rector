@@ -18,5 +18,5 @@ use RectorPrefix20210510\Symfony\Component\VarDumper\Cloner\Data;
  */
 interface DataDumperInterface
 {
-    public function dump(Data $data);
+    public function dump(\RectorPrefix20210510\Symfony\Component\VarDumper\Cloner\Data $data);
 }

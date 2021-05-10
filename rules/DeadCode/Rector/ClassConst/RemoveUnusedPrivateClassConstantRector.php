@@ -18,19 +18,19 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\DeadCode\Rector\ClassConst\RemoveUnusedPrivateClassConstantRector\RemoveUnusedPrivateClassConstantRectorTest
  */
-final class RemoveUnusedPrivateClassConstantRector extends AbstractRector
+final class RemoveUnusedPrivateClassConstantRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var ClassConstManipulator
      */
     private $classConstManipulator;
-    public function __construct(ClassConstManipulator $classConstManipulator)
+    public function __construct(\Rector\Core\NodeManipulator\ClassConstManipulator $classConstManipulator)
     {
         $this->classConstManipulator = $classConstManipulator;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Remove unused class constants', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove unused class constants', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     private const SOME_CONST = 'dead';
@@ -55,31 +55,31 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [ClassConst::class];
+        return [\PhpParser\Node\Stmt\ClassConst::class];
     }
     /**
      * @param ClassConst $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($this->shouldSkip($node)) {
             return null;
         }
-        $scope = $node->getAttribute(AttributeKey::SCOPE);
-        if (!$scope instanceof Scope) {
+        $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
+        if (!$scope instanceof \PHPStan\Analyser\Scope) {
             return null;
         }
         $classReflection = $scope->getClassReflection();
-        if (!$classReflection instanceof ClassReflection) {
+        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
             return null;
         }
         $classLike = $this->nodeRepository->findClassLike($classReflection->getName());
-        if (!$classLike instanceof ClassLike) {
+        if (!$classLike instanceof \PhpParser\Node\Stmt\ClassLike) {
             return null;
         }
-        $classObjectType = new ObjectType($classReflection->getName());
+        $classObjectType = new \PHPStan\Type\ObjectType($classReflection->getName());
         /** @var ClassConstFetch[] $classConstFetches */
-        $classConstFetches = $this->betterNodeFinder->findInstanceOf($classLike->stmts, ClassConstFetch::class);
+        $classConstFetches = $this->betterNodeFinder->findInstanceOf($classLike->stmts, \PhpParser\Node\Expr\ClassConstFetch::class);
         foreach ($classConstFetches as $classConstFetch) {
             if (!$this->nodeNameResolver->areNamesEqual($classConstFetch->name, $node->consts[0]->name)) {
                 continue;
@@ -93,7 +93,7 @@ CODE_SAMPLE
         $this->removeNode($node);
         return null;
     }
-    private function shouldSkip(ClassConst $classConst) : bool
+    private function shouldSkip(\PhpParser\Node\Stmt\ClassConst $classConst) : bool
     {
         if (!$classConst->isPrivate()) {
             return \true;
@@ -111,8 +111,8 @@ CODE_SAMPLE
         if ($phpDocInfo->hasByName('api')) {
             return \true;
         }
-        $classLike = $classConst->getAttribute(AttributeKey::CLASS_NODE);
-        if ($classLike instanceof ClassLike) {
+        $classLike = $classConst->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
+        if ($classLike instanceof \PhpParser\Node\Stmt\ClassLike) {
             $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classLike);
             return $phpDocInfo->hasByName('api');
         }

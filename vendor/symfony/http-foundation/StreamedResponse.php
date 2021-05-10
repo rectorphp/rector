@@ -23,7 +23,7 @@ namespace RectorPrefix20210510\Symfony\Component\HttpFoundation;
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class StreamedResponse extends Response
+class StreamedResponse extends \RectorPrefix20210510\Symfony\Component\HttpFoundation\Response
 {
     protected $callback;
     protected $streamed;

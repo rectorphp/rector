@@ -18,7 +18,7 @@ final class StaticMethodClassFactory
      * @var ClassNaming
      */
     private $classNaming;
-    public function __construct(\Rector\Transform\NodeFactory\ClassMethodFactory $classMethodFactory, ClassNaming $classNaming)
+    public function __construct(\Rector\Transform\NodeFactory\ClassMethodFactory $classMethodFactory, \Rector\CodingStyle\Naming\ClassNaming $classNaming)
     {
         $this->classMethodFactory = $classMethodFactory;
         $this->classNaming = $classNaming;
@@ -26,9 +26,9 @@ final class StaticMethodClassFactory
     /**
      * @param Function_[] $functions
      */
-    public function createStaticMethodClass(string $shortClassName, array $functions) : Class_
+    public function createStaticMethodClass(string $shortClassName, array $functions) : \PhpParser\Node\Stmt\Class_
     {
-        $classBuilder = new ClassBuilder($shortClassName);
+        $classBuilder = new \RectorPrefix20210510\Symplify\Astral\ValueObject\NodeBuilder\ClassBuilder($shortClassName);
         $classBuilder->makeFinal();
         foreach ($functions as $function) {
             $staticClassMethod = $this->createStaticMethod($function);
@@ -36,7 +36,7 @@ final class StaticMethodClassFactory
         }
         return $classBuilder->getNode();
     }
-    private function createStaticMethod(Function_ $function) : ClassMethod
+    private function createStaticMethod(\PhpParser\Node\Stmt\Function_ $function) : \PhpParser\Node\Stmt\ClassMethod
     {
         $methodName = $this->classNaming->createMethodNameFromFunction($function);
         return $this->classMethodFactory->createClassMethodFromFunction($methodName, $function);

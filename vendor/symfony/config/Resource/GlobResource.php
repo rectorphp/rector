@@ -21,7 +21,7 @@ use RectorPrefix20210510\Symfony\Component\Finder\Glob;
  *
  * @final
  */
-class GlobResource implements \IteratorAggregate, SelfCheckingResourceInterface
+class GlobResource implements \IteratorAggregate, \RectorPrefix20210510\Symfony\Component\Config\Resource\SelfCheckingResourceInterface
 {
     private $prefix;
     private $pattern;
@@ -142,11 +142,11 @@ class GlobResource implements \IteratorAggregate, SelfCheckingResourceInterface
             }
             return;
         }
-        if (!\class_exists(Finder::class)) {
+        if (!\class_exists(\RectorPrefix20210510\Symfony\Component\Finder\Finder::class)) {
             throw new \LogicException(\sprintf('Extended glob pattern "%s" cannot be used as the Finder component is not installed.', $this->pattern));
         }
-        $finder = new Finder();
-        $regex = Glob::toRegex($this->pattern);
+        $finder = new \RectorPrefix20210510\Symfony\Component\Finder\Finder();
+        $regex = \RectorPrefix20210510\Symfony\Component\Finder\Glob::toRegex($this->pattern);
         if ($this->recursive) {
             $regex = \substr_replace($regex, '(/|$)', -2, 1);
         }

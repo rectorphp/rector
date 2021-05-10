@@ -42,7 +42,7 @@ final class UseAddingPostRector extends \Rector\PostRector\Rector\AbstractPostRe
      * @var CurrentFileProvider
      */
     private $currentFileProvider;
-    public function __construct(BetterNodeFinder $betterNodeFinder, TypeFactory $typeFactory, UseImportsAdder $useImportsAdder, UseImportsRemover $useImportsRemover, UseNodesToAddCollector $useNodesToAddCollector, CurrentFileProvider $currentFileProvider)
+    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory $typeFactory, \Rector\CodingStyle\Application\UseImportsAdder $useImportsAdder, \Rector\CodingStyle\Application\UseImportsRemover $useImportsRemover, \Rector\PostRector\Collector\UseNodesToAddCollector $useNodesToAddCollector, \Rector\Core\Provider\CurrentFileProvider $currentFileProvider)
     {
         $this->useImportsAdder = $useImportsAdder;
         $this->betterNodeFinder = $betterNodeFinder;
@@ -74,8 +74,8 @@ final class UseAddingPostRector extends \Rector\PostRector\Rector\AbstractPostRe
         $useImportTypes = $this->typeFactory->uniquateTypes($useImportTypes);
         $this->useNodesToAddCollector->clear($smartFileInfo);
         // A. has namespace? add under it
-        $namespace = $this->betterNodeFinder->findFirstInstanceOf($nodes, Namespace_::class);
-        if ($namespace instanceof Namespace_) {
+        $namespace = $this->betterNodeFinder->findFirstInstanceOf($nodes, \PhpParser\Node\Stmt\Namespace_::class);
+        if ($namespace instanceof \PhpParser\Node\Stmt\Namespace_) {
             // first clean
             $this->useImportsRemover->removeImportsFromNamespace($namespace, $removedShortUses);
             // then add, to prevent adding + removing false positive of same short use
@@ -83,7 +83,7 @@ final class UseAddingPostRector extends \Rector\PostRector\Rector\AbstractPostRe
             return $nodes;
         }
         $firstNode = $nodes[0];
-        if ($firstNode instanceof FileWithoutNamespace) {
+        if ($firstNode instanceof \Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace) {
             $nodes = $firstNode->stmts;
         }
         // B. no namespace? add in the top
@@ -98,9 +98,9 @@ final class UseAddingPostRector extends \Rector\PostRector\Rector\AbstractPostRe
         // must be after name importing
         return 500;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Add unique use imports collected during Rector run', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Add unique use imports collected during Rector run', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run(AnotherClass $anotherClass)
@@ -129,7 +129,7 @@ CODE_SAMPLE
     {
         $namespacedUseImportTypes = [];
         foreach ($useImportTypes as $useImportType) {
-            if (!Strings::contains($useImportType->getClassName(), '\\')) {
+            if (!\RectorPrefix20210510\Nette\Utils\Strings::contains($useImportType->getClassName(), '\\')) {
                 continue;
             }
             $namespacedUseImportTypes[] = $useImportType;

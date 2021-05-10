@@ -5,7 +5,7 @@ namespace Rector\Nette\ValueObject;
 
 use PhpParser\Node\Expr;
 use Rector\Nette\Contract\ValueObject\ParameterArrayInterface;
-final class TemplateParametersAssigns implements ParameterArrayInterface
+final class TemplateParametersAssigns implements \Rector\Nette\Contract\ValueObject\ParameterArrayInterface
 {
     /**
      * @var AlwaysTemplateParameterAssign[]

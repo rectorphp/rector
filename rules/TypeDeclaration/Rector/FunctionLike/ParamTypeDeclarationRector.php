@@ -30,7 +30,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\TypeDeclaration\Rector\FunctionLike\ParamTypeDeclarationRector\ParamTypeDeclarationRectorTest
  */
-final class ParamTypeDeclarationRector extends AbstractRector
+final class ParamTypeDeclarationRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var ParamTypeInferer
@@ -52,7 +52,7 @@ final class ParamTypeDeclarationRector extends AbstractRector
      * @var VendorLockResolver
      */
     private $vendorLockResolver;
-    public function __construct(VendorLockResolver $vendorLockResolver, ChildParamPopulator $childParamPopulator, ParamTypeInferer $paramTypeInferer, TraitTypeAnalyzer $traitTypeAnalyzer, ParamTagRemover $paramTagRemover)
+    public function __construct(\Rector\VendorLocker\VendorLockResolver $vendorLockResolver, \Rector\TypeDeclaration\ChildPopulator\ChildParamPopulator $childParamPopulator, \Rector\TypeDeclaration\TypeInferer\ParamTypeInferer $paramTypeInferer, \Rector\TypeDeclaration\NodeTypeAnalyzer\TraitTypeAnalyzer $traitTypeAnalyzer, \Rector\DeadCode\PhpDoc\TagRemover\ParamTagRemover $paramTagRemover)
     {
         $this->paramTypeInferer = $paramTypeInferer;
         $this->childParamPopulator = $childParamPopulator;
@@ -65,11 +65,11 @@ final class ParamTypeDeclarationRector extends AbstractRector
      */
     public function getNodeTypes() : array
     {
-        return [Function_::class, ClassMethod::class];
+        return [\PhpParser\Node\Stmt\Function_::class, \PhpParser\Node\Stmt\ClassMethod::class];
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Change @param types to type declarations if not a BC-break', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change @param types to type declarations if not a BC-break', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class ParentClass
 {
     /**
@@ -127,9 +127,9 @@ CODE_SAMPLE
     /**
      * @param ClassMethod|Function_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if (!$this->isAtLeastPhpVersion(PhpVersionFeature::SCALAR_TYPES)) {
+        if (!$this->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::SCALAR_TYPES)) {
             return null;
         }
         if ($node->params === []) {
@@ -143,24 +143,24 @@ CODE_SAMPLE
     /**
      * @param ClassMethod|Function_ $functionLike
      */
-    private function refactorParam(Param $param, FunctionLike $functionLike, int $position) : void
+    private function refactorParam(\PhpParser\Node\Param $param, \PhpParser\Node\FunctionLike $functionLike, int $position) : void
     {
         if ($this->shouldSkipParam($param, $functionLike)) {
             return;
         }
         $inferedType = $this->paramTypeInferer->inferParam($param);
-        if ($inferedType instanceof MixedType) {
+        if ($inferedType instanceof \PHPStan\Type\MixedType) {
             return;
         }
         if ($this->traitTypeAnalyzer->isTraitType($inferedType)) {
             return;
         }
-        $paramTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($inferedType, TypeKind::KIND_PARAM);
-        if (!$paramTypeNode instanceof Node) {
+        $paramTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($inferedType, \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind::KIND_PARAM);
+        if (!$paramTypeNode instanceof \PhpParser\Node) {
             return;
         }
-        $parentNode = $functionLike->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parentNode instanceof Interface_ && $parentNode->extends !== []) {
+        $parentNode = $functionLike->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        if ($parentNode instanceof \PhpParser\Node\Stmt\Interface_ && $parentNode->extends !== []) {
             return;
         }
         $param->type = $paramTypeNode;
@@ -168,7 +168,7 @@ CODE_SAMPLE
         $this->paramTagRemover->removeParamTagsIfUseless($functionLikePhpDocInfo, $functionLike);
         $this->childParamPopulator->populateChildClassMethod($functionLike, $position, $inferedType);
     }
-    private function shouldSkipParam(Param $param, FunctionLike $functionLike) : bool
+    private function shouldSkipParam(\PhpParser\Node\Param $param, \PhpParser\Node\FunctionLike $functionLike) : bool
     {
         if ($param->variadic) {
             return \true;
@@ -181,6 +181,6 @@ CODE_SAMPLE
             return \false;
         }
         // already set → skip
-        return !$param->type->getAttribute(NewType::HAS_NEW_INHERITED_TYPE, \false);
+        return !$param->type->getAttribute(\Rector\TypeDeclaration\ValueObject\NewType::HAS_NEW_INHERITED_TYPE, \false);
     }
 }

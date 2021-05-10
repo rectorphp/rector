@@ -13,13 +13,13 @@ final class ScopeFactory
      * @var PHPStanScopeFactory
      */
     private $phpStanScopeFactory;
-    public function __construct(PHPStanScopeFactory $phpStanScopeFactory)
+    public function __construct(\PHPStan\Analyser\ScopeFactory $phpStanScopeFactory)
     {
         $this->phpStanScopeFactory = $phpStanScopeFactory;
     }
-    public function createFromFile(SmartFileInfo $fileInfo) : MutatingScope
+    public function createFromFile(\Symplify\SmartFileSystem\SmartFileInfo $fileInfo) : \PHPStan\Analyser\MutatingScope
     {
-        $scopeContext = ScopeContext::create($fileInfo->getRealPath());
+        $scopeContext = \PHPStan\Analyser\ScopeContext::create($fileInfo->getRealPath());
         return $this->phpStanScopeFactory->create($scopeContext);
     }
 }

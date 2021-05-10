@@ -13,22 +13,22 @@ final class StaticCallAnalyzer
      * @var NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(NodeNameResolver $nodeNameResolver)
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
     }
-    public function isParentCallNamed(Node $node, string $desiredMethodName) : bool
+    public function isParentCallNamed(\PhpParser\Node $node, string $desiredMethodName) : bool
     {
-        if (!$node instanceof StaticCall) {
+        if (!$node instanceof \PhpParser\Node\Expr\StaticCall) {
             return \false;
         }
-        if ($node->class instanceof Expr) {
+        if ($node->class instanceof \PhpParser\Node\Expr) {
             return \false;
         }
         if (!$this->nodeNameResolver->isName($node->class, 'parent')) {
             return \false;
         }
-        if ($node->name instanceof Expr) {
+        if ($node->name instanceof \PhpParser\Node\Expr) {
             return \false;
         }
         return $this->nodeNameResolver->isName($node->name, $desiredMethodName);

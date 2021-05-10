@@ -15,7 +15,7 @@ use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\Php80\Contract\StrStartWithMatchAndRefactorInterface;
 use Rector\Php80\NodeFactory\StrStartsWithFuncCallFactory;
 use Rector\Php80\ValueObject\StrStartsWith;
-final class StrposMatchAndRefactor implements StrStartWithMatchAndRefactorInterface
+final class StrposMatchAndRefactor implements \Rector\Php80\Contract\StrStartWithMatchAndRefactorInterface
 {
     /**
      * @var NodeNameResolver
@@ -29,7 +29,7 @@ final class StrposMatchAndRefactor implements StrStartWithMatchAndRefactorInterf
      * @var StrStartsWithFuncCallFactory
      */
     private $strStartsWithFuncCallFactory;
-    public function __construct(NodeNameResolver $nodeNameResolver, ValueResolver $valueResolver, StrStartsWithFuncCallFactory $strStartsWithFuncCallFactory)
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\Value\ValueResolver $valueResolver, \Rector\Php80\NodeFactory\StrStartsWithFuncCallFactory $strStartsWithFuncCallFactory)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->valueResolver = $valueResolver;
@@ -38,10 +38,10 @@ final class StrposMatchAndRefactor implements StrStartWithMatchAndRefactorInterf
     /**
      * @param Identical|NotIdentical $binaryOp
      */
-    public function match(BinaryOp $binaryOp) : ?StrStartsWith
+    public function match(\PhpParser\Node\Expr\BinaryOp $binaryOp) : ?\Rector\Php80\ValueObject\StrStartsWith
     {
-        $isPositive = $binaryOp instanceof Identical;
-        if ($binaryOp->left instanceof FuncCall && $this->nodeNameResolver->isName($binaryOp->left, 'strpos')) {
+        $isPositive = $binaryOp instanceof \PhpParser\Node\Expr\BinaryOp\Identical;
+        if ($binaryOp->left instanceof \PhpParser\Node\Expr\FuncCall && $this->nodeNameResolver->isName($binaryOp->left, 'strpos')) {
             if (!$this->valueResolver->isValue($binaryOp->right, 0)) {
                 return null;
             }
@@ -49,9 +49,9 @@ final class StrposMatchAndRefactor implements StrStartWithMatchAndRefactorInterf
             $funcCall = $binaryOp->left;
             $haystack = $funcCall->args[0]->value;
             $needle = $funcCall->args[1]->value;
-            return new StrStartsWith($funcCall, $haystack, $needle, $isPositive);
+            return new \Rector\Php80\ValueObject\StrStartsWith($funcCall, $haystack, $needle, $isPositive);
         }
-        if ($binaryOp->right instanceof FuncCall && $this->nodeNameResolver->isName($binaryOp->right, 'strpos')) {
+        if ($binaryOp->right instanceof \PhpParser\Node\Expr\FuncCall && $this->nodeNameResolver->isName($binaryOp->right, 'strpos')) {
             if (!$this->valueResolver->isValue($binaryOp->left, 0)) {
                 return null;
             }
@@ -59,17 +59,17 @@ final class StrposMatchAndRefactor implements StrStartWithMatchAndRefactorInterf
             $funcCall = $binaryOp->right;
             $haystack = $funcCall->args[0]->value;
             $needle = $funcCall->args[1]->value;
-            return new StrStartsWith($funcCall, $haystack, $needle, $isPositive);
+            return new \Rector\Php80\ValueObject\StrStartsWith($funcCall, $haystack, $needle, $isPositive);
         }
         return null;
     }
     /**
      * @return FuncCall|BooleanNot
      */
-    public function refactorStrStartsWith(StrStartsWith $strStartsWith) : Node
+    public function refactorStrStartsWith(\Rector\Php80\ValueObject\StrStartsWith $strStartsWith) : \PhpParser\Node
     {
         $strposFuncCall = $strStartsWith->getFuncCall();
-        $strposFuncCall->name = new Name('str_starts_with');
+        $strposFuncCall->name = new \PhpParser\Node\Name('str_starts_with');
         return $this->strStartsWithFuncCallFactory->createStrStartsWith($strStartsWith);
     }
 }

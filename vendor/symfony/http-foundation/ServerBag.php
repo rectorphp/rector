@@ -17,7 +17,7 @@ namespace RectorPrefix20210510\Symfony\Component\HttpFoundation;
  * @author Bulat Shakirzyanov <mallluhuct@gmail.com>
  * @author Robert Kiss <kepten@gmail.com>
  */
-class ServerBag extends ParameterBag
+class ServerBag extends \RectorPrefix20210510\Symfony\Component\HttpFoundation\ParameterBag
 {
     /**
      * Gets the HTTP headers.

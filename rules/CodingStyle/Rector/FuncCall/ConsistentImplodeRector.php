@@ -16,19 +16,19 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @see https://3v4l.org/iYTgh
  * @see \Rector\Tests\CodingStyle\Rector\FuncCall\ConsistentImplodeRector\ConsistentImplodeRectorTest
  */
-final class ConsistentImplodeRector extends AbstractRector
+final class ConsistentImplodeRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var StringTypeAnalyzer
      */
     private $stringTypeAnalyzer;
-    public function __construct(StringTypeAnalyzer $stringTypeAnalyzer)
+    public function __construct(\Rector\NodeTypeResolver\TypeAnalyzer\StringTypeAnalyzer $stringTypeAnalyzer)
     {
         $this->stringTypeAnalyzer = $stringTypeAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Changes various implode forms to consistent one', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Changes various implode forms to consistent one', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run(array $items)
@@ -59,12 +59,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [FuncCall::class];
+        return [\PhpParser\Node\Expr\FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$this->isName($node, 'implode')) {
             return null;
@@ -72,11 +72,11 @@ CODE_SAMPLE
         if (\count($node->args) === 1) {
             // complete default value ''
             $node->args[1] = $node->args[0];
-            $node->args[0] = new Arg(new String_(''));
+            $node->args[0] = new \PhpParser\Node\Arg(new \PhpParser\Node\Scalar\String_(''));
             return $node;
         }
         $firstArgumentValue = $node->args[0]->value;
-        if ($firstArgumentValue instanceof String_) {
+        if ($firstArgumentValue instanceof \PhpParser\Node\Scalar\String_) {
             return null;
         }
         if (\count($node->args) === 2 && $this->stringTypeAnalyzer->isStringOrUnionStringOnlyType($node->args[1]->value)) {

@@ -14,23 +14,23 @@ class Inflectible
      */
     public static function getSingular() : iterable
     {
-        (yield new Transformation(new Pattern('/l[ae]r$/i'), ''));
+        (yield new \RectorPrefix20210510\Doctrine\Inflector\Rules\Transformation(new \RectorPrefix20210510\Doctrine\Inflector\Rules\Pattern('/l[ae]r$/i'), ''));
     }
     /**
      * @return Transformation[]
      */
     public static function getPlural() : iterable
     {
-        (yield new Transformation(new Pattern('/([eöiü][^aoıueöiü]{0,6})$/u'), '\\1ler'));
-        (yield new Transformation(new Pattern('/([aoıu][^aoıueöiü]{0,6})$/u'), '\\1lar'));
+        (yield new \RectorPrefix20210510\Doctrine\Inflector\Rules\Transformation(new \RectorPrefix20210510\Doctrine\Inflector\Rules\Pattern('/([eöiü][^aoıueöiü]{0,6})$/u'), '\\1ler'));
+        (yield new \RectorPrefix20210510\Doctrine\Inflector\Rules\Transformation(new \RectorPrefix20210510\Doctrine\Inflector\Rules\Pattern('/([aoıu][^aoıueöiü]{0,6})$/u'), '\\1lar'));
     }
     /**
      * @return Substitution[]
      */
     public static function getIrregular() : iterable
     {
-        (yield new Substitution(new Word('ben'), new Word('biz')));
-        (yield new Substitution(new Word('sen'), new Word('siz')));
-        (yield new Substitution(new Word('o'), new Word('onlar')));
+        (yield new \RectorPrefix20210510\Doctrine\Inflector\Rules\Substitution(new \RectorPrefix20210510\Doctrine\Inflector\Rules\Word('ben'), new \RectorPrefix20210510\Doctrine\Inflector\Rules\Word('biz')));
+        (yield new \RectorPrefix20210510\Doctrine\Inflector\Rules\Substitution(new \RectorPrefix20210510\Doctrine\Inflector\Rules\Word('sen'), new \RectorPrefix20210510\Doctrine\Inflector\Rules\Word('siz')));
+        (yield new \RectorPrefix20210510\Doctrine\Inflector\Rules\Substitution(new \RectorPrefix20210510\Doctrine\Inflector\Rules\Word('o'), new \RectorPrefix20210510\Doctrine\Inflector\Rules\Word('onlar')));
     }
 }

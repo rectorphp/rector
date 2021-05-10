@@ -15,7 +15,7 @@ namespace RectorPrefix20210510\Symfony\Component\HttpFoundation;
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class RedirectResponse extends Response
+class RedirectResponse extends \RectorPrefix20210510\Symfony\Component\HttpFoundation\Response
 {
     protected $targetUrl;
     /**

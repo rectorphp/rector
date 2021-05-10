@@ -22,17 +22,17 @@ final class MatchPropertyTypeExpectedNameResolver
      * @var NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(PropertyNaming $propertyNaming, PhpDocInfoFactory $phpDocInfoFactory, NodeNameResolver $nodeNameResolver)
+    public function __construct(\Rector\Naming\Naming\PropertyNaming $propertyNaming, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
     {
         $this->propertyNaming = $propertyNaming;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->nodeNameResolver = $nodeNameResolver;
     }
-    public function resolve(Property $property) : ?string
+    public function resolve(\PhpParser\Node\Stmt\Property $property) : ?string
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
         $expectedName = $this->propertyNaming->getExpectedNameFromType($phpDocInfo->getVarType());
-        if (!$expectedName instanceof ExpectedName) {
+        if (!$expectedName instanceof \Rector\Naming\ValueObject\ExpectedName) {
             return null;
         }
         // skip if already has suffix

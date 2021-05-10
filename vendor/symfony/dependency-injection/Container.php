@@ -23,8 +23,8 @@ use RectorPrefix20210510\Symfony\Component\DependencyInjection\ParameterBag\Froz
 use RectorPrefix20210510\Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use RectorPrefix20210510\Symfony\Contracts\Service\ResetInterface;
 // Help opcache.preload discover always-needed symbols
-\class_exists(RewindableGenerator::class);
-\class_exists(ArgumentServiceLocator::class);
+\class_exists(\RectorPrefix20210510\Symfony\Component\DependencyInjection\Argument\RewindableGenerator::class);
+\class_exists(\RectorPrefix20210510\Symfony\Component\DependencyInjection\Argument\ServiceLocator::class);
 /**
  * Container is a dependency injection container.
  *
@@ -42,7 +42,7 @@ use RectorPrefix20210510\Symfony\Contracts\Service\ResetInterface;
  * @author Fabien Potencier <fabien@symfony.com>
  * @author Johannes M. Schmitt <schmittjoh@gmail.com>
  */
-class Container implements ContainerInterface, ResetInterface
+class Container implements \RectorPrefix20210510\Symfony\Component\DependencyInjection\ContainerInterface, \RectorPrefix20210510\Symfony\Contracts\Service\ResetInterface
 {
     protected $parameterBag;
     protected $services = [];
@@ -57,9 +57,9 @@ class Container implements ContainerInterface, ResetInterface
     private $envCache = [];
     private $compiled = \false;
     private $getEnv;
-    public function __construct(ParameterBagInterface $parameterBag = null)
+    public function __construct(\RectorPrefix20210510\Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface $parameterBag = null)
     {
-        $this->parameterBag = $parameterBag ?? new EnvPlaceholderParameterBag();
+        $this->parameterBag = $parameterBag ?? new \RectorPrefix20210510\Symfony\Component\DependencyInjection\ParameterBag\EnvPlaceholderParameterBag();
     }
     /**
      * Compiles the container.
@@ -72,7 +72,7 @@ class Container implements ContainerInterface, ResetInterface
     public function compile()
     {
         $this->parameterBag->resolve();
-        $this->parameterBag = new FrozenParameterBag($this->parameterBag->all());
+        $this->parameterBag = new \RectorPrefix20210510\Symfony\Component\DependencyInjection\ParameterBag\FrozenParameterBag($this->parameterBag->all());
         $this->compiled = \true;
     }
     /**
@@ -143,18 +143,18 @@ class Container implements ContainerInterface, ResetInterface
             $initialize();
         }
         if ('service_container' === $id) {
-            throw new InvalidArgumentException('You cannot set service "service_container".');
+            throw new \RectorPrefix20210510\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException('You cannot set service "service_container".');
         }
         if (!(isset($this->fileMap[$id]) || isset($this->methodMap[$id]))) {
             if (isset($this->syntheticIds[$id]) || !isset($this->getRemovedIds()[$id])) {
                 // no-op
             } elseif (null === $service) {
-                throw new InvalidArgumentException(\sprintf('The "%s" service is private, you cannot unset it.', $id));
+                throw new \RectorPrefix20210510\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException(\sprintf('The "%s" service is private, you cannot unset it.', $id));
             } else {
-                throw new InvalidArgumentException(\sprintf('The "%s" service is private, you cannot replace it.', $id));
+                throw new \RectorPrefix20210510\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException(\sprintf('The "%s" service is private, you cannot replace it.', $id));
             }
         } elseif (isset($this->services[$id])) {
-            throw new InvalidArgumentException(\sprintf('The "%s" service is already initialized, you cannot replace it.', $id));
+            throw new \RectorPrefix20210510\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException(\sprintf('The "%s" service is already initialized, you cannot replace it.', $id));
         }
         if (isset($this->aliases[$id])) {
             unset($this->aliases[$id]);
@@ -211,7 +211,7 @@ class Container implements ContainerInterface, ResetInterface
     private function make(string $id, int $invalidBehavior)
     {
         if (isset($this->loading[$id])) {
-            throw new ServiceCircularReferenceException($id, \array_merge(\array_keys($this->loading), [$id]));
+            throw new \RectorPrefix20210510\Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException($id, \array_merge(\array_keys($this->loading), [$id]));
         }
         $this->loading[$id] = \true;
         try {
@@ -228,13 +228,13 @@ class Container implements ContainerInterface, ResetInterface
         }
         if (1 === $invalidBehavior) {
             if (!$id) {
-                throw new ServiceNotFoundException($id);
+                throw new \RectorPrefix20210510\Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException($id);
             }
             if (isset($this->syntheticIds[$id])) {
-                throw new ServiceNotFoundException($id, null, null, [], \sprintf('The "%s" service is synthetic, it needs to be set at boot time before it can be used.', $id));
+                throw new \RectorPrefix20210510\Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException($id, null, null, [], \sprintf('The "%s" service is synthetic, it needs to be set at boot time before it can be used.', $id));
             }
             if (isset($this->getRemovedIds()[$id])) {
-                throw new ServiceNotFoundException($id, null, null, [], \sprintf('The "%s" service or alias has been removed or inlined when the container was compiled. You should either make it public, or stop using the container directly and use dependency injection instead.', $id));
+                throw new \RectorPrefix20210510\Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException($id, null, null, [], \sprintf('The "%s" service or alias has been removed or inlined when the container was compiled. You should either make it public, or stop using the container directly and use dependency injection instead.', $id));
             }
             $alternatives = [];
             foreach ($this->getServiceIds() as $knownId) {
@@ -246,7 +246,7 @@ class Container implements ContainerInterface, ResetInterface
                     $alternatives[] = $knownId;
                 }
             }
-            throw new ServiceNotFoundException($id, null, null, $alternatives);
+            throw new \RectorPrefix20210510\Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException($id, null, null, $alternatives);
         }
         return null;
     }
@@ -276,7 +276,7 @@ class Container implements ContainerInterface, ResetInterface
         $this->services = $this->factories = $this->privates = [];
         foreach ($services as $service) {
             try {
-                if ($service instanceof ResetInterface) {
+                if ($service instanceof \RectorPrefix20210510\Symfony\Contracts\Service\ResetInterface) {
                     $service->reset();
                 }
             } catch (\Throwable $e) {
@@ -343,13 +343,13 @@ class Container implements ContainerInterface, ResetInterface
     protected function getEnv($name)
     {
         if (isset($this->resolving[$envName = "env({$name})"])) {
-            throw new ParameterCircularReferenceException(\array_keys($this->resolving));
+            throw new \RectorPrefix20210510\Symfony\Component\DependencyInjection\Exception\ParameterCircularReferenceException(\array_keys($this->resolving));
         }
         if (isset($this->envCache[$name]) || \array_key_exists($name, $this->envCache)) {
             return $this->envCache[$name];
         }
         if (!$this->has($id = 'container.env_var_processors_locator')) {
-            $this->set($id, new ServiceLocator([]));
+            $this->set($id, new \RectorPrefix20210510\Symfony\Component\DependencyInjection\ServiceLocator([]));
         }
         if (!$this->getEnv) {
             $this->getEnv = new \ReflectionMethod($this, __FUNCTION__);
@@ -364,7 +364,7 @@ class Container implements ContainerInterface, ResetInterface
             $prefix = 'string';
             $localName = $name;
         }
-        $processor = $processors->has($prefix) ? $processors->get($prefix) : new EnvVarProcessor($this);
+        $processor = $processors->has($prefix) ? $processors->get($prefix) : new \RectorPrefix20210510\Symfony\Component\DependencyInjection\EnvVarProcessor($this);
         $this->resolving[$envName] = \true;
         try {
             return $this->envCache[$name] = $processor->getEnv($prefix, $localName, $this->getEnv);
@@ -386,7 +386,7 @@ class Container implements ContainerInterface, ResetInterface
             return $this;
         }
         if (\is_string($load)) {
-            throw new RuntimeException($load);
+            throw new \RectorPrefix20210510\Symfony\Component\DependencyInjection\Exception\RuntimeException($load);
         }
         if (null === $method) {
             return \false !== $registry ? $this->{$registry}[$id] ?? null : null;

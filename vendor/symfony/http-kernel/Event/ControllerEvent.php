@@ -23,10 +23,10 @@ use RectorPrefix20210510\Symfony\Component\HttpKernel\HttpKernelInterface;
  *
  * @author Bernhard Schussek <bschussek@gmail.com>
  */
-final class ControllerEvent extends KernelEvent
+final class ControllerEvent extends \RectorPrefix20210510\Symfony\Component\HttpKernel\Event\KernelEvent
 {
     private $controller;
-    public function __construct(HttpKernelInterface $kernel, callable $controller, Request $request, ?int $requestType)
+    public function __construct(\RectorPrefix20210510\Symfony\Component\HttpKernel\HttpKernelInterface $kernel, callable $controller, \RectorPrefix20210510\Symfony\Component\HttpFoundation\Request $request, ?int $requestType)
     {
         parent::__construct($kernel, $request, $requestType);
         $this->setController($controller);

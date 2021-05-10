@@ -10,13 +10,13 @@ final class NamespaceMatcher
     /**
      * @param string[] $oldToNewNamespace
      */
-    public function matchRenamedNamespace(string $name, array $oldToNewNamespace) : ?RenamedNamespace
+    public function matchRenamedNamespace(string $name, array $oldToNewNamespace) : ?\Rector\Renaming\ValueObject\RenamedNamespace
     {
         \krsort($oldToNewNamespace);
         /** @var string $oldNamespace */
         foreach ($oldToNewNamespace as $oldNamespace => $newNamespace) {
-            if (Strings::startsWith($name, $oldNamespace)) {
-                return new RenamedNamespace($name, $oldNamespace, $newNamespace);
+            if (\RectorPrefix20210510\Nette\Utils\Strings::startsWith($name, $oldNamespace)) {
+                return new \Rector\Renaming\ValueObject\RenamedNamespace($name, $oldNamespace, $newNamespace);
             }
         }
         return null;

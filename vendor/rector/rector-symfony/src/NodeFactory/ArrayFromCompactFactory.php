@@ -15,16 +15,16 @@ final class ArrayFromCompactFactory
      * @var FuncCallManipulator
      */
     private $funcCallManipulator;
-    public function __construct(FuncCallManipulator $funcCallManipulator)
+    public function __construct(\Rector\Core\NodeManipulator\FuncCallManipulator $funcCallManipulator)
     {
         $this->funcCallManipulator = $funcCallManipulator;
     }
-    public function createArrayFromCompactFuncCall(FuncCall $compactFuncCall) : Array_
+    public function createArrayFromCompactFuncCall(\PhpParser\Node\Expr\FuncCall $compactFuncCall) : \PhpParser\Node\Expr\Array_
     {
         $compactVariableNames = $this->funcCallManipulator->extractArgumentsFromCompactFuncCalls([$compactFuncCall]);
-        $array = new Array_();
+        $array = new \PhpParser\Node\Expr\Array_();
         foreach ($compactVariableNames as $compactVariableName) {
-            $arrayItem = new ArrayItem(new Variable($compactVariableName), new String_($compactVariableName));
+            $arrayItem = new \PhpParser\Node\Expr\ArrayItem(new \PhpParser\Node\Expr\Variable($compactVariableName), new \PhpParser\Node\Scalar\String_($compactVariableName));
             $array->items[] = $arrayItem;
         }
         return $array;

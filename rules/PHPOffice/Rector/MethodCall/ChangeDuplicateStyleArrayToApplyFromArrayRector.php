@@ -15,11 +15,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\PHPOffice\Rector\MethodCall\ChangeDuplicateStyleArrayToApplyFromArrayRector\ChangeDuplicateStyleArrayToApplyFromArrayRectorTest
  */
-final class ChangeDuplicateStyleArrayToApplyFromArrayRector extends AbstractRector
+final class ChangeDuplicateStyleArrayToApplyFromArrayRector extends \Rector\Core\Rector\AbstractRector
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Change method call duplicateStyleArray() to getStyle() + applyFromArray()', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change method call duplicateStyleArray() to getStyle() + applyFromArray()', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run(): void
@@ -46,14 +46,14 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [MethodCall::class];
+        return [\PhpParser\Node\Expr\MethodCall::class];
     }
     /**
      * @param MethodCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if (!$this->isObjectType($node->var, new ObjectType('PHPExcel_Worksheet'))) {
+        if (!$this->isObjectType($node->var, new \PHPStan\Type\ObjectType('PHPExcel_Worksheet'))) {
             return null;
         }
         if (!$this->nodeNameResolver->isName($node->name, 'duplicateStyleArray')) {
@@ -63,9 +63,9 @@ CODE_SAMPLE
         // pop out 2nd argument
         $secondArgument = $node->args[1];
         unset($node->args[1]);
-        $getStyleMethodCall = new MethodCall($variable, 'getStyle', [$secondArgument]);
+        $getStyleMethodCall = new \PhpParser\Node\Expr\MethodCall($variable, 'getStyle', [$secondArgument]);
         $node->var = $getStyleMethodCall;
-        $node->name = new Identifier('applyFromArray');
+        $node->name = new \PhpParser\Node\Identifier('applyFromArray');
         return $node;
     }
 }

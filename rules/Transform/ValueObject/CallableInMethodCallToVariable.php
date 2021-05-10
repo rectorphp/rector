@@ -24,9 +24,9 @@ final class CallableInMethodCallToVariable
         $this->methodName = $methodName;
         $this->argumentPosition = $argumentPosition;
     }
-    public function getObjectType() : ObjectType
+    public function getObjectType() : \PHPStan\Type\ObjectType
     {
-        return new ObjectType($this->classType);
+        return new \PHPStan\Type\ObjectType($this->classType);
     }
     public function getMethodName() : string
     {

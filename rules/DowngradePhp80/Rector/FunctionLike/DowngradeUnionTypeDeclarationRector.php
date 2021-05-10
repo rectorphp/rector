@@ -16,13 +16,13 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @requires PHP 8.0
  */
-final class DowngradeUnionTypeDeclarationRector extends AbstractRector
+final class DowngradeUnionTypeDeclarationRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var PhpDocFromTypeDeclarationDecorator
      */
     private $phpDocFromTypeDeclarationDecorator;
-    public function __construct(PhpDocFromTypeDeclarationDecorator $phpDocFromTypeDeclarationDecorator)
+    public function __construct(\Rector\DowngradePhp71\TypeDeclaration\PhpDocFromTypeDeclarationDecorator $phpDocFromTypeDeclarationDecorator)
     {
         $this->phpDocFromTypeDeclarationDecorator = $phpDocFromTypeDeclarationDecorator;
     }
@@ -31,11 +31,11 @@ final class DowngradeUnionTypeDeclarationRector extends AbstractRector
      */
     public function getNodeTypes() : array
     {
-        return [Function_::class, ClassMethod::class];
+        return [\PhpParser\Node\Stmt\Function_::class, \PhpParser\Node\Stmt\ClassMethod::class];
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Remove the union type params and returns, add @param/@return tags instead', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove the union type params and returns, add @param/@return tags instead', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function echoInput(string|int $input): int|bool
@@ -62,15 +62,15 @@ CODE_SAMPLE
     /**
      * @param ClassMethod|Function_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         foreach ($node->getParams() as $param) {
-            if (!$param->type instanceof UnionType) {
+            if (!$param->type instanceof \PhpParser\Node\UnionType) {
                 continue;
             }
             $this->phpDocFromTypeDeclarationDecorator->decorateParam($param, $node, [\PHPStan\Type\UnionType::class]);
         }
-        if (!$node->returnType instanceof UnionType) {
+        if (!$node->returnType instanceof \PhpParser\Node\UnionType) {
             return null;
         }
         if (!$this->phpDocFromTypeDeclarationDecorator->decorate($node)) {

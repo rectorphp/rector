@@ -26,14 +26,14 @@ final class SimpleCallableNodeTraverser
         if (!\is_array($nodes)) {
             $nodes = [$nodes];
         }
-        $nodeTraverser = new NodeTraverser();
+        $nodeTraverser = new \PhpParser\NodeTraverser();
         $callableNodeVisitor = $this->createNodeVisitor($callable);
         $nodeTraverser->addVisitor($callableNodeVisitor);
         $nodeTraverser->traverse($nodes);
     }
-    private function createNodeVisitor(callable $callable) : NodeVisitor
+    private function createNodeVisitor(callable $callable) : \PhpParser\NodeVisitor
     {
-        return new class($callable) extends NodeVisitorAbstract
+        return new class($callable) extends \PhpParser\NodeVisitorAbstract
         {
             /**
              * @var callable
@@ -46,14 +46,14 @@ final class SimpleCallableNodeTraverser
             /**
              * @return int|Node|null
              */
-            public function enterNode(Node $node)
+            public function enterNode(\PhpParser\Node $node)
             {
                 $originalNode = $node;
                 $callable = $this->callable;
                 /** @var int|Node|null $newNode */
                 $newNode = $callable($node);
-                if ($originalNode instanceof Stmt && $newNode instanceof Expr) {
-                    return new Expression($newNode);
+                if ($originalNode instanceof \PhpParser\Node\Stmt && $newNode instanceof \PhpParser\Node\Expr) {
+                    return new \PhpParser\Node\Stmt\Expression($newNode);
                 }
                 return $newNode;
             }

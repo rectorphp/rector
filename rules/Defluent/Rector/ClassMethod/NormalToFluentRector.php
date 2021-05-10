@@ -18,7 +18,7 @@ use RectorPrefix20210510\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Defluent\Rector\ClassMethod\NormalToFluentRector\NormalToFluentRectorTest
  */
-final class NormalToFluentRector extends AbstractRector implements ConfigurableRectorInterface
+final class NormalToFluentRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
      * @var string
@@ -32,9 +32,9 @@ final class NormalToFluentRector extends AbstractRector implements ConfigurableR
      * @var MethodCall[]
      */
     private $collectedMethodCalls = [];
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Turns fluent interface calls to classic ones.', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Turns fluent interface calls to classic ones.', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
 $someObject = new SomeClass();
 $someObject->someFunction();
 $someObject->otherFunction();
@@ -44,19 +44,19 @@ $someObject = new SomeClass();
 $someObject->someFunction()
     ->otherFunction();
 CODE_SAMPLE
-, [self::CALLS_TO_FLUENT => [new NormalToFluent('SomeClass', ['someFunction', 'otherFunction'])]])]);
+, [self::CALLS_TO_FLUENT => [new \Rector\Defluent\ValueObject\NormalToFluent('SomeClass', ['someFunction', 'otherFunction'])]])]);
     }
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [ClassMethod::class];
+        return [\PhpParser\Node\Stmt\ClassMethod::class];
     }
     /**
      * @param ClassMethod $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         // process only existing statements
         if ($node->stmts === null) {
@@ -100,38 +100,38 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $callsToFluent = $configuration[self::CALLS_TO_FLUENT] ?? [];
-        Assert::allIsInstanceOf($callsToFluent, NormalToFluent::class);
+        \RectorPrefix20210510\Webmozart\Assert\Assert::allIsInstanceOf($callsToFluent, \Rector\Defluent\ValueObject\NormalToFluent::class);
         $this->callsToFluent = $callsToFluent;
     }
-    private function shouldSkipPreviousStmt(ClassMethod $classMethod, int $i) : bool
+    private function shouldSkipPreviousStmt(\PhpParser\Node\Stmt\ClassMethod $classMethod, int $i) : bool
     {
         // we look only for 2+ stmts
         if (!isset($classMethod->stmts[$i - 1])) {
             return \true;
         }
         $prevStmt = $classMethod->stmts[$i - 1];
-        return !$prevStmt instanceof Expression;
+        return !$prevStmt instanceof \PhpParser\Node\Stmt\Expression;
     }
-    private function isBothMethodCallMatch(Expression $firstExpression, Expression $secondExpression) : bool
+    private function isBothMethodCallMatch(\PhpParser\Node\Stmt\Expression $firstExpression, \PhpParser\Node\Stmt\Expression $secondExpression) : bool
     {
-        if (!$firstExpression->expr instanceof MethodCall) {
+        if (!$firstExpression->expr instanceof \PhpParser\Node\Expr\MethodCall) {
             return \false;
         }
-        if (!$secondExpression->expr instanceof MethodCall) {
+        if (!$secondExpression->expr instanceof \PhpParser\Node\Expr\MethodCall) {
             return \false;
         }
         $firstMethodCallMatchObjectType = $this->matchMethodCall($firstExpression->expr);
-        if (!$firstMethodCallMatchObjectType instanceof ObjectType) {
+        if (!$firstMethodCallMatchObjectType instanceof \PHPStan\Type\ObjectType) {
             return \false;
         }
         $secondMethodCallMatchObjectType = $this->matchMethodCall($secondExpression->expr);
-        if (!$secondMethodCallMatchObjectType instanceof ObjectType) {
+        if (!$secondMethodCallMatchObjectType instanceof \PHPStan\Type\ObjectType) {
             return \false;
         }
         // is the same type
         return $firstMethodCallMatchObjectType->equals($secondMethodCallMatchObjectType);
     }
-    private function fluentizeCollectedMethodCalls(ClassMethod $classMethod) : void
+    private function fluentizeCollectedMethodCalls(\PhpParser\Node\Stmt\ClassMethod $classMethod) : void
     {
         $i = 0;
         $fluentMethodCallIndex = null;
@@ -148,8 +148,8 @@ CODE_SAMPLE
             ++$i;
         }
         $stmt = $classMethod->stmts[$fluentMethodCallIndex];
-        if (!$stmt instanceof Expression) {
-            throw new ShouldNotHappenException();
+        if (!$stmt instanceof \PhpParser\Node\Stmt\Expression) {
+            throw new \Rector\Core\Exception\ShouldNotHappenException();
         }
         /** @var MethodCall $fluentMethodCall */
         $fluentMethodCall = $stmt->expr;
@@ -157,10 +157,10 @@ CODE_SAMPLE
         $methodCallsToAdd = \array_reverse($methodCallsToAdd);
         foreach ($methodCallsToAdd as $methodCallToAdd) {
             // make var a parent method call
-            $fluentMethodCall->var = new MethodCall($fluentMethodCall->var, $methodCallToAdd->name, $methodCallToAdd->args);
+            $fluentMethodCall->var = new \PhpParser\Node\Expr\MethodCall($fluentMethodCall->var, $methodCallToAdd->name, $methodCallToAdd->args);
         }
     }
-    private function matchMethodCall(MethodCall $methodCall) : ?ObjectType
+    private function matchMethodCall(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\PHPStan\Type\ObjectType
     {
         foreach ($this->callsToFluent as $callToFluent) {
             if (!$this->isObjectType($methodCall->var, $callToFluent->getObjectType())) {

@@ -16,7 +16,7 @@ use RectorPrefix20210510\Symfony\Component\HttpFoundation\Session\SessionBagInte
  *
  * @author Drak <drak@zikula.org>
  */
-interface FlashBagInterface extends SessionBagInterface
+interface FlashBagInterface extends \RectorPrefix20210510\Symfony\Component\HttpFoundation\Session\SessionBagInterface
 {
     /**
      * Adds a flash message for the given type.

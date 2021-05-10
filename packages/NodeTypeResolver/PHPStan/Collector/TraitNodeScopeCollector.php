@@ -17,13 +17,13 @@ final class TraitNodeScopeCollector
      * @var BetterStandardPrinter
      */
     private $betterStandardPrinter;
-    public function __construct(BetterStandardPrinter $betterStandardPrinter)
+    public function __construct(\Rector\Core\PhpParser\Printer\BetterStandardPrinter $betterStandardPrinter)
     {
         $this->betterStandardPrinter = $betterStandardPrinter;
     }
-    public function addForTraitAndNode(string $traitName, Node $node, Scope $scope) : void
+    public function addForTraitAndNode(string $traitName, \PhpParser\Node $node, \PHPStan\Analyser\Scope $scope) : void
     {
-        if ($node instanceof VirtualNode) {
+        if ($node instanceof \PHPStan\Node\VirtualNode) {
             return;
         }
         $traitNodeHash = $this->createHash($traitName, $node);
@@ -33,12 +33,12 @@ final class TraitNodeScopeCollector
         }
         $this->scopeByTraitNodeHash[$traitNodeHash] = $scope;
     }
-    public function getScopeForTraitAndNode(string $traitName, Node $node) : ?Scope
+    public function getScopeForTraitAndNode(string $traitName, \PhpParser\Node $node) : ?\PHPStan\Analyser\Scope
     {
         $traitNodeHash = $this->createHash($traitName, $node);
         return $this->scopeByTraitNodeHash[$traitNodeHash] ?? null;
     }
-    private function createHash(string $traitName, Node $node) : string
+    private function createHash(string $traitName, \PhpParser\Node $node) : string
     {
         $printedNode = $this->betterStandardPrinter->print($node);
         return \sha1($traitName . $printedNode);

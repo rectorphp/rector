@@ -21,11 +21,11 @@ final class ParameterDefaultsComparator
      * @var ValueResolver
      */
     private $valueResolver;
-    public function __construct(ValueResolver $valueResolver)
+    public function __construct(\Rector\Core\PhpParser\Node\Value\ValueResolver $valueResolver)
     {
         $this->valueResolver = $valueResolver;
     }
-    public function areDefaultValuesDifferent(ParameterReflection $parameterReflection, Param $param) : bool
+    public function areDefaultValuesDifferent(\PHPStan\Reflection\ParameterReflection $parameterReflection, \PhpParser\Node\Param $param) : bool
     {
         if ($parameterReflection->getDefaultValue() === null && $param->default === null) {
             return \false;
@@ -39,7 +39,7 @@ final class ParameterDefaultsComparator
         $secondParameterValue = $this->valueResolver->getValue($paramDefault);
         return $firstParameterValue !== $secondParameterValue;
     }
-    private function isMutuallyExclusiveNull(ParameterReflection $parameterReflection, Param $param) : bool
+    private function isMutuallyExclusiveNull(\PHPStan\Reflection\ParameterReflection $parameterReflection, \PhpParser\Node\Param $param) : bool
     {
         if ($parameterReflection->getDefaultValue() === null && $param->default !== null) {
             return \true;
@@ -52,13 +52,13 @@ final class ParameterDefaultsComparator
     /**
      * @return bool|float|int|string|mixed[]|null
      */
-    private function resolveParameterReflectionDefaultValue(ParameterReflection $parameterReflection)
+    private function resolveParameterReflectionDefaultValue(\PHPStan\Reflection\ParameterReflection $parameterReflection)
     {
         $defaultValue = $parameterReflection->getDefaultValue();
-        if (!$defaultValue instanceof ConstantType) {
-            throw new ShouldNotHappenException();
+        if (!$defaultValue instanceof \PHPStan\Type\ConstantType) {
+            throw new \Rector\Core\Exception\ShouldNotHappenException();
         }
-        if ($defaultValue instanceof ConstantArrayType) {
+        if ($defaultValue instanceof \PHPStan\Type\Constant\ConstantArrayType) {
             return $defaultValue->getAllArrays();
         }
         /** @var ConstantStringType|ConstantIntegerType|ConstantFloatType|ConstantBooleanType|NullType $defaultValue */

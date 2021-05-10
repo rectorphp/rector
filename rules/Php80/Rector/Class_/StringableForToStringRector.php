@@ -18,7 +18,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php80\Rector\Class_\StringableForToStringRector\StringableForToStringRectorTest
  */
-final class StringableForToStringRector extends AbstractRector
+final class StringableForToStringRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var string
@@ -28,13 +28,13 @@ final class StringableForToStringRector extends AbstractRector
      * @var ClassManipulator
      */
     private $classManipulator;
-    public function __construct(ClassManipulator $classManipulator)
+    public function __construct(\Rector\Core\NodeManipulator\ClassManipulator $classManipulator)
     {
         $this->classManipulator = $classManipulator;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Add `Stringable` interface to classes with `__toString()` method', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Add `Stringable` interface to classes with `__toString()` method', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function __toString()
@@ -59,25 +59,25 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Class_::class];
+        return [\PhpParser\Node\Stmt\Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $toStringClassMethod = $node->getMethod('__toString');
-        if (!$toStringClassMethod instanceof ClassMethod) {
+        if (!$toStringClassMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
             return null;
         }
-        if ($this->classManipulator->hasInterface($node, new ObjectType(self::STRINGABLE))) {
+        if ($this->classManipulator->hasInterface($node, new \PHPStan\Type\ObjectType(self::STRINGABLE))) {
             return null;
         }
         // add interface
-        $node->implements[] = new FullyQualified(self::STRINGABLE);
+        $node->implements[] = new \PhpParser\Node\Name\FullyQualified(self::STRINGABLE);
         // add return type
         if ($toStringClassMethod->returnType === null) {
-            $toStringClassMethod->returnType = new Name('string');
+            $toStringClassMethod->returnType = new \PhpParser\Node\Name('string');
         }
         return $node;
     }

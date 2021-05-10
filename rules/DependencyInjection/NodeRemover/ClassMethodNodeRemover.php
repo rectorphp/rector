@@ -28,13 +28,13 @@ final class ClassMethodNodeRemover
      * @var SimpleCallableNodeTraverser
      */
     private $simpleCallableNodeTraverser;
-    public function __construct(SimpleCallableNodeTraverser $simpleCallableNodeTraverser, NodeNameResolver $nodeNameResolver, NodesToRemoveCollector $nodesToRemoveCollector)
+    public function __construct(\RectorPrefix20210510\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\PostRector\Collector\NodesToRemoveCollector $nodesToRemoveCollector)
     {
         $this->nodesToRemoveCollector = $nodesToRemoveCollector;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
     }
-    public function removeClassMethodIfUseless(ClassMethod $classMethod) : void
+    public function removeClassMethodIfUseless(\PhpParser\Node\Stmt\ClassMethod $classMethod) : void
     {
         if ($classMethod->params !== []) {
             return;
@@ -44,11 +44,11 @@ final class ClassMethodNodeRemover
         }
         $this->nodesToRemoveCollector->addNodeToRemove($classMethod);
     }
-    public function removeParamFromMethodBody(ClassMethod $classMethod, Param $param) : void
+    public function removeParamFromMethodBody(\PhpParser\Node\Stmt\ClassMethod $classMethod, \PhpParser\Node\Param $param) : void
     {
         /** @var string $paramName */
         $paramName = $this->nodeNameResolver->getName($param->var);
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) use($paramName) {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $classMethod->stmts, function (\PhpParser\Node $node) use($paramName) {
             if (!$this->isParentConstructStaticCall($node)) {
                 return null;
             }
@@ -60,7 +60,7 @@ final class ClassMethodNodeRemover
             return null;
         });
         foreach ((array) $classMethod->stmts as $key => $stmt) {
-            if ($stmt instanceof Expression) {
+            if ($stmt instanceof \PhpParser\Node\Stmt\Expression) {
                 $stmt = $stmt->expr;
             }
             if (!$this->isParentConstructStaticCall($stmt)) {
@@ -74,11 +74,11 @@ final class ClassMethodNodeRemover
         }
         $this->removeParamFromAssign($classMethod, $paramName);
     }
-    private function isParentConstructStaticCall(Node $node) : bool
+    private function isParentConstructStaticCall(\PhpParser\Node $node) : bool
     {
-        return $this->isStaticCallNamed($node, 'parent', MethodName::CONSTRUCT);
+        return $this->isStaticCallNamed($node, 'parent', \Rector\Core\ValueObject\MethodName::CONSTRUCT);
     }
-    private function removeParamFromArgs(StaticCall $staticCall, string $paramName) : void
+    private function removeParamFromArgs(\PhpParser\Node\Expr\StaticCall $staticCall, string $paramName) : void
     {
         foreach ($staticCall->args as $key => $arg) {
             if (!$this->nodeNameResolver->isName($arg->value, $paramName)) {
@@ -87,16 +87,16 @@ final class ClassMethodNodeRemover
             unset($staticCall->args[$key]);
         }
     }
-    private function removeParamFromAssign(ClassMethod $classMethod, string $paramName) : void
+    private function removeParamFromAssign(\PhpParser\Node\Stmt\ClassMethod $classMethod, string $paramName) : void
     {
         foreach ((array) $classMethod->stmts as $key => $stmt) {
-            if ($stmt instanceof Expression) {
+            if ($stmt instanceof \PhpParser\Node\Stmt\Expression) {
                 $stmt = $stmt->expr;
             }
-            if (!$stmt instanceof Assign) {
+            if (!$stmt instanceof \PhpParser\Node\Expr\Assign) {
                 continue;
             }
-            if (!$stmt->expr instanceof Variable) {
+            if (!$stmt->expr instanceof \PhpParser\Node\Expr\Variable) {
                 continue;
             }
             if (!$this->nodeNameResolver->isName($stmt->expr, $paramName)) {
@@ -105,9 +105,9 @@ final class ClassMethodNodeRemover
             unset($classMethod->stmts[$key]);
         }
     }
-    private function isStaticCallNamed(Node $node, string $class, string $method) : bool
+    private function isStaticCallNamed(\PhpParser\Node $node, string $class, string $method) : bool
     {
-        if (!$node instanceof StaticCall) {
+        if (!$node instanceof \PhpParser\Node\Expr\StaticCall) {
             return \false;
         }
         if (!$this->nodeNameResolver->isName($node->class, $class)) {

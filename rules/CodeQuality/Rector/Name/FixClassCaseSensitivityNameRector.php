@@ -20,19 +20,19 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\CodeQuality\Rector\Name\FixClassCaseSensitivityNameRector\FixClassCaseSensitivityNameRectorTest
  */
-final class FixClassCaseSensitivityNameRector extends AbstractRector
+final class FixClassCaseSensitivityNameRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(ReflectionProvider $reflectionProvider)
+    public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider)
     {
         $this->reflectionProvider = $reflectionProvider;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Change miss-typed case sensitivity name to correct one', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change miss-typed case sensitivity name to correct one', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run()
@@ -65,12 +65,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Name::class];
+        return [\PhpParser\Node\Name::class];
     }
     /**
      * @param Name $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $fullyQualifiedName = $this->resolveFullyQualifiedName($node);
         if (!$this->reflectionProvider->hasClass($fullyQualifiedName)) {
@@ -89,22 +89,22 @@ CODE_SAMPLE
         if ($realClassName === $fullyQualifiedName) {
             return null;
         }
-        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
+        $parent = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
         // do not FQN use imports
-        if ($parent instanceof UseUse) {
-            return new Name($realClassName);
+        if ($parent instanceof \PhpParser\Node\Stmt\UseUse) {
+            return new \PhpParser\Node\Name($realClassName);
         }
-        return new FullyQualified($realClassName);
+        return new \PhpParser\Node\Name\FullyQualified($realClassName);
     }
-    private function resolveFullyQualifiedName(Name $name) : string
+    private function resolveFullyQualifiedName(\PhpParser\Node\Name $name) : string
     {
-        $parent = $name->getAttribute(AttributeKey::PARENT_NODE);
+        $parent = $name->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
         // for some reason, Param gets already corrected name
-        if (!$parent instanceof Param && !$parent instanceof ClassConstFetch) {
+        if (!$parent instanceof \PhpParser\Node\Param && !$parent instanceof \PhpParser\Node\Expr\ClassConstFetch) {
             return $this->getName($name);
         }
-        $originalName = $name->getAttribute(AttributeKey::ORIGINAL_NAME);
-        if (!$originalName instanceof Name) {
+        $originalName = $name->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NAME);
+        if (!$originalName instanceof \PhpParser\Node\Name) {
             return $this->getName($name);
         }
         // replace parts from the old one

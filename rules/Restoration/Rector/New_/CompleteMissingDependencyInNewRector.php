@@ -18,7 +18,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\Restoration\Rector\New_\CompleteMissingDependencyInNewRector\CompleteMissingDependencyInNewRectorTest
  */
-final class CompleteMissingDependencyInNewRector extends AbstractRector implements ConfigurableRectorInterface
+final class CompleteMissingDependencyInNewRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
      * @api
@@ -33,13 +33,13 @@ final class CompleteMissingDependencyInNewRector extends AbstractRector implemen
      * @var ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(ReflectionProvider $reflectionProvider)
+    public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider)
     {
         $this->reflectionProvider = $reflectionProvider;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Complete missing constructor dependency instance by type', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Complete missing constructor dependency instance by type', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run()
@@ -78,12 +78,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [New_::class];
+        return [\PhpParser\Node\Expr\New_::class];
     }
     /**
      * @param New_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($this->shouldSkipNew($node)) {
             return null;
@@ -99,8 +99,8 @@ CODE_SAMPLE
             if ($classToInstantiate === null) {
                 continue;
             }
-            $new = new New_(new FullyQualified($classToInstantiate));
-            $node->args[$position] = new Arg($new);
+            $new = new \PhpParser\Node\Expr\New_(new \PhpParser\Node\Name\FullyQualified($classToInstantiate));
+            $node->args[$position] = new \PhpParser\Node\Arg($new);
         }
         return $node;
     }
@@ -111,15 +111,15 @@ CODE_SAMPLE
     {
         $this->classToInstantiateByType = $configuration[self::CLASS_TO_INSTANTIATE_BY_TYPE] ?? [];
     }
-    private function shouldSkipNew(New_ $new) : bool
+    private function shouldSkipNew(\PhpParser\Node\Expr\New_ $new) : bool
     {
         $constructorMethodReflection = $this->getNewNodeClassConstructorMethodReflection($new);
-        if (!$constructorMethodReflection instanceof ReflectionMethod) {
+        if (!$constructorMethodReflection instanceof \ReflectionMethod) {
             return \true;
         }
         return $constructorMethodReflection->getNumberOfRequiredParameters() <= \count($new->args);
     }
-    private function getNewNodeClassConstructorMethodReflection(New_ $new) : ?ReflectionMethod
+    private function getNewNodeClassConstructorMethodReflection(\PhpParser\Node\Expr\New_ $new) : ?\ReflectionMethod
     {
         $className = $this->getName($new->class);
         if ($className === null) {
@@ -132,10 +132,10 @@ CODE_SAMPLE
         $reflectionClass = $classReflection->getNativeReflection();
         return $reflectionClass->getConstructor();
     }
-    private function resolveClassToInstantiateByParameterReflection(ReflectionParameter $reflectionParameter) : ?string
+    private function resolveClassToInstantiateByParameterReflection(\ReflectionParameter $reflectionParameter) : ?string
     {
         $reflectionType = $reflectionParameter->getType();
-        if (!$reflectionType instanceof ReflectionType) {
+        if (!$reflectionType instanceof \ReflectionType) {
             return null;
         }
         $requiredType = (string) $reflectionType;

@@ -13,8 +13,8 @@ namespace RectorPrefix20210510\Symfony\Contracts\Service;
 use RectorPrefix20210510\Psr\Container\ContainerExceptionInterface;
 use RectorPrefix20210510\Psr\Container\NotFoundExceptionInterface;
 // Help opcache.preload discover always-needed symbols
-\class_exists(ContainerExceptionInterface::class);
-\class_exists(NotFoundExceptionInterface::class);
+\class_exists(\RectorPrefix20210510\Psr\Container\ContainerExceptionInterface::class);
+\class_exists(\RectorPrefix20210510\Psr\Container\NotFoundExceptionInterface::class);
 /**
  * A trait to help implement ServiceProviderInterface.
  *
@@ -85,7 +85,7 @@ trait ServiceLocatorTrait
         }
         return $this->providedTypes;
     }
-    private function createNotFoundException(string $id) : NotFoundExceptionInterface
+    private function createNotFoundException(string $id) : \RectorPrefix20210510\Psr\Container\NotFoundExceptionInterface
     {
         if (!($alternatives = \array_keys($this->factories))) {
             $message = 'is empty...';
@@ -102,13 +102,13 @@ trait ServiceLocatorTrait
         } else {
             $message = \sprintf('Service "%s" not found: the current service locator %s', $id, $message);
         }
-        return new class($message) extends \InvalidArgumentException implements NotFoundExceptionInterface
+        return new class($message) extends \InvalidArgumentException implements \RectorPrefix20210510\Psr\Container\NotFoundExceptionInterface
         {
         };
     }
-    private function createCircularReferenceException(string $id, array $path) : ContainerExceptionInterface
+    private function createCircularReferenceException(string $id, array $path) : \RectorPrefix20210510\Psr\Container\ContainerExceptionInterface
     {
-        return new class(\sprintf('Circular reference detected for service "%s", path: "%s".', $id, \implode(' -> ', $path))) extends \RuntimeException implements ContainerExceptionInterface
+        return new class(\sprintf('Circular reference detected for service "%s", path: "%s".', $id, \implode(' -> ', $path))) extends \RuntimeException implements \RectorPrefix20210510\Psr\Container\ContainerExceptionInterface
         {
         };
     }

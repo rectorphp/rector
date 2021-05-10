@@ -14,11 +14,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://gnugat.github.io/2015/09/23/phpunit-with-phpspec.html
  * @changelog http://www.phpspec.net/en/stable/cookbook/construction.html
  */
-abstract class AbstractPhpSpecToPHPUnitRector extends AbstractRector
+abstract class AbstractPhpSpecToPHPUnitRector extends \Rector\Core\Rector\AbstractRector
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Migrate PhpSpec behavior to PHPUnit test', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Migrate PhpSpec behavior to PHPUnit test', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 
 namespace spec\SomeNamespaceForThisTest;
 
@@ -55,12 +55,12 @@ class OrderSpec extends ObjectBehavior
 CODE_SAMPLE
 )]);
     }
-    public function isInPhpSpecBehavior(Node $node) : bool
+    public function isInPhpSpecBehavior(\PhpParser\Node $node) : bool
     {
-        $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
-        if (!$classLike instanceof ClassLike) {
+        $classLike = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
+        if (!$classLike instanceof \PhpParser\Node\Stmt\ClassLike) {
             return \false;
         }
-        return $this->isObjectType($classLike, new ObjectType('PhpSpec\\ObjectBehavior'));
+        return $this->isObjectType($classLike, new \PHPStan\Type\ObjectType('PhpSpec\\ObjectBehavior'));
     }
 }

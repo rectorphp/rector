@@ -53,13 +53,13 @@ final class File
      * @var RectorError[]
      */
     private $rectorErrors = [];
-    public function __construct(SmartFileInfo $smartFileInfo, string $fileContent)
+    public function __construct(\Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo, string $fileContent)
     {
         $this->smartFileInfo = $smartFileInfo;
         $this->fileContent = $fileContent;
         $this->originalFileContent = $fileContent;
     }
-    public function getSmartFileInfo() : SmartFileInfo
+    public function getSmartFileInfo() : \Symplify\SmartFileSystem\SmartFileInfo
     {
         return $this->smartFileInfo;
     }
@@ -83,11 +83,11 @@ final class File
     {
         return $this->hasChanged;
     }
-    public function setFileDiff(FileDiff $fileDiff) : void
+    public function setFileDiff(\Rector\Core\ValueObject\Reporting\FileDiff $fileDiff) : void
     {
         $this->fileDiff = $fileDiff;
     }
-    public function getFileDiff() : ?FileDiff
+    public function getFileDiff() : ?\Rector\Core\ValueObject\Reporting\FileDiff
     {
         return $this->fileDiff;
     }
@@ -99,7 +99,7 @@ final class File
     public function hydrateStmtsAndTokens(array $newStmts, array $oldStmts, array $oldTokens) : void
     {
         if ($this->oldStmts !== []) {
-            throw new ShouldNotHappenException('Double stmts override');
+            throw new \Rector\Core\Exception\ShouldNotHappenException('Double stmts override');
         }
         $this->oldStmts = $oldStmts;
         $this->newStmts = $newStmts;
@@ -133,7 +133,7 @@ final class File
     {
         $this->newStmts = $newStmts;
     }
-    public function addRectorClassWithLine(RectorWithLineChange $rectorWithLineChange) : void
+    public function addRectorClassWithLine(\Rector\ChangesReporting\ValueObject\RectorWithLineChange $rectorWithLineChange) : void
     {
         $this->rectorWithLineChanges[] = $rectorWithLineChange;
     }

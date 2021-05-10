@@ -15,7 +15,7 @@ namespace RectorPrefix20210510\Symfony\Component\String\Inflector;
  *
  * This class does only inflect nouns; not adjectives nor composed words like "soixante-dix".
  */
-final class FrenchInflector implements InflectorInterface
+final class FrenchInflector implements \RectorPrefix20210510\Symfony\Component\String\Inflector\InflectorInterface
 {
     /**
      * A list of all rules for pluralise.

@@ -17,11 +17,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\CodeQuality\Rector\Include_\AbsolutizeRequireAndIncludePathRector\AbsolutizeRequireAndIncludePathRectorTest
  */
-final class AbsolutizeRequireAndIncludePathRector extends AbstractRector
+final class AbsolutizeRequireAndIncludePathRector extends \Rector\Core\Rector\AbstractRector
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('include/require to absolute path. This Rector might introduce backwards incompatible code, when the include/require beeing changed depends on the current working directory.', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('include/require to absolute path. This Rector might introduce backwards incompatible code, when the include/require beeing changed depends on the current working directory.', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -50,33 +50,33 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Include_::class];
+        return [\PhpParser\Node\Expr\Include_::class];
     }
     /**
      * @param Include_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if (!$node->expr instanceof String_) {
+        if (!$node->expr instanceof \PhpParser\Node\Scalar\String_) {
             return null;
         }
         /** @var string $includeValue */
         $includeValue = $this->valueResolver->getValue($node->expr);
         // skip phar
-        if (Strings::startsWith($includeValue, 'phar://')) {
+        if (\RectorPrefix20210510\Nette\Utils\Strings::startsWith($includeValue, 'phar://')) {
             return null;
         }
         // skip absolute paths
-        if (Strings::startsWith($includeValue, '/')) {
+        if (\RectorPrefix20210510\Nette\Utils\Strings::startsWith($includeValue, '/')) {
             return null;
         }
         // add preslash to string
-        if (Strings::startsWith($includeValue, './')) {
-            $node->expr->value = Strings::substring($includeValue, 1);
+        if (\RectorPrefix20210510\Nette\Utils\Strings::startsWith($includeValue, './')) {
+            $node->expr->value = \RectorPrefix20210510\Nette\Utils\Strings::substring($includeValue, 1);
         } else {
             $node->expr->value = '/' . $includeValue;
         }
-        $node->expr = new Concat(new Dir(), $node->expr);
+        $node->expr = new \PhpParser\Node\Expr\BinaryOp\Concat(new \PhpParser\Node\Scalar\MagicConst\Dir(), $node->expr);
         return $node;
     }
 }

@@ -18,7 +18,7 @@ use RectorPrefix20210510\Symfony\Contracts\EventDispatcher\Event;
  *
  * @author Bernhard Schussek <bschussek@gmail.com>
  */
-class KernelEvent extends Event
+class KernelEvent extends \RectorPrefix20210510\Symfony\Contracts\EventDispatcher\Event
 {
     private $kernel;
     private $request;
@@ -27,7 +27,7 @@ class KernelEvent extends Event
      * @param int $requestType The request type the kernel is currently processing; one of
      *                         HttpKernelInterface::MASTER_REQUEST or HttpKernelInterface::SUB_REQUEST
      */
-    public function __construct(HttpKernelInterface $kernel, Request $request, ?int $requestType)
+    public function __construct(\RectorPrefix20210510\Symfony\Component\HttpKernel\HttpKernelInterface $kernel, \RectorPrefix20210510\Symfony\Component\HttpFoundation\Request $request, ?int $requestType)
     {
         $this->kernel = $kernel;
         $this->request = $request;
@@ -68,6 +68,6 @@ class KernelEvent extends Event
      */
     public function isMasterRequest()
     {
-        return HttpKernelInterface::MASTER_REQUEST === $this->requestType;
+        return \RectorPrefix20210510\Symfony\Component\HttpKernel\HttpKernelInterface::MASTER_REQUEST === $this->requestType;
     }
 }

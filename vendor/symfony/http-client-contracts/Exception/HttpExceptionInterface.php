@@ -16,7 +16,7 @@ use RectorPrefix20210510\Symfony\Contracts\HttpClient\ResponseInterface;
  *
  * @author Anton Chernikov <anton_ch1989@mail.ru>
  */
-interface HttpExceptionInterface extends ExceptionInterface
+interface HttpExceptionInterface extends \RectorPrefix20210510\Symfony\Contracts\HttpClient\Exception\ExceptionInterface
 {
-    public function getResponse() : ResponseInterface;
+    public function getResponse() : \RectorPrefix20210510\Symfony\Contracts\HttpClient\ResponseInterface;
 }

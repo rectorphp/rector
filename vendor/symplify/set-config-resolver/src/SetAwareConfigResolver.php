@@ -9,16 +9,16 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 /**
  * @see \Symplify\SetConfigResolver\Tests\ConfigResolver\SetAwareConfigResolverTest
  */
-final class SetAwareConfigResolver extends AbstractConfigResolver
+final class SetAwareConfigResolver extends \RectorPrefix20210510\Symplify\SetConfigResolver\AbstractConfigResolver
 {
     /**
      * @var SetsParameterResolver
      */
     private $setsParameterResolver;
-    public function __construct(SetProviderInterface $setProvider)
+    public function __construct(\RectorPrefix20210510\Symplify\SetConfigResolver\Contract\SetProviderInterface $setProvider)
     {
-        $setResolver = new SetResolver($setProvider);
-        $this->setsParameterResolver = new SetsParameterResolver($setResolver);
+        $setResolver = new \RectorPrefix20210510\Symplify\SetConfigResolver\SetResolver($setProvider);
+        $this->setsParameterResolver = new \RectorPrefix20210510\Symplify\SetConfigResolver\Config\SetsParameterResolver($setResolver);
         parent::__construct();
     }
     /**

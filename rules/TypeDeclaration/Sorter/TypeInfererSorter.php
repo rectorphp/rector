@@ -24,12 +24,12 @@ final class TypeInfererSorter
     /**
      * @param PriorityAwareTypeInfererInterface[] $sortedTypeInferers
      */
-    private function ensurePriorityIsUnique(array $sortedTypeInferers, PriorityAwareTypeInfererInterface $priorityAwareTypeInferer) : void
+    private function ensurePriorityIsUnique(array $sortedTypeInferers, \Rector\TypeDeclaration\Contract\TypeInferer\PriorityAwareTypeInfererInterface $priorityAwareTypeInferer) : void
     {
         if (!isset($sortedTypeInferers[$priorityAwareTypeInferer->getPriority()])) {
             return;
         }
         $alreadySetPropertyTypeInferer = $sortedTypeInferers[$priorityAwareTypeInferer->getPriority()];
-        throw new ConflictingPriorityException($priorityAwareTypeInferer, $alreadySetPropertyTypeInferer);
+        throw new \Rector\TypeDeclaration\Exception\ConflictingPriorityException($priorityAwareTypeInferer, $alreadySetPropertyTypeInferer);
     }
 }

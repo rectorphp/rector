@@ -13,19 +13,19 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\NetteToSymfony\Tests\Rector\Class_\NetteTesterClassToPHPUnitClassRector\NetteTesterClassToPHPUnitClassRectorTest
  */
-final class NetteAssertToPHPUnitAssertRector extends AbstractRector
+final class NetteAssertToPHPUnitAssertRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var AssertManipulator
      */
     private $assertManipulator;
-    public function __construct(AssertManipulator $assertManipulator)
+    public function __construct(\Rector\NetteToSymfony\AssertManipulator $assertManipulator)
     {
         $this->assertManipulator = $assertManipulator;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Migrate Nette/Assert calls to PHPUnit', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Migrate Nette/Assert calls to PHPUnit', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 use Tester\Assert;
 
 function someStaticFunctions()
@@ -48,14 +48,14 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [StaticCall::class];
+        return [\PhpParser\Node\Expr\StaticCall::class];
     }
     /**
      * @param StaticCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if (!$this->isObjectType($node->class, new ObjectType('Tester\\Assert'))) {
+        if (!$this->isObjectType($node->class, new \PHPStan\Type\ObjectType('Tester\\Assert'))) {
             return null;
         }
         return $this->assertManipulator->processStaticCall($node);

@@ -30,17 +30,17 @@ final class CondAndExpr
      * @var Expr|null
      */
     private $condExpr;
-    public function __construct(?Expr $condExpr, Expr $expr, string $kind)
+    public function __construct(?\PhpParser\Node\Expr $condExpr, \PhpParser\Node\Expr $expr, string $kind)
     {
         $this->condExpr = $condExpr;
         $this->expr = $expr;
         $this->kind = $kind;
     }
-    public function getExpr() : Expr
+    public function getExpr() : \PhpParser\Node\Expr
     {
         return $this->expr;
     }
-    public function getCondExpr() : ?Expr
+    public function getCondExpr() : ?\PhpParser\Node\Expr
     {
         return $this->condExpr;
     }

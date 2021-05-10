@@ -15,6 +15,6 @@ namespace RectorPrefix20210510\Symfony\Component\DependencyInjection\Exception;
  *
  * @author Bulat Shakirzyanov <bulat@theopenskyproject.com>
  */
-class InvalidArgumentException extends \InvalidArgumentException implements ExceptionInterface
+class InvalidArgumentException extends \InvalidArgumentException implements \RectorPrefix20210510\Symfony\Component\DependencyInjection\Exception\ExceptionInterface
 {
 }

@@ -30,22 +30,22 @@ final class DependencyInjectionMethodCallAnalyzer
      * @var PropertyAdder
      */
     private $propertyAdder;
-    public function __construct(PropertyNaming $propertyNaming, \Rector\Symfony\NodeAnalyzer\ServiceTypeMethodCallResolver $serviceTypeMethodCallResolver, NodeFactory $nodeFactory, PropertyAdder $propertyAdder)
+    public function __construct(\Rector\Naming\Naming\PropertyNaming $propertyNaming, \Rector\Symfony\NodeAnalyzer\ServiceTypeMethodCallResolver $serviceTypeMethodCallResolver, \Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\PostRector\DependencyInjection\PropertyAdder $propertyAdder)
     {
         $this->propertyNaming = $propertyNaming;
         $this->serviceTypeMethodCallResolver = $serviceTypeMethodCallResolver;
         $this->nodeFactory = $nodeFactory;
         $this->propertyAdder = $propertyAdder;
     }
-    public function replaceMethodCallWithPropertyFetchAndDependency(MethodCall $methodCall) : ?Node
+    public function replaceMethodCallWithPropertyFetchAndDependency(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\PhpParser\Node
     {
         $serviceType = $this->serviceTypeMethodCallResolver->resolve($methodCall);
-        if (!$serviceType instanceof ObjectType) {
+        if (!$serviceType instanceof \PHPStan\Type\ObjectType) {
             return null;
         }
-        $classLike = $methodCall->getAttribute(AttributeKey::CLASS_NODE);
-        if (!$classLike instanceof Class_) {
-            throw new ShouldNotHappenException();
+        $classLike = $methodCall->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
+        if (!$classLike instanceof \PhpParser\Node\Stmt\Class_) {
+            throw new \Rector\Core\Exception\ShouldNotHappenException();
         }
         $propertyName = $this->propertyNaming->fqnToVariableName($serviceType);
         $this->propertyAdder->addConstructorDependencyToClass($classLike, $serviceType, $propertyName);

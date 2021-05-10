@@ -9,9 +9,9 @@ final class RobotLoaderFactory
     /**
      * @param string[] $directories
      */
-    public function createFromDirectories(array $directories) : RobotLoader
+    public function createFromDirectories(array $directories) : \RectorPrefix20210510\Nette\Loaders\RobotLoader
     {
-        $robotLoader = new RobotLoader();
+        $robotLoader = new \RectorPrefix20210510\Nette\Loaders\RobotLoader();
         $robotLoader->setTempDirectory(\sys_get_temp_dir() . '/tests_add_see_rector_tests');
         $robotLoader->addDirectory(...$directories);
         $robotLoader->acceptFiles = ['*Test.php'];

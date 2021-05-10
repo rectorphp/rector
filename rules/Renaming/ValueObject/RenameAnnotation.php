@@ -24,9 +24,9 @@ final class RenameAnnotation
         $this->oldAnnotation = $oldAnnotation;
         $this->newAnnotation = $newAnnotation;
     }
-    public function getObjectType() : ObjectType
+    public function getObjectType() : \PHPStan\Type\ObjectType
     {
-        return new ObjectType($this->type);
+        return new \PHPStan\Type\ObjectType($this->type);
     }
     public function getOldAnnotation() : string
     {

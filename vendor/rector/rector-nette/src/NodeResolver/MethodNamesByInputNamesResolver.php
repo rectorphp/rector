@@ -18,7 +18,7 @@ final class MethodNamesByInputNamesResolver
     public function __construct(array $formControlTypeResolvers)
     {
         foreach ($formControlTypeResolvers as $formControlTypeResolver) {
-            if ($formControlTypeResolver instanceof MethodNamesByInputNamesResolverAwareInterface) {
+            if ($formControlTypeResolver instanceof \Rector\Nette\Contract\MethodNamesByInputNamesResolverAwareInterface) {
                 $formControlTypeResolver->setResolver($this);
             }
             $this->formControlTypeResolvers[] = $formControlTypeResolver;
@@ -27,7 +27,7 @@ final class MethodNamesByInputNamesResolver
     /**
      * @return array<string, class-string>
      */
-    public function resolveExpr(Node $node) : array
+    public function resolveExpr(\PhpParser\Node $node) : array
     {
         $methodNamesByInputNames = [];
         foreach ($this->formControlTypeResolvers as $formControlTypeResolver) {

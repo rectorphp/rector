@@ -16,13 +16,13 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @see https://github.com/nette/utils/blob/master/src/Utils/Strings.php
  * @see \Rector\Nette\Tests\Rector\Identical\EndsWithFunctionToNetteUtilsStringsRector\EndsWithFunctionToNetteUtilsStringsRectorTest
  */
-final class EndsWithFunctionToNetteUtilsStringsRector extends AbstractRector
+final class EndsWithFunctionToNetteUtilsStringsRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var StrlenEndsWithResolver
      */
     private $strlenEndsWithResolver;
-    public function __construct(StrlenEndsWithResolver $strlenEndsWithResolver)
+    public function __construct(\Rector\Nette\NodeAnalyzer\StrlenEndsWithResolver $strlenEndsWithResolver)
     {
         $this->strlenEndsWithResolver = $strlenEndsWithResolver;
     }
@@ -31,11 +31,11 @@ final class EndsWithFunctionToNetteUtilsStringsRector extends AbstractRector
      */
     public function getNodeTypes() : array
     {
-        return [Identical::class, NotIdentical::class];
+        return [\PhpParser\Node\Expr\BinaryOp\Identical::class, \PhpParser\Node\Expr\BinaryOp\NotIdentical::class];
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Use Nette\\Utils\\Strings::endsWith() over bare string-functions', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Use Nette\\Utils\\Strings::endsWith() over bare string-functions', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function end($needle)
@@ -63,15 +63,15 @@ CODE_SAMPLE
     /**
      * @param Identical|NotIdentical $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $contentExprAndNeedleExpr = $this->strlenEndsWithResolver->resolveBinaryOpForFunction($node);
-        if (!$contentExprAndNeedleExpr instanceof ContentExprAndNeedleExpr) {
+        if (!$contentExprAndNeedleExpr instanceof \Rector\Nette\ValueObject\ContentExprAndNeedleExpr) {
             return null;
         }
         $staticCall = $this->nodeFactory->createStaticCall('Nette\\Utils\\Strings', 'endsWith', [$contentExprAndNeedleExpr->getContentExpr(), $contentExprAndNeedleExpr->getNeedleExpr()]);
-        if ($node instanceof NotIdentical) {
-            return new BooleanNot($staticCall);
+        if ($node instanceof \PhpParser\Node\Expr\BinaryOp\NotIdentical) {
+            return new \PhpParser\Node\Expr\BooleanNot($staticCall);
         }
         return $staticCall;
     }

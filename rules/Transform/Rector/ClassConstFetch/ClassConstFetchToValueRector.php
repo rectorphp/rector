@@ -15,7 +15,7 @@ use RectorPrefix20210510\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Transform\Rector\ClassConstFetch\ClassConstFetchToValueRector\ClassConstFetchToValueRectorTest
  */
-final class ClassConstFetchToValueRector extends AbstractRector implements ConfigurableRectorInterface
+final class ClassConstFetchToValueRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
      * @var string
@@ -25,22 +25,22 @@ final class ClassConstFetchToValueRector extends AbstractRector implements Confi
      * @var ClassConstFetchToValue[]
      */
     private $classConstFetchesToValues = [];
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        $configuration = [self::CLASS_CONST_FETCHES_TO_VALUES => [new ClassConstFetchToValue('Nette\\Configurator', 'DEVELOPMENT', 'development'), new ClassConstFetchToValue('Nette\\Configurator', 'PRODUCTION', 'production')]];
-        return new RuleDefinition('Replaces constant by value', [new ConfiguredCodeSample('$value === Nette\\Configurator::DEVELOPMENT', '$value === "development"', $configuration)]);
+        $configuration = [self::CLASS_CONST_FETCHES_TO_VALUES => [new \Rector\Transform\ValueObject\ClassConstFetchToValue('Nette\\Configurator', 'DEVELOPMENT', 'development'), new \Rector\Transform\ValueObject\ClassConstFetchToValue('Nette\\Configurator', 'PRODUCTION', 'production')]];
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Replaces constant by value', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample('$value === Nette\\Configurator::DEVELOPMENT', '$value === "development"', $configuration)]);
     }
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [ClassConstFetch::class];
+        return [\PhpParser\Node\Expr\ClassConstFetch::class];
     }
     /**
      * @param ClassConstFetch $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         foreach ($this->classConstFetchesToValues as $classConstFetchToValue) {
             if (!$this->isObjectType($node->class, $classConstFetchToValue->getObjectType())) {
@@ -49,7 +49,7 @@ final class ClassConstFetchToValueRector extends AbstractRector implements Confi
             if (!$this->isName($node->name, $classConstFetchToValue->getConstant())) {
                 continue;
             }
-            return BuilderHelpers::normalizeValue($classConstFetchToValue->getValue());
+            return \PhpParser\BuilderHelpers::normalizeValue($classConstFetchToValue->getValue());
         }
         return $node;
     }
@@ -59,7 +59,7 @@ final class ClassConstFetchToValueRector extends AbstractRector implements Confi
     public function configure(array $configuration) : void
     {
         $classConstFetchesToValues = $configuration[self::CLASS_CONST_FETCHES_TO_VALUES] ?? [];
-        Assert::allIsInstanceOf($classConstFetchesToValues, ClassConstFetchToValue::class);
+        \RectorPrefix20210510\Webmozart\Assert\Assert::allIsInstanceOf($classConstFetchesToValues, \Rector\Transform\ValueObject\ClassConstFetchToValue::class);
         $this->classConstFetchesToValues = $classConstFetchesToValues;
     }
 }

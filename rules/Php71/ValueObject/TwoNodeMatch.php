@@ -14,16 +14,16 @@ final class TwoNodeMatch
      * @var Expr
      */
     private $secondExpr;
-    public function __construct(Expr $firstExpr, Expr $secondExpr)
+    public function __construct(\PhpParser\Node\Expr $firstExpr, \PhpParser\Node\Expr $secondExpr)
     {
         $this->firstExpr = $firstExpr;
         $this->secondExpr = $secondExpr;
     }
-    public function getFirstExpr() : Expr
+    public function getFirstExpr() : \PhpParser\Node\Expr
     {
         return $this->firstExpr;
     }
-    public function getSecondExpr() : Expr
+    public function getSecondExpr() : \PhpParser\Node\Expr
     {
         return $this->secondExpr;
     }

@@ -67,7 +67,7 @@ final class ClassMethodRenderAnalyzer
      * @var ReturnAnalyzer
      */
     private $returnAnalyzer;
-    public function __construct(SimpleCallableNodeTraverser $simpleCallableNodeTraverser, NodeNameResolver $nodeNameResolver, ScopeNestingComparator $scopeNestingComparator, BetterNodeFinder $betterNodeFinder, ThisTemplatePropertyFetchAnalyzer $thisTemplatePropertyFetchAnalyzer, ReturnAnalyzer $returnAnalyzer)
+    public function __construct(\RectorPrefix20210510\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeNestingScope\ScopeNestingComparator $scopeNestingComparator, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Nette\NodeAnalyzer\ThisTemplatePropertyFetchAnalyzer $thisTemplatePropertyFetchAnalyzer, \Rector\Nette\NodeAnalyzer\ReturnAnalyzer $returnAnalyzer)
     {
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->nodeNameResolver = $nodeNameResolver;
@@ -76,24 +76,24 @@ final class ClassMethodRenderAnalyzer
         $this->thisTemplatePropertyFetchAnalyzer = $thisTemplatePropertyFetchAnalyzer;
         $this->returnAnalyzer = $returnAnalyzer;
     }
-    public function collectFromClassMethod(ClassMethod $classMethod) : ClassMethodRender
+    public function collectFromClassMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod) : \Rector\NetteToSymfony\ValueObject\ClassMethodRender
     {
         $this->templateFileExprs = [];
         $this->templateVariables = [];
         $this->nodesToRemove = [];
         $this->conditionalAssigns = [];
         $this->lastReturn = $this->returnAnalyzer->findLastClassMethodReturn($classMethod);
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) : void {
-            if ($node instanceof MethodCall) {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $classMethod->stmts, function (\PhpParser\Node $node) : void {
+            if ($node instanceof \PhpParser\Node\Expr\MethodCall) {
                 $this->collectTemplateFileExpr($node);
             }
-            if ($node instanceof Assign) {
+            if ($node instanceof \PhpParser\Node\Expr\Assign) {
                 $this->collectVariableFromAssign($node);
             }
         });
-        return new ClassMethodRender($this->templateFileExprs, $this->templateVariables, $this->nodesToRemove, $this->conditionalAssigns);
+        return new \Rector\NetteToSymfony\ValueObject\ClassMethodRender($this->templateFileExprs, $this->templateVariables, $this->nodesToRemove, $this->conditionalAssigns);
     }
-    private function collectTemplateFileExpr(MethodCall $methodCall) : void
+    private function collectTemplateFileExpr(\PhpParser\Node\Expr\MethodCall $methodCall) : void
     {
         if (!$this->nodeNameResolver->isNames($methodCall->name, ['render', 'setFile'])) {
             return;
@@ -104,24 +104,24 @@ final class ClassMethodRenderAnalyzer
         }
         $this->templateFileExprs[] = $methodCall->args[0]->value;
     }
-    private function collectVariableFromAssign(Assign $assign) : void
+    private function collectVariableFromAssign(\PhpParser\Node\Expr\Assign $assign) : void
     {
         // $this->template = x
-        if ($assign->var instanceof PropertyFetch) {
+        if ($assign->var instanceof \PhpParser\Node\Expr\PropertyFetch) {
             $propertyFetch = $assign->var;
             if (!$this->thisTemplatePropertyFetchAnalyzer->isTemplatePropertyFetch($propertyFetch->var)) {
                 return;
             }
             $variableName = $this->nodeNameResolver->getName($propertyFetch);
-            $foundParent = $this->betterNodeFinder->findParentTypes($propertyFetch->var, ControlStructure::CONDITIONAL_NODE_SCOPE_TYPES + [FunctionLike::class]);
+            $foundParent = $this->betterNodeFinder->findParentTypes($propertyFetch->var, \Rector\NodeNestingScope\ValueObject\ControlStructure::CONDITIONAL_NODE_SCOPE_TYPES + [\PhpParser\Node\FunctionLike::class]);
             if ($foundParent && $this->scopeNestingComparator->isInBothIfElseBranch($foundParent, $propertyFetch)) {
                 $this->conditionalAssigns[$variableName][] = $assign;
                 return;
             }
-            if ($foundParent instanceof If_) {
+            if ($foundParent instanceof \PhpParser\Node\Stmt\If_) {
                 return;
             }
-            if ($foundParent instanceof Else_) {
+            if ($foundParent instanceof \PhpParser\Node\Stmt\Else_) {
                 return;
             }
             // there is a return before this assign, to do not remove it and keep ti

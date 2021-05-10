@@ -11,7 +11,7 @@ use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use RectorPrefix20210510\Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
 use RectorPrefix20210510\Symplify\SimplePhpDocParser\PhpDocNodeTraverser;
 use RectorPrefix20210510\Symplify\SimplePhpDocParser\Tests\HttpKernel\SimplePhpDocParserKernel;
-final class PhpDocNodeTraverserTest extends AbstractKernelTestCase
+final class PhpDocNodeTraverserTest extends \RectorPrefix20210510\Symplify\PackageBuilder\Testing\AbstractKernelTestCase
 {
     /**
      * @var string
@@ -23,15 +23,15 @@ final class PhpDocNodeTraverserTest extends AbstractKernelTestCase
     private $phpDocNodeTraverser;
     protected function setUp() : void
     {
-        $this->bootKernel(SimplePhpDocParserKernel::class);
-        $this->phpDocNodeTraverser = $this->getService(PhpDocNodeTraverser::class);
+        $this->bootKernel(\RectorPrefix20210510\Symplify\SimplePhpDocParser\Tests\HttpKernel\SimplePhpDocParserKernel::class);
+        $this->phpDocNodeTraverser = $this->getService(\RectorPrefix20210510\Symplify\SimplePhpDocParser\PhpDocNodeTraverser::class);
     }
     public function test() : void
     {
-        $varTagValueNode = new VarTagValueNode(new IdentifierTypeNode('string'), '', '');
-        $phpDocNode = new PhpDocNode([new PhpDocTagNode('@var', $varTagValueNode)]);
-        $this->phpDocNodeTraverser->traverseWithCallable($phpDocNode, '', function (Node $node) : Node {
-            if (!$node instanceof VarTagValueNode) {
+        $varTagValueNode = new \PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode(new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode('string'), '', '');
+        $phpDocNode = new \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode([new \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode('@var', $varTagValueNode)]);
+        $this->phpDocNodeTraverser->traverseWithCallable($phpDocNode, '', function (\PHPStan\PhpDocParser\Ast\Node $node) : Node {
+            if (!$node instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode) {
                 return $node;
             }
             $node->description = self::SOME_DESCRIPTION;

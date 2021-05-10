@@ -24,7 +24,7 @@ use Symplify\SmartFileSystem\SmartFileInfo;
  *
  * @see \Rector\Tests\DowngradePhp70\Rector\String_\DowngradeGeneratedScalarTypesRector\DowngradeGeneratedScalarTypesRectorTest
  */
-final class DowngradeGeneratedScalarTypesRector extends AbstractRector
+final class DowngradeGeneratedScalarTypesRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * Extends list here as needed
@@ -42,14 +42,14 @@ final class DowngradeGeneratedScalarTypesRector extends AbstractRector
      * @var InlineCodeParser
      */
     private $inlineCodeParser;
-    public function __construct(InlineCodeParser $inlineCodeParser, DowngradeScalarTypeDeclarationRector $downgradeScalarTypeDeclarationRector, DowngradeVoidTypeDeclarationRector $downgradeVoidTypeDeclarationRector)
+    public function __construct(\Rector\Core\PhpParser\Parser\InlineCodeParser $inlineCodeParser, \Rector\DowngradePhp70\Rector\FunctionLike\DowngradeScalarTypeDeclarationRector $downgradeScalarTypeDeclarationRector, \Rector\DowngradePhp71\Rector\FunctionLike\DowngradeVoidTypeDeclarationRector $downgradeVoidTypeDeclarationRector)
     {
         $this->phpRectors = [$downgradeScalarTypeDeclarationRector, $downgradeVoidTypeDeclarationRector];
         $this->inlineCodeParser = $inlineCodeParser;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Refactor scalar types in PHP code in string snippets, e.g. generated container code from symfony/dependency-injection', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Refactor scalar types in PHP code in string snippets, e.g. generated container code from symfony/dependency-injection', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 $code = <<<'EOF'
     public function getParameter(string $name)
     {
@@ -75,26 +75,26 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [String_::class];
+        return [\PhpParser\Node\Scalar\String_::class];
     }
     /**
      * @param String_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $fileInfo = $this->file->getSmartFileInfo();
         // this rule is parsing strings, so it heavy on performance; to lower it, we'll process only known opt-in files
         if (!$this->isRelevantFileInfo($fileInfo)) {
             return null;
         }
-        $stringKind = $node->getAttribute(AttributeKey::KIND);
-        if (!\in_array($stringKind, [String_::KIND_NOWDOC, String_::KIND_HEREDOC], \true)) {
+        $stringKind = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::KIND);
+        if (!\in_array($stringKind, [\PhpParser\Node\Scalar\String_::KIND_NOWDOC, \PhpParser\Node\Scalar\String_::KIND_HEREDOC], \true)) {
             return null;
         }
         // we assume its a function list - see https://github.com/symfony/symfony/blob/ad91659ea9b2a964f933bf27d0d1f1ef60fe9417/src/Symfony/Component/DependencyInjection/Dumper/PhpDumper.php#L1513-L1560
         try {
             $nodes = $this->inlineCodeParser->parse('<?php class SomeClass { ' . $node->value . ' }');
-        } catch (Error $error) {
+        } catch (\PhpParser\Error $error) {
             // nothing we can do
             return null;
         }
@@ -106,26 +106,26 @@ CODE_SAMPLE
         // somehow we want to call all Rector rules here
         $nodeTraverser = $this->createNodeTraverser();
         $changedNodes = $nodeTraverser->traverse($nodes);
-        if (!$changedNodes[0] instanceof Class_) {
+        if (!$changedNodes[0] instanceof \PhpParser\Node\Stmt\Class_) {
             return null;
         }
         $node->value = $this->printClassStmts($changedNodes[0]);
         return $node;
     }
-    private function isRelevantFileInfo(SmartFileInfo $fileInfo) : bool
+    private function isRelevantFileInfo(\Symplify\SmartFileSystem\SmartFileInfo $fileInfo) : bool
     {
         // for tests
-        if (StaticPHPUnitEnvironment::isPHPUnitRun()) {
+        if (\Rector\Testing\PHPUnit\StaticPHPUnitEnvironment::isPHPUnitRun()) {
             return \true;
         }
         foreach (self::FILES_TO_INCLUDE as $fileToInclude) {
-            if (Strings::endsWith($fileInfo->getRealPath(), $fileToInclude)) {
+            if (\RectorPrefix20210510\Nette\Utils\Strings::endsWith($fileInfo->getRealPath(), $fileToInclude)) {
                 return \true;
             }
         }
         return \false;
     }
-    private function printClassStmts(Class_ $class) : string
+    private function printClassStmts(\PhpParser\Node\Stmt\Class_ $class) : string
     {
         $refactoredContent = '';
         foreach ($class->stmts as $classStmt) {
@@ -133,9 +133,9 @@ CODE_SAMPLE
         }
         return $refactoredContent;
     }
-    private function createNodeTraverser() : NodeTraverser
+    private function createNodeTraverser() : \PhpParser\NodeTraverser
     {
-        $nodeTraverser = new NodeTraverser();
+        $nodeTraverser = new \PhpParser\NodeTraverser();
         foreach ($this->phpRectors as $phpRector) {
             $nodeTraverser->addVisitor($phpRector);
         }

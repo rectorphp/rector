@@ -36,7 +36,7 @@ final class PropertyAdder
      * @var PropertyNaming
      */
     private $propertyNaming;
-    public function __construct(NodeTypeResolver $nodeTypeResolver, NodeNameResolver $nodeNameResolver, PropertyToAddCollector $propertyToAddCollector, RectorChangeCollector $rectorChangeCollector, PropertyNaming $propertyNaming)
+    public function __construct(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\PostRector\Collector\PropertyToAddCollector $propertyToAddCollector, \Rector\ChangesReporting\Collector\RectorChangeCollector $rectorChangeCollector, \Rector\Naming\Naming\PropertyNaming $propertyNaming)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->nodeNameResolver = $nodeNameResolver;
@@ -44,26 +44,26 @@ final class PropertyAdder
         $this->rectorChangeCollector = $rectorChangeCollector;
         $this->propertyNaming = $propertyNaming;
     }
-    public function addPropertyToCollector(Property $property) : void
+    public function addPropertyToCollector(\PhpParser\Node\Stmt\Property $property) : void
     {
-        $classNode = $property->getAttribute(AttributeKey::CLASS_NODE);
-        if (!$classNode instanceof Class_) {
+        $classNode = $property->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
+        if (!$classNode instanceof \PhpParser\Node\Stmt\Class_) {
             return;
         }
         $propertyType = $this->nodeTypeResolver->resolve($property);
         // use first type - hard assumption @todo improve
-        if ($propertyType instanceof UnionType) {
+        if ($propertyType instanceof \PHPStan\Type\UnionType) {
             $propertyType = $propertyType->getTypes()[0];
         }
         $propertyName = $this->nodeNameResolver->getName($property);
         $this->addConstructorDependencyToClass($classNode, $propertyType, $propertyName, $property->flags);
     }
-    public function addConstructorDependencyToClass(Class_ $class, Type $propertyType, string $propertyName, int $propertyFlags = 0) : void
+    public function addConstructorDependencyToClass(\PhpParser\Node\Stmt\Class_ $class, \PHPStan\Type\Type $propertyType, string $propertyName, int $propertyFlags = 0) : void
     {
         $this->propertyToAddCollector->addPropertyToClass($class, $propertyName, $propertyType, $propertyFlags);
         $this->rectorChangeCollector->notifyNodeFileInfo($class);
     }
-    public function addServiceConstructorDependencyToClass(Class_ $class, ObjectType $objectType) : void
+    public function addServiceConstructorDependencyToClass(\PhpParser\Node\Stmt\Class_ $class, \PHPStan\Type\ObjectType $objectType) : void
     {
         $propertyName = $this->propertyNaming->fqnToVariableName($objectType);
         $this->addConstructorDependencyToClass($class, $objectType, $propertyName);

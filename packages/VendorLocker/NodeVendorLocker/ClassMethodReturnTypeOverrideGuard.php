@@ -43,14 +43,14 @@ final class ClassMethodReturnTypeOverrideGuard
      * @var BetterNodeFinder
      */
     private $betterNodeFinder;
-    public function __construct(NodeNameResolver $nodeNameResolver, ReflectionProvider $reflectionProvider, FamilyRelationsAnalyzer $familyRelationsAnalyzer, BetterNodeFinder $betterNodeFinder)
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer $familyRelationsAnalyzer, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->reflectionProvider = $reflectionProvider;
         $this->familyRelationsAnalyzer = $familyRelationsAnalyzer;
         $this->betterNodeFinder = $betterNodeFinder;
     }
-    public function shouldSkipClassMethod(ClassMethod $classMethod) : bool
+    public function shouldSkipClassMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
     {
         // 1. skip magic methods
         if ($classMethod->isMagic()) {
@@ -60,13 +60,13 @@ final class ClassMethodReturnTypeOverrideGuard
         if ($this->shouldSkipChaoticClassMethods($classMethod)) {
             return \true;
         }
-        $scope = $classMethod->getAttribute(AttributeKey::SCOPE);
-        if (!$scope instanceof Scope) {
+        $scope = $classMethod->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
+        if (!$scope instanceof \PHPStan\Analyser\Scope) {
             return \false;
         }
         $classReflection = $scope->getClassReflection();
-        if (!$classReflection instanceof ClassReflection) {
-            throw new ShouldNotHappenException();
+        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
+            throw new \Rector\Core\Exception\ShouldNotHappenException();
         }
         $childrenClassReflections = $this->familyRelationsAnalyzer->getChildrenOfClassReflection($classReflection);
         if ($childrenClassReflections === []) {
@@ -77,9 +77,9 @@ final class ClassMethodReturnTypeOverrideGuard
         }
         return $classMethod->returnType === null;
     }
-    public function shouldSkipClassMethodOldTypeWithNewType(Type $oldType, Type $newType) : bool
+    public function shouldSkipClassMethodOldTypeWithNewType(\PHPStan\Type\Type $oldType, \PHPStan\Type\Type $newType) : bool
     {
-        if ($oldType instanceof MixedType) {
+        if ($oldType instanceof \PHPStan\Type\MixedType) {
             return \false;
         }
         // new generic string type is more advanced than old array type
@@ -88,19 +88,19 @@ final class ClassMethodReturnTypeOverrideGuard
         }
         return $oldType->isSuperTypeOf($newType)->yes();
     }
-    private function shouldSkipChaoticClassMethods(ClassMethod $classMethod) : bool
+    private function shouldSkipChaoticClassMethods(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
     {
         /** @var string|null $className */
-        $className = $classMethod->getAttribute(AttributeKey::CLASS_NAME);
+        $className = $classMethod->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);
         if ($className === null) {
             return \false;
         }
-        $scope = $classMethod->getAttribute(AttributeKey::SCOPE);
-        if (!$scope instanceof Scope) {
+        $scope = $classMethod->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
+        if (!$scope instanceof \PHPStan\Analyser\Scope) {
             return \false;
         }
         $classReflection = $scope->getClassReflection();
-        if (!$classReflection instanceof ClassReflection) {
+        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
             return \false;
         }
         foreach (self::CHAOTIC_CLASS_METHOD_NAMES as $chaoticClass => $chaoticMethodNames) {
@@ -115,26 +115,26 @@ final class ClassMethodReturnTypeOverrideGuard
         }
         return \false;
     }
-    private function hasClassMethodExprReturn(ClassMethod $classMethod) : bool
+    private function hasClassMethodExprReturn(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
     {
-        return (bool) $this->betterNodeFinder->findFirst((array) $classMethod->stmts, function (Node $node) : bool {
-            if (!$node instanceof Return_) {
+        return (bool) $this->betterNodeFinder->findFirst((array) $classMethod->stmts, function (\PhpParser\Node $node) : bool {
+            if (!$node instanceof \PhpParser\Node\Stmt\Return_) {
                 return \false;
             }
-            return $node->expr instanceof Expr;
+            return $node->expr instanceof \PhpParser\Node\Expr;
         });
     }
-    private function isFirstArrayTypeMoreAdvanced(Type $oldType, Type $newType) : bool
+    private function isFirstArrayTypeMoreAdvanced(\PHPStan\Type\Type $oldType, \PHPStan\Type\Type $newType) : bool
     {
-        if (!$oldType instanceof ArrayType) {
+        if (!$oldType instanceof \PHPStan\Type\ArrayType) {
             return \false;
         }
-        if (!$newType instanceof ArrayType) {
+        if (!$newType instanceof \PHPStan\Type\ArrayType) {
             return \false;
         }
-        if (!$oldType->getItemType() instanceof StringType) {
+        if (!$oldType->getItemType() instanceof \PHPStan\Type\StringType) {
             return \false;
         }
-        return $newType->getItemType() instanceof GenericClassStringType;
+        return $newType->getItemType() instanceof \PHPStan\Type\Generic\GenericClassStringType;
     }
 }

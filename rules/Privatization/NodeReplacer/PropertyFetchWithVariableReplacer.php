@@ -20,7 +20,7 @@ final class PropertyFetchWithVariableReplacer
      * @var NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(SimpleCallableNodeTraverser $simpleCallableNodeTraverser, NodeNameResolver $nodeNameResolver)
+    public function __construct(\RectorPrefix20210510\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
     {
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->nodeNameResolver = $nodeNameResolver;
@@ -28,22 +28,22 @@ final class PropertyFetchWithVariableReplacer
     /**
      * @param array<string, string[]> $methodsByPropertyName
      */
-    public function replacePropertyFetchesByVariable(Class_ $class, array $methodsByPropertyName) : void
+    public function replacePropertyFetchesByVariable(\PhpParser\Node\Stmt\Class_ $class, array $methodsByPropertyName) : void
     {
         foreach ($methodsByPropertyName as $propertyName => $methodNames) {
             $methodName = $methodNames[0];
             $classMethod = $class->getMethod($methodName);
-            if (!$classMethod instanceof ClassMethod) {
+            if (!$classMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
                 continue;
             }
-            $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $classMethod->getStmts(), function (Node $node) use($propertyName) : ?Variable {
-                if (!$node instanceof PropertyFetch) {
+            $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $classMethod->getStmts(), function (\PhpParser\Node $node) use($propertyName) : ?Variable {
+                if (!$node instanceof \PhpParser\Node\Expr\PropertyFetch) {
                     return null;
                 }
                 if (!$this->nodeNameResolver->isName($node, $propertyName)) {
                     return null;
                 }
-                return new Variable($propertyName);
+                return new \PhpParser\Node\Expr\Variable($propertyName);
             });
         }
     }

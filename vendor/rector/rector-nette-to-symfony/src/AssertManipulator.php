@@ -78,7 +78,7 @@ final class AssertManipulator
      * @var PhpDocInfoFactory
      */
     private $phpDocInfoFactory;
-    public function __construct(NodeNameResolver $nodeNameResolver, NodeTypeResolver $nodeTypeResolver, NodesToAddCollector $nodesToAddCollector, NodesToRemoveCollector $nodesToRemoveCollector, StringTypeAnalyzer $stringTypeAnalyzer, ValueResolver $valueResolver, PhpDocInfoFactory $phpDocInfoFactory)
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\PostRector\Collector\NodesToAddCollector $nodesToAddCollector, \Rector\PostRector\Collector\NodesToRemoveCollector $nodesToRemoveCollector, \Rector\NodeTypeResolver\TypeAnalyzer\StringTypeAnalyzer $stringTypeAnalyzer, \Rector\Core\PhpParser\Node\Value\ValueResolver $valueResolver, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
@@ -91,7 +91,7 @@ final class AssertManipulator
     /**
      * @return StaticCall|MethodCall
      */
-    public function processStaticCall(StaticCall $staticCall) : Expr
+    public function processStaticCall(\PhpParser\Node\Expr\StaticCall $staticCall) : \PhpParser\Node\Expr
     {
         if ($this->nodeNameResolver->isNames($staticCall->name, ['truthy', 'falsey'])) {
             return $this->processTruthyOrFalseyCall($staticCall);
@@ -110,52 +110,52 @@ final class AssertManipulator
         // self or class, depending on the context
         // prefer $this->assertSame() as more conventional and explicit in class-context
         if (!$this->sholdBeStaticCall($staticCall)) {
-            $methodCall = new MethodCall(new Variable(self::THIS), $staticCall->name);
+            $methodCall = new \PhpParser\Node\Expr\MethodCall(new \PhpParser\Node\Expr\Variable(self::THIS), $staticCall->name);
             $methodCall->args = $staticCall->args;
             $methodCall->setAttributes($staticCall->getAttributes());
-            $methodCall->setAttribute(AttributeKey::ORIGINAL_NODE, null);
+            $methodCall->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NODE, null);
             return $methodCall;
         }
-        $staticCall->class = new FullyQualified('PHPUnit\\Framework\\Assert');
+        $staticCall->class = new \PhpParser\Node\Name\FullyQualified('PHPUnit\\Framework\\Assert');
         return $staticCall;
     }
     /**
      * @return StaticCall|MethodCall
      */
-    private function processTruthyOrFalseyCall(StaticCall $staticCall) : Expr
+    private function processTruthyOrFalseyCall(\PhpParser\Node\Expr\StaticCall $staticCall) : \PhpParser\Node\Expr
     {
         $method = $this->nodeNameResolver->isName($staticCall->name, 'truthy') ? 'assertTrue' : 'assertFalse';
         if (!$this->sholdBeStaticCall($staticCall)) {
-            $call = new MethodCall(new Variable(self::THIS), $method);
+            $call = new \PhpParser\Node\Expr\MethodCall(new \PhpParser\Node\Expr\Variable(self::THIS), $method);
             $call->args = $staticCall->args;
             $call->setAttributes($staticCall->getAttributes());
-            $call->setAttribute(AttributeKey::ORIGINAL_NODE, null);
+            $call->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NODE, null);
         } else {
             $call = $staticCall;
-            $call->name = new Identifier($method);
+            $call->name = new \PhpParser\Node\Identifier($method);
         }
-        if (!$this->nodeTypeResolver->isStaticType($staticCall->args[0]->value, BooleanType::class)) {
-            $call->args[0]->value = new Bool_($staticCall->args[0]->value);
+        if (!$this->nodeTypeResolver->isStaticType($staticCall->args[0]->value, \PHPStan\Type\BooleanType::class)) {
+            $call->args[0]->value = new \PhpParser\Node\Expr\Cast\Bool_($staticCall->args[0]->value);
         }
         return $call;
     }
-    private function processContainsCall(StaticCall $staticCall) : void
+    private function processContainsCall(\PhpParser\Node\Expr\StaticCall $staticCall) : void
     {
         if ($this->stringTypeAnalyzer->isStringOrUnionStringOnlyType($staticCall->args[1]->value)) {
             $name = $this->nodeNameResolver->isName($staticCall->name, self::CONTAINS) ? 'assertStringContainsString' : 'assertStringNotContainsString';
         } else {
             $name = $this->nodeNameResolver->isName($staticCall->name, self::CONTAINS) ? 'assertContains' : 'assertNotContains';
         }
-        $staticCall->name = new Identifier($name);
+        $staticCall->name = new \PhpParser\Node\Identifier($name);
     }
-    private function processExceptionCall(StaticCall $staticCall) : void
+    private function processExceptionCall(\PhpParser\Node\Expr\StaticCall $staticCall) : void
     {
         $method = 'expectException';
         // expect exception
         if ($this->sholdBeStaticCall($staticCall)) {
-            $expectException = new StaticCall(new Name(self::SELF), $method);
+            $expectException = new \PhpParser\Node\Expr\StaticCall(new \PhpParser\Node\Name(self::SELF), $method);
         } else {
-            $expectException = new MethodCall(new Variable(self::THIS), $method);
+            $expectException = new \PhpParser\Node\Expr\MethodCall(new \PhpParser\Node\Expr\Variable(self::THIS), $method);
         }
         $expectException->args[] = $staticCall->args[1];
         $this->nodesToAddCollector->addNodeAfterNode($expectException, $staticCall);
@@ -172,65 +172,65 @@ final class AssertManipulator
         $this->nodesToAddCollector->addNodesAfterNode($closure->stmts, $staticCall);
         $this->nodesToRemoveCollector->addNodeToRemove($staticCall);
     }
-    private function processTypeCall(StaticCall $staticCall) : void
+    private function processTypeCall(\PhpParser\Node\Expr\StaticCall $staticCall) : void
     {
         $value = $this->valueResolver->getValue($staticCall->args[0]->value);
         if (isset(self::TYPE_TO_METHOD[$value])) {
-            $staticCall->name = new Identifier(self::TYPE_TO_METHOD[$value]);
+            $staticCall->name = new \PhpParser\Node\Identifier(self::TYPE_TO_METHOD[$value]);
             unset($staticCall->args[0]);
             $staticCall->args = \array_values($staticCall->args);
         } elseif ($value === 'null') {
-            $staticCall->name = new Identifier('assertNull');
+            $staticCall->name = new \PhpParser\Node\Identifier('assertNull');
             unset($staticCall->args[0]);
             $staticCall->args = \array_values($staticCall->args);
         } else {
-            $staticCall->name = new Identifier('assertInstanceOf');
+            $staticCall->name = new \PhpParser\Node\Identifier('assertInstanceOf');
         }
     }
-    private function processNoErrorCall(StaticCall $staticCall) : void
+    private function processNoErrorCall(\PhpParser\Node\Expr\StaticCall $staticCall) : void
     {
         /** @var Closure $closure */
         $closure = $staticCall->args[0]->value;
         $this->nodesToAddCollector->addNodesAfterNode($closure->stmts, $staticCall);
         $this->nodesToRemoveCollector->addNodeToRemove($staticCall);
-        $classMethod = $staticCall->getAttribute(AttributeKey::METHOD_NODE);
-        if (!$classMethod instanceof ClassMethod) {
+        $classMethod = $staticCall->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::METHOD_NODE);
+        if (!$classMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
             return;
         }
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
-        $phpDocInfo->addPhpDocTagNode(new PhpDocTagNode('@doesNotPerformAssertions', new GenericTagValueNode('')));
+        $phpDocInfo->addPhpDocTagNode(new \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode('@doesNotPerformAssertions', new \PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode('')));
     }
-    private function renameAssertMethod(StaticCall $staticCall) : void
+    private function renameAssertMethod(\PhpParser\Node\Expr\StaticCall $staticCall) : void
     {
         foreach (self::ASSERT_METHODS_REMAP as $oldMethod => $newMethod) {
             if (!$this->nodeNameResolver->isName($staticCall->name, $oldMethod)) {
                 continue;
             }
-            $staticCall->name = new Identifier($newMethod);
+            $staticCall->name = new \PhpParser\Node\Identifier($newMethod);
         }
     }
-    private function sholdBeStaticCall(StaticCall $staticCall) : bool
+    private function sholdBeStaticCall(\PhpParser\Node\Expr\StaticCall $staticCall) : bool
     {
-        return !(bool) $staticCall->getAttribute(AttributeKey::CLASS_NODE);
+        return !(bool) $staticCall->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
     }
-    private function refactorExpectException(StaticCall $staticCall) : string
+    private function refactorExpectException(\PhpParser\Node\Expr\StaticCall $staticCall) : string
     {
         $method = 'expectExceptionMessage';
         if ($this->sholdBeStaticCall($staticCall)) {
-            $expectExceptionMessage = new StaticCall(new Name(self::SELF), $method);
+            $expectExceptionMessage = new \PhpParser\Node\Expr\StaticCall(new \PhpParser\Node\Name(self::SELF), $method);
         } else {
-            $expectExceptionMessage = new MethodCall(new Variable(self::THIS), $method);
+            $expectExceptionMessage = new \PhpParser\Node\Expr\MethodCall(new \PhpParser\Node\Expr\Variable(self::THIS), $method);
         }
         $expectExceptionMessage->args[] = $staticCall->args[2];
         $this->nodesToAddCollector->addNodeAfterNode($expectExceptionMessage, $staticCall);
         return $method;
     }
-    private function refactorExpectExceptionCode(StaticCall $staticCall) : void
+    private function refactorExpectExceptionCode(\PhpParser\Node\Expr\StaticCall $staticCall) : void
     {
         if ($this->sholdBeStaticCall($staticCall)) {
-            $expectExceptionCode = new StaticCall(new Name(self::SELF), 'expectExceptionCode');
+            $expectExceptionCode = new \PhpParser\Node\Expr\StaticCall(new \PhpParser\Node\Name(self::SELF), 'expectExceptionCode');
         } else {
-            $expectExceptionCode = new MethodCall(new Variable(self::THIS), 'expectExceptionCode');
+            $expectExceptionCode = new \PhpParser\Node\Expr\MethodCall(new \PhpParser\Node\Expr\Variable(self::THIS), 'expectExceptionCode');
         }
         $expectExceptionCode->args[] = $staticCall->args[3];
         $this->nodesToAddCollector->addNodeAfterNode($expectExceptionCode, $staticCall);

@@ -24,7 +24,7 @@ final class SymfonyMethodCallsFactory
      * @var NodeFactory
      */
     private $nodeFactory;
-    public function __construct(NodeNameResolver $nodeNameResolver, NodeFactory $nodeFactory)
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\NodeFactory $nodeFactory)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeFactory = $nodeFactory;
@@ -33,7 +33,7 @@ final class SymfonyMethodCallsFactory
      * @param MethodCall[] $onFormVariableMethodCalls
      * @return Expression[]
      */
-    public function create(array $onFormVariableMethodCalls, Variable $formBuilderVariable) : array
+    public function create(array $onFormVariableMethodCalls, \PhpParser\Node\Expr\Variable $formBuilderVariable) : array
     {
         $symfonyMethodCalls = [];
         // create symfony form from nette form method calls
@@ -43,22 +43,22 @@ final class SymfonyMethodCallsFactory
             }
             // text input
             $inputName = $onFormVariableMethodCall->args[0];
-            $formTypeClassConstant = $this->nodeFactory->createClassConstReference(TextType::class);
+            $formTypeClassConstant = $this->nodeFactory->createClassConstReference(\RectorPrefix20210510\Symfony\Component\Form\Extension\Core\Type\TextType::class);
             $args = $this->createAddTextArgs($inputName, $formTypeClassConstant, $onFormVariableMethodCall);
-            $methodCall = new MethodCall($formBuilderVariable, 'add', $args);
-            $symfonyMethodCalls[] = new Expression($methodCall);
+            $methodCall = new \PhpParser\Node\Expr\MethodCall($formBuilderVariable, 'add', $args);
+            $symfonyMethodCalls[] = new \PhpParser\Node\Stmt\Expression($methodCall);
         }
         return $symfonyMethodCalls;
     }
     /**
      * @return Arg[]
      */
-    private function createAddTextArgs(Arg $arg, ClassConstFetch $classConstFetch, MethodCall $onFormVariableMethodCall) : array
+    private function createAddTextArgs(\PhpParser\Node\Arg $arg, \PhpParser\Node\Expr\ClassConstFetch $classConstFetch, \PhpParser\Node\Expr\MethodCall $onFormVariableMethodCall) : array
     {
-        $args = [$arg, new Arg($classConstFetch)];
+        $args = [$arg, new \PhpParser\Node\Arg($classConstFetch)];
         if (isset($onFormVariableMethodCall->args[1])) {
-            $optionsArray = new Array_([new ArrayItem($onFormVariableMethodCall->args[1]->value, new String_('label'))]);
-            $args[] = new Arg($optionsArray);
+            $optionsArray = new \PhpParser\Node\Expr\Array_([new \PhpParser\Node\Expr\ArrayItem($onFormVariableMethodCall->args[1]->value, new \PhpParser\Node\Scalar\String_('label'))]);
+            $args[] = new \PhpParser\Node\Arg($optionsArray);
         }
         return $args;
     }

@@ -77,7 +77,7 @@ final class PropertyNaming
      * @var ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(TypeUnwrapper $typeUnwrapper, RectorNamingInflector $rectorNamingInflector, BetterNodeFinder $betterNodeFinder, NodeNameResolver $nodeNameResolver, NodeTypeResolver $nodeTypeResolver, ReflectionProvider $reflectionProvider)
+    public function __construct(\Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper $typeUnwrapper, \Rector\Naming\RectorNamingInflector $rectorNamingInflector, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
     {
         $this->typeUnwrapper = $typeUnwrapper;
         $this->rectorNamingInflector = $rectorNamingInflector;
@@ -86,30 +86,30 @@ final class PropertyNaming
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->reflectionProvider = $reflectionProvider;
     }
-    public function getExpectedNameFromMethodName(string $methodName) : ?ExpectedName
+    public function getExpectedNameFromMethodName(string $methodName) : ?\Rector\Naming\ValueObject\ExpectedName
     {
-        $matches = Strings::match($methodName, self::GET_PREFIX_REGEX);
+        $matches = \RectorPrefix20210510\Nette\Utils\Strings::match($methodName, self::GET_PREFIX_REGEX);
         if ($matches === null) {
             return null;
         }
         $originalName = \lcfirst($matches['root_name']);
-        return new ExpectedName($originalName, $this->rectorNamingInflector->singularize($originalName));
+        return new \Rector\Naming\ValueObject\ExpectedName($originalName, $this->rectorNamingInflector->singularize($originalName));
     }
-    public function getExpectedNameFromType(Type $type) : ?ExpectedName
+    public function getExpectedNameFromType(\PHPStan\Type\Type $type) : ?\Rector\Naming\ValueObject\ExpectedName
     {
         $type = $this->typeUnwrapper->unwrapNullableType($type);
-        if (!$type instanceof TypeWithClassName) {
+        if (!$type instanceof \PHPStan\Type\TypeWithClassName) {
             return null;
         }
-        if ($type instanceof SelfObjectType) {
+        if ($type instanceof \Rector\StaticTypeMapper\ValueObject\Type\SelfObjectType) {
             return null;
         }
-        if ($type instanceof StaticType) {
+        if ($type instanceof \PHPStan\Type\StaticType) {
             return null;
         }
         $className = $this->nodeTypeResolver->getFullyQualifiedClassName($type);
         foreach (self::EXCLUDED_CLASSES as $excludedClass) {
-            if (Strings::match($className, $excludedClass)) {
+            if (\RectorPrefix20210510\Nette\Utils\Strings::match($className, $excludedClass)) {
                 return null;
             }
         }
@@ -120,11 +120,11 @@ final class PropertyNaming
             $shortClassName = \strtolower($shortClassName);
         }
         // remove "_"
-        $shortClassName = Strings::replace($shortClassName, '#_#', '');
+        $shortClassName = \RectorPrefix20210510\Nette\Utils\Strings::replace($shortClassName, '#_#', '');
         $shortClassName = $this->normalizeUpperCase($shortClassName);
         // prolong too short generic names with one namespace up
         $originalName = $this->prolongIfTooShort($shortClassName, $className);
-        return new ExpectedName($originalName, $this->rectorNamingInflector->singularize($originalName));
+        return new \Rector\Naming\ValueObject\ExpectedName($originalName, $this->rectorNamingInflector->singularize($originalName));
     }
     /**
      * @param ObjectType|string $objectType
@@ -146,7 +146,7 @@ final class PropertyNaming
         $pascalCaseName = \str_replace('_', '', $uppercaseWords);
         return \lcfirst($pascalCaseName);
     }
-    public function getExpectedNameFromBooleanPropertyType(Property $property) : ?string
+    public function getExpectedNameFromBooleanPropertyType(\PhpParser\Node\Stmt\Property $property) : ?string
     {
         $prefixedClassMethods = $this->getPrefixedClassMethods($property);
         if ($prefixedClassMethods === []) {
@@ -161,24 +161,24 @@ final class PropertyNaming
     }
     private function resolveShortClassName(string $className) : string
     {
-        if (Strings::contains($className, '\\')) {
-            return (string) Strings::after($className, '\\', -1);
+        if (\RectorPrefix20210510\Nette\Utils\Strings::contains($className, '\\')) {
+            return (string) \RectorPrefix20210510\Nette\Utils\Strings::after($className, '\\', -1);
         }
         return $className;
     }
     private function removePrefixesAndSuffixes(string $shortClassName) : string
     {
         // is SomeInterface
-        if (Strings::endsWith($shortClassName, self::INTERFACE)) {
-            $shortClassName = Strings::substring($shortClassName, 0, -\strlen(self::INTERFACE));
+        if (\RectorPrefix20210510\Nette\Utils\Strings::endsWith($shortClassName, self::INTERFACE)) {
+            $shortClassName = \RectorPrefix20210510\Nette\Utils\Strings::substring($shortClassName, 0, -\strlen(self::INTERFACE));
         }
         // is ISomeClass
         if ($this->isPrefixedInterface($shortClassName)) {
-            $shortClassName = Strings::substring($shortClassName, 1);
+            $shortClassName = \RectorPrefix20210510\Nette\Utils\Strings::substring($shortClassName, 1);
         }
         // is AbstractClass
-        if (Strings::startsWith($shortClassName, 'Abstract')) {
-            $shortClassName = Strings::substring($shortClassName, \strlen('Abstract'));
+        if (\RectorPrefix20210510\Nette\Utils\Strings::startsWith($shortClassName, 'Abstract')) {
+            $shortClassName = \RectorPrefix20210510\Nette\Utils\Strings::substring($shortClassName, \strlen('Abstract'));
         }
         return $shortClassName;
     }
@@ -197,8 +197,8 @@ final class PropertyNaming
     private function prolongIfTooShort(string $shortClassName, string $className) : string
     {
         if (\in_array($shortClassName, ['Factory', 'Repository'], \true)) {
-            $namespaceAbove = (string) Strings::after($className, '\\', -2);
-            $namespaceAbove = (string) Strings::before($namespaceAbove, '\\');
+            $namespaceAbove = (string) \RectorPrefix20210510\Nette\Utils\Strings::after($className, '\\', -2);
+            $namespaceAbove = (string) \RectorPrefix20210510\Nette\Utils\Strings::before($namespaceAbove, '\\');
             return \lcfirst($namespaceAbove) . $shortClassName;
         }
         return \lcfirst($shortClassName);
@@ -208,20 +208,20 @@ final class PropertyNaming
      */
     private function resolveClassName($objectType) : string
     {
-        if ($objectType instanceof ObjectType) {
+        if ($objectType instanceof \PHPStan\Type\ObjectType) {
             return $objectType->getClassName();
         }
         return $objectType;
     }
     private function fqnToShortName(string $fqn) : string
     {
-        if (!Strings::contains($fqn, '\\')) {
+        if (!\RectorPrefix20210510\Nette\Utils\Strings::contains($fqn, '\\')) {
             return $fqn;
         }
         /** @var string $lastNamePart */
-        $lastNamePart = Strings::after($fqn, '\\', -1);
-        if (Strings::endsWith($lastNamePart, self::INTERFACE)) {
-            return Strings::substring($lastNamePart, 0, -\strlen(self::INTERFACE));
+        $lastNamePart = \RectorPrefix20210510\Nette\Utils\Strings::after($fqn, '\\', -1);
+        if (\RectorPrefix20210510\Nette\Utils\Strings::endsWith($lastNamePart, self::INTERFACE)) {
+            return \RectorPrefix20210510\Nette\Utils\Strings::substring($lastNamePart, 0, -\strlen(self::INTERFACE));
         }
         return $lastNamePart;
     }
@@ -232,25 +232,25 @@ final class PropertyNaming
             return $shortName;
         }
         // starts with "I\W+"?
-        if (Strings::match($shortName, self::I_PREFIX_REGEX)) {
-            return Strings::substring($shortName, 1);
+        if (\RectorPrefix20210510\Nette\Utils\Strings::match($shortName, self::I_PREFIX_REGEX)) {
+            return \RectorPrefix20210510\Nette\Utils\Strings::substring($shortName, 1);
         }
-        if (Strings::endsWith($shortName, self::INTERFACE)) {
-            return Strings::substring($shortName, -\strlen(self::INTERFACE));
+        if (\RectorPrefix20210510\Nette\Utils\Strings::endsWith($shortName, self::INTERFACE)) {
+            return \RectorPrefix20210510\Nette\Utils\Strings::substring($shortName, -\strlen(self::INTERFACE));
         }
         return $shortName;
     }
     /**
      * @return ClassMethod[]
      */
-    private function getPrefixedClassMethods(Property $property) : array
+    private function getPrefixedClassMethods(\PhpParser\Node\Stmt\Property $property) : array
     {
-        $classLike = $property->getAttribute(AttributeKey::CLASS_NODE);
-        if (!$classLike instanceof ClassLike) {
+        $classLike = $property->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
+        if (!$classLike instanceof \PhpParser\Node\Stmt\ClassLike) {
             return [];
         }
-        $classMethods = $this->betterNodeFinder->findInstanceOf($classLike, ClassMethod::class);
-        return \array_filter($classMethods, function (ClassMethod $classMethod) : bool {
+        $classMethods = $this->betterNodeFinder->findInstanceOf($classLike, \PhpParser\Node\Stmt\ClassMethod::class);
+        return \array_filter($classMethods, function (\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool {
             return $this->isBoolishMethodName($classMethod);
         });
     }
@@ -258,10 +258,10 @@ final class PropertyNaming
      * @param ClassMethod[] $prefixedClassMethods
      * @return ClassMethod[]
      */
-    private function filterClassMethodsWithPropertyFetchReturnOnly(array $prefixedClassMethods, Property $property) : array
+    private function filterClassMethodsWithPropertyFetchReturnOnly(array $prefixedClassMethods, \PhpParser\Node\Stmt\Property $property) : array
     {
         $classMethodName = $this->nodeNameResolver->getName($property);
-        return \array_filter($prefixedClassMethods, function (ClassMethod $classMethod) use($classMethodName) : bool {
+        return \array_filter($prefixedClassMethods, function (\PhpParser\Node\Stmt\ClassMethod $classMethod) use($classMethodName) : bool {
             return $this->doesClassMethodMatchReturnPropertyFetch($classMethod, $classMethodName);
         });
     }
@@ -270,7 +270,7 @@ final class PropertyNaming
         if (\strlen($shortClassName) <= 3) {
             return \false;
         }
-        if (!Strings::startsWith($shortClassName, 'I')) {
+        if (!\RectorPrefix20210510\Nette\Utils\Strings::startsWith($shortClassName, 'I')) {
             return \false;
         }
         if (!\ctype_upper($shortClassName[1])) {
@@ -285,19 +285,19 @@ final class PropertyNaming
         }
         return \ctype_digit($char);
     }
-    private function isBoolishMethodName(ClassMethod $classMethod) : bool
+    private function isBoolishMethodName(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
     {
         $classMethodName = $this->nodeNameResolver->getName($classMethod);
-        return (bool) Strings::match($classMethodName, self::PREFIXED_CLASS_METHODS_REGEX);
+        return (bool) \RectorPrefix20210510\Nette\Utils\Strings::match($classMethodName, self::PREFIXED_CLASS_METHODS_REGEX);
     }
-    private function doesClassMethodMatchReturnPropertyFetch(ClassMethod $classMethod, string $currentClassMethodName) : bool
+    private function doesClassMethodMatchReturnPropertyFetch(\PhpParser\Node\Stmt\ClassMethod $classMethod, string $currentClassMethodName) : bool
     {
         $possibleReturn = $classMethod->stmts[0] ?? null;
-        if (!$possibleReturn instanceof Return_) {
+        if (!$possibleReturn instanceof \PhpParser\Node\Stmt\Return_) {
             return \false;
         }
         $node = $possibleReturn->expr;
-        if (!$node instanceof PropertyFetch) {
+        if (!$node instanceof \PhpParser\Node\Expr\PropertyFetch) {
             return \false;
         }
         return $this->nodeNameResolver->isName($node->name, $currentClassMethodName);

@@ -18,7 +18,7 @@ namespace RectorPrefix20210510\Symfony\Component\Config\Loader;
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class LoaderResolver implements LoaderResolverInterface
+class LoaderResolver implements \RectorPrefix20210510\Symfony\Component\Config\Loader\LoaderResolverInterface
 {
     /**
      * @var LoaderInterface[] An array of LoaderInterface objects
@@ -45,7 +45,7 @@ class LoaderResolver implements LoaderResolverInterface
         }
         return \false;
     }
-    public function addLoader(LoaderInterface $loader)
+    public function addLoader(\RectorPrefix20210510\Symfony\Component\Config\Loader\LoaderInterface $loader)
     {
         $this->loaders[] = $loader;
         $loader->setResolver($this);

@@ -20,7 +20,7 @@ use RectorPrefix20210510\Symfony\Component\HttpFoundation\Response;
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class ResponseCacheStrategy implements ResponseCacheStrategyInterface
+class ResponseCacheStrategy implements \RectorPrefix20210510\Symfony\Component\HttpKernel\HttpCache\ResponseCacheStrategyInterface
 {
     /**
      * Cache-Control headers that are sent to the final response if they appear in ANY of the responses.
@@ -38,7 +38,7 @@ class ResponseCacheStrategy implements ResponseCacheStrategyInterface
     /**
      * {@inheritdoc}
      */
-    public function add(Response $response)
+    public function add(\RectorPrefix20210510\Symfony\Component\HttpFoundation\Response $response)
     {
         ++$this->embeddedResponses;
         foreach (self::OVERRIDE_DIRECTIVES as $directive) {
@@ -66,7 +66,7 @@ class ResponseCacheStrategy implements ResponseCacheStrategyInterface
     /**
      * {@inheritdoc}
      */
-    public function update(Response $response)
+    public function update(\RectorPrefix20210510\Symfony\Component\HttpFoundation\Response $response)
     {
         // if we have no embedded Response, do nothing
         if (0 === $this->embeddedResponses) {
@@ -114,7 +114,7 @@ class ResponseCacheStrategy implements ResponseCacheStrategyInterface
      *
      * @see https://www.w3.org/Protocols/rfc2616/rfc2616-sec13.html#sec13.4
      */
-    private function willMakeFinalResponseUncacheable(Response $response) : bool
+    private function willMakeFinalResponseUncacheable(\RectorPrefix20210510\Symfony\Component\HttpFoundation\Response $response) : bool
     {
         // RFC2616: A response received with a status code of 200, 203, 300, 301 or 410
         // MAY be stored by a cache […] unless a cache-control directive prohibits caching.

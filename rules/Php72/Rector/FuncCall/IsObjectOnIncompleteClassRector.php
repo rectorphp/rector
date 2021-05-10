@@ -16,11 +16,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php72\Rector\FuncCall\IsObjectOnIncompleteClassRector\IsObjectOnIncompleteClassRectorTest
  */
-final class IsObjectOnIncompleteClassRector extends AbstractRector
+final class IsObjectOnIncompleteClassRector extends \Rector\Core\Rector\AbstractRector
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Incomplete class returns inverted bool on is_object()', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Incomplete class returns inverted bool on is_object()', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 $incompleteObject = new __PHP_Incomplete_Class;
 $isObject = is_object($incompleteObject);
 CODE_SAMPLE
@@ -35,28 +35,28 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [FuncCall::class];
+        return [\PhpParser\Node\Expr\FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$this->isName($node, 'is_object')) {
             return null;
         }
-        $incompleteClassObjectType = new ObjectType('__PHP_Incomplete_Class');
+        $incompleteClassObjectType = new \PHPStan\Type\ObjectType('__PHP_Incomplete_Class');
         if (!$this->isObjectType($node->args[0]->value, $incompleteClassObjectType)) {
             return null;
         }
         if ($this->shouldSkip($node)) {
             return null;
         }
-        return new BooleanNot($node);
+        return new \PhpParser\Node\Expr\BooleanNot($node);
     }
-    private function shouldSkip(FuncCall $funcCall) : bool
+    private function shouldSkip(\PhpParser\Node\Expr\FuncCall $funcCall) : bool
     {
-        $parentNode = $funcCall->getAttribute(AttributeKey::PARENT_NODE);
-        return $parentNode instanceof BooleanNot;
+        $parentNode = $funcCall->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        return $parentNode instanceof \PhpParser\Node\Expr\BooleanNot;
     }
 }

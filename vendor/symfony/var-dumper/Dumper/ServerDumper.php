@@ -18,7 +18,7 @@ use RectorPrefix20210510\Symfony\Component\VarDumper\Server\Connection;
  *
  * @author Maxime Steinhausser <maxime.steinhausser@gmail.com>
  */
-class ServerDumper implements DataDumperInterface
+class ServerDumper implements \RectorPrefix20210510\Symfony\Component\VarDumper\Dumper\DataDumperInterface
 {
     private $connection;
     private $wrappedDumper;
@@ -27,9 +27,9 @@ class ServerDumper implements DataDumperInterface
      * @param DataDumperInterface|null   $wrappedDumper    A wrapped instance used whenever we failed contacting the server
      * @param ContextProviderInterface[] $contextProviders Context providers indexed by context name
      */
-    public function __construct(string $host, DataDumperInterface $wrappedDumper = null, array $contextProviders = [])
+    public function __construct(string $host, \RectorPrefix20210510\Symfony\Component\VarDumper\Dumper\DataDumperInterface $wrappedDumper = null, array $contextProviders = [])
     {
-        $this->connection = new Connection($host, $contextProviders);
+        $this->connection = new \RectorPrefix20210510\Symfony\Component\VarDumper\Server\Connection($host, $contextProviders);
         $this->wrappedDumper = $wrappedDumper;
     }
     public function getContextProviders() : array
@@ -39,7 +39,7 @@ class ServerDumper implements DataDumperInterface
     /**
      * {@inheritdoc}
      */
-    public function dump(Data $data)
+    public function dump(\RectorPrefix20210510\Symfony\Component\VarDumper\Cloner\Data $data)
     {
         if (!$this->connection->write($data) && $this->wrappedDumper) {
             $this->wrappedDumper->dump($data);

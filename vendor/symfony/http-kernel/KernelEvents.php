@@ -105,5 +105,5 @@ final class KernelEvents
      *
      * These aliases can be consumed by RegisterListenersPass.
      */
-    public const ALIASES = [ControllerArgumentsEvent::class => self::CONTROLLER_ARGUMENTS, ControllerEvent::class => self::CONTROLLER, ResponseEvent::class => self::RESPONSE, FinishRequestEvent::class => self::FINISH_REQUEST, RequestEvent::class => self::REQUEST, ViewEvent::class => self::VIEW, ExceptionEvent::class => self::EXCEPTION, TerminateEvent::class => self::TERMINATE];
+    public const ALIASES = [\RectorPrefix20210510\Symfony\Component\HttpKernel\Event\ControllerArgumentsEvent::class => self::CONTROLLER_ARGUMENTS, \RectorPrefix20210510\Symfony\Component\HttpKernel\Event\ControllerEvent::class => self::CONTROLLER, \RectorPrefix20210510\Symfony\Component\HttpKernel\Event\ResponseEvent::class => self::RESPONSE, \RectorPrefix20210510\Symfony\Component\HttpKernel\Event\FinishRequestEvent::class => self::FINISH_REQUEST, \RectorPrefix20210510\Symfony\Component\HttpKernel\Event\RequestEvent::class => self::REQUEST, \RectorPrefix20210510\Symfony\Component\HttpKernel\Event\ViewEvent::class => self::VIEW, \RectorPrefix20210510\Symfony\Component\HttpKernel\Event\ExceptionEvent::class => self::EXCEPTION, \RectorPrefix20210510\Symfony\Component\HttpKernel\Event\TerminateEvent::class => self::TERMINATE];
 }

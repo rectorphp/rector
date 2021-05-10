@@ -18,33 +18,33 @@ final class RectorContainerFactory
      * @param SmartFileInfo[] $configFileInfos
      * @api
      */
-    public function createFromConfigs(array $configFileInfos) : ContainerInterface
+    public function createFromConfigs(array $configFileInfos) : \RectorPrefix20210510\Symfony\Component\DependencyInjection\ContainerInterface
     {
         // to override the configs without clearing cache
-        $isDebug = StaticInputDetector::isDebug();
+        $isDebug = \RectorPrefix20210510\Symplify\PackageBuilder\Console\Input\StaticInputDetector::isDebug();
         $environment = $this->createEnvironment($configFileInfos);
         // mt_rand is needed to invalidate container cache in case of class changes to be registered as services
-        $isPHPUnitRun = StaticPHPUnitEnvironment::isPHPUnitRun();
+        $isPHPUnitRun = \Rector\Testing\PHPUnit\StaticPHPUnitEnvironment::isPHPUnitRun();
         if (!$isPHPUnitRun) {
             $environment .= \mt_rand(0, 10000);
         }
-        $phpStanStubLoader = new PHPStanStubLoader();
+        $phpStanStubLoader = new \Rector\Core\Stubs\PHPStanStubLoader();
         $phpStanStubLoader->loadStubs();
-        $rectorKernel = new RectorKernel($environment, $isDebug, $configFileInfos);
+        $rectorKernel = new \Rector\Core\HttpKernel\RectorKernel($environment, $isDebug, $configFileInfos);
         $rectorKernel->boot();
         return $rectorKernel->getContainer();
     }
-    public function createFromBootstrapConfigs(BootstrapConfigs $bootstrapConfigs) : ContainerInterface
+    public function createFromBootstrapConfigs(\Rector\Core\ValueObject\Bootstrap\BootstrapConfigs $bootstrapConfigs) : \RectorPrefix20210510\Symfony\Component\DependencyInjection\ContainerInterface
     {
         $container = $this->createFromConfigs($bootstrapConfigs->getConfigFileInfos());
         $mainConfigFileInfo = $bootstrapConfigs->getMainConfigFileInfo();
         if ($mainConfigFileInfo !== null) {
             /** @var ChangedFilesDetector $changedFilesDetector */
-            $changedFilesDetector = $container->get(ChangedFilesDetector::class);
+            $changedFilesDetector = $container->get(\Rector\Caching\Detector\ChangedFilesDetector::class);
             $changedFilesDetector->setFirstResolvedConfigFileInfo($mainConfigFileInfo);
         }
         /** @var Configuration $configuration */
-        $configuration = $container->get(Configuration::class);
+        $configuration = $container->get(\Rector\Core\Configuration\Configuration::class);
         $configuration->setBootstrapConfigs($bootstrapConfigs);
         return $container;
     }

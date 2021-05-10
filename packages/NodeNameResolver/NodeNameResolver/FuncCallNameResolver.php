@@ -10,13 +10,13 @@ use PhpParser\Node\Name\FullyQualified;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\NodeNameResolver\Contract\NodeNameResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-final class FuncCallNameResolver implements NodeNameResolverInterface
+final class FuncCallNameResolver implements \Rector\NodeNameResolver\Contract\NodeNameResolverInterface
 {
     /**
      * @var ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(ReflectionProvider $reflectionProvider)
+    public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider)
     {
         $this->reflectionProvider = $reflectionProvider;
     }
@@ -25,7 +25,7 @@ final class FuncCallNameResolver implements NodeNameResolverInterface
      */
     public function getNode() : string
     {
-        return FuncCall::class;
+        return \PhpParser\Node\Expr\FuncCall::class;
     }
     /**
      * If some function is namespaced, it will be used over global one.
@@ -33,14 +33,14 @@ final class FuncCallNameResolver implements NodeNameResolverInterface
      *
      * @param FuncCall $node
      */
-    public function resolve(Node $node) : ?string
+    public function resolve(\PhpParser\Node $node) : ?string
     {
-        if ($node->name instanceof Expr) {
+        if ($node->name instanceof \PhpParser\Node\Expr) {
             return null;
         }
         $functionName = $node->name;
-        $namespaceName = $functionName->getAttribute(AttributeKey::NAMESPACED_NAME);
-        if ($namespaceName instanceof FullyQualified) {
+        $namespaceName = $functionName->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::NAMESPACED_NAME);
+        if ($namespaceName instanceof \PhpParser\Node\Name\FullyQualified) {
             $functionFqnName = $namespaceName->toString();
             if ($this->reflectionProvider->hasFunction($namespaceName, null)) {
                 return $functionFqnName;

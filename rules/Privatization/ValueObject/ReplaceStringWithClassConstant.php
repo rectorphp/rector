@@ -32,9 +32,9 @@ final class ReplaceStringWithClassConstant
         $this->classWithConstants = $classWithConstants;
         $this->argPosition = $argPosition;
     }
-    public function getObjectType() : ObjectType
+    public function getObjectType() : \PHPStan\Type\ObjectType
     {
-        return new ObjectType($this->class);
+        return new \PHPStan\Type\ObjectType($this->class);
     }
     public function getMethod() : string
     {

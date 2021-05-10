@@ -16,17 +16,17 @@ final class ValueObjectInliner
     /**
      * @param object $object
      */
-    public static function inlineArgumentObject($object, ServicesConfigurator $servicesConfigurator) : ReferenceConfigurator
+    public static function inlineArgumentObject($object, \RectorPrefix20210510\Symfony\Component\DependencyInjection\Loader\Configurator\ServicesConfigurator $servicesConfigurator) : \RectorPrefix20210510\Symfony\Component\DependencyInjection\Loader\Configurator\ReferenceConfigurator
     {
-        $reflectionClass = new ReflectionClass($object);
+        $reflectionClass = new \ReflectionClass($object);
         $className = $reflectionClass->getName();
         $propertyValues = self::resolvePropertyValues($reflectionClass, $object);
         // create fake factory with private accessor, as properties are different
         // @see https://symfony.com/doc/current/service_container/factories.html#passing-arguments-to-the-factory-method
-        $servicesConfigurator->set(ArgumentAndParameterFactory::class);
+        $servicesConfigurator->set(\Symplify\SymfonyPhpConfig\Reflection\ArgumentAndParameterFactory::class);
         $argumentValues = self::resolveArgumentValues($reflectionClass, $object);
-        $servicesConfigurator->set($className)->factory([service(ArgumentAndParameterFactory::class), 'create'])->args([$className, $argumentValues, $propertyValues]);
-        return service($className);
+        $servicesConfigurator->set($className)->factory([\RectorPrefix20210510\Symfony\Component\DependencyInjection\Loader\Configurator\service(\Symplify\SymfonyPhpConfig\Reflection\ArgumentAndParameterFactory::class), 'create'])->args([$className, $argumentValues, $propertyValues]);
+        return \RectorPrefix20210510\Symfony\Component\DependencyInjection\Loader\Configurator\service($className);
     }
     /**
      * @param object|object[] $object
@@ -43,11 +43,11 @@ final class ValueObjectInliner
      * @return mixed[]
      * @param object $object
      */
-    public static function resolveArgumentValues(ReflectionClass $reflectionClass, $object) : array
+    public static function resolveArgumentValues(\ReflectionClass $reflectionClass, $object) : array
     {
         $argumentValues = [];
         $constructorReflectionMethod = $reflectionClass->getConstructor();
-        if (!$constructorReflectionMethod instanceof ReflectionMethod) {
+        if (!$constructorReflectionMethod instanceof \ReflectionMethod) {
             // value object without constructor
             return [];
         }
@@ -77,7 +77,7 @@ final class ValueObjectInliner
      * @return array<string, mixed>
      * @param object $object
      */
-    private static function resolvePropertyValues(ReflectionClass $reflectionClass, $object) : array
+    private static function resolvePropertyValues(\ReflectionClass $reflectionClass, $object) : array
     {
         $propertyValues = [];
         foreach ($reflectionClass->getProperties() as $reflectionProperty) {
@@ -90,12 +90,12 @@ final class ValueObjectInliner
     /**
      * @param object $object
      */
-    private static function inlineSingle($object) : InlineServiceConfigurator
+    private static function inlineSingle($object) : \RectorPrefix20210510\Symfony\Component\DependencyInjection\Loader\Configurator\InlineServiceConfigurator
     {
-        $reflectionClass = new ReflectionClass($object);
+        $reflectionClass = new \ReflectionClass($object);
         $className = $reflectionClass->getName();
         $argumentValues = self::resolveArgumentValues($reflectionClass, $object);
-        $inlineServiceConfigurator = inline_service($className);
+        $inlineServiceConfigurator = \RectorPrefix20210510\Symfony\Component\DependencyInjection\Loader\Configurator\inline_service($className);
         if ($argumentValues !== []) {
             $inlineServiceConfigurator->args($argumentValues);
         }

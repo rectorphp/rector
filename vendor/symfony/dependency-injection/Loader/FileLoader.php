@@ -25,7 +25,7 @@ use RectorPrefix20210510\Symfony\Component\DependencyInjection\Exception\Invalid
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-abstract class FileLoader extends BaseFileLoader
+abstract class FileLoader extends \RectorPrefix20210510\Symfony\Component\Config\Loader\FileLoader
 {
     public const ANONYMOUS_ID_REGEXP = '/^\\.\\d+_[^~]*+~[._a-zA-Z\\d]{7}$/';
     protected $container;
@@ -34,7 +34,7 @@ abstract class FileLoader extends BaseFileLoader
     protected $interfaces = [];
     protected $singlyImplemented = [];
     protected $autoRegisterAliasesForSinglyImplementedInterfaces = \true;
-    public function __construct(ContainerBuilder $container, FileLocatorInterface $locator)
+    public function __construct(\RectorPrefix20210510\Symfony\Component\DependencyInjection\ContainerBuilder $container, \RectorPrefix20210510\Symfony\Component\Config\FileLocatorInterface $locator)
     {
         $this->container = $container;
         parent::__construct($locator);
@@ -54,12 +54,12 @@ abstract class FileLoader extends BaseFileLoader
         }
         try {
             parent::import(...$args);
-        } catch (LoaderLoadException $e) {
-            if (!$ignoreNotFound || !($prev = $e->getPrevious()) instanceof FileLocatorFileNotFoundException) {
+        } catch (\RectorPrefix20210510\Symfony\Component\Config\Exception\LoaderLoadException $e) {
+            if (!$ignoreNotFound || !($prev = $e->getPrevious()) instanceof \RectorPrefix20210510\Symfony\Component\Config\Exception\FileLocatorFileNotFoundException) {
                 throw $e;
             }
             foreach ($prev->getTrace() as $frame) {
-                if ('import' === ($frame['function'] ?? null) && \is_a($frame['class'] ?? '', Loader::class, \true)) {
+                if ('import' === ($frame['function'] ?? null) && \is_a($frame['class'] ?? '', \RectorPrefix20210510\Symfony\Component\Config\Loader\Loader::class, \true)) {
                     break;
                 }
             }
@@ -76,13 +76,13 @@ abstract class FileLoader extends BaseFileLoader
      * @param string               $resource  The directory to look for classes, glob-patterns allowed
      * @param string|string[]|null $exclude   A globbed path of files to exclude or an array of globbed paths of files to exclude
      */
-    public function registerClasses(Definition $prototype, $namespace, $resource, $exclude = null)
+    public function registerClasses(\RectorPrefix20210510\Symfony\Component\DependencyInjection\Definition $prototype, $namespace, $resource, $exclude = null)
     {
         if ('\\' !== \substr($namespace, -1)) {
-            throw new InvalidArgumentException(\sprintf('Namespace prefix must end with a "\\": "%s".', $namespace));
+            throw new \RectorPrefix20210510\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException(\sprintf('Namespace prefix must end with a "\\": "%s".', $namespace));
         }
         if (!\preg_match('/^(?:[a-zA-Z_\\x7f-\\xff][a-zA-Z0-9_\\x7f-\\xff]*+\\\\)++$/', $namespace)) {
-            throw new InvalidArgumentException(\sprintf('Namespace is not a valid PSR-4 prefix: "%s".', $namespace));
+            throw new \RectorPrefix20210510\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException(\sprintf('Namespace is not a valid PSR-4 prefix: "%s".', $namespace));
         }
         $classes = $this->findClasses($namespace, $resource, (array) $exclude);
         // prepare for deep cloning
@@ -119,12 +119,12 @@ abstract class FileLoader extends BaseFileLoader
      *
      * @param string $id
      */
-    protected function setDefinition($id, Definition $definition)
+    protected function setDefinition($id, \RectorPrefix20210510\Symfony\Component\DependencyInjection\Definition $definition)
     {
         $this->container->removeBindings($id);
         if ($this->isLoadingInstanceof) {
-            if (!$definition instanceof ChildDefinition) {
-                throw new InvalidArgumentException(\sprintf('Invalid type definition "%s": ChildDefinition expected, "%s" given.', $id, \get_debug_type($definition)));
+            if (!$definition instanceof \RectorPrefix20210510\Symfony\Component\DependencyInjection\ChildDefinition) {
+                throw new \RectorPrefix20210510\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException(\sprintf('Invalid type definition "%s": ChildDefinition expected, "%s" given.', $id, \get_debug_type($definition)));
             }
             $this->instanceof[$id] = $definition;
         } else {
@@ -154,7 +154,7 @@ abstract class FileLoader extends BaseFileLoader
             if (null === $prefixLen) {
                 $prefixLen = \strlen($resource->getPrefix());
                 if ($excludePrefix && 0 !== \strpos($excludePrefix, $resource->getPrefix())) {
-                    throw new InvalidArgumentException(\sprintf('Invalid "exclude" pattern when importing classes for "%s": make sure your "exclude" pattern (%s) is a subset of the "resource" pattern (%s).', $namespace, $excludePattern, $pattern));
+                    throw new \RectorPrefix20210510\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException(\sprintf('Invalid "exclude" pattern when importing classes for "%s": make sure your "exclude" pattern (%s) is a subset of the "resource" pattern (%s).', $namespace, $excludePattern, $pattern));
                 }
             }
             if (isset($excludePaths[\str_replace('\\', '/', $path)])) {
@@ -175,14 +175,14 @@ abstract class FileLoader extends BaseFileLoader
             }
             // check to make sure the expected class exists
             if (!$r) {
-                throw new InvalidArgumentException(\sprintf('Expected to find class "%s" in file "%s" while importing services from resource "%s", but it was not found! Check the namespace prefix used with the resource.', $class, $path, $pattern));
+                throw new \RectorPrefix20210510\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException(\sprintf('Expected to find class "%s" in file "%s" while importing services from resource "%s", but it was not found! Check the namespace prefix used with the resource.', $class, $path, $pattern));
             }
             if ($r->isInstantiable() || $r->isInterface()) {
                 $classes[$class] = null;
             }
         }
         // track only for new & removed files
-        if ($resource instanceof GlobResource) {
+        if ($resource instanceof \RectorPrefix20210510\Symfony\Component\Config\Resource\GlobResource) {
             $this->container->addResource($resource);
         } else {
             foreach ($resource as $path) {

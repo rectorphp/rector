@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace Rector\FileFormatter\Exception;
 
 use InvalidArgumentException;
-final class InvalidIndentSizeException extends InvalidArgumentException
+final class InvalidIndentSizeException extends \InvalidArgumentException
 {
     /**
      * @return $this

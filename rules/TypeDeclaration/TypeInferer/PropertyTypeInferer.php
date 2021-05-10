@@ -45,7 +45,7 @@ final class PropertyTypeInferer
     /**
      * @param PropertyTypeInfererInterface[] $propertyTypeInferers
      */
-    public function __construct(TypeInfererSorter $typeInfererSorter, GenericClassStringTypeNormalizer $genericClassStringTypeNormalizer, DefaultValuePropertyTypeInferer $defaultValuePropertyTypeInferer, VarDocPropertyTypeInferer $varDocPropertyTypeInferer, TypeFactory $typeFactory, DoctrineTypeAnalyzer $doctrineTypeAnalyzer, array $propertyTypeInferers)
+    public function __construct(\Rector\TypeDeclaration\Sorter\TypeInfererSorter $typeInfererSorter, \Rector\TypeDeclaration\TypeAnalyzer\GenericClassStringTypeNormalizer $genericClassStringTypeNormalizer, \Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer\DefaultValuePropertyTypeInferer $defaultValuePropertyTypeInferer, \Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer\VarDocPropertyTypeInferer $varDocPropertyTypeInferer, \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory $typeFactory, \Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer $doctrineTypeAnalyzer, array $propertyTypeInferers)
     {
         $this->propertyTypeInferers = $typeInfererSorter->sort($propertyTypeInferers);
         $this->defaultValuePropertyTypeInferer = $defaultValuePropertyTypeInferer;
@@ -54,15 +54,15 @@ final class PropertyTypeInferer
         $this->varDocPropertyTypeInferer = $varDocPropertyTypeInferer;
         $this->genericClassStringTypeNormalizer = $genericClassStringTypeNormalizer;
     }
-    public function inferProperty(Property $property) : Type
+    public function inferProperty(\PhpParser\Node\Stmt\Property $property) : \PHPStan\Type\Type
     {
         $resolvedTypes = [];
         foreach ($this->propertyTypeInferers as $propertyTypeInferer) {
             $type = $propertyTypeInferer->inferProperty($property);
-            if ($type instanceof VoidType) {
+            if ($type instanceof \PHPStan\Type\VoidType) {
                 continue;
             }
-            if ($type instanceof MixedType) {
+            if ($type instanceof \PHPStan\Type\MixedType) {
                 continue;
             }
             $resolvedTypes[] = $type;
@@ -83,25 +83,25 @@ final class PropertyTypeInferer
         }
         return $this->genericClassStringTypeNormalizer->normalize($resolvedType);
     }
-    private function shouldUnionWithDefaultValue(Type $defaultValueType, Type $type) : bool
+    private function shouldUnionWithDefaultValue(\PHPStan\Type\Type $defaultValueType, \PHPStan\Type\Type $type) : bool
     {
-        if ($defaultValueType instanceof MixedType) {
+        if ($defaultValueType instanceof \PHPStan\Type\MixedType) {
             return \false;
         }
         // skip empty array type (mixed[])
-        if ($defaultValueType instanceof ArrayType && $defaultValueType->getItemType() instanceof NeverType && !$type instanceof MixedType) {
+        if ($defaultValueType instanceof \PHPStan\Type\ArrayType && $defaultValueType->getItemType() instanceof \PHPStan\Type\NeverType && !$type instanceof \PHPStan\Type\MixedType) {
             return \false;
         }
-        if ($type instanceof MixedType) {
+        if ($type instanceof \PHPStan\Type\MixedType) {
             return \true;
         }
         return !$this->doctrineTypeAnalyzer->isDoctrineCollectionWithIterableUnionType($type);
     }
-    private function unionWithDefaultValueType(Type $defaultValueType, Type $resolvedType) : Type
+    private function unionWithDefaultValueType(\PHPStan\Type\Type $defaultValueType, \PHPStan\Type\Type $resolvedType) : \PHPStan\Type\Type
     {
         $types = [];
         $types[] = $defaultValueType;
-        if (!$resolvedType instanceof MixedType) {
+        if (!$resolvedType instanceof \PHPStan\Type\MixedType) {
             $types[] = $resolvedType;
         }
         return $this->typeFactory->createMixedPassedOrUnionType($types);

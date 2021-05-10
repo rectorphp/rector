@@ -20,9 +20,9 @@ class MemcachedCaster
 {
     private static $optionConstants;
     private static $defaultOptions;
-    public static function castMemcached(\Memcached $c, array $a, Stub $stub, bool $isNested)
+    public static function castMemcached(\Memcached $c, array $a, \RectorPrefix20210510\Symfony\Component\VarDumper\Cloner\Stub $stub, bool $isNested)
     {
-        $a += [Caster::PREFIX_VIRTUAL . 'servers' => $c->getServerList(), Caster::PREFIX_VIRTUAL . 'options' => new EnumStub(self::getNonDefaultOptions($c))];
+        $a += [\RectorPrefix20210510\Symfony\Component\VarDumper\Caster\Caster::PREFIX_VIRTUAL . 'servers' => $c->getServerList(), \RectorPrefix20210510\Symfony\Component\VarDumper\Caster\Caster::PREFIX_VIRTUAL . 'options' => new \RectorPrefix20210510\Symfony\Component\VarDumper\Caster\EnumStub(self::getNonDefaultOptions($c))];
         return $a;
     }
     private static function getNonDefaultOptions(\Memcached $c) : array

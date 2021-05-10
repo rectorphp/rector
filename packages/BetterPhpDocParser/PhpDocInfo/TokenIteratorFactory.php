@@ -21,23 +21,23 @@ final class TokenIteratorFactory
      * @var PrivatesAccessor
      */
     private $privatesAccessor;
-    public function __construct(Lexer $lexer, PrivatesAccessor $privatesAccessor)
+    public function __construct(\PHPStan\PhpDocParser\Lexer\Lexer $lexer, \RectorPrefix20210510\Symplify\PackageBuilder\Reflection\PrivatesAccessor $privatesAccessor)
     {
         $this->lexer = $lexer;
         $this->privatesAccessor = $privatesAccessor;
     }
-    public function create(string $content) : BetterTokenIterator
+    public function create(string $content) : \Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator
     {
         $tokens = $this->lexer->tokenize($content);
-        return new BetterTokenIterator($tokens);
+        return new \Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator($tokens);
     }
-    public function createFromTokenIterator(TokenIterator $tokenIterator) : BetterTokenIterator
+    public function createFromTokenIterator(\PHPStan\PhpDocParser\Parser\TokenIterator $tokenIterator) : \Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator
     {
-        if ($tokenIterator instanceof BetterTokenIterator) {
+        if ($tokenIterator instanceof \Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator) {
             return $tokenIterator;
         }
         $tokens = $this->privatesAccessor->getPrivateProperty($tokenIterator, 'tokens');
-        $betterTokenIterator = new BetterTokenIterator($tokens);
+        $betterTokenIterator = new \Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator($tokens);
         // keep original position
         $currentIndex = $this->privatesAccessor->getPrivateProperty($tokenIterator, 'index');
         $this->privatesAccessor->setPrivateProperty($betterTokenIterator, self::INDEX, $currentIndex);

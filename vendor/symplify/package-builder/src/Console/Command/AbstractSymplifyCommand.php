@@ -10,7 +10,7 @@ use RectorPrefix20210510\Symplify\PackageBuilder\ValueObject\Option;
 use RectorPrefix20210510\Symplify\SmartFileSystem\FileSystemGuard;
 use RectorPrefix20210510\Symplify\SmartFileSystem\Finder\SmartFinder;
 use RectorPrefix20210510\Symplify\SmartFileSystem\SmartFileSystem;
-abstract class AbstractSymplifyCommand extends Command
+abstract class AbstractSymplifyCommand extends \RectorPrefix20210510\Symfony\Component\Console\Command\Command
 {
     /**
      * @var SymfonyStyle
@@ -31,12 +31,12 @@ abstract class AbstractSymplifyCommand extends Command
     public function __construct()
     {
         parent::__construct();
-        $this->addOption(Option::CONFIG, 'c', InputOption::VALUE_REQUIRED, 'Path to config file');
+        $this->addOption(\RectorPrefix20210510\Symplify\PackageBuilder\ValueObject\Option::CONFIG, 'c', \RectorPrefix20210510\Symfony\Component\Console\Input\InputOption::VALUE_REQUIRED, 'Path to config file');
     }
     /**
      * @required
      */
-    public function autowireAbstractSymplifyCommand(SymfonyStyle $symfonyStyle, SmartFileSystem $smartFileSystem, SmartFinder $smartFinder, FileSystemGuard $fileSystemGuard) : void
+    public function autowireAbstractSymplifyCommand(\RectorPrefix20210510\Symfony\Component\Console\Style\SymfonyStyle $symfonyStyle, \RectorPrefix20210510\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \RectorPrefix20210510\Symplify\SmartFileSystem\Finder\SmartFinder $smartFinder, \RectorPrefix20210510\Symplify\SmartFileSystem\FileSystemGuard $fileSystemGuard) : void
     {
         $this->symfonyStyle = $symfonyStyle;
         $this->smartFileSystem = $smartFileSystem;

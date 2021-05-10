@@ -5,7 +5,7 @@ namespace RectorPrefix20210510\Symplify\PackageBuilder\Contract\HttpKernel;
 
 use RectorPrefix20210510\Symfony\Component\HttpKernel\KernelInterface;
 use Symplify\SmartFileSystem\SmartFileInfo;
-interface ExtraConfigAwareKernelInterface extends KernelInterface
+interface ExtraConfigAwareKernelInterface extends \RectorPrefix20210510\Symfony\Component\HttpKernel\KernelInterface
 {
     /**
      * @param string[]|SmartFileInfo[] $configs

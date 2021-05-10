@@ -20,7 +20,7 @@ class NormalizationBuilder
     protected $node;
     public $before = [];
     public $remappings = [];
-    public function __construct(NodeDefinition $node)
+    public function __construct(\RectorPrefix20210510\Symfony\Component\Config\Definition\Builder\NodeDefinition $node)
     {
         $this->node = $node;
     }
@@ -48,6 +48,6 @@ class NormalizationBuilder
             $this->before[] = $closure;
             return $this;
         }
-        return $this->before[] = new ExprBuilder($this->node);
+        return $this->before[] = new \RectorPrefix20210510\Symfony\Component\Config\Definition\Builder\ExprBuilder($this->node);
     }
 }

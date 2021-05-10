@@ -36,7 +36,7 @@ final class PropertyConstructorInjectionManipulator
      * @var PropertyAdder
      */
     private $propertyAdder;
-    public function __construct(NodeNameResolver $nodeNameResolver, PhpDocInfoFactory $phpDocInfoFactory, PhpDocTypeChanger $phpDocTypeChanger, PhpDocTagRemover $phpDocTagRemover, PropertyAdder $propertyAdder)
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover $phpDocTagRemover, \Rector\PostRector\DependencyInjection\PropertyAdder $propertyAdder)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
@@ -44,15 +44,15 @@ final class PropertyConstructorInjectionManipulator
         $this->phpDocTagRemover = $phpDocTagRemover;
         $this->propertyAdder = $propertyAdder;
     }
-    public function refactor(Property $property, Type $type, DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode) : void
+    public function refactor(\PhpParser\Node\Stmt\Property $property, \PHPStan\Type\Type $type, \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode) : void
     {
         $propertyName = $this->nodeNameResolver->getName($property);
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
         $this->phpDocTypeChanger->changeVarType($phpDocInfo, $type);
         $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $doctrineAnnotationTagValueNode);
-        $classLike = $property->getAttribute(AttributeKey::CLASS_NODE);
-        if (!$classLike instanceof Class_) {
-            throw new ShouldNotHappenException();
+        $classLike = $property->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
+        if (!$classLike instanceof \PhpParser\Node\Stmt\Class_) {
+            throw new \Rector\Core\Exception\ShouldNotHappenException();
         }
         $this->propertyAdder->addConstructorDependencyToClass($classLike, $type, $propertyName, $property->flags);
     }

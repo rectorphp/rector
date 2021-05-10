@@ -23,7 +23,7 @@ use RectorPrefix20210510\Symfony\Component\Config\Definition\Exception\InvalidTy
  *
  * @author Johannes M. Schmitt <schmittjoh@gmail.com>
  */
-class ScalarNode extends VariableNode
+class ScalarNode extends \RectorPrefix20210510\Symfony\Component\Config\Definition\VariableNode
 {
     /**
      * {@inheritdoc}
@@ -31,7 +31,7 @@ class ScalarNode extends VariableNode
     protected function validateType($value)
     {
         if (!\is_scalar($value) && null !== $value) {
-            $ex = new InvalidTypeException(\sprintf('Invalid type for path "%s". Expected "scalar", but got "%s".', $this->getPath(), \get_debug_type($value)));
+            $ex = new \RectorPrefix20210510\Symfony\Component\Config\Definition\Exception\InvalidTypeException(\sprintf('Invalid type for path "%s". Expected "scalar", but got "%s".', $this->getPath(), \get_debug_type($value)));
             if ($hint = $this->getInfo()) {
                 $ex->addHint($hint);
             }

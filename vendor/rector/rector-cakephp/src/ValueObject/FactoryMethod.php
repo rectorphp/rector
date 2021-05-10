@@ -29,9 +29,9 @@ final class FactoryMethod
         $this->position = $position;
         $this->newClass = $newClass;
     }
-    public function getObjectType() : ObjectType
+    public function getObjectType() : \PHPStan\Type\ObjectType
     {
-        return new ObjectType($this->type);
+        return new \PHPStan\Type\ObjectType($this->type);
     }
     public function getMethod() : string
     {

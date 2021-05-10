@@ -19,9 +19,9 @@ final class ReturnArrayClassMethodToYield
         $this->type = $type;
         $this->method = $method;
     }
-    public function getObjectType() : ObjectType
+    public function getObjectType() : \PHPStan\Type\ObjectType
     {
-        return new ObjectType($this->type);
+        return new \PHPStan\Type\ObjectType($this->type);
     }
     public function getMethod() : string
     {

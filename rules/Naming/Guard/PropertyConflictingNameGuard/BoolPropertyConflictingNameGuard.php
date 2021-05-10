@@ -22,13 +22,13 @@ final class BoolPropertyConflictingNameGuard
      * @var BoolPropertyExpectedNameResolver
      */
     private $boolPropertyExpectedNameResolver;
-    public function __construct(BoolPropertyExpectedNameResolver $boolPropertyExpectedNameResolver, NodeNameResolver $nodeNameResolver, ArrayFilter $arrayFilter)
+    public function __construct(\Rector\Naming\ExpectedNameResolver\BoolPropertyExpectedNameResolver $boolPropertyExpectedNameResolver, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Naming\PhpArray\ArrayFilter $arrayFilter)
     {
         $this->boolPropertyExpectedNameResolver = $boolPropertyExpectedNameResolver;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->arrayFilter = $arrayFilter;
     }
-    public function isConflicting(PropertyRename $propertyRename) : bool
+    public function isConflicting(\Rector\Naming\ValueObject\PropertyRename $propertyRename) : bool
     {
         $conflictingPropertyNames = $this->resolve($propertyRename->getClassLike());
         return \in_array($propertyRename->getExpectedName(), $conflictingPropertyNames, \true);
@@ -36,7 +36,7 @@ final class BoolPropertyConflictingNameGuard
     /**
      * @return string[]
      */
-    public function resolve(ClassLike $classLike) : array
+    public function resolve(\PhpParser\Node\Stmt\ClassLike $classLike) : array
     {
         $expectedNames = [];
         foreach ($classLike->getProperties() as $property) {

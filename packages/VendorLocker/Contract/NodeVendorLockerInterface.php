@@ -6,5 +6,5 @@ namespace Rector\VendorLocker\Contract;
 use PhpParser\Node;
 interface NodeVendorLockerInterface
 {
-    public function resolve(Node $node) : bool;
+    public function resolve(\PhpParser\Node $node) : bool;
 }

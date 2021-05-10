@@ -22,13 +22,13 @@ use RectorPrefix20210510\Symfony\Component\RateLimiter\RateLimit;
  *
  * @experimental in 5.2
  */
-abstract class AbstractRequestRateLimiter implements RequestRateLimiterInterface
+abstract class AbstractRequestRateLimiter implements \RectorPrefix20210510\Symfony\Component\HttpFoundation\RateLimiter\RequestRateLimiterInterface
 {
-    public function consume(Request $request) : RateLimit
+    public function consume(\RectorPrefix20210510\Symfony\Component\HttpFoundation\Request $request) : \RectorPrefix20210510\Symfony\Component\RateLimiter\RateLimit
     {
         $limiters = $this->getLimiters($request);
         if (0 === \count($limiters)) {
-            $limiters = [new NoLimiter()];
+            $limiters = [new \RectorPrefix20210510\Symfony\Component\RateLimiter\Policy\NoLimiter()];
         }
         $minimalRateLimit = null;
         foreach ($limiters as $limiter) {
@@ -39,7 +39,7 @@ abstract class AbstractRequestRateLimiter implements RequestRateLimiterInterface
         }
         return $minimalRateLimit;
     }
-    public function reset(Request $request) : void
+    public function reset(\RectorPrefix20210510\Symfony\Component\HttpFoundation\Request $request) : void
     {
         foreach ($this->getLimiters($request) as $limiter) {
             $limiter->reset();
@@ -48,5 +48,5 @@ abstract class AbstractRequestRateLimiter implements RequestRateLimiterInterface
     /**
      * @return LimiterInterface[] a set of limiters using keys extracted from the request
      */
-    protected abstract function getLimiters(Request $request) : array;
+    protected abstract function getLimiters(\RectorPrefix20210510\Symfony\Component\HttpFoundation\Request $request) : array;
 }

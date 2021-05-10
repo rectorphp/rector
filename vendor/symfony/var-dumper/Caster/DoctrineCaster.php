@@ -23,7 +23,7 @@ use RectorPrefix20210510\Symfony\Component\VarDumper\Cloner\Stub;
  */
 class DoctrineCaster
 {
-    public static function castCommonProxy(CommonProxy $proxy, array $a, Stub $stub, bool $isNested)
+    public static function castCommonProxy(\RectorPrefix20210510\Doctrine\Common\Proxy\Proxy $proxy, array $a, \RectorPrefix20210510\Symfony\Component\VarDumper\Cloner\Stub $stub, bool $isNested)
     {
         foreach (['__cloner__', '__initializer__'] as $k) {
             if (\array_key_exists($k, $a)) {
@@ -33,7 +33,7 @@ class DoctrineCaster
         }
         return $a;
     }
-    public static function castOrmProxy(OrmProxy $proxy, array $a, Stub $stub, bool $isNested)
+    public static function castOrmProxy(\RectorPrefix20210510\Doctrine\ORM\Proxy\Proxy $proxy, array $a, \RectorPrefix20210510\Symfony\Component\VarDumper\Cloner\Stub $stub, bool $isNested)
     {
         foreach (['_entityPersister', '_identifier'] as $k) {
             if (\array_key_exists($k = "\0Doctrine\\ORM\\Proxy\\Proxy\0" . $k, $a)) {
@@ -43,11 +43,11 @@ class DoctrineCaster
         }
         return $a;
     }
-    public static function castPersistentCollection(PersistentCollection $coll, array $a, Stub $stub, bool $isNested)
+    public static function castPersistentCollection(\RectorPrefix20210510\Doctrine\ORM\PersistentCollection $coll, array $a, \RectorPrefix20210510\Symfony\Component\VarDumper\Cloner\Stub $stub, bool $isNested)
     {
         foreach (['snapshot', 'association', 'typeClass'] as $k) {
             if (\array_key_exists($k = "\0Doctrine\\ORM\\PersistentCollection\0" . $k, $a)) {
-                $a[$k] = new CutStub($a[$k]);
+                $a[$k] = new \RectorPrefix20210510\Symfony\Component\VarDumper\Caster\CutStub($a[$k]);
             }
         }
         return $a;

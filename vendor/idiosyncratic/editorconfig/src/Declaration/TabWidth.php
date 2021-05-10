@@ -5,7 +5,7 @@ namespace RectorPrefix20210510\Idiosyncratic\EditorConfig\Declaration;
 
 use RectorPrefix20210510\Idiosyncratic\EditorConfig\Exception\InvalidValue;
 use function is_int;
-final class TabWidth extends Declaration
+final class TabWidth extends \RectorPrefix20210510\Idiosyncratic\EditorConfig\Declaration\Declaration
 {
     public function getName() : string
     {
@@ -16,8 +16,8 @@ final class TabWidth extends Declaration
      */
     public function validateValue($value) : void
     {
-        if (is_int($value) === \false || $value < 1 === \true) {
-            throw new InvalidValue($this->getStringValue(), $this->getName());
+        if (\is_int($value) === \false || $value < 1 === \true) {
+            throw new \RectorPrefix20210510\Idiosyncratic\EditorConfig\Exception\InvalidValue($this->getStringValue(), $this->getName());
         }
     }
 }

@@ -6,16 +6,16 @@ namespace RectorPrefix20210510\Symplify\Astral\NodeNameResolver;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Namespace_;
 use RectorPrefix20210510\Symplify\Astral\Contract\NodeNameResolverInterface;
-final class NamespaceNodeNameResolver implements NodeNameResolverInterface
+final class NamespaceNodeNameResolver implements \RectorPrefix20210510\Symplify\Astral\Contract\NodeNameResolverInterface
 {
-    public function match(Node $node) : bool
+    public function match(\PhpParser\Node $node) : bool
     {
-        return $node instanceof Namespace_;
+        return $node instanceof \PhpParser\Node\Stmt\Namespace_;
     }
     /**
      * @param Namespace_ $node
      */
-    public function resolve(Node $node) : ?string
+    public function resolve(\PhpParser\Node $node) : ?string
     {
         if ($node->name === null) {
             return null;

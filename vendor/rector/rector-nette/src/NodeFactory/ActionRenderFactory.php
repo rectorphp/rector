@@ -20,33 +20,33 @@ final class ActionRenderFactory
      * @var RenderParameterArrayFactory
      */
     private $renderParameterArrayFactory;
-    public function __construct(NodeFactory $nodeFactory, \Rector\Nette\NodeFactory\RenderParameterArrayFactory $renderParameterArrayFactory)
+    public function __construct(\Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\Nette\NodeFactory\RenderParameterArrayFactory $renderParameterArrayFactory)
     {
         $this->nodeFactory = $nodeFactory;
         $this->renderParameterArrayFactory = $renderParameterArrayFactory;
     }
-    public function createThisRenderMethodCall(ClassMethodRender $classMethodRender) : MethodCall
+    public function createThisRenderMethodCall(\Rector\NetteToSymfony\ValueObject\ClassMethodRender $classMethodRender) : \PhpParser\Node\Expr\MethodCall
     {
         $methodCall = $this->nodeFactory->createMethodCall('this', 'render');
         $this->addArguments($classMethodRender, $methodCall);
         return $methodCall;
     }
-    public function createThisTemplateRenderMethodCall(ClassMethodRender $classMethodRender) : MethodCall
+    public function createThisTemplateRenderMethodCall(\Rector\NetteToSymfony\ValueObject\ClassMethodRender $classMethodRender) : \PhpParser\Node\Expr\MethodCall
     {
-        $thisTemplatePropertyFetch = new PropertyFetch(new Variable('this'), 'template');
+        $thisTemplatePropertyFetch = new \PhpParser\Node\Expr\PropertyFetch(new \PhpParser\Node\Expr\Variable('this'), 'template');
         $methodCall = $this->nodeFactory->createMethodCall($thisTemplatePropertyFetch, 'render');
         $this->addArguments($classMethodRender, $methodCall);
         return $methodCall;
     }
-    private function addArguments(ClassMethodRender $classMethodRender, MethodCall $methodCall) : void
+    private function addArguments(\Rector\NetteToSymfony\ValueObject\ClassMethodRender $classMethodRender, \PhpParser\Node\Expr\MethodCall $methodCall) : void
     {
         if ($classMethodRender->getFirstTemplateFileExpr() !== null) {
-            $methodCall->args[0] = new Arg($classMethodRender->getFirstTemplateFileExpr());
+            $methodCall->args[0] = new \PhpParser\Node\Arg($classMethodRender->getFirstTemplateFileExpr());
         }
         $templateVariablesArray = $this->renderParameterArrayFactory->createArray($classMethodRender);
-        if (!$templateVariablesArray instanceof Array_) {
+        if (!$templateVariablesArray instanceof \PhpParser\Node\Expr\Array_) {
             return;
         }
-        $methodCall->args[1] = new Arg($templateVariablesArray);
+        $methodCall->args[1] = new \PhpParser\Node\Arg($templateVariablesArray);
     }
 }

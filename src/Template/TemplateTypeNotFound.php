@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace Rector\Core\Template;
 
 use RuntimeException;
-final class TemplateTypeNotFound extends RuntimeException
+final class TemplateTypeNotFound extends \RuntimeException
 {
     /**
      * @return $this

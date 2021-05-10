@@ -21,20 +21,20 @@ final class ParamTypeInferer
     /**
      * @param ParamTypeInfererInterface[] $paramTypeInferers
      */
-    public function __construct(GenericClassStringTypeNormalizer $genericClassStringTypeNormalizer, array $paramTypeInferers)
+    public function __construct(\Rector\TypeDeclaration\TypeAnalyzer\GenericClassStringTypeNormalizer $genericClassStringTypeNormalizer, array $paramTypeInferers)
     {
         $this->paramTypeInferers = $paramTypeInferers;
         $this->genericClassStringTypeNormalizer = $genericClassStringTypeNormalizer;
     }
-    public function inferParam(Param $param) : Type
+    public function inferParam(\PhpParser\Node\Param $param) : \PHPStan\Type\Type
     {
         foreach ($this->paramTypeInferers as $paramTypeInferer) {
             $paramType = $paramTypeInferer->inferParam($param);
-            if ($paramType instanceof MixedType) {
+            if ($paramType instanceof \PHPStan\Type\MixedType) {
                 continue;
             }
             return $this->genericClassStringTypeNormalizer->normalize($paramType);
         }
-        return new MixedType();
+        return new \PHPStan\Type\MixedType();
     }
 }

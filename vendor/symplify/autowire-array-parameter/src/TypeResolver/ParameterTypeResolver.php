@@ -16,11 +16,11 @@ final class ParameterTypeResolver
      * @var array<string, string>
      */
     private $resolvedParameterTypesCached = [];
-    public function __construct(ParamTypeDocBlockResolver $paramTypeDocBlockResolver)
+    public function __construct(\RectorPrefix20210510\Symplify\AutowireArrayParameter\DocBlock\ParamTypeDocBlockResolver $paramTypeDocBlockResolver)
     {
         $this->paramTypeDocBlockResolver = $paramTypeDocBlockResolver;
     }
-    public function resolveParameterType(string $parameterName, ReflectionMethod $reflectionMethod) : ?string
+    public function resolveParameterType(string $parameterName, \ReflectionMethod $reflectionMethod) : ?string
     {
         $docComment = $reflectionMethod->getDocComment();
         if ($docComment === \false) {
@@ -39,7 +39,7 @@ final class ParameterTypeResolver
         if (\ctype_lower($resolvedType[0])) {
             return null;
         }
-        $resolvedClass = Reflection::expandClassName($resolvedType, $declaringReflectionClass);
+        $resolvedClass = \RectorPrefix20210510\Nette\Utils\Reflection::expandClassName($resolvedType, $declaringReflectionClass);
         $this->resolvedParameterTypesCached[$uniqueKey] = $resolvedClass;
         return $resolvedClass;
     }

@@ -11,18 +11,18 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\DowngradePhp70\Rector\Declare_\DowngradeStrictTypeDeclarationRector\DowngradeStrictTypeDeclarationRectorTest
  */
-final class DowngradeStrictTypeDeclarationRector extends AbstractRector
+final class DowngradeStrictTypeDeclarationRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [Declare_::class];
+        return [\PhpParser\Node\Stmt\Declare_::class];
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Remove the declare(strict_types=1)', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove the declare(strict_types=1)', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 declare(strict_types=1);
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
@@ -32,7 +32,7 @@ CODE_SAMPLE
     /**
      * @param Declare_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -40,7 +40,7 @@ CODE_SAMPLE
         $this->removeNode($node);
         return $node;
     }
-    private function shouldSkip(Declare_ $declare) : bool
+    private function shouldSkip(\PhpParser\Node\Stmt\Declare_ $declare) : bool
     {
         $declares = $declare->declares;
         foreach ($declares as $declare) {

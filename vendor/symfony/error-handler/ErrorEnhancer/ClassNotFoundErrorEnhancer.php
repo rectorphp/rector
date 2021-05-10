@@ -17,7 +17,7 @@ use RectorPrefix20210510\Symfony\Component\ErrorHandler\Error\FatalError;
 /**
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class ClassNotFoundErrorEnhancer implements ErrorEnhancerInterface
+class ClassNotFoundErrorEnhancer implements \RectorPrefix20210510\Symfony\Component\ErrorHandler\ErrorEnhancer\ErrorEnhancerInterface
 {
     /**
      * {@inheritdoc}
@@ -25,7 +25,7 @@ class ClassNotFoundErrorEnhancer implements ErrorEnhancerInterface
     public function enhance(\Throwable $error) : ?\Throwable
     {
         // Some specific versions of PHP produce a fatal error when extending a not found class.
-        $message = !$error instanceof FatalError ? $error->getMessage() : $error->getError()['message'];
+        $message = !$error instanceof \RectorPrefix20210510\Symfony\Component\ErrorHandler\Error\FatalError ? $error->getMessage() : $error->getError()['message'];
         if (!\preg_match('/^(Class|Interface|Trait) [\'"]([^\'"]+)[\'"] not found$/', $message, $matches)) {
             return null;
         }
@@ -50,7 +50,7 @@ class ClassNotFoundErrorEnhancer implements ErrorEnhancerInterface
             }
         }
         $message .= "\nDid you forget a \"use\" statement" . $tail;
-        return new ClassNotFoundError($message, $error);
+        return new \RectorPrefix20210510\Symfony\Component\ErrorHandler\Error\ClassNotFoundError($message, $error);
     }
     /**
      * Tries to guess the full namespace for a given class name.
@@ -74,13 +74,13 @@ class ClassNotFoundErrorEnhancer implements ErrorEnhancerInterface
                 continue;
             }
             // get class loaders wrapped by DebugClassLoader
-            if ($function[0] instanceof DebugClassLoader) {
+            if ($function[0] instanceof \RectorPrefix20210510\Symfony\Component\ErrorHandler\DebugClassLoader) {
                 $function = $function[0]->getClassLoader();
                 if (!\is_array($function)) {
                     continue;
                 }
             }
-            if ($function[0] instanceof ClassLoader) {
+            if ($function[0] instanceof \RectorPrefix20210510\Composer\Autoload\ClassLoader) {
                 foreach ($function[0]->getPrefixes() as $prefix => $paths) {
                     foreach ($paths as $path) {
                         $classes = \array_merge($classes, $this->findClassInPath($path, $class, $prefix));

@@ -6,7 +6,7 @@ namespace RectorPrefix20210510\Symplify\SmartFileSystem\Tests\Normalizer;
 use Iterator;
 use RectorPrefix20210510\PHPUnit\Framework\TestCase;
 use RectorPrefix20210510\Symplify\SmartFileSystem\Normalizer\PathNormalizer;
-final class PathNormalizerTest extends TestCase
+final class PathNormalizerTest extends \RectorPrefix20210510\PHPUnit\Framework\TestCase
 {
     /**
      * @var PathNormalizer
@@ -14,7 +14,7 @@ final class PathNormalizerTest extends TestCase
     private $pathNormalizer;
     protected function setUp() : void
     {
-        $this->pathNormalizer = new PathNormalizer();
+        $this->pathNormalizer = new \RectorPrefix20210510\Symplify\SmartFileSystem\Normalizer\PathNormalizer();
     }
     /**
      * @dataProvider provideData()
@@ -27,7 +27,7 @@ final class PathNormalizerTest extends TestCase
     /**
      * @return Iterator<string[]>
      */
-    public function provideData() : Iterator
+    public function provideData() : \Iterator
     {
         // based on Linux
         (yield ['/any/path', '/any/path']);

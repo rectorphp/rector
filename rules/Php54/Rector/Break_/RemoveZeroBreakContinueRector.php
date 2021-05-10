@@ -19,11 +19,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php54\Rector\Break_\RemoveZeroBreakContinueRector\RemoveZeroBreakContinueRectorTest
  */
-final class RemoveZeroBreakContinueRector extends AbstractRector
+final class RemoveZeroBreakContinueRector extends \Rector\Core\Rector\AbstractRector
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Remove 0 from break and continue', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove 0 from break and continue', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($random)
@@ -60,17 +60,17 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Break_::class, Continue_::class];
+        return [\PhpParser\Node\Stmt\Break_::class, \PhpParser\Node\Stmt\Continue_::class];
     }
     /**
      * @param Break_|Continue_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($node->num === null) {
             return null;
         }
-        if ($node->num instanceof LNumber) {
+        if ($node->num instanceof \PhpParser\Node\Scalar\LNumber) {
             $number = $this->valueResolver->getValue($node->num);
             if ($number > 1) {
                 return null;
@@ -81,7 +81,7 @@ CODE_SAMPLE
             }
             return null;
         }
-        if ($node->num instanceof Variable) {
+        if ($node->num instanceof \PhpParser\Node\Expr\Variable) {
             return $this->processVariableNum($node, $node->num);
         }
         return null;
@@ -89,17 +89,17 @@ CODE_SAMPLE
     /**
      * @param Break_|Continue_ $stmt
      */
-    private function processVariableNum(Stmt $stmt, Variable $numVariable) : ?Node
+    private function processVariableNum(\PhpParser\Node\Stmt $stmt, \PhpParser\Node\Expr\Variable $numVariable) : ?\PhpParser\Node
     {
         $staticType = $this->getStaticType($numVariable);
-        if ($staticType instanceof ConstantType) {
-            if ($staticType instanceof ConstantIntegerType) {
+        if ($staticType instanceof \PHPStan\Type\ConstantType) {
+            if ($staticType instanceof \PHPStan\Type\Constant\ConstantIntegerType) {
                 if ($staticType->getValue() === 0) {
                     $stmt->num = null;
                     return $stmt;
                 }
                 if ($staticType->getValue() > 0) {
-                    $stmt->num = new LNumber($staticType->getValue());
+                    $stmt->num = new \PhpParser\Node\Scalar\LNumber($staticType->getValue());
                     return $stmt;
                 }
             }

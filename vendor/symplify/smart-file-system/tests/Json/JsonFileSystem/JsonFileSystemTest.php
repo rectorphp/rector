@@ -7,7 +7,7 @@ use RectorPrefix20210510\PHPUnit\Framework\TestCase;
 use RectorPrefix20210510\Symplify\SmartFileSystem\FileSystemGuard;
 use RectorPrefix20210510\Symplify\SmartFileSystem\Json\JsonFileSystem;
 use RectorPrefix20210510\Symplify\SmartFileSystem\SmartFileSystem;
-final class JsonFileSystemTest extends TestCase
+final class JsonFileSystemTest extends \RectorPrefix20210510\PHPUnit\Framework\TestCase
 {
     /**
      * @var string
@@ -23,8 +23,8 @@ final class JsonFileSystemTest extends TestCase
     private $smartFileSystem;
     protected function setUp() : void
     {
-        $this->smartFileSystem = new SmartFileSystem();
-        $this->jsonFileSystem = new JsonFileSystem(new FileSystemGuard(), $this->smartFileSystem);
+        $this->smartFileSystem = new \RectorPrefix20210510\Symplify\SmartFileSystem\SmartFileSystem();
+        $this->jsonFileSystem = new \RectorPrefix20210510\Symplify\SmartFileSystem\Json\JsonFileSystem(new \RectorPrefix20210510\Symplify\SmartFileSystem\FileSystemGuard(), $this->smartFileSystem);
     }
     public function testLoadFilePathToJson() : void
     {

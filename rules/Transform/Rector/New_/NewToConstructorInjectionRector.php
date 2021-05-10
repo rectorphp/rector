@@ -21,7 +21,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\Transform\Rector\New_\NewToConstructorInjectionRector\NewToConstructorInjectionRectorTest
  */
-final class NewToConstructorInjectionRector extends AbstractRector implements ConfigurableRectorInterface
+final class NewToConstructorInjectionRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
      * @var string
@@ -39,14 +39,14 @@ final class NewToConstructorInjectionRector extends AbstractRector implements Co
      * @var PropertyNaming
      */
     private $propertyNaming;
-    public function __construct(PropertyFetchFactory $propertyFetchFactory, PropertyNaming $propertyNaming)
+    public function __construct(\Rector\Transform\NodeFactory\PropertyFetchFactory $propertyFetchFactory, \Rector\Naming\Naming\PropertyNaming $propertyNaming)
     {
         $this->propertyFetchFactory = $propertyFetchFactory;
         $this->propertyNaming = $propertyNaming;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Change defined new type to constructor injection', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change defined new type to constructor injection', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -82,20 +82,20 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [New_::class, Assign::class, MethodCall::class];
+        return [\PhpParser\Node\Expr\New_::class, \PhpParser\Node\Expr\Assign::class, \PhpParser\Node\Expr\MethodCall::class];
     }
     /**
      * @param New_|Assign|MethodCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if ($node instanceof MethodCall) {
+        if ($node instanceof \PhpParser\Node\Expr\MethodCall) {
             return $this->refactorMethodCall($node);
         }
-        if ($node instanceof Assign) {
+        if ($node instanceof \PhpParser\Node\Expr\Assign) {
             $this->refactorAssign($node);
         }
-        if ($node instanceof New_) {
+        if ($node instanceof \PhpParser\Node\Expr\New_) {
             $this->refactorNew($node);
         }
         return null;
@@ -107,13 +107,13 @@ CODE_SAMPLE
     {
         $typesToConstructorInjections = $configuration[self::TYPES_TO_CONSTRUCTOR_INJECTION] ?? [];
         foreach ($typesToConstructorInjections as $typeToConstructorInjection) {
-            $this->constructorInjectionObjectTypes[] = new ObjectType($typeToConstructorInjection);
+            $this->constructorInjectionObjectTypes[] = new \PHPStan\Type\ObjectType($typeToConstructorInjection);
         }
     }
-    private function refactorMethodCall(MethodCall $methodCall) : ?MethodCall
+    private function refactorMethodCall(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\PhpParser\Node\Expr\MethodCall
     {
         foreach ($this->constructorInjectionObjectTypes as $constructorInjectionObjectType) {
-            if (!$methodCall->var instanceof Variable) {
+            if (!$methodCall->var instanceof \PhpParser\Node\Expr\Variable) {
                 continue;
             }
             if (!$this->isObjectType($methodCall->var, $constructorInjectionObjectType)) {
@@ -127,9 +127,9 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function refactorAssign(Assign $assign) : void
+    private function refactorAssign(\PhpParser\Node\Expr\Assign $assign) : void
     {
-        if (!$assign->expr instanceof New_) {
+        if (!$assign->expr instanceof \PhpParser\Node\Expr\New_) {
             return;
         }
         foreach ($this->constructorInjectionObjectTypes as $constructorInjectionObjectType) {
@@ -139,18 +139,18 @@ CODE_SAMPLE
             $this->removeNode($assign);
         }
     }
-    private function refactorNew(New_ $new) : void
+    private function refactorNew(\PhpParser\Node\Expr\New_ $new) : void
     {
         foreach ($this->constructorInjectionObjectTypes as $constructorInjectionObjectType) {
             if (!$this->isObjectType($new->class, $constructorInjectionObjectType)) {
                 continue;
             }
-            $classLike = $new->getAttribute(AttributeKey::CLASS_NODE);
-            if (!$classLike instanceof Class_) {
+            $classLike = $new->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
+            if (!$classLike instanceof \PhpParser\Node\Stmt\Class_) {
                 continue;
             }
             $expectedPropertyName = $this->propertyNaming->getExpectedNameFromType($constructorInjectionObjectType);
-            if (!$expectedPropertyName instanceof ExpectedName) {
+            if (!$expectedPropertyName instanceof \Rector\Naming\ValueObject\ExpectedName) {
                 continue;
             }
             $this->addConstructorDependencyToClass($classLike, $constructorInjectionObjectType, $expectedPropertyName->getName());

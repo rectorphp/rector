@@ -18,7 +18,7 @@ final class ParameterProvider
     /**
      * @param Container|ContainerInterface $container
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct(\RectorPrefix20210510\Symfony\Component\DependencyInjection\ContainerInterface $container)
     {
         $parameterBag = $container->getParameterBag();
         $this->parameters = $parameterBag->all();
@@ -87,6 +87,6 @@ final class ParameterProvider
         if (\array_key_exists($name, $this->parameters)) {
             return;
         }
-        throw new ParameterNotFoundException($name);
+        throw new \RectorPrefix20210510\Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException($name);
     }
 }

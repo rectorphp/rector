@@ -12,13 +12,13 @@ class InvocationMockerDynamicReturnTypeExtension implements \PHPStan\Type\Dynami
 {
     public function getClass() : string
     {
-        return InvocationMocker::class;
+        return \RectorPrefix20210510\PHPUnit\Framework\MockObject\Builder\InvocationMocker::class;
     }
-    public function isMethodSupported(MethodReflection $methodReflection) : bool
+    public function isMethodSupported(\PHPStan\Reflection\MethodReflection $methodReflection) : bool
     {
         return $methodReflection->getName() !== 'getMatcher';
     }
-    public function getTypeFromMethodCall(MethodReflection $methodReflection, MethodCall $methodCall, Scope $scope) : Type
+    public function getTypeFromMethodCall(\PHPStan\Reflection\MethodReflection $methodReflection, \PhpParser\Node\Expr\MethodCall $methodCall, \PHPStan\Analyser\Scope $scope) : \PHPStan\Type\Type
     {
         return $scope->getType($methodCall->var);
     }

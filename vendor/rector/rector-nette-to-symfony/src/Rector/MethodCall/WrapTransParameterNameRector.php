@@ -19,16 +19,16 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\NetteToSymfony\Tests\Rector\MethodCall\WrapTransParameterNameRector\WrapTransParameterNameRectorTest
  */
-final class WrapTransParameterNameRector extends AbstractRector
+final class WrapTransParameterNameRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var string
      * @see https://regex101.com/r/b8boED/1
      */
     private const BETWEEN_PERCENT_CHARS_REGEX = '#%(.*?)%#';
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Adds %% to placeholder name of trans() method if missing', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Adds %% to placeholder name of trans() method if missing', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 use Symfony\Component\Translation\Translator;
 
 final class SomeController
@@ -65,14 +65,14 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [MethodCall::class];
+        return [\PhpParser\Node\Expr\MethodCall::class];
     }
     /**
      * @param MethodCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if (!$this->isObjectType($node->var, new ObjectType('Symfony\\Component\\Translation\\TranslatorInterface'))) {
+        if (!$this->isObjectType($node->var, new \PHPStan\Type\ObjectType('Symfony\\Component\\Translation\\TranslatorInterface'))) {
             return null;
         }
         if (!$this->isName($node->name, 'trans')) {
@@ -81,7 +81,7 @@ CODE_SAMPLE
         if (\count($node->args) < 2) {
             return null;
         }
-        if (!$node->args[1]->value instanceof Array_) {
+        if (!$node->args[1]->value instanceof \PhpParser\Node\Expr\Array_) {
             return null;
         }
         /** @var Array_ $parametersArrayNode */
@@ -90,13 +90,13 @@ CODE_SAMPLE
             if ($arrayItem === null) {
                 continue;
             }
-            if (!$arrayItem->key instanceof String_) {
+            if (!$arrayItem->key instanceof \PhpParser\Node\Scalar\String_) {
                 continue;
             }
-            if (Strings::match($arrayItem->key->value, self::BETWEEN_PERCENT_CHARS_REGEX)) {
+            if (\RectorPrefix20210510\Nette\Utils\Strings::match($arrayItem->key->value, self::BETWEEN_PERCENT_CHARS_REGEX)) {
                 continue;
             }
-            $arrayItem->key = new String_('%' . $arrayItem->key->value . '%');
+            $arrayItem->key = new \PhpParser\Node\Scalar\String_('%' . $arrayItem->key->value . '%');
         }
         return $node;
     }

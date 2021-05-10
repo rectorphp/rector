@@ -32,7 +32,7 @@ final class RectorError
     {
         return $this->fileInfo->getRelativeFilePathFromCwd();
     }
-    public function getFileInfo() : SmartFileInfo
+    public function getFileInfo() : \Symplify\SmartFileSystem\SmartFileInfo
     {
         return $this->fileInfo;
     }

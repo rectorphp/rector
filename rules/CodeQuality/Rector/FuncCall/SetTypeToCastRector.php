@@ -25,15 +25,15 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\CodeQuality\Rector\FuncCall\SetTypeToCastRector\SetTypeToCastRectorTest
  */
-final class SetTypeToCastRector extends AbstractRector
+final class SetTypeToCastRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var array<string, class-string<Cast>>
      */
-    private const TYPE_TO_CAST = ['array' => Array_::class, 'bool' => Bool_::class, 'boolean' => Bool_::class, 'double' => Double::class, 'float' => Double::class, 'int' => Int_::class, 'integer' => Int_::class, 'object' => Object_::class, 'string' => String_::class];
-    public function getRuleDefinition() : RuleDefinition
+    private const TYPE_TO_CAST = ['array' => \PhpParser\Node\Expr\Cast\Array_::class, 'bool' => \PhpParser\Node\Expr\Cast\Bool_::class, 'boolean' => \PhpParser\Node\Expr\Cast\Bool_::class, 'double' => \PhpParser\Node\Expr\Cast\Double::class, 'float' => \PhpParser\Node\Expr\Cast\Double::class, 'int' => \PhpParser\Node\Expr\Cast\Int_::class, 'integer' => \PhpParser\Node\Expr\Cast\Int_::class, 'object' => \PhpParser\Node\Expr\Cast\Object_::class, 'string' => \PhpParser\Node\Expr\Cast\String_::class];
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Changes settype() to (type) where possible', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Changes settype() to (type) where possible', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($foo)
@@ -62,12 +62,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [FuncCall::class];
+        return [\PhpParser\Node\Expr\FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$this->isName($node, 'settype')) {
             return null;
@@ -78,22 +78,22 @@ CODE_SAMPLE
         }
         $typeNode = \strtolower($typeNode);
         $varNode = $node->args[0]->value;
-        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+        $parentNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
         // result of function or probably used
-        if ($parentNode instanceof Expr || $parentNode instanceof Arg) {
+        if ($parentNode instanceof \PhpParser\Node\Expr || $parentNode instanceof \PhpParser\Node\Arg) {
             return null;
         }
         if (isset(self::TYPE_TO_CAST[$typeNode])) {
             $castClass = self::TYPE_TO_CAST[$typeNode];
             $castNode = new $castClass($varNode);
-            if ($parentNode instanceof Expression) {
+            if ($parentNode instanceof \PhpParser\Node\Stmt\Expression) {
                 // bare expression? → assign
-                return new Assign($varNode, $castNode);
+                return new \PhpParser\Node\Expr\Assign($varNode, $castNode);
             }
             return $castNode;
         }
         if ($typeNode === 'null') {
-            return new Assign($varNode, $this->nodeFactory->createNull());
+            return new \PhpParser\Node\Expr\Assign($varNode, $this->nodeFactory->createNull());
         }
         return $node;
     }

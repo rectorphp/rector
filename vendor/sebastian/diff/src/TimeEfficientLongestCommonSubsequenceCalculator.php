@@ -15,7 +15,7 @@ use function array_reverse;
 use function count;
 use function max;
 use SplFixedArray;
-final class TimeEfficientLongestCommonSubsequenceCalculator implements LongestCommonSubsequenceCalculator
+final class TimeEfficientLongestCommonSubsequenceCalculator implements \RectorPrefix20210510\SebastianBergmann\Diff\LongestCommonSubsequenceCalculator
 {
     /**
      * {@inheritdoc}
@@ -23,10 +23,10 @@ final class TimeEfficientLongestCommonSubsequenceCalculator implements LongestCo
     public function calculate(array $from, array $to) : array
     {
         $common = [];
-        $fromLength = count($from);
-        $toLength = count($to);
+        $fromLength = \count($from);
+        $toLength = \count($to);
         $width = $fromLength + 1;
-        $matrix = new SplFixedArray($width * ($toLength + 1));
+        $matrix = new \SplFixedArray($width * ($toLength + 1));
         for ($i = 0; $i <= $fromLength; ++$i) {
             $matrix[$i] = 0;
         }
@@ -36,7 +36,7 @@ final class TimeEfficientLongestCommonSubsequenceCalculator implements LongestCo
         for ($i = 1; $i <= $fromLength; ++$i) {
             for ($j = 1; $j <= $toLength; ++$j) {
                 $o = $j * $width + $i;
-                $matrix[$o] = max($matrix[$o - 1], $matrix[$o - $width], $from[$i - 1] === $to[$j - 1] ? $matrix[$o - $width - 1] + 1 : 0);
+                $matrix[$o] = \max($matrix[$o - 1], $matrix[$o - $width], $from[$i - 1] === $to[$j - 1] ? $matrix[$o - $width - 1] + 1 : 0);
             }
         }
         $i = $fromLength;
@@ -55,6 +55,6 @@ final class TimeEfficientLongestCommonSubsequenceCalculator implements LongestCo
                 }
             }
         }
-        return array_reverse($common);
+        return \array_reverse($common);
     }
 }

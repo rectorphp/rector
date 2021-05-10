@@ -25,10 +25,10 @@ final class Uninflected
      */
     private static function getDefault() : iterable
     {
-        (yield new Pattern('tórax'));
-        (yield new Pattern('tênis'));
-        (yield new Pattern('ônibus'));
-        (yield new Pattern('lápis'));
-        (yield new Pattern('fênix'));
+        (yield new \RectorPrefix20210510\Doctrine\Inflector\Rules\Pattern('tórax'));
+        (yield new \RectorPrefix20210510\Doctrine\Inflector\Rules\Pattern('tênis'));
+        (yield new \RectorPrefix20210510\Doctrine\Inflector\Rules\Pattern('ônibus'));
+        (yield new \RectorPrefix20210510\Doctrine\Inflector\Rules\Pattern('lápis'));
+        (yield new \RectorPrefix20210510\Doctrine\Inflector\Rules\Pattern('fênix'));
     }
 }

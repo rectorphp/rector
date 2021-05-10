@@ -23,7 +23,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Nette\Tests\Rector\FuncCall\PregMatchFunctionToNetteUtilsStringsRector\PregMatchFunctionToNetteUtilsStringsRectorTest
  */
-final class PregMatchFunctionToNetteUtilsStringsRector extends AbstractRector
+final class PregMatchFunctionToNetteUtilsStringsRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var array<string, string>
@@ -33,13 +33,13 @@ final class PregMatchFunctionToNetteUtilsStringsRector extends AbstractRector
      * @var PregMatchAllAnalyzer
      */
     private $pregMatchAllAnalyzer;
-    public function __construct(PregMatchAllAnalyzer $pregMatchAllAnalyzer)
+    public function __construct(\Rector\Nette\NodeAnalyzer\PregMatchAllAnalyzer $pregMatchAllAnalyzer)
     {
         $this->pregMatchAllAnalyzer = $pregMatchAllAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Use Nette\\Utils\\Strings over bare preg_match() and preg_match_all() functions', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Use Nette\\Utils\\Strings over bare preg_match() and preg_match_all() functions', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -66,9 +66,9 @@ CODE_SAMPLE
     /**
      * @param FuncCall|Identical $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if ($node instanceof Identical) {
+        if ($node instanceof \PhpParser\Node\Expr\BinaryOp\Identical) {
             return $this->refactorIdentical($node);
         }
         return $this->refactorFuncCall($node);
@@ -78,18 +78,18 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [FuncCall::class, Identical::class];
+        return [\PhpParser\Node\Expr\FuncCall::class, \PhpParser\Node\Expr\BinaryOp\Identical::class];
     }
-    public function refactorIdentical(Identical $identical) : ?Bool_
+    public function refactorIdentical(\PhpParser\Node\Expr\BinaryOp\Identical $identical) : ?\PhpParser\Node\Expr\Cast\Bool_
     {
-        $parentNode = $identical->getAttribute(AttributeKey::PARENT_NODE);
-        if ($identical->left instanceof FuncCall) {
+        $parentNode = $identical->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        if ($identical->left instanceof \PhpParser\Node\Expr\FuncCall) {
             $refactoredFuncCall = $this->refactorFuncCall($identical->left);
             if ($refactoredFuncCall !== null && $this->valueResolver->isValue($identical->right, 1)) {
                 return $this->createBoolCast($parentNode, $refactoredFuncCall);
             }
         }
-        if ($identical->right instanceof FuncCall) {
+        if ($identical->right instanceof \PhpParser\Node\Expr\FuncCall) {
             $refactoredFuncCall = $this->refactorFuncCall($identical->right);
             if ($refactoredFuncCall !== null && $this->valueResolver->isValue($identical->left, 1)) {
                 return $this->createBoolCast($parentNode, $refactoredFuncCall);
@@ -100,7 +100,7 @@ CODE_SAMPLE
     /**
      * @return FuncCall|StaticCall|Assign|null
      */
-    public function refactorFuncCall(FuncCall $funcCall) : ?Expr
+    public function refactorFuncCall(\PhpParser\Node\Expr\FuncCall $funcCall) : ?\PhpParser\Node\Expr
     {
         $methodName = $this->nodeNameResolver->matchNameFromMap($funcCall, self::FUNCTION_NAME_TO_METHOD_NAME);
         if ($methodName === null) {
@@ -108,31 +108,31 @@ CODE_SAMPLE
         }
         $matchStaticCall = $this->createMatchStaticCall($funcCall, $methodName);
         // skip assigns, might be used with different return value
-        $parentNode = $funcCall->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parentNode instanceof Assign) {
+        $parentNode = $funcCall->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        if ($parentNode instanceof \PhpParser\Node\Expr\Assign) {
             if ($methodName === 'matchAll') {
                 // use count
-                return new FuncCall(new Name('count'), [new Arg($matchStaticCall)]);
+                return new \PhpParser\Node\Expr\FuncCall(new \PhpParser\Node\Name('count'), [new \PhpParser\Node\Arg($matchStaticCall)]);
             }
             return null;
         }
         // assign
         if (isset($funcCall->args[2])) {
-            return new Assign($funcCall->args[2]->value, $matchStaticCall);
+            return new \PhpParser\Node\Expr\Assign($funcCall->args[2]->value, $matchStaticCall);
         }
         return $matchStaticCall;
     }
     /**
      * @param Expr $expr
      */
-    private function createBoolCast(?Node $node, Node $expr) : Bool_
+    private function createBoolCast(?\PhpParser\Node $node, \PhpParser\Node $expr) : \PhpParser\Node\Expr\Cast\Bool_
     {
-        if ($node instanceof Return_ && $expr instanceof Assign) {
+        if ($node instanceof \PhpParser\Node\Stmt\Return_ && $expr instanceof \PhpParser\Node\Expr\Assign) {
             $expr = $expr->expr;
         }
-        return new Bool_($expr);
+        return new \PhpParser\Node\Expr\Cast\Bool_($expr);
     }
-    private function createMatchStaticCall(FuncCall $funcCall, string $methodName) : StaticCall
+    private function createMatchStaticCall(\PhpParser\Node\Expr\FuncCall $funcCall, string $methodName) : \PhpParser\Node\Expr\StaticCall
     {
         $args = [];
         $args[] = $funcCall->args[1];

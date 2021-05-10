@@ -21,7 +21,7 @@ use RectorPrefix20210510\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Transform\Rector\New_\NewToMethodCallRector\NewToMethodCallRectorTest
  */
-final class NewToMethodCallRector extends AbstractRector implements ConfigurableRectorInterface
+final class NewToMethodCallRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
      * @var string
@@ -35,13 +35,13 @@ final class NewToMethodCallRector extends AbstractRector implements Configurable
      * @var ClassNaming
      */
     private $classNaming;
-    public function __construct(ClassNaming $classNaming)
+    public function __construct(\Rector\CodingStyle\Naming\ClassNaming $classNaming)
     {
         $this->classNaming = $classNaming;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Replaces creating object instances with "new" keyword with factory method.', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Replaces creating object instances with "new" keyword with factory method.', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
 	public function example() {
@@ -62,31 +62,31 @@ class SomeClass
 	}
 }
 CODE_SAMPLE
-, [self::NEWS_TO_METHOD_CALLS => [new NewToMethodCall('MyClass', 'MyClassFactory', 'create')]])]);
+, [self::NEWS_TO_METHOD_CALLS => [new \Rector\Transform\ValueObject\NewToMethodCall('MyClass', 'MyClassFactory', 'create')]])]);
     }
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [New_::class];
+        return [\PhpParser\Node\Expr\New_::class];
     }
     /**
      * @param New_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         foreach ($this->newsToMethodCalls as $newsToMethodCall) {
             if (!$this->isObjectType($node, $newsToMethodCall->getNewObjectType())) {
                 continue;
             }
             $serviceObjectType = $newsToMethodCall->getServiceObjectType();
-            $className = $node->getAttribute(AttributeKey::CLASS_NAME);
+            $className = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);
             if ($className === $serviceObjectType->getClassName()) {
                 continue;
             }
             /** @var Class_ $classNode */
-            $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
+            $classNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
             $propertyName = $this->getExistingFactoryPropertyName($classNode, $newsToMethodCall->getServiceObjectType());
             if ($propertyName === null) {
                 $serviceObjectType = $newsToMethodCall->getServiceObjectType();
@@ -94,8 +94,8 @@ CODE_SAMPLE
                 $propertyName = \lcfirst($propertyName);
                 $this->addConstructorDependencyToClass($classNode, $newsToMethodCall->getServiceObjectType(), $propertyName);
             }
-            $propertyFetch = new PropertyFetch(new Variable('this'), $propertyName);
-            return new MethodCall($propertyFetch, $newsToMethodCall->getServiceMethod(), $node->args);
+            $propertyFetch = new \PhpParser\Node\Expr\PropertyFetch(new \PhpParser\Node\Expr\Variable('this'), $propertyName);
+            return new \PhpParser\Node\Expr\MethodCall($propertyFetch, $newsToMethodCall->getServiceMethod(), $node->args);
         }
         return $node;
     }
@@ -105,10 +105,10 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $newsToMethodCalls = $configuration[self::NEWS_TO_METHOD_CALLS] ?? [];
-        Assert::allIsInstanceOf($newsToMethodCalls, NewToMethodCall::class);
+        \RectorPrefix20210510\Webmozart\Assert\Assert::allIsInstanceOf($newsToMethodCalls, \Rector\Transform\ValueObject\NewToMethodCall::class);
         $this->newsToMethodCalls = $newsToMethodCalls;
     }
-    private function getExistingFactoryPropertyName(Class_ $class, ObjectType $factoryObjectType) : ?string
+    private function getExistingFactoryPropertyName(\PhpParser\Node\Stmt\Class_ $class, \PHPStan\Type\ObjectType $factoryObjectType) : ?string
     {
         foreach ($class->getProperties() as $property) {
             if (!$this->isObjectType($property, $factoryObjectType)) {

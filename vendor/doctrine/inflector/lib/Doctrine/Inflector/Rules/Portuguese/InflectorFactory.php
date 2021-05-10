@@ -5,14 +5,14 @@ namespace RectorPrefix20210510\Doctrine\Inflector\Rules\Portuguese;
 
 use RectorPrefix20210510\Doctrine\Inflector\GenericLanguageInflectorFactory;
 use RectorPrefix20210510\Doctrine\Inflector\Rules\Ruleset;
-final class InflectorFactory extends GenericLanguageInflectorFactory
+final class InflectorFactory extends \RectorPrefix20210510\Doctrine\Inflector\GenericLanguageInflectorFactory
 {
-    protected function getSingularRuleset() : Ruleset
+    protected function getSingularRuleset() : \RectorPrefix20210510\Doctrine\Inflector\Rules\Ruleset
     {
-        return Rules::getSingularRuleset();
+        return \RectorPrefix20210510\Doctrine\Inflector\Rules\Portuguese\Rules::getSingularRuleset();
     }
-    protected function getPluralRuleset() : Ruleset
+    protected function getPluralRuleset() : \RectorPrefix20210510\Doctrine\Inflector\Rules\Ruleset
     {
-        return Rules::getPluralRuleset();
+        return \RectorPrefix20210510\Doctrine\Inflector\Rules\Portuguese\Rules::getPluralRuleset();
     }
 }

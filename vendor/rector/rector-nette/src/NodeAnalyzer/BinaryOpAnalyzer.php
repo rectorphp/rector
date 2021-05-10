@@ -13,23 +13,23 @@ final class BinaryOpAnalyzer
      * @var NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(NodeNameResolver $nodeNameResolver)
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
     }
-    public function matchFuncCallAndOtherExpr(BinaryOp $binaryOp, string $funcCallName) : ?FuncCallAndExpr
+    public function matchFuncCallAndOtherExpr(\PhpParser\Node\Expr\BinaryOp $binaryOp, string $funcCallName) : ?\Rector\Nette\ValueObject\FuncCallAndExpr
     {
-        if ($binaryOp->left instanceof FuncCall) {
+        if ($binaryOp->left instanceof \PhpParser\Node\Expr\FuncCall) {
             if (!$this->nodeNameResolver->isName($binaryOp->left, $funcCallName)) {
                 return null;
             }
-            return new FuncCallAndExpr($binaryOp->left, $binaryOp->right);
+            return new \Rector\Nette\ValueObject\FuncCallAndExpr($binaryOp->left, $binaryOp->right);
         }
-        if ($binaryOp->right instanceof FuncCall) {
+        if ($binaryOp->right instanceof \PhpParser\Node\Expr\FuncCall) {
             if (!$this->nodeNameResolver->isName($binaryOp->right, $funcCallName)) {
                 return null;
             }
-            return new FuncCallAndExpr($binaryOp->right, $binaryOp->left);
+            return new \Rector\Nette\ValueObject\FuncCallAndExpr($binaryOp->right, $binaryOp->left);
         }
         return null;
     }

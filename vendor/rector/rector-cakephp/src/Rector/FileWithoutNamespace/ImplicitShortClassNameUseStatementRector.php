@@ -17,19 +17,19 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \aRector\CakePHP\Tests\Rector\FileWithoutNamespace\ImplicitShortClassNameUseStatementRector\ImplicitShortClassNameUseStatementRectorTest
  */
-final class ImplicitShortClassNameUseStatementRector extends AbstractRector
+final class ImplicitShortClassNameUseStatementRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var ImplicitNameResolver
      */
     private $implicitNameResolver;
-    public function __construct(ImplicitNameResolver $implicitNameResolver)
+    public function __construct(\Rector\CakePHP\ImplicitNameResolver $implicitNameResolver)
     {
         $this->implicitNameResolver = $implicitNameResolver;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Collect implicit class names and add imports', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Collect implicit class names and add imports', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 use App\Foo\Plugin;
 
 class LocationsFixture extends TestFixture implements Plugin
@@ -51,12 +51,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [FileWithoutNamespace::class];
+        return [\Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace::class];
     }
     /**
      * @param FileWithoutNamespace $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $names = $this->findNames($node);
         if ($names === []) {
@@ -73,14 +73,14 @@ CODE_SAMPLE
     /**
      * @return Name[]
      */
-    private function findNames(FileWithoutNamespace $fileWithoutNamespace) : array
+    private function findNames(\Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace $fileWithoutNamespace) : array
     {
-        return $this->betterNodeFinder->find($fileWithoutNamespace->stmts, function (Node $node) : bool {
-            if (!$node instanceof Name) {
+        return $this->betterNodeFinder->find($fileWithoutNamespace->stmts, function (\PhpParser\Node $node) : bool {
+            if (!$node instanceof \PhpParser\Node\Name) {
                 return \false;
             }
-            $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
-            return !$parent instanceof New_;
+            $parent = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+            return !$parent instanceof \PhpParser\Node\Expr\New_;
         });
     }
     /**

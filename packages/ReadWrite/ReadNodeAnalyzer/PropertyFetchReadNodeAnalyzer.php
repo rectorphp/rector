@@ -7,7 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\PropertyFetch;
 use Rector\ReadWrite\Contract\ReadNodeAnalyzerInterface;
 use Rector\ReadWrite\NodeFinder\NodeUsageFinder;
-final class PropertyFetchReadNodeAnalyzer implements ReadNodeAnalyzerInterface
+final class PropertyFetchReadNodeAnalyzer implements \Rector\ReadWrite\Contract\ReadNodeAnalyzerInterface
 {
     /**
      * @var ReadExprAnalyzer
@@ -17,19 +17,19 @@ final class PropertyFetchReadNodeAnalyzer implements ReadNodeAnalyzerInterface
      * @var NodeUsageFinder
      */
     private $nodeUsageFinder;
-    public function __construct(\Rector\ReadWrite\ReadNodeAnalyzer\ReadExprAnalyzer $readExprAnalyzer, NodeUsageFinder $nodeUsageFinder)
+    public function __construct(\Rector\ReadWrite\ReadNodeAnalyzer\ReadExprAnalyzer $readExprAnalyzer, \Rector\ReadWrite\NodeFinder\NodeUsageFinder $nodeUsageFinder)
     {
         $this->readExprAnalyzer = $readExprAnalyzer;
         $this->nodeUsageFinder = $nodeUsageFinder;
     }
-    public function supports(Node $node) : bool
+    public function supports(\PhpParser\Node $node) : bool
     {
-        return $node instanceof PropertyFetch;
+        return $node instanceof \PhpParser\Node\Expr\PropertyFetch;
     }
     /**
      * @param PropertyFetch $node
      */
-    public function isRead(Node $node) : bool
+    public function isRead(\PhpParser\Node $node) : bool
     {
         $propertyFetchUsages = $this->nodeUsageFinder->findPropertyFetchUsages($node);
         foreach ($propertyFetchUsages as $propertyFetchUsage) {

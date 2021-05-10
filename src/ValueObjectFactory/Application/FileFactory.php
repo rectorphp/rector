@@ -22,7 +22,7 @@ final class FileFactory
     /**
      * @param FileProcessorInterface[] $fileProcessors
      */
-    public function __construct(FilesFinder $filesFinder, array $fileProcessors)
+    public function __construct(\Rector\Core\FileSystem\FilesFinder $filesFinder, array $fileProcessors)
     {
         $this->fileProcessors = $fileProcessors;
         $this->filesFinder = $filesFinder;
@@ -37,7 +37,7 @@ final class FileFactory
         $fileInfos = $this->filesFinder->findInDirectoriesAndFiles($paths, $supportedFileExtensions);
         $files = [];
         foreach ($fileInfos as $fileInfo) {
-            $files[] = new File($fileInfo, $fileInfo->getContents());
+            $files[] = new \Rector\Core\ValueObject\Application\File($fileInfo, $fileInfo->getContents());
         }
         return $files;
     }

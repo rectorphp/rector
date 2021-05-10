@@ -14,38 +14,38 @@ final class ChangedNodeAnalyzer
      * @var NodeComparator
      */
     private $nodeComparator;
-    public function __construct(NodeComparator $nodeComparator)
+    public function __construct(\Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator)
     {
         $this->nodeComparator = $nodeComparator;
     }
-    public function hasNodeChanged(Node $originalNode, Node $node) : bool
+    public function hasNodeChanged(\PhpParser\Node $originalNode, \PhpParser\Node $node) : bool
     {
         if ($this->isNameIdentical($node, $originalNode)) {
             return \false;
         }
         // @see https://github.com/rectorphp/rector/issues/6169 - special check, as php-parser skips brackets
-        if ($node instanceof Encapsed) {
+        if ($node instanceof \PhpParser\Node\Scalar\Encapsed) {
             foreach ($node->parts as $encapsedPart) {
-                $originalEncapsedPart = $encapsedPart->getAttribute(AttributeKey::ORIGINAL_NODE);
+                $originalEncapsedPart = $encapsedPart->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NODE);
                 if ($originalEncapsedPart === null) {
                     return \true;
                 }
             }
         }
         // php-parser has no idea about changed docblocks, so to report it correctly, we have to set up this attribute
-        if ($node->hasAttribute(AttributeKey::HAS_PHP_DOC_INFO_JUST_CHANGED)) {
-            $node->setAttribute(AttributeKey::HAS_PHP_DOC_INFO_JUST_CHANGED, null);
+        if ($node->hasAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::HAS_PHP_DOC_INFO_JUST_CHANGED)) {
+            $node->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::HAS_PHP_DOC_INFO_JUST_CHANGED, null);
             return \true;
         }
         return !$this->nodeComparator->areNodesEqual($originalNode, $node);
     }
-    private function isNameIdentical(Node $node, Node $originalNode) : bool
+    private function isNameIdentical(\PhpParser\Node $node, \PhpParser\Node $originalNode) : bool
     {
-        if (!$originalNode instanceof Name) {
+        if (!$originalNode instanceof \PhpParser\Node\Name) {
             return \false;
         }
         // names are the same
-        $originalName = $originalNode->getAttribute(AttributeKey::ORIGINAL_NAME);
+        $originalName = $originalNode->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NAME);
         return $this->nodeComparator->areNodesEqual($originalName, $node);
     }
 }

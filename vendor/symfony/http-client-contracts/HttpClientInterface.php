@@ -99,12 +99,12 @@ interface HttpClientInterface
      *
      * @throws TransportExceptionInterface When an unsupported option is passed
      */
-    public function request(string $method, string $url, array $options = []) : ResponseInterface;
+    public function request(string $method, string $url, array $options = []) : \RectorPrefix20210510\Symfony\Contracts\HttpClient\ResponseInterface;
     /**
      * Yields responses chunk by chunk as they complete.
      *
      * @param ResponseInterface|ResponseInterface[]|iterable $responses One or more responses created by the current HTTP client
      * @param float|null                                     $timeout   The idle timeout before yielding timeout chunks
      */
-    public function stream($responses, float $timeout = null) : ResponseStreamInterface;
+    public function stream($responses, float $timeout = null) : \RectorPrefix20210510\Symfony\Contracts\HttpClient\ResponseStreamInterface;
 }

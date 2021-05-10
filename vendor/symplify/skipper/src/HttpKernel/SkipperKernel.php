@@ -8,9 +8,9 @@ use RectorPrefix20210510\Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use RectorPrefix20210510\Symplify\Skipper\Bundle\SkipperBundle;
 use RectorPrefix20210510\Symplify\SymplifyKernel\Bundle\SymplifyKernelBundle;
 use RectorPrefix20210510\Symplify\SymplifyKernel\HttpKernel\AbstractSymplifyKernel;
-final class SkipperKernel extends AbstractSymplifyKernel
+final class SkipperKernel extends \RectorPrefix20210510\Symplify\SymplifyKernel\HttpKernel\AbstractSymplifyKernel
 {
-    public function registerContainerConfiguration(LoaderInterface $loader) : void
+    public function registerContainerConfiguration(\RectorPrefix20210510\Symfony\Component\Config\Loader\LoaderInterface $loader) : void
     {
         $loader->load(__DIR__ . '/../../config/config.php');
         parent::registerContainerConfiguration($loader);
@@ -20,6 +20,6 @@ final class SkipperKernel extends AbstractSymplifyKernel
      */
     public function registerBundles() : iterable
     {
-        return [new SkipperBundle(), new SymplifyKernelBundle()];
+        return [new \RectorPrefix20210510\Symplify\Skipper\Bundle\SkipperBundle(), new \RectorPrefix20210510\Symplify\SymplifyKernel\Bundle\SymplifyKernelBundle()];
     }
 }

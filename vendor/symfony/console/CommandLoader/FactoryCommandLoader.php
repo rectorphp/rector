@@ -16,7 +16,7 @@ use RectorPrefix20210510\Symfony\Component\Console\Exception\CommandNotFoundExce
  *
  * @author Maxime Steinhausser <maxime.steinhausser@gmail.com>
  */
-class FactoryCommandLoader implements CommandLoaderInterface
+class FactoryCommandLoader implements \RectorPrefix20210510\Symfony\Component\Console\CommandLoader\CommandLoaderInterface
 {
     private $factories;
     /**
@@ -39,7 +39,7 @@ class FactoryCommandLoader implements CommandLoaderInterface
     public function get(string $name)
     {
         if (!isset($this->factories[$name])) {
-            throw new CommandNotFoundException(\sprintf('Command "%s" does not exist.', $name));
+            throw new \RectorPrefix20210510\Symfony\Component\Console\Exception\CommandNotFoundException(\sprintf('Command "%s" does not exist.', $name));
         }
         $factory = $this->factories[$name];
         return $factory();

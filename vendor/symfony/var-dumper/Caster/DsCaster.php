@@ -23,33 +23,33 @@ use RectorPrefix20210510\Symfony\Component\VarDumper\Cloner\Stub;
  */
 class DsCaster
 {
-    public static function castCollection(Collection $c, array $a, Stub $stub, bool $isNested) : array
+    public static function castCollection(\Ds\Collection $c, array $a, \RectorPrefix20210510\Symfony\Component\VarDumper\Cloner\Stub $stub, bool $isNested) : array
     {
-        $a[Caster::PREFIX_VIRTUAL . 'count'] = $c->count();
-        $a[Caster::PREFIX_VIRTUAL . 'capacity'] = $c->capacity();
-        if (!$c instanceof Map) {
+        $a[\RectorPrefix20210510\Symfony\Component\VarDumper\Caster\Caster::PREFIX_VIRTUAL . 'count'] = $c->count();
+        $a[\RectorPrefix20210510\Symfony\Component\VarDumper\Caster\Caster::PREFIX_VIRTUAL . 'capacity'] = $c->capacity();
+        if (!$c instanceof \Ds\Map) {
             $a += $c->toArray();
         }
         return $a;
     }
-    public static function castMap(Map $c, array $a, Stub $stub, bool $isNested) : array
+    public static function castMap(\Ds\Map $c, array $a, \RectorPrefix20210510\Symfony\Component\VarDumper\Cloner\Stub $stub, bool $isNested) : array
     {
         foreach ($c as $k => $v) {
-            $a[] = new DsPairStub($k, $v);
+            $a[] = new \RectorPrefix20210510\Symfony\Component\VarDumper\Caster\DsPairStub($k, $v);
         }
         return $a;
     }
-    public static function castPair(Pair $c, array $a, Stub $stub, bool $isNested) : array
+    public static function castPair(\Ds\Pair $c, array $a, \RectorPrefix20210510\Symfony\Component\VarDumper\Cloner\Stub $stub, bool $isNested) : array
     {
         foreach ($c->toArray() as $k => $v) {
-            $a[Caster::PREFIX_VIRTUAL . $k] = $v;
+            $a[\RectorPrefix20210510\Symfony\Component\VarDumper\Caster\Caster::PREFIX_VIRTUAL . $k] = $v;
         }
         return $a;
     }
-    public static function castPairStub(DsPairStub $c, array $a, Stub $stub, bool $isNested) : array
+    public static function castPairStub(\RectorPrefix20210510\Symfony\Component\VarDumper\Caster\DsPairStub $c, array $a, \RectorPrefix20210510\Symfony\Component\VarDumper\Cloner\Stub $stub, bool $isNested) : array
     {
         if ($isNested) {
-            $stub->class = Pair::class;
+            $stub->class = \Ds\Pair::class;
             $stub->value = null;
             $stub->handle = 0;
             $a = $c->value;

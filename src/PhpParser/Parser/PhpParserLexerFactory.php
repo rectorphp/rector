@@ -10,8 +10,8 @@ use PhpParser\Lexer\Emulative;
  */
 final class PhpParserLexerFactory
 {
-    public function create() : Emulative
+    public function create() : \PhpParser\Lexer\Emulative
     {
-        return new Emulative(['usedAttributes' => ['comments', 'startLine', 'endLine', 'startTokenPos', 'endTokenPos'], 'phpVersion' => \PHP_VERSION]);
+        return new \PhpParser\Lexer\Emulative(['usedAttributes' => ['comments', 'startLine', 'endLine', 'startTokenPos', 'endTokenPos'], 'phpVersion' => \PHP_VERSION]);
     }
 }

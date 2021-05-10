@@ -8,14 +8,14 @@ use PhpParser\Node;
 use Rector\Core\ValueObject\Application\File;
 final class FollowedByCommaAnalyzer
 {
-    public function isFollowed(File $file, Node $node) : bool
+    public function isFollowed(\Rector\Core\ValueObject\Application\File $file, \PhpParser\Node $node) : bool
     {
         $oldTokens = $file->getOldTokens();
         $nextTokenPosition = $node->getEndTokenPos() + 1;
         while (isset($oldTokens[$nextTokenPosition])) {
             $currentToken = $oldTokens[$nextTokenPosition];
             // only space
-            if (\is_array($currentToken) || Strings::match($currentToken, '#\\s+#')) {
+            if (\is_array($currentToken) || \RectorPrefix20210510\Nette\Utils\Strings::match($currentToken, '#\\s+#')) {
                 ++$nextTokenPosition;
                 continue;
             }

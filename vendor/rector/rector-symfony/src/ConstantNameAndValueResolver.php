@@ -16,7 +16,7 @@ final class ConstantNameAndValueResolver
      * @var ConstantNameAndValueMatcher
      */
     private $constantNameAndValueMatcher;
-    public function __construct(NodeNameResolver $nodeNameResolver, \Rector\Symfony\ConstantNameAndValueMatcher $constantNameAndValueMatcher)
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Symfony\ConstantNameAndValueMatcher $constantNameAndValueMatcher)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->constantNameAndValueMatcher = $constantNameAndValueMatcher;
@@ -34,7 +34,7 @@ final class ConstantNameAndValueResolver
                     continue;
                 }
                 $constantNameAndValue = $this->constantNameAndValueMatcher->matchFromArg($arg, $prefixForNumeric);
-                if (!$constantNameAndValue instanceof ConstantNameAndValue) {
+                if (!$constantNameAndValue instanceof \Rector\Symfony\ValueObject\ConstantNameAndValue) {
                     continue;
                 }
                 $constantNameAndValues[] = $constantNameAndValue;

@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace PhpParser\Node;
 
 use PhpParser\NodeAbstract;
-class Name extends NodeAbstract
+class Name extends \PhpParser\NodeAbstract
 {
     /** @var string[] Parts of the name */
     public $parts;

@@ -20,7 +20,7 @@ final class ClassGenericMethodResolver
      * @var MethodTagValueNodeFactory
      */
     private $methodTagValueNodeFactory;
-    public function __construct(SimplePhpDocParser $simplePhpDocParser, MethodTagValueNodeFactory $methodTagValueNodeFactory)
+    public function __construct(\RectorPrefix20210510\Symplify\SimplePhpDocParser\SimplePhpDocParser $simplePhpDocParser, \Rector\Generics\TagValueNodeFactory\MethodTagValueNodeFactory $methodTagValueNodeFactory)
     {
         $this->simplePhpDocParser = $simplePhpDocParser;
         $this->methodTagValueNodeFactory = $methodTagValueNodeFactory;
@@ -28,7 +28,7 @@ final class ClassGenericMethodResolver
     /**
      * @return MethodTagValueNode[]
      */
-    public function resolveFromClass(ChildParentClassReflections $genericChildParentClassReflections) : array
+    public function resolveFromClass(\Rector\Generics\ValueObject\ChildParentClassReflections $genericChildParentClassReflections) : array
     {
         $methodTagValueNodes = [];
         $classReflection = $genericChildParentClassReflections->getParentClassReflection();
@@ -41,7 +41,7 @@ final class ClassGenericMethodResolver
             // how to parse?
             $parentMethodSimplePhpDocNode = $this->simplePhpDocParser->parseDocBlock($parentMethodDocComment);
             $methodTagValueNode = $this->resolveMethodTagValueNode($parentMethodSimplePhpDocNode, $templateNames, $methodReflection, $genericChildParentClassReflections);
-            if (!$methodTagValueNode instanceof MethodTagValueNode) {
+            if (!$methodTagValueNode instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\MethodTagValueNode) {
                 continue;
             }
             $methodTagValueNodes[] = $methodTagValueNode;
@@ -51,12 +51,12 @@ final class ClassGenericMethodResolver
     /**
      * @param string[] $templateNames
      */
-    private function resolveMethodTagValueNode(SimplePhpDocNode $simplePhpDocNode, array $templateNames, MethodReflection $methodReflection, ChildParentClassReflections $genericChildParentClassReflections) : ?MethodTagValueNode
+    private function resolveMethodTagValueNode(\RectorPrefix20210510\Symplify\SimplePhpDocParser\ValueObject\Ast\PhpDoc\SimplePhpDocNode $simplePhpDocNode, array $templateNames, \PHPStan\Reflection\MethodReflection $methodReflection, \Rector\Generics\ValueObject\ChildParentClassReflections $genericChildParentClassReflections) : ?\PHPStan\PhpDocParser\Ast\PhpDoc\MethodTagValueNode
     {
         foreach ($simplePhpDocNode->getReturnTagValues() as $returnTagValueNode) {
             foreach ($templateNames as $templateName) {
                 $typeAsString = (string) $returnTagValueNode->type;
-                if (!Strings::match($typeAsString, '#\\b' . \preg_quote($templateName, '#') . '\\b#')) {
+                if (!\RectorPrefix20210510\Nette\Utils\Strings::match($typeAsString, '#\\b' . \preg_quote($templateName, '#') . '\\b#')) {
                     continue;
                 }
                 return $this->methodTagValueNodeFactory->createFromMethodReflectionAndReturnTagValueNode($methodReflection, $returnTagValueNode, $genericChildParentClassReflections);

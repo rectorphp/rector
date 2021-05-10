@@ -38,7 +38,7 @@ final class ValueObjectClassAnalyzer
      * @var ClassAnalyzer
      */
     private $classAnalyzer;
-    public function __construct(NodeNameResolver $nodeNameResolver, NodeTypeResolver $nodeTypeResolver, PhpDocInfoFactory $phpDocInfoFactory, NodeRepository $nodeRepository, ClassAnalyzer $classAnalyzer)
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \Rector\NodeCollector\NodeCollector\NodeRepository $nodeRepository, \Rector\Core\NodeAnalyzer\ClassAnalyzer $classAnalyzer)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
@@ -46,7 +46,7 @@ final class ValueObjectClassAnalyzer
         $this->nodeRepository = $nodeRepository;
         $this->classAnalyzer = $classAnalyzer;
     }
-    public function isValueObjectClass(Class_ $class) : bool
+    public function isValueObjectClass(\PhpParser\Node\Stmt\Class_ $class) : bool
     {
         if ($this->classAnalyzer->isAnonymousClass($class)) {
             return \false;
@@ -56,20 +56,20 @@ final class ValueObjectClassAnalyzer
         if (isset($this->valueObjectStatusByClassName[$className])) {
             return $this->valueObjectStatusByClassName[$className];
         }
-        $constructClassMethod = $class->getMethod(MethodName::CONSTRUCT);
-        if (!$constructClassMethod instanceof ClassMethod) {
+        $constructClassMethod = $class->getMethod(\Rector\Core\ValueObject\MethodName::CONSTRUCT);
+        if (!$constructClassMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
             return $this->analyseWithoutConstructor($class, $className);
         }
         // resolve constructor types
         foreach ($constructClassMethod->params as $param) {
             $paramType = $this->nodeTypeResolver->resolve($param);
-            if (!$paramType instanceof ObjectType) {
+            if (!$paramType instanceof \PHPStan\Type\ObjectType) {
                 continue;
             }
             // awesome!
             // is it services or value object?
             $paramTypeClass = $this->nodeRepository->findClass($paramType->getClassName());
-            if (!$paramTypeClass instanceof Class_) {
+            if (!$paramTypeClass instanceof \PhpParser\Node\Stmt\Class_) {
                 // not sure :/
                 continue;
             }
@@ -81,7 +81,7 @@ final class ValueObjectClassAnalyzer
         $this->valueObjectStatusByClassName[$className] = \true;
         return \true;
     }
-    private function analyseWithoutConstructor(Class_ $class, string $className) : bool
+    private function analyseWithoutConstructor(\PhpParser\Node\Stmt\Class_ $class, string $className) : bool
     {
         // A. has all properties with serialize?
         if ($this->hasAllPropertiesWithSerialize($class)) {
@@ -92,7 +92,7 @@ final class ValueObjectClassAnalyzer
         $this->valueObjectStatusByClassName[$className] = \false;
         return \false;
     }
-    private function hasAllPropertiesWithSerialize(Class_ $class) : bool
+    private function hasAllPropertiesWithSerialize(\PhpParser\Node\Stmt\Class_ $class) : bool
     {
         foreach ($class->getProperties() as $property) {
             $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);

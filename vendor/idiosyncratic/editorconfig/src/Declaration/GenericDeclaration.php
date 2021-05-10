@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace RectorPrefix20210510\Idiosyncratic\EditorConfig\Declaration;
 
-final class GenericDeclaration extends Declaration
+final class GenericDeclaration extends \RectorPrefix20210510\Idiosyncratic\EditorConfig\Declaration\Declaration
 {
     public function __construct(string $name, string $value)
     {

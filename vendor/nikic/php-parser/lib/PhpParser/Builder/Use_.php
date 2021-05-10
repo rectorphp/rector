@@ -7,7 +7,7 @@ use PhpParser\Builder;
 use PhpParser\BuilderHelpers;
 use PhpParser\Node;
 use PhpParser\Node\Stmt;
-class Use_ implements Builder
+class Use_ implements \PhpParser\Builder
 {
     protected $name;
     protected $type;
@@ -20,7 +20,7 @@ class Use_ implements Builder
      */
     public function __construct($name, int $type)
     {
-        $this->name = BuilderHelpers::normalizeName($name);
+        $this->name = \PhpParser\BuilderHelpers::normalizeName($name);
         $this->type = $type;
     }
     /**
@@ -40,8 +40,8 @@ class Use_ implements Builder
      *
      * @return Node The built node
      */
-    public function getNode() : Node
+    public function getNode() : \PhpParser\Node
     {
-        return new Stmt\Use_([new Stmt\UseUse($this->name, $this->alias)], $this->type);
+        return new \PhpParser\Node\Stmt\Use_([new \PhpParser\Node\Stmt\UseUse($this->name, $this->alias)], $this->type);
     }
 }

@@ -6,7 +6,7 @@ namespace RectorPrefix20210510\Symplify\AutowireArrayParameter\Tests\DocBlock;
 use Iterator;
 use RectorPrefix20210510\PHPUnit\Framework\TestCase;
 use RectorPrefix20210510\Symplify\AutowireArrayParameter\DocBlock\ParamTypeDocBlockResolver;
-final class ParamTypeDocBlockResolverTest extends TestCase
+final class ParamTypeDocBlockResolverTest extends \RectorPrefix20210510\PHPUnit\Framework\TestCase
 {
     /**
      * @var ParamTypeDocBlockResolver
@@ -14,7 +14,7 @@ final class ParamTypeDocBlockResolverTest extends TestCase
     private $paramTypeDocBlockResolver;
     protected function setUp() : void
     {
-        $this->paramTypeDocBlockResolver = new ParamTypeDocBlockResolver();
+        $this->paramTypeDocBlockResolver = new \RectorPrefix20210510\Symplify\AutowireArrayParameter\DocBlock\ParamTypeDocBlockResolver();
     }
     /**
      * @dataProvider provideData()
@@ -24,7 +24,7 @@ final class ParamTypeDocBlockResolverTest extends TestCase
         $resolvedType = $this->paramTypeDocBlockResolver->resolve($docBlock, $parameterName);
         $this->assertSame($expectedType, $resolvedType);
     }
-    public function provideData() : Iterator
+    public function provideData() : \Iterator
     {
         (yield ['/** @param Type[] $name */', 'name', 'Type']);
         (yield ['/** @param array<Type> $name */', 'name', 'Type']);
@@ -41,7 +41,7 @@ final class ParamTypeDocBlockResolverTest extends TestCase
     /**
      * @return Iterator<string[]>
      */
-    public function provideDataMissmatchName() : Iterator
+    public function provideDataMissmatchName() : \Iterator
     {
         (yield ['/** @param Type[] $name */', '___not']);
     }

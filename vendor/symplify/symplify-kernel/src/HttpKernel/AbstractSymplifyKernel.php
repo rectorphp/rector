@@ -10,7 +10,7 @@ use RectorPrefix20210510\Symplify\PackageBuilder\Contract\HttpKernel\ExtraConfig
 use Symplify\SmartFileSystem\SmartFileInfo;
 use RectorPrefix20210510\Symplify\SymplifyKernel\Bundle\SymplifyKernelBundle;
 use RectorPrefix20210510\Symplify\SymplifyKernel\Strings\KernelUniqueHasher;
-abstract class AbstractSymplifyKernel extends Kernel implements ExtraConfigAwareKernelInterface
+abstract class AbstractSymplifyKernel extends \RectorPrefix20210510\Symfony\Component\HttpKernel\Kernel implements \RectorPrefix20210510\Symplify\PackageBuilder\Contract\HttpKernel\ExtraConfigAwareKernelInterface
 {
     /**
      * @var string[]
@@ -29,7 +29,7 @@ abstract class AbstractSymplifyKernel extends Kernel implements ExtraConfigAware
      */
     public function registerBundles() : iterable
     {
-        return [new SymplifyKernelBundle()];
+        return [new \RectorPrefix20210510\Symplify\SymplifyKernel\Bundle\SymplifyKernelBundle()];
     }
     /**
      * @param string[]|SmartFileInfo[] $configs
@@ -37,13 +37,13 @@ abstract class AbstractSymplifyKernel extends Kernel implements ExtraConfigAware
     public function setConfigs(array $configs) : void
     {
         foreach ($configs as $config) {
-            if ($config instanceof SmartFileInfo) {
+            if ($config instanceof \Symplify\SmartFileSystem\SmartFileInfo) {
                 $config = $config->getRealPath();
             }
             $this->configs[] = $config;
         }
     }
-    public function registerContainerConfiguration(LoaderInterface $loader) : void
+    public function registerContainerConfiguration(\RectorPrefix20210510\Symfony\Component\Config\Loader\LoaderInterface $loader) : void
     {
         foreach ($this->configs as $config) {
             $loader->load($config);
@@ -51,7 +51,7 @@ abstract class AbstractSymplifyKernel extends Kernel implements ExtraConfigAware
     }
     private function getUniqueKernelHash() : string
     {
-        $kernelUniqueHasher = new KernelUniqueHasher();
+        $kernelUniqueHasher = new \RectorPrefix20210510\Symplify\SymplifyKernel\Strings\KernelUniqueHasher();
         return $kernelUniqueHasher->hashKernelClass(static::class);
     }
 }

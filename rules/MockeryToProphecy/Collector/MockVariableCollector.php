@@ -21,7 +21,7 @@ final class MockVariableCollector
      * @var ValueResolver
      */
     private $valueResolver;
-    public function __construct(NodeNameResolver $nodeNameResolver, ValueResolver $valueResolver)
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\Value\ValueResolver $valueResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->valueResolver = $valueResolver;
@@ -30,14 +30,14 @@ final class MockVariableCollector
      * @param FuncCall|StaticCall $node
      * @return array<string, class-string>
      */
-    public function collectMockVariableName(Node $node) : array
+    public function collectMockVariableName(\PhpParser\Node $node) : array
     {
         $mockVariableTypesByNames = [];
-        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if (!$parentNode instanceof Assign) {
+        $parentNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        if (!$parentNode instanceof \PhpParser\Node\Expr\Assign) {
             return [];
         }
-        if (!$parentNode->var instanceof Variable) {
+        if (!$parentNode->var instanceof \PhpParser\Node\Expr\Variable) {
             return [];
         }
         /** @var Variable $variable */

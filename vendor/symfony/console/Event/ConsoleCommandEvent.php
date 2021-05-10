@@ -15,7 +15,7 @@ namespace RectorPrefix20210510\Symfony\Component\Console\Event;
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-final class ConsoleCommandEvent extends ConsoleEvent
+final class ConsoleCommandEvent extends \RectorPrefix20210510\Symfony\Component\Console\Event\ConsoleEvent
 {
     /**
      * The return code for skipped commands, this will also be passed into the terminate event.

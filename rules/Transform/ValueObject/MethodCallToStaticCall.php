@@ -29,9 +29,9 @@ final class MethodCallToStaticCall
         $this->newClass = $newClass;
         $this->newMethod = $newMethod;
     }
-    public function getOldObjectType() : ObjectType
+    public function getOldObjectType() : \PHPStan\Type\ObjectType
     {
-        return new ObjectType($this->oldClass);
+        return new \PHPStan\Type\ObjectType($this->oldClass);
     }
     public function getOldMethod() : string
     {

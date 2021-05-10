@@ -17,10 +17,10 @@ use RectorPrefix20210510\Symfony\Component\HttpKernel\KernelInterface;
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class FileLocator extends BaseFileLocator
+class FileLocator extends \RectorPrefix20210510\Symfony\Component\Config\FileLocator
 {
     private $kernel;
-    public function __construct(KernelInterface $kernel)
+    public function __construct(\RectorPrefix20210510\Symfony\Component\HttpKernel\KernelInterface $kernel)
     {
         $this->kernel = $kernel;
         parent::__construct();

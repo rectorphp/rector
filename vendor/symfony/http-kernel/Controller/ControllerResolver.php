@@ -19,17 +19,17 @@ use RectorPrefix20210510\Symfony\Component\HttpFoundation\Request;
  * @author Fabien Potencier <fabien@symfony.com>
  * @author Tobias Schultze <http://tobion.de>
  */
-class ControllerResolver implements ControllerResolverInterface
+class ControllerResolver implements \RectorPrefix20210510\Symfony\Component\HttpKernel\Controller\ControllerResolverInterface
 {
     private $logger;
-    public function __construct(LoggerInterface $logger = null)
+    public function __construct(\RectorPrefix20210510\Psr\Log\LoggerInterface $logger = null)
     {
         $this->logger = $logger;
     }
     /**
      * {@inheritdoc}
      */
-    public function getController(Request $request)
+    public function getController(\RectorPrefix20210510\Symfony\Component\HttpFoundation\Request $request)
     {
         if (!($controller = $request->attributes->get('_controller'))) {
             if (null !== $this->logger) {

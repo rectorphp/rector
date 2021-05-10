@@ -14,22 +14,22 @@ final class PropertyDocBlockManipulator
      * @var PhpDocInfoFactory
      */
     private $phpDocInfoFactory;
-    public function __construct(PhpDocInfoFactory $phpDocInfoFactory)
+    public function __construct(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory)
     {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
     /**
      * @param ParamRename $renameValueObject
      */
-    public function renameParameterNameInDocBlock(RenameValueObjectInterface $renameValueObject) : void
+    public function renameParameterNameInDocBlock(\Rector\Naming\Contract\RenameValueObjectInterface $renameValueObject) : void
     {
         $functionLike = $renameValueObject->getFunctionLike();
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($functionLike);
         $paramTagValueNode = $phpDocInfo->getParamTagValueNodeByName($renameValueObject->getCurrentName());
-        if (!$paramTagValueNode instanceof ParamTagValueNode) {
+        if (!$paramTagValueNode instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode) {
             return;
         }
         $paramTagValueNode->parameterName = '$' . $renameValueObject->getExpectedName();
-        $paramTagValueNode->setAttribute(PhpDocAttributeKey::ORIG_NODE, null);
+        $paramTagValueNode->setAttribute(\Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey::ORIG_NODE, null);
     }
 }

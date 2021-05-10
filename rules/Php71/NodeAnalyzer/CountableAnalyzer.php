@@ -26,15 +26,15 @@ final class CountableAnalyzer
      * @var ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(NodeTypeResolver $nodeTypeResolver, NodeNameResolver $nodeNameResolver, ReflectionProvider $reflectionProvider)
+    public function __construct(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->reflectionProvider = $reflectionProvider;
     }
-    public function isCastableArrayType(Expr $expr) : bool
+    public function isCastableArrayType(\PhpParser\Node\Expr $expr) : bool
     {
-        if (!$expr instanceof PropertyFetch) {
+        if (!$expr instanceof \PhpParser\Node\Expr\PropertyFetch) {
             return \false;
         }
         $callerObjectType = $this->nodeTypeResolver->resolve($expr->var);
@@ -42,16 +42,16 @@ final class CountableAnalyzer
         if (!\is_string($propertyName)) {
             return \false;
         }
-        if ($callerObjectType instanceof UnionType) {
+        if ($callerObjectType instanceof \PHPStan\Type\UnionType) {
             $callerObjectType = $callerObjectType->getTypes()[0];
         }
-        if (!$callerObjectType instanceof TypeWithClassName) {
+        if (!$callerObjectType instanceof \PHPStan\Type\TypeWithClassName) {
             return \false;
         }
-        if (\is_a($callerObjectType->getClassName(), Stmt::class, \true)) {
+        if (\is_a($callerObjectType->getClassName(), \PhpParser\Node\Stmt::class, \true)) {
             return \false;
         }
-        if (\is_a($callerObjectType->getClassName(), Array_::class, \true)) {
+        if (\is_a($callerObjectType->getClassName(), \PhpParser\Node\Expr\Array_::class, \true)) {
             return \false;
         }
         // this must be handled reflection, as PHPStan ReflectionProvider does not provide default values for properties in any way

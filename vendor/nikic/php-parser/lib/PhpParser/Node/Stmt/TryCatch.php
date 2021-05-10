@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace PhpParser\Node\Stmt;
 
 use PhpParser\Node;
-class TryCatch extends Node\Stmt
+class TryCatch extends \PhpParser\Node\Stmt
 {
     /** @var Node\Stmt[] Statements */
     public $stmts;

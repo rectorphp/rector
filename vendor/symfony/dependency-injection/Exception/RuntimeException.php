@@ -15,6 +15,6 @@ namespace RectorPrefix20210510\Symfony\Component\DependencyInjection\Exception;
  *
  * @author Johannes M. Schmitt <schmittjoh@gmail.com>
  */
-class RuntimeException extends \RuntimeException implements ExceptionInterface
+class RuntimeException extends \RuntimeException implements \RectorPrefix20210510\Symfony\Component\DependencyInjection\Exception\ExceptionInterface
 {
 }

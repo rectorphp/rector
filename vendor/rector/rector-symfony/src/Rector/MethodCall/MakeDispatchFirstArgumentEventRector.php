@@ -18,19 +18,19 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Symfony\Tests\Rector\MethodCall\MakeDispatchFirstArgumentEventRector\MakeDispatchFirstArgumentEventRectorTest
  */
-final class MakeDispatchFirstArgumentEventRector extends AbstractRector
+final class MakeDispatchFirstArgumentEventRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var StringTypeAnalyzer
      */
     private $stringTypeAnalyzer;
-    public function __construct(StringTypeAnalyzer $stringTypeAnalyzer)
+    public function __construct(\Rector\NodeTypeResolver\TypeAnalyzer\StringTypeAnalyzer $stringTypeAnalyzer)
     {
         $this->stringTypeAnalyzer = $stringTypeAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Make event object a first argument of dispatch() method, event name as second', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Make event object a first argument of dispatch() method, event name as second', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class SomeClass
@@ -59,12 +59,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [MethodCall::class];
+        return [\PhpParser\Node\Expr\MethodCall::class];
     }
     /**
      * @param MethodCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -75,15 +75,15 @@ CODE_SAMPLE
             return $node;
         }
         $secondArgumentValue = $node->args[1]->value;
-        if ($secondArgumentValue instanceof FuncCall) {
+        if ($secondArgumentValue instanceof \PhpParser\Node\Expr\FuncCall) {
             $this->refactorGetCallFuncCall($node, $secondArgumentValue, $firstArgumentValue);
             return $node;
         }
         return null;
     }
-    private function shouldSkip(MethodCall $methodCall) : bool
+    private function shouldSkip(\PhpParser\Node\Expr\MethodCall $methodCall) : bool
     {
-        if (!$this->isObjectType($methodCall->var, new ObjectType('Symfony\\Contracts\\EventDispatcher\\EventDispatcherInterface'))) {
+        if (!$this->isObjectType($methodCall->var, new \PHPStan\Type\ObjectType('Symfony\\Contracts\\EventDispatcher\\EventDispatcherInterface'))) {
             return \true;
         }
         if (!$this->isName($methodCall->name, 'dispatch')) {
@@ -91,7 +91,7 @@ CODE_SAMPLE
         }
         return !isset($methodCall->args[1]);
     }
-    private function refactorStringArgument(MethodCall $methodCall) : void
+    private function refactorStringArgument(\PhpParser\Node\Expr\MethodCall $methodCall) : void
     {
         // swap arguments
         [$methodCall->args[0], $methodCall->args[1]] = [$methodCall->args[1], $methodCall->args[0]];
@@ -99,7 +99,7 @@ CODE_SAMPLE
             unset($methodCall->args[1]);
         }
     }
-    private function refactorGetCallFuncCall(MethodCall $methodCall, FuncCall $funcCall, Expr $expr) : void
+    private function refactorGetCallFuncCall(\PhpParser\Node\Expr\MethodCall $methodCall, \PhpParser\Node\Expr\FuncCall $funcCall, \PhpParser\Node\Expr $expr) : void
     {
         if (!$this->isName($funcCall, 'get_class')) {
             return;
@@ -113,14 +113,14 @@ CODE_SAMPLE
     /**
      * Is the event name just `::class`? We can remove it
      */
-    private function isEventNameSameAsEventObjectClass(MethodCall $methodCall) : bool
+    private function isEventNameSameAsEventObjectClass(\PhpParser\Node\Expr\MethodCall $methodCall) : bool
     {
-        if (!$methodCall->args[1]->value instanceof ClassConstFetch) {
+        if (!$methodCall->args[1]->value instanceof \PhpParser\Node\Expr\ClassConstFetch) {
             return \false;
         }
         $classConst = $this->valueResolver->getValue($methodCall->args[1]->value);
         $eventStaticType = $this->getStaticType($methodCall->args[0]->value);
-        if (!$eventStaticType instanceof ObjectType) {
+        if (!$eventStaticType instanceof \PHPStan\Type\ObjectType) {
             return \false;
         }
         return $classConst === $eventStaticType->getClassName();

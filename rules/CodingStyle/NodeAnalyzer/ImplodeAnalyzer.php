@@ -13,16 +13,16 @@ final class ImplodeAnalyzer
      * @var NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(NodeNameResolver $nodeNameResolver)
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
     }
     /**
      * Matches: "implode('","', $items)"
      */
-    public function isImplodeToJson(Expr $expr) : bool
+    public function isImplodeToJson(\PhpParser\Node\Expr $expr) : bool
     {
-        if (!$expr instanceof FuncCall) {
+        if (!$expr instanceof \PhpParser\Node\Expr\FuncCall) {
             return \false;
         }
         if (!$this->nodeNameResolver->isName($expr, 'implode')) {
@@ -32,7 +32,7 @@ final class ImplodeAnalyzer
             return \false;
         }
         $firstArgumentValue = $expr->args[0]->value;
-        if (!$firstArgumentValue instanceof String_) {
+        if (!$firstArgumentValue instanceof \PhpParser\Node\Scalar\String_) {
             return \true;
         }
         return $firstArgumentValue->value === '","';

@@ -11,13 +11,13 @@ final class BooleanAndAnalyzer
     /**
      * @return Expr[]
      */
-    public function findBooleanAndConditions(BooleanAnd $booleanAnd) : array
+    public function findBooleanAndConditions(\PhpParser\Node\Expr\BinaryOp\BooleanAnd $booleanAnd) : array
     {
         $conditions = [];
-        while ($booleanAnd instanceof BinaryOp) {
+        while ($booleanAnd instanceof \PhpParser\Node\Expr\BinaryOp) {
             $conditions[] = $booleanAnd->right;
             $booleanAnd = $booleanAnd->left;
-            if (!$booleanAnd instanceof BooleanAnd) {
+            if (!$booleanAnd instanceof \PhpParser\Node\Expr\BinaryOp\BooleanAnd) {
                 $conditions[] = $booleanAnd;
                 break;
             }

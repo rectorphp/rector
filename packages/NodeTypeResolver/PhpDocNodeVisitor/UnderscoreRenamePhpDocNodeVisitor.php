@@ -11,7 +11,7 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Renaming\ValueObject\PseudoNamespaceToNamespace;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use RectorPrefix20210510\Symplify\SimplePhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor;
-final class UnderscoreRenamePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
+final class UnderscoreRenamePhpDocNodeVisitor extends \RectorPrefix20210510\Symplify\SimplePhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor
 {
     /**
      * @var StaticTypeMapper
@@ -25,22 +25,22 @@ final class UnderscoreRenamePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
      * @var \PhpParser\Node|null
      */
     private $currentPhpParserNode;
-    public function __construct(StaticTypeMapper $staticTypeMapper)
+    public function __construct(\Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper)
     {
         $this->staticTypeMapper = $staticTypeMapper;
     }
-    public function beforeTraverse(Node $node) : void
+    public function beforeTraverse(\PHPStan\PhpDocParser\Ast\Node $node) : void
     {
         if ($this->pseudoNamespaceToNamespace === null) {
-            throw new ShouldNotHappenException('Set PseudoNamespaceToNamespace first');
+            throw new \Rector\Core\Exception\ShouldNotHappenException('Set PseudoNamespaceToNamespace first');
         }
         if (!$this->currentPhpParserNode instanceof \PhpParser\Node) {
-            throw new ShouldNotHappenException('Set "$currentPhpParserNode" first');
+            throw new \Rector\Core\Exception\ShouldNotHappenException('Set "$currentPhpParserNode" first');
         }
     }
-    public function enterNode(Node $node) : ?Node
+    public function enterNode(\PHPStan\PhpDocParser\Ast\Node $node) : ?\PHPStan\PhpDocParser\Ast\Node
     {
-        if (!$node instanceof IdentifierTypeNode) {
+        if (!$node instanceof \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode) {
             return null;
         }
         if ($this->shouldSkip($node, $this->currentPhpParserNode, $this->pseudoNamespaceToNamespace)) {
@@ -48,14 +48,14 @@ final class UnderscoreRenamePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
         }
         /** @var IdentifierTypeNode $node */
         $staticType = $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType($node, $this->currentPhpParserNode);
-        if (!$staticType instanceof ObjectType) {
+        if (!$staticType instanceof \PHPStan\Type\ObjectType) {
             return null;
         }
         // change underscore to \\
-        $slashedName = '\\' . Strings::replace($staticType->getClassName(), '#_#', '\\');
-        return new IdentifierTypeNode($slashedName);
+        $slashedName = '\\' . \RectorPrefix20210510\Nette\Utils\Strings::replace($staticType->getClassName(), '#_#', '\\');
+        return new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode($slashedName);
     }
-    public function setPseudoNamespaceToNamespace(PseudoNamespaceToNamespace $pseudoNamespaceToNamespace) : void
+    public function setPseudoNamespaceToNamespace(\Rector\Renaming\ValueObject\PseudoNamespaceToNamespace $pseudoNamespaceToNamespace) : void
     {
         $this->pseudoNamespaceToNamespace = $pseudoNamespaceToNamespace;
     }
@@ -63,13 +63,13 @@ final class UnderscoreRenamePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
     {
         $this->currentPhpParserNode = $node;
     }
-    private function shouldSkip(IdentifierTypeNode $identifierTypeNode, \PhpParser\Node $phpParserNode, PseudoNamespaceToNamespace $pseudoNamespaceToNamespace) : bool
+    private function shouldSkip(\PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode $identifierTypeNode, \PhpParser\Node $phpParserNode, \Rector\Renaming\ValueObject\PseudoNamespaceToNamespace $pseudoNamespaceToNamespace) : bool
     {
         $staticType = $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType($identifierTypeNode, $phpParserNode);
-        if (!$staticType instanceof ObjectType) {
+        if (!$staticType instanceof \PHPStan\Type\ObjectType) {
             return \true;
         }
-        if (!Strings::startsWith($staticType->getClassName(), $pseudoNamespaceToNamespace->getNamespacePrefix())) {
+        if (!\RectorPrefix20210510\Nette\Utils\Strings::startsWith($staticType->getClassName(), $pseudoNamespaceToNamespace->getNamespacePrefix())) {
             return \true;
         }
         // excluded?

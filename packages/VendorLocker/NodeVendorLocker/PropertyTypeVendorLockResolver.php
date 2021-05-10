@@ -19,20 +19,20 @@ final class PropertyTypeVendorLockResolver
      * @var FamilyRelationsAnalyzer
      */
     private $familyRelationsAnalyzer;
-    public function __construct(NodeNameResolver $nodeNameResolver, FamilyRelationsAnalyzer $familyRelationsAnalyzer)
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer $familyRelationsAnalyzer)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->familyRelationsAnalyzer = $familyRelationsAnalyzer;
     }
-    public function isVendorLocked(Property $property) : bool
+    public function isVendorLocked(\PhpParser\Node\Stmt\Property $property) : bool
     {
-        $scope = $property->getAttribute(AttributeKey::SCOPE);
+        $scope = $property->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
         // possibly trait
-        if (!$scope instanceof Scope) {
+        if (!$scope instanceof \PHPStan\Analyser\Scope) {
             return \true;
         }
         $classReflection = $scope->getClassReflection();
-        if (!$classReflection instanceof ClassReflection) {
+        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
             return \false;
         }
         if (\count($classReflection->getAncestors()) === 1) {
@@ -45,7 +45,7 @@ final class PropertyTypeVendorLockResolver
         }
         return $this->isChildClassLocked($property, $classReflection, $propertyName);
     }
-    private function isParentClassLocked(ClassReflection $classReflection, string $propertyName) : bool
+    private function isParentClassLocked(\PHPStan\Reflection\ClassReflection $classReflection, string $propertyName) : bool
     {
         // extract to some "inherited parent method" service
         foreach ($classReflection->getParents() as $parentClassReflection) {
@@ -57,7 +57,7 @@ final class PropertyTypeVendorLockResolver
         }
         return \false;
     }
-    private function isChildClassLocked(Property $property, ClassReflection $classReflection, string $propertyName) : bool
+    private function isChildClassLocked(\PhpParser\Node\Stmt\Property $property, \PHPStan\Reflection\ClassReflection $classReflection, string $propertyName) : bool
     {
         if (!$classReflection->isClass()) {
             return \false;

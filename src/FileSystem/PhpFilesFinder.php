@@ -21,7 +21,7 @@ final class PhpFilesFinder
      * @var CachedFileInfoFilterAndReporter
      */
     private $cachedFileInfoFilterAndReporter;
-    public function __construct(\Rector\Core\FileSystem\FilesFinder $filesFinder, Configuration $configuration, CachedFileInfoFilterAndReporter $cachedFileInfoFilterAndReporter)
+    public function __construct(\Rector\Core\FileSystem\FilesFinder $filesFinder, \Rector\Core\Configuration\Configuration $configuration, \Rector\Caching\Application\CachedFileInfoFilterAndReporter $cachedFileInfoFilterAndReporter)
     {
         $this->filesFinder = $filesFinder;
         $this->configuration = $configuration;
@@ -35,8 +35,8 @@ final class PhpFilesFinder
     {
         $phpFileInfos = $this->filesFinder->findInDirectoriesAndFiles($paths, $this->configuration->getFileExtensions());
         // filter out non-PHP php files, e.g. blade templates in Laravel
-        $phpFileInfos = \array_filter($phpFileInfos, function (SmartFileInfo $smartFileInfo) : bool {
-            return !Strings::endsWith($smartFileInfo->getPathname(), '.blade.php');
+        $phpFileInfos = \array_filter($phpFileInfos, function (\Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo) : bool {
+            return !\RectorPrefix20210510\Nette\Utils\Strings::endsWith($smartFileInfo->getPathname(), '.blade.php');
         });
         return $this->cachedFileInfoFilterAndReporter->filterFileInfos($phpFileInfos);
     }

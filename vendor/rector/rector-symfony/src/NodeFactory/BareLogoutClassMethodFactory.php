@@ -21,25 +21,25 @@ final class BareLogoutClassMethodFactory
      * @var PhpVersionProvider
      */
     private $phpVersionProvider;
-    public function __construct(NodeFactory $nodeFactory, PhpVersionProvider $phpVersionProvider)
+    public function __construct(\Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\Core\Php\PhpVersionProvider $phpVersionProvider)
     {
         $this->nodeFactory = $nodeFactory;
         $this->phpVersionProvider = $phpVersionProvider;
     }
-    public function create() : ClassMethod
+    public function create() : \PhpParser\Node\Stmt\ClassMethod
     {
         $classMethod = $this->nodeFactory->createPublicMethod('onLogout');
-        $variable = new Variable('logoutEvent');
+        $variable = new \PhpParser\Node\Expr\Variable('logoutEvent');
         $classMethod->params[] = $this->createLogoutEventParam($variable);
-        if ($this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::VOID_TYPE)) {
-            $classMethod->returnType = new Identifier('void');
+        if ($this->phpVersionProvider->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::VOID_TYPE)) {
+            $classMethod->returnType = new \PhpParser\Node\Identifier('void');
         }
         return $classMethod;
     }
-    private function createLogoutEventParam(Variable $variable) : Param
+    private function createLogoutEventParam(\PhpParser\Node\Expr\Variable $variable) : \PhpParser\Node\Param
     {
-        $param = new Param($variable);
-        $param->type = new FullyQualified('Symfony\\Component\\Security\\Http\\Event\\LogoutEvent');
+        $param = new \PhpParser\Node\Param($variable);
+        $param->type = new \PhpParser\Node\Name\FullyQualified('Symfony\\Component\\Security\\Http\\Event\\LogoutEvent');
         return $param;
     }
 }

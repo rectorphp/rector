@@ -6,20 +6,20 @@ namespace RectorPrefix20210510\Idiosyncratic\EditorConfig\Declaration;
 use DomainException;
 use RectorPrefix20210510\PHPUnit\Framework\TestCase;
 use RuntimeException;
-class EndOfLineTest extends TestCase
+class EndOfLineTest extends \RectorPrefix20210510\PHPUnit\Framework\TestCase
 {
     public function testValidValues()
     {
-        foreach (EndOfLine::LINE_ENDINGS as $eol) {
-            $declaration = new EndOfLine($eol);
+        foreach (\RectorPrefix20210510\Idiosyncratic\EditorConfig\Declaration\EndOfLine::LINE_ENDINGS as $eol) {
+            $declaration = new \RectorPrefix20210510\Idiosyncratic\EditorConfig\Declaration\EndOfLine($eol);
             $this->assertEquals(\sprintf('end_of_line=%s', $eol), (string) $declaration);
         }
     }
     public function testInvalidValues()
     {
-        $this->expectException(DomainException::class);
-        $declaration = new EndOfLine('true');
-        $this->expectException(DomainException::class);
-        $declaration = new EndOfLine('spaces');
+        $this->expectException(\DomainException::class);
+        $declaration = new \RectorPrefix20210510\Idiosyncratic\EditorConfig\Declaration\EndOfLine('true');
+        $this->expectException(\DomainException::class);
+        $declaration = new \RectorPrefix20210510\Idiosyncratic\EditorConfig\Declaration\EndOfLine('spaces');
     }
 }

@@ -30,7 +30,7 @@ interface OutputFormatterInterface
     /**
      * Sets a new style.
      */
-    public function setStyle(string $name, OutputFormatterStyleInterface $style);
+    public function setStyle(string $name, \RectorPrefix20210510\Symfony\Component\Console\Formatter\OutputFormatterStyleInterface $style);
     /**
      * Checks if output formatter has style with specified name.
      *

@@ -23,7 +23,7 @@ use RectorPrefix20210510\Webmozart\Assert\Assert;
  * Taking the most generic use case to the account: https://wiki.php.net/rfc/numeric_literal_separator#should_it_be_the_role_of_an_ide_to_group_digits
  * The final check should be done manually
  */
-final class AddLiteralSeparatorToNumberRector extends AbstractRector implements ConfigurableRectorInterface
+final class AddLiteralSeparatorToNumberRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
      * @api
@@ -44,12 +44,12 @@ final class AddLiteralSeparatorToNumberRector extends AbstractRector implements 
     public function configure(array $configuration) : void
     {
         $limitValue = $configuration[self::LIMIT_VALUE] ?? 1000000;
-        Assert::integer($limitValue);
+        \RectorPrefix20210510\Webmozart\Assert\Assert::integer($limitValue);
         $this->limitValue = $limitValue;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Add "_" as thousands separator in numbers for higher or equals to limitValue config', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Add "_" as thousands separator in numbers for higher or equals to limitValue config', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -76,21 +76,21 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [LNumber::class, DNumber::class];
+        return [\PhpParser\Node\Scalar\LNumber::class, \PhpParser\Node\Scalar\DNumber::class];
     }
     /**
      * @param LNumber|DNumber $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if (!$this->isAtLeastPhpVersion(PhpVersionFeature::LITERAL_SEPARATOR)) {
+        if (!$this->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::LITERAL_SEPARATOR)) {
             return null;
         }
         $numericValueAsString = (string) $node->value;
         if ($this->shouldSkip($node, $numericValueAsString)) {
             return null;
         }
-        if (Strings::contains($numericValueAsString, '.')) {
+        if (\RectorPrefix20210510\Nette\Utils\Strings::contains($numericValueAsString, '.')) {
             [$mainPart, $decimalPart] = \explode('.', $numericValueAsString);
             $chunks = $this->strSplitNegative($mainPart, self::GROUP_SIZE);
             $literalSeparatedNumber = \implode('_', $chunks) . '.' . $decimalPart;
@@ -108,25 +108,25 @@ CODE_SAMPLE
     /**
      * @param LNumber|DNumber $node
      */
-    private function shouldSkip(Node $node, string $numericValueAsString) : bool
+    private function shouldSkip(\PhpParser\Node $node, string $numericValueAsString) : bool
     {
         if ($numericValueAsString < $this->limitValue) {
             return \true;
         }
         // already separated
-        if (Strings::contains($numericValueAsString, '_')) {
+        if (\RectorPrefix20210510\Nette\Utils\Strings::contains($numericValueAsString, '_')) {
             return \true;
         }
-        $kind = $node->getAttribute(AttributeKey::KIND);
-        if (\in_array($kind, [LNumber::KIND_BIN, LNumber::KIND_OCT, LNumber::KIND_HEX], \true)) {
+        $kind = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::KIND);
+        if (\in_array($kind, [\PhpParser\Node\Scalar\LNumber::KIND_BIN, \PhpParser\Node\Scalar\LNumber::KIND_OCT, \PhpParser\Node\Scalar\LNumber::KIND_HEX], \true)) {
             return \true;
         }
         // e+/e-
-        if (Strings::match($numericValueAsString, '#e#i')) {
+        if (\RectorPrefix20210510\Nette\Utils\Strings::match($numericValueAsString, '#e#i')) {
             return \true;
         }
         // too short
-        return Strings::length($numericValueAsString) <= self::GROUP_SIZE;
+        return \RectorPrefix20210510\Nette\Utils\Strings::length($numericValueAsString) <= self::GROUP_SIZE;
     }
     /**
      * @return string[]

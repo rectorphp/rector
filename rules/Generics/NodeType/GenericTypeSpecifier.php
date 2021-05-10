@@ -19,7 +19,7 @@ final class GenericTypeSpecifier
      * @var ExtendsTemplateTypeMapFallbackFactory
      */
     private $extendsTemplateTypeMapFallbackFactory;
-    public function __construct(StaticTypeMapper $staticTypeMapper, \Rector\Generics\NodeType\ExtendsTemplateTypeMapFallbackFactory $extendsTemplateTypeMapFallbackFactory)
+    public function __construct(\Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \Rector\Generics\NodeType\ExtendsTemplateTypeMapFallbackFactory $extendsTemplateTypeMapFallbackFactory)
     {
         $this->staticTypeMapper = $staticTypeMapper;
         $this->extendsTemplateTypeMapFallbackFactory = $extendsTemplateTypeMapFallbackFactory;
@@ -27,7 +27,7 @@ final class GenericTypeSpecifier
     /**
      * @param MethodTagValueNode[] $methodTagValueNodes
      */
-    public function replaceGenericTypesWithSpecificTypes(array $methodTagValueNodes, Node $node, ClassReflection $classReflection) : void
+    public function replaceGenericTypesWithSpecificTypes(array $methodTagValueNodes, \PhpParser\Node $node, \PHPStan\Reflection\ClassReflection $classReflection) : void
     {
         $templateTypeMap = $this->resolveAvailableTemplateTypeMap($classReflection);
         foreach ($methodTagValueNodes as $methodTagValueNode) {
@@ -35,12 +35,12 @@ final class GenericTypeSpecifier
                 continue;
             }
             $returnType = $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanTypeWithTemplateTypeMap($methodTagValueNode->returnType, $node, $templateTypeMap);
-            $resolvedType = TemplateTypeHelper::resolveTemplateTypes($returnType, $templateTypeMap);
+            $resolvedType = \PHPStan\Type\Generic\TemplateTypeHelper::resolveTemplateTypes($returnType, $templateTypeMap);
             $resolvedTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($resolvedType);
             $methodTagValueNode->returnType = $resolvedTypeNode;
         }
     }
-    private function resolveAvailableTemplateTypeMap(ClassReflection $classReflection) : TemplateTypeMap
+    private function resolveAvailableTemplateTypeMap(\PHPStan\Reflection\ClassReflection $classReflection) : \PHPStan\Type\Generic\TemplateTypeMap
     {
         $templateTypeMap = $classReflection->getTemplateTypeMap();
         // add template map from extends
@@ -48,7 +48,7 @@ final class GenericTypeSpecifier
             return $templateTypeMap;
         }
         $fallbackTemplateTypeMap = $this->extendsTemplateTypeMapFallbackFactory->createFromClassReflection($classReflection);
-        if ($fallbackTemplateTypeMap instanceof TemplateTypeMap) {
+        if ($fallbackTemplateTypeMap instanceof \PHPStan\Type\Generic\TemplateTypeMap) {
             return $fallbackTemplateTypeMap;
         }
         return $templateTypeMap;

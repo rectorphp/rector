@@ -24,7 +24,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\Php80\Rector\FunctionLike\UnionTypesRector\UnionTypesRectorTest
  */
-final class UnionTypesRector extends AbstractRector
+final class UnionTypesRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var ClassMethodParamVendorLockResolver
@@ -42,16 +42,16 @@ final class UnionTypesRector extends AbstractRector
      * @var UnionTypeAnalyzer
      */
     private $unionTypeAnalyzer;
-    public function __construct(ReturnTagRemover $returnTagRemover, ParamTagRemover $paramTagRemover, ClassMethodParamVendorLockResolver $classMethodParamVendorLockResolver, UnionTypeAnalyzer $unionTypeAnalyzer)
+    public function __construct(\Rector\DeadCode\PhpDoc\TagRemover\ReturnTagRemover $returnTagRemover, \Rector\DeadCode\PhpDoc\TagRemover\ParamTagRemover $paramTagRemover, \Rector\VendorLocker\NodeVendorLocker\ClassMethodParamVendorLockResolver $classMethodParamVendorLockResolver, \Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeAnalyzer $unionTypeAnalyzer)
     {
         $this->returnTagRemover = $returnTagRemover;
         $this->paramTagRemover = $paramTagRemover;
         $this->classMethodParamVendorLockResolver = $classMethodParamVendorLockResolver;
         $this->unionTypeAnalyzer = $unionTypeAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Change docs types to union types, where possible (properties are covered by TypedPropertiesRector)', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change docs types to union types, where possible (properties are covered by TypedPropertiesRector)', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     /**
@@ -78,12 +78,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [ClassMethod::class, Function_::class, Closure::class, ArrowFunction::class];
+        return [\PhpParser\Node\Stmt\ClassMethod::class, \PhpParser\Node\Stmt\Function_::class, \PhpParser\Node\Expr\Closure::class, \PhpParser\Node\Expr\ArrowFunction::class];
     }
     /**
      * @param ClassMethod|Function_|Closure|ArrowFunction $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         $this->refactorParamTypes($node, $phpDocInfo);
@@ -92,16 +92,16 @@ CODE_SAMPLE
         $this->returnTagRemover->removeReturnTagIfUseless($phpDocInfo, $node);
         return $node;
     }
-    private function isVendorLocked(ClassMethod $classMethod) : bool
+    private function isVendorLocked(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
     {
         return $this->classMethodParamVendorLockResolver->isVendorLocked($classMethod);
     }
     /**
      * @param ClassMethod|Function_|Closure|ArrowFunction $functionLike
      */
-    private function refactorParamTypes(FunctionLike $functionLike, PhpDocInfo $phpDocInfo) : void
+    private function refactorParamTypes(\PhpParser\Node\FunctionLike $functionLike, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo) : void
     {
-        if ($functionLike instanceof ClassMethod && $this->isVendorLocked($functionLike)) {
+        if ($functionLike instanceof \PhpParser\Node\Stmt\ClassMethod && $this->isVendorLocked($functionLike)) {
             return;
         }
         foreach ($functionLike->getParams() as $param) {
@@ -111,7 +111,7 @@ CODE_SAMPLE
             /** @var string $paramName */
             $paramName = $this->getName($param->var);
             $paramType = $phpDocInfo->getParamType($paramName);
-            if (!$paramType instanceof UnionType) {
+            if (!$paramType instanceof \PHPStan\Type\UnionType) {
                 continue;
             }
             if ($this->unionTypeAnalyzer->hasObjectWithoutClassType($paramType)) {
@@ -119,34 +119,34 @@ CODE_SAMPLE
                 continue;
             }
             $phpParserUnionType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($paramType);
-            if (!$phpParserUnionType instanceof PhpParserUnionType) {
+            if (!$phpParserUnionType instanceof \PhpParser\Node\UnionType) {
                 continue;
             }
             $param->type = $phpParserUnionType;
         }
     }
-    private function changeObjectWithoutClassType(Param $param, UnionType $unionType) : void
+    private function changeObjectWithoutClassType(\PhpParser\Node\Param $param, \PHPStan\Type\UnionType $unionType) : void
     {
         if (!$this->unionTypeAnalyzer->hasObjectWithoutClassTypeWithOnlyFullyQualifiedObjectType($unionType)) {
             return;
         }
-        $param->type = new Name('object');
+        $param->type = new \PhpParser\Node\Name('object');
     }
     /**
      * @param ClassMethod|Function_|Closure|ArrowFunction $functionLike
      */
-    private function refactorReturnType(FunctionLike $functionLike, PhpDocInfo $phpDocInfo) : void
+    private function refactorReturnType(\PhpParser\Node\FunctionLike $functionLike, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo) : void
     {
         // do not override existing return type
         if ($functionLike->getReturnType() !== null) {
             return;
         }
         $returnType = $phpDocInfo->getReturnType();
-        if (!$returnType instanceof UnionType) {
+        if (!$returnType instanceof \PHPStan\Type\UnionType) {
             return;
         }
         $phpParserUnionType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($returnType);
-        if (!$phpParserUnionType instanceof PhpParserUnionType) {
+        if (!$phpParserUnionType instanceof \PhpParser\Node\UnionType) {
             return;
         }
         $functionLike->returnType = $phpParserUnionType;

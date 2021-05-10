@@ -13,11 +13,11 @@ final class CompactFuncCallAnalyzer
      * @var NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(NodeNameResolver $nodeNameResolver)
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
     }
-    public function isInCompact(FuncCall $funcCall, Variable $variable) : bool
+    public function isInCompact(\PhpParser\Node\Expr\FuncCall $funcCall, \PhpParser\Node\Expr\Variable $variable) : bool
     {
         if (!$this->nodeNameResolver->isName($funcCall, 'compact')) {
             return \false;
@@ -28,7 +28,7 @@ final class CompactFuncCallAnalyzer
         }
         $args = $funcCall->args;
         foreach ($args as $arg) {
-            if (!$arg->value instanceof String_) {
+            if (!$arg->value instanceof \PhpParser\Node\Scalar\String_) {
                 continue;
             }
             if ($arg->value->value === $variableName) {

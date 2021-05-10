@@ -24,13 +24,13 @@ final class DimFetchAssignToMethodCall
         $this->itemClass = $itemClass;
         $this->addMethod = $addMethod;
     }
-    public function getListObjectType() : ObjectType
+    public function getListObjectType() : \PHPStan\Type\ObjectType
     {
-        return new ObjectType($this->listClass);
+        return new \PHPStan\Type\ObjectType($this->listClass);
     }
-    public function getItemObjectType() : ObjectType
+    public function getItemObjectType() : \PHPStan\Type\ObjectType
     {
-        return new ObjectType($this->itemClass);
+        return new \PHPStan\Type\ObjectType($this->itemClass);
     }
     public function getAddMethod() : string
     {

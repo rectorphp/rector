@@ -10,7 +10,7 @@
  */
 namespace RectorPrefix20210510\Symfony\Component\HttpFoundation\File\Exception;
 
-class UnexpectedTypeException extends FileException
+class UnexpectedTypeException extends \RectorPrefix20210510\Symfony\Component\HttpFoundation\File\Exception\FileException
 {
     public function __construct($value, string $expectedType)
     {

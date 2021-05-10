@@ -13,7 +13,7 @@ interface LanguageInflectorFactory
      *
      * @return $this
      */
-    public function withSingularRules(?Ruleset $singularRules, bool $reset = \false);
+    public function withSingularRules(?\RectorPrefix20210510\Doctrine\Inflector\Rules\Ruleset $singularRules, bool $reset = \false);
     /**
      * Applies custom rules for pluralisation
      *
@@ -21,9 +21,9 @@ interface LanguageInflectorFactory
      *
      * @return $this
      */
-    public function withPluralRules(?Ruleset $pluralRules, bool $reset = \false);
+    public function withPluralRules(?\RectorPrefix20210510\Doctrine\Inflector\Rules\Ruleset $pluralRules, bool $reset = \false);
     /**
      * Builds the inflector instance with all applicable rules
      */
-    public function build() : Inflector;
+    public function build() : \RectorPrefix20210510\Doctrine\Inflector\Inflector;
 }

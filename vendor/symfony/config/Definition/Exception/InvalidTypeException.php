@@ -15,6 +15,6 @@ namespace RectorPrefix20210510\Symfony\Component\Config\Definition\Exception;
  *
  * @author Johannes M. Schmitt <schmittjoh@gmail.com>
  */
-class InvalidTypeException extends InvalidConfigurationException
+class InvalidTypeException extends \RectorPrefix20210510\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
 {
 }

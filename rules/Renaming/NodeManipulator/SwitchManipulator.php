@@ -14,7 +14,7 @@ final class SwitchManipulator
     public function removeBreakNodes(array $stmts) : array
     {
         foreach ($stmts as $key => $node) {
-            if ($node instanceof Break_) {
+            if ($node instanceof \PhpParser\Node\Stmt\Break_) {
                 unset($stmts[$key]);
             }
         }

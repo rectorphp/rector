@@ -12,11 +12,11 @@ final class DeadVarTagValueNodeAnalyzer
      * @var TypeComparator
      */
     private $typeComparator;
-    public function __construct(TypeComparator $typeComparator)
+    public function __construct(\Rector\NodeTypeResolver\TypeComparator\TypeComparator $typeComparator)
     {
         $this->typeComparator = $typeComparator;
     }
-    public function isDead(VarTagValueNode $varTagValueNode, Property $property) : bool
+    public function isDead(\PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode $varTagValueNode, \PhpParser\Node\Stmt\Property $property) : bool
     {
         if ($property->type === null) {
             return \false;

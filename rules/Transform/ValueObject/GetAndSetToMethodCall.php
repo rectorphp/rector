@@ -35,8 +35,8 @@ final class GetAndSetToMethodCall
     {
         return $this->setMethod;
     }
-    public function getObjectType() : ObjectType
+    public function getObjectType() : \PHPStan\Type\ObjectType
     {
-        return new ObjectType($this->classType);
+        return new \PHPStan\Type\ObjectType($this->classType);
     }
 }

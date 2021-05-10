@@ -19,7 +19,7 @@ use RectorPrefix20210510\Symfony\Component\HttpKernel\HttpKernelInterface;
  * @author Fabien Potencier <fabien@symfony.com>
  * @author Robin Chalas <robin.chalas@gmail.com>
  */
-abstract class AbstractSurrogate implements SurrogateInterface
+abstract class AbstractSurrogate implements \RectorPrefix20210510\Symfony\Component\HttpKernel\HttpCache\SurrogateInterface
 {
     protected $contentTypes;
     protected $phpEscapeMap = [['<?', '<%', '<s', '<S'], ['<?php echo "<?"; ?>', '<?php echo "<%"; ?>', '<?php echo "<s"; ?>', '<?php echo "<S"; ?>']];
@@ -38,12 +38,12 @@ abstract class AbstractSurrogate implements SurrogateInterface
      */
     public function createCacheStrategy()
     {
-        return new ResponseCacheStrategy();
+        return new \RectorPrefix20210510\Symfony\Component\HttpKernel\HttpCache\ResponseCacheStrategy();
     }
     /**
      * {@inheritdoc}
      */
-    public function hasSurrogateCapability(Request $request)
+    public function hasSurrogateCapability(\RectorPrefix20210510\Symfony\Component\HttpFoundation\Request $request)
     {
         if (null === ($value = $request->headers->get('Surrogate-Capability'))) {
             return \false;
@@ -53,7 +53,7 @@ abstract class AbstractSurrogate implements SurrogateInterface
     /**
      * {@inheritdoc}
      */
-    public function addSurrogateCapability(Request $request)
+    public function addSurrogateCapability(\RectorPrefix20210510\Symfony\Component\HttpFoundation\Request $request)
     {
         $current = $request->headers->get('Surrogate-Capability');
         $new = \sprintf('symfony="%s/1.0"', \strtoupper($this->getName()));
@@ -62,7 +62,7 @@ abstract class AbstractSurrogate implements SurrogateInterface
     /**
      * {@inheritdoc}
      */
-    public function needsParsing(Response $response)
+    public function needsParsing(\RectorPrefix20210510\Symfony\Component\HttpFoundation\Response $response)
     {
         if (!($control = $response->headers->get('Surrogate-Control'))) {
             return \false;
@@ -73,11 +73,11 @@ abstract class AbstractSurrogate implements SurrogateInterface
     /**
      * {@inheritdoc}
      */
-    public function handle(HttpCache $cache, string $uri, string $alt, bool $ignoreErrors)
+    public function handle(\RectorPrefix20210510\Symfony\Component\HttpKernel\HttpCache\HttpCache $cache, string $uri, string $alt, bool $ignoreErrors)
     {
-        $subRequest = Request::create($uri, Request::METHOD_GET, [], $cache->getRequest()->cookies->all(), [], $cache->getRequest()->server->all());
+        $subRequest = \RectorPrefix20210510\Symfony\Component\HttpFoundation\Request::create($uri, \RectorPrefix20210510\Symfony\Component\HttpFoundation\Request::METHOD_GET, [], $cache->getRequest()->cookies->all(), [], $cache->getRequest()->server->all());
         try {
-            $response = $cache->handle($subRequest, HttpKernelInterface::SUB_REQUEST, \true);
+            $response = $cache->handle($subRequest, \RectorPrefix20210510\Symfony\Component\HttpKernel\HttpKernelInterface::SUB_REQUEST, \true);
             if (!$response->isSuccessful()) {
                 throw new \RuntimeException(\sprintf('Error when rendering "%s" (Status code is %d).', $subRequest->getUri(), $response->getStatusCode()));
             }
@@ -95,7 +95,7 @@ abstract class AbstractSurrogate implements SurrogateInterface
     /**
      * Remove the Surrogate from the Surrogate-Control header.
      */
-    protected function removeFromControl(Response $response)
+    protected function removeFromControl(\RectorPrefix20210510\Symfony\Component\HttpFoundation\Response $response)
     {
         if (!$response->headers->has('Surrogate-Control')) {
             return;

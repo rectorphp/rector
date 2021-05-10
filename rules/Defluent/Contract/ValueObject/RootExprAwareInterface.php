@@ -6,5 +6,5 @@ namespace Rector\Defluent\Contract\ValueObject;
 use PhpParser\Node\Expr;
 interface RootExprAwareInterface
 {
-    public function getRootExpr() : Expr;
+    public function getRootExpr() : \PhpParser\Node\Expr;
 }

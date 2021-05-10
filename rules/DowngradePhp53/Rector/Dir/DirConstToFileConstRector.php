@@ -14,11 +14,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\DowngradePhp53\Rector\Dir\DirConstToFileConstRector\DirConstToFileConstRectorTest
  */
-final class DirConstToFileConstRector extends AbstractRector
+final class DirConstToFileConstRector extends \Rector\Core\Rector\AbstractRector
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Refactor __DIR__ to dirname(__FILE__)', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Refactor __DIR__ to dirname(__FILE__)', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run()
@@ -43,13 +43,13 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Dir::class];
+        return [\PhpParser\Node\Scalar\MagicConst\Dir::class];
     }
     /**
      * @param Dir $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        return $this->nodeFactory->createFuncCall('dirname', [new File()]);
+        return $this->nodeFactory->createFuncCall('dirname', [new \PhpParser\Node\Scalar\MagicConst\File()]);
     }
 }

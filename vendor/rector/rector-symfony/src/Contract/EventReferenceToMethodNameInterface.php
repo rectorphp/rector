@@ -6,6 +6,6 @@ namespace Rector\Symfony\Contract;
 use PhpParser\Node\Expr\ClassConstFetch;
 interface EventReferenceToMethodNameInterface
 {
-    public function getClassConstFetch() : ClassConstFetch;
+    public function getClassConstFetch() : \PhpParser\Node\Expr\ClassConstFetch;
     public function getMethodName() : string;
 }

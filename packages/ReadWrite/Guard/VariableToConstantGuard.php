@@ -32,24 +32,24 @@ final class VariableToConstantGuard
      * @var PrivatesAccessor
      */
     private $privatesAccessor;
-    public function __construct(NodeNameResolver $nodeNameResolver, ReflectionProvider $reflectionProvider, PrivatesAccessor $privatesAccessor)
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \RectorPrefix20210510\Symplify\PackageBuilder\Reflection\PrivatesAccessor $privatesAccessor)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->reflectionProvider = $reflectionProvider;
         $this->privatesAccessor = $privatesAccessor;
     }
-    public function isReadArg(Arg $arg) : bool
+    public function isReadArg(\PhpParser\Node\Arg $arg) : bool
     {
-        $parentParent = $arg->getAttribute(AttributeKey::PARENT_NODE);
-        if (!$parentParent instanceof FuncCall) {
+        $parentParent = $arg->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        if (!$parentParent instanceof \PhpParser\Node\Expr\FuncCall) {
             return \true;
         }
         $functionNameString = $this->nodeNameResolver->getName($parentParent);
         if ($functionNameString === null) {
             return \true;
         }
-        $functionName = new Name($functionNameString);
-        $argScope = $arg->getAttribute(AttributeKey::SCOPE);
+        $functionName = new \PhpParser\Node\Name($functionNameString);
+        $argScope = $arg->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
         if (!$this->reflectionProvider->hasFunction($functionName, $argScope)) {
             // we don't know
             return \true;
@@ -66,14 +66,14 @@ final class VariableToConstantGuard
     /**
      * @return int[]
      */
-    private function resolveFunctionReferencePositions(FunctionReflection $functionReflection) : array
+    private function resolveFunctionReferencePositions(\PHPStan\Reflection\FunctionReflection $functionReflection) : array
     {
         if (isset($this->referencePositionsByFunctionName[$functionReflection->getName()])) {
             return $this->referencePositionsByFunctionName[$functionReflection->getName()];
         }
         // this is needed, as native function reflection does not have access to referenced parameters
-        if ($functionReflection instanceof NativeFunctionReflection) {
-            $nativeFunctionReflection = new ReflectionFunction($functionReflection->getName());
+        if ($functionReflection instanceof \PHPStan\Reflection\Native\NativeFunctionReflection) {
+            $nativeFunctionReflection = new \ReflectionFunction($functionReflection->getName());
         } else {
             $nativeFunctionReflection = $this->privatesAccessor->getPrivateProperty($functionReflection, 'reflection');
         }
@@ -88,7 +88,7 @@ final class VariableToConstantGuard
         $this->referencePositionsByFunctionName[$functionReflection->getName()] = $referencePositions;
         return $referencePositions;
     }
-    private function getArgumentPosition(FuncCall $funcCall, Arg $desiredArg) : int
+    private function getArgumentPosition(\PhpParser\Node\Expr\FuncCall $funcCall, \PhpParser\Node\Arg $desiredArg) : int
     {
         foreach ($funcCall->args as $position => $arg) {
             if ($arg !== $desiredArg) {
@@ -96,6 +96,6 @@ final class VariableToConstantGuard
             }
             return $position;
         }
-        throw new ShouldNotHappenException();
+        throw new \Rector\Core\Exception\ShouldNotHappenException();
     }
 }

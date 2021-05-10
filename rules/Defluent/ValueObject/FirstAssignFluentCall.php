@@ -8,28 +8,28 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use Rector\Defluent\Contract\ValueObject\FirstCallFactoryAwareInterface;
 use Rector\Defluent\Contract\ValueObject\RootExprAwareInterface;
-final class FirstAssignFluentCall extends \Rector\Defluent\ValueObject\AbstractRootExpr implements RootExprAwareInterface, FirstCallFactoryAwareInterface
+final class FirstAssignFluentCall extends \Rector\Defluent\ValueObject\AbstractRootExpr implements \Rector\Defluent\Contract\ValueObject\RootExprAwareInterface, \Rector\Defluent\Contract\ValueObject\FirstCallFactoryAwareInterface
 {
     /**
      * @var FluentMethodCalls
      */
     private $fluentMethodCalls;
-    public function __construct(Expr $assignExpr, Expr $rootExpr, bool $isFirstCallFactory, \Rector\Defluent\ValueObject\FluentMethodCalls $fluentMethodCalls)
+    public function __construct(\PhpParser\Node\Expr $assignExpr, \PhpParser\Node\Expr $rootExpr, bool $isFirstCallFactory, \Rector\Defluent\ValueObject\FluentMethodCalls $fluentMethodCalls)
     {
         $this->assignExpr = $assignExpr;
         $this->rootExpr = $rootExpr;
         $this->isFirstCallFactory = $isFirstCallFactory;
         $this->fluentMethodCalls = $fluentMethodCalls;
     }
-    public function getAssignExpr() : Expr
+    public function getAssignExpr() : \PhpParser\Node\Expr
     {
         return $this->assignExpr;
     }
-    public function getRootExpr() : Expr
+    public function getRootExpr() : \PhpParser\Node\Expr
     {
         return $this->rootExpr;
     }
-    public function getCallerExpr() : Expr
+    public function getCallerExpr() : \PhpParser\Node\Expr
     {
         return $this->assignExpr;
     }
@@ -37,10 +37,10 @@ final class FirstAssignFluentCall extends \Rector\Defluent\ValueObject\AbstractR
     {
         return $this->isFirstCallFactory;
     }
-    public function getFactoryAssignVariable() : Expr
+    public function getFactoryAssignVariable() : \PhpParser\Node\Expr
     {
         $firstAssign = $this->getFirstAssign();
-        if (!$firstAssign instanceof Assign) {
+        if (!$firstAssign instanceof \PhpParser\Node\Expr\Assign) {
             return $this->assignExpr;
         }
         return $firstAssign->var;

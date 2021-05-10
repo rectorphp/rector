@@ -29,15 +29,15 @@ final class InflectorSingularResolver
      * @var Inflector
      */
     private $inflector;
-    public function __construct(Inflector $inflector)
+    public function __construct(\RectorPrefix20210510\Doctrine\Inflector\Inflector $inflector)
     {
         $this->inflector = $inflector;
     }
     public function resolve(string $currentName) : string
     {
-        $matchBy = Strings::match($currentName, self::BY_MIDDLE_REGEX);
+        $matchBy = \RectorPrefix20210510\Nette\Utils\Strings::match($currentName, self::BY_MIDDLE_REGEX);
         if ($matchBy) {
-            return Strings::substring($currentName, 0, -\strlen($matchBy['by']));
+            return \RectorPrefix20210510\Nette\Utils\Strings::substring($currentName, 0, -\strlen($matchBy['by']));
         }
         if (\array_key_exists($currentName, self::SINGULAR_VERB)) {
             return self::SINGULAR_VERB[$currentName];
@@ -45,7 +45,7 @@ final class InflectorSingularResolver
         if (\strpos($currentName, self::SINGLE) === 0) {
             return $currentName;
         }
-        $camelCases = Strings::matchAll($currentName, self::CAMELCASE_REGEX);
+        $camelCases = \RectorPrefix20210510\Nette\Utils\Strings::matchAll($currentName, self::CAMELCASE_REGEX);
         $singularValueVarName = '';
         foreach ($camelCases as $camelCase) {
             $singularValueVarName .= $this->inflector->singularize($camelCase['camelcase']);

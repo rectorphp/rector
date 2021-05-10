@@ -28,7 +28,7 @@ final class EditorConfigConfigurationBuilder
     {
         $this->indentStyle = 'space';
         $this->indentSize = 2;
-        $this->newLine = NewLine::fromEditorConfig('lf');
+        $this->newLine = \Rector\FileFormatter\ValueObject\NewLine::fromEditorConfig('lf');
         $this->insertFinalNewline = \true;
     }
     /**
@@ -41,7 +41,7 @@ final class EditorConfigConfigurationBuilder
     /**
      * @return $this
      */
-    public function withNewLine(NewLine $newLine)
+    public function withNewLine(\Rector\FileFormatter\ValueObject\NewLine $newLine)
     {
         $this->newLine = $newLine;
         return $this;
@@ -49,7 +49,7 @@ final class EditorConfigConfigurationBuilder
     /**
      * @return $this
      */
-    public function withIndent(Indent $indent)
+    public function withIndent(\Rector\FileFormatter\ValueObject\Indent $indent)
     {
         $this->indentSize = $indent->getIndentSize();
         $this->indentStyle = $indent->getIndentStyle();
@@ -84,12 +84,12 @@ final class EditorConfigConfigurationBuilder
      */
     public function withEndOfLineFromEditorConfig(string $endOfLine)
     {
-        $this->newLine = NewLine::fromEditorConfig($endOfLine);
+        $this->newLine = \Rector\FileFormatter\ValueObject\NewLine::fromEditorConfig($endOfLine);
         return $this;
     }
-    public function build() : EditorConfigConfiguration
+    public function build() : \Rector\FileFormatter\ValueObject\EditorConfigConfiguration
     {
         $newLine = $this->newLine;
-        return new EditorConfigConfiguration(Indent::fromSizeAndStyle($this->indentSize, $this->indentStyle), $newLine, $this->insertFinalNewline);
+        return new \Rector\FileFormatter\ValueObject\EditorConfigConfiguration(\Rector\FileFormatter\ValueObject\Indent::fromSizeAndStyle($this->indentSize, $this->indentStyle), $newLine, $this->insertFinalNewline);
     }
 }

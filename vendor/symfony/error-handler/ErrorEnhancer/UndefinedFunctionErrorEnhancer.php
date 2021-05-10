@@ -15,14 +15,14 @@ use RectorPrefix20210510\Symfony\Component\ErrorHandler\Error\UndefinedFunctionE
 /**
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class UndefinedFunctionErrorEnhancer implements ErrorEnhancerInterface
+class UndefinedFunctionErrorEnhancer implements \RectorPrefix20210510\Symfony\Component\ErrorHandler\ErrorEnhancer\ErrorEnhancerInterface
 {
     /**
      * {@inheritdoc}
      */
     public function enhance(\Throwable $error) : ?\Throwable
     {
-        if ($error instanceof FatalError) {
+        if ($error instanceof \RectorPrefix20210510\Symfony\Component\ErrorHandler\Error\FatalError) {
             return null;
         }
         $message = $error->getMessage();
@@ -72,6 +72,6 @@ class UndefinedFunctionErrorEnhancer implements ErrorEnhancerInterface
             }
             $message .= "\nDid you mean to call " . $candidates;
         }
-        return new UndefinedFunctionError($message, $error);
+        return new \RectorPrefix20210510\Symfony\Component\ErrorHandler\Error\UndefinedFunctionError($message, $error);
     }
 }

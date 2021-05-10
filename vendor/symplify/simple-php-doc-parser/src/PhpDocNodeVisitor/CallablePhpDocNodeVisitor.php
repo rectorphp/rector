@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace RectorPrefix20210510\Symplify\SimplePhpDocParser\PhpDocNodeVisitor;
 
 use PHPStan\PhpDocParser\Ast\Node;
-final class CallablePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
+final class CallablePhpDocNodeVisitor extends \RectorPrefix20210510\Symplify\SimplePhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor
 {
     /**
      * @var callable
@@ -19,7 +19,7 @@ final class CallablePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
         $this->callable = $callable;
         $this->docContent = $docContent;
     }
-    public function enterNode(Node $node) : ?Node
+    public function enterNode(\PHPStan\PhpDocParser\Ast\Node $node) : ?\PHPStan\PhpDocParser\Ast\Node
     {
         $callable = $this->callable;
         return $callable($node, $this->docContent);

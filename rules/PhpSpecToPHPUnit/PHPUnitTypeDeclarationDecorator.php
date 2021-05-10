@@ -17,26 +17,26 @@ final class PHPUnitTypeDeclarationDecorator
      * @var ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(ReflectionProvider $reflectionProvider)
+    public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider)
     {
         $this->reflectionProvider = $reflectionProvider;
     }
-    public function decorate(ClassMethod $classMethod) : void
+    public function decorate(\PhpParser\Node\Stmt\ClassMethod $classMethod) : void
     {
         if (!$this->reflectionProvider->hasClass('PHPUnit\\Framework\\TestCase')) {
             return;
         }
         // skip test run
-        if (StaticPHPUnitEnvironment::isPHPUnitRun()) {
+        if (\Rector\Testing\PHPUnit\StaticPHPUnitEnvironment::isPHPUnitRun()) {
             return;
         }
         $classReflection = $this->reflectionProvider->getClass('PHPUnit\\Framework\\TestCase');
         $reflectionClass = $classReflection->getNativeReflection();
-        $reflectionMethod = $reflectionClass->getMethod(MethodName::SET_UP);
+        $reflectionMethod = $reflectionClass->getMethod(\Rector\Core\ValueObject\MethodName::SET_UP);
         if (!$reflectionMethod->hasReturnType()) {
             return;
         }
         $returnType = (string) $reflectionMethod->getReturnType();
-        $classMethod->returnType = new Identifier($returnType);
+        $classMethod->returnType = new \PhpParser\Node\Identifier($returnType);
     }
 }

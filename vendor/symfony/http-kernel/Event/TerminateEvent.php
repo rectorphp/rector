@@ -21,15 +21,15 @@ use RectorPrefix20210510\Symfony\Component\HttpKernel\HttpKernelInterface;
  *
  * @author Jordi Boggiano <j.boggiano@seld.be>
  */
-final class TerminateEvent extends KernelEvent
+final class TerminateEvent extends \RectorPrefix20210510\Symfony\Component\HttpKernel\Event\KernelEvent
 {
     private $response;
-    public function __construct(HttpKernelInterface $kernel, Request $request, Response $response)
+    public function __construct(\RectorPrefix20210510\Symfony\Component\HttpKernel\HttpKernelInterface $kernel, \RectorPrefix20210510\Symfony\Component\HttpFoundation\Request $request, \RectorPrefix20210510\Symfony\Component\HttpFoundation\Response $response)
     {
-        parent::__construct($kernel, $request, HttpKernelInterface::MASTER_REQUEST);
+        parent::__construct($kernel, $request, \RectorPrefix20210510\Symfony\Component\HttpKernel\HttpKernelInterface::MASTER_REQUEST);
         $this->response = $response;
     }
-    public function getResponse() : Response
+    public function getResponse() : \RectorPrefix20210510\Symfony\Component\HttpFoundation\Response
     {
         return $this->response;
     }

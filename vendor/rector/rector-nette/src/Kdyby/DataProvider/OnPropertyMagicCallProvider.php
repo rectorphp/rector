@@ -31,7 +31,7 @@ final class OnPropertyMagicCallProvider
      * @var NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(NodeNameResolver $nodeNameResolver, NodeRepository $nodeRepository)
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeCollector\NodeCollector\NodeRepository $nodeRepository)
     {
         $this->nodeRepository = $nodeRepository;
         $this->nodeNameResolver = $nodeNameResolver;
@@ -41,12 +41,12 @@ final class OnPropertyMagicCallProvider
      */
     public function provide() : array
     {
-        if ($this->onPropertyMagicCalls !== [] && !StaticPHPUnitEnvironment::isPHPUnitRun()) {
+        if ($this->onPropertyMagicCalls !== [] && !\Rector\Testing\PHPUnit\StaticPHPUnitEnvironment::isPHPUnitRun()) {
             return $this->onPropertyMagicCalls;
         }
         foreach ($this->nodeRepository->getMethodsCalls() as $methodCall) {
-            $scope = $methodCall->getAttribute(AttributeKey::SCOPE);
-            if (!$scope instanceof Scope) {
+            $scope = $methodCall->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
+            if (!$scope instanceof \PHPStan\Analyser\Scope) {
                 continue;
             }
             if (!$this->isLocalOnPropertyCall($methodCall, $scope)) {
@@ -59,12 +59,12 @@ final class OnPropertyMagicCallProvider
     /**
      * Detects method call on, e.g: public $onSomeProperty;
      */
-    private function isLocalOnPropertyCall(MethodCall $methodCall, Scope $scope) : bool
+    private function isLocalOnPropertyCall(\PhpParser\Node\Expr\MethodCall $methodCall, \PHPStan\Analyser\Scope $scope) : bool
     {
-        if ($methodCall->var instanceof StaticCall) {
+        if ($methodCall->var instanceof \PhpParser\Node\Expr\StaticCall) {
             return \false;
         }
-        if ($methodCall->var instanceof MethodCall) {
+        if ($methodCall->var instanceof \PhpParser\Node\Expr\MethodCall) {
             return \false;
         }
         if (!$this->nodeNameResolver->isName($methodCall->var, 'this')) {
@@ -78,7 +78,7 @@ final class OnPropertyMagicCallProvider
             return \false;
         }
         $classReflection = $scope->getClassReflection();
-        if (!$classReflection instanceof ClassReflection) {
+        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
             return \false;
         }
         // control event, inner only

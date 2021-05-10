@@ -10,7 +10,7 @@ use RectorPrefix20210510\Symfony\Component\Console\Input\InputInterface;
 use RectorPrefix20210510\Symfony\Component\Console\Output\OutputInterface;
 use RectorPrefix20210510\Symfony\Component\Console\Style\SymfonyStyle;
 use RectorPrefix20210510\Symplify\PackageBuilder\Console\ShellCode;
-final class ShowCommand extends Command
+final class ShowCommand extends \RectorPrefix20210510\Symfony\Component\Console\Command\Command
 {
     /**
      * @var SymfonyStyle
@@ -23,7 +23,7 @@ final class ShowCommand extends Command
     /**
      * @param RectorInterface[] $rectors
      */
-    public function __construct(SymfonyStyle $symfonyStyle, array $rectors)
+    public function __construct(\RectorPrefix20210510\Symfony\Component\Console\Style\SymfonyStyle $symfonyStyle, array $rectors)
     {
         $this->symfonyStyle = $symfonyStyle;
         $this->rectors = $rectors;
@@ -33,15 +33,15 @@ final class ShowCommand extends Command
     {
         $this->setDescription('Show loaded Rectors with their configuration');
     }
-    protected function execute(InputInterface $input, OutputInterface $output) : int
+    protected function execute(\RectorPrefix20210510\Symfony\Component\Console\Input\InputInterface $input, \RectorPrefix20210510\Symfony\Component\Console\Output\OutputInterface $output) : int
     {
         $this->reportLoadedRectors();
-        return ShellCode::SUCCESS;
+        return \RectorPrefix20210510\Symplify\PackageBuilder\Console\ShellCode::SUCCESS;
     }
     private function reportLoadedRectors() : void
     {
-        $rectors = \array_filter($this->rectors, function (RectorInterface $rector) {
-            return !$rector instanceof PostRectorInterface;
+        $rectors = \array_filter($this->rectors, function (\Rector\Core\Contract\Rector\RectorInterface $rector) {
+            return !$rector instanceof \Rector\PostRector\Contract\Rector\PostRectorInterface;
         });
         $rectorCount = \count($rectors);
         if ($rectorCount > 0) {

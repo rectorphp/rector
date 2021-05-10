@@ -15,7 +15,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\TypeDeclaration\Rector\Property\PropertyTypeDeclarationRector\PropertyTypeDeclarationRectorTest
  */
-final class PropertyTypeDeclarationRector extends AbstractRector
+final class PropertyTypeDeclarationRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var PropertyTypeInferer
@@ -25,14 +25,14 @@ final class PropertyTypeDeclarationRector extends AbstractRector
      * @var PhpDocTypeChanger
      */
     private $phpDocTypeChanger;
-    public function __construct(PropertyTypeInferer $propertyTypeInferer, PhpDocTypeChanger $phpDocTypeChanger)
+    public function __construct(\Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer $propertyTypeInferer, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger)
     {
         $this->propertyTypeInferer = $propertyTypeInferer;
         $this->phpDocTypeChanger = $phpDocTypeChanger;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Add @var to properties that are missing it', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Add @var to properties that are missing it', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     private $value;
@@ -64,12 +64,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Property::class];
+        return [\PhpParser\Node\Stmt\Property::class];
     }
     /**
      * @param Property $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (\count($node->props) !== 1) {
             return null;
@@ -79,14 +79,14 @@ CODE_SAMPLE
         }
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         // is already set
-        if (!$phpDocInfo->getVarType() instanceof MixedType) {
+        if (!$phpDocInfo->getVarType() instanceof \PHPStan\Type\MixedType) {
             return null;
         }
         $type = $this->propertyTypeInferer->inferProperty($node);
-        if ($type instanceof MixedType) {
+        if ($type instanceof \PHPStan\Type\MixedType) {
             return null;
         }
-        if (!$node->isPrivate() && $type instanceof NullType) {
+        if (!$node->isPrivate() && $type instanceof \PHPStan\Type\NullType) {
             return null;
         }
         $this->phpDocTypeChanger->changeVarType($phpDocInfo, $type);

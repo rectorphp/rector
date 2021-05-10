@@ -39,7 +39,7 @@ final class ChildAndParentClassManipulator
      * @var ParentClassScopeResolver
      */
     private $parentClassScopeResolver;
-    public function __construct(NodeFactory $nodeFactory, NodeNameResolver $nodeNameResolver, NodeRepository $nodeRepository, PromotedPropertyParamCleaner $promotedPropertyParamCleaner, ReflectionProvider $reflectionProvider, ParentClassScopeResolver $parentClassScopeResolver)
+    public function __construct(\Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeCollector\NodeCollector\NodeRepository $nodeRepository, \Rector\Core\NodeAnalyzer\PromotedPropertyParamCleaner $promotedPropertyParamCleaner, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\NodeCollector\ScopeResolver\ParentClassScopeResolver $parentClassScopeResolver)
     {
         $this->nodeFactory = $nodeFactory;
         $this->nodeNameResolver = $nodeNameResolver;
@@ -51,7 +51,7 @@ final class ChildAndParentClassManipulator
     /**
      * Add "parent::__construct()" where needed
      */
-    public function completeParentConstructor(Class_ $class, ClassMethod $classMethod) : void
+    public function completeParentConstructor(\PhpParser\Node\Stmt\Class_ $class, \PhpParser\Node\Stmt\ClassMethod $classMethod) : void
     {
         $className = $this->nodeNameResolver->getName($class);
         if ($className === null) {
@@ -67,17 +67,17 @@ final class ChildAndParentClassManipulator
         }
         // not in analyzed scope, nothing we can do
         $parentClassNode = $this->nodeRepository->findClass($parentClassReflection->getName());
-        if ($parentClassNode instanceof Class_) {
+        if ($parentClassNode instanceof \PhpParser\Node\Stmt\Class_) {
             $this->completeParentConstructorBasedOnParentNode($parentClassNode, $classMethod);
             return;
         }
         // complete parent call for __construct()
-        if ($parentClassReflection->hasMethod(MethodName::CONSTRUCT)) {
+        if ($parentClassReflection->hasMethod(\Rector\Core\ValueObject\MethodName::CONSTRUCT)) {
             $staticCall = $this->nodeFactory->createParentConstructWithParams([]);
-            $classMethod->stmts[] = new Expression($staticCall);
+            $classMethod->stmts[] = new \PhpParser\Node\Stmt\Expression($staticCall);
         }
     }
-    public function completeChildConstructors(Class_ $class, ClassMethod $constructorClassMethod) : void
+    public function completeChildConstructors(\PhpParser\Node\Stmt\Class_ $class, \PhpParser\Node\Stmt\ClassMethod $constructorClassMethod) : void
     {
         $className = $this->nodeNameResolver->getName($class);
         if ($className === null) {
@@ -85,32 +85,32 @@ final class ChildAndParentClassManipulator
         }
         $childClasses = $this->nodeRepository->findChildrenOfClass($className);
         foreach ($childClasses as $childClass) {
-            $childConstructorClassMethod = $childClass->getMethod(MethodName::CONSTRUCT);
-            if (!$childConstructorClassMethod instanceof ClassMethod) {
+            $childConstructorClassMethod = $childClass->getMethod(\Rector\Core\ValueObject\MethodName::CONSTRUCT);
+            if (!$childConstructorClassMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
                 continue;
             }
             // replicate parent parameters
             $childConstructorClassMethod->params = \array_merge($constructorClassMethod->params, $childConstructorClassMethod->params);
             $parentConstructCallNode = $this->nodeFactory->createParentConstructWithParams($constructorClassMethod->params);
-            $childConstructorClassMethod->stmts = \array_merge([new Expression($parentConstructCallNode)], (array) $childConstructorClassMethod->stmts);
+            $childConstructorClassMethod->stmts = \array_merge([new \PhpParser\Node\Stmt\Expression($parentConstructCallNode)], (array) $childConstructorClassMethod->stmts);
         }
     }
-    private function completeParentConstructorBasedOnParentNode(Class_ $parentClassNode, ClassMethod $classMethod) : void
+    private function completeParentConstructorBasedOnParentNode(\PhpParser\Node\Stmt\Class_ $parentClassNode, \PhpParser\Node\Stmt\ClassMethod $classMethod) : void
     {
         $firstParentConstructMethodNode = $this->findFirstParentConstructor($parentClassNode);
-        if (!$firstParentConstructMethodNode instanceof ClassMethod) {
+        if (!$firstParentConstructMethodNode instanceof \PhpParser\Node\Stmt\ClassMethod) {
             return;
         }
         $cleanParams = $this->promotedPropertyParamCleaner->cleanFromFlags($firstParentConstructMethodNode->params);
         // replicate parent parameters
         $classMethod->params = \array_merge($cleanParams, $classMethod->params);
         $staticCall = $this->nodeFactory->createParentConstructWithParams($firstParentConstructMethodNode->params);
-        $classMethod->stmts[] = new Expression($staticCall);
+        $classMethod->stmts[] = new \PhpParser\Node\Stmt\Expression($staticCall);
     }
-    private function findFirstParentConstructor(Class_ $class) : ?ClassMethod
+    private function findFirstParentConstructor(\PhpParser\Node\Stmt\Class_ $class) : ?\PhpParser\Node\Stmt\ClassMethod
     {
         while ($class !== null) {
-            $constructMethodNode = $class->getMethod(MethodName::CONSTRUCT);
+            $constructMethodNode = $class->getMethod(\Rector\Core\ValueObject\MethodName::CONSTRUCT);
             if ($constructMethodNode !== null) {
                 return $constructMethodNode;
             }

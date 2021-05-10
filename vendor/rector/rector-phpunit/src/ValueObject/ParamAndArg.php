@@ -15,16 +15,16 @@ final class ParamAndArg
      * @var Type|null
      */
     private $type;
-    public function __construct(Variable $variable, ?Type $type)
+    public function __construct(\PhpParser\Node\Expr\Variable $variable, ?\PHPStan\Type\Type $type)
     {
         $this->variable = $variable;
         $this->type = $type;
     }
-    public function getVariable() : Variable
+    public function getVariable() : \PhpParser\Node\Expr\Variable
     {
         return $this->variable;
     }
-    public function getType() : ?Type
+    public function getType() : ?\PHPStan\Type\Type
     {
         return $this->type;
     }

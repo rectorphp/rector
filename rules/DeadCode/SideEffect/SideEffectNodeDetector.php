@@ -19,7 +19,7 @@ final class SideEffectNodeDetector
     /**
      * @var array<class-string<Expr>>
      */
-    private const SIDE_EFFECT_NODE_TYPES = [Encapsed::class, New_::class, Concat::class, PropertyFetch::class];
+    private const SIDE_EFFECT_NODE_TYPES = [\PhpParser\Node\Scalar\Encapsed::class, \PhpParser\Node\Expr\New_::class, \PhpParser\Node\Expr\BinaryOp\Concat::class, \PhpParser\Node\Expr\PropertyFetch::class];
     /**
      * @var PureFunctionDetector
      */
@@ -28,18 +28,18 @@ final class SideEffectNodeDetector
      * @var NodeTypeResolver
      */
     private $nodeTypeResolver;
-    public function __construct(NodeTypeResolver $nodeTypeResolver, \Rector\DeadCode\SideEffect\PureFunctionDetector $pureFunctionDetector)
+    public function __construct(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\DeadCode\SideEffect\PureFunctionDetector $pureFunctionDetector)
     {
         $this->pureFunctionDetector = $pureFunctionDetector;
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
-    public function detect(Expr $expr) : bool
+    public function detect(\PhpParser\Node\Expr $expr) : bool
     {
-        if ($expr instanceof Assign) {
+        if ($expr instanceof \PhpParser\Node\Expr\Assign) {
             return \true;
         }
         $exprStaticType = $this->nodeTypeResolver->resolve($expr);
-        if ($exprStaticType instanceof ConstantType) {
+        if ($exprStaticType instanceof \PHPStan\Type\ConstantType) {
             return \false;
         }
         foreach (self::SIDE_EFFECT_NODE_TYPES as $sideEffectNodeType) {
@@ -47,22 +47,22 @@ final class SideEffectNodeDetector
                 return \false;
             }
         }
-        if ($expr instanceof FuncCall) {
+        if ($expr instanceof \PhpParser\Node\Expr\FuncCall) {
             return !$this->pureFunctionDetector->detect($expr);
         }
-        if ($expr instanceof Variable || $expr instanceof ArrayDimFetch) {
+        if ($expr instanceof \PhpParser\Node\Expr\Variable || $expr instanceof \PhpParser\Node\Expr\ArrayDimFetch) {
             $variable = $this->resolveVariable($expr);
             // variables don't have side effects
-            return !$variable instanceof Variable;
+            return !$variable instanceof \PhpParser\Node\Expr\Variable;
         }
         return \true;
     }
-    private function resolveVariable(Expr $expr) : ?Variable
+    private function resolveVariable(\PhpParser\Node\Expr $expr) : ?\PhpParser\Node\Expr\Variable
     {
-        while ($expr instanceof ArrayDimFetch) {
+        while ($expr instanceof \PhpParser\Node\Expr\ArrayDimFetch) {
             $expr = $expr->var;
         }
-        if (!$expr instanceof Variable) {
+        if (!$expr instanceof \PhpParser\Node\Expr\Variable) {
             return null;
         }
         return $expr;

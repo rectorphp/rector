@@ -18,7 +18,7 @@ class Namespace_ extends \PhpParser\Builder\Declaration
      */
     public function __construct($name)
     {
-        $this->name = null !== $name ? BuilderHelpers::normalizeName($name) : null;
+        $this->name = null !== $name ? \PhpParser\BuilderHelpers::normalizeName($name) : null;
     }
     /**
      * Adds a statement.
@@ -29,7 +29,7 @@ class Namespace_ extends \PhpParser\Builder\Declaration
      */
     public function addStmt($stmt)
     {
-        $this->stmts[] = BuilderHelpers::normalizeStmt($stmt);
+        $this->stmts[] = \PhpParser\BuilderHelpers::normalizeStmt($stmt);
         return $this;
     }
     /**
@@ -37,8 +37,8 @@ class Namespace_ extends \PhpParser\Builder\Declaration
      *
      * @return Node The built node
      */
-    public function getNode() : Node
+    public function getNode() : \PhpParser\Node
     {
-        return new Stmt\Namespace_($this->name, $this->stmts, $this->attributes);
+        return new \PhpParser\Node\Stmt\Namespace_($this->name, $this->stmts, $this->attributes);
     }
 }

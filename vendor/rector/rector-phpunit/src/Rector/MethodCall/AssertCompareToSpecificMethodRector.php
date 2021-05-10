@@ -17,7 +17,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\PHPUnit\Tests\Rector\MethodCall\AssertCompareToSpecificMethodRector\AssertCompareToSpecificMethodRectorTest
  */
-final class AssertCompareToSpecificMethodRector extends AbstractRector
+final class AssertCompareToSpecificMethodRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var string
@@ -35,26 +35,26 @@ final class AssertCompareToSpecificMethodRector extends AbstractRector
      * @var TestsNodeAnalyzer
      */
     private $testsNodeAnalyzer;
-    public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer)
+    public function __construct(\Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer $testsNodeAnalyzer)
     {
-        $this->functionNamesWithAssertMethods = [new FunctionNameWithAssertMethods('count', self::ASSERT_COUNT, self::ASSERT_NOT_COUNT), new FunctionNameWithAssertMethods('sizeof', self::ASSERT_COUNT, self::ASSERT_NOT_COUNT), new FunctionNameWithAssertMethods('iterator_count', self::ASSERT_COUNT, self::ASSERT_NOT_COUNT), new FunctionNameWithAssertMethods('gettype', 'assertInternalType', 'assertNotInternalType'), new FunctionNameWithAssertMethods('get_class', 'assertInstanceOf', 'assertNotInstanceOf')];
+        $this->functionNamesWithAssertMethods = [new \Rector\PHPUnit\ValueObject\FunctionNameWithAssertMethods('count', self::ASSERT_COUNT, self::ASSERT_NOT_COUNT), new \Rector\PHPUnit\ValueObject\FunctionNameWithAssertMethods('sizeof', self::ASSERT_COUNT, self::ASSERT_NOT_COUNT), new \Rector\PHPUnit\ValueObject\FunctionNameWithAssertMethods('iterator_count', self::ASSERT_COUNT, self::ASSERT_NOT_COUNT), new \Rector\PHPUnit\ValueObject\FunctionNameWithAssertMethods('gettype', 'assertInternalType', 'assertNotInternalType'), new \Rector\PHPUnit\ValueObject\FunctionNameWithAssertMethods('get_class', 'assertInstanceOf', 'assertNotInstanceOf')];
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Turns vague php-only method in PHPUnit TestCase to more specific', [new CodeSample('$this->assertSame(10, count($anything), "message");', '$this->assertCount(10, $anything, "message");'), new CodeSample('$this->assertNotEquals(get_class($value), stdClass::class);', '$this->assertNotInstanceOf(stdClass::class, $value);')]);
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Turns vague php-only method in PHPUnit TestCase to more specific', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample('$this->assertSame(10, count($anything), "message");', '$this->assertCount(10, $anything, "message");'), new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample('$this->assertNotEquals(get_class($value), stdClass::class);', '$this->assertNotInstanceOf(stdClass::class, $value);')]);
     }
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [MethodCall::class, StaticCall::class];
+        return [\PhpParser\Node\Expr\MethodCall::class, \PhpParser\Node\Expr\StaticCall::class];
     }
     /**
      * @param MethodCall|StaticCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$this->testsNodeAnalyzer->isPHPUnitMethodCallNames($node, ['assertSame', 'assertNotSame', 'assertEquals', 'assertNotEquals'])) {
             return null;
@@ -67,10 +67,10 @@ final class AssertCompareToSpecificMethodRector extends AbstractRector
         $secondArgument = $node->args[1];
         $firstArgumentValue = $firstArgument->value;
         $secondArgumentValue = $secondArgument->value;
-        if ($secondArgumentValue instanceof FuncCall) {
+        if ($secondArgumentValue instanceof \PhpParser\Node\Expr\FuncCall) {
             return $this->processFuncCallArgumentValue($node, $secondArgumentValue, $firstArgument);
         }
-        if ($firstArgumentValue instanceof FuncCall) {
+        if ($firstArgumentValue instanceof \PhpParser\Node\Expr\FuncCall) {
             return $this->processFuncCallArgumentValue($node, $firstArgumentValue, $secondArgument);
         }
         return null;
@@ -79,7 +79,7 @@ final class AssertCompareToSpecificMethodRector extends AbstractRector
      * @param MethodCall|StaticCall $node
      * @return MethodCall|StaticCall|null
      */
-    private function processFuncCallArgumentValue(Node $node, FuncCall $funcCall, Arg $requiredArg) : ?Node
+    private function processFuncCallArgumentValue(\PhpParser\Node $node, \PhpParser\Node\Expr\FuncCall $funcCall, \PhpParser\Node\Arg $requiredArg) : ?\PhpParser\Node
     {
         foreach ($this->functionNamesWithAssertMethods as $functionNameWithAssertMethod) {
             if (!$this->isName($funcCall, $functionNameWithAssertMethod->getFunctionName())) {
@@ -94,12 +94,12 @@ final class AssertCompareToSpecificMethodRector extends AbstractRector
     /**
      * @param MethodCall|StaticCall $node
      */
-    private function renameMethod(Node $node, FunctionNameWithAssertMethods $functionNameWithAssertMethods) : void
+    private function renameMethod(\PhpParser\Node $node, \Rector\PHPUnit\ValueObject\FunctionNameWithAssertMethods $functionNameWithAssertMethods) : void
     {
         if ($this->isNames($node->name, ['assertSame', 'assertEquals'])) {
-            $node->name = new Identifier($functionNameWithAssertMethods->getAssetMethodName());
+            $node->name = new \PhpParser\Node\Identifier($functionNameWithAssertMethods->getAssetMethodName());
         } elseif ($this->isNames($node->name, ['assertNotSame', 'assertNotEquals'])) {
-            $node->name = new Identifier($functionNameWithAssertMethods->getNotAssertMethodName());
+            $node->name = new \PhpParser\Node\Identifier($functionNameWithAssertMethods->getNotAssertMethodName());
         }
     }
     /**
@@ -107,7 +107,7 @@ final class AssertCompareToSpecificMethodRector extends AbstractRector
      *
      * @param StaticCall|MethodCall $node
      */
-    private function moveFunctionArgumentsUp(Node $node, FuncCall $funcCall, Arg $requiredArg) : void
+    private function moveFunctionArgumentsUp(\PhpParser\Node $node, \PhpParser\Node\Expr\FuncCall $funcCall, \PhpParser\Node\Arg $requiredArg) : void
     {
         $node->args[1] = $funcCall->args[0];
         $node->args[0] = $requiredArg;

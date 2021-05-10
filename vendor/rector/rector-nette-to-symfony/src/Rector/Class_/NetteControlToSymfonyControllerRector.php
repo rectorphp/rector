@@ -28,7 +28,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\NetteToSymfony\Tests\Rector\Class_\NetteControlToSymfonyControllerRector\NetteControlToSymfonyControllerRectorTest
  */
-final class NetteControlToSymfonyControllerRector extends AbstractRector
+final class NetteControlToSymfonyControllerRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var ActionRenderFactory
@@ -46,16 +46,16 @@ final class NetteControlToSymfonyControllerRector extends AbstractRector
      * @var ClassMethodRenderAnalyzer
      */
     private $classMethodRenderAnalyzer;
-    public function __construct(ActionRenderFactory $actionRenderFactory, NetteClassAnalyzer $netteClassAnalyzer, ClassNaming $classNaming, ClassMethodRenderAnalyzer $classMethodRenderAnalyzer)
+    public function __construct(\Rector\Nette\NodeFactory\ActionRenderFactory $actionRenderFactory, \Rector\Nette\NodeAnalyzer\NetteClassAnalyzer $netteClassAnalyzer, \Rector\CodingStyle\Naming\ClassNaming $classNaming, \Rector\NetteToSymfony\NodeAnalyzer\ClassMethodRenderAnalyzer $classMethodRenderAnalyzer)
     {
         $this->actionRenderFactory = $actionRenderFactory;
         $this->netteClassAnalyzer = $netteClassAnalyzer;
         $this->classNaming = $classNaming;
         $this->classMethodRenderAnalyzer = $classMethodRenderAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Migrate Nette Component to Symfony Controller', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Migrate Nette Component to Symfony Controller', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 use Nette\Application\UI\Control;
 
 class SomeControl extends Control
@@ -86,61 +86,61 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Class_::class];
+        return [\PhpParser\Node\Stmt\Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$this->netteClassAnalyzer->isInComponent($node)) {
             return null;
         }
         $shortClassName = $this->nodeNameResolver->getShortName($node);
         $shortClassName = $this->classNaming->replaceSuffix($shortClassName, 'Control', 'Controller');
-        $node->name = new Identifier($shortClassName);
-        $node->extends = new FullyQualified('Symfony\\Bundle\\FrameworkBundle\\Controller\\AbstractController');
+        $node->name = new \PhpParser\Node\Identifier($shortClassName);
+        $node->extends = new \PhpParser\Node\Name\FullyQualified('Symfony\\Bundle\\FrameworkBundle\\Controller\\AbstractController');
         $classMethod = $node->getMethod('render');
         if ($classMethod !== null) {
             $this->processRenderMethod($classMethod);
         }
         return $node;
     }
-    private function processRenderMethod(ClassMethod $classMethod) : void
+    private function processRenderMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod) : void
     {
         $this->processGetPresenterGetSessionMethodCall($classMethod);
-        $classMethod->name = new Identifier('action');
+        $classMethod->name = new \PhpParser\Node\Identifier('action');
         $classMethodRender = $this->classMethodRenderAnalyzer->collectFromClassMethod($classMethod);
         $methodCall = $this->actionRenderFactory->createThisRenderMethodCall($classMethodRender);
         // add return in the end
-        $return = new Return_($methodCall);
+        $return = new \PhpParser\Node\Stmt\Return_($methodCall);
         $classMethod->stmts[] = $return;
-        if ($this->isAtLeastPhpVersion(PhpVersionFeature::SCALAR_TYPES)) {
-            $classMethod->returnType = new FullyQualified('Symfony\\Component\\HttpFoundation\\Response');
+        if ($this->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::SCALAR_TYPES)) {
+            $classMethod->returnType = new \PhpParser\Node\Name\FullyQualified('Symfony\\Component\\HttpFoundation\\Response');
         }
         $this->removeNodes($classMethodRender->getNodesToRemove());
     }
-    private function processGetPresenterGetSessionMethodCall(ClassMethod $classMethod) : void
+    private function processGetPresenterGetSessionMethodCall(\PhpParser\Node\Stmt\ClassMethod $classMethod) : void
     {
-        $this->traverseNodesWithCallable((array) $classMethod->getStmts(), function (Node $node) : ?MethodCall {
-            if (!$node instanceof MethodCall) {
+        $this->traverseNodesWithCallable((array) $classMethod->getStmts(), function (\PhpParser\Node $node) : ?MethodCall {
+            if (!$node instanceof \PhpParser\Node\Expr\MethodCall) {
                 return null;
             }
             if (!$this->isName($node->name, 'getSession')) {
                 return null;
             }
-            if (!$node->var instanceof MethodCall) {
+            if (!$node->var instanceof \PhpParser\Node\Expr\MethodCall) {
                 return null;
             }
             if (!$this->isName($node->var->name, 'getPresenter')) {
                 return null;
             }
-            $node->var = new PropertyFetch(new Variable('this'), 'session');
-            $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
-            if (!$classLike instanceof Class_) {
-                throw new ShouldNotHappenException();
+            $node->var = new \PhpParser\Node\Expr\PropertyFetch(new \PhpParser\Node\Expr\Variable('this'), 'session');
+            $classLike = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
+            if (!$classLike instanceof \PhpParser\Node\Stmt\Class_) {
+                throw new \Rector\Core\Exception\ShouldNotHappenException();
             }
-            $this->addConstructorDependencyToClass($classLike, new FullyQualifiedObjectType('Nette\\Http\\Session'), 'session');
+            $this->addConstructorDependencyToClass($classLike, new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType('Nette\\Http\\Session'), 'session');
             return $node;
         });
     }

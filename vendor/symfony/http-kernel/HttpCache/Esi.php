@@ -23,7 +23,7 @@ use RectorPrefix20210510\Symfony\Component\HttpFoundation\Response;
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class Esi extends AbstractSurrogate
+class Esi extends \RectorPrefix20210510\Symfony\Component\HttpKernel\HttpCache\AbstractSurrogate
 {
     public function getName()
     {
@@ -32,7 +32,7 @@ class Esi extends AbstractSurrogate
     /**
      * {@inheritdoc}
      */
-    public function addSurrogateControl(Response $response)
+    public function addSurrogateControl(\RectorPrefix20210510\Symfony\Component\HttpFoundation\Response $response)
     {
         if (\false !== \strpos($response->getContent(), '<esi:include')) {
             $response->headers->set('Surrogate-Control', 'content="ESI/1.0"');
@@ -52,7 +52,7 @@ class Esi extends AbstractSurrogate
     /**
      * {@inheritdoc}
      */
-    public function process(Request $request, Response $response)
+    public function process(\RectorPrefix20210510\Symfony\Component\HttpFoundation\Request $request, \RectorPrefix20210510\Symfony\Component\HttpFoundation\Response $response)
     {
         $type = $response->headers->get('Content-Type');
         if (empty($type)) {

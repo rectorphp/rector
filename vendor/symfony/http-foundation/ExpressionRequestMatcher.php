@@ -16,16 +16,16 @@ use RectorPrefix20210510\Symfony\Component\ExpressionLanguage\ExpressionLanguage
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class ExpressionRequestMatcher extends RequestMatcher
+class ExpressionRequestMatcher extends \RectorPrefix20210510\Symfony\Component\HttpFoundation\RequestMatcher
 {
     private $language;
     private $expression;
-    public function setExpression(ExpressionLanguage $language, $expression)
+    public function setExpression(\RectorPrefix20210510\Symfony\Component\ExpressionLanguage\ExpressionLanguage $language, $expression)
     {
         $this->language = $language;
         $this->expression = $expression;
     }
-    public function matches(Request $request)
+    public function matches(\RectorPrefix20210510\Symfony\Component\HttpFoundation\Request $request)
     {
         if (!$this->language) {
             throw new \LogicException('Unable to match the request as the expression language is not available.');

@@ -11,7 +11,7 @@ final class FuncCallManipulator
      * @var ValueResolver
      */
     private $valueResolver;
-    public function __construct(ValueResolver $valueResolver)
+    public function __construct(\Rector\Core\PhpParser\Node\Value\ValueResolver $valueResolver)
     {
         $this->valueResolver = $valueResolver;
     }

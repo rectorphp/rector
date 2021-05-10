@@ -31,22 +31,22 @@ final class ParsedPropertyFetchNodeCollector
      * @var NodeTypeResolver
      */
     private $nodeTypeResolver;
-    public function __construct(NodeNameResolver $nodeNameResolver, NodeTypeResolver $nodeTypeResolver)
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
-    public function collect(Node $node) : void
+    public function collect(\PhpParser\Node $node) : void
     {
-        if (!$node instanceof PropertyFetch && !$node instanceof StaticPropertyFetch) {
+        if (!$node instanceof \PhpParser\Node\Expr\PropertyFetch && !$node instanceof \PhpParser\Node\Expr\StaticPropertyFetch) {
             return;
         }
         $propertyType = $this->resolvePropertyCallerType($node);
-        if ($propertyType instanceof MixedType) {
+        if ($propertyType instanceof \PHPStan\Type\MixedType) {
             return;
         }
         // make sure name is valid
-        if ($node->name instanceof StaticCall || $node->name instanceof MethodCall) {
+        if ($node->name instanceof \PhpParser\Node\Expr\StaticCall || $node->name instanceof \PhpParser\Node\Expr\MethodCall) {
             return;
         }
         $propertyName = $this->nodeNameResolver->getName($node->name);
@@ -65,9 +65,9 @@ final class ParsedPropertyFetchNodeCollector
     /**
      * @param PropertyFetch|StaticPropertyFetch $node
      */
-    private function resolvePropertyCallerType(Node $node) : Type
+    private function resolvePropertyCallerType(\PhpParser\Node $node) : \PHPStan\Type\Type
     {
-        if ($node instanceof PropertyFetch) {
+        if ($node instanceof \PhpParser\Node\Expr\PropertyFetch) {
             return $this->nodeTypeResolver->resolve($node->var);
         }
         return $this->nodeTypeResolver->resolve($node->class);
@@ -75,12 +75,12 @@ final class ParsedPropertyFetchNodeCollector
     /**
      * @param PropertyFetch|StaticPropertyFetch $propertyFetchNode
      */
-    private function addPropertyFetchWithTypeAndName(Type $propertyType, Node $propertyFetchNode, string $propertyName) : void
+    private function addPropertyFetchWithTypeAndName(\PHPStan\Type\Type $propertyType, \PhpParser\Node $propertyFetchNode, string $propertyName) : void
     {
-        if ($propertyType instanceof TypeWithClassName) {
+        if ($propertyType instanceof \PHPStan\Type\TypeWithClassName) {
             $this->propertyFetchesByTypeAndName[$propertyType->getClassName()][$propertyName][] = $propertyFetchNode;
         }
-        if ($propertyType instanceof UnionType) {
+        if ($propertyType instanceof \PHPStan\Type\UnionType) {
             foreach ($propertyType->getTypes() as $unionedType) {
                 $this->addPropertyFetchWithTypeAndName($unionedType, $propertyFetchNode, $propertyName);
             }

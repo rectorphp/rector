@@ -9,7 +9,7 @@ use PhpParser\Node\Identifier;
 use RectorPrefix20210510\Symplify\Astral\HttpKernel\AstralKernel;
 use RectorPrefix20210510\Symplify\Astral\Naming\SimpleNameResolver;
 use RectorPrefix20210510\Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
-final class SimpleNameResolverTest extends AbstractKernelTestCase
+final class SimpleNameResolverTest extends \RectorPrefix20210510\Symplify\PackageBuilder\Testing\AbstractKernelTestCase
 {
     /**
      * @var SimpleNameResolver
@@ -17,13 +17,13 @@ final class SimpleNameResolverTest extends AbstractKernelTestCase
     private $simpleNameResolver;
     protected function setUp() : void
     {
-        $this->bootKernel(AstralKernel::class);
-        $this->simpleNameResolver = $this->getService(SimpleNameResolver::class);
+        $this->bootKernel(\RectorPrefix20210510\Symplify\Astral\HttpKernel\AstralKernel::class);
+        $this->simpleNameResolver = $this->getService(\RectorPrefix20210510\Symplify\Astral\Naming\SimpleNameResolver::class);
     }
     /**
      * @dataProvider provideData()
      */
-    public function test(Node $node, string $expectedName) : void
+    public function test(\PhpParser\Node $node, string $expectedName) : void
     {
         $resolvedName = $this->simpleNameResolver->getName($node);
         $this->assertSame($expectedName, $resolvedName);
@@ -31,9 +31,9 @@ final class SimpleNameResolverTest extends AbstractKernelTestCase
     /**
      * @return Iterator<string[]|Identifier[]>
      */
-    public function provideData() : Iterator
+    public function provideData() : \Iterator
     {
-        $identifier = new Identifier('first name');
+        $identifier = new \PhpParser\Node\Identifier('first name');
         (yield [$identifier, 'first name']);
     }
 }

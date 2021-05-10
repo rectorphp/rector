@@ -7,5 +7,5 @@ use PhpParser\Node;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 interface ClassNameImportSkipVoterInterface
 {
-    public function shouldSkip(FullyQualifiedObjectType $fullyQualifiedObjectType, Node $node) : bool;
+    public function shouldSkip(\Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType $fullyQualifiedObjectType, \PhpParser\Node $node) : bool;
 }

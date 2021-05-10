@@ -86,7 +86,7 @@ final class Option
     /**
      * @var string
      */
-    public const SKIP = SkipperOption::SKIP;
+    public const SKIP = \RectorPrefix20210510\Symplify\Skipper\ValueObject\Option::SKIP;
     /**
      * @var string
      */

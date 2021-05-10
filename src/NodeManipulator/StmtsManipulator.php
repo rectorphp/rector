@@ -19,7 +19,7 @@ final class StmtsManipulator
      * @var NodeComparator
      */
     private $nodeComparator;
-    public function __construct(SimpleCallableNodeTraverser $simpleCallableNodeTraverser, NodeComparator $nodeComparator)
+    public function __construct(\RectorPrefix20210510\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator)
     {
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->nodeComparator = $nodeComparator;
@@ -27,12 +27,12 @@ final class StmtsManipulator
     /**
      * @param Stmt[] $stmts
      */
-    public function getUnwrappedLastStmt(array $stmts) : ?Node
+    public function getUnwrappedLastStmt(array $stmts) : ?\PhpParser\Node
     {
         \end($stmts);
         $lastStmtKey = \key($stmts);
         $lastStmt = $stmts[$lastStmtKey];
-        if ($lastStmt instanceof Expression) {
+        if ($lastStmt instanceof \PhpParser\Node\Stmt\Expression) {
             return $lastStmt->expr;
         }
         return $lastStmt;
@@ -41,9 +41,9 @@ final class StmtsManipulator
      * @param Stmt[] $stmts
      * @return Stmt[]
      */
-    public function filterOutExistingStmts(ClassMethod $classMethod, array $stmts) : array
+    public function filterOutExistingStmts(\PhpParser\Node\Stmt\ClassMethod $classMethod, array $stmts) : array
     {
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) use(&$stmts) {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $classMethod->stmts, function (\PhpParser\Node $node) use(&$stmts) {
             foreach ($stmts as $key => $assign) {
                 if (!$this->nodeComparator->areNodesEqual($node, $assign)) {
                     continue;

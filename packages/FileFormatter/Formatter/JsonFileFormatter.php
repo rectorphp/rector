@@ -12,31 +12,31 @@ use Rector\FileFormatter\ValueObjectFactory\EditorConfigConfigurationBuilder;
 /**
  * @see \Rector\Tests\FileFormatter\Formatter\JsonFileFormatter\JsonFileFormatterTest
  */
-final class JsonFileFormatter implements FileFormatterInterface
+final class JsonFileFormatter implements \Rector\FileFormatter\Contract\Formatter\FileFormatterInterface
 {
     /**
      * @var PrinterInterface
      */
     private $jsonPrinter;
-    public function __construct(PrinterInterface $jsonPrinter)
+    public function __construct(\RectorPrefix20210510\Ergebnis\Json\Printer\PrinterInterface $jsonPrinter)
     {
         $this->jsonPrinter = $jsonPrinter;
     }
-    public function supports(File $file) : bool
+    public function supports(\Rector\Core\ValueObject\Application\File $file) : bool
     {
         $smartFileInfo = $file->getSmartFileInfo();
         return $smartFileInfo->getExtension() === 'json';
     }
-    public function format(File $file, EditorConfigConfiguration $editorConfigConfiguration) : void
+    public function format(\Rector\Core\ValueObject\Application\File $file, \Rector\FileFormatter\ValueObject\EditorConfigConfiguration $editorConfigConfiguration) : void
     {
         $newFileContent = $this->jsonPrinter->print($file->getFileContent(), $editorConfigConfiguration->getIndent(), $editorConfigConfiguration->getNewLine());
         $newFileContent .= $editorConfigConfiguration->getFinalNewline();
         $file->changeFileContent($newFileContent);
     }
-    public function createDefaultEditorConfigConfigurationBuilder() : EditorConfigConfigurationBuilder
+    public function createDefaultEditorConfigConfigurationBuilder() : \Rector\FileFormatter\ValueObjectFactory\EditorConfigConfigurationBuilder
     {
-        $editorConfigConfigurationBuilder = EditorConfigConfigurationBuilder::anEditorConfigConfiguration();
-        $editorConfigConfigurationBuilder->withIndent(Indent::createSpaceWithSize(4));
+        $editorConfigConfigurationBuilder = \Rector\FileFormatter\ValueObjectFactory\EditorConfigConfigurationBuilder::anEditorConfigConfiguration();
+        $editorConfigConfigurationBuilder->withIndent(\Rector\FileFormatter\ValueObject\Indent::createSpaceWithSize(4));
         return $editorConfigConfigurationBuilder;
     }
 }

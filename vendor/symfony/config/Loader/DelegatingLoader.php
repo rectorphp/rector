@@ -19,9 +19,9 @@ use RectorPrefix20210510\Symfony\Component\Config\Exception\LoaderLoadException;
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class DelegatingLoader extends Loader
+class DelegatingLoader extends \RectorPrefix20210510\Symfony\Component\Config\Loader\Loader
 {
-    public function __construct(LoaderResolverInterface $resolver)
+    public function __construct(\RectorPrefix20210510\Symfony\Component\Config\Loader\LoaderResolverInterface $resolver)
     {
         $this->resolver = $resolver;
     }
@@ -32,7 +32,7 @@ class DelegatingLoader extends Loader
     public function load($resource, $type = null)
     {
         if (\false === ($loader = $this->resolver->resolve($resource, $type))) {
-            throw new LoaderLoadException($resource, null, 0, null, $type);
+            throw new \RectorPrefix20210510\Symfony\Component\Config\Exception\LoaderLoadException($resource, null, 0, null, $type);
         }
         return $loader->load($resource, $type);
     }

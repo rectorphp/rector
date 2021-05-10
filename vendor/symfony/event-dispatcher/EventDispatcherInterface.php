@@ -18,7 +18,7 @@ use RectorPrefix20210510\Symfony\Contracts\EventDispatcher\EventDispatcherInterf
  *
  * @author Bernhard Schussek <bschussek@gmail.com>
  */
-interface EventDispatcherInterface extends ContractsEventDispatcherInterface
+interface EventDispatcherInterface extends \RectorPrefix20210510\Symfony\Contracts\EventDispatcher\EventDispatcherInterface
 {
     /**
      * Adds an event listener that listens on the specified events.
@@ -34,14 +34,14 @@ interface EventDispatcherInterface extends ContractsEventDispatcherInterface
      * The subscriber is asked for all the events it is
      * interested in and added as a listener for these events.
      */
-    public function addSubscriber(EventSubscriberInterface $subscriber);
+    public function addSubscriber(\RectorPrefix20210510\Symfony\Component\EventDispatcher\EventSubscriberInterface $subscriber);
     /**
      * Removes an event listener from the specified events.
      *
      * @param callable $listener The listener to remove
      */
     public function removeListener(string $eventName, $listener);
-    public function removeSubscriber(EventSubscriberInterface $subscriber);
+    public function removeSubscriber(\RectorPrefix20210510\Symfony\Component\EventDispatcher\EventSubscriberInterface $subscriber);
     /**
      * Gets the listeners of a specific event or all listeners sorted by descending priority.
      *

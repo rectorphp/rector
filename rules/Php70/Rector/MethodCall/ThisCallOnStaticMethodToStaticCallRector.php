@@ -19,7 +19,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @see https://3v4l.org/rkiSC
  * @see \Rector\Tests\Php70\Rector\MethodCall\ThisCallOnStaticMethodToStaticCallRector\ThisCallOnStaticMethodToStaticCallRectorTest
  */
-final class ThisCallOnStaticMethodToStaticCallRector extends AbstractRector
+final class ThisCallOnStaticMethodToStaticCallRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var StaticAnalyzer
@@ -29,14 +29,14 @@ final class ThisCallOnStaticMethodToStaticCallRector extends AbstractRector
      * @var MethodReflectionProvider
      */
     private $methodReflectionProvider;
-    public function __construct(StaticAnalyzer $staticAnalyzer, MethodReflectionProvider $methodReflectionProvider)
+    public function __construct(\Rector\NodeCollector\StaticAnalyzer $staticAnalyzer, \Rector\NodeCollector\Reflection\MethodReflectionProvider $methodReflectionProvider)
     {
         $this->staticAnalyzer = $staticAnalyzer;
         $this->methodReflectionProvider = $methodReflectionProvider;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Changes $this->call() to static method to static call', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Changes $this->call() to static method to static call', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public static function run()
@@ -69,14 +69,14 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [MethodCall::class];
+        return [\PhpParser\Node\Expr\MethodCall::class];
     }
     /**
      * @param MethodCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if (!$node->var instanceof Variable) {
+        if (!$node->var instanceof \PhpParser\Node\Expr\Variable) {
             return null;
         }
         if (!$this->nodeNameResolver->isName($node->var, 'this')) {
@@ -87,11 +87,11 @@ CODE_SAMPLE
             return null;
         }
         // skip PHPUnit calls, as they accept both self:: and $this-> formats
-        if ($this->isObjectType($node->var, new ObjectType('PHPUnit\\Framework\\TestCase'))) {
+        if ($this->isObjectType($node->var, new \PHPStan\Type\ObjectType('PHPUnit\\Framework\\TestCase'))) {
             return null;
         }
         /** @var class-string $className */
-        $className = $node->getAttribute(AttributeKey::CLASS_NAME);
+        $className = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);
         if (!\is_string($className)) {
             return null;
         }
@@ -102,17 +102,17 @@ CODE_SAMPLE
         $classReference = $this->resolveClassSelf($node);
         return $this->nodeFactory->createStaticCall($classReference, $methodName, $node->args);
     }
-    private function resolveClassSelf(MethodCall $methodCall) : string
+    private function resolveClassSelf(\PhpParser\Node\Expr\MethodCall $methodCall) : string
     {
-        $classLike = $methodCall->getAttribute(AttributeKey::CLASS_NODE);
-        if (!$classLike instanceof Class_) {
+        $classLike = $methodCall->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
+        if (!$classLike instanceof \PhpParser\Node\Stmt\Class_) {
             return 'static';
         }
         if ($classLike->isFinal()) {
             return 'self';
         }
         $methodReflection = $this->methodReflectionProvider->provideByMethodCall($methodCall);
-        if (!$methodReflection instanceof PhpMethodReflection) {
+        if (!$methodReflection instanceof \PHPStan\Reflection\Php\PhpMethodReflection) {
             return 'static';
         }
         if (!$methodReflection->isPrivate()) {

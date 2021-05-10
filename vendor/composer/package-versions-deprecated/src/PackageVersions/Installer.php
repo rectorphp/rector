@@ -28,7 +28,7 @@ use function rename;
 use function sprintf;
 use function uniqid;
 use function var_export;
-final class Installer implements PluginInterface, EventSubscriberInterface
+final class Installer implements \RectorPrefix20210510\Composer\Plugin\PluginInterface, \RectorPrefix20210510\Composer\EventDispatcher\EventSubscriberInterface
 {
     private static $generatedClassTemplate = <<<'PHP'
 <?php
@@ -113,15 +113,15 @@ class_exists(InstalledVersions::class);
 }
 
 PHP;
-    public function activate(Composer $composer, IOInterface $io)
+    public function activate(\RectorPrefix20210510\Composer\Composer $composer, \RectorPrefix20210510\Composer\IO\IOInterface $io)
     {
         // Nothing to do here, as all features are provided through event listeners
     }
-    public function deactivate(Composer $composer, IOInterface $io)
+    public function deactivate(\RectorPrefix20210510\Composer\Composer $composer, \RectorPrefix20210510\Composer\IO\IOInterface $io)
     {
         // Nothing to do here, as all features are provided through event listeners
     }
-    public function uninstall(Composer $composer, IOInterface $io)
+    public function uninstall(\RectorPrefix20210510\Composer\Composer $composer, \RectorPrefix20210510\Composer\IO\IOInterface $io)
     {
         // Nothing to do here, as all features are provided through event listeners
     }
@@ -130,17 +130,17 @@ PHP;
      */
     public static function getSubscribedEvents() : array
     {
-        return [ScriptEvents::POST_AUTOLOAD_DUMP => 'dumpVersionsClass'];
+        return [\RectorPrefix20210510\Composer\Script\ScriptEvents::POST_AUTOLOAD_DUMP => 'dumpVersionsClass'];
     }
     /**
      * @throws RuntimeException
      */
-    public static function dumpVersionsClass(Event $composerEvent)
+    public static function dumpVersionsClass(\RectorPrefix20210510\Composer\Script\Event $composerEvent)
     {
         $composer = $composerEvent->getComposer();
         $rootPackage = $composer->getPackage();
-        $versions = iterator_to_array(self::getVersions($composer->getLocker(), $rootPackage));
-        if (!array_key_exists('composer/package-versions-deprecated', $versions)) {
+        $versions = \iterator_to_array(self::getVersions($composer->getLocker(), $rootPackage));
+        if (!\array_key_exists('composer/package-versions-deprecated', $versions)) {
             //plugin must be globally installed - we only want to generate versions for projects which specifically
             //require composer/package-versions-deprecated
             return;
@@ -153,50 +153,50 @@ PHP;
      */
     private static function generateVersionsClass(string $rootPackageName, array $versions) : string
     {
-        return sprintf(
+        return \sprintf(
             self::$generatedClassTemplate,
             'fin' . 'al ' . 'cla' . 'ss ' . 'Versions',
             // note: workaround for regex-based code parsers :-(
             $rootPackageName,
-            var_export($versions, \true)
+            \var_export($versions, \true)
         );
     }
     /**
      * @throws RuntimeException
      */
-    private static function writeVersionClassToFile(string $versionClassSource, Composer $composer, IOInterface $io)
+    private static function writeVersionClassToFile(string $versionClassSource, \RectorPrefix20210510\Composer\Composer $composer, \RectorPrefix20210510\Composer\IO\IOInterface $io)
     {
         $installPath = self::locateRootPackageInstallPath($composer->getConfig(), $composer->getPackage()) . '/src/PackageVersions/Versions.php';
-        $installDir = dirname($installPath);
-        if (!file_exists($installDir)) {
+        $installDir = \dirname($installPath);
+        if (!\file_exists($installDir)) {
             $io->write('<info>composer/package-versions-deprecated:</info> Package not found (probably scheduled for removal); generation of version class skipped.');
             return;
         }
-        if (!is_writable($installDir)) {
-            $io->write(sprintf('<info>composer/package-versions-deprecated:</info> %s is not writable; generation of version class skipped.', $installDir));
+        if (!\is_writable($installDir)) {
+            $io->write(\sprintf('<info>composer/package-versions-deprecated:</info> %s is not writable; generation of version class skipped.', $installDir));
             return;
         }
         $io->write('<info>composer/package-versions-deprecated:</info> Generating version class...');
-        $installPathTmp = $installPath . '_' . uniqid('tmp', \true);
-        file_put_contents($installPathTmp, $versionClassSource);
-        chmod($installPathTmp, 0664);
-        rename($installPathTmp, $installPath);
+        $installPathTmp = $installPath . '_' . \uniqid('tmp', \true);
+        \file_put_contents($installPathTmp, $versionClassSource);
+        \chmod($installPathTmp, 0664);
+        \rename($installPathTmp, $installPath);
         $io->write('<info>composer/package-versions-deprecated:</info> ...done generating version class');
     }
     /**
      * @throws RuntimeException
      */
-    private static function locateRootPackageInstallPath(Config $composerConfig, RootPackageInterface $rootPackage) : string
+    private static function locateRootPackageInstallPath(\RectorPrefix20210510\Composer\Config $composerConfig, \RectorPrefix20210510\Composer\Package\RootPackageInterface $rootPackage) : string
     {
         if (self::getRootPackageAlias($rootPackage)->getName() === 'composer/package-versions-deprecated') {
-            return dirname($composerConfig->get('vendor-dir'));
+            return \dirname($composerConfig->get('vendor-dir'));
         }
         return $composerConfig->get('vendor-dir') . '/composer/package-versions-deprecated';
     }
-    private static function getRootPackageAlias(RootPackageInterface $rootPackage) : PackageInterface
+    private static function getRootPackageAlias(\RectorPrefix20210510\Composer\Package\RootPackageInterface $rootPackage) : \RectorPrefix20210510\Composer\Package\PackageInterface
     {
         $package = $rootPackage;
-        while ($package instanceof AliasPackage) {
+        while ($package instanceof \RectorPrefix20210510\Composer\Package\AliasPackage) {
             $package = $package->getAliasOf();
         }
         return $package;
@@ -206,13 +206,13 @@ PHP;
      *
      * @psalm-return Generator<string, string>
      */
-    private static function getVersions(Locker $locker, RootPackageInterface $rootPackage) : Generator
+    private static function getVersions(\RectorPrefix20210510\Composer\Package\Locker $locker, \RectorPrefix20210510\Composer\Package\RootPackageInterface $rootPackage) : \Generator
     {
         $lockData = $locker->getLockData();
         $lockData['packages-dev'] = $lockData['packages-dev'] ?? [];
         $packages = $lockData['packages'];
         if (\getenv('COMPOSER_DEV_MODE') !== '0') {
-            $packages = array_merge($packages, $lockData['packages-dev']);
+            $packages = \array_merge($packages, $lockData['packages-dev']);
         }
         foreach ($packages as $package) {
             (yield $package['name'] => $package['version'] . '@' . ($package['source']['reference'] ?? $package['dist']['reference'] ?? ''));

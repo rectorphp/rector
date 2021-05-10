@@ -15,7 +15,7 @@ use RectorPrefix20210510\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Renaming\Rector\PropertyFetch\RenamePropertyRector\RenamePropertyRectorTest
  */
-final class RenamePropertyRector extends AbstractRector implements ConfigurableRectorInterface
+final class RenamePropertyRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
      * @var string
@@ -25,21 +25,21 @@ final class RenamePropertyRector extends AbstractRector implements ConfigurableR
      * @var RenameProperty[]
      */
     private $renamedProperties = [];
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Replaces defined old properties by new ones.', [new ConfiguredCodeSample('$someObject->someOldProperty;', '$someObject->someNewProperty;', [self::RENAMED_PROPERTIES => [new RenameProperty('SomeClass', 'someOldProperty', 'someNewProperty')]])]);
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Replaces defined old properties by new ones.', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample('$someObject->someOldProperty;', '$someObject->someNewProperty;', [self::RENAMED_PROPERTIES => [new \Rector\Renaming\ValueObject\RenameProperty('SomeClass', 'someOldProperty', 'someNewProperty')]])]);
     }
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [PropertyFetch::class];
+        return [\PhpParser\Node\Expr\PropertyFetch::class];
     }
     /**
      * @param PropertyFetch $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         foreach ($this->renamedProperties as $renamedProperty) {
             if (!$this->isObjectType($node->var, $renamedProperty->getObjectType())) {
@@ -48,7 +48,7 @@ final class RenamePropertyRector extends AbstractRector implements ConfigurableR
             if (!$this->isName($node, $renamedProperty->getOldProperty())) {
                 continue;
             }
-            $node->name = new Identifier($renamedProperty->getNewProperty());
+            $node->name = new \PhpParser\Node\Identifier($renamedProperty->getNewProperty());
             return $node;
         }
         return null;
@@ -59,7 +59,7 @@ final class RenamePropertyRector extends AbstractRector implements ConfigurableR
     public function configure(array $configuration) : void
     {
         $renamedProperties = $configuration[self::RENAMED_PROPERTIES] ?? [];
-        Assert::allIsInstanceOf($renamedProperties, RenameProperty::class);
+        \RectorPrefix20210510\Webmozart\Assert\Assert::allIsInstanceOf($renamedProperties, \Rector\Renaming\ValueObject\RenameProperty::class);
         $this->renamedProperties = $renamedProperties;
     }
 }

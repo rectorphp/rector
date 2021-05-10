@@ -9,25 +9,25 @@ use Rector\BetterPhpDocParser\Attributes\AttributeMirrorer;
 use Rector\BetterPhpDocParser\Contract\BasePhpDocNodeVisitorInterface;
 use Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareArrayTypeNode;
 use RectorPrefix20210510\Symplify\SimplePhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor;
-final class ArrayTypePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor implements BasePhpDocNodeVisitorInterface
+final class ArrayTypePhpDocNodeVisitor extends \RectorPrefix20210510\Symplify\SimplePhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor implements \Rector\BetterPhpDocParser\Contract\BasePhpDocNodeVisitorInterface
 {
     /**
      * @var AttributeMirrorer
      */
     private $attributeMirrorer;
-    public function __construct(AttributeMirrorer $attributeMirrorer)
+    public function __construct(\Rector\BetterPhpDocParser\Attributes\AttributeMirrorer $attributeMirrorer)
     {
         $this->attributeMirrorer = $attributeMirrorer;
     }
-    public function enterNode(Node $node) : ?Node
+    public function enterNode(\PHPStan\PhpDocParser\Ast\Node $node) : ?\PHPStan\PhpDocParser\Ast\Node
     {
-        if (!$node instanceof ArrayTypeNode) {
+        if (!$node instanceof \PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode) {
             return null;
         }
-        if ($node instanceof SpacingAwareArrayTypeNode) {
+        if ($node instanceof \Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareArrayTypeNode) {
             return null;
         }
-        $spacingAwareArrayTypeNode = new SpacingAwareArrayTypeNode($node->type);
+        $spacingAwareArrayTypeNode = new \Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareArrayTypeNode($node->type);
         $this->attributeMirrorer->mirror($node, $spacingAwareArrayTypeNode);
         return $spacingAwareArrayTypeNode;
     }

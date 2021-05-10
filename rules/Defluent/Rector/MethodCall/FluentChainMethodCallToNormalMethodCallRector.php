@@ -22,7 +22,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Defluent\Rector\MethodCall\FluentChainMethodCallToNormalMethodCallRector\FluentChainMethodCallToNormalMethodCallRectorTest
  */
-final class FluentChainMethodCallToNormalMethodCallRector extends AbstractRector
+final class FluentChainMethodCallToNormalMethodCallRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var FluentNodeRemover
@@ -36,15 +36,15 @@ final class FluentChainMethodCallToNormalMethodCallRector extends AbstractRector
      * @var AssignAndRootExprAndNodesToAddMatcher
      */
     private $assignAndRootExprAndNodesToAddMatcher;
-    public function __construct(FluentNodeRemover $fluentNodeRemover, MethodCallSkipAnalyzer $methodCallSkipAnalyzer, AssignAndRootExprAndNodesToAddMatcher $assignAndRootExprAndNodesToAddMatcher)
+    public function __construct(\Rector\Symfony\NodeAnalyzer\FluentNodeRemover $fluentNodeRemover, \Rector\Defluent\NodeAnalyzer\MethodCallSkipAnalyzer $methodCallSkipAnalyzer, \Rector\Defluent\Matcher\AssignAndRootExprAndNodesToAddMatcher $assignAndRootExprAndNodesToAddMatcher)
     {
         $this->fluentNodeRemover = $fluentNodeRemover;
         $this->methodCallSkipAnalyzer = $methodCallSkipAnalyzer;
         $this->assignAndRootExprAndNodesToAddMatcher = $assignAndRootExprAndNodesToAddMatcher;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Turns fluent interface calls to classic ones.', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Turns fluent interface calls to classic ones.', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 $someClass = new SomeClass();
 $someClass->someFunction()
             ->otherFunction();
@@ -61,12 +61,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [MethodCall::class];
+        return [\PhpParser\Node\Expr\MethodCall::class];
     }
     /**
      * @param MethodCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($this->isHandledByAnotherRule($node)) {
             return null;
@@ -74,8 +74,8 @@ CODE_SAMPLE
         if ($this->methodCallSkipAnalyzer->shouldSkipMethodCallIncludingNew($node)) {
             return null;
         }
-        $assignAndRootExprAndNodesToAdd = $this->assignAndRootExprAndNodesToAddMatcher->match($node, FluentCallsKind::NORMAL);
-        if (!$assignAndRootExprAndNodesToAdd instanceof AssignAndRootExprAndNodesToAdd) {
+        $assignAndRootExprAndNodesToAdd = $this->assignAndRootExprAndNodesToAddMatcher->match($node, \Rector\Defluent\ValueObject\FluentCallsKind::NORMAL);
+        if (!$assignAndRootExprAndNodesToAdd instanceof \Rector\Defluent\ValueObject\AssignAndRootExprAndNodesToAdd) {
             return null;
         }
         $this->fluentNodeRemover->removeCurrentNode($node);
@@ -87,12 +87,12 @@ CODE_SAMPLE
      * @see DefluentReturnMethodCallRector
      * @see InArgFluentChainMethodCallToStandaloneMethodCallRector
      */
-    private function isHandledByAnotherRule(MethodCall $methodCall) : bool
+    private function isHandledByAnotherRule(\PhpParser\Node\Expr\MethodCall $methodCall) : bool
     {
-        $parent = $methodCall->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parent instanceof Return_) {
+        $parent = $methodCall->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        if ($parent instanceof \PhpParser\Node\Stmt\Return_) {
             return \true;
         }
-        return $parent instanceof Arg;
+        return $parent instanceof \PhpParser\Node\Arg;
     }
 }

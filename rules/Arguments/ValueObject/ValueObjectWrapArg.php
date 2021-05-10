@@ -29,9 +29,9 @@ final class ValueObjectWrapArg
         $this->argPosition = $argPosition;
         $this->newType = $newType;
     }
-    public function getObjectType() : ObjectType
+    public function getObjectType() : \PHPStan\Type\ObjectType
     {
-        return new ObjectType($this->objectType);
+        return new \PHPStan\Type\ObjectType($this->objectType);
     }
     public function getMethodName() : string
     {
@@ -41,8 +41,8 @@ final class ValueObjectWrapArg
     {
         return $this->argPosition;
     }
-    public function getNewType() : ObjectType
+    public function getNewType() : \PHPStan\Type\ObjectType
     {
-        return new ObjectType($this->newType);
+        return new \PHPStan\Type\ObjectType($this->newType);
     }
 }

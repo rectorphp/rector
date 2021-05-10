@@ -6,7 +6,7 @@ namespace Rector\Nette\FileProcessor;
 use Rector\Core\Contract\Processor\FileProcessorInterface;
 use Rector\Core\ValueObject\Application\File;
 use Rector\Nette\Contract\Rector\NeonRectorInterface;
-final class NeonFileProcessor implements FileProcessorInterface
+final class NeonFileProcessor implements \Rector\Core\Contract\Processor\FileProcessorInterface
 {
     /**
      * @var NeonRectorInterface[]
@@ -32,7 +32,7 @@ final class NeonFileProcessor implements FileProcessorInterface
             $file->changeFileContent($fileContent);
         }
     }
-    public function supports(File $file) : bool
+    public function supports(\Rector\Core\ValueObject\Application\File $file) : bool
     {
         $fileInfo = $file->getSmartFileInfo();
         return $fileInfo->hasSuffixes($this->getSupportedFileExtensions());

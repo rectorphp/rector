@@ -5,7 +5,7 @@ namespace RectorPrefix20210510\Symplify\SmartFileSystem\Tests\FileSystemFilter;
 
 use RectorPrefix20210510\PHPUnit\Framework\TestCase;
 use RectorPrefix20210510\Symplify\SmartFileSystem\FileSystemFilter;
-final class FileSystemFilterTest extends TestCase
+final class FileSystemFilterTest extends \RectorPrefix20210510\PHPUnit\Framework\TestCase
 {
     /**
      * @var FileSystemFilter
@@ -13,7 +13,7 @@ final class FileSystemFilterTest extends TestCase
     private $fileSystemFilter;
     protected function setUp() : void
     {
-        $this->fileSystemFilter = new FileSystemFilter();
+        $this->fileSystemFilter = new \RectorPrefix20210510\Symplify\SmartFileSystem\FileSystemFilter();
     }
     public function testSeparateFilesAndDirectories() : void
     {

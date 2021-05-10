@@ -16,7 +16,7 @@ final class FamilyRelationsAnalyzer
      * @var PrivatesAccessor
      */
     private $privatesAccessor;
-    public function __construct(ReflectionProvider $reflectionProvider, PrivatesAccessor $privatesAccessor)
+    public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider, \RectorPrefix20210510\Symplify\PackageBuilder\Reflection\PrivatesAccessor $privatesAccessor)
     {
         $this->reflectionProvider = $reflectionProvider;
         $this->privatesAccessor = $privatesAccessor;
@@ -24,7 +24,7 @@ final class FamilyRelationsAnalyzer
     /**
      * @return ClassReflection[]
      */
-    public function getChildrenOfClassReflection(ClassReflection $desiredClassReflection) : array
+    public function getChildrenOfClassReflection(\PHPStan\Reflection\ClassReflection $desiredClassReflection) : array
     {
         /** @var ClassReflection[] $classReflections */
         $classReflections = $this->privatesAccessor->getPrivateProperty($this->reflectionProvider, 'classes');

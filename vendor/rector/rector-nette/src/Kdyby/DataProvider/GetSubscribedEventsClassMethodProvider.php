@@ -11,7 +11,7 @@ final class GetSubscribedEventsClassMethodProvider
      * @var NodeRepository
      */
     private $nodeRepository;
-    public function __construct(NodeRepository $nodeRepository)
+    public function __construct(\Rector\NodeCollector\NodeCollector\NodeRepository $nodeRepository)
     {
         $this->nodeRepository = $nodeRepository;
     }

@@ -37,9 +37,9 @@ final class PropertyFetchToMethodCall
         $this->newSetMethod = $newSetMethod;
         $this->newGetArguments = $newGetArguments;
     }
-    public function getOldObjectType() : ObjectType
+    public function getOldObjectType() : \PHPStan\Type\ObjectType
     {
-        return new ObjectType($this->oldType);
+        return new \PHPStan\Type\ObjectType($this->oldType);
     }
     public function getOldProperty() : string
     {

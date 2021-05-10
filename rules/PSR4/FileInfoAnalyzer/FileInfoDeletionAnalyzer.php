@@ -23,12 +23,12 @@ final class FileInfoDeletionAnalyzer
      * @var ClassNaming
      */
     private $classNaming;
-    public function __construct(NodeNameResolver $nodeNameResolver, ClassNaming $classNaming)
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\CodingStyle\Naming\ClassNaming $classNaming)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->classNaming = $classNaming;
     }
-    public function isClassLikeAndFileInfoMatch(File $file, ClassLike $classLike) : bool
+    public function isClassLikeAndFileInfoMatch(\Rector\Core\ValueObject\Application\File $file, \PhpParser\Node\Stmt\ClassLike $classLike) : bool
     {
         $className = $this->nodeNameResolver->getName($classLike);
         if ($className === null) {
@@ -41,6 +41,6 @@ final class FileInfoDeletionAnalyzer
     }
     public function clearNameFromTestingPrefix(string $name) : string
     {
-        return Strings::replace($name, self::TESTING_PREFIX_REGEX, '');
+        return \RectorPrefix20210510\Nette\Utils\Strings::replace($name, self::TESTING_PREFIX_REGEX, '');
     }
 }

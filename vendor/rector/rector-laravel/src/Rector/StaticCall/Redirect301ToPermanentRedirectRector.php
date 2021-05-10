@@ -14,7 +14,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @see https://laravel.com/docs/5.7/upgrade
  * @see \Rector\Laravel\Tests\Rector\StaticCall\Redirect301ToPermanentRedirectRector\Redirect301ToPermanentRedirectRectorTest
  */
-final class Redirect301ToPermanentRedirectRector extends AbstractRector
+final class Redirect301ToPermanentRedirectRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var ObjectType[]
@@ -22,11 +22,11 @@ final class Redirect301ToPermanentRedirectRector extends AbstractRector
     private $routerObjectTypes = [];
     public function __construct()
     {
-        $this->routerObjectTypes = [new ObjectType('Illuminate\\Support\\Facades\\Route'), new ObjectType('Illuminate\\Routing\\Route')];
+        $this->routerObjectTypes = [new \PHPStan\Type\ObjectType('Illuminate\\Support\\Facades\\Route'), new \PHPStan\Type\ObjectType('Illuminate\\Routing\\Route')];
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Change "redirect" call with 301 to "permanentRedirect"', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change "redirect" call with 301 to "permanentRedirect"', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -51,12 +51,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [StaticCall::class];
+        return [\PhpParser\Node\Expr\StaticCall::class];
     }
     /**
      * @param StaticCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$this->nodeTypeResolver->isObjectTypes($node->class, $this->routerObjectTypes)) {
             return null;
@@ -69,7 +69,7 @@ CODE_SAMPLE
             return null;
         }
         unset($node->args[2]);
-        $node->name = new Identifier('permanentRedirect');
+        $node->name = new \PhpParser\Node\Identifier('permanentRedirect');
         return $node;
     }
 }

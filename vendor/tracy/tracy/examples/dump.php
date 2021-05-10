@@ -7,7 +7,7 @@ require __DIR__ . '/../src/tracy.php';
 use RectorPrefix20210510\Tracy\Debugger;
 // For security reasons, Tracy is visible only on localhost.
 // You may force Tracy to run in development mode by passing the Debugger::DEVELOPMENT instead of Debugger::DETECT.
-Debugger::enable(Debugger::DETECT, __DIR__ . '/log');
+\RectorPrefix20210510\Tracy\Debugger::enable(\RectorPrefix20210510\Tracy\Debugger::DETECT, __DIR__ . '/log');
 ?>
 <!DOCTYPE html><link rel="stylesheet" href="assets/style.css">
 
@@ -15,10 +15,10 @@ Debugger::enable(Debugger::DETECT, __DIR__ . '/log');
 
 <?php 
 echo "<h2>Basic Types</h2>\n";
-dump('any string', 123, [\true, \false, null]);
+\RectorPrefix20210510\dump('any string', 123, [\true, \false, null]);
 echo "<h2>Dark Mode</h2>\n";
-Debugger::$dumpTheme = 'dark';
-dump('any string');
+\RectorPrefix20210510\Tracy\Debugger::$dumpTheme = 'dark';
+\RectorPrefix20210510\dump('any string');
 echo "<h2>Objects</h2>\n";
 echo "<p>Hover over the name <code>\$baz</code> to see property declaring class and over the hash <code>#5</code> to see same objects.</p>\n";
 class ParentClass
@@ -28,32 +28,32 @@ class ParentClass
     private $baz = 'parent';
 }
 \class_alias('RectorPrefix20210510\\ParentClass', 'ParentClass', \false);
-class ChildClass extends ParentClass
+class ChildClass extends \RectorPrefix20210510\ParentClass
 {
     private $baz = 'child';
 }
 \class_alias('RectorPrefix20210510\\ChildClass', 'ChildClass', \false);
-$obj = new ChildClass();
+$obj = new \RectorPrefix20210510\ChildClass();
 $obj->dynamic = 'hello';
 $obj->selfReference = $obj;
-dump($obj);
+\RectorPrefix20210510\dump($obj);
 echo "<h2>Strings</h2>\n";
 echo "<p>Hover over the string to see length.</p>\n";
 $arr = ['single line' => 'hello', 'binary' => "binary string", 'multi line' => "first\r\nsecond\nthird\n   indented line", 'long' => \str_repeat('tracy ', 1000)];
-dump($arr);
+\RectorPrefix20210510\dump($arr);
 echo "<h2>References and Recursion</h2>\n";
 echo "<p>Hover over the reference <code>&1</code> to see referenced values.</p>\n";
 $arr = ['first', 'second', 'third'];
 $arr[] =& $arr[0];
 $arr[] =& $arr[1];
 $arr[] =& $arr;
-dump($arr);
+\RectorPrefix20210510\dump($arr);
 echo "<h2>Special Types</h2>\n";
 $arr = [\fopen(__FILE__, 'r'), new class
 {
 }, function ($x, $y) use(&$arr, $obj) {
 }];
-dump($arr);
-if (Debugger::$productionMode) {
+\RectorPrefix20210510\dump($arr);
+if (\RectorPrefix20210510\Tracy\Debugger::$productionMode) {
     echo '<p><b>For security reasons, Tracy is visible only on localhost. Look into the source code to see how to enable Tracy.</b></p>';
 }

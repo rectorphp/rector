@@ -23,10 +23,10 @@ class TableCell
         $this->value = $value;
         // check option names
         if ($diff = \array_diff(\array_keys($options), \array_keys($this->options))) {
-            throw new InvalidArgumentException(\sprintf('The TableCell does not support the following options: \'%s\'.', \implode('\', \'', $diff)));
+            throw new \RectorPrefix20210510\Symfony\Component\Console\Exception\InvalidArgumentException(\sprintf('The TableCell does not support the following options: \'%s\'.', \implode('\', \'', $diff)));
         }
-        if (isset($options['style']) && !$options['style'] instanceof TableCellStyle) {
-            throw new InvalidArgumentException('The style option must be an instance of "TableCellStyle".');
+        if (isset($options['style']) && !$options['style'] instanceof \RectorPrefix20210510\Symfony\Component\Console\Helper\TableCellStyle) {
+            throw new \RectorPrefix20210510\Symfony\Component\Console\Exception\InvalidArgumentException('The style option must be an instance of "TableCellStyle".');
         }
         $this->options = \array_merge($this->options, $options);
     }
@@ -57,7 +57,7 @@ class TableCell
     {
         return (int) $this->options['rowspan'];
     }
-    public function getStyle() : ?TableCellStyle
+    public function getStyle() : ?\RectorPrefix20210510\Symfony\Component\Console\Helper\TableCellStyle
     {
         return $this->options['style'];
     }

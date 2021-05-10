@@ -21,7 +21,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\CodingStyle\Rector\ClassMethod\YieldClassMethodToArrayClassMethodRector\YieldClassMethodToArrayClassMethodRectorTest
  */
-final class YieldClassMethodToArrayClassMethodRector extends AbstractRector implements ConfigurableRectorInterface
+final class YieldClassMethodToArrayClassMethodRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
      * @var string
@@ -38,14 +38,14 @@ final class YieldClassMethodToArrayClassMethodRector extends AbstractRector impl
     /**
      * @param array<class-string, string[]> $methodsByType
      */
-    public function __construct(NodeTransformer $nodeTransformer, array $methodsByType = [])
+    public function __construct(\Rector\Core\PhpParser\NodeTransformer $nodeTransformer, array $methodsByType = [])
     {
         $this->methodsByType = $methodsByType;
         $this->nodeTransformer = $nodeTransformer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Turns yield return to array return in specific type and method', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Turns yield return to array return in specific type and method', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
 class SomeEventSubscriber implements EventSubscriberInterface
 {
     public static function getSubscribedEvents()
@@ -70,15 +70,15 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [ClassMethod::class];
+        return [\PhpParser\Node\Stmt\ClassMethod::class];
     }
     /**
      * @param ClassMethod $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         foreach ($this->methodsByType as $type => $methods) {
-            if (!$this->isObjectType($node, new ObjectType($type))) {
+            if (!$this->isObjectType($node, new \PHPStan\Type\ObjectType($type))) {
                 continue;
             }
             foreach ($methods as $method) {
@@ -91,8 +91,8 @@ CODE_SAMPLE
                 }
                 $arrayNode = $this->nodeTransformer->transformYieldsToArray($yieldNodes);
                 $this->removeNodes($yieldNodes);
-                $node->returnType = new Identifier('array');
-                $returnExpression = new Return_($arrayNode);
+                $node->returnType = new \PhpParser\Node\Identifier('array');
+                $returnExpression = new \PhpParser\Node\Stmt\Return_($arrayNode);
                 $node->stmts = \array_merge((array) $node->stmts, [$returnExpression]);
             }
         }
@@ -105,17 +105,17 @@ CODE_SAMPLE
     /**
      * @return Yield_[]
      */
-    private function collectYieldNodesFromClassMethod(ClassMethod $classMethod) : array
+    private function collectYieldNodesFromClassMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod) : array
     {
         $yieldNodes = [];
         if ($classMethod->stmts === null) {
             return [];
         }
         foreach ($classMethod->stmts as $statement) {
-            if (!$statement instanceof Expression) {
+            if (!$statement instanceof \PhpParser\Node\Stmt\Expression) {
                 continue;
             }
-            if ($statement->expr instanceof Yield_) {
+            if ($statement->expr instanceof \PhpParser\Node\Expr\Yield_) {
                 $yieldNodes[] = $statement->expr;
             }
         }

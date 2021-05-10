@@ -13,7 +13,7 @@ namespace RectorPrefix20210510\Symfony\Component\HttpFoundation\Session\Attribut
 /**
  * This class relates to session attribute storage.
  */
-class AttributeBag implements AttributeBagInterface, \IteratorAggregate, \Countable
+class AttributeBag implements \RectorPrefix20210510\Symfony\Component\HttpFoundation\Session\Attribute\AttributeBagInterface, \IteratorAggregate, \Countable
 {
     private $name = 'attributes';
     private $storageKey;

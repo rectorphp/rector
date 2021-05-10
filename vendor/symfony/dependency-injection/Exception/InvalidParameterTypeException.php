@@ -16,7 +16,7 @@ namespace RectorPrefix20210510\Symfony\Component\DependencyInjection\Exception;
  * @author Nicolas Grekas <p@tchwork.com>
  * @author Julien Maulny <jmaulny@darkmira.fr>
  */
-class InvalidParameterTypeException extends InvalidArgumentException
+class InvalidParameterTypeException extends \RectorPrefix20210510\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException
 {
     public function __construct(string $serviceId, string $type, \ReflectionParameter $parameter)
     {

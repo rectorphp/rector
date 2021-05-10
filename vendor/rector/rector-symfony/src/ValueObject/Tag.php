@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace Rector\Symfony\ValueObject;
 
 use Rector\Symfony\Contract\Tag\TagInterface;
-final class Tag implements TagInterface
+final class Tag implements \Rector\Symfony\Contract\Tag\TagInterface
 {
     /**
      * @var string

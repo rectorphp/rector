@@ -12,24 +12,24 @@ use Rector\Core\Contract\PHPStan\Reflection\TypeToCallReflectionResolver\TypeToC
 /**
  * @see https://github.com/phpstan/phpstan-src/blob/b1fd47bda2a7a7d25091197b125c0adf82af6757/src/Type/ObjectType.php#L705
  */
-final class ObjectTypeToCallReflectionResolver implements TypeToCallReflectionResolverInterface
+final class ObjectTypeToCallReflectionResolver implements \Rector\Core\Contract\PHPStan\Reflection\TypeToCallReflectionResolver\TypeToCallReflectionResolverInterface
 {
     /**
      * @var ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(ReflectionProvider $reflectionProvider)
+    public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider)
     {
         $this->reflectionProvider = $reflectionProvider;
     }
-    public function supports(Type $type) : bool
+    public function supports(\PHPStan\Type\Type $type) : bool
     {
-        return $type instanceof ObjectType;
+        return $type instanceof \PHPStan\Type\ObjectType;
     }
     /**
      * @param ObjectType $type
      */
-    public function resolve(Type $type, ClassMemberAccessAnswerer $classMemberAccessAnswerer) : ?MethodReflection
+    public function resolve(\PHPStan\Type\Type $type, \PHPStan\Reflection\ClassMemberAccessAnswerer $classMemberAccessAnswerer) : ?\PHPStan\Reflection\MethodReflection
     {
         $className = $type->getClassName();
         if (!$this->reflectionProvider->hasClass($className)) {

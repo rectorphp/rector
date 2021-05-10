@@ -19,7 +19,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\CodingStyle\Rector\ClassMethod\NewlineBeforeNewAssignSetRector\NewlineBeforeNewAssignSetRectorTest
  */
-final class NewlineBeforeNewAssignSetRector extends AbstractRector
+final class NewlineBeforeNewAssignSetRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var string|null
@@ -29,9 +29,9 @@ final class NewlineBeforeNewAssignSetRector extends AbstractRector
      * @var string|null
      */
     private $previousPreviousStmtVariableName;
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Add extra space before new assign set', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Add extra space before new assign set', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run()
@@ -63,12 +63,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [ClassMethod::class, Function_::class, Closure::class];
+        return [\PhpParser\Node\Stmt\ClassMethod::class, \PhpParser\Node\Stmt\Function_::class, \PhpParser\Node\Expr\Closure::class];
     }
     /**
      * @param ClassMethod|Function_|Closure $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $this->reset();
         $hasChanged = \false;
@@ -78,7 +78,7 @@ CODE_SAMPLE
                 $hasChanged = \true;
                 // insert newline before
                 $stmts = (array) $node->stmts;
-                \array_splice($stmts, $key, 0, [new Nop()]);
+                \array_splice($stmts, $key, 0, [new \PhpParser\Node\Stmt\Nop()]);
                 $node->stmts = $stmts;
             }
             $this->previousPreviousStmtVariableName = $this->previousStmtVariableName;
@@ -91,14 +91,14 @@ CODE_SAMPLE
         $this->previousStmtVariableName = null;
         $this->previousPreviousStmtVariableName = null;
     }
-    private function resolveCurrentStmtVariableName(Stmt $stmt) : ?string
+    private function resolveCurrentStmtVariableName(\PhpParser\Node\Stmt $stmt) : ?string
     {
         $stmt = $this->unwrapExpression($stmt);
-        if ($stmt instanceof Assign || $stmt instanceof MethodCall) {
+        if ($stmt instanceof \PhpParser\Node\Expr\Assign || $stmt instanceof \PhpParser\Node\Expr\MethodCall) {
             if ($this->shouldSkipLeftVariable($stmt)) {
                 return null;
             }
-            if (!$stmt->var instanceof MethodCall && !$stmt->var instanceof StaticCall) {
+            if (!$stmt->var instanceof \PhpParser\Node\Expr\MethodCall && !$stmt->var instanceof \PhpParser\Node\Expr\StaticCall) {
                 return $this->getName($stmt->var);
             }
         }
@@ -107,7 +107,7 @@ CODE_SAMPLE
     /**
      * @param ClassMethod|Function_|Closure $node
      */
-    private function shouldAddEmptyLine(?string $currentStmtVariableName, Node $node, int $key) : bool
+    private function shouldAddEmptyLine(?string $currentStmtVariableName, \PhpParser\Node $node, int $key) : bool
     {
         if (!$this->isNewVariableThanBefore($currentStmtVariableName)) {
             return \false;
@@ -118,9 +118,9 @@ CODE_SAMPLE
     /**
      * @param Assign|MethodCall $node
      */
-    private function shouldSkipLeftVariable(Node $node) : bool
+    private function shouldSkipLeftVariable(\PhpParser\Node $node) : bool
     {
-        if (!$node->var instanceof Variable) {
+        if (!$node->var instanceof \PhpParser\Node\Expr\Variable) {
             return \false;
         }
         // local method call
@@ -145,7 +145,7 @@ CODE_SAMPLE
     /**
      * @param ClassMethod|Function_|Closure $node
      */
-    private function isPreceededByEmptyLine(Node $node, int $key) : bool
+    private function isPreceededByEmptyLine(\PhpParser\Node $node, int $key) : bool
     {
         if ($node->stmts === null) {
             return \false;

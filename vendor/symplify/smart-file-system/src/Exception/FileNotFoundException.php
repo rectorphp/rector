@@ -4,6 +4,6 @@ declare (strict_types=1);
 namespace RectorPrefix20210510\Symplify\SmartFileSystem\Exception;
 
 use Exception;
-final class FileNotFoundException extends Exception
+final class FileNotFoundException extends \Exception
 {
 }

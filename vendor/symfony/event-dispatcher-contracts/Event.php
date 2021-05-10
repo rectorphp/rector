@@ -26,7 +26,7 @@ use RectorPrefix20210510\Psr\EventDispatcher\StoppableEventInterface;
  * @author Bernhard Schussek <bschussek@gmail.com>
  * @author Nicolas Grekas <p@tchwork.com>
  */
-class Event implements StoppableEventInterface
+class Event implements \RectorPrefix20210510\Psr\EventDispatcher\StoppableEventInterface
 {
     private $propagationStopped = \false;
     /**

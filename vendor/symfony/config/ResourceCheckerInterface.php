@@ -30,7 +30,7 @@ interface ResourceCheckerInterface
      *
      * @return bool True if the ResourceChecker can handle this resource type, false if not
      */
-    public function supports(ResourceInterface $metadata);
+    public function supports(\RectorPrefix20210510\Symfony\Component\Config\Resource\ResourceInterface $metadata);
     /**
      * Validates the resource.
      *
@@ -38,5 +38,5 @@ interface ResourceCheckerInterface
      *
      * @return bool True if the resource has not changed since the given timestamp, false otherwise
      */
-    public function isFresh(ResourceInterface $resource, int $timestamp);
+    public function isFresh(\RectorPrefix20210510\Symfony\Component\Config\Resource\ResourceInterface $resource, int $timestamp);
 }

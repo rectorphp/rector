@@ -16,19 +16,19 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Doctrine\Tests\Rector\Class_\BlameableBehaviorRector\BlameableBehaviorRectorTest
  */
-final class BlameableBehaviorRector extends AbstractRector
+final class BlameableBehaviorRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var ClassInsertManipulator
      */
     private $classInsertManipulator;
-    public function __construct(ClassInsertManipulator $classInsertManipulator)
+    public function __construct(\Rector\Core\NodeManipulator\ClassInsertManipulator $classInsertManipulator)
     {
         $this->classInsertManipulator = $classInsertManipulator;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Change Blameable from gedmo/doctrine-extensions to knplabs/doctrine-behaviors', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change Blameable from gedmo/doctrine-extensions to knplabs/doctrine-behaviors', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -88,22 +88,22 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Class_::class];
+        return [\PhpParser\Node\Stmt\Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$this->isGedmoBlameableClass($node)) {
             return null;
         }
         $this->removeBlameablePropertiesAndMethods($node);
         $this->classInsertManipulator->addAsFirstTrait($node, 'Knp\\DoctrineBehaviors\\Model\\Blameable\\BlameableTrait');
-        $node->implements[] = new FullyQualified('Knp\\DoctrineBehaviors\\Contract\\Entity\\BlameableInterface');
+        $node->implements[] = new \PhpParser\Node\Name\FullyQualified('Knp\\DoctrineBehaviors\\Contract\\Entity\\BlameableInterface');
         return $node;
     }
-    private function isGedmoBlameableClass(Class_ $class) : bool
+    private function isGedmoBlameableClass(\PhpParser\Node\Stmt\Class_ $class) : bool
     {
         foreach ($class->getProperties() as $property) {
             $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
@@ -113,7 +113,7 @@ CODE_SAMPLE
         }
         return \false;
     }
-    private function removeBlameablePropertiesAndMethods(Class_ $class) : void
+    private function removeBlameablePropertiesAndMethods(\PhpParser\Node\Stmt\Class_ $class) : void
     {
         $removedPropertyNames = [];
         foreach ($class->getProperties() as $property) {
@@ -131,7 +131,7 @@ CODE_SAMPLE
     /**
      * @param string[] $removedPropertyNames
      */
-    private function removeSetterAndGetterByPropertyNames(Class_ $class, array $removedPropertyNames) : void
+    private function removeSetterAndGetterByPropertyNames(\PhpParser\Node\Stmt\Class_ $class, array $removedPropertyNames) : void
     {
         foreach ($class->getMethods() as $classMethod) {
             foreach ($removedPropertyNames as $removedPropertyName) {

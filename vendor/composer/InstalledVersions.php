@@ -29,7 +29,7 @@ class InstalledVersions
         }
         return \false;
     }
-    public static function satisfies(VersionParser $parser, $packageName, $constraint)
+    public static function satisfies(\RectorPrefix20210510\Composer\Semver\VersionParser $parser, $packageName, $constraint)
     {
         $constraint = $parser->parseConstraints($constraint);
         $provided = $parser->parseConstraints(self::getVersionRanges($packageName));
@@ -118,7 +118,7 @@ class InstalledVersions
         }
         $installed = array();
         if (self::$canGetVendors) {
-            foreach (ClassLoader::getRegisteredLoaders() as $vendorDir => $loader) {
+            foreach (\RectorPrefix20210510\Composer\Autoload\ClassLoader::getRegisteredLoaders() as $vendorDir => $loader) {
                 if (isset(self::$installedByVendor[$vendorDir])) {
                     $installed[] = self::$installedByVendor[$vendorDir];
                 } elseif (\is_file($vendorDir . '/composer/installed.php')) {

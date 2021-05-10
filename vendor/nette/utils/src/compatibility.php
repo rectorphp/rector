@@ -10,19 +10,19 @@ namespace RectorPrefix20210510\Nette\Utils;
 use RectorPrefix20210510\Nette;
 if (\false) {
     /** @deprecated use Nette\HtmlStringable */
-    interface IHtmlString extends Nette\HtmlStringable
+    interface IHtmlString extends \RectorPrefix20210510\Nette\HtmlStringable
     {
     }
-} elseif (!\interface_exists(IHtmlString::class)) {
-    \class_alias(Nette\HtmlStringable::class, IHtmlString::class);
+} elseif (!\interface_exists(\RectorPrefix20210510\Nette\Utils\IHtmlString::class)) {
+    \class_alias(\RectorPrefix20210510\Nette\HtmlStringable::class, \RectorPrefix20210510\Nette\Utils\IHtmlString::class);
 }
 namespace RectorPrefix20210510\Nette\Localization;
 
 if (\false) {
     /** @deprecated use Nette\Localization\Translator */
-    interface ITranslator extends Translator
+    interface ITranslator extends \RectorPrefix20210510\Nette\Localization\Translator
     {
     }
-} elseif (!\interface_exists(ITranslator::class)) {
-    \class_alias(Translator::class, ITranslator::class);
+} elseif (!\interface_exists(\RectorPrefix20210510\Nette\Localization\ITranslator::class)) {
+    \class_alias(\RectorPrefix20210510\Nette\Localization\Translator::class, \RectorPrefix20210510\Nette\Localization\ITranslator::class);
 }

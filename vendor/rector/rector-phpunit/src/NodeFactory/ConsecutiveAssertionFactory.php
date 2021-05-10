@@ -22,7 +22,7 @@ final class ConsecutiveAssertionFactory
      * @var array<string, string>
      */
     private const REPLACE_WILL_MAP = ['willReturnMap' => 'returnValueMap', 'willReturnArgument' => 'returnArgument', 'willReturnCallback' => 'returnCallback', 'willThrowException' => 'throwException'];
-    public function createAssertionFromExpectationMockCollection(ExpectationMockCollection $expectationMockCollection) : MethodCall
+    public function createAssertionFromExpectationMockCollection(\Rector\PHPUnit\ValueObject\ExpectationMockCollection $expectationMockCollection) : \PhpParser\Node\Expr\MethodCall
     {
         $expectationMocks = $expectationMockCollection->getExpectationMocks();
         $variable = $expectationMocks[0]->getExpectationVariable();
@@ -39,27 +39,27 @@ final class ConsecutiveAssertionFactory
     /**
      * @param Arg[] $args
      */
-    public function createWillReturnOnConsecutiveCalls(Expr $expr, array $args) : MethodCall
+    public function createWillReturnOnConsecutiveCalls(\PhpParser\Node\Expr $expr, array $args) : \PhpParser\Node\Expr\MethodCall
     {
         return $this->createMethodCall($expr, 'willReturnOnConsecutiveCalls', $args);
     }
     /**
      * @param Arg[] $args
      */
-    public function createMethod(Expr $expr, array $args) : MethodCall
+    public function createMethod(\PhpParser\Node\Expr $expr, array $args) : \PhpParser\Node\Expr\MethodCall
     {
         return $this->createMethodCall($expr, 'method', $args);
     }
     /**
      * @param Arg[] $args
      */
-    public function createWithConsecutive(Expr $expr, array $args) : MethodCall
+    public function createWithConsecutive(\PhpParser\Node\Expr $expr, array $args) : \PhpParser\Node\Expr\MethodCall
     {
         return $this->createMethodCall($expr, 'withConsecutive', $args);
     }
-    public function createWillReturn(MethodCall $methodCall) : Expr
+    public function createWillReturn(\PhpParser\Node\Expr\MethodCall $methodCall) : \PhpParser\Node\Expr
     {
-        if (!$methodCall->name instanceof Identifier) {
+        if (!$methodCall->name instanceof \PhpParser\Node\Identifier) {
             return $methodCall;
         }
         $methodCallName = $methodCall->name->name;
@@ -83,8 +83,8 @@ final class ConsecutiveAssertionFactory
      */
     private function createReturnArgs(array $expectationMocks) : array
     {
-        return \array_map(static function (ExpectationMock $expectationMock) : Arg {
-            return new Arg($expectationMock->getReturn() ?: new ConstFetch(new Name('null')));
+        return \array_map(static function (\Rector\PHPUnit\ValueObject\ExpectationMock $expectationMock) : Arg {
+            return new \PhpParser\Node\Arg($expectationMock->getReturn() ?: new \PhpParser\Node\Expr\ConstFetch(new \PhpParser\Node\Name('null')));
         }, $expectationMocks);
     }
     /**
@@ -93,31 +93,31 @@ final class ConsecutiveAssertionFactory
      */
     private function createWithArgs(array $expectationMocks) : array
     {
-        return \array_map(static function (ExpectationMock $expectationMock) : Arg {
-            $arrayItems = \array_map(static function (?Expr $expr) : ArrayItem {
-                return new ArrayItem($expr ?: new ConstFetch(new Name('null')));
+        return \array_map(static function (\Rector\PHPUnit\ValueObject\ExpectationMock $expectationMock) : Arg {
+            $arrayItems = \array_map(static function (?\PhpParser\Node\Expr $expr) : ArrayItem {
+                return new \PhpParser\Node\Expr\ArrayItem($expr ?: new \PhpParser\Node\Expr\ConstFetch(new \PhpParser\Node\Name('null')));
             }, $expectationMock->getWithArguments());
-            return new Arg(new Array_($arrayItems));
+            return new \PhpParser\Node\Arg(new \PhpParser\Node\Expr\Array_($arrayItems));
         }, $expectationMocks);
     }
-    private function createWillReturnSelf() : MethodCall
+    private function createWillReturnSelf() : \PhpParser\Node\Expr\MethodCall
     {
-        return $this->createMethodCall(new Variable('this'), 'returnSelf', []);
+        return $this->createMethodCall(new \PhpParser\Node\Expr\Variable('this'), 'returnSelf', []);
     }
-    private function createWillReturnReference(MethodCall $methodCall) : New_
+    private function createWillReturnReference(\PhpParser\Node\Expr\MethodCall $methodCall) : \PhpParser\Node\Expr\New_
     {
-        return new New_(new FullyQualified('PHPUnit\\Framework\\MockObject\\Stub\\ReturnReference'), [new Arg($methodCall->args[0]->value)]);
+        return new \PhpParser\Node\Expr\New_(new \PhpParser\Node\Name\FullyQualified('PHPUnit\\Framework\\MockObject\\Stub\\ReturnReference'), [new \PhpParser\Node\Arg($methodCall->args[0]->value)]);
     }
-    private function createMappedWillReturn(string $methodCallName, MethodCall $methodCall) : MethodCall
+    private function createMappedWillReturn(string $methodCallName, \PhpParser\Node\Expr\MethodCall $methodCall) : \PhpParser\Node\Expr\MethodCall
     {
-        return $this->createMethodCall(new Variable('this'), self::REPLACE_WILL_MAP[$methodCallName], [new Arg($methodCall->args[0]->value)]);
+        return $this->createMethodCall(new \PhpParser\Node\Expr\Variable('this'), self::REPLACE_WILL_MAP[$methodCallName], [new \PhpParser\Node\Arg($methodCall->args[0]->value)]);
     }
     /**
      * @param Arg[] $args
      */
-    private function createMethodCall(Expr $expr, string $name, array $args) : MethodCall
+    private function createMethodCall(\PhpParser\Node\Expr $expr, string $name, array $args) : \PhpParser\Node\Expr\MethodCall
     {
-        return new MethodCall($expr, new Identifier($name), $args);
+        return new \PhpParser\Node\Expr\MethodCall($expr, new \PhpParser\Node\Identifier($name), $args);
     }
     /**
      * @param ExpectationMock[] $expectationMocks
@@ -125,7 +125,7 @@ final class ConsecutiveAssertionFactory
      */
     private function sortExpectationMocksByIndex(array $expectationMocks) : array
     {
-        \usort($expectationMocks, static function (ExpectationMock $expectationMockA, ExpectationMock $expectationMockB) : int {
+        \usort($expectationMocks, static function (\Rector\PHPUnit\ValueObject\ExpectationMock $expectationMockA, \Rector\PHPUnit\ValueObject\ExpectationMock $expectationMockB) : int {
             return $expectationMockA->getIndex() > $expectationMockB->getIndex() ? 1 : -1;
         });
         return $expectationMocks;

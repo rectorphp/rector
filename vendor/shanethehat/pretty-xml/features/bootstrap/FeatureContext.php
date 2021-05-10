@@ -8,7 +8,7 @@ use RectorPrefix20210510\PrettyXml\Formatter;
 /**
  * Behat context class.
  */
-class FeatureContext implements SnippetAcceptingContext
+class FeatureContext implements \RectorPrefix20210510\Behat\Behat\Context\SnippetAcceptingContext
 {
     /**
      * @var string
@@ -30,7 +30,7 @@ class FeatureContext implements SnippetAcceptingContext
      */
     public function itIsFormattedByPrettyXml()
     {
-        $formatter = new Formatter();
+        $formatter = new \RectorPrefix20210510\PrettyXml\Formatter();
         $this->formattedXml = $formatter->format($this->getBeforeXml());
     }
     /**
@@ -38,7 +38,7 @@ class FeatureContext implements SnippetAcceptingContext
      */
     public function itShouldBeCorrectlyFormatted()
     {
-        expect($this->formattedXml)->toBe($this->getAfterXml());
+        \RectorPrefix20210510\expect($this->formattedXml)->toBe($this->getAfterXml());
     }
     /**
      * @return string

@@ -15,6 +15,6 @@ namespace RectorPrefix20210510\Symfony\Component\HttpFoundation\File\Exception;
  *
  * @author Florent Mata <florentmata@gmail.com>
  */
-class CannotWriteFileException extends FileException
+class CannotWriteFileException extends \RectorPrefix20210510\Symfony\Component\HttpFoundation\File\Exception\FileException
 {
 }

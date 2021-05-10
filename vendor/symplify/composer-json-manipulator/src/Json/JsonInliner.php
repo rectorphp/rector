@@ -17,20 +17,20 @@ final class JsonInliner
      * @var ParameterProvider
      */
     private $parameterProvider;
-    public function __construct(ParameterProvider $parameterProvider)
+    public function __construct(\RectorPrefix20210510\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider)
     {
         $this->parameterProvider = $parameterProvider;
     }
     public function inlineSections(string $jsonContent) : string
     {
-        if (!$this->parameterProvider->hasParameter(Option::INLINE_SECTIONS)) {
+        if (!$this->parameterProvider->hasParameter(\RectorPrefix20210510\Symplify\ComposerJsonManipulator\ValueObject\Option::INLINE_SECTIONS)) {
             return $jsonContent;
         }
-        $inlineSections = $this->parameterProvider->provideArrayParameter(Option::INLINE_SECTIONS);
+        $inlineSections = $this->parameterProvider->provideArrayParameter(\RectorPrefix20210510\Symplify\ComposerJsonManipulator\ValueObject\Option::INLINE_SECTIONS);
         foreach ($inlineSections as $inlineSection) {
             $pattern = '#("' . \preg_quote($inlineSection, '#') . '": )\\[(.*?)\\](,)#ms';
-            $jsonContent = Strings::replace($jsonContent, $pattern, function (array $match) : string {
-                $inlined = Strings::replace($match[2], self::SPACE_REGEX, ' ');
+            $jsonContent = \RectorPrefix20210510\Nette\Utils\Strings::replace($jsonContent, $pattern, function (array $match) : string {
+                $inlined = \RectorPrefix20210510\Nette\Utils\Strings::replace($match[2], self::SPACE_REGEX, ' ');
                 $inlined = \trim($inlined);
                 $inlined = '[' . $inlined . ']';
                 return $match[1] . $inlined . $match[3];

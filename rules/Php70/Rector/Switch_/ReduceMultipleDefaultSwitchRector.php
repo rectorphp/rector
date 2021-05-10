@@ -17,11 +17,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php70\Rector\Switch_\ReduceMultipleDefaultSwitchRector\ReduceMultipleDefaultSwitchRectorTest
  */
-final class ReduceMultipleDefaultSwitchRector extends AbstractRector
+final class ReduceMultipleDefaultSwitchRector extends \Rector\Core\Rector\AbstractRector
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Remove first default switch, that is ignored', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove first default switch, that is ignored', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 switch ($expr) {
     default:
          echo "Hello World";
@@ -45,12 +45,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Switch_::class];
+        return [\PhpParser\Node\Stmt\Switch_::class];
     }
     /**
      * @param Switch_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $defaultCases = [];
         foreach ($node->cases as $case) {
@@ -77,10 +77,10 @@ CODE_SAMPLE
             $this->removeNode($defaultCase);
         }
     }
-    private function keepStatementsToParentCase(Case_ $case) : void
+    private function keepStatementsToParentCase(\PhpParser\Node\Stmt\Case_ $case) : void
     {
-        $previousNode = $case->getAttribute(AttributeKey::PREVIOUS_NODE);
-        if (!$previousNode instanceof Case_) {
+        $previousNode = $case->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PREVIOUS_NODE);
+        if (!$previousNode instanceof \PhpParser\Node\Stmt\Case_) {
             return;
         }
         if ($previousNode->stmts === []) {

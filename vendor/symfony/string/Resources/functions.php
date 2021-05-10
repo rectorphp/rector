@@ -10,25 +10,25 @@
  */
 namespace RectorPrefix20210510\Symfony\Component\String;
 
-if (!\function_exists(u::class)) {
-    function u(?string $string = '') : UnicodeString
+if (!\function_exists(\RectorPrefix20210510\Symfony\Component\String\u::class)) {
+    function u(?string $string = '') : \RectorPrefix20210510\Symfony\Component\String\UnicodeString
     {
-        return new UnicodeString($string ?? '');
+        return new \RectorPrefix20210510\Symfony\Component\String\UnicodeString($string ?? '');
     }
 }
-if (!\function_exists(b::class)) {
-    function b(?string $string = '') : ByteString
+if (!\function_exists(\RectorPrefix20210510\Symfony\Component\String\b::class)) {
+    function b(?string $string = '') : \RectorPrefix20210510\Symfony\Component\String\ByteString
     {
-        return new ByteString($string ?? '');
+        return new \RectorPrefix20210510\Symfony\Component\String\ByteString($string ?? '');
     }
 }
-if (!\function_exists(s::class)) {
+if (!\function_exists(\RectorPrefix20210510\Symfony\Component\String\s::class)) {
     /**
      * @return UnicodeString|ByteString
      */
-    function s(?string $string = '') : AbstractString
+    function s(?string $string = '') : \RectorPrefix20210510\Symfony\Component\String\AbstractString
     {
         $string = $string ?? '';
-        return \preg_match('//u', $string) ? new UnicodeString($string) : new ByteString($string);
+        return \preg_match('//u', $string) ? new \RectorPrefix20210510\Symfony\Component\String\UnicodeString($string) : new \RectorPrefix20210510\Symfony\Component\String\ByteString($string);
     }
 }

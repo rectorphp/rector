@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace Rector\Order\ValueObject;
 
 use Rector\Order\Contract\RankeableInterface;
-final class ClassConstRankeable implements RankeableInterface
+final class ClassConstRankeable implements \Rector\Order\Contract\RankeableInterface
 {
     /**
      * @var string

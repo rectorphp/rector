@@ -7,7 +7,7 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
 use PHPStan\Type\ObjectType;
-final class AliasedObjectType extends ObjectType
+final class AliasedObjectType extends \PHPStan\Type\ObjectType
 {
     /**
      * @var string
@@ -22,11 +22,11 @@ final class AliasedObjectType extends ObjectType
     {
         return $this->fullyQualifiedClass;
     }
-    public function getUseNode() : Use_
+    public function getUseNode() : \PhpParser\Node\Stmt\Use_
     {
-        $name = new Name($this->fullyQualifiedClass);
-        $useUse = new UseUse($name, $this->getClassName());
-        return new Use_([$useUse]);
+        $name = new \PhpParser\Node\Name($this->fullyQualifiedClass);
+        $useUse = new \PhpParser\Node\Stmt\UseUse($name, $this->getClassName());
+        return new \PhpParser\Node\Stmt\Use_([$useUse]);
     }
     public function getShortName() : string
     {
@@ -35,7 +35,7 @@ final class AliasedObjectType extends ObjectType
     /**
      * @param AliasedObjectType|FullyQualifiedObjectType $comparedObjectType
      */
-    public function areShortNamesEqual(ObjectType $comparedObjectType) : bool
+    public function areShortNamesEqual(\PHPStan\Type\ObjectType $comparedObjectType) : bool
     {
         return $this->getShortName() === $comparedObjectType->getShortName();
     }

@@ -42,7 +42,7 @@ final class ThisRenderFactory
      * @var NodeTypeResolver
      */
     private $nodeTypeResolver;
-    public function __construct(\Rector\Symfony\NodeFactory\ArrayFromCompactFactory $arrayFromCompactFactory, NodeFactory $nodeFactory, NodeNameResolver $nodeNameResolver, NodeTypeResolver $nodeTypeResolver, TemplateGuesser $templateGuesser)
+    public function __construct(\Rector\Symfony\NodeFactory\ArrayFromCompactFactory $arrayFromCompactFactory, \Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\Symfony\Helper\TemplateGuesser $templateGuesser)
     {
         $this->nodeFactory = $nodeFactory;
         $this->templateGuesser = $templateGuesser;
@@ -50,7 +50,7 @@ final class ThisRenderFactory
         $this->arrayFromCompactFactory = $arrayFromCompactFactory;
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
-    public function create(ClassMethod $classMethod, ?Return_ $return, DoctrineAnnotationTagValueNode $templateDoctrineAnnotationTagValueNode) : MethodCall
+    public function create(\PhpParser\Node\Stmt\ClassMethod $classMethod, ?\PhpParser\Node\Stmt\Return_ $return, \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode $templateDoctrineAnnotationTagValueNode) : \PhpParser\Node\Expr\MethodCall
     {
         $renderArguments = $this->resolveRenderArguments($classMethod, $return, $templateDoctrineAnnotationTagValueNode);
         return $this->nodeFactory->createMethodCall('this', 'render', $renderArguments);
@@ -58,17 +58,17 @@ final class ThisRenderFactory
     /**
      * @return Arg[]
      */
-    private function resolveRenderArguments(ClassMethod $classMethod, ?Return_ $return, DoctrineAnnotationTagValueNode $templateDoctrineAnnotationTagValueNode) : array
+    private function resolveRenderArguments(\PhpParser\Node\Stmt\ClassMethod $classMethod, ?\PhpParser\Node\Stmt\Return_ $return, \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode $templateDoctrineAnnotationTagValueNode) : array
     {
         $templateNameString = $this->resolveTemplateName($classMethod, $templateDoctrineAnnotationTagValueNode);
         $arguments = [$templateNameString];
         $parametersExpr = $this->resolveParametersExpr($return, $templateDoctrineAnnotationTagValueNode);
         if ($parametersExpr !== null) {
-            $arguments[] = new Arg($parametersExpr);
+            $arguments[] = new \PhpParser\Node\Arg($parametersExpr);
         }
         return $this->nodeFactory->createArgs($arguments);
     }
-    private function resolveTemplateName(ClassMethod $classMethod, DoctrineAnnotationTagValueNode $templateDoctrineAnnotationTagValueNode) : string
+    private function resolveTemplateName(\PhpParser\Node\Stmt\ClassMethod $classMethod, \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode $templateDoctrineAnnotationTagValueNode) : string
     {
         $template = $templateDoctrineAnnotationTagValueNode->getValue('template') ?: $templateDoctrineAnnotationTagValueNode->getSilentValue();
         if ($template !== null) {
@@ -76,10 +76,10 @@ final class ThisRenderFactory
         }
         return $this->templateGuesser->resolveFromClassMethodNode($classMethod);
     }
-    private function resolveParametersExpr(?Return_ $return, DoctrineAnnotationTagValueNode $templateDoctrineAnnotationTagValueNode) : ?Expr
+    private function resolveParametersExpr(?\PhpParser\Node\Stmt\Return_ $return, \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode $templateDoctrineAnnotationTagValueNode) : ?\PhpParser\Node\Expr
     {
         $vars = $templateDoctrineAnnotationTagValueNode->getValue('vars');
-        if ($vars instanceof CurlyListNode) {
+        if ($vars instanceof \Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode) {
             $vars = $vars->getValuesWithExplicitSilentAndWithoutQuotes();
         }
         if (\is_array($vars) && $vars !== []) {
@@ -88,13 +88,13 @@ final class ThisRenderFactory
         if ($return === null) {
             return null;
         }
-        if ($return->expr instanceof Array_ && \count($return->expr->items)) {
+        if ($return->expr instanceof \PhpParser\Node\Expr\Array_ && \count($return->expr->items)) {
             return $return->expr;
         }
-        if ($return->expr instanceof MethodCall) {
+        if ($return->expr instanceof \PhpParser\Node\Expr\MethodCall) {
             return $this->resolveMethodCall($return->expr);
         }
-        if ($return->expr instanceof FuncCall && $this->nodeNameResolver->isName($return->expr, 'compact')) {
+        if ($return->expr instanceof \PhpParser\Node\Expr\FuncCall && $this->nodeNameResolver->isName($return->expr, 'compact')) {
             $compactFunCall = $return->expr;
             return $this->arrayFromCompactFactory->createArrayFromCompactFuncCall($compactFunCall);
         }
@@ -103,18 +103,18 @@ final class ThisRenderFactory
     /**
      * @param string[] $vars
      */
-    private function createArrayFromVars(array $vars) : Array_
+    private function createArrayFromVars(array $vars) : \PhpParser\Node\Expr\Array_
     {
         $arrayItems = [];
         foreach ($vars as $var) {
-            $arrayItems[] = new ArrayItem(new Variable($var), new String_($var));
+            $arrayItems[] = new \PhpParser\Node\Expr\ArrayItem(new \PhpParser\Node\Expr\Variable($var), new \PhpParser\Node\Scalar\String_($var));
         }
-        return new Array_($arrayItems);
+        return new \PhpParser\Node\Expr\Array_($arrayItems);
     }
-    private function resolveMethodCall(MethodCall $methodCall) : ?Expr
+    private function resolveMethodCall(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\PhpParser\Node\Expr
     {
         $returnStaticType = $this->nodeTypeResolver->getStaticType($methodCall);
-        if ($returnStaticType instanceof ArrayType) {
+        if ($returnStaticType instanceof \PHPStan\Type\ArrayType) {
             return $methodCall;
         }
         return null;

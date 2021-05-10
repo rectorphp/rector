@@ -23,11 +23,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\NetteToSymfony\Tests\Rector\MethodCall\NetteFormToSymfonyFormRector\NetteFormToSymfonyFormRectorTest
  */
-final class NetteFormToSymfonyFormRector extends AbstractRector
+final class NetteFormToSymfonyFormRector extends \Rector\Core\Rector\AbstractRector
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Migrate Nette\\Forms in Presenter to Symfony', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Migrate Nette\\Forms in Presenter to Symfony', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 use Nette\Application\UI\Presenter;
 
 final class SomePresenter extends Presenter
@@ -66,28 +66,28 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [New_::class, MethodCall::class];
+        return [\PhpParser\Node\Expr\New_::class, \PhpParser\Node\Expr\MethodCall::class];
     }
     /**
      * @param New_|MethodCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
-        if (!$classLike instanceof ClassLike) {
+        $classLike = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
+        if (!$classLike instanceof \PhpParser\Node\Stmt\ClassLike) {
             return null;
         }
-        if (!$this->isObjectType($classLike, new ObjectType('Nette\\Application\\IPresenter'))) {
+        if (!$this->isObjectType($classLike, new \PHPStan\Type\ObjectType('Nette\\Application\\IPresenter'))) {
             return null;
         }
-        if ($node instanceof New_) {
+        if ($node instanceof \PhpParser\Node\Expr\New_) {
             return $this->processNew($node);
         }
         /** @var MethodCall $node */
-        if (!$this->isObjectType($node->var, new ObjectType('Nette\\Application\\UI\\Form'))) {
+        if (!$this->isObjectType($node->var, new \PHPStan\Type\ObjectType('Nette\\Application\\UI\\Form'))) {
             return null;
         }
-        foreach (NetteFormMethodToSymfonyTypeClass::ADD_METHOD_TO_FORM_TYPE as $method => $classType) {
+        foreach (\Rector\NetteToSymfony\ValueObject\NetteFormMethodToSymfonyTypeClass::ADD_METHOD_TO_FORM_TYPE as $method => $classType) {
             if (!$this->isName($node->name, $method)) {
                 continue;
             }
@@ -95,33 +95,33 @@ CODE_SAMPLE
         }
         return $node;
     }
-    private function processNew(New_ $new) : ?MethodCall
+    private function processNew(\PhpParser\Node\Expr\New_ $new) : ?\PhpParser\Node\Expr\MethodCall
     {
         if (!$this->isName($new->class, 'Nette\\Application\\UI\\Form')) {
             return null;
         }
         return $this->nodeFactory->createMethodCall('this', 'createFormBuilder');
     }
-    private function processAddMethod(MethodCall $methodCall, string $method, string $classType) : void
+    private function processAddMethod(\PhpParser\Node\Expr\MethodCall $methodCall, string $method, string $classType) : void
     {
-        $methodCall->name = new Identifier('add');
+        $methodCall->name = new \PhpParser\Node\Identifier('add');
         // remove unused params
         if ($method === 'addText') {
             unset($methodCall->args[3], $methodCall->args[4]);
         }
         // has label
-        $optionsArray = new Array_();
+        $optionsArray = new \PhpParser\Node\Expr\Array_();
         if (isset($methodCall->args[1])) {
-            $optionsArray->items[] = new ArrayItem($methodCall->args[1]->value, new String_('label'));
+            $optionsArray->items[] = new \PhpParser\Node\Expr\ArrayItem($methodCall->args[1]->value, new \PhpParser\Node\Scalar\String_('label'));
         }
         $this->addChoiceTypeOptions($method, $optionsArray);
         $this->addMultiFileTypeOptions($method, $optionsArray);
-        $methodCall->args[1] = new Arg($this->nodeFactory->createClassConstReference($classType));
+        $methodCall->args[1] = new \PhpParser\Node\Arg($this->nodeFactory->createClassConstReference($classType));
         if ($optionsArray->items !== []) {
-            $methodCall->args[2] = new Arg($optionsArray);
+            $methodCall->args[2] = new \PhpParser\Node\Arg($optionsArray);
         }
     }
-    private function addChoiceTypeOptions(string $method, Array_ $optionsArray) : void
+    private function addChoiceTypeOptions(string $method, \PhpParser\Node\Expr\Array_ $optionsArray) : void
     {
         if ($method === 'addSelect') {
             $expanded = \false;
@@ -138,14 +138,14 @@ CODE_SAMPLE
         } else {
             return;
         }
-        $optionsArray->items[] = new ArrayItem($expanded ? $this->nodeFactory->createTrue() : $this->nodeFactory->createFalse(), new String_('expanded'));
-        $optionsArray->items[] = new ArrayItem($multiple ? $this->nodeFactory->createTrue() : $this->nodeFactory->createFalse(), new String_('multiple'));
+        $optionsArray->items[] = new \PhpParser\Node\Expr\ArrayItem($expanded ? $this->nodeFactory->createTrue() : $this->nodeFactory->createFalse(), new \PhpParser\Node\Scalar\String_('expanded'));
+        $optionsArray->items[] = new \PhpParser\Node\Expr\ArrayItem($multiple ? $this->nodeFactory->createTrue() : $this->nodeFactory->createFalse(), new \PhpParser\Node\Scalar\String_('multiple'));
     }
-    private function addMultiFileTypeOptions(string $method, Array_ $optionsArray) : void
+    private function addMultiFileTypeOptions(string $method, \PhpParser\Node\Expr\Array_ $optionsArray) : void
     {
         if ($method !== 'addMultiUpload') {
             return;
         }
-        $optionsArray->items[] = new ArrayItem($this->nodeFactory->createTrue(), new String_('multiple'));
+        $optionsArray->items[] = new \PhpParser\Node\Expr\ArrayItem($this->nodeFactory->createTrue(), new \PhpParser\Node\Scalar\String_('multiple'));
     }
 }

@@ -24,11 +24,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\DeadCode\Rector\Plus\RemoveDeadZeroAndOneOperationRector\RemoveDeadZeroAndOneOperationRectorTest
  */
-final class RemoveDeadZeroAndOneOperationRector extends AbstractRector
+final class RemoveDeadZeroAndOneOperationRector extends \Rector\Core\Rector\AbstractRector
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Remove operation with 1 and 0, that have no effect on the value', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove operation with 1 and 0, that have no effect on the value', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -55,39 +55,39 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Plus::class, Minus::class, Mul::class, Div::class, AssignPlus::class, AssignMinus::class, AssignMul::class, AssignDiv::class];
+        return [\PhpParser\Node\Expr\BinaryOp\Plus::class, \PhpParser\Node\Expr\BinaryOp\Minus::class, \PhpParser\Node\Expr\BinaryOp\Mul::class, \PhpParser\Node\Expr\BinaryOp\Div::class, \PhpParser\Node\Expr\AssignOp\Plus::class, \PhpParser\Node\Expr\AssignOp\Minus::class, \PhpParser\Node\Expr\AssignOp\Mul::class, \PhpParser\Node\Expr\AssignOp\Div::class];
     }
     /**
      * @param Plus|Minus|Mul|Div|AssignPlus|AssignMinus|AssignMul|AssignDiv $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $changedNode = null;
         $previousNode = $node;
-        if ($node instanceof AssignOp) {
+        if ($node instanceof \PhpParser\Node\Expr\AssignOp) {
             $changedNode = $this->processAssignOp($node);
         }
         // -, +
-        if ($node instanceof BinaryOp) {
+        if ($node instanceof \PhpParser\Node\Expr\BinaryOp) {
             $changedNode = $this->processBinaryOp($node);
         }
         // recurse nested combinations
         while ($changedNode !== null && !$this->nodeComparator->areNodesEqual($previousNode, $changedNode)) {
             $previousNode = $changedNode;
-            if ($changedNode instanceof BinaryOp || $changedNode instanceof AssignOp) {
+            if ($changedNode instanceof \PhpParser\Node\Expr\BinaryOp || $changedNode instanceof \PhpParser\Node\Expr\AssignOp) {
                 $changedNode = $this->refactor($changedNode);
             }
             // nothing more to change, return last node
-            if (!$changedNode instanceof Node) {
+            if (!$changedNode instanceof \PhpParser\Node) {
                 return $previousNode;
             }
         }
         return $changedNode;
     }
-    private function processAssignOp(Node $node) : ?Expr
+    private function processAssignOp(\PhpParser\Node $node) : ?\PhpParser\Node\Expr
     {
         // +=, -=
-        if ($node instanceof AssignPlus || $node instanceof AssignMinus) {
+        if ($node instanceof \PhpParser\Node\Expr\AssignOp\Plus || $node instanceof \PhpParser\Node\Expr\AssignOp\Minus) {
             if (!$this->valueResolver->isValue($node->expr, 0)) {
                 return null;
             }
@@ -96,7 +96,7 @@ CODE_SAMPLE
             }
         }
         // *, /
-        if ($node instanceof AssignMul || $node instanceof AssignDiv) {
+        if ($node instanceof \PhpParser\Node\Expr\AssignOp\Mul || $node instanceof \PhpParser\Node\Expr\AssignOp\Div) {
             if (!$this->valueResolver->isValue($node->expr, 1)) {
                 return null;
             }
@@ -106,16 +106,16 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function processBinaryOp(Node $node) : ?Expr
+    private function processBinaryOp(\PhpParser\Node $node) : ?\PhpParser\Node\Expr
     {
-        if ($node instanceof Plus || $node instanceof Minus) {
+        if ($node instanceof \PhpParser\Node\Expr\BinaryOp\Plus || $node instanceof \PhpParser\Node\Expr\BinaryOp\Minus) {
             return $this->processBinaryPlusAndMinus($node);
         }
         // *, /
-        if ($node instanceof Mul) {
+        if ($node instanceof \PhpParser\Node\Expr\BinaryOp\Mul) {
             return $this->processBinaryMulAndDiv($node);
         }
-        if ($node instanceof Div) {
+        if ($node instanceof \PhpParser\Node\Expr\BinaryOp\Div) {
             return $this->processBinaryMulAndDiv($node);
         }
         return null;
@@ -123,11 +123,11 @@ CODE_SAMPLE
     /**
      * @param Plus|Minus $binaryOp
      */
-    private function processBinaryPlusAndMinus(BinaryOp $binaryOp) : ?Expr
+    private function processBinaryPlusAndMinus(\PhpParser\Node\Expr\BinaryOp $binaryOp) : ?\PhpParser\Node\Expr
     {
         if ($this->valueResolver->isValue($binaryOp->left, 0) && $this->nodeTypeResolver->isNumberType($binaryOp->right)) {
-            if ($binaryOp instanceof Minus) {
-                return new UnaryMinus($binaryOp->right);
+            if ($binaryOp instanceof \PhpParser\Node\Expr\BinaryOp\Minus) {
+                return new \PhpParser\Node\Expr\UnaryMinus($binaryOp->right);
             }
             return $binaryOp->right;
         }
@@ -142,9 +142,9 @@ CODE_SAMPLE
     /**
      * @param Mul|Div $binaryOp
      */
-    private function processBinaryMulAndDiv(BinaryOp $binaryOp) : ?Expr
+    private function processBinaryMulAndDiv(\PhpParser\Node\Expr\BinaryOp $binaryOp) : ?\PhpParser\Node\Expr
     {
-        if ($binaryOp instanceof Mul && $this->valueResolver->isValue($binaryOp->left, 1) && $this->nodeTypeResolver->isNumberType($binaryOp->right)) {
+        if ($binaryOp instanceof \PhpParser\Node\Expr\BinaryOp\Mul && $this->valueResolver->isValue($binaryOp->left, 1) && $this->nodeTypeResolver->isNumberType($binaryOp->right)) {
             return $binaryOp->right;
         }
         if (!$this->valueResolver->isValue($binaryOp->right, 1)) {

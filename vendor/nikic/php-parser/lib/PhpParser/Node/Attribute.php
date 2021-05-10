@@ -5,7 +5,7 @@ namespace PhpParser\Node;
 
 use PhpParser\Node;
 use PhpParser\NodeAbstract;
-class Attribute extends NodeAbstract
+class Attribute extends \PhpParser\NodeAbstract
 {
     /** @var Name Attribute name */
     public $name;

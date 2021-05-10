@@ -15,7 +15,7 @@ use RectorPrefix20210510\Symfony\Component\DependencyInjection\Loader\PhpFileLoa
 /**
  * @author Nicolas Grekas <p@tchwork.com>
  */
-class PrototypeConfigurator extends AbstractServiceConfigurator
+class PrototypeConfigurator extends \RectorPrefix20210510\Symfony\Component\DependencyInjection\Loader\Configurator\AbstractServiceConfigurator
 {
     public const FACTORY = 'load';
     use Traits\AbstractTrait;
@@ -37,9 +37,9 @@ class PrototypeConfigurator extends AbstractServiceConfigurator
     private $resource;
     private $excludes;
     private $allowParent;
-    public function __construct(ServicesConfigurator $parent, PhpFileLoader $loader, Definition $defaults, string $namespace, string $resource, bool $allowParent)
+    public function __construct(\RectorPrefix20210510\Symfony\Component\DependencyInjection\Loader\Configurator\ServicesConfigurator $parent, \RectorPrefix20210510\Symfony\Component\DependencyInjection\Loader\PhpFileLoader $loader, \RectorPrefix20210510\Symfony\Component\DependencyInjection\Definition $defaults, string $namespace, string $resource, bool $allowParent)
     {
-        $definition = new Definition();
+        $definition = new \RectorPrefix20210510\Symfony\Component\DependencyInjection\Definition();
         if (!$defaults->isPublic() || !$defaults->isPrivate()) {
             $definition->setPublic($defaults->isPublic());
         }

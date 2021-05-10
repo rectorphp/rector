@@ -15,7 +15,7 @@ final class FluentCallStaticTypeResolver
      * @var ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(\Rector\Defluent\NodeAnalyzer\ExprStringTypeResolver $exprStringTypeResolver, ReflectionProvider $reflectionProvider)
+    public function __construct(\Rector\Defluent\NodeAnalyzer\ExprStringTypeResolver $exprStringTypeResolver, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
     {
         $this->exprStringTypeResolver = $exprStringTypeResolver;
         $this->reflectionProvider = $reflectionProvider;

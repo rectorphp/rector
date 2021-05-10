@@ -15,7 +15,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\Transform\Rector\String_\ToStringToMethodCallRector\ToStringToMethodCallRectorTest
  */
-final class ToStringToMethodCallRector extends AbstractRector implements ConfigurableRectorInterface
+final class ToStringToMethodCallRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
      * @api
@@ -26,9 +26,9 @@ final class ToStringToMethodCallRector extends AbstractRector implements Configu
      * @var array<string, string>
      */
     private $methodNamesByType = [];
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Turns defined code uses of "__toString()" method  to specific method calls.', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Turns defined code uses of "__toString()" method  to specific method calls.', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
 $someValue = new SomeObject;
 $result = (string) $someValue;
 $result = $someValue->__toString();
@@ -45,14 +45,14 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [String_::class, MethodCall::class];
+        return [\PhpParser\Node\Expr\Cast\String_::class, \PhpParser\Node\Expr\MethodCall::class];
     }
     /**
      * @param String_|MethodCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if ($node instanceof String_) {
+        if ($node instanceof \PhpParser\Node\Expr\Cast\String_) {
             return $this->processStringNode($node);
         }
         return $this->processMethodCall($node);
@@ -64,26 +64,26 @@ CODE_SAMPLE
     {
         $this->methodNamesByType = $configuration[self::METHOD_NAMES_BY_TYPE] ?? [];
     }
-    private function processStringNode(String_ $string) : ?Node
+    private function processStringNode(\PhpParser\Node\Expr\Cast\String_ $string) : ?\PhpParser\Node
     {
         foreach ($this->methodNamesByType as $type => $methodName) {
-            if (!$this->isObjectType($string->expr, new ObjectType($type))) {
+            if (!$this->isObjectType($string->expr, new \PHPStan\Type\ObjectType($type))) {
                 continue;
             }
             return $this->nodeFactory->createMethodCall($string->expr, $methodName);
         }
         return null;
     }
-    private function processMethodCall(MethodCall $methodCall) : ?Node
+    private function processMethodCall(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\PhpParser\Node
     {
         foreach ($this->methodNamesByType as $type => $methodName) {
-            if (!$this->isObjectType($methodCall->var, new ObjectType($type))) {
+            if (!$this->isObjectType($methodCall->var, new \PHPStan\Type\ObjectType($type))) {
                 continue;
             }
             if (!$this->isName($methodCall->name, '__toString')) {
                 continue;
             }
-            $methodCall->name = new Identifier($methodName);
+            $methodCall->name = new \PhpParser\Node\Identifier($methodName);
             return $methodCall;
         }
         return null;

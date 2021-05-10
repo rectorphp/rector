@@ -16,6 +16,6 @@ namespace RectorPrefix20210510\Symfony\Component\Config\Definition\Exception;
  *
  * @author Johannes M. Schmitt <schmittjoh@gmail.com>
  */
-class DuplicateKeyException extends InvalidConfigurationException
+class DuplicateKeyException extends \RectorPrefix20210510\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
 {
 }

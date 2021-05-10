@@ -11,7 +11,7 @@ use RectorPrefix20210510\PHPUnit\Framework\TestCase;
  * Implementors can extend the class and implement abstract methods to run this
  * as part of their test suite.
  */
-abstract class LoggerInterfaceTest extends TestCase
+abstract class LoggerInterfaceTest extends \RectorPrefix20210510\PHPUnit\Framework\TestCase
 {
     /**
      * @return LoggerInterface
@@ -44,7 +44,7 @@ abstract class LoggerInterfaceTest extends TestCase
     }
     public function provideLevelsAndMessages()
     {
-        return array(LogLevel::EMERGENCY => array(LogLevel::EMERGENCY, 'message of level emergency with context: {user}'), LogLevel::ALERT => array(LogLevel::ALERT, 'message of level alert with context: {user}'), LogLevel::CRITICAL => array(LogLevel::CRITICAL, 'message of level critical with context: {user}'), LogLevel::ERROR => array(LogLevel::ERROR, 'message of level error with context: {user}'), LogLevel::WARNING => array(LogLevel::WARNING, 'message of level warning with context: {user}'), LogLevel::NOTICE => array(LogLevel::NOTICE, 'message of level notice with context: {user}'), LogLevel::INFO => array(LogLevel::INFO, 'message of level info with context: {user}'), LogLevel::DEBUG => array(LogLevel::DEBUG, 'message of level debug with context: {user}'));
+        return array(\RectorPrefix20210510\Psr\Log\LogLevel::EMERGENCY => array(\RectorPrefix20210510\Psr\Log\LogLevel::EMERGENCY, 'message of level emergency with context: {user}'), \RectorPrefix20210510\Psr\Log\LogLevel::ALERT => array(\RectorPrefix20210510\Psr\Log\LogLevel::ALERT, 'message of level alert with context: {user}'), \RectorPrefix20210510\Psr\Log\LogLevel::CRITICAL => array(\RectorPrefix20210510\Psr\Log\LogLevel::CRITICAL, 'message of level critical with context: {user}'), \RectorPrefix20210510\Psr\Log\LogLevel::ERROR => array(\RectorPrefix20210510\Psr\Log\LogLevel::ERROR, 'message of level error with context: {user}'), \RectorPrefix20210510\Psr\Log\LogLevel::WARNING => array(\RectorPrefix20210510\Psr\Log\LogLevel::WARNING, 'message of level warning with context: {user}'), \RectorPrefix20210510\Psr\Log\LogLevel::NOTICE => array(\RectorPrefix20210510\Psr\Log\LogLevel::NOTICE, 'message of level notice with context: {user}'), \RectorPrefix20210510\Psr\Log\LogLevel::INFO => array(\RectorPrefix20210510\Psr\Log\LogLevel::INFO, 'message of level info with context: {user}'), \RectorPrefix20210510\Psr\Log\LogLevel::DEBUG => array(\RectorPrefix20210510\Psr\Log\LogLevel::DEBUG, 'message of level debug with context: {user}'));
     }
     /**
      * @expectedException \Psr\Log\InvalidArgumentException
@@ -77,7 +77,7 @@ abstract class LoggerInterfaceTest extends TestCase
     {
         $closed = \fopen('php://memory', 'r');
         \fclose($closed);
-        $context = array('bool' => \true, 'null' => null, 'string' => 'Foo', 'int' => 0, 'float' => 0.5, 'nested' => array('with object' => new DummyTest()), 'object' => new \DateTime(), 'resource' => \fopen('php://memory', 'r'), 'closed' => $closed);
+        $context = array('bool' => \true, 'null' => null, 'string' => 'Foo', 'int' => 0, 'float' => 0.5, 'nested' => array('with object' => new \RectorPrefix20210510\Psr\Log\Test\DummyTest()), 'object' => new \DateTime(), 'resource' => \fopen('php://memory', 'r'), 'closed' => $closed);
         $this->getLogger()->warning('Crazy context data', $context);
         $expected = array('warning Crazy context data');
         $this->assertEquals($expected, $this->getLogs());

@@ -21,7 +21,7 @@ use RectorPrefix20210510\Symfony\Component\Config\Resource\SelfCheckingResourceC
  * @author Fabien Potencier <fabien@symfony.com>
  * @author Matthias Pigulla <mp@webfactory.de>
  */
-class ConfigCache extends ResourceCheckerConfigCache
+class ConfigCache extends \RectorPrefix20210510\Symfony\Component\Config\ResourceCheckerConfigCache
 {
     private $debug;
     /**
@@ -33,7 +33,7 @@ class ConfigCache extends ResourceCheckerConfigCache
         $this->debug = $debug;
         $checkers = [];
         if (\true === $this->debug) {
-            $checkers = [new SelfCheckingResourceChecker()];
+            $checkers = [new \RectorPrefix20210510\Symfony\Component\Config\Resource\SelfCheckingResourceChecker()];
         }
         parent::__construct($file, $checkers);
     }

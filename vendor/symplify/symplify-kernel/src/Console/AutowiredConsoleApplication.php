@@ -7,7 +7,7 @@ use RectorPrefix20210510\Symfony\Component\Console\Command\Command;
 /**
  * @see \Symplify\SymplifyKernel\Tests\Console\AbstractSymplifyConsoleApplication\AutowiredConsoleApplicationTest
  */
-final class AutowiredConsoleApplication extends AbstractSymplifyConsoleApplication
+final class AutowiredConsoleApplication extends \RectorPrefix20210510\Symplify\SymplifyKernel\Console\AbstractSymplifyConsoleApplication
 {
     /**
      * @param Command[] $commands

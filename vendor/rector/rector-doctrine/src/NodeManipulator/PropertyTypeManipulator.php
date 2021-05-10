@@ -20,23 +20,23 @@ final class PropertyTypeManipulator
      * @var PhpDocInfoFactory
      */
     private $phpDocInfoFactory;
-    public function __construct(DocBlockClassRenamer $docBlockClassRenamer, PhpDocInfoFactory $phpDocInfoFactory)
+    public function __construct(\Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockClassRenamer $docBlockClassRenamer, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory)
     {
         $this->docBlockClassRenamer = $docBlockClassRenamer;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
-    public function changePropertyType(Property $property, string $oldClass, string $newClass) : void
+    public function changePropertyType(\PhpParser\Node\Stmt\Property $property, string $oldClass, string $newClass) : void
     {
         if ($property->type !== null) {
             // fix later
-            throw new NotImplementedYetException();
+            throw new \Rector\Core\Exception\NotImplementedYetException();
         }
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
-        $oldToNewTypes = [new OldToNewType(new FullyQualifiedObjectType($oldClass), new FullyQualifiedObjectType($newClass))];
+        $oldToNewTypes = [new \Rector\NodeTypeResolver\ValueObject\OldToNewType(new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType($oldClass), new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType($newClass))];
         $this->docBlockClassRenamer->renamePhpDocType($phpDocInfo, $oldToNewTypes);
         if ($phpDocInfo->hasChanged()) {
             // invoke phpdoc reprint
-            $property->setAttribute(AttributeKey::ORIGINAL_NODE, null);
+            $property->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NODE, null);
         }
     }
 }

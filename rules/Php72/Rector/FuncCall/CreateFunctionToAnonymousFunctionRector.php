@@ -28,7 +28,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php72\Rector\FuncCall\CreateFunctionToAnonymousFunctionRector\CreateFunctionToAnonymousFunctionRectorTest
  */
-final class CreateFunctionToAnonymousFunctionRector extends AbstractRector
+final class CreateFunctionToAnonymousFunctionRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var InlineCodeParser
@@ -42,15 +42,15 @@ final class CreateFunctionToAnonymousFunctionRector extends AbstractRector
      * @var ReservedKeywordAnalyzer
      */
     private $reservedKeywordAnalyzer;
-    public function __construct(InlineCodeParser $inlineCodeParser, AnonymousFunctionFactory $anonymousFunctionFactory, ReservedKeywordAnalyzer $reservedKeywordAnalyzer)
+    public function __construct(\Rector\Core\PhpParser\Parser\InlineCodeParser $inlineCodeParser, \Rector\Php72\NodeFactory\AnonymousFunctionFactory $anonymousFunctionFactory, \Rector\Core\Php\ReservedKeywordAnalyzer $reservedKeywordAnalyzer)
     {
         $this->inlineCodeParser = $inlineCodeParser;
         $this->anonymousFunctionFactory = $anonymousFunctionFactory;
         $this->reservedKeywordAnalyzer = $reservedKeywordAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Use anonymous functions instead of deprecated create_function()', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Use anonymous functions instead of deprecated create_function()', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class ClassWithCreateFunction
 {
     public function run()
@@ -77,13 +77,13 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [FuncCall::class];
+        return [\PhpParser\Node\Expr\FuncCall::class];
     }
     /**
      * @param FuncCall $node
      * @return Closure|null
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$this->isName($node, 'create_function')) {
             return null;
@@ -105,7 +105,7 @@ CODE_SAMPLE
     /**
      * @return Param[]
      */
-    private function createParamsFromString(Expr $expr) : array
+    private function createParamsFromString(\PhpParser\Node\Expr $expr) : array
     {
         $content = $this->inlineCodeParser->stringify($expr);
         $content = '<?php $value = function(' . $content . ') {};';
@@ -115,26 +115,26 @@ CODE_SAMPLE
         /** @var Assign $assign */
         $assign = $expression->expr;
         $function = $assign->expr;
-        if (!$function instanceof Closure) {
-            throw new ShouldNotHappenException();
+        if (!$function instanceof \PhpParser\Node\Expr\Closure) {
+            throw new \Rector\Core\Exception\ShouldNotHappenException();
         }
         return $function->params;
     }
     /**
      * @return Expression[]|Stmt[]
      */
-    private function parseStringToBody(Expr $expr) : array
+    private function parseStringToBody(\PhpParser\Node\Expr $expr) : array
     {
-        if (!$expr instanceof String_ && !$expr instanceof Encapsed && !$expr instanceof Concat) {
+        if (!$expr instanceof \PhpParser\Node\Scalar\String_ && !$expr instanceof \PhpParser\Node\Scalar\Encapsed && !$expr instanceof \PhpParser\Node\Expr\BinaryOp\Concat) {
             // special case of code elsewhere
             return [$this->createEval($expr)];
         }
         $expr = $this->inlineCodeParser->stringify($expr);
         return $this->inlineCodeParser->parse($expr);
     }
-    private function createEval(Expr $expr) : Expression
+    private function createEval(\PhpParser\Node\Expr $expr) : \PhpParser\Node\Stmt\Expression
     {
-        $evalFuncCall = new FuncCall(new Name('eval'), [new Arg($expr)]);
-        return new Expression($evalFuncCall);
+        $evalFuncCall = new \PhpParser\Node\Expr\FuncCall(new \PhpParser\Node\Name('eval'), [new \PhpParser\Node\Arg($expr)]);
+        return new \PhpParser\Node\Stmt\Expression($evalFuncCall);
     }
 }

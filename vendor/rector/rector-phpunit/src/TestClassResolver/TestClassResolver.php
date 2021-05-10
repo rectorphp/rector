@@ -28,7 +28,7 @@ final class TestClassResolver
      * @var ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(NodeNameResolver $nodeNameResolver, \Rector\PHPUnit\TestClassResolver\PHPUnitTestCaseClassesProvider $phpUnitTestCaseClassesProvider, ReflectionProvider $reflectionProvider)
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\PHPUnit\TestClassResolver\PHPUnitTestCaseClassesProvider $phpUnitTestCaseClassesProvider, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->phpUnitTestCaseClassesProvider = $phpUnitTestCaseClassesProvider;
@@ -48,7 +48,7 @@ final class TestClassResolver
         \sort($classNamespaceParts);
         foreach ($phpUnitTestCaseClasses as $phpUnitTestCaseClass) {
             // 1. is short class match
-            if (!Strings::endsWith($phpUnitTestCaseClass, '\\' . $testShortClassName)) {
+            if (!\RectorPrefix20210510\Nette\Utils\Strings::endsWith($phpUnitTestCaseClass, '\\' . $testShortClassName)) {
                 continue;
             }
             $phpUnitTestNamespaceParts = $this->resolveNamespaceParts($phpUnitTestCaseClass);
@@ -65,7 +65,7 @@ final class TestClassResolver
         }
         return null;
     }
-    public function resolveFromClass(Class_ $class) : ?string
+    public function resolveFromClass(\PhpParser\Node\Stmt\Class_ $class) : ?string
     {
         $className = $this->nodeNameResolver->getName($class);
         if ($className === null) {
@@ -75,14 +75,14 @@ final class TestClassResolver
     }
     private function resolveShortClassName(string $className) : ?string
     {
-        return Strings::after($className, '\\', -1);
+        return \RectorPrefix20210510\Nette\Utils\Strings::after($className, '\\', -1);
     }
     /**
      * @return string[]
      */
     private function resolveNamespaceParts(string $className) : array
     {
-        $namespacePart = (string) Strings::before($className, '\\', -1);
+        $namespacePart = (string) \RectorPrefix20210510\Nette\Utils\Strings::before($className, '\\', -1);
         return \explode('\\', $namespacePart);
     }
 }

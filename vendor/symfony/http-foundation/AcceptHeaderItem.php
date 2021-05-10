@@ -35,9 +35,9 @@ class AcceptHeaderItem
      */
     public static function fromString(?string $itemValue)
     {
-        $parts = HeaderUtils::split($itemValue ?? '', ';=');
+        $parts = \RectorPrefix20210510\Symfony\Component\HttpFoundation\HeaderUtils::split($itemValue ?? '', ';=');
         $part = \array_shift($parts);
-        $attributes = HeaderUtils::combine($parts);
+        $attributes = \RectorPrefix20210510\Symfony\Component\HttpFoundation\HeaderUtils::combine($parts);
         return new self($part[0], $attributes);
     }
     /**
@@ -49,7 +49,7 @@ class AcceptHeaderItem
     {
         $string = $this->value . ($this->quality < 1 ? ';q=' . $this->quality : '');
         if (\count($this->attributes) > 0) {
-            $string .= '; ' . HeaderUtils::toString($this->attributes, ';');
+            $string .= '; ' . \RectorPrefix20210510\Symfony\Component\HttpFoundation\HeaderUtils::toString($this->attributes, ';');
         }
         return $string;
     }

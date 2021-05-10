@@ -12,13 +12,13 @@ final class ErrorFactory
      * @var ExceptionCorrector
      */
     private $exceptionCorrector;
-    public function __construct(ExceptionCorrector $exceptionCorrector)
+    public function __construct(\Rector\Core\Error\ExceptionCorrector $exceptionCorrector)
     {
         $this->exceptionCorrector = $exceptionCorrector;
     }
-    public function createAutoloadError(AnalysedCodeException $analysedCodeException) : RectorError
+    public function createAutoloadError(\PHPStan\AnalysedCodeException $analysedCodeException) : \Rector\Core\ValueObject\Application\RectorError
     {
         $message = $this->exceptionCorrector->getAutoloadExceptionMessageAndAddLocation($analysedCodeException);
-        return new RectorError($message);
+        return new \Rector\Core\ValueObject\Application\RectorError($message);
     }
 }

@@ -12,7 +12,7 @@ final class FileSystemGuard
         if (\file_exists($file)) {
             return;
         }
-        throw new FileNotFoundException(\sprintf('File "%s" not found in "%s".', $file, $location));
+        throw new \RectorPrefix20210510\Symplify\SmartFileSystem\Exception\FileNotFoundException(\sprintf('File "%s" not found in "%s".', $file, $location));
     }
     public function ensureDirectoryExists(string $directory, string $extraMessage = '') : void
     {
@@ -23,6 +23,6 @@ final class FileSystemGuard
         if ($extraMessage !== '') {
             $message .= ' ' . $extraMessage;
         }
-        throw new DirectoryNotFoundException($message);
+        throw new \RectorPrefix20210510\Symplify\SmartFileSystem\Exception\DirectoryNotFoundException($message);
     }
 }

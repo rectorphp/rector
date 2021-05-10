@@ -13,7 +13,7 @@ namespace RectorPrefix20210510\Symfony\Component\Console\Output;
 /**
  * @author Jean-François Simon <contact@jfsimon.fr>
  */
-class BufferedOutput extends Output
+class BufferedOutput extends \RectorPrefix20210510\Symfony\Component\Console\Output\Output
 {
     private $buffer = '';
     /**

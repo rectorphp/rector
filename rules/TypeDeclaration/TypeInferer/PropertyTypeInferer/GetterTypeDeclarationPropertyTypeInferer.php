@@ -13,7 +13,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\TypeDeclaration\Contract\TypeInferer\PropertyTypeInfererInterface;
 use Rector\TypeDeclaration\FunctionLikeReturnTypeResolver;
 use Rector\TypeDeclaration\NodeAnalyzer\ClassMethodAndPropertyAnalyzer;
-final class GetterTypeDeclarationPropertyTypeInferer implements PropertyTypeInfererInterface
+final class GetterTypeDeclarationPropertyTypeInferer implements \Rector\TypeDeclaration\Contract\TypeInferer\PropertyTypeInfererInterface
 {
     /**
      * @var FunctionLikeReturnTypeResolver
@@ -27,18 +27,18 @@ final class GetterTypeDeclarationPropertyTypeInferer implements PropertyTypeInfe
      * @var NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(FunctionLikeReturnTypeResolver $functionLikeReturnTypeResolver, ClassMethodAndPropertyAnalyzer $classMethodAndPropertyAnalyzer, NodeNameResolver $nodeNameResolver)
+    public function __construct(\Rector\TypeDeclaration\FunctionLikeReturnTypeResolver $functionLikeReturnTypeResolver, \Rector\TypeDeclaration\NodeAnalyzer\ClassMethodAndPropertyAnalyzer $classMethodAndPropertyAnalyzer, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
     {
         $this->functionLikeReturnTypeResolver = $functionLikeReturnTypeResolver;
         $this->classMethodAndPropertyAnalyzer = $classMethodAndPropertyAnalyzer;
         $this->nodeNameResolver = $nodeNameResolver;
     }
-    public function inferProperty(Property $property) : Type
+    public function inferProperty(\PhpParser\Node\Stmt\Property $property) : \PHPStan\Type\Type
     {
-        $classLike = $property->getAttribute(AttributeKey::CLASS_NODE);
-        if (!$classLike instanceof Class_) {
+        $classLike = $property->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
+        if (!$classLike instanceof \PhpParser\Node\Stmt\Class_) {
             // anonymous class
-            return new MixedType();
+            return new \PHPStan\Type\MixedType();
         }
         /** @var string $propertyName */
         $propertyName = $this->nodeNameResolver->getName($property);
@@ -48,14 +48,14 @@ final class GetterTypeDeclarationPropertyTypeInferer implements PropertyTypeInfe
             }
             $returnType = $this->functionLikeReturnTypeResolver->resolveFunctionLikeReturnTypeToPHPStanType($classMethod);
             // let PhpDoc solve that later for more precise type
-            if ($returnType instanceof ArrayType) {
-                return new MixedType();
+            if ($returnType instanceof \PHPStan\Type\ArrayType) {
+                return new \PHPStan\Type\MixedType();
             }
-            if (!$returnType instanceof MixedType) {
+            if (!$returnType instanceof \PHPStan\Type\MixedType) {
                 return $returnType;
             }
         }
-        return new MixedType();
+        return new \PHPStan\Type\MixedType();
     }
     public function getPriority() : int
     {

@@ -13,15 +13,15 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\DowngradePhp73\Rector\String_\DowngradeFlexibleHeredocSyntaxRector\DowngradeFlexibleHeredocSyntaxRectorTest
  */
-final class DowngradeFlexibleHeredocSyntaxRector extends AbstractRector
+final class DowngradeFlexibleHeredocSyntaxRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var int[]
      */
-    private const HERENOW_DOC_KINDS = [String_::KIND_HEREDOC, String_::KIND_NOWDOC];
-    public function getRuleDefinition() : RuleDefinition
+    private const HERENOW_DOC_KINDS = [\PhpParser\Node\Scalar\String_::KIND_HEREDOC, \PhpParser\Node\Scalar\String_::KIND_NOWDOC];
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Changes heredoc/nowdoc that contains closing word to safe wrapper name', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Changes heredoc/nowdoc that contains closing word to safe wrapper name', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 $query = <<<SQL
     SELECT *
     FROM `table`
@@ -42,24 +42,24 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [String_::class, Encapsed::class];
+        return [\PhpParser\Node\Scalar\String_::class, \PhpParser\Node\Scalar\Encapsed::class];
     }
     /**
      * @param Encapsed|String_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        $stringKind = $node->getAttribute(AttributeKey::KIND);
+        $stringKind = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::KIND);
         if (!\in_array($stringKind, self::HERENOW_DOC_KINDS, \true)) {
             return null;
         }
         // skip correctly indented
-        $docIndentation = (string) $node->getAttribute(AttributeKey::DOC_INDENTATION);
+        $docIndentation = (string) $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::DOC_INDENTATION);
         if ($docIndentation === '') {
             return null;
         }
-        $node->setAttribute(AttributeKey::DOC_INDENTATION, '');
-        $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
+        $node->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::DOC_INDENTATION, '');
+        $node->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NODE, null);
         return $node;
     }
 }

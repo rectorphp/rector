@@ -10,7 +10,7 @@
  */
 namespace RectorPrefix20210510\Symfony\Component\String\Inflector;
 
-final class EnglishInflector implements InflectorInterface
+final class EnglishInflector implements \RectorPrefix20210510\Symfony\Component\String\Inflector\InflectorInterface
 {
     /**
      * Map English plural to singular suffixes.

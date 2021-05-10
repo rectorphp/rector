@@ -15,7 +15,7 @@ final class StmtOrder
      * @var NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(NodeNameResolver $nodeNameResolver)
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
     }
@@ -43,7 +43,7 @@ final class StmtOrder
     /**
      * @param array<int, int> $oldToNewKeys
      */
-    public function reorderClassStmtsByOldToNewKeys(ClassLike $classLike, array $oldToNewKeys) : void
+    public function reorderClassStmtsByOldToNewKeys(\PhpParser\Node\Stmt\ClassLike $classLike, array $oldToNewKeys) : void
     {
         $reorderedStmts = [];
         $stmtCount = \count($classLike->stmts);
@@ -67,7 +67,7 @@ final class StmtOrder
      * @param class-string<Node> $type
      * @return array<int, string>
      */
-    public function getStmtsOfTypeOrder(ClassLike $classLike, string $type) : array
+    public function getStmtsOfTypeOrder(\PhpParser\Node\Stmt\ClassLike $classLike, string $type) : array
     {
         $stmtsByPosition = [];
         foreach ($classLike->stmts as $position => $classStmt) {

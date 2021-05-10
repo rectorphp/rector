@@ -22,7 +22,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Autodiscovery\Rector\Class_\MoveValueObjectsToValueObjectDirectoryRector\MoveValueObjectsToValueObjectDirectoryRectorTest
  */
-final class MoveValueObjectsToValueObjectDirectoryRector extends AbstractRector implements ConfigurableRectorInterface
+final class MoveValueObjectsToValueObjectDirectoryRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
      * @var string
@@ -61,14 +61,14 @@ final class MoveValueObjectsToValueObjectDirectoryRector extends AbstractRector 
      * @var ValueObjectClassAnalyzer
      */
     private $valueObjectClassAnalyzer;
-    public function __construct(AddedFileWithNodesFactory $addedFileWithNodesFactory, ValueObjectClassAnalyzer $valueObjectClassAnalyzer)
+    public function __construct(\Rector\FileSystemRector\ValueObjectFactory\AddedFileWithNodesFactory $addedFileWithNodesFactory, \Rector\Autodiscovery\Analyzer\ValueObjectClassAnalyzer $valueObjectClassAnalyzer)
     {
         $this->addedFileWithNodesFactory = $addedFileWithNodesFactory;
         $this->valueObjectClassAnalyzer = $valueObjectClassAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Move value object to ValueObject namespace/directory', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Move value object to ValueObject namespace/directory', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
 // app/Exception/Name.php
 class Name
 {
@@ -109,19 +109,19 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Class_::class];
+        return [\PhpParser\Node\Stmt\Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$this->isValueObjectMatch($node)) {
             return null;
         }
         $smartFileInfo = $this->file->getSmartFileInfo();
         $addedFileWithNodes = $this->addedFileWithNodesFactory->createWithDesiredGroup($smartFileInfo, $this->file, 'ValueObject');
-        if (!$addedFileWithNodes instanceof AddedFileWithNodes) {
+        if (!$addedFileWithNodes instanceof \Rector\FileSystemRector\ValueObject\AddedFileWithNodes) {
             return null;
         }
         $this->removedAndAddedFilesCollector->removeFile($smartFileInfo);
@@ -137,7 +137,7 @@ CODE_SAMPLE
         $this->suffixes = $configuration[self::SUFFIXES] ?? [];
         $this->enableValueObjectGuessing = $configuration[self::ENABLE_VALUE_OBJECT_GUESSING] ?? \false;
     }
-    private function isValueObjectMatch(Class_ $class) : bool
+    private function isValueObjectMatch(\PhpParser\Node\Stmt\Class_ $class) : bool
     {
         if ($this->isSuffixMatch($class)) {
             return \true;
@@ -146,9 +146,9 @@ CODE_SAMPLE
         if ($className === null) {
             return \false;
         }
-        $classObjectType = new ObjectType($className);
+        $classObjectType = new \PHPStan\Type\ObjectType($className);
         foreach ($this->types as $type) {
-            $desiredObjectType = new ObjectType($type);
+            $desiredObjectType = new \PHPStan\Type\ObjectType($type);
             if ($desiredObjectType->isSuperTypeOf($classObjectType)->yes()) {
                 return \true;
             }
@@ -161,14 +161,14 @@ CODE_SAMPLE
         }
         return $this->valueObjectClassAnalyzer->isValueObjectClass($class);
     }
-    private function isSuffixMatch(Class_ $class) : bool
+    private function isSuffixMatch(\PhpParser\Node\Stmt\Class_ $class) : bool
     {
-        $className = $class->getAttribute(AttributeKey::CLASS_NAME);
+        $className = $class->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);
         if ($className === null) {
             return \false;
         }
         foreach ($this->suffixes as $suffix) {
-            if (Strings::endsWith($className, $suffix)) {
+            if (\RectorPrefix20210510\Nette\Utils\Strings::endsWith($className, $suffix)) {
                 return \true;
             }
         }
@@ -177,7 +177,7 @@ CODE_SAMPLE
     private function isKnownServiceType(string $className) : bool
     {
         foreach (self::COMMON_SERVICE_SUFFIXES as $commonServiceSuffix) {
-            if (Strings::endsWith($className, $commonServiceSuffix)) {
+            if (\RectorPrefix20210510\Nette\Utils\Strings::endsWith($className, $commonServiceSuffix)) {
                 return \true;
             }
         }

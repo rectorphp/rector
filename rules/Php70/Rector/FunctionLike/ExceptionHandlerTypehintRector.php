@@ -18,16 +18,16 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php70\Rector\FunctionLike\ExceptionHandlerTypehintRector\ExceptionHandlerTypehintRectorTest
  */
-final class ExceptionHandlerTypehintRector extends AbstractRector
+final class ExceptionHandlerTypehintRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var string
      * @see https://regex101.com/r/VBFXCR/1
      */
     private const HANDLE_INSENSITIVE_REGEX = '#handle#i';
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Changes property `@var` annotations from annotation to type.', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Changes property `@var` annotations from annotation to type.', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 function handler(Exception $exception) { ... }
 set_exception_handler('handler');
 CODE_SAMPLE
@@ -42,14 +42,14 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Function_::class, ClassMethod::class];
+        return [\PhpParser\Node\Stmt\Function_::class, \PhpParser\Node\Stmt\ClassMethod::class];
     }
     /**
      * @param Function_|ClassMethod $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if (!$this->isAtLeastPhpVersion(PhpVersionFeature::THROWABLE_TYPE)) {
+        if (!$this->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::THROWABLE_TYPE)) {
             return null;
         }
         // exception handle has 1 param exactly
@@ -61,18 +61,18 @@ CODE_SAMPLE
             return null;
         }
         // handle only Exception typehint
-        $actualType = $paramNode->type instanceof NullableType ? $this->getName($paramNode->type->type) : $this->getName($paramNode->type);
+        $actualType = $paramNode->type instanceof \PhpParser\Node\NullableType ? $this->getName($paramNode->type->type) : $this->getName($paramNode->type);
         if ($actualType !== 'Exception') {
             return null;
         }
         // is probably handling exceptions
-        if (!Strings::match((string) $node->name, self::HANDLE_INSENSITIVE_REGEX)) {
+        if (!\RectorPrefix20210510\Nette\Utils\Strings::match((string) $node->name, self::HANDLE_INSENSITIVE_REGEX)) {
             return null;
         }
-        if (!$paramNode->type instanceof NullableType) {
-            $paramNode->type = new FullyQualified('Throwable');
+        if (!$paramNode->type instanceof \PhpParser\Node\NullableType) {
+            $paramNode->type = new \PhpParser\Node\Name\FullyQualified('Throwable');
         } else {
-            $paramNode->type->type = new FullyQualified('Throwable');
+            $paramNode->type->type = new \PhpParser\Node\Name\FullyQualified('Throwable');
         }
         return $node;
     }

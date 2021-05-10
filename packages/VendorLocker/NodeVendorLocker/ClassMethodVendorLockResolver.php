@@ -20,7 +20,7 @@ final class ClassMethodVendorLockResolver
      * @var NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(MethodReflectionContractAnalyzer $methodReflectionContractAnalyzer, NodeNameResolver $nodeNameResolver)
+    public function __construct(\Rector\VendorLocker\Reflection\MethodReflectionContractAnalyzer $methodReflectionContractAnalyzer, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
     {
         $this->methodReflectionContractAnalyzer = $methodReflectionContractAnalyzer;
         $this->nodeNameResolver = $nodeNameResolver;
@@ -33,13 +33,13 @@ final class ClassMethodVendorLockResolver
      * Prevent:
      * - removing class methods, that breaks the code
      */
-    public function isRemovalVendorLocked(ClassMethod $classMethod) : bool
+    public function isRemovalVendorLocked(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
     {
         $classMethodName = $this->nodeNameResolver->getName($classMethod);
         /** @var Scope $scope */
-        $scope = $classMethod->getAttribute(AttributeKey::SCOPE);
+        $scope = $classMethod->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
         $classReflection = $scope->getClassReflection();
-        if (!$classReflection instanceof ClassReflection) {
+        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
             return \false;
         }
         if ($this->methodReflectionContractAnalyzer->hasInterfaceContract($classReflection, $classMethodName)) {
@@ -50,7 +50,7 @@ final class ClassMethodVendorLockResolver
                 continue;
             }
             $methodReflection = $parentClassReflection->getNativeMethod($classMethodName);
-            if (!$methodReflection instanceof PhpMethodReflection) {
+            if (!$methodReflection instanceof \PHPStan\Reflection\Php\PhpMethodReflection) {
                 continue;
             }
             if ($methodReflection->isAbstract()) {

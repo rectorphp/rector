@@ -11,15 +11,15 @@ use PHPStan\Type\UnionType;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 final class CollectionTypeFactory
 {
-    public function createType(FullyQualifiedObjectType $fullyQualifiedObjectType) : UnionType
+    public function createType(\Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType $fullyQualifiedObjectType) : \PHPStan\Type\UnionType
     {
         $genericType = $this->createGenericObjectType($fullyQualifiedObjectType);
-        $arrayType = new ArrayType(new MixedType(), $fullyQualifiedObjectType);
-        return new UnionType([$genericType, $arrayType]);
+        $arrayType = new \PHPStan\Type\ArrayType(new \PHPStan\Type\MixedType(), $fullyQualifiedObjectType);
+        return new \PHPStan\Type\UnionType([$genericType, $arrayType]);
     }
-    private function createGenericObjectType(FullyQualifiedObjectType $fullyQualifiedObjectType) : GenericObjectType
+    private function createGenericObjectType(\Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType $fullyQualifiedObjectType) : \PHPStan\Type\Generic\GenericObjectType
     {
-        $genericTypes = [new IntegerType(), $fullyQualifiedObjectType];
-        return new GenericObjectType('Doctrine\\Common\\Collections\\Collection', $genericTypes);
+        $genericTypes = [new \PHPStan\Type\IntegerType(), $fullyQualifiedObjectType];
+        return new \PHPStan\Type\Generic\GenericObjectType('Doctrine\\Common\\Collections\\Collection', $genericTypes);
     }
 }

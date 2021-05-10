@@ -11,7 +11,7 @@
 namespace RectorPrefix20210510\Symfony\Component\EventDispatcher;
 
 use RectorPrefix20210510\Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
-trigger_deprecation('symfony/event-dispatcher', '5.1', '%s is deprecated, use the event dispatcher without the proxy.', LegacyEventDispatcherProxy::class);
+trigger_deprecation('symfony/event-dispatcher', '5.1', '%s is deprecated, use the event dispatcher without the proxy.', \RectorPrefix20210510\Symfony\Component\EventDispatcher\LegacyEventDispatcherProxy::class);
 /**
  * A helper class to provide BC/FC with the legacy signature of EventDispatcherInterface::dispatch().
  *
@@ -21,7 +21,7 @@ trigger_deprecation('symfony/event-dispatcher', '5.1', '%s is deprecated, use th
  */
 final class LegacyEventDispatcherProxy
 {
-    public static function decorate(?EventDispatcherInterface $dispatcher) : ?EventDispatcherInterface
+    public static function decorate(?\RectorPrefix20210510\Symfony\Contracts\EventDispatcher\EventDispatcherInterface $dispatcher) : ?\RectorPrefix20210510\Symfony\Contracts\EventDispatcher\EventDispatcherInterface
     {
         return $dispatcher;
     }

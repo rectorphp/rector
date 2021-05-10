@@ -15,15 +15,15 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\PHPOffice\Rector\StaticCall\CellStaticToCoordinateRector\CellStaticToCoordinateRectorTest
  */
-final class CellStaticToCoordinateRector extends AbstractRector
+final class CellStaticToCoordinateRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var string[]
      */
     private const DECOUPLED_METHODS = ['absoluteCoordinate', 'absoluteReference', 'buildRange', 'columnIndexFromString', 'coordinateFromString', 'extractAllCellReferencesInRange', 'getRangeBoundaries', 'mergeRangesInCollection', 'rangeBoundaries', 'rangeDimension', 'splitRange', 'stringFromColumnIndex'];
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Methods to manipulate coordinates that used to exists in PHPExcel_Cell to PhpOffice\\PhpSpreadsheet\\Cell\\Coordinate', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Methods to manipulate coordinates that used to exists in PHPExcel_Cell to PhpOffice\\PhpSpreadsheet\\Cell\\Coordinate', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -48,20 +48,20 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [StaticCall::class];
+        return [\PhpParser\Node\Expr\StaticCall::class];
     }
     /**
      * @param StaticCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if (!$this->isObjectType($node->class, new ObjectType('PHPExcel_Cell'))) {
+        if (!$this->isObjectType($node->class, new \PHPStan\Type\ObjectType('PHPExcel_Cell'))) {
             return null;
         }
         if (!$this->isNames($node->name, self::DECOUPLED_METHODS)) {
             return null;
         }
-        $node->class = new FullyQualified('PhpOffice\\PhpSpreadsheet\\Cell\\Coordinate');
+        $node->class = new \PhpParser\Node\Name\FullyQualified('PhpOffice\\PhpSpreadsheet\\Cell\\Coordinate');
         return $node;
     }
 }

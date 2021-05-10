@@ -7,16 +7,16 @@ use RectorPrefix20210510\Symfony\Component\DependencyInjection\Loader\Configurat
 use RectorPrefix20210510\Symplify\Skipper\Tests\Skipper\Skip\Source\AnotherClassToSkip;
 use RectorPrefix20210510\Symplify\Skipper\Tests\Skipper\Skip\Source\SomeClassToSkip;
 use RectorPrefix20210510\Symplify\Skipper\ValueObject\Option;
-return static function (ContainerConfigurator $containerConfigurator) : void {
+return static function (\RectorPrefix20210510\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
     $parameters = $containerConfigurator->parameters();
-    $parameters->set(Option::SKIP, [
+    $parameters->set(\RectorPrefix20210510\Symplify\Skipper\ValueObject\Option::SKIP, [
         // classes
-        SomeClassToSkip::class,
-        AnotherClassToSkip::class => ['Fixture/someFile', '*/someDirectory/*'],
+        \RectorPrefix20210510\Symplify\Skipper\Tests\Skipper\Skip\Source\SomeClassToSkip::class,
+        \RectorPrefix20210510\Symplify\Skipper\Tests\Skipper\Skip\Source\AnotherClassToSkip::class => ['Fixture/someFile', '*/someDirectory/*'],
         // code
-        AnotherClassToSkip::class . '.someCode' => null,
-        AnotherClassToSkip::class . '.someOtherCode' => ['*/someDirectory/*'],
-        AnotherClassToSkip::class . '.someAnotherCode' => ['someDirectory/*'],
+        \RectorPrefix20210510\Symplify\Skipper\Tests\Skipper\Skip\Source\AnotherClassToSkip::class . '.someCode' => null,
+        \RectorPrefix20210510\Symplify\Skipper\Tests\Skipper\Skip\Source\AnotherClassToSkip::class . '.someOtherCode' => ['*/someDirectory/*'],
+        \RectorPrefix20210510\Symplify\Skipper\Tests\Skipper\Skip\Source\AnotherClassToSkip::class . '.someAnotherCode' => ['someDirectory/*'],
         // file paths
         __DIR__ . '/../Fixture/AlwaysSkippedPath',
         '*\\PathSkippedWithMask\\*',

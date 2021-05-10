@@ -16,19 +16,19 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\PHPUnit\Tests\Rector\Foreach_\SimplifyForeachInstanceOfRector\SimplifyForeachInstanceOfRectorTest
  */
-final class SimplifyForeachInstanceOfRector extends AbstractRector
+final class SimplifyForeachInstanceOfRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var ForeachManipulator
      */
     private $foreachManipulator;
-    public function __construct(ForeachManipulator $foreachManipulator)
+    public function __construct(\Rector\Core\NodeManipulator\ForeachManipulator $foreachManipulator)
     {
         $this->foreachManipulator = $foreachManipulator;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Simplify unnecessary foreach check of instances', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Simplify unnecessary foreach check of instances', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 foreach ($foos as $foo) {
     $this->assertInstanceOf(SplFileInfo::class, $foo);
 }
@@ -40,16 +40,16 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Foreach_::class];
+        return [\PhpParser\Node\Stmt\Foreach_::class];
     }
     /**
      * @param Foreach_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         /** @var MethodCall|StaticCall|null $matchedNode */
-        $matchedNode = $this->foreachManipulator->matchOnlyStmt($node, function (Node $node, Foreach_ $foreachNode) : ?Node {
-            if (!$node instanceof MethodCall && !$node instanceof StaticCall) {
+        $matchedNode = $this->foreachManipulator->matchOnlyStmt($node, function (\PhpParser\Node $node, \PhpParser\Node\Stmt\Foreach_ $foreachNode) : ?Node {
+            if (!$node instanceof \PhpParser\Node\Expr\MethodCall && !$node instanceof \PhpParser\Node\Expr\StaticCall) {
                 return null;
             }
             if (!$this->isName($node->name, 'assertInstanceOf')) {
@@ -65,14 +65,14 @@ CODE_SAMPLE
         }
         /** @var MethodCall|StaticCall $matchedNode */
         $callClass = \get_class($matchedNode);
-        return new $callClass($this->resolveVar($matchedNode), new Name('assertContainsOnlyInstancesOf'), [$matchedNode->args[0], new Arg($node->expr)]);
+        return new $callClass($this->resolveVar($matchedNode), new \PhpParser\Node\Name('assertContainsOnlyInstancesOf'), [$matchedNode->args[0], new \PhpParser\Node\Arg($node->expr)]);
     }
     /**
      * @param MethodCall|StaticCall $node
      */
-    private function resolveVar(Node $node) : Node
+    private function resolveVar(\PhpParser\Node $node) : \PhpParser\Node
     {
-        if ($node instanceof MethodCall) {
+        if ($node instanceof \PhpParser\Node\Expr\MethodCall) {
             return $node->var;
         }
         return $node->class;

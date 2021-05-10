@@ -6,8 +6,8 @@ namespace Rector\NetteToSymfony\Tests\Rector\ClassMethod\RouterListToControllerA
 use RectorPrefix20210510\Nette\Application\Routers\Route;
 final class RouteFactory
 {
-    public static function get(string $path, string $presenterClass) : Route
+    public static function get(string $path, string $presenterClass) : \RectorPrefix20210510\Nette\Application\Routers\Route
     {
-        return new Route($path, $presenterClass);
+        return new \RectorPrefix20210510\Nette\Application\Routers\Route($path, $presenterClass);
     }
 }

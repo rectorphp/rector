@@ -23,7 +23,7 @@ final class PropertyPresenceChecker
      * @var ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(PromotedPropertyResolver $promotedPropertyResolver, NodeNameResolver $nodeNameResolver, ReflectionProvider $reflectionProvider)
+    public function __construct(\Rector\Php80\NodeAnalyzer\PromotedPropertyResolver $promotedPropertyResolver, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
     {
         $this->promotedPropertyResolver = $promotedPropertyResolver;
         $this->nodeNameResolver = $nodeNameResolver;
@@ -32,7 +32,7 @@ final class PropertyPresenceChecker
     /**
      * Includes parent classes and traits
      */
-    public function hasClassContextPropertyByName(Class_ $class, string $propertyName) : bool
+    public function hasClassContextPropertyByName(\PhpParser\Node\Stmt\Class_ $class, string $propertyName) : bool
     {
         $className = $this->nodeNameResolver->getName($class);
         if ($className === null) {
@@ -42,7 +42,7 @@ final class PropertyPresenceChecker
             return \false;
         }
         $property = $class->getProperty($propertyName);
-        if ($property instanceof Property) {
+        if ($property instanceof \PhpParser\Node\Stmt\Property) {
             return \true;
         }
         $availablePropertyReflections = $this->getParentClassPublicAndProtectedPropertyReflections($className);
@@ -72,7 +72,7 @@ final class PropertyPresenceChecker
         $propertyReflections = [];
         foreach ($classReflection->getParents() as $parentClassReflection) {
             $nativeReflectionClass = $parentClassReflection->getNativeReflection();
-            $currentPropertyReflections = $nativeReflectionClass->getProperties(ReflectionProperty::IS_PUBLIC | ReflectionProperty::IS_PROTECTED);
+            $currentPropertyReflections = $nativeReflectionClass->getProperties(\ReflectionProperty::IS_PUBLIC | \ReflectionProperty::IS_PROTECTED);
             $propertyReflections = \array_merge($propertyReflections, $currentPropertyReflections);
         }
         return $propertyReflections;

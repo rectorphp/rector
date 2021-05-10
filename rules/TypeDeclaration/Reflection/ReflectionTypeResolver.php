@@ -37,17 +37,17 @@ final class ReflectionTypeResolver
      * @var PrivatesCaller
      */
     private $privatesCaller;
-    public function __construct(NodeTypeResolver $nodeTypeResolver, ReflectionProvider $reflectionProvider, NodeNameResolver $nodeNameResolver, PrivatesCaller $privatesCaller)
+    public function __construct(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \RectorPrefix20210510\Symplify\PackageBuilder\Reflection\PrivatesCaller $privatesCaller)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->reflectionProvider = $reflectionProvider;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->privatesCaller = $privatesCaller;
     }
-    public function resolveMethodCallReturnType(MethodCall $methodCall) : ?Type
+    public function resolveMethodCallReturnType(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\PHPStan\Type\Type
     {
         $objectType = $this->nodeTypeResolver->resolve($methodCall->var);
-        if (!$objectType instanceof TypeWithClassName) {
+        if (!$objectType instanceof \PHPStan\Type\TypeWithClassName) {
             return null;
         }
         $methodName = $this->nodeNameResolver->getName($methodCall->name);
@@ -56,7 +56,7 @@ final class ReflectionTypeResolver
         }
         return $this->resolveNativeReturnTypeFromClassAndMethod($objectType->getClassName(), $methodName, $methodCall);
     }
-    public function resolveStaticCallReturnType(StaticCall $staticCall) : ?Type
+    public function resolveStaticCallReturnType(\PhpParser\Node\Expr\StaticCall $staticCall) : ?\PHPStan\Type\Type
     {
         $className = $this->nodeNameResolver->getName($staticCall->class);
         if ($className === null) {
@@ -68,10 +68,10 @@ final class ReflectionTypeResolver
         }
         return $this->resolveNativeReturnTypeFromClassAndMethod($className, $methodName, $staticCall);
     }
-    public function resolvePropertyFetchType(PropertyFetch $propertyFetch) : ?Type
+    public function resolvePropertyFetchType(\PhpParser\Node\Expr\PropertyFetch $propertyFetch) : ?\PHPStan\Type\Type
     {
         $objectType = $this->nodeTypeResolver->resolve($propertyFetch->var);
-        if (!$objectType instanceof TypeWithClassName) {
+        if (!$objectType instanceof \PHPStan\Type\TypeWithClassName) {
             return null;
         }
         $classReflection = $this->reflectionProvider->getClass($objectType->getClassName());
@@ -80,31 +80,31 @@ final class ReflectionTypeResolver
             return null;
         }
         if ($classReflection->hasProperty($propertyName)) {
-            $propertyFetchScope = $propertyFetch->getAttribute(AttributeKey::SCOPE);
+            $propertyFetchScope = $propertyFetch->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
             $propertyReflection = $classReflection->getProperty($propertyName, $propertyFetchScope);
-            if ($propertyReflection instanceof PhpPropertyReflection) {
+            if ($propertyReflection instanceof \PHPStan\Reflection\Php\PhpPropertyReflection) {
                 return $propertyReflection->getNativeType();
             }
         }
         return null;
     }
-    public function resolveFuncCallReturnType(FuncCall $funcCall) : ?Type
+    public function resolveFuncCallReturnType(\PhpParser\Node\Expr\FuncCall $funcCall) : ?\PHPStan\Type\Type
     {
-        $funcCallScope = $funcCall->getAttribute(AttributeKey::SCOPE);
+        $funcCallScope = $funcCall->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
         $funcCallName = $funcCall->name;
-        if ($funcCallName instanceof Expr) {
+        if ($funcCallName instanceof \PhpParser\Node\Expr) {
             return null;
         }
         if (!$this->reflectionProvider->hasFunction($funcCallName, $funcCallScope)) {
             return null;
         }
         $functionReflection = $this->reflectionProvider->getFunction($funcCallName, $funcCallScope);
-        if (!$functionReflection instanceof PhpFunctionReflection) {
+        if (!$functionReflection instanceof \PHPStan\Reflection\Php\PhpFunctionReflection) {
             return null;
         }
         return $this->privatesCaller->callPrivateMethod($functionReflection, 'getNativeReturnType', []);
     }
-    private function resolveNativeReturnTypeFromClassAndMethod(string $className, string $methodName, Expr $expr) : ?Type
+    private function resolveNativeReturnTypeFromClassAndMethod(string $className, string $methodName, \PhpParser\Node\Expr $expr) : ?\PHPStan\Type\Type
     {
         if (!$this->reflectionProvider->hasClass($className)) {
             return null;
@@ -113,13 +113,13 @@ final class ReflectionTypeResolver
         if (!$classReflection->hasMethod($methodName)) {
             return null;
         }
-        $callerScope = $expr->getAttribute(AttributeKey::SCOPE);
+        $callerScope = $expr->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
         // probably trait
-        if (!$callerScope instanceof Scope) {
+        if (!$callerScope instanceof \PHPStan\Analyser\Scope) {
             return null;
         }
         $methodReflection = $classReflection->getMethod($methodName, $callerScope);
-        if (!$methodReflection instanceof PhpMethodReflection) {
+        if (!$methodReflection instanceof \PHPStan\Reflection\Php\PhpMethodReflection) {
             return null;
         }
         return $this->privatesCaller->callPrivateMethod($methodReflection, 'getNativeReturnType', []);

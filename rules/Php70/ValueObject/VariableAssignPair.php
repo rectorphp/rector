@@ -26,7 +26,7 @@ final class VariableAssignPair
      * @param Variable|ArrayDimFetch|PropertyFetch|StaticPropertyFetch $variable
      * @param Assign|AssignOp|AssignRef $node
      */
-    public function __construct(Node $variable, Node $node)
+    public function __construct(\PhpParser\Node $variable, \PhpParser\Node $node)
     {
         $this->variable = $variable;
         $this->assign = $node;
@@ -34,14 +34,14 @@ final class VariableAssignPair
     /**
      * @return Variable|ArrayDimFetch|PropertyFetch|StaticPropertyFetch
      */
-    public function getVariable() : Expr
+    public function getVariable() : \PhpParser\Node\Expr
     {
         return $this->variable;
     }
     /**
      * @return Assign|AssignOp|AssignRef
      */
-    public function getAssign() : Expr
+    public function getAssign() : \PhpParser\Node\Expr
     {
         return $this->assign;
     }

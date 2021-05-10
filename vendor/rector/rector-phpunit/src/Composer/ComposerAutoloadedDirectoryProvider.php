@@ -13,7 +13,7 @@ final class ComposerAutoloadedDirectoryProvider
     /**
      * @var string[]
      */
-    private const AUTOLOAD_SECTIONS = [ComposerJsonSection::AUTOLOAD, ComposerJsonSection::AUTOLOAD_DEV];
+    private const AUTOLOAD_SECTIONS = [\RectorPrefix20210510\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::AUTOLOAD, \RectorPrefix20210510\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::AUTOLOAD_DEV];
     /**
      * @var string
      */
@@ -22,7 +22,7 @@ final class ComposerAutoloadedDirectoryProvider
      * @var SmartFileSystem
      */
     private $smartFileSystem;
-    public function __construct(SmartFileSystem $smartFileSystem)
+    public function __construct(\RectorPrefix20210510\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem)
     {
         $this->composerFilePath = \getcwd() . '/composer.json';
         $this->smartFileSystem = $smartFileSystem;
@@ -33,7 +33,7 @@ final class ComposerAutoloadedDirectoryProvider
     public function provide() : array
     {
         // @todo use paths parameter?
-        if (StaticPHPUnitEnvironment::isPHPUnitRun()) {
+        if (\Rector\Testing\PHPUnit\StaticPHPUnitEnvironment::isPHPUnitRun()) {
             return [\getcwd() . '/src', \getcwd() . '/tests'];
         }
         $composerJson = $this->loadComposerJsonArray();
@@ -45,7 +45,7 @@ final class ComposerAutoloadedDirectoryProvider
             $sectionDirectories = $this->collectDirectoriesFromAutoload($composerJson[$autoloadSection]);
             $autoloadDirectories[] = $sectionDirectories;
         }
-        return Arrays::flatten($autoloadDirectories);
+        return \RectorPrefix20210510\Nette\Utils\Arrays::flatten($autoloadDirectories);
     }
     /**
      * @return mixed[]
@@ -56,7 +56,7 @@ final class ComposerAutoloadedDirectoryProvider
             return [];
         }
         $composerFileContent = $this->smartFileSystem->readFile($this->composerFilePath);
-        return Json::decode($composerFileContent, Json::FORCE_ARRAY);
+        return \RectorPrefix20210510\Nette\Utils\Json::decode($composerFileContent, \RectorPrefix20210510\Nette\Utils\Json::FORCE_ARRAY);
     }
     /**
      * @param string[] $composerJsonAutoload

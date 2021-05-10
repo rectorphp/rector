@@ -17,7 +17,7 @@ final class DocBlockClassRenamer
      * @var RenamingPhpDocNodeVisitorFactory
      */
     private $renamingPhpDocNodeVisitorFactory;
-    public function __construct(ClassRenamePhpDocNodeVisitor $classRenamePhpDocNodeVisitor, RenamingPhpDocNodeVisitorFactory $renamingPhpDocNodeVisitorFactory)
+    public function __construct(\Rector\NodeTypeResolver\PhpDocNodeVisitor\ClassRenamePhpDocNodeVisitor $classRenamePhpDocNodeVisitor, \Rector\NodeTypeResolver\PhpDoc\PhpDocNodeTraverser\RenamingPhpDocNodeVisitorFactory $renamingPhpDocNodeVisitorFactory)
     {
         $this->classRenamePhpDocNodeVisitor = $classRenamePhpDocNodeVisitor;
         $this->renamingPhpDocNodeVisitorFactory = $renamingPhpDocNodeVisitorFactory;
@@ -25,7 +25,7 @@ final class DocBlockClassRenamer
     /**
      * @param OldToNewType[] $oldToNewTypes
      */
-    public function renamePhpDocType(PhpDocInfo $phpDocInfo, array $oldToNewTypes) : void
+    public function renamePhpDocType(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo, array $oldToNewTypes) : void
     {
         if ($oldToNewTypes === []) {
             return;

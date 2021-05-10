@@ -14,14 +14,14 @@ use Rector\Php73\Rector\FuncCall\StringifyStrNeedlesRector;
 use Rector\Php73\Rector\String_\SensitiveHereNowDocRector;
 use Rector\Renaming\Rector\FuncCall\RenameFunctionRector;
 use RectorPrefix20210510\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-return static function (ContainerConfigurator $containerConfigurator) : void {
+return static function (\RectorPrefix20210510\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
-    $services->set(IsCountableRector::class);
-    $services->set(ArrayKeyFirstLastRector::class);
-    $services->set(SensitiveDefineRector::class);
-    $services->set(SensitiveConstantNameRector::class);
-    $services->set(SensitiveHereNowDocRector::class);
-    $services->set(RenameFunctionRector::class)->call('configure', [[RenameFunctionRector::OLD_FUNCTION_TO_NEW_FUNCTION => [
+    $services->set(\Rector\Php73\Rector\BooleanOr\IsCountableRector::class);
+    $services->set(\Rector\Php73\Rector\FuncCall\ArrayKeyFirstLastRector::class);
+    $services->set(\Rector\Php73\Rector\FuncCall\SensitiveDefineRector::class);
+    $services->set(\Rector\Php73\Rector\ConstFetch\SensitiveConstantNameRector::class);
+    $services->set(\Rector\Php73\Rector\String_\SensitiveHereNowDocRector::class);
+    $services->set(\Rector\Renaming\Rector\FuncCall\RenameFunctionRector::class)->call('configure', [[\Rector\Renaming\Rector\FuncCall\RenameFunctionRector::OLD_FUNCTION_TO_NEW_FUNCTION => [
         # https://wiki.php.net/rfc/deprecations_php_7_3
         'image2wbmp' => 'imagewbmp',
         'mbregex_encoding' => 'mb_regex_encoding',
@@ -38,8 +38,8 @@ return static function (ContainerConfigurator $containerConfigurator) : void {
         'mbereg_search_getregs' => 'mb_ereg_search_getregs',
         'mbereg_search_getpos' => 'mb_ereg_search_getpos',
     ]]]);
-    $services->set(StringifyStrNeedlesRector::class);
-    $services->set(JsonThrowOnErrorRector::class);
-    $services->set(RegexDashEscapeRector::class);
-    $services->set(ContinueToBreakInSwitchRector::class);
+    $services->set(\Rector\Php73\Rector\FuncCall\StringifyStrNeedlesRector::class);
+    $services->set(\Rector\Php73\Rector\FuncCall\JsonThrowOnErrorRector::class);
+    $services->set(\Rector\Php73\Rector\FuncCall\RegexDashEscapeRector::class);
+    $services->set(\Rector\Php52\Rector\Switch_\ContinueToBreakInSwitchRector::class);
 };

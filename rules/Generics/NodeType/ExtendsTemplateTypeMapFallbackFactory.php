@@ -16,7 +16,7 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\TypeWithClassName;
 final class ExtendsTemplateTypeMapFallbackFactory
 {
-    public function createFromClassReflection(ClassReflection $classReflection) : ?TemplateTypeMap
+    public function createFromClassReflection(\PHPStan\Reflection\ClassReflection $classReflection) : ?\PHPStan\Type\Generic\TemplateTypeMap
     {
         $extendsTags = $this->resolveExtendsTags($classReflection);
         if ($extendsTags === []) {
@@ -25,7 +25,7 @@ final class ExtendsTemplateTypeMapFallbackFactory
         $parentGenericTypeNames = $this->resolveParentGenericTypeNames($classReflection);
         foreach ($extendsTags as $extendTag) {
             $extendsTagType = $extendTag->getType();
-            if (!$extendsTagType instanceof GenericObjectType) {
+            if (!$extendsTagType instanceof \PHPStan\Type\Generic\GenericObjectType) {
                 continue;
             }
             $templateTypeMap = [];
@@ -34,28 +34,28 @@ final class ExtendsTemplateTypeMapFallbackFactory
                     continue;
                 }
                 $parentGenericTypeName = $parentGenericTypeNames[$key];
-                if ($genericExtendType instanceof TypeWithClassName) {
+                if ($genericExtendType instanceof \PHPStan\Type\TypeWithClassName) {
                     // this plac ewill need more work
-                    $templateTypeScope = TemplateTypeScope::createWithClass($classReflection->getName());
+                    $templateTypeScope = \PHPStan\Type\Generic\TemplateTypeScope::createWithClass($classReflection->getName());
                     $genericExtendType = $this->createTemplateObjectType($templateTypeScope, $parentGenericTypeName, $genericExtendType);
                 }
                 $templateTypeMap[$parentGenericTypeName] = $genericExtendType;
             }
-            return new TemplateTypeMap($templateTypeMap);
+            return new \PHPStan\Type\Generic\TemplateTypeMap($templateTypeMap);
         }
         return null;
     }
     /**
      * @return ExtendsTag[]
      */
-    private function resolveExtendsTags(ClassReflection $classReflection) : array
+    private function resolveExtendsTags(\PHPStan\Reflection\ClassReflection $classReflection) : array
     {
         $parentClassReflection = $classReflection->getParentClass();
-        if (!$parentClassReflection instanceof ClassReflection) {
+        if (!$parentClassReflection instanceof \PHPStan\Reflection\ClassReflection) {
             return [];
         }
         $resolvedPhpDocBlock = $classReflection->getResolvedPhpDoc();
-        if (!$resolvedPhpDocBlock instanceof ResolvedPhpDocBlock) {
+        if (!$resolvedPhpDocBlock instanceof \PHPStan\PhpDoc\ResolvedPhpDocBlock) {
             return [];
         }
         return $resolvedPhpDocBlock->getExtendsTags();
@@ -63,17 +63,17 @@ final class ExtendsTemplateTypeMapFallbackFactory
     /**
      * @return string[]
      */
-    private function resolveParentGenericTypeNames(ClassReflection $classReflection) : array
+    private function resolveParentGenericTypeNames(\PHPStan\Reflection\ClassReflection $classReflection) : array
     {
         $parentClassReflection = $classReflection->getParentClass();
-        if (!$parentClassReflection instanceof ClassReflection) {
+        if (!$parentClassReflection instanceof \PHPStan\Reflection\ClassReflection) {
             return [];
         }
         $templateTypeMap = $parentClassReflection->getTemplateTypeMap();
         return \array_keys($templateTypeMap->getTypes());
     }
-    private function createTemplateObjectType(TemplateTypeScope $templateTypeScope, string $parentGenericTypeName, TypeWithClassName $typeWithClassName) : TemplateObjectType
+    private function createTemplateObjectType(\PHPStan\Type\Generic\TemplateTypeScope $templateTypeScope, string $parentGenericTypeName, \PHPStan\Type\TypeWithClassName $typeWithClassName) : \PHPStan\Type\Generic\TemplateObjectType
     {
-        return new TemplateObjectType($templateTypeScope, new TemplateTypeParameterStrategy(), TemplateTypeVariance::createInvariant(), $parentGenericTypeName, new ObjectType($typeWithClassName->getClassName()));
+        return new \PHPStan\Type\Generic\TemplateObjectType($templateTypeScope, new \PHPStan\Type\Generic\TemplateTypeParameterStrategy(), \PHPStan\Type\Generic\TemplateTypeVariance::createInvariant(), $parentGenericTypeName, new \PHPStan\Type\ObjectType($typeWithClassName->getClassName()));
     }
 }

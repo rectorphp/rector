@@ -23,7 +23,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\DependencyInjection\Rector\Class_\MultiParentingToAbstractDependencyRector\MultiParentingToAbstractDependencyRectorTest
  */
-final class MultiParentingToAbstractDependencyRector extends AbstractRector implements ConfigurableRectorInterface
+final class MultiParentingToAbstractDependencyRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
      * @api
@@ -50,16 +50,16 @@ final class MultiParentingToAbstractDependencyRector extends AbstractRector impl
      * @var ClassInsertManipulator
      */
     private $classInsertManipulator;
-    public function __construct(ClassMethodNodeRemover $classMethodNodeRemover, InjectMethodFactory $injectMethodFactory, PhpDocInfoFactory $phpDocInfoFactory, ClassInsertManipulator $classInsertManipulator)
+    public function __construct(\Rector\DependencyInjection\NodeRemover\ClassMethodNodeRemover $classMethodNodeRemover, \Rector\DependencyInjection\NodeFactory\InjectMethodFactory $injectMethodFactory, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \Rector\Core\NodeManipulator\ClassInsertManipulator $classInsertManipulator)
     {
         $this->injectMethodFactory = $injectMethodFactory;
         $this->classMethodNodeRemover = $classMethodNodeRemover;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->classInsertManipulator = $classInsertManipulator;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Move dependency passed to all children to parent as @inject/@required dependency', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Move dependency passed to all children to parent as @inject/@required dependency', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
 abstract class AbstractParentClass
 {
     private $someDependency;
@@ -104,25 +104,25 @@ class SecondChild extends AbstractParentClass
 {
 }
 CODE_SAMPLE
-, [self::FRAMEWORK => FrameworkName::NETTE])]);
+, [self::FRAMEWORK => \Rector\Core\ValueObject\FrameworkName::NETTE])]);
     }
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [Class_::class];
+        return [\PhpParser\Node\Stmt\Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$node->isAbstract()) {
             return null;
         }
         /** @var string|null $className */
-        $className = $node->getAttribute(AttributeKey::CLASS_NAME);
+        $className = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);
         if ($className === null) {
             return null;
         }
@@ -130,16 +130,16 @@ CODE_SAMPLE
         if (\count($childrenClasses) < 2) {
             return null;
         }
-        $classMethod = $node->getMethod(MethodName::CONSTRUCT);
-        if (!$classMethod instanceof ClassMethod) {
+        $classMethod = $node->getMethod(\Rector\Core\ValueObject\MethodName::CONSTRUCT);
+        if (!$classMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
             return null;
         }
         $abstractClassConstructorParamTypes = $this->resolveConstructorParamClassTypes($node);
         // process
         $this->injectObjectTypes = [];
         foreach ($childrenClasses as $childClass) {
-            $constructorClassMethod = $childClass->getMethod(MethodName::CONSTRUCT);
-            if (!$constructorClassMethod instanceof ClassMethod) {
+            $constructorClassMethod = $childClass->getMethod(\Rector\Core\ValueObject\MethodName::CONSTRUCT);
+            if (!$constructorClassMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
                 continue;
             }
             $this->refactorChildConstructorClassMethod($constructorClassMethod, $abstractClassConstructorParamTypes);
@@ -161,17 +161,17 @@ CODE_SAMPLE
     /**
      * @return ObjectType[]
      */
-    private function resolveConstructorParamClassTypes(Class_ $class) : array
+    private function resolveConstructorParamClassTypes(\PhpParser\Node\Stmt\Class_ $class) : array
     {
-        $constructorClassMethod = $class->getMethod(MethodName::CONSTRUCT);
-        if (!$constructorClassMethod instanceof ClassMethod) {
+        $constructorClassMethod = $class->getMethod(\Rector\Core\ValueObject\MethodName::CONSTRUCT);
+        if (!$constructorClassMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
             return [];
         }
         $objectTypes = [];
         foreach ($constructorClassMethod->getParams() as $param) {
             $paramType = $this->getObjectType($param);
             $paramType = $this->popFirstObjectTypeFromUnionType($paramType);
-            if (!$paramType instanceof ObjectType) {
+            if (!$paramType instanceof \PHPStan\Type\ObjectType) {
                 continue;
             }
             $objectTypes[] = $paramType;
@@ -181,12 +181,12 @@ CODE_SAMPLE
     /**
      * @param ObjectType[] $abstractClassConstructorParamTypes
      */
-    private function refactorChildConstructorClassMethod(ClassMethod $classMethod, array $abstractClassConstructorParamTypes) : void
+    private function refactorChildConstructorClassMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod, array $abstractClassConstructorParamTypes) : void
     {
         foreach ($classMethod->getParams() as $key => $param) {
             $paramType = $this->getStaticType($param);
             $paramType = $this->popFirstObjectTypeFromUnionType($paramType);
-            if (!$paramType instanceof ObjectType) {
+            if (!$paramType instanceof \PHPStan\Type\ObjectType) {
                 continue;
             }
             if (!$this->nodeTypeResolver->isSameObjectTypes($paramType, $abstractClassConstructorParamTypes)) {
@@ -197,7 +197,7 @@ CODE_SAMPLE
             $this->injectObjectTypes[] = $paramType;
         }
     }
-    private function clearAbstractClassConstructor(ClassMethod $classMethod) : void
+    private function clearAbstractClassConstructor(\PhpParser\Node\Stmt\ClassMethod $classMethod) : void
     {
         foreach ($classMethod->getParams() as $key => $param) {
             if (!$this->nodeTypeResolver->isObjectTypes($param, $this->injectObjectTypes)) {
@@ -208,23 +208,23 @@ CODE_SAMPLE
         }
         $this->classMethodNodeRemover->removeClassMethodIfUseless($classMethod);
     }
-    private function addInjectOrRequiredClassMethod(Class_ $class) : void
+    private function addInjectOrRequiredClassMethod(\PhpParser\Node\Stmt\Class_ $class) : void
     {
         /** @var string $className */
-        $className = $class->getAttribute(AttributeKey::CLASS_NAME);
+        $className = $class->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);
         if ($this->injectObjectTypes === []) {
             return;
         }
         $injectClassMethod = $this->injectMethodFactory->createFromTypes($this->injectObjectTypes, $className, $this->framework);
         $this->classInsertManipulator->addAsFirstMethod($class, $injectClassMethod);
     }
-    private function popFirstObjectTypeFromUnionType(Type $paramType) : Type
+    private function popFirstObjectTypeFromUnionType(\PHPStan\Type\Type $paramType) : \PHPStan\Type\Type
     {
-        if (!$paramType instanceof UnionType) {
+        if (!$paramType instanceof \PHPStan\Type\UnionType) {
             return $paramType;
         }
         foreach ($paramType->getTypes() as $unionedType) {
-            if ($unionedType instanceof ObjectType) {
+            if ($unionedType instanceof \PHPStan\Type\ObjectType) {
                 return $unionedType;
             }
         }

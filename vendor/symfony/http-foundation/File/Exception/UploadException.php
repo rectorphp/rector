@@ -15,6 +15,6 @@ namespace RectorPrefix20210510\Symfony\Component\HttpFoundation\File\Exception;
  *
  * @author Bernhard Schussek <bschussek@gmail.com>
  */
-class UploadException extends FileException
+class UploadException extends \RectorPrefix20210510\Symfony\Component\HttpFoundation\File\Exception\FileException
 {
 }

@@ -13,25 +13,25 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\Php56\Rector\FuncCall\PowToExpRector\PowToExpRectorTest
  */
-final class PowToExpRector extends AbstractRector
+final class PowToExpRector extends \Rector\Core\Rector\AbstractRector
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Changes pow(val, val2) to ** (exp) parameter', [new CodeSample('pow(1, 2);', '1**2;')]);
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Changes pow(val, val2) to ** (exp) parameter', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample('pow(1, 2);', '1**2;')]);
     }
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [FuncCall::class];
+        return [\PhpParser\Node\Expr\FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if (!$this->isAtLeastPhpVersion(PhpVersionFeature::EXP_OPERATOR)) {
+        if (!$this->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::EXP_OPERATOR)) {
             return null;
         }
         if (!$this->isName($node, 'pow')) {
@@ -42,6 +42,6 @@ final class PowToExpRector extends AbstractRector
         }
         $firstArgument = $node->args[0]->value;
         $secondArgument = $node->args[1]->value;
-        return new Pow($firstArgument, $secondArgument);
+        return new \PhpParser\Node\Expr\BinaryOp\Pow($firstArgument, $secondArgument);
     }
 }

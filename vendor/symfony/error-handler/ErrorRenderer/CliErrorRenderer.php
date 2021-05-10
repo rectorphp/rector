@@ -14,19 +14,19 @@ use RectorPrefix20210510\Symfony\Component\ErrorHandler\Exception\FlattenExcepti
 use RectorPrefix20210510\Symfony\Component\VarDumper\Cloner\VarCloner;
 use RectorPrefix20210510\Symfony\Component\VarDumper\Dumper\CliDumper;
 // Help opcache.preload discover always-needed symbols
-\class_exists(CliDumper::class);
+\class_exists(\RectorPrefix20210510\Symfony\Component\VarDumper\Dumper\CliDumper::class);
 /**
  * @author Nicolas Grekas <p@tchwork.com>
  */
-class CliErrorRenderer implements ErrorRendererInterface
+class CliErrorRenderer implements \RectorPrefix20210510\Symfony\Component\ErrorHandler\ErrorRenderer\ErrorRendererInterface
 {
     /**
      * {@inheritdoc}
      */
-    public function render(\Throwable $exception) : FlattenException
+    public function render(\Throwable $exception) : \RectorPrefix20210510\Symfony\Component\ErrorHandler\Exception\FlattenException
     {
-        $cloner = new VarCloner();
-        $dumper = new class extends CliDumper
+        $cloner = new \RectorPrefix20210510\Symfony\Component\VarDumper\Cloner\VarCloner();
+        $dumper = new class extends \RectorPrefix20210510\Symfony\Component\VarDumper\Dumper\CliDumper
         {
             protected function supportsColors() : bool
             {
@@ -39,6 +39,6 @@ class CliErrorRenderer implements ErrorRendererInterface
                 }
             }
         };
-        return FlattenException::createFromThrowable($exception)->setAsString($dumper->dump($cloner->cloneVar($exception), \true));
+        return \RectorPrefix20210510\Symfony\Component\ErrorHandler\Exception\FlattenException::createFromThrowable($exception)->setAsString($dumper->dump($cloner->cloneVar($exception), \true));
     }
 }

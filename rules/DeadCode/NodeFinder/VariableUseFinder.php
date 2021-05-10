@@ -24,7 +24,7 @@ final class VariableUseFinder
      * @var NodeComparator
      */
     private $nodeComparator;
-    public function __construct(BetterNodeFinder $betterNodeFinder, NodeNameResolver $nodeNameResolver, NodeComparator $nodeComparator)
+    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator)
     {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->nodeNameResolver = $nodeNameResolver;
@@ -34,15 +34,15 @@ final class VariableUseFinder
      * @param Variable[] $assignedVariables
      * @return Variable[]
      */
-    public function resolveUsedVariables(Node $node, array $assignedVariables) : array
+    public function resolveUsedVariables(\PhpParser\Node $node, array $assignedVariables) : array
     {
-        return $this->betterNodeFinder->find($node, function (Node $node) use($assignedVariables) : bool {
-            if (!$node instanceof Variable) {
+        return $this->betterNodeFinder->find($node, function (\PhpParser\Node $node) use($assignedVariables) : bool {
+            if (!$node instanceof \PhpParser\Node\Expr\Variable) {
                 return \false;
             }
-            $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+            $parentNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
             // is the left assign - not use of one
-            if ($parentNode instanceof Assign && ($parentNode->var instanceof Variable && $parentNode->var === $node)) {
+            if ($parentNode instanceof \PhpParser\Node\Expr\Assign && ($parentNode->var instanceof \PhpParser\Node\Expr\Variable && $parentNode->var === $node)) {
                 return \false;
             }
             $nodeNameResolverGetName = $this->nodeNameResolver->getName($node);

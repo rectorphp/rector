@@ -19,9 +19,9 @@ final class MethodCallToReturn
         $this->class = $class;
         $this->method = $method;
     }
-    public function getObjectType() : ObjectType
+    public function getObjectType() : \PHPStan\Type\ObjectType
     {
-        return new ObjectType($this->class);
+        return new \PHPStan\Type\ObjectType($this->class);
     }
     public function getMethod() : string
     {

@@ -17,7 +17,7 @@ final class ProcessResultFactory
      * @var NodesToRemoveCollector
      */
     private $nodesToRemoveCollector;
-    public function __construct(RemovedAndAddedFilesCollector $removedAndAddedFilesCollector, NodesToRemoveCollector $nodesToRemoveCollector)
+    public function __construct(\Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector $removedAndAddedFilesCollector, \Rector\PostRector\Collector\NodesToRemoveCollector $nodesToRemoveCollector)
     {
         $this->removedAndAddedFilesCollector = $removedAndAddedFilesCollector;
         $this->nodesToRemoveCollector = $nodesToRemoveCollector;
@@ -25,7 +25,7 @@ final class ProcessResultFactory
     /**
      * @param File[] $files
      */
-    public function create(array $files) : ProcessResult
+    public function create(array $files) : \Rector\Core\ValueObject\ProcessResult
     {
         $fileDiffs = [];
         $errors = [];
@@ -36,6 +36,6 @@ final class ProcessResultFactory
             $errors = \array_merge($errors, $file->getErrors());
             $fileDiffs[] = $file->getFileDiff();
         }
-        return new ProcessResult($fileDiffs, $errors, $this->removedAndAddedFilesCollector->getAddedFileCount(), $this->removedAndAddedFilesCollector->getRemovedFilesCount(), $this->nodesToRemoveCollector->getCount());
+        return new \Rector\Core\ValueObject\ProcessResult($fileDiffs, $errors, $this->removedAndAddedFilesCollector->getAddedFileCount(), $this->removedAndAddedFilesCollector->getRemovedFilesCount(), $this->nodesToRemoveCollector->getCount());
     }
 }

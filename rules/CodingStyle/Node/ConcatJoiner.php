@@ -22,26 +22,26 @@ final class ConcatJoiner
      * Joins all String_ nodes to string.
      * Returns that string + array of non-string nodes that were replaced by hash placeholders
      */
-    public function joinToStringAndPlaceholderNodes(Concat $concat) : ConcatStringAndPlaceholders
+    public function joinToStringAndPlaceholderNodes(\PhpParser\Node\Expr\BinaryOp\Concat $concat) : \Rector\CodingStyle\ValueObject\ConcatStringAndPlaceholders
     {
-        $parentNode = $concat->getAttribute(AttributeKey::PARENT_NODE);
-        if (!$parentNode instanceof Concat) {
+        $parentNode = $concat->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        if (!$parentNode instanceof \PhpParser\Node\Expr\BinaryOp\Concat) {
             $this->reset();
         }
         $this->processConcatSide($concat->left);
         $this->processConcatSide($concat->right);
-        return new ConcatStringAndPlaceholders($this->content, $this->placeholderNodes);
+        return new \Rector\CodingStyle\ValueObject\ConcatStringAndPlaceholders($this->content, $this->placeholderNodes);
     }
     private function reset() : void
     {
         $this->content = '';
         $this->placeholderNodes = [];
     }
-    private function processConcatSide(Expr $expr) : void
+    private function processConcatSide(\PhpParser\Node\Expr $expr) : void
     {
-        if ($expr instanceof String_) {
+        if ($expr instanceof \PhpParser\Node\Scalar\String_) {
             $this->content .= $expr->value;
-        } elseif ($expr instanceof Concat) {
+        } elseif ($expr instanceof \PhpParser\Node\Expr\BinaryOp\Concat) {
             $this->joinToStringAndPlaceholderNodes($expr);
         } else {
             $objectHash = '____' . \spl_object_hash($expr) . '____';

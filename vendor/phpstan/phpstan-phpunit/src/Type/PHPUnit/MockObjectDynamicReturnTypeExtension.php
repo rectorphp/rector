@@ -17,24 +17,24 @@ class MockObjectDynamicReturnTypeExtension implements \PHPStan\Type\DynamicMetho
 {
     public function getClass() : string
     {
-        return MockObject::class;
+        return \RectorPrefix20210510\PHPUnit\Framework\MockObject\MockObject::class;
     }
-    public function isMethodSupported(MethodReflection $methodReflection) : bool
+    public function isMethodSupported(\PHPStan\Reflection\MethodReflection $methodReflection) : bool
     {
         return $methodReflection->getName() === 'expects';
     }
-    public function getTypeFromMethodCall(MethodReflection $methodReflection, MethodCall $methodCall, Scope $scope) : Type
+    public function getTypeFromMethodCall(\PHPStan\Reflection\MethodReflection $methodReflection, \PhpParser\Node\Expr\MethodCall $methodCall, \PHPStan\Analyser\Scope $scope) : \PHPStan\Type\Type
     {
         $type = $scope->getType($methodCall->var);
-        if (!$type instanceof IntersectionType) {
-            return new ObjectType(InvocationMocker::class);
+        if (!$type instanceof \PHPStan\Type\IntersectionType) {
+            return new \PHPStan\Type\ObjectType(\RectorPrefix20210510\PHPUnit\Framework\MockObject\Builder\InvocationMocker::class);
         }
-        $mockClasses = \array_values(\array_filter($type->getTypes(), function (Type $type) : bool {
-            return !$type instanceof TypeWithClassName || $type->getClassName() !== MockObject::class;
+        $mockClasses = \array_values(\array_filter($type->getTypes(), function (\PHPStan\Type\Type $type) : bool {
+            return !$type instanceof \PHPStan\Type\TypeWithClassName || $type->getClassName() !== \RectorPrefix20210510\PHPUnit\Framework\MockObject\MockObject::class;
         }));
         if (\count($mockClasses) !== 1) {
-            return new ObjectType(InvocationMocker::class);
+            return new \PHPStan\Type\ObjectType(\RectorPrefix20210510\PHPUnit\Framework\MockObject\Builder\InvocationMocker::class);
         }
-        return new GenericObjectType(InvocationMocker::class, $mockClasses);
+        return new \PHPStan\Type\Generic\GenericObjectType(\RectorPrefix20210510\PHPUnit\Framework\MockObject\Builder\InvocationMocker::class, $mockClasses);
     }
 }

@@ -17,7 +17,7 @@ use RectorPrefix20210510\Symfony\Component\HttpFoundation\Response;
  *
  * @author Sebastian Krebs <krebs.seb@gmail.com>
  */
-class Ssi extends AbstractSurrogate
+class Ssi extends \RectorPrefix20210510\Symfony\Component\HttpKernel\HttpCache\AbstractSurrogate
 {
     /**
      * {@inheritdoc}
@@ -29,7 +29,7 @@ class Ssi extends AbstractSurrogate
     /**
      * {@inheritdoc}
      */
-    public function addSurrogateControl(Response $response)
+    public function addSurrogateControl(\RectorPrefix20210510\Symfony\Component\HttpFoundation\Response $response)
     {
         if (\false !== \strpos($response->getContent(), '<!--#include')) {
             $response->headers->set('Surrogate-Control', 'content="SSI/1.0"');
@@ -45,7 +45,7 @@ class Ssi extends AbstractSurrogate
     /**
      * {@inheritdoc}
      */
-    public function process(Request $request, Response $response)
+    public function process(\RectorPrefix20210510\Symfony\Component\HttpFoundation\Request $request, \RectorPrefix20210510\Symfony\Component\HttpFoundation\Response $response)
     {
         $type = $response->headers->get('Content-Type');
         if (empty($type)) {

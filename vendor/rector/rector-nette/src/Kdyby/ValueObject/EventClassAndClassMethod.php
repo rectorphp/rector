@@ -14,7 +14,7 @@ final class EventClassAndClassMethod
      * @var ClassMethod
      */
     private $classMethod;
-    public function __construct(string $eventClass, ClassMethod $classMethod)
+    public function __construct(string $eventClass, \PhpParser\Node\Stmt\ClassMethod $classMethod)
     {
         $this->eventClass = $eventClass;
         $this->classMethod = $classMethod;
@@ -23,7 +23,7 @@ final class EventClassAndClassMethod
     {
         return $this->eventClass;
     }
-    public function getClassMethod() : ClassMethod
+    public function getClassMethod() : \PhpParser\Node\Stmt\ClassMethod
     {
         return $this->classMethod;
     }

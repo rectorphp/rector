@@ -9,11 +9,11 @@ use Rector\Order\Rector\Class_\OrderMethodsByVisibilityRector;
 use Rector\Order\Rector\Class_\OrderPrivateMethodsByUseRector;
 use Rector\Order\Rector\Class_\OrderPropertiesByVisibilityRector;
 use RectorPrefix20210510\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-return static function (ContainerConfigurator $containerConfigurator) : void {
+return static function (\RectorPrefix20210510\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
-    $services->set(OrderPrivateMethodsByUseRector::class);
-    $services->set(OrderClassConstantsByIntegerValueRector::class);
-    $services->set(OrderMethodsByVisibilityRector::class);
-    $services->set(OrderPropertiesByVisibilityRector::class);
-    $services->set(OrderConstantsByVisibilityRector::class);
+    $services->set(\Rector\Order\Rector\Class_\OrderPrivateMethodsByUseRector::class);
+    $services->set(\Rector\Order\Rector\Class_\OrderClassConstantsByIntegerValueRector::class);
+    $services->set(\Rector\Order\Rector\Class_\OrderMethodsByVisibilityRector::class);
+    $services->set(\Rector\Order\Rector\Class_\OrderPropertiesByVisibilityRector::class);
+    $services->set(\Rector\Order\Rector\Class_\OrderConstantsByVisibilityRector::class);
 };

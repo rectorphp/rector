@@ -21,26 +21,26 @@ final class PropertyFetchRenamer
      * @var NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(SimpleCallableNodeTraverser $simpleCallableNodeTraverser, NodeNameResolver $nodeNameResolver)
+    public function __construct(\RectorPrefix20210510\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
     {
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->nodeNameResolver = $nodeNameResolver;
     }
-    public function renamePropertyFetchesInClass(ClassLike $classLike, string $currentName, string $expectedName) : void
+    public function renamePropertyFetchesInClass(\PhpParser\Node\Stmt\ClassLike $classLike, string $currentName, string $expectedName) : void
     {
         // 1. replace property fetch rename in whole class
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($classLike, function (Node $node) use($currentName, $expectedName) : ?Node {
-            if ($node instanceof PropertyFetch && $this->nodeNameResolver->isLocalPropertyFetchNamed($node, $currentName)) {
-                $node->name = new Identifier($expectedName);
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($classLike, function (\PhpParser\Node $node) use($currentName, $expectedName) : ?Node {
+            if ($node instanceof \PhpParser\Node\Expr\PropertyFetch && $this->nodeNameResolver->isLocalPropertyFetchNamed($node, $currentName)) {
+                $node->name = new \PhpParser\Node\Identifier($expectedName);
                 return $node;
             }
-            if (!$node instanceof StaticPropertyFetch) {
+            if (!$node instanceof \PhpParser\Node\Expr\StaticPropertyFetch) {
                 return null;
             }
             if (!$this->nodeNameResolver->isName($node->name, $currentName)) {
                 return null;
             }
-            $node->name = new VarLikeIdentifier($expectedName);
+            $node->name = new \PhpParser\Node\VarLikeIdentifier($expectedName);
             return $node;
         });
     }

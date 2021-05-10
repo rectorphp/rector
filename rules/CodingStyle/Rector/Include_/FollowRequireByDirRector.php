@@ -15,11 +15,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\CodingStyle\Rector\Include_\FollowRequireByDirRector\FollowRequireByDirRectorTest
  */
-final class FollowRequireByDirRector extends AbstractRector
+final class FollowRequireByDirRector extends \Rector\Core\Rector\AbstractRector
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('include/require should be followed by absolute path', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('include/require should be followed by absolute path', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -44,47 +44,47 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Include_::class];
+        return [\PhpParser\Node\Expr\Include_::class];
     }
     /**
      * @param Include_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if ($node->expr instanceof Concat && $node->expr->left instanceof String_ && $this->isRefactorableStringPath($node->expr->left)) {
+        if ($node->expr instanceof \PhpParser\Node\Expr\BinaryOp\Concat && $node->expr->left instanceof \PhpParser\Node\Scalar\String_ && $this->isRefactorableStringPath($node->expr->left)) {
             $node->expr->left = $this->prefixWithDir($node->expr->left);
             return $node;
         }
-        if ($node->expr instanceof String_ && $this->isRefactorableStringPath($node->expr)) {
+        if ($node->expr instanceof \PhpParser\Node\Scalar\String_ && $this->isRefactorableStringPath($node->expr)) {
             $node->expr = $this->prefixWithDir($node->expr);
             return $node;
         }
         // nothing we can do
         return null;
     }
-    private function isRefactorableStringPath(String_ $string) : bool
+    private function isRefactorableStringPath(\PhpParser\Node\Scalar\String_ $string) : bool
     {
-        return !Strings::startsWith($string->value, 'phar://');
+        return !\RectorPrefix20210510\Nette\Utils\Strings::startsWith($string->value, 'phar://');
     }
-    private function prefixWithDir(String_ $string) : Concat
+    private function prefixWithDir(\PhpParser\Node\Scalar\String_ $string) : \PhpParser\Node\Expr\BinaryOp\Concat
     {
         $this->removeExtraDotSlash($string);
         $this->prependSlashIfMissing($string);
-        return new Concat(new Dir(), $string);
+        return new \PhpParser\Node\Expr\BinaryOp\Concat(new \PhpParser\Node\Scalar\MagicConst\Dir(), $string);
     }
     /**
      * Remove "./" which would break the path
      */
-    private function removeExtraDotSlash(String_ $string) : void
+    private function removeExtraDotSlash(\PhpParser\Node\Scalar\String_ $string) : void
     {
-        if (!Strings::startsWith($string->value, './')) {
+        if (!\RectorPrefix20210510\Nette\Utils\Strings::startsWith($string->value, './')) {
             return;
         }
-        $string->value = Strings::replace($string->value, '#^\\.\\/#', '/');
+        $string->value = \RectorPrefix20210510\Nette\Utils\Strings::replace($string->value, '#^\\.\\/#', '/');
     }
-    private function prependSlashIfMissing(String_ $string) : void
+    private function prependSlashIfMissing(\PhpParser\Node\Scalar\String_ $string) : void
     {
-        if (Strings::startsWith($string->value, '/')) {
+        if (\RectorPrefix20210510\Nette\Utils\Strings::startsWith($string->value, '/')) {
             return;
         }
         $string->value = '/' . $string->value;

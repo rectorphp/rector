@@ -20,11 +20,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\CodeQuality\Rector\Foreach_\SimplifyForeachToArrayFilterRector\SimplifyForeachToArrayFilterRectorTest
  */
-final class SimplifyForeachToArrayFilterRector extends AbstractRector
+final class SimplifyForeachToArrayFilterRector extends \Rector\Core\Rector\AbstractRector
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Simplify foreach with function filtering to array filter', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Simplify foreach with function filtering to array filter', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 $directories = [];
 $possibleDirectories = [];
 foreach ($possibleDirectories as $possibleDirectory) {
@@ -44,12 +44,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Foreach_::class];
+        return [\PhpParser\Node\Stmt\Foreach_::class];
     }
     /**
      * @param Foreach_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -64,15 +64,15 @@ CODE_SAMPLE
         if (!$this->isSimpleCall($funcCallNode, $node)) {
             return null;
         }
-        if (!$ifNode->stmts[0] instanceof Expression) {
+        if (!$ifNode->stmts[0] instanceof \PhpParser\Node\Stmt\Expression) {
             return null;
         }
         $onlyNodeInIf = $ifNode->stmts[0]->expr;
-        if (!$onlyNodeInIf instanceof Assign) {
+        if (!$onlyNodeInIf instanceof \PhpParser\Node\Expr\Assign) {
             return null;
         }
         $arrayDimFetch = $onlyNodeInIf->var;
-        if (!$arrayDimFetch instanceof ArrayDimFetch) {
+        if (!$arrayDimFetch instanceof \PhpParser\Node\Expr\ArrayDimFetch) {
             return null;
         }
         if (!$this->nodeComparator->areNodesEqual($onlyNodeInIf->expr, $node->valueVar)) {
@@ -87,12 +87,12 @@ CODE_SAMPLE
         }
         return $this->createAssignNode($node, $name, $arrayDimFetch);
     }
-    private function shouldSkip(Foreach_ $foreach) : bool
+    private function shouldSkip(\PhpParser\Node\Stmt\Foreach_ $foreach) : bool
     {
         if (\count($foreach->stmts) !== 1) {
             return \true;
         }
-        if (!$foreach->stmts[0] instanceof If_) {
+        if (!$foreach->stmts[0] instanceof \PhpParser\Node\Stmt\If_) {
             return \true;
         }
         /** @var If_ $ifNode */
@@ -103,28 +103,28 @@ CODE_SAMPLE
         if ($ifNode->elseifs !== []) {
             return \true;
         }
-        return !$ifNode->cond instanceof FuncCall;
+        return !$ifNode->cond instanceof \PhpParser\Node\Expr\FuncCall;
     }
-    private function createAssignNode(Foreach_ $foreach, string $name, ArrayDimFetch $arrayDimFetch) : Assign
+    private function createAssignNode(\PhpParser\Node\Stmt\Foreach_ $foreach, string $name, \PhpParser\Node\Expr\ArrayDimFetch $arrayDimFetch) : \PhpParser\Node\Expr\Assign
     {
-        $string = new String_($name);
-        $args = [new Arg($foreach->expr), new Arg($string)];
-        $arrayFilterFuncCall = new FuncCall(new Name('array_filter'), $args);
-        return new Assign($arrayDimFetch->var, $arrayFilterFuncCall);
+        $string = new \PhpParser\Node\Scalar\String_($name);
+        $args = [new \PhpParser\Node\Arg($foreach->expr), new \PhpParser\Node\Arg($string)];
+        $arrayFilterFuncCall = new \PhpParser\Node\Expr\FuncCall(new \PhpParser\Node\Name('array_filter'), $args);
+        return new \PhpParser\Node\Expr\Assign($arrayDimFetch->var, $arrayFilterFuncCall);
     }
-    private function forLoopFillsAnotherArray(Foreach_ $foreach, ArrayDimFetch $arrayDimFetch) : bool
+    private function forLoopFillsAnotherArray(\PhpParser\Node\Stmt\Foreach_ $foreach, \PhpParser\Node\Expr\ArrayDimFetch $arrayDimFetch) : bool
     {
         $loopVar = $foreach->expr;
-        if (!$loopVar instanceof Variable) {
+        if (!$loopVar instanceof \PhpParser\Node\Expr\Variable) {
             return \false;
         }
         $varThatIsModified = $arrayDimFetch->var;
-        if (!$varThatIsModified instanceof Variable) {
+        if (!$varThatIsModified instanceof \PhpParser\Node\Expr\Variable) {
             return \false;
         }
         return $loopVar->name !== $varThatIsModified->name;
     }
-    private function isSimpleCall(FuncCall $funcCall, Foreach_ $foreach) : bool
+    private function isSimpleCall(\PhpParser\Node\Expr\FuncCall $funcCall, \PhpParser\Node\Stmt\Foreach_ $foreach) : bool
     {
         if (\count($funcCall->args) !== 1) {
             return \false;

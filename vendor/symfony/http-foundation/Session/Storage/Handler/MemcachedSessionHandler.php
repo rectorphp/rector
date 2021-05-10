@@ -18,7 +18,7 @@ namespace RectorPrefix20210510\Symfony\Component\HttpFoundation\Session\Storage\
  *
  * @author Drak <drak@zikula.org>
  */
-class MemcachedSessionHandler extends AbstractSessionHandler
+class MemcachedSessionHandler extends \RectorPrefix20210510\Symfony\Component\HttpFoundation\Session\Storage\Handler\AbstractSessionHandler
 {
     private $memcached;
     /**

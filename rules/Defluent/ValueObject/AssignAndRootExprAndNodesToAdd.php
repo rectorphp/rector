@@ -30,7 +30,7 @@ final class AssignAndRootExprAndNodesToAdd
     {
         return $this->nodesToAdd;
     }
-    public function getRootCallerExpr() : Expr
+    public function getRootCallerExpr() : \PhpParser\Node\Expr
     {
         return $this->assignAndRootExpr->getCallerExpr();
     }

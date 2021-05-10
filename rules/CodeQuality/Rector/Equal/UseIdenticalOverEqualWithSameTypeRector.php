@@ -16,11 +16,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\CodeQuality\Rector\Equal\UseIdenticalOverEqualWithSameTypeRector\UseIdenticalOverEqualWithSameTypeRectorTest
  */
-final class UseIdenticalOverEqualWithSameTypeRector extends AbstractRector
+final class UseIdenticalOverEqualWithSameTypeRector extends \Rector\Core\Rector\AbstractRector
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Use ===/!== over ==/!=, it values have the same type', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Use ===/!== over ==/!=, it values have the same type', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run(int $firstValue, int $secondValue)
@@ -47,32 +47,32 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Equal::class, NotEqual::class];
+        return [\PhpParser\Node\Expr\BinaryOp\Equal::class, \PhpParser\Node\Expr\BinaryOp\NotEqual::class];
     }
     /**
      * @param Equal|NotEqual $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $leftStaticType = $this->getStaticType($node->left);
         $rightStaticType = $this->getStaticType($node->right);
         // objects can be different by content
-        if ($leftStaticType instanceof ObjectType) {
+        if ($leftStaticType instanceof \PHPStan\Type\ObjectType) {
             return null;
         }
-        if ($leftStaticType instanceof MixedType) {
+        if ($leftStaticType instanceof \PHPStan\Type\MixedType) {
             return null;
         }
-        if ($rightStaticType instanceof MixedType) {
+        if ($rightStaticType instanceof \PHPStan\Type\MixedType) {
             return null;
         }
         // different types
         if (!$leftStaticType->equals($rightStaticType)) {
             return null;
         }
-        if ($node instanceof Equal) {
-            return new Identical($node->left, $node->right);
+        if ($node instanceof \PhpParser\Node\Expr\BinaryOp\Equal) {
+            return new \PhpParser\Node\Expr\BinaryOp\Identical($node->left, $node->right);
         }
-        return new NotIdentical($node->left, $node->right);
+        return new \PhpParser\Node\Expr\BinaryOp\NotIdentical($node->left, $node->right);
     }
 }

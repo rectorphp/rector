@@ -13,21 +13,21 @@ final class MatchersManipulator
     /**
      * @return string[]
      */
-    public function resolveMatcherNamesFromClass(Class_ $class) : array
+    public function resolveMatcherNamesFromClass(\PhpParser\Node\Stmt\Class_ $class) : array
     {
         $classMethod = $class->getMethod('getMatchers');
-        if (!$classMethod instanceof ClassMethod) {
+        if (!$classMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
             return [];
         }
         if (!isset($classMethod->stmts[0])) {
             return [];
         }
-        if (!$classMethod->stmts[0] instanceof Return_) {
+        if (!$classMethod->stmts[0] instanceof \PhpParser\Node\Stmt\Return_) {
             return [];
         }
         /** @var Return_ $return */
         $return = $classMethod->stmts[0];
-        if (!$return->expr instanceof Array_) {
+        if (!$return->expr instanceof \PhpParser\Node\Expr\Array_) {
             return [];
         }
         $keys = [];
@@ -35,7 +35,7 @@ final class MatchersManipulator
             if ($arrayItem === null) {
                 continue;
             }
-            if ($arrayItem->key instanceof String_) {
+            if ($arrayItem->key instanceof \PhpParser\Node\Scalar\String_) {
                 $keys[] = $arrayItem->key->value;
             }
         }

@@ -14,19 +14,19 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Nette\Tests\Rector\ClassMethod\MergeTemplateSetFileToTemplateRenderRector\MergeTemplateSetFileToTemplateRenderRectorTest
  */
-final class MergeTemplateSetFileToTemplateRenderRector extends AbstractRector
+final class MergeTemplateSetFileToTemplateRenderRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var NetteClassAnalyzer
      */
     private $netteClassAnalyzer;
-    public function __construct(NetteClassAnalyzer $netteClassAnalyzer)
+    public function __construct(\Rector\Nette\NodeAnalyzer\NetteClassAnalyzer $netteClassAnalyzer)
     {
         $this->netteClassAnalyzer = $netteClassAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Change $this->template->setFile() $this->template->render()', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change $this->template->setFile() $this->template->render()', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 use Nette\Application\UI\Control;
 
 final class SomeControl extends Control
@@ -56,20 +56,20 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [ClassMethod::class];
+        return [\PhpParser\Node\Stmt\ClassMethod::class];
     }
     /**
      * @param ClassMethod $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$this->netteClassAnalyzer->isInComponent($node)) {
             return null;
         }
         /** @var MethodCall[] $methodCalls */
-        $methodCalls = $this->betterNodeFinder->findInstanceOf((array) $node->stmts, MethodCall::class);
+        $methodCalls = $this->betterNodeFinder->findInstanceOf((array) $node->stmts, \PhpParser\Node\Expr\MethodCall::class);
         $setFileMethodCall = $this->resolveSingleSetFileMethodCall($methodCalls);
-        if (!$setFileMethodCall instanceof MethodCall) {
+        if (!$setFileMethodCall instanceof \PhpParser\Node\Expr\MethodCall) {
             return null;
         }
         foreach ($methodCalls as $methodCall) {
@@ -80,7 +80,7 @@ CODE_SAMPLE
                 continue;
             }
             $this->removeNode($setFileMethodCall);
-            $methodCall->args[0] = new Arg($setFileMethodCall->args[0]->value);
+            $methodCall->args[0] = new \PhpParser\Node\Arg($setFileMethodCall->args[0]->value);
             return $node;
         }
         return null;
@@ -88,14 +88,14 @@ CODE_SAMPLE
     /**
      * @param MethodCall[] $methodCalls
      */
-    private function resolveSingleSetFileMethodCall(array $methodCalls) : ?MethodCall
+    private function resolveSingleSetFileMethodCall(array $methodCalls) : ?\PhpParser\Node\Expr\MethodCall
     {
         $singleSetFileMethodCall = null;
         foreach ($methodCalls as $methodCall) {
             if (!$this->isName($methodCall->name, 'setFile')) {
                 continue;
             }
-            if ($singleSetFileMethodCall instanceof MethodCall) {
+            if ($singleSetFileMethodCall instanceof \PhpParser\Node\Expr\MethodCall) {
                 return null;
             }
             $singleSetFileMethodCall = $methodCall;

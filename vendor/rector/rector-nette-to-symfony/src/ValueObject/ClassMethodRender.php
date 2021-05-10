@@ -7,7 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use Rector\Nette\Contract\ValueObject\ParameterArrayInterface;
-final class ClassMethodRender implements ParameterArrayInterface
+final class ClassMethodRender implements \Rector\Nette\Contract\ValueObject\ParameterArrayInterface
 {
     /**
      * @var Node[]
@@ -59,7 +59,7 @@ final class ClassMethodRender implements ParameterArrayInterface
     {
         return $this->nodesToRemove;
     }
-    public function getFirstTemplateFileExpr() : ?Expr
+    public function getFirstTemplateFileExpr() : ?\PhpParser\Node\Expr
     {
         return $this->templateFileExprs[0] ?? null;
     }

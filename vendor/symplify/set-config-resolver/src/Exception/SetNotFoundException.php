@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace RectorPrefix20210510\Symplify\SetConfigResolver\Exception;
 
 use Exception;
-final class SetNotFoundException extends Exception
+final class SetNotFoundException extends \Exception
 {
     /**
      * @var string

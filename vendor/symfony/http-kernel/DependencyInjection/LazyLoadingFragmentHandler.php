@@ -18,11 +18,11 @@ use RectorPrefix20210510\Symfony\Component\HttpKernel\Fragment\FragmentHandler;
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class LazyLoadingFragmentHandler extends FragmentHandler
+class LazyLoadingFragmentHandler extends \RectorPrefix20210510\Symfony\Component\HttpKernel\Fragment\FragmentHandler
 {
     private $container;
     private $initialized = [];
-    public function __construct(ContainerInterface $container, RequestStack $requestStack, bool $debug = \false)
+    public function __construct(\RectorPrefix20210510\Psr\Container\ContainerInterface $container, \RectorPrefix20210510\Symfony\Component\HttpFoundation\RequestStack $requestStack, bool $debug = \false)
     {
         $this->container = $container;
         parent::__construct($requestStack, [], $debug);

@@ -93,7 +93,7 @@ final class AttributeKey
      * @deprecated Use File object instead, e.g. via CurrentFileProvider
      * @var string
      */
-    public const FILE_INFO = SmartFileInfo::class;
+    public const FILE_INFO = \Symplify\SmartFileSystem\SmartFileInfo::class;
     /**
      * Internal php-parser name.
      * Do not change this even if you want!

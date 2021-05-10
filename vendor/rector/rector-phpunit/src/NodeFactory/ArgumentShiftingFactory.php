@@ -7,9 +7,9 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
 final class ArgumentShiftingFactory
 {
-    public function removeAllButFirstArgMethodCall(MethodCall $methodCall, string $methodName) : void
+    public function removeAllButFirstArgMethodCall(\PhpParser\Node\Expr\MethodCall $methodCall, string $methodName) : void
     {
-        $methodCall->name = new Identifier($methodName);
+        $methodCall->name = new \PhpParser\Node\Identifier($methodName);
         foreach (\array_keys($methodCall->args) as $i) {
             // keep first arg
             if ($i === 0) {

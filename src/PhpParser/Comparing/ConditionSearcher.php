@@ -10,27 +10,27 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
 final class ConditionSearcher
 {
-    public function searchIfAndElseForVariableRedeclaration(Assign $assign, If_ $if) : bool
+    public function searchIfAndElseForVariableRedeclaration(\PhpParser\Node\Expr\Assign $assign, \PhpParser\Node\Stmt\If_ $if) : bool
     {
         /** @var Variable $varNode */
         $varNode = $assign->var;
         // search if for redeclaration of variable
         foreach ($if->stmts as $statementIf) {
-            if (!$statementIf instanceof Expression) {
+            if (!$statementIf instanceof \PhpParser\Node\Stmt\Expression) {
                 continue;
             }
-            if (!$statementIf->expr instanceof Assign) {
+            if (!$statementIf->expr instanceof \PhpParser\Node\Expr\Assign) {
                 continue;
             }
             $assignVar = $statementIf->expr->var;
-            if (!$assignVar instanceof Variable) {
+            if (!$assignVar instanceof \PhpParser\Node\Expr\Variable) {
                 continue;
             }
             if ($varNode->name !== $assignVar->name) {
                 continue;
             }
             $elseNode = $if->else;
-            if (!$elseNode instanceof Else_) {
+            if (!$elseNode instanceof \PhpParser\Node\Stmt\Else_) {
                 continue;
             }
             // search else for redeclaration of variable
@@ -38,13 +38,13 @@ final class ConditionSearcher
         }
         return \false;
     }
-    private function searchElseForVariableRedeclaration(Assign $assign, Else_ $else) : bool
+    private function searchElseForVariableRedeclaration(\PhpParser\Node\Expr\Assign $assign, \PhpParser\Node\Stmt\Else_ $else) : bool
     {
         foreach ($else->stmts as $statementElse) {
-            if (!$statementElse instanceof Expression) {
+            if (!$statementElse instanceof \PhpParser\Node\Stmt\Expression) {
                 continue;
             }
-            if (!$statementElse->expr instanceof Assign) {
+            if (!$statementElse->expr instanceof \PhpParser\Node\Expr\Assign) {
                 continue;
             }
             /** @var Variable $varElse */

@@ -11,42 +11,42 @@ use Rector\Generics\ValueObject\ChildParentClassReflections;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 final class GenericClassReflectionAnalyzer
 {
-    public function resolveChildParent(Class_ $class) : ?ChildParentClassReflections
+    public function resolveChildParent(\PhpParser\Node\Stmt\Class_ $class) : ?\Rector\Generics\ValueObject\ChildParentClassReflections
     {
         if ($class->extends === null) {
             return null;
         }
-        $scope = $class->getAttribute(AttributeKey::SCOPE);
-        if (!$scope instanceof Scope) {
+        $scope = $class->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
+        if (!$scope instanceof \PHPStan\Analyser\Scope) {
             return null;
         }
         $classReflection = $scope->getClassReflection();
-        if (!$classReflection instanceof ClassReflection) {
+        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
             return null;
         }
         if (!$this->isGeneric($classReflection)) {
             return null;
         }
         $parentClassReflection = $classReflection->getParentClass();
-        if (!$parentClassReflection instanceof ClassReflection) {
+        if (!$parentClassReflection instanceof \PHPStan\Reflection\ClassReflection) {
             return null;
         }
         if (!$this->isGeneric($parentClassReflection)) {
             return null;
         }
-        return new ChildParentClassReflections($classReflection, $parentClassReflection);
+        return new \Rector\Generics\ValueObject\ChildParentClassReflections($classReflection, $parentClassReflection);
     }
     /**
      * Solve isGeneric() ignores extends and similar tags,
      * so it has to be extended with "@extends" and "@implements"
      */
-    private function isGeneric(ClassReflection $classReflection) : bool
+    private function isGeneric(\PHPStan\Reflection\ClassReflection $classReflection) : bool
     {
         if ($classReflection->isGeneric()) {
             return \true;
         }
         $resolvedPhpDocBlock = $classReflection->getResolvedPhpDoc();
-        if (!$resolvedPhpDocBlock instanceof ResolvedPhpDocBlock) {
+        if (!$resolvedPhpDocBlock instanceof \PHPStan\PhpDoc\ResolvedPhpDocBlock) {
             return \false;
         }
         if ($resolvedPhpDocBlock->getExtendsTags() !== []) {

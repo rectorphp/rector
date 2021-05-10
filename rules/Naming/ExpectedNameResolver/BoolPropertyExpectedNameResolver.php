@@ -21,13 +21,13 @@ final class BoolPropertyExpectedNameResolver
      * @var NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(PropertyNaming $propertyNaming, NodeTypeResolver $nodeTypeResolver, NodeNameResolver $nodeNameResolver)
+    public function __construct(\Rector\Naming\Naming\PropertyNaming $propertyNaming, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
     {
         $this->propertyNaming = $propertyNaming;
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->nodeNameResolver = $nodeNameResolver;
     }
-    public function resolve(Property $property) : ?string
+    public function resolve(\PhpParser\Node\Stmt\Property $property) : ?string
     {
         if (!$this->nodeTypeResolver->isPropertyBoolean($property)) {
             return null;

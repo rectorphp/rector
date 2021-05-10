@@ -17,9 +17,9 @@ if (!\function_exists('RectorPrefix20210510\\dump')) {
      */
     function dump($var, ...$moreVars)
     {
-        VarDumper::dump($var);
+        \RectorPrefix20210510\Symfony\Component\VarDumper\VarDumper::dump($var);
         foreach ($moreVars as $v) {
-            VarDumper::dump($v);
+            \RectorPrefix20210510\Symfony\Component\VarDumper\VarDumper::dump($v);
         }
         if (1 < \func_num_args()) {
             return \func_get_args();
@@ -31,7 +31,7 @@ if (!\function_exists('RectorPrefix20210510\\dd')) {
     function dd(...$vars)
     {
         foreach ($vars as $v) {
-            VarDumper::dump($v);
+            \RectorPrefix20210510\Symfony\Component\VarDumper\VarDumper::dump($v);
         }
         exit(1);
     }

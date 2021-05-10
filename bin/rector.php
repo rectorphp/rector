@@ -18,29 +18,29 @@ use RectorPrefix20210510\Symplify\PackageBuilder\Reflection\PrivatesCaller;
 \gc_disable();
 \define('__RECTOR_RUNNING__', \true);
 // Require Composer autoload.php
-$autoloadIncluder = new AutoloadIncluder();
+$autoloadIncluder = new \RectorPrefix20210510\AutoloadIncluder();
 $autoloadIncluder->includeDependencyOrRepositoryVendorAutoloadIfExists();
 // load extracted PHPStan with its own preload.php
 $extractedPhpstanAutoload = __DIR__ . '/../vendor/phpstan/phpstan-extracted/vendor/autoload.php';
 if (\file_exists($extractedPhpstanAutoload)) {
     require_once $extractedPhpstanAutoload;
-} elseif (should_include_preload()) {
+} elseif (\RectorPrefix20210510\should_include_preload()) {
     require_once __DIR__ . '/../preload.php';
 }
 require_once __DIR__ . '/../src/constants.php';
 $autoloadIncluder->loadIfExistsAndNotLoadedYet(__DIR__ . '/../vendor/scoper-autoload.php');
 $autoloadIncluder->autoloadProjectAutoloaderFile();
 $autoloadIncluder->autoloadFromCommandLine();
-$symfonyStyleFactory = new SymfonyStyleFactory(new PrivatesCaller());
+$symfonyStyleFactory = new \Rector\Core\Console\Style\SymfonyStyleFactory(new \RectorPrefix20210510\Symplify\PackageBuilder\Reflection\PrivatesCaller());
 $symfonyStyle = $symfonyStyleFactory->create();
-$rectorConfigsResolver = new RectorConfigsResolver();
+$rectorConfigsResolver = new \Rector\Core\Bootstrap\RectorConfigsResolver();
 try {
     $bootstrapConfigs = $rectorConfigsResolver->provide();
-    $rectorContainerFactory = new RectorContainerFactory();
+    $rectorContainerFactory = new \Rector\Core\DependencyInjection\RectorContainerFactory();
     $container = $rectorContainerFactory->createFromBootstrapConfigs($bootstrapConfigs);
 } catch (\Throwable $throwable) {
     $symfonyStyle->error($throwable->getMessage());
-    exit(ShellCode::ERROR);
+    exit(\RectorPrefix20210510\Symplify\PackageBuilder\Console\ShellCode::ERROR);
 }
 // preload local InstalledVersions.php - to fix incorrect version by same-named class in phpstan
 $currentlyInstalledVersions = __DIR__ . '/../../../../vendor/composer/InstalledVersions.php';
@@ -48,7 +48,7 @@ if (\file_exists($currentlyInstalledVersions)) {
     require_once $currentlyInstalledVersions;
 }
 /** @var ConsoleApplication $application */
-$application = $container->get(ConsoleApplication::class);
+$application = $container->get(\Rector\Core\Console\ConsoleApplication::class);
 exit($application->run());
 final class AutoloadIncluder
 {
@@ -59,7 +59,7 @@ final class AutoloadIncluder
     public function includeDependencyOrRepositoryVendorAutoloadIfExists() : void
     {
         // Rector's vendor is already loaded
-        if (\class_exists(RectorKernel::class)) {
+        if (\class_exists(\Rector\Core\HttpKernel\RectorKernel::class)) {
             return;
         }
         // in Rector develop repository

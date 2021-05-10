@@ -14,17 +14,17 @@ use Rector\Privatization\Rector\Property\ChangeReadOnlyPropertyWithDefaultValueT
 use Rector\Privatization\Rector\Property\PrivatizeFinalClassPropertyRector;
 use Rector\Privatization\Rector\Property\PrivatizeLocalPropertyToPrivatePropertyRector;
 use RectorPrefix20210510\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-return static function (ContainerConfigurator $containerConfigurator) : void {
+return static function (\RectorPrefix20210510\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
-    $services->set(FinalizeClassesWithoutChildrenRector::class);
-    $services->set(ChangeGlobalVariablesToPropertiesRector::class);
-    $services->set(ChangeReadOnlyPropertyWithDefaultValueToConstantRector::class);
-    $services->set(ChangeReadOnlyVariableWithDefaultValueToConstantRector::class);
-    $services->set(RepeatedLiteralToClassConstantRector::class);
-    $services->set(PrivatizeLocalGetterToPropertyRector::class);
-    $services->set(PrivatizeLocalPropertyToPrivatePropertyRector::class);
-    $services->set(PrivatizeFinalClassPropertyRector::class);
-    $services->set(PrivatizeFinalClassMethodRector::class);
+    $services->set(\Rector\Privatization\Rector\Class_\FinalizeClassesWithoutChildrenRector::class);
+    $services->set(\Rector\Privatization\Rector\ClassMethod\ChangeGlobalVariablesToPropertiesRector::class);
+    $services->set(\Rector\Privatization\Rector\Property\ChangeReadOnlyPropertyWithDefaultValueToConstantRector::class);
+    $services->set(\Rector\Privatization\Rector\Class_\ChangeReadOnlyVariableWithDefaultValueToConstantRector::class);
+    $services->set(\Rector\Privatization\Rector\Class_\RepeatedLiteralToClassConstantRector::class);
+    $services->set(\Rector\Privatization\Rector\MethodCall\PrivatizeLocalGetterToPropertyRector::class);
+    $services->set(\Rector\Privatization\Rector\Property\PrivatizeLocalPropertyToPrivatePropertyRector::class);
+    $services->set(\Rector\Privatization\Rector\Property\PrivatizeFinalClassPropertyRector::class);
+    $services->set(\Rector\Privatization\Rector\ClassMethod\PrivatizeFinalClassMethodRector::class);
     // buggy, requires more work
     // $services->set(ChangeLocalPropertyToVariableRector::class);
 };

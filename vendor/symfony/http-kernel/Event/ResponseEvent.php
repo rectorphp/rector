@@ -22,19 +22,19 @@ use RectorPrefix20210510\Symfony\Component\HttpKernel\HttpKernelInterface;
  *
  * @author Bernhard Schussek <bschussek@gmail.com>
  */
-final class ResponseEvent extends KernelEvent
+final class ResponseEvent extends \RectorPrefix20210510\Symfony\Component\HttpKernel\Event\KernelEvent
 {
     private $response;
-    public function __construct(HttpKernelInterface $kernel, Request $request, int $requestType, Response $response)
+    public function __construct(\RectorPrefix20210510\Symfony\Component\HttpKernel\HttpKernelInterface $kernel, \RectorPrefix20210510\Symfony\Component\HttpFoundation\Request $request, int $requestType, \RectorPrefix20210510\Symfony\Component\HttpFoundation\Response $response)
     {
         parent::__construct($kernel, $request, $requestType);
         $this->setResponse($response);
     }
-    public function getResponse() : Response
+    public function getResponse() : \RectorPrefix20210510\Symfony\Component\HttpFoundation\Response
     {
         return $this->response;
     }
-    public function setResponse(Response $response) : void
+    public function setResponse(\RectorPrefix20210510\Symfony\Component\HttpFoundation\Response $response) : void
     {
         $this->response = $response;
     }

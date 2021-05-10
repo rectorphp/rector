@@ -17,7 +17,7 @@ use RectorPrefix20210510\Symfony\Component\HttpFoundation\File\UploadedFile;
  * @author Fabien Potencier <fabien@symfony.com>
  * @author Bulat Shakirzyanov <mallluhuct@gmail.com>
  */
-class FileBag extends ParameterBag
+class FileBag extends \RectorPrefix20210510\Symfony\Component\HttpFoundation\ParameterBag
 {
     private const FILE_KEYS = ['error', 'name', 'size', 'tmp_name', 'type'];
     /**
@@ -40,7 +40,7 @@ class FileBag extends ParameterBag
      */
     public function set(string $key, $value)
     {
-        if (!\is_array($value) && !$value instanceof UploadedFile) {
+        if (!\is_array($value) && !$value instanceof \RectorPrefix20210510\Symfony\Component\HttpFoundation\File\UploadedFile) {
             throw new \InvalidArgumentException('An uploaded file must be an array or an instance of UploadedFile.');
         }
         parent::set($key, $this->convertFileInformation($value));
@@ -63,7 +63,7 @@ class FileBag extends ParameterBag
      */
     protected function convertFileInformation($file)
     {
-        if ($file instanceof UploadedFile) {
+        if ($file instanceof \RectorPrefix20210510\Symfony\Component\HttpFoundation\File\UploadedFile) {
             return $file;
         }
         if (\is_array($file)) {
@@ -74,7 +74,7 @@ class FileBag extends ParameterBag
                 if (\UPLOAD_ERR_NO_FILE == $file['error']) {
                     $file = null;
                 } else {
-                    $file = new UploadedFile($file['tmp_name'], $file['name'], $file['type'], $file['error'], \false);
+                    $file = new \RectorPrefix20210510\Symfony\Component\HttpFoundation\File\UploadedFile($file['tmp_name'], $file['name'], $file['type'], $file['error'], \false);
                 }
             } else {
                 $file = \array_map([$this, 'convertFileInformation'], $file);
