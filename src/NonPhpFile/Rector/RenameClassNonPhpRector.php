@@ -30,17 +30,17 @@ final class RenameClassNonPhpRector implements \Rector\Core\Contract\Rector\NonP
      */
     private const STANDALONE_CLASS_SUFFIX_REGEX = '(?=::)#';
     /**
-     * @var RenamedClassesDataCollector
-     */
-    private $renamedClassesDataCollector;
-    /**
-     * @var RenamedClassesCollector
-     */
-    private $renamedClassesCollector;
-    /**
      * @var array<string, string>
      */
     private $renameClasses = [];
+    /**
+     * @var \Rector\Core\Configuration\RenamedClassesDataCollector
+     */
+    private $renamedClassesDataCollector;
+    /**
+     * @var \Rector\PSR4\Collector\RenamedClassesCollector
+     */
+    private $renamedClassesCollector;
     public function __construct(\Rector\Core\Configuration\RenamedClassesDataCollector $renamedClassesDataCollector, \Rector\PSR4\Collector\RenamedClassesCollector $renamedClassesCollector)
     {
         $this->renamedClassesDataCollector = $renamedClassesDataCollector;

@@ -10,7 +10,7 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 final class AssignVariableTypeResolver
 {
     /**
-     * @var NodeTypeResolver
+     * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;
     public function __construct(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver)

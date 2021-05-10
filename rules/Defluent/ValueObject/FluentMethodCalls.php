@@ -7,15 +7,15 @@ use PhpParser\Node\Expr\MethodCall;
 final class FluentMethodCalls
 {
     /**
-     * @var MethodCall[]
-     */
-    private $fluentMethodCalls = [];
-    /**
-     * @var MethodCall
+     * @var \PhpParser\Node\Expr\MethodCall
      */
     private $rootMethodCall;
     /**
-     * @var MethodCall
+     * @var mixed[]
+     */
+    private $fluentMethodCalls;
+    /**
+     * @var \PhpParser\Node\Expr\MethodCall
      */
     private $lastMethodCall;
     /**

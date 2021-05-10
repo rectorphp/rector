@@ -30,22 +30,22 @@ final class PrivatizeLocalPropertyToPrivatePropertyRector extends \Rector\Core\R
         'inject',
     ];
     /**
-     * @var PropertyVisibilityVendorLockResolver
-     */
-    private $propertyVisibilityVendorLockResolver;
-    /**
      * @var ObjectType[]
      */
     private $excludedObjectTypes = [];
     /**
-     * @var ClassAnalyzer
+     * @var \Rector\VendorLocker\NodeVendorLocker\PropertyVisibilityVendorLockResolver
+     */
+    private $propertyVisibilityVendorLockResolver;
+    /**
+     * @var \Rector\Core\NodeAnalyzer\ClassAnalyzer
      */
     private $classAnalyzer;
     public function __construct(\Rector\VendorLocker\NodeVendorLocker\PropertyVisibilityVendorLockResolver $propertyVisibilityVendorLockResolver, \Rector\Core\NodeAnalyzer\ClassAnalyzer $classAnalyzer)
     {
         $this->propertyVisibilityVendorLockResolver = $propertyVisibilityVendorLockResolver;
-        $this->excludedObjectTypes = [new \PHPStan\Type\ObjectType('PHPUnit\\Framework\\TestCase'), new \PHPStan\Type\ObjectType('PHP_CodeSniffer\\Sniffs\\Sniff')];
         $this->classAnalyzer = $classAnalyzer;
+        $this->excludedObjectTypes = [new \PHPStan\Type\ObjectType('PHPUnit\\Framework\\TestCase'), new \PHPStan\Type\ObjectType('PHP_CodeSniffer\\Sniffs\\Sniff')];
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {

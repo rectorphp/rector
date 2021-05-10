@@ -19,7 +19,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ReplaceVariableByPropertyFetchRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var VariablesToPropertyFetchCollection
+     * @var \Rector\DependencyInjection\Collector\VariablesToPropertyFetchCollection
      */
     private $variablesToPropertyFetchCollection;
     public function __construct(\Rector\DependencyInjection\Collector\VariablesToPropertyFetchCollection $variablesToPropertyFetchCollection)

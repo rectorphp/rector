@@ -11,15 +11,15 @@ use Rector\NodeCollector\NodeCollector\ParsedPropertyFetchNodeCollector;
 final class NodeCollectorNodeVisitor extends \PhpParser\NodeVisitorAbstract
 {
     /**
-     * @var NodeRepository
+     * @var \Rector\NodeCollector\NodeCollector\NodeRepository
      */
     private $nodeRepository;
     /**
-     * @var ParsedNodeCollector
+     * @var \Rector\NodeCollector\NodeCollector\ParsedNodeCollector
      */
     private $parsedNodeCollector;
     /**
-     * @var ParsedPropertyFetchNodeCollector
+     * @var \Rector\NodeCollector\NodeCollector\ParsedPropertyFetchNodeCollector
      */
     private $parsedPropertyFetchNodeCollector;
     public function __construct(\Rector\NodeCollector\NodeCollector\NodeRepository $nodeRepository, \Rector\NodeCollector\NodeCollector\ParsedNodeCollector $parsedNodeCollector, \Rector\NodeCollector\NodeCollector\ParsedPropertyFetchNodeCollector $parsedPropertyFetchNodeCollector)

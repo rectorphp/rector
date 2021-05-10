@@ -27,19 +27,19 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveSetterOnlyPropertyAndMethodCallRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var PropertyManipulator
+     * @var \Rector\Core\NodeManipulator\PropertyManipulator
      */
     private $propertyManipulator;
     /**
-     * @var VendorLockResolver
+     * @var \Rector\VendorLocker\VendorLockResolver
      */
     private $vendorLockResolver;
     /**
-     * @var PropertyFetchFinder
+     * @var \Rector\Core\PhpParser\NodeFinder\PropertyFetchFinder
      */
     private $propertyFetchFinder;
     /**
-     * @var ComplexNodeRemover
+     * @var \Rector\Removing\NodeManipulator\ComplexNodeRemover
      */
     private $complexNodeRemover;
     public function __construct(\Rector\Core\NodeManipulator\PropertyManipulator $propertyManipulator, \Rector\VendorLocker\VendorLockResolver $vendorLockResolver, \Rector\Core\PhpParser\NodeFinder\PropertyFetchFinder $propertyFetchFinder, \Rector\Removing\NodeManipulator\ComplexNodeRemover $complexNodeRemover)

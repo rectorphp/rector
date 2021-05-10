@@ -17,17 +17,17 @@ use Rector\PhpSpecToPHPUnit\Rector\AbstractPhpSpecToPHPUnitRector;
 final class AddMockPropertiesRector extends \Rector\PhpSpecToPHPUnit\Rector\AbstractPhpSpecToPHPUnitRector
 {
     /**
-     * @var PhpSpecMockCollector
-     */
-    private $phpSpecMockCollector;
-    /**
-     * @var ClassInsertManipulator
+     * @var \Rector\Core\NodeManipulator\ClassInsertManipulator
      */
     private $classInsertManipulator;
+    /**
+     * @var \Rector\PhpSpecToPHPUnit\PhpSpecMockCollector
+     */
+    private $phpSpecMockCollector;
     public function __construct(\Rector\Core\NodeManipulator\ClassInsertManipulator $classInsertManipulator, \Rector\PhpSpecToPHPUnit\PhpSpecMockCollector $phpSpecMockCollector)
     {
-        $this->phpSpecMockCollector = $phpSpecMockCollector;
         $this->classInsertManipulator = $classInsertManipulator;
+        $this->phpSpecMockCollector = $phpSpecMockCollector;
     }
     /**
      * @return array<class-string<Node>>

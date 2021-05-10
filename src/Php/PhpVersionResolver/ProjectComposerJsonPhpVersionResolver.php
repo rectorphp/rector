@@ -12,15 +12,15 @@ use RectorPrefix20210510\Symplify\ComposerJsonManipulator\ComposerJsonFactory;
 final class ProjectComposerJsonPhpVersionResolver
 {
     /**
-     * @var ComposerJsonFactory
+     * @var \Symplify\ComposerJsonManipulator\ComposerJsonFactory
      */
     private $composerJsonFactory;
     /**
-     * @var VersionParser
+     * @var \Composer\Semver\VersionParser
      */
     private $versionParser;
     /**
-     * @var PhpVersionFactory
+     * @var \Rector\Core\Util\PhpVersionFactory
      */
     private $phpVersionFactory;
     public function __construct(\RectorPrefix20210510\Symplify\ComposerJsonManipulator\ComposerJsonFactory $composerJsonFactory, \RectorPrefix20210510\Composer\Semver\VersionParser $versionParser, \Rector\Core\Util\PhpVersionFactory $phpVersionFactory)

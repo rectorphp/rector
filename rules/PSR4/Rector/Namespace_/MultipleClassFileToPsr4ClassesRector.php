@@ -21,11 +21,11 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class MultipleClassFileToPsr4ClassesRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var NamespaceManipulator
+     * @var \Rector\PSR4\NodeManipulator\NamespaceManipulator
      */
     private $namespaceManipulator;
     /**
-     * @var FileInfoDeletionAnalyzer
+     * @var \Rector\PSR4\FileInfoAnalyzer\FileInfoDeletionAnalyzer
      */
     private $fileInfoDeletionAnalyzer;
     public function __construct(\Rector\PSR4\NodeManipulator\NamespaceManipulator $namespaceManipulator, \Rector\PSR4\FileInfoAnalyzer\FileInfoDeletionAnalyzer $fileInfoDeletionAnalyzer)

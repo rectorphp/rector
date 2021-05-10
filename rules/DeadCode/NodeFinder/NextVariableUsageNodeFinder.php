@@ -16,31 +16,31 @@ use RectorPrefix20210510\Symplify\Astral\NodeTraverser\SimpleCallableNodeTravers
 final class NextVariableUsageNodeFinder
 {
     /**
-     * @var SimpleCallableNodeTraverser
-     */
-    private $simpleCallableNodeTraverser;
-    /**
-     * @var NodeComparator
-     */
-    private $nodeComparator;
-    /**
-     * @var ParentScopeFinder
-     */
-    private $parentScopeFinder;
-    /**
-     * @var BetterNodeFinder
+     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
     /**
-     * @var NodeNameResolver
+     * @var \Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser
+     */
+    private $simpleCallableNodeTraverser;
+    /**
+     * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
+    /**
+     * @var \Rector\NodeNestingScope\ParentScopeFinder
+     */
+    private $parentScopeFinder;
+    /**
+     * @var \Rector\Core\PhpParser\Comparing\NodeComparator
+     */
+    private $nodeComparator;
     public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \RectorPrefix20210510\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeNestingScope\ParentScopeFinder $parentScopeFinder, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator)
     {
-        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
-        $this->parentScopeFinder = $parentScopeFinder;
         $this->betterNodeFinder = $betterNodeFinder;
+        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->nodeNameResolver = $nodeNameResolver;
+        $this->parentScopeFinder = $parentScopeFinder;
         $this->nodeComparator = $nodeComparator;
     }
     public function find(\PhpParser\Node\Expr\Assign $assign) : ?\PhpParser\Node

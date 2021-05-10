@@ -22,10 +22,10 @@ final class ReplacePackageAndVersion implements \Rector\Composer\Contract\Versio
     private $version;
     public function __construct(string $oldPackageName, string $newPackageName, string $version)
     {
+        $this->version = $version;
         \RectorPrefix20210510\Webmozart\Assert\Assert::notSame($oldPackageName, $newPackageName, 'Old and new package have to be different. If you want to only change package version, use ' . \Rector\Composer\Rector\ChangePackageVersionComposerRector::class);
         $this->oldPackageName = $oldPackageName;
         $this->newPackageName = $newPackageName;
-        $this->version = $version;
     }
     public function getOldPackageName() : string
     {

@@ -15,11 +15,11 @@ use Rector\StaticTypeMapper\Contract\PhpDocParser\PhpDocTypeMapperInterface;
 final class PhpDocTypeMapper
 {
     /**
-     * @var PhpDocTypeMapperInterface[]
+     * @var mixed[]
      */
-    private $phpDocTypeMappers = [];
+    private $phpDocTypeMappers;
     /**
-     * @var TypeNodeResolver
+     * @var \PHPStan\PhpDoc\TypeNodeResolver
      */
     private $typeNodeResolver;
     /**

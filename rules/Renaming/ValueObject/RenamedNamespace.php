@@ -8,18 +8,18 @@ final class RenamedNamespace
     /**
      * @var string
      */
+    private $currentName;
+    /**
+     * @var string
+     */
     private $oldNamespace;
     /**
      * @var string
      */
     private $newNamespace;
-    /**
-     * @var string
-     */
-    private $currentName;
-    public function __construct(string $currentNamespaceName, string $oldNamespace, string $newNamespace)
+    public function __construct(string $currentName, string $oldNamespace, string $newNamespace)
     {
-        $this->currentName = $currentNamespaceName;
+        $this->currentName = $currentName;
         $this->oldNamespace = $oldNamespace;
         $this->newNamespace = $newNamespace;
     }

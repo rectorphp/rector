@@ -23,15 +23,15 @@ final class StaticCallToFuncCallRector extends \Rector\Core\Rector\AbstractRecto
      */
     public const STATIC_CALLS_TO_FUNCTIONS = 'static_calls_to_functions';
     /**
-     * @var StaticCallToFuncCall[]
+     * @var mixed[]
      */
-    private $staticCallsToFunctions = [];
+    private $staticCallsToFunctions;
     /**
-     * @param StaticCallToFuncCall[] $staticCallToFunctions
+     * @param StaticCallToFuncCall[] $staticCallsToFunctions
      */
-    public function __construct(array $staticCallToFunctions = [])
+    public function __construct(array $staticCallsToFunctions = [])
     {
-        $this->staticCallsToFunctions = $staticCallToFunctions;
+        $this->staticCallsToFunctions = $staticCallsToFunctions;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {

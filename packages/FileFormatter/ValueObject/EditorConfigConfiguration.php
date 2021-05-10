@@ -9,17 +9,17 @@ namespace Rector\FileFormatter\ValueObject;
 final class EditorConfigConfiguration
 {
     /**
-     * @var NewLine
+     * @var \Rector\FileFormatter\ValueObject\Indent
+     */
+    private $indent;
+    /**
+     * @var \Rector\FileFormatter\ValueObject\NewLine
      */
     private $newLine;
     /**
      * @var bool
      */
-    private $insertFinalNewline = \false;
-    /**
-     * @var Indent
-     */
-    private $indent;
+    private $insertFinalNewline;
     public function __construct(\Rector\FileFormatter\ValueObject\Indent $indent, \Rector\FileFormatter\ValueObject\NewLine $newLine, bool $insertFinalNewline)
     {
         $this->indent = $indent;

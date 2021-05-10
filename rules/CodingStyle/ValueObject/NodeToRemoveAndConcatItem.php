@@ -8,11 +8,11 @@ use PhpParser\Node\Expr;
 final class NodeToRemoveAndConcatItem
 {
     /**
-     * @var Expr
+     * @var \PhpParser\Node\Expr
      */
     private $removedExpr;
     /**
-     * @var Node
+     * @var \PhpParser\Node
      */
     private $concatItemNode;
     public function __construct(\PhpParser\Node\Expr $removedExpr, \PhpParser\Node $concatItemNode)

@@ -16,7 +16,7 @@ use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 final class UseImportsAdder
 {
     /**
-     * @var UsedImportsResolver
+     * @var \Rector\CodingStyle\ClassNameImport\UsedImportsResolver
      */
     private $usedImportsResolver;
     public function __construct(\Rector\CodingStyle\ClassNameImport\UsedImportsResolver $usedImportsResolver)

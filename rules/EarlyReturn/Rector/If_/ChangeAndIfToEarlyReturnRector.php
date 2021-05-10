@@ -25,19 +25,19 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ChangeAndIfToEarlyReturnRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var IfManipulator
+     * @var \Rector\Core\NodeManipulator\IfManipulator
      */
     private $ifManipulator;
     /**
-     * @var InvertedIfFactory
+     * @var \Rector\EarlyReturn\NodeFactory\InvertedIfFactory
      */
     private $invertedIfFactory;
     /**
-     * @var ContextAnalyzer
+     * @var \Rector\NodeNestingScope\ContextAnalyzer
      */
     private $contextAnalyzer;
     /**
-     * @var BooleanAndAnalyzer
+     * @var \Rector\NodeCollector\NodeAnalyzer\BooleanAndAnalyzer
      */
     private $booleanAndAnalyzer;
     public function __construct(\Rector\Core\NodeManipulator\IfManipulator $ifManipulator, \Rector\EarlyReturn\NodeFactory\InvertedIfFactory $invertedIfFactory, \Rector\NodeNestingScope\ContextAnalyzer $contextAnalyzer, \Rector\NodeCollector\NodeAnalyzer\BooleanAndAnalyzer $booleanAndAnalyzer)

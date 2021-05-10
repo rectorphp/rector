@@ -9,11 +9,11 @@ use Rector\Defluent\Skipper\FluentMethodCallSkipper;
 final class MethodCallSkipAnalyzer
 {
     /**
-     * @var FluentMethodCallSkipper
+     * @var \Rector\Defluent\Skipper\FluentMethodCallSkipper
      */
     private $fluentMethodCallSkipper;
     /**
-     * @var FluentChainMethodCallNodeAnalyzer
+     * @var \Rector\Defluent\NodeAnalyzer\FluentChainMethodCallNodeAnalyzer
      */
     private $fluentChainMethodCallNodeAnalyzer;
     public function __construct(\Rector\Defluent\Skipper\FluentMethodCallSkipper $fluentMethodCallSkipper, \Rector\Defluent\NodeAnalyzer\FluentChainMethodCallNodeAnalyzer $fluentChainMethodCallNodeAnalyzer)

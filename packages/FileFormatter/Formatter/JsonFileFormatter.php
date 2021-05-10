@@ -15,7 +15,7 @@ use Rector\FileFormatter\ValueObjectFactory\EditorConfigConfigurationBuilder;
 final class JsonFileFormatter implements \Rector\FileFormatter\Contract\Formatter\FileFormatterInterface
 {
     /**
-     * @var PrinterInterface
+     * @var \Ergebnis\Json\Printer\PrinterInterface
      */
     private $jsonPrinter;
     public function __construct(\RectorPrefix20210510\Ergebnis\Json\Printer\PrinterInterface $jsonPrinter)

@@ -14,7 +14,7 @@ use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 final class PHPUnitTypeDeclarationDecorator
 {
     /**
-     * @var ReflectionProvider
+     * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
     public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider)

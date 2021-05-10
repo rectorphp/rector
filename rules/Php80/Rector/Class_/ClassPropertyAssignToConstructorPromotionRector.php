@@ -26,15 +26,15 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ClassPropertyAssignToConstructorPromotionRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var PromotedPropertyResolver
+     * @var \Rector\Php80\NodeResolver\PromotedPropertyResolver
      */
     private $promotedPropertyResolver;
     /**
-     * @var VariableRenamer
+     * @var \Rector\Naming\VariableRenamer
      */
     private $variableRenamer;
     /**
-     * @var VarTagRemover
+     * @var \Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover
      */
     private $varTagRemover;
     public function __construct(\Rector\Php80\NodeResolver\PromotedPropertyResolver $promotedPropertyResolver, \Rector\Naming\VariableRenamer $variableRenamer, \Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover $varTagRemover)

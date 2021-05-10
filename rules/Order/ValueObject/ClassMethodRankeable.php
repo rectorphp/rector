@@ -20,7 +20,7 @@ final class ClassMethodRankeable implements \Rector\Order\Contract\RankeableInte
      */
     private $position;
     /**
-     * @var ClassMethod
+     * @var \PhpParser\Node\Stmt\ClassMethod
      */
     private $classMethod;
     public function __construct(string $name, int $visibility, int $position, \PhpParser\Node\Stmt\ClassMethod $classMethod)

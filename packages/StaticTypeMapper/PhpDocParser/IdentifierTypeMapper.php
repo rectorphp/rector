@@ -24,21 +24,21 @@ use Rector\TypeDeclaration\PHPStan\Type\ObjectTypeSpecifier;
 final class IdentifierTypeMapper implements \Rector\StaticTypeMapper\Contract\PhpDocParser\PhpDocTypeMapperInterface
 {
     /**
-     * @var ScalarStringToTypeMapper
-     */
-    private $scalarStringToTypeMapper;
-    /**
-     * @var ObjectTypeSpecifier
+     * @var \Rector\TypeDeclaration\PHPStan\Type\ObjectTypeSpecifier
      */
     private $objectTypeSpecifier;
     /**
-     * @var ParentClassScopeResolver
+     * @var \Rector\StaticTypeMapper\Mapper\ScalarStringToTypeMapper
+     */
+    private $scalarStringToTypeMapper;
+    /**
+     * @var \Rector\NodeCollector\ScopeResolver\ParentClassScopeResolver
      */
     private $parentClassScopeResolver;
     public function __construct(\Rector\TypeDeclaration\PHPStan\Type\ObjectTypeSpecifier $objectTypeSpecifier, \Rector\StaticTypeMapper\Mapper\ScalarStringToTypeMapper $scalarStringToTypeMapper, \Rector\NodeCollector\ScopeResolver\ParentClassScopeResolver $parentClassScopeResolver)
     {
-        $this->scalarStringToTypeMapper = $scalarStringToTypeMapper;
         $this->objectTypeSpecifier = $objectTypeSpecifier;
+        $this->scalarStringToTypeMapper = $scalarStringToTypeMapper;
         $this->parentClassScopeResolver = $parentClassScopeResolver;
     }
     /**

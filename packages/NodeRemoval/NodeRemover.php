@@ -19,11 +19,11 @@ use Rector\PostRector\Collector\NodesToRemoveCollector;
 final class NodeRemover
 {
     /**
-     * @var NodesToRemoveCollector
+     * @var \Rector\PostRector\Collector\NodesToRemoveCollector
      */
     private $nodesToRemoveCollector;
     /**
-     * @var RectorChangeCollector
+     * @var \Rector\ChangesReporting\Collector\RectorChangeCollector
      */
     private $rectorChangeCollector;
     public function __construct(\Rector\PostRector\Collector\NodesToRemoveCollector $nodesToRemoveCollector, \Rector\ChangesReporting\Collector\RectorChangeCollector $rectorChangeCollector)

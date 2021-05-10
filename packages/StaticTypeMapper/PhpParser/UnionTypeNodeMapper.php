@@ -12,13 +12,13 @@ use Rector\StaticTypeMapper\Mapper\PhpParserNodeMapper;
 final class UnionTypeNodeMapper implements \Rector\StaticTypeMapper\Contract\PhpParser\PhpParserNodeMapperInterface
 {
     /**
-     * @var TypeFactory
-     */
-    private $typeFactory;
-    /**
      * @var PhpParserNodeMapper
      */
     private $phpParserNodeMapper;
+    /**
+     * @var \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory
+     */
+    private $typeFactory;
     public function __construct(\Rector\NodeTypeResolver\PHPStan\Type\TypeFactory $typeFactory)
     {
         $this->typeFactory = $typeFactory;

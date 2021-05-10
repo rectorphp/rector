@@ -55,35 +55,35 @@ final class NodeTypeResolver
      */
     private $nodeTypeResolvers = [];
     /**
-     * @var ObjectTypeSpecifier
-     */
-    private $objectTypeSpecifier;
-    /**
      * @var ArrayTypeAnalyzer
      */
     private $arrayTypeAnalyzer;
     /**
-     * @var ClassAnalyzer
+     * @var \Rector\TypeDeclaration\PHPStan\Type\ObjectTypeSpecifier
+     */
+    private $objectTypeSpecifier;
+    /**
+     * @var \Rector\Core\NodeAnalyzer\ClassAnalyzer
      */
     private $classAnalyzer;
     /**
-     * @var GenericClassStringTypeCorrector
+     * @var \Rector\NodeTypeResolver\NodeTypeCorrector\GenericClassStringTypeCorrector
      */
     private $genericClassStringTypeCorrector;
     /**
-     * @var ReflectionProvider
+     * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
     /**
-     * @var HasOffsetTypeCorrector
+     * @var \Rector\NodeTypeResolver\NodeTypeCorrector\HasOffsetTypeCorrector
      */
     private $hasOffsetTypeCorrector;
     /**
-     * @var IdentifierTypeResolver
+     * @var \Rector\NodeTypeResolver\NodeTypeResolver\IdentifierTypeResolver
      */
     private $identifierTypeResolver;
     /**
-     * @var RenamedClassesDataCollector
+     * @var \Rector\Core\Configuration\RenamedClassesDataCollector
      */
     private $renamedClassesDataCollector;
     /**
@@ -91,9 +91,6 @@ final class NodeTypeResolver
      */
     public function __construct(\Rector\TypeDeclaration\PHPStan\Type\ObjectTypeSpecifier $objectTypeSpecifier, \Rector\Core\NodeAnalyzer\ClassAnalyzer $classAnalyzer, \Rector\NodeTypeResolver\NodeTypeCorrector\GenericClassStringTypeCorrector $genericClassStringTypeCorrector, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\NodeTypeResolver\NodeTypeCorrector\HasOffsetTypeCorrector $hasOffsetTypeCorrector, \Rector\NodeTypeResolver\NodeTypeResolver\IdentifierTypeResolver $identifierTypeResolver, \Rector\Core\Configuration\RenamedClassesDataCollector $renamedClassesDataCollector, array $nodeTypeResolvers)
     {
-        foreach ($nodeTypeResolvers as $nodeTypeResolver) {
-            $this->addNodeTypeResolver($nodeTypeResolver);
-        }
         $this->objectTypeSpecifier = $objectTypeSpecifier;
         $this->classAnalyzer = $classAnalyzer;
         $this->genericClassStringTypeCorrector = $genericClassStringTypeCorrector;
@@ -101,6 +98,9 @@ final class NodeTypeResolver
         $this->hasOffsetTypeCorrector = $hasOffsetTypeCorrector;
         $this->identifierTypeResolver = $identifierTypeResolver;
         $this->renamedClassesDataCollector = $renamedClassesDataCollector;
+        foreach ($nodeTypeResolvers as $nodeTypeResolver) {
+            $this->addNodeTypeResolver($nodeTypeResolver);
+        }
     }
     /**
      * Prevents circular dependency

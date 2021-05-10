@@ -32,7 +32,7 @@ final class EregToPregMatchRector extends \Rector\Core\Rector\AbstractRector
      */
     private const OLD_NAMES_TO_NEW_ONES = ['ereg' => 'preg_match', 'eregi' => 'preg_match', 'ereg_replace' => 'preg_replace', 'eregi_replace' => 'preg_replace', 'split' => 'preg_split', 'spliti' => 'preg_split'];
     /**
-     * @var EregToPcreTransformer
+     * @var \Rector\Php70\EregToPcreTransformer
      */
     private $eregToPcreTransformer;
     public function __construct(\Rector\Php70\EregToPcreTransformer $eregToPcreTransformer)

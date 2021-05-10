@@ -20,15 +20,15 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveUnusedPrivateMethodParameterRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var VariadicFunctionLikeDetector
+     * @var \Rector\DeadCode\NodeManipulator\VariadicFunctionLikeDetector
      */
     private $variadicFunctionLikeDetector;
     /**
-     * @var UnusedParameterResolver
+     * @var \Rector\DeadCode\NodeCollector\UnusedParameterResolver
      */
     private $unusedParameterResolver;
     /**
-     * @var PhpDocTagRemover
+     * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover
      */
     private $phpDocTagRemover;
     public function __construct(\Rector\DeadCode\NodeManipulator\VariadicFunctionLikeDetector $variadicFunctionLikeDetector, \Rector\DeadCode\NodeCollector\UnusedParameterResolver $unusedParameterResolver, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover $phpDocTagRemover)

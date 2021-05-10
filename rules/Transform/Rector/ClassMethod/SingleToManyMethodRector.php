@@ -33,7 +33,7 @@ final class SingleToManyMethodRector extends \Rector\Core\Rector\AbstractRector 
      */
     private $singleToManyMethods = [];
     /**
-     * @var PhpDocTypeChanger
+     * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger
      */
     private $phpDocTypeChanger;
     public function __construct(\Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger)

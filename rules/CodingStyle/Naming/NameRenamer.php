@@ -18,7 +18,7 @@ use Rector\NodeNameResolver\NodeNameResolver;
 final class NameRenamer
 {
     /**
-     * @var NodeNameResolver
+     * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)

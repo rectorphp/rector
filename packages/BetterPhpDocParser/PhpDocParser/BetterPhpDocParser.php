@@ -28,19 +28,19 @@ final class BetterPhpDocParser extends \PHPStan\PhpDocParser\Parser\PhpDocParser
      */
     private $privatesCaller;
     /**
-     * @var DoctrineAnnotationDecorator
-     */
-    private $doctrineAnnotationDecorator;
-    /**
-     * @var TokenIteratorFactory
+     * @var \Rector\BetterPhpDocParser\PhpDocInfo\TokenIteratorFactory
      */
     private $tokenIteratorFactory;
+    /**
+     * @var \Rector\BetterPhpDocParser\PhpDocParser\DoctrineAnnotationDecorator
+     */
+    private $doctrineAnnotationDecorator;
     public function __construct(\PHPStan\PhpDocParser\Parser\TypeParser $typeParser, \PHPStan\PhpDocParser\Parser\ConstExprParser $constExprParser, \Rector\BetterPhpDocParser\PhpDocInfo\TokenIteratorFactory $tokenIteratorFactory, \Rector\BetterPhpDocParser\PhpDocParser\DoctrineAnnotationDecorator $doctrineAnnotationDecorator)
     {
+        $this->tokenIteratorFactory = $tokenIteratorFactory;
+        $this->doctrineAnnotationDecorator = $doctrineAnnotationDecorator;
         parent::__construct($typeParser, $constExprParser);
         $this->privatesCaller = new \RectorPrefix20210510\Symplify\PackageBuilder\Reflection\PrivatesCaller();
-        $this->doctrineAnnotationDecorator = $doctrineAnnotationDecorator;
-        $this->tokenIteratorFactory = $tokenIteratorFactory;
     }
     public function parse(\PHPStan\PhpDocParser\Parser\TokenIterator $tokenIterator) : \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode
     {

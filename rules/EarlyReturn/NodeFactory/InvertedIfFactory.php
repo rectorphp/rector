@@ -16,15 +16,15 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class InvertedIfFactory
 {
     /**
-     * @var BetterNodeFinder
+     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
     /**
-     * @var ConditionInverter
+     * @var \Rector\EarlyReturn\NodeTransformer\ConditionInverter
      */
     private $conditionInverter;
     /**
-     * @var ContextAnalyzer
+     * @var \Rector\NodeNestingScope\ContextAnalyzer
      */
     private $contextAnalyzer;
     public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\EarlyReturn\NodeTransformer\ConditionInverter $conditionInverter, \Rector\NodeNestingScope\ContextAnalyzer $contextAnalyzer)

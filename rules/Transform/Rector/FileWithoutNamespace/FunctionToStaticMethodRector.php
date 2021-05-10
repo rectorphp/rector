@@ -26,15 +26,15 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class FunctionToStaticMethodRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var ClassNaming
+     * @var \Rector\CodingStyle\Naming\ClassNaming
      */
     private $classNaming;
     /**
-     * @var StaticMethodClassFactory
+     * @var \Rector\Transform\NodeFactory\StaticMethodClassFactory
      */
     private $staticMethodClassFactory;
     /**
-     * @var FullyQualifiedNameResolver
+     * @var \Rector\Transform\Naming\FullyQualifiedNameResolver
      */
     private $fullyQualifiedNameResolver;
     public function __construct(\Rector\CodingStyle\Naming\ClassNaming $classNaming, \Rector\Transform\NodeFactory\StaticMethodClassFactory $staticMethodClassFactory, \Rector\Transform\Naming\FullyQualifiedNameResolver $fullyQualifiedNameResolver)

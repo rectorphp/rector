@@ -19,25 +19,25 @@ use RectorPrefix20210510\Symplify\SimplePhpDocParser\PhpDocNodeVisitor\AbstractP
 final class NameImportingPhpDocNodeVisitor extends \RectorPrefix20210510\Symplify\SimplePhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor
 {
     /**
-     * @var StaticTypeMapper
-     */
-    private $staticTypeMapper;
-    /**
-     * @var ParameterProvider
-     */
-    private $parameterProvider;
-    /**
-     * @var ClassNameImportSkipper
-     */
-    private $classNameImportSkipper;
-    /**
-     * @var UseNodesToAddCollector
-     */
-    private $useNodesToAddCollector;
-    /**
      * @var PhpParserNode|null
      */
     private $currentPhpParserNode;
+    /**
+     * @var \Rector\StaticTypeMapper\StaticTypeMapper
+     */
+    private $staticTypeMapper;
+    /**
+     * @var \Symplify\PackageBuilder\Parameter\ParameterProvider
+     */
+    private $parameterProvider;
+    /**
+     * @var \Rector\CodingStyle\ClassNameImport\ClassNameImportSkipper
+     */
+    private $classNameImportSkipper;
+    /**
+     * @var \Rector\PostRector\Collector\UseNodesToAddCollector
+     */
+    private $useNodesToAddCollector;
     public function __construct(\Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \RectorPrefix20210510\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \Rector\CodingStyle\ClassNameImport\ClassNameImportSkipper $classNameImportSkipper, \Rector\PostRector\Collector\UseNodesToAddCollector $useNodesToAddCollector)
     {
         $this->staticTypeMapper = $staticTypeMapper;

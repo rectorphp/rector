@@ -32,7 +32,7 @@ use Traversable;
 final class DowngradeArraySpreadRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var VariableNaming
+     * @var \Rector\Php70\NodeAnalyzer\VariableNaming
      */
     private $variableNaming;
     public function __construct(\Rector\Php70\NodeAnalyzer\VariableNaming $variableNaming)

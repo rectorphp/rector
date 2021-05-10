@@ -25,11 +25,11 @@ final class MakeGetterClassMethodNameStartWithGetRector extends \Rector\Core\Rec
      */
     private const GETTER_NAME_PATTERN = '#^(is|should|has|was|must|get|provide|__)#';
     /**
-     * @var MethodNameResolver
+     * @var \Rector\Naming\Naming\MethodNameResolver
      */
     private $methodNameResolver;
     /**
-     * @var MethodCallRenamer
+     * @var \Rector\Naming\NodeRenamer\MethodCallRenamer
      */
     private $methodCallRenamer;
     public function __construct(\Rector\Naming\Naming\MethodNameResolver $methodNameResolver, \Rector\Naming\NodeRenamer\MethodCallRenamer $methodCallRenamer)

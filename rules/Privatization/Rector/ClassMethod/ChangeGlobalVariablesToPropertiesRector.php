@@ -27,7 +27,7 @@ final class ChangeGlobalVariablesToPropertiesRector extends \Rector\Core\Rector\
      */
     private $globalVariableNames = [];
     /**
-     * @var PropertyToAddCollector
+     * @var \Rector\PostRector\Collector\PropertyToAddCollector
      */
     private $propertyToAddCollector;
     public function __construct(\Rector\PostRector\Collector\PropertyToAddCollector $propertyToAddCollector)

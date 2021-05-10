@@ -26,19 +26,19 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class NewFluentChainMethodCallToNonFluentRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var TypeChecker
+     * @var \Symplify\PackageBuilder\Php\TypeChecker
      */
     private $typeChecker;
     /**
-     * @var FluentNodeRemover
+     * @var \Rector\Symfony\NodeAnalyzer\FluentNodeRemover
      */
     private $fluentNodeRemover;
     /**
-     * @var AssignAndRootExprAndNodesToAddMatcher
+     * @var \Rector\Defluent\Matcher\AssignAndRootExprAndNodesToAddMatcher
      */
     private $assignAndRootExprAndNodesToAddMatcher;
     /**
-     * @var FluentMethodCallSkipper
+     * @var \Rector\Defluent\Skipper\FluentMethodCallSkipper
      */
     private $fluentMethodCallSkipper;
     public function __construct(\RectorPrefix20210510\Symplify\PackageBuilder\Php\TypeChecker $typeChecker, \Rector\Symfony\NodeAnalyzer\FluentNodeRemover $fluentNodeRemover, \Rector\Defluent\Matcher\AssignAndRootExprAndNodesToAddMatcher $assignAndRootExprAndNodesToAddMatcher, \Rector\Defluent\Skipper\FluentMethodCallSkipper $fluentMethodCallSkipper)

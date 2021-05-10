@@ -12,7 +12,7 @@ use Rector\NodeNameResolver\NodeNameResolver;
 final class StmtOrder
 {
     /**
-     * @var NodeNameResolver
+     * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)

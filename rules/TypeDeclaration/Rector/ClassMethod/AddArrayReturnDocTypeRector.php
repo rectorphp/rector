@@ -34,31 +34,31 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class AddArrayReturnDocTypeRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var ReturnTypeInferer
+     * @var \Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer
      */
     private $returnTypeInferer;
     /**
-     * @var ClassMethodReturnTypeOverrideGuard
+     * @var \Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnTypeOverrideGuard
      */
     private $classMethodReturnTypeOverrideGuard;
     /**
-     * @var AdvancedArrayAnalyzer
+     * @var \Rector\TypeDeclaration\TypeAnalyzer\AdvancedArrayAnalyzer
      */
     private $advancedArrayAnalyzer;
     /**
-     * @var PhpDocTypeChanger
+     * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger
      */
     private $phpDocTypeChanger;
     /**
-     * @var NormalizeTypeToRespectArrayScalarType
+     * @var \Rector\Privatization\TypeManipulator\NormalizeTypeToRespectArrayScalarType
      */
     private $normalizeTypeToRespectArrayScalarType;
     /**
-     * @var ReturnTagRemover
+     * @var \Rector\DeadCode\PhpDoc\TagRemover\ReturnTagRemover
      */
     private $returnTagRemover;
     /**
-     * @var DetailedTypeAnalyzer
+     * @var \Rector\TypeDeclaration\NodeTypeAnalyzer\DetailedTypeAnalyzer
      */
     private $detailedTypeAnalyzer;
     public function __construct(\Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer $returnTypeInferer, \Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnTypeOverrideGuard $classMethodReturnTypeOverrideGuard, \Rector\TypeDeclaration\TypeAnalyzer\AdvancedArrayAnalyzer $advancedArrayAnalyzer, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger, \Rector\Privatization\TypeManipulator\NormalizeTypeToRespectArrayScalarType $normalizeTypeToRespectArrayScalarType, \Rector\DeadCode\PhpDoc\TagRemover\ReturnTagRemover $returnTagRemover, \Rector\TypeDeclaration\NodeTypeAnalyzer\DetailedTypeAnalyzer $detailedTypeAnalyzer)

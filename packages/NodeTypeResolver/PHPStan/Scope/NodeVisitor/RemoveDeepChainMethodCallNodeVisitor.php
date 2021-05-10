@@ -22,13 +22,13 @@ final class RemoveDeepChainMethodCallNodeVisitor extends \PhpParser\NodeVisitorA
      */
     private $nestedChainMethodCallLimit;
     /**
-     * @var BetterNodeFinder
-     */
-    private $betterNodeFinder;
-    /**
      * @var Expression|null
      */
     private $removingExpression;
+    /**
+     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
+     */
+    private $betterNodeFinder;
     public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \RectorPrefix20210510\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider)
     {
         $this->betterNodeFinder = $betterNodeFinder;

@@ -14,15 +14,15 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class ClassMethodRemover
 {
     /**
-     * @var NodeRepository
+     * @var \Rector\NodeCollector\NodeCollector\NodeRepository
      */
     private $nodeRepository;
     /**
-     * @var NodeRemover
+     * @var \Rector\NodeRemoval\NodeRemover
      */
     private $nodeRemover;
     /**
-     * @var LivingCodeManipulator
+     * @var \Rector\DeadCode\NodeManipulator\LivingCodeManipulator
      */
     private $livingCodeManipulator;
     public function __construct(\Rector\NodeCollector\NodeCollector\NodeRepository $nodeRepository, \Rector\NodeRemoval\NodeRemover $nodeRemover, \Rector\DeadCode\NodeManipulator\LivingCodeManipulator $livingCodeManipulator)

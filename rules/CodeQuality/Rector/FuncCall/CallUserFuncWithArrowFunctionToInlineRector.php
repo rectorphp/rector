@@ -19,7 +19,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class CallUserFuncWithArrowFunctionToInlineRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var ClosureArrowFunctionAnalyzer
+     * @var \Rector\Php74\NodeAnalyzer\ClosureArrowFunctionAnalyzer
      */
     private $closureArrowFunctionAnalyzer;
     public function __construct(\Rector\Php74\NodeAnalyzer\ClosureArrowFunctionAnalyzer $closureArrowFunctionAnalyzer)

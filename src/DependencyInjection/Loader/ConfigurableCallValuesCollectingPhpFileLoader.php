@@ -11,7 +11,7 @@ use RectorPrefix20210510\Symfony\Component\DependencyInjection\Loader\PhpFileLoa
 final class ConfigurableCallValuesCollectingPhpFileLoader extends \RectorPrefix20210510\Symfony\Component\DependencyInjection\Loader\PhpFileLoader
 {
     /**
-     * @var ConfigureCallValuesCollector
+     * @var \Rector\Core\DependencyInjection\Collector\ConfigureCallValuesCollector
      */
     private $configureCallValuesCollector;
     public function __construct(\RectorPrefix20210510\Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder, \RectorPrefix20210510\Symfony\Component\Config\FileLocatorInterface $fileLocator, \Rector\Core\DependencyInjection\Collector\ConfigureCallValuesCollector $configureCallValuesCollector)

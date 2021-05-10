@@ -27,34 +27,34 @@ use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 final class FluentChainMethodCallRootExtractor
 {
     /**
-     * @var PropertyNaming
-     */
-    private $propertyNaming;
-    /**
-     * @var BetterNodeFinder
+     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
     /**
-     * @var NodeNameResolver
+     * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     /**
-     * @var VariableNaming
+     * @var \Rector\Naming\Naming\PropertyNaming
+     */
+    private $propertyNaming;
+    /**
+     * @var \Rector\Naming\Naming\VariableNaming
      */
     private $variableNaming;
     /**
-     * @var ExprStringTypeResolver
+     * @var \Rector\Defluent\NodeAnalyzer\ExprStringTypeResolver
      */
     private $exprStringTypeResolver;
     /**
-     * @var NodeTypeResolver
+     * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;
     public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Naming\Naming\PropertyNaming $propertyNaming, \Rector\Naming\Naming\VariableNaming $variableNaming, \Rector\Defluent\NodeAnalyzer\ExprStringTypeResolver $exprStringTypeResolver, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver)
     {
-        $this->propertyNaming = $propertyNaming;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->nodeNameResolver = $nodeNameResolver;
+        $this->propertyNaming = $propertyNaming;
         $this->variableNaming = $variableNaming;
         $this->exprStringTypeResolver = $exprStringTypeResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;

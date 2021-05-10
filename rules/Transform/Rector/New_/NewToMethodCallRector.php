@@ -32,7 +32,7 @@ final class NewToMethodCallRector extends \Rector\Core\Rector\AbstractRector imp
      */
     private $newsToMethodCalls = [];
     /**
-     * @var ClassNaming
+     * @var \Rector\CodingStyle\Naming\ClassNaming
      */
     private $classNaming;
     public function __construct(\Rector\CodingStyle\Naming\ClassNaming $classNaming)

@@ -13,11 +13,11 @@ use Rector\VendorLocker\Reflection\MethodReflectionContractAnalyzer;
 final class ClassMethodVendorLockResolver
 {
     /**
-     * @var MethodReflectionContractAnalyzer
+     * @var \Rector\VendorLocker\Reflection\MethodReflectionContractAnalyzer
      */
     private $methodReflectionContractAnalyzer;
     /**
-     * @var NodeNameResolver
+     * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     public function __construct(\Rector\VendorLocker\Reflection\MethodReflectionContractAnalyzer $methodReflectionContractAnalyzer, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)

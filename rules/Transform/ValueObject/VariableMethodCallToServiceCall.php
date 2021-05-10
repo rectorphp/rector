@@ -14,9 +14,6 @@ final class VariableMethodCallToServiceCall
      * @var string
      */
     private $methodName;
-    /**
-     * @var mixed
-     */
     private $argumentValue;
     /**
      * @var string

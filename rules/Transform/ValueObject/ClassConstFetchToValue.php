@@ -14,9 +14,6 @@ final class ClassConstFetchToValue
      * @var string
      */
     private $constant;
-    /**
-     * @var mixed
-     */
     private $value;
     /**
      * @param mixed $value

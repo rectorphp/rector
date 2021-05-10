@@ -16,7 +16,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class CombineIfRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var CommentsMerger
+     * @var \Rector\BetterPhpDocParser\Comment\CommentsMerger
      */
     private $commentsMerger;
     public function __construct(\Rector\BetterPhpDocParser\Comment\CommentsMerger $commentsMerger)

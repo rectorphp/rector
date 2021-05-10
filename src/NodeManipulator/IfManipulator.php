@@ -26,34 +26,34 @@ use Rector\NodeNameResolver\NodeNameResolver;
 final class IfManipulator
 {
     /**
-     * @var StmtsManipulator
-     */
-    private $stmtsManipulator;
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-    /**
-     * @var BetterNodeFinder
+     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
     /**
-     * @var ValueResolver
+     * @var \Rector\NodeNameResolver\NodeNameResolver
+     */
+    private $nodeNameResolver;
+    /**
+     * @var \Rector\Core\NodeManipulator\StmtsManipulator
+     */
+    private $stmtsManipulator;
+    /**
+     * @var \Rector\Core\PhpParser\Node\Value\ValueResolver
      */
     private $valueResolver;
     /**
-     * @var ConditionInverter
+     * @var \Rector\EarlyReturn\NodeTransformer\ConditionInverter
      */
     private $conditionInverter;
     /**
-     * @var NodeComparator
+     * @var \Rector\Core\PhpParser\Comparing\NodeComparator
      */
     private $nodeComparator;
     public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\NodeManipulator\StmtsManipulator $stmtsManipulator, \Rector\Core\PhpParser\Node\Value\ValueResolver $valueResolver, \Rector\EarlyReturn\NodeTransformer\ConditionInverter $conditionInverter, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator)
     {
-        $this->stmtsManipulator = $stmtsManipulator;
-        $this->nodeNameResolver = $nodeNameResolver;
         $this->betterNodeFinder = $betterNodeFinder;
+        $this->nodeNameResolver = $nodeNameResolver;
+        $this->stmtsManipulator = $stmtsManipulator;
         $this->valueResolver = $valueResolver;
         $this->conditionInverter = $conditionInverter;
         $this->nodeComparator = $nodeComparator;

@@ -62,26 +62,26 @@ final class BetterStandardPrinter extends \PhpParser\PrettyPrinter\Standard
      */
     private $tabOrSpaceIndentCharacter = ' ';
     /**
-     * @var DocBlockUpdater
-     */
-    private $docBlockUpdater;
-    /**
-     * @var IndentCharacterDetector
+     * @var \Rector\Core\PhpParser\Printer\Whitespace\IndentCharacterDetector
      */
     private $indentCharacterDetector;
+    /**
+     * @var \Rector\Comments\NodeDocBlock\DocBlockUpdater
+     */
+    private $docBlockUpdater;
     /**
      * @param mixed[] $options
      */
     public function __construct(\Rector\Core\PhpParser\Printer\Whitespace\IndentCharacterDetector $indentCharacterDetector, \Rector\Comments\NodeDocBlock\DocBlockUpdater $docBlockUpdater, array $options = [])
     {
+        $this->indentCharacterDetector = $indentCharacterDetector;
+        $this->docBlockUpdater = $docBlockUpdater;
         parent::__construct($options);
         // print return type double colon right after the bracket "function(): string"
         $this->initializeInsertionMap();
         $this->insertionMap['Stmt_ClassMethod->returnType'] = [')', \false, ': ', null];
         $this->insertionMap['Stmt_Function->returnType'] = [')', \false, ': ', null];
         $this->insertionMap['Expr_Closure->returnType'] = [')', \false, ': ', null];
-        $this->indentCharacterDetector = $indentCharacterDetector;
-        $this->docBlockUpdater = $docBlockUpdater;
     }
     /**
      * @param Node[] $stmts

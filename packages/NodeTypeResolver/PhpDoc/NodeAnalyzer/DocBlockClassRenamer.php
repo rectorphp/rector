@@ -10,11 +10,11 @@ use Rector\NodeTypeResolver\ValueObject\OldToNewType;
 final class DocBlockClassRenamer
 {
     /**
-     * @var ClassRenamePhpDocNodeVisitor
+     * @var \Rector\NodeTypeResolver\PhpDocNodeVisitor\ClassRenamePhpDocNodeVisitor
      */
     private $classRenamePhpDocNodeVisitor;
     /**
-     * @var RenamingPhpDocNodeVisitorFactory
+     * @var \Rector\NodeTypeResolver\PhpDoc\PhpDocNodeTraverser\RenamingPhpDocNodeVisitorFactory
      */
     private $renamingPhpDocNodeVisitorFactory;
     public function __construct(\Rector\NodeTypeResolver\PhpDocNodeVisitor\ClassRenamePhpDocNodeVisitor $classRenamePhpDocNodeVisitor, \Rector\NodeTypeResolver\PhpDoc\PhpDocNodeTraverser\RenamingPhpDocNodeVisitorFactory $renamingPhpDocNodeVisitorFactory)

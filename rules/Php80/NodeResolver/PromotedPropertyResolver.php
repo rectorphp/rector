@@ -19,17 +19,17 @@ use Rector\Php80\ValueObject\PropertyPromotionCandidate;
 final class PromotedPropertyResolver
 {
     /**
-     * @var NodeNameResolver
+     * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     /**
-     * @var NodeComparator
-     */
-    private $nodeComparator;
-    /**
-     * @var BetterNodeFinder
+     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
+    /**
+     * @var \Rector\Core\PhpParser\Comparing\NodeComparator
+     */
+    private $nodeComparator;
     public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator)
     {
         $this->nodeNameResolver = $nodeNameResolver;
@@ -83,6 +83,9 @@ final class PromotedPropertyResolver
             }
             $matchedParam = $this->matchClassMethodParamByAssignedVariable($constructClassMethod, $assignedExpr);
             if (!$matchedParam instanceof \PhpParser\Node\Param) {
+                continue;
+            }
+            if ($matchedParam->flags !== 0) {
                 continue;
             }
             // is param used above assign?

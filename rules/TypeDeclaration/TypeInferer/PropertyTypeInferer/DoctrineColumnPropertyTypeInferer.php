@@ -31,16 +31,17 @@ final class DoctrineColumnPropertyTypeInferer implements \Rector\TypeDeclaration
      */
     private $doctrineTypeToScalarType = [];
     /**
-     * @var TypeFactory
+     * @var \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory
      */
     private $typeFactory;
     /**
-     * @var PhpDocInfoFactory
+     * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
     private $phpDocInfoFactory;
     public function __construct(\Rector\NodeTypeResolver\PHPStan\Type\TypeFactory $typeFactory, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory)
     {
         $this->typeFactory = $typeFactory;
+        $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->doctrineTypeToScalarType = [
             'tinyint' => new \PHPStan\Type\BooleanType(),
             // integers
@@ -77,7 +78,6 @@ final class DoctrineColumnPropertyTypeInferer implements \Rector\TypeDeclaration
             'time' => new \PHPStan\Type\ObjectType(self::DATE_TIME_INTERFACE),
             'year' => new \PHPStan\Type\ObjectType(self::DATE_TIME_INTERFACE),
         ];
-        $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
     public function inferProperty(\PhpParser\Node\Stmt\Property $property) : \PHPStan\Type\Type
     {

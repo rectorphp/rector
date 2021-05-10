@@ -26,7 +26,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveEmptyMethodCallRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var ClassReflectionToAstResolver
+     * @var \Rector\Core\Reflection\ClassReflectionToAstResolver
      */
     private $classReflectionToAstResolver;
     public function __construct(\Rector\Core\Reflection\ClassReflectionToAstResolver $classReflectionToAstResolver)

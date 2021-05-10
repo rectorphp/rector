@@ -16,15 +16,15 @@ final class JsonOutputFormatter implements \Rector\ChangesReporting\Contract\Out
      */
     public const NAME = 'json';
     /**
-     * @var Configuration
+     * @var \Rector\Core\Configuration\Configuration
      */
     private $configuration;
     /**
-     * @var SmartFileSystem
+     * @var \Symplify\SmartFileSystem\SmartFileSystem
      */
     private $smartFileSystem;
     /**
-     * @var RectorsChangelogResolver
+     * @var \Rector\ChangesReporting\Annotation\RectorsChangelogResolver
      */
     private $rectorsChangelogResolver;
     public function __construct(\Rector\Core\Configuration\Configuration $configuration, \RectorPrefix20210510\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \Rector\ChangesReporting\Annotation\RectorsChangelogResolver $rectorsChangelogResolver)

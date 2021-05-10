@@ -20,7 +20,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class LocallyCalledStaticMethodToNonStaticRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var ClassMethodVisibilityGuard
+     * @var \Rector\Privatization\VisibilityGuard\ClassMethodVisibilityGuard
      */
     private $classMethodVisibilityGuard;
     public function __construct(\Rector\Privatization\VisibilityGuard\ClassMethodVisibilityGuard $classMethodVisibilityGuard)

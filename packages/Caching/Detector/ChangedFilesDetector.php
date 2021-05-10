@@ -18,11 +18,11 @@ final class ChangedFilesDetector
      */
     private const CONFIGURATION_HASH_KEY = 'configuration_hash';
     /**
-     * @var FileHashComputer
+     * @var \Rector\Caching\Config\FileHashComputer
      */
     private $fileHashComputer;
     /**
-     * @var Cache
+     * @var \Nette\Caching\Cache
      */
     private $cache;
     public function __construct(\Rector\Caching\Config\FileHashComputer $fileHashComputer, \RectorPrefix20210510\Nette\Caching\Cache $cache)

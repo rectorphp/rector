@@ -25,27 +25,27 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ReturnFluentChainMethodCallToNormalMethodCallRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var ReturnFluentMethodCallFactory
+     * @var \Rector\Defluent\NodeFactory\ReturnFluentMethodCallFactory
      */
     private $returnFluentMethodCallFactory;
     /**
-     * @var FluentMethodCallsFactory
+     * @var \Rector\Defluent\ValueObjectFactory\FluentMethodCallsFactory
      */
     private $fluentMethodCallsFactory;
     /**
-     * @var SeparateReturnMethodCallFactory
+     * @var \Rector\Defluent\NodeFactory\SeparateReturnMethodCallFactory
      */
     private $separateReturnMethodCallFactory;
     /**
-     * @var FluentNodeRemover
+     * @var \Rector\Symfony\NodeAnalyzer\FluentNodeRemover
      */
     private $fluentNodeRemover;
     /**
-     * @var MethodCallSkipAnalyzer
+     * @var \Rector\Defluent\NodeAnalyzer\MethodCallSkipAnalyzer
      */
     private $methodCallSkipAnalyzer;
     /**
-     * @var FluentMethodCallSkipper
+     * @var \Rector\Defluent\Skipper\FluentMethodCallSkipper
      */
     private $fluentMethodCallSkipper;
     public function __construct(\Rector\Defluent\NodeFactory\ReturnFluentMethodCallFactory $returnFluentMethodCallFactory, \Rector\Defluent\ValueObjectFactory\FluentMethodCallsFactory $fluentMethodCallsFactory, \Rector\Defluent\NodeFactory\SeparateReturnMethodCallFactory $separateReturnMethodCallFactory, \Rector\Symfony\NodeAnalyzer\FluentNodeRemover $fluentNodeRemover, \Rector\Defluent\NodeAnalyzer\MethodCallSkipAnalyzer $methodCallSkipAnalyzer, \Rector\Defluent\Skipper\FluentMethodCallSkipper $fluentMethodCallSkipper)

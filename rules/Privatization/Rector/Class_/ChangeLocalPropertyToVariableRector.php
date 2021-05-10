@@ -18,19 +18,19 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ChangeLocalPropertyToVariableRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var ClassManipulator
+     * @var \Rector\Core\NodeManipulator\ClassManipulator
      */
     private $classManipulator;
     /**
-     * @var PropertyFetchWithVariableReplacer
+     * @var \Rector\Privatization\NodeReplacer\PropertyFetchWithVariableReplacer
      */
     private $propertyFetchWithVariableReplacer;
     /**
-     * @var PropertyFetchByMethodAnalyzer
+     * @var \Rector\Privatization\NodeAnalyzer\PropertyFetchByMethodAnalyzer
      */
     private $propertyFetchByMethodAnalyzer;
     /**
-     * @var ClassAnalyzer
+     * @var \Rector\Core\NodeAnalyzer\ClassAnalyzer
      */
     private $classAnalyzer;
     public function __construct(\Rector\Core\NodeManipulator\ClassManipulator $classManipulator, \Rector\Privatization\NodeReplacer\PropertyFetchWithVariableReplacer $propertyFetchWithVariableReplacer, \Rector\Privatization\NodeAnalyzer\PropertyFetchByMethodAnalyzer $propertyFetchByMethodAnalyzer, \Rector\Core\NodeAnalyzer\ClassAnalyzer $classAnalyzer)

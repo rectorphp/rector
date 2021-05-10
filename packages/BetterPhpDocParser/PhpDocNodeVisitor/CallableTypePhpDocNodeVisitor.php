@@ -12,7 +12,7 @@ use RectorPrefix20210510\Symplify\SimplePhpDocParser\PhpDocNodeVisitor\AbstractP
 final class CallableTypePhpDocNodeVisitor extends \RectorPrefix20210510\Symplify\SimplePhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor implements \Rector\BetterPhpDocParser\Contract\BasePhpDocNodeVisitorInterface
 {
     /**
-     * @var AttributeMirrorer
+     * @var \Rector\BetterPhpDocParser\Attributes\AttributeMirrorer
      */
     private $attributeMirrorer;
     public function __construct(\Rector\BetterPhpDocParser\Attributes\AttributeMirrorer $attributeMirrorer)

@@ -13,13 +13,13 @@ use RectorPrefix20210510\Symplify\PackageBuilder\Console\ShellCode;
 final class ShowCommand extends \RectorPrefix20210510\Symfony\Component\Console\Command\Command
 {
     /**
-     * @var SymfonyStyle
+     * @var \Symfony\Component\Console\Style\SymfonyStyle
      */
     private $symfonyStyle;
     /**
-     * @var RectorInterface[]
+     * @var mixed[]
      */
-    private $rectors = [];
+    private $rectors;
     /**
      * @param RectorInterface[] $rectors
      */

@@ -21,7 +21,7 @@ final class MethodCallToAnotherMethodCallWithArguments
     /**
      * @var mixed[]
      */
-    private $newArguments = [];
+    private $newArguments;
     /**
      * @param mixed[] $newArguments
      */

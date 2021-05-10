@@ -31,26 +31,26 @@ final class PhpSpecClassToPHPUnitClassRector extends \Rector\PhpSpecToPHPUnit\Re
      */
     private $testedObjectType;
     /**
-     * @var PhpSpecRenaming
-     */
-    private $phpSpecRenaming;
-    /**
-     * @var LetManipulator
-     */
-    private $letManipulator;
-    /**
-     * @var ClassInsertManipulator
+     * @var \Rector\Core\NodeManipulator\ClassInsertManipulator
      */
     private $classInsertManipulator;
     /**
-     * @var SetUpClassMethodFactory
+     * @var \Rector\PhpSpecToPHPUnit\LetManipulator
+     */
+    private $letManipulator;
+    /**
+     * @var \Rector\PhpSpecToPHPUnit\Naming\PhpSpecRenaming
+     */
+    private $phpSpecRenaming;
+    /**
+     * @var \Rector\PHPUnit\NodeFactory\SetUpClassMethodFactory
      */
     private $setUpClassMethodFactory;
     public function __construct(\Rector\Core\NodeManipulator\ClassInsertManipulator $classInsertManipulator, \Rector\PhpSpecToPHPUnit\LetManipulator $letManipulator, \Rector\PhpSpecToPHPUnit\Naming\PhpSpecRenaming $phpSpecRenaming, \Rector\PHPUnit\NodeFactory\SetUpClassMethodFactory $setUpClassMethodFactory)
     {
-        $this->phpSpecRenaming = $phpSpecRenaming;
-        $this->letManipulator = $letManipulator;
         $this->classInsertManipulator = $classInsertManipulator;
+        $this->letManipulator = $letManipulator;
+        $this->phpSpecRenaming = $phpSpecRenaming;
         $this->setUpClassMethodFactory = $setUpClassMethodFactory;
     }
     /**

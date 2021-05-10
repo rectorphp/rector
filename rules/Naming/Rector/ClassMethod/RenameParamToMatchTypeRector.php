@@ -26,32 +26,32 @@ final class RenameParamToMatchTypeRector extends \Rector\Core\Rector\AbstractRec
      */
     private $hasChanged = \false;
     /**
-     * @var ExpectedNameResolver
-     */
-    private $expectedNameResolver;
-    /**
-     * @var BreakingVariableRenameGuard
+     * @var \Rector\Naming\Guard\BreakingVariableRenameGuard
      */
     private $breakingVariableRenameGuard;
     /**
-     * @var ParamRenamer
+     * @var \Rector\Naming\Naming\ExpectedNameResolver
      */
-    private $paramRenamer;
+    private $expectedNameResolver;
     /**
-     * @var ParamRenameFactory
+     * @var \Rector\Naming\ExpectedNameResolver\MatchParamTypeExpectedNameResolver
+     */
+    private $matchParamTypeExpectedNameResolver;
+    /**
+     * @var \Rector\Naming\ValueObjectFactory\ParamRenameFactory
      */
     private $paramRenameFactory;
     /**
-     * @var MatchParamTypeExpectedNameResolver
+     * @var \Rector\Naming\ParamRenamer\ParamRenamer
      */
-    private $matchParamTypeExpectedNameResolver;
+    private $paramRenamer;
     public function __construct(\Rector\Naming\Guard\BreakingVariableRenameGuard $breakingVariableRenameGuard, \Rector\Naming\Naming\ExpectedNameResolver $expectedNameResolver, \Rector\Naming\ExpectedNameResolver\MatchParamTypeExpectedNameResolver $matchParamTypeExpectedNameResolver, \Rector\Naming\ValueObjectFactory\ParamRenameFactory $paramRenameFactory, \Rector\Naming\ParamRenamer\ParamRenamer $paramRenamer)
     {
-        $this->expectedNameResolver = $expectedNameResolver;
         $this->breakingVariableRenameGuard = $breakingVariableRenameGuard;
+        $this->expectedNameResolver = $expectedNameResolver;
+        $this->matchParamTypeExpectedNameResolver = $matchParamTypeExpectedNameResolver;
         $this->paramRenameFactory = $paramRenameFactory;
         $this->paramRenamer = $paramRenamer;
-        $this->matchParamTypeExpectedNameResolver = $matchParamTypeExpectedNameResolver;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {

@@ -17,21 +17,21 @@ use Rector\TypeDeclaration\PhpDocParser\ParamPhpDocNodeFactory;
 final class PhpDocTypeChanger
 {
     /**
-     * @var TypeComparator
-     */
-    private $typeComparator;
-    /**
-     * @var StaticTypeMapper
+     * @var \Rector\StaticTypeMapper\StaticTypeMapper
      */
     private $staticTypeMapper;
     /**
-     * @var ParamPhpDocNodeFactory
+     * @var \Rector\NodeTypeResolver\TypeComparator\TypeComparator
+     */
+    private $typeComparator;
+    /**
+     * @var \Rector\TypeDeclaration\PhpDocParser\ParamPhpDocNodeFactory
      */
     private $paramPhpDocNodeFactory;
     public function __construct(\Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \Rector\NodeTypeResolver\TypeComparator\TypeComparator $typeComparator, \Rector\TypeDeclaration\PhpDocParser\ParamPhpDocNodeFactory $paramPhpDocNodeFactory)
     {
-        $this->typeComparator = $typeComparator;
         $this->staticTypeMapper = $staticTypeMapper;
+        $this->typeComparator = $typeComparator;
         $this->paramPhpDocNodeFactory = $paramPhpDocNodeFactory;
     }
     public function changeVarType(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo, \PHPStan\Type\Type $newType) : void

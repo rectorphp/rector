@@ -11,15 +11,15 @@ use Rector\Defluent\Contract\ValueObject\RootExprAwareInterface;
 final class FirstAssignFluentCall extends \Rector\Defluent\ValueObject\AbstractRootExpr implements \Rector\Defluent\Contract\ValueObject\RootExprAwareInterface, \Rector\Defluent\Contract\ValueObject\FirstCallFactoryAwareInterface
 {
     /**
-     * @var FluentMethodCalls
+     * @var \Rector\Defluent\ValueObject\FluentMethodCalls
      */
     private $fluentMethodCalls;
     public function __construct(\PhpParser\Node\Expr $assignExpr, \PhpParser\Node\Expr $rootExpr, bool $isFirstCallFactory, \Rector\Defluent\ValueObject\FluentMethodCalls $fluentMethodCalls)
     {
+        $this->fluentMethodCalls = $fluentMethodCalls;
         $this->assignExpr = $assignExpr;
         $this->rootExpr = $rootExpr;
         $this->isFirstCallFactory = $isFirstCallFactory;
-        $this->fluentMethodCalls = $fluentMethodCalls;
     }
     public function getAssignExpr() : \PhpParser\Node\Expr
     {

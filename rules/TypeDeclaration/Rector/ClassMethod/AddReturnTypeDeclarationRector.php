@@ -29,7 +29,7 @@ final class AddReturnTypeDeclarationRector extends \Rector\Core\Rector\AbstractR
      */
     private $methodReturnTypes = [];
     /**
-     * @var TypeComparator
+     * @var \Rector\NodeTypeResolver\TypeComparator\TypeComparator
      */
     private $typeComparator;
     public function __construct(\Rector\NodeTypeResolver\TypeComparator\TypeComparator $typeComparator)

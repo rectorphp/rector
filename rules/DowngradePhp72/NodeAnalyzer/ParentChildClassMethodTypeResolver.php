@@ -12,19 +12,19 @@ use Rector\NodeNameResolver\NodeNameResolver;
 final class ParentChildClassMethodTypeResolver
 {
     /**
-     * @var NativeTypeClassTreeResolver
+     * @var \Rector\DowngradePhp72\NodeAnalyzer\NativeTypeClassTreeResolver
      */
     private $nativeTypeClassTreeResolver;
     /**
-     * @var NodeRepository
+     * @var \Rector\NodeCollector\NodeCollector\NodeRepository
      */
     private $nodeRepository;
     /**
-     * @var ReflectionProvider
+     * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
     /**
-     * @var NodeNameResolver
+     * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     public function __construct(\Rector\DowngradePhp72\NodeAnalyzer\NativeTypeClassTreeResolver $nativeTypeClassTreeResolver, \Rector\NodeCollector\NodeCollector\NodeRepository $nodeRepository, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)

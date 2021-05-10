@@ -18,11 +18,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveEmptyClassMethodRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var ClassMethodManipulator
+     * @var \Rector\Core\NodeManipulator\ClassMethodManipulator
      */
     private $classMethodManipulator;
     /**
-     * @var ControllerClassMethodManipulator
+     * @var \Rector\DeadCode\NodeManipulator\ControllerClassMethodManipulator
      */
     private $controllerClassMethodManipulator;
     public function __construct(\Rector\Core\NodeManipulator\ClassMethodManipulator $classMethodManipulator, \Rector\DeadCode\NodeManipulator\ControllerClassMethodManipulator $controllerClassMethodManipulator)

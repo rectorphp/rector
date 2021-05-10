@@ -17,7 +17,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveDeadStmtRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var LivingCodeManipulator
+     * @var \Rector\DeadCode\NodeManipulator\LivingCodeManipulator
      */
     private $livingCodeManipulator;
     public function __construct(\Rector\DeadCode\NodeManipulator\LivingCodeManipulator $livingCodeManipulator)

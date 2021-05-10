@@ -8,7 +8,7 @@ use PhpParser\Node\Expr;
 final class MethodNameResolver
 {
     /**
-     * @var VariableNaming
+     * @var \Rector\Naming\Naming\VariableNaming
      */
     private $variableNaming;
     public function __construct(\Rector\Naming\Naming\VariableNaming $variableNaming)

@@ -30,7 +30,7 @@ final class CompleteMissingDependencyInNewRector extends \Rector\Core\Rector\Abs
      */
     private $classToInstantiateByType = [];
     /**
-     * @var ReflectionProvider
+     * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
     public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider)

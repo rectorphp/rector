@@ -33,7 +33,7 @@ use Rector\PostRector\Collector\NodesToAddCollector;
 final class LivingCodeManipulator
 {
     /**
-     * @var NodesToAddCollector
+     * @var \Rector\PostRector\Collector\NodesToAddCollector
      */
     private $nodesToAddCollector;
     public function __construct(\Rector\PostRector\Collector\NodesToAddCollector $nodesToAddCollector)

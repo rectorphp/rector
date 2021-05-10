@@ -8,20 +8,20 @@ use PHPStan\Type\Type;
 final class NestedArrayType
 {
     /**
+     * @var \PHPStan\Type\Type
+     */
+    private $type;
+    /**
      * @var int
      */
     private $arrayNestingLevel;
     /**
-     * @var Type
-     */
-    private $type;
-    /**
-     * @var Type|null
+     * @var \PHPStan\Type\Type|null
      */
     private $keyType;
-    public function __construct(\PHPStan\Type\Type $valueType, int $arrayNestingLevel, ?\PHPStan\Type\Type $keyType = null)
+    public function __construct(\PHPStan\Type\Type $type, int $arrayNestingLevel, ?\PHPStan\Type\Type $keyType = null)
     {
-        $this->type = $valueType;
+        $this->type = $type;
         $this->arrayNestingLevel = $arrayNestingLevel;
         $this->keyType = $keyType;
     }

@@ -28,10 +28,6 @@ final class ForToForeachRector extends \Rector\Core\Rector\AbstractRector
      */
     private const COUNT = 'count';
     /**
-     * @var Inflector
-     */
-    private $inflector;
-    /**
      * @var string|null
      */
     private $keyValueName;
@@ -48,15 +44,19 @@ final class ForToForeachRector extends \Rector\Core\Rector\AbstractRector
      */
     private $iteratedExpr;
     /**
-     * @var ForAnalyzer
+     * @var \Doctrine\Inflector\Inflector
+     */
+    private $inflector;
+    /**
+     * @var \Rector\CodeQuality\NodeAnalyzer\ForAnalyzer
      */
     private $forAnalyzer;
     /**
-     * @var ForeachFactory
+     * @var \Rector\CodeQuality\NodeFactory\ForeachFactory
      */
     private $foreachFactory;
     /**
-     * @var ForeachAnalyzer
+     * @var \Rector\CodeQuality\NodeAnalyzer\ForeachAnalyzer
      */
     private $foreachAnalyzer;
     public function __construct(\RectorPrefix20210510\Doctrine\Inflector\Inflector $inflector, \Rector\CodeQuality\NodeAnalyzer\ForAnalyzer $forAnalyzer, \Rector\CodeQuality\NodeFactory\ForeachFactory $foreachFactory, \Rector\CodeQuality\NodeAnalyzer\ForeachAnalyzer $foreachAnalyzer)

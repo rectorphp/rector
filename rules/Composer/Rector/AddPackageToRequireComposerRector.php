@@ -23,7 +23,7 @@ final class AddPackageToRequireComposerRector implements \Rector\Composer\Contra
      */
     private $packagesAndVersions = [];
     /**
-     * @var VersionGuard
+     * @var \Rector\Composer\Guard\VersionGuard
      */
     private $versionGuard;
     public function __construct(\Rector\Composer\Guard\VersionGuard $versionGuard)

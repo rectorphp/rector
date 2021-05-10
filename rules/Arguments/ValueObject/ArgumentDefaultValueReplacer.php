@@ -18,13 +18,7 @@ final class ArgumentDefaultValueReplacer
      * @var int
      */
     private $position;
-    /**
-     * @var mixed
-     */
     private $valueBefore;
-    /**
-     * @var mixed
-     */
     private $valueAfter;
     /**
      * @param mixed $valueBefore

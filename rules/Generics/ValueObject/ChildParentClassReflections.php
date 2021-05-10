@@ -8,11 +8,11 @@ use PHPStan\Type\Generic\TemplateTypeMap;
 final class ChildParentClassReflections
 {
     /**
-     * @var ClassReflection
+     * @var \PHPStan\Reflection\ClassReflection
      */
     private $childClassReflection;
     /**
-     * @var ClassReflection
+     * @var \PHPStan\Reflection\ClassReflection
      */
     private $parentClassReflection;
     public function __construct(\PHPStan\Reflection\ClassReflection $childClassReflection, \PHPStan\Reflection\ClassReflection $parentClassReflection)

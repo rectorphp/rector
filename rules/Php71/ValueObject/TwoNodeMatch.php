@@ -7,11 +7,11 @@ use PhpParser\Node\Expr;
 final class TwoNodeMatch
 {
     /**
-     * @var Expr
+     * @var \PhpParser\Node\Expr
      */
     private $firstExpr;
     /**
-     * @var Expr
+     * @var \PhpParser\Node\Expr
      */
     private $secondExpr;
     public function __construct(\PhpParser\Node\Expr $firstExpr, \PhpParser\Node\Expr $secondExpr)

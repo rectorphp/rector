@@ -23,19 +23,19 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class GenericsPHPStormMethodAnnotationRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var ClassGenericMethodResolver
+     * @var \Rector\Generics\Reflection\ClassGenericMethodResolver
      */
     private $classGenericMethodResolver;
     /**
-     * @var GenericTypeSpecifier
+     * @var \Rector\Generics\NodeType\GenericTypeSpecifier
      */
     private $genericTypeSpecifier;
     /**
-     * @var GenericClassReflectionAnalyzer
+     * @var \Rector\Generics\Reflection\GenericClassReflectionAnalyzer
      */
     private $genericClassReflectionAnalyzer;
     /**
-     * @var UnnededMethodTagValueNodeFilter
+     * @var \Rector\Generics\Filter\UnnededMethodTagValueNodeFilter
      */
     private $unnededMethodTagValueNodeFilter;
     public function __construct(\Rector\Generics\Reflection\ClassGenericMethodResolver $classGenericMethodResolver, \Rector\Generics\NodeType\GenericTypeSpecifier $genericTypeSpecifier, \Rector\Generics\Reflection\GenericClassReflectionAnalyzer $genericClassReflectionAnalyzer, \Rector\Generics\Filter\UnnededMethodTagValueNodeFilter $unnededMethodTagValueNodeFilter)

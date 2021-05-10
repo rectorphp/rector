@@ -26,11 +26,11 @@ final class MakeIsserClassMethodNameStartWithIsRector extends \Rector\Core\Recto
      */
     private const ISSER_NAME_REGEX = '#^(is|has|was|must|does|have|should|__)#';
     /**
-     * @var MethodNameResolver
+     * @var \Rector\Naming\Naming\MethodNameResolver
      */
     private $methodNameResolver;
     /**
-     * @var MethodCallRenamer
+     * @var \Rector\Naming\NodeRenamer\MethodCallRenamer
      */
     private $methodCallRenamer;
     public function __construct(\Rector\Naming\Naming\MethodNameResolver $methodNameResolver, \Rector\Naming\NodeRenamer\MethodCallRenamer $methodCallRenamer)

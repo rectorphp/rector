@@ -11,9 +11,9 @@ use Rector\Core\Contract\PHPStan\Reflection\TypeToCallReflectionResolver\TypeToC
 final class TypeToCallReflectionResolverRegistry
 {
     /**
-     * @var TypeToCallReflectionResolverInterface[]
+     * @var mixed[]
      */
-    private $resolvers = [];
+    private $resolvers;
     /**
      * @param TypeToCallReflectionResolverInterface[] $resolvers
      */

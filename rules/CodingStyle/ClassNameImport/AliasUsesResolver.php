@@ -10,11 +10,11 @@ use Rector\Core\PhpParser\Node\BetterNodeFinder;
 final class AliasUsesResolver
 {
     /**
-     * @var UseImportsTraverser
+     * @var \Rector\CodingStyle\ClassNameImport\UseImportsTraverser
      */
     private $useImportsTraverser;
     /**
-     * @var BetterNodeFinder
+     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
     public function __construct(\Rector\CodingStyle\ClassNameImport\UseImportsTraverser $useImportsTraverser, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)

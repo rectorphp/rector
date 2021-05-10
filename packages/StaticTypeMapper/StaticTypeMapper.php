@@ -29,27 +29,27 @@ use Rector\StaticTypeMapper\PhpDoc\PhpDocTypeMapper;
 final class StaticTypeMapper
 {
     /**
-     * @var PHPStanStaticTypeMapper
+     * @var \Rector\StaticTypeMapper\Naming\NameScopeFactory
+     */
+    private $nameScopeFactory;
+    /**
+     * @var \Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper
      */
     private $phpStanStaticTypeMapper;
     /**
-     * @var PhpParserNodeMapper
-     */
-    private $phpParserNodeMapper;
-    /**
-     * @var PhpDocTypeMapper
+     * @var \Rector\StaticTypeMapper\PhpDoc\PhpDocTypeMapper
      */
     private $phpDocTypeMapper;
     /**
-     * @var NameScopeFactory
+     * @var \Rector\StaticTypeMapper\Mapper\PhpParserNodeMapper
      */
-    private $nameScopeFactory;
+    private $phpParserNodeMapper;
     public function __construct(\Rector\StaticTypeMapper\Naming\NameScopeFactory $nameScopeFactory, \Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper $phpStanStaticTypeMapper, \Rector\StaticTypeMapper\PhpDoc\PhpDocTypeMapper $phpDocTypeMapper, \Rector\StaticTypeMapper\Mapper\PhpParserNodeMapper $phpParserNodeMapper)
     {
-        $this->phpStanStaticTypeMapper = $phpStanStaticTypeMapper;
-        $this->phpParserNodeMapper = $phpParserNodeMapper;
-        $this->phpDocTypeMapper = $phpDocTypeMapper;
         $this->nameScopeFactory = $nameScopeFactory;
+        $this->phpStanStaticTypeMapper = $phpStanStaticTypeMapper;
+        $this->phpDocTypeMapper = $phpDocTypeMapper;
+        $this->phpParserNodeMapper = $phpParserNodeMapper;
         $this->nameScopeFactory->setStaticTypeMapper($this);
     }
     public function mapPHPStanTypeToPHPStanPhpDocTypeNode(\PHPStan\Type\Type $phpStanType) : \PHPStan\PhpDocParser\Ast\Type\TypeNode

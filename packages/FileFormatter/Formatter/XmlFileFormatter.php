@@ -15,7 +15,7 @@ use Rector\FileFormatter\ValueObjectFactory\EditorConfigConfigurationBuilder;
 final class XmlFileFormatter implements \Rector\FileFormatter\Contract\Formatter\FileFormatterInterface
 {
     /**
-     * @var Formatter
+     * @var \PrettyXml\Formatter
      */
     private $xmlFormatter;
     public function __construct(\RectorPrefix20210510\PrettyXml\Formatter $xmlFormatter)

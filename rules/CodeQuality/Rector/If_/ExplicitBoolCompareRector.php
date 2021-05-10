@@ -38,11 +38,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ExplicitBoolCompareRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var StringTypeAnalyzer
+     * @var \Rector\NodeTypeResolver\TypeAnalyzer\StringTypeAnalyzer
      */
     private $stringTypeAnalyzer;
     /**
-     * @var ArrayTypeAnalyzer
+     * @var \Rector\NodeTypeResolver\TypeAnalyzer\ArrayTypeAnalyzer
      */
     private $arrayTypeAnalyzer;
     public function __construct(\Rector\NodeTypeResolver\TypeAnalyzer\StringTypeAnalyzer $stringTypeAnalyzer, \Rector\NodeTypeResolver\TypeAnalyzer\ArrayTypeAnalyzer $arrayTypeAnalyzer)

@@ -45,27 +45,27 @@ final class PHPUnitStaticToKernelTestCaseGetRector extends \Rector\Core\Rector\A
      */
     private $newPropertyObjectTypes = [];
     /**
-     * @var PropertyNaming
+     * @var \Rector\Naming\Naming\PropertyNaming
      */
     private $propertyNaming;
     /**
-     * @var ClassInsertManipulator
+     * @var \Rector\Core\NodeManipulator\ClassInsertManipulator
      */
     private $classInsertManipulator;
     /**
-     * @var SetUpClassMethodFactory
+     * @var \Rector\PHPUnit\NodeFactory\SetUpClassMethodFactory
      */
     private $setUpClassMethodFactory;
     /**
-     * @var SetUpFactory
+     * @var \Rector\RemovingStatic\NodeFactory\SetUpFactory
      */
     private $setUpFactory;
     /**
-     * @var SelfContainerFactory
+     * @var \Rector\RemovingStatic\NodeFactory\SelfContainerFactory
      */
     private $selfContainerFactory;
     /**
-     * @var SetUpClassMethodUpdater
+     * @var \Rector\RemovingStatic\NodeAnalyzer\SetUpClassMethodUpdater
      */
     private $setUpClassMethodUpdater;
     public function __construct(\Rector\Naming\Naming\PropertyNaming $propertyNaming, \Rector\Core\NodeManipulator\ClassInsertManipulator $classInsertManipulator, \Rector\PHPUnit\NodeFactory\SetUpClassMethodFactory $setUpClassMethodFactory, \Rector\RemovingStatic\NodeFactory\SetUpFactory $setUpFactory, \Rector\RemovingStatic\NodeFactory\SelfContainerFactory $selfContainerFactory, \Rector\RemovingStatic\NodeAnalyzer\SetUpClassMethodUpdater $setUpClassMethodUpdater)

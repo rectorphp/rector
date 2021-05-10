@@ -12,7 +12,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class NameNameResolver implements \Rector\NodeNameResolver\Contract\NodeNameResolverInterface
 {
     /**
-     * @var FuncCallNameResolver
+     * @var \Rector\NodeNameResolver\NodeNameResolver\FuncCallNameResolver
      */
     private $funcCallNameResolver;
     public function __construct(\Rector\NodeNameResolver\NodeNameResolver\FuncCallNameResolver $funcCallNameResolver)

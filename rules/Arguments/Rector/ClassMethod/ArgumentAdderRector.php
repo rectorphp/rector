@@ -39,7 +39,7 @@ final class ArgumentAdderRector extends \Rector\Core\Rector\AbstractRector imple
      */
     private $addedArguments = [];
     /**
-     * @var ArgumentAddingScope
+     * @var \Rector\Arguments\NodeAnalyzer\ArgumentAddingScope
      */
     private $argumentAddingScope;
     public function __construct(\Rector\Arguments\NodeAnalyzer\ArgumentAddingScope $argumentAddingScope)

@@ -30,7 +30,7 @@ final class RemoveAnnotationRector extends \Rector\Core\Rector\AbstractRector im
      */
     private $annotationsToRemove = [];
     /**
-     * @var PhpDocTagRemover
+     * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover
      */
     private $phpDocTagRemover;
     public function __construct(\Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover $phpDocTagRemover)

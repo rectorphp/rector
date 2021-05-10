@@ -14,7 +14,7 @@ use Rector\StaticTypeMapper\StaticTypeMapper;
 final class SelfContainerFactory
 {
     /**
-     * @var StaticTypeMapper
+     * @var \Rector\StaticTypeMapper\StaticTypeMapper
      */
     private $staticTypeMapper;
     public function __construct(\Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper)

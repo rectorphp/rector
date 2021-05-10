@@ -22,7 +22,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradePropertyPromotionRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var ClassInsertManipulator
+     * @var \Rector\Core\NodeManipulator\ClassInsertManipulator
      */
     private $classInsertManipulator;
     public function __construct(\Rector\Core\NodeManipulator\ClassInsertManipulator $classInsertManipulator)

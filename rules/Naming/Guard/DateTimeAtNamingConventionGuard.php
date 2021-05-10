@@ -19,11 +19,11 @@ final class DateTimeAtNamingConventionGuard implements \Rector\Naming\Contract\G
      */
     private const AT_NAMING_REGEX = '#[\\w+]At$#';
     /**
-     * @var NodeTypeResolver
+     * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;
     /**
-     * @var TypeUnwrapper
+     * @var \Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper
      */
     private $typeUnwrapper;
     public function __construct(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper $typeUnwrapper)

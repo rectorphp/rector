@@ -26,13 +26,13 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class SimplifyForeachToCoalescingRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var ForeachManipulator
-     */
-    private $foreachManipulator;
-    /**
      * @var Return_|null
      */
     private $return;
+    /**
+     * @var \Rector\Core\NodeManipulator\ForeachManipulator
+     */
+    private $foreachManipulator;
     public function __construct(\Rector\Core\NodeManipulator\ForeachManipulator $foreachManipulator)
     {
         $this->foreachManipulator = $foreachManipulator;

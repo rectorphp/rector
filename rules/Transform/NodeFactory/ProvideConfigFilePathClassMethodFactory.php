@@ -13,7 +13,7 @@ use Rector\Core\PhpParser\Node\NodeFactory;
 final class ProvideConfigFilePathClassMethodFactory
 {
     /**
-     * @var NodeFactory
+     * @var \Rector\Core\PhpParser\Node\NodeFactory
      */
     private $nodeFactory;
     public function __construct(\Rector\Core\PhpParser\Node\NodeFactory $nodeFactory)

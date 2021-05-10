@@ -13,7 +13,7 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 final class NodeTypeAnalyzer
 {
     /**
-     * @var NodeTypeResolver
+     * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;
     public function __construct(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver)

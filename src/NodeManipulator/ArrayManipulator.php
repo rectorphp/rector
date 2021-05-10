@@ -11,7 +11,7 @@ use Rector\ChangesReporting\Collector\RectorChangeCollector;
 final class ArrayManipulator
 {
     /**
-     * @var RectorChangeCollector
+     * @var \Rector\ChangesReporting\Collector\RectorChangeCollector
      */
     private $rectorChangeCollector;
     public function __construct(\Rector\ChangesReporting\Collector\RectorChangeCollector $rectorChangeCollector)

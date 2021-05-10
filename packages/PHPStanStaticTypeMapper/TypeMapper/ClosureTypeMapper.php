@@ -19,7 +19,7 @@ final class ClosureTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contrac
      */
     private $phpStanStaticTypeMapper;
     /**
-     * @var CallableTypeMapper
+     * @var \Rector\PHPStanStaticTypeMapper\TypeMapper\CallableTypeMapper
      */
     private $callableTypeMapper;
     public function __construct(\Rector\PHPStanStaticTypeMapper\TypeMapper\CallableTypeMapper $callableTypeMapper)

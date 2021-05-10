@@ -7,7 +7,6 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use Rector\BetterPhpDocParser\Contract\BasePhpDocNodeVisitorInterface;
 use Rector\BetterPhpDocParser\DataProvider\CurrentTokenIteratorProvider;
 use Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator;
-use RectorPrefix20210510\Symplify\SimplePhpDocParser\Contract\PhpDocNodeVisitorInterface;
 use RectorPrefix20210510\Symplify\SimplePhpDocParser\PhpDocNodeTraverser;
 use RectorPrefix20210510\Symplify\SimplePhpDocParser\PhpDocNodeVisitor\CloningPhpDocNodeVisitor;
 use RectorPrefix20210510\Symplify\SimplePhpDocParser\PhpDocNodeVisitor\ParentConnectingPhpDocNodeVisitor;
@@ -17,30 +16,30 @@ use RectorPrefix20210510\Symplify\SimplePhpDocParser\PhpDocNodeVisitor\ParentCon
 final class PhpDocNodeMapper
 {
     /**
-     * @var PhpDocNodeVisitorInterface[]
-     */
-    private $phpDocNodeVisitors = [];
-    /**
-     * @var CurrentTokenIteratorProvider
+     * @var \Rector\BetterPhpDocParser\DataProvider\CurrentTokenIteratorProvider
      */
     private $currentTokenIteratorProvider;
     /**
-     * @var ParentConnectingPhpDocNodeVisitor
+     * @var \Symplify\SimplePhpDocParser\PhpDocNodeVisitor\ParentConnectingPhpDocNodeVisitor
      */
     private $parentConnectingPhpDocNodeVisitor;
     /**
-     * @var CloningPhpDocNodeVisitor
+     * @var \Symplify\SimplePhpDocParser\PhpDocNodeVisitor\CloningPhpDocNodeVisitor
      */
     private $cloningPhpDocNodeVisitor;
+    /**
+     * @var mixed[]
+     */
+    private $phpDocNodeVisitors;
     /**
      * @param BasePhpDocNodeVisitorInterface[] $phpDocNodeVisitors
      */
     public function __construct(\Rector\BetterPhpDocParser\DataProvider\CurrentTokenIteratorProvider $currentTokenIteratorProvider, \RectorPrefix20210510\Symplify\SimplePhpDocParser\PhpDocNodeVisitor\ParentConnectingPhpDocNodeVisitor $parentConnectingPhpDocNodeVisitor, \RectorPrefix20210510\Symplify\SimplePhpDocParser\PhpDocNodeVisitor\CloningPhpDocNodeVisitor $cloningPhpDocNodeVisitor, array $phpDocNodeVisitors)
     {
-        $this->phpDocNodeVisitors = $phpDocNodeVisitors;
         $this->currentTokenIteratorProvider = $currentTokenIteratorProvider;
         $this->parentConnectingPhpDocNodeVisitor = $parentConnectingPhpDocNodeVisitor;
         $this->cloningPhpDocNodeVisitor = $cloningPhpDocNodeVisitor;
+        $this->phpDocNodeVisitors = $phpDocNodeVisitors;
     }
     public function transform(\PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode $phpDocNode, \Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator $betterTokenIterator) : void
     {

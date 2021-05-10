@@ -10,11 +10,11 @@ use Rector\ReadWrite\NodeFinder\NodeUsageFinder;
 final class PropertyFetchReadNodeAnalyzer implements \Rector\ReadWrite\Contract\ReadNodeAnalyzerInterface
 {
     /**
-     * @var ReadExprAnalyzer
+     * @var \Rector\ReadWrite\ReadNodeAnalyzer\ReadExprAnalyzer
      */
     private $readExprAnalyzer;
     /**
-     * @var NodeUsageFinder
+     * @var \Rector\ReadWrite\NodeFinder\NodeUsageFinder
      */
     private $nodeUsageFinder;
     public function __construct(\Rector\ReadWrite\ReadNodeAnalyzer\ReadExprAnalyzer $readExprAnalyzer, \Rector\ReadWrite\NodeFinder\NodeUsageFinder $nodeUsageFinder)

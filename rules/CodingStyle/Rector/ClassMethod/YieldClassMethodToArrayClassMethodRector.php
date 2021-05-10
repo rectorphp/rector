@@ -28,20 +28,20 @@ final class YieldClassMethodToArrayClassMethodRector extends \Rector\Core\Rector
      */
     public const METHODS_BY_TYPE = 'methods_by_type';
     /**
-     * @var array<class-string, string[]>
-     */
-    private $methodsByType = [];
-    /**
-     * @var NodeTransformer
+     * @var \Rector\Core\PhpParser\NodeTransformer
      */
     private $nodeTransformer;
+    /**
+     * @var mixed[]
+     */
+    private $methodsByType;
     /**
      * @param array<class-string, string[]> $methodsByType
      */
     public function __construct(\Rector\Core\PhpParser\NodeTransformer $nodeTransformer, array $methodsByType = [])
     {
-        $this->methodsByType = $methodsByType;
         $this->nodeTransformer = $nodeTransformer;
+        $this->methodsByType = $methodsByType;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {

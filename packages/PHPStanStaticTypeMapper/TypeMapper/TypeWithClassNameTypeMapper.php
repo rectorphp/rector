@@ -12,7 +12,7 @@ use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 final class TypeWithClassNameTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface
 {
     /**
-     * @var StringTypeMapper
+     * @var \Rector\PHPStanStaticTypeMapper\TypeMapper\StringTypeMapper
      */
     private $stringTypeMapper;
     public function __construct(\Rector\PHPStanStaticTypeMapper\TypeMapper\StringTypeMapper $stringTypeMapper)

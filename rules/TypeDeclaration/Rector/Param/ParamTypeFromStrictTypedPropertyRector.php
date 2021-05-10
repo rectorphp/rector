@@ -26,7 +26,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ParamTypeFromStrictTypedPropertyRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var ReflectionTypeResolver
+     * @var \Rector\TypeDeclaration\Reflection\ReflectionTypeResolver
      */
     private $reflectionTypeResolver;
     public function __construct(\Rector\TypeDeclaration\Reflection\ReflectionTypeResolver $reflectionTypeResolver)

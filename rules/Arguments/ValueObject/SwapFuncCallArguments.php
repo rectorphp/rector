@@ -10,9 +10,9 @@ final class SwapFuncCallArguments
      */
     private $function;
     /**
-     * @var array<int, int>
+     * @var mixed[]
      */
-    private $order = [];
+    private $order;
     /**
      * @param array<int, int> $order
      */

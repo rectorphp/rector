@@ -21,27 +21,27 @@ use Rector\Transform\NodeTypeAnalyzer\TypeProvidingExprFromClassResolver;
 final class FuncCallStaticCallToMethodCallAnalyzer
 {
     /**
-     * @var TypeProvidingExprFromClassResolver
+     * @var \Rector\Transform\NodeTypeAnalyzer\TypeProvidingExprFromClassResolver
      */
     private $typeProvidingExprFromClassResolver;
     /**
-     * @var PropertyNaming
+     * @var \Rector\Naming\Naming\PropertyNaming
      */
     private $propertyNaming;
     /**
-     * @var NodeNameResolver
+     * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     /**
-     * @var NodeFactory
+     * @var \Rector\Core\PhpParser\Node\NodeFactory
      */
     private $nodeFactory;
     /**
-     * @var PropertyFetchFactory
+     * @var \Rector\Transform\NodeFactory\PropertyFetchFactory
      */
     private $propertyFetchFactory;
     /**
-     * @var PropertyAdder
+     * @var \Rector\PostRector\DependencyInjection\PropertyAdder
      */
     private $propertyAdder;
     public function __construct(\Rector\Transform\NodeTypeAnalyzer\TypeProvidingExprFromClassResolver $typeProvidingExprFromClassResolver, \Rector\Naming\Naming\PropertyNaming $propertyNaming, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\Transform\NodeFactory\PropertyFetchFactory $propertyFetchFactory, \Rector\PostRector\DependencyInjection\PropertyAdder $propertyAdder)

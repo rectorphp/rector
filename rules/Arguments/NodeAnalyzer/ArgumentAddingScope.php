@@ -24,7 +24,7 @@ final class ArgumentAddingScope
      */
     public const SCOPE_CLASS_METHOD = 'class_method';
     /**
-     * @var NodeNameResolver
+     * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)

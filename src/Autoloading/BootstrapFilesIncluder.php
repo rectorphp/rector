@@ -10,7 +10,7 @@ use Throwable;
 final class BootstrapFilesIncluder
 {
     /**
-     * @var ParameterProvider
+     * @var \Symplify\PackageBuilder\Parameter\ParameterProvider
      */
     private $parameterProvider;
     public function __construct(\RectorPrefix20210510\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider)

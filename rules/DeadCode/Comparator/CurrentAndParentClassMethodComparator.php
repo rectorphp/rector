@@ -20,25 +20,25 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class CurrentAndParentClassMethodComparator
 {
     /**
-     * @var NodeNameResolver
+     * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     /**
-     * @var NodeComparator
-     */
-    private $nodeComparator;
-    /**
-     * @var MethodReflectionProvider
+     * @var \Rector\NodeCollector\Reflection\MethodReflectionProvider
      */
     private $methodReflectionProvider;
     /**
-     * @var ParameterDefaultsComparator
+     * @var \Rector\DeadCode\Comparator\Parameter\ParameterDefaultsComparator
      */
     private $parameterDefaultsComparator;
     /**
-     * @var ParameterTypeComparator
+     * @var \Rector\DeadCode\Comparator\Parameter\ParameterTypeComparator
      */
     private $parameterTypeComparator;
+    /**
+     * @var \Rector\Core\PhpParser\Comparing\NodeComparator
+     */
+    private $nodeComparator;
     public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeCollector\Reflection\MethodReflectionProvider $methodReflectionProvider, \Rector\DeadCode\Comparator\Parameter\ParameterDefaultsComparator $parameterDefaultsComparator, \Rector\DeadCode\Comparator\Parameter\ParameterTypeComparator $parameterTypeComparator, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator)
     {
         $this->nodeNameResolver = $nodeNameResolver;

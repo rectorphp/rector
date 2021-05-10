@@ -22,7 +22,7 @@ use RectorPrefix20210510\Webmozart\Assert\Assert;
 final class IdentifierManipulator
 {
     /**
-     * @var NodeNameResolver
+     * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)

@@ -18,9 +18,6 @@ final class ArgumentRemover
      * @var int
      */
     private $position;
-    /**
-     * @var mixed
-     */
     private $value;
     /**
      * @param mixed $value

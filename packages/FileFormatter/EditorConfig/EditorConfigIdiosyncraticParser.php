@@ -14,7 +14,7 @@ use Rector\FileFormatter\ValueObjectFactory\EditorConfigConfigurationBuilder;
 final class EditorConfigIdiosyncraticParser implements \Rector\FileFormatter\Contract\EditorConfig\EditorConfigParserInterface
 {
     /**
-     * @var EditorConfig
+     * @var \Idiosyncratic\EditorConfig\EditorConfig
      */
     private $editorConfig;
     public function __construct(\RectorPrefix20210510\Idiosyncratic\EditorConfig\EditorConfig $editorConfig)

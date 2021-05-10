@@ -14,9 +14,9 @@ use Rector\Core\ValueObject\StaticNonPhpFileSuffixes;
 final class NonPhpFileProcessor implements \Rector\Core\Contract\Processor\FileProcessorInterface
 {
     /**
-     * @var NonPhpRectorInterface[]
+     * @var mixed[]
      */
-    private $nonPhpRectors = [];
+    private $nonPhpRectors;
     /**
      * @param NonPhpRectorInterface[] $nonPhpRectors
      */

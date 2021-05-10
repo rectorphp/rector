@@ -10,7 +10,7 @@ use Rector\NodeCollector\NodeCollector\NodeRepository;
 final class ClassLikeParentResolver
 {
     /**
-     * @var NodeRepository
+     * @var \Rector\NodeCollector\NodeCollector\NodeRepository
      */
     private $nodeRepository;
     public function __construct(\Rector\NodeCollector\NodeCollector\NodeRepository $nodeRepository)

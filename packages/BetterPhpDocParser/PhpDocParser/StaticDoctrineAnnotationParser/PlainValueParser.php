@@ -21,17 +21,17 @@ final class PlainValueParser
      */
     private $staticDoctrineAnnotationParser;
     /**
-     * @var ClassAnnotationMatcher
-     */
-    private $classAnnotationMatcher;
-    /**
-     * @var CurrentNodeProvider
-     */
-    private $currentNodeProvider;
-    /**
      * @var ArrayParser
      */
     private $arrayParser;
+    /**
+     * @var \Rector\BetterPhpDocParser\PhpDocParser\ClassAnnotationMatcher
+     */
+    private $classAnnotationMatcher;
+    /**
+     * @var \Rector\Core\Configuration\CurrentNodeProvider
+     */
+    private $currentNodeProvider;
     public function __construct(\Rector\BetterPhpDocParser\PhpDocParser\ClassAnnotationMatcher $classAnnotationMatcher, \Rector\Core\Configuration\CurrentNodeProvider $currentNodeProvider)
     {
         $this->classAnnotationMatcher = $classAnnotationMatcher;

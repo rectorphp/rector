@@ -9,11 +9,11 @@ use Rector\Naming\ValueObject\PropertyRename;
 final class BoolPropertyRenamer
 {
     /**
-     * @var BoolPropertyConflictingNameGuard
+     * @var \Rector\Naming\Guard\PropertyConflictingNameGuard\BoolPropertyConflictingNameGuard
      */
     private $boolPropertyConflictingNameGuard;
     /**
-     * @var PropertyRenamer
+     * @var \Rector\Naming\PropertyRenamer\PropertyRenamer
      */
     private $propertyRenamer;
     public function __construct(\Rector\Naming\Guard\PropertyConflictingNameGuard\BoolPropertyConflictingNameGuard $boolPropertyConflictingNameGuard, \Rector\Naming\PropertyRenamer\PropertyRenamer $propertyRenamer)

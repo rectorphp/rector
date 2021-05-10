@@ -18,11 +18,11 @@ use RectorPrefix20210510\Symplify\SimplePhpDocParser\PhpDocNodeVisitor\AbstractP
 final class UnionTypeNodePhpDocNodeVisitor extends \RectorPrefix20210510\Symplify\SimplePhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor implements \Rector\BetterPhpDocParser\Contract\BasePhpDocNodeVisitorInterface
 {
     /**
-     * @var CurrentTokenIteratorProvider
+     * @var \Rector\BetterPhpDocParser\DataProvider\CurrentTokenIteratorProvider
      */
     private $currentTokenIteratorProvider;
     /**
-     * @var AttributeMirrorer
+     * @var \Rector\BetterPhpDocParser\Attributes\AttributeMirrorer
      */
     private $attributeMirrorer;
     public function __construct(\Rector\BetterPhpDocParser\DataProvider\CurrentTokenIteratorProvider $currentTokenIteratorProvider, \Rector\BetterPhpDocParser\Attributes\AttributeMirrorer $attributeMirrorer)

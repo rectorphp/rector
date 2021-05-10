@@ -24,44 +24,44 @@ use Rector\PostRector\ValueObject\PropertyMetadata;
 final class ClassDependencyManipulator
 {
     /**
-     * @var ClassMethodAssignManipulator
-     */
-    private $classMethodAssignManipulator;
-    /**
-     * @var NodeFactory
-     */
-    private $nodeFactory;
-    /**
-     * @var ChildAndParentClassManipulator
+     * @var \Rector\Core\NodeManipulator\ChildAndParentClassManipulator
      */
     private $childAndParentClassManipulator;
     /**
-     * @var StmtsManipulator
-     */
-    private $stmtsManipulator;
-    /**
-     * @var ClassInsertManipulator
+     * @var \Rector\Core\NodeManipulator\ClassInsertManipulator
      */
     private $classInsertManipulator;
     /**
-     * @var PhpVersionProvider
+     * @var \Rector\Core\NodeManipulator\ClassMethodAssignManipulator
+     */
+    private $classMethodAssignManipulator;
+    /**
+     * @var \Rector\Core\PhpParser\Node\NodeFactory
+     */
+    private $nodeFactory;
+    /**
+     * @var \Rector\Core\NodeManipulator\StmtsManipulator
+     */
+    private $stmtsManipulator;
+    /**
+     * @var \Rector\Core\Php\PhpVersionProvider
      */
     private $phpVersionProvider;
     /**
-     * @var PropertyPresenceChecker
+     * @var \Rector\Core\NodeAnalyzer\PropertyPresenceChecker
      */
     private $propertyPresenceChecker;
     /**
-     * @var NodeNameResolver
+     * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     public function __construct(\Rector\Core\NodeManipulator\ChildAndParentClassManipulator $childAndParentClassManipulator, \Rector\Core\NodeManipulator\ClassInsertManipulator $classInsertManipulator, \Rector\Core\NodeManipulator\ClassMethodAssignManipulator $classMethodAssignManipulator, \Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\Core\NodeManipulator\StmtsManipulator $stmtsManipulator, \Rector\Core\Php\PhpVersionProvider $phpVersionProvider, \Rector\Core\NodeAnalyzer\PropertyPresenceChecker $propertyPresenceChecker, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
     {
+        $this->childAndParentClassManipulator = $childAndParentClassManipulator;
+        $this->classInsertManipulator = $classInsertManipulator;
         $this->classMethodAssignManipulator = $classMethodAssignManipulator;
         $this->nodeFactory = $nodeFactory;
-        $this->childAndParentClassManipulator = $childAndParentClassManipulator;
         $this->stmtsManipulator = $stmtsManipulator;
-        $this->classInsertManipulator = $classInsertManipulator;
         $this->phpVersionProvider = $phpVersionProvider;
         $this->propertyPresenceChecker = $propertyPresenceChecker;
         $this->nodeNameResolver = $nodeNameResolver;

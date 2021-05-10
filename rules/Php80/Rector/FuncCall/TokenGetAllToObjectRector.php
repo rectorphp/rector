@@ -26,12 +26,12 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class TokenGetAllToObjectRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var TokenManipulator
+     * @var \Rector\Php80\NodeManipulator\TokenManipulator
      */
     private $tokenManipulator;
-    public function __construct(\Rector\Php80\NodeManipulator\TokenManipulator $ifArrayTokenManipulator)
+    public function __construct(\Rector\Php80\NodeManipulator\TokenManipulator $tokenManipulator)
     {
-        $this->tokenManipulator = $ifArrayTokenManipulator;
+        $this->tokenManipulator = $tokenManipulator;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {

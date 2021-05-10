@@ -22,7 +22,7 @@ use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
 final class ObjectTypeSpecifier
 {
     /**
-     * @var ReflectionProvider
+     * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
     public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider)

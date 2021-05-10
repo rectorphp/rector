@@ -11,7 +11,7 @@ final class PropertyMetadata
      */
     private $name;
     /**
-     * @var Type|null
+     * @var \PHPStan\Type\Type|null
      */
     private $type;
     /**

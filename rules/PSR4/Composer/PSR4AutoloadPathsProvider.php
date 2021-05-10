@@ -12,7 +12,7 @@ final class PSR4AutoloadPathsProvider
      */
     private $cachedComposerJsonPSR4AutoloadPaths = [];
     /**
-     * @var JsonFileSystem
+     * @var \Symplify\SmartFileSystem\Json\JsonFileSystem
      */
     private $jsonFileSystem;
     public function __construct(\RectorPrefix20210510\Symplify\SmartFileSystem\Json\JsonFileSystem $jsonFileSystem)

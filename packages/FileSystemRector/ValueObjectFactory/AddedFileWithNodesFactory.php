@@ -20,30 +20,30 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class AddedFileWithNodesFactory
 {
     /**
-     * @var BetterNodeFinder
+     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
     /**
-     * @var FileRelocationResolver
-     */
-    private $fileRelocationResolver;
-    /**
-     * @var CategoryNamespaceProvider
+     * @var \Rector\Autodiscovery\Configuration\CategoryNamespaceProvider
      */
     private $categoryNamespaceProvider;
     /**
-     * @var RenamedClassesCollector
+     * @var \Rector\PSR4\FileRelocationResolver
+     */
+    private $fileRelocationResolver;
+    /**
+     * @var \Rector\PSR4\Collector\RenamedClassesCollector
      */
     private $renamedClassesCollector;
     /**
-     * @var FileInfoDeletionAnalyzer
+     * @var \Rector\PSR4\FileInfoAnalyzer\FileInfoDeletionAnalyzer
      */
     private $fileInfoDeletionAnalyzer;
     public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Autodiscovery\Configuration\CategoryNamespaceProvider $categoryNamespaceProvider, \Rector\PSR4\FileRelocationResolver $fileRelocationResolver, \Rector\PSR4\Collector\RenamedClassesCollector $renamedClassesCollector, \Rector\PSR4\FileInfoAnalyzer\FileInfoDeletionAnalyzer $fileInfoDeletionAnalyzer)
     {
         $this->betterNodeFinder = $betterNodeFinder;
-        $this->fileRelocationResolver = $fileRelocationResolver;
         $this->categoryNamespaceProvider = $categoryNamespaceProvider;
+        $this->fileRelocationResolver = $fileRelocationResolver;
         $this->renamedClassesCollector = $renamedClassesCollector;
         $this->fileInfoDeletionAnalyzer = $fileInfoDeletionAnalyzer;
     }

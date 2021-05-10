@@ -24,21 +24,21 @@ final class ConsoleOutputFormatter implements \Rector\ChangesReporting\Contract\
      */
     private const ON_LINE_REGEX = '# on line #';
     /**
-     * @var OutputStyleInterface
-     */
-    private $outputStyle;
-    /**
-     * @var Configuration
+     * @var \Rector\Core\Configuration\Configuration
      */
     private $configuration;
     /**
-     * @var RectorsChangelogResolver
+     * @var \Rector\Core\Contract\Console\OutputStyleInterface
+     */
+    private $outputStyle;
+    /**
+     * @var \Rector\ChangesReporting\Annotation\RectorsChangelogResolver
      */
     private $rectorsChangelogResolver;
     public function __construct(\Rector\Core\Configuration\Configuration $configuration, \Rector\Core\Contract\Console\OutputStyleInterface $outputStyle, \Rector\ChangesReporting\Annotation\RectorsChangelogResolver $rectorsChangelogResolver)
     {
-        $this->outputStyle = $outputStyle;
         $this->configuration = $configuration;
+        $this->outputStyle = $outputStyle;
         $this->rectorsChangelogResolver = $rectorsChangelogResolver;
     }
     public function report(\Rector\Core\ValueObject\ProcessResult $processResult) : void

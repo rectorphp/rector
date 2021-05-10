@@ -12,32 +12,32 @@ use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
 final class FileProcessor
 {
     /**
-     * @var Parser
+     * @var \Rector\ChangesReporting\Collector\AffectedFilesCollector
      */
-    private $parser;
+    private $affectedFilesCollector;
     /**
-     * @var Lexer
+     * @var \PhpParser\Lexer
      */
     private $lexer;
     /**
-     * @var RectorNodeTraverser
-     */
-    private $rectorNodeTraverser;
-    /**
-     * @var NodeScopeAndMetadataDecorator
+     * @var \Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator
      */
     private $nodeScopeAndMetadataDecorator;
     /**
-     * @var AffectedFilesCollector
+     * @var \Rector\Core\PhpParser\Parser\Parser
      */
-    private $affectedFilesCollector;
+    private $parser;
+    /**
+     * @var \Rector\Core\PhpParser\NodeTraverser\RectorNodeTraverser
+     */
+    private $rectorNodeTraverser;
     public function __construct(\Rector\ChangesReporting\Collector\AffectedFilesCollector $affectedFilesCollector, \PhpParser\Lexer $lexer, \Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator, \Rector\Core\PhpParser\Parser\Parser $parser, \Rector\Core\PhpParser\NodeTraverser\RectorNodeTraverser $rectorNodeTraverser)
     {
-        $this->parser = $parser;
-        $this->lexer = $lexer;
-        $this->rectorNodeTraverser = $rectorNodeTraverser;
-        $this->nodeScopeAndMetadataDecorator = $nodeScopeAndMetadataDecorator;
         $this->affectedFilesCollector = $affectedFilesCollector;
+        $this->lexer = $lexer;
+        $this->nodeScopeAndMetadataDecorator = $nodeScopeAndMetadataDecorator;
+        $this->parser = $parser;
+        $this->rectorNodeTraverser = $rectorNodeTraverser;
     }
     public function parseFileInfoToLocalCache(\Rector\Core\ValueObject\Application\File $file) : void
     {

@@ -25,7 +25,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class FormerNullableArgumentToScalarTypedRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var CallTypeAnalyzer
+     * @var \Rector\TypeDeclaration\NodeTypeAnalyzer\CallTypeAnalyzer
      */
     private $callTypeAnalyzer;
     public function __construct(\Rector\TypeDeclaration\NodeTypeAnalyzer\CallTypeAnalyzer $callTypeAnalyzer)

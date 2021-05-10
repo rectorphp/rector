@@ -14,11 +14,11 @@ use Rector\TypeDeclaration\TypeInferer\AssignToPropertyTypeInferer;
 final class AllAssignNodePropertyTypeInferer implements \Rector\TypeDeclaration\Contract\TypeInferer\PropertyTypeInfererInterface
 {
     /**
-     * @var AssignToPropertyTypeInferer
+     * @var \Rector\TypeDeclaration\TypeInferer\AssignToPropertyTypeInferer
      */
     private $assignToPropertyTypeInferer;
     /**
-     * @var NodeNameResolver
+     * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     public function __construct(\Rector\TypeDeclaration\TypeInferer\AssignToPropertyTypeInferer $assignToPropertyTypeInferer, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)

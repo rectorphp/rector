@@ -37,11 +37,11 @@ final class CountOnNullRector extends \Rector\Core\Rector\AbstractRector
      */
     private const ALREADY_CHANGED_ON_COUNT = 'already_changed_on_count';
     /**
-     * @var CountableTypeAnalyzer
+     * @var \Rector\NodeTypeResolver\TypeAnalyzer\CountableTypeAnalyzer
      */
     private $countableTypeAnalyzer;
     /**
-     * @var CountableAnalyzer
+     * @var \Rector\Php71\NodeAnalyzer\CountableAnalyzer
      */
     private $countableAnalyzer;
     public function __construct(\Rector\NodeTypeResolver\TypeAnalyzer\CountableTypeAnalyzer $countableTypeAnalyzer, \Rector\Php71\NodeAnalyzer\CountableAnalyzer $countableAnalyzer)

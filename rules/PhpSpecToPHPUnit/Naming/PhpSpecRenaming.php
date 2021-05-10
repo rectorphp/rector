@@ -24,21 +24,21 @@ final class PhpSpecRenaming
      */
     private const SPEC = 'Spec';
     /**
-     * @var StringFormatConverter
-     */
-    private $stringFormatConverter;
-    /**
-     * @var NodeNameResolver
+     * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     /**
-     * @var BetterNodeFinder
+     * @var \Symplify\PackageBuilder\Strings\StringFormatConverter
+     */
+    private $stringFormatConverter;
+    /**
+     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
     public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \RectorPrefix20210510\Symplify\PackageBuilder\Strings\StringFormatConverter $stringFormatConverter, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
     {
-        $this->stringFormatConverter = $stringFormatConverter;
         $this->nodeNameResolver = $nodeNameResolver;
+        $this->stringFormatConverter = $stringFormatConverter;
         $this->betterNodeFinder = $betterNodeFinder;
     }
     public function renameMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod) : void

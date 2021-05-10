@@ -31,7 +31,7 @@ final class RemoveTraitRector extends \Rector\Core\Rector\AbstractRector impleme
      */
     private $traitsToRemove = [];
     /**
-     * @var ClassManipulator
+     * @var \Rector\Core\NodeManipulator\ClassManipulator
      */
     private $classManipulator;
     public function __construct(\Rector\Core\NodeManipulator\ClassManipulator $classManipulator)

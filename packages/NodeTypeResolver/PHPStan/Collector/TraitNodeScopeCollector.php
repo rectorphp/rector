@@ -14,7 +14,7 @@ final class TraitNodeScopeCollector
      */
     private $scopeByTraitNodeHash = [];
     /**
-     * @var BetterStandardPrinter
+     * @var \Rector\Core\PhpParser\Printer\BetterStandardPrinter
      */
     private $betterStandardPrinter;
     public function __construct(\Rector\Core\PhpParser\Printer\BetterStandardPrinter $betterStandardPrinter)

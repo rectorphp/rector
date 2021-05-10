@@ -11,17 +11,17 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class FileInfoParser
 {
     /**
-     * @var Parser
-     */
-    private $parser;
-    /**
-     * @var NodeScopeAndMetadataDecorator
+     * @var \Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator
      */
     private $nodeScopeAndMetadataDecorator;
+    /**
+     * @var \Rector\Core\PhpParser\Parser\Parser
+     */
+    private $parser;
     public function __construct(\Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator, \Rector\Core\PhpParser\Parser\Parser $parser)
     {
-        $this->parser = $parser;
         $this->nodeScopeAndMetadataDecorator = $nodeScopeAndMetadataDecorator;
+        $this->parser = $parser;
     }
     /**
      * @return Node[]

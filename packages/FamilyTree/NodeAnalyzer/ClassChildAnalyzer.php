@@ -9,7 +9,7 @@ use Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer;
 final class ClassChildAnalyzer
 {
     /**
-     * @var FamilyRelationsAnalyzer
+     * @var \Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer
      */
     private $familyRelationsAnalyzer;
     public function __construct(\Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer $familyRelationsAnalyzer)

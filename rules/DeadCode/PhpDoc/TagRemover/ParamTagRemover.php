@@ -11,11 +11,11 @@ use Rector\DeadCode\PhpDoc\DeadParamTagValueNodeAnalyzer;
 final class ParamTagRemover
 {
     /**
-     * @var DeadParamTagValueNodeAnalyzer
+     * @var \Rector\DeadCode\PhpDoc\DeadParamTagValueNodeAnalyzer
      */
     private $deadParamTagValueNodeAnalyzer;
     /**
-     * @var PhpDocTagRemover
+     * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover
      */
     private $phpDocTagRemover;
     public function __construct(\Rector\DeadCode\PhpDoc\DeadParamTagValueNodeAnalyzer $deadParamTagValueNodeAnalyzer, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover $phpDocTagRemover)

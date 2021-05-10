@@ -12,17 +12,17 @@ use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 final class RectorNodeTraverser extends \PhpParser\NodeTraverser
 {
     /**
-     * @var PhpRectorInterface[]
-     */
-    private $phpRectors = [];
-    /**
-     * @var NodeFinder
-     */
-    private $nodeFinder;
-    /**
      * @var bool
      */
     private $areNodeVisitorsPrepared = \false;
+    /**
+     * @var mixed[]
+     */
+    private $phpRectors;
+    /**
+     * @var \PhpParser\NodeFinder
+     */
+    private $nodeFinder;
     /**
      * @param PhpRectorInterface[] $phpRectors
      */

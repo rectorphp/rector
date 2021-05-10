@@ -13,7 +13,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class FuncCallNameResolver implements \Rector\NodeNameResolver\Contract\NodeNameResolverInterface
 {
     /**
-     * @var ReflectionProvider
+     * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
     public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider)

@@ -11,17 +11,17 @@ use Rector\Renaming\ValueObject\PseudoNamespaceToNamespace;
 final class PhpDocTypeRenamer
 {
     /**
-     * @var UnderscoreRenamePhpDocNodeVisitor
-     */
-    private $underscoreRenamePhpDocNodeVisitor;
-    /**
-     * @var UnderscorePhpDocNodeTraverserFactory
+     * @var \Rector\NodeTypeResolver\PhpDoc\PhpDocNodeTraverser\UnderscorePhpDocNodeTraverserFactory
      */
     private $underscorePhpDocNodeTraverserFactory;
+    /**
+     * @var \Rector\NodeTypeResolver\PhpDocNodeVisitor\UnderscoreRenamePhpDocNodeVisitor
+     */
+    private $underscoreRenamePhpDocNodeVisitor;
     public function __construct(\Rector\NodeTypeResolver\PhpDoc\PhpDocNodeTraverser\UnderscorePhpDocNodeTraverserFactory $underscorePhpDocNodeTraverserFactory, \Rector\NodeTypeResolver\PhpDocNodeVisitor\UnderscoreRenamePhpDocNodeVisitor $underscoreRenamePhpDocNodeVisitor)
     {
-        $this->underscoreRenamePhpDocNodeVisitor = $underscoreRenamePhpDocNodeVisitor;
         $this->underscorePhpDocNodeTraverserFactory = $underscorePhpDocNodeTraverserFactory;
+        $this->underscoreRenamePhpDocNodeVisitor = $underscoreRenamePhpDocNodeVisitor;
     }
     public function changeUnderscoreType(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo, \PhpParser\Node $node, \Rector\Renaming\ValueObject\PseudoNamespaceToNamespace $pseudoNamespaceToNamespace) : void
     {

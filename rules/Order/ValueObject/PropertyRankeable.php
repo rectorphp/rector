@@ -16,13 +16,13 @@ final class PropertyRankeable implements \Rector\Order\Contract\RankeableInterfa
      */
     private $visibility;
     /**
+     * @var \PhpParser\Node\Stmt\Property
+     */
+    private $property;
+    /**
      * @var int
      */
     private $position;
-    /**
-     * @var Property
-     */
-    private $property;
     public function __construct(string $name, int $visibility, \PhpParser\Node\Stmt\Property $property, int $position)
     {
         $this->name = $name;

@@ -8,9 +8,9 @@ use Rector\Naming\Contract\RenameValueObjectInterface;
 final class PropertyRenameGuard
 {
     /**
-     * @var ConflictingNameGuardInterface[]
+     * @var mixed[]
      */
-    private $conflictingNameGuards = [];
+    private $conflictingNameGuards;
     /**
      * @param ConflictingNameGuardInterface[] $conflictingNameGuards
      */

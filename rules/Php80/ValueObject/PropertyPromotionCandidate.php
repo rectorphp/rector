@@ -9,15 +9,15 @@ use PhpParser\Node\Stmt\Property;
 final class PropertyPromotionCandidate
 {
     /**
-     * @var Property
+     * @var \PhpParser\Node\Stmt\Property
      */
     private $property;
     /**
-     * @var Assign
+     * @var \PhpParser\Node\Expr\Assign
      */
     private $assign;
     /**
-     * @var Param
+     * @var \PhpParser\Node\Param
      */
     private $param;
     public function __construct(\PhpParser\Node\Stmt\Property $property, \PhpParser\Node\Expr\Assign $assign, \PhpParser\Node\Param $param)

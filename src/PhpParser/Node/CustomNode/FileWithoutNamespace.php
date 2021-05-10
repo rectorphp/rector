@@ -11,9 +11,9 @@ use PhpParser\NodeAbstract;
 final class FileWithoutNamespace extends \PhpParser\NodeAbstract
 {
     /**
-     * @var Stmt[]
+     * @var mixed[]
      */
-    public $stmts = [];
+    public $stmts;
     /**
      * @param Stmt[] $stmts
      */

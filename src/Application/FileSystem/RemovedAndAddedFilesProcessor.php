@@ -13,32 +13,32 @@ use RectorPrefix20210510\Symplify\SmartFileSystem\SmartFileSystem;
 final class RemovedAndAddedFilesProcessor
 {
     /**
-     * @var RemovedAndAddedFilesCollector
-     */
-    private $removedAndAddedFilesCollector;
-    /**
-     * @var Configuration
+     * @var \Rector\Core\Configuration\Configuration
      */
     private $configuration;
     /**
-     * @var SymfonyStyle
+     * @var \Symplify\SmartFileSystem\SmartFileSystem
      */
-    private $symfonyStyle;
+    private $smartFileSystem;
     /**
-     * @var NodesWithFileDestinationPrinter
+     * @var \Rector\Core\PhpParser\Printer\NodesWithFileDestinationPrinter
      */
     private $nodesWithFileDestinationPrinter;
     /**
-     * @var SmartFileSystem
+     * @var \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector
      */
-    private $smartFileSystem;
+    private $removedAndAddedFilesCollector;
+    /**
+     * @var \Symfony\Component\Console\Style\SymfonyStyle
+     */
+    private $symfonyStyle;
     public function __construct(\Rector\Core\Configuration\Configuration $configuration, \RectorPrefix20210510\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \Rector\Core\PhpParser\Printer\NodesWithFileDestinationPrinter $nodesWithFileDestinationPrinter, \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector $removedAndAddedFilesCollector, \RectorPrefix20210510\Symfony\Component\Console\Style\SymfonyStyle $symfonyStyle)
     {
-        $this->removedAndAddedFilesCollector = $removedAndAddedFilesCollector;
         $this->configuration = $configuration;
-        $this->symfonyStyle = $symfonyStyle;
-        $this->nodesWithFileDestinationPrinter = $nodesWithFileDestinationPrinter;
         $this->smartFileSystem = $smartFileSystem;
+        $this->nodesWithFileDestinationPrinter = $nodesWithFileDestinationPrinter;
+        $this->removedAndAddedFilesCollector = $removedAndAddedFilesCollector;
+        $this->symfonyStyle = $symfonyStyle;
     }
     public function run() : void
     {

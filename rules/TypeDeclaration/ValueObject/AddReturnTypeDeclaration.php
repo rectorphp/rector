@@ -16,7 +16,7 @@ final class AddReturnTypeDeclaration
      */
     private $method;
     /**
-     * @var Type
+     * @var \PHPStan\Type\Type
      */
     private $returnType;
     public function __construct(string $class, string $method, \PHPStan\Type\Type $returnType)

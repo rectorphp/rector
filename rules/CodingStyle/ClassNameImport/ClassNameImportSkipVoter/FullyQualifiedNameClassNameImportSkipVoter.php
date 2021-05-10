@@ -20,11 +20,11 @@ use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 final class FullyQualifiedNameClassNameImportSkipVoter implements \Rector\CodingStyle\Contract\ClassNameImport\ClassNameImportSkipVoterInterface
 {
     /**
-     * @var ShortNameResolver
+     * @var \Rector\CodingStyle\ClassNameImport\ShortNameResolver
      */
     private $shortNameResolver;
     /**
-     * @var CurrentFileProvider
+     * @var \Rector\Core\Provider\CurrentFileProvider
      */
     private $currentFileProvider;
     public function __construct(\Rector\CodingStyle\ClassNameImport\ShortNameResolver $shortNameResolver, \Rector\Core\Provider\CurrentFileProvider $currentFileProvider)

@@ -36,19 +36,19 @@ final class FluentMethodCallSkipper
         'DateTimeInterface',
     ];
     /**
-     * @var FluentCallStaticTypeResolver
+     * @var \Rector\Defluent\NodeAnalyzer\FluentCallStaticTypeResolver
      */
     private $fluentCallStaticTypeResolver;
     /**
-     * @var SameClassMethodCallAnalyzer
+     * @var \Rector\Defluent\NodeAnalyzer\SameClassMethodCallAnalyzer
      */
     private $sameClassMethodCallAnalyzer;
     /**
-     * @var FluentChainMethodCallNodeAnalyzer
+     * @var \Rector\Defluent\NodeAnalyzer\FluentChainMethodCallNodeAnalyzer
      */
     private $fluentChainMethodCallNodeAnalyzer;
     /**
-     * @var GetterMethodCallAnalyzer
+     * @var \Rector\Defluent\NodeAnalyzer\GetterMethodCallAnalyzer
      */
     private $getterMethodCallAnalyzer;
     public function __construct(\Rector\Defluent\NodeAnalyzer\FluentCallStaticTypeResolver $fluentCallStaticTypeResolver, \Rector\Defluent\NodeAnalyzer\SameClassMethodCallAnalyzer $sameClassMethodCallAnalyzer, \Rector\Defluent\NodeAnalyzer\FluentChainMethodCallNodeAnalyzer $fluentChainMethodCallNodeAnalyzer, \Rector\Defluent\NodeAnalyzer\GetterMethodCallAnalyzer $getterMethodCallAnalyzer)

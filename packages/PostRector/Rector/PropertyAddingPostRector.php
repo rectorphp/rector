@@ -18,31 +18,31 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class PropertyAddingPostRector extends \Rector\PostRector\Rector\AbstractPostRector
 {
     /**
-     * @var ClassDependencyManipulator
+     * @var \Rector\Core\NodeManipulator\ClassDependencyManipulator
      */
     private $classDependencyManipulator;
     /**
-     * @var ClassInsertManipulator
+     * @var \Rector\Core\NodeManipulator\ClassInsertManipulator
      */
     private $classInsertManipulator;
     /**
-     * @var PropertyToAddCollector
-     */
-    private $propertyToAddCollector;
-    /**
-     * @var NetteInjectDetector
+     * @var \Rector\PostRector\NodeAnalyzer\NetteInjectDetector
      */
     private $netteInjectDetector;
     /**
-     * @var ClassAnalyzer
+     * @var \Rector\PostRector\Collector\PropertyToAddCollector
+     */
+    private $propertyToAddCollector;
+    /**
+     * @var \Rector\Core\NodeAnalyzer\ClassAnalyzer
      */
     private $classAnalyzer;
     public function __construct(\Rector\Core\NodeManipulator\ClassDependencyManipulator $classDependencyManipulator, \Rector\Core\NodeManipulator\ClassInsertManipulator $classInsertManipulator, \Rector\PostRector\NodeAnalyzer\NetteInjectDetector $netteInjectDetector, \Rector\PostRector\Collector\PropertyToAddCollector $propertyToAddCollector, \Rector\Core\NodeAnalyzer\ClassAnalyzer $classAnalyzer)
     {
         $this->classDependencyManipulator = $classDependencyManipulator;
         $this->classInsertManipulator = $classInsertManipulator;
-        $this->propertyToAddCollector = $propertyToAddCollector;
         $this->netteInjectDetector = $netteInjectDetector;
+        $this->propertyToAddCollector = $propertyToAddCollector;
         $this->classAnalyzer = $classAnalyzer;
     }
     public function getPriority() : int

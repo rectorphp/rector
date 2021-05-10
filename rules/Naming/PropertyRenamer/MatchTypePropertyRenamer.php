@@ -9,17 +9,17 @@ use Rector\Naming\ValueObject\PropertyRename;
 final class MatchTypePropertyRenamer
 {
     /**
-     * @var MatchPropertyTypeConflictingNameGuard
-     */
-    private $matchPropertyTypeConflictingNameGuard;
-    /**
-     * @var PropertyRenamer
+     * @var \Rector\Naming\PropertyRenamer\PropertyRenamer
      */
     private $propertyRenamer;
+    /**
+     * @var \Rector\Naming\Guard\PropertyConflictingNameGuard\MatchPropertyTypeConflictingNameGuard
+     */
+    private $matchPropertyTypeConflictingNameGuard;
     public function __construct(\Rector\Naming\PropertyRenamer\PropertyRenamer $propertyRenamer, \Rector\Naming\Guard\PropertyConflictingNameGuard\MatchPropertyTypeConflictingNameGuard $matchPropertyTypeConflictingNameGuard)
     {
-        $this->matchPropertyTypeConflictingNameGuard = $matchPropertyTypeConflictingNameGuard;
         $this->propertyRenamer = $propertyRenamer;
+        $this->matchPropertyTypeConflictingNameGuard = $matchPropertyTypeConflictingNameGuard;
     }
     public function rename(\Rector\Naming\ValueObject\PropertyRename $propertyRename) : ?\PhpParser\Node\Stmt\Property
     {

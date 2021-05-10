@@ -30,7 +30,7 @@ final class ConsoleApplication extends \RectorPrefix20210510\Symfony\Component\C
     {
         try {
             $version = $configuration->getPrettyVersion();
-        } catch (\OutOfBoundsException $outOfBoundsException) {
+        } catch (\OutOfBoundsException $exception) {
             $version = 'Unknown';
         }
         parent::__construct(self::NAME, $version);

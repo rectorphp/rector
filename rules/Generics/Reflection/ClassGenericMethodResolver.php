@@ -13,11 +13,11 @@ use RectorPrefix20210510\Symplify\SimplePhpDocParser\ValueObject\Ast\PhpDoc\Simp
 final class ClassGenericMethodResolver
 {
     /**
-     * @var SimplePhpDocParser
+     * @var \Symplify\SimplePhpDocParser\SimplePhpDocParser
      */
     private $simplePhpDocParser;
     /**
-     * @var MethodTagValueNodeFactory
+     * @var \Rector\Generics\TagValueNodeFactory\MethodTagValueNodeFactory
      */
     private $methodTagValueNodeFactory;
     public function __construct(\RectorPrefix20210510\Symplify\SimplePhpDocParser\SimplePhpDocParser $simplePhpDocParser, \Rector\Generics\TagValueNodeFactory\MethodTagValueNodeFactory $methodTagValueNodeFactory)

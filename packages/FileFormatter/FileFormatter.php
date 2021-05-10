@@ -17,25 +17,25 @@ use RectorPrefix20210510\Symplify\PackageBuilder\Parameter\ParameterProvider;
 final class FileFormatter
 {
     /**
-     * @var EditorConfigParserInterface
+     * @var \Rector\FileFormatter\Contract\EditorConfig\EditorConfigParserInterface
      */
     private $editorConfigParser;
     /**
-     * @var FileFormatterInterface[]
-     */
-    private $fileFormatters = [];
-    /**
-     * @var ParameterProvider
+     * @var \Symplify\PackageBuilder\Parameter\ParameterProvider
      */
     private $parameterProvider;
+    /**
+     * @var mixed[]
+     */
+    private $fileFormatters;
     /**
      * @param FileFormatterInterface[] $fileFormatters
      */
     public function __construct(\Rector\FileFormatter\Contract\EditorConfig\EditorConfigParserInterface $editorConfigParser, \RectorPrefix20210510\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, array $fileFormatters = [])
     {
         $this->editorConfigParser = $editorConfigParser;
-        $this->fileFormatters = $fileFormatters;
         $this->parameterProvider = $parameterProvider;
+        $this->fileFormatters = $fileFormatters;
     }
     /**
      * @param File[] $files

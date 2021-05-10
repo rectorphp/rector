@@ -24,7 +24,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class CallUserFuncArrayToVariadicRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var ArrayCallableToMethodCallFactory
+     * @var \Rector\CodingStyle\NodeFactory\ArrayCallableToMethodCallFactory
      */
     private $arrayCallableToMethodCallFactory;
     public function __construct(\Rector\CodingStyle\NodeFactory\ArrayCallableToMethodCallFactory $arrayCallableToMethodCallFactory)

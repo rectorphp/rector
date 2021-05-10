@@ -12,22 +12,22 @@ use Rector\NodeNameResolver\NodeNameResolver;
 final class MatchPropertyTypeConflictingNameGuard
 {
     /**
-     * @var NodeNameResolver
+     * @var \Rector\Naming\ExpectedNameResolver\MatchPropertyTypeExpectedNameResolver
+     */
+    private $matchPropertyTypeExpectedNameResolver;
+    /**
+     * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     /**
-     * @var ArrayFilter
+     * @var \Rector\Naming\PhpArray\ArrayFilter
      */
     private $arrayFilter;
-    /**
-     * @var MatchPropertyTypeExpectedNameResolver
-     */
-    private $matchPropertyTypeExpectedNameResolver;
     public function __construct(\Rector\Naming\ExpectedNameResolver\MatchPropertyTypeExpectedNameResolver $matchPropertyTypeExpectedNameResolver, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Naming\PhpArray\ArrayFilter $arrayFilter)
     {
+        $this->matchPropertyTypeExpectedNameResolver = $matchPropertyTypeExpectedNameResolver;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->arrayFilter = $arrayFilter;
-        $this->matchPropertyTypeExpectedNameResolver = $matchPropertyTypeExpectedNameResolver;
     }
     /**
      * @param PropertyRename $renameValueObject

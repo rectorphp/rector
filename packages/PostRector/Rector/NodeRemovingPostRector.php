@@ -16,22 +16,22 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class NodeRemovingPostRector extends \Rector\PostRector\Rector\AbstractPostRector
 {
     /**
-     * @var NodesToRemoveCollector
-     */
-    private $nodesToRemoveCollector;
-    /**
-     * @var NodeFactory
+     * @var \Rector\Core\PhpParser\Node\NodeFactory
      */
     private $nodeFactory;
     /**
-     * @var NodeNameResolver
+     * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
+    /**
+     * @var \Rector\PostRector\Collector\NodesToRemoveCollector
+     */
+    private $nodesToRemoveCollector;
     public function __construct(\Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\PostRector\Collector\NodesToRemoveCollector $nodesToRemoveCollector)
     {
-        $this->nodesToRemoveCollector = $nodesToRemoveCollector;
         $this->nodeFactory = $nodeFactory;
         $this->nodeNameResolver = $nodeNameResolver;
+        $this->nodesToRemoveCollector = $nodesToRemoveCollector;
     }
     public function getPriority() : int
     {

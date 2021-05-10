@@ -7,13 +7,13 @@ use Rector\Core\Contract\Rector\RectorInterface;
 final class RectorWithLineChange
 {
     /**
+     * @var \Rector\Core\Contract\Rector\RectorInterface
+     */
+    private $rector;
+    /**
      * @var int
      */
     private $line;
-    /**
-     * @var RectorInterface
-     */
-    private $rector;
     public function __construct(\Rector\Core\Contract\Rector\RectorInterface $rector, int $line)
     {
         $this->rector = $rector;

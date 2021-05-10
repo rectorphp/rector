@@ -24,7 +24,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class MoveOutMethodCallInsideIfConditionRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var MethodCallToVariableNameResolver
+     * @var \Rector\CodeQuality\Naming\MethodCallToVariableNameResolver
      */
     private $methodCallToVariableNameResolver;
     public function __construct(\Rector\CodeQuality\Naming\MethodCallToVariableNameResolver $methodCallToVariableNameResolver)

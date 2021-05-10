@@ -8,11 +8,11 @@ use PHPStan\Reflection\ReflectionProvider;
 final class FluentCallStaticTypeResolver
 {
     /**
-     * @var ExprStringTypeResolver
+     * @var \Rector\Defluent\NodeAnalyzer\ExprStringTypeResolver
      */
     private $exprStringTypeResolver;
     /**
-     * @var ReflectionProvider
+     * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
     public function __construct(\Rector\Defluent\NodeAnalyzer\ExprStringTypeResolver $exprStringTypeResolver, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)

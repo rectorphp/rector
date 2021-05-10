@@ -26,11 +26,11 @@ final class MockeryCreateMockToProphizeRector extends \Rector\Core\Rector\Abstra
      */
     private $mockVariableTypesByNames = [];
     /**
-     * @var MockVariableCollector
+     * @var \Rector\MockeryToProphecy\Collector\MockVariableCollector
      */
     private $mockVariableCollector;
     /**
-     * @var TestsNodeAnalyzer
+     * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
      */
     private $testsNodeAnalyzer;
     public function __construct(\Rector\MockeryToProphecy\Collector\MockVariableCollector $mockVariableCollector, \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer $testsNodeAnalyzer)

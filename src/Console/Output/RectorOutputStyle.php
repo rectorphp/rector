@@ -12,7 +12,7 @@ use RectorPrefix20210510\Symfony\Component\Console\Style\SymfonyStyle;
 final class RectorOutputStyle implements \Rector\Core\Contract\Console\OutputStyleInterface
 {
     /**
-     * @var SymfonyStyle
+     * @var \Symfony\Component\Console\Style\SymfonyStyle
      */
     private $symfonyStyle;
     public function __construct(\RectorPrefix20210510\Symfony\Component\Console\Style\SymfonyStyle $symfonyStyle)

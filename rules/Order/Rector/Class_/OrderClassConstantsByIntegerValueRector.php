@@ -18,11 +18,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class OrderClassConstantsByIntegerValueRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var OrderChangeAnalyzer
+     * @var \Rector\Order\Order\OrderChangeAnalyzer
      */
     private $orderChangeAnalyzer;
     /**
-     * @var StmtOrder
+     * @var \Rector\Order\StmtOrder
      */
     private $stmtOrder;
     public function __construct(\Rector\Order\Order\OrderChangeAnalyzer $orderChangeAnalyzer, \Rector\Order\StmtOrder $stmtOrder)

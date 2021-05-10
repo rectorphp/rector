@@ -30,7 +30,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradeStripTagsCallWithArrayRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var VariableNaming
+     * @var \Rector\Php70\NodeAnalyzer\VariableNaming
      */
     private $variableNaming;
     public function __construct(\Rector\Php70\NodeAnalyzer\VariableNaming $variableNaming)

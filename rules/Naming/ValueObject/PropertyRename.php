@@ -10,6 +10,10 @@ use Rector\Naming\Contract\RenamePropertyValueObjectInterface;
 final class PropertyRename implements \Rector\Naming\Contract\RenamePropertyValueObjectInterface
 {
     /**
+     * @var \PhpParser\Node\Stmt\Property
+     */
+    private $property;
+    /**
      * @var string
      */
     private $expectedName;
@@ -18,19 +22,15 @@ final class PropertyRename implements \Rector\Naming\Contract\RenamePropertyValu
      */
     private $currentName;
     /**
+     * @var \PhpParser\Node\Stmt\ClassLike
+     */
+    private $classLike;
+    /**
      * @var string
      */
     private $classLikeName;
     /**
-     * @var Property
-     */
-    private $property;
-    /**
-     * @var ClassLike
-     */
-    private $classLike;
-    /**
-     * @var PropertyProperty
+     * @var \PhpParser\Node\Stmt\PropertyProperty
      */
     private $propertyProperty;
     public function __construct(\PhpParser\Node\Stmt\Property $property, string $expectedName, string $currentName, \PhpParser\Node\Stmt\ClassLike $classLike, string $classLikeName, \PhpParser\Node\Stmt\PropertyProperty $propertyProperty)

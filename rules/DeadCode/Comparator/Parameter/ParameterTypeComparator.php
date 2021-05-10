@@ -9,7 +9,7 @@ use Rector\NodeCollector\Reflection\MethodReflectionProvider;
 final class ParameterTypeComparator
 {
     /**
-     * @var MethodReflectionProvider
+     * @var \Rector\NodeCollector\Reflection\MethodReflectionProvider
      */
     private $methodReflectionProvider;
     public function __construct(\Rector\NodeCollector\Reflection\MethodReflectionProvider $methodReflectionProvider)

@@ -15,15 +15,15 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 final class ReturnFluentMethodCallFactory
 {
     /**
-     * @var FluentChainMethodCallRootExtractor
+     * @var \Rector\Defluent\NodeAnalyzer\FluentChainMethodCallRootExtractor
      */
     private $fluentChainMethodCallRootExtractor;
     /**
-     * @var NodeTypeResolver
+     * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;
     /**
-     * @var PropertyNaming
+     * @var \Rector\Naming\Naming\PropertyNaming
      */
     private $propertyNaming;
     public function __construct(\Rector\Defluent\NodeAnalyzer\FluentChainMethodCallRootExtractor $fluentChainMethodCallRootExtractor, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\Naming\Naming\PropertyNaming $propertyNaming)

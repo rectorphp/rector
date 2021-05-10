@@ -14,10 +14,6 @@ use RectorPrefix20210510\Symplify\SimplePhpDocParser\PhpDocNodeVisitor\AbstractP
 final class UnderscoreRenamePhpDocNodeVisitor extends \RectorPrefix20210510\Symplify\SimplePhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor
 {
     /**
-     * @var StaticTypeMapper
-     */
-    private $staticTypeMapper;
-    /**
      * @var PseudoNamespaceToNamespace|null
      */
     private $pseudoNamespaceToNamespace;
@@ -25,6 +21,10 @@ final class UnderscoreRenamePhpDocNodeVisitor extends \RectorPrefix20210510\Symp
      * @var \PhpParser\Node|null
      */
     private $currentPhpParserNode;
+    /**
+     * @var \Rector\StaticTypeMapper\StaticTypeMapper
+     */
+    private $staticTypeMapper;
     public function __construct(\Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper)
     {
         $this->staticTypeMapper = $staticTypeMapper;

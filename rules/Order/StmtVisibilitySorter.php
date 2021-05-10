@@ -19,7 +19,7 @@ use Rector\Order\ValueObject\PropertyRankeable;
 final class StmtVisibilitySorter
 {
     /**
-     * @var NodeNameResolver
+     * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)

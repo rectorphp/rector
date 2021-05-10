@@ -45,17 +45,17 @@ final class ArgumentFuncCallToMethodCallRector extends \Rector\Core\Rector\Abstr
      */
     private $arrayFunctionsToMethodCalls = [];
     /**
-     * @var PropertyNaming
-     */
-    private $propertyNaming;
-    /**
-     * @var ArrayTypeAnalyzer
+     * @var \Rector\NodeTypeResolver\TypeAnalyzer\ArrayTypeAnalyzer
      */
     private $arrayTypeAnalyzer;
+    /**
+     * @var \Rector\Naming\Naming\PropertyNaming
+     */
+    private $propertyNaming;
     public function __construct(\Rector\NodeTypeResolver\TypeAnalyzer\ArrayTypeAnalyzer $arrayTypeAnalyzer, \Rector\Naming\Naming\PropertyNaming $propertyNaming)
     {
-        $this->propertyNaming = $propertyNaming;
         $this->arrayTypeAnalyzer = $arrayTypeAnalyzer;
+        $this->propertyNaming = $propertyNaming;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {

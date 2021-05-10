@@ -8,7 +8,7 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class UnchangedFilesFilter
 {
     /**
-     * @var ChangedFilesDetector
+     * @var \Rector\Caching\Detector\ChangedFilesDetector
      */
     private $changedFilesDetector;
     public function __construct(\Rector\Caching\Detector\ChangedFilesDetector $changedFilesDetector)

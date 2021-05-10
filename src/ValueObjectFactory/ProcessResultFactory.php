@@ -10,11 +10,11 @@ use Rector\PostRector\Collector\NodesToRemoveCollector;
 final class ProcessResultFactory
 {
     /**
-     * @var RemovedAndAddedFilesCollector
+     * @var \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector
      */
     private $removedAndAddedFilesCollector;
     /**
-     * @var NodesToRemoveCollector
+     * @var \Rector\PostRector\Collector\NodesToRemoveCollector
      */
     private $nodesToRemoveCollector;
     public function __construct(\Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector $removedAndAddedFilesCollector, \Rector\PostRector\Collector\NodesToRemoveCollector $nodesToRemoveCollector)

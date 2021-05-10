@@ -22,23 +22,23 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class MethodCallOnSetterMethodCallToStandaloneAssignRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var NewFluentChainMethodCallNodeAnalyzer
+     * @var \Rector\Defluent\NodeAnalyzer\NewFluentChainMethodCallNodeAnalyzer
      */
     private $newFluentChainMethodCallNodeAnalyzer;
     /**
-     * @var VariableFromNewFactory
+     * @var \Rector\Defluent\NodeFactory\VariableFromNewFactory
      */
     private $variableFromNewFactory;
     /**
-     * @var NonFluentChainMethodCallFactory
+     * @var \Rector\Defluent\NodeFactory\NonFluentChainMethodCallFactory
      */
     private $nonFluentChainMethodCallFactory;
     /**
-     * @var FluentMethodCallSkipper
+     * @var \Rector\Defluent\Skipper\FluentMethodCallSkipper
      */
     private $fluentMethodCallSkipper;
     /**
-     * @var FluentChainMethodCallNodeAnalyzer
+     * @var \Rector\Defluent\NodeAnalyzer\FluentChainMethodCallNodeAnalyzer
      */
     private $fluentChainMethodCallNodeAnalyzer;
     public function __construct(\Rector\Defluent\NodeAnalyzer\NewFluentChainMethodCallNodeAnalyzer $newFluentChainMethodCallNodeAnalyzer, \Rector\Defluent\NodeFactory\VariableFromNewFactory $variableFromNewFactory, \Rector\Defluent\NodeFactory\NonFluentChainMethodCallFactory $nonFluentChainMethodCallFactory, \Rector\Defluent\Skipper\FluentMethodCallSkipper $fluentMethodCallSkipper, \Rector\Defluent\NodeAnalyzer\FluentChainMethodCallNodeAnalyzer $fluentChainMethodCallNodeAnalyzer)

@@ -36,26 +36,26 @@ final class RemoveUnusedAliasRector extends \Rector\Core\Rector\AbstractRector
      */
     private $resolvedDocPossibleAliases = [];
     /**
-     * @var DocAliasResolver
+     * @var \Rector\CodingStyle\Node\DocAliasResolver
      */
     private $docAliasResolver;
     /**
-     * @var UseNameAliasToNameResolver
-     */
-    private $useNameAliasToNameResolver;
-    /**
-     * @var UseManipulator
+     * @var \Rector\CodingStyle\Node\UseManipulator
      */
     private $useManipulator;
     /**
-     * @var NameRenamer
+     * @var \Rector\CodingStyle\Node\UseNameAliasToNameResolver
+     */
+    private $useNameAliasToNameResolver;
+    /**
+     * @var \Rector\CodingStyle\Naming\NameRenamer
      */
     private $nameRenamer;
     public function __construct(\Rector\CodingStyle\Node\DocAliasResolver $docAliasResolver, \Rector\CodingStyle\Node\UseManipulator $useManipulator, \Rector\CodingStyle\Node\UseNameAliasToNameResolver $useNameAliasToNameResolver, \Rector\CodingStyle\Naming\NameRenamer $nameRenamer)
     {
         $this->docAliasResolver = $docAliasResolver;
-        $this->useNameAliasToNameResolver = $useNameAliasToNameResolver;
         $this->useManipulator = $useManipulator;
+        $this->useNameAliasToNameResolver = $useNameAliasToNameResolver;
         $this->nameRenamer = $nameRenamer;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition

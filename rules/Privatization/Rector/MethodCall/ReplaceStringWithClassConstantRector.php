@@ -27,7 +27,7 @@ final class ReplaceStringWithClassConstantRector extends \Rector\Core\Rector\Abs
      */
     private $replaceStringWithClassConstants = [];
     /**
-     * @var ClassConstantFetchValueFactory
+     * @var \Rector\Privatization\NodeFactory\ClassConstantFetchValueFactory
      */
     private $classConstantFetchValueFactory;
     public function __construct(\Rector\Privatization\NodeFactory\ClassConstantFetchValueFactory $classConstantFetchValueFactory)

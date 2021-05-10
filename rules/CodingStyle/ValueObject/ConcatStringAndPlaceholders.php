@@ -11,9 +11,9 @@ final class ConcatStringAndPlaceholders
      */
     private $content;
     /**
-     * @var Expr[]
+     * @var mixed[]
      */
-    private $placeholderNodes = [];
+    private $placeholderNodes;
     /**
      * @param Expr[] $placeholderNodes
      */

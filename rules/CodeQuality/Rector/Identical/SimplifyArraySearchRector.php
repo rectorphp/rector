@@ -19,7 +19,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class SimplifyArraySearchRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var BinaryOpManipulator
+     * @var \Rector\Core\NodeManipulator\BinaryOpManipulator
      */
     private $binaryOpManipulator;
     public function __construct(\Rector\Core\NodeManipulator\BinaryOpManipulator $binaryOpManipulator)

@@ -19,7 +19,7 @@ use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 final class StaticTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface
 {
     /**
-     * @var PhpVersionProvider
+     * @var \Rector\Core\Php\PhpVersionProvider
      */
     private $phpVersionProvider;
     public function __construct(\Rector\Core\Php\PhpVersionProvider $phpVersionProvider)

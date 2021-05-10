@@ -65,42 +65,42 @@ final class NodeRepository
      */
     private $arrayCallablesByTypeAndMethod = [];
     /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-    /**
-     * @var NodeTypeResolver
-     */
-    private $nodeTypeResolver;
-    /**
-     * @var ArrayCallableMethodReferenceAnalyzer
-     */
-    private $arrayCallableMethodReferenceAnalyzer;
-    /**
-     * @var ParsedPropertyFetchNodeCollector
-     */
-    private $parsedPropertyFetchNodeCollector;
-    /**
-     * @var ParsedNodeCollector
-     */
-    private $parsedNodeCollector;
-    /**
-     * @var TypeUnwrapper
-     */
-    private $typeUnwrapper;
-    /**
      * @var array<string, Attribute[]>
      */
     private $attributes = [];
     /**
-     * @var ReflectionProvider
+     * @var \Rector\NodeCollector\NodeAnalyzer\ArrayCallableMethodReferenceAnalyzer
+     */
+    private $arrayCallableMethodReferenceAnalyzer;
+    /**
+     * @var \Rector\NodeCollector\NodeCollector\ParsedPropertyFetchNodeCollector
+     */
+    private $parsedPropertyFetchNodeCollector;
+    /**
+     * @var \Rector\NodeNameResolver\NodeNameResolver
+     */
+    private $nodeNameResolver;
+    /**
+     * @var \Rector\NodeCollector\NodeCollector\ParsedNodeCollector
+     */
+    private $parsedNodeCollector;
+    /**
+     * @var \Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper
+     */
+    private $typeUnwrapper;
+    /**
+     * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
+    /**
+     * @var \Rector\NodeTypeResolver\NodeTypeResolver
+     */
+    private $nodeTypeResolver;
     public function __construct(\Rector\NodeCollector\NodeAnalyzer\ArrayCallableMethodReferenceAnalyzer $arrayCallableMethodReferenceAnalyzer, \Rector\NodeCollector\NodeCollector\ParsedPropertyFetchNodeCollector $parsedPropertyFetchNodeCollector, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeCollector\NodeCollector\ParsedNodeCollector $parsedNodeCollector, \Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper $typeUnwrapper, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver)
     {
-        $this->nodeNameResolver = $nodeNameResolver;
         $this->arrayCallableMethodReferenceAnalyzer = $arrayCallableMethodReferenceAnalyzer;
         $this->parsedPropertyFetchNodeCollector = $parsedPropertyFetchNodeCollector;
+        $this->nodeNameResolver = $nodeNameResolver;
         $this->parsedNodeCollector = $parsedNodeCollector;
         $this->typeUnwrapper = $typeUnwrapper;
         $this->reflectionProvider = $reflectionProvider;

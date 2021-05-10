@@ -23,7 +23,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ListEachRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var AssignManipulator
+     * @var \Rector\Core\NodeManipulator\AssignManipulator
      */
     private $assignManipulator;
     public function __construct(\Rector\Core\NodeManipulator\AssignManipulator $assignManipulator)

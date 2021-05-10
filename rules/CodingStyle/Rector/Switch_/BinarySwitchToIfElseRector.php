@@ -21,7 +21,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class BinarySwitchToIfElseRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var SwitchManipulator
+     * @var \Rector\Renaming\NodeManipulator\SwitchManipulator
      */
     private $switchManipulator;
     public function __construct(\Rector\Renaming\NodeManipulator\SwitchManipulator $switchManipulator)

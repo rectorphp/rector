@@ -19,7 +19,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class AddVoidReturnTypeWhereNoReturnRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var SilentVoidResolver
+     * @var \Rector\TypeDeclaration\TypeInferer\SilentVoidResolver
      */
     private $silentVoidResolver;
     public function __construct(\Rector\TypeDeclaration\TypeInferer\SilentVoidResolver $silentVoidResolver)

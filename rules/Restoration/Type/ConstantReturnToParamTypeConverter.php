@@ -15,7 +15,7 @@ use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 final class ConstantReturnToParamTypeConverter
 {
     /**
-     * @var TypeFactory
+     * @var \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory
      */
     private $typeFactory;
     public function __construct(\Rector\NodeTypeResolver\PHPStan\Type\TypeFactory $typeFactory)

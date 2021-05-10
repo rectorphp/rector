@@ -12,7 +12,7 @@ use Rector\Generics\ValueObject\ChildParentClassReflections;
 final class UnnededMethodTagValueNodeFilter
 {
     /**
-     * @var ClassMethodAnalyzer
+     * @var \Rector\Generics\Reflection\ClassMethodAnalyzer
      */
     private $classMethodAnalyzer;
     public function __construct(\Rector\Generics\Reflection\ClassMethodAnalyzer $classMethodAnalyzer)

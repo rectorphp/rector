@@ -15,13 +15,13 @@ final class ReplaceStringWithClassConstant
      */
     private $method;
     /**
-     * @var class-string
-     */
-    private $classWithConstants;
-    /**
      * @var int
      */
     private $argPosition;
+    /**
+     * @var string
+     */
+    private $classWithConstants;
     /**
      * @param class-string $classWithConstants
      */
@@ -29,8 +29,8 @@ final class ReplaceStringWithClassConstant
     {
         $this->class = $class;
         $this->method = $method;
-        $this->classWithConstants = $classWithConstants;
         $this->argPosition = $argPosition;
+        $this->classWithConstants = $classWithConstants;
     }
     public function getObjectType() : \PHPStan\Type\ObjectType
     {

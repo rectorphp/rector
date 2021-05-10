@@ -8,20 +8,20 @@ final class FunctionToStaticCall
     /**
      * @var string
      */
+    private $function;
+    /**
+     * @var string
+     */
     private $class;
     /**
      * @var string
      */
     private $method;
-    /**
-     * @var string
-     */
-    private $function;
     public function __construct(string $function, string $class, string $method)
     {
+        $this->function = $function;
         $this->class = $class;
         $this->method = $method;
-        $this->function = $function;
     }
     public function getClass() : string
     {

@@ -27,7 +27,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ReturnNeverTypeRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var ParentClassMethodTypeOverrideGuard
+     * @var \Rector\Defluent\ConflictGuard\ParentClassMethodTypeOverrideGuard
      */
     private $parentClassMethodTypeOverrideGuard;
     public function __construct(\Rector\Defluent\ConflictGuard\ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard)

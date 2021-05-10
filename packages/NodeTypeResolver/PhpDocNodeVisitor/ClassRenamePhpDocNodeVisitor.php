@@ -17,17 +17,17 @@ use RectorPrefix20210510\Symplify\SimplePhpDocParser\PhpDocNodeVisitor\AbstractP
 final class ClassRenamePhpDocNodeVisitor extends \RectorPrefix20210510\Symplify\SimplePhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor
 {
     /**
-     * @var StaticTypeMapper
-     */
-    private $staticTypeMapper;
-    /**
-     * @var CurrentNodeProvider
-     */
-    private $currentNodeProvider;
-    /**
      * @var OldToNewType[]
      */
     private $oldToNewTypes = [];
+    /**
+     * @var \Rector\StaticTypeMapper\StaticTypeMapper
+     */
+    private $staticTypeMapper;
+    /**
+     * @var \Rector\Core\Configuration\CurrentNodeProvider
+     */
+    private $currentNodeProvider;
     public function __construct(\Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \Rector\Core\Configuration\CurrentNodeProvider $currentNodeProvider)
     {
         $this->staticTypeMapper = $staticTypeMapper;

@@ -19,32 +19,32 @@ use RectorPrefix20210510\Symplify\Astral\ValueObject\NodeBuilder\ParamBuilder;
 final class InjectMethodFactory
 {
     /**
-     * @var PhpDocInfoFactory
-     */
-    private $phpDocInfoFactory;
-    /**
-     * @var PropertyNaming
-     */
-    private $propertyNaming;
-    /**
-     * @var ClassNaming
+     * @var \Rector\CodingStyle\Naming\ClassNaming
      */
     private $classNaming;
     /**
-     * @var TypeFactory
-     */
-    private $typeFactory;
-    /**
-     * @var NodeFactory
+     * @var \Rector\Core\PhpParser\Node\NodeFactory
      */
     private $nodeFactory;
+    /**
+     * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
+     */
+    private $phpDocInfoFactory;
+    /**
+     * @var \Rector\Naming\Naming\PropertyNaming
+     */
+    private $propertyNaming;
+    /**
+     * @var \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory
+     */
+    private $typeFactory;
     public function __construct(\Rector\CodingStyle\Naming\ClassNaming $classNaming, \Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \Rector\Naming\Naming\PropertyNaming $propertyNaming, \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory $typeFactory)
     {
+        $this->classNaming = $classNaming;
+        $this->nodeFactory = $nodeFactory;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->propertyNaming = $propertyNaming;
-        $this->classNaming = $classNaming;
         $this->typeFactory = $typeFactory;
-        $this->nodeFactory = $nodeFactory;
     }
     /**
      * @param ObjectType[] $objectTypes

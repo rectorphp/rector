@@ -31,49 +31,49 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RenameVariableToMatchMethodCallReturnTypeRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var ExpectedNameResolver
-     */
-    private $expectedNameResolver;
-    /**
-     * @var VariableRenamer
-     */
-    private $variableRenamer;
-    /**
-     * @var BreakingVariableRenameGuard
+     * @var \Rector\Naming\Guard\BreakingVariableRenameGuard
      */
     private $breakingVariableRenameGuard;
     /**
-     * @var VariableAndCallAssignMatcher
+     * @var \Rector\Naming\Naming\ExpectedNameResolver
      */
-    private $variableAndCallAssignMatcher;
+    private $expectedNameResolver;
     /**
-     * @var NamingConventionAnalyzer
+     * @var \Rector\Naming\NamingConvention\NamingConventionAnalyzer
      */
     private $namingConventionAnalyzer;
     /**
-     * @var VarTagValueNodeRenamer
+     * @var \Rector\Naming\PhpDoc\VarTagValueNodeRenamer
      */
     private $varTagValueNodeRenamer;
     /**
-     * @var TypeUnwrapper
+     * @var \Rector\Naming\Matcher\VariableAndCallAssignMatcher
+     */
+    private $variableAndCallAssignMatcher;
+    /**
+     * @var \Rector\Naming\VariableRenamer
+     */
+    private $variableRenamer;
+    /**
+     * @var \Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper
      */
     private $typeUnwrapper;
     /**
-     * @var ReflectionProvider
+     * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
     /**
-     * @var FamilyRelationsAnalyzer
+     * @var \Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer
      */
     private $familyRelationsAnalyzer;
     public function __construct(\Rector\Naming\Guard\BreakingVariableRenameGuard $breakingVariableRenameGuard, \Rector\Naming\Naming\ExpectedNameResolver $expectedNameResolver, \Rector\Naming\NamingConvention\NamingConventionAnalyzer $namingConventionAnalyzer, \Rector\Naming\PhpDoc\VarTagValueNodeRenamer $varTagValueNodeRenamer, \Rector\Naming\Matcher\VariableAndCallAssignMatcher $variableAndCallAssignMatcher, \Rector\Naming\VariableRenamer $variableRenamer, \Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper $typeUnwrapper, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer $familyRelationsAnalyzer)
     {
-        $this->expectedNameResolver = $expectedNameResolver;
-        $this->variableRenamer = $variableRenamer;
         $this->breakingVariableRenameGuard = $breakingVariableRenameGuard;
-        $this->variableAndCallAssignMatcher = $variableAndCallAssignMatcher;
+        $this->expectedNameResolver = $expectedNameResolver;
         $this->namingConventionAnalyzer = $namingConventionAnalyzer;
         $this->varTagValueNodeRenamer = $varTagValueNodeRenamer;
+        $this->variableAndCallAssignMatcher = $variableAndCallAssignMatcher;
+        $this->variableRenamer = $variableRenamer;
         $this->typeUnwrapper = $typeUnwrapper;
         $this->reflectionProvider = $reflectionProvider;
         $this->familyRelationsAnalyzer = $familyRelationsAnalyzer;

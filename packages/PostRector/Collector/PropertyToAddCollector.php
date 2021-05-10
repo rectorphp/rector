@@ -17,10 +17,6 @@ final class PropertyToAddCollector implements \Rector\PostRector\Contract\Collec
      */
     private $constantsByClass = [];
     /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-    /**
      * @var array<string, PropertyMetadata[]>
      */
     private $propertiesByClass = [];
@@ -29,7 +25,11 @@ final class PropertyToAddCollector implements \Rector\PostRector\Contract\Collec
      */
     private $propertiesWithoutConstructorByClass = [];
     /**
-     * @var RectorChangeCollector
+     * @var \Rector\NodeNameResolver\NodeNameResolver
+     */
+    private $nodeNameResolver;
+    /**
+     * @var \Rector\ChangesReporting\Collector\RectorChangeCollector
      */
     private $rectorChangeCollector;
     public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\ChangesReporting\Collector\RectorChangeCollector $rectorChangeCollector)

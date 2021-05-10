@@ -17,21 +17,21 @@ use RectorPrefix20210510\Symplify\SmartFileSystem\SmartFileSystem;
 final class InitCommand extends \RectorPrefix20210510\Symfony\Component\Console\Command\Command
 {
     /**
-     * @var FileSystemGuard
+     * @var \Symplify\SmartFileSystem\FileSystemGuard
      */
     private $fileSystemGuard;
     /**
-     * @var SmartFileSystem
+     * @var \Symplify\SmartFileSystem\SmartFileSystem
      */
     private $smartFileSystem;
     /**
-     * @var SymfonyStyle
+     * @var \Symfony\Component\Console\Style\SymfonyStyle
      */
     private $symfonyStyle;
     /**
-     * @var TemplateResolverInterface[]
+     * @var mixed[]
      */
-    private $templateResolvers = [];
+    private $templateResolvers;
     /**
      * @param TemplateResolverInterface[] $templateResolvers
      */

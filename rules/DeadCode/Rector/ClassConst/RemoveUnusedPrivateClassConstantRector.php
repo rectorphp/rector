@@ -21,7 +21,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveUnusedPrivateClassConstantRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var ClassConstManipulator
+     * @var \Rector\Core\NodeManipulator\ClassConstManipulator
      */
     private $classConstManipulator;
     public function __construct(\Rector\Core\NodeManipulator\ClassConstManipulator $classConstManipulator)

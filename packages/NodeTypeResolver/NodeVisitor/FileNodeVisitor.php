@@ -13,7 +13,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class FileNodeVisitor extends \PhpParser\NodeVisitorAbstract
 {
     /**
-     * @var File
+     * @var \Rector\Core\ValueObject\Application\File
      */
     private $file;
     public function __construct(\Rector\Core\ValueObject\Application\File $file)

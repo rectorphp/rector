@@ -8,13 +8,13 @@ use PhpParser\Node\Stmt\Return_;
 final class AssignAndRootExprAndNodesToAdd
 {
     /**
-     * @var array<Expr|Return_>
-     */
-    private $nodesToAdd = [];
-    /**
-     * @var AssignAndRootExpr
+     * @var \Rector\Defluent\ValueObject\AssignAndRootExpr
      */
     private $assignAndRootExpr;
+    /**
+     * @var mixed[]
+     */
+    private $nodesToAdd;
     /**
      * @param array<Expr|Return_> $nodesToAdd
      */

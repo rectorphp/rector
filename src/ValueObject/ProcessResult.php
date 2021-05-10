@@ -38,13 +38,13 @@ final class ProcessResult
      */
     public function __construct(array $fileDiffs, array $errors, int $addedFilesCount, int $removedFilesCount, int $removedNodeCount)
     {
+        $this->addedFilesCount = $addedFilesCount;
+        $this->removedFilesCount = $removedFilesCount;
+        $this->removedNodeCount = $removedNodeCount;
         \RectorPrefix20210510\Webmozart\Assert\Assert::allIsAOf($fileDiffs, \Rector\Core\ValueObject\Reporting\FileDiff::class);
         \RectorPrefix20210510\Webmozart\Assert\Assert::allIsAOf($errors, \Rector\Core\ValueObject\Application\RectorError::class);
         $this->fileDiffs = $fileDiffs;
         $this->errors = $errors;
-        $this->addedFilesCount = $addedFilesCount;
-        $this->removedFilesCount = $removedFilesCount;
-        $this->removedNodeCount = $removedNodeCount;
     }
     /**
      * @return FileDiff[]

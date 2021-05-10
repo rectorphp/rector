@@ -20,45 +20,45 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class NodeScopeAndMetadataDecorator
 {
     /**
-     * @var PHPStanNodeScopeResolver
-     */
-    private $phpStanNodeScopeResolver;
-    /**
-     * @var CloningVisitor
+     * @var \PhpParser\NodeVisitor\CloningVisitor
      */
     private $cloningVisitor;
     /**
-     * @var FunctionMethodAndClassNodeVisitor
+     * @var \Rector\NodeTypeResolver\NodeVisitor\FunctionMethodAndClassNodeVisitor
      */
     private $functionMethodAndClassNodeVisitor;
     /**
-     * @var NamespaceNodeVisitor
+     * @var \Rector\NodeTypeResolver\NodeVisitor\NamespaceNodeVisitor
      */
     private $namespaceNodeVisitor;
     /**
-     * @var StatementNodeVisitor
-     */
-    private $statementNodeVisitor;
-    /**
-     * @var NodeCollectorNodeVisitor
+     * @var \Rector\NodeCollector\NodeVisitor\NodeCollectorNodeVisitor
      */
     private $nodeCollectorNodeVisitor;
     /**
-     * @var NodeConnectingVisitor
+     * @var \Rector\NodeTypeResolver\PHPStan\Scope\PHPStanNodeScopeResolver
+     */
+    private $phpStanNodeScopeResolver;
+    /**
+     * @var \Rector\NodeTypeResolver\NodeVisitor\StatementNodeVisitor
+     */
+    private $statementNodeVisitor;
+    /**
+     * @var \PhpParser\NodeVisitor\NodeConnectingVisitor
      */
     private $nodeConnectingVisitor;
     /**
-     * @var FunctionLikeParamArgPositionNodeVisitor
+     * @var \Rector\NodeTypeResolver\NodeVisitor\FunctionLikeParamArgPositionNodeVisitor
      */
     private $functionLikeParamArgPositionNodeVisitor;
     public function __construct(\PhpParser\NodeVisitor\CloningVisitor $cloningVisitor, \Rector\NodeTypeResolver\NodeVisitor\FunctionMethodAndClassNodeVisitor $functionMethodAndClassNodeVisitor, \Rector\NodeTypeResolver\NodeVisitor\NamespaceNodeVisitor $namespaceNodeVisitor, \Rector\NodeCollector\NodeVisitor\NodeCollectorNodeVisitor $nodeCollectorNodeVisitor, \Rector\NodeTypeResolver\PHPStan\Scope\PHPStanNodeScopeResolver $phpStanNodeScopeResolver, \Rector\NodeTypeResolver\NodeVisitor\StatementNodeVisitor $statementNodeVisitor, \PhpParser\NodeVisitor\NodeConnectingVisitor $nodeConnectingVisitor, \Rector\NodeTypeResolver\NodeVisitor\FunctionLikeParamArgPositionNodeVisitor $functionLikeParamArgPositionNodeVisitor)
     {
-        $this->phpStanNodeScopeResolver = $phpStanNodeScopeResolver;
         $this->cloningVisitor = $cloningVisitor;
         $this->functionMethodAndClassNodeVisitor = $functionMethodAndClassNodeVisitor;
         $this->namespaceNodeVisitor = $namespaceNodeVisitor;
-        $this->statementNodeVisitor = $statementNodeVisitor;
         $this->nodeCollectorNodeVisitor = $nodeCollectorNodeVisitor;
+        $this->phpStanNodeScopeResolver = $phpStanNodeScopeResolver;
+        $this->statementNodeVisitor = $statementNodeVisitor;
         $this->nodeConnectingVisitor = $nodeConnectingVisitor;
         $this->functionLikeParamArgPositionNodeVisitor = $functionLikeParamArgPositionNodeVisitor;
     }

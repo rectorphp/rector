@@ -19,9 +19,6 @@ final class MethodCallRenameWithArrayKey implements \Rector\Renaming\Contract\Me
      * @var string
      */
     private $newMethod;
-    /**
-     * @var mixed
-     */
     private $arrayKey;
     /**
      * @param mixed $arrayKey

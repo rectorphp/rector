@@ -16,36 +16,36 @@ use PhpParser\Node\Stmt\Function_;
 final class VariableAndCallAssign
 {
     /**
+     * @var \PhpParser\Node\Expr\Variable
+     */
+    private $variable;
+    /**
+     * @var \PhpParser\Node\Expr
+     */
+    private $call;
+    /**
+     * @var \PhpParser\Node\Expr\Assign
+     */
+    private $assign;
+    /**
      * @var string
      */
     private $variableName;
     /**
-     * @var Variable
-     */
-    private $variable;
-    /**
-     * @var Assign
-     */
-    private $assign;
-    /**
-     * @var FuncCall|MethodCall|StaticCall
-     */
-    private $call;
-    /**
-     * @var ClassMethod|Function_|Closure
+     * @var \PhpParser\Node\FunctionLike
      */
     private $functionLike;
     /**
-     * @param FuncCall|StaticCall|MethodCall $expr
+     * @param FuncCall|StaticCall|MethodCall $call
      * @param ClassMethod|Function_|Closure $functionLike
      */
-    public function __construct(\PhpParser\Node\Expr\Variable $variable, \PhpParser\Node\Expr $expr, \PhpParser\Node\Expr\Assign $assign, string $variableName, \PhpParser\Node\FunctionLike $functionLike)
+    public function __construct(\PhpParser\Node\Expr\Variable $variable, \PhpParser\Node\Expr $call, \PhpParser\Node\Expr\Assign $assign, string $variableName, \PhpParser\Node\FunctionLike $functionLike)
     {
         $this->variable = $variable;
-        $this->call = $expr;
+        $this->call = $call;
+        $this->assign = $assign;
         $this->variableName = $variableName;
         $this->functionLike = $functionLike;
-        $this->assign = $assign;
     }
     public function getVariable() : \PhpParser\Node\Expr\Variable
     {

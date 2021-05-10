@@ -41,13 +41,13 @@ final class PseudoNamespaceToNamespaceRector extends \Rector\Core\Rector\Abstrac
      */
     private $pseudoNamespacesToNamespaces = [];
     /**
-     * @var PhpDocTypeRenamer
-     */
-    private $phpDocTypeRenamer;
-    /**
      * @var string|null
      */
     private $newNamespace;
+    /**
+     * @var \Rector\NodeTypeResolver\PhpDoc\PhpDocTypeRenamer
+     */
+    private $phpDocTypeRenamer;
     public function __construct(\Rector\NodeTypeResolver\PhpDoc\PhpDocTypeRenamer $phpDocTypeRenamer)
     {
         $this->phpDocTypeRenamer = $phpDocTypeRenamer;

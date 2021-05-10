@@ -20,7 +20,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class UnnecessaryTernaryExpressionRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var AssignAndBinaryMap
+     * @var \Rector\Core\PhpParser\Node\AssignAndBinaryMap
      */
     private $assignAndBinaryMap;
     public function __construct(\Rector\Core\PhpParser\Node\AssignAndBinaryMap $assignAndBinaryMap)

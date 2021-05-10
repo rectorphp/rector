@@ -29,7 +29,7 @@ final class FuncCallToMethodCallRector extends \Rector\Core\Rector\AbstractRecto
      */
     private $funcNameToMethodCallNames = [];
     /**
-     * @var FuncCallStaticCallToMethodCallAnalyzer
+     * @var \Rector\Transform\NodeAnalyzer\FuncCallStaticCallToMethodCallAnalyzer
      */
     private $funcCallStaticCallToMethodCallAnalyzer;
     public function __construct(\Rector\Transform\NodeAnalyzer\FuncCallStaticCallToMethodCallAnalyzer $funcCallStaticCallToMethodCallAnalyzer)

@@ -37,43 +37,43 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ReturnTypeDeclarationRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var ReturnTypeInferer
+     * @var \Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer
      */
     private $returnTypeInferer;
     /**
-     * @var ReturnTypeAlreadyAddedChecker
-     */
-    private $returnTypeAlreadyAddedChecker;
-    /**
-     * @var NonInformativeReturnTagRemover
-     */
-    private $nonInformativeReturnTagRemover;
-    /**
-     * @var ChildReturnPopulator
+     * @var \Rector\TypeDeclaration\ChildPopulator\ChildReturnPopulator
      */
     private $childReturnPopulator;
     /**
-     * @var ClassMethodReturnTypeOverrideGuard
+     * @var \Rector\TypeDeclaration\TypeAlreadyAddedChecker\ReturnTypeAlreadyAddedChecker
+     */
+    private $returnTypeAlreadyAddedChecker;
+    /**
+     * @var \Rector\TypeDeclaration\PhpDocParser\NonInformativeReturnTagRemover
+     */
+    private $nonInformativeReturnTagRemover;
+    /**
+     * @var \Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnTypeOverrideGuard
      */
     private $classMethodReturnTypeOverrideGuard;
     /**
-     * @var VendorLockResolver
+     * @var \Rector\VendorLocker\VendorLockResolver
      */
     private $vendorLockResolver;
     /**
-     * @var PhpParserTypeAnalyzer
+     * @var \Rector\TypeDeclaration\PhpParserTypeAnalyzer
      */
     private $phpParserTypeAnalyzer;
     /**
-     * @var ObjectTypeComparator
+     * @var \Rector\TypeDeclaration\TypeAnalyzer\ObjectTypeComparator
      */
     private $objectTypeComparator;
     public function __construct(\Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer $returnTypeInferer, \Rector\TypeDeclaration\ChildPopulator\ChildReturnPopulator $childReturnPopulator, \Rector\TypeDeclaration\TypeAlreadyAddedChecker\ReturnTypeAlreadyAddedChecker $returnTypeAlreadyAddedChecker, \Rector\TypeDeclaration\PhpDocParser\NonInformativeReturnTagRemover $nonInformativeReturnTagRemover, \Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnTypeOverrideGuard $classMethodReturnTypeOverrideGuard, \Rector\VendorLocker\VendorLockResolver $vendorLockResolver, \Rector\TypeDeclaration\PhpParserTypeAnalyzer $phpParserTypeAnalyzer, \Rector\TypeDeclaration\TypeAnalyzer\ObjectTypeComparator $objectTypeComparator)
     {
         $this->returnTypeInferer = $returnTypeInferer;
+        $this->childReturnPopulator = $childReturnPopulator;
         $this->returnTypeAlreadyAddedChecker = $returnTypeAlreadyAddedChecker;
         $this->nonInformativeReturnTagRemover = $nonInformativeReturnTagRemover;
-        $this->childReturnPopulator = $childReturnPopulator;
         $this->classMethodReturnTypeOverrideGuard = $classMethodReturnTypeOverrideGuard;
         $this->vendorLockResolver = $vendorLockResolver;
         $this->phpParserTypeAnalyzer = $phpParserTypeAnalyzer;

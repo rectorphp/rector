@@ -29,15 +29,15 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ChangeReadOnlyVariableWithDefaultValueToConstantRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var ClassMethodAssignManipulator
+     * @var \Rector\Core\NodeManipulator\ClassMethodAssignManipulator
      */
     private $classMethodAssignManipulator;
     /**
-     * @var VarAnnotationManipulator
+     * @var \Rector\BetterPhpDocParser\PhpDocManipulator\VarAnnotationManipulator
      */
     private $varAnnotationManipulator;
     /**
-     * @var PropertyToAddCollector
+     * @var \Rector\PostRector\Collector\PropertyToAddCollector
      */
     private $propertyToAddCollector;
     public function __construct(\Rector\Core\NodeManipulator\ClassMethodAssignManipulator $classMethodAssignManipulator, \Rector\BetterPhpDocParser\PhpDocManipulator\VarAnnotationManipulator $varAnnotationManipulator, \Rector\PostRector\Collector\PropertyToAddCollector $propertyToAddCollector)

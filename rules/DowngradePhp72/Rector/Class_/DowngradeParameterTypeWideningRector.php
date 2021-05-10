@@ -29,23 +29,23 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradeParameterTypeWideningRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var ClassLikeWithTraitsClassMethodResolver
+     * @var \Rector\DowngradePhp72\NodeAnalyzer\ClassLikeWithTraitsClassMethodResolver
      */
     private $classLikeWithTraitsClassMethodResolver;
     /**
-     * @var ParentChildClassMethodTypeResolver
+     * @var \Rector\DowngradePhp72\NodeAnalyzer\ParentChildClassMethodTypeResolver
      */
     private $parentChildClassMethodTypeResolver;
     /**
-     * @var NativeParamToPhpDocDecorator
+     * @var \Rector\DowngradePhp72\PhpDoc\NativeParamToPhpDocDecorator
      */
     private $nativeParamToPhpDocDecorator;
     /**
-     * @var ParamContravariantDetector
+     * @var \Rector\DowngradePhp72\NodeAnalyzer\ParamContravariantDetector
      */
     private $paramContravariantDetector;
     /**
-     * @var TypeFactory
+     * @var \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory
      */
     private $typeFactory;
     public function __construct(\Rector\DowngradePhp72\NodeAnalyzer\ClassLikeWithTraitsClassMethodResolver $classLikeWithTraitsClassMethodResolver, \Rector\DowngradePhp72\NodeAnalyzer\ParentChildClassMethodTypeResolver $parentChildClassMethodTypeResolver, \Rector\DowngradePhp72\PhpDoc\NativeParamToPhpDocDecorator $nativeParamToPhpDocDecorator, \Rector\DowngradePhp72\NodeAnalyzer\ParamContravariantDetector $paramContravariantDetector, \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory $typeFactory)

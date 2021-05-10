@@ -14,19 +14,19 @@ use Rector\NodeNameResolver\NodeNameResolver;
 final class AssertMethodCallFactory
 {
     /**
-     * @var NodeFactory
-     */
-    private $nodeFactory;
-    /**
      * @var bool
      */
     private $isBoolAssert = \false;
     /**
-     * @var NodeNameResolver
+     * @var \Rector\Core\PhpParser\Node\NodeFactory
+     */
+    private $nodeFactory;
+    /**
+     * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     /**
-     * @var ValueResolver
+     * @var \Rector\Core\PhpParser\Node\Value\ValueResolver
      */
     private $valueResolver;
     public function __construct(\Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\Value\ValueResolver $valueResolver)

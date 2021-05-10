@@ -33,19 +33,19 @@ final class PHPUnitDataProviderParamTypeInferer implements \Rector\TypeDeclarati
      */
     private const METHOD_NAME_REGEX = '#^(?<method_name>\\w+)(\\(\\))?#';
     /**
-     * @var BetterNodeFinder
-     */
-    private $betterNodeFinder;
-    /**
      * @var NodeTypeResolver
      */
     private $nodeTypeResolver;
     /**
-     * @var TypeFactory
+     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
+     */
+    private $betterNodeFinder;
+    /**
+     * @var \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory
      */
     private $typeFactory;
     /**
-     * @var PhpDocInfoFactory
+     * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
     private $phpDocInfoFactory;
     public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory $typeFactory, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory)

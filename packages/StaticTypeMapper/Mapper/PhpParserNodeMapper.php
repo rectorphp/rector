@@ -12,9 +12,9 @@ use Rector\StaticTypeMapper\Contract\PhpParser\PhpParserNodeMapperInterface;
 final class PhpParserNodeMapper
 {
     /**
-     * @var PhpParserNodeMapperInterface[]
+     * @var mixed[]
      */
-    private $phpParserNodeMappers = [];
+    private $phpParserNodeMappers;
     /**
      * @param PhpParserNodeMapperInterface[] $phpParserNodeMappers
      */

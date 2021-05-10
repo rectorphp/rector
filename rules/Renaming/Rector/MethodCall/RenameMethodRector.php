@@ -37,11 +37,11 @@ final class RenameMethodRector extends \Rector\Core\Rector\AbstractRector implem
      */
     private $methodCallRenames = [];
     /**
-     * @var ClassManipulator
+     * @var \Rector\Core\NodeManipulator\ClassManipulator
      */
     private $classManipulator;
     /**
-     * @var MethodCallRenameCollector
+     * @var \Rector\Renaming\Collector\MethodCallRenameCollector
      */
     private $methodCallRenameCollector;
     public function __construct(\Rector\Core\NodeManipulator\ClassManipulator $classManipulator, \Rector\Renaming\Collector\MethodCallRenameCollector $methodCallRenameCollector)

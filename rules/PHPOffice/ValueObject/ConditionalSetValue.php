@@ -14,23 +14,23 @@ final class ConditionalSetValue
      */
     private $newGetMethod;
     /**
-     * @var int
-     */
-    private $argPosition;
-    /**
      * @var string
      */
     private $newSetMethod;
     /**
+     * @var int
+     */
+    private $argPosition;
+    /**
      * @var bool
      */
-    private $hasRow = \false;
+    private $hasRow;
     public function __construct(string $oldMethod, string $newGetMethod, string $newSetMethod, int $argPosition, bool $hasRow)
     {
         $this->oldMethod = $oldMethod;
         $this->newGetMethod = $newGetMethod;
-        $this->argPosition = $argPosition;
         $this->newSetMethod = $newSetMethod;
+        $this->argPosition = $argPosition;
         $this->hasRow = $hasRow;
     }
     public function getOldMethod() : string

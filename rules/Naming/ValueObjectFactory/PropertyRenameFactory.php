@@ -14,7 +14,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class PropertyRenameFactory
 {
     /**
-     * @var NodeNameResolver
+     * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)

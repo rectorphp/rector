@@ -31,7 +31,7 @@ final class VariableMethodCallToServiceCallRector extends \Rector\Core\Rector\Ab
      */
     private $variableMethodCallsToServiceCalls = [];
     /**
-     * @var PropertyNaming
+     * @var \Rector\Naming\Naming\PropertyNaming
      */
     private $propertyNaming;
     public function __construct(\Rector\Naming\Naming\PropertyNaming $propertyNaming)

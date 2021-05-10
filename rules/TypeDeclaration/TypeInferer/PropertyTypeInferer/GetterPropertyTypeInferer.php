@@ -18,29 +18,29 @@ use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer\ReturnTagReturnTypeInfe
 final class GetterPropertyTypeInferer implements \Rector\TypeDeclaration\Contract\TypeInferer\PropertyTypeInfererInterface
 {
     /**
-     * @var ReturnedNodesReturnTypeInferer
-     */
-    private $returnedNodesReturnTypeInferer;
-    /**
-     * @var ReturnTagReturnTypeInferer
+     * @var \Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer\ReturnTagReturnTypeInferer
      */
     private $returnTagReturnTypeInferer;
     /**
-     * @var FunctionLikeReturnTypeResolver
+     * @var \Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer\ReturnedNodesReturnTypeInferer
+     */
+    private $returnedNodesReturnTypeInferer;
+    /**
+     * @var \Rector\TypeDeclaration\FunctionLikeReturnTypeResolver
      */
     private $functionLikeReturnTypeResolver;
     /**
-     * @var ClassMethodAndPropertyAnalyzer
+     * @var \Rector\TypeDeclaration\NodeAnalyzer\ClassMethodAndPropertyAnalyzer
      */
     private $classMethodAndPropertyAnalyzer;
     /**
-     * @var NodeNameResolver
+     * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     public function __construct(\Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer\ReturnTagReturnTypeInferer $returnTagReturnTypeInferer, \Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer\ReturnedNodesReturnTypeInferer $returnedNodesReturnTypeInferer, \Rector\TypeDeclaration\FunctionLikeReturnTypeResolver $functionLikeReturnTypeResolver, \Rector\TypeDeclaration\NodeAnalyzer\ClassMethodAndPropertyAnalyzer $classMethodAndPropertyAnalyzer, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
     {
-        $this->returnedNodesReturnTypeInferer = $returnedNodesReturnTypeInferer;
         $this->returnTagReturnTypeInferer = $returnTagReturnTypeInferer;
+        $this->returnedNodesReturnTypeInferer = $returnedNodesReturnTypeInferer;
         $this->functionLikeReturnTypeResolver = $functionLikeReturnTypeResolver;
         $this->classMethodAndPropertyAnalyzer = $classMethodAndPropertyAnalyzer;
         $this->nodeNameResolver = $nodeNameResolver;

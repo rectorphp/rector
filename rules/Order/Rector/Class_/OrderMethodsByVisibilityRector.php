@@ -25,15 +25,15 @@ final class OrderMethodsByVisibilityRector extends \Rector\Core\Rector\AbstractR
      */
     private const PREFERRED_ORDER = [\Rector\Core\ValueObject\MethodName::CONSTRUCT, \Rector\Core\ValueObject\MethodName::DESCTRUCT, '__call', '__callStatic', '__get', '__set', '__isset', '__unset', '__sleep', '__wakeup', '__serialize', '__unserialize', '__toString', '__invoke', \Rector\Core\ValueObject\MethodName::SET_STATE, \Rector\Core\ValueObject\MethodName::CLONE, 'setUpBeforeClass', 'tearDownAfterClass', \Rector\Core\ValueObject\MethodName::SET_UP, \Rector\Core\ValueObject\MethodName::TEAR_DOWN];
     /**
-     * @var OrderChangeAnalyzer
+     * @var \Rector\Order\Order\OrderChangeAnalyzer
      */
     private $orderChangeAnalyzer;
     /**
-     * @var StmtOrder
+     * @var \Rector\Order\StmtOrder
      */
     private $stmtOrder;
     /**
-     * @var StmtVisibilitySorter
+     * @var \Rector\Order\StmtVisibilitySorter
      */
     private $stmtVisibilitySorter;
     public function __construct(\Rector\Order\Order\OrderChangeAnalyzer $orderChangeAnalyzer, \Rector\Order\StmtOrder $stmtOrder, \Rector\Order\StmtVisibilitySorter $stmtVisibilitySorter)

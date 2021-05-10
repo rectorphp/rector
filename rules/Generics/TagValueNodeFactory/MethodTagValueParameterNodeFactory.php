@@ -10,7 +10,7 @@ use Rector\StaticTypeMapper\StaticTypeMapper;
 final class MethodTagValueParameterNodeFactory
 {
     /**
-     * @var StaticTypeMapper
+     * @var \Rector\StaticTypeMapper\StaticTypeMapper
      */
     private $staticTypeMapper;
     public function __construct(\Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper)

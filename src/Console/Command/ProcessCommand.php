@@ -30,68 +30,68 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class ProcessCommand extends \RectorPrefix20210510\Symfony\Component\Console\Command\Command
 {
     /**
-     * @var AdditionalAutoloader
+     * @var \Rector\Core\Autoloading\AdditionalAutoloader
      */
     private $additionalAutoloader;
     /**
-     * @var Configuration
-     */
-    private $configuration;
-    /**
-     * @var OutputFormatterCollector
-     */
-    private $outputFormatterCollector;
-    /**
-     * @var PhpFilesFinder
-     */
-    private $phpFilesFinder;
-    /**
-     * @var ChangedFilesDetector
+     * @var \Rector\Caching\Detector\ChangedFilesDetector
      */
     private $changedFilesDetector;
     /**
-     * @var MissingRectorRulesReporter
+     * @var \Rector\Core\Configuration\Configuration
+     */
+    private $configuration;
+    /**
+     * @var \Rector\Core\Console\Output\OutputFormatterCollector
+     */
+    private $outputFormatterCollector;
+    /**
+     * @var \Rector\Core\FileSystem\PhpFilesFinder
+     */
+    private $phpFilesFinder;
+    /**
+     * @var \Rector\Core\Reporting\MissingRectorRulesReporter
      */
     private $missingRectorRulesReporter;
     /**
-     * @var ApplicationFileProcessor
+     * @var \Rector\Core\Application\ApplicationFileProcessor
      */
     private $applicationFileProcessor;
     /**
-     * @var FileFactory
+     * @var \Rector\Core\ValueObjectFactory\Application\FileFactory
      */
     private $fileFactory;
     /**
-     * @var BootstrapFilesIncluder
+     * @var \Rector\Core\Autoloading\BootstrapFilesIncluder
      */
     private $bootstrapFilesIncluder;
     /**
-     * @var ProcessResultFactory
+     * @var \Rector\Core\ValueObjectFactory\ProcessResultFactory
      */
     private $processResultFactory;
     /**
-     * @var NodeScopeResolver
+     * @var \PHPStan\Analyser\NodeScopeResolver
      */
     private $nodeScopeResolver;
     /**
-     * @var DynamicSourceLocatorDecorator
+     * @var \Rector\Core\StaticReflection\DynamicSourceLocatorDecorator
      */
     private $dynamicSourceLocatorDecorator;
     public function __construct(\Rector\Core\Autoloading\AdditionalAutoloader $additionalAutoloader, \Rector\Caching\Detector\ChangedFilesDetector $changedFilesDetector, \Rector\Core\Configuration\Configuration $configuration, \Rector\Core\Console\Output\OutputFormatterCollector $outputFormatterCollector, \Rector\Core\FileSystem\PhpFilesFinder $phpFilesFinder, \Rector\Core\Reporting\MissingRectorRulesReporter $missingRectorRulesReporter, \Rector\Core\Application\ApplicationFileProcessor $applicationFileProcessor, \Rector\Core\ValueObjectFactory\Application\FileFactory $fileFactory, \Rector\Core\Autoloading\BootstrapFilesIncluder $bootstrapFilesIncluder, \Rector\Core\ValueObjectFactory\ProcessResultFactory $processResultFactory, \PHPStan\Analyser\NodeScopeResolver $nodeScopeResolver, \Rector\Core\StaticReflection\DynamicSourceLocatorDecorator $dynamicSourceLocatorDecorator)
     {
         $this->additionalAutoloader = $additionalAutoloader;
+        $this->changedFilesDetector = $changedFilesDetector;
         $this->configuration = $configuration;
         $this->outputFormatterCollector = $outputFormatterCollector;
-        $this->changedFilesDetector = $changedFilesDetector;
         $this->phpFilesFinder = $phpFilesFinder;
         $this->missingRectorRulesReporter = $missingRectorRulesReporter;
-        parent::__construct();
         $this->applicationFileProcessor = $applicationFileProcessor;
         $this->fileFactory = $fileFactory;
         $this->bootstrapFilesIncluder = $bootstrapFilesIncluder;
         $this->processResultFactory = $processResultFactory;
         $this->nodeScopeResolver = $nodeScopeResolver;
         $this->dynamicSourceLocatorDecorator = $dynamicSourceLocatorDecorator;
+        parent::__construct();
     }
     protected function configure() : void
     {

@@ -13,7 +13,7 @@ final class RectorNamingInflector
      */
     private const DATA_INFO_SUFFIX_REGEX = '#^(?<prefix>.+)(?<suffix>Data|Info)$#';
     /**
-     * @var Inflector
+     * @var \Doctrine\Inflector\Inflector
      */
     private $inflector;
     public function __construct(\RectorPrefix20210510\Doctrine\Inflector\Inflector $inflector)

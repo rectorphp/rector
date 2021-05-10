@@ -25,7 +25,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveExtraParametersRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var CallReflectionResolver
+     * @var \Rector\Core\PHPStan\Reflection\CallReflectionResolver
      */
     private $callReflectionResolver;
     public function __construct(\Rector\Core\PHPStan\Reflection\CallReflectionResolver $callReflectionResolver)

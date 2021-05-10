@@ -14,13 +14,13 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class EmptyStringDefaultPropertyFinder
 {
     /**
-     * @var BetterNodeFinder
-     */
-    private $betterNodeFinder;
-    /**
      * @var array<string, PropertyProperty[]>
      */
     private $propertyPropertiesByClassName = [];
+    /**
+     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
+     */
+    private $betterNodeFinder;
     public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
     {
         $this->betterNodeFinder = $betterNodeFinder;

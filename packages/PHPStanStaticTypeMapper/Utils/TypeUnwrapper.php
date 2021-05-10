@@ -11,7 +11,7 @@ use Rector\StaticTypeMapper\TypeFactory\UnionTypeFactory;
 final class TypeUnwrapper
 {
     /**
-     * @var UnionTypeFactory
+     * @var \Rector\StaticTypeMapper\TypeFactory\UnionTypeFactory
      */
     private $unionTypeFactory;
     public function __construct(\Rector\StaticTypeMapper\TypeFactory\UnionTypeFactory $unionTypeFactory)

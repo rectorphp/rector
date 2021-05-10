@@ -10,11 +10,11 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class NodeComparator
 {
     /**
-     * @var CommentRemover
+     * @var \Rector\Comments\CommentRemover
      */
     private $commentRemover;
     /**
-     * @var BetterStandardPrinter
+     * @var \Rector\Core\PhpParser\Printer\BetterStandardPrinter
      */
     private $betterStandardPrinter;
     public function __construct(\Rector\Comments\CommentRemover $commentRemover, \Rector\Core\PhpParser\Printer\BetterStandardPrinter $betterStandardPrinter)

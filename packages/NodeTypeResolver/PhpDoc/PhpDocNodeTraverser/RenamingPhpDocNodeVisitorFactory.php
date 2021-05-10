@@ -8,7 +8,7 @@ use RectorPrefix20210510\Symplify\SimplePhpDocParser\PhpDocNodeTraverser;
 final class RenamingPhpDocNodeVisitorFactory
 {
     /**
-     * @var ClassRenamePhpDocNodeVisitor
+     * @var \Rector\NodeTypeResolver\PhpDocNodeVisitor\ClassRenamePhpDocNodeVisitor
      */
     private $classRenamePhpDocNodeVisitor;
     public function __construct(\Rector\NodeTypeResolver\PhpDocNodeVisitor\ClassRenamePhpDocNodeVisitor $classRenamePhpDocNodeVisitor)

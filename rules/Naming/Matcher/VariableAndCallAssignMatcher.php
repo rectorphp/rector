@@ -16,15 +16,15 @@ use Rector\NodeNameResolver\NodeNameResolver;
 final class VariableAndCallAssignMatcher
 {
     /**
-     * @var CallMatcher
+     * @var \Rector\Naming\Matcher\CallMatcher
      */
     private $callMatcher;
     /**
-     * @var NodeNameResolver
+     * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     /**
-     * @var BetterNodeFinder
+     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
     public function __construct(\Rector\Naming\Matcher\CallMatcher $callMatcher, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)

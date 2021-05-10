@@ -13,17 +13,17 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class ComposerFileProcessor implements \Rector\Core\Contract\Processor\FileProcessorInterface
 {
     /**
-     * @var ComposerJsonFactory
+     * @var \Symplify\ComposerJsonManipulator\ComposerJsonFactory
      */
     private $composerJsonFactory;
     /**
-     * @var ComposerJsonPrinter
+     * @var \Symplify\ComposerJsonManipulator\Printer\ComposerJsonPrinter
      */
     private $composerJsonPrinter;
     /**
-     * @var ComposerRectorInterface[]
+     * @var mixed[]
      */
-    private $composerRectors = [];
+    private $composerRectors;
     /**
      * @param ComposerRectorInterface[] $composerRectors
      */

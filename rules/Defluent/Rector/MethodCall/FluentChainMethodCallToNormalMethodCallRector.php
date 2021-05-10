@@ -25,15 +25,15 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class FluentChainMethodCallToNormalMethodCallRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var FluentNodeRemover
+     * @var \Rector\Symfony\NodeAnalyzer\FluentNodeRemover
      */
     private $fluentNodeRemover;
     /**
-     * @var MethodCallSkipAnalyzer
+     * @var \Rector\Defluent\NodeAnalyzer\MethodCallSkipAnalyzer
      */
     private $methodCallSkipAnalyzer;
     /**
-     * @var AssignAndRootExprAndNodesToAddMatcher
+     * @var \Rector\Defluent\Matcher\AssignAndRootExprAndNodesToAddMatcher
      */
     private $assignAndRootExprAndNodesToAddMatcher;
     public function __construct(\Rector\Symfony\NodeAnalyzer\FluentNodeRemover $fluentNodeRemover, \Rector\Defluent\NodeAnalyzer\MethodCallSkipAnalyzer $methodCallSkipAnalyzer, \Rector\Defluent\Matcher\AssignAndRootExprAndNodesToAddMatcher $assignAndRootExprAndNodesToAddMatcher)

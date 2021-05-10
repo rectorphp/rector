@@ -7,7 +7,6 @@ use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use PHPStan\PhpDocParser\Lexer\Lexer;
-use PHPStan\PhpDocParser\Parser\PhpDocParser;
 use Rector\BetterPhpDocParser\Annotation\AnnotationNaming;
 use Rector\BetterPhpDocParser\Contract\PhpDocNodeFactoryInterface;
 use Rector\BetterPhpDocParser\PhpDocNodeMapper;
@@ -22,44 +21,44 @@ use Rector\StaticTypeMapper\StaticTypeMapper;
 final class PhpDocInfoFactory
 {
     /**
-     * @var PhpDocParser
-     */
-    private $betterPhpDocParser;
-    /**
-     * @var Lexer
-     */
-    private $lexer;
-    /**
-     * @var CurrentNodeProvider
-     */
-    private $currentNodeProvider;
-    /**
-     * @var StaticTypeMapper
-     */
-    private $staticTypeMapper;
-    /**
-     * @var PhpDocNodeMapper
-     */
-    private $phpDocNodeMapper;
-    /**
-     * @var AnnotationNaming
-     */
-    private $annotationNaming;
-    /**
-     * @var RectorChangeCollector
-     */
-    private $rectorChangeCollector;
-    /**
      * @var array<string, PhpDocInfo>
      */
     private $phpDocInfosByObjectHash = [];
+    /**
+     * @var \Rector\BetterPhpDocParser\PhpDocNodeMapper
+     */
+    private $phpDocNodeMapper;
+    /**
+     * @var \Rector\Core\Configuration\CurrentNodeProvider
+     */
+    private $currentNodeProvider;
+    /**
+     * @var \PHPStan\PhpDocParser\Lexer\Lexer
+     */
+    private $lexer;
+    /**
+     * @var \Rector\BetterPhpDocParser\PhpDocParser\BetterPhpDocParser
+     */
+    private $betterPhpDocParser;
+    /**
+     * @var \Rector\StaticTypeMapper\StaticTypeMapper
+     */
+    private $staticTypeMapper;
+    /**
+     * @var \Rector\BetterPhpDocParser\Annotation\AnnotationNaming
+     */
+    private $annotationNaming;
+    /**
+     * @var \Rector\ChangesReporting\Collector\RectorChangeCollector
+     */
+    private $rectorChangeCollector;
     public function __construct(\Rector\BetterPhpDocParser\PhpDocNodeMapper $phpDocNodeMapper, \Rector\Core\Configuration\CurrentNodeProvider $currentNodeProvider, \PHPStan\PhpDocParser\Lexer\Lexer $lexer, \Rector\BetterPhpDocParser\PhpDocParser\BetterPhpDocParser $betterPhpDocParser, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \Rector\BetterPhpDocParser\Annotation\AnnotationNaming $annotationNaming, \Rector\ChangesReporting\Collector\RectorChangeCollector $rectorChangeCollector)
     {
-        $this->betterPhpDocParser = $betterPhpDocParser;
-        $this->lexer = $lexer;
-        $this->currentNodeProvider = $currentNodeProvider;
-        $this->staticTypeMapper = $staticTypeMapper;
         $this->phpDocNodeMapper = $phpDocNodeMapper;
+        $this->currentNodeProvider = $currentNodeProvider;
+        $this->lexer = $lexer;
+        $this->betterPhpDocParser = $betterPhpDocParser;
+        $this->staticTypeMapper = $staticTypeMapper;
         $this->annotationNaming = $annotationNaming;
         $this->rectorChangeCollector = $rectorChangeCollector;
     }

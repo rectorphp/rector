@@ -11,20 +11,20 @@ use Rector\TypeDeclaration\TypeAnalyzer\GenericClassStringTypeNormalizer;
 final class ParamTypeInferer
 {
     /**
-     * @var ParamTypeInfererInterface[]
-     */
-    private $paramTypeInferers = [];
-    /**
-     * @var GenericClassStringTypeNormalizer
+     * @var \Rector\TypeDeclaration\TypeAnalyzer\GenericClassStringTypeNormalizer
      */
     private $genericClassStringTypeNormalizer;
+    /**
+     * @var mixed[]
+     */
+    private $paramTypeInferers;
     /**
      * @param ParamTypeInfererInterface[] $paramTypeInferers
      */
     public function __construct(\Rector\TypeDeclaration\TypeAnalyzer\GenericClassStringTypeNormalizer $genericClassStringTypeNormalizer, array $paramTypeInferers)
     {
-        $this->paramTypeInferers = $paramTypeInferers;
         $this->genericClassStringTypeNormalizer = $genericClassStringTypeNormalizer;
+        $this->paramTypeInferers = $paramTypeInferers;
     }
     public function inferParam(\PhpParser\Node\Param $param) : \PHPStan\Type\Type
     {

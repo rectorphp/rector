@@ -8,13 +8,13 @@ use PhpParser\Node\Scalar\String_;
 final class SprintfStringAndArgs
 {
     /**
-     * @var Expr[]
-     */
-    private $arrayItems = [];
-    /**
-     * @var String_
+     * @var \PhpParser\Node\Scalar\String_
      */
     private $string;
+    /**
+     * @var mixed[]
+     */
+    private $arrayItems;
     /**
      * @param Expr[] $arrayItems
      */

@@ -27,11 +27,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ArrayThisCallToThisMethodCallRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var ArrayCallableMethodReferenceAnalyzer
+     * @var \Rector\NodeCollector\NodeAnalyzer\ArrayCallableMethodReferenceAnalyzer
      */
     private $arrayCallableMethodReferenceAnalyzer;
     /**
-     * @var ReflectionProvider
+     * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
     public function __construct(\Rector\NodeCollector\NodeAnalyzer\ArrayCallableMethodReferenceAnalyzer $arrayCallableMethodReferenceAnalyzer, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)

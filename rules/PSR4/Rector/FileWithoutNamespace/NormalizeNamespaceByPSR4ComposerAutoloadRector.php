@@ -20,11 +20,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class NormalizeNamespaceByPSR4ComposerAutoloadRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var PSR4AutoloadNamespaceMatcherInterface
+     * @var \Rector\PSR4\Contract\PSR4AutoloadNamespaceMatcherInterface
      */
     private $psr4AutoloadNamespaceMatcher;
     /**
-     * @var FullyQualifyStmtsAnalyzer
+     * @var \Rector\PSR4\NodeManipulator\FullyQualifyStmtsAnalyzer
      */
     private $fullyQualifyStmtsAnalyzer;
     public function __construct(\Rector\PSR4\Contract\PSR4AutoloadNamespaceMatcherInterface $psr4AutoloadNamespaceMatcher, \Rector\PSR4\NodeManipulator\FullyQualifyStmtsAnalyzer $fullyQualifyStmtsAnalyzer)

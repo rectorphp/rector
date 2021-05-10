@@ -19,35 +19,35 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class UseAddingPostRector extends \Rector\PostRector\Rector\AbstractPostRector
 {
     /**
-     * @var UseImportsAdder
-     */
-    private $useImportsAdder;
-    /**
-     * @var BetterNodeFinder
+     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
     /**
-     * @var UseImportsRemover
-     */
-    private $useImportsRemover;
-    /**
-     * @var TypeFactory
+     * @var \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory
      */
     private $typeFactory;
     /**
-     * @var UseNodesToAddCollector
+     * @var \Rector\CodingStyle\Application\UseImportsAdder
+     */
+    private $useImportsAdder;
+    /**
+     * @var \Rector\CodingStyle\Application\UseImportsRemover
+     */
+    private $useImportsRemover;
+    /**
+     * @var \Rector\PostRector\Collector\UseNodesToAddCollector
      */
     private $useNodesToAddCollector;
     /**
-     * @var CurrentFileProvider
+     * @var \Rector\Core\Provider\CurrentFileProvider
      */
     private $currentFileProvider;
     public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory $typeFactory, \Rector\CodingStyle\Application\UseImportsAdder $useImportsAdder, \Rector\CodingStyle\Application\UseImportsRemover $useImportsRemover, \Rector\PostRector\Collector\UseNodesToAddCollector $useNodesToAddCollector, \Rector\Core\Provider\CurrentFileProvider $currentFileProvider)
     {
-        $this->useImportsAdder = $useImportsAdder;
         $this->betterNodeFinder = $betterNodeFinder;
-        $this->useImportsRemover = $useImportsRemover;
         $this->typeFactory = $typeFactory;
+        $this->useImportsAdder = $useImportsAdder;
+        $this->useImportsRemover = $useImportsRemover;
         $this->useNodesToAddCollector = $useNodesToAddCollector;
         $this->currentFileProvider = $currentFileProvider;
     }

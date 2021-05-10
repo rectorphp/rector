@@ -9,7 +9,7 @@ use RectorPrefix20210510\Stringy\Stringy;
 final class ConstantNaming
 {
     /**
-     * @var NodeNameResolver
+     * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)

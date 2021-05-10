@@ -39,13 +39,13 @@ final class DowngradeGeneratedScalarTypesRector extends \Rector\Core\Rector\Abst
      */
     private $phpRectors = [];
     /**
-     * @var InlineCodeParser
+     * @var \Rector\Core\PhpParser\Parser\InlineCodeParser
      */
     private $inlineCodeParser;
     public function __construct(\Rector\Core\PhpParser\Parser\InlineCodeParser $inlineCodeParser, \Rector\DowngradePhp70\Rector\FunctionLike\DowngradeScalarTypeDeclarationRector $downgradeScalarTypeDeclarationRector, \Rector\DowngradePhp71\Rector\FunctionLike\DowngradeVoidTypeDeclarationRector $downgradeVoidTypeDeclarationRector)
     {
-        $this->phpRectors = [$downgradeScalarTypeDeclarationRector, $downgradeVoidTypeDeclarationRector];
         $this->inlineCodeParser = $inlineCodeParser;
+        $this->phpRectors = [$downgradeScalarTypeDeclarationRector, $downgradeVoidTypeDeclarationRector];
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -94,7 +94,7 @@ CODE_SAMPLE
         // we assume its a function list - see https://github.com/symfony/symfony/blob/ad91659ea9b2a964f933bf27d0d1f1ef60fe9417/src/Symfony/Component/DependencyInjection/Dumper/PhpDumper.php#L1513-L1560
         try {
             $nodes = $this->inlineCodeParser->parse('<?php class SomeClass { ' . $node->value . ' }');
-        } catch (\PhpParser\Error $error) {
+        } catch (\PhpParser\Error $exception) {
             // nothing we can do
             return null;
         }

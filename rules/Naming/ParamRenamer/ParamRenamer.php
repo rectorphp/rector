@@ -10,11 +10,11 @@ use Rector\Naming\VariableRenamer;
 final class ParamRenamer
 {
     /**
-     * @var VariableRenamer
+     * @var \Rector\Naming\VariableRenamer
      */
     private $variableRenamer;
     /**
-     * @var PropertyDocBlockManipulator
+     * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PropertyDocBlockManipulator
      */
     private $propertyDocBlockManipulator;
     public function __construct(\Rector\Naming\VariableRenamer $variableRenamer, \Rector\BetterPhpDocParser\PhpDocManipulator\PropertyDocBlockManipulator $propertyDocBlockManipulator)

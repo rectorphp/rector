@@ -10,7 +10,7 @@ use Rector\Naming\Naming\VariableNaming;
 final class VariableFromNewFactory
 {
     /**
-     * @var VariableNaming
+     * @var \Rector\Naming\Naming\VariableNaming
      */
     private $variableNaming;
     public function __construct(\Rector\Naming\Naming\VariableNaming $variableNaming)

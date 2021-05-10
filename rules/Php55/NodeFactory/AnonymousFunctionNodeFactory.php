@@ -25,17 +25,17 @@ final class AnonymousFunctionNodeFactory
      */
     private const DIM_FETCH_REGEX = '#(\\$|\\\\|\\x0)(?<number>\\d+)#';
     /**
-     * @var Parser
-     */
-    private $parser;
-    /**
-     * @var SimpleCallableNodeTraverser
+     * @var \Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser
      */
     private $simpleCallableNodeTraverser;
+    /**
+     * @var \PhpParser\Parser
+     */
+    private $parser;
     public function __construct(\RectorPrefix20210510\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \PhpParser\Parser $parser)
     {
-        $this->parser = $parser;
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
+        $this->parser = $parser;
     }
     public function createAnonymousFunctionFromString(\PhpParser\Node\Expr $expr) : ?\PhpParser\Node\Expr\Closure
     {

@@ -33,32 +33,32 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ParamTypeDeclarationRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var ParamTypeInferer
+     * @var \Rector\VendorLocker\VendorLockResolver
      */
-    private $paramTypeInferer;
+    private $vendorLockResolver;
     /**
-     * @var ChildParamPopulator
+     * @var \Rector\TypeDeclaration\ChildPopulator\ChildParamPopulator
      */
     private $childParamPopulator;
     /**
-     * @var TraitTypeAnalyzer
+     * @var \Rector\TypeDeclaration\TypeInferer\ParamTypeInferer
+     */
+    private $paramTypeInferer;
+    /**
+     * @var \Rector\TypeDeclaration\NodeTypeAnalyzer\TraitTypeAnalyzer
      */
     private $traitTypeAnalyzer;
     /**
-     * @var ParamTagRemover
+     * @var \Rector\DeadCode\PhpDoc\TagRemover\ParamTagRemover
      */
     private $paramTagRemover;
-    /**
-     * @var VendorLockResolver
-     */
-    private $vendorLockResolver;
     public function __construct(\Rector\VendorLocker\VendorLockResolver $vendorLockResolver, \Rector\TypeDeclaration\ChildPopulator\ChildParamPopulator $childParamPopulator, \Rector\TypeDeclaration\TypeInferer\ParamTypeInferer $paramTypeInferer, \Rector\TypeDeclaration\NodeTypeAnalyzer\TraitTypeAnalyzer $traitTypeAnalyzer, \Rector\DeadCode\PhpDoc\TagRemover\ParamTagRemover $paramTagRemover)
     {
-        $this->paramTypeInferer = $paramTypeInferer;
+        $this->vendorLockResolver = $vendorLockResolver;
         $this->childParamPopulator = $childParamPopulator;
+        $this->paramTypeInferer = $paramTypeInferer;
         $this->traitTypeAnalyzer = $traitTypeAnalyzer;
         $this->paramTagRemover = $paramTagRemover;
-        $this->vendorLockResolver = $vendorLockResolver;
     }
     /**
      * @return array<class-string<Node>>

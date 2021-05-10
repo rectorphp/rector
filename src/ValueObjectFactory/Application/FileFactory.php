@@ -12,20 +12,20 @@ use Rector\Core\ValueObject\Application\File;
 final class FileFactory
 {
     /**
-     * @var FileProcessorInterface[]
-     */
-    private $fileProcessors = [];
-    /**
-     * @var FilesFinder
+     * @var \Rector\Core\FileSystem\FilesFinder
      */
     private $filesFinder;
+    /**
+     * @var mixed[]
+     */
+    private $fileProcessors;
     /**
      * @param FileProcessorInterface[] $fileProcessors
      */
     public function __construct(\Rector\Core\FileSystem\FilesFinder $filesFinder, array $fileProcessors)
     {
-        $this->fileProcessors = $fileProcessors;
         $this->filesFinder = $filesFinder;
+        $this->fileProcessors = $fileProcessors;
     }
     /**
      * @param string[] $paths

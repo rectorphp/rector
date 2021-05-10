@@ -22,17 +22,17 @@ final class DowngradeAnonymousClassRector extends \Rector\Core\Rector\AbstractRe
      */
     private const ANONYMOUS_CLASS_PREFIX = 'Anonymous__';
     /**
-     * @var ClassAnalyzer
-     */
-    private $classAnalyzer;
-    /**
-     * @var ClassFromAnonymousFactory
-     */
-    private $classFromAnonymousFactory;
-    /**
      * @var Class_[]
      */
     private $classes = [];
+    /**
+     * @var \Rector\Core\NodeAnalyzer\ClassAnalyzer
+     */
+    private $classAnalyzer;
+    /**
+     * @var \Rector\DowngradePhp70\NodeFactory\ClassFromAnonymousFactory
+     */
+    private $classFromAnonymousFactory;
     public function __construct(\Rector\Core\NodeAnalyzer\ClassAnalyzer $classAnalyzer, \Rector\DowngradePhp70\NodeFactory\ClassFromAnonymousFactory $classFromAnonymousFactory)
     {
         $this->classAnalyzer = $classAnalyzer;

@@ -28,11 +28,11 @@ final class UnionTypeCommonTypeNarrower
      */
     private const PRIORITY_TYPES = [\PhpParser\Node\Stmt\ClassLike::class => [\PhpParser\Node\Stmt\ClassLike::class], \PhpParser\Node\FunctionLike::class => [\PhpParser\Node\FunctionLike::class], \PhpParser\Node\Expr\BinaryOp::class => [\PhpParser\Node\Expr\BinaryOp::class, \PhpParser\Node\Expr::class], \PhpParser\Node\Expr::class => [\PhpParser\Node::class, \PhpParser\Node\Expr::class], \PhpParser\Node\Stmt::class => [\PhpParser\Node::class, \PhpParser\Node\Stmt::class], \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode::class => [\PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode::class, \PHPStan\PhpDocParser\Ast\Node::class], \PhpParser\Node::class => [\PhpParser\Node::class], \Rector\Core\Contract\Rector\RectorInterface::class => [\Rector\Core\Contract\Rector\RectorInterface::class]];
     /**
-     * @var GenericClassStringTypeCorrector
+     * @var \Rector\NodeTypeResolver\NodeTypeCorrector\GenericClassStringTypeCorrector
      */
     private $genericClassStringTypeCorrector;
     /**
-     * @var ReflectionProvider
+     * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
     public function __construct(\Rector\NodeTypeResolver\NodeTypeCorrector\GenericClassStringTypeCorrector $genericClassStringTypeCorrector, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)

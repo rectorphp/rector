@@ -30,7 +30,7 @@ final class CallableInMethodCallToVariableRector extends \Rector\Core\Rector\Abs
      */
     private $callableInMethodCallToVariable = [];
     /**
-     * @var UnwrapClosureFactory
+     * @var \Rector\Transform\NodeFactory\UnwrapClosureFactory
      */
     private $unwrapClosureFactory;
     public function __construct(\Rector\Transform\NodeFactory\UnwrapClosureFactory $unwrapClosureFactory)

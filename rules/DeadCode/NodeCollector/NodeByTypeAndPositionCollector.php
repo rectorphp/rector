@@ -13,11 +13,11 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class NodeByTypeAndPositionCollector
 {
     /**
-     * @var FlowOfControlLocator
+     * @var \Rector\NodeNestingScope\FlowOfControlLocator
      */
     private $flowOfControlLocator;
     /**
-     * @var NodeNameResolver
+     * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     public function __construct(\Rector\NodeNestingScope\FlowOfControlLocator $flowOfControlLocator, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)

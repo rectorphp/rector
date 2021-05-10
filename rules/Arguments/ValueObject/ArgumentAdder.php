@@ -22,9 +22,6 @@ final class ArgumentAdder
      * @var string|null
      */
     private $argumentName;
-    /**
-     * @var mixed|null
-     */
     private $argumentDefaultValue;
     /**
      * @var string|null

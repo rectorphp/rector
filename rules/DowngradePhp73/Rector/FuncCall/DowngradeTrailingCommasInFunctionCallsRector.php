@@ -18,7 +18,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradeTrailingCommasInFunctionCallsRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var FollowedByCommaAnalyzer
+     * @var \Rector\DowngradePhp73\Tokenizer\FollowedByCommaAnalyzer
      */
     private $followedByCommaAnalyzer;
     public function __construct(\Rector\DowngradePhp73\Tokenizer\FollowedByCommaAnalyzer $followedByCommaAnalyzer)

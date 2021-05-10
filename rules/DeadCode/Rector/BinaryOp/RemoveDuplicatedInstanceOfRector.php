@@ -16,7 +16,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveDuplicatedInstanceOfRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var InstanceOfUniqueKeyResolver
+     * @var \Rector\DeadCode\NodeAnalyzer\InstanceOfUniqueKeyResolver
      */
     private $instanceOfUniqueKeyResolver;
     public function __construct(\Rector\DeadCode\NodeAnalyzer\InstanceOfUniqueKeyResolver $instanceOfUniqueKeyResolver)

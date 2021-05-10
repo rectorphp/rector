@@ -18,15 +18,15 @@ use Rector\Naming\Naming\VariableNaming;
 final class NonFluentChainMethodCallFactory
 {
     /**
-     * @var FluentChainMethodCallNodeAnalyzer
+     * @var \Rector\Defluent\NodeAnalyzer\FluentChainMethodCallNodeAnalyzer
      */
     private $fluentChainMethodCallNodeAnalyzer;
     /**
-     * @var VariableNaming
+     * @var \Rector\Naming\Naming\VariableNaming
      */
     private $variableNaming;
     /**
-     * @var FirstMethodCallVarResolver
+     * @var \Rector\Defluent\NodeResolver\FirstMethodCallVarResolver
      */
     private $firstMethodCallVarResolver;
     public function __construct(\Rector\Defluent\NodeAnalyzer\FluentChainMethodCallNodeAnalyzer $fluentChainMethodCallNodeAnalyzer, \Rector\Naming\Naming\VariableNaming $variableNaming, \Rector\Defluent\NodeResolver\FirstMethodCallVarResolver $firstMethodCallVarResolver)

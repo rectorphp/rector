@@ -27,7 +27,7 @@ final class ChangeMethodVisibilityRector extends \Rector\Core\Rector\AbstractRec
      */
     private $methodVisibilities = [];
     /**
-     * @var ParentClassScopeResolver
+     * @var \Rector\NodeCollector\ScopeResolver\ParentClassScopeResolver
      */
     private $parentClassScopeResolver;
     public function __construct(\Rector\NodeCollector\ScopeResolver\ParentClassScopeResolver $parentClassScopeResolver)

@@ -10,7 +10,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class NodeToReplacePostRector extends \Rector\PostRector\Rector\AbstractPostRector
 {
     /**
-     * @var NodesToReplaceCollector
+     * @var \Rector\PostRector\Collector\NodesToReplaceCollector
      */
     private $nodesToReplaceCollector;
     public function __construct(\Rector\PostRector\Collector\NodesToReplaceCollector $nodesToReplaceCollector)

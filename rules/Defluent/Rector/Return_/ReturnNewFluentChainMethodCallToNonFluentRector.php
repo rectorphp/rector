@@ -24,15 +24,15 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ReturnNewFluentChainMethodCallToNonFluentRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var FluentNodeRemover
+     * @var \Rector\Symfony\NodeAnalyzer\FluentNodeRemover
      */
     private $fluentNodeRemover;
     /**
-     * @var AssignAndRootExprAndNodesToAddMatcher
+     * @var \Rector\Defluent\Matcher\AssignAndRootExprAndNodesToAddMatcher
      */
     private $assignAndRootExprAndNodesToAddMatcher;
     /**
-     * @var FluentMethodCallSkipper
+     * @var \Rector\Defluent\Skipper\FluentMethodCallSkipper
      */
     private $fluentMethodCallSkipper;
     public function __construct(\Rector\Symfony\NodeAnalyzer\FluentNodeRemover $fluentNodeRemover, \Rector\Defluent\Matcher\AssignAndRootExprAndNodesToAddMatcher $assignAndRootExprAndNodesToAddMatcher, \Rector\Defluent\Skipper\FluentMethodCallSkipper $fluentMethodCallSkipper)

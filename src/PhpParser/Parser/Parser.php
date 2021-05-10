@@ -18,7 +18,7 @@ final class Parser
      */
     private $nikicParser;
     /**
-     * @var SmartFileSystem
+     * @var \Symplify\SmartFileSystem\SmartFileSystem
      */
     private $smartFileSystem;
     public function __construct(\PhpParser\Parser $nikicParser, \RectorPrefix20210510\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem)

@@ -23,7 +23,7 @@ final class SimplifyRegexPatternRector extends \Rector\Core\Rector\AbstractRecto
      */
     private const COMPLEX_PATTERN_TO_SIMPLE = ['[0-9]' => '\\d', '[a-zA-Z0-9_]' => '\\w', '[A-Za-z0-9_]' => '\\w', '[0-9a-zA-Z_]' => '\\w', '[0-9A-Za-z_]' => '\\w', '[\\r\\n\\t\\f\\v ]' => '\\s'];
     /**
-     * @var RegexPatternArgumentManipulator
+     * @var \Rector\Core\Php\Regex\RegexPatternArgumentManipulator
      */
     private $regexPatternArgumentManipulator;
     public function __construct(\Rector\Core\Php\Regex\RegexPatternArgumentManipulator $regexPatternArgumentManipulator)

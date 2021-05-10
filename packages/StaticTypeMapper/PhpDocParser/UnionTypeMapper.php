@@ -18,7 +18,7 @@ final class UnionTypeMapper implements \Rector\StaticTypeMapper\Contract\PhpDocP
      */
     private $phpDocTypeMapper;
     /**
-     * @var TypeFactory
+     * @var \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory
      */
     private $typeFactory;
     public function __construct(\Rector\NodeTypeResolver\PHPStan\Type\TypeFactory $typeFactory)

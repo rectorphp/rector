@@ -15,7 +15,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class FinalizeClassesWithoutChildrenRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var ClassAnalyzer
+     * @var \Rector\Core\NodeAnalyzer\ClassAnalyzer
      */
     private $classAnalyzer;
     public function __construct(\Rector\Core\NodeAnalyzer\ClassAnalyzer $classAnalyzer)

@@ -18,15 +18,15 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class OrderConstantsByVisibilityRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var OrderChangeAnalyzer
+     * @var \Rector\Order\Order\OrderChangeAnalyzer
      */
     private $orderChangeAnalyzer;
     /**
-     * @var StmtOrder
+     * @var \Rector\Order\StmtOrder
      */
     private $stmtOrder;
     /**
-     * @var StmtVisibilitySorter
+     * @var \Rector\Order\StmtVisibilitySorter
      */
     private $stmtVisibilitySorter;
     public function __construct(\Rector\Order\Order\OrderChangeAnalyzer $orderChangeAnalyzer, \Rector\Order\StmtOrder $stmtOrder, \Rector\Order\StmtVisibilitySorter $stmtVisibilitySorter)

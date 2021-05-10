@@ -21,17 +21,17 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class PregReplaceEModifierRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var RegexMatcher
-     */
-    private $regexMatcher;
-    /**
-     * @var AnonymousFunctionNodeFactory
+     * @var \Rector\Php55\NodeFactory\AnonymousFunctionNodeFactory
      */
     private $anonymousFunctionNodeFactory;
+    /**
+     * @var \Rector\Php55\RegexMatcher
+     */
+    private $regexMatcher;
     public function __construct(\Rector\Php55\NodeFactory\AnonymousFunctionNodeFactory $anonymousFunctionNodeFactory, \Rector\Php55\RegexMatcher $regexMatcher)
     {
-        $this->regexMatcher = $regexMatcher;
         $this->anonymousFunctionNodeFactory = $anonymousFunctionNodeFactory;
+        $this->regexMatcher = $regexMatcher;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {

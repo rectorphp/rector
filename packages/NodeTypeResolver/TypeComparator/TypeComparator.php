@@ -23,27 +23,27 @@ use Rector\TypeDeclaration\TypeNormalizer;
 final class TypeComparator
 {
     /**
-     * @var TypeHasher
+     * @var \Rector\NodeTypeResolver\PHPStan\TypeHasher
      */
     private $typeHasher;
     /**
-     * @var TypeNormalizer
+     * @var \Rector\TypeDeclaration\TypeNormalizer
      */
     private $typeNormalizer;
     /**
-     * @var StaticTypeMapper
+     * @var \Rector\StaticTypeMapper\StaticTypeMapper
      */
     private $staticTypeMapper;
     /**
-     * @var ArrayTypeComparator
+     * @var \Rector\NodeTypeResolver\TypeComparator\ArrayTypeComparator
      */
     private $arrayTypeComparator;
     /**
-     * @var ScalarTypeComparator
+     * @var \Rector\NodeTypeResolver\TypeComparator\ScalarTypeComparator
      */
     private $scalarTypeComparator;
     /**
-     * @var TypeFactory
+     * @var \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory
      */
     private $typeFactory;
     public function __construct(\Rector\NodeTypeResolver\PHPStan\TypeHasher $typeHasher, \Rector\TypeDeclaration\TypeNormalizer $typeNormalizer, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \Rector\NodeTypeResolver\TypeComparator\ArrayTypeComparator $arrayTypeComparator, \Rector\NodeTypeResolver\TypeComparator\ScalarTypeComparator $scalarTypeComparator, \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory $typeFactory)
