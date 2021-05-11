@@ -2,7 +2,7 @@
 
 namespace Rector\Tests\Php80\Rector\FunctionLike\UnionTypesRector\Fixture;
 
-class FalsePseudoType
+final class FalsePseudoType
 {
     /**
      * @return false|int
@@ -19,7 +19,7 @@ class FalsePseudoType
 
 namespace Rector\Tests\Php80\Rector\FunctionLike\UnionTypesRector\Fixture;
 
-class FalsePseudoType
+final class FalsePseudoType
 {
     public function go($value): false|int
     {

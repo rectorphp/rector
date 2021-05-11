@@ -13,11 +13,14 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\UnionType as PhpParserUnionType;
+use PHPStan\Type\ArrayType;
+use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DeadCode\PhpDoc\TagRemover\ParamTagRemover;
 use Rector\DeadCode\PhpDoc\TagRemover\ReturnTagRemover;
+use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeAnalyzer;
 use Rector\VendorLocker\NodeVendorLocker\ClassMethodParamVendorLockResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -32,7 +35,8 @@ final class UnionTypesRector extends AbstractRector
         private ReturnTagRemover $returnTagRemover,
         private ParamTagRemover $paramTagRemover,
         private ClassMethodParamVendorLockResolver $classMethodParamVendorLockResolver,
-        private UnionTypeAnalyzer $unionTypeAnalyzer
+        private UnionTypeAnalyzer $unionTypeAnalyzer,
+        private TypeFactory $typeFactory
     ) {
     }
 
@@ -92,17 +96,14 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function isVendorLocked(ClassMethod $classMethod): bool
-    {
-        return $this->classMethodParamVendorLockResolver->isVendorLocked($classMethod);
-    }
-
     /**
      * @param ClassMethod|Function_|Closure|ArrowFunction $functionLike
      */
     private function refactorParamTypes(FunctionLike $functionLike, PhpDocInfo $phpDocInfo): void
     {
-        if ($functionLike instanceof ClassMethod && $this->isVendorLocked($functionLike)) {
+        if ($functionLike instanceof ClassMethod && $this->classMethodParamVendorLockResolver->isVendorLocked(
+            $functionLike
+        )) {
             return;
         }
 
@@ -123,7 +124,12 @@ CODE_SAMPLE
                 continue;
             }
 
-            $phpParserUnionType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($paramType);
+            $uniqueatedParamType = $this->filterOutDuplicatedArrayTypes($paramType);
+            if (! $uniqueatedParamType instanceof UnionType) {
+                continue;
+            }
+
+            $phpParserUnionType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($uniqueatedParamType);
             if (! $phpParserUnionType instanceof PhpParserUnionType) {
                 continue;
             }
@@ -156,11 +162,44 @@ CODE_SAMPLE
             return;
         }
 
-        $phpParserUnionType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($returnType);
+        $uniqueatedReturnType = $this->filterOutDuplicatedArrayTypes($returnType);
+        if (! $uniqueatedReturnType instanceof UnionType) {
+            return;
+        }
+
+        $phpParserUnionType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($uniqueatedReturnType);
         if (! $phpParserUnionType instanceof PhpParserUnionType) {
             return;
         }
 
         $functionLike->returnType = $phpParserUnionType;
+    }
+
+    private function filterOutDuplicatedArrayTypes(UnionType $unionType): UnionType | Type
+    {
+        $hasArrayType = false;
+        $singleArrayTypes = [];
+
+        $originalTypeCount = count($unionType->getTypes());
+
+        foreach ($unionType->getTypes() as $unionedType) {
+            if ($unionedType instanceof ArrayType) {
+                if ($hasArrayType) {
+                    continue;
+                }
+
+                $singleArrayTypes[] = $unionedType;
+                $hasArrayType = true;
+                continue;
+            }
+
+            $singleArrayTypes[] = $unionedType;
+        }
+
+        if ($originalTypeCount === count($singleArrayTypes)) {
+            return $unionType;
+        }
+
+        return $this->typeFactory->createMixedPassedOrUnionType($singleArrayTypes);
     }
 }

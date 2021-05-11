@@ -18,7 +18,7 @@ if (! function_exists('dump_node')) {
     /**
      * @param Node|Node[] $node
      */
-    function dump_node(Node | array $node, int $depth = 2): void
+    function dump_node($node, int $depth = 2): void
     {
         $nodes = is_array($node) ? $node : [$node];
 
