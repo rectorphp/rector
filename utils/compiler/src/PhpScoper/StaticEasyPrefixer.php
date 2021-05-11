@@ -16,6 +16,8 @@ final class StaticEasyPrefixer
         'Doctrine\Inflector\Inflector',
         // for SmartFileInfo
         'Symplify\SmartFileSystem\SmartFileInfo',
+        // for ComposerJson because it is part of the public API. I.e. ComposerRectorInterface
+        'Symplify\ComposerJsonManipulator\ValueObject\ComposerJson'
     ];
 
     /**
