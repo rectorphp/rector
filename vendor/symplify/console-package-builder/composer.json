@@ -6,11 +6,11 @@
         "php": ">=7.3",
         "symfony\/dependency-injection": "^5.2",
         "symfony\/console": "^4.4|^5.2",
-        "symplify\/symplify-kernel": "^9.3.1"
+        "symplify\/symplify-kernel": "^9.3.4"
     },
     "require-dev": {
         "symfony\/http-kernel": "^4.4|^5.2",
-        "symplify\/package-builder": "^9.3.1",
+        "symplify\/package-builder": "^9.3.4",
         "phpunit\/phpunit": "^9.5"
     },
     "autoload": {
