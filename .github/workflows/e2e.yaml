@@ -1,0 +1,50 @@
+name: End to End tests
+
+on:
+    pull_request: null
+    push:
+        branches:
+            - main
+
+jobs:
+    end_to_end:
+        runs-on: ubuntu-latest
+        strategy:
+            fail-fast: false
+            matrix:
+                php: ['7.4', '8.0']
+
+        name: PHP ${{ matrix.php }} system tests
+        steps:
+            -   uses: actions/checkout@v2
+
+            -   uses: shivammathur/setup-php@v2
+                with:
+                    php-version: ${{ matrix.php }}
+                    coverage: none # disable xdebug, pcov
+
+            # This workflow runs system tests: Use the Rector application from the source
+            # checkout to process "fixture" projects in tests/system-tests
+            # to see if those can be processed successfully
+
+            -   name: Generate Composer autoloaders in fixture directories
+                run: |
+                    for FIXTURE in `find e2e -mindepth 1 -maxdepth 1 -type d`; do
+                      (cd $FIXTURE; composer install --no-progress --ansi)
+                    done
+
+            -   name: Run system tests
+                run: |
+                    HAS_FAILURES=0
+
+                    for FIXTURE in `find e2e -mindepth 1 -maxdepth 1 -type d`; do
+                        echo "-----> Running $FIXTURE <-----"
+                        if (cd $FIXTURE; ../../bin/rector process --dry-run --clear-cache); then
+                            echo "-----> Result: OK <-----"
+                        else
+                            echo "-----> Result: FAILED <-----"
+                            HAS_FAILURES=1
+                        fi
+                    done
+
+                    exit $HAS_FAILURES
