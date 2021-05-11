@@ -5,8 +5,8 @@ namespace Rector\FileFormatter;
 
 use Rector\Core\Configuration\Option;
 use Rector\Core\ValueObject\Application\File;
-use Rector\FileFormatter\Contract\EditorConfig\EditorConfigParserInterface;
 use Rector\FileFormatter\Contract\Formatter\FileFormatterInterface;
+use Rector\FileFormatter\EditorConfig\EditorConfigParser;
 use Rector\FileFormatter\Exception\InvalidNewLineStringException;
 use Rector\FileFormatter\Exception\ParseIndentException;
 use Rector\FileFormatter\ValueObject\EditorConfigConfiguration;
@@ -17,7 +17,7 @@ use RectorPrefix20210511\Symplify\PackageBuilder\Parameter\ParameterProvider;
 final class FileFormatter
 {
     /**
-     * @var \Rector\FileFormatter\Contract\EditorConfig\EditorConfigParserInterface
+     * @var \Rector\FileFormatter\EditorConfig\EditorConfigParser
      */
     private $editorConfigParser;
     /**
@@ -31,7 +31,7 @@ final class FileFormatter
     /**
      * @param FileFormatterInterface[] $fileFormatters
      */
-    public function __construct(\Rector\FileFormatter\Contract\EditorConfig\EditorConfigParserInterface $editorConfigParser, \RectorPrefix20210511\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, array $fileFormatters = [])
+    public function __construct(\Rector\FileFormatter\EditorConfig\EditorConfigParser $editorConfigParser, \RectorPrefix20210511\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, array $fileFormatters = [])
     {
         $this->editorConfigParser = $editorConfigParser;
         $this->parameterProvider = $parameterProvider;
@@ -63,12 +63,12 @@ final class FileFormatter
         try {
             $indent = \Rector\FileFormatter\ValueObject\Indent::fromContent($file->getOriginalFileContent());
             $editorConfigConfigurationBuilder->withIndent($indent);
-        } catch (\Rector\FileFormatter\Exception\ParseIndentException $parseIndentException) {
+        } catch (\Rector\FileFormatter\Exception\ParseIndentException $exception) {
         }
         try {
             $newLine = \Rector\FileFormatter\ValueObject\NewLine::fromContent($file->getOriginalFileContent());
             $editorConfigConfigurationBuilder->withNewLine($newLine);
-        } catch (\Rector\FileFormatter\Exception\InvalidNewLineStringException $invalidNewLineStringException) {
+        } catch (\Rector\FileFormatter\Exception\InvalidNewLineStringException $exception) {
         }
     }
     private function createEditorConfiguration(\Rector\Core\ValueObject\Application\File $file, \Rector\FileFormatter\ValueObjectFactory\EditorConfigConfigurationBuilder $editorConfigConfigurationBuilder) : \Rector\FileFormatter\ValueObject\EditorConfigConfiguration

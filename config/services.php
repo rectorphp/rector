@@ -32,8 +32,6 @@ use Rector\Caching\Cache\NetteCacheFactory;
 use Rector\Core\Console\ConsoleApplication;
 use Rector\Core\PhpParser\Parser\NikicPhpParserFactory;
 use Rector\Core\PhpParser\Parser\PhpParserLexerFactory;
-use Rector\FileFormatter\Contract\EditorConfig\EditorConfigParserInterface;
-use Rector\FileFormatter\EditorConfig\EditorConfigIdiosyncraticParser;
 use Rector\NodeTypeResolver\DependencyInjection\PHPStanServicesFactory;
 use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocator\IntermediateSourceLocator;
 use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider;
@@ -104,5 +102,4 @@ return static function (\RectorPrefix20210511\Symfony\Component\DependencyInject
     $services->alias(\RectorPrefix20210511\Ergebnis\Json\Printer\PrinterInterface::class, \RectorPrefix20210511\Ergebnis\Json\Printer\Printer::class);
     $services->set(\RectorPrefix20210511\PrettyXml\Formatter::class);
     $services->set(\RectorPrefix20210511\Idiosyncratic\EditorConfig\EditorConfig::class);
-    $services->alias(\Rector\FileFormatter\Contract\EditorConfig\EditorConfigParserInterface::class, \Rector\FileFormatter\EditorConfig\EditorConfigIdiosyncraticParser::class);
 };

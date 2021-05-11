@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit5cda148805866f81bed8349814b39895
+class ComposerStaticInitb41cade44363a63377d9458fc5dbad3f
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -2401,9 +2401,8 @@ class ComposerStaticInit5cda148805866f81bed8349814b39895
         'Rector\\FamilyTree\\NodeAnalyzer\\ClassChildAnalyzer' => __DIR__ . '/../..' . '/packages/FamilyTree/NodeAnalyzer/ClassChildAnalyzer.php',
         'Rector\\FamilyTree\\NodeAnalyzer\\PropertyUsageAnalyzer' => __DIR__ . '/../..' . '/packages/FamilyTree/NodeAnalyzer/PropertyUsageAnalyzer.php',
         'Rector\\FamilyTree\\Reflection\\FamilyRelationsAnalyzer' => __DIR__ . '/../..' . '/packages/FamilyTree/Reflection/FamilyRelationsAnalyzer.php',
-        'Rector\\FileFormatter\\Contract\\EditorConfig\\EditorConfigParserInterface' => __DIR__ . '/../..' . '/packages/FileFormatter/Contract/EditorConfig/EditorConfigParserInterface.php',
         'Rector\\FileFormatter\\Contract\\Formatter\\FileFormatterInterface' => __DIR__ . '/../..' . '/packages/FileFormatter/Contract/Formatter/FileFormatterInterface.php',
-        'Rector\\FileFormatter\\EditorConfig\\EditorConfigIdiosyncraticParser' => __DIR__ . '/../..' . '/packages/FileFormatter/EditorConfig/EditorConfigIdiosyncraticParser.php',
+        'Rector\\FileFormatter\\EditorConfig\\EditorConfigParser' => __DIR__ . '/../..' . '/packages/FileFormatter/EditorConfig/EditorConfigParser.php',
         'Rector\\FileFormatter\\Exception\\InvalidIndentSizeException' => __DIR__ . '/../..' . '/packages/FileFormatter/Exception/InvalidIndentSizeException.php',
         'Rector\\FileFormatter\\Exception\\InvalidIndentStringException' => __DIR__ . '/../..' . '/packages/FileFormatter/Exception/InvalidIndentStringException.php',
         'Rector\\FileFormatter\\Exception\\InvalidIndentStyleException' => __DIR__ . '/../..' . '/packages/FileFormatter/Exception/InvalidIndentStyleException.php',
@@ -2415,6 +2414,7 @@ class ComposerStaticInit5cda148805866f81bed8349814b39895
         'Rector\\FileFormatter\\Formatter\\YamlFileFormatter' => __DIR__ . '/../..' . '/packages/FileFormatter/Formatter/YamlFileFormatter.php',
         'Rector\\FileFormatter\\ValueObjectFactory\\EditorConfigConfigurationBuilder' => __DIR__ . '/../..' . '/packages/FileFormatter/ValueObjectFactory/EditorConfigConfigurationBuilder.php',
         'Rector\\FileFormatter\\ValueObject\\EditorConfigConfiguration' => __DIR__ . '/../..' . '/packages/FileFormatter/ValueObject/EditorConfigConfiguration.php',
+        'Rector\\FileFormatter\\ValueObject\\EditorConfigOption' => __DIR__ . '/../..' . '/packages/FileFormatter/ValueObject/EditorConfigOption.php',
         'Rector\\FileFormatter\\ValueObject\\Indent' => __DIR__ . '/../..' . '/packages/FileFormatter/ValueObject/Indent.php',
         'Rector\\FileFormatter\\ValueObject\\NewLine' => __DIR__ . '/../..' . '/packages/FileFormatter/ValueObject/NewLine.php',
         'Rector\\FileSystemRector\\Contract\\AddedFileInterface' => __DIR__ . '/../..' . '/packages/FileSystemRector/Contract/AddedFileInterface.php',
@@ -3465,9 +3465,9 @@ class ComposerStaticInit5cda148805866f81bed8349814b39895
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit5cda148805866f81bed8349814b39895::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit5cda148805866f81bed8349814b39895::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit5cda148805866f81bed8349814b39895::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitb41cade44363a63377d9458fc5dbad3f::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitb41cade44363a63377d9458fc5dbad3f::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitb41cade44363a63377d9458fc5dbad3f::$classMap;
 
         }, null, ClassLoader::class);
     }

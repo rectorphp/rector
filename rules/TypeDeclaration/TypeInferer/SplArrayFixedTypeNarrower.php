@@ -11,7 +11,7 @@ final class SplArrayFixedTypeNarrower
 {
     public function narrow(\PHPStan\Type\Type $paramType) : \PHPStan\Type\Type
     {
-        if ($paramType->isSuperTypeOf(new \PHPStan\Type\ObjectType('SplArrayFixed'))->no()) {
+        if ($paramType->isSuperTypeOf(new \PHPStan\Type\ObjectType('SplFixedArray'))->no()) {
             return $paramType;
         }
         if (!$paramType instanceof \PHPStan\Type\TypeWithClassName) {
