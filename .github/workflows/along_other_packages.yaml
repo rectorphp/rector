@@ -1,4 +1,4 @@
-name: Rector Run
+name: Along Other Packages
 
 on:
     pull_request: null
@@ -7,7 +7,7 @@ on:
             - main
 
 jobs:
-    rector_run:
+    along_other_packages:
         runs-on: ubuntu-latest
 
         strategy:
@@ -16,21 +16,17 @@ jobs:
                 php_version: ['7.1', '7.2', '7.3', '7.4', '8.0']
                 commands:
                     -
-                        name: 'Finalize Entity'
-                        install: composer require doctrine/orm
-                        run: vendor/bin/rector process ../tests/fixture-finalize --config ../ci/rector-finalize.php --ansi
+                        name: 'Composer Dependency'
+                        install: composer require symfony/console:2.8 --ansi
+                        run: vendor/bin/rector list --debug --ansi
 
                     -
-                        name: 'Composer Dependency'
-                        install: composer require symfony/console 2.8
-                        run: vendor/bin/rector list --debug --ansi
+                        name: 'PHP Parser 3.1'
+                        install: composer require nikic/php-parser:^3.1 --ansi
 
                     -
                         name: 'Along PHPStan'
                         install: composer require phpstan/phpstan:0.12.86 --dev --ansi
-                        run: |
-                            vendor/bin/rector list --ansi
-                            vendor/bin/phpstan -h --ansi
 
         name: "PHP ${{ matrix.php_version }}"
 
@@ -42,19 +38,19 @@ jobs:
                     php-version: ${{ matrix.php_version }}
                     coverage: none
 
+            # wait for deploy to packagist
+            -   run: sleep 70
+
             -   run: |
                     mkdir standalone
                     cd standalone
-                    # wait for deploy to packagist
-                    sleep 70
 
             -   run: |
-                    cd standalone
                     # run
                     composer require rector/rector:dev-main --dev --ansi
                     ${{ matrix.commands.install }}
+                working-directory: standalone
 
             -
-                run: |
-                    cd standalone
-                    ${{ matrix.commands.run }}
+                run: vendor/bin/rector list --ansi
+                working-directory: standalone
