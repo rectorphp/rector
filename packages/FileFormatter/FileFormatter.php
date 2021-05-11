@@ -6,8 +6,8 @@ namespace Rector\FileFormatter;
 
 use Rector\Core\Configuration\Option;
 use Rector\Core\ValueObject\Application\File;
-use Rector\FileFormatter\Contract\EditorConfig\EditorConfigParserInterface;
 use Rector\FileFormatter\Contract\Formatter\FileFormatterInterface;
+use Rector\FileFormatter\EditorConfig\EditorConfigParser;
 use Rector\FileFormatter\Exception\InvalidNewLineStringException;
 use Rector\FileFormatter\Exception\ParseIndentException;
 use Rector\FileFormatter\ValueObject\EditorConfigConfiguration;
@@ -22,7 +22,7 @@ final class FileFormatter
      * @param FileFormatterInterface[] $fileFormatters
      */
     public function __construct(
-        private EditorConfigParserInterface $editorConfigParser,
+        private EditorConfigParser $editorConfigParser,
         private ParameterProvider $parameterProvider,
         private array $fileFormatters = []
     ) {
@@ -62,13 +62,13 @@ final class FileFormatter
         try {
             $indent = Indent::fromContent($file->getOriginalFileContent());
             $editorConfigConfigurationBuilder->withIndent($indent);
-        } catch (ParseIndentException $parseIndentException) {
+        } catch (ParseIndentException) {
         }
 
         try {
             $newLine = NewLine::fromContent($file->getOriginalFileContent());
             $editorConfigConfigurationBuilder->withNewLine($newLine);
-        } catch (InvalidNewLineStringException $invalidNewLineStringException) {
+        } catch (InvalidNewLineStringException) {
         }
     }
 

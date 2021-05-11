@@ -13,7 +13,7 @@ final class SplArrayFixedTypeNarrower
 {
     public function narrow(Type $paramType): Type
     {
-        if ($paramType->isSuperTypeOf(new ObjectType('SplArrayFixed'))->no()) {
+        if ($paramType->isSuperTypeOf(new ObjectType('SplFixedArray'))->no()) {
             return $paramType;
         }
 

@@ -3,7 +3,6 @@ includes:
     - vendor/symplify/phpstan-rules/config/code-complexity-rules.neon
     - vendor/symplify/phpstan-rules/config/doctrine-rules.neon
     - vendor/symplify/phpstan-rules/config/forbidden-static-rules.neon
-    - vendor/symplify/phpstan-rules/config/generic-rules.neon
     - vendor/symplify/phpstan-rules/config/naming-rules.neon
     - vendor/symplify/phpstan-rules/config/regex-rules.neon
     - vendor/symplify/phpstan-rules/config/services-rules.neon
@@ -17,7 +16,6 @@ parameters:
     level: max
 
     paths:
-        - ecs.php
         - rector.php
         - bin
         - src
@@ -505,3 +503,11 @@ parameters:
         -
             message: '#Do not call parent method if parent method is empty#'
             path: packages/BetterPhpDocParser/PhpDoc/DoctrineAnnotationTagValueNode.php
+
+        # upgrade to PHP 7.4 wip
+        - '#This property type might be inlined to PHP\. Do you have confidence it is correct\? Put it here#'
+
+        # special case - cleanup in the future
+        -
+            message: '#File processor must require Rector rules in constructor via TypeRectorInterface\[\] \$typeRectors array autowire#'
+            path: src/Application/FileProcessor/PhpFileProcessor.php

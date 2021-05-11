@@ -31,8 +31,6 @@ use Rector\Caching\Cache\NetteCacheFactory;
 use Rector\Core\Console\ConsoleApplication;
 use Rector\Core\PhpParser\Parser\NikicPhpParserFactory;
 use Rector\Core\PhpParser\Parser\PhpParserLexerFactory;
-use Rector\FileFormatter\Contract\EditorConfig\EditorConfigParserInterface;
-use Rector\FileFormatter\EditorConfig\EditorConfigIdiosyncraticParser;
 use Rector\NodeTypeResolver\DependencyInjection\PHPStanServicesFactory;
 use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocator\IntermediateSourceLocator;
 use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider;
@@ -155,6 +153,4 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(Formatter::class);
 
     $services->set(EditorConfig::class);
-
-    $services->alias(EditorConfigParserInterface::class, EditorConfigIdiosyncraticParser::class);
 };

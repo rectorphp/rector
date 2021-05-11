@@ -1,25 +1,27 @@
 <?php
 
-namespace Rector\Tests\FileFormatter\EditorConfig\EditorConfigIdiosyncraticParser;
+declare(strict_types=1);
+
+namespace Rector\Tests\FileFormatter\EditorConfig\EditorConfigParser;
 
 use Rector\Core\ValueObject\Application\File;
-use Rector\FileFormatter\Contract\EditorConfig\EditorConfigParserInterface;
+use Rector\FileFormatter\EditorConfig\EditorConfigParser;
 use Rector\FileFormatter\ValueObject\Indent;
 use Rector\FileFormatter\ValueObjectFactory\EditorConfigConfigurationBuilder;
 use Rector\Testing\PHPUnit\AbstractTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class EditorConfigIdiosyncraticParserTest extends AbstractTestCase
+final class EditorConfigParserTest extends AbstractTestCase
 {
     /**
-     * @var EditorConfigParserInterface
+     * @var EditorConfigParser
      */
     private $editorConfigParser;
 
     protected function setUp(): void
     {
         $this->boot();
-        $this->editorConfigParser = $this->getService(EditorConfigParserInterface::class);
+        $this->editorConfigParser = $this->getService(EditorConfigParser::class);
     }
 
     public function testComposerJsonFile(): void
