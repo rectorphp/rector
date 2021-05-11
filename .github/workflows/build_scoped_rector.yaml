@@ -83,7 +83,7 @@ jobs:
             -
                 name: "Get Git log"
                 id: git-log
-                run: echo ::set-output name=log::$(git log ${{ github.event.before }}..${{ github.event.after }} --reverse --pretty='%H %s' | sed -e 's/^/https:\/\/github.com\/rectorphp\/rector\/commit\//')
+                run: echo ::set-output name=log::$(git log ${{ github.event.before }}..${{ github.event.after }} --reverse --pretty='%H %s' | sed -e 's/^/https:\/\/github.com\/rectorphp\/rector-src\/commit\//')
 
             # 8.A publish it to remote repository without tag
             -
