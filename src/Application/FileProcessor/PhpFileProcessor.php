@@ -48,7 +48,6 @@ final class PhpFileProcessor implements FileProcessorInterface
         private FormatPerservingPrinter $formatPerservingPrinter,
         private FileProcessor $fileProcessor,
         private RemovedAndAddedFilesCollector $removedAndAddedFilesCollector,
-        private RemovedAndAddedFilesProcessor $removedAndAddedFilesProcessor,
         private SymfonyStyle $symfonyStyle,
         private PrivatesAccessor $privatesAccessor,
         private FileDiffFileDecorator $fileDiffFileDecorator,
@@ -56,7 +55,6 @@ final class PhpFileProcessor implements FileProcessorInterface
         private PostFileProcessor $postFileProcessor,
         private ErrorFactory $errorFactory
     ) {
-        $this->configuration = $configuration;
     }
 
     /**
@@ -109,9 +107,6 @@ final class PhpFileProcessor implements FileProcessorInterface
         if ($this->configuration->shouldShowProgressBar()) {
             $this->symfonyStyle->newLine(2);
         }
-
-        // 4. remove and add files
-        $this->removedAndAddedFilesProcessor->run();
     }
 
     public function supports(File $file): bool
