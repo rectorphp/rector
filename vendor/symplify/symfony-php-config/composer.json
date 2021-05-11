@@ -5,13 +5,13 @@
     "require": {
         "php": ">=7.3",
         "symfony\/dependency-injection": "^5.2",
-        "symplify\/symplify-kernel": "^9.3",
-        "symplify\/package-builder": "^9.3"
+        "symplify\/symplify-kernel": "^9.3.5",
+        "symplify\/package-builder": "^9.3.5"
     },
     "require-dev": {
         "symfony\/http-kernel": "^4.4|^5.2",
         "phpunit\/phpunit": "^9.5",
-        "phpstan\/phpstan": "^0.12.82"
+        "phpstan\/phpstan": "0.12.86"
     },
     "autoload": {
         "psr-4": {
@@ -21,14 +21,11 @@
     "autoload-dev": {
         "psr-4": {
             "Symplify\\SymfonyPhpConfig\\Tests\\": "tests"
-        },
-        "files": [
-            "vendor\/symfony\/dependency-injection\/Loader\/Configurator\/ContainerConfigurator.php"
-        ]
+        }
     },
     "extra": {
         "branch-alias": {
-            "dev-main": "9.3-dev"
+            "dev-main": "9.4-dev"
         }
     },
     "minimum-stability": "dev",
