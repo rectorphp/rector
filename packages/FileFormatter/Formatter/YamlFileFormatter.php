@@ -23,7 +23,6 @@ final class YamlFileFormatter implements \Rector\FileFormatter\Contract\Formatte
     {
         $yaml = \RectorPrefix20210511\Symfony\Component\Yaml\Yaml::parse($file->getFileContent());
         $newFileContent = \RectorPrefix20210511\Symfony\Component\Yaml\Yaml::dump($yaml, 99, $editorConfigConfiguration->getIndentSize());
-        $newFileContent .= $editorConfigConfiguration->getFinalNewline();
         $file->changeFileContent($newFileContent);
     }
     public function createDefaultEditorConfigConfigurationBuilder() : \Rector\FileFormatter\ValueObjectFactory\EditorConfigConfigurationBuilder
