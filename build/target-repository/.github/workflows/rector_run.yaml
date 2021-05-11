@@ -27,7 +27,7 @@ jobs:
 
                     -
                         name: 'Along PHPStan'
-                        install: composer require phpstan/phpstan:0.12.85 --dev --ansi
+                        install: composer require phpstan/phpstan:0.12.86 --dev --ansi
                         run: |
                             vendor/bin/rector list --ansi
                             vendor/bin/phpstan -h --ansi
