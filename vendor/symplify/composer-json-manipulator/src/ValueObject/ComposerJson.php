@@ -687,3 +687,8 @@ final class ComposerJson
         return \array_search($key, $items, \true);
     }
 }
+/**
+ * @api
+ * @see \Symplify\ComposerJsonManipulator\Tests\ValueObject\ComposerJsonTest
+ */
+\class_alias('RectorPrefix20210511\\Symplify\\ComposerJsonManipulator\\ValueObject\\ComposerJson', 'Symplify\\ComposerJsonManipulator\\ValueObject\\ComposerJson', \false);
