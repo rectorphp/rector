@@ -13,6 +13,10 @@ parameters:
 		- stubs/MockBuilder.stub
 		- stubs/MockObject.stub
 		- stubs/TestCase.stub
+	exceptions:
+		uncheckedExceptionRegexes:
+			- '#^PHPUnit\\#'
+			- '#^SebastianBergmann\\#'
 
 parametersSchema:
 	phpunit: structure([

@@ -33,6 +33,7 @@ require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Builder/FunctionL
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Builder/Trait_.php';
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Builder/Use_.php';
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Builder/Interface_.php';
+require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Builder/ClassConst.php';
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Error.php';
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Parser.php';
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/BuilderHelpers.php';
@@ -43,6 +44,7 @@ require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/NameContext.php';
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Comment/Doc.php';
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Lexer/TokenEmulator/FlexibleDocStringEmulator.php';
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Lexer/TokenEmulator/CoaleseEqualTokenEmulator.php';
+require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Lexer/TokenEmulator/EnumTokenEmulator.php';
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Lexer/TokenEmulator/MatchTokenEmulator.php';
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Lexer/TokenEmulator/NumericLiteralSeparatorEmulator.php';
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Lexer/TokenEmulator/ReverseEmulator.php';
@@ -88,6 +90,7 @@ require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Node/Stmt/Foreach
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Node/Stmt/Expression.php';
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Node/Stmt/Return_.php';
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Node/Stmt/StaticVar.php';
+require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Node/Stmt/Enum_.php';
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Node/Stmt/Function_.php';
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Node/Stmt/Static_.php';
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Node/Stmt/Property.php';
@@ -97,6 +100,7 @@ require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Node/Stmt/Const_.
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Node/Stmt/Global_.php';
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Node/Stmt/Goto_.php';
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Node/Stmt/UseUse.php';
+require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Node/Stmt/EnumCase.php';
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Node/Stmt/TraitUse.php';
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Node/Stmt/PropertyProperty.php';
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Node/Stmt/For_.php';

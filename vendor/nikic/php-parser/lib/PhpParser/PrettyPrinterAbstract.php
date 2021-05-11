@@ -1051,7 +1051,7 @@ abstract class PrettyPrinterAbstract
     /**
      * Lazily initializes the removal map.
      *
-     * The removal map is used to determine which additional tokens should be returned when a
+     * The removal map is used to determine which additional tokens should be removed when a
      * certain node is replaced by null.
      */
     protected function initializeRemovalMap()
@@ -1065,7 +1065,7 @@ abstract class PrettyPrinterAbstract
         $stripDoubleArrow = ['right' => \T_DOUBLE_ARROW];
         $stripColon = ['left' => ':'];
         $stripEquals = ['left' => '='];
-        $this->removalMap = ['Expr_ArrayDimFetch->dim' => $stripBoth, 'Expr_ArrayItem->key' => $stripDoubleArrow, 'Expr_ArrowFunction->returnType' => $stripColon, 'Expr_Closure->returnType' => $stripColon, 'Expr_Exit->expr' => $stripBoth, 'Expr_Ternary->if' => $stripBoth, 'Expr_Yield->key' => $stripDoubleArrow, 'Expr_Yield->value' => $stripBoth, 'Param->type' => $stripRight, 'Param->default' => $stripEquals, 'Stmt_Break->num' => $stripBoth, 'Stmt_Catch->var' => $stripLeft, 'Stmt_ClassMethod->returnType' => $stripColon, 'Stmt_Class->extends' => ['left' => \T_EXTENDS], 'Expr_PrintableNewAnonClass->extends' => ['left' => \T_EXTENDS], 'Stmt_Continue->num' => $stripBoth, 'Stmt_Foreach->keyVar' => $stripDoubleArrow, 'Stmt_Function->returnType' => $stripColon, 'Stmt_If->else' => $stripLeft, 'Stmt_Namespace->name' => $stripLeft, 'Stmt_Property->type' => $stripRight, 'Stmt_PropertyProperty->default' => $stripEquals, 'Stmt_Return->expr' => $stripBoth, 'Stmt_StaticVar->default' => $stripEquals, 'Stmt_TraitUseAdaptation_Alias->newName' => $stripLeft, 'Stmt_TryCatch->finally' => $stripLeft];
+        $this->removalMap = ['Expr_ArrayDimFetch->dim' => $stripBoth, 'Expr_ArrayItem->key' => $stripDoubleArrow, 'Expr_ArrowFunction->returnType' => $stripColon, 'Expr_Closure->returnType' => $stripColon, 'Expr_Exit->expr' => $stripBoth, 'Expr_Ternary->if' => $stripBoth, 'Expr_Yield->key' => $stripDoubleArrow, 'Expr_Yield->value' => $stripBoth, 'Param->type' => $stripRight, 'Param->default' => $stripEquals, 'Stmt_Break->num' => $stripBoth, 'Stmt_Catch->var' => $stripLeft, 'Stmt_ClassMethod->returnType' => $stripColon, 'Stmt_Class->extends' => ['left' => \T_EXTENDS], 'Stmt_Enum->scalarType' => $stripColon, 'Stmt_EnumCase->expr' => $stripEquals, 'Expr_PrintableNewAnonClass->extends' => ['left' => \T_EXTENDS], 'Stmt_Continue->num' => $stripBoth, 'Stmt_Foreach->keyVar' => $stripDoubleArrow, 'Stmt_Function->returnType' => $stripColon, 'Stmt_If->else' => $stripLeft, 'Stmt_Namespace->name' => $stripLeft, 'Stmt_Property->type' => $stripRight, 'Stmt_PropertyProperty->default' => $stripEquals, 'Stmt_Return->expr' => $stripBoth, 'Stmt_StaticVar->default' => $stripEquals, 'Stmt_TraitUseAdaptation_Alias->newName' => $stripLeft, 'Stmt_TryCatch->finally' => $stripLeft];
     }
     protected function initializeInsertionMap()
     {
@@ -1088,6 +1088,8 @@ abstract class PrettyPrinterAbstract
             'Stmt_Catch->var' => [null, \false, ' ', null],
             'Stmt_ClassMethod->returnType' => [')', \false, ' : ', null],
             'Stmt_Class->extends' => [null, \false, ' extends ', null],
+            'Stmt_Enum->scalarType' => [null, \false, ' : ', null],
+            'Stmt_EnumCase->expr' => [null, \false, ' = ', null],
             'Expr_PrintableNewAnonClass->extends' => [null, ' extends ', null],
             'Stmt_Continue->num' => [\T_CONTINUE, \false, ' ', null],
             'Stmt_Foreach->keyVar' => [\T_AS, \false, null, ' => '],
@@ -1131,6 +1133,7 @@ abstract class PrettyPrinterAbstract
             'Stmt_ClassConst->consts' => ', ',
             'Stmt_ClassMethod->params' => ', ',
             'Stmt_Class->implements' => ', ',
+            'Stmt_Enum->implements' => ', ',
             'Expr_PrintableNewAnonClass->implements' => ', ',
             'Stmt_Const->consts' => ', ',
             'Stmt_Declare->declares' => ', ',
@@ -1156,6 +1159,7 @@ abstract class PrettyPrinterAbstract
             'Stmt_Case->stmts' => "\n",
             'Stmt_Catch->stmts' => "\n",
             'Stmt_Class->stmts' => "\n",
+            'Stmt_Enum->stmts' => "\n",
             'Expr_PrintableNewAnonClass->stmts' => "\n",
             'Stmt_Interface->stmts' => "\n",
             'Stmt_Trait->stmts' => "\n",
@@ -1171,6 +1175,8 @@ abstract class PrettyPrinterAbstract
             'Stmt_If->stmts' => "\n",
             'Stmt_Namespace->stmts' => "\n",
             'Stmt_Class->attrGroups' => "\n",
+            'Stmt_Enum->attrGroups' => "\n",
+            'Stmt_EnumCase->attrGroups' => "\n",
             'Stmt_Interface->attrGroups' => "\n",
             'Stmt_Trait->attrGroups' => "\n",
             'Stmt_Function->attrGroups' => "\n",
@@ -1196,7 +1202,7 @@ abstract class PrettyPrinterAbstract
         }
         // TODO Insertion into empty statement lists.
         // [$find, $extraLeft, $extraRight]
-        $this->emptyListInsertionMap = ['Expr_ArrowFunction->params' => ['(', '', ''], 'Expr_Closure->uses' => [')', ' use(', ')'], 'Expr_Closure->params' => ['(', '', ''], 'Expr_FuncCall->args' => ['(', '', ''], 'Expr_MethodCall->args' => ['(', '', ''], 'Expr_NullsafeMethodCall->args' => ['(', '', ''], 'Expr_New->args' => ['(', '', ''], 'Expr_PrintableNewAnonClass->args' => ['(', '', ''], 'Expr_PrintableNewAnonClass->implements' => [null, ' implements ', ''], 'Expr_StaticCall->args' => ['(', '', ''], 'Stmt_Class->implements' => [null, ' implements ', ''], 'Stmt_ClassMethod->params' => ['(', '', ''], 'Stmt_Interface->extends' => [null, ' extends ', ''], 'Stmt_Function->params' => ['(', '', '']];
+        $this->emptyListInsertionMap = ['Expr_ArrowFunction->params' => ['(', '', ''], 'Expr_Closure->uses' => [')', ' use(', ')'], 'Expr_Closure->params' => ['(', '', ''], 'Expr_FuncCall->args' => ['(', '', ''], 'Expr_MethodCall->args' => ['(', '', ''], 'Expr_NullsafeMethodCall->args' => ['(', '', ''], 'Expr_New->args' => ['(', '', ''], 'Expr_PrintableNewAnonClass->args' => ['(', '', ''], 'Expr_PrintableNewAnonClass->implements' => [null, ' implements ', ''], 'Expr_StaticCall->args' => ['(', '', ''], 'Stmt_Class->implements' => [null, ' implements ', ''], 'Stmt_Enum->implements' => [null, ' implements ', ''], 'Stmt_ClassMethod->params' => ['(', '', ''], 'Stmt_Interface->extends' => [null, ' extends ', ''], 'Stmt_Function->params' => ['(', '', '']];
     }
     protected function initializeModifierChangeMap()
     {

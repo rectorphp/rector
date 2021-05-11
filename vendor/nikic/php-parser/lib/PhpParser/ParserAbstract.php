@@ -17,6 +17,7 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Enum_;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Property;
@@ -53,8 +54,8 @@ abstract class ParserAbstract implements \PhpParser\Parser
     /** @var array Names of the production rules (only necessary for debugging) */
     protected $productions;
     /** @var int[] Map of states to a displacement into the $action table. The corresponding action for this
-        *             state/symbol pair is $action[$actionBase[$state] + $symbol]. If $actionBase[$state] is 0, the
-                      action is defaulted, i.e. $actionDefault[$state] should be used instead. */
+     *             state/symbol pair is $action[$actionBase[$state] + $symbol]. If $actionBase[$state] is 0, the
+     *             action is defaulted, i.e. $actionDefault[$state] should be used instead. */
     protected $actionBase;
     /** @var int[] Table of actions. Indexed according to $actionBase comment. */
     protected $action;
@@ -556,7 +557,7 @@ abstract class ParserAbstract implements \PhpParser\Parser
     }
     protected function handleBuiltinTypes(\PhpParser\Node\Name $name)
     {
-        $builtinTypes = ['bool' => \true, 'int' => \true, 'float' => \true, 'string' => \true, 'iterable' => \true, 'void' => \true, 'object' => \true, 'null' => \true, 'false' => \true, 'mixed' => \true];
+        $builtinTypes = ['bool' => \true, 'int' => \true, 'float' => \true, 'string' => \true, 'iterable' => \true, 'void' => \true, 'object' => \true, 'null' => \true, 'false' => \true, 'mixed' => \true, 'never' => \true];
         if (!$name->isUnqualified()) {
             return $name;
         }
@@ -750,30 +751,37 @@ abstract class ParserAbstract implements \PhpParser\Parser
             }
         }
     }
-    protected function checkClass(\PhpParser\Node\Stmt\Class_ $node, $namePos)
+    private function checkClassName($name, $namePos)
     {
-        if (null !== $node->name && $node->name->isSpecialClassName()) {
-            $this->emitError(new \PhpParser\Error(\sprintf('Cannot use \'%s\' as class name as it is reserved', $node->name), $this->getAttributesAt($namePos)));
+        if (null !== $name && $name->isSpecialClassName()) {
+            $this->emitError(new \PhpParser\Error(\sprintf('Cannot use \'%s\' as class name as it is reserved', $name), $this->getAttributesAt($namePos)));
         }
-        if ($node->extends && $node->extends->isSpecialClassName()) {
-            $this->emitError(new \PhpParser\Error(\sprintf('Cannot use \'%s\' as class name as it is reserved', $node->extends), $node->extends->getAttributes()));
-        }
-        foreach ($node->implements as $interface) {
+    }
+    private function checkImplementedInterfaces(array $interfaces)
+    {
+        foreach ($interfaces as $interface) {
             if ($interface->isSpecialClassName()) {
                 $this->emitError(new \PhpParser\Error(\sprintf('Cannot use \'%s\' as interface name as it is reserved', $interface), $interface->getAttributes()));
             }
         }
     }
+    protected function checkClass(\PhpParser\Node\Stmt\Class_ $node, $namePos)
+    {
+        $this->checkClassName($node->name, $namePos);
+        if ($node->extends && $node->extends->isSpecialClassName()) {
+            $this->emitError(new \PhpParser\Error(\sprintf('Cannot use \'%s\' as class name as it is reserved', $node->extends), $node->extends->getAttributes()));
+        }
+        $this->checkImplementedInterfaces($node->implements);
+    }
     protected function checkInterface(\PhpParser\Node\Stmt\Interface_ $node, $namePos)
     {
-        if (null !== $node->name && $node->name->isSpecialClassName()) {
-            $this->emitError(new \PhpParser\Error(\sprintf('Cannot use \'%s\' as class name as it is reserved', $node->name), $this->getAttributesAt($namePos)));
-        }
-        foreach ($node->extends as $interface) {
-            if ($interface->isSpecialClassName()) {
-                $this->emitError(new \PhpParser\Error(\sprintf('Cannot use \'%s\' as interface name as it is reserved', $interface), $interface->getAttributes()));
-            }
-        }
+        $this->checkClassName($node->name, $namePos);
+        $this->checkImplementedInterfaces($node->extends);
+    }
+    protected function checkEnum(\PhpParser\Node\Stmt\Enum_ $node, $namePos)
+    {
+        $this->checkClassName($node->name, $namePos);
+        $this->checkImplementedInterfaces($node->implements);
     }
     protected function checkClassMethod(\PhpParser\Node\Stmt\ClassMethod $node, $modifierPos)
     {

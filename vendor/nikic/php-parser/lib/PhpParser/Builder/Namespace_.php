@@ -35,7 +35,7 @@ class Namespace_ extends \PhpParser\Builder\Declaration
     /**
      * Returns the built node.
      *
-     * @return Node The built node
+     * @return Stmt\Namespace_ The built node
      */
     public function getNode() : \PhpParser\Node
     {

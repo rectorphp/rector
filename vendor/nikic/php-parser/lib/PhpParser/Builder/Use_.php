@@ -38,7 +38,7 @@ class Use_ implements \PhpParser\Builder
     /**
      * Returns the built node.
      *
-     * @return Node The built node
+     * @return Stmt\Use_ The built node
      */
     public function getNode() : \PhpParser\Node
     {

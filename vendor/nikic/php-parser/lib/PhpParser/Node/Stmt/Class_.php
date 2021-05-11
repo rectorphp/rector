@@ -30,7 +30,7 @@ class Class_ extends \PhpParser\Node\Stmt\ClassLike
      *                                'extends'     => null   : Name of extended class
      *                                'implements'  => array(): Names of implemented interfaces
      *                                'stmts'       => array(): Statements
-     *                                '$attrGroups' => array(): PHP attribute groups
+     *                                'attrGroups'  => array(): PHP attribute groups
      * @param array       $attributes Additional attributes
      */
     public function __construct($name, array $subNodes = [], array $attributes = [])

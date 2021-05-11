@@ -866,17 +866,17 @@
         },
         {
             "name": "nikic\/php-parser",
-            "version": "v4.10.4",
-            "version_normalized": "4.10.4.0",
+            "version": "v4.10.5",
+            "version_normalized": "4.10.5.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/nikic\/PHP-Parser.git",
-                "reference": "c6d052fc58cb876152f89f532b95a8d7907e7f0e"
+                "reference": "4432ba399e47c66624bc73c8c0f811e5c109576f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/nikic\/PHP-Parser\/zipball\/c6d052fc58cb876152f89f532b95a8d7907e7f0e",
-                "reference": "c6d052fc58cb876152f89f532b95a8d7907e7f0e",
+                "url": "https:\/\/api.github.com\/repos\/nikic\/PHP-Parser\/zipball\/4432ba399e47c66624bc73c8c0f811e5c109576f",
+                "reference": "4432ba399e47c66624bc73c8c0f811e5c109576f",
                 "shasum": ""
             },
             "require": {
@@ -887,7 +887,7 @@
                 "ircmaxell\/php-yacc": "^0.0.7",
                 "phpunit\/phpunit": "^6.5 || ^7.0 || ^8.0 || ^9.0"
             },
-            "time": "2020-12-20T10:01:03+00:00",
+            "time": "2021-05-03T19:11:20+00:00",
             "bin": [
                 "bin\/php-parse"
             ],
@@ -919,7 +919,7 @@
             ],
             "support": {
                 "issues": "https:\/\/github.com\/nikic\/PHP-Parser\/issues",
-                "source": "https:\/\/github.com\/nikic\/PHP-Parser\/tree\/v4.10.4"
+                "source": "https:\/\/github.com\/nikic\/PHP-Parser\/tree\/v4.10.5"
             },
             "install-path": "..\/nikic\/php-parser"
         },
@@ -978,17 +978,17 @@
         },
         {
             "name": "phpstan\/phpstan",
-            "version": "0.12.85",
-            "version_normalized": "0.12.85.0",
+            "version": "0.12.86",
+            "version_normalized": "0.12.86.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/phpstan\/phpstan.git",
-                "reference": "20e6333c0067875ad7697cd8acdf245c6ef69d03"
+                "reference": "a84fdc53ecca7643dbc89ef8880d8b393a6c155a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/phpstan\/phpstan\/zipball\/20e6333c0067875ad7697cd8acdf245c6ef69d03",
-                "reference": "20e6333c0067875ad7697cd8acdf245c6ef69d03",
+                "url": "https:\/\/api.github.com\/repos\/phpstan\/phpstan\/zipball\/a84fdc53ecca7643dbc89ef8880d8b393a6c155a",
+                "reference": "a84fdc53ecca7643dbc89ef8880d8b393a6c155a",
                 "shasum": ""
             },
             "require": {
@@ -997,7 +997,7 @@
             "conflict": {
                 "phpstan\/phpstan-shim": "*"
             },
-            "time": "2021-04-27T14:13:16+00:00",
+            "time": "2021-05-08T11:29:01+00:00",
             "bin": [
                 "phpstan",
                 "phpstan.phar"
@@ -1021,7 +1021,7 @@
             "description": "PHPStan - PHP Static Analysis Tool",
             "support": {
                 "issues": "https:\/\/github.com\/phpstan\/phpstan\/issues",
-                "source": "https:\/\/github.com\/phpstan\/phpstan\/tree\/0.12.85"
+                "source": "https:\/\/github.com\/phpstan\/phpstan\/tree\/0.12.86"
             },
             "funding": [
                 {
@@ -1041,22 +1041,22 @@
         },
         {
             "name": "phpstan\/phpstan-phpunit",
-            "version": "0.12.18",
-            "version_normalized": "0.12.18.0",
+            "version": "0.12.19",
+            "version_normalized": "0.12.19.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/phpstan\/phpstan-phpunit.git",
-                "reference": "ab44aec7cfb5cb267b8bc30a8caea86dd50d1f72"
+                "reference": "52f7072ddc5f81492f9d2de65a24813a48c90b18"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/phpstan\/phpstan-phpunit\/zipball\/ab44aec7cfb5cb267b8bc30a8caea86dd50d1f72",
-                "reference": "ab44aec7cfb5cb267b8bc30a8caea86dd50d1f72",
+                "url": "https:\/\/api.github.com\/repos\/phpstan\/phpstan-phpunit\/zipball\/52f7072ddc5f81492f9d2de65a24813a48c90b18",
+                "reference": "52f7072ddc5f81492f9d2de65a24813a48c90b18",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.1 || ^8.0",
-                "phpstan\/phpstan": "^0.12.60"
+                "phpstan\/phpstan": "^0.12.86"
             },
             "conflict": {
                 "phpunit\/phpunit": "<7.0"
@@ -1067,7 +1067,7 @@
                 "phpstan\/phpstan-strict-rules": "^0.12.6",
                 "phpunit\/phpunit": "^7.5.20"
             },
-            "time": "2021-03-06T11:51:27+00:00",
+            "time": "2021-04-30T11:10:37+00:00",
             "type": "phpstan-extension",
             "extra": {
                 "branch-alias": {
@@ -1093,7 +1093,7 @@
             "description": "PHPUnit extensions and rules for PHPStan",
             "support": {
                 "issues": "https:\/\/github.com\/phpstan\/phpstan-phpunit\/issues",
-                "source": "https:\/\/github.com\/phpstan\/phpstan-phpunit\/tree\/0.12.18"
+                "source": "https:\/\/github.com\/phpstan\/phpstan-phpunit\/tree\/0.12.19"
             },
             "install-path": "..\/phpstan\/phpstan-phpunit"
         },
@@ -3606,37 +3606,37 @@
         },
         {
             "name": "symplify\/astral",
-            "version": "v9.3.1",
-            "version_normalized": "9.3.1.0",
+            "version": "v9.3.0",
+            "version_normalized": "9.3.0.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symplify\/astral.git",
-                "reference": "4347ac8b82c7abc46007850147bdd48f2dd9f511"
+                "reference": "9707ba1a438bb0e22dca731ac16a47cb9944d1df"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symplify\/astral\/zipball\/4347ac8b82c7abc46007850147bdd48f2dd9f511",
-                "reference": "4347ac8b82c7abc46007850147bdd48f2dd9f511",
+                "url": "https:\/\/api.github.com\/repos\/symplify\/astral\/zipball\/9707ba1a438bb0e22dca731ac16a47cb9944d1df",
+                "reference": "9707ba1a438bb0e22dca731ac16a47cb9944d1df",
                 "shasum": ""
             },
             "require": {
                 "nette\/utils": "^3.2",
-                "nikic\/php-parser": "4.10.4",
+                "nikic\/php-parser": "^4.10.4",
                 "php": ">=7.3",
                 "symfony\/dependency-injection": "^5.2",
                 "symfony\/http-kernel": "^4.4|^5.2",
-                "symplify\/autowire-array-parameter": "^9.3.1",
-                "symplify\/package-builder": "^9.3.1"
+                "symplify\/autowire-array-parameter": "^9.3",
+                "symplify\/package-builder": "^9.3"
             },
             "require-dev": {
                 "phpunit\/phpunit": "^9.5",
-                "symplify\/easy-testing": "^9.3.1"
+                "symplify\/easy-testing": "^9.3"
             },
-            "time": "2021-05-04T18:51:08+00:00",
+            "time": "2021-04-26T17:11:32+00:00",
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-main": "9.4-dev"
+                    "dev-main": "9.3-dev"
                 }
             },
             "installation-source": "dist",
@@ -3651,7 +3651,7 @@
             ],
             "description": "Toolking for smart daily work with AST",
             "support": {
-                "source": "https:\/\/github.com\/symplify\/astral\/tree\/v9.3.1"
+                "source": "https:\/\/github.com\/symplify\/astral\/tree\/v9.3.0"
             },
             "funding": [
                 {

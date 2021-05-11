@@ -161,6 +161,18 @@ class BuilderFactory
         return new \PhpParser\Builder\Use_($name, \PhpParser\Node\Stmt\Use_::TYPE_CONSTANT);
     }
     /**
+     * Creates a class constant builder.
+     *
+     * @param string|Identifier                          $name  Name
+     * @param Node\Expr|bool|null|int|float|string|array $value Value
+     *
+     * @return Builder\ClassConst The created use const builder
+     */
+    public function classConst($name, $value) : \PhpParser\Builder\ClassConst
+    {
+        return new \PhpParser\Builder\ClassConst($name, $value);
+    }
+    /**
      * Creates node a for a literal value.
      *
      * @param Expr|bool|null|int|float|string|array $value $value

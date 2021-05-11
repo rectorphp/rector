@@ -639,6 +639,10 @@ class Standard extends \PhpParser\PrettyPrinterAbstract
     {
         return $this->pAttrGroups($node->attrGroups) . 'interface ' . $node->name . (!empty($node->extends) ? ' extends ' . $this->pCommaSeparated($node->extends) : '') . $this->nl . '{' . $this->pStmts($node->stmts) . $this->nl . '}';
     }
+    protected function pStmt_Enum(\PhpParser\Node\Stmt\Enum_ $node)
+    {
+        return $this->pAttrGroups($node->attrGroups) . 'enum ' . $node->name . (!empty($node->implements) ? ' implements ' . $this->pCommaSeparated($node->implements) : '') . $this->nl . '{' . $this->pStmts($node->stmts) . $this->nl . '}';
+    }
     protected function pStmt_Class(\PhpParser\Node\Stmt\Class_ $node)
     {
         return $this->pClassCommon($node, ' ' . $node->name);
@@ -646,6 +650,10 @@ class Standard extends \PhpParser\PrettyPrinterAbstract
     protected function pStmt_Trait(\PhpParser\Node\Stmt\Trait_ $node)
     {
         return $this->pAttrGroups($node->attrGroups) . 'trait ' . $node->name . $this->nl . '{' . $this->pStmts($node->stmts) . $this->nl . '}';
+    }
+    protected function pStmt_EnumCase(\PhpParser\Node\Stmt\EnumCase $node)
+    {
+        return $this->pAttrGroups($node->attrGroups) . 'case ' . $node->name . ($node->expr ? ' = ' . $this->p($node->expr) : '') . ';';
     }
     protected function pStmt_TraitUse(\PhpParser\Node\Stmt\TraitUse $node)
     {
@@ -839,14 +847,27 @@ class Standard extends \PhpParser\PrettyPrinterAbstract
         } else {
             $escaped = \addcslashes($string, "\n\r\t\f\v\$" . $quote . "\\");
         }
-        // Escape other control characters
-        return \preg_replace_callback('/([\\0-\\10\\16-\\37])(?=([0-7]?))/', function ($matches) {
-            $oct = \decoct(\ord($matches[1]));
-            if ($matches[2] !== '') {
-                // If there is a trailing digit, use the full three character form
-                return '\\' . \str_pad($oct, 3, '0', \STR_PAD_LEFT);
-            }
-            return '\\' . $oct;
+        // Escape control characters and non-UTF-8 characters.
+        // Regex based on https://stackoverflow.com/a/11709412/385378.
+        $regex = '/(
+              [\\x00-\\x08\\x0E-\\x1F] # Control characters
+            | [\\xC0-\\xC1] # Invalid UTF-8 Bytes
+            | [\\xF5-\\xFF] # Invalid UTF-8 Bytes
+            | \\xE0(?=[\\x80-\\x9F]) # Overlong encoding of prior code point
+            | \\xF0(?=[\\x80-\\x8F]) # Overlong encoding of prior code point
+            | [\\xC2-\\xDF](?![\\x80-\\xBF]) # Invalid UTF-8 Sequence Start
+            | [\\xE0-\\xEF](?![\\x80-\\xBF]{2}) # Invalid UTF-8 Sequence Start
+            | [\\xF0-\\xF4](?![\\x80-\\xBF]{3}) # Invalid UTF-8 Sequence Start
+            | (?<=[\\x00-\\x7F\\xF5-\\xFF])[\\x80-\\xBF] # Invalid UTF-8 Sequence Middle
+            | (?<![\\xC2-\\xDF]|[\\xE0-\\xEF]|[\\xE0-\\xEF][\\x80-\\xBF]|[\\xF0-\\xF4]|[\\xF0-\\xF4][\\x80-\\xBF]|[\\xF0-\\xF4][\\x80-\\xBF]{2})[\\x80-\\xBF] # Overlong Sequence
+            | (?<=[\\xE0-\\xEF])[\\x80-\\xBF](?![\\x80-\\xBF]) # Short 3 byte sequence
+            | (?<=[\\xF0-\\xF4])[\\x80-\\xBF](?![\\x80-\\xBF]{2}) # Short 4 byte sequence
+            | (?<=[\\xF0-\\xF4][\\x80-\\xBF])[\\x80-\\xBF](?![\\x80-\\xBF]) # Short 4 byte sequence (2)
+        )/x';
+        return \preg_replace_callback($regex, function ($matches) {
+            \assert(\strlen($matches[0]) === 1);
+            $hex = \dechex(\ord($matches[0]));
+            return '\\x' . \str_pad($hex, 2, '0', \STR_PAD_LEFT);
         }, $escaped);
     }
     protected function containsEndLabel($string, $label, $atStart = \true, $atEnd = \true)

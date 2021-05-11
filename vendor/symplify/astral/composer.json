@@ -6,13 +6,13 @@
         "php": ">=7.3",
         "nette\/utils": "^3.2",
         "symfony\/dependency-injection": "^5.2",
-        "symplify\/autowire-array-parameter": "^9.3.1",
+        "symplify\/autowire-array-parameter": "^9.3",
         "symfony\/http-kernel": "^4.4|^5.2",
-        "nikic\/php-parser": "4.10.4",
-        "symplify\/package-builder": "^9.3.1"
+        "nikic\/php-parser": "^4.10.4",
+        "symplify\/package-builder": "^9.3"
     },
     "require-dev": {
-        "symplify\/easy-testing": "^9.3.1",
+        "symplify\/easy-testing": "^9.3",
         "phpunit\/phpunit": "^9.5"
     },
     "autoload": {
@@ -27,7 +27,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-main": "9.4-dev"
+            "dev-main": "9.3-dev"
         }
     },
     "minimum-stability": "dev",

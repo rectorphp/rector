@@ -273,7 +273,7 @@ class Lexer
                 $value = $token[1];
                 $id = $this->tokenMap[$token[0]];
                 if (\T_CLOSE_TAG === $token[0]) {
-                    $this->prevCloseTagHasNewline = \false !== \strpos($token[1], "\n");
+                    $this->prevCloseTagHasNewline = \false !== \strpos($token[1], "\n") || \false !== \strpos($token[1], "\r");
                 } elseif (\T_INLINE_HTML === $token[0]) {
                     $startAttributes['hasLeadingNewline'] = $this->prevCloseTagHasNewline;
                 }
@@ -357,6 +357,8 @@ class Lexer
             'T_MATCH',
             'T_NULLSAFE_OBJECT_OPERATOR',
             'T_ATTRIBUTE',
+            // PHP 8.1
+            'T_ENUM',
         ];
         // PHP-Parser might be used together with another library that also emulates some or all
         // of these tokens. Perform a sanity-check that all already defined tokens have been
@@ -437,6 +439,7 @@ class Lexer
         $tokenMap[\T_MATCH] = \PhpParser\Parser\Tokens::T_MATCH;
         $tokenMap[\T_NULLSAFE_OBJECT_OPERATOR] = \PhpParser\Parser\Tokens::T_NULLSAFE_OBJECT_OPERATOR;
         $tokenMap[\T_ATTRIBUTE] = \PhpParser\Parser\Tokens::T_ATTRIBUTE;
+        $tokenMap[\T_ENUM] = \PhpParser\Parser\Tokens::T_ENUM;
         return $tokenMap;
     }
     private function createIdentifierTokenMap() : array
