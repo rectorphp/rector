@@ -10,7 +10,7 @@ parameters:
         disableRuntimeReflectionProvider: true
 
 includes:
-    - vendor/rector/rector-phpstan-rules/config/config.neon
+    - vendor/rector/phpstan-rules/config/config.neon
     - vendor/symplify/phpstan-extensions/config/config.neon
 
     - vendor/symplify/phpstan-rules/config/services/services.neon

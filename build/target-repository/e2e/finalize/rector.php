@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use Rector\Core\Configuration\Option;
 use Rector\Privatization\Rector\Class_\FinalizeClassesWithoutChildrenRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 

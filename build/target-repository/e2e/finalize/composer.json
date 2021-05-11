@@ -1,0 +1,10 @@
+{
+    "autoload": {
+        "psr-4": {
+            "Rector\\e2e\\": "src"
+        }
+    },
+    "require-dev": {
+        "doctrine/orm": "^2.7"
+    }
+}
