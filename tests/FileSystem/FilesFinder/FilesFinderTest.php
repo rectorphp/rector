@@ -11,10 +11,7 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class FilesFinderTest extends AbstractTestCase
 {
-    /**
-     * @var FilesFinder
-     */
-    private $filesFinder;
+    private FilesFinder $filesFinder;
 
     protected function setUp(): void
     {

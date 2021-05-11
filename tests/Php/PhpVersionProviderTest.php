@@ -9,10 +9,7 @@ use Rector\Testing\PHPUnit\AbstractTestCase;
 
 final class PhpVersionProviderTest extends AbstractTestCase
 {
-    /**
-     * @var PhpVersionProvider
-     */
-    private $phpVersionProvider;
+    private PhpVersionProvider $phpVersionProvider;
 
     protected function setUp(): void
     {

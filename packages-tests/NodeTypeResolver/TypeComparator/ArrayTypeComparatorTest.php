@@ -20,10 +20,7 @@ use Rector\Tests\NodeTypeResolver\TypeComparator\Source\SomeGenericTypeObject;
 
 final class ArrayTypeComparatorTest extends AbstractTestCase
 {
-    /**
-     * @var ArrayTypeComparator
-     */
-    private $arrayTypeComparator;
+    private ArrayTypeComparator $arrayTypeComparator;
 
     protected function setUp(): void
     {

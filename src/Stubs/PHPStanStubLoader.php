@@ -23,10 +23,7 @@ final class PHPStanStubLoader
         __DIR__ . '/../../../../../vendor',
     ];
 
-    /**
-     * @var bool
-     */
-    private $areStubsLoaded = false;
+    private bool $areStubsLoaded = false;
 
     /**
      * @see https://github.com/phpstan/phpstan/issues/4541#issuecomment-779434916

@@ -16,15 +16,9 @@ final class FormatPerservingPrinterTest extends AbstractTestCase
      */
     private const EXPECTED_FILEMOD = 0755;
 
-    /**
-     * @var FormatPerservingPrinter
-     */
-    private $formatPerservingPrinter;
+    private FormatPerservingPrinter $formatPerservingPrinter;
 
-    /**
-     * @var SmartFileSystem
-     */
-    private $smartFileSystem;
+    private SmartFileSystem $smartFileSystem;
 
     protected function setUp(): void
     {

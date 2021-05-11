@@ -12,10 +12,7 @@ use Rector\Tests\ChangesReporting\Annotation\AppliedRectorsChangelogResolver\Sou
 
 final class AnnotationExtractorTest extends TestCase
 {
-    /**
-     * @var AnnotationExtractor
-     */
-    private $annotationExtractor;
+    private AnnotationExtractor $annotationExtractor;
 
     protected function setUp(): void
     {

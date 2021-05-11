@@ -23,15 +23,9 @@ final class StmtOrderTest extends AbstractTestCase
         2 => 1,
     ];
 
-    /**
-     * @var StmtOrder
-     */
-    private $stmtOrder;
+    private StmtOrder $stmtOrder;
 
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
+    private NodeNameResolver $nodeNameResolver;
 
     protected function setUp(): void
     {

@@ -21,10 +21,7 @@ use Rector\Testing\PHPUnit\AbstractTestCase;
 
 final class StaticTypeMapperTest extends AbstractTestCase
 {
-    /**
-     * @var StaticTypeMapper
-     */
-    private $staticTypeMapper;
+    private StaticTypeMapper $staticTypeMapper;
 
     protected function setUp(): void
     {

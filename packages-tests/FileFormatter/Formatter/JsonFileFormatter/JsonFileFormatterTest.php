@@ -16,10 +16,7 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class JsonFileFormatterTest extends AbstractTestCase
 {
-    /**
-     * @var JsonFileFormatter
-     */
-    private $jsonFileFormatter;
+    private JsonFileFormatter $jsonFileFormatter;
 
     protected function setUp(): void
     {

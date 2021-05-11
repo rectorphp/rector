@@ -15,10 +15,7 @@ use Rector\Testing\PHPUnit\AbstractTestCase;
 
 final class ArrayTypeMapperTest extends AbstractTestCase
 {
-    /**
-     * @var ArrayTypeMapper
-     */
-    private $arrayTypeMapper;
+    private ArrayTypeMapper $arrayTypeMapper;
 
     protected function setUp(): void
     {

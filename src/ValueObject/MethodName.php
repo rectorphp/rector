@@ -23,6 +23,7 @@ final class MethodName
 
     /**
      * Mostly used in unit tests
+     * @see https://phpunit.readthedocs.io/en/9.3/fixtures.html#more-setup-than-teardown
      * @var string
      */
     public const SET_UP = 'setUp';
@@ -37,4 +38,10 @@ final class MethodName
      * @var string
      */
     public const SET_STATE = '__set_state';
+
+    /**
+     * @see https://phpunit.readthedocs.io/en/9.3/fixtures.html#fixtures-sharing-fixture-examples-databasetest-php
+     * @var string
+     */
+    public const SET_UP_BEFORE_CLASS = 'setUpBeforeClass';
 }

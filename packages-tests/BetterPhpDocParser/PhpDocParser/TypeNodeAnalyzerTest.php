@@ -19,10 +19,7 @@ final class TypeNodeAnalyzerTest extends AbstractTestCase
      */
     private const INT = 'int';
 
-    /**
-     * @var TypeNodeAnalyzer
-     */
-    private $typeNodeAnalyzer;
+    private TypeNodeAnalyzer $typeNodeAnalyzer;
 
     protected function setUp(): void
     {

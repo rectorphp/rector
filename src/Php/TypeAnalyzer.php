@@ -29,7 +29,7 @@ final class TypeAnalyzer
     /**
      * @var string[]
      */
-    private $phpSupportedTypes = [
+    private array $phpSupportedTypes = [
         'string',
         'bool',
         'int',

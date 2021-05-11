@@ -16,25 +16,13 @@ use Symplify\SmartFileSystem\SmartFileSystem;
 
 final class PhpDocInfoTest extends AbstractTestCase
 {
-    /**
-     * @var PhpDocInfo
-     */
-    private $phpDocInfo;
+    private PhpDocInfo $phpDocInfo;
 
-    /**
-     * @var PhpDocInfoPrinter
-     */
-    private $phpDocInfoPrinter;
+    private PhpDocInfoPrinter $phpDocInfoPrinter;
 
-    /**
-     * @var SmartFileSystem
-     */
-    private $smartFileSystem;
+    private SmartFileSystem $smartFileSystem;
 
-    /**
-     * @var DocBlockTagReplacer
-     */
-    private $docBlockTagReplacer;
+    private DocBlockTagReplacer $docBlockTagReplacer;
 
     protected function setUp(): void
     {
@@ -74,7 +62,7 @@ final class PhpDocInfoTest extends AbstractTestCase
         $this->assertStringEqualsFile(__DIR__ . '/Source/expected-replaced-tag.txt', $printedPhpDocInfo);
     }
 
-    private function createPhpDocInfoFromFile(string $path): PhpDocInfo
+    private function createPhpDocInfoFromFile(string $path): ?PhpDocInfo
     {
         $phpDocInfoFactory = $this->getService(PhpDocInfoFactory::class);
         $phpDocContent = $this->smartFileSystem->readFile($path);

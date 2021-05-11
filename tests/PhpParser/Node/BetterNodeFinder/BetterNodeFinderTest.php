@@ -18,12 +18,9 @@ final class BetterNodeFinderTest extends AbstractTestCase
     /**
      * @var Node[]
      */
-    private $nodes = [];
+    private array $nodes = [];
 
-    /**
-     * @var BetterNodeFinder
-     */
-    private $betterNodeFinder;
+    private BetterNodeFinder $betterNodeFinder;
 
     protected function setUp(): void
     {

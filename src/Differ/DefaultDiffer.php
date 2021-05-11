@@ -9,10 +9,7 @@ use SebastianBergmann\Diff\Output\StrictUnifiedDiffOutputBuilder;
 
 final class DefaultDiffer
 {
-    /**
-     * @var Differ
-     */
-    private $differ;
+    private Differ $differ;
 
     public function __construct()
     {

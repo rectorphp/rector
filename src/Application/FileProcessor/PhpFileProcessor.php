@@ -40,7 +40,7 @@ final class PhpFileProcessor implements FileProcessorInterface
     /**
      * @var File[]
      */
-    private $notParsedFiles = [];
+    private array $notParsedFiles = [];
 
     public function __construct(
         private Configuration $configuration,

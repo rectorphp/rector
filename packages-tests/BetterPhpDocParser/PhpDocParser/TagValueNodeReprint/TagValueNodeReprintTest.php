@@ -21,25 +21,13 @@ use Symplify\SmartFileSystem\SmartFileSystem;
 
 final class TagValueNodeReprintTest extends AbstractTestCase
 {
-    /**
-     * @var FileInfoParser
-     */
-    private $fileInfoParser;
+    private FileInfoParser $fileInfoParser;
 
-    /**
-     * @var BetterNodeFinder
-     */
-    private $betterNodeFinder;
+    private BetterNodeFinder $betterNodeFinder;
 
-    /**
-     * @var PhpDocInfoPrinter
-     */
-    private $phpDocInfoPrinter;
+    private PhpDocInfoPrinter $phpDocInfoPrinter;
 
-    /**
-     * @var PhpDocInfoFactory
-     */
-    private $phpDocInfoFactory;
+    private PhpDocInfoFactory $phpDocInfoFactory;
 
     protected function setUp(): void
     {

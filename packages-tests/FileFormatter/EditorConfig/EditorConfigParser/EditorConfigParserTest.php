@@ -13,10 +13,7 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class EditorConfigParserTest extends AbstractTestCase
 {
-    /**
-     * @var EditorConfigParser
-     */
-    private $editorConfigParser;
+    private EditorConfigParser $editorConfigParser;
 
     protected function setUp(): void
     {

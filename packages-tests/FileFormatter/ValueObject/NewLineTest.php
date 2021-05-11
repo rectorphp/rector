@@ -2,7 +2,7 @@
 
 namespace Rector\Tests\FileFormatter\ValueObject;
 
-use Generator;
+use Iterator;
 use PHPUnit\Framework\TestCase;
 use Rector\FileFormatter\Exception\InvalidNewLineStringException;
 use Rector\FileFormatter\ValueObject\NewLine;
@@ -50,9 +50,9 @@ final class NewLineTest extends TestCase
     }
 
     /**
-     * @return Generator<array<string>>
+     * @return Iterator<array<string>>
      */
-    public function provideValidNewLineString(): Generator
+    public function provideValidNewLineString(): Iterator
     {
         foreach (["\n", "\r", "\r\n"] as $string) {
             yield [$string];
@@ -60,9 +60,9 @@ final class NewLineTest extends TestCase
     }
 
     /**
-     * @return Generator<array<string>>
+     * @return Iterator<array<string>>
      */
-    public function provideInvalidNewLineString(): Generator
+    public function provideInvalidNewLineString(): Iterator
     {
         foreach (["\t", " \r ", " \r\n ", " \n ", ' ', "\f", "\x0b", "\x85"] as $string) {
             yield [$string];
@@ -70,9 +70,9 @@ final class NewLineTest extends TestCase
     }
 
     /**
-     * @return Generator<array<string>>
+     * @return Iterator<array<string>>
      */
-    public function extractFromFiles(): Generator
+    public function extractFromFiles(): Iterator
     {
         yield 'Yaml file with carriage return' => [
             new SmartFileInfo(__DIR__ . '/Fixture/yaml_carriage_return.yaml'),
@@ -95,9 +95,9 @@ final class NewLineTest extends TestCase
     }
 
     /**
-     * @return Generator<array<string>>
+     * @return Iterator<array<string>>
      */
-    public function provideValidNewLineStringFromEditorConfig(): Generator
+    public function provideValidNewLineStringFromEditorConfig(): Iterator
     {
         foreach ([
             'lf' => "\n",

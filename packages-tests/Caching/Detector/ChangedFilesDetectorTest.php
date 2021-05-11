@@ -11,10 +11,7 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ChangedFilesDetectorTest extends AbstractRectorTestCase
 {
-    /**
-     * @var ChangedFilesDetector
-     */
-    private $changedFilesDetector;
+    private ChangedFilesDetector $changedFilesDetector;
 
     protected function setUp(): void
     {

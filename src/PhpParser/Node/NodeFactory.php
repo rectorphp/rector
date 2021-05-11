@@ -248,10 +248,9 @@ final class NodeFactory
     }
 
     /**
-     * @param string|Expr $variable
      * @param mixed[] $arguments
      */
-    public function createMethodCall($variable, string $method, array $arguments = []): MethodCall
+    public function createMethodCall(string | Expr $variable, string $method, array $arguments = []): MethodCall
     {
         if (is_string($variable)) {
             $variable = new Variable($variable);
@@ -272,10 +271,7 @@ final class NodeFactory
         return $this->builderFactory->methodCall($variable, $method, $arguments);
     }
 
-    /**
-     * @param string|Expr $variable
-     */
-    public function createPropertyFetch($variable, string $property): PropertyFetch
+    public function createPropertyFetch(string | Expr $variable, string $property): PropertyFetch
     {
         if (is_string($variable)) {
             $variable = new Variable($variable);

@@ -17,12 +17,12 @@ final class ProcessResult
     /**
      * @var FileDiff[]
      */
-    private $fileDiffs = [];
+    private array $fileDiffs = [];
 
     /**
      * @var RectorError[]
      */
-    private $errors = [];
+    private array $errors = [];
 
     /**
      * @param FileDiff[] $fileDiffs

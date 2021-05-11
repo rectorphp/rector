@@ -11,7 +11,7 @@ final class RenamedClassesDataCollector
     /**
      * @var array<string, string>
      */
-    private $oldToNewClasses = [];
+    private array $oldToNewClasses = [];
 
     /**
      * @param array<string, string> $oldToNewClasses

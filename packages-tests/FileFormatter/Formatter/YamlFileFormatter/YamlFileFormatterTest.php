@@ -16,10 +16,7 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class YamlFileFormatterTest extends AbstractTestCase
 {
-    /**
-     * @var YamlFileFormatter
-     */
-    private $yamlFileFormatter;
+    private YamlFileFormatter $yamlFileFormatter;
 
     protected function setUp(): void
     {

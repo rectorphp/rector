@@ -16,10 +16,7 @@ use Rector\Testing\PHPUnit\AbstractTestCase;
 
 final class PhpDocNodeMapperTest extends AbstractTestCase
 {
-    /**
-     * @var PhpDocNodeMapper
-     */
-    private $phpDocNodeMapper;
+    private PhpDocNodeMapper $phpDocNodeMapper;
 
     protected function setUp(): void
     {

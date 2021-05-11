@@ -14,15 +14,9 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class RectorsChangelogResolverTest extends AbstractTestCase
 {
-    /**
-     * @var RectorsChangelogResolver
-     */
-    private $rectorsChangelogResolver;
+    private RectorsChangelogResolver $rectorsChangelogResolver;
 
-    /**
-     * @var FileDiff
-     */
-    private $fileDiff;
+    private FileDiff $fileDiff;
 
     protected function setUp(): void
     {

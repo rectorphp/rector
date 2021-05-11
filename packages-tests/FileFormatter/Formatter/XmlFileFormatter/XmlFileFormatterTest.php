@@ -16,10 +16,7 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class XmlFileFormatterTest extends AbstractTestCase
 {
-    /**
-     * @var XmlFileFormatter
-     */
-    private $xmlFileFormatter;
+    private XmlFileFormatter $xmlFileFormatter;
 
     protected function setUp(): void
     {

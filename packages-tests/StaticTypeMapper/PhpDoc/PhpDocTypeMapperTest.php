@@ -17,15 +17,9 @@ use Rector\Testing\PHPUnit\AbstractTestCase;
 
 final class PhpDocTypeMapperTest extends AbstractTestCase
 {
-    /**
-     * @var PhpDocTypeMapper
-     */
-    private $phpDocTypeMapper;
+    private PhpDocTypeMapper $phpDocTypeMapper;
 
-    /**
-     * @var NameScopeFactory
-     */
-    private $nameScopeFactory;
+    private NameScopeFactory $nameScopeFactory;
 
     protected function setUp(): void
     {

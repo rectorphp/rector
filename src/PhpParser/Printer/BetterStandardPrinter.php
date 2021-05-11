@@ -65,9 +65,8 @@ final class BetterStandardPrinter extends Standard
 
     /**
      * Use space by default
-     * @var string
      */
-    private $tabOrSpaceIndentCharacter = ' ';
+    private string $tabOrSpaceIndentCharacter = ' ';
 
     /**
      * @param mixed[] $options

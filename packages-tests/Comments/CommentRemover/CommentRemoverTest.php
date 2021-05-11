@@ -15,20 +15,11 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class CommentRemoverTest extends AbstractTestCase
 {
-    /**
-     * @var CommentRemover
-     */
-    private $commentRemover;
+    private CommentRemover $commentRemover;
 
-    /**
-     * @var FileInfoParser
-     */
-    private $fileInfoParser;
+    private FileInfoParser $fileInfoParser;
 
-    /**
-     * @var BetterStandardPrinter
-     */
-    private $betterStandardPrinter;
+    private BetterStandardPrinter $betterStandardPrinter;
 
     protected function setUp(): void
     {

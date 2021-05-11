@@ -8,10 +8,7 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class RectorError
 {
-    /**
-     * @var SmartFileInfo
-     */
-    private $fileInfo;
+    private SmartFileInfo $fileInfo;
 
     public function __construct(
         private string $message,

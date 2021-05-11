@@ -14,15 +14,9 @@ use Rector\Testing\TestingParser\TestingParser;
 
 final class FluentChainMethodCallRootExtractorTest extends AbstractTestCase
 {
-    /**
-     * @var FluentChainMethodCallRootExtractor
-     */
-    private $fluentChainMethodCallRootExtractor;
+    private FluentChainMethodCallRootExtractor $fluentChainMethodCallRootExtractor;
 
-    /**
-     * @var TestingParser
-     */
-    private $testingParser;
+    private TestingParser $testingParser;
 
     protected function setUp(): void
     {

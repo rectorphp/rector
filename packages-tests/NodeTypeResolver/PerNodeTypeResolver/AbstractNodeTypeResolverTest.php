@@ -12,20 +12,11 @@ use Rector\Testing\TestingParser\TestingParser;
 
 abstract class AbstractNodeTypeResolverTest extends AbstractTestCase
 {
-    /**
-     * @var NodeTypeResolver
-     */
-    protected $nodeTypeResolver;
+    protected NodeTypeResolver $nodeTypeResolver;
 
-    /**
-     * @var BetterNodeFinder
-     */
-    private $betterNodeFinder;
+    private BetterNodeFinder $betterNodeFinder;
 
-    /**
-     * @var TestingParser
-     */
-    private $testingParser;
+    private TestingParser $testingParser;
 
     protected function setUp(): void
     {

@@ -34,10 +34,7 @@ use Symplify\SmartFileSystem\SmartFileInfo;
  */
 final class RectorKernel extends Kernel
 {
-    /**
-     * @var ConfigureCallValuesCollector
-     */
-    private $configureCallValuesCollector;
+    private ConfigureCallValuesCollector $configureCallValuesCollector;
 
     /**
      * @param SmartFileInfo[] $configFileInfos

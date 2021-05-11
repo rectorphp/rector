@@ -15,10 +15,7 @@ use Rector\TypeDeclaration\TypeNormalizer;
 
 final class TypeNormalizerTest extends AbstractTestCase
 {
-    /**
-     * @var TypeNormalizer
-     */
-    private $typeNormalizer;
+    private TypeNormalizer $typeNormalizer;
 
     protected function setUp(): void
     {

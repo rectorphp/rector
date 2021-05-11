@@ -18,7 +18,7 @@ final class MethodReflectionToAstResolver
     /**
      * @var array<string, array<string, ClassMethod>>
      */
-    private $analyzedMethodsInFileName = [];
+    private array $analyzedMethodsInFileName = [];
 
     public function __construct(
         private FileInfoParser $fileInfoParser,

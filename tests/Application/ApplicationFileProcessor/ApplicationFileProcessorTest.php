@@ -13,20 +13,11 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ApplicationFileProcessorTest extends AbstractTestCase
 {
-    /**
-     * @var ApplicationFileProcessor
-     */
-    private $applicationFileProcessor;
+    private ApplicationFileProcessor $applicationFileProcessor;
 
-    /**
-     * @var FileFactory
-     */
-    private $fileFactory;
+    private FileFactory $fileFactory;
 
-    /**
-     * @var ProcessResultFactory
-     */
-    private $processResultFactory;
+    private ProcessResultFactory $processResultFactory;
 
     protected function setUp(): void
     {

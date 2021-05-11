@@ -13,10 +13,7 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ConfigurableRectorImportConfigCallsMergeTest extends AbstractRectorTestCase
 {
-    /**
-     * @var PrivatesAccessor
-     */
-    private $privatesAccessor;
+    private PrivatesAccessor $privatesAccessor;
 
     protected function setUp(): void
     {

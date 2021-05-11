@@ -10,10 +10,7 @@ use Rector\Testing\PHPUnit\AbstractTestCase;
 
 final class ProjectComposerJsonPhpVersionResolverTest extends AbstractTestCase
 {
-    /**
-     * @var ProjectComposerJsonPhpVersionResolver
-     */
-    private $projectComposerJsonPhpVersionResolver;
+    private ProjectComposerJsonPhpVersionResolver $projectComposerJsonPhpVersionResolver;
 
     protected function setUp(): void
     {

@@ -14,10 +14,7 @@ use Rector\Testing\PHPUnit\AbstractTestCase;
 
 final class ScalarTypeComparatorTest extends AbstractTestCase
 {
-    /**
-     * @var ScalarTypeComparator
-     */
-    private $scalarTypeComparator;
+    private ScalarTypeComparator $scalarTypeComparator;
 
     protected function setUp(): void
     {

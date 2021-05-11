@@ -16,20 +16,11 @@ use Symplify\SmartFileSystem\SmartFileSystem;
 
 abstract class AbstractPhpDocInfoPrinterTest extends AbstractTestCase
 {
-    /**
-     * @var PhpDocInfoPrinter
-     */
-    protected $phpDocInfoPrinter;
+    protected PhpDocInfoPrinter $phpDocInfoPrinter;
 
-    /**
-     * @var SmartFileSystem
-     */
-    protected $smartFileSystem;
+    protected SmartFileSystem $smartFileSystem;
 
-    /**
-     * @var PhpDocInfoFactory
-     */
-    private $phpDocInfoFactory;
+    private PhpDocInfoFactory $phpDocInfoFactory;
 
     protected function setUp(): void
     {

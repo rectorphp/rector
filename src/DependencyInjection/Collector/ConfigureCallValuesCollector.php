@@ -12,12 +12,9 @@ final class ConfigureCallValuesCollector
     /**
      * @var mixed[]
      */
-    private $configureCallValuesByRectorClass = [];
+    private array $configureCallValuesByRectorClass = [];
 
-    /**
-     * @var ParametersMerger
-     */
-    private $parametersMerger;
+    private ParametersMerger $parametersMerger;
 
     public function __construct()
     {

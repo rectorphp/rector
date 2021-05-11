@@ -12,10 +12,7 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class FileRelocationResolverTest extends AbstractTestCase
 {
-    /**
-     * @var FileRelocationResolver
-     */
-    private $fileRelocationResolver;
+    private FileRelocationResolver $fileRelocationResolver;
 
     protected function setUp(): void
     {

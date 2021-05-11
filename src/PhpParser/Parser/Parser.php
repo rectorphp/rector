@@ -14,7 +14,7 @@ final class Parser
     /**
      * @var array<string, Stmt[]>
      */
-    private $nodesByFile = [];
+    private array $nodesByFile = [];
 
     public function __construct(
         private NikicParser $nikicParser,

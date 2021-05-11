@@ -17,25 +17,13 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class PropertyRenameFactoryTest extends AbstractTestCase
 {
-    /**
-     * @var PropertyRenameFactory
-     */
-    private $propertyRenameFactory;
+    private PropertyRenameFactory $propertyRenameFactory;
 
-    /**
-     * @var FileInfoParser
-     */
-    private $fileInfoParser;
+    private FileInfoParser $fileInfoParser;
 
-    /**
-     * @var BetterNodeFinder
-     */
-    private $betterNodeFinder;
+    private BetterNodeFinder $betterNodeFinder;
 
-    /**
-     * @var MatchPropertyTypeExpectedNameResolver
-     */
-    private $matchPropertyTypeExpectedNameResolver;
+    private MatchPropertyTypeExpectedNameResolver $matchPropertyTypeExpectedNameResolver;
 
     protected function setUp(): void
     {

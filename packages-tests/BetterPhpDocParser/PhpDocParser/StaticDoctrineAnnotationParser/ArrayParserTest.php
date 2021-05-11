@@ -11,15 +11,9 @@ use Rector\Testing\PHPUnit\AbstractTestCase;
 
 final class ArrayParserTest extends AbstractTestCase
 {
-    /**
-     * @var ArrayParser
-     */
-    private $arrayParser;
+    private ArrayParser $arrayParser;
 
-    /**
-     * @var TokenIteratorFactory
-     */
-    private $tokenIteratorFactory;
+    private TokenIteratorFactory $tokenIteratorFactory;
 
     protected function setUp(): void
     {

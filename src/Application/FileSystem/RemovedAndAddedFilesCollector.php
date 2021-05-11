@@ -14,12 +14,12 @@ final class RemovedAndAddedFilesCollector
     /**
      * @var SmartFileInfo[]
      */
-    private $removedFileInfos = [];
+    private array $removedFileInfos = [];
 
     /**
      * @var AddedFileInterface[]
      */
-    private $addedFiles = [];
+    private array $addedFiles = [];
 
     public function removeFile(SmartFileInfo $smartFileInfo): void
     {

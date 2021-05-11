@@ -11,10 +11,7 @@ use Rector\Testing\PHPUnit\AbstractTestCase;
 
 final class PropertyNamingTest extends AbstractTestCase
 {
-    /**
-     * @var PropertyNaming
-     */
-    private $propertyNaming;
+    private PropertyNaming $propertyNaming;
 
     protected function setUp(): void
     {

@@ -14,10 +14,7 @@ use Rector\Testing\PHPUnit\AbstractTestCase;
 
 final class NodeFactoryTest extends AbstractTestCase
 {
-    /**
-     * @var NodeFactory
-     */
-    private $nodeFactory;
+    private NodeFactory $nodeFactory;
 
     protected function setUp(): void
     {

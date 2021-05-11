@@ -10,10 +10,7 @@ use Rector\Php70\EregToPcreTransformer;
 
 final class EregToPcreTransformerTest extends TestCase
 {
-    /**
-     * @var EregToPcreTransformer
-     */
-    private $eregToPcreTransformer;
+    private EregToPcreTransformer $eregToPcreTransformer;
 
     protected function setUp(): void
     {

@@ -3,6 +3,7 @@
 namespace Rector\Tests\FileFormatter\ValueObject;
 
 use Generator;
+use Iterator;
 use PHPUnit\Framework\TestCase;
 use Rector\FileFormatter\Exception\InvalidIndentSizeException;
 use Rector\FileFormatter\Exception\InvalidIndentStyleException;
@@ -52,9 +53,9 @@ final class IndentTest extends TestCase
     }
 
     /**
-     * @return Generator<array<string>>
+     * @return Iterator<array<string>>
      */
-    public function extractFromFiles(): Generator
+    public function extractFromFiles(): Iterator
     {
         yield 'Yaml file with space indentation of size 4' => [
             new SmartFileInfo(__DIR__ . '/Fixture/yaml_indentation_space_four.yaml'),
@@ -80,7 +81,7 @@ final class IndentTest extends TestCase
     /**
      * @return Generator<array{0: int, 1: string, 2: string}>
      */
-    public function provideSizeStyleAndIndentString(): Generator
+    public function provideSizeStyleAndIndentString(): Iterator
     {
         foreach ($this->sizes() as $size) {
             foreach (Indent::CHARACTERS as $style => $character) {

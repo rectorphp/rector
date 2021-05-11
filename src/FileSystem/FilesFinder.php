@@ -32,7 +32,7 @@ final class FilesFinder
     /**
      * @var SmartFileInfo[][]
      */
-    private $fileInfosBySourceAndSuffixes = [];
+    private array $fileInfosBySourceAndSuffixes = [];
 
     public function __construct(
         private FilesystemTweaker $filesystemTweaker,

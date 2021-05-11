@@ -12,15 +12,9 @@ use Rector\Testing\PHPUnit\AbstractTestCase;
 
 final class StaticDoctrineAnnotationParserTest extends AbstractTestCase
 {
-    /**
-     * @var StaticDoctrineAnnotationParser
-     */
-    private $staticDoctrineAnnotationParser;
+    private StaticDoctrineAnnotationParser $staticDoctrineAnnotationParser;
 
-    /**
-     * @var TokenIteratorFactory
-     */
-    private $tokenIteratorFactory;
+    private TokenIteratorFactory $tokenIteratorFactory;
 
     protected function setUp(): void
     {

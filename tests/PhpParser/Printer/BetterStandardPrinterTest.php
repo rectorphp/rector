@@ -18,10 +18,7 @@ use Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
 
 final class BetterStandardPrinterTest extends AbstractTestCase
 {
-    /**
-     * @var BetterStandardPrinter
-     */
-    private $betterStandardPrinter;
+    private BetterStandardPrinter $betterStandardPrinter;
 
     protected function setUp(): void
     {

@@ -11,20 +11,14 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class RectorConfigsResolver
 {
-    /**
-     * @var ConfigResolver
-     */
-    private $configResolver;
+    private ConfigResolver $configResolver;
 
     /**
      * @var array<string, SmartFileInfo[]>
      */
-    private $resolvedConfigFileInfos = [];
+    private array $resolvedConfigFileInfos = [];
 
-    /**
-     * @var SetConfigResolver
-     */
-    private $setConfigResolver;
+    private SetConfigResolver $setConfigResolver;
 
     public function __construct()
     {

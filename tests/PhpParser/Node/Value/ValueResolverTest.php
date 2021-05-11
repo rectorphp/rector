@@ -15,10 +15,7 @@ use Rector\Testing\PHPUnit\AbstractTestCase;
 
 final class ValueResolverTest extends AbstractTestCase
 {
-    /**
-     * @var ValueResolver
-     */
-    private $valueResolver;
+    private ValueResolver $valueResolver;
 
     protected function setUp(): void
     {
