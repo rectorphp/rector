@@ -25,20 +25,20 @@ use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     // include sets
-//    $containerConfigurator->import(SetList::CODING_STYLE);
-//    $containerConfigurator->import(SetList::CODE_QUALITY);
-//    $containerConfigurator->import(SetList::CODE_QUALITY_STRICT);
-//    $containerConfigurator->import(SetList::DEAD_CODE);
-//    $containerConfigurator->import(SetList::PRIVATIZATION);
-//    $containerConfigurator->import(SetList::NAMING);
-//    $containerConfigurator->import(SetList::TYPE_DECLARATION);
-//    $containerConfigurator->import(SetList::PHP_71);
-//    $containerConfigurator->import(SetList::PHP_72);
-//    $containerConfigurator->import(SetList::PHP_73);
-//    $containerConfigurator->import(SetList::EARLY_RETURN);
-//    $containerConfigurator->import(SetList::TYPE_DECLARATION_STRICT);
-//    $containerConfigurator->import(NetteSetList::NETTE_UTILS_CODE_QUALITY);
-//    $containerConfigurator->import(PHPUnitSetList::PHPUNIT_CODE_QUALITY);
+    $containerConfigurator->import(SetList::CODING_STYLE);
+    $containerConfigurator->import(SetList::CODE_QUALITY);
+    $containerConfigurator->import(SetList::CODE_QUALITY_STRICT);
+    $containerConfigurator->import(SetList::DEAD_CODE);
+    $containerConfigurator->import(SetList::PRIVATIZATION);
+    $containerConfigurator->import(SetList::NAMING);
+    $containerConfigurator->import(SetList::TYPE_DECLARATION);
+    $containerConfigurator->import(SetList::PHP_71);
+    $containerConfigurator->import(SetList::PHP_72);
+    $containerConfigurator->import(SetList::PHP_73);
+    $containerConfigurator->import(SetList::EARLY_RETURN);
+    $containerConfigurator->import(SetList::TYPE_DECLARATION_STRICT);
+    $containerConfigurator->import(NetteSetList::NETTE_UTILS_CODE_QUALITY);
+    $containerConfigurator->import(PHPUnitSetList::PHPUNIT_CODE_QUALITY);
 
     $services = $containerConfigurator->services();
 

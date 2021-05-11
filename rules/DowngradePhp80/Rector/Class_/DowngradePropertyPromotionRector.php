@@ -75,7 +75,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $properties = $this->addPropertiesFromParams($promotedParams, $node);
+        $properties = $this->resolvePropertiesFromPromotedParams($promotedParams, $node);
 
         $this->addPropertyAssignsToConstructorClassMethod($properties, $node);
 
@@ -113,7 +113,7 @@ CODE_SAMPLE
      * @param Param[] $promotedParams
      * @return Property[]
      */
-    private function addPropertiesFromParams(array $promotedParams, Class_ $class): array
+    private function resolvePropertiesFromPromotedParams(array $promotedParams, Class_ $class): array
     {
         $properties = $this->createPropertiesFromParams($promotedParams);
         $this->classInsertManipulator->addPropertiesToClass($class, $properties);
@@ -154,6 +154,10 @@ CODE_SAMPLE
             $property = $this->nodeFactory->createProperty($name);
             $property->flags = $param->flags;
             $property->type = $param->type;
+
+            if ($param->default !== null) {
+                $property->props[0]->default = $param->default;
+            }
 
             $properties[] = $property;
         }

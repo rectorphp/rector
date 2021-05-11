@@ -2,9 +2,10 @@
 
 namespace Rector\Tests\DowngradePhp80\Rector\Class_\DowngradePropertyPromotionRector\Fixture;
 
-class Fixture
+final class AddArrayDefaults
 {
-    public function __construct(public float $value = 0.0)
+    public function __construct(
+        protected array $values = [])
     {
     }
 }
@@ -15,12 +16,12 @@ class Fixture
 
 namespace Rector\Tests\DowngradePhp80\Rector\Class_\DowngradePropertyPromotionRector\Fixture;
 
-class Fixture
+final class AddArrayDefaults
 {
-    public float $value = 0.0;
-    public function __construct(float $value = 0.0)
+    protected array $values = [];
+    public function __construct(array $values = [])
     {
-        $this->value = $value;
+        $this->values = $values;
     }
 }
 
