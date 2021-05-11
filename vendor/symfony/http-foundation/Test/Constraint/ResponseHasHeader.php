@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210510\Symfony\Component\HttpFoundation\Test\Constraint;
+namespace RectorPrefix20210511\Symfony\Component\HttpFoundation\Test\Constraint;
 
-use RectorPrefix20210510\PHPUnit\Framework\Constraint\Constraint;
-use RectorPrefix20210510\Symfony\Component\HttpFoundation\Response;
-final class ResponseHasHeader extends \RectorPrefix20210510\PHPUnit\Framework\Constraint\Constraint
+use RectorPrefix20210511\PHPUnit\Framework\Constraint\Constraint;
+use RectorPrefix20210511\Symfony\Component\HttpFoundation\Response;
+final class ResponseHasHeader extends \RectorPrefix20210511\PHPUnit\Framework\Constraint\Constraint
 {
     private $headerName;
     public function __construct(string $headerName)

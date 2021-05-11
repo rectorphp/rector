@@ -12,7 +12,7 @@ final class RemoveFuncCall
     /**
      * @var mixed[]
      */
-    private $argumentPositionAndValues;
+    private $argumentPositionAndValues = [];
     /**
      * @param array<int, mixed[]> $argumentPositionAndValues
      */

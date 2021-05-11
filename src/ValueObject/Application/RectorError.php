@@ -17,11 +17,11 @@ final class RectorError
     /**
      * @var int|null
      */
-    private $line;
+    private $line = null;
     /**
      * @var string|null
      */
-    private $rectorClass;
+    private $rectorClass = null;
     public function __construct(string $message, ?int $line = null, ?string $rectorClass = null)
     {
         $this->message = $message;

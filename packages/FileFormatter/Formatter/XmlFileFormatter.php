@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\FileFormatter\Formatter;
 
-use RectorPrefix20210510\PrettyXml\Formatter;
+use RectorPrefix20210511\PrettyXml\Formatter;
 use Rector\Core\ValueObject\Application\File;
 use Rector\FileFormatter\Contract\Formatter\FileFormatterInterface;
 use Rector\FileFormatter\ValueObject\EditorConfigConfiguration;
@@ -18,7 +18,7 @@ final class XmlFileFormatter implements \Rector\FileFormatter\Contract\Formatter
      * @var \PrettyXml\Formatter
      */
     private $xmlFormatter;
-    public function __construct(\RectorPrefix20210510\PrettyXml\Formatter $xmlFormatter)
+    public function __construct(\RectorPrefix20210511\PrettyXml\Formatter $xmlFormatter)
     {
         $this->xmlFormatter = $xmlFormatter;
     }

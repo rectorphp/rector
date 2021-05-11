@@ -34,7 +34,7 @@ final class YieldClassMethodToArrayClassMethodRector extends \Rector\Core\Rector
     /**
      * @var mixed[]
      */
-    private $methodsByType;
+    private $methodsByType = [];
     /**
      * @param array<class-string, string[]> $methodsByType
      */

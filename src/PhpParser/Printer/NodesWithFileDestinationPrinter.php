@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Core\PhpParser\Printer;
 
-use RectorPrefix20210510\Nette\Utils\Strings;
+use RectorPrefix20210511\Nette\Utils\Strings;
 use PhpParser\Lexer;
 use Rector\FileSystemRector\Contract\FileWithNodesInterface;
 use Rector\PostRector\Application\PostFileProcessor;
@@ -40,7 +40,7 @@ final class NodesWithFileDestinationPrinter
     {
         $tokens = $this->lexer->getTokens();
         $lastToken = \array_pop($tokens);
-        if ($lastToken && isset($lastToken[1]) && \RectorPrefix20210510\Nette\Utils\Strings::contains($lastToken[1], "\n")) {
+        if ($lastToken && isset($lastToken[1]) && \RectorPrefix20210511\Nette\Utils\Strings::contains($lastToken[1], "\n")) {
             $prettyPrintContent = \trim($prettyPrintContent) . \PHP_EOL;
         }
         return $prettyPrintContent;

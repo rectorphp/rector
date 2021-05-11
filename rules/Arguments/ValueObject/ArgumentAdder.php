@@ -21,16 +21,16 @@ final class ArgumentAdder
     /**
      * @var string|null
      */
-    private $argumentName;
-    private $argumentDefaultValue;
+    private $argumentName = null;
+    private $argumentDefaultValue = null;
     /**
      * @var string|null
      */
-    private $argumentType;
+    private $argumentType = null;
     /**
      * @var string|null
      */
-    private $scope;
+    private $scope = null;
     /**
      * @param mixed|null $argumentDefaultValue
      */

@@ -21,11 +21,11 @@ final class PropertyFetchToMethodCall
     /**
      * @var string|null
      */
-    private $newSetMethod;
+    private $newSetMethod = null;
     /**
      * @var mixed[]
      */
-    private $newGetArguments;
+    private $newGetArguments = [];
     /**
      * @param mixed[] $newGetArguments
      */

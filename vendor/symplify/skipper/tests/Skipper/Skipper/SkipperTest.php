@@ -1,17 +1,17 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210510\Symplify\Skipper\Tests\Skipper\Skipper;
+namespace RectorPrefix20210511\Symplify\Skipper\Tests\Skipper\Skipper;
 
 use Iterator;
-use RectorPrefix20210510\Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
-use RectorPrefix20210510\Symplify\Skipper\HttpKernel\SkipperKernel;
-use RectorPrefix20210510\Symplify\Skipper\Skipper\Skipper;
-use RectorPrefix20210510\Symplify\Skipper\Tests\Skipper\Skipper\Fixture\Element\FifthElement;
-use RectorPrefix20210510\Symplify\Skipper\Tests\Skipper\Skipper\Fixture\Element\SixthSense;
-use RectorPrefix20210510\Symplify\Skipper\Tests\Skipper\Skipper\Fixture\Element\ThreeMan;
+use RectorPrefix20210511\Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
+use RectorPrefix20210511\Symplify\Skipper\HttpKernel\SkipperKernel;
+use RectorPrefix20210511\Symplify\Skipper\Skipper\Skipper;
+use RectorPrefix20210511\Symplify\Skipper\Tests\Skipper\Skipper\Fixture\Element\FifthElement;
+use RectorPrefix20210511\Symplify\Skipper\Tests\Skipper\Skipper\Fixture\Element\SixthSense;
+use RectorPrefix20210511\Symplify\Skipper\Tests\Skipper\Skipper\Fixture\Element\ThreeMan;
 use Symplify\SmartFileSystem\SmartFileInfo;
-final class SkipperTest extends \RectorPrefix20210510\Symplify\PackageBuilder\Testing\AbstractKernelTestCase
+final class SkipperTest extends \RectorPrefix20210511\Symplify\PackageBuilder\Testing\AbstractKernelTestCase
 {
     /**
      * @var Skipper
@@ -19,8 +19,8 @@ final class SkipperTest extends \RectorPrefix20210510\Symplify\PackageBuilder\Te
     private $skipper;
     protected function setUp() : void
     {
-        $this->bootKernelWithConfigs(\RectorPrefix20210510\Symplify\Skipper\HttpKernel\SkipperKernel::class, [__DIR__ . '/config/config.php']);
-        $this->skipper = $this->getService(\RectorPrefix20210510\Symplify\Skipper\Skipper\Skipper::class);
+        $this->bootKernelWithConfigs(\RectorPrefix20210511\Symplify\Skipper\HttpKernel\SkipperKernel::class, [__DIR__ . '/config/config.php']);
+        $this->skipper = $this->getService(\RectorPrefix20210511\Symplify\Skipper\Skipper\Skipper::class);
     }
     /**
      * @dataProvider provideDataShouldSkipFileInfo()
@@ -47,8 +47,8 @@ final class SkipperTest extends \RectorPrefix20210510\Symplify\PackageBuilder\Te
     }
     public function provideDataShouldSkipElement() : \Iterator
     {
-        (yield [\RectorPrefix20210510\Symplify\Skipper\Tests\Skipper\Skipper\Fixture\Element\ThreeMan::class, \false]);
-        (yield [\RectorPrefix20210510\Symplify\Skipper\Tests\Skipper\Skipper\Fixture\Element\SixthSense::class, \true]);
-        (yield [new \RectorPrefix20210510\Symplify\Skipper\Tests\Skipper\Skipper\Fixture\Element\FifthElement(), \true]);
+        (yield [\RectorPrefix20210511\Symplify\Skipper\Tests\Skipper\Skipper\Fixture\Element\ThreeMan::class, \false]);
+        (yield [\RectorPrefix20210511\Symplify\Skipper\Tests\Skipper\Skipper\Fixture\Element\SixthSense::class, \true]);
+        (yield [new \RectorPrefix20210511\Symplify\Skipper\Tests\Skipper\Skipper\Fixture\Element\FifthElement(), \true]);
     }
 }

@@ -16,11 +16,11 @@ final class ArgumentFuncCallToMethodCall
     /**
      * @var string|null
      */
-    private $methodIfArgs;
+    private $methodIfArgs = null;
     /**
      * @var string|null
      */
-    private $methodIfNoArgs;
+    private $methodIfNoArgs = null;
     public function __construct(string $function, string $class, ?string $methodIfArgs = null, ?string $methodIfNoArgs = null)
     {
         $this->function = $function;

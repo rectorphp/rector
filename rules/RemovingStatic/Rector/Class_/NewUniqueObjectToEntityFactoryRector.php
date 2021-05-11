@@ -64,13 +64,13 @@ final class NewUniqueObjectToEntityFactoryRector extends \Rector\Core\Rector\Abs
         return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Convert new X to new factories', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
 <?php
 
-namespace RectorPrefix20210510;
+namespace RectorPrefix20210511;
 
 class SomeClass
 {
     public function run()
     {
-        return new \RectorPrefix20210510\AnotherClass();
+        return new \RectorPrefix20210511\AnotherClass();
     }
 }
 \class_alias('SomeClass', 'SomeClass', \false);
@@ -78,7 +78,7 @@ class AnotherClass
 {
     public function someFun()
     {
-        return \RectorPrefix20210510\StaticClass::staticMethod();
+        return \RectorPrefix20210511\StaticClass::staticMethod();
     }
 }
 \class_alias('AnotherClass', 'AnotherClass', \false);

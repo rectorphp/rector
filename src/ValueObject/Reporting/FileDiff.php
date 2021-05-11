@@ -23,7 +23,7 @@ final class FileDiff
     /**
      * @var mixed[]
      */
-    private $rectorWithLineChanges;
+    private $rectorWithLineChanges = [];
     /**
      * @param RectorWithLineChange[] $rectorWithLineChanges
      */

@@ -12,7 +12,7 @@ final class PseudoNamespaceToNamespace
     /**
      * @var mixed[]
      */
-    private $excludedClasses;
+    private $excludedClasses = [];
     /**
      * @param string[] $excludedClasses
      */

@@ -1,17 +1,17 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210510\Symplify\Skipper\Tests\Skipper\Skip;
+namespace RectorPrefix20210511\Symplify\Skipper\Tests\Skipper\Skip;
 
 use Iterator;
-use RectorPrefix20210510\Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
-use RectorPrefix20210510\Symplify\Skipper\HttpKernel\SkipperKernel;
-use RectorPrefix20210510\Symplify\Skipper\Skipper\Skipper;
-use RectorPrefix20210510\Symplify\Skipper\Tests\Skipper\Skip\Source\AnotherClassToSkip;
-use RectorPrefix20210510\Symplify\Skipper\Tests\Skipper\Skip\Source\NotSkippedClass;
-use RectorPrefix20210510\Symplify\Skipper\Tests\Skipper\Skip\Source\SomeClassToSkip;
+use RectorPrefix20210511\Symplify\PackageBuilder\Testing\AbstractKernelTestCase;
+use RectorPrefix20210511\Symplify\Skipper\HttpKernel\SkipperKernel;
+use RectorPrefix20210511\Symplify\Skipper\Skipper\Skipper;
+use RectorPrefix20210511\Symplify\Skipper\Tests\Skipper\Skip\Source\AnotherClassToSkip;
+use RectorPrefix20210511\Symplify\Skipper\Tests\Skipper\Skip\Source\NotSkippedClass;
+use RectorPrefix20210511\Symplify\Skipper\Tests\Skipper\Skip\Source\SomeClassToSkip;
 use Symplify\SmartFileSystem\SmartFileInfo;
-final class SkipSkipperTest extends \RectorPrefix20210510\Symplify\PackageBuilder\Testing\AbstractKernelTestCase
+final class SkipSkipperTest extends \RectorPrefix20210511\Symplify\PackageBuilder\Testing\AbstractKernelTestCase
 {
     /**
      * @var Skipper
@@ -19,8 +19,8 @@ final class SkipSkipperTest extends \RectorPrefix20210510\Symplify\PackageBuilde
     private $skipper;
     protected function setUp() : void
     {
-        $this->bootKernelWithConfigs(\RectorPrefix20210510\Symplify\Skipper\HttpKernel\SkipperKernel::class, [__DIR__ . '/config/config.php']);
-        $this->skipper = $this->getService(\RectorPrefix20210510\Symplify\Skipper\Skipper\Skipper::class);
+        $this->bootKernelWithConfigs(\RectorPrefix20210511\Symplify\Skipper\HttpKernel\SkipperKernel::class, [__DIR__ . '/config/config.php']);
+        $this->skipper = $this->getService(\RectorPrefix20210511\Symplify\Skipper\Skipper\Skipper::class);
     }
     /**
      * @dataProvider provideCheckerAndFile()
@@ -35,18 +35,18 @@ final class SkipSkipperTest extends \RectorPrefix20210510\Symplify\PackageBuilde
     }
     public function provideCheckerAndFile() : \Iterator
     {
-        (yield [\RectorPrefix20210510\Symplify\Skipper\Tests\Skipper\Skip\Source\SomeClassToSkip::class, __DIR__ . '/Fixture', \true]);
-        (yield [\RectorPrefix20210510\Symplify\Skipper\Tests\Skipper\Skip\Source\AnotherClassToSkip::class, __DIR__ . '/Fixture/someFile', \true]);
-        (yield [\RectorPrefix20210510\Symplify\Skipper\Tests\Skipper\Skip\Source\AnotherClassToSkip::class, __DIR__ . '/Fixture/someDirectory/anotherFile.php', \true]);
-        (yield [\RectorPrefix20210510\Symplify\Skipper\Tests\Skipper\Skip\Source\AnotherClassToSkip::class, __DIR__ . '/Fixture/someDirectory/anotherFile.php', \true]);
-        (yield [\RectorPrefix20210510\Symplify\Skipper\Tests\Skipper\Skip\Source\NotSkippedClass::class, __DIR__ . '/Fixture/someFile', \false]);
-        (yield [\RectorPrefix20210510\Symplify\Skipper\Tests\Skipper\Skip\Source\NotSkippedClass::class, __DIR__ . '/Fixture/someOtherFile', \false]);
+        (yield [\RectorPrefix20210511\Symplify\Skipper\Tests\Skipper\Skip\Source\SomeClassToSkip::class, __DIR__ . '/Fixture', \true]);
+        (yield [\RectorPrefix20210511\Symplify\Skipper\Tests\Skipper\Skip\Source\AnotherClassToSkip::class, __DIR__ . '/Fixture/someFile', \true]);
+        (yield [\RectorPrefix20210511\Symplify\Skipper\Tests\Skipper\Skip\Source\AnotherClassToSkip::class, __DIR__ . '/Fixture/someDirectory/anotherFile.php', \true]);
+        (yield [\RectorPrefix20210511\Symplify\Skipper\Tests\Skipper\Skip\Source\AnotherClassToSkip::class, __DIR__ . '/Fixture/someDirectory/anotherFile.php', \true]);
+        (yield [\RectorPrefix20210511\Symplify\Skipper\Tests\Skipper\Skip\Source\NotSkippedClass::class, __DIR__ . '/Fixture/someFile', \false]);
+        (yield [\RectorPrefix20210511\Symplify\Skipper\Tests\Skipper\Skip\Source\NotSkippedClass::class, __DIR__ . '/Fixture/someOtherFile', \false]);
     }
     public function provideCodeAndFile() : \Iterator
     {
-        (yield [\RectorPrefix20210510\Symplify\Skipper\Tests\Skipper\Skip\Source\AnotherClassToSkip::class . '.someCode', __DIR__ . '/Fixture/someFile', \true]);
-        (yield [\RectorPrefix20210510\Symplify\Skipper\Tests\Skipper\Skip\Source\AnotherClassToSkip::class . '.someOtherCode', __DIR__ . '/Fixture/someDirectory/someFile', \true]);
-        (yield [\RectorPrefix20210510\Symplify\Skipper\Tests\Skipper\Skip\Source\AnotherClassToSkip::class . '.someAnotherCode', __DIR__ . '/Fixture/someDirectory/someFile', \true]);
+        (yield [\RectorPrefix20210511\Symplify\Skipper\Tests\Skipper\Skip\Source\AnotherClassToSkip::class . '.someCode', __DIR__ . '/Fixture/someFile', \true]);
+        (yield [\RectorPrefix20210511\Symplify\Skipper\Tests\Skipper\Skip\Source\AnotherClassToSkip::class . '.someOtherCode', __DIR__ . '/Fixture/someDirectory/someFile', \true]);
+        (yield [\RectorPrefix20210511\Symplify\Skipper\Tests\Skipper\Skip\Source\AnotherClassToSkip::class . '.someAnotherCode', __DIR__ . '/Fixture/someDirectory/someFile', \true]);
         (yield ['someSniff.someForeignCode', __DIR__ . '/Fixture/someFile', \false]);
         (yield ['someSniff.someOtherCode', __DIR__ . '/Fixture/someFile', \false]);
     }

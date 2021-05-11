@@ -10,7 +10,7 @@ final class BracketsAwareUnionTypeNode extends \PHPStan\PhpDocParser\Ast\Type\Un
     /**
      * @var bool
      */
-    private $isWrappedInBrackets;
+    private $isWrappedInBrackets = \false;
     /**
      * @param TypeNode[] $types
      */

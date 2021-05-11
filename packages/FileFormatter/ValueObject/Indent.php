@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\FileFormatter\ValueObject;
 
-use RectorPrefix20210510\Nette\Utils\Strings;
+use RectorPrefix20210511\Nette\Utils\Strings;
 use Rector\FileFormatter\Exception\InvalidIndentSizeException;
 use Rector\FileFormatter\Exception\InvalidIndentStringException;
 use Rector\FileFormatter\Exception\InvalidIndentStyleException;
@@ -115,6 +115,6 @@ final class Indent
     }
     private function startsWithSpace() : bool
     {
-        return \RectorPrefix20210510\Nette\Utils\Strings::startsWith($this->string, ' ');
+        return \RectorPrefix20210511\Nette\Utils\Strings::startsWith($this->string, ' ');
     }
 }

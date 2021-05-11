@@ -1,17 +1,17 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210510\Symplify\SmartFileSystem\Tests\SmartFileInfo;
+namespace RectorPrefix20210511\Symplify\SmartFileSystem\Tests\SmartFileInfo;
 
-use RectorPrefix20210510\PHPUnit\Framework\TestCase;
-use RectorPrefix20210510\Symplify\SmartFileSystem\Exception\DirectoryNotFoundException;
-use RectorPrefix20210510\Symplify\SmartFileSystem\Exception\FileNotFoundException;
+use RectorPrefix20210511\PHPUnit\Framework\TestCase;
+use RectorPrefix20210511\Symplify\SmartFileSystem\Exception\DirectoryNotFoundException;
+use RectorPrefix20210511\Symplify\SmartFileSystem\Exception\FileNotFoundException;
 use Symplify\SmartFileSystem\SmartFileInfo;
-final class SmartFileInfoTest extends \RectorPrefix20210510\PHPUnit\Framework\TestCase
+final class SmartFileInfoTest extends \RectorPrefix20210511\PHPUnit\Framework\TestCase
 {
     public function testInvalidPath() : void
     {
-        $this->expectException(\RectorPrefix20210510\Symplify\SmartFileSystem\Exception\FileNotFoundException::class);
+        $this->expectException(\RectorPrefix20210511\Symplify\SmartFileSystem\Exception\FileNotFoundException::class);
         new \Symplify\SmartFileSystem\SmartFileInfo('random');
     }
     public function testRelatives() : void
@@ -38,7 +38,7 @@ final class SmartFileInfoTest extends \RectorPrefix20210510\PHPUnit\Framework\Te
     }
     public function testRelativeToDirException() : void
     {
-        $this->expectException(\RectorPrefix20210510\Symplify\SmartFileSystem\Exception\DirectoryNotFoundException::class);
+        $this->expectException(\RectorPrefix20210511\Symplify\SmartFileSystem\Exception\DirectoryNotFoundException::class);
         $smartFileInfo = new \Symplify\SmartFileSystem\SmartFileInfo(__FILE__);
         $smartFileInfo->getRelativeFilePathFromDirectory('non-existing-path');
     }

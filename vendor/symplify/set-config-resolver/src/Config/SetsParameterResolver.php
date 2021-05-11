@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210510\Symplify\SetConfigResolver\Config;
+namespace RectorPrefix20210511\Symplify\SetConfigResolver\Config;
 
-use RectorPrefix20210510\Symfony\Component\Config\FileLocator;
-use RectorPrefix20210510\Symfony\Component\DependencyInjection\ContainerBuilder;
-use RectorPrefix20210510\Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
-use RectorPrefix20210510\Symplify\Astral\Exception\ShouldNotHappenException;
-use RectorPrefix20210510\Symplify\SetConfigResolver\SetResolver;
+use RectorPrefix20210511\Symfony\Component\Config\FileLocator;
+use RectorPrefix20210511\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix20210511\Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
+use RectorPrefix20210511\Symplify\Astral\Exception\ShouldNotHappenException;
+use RectorPrefix20210511\Symplify\SetConfigResolver\SetResolver;
 use Symplify\SmartFileSystem\SmartFileInfo;
 final class SetsParameterResolver
 {
@@ -19,7 +19,7 @@ final class SetsParameterResolver
      * @var SetResolver
      */
     private $setResolver;
-    public function __construct(\RectorPrefix20210510\Symplify\SetConfigResolver\SetResolver $setResolver)
+    public function __construct(\RectorPrefix20210511\Symplify\SetConfigResolver\SetResolver $setResolver)
     {
         $this->setResolver = $setResolver;
     }
@@ -44,7 +44,7 @@ final class SetsParameterResolver
     private function resolveSetsFromFileInfo(\Symplify\SmartFileSystem\SmartFileInfo $configFileInfo) : array
     {
         if ($configFileInfo->hasSuffixes(['yml', 'yaml'])) {
-            throw new \RectorPrefix20210510\Symplify\Astral\Exception\ShouldNotHappenException('Only PHP config suffix is supported now. Migrete your Symfony config to PHP');
+            throw new \RectorPrefix20210511\Symplify\Astral\Exception\ShouldNotHappenException('Only PHP config suffix is supported now. Migrete your Symfony config to PHP');
         }
         return $this->resolveSetsParameterFromPhpFileInfo($configFileInfo);
     }
@@ -54,8 +54,8 @@ final class SetsParameterResolver
     private function resolveSetsParameterFromPhpFileInfo(\Symplify\SmartFileSystem\SmartFileInfo $configFileInfo) : array
     {
         // php file loader
-        $containerBuilder = new \RectorPrefix20210510\Symfony\Component\DependencyInjection\ContainerBuilder();
-        $phpFileLoader = new \RectorPrefix20210510\Symfony\Component\DependencyInjection\Loader\PhpFileLoader($containerBuilder, new \RectorPrefix20210510\Symfony\Component\Config\FileLocator());
+        $containerBuilder = new \RectorPrefix20210511\Symfony\Component\DependencyInjection\ContainerBuilder();
+        $phpFileLoader = new \RectorPrefix20210511\Symfony\Component\DependencyInjection\Loader\PhpFileLoader($containerBuilder, new \RectorPrefix20210511\Symfony\Component\Config\FileLocator());
         $phpFileLoader->load($configFileInfo->getRealPath());
         if (!$containerBuilder->hasParameter(self::SETS)) {
             return [];

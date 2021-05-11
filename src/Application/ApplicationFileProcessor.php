@@ -8,7 +8,7 @@ use Rector\Core\Configuration\Configuration;
 use Rector\Core\Contract\Processor\FileProcessorInterface;
 use Rector\Core\ValueObject\Application\File;
 use Rector\FileFormatter\FileFormatter;
-use RectorPrefix20210510\Symplify\SmartFileSystem\SmartFileSystem;
+use RectorPrefix20210511\Symplify\SmartFileSystem\SmartFileSystem;
 final class ApplicationFileProcessor
 {
     /**
@@ -30,11 +30,11 @@ final class ApplicationFileProcessor
     /**
      * @var mixed[]
      */
-    private $fileProcessors;
+    private $fileProcessors = [];
     /**
      * @param FileProcessorInterface[] $fileProcessors
      */
-    public function __construct(\Rector\Core\Configuration\Configuration $configuration, \RectorPrefix20210510\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \Rector\Core\Application\FileDecorator\FileDiffFileDecorator $fileDiffFileDecorator, \Rector\FileFormatter\FileFormatter $fileFormatter, array $fileProcessors = [])
+    public function __construct(\Rector\Core\Configuration\Configuration $configuration, \RectorPrefix20210511\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \Rector\Core\Application\FileDecorator\FileDiffFileDecorator $fileDiffFileDecorator, \Rector\FileFormatter\FileFormatter $fileFormatter, array $fileProcessors = [])
     {
         $this->configuration = $configuration;
         $this->smartFileSystem = $smartFileSystem;

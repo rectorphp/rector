@@ -16,7 +16,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\NodeNameResolver\NodeNameResolver;
-use RectorPrefix20210510\Symfony\Component\Form\Extension\Core\Type\TextType;
+use RectorPrefix20210511\Symfony\Component\Form\Extension\Core\Type\TextType;
 final class SymfonyFormAbstractTypeFactory
 {
     /**
@@ -61,7 +61,7 @@ final class SymfonyFormAbstractTypeFactory
         foreach ($methodCalls as $methodCall) {
             if ($this->nodeNameResolver->isName($methodCall->name, 'addText')) {
                 $optionsArray = $this->createOptionsArray($methodCall);
-                $formTypeClassConstant = $this->nodeFactory->createClassConstReference(\RectorPrefix20210510\Symfony\Component\Form\Extension\Core\Type\TextType::class);
+                $formTypeClassConstant = $this->nodeFactory->createClassConstReference(\RectorPrefix20210511\Symfony\Component\Form\Extension\Core\Type\TextType::class);
                 $args = [$methodCall->args[0], new \PhpParser\Node\Arg($formTypeClassConstant)];
                 if ($optionsArray instanceof \PhpParser\Node\Expr\Array_) {
                     $args[] = new \PhpParser\Node\Arg($optionsArray);

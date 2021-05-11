@@ -8,15 +8,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210510\Symfony\Component\DependencyInjection\Exception;
+namespace RectorPrefix20210511\Symfony\Component\DependencyInjection\Exception;
 
-use RectorPrefix20210510\Psr\Container\NotFoundExceptionInterface;
+use RectorPrefix20210511\Psr\Container\NotFoundExceptionInterface;
 /**
  * This exception is thrown when a non-existent parameter is used.
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class ParameterNotFoundException extends \RectorPrefix20210510\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException implements \RectorPrefix20210510\Psr\Container\NotFoundExceptionInterface
+class ParameterNotFoundException extends \RectorPrefix20210511\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException implements \RectorPrefix20210511\Psr\Container\NotFoundExceptionInterface
 {
     private $key;
     private $sourceId;
