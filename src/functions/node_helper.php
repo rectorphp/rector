@@ -35,7 +35,7 @@ if (! function_exists('print_node')) {
     /**
      * @param Node|Node[] $node
      */
-    function print_node(Node | array $node): void
+    function print_node($node): void
     {
         $standard = new Standard();
 
