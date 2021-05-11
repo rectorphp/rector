@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\Core\Application;
 
 use Rector\Core\Application\FileDecorator\FileDiffFileDecorator;
+use Rector\Core\Application\FileSystem\RemovedAndAddedFilesProcessor;
 use Rector\Core\Configuration\Configuration;
 use Rector\Core\Contract\Processor\FileProcessorInterface;
 use Rector\Core\ValueObject\Application\File;
@@ -28,18 +29,23 @@ final class ApplicationFileProcessor
      */
     private $fileFormatter;
     /**
+     * @var \Rector\Core\Application\FileSystem\RemovedAndAddedFilesProcessor
+     */
+    private $removedAndAddedFilesProcessor;
+    /**
      * @var mixed[]
      */
     private $fileProcessors = [];
     /**
      * @param FileProcessorInterface[] $fileProcessors
      */
-    public function __construct(\Rector\Core\Configuration\Configuration $configuration, \RectorPrefix20210511\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \Rector\Core\Application\FileDecorator\FileDiffFileDecorator $fileDiffFileDecorator, \Rector\FileFormatter\FileFormatter $fileFormatter, array $fileProcessors = [])
+    public function __construct(\Rector\Core\Configuration\Configuration $configuration, \RectorPrefix20210511\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \Rector\Core\Application\FileDecorator\FileDiffFileDecorator $fileDiffFileDecorator, \Rector\FileFormatter\FileFormatter $fileFormatter, \Rector\Core\Application\FileSystem\RemovedAndAddedFilesProcessor $removedAndAddedFilesProcessor, array $fileProcessors = [])
     {
         $this->configuration = $configuration;
         $this->smartFileSystem = $smartFileSystem;
         $this->fileDiffFileDecorator = $fileDiffFileDecorator;
         $this->fileFormatter = $fileFormatter;
+        $this->removedAndAddedFilesProcessor = $removedAndAddedFilesProcessor;
         $this->fileProcessors = $fileProcessors;
     }
     /**
@@ -63,6 +69,7 @@ final class ApplicationFileProcessor
             });
             $fileProcessor->process($supportedFiles);
         }
+        $this->removedAndAddedFilesProcessor->run();
     }
     /**
      * @param File[] $files

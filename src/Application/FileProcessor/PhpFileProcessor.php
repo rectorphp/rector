@@ -56,10 +56,6 @@ final class PhpFileProcessor implements \Rector\Core\Contract\Processor\FileProc
      */
     private $removedAndAddedFilesCollector;
     /**
-     * @var \Rector\Core\Application\FileSystem\RemovedAndAddedFilesProcessor
-     */
-    private $removedAndAddedFilesProcessor;
-    /**
      * @var \Symfony\Component\Console\Style\SymfonyStyle
      */
     private $symfonyStyle;
@@ -83,20 +79,18 @@ final class PhpFileProcessor implements \Rector\Core\Contract\Processor\FileProc
      * @var \Rector\ChangesReporting\ValueObjectFactory\ErrorFactory
      */
     private $errorFactory;
-    public function __construct(\Rector\Core\Configuration\Configuration $configuration, \Rector\Core\PhpParser\Printer\FormatPerservingPrinter $formatPerservingPrinter, \Rector\Core\Application\FileProcessor $fileProcessor, \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector $removedAndAddedFilesCollector, \Rector\Core\Application\FileSystem\RemovedAndAddedFilesProcessor $removedAndAddedFilesProcessor, \RectorPrefix20210511\Symfony\Component\Console\Style\SymfonyStyle $symfonyStyle, \RectorPrefix20210511\Symplify\PackageBuilder\Reflection\PrivatesAccessor $privatesAccessor, \Rector\Core\Application\FileDecorator\FileDiffFileDecorator $fileDiffFileDecorator, \Rector\Core\Provider\CurrentFileProvider $currentFileProvider, \Rector\PostRector\Application\PostFileProcessor $postFileProcessor, \Rector\ChangesReporting\ValueObjectFactory\ErrorFactory $errorFactory)
+    public function __construct(\Rector\Core\Configuration\Configuration $configuration, \Rector\Core\PhpParser\Printer\FormatPerservingPrinter $formatPerservingPrinter, \Rector\Core\Application\FileProcessor $fileProcessor, \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector $removedAndAddedFilesCollector, \RectorPrefix20210511\Symfony\Component\Console\Style\SymfonyStyle $symfonyStyle, \RectorPrefix20210511\Symplify\PackageBuilder\Reflection\PrivatesAccessor $privatesAccessor, \Rector\Core\Application\FileDecorator\FileDiffFileDecorator $fileDiffFileDecorator, \Rector\Core\Provider\CurrentFileProvider $currentFileProvider, \Rector\PostRector\Application\PostFileProcessor $postFileProcessor, \Rector\ChangesReporting\ValueObjectFactory\ErrorFactory $errorFactory)
     {
         $this->configuration = $configuration;
         $this->formatPerservingPrinter = $formatPerservingPrinter;
         $this->fileProcessor = $fileProcessor;
         $this->removedAndAddedFilesCollector = $removedAndAddedFilesCollector;
-        $this->removedAndAddedFilesProcessor = $removedAndAddedFilesProcessor;
         $this->symfonyStyle = $symfonyStyle;
         $this->privatesAccessor = $privatesAccessor;
         $this->fileDiffFileDecorator = $fileDiffFileDecorator;
         $this->currentFileProvider = $currentFileProvider;
         $this->postFileProcessor = $postFileProcessor;
         $this->errorFactory = $errorFactory;
-        $this->configuration = $configuration;
     }
     /**
      * @param File[] $files
@@ -139,8 +133,6 @@ final class PhpFileProcessor implements \Rector\Core\Contract\Processor\FileProc
         if ($this->configuration->shouldShowProgressBar()) {
             $this->symfonyStyle->newLine(2);
         }
-        // 4. remove and add files
-        $this->removedAndAddedFilesProcessor->run();
     }
     public function supports(\Rector\Core\ValueObject\Application\File $file) : bool
     {
