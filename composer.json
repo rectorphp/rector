@@ -37,6 +37,7 @@
         "symfony/dependency-injection": "^5.1",
         "symfony/finder": "^4.4.8|^5.1",
         "symfony/http-kernel": "^4.4.8|^5.1",
+        "symfony/yaml": "^4.4.8|^5.1",
         "symplify/astral": "^9.3.5",
         "symplify/autowire-array-parameter": "^9.3.5",
         "symplify/composer-json-manipulator": "^9.3.5",
