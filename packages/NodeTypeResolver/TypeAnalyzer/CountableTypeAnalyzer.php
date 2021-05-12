@@ -14,7 +14,7 @@ final class CountableTypeAnalyzer
     /**
      * @var ObjectType[]
      */
-    private $countableObjectTypes = [];
+    private array $countableObjectTypes = [];
 
     public function __construct(
         private ArrayTypeAnalyzer $arrayTypeAnalyzer,

@@ -32,7 +32,7 @@ final class RenameClassRector extends AbstractRector implements ConfigurableRect
     /**
      * @var array<string, string>
      */
-    private $oldToNewClasses = [];
+    private array $oldToNewClasses = [];
 
     public function __construct(
         private RenamedClassesDataCollector $renamedClassesDataCollector,

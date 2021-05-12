@@ -22,23 +22,20 @@ use Rector\StaticTypeMapper\StaticTypeMapper;
  */
 final class NameScopeFactory
 {
-    /**
-     * @var StaticTypeMapper
-     */
-    private $staticTypeMapper;
+    private StaticTypeMapper $staticTypeMapper;
 
-    /**
-     * @var PhpDocInfoFactory
-     */
-    private $phpDocInfoFactory;
+    private PhpDocInfoFactory $phpDocInfoFactory;
 
     /**
      * This is needed to avoid circular references
      * @required
      */
-    public function autowireNameScopeFactory(PhpDocInfoFactory $phpDocInfoFactory): void
-    {
+    public function autowireNameScopeFactory(
+        PhpDocInfoFactory $phpDocInfoFactory,
+        StaticTypeMapper $staticTypeMapper
+    ): void {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
+        $this->staticTypeMapper = $staticTypeMapper;
     }
 
     public function createNameScopeFromNodeWithoutTemplateTypes(Node $node): NameScope
@@ -69,10 +66,10 @@ final class NameScopeFactory
         );
     }
 
-    public function setStaticTypeMapper(StaticTypeMapper $staticTypeMapper): void
-    {
-        $this->staticTypeMapper = $staticTypeMapper;
-    }
+//    public function setStaticTypeMapper(StaticTypeMapper $staticTypeMapper): void
+//    {
+//        $this->staticTypeMapper = $staticTypeMapper;
+//    }
 
     /**
      * @param Use_[] $useNodes

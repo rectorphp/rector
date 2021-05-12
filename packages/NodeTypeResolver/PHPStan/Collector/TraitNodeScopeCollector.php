@@ -14,7 +14,7 @@ final class TraitNodeScopeCollector
     /**
      * @var array<string, Scope>
      */
-    private $scopeByTraitNodeHash = [];
+    private array $scopeByTraitNodeHash = [];
 
     public function __construct(
         private BetterStandardPrinter $betterStandardPrinter

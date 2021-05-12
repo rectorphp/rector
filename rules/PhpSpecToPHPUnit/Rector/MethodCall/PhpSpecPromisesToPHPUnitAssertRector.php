@@ -16,6 +16,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpSpecToPHPUnit\MatchersManipulator;
 use Rector\PhpSpecToPHPUnit\Naming\PhpSpecRenaming;
@@ -77,25 +78,16 @@ final class PhpSpecPromisesToPHPUnitAssertRector extends AbstractPhpSpecToPHPUni
      */
     private const THIS = 'this';
 
-    /**
-     * @var string
-     */
-    private $testedClass;
+    private ?string $testedClass = null;
 
-    /**
-     * @var bool
-     */
-    private $isPrepared = false;
+    private bool $isPrepared = false;
 
     /**
      * @var string[]
      */
-    private $matchersKeys = [];
+    private array $matchersKeys = [];
 
-    /**
-     * @var PropertyFetch
-     */
-    private $testedObjectPropertyFetch;
+    private ?PropertyFetch $testedObjectPropertyFetch = null;
 
     public function __construct(
         private MatchersManipulator $matchersManipulator,
@@ -131,7 +123,7 @@ final class PhpSpecPromisesToPHPUnitAssertRector extends AbstractPhpSpecToPHPUni
         }
 
         if ($this->isName($node->name, 'during')) {
-            return $this->duringMethodCallFactory->create($node, $this->testedObjectPropertyFetch);
+            return $this->duringMethodCallFactory->create($node, $this->getTestedObjectPropertyFetch());
         }
 
         if ($this->isName($node->name, 'duringInstantiation')) {
@@ -147,8 +139,8 @@ final class PhpSpecPromisesToPHPUnitAssertRector extends AbstractPhpSpecToPHPUni
         if ($this->isName($node->name, 'beConstructed*')) {
             return $this->beConstructedWithAssignFactory->create(
                 $node,
-                $this->testedClass,
-                $this->testedObjectPropertyFetch
+                $this->getTestedClass(),
+                $this->getTestedObjectPropertyFetch()
             );
         }
 
@@ -163,7 +155,7 @@ final class PhpSpecPromisesToPHPUnitAssertRector extends AbstractPhpSpecToPHPUni
                 $newMethod,
                 $node->var,
                 $node->args[0]->value ?? null,
-                $this->testedObjectPropertyFetch
+                $this->getTestedObjectPropertyFetch()
             );
         }
 
@@ -172,7 +164,7 @@ final class PhpSpecPromisesToPHPUnitAssertRector extends AbstractPhpSpecToPHPUni
         }
 
         if ($this->isName($node->name, 'clone')) {
-            return new Clone_($this->testedObjectPropertyFetch);
+            return new Clone_($this->getTestedObjectPropertyFetch());
         }
 
         $methodName = $this->getName($node->name);
@@ -188,7 +180,7 @@ final class PhpSpecPromisesToPHPUnitAssertRector extends AbstractPhpSpecToPHPUni
             return null;
         }
 
-        $node->var = $this->testedObjectPropertyFetch;
+        $node->var = $this->getTestedObjectPropertyFetch();
 
         return $node;
     }
@@ -218,6 +210,24 @@ final class PhpSpecPromisesToPHPUnitAssertRector extends AbstractPhpSpecToPHPUni
         $this->isPrepared = true;
     }
 
+    private function getTestedObjectPropertyFetch(): PropertyFetch
+    {
+        if ($this->testedObjectPropertyFetch === null) {
+            throw new ShouldNotHappenException();
+        }
+
+        return $this->testedObjectPropertyFetch;
+    }
+
+    private function getTestedClass(): string
+    {
+        if ($this->testedClass === null) {
+            throw new ShouldNotHappenException();
+        }
+
+        return $this->testedClass;
+    }
+
     /**
      * @changelog https://johannespichler.com/writing-custom-phpspec-matchers/
      */
@@ -243,7 +253,7 @@ final class PhpSpecPromisesToPHPUnitAssertRector extends AbstractPhpSpecToPHPUni
             $funcCall->args = $methodCall->args;
 
             $methodCall->name = $methodCall->var->name;
-            $methodCall->var = $this->testedObjectPropertyFetch;
+            $methodCall->var = $this->getTestedObjectPropertyFetch();
             $methodCall->args = [];
             $funcCall->args[] = new Arg($methodCall);
 

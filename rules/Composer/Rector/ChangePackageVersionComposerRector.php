@@ -24,7 +24,7 @@ final class ChangePackageVersionComposerRector implements ComposerRectorInterfac
     /**
      * @var PackageAndVersion[]
      */
-    private $packagesAndVersions = [];
+    private array $packagesAndVersions = [];
 
     public function __construct(
         private VersionGuard $versionGuard

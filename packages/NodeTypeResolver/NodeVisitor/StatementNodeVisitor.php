@@ -11,10 +11,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class StatementNodeVisitor extends NodeVisitorAbstract
 {
-    /**
-     * @var Stmt|null
-     */
-    private $previousStmt;
+    private ?Stmt $previousStmt = null;
 
     /**
      * @param Node[] $nodes

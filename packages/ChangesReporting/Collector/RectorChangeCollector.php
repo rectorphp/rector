@@ -7,7 +7,6 @@ namespace Rector\ChangesReporting\Collector;
 use PhpParser\Node;
 use Rector\ChangesReporting\ValueObject\RectorWithLineChange;
 use Rector\Core\Contract\Rector\RectorInterface;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Logging\CurrentRectorProvider;
 use Rector\Core\Provider\CurrentFileProvider;
 use Rector\Core\ValueObject\Application\File;
@@ -20,6 +19,9 @@ final class RectorChangeCollector
     ) {
     }
 
+    /**
+     * @deprecated Use file-> method instead
+     */
     public function notifyNodeFileInfo(Node $node): void
     {
         $file = $this->currentFileProvider->getFile();
@@ -31,7 +33,7 @@ final class RectorChangeCollector
 
         $currentRector = $this->currentRectorProvider->getCurrentRector();
         if (! $currentRector instanceof RectorInterface) {
-            throw new ShouldNotHappenException();
+            return;
         }
 
         $rectorWithLineChange = new RectorWithLineChange($currentRector, $node->getLine());

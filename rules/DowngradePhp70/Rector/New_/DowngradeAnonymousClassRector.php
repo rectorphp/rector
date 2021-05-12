@@ -27,7 +27,7 @@ final class DowngradeAnonymousClassRector extends AbstractRector
     /**
      * @var Class_[]
      */
-    private $classes = [];
+    private array $classes = [];
 
     public function __construct(
         private ClassAnalyzer $classAnalyzer,

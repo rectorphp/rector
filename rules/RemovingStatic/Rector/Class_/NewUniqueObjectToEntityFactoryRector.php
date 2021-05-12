@@ -41,17 +41,17 @@ final class NewUniqueObjectToEntityFactoryRector extends AbstractRector implemen
     /**
      * @var ObjectType[]
      */
-    private $matchedObjectTypes = [];
+    private array $matchedObjectTypes = [];
 
     /**
      * @var ObjectType[]
      */
-    private $serviceObjectTypes = [];
+    private array $serviceObjectTypes = [];
 
     /**
      * @var string[]
      */
-    private $classesUsingTypes = [];
+    private array $classesUsingTypes = [];
 
     public function __construct(
         private PropertyNaming $propertyNaming,

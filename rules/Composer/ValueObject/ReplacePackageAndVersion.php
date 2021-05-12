@@ -10,15 +10,9 @@ use Webmozart\Assert\Assert;
 
 final class ReplacePackageAndVersion implements VersionAwareInterface
 {
-    /**
-     * @var string
-     */
-    private $oldPackageName;
+    private string $oldPackageName;
 
-    /**
-     * @var string
-     */
-    private $newPackageName;
+    private string $newPackageName;
 
     public function __construct(
         string $oldPackageName,

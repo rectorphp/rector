@@ -23,10 +23,7 @@ final class MultiDirnameRector extends AbstractRector
      */
     private const DIRNAME = 'dirname';
 
-    /**
-     * @var int
-     */
-    private $nestingLevel = 0;
+    private int $nestingLevel = 0;
 
     public function getRuleDefinition(): RuleDefinition
     {

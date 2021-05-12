@@ -33,7 +33,7 @@ final class ValueObjectWrapArgRector extends AbstractRector implements Configura
     /**
      * @var ValueObjectWrapArg[]
      */
-    private $valueObjectWrapArgs = [];
+    private array $valueObjectWrapArgs = [];
 
     public function getRuleDefinition(): RuleDefinition
     {

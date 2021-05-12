@@ -28,15 +28,9 @@ use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
  */
 final class ParamTypeResolver implements NodeTypeResolverInterface
 {
-    /**
-     * @var NodeTypeResolver
-     */
-    private $nodeTypeResolver;
+    private NodeTypeResolver $nodeTypeResolver;
 
-    /**
-     * @var StaticTypeMapper
-     */
-    private $staticTypeMapper;
+    private StaticTypeMapper $staticTypeMapper;
 
     public function __construct(
         private SimpleCallableNodeTraverser $simpleCallableNodeTraverser,

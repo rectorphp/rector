@@ -37,7 +37,7 @@ final class InferParamFromClassMethodReturnRector extends AbstractRector impleme
     /**
      * @var InferParamFromClassMethodReturn[]
      */
-    private $inferParamFromClassMethodReturn = [];
+    private array $inferParamFromClassMethodReturn = [];
 
     public function __construct(
         private ReturnTypeInferer $returnTypeInferer,

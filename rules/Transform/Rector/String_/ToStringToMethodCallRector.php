@@ -28,7 +28,7 @@ final class ToStringToMethodCallRector extends AbstractRector implements Configu
     /**
      * @var array<string, string>
      */
-    private $methodNamesByType = [];
+    private array $methodNamesByType = [];
 
     public function getRuleDefinition(): RuleDefinition
     {

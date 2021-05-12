@@ -5,13 +5,11 @@ declare(strict_types=1);
 namespace Rector\BetterPhpDocParser\DataProvider;
 
 use Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator;
+use Rector\Core\Exception\ShouldNotHappenException;
 
 final class CurrentTokenIteratorProvider
 {
-    /**
-     * @var BetterTokenIterator
-     */
-    private $betterTokenIterator;
+    private ?BetterTokenIterator $betterTokenIterator;
 
     public function setBetterTokenIterator(BetterTokenIterator $betterTokenIterator): void
     {
@@ -20,6 +18,10 @@ final class CurrentTokenIteratorProvider
 
     public function provide(): BetterTokenIterator
     {
+        if ($this->betterTokenIterator === null) {
+            throw new ShouldNotHappenException();
+        }
+
         return $this->betterTokenIterator;
     }
 }

@@ -27,10 +27,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class SimplifyForeachToCoalescingRector extends AbstractRector
 {
-    /**
-     * @var Return_|null
-     */
-    private $return;
+    private ?Return_ $return = null;
 
     public function __construct(
         private ForeachManipulator $foreachManipulator

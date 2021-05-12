@@ -17,17 +17,17 @@ final class PropertyToAddCollector implements NodeCollectorInterface
     /**
      * @var array<string, array<string, ClassConst>>
      */
-    private $constantsByClass = [];
+    private array $constantsByClass = [];
 
     /**
      * @var array<string, PropertyMetadata[]>
      */
-    private $propertiesByClass = [];
+    private array $propertiesByClass = [];
 
     /**
      * @var array<string, array<string, Type>>
      */
-    private $propertiesWithoutConstructorByClass = [];
+    private array $propertiesWithoutConstructorByClass = [];
 
     public function __construct(
         private NodeNameResolver $nodeNameResolver,

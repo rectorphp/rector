@@ -28,17 +28,17 @@ final class RemoveUnusedAliasRector extends AbstractRector
     /**
      * @var NameAndParent[][]
      */
-    private $resolvedNodeNames = [];
+    private array $resolvedNodeNames = [];
 
     /**
      * @var array<string, string[]>
      */
-    private $useNamesAliasToName = [];
+    private array $useNamesAliasToName = [];
 
     /**
      * @var string[]
      */
-    private $resolvedDocPossibleAliases = [];
+    private array $resolvedDocPossibleAliases = [];
 
     public function __construct(
         private DocAliasResolver $docAliasResolver,

@@ -18,7 +18,7 @@ final class EmptyStringDefaultPropertyFinder
     /**
      * @var array<string, PropertyProperty[]>
      */
-    private $propertyPropertiesByClassName = [];
+    private array $propertyPropertiesByClassName = [];
 
     public function __construct(
         private BetterNodeFinder $betterNodeFinder

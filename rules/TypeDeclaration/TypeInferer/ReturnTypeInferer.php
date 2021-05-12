@@ -18,7 +18,7 @@ final class ReturnTypeInferer
     /**
      * @var ReturnTypeInfererInterface[]
      */
-    private $returnTypeInferers = [];
+    private array $returnTypeInferers = [];
 
     /**
      * @param ReturnTypeInfererInterface[] $returnTypeInferers

@@ -62,10 +62,7 @@ final class ConsistentPregDelimiterRector extends AbstractRector implements Conf
         ],
     ];
 
-    /**
-     * @var string
-     */
-    private $delimiter = '#';
+    private string $delimiter = '#';
 
     public function getRuleDefinition(): RuleDefinition
     {

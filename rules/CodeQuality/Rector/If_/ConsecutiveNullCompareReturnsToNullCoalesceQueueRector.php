@@ -24,12 +24,12 @@ final class ConsecutiveNullCompareReturnsToNullCoalesceQueueRector extends Abstr
     /**
      * @var Node[]
      */
-    private $nodesToRemove = [];
+    private array $nodesToRemove = [];
 
     /**
      * @var Expr[]
      */
-    private $coalescingNodes = [];
+    private array $coalescingNodes = [];
 
     public function __construct(
         private IfManipulator $ifManipulator

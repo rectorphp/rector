@@ -24,10 +24,7 @@ final class JoinStringConcatRector extends AbstractRector
      */
     private const LINE_BREAK_POINT = 100;
 
-    /**
-     * @var bool
-     */
-    private $nodeReplacementIsRestricted = false;
+    private bool $nodeReplacementIsRestricted = false;
 
     public function getRuleDefinition(): RuleDefinition
     {

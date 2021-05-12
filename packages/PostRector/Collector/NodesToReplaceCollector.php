@@ -12,7 +12,7 @@ final class NodesToReplaceCollector implements NodeCollectorInterface
     /**
      * @var Node[][]
      */
-    private $nodesToReplace = [];
+    private array $nodesToReplace = [];
 
     public function addReplaceNodeWithAnotherNode(Node $node, Node $replaceWith): void
     {

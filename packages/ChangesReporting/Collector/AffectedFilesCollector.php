@@ -11,7 +11,7 @@ final class AffectedFilesCollector
     /**
      * @var File[]
      */
-    private $affectedFiles = [];
+    private array $affectedFiles = [];
 
     public function addFile(File $file): void
     {

@@ -44,9 +44,8 @@ final class TypedPropertyRector extends AbstractRector implements ConfigurableRe
 
     /**
      * Useful for refactoring of huge applications. Taking types first narrows scope
-     * @var bool
      */
-    private $classLikeTypeOnly = false;
+    private bool $classLikeTypeOnly = false;
 
     public function __construct(
         private PropertyTypeInferer $propertyTypeInferer,
@@ -145,6 +144,8 @@ CODE_SAMPLE
         $this->addDefaultValueNullForNullableType($node, $varType);
 
         $node->type = $propertyTypeNode;
+
+        dump_node($node);
 
         return $node;
     }

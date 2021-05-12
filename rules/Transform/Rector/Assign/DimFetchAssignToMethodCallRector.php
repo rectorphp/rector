@@ -30,7 +30,7 @@ final class DimFetchAssignToMethodCallRector extends AbstractRector implements C
     /**
      * @var DimFetchAssignToMethodCall[]
      */
-    private $dimFetchAssignToMethodCalls = [];
+    private array $dimFetchAssignToMethodCalls = [];
 
     public function getRuleDefinition(): RuleDefinition
     {

@@ -30,7 +30,7 @@ final class AddMethodParentCallRector extends AbstractRector implements Configur
     /**
      * @var array<string, string>
      */
-    private $methodByParentTypes = [];
+    private array $methodByParentTypes = [];
 
     public function getRuleDefinition(): RuleDefinition
     {

@@ -12,7 +12,7 @@ final class PSR4AutoloadPathsProvider
     /**
      * @var array<string, array<string, string>>
      */
-    private $cachedComposerJsonPSR4AutoloadPaths = [];
+    private array $cachedComposerJsonPSR4AutoloadPaths = [];
 
     public function __construct(
         private JsonFileSystem $jsonFileSystem

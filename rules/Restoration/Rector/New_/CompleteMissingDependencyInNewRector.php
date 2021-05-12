@@ -31,7 +31,7 @@ final class CompleteMissingDependencyInNewRector extends AbstractRector implemen
     /**
      * @var array<class-string, class-string>
      */
-    private $classToInstantiateByType = [];
+    private array $classToInstantiateByType = [];
 
     public function __construct(
         private ReflectionProvider $reflectionProvider

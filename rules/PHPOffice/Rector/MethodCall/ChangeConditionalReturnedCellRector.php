@@ -23,7 +23,7 @@ final class ChangeConditionalReturnedCellRector extends AbstractRector
     /**
      * @var ConditionalSetValue[]
      */
-    private $conditionalSetValues = [];
+    private array $conditionalSetValues = [];
 
     public function __construct()
     {

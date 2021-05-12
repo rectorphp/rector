@@ -53,6 +53,7 @@ final class DoctrineRelationPropertyTypeInferer implements PropertyTypeInfererIn
 
         if ($toOneRelationTagValueNode !== null) {
             $joinDoctrineAnnotationTagValueNode = $phpDocInfo->getByAnnotationClass('Doctrine\ORM\Mapping\JoinColumn');
+
             return $this->processToOneRelation(
                 $property,
                 $toOneRelationTagValueNode,

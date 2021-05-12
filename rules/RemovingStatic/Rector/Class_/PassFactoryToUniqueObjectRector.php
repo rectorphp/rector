@@ -35,7 +35,7 @@ final class PassFactoryToUniqueObjectRector extends AbstractRector implements Co
     /**
      * @var ObjectType[]
      */
-    private $serviceObjectTypes = [];
+    private array $serviceObjectTypes = [];
 
     public function __construct(
         private StaticTypesInClassResolver $staticTypesInClassResolver,

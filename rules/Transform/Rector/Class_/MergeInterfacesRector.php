@@ -30,7 +30,7 @@ final class MergeInterfacesRector extends AbstractRector implements Configurable
     /**
      * @var array<string, string>
      */
-    private $oldToNewInterfaces = [];
+    private array $oldToNewInterfaces = [];
 
     public function getRuleDefinition(): RuleDefinition
     {

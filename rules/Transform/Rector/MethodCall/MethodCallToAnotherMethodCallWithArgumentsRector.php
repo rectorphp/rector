@@ -28,7 +28,7 @@ final class MethodCallToAnotherMethodCallWithArgumentsRector extends AbstractRec
     /**
      * @var MethodCallToAnotherMethodCallWithArguments[]
      */
-    private $methodCallRenamesWithAddedArguments = [];
+    private array $methodCallRenamesWithAddedArguments = [];
 
     public function getRuleDefinition(): RuleDefinition
     {

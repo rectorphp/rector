@@ -35,7 +35,7 @@ final class PreferThisOrSelfMethodCallRector extends AbstractRector implements C
     /**
      * @var array<class-string, string>
      */
-    private $typeToPreference = [];
+    private array $typeToPreference = [];
 
     public function getRuleDefinition(): RuleDefinition
     {

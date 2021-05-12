@@ -30,12 +30,12 @@ final class NormalToFluentRector extends AbstractRector implements ConfigurableR
     /**
      * @var NormalToFluent[]
      */
-    private $callsToFluent = [];
+    private array $callsToFluent = [];
 
     /**
      * @var MethodCall[]
      */
-    private $collectedMethodCalls = [];
+    private array $collectedMethodCalls = [];
 
     public function getRuleDefinition(): RuleDefinition
     {

@@ -20,7 +20,7 @@ final class UseManipulator
     /**
      * @var NameAndParent[][]
      */
-    private $resolvedNodeNames = [];
+    private array $resolvedNodeNames = [];
 
     public function __construct(
         private BetterNodeFinder $betterNodeFinder,

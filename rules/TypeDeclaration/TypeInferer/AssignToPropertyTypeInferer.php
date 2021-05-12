@@ -89,24 +89,27 @@ final class AssignToPropertyTypeInferer
     {
         $hasPropertyDefaultValue = $this->propertyDefaultAssignDetector->detect($classLike, $propertyName);
         $isAssignedInConstructor = $this->constructorAssignDetector->isPropertyAssigned($classLike, $propertyName);
-        $shouldAddNullType = $this->nullTypeAssignDetector->detect($classLike, $propertyName);
 
         if (($assignedExprTypes === []) && ($isAssignedInConstructor || $hasPropertyDefaultValue)) {
             return false;
         }
 
-        if ($shouldAddNullType === true) {
+        $shouldAddNullType = $this->nullTypeAssignDetector->detect($classLike, $propertyName);
+        if ($shouldAddNullType) {
             if ($isAssignedInConstructor) {
                 return false;
             }
             return ! $hasPropertyDefaultValue;
         }
+
         if ($assignedExprTypes === []) {
             return false;
         }
+
         if ($isAssignedInConstructor) {
             return false;
         }
+
         return ! $hasPropertyDefaultValue;
     }
 }

@@ -19,15 +19,9 @@ use Symplify\PackageBuilder\Parameter\ParameterProvider;
  */
 final class RemoveDeepChainMethodCallNodeVisitor extends NodeVisitorAbstract
 {
-    /**
-     * @var int
-     */
-    private $nestedChainMethodCallLimit;
+    private int $nestedChainMethodCallLimit;
 
-    /**
-     * @var Expression|null
-     */
-    private $removingExpression;
+    private ?Expression $removingExpression = null;
 
     public function __construct(
         private BetterNodeFinder $betterNodeFinder,

@@ -27,7 +27,7 @@ final class IncreaseColumnIndexRector extends AbstractRector
     /**
      * @var ObjectType[]
      */
-    private $worksheetObjectTypes = [];
+    private array $worksheetObjectTypes = [];
 
     public function __construct()
     {

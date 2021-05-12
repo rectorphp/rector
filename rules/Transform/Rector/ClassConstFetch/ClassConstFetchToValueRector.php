@@ -27,7 +27,7 @@ final class ClassConstFetchToValueRector extends AbstractRector implements Confi
     /**
      * @var ClassConstFetchToValue[]
      */
-    private $classConstFetchesToValues = [];
+    private array $classConstFetchesToValues = [];
 
     public function getRuleDefinition(): RuleDefinition
     {

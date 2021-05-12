@@ -25,7 +25,7 @@ final class DesiredPropertyClassMethodTypeToDynamicRector extends AbstractRector
     /**
      * @var ObjectType[]
      */
-    private $staticObjectTypes = [];
+    private array $staticObjectTypes = [];
 
     public function __construct(ParameterProvider $parameterProvider)
     {

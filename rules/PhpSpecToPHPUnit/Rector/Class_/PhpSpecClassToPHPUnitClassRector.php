@@ -28,11 +28,6 @@ use Rector\PHPUnit\NodeFactory\SetUpClassMethodFactory;
  */
 final class PhpSpecClassToPHPUnitClassRector extends AbstractPhpSpecToPHPUnitRector
 {
-    /**
-     * @var ObjectType
-     */
-    private $testedObjectType;
-
     public function __construct(
         private ClassInsertManipulator $classInsertManipulator,
         private LetManipulator $letManipulator,
@@ -68,8 +63,8 @@ final class PhpSpecClassToPHPUnitClassRector extends AbstractPhpSpecToPHPUnitRec
 
         $testedClass = $this->phpSpecRenaming->resolveTestedClass($node);
 
-        $this->testedObjectType = new ObjectType($testedClass);
-        $this->classInsertManipulator->addPropertyToClass($node, $propertyName, $this->testedObjectType);
+        $testedObjectType = new ObjectType($testedClass);
+        $this->classInsertManipulator->addPropertyToClass($node, $propertyName, $testedObjectType);
         $classMethod = $node->getMethod('let');
 
         // add let if missing
@@ -78,18 +73,18 @@ final class PhpSpecClassToPHPUnitClassRector extends AbstractPhpSpecToPHPUnitRec
                 return null;
             }
 
-            $letClassMethod = $this->createLetClassMethod($propertyName);
+            $letClassMethod = $this->createLetClassMethod($propertyName, $testedObjectType);
             $this->classInsertManipulator->addAsFirstMethod($node, $letClassMethod);
         }
 
-        return $this->removeSelfTypeMethod($node);
+        return $this->removeSelfTypeMethod($node, $testedObjectType);
     }
 
-    private function createLetClassMethod(string $propertyName): ClassMethod
+    private function createLetClassMethod(string $propertyName, ObjectType $testedObjectType): ClassMethod
     {
         $propertyFetch = new PropertyFetch(new Variable('this'), $propertyName);
 
-        $testedObjectType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($this->testedObjectType);
+        $testedObjectType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($testedObjectType);
         if (! $testedObjectType instanceof Name) {
             throw new ShouldNotHappenException();
         }
@@ -104,7 +99,7 @@ final class PhpSpecClassToPHPUnitClassRector extends AbstractPhpSpecToPHPUnitRec
     /**
      * This is already checked on construction of object
      */
-    private function removeSelfTypeMethod(Class_ $class): Class_
+    private function removeSelfTypeMethod(Class_ $class, ObjectType $testedObjectType): Class_
     {
         foreach ($class->getMethods() as $classMethod) {
             $classMethodStmts = (array) $classMethod->stmts;
@@ -124,7 +119,7 @@ final class PhpSpecClassToPHPUnitClassRector extends AbstractPhpSpecToPHPUnitRec
             // not the tested type
             if (! $this->valueResolver->isValue(
                 $innerClassMethodStmt->args[0]->value,
-                $this->testedObjectType->getClassName()
+                $testedObjectType->getClassName()
             )) {
                 continue;
             }

@@ -49,20 +49,17 @@ final class MoveValueObjectsToValueObjectDirectoryRector extends AbstractRector 
         'Repository', 'Command', 'Mapper', 'Controller', 'Presenter', 'Factory', 'Test', 'TestCase', 'Service',
     ];
 
-    /**
-     * @var bool
-     */
-    private $enableValueObjectGuessing = true;
+    private bool $enableValueObjectGuessing = true;
 
     /**
      * @var class-string[]
      */
-    private $types = [];
+    private array $types = [];
 
     /**
      * @var string[]
      */
-    private $suffixes = [];
+    private array $suffixes = [];
 
     public function __construct(
         private AddedFileWithNodesFactory $addedFileWithNodesFactory,

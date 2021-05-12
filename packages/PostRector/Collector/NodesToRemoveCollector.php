@@ -28,7 +28,7 @@ final class NodesToRemoveCollector implements NodeCollectorInterface
     /**
      * @var Stmt[]|Node[]
      */
-    private $nodesToRemove = [];
+    private array $nodesToRemove = [];
 
     public function __construct(
         private AffectedFilesCollector $affectedFilesCollector,

@@ -15,45 +15,36 @@ use Symplify\SmartFileSystem\SmartFileInfo;
  */
 final class File
 {
-    /**
-     * @var bool
-     */
-    private $hasChanged = false;
+    private bool $hasChanged = false;
 
-    /**
-     * @var string
-     */
-    private $originalFileContent;
+    private string $originalFileContent;
 
-    /**
-     * @var FileDiff|null
-     */
-    private $fileDiff;
+    private ?FileDiff $fileDiff = null;
 
     /**
      * @var Stmt[]
      */
-    private $oldStmts = [];
+    private array $oldStmts = [];
 
     /**
      * @var Stmt[]
      */
-    private $newStmts = [];
+    private array $newStmts = [];
 
     /**
      * @var mixed[]
      */
-    private $oldTokens = [];
+    private array $oldTokens = [];
 
     /**
      * @var RectorWithLineChange[]
      */
-    private $rectorWithLineChanges = [];
+    private array $rectorWithLineChanges = [];
 
     /**
      * @var RectorError[]
      */
-    private $rectorErrors = [];
+    private array $rectorErrors = [];
 
     public function __construct(
         private SmartFileInfo $smartFileInfo,

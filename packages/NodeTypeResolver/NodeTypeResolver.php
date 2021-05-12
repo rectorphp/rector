@@ -55,12 +55,9 @@ final class NodeTypeResolver
     /**
      * @var array<class-string<Node>, NodeTypeResolverInterface>
      */
-    private $nodeTypeResolvers = [];
+    private array $nodeTypeResolvers = [];
 
-    /**
-     * @var ArrayTypeAnalyzer
-     */
-    private $arrayTypeAnalyzer;
+    private ArrayTypeAnalyzer $arrayTypeAnalyzer;
 
     /**
      * @param NodeTypeResolverInterface[] $nodeTypeResolvers

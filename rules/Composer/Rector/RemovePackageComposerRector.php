@@ -22,7 +22,7 @@ final class RemovePackageComposerRector implements ComposerRectorInterface
     /**
      * @var string[]
      */
-    private $packageNames = [];
+    private array $packageNames = [];
 
     public function refactor(ComposerJson $composerJson): void
     {

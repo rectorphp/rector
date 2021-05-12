@@ -24,10 +24,7 @@ use Rector\NodeTypeResolver\PHPStan\Collector\TraitNodeScopeCollector;
  */
 final class PropertyFetchTypeResolver implements NodeTypeResolverInterface
 {
-    /**
-     * @var NodeTypeResolver
-     */
-    private $nodeTypeResolver;
+    private NodeTypeResolver $nodeTypeResolver;
 
     public function __construct(
         private NodeNameResolver $nodeNameResolver,

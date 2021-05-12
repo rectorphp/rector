@@ -43,23 +43,23 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services = $containerConfigurator->services();
     $services->set(TypedPropertyRector::class);
-//
-//    $configuration = ValueObjectInliner::inline([
-//        new InferParamFromClassMethodReturn(AbstractRector::class, 'refactor', 'getNodeTypes'),
-//    ]);
-//    $services->set(InferParamFromClassMethodReturnRector::class)
-//        ->call('configure', [[
-//            InferParamFromClassMethodReturnRector::INFER_PARAMS_FROM_CLASS_METHOD_RETURNS => $configuration,
-//        ]]);
-//
-//    $services->set(ClassPropertyAssignToConstructorPromotionRector::class);
-//
-//    $services->set(PreferThisOrSelfMethodCallRector::class)
-//        ->call('configure', [[
-//            PreferThisOrSelfMethodCallRector::TYPE_TO_PREFERENCE => [
-//                TestCase::class => PreferenceSelfThis::PREFER_THIS,
-//            ],
-//        ]]);
+
+    $configuration = ValueObjectInliner::inline([
+        new InferParamFromClassMethodReturn(AbstractRector::class, 'refactor', 'getNodeTypes'),
+    ]);
+    $services->set(InferParamFromClassMethodReturnRector::class)
+        ->call('configure', [[
+            InferParamFromClassMethodReturnRector::INFER_PARAMS_FROM_CLASS_METHOD_RETURNS => $configuration,
+        ]]);
+
+    $services->set(ClassPropertyAssignToConstructorPromotionRector::class);
+
+    $services->set(PreferThisOrSelfMethodCallRector::class)
+        ->call('configure', [[
+            PreferThisOrSelfMethodCallRector::TYPE_TO_PREFERENCE => [
+                TestCase::class => PreferenceSelfThis::PREFER_THIS,
+            ],
+        ]]);
 
     $parameters = $containerConfigurator->parameters();
 
@@ -104,6 +104,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         '*/Expected*/*',
     ]);
 
-    $parameters->set(Option::PHP_VERSION_FEATURES, PhpVersion::PHP_73);
+    $parameters->set(Option::PHP_VERSION_FEATURES, PhpVersion::PHP_74);
     $parameters->set(Option::ENABLE_CACHE, true);
 };

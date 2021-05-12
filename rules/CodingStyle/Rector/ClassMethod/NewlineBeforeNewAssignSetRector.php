@@ -23,15 +23,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class NewlineBeforeNewAssignSetRector extends AbstractRector
 {
-    /**
-     * @var string|null
-     */
-    private $previousStmtVariableName;
+    private ?string $previousStmtVariableName = null;
 
-    /**
-     * @var string|null
-     */
-    private $previousPreviousStmtVariableName;
+    private ?string $previousPreviousStmtVariableName = null;
 
     public function getRuleDefinition(): RuleDefinition
     {

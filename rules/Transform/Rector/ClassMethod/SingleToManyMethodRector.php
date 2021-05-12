@@ -34,7 +34,7 @@ final class SingleToManyMethodRector extends AbstractRector implements Configura
     /**
      * @var SingleToManyMethod[]
      */
-    private $singleToManyMethods = [];
+    private array $singleToManyMethods = [];
 
     public function __construct(
         private PhpDocTypeChanger $phpDocTypeChanger

@@ -33,7 +33,7 @@ final class NewToConstructorInjectionRector extends AbstractRector implements Co
     /**
      * @var ObjectType[]
      */
-    private $constructorInjectionObjectTypes = [];
+    private array $constructorInjectionObjectTypes = [];
 
     public function __construct(
         private PropertyFetchFactory $propertyFetchFactory,

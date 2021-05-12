@@ -14,10 +14,7 @@ use Rector\StaticTypeMapper\Mapper\PhpParserNodeMapper;
 
 final class NullableTypeNodeMapper implements PhpParserNodeMapperInterface
 {
-    /**
-     * @var PhpParserNodeMapper
-     */
-    private $phpParserNodeMapper;
+    private PhpParserNodeMapper $phpParserNodeMapper;
 
     public function __construct(
         private TypeFactory $typeFactory

@@ -24,7 +24,7 @@ final class ParsedPropertyFetchNodeCollector
     /**
      * @var array<string, array<string, PropertyFetch[]>>
      */
-    private $propertyFetchesByTypeAndName = [];
+    private array $propertyFetchesByTypeAndName = [];
 
     public function __construct(
         private NodeNameResolver $nodeNameResolver,

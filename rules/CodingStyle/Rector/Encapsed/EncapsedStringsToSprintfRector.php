@@ -27,15 +27,12 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class EncapsedStringsToSprintfRector extends AbstractRector
 {
-    /**
-     * @var string
-     */
-    private $sprintfFormat;
+    private string $sprintfFormat = '';
 
     /**
      * @var Expr[]
      */
-    private $argumentVariables = [];
+    private array $argumentVariables = [];
 
     public function getRuleDefinition(): RuleDefinition
     {

@@ -33,7 +33,7 @@ final class RenameNamespaceRector extends AbstractRector implements Configurable
     /**
      * @var array<string, string>
      */
-    private $oldToNewNamespaces = [];
+    private array $oldToNewNamespaces = [];
 
     public function __construct(
         private NamespaceMatcher $namespaceMatcher

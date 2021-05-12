@@ -28,7 +28,7 @@ final class ChangePropertyVisibilityRector extends AbstractRector implements Con
     /**
      * @var array<string, array<string, int>>
      */
-    private $propertyToVisibilityByClass = [];
+    private array $propertyToVisibilityByClass = [];
 
     public function getRuleDefinition(): RuleDefinition
     {

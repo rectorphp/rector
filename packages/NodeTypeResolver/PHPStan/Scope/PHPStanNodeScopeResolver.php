@@ -43,7 +43,7 @@ final class PHPStanNodeScopeResolver
     /**
      * @var string[]
      */
-    private $dependentFiles = [];
+    private array $dependentFiles = [];
 
     public function __construct(
         private ChangedFilesDetector $changedFilesDetector,

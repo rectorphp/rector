@@ -28,7 +28,7 @@ final class RemoveFuncCallRector extends AbstractRector implements ConfigurableR
     /**
      * @var RemoveFuncCall[]
      */
-    private $removeFuncCalls = [];
+    private array $removeFuncCalls = [];
 
     public function __construct(
         private BreakingRemovalGuard $breakingRemovalGuard

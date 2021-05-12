@@ -19,17 +19,17 @@ final class PhpSpecMockCollector
     /**
      * @var mixed[]
      */
-    private $mocks = [];
+    private array $mocks = [];
 
     /**
      * @var mixed[]
      */
-    private $mocksWithsTypes = [];
+    private array $mocksWithsTypes = [];
 
     /**
      * @var mixed[]
      */
-    private $propertyMocksByClass = [];
+    private array $propertyMocksByClass = [];
 
     public function __construct(
         private SimpleCallableNodeTraverser $simpleCallableNodeTraverser,

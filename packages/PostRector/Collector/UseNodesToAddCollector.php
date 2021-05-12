@@ -20,17 +20,17 @@ final class UseNodesToAddCollector implements NodeCollectorInterface
     /**
      * @var string[][]
      */
-    private $removedShortUsesInFilePath = [];
+    private array $removedShortUsesInFilePath = [];
 
     /**
-     * @var FullyQualifiedObjectType[][]
+     * @var array<string, FullyQualifiedObjectType[]>
      */
-    private $functionUseImportTypesInFilePath = [];
+    private array $functionUseImportTypesInFilePath = [];
 
     /**
-     * @var FullyQualifiedObjectType[][]|AliasedObjectType[][]
+     * @var array<string, FullyQualifiedObjectType[]|AliasedObjectType[]>
      */
-    private $useImportTypesInFilePath = [];
+    private array $useImportTypesInFilePath = [];
 
     public function __construct(
         private CurrentFileProvider $currentFileProvider

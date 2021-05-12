@@ -25,10 +25,7 @@ use Symplify\PackageBuilder\Reflection\PrivatesCaller;
  */
 final class BetterPhpDocParser extends PhpDocParser
 {
-    /**
-     * @var PrivatesCaller
-     */
-    private $privatesCaller;
+    private PrivatesCaller $privatesCaller;
 
     public function __construct(
         TypeParser $typeParser,
@@ -93,13 +90,16 @@ final class BetterPhpDocParser extends PhpDocParser
         return $tagValueNode;
     }
 
+    /**
+     * @return PhpDocTextNode|PhpDocTagNode
+     */
     private function parseChildAndStoreItsPositions(TokenIterator $tokenIterator): PhpDocChildNode
     {
         $betterTokenIterator = $this->tokenIteratorFactory->createFromTokenIterator($tokenIterator);
 
         $startPosition = $betterTokenIterator->currentPosition();
 
-        /** @var PhpDocTagNode|PhpDocTextNode $phpDocNode */
+        /** @var PhpDocChildNode $phpDocNode */
         $phpDocNode = $this->privatesCaller->callPrivateMethod($this, 'parseChild', [$betterTokenIterator]);
         $endPosition = $betterTokenIterator->currentPosition();
 

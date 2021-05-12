@@ -12,30 +12,21 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class FunctionMethodAndClassNodeVisitor extends NodeVisitorAbstract
 {
-    /**
-     * @var string|null
-     */
-    private $className;
+    private ?string $className;
 
     /**
      * @var ClassLike[]|null[]
      */
-    private $classStack = [];
+    private array $classStack = [];
 
     /**
      * @var ClassMethod[]|null[]
      */
-    private $methodStack = [];
+    private array $methodStack = [];
 
-    /**
-     * @var ClassLike|null
-     */
-    private $classLike;
+    private ?ClassLike $classLike;
 
-    /**
-     * @var ClassMethod|null
-     */
-    private $classMethod;
+    private ?ClassMethod $classMethod;
 
     /**
      * @param Node[] $nodes

@@ -21,7 +21,7 @@ final class VariableToConstantGuard
     /**
      * @var array<string, array<int>>
      */
-    private $referencePositionsByFunctionName = [];
+    private array $referencePositionsByFunctionName = [];
 
     public function __construct(
         private NodeNameResolver $nodeNameResolver,

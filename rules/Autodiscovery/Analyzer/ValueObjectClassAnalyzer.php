@@ -19,7 +19,7 @@ final class ValueObjectClassAnalyzer
     /**
      * @var array<string, bool>
      */
-    private $valueObjectStatusByClassName = [];
+    private array $valueObjectStatusByClassName = [];
 
     public function __construct(
         private NodeNameResolver $nodeNameResolver,

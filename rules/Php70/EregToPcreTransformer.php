@@ -55,12 +55,12 @@ final class EregToPcreTransformer
     /**
      * @var string[]
      */
-    private $icache = [];
+    private array $icache = [];
 
     /**
      * @var string[]
      */
-    private $cache = [];
+    private array $cache = [];
 
     /**
      * Change this via services configuratoin in rector.php if you need it

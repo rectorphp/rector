@@ -15,15 +15,9 @@ use Symplify\SimplePhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor;
 
 final class UnderscoreRenamePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
 {
-    /**
-     * @var PseudoNamespaceToNamespace|null
-     */
-    private $pseudoNamespaceToNamespace;
+    private ?PseudoNamespaceToNamespace $pseudoNamespaceToNamespace;
 
-    /**
-     * @var \PhpParser\Node|null
-     */
-    private $currentPhpParserNode;
+    private ?\PhpParser\Node $currentPhpParserNode;
 
     public function __construct(
         private StaticTypeMapper $staticTypeMapper

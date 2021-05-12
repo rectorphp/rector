@@ -27,7 +27,7 @@ final class NameImporter
     /**
      * @var string[]
      */
-    private $aliasedUses = [];
+    private array $aliasedUses = [];
 
     public function __construct(
         private AliasUsesResolver $aliasUsesResolver,

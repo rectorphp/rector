@@ -38,7 +38,7 @@ final class AnnotationToAttributeRector extends AbstractRector implements Config
     /**
      * @var AnnotationToAttribute[]
      */
-    private $annotationsToAttributes = [];
+    private array $annotationsToAttributes = [];
 
     public function __construct(
         private PhpAttributeGroupFactory $phpAttributeGroupFactory,

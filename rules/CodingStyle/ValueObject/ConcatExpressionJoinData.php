@@ -12,17 +12,17 @@ final class ConcatExpressionJoinData
     /**
      * @var string[]
      */
-    private $values = [];
+    private array $values = [];
 
     /**
      * @var Node[]
      */
-    private $nodesToRemove = [];
+    private array $nodesToRemove = [];
 
     /**
      * @var Expr[]
      */
-    private $placeholdersToNodes = [];
+    private array $placeholdersToNodes = [];
 
     public function addString(string $value): void
     {

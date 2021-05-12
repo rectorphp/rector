@@ -29,9 +29,9 @@ final class NullTypeAssignDetector
     ) {
     }
 
-    public function detect(ClassLike $classLike, string $propertyName): ?bool
+    public function detect(ClassLike $classLike, string $propertyName): bool
     {
-        $needsNullType = null;
+        $needsNullType = false;
 
         $this->simpleCallableNodeTraverser->traverseNodesWithCallable($classLike->stmts, function (Node $node) use (
             $propertyName,

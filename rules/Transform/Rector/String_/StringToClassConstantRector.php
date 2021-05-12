@@ -26,7 +26,7 @@ final class StringToClassConstantRector extends AbstractRector implements Config
     /**
      * @var StringToClassConstant[]
      */
-    private $stringsToClassConstants = [];
+    private array $stringsToClassConstants = [];
 
     public function getRuleDefinition(): RuleDefinition
     {

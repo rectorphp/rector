@@ -19,7 +19,7 @@ final class ConflictingNameResolver
     /**
      * @var string[][]
      */
-    private $conflictingVariableNamesByClassMethod = [];
+    private array $conflictingVariableNamesByClassMethod = [];
 
     public function __construct(
         private ArrayFilter $arrayFilter,

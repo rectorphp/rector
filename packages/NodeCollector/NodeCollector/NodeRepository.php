@@ -51,29 +51,29 @@ final class NodeRepository
     /**
      * @var array<class-string, ClassMethod[]>
      */
-    private $classMethodsByType = [];
+    private array $classMethodsByType = [];
 
     /**
      * @var array<string, Function_>
      */
-    private $functionsByName = [];
+    private array $functionsByName = [];
 
     /**
      * @var array<class-string, array<array<MethodCall|StaticCall>>>
      */
-    private $callsByTypeAndMethod = [];
+    private array $callsByTypeAndMethod = [];
 
     /**
      * E.g. [$this, 'someLocalMethod']
      *
      * @var array<string, array<string, ArrayCallable[]>>
      */
-    private $arrayCallablesByTypeAndMethod = [];
+    private array $arrayCallablesByTypeAndMethod = [];
 
     /**
      * @var array<string, Attribute[]>
      */
-    private $attributes = [];
+    private array $attributes = [];
 
     public function __construct(
         private ArrayCallableMethodReferenceAnalyzer $arrayCallableMethodReferenceAnalyzer,

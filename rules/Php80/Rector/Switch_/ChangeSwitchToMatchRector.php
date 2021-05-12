@@ -28,10 +28,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class ChangeSwitchToMatchRector extends AbstractRector
 {
-    /**
-     * @var Expr|null
-     */
-    private $assignExpr;
+    private ?Expr $assignExpr = null;
 
     public function __construct(
         private SwitchExprsResolver $switchExprsResolver,

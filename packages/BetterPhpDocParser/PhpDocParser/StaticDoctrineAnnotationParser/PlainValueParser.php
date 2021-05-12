@@ -18,15 +18,9 @@ use Rector\Core\Exception\ShouldNotHappenException;
 
 final class PlainValueParser
 {
-    /**
-     * @var StaticDoctrineAnnotationParser
-     */
-    private $staticDoctrineAnnotationParser;
+    private StaticDoctrineAnnotationParser $staticDoctrineAnnotationParser;
 
-    /**
-     * @var ArrayParser
-     */
-    private $arrayParser;
+    private ArrayParser $arrayParser;
 
     public function __construct(
         private ClassAnnotationMatcher $classAnnotationMatcher,

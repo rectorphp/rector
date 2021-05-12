@@ -27,7 +27,7 @@ final class ChangeConstantVisibilityRector extends AbstractRector implements Con
     /**
      * @var ChangeConstantVisibility[]
      */
-    private $classConstantVisibilityChanges = [];
+    private array $classConstantVisibilityChanges = [];
 
     public function getRuleDefinition(): RuleDefinition
     {

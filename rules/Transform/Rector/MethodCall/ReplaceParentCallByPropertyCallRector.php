@@ -25,7 +25,7 @@ final class ReplaceParentCallByPropertyCallRector extends AbstractRector impleme
     /**
      * @var ReplaceParentCallByPropertyCall[]
      */
-    private $parentCallToProperties = [];
+    private array $parentCallToProperties = [];
 
     public function getRuleDefinition(): RuleDefinition
     {

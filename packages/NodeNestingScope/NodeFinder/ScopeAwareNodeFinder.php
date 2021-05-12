@@ -10,10 +10,7 @@ use Rector\NodeNestingScope\ValueObject\ControlStructure;
 
 final class ScopeAwareNodeFinder
 {
-    /**
-     * @var bool
-     */
-    private $isBreakingNodeFoundFirst = false;
+    private bool $isBreakingNodeFoundFirst = false;
 
     public function __construct(
         private BetterNodeFinder $betterNodeFinder

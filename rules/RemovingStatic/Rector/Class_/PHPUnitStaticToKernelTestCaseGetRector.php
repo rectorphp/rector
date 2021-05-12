@@ -42,12 +42,12 @@ final class PHPUnitStaticToKernelTestCaseGetRector extends AbstractRector implem
     /**
      * @var ObjectType[]
      */
-    private $staticObjectTypes = [];
+    private array $staticObjectTypes = [];
 
     /**
      * @var ObjectType[]
      */
-    private $newPropertyObjectTypes = [];
+    private array $newPropertyObjectTypes = [];
 
     public function __construct(
         private PropertyNaming $propertyNaming,

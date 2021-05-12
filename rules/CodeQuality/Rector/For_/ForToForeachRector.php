@@ -30,25 +30,13 @@ final class ForToForeachRector extends AbstractRector
      */
     private const COUNT = 'count';
 
-    /**
-     * @var string|null
-     */
-    private $keyValueName;
+    private ?string $keyValueName = null;
 
-    /**
-     * @var string|null
-     */
-    private $countValueName;
+    private ?string $countValueName = null;
 
-    /**
-     * @var Expr|null
-     */
-    private $countValueVariableExpr;
+    private ?Expr $countValueVariableExpr = null;
 
-    /**
-     * @var Expr|null
-     */
-    private $iteratedExpr;
+    private ?Expr $iteratedExpr = null;
 
     public function __construct(
         private Inflector $inflector,

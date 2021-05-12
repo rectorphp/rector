@@ -48,20 +48,11 @@ final class PhpDocInfo
         PropertyTagValueNode::class => '@property',
     ];
 
-    /**
-     * @var bool
-     */
-    private $isSingleLine = false;
+    private bool $isSingleLine = false;
 
-    /**
-     * @var PhpDocNode
-     */
-    private $originalPhpDocNode;
+    private PhpDocNode $originalPhpDocNode;
 
-    /**
-     * @var bool
-     */
-    private $hasChanged = false;
+    private bool $hasChanged = false;
 
     public function __construct(
         private PhpDocNode $phpDocNode,
@@ -257,14 +248,16 @@ final class PhpDocInfo
                 continue;
             }
 
-            $annotationClass = $phpDocChildNode->value->getAnnotationClass();
+            $doctrineAnnotationTagValueNode = $phpDocChildNode->value;
+
+            $annotationClass = $doctrineAnnotationTagValueNode->getAnnotationClass();
             if ($annotationClass === $desiredClass) {
-                return $phpDocChildNode->value;
+                return $doctrineAnnotationTagValueNode;
             }
 
             // fnmatch
             if ($this->isFnmatch($annotationClass, $desiredClass)) {
-                return $phpDocChildNode->value;
+                return $doctrineAnnotationTagValueNode;
             }
         }
 

@@ -26,7 +26,7 @@ final class MockeryCreateMockToProphizeRector extends AbstractRector
     /**
      * @var array<string, class-string>
      */
-    private $mockVariableTypesByNames = [];
+    private array $mockVariableTypesByNames = [];
 
     public function __construct(
         private MockVariableCollector $mockVariableCollector,

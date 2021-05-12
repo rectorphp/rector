@@ -14,7 +14,7 @@ final class RenamedClassesCollector
     /**
      * @var array<string, string>
      */
-    private $oldToNewClass = [];
+    private array $oldToNewClass = [];
 
     public function __construct(
         private RenamedClassesDataCollector $renamedClassesDataCollector

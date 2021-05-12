@@ -36,7 +36,7 @@ final class StringClassNameToClassConstantRector extends AbstractRector implemen
     /**
      * @var string[]
      */
-    private $classesToSkip = [
+    private array $classesToSkip = [
         // can be string
         'Error',
         'Exception',

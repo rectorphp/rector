@@ -23,7 +23,7 @@ final class PropertyTypeInferer
     /**
      * @var PropertyTypeInfererInterface[]
      */
-    private $propertyTypeInferers = [];
+    private array $propertyTypeInferers = [];
 
     /**
      * @param PropertyTypeInfererInterface[] $propertyTypeInferers

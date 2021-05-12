@@ -12,15 +12,12 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class ConcatJoiner
 {
-    /**
-     * @var string
-     */
-    private $content;
+    private string $content = '';
 
     /**
      * @var Expr[]
      */
-    private $placeholderNodes = [];
+    private array $placeholderNodes = [];
 
     /**
      * Joins all String_ nodes to string.

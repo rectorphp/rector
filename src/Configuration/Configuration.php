@@ -15,65 +15,35 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class Configuration
 {
-    /**
-     * @var bool
-     */
-    private $isDryRun = false;
+    private bool $isDryRun = false;
 
-    /**
-     * @var bool
-     */
-    private $showProgressBar = true;
+    private bool $showProgressBar = true;
 
-    /**
-     * @var bool
-     */
-    private $shouldClearCache = false;
+    private bool $shouldClearCache = false;
 
-    /**
-     * @var string
-     */
-    private $outputFormat;
+    private string $outputFormat;
 
-    /**
-     * @var bool
-     */
-    private $isCacheDebug = false;
+    private bool $isCacheDebug = false;
 
-    /**
-     * @var bool
-     */
-    private $isCacheEnabled = false;
+    private bool $isCacheEnabled = false;
 
     /**
      * @var string[]
      */
-    private $fileExtensions = [];
+    private array $fileExtensions = [];
 
     /**
      * @var string[]
      */
-    private $paths = [];
+    private array $paths = [];
 
-    /**
-     * @var ParameterProvider
-     */
-    private $parameterProvider;
+    private ParameterProvider $parameterProvider;
 
-    /**
-     * @var string|null
-     */
-    private $outputFile;
+    private ?string $outputFile = null;
 
-    /**
-     * @var bool
-     */
-    private $showDiffs = true;
+    private bool $showDiffs = true;
 
-    /**
-     * @var BootstrapConfigs|null
-     */
-    private $bootstrapConfigs;
+    private ?BootstrapConfigs $bootstrapConfigs = null;
 
     public function __construct(ParameterProvider $parameterProvider)
     {

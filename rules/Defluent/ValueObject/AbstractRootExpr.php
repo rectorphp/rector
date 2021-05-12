@@ -15,20 +15,11 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 
 abstract class AbstractRootExpr implements RootExprAwareInterface, FirstCallFactoryAwareInterface
 {
-    /**
-     * @var bool
-     */
-    protected $isFirstCallFactory = false;
+    protected bool $isFirstCallFactory = false;
 
-    /**
-     * @var Expr
-     */
-    protected $rootExpr;
+    protected Expr $rootExpr;
 
-    /**
-     * @var Expr
-     */
-    protected $assignExpr;
+    protected Expr $assignExpr;
 
     public function createFirstAssign(): Assign
     {

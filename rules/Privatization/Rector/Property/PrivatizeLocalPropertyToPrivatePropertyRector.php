@@ -35,7 +35,7 @@ final class PrivatizeLocalPropertyToPrivatePropertyRector extends AbstractRector
     /**
      * @var ObjectType[]
      */
-    private $excludedObjectTypes = [];
+    private array $excludedObjectTypes = [];
 
     public function __construct(
         private PropertyVisibilityVendorLockResolver $propertyVisibilityVendorLockResolver,

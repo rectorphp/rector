@@ -29,7 +29,7 @@ final class MethodCallToReturnRector extends AbstractRector implements Configura
     /**
      * @var MethodCallToReturn[]
      */
-    private $methodCallWraps = [];
+    private array $methodCallWraps = [];
 
     public function getRuleDefinition(): RuleDefinition
     {

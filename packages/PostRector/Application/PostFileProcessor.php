@@ -18,7 +18,7 @@ final class PostFileProcessor
     /**
      * @var PostRectorInterface[]
      */
-    private $postRectors = [];
+    private array $postRectors = [];
 
     /**
      * @param PostRectorInterface[] $postRectors

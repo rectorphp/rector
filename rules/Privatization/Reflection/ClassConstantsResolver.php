@@ -11,7 +11,7 @@ final class ClassConstantsResolver
     /**
      * @var array<string, array<string, string>>
      */
-    private $cachedConstantNamesToValues = [];
+    private array $cachedConstantNamesToValues = [];
 
     public function __construct(
         private ReflectionProvider $reflectionProvider

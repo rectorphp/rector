@@ -11,7 +11,7 @@ final class VariablesToPropertyFetchCollection
     /**
      * @var Type[]
      */
-    private $variableNameAndType = [];
+    private array $variableNameAndType = [];
 
     public function addVariableNameAndType(string $name, Type $type): void
     {

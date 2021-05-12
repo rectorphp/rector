@@ -27,7 +27,7 @@ final class RenameFunctionRector extends AbstractRector implements ConfigurableR
     /**
      * @var array<string, string>
      */
-    private $oldFunctionToNewFunction = [];
+    private array $oldFunctionToNewFunction = [];
 
     public function getRuleDefinition(): RuleDefinition
     {

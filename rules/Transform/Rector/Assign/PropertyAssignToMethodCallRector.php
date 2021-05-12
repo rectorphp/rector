@@ -28,7 +28,7 @@ final class PropertyAssignToMethodCallRector extends AbstractRector implements C
     /**
      * @var PropertyAssignToMethodCall[]
      */
-    private $propertyAssignsToMethodCalls = [];
+    private array $propertyAssignsToMethodCalls = [];
 
     public function getRuleDefinition(): RuleDefinition
     {

@@ -33,15 +33,12 @@ final class MultiParentingToAbstractDependencyRector extends AbstractRector impl
      */
     public const FRAMEWORK = 'framework';
 
-    /**
-     * @var string
-     */
-    private $framework;
+    private string $framework = FrameworkName::SYMFONY;
 
     /**
      * @var ObjectType[]
      */
-    private $injectObjectTypes = [];
+    private array $injectObjectTypes = [];
 
     public function __construct(
         private ClassMethodNodeRemover $classMethodNodeRemover,
@@ -176,7 +173,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $this->framework = $configuration[self::FRAMEWORK];
+        $this->framework = $configuration[self::FRAMEWORK] ?? FrameworkName::SYMFONY;
     }
 
     /**

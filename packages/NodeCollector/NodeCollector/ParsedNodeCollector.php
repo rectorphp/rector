@@ -50,27 +50,27 @@ final class ParsedNodeCollector
     /**
      * @var Class_[]
      */
-    private $classes = [];
+    private array $classes = [];
 
     /**
      * @var ClassConst[][]
      */
-    private $constantsByType = [];
+    private array $constantsByType = [];
 
     /**
      * @var Interface_[]
      */
-    private $interfaces = [];
+    private array $interfaces = [];
 
     /**
      * @var Trait_[]
      */
-    private $traits = [];
+    private array $traits = [];
 
     /**
      * @var StaticCall[]
      */
-    private $staticCalls = [];
+    private array $staticCalls = [];
 
     public function __construct(
         private NodeNameResolver $nodeNameResolver,

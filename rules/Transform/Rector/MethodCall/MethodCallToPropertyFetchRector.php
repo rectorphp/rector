@@ -25,7 +25,7 @@ final class MethodCallToPropertyFetchRector extends AbstractRector implements Co
     /**
      * @var array<string, string>
      */
-    private $methodCallToPropertyFetchCollection = [];
+    private array $methodCallToPropertyFetchCollection = [];
 
     public function getRuleDefinition(): RuleDefinition
     {

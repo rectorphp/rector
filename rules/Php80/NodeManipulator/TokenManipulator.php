@@ -30,10 +30,7 @@ use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
 final class TokenManipulator
 {
-    /**
-     * @var Expr|null
-     */
-    private $assignedNameExpr;
+    private ?Expr $assignedNameExpr = null;
 
     public function __construct(
         private SimpleCallableNodeTraverser $simpleCallableNodeTraverser,

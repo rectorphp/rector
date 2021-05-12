@@ -36,7 +36,7 @@ final class ChangeReflectionTypeToStringToGetNameRector extends AbstractRector
      * Possibly extract node decorator with scope breakers (Function_, If_) to respect node flow
      * @var string[][]
      */
-    private $callsByVariable = [];
+    private array $callsByVariable = [];
 
     public function getRuleDefinition(): RuleDefinition
     {

@@ -25,7 +25,7 @@ final class TypeNormalizer
     /**
      * @var NestedArrayType[]
      */
-    private $collectedNestedArrayTypes = [];
+    private array $collectedNestedArrayTypes = [];
 
     public function __construct(
         private TypeFactory $typeFactory,

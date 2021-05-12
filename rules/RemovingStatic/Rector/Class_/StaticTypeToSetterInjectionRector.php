@@ -34,7 +34,7 @@ final class StaticTypeToSetterInjectionRector extends AbstractRector implements 
     /**
      * @var array<class-string|int, class-string>
      */
-    private $staticTypes = [];
+    private array $staticTypes = [];
 
     public function __construct(
         private PropertyNaming $propertyNaming,

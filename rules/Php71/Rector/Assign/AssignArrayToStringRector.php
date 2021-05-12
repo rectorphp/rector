@@ -36,7 +36,7 @@ final class AssignArrayToStringRector extends AbstractRector
     /**
      * @var PropertyProperty[]
      */
-    private $emptyStringProperties = [];
+    private array $emptyStringProperties = [];
 
     public function __construct(
         private EmptyStringDefaultPropertyFinder $emptyStringDefaultPropertyFinder

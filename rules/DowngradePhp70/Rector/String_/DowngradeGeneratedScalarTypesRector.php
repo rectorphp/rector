@@ -40,7 +40,7 @@ final class DowngradeGeneratedScalarTypesRector extends AbstractRector
     /**
      * @var PhpRectorInterface[]
      */
-    private $phpRectors = [];
+    private array $phpRectors = [];
 
     public function __construct(
         private InlineCodeParser $inlineCodeParser,

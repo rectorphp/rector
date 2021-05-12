@@ -31,7 +31,7 @@ final class CompleteImportForPartialAnnotationRector extends AbstractRector impl
     /**
      * @var CompleteImportForPartialAnnotation[]
      */
-    private $useImportsToRestore = [];
+    private array $useImportsToRestore = [];
 
     public function getRuleDefinition(): RuleDefinition
     {

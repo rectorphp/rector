@@ -33,7 +33,7 @@ final class NewToMethodCallRector extends AbstractRector implements Configurable
     /**
      * @var NewToMethodCall[]
      */
-    private $newsToMethodCalls = [];
+    private array $newsToMethodCalls = [];
 
     public function __construct(
         private ClassNaming $classNaming

@@ -11,10 +11,7 @@ use Rector\NodeNameResolver\NodeNameResolver;
 
 final class PropertyNameResolver implements NodeNameResolverInterface
 {
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
+    private NodeNameResolver $nodeNameResolver;
 
     /**
      * @required

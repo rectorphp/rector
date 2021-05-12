@@ -29,7 +29,7 @@ final class WrapReturnRector extends AbstractRector implements ConfigurableRecto
     /**
      * @var WrapReturn[]
      */
-    private $typeMethodWraps = [];
+    private array $typeMethodWraps = [];
 
     public function getRuleDefinition(): RuleDefinition
     {

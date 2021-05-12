@@ -28,7 +28,7 @@ final class AddInterfaceByParentRector extends AbstractRector implements Configu
     /**
      * @var array<string, string>
      */
-    private $interfaceByParent = [];
+    private array $interfaceByParent = [];
 
     public function getRuleDefinition(): RuleDefinition
     {

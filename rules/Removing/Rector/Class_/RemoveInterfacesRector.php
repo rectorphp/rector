@@ -24,7 +24,7 @@ final class RemoveInterfacesRector extends AbstractRector implements Configurabl
     /**
      * @var class-string[]
      */
-    private $interfacesToRemove = [];
+    private array $interfacesToRemove = [];
 
     public function getRuleDefinition(): RuleDefinition
     {

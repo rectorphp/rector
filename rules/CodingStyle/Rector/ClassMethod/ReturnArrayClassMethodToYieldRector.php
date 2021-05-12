@@ -37,7 +37,7 @@ final class ReturnArrayClassMethodToYieldRector extends AbstractRector implement
     /**
      * @var ReturnArrayClassMethodToyield[]
      */
-    private $methodsToYields = [];
+    private array $methodsToYields = [];
 
     public function __construct(
         private NodeTransformer $nodeTransformer,

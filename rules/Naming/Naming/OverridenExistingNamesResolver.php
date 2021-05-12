@@ -19,7 +19,7 @@ final class OverridenExistingNamesResolver
     /**
      * @var array<string, array<int, string>>
      */
-    private $overridenExistingVariableNamesByClassMethod = [];
+    private array $overridenExistingVariableNamesByClassMethod = [];
 
     public function __construct(
         private ArrayFilter $arrayFilter,

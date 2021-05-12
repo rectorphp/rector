@@ -29,7 +29,7 @@ final class NewArgToMethodCallRector extends AbstractRector implements Configura
     /**
      * @var NewArgToMethodCall[]
      */
-    private $newArgsToMethodCalls = [];
+    private array $newArgsToMethodCalls = [];
 
     public function getRuleDefinition(): RuleDefinition
     {

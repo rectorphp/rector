@@ -9,24 +9,13 @@ use Rector\FileSystemRector\Contract\AddedFileInterface;
 
 final class AddedFileWithContent implements AddedFileInterface
 {
-    /**
-     * @var string
-     */
-    private $filePath;
-
-    /**
-     * @var string
-     */
-    private $fileContent;
-
-    public function __construct(string $filePath, string $fileContent)
-    {
+    public function __construct(
+        private string $filePath,
+        private string $fileContent
+    ) {
         if ($filePath === $fileContent) {
             throw new ShouldNotHappenException('File path and content are the same, probably a bug');
         }
-
-        $this->filePath = $filePath;
-        $this->fileContent = $fileContent;
     }
 
     public function getFilePath(): string

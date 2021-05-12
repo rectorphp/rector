@@ -18,10 +18,7 @@ use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
 
 final class IterableTypeMapper implements TypeMapperInterface
 {
-    /**
-     * @var PHPStanStaticTypeMapper
-     */
-    private $phpStanStaticTypeMapper;
+    private PHPStanStaticTypeMapper $phpStanStaticTypeMapper;
 
     /**
      * @required

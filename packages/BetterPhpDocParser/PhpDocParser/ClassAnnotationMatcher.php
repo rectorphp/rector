@@ -20,7 +20,7 @@ final class ClassAnnotationMatcher
     /**
      * @var array<string, string>
      */
-    private $fullyQualifiedNameByHash = [];
+    private array $fullyQualifiedNameByHash = [];
 
     public function __construct(
         private ReflectionProvider $reflectionProvider

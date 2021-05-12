@@ -9,7 +9,7 @@ final class MethodCallRenameCollector
     /**
      * @var MethodCallRenameInterface[]
      */
-    private $methodCallRenames = [];
+    private array $methodCallRenames = [];
 
     /**
      * @param MethodCallRenameInterface[] $methodCallRenames

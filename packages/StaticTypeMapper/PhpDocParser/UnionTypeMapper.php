@@ -15,10 +15,7 @@ use Rector\StaticTypeMapper\PhpDoc\PhpDocTypeMapper;
 
 final class UnionTypeMapper implements PhpDocTypeMapperInterface
 {
-    /**
-     * @var PhpDocTypeMapper
-     */
-    private $phpDocTypeMapper;
+    private PhpDocTypeMapper $phpDocTypeMapper;
 
     public function __construct(
         private TypeFactory $typeFactory

@@ -32,7 +32,7 @@ final class DoctrineColumnPropertyTypeInferer implements PropertyTypeInfererInte
      * @see \Doctrine\DBAL\Platforms\MySqlPlatform::initializeDoctrineTypeMappings()
      * @see https://www.doctrine-project.org/projects/doctrine-orm/en/2.6/reference/basic-mapping.html#doctrine-mapping-types
      */
-    private $doctrineTypeToScalarType = [];
+    private array $doctrineTypeToScalarType = [];
 
     public function __construct(
         private TypeFactory $typeFactory,

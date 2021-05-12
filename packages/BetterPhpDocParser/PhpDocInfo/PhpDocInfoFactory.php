@@ -25,7 +25,7 @@ final class PhpDocInfoFactory
     /**
      * @var array<string, PhpDocInfo>
      */
-    private $phpDocInfosByObjectHash = [];
+    private array $phpDocInfosByObjectHash = [];
 
     public function __construct(
         private PhpDocNodeMapper $phpDocNodeMapper,

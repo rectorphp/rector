@@ -10,25 +10,13 @@ use Rector\FileFormatter\ValueObject\NewLine;
 
 final class EditorConfigConfigurationBuilder
 {
-    /**
-     * @var string
-     */
-    private $indentStyle;
+    private string $indentStyle;
 
-    /**
-     * @var int
-     */
-    private $indentSize;
+    private int $indentSize;
 
-    /**
-     * @var bool
-     */
-    private $insertFinalNewline = false;
+    private bool $insertFinalNewline = false;
 
-    /**
-     * @var NewLine
-     */
-    private $newLine;
+    private NewLine $newLine;
 
     private function __construct()
     {

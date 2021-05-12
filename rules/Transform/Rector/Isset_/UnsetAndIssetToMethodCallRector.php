@@ -28,7 +28,7 @@ final class UnsetAndIssetToMethodCallRector extends AbstractRector implements Co
     /**
      * @var UnsetAndIssetToMethodCall[]
      */
-    private $issetUnsetToMethodCalls = [];
+    private array $issetUnsetToMethodCalls = [];
 
     public function getRuleDefinition(): RuleDefinition
     {

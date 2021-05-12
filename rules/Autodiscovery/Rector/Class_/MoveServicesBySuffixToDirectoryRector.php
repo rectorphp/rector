@@ -33,7 +33,7 @@ final class MoveServicesBySuffixToDirectoryRector extends AbstractRector impleme
     /**
      * @var string[]
      */
-    private $groupNamesBySuffix = [];
+    private array $groupNamesBySuffix = [];
 
     public function __construct(
         private ExpectedFileLocationResolver $expectedFileLocationResolver,

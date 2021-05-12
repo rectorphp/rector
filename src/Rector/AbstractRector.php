@@ -73,155 +73,71 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         AttributeKey::PREVIOUS_STATEMENT,
     ];
 
-    /**
-     * @var NodeNameResolver
-     */
-    protected $nodeNameResolver;
+    protected NodeNameResolver $nodeNameResolver;
 
-    /**
-     * @var NodeTypeResolver
-     */
-    protected $nodeTypeResolver;
+    protected NodeTypeResolver $nodeTypeResolver;
 
-    /**
-     * @var BetterStandardPrinter
-     */
-    protected $betterStandardPrinter;
+    protected BetterStandardPrinter $betterStandardPrinter;
 
-    /**
-     * @var RemovedAndAddedFilesCollector
-     */
-    protected $removedAndAddedFilesCollector;
+    protected RemovedAndAddedFilesCollector $removedAndAddedFilesCollector;
 
-    /**
-     * @var ParameterProvider
-     */
-    protected $parameterProvider;
+    protected ParameterProvider $parameterProvider;
 
-    /**
-     * @var PhpVersionProvider
-     */
-    protected $phpVersionProvider;
+    protected PhpVersionProvider $phpVersionProvider;
 
-    /**
-     * @var StaticTypeMapper
-     */
-    protected $staticTypeMapper;
+    protected StaticTypeMapper $staticTypeMapper;
 
-    /**
-     * @var PhpDocInfoFactory
-     */
-    protected $phpDocInfoFactory;
+    protected PhpDocInfoFactory $phpDocInfoFactory;
 
-    /**
-     * @var NodeFactory
-     */
-    protected $nodeFactory;
+    protected NodeFactory $nodeFactory;
 
-    /**
-     * @var VisibilityManipulator
-     */
-    protected $visibilityManipulator;
+    protected VisibilityManipulator $visibilityManipulator;
 
-    /**
-     * @var ValueResolver
-     */
-    protected $valueResolver;
+    protected ValueResolver $valueResolver;
 
-    /**
-     * @var NodeRepository
-     */
-    protected $nodeRepository;
+    protected NodeRepository $nodeRepository;
 
-    /**
-     * @var BetterNodeFinder
-     */
-    protected $betterNodeFinder;
+    protected BetterNodeFinder $betterNodeFinder;
 
-    /**
-     * @var NodeRemover
-     */
-    protected $nodeRemover;
+    protected NodeRemover $nodeRemover;
 
-    /**
-     * @var RectorChangeCollector
-     */
-    protected $rectorChangeCollector;
+    protected RectorChangeCollector $rectorChangeCollector;
 
-    /**
-     * @var NodeComparator
-     */
-    protected $nodeComparator;
+    protected NodeComparator $nodeComparator;
 
-    /**
-     * @var PropertyAdder
-     */
-    protected $propertyAdder;
+    protected PropertyAdder $propertyAdder;
 
-    /**
-     * @var NodesToRemoveCollector
-     */
-    protected $nodesToRemoveCollector;
+    protected NodesToRemoveCollector $nodesToRemoveCollector;
 
-    /**
-     * @var File
-     */
-    protected $file;
+    protected File $file;
 
-    /**
-     * @var SimpleCallableNodeTraverser
-     */
-    private $simpleCallableNodeTraverser;
+    private SimpleCallableNodeTraverser $simpleCallableNodeTraverser;
 
-    /**
-     * @var SymfonyStyle
-     */
-    private $symfonyStyle;
+    private SymfonyStyle $symfonyStyle;
 
-    /**
-     * @var ExclusionManager
-     */
-    private $exclusionManager;
+    private ExclusionManager $exclusionManager;
 
-    /**
-     * @var CurrentRectorProvider
-     */
-    private $currentRectorProvider;
+    private CurrentRectorProvider $currentRectorProvider;
 
-    /**
-     * @var CurrentNodeProvider
-     */
-    private $currentNodeProvider;
+    private CurrentNodeProvider $currentNodeProvider;
 
-    /**
-     * @var Skipper
-     */
-    private $skipper;
+    private Skipper $skipper;
 
     /**
      * @var string|null
      */
     private $previousAppliedClass;
 
-    /**
-     * @var NodesToAddCollector
-     */
-    private $nodesToAddCollector;
+    private NodesToAddCollector $nodesToAddCollector;
 
-    /**
-     * @var CurrentFileProvider
-     */
-    private $currentFileProvider;
+    private CurrentFileProvider $currentFileProvider;
 
-    /**
-     * @var ChangedNodeAnalyzer
-     */
-    private $changedNodeAnalyzer;
+    private ChangedNodeAnalyzer $changedNodeAnalyzer;
 
     /**
      * @var array<string, Node[]>
      */
-    private $nodesToReturn = [];
+    private array $nodesToReturn = [];
 
     /**
      * @required

@@ -10,10 +10,7 @@ use Symplify\SimplePhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor;
 
 final class ChangedPhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
 {
-    /**
-     * @var bool
-     */
-    private $hasChanged = false;
+    private bool $hasChanged = false;
 
     public function beforeTraverse(Node $node): void
     {

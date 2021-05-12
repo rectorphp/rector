@@ -33,7 +33,7 @@ final class RenameStaticMethodRector extends AbstractRector implements Configura
     /**
      * @var RenameStaticMethod[]
      */
-    private $staticMethodRenames = [];
+    private array $staticMethodRenames = [];
 
     public function getRuleDefinition(): RuleDefinition
     {

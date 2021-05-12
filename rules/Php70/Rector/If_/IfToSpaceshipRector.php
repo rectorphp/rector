@@ -44,15 +44,9 @@ final class IfToSpaceshipRector extends AbstractRector
      */
     private $onGreater;
 
-    /**
-     * @var Expr|null
-     */
-    private $firstValue;
+    private ?Expr $firstValue = null;
 
-    /**
-     * @var Expr|null
-     */
-    private $secondValue;
+    private ?Expr $secondValue = null;
 
     /**
      * @var Node|null

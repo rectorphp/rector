@@ -23,10 +23,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class RenameParamToMatchTypeRector extends AbstractRector
 {
-    /**
-     * @var bool
-     */
-    private $hasChanged = false;
+    private bool $hasChanged = false;
 
     public function __construct(
         private BreakingVariableRenameGuard $breakingVariableRenameGuard,

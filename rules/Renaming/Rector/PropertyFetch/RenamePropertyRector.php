@@ -27,7 +27,7 @@ final class RenamePropertyRector extends AbstractRector implements ConfigurableR
     /**
      * @var RenameProperty[]
      */
-    private $renamedProperties = [];
+    private array $renamedProperties = [];
 
     public function getRuleDefinition(): RuleDefinition
     {

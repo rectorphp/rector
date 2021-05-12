@@ -15,12 +15,9 @@ abstract class AbstractTestCase extends TestCase
     /**
      * @var array<string, RectorKernel>
      */
-    private static $kernelsByHash = [];
+    private static array $kernelsByHash = [];
 
-    /**
-     * @var ContainerInterface
-     */
-    private static $currentContainer;
+    private static ?ContainerInterface $currentContainer;
 
     protected function boot(): void
     {
@@ -59,7 +56,13 @@ abstract class AbstractTestCase extends TestCase
             throw new ShouldNotHappenException('First, create container with "bootWithConfigFileInfos([...])"');
         }
 
-        return self::$currentContainer->get($type);
+        $object = self::$currentContainer->get($type);
+        if ($object === null) {
+            $message = sprintf('Service "%s" was not found', $type);
+            throw new ShouldNotHappenException($message);
+        }
+
+        return $object;
     }
 
     /**

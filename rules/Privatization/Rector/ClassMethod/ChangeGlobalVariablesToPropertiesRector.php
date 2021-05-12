@@ -27,7 +27,7 @@ final class ChangeGlobalVariablesToPropertiesRector extends AbstractRector
     /**
      * @var string[]
      */
-    private $globalVariableNames = [];
+    private array $globalVariableNames = [];
 
     public function __construct(
         private PropertyToAddCollector $propertyToAddCollector

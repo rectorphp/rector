@@ -35,10 +35,7 @@ final class PHPUnitDataProviderParamTypeInferer implements ParamTypeInfererInter
      */
     private const METHOD_NAME_REGEX = '#^(?<method_name>\w+)(\(\))?#';
 
-    /**
-     * @var NodeTypeResolver
-     */
-    private $nodeTypeResolver;
+    private NodeTypeResolver $nodeTypeResolver;
 
     public function __construct(
         private BetterNodeFinder $betterNodeFinder,

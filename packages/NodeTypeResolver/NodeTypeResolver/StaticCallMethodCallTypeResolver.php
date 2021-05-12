@@ -19,10 +19,7 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 
 final class StaticCallMethodCallTypeResolver implements NodeTypeResolverInterface
 {
-    /**
-     * @var NodeTypeResolver
-     */
-    private $nodeTypeResolver;
+    private NodeTypeResolver $nodeTypeResolver;
 
     public function __construct(
         private NodeNameResolver $nodeNameResolver,

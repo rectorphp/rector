@@ -10,14 +10,14 @@ class Value
     }
 }
 
-class Property
+class SomeProperty
 {
     public $value;
 }
 
 trait InteractsWithProperty
 {
-    public function doSomething(Property $property)
+    public function doSomething(SomeProperty $property)
     {
         $property->value->doSomething();
     }

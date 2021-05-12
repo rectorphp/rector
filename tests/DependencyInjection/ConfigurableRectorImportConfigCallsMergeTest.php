@@ -31,7 +31,9 @@ final class ConfigurableRectorImportConfigCallsMergeTest extends AbstractRectorT
         $configFileInfos = $rectorConfigsResolver->resolveFromConfigFileInfo(new SmartFileInfo($config));
         $this->bootFromConfigFileInfos($configFileInfos);
 
+        /** @var RenameClassRector $renameClassRector */
         $renameClassRector = $this->getService(RenameClassRector::class);
+
         $oldToNewClasses = $this->privatesAccessor->getPrivateProperty($renameClassRector, 'oldToNewClasses');
 
         $this->assertSame($expectedConfiguration, $oldToNewClasses);

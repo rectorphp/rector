@@ -15,10 +15,7 @@ use Rector\NodeNameResolver\NodeNameResolver;
 
 final class AssertMethodCallFactory
 {
-    /**
-     * @var bool
-     */
-    private $isBoolAssert = false;
+    private bool $isBoolAssert = false;
 
     public function __construct(
         private NodeFactory $nodeFactory,

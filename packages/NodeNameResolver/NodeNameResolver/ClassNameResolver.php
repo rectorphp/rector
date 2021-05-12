@@ -12,10 +12,7 @@ use Rector\NodeNameResolver\NodeNameResolver;
 
 final class ClassNameResolver implements NodeNameResolverInterface
 {
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
+    private NodeNameResolver $nodeNameResolver;
 
     /**
      * @required

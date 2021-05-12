@@ -26,7 +26,7 @@ final class FuncCallToNewRector extends AbstractRector implements ConfigurableRe
     /**
      * @var string[]
      */
-    private $functionToNew = [];
+    private array $functionToNew = [];
 
     public function getRuleDefinition(): RuleDefinition
     {

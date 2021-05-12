@@ -19,7 +19,7 @@ final class ScopeNestingComparator
     /**
      * @var Expr[]
      */
-    private $doubleIfBranchExprs = [];
+    private array $doubleIfBranchExprs = [];
 
     public function __construct(
         private BetterNodeFinder $betterNodeFinder,

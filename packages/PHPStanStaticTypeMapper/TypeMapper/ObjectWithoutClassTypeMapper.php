@@ -14,16 +14,12 @@ use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\ValueObject\Type\EmptyGenericTypeNode;
 use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\ValueObject\PhpVersionFeature;
-use Rector\PHPStanStaticTypeMapper\Contract\PHPStanStaticTypeMapperAwareInterface;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
 
-final class ObjectWithoutClassTypeMapper implements TypeMapperInterface, PHPStanStaticTypeMapperAwareInterface
+final class ObjectWithoutClassTypeMapper implements TypeMapperInterface
 {
-    /**
-     * @var PHPStanStaticTypeMapper
-     */
-    private $phpStanStaticTypeMapper;
+    private PHPStanStaticTypeMapper $phpStanStaticTypeMapper;
 
     public function __construct(
         private PhpVersionProvider $phpVersionProvider
@@ -68,7 +64,10 @@ final class ObjectWithoutClassTypeMapper implements TypeMapperInterface, PHPStan
         return new Name('object');
     }
 
-    public function setPHPStanStaticTypeMapper(PHPStanStaticTypeMapper $phpStanStaticTypeMapper): void
+    /**
+     * @required
+     */
+    public function autowireObjectWithoutClassTypeMapper(PHPStanStaticTypeMapper $phpStanStaticTypeMapper): void
     {
         $this->phpStanStaticTypeMapper = $phpStanStaticTypeMapper;
     }

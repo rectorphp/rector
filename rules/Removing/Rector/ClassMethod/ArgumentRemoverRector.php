@@ -29,7 +29,7 @@ final class ArgumentRemoverRector extends AbstractRector implements Configurable
     /**
      * @var ArgumentRemover[]
      */
-    private $removedArguments = [];
+    private array $removedArguments = [];
 
     public function getRuleDefinition(): RuleDefinition
     {

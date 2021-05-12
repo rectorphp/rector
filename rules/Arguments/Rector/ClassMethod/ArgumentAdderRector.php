@@ -40,7 +40,7 @@ final class ArgumentAdderRector extends AbstractRector implements ConfigurableRe
     /**
      * @var ArgumentAdder[]
      */
-    private $addedArguments = [];
+    private array $addedArguments = [];
 
     public function __construct(
         private ArgumentAddingScope $argumentAddingScope

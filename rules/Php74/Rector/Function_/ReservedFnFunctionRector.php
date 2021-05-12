@@ -29,7 +29,7 @@ final class ReservedFnFunctionRector extends AbstractRector implements Configura
     /**
      * @var string[]
      */
-    private $reservedNamesToNewOnes = [];
+    private array $reservedNamesToNewOnes = [];
 
     public function getRuleDefinition(): RuleDefinition
     {

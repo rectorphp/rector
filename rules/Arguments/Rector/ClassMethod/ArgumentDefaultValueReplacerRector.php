@@ -32,7 +32,7 @@ final class ArgumentDefaultValueReplacerRector extends AbstractRector implements
     /**
      * @var ArgumentDefaultValueReplacer[]
      */
-    private $replacedArguments = [];
+    private array $replacedArguments = [];
 
     public function getRuleDefinition(): RuleDefinition
     {

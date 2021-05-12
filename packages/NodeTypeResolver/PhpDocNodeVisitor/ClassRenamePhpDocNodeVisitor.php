@@ -21,7 +21,7 @@ final class ClassRenamePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
     /**
      * @var OldToNewType[]
      */
-    private $oldToNewTypes = [];
+    private array $oldToNewTypes = [];
 
     public function __construct(
         private StaticTypeMapper $staticTypeMapper,

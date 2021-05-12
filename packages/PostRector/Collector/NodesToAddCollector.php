@@ -21,12 +21,12 @@ final class NodesToAddCollector implements NodeCollectorInterface
     /**
      * @var Stmt[][]
      */
-    private $nodesToAddAfter = [];
+    private array $nodesToAddAfter = [];
 
     /**
      * @var Stmt[][]
      */
-    private $nodesToAddBefore = [];
+    private array $nodesToAddBefore = [];
 
     public function __construct(
         private BetterNodeFinder $betterNodeFinder,

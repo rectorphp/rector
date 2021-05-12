@@ -38,10 +38,7 @@ final class AddLiteralSeparatorToNumberRector extends AbstractRector implements 
      */
     private const GROUP_SIZE = 3;
 
-    /**
-     * @var int
-     */
-    private $limitValue = 1000000;
+    private int $limitValue = 1000000;
 
     /**
      * @param mixed[] $configuration

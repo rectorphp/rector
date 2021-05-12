@@ -35,10 +35,7 @@ use Rector\PHPStanStaticTypeMapper\ValueObject\UnionTypeAnalysis;
 
 final class UnionTypeMapper implements TypeMapperInterface
 {
-    /**
-     * @var PHPStanStaticTypeMapper
-     */
-    private $phpStanStaticTypeMapper;
+    private PHPStanStaticTypeMapper $phpStanStaticTypeMapper;
 
     public function __construct(
         private DoctrineTypeAnalyzer $doctrineTypeAnalyzer,

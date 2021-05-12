@@ -31,7 +31,7 @@ final class CallableInMethodCallToVariableRector extends AbstractRector implemen
     /**
      * @var CallableInMethodCallToVariable[]
      */
-    private $callableInMethodCallToVariable = [];
+    private array $callableInMethodCallToVariable = [];
 
     public function __construct(
         private UnwrapClosureFactory $unwrapClosureFactory

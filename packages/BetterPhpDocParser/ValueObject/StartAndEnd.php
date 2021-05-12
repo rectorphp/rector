@@ -8,24 +8,13 @@ use Rector\Core\Exception\ShouldNotHappenException;
 
 final class StartAndEnd
 {
-    /**
-     * @var int
-     */
-    private $start;
-
-    /**
-     * @var int
-     */
-    private $end;
-
-    public function __construct(int $start, int $end)
-    {
+    public function __construct(
+        private int $start,
+        private int $end
+    ) {
         if ($end < $start) {
             throw new ShouldNotHappenException();
         }
-
-        $this->start = $start;
-        $this->end = $end;
     }
 
     public function getStart(): int

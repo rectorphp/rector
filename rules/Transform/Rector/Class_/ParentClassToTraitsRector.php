@@ -32,7 +32,7 @@ final class ParentClassToTraitsRector extends AbstractRector implements Configur
     /**
      * @var ParentClassToTraits[]
      */
-    private $parentClassToTraits = [];
+    private array $parentClassToTraits = [];
 
     public function __construct(
         private ClassInsertManipulator $classInsertManipulator,

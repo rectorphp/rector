@@ -30,35 +30,17 @@ abstract class AbstractRectorTestCase extends AbstractTestCase implements Rector
 {
     use MovingFilesTrait;
 
-    /**
-     * @var ParameterProvider
-     */
-    protected $parameterProvider;
+    protected ParameterProvider $parameterProvider;
 
-    /**
-     * @var RemovedAndAddedFilesCollector
-     */
-    protected $removedAndAddedFilesCollector;
+    protected RemovedAndAddedFilesCollector $removedAndAddedFilesCollector;
 
-    /**
-     * @var SmartFileInfo
-     */
-    protected $originalTempFileInfo;
+    protected ?SmartFileInfo $originalTempFileInfo;
 
-    /**
-     * @var ContainerInterface|null
-     */
-    protected static $allRectorContainer;
+    protected static ?ContainerInterface $allRectorContainer;
 
-    /**
-     * @var DynamicSourceLocatorProvider
-     */
-    private $dynamicSourceLocatorProvider;
+    private DynamicSourceLocatorProvider $dynamicSourceLocatorProvider;
 
-    /**
-     * @var ApplicationFileProcessor
-     */
-    private $applicationFileProcessor;
+    private ApplicationFileProcessor $applicationFileProcessor;
 
     protected function setUp(): void
     {

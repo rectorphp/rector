@@ -25,15 +25,12 @@ final class RemoveTraitRector extends AbstractRector implements ConfigurableRect
      */
     public const TRAITS_TO_REMOVE = 'traits_to_remove';
 
-    /**
-     * @var bool
-     */
-    private $classHasChanged = false;
+    private bool $classHasChanged = false;
 
     /**
      * @var string[]
      */
-    private $traitsToRemove = [];
+    private array $traitsToRemove = [];
 
     public function __construct(
         private ClassManipulator $classManipulator

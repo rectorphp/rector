@@ -28,10 +28,7 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
  */
 final class ValueResolver
 {
-    /**
-     * @var ConstExprEvaluator
-     */
-    private $constExprEvaluator;
+    private ?ConstExprEvaluator $constExprEvaluator = null;
 
     public function __construct(
         private NodeNameResolver $nodeNameResolver,

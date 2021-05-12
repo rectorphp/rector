@@ -38,7 +38,7 @@ final class ClassRenamer
     /**
      * @var string[]
      */
-    private $alreadyProcessedClasses = [];
+    private array $alreadyProcessedClasses = [];
 
     public function __construct(
         private BetterNodeFinder $betterNodeFinder,

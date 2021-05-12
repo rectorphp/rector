@@ -4,7 +4,7 @@ namespace Rector\Tests\Php74\Rector\Property\TypedPropertyRector\Fixture;
 
 trait JsonBodyTrait
 {
-    private $body = null;
+    private $body;
 
     public function setJsonBody( array $body ): self {
         $this->body = $body;

@@ -20,10 +20,7 @@ abstract class AbstractValuesAwareNode implements PhpDocTagValueNode
      */
     private const UNQUOTED_VALUE_REGEX = '#"(?<content>.*?)"#';
 
-    /**
-     * @var bool
-     */
-    protected $hasChanged = false;
+    protected bool $hasChanged = false;
 
     /**
      * @param mixed[] $values

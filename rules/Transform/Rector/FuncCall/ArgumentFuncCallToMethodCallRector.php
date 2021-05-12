@@ -43,12 +43,12 @@ final class ArgumentFuncCallToMethodCallRector extends AbstractRector implements
     /**
      * @var ArgumentFuncCallToMethodCall[]
      */
-    private $argumentFuncCallToMethodCalls = [];
+    private array $argumentFuncCallToMethodCalls = [];
 
     /**
      * @var ArrayFuncCallToMethodCall[]
      */
-    private $arrayFunctionsToMethodCalls = [];
+    private array $arrayFunctionsToMethodCalls = [];
 
     public function __construct(
         private ArrayTypeAnalyzer $arrayTypeAnalyzer,

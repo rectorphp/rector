@@ -32,7 +32,7 @@ final class VariableMethodCallToServiceCallRector extends AbstractRector impleme
     /**
      * @var VariableMethodCallToServiceCall[]
      */
-    private $variableMethodCallsToServiceCalls = [];
+    private array $variableMethodCallsToServiceCalls = [];
 
     public function __construct(
         private PropertyNaming $propertyNaming

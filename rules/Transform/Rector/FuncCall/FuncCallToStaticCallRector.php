@@ -26,7 +26,7 @@ final class FuncCallToStaticCallRector extends AbstractRector implements Configu
     /**
      * @var FuncCallToStaticCall[]
      */
-    private $funcCallsToStaticCalls = [];
+    private array $funcCallsToStaticCalls = [];
 
     public function getRuleDefinition(): RuleDefinition
     {
