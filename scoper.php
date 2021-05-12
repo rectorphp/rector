@@ -65,6 +65,21 @@ return [
             );
         },
 
+        // make UT=1 in tests work
+        function (string $filePath, string $prefix, string $content): string {
+            if (! Strings::endsWith($filePath, 'packages/Testing/PHPUnit/AbstractRectorTestCase.php')) {
+                return $content;
+            }
+
+            // see https://regex101.com/r/v8zRMm/1
+            return Strings::replace(
+                $content, '
+                #' . $prefix . '\\\\PHPUnit\\\\Framework\\\\ExpectationFailedException',
+#',
+                'PHPUnit\Framework\ExpectationFailedException'
+            );
+        },
+
         // unprefixed SmartFileInfo
         function (string $filePath, string $prefix, string $content): string {
             return Strings::replace(
