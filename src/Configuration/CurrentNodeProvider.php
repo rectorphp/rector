@@ -7,7 +7,7 @@ use PhpParser\Node;
 final class CurrentNodeProvider
 {
     /**
-     * @var Node|null
+     * @var \PhpParser\Node|null
      */
     private $node;
     public function setNode(\PhpParser\Node $node) : void

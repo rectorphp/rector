@@ -15,7 +15,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20210511\Webmozart\Assert\Assert;
+use RectorPrefix20210512\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\DeadCode\Rector\ClassLike\RemoveAnnotationRector\RemoveAnnotationRectorTest
  */
@@ -26,7 +26,7 @@ final class RemoveAnnotationRector extends \Rector\Core\Rector\AbstractRector im
      */
     public const ANNOTATIONS_TO_REMOVE = 'annotations_to_remove';
     /**
-     * @var string[]|class-string[]
+     * @var string[]
      */
     private $annotationsToRemove = [];
     /**
@@ -88,7 +88,7 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $annotationsToRemove = $configuration[self::ANNOTATIONS_TO_REMOVE] ?? [];
-        \RectorPrefix20210511\Webmozart\Assert\Assert::allString($annotationsToRemove);
+        \RectorPrefix20210512\Webmozart\Assert\Assert::allString($annotationsToRemove);
         $this->annotationsToRemove = $annotationsToRemove;
     }
 }

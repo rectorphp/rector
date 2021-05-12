@@ -7,7 +7,7 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class RectorError
 {
     /**
-     * @var SmartFileInfo
+     * @var \Symplify\SmartFileSystem\SmartFileInfo
      */
     private $fileInfo;
     /**
@@ -17,11 +17,11 @@ final class RectorError
     /**
      * @var int|null
      */
-    private $line = null;
+    private $line;
     /**
      * @var string|null
      */
-    private $rectorClass = null;
+    private $rectorClass;
     public function __construct(string $message, ?int $line = null, ?string $rectorClass = null)
     {
         $this->message = $message;

@@ -6,7 +6,7 @@ namespace Rector\Testing\PHPUnit;
 use PHPUnit\Framework\TestCase;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\HttpKernel\RectorKernel;
-use RectorPrefix20210511\Symfony\Component\DependencyInjection\ContainerInterface;
+use RectorPrefix20210512\Symfony\Component\DependencyInjection\ContainerInterface;
 use Symplify\SmartFileSystem\SmartFileInfo;
 abstract class AbstractTestCase extends \PHPUnit\Framework\TestCase
 {
@@ -15,7 +15,7 @@ abstract class AbstractTestCase extends \PHPUnit\Framework\TestCase
      */
     private static $kernelsByHash = [];
     /**
-     * @var ContainerInterface
+     * @var \Symfony\Component\DependencyInjection\ContainerInterface|null
      */
     private static $currentContainer;
     protected function boot() : void
@@ -43,14 +43,19 @@ abstract class AbstractTestCase extends \PHPUnit\Framework\TestCase
      *
      * @template T of object
      * @param class-string<T> $type
-     * @return T
+     * @return object
      */
-    protected function getService(string $type) : object
+    protected function getService(string $type)
     {
         if (self::$currentContainer === null) {
             throw new \Rector\Core\Exception\ShouldNotHappenException('First, create container with "bootWithConfigFileInfos([...])"');
         }
-        return self::$currentContainer->get($type);
+        $object = self::$currentContainer->get($type);
+        if ($object === null) {
+            $message = \sprintf('Service "%s" was not found', $type);
+            throw new \Rector\Core\Exception\ShouldNotHappenException($message);
+        }
+        return $object;
     }
     /**
      * @param SmartFileInfo[] $configFileInfos

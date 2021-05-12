@@ -27,7 +27,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ChangeSwitchToMatchRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var Expr|null
+     * @var \PhpParser\Node\Expr|null
      */
     private $assignExpr;
     /**

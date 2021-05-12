@@ -13,7 +13,7 @@ use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
 final class IntersectionTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface
 {
     /**
-     * @var PHPStanStaticTypeMapper
+     * @var \Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper
      */
     private $phpStanStaticTypeMapper;
     /**

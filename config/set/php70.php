@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210511;
+namespace RectorPrefix20210512;
 
 use Rector\Php70\Rector\Assign\ListSplitStringRector;
 use Rector\Php70\Rector\Assign\ListSwapArrayOrderRector;
@@ -22,8 +22,8 @@ use Rector\Php70\Rector\Switch_\ReduceMultipleDefaultSwitchRector;
 use Rector\Php70\Rector\Ternary\TernaryToNullCoalescingRector;
 use Rector\Php70\Rector\Ternary\TernaryToSpaceshipRector;
 use Rector\Php70\Rector\Variable\WrapVariableVariableNameInCurlyBracesRector;
-use RectorPrefix20210511\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-return static function (\RectorPrefix20210511\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
+use RectorPrefix20210512\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+return static function (\RectorPrefix20210512\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
     $containerConfigurator->import(__DIR__ . '/mysql-to-mysqli.php');
     $services = $containerConfigurator->services();
     $services->set(\Rector\Php70\Rector\ClassMethod\Php4ConstructorRector::class);

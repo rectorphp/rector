@@ -7,6 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\NullableType;
+use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\PropertyProperty;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -46,6 +47,11 @@ CODE_SAMPLE
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
+        $parent = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        // skip typed properties
+        if ($parent instanceof \PhpParser\Node\Stmt\Property && $parent->type) {
+            return null;
+        }
         $defaultValueNode = $node->default;
         if (!$defaultValueNode instanceof \PhpParser\Node\Expr) {
             return null;

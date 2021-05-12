@@ -12,11 +12,14 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\UnionType as PhpParserUnionType;
+use PHPStan\Type\ArrayType;
+use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DeadCode\PhpDoc\TagRemover\ParamTagRemover;
 use Rector\DeadCode\PhpDoc\TagRemover\ReturnTagRemover;
+use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeAnalyzer;
 use Rector\VendorLocker\NodeVendorLocker\ClassMethodParamVendorLockResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -42,12 +45,17 @@ final class UnionTypesRector extends \Rector\Core\Rector\AbstractRector
      * @var \Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeAnalyzer
      */
     private $unionTypeAnalyzer;
-    public function __construct(\Rector\DeadCode\PhpDoc\TagRemover\ReturnTagRemover $returnTagRemover, \Rector\DeadCode\PhpDoc\TagRemover\ParamTagRemover $paramTagRemover, \Rector\VendorLocker\NodeVendorLocker\ClassMethodParamVendorLockResolver $classMethodParamVendorLockResolver, \Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeAnalyzer $unionTypeAnalyzer)
+    /**
+     * @var \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory
+     */
+    private $typeFactory;
+    public function __construct(\Rector\DeadCode\PhpDoc\TagRemover\ReturnTagRemover $returnTagRemover, \Rector\DeadCode\PhpDoc\TagRemover\ParamTagRemover $paramTagRemover, \Rector\VendorLocker\NodeVendorLocker\ClassMethodParamVendorLockResolver $classMethodParamVendorLockResolver, \Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeAnalyzer $unionTypeAnalyzer, \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory $typeFactory)
     {
         $this->returnTagRemover = $returnTagRemover;
         $this->paramTagRemover = $paramTagRemover;
         $this->classMethodParamVendorLockResolver = $classMethodParamVendorLockResolver;
         $this->unionTypeAnalyzer = $unionTypeAnalyzer;
+        $this->typeFactory = $typeFactory;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -92,16 +100,12 @@ CODE_SAMPLE
         $this->returnTagRemover->removeReturnTagIfUseless($phpDocInfo, $node);
         return $node;
     }
-    private function isVendorLocked(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
-    {
-        return $this->classMethodParamVendorLockResolver->isVendorLocked($classMethod);
-    }
     /**
      * @param ClassMethod|Function_|Closure|ArrowFunction $functionLike
      */
     private function refactorParamTypes(\PhpParser\Node\FunctionLike $functionLike, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo) : void
     {
-        if ($functionLike instanceof \PhpParser\Node\Stmt\ClassMethod && $this->isVendorLocked($functionLike)) {
+        if ($functionLike instanceof \PhpParser\Node\Stmt\ClassMethod && $this->classMethodParamVendorLockResolver->isVendorLocked($functionLike)) {
             return;
         }
         foreach ($functionLike->getParams() as $param) {
@@ -118,7 +122,11 @@ CODE_SAMPLE
                 $this->changeObjectWithoutClassType($param, $paramType);
                 continue;
             }
-            $phpParserUnionType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($paramType);
+            $uniqueatedParamType = $this->filterOutDuplicatedArrayTypes($paramType);
+            if (!$uniqueatedParamType instanceof \PHPStan\Type\UnionType) {
+                continue;
+            }
+            $phpParserUnionType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($uniqueatedParamType);
             if (!$phpParserUnionType instanceof \PhpParser\Node\UnionType) {
                 continue;
             }
@@ -145,10 +153,38 @@ CODE_SAMPLE
         if (!$returnType instanceof \PHPStan\Type\UnionType) {
             return;
         }
-        $phpParserUnionType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($returnType);
+        $uniqueatedReturnType = $this->filterOutDuplicatedArrayTypes($returnType);
+        if (!$uniqueatedReturnType instanceof \PHPStan\Type\UnionType) {
+            return;
+        }
+        $phpParserUnionType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($uniqueatedReturnType);
         if (!$phpParserUnionType instanceof \PhpParser\Node\UnionType) {
             return;
         }
         $functionLike->returnType = $phpParserUnionType;
+    }
+    /**
+     * @return \PHPStan\Type\UnionType|\PHPStan\Type\Type
+     */
+    private function filterOutDuplicatedArrayTypes(\PHPStan\Type\UnionType $unionType)
+    {
+        $hasArrayType = \false;
+        $singleArrayTypes = [];
+        $originalTypeCount = \count($unionType->getTypes());
+        foreach ($unionType->getTypes() as $unionedType) {
+            if ($unionedType instanceof \PHPStan\Type\ArrayType) {
+                if ($hasArrayType) {
+                    continue;
+                }
+                $singleArrayTypes[] = $unionedType;
+                $hasArrayType = \true;
+                continue;
+            }
+            $singleArrayTypes[] = $unionedType;
+        }
+        if ($originalTypeCount === \count($singleArrayTypes)) {
+            return $unionType;
+        }
+        return $this->typeFactory->createMixedPassedOrUnionType($singleArrayTypes);
     }
 }

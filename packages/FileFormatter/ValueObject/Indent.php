@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\FileFormatter\ValueObject;
 
-use RectorPrefix20210511\Nette\Utils\Strings;
+use RectorPrefix20210512\Nette\Utils\Strings;
 use Rector\FileFormatter\Exception\InvalidIndentSizeException;
 use Rector\FileFormatter\Exception\InvalidIndentStringException;
 use Rector\FileFormatter\Exception\InvalidIndentStyleException;
@@ -14,7 +14,7 @@ use Rector\FileFormatter\Exception\ParseIndentException;
 final class Indent
 {
     /**
-     * @var string[]
+     * @var array<string, string>
      */
     public const CHARACTERS = [self::SPACE => ' ', self::TAB => "\t"];
     /**
@@ -29,7 +29,7 @@ final class Indent
      * @see https://regex101.com/r/A2XiaF/1
      * @var string
      */
-    private const VALID_INDENT_REGEX = '/^( *|\\t+)$/';
+    private const VALID_INDENT_REGEX = '#^( *|\\t+)$#';
     /**
      * @var int
      */
@@ -54,13 +54,13 @@ final class Indent
     /**
      * @return $this
      */
-    public static function fromString(string $string)
+    public static function fromString(string $content)
     {
-        $validIndent = \preg_match(self::VALID_INDENT_REGEX, $string);
-        if ($validIndent !== 1) {
-            throw \Rector\FileFormatter\Exception\InvalidIndentStringException::fromString($string);
+        $match = \RectorPrefix20210512\Nette\Utils\Strings::match($content, self::VALID_INDENT_REGEX);
+        if ($match === null) {
+            throw \Rector\FileFormatter\Exception\InvalidIndentStringException::fromString($content);
         }
-        return new self($string);
+        return new self($content);
     }
     /**
      * @return $this
@@ -93,13 +93,13 @@ final class Indent
     /**
      * @return $this
      */
-    public static function fromContent(string $string)
+    public static function fromContent(string $content)
     {
-        $validIndent = \preg_match(self::PARSE_INDENT_REGEX, $string, $match);
-        if ($validIndent === 1) {
+        $match = \RectorPrefix20210512\Nette\Utils\Strings::match($content, self::PARSE_INDENT_REGEX);
+        if (isset($match['indent'])) {
             return self::fromString($match['indent']);
         }
-        throw \Rector\FileFormatter\Exception\ParseIndentException::fromString($string);
+        throw \Rector\FileFormatter\Exception\ParseIndentException::fromString($content);
     }
     public function getIndentSize() : int
     {
@@ -115,6 +115,6 @@ final class Indent
     }
     private function startsWithSpace() : bool
     {
-        return \RectorPrefix20210511\Nette\Utils\Strings::startsWith($this->string, ' ');
+        return \RectorPrefix20210512\Nette\Utils\Strings::startsWith($this->string, ' ');
     }
 }

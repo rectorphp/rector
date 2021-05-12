@@ -47,10 +47,10 @@ use Rector\PostRector\Collector\NodesToRemoveCollector;
 use Rector\PostRector\DependencyInjection\PropertyAdder;
 use Rector\Privatization\NodeManipulator\VisibilityManipulator;
 use Rector\StaticTypeMapper\StaticTypeMapper;
-use RectorPrefix20210511\Symfony\Component\Console\Style\SymfonyStyle;
-use RectorPrefix20210511\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
-use RectorPrefix20210511\Symplify\PackageBuilder\Parameter\ParameterProvider;
-use RectorPrefix20210511\Symplify\Skipper\Skipper\Skipper;
+use RectorPrefix20210512\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix20210512\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
+use RectorPrefix20210512\Symplify\PackageBuilder\Parameter\ParameterProvider;
+use RectorPrefix20210512\Symplify\Skipper\Skipper\Skipper;
 /**
  * @see \Rector\Testing\PHPUnit\AbstractRectorTestCase
  */
@@ -61,103 +61,103 @@ abstract class AbstractRector extends \PhpParser\NodeVisitorAbstract implements 
      */
     private const ATTRIBUTES_TO_MIRROR = [\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE, \Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME, \Rector\NodeTypeResolver\Node\AttributeKey::METHOD_NODE, \Rector\NodeTypeResolver\Node\AttributeKey::USE_NODES, \Rector\NodeTypeResolver\Node\AttributeKey::SCOPE, \Rector\NodeTypeResolver\Node\AttributeKey::RESOLVED_NAME, \Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE, \Rector\NodeTypeResolver\Node\AttributeKey::CURRENT_STATEMENT, \Rector\NodeTypeResolver\Node\AttributeKey::PREVIOUS_STATEMENT];
     /**
-     * @var NodeNameResolver
+     * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     protected $nodeNameResolver;
     /**
-     * @var NodeTypeResolver
+     * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     protected $nodeTypeResolver;
     /**
-     * @var BetterStandardPrinter
+     * @var \Rector\Core\PhpParser\Printer\BetterStandardPrinter
      */
     protected $betterStandardPrinter;
     /**
-     * @var RemovedAndAddedFilesCollector
+     * @var \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector
      */
     protected $removedAndAddedFilesCollector;
     /**
-     * @var ParameterProvider
+     * @var \Symplify\PackageBuilder\Parameter\ParameterProvider
      */
     protected $parameterProvider;
     /**
-     * @var PhpVersionProvider
+     * @var \Rector\Core\Php\PhpVersionProvider
      */
     protected $phpVersionProvider;
     /**
-     * @var StaticTypeMapper
+     * @var \Rector\StaticTypeMapper\StaticTypeMapper
      */
     protected $staticTypeMapper;
     /**
-     * @var PhpDocInfoFactory
+     * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
     protected $phpDocInfoFactory;
     /**
-     * @var NodeFactory
+     * @var \Rector\Core\PhpParser\Node\NodeFactory
      */
     protected $nodeFactory;
     /**
-     * @var VisibilityManipulator
+     * @var \Rector\Privatization\NodeManipulator\VisibilityManipulator
      */
     protected $visibilityManipulator;
     /**
-     * @var ValueResolver
+     * @var \Rector\Core\PhpParser\Node\Value\ValueResolver
      */
     protected $valueResolver;
     /**
-     * @var NodeRepository
+     * @var \Rector\NodeCollector\NodeCollector\NodeRepository
      */
     protected $nodeRepository;
     /**
-     * @var BetterNodeFinder
+     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     protected $betterNodeFinder;
     /**
-     * @var NodeRemover
+     * @var \Rector\NodeRemoval\NodeRemover
      */
     protected $nodeRemover;
     /**
-     * @var RectorChangeCollector
+     * @var \Rector\ChangesReporting\Collector\RectorChangeCollector
      */
     protected $rectorChangeCollector;
     /**
-     * @var NodeComparator
+     * @var \Rector\Core\PhpParser\Comparing\NodeComparator
      */
     protected $nodeComparator;
     /**
-     * @var PropertyAdder
+     * @var \Rector\PostRector\DependencyInjection\PropertyAdder
      */
     protected $propertyAdder;
     /**
-     * @var NodesToRemoveCollector
+     * @var \Rector\PostRector\Collector\NodesToRemoveCollector
      */
     protected $nodesToRemoveCollector;
     /**
-     * @var File
+     * @var \Rector\Core\ValueObject\Application\File
      */
     protected $file;
     /**
-     * @var SimpleCallableNodeTraverser
+     * @var \Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser
      */
     private $simpleCallableNodeTraverser;
     /**
-     * @var SymfonyStyle
+     * @var \Symfony\Component\Console\Style\SymfonyStyle
      */
     private $symfonyStyle;
     /**
-     * @var ExclusionManager
+     * @var \Rector\Core\Exclusion\ExclusionManager
      */
     private $exclusionManager;
     /**
-     * @var CurrentRectorProvider
+     * @var \Rector\Core\Logging\CurrentRectorProvider
      */
     private $currentRectorProvider;
     /**
-     * @var CurrentNodeProvider
+     * @var \Rector\Core\Configuration\CurrentNodeProvider
      */
     private $currentNodeProvider;
     /**
-     * @var Skipper
+     * @var \Symplify\Skipper\Skipper\Skipper
      */
     private $skipper;
     /**
@@ -165,15 +165,15 @@ abstract class AbstractRector extends \PhpParser\NodeVisitorAbstract implements 
      */
     private $previousAppliedClass;
     /**
-     * @var NodesToAddCollector
+     * @var \Rector\PostRector\Collector\NodesToAddCollector
      */
     private $nodesToAddCollector;
     /**
-     * @var CurrentFileProvider
+     * @var \Rector\Core\Provider\CurrentFileProvider
      */
     private $currentFileProvider;
     /**
-     * @var ChangedNodeAnalyzer
+     * @var \Rector\Core\NodeAnalyzer\ChangedNodeAnalyzer
      */
     private $changedNodeAnalyzer;
     /**
@@ -183,7 +183,7 @@ abstract class AbstractRector extends \PhpParser\NodeVisitorAbstract implements 
     /**
      * @required
      */
-    public function autowireAbstractRector(\Rector\PostRector\Collector\NodesToRemoveCollector $nodesToRemoveCollector, \Rector\PostRector\Collector\NodesToAddCollector $nodesToAddCollector, \Rector\ChangesReporting\Collector\RectorChangeCollector $rectorChangeCollector, \Rector\NodeRemoval\NodeRemover $nodeRemover, \Rector\PostRector\DependencyInjection\PropertyAdder $propertyAdder, \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector $removedAndAddedFilesCollector, \Rector\Core\PhpParser\Printer\BetterStandardPrinter $betterStandardPrinter, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \RectorPrefix20210511\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\Privatization\NodeManipulator\VisibilityManipulator $visibilityManipulator, \Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \RectorPrefix20210511\Symfony\Component\Console\Style\SymfonyStyle $symfonyStyle, \Rector\Core\Php\PhpVersionProvider $phpVersionProvider, \Rector\Core\Exclusion\ExclusionManager $exclusionManager, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \RectorPrefix20210511\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \Rector\Core\Logging\CurrentRectorProvider $currentRectorProvider, \Rector\Core\Configuration\CurrentNodeProvider $currentNodeProvider, \RectorPrefix20210511\Symplify\Skipper\Skipper\Skipper $skipper, \Rector\Core\PhpParser\Node\Value\ValueResolver $valueResolver, \Rector\NodeCollector\NodeCollector\NodeRepository $nodeRepository, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator, \Rector\Core\Provider\CurrentFileProvider $currentFileProvider, \Rector\Core\NodeAnalyzer\ChangedNodeAnalyzer $changedNodeAnalyzer) : void
+    public function autowireAbstractRector(\Rector\PostRector\Collector\NodesToRemoveCollector $nodesToRemoveCollector, \Rector\PostRector\Collector\NodesToAddCollector $nodesToAddCollector, \Rector\ChangesReporting\Collector\RectorChangeCollector $rectorChangeCollector, \Rector\NodeRemoval\NodeRemover $nodeRemover, \Rector\PostRector\DependencyInjection\PropertyAdder $propertyAdder, \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector $removedAndAddedFilesCollector, \Rector\Core\PhpParser\Printer\BetterStandardPrinter $betterStandardPrinter, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \RectorPrefix20210512\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\Privatization\NodeManipulator\VisibilityManipulator $visibilityManipulator, \Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \RectorPrefix20210512\Symfony\Component\Console\Style\SymfonyStyle $symfonyStyle, \Rector\Core\Php\PhpVersionProvider $phpVersionProvider, \Rector\Core\Exclusion\ExclusionManager $exclusionManager, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \RectorPrefix20210512\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \Rector\Core\Logging\CurrentRectorProvider $currentRectorProvider, \Rector\Core\Configuration\CurrentNodeProvider $currentNodeProvider, \RectorPrefix20210512\Symplify\Skipper\Skipper\Skipper $skipper, \Rector\Core\PhpParser\Node\Value\ValueResolver $valueResolver, \Rector\NodeCollector\NodeCollector\NodeRepository $nodeRepository, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator, \Rector\Core\Provider\CurrentFileProvider $currentFileProvider, \Rector\Core\NodeAnalyzer\ChangedNodeAnalyzer $changedNodeAnalyzer) : void
     {
         $this->nodesToRemoveCollector = $nodesToRemoveCollector;
         $this->nodesToAddCollector = $nodesToAddCollector;

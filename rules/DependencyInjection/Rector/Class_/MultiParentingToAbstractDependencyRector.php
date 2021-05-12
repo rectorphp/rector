@@ -33,7 +33,7 @@ final class MultiParentingToAbstractDependencyRector extends \Rector\Core\Rector
     /**
      * @var string
      */
-    private $framework;
+    private $framework = \Rector\Core\ValueObject\FrameworkName::SYMFONY;
     /**
      * @var ObjectType[]
      */
@@ -156,7 +156,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $this->framework = $configuration[self::FRAMEWORK];
+        $this->framework = $configuration[self::FRAMEWORK] ?? \Rector\Core\ValueObject\FrameworkName::SYMFONY;
     }
     /**
      * @return ObjectType[]

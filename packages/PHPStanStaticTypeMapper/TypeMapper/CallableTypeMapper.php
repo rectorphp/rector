@@ -16,7 +16,7 @@ use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
 final class CallableTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface
 {
     /**
-     * @var PHPStanStaticTypeMapper
+     * @var \Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper
      */
     private $phpStanStaticTypeMapper;
     /**

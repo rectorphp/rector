@@ -4,13 +4,13 @@ declare (strict_types=1);
 namespace Rector\Core\Bootstrap;
 
 use Rector\Core\ValueObject\Bootstrap\BootstrapConfigs;
-use RectorPrefix20210511\Symfony\Component\Console\Input\ArgvInput;
-use RectorPrefix20210511\Symplify\SetConfigResolver\ConfigResolver;
+use RectorPrefix20210512\Symfony\Component\Console\Input\ArgvInput;
+use RectorPrefix20210512\Symplify\SetConfigResolver\ConfigResolver;
 use Symplify\SmartFileSystem\SmartFileInfo;
 final class RectorConfigsResolver
 {
     /**
-     * @var ConfigResolver
+     * @var \Symplify\SetConfigResolver\ConfigResolver
      */
     private $configResolver;
     /**
@@ -18,13 +18,13 @@ final class RectorConfigsResolver
      */
     private $resolvedConfigFileInfos = [];
     /**
-     * @var SetConfigResolver
+     * @var \Rector\Core\Bootstrap\SetConfigResolver
      */
     private $setConfigResolver;
     public function __construct()
     {
         $this->setConfigResolver = new \Rector\Core\Bootstrap\SetConfigResolver();
-        $this->configResolver = new \RectorPrefix20210511\Symplify\SetConfigResolver\ConfigResolver();
+        $this->configResolver = new \RectorPrefix20210512\Symplify\SetConfigResolver\ConfigResolver();
     }
     /**
      * @return SmartFileInfo[]
@@ -45,7 +45,7 @@ final class RectorConfigsResolver
     }
     public function provide() : \Rector\Core\ValueObject\Bootstrap\BootstrapConfigs
     {
-        $argvInput = new \RectorPrefix20210511\Symfony\Component\Console\Input\ArgvInput();
+        $argvInput = new \RectorPrefix20210512\Symfony\Component\Console\Input\ArgvInput();
         $mainConfigFileInfo = $this->configResolver->resolveFromInputWithFallback($argvInput, ['rector.php']);
         $configFileInfos = $mainConfigFileInfo instanceof \Symplify\SmartFileSystem\SmartFileInfo ? $this->resolveFromConfigFileInfo($mainConfigFileInfo) : [];
         $configFileInfos = $this->appendRectorRecipeConfig($argvInput, $configFileInfos);
@@ -55,7 +55,7 @@ final class RectorConfigsResolver
      * @param SmartFileInfo[] $configFileInfos
      * @return SmartFileInfo[]
      */
-    private function appendRectorRecipeConfig(\RectorPrefix20210511\Symfony\Component\Console\Input\ArgvInput $argvInput, array $configFileInfos) : array
+    private function appendRectorRecipeConfig(\RectorPrefix20210512\Symfony\Component\Console\Input\ArgvInput $argvInput, array $configFileInfos) : array
     {
         if ($argvInput->getFirstArgument() !== 'generate') {
             return $configFileInfos;

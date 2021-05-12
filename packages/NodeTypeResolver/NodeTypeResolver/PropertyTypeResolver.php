@@ -17,7 +17,7 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 final class PropertyTypeResolver implements \Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface
 {
     /**
-     * @var NodeTypeResolver
+     * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;
     /**

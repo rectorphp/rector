@@ -8,13 +8,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210511\Symfony\Component\HttpKernel\Fragment;
+namespace RectorPrefix20210512\Symfony\Component\HttpKernel\Fragment;
 
-use RectorPrefix20210511\Symfony\Component\HttpFoundation\RequestStack;
-use RectorPrefix20210511\Symfony\Component\HttpFoundation\Response;
-use RectorPrefix20210511\Symfony\Component\HttpFoundation\StreamedResponse;
-use RectorPrefix20210511\Symfony\Component\HttpKernel\Controller\ControllerReference;
-use RectorPrefix20210511\Symfony\Component\HttpKernel\Exception\HttpException;
+use RectorPrefix20210512\Symfony\Component\HttpFoundation\RequestStack;
+use RectorPrefix20210512\Symfony\Component\HttpFoundation\Response;
+use RectorPrefix20210512\Symfony\Component\HttpFoundation\StreamedResponse;
+use RectorPrefix20210512\Symfony\Component\HttpKernel\Controller\ControllerReference;
+use RectorPrefix20210512\Symfony\Component\HttpKernel\Exception\HttpException;
 /**
  * Renders a URI that represents a resource fragment.
  *
@@ -34,7 +34,7 @@ class FragmentHandler
      * @param FragmentRendererInterface[] $renderers An array of FragmentRendererInterface instances
      * @param bool                        $debug     Whether the debug mode is enabled or not
      */
-    public function __construct(\RectorPrefix20210511\Symfony\Component\HttpFoundation\RequestStack $requestStack, array $renderers = [], bool $debug = \false)
+    public function __construct(\RectorPrefix20210512\Symfony\Component\HttpFoundation\RequestStack $requestStack, array $renderers = [], bool $debug = \false)
     {
         $this->requestStack = $requestStack;
         foreach ($renderers as $renderer) {
@@ -45,7 +45,7 @@ class FragmentHandler
     /**
      * Adds a renderer.
      */
-    public function addRenderer(\RectorPrefix20210511\Symfony\Component\HttpKernel\Fragment\FragmentRendererInterface $renderer)
+    public function addRenderer(\RectorPrefix20210512\Symfony\Component\HttpKernel\Fragment\FragmentRendererInterface $renderer)
     {
         $this->renderers[$renderer->getName()] = $renderer;
     }
@@ -86,13 +86,13 @@ class FragmentHandler
      *
      * @throws \RuntimeException when the Response is not successful
      */
-    protected function deliver(\RectorPrefix20210511\Symfony\Component\HttpFoundation\Response $response)
+    protected function deliver(\RectorPrefix20210512\Symfony\Component\HttpFoundation\Response $response)
     {
         if (!$response->isSuccessful()) {
             $responseStatusCode = $response->getStatusCode();
-            throw new \RuntimeException(\sprintf('Error when rendering "%s" (Status code is %d).', $this->requestStack->getCurrentRequest()->getUri(), $responseStatusCode), 0, new \RectorPrefix20210511\Symfony\Component\HttpKernel\Exception\HttpException($responseStatusCode));
+            throw new \RuntimeException(\sprintf('Error when rendering "%s" (Status code is %d).', $this->requestStack->getCurrentRequest()->getUri(), $responseStatusCode), 0, new \RectorPrefix20210512\Symfony\Component\HttpKernel\Exception\HttpException($responseStatusCode));
         }
-        if (!$response instanceof \RectorPrefix20210511\Symfony\Component\HttpFoundation\StreamedResponse) {
+        if (!$response instanceof \RectorPrefix20210512\Symfony\Component\HttpFoundation\StreamedResponse) {
             return $response->getContent();
         }
         $response->sendContent();

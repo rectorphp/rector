@@ -10,7 +10,7 @@ use Rector\NodeNameResolver\NodeNameResolver;
 final class UseNameResolver implements \Rector\NodeNameResolver\Contract\NodeNameResolverInterface
 {
     /**
-     * @var NodeNameResolver
+     * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     /**

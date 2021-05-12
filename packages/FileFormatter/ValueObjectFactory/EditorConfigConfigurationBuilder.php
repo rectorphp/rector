@@ -9,32 +9,32 @@ use Rector\FileFormatter\ValueObject\NewLine;
 final class EditorConfigConfigurationBuilder
 {
     /**
+     * @var \Rector\FileFormatter\ValueObject\NewLine
+     */
+    private $newLine;
+    /**
      * @var string
      */
-    private $indentStyle;
+    private $indentStyle = 'space';
     /**
      * @var int
      */
-    private $indentSize;
+    private $indentSize = 2;
     /**
      * @var bool
      */
-    private $insertFinalNewline = \false;
-    /**
-     * @var NewLine
-     */
-    private $newLine;
-    private function __construct()
+    private $insertFinalNewline = \true;
+    public function __construct(string $indentStyle = 'space', int $indentSize = 2, bool $insertFinalNewline = \true)
     {
-        $this->indentStyle = 'space';
-        $this->indentSize = 2;
+        $this->indentStyle = $indentStyle;
+        $this->indentSize = $indentSize;
+        $this->insertFinalNewline = $insertFinalNewline;
         $this->newLine = \Rector\FileFormatter\ValueObject\NewLine::fromEditorConfig('lf');
-        $this->insertFinalNewline = \true;
     }
     /**
      * @return $this
      */
-    public static function anEditorConfigConfiguration()
+    public static function create()
     {
         return new self();
     }

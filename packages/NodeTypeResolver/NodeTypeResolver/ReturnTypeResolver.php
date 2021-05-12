@@ -12,7 +12,7 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 final class ReturnTypeResolver implements \Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface
 {
     /**
-     * @var NodeTypeResolver
+     * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;
     /**

@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210511\Symfony\Component\String;
+namespace RectorPrefix20210512\Symfony\Component\String;
 
-use RectorPrefix20210511\Symfony\Component\String\Exception\ExceptionInterface;
-use RectorPrefix20210511\Symfony\Component\String\Exception\InvalidArgumentException;
-use RectorPrefix20210511\Symfony\Component\String\Exception\RuntimeException;
+use RectorPrefix20210512\Symfony\Component\String\Exception\ExceptionInterface;
+use RectorPrefix20210512\Symfony\Component\String\Exception\InvalidArgumentException;
+use RectorPrefix20210512\Symfony\Component\String\Exception\RuntimeException;
 /**
  * Represents a string of abstract Unicode characters.
  *
@@ -24,7 +24,7 @@ use RectorPrefix20210511\Symfony\Component\String\Exception\RuntimeException;
  *
  * @throws ExceptionInterface
  */
-abstract class AbstractUnicodeString extends \RectorPrefix20210511\Symfony\Component\String\AbstractString
+abstract class AbstractUnicodeString extends \RectorPrefix20210512\Symfony\Component\String\AbstractString
 {
     public const NFC = \Normalizer::NFC;
     public const NFD = \Normalizer::NFD;
@@ -113,7 +113,7 @@ abstract class AbstractUnicodeString extends \RectorPrefix20210511\Symfony\Compo
                             $transliterator = self::$transliterators[$rule] ?? (self::$transliterators[$rule] = \Transliterator::create($rule));
                         }
                         if (null === $transliterator) {
-                            throw new \RectorPrefix20210511\Symfony\Component\String\Exception\InvalidArgumentException(\sprintf('Unknown transliteration rule "%s".', $rule));
+                            throw new \RectorPrefix20210512\Symfony\Component\String\Exception\InvalidArgumentException(\sprintf('Unknown transliteration rule "%s".', $rule));
                         }
                         self::$transliterators['any-latin/bgn'] = $transliterator;
                     }
@@ -177,7 +177,7 @@ abstract class AbstractUnicodeString extends \RectorPrefix20210511\Symfony\Compo
         $tail = null !== $lastGlue && 1 < \count($strings) ? $lastGlue . \array_pop($strings) : '';
         $str->string = \implode($this->string, $strings) . $tail;
         if (!\preg_match('//u', $str->string)) {
-            throw new \RectorPrefix20210511\Symfony\Component\String\Exception\InvalidArgumentException('Invalid UTF-8 string.');
+            throw new \RectorPrefix20210512\Symfony\Component\String\Exception\InvalidArgumentException('Invalid UTF-8 string.');
         }
         return $str;
     }
@@ -194,17 +194,17 @@ abstract class AbstractUnicodeString extends \RectorPrefix20210511\Symfony\Compo
             $regexp .= 'i';
         }
         \set_error_handler(static function ($t, $m) {
-            throw new \RectorPrefix20210511\Symfony\Component\String\Exception\InvalidArgumentException($m);
+            throw new \RectorPrefix20210512\Symfony\Component\String\Exception\InvalidArgumentException($m);
         });
         try {
             if (\false === $match($regexp . 'u', $this->string, $matches, $flags, $offset)) {
                 $lastError = \preg_last_error();
                 foreach (\get_defined_constants(\true)['pcre'] as $k => $v) {
                     if ($lastError === $v && '_ERROR' === \substr($k, -6)) {
-                        throw new \RectorPrefix20210511\Symfony\Component\String\Exception\RuntimeException('Matching failed with ' . $k . '.');
+                        throw new \RectorPrefix20210512\Symfony\Component\String\Exception\RuntimeException('Matching failed with ' . $k . '.');
                     }
                 }
-                throw new \RectorPrefix20210511\Symfony\Component\String\Exception\RuntimeException('Matching failed with unknown error code.');
+                throw new \RectorPrefix20210512\Symfony\Component\String\Exception\RuntimeException('Matching failed with unknown error code.');
             }
             \array_walk_recursive($matches, function (&$value) {
                 if ($value === '') {
@@ -222,7 +222,7 @@ abstract class AbstractUnicodeString extends \RectorPrefix20210511\Symfony\Compo
     public function normalize(int $form = self::NFC)
     {
         if (!\in_array($form, [self::NFC, self::NFD, self::NFKC, self::NFKD])) {
-            throw new \RectorPrefix20210511\Symfony\Component\String\Exception\InvalidArgumentException('Unsupported normalization form.');
+            throw new \RectorPrefix20210512\Symfony\Component\String\Exception\InvalidArgumentException('Unsupported normalization form.');
         }
         $str = clone $this;
         \normalizer_is_normalized($str->string, $form) ?: ($str->string = \normalizer_normalize($str->string, $form));
@@ -231,7 +231,7 @@ abstract class AbstractUnicodeString extends \RectorPrefix20210511\Symfony\Compo
     public function padBoth(int $length, string $padStr = ' ')
     {
         if ('' === $padStr || !\preg_match('//u', $padStr)) {
-            throw new \RectorPrefix20210511\Symfony\Component\String\Exception\InvalidArgumentException('Invalid UTF-8 string.');
+            throw new \RectorPrefix20210512\Symfony\Component\String\Exception\InvalidArgumentException('Invalid UTF-8 string.');
         }
         $pad = clone $this;
         $pad->string = $padStr;
@@ -240,7 +240,7 @@ abstract class AbstractUnicodeString extends \RectorPrefix20210511\Symfony\Compo
     public function padEnd(int $length, string $padStr = ' ')
     {
         if ('' === $padStr || !\preg_match('//u', $padStr)) {
-            throw new \RectorPrefix20210511\Symfony\Component\String\Exception\InvalidArgumentException('Invalid UTF-8 string.');
+            throw new \RectorPrefix20210512\Symfony\Component\String\Exception\InvalidArgumentException('Invalid UTF-8 string.');
         }
         $pad = clone $this;
         $pad->string = $padStr;
@@ -249,7 +249,7 @@ abstract class AbstractUnicodeString extends \RectorPrefix20210511\Symfony\Compo
     public function padStart(int $length, string $padStr = ' ')
     {
         if ('' === $padStr || !\preg_match('//u', $padStr)) {
-            throw new \RectorPrefix20210511\Symfony\Component\String\Exception\InvalidArgumentException('Invalid UTF-8 string.');
+            throw new \RectorPrefix20210512\Symfony\Component\String\Exception\InvalidArgumentException('Invalid UTF-8 string.');
         }
         $pad = clone $this;
         $pad->string = $padStr;
@@ -268,27 +268,27 @@ abstract class AbstractUnicodeString extends \RectorPrefix20210511\Symfony\Compo
             $to = static function (array $m) use($to) : string {
                 $to = $to($m);
                 if ('' !== $to && (!\is_string($to) || !\preg_match('//u', $to))) {
-                    throw new \RectorPrefix20210511\Symfony\Component\String\Exception\InvalidArgumentException('Replace callback must return a valid UTF-8 string.');
+                    throw new \RectorPrefix20210512\Symfony\Component\String\Exception\InvalidArgumentException('Replace callback must return a valid UTF-8 string.');
                 }
                 return $to;
             };
         } elseif ('' !== $to && !\preg_match('//u', $to)) {
-            throw new \RectorPrefix20210511\Symfony\Component\String\Exception\InvalidArgumentException('Invalid UTF-8 string.');
+            throw new \RectorPrefix20210512\Symfony\Component\String\Exception\InvalidArgumentException('Invalid UTF-8 string.');
         } else {
             $replace = 'preg_replace';
         }
         \set_error_handler(static function ($t, $m) {
-            throw new \RectorPrefix20210511\Symfony\Component\String\Exception\InvalidArgumentException($m);
+            throw new \RectorPrefix20210512\Symfony\Component\String\Exception\InvalidArgumentException($m);
         });
         try {
             if (null === ($string = $replace($fromRegexp . 'u', $to, $this->string))) {
                 $lastError = \preg_last_error();
                 foreach (\get_defined_constants(\true)['pcre'] as $k => $v) {
                     if ($lastError === $v && '_ERROR' === \substr($k, -6)) {
-                        throw new \RectorPrefix20210511\Symfony\Component\String\Exception\RuntimeException('Matching failed with ' . $k . '.');
+                        throw new \RectorPrefix20210512\Symfony\Component\String\Exception\RuntimeException('Matching failed with ' . $k . '.');
                     }
                 }
-                throw new \RectorPrefix20210511\Symfony\Component\String\Exception\RuntimeException('Matching failed with unknown error code.');
+                throw new \RectorPrefix20210512\Symfony\Component\String\Exception\RuntimeException('Matching failed with unknown error code.');
             }
         } finally {
             \restore_error_handler();
@@ -306,7 +306,7 @@ abstract class AbstractUnicodeString extends \RectorPrefix20210511\Symfony\Compo
     public function snake()
     {
         $str = $this->camel()->title();
-        $str->string = \mb_strtolower(\preg_replace(['/(\\p{Lu}+)(\\p{Lu}\\p{Ll})/u', '/([\\p{Ll}0-9])(\\p{Lu})/u'], 'RectorPrefix20210511\\1_\\2', $str->string), 'UTF-8');
+        $str->string = \mb_strtolower(\preg_replace(['/(\\p{Lu}+)(\\p{Lu}\\p{Ll})/u', '/([\\p{Ll}0-9])(\\p{Lu})/u'], 'RectorPrefix20210512\\1_\\2', $str->string), 'UTF-8');
         return $str;
     }
     public function title(bool $allWords = \false)
@@ -321,7 +321,7 @@ abstract class AbstractUnicodeString extends \RectorPrefix20210511\Symfony\Compo
     public function trim(string $chars = " \t\n\r\0\v\f ﻿")
     {
         if (" \t\n\r\0\v\f ﻿" !== $chars && !\preg_match('//u', $chars)) {
-            throw new \RectorPrefix20210511\Symfony\Component\String\Exception\InvalidArgumentException('Invalid UTF-8 chars.');
+            throw new \RectorPrefix20210512\Symfony\Component\String\Exception\InvalidArgumentException('Invalid UTF-8 chars.');
         }
         $chars = \preg_quote($chars);
         $str = clone $this;
@@ -331,7 +331,7 @@ abstract class AbstractUnicodeString extends \RectorPrefix20210511\Symfony\Compo
     public function trimEnd(string $chars = " \t\n\r\0\v\f ﻿")
     {
         if (" \t\n\r\0\v\f ﻿" !== $chars && !\preg_match('//u', $chars)) {
-            throw new \RectorPrefix20210511\Symfony\Component\String\Exception\InvalidArgumentException('Invalid UTF-8 chars.');
+            throw new \RectorPrefix20210512\Symfony\Component\String\Exception\InvalidArgumentException('Invalid UTF-8 chars.');
         }
         $chars = \preg_quote($chars);
         $str = clone $this;
@@ -341,7 +341,7 @@ abstract class AbstractUnicodeString extends \RectorPrefix20210511\Symfony\Compo
     public function trimStart(string $chars = " \t\n\r\0\v\f ﻿")
     {
         if (" \t\n\r\0\v\f ﻿" !== $chars && !\preg_match('//u', $chars)) {
-            throw new \RectorPrefix20210511\Symfony\Component\String\Exception\InvalidArgumentException('Invalid UTF-8 chars.');
+            throw new \RectorPrefix20210512\Symfony\Component\String\Exception\InvalidArgumentException('Invalid UTF-8 chars.');
         }
         $chars = \preg_quote($chars);
         $str = clone $this;
@@ -407,7 +407,7 @@ abstract class AbstractUnicodeString extends \RectorPrefix20210511\Symfony\Compo
                 $len = $leftLen % $padLen;
                 return $str->prepend(\str_repeat($pad->string, $leftLen / $padLen) . ($len ? $pad->slice(0, $len) : ''));
             default:
-                throw new \RectorPrefix20210511\Symfony\Component\String\Exception\InvalidArgumentException('Invalid padding type.');
+                throw new \RectorPrefix20210512\Symfony\Component\String\Exception\InvalidArgumentException('Invalid padding type.');
         }
     }
     /**

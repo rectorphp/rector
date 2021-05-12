@@ -17,11 +17,11 @@ use Rector\Core\Exception\ShouldNotHappenException;
 final class PlainValueParser
 {
     /**
-     * @var StaticDoctrineAnnotationParser
+     * @var \Rector\BetterPhpDocParser\PhpDocParser\StaticDoctrineAnnotationParser
      */
     private $staticDoctrineAnnotationParser;
     /**
-     * @var ArrayParser
+     * @var \Rector\BetterPhpDocParser\PhpDocParser\StaticDoctrineAnnotationParser\ArrayParser
      */
     private $arrayParser;
     /**

@@ -14,7 +14,7 @@ use Rector\StaticTypeMapper\PhpDoc\PhpDocTypeMapper;
 final class UnionTypeMapper implements \Rector\StaticTypeMapper\Contract\PhpDocParser\PhpDocTypeMapperInterface
 {
     /**
-     * @var PhpDocTypeMapper
+     * @var \Rector\StaticTypeMapper\PhpDoc\PhpDocTypeMapper
      */
     private $phpDocTypeMapper;
     /**

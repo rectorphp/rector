@@ -16,11 +16,11 @@ final class StartAndEnd
     private $end;
     public function __construct(int $start, int $end)
     {
+        $this->start = $start;
+        $this->end = $end;
         if ($end < $start) {
             throw new \Rector\Core\Exception\ShouldNotHappenException();
         }
-        $this->start = $start;
-        $this->end = $end;
     }
     public function getStart() : int
     {

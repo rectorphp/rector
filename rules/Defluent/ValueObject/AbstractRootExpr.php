@@ -18,11 +18,11 @@ abstract class AbstractRootExpr implements \Rector\Defluent\Contract\ValueObject
      */
     protected $isFirstCallFactory = \false;
     /**
-     * @var Expr
+     * @var \PhpParser\Node\Expr
      */
     protected $rootExpr;
     /**
-     * @var Expr
+     * @var \PhpParser\Node\Expr
      */
     protected $assignExpr;
     public function createFirstAssign() : \PhpParser\Node\Expr\Assign

@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\BetterPhpDocParser\PhpDocInfo;
 
-use RectorPrefix20210511\Nette\Utils\Strings;
+use RectorPrefix20210512\Nette\Utils\Strings;
 use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\InvalidTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\MethodTagValueNode;
@@ -28,7 +28,7 @@ use Rector\ChangesReporting\Collector\RectorChangeCollector;
 use Rector\Core\Configuration\CurrentNodeProvider;
 use Rector\Core\Exception\NotImplementedYetException;
 use Rector\StaticTypeMapper\StaticTypeMapper;
-use RectorPrefix20210511\Symplify\SimplePhpDocParser\PhpDocNodeTraverser;
+use RectorPrefix20210512\Symplify\SimplePhpDocParser\PhpDocNodeTraverser;
 /**
  * @template TNode as \PHPStan\PhpDocParser\Ast\Node
  * @see \Rector\Tests\BetterPhpDocParser\PhpDocInfo\PhpDocInfo\PhpDocInfoTest
@@ -44,7 +44,7 @@ final class PhpDocInfo
      */
     private $isSingleLine = \false;
     /**
-     * @var PhpDocNode
+     * @var \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode
      */
     private $originalPhpDocNode;
     /**
@@ -239,13 +239,14 @@ final class PhpDocInfo
             if (!$phpDocChildNode->value instanceof \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode) {
                 continue;
             }
-            $annotationClass = $phpDocChildNode->value->getAnnotationClass();
+            $doctrineAnnotationTagValueNode = $phpDocChildNode->value;
+            $annotationClass = $doctrineAnnotationTagValueNode->getAnnotationClass();
             if ($annotationClass === $desiredClass) {
-                return $phpDocChildNode->value;
+                return $doctrineAnnotationTagValueNode;
             }
             // fnmatch
             if ($this->isFnmatch($annotationClass, $desiredClass)) {
-                return $phpDocChildNode->value;
+                return $doctrineAnnotationTagValueNode;
             }
         }
         return null;
@@ -396,7 +397,7 @@ final class PhpDocInfo
             return \true;
         }
         // has a single node with missing start_end
-        $phpDocNodeTraverser = new \RectorPrefix20210511\Symplify\SimplePhpDocParser\PhpDocNodeTraverser();
+        $phpDocNodeTraverser = new \RectorPrefix20210512\Symplify\SimplePhpDocParser\PhpDocNodeTraverser();
         $changedPhpDocNodeVisitor = new \Rector\BetterPhpDocParser\PhpDocNodeVisitor\ChangedPhpDocNodeVisitor();
         $phpDocNodeTraverser->addPhpDocNodeVisitor($changedPhpDocNodeVisitor);
         $phpDocNodeTraverser->traverse($this->phpDocNode);
@@ -436,7 +437,7 @@ final class PhpDocInfo
     }
     private function isFnmatch(string $currentValue, string $desiredValue) : bool
     {
-        if (!\RectorPrefix20210511\Nette\Utils\Strings::contains($desiredValue, '*')) {
+        if (!\RectorPrefix20210512\Nette\Utils\Strings::contains($desiredValue, '*')) {
             return \false;
         }
         return \fnmatch($desiredValue, $currentValue, \FNM_NOESCAPE);

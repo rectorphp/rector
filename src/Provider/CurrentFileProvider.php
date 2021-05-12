@@ -7,7 +7,7 @@ use Rector\Core\ValueObject\Application\File;
 final class CurrentFileProvider
 {
     /**
-     * @var File|null
+     * @var \Rector\Core\ValueObject\Application\File|null
      */
     private $file;
     public function setFile(\Rector\Core\ValueObject\Application\File $file) : void

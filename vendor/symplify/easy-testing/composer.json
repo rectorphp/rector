@@ -13,22 +13,22 @@
         "symfony\/http-kernel": "^4.4|^5.2",
         "symfony\/console": "^4.4|^5.2",
         "symfony\/dependency-injection": "^5.2",
-        "symplify\/package-builder": "^9.3.5",
-        "symplify\/console-package-builder": "^9.3.5",
-        "symplify\/smart-file-system": "^9.3.5",
-        "symplify\/symplify-kernel": "^9.3.5"
+        "symplify\/package-builder": "^9.3.6",
+        "symplify\/console-package-builder": "^9.3.6",
+        "symplify\/smart-file-system": "^9.3.6",
+        "symplify\/symplify-kernel": "^9.3.6"
     },
     "require-dev": {
         "phpunit\/phpunit": "^9.5"
     },
     "autoload": {
         "psr-4": {
-            "RectorPrefix20210511\\Symplify\\EasyTesting\\": "src"
+            "RectorPrefix20210512\\Symplify\\EasyTesting\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "RectorPrefix20210511\\Symplify\\EasyTesting\\Tests\\": "tests"
+            "RectorPrefix20210512\\Symplify\\EasyTesting\\Tests\\": "tests"
         }
     },
     "extra": {

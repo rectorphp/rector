@@ -16,7 +16,7 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 final class ClassMethodOrClassConstTypeResolver implements \Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface
 {
     /**
-     * @var NodeTypeResolver
+     * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;
     /**

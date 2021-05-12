@@ -5,12 +5,12 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix20210511\Tracy;
+namespace RectorPrefix20210512\Tracy;
 
 /**
  * Logger.
  */
-class Logger implements \RectorPrefix20210511\Tracy\ILogger
+class Logger implements \RectorPrefix20210512\Tracy\ILogger
 {
     /** @var string|null name of the directory where errors should be logged */
     public $directory;
@@ -27,7 +27,7 @@ class Logger implements \RectorPrefix20210511\Tracy\ILogger
     /**
      * @param  string|array|null  $email
      */
-    public function __construct(?string $directory, $email = null, \RectorPrefix20210511\Tracy\BlueScreen $blueScreen = null)
+    public function __construct(?string $directory, $email = null, \RectorPrefix20210512\Tracy\BlueScreen $blueScreen = null)
     {
         $this->directory = $directory;
         $this->email = $email;
@@ -69,12 +69,12 @@ class Logger implements \RectorPrefix20210511\Tracy\ILogger
     {
         if ($message instanceof \Throwable) {
             while ($message) {
-                $tmp[] = ($message instanceof \ErrorException ? \RectorPrefix20210511\Tracy\Helpers::errorTypeToString($message->getSeverity()) . ': ' . $message->getMessage() : \RectorPrefix20210511\Tracy\Helpers::getClass($message) . ': ' . $message->getMessage() . ($message->getCode() ? ' #' . $message->getCode() : '')) . ' in ' . $message->getFile() . ':' . $message->getLine();
+                $tmp[] = ($message instanceof \ErrorException ? \RectorPrefix20210512\Tracy\Helpers::errorTypeToString($message->getSeverity()) . ': ' . $message->getMessage() : \RectorPrefix20210512\Tracy\Helpers::getClass($message) . ': ' . $message->getMessage() . ($message->getCode() ? ' #' . $message->getCode() : '')) . ' in ' . $message->getFile() . ':' . $message->getLine();
                 $message = $message->getPrevious();
             }
             $message = \implode("\ncaused by ", $tmp);
         } elseif (!\is_string($message)) {
-            $message = \RectorPrefix20210511\Tracy\Dumper::toText($message);
+            $message = \RectorPrefix20210512\Tracy\Dumper::toText($message);
         }
         return \trim($message);
     }
@@ -83,7 +83,7 @@ class Logger implements \RectorPrefix20210511\Tracy\ILogger
      */
     public static function formatLogLine($message, string $exceptionFile = null) : string
     {
-        return \implode(' ', [\date('[Y-m-d H-i-s]'), \preg_replace('#\\s*\\r?\\n\\s*#', ' ', static::formatMessage($message)), ' @  ' . \RectorPrefix20210511\Tracy\Helpers::getSource(), $exceptionFile ? ' @@  ' . \basename($exceptionFile) : null]);
+        return \implode(' ', [\date('[Y-m-d H-i-s]'), \preg_replace('#\\s*\\r?\\n\\s*#', ' ', static::formatMessage($message)), ' @  ' . \RectorPrefix20210512\Tracy\Helpers::getSource(), $exceptionFile ? ' @@  ' . \basename($exceptionFile) : null]);
     }
     public function getExceptionFile(\Throwable $exception, string $level = self::EXCEPTION) : string
     {
@@ -110,7 +110,7 @@ class Logger implements \RectorPrefix20210511\Tracy\ILogger
     protected function logException(\Throwable $exception, string $file = null) : string
     {
         $file = $file ?: $this->getExceptionFile($exception);
-        $bs = $this->blueScreen ?: new \RectorPrefix20210511\Tracy\BlueScreen();
+        $bs = $this->blueScreen ?: new \RectorPrefix20210512\Tracy\BlueScreen();
         $bs->renderToFile($exception, $file);
         return $file;
     }
@@ -132,7 +132,7 @@ class Logger implements \RectorPrefix20210511\Tracy\ILogger
     public function defaultMailer($message, string $email) : void
     {
         $host = \preg_replace('#[^\\w.-]+#', '', $_SERVER['SERVER_NAME'] ?? \php_uname('n'));
-        $parts = \str_replace(["\r\n", "\n"], ["\n", \PHP_EOL], ['headers' => \implode("\n", ['From: ' . ($this->fromEmail ?: "noreply@{$host}"), 'X-Mailer: Tracy', 'Content-Type: text/plain; charset=UTF-8', 'Content-Transfer-Encoding: 8bit']) . "\n", 'subject' => "PHP: An error occurred on the server {$host}", 'body' => static::formatMessage($message) . "\n\nsource: " . \RectorPrefix20210511\Tracy\Helpers::getSource()]);
+        $parts = \str_replace(["\r\n", "\n"], ["\n", \PHP_EOL], ['headers' => \implode("\n", ['From: ' . ($this->fromEmail ?: "noreply@{$host}"), 'X-Mailer: Tracy', 'Content-Type: text/plain; charset=UTF-8', 'Content-Transfer-Encoding: 8bit']) . "\n", 'subject' => "PHP: An error occurred on the server {$host}", 'body' => static::formatMessage($message) . "\n\nsource: " . \RectorPrefix20210512\Tracy\Helpers::getSource()]);
         \mail($email, $parts['subject'], $parts['body'], $parts['headers']);
     }
 }

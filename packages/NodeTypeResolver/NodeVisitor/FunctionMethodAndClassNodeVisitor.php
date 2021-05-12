@@ -23,11 +23,11 @@ final class FunctionMethodAndClassNodeVisitor extends \PhpParser\NodeVisitorAbst
      */
     private $methodStack = [];
     /**
-     * @var ClassLike|null
+     * @var \PhpParser\Node\Stmt\ClassLike|null
      */
     private $classLike;
     /**
-     * @var ClassMethod|null
+     * @var \PhpParser\Node\Stmt\ClassMethod|null
      */
     private $classMethod;
     /**

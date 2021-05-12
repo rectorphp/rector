@@ -55,7 +55,7 @@ final class NodeTypeResolver
      */
     private $nodeTypeResolvers = [];
     /**
-     * @var ArrayTypeAnalyzer
+     * @var \Rector\NodeTypeResolver\TypeAnalyzer\ArrayTypeAnalyzer
      */
     private $arrayTypeAnalyzer;
     /**

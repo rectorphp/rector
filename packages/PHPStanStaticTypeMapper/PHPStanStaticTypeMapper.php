@@ -10,24 +10,18 @@ use PhpParser\Node\UnionType as PhpParserUnionType;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\Type;
 use Rector\Core\Exception\NotImplementedYetException;
-use Rector\PHPStanStaticTypeMapper\Contract\PHPStanStaticTypeMapperAwareInterface;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 final class PHPStanStaticTypeMapper
 {
     /**
-     * @var TypeMapperInterface[]
+     * @var mixed[]
      */
-    private $typeMappers = [];
+    private $typeMappers;
     /**
      * @param TypeMapperInterface[] $typeMappers
      */
     public function __construct(array $typeMappers)
     {
-        foreach ($typeMappers as $typeMapper) {
-            if ($typeMapper instanceof \Rector\PHPStanStaticTypeMapper\Contract\PHPStanStaticTypeMapperAwareInterface) {
-                $typeMapper->setPHPStanStaticTypeMapper($this);
-            }
-        }
         $this->typeMappers = $typeMappers;
     }
     public function mapToPHPStanPhpDocTypeNode(\PHPStan\Type\Type $type) : \PHPStan\PhpDocParser\Ast\Type\TypeNode

@@ -8,6 +8,7 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\AssignOp;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\MixedType;
@@ -86,9 +87,22 @@ CODE_SAMPLE
         $this->removeNode($previousNode);
         return $node;
     }
+    private function returnsByRef(\PhpParser\Node\Stmt\Return_ $return) : bool
+    {
+        $node = $return;
+        while ($node = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE)) {
+            if ($node instanceof \PhpParser\Node\FunctionLike) {
+                return $node->returnsByRef();
+            }
+        }
+        return \false;
+    }
     private function shouldSkip(\PhpParser\Node\Stmt\Return_ $return) : bool
     {
         if (!$return->expr instanceof \PhpParser\Node\Expr\Variable) {
+            return \true;
+        }
+        if ($this->returnsByRef($return)) {
             return \true;
         }
         $variableNode = $return->expr;

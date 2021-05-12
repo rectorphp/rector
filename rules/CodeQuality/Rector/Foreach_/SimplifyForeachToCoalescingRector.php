@@ -26,7 +26,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class SimplifyForeachToCoalescingRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var Return_|null
+     * @var \PhpParser\Node\Stmt\Return_|null
      */
     private $return;
     /**

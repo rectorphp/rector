@@ -3,12 +3,14 @@
 declare (strict_types=1);
 namespace Rector\FileFormatter\ValueObject;
 
+use RectorPrefix20210512\Nette\Utils\Strings;
 use const PHP_EOL;
 use Rector\FileFormatter\Exception\InvalidNewLineStringException;
+use Stringable;
 /**
  * @see \Rector\Tests\FileFormatter\ValueObject\NewLineTest
  */
-final class NewLine
+final class NewLine implements \Stringable
 {
     /**
      * @var string
@@ -27,6 +29,16 @@ final class NewLine
      */
     private const ALLOWED_END_OF_LINE = [self::LINE_FEED => "\n", self::CARRIAGE_RETURN => "\r", self::CARRIAGE_RETURN_LINE_FEED => "\r\n"];
     /**
+     * @see https://regex101.com/r/icaBBp/1
+     * @var string
+     */
+    private const NEWLINE_REGEX = '#(?P<newLine>\\r\\n|\\n|\\r)#';
+    /**
+     * @see https://regex101.com/r/WrY9ZW/1/
+     * @var string
+     */
+    private const VALID_NEWLINE_REGEX = '#^(?>\\r\\n|\\n|\\r)$#';
+    /**
      * @var string
      */
     private $string;
@@ -41,23 +53,21 @@ final class NewLine
     /**
      * @return $this
      */
-    public static function fromSingleCharacter(string $string)
+    public static function fromSingleCharacter(string $content)
     {
-        $validNewLineRegularExpression = '/^(?>\\r\\n|\\n|\\r)$/';
-        $validNewLine = \preg_match($validNewLineRegularExpression, $string);
-        if ($validNewLine !== 1) {
-            throw \Rector\FileFormatter\Exception\InvalidNewLineStringException::fromString($string);
+        $matches = \RectorPrefix20210512\Nette\Utils\Strings::match($content, self::VALID_NEWLINE_REGEX);
+        if ($matches === null) {
+            throw \Rector\FileFormatter\Exception\InvalidNewLineStringException::fromString($content);
         }
-        return new self($string);
+        return new self($content);
     }
     /**
      * @return $this
      */
-    public static function fromContent(string $string)
+    public static function fromContent(string $content)
     {
-        $validNewLineRegularExpression = '/(?P<newLine>\\r\\n|\\n|\\r)/';
-        $validNewLine = \preg_match($validNewLineRegularExpression, $string, $match);
-        if ($validNewLine === 1) {
+        $match = \RectorPrefix20210512\Nette\Utils\Strings::match($content, self::NEWLINE_REGEX);
+        if (isset($match['newLine'])) {
             return self::fromSingleCharacter($match['newLine']);
         }
         return self::fromSingleCharacter(\PHP_EOL);

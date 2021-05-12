@@ -22,7 +22,7 @@ final class File
      */
     private $originalFileContent;
     /**
-     * @var FileDiff|null
+     * @var \Rector\Core\ValueObject\Reporting\FileDiff|null
      */
     private $fileDiff;
     /**

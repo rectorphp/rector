@@ -13,7 +13,7 @@ final class ConcatJoiner
     /**
      * @var string
      */
-    private $content;
+    private $content = '';
     /**
      * @var Expr[]
      */

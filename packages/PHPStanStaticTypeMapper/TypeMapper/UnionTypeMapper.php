@@ -34,7 +34,7 @@ use Rector\PHPStanStaticTypeMapper\ValueObject\UnionTypeAnalysis;
 final class UnionTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface
 {
     /**
-     * @var PHPStanStaticTypeMapper
+     * @var \Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper
      */
     private $phpStanStaticTypeMapper;
     /**

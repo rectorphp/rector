@@ -10,8 +10,8 @@
         "symfony\/dependency-injection": "^5.2",
         "symfony\/finder": "^4.4|^5.2",
         "symfony\/http-kernel": "^4.4|^5.2",
-        "symplify\/symplify-kernel": "^9.3.5",
-        "symplify\/easy-testing": "^9.3.5",
+        "symplify\/symplify-kernel": "^9.3.6",
+        "symplify\/easy-testing": "^9.3.6",
         "nette\/neon": "^3.2"
     },
     "require-dev": {
@@ -19,12 +19,12 @@
     },
     "autoload": {
         "psr-4": {
-            "RectorPrefix20210511\\Symplify\\PackageBuilder\\": "src"
+            "RectorPrefix20210512\\Symplify\\PackageBuilder\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "RectorPrefix20210511\\Symplify\\PackageBuilder\\Tests\\": "tests"
+            "RectorPrefix20210512\\Symplify\\PackageBuilder\\Tests\\": "tests"
         }
     },
     "extra": {

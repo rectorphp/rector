@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Nette\Rector\Identical;
 
-use RectorPrefix20210511\Nette\Utils\Strings;
+use RectorPrefix20210512\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
@@ -76,7 +76,7 @@ CODE_SAMPLE
             return null;
         }
         $arguments = [$substrFuncCall->args[0]->value, $string];
-        $staticCall = $this->nodeFactory->createStaticCall(\RectorPrefix20210511\Nette\Utils\Strings::class, 'endsWith', $arguments);
+        $staticCall = $this->nodeFactory->createStaticCall(\RectorPrefix20210512\Nette\Utils\Strings::class, 'endsWith', $arguments);
         if ($node instanceof \PhpParser\Node\Expr\BinaryOp\Identical) {
             return $staticCall;
         }

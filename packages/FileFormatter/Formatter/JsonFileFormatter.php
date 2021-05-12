@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\FileFormatter\Formatter;
 
-use RectorPrefix20210511\Ergebnis\Json\Printer\PrinterInterface;
+use RectorPrefix20210512\Ergebnis\Json\Printer\PrinterInterface;
 use Rector\Core\ValueObject\Application\File;
 use Rector\FileFormatter\Contract\Formatter\FileFormatterInterface;
 use Rector\FileFormatter\ValueObject\EditorConfigConfiguration;
@@ -18,7 +18,7 @@ final class JsonFileFormatter implements \Rector\FileFormatter\Contract\Formatte
      * @var \Ergebnis\Json\Printer\PrinterInterface
      */
     private $jsonPrinter;
-    public function __construct(\RectorPrefix20210511\Ergebnis\Json\Printer\PrinterInterface $jsonPrinter)
+    public function __construct(\RectorPrefix20210512\Ergebnis\Json\Printer\PrinterInterface $jsonPrinter)
     {
         $this->jsonPrinter = $jsonPrinter;
     }
@@ -35,7 +35,7 @@ final class JsonFileFormatter implements \Rector\FileFormatter\Contract\Formatte
     }
     public function createDefaultEditorConfigConfigurationBuilder() : \Rector\FileFormatter\ValueObjectFactory\EditorConfigConfigurationBuilder
     {
-        $editorConfigConfigurationBuilder = \Rector\FileFormatter\ValueObjectFactory\EditorConfigConfigurationBuilder::anEditorConfigConfiguration();
+        $editorConfigConfigurationBuilder = new \Rector\FileFormatter\ValueObjectFactory\EditorConfigConfigurationBuilder();
         $editorConfigConfigurationBuilder->withIndent(\Rector\FileFormatter\ValueObject\Indent::createSpaceWithSize(4));
         return $editorConfigConfigurationBuilder;
     }

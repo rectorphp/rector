@@ -17,14 +17,14 @@ use Rector\BetterPhpDocParser\PhpDocInfo\TokenIteratorFactory;
 use Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 use Rector\BetterPhpDocParser\ValueObject\StartAndEnd;
-use RectorPrefix20210511\Symplify\PackageBuilder\Reflection\PrivatesCaller;
+use RectorPrefix20210512\Symplify\PackageBuilder\Reflection\PrivatesCaller;
 /**
  * @see \Rector\Tests\BetterPhpDocParser\PhpDocParser\TagValueNodeReprint\TagValueNodeReprintTest
  */
 final class BetterPhpDocParser extends \PHPStan\PhpDocParser\Parser\PhpDocParser
 {
     /**
-     * @var PrivatesCaller
+     * @var \Symplify\PackageBuilder\Reflection\PrivatesCaller
      */
     private $privatesCaller;
     /**
@@ -40,7 +40,7 @@ final class BetterPhpDocParser extends \PHPStan\PhpDocParser\Parser\PhpDocParser
         $this->tokenIteratorFactory = $tokenIteratorFactory;
         $this->doctrineAnnotationDecorator = $doctrineAnnotationDecorator;
         parent::__construct($typeParser, $constExprParser);
-        $this->privatesCaller = new \RectorPrefix20210511\Symplify\PackageBuilder\Reflection\PrivatesCaller();
+        $this->privatesCaller = new \RectorPrefix20210512\Symplify\PackageBuilder\Reflection\PrivatesCaller();
     }
     public function parse(\PHPStan\PhpDocParser\Parser\TokenIterator $tokenIterator) : \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode
     {
@@ -81,11 +81,14 @@ final class BetterPhpDocParser extends \PHPStan\PhpDocParser\Parser\PhpDocParser
         $tagValueNode->setAttribute(\Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey::START_AND_END, $startAndEnd);
         return $tagValueNode;
     }
+    /**
+     * @return PhpDocTextNode|PhpDocTagNode
+     */
     private function parseChildAndStoreItsPositions(\PHPStan\PhpDocParser\Parser\TokenIterator $tokenIterator) : \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocChildNode
     {
         $betterTokenIterator = $this->tokenIteratorFactory->createFromTokenIterator($tokenIterator);
         $startPosition = $betterTokenIterator->currentPosition();
-        /** @var PhpDocTagNode|PhpDocTextNode $phpDocNode */
+        /** @var PhpDocChildNode $phpDocNode */
         $phpDocNode = $this->privatesCaller->callPrivateMethod($this, 'parseChild', [$betterTokenIterator]);
         $endPosition = $betterTokenIterator->currentPosition();
         $startAndEnd = new \Rector\BetterPhpDocParser\ValueObject\StartAndEnd($startPosition, $endPosition);

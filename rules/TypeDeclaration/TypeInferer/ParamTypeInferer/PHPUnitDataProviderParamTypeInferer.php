@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\TypeDeclaration\TypeInferer\ParamTypeInferer;
 
-use RectorPrefix20210511\Nette\Utils\Strings;
+use RectorPrefix20210512\Nette\Utils\Strings;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Yield_;
@@ -33,7 +33,7 @@ final class PHPUnitDataProviderParamTypeInferer implements \Rector\TypeDeclarati
      */
     private const METHOD_NAME_REGEX = '#^(?<method_name>\\w+)(\\(\\))?#';
     /**
-     * @var NodeTypeResolver
+     * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;
     /**
@@ -96,7 +96,7 @@ final class PHPUnitDataProviderParamTypeInferer implements \Rector\TypeDeclarati
             return null;
         }
         $content = $phpDocTagNode->value->value;
-        $match = \RectorPrefix20210511\Nette\Utils\Strings::match($content, self::METHOD_NAME_REGEX);
+        $match = \RectorPrefix20210512\Nette\Utils\Strings::match($content, self::METHOD_NAME_REGEX);
         if ($match === null) {
             return null;
         }

@@ -21,7 +21,7 @@ final class PropertyFetchToMethodCall
     /**
      * @var string|null
      */
-    private $newSetMethod = null;
+    private $newSetMethod;
     /**
      * @var mixed[]
      */

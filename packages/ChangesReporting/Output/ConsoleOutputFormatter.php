@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\ChangesReporting\Output;
 
-use RectorPrefix20210511\Nette\Utils\Strings;
+use RectorPrefix20210512\Nette\Utils\Strings;
 use Rector\ChangesReporting\Annotation\RectorsChangelogResolver;
 use Rector\ChangesReporting\Contract\Output\OutputFormatterInterface;
 use Rector\Core\Configuration\Configuration;
@@ -119,8 +119,8 @@ final class ConsoleOutputFormatter implements \Rector\ChangesReporting\Contract\
     private function normalizePathsToRelativeWithLine(string $errorMessage) : string
     {
         $regex = '#' . \preg_quote(\getcwd(), '#') . '/#';
-        $errorMessage = \RectorPrefix20210511\Nette\Utils\Strings::replace($errorMessage, $regex, '');
-        return \RectorPrefix20210511\Nette\Utils\Strings::replace($errorMessage, self::ON_LINE_REGEX, ':');
+        $errorMessage = \RectorPrefix20210512\Nette\Utils\Strings::replace($errorMessage, $regex, '');
+        return \RectorPrefix20210512\Nette\Utils\Strings::replace($errorMessage, self::ON_LINE_REGEX, ':');
     }
     private function reportRemovedNodes(\Rector\Core\ValueObject\ProcessResult $processResult) : void
     {
@@ -146,7 +146,7 @@ final class ConsoleOutputFormatter implements \Rector\ChangesReporting\Contract\
         $rectorsChangelogs = $this->rectorsChangelogResolver->resolveIncludingMissing($fileDiff->getRectorClasses());
         $rectorsChangelogsLines = [];
         foreach ($rectorsChangelogs as $rectorClass => $changelog) {
-            $rectorShortClass = (string) \RectorPrefix20210511\Nette\Utils\Strings::after($rectorClass, '\\', -1);
+            $rectorShortClass = (string) \RectorPrefix20210512\Nette\Utils\Strings::after($rectorClass, '\\', -1);
             $rectorsChangelogsLines[] = $changelog === null ? $rectorShortClass : $rectorShortClass . ' (' . $changelog . ')';
         }
         return $rectorsChangelogsLines;

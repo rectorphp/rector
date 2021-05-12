@@ -36,7 +36,7 @@ final class VariableNodeUse
     /**
      * @var string|null
      */
-    private $nestingHash = null;
+    private $nestingHash;
     public function __construct(int $startTokenPosition, string $variableName, string $type, \PhpParser\Node\Expr\Variable $variable, ?string $nestingHash = null)
     {
         $this->startTokenPosition = $startTokenPosition;

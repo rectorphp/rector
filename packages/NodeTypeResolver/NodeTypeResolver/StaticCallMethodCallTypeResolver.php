@@ -18,7 +18,7 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 final class StaticCallMethodCallTypeResolver implements \Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface
 {
     /**
-     * @var NodeTypeResolver
+     * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;
     /**

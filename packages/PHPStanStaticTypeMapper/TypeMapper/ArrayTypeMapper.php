@@ -34,15 +34,15 @@ final class ArrayTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\
      */
     public const HAS_GENERIC_TYPE_PARENT = 'has_generic_type_parent';
     /**
-     * @var PHPStanStaticTypeMapper
+     * @var \Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper
      */
     private $phpStanStaticTypeMapper;
     /**
-     * @var UnionTypeCommonTypeNarrower
+     * @var \Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeCommonTypeNarrower
      */
     private $unionTypeCommonTypeNarrower;
     /**
-     * @var ReflectionProvider
+     * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
     /**

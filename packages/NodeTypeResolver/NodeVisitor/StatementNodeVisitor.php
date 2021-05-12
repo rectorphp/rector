@@ -10,7 +10,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class StatementNodeVisitor extends \PhpParser\NodeVisitorAbstract
 {
     /**
-     * @var Stmt|null
+     * @var \PhpParser\Node\Stmt|null
      */
     private $previousStmt;
     /**

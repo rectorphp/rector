@@ -50,7 +50,7 @@ final class StaticTypeMapper
         $this->phpStanStaticTypeMapper = $phpStanStaticTypeMapper;
         $this->phpDocTypeMapper = $phpDocTypeMapper;
         $this->phpParserNodeMapper = $phpParserNodeMapper;
-        $this->nameScopeFactory->setStaticTypeMapper($this);
+        //        $this->nameScopeFactory->setStaticTypeMapper($this);
     }
     public function mapPHPStanTypeToPHPStanPhpDocTypeNode(\PHPStan\Type\Type $phpStanType) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
     {

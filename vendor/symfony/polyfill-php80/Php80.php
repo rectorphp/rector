@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210511\Symfony\Polyfill\Php80;
+namespace RectorPrefix20210512\Symfony\Polyfill\Php80;
 
 /**
  * @author Ion Bazan <ion.bazan@gmail.com>

@@ -13,7 +13,7 @@ use Rector\StaticTypeMapper\Mapper\PhpParserNodeMapper;
 final class NullableTypeNodeMapper implements \Rector\StaticTypeMapper\Contract\PhpParser\PhpParserNodeMapperInterface
 {
     /**
-     * @var PhpParserNodeMapper
+     * @var \Rector\StaticTypeMapper\Mapper\PhpParserNodeMapper
      */
     private $phpParserNodeMapper;
     /**
