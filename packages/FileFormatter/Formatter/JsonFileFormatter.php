@@ -43,7 +43,7 @@ final class JsonFileFormatter implements FileFormatterInterface
 
     public function createDefaultEditorConfigConfigurationBuilder(): EditorConfigConfigurationBuilder
     {
-        $editorConfigConfigurationBuilder = EditorConfigConfigurationBuilder::anEditorConfigConfiguration();
+        $editorConfigConfigurationBuilder = new EditorConfigConfigurationBuilder();
 
         $editorConfigConfigurationBuilder->withIndent(Indent::createSpaceWithSize(4));
 

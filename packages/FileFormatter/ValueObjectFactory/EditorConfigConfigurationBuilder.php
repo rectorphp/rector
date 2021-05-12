@@ -10,23 +10,17 @@ use Rector\FileFormatter\ValueObject\NewLine;
 
 final class EditorConfigConfigurationBuilder
 {
-    private string $indentStyle;
-
-    private int $indentSize;
-
-    private bool $insertFinalNewline = false;
-
     private NewLine $newLine;
 
-    private function __construct()
-    {
-        $this->indentStyle = 'space';
-        $this->indentSize = 2;
+    public function __construct(
+        private string $indentStyle = 'space',
+        private int $indentSize = 2,
+        private bool $insertFinalNewline = true
+    ) {
         $this->newLine = NewLine::fromEditorConfig('lf');
-        $this->insertFinalNewline = true;
     }
 
-    public static function anEditorConfigConfiguration(): self
+    public static function create(): self
     {
         return new self();
     }

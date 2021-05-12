@@ -42,7 +42,7 @@ final class XmlFileFormatter implements FileFormatterInterface
 
     public function createDefaultEditorConfigConfigurationBuilder(): EditorConfigConfigurationBuilder
     {
-        $editorConfigConfigurationBuilder = EditorConfigConfigurationBuilder::anEditorConfigConfiguration();
+        $editorConfigConfigurationBuilder = new EditorConfigConfigurationBuilder();
 
         $editorConfigConfigurationBuilder->withIndent(Indent::createTabWithSize(1));
 

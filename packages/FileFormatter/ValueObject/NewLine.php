@@ -4,13 +4,15 @@ declare(strict_types=1);
 
 namespace Rector\FileFormatter\ValueObject;
 
+use Nette\Utils\Strings;
 use const PHP_EOL;
 use Rector\FileFormatter\Exception\InvalidNewLineStringException;
+use Stringable;
 
 /**
  * @see \Rector\Tests\FileFormatter\ValueObject\NewLineTest
  */
-final class NewLine
+final class NewLine implements Stringable
 {
     /**
      * @var string
@@ -36,6 +38,18 @@ final class NewLine
         self::CARRIAGE_RETURN_LINE_FEED => "\r\n",
     ];
 
+    /**
+     * @see https://regex101.com/r/icaBBp/1
+     * @var string
+     */
+    private const NEWLINE_REGEX = '#(?P<newLine>\r\n|\n|\r)#';
+
+    /**
+     * @see https://regex101.com/r/WrY9ZW/1/
+     * @var string
+     */
+    private const VALID_NEWLINE_REGEX = '#^(?>\r\n|\n|\r)$#';
+
     private function __construct(
         private string $string
     ) {
@@ -46,23 +60,20 @@ final class NewLine
         return $this->string;
     }
 
-    public static function fromSingleCharacter(string $string): self
+    public static function fromSingleCharacter(string $content): self
     {
-        $validNewLineRegularExpression = '/^(?>\r\n|\n|\r)$/';
-        $validNewLine = preg_match($validNewLineRegularExpression, $string);
-
-        if ($validNewLine !== 1) {
-            throw InvalidNewLineStringException::fromString($string);
+        $matches = Strings::match($content, self::VALID_NEWLINE_REGEX);
+        if ($matches === null) {
+            throw InvalidNewLineStringException::fromString($content);
         }
 
-        return new self($string);
+        return new self($content);
     }
 
-    public static function fromContent(string $string): self
+    public static function fromContent(string $content): self
     {
-        $validNewLineRegularExpression = '/(?P<newLine>\r\n|\n|\r)/';
-        $validNewLine = preg_match($validNewLineRegularExpression, $string, $match);
-        if ($validNewLine === 1) {
+        $match = Strings::match($content, self::NEWLINE_REGEX);
+        if (isset($match['newLine'])) {
             return self::fromSingleCharacter($match['newLine']);
         }
 

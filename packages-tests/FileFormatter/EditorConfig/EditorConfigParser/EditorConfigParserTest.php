@@ -23,7 +23,7 @@ final class EditorConfigParserTest extends AbstractTestCase
 
     public function testComposerJsonFile(): void
     {
-        $editorConfigConfigurationBuilder = EditorConfigConfigurationBuilder::anEditorConfigConfiguration();
+        $editorConfigConfigurationBuilder = new EditorConfigConfigurationBuilder();
         $editorConfigConfigurationBuilder->withIndent(Indent::createSpaceWithSize(20));
 
         $composerJsonFile = new SmartFileInfo(__DIR__ . '/Fixture/composer.json');

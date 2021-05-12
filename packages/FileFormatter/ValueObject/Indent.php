@@ -16,7 +16,7 @@ use Rector\FileFormatter\Exception\ParseIndentException;
 final class Indent
 {
     /**
-     * @var string[]
+     * @var array<string, string>
      */
     public const CHARACTERS = [
         self::SPACE => ' ',
@@ -37,7 +37,7 @@ final class Indent
      * @see https://regex101.com/r/A2XiaF/1
      * @var string
      */
-    private const VALID_INDENT_REGEX = '/^( *|\t+)$/';
+    private const VALID_INDENT_REGEX = '#^( *|\t+)$#';
 
     /**
      * @var int
@@ -60,15 +60,14 @@ final class Indent
         return $this->string;
     }
 
-    public static function fromString(string $string): self
+    public static function fromString(string $content): self
     {
-        $validIndent = preg_match(self::VALID_INDENT_REGEX, $string);
-
-        if ($validIndent !== 1) {
-            throw InvalidIndentStringException::fromString($string);
+        $match = Strings::match($content, self::VALID_INDENT_REGEX);
+        if ($match === null) {
+            throw InvalidIndentStringException::fromString($content);
         }
 
-        return new self($string);
+        return new self($content);
     }
 
     public static function createSpaceWithSize(int $size): self
@@ -96,14 +95,14 @@ final class Indent
         return new self($value);
     }
 
-    public static function fromContent(string $string): self
+    public static function fromContent(string $content): self
     {
-        $validIndent = preg_match(self::PARSE_INDENT_REGEX, $string, $match);
-        if ($validIndent === 1) {
+        $match = Strings::match($content, self::PARSE_INDENT_REGEX);
+        if (isset($match['indent'])) {
             return self::fromString($match['indent']);
         }
 
-        throw ParseIndentException::fromString($string);
+        throw ParseIndentException::fromString($content);
     }
 
     public function getIndentSize(): int

@@ -11,7 +11,7 @@ final class EditorConfigConfigurationTest extends TestCase
 {
     public function testWithFinalNewline(): void
     {
-        $editorConfigConfigurationBuilder = EditorConfigConfigurationBuilder::anEditorConfigConfiguration();
+        $editorConfigConfigurationBuilder = new EditorConfigConfigurationBuilder();
         $editorConfigConfiguration = $editorConfigConfigurationBuilder->build();
 
         $this->assertSame(StaticEolConfiguration::getEolChar(), $editorConfigConfiguration->getFinalNewline());
@@ -19,7 +19,7 @@ final class EditorConfigConfigurationTest extends TestCase
 
     public function testWithoutFinalNewline(): void
     {
-        $editorConfigConfigurationBuilder = EditorConfigConfigurationBuilder::anEditorConfigConfiguration();
+        $editorConfigConfigurationBuilder = new EditorConfigConfigurationBuilder();
         $editorConfigConfigurationBuilder->withInsertFinalNewline(false);
 
         $editorConfigConfiguration = $editorConfigConfigurationBuilder->build();
@@ -29,7 +29,7 @@ final class EditorConfigConfigurationTest extends TestCase
 
     public function testIndentForTab(): void
     {
-        $editorConfigConfigurationBuilder = EditorConfigConfigurationBuilder::anEditorConfigConfiguration();
+        $editorConfigConfigurationBuilder = new EditorConfigConfigurationBuilder();
         $editorConfigConfigurationBuilder->withIndent(Indent::createTabWithSize(4));
 
         $editorConfigConfiguration = $editorConfigConfigurationBuilder->build();
@@ -39,7 +39,7 @@ final class EditorConfigConfigurationTest extends TestCase
 
     public function testIndentForSpace(): void
     {
-        $editorConfigConfigurationBuilder = EditorConfigConfigurationBuilder::anEditorConfigConfiguration();
+        $editorConfigConfigurationBuilder = new EditorConfigConfigurationBuilder();
         $editorConfigConfigurationBuilder->withIndent(Indent::createSpaceWithSize(10));
 
         $editorConfigConfiguration = $editorConfigConfigurationBuilder->build();

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\DowngradePhp74\Rector\Property;
 
 use PhpParser\Node;
+use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt\Property;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Rector\AbstractRector;
@@ -60,6 +61,10 @@ CODE_SAMPLE
     {
         if ($node->type === null) {
             return null;
+        }
+
+        if ($node->type instanceof NullableType) {
+            $node->props[0]->default = null;
         }
 
         $this->decoratePropertyWithDocBlock($node, $node->type);
