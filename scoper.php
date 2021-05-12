@@ -74,8 +74,7 @@ return [
             // see https://regex101.com/r/v8zRMm/1
             return Strings::replace(
                 $content, '
-                #' . $prefix . '\\\\PHPUnit\\\\Framework\\\\ExpectationFailedException',
-#',
+                #' . $prefix . '\\\\PHPUnit\\\\Framework\\\\ExpectationFailedException#',
                 'PHPUnit\Framework\ExpectationFailedException'
             );
         },
