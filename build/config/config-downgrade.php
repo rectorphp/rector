@@ -11,18 +11,12 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 $phpStanStubLoader = new PHPStanStubLoader();
 $phpStanStubLoader->loadStubs();
 
+require_once  __DIR__ . '/../../stubs-rector/PHPUnit/Framework/TestCase.php';
+
 return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters = $containerConfigurator->parameters();
 
-    $skip = array_merge(
-        DowngradeRectorConfig::DEPENDENCY_EXCLUDE_PATHS,
-        [
-            // should be skipped until phpstan is downgraded to avoid conflict like this https://github.com/rectorphp/rector-prefixed/runs/2422176105#step:4:4
-            DowngradeNullableTypeDeclarationRector::class
-        ]
-    );
-    $parameters->set(Option::SKIP, $skip);
-
+    $parameters->set(Option::SKIP, DowngradeRectorConfig::DEPENDENCY_EXCLUDE_PATHS);
     $parameters->set(Option::PHPSTAN_FOR_RECTOR_PATH, __DIR__ . '/phpstan-for-downgrade.neon');
 
     $containerConfigurator->import(DowngradeSetList::PHP_80);
@@ -43,10 +37,6 @@ final class DowngradeRectorConfig
         '*/tests/*',
         // symfony test are parts of package
         '*/Test/*',
-
-        // missing phpunit test case
-        'packages/Testing/PHPUnit/AbstractRectorTestCase.php',
-        'packages/Testing/PHPUnit/AbstractComposerRectorTestCase.php',
 
         // only for dev
         'packages/Testing/PhpConfigPrinter/*',
