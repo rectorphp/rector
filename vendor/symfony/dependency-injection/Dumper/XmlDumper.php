@@ -237,9 +237,6 @@ class XmlDumper extends \RectorPrefix20210512\Symfony\Component\DependencyInject
             if ($withKeys) {
                 $element->setAttribute($keyAttribute, $key);
             }
-            if ($value instanceof \RectorPrefix20210512\Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument) {
-                $value = $value->getValues()[0];
-            }
             if (\is_array($tag = $value)) {
                 $element->setAttribute('type', 'collection');
                 $this->convertParameters($value, $type, $element, 'key');
@@ -261,8 +258,12 @@ class XmlDumper extends \RectorPrefix20210512\Symfony\Component\DependencyInject
             } elseif ($value instanceof \RectorPrefix20210512\Symfony\Component\DependencyInjection\Argument\ServiceLocatorArgument) {
                 $element->setAttribute('type', 'service_locator');
                 $this->convertParameters($value->getValues(), $type, $element, 'key');
-            } elseif ($value instanceof \RectorPrefix20210512\Symfony\Component\DependencyInjection\Reference) {
+            } elseif ($value instanceof \RectorPrefix20210512\Symfony\Component\DependencyInjection\Reference || $value instanceof \RectorPrefix20210512\Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument) {
                 $element->setAttribute('type', 'service');
+                if ($value instanceof \RectorPrefix20210512\Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument) {
+                    $element->setAttribute('type', 'service_closure');
+                    $value = $value->getValues()[0];
+                }
                 $element->setAttribute('id', (string) $value);
                 $behavior = $value->getInvalidBehavior();
                 if (\RectorPrefix20210512\Symfony\Component\DependencyInjection\ContainerInterface::NULL_ON_INVALID_REFERENCE == $behavior) {

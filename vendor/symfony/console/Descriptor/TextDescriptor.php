@@ -101,7 +101,7 @@ class TextDescriptor extends \RectorPrefix20210512\Symfony\Component\Console\Des
             $laterOptions = [];
             $this->writeText('<comment>Options:</comment>', $options);
             foreach ($definition->getOptions() as $option) {
-                if (\strlen($option->getShortcut()) > 1) {
+                if (\strlen($option->getShortcut() ?? '') > 1) {
                     $laterOptions[] = $option;
                     continue;
                 }

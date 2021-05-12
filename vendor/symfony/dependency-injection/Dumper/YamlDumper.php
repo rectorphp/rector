@@ -212,6 +212,7 @@ class YamlDumper extends \RectorPrefix20210512\Symfony\Component\DependencyInjec
     {
         if ($value instanceof \RectorPrefix20210512\Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument) {
             $value = $value->getValues()[0];
+            return new \RectorPrefix20210512\Symfony\Component\Yaml\Tag\TaggedValue('service_closure', $this->getServiceCall((string) $value, $value));
         }
         if ($value instanceof \RectorPrefix20210512\Symfony\Component\DependencyInjection\Argument\ArgumentInterface) {
             $tag = $value;

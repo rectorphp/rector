@@ -15,6 +15,7 @@ use RectorPrefix20210512\Symfony\Component\DependencyInjection\Argument\Abstract
 use RectorPrefix20210512\Symfony\Component\DependencyInjection\Argument\ArgumentInterface;
 use RectorPrefix20210512\Symfony\Component\DependencyInjection\Argument\BoundArgument;
 use RectorPrefix20210512\Symfony\Component\DependencyInjection\Argument\IteratorArgument;
+use RectorPrefix20210512\Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument;
 use RectorPrefix20210512\Symfony\Component\DependencyInjection\Argument\ServiceLocatorArgument;
 use RectorPrefix20210512\Symfony\Component\DependencyInjection\Argument\TaggedIteratorArgument;
 use RectorPrefix20210512\Symfony\Component\DependencyInjection\ChildDefinition;
@@ -597,6 +598,13 @@ class YamlFileLoader extends \RectorPrefix20210512\Symfony\Component\DependencyI
                 } catch (\RectorPrefix20210512\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException $e) {
                     throw new \RectorPrefix20210512\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException(\sprintf('"!iterator" tag only accepts arrays of "@service" references in "%s".', $file));
                 }
+            }
+            if ('service_closure' === $value->getTag()) {
+                $argument = $this->resolveServices($argument, $file, $isParameter);
+                if (!$argument instanceof \RectorPrefix20210512\Symfony\Component\DependencyInjection\Reference) {
+                    throw new \RectorPrefix20210512\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException(\sprintf('"!service_closure" tag only accepts service references in "%s".', $file));
+                }
+                return new \RectorPrefix20210512\Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument($argument);
             }
             if ('service_locator' === $value->getTag()) {
                 if (!\is_array($argument)) {

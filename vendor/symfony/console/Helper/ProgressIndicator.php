@@ -154,7 +154,7 @@ class ProgressIndicator
                 return $formatter($this);
             }
             return $matches[0];
-        }, $this->format));
+        }, $this->format ?? ''));
     }
     private function determineBestFormat() : string
     {

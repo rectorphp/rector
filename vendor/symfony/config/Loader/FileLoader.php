@@ -67,8 +67,8 @@ abstract class FileLoader extends \RectorPrefix20210512\Symfony\Component\Config
             $excluded = [];
             foreach ((array) $exclude as $pattern) {
                 foreach ($this->glob($pattern, \true, $_, \false, \true) as $path => $info) {
-                    // normalize Windows slashes
-                    $excluded[\str_replace('\\', '/', $path)] = \true;
+                    // normalize Windows slashes and remove trailing slashes
+                    $excluded[\rtrim(\str_replace('\\', '/', $path), '/')] = \true;
                 }
             }
             $ret = [];

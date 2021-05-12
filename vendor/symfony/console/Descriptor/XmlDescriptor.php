@@ -163,7 +163,7 @@ class XmlDescriptor extends \RectorPrefix20210512\Symfony\Component\Console\Desc
         $dom = new \DOMDocument('1.0', 'UTF-8');
         $dom->appendChild($objectXML = $dom->createElement('option'));
         $objectXML->setAttribute('name', '--' . $option->getName());
-        $pos = \strpos($option->getShortcut(), '|');
+        $pos = \strpos($option->getShortcut() ?? '', '|');
         if (\false !== $pos) {
             $objectXML->setAttribute('shortcut', '-' . \substr($option->getShortcut(), 0, $pos));
             $objectXML->setAttribute('shortcuts', '-' . \str_replace('|', '|-', $option->getShortcut()));

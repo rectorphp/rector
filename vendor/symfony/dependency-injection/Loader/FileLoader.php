@@ -142,8 +142,8 @@ abstract class FileLoader extends \RectorPrefix20210512\Symfony\Component\Config
                 if (null === $excludePrefix) {
                     $excludePrefix = $resource->getPrefix();
                 }
-                // normalize Windows slashes
-                $excludePaths[\str_replace('\\', '/', $path)] = \true;
+                // normalize Windows slashes and remove trailing slashes
+                $excludePaths[\rtrim(\str_replace('\\', '/', $path), '/')] = \true;
             }
         }
         $pattern = $parameterBag->unescapeValue($parameterBag->resolveValue($pattern));

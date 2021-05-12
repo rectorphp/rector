@@ -15,6 +15,7 @@ use RectorPrefix20210512\Symfony\Component\DependencyInjection\Alias;
 use RectorPrefix20210512\Symfony\Component\DependencyInjection\Argument\AbstractArgument;
 use RectorPrefix20210512\Symfony\Component\DependencyInjection\Argument\BoundArgument;
 use RectorPrefix20210512\Symfony\Component\DependencyInjection\Argument\IteratorArgument;
+use RectorPrefix20210512\Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument;
 use RectorPrefix20210512\Symfony\Component\DependencyInjection\Argument\ServiceLocatorArgument;
 use RectorPrefix20210512\Symfony\Component\DependencyInjection\Argument\TaggedIteratorArgument;
 use RectorPrefix20210512\Symfony\Component\DependencyInjection\ChildDefinition;
@@ -408,6 +409,12 @@ class XmlFileLoader extends \RectorPrefix20210512\Symfony\Component\DependencyIn
                     } catch (\RectorPrefix20210512\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException $e) {
                         throw new \RectorPrefix20210512\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException(\sprintf('Tag "<%s>" with type="iterator" only accepts collections of type="service" references in "%s".', $name, $file));
                     }
+                    break;
+                case 'service_closure':
+                    if ('' === $arg->getAttribute('id')) {
+                        throw new \RectorPrefix20210512\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException(\sprintf('Tag "<%s>" with type="service_closure" has no or empty "id" attribute in "%s".', $name, $file));
+                    }
+                    $arguments[$key] = new \RectorPrefix20210512\Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument(new \RectorPrefix20210512\Symfony\Component\DependencyInjection\Reference($arg->getAttribute('id'), $invalidBehavior));
                     break;
                 case 'service_locator':
                     $arg = $this->getArgumentsAsPhp($arg, $name, $file);

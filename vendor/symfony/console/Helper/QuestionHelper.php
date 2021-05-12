@@ -95,10 +95,6 @@ class QuestionHelper extends \RectorPrefix20210512\Symfony\Component\Console\Hel
         $this->writePrompt($output, $question);
         $inputStream = $this->inputStream ?: \STDIN;
         $autocomplete = $question->getAutocompleterCallback();
-        if (\function_exists('sapi_windows_cp_set')) {
-            // Codepage used by cmd.exe on Windows to allow special characters (éàüñ).
-            @\sapi_windows_cp_set(1252);
-        }
         if (null === $autocomplete || !self::$stty || !\RectorPrefix20210512\Symfony\Component\Console\Terminal::hasSttyAvailable()) {
             $ret = \false;
             if ($question->isHidden()) {
@@ -427,20 +423,54 @@ class QuestionHelper extends \RectorPrefix20210512\Symfony\Component\Console\Hel
     private function readInput($inputStream, \RectorPrefix20210512\Symfony\Component\Console\Question\Question $question)
     {
         if (!$question->isMultiline()) {
-            return \fgets($inputStream, 4096);
+            $cp = $this->setIOCodepage();
+            $ret = \fgets($inputStream, 4096);
+            return $this->resetIOCodepage($cp, $ret);
         }
         $multiLineStreamReader = $this->cloneInputStream($inputStream);
         if (null === $multiLineStreamReader) {
             return \false;
         }
         $ret = '';
+        $cp = $this->setIOCodepage();
         while (\false !== ($char = \fgetc($multiLineStreamReader))) {
             if (\PHP_EOL === "{$ret}{$char}") {
                 break;
             }
             $ret .= $char;
         }
-        return $ret;
+        return $this->resetIOCodepage($cp, $ret);
+    }
+    /**
+     * Sets console I/O to the host code page.
+     *
+     * @return int Previous code page in IBM/EBCDIC format
+     */
+    private function setIOCodepage() : int
+    {
+        if (\function_exists('sapi_windows_cp_set')) {
+            $cp = \sapi_windows_cp_get();
+            \sapi_windows_cp_set(\sapi_windows_cp_get('oem'));
+            return $cp;
+        }
+        return 0;
+    }
+    /**
+     * Sets console I/O to the specified code page and converts the user input.
+     *
+     * @param string|false $input
+     *
+     * @return string|false
+     */
+    private function resetIOCodepage(int $cp, $input)
+    {
+        if (0 !== $cp) {
+            \sapi_windows_cp_set($cp);
+            if (\false !== $input && '' !== $input) {
+                $input = \sapi_windows_cp_conv(\sapi_windows_cp_get('oem'), $cp, $input);
+            }
+        }
+        return $input;
     }
     /**
      * Clones an input stream in order to act on one instance of the same
