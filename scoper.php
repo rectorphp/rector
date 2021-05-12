@@ -88,6 +88,20 @@ return [
             );
         },
 
+        // unprefixed ComposerJson as part of public API in ComposerRectorInterface
+        function (string $filePath, string $prefix, string $content): string {
+            if (! Strings::endsWith($filePath, 'rules/Composer/Contract/Rector/ComposerRectorInterface.php')) {
+                return $content;
+            }
+
+            // see https://regex101.com/r/v8zRMm/1
+            return Strings::replace(
+                $content, '
+                #' . $prefix . '\\\\Symplify\\\\ComposerJsonManipulator\\\\ValueObject\\\\ComposerJson#',
+                'Symplify\ComposerJsonManipulator\ValueObject\ComposerJson'
+            );
+        },
+
         // get version for prefixed version
         function (string $filePath, string $prefix, string $content): string {
             if (! Strings::endsWith($filePath, 'src/Configuration/Configuration.php')) {
