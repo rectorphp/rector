@@ -18,7 +18,9 @@ final class StaticEasyPrefixer
         'Symplify\SmartFileSystem\SmartFileInfo',
         // for ComposerJson because it is part of the public API. I.e. ComposerRectorInterface
         'Symplify\ComposerJsonManipulator\ValueObject\ComposerJson',
-        'Symplify\ComposerJsonManipulator\ComposerJsonFactory'
+        'Symplify\ComposerJsonManipulator\ComposerJsonFactory',
+        // this will make AbstractRectorTest case work for fixture updating
+        'PHPUnit\Framework\ExpectationFailedException',
     ];
 
     /**
