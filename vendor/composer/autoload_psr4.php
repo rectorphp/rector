@@ -41,6 +41,7 @@ return array(
     'RectorPrefix20210512\\Symfony\\Contracts\\Service\\' => array($vendorDir . '/symfony/service-contracts'),
     'RectorPrefix20210512\\Symfony\\Contracts\\HttpClient\\' => array($vendorDir . '/symfony/http-client-contracts'),
     'RectorPrefix20210512\\Symfony\\Contracts\\EventDispatcher\\' => array($vendorDir . '/symfony/event-dispatcher-contracts'),
+    'RectorPrefix20210512\\Symfony\\Component\\Yaml\\' => array($vendorDir . '/symfony/yaml'),
     'RectorPrefix20210512\\Symfony\\Component\\VarDumper\\' => array($vendorDir . '/symfony/var-dumper'),
     'RectorPrefix20210512\\Symfony\\Component\\String\\' => array($vendorDir . '/symfony/string'),
     'RectorPrefix20210512\\Symfony\\Component\\HttpKernel\\' => array($vendorDir . '/symfony/http-kernel'),

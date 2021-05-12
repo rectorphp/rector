@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit86fcb3fb993a4a026ca21db64c2a9773
+class ComposerStaticInit0c4ee193fbbfb4c8d71e4941a5efdabc
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -64,6 +64,7 @@ class ComposerStaticInit86fcb3fb993a4a026ca21db64c2a9773
             'RectorPrefix20210512\\Symfony\\Contracts\\Service\\' => 47,
             'RectorPrefix20210512\\Symfony\\Contracts\\HttpClient\\' => 50,
             'RectorPrefix20210512\\Symfony\\Contracts\\EventDispatcher\\' => 55,
+            'RectorPrefix20210512\\Symfony\\Component\\Yaml\\' => 44,
             'RectorPrefix20210512\\Symfony\\Component\\VarDumper\\' => 49,
             'RectorPrefix20210512\\Symfony\\Component\\String\\' => 46,
             'RectorPrefix20210512\\Symfony\\Component\\HttpKernel\\' => 50,
@@ -237,6 +238,10 @@ class ComposerStaticInit86fcb3fb993a4a026ca21db64c2a9773
         'RectorPrefix20210512\\Symfony\\Contracts\\EventDispatcher\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/event-dispatcher-contracts',
+        ),
+        'RectorPrefix20210512\\Symfony\\Component\\Yaml\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/yaml',
         ),
         'RectorPrefix20210512\\Symfony\\Component\\VarDumper\\' => 
         array (
@@ -1520,6 +1525,18 @@ class ComposerStaticInit86fcb3fb993a4a026ca21db64c2a9773
         'RectorPrefix20210512\\Symfony\\Component\\VarDumper\\Server\\DumpServer' => __DIR__ . '/..' . '/symfony/var-dumper/Server/DumpServer.php',
         'RectorPrefix20210512\\Symfony\\Component\\VarDumper\\Test\\VarDumperTestTrait' => __DIR__ . '/..' . '/symfony/var-dumper/Test/VarDumperTestTrait.php',
         'RectorPrefix20210512\\Symfony\\Component\\VarDumper\\VarDumper' => __DIR__ . '/..' . '/symfony/var-dumper/VarDumper.php',
+        'RectorPrefix20210512\\Symfony\\Component\\Yaml\\Command\\LintCommand' => __DIR__ . '/..' . '/symfony/yaml/Command/LintCommand.php',
+        'RectorPrefix20210512\\Symfony\\Component\\Yaml\\Dumper' => __DIR__ . '/..' . '/symfony/yaml/Dumper.php',
+        'RectorPrefix20210512\\Symfony\\Component\\Yaml\\Escaper' => __DIR__ . '/..' . '/symfony/yaml/Escaper.php',
+        'RectorPrefix20210512\\Symfony\\Component\\Yaml\\Exception\\DumpException' => __DIR__ . '/..' . '/symfony/yaml/Exception/DumpException.php',
+        'RectorPrefix20210512\\Symfony\\Component\\Yaml\\Exception\\ExceptionInterface' => __DIR__ . '/..' . '/symfony/yaml/Exception/ExceptionInterface.php',
+        'RectorPrefix20210512\\Symfony\\Component\\Yaml\\Exception\\ParseException' => __DIR__ . '/..' . '/symfony/yaml/Exception/ParseException.php',
+        'RectorPrefix20210512\\Symfony\\Component\\Yaml\\Exception\\RuntimeException' => __DIR__ . '/..' . '/symfony/yaml/Exception/RuntimeException.php',
+        'RectorPrefix20210512\\Symfony\\Component\\Yaml\\Inline' => __DIR__ . '/..' . '/symfony/yaml/Inline.php',
+        'RectorPrefix20210512\\Symfony\\Component\\Yaml\\Parser' => __DIR__ . '/..' . '/symfony/yaml/Parser.php',
+        'RectorPrefix20210512\\Symfony\\Component\\Yaml\\Tag\\TaggedValue' => __DIR__ . '/..' . '/symfony/yaml/Tag/TaggedValue.php',
+        'RectorPrefix20210512\\Symfony\\Component\\Yaml\\Unescaper' => __DIR__ . '/..' . '/symfony/yaml/Unescaper.php',
+        'RectorPrefix20210512\\Symfony\\Component\\Yaml\\Yaml' => __DIR__ . '/..' . '/symfony/yaml/Yaml.php',
         'RectorPrefix20210512\\Symfony\\Contracts\\EventDispatcher\\Event' => __DIR__ . '/..' . '/symfony/event-dispatcher-contracts/Event.php',
         'RectorPrefix20210512\\Symfony\\Contracts\\EventDispatcher\\EventDispatcherInterface' => __DIR__ . '/..' . '/symfony/event-dispatcher-contracts/EventDispatcherInterface.php',
         'RectorPrefix20210512\\Symfony\\Contracts\\HttpClient\\ChunkInterface' => __DIR__ . '/..' . '/symfony/http-client-contracts/ChunkInterface.php',
@@ -3464,9 +3481,9 @@ class ComposerStaticInit86fcb3fb993a4a026ca21db64c2a9773
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit86fcb3fb993a4a026ca21db64c2a9773::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit86fcb3fb993a4a026ca21db64c2a9773::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit86fcb3fb993a4a026ca21db64c2a9773::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit0c4ee193fbbfb4c8d71e4941a5efdabc::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit0c4ee193fbbfb4c8d71e4941a5efdabc::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit0c4ee193fbbfb4c8d71e4941a5efdabc::$classMap;
 
         }, null, ClassLoader::class);
     }
