@@ -122,3 +122,7 @@ final class ComposerJsonFactory
         return $composerJson;
     }
 }
+/**
+ * @see \Symplify\ComposerJsonManipulator\Tests\ComposerJsonFactory\ComposerJsonFactoryTest
+ */
+\class_alias('RectorPrefix20210512\\Symplify\\ComposerJsonManipulator\\ComposerJsonFactory', 'Symplify\\ComposerJsonManipulator\\ComposerJsonFactory', \false);
