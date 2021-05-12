@@ -9,6 +9,7 @@ use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 use Symplify\Skipper\SkipCriteriaResolver\SkippedPathsResolver;
 use Symplify\SmartFileSystem\FileSystemFilter;
+use Symplify\SmartFileSystem\FileSystemGuard;
 use Symplify\SmartFileSystem\Finder\FinderSanitizer;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -55,8 +56,10 @@ final class FilesFinder
             return $this->fileInfosBySourceAndSuffixes[$cacheKey];
         }
 
-        $files = $this->fileSystemFilter->filterFiles($source);
-        $directories = $this->fileSystemFilter->filterDirectories($source);
+        $filesAndDirectories = $this->filesystemTweaker->resolveWithFnmatch($source);
+
+        $files = $this->fileSystemFilter->filterFiles($filesAndDirectories);
+        $directories = $this->fileSystemFilter->filterDirectories($filesAndDirectories);
 
         $smartFileInfos = [];
         foreach ($files as $file) {
@@ -78,11 +81,6 @@ final class FilesFinder
             return [];
         }
 
-        $absoluteDirectories = $this->filesystemTweaker->resolveDirectoriesWithFnmatch($directories);
-        if ($absoluteDirectories === []) {
-            return [];
-        }
-
         $suffixesPattern = $this->normalizeSuffixesToPattern($suffixes);
 
         $finder = Finder::create()
@@ -90,7 +88,7 @@ final class FilesFinder
             ->files()
             // skip empty files
             ->size('> 0')
-            ->in($absoluteDirectories)
+            ->in($directories)
             ->name($suffixesPattern)
             ->sortByName();
 

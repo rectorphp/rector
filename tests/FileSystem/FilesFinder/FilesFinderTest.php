@@ -59,4 +59,20 @@ final class FilesFinderTest extends AbstractTestCase
         sort($expectedFoundFileNames);
         $this->assertSame($expectedFoundFileNames, $foundFileNames);
     }
+
+    public function testDirectoriesWithGlobPattern(): void
+    {
+        $foundDirectories = $this->filesFinder->findInDirectoriesAndFiles([__DIR__ . '/Source/folder*/*'], []);
+        $this->assertCount(2, $foundDirectories);
+    }
+
+    public function testFilesWithGlobPattern(): void
+    {
+        $foundFiles = $this->filesFinder->findInDirectoriesAndFiles([__DIR__ . '/Source/**/foo.txt'], ['txt']);
+        $this->assertCount(2, $foundFiles);
+
+        /** @var SmartFileInfo $foundFile */
+        $foundFile = array_pop($foundFiles);
+        $this->assertSame('foo.txt', $foundFile->getBasename());
+    }
 }
