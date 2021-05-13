@@ -37,7 +37,10 @@ php;
         ->notPath('#\/set\/#')
         ->in($vendorDir . '/symplify/symfony-php-config');
 
-    foreach ($finder->getIterator() as $fileInfo) {
+    $fileInfos = iterator_to_array($finder->getIterator());
+    $fileInfos[] = new SplFileInfo(__DIR__ . '/../vendor/symfony/dependency-injection/Loader/Configurator/ContainerConfigurator.php');
+
+    foreach ($fileInfos as $fileInfo) {
         $realPath = $fileInfo->getRealPath();
         if ($realPath === false) {
             continue;

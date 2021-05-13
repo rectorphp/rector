@@ -28,4 +28,11 @@ spl_autoload_register(function (string $class): void {
             require $filePath;
         }
     }
+
+    if ($class === 'Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator') {
+        // avoid duplicated autoload bug in Rector demo runner
+        if (class_exists('Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator', false)) {
+            return;
+        }
+    }
 });
