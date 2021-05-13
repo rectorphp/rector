@@ -31,6 +31,23 @@ $filePathsToRemoveNamespace = [
 $dateTime = DateTime::from('now');
 $timestamp = $dateTime->format('Ymd');
 
+/**
+ * @var array<string, string>
+ */
+const UNPREFIX_CLASSES_BY_FILE = [
+    // make UT=1 in tests work
+    'packages/Testing/PHPUnit/AbstractRectorTestCase.php' => [
+        'PHPUnit\Framework\ExpectationFailedException',
+        'PHPUnit\Framework\TestCase',
+    ],
+
+    // unprefixed ComposerJson as part of public API in ComposerRectorInterface
+    'rules/Composer/Contract/Rector/ComposerRectorInterface.php' => ['Symplify\ComposerJsonManipulator\ValueObject\ComposerJson'],
+
+    'vendor/composer/package-versions-deprecated/src/PackageVersions/Versions.php' => ['Composer\InstalledVersions'],
+    'packages/Testing/PHPUnit/AbstractTestCase.php' => ['PHPUnit\Framework\TestCase'],
+];
+
 // see https://github.com/humbug/php-scoper
 return [
     ScoperOption::PREFIX => 'RectorPrefix' . $timestamp,
@@ -53,30 +70,21 @@ return [
         },
 
         function (string $filePath, string $prefix, string $content): string {
-            if (! Strings::endsWith($filePath, 'vendor/composer/package-versions-deprecated/src/PackageVersions/Versions.php')) {
-                return $content;
+            foreach (UNPREFIX_CLASSES_BY_FILE as $endFilePath => $unprefixClasses) {
+                if (! Strings::endsWith($filePath, $endFilePath)) {
+                    foreach ($unprefixClasses as $unprefixClass) {
+                        $doubleQuotedClass = preg_quote(preg_quote('\\' . $unprefixClass));
+
+                        $content = Strings::replace(
+                            $content,
+                            '#' . $prefix . '\\' . $doubleQuotedClass . '#',
+                            $unprefixClass
+                        );
+                    }
+                }
             }
 
-            // see https://regex101.com/r/v8zRMm/1
-            return Strings::replace(
-                $content, '
-                #' . $prefix . '\\\\Composer\\\\InstalledVersions#',
-                'Composer\InstalledVersions'
-            );
-        },
-
-        // make UT=1 in tests work
-        function (string $filePath, string $prefix, string $content): string {
-            if (! Strings::endsWith($filePath, 'packages/Testing/PHPUnit/AbstractRectorTestCase.php')) {
-                return $content;
-            }
-
-            // see https://regex101.com/r/v8zRMm/1
-            return Strings::replace(
-                $content, '
-                #' . $prefix . '\\\\PHPUnit\\\\Framework\\\\ExpectationFailedException#',
-                'PHPUnit\Framework\ExpectationFailedException'
-            );
+            return $content;
         },
 
         // unprefixed SmartFileInfo
@@ -85,20 +93,6 @@ return [
                 $content, '
                 #' . $prefix . '\\\\Symplify\\\\SmartFileSystem\\\\SmartFileInfo#',
                 'Symplify\SmartFileSystem\SmartFileInfo'
-            );
-        },
-
-        // unprefixed ComposerJson as part of public API in ComposerRectorInterface
-        function (string $filePath, string $prefix, string $content): string {
-            if (! Strings::endsWith($filePath, 'rules/Composer/Contract/Rector/ComposerRectorInterface.php')) {
-                return $content;
-            }
-
-            // see https://regex101.com/r/v8zRMm/1
-            return Strings::replace(
-                $content, '
-                #' . $prefix . '\\\\Symplify\\\\ComposerJsonManipulator\\\\ValueObject\\\\ComposerJson#',
-                'Symplify\ComposerJsonManipulator\ValueObject\ComposerJson'
             );
         },
 
