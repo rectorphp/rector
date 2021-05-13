@@ -11,14 +11,13 @@ final class StaticEasyPrefixer
      */
     public const EXCLUDED_CLASSES = [
         // part of public interface of configs.php
-        'Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator',
+        // 'Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator',
         // this is not prefixed on few places by php-scoper by default, probably some bug
         'Doctrine\Inflector\Inflector',
         // for SmartFileInfo
         'Symplify\SmartFileSystem\SmartFileInfo',
         // for ComposerJson because it is part of the public API. I.e. ComposerRectorInterface
         'Symplify\ComposerJsonManipulator\ValueObject\ComposerJson',
-        'Symplify\ComposerJsonManipulator\ComposerJsonFactory',
     ];
 
     /**
