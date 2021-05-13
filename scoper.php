@@ -97,15 +97,6 @@ return [
             );
         },
 
-        // unprefixed ContainerConfigurator
-        function (string $filePath, string $prefix, string $content): string {
-            return Strings::replace(
-                $content, '
-                #' . $prefix . '\\\\Symfony\\\\Component\\\\DependencyInjection\\\\Loader\\\\Configurator\\\\ContainerConfigurator#',
-                'Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator'
-            );
-        },
-
         // get version for prefixed version
         function (string $filePath, string $prefix, string $content): string {
             if (! Strings::endsWith($filePath, 'src/Configuration/Configuration.php')) {
