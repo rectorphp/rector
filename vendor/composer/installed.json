@@ -4395,31 +4395,31 @@
         },
         {
             "name": "symplify\/symfony-php-config",
-            "version": "v9.3.5",
-            "version_normalized": "9.3.5.0",
+            "version": "v9.3.10",
+            "version_normalized": "9.3.10.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symplify\/symfony-php-config.git",
-                "reference": "9dc9a4010871f822394628487cbc5721c83fe3de"
+                "reference": "91f29a210de56fb208da5e18c8573937bf7bc37e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symplify\/symfony-php-config\/zipball\/9dc9a4010871f822394628487cbc5721c83fe3de",
-                "reference": "9dc9a4010871f822394628487cbc5721c83fe3de",
+                "url": "https:\/\/api.github.com\/repos\/symplify\/symfony-php-config\/zipball\/91f29a210de56fb208da5e18c8573937bf7bc37e",
+                "reference": "91f29a210de56fb208da5e18c8573937bf7bc37e",
                 "shasum": ""
             },
             "require": {
                 "php": ">=7.3",
                 "symfony\/dependency-injection": "^5.2",
-                "symplify\/package-builder": "^9.3.5",
-                "symplify\/symplify-kernel": "^9.3.5"
+                "symplify\/package-builder": "^9.3.10",
+                "symplify\/symplify-kernel": "^9.3.10"
             },
             "require-dev": {
                 "phpstan\/phpstan": "0.12.86",
                 "phpunit\/phpunit": "^9.5",
                 "symfony\/http-kernel": "^4.4|^5.2"
             },
-            "time": "2021-05-11T14:11:22+00:00",
+            "time": "2021-05-12T14:29:08+00:00",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -4438,7 +4438,7 @@
             ],
             "description": "Tools that easy work with Symfony PHP Configs",
             "support": {
-                "source": "https:\/\/github.com\/symplify\/symfony-php-config\/tree\/v9.3.5"
+                "source": "https:\/\/github.com\/symplify\/symfony-php-config\/tree\/v9.3.10"
             },
             "install-path": "..\/symplify\/symfony-php-config"
         },
