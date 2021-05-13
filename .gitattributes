@@ -19,13 +19,14 @@ rector.php export-ignore
 # @see: https://github.com/rectorphp/rector/issues/4905
 bin/rector.php !export-ignore
 
-utils export-ignore
-stubs export-ignore
+# exclude only root dirs, otherwise nette/utils is removed - see https://github.com/TomasVotruba/tomasvotruba.com/pull/1197/checks?check_run_id=2577329283
+/utils export-ignore
+/stubs export-ignore
 
-tests export-ignore
-packages-tests export-ignore
-rules-tests export-ignore
-build export-ignore
+/tests export-ignore
+/packages-tests export-ignore
+/rules-tests export-ignore
+/build export-ignore
 full_build.sh export-ignore
 Dockerfile export-ignore
 UPGRADE_09.md export-ignore
