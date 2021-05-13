@@ -1,0 +1,17 @@
+{
+    "require": {
+        "foo/bar": "dev-main"
+    },
+    "require-dev": {
+        "foo/baz": "dev-main"
+    }
+}
+-----
+{
+    "require": {
+        "baz/bar": "dev-main"
+    },
+    "require-dev": {
+        "baz/baz": "dev-main"
+    }
+}
