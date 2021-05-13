@@ -32,7 +32,7 @@ $dateTime = DateTime::from('now');
 $timestamp = $dateTime->format('Ymd');
 
 /**
- * @var array<string, string>
+ * @var array<string, string[]>
  */
 const UNPREFIX_CLASSES_BY_FILE = [
     // make UT=1 in tests work
@@ -76,11 +76,11 @@ return [
                 }
 
                 foreach ($unprefixClasses as $unprefixClass) {
-                    $doubleQuotedClass = preg_quote(preg_quote('\\' . $unprefixClass));
+                    $doubleQuotedClass = preg_quote(preg_quote($unprefixClass));
 
                     $content = Strings::replace(
                         $content,
-                        '#' . $prefix . '\\' . $doubleQuotedClass . '#',
+                        '#' . $prefix . '\\\\' . $doubleQuotedClass . '#',
                         $unprefixClass
                     );
                 }
