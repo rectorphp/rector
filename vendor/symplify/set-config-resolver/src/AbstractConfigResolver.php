@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210512\Symplify\SetConfigResolver;
+namespace RectorPrefix20210513\Symplify\SetConfigResolver;
 
-use RectorPrefix20210512\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix20210512\Symplify\SetConfigResolver\Console\Option\OptionName;
-use RectorPrefix20210512\Symplify\SetConfigResolver\Console\OptionValueResolver;
-use RectorPrefix20210512\Symplify\SmartFileSystem\Exception\FileNotFoundException;
+use RectorPrefix20210513\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix20210513\Symplify\SetConfigResolver\Console\Option\OptionName;
+use RectorPrefix20210513\Symplify\SetConfigResolver\Console\OptionValueResolver;
+use RectorPrefix20210513\Symplify\SmartFileSystem\Exception\FileNotFoundException;
 use Symplify\SmartFileSystem\SmartFileInfo;
 abstract class AbstractConfigResolver
 {
@@ -16,15 +16,15 @@ abstract class AbstractConfigResolver
     private $optionValueResolver;
     public function __construct()
     {
-        $this->optionValueResolver = new \RectorPrefix20210512\Symplify\SetConfigResolver\Console\OptionValueResolver();
+        $this->optionValueResolver = new \RectorPrefix20210513\Symplify\SetConfigResolver\Console\OptionValueResolver();
     }
-    public function resolveFromInput(\RectorPrefix20210512\Symfony\Component\Console\Input\InputInterface $input) : ?\Symplify\SmartFileSystem\SmartFileInfo
+    public function resolveFromInput(\RectorPrefix20210513\Symfony\Component\Console\Input\InputInterface $input) : ?\Symplify\SmartFileSystem\SmartFileInfo
     {
-        $configValue = $this->optionValueResolver->getOptionValue($input, \RectorPrefix20210512\Symplify\SetConfigResolver\Console\Option\OptionName::CONFIG);
+        $configValue = $this->optionValueResolver->getOptionValue($input, \RectorPrefix20210513\Symplify\SetConfigResolver\Console\Option\OptionName::CONFIG);
         if ($configValue !== null) {
             if (!\file_exists($configValue)) {
                 $message = \sprintf('File "%s" was not found', $configValue);
-                throw new \RectorPrefix20210512\Symplify\SmartFileSystem\Exception\FileNotFoundException($message);
+                throw new \RectorPrefix20210513\Symplify\SmartFileSystem\Exception\FileNotFoundException($message);
             }
             return $this->createFileInfo($configValue);
         }
@@ -33,7 +33,7 @@ abstract class AbstractConfigResolver
     /**
      * @param string[] $fallbackFiles
      */
-    public function resolveFromInputWithFallback(\RectorPrefix20210512\Symfony\Component\Console\Input\InputInterface $input, array $fallbackFiles) : ?\Symplify\SmartFileSystem\SmartFileInfo
+    public function resolveFromInputWithFallback(\RectorPrefix20210513\Symfony\Component\Console\Input\InputInterface $input, array $fallbackFiles) : ?\Symplify\SmartFileSystem\SmartFileInfo
     {
         $configFileInfo = $this->resolveFromInput($input);
         if ($configFileInfo !== null) {

@@ -1,9 +1,9 @@
 <?php
 
-namespace RectorPrefix20210512\spec\PrettyXml;
+namespace RectorPrefix20210513\spec\PrettyXml;
 
-use RectorPrefix20210512\PhpSpec\ObjectBehavior;
-class FormatterSpec extends \RectorPrefix20210512\PhpSpec\ObjectBehavior
+use RectorPrefix20210513\PhpSpec\ObjectBehavior;
+class FormatterSpec extends \RectorPrefix20210513\PhpSpec\ObjectBehavior
 {
     function it_should_indent_a_nested_element()
     {

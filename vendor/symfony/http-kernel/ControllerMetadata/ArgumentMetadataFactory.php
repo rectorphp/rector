@@ -8,16 +8,16 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210512\Symfony\Component\HttpKernel\ControllerMetadata;
+namespace RectorPrefix20210513\Symfony\Component\HttpKernel\ControllerMetadata;
 
-use RectorPrefix20210512\Symfony\Component\HttpKernel\Attribute\ArgumentInterface;
-use RectorPrefix20210512\Symfony\Component\HttpKernel\Exception\InvalidMetadataException;
+use RectorPrefix20210513\Symfony\Component\HttpKernel\Attribute\ArgumentInterface;
+use RectorPrefix20210513\Symfony\Component\HttpKernel\Exception\InvalidMetadataException;
 /**
  * Builds {@see ArgumentMetadata} objects based on the given Controller.
  *
  * @author Iltar van der Berg <kjarli@gmail.com>
  */
-final class ArgumentMetadataFactory implements \RectorPrefix20210512\Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadataFactoryInterface
+final class ArgumentMetadataFactory implements \RectorPrefix20210513\Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadataFactoryInterface
 {
     /**
      * {@inheritdoc}
@@ -35,7 +35,7 @@ final class ArgumentMetadataFactory implements \RectorPrefix20210512\Symfony\Com
         foreach ($reflection->getParameters() as $param) {
             $attribute = null;
             if (\PHP_VERSION_ID >= 80000) {
-                $reflectionAttributes = $param->getAttributes(\RectorPrefix20210512\Symfony\Component\HttpKernel\Attribute\ArgumentInterface::class, \ReflectionAttribute::IS_INSTANCEOF);
+                $reflectionAttributes = $param->getAttributes(\RectorPrefix20210513\Symfony\Component\HttpKernel\Attribute\ArgumentInterface::class, \ReflectionAttribute::IS_INSTANCEOF);
                 if (\count($reflectionAttributes) > 1) {
                     $representative = $controller;
                     if (\is_array($representative)) {
@@ -43,13 +43,13 @@ final class ArgumentMetadataFactory implements \RectorPrefix20210512\Symfony\Com
                     } elseif (\is_object($representative)) {
                         $representative = \get_class($representative);
                     }
-                    throw new \RectorPrefix20210512\Symfony\Component\HttpKernel\Exception\InvalidMetadataException(\sprintf('Controller "%s" has more than one attribute for "$%s" argument.', $representative, $param->getName()));
+                    throw new \RectorPrefix20210513\Symfony\Component\HttpKernel\Exception\InvalidMetadataException(\sprintf('Controller "%s" has more than one attribute for "$%s" argument.', $representative, $param->getName()));
                 }
                 if (isset($reflectionAttributes[0])) {
                     $attribute = $reflectionAttributes[0]->newInstance();
                 }
             }
-            $arguments[] = new \RectorPrefix20210512\Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata($param->getName(), $this->getType($param, $reflection), $param->isVariadic(), $param->isDefaultValueAvailable(), $param->isDefaultValueAvailable() ? $param->getDefaultValue() : null, $param->allowsNull(), $attribute);
+            $arguments[] = new \RectorPrefix20210513\Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata($param->getName(), $this->getType($param, $reflection), $param->isVariadic(), $param->isDefaultValueAvailable(), $param->isDefaultValueAvailable() ? $param->getDefaultValue() : null, $param->allowsNull(), $attribute);
         }
         return $arguments;
     }

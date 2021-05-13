@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210512;
+namespace RectorPrefix20210513;
 
 use Rector\Doctrine\Rector\Class_\AddEntityIdByConditionRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Transform\Rector\Class_\AddInterfaceByTraitRector;
-use RectorPrefix20210512\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-return static function (\RectorPrefix20210512\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
+use RectorPrefix20210513\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+return static function (\RectorPrefix20210513\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->set(\Rector\Transform\Rector\Class_\AddInterfaceByTraitRector::class)->call('configure', [[\Rector\Transform\Rector\Class_\AddInterfaceByTraitRector::INTERFACE_BY_TRAIT => ['Knp\\DoctrineBehaviors\\Model\\Timestampable\\Timestampable' => 'Knp\\DoctrineBehaviors\\Contract\\Entity\\TimestampableInterface', 'Knp\\DoctrineBehaviors\\Model\\Timestampable\\TimestampableMethods' => 'Knp\\DoctrineBehaviors\\Contract\\Entity\\TimestampableInterface', 'Knp\\DoctrineBehaviors\\Model\\Blameable\\Blameable' => 'Knp\\DoctrineBehaviors\\Contract\\Entity\\BlameableInterface', 'Knp\\DoctrineBehaviors\\Model\\Blameable\\BlameableMethods' => 'Knp\\DoctrineBehaviors\\Contract\\Entity\\BlameableInterface', 'Knp\\DoctrineBehaviors\\Model\\Loggable\\Loggable' => 'Knp\\DoctrineBehaviors\\Contract\\Entity\\LoggableInterface', 'Knp\\DoctrineBehaviors\\Model\\SoftDeletable\\SoftDeletable' => 'Knp\\DoctrineBehaviors\\Contract\\Entity\\SoftDeletableInterface', 'Knp\\DoctrineBehaviors\\Model\\SoftDeletable\\SoftDeletableMethodsTrait' => 'Knp\\DoctrineBehaviors\\Contract\\Entity\\SoftDeletableInterface', 'Knp\\DoctrineBehaviors\\Model\\Translatable\\Translatable' => 'Knp\\DoctrineBehaviors\\Contract\\Entity\\TranslatableInterface', 'Knp\\DoctrineBehaviors\\Model\\Translatable\\TranslatableMethods' => 'Knp\\DoctrineBehaviors\\Contract\\Entity\\TranslatableInterface', 'Knp\\DoctrineBehaviors\\Model\\Translatable\\Translation' => 'Knp\\DoctrineBehaviors\\Contract\\Entity\\TranslationInterface', 'Knp\\DoctrineBehaviors\\Model\\Translatable\\TranslationMethods' => 'Knp\\DoctrineBehaviors\\Contract\\Entity\\TranslationInterface', 'Knp\\DoctrineBehaviors\\Model\\Uuidable\\Uuidable' => 'Knp\\DoctrineBehaviors\\Contract\\Entity\\UuidableInterface', 'Knp\\DoctrineBehaviors\\Model\\Uuidable\\UuidableMethods' => 'Knp\\DoctrineBehaviors\\Contract\\Entity\\UuidableInterface']]]);
     $services->set(\Rector\Renaming\Rector\Name\RenameClassRector::class)->call('configure', [[\Rector\Renaming\Rector\Name\RenameClassRector::OLD_TO_NEW_CLASSES => [

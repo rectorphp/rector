@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210512\Psr\Container;
+namespace RectorPrefix20210513\Psr\Container;
 
 /**
  * Base interface representing a generic exception in a container.

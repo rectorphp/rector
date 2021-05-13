@@ -1,14 +1,14 @@
 <?php
 
-namespace RectorPrefix20210512;
+namespace RectorPrefix20210513;
 
-use RectorPrefix20210512\Behat\Behat\Tester\Exception\PendingException;
-use RectorPrefix20210512\Behat\Behat\Context\SnippetAcceptingContext;
-use RectorPrefix20210512\PrettyXml\Formatter;
+use RectorPrefix20210513\Behat\Behat\Tester\Exception\PendingException;
+use RectorPrefix20210513\Behat\Behat\Context\SnippetAcceptingContext;
+use RectorPrefix20210513\PrettyXml\Formatter;
 /**
  * Behat context class.
  */
-class FeatureContext implements \RectorPrefix20210512\Behat\Behat\Context\SnippetAcceptingContext
+class FeatureContext implements \RectorPrefix20210513\Behat\Behat\Context\SnippetAcceptingContext
 {
     /**
      * @var string
@@ -30,7 +30,7 @@ class FeatureContext implements \RectorPrefix20210512\Behat\Behat\Context\Snippe
      */
     public function itIsFormattedByPrettyXml()
     {
-        $formatter = new \RectorPrefix20210512\PrettyXml\Formatter();
+        $formatter = new \RectorPrefix20210513\PrettyXml\Formatter();
         $this->formattedXml = $formatter->format($this->getBeforeXml());
     }
     /**
@@ -38,7 +38,7 @@ class FeatureContext implements \RectorPrefix20210512\Behat\Behat\Context\Snippe
      */
     public function itShouldBeCorrectlyFormatted()
     {
-        \RectorPrefix20210512\expect($this->formattedXml)->toBe($this->getAfterXml());
+        \RectorPrefix20210513\expect($this->formattedXml)->toBe($this->getAfterXml());
     }
     /**
      * @return string
@@ -58,4 +58,4 @@ class FeatureContext implements \RectorPrefix20210512\Behat\Behat\Context\Snippe
 /**
  * Behat context class.
  */
-\class_alias('RectorPrefix20210512\\FeatureContext', 'FeatureContext', \false);
+\class_alias('RectorPrefix20210513\\FeatureContext', 'FeatureContext', \false);
