@@ -142,23 +142,6 @@ return [
             return $content;
         },
 
-
-        function (string $filePath, string $prefix, string $content): string {
-            if (
-                ! Strings::endsWith($filePath, 'packages/Testing/PHPUnit/AbstractTestCase.php')
-                && ! Strings::endsWith($filePath, 'packages/Testing/PHPUnit/AbstractRectorTestCase.php')
-            ) {
-                return $content;
-            }
-
-            // un-prefix
-            return Strings::replace(
-                $content,
-                '#' . $prefix . '\\\\PHPUnit\\\\Framework\\\\TestCase#',
-                'PHPUnit\Framework\TestCase'
-            );
-        },
-
         // fixes https://github.com/rectorphp/rector/issues/6010 + test case prefix
         function (string $filePath, string $prefix, string $content): string {
             // @see https://regex101.com/r/bA1nQa/1
