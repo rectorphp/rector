@@ -3,12 +3,12 @@
 declare (strict_types=1);
 namespace Rector\Testing\PHPUnit;
 
-use RectorPrefix20210513\PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\TestCase;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\HttpKernel\RectorKernel;
 use RectorPrefix20210513\Symfony\Component\DependencyInjection\ContainerInterface;
 use Symplify\SmartFileSystem\SmartFileInfo;
-abstract class AbstractTestCase extends \RectorPrefix20210513\PHPUnit\Framework\TestCase
+abstract class AbstractTestCase extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var array<string, RectorKernel>

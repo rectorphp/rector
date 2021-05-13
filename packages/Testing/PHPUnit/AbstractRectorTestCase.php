@@ -6,7 +6,7 @@ namespace Rector\Testing\PHPUnit;
 use Iterator;
 use RectorPrefix20210513\Nette\Utils\Strings;
 use PHPStan\Analyser\NodeScopeResolver;
-use RectorPrefix20210513\PHPUnit\Framework\ExpectationFailedException;
+use PHPUnit\Framework\ExpectationFailedException;
 use RectorPrefix20210513\Psr\Container\ContainerInterface;
 use Rector\Core\Application\ApplicationFileProcessor;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
@@ -109,7 +109,7 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractTe
         $relativeFilePathFromCwd = $fixtureFileInfo->getRelativeFilePathFromCwd();
         try {
             $this->assertStringEqualsFile($expectedFileInfo->getRealPath(), $changedContent, $relativeFilePathFromCwd);
-        } catch (\RectorPrefix20210513\PHPUnit\Framework\ExpectationFailedException $expectationFailedException) {
+        } catch (\PHPUnit\Framework\ExpectationFailedException $expectationFailedException) {
             \RectorPrefix20210513\Symplify\EasyTesting\DataProvider\StaticFixtureUpdater::updateFixtureContent($originalFileInfo, $changedContent, $fixtureFileInfo);
             $contents = $expectedFileInfo->getContents();
             // make sure we don't get a diff in which every line is different (because of differences in EOL)
