@@ -76,11 +76,10 @@ return [
                 }
 
                 foreach ($unprefixClasses as $unprefixClass) {
-                    $doubleQuotedClass = preg_quote(preg_quote($unprefixClass));
-
+                    $doubleQuotedClass = preg_quote('\\' . $unprefixClass);
                     $content = Strings::replace(
                         $content,
-                        '#' . $prefix . '\\\\' . $doubleQuotedClass . '#',
+                        '#' . $prefix . $doubleQuotedClass . '#',
                         $unprefixClass
                     );
                 }
