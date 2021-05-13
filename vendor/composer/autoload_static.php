@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit29b0c59542a7f7845f393b075e9a11d8
+class ComposerStaticInitf1d6c2199628b98ca69131bed21de7f3
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -2026,8 +2026,10 @@ class ComposerStaticInit29b0c59542a7f7845f393b075e9a11d8
         'Rector\\Composer\\Rector\\AddPackageToRequireDevComposerRector' => __DIR__ . '/../..' . '/rules/Composer/Rector/AddPackageToRequireDevComposerRector.php',
         'Rector\\Composer\\Rector\\ChangePackageVersionComposerRector' => __DIR__ . '/../..' . '/rules/Composer/Rector/ChangePackageVersionComposerRector.php',
         'Rector\\Composer\\Rector\\RemovePackageComposerRector' => __DIR__ . '/../..' . '/rules/Composer/Rector/RemovePackageComposerRector.php',
+        'Rector\\Composer\\Rector\\RenamePackageComposerRector' => __DIR__ . '/../..' . '/rules/Composer/Rector/RenamePackageComposerRector.php',
         'Rector\\Composer\\Rector\\ReplacePackageAndVersionComposerRector' => __DIR__ . '/../..' . '/rules/Composer/Rector/ReplacePackageAndVersionComposerRector.php',
         'Rector\\Composer\\ValueObject\\PackageAndVersion' => __DIR__ . '/../..' . '/rules/Composer/ValueObject/PackageAndVersion.php',
+        'Rector\\Composer\\ValueObject\\RenamePackage' => __DIR__ . '/../..' . '/rules/Composer/ValueObject/RenamePackage.php',
         'Rector\\Composer\\ValueObject\\ReplacePackageAndVersion' => __DIR__ . '/../..' . '/rules/Composer/ValueObject/ReplacePackageAndVersion.php',
         'Rector\\Core\\Application\\ApplicationFileProcessor' => __DIR__ . '/../..' . '/src/Application/ApplicationFileProcessor.php',
         'Rector\\Core\\Application\\FileDecorator\\FileDiffFileDecorator' => __DIR__ . '/../..' . '/src/Application/FileDecorator/FileDiffFileDecorator.php',
@@ -3481,9 +3483,9 @@ class ComposerStaticInit29b0c59542a7f7845f393b075e9a11d8
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit29b0c59542a7f7845f393b075e9a11d8::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit29b0c59542a7f7845f393b075e9a11d8::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit29b0c59542a7f7845f393b075e9a11d8::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitf1d6c2199628b98ca69131bed21de7f3::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitf1d6c2199628b98ca69131bed21de7f3::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitf1d6c2199628b98ca69131bed21de7f3::$classMap;
 
         }, null, ClassLoader::class);
     }
