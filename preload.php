@@ -246,3 +246,4 @@ require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Node.php';
 require_once __DIR__ . '/vendor/symplify/symfony-php-config/src/Exception/ValueObjectException.php';
 require_once __DIR__ . '/vendor/symplify/symfony-php-config/src/Reflection/ArgumentAndParameterFactory.php';
 require_once __DIR__ . '/vendor/symplify/symfony-php-config/src/ValueObjectInliner.php';
+require_once __DIR__ . '/vendor/symfony/dependency-injection/Loader/Configurator/ContainerConfigurator.php';
