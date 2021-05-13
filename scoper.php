@@ -72,15 +72,17 @@ return [
         function (string $filePath, string $prefix, string $content): string {
             foreach (UNPREFIX_CLASSES_BY_FILE as $endFilePath => $unprefixClasses) {
                 if (! Strings::endsWith($filePath, $endFilePath)) {
-                    foreach ($unprefixClasses as $unprefixClass) {
-                        $doubleQuotedClass = preg_quote(preg_quote('\\' . $unprefixClass));
+                    continue;
+                }
 
-                        $content = Strings::replace(
-                            $content,
-                            '#' . $prefix . '\\' . $doubleQuotedClass . '#',
-                            $unprefixClass
-                        );
-                    }
+                foreach ($unprefixClasses as $unprefixClass) {
+                    $doubleQuotedClass = preg_quote(preg_quote('\\' . $unprefixClass));
+
+                    $content = Strings::replace(
+                        $content,
+                        '#' . $prefix . '\\' . $doubleQuotedClass . '#',
+                        $unprefixClass
+                    );
                 }
             }
 
