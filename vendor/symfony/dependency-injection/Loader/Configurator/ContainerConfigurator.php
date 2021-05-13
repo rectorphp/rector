@@ -74,6 +74,10 @@ class ContainerConfigurator extends \RectorPrefix20210513\Symfony\Component\Depe
     }
 }
 /**
+ * @author Nicolas Grekas <p@tchwork.com>
+ */
+\class_alias('RectorPrefix20210513\\Symfony\\Component\\DependencyInjection\\Loader\\Configurator\\ContainerConfigurator', 'Symfony\\Component\\DependencyInjection\\Loader\\Configurator\\ContainerConfigurator', \false);
+/**
  * Creates a parameter.
  */
 function param(string $name) : string

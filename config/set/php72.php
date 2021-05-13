@@ -14,8 +14,8 @@ use Rector\Php72\Rector\FuncCall\StringsAssertNakedRector;
 use Rector\Php72\Rector\Unset_\UnsetCastRector;
 use Rector\Php72\Rector\While_\WhileEachToForeachRector;
 use Rector\Renaming\Rector\FuncCall\RenameFunctionRector;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-return static function (\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
+use RectorPrefix20210513\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+return static function (\RectorPrefix20210513\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->set(\Rector\Php72\Rector\While_\WhileEachToForeachRector::class);
     $services->set(\Rector\Php72\Rector\Assign\ListEachRector::class);
