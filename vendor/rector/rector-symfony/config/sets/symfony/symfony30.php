@@ -18,9 +18,9 @@ use Rector\Symfony\Rector\MethodCall\FormTypeInstanceToClassConstRector;
 use Rector\Symfony\Rector\MethodCall\OptionNameRector;
 use Rector\Symfony\Rector\MethodCall\ReadOnlyOptionToAttributeRector;
 use Rector\Symfony\Rector\MethodCall\StringFormTypeToClassRector;
-use RectorPrefix20210513\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
-return static function (\RectorPrefix20210513\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
+return static function (\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     # resources:
     # - https://github.com/symfony/symfony/blob/3.4/UPGRADE-3.0.md

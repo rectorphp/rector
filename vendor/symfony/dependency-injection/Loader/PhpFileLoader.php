@@ -10,7 +10,7 @@
  */
 namespace RectorPrefix20210513\Symfony\Component\DependencyInjection\Loader;
 
-use RectorPrefix20210513\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 /**
  * PhpFileLoader loads service definitions from a PHP file.
  *
@@ -40,7 +40,7 @@ class PhpFileLoader extends \RectorPrefix20210513\Symfony\Component\DependencyIn
         try {
             $callback = $load($path);
             if (\is_object($callback) && \is_callable($callback)) {
-                $callback(new \RectorPrefix20210513\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator($this->container, $this, $this->instanceof, $path, $resource), $this->container, $this);
+                $callback(new \Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator($this->container, $this, $this->instanceof, $path, $resource), $this->container, $this);
             }
         } finally {
             $this->instanceof = [];
