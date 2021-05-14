@@ -64,23 +64,23 @@ It supports all versions of PHP from 5.3 and major open-source projects:
 
 ## Documentation
 
-- [Explore 450+ Rector Rules]https://github.com/rectorphp/rector-src/blob/main/docs/rector_rules_overview.md)
-- [How Does Rector Work?]https://github.com/rectorphp/rector-src/blob/main/docs/how_it_works.md)
+- [Explore 450+ Rector Rules](https://github.com/rectorphp/rector-src/blob/main/docs/rector_rules_overview.md)
+- [How Does Rector Work?](https://github.com/rectorphp/rector-src/blob/main/docs/how_it_works.md)
 - [PHP Parser Nodes](https://github.com/rectorphp/php-parser-nodes-docs/)
 
 ### Advanced
 
-- [Auto Import Names]https://github.com/rectorphp/rector-src/blob/main/docs/auto_import_names.md)
-- [How to Ignore Rule or Paths]https://github.com/rectorphp/rector-src/blob/main/docs/how_to_ignore_rule_or_paths.md)
-- [Static Reflection and Autoload]https://github.com/rectorphp/rector-src/blob/main/docs/static_reflection_and_autoload.md)
-- [How to Configure Rule]https://github.com/rectorphp/rector-src/blob/main/docs/how_to_configure_rules.md)
-- [How to Generate Configuration file]https://github.com/rectorphp/rector-src/blob/main/docs/init_command.md)
+- [Auto Import Names](https://github.com/rectorphp/rector-src/blob/main/docs/auto_import_names.md)
+- [How to Ignore Rule or Paths](https://github.com/rectorphp/rector-src/blob/main/docs/how_to_ignore_rule_or_paths.md)
+- [Static Reflection and Autoload](https://github.com/rectorphp/rector-src/blob/main/docs/static_reflection_and_autoload.md)
+- [How to Configure Rule](https://github.com/rectorphp/rector-src/blob/main/docs/how_to_configure_rules.md)
+- [How to Generate Configuration file](https://github.com/rectorphp/rector-src/blob/main/docs/init_command.md)
 
 ### Contributing
 
-- [How to add Test for Rector Rule]https://github.com/rectorphp/rector-src/blob/main/docs/how_to_add_test_for_rector_rule.md)
-- [How to work with Doc Block and Comments]https://github.com/rectorphp/rector-src/blob/main/docs/how_to_work_with_doc_block_and_comments.md)
-- [How to Create New Rector Rule]https://github.com/rectorphp/rector-src/blob/main/docs/create_own_rule.md)
+- [How to add Test for Rector Rule](https://github.com/rectorphp/rector-src/blob/main/docs/how_to_add_test_for_rector_rule.md)
+- [How to work with Doc Block and Comments](https://github.com/rectorphp/rector-src/blob/main/docs/how_to_work_with_doc_block_and_comments.md)
+- [How to Create New Rector Rule](https://github.com/rectorphp/rector-src/blob/main/docs/create_own_rule.md)
 
 <br>
 
@@ -91,7 +91,7 @@ composer require rector/rector --dev
 ```
 
 - Having conflicts during `composer require`? → Use the [Rector Prefixed](https://github.com/rectorphp/rector-prefixed) with PHP 7.1+ version
-- Using a different PHP version than Rector supports? → Use the [Docker image]https://github.com/rectorphp/rector-src/blob/main/docs/how_to_run_rector_in_docker.md)
+- Using a different PHP version than Rector supports? → Use the [Docker image](https://github.com/rectorphp/rector-src/blob/main/docs/how_to_run_rector_in_docker.md)
 
 <br>
 
