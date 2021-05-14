@@ -6,7 +6,7 @@ To start quickly you can run the init command
 vendor/bin/rector init
 ```
 
-This will create a `rector.php` if it doesn´t already exist in your root directory with some sensitive defaults to start with.
+This will create a `rector.php` if it doesn't already exist in your root directory with some sensitive defaults to start with.
 
 ```php
 // rector.php
