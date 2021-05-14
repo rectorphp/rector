@@ -39,7 +39,7 @@ final class JsonOutputFormatter implements \Rector\ChangesReporting\Contract\Out
     }
     public function report(\Rector\Core\ValueObject\ProcessResult $processResult) : void
     {
-        $errorsArray = ['meta' => ['version' => $this->configuration->getPrettyVersion(), 'config' => $this->configuration->getMainConfigFilePath()], 'totals' => ['changed_files' => \count($processResult->getFileDiffs()), 'removed_and_added_files_count' => $processResult->getRemovedAndAddedFilesCount(), 'removed_node_count' => $processResult->getRemovedNodeCount()]];
+        $errorsArray = ['meta' => ['config' => $this->configuration->getMainConfigFilePath()], 'totals' => ['changed_files' => \count($processResult->getFileDiffs()), 'removed_and_added_files_count' => $processResult->getRemovedAndAddedFilesCount(), 'removed_node_count' => $processResult->getRemovedNodeCount()]];
         $fileDiffs = $processResult->getFileDiffs();
         \ksort($fileDiffs);
         foreach ($fileDiffs as $fileDiff) {

@@ -4,9 +4,8 @@ declare (strict_types=1);
 namespace Rector\Core\Console;
 
 use RectorPrefix20210514\Composer\XdebugHandler\XdebugHandler;
-use OutOfBoundsException;
 use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
-use Rector\Core\Configuration\Configuration;
+use Rector\Core\Application\VersionResolver;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Console\Command\ProcessCommand;
 use Rector\Core\Exception\Configuration\InvalidConfigurationException;
@@ -26,13 +25,9 @@ final class ConsoleApplication extends \RectorPrefix20210514\Symfony\Component\C
     /**
      * @param Command[] $commands
      */
-    public function __construct(\Rector\Core\Configuration\Configuration $configuration, \RectorPrefix20210514\Symplify\PackageBuilder\Console\Command\CommandNaming $commandNaming, array $commands = [])
+    public function __construct(\Rector\Core\Application\VersionResolver $versionResolver, \RectorPrefix20210514\Symplify\PackageBuilder\Console\Command\CommandNaming $commandNaming, array $commands = [])
     {
-        try {
-            $version = $configuration->getPrettyVersion();
-        } catch (\OutOfBoundsException $exception) {
-            $version = 'Unknown';
-        }
+        $version = $versionResolver->resolve();
         parent::__construct(self::NAME, $version);
         foreach ($commands as $command) {
             $commandName = $commandNaming->resolveFromCommand($command);

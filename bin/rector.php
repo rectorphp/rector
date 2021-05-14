@@ -42,11 +42,6 @@ try {
     $symfonyStyle->error($throwable->getMessage());
     exit(\RectorPrefix20210514\Symplify\PackageBuilder\Console\ShellCode::ERROR);
 }
-// preload local InstalledVersions.php - to fix incorrect version by same-named class in phpstan
-$currentlyInstalledVersions = __DIR__ . '/../../../../vendor/composer/InstalledVersions.php';
-if (\file_exists($currentlyInstalledVersions)) {
-    require_once $currentlyInstalledVersions;
-}
 /** @var ConsoleApplication $application */
 $application = $container->get(\Rector\Core\Console\ConsoleApplication::class);
 exit($application->run());

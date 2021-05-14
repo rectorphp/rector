@@ -58,8 +58,6 @@ return array(
     'RectorPrefix20210514\\Psr\\EventDispatcher\\' => array($vendorDir . '/psr/event-dispatcher/src'),
     'RectorPrefix20210514\\Psr\\Container\\' => array($vendorDir . '/psr/container/src'),
     'RectorPrefix20210514\\PrettyXml\\' => array($vendorDir . '/shanethehat/pretty-xml/src/PrettyXml'),
-    'RectorPrefix20210514\\PackageVersions\\' => array($vendorDir . '/composer/package-versions-deprecated/src/PackageVersions'),
-    'RectorPrefix20210514\\Jean85\\' => array($vendorDir . '/jean85/pretty-package-versions/src'),
     'RectorPrefix20210514\\Idiosyncratic\\EditorConfig\\' => array($vendorDir . '/idiosyncratic/editorconfig/src'),
     'RectorPrefix20210514\\Ergebnis\\Json\\Printer\\' => array($vendorDir . '/ergebnis/json-printer/src'),
     'RectorPrefix20210514\\Doctrine\\Inflector\\' => array($vendorDir . '/doctrine/inflector/lib/Doctrine/Inflector'),
