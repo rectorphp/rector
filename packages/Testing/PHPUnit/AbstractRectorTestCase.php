@@ -73,12 +73,6 @@ abstract class AbstractRectorTestCase extends AbstractTestCase implements Rector
         $configuration->setIsDryRun(true);
     }
 
-    public function provideConfigFilePath(): string
-    {
-        // must be implemented
-        return '';
-    }
-
     /**
      * @return Iterator<SmartFileInfo>
      */

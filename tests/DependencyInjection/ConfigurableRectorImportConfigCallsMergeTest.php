@@ -117,4 +117,9 @@ final class ConfigurableRectorImportConfigCallsMergeTest extends AbstractRectorT
             ],
         ];
     }
+
+    public function provideConfigFilePath(): string
+    {
+        return '';
+    }
 }
