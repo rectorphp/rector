@@ -23,7 +23,10 @@
     "autoload": {
         "psr-4": {
             "Rector\\Symfony\\": "src"
-        }
+        },
+        "files": [
+            "src\/Helper\/TemplateGuesser.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {
