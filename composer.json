@@ -30,7 +30,7 @@
         "rector/rector-nette": "^0.11.1",
         "rector/rector-nette-to-symfony": "^0.11",
         "rector/rector-phpunit": "^0.11",
-        "rector/rector-symfony": "^0.11",
+        "rector/rector-symfony": "^0.11.1",
         "sebastian/diff": "^4.0.4",
         "shanethehat/pretty-xml": "^1.0",
         "symfony/console": "^5.2",
