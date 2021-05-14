@@ -205,9 +205,6 @@ CODE_SAMPLE
             return null;
         }
         $classMethodName = $this->getName($methodNode);
-        if ($classMethodName === null) {
-            return null;
-        }
         return 'provideDataFor' . \ucfirst($classMethodName);
     }
     /**

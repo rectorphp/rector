@@ -9,6 +9,10 @@ final class NetteToSymfonySetList implements \Rector\Set\Contract\SetListInterfa
     /**
      * @var string
      */
+    public const CONTRIBUTTE_TO_SYMFONY = __DIR__ . '/../../config/sets/contributte-to-symfony.php';
+    /**
+     * @var string
+     */
     public const NETTE_CONTROL_TO_SYMFONY_CONTROLLER = __DIR__ . '/../../config/sets/nette-control-to-symfony-controller.php';
     /**
      * @var string

@@ -8,7 +8,14 @@ parameters:
     excludes_analyse:
         - '*tests/*/Source/*'
 
+    reportUnmatchedIgnoredErrors: false
+
     ignoreErrors:
         - '#Unable to resolve the template type T in call to method Rector\\Core\\PhpParser\\Node\\BetterNodeFinder\:\:findParentTypes\(\)#'
         # requires an extension probably
         - '#Method Rector\\NetteToSymfony\\Rector\\ClassMethod\\RouterListToControllerAnnotationsRector\:\:resolveAssignRouteNodes\(\) should return array<PhpParser\\Node\\Expr\\Assign\> but returns array<PhpParser\\Node\>#'
+
+        - '#This property type might be inlined to PHP\. Do you have confidence it is correct\? Put it here#'
+
+        # is always set
+        - '#Parameter \#1 \$smartFileInfo of method Rector\\Testing\\PHPUnit\\AbstractRectorTestCase\:\:assertFileWasRemoved\(\) expects Symplify\\SmartFileSystem\\SmartFileInfo, Symplify\\SmartFileSystem\\SmartFileInfo\|null given#'

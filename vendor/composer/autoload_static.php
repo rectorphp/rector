@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit2821fef952dd3e7d5d00ee39804e18c4
+class ComposerStaticInite7e48f7b8341a9e5f98b251b63d86dd9
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -15,10 +15,10 @@ class ComposerStaticInit2821fef952dd3e7d5d00ee39804e18c4
         '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
         'd507e002f7fce7f0c6dbf1f22edcb902' => __DIR__ . '/..' . '/tracy/tracy/src/Tracy/functions.php',
         '667aeda72477189d0494fecd327c3641' => __DIR__ . '/..' . '/symfony/var-dumper/Resources/functions/dump.php',
+        '65fec9ebcfbb3cbb4fd0d519687aea01' => __DIR__ . '/..' . '/danielstjules/stringy/src/Create.php',
         '8825ede83f2f289127722d4e842cf7e8' => __DIR__ . '/..' . '/symfony/polyfill-intl-grapheme/bootstrap.php',
         'e69f7f6ee287b969198c3c9d6777bd38' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/bootstrap.php',
         'b6b991a57620e2fb6b2f66f03fe9ddc2' => __DIR__ . '/..' . '/symfony/string/Resources/functions.php',
-        '65fec9ebcfbb3cbb4fd0d519687aea01' => __DIR__ . '/..' . '/danielstjules/stringy/src/Create.php',
         '30bca7fff093e8069bed7c55247e2bf8' => __DIR__ . '/../..' . '/src/functions/node_helper.php',
         '4508688f3cab21375725e8d11ca194a2' => __DIR__ . '/../..' . '/src/constants.php',
     );
@@ -2819,7 +2819,7 @@ class ComposerStaticInit2821fef952dd3e7d5d00ee39804e18c4
         'Rector\\PHPStanStaticTypeMapper\\Utils\\TypeUnwrapper' => __DIR__ . '/../..' . '/packages/PHPStanStaticTypeMapper/Utils/TypeUnwrapper.php',
         'Rector\\PHPStanStaticTypeMapper\\ValueObject\\TypeKind' => __DIR__ . '/../..' . '/packages/PHPStanStaticTypeMapper/ValueObject/TypeKind.php',
         'Rector\\PHPStanStaticTypeMapper\\ValueObject\\UnionTypeAnalysis' => __DIR__ . '/../..' . '/packages/PHPStanStaticTypeMapper/ValueObject/UnionTypeAnalysis.php',
-        'Rector\\PHPUnit\\Composer\\ComposerAutoloadedDirectoryProvider' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Composer/ComposerAutoloadedDirectoryProvider.php',
+        'Rector\\PHPUnit\\Naming\\TestClassNameResolver' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Naming/TestClassNameResolver.php',
         'Rector\\PHPUnit\\NodeAnalyzer\\ExpectationAnalyzer' => __DIR__ . '/..' . '/rector/rector-phpunit/src/NodeAnalyzer/ExpectationAnalyzer.php',
         'Rector\\PHPUnit\\NodeAnalyzer\\TestsNodeAnalyzer' => __DIR__ . '/..' . '/rector/rector-phpunit/src/NodeAnalyzer/TestsNodeAnalyzer.php',
         'Rector\\PHPUnit\\NodeFactory\\ArgumentShiftingFactory' => __DIR__ . '/..' . '/rector/rector-phpunit/src/NodeFactory/ArgumentShiftingFactory.php',
@@ -2876,10 +2876,7 @@ class ComposerStaticInit2821fef952dd3e7d5d00ee39804e18c4
         'Rector\\PHPUnit\\Rector\\MethodCall\\UseSpecificWillMethodRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/MethodCall/UseSpecificWillMethodRector.php',
         'Rector\\PHPUnit\\Rector\\MethodCall\\WithConsecutiveArgToArrayRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/MethodCall/WithConsecutiveArgToArrayRector.php',
         'Rector\\PHPUnit\\Rector\\StaticCall\\GetMockRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/StaticCall/GetMockRector.php',
-        'Rector\\PHPUnit\\RobotLoader\\RobotLoaderFactory' => __DIR__ . '/..' . '/rector/rector-phpunit/src/RobotLoader/RobotLoaderFactory.php',
         'Rector\\PHPUnit\\Set\\PHPUnitSetList' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Set/PHPUnitSetList.php',
-        'Rector\\PHPUnit\\TestClassResolver\\PHPUnitTestCaseClassesProvider' => __DIR__ . '/..' . '/rector/rector-phpunit/src/TestClassResolver/PHPUnitTestCaseClassesProvider.php',
-        'Rector\\PHPUnit\\TestClassResolver\\TestClassResolver' => __DIR__ . '/..' . '/rector/rector-phpunit/src/TestClassResolver/TestClassResolver.php',
         'Rector\\PHPUnit\\ValueObject\\ArrayArgumentToDataProvider' => __DIR__ . '/..' . '/rector/rector-phpunit/src/ValueObject/ArrayArgumentToDataProvider.php',
         'Rector\\PHPUnit\\ValueObject\\BinaryOpWithAssertMethod' => __DIR__ . '/..' . '/rector/rector-phpunit/src/ValueObject/BinaryOpWithAssertMethod.php',
         'Rector\\PHPUnit\\ValueObject\\ConstantWithAssertMethods' => __DIR__ . '/..' . '/rector/rector-phpunit/src/ValueObject/ConstantWithAssertMethods.php',
@@ -3486,9 +3483,9 @@ class ComposerStaticInit2821fef952dd3e7d5d00ee39804e18c4
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit2821fef952dd3e7d5d00ee39804e18c4::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit2821fef952dd3e7d5d00ee39804e18c4::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit2821fef952dd3e7d5d00ee39804e18c4::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInite7e48f7b8341a9e5f98b251b63d86dd9::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInite7e48f7b8341a9e5f98b251b63d86dd9::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInite7e48f7b8341a9e5f98b251b63d86dd9::$classMap;
 
         }, null, ClassLoader::class);
     }

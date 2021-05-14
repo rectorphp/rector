@@ -12,13 +12,21 @@ Do you need to migrate from Nette to Symfony? You can ↓
 
 See available [rules](/docs/rector_rules_overview.md)
 
-## Read More
-
-- Nette to Symfony app
-- Nette\Tester to PHPUnit
-
 ## Install
 
 ```bash
 composer require rector/rector-nette-to-symfony
+```
+
+## Use Sets
+
+To add a set to your config, use `Rector\Symfony\Set\SymfonySetList` class and pick one of constants:
+
+```php
+use Rector\NetteToSymfony\Set\NetteToSymfonySetList;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $containerConfigurator->import(NetteToSymfonySetList::NETTE_TO_SYMFONY);
+};
 ```

@@ -5,8 +5,8 @@
     "license": "MIT",
     "require": {
         "php": ">=7.3",
-        "rector\/rector": "^0.10.19",
-        "rector\/rector-nette": "^0.10.9"
+        "rector\/rector": "^0.11",
+        "rector\/rector-nette": "^0.11"
     },
     "require-dev": {
         "phpunit\/phpunit": "^9.5",
@@ -16,7 +16,7 @@
         "phpstan\/phpstan-nette": "^0.12.16",
         "symplify\/rule-doc-generator": "^9.3",
         "phpstan\/extension-installer": "^1.1",
-        "rector\/rector-phpstan-rules": "^0.1",
+        "rector\/rector-phpstan-rules": "^0.2",
         "nette\/application": "^3.1",
         "symfony\/form": "^5.2",
         "nette\/forms": "^3.1"
@@ -37,7 +37,11 @@
     "scripts": {
         "check-cs": "vendor\/bin\/ecs check --ansi",
         "fix-cs": "vendor\/bin\/ecs check --fix --ansi",
-        "phpstan": "vendor\/bin\/phpstan analyse --ansi --error-format symplify"
+        "phpstan": "vendor\/bin\/phpstan analyse --ansi --error-format symplify",
+        "docs": [
+            "vendor\/bin\/rule-doc-generator generate src --output-file docs\/rector_rules_overview.md --ansi",
+            "vendor\/bin\/ecs check-markdown docs\/rector_rules_overview.md --ansi --fix"
+        ]
     },
     "extra": {
         "rector": {

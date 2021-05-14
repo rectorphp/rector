@@ -6,18 +6,19 @@
     "require": {
         "php": ">=7.3",
         "ext-xml": "*",
-        "rector\/rector": "^0.10.12"
+        "rector\/rector": "^0.11",
+        "danielstjules\/stringy": "^3.1"
     },
     "require-dev": {
         "phpunit\/phpunit": "^9.5",
-        "symplify\/phpstan-rules": "^9.2",
+        "symplify\/phpstan-rules": "^9.3",
         "symfony\/security-core": "^5.2",
         "symfony\/security-http": "^5.2",
-        "symplify\/phpstan-extensions": "^9.2",
-        "symplify\/easy-coding-standard": "^9.2",
-        "symplify\/rule-doc-generator": "^9.2",
+        "symplify\/phpstan-extensions": "^9.3",
+        "symplify\/easy-coding-standard": "^9.3",
+        "symplify\/rule-doc-generator": "^9.3",
         "phpstan\/extension-installer": "^1.1",
-        "rector\/rector-phpstan-rules": "dev-main"
+        "rector\/rector-phpstan-rules": "^0.2.8"
     },
     "autoload": {
         "psr-4": {
@@ -43,16 +44,13 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-main": "0.10-dev"
+            "dev-main": "0.11-dev"
         },
         "rector": {
             "includes": [
                 "config\/config.php"
             ]
         }
-    },
-    "conflict": {
-        "rector\/rector": "<=0.10.3"
     },
     "minimum-stability": "dev",
     "prefer-stable": true

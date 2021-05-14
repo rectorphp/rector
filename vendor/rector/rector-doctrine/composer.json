@@ -5,14 +5,13 @@
     "description": "Rector upgrades rules for Doctrine",
     "require": {
         "php": ">=7.3",
-        "rector\/rector": "^0.10.10"
+        "rector\/rector": "^0.11"
     },
     "require-dev": {
         "phpunit\/phpunit": "^9.5",
         "symplify\/phpstan-rules": "^9.2",
         "symplify\/phpstan-extensions": "^9.2",
         "symplify\/easy-coding-standard": "^9.2",
-        "tracy\/tracy": "^2.8",
         "symplify\/rule-doc-generator": "^9.2"
     },
     "autoload": {
@@ -46,9 +45,6 @@
                 "config\/config.php"
             ]
         }
-    },
-    "conflict": {
-        "rector\/rector": "<=0.10.3"
     },
     "minimum-stability": "dev",
     "prefer-stable": true

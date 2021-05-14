@@ -16,7 +16,7 @@ use RectorPrefix20210514\Webmozart\Assert\Assert;
  * @see https://book.cakephp.org/4.0/en/appendices/4-0-migration-guide.html
  * @see https://github.com/cakephp/cakephp/commit/77017145961bb697b4256040b947029259f66a9b
  *
- * @see \aRector\CakePHP\Tests\Rector\MethodCall\RenameMethodCallBasedOnParameterRector\RenameMethodCallBasedOnParameterRectorTest
+ * @see \Rector\CakePHP\Tests\Rector\MethodCall\RenameMethodCallBasedOnParameterRector\RenameMethodCallBasedOnParameterRectorTest
  */
 final class RenameMethodCallBasedOnParameterRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
