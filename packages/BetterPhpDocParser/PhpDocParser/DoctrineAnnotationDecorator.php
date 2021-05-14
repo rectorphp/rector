@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\BetterPhpDocParser\PhpDocParser;
 
-use RectorPrefix20210513\Nette\Utils\Strings;
+use RectorPrefix20210514\Nette\Utils\Strings;
 use PhpParser\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
@@ -129,7 +129,7 @@ final class DoctrineAnnotationDecorator
             // known doc tag to annotation class
             $fullyQualifiedAnnotationClass = $this->classAnnotationMatcher->resolveTagFullyQualifiedName($phpDocChildNode->name, $currentPhpNode);
             // not an annotations class
-            if (!\RectorPrefix20210513\Nette\Utils\Strings::contains($fullyQualifiedAnnotationClass, '\\')) {
+            if (!\RectorPrefix20210514\Nette\Utils\Strings::contains($fullyQualifiedAnnotationClass, '\\')) {
                 continue;
             }
             $genericTagValueNode = $phpDocChildNode->value;
@@ -159,10 +159,10 @@ final class DoctrineAnnotationDecorator
             return \true;
         }
         do {
-            if ($composedTokenIterator->isCurrentTokenTypes([\PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_OPEN_CURLY_BRACKET, \PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_OPEN_PARENTHESES]) || \RectorPrefix20210513\Nette\Utils\Strings::contains($composedTokenIterator->currentTokenValue(), '(')) {
+            if ($composedTokenIterator->isCurrentTokenTypes([\PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_OPEN_CURLY_BRACKET, \PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_OPEN_PARENTHESES]) || \RectorPrefix20210514\Nette\Utils\Strings::contains($composedTokenIterator->currentTokenValue(), '(')) {
                 ++$openBracketCount;
             }
-            if ($composedTokenIterator->isCurrentTokenTypes([\PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_CLOSE_CURLY_BRACKET, \PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_CLOSE_PARENTHESES]) || \RectorPrefix20210513\Nette\Utils\Strings::contains($composedTokenIterator->currentTokenValue(), ')')) {
+            if ($composedTokenIterator->isCurrentTokenTypes([\PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_CLOSE_CURLY_BRACKET, \PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_CLOSE_PARENTHESES]) || \RectorPrefix20210514\Nette\Utils\Strings::contains($composedTokenIterator->currentTokenValue(), ')')) {
                 ++$closeBracketCount;
             }
             $composedTokenIterator->next();

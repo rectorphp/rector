@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210513;
+namespace RectorPrefix20210514;
 
 use PHPStan\Type\BooleanType;
 use PHPStan\Type\IntegerType;
@@ -28,10 +28,10 @@ use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationRector;
 use Rector\TypeDeclaration\ValueObject\AddParamTypeDeclaration;
 use Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration;
-use RectorPrefix20210513\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use RectorPrefix20210514\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 # source: https://book.cakephp.org/4/en/appendices/4-0-migration-guide.html
-return static function (\RectorPrefix20210513\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
+return static function (\RectorPrefix20210514\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->set(\Rector\Renaming\Rector\Name\RenameClassRector::class)->call('configure', [[\Rector\Renaming\Rector\Name\RenameClassRector::OLD_TO_NEW_CLASSES => ['Cake\\Database\\Type' => 'Cake\\Database\\TypeFactory', 'Cake\\Console\\ConsoleErrorHandler' => 'Cake\\Error\\ConsoleErrorHandler']]]);
     $services->set(\Rector\Renaming\Rector\ClassConstFetch\RenameClassConstFetchRector::class)->call('configure', [[\Rector\Renaming\Rector\ClassConstFetch\RenameClassConstFetchRector::CLASS_CONSTANT_RENAME => \Symplify\SymfonyPhpConfig\ValueObjectInliner::inline([new \Rector\Renaming\ValueObject\RenameClassConstFetch('Cake\\View\\View', 'NAME_ELEMENT', 'TYPE_ELEMENT'), new \Rector\Renaming\ValueObject\RenameClassConstFetch('Cake\\View\\View', 'NAME_LAYOUT', 'TYPE_LAYOUT'), new \Rector\Renaming\ValueObject\RenameClassAndConstFetch('Cake\\Mailer\\Email', 'MESSAGE_HTML', 'Cake\\Mailer\\Message', 'MESSAGE_HTML'), new \Rector\Renaming\ValueObject\RenameClassAndConstFetch('Cake\\Mailer\\Email', 'MESSAGE_TEXT', 'Cake\\Mailer\\Message', 'MESSAGE_TEXT'), new \Rector\Renaming\ValueObject\RenameClassAndConstFetch('Cake\\Mailer\\Email', 'MESSAGE_BOTH', 'Cake\\Mailer\\Message', 'MESSAGE_BOTH'), new \Rector\Renaming\ValueObject\RenameClassAndConstFetch('Cake\\Mailer\\Email', 'EMAIL_PATTERN', 'Cake\\Mailer\\Message', 'EMAIL_PATTERN')])]]);

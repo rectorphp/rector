@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\PSR4;
 
-use RectorPrefix20210513\Nette\Utils\Strings;
+use RectorPrefix20210514\Nette\Utils\Strings;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Namespace_;
 use Rector\PSR4\FileInfoAnalyzer\FileInfoDeletionAnalyzer;
@@ -54,7 +54,7 @@ final class FileRelocationResolver
      */
     private function resolveRootDirectory(\Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo, string $suffixName, array $groupNames) : string
     {
-        if (\RectorPrefix20210513\Nette\Utils\Strings::startsWith($smartFileInfo->getRealPathDirectory(), '/tmp')) {
+        if (\RectorPrefix20210514\Nette\Utils\Strings::startsWith($smartFileInfo->getRealPathDirectory(), '/tmp')) {
             $currentTraversePath = $smartFileInfo->getRealPathDirectory();
         } else {
             $currentTraversePath = $smartFileInfo->getRelativeDirectoryPath();
@@ -117,7 +117,7 @@ final class FileRelocationResolver
     private function replaceRelativeFilePathsWithBeforeAfter(\Symplify\SmartFileSystem\SmartFileInfo $oldSmartFileInfo, array $beforeToAfterPart) : string
     {
         // A. first "dir has changed" dummy detection
-        $relativeFilePathParts = \RectorPrefix20210513\Nette\Utils\Strings::split($oldSmartFileInfo->getRelativeFilePath(), '#' . \DIRECTORY_SEPARATOR . '#');
+        $relativeFilePathParts = \RectorPrefix20210514\Nette\Utils\Strings::split($oldSmartFileInfo->getRelativeFilePath(), '#' . \DIRECTORY_SEPARATOR . '#');
         foreach ($relativeFilePathParts as $key => $relativeFilePathPart) {
             if (!isset($beforeToAfterPart[$relativeFilePathPart])) {
                 continue;

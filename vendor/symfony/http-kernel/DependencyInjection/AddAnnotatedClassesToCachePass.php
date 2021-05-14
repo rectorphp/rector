@@ -8,34 +8,34 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210513\Symfony\Component\HttpKernel\DependencyInjection;
+namespace RectorPrefix20210514\Symfony\Component\HttpKernel\DependencyInjection;
 
-use RectorPrefix20210513\Composer\Autoload\ClassLoader;
-use RectorPrefix20210513\Symfony\Component\Debug\DebugClassLoader as LegacyDebugClassLoader;
-use RectorPrefix20210513\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
-use RectorPrefix20210513\Symfony\Component\DependencyInjection\ContainerBuilder;
-use RectorPrefix20210513\Symfony\Component\ErrorHandler\DebugClassLoader;
-use RectorPrefix20210513\Symfony\Component\HttpKernel\Kernel;
+use RectorPrefix20210514\Composer\Autoload\ClassLoader;
+use RectorPrefix20210514\Symfony\Component\Debug\DebugClassLoader as LegacyDebugClassLoader;
+use RectorPrefix20210514\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use RectorPrefix20210514\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix20210514\Symfony\Component\ErrorHandler\DebugClassLoader;
+use RectorPrefix20210514\Symfony\Component\HttpKernel\Kernel;
 /**
  * Sets the classes to compile in the cache for the container.
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class AddAnnotatedClassesToCachePass implements \RectorPrefix20210513\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface
+class AddAnnotatedClassesToCachePass implements \RectorPrefix20210514\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface
 {
     private $kernel;
-    public function __construct(\RectorPrefix20210513\Symfony\Component\HttpKernel\Kernel $kernel)
+    public function __construct(\RectorPrefix20210514\Symfony\Component\HttpKernel\Kernel $kernel)
     {
         $this->kernel = $kernel;
     }
     /**
      * {@inheritdoc}
      */
-    public function process(\RectorPrefix20210513\Symfony\Component\DependencyInjection\ContainerBuilder $container)
+    public function process(\RectorPrefix20210514\Symfony\Component\DependencyInjection\ContainerBuilder $container)
     {
         $annotatedClasses = $this->kernel->getAnnotatedClassesToCompile();
         foreach ($container->getExtensions() as $extension) {
-            if ($extension instanceof \RectorPrefix20210513\Symfony\Component\HttpKernel\DependencyInjection\Extension) {
+            if ($extension instanceof \RectorPrefix20210514\Symfony\Component\HttpKernel\DependencyInjection\Extension) {
                 $annotatedClasses = \array_merge($annotatedClasses, $extension->getAnnotatedClassesToCompile());
             }
         }
@@ -76,10 +76,10 @@ class AddAnnotatedClassesToCachePass implements \RectorPrefix20210513\Symfony\Co
             if (!\is_array($function)) {
                 continue;
             }
-            if ($function[0] instanceof \RectorPrefix20210513\Symfony\Component\ErrorHandler\DebugClassLoader || $function[0] instanceof \RectorPrefix20210513\Symfony\Component\Debug\DebugClassLoader) {
+            if ($function[0] instanceof \RectorPrefix20210514\Symfony\Component\ErrorHandler\DebugClassLoader || $function[0] instanceof \RectorPrefix20210514\Symfony\Component\Debug\DebugClassLoader) {
                 $function = $function[0]->getClassLoader();
             }
-            if (\is_array($function) && $function[0] instanceof \RectorPrefix20210513\Composer\Autoload\ClassLoader) {
+            if (\is_array($function) && $function[0] instanceof \RectorPrefix20210514\Composer\Autoload\ClassLoader) {
                 $classes += \array_filter($function[0]->getClassMap());
             }
         }
