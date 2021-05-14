@@ -74,11 +74,6 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractTe
         $configuration = $this->getService(\Rector\Core\Configuration\Configuration::class);
         $configuration->setIsDryRun(\true);
     }
-    public function provideConfigFilePath() : string
-    {
-        // must be implemented
-        return '';
-    }
     /**
      * @return Iterator<SmartFileInfo>
      */
