@@ -16,7 +16,6 @@
         "doctrine/inflector": "^2.0",
         "ergebnis/json-printer": "^3.1",
         "idiosyncratic/editorconfig": "^0.1.0",
-        "jean85/pretty-package-versions": "^1.6",
         "nette/caching": "^3.1",
         "nette/utils": "^3.2",
         "nikic/php-parser": "4.10.5",

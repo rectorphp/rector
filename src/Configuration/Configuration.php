@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Core\Configuration;
 
-use Jean85\PrettyVersions;
 use Nette\Utils\Strings;
 use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
 use Rector\Core\Exception\Configuration\InvalidConfigurationException;
@@ -78,12 +77,6 @@ final class Configuration
             $commandLinePaths = $this->correctBashSpacePaths($commandLinePaths);
             $this->paths = $commandLinePaths;
         }
-    }
-
-    public function getPrettyVersion(): string
-    {
-        $version = PrettyVersions::getVersion('rector/rector');
-        return $version->getPrettyVersion();
     }
 
     /**

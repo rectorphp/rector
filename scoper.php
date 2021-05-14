@@ -43,8 +43,6 @@ const UNPREFIX_CLASSES_BY_FILE = [
 
     // unprefixed ComposerJson as part of public API in ComposerRectorInterface
     'rules/Composer/Contract/Rector/ComposerRectorInterface.php' => ['Symplify\ComposerJsonManipulator\ValueObject\ComposerJson'],
-
-    'vendor/composer/package-versions-deprecated/src/PackageVersions/Versions.php' => ['Composer\InstalledVersions'],
     'packages/Testing/PHPUnit/AbstractTestCase.php' => ['PHPUnit\Framework\TestCase'],
 ];
 

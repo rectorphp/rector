@@ -55,14 +55,6 @@ try {
     exit(ShellCode::ERROR);
 }
 
-
-// preload local InstalledVersions.php - to fix incorrect version by same-named class in phpstan
-$currentlyInstalledVersions = __DIR__ . '/../../../../vendor/composer/InstalledVersions.php';
-if (file_exists($currentlyInstalledVersions)) {
-    require_once $currentlyInstalledVersions;
-}
-
-
 /** @var ConsoleApplication $application */
 $application = $container->get(ConsoleApplication::class);
 exit($application->run());

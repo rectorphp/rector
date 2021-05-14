@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace Rector\Core\Console;
 
 use Composer\XdebugHandler\XdebugHandler;
-use OutOfBoundsException;
 use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
-use Rector\Core\Configuration\Configuration;
+use Rector\Core\Application\VersionResolver;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Console\Command\ProcessCommand;
 use Rector\Core\Exception\Configuration\InvalidConfigurationException;
@@ -29,14 +28,9 @@ final class ConsoleApplication extends Application
     /**
      * @param Command[] $commands
      */
-    public function __construct(Configuration $configuration, CommandNaming $commandNaming, array $commands = [])
+    public function __construct(VersionResolver $versionResolver, CommandNaming $commandNaming, array $commands = [])
     {
-        try {
-            $version = $configuration->getPrettyVersion();
-        } catch (OutOfBoundsException) {
-            $version = 'Unknown';
-        }
-
+        $version = $versionResolver->resolve();
         parent::__construct(self::NAME, $version);
 
         foreach ($commands as $command) {
