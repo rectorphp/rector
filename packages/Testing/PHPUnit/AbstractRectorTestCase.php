@@ -12,7 +12,6 @@ use Rector\Core\Application\ApplicationFileProcessor;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\Autoloading\AdditionalAutoloader;
 use Rector\Core\Autoloading\BootstrapFilesIncluder;
-use Rector\Core\Bootstrap\RectorConfigsResolver;
 use Rector\Core\Configuration\Configuration;
 use Rector\Core\Configuration\Option;
 use Rector\Core\ValueObject\Application\File;
@@ -56,9 +55,7 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractTe
         // speed up
         @\ini_set('memory_limit', '-1');
         $configFileInfo = new \Symplify\SmartFileSystem\SmartFileInfo($this->provideConfigFilePath());
-        $rectorConfigsResolver = new \Rector\Core\Bootstrap\RectorConfigsResolver();
-        $configFileInfos = $rectorConfigsResolver->resolveFromConfigFileInfo($configFileInfo);
-        $this->bootFromConfigFileInfos($configFileInfos);
+        $this->bootFromConfigFileInfos([$configFileInfo]);
         $this->applicationFileProcessor = $this->getService(\Rector\Core\Application\ApplicationFileProcessor::class);
         $this->parameterProvider = $this->getService(\RectorPrefix20210515\Symplify\PackageBuilder\Parameter\ParameterProvider::class);
         $this->dynamicSourceLocatorProvider = $this->getService(\Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider::class);

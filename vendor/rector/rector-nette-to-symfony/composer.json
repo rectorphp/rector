@@ -4,7 +4,7 @@
     "description": "Generate Rector rules from command line",
     "license": "MIT",
     "require": {
-        "php": ">=7.3",
+        "php": ">=8.0",
         "rector\/rector-nette": "^0.11"
     },
     "require-dev": {
@@ -16,7 +16,7 @@
         "phpstan\/phpstan-nette": "^0.12.16",
         "symplify\/rule-doc-generator": "^9.3",
         "phpstan\/extension-installer": "^1.1",
-        "rector\/rector-phpstan-rules": "^0.2",
+        "rector\/phpstan-rules": "^0.2.8",
         "nette\/application": "^3.1",
         "symfony\/form": "^5.2",
         "nette\/forms": "^3.1"

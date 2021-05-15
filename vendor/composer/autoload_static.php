@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit27ccce5055bf2ad0da846430c5540272
+class ComposerStaticInit2f841dc6288aa7a74ae0b865f80227e5
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -47,7 +47,6 @@ class ComposerStaticInit27ccce5055bf2ad0da846430c5540272
             'RectorPrefix20210515\\Symplify\\SmartFileSystem\\' => 46,
             'RectorPrefix20210515\\Symplify\\Skipper\\' => 38,
             'RectorPrefix20210515\\Symplify\\SimplePhpDocParser\\' => 49,
-            'RectorPrefix20210515\\Symplify\\SetConfigResolver\\' => 48,
             'RectorPrefix20210515\\Symplify\\PackageBuilder\\' => 45,
             'RectorPrefix20210515\\Symplify\\EasyTesting\\' => 42,
             'RectorPrefix20210515\\Symplify\\ConsolePackageBuilder\\' => 52,
@@ -168,10 +167,6 @@ class ComposerStaticInit27ccce5055bf2ad0da846430c5540272
         'RectorPrefix20210515\\Symplify\\SimplePhpDocParser\\' => 
         array (
             0 => __DIR__ . '/..' . '/symplify/simple-php-doc-parser/src',
-        ),
-        'RectorPrefix20210515\\Symplify\\SetConfigResolver\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symplify/set-config-resolver/src',
         ),
         'RectorPrefix20210515\\Symplify\\PackageBuilder\\' => 
         array (
@@ -1651,19 +1646,6 @@ class ComposerStaticInit27ccce5055bf2ad0da846430c5540272
         'RectorPrefix20210515\\Symplify\\PackageBuilder\\ValueObject\\MethodName' => __DIR__ . '/..' . '/symplify/package-builder/src/ValueObject/MethodName.php',
         'RectorPrefix20210515\\Symplify\\PackageBuilder\\ValueObject\\Option' => __DIR__ . '/..' . '/symplify/package-builder/src/ValueObject/Option.php',
         'RectorPrefix20210515\\Symplify\\PackageBuilder\\Yaml\\ParametersMerger' => __DIR__ . '/..' . '/symplify/package-builder/src/Yaml/ParametersMerger.php',
-        'RectorPrefix20210515\\Symplify\\SetConfigResolver\\AbstractConfigResolver' => __DIR__ . '/..' . '/symplify/set-config-resolver/src/AbstractConfigResolver.php',
-        'RectorPrefix20210515\\Symplify\\SetConfigResolver\\Bootstrap\\InvalidSetReporter' => __DIR__ . '/..' . '/symplify/set-config-resolver/src/Bootstrap/InvalidSetReporter.php',
-        'RectorPrefix20210515\\Symplify\\SetConfigResolver\\ConfigResolver' => __DIR__ . '/..' . '/symplify/set-config-resolver/src/ConfigResolver.php',
-        'RectorPrefix20210515\\Symplify\\SetConfigResolver\\Config\\SetsParameterResolver' => __DIR__ . '/..' . '/symplify/set-config-resolver/src/Config/SetsParameterResolver.php',
-        'RectorPrefix20210515\\Symplify\\SetConfigResolver\\Console\\OptionValueResolver' => __DIR__ . '/..' . '/symplify/set-config-resolver/src/Console/OptionValueResolver.php',
-        'RectorPrefix20210515\\Symplify\\SetConfigResolver\\Console\\Option\\OptionName' => __DIR__ . '/..' . '/symplify/set-config-resolver/src/Console/Option/OptionName.php',
-        'RectorPrefix20210515\\Symplify\\SetConfigResolver\\Contract\\SetProviderInterface' => __DIR__ . '/..' . '/symplify/set-config-resolver/src/Contract/SetProviderInterface.php',
-        'RectorPrefix20210515\\Symplify\\SetConfigResolver\\Exception\\SetNotFoundException' => __DIR__ . '/..' . '/symplify/set-config-resolver/src/Exception/SetNotFoundException.php',
-        'RectorPrefix20210515\\Symplify\\SetConfigResolver\\Provider\\AbstractSetProvider' => __DIR__ . '/..' . '/symplify/set-config-resolver/src/Provider/AbstractSetProvider.php',
-        'RectorPrefix20210515\\Symplify\\SetConfigResolver\\SetAwareConfigResolver' => __DIR__ . '/..' . '/symplify/set-config-resolver/src/SetAwareConfigResolver.php',
-        'RectorPrefix20210515\\Symplify\\SetConfigResolver\\SetResolver' => __DIR__ . '/..' . '/symplify/set-config-resolver/src/SetResolver.php',
-        'RectorPrefix20210515\\Symplify\\SetConfigResolver\\ValueObject\\Bootstrap\\BootstrapConfigs' => __DIR__ . '/..' . '/symplify/set-config-resolver/src/ValueObject/Bootstrap/BootstrapConfigs.php',
-        'RectorPrefix20210515\\Symplify\\SetConfigResolver\\ValueObject\\Set' => __DIR__ . '/..' . '/symplify/set-config-resolver/src/ValueObject/Set.php',
         'RectorPrefix20210515\\Symplify\\SimplePhpDocParser\\Bundle\\DependencyInjection\\Extension\\SimplePhpDocParserExtension' => __DIR__ . '/..' . '/symplify/simple-php-doc-parser/src/Bundle/DependencyInjection/Extension/SimplePhpDocParserExtension.php',
         'RectorPrefix20210515\\Symplify\\SimplePhpDocParser\\Bundle\\SimplePhpDocParserBundle' => __DIR__ . '/..' . '/symplify/simple-php-doc-parser/src/Bundle/SimplePhpDocParserBundle.php',
         'RectorPrefix20210515\\Symplify\\SimplePhpDocParser\\Contract\\PhpDocNodeVisitorInterface' => __DIR__ . '/..' . '/symplify/simple-php-doc-parser/src/Contract/PhpDocNodeVisitorInterface.php',
@@ -2027,7 +2009,6 @@ class ComposerStaticInit27ccce5055bf2ad0da846430c5540272
         'Rector\\Core\\Autoloading\\BootstrapFilesIncluder' => __DIR__ . '/../..' . '/src/Autoloading/BootstrapFilesIncluder.php',
         'Rector\\Core\\Bootstrap\\ExtensionConfigResolver' => __DIR__ . '/../..' . '/src/Bootstrap/ExtensionConfigResolver.php',
         'Rector\\Core\\Bootstrap\\RectorConfigsResolver' => __DIR__ . '/../..' . '/src/Bootstrap/RectorConfigsResolver.php',
-        'Rector\\Core\\Bootstrap\\SetConfigResolver' => __DIR__ . '/../..' . '/src/Bootstrap/SetConfigResolver.php',
         'Rector\\Core\\Configuration\\Configuration' => __DIR__ . '/../..' . '/src/Configuration/Configuration.php',
         'Rector\\Core\\Configuration\\CurrentNodeProvider' => __DIR__ . '/../..' . '/src/Configuration/CurrentNodeProvider.php',
         'Rector\\Core\\Configuration\\Option' => __DIR__ . '/../..' . '/src/Configuration/Option.php',
@@ -3468,9 +3449,9 @@ class ComposerStaticInit27ccce5055bf2ad0da846430c5540272
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit27ccce5055bf2ad0da846430c5540272::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit27ccce5055bf2ad0da846430c5540272::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit27ccce5055bf2ad0da846430c5540272::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit2f841dc6288aa7a74ae0b865f80227e5::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit2f841dc6288aa7a74ae0b865f80227e5::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit2f841dc6288aa7a74ae0b865f80227e5::$classMap;
 
         }, null, ClassLoader::class);
     }
