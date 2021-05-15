@@ -8,18 +8,18 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210514\Symfony\Component\VarDumper\Caster;
+namespace RectorPrefix20210515\Symfony\Component\VarDumper\Caster;
 
-use RectorPrefix20210514\Ramsey\Uuid\UuidInterface;
-use RectorPrefix20210514\Symfony\Component\VarDumper\Cloner\Stub;
+use RectorPrefix20210515\Ramsey\Uuid\UuidInterface;
+use RectorPrefix20210515\Symfony\Component\VarDumper\Cloner\Stub;
 /**
  * @author Grégoire Pineau <lyrixx@lyrixx.info>
  */
 final class UuidCaster
 {
-    public static function castRamseyUuid(\RectorPrefix20210514\Ramsey\Uuid\UuidInterface $c, array $a, \RectorPrefix20210514\Symfony\Component\VarDumper\Cloner\Stub $stub, bool $isNested) : array
+    public static function castRamseyUuid(\RectorPrefix20210515\Ramsey\Uuid\UuidInterface $c, array $a, \RectorPrefix20210515\Symfony\Component\VarDumper\Cloner\Stub $stub, bool $isNested) : array
     {
-        $a += [\RectorPrefix20210514\Symfony\Component\VarDumper\Caster\Caster::PREFIX_VIRTUAL . 'uuid' => (string) $c];
+        $a += [\RectorPrefix20210515\Symfony\Component\VarDumper\Caster\Caster::PREFIX_VIRTUAL . 'uuid' => (string) $c];
         return $a;
     }
 }

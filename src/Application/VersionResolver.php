@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Rector\Core\Application;
 
-use RectorPrefix20210514\Composer\InstalledVersions;
-use RectorPrefix20210514\Nette\Utils\Strings;
+use RectorPrefix20210515\Composer\InstalledVersions;
+use RectorPrefix20210515\Nette\Utils\Strings;
 /**
  * Inspired by https://github.com/symplify/symplify/pull/3179/files
  * Local resolver is needed, because PHPStan is unprefixing its InstalledVersion classes and the API is changing way too often.
@@ -19,7 +19,7 @@ final class VersionResolver
         if (\file_exists($intalledVersionsFilepath)) {
             require_once $intalledVersionsFilepath;
         }
-        $installedRawData = \RectorPrefix20210514\Composer\InstalledVersions::getRawData();
+        $installedRawData = \RectorPrefix20210515\Composer\InstalledVersions::getRawData();
         $rectorPackageData = $this->resolvePackageData($installedRawData);
         if ($rectorPackageData === null) {
             return 'Unknown';
@@ -32,7 +32,7 @@ final class VersionResolver
             if ($reference === null) {
                 return 'dev-main';
             }
-            return 'dev-main@' . \RectorPrefix20210514\Nette\Utils\Strings::substring($rectorPackageData['reference'], 0, 7);
+            return 'dev-main@' . \RectorPrefix20210515\Nette\Utils\Strings::substring($rectorPackageData['reference'], 0, 7);
         }
         return $rectorPackageData['version'];
     }
