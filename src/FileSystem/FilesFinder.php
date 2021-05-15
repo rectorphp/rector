@@ -3,7 +3,9 @@
 declare (strict_types=1);
 namespace Rector\Core\FileSystem;
 
+use RectorPrefix20210515\Nette\Caching\Cache;
 use RectorPrefix20210515\Nette\Utils\Strings;
+use Rector\Core\Configuration\Configuration;
 use RectorPrefix20210515\Symfony\Component\Finder\Finder;
 use RectorPrefix20210515\Symfony\Component\Finder\SplFileInfo;
 use RectorPrefix20210515\Symplify\Skipper\SkipCriteriaResolver\SkippedPathsResolver;
@@ -26,10 +28,6 @@ final class FilesFinder
      */
     private const ENDS_WITH_ASTERISK_REGEX = '#^[^*](.*?)\\*$#';
     /**
-     * @var SmartFileInfo[][]
-     */
-    private $fileInfosBySourceAndSuffixes = [];
-    /**
      * @var \Rector\Core\FileSystem\FilesystemTweaker
      */
     private $filesystemTweaker;
@@ -45,12 +43,22 @@ final class FilesFinder
      * @var \Symplify\Skipper\SkipCriteriaResolver\SkippedPathsResolver
      */
     private $skippedPathsResolver;
-    public function __construct(\Rector\Core\FileSystem\FilesystemTweaker $filesystemTweaker, \RectorPrefix20210515\Symplify\SmartFileSystem\Finder\FinderSanitizer $finderSanitizer, \RectorPrefix20210515\Symplify\SmartFileSystem\FileSystemFilter $fileSystemFilter, \RectorPrefix20210515\Symplify\Skipper\SkipCriteriaResolver\SkippedPathsResolver $skippedPathsResolver)
+    /**
+     * @var \Rector\Core\Configuration\Configuration
+     */
+    private $configuration;
+    /**
+     * @var \Nette\Caching\Cache
+     */
+    private $cache;
+    public function __construct(\Rector\Core\FileSystem\FilesystemTweaker $filesystemTweaker, \RectorPrefix20210515\Symplify\SmartFileSystem\Finder\FinderSanitizer $finderSanitizer, \RectorPrefix20210515\Symplify\SmartFileSystem\FileSystemFilter $fileSystemFilter, \RectorPrefix20210515\Symplify\Skipper\SkipCriteriaResolver\SkippedPathsResolver $skippedPathsResolver, \Rector\Core\Configuration\Configuration $configuration, \RectorPrefix20210515\Nette\Caching\Cache $cache)
     {
         $this->filesystemTweaker = $filesystemTweaker;
         $this->finderSanitizer = $finderSanitizer;
         $this->fileSystemFilter = $fileSystemFilter;
         $this->skippedPathsResolver = $skippedPathsResolver;
+        $this->configuration = $configuration;
+        $this->cache = $cache;
     }
     /**
      * @param string[] $source
@@ -60,9 +68,27 @@ final class FilesFinder
     public function findInDirectoriesAndFiles(array $source, array $suffixes) : array
     {
         $cacheKey = \md5(\serialize($source) . \serialize($suffixes));
-        if (isset($this->fileInfosBySourceAndSuffixes[$cacheKey])) {
-            return $this->fileInfosBySourceAndSuffixes[$cacheKey];
+        if (!$this->configuration->isCacheEnabled() || $this->configuration->shouldClearCache()) {
+            $this->cache->clean([\RectorPrefix20210515\Nette\Caching\Cache::ALL => \true]);
+            return $this->collectFileInfos($source, $suffixes);
         }
+        $loadCache = $this->cache->load($cacheKey);
+        if ($loadCache) {
+            $stringFiles = \unserialize($loadCache);
+            return $this->getSmartFileInfosFromStringFiles($stringFiles);
+        }
+        $smartFileInfos = $this->collectFileInfos($source, $suffixes);
+        $stringFiles = \serialize($this->convertFileInfosToStringFiles($smartFileInfos));
+        $this->cache->save($cacheKey, $stringFiles);
+        return $smartFileInfos;
+    }
+    /**
+     * @param string[] $source
+     * @param string[] $suffixes
+     * @return SmartFileInfo[]
+     */
+    private function collectFileInfos(array $source, array $suffixes) : array
+    {
         $filesAndDirectories = $this->filesystemTweaker->resolveWithFnmatch($source);
         $files = $this->fileSystemFilter->filterFiles($filesAndDirectories);
         $directories = $this->fileSystemFilter->filterDirectories($filesAndDirectories);
@@ -70,8 +96,31 @@ final class FilesFinder
         foreach ($files as $file) {
             $smartFileInfos[] = new \Symplify\SmartFileSystem\SmartFileInfo($file);
         }
-        $smartFileInfos = \array_merge($smartFileInfos, $this->findInDirectories($directories, $suffixes));
-        return $this->fileInfosBySourceAndSuffixes[$cacheKey] = $smartFileInfos;
+        return \array_merge($smartFileInfos, $this->findInDirectories($directories, $suffixes));
+    }
+    /**
+     * @param SmartFileInfo[] $smartFileInfos
+     * @return string[]
+     */
+    private function convertFileInfosToStringFiles(array $smartFileInfos) : array
+    {
+        $files = [];
+        foreach ($smartFileInfos as $smartFileInfo) {
+            $files[] = $smartFileInfo->getPathname();
+        }
+        return $files;
+    }
+    /**
+     * @param string[] $files
+     * @return SmartFileInfo[]
+     */
+    private function getSmartFileInfosFromStringFiles(array $files) : array
+    {
+        $smartFileInfos = [];
+        foreach ($files as $file) {
+            $smartFileInfos[] = new \Symplify\SmartFileSystem\SmartFileInfo($file);
+        }
+        return $smartFileInfos;
     }
     /**
      * @param string[] $directories
