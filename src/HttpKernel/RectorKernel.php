@@ -69,7 +69,6 @@ final class RectorKernel extends Kernel
     public function registerContainerConfiguration(LoaderInterface $loader): void
     {
         $loader->load(__DIR__ . '/../../config/config.php');
-
         foreach ($this->configFileInfos as $configFileInfo) {
             $loader->load($configFileInfo->getRealPath());
         }

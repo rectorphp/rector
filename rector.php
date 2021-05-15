@@ -104,6 +104,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         '*/Expected*/*',
     ]);
 
+    $parameters->set(Option::PHPSTAN_FOR_RECTOR_PATH, __DIR__ . '/phpstan-for-rector.neon');
     $parameters->set(Option::PHP_VERSION_FEATURES, PhpVersion::PHP_74);
     $parameters->set(Option::ENABLE_CACHE, true);
 };

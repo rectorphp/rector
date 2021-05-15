@@ -43,7 +43,7 @@ final class RectorConfigsResolver
 
     private function resolveFromInput(ArgvInput $argvInput): ?SmartFileInfo
     {
-        $configValue = $this->getOptionValue($argvInput, ['config', 'c']);
+        $configValue = $this->getOptionValue($argvInput, ['--config', '-c']);
         if ($configValue === null) {
             return null;
         }
