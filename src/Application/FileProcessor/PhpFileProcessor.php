@@ -240,8 +240,8 @@ final class PhpFileProcessor implements \Rector\Core\Contract\Processor\FileProc
         if (!$file->hasErrors()) {
             return;
         }
-        foreach ($file->getErrors() as $error) {
-            $this->symfonyStyle->error($error->getMessage());
+        foreach ($file->getErrors() as $rectorError) {
+            $this->symfonyStyle->error($rectorError->getMessage());
         }
     }
 }
