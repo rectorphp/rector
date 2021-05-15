@@ -12,13 +12,11 @@
             <directory>rules-tests</directory>
             <directory>packages-tests</directory>
             <directory>utils/*/tests</directory>
-            <exclude>rules-tests/NetteTesterToPHPUnit/Rector/RenameTesterTestToPHPUnitToTestFileRector/Source/*</exclude>
         </testsuite>
     </testsuites>
 
     <php>
         <ini name="memory_limit" value="-1" />
-        <const name="RECTOR_REPOSITORY" value="true"/>
         <env name="XDEBUG_MODE" value="coverage"/>
         <env name="KERNEL_CACHE_DIRECTORY" value="tmp/rector/cache"/>
     </php>

@@ -31,6 +31,7 @@ final class PHPStanServicesFactory
         $containerFactory = new ContainerFactory(getcwd());
 
         $additionalConfigFiles = [];
+
         $additionalConfigFiles[] = $parameterProvider->provideStringParameter(Option::PHPSTAN_FOR_RECTOR_PATH);
         $additionalConfigFiles[] = __DIR__ . '/../../../config/phpstan/static-reflection.neon';
         $additionalConfigFiles[] = __DIR__ . '/../../../config/phpstan/better-infer.neon';
