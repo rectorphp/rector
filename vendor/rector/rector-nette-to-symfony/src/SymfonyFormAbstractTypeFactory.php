@@ -20,11 +20,11 @@ use RectorPrefix20210515\Symfony\Component\Form\Extension\Core\Type\TextType;
 final class SymfonyFormAbstractTypeFactory
 {
     /**
-     * @var NodeFactory
+     * @var \Rector\Core\PhpParser\Node\NodeFactory
      */
     private $nodeFactory;
     /**
-     * @var NodeNameResolver
+     * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     public function __construct(\Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)

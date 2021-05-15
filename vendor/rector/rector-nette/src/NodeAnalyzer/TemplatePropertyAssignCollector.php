@@ -19,25 +19,9 @@ use Rector\NodeNestingScope\ValueObject\ControlStructure;
 final class TemplatePropertyAssignCollector
 {
     /**
-     * @var ScopeNestingComparator
-     */
-    private $scopeNestingComparator;
-    /**
-     * @var BetterNodeFinder
-     */
-    private $betterNodeFinder;
-    /**
-     * @var ThisTemplatePropertyFetchAnalyzer
-     */
-    private $thisTemplatePropertyFetchAnalyzer;
-    /**
-     * @var Return_|null
+     * @var \PhpParser\Node\Stmt\Return_|null
      */
     private $lastReturn;
-    /**
-     * @var ReturnAnalyzer
-     */
-    private $returnAnalyzer;
     /**
      * @var AlwaysTemplateParameterAssign[]
      */
@@ -46,6 +30,22 @@ final class TemplatePropertyAssignCollector
      * @var ConditionalTemplateParameterAssign[]
      */
     private $conditionalTemplateParameterAssigns = [];
+    /**
+     * @var \Rector\NodeNestingScope\ScopeNestingComparator
+     */
+    private $scopeNestingComparator;
+    /**
+     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
+     */
+    private $betterNodeFinder;
+    /**
+     * @var \Rector\Nette\NodeAnalyzer\ThisTemplatePropertyFetchAnalyzer
+     */
+    private $thisTemplatePropertyFetchAnalyzer;
+    /**
+     * @var \Rector\Nette\NodeAnalyzer\ReturnAnalyzer
+     */
+    private $returnAnalyzer;
     public function __construct(\Rector\NodeNestingScope\ScopeNestingComparator $scopeNestingComparator, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Nette\NodeAnalyzer\ThisTemplatePropertyFetchAnalyzer $thisTemplatePropertyFetchAnalyzer, \Rector\Nette\NodeAnalyzer\ReturnAnalyzer $returnAnalyzer)
     {
         $this->scopeNestingComparator = $scopeNestingComparator;

@@ -10,7 +10,7 @@ use Rector\NodeCollector\ScopeResolver\ParentClassScopeResolver;
 final class ControllerMethodAnalyzer
 {
     /**
-     * @var ParentClassScopeResolver
+     * @var \Rector\NodeCollector\ScopeResolver\ParentClassScopeResolver
      */
     private $parentClassScopeResolver;
     public function __construct(\Rector\NodeCollector\ScopeResolver\ParentClassScopeResolver $parentClassScopeResolver)

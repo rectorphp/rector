@@ -11,7 +11,7 @@ use Rector\CodingStyle\Naming\ClassNaming;
 final class DispatchMethodCallFactory
 {
     /**
-     * @var ClassNaming
+     * @var \Rector\CodingStyle\Naming\ClassNaming
      */
     private $classNaming;
     public function __construct(\Rector\CodingStyle\Naming\ClassNaming $classNaming)

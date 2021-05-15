@@ -36,35 +36,35 @@ final class ClassMethodRenderAnalyzer
      */
     private $conditionalAssigns = [];
     /**
-     * @var SimpleCallableNodeTraverser
-     */
-    private $simpleCallableNodeTraverser;
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-    /**
      * @var Expr[]
      */
     private $templateFileExprs = [];
-    /**
-     * @var ScopeNestingComparator
-     */
-    private $scopeNestingComparator;
-    /**
-     * @var BetterNodeFinder
-     */
-    private $betterNodeFinder;
-    /**
-     * @var ThisTemplatePropertyFetchAnalyzer
-     */
-    private $thisTemplatePropertyFetchAnalyzer;
     /**
      * @var Return_|null
      */
     private $lastReturn;
     /**
-     * @var ReturnAnalyzer
+     * @var \Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser
+     */
+    private $simpleCallableNodeTraverser;
+    /**
+     * @var \Rector\NodeNameResolver\NodeNameResolver
+     */
+    private $nodeNameResolver;
+    /**
+     * @var \Rector\NodeNestingScope\ScopeNestingComparator
+     */
+    private $scopeNestingComparator;
+    /**
+     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
+     */
+    private $betterNodeFinder;
+    /**
+     * @var \Rector\Nette\NodeAnalyzer\ThisTemplatePropertyFetchAnalyzer
+     */
+    private $thisTemplatePropertyFetchAnalyzer;
+    /**
+     * @var \Rector\Nette\NodeAnalyzer\ReturnAnalyzer
      */
     private $returnAnalyzer;
     public function __construct(\RectorPrefix20210515\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeNestingScope\ScopeNestingComparator $scopeNestingComparator, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Nette\NodeAnalyzer\ThisTemplatePropertyFetchAnalyzer $thisTemplatePropertyFetchAnalyzer, \Rector\Nette\NodeAnalyzer\ReturnAnalyzer $returnAnalyzer)

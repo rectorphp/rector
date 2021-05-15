@@ -22,11 +22,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class GetParameterToConstructorInjectionRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var PropertyNaming
+     * @var \Rector\Naming\Naming\PropertyNaming
      */
     private $propertyNaming;
     /**
-     * @var ReflectionProvider
+     * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
     public function __construct(\Rector\Naming\Naming\PropertyNaming $propertyNaming, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)

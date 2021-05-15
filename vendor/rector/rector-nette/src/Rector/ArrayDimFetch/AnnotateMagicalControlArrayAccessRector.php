@@ -29,27 +29,27 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class AnnotateMagicalControlArrayAccessRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var MethodNamesByInputNamesResolver
+     * @var \Rector\Nette\NodeResolver\MethodNamesByInputNamesResolver
      */
     private $methodNamesByInputNamesResolver;
     /**
-     * @var ArrayDimFetchRenamer
+     * @var \Rector\Naming\ArrayDimFetchRenamer
      */
     private $arrayDimFetchRenamer;
     /**
-     * @var ArrayDimFetchAnalyzer
+     * @var \Rector\Nette\NodeAnalyzer\ArrayDimFetchAnalyzer
      */
     private $arrayDimFetchAnalyzer;
     /**
-     * @var ControlDimFetchAnalyzer
+     * @var \Rector\Nette\NodeAnalyzer\ControlDimFetchAnalyzer
      */
     private $controlDimFetchAnalyzer;
     /**
-     * @var NetteControlNaming
+     * @var \Rector\Nette\Naming\NetteControlNaming
      */
     private $netteControlNaming;
     /**
-     * @var AssignAnalyzer
+     * @var \Rector\Nette\NodeAnalyzer\AssignAnalyzer
      */
     private $assignAnalyzer;
     public function __construct(\Rector\Nette\NodeResolver\MethodNamesByInputNamesResolver $methodNamesByInputNamesResolver, \Rector\Naming\ArrayDimFetchRenamer $arrayDimFetchRenamer, \Rector\Nette\NodeAnalyzer\ArrayDimFetchAnalyzer $arrayDimFetchAnalyzer, \Rector\Nette\NodeAnalyzer\ControlDimFetchAnalyzer $controlDimFetchAnalyzer, \Rector\Nette\Naming\NetteControlNaming $netteControlNaming, \Rector\Nette\NodeAnalyzer\AssignAnalyzer $assignAnalyzer)

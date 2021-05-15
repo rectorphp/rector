@@ -13,11 +13,11 @@ use RectorPrefix20210515\Symplify\Astral\ValueObject\NodeBuilder\NamespaceBuilde
 final class RouteNameClassFactory
 {
     /**
-     * @var NodeFactory
+     * @var \Rector\Core\PhpParser\Node\NodeFactory
      */
     private $nodeFactory;
     /**
-     * @var ComposerNamespaceMatcher
+     * @var \Rector\Symfony\Composer\ComposerNamespaceMatcher
      */
     private $composerNamespaceMatcher;
     public function __construct(\Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\Symfony\Composer\ComposerNamespaceMatcher $composerNamespaceMatcher)

@@ -9,23 +9,23 @@ final class ModalToGetSet
     /**
      * @var string
      */
-    private $type;
-    /**
-     * @var string
-     */
-    private $unprefixedMethod;
-    /**
-     * @var string
-     */
     private $getMethod;
     /**
      * @var string
      */
     private $setMethod;
     /**
+     * @var string
+     */
+    private $type;
+    /**
+     * @var string
+     */
+    private $unprefixedMethod;
+    /**
      * @var int
      */
-    private $minimalSetterArgumentCount;
+    private $minimalSetterArgumentCount = 1;
     /**
      * @var string|null
      */
@@ -34,10 +34,10 @@ final class ModalToGetSet
     {
         $this->type = $type;
         $this->unprefixedMethod = $unprefixedMethod;
-        $this->getMethod = $getMethod ?? 'get' . \ucfirst($unprefixedMethod);
-        $this->setMethod = $setMethod ?? 'set' . \ucfirst($unprefixedMethod);
         $this->minimalSetterArgumentCount = $minimalSetterArgumentCount;
         $this->firstArgumentType = $firstArgumentType;
+        $this->getMethod = $getMethod ?? 'get' . \ucfirst($unprefixedMethod);
+        $this->setMethod = $setMethod ?? 'set' . \ucfirst($unprefixedMethod);
     }
     public function getObjectType() : \PHPStan\Type\ObjectType
     {

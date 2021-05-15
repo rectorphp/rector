@@ -24,17 +24,17 @@ final class OnPropertyMagicCallProvider
      */
     private $onPropertyMagicCalls = [];
     /**
-     * @var NodeRepository
-     */
-    private $nodeRepository;
-    /**
-     * @var NodeNameResolver
+     * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
+    /**
+     * @var \Rector\NodeCollector\NodeCollector\NodeRepository
+     */
+    private $nodeRepository;
     public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeCollector\NodeCollector\NodeRepository $nodeRepository)
     {
-        $this->nodeRepository = $nodeRepository;
         $this->nodeNameResolver = $nodeNameResolver;
+        $this->nodeRepository = $nodeRepository;
     }
     /**
      * @return MethodCall[]

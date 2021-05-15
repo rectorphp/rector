@@ -20,23 +20,23 @@ use Rector\Symfony\ValueObject\ServiceMap\ServiceMap;
 final class JMSDITypeResolver
 {
     /**
-     * @var ServiceMapProvider
+     * @var \Rector\Symfony\DataProvider\ServiceMapProvider
      */
     private $serviceMapProvider;
     /**
-     * @var PhpDocInfoFactory
+     * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
     private $phpDocInfoFactory;
     /**
-     * @var ReflectionProvider
+     * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
     /**
-     * @var NodeNameResolver
+     * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     /**
-     * @var CurrentFileProvider
+     * @var \Rector\Core\Provider\CurrentFileProvider
      */
     private $currentFileProvider;
     public function __construct(\Rector\Symfony\DataProvider\ServiceMapProvider $serviceMapProvider, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\Provider\CurrentFileProvider $currentFileProvider)

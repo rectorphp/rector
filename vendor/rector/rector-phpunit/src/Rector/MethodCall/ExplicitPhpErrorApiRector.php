@@ -26,11 +26,11 @@ final class ExplicitPhpErrorApiRector extends \Rector\Core\Rector\AbstractRector
      */
     private const REPLACEMENTS = ['PHPUnit\\Framework\\TestCase\\Notice' => 'expectNotice', 'PHPUnit\\Framework\\TestCase\\Deprecated' => 'expectDeprecation', 'PHPUnit\\Framework\\TestCase\\Error' => 'expectError', 'PHPUnit\\Framework\\TestCase\\Warning' => 'expectWarning'];
     /**
-     * @var AssertCallFactory
+     * @var \Rector\PHPUnit\NodeFactory\AssertCallFactory
      */
     private $assertCallFactory;
     /**
-     * @var TestsNodeAnalyzer
+     * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
      */
     private $testsNodeAnalyzer;
     public function __construct(\Rector\PHPUnit\NodeFactory\AssertCallFactory $assertCallFactory, \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer $testsNodeAnalyzer)

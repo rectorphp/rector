@@ -16,7 +16,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class NetteAssertToPHPUnitAssertRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var AssertManipulator
+     * @var \Rector\NetteToSymfony\AssertManipulator
      */
     private $assertManipulator;
     public function __construct(\Rector\NetteToSymfony\AssertManipulator $assertManipulator)

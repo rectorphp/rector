@@ -23,15 +23,15 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class NetteInjectToConstructorInjectionRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var PropertyUsageAnalyzer
+     * @var \Rector\FamilyTree\NodeAnalyzer\PropertyUsageAnalyzer
      */
     private $propertyUsageAnalyzer;
     /**
-     * @var NetteInjectPropertyAnalyzer
+     * @var \Rector\Nette\NodeAnalyzer\NetteInjectPropertyAnalyzer
      */
     private $netteInjectPropertyAnalyzer;
     /**
-     * @var PhpDocTagRemover
+     * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover
      */
     private $phpDocTagRemover;
     public function __construct(\Rector\FamilyTree\NodeAnalyzer\PropertyUsageAnalyzer $propertyUsageAnalyzer, \Rector\Nette\NodeAnalyzer\NetteInjectPropertyAnalyzer $netteInjectPropertyAnalyzer, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover $phpDocTagRemover)

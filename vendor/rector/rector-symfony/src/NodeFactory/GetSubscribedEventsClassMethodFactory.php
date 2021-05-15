@@ -35,27 +35,27 @@ final class GetSubscribedEventsClassMethodFactory
      */
     private const GET_SUBSCRIBED_EVENTS_METHOD_NAME = 'getSubscribedEvents';
     /**
-     * @var NodeFactory
+     * @var \Rector\Core\PhpParser\Node\NodeFactory
      */
     private $nodeFactory;
     /**
-     * @var VisibilityManipulator
+     * @var \Rector\Privatization\NodeManipulator\VisibilityManipulator
      */
     private $visibilityManipulator;
     /**
-     * @var PhpVersionProvider
+     * @var \Rector\Core\Php\PhpVersionProvider
      */
     private $phpVersionProvider;
     /**
-     * @var PhpDocInfoFactory
+     * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
     private $phpDocInfoFactory;
     /**
-     * @var PhpDocTypeChanger
+     * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger
      */
     private $phpDocTypeChanger;
     /**
-     * @var EventReferenceFactory
+     * @var \Rector\Symfony\NodeFactory\EventReferenceFactory
      */
     private $eventReferenceFactory;
     public function __construct(\Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\Privatization\NodeManipulator\VisibilityManipulator $visibilityManipulator, \Rector\Core\Php\PhpVersionProvider $phpVersionProvider, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger, \Rector\Symfony\NodeFactory\EventReferenceFactory $eventReferenceFactory)

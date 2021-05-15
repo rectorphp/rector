@@ -9,23 +9,29 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Nette\Contract\FormControlTypeResolverInterface;
-use Rector\Nette\Contract\MethodNamesByInputNamesResolverAwareInterface;
 use Rector\Nette\NodeResolver\MethodNamesByInputNamesResolver;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-final class ThisVariableInAnotherMethodFormControlTypeResolver implements \Rector\Nette\Contract\FormControlTypeResolverInterface, \Rector\Nette\Contract\MethodNamesByInputNamesResolverAwareInterface
+final class ThisVariableInAnotherMethodFormControlTypeResolver implements \Rector\Nette\Contract\FormControlTypeResolverInterface
 {
     /**
-     * @var MethodNamesByInputNamesResolver
+     * @var \Rector\Nette\NodeResolver\MethodNamesByInputNamesResolver
      */
     private $methodNamesByInputNamesResolver;
     /**
-     * @var NodeNameResolver
+     * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
+    }
+    /**
+     * @required
+     */
+    public function autowireThisVariableInAnotherMethodFormControlTypeResolver(\Rector\Nette\NodeResolver\MethodNamesByInputNamesResolver $methodNamesByInputNamesResolver) : void
+    {
+        $this->methodNamesByInputNamesResolver = $methodNamesByInputNamesResolver;
     }
     /**
      * @return array<string, string>
@@ -52,9 +58,5 @@ final class ThisVariableInAnotherMethodFormControlTypeResolver implements \Recto
             return [];
         }
         return $this->methodNamesByInputNamesResolver->resolveExpr($constructorClassMethod);
-    }
-    public function setResolver(\Rector\Nette\NodeResolver\MethodNamesByInputNamesResolver $methodNamesByInputNamesResolver) : void
-    {
-        $this->methodNamesByInputNamesResolver = $methodNamesByInputNamesResolver;
     }
 }

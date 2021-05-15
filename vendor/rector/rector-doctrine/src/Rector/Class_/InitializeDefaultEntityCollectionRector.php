@@ -21,7 +21,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class InitializeDefaultEntityCollectionRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var ClassDependencyManipulator
+     * @var \Rector\Core\NodeManipulator\ClassDependencyManipulator
      */
     private $classDependencyManipulator;
     public function __construct(\Rector\Core\NodeManipulator\ClassDependencyManipulator $classDependencyManipulator)

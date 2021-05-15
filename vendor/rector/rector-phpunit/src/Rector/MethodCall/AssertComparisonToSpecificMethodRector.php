@@ -35,18 +35,18 @@ final class AssertComparisonToSpecificMethodRector extends \Rector\Core\Rector\A
      */
     private $binaryOpWithAssertMethods = [];
     /**
-     * @var IdentifierManipulator
+     * @var \Rector\Renaming\NodeManipulator\IdentifierManipulator
      */
     private $identifierManipulator;
     /**
-     * @var TestsNodeAnalyzer
+     * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
      */
     private $testsNodeAnalyzer;
     public function __construct(\Rector\Renaming\NodeManipulator\IdentifierManipulator $identifierManipulator, \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer $testsNodeAnalyzer)
     {
         $this->identifierManipulator = $identifierManipulator;
-        $this->binaryOpWithAssertMethods = [new \Rector\PHPUnit\ValueObject\BinaryOpWithAssertMethod(\PhpParser\Node\Expr\BinaryOp\Identical::class, 'assertSame', 'assertNotSame'), new \Rector\PHPUnit\ValueObject\BinaryOpWithAssertMethod(\PhpParser\Node\Expr\BinaryOp\NotIdentical::class, 'assertNotSame', 'assertSame'), new \Rector\PHPUnit\ValueObject\BinaryOpWithAssertMethod(\PhpParser\Node\Expr\BinaryOp\Equal::class, 'assertEquals', 'assertNotEquals'), new \Rector\PHPUnit\ValueObject\BinaryOpWithAssertMethod(\PhpParser\Node\Expr\BinaryOp\NotEqual::class, 'assertNotEquals', 'assertEquals'), new \Rector\PHPUnit\ValueObject\BinaryOpWithAssertMethod(\PhpParser\Node\Expr\BinaryOp\Greater::class, 'assertGreaterThan', 'assertLessThan'), new \Rector\PHPUnit\ValueObject\BinaryOpWithAssertMethod(\PhpParser\Node\Expr\BinaryOp\Smaller::class, 'assertLessThan', 'assertGreaterThan'), new \Rector\PHPUnit\ValueObject\BinaryOpWithAssertMethod(\PhpParser\Node\Expr\BinaryOp\GreaterOrEqual::class, 'assertGreaterThanOrEqual', 'assertLessThanOrEqual'), new \Rector\PHPUnit\ValueObject\BinaryOpWithAssertMethod(\PhpParser\Node\Expr\BinaryOp\SmallerOrEqual::class, 'assertLessThanOrEqual', 'assertGreaterThanOrEqual')];
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
+        $this->binaryOpWithAssertMethods = [new \Rector\PHPUnit\ValueObject\BinaryOpWithAssertMethod(\PhpParser\Node\Expr\BinaryOp\Identical::class, 'assertSame', 'assertNotSame'), new \Rector\PHPUnit\ValueObject\BinaryOpWithAssertMethod(\PhpParser\Node\Expr\BinaryOp\NotIdentical::class, 'assertNotSame', 'assertSame'), new \Rector\PHPUnit\ValueObject\BinaryOpWithAssertMethod(\PhpParser\Node\Expr\BinaryOp\Equal::class, 'assertEquals', 'assertNotEquals'), new \Rector\PHPUnit\ValueObject\BinaryOpWithAssertMethod(\PhpParser\Node\Expr\BinaryOp\NotEqual::class, 'assertNotEquals', 'assertEquals'), new \Rector\PHPUnit\ValueObject\BinaryOpWithAssertMethod(\PhpParser\Node\Expr\BinaryOp\Greater::class, 'assertGreaterThan', 'assertLessThan'), new \Rector\PHPUnit\ValueObject\BinaryOpWithAssertMethod(\PhpParser\Node\Expr\BinaryOp\Smaller::class, 'assertLessThan', 'assertGreaterThan'), new \Rector\PHPUnit\ValueObject\BinaryOpWithAssertMethod(\PhpParser\Node\Expr\BinaryOp\GreaterOrEqual::class, 'assertGreaterThanOrEqual', 'assertLessThanOrEqual'), new \Rector\PHPUnit\ValueObject\BinaryOpWithAssertMethod(\PhpParser\Node\Expr\BinaryOp\SmallerOrEqual::class, 'assertLessThanOrEqual', 'assertGreaterThanOrEqual')];
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {

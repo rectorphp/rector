@@ -27,19 +27,19 @@ final class AddEntityIdByConditionRector extends \Rector\Core\Rector\AbstractRec
      */
     private $detectedTraits = [];
     /**
-     * @var EntityIdNodeFactory
+     * @var \Rector\Doctrine\NodeFactory\EntityIdNodeFactory
      */
     private $entityIdNodeFactory;
     /**
-     * @var ClassInsertManipulator
+     * @var \Rector\Core\NodeManipulator\ClassInsertManipulator
      */
     private $classInsertManipulator;
     /**
-     * @var ReflectionProvider
+     * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
     /**
-     * @var ClassAnalyzer
+     * @var \Rector\Core\NodeAnalyzer\ClassAnalyzer
      */
     private $classAnalyzer;
     public function __construct(\Rector\Doctrine\NodeFactory\EntityIdNodeFactory $entityIdNodeFactory, \Rector\Core\NodeManipulator\ClassInsertManipulator $classInsertManipulator, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\Core\NodeAnalyzer\ClassAnalyzer $classAnalyzer)

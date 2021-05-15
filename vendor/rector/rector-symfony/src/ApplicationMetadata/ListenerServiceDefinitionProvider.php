@@ -23,7 +23,7 @@ final class ListenerServiceDefinitionProvider
      */
     private $listenerClassesToEvents = [];
     /**
-     * @var ServiceMapProvider
+     * @var \Rector\Symfony\DataProvider\ServiceMapProvider
      */
     private $serviceMapProvider;
     public function __construct(\Rector\Symfony\DataProvider\ServiceMapProvider $serviceMapProvider)

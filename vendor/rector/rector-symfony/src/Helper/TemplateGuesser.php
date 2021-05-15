@@ -41,17 +41,17 @@ final class TemplateGuesser
      */
     private const ACTION_MATCH_REGEX = '#Action$#';
     /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-    /**
-     * @var BundleClassResolver
+     * @var \Rector\Symfony\BundleClassResolver
      */
     private $bundleClassResolver;
+    /**
+     * @var \Rector\NodeNameResolver\NodeNameResolver
+     */
+    private $nodeNameResolver;
     public function __construct(\Rector\Symfony\BundleClassResolver $bundleClassResolver, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
     {
-        $this->nodeNameResolver = $nodeNameResolver;
         $this->bundleClassResolver = $bundleClassResolver;
+        $this->nodeNameResolver = $nodeNameResolver;
     }
     public function resolveFromClassMethodNode(\PhpParser\Node\Stmt\ClassMethod $classMethod) : string
     {

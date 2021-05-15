@@ -18,26 +18,26 @@ use Rector\StaticTypeMapper\StaticTypeMapper;
 final class ReturnTypeDeclarationUpdater
 {
     /**
-     * @var StaticTypeMapper
-     */
-    private $staticTypeMapper;
-    /**
-     * @var PhpVersionProvider
-     */
-    private $phpVersionProvider;
-    /**
-     * @var NodeNameResolver
+     * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     /**
-     * @var PhpDocInfoFactory
+     * @var \Rector\Core\Php\PhpVersionProvider
+     */
+    private $phpVersionProvider;
+    /**
+     * @var \Rector\StaticTypeMapper\StaticTypeMapper
+     */
+    private $staticTypeMapper;
+    /**
+     * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
     private $phpDocInfoFactory;
     public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\Php\PhpVersionProvider $phpVersionProvider, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory)
     {
-        $this->staticTypeMapper = $staticTypeMapper;
-        $this->phpVersionProvider = $phpVersionProvider;
         $this->nodeNameResolver = $nodeNameResolver;
+        $this->phpVersionProvider = $phpVersionProvider;
+        $this->staticTypeMapper = $staticTypeMapper;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
     /**

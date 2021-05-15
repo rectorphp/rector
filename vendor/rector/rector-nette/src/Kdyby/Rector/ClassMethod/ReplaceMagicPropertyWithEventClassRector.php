@@ -22,26 +22,26 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ReplaceMagicPropertyWithEventClassRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var EventClassNaming
-     */
-    private $eventClassNaming;
-    /**
-     * @var ListeningClassMethodArgumentManipulator
-     */
-    private $listeningClassMethodArgumentManipulator;
-    /**
-     * @var EventAndListenerTreeProvider
+     * @var \Rector\Nette\Kdyby\DataProvider\EventAndListenerTreeProvider
      */
     private $eventAndListenerTreeProvider;
     /**
-     * @var GetSubscribedEventsClassMethodAnalyzer
+     * @var \Rector\Nette\Kdyby\Naming\EventClassNaming
+     */
+    private $eventClassNaming;
+    /**
+     * @var \Rector\Nette\Kdyby\NodeManipulator\ListeningClassMethodArgumentManipulator
+     */
+    private $listeningClassMethodArgumentManipulator;
+    /**
+     * @var \Rector\Nette\Kdyby\NodeAnalyzer\GetSubscribedEventsClassMethodAnalyzer
      */
     private $getSubscribedEventsClassMethodAnalyzer;
     public function __construct(\Rector\Nette\Kdyby\DataProvider\EventAndListenerTreeProvider $eventAndListenerTreeProvider, \Rector\Nette\Kdyby\Naming\EventClassNaming $eventClassNaming, \Rector\Nette\Kdyby\NodeManipulator\ListeningClassMethodArgumentManipulator $listeningClassMethodArgumentManipulator, \Rector\Nette\Kdyby\NodeAnalyzer\GetSubscribedEventsClassMethodAnalyzer $getSubscribedEventsClassMethodAnalyzer)
     {
+        $this->eventAndListenerTreeProvider = $eventAndListenerTreeProvider;
         $this->eventClassNaming = $eventClassNaming;
         $this->listeningClassMethodArgumentManipulator = $listeningClassMethodArgumentManipulator;
-        $this->eventAndListenerTreeProvider = $eventAndListenerTreeProvider;
         $this->getSubscribedEventsClassMethodAnalyzer = $getSubscribedEventsClassMethodAnalyzer;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition

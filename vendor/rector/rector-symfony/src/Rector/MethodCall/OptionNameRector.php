@@ -22,11 +22,11 @@ final class OptionNameRector extends \Rector\Core\Rector\AbstractRector
      */
     private const OLD_TO_NEW_OPTION = ['precision' => 'scale', 'virtual' => 'inherit_data'];
     /**
-     * @var FormAddMethodCallAnalyzer
+     * @var \Rector\Symfony\NodeAnalyzer\FormAddMethodCallAnalyzer
      */
     private $formAddMethodCallAnalyzer;
     /**
-     * @var FormOptionsArrayMatcher
+     * @var \Rector\Symfony\NodeAnalyzer\FormOptionsArrayMatcher
      */
     private $formOptionsArrayMatcher;
     public function __construct(\Rector\Symfony\NodeAnalyzer\FormAddMethodCallAnalyzer $formAddMethodCallAnalyzer, \Rector\Symfony\NodeAnalyzer\FormOptionsArrayMatcher $formOptionsArrayMatcher)

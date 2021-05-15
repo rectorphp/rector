@@ -27,7 +27,7 @@ final class RenameTesterTestToPHPUnitToTestFileRector extends \Rector\Core\Recto
      */
     private const PHPT_SUFFIX_REGEX = '#\\.phpt$#';
     /**
-     * @var FileInfoDeletionAnalyzer
+     * @var \Rector\PSR4\FileInfoAnalyzer\FileInfoDeletionAnalyzer
      */
     private $fileInfoDeletionAnalyzer;
     public function __construct(\Rector\PSR4\FileInfoAnalyzer\FileInfoDeletionAnalyzer $fileInfoDeletionAnalyzer)

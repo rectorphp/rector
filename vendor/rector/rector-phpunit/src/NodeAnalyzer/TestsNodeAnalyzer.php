@@ -16,21 +16,21 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 final class TestsNodeAnalyzer
 {
     /**
-     * @var NodeTypeResolver
-     */
-    private $nodeTypeResolver;
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-    /**
-     * @var PhpDocInfoFactory
-     */
-    private $phpDocInfoFactory;
-    /**
      * @var ObjectType[]
      */
     private $testCaseObjectTypes = [];
+    /**
+     * @var \Rector\NodeTypeResolver\NodeTypeResolver
+     */
+    private $nodeTypeResolver;
+    /**
+     * @var \Rector\NodeNameResolver\NodeNameResolver
+     */
+    private $nodeNameResolver;
+    /**
+     * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
+     */
+    private $phpDocInfoFactory;
     public function __construct(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;

@@ -26,42 +26,42 @@ final class EventAndListenerTreeProvider
      */
     private $eventAndListenerTrees = [];
     /**
-     * @var OnPropertyMagicCallProvider
-     */
-    private $onPropertyMagicCallProvider;
-    /**
-     * @var ListeningMethodsCollector
-     */
-    private $listeningMethodsCollector;
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-    /**
-     * @var EventClassNaming
-     */
-    private $eventClassNaming;
-    /**
-     * @var EventValueObjectClassFactory
-     */
-    private $eventValueObjectClassFactory;
-    /**
-     * @var DispatchMethodCallFactory
+     * @var \Rector\Nette\Kdyby\NodeFactory\DispatchMethodCallFactory
      */
     private $dispatchMethodCallFactory;
     /**
-     * @var GetSubscribedEventsClassMethodProvider
+     * @var \Rector\Nette\Kdyby\Naming\EventClassNaming
+     */
+    private $eventClassNaming;
+    /**
+     * @var \Rector\Nette\Kdyby\NodeFactory\EventValueObjectClassFactory
+     */
+    private $eventValueObjectClassFactory;
+    /**
+     * @var \Rector\Nette\Kdyby\DataProvider\GetSubscribedEventsClassMethodProvider
      */
     private $getSubscribedEventsClassMethodProvider;
+    /**
+     * @var \Rector\Nette\Kdyby\NodeResolver\ListeningMethodsCollector
+     */
+    private $listeningMethodsCollector;
+    /**
+     * @var \Rector\NodeNameResolver\NodeNameResolver
+     */
+    private $nodeNameResolver;
+    /**
+     * @var \Rector\Nette\Kdyby\DataProvider\OnPropertyMagicCallProvider
+     */
+    private $onPropertyMagicCallProvider;
     public function __construct(\Rector\Nette\Kdyby\NodeFactory\DispatchMethodCallFactory $dispatchMethodCallFactory, \Rector\Nette\Kdyby\Naming\EventClassNaming $eventClassNaming, \Rector\Nette\Kdyby\NodeFactory\EventValueObjectClassFactory $eventValueObjectClassFactory, \Rector\Nette\Kdyby\DataProvider\GetSubscribedEventsClassMethodProvider $getSubscribedEventsClassMethodProvider, \Rector\Nette\Kdyby\NodeResolver\ListeningMethodsCollector $listeningMethodsCollector, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Nette\Kdyby\DataProvider\OnPropertyMagicCallProvider $onPropertyMagicCallProvider)
     {
-        $this->onPropertyMagicCallProvider = $onPropertyMagicCallProvider;
-        $this->listeningMethodsCollector = $listeningMethodsCollector;
-        $this->nodeNameResolver = $nodeNameResolver;
+        $this->dispatchMethodCallFactory = $dispatchMethodCallFactory;
         $this->eventClassNaming = $eventClassNaming;
         $this->eventValueObjectClassFactory = $eventValueObjectClassFactory;
-        $this->dispatchMethodCallFactory = $dispatchMethodCallFactory;
         $this->getSubscribedEventsClassMethodProvider = $getSubscribedEventsClassMethodProvider;
+        $this->listeningMethodsCollector = $listeningMethodsCollector;
+        $this->nodeNameResolver = $nodeNameResolver;
+        $this->onPropertyMagicCallProvider = $onPropertyMagicCallProvider;
     }
     public function matchMethodCall(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\Rector\Nette\Kdyby\ValueObject\EventAndListenerTree
     {

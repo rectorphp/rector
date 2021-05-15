@@ -27,11 +27,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ChangeSetParametersArrayToArrayCollectionRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var ArrayTypeAnalyzer
+     * @var \Rector\NodeTypeResolver\TypeAnalyzer\ArrayTypeAnalyzer
      */
     private $arrayTypeAnalyzer;
     /**
-     * @var FluentChainMethodCallNodeAnalyzer
+     * @var \Rector\Defluent\NodeAnalyzer\FluentChainMethodCallNodeAnalyzer
      */
     private $fluentChainMethodCallNodeAnalyzer;
     public function __construct(\Rector\NodeTypeResolver\TypeAnalyzer\ArrayTypeAnalyzer $arrayTypeAnalyzer, \Rector\Defluent\NodeAnalyzer\FluentChainMethodCallNodeAnalyzer $fluentChainMethodCallNodeAnalyzer)

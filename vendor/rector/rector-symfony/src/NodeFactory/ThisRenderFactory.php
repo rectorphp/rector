@@ -23,32 +23,32 @@ use Rector\Symfony\Helper\TemplateGuesser;
 final class ThisRenderFactory
 {
     /**
-     * @var NodeFactory
-     */
-    private $nodeFactory;
-    /**
-     * @var TemplateGuesser
-     */
-    private $templateGuesser;
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-    /**
-     * @var ArrayFromCompactFactory
+     * @var \Rector\Symfony\NodeFactory\ArrayFromCompactFactory
      */
     private $arrayFromCompactFactory;
     /**
-     * @var NodeTypeResolver
+     * @var \Rector\Core\PhpParser\Node\NodeFactory
+     */
+    private $nodeFactory;
+    /**
+     * @var \Rector\NodeNameResolver\NodeNameResolver
+     */
+    private $nodeNameResolver;
+    /**
+     * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;
+    /**
+     * @var \Rector\Symfony\Helper\TemplateGuesser
+     */
+    private $templateGuesser;
     public function __construct(\Rector\Symfony\NodeFactory\ArrayFromCompactFactory $arrayFromCompactFactory, \Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\Symfony\Helper\TemplateGuesser $templateGuesser)
     {
-        $this->nodeFactory = $nodeFactory;
-        $this->templateGuesser = $templateGuesser;
-        $this->nodeNameResolver = $nodeNameResolver;
         $this->arrayFromCompactFactory = $arrayFromCompactFactory;
+        $this->nodeFactory = $nodeFactory;
+        $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
+        $this->templateGuesser = $templateGuesser;
     }
     public function create(\PhpParser\Node\Stmt\ClassMethod $classMethod, ?\PhpParser\Node\Stmt\Return_ $return, \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode $templateDoctrineAnnotationTagValueNode) : \PhpParser\Node\Expr\MethodCall
     {

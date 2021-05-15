@@ -11,9 +11,9 @@ final class DataProviderClassMethodRecipe
      */
     private $methodName;
     /**
-     * @var Arg[]
+     * @var mixed[]
      */
-    private $args = [];
+    private $args;
     /**
      * @param Arg[] $args
      */

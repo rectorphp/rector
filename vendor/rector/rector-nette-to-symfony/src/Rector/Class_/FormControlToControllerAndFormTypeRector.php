@@ -26,19 +26,19 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class FormControlToControllerAndFormTypeRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var OnFormVariableMethodCallsCollector
+     * @var \Rector\NetteToSymfony\Collector\OnFormVariableMethodCallsCollector
      */
     private $onFormVariableMethodCallsCollector;
     /**
-     * @var SymfonyControllerFactory
+     * @var \Rector\NetteToSymfony\NodeFactory\SymfonyControllerFactory
      */
     private $symfonyControllerFactory;
     /**
-     * @var BuildFormClassMethodFactory
+     * @var \Rector\NetteToSymfony\NodeFactory\BuildFormClassMethodFactory
      */
     private $buildFormClassMethodFactory;
     /**
-     * @var SymfonyMethodCallsFactory
+     * @var \Rector\NetteToSymfony\NodeFactory\SymfonyMethodCallsFactory
      */
     private $symfonyMethodCallsFactory;
     public function __construct(\Rector\NetteToSymfony\Collector\OnFormVariableMethodCallsCollector $onFormVariableMethodCallsCollector, \Rector\NetteToSymfony\NodeFactory\SymfonyControllerFactory $symfonyControllerFactory, \Rector\NetteToSymfony\NodeFactory\BuildFormClassMethodFactory $buildFormClassMethodFactory, \Rector\NetteToSymfony\NodeFactory\SymfonyMethodCallsFactory $symfonyMethodCallsFactory)

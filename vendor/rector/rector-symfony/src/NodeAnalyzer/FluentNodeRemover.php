@@ -13,7 +13,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class FluentNodeRemover
 {
     /**
-     * @var NodeRemover
+     * @var \Rector\NodeRemoval\NodeRemover
      */
     private $nodeRemover;
     public function __construct(\Rector\NodeRemoval\NodeRemover $nodeRemover)

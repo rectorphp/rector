@@ -22,21 +22,21 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class LogoutSuccessHandlerToLogoutEventSubscriberRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var GetSubscribedEventsClassMethodFactory
+     * @var \PHPStan\Type\ObjectType
      */
-    private $getSubscribedEventsClassMethodFactory;
+    private $successHandlerObjectType;
     /**
-     * @var OnSuccessLogoutClassMethodFactory
+     * @var \Rector\Symfony\NodeFactory\OnSuccessLogoutClassMethodFactory
      */
     private $onSuccessLogoutClassMethodFactory;
     /**
-     * @var ObjectType
+     * @var \Rector\Symfony\NodeFactory\GetSubscribedEventsClassMethodFactory
      */
-    private $successHandlerObjectType;
+    private $getSubscribedEventsClassMethodFactory;
     public function __construct(\Rector\Symfony\NodeFactory\OnSuccessLogoutClassMethodFactory $onSuccessLogoutClassMethodFactory, \Rector\Symfony\NodeFactory\GetSubscribedEventsClassMethodFactory $getSubscribedEventsClassMethodFactory)
     {
-        $this->getSubscribedEventsClassMethodFactory = $getSubscribedEventsClassMethodFactory;
         $this->onSuccessLogoutClassMethodFactory = $onSuccessLogoutClassMethodFactory;
+        $this->getSubscribedEventsClassMethodFactory = $getSubscribedEventsClassMethodFactory;
         $this->successHandlerObjectType = new \PHPStan\Type\ObjectType('Symfony\\Component\\Security\\Http\\Logout\\LogoutSuccessHandlerInterface');
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition

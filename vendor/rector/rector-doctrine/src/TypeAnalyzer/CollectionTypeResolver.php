@@ -18,15 +18,15 @@ use Rector\TypeDeclaration\PhpDoc\ShortClassExpander;
 final class CollectionTypeResolver
 {
     /**
-     * @var NameScopeFactory
+     * @var \Rector\StaticTypeMapper\Naming\NameScopeFactory
      */
     private $nameScopeFactory;
     /**
-     * @var PhpDocInfoFactory
+     * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
     private $phpDocInfoFactory;
     /**
-     * @var ShortClassExpander
+     * @var \Rector\TypeDeclaration\PhpDoc\ShortClassExpander
      */
     private $shortClassExpander;
     public function __construct(\Rector\StaticTypeMapper\Naming\NameScopeFactory $nameScopeFactory, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \Rector\TypeDeclaration\PhpDoc\ShortClassExpander $shortClassExpander)

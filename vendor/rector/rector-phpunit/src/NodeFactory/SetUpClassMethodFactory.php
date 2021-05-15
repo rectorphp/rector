@@ -14,15 +14,15 @@ use RectorPrefix20210515\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
 final class SetUpClassMethodFactory
 {
     /**
-     * @var PHPUnitTypeDeclarationDecorator
+     * @var \Rector\PhpSpecToPHPUnit\PHPUnitTypeDeclarationDecorator
      */
     private $phpUnitTypeDeclarationDecorator;
     /**
-     * @var StmtManipulator
+     * @var \Rector\PHPUnit\NodeManipulator\StmtManipulator
      */
     private $stmtManipulator;
     /**
-     * @var SetUpFactory
+     * @var \Rector\RemovingStatic\NodeFactory\SetUpFactory
      */
     private $setUpFactory;
     public function __construct(\Rector\PhpSpecToPHPUnit\PHPUnitTypeDeclarationDecorator $phpUnitTypeDeclarationDecorator, \Rector\PHPUnit\NodeManipulator\StmtManipulator $stmtManipulator, \Rector\RemovingStatic\NodeFactory\SetUpFactory $setUpFactory)

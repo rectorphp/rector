@@ -24,23 +24,23 @@ final class AssertSameBoolNullToSpecificMethodRector extends \Rector\Core\Rector
      */
     private $constantWithAssertMethods = [];
     /**
-     * @var IdentifierManipulator
+     * @var \Rector\Renaming\NodeManipulator\IdentifierManipulator
      */
     private $identifierManipulator;
     /**
-     * @var ArgumentMover
+     * @var \Rector\PHPUnit\NodeManipulator\ArgumentMover
      */
     private $argumentMover;
     /**
-     * @var TestsNodeAnalyzer
+     * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
      */
     private $testsNodeAnalyzer;
     public function __construct(\Rector\Renaming\NodeManipulator\IdentifierManipulator $identifierManipulator, \Rector\PHPUnit\NodeManipulator\ArgumentMover $argumentMover, \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer $testsNodeAnalyzer)
     {
         $this->identifierManipulator = $identifierManipulator;
-        $this->constantWithAssertMethods = [new \Rector\PHPUnit\ValueObject\ConstantWithAssertMethods('null', 'assertNull', 'assertNotNull'), new \Rector\PHPUnit\ValueObject\ConstantWithAssertMethods('true', 'assertTrue', 'assertNotTrue'), new \Rector\PHPUnit\ValueObject\ConstantWithAssertMethods('false', 'assertFalse', 'assertNotFalse')];
         $this->argumentMover = $argumentMover;
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
+        $this->constantWithAssertMethods = [new \Rector\PHPUnit\ValueObject\ConstantWithAssertMethods('null', 'assertNull', 'assertNotNull'), new \Rector\PHPUnit\ValueObject\ConstantWithAssertMethods('true', 'assertTrue', 'assertNotTrue'), new \Rector\PHPUnit\ValueObject\ConstantWithAssertMethods('false', 'assertFalse', 'assertNotFalse')];
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {

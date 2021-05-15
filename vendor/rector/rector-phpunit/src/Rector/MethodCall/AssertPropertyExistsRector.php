@@ -29,11 +29,11 @@ final class AssertPropertyExistsRector extends \Rector\Core\Rector\AbstractRecto
      */
     private const RENAME_METHODS_WITH_CLASS_MAP = ['assertTrue' => 'assertClassHasAttribute', 'assertFalse' => 'assertClassNotHasAttribute'];
     /**
-     * @var IdentifierManipulator
+     * @var \Rector\Renaming\NodeManipulator\IdentifierManipulator
      */
     private $identifierManipulator;
     /**
-     * @var TestsNodeAnalyzer
+     * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
      */
     private $testsNodeAnalyzer;
     public function __construct(\Rector\Renaming\NodeManipulator\IdentifierManipulator $identifierManipulator, \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer $testsNodeAnalyzer)

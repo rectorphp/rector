@@ -27,23 +27,23 @@ final class ExtractAttributeRouteNameConstantsRector extends \Rector\Core\Rector
      */
     private const ROUTE_NAME_FILE_LOCATION = 'src/ValueObject/Routing/RouteName.php';
     /**
-     * @var RouteNameClassFactory
-     */
-    private $routeNameClassFactory;
-    /**
      * @var bool
      */
     private $isRouteNameValueObjectCreated = \false;
     /**
-     * @var ConstantNameAndValueMatcher
+     * @var \Rector\Symfony\NodeFactory\RouteNameClassFactory
+     */
+    private $routeNameClassFactory;
+    /**
+     * @var \Rector\Symfony\ConstantNameAndValueMatcher
      */
     private $constantNameAndValueMatcher;
     /**
-     * @var ConstantNameAndValueResolver
+     * @var \Rector\Symfony\ConstantNameAndValueResolver
      */
     private $constantNameAndValueResolver;
     /**
-     * @var SmartFileSystem
+     * @var \Symplify\SmartFileSystem\SmartFileSystem
      */
     private $smartFileSystem;
     public function __construct(\Rector\Symfony\NodeFactory\RouteNameClassFactory $routeNameClassFactory, \Rector\Symfony\ConstantNameAndValueMatcher $constantNameAndValueMatcher, \Rector\Symfony\ConstantNameAndValueResolver $constantNameAndValueResolver, \RectorPrefix20210515\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem)

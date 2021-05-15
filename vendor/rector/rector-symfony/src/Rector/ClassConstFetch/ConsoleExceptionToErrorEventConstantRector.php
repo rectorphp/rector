@@ -20,7 +20,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ConsoleExceptionToErrorEventConstantRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var ObjectType
+     * @var \PHPStan\Type\ObjectType
      */
     private $consoleEventsObjectType;
     public function __construct()

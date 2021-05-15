@@ -12,23 +12,23 @@ use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 final class ExpectExceptionMessageFactory
 {
     /**
-     * @var NodeNameResolver
+     * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     /**
-     * @var NodeComparator
-     */
-    private $nodeComparator;
-    /**
-     * @var ArgumentShiftingFactory
+     * @var \Rector\PHPUnit\NodeFactory\ArgumentShiftingFactory
      */
     private $argumentShiftingFactory;
     /**
-     * @var NodeTypeResolver
+     * @var \Rector\Core\PhpParser\Comparing\NodeComparator
+     */
+    private $nodeComparator;
+    /**
+     * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;
     /**
-     * @var TestsNodeAnalyzer
+     * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
      */
     private $testsNodeAnalyzer;
     public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\PHPUnit\NodeFactory\ArgumentShiftingFactory $argumentShiftingFactory, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer $testsNodeAnalyzer)

@@ -35,22 +35,6 @@ final class RouterListToControllerAnnotationsRector extends \Rector\Core\Rector\
      */
     private const ACTION_RENDER_NAME_MATCHING_REGEX = '#^(action|render)(?<short_action_name>.*?$)#sm';
     /**
-     * @var RouteInfoFactory
-     */
-    private $routeInfoFactory;
-    /**
-     * @var ReturnTypeInferer
-     */
-    private $returnTypeInferer;
-    /**
-     * @var ExplicitRouteAnnotationDecorator
-     */
-    private $explicitRouteAnnotationDecorator;
-    /**
-     * @var SymfonyRouteTagValueNodeFactory
-     */
-    private $symfonyRouteTagValueNodeFactory;
-    /**
      * @var ObjectType[]
      */
     private $routerObjectTypes = [];
@@ -58,11 +42,27 @@ final class RouterListToControllerAnnotationsRector extends \Rector\Core\Rector\
      * @var ObjectType
      */
     private $routeListObjectType;
+    /**
+     * @var \Rector\NetteToSymfony\Routing\ExplicitRouteAnnotationDecorator
+     */
+    private $explicitRouteAnnotationDecorator;
+    /**
+     * @var \Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer
+     */
+    private $returnTypeInferer;
+    /**
+     * @var \Rector\NetteToSymfony\Route\RouteInfoFactory
+     */
+    private $routeInfoFactory;
+    /**
+     * @var \Rector\BetterPhpDocParser\ValueObjectFactory\PhpDocNode\Symfony\SymfonyRouteTagValueNodeFactory
+     */
+    private $symfonyRouteTagValueNodeFactory;
     public function __construct(\Rector\NetteToSymfony\Routing\ExplicitRouteAnnotationDecorator $explicitRouteAnnotationDecorator, \Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer $returnTypeInferer, \Rector\NetteToSymfony\Route\RouteInfoFactory $routeInfoFactory, \Rector\BetterPhpDocParser\ValueObjectFactory\PhpDocNode\Symfony\SymfonyRouteTagValueNodeFactory $symfonyRouteTagValueNodeFactory)
     {
-        $this->routeInfoFactory = $routeInfoFactory;
-        $this->returnTypeInferer = $returnTypeInferer;
         $this->explicitRouteAnnotationDecorator = $explicitRouteAnnotationDecorator;
+        $this->returnTypeInferer = $returnTypeInferer;
+        $this->routeInfoFactory = $routeInfoFactory;
         $this->symfonyRouteTagValueNodeFactory = $symfonyRouteTagValueNodeFactory;
         $this->routerObjectTypes = [new \PHPStan\Type\ObjectType('Nette\\Application\\IRouter'), new \PHPStan\Type\ObjectType('Nette\\Routing\\Router')];
         $this->routeListObjectType = new \PHPStan\Type\ObjectType('Nette\\Application\\Routers\\RouteList');

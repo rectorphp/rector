@@ -24,19 +24,19 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ChangeNetteEventNamesInGetSubscribedEventsRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var GetSubscribedEventsArrayManipulator
+     * @var \Rector\Nette\Kdyby\NodeManipulator\GetSubscribedEventsArrayManipulator
      */
     private $getSubscribedEventsArrayManipulator;
     /**
-     * @var ListeningClassMethodArgumentManipulator
+     * @var \Rector\Nette\Kdyby\NodeManipulator\ListeningClassMethodArgumentManipulator
      */
     private $listeningClassMethodArgumentManipulator;
     /**
-     * @var ListeningMethodsCollector
+     * @var \Rector\Nette\Kdyby\NodeResolver\ListeningMethodsCollector
      */
     private $listeningMethodsCollector;
     /**
-     * @var GetSubscribedEventsClassMethodAnalyzer
+     * @var \Rector\Nette\Kdyby\NodeAnalyzer\GetSubscribedEventsClassMethodAnalyzer
      */
     private $getSubscribedEventsClassMethodAnalyzer;
     public function __construct(\Rector\Nette\Kdyby\NodeManipulator\GetSubscribedEventsArrayManipulator $getSubscribedEventsArrayManipulator, \Rector\Nette\Kdyby\NodeManipulator\ListeningClassMethodArgumentManipulator $listeningClassMethodArgumentManipulator, \Rector\Nette\Kdyby\NodeResolver\ListeningMethodsCollector $listeningMethodsCollector, \Rector\Nette\Kdyby\NodeAnalyzer\GetSubscribedEventsClassMethodAnalyzer $getSubscribedEventsClassMethodAnalyzer)

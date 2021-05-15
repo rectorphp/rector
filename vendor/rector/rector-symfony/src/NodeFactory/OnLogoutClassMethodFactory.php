@@ -19,15 +19,15 @@ final class OnLogoutClassMethodFactory
      */
     private const PARAMETER_TO_GETTER_NAMES = ['request' => 'getRequest', 'response' => 'getResponse', 'token' => 'getToken'];
     /**
-     * @var NodeNameResolver
+     * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     /**
-     * @var BareLogoutClassMethodFactory
+     * @var \Rector\Symfony\NodeFactory\BareLogoutClassMethodFactory
      */
     private $bareLogoutClassMethodFactory;
     /**
-     * @var ParamAnalyzer
+     * @var \Rector\Core\NodeAnalyzer\ParamAnalyzer
      */
     private $paramAnalyzer;
     public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Symfony\NodeFactory\BareLogoutClassMethodFactory $bareLogoutClassMethodFactory, \Rector\Core\NodeAnalyzer\ParamAnalyzer $paramAnalyzer)

@@ -9,11 +9,11 @@ use Rector\Symfony\ValueObject\ConstantNameAndValue;
 final class ConstantNameAndValueResolver
 {
     /**
-     * @var NodeNameResolver
+     * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     /**
-     * @var ConstantNameAndValueMatcher
+     * @var \Rector\Symfony\ConstantNameAndValueMatcher
      */
     private $constantNameAndValueMatcher;
     public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Symfony\ConstantNameAndValueMatcher $constantNameAndValueMatcher)

@@ -16,11 +16,11 @@ final class ServiceMapProvider
      */
     private const SYMFONY_CONTAINER_XML_PATH_PARAMETER = 'symfony_container_xml_path';
     /**
-     * @var ParameterProvider
+     * @var \Symplify\PackageBuilder\Parameter\ParameterProvider
      */
     private $parameterProvider;
     /**
-     * @var ServiceMapFactory
+     * @var \Rector\Symfony\ValueObjectFactory\ServiceMapFactory
      */
     private $serviceMapFactory;
     public function __construct(\RectorPrefix20210515\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \Rector\Symfony\ValueObjectFactory\ServiceMapFactory $serviceMapFactory)

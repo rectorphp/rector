@@ -21,11 +21,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ReplaceSensioRouteAnnotationWithSymfonyRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var SymfonyRouteTagValueNodeFactory
+     * @var \Rector\BetterPhpDocParser\ValueObjectFactory\PhpDocNode\Symfony\SymfonyRouteTagValueNodeFactory
      */
     private $symfonyRouteTagValueNodeFactory;
     /**
-     * @var PhpDocTagRemover
+     * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover
      */
     private $phpDocTagRemover;
     public function __construct(\Rector\BetterPhpDocParser\ValueObjectFactory\PhpDocNode\Symfony\SymfonyRouteTagValueNodeFactory $symfonyRouteTagValueNodeFactory, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover $phpDocTagRemover)

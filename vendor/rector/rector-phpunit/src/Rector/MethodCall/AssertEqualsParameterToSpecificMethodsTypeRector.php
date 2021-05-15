@@ -20,11 +20,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class AssertEqualsParameterToSpecificMethodsTypeRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var AssertCallFactory
+     * @var \Rector\PHPUnit\NodeFactory\AssertCallFactory
      */
     private $assertCallFactory;
     /**
-     * @var TestsNodeAnalyzer
+     * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
      */
     private $testsNodeAnalyzer;
     public function __construct(\Rector\PHPUnit\NodeFactory\AssertCallFactory $assertCallFactory, \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer $testsNodeAnalyzer)

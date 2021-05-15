@@ -10,15 +10,15 @@ use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 final class ExpectExceptionCodeFactory
 {
     /**
-     * @var NodeNameResolver
+     * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     /**
-     * @var ArgumentShiftingFactory
+     * @var \Rector\PHPUnit\NodeFactory\ArgumentShiftingFactory
      */
     private $argumentShiftingFactory;
     /**
-     * @var TestsNodeAnalyzer
+     * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
      */
     private $testsNodeAnalyzer;
     public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\PHPUnit\NodeFactory\ArgumentShiftingFactory $argumentShiftingFactory, \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer $testsNodeAnalyzer)

@@ -23,7 +23,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class CascadeValidationFormBuilderRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var ArrayManipulator
+     * @var \Rector\Core\NodeManipulator\ArrayManipulator
      */
     private $arrayManipulator;
     public function __construct(\Rector\Core\NodeManipulator\ArrayManipulator $arrayManipulator)

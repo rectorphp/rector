@@ -27,31 +27,31 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class TemplateMagicAssignToExplicitVariableArrayRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var TemplatePropertyAssignCollector
+     * @var \Rector\Nette\NodeAnalyzer\TemplatePropertyAssignCollector
      */
     private $templatePropertyAssignCollector;
     /**
-     * @var RenderMethodAnalyzer
+     * @var \Rector\Nette\NodeAnalyzer\RenderMethodAnalyzer
      */
     private $renderMethodAnalyzer;
     /**
-     * @var NetteClassAnalyzer
+     * @var \Rector\Nette\NodeAnalyzer\NetteClassAnalyzer
      */
     private $netteClassAnalyzer;
     /**
-     * @var RenderParameterArrayFactory
+     * @var \Rector\Nette\NodeFactory\RenderParameterArrayFactory
      */
     private $renderParameterArrayFactory;
     /**
-     * @var ConditionalTemplateAssignReplacer
+     * @var \Rector\Nette\NodeAnalyzer\ConditionalTemplateAssignReplacer
      */
     private $conditionalTemplateAssignReplacer;
     /**
-     * @var RightAssignTemplateRemover
+     * @var \Rector\Nette\NodeAnalyzer\RightAssignTemplateRemover
      */
     private $rightAssignTemplateRemover;
     /**
-     * @var TemplatePropertyParametersReplacer
+     * @var \Rector\Nette\NodeAnalyzer\TemplatePropertyParametersReplacer
      */
     private $templatePropertyParametersReplacer;
     public function __construct(\Rector\Nette\NodeAnalyzer\TemplatePropertyAssignCollector $templatePropertyAssignCollector, \Rector\Nette\NodeAnalyzer\RenderMethodAnalyzer $renderMethodAnalyzer, \Rector\Nette\NodeAnalyzer\NetteClassAnalyzer $netteClassAnalyzer, \Rector\Nette\NodeFactory\RenderParameterArrayFactory $renderParameterArrayFactory, \Rector\Nette\NodeAnalyzer\ConditionalTemplateAssignReplacer $conditionalTemplateAssignReplacer, \Rector\Nette\NodeAnalyzer\RightAssignTemplateRemover $rightAssignTemplateRemover, \Rector\Nette\NodeAnalyzer\TemplatePropertyParametersReplacer $templatePropertyParametersReplacer)

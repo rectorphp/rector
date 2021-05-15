@@ -18,15 +18,15 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 final class SetterClassMethodAnalyzer
 {
     /**
-     * @var NodeTypeResolver
+     * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;
     /**
-     * @var NodeNameResolver
+     * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     /**
-     * @var NodeRepository
+     * @var \Rector\NodeCollector\NodeCollector\NodeRepository
      */
     private $nodeRepository;
     public function __construct(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeCollector\NodeCollector\NodeRepository $nodeRepository)

@@ -17,15 +17,15 @@ use RectorPrefix20210515\Symplify\Astral\NodeTraverser\SimpleCallableNodeTravers
 final class ParentGetterStmtsToExternalStmtsFactory
 {
     /**
-     * @var NodeTypeResolver
+     * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;
     /**
-     * @var SimpleCallableNodeTraverser
+     * @var \Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser
      */
     private $simpleCallableNodeTraverser;
     /**
-     * @var NodeComparator
+     * @var \Rector\Core\PhpParser\Comparing\NodeComparator
      */
     private $nodeComparator;
     public function __construct(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \RectorPrefix20210515\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator)

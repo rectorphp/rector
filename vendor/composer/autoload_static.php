@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit8624914a55c8c7caf4db2ff755415a19
+class ComposerStaticInit518bb55278b31084cb424c848dd2e690
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -19,7 +19,6 @@ class ComposerStaticInit8624914a55c8c7caf4db2ff755415a19
         '8825ede83f2f289127722d4e842cf7e8' => __DIR__ . '/..' . '/symfony/polyfill-intl-grapheme/bootstrap.php',
         'e69f7f6ee287b969198c3c9d6777bd38' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/bootstrap.php',
         'b6b991a57620e2fb6b2f66f03fe9ddc2' => __DIR__ . '/..' . '/symfony/string/Resources/functions.php',
-        'a91da1e150ddcb7aac1cc8a00171d65f' => __DIR__ . '/..' . '/rector/rector-symfony/src/Helper/TemplateGuesser.php',
         '30bca7fff093e8069bed7c55247e2bf8' => __DIR__ . '/../..' . '/src/functions/node_helper.php',
         '4508688f3cab21375725e8d11ca194a2' => __DIR__ . '/../..' . '/src/constants.php',
     );
@@ -2546,7 +2545,6 @@ class ComposerStaticInit8624914a55c8c7caf4db2ff755415a19
         'Rector\\NetteToSymfony\\ValueObject\\NetteFormMethodToSymfonyTypeClass' => __DIR__ . '/..' . '/rector/rector-nette-to-symfony/src/ValueObject/NetteFormMethodToSymfonyTypeClass.php',
         'Rector\\NetteToSymfony\\ValueObject\\RouteInfo' => __DIR__ . '/..' . '/rector/rector-nette-to-symfony/src/ValueObject/RouteInfo.php',
         'Rector\\Nette\\Contract\\FormControlTypeResolverInterface' => __DIR__ . '/..' . '/rector/rector-nette/src/Contract/FormControlTypeResolverInterface.php',
-        'Rector\\Nette\\Contract\\MethodNamesByInputNamesResolverAwareInterface' => __DIR__ . '/..' . '/rector/rector-nette/src/Contract/MethodNamesByInputNamesResolverAwareInterface.php',
         'Rector\\Nette\\Contract\\PregToNetteUtilsStringInterface' => __DIR__ . '/..' . '/rector/rector-nette/src/Contract/PregToNetteUtilsStringInterface.php',
         'Rector\\Nette\\Contract\\Rector\\NeonRectorInterface' => __DIR__ . '/..' . '/rector/rector-nette/src/Contract/Rector/NeonRectorInterface.php',
         'Rector\\Nette\\Contract\\ValueObject\\ParameterArrayInterface' => __DIR__ . '/..' . '/rector/rector-nette/src/Contract/ValueObject/ParameterArrayInterface.php',
@@ -3470,9 +3468,9 @@ class ComposerStaticInit8624914a55c8c7caf4db2ff755415a19
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit8624914a55c8c7caf4db2ff755415a19::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit8624914a55c8c7caf4db2ff755415a19::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit8624914a55c8c7caf4db2ff755415a19::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit518bb55278b31084cb424c848dd2e690::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit518bb55278b31084cb424c848dd2e690::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit518bb55278b31084cb424c848dd2e690::$classMap;
 
         }, null, ClassLoader::class);
     }

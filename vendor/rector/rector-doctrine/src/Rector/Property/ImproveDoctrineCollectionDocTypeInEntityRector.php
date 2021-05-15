@@ -24,27 +24,27 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ImproveDoctrineCollectionDocTypeInEntityRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var CollectionTypeFactory
+     * @var \Rector\Doctrine\TypeAnalyzer\CollectionTypeFactory
      */
     private $collectionTypeFactory;
     /**
-     * @var AssignManipulator
+     * @var \Rector\Core\NodeManipulator\AssignManipulator
      */
     private $assignManipulator;
     /**
-     * @var CollectionTypeResolver
+     * @var \Rector\Doctrine\TypeAnalyzer\CollectionTypeResolver
      */
     private $collectionTypeResolver;
     /**
-     * @var CollectionVarTagValueNodeResolver
+     * @var \Rector\Doctrine\TypeAnalyzer\CollectionVarTagValueNodeResolver
      */
     private $collectionVarTagValueNodeResolver;
     /**
-     * @var PhpDocTypeChanger
+     * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger
      */
     private $phpDocTypeChanger;
     /**
-     * @var DoctrineDocBlockResolver
+     * @var \Rector\Doctrine\PhpDocParser\DoctrineDocBlockResolver
      */
     private $doctrineDocBlockResolver;
     public function __construct(\Rector\Doctrine\TypeAnalyzer\CollectionTypeFactory $collectionTypeFactory, \Rector\Core\NodeManipulator\AssignManipulator $assignManipulator, \Rector\Doctrine\TypeAnalyzer\CollectionTypeResolver $collectionTypeResolver, \Rector\Doctrine\TypeAnalyzer\CollectionVarTagValueNodeResolver $collectionVarTagValueNodeResolver, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger, \Rector\Doctrine\PhpDocParser\DoctrineDocBlockResolver $doctrineDocBlockResolver)

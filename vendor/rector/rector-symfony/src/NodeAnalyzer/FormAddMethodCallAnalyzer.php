@@ -14,18 +14,18 @@ final class FormAddMethodCallAnalyzer
      */
     private $formObjectTypes = [];
     /**
-     * @var NodeTypeResolver
+     * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;
     /**
-     * @var NodeNameResolver
+     * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     public function __construct(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
     {
-        $this->formObjectTypes = [new \PHPStan\Type\ObjectType('Symfony\\Component\\Form\\FormBuilderInterface'), new \PHPStan\Type\ObjectType('Symfony\\Component\\Form\\FormInterface')];
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->nodeNameResolver = $nodeNameResolver;
+        $this->formObjectTypes = [new \PHPStan\Type\ObjectType('Symfony\\Component\\Form\\FormBuilderInterface'), new \PHPStan\Type\ObjectType('Symfony\\Component\\Form\\FormInterface')];
     }
     public function isMatching(\PhpParser\Node\Expr\MethodCall $methodCall) : bool
     {

@@ -40,26 +40,26 @@ final class ContributeEventClassResolver
         'Contributte\\Events\\Extra\\Event\\Latte\\TemplateCreateEvent' => ['Nette\\Bridges\\ApplicationLatte\\Template' => 'getTemplate'],
     ];
     /**
-     * @var NodeNameResolver
+     * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     /**
-     * @var VariableNaming
-     */
-    private $variableNaming;
-    /**
-     * @var StaticTypeMapper
+     * @var \Rector\StaticTypeMapper\StaticTypeMapper
      */
     private $staticTypeMapper;
     /**
-     * @var NodeComparator
+     * @var \Rector\Naming\Naming\VariableNaming
+     */
+    private $variableNaming;
+    /**
+     * @var \Rector\Core\PhpParser\Comparing\NodeComparator
      */
     private $nodeComparator;
     public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \Rector\Naming\Naming\VariableNaming $variableNaming, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator)
     {
         $this->nodeNameResolver = $nodeNameResolver;
-        $this->variableNaming = $variableNaming;
         $this->staticTypeMapper = $staticTypeMapper;
+        $this->variableNaming = $variableNaming;
         $this->nodeComparator = $nodeComparator;
     }
     public function resolveGetterMethodByEventClassAndParam(string $eventClass, \PhpParser\Node\Param $param, ?\Rector\Nette\Kdyby\ValueObject\EventAndListenerTree $eventAndListenerTree) : string

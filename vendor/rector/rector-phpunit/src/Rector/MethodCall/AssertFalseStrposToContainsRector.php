@@ -22,11 +22,11 @@ final class AssertFalseStrposToContainsRector extends \Rector\Core\Rector\Abstra
      */
     private const RENAME_METHODS_MAP = ['assertFalse' => 'assertNotContains', 'assertNotFalse' => 'assertContains'];
     /**
-     * @var IdentifierManipulator
+     * @var \Rector\Renaming\NodeManipulator\IdentifierManipulator
      */
     private $identifierManipulator;
     /**
-     * @var TestsNodeAnalyzer
+     * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
      */
     private $testsNodeAnalyzer;
     public function __construct(\Rector\Renaming\NodeManipulator\IdentifierManipulator $identifierManipulator, \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer $testsNodeAnalyzer)

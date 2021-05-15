@@ -13,11 +13,11 @@ use Rector\NetteToSymfony\ValueObject\ClassMethodRender;
 final class ActionRenderFactory
 {
     /**
-     * @var NodeFactory
+     * @var \Rector\Core\PhpParser\Node\NodeFactory
      */
     private $nodeFactory;
     /**
-     * @var RenderParameterArrayFactory
+     * @var \Rector\Nette\NodeFactory\RenderParameterArrayFactory
      */
     private $renderParameterArrayFactory;
     public function __construct(\Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\Nette\NodeFactory\RenderParameterArrayFactory $renderParameterArrayFactory)

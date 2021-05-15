@@ -23,11 +23,11 @@ final class AssertNotOperatorRector extends \Rector\Core\Rector\AbstractRector
      */
     private const RENAME_METHODS_MAP = ['assertTrue' => 'assertFalse', 'assertFalse' => 'assertTrue'];
     /**
-     * @var IdentifierManipulator
+     * @var \Rector\Renaming\NodeManipulator\IdentifierManipulator
      */
     private $identifierManipulator;
     /**
-     * @var TestsNodeAnalyzer
+     * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
      */
     private $testsNodeAnalyzer;
     public function __construct(\Rector\Renaming\NodeManipulator\IdentifierManipulator $identifierManipulator, \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer $testsNodeAnalyzer)

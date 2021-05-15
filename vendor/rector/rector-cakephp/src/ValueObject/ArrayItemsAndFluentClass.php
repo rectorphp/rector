@@ -8,13 +8,13 @@ use PhpParser\Node\Expr\ArrayItem;
 final class ArrayItemsAndFluentClass
 {
     /**
-     * @var ArrayItem[]
+     * @var mixed[]
      */
-    private $arrayItems = [];
+    private $arrayItems;
     /**
-     * @var array<string, Expr>
+     * @var mixed[]
      */
-    private $fluentCalls = [];
+    private $fluentCalls;
     /**
      * @param ArrayItem[] $arrayItems
      * @param array<string, Expr> $fluentCalls

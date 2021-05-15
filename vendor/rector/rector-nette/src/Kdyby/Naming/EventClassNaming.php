@@ -18,17 +18,17 @@ final class EventClassNaming
      */
     private const EVENT = 'Event';
     /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-    /**
-     * @var ClassNaming
+     * @var \Rector\CodingStyle\Naming\ClassNaming
      */
     private $classNaming;
+    /**
+     * @var \Rector\NodeNameResolver\NodeNameResolver
+     */
+    private $nodeNameResolver;
     public function __construct(\Rector\CodingStyle\Naming\ClassNaming $classNaming, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
     {
-        $this->nodeNameResolver = $nodeNameResolver;
         $this->classNaming = $classNaming;
+        $this->nodeNameResolver = $nodeNameResolver;
     }
     /**
      * "App\SomeNamespace\SomeClass::onUpload" → "App\SomeNamespace\Event\SomeClassUploadEvent"

@@ -20,7 +20,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ImplicitShortClassNameUseStatementRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var ImplicitNameResolver
+     * @var \Rector\CakePHP\ImplicitNameResolver
      */
     private $implicitNameResolver;
     public function __construct(\Rector\CakePHP\ImplicitNameResolver $implicitNameResolver)

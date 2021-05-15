@@ -51,15 +51,15 @@ final class ArrayArgumentToDataProviderRector extends \Rector\Core\Rector\Abstra
      */
     private $dataProviderClassMethodRecipes = [];
     /**
-     * @var DataProviderClassMethodFactory
+     * @var \Rector\PHPUnit\NodeFactory\DataProviderClassMethodFactory
      */
     private $dataProviderClassMethodFactory;
     /**
-     * @var ParamAndArgFromArrayResolver
+     * @var \Rector\PHPUnit\NodeManipulator\ParamAndArgFromArrayResolver
      */
     private $paramAndArgFromArrayResolver;
     /**
-     * @var TestsNodeAnalyzer
+     * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
      */
     private $testsNodeAnalyzer;
     public function __construct(\Rector\PHPUnit\NodeFactory\DataProviderClassMethodFactory $dataProviderClassMethodFactory, \Rector\PHPUnit\NodeManipulator\ParamAndArgFromArrayResolver $paramAndArgFromArrayResolver, \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer $testsNodeAnalyzer)

@@ -25,13 +25,13 @@ final class CallOnAppArrayAccessToStandaloneAssignRector extends \Rector\Core\Re
      */
     private $serviceNameTypeAndVariableNames = [];
     /**
-     * @var AppAssignFactory
+     * @var \Rector\Laravel\NodeFactory\AppAssignFactory
      */
     private $appAssignFactory;
     public function __construct(\Rector\Laravel\NodeFactory\AppAssignFactory $appAssignFactory)
     {
-        $this->serviceNameTypeAndVariableNames[] = new \Rector\Laravel\ValueObject\ServiceNameTypeAndVariableName('validator', 'Illuminate\\Validation\\Factory', 'validationFactory');
         $this->appAssignFactory = $appAssignFactory;
+        $this->serviceNameTypeAndVariableNames[] = new \Rector\Laravel\ValueObject\ServiceNameTypeAndVariableName('validator', 'Illuminate\\Validation\\Factory', 'validationFactory');
     }
     /**
      * @return array<class-string<Node>>

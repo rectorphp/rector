@@ -19,7 +19,7 @@ final class ServiceMapFactory
      */
     private const TAG = 'tag';
     /**
-     * @var SmartFileSystem
+     * @var \Symplify\SmartFileSystem\SmartFileSystem
      */
     private $smartFileSystem;
     public function __construct(\RectorPrefix20210515\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem)

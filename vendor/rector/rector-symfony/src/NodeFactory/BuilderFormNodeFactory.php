@@ -18,7 +18,7 @@ use RectorPrefix20210515\Symplify\Astral\ValueObject\NodeBuilder\ParamBuilder;
 final class BuilderFormNodeFactory
 {
     /**
-     * @var NodeNameResolver
+     * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)

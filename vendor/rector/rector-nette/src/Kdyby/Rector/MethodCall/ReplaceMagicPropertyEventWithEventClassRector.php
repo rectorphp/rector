@@ -25,11 +25,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ReplaceMagicPropertyEventWithEventClassRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var ClassNaming
+     * @var \Rector\CodingStyle\Naming\ClassNaming
      */
     private $classNaming;
     /**
-     * @var EventAndListenerTreeProvider
+     * @var \Rector\Nette\Kdyby\DataProvider\EventAndListenerTreeProvider
      */
     private $eventAndListenerTreeProvider;
     public function __construct(\Rector\CodingStyle\Naming\ClassNaming $classNaming, \Rector\Nette\Kdyby\DataProvider\EventAndListenerTreeProvider $eventAndListenerTreeProvider)

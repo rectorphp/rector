@@ -26,7 +26,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class MakeCommandLazyRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var ParamAnalyzer
+     * @var \Rector\Core\NodeAnalyzer\ParamAnalyzer
      */
     private $paramAnalyzer;
     public function __construct(\Rector\Core\NodeAnalyzer\ParamAnalyzer $paramAnalyzer)

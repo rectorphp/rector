@@ -11,7 +11,7 @@ final class EventClassAndClassMethod
      */
     private $eventClass;
     /**
-     * @var ClassMethod
+     * @var \PhpParser\Node\Stmt\ClassMethod
      */
     private $classMethod;
     public function __construct(string $eventClass, \PhpParser\Node\Stmt\ClassMethod $classMethod)

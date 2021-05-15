@@ -35,11 +35,11 @@ final class ManagerRegistryGetManagerToEntityManagerRector extends \Rector\Core\
      */
     private const ENTITY_MANAGER = 'entityManager';
     /**
-     * @var MethodCallNameOnTypeResolver
+     * @var \Rector\Doctrine\NodeAnalyzer\MethodCallNameOnTypeResolver
      */
     private $methodCallNameOnTypeResolver;
     /**
-     * @var DependencyRemover
+     * @var \Rector\Doctrine\NodeManipulator\DependencyRemover
      */
     private $dependencyRemover;
     public function __construct(\Rector\Doctrine\NodeAnalyzer\MethodCallNameOnTypeResolver $methodCallNameOnTypeResolver, \Rector\Doctrine\NodeManipulator\DependencyRemover $dependencyRemover)

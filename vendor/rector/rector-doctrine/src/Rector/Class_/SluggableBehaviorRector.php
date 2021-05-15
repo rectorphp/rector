@@ -27,11 +27,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class SluggableBehaviorRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var ClassInsertManipulator
+     * @var \Rector\Core\NodeManipulator\ClassInsertManipulator
      */
     private $classInsertManipulator;
     /**
-     * @var PhpDocTypeChanger
+     * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger
      */
     private $phpDocTypeChanger;
     public function __construct(\Rector\Core\NodeManipulator\ClassInsertManipulator $classInsertManipulator, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger)

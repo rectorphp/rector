@@ -25,15 +25,15 @@ final class AddProphecyTraitRector extends \Rector\Core\Rector\AbstractRector
      */
     private const PROPHECY_TRAIT = 'Prophecy\\PhpUnit\\ProphecyTrait';
     /**
-     * @var ClassInsertManipulator
+     * @var \Rector\Core\NodeManipulator\ClassInsertManipulator
      */
     private $classInsertManipulator;
     /**
-     * @var ClassManipulator
+     * @var \Rector\Core\NodeManipulator\ClassManipulator
      */
     private $classManipulator;
     /**
-     * @var TestsNodeAnalyzer
+     * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
      */
     private $testsNodeAnalyzer;
     public function __construct(\Rector\Core\NodeManipulator\ClassInsertManipulator $classInsertManipulator, \Rector\Core\NodeManipulator\ClassManipulator $classManipulator, \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer $testsNodeAnalyzer)

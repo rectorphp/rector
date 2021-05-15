@@ -17,15 +17,15 @@ use RectorPrefix20210515\Symplify\Astral\NodeTraverser\SimpleCallableNodeTravers
 final class DependencyRemover
 {
     /**
-     * @var NodeNameResolver
+     * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     /**
-     * @var SimpleCallableNodeTraverser
+     * @var \Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser
      */
     private $simpleCallableNodeTraverser;
     /**
-     * @var NodeRemover
+     * @var \Rector\NodeRemoval\NodeRemover
      */
     private $nodeRemover;
     public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \RectorPrefix20210515\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\NodeRemoval\NodeRemover $nodeRemover)

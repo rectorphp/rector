@@ -22,11 +22,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class MigrateAtToConsecutiveExpectationsRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var ConsecutiveAssertionFactory
+     * @var \Rector\PHPUnit\NodeFactory\ConsecutiveAssertionFactory
      */
     private $consecutiveAssertionFactory;
     /**
-     * @var ExpectationAnalyzer
+     * @var \Rector\PHPUnit\NodeAnalyzer\ExpectationAnalyzer
      */
     private $expectationAnalyzer;
     public function __construct(\Rector\PHPUnit\NodeFactory\ConsecutiveAssertionFactory $consecutiveAssertionFactory, \Rector\PHPUnit\NodeAnalyzer\ExpectationAnalyzer $expectationAnalyzer)

@@ -9,6 +9,10 @@ final class RenameMethodCallBasedOnParameter
     /**
      * @var string
      */
+    private $oldClass;
+    /**
+     * @var string
+     */
     private $oldMethod;
     /**
      * @var string
@@ -18,16 +22,12 @@ final class RenameMethodCallBasedOnParameter
      * @var string
      */
     private $newMethod;
-    /**
-     * @var string
-     */
-    private $oldClass;
     public function __construct(string $oldClass, string $oldMethod, string $parameterName, string $newMethod)
     {
+        $this->oldClass = $oldClass;
         $this->oldMethod = $oldMethod;
         $this->parameterName = $parameterName;
         $this->newMethod = $newMethod;
-        $this->oldClass = $oldClass;
     }
     public function getOldMethod() : string
     {

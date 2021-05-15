@@ -22,15 +22,15 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class MakeEntityDateTimePropertyDateTimeInterfaceRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var SetterClassMethodAnalyzer
+     * @var \Rector\Doctrine\NodeAnalyzer\SetterClassMethodAnalyzer
      */
     private $setterClassMethodAnalyzer;
     /**
-     * @var PropertyTypeManipulator
+     * @var \Rector\Doctrine\NodeManipulator\PropertyTypeManipulator
      */
     private $propertyTypeManipulator;
     /**
-     * @var PropertyTypeInferer
+     * @var \Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer
      */
     private $propertyTypeInferer;
     public function __construct(\Rector\Doctrine\NodeAnalyzer\SetterClassMethodAnalyzer $setterClassMethodAnalyzer, \Rector\Doctrine\NodeManipulator\PropertyTypeManipulator $propertyTypeManipulator, \Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer $propertyTypeInferer)

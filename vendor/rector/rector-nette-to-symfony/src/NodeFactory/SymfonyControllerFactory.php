@@ -13,11 +13,11 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class SymfonyControllerFactory
 {
     /**
-     * @var NodeNameResolver
+     * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     /**
-     * @var ActionWithFormProcessClassMethodFactory
+     * @var \Rector\NetteToSymfony\NodeFactory\ActionWithFormProcessClassMethodFactory
      */
     private $actionWithFormProcessClassMethodFactory;
     public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NetteToSymfony\NodeFactory\ActionWithFormProcessClassMethodFactory $actionWithFormProcessClassMethodFactory)

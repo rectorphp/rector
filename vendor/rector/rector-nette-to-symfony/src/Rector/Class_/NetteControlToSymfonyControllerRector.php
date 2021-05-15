@@ -31,19 +31,19 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class NetteControlToSymfonyControllerRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var ActionRenderFactory
+     * @var \Rector\Nette\NodeFactory\ActionRenderFactory
      */
     private $actionRenderFactory;
     /**
-     * @var NetteClassAnalyzer
+     * @var \Rector\Nette\NodeAnalyzer\NetteClassAnalyzer
      */
     private $netteClassAnalyzer;
     /**
-     * @var ClassNaming
+     * @var \Rector\CodingStyle\Naming\ClassNaming
      */
     private $classNaming;
     /**
-     * @var ClassMethodRenderAnalyzer
+     * @var \Rector\NetteToSymfony\NodeAnalyzer\ClassMethodRenderAnalyzer
      */
     private $classMethodRenderAnalyzer;
     public function __construct(\Rector\Nette\NodeFactory\ActionRenderFactory $actionRenderFactory, \Rector\Nette\NodeAnalyzer\NetteClassAnalyzer $netteClassAnalyzer, \Rector\CodingStyle\Naming\ClassNaming $classNaming, \Rector\NetteToSymfony\NodeAnalyzer\ClassMethodRenderAnalyzer $classMethodRenderAnalyzer)

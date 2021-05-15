@@ -30,25 +30,25 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class TranslationBehaviorRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var ClassManipulator
-     */
-    private $classManipulator;
-    /**
-     * @var ClassInsertManipulator
+     * @var \Rector\Core\NodeManipulator\ClassInsertManipulator
      */
     private $classInsertManipulator;
     /**
-     * @var TranslationClassNodeFactory
+     * @var \Rector\Core\NodeManipulator\ClassManipulator
+     */
+    private $classManipulator;
+    /**
+     * @var \Rector\Doctrine\NodeFactory\TranslationClassNodeFactory
      */
     private $translationClassNodeFactory;
     /**
-     * @var PhpDocTagRemover
+     * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover
      */
     private $phpDocTagRemover;
     public function __construct(\Rector\Core\NodeManipulator\ClassInsertManipulator $classInsertManipulator, \Rector\Core\NodeManipulator\ClassManipulator $classManipulator, \Rector\Doctrine\NodeFactory\TranslationClassNodeFactory $translationClassNodeFactory, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover $phpDocTagRemover)
     {
-        $this->classManipulator = $classManipulator;
         $this->classInsertManipulator = $classInsertManipulator;
+        $this->classManipulator = $classManipulator;
         $this->translationClassNodeFactory = $translationClassNodeFactory;
         $this->phpDocTagRemover = $phpDocTagRemover;
     }

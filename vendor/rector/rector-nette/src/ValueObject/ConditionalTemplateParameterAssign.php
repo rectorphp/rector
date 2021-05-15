@@ -7,7 +7,7 @@ use PhpParser\Node\Expr\Assign;
 final class ConditionalTemplateParameterAssign
 {
     /**
-     * @var Assign
+     * @var \PhpParser\Node\Expr\Assign
      */
     private $assign;
     /**

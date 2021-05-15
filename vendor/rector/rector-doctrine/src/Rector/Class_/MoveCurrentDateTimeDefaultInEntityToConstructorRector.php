@@ -23,15 +23,15 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class MoveCurrentDateTimeDefaultInEntityToConstructorRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var ConstructorManipulator
+     * @var \Rector\Doctrine\NodeManipulator\ConstructorManipulator
      */
     private $constructorManipulator;
     /**
-     * @var ValueAssignFactory
+     * @var \Rector\Doctrine\NodeFactory\ValueAssignFactory
      */
     private $valueAssignFactory;
     /**
-     * @var ConstructorAssignPropertyAnalyzer
+     * @var \Rector\Doctrine\NodeAnalyzer\ConstructorAssignPropertyAnalyzer
      */
     private $constructorAssignPropertyAnalyzer;
     public function __construct(\Rector\Doctrine\NodeManipulator\ConstructorManipulator $constructorManipulator, \Rector\Doctrine\NodeFactory\ValueAssignFactory $valueAssignFactory, \Rector\Doctrine\NodeAnalyzer\ConstructorAssignPropertyAnalyzer $constructorAssignPropertyAnalyzer)

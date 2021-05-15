@@ -27,27 +27,27 @@ use RectorPrefix20210515\Symplify\Astral\ValueObject\NodeBuilder\NamespaceBuilde
 final class EventValueObjectClassFactory
 {
     /**
-     * @var ClassNaming
+     * @var \Rector\CodingStyle\Naming\ClassNaming
      */
     private $classNaming;
     /**
-     * @var VariableWithTypesFactory
-     */
-    private $variableWithTypesFactory;
-    /**
-     * @var NodeFactory
+     * @var \Rector\Core\PhpParser\Node\NodeFactory
      */
     private $nodeFactory;
     /**
-     * @var NodeNameResolver
+     * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
+    /**
+     * @var \Rector\Nette\Kdyby\BlueprintFactory\VariableWithTypesFactory
+     */
+    private $variableWithTypesFactory;
     public function __construct(\Rector\CodingStyle\Naming\ClassNaming $classNaming, \Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Nette\Kdyby\BlueprintFactory\VariableWithTypesFactory $variableWithTypesFactory)
     {
         $this->classNaming = $classNaming;
-        $this->variableWithTypesFactory = $variableWithTypesFactory;
         $this->nodeFactory = $nodeFactory;
         $this->nodeNameResolver = $nodeNameResolver;
+        $this->variableWithTypesFactory = $variableWithTypesFactory;
     }
     /**
      * @param Arg[] $args

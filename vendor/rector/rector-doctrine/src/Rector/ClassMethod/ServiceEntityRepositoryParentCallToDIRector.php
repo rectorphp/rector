@@ -29,19 +29,19 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ServiceEntityRepositoryParentCallToDIRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var RepositoryNodeFactory
+     * @var \Rector\Doctrine\NodeFactory\RepositoryNodeFactory
      */
     private $repositoryNodeFactory;
     /**
-     * @var RepositoryTypeFactory
+     * @var \Rector\Doctrine\Type\RepositoryTypeFactory
      */
     private $repositoryTypeFactory;
     /**
-     * @var PropertyToAddCollector
+     * @var \Rector\PostRector\Collector\PropertyToAddCollector
      */
     private $propertyToAddCollector;
     /**
-     * @var ClassDependencyManipulator
+     * @var \Rector\Core\NodeManipulator\ClassDependencyManipulator
      */
     private $classDependencyManipulator;
     public function __construct(\Rector\Doctrine\NodeFactory\RepositoryNodeFactory $repositoryNodeFactory, \Rector\Doctrine\Type\RepositoryTypeFactory $repositoryTypeFactory, \Rector\PostRector\Collector\PropertyToAddCollector $propertyToAddCollector, \Rector\Core\NodeManipulator\ClassDependencyManipulator $classDependencyManipulator)

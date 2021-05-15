@@ -12,11 +12,11 @@ use Rector\Symfony\ValueObject\EventNameToClassAndConstant;
 final class EventReferenceFactory
 {
     /**
-     * @var NodeFactory
+     * @var \Rector\Core\PhpParser\Node\NodeFactory
      */
     private $nodeFactory;
     /**
-     * @var ReflectionProvider
+     * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
     public function __construct(\Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)

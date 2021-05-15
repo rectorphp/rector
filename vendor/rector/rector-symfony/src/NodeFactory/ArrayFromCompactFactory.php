@@ -12,7 +12,7 @@ use Rector\Core\NodeManipulator\FuncCallManipulator;
 final class ArrayFromCompactFactory
 {
     /**
-     * @var FuncCallManipulator
+     * @var \Rector\Core\NodeManipulator\FuncCallManipulator
      */
     private $funcCallManipulator;
     public function __construct(\Rector\Core\NodeManipulator\FuncCallManipulator $funcCallManipulator)

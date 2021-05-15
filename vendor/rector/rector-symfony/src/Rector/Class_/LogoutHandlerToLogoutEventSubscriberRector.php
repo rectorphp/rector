@@ -22,17 +22,17 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class LogoutHandlerToLogoutEventSubscriberRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var OnLogoutClassMethodFactory
+     * @var \PHPStan\Type\ObjectType
+     */
+    private $logoutHandlerObjectType;
+    /**
+     * @var \Rector\Symfony\NodeFactory\OnLogoutClassMethodFactory
      */
     private $onLogoutClassMethodFactory;
     /**
-     * @var GetSubscribedEventsClassMethodFactory
+     * @var \Rector\Symfony\NodeFactory\GetSubscribedEventsClassMethodFactory
      */
     private $getSubscribedEventsClassMethodFactory;
-    /**
-     * @var ObjectType
-     */
-    private $logoutHandlerObjectType;
     public function __construct(\Rector\Symfony\NodeFactory\OnLogoutClassMethodFactory $onLogoutClassMethodFactory, \Rector\Symfony\NodeFactory\GetSubscribedEventsClassMethodFactory $getSubscribedEventsClassMethodFactory)
     {
         $this->onLogoutClassMethodFactory = $onLogoutClassMethodFactory;

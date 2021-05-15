@@ -16,19 +16,19 @@ use Rector\StaticTypeMapper\StaticTypeMapper;
 final class ExpectExceptionMethodCallFactory
 {
     /**
-     * @var NodeFactory
+     * @var \Rector\Core\PhpParser\Node\NodeFactory
      */
     private $nodeFactory;
     /**
-     * @var PhpDocValueToNodeMapper
+     * @var \Rector\PHPUnit\PhpDoc\PhpDocValueToNodeMapper
      */
     private $phpDocValueToNodeMapper;
     /**
-     * @var StaticTypeMapper
+     * @var \Rector\StaticTypeMapper\StaticTypeMapper
      */
     private $staticTypeMapper;
     /**
-     * @var CurrentNodeProvider
+     * @var \Rector\Core\Configuration\CurrentNodeProvider
      */
     private $currentNodeProvider;
     public function __construct(\Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\PHPUnit\PhpDoc\PhpDocValueToNodeMapper $phpDocValueToNodeMapper, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \Rector\Core\Configuration\CurrentNodeProvider $currentNodeProvider)

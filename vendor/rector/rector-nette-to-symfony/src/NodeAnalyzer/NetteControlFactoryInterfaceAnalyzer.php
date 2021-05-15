@@ -12,7 +12,7 @@ use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
 final class NetteControlFactoryInterfaceAnalyzer
 {
     /**
-     * @var ReturnTypeInferer
+     * @var \Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer
      */
     private $returnTypeInferer;
     public function __construct(\Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer $returnTypeInferer)

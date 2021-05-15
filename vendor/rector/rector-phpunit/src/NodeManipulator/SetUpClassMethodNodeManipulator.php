@@ -11,11 +11,11 @@ use Rector\PHPUnit\NodeFactory\SetUpClassMethodFactory;
 final class SetUpClassMethodNodeManipulator
 {
     /**
-     * @var SetUpClassMethodFactory
+     * @var \Rector\PHPUnit\NodeFactory\SetUpClassMethodFactory
      */
     private $setUpClassMethodFactory;
     /**
-     * @var StmtManipulator
+     * @var \Rector\PHPUnit\NodeManipulator\StmtManipulator
      */
     private $stmtManipulator;
     public function __construct(\Rector\PHPUnit\NodeFactory\SetUpClassMethodFactory $setUpClassMethodFactory, \Rector\PHPUnit\NodeManipulator\StmtManipulator $stmtManipulator)

@@ -11,11 +11,11 @@ use Rector\NodeNestingScope\ScopeNestingComparator;
 final class ReturnAnalyzer
 {
     /**
-     * @var BetterNodeFinder
+     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
     /**
-     * @var ScopeNestingComparator
+     * @var \Rector\NodeNestingScope\ScopeNestingComparator
      */
     private $scopeNestingComparator;
     public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\NodeNestingScope\ScopeNestingComparator $scopeNestingComparator)

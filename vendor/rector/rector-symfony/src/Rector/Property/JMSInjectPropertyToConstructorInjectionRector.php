@@ -31,19 +31,19 @@ final class JMSInjectPropertyToConstructorInjectionRector extends \Rector\Core\R
      */
     private const INJECT_ANNOTATION_CLASS = 'JMS\\DiExtraBundle\\Annotation\\Inject';
     /**
-     * @var PhpDocTypeChanger
+     * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger
      */
     private $phpDocTypeChanger;
     /**
-     * @var PhpDocTagRemover
+     * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover
      */
     private $phpDocTagRemover;
     /**
-     * @var JMSDITypeResolver
+     * @var \Rector\Symfony\TypeAnalyzer\JMSDITypeResolver
      */
     private $jmsDITypeResolver;
     /**
-     * @var PropertyConstructorInjectionManipulator
+     * @var \Rector\DependencyInjection\NodeManipulator\PropertyConstructorInjectionManipulator
      */
     private $propertyConstructorInjectionManipulator;
     public function __construct(\Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover $phpDocTagRemover, \Rector\Symfony\TypeAnalyzer\JMSDITypeResolver $jmsDITypeResolver, \Rector\DependencyInjection\NodeManipulator\PropertyConstructorInjectionManipulator $propertyConstructorInjectionManipulator)

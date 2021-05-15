@@ -10,7 +10,7 @@ use Rector\Nette\ValueObject\NetteFormMethodNameToControlType;
 final class FormVariableInputNameTypeResolver
 {
     /**
-     * @var MethodNamesByInputNamesResolver
+     * @var \Rector\Nette\NodeResolver\MethodNamesByInputNamesResolver
      */
     private $methodNamesByInputNamesResolver;
     public function __construct(\Rector\Nette\NodeResolver\MethodNamesByInputNamesResolver $methodNamesByInputNamesResolver)

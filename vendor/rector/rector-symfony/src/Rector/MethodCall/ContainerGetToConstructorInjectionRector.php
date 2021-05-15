@@ -29,11 +29,11 @@ final class ContainerGetToConstructorInjectionRector extends \Rector\Core\Rector
      */
     private $containerAwareParentTypes = ['Symfony\\Bundle\\FrameworkBundle\\Command\\ContainerAwareCommand', 'Symfony\\Bundle\\FrameworkBundle\\Controller\\Controller'];
     /**
-     * @var DependencyInjectionMethodCallAnalyzer
+     * @var \Rector\Symfony\NodeAnalyzer\DependencyInjectionMethodCallAnalyzer
      */
     private $dependencyInjectionMethodCallAnalyzer;
     /**
-     * @var ParentClassScopeResolver
+     * @var \Rector\NodeCollector\ScopeResolver\ParentClassScopeResolver
      */
     private $parentClassScopeResolver;
     public function __construct(\Rector\Symfony\NodeAnalyzer\DependencyInjectionMethodCallAnalyzer $dependencyInjectionMethodCallAnalyzer, \Rector\NodeCollector\ScopeResolver\ParentClassScopeResolver $parentClassScopeResolver)

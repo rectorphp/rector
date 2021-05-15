@@ -10,15 +10,15 @@ use Rector\NodeRemoval\NodeRemover;
 final class RightAssignTemplateRemover
 {
     /**
-     * @var BetterNodeFinder
+     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
     /**
-     * @var ThisTemplatePropertyFetchAnalyzer
+     * @var \Rector\Nette\NodeAnalyzer\ThisTemplatePropertyFetchAnalyzer
      */
     private $thisTemplatePropertyFetchAnalyzer;
     /**
-     * @var NodeRemover
+     * @var \Rector\NodeRemoval\NodeRemover
      */
     private $nodeRemover;
     public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Nette\NodeAnalyzer\ThisTemplatePropertyFetchAnalyzer $thisTemplatePropertyFetchAnalyzer, \Rector\NodeRemoval\NodeRemover $nodeRemover)

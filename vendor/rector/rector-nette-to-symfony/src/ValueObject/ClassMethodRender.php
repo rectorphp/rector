@@ -10,21 +10,21 @@ use Rector\Nette\Contract\ValueObject\ParameterArrayInterface;
 final class ClassMethodRender implements \Rector\Nette\Contract\ValueObject\ParameterArrayInterface
 {
     /**
-     * @var Node[]
+     * @var mixed[]
      */
-    private $nodesToRemove = [];
+    private $templateFileExprs;
     /**
-     * @var array<string, Expr>
+     * @var mixed[]
      */
-    private $templateVariables = [];
+    private $templateVariables;
     /**
-     * @var array<string, Assign[]>
+     * @var mixed[]
      */
-    private $conditionalAssigns = [];
+    private $nodesToRemove;
     /**
-     * @var Expr[]
+     * @var mixed[]
      */
-    private $templateFileExprs = [];
+    private $conditionalAssigns;
     /**
      * @param Expr[] $templateFileExprs
      * @param array<string, Expr> $templateVariables
@@ -33,10 +33,10 @@ final class ClassMethodRender implements \Rector\Nette\Contract\ValueObject\Para
      */
     public function __construct(array $templateFileExprs, array $templateVariables, array $nodesToRemove, array $conditionalAssigns)
     {
+        $this->templateFileExprs = $templateFileExprs;
         $this->templateVariables = $templateVariables;
         $this->nodesToRemove = $nodesToRemove;
         $this->conditionalAssigns = $conditionalAssigns;
-        $this->templateFileExprs = $templateFileExprs;
     }
     /**
      * @return array<string, Expr>

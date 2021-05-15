@@ -20,11 +20,11 @@ final class ExpectationAnalyzer
      */
     private const PROCESSABLE_WILL_STATEMENTS = ['will', 'willReturn', 'willReturnReference', 'willReturnMap', 'willReturnArgument', 'willReturnCallback', 'willReturnSelf', 'willThrowException'];
     /**
-     * @var TestsNodeAnalyzer
+     * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
      */
     private $testsNodeAnalyzer;
     /**
-     * @var ConsecutiveAssertionFactory
+     * @var \Rector\PHPUnit\NodeFactory\ConsecutiveAssertionFactory
      */
     private $consecutiveAssertionFactory;
     public function __construct(\Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer $testsNodeAnalyzer, \Rector\PHPUnit\NodeFactory\ConsecutiveAssertionFactory $consecutiveAssertionFactory)

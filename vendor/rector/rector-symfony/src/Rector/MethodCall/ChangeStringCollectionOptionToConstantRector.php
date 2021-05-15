@@ -24,19 +24,19 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ChangeStringCollectionOptionToConstantRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var FormAddMethodCallAnalyzer
+     * @var \Rector\Symfony\NodeAnalyzer\FormAddMethodCallAnalyzer
      */
     private $formAddMethodCallAnalyzer;
     /**
-     * @var FormOptionsArrayMatcher
+     * @var \Rector\Symfony\NodeAnalyzer\FormOptionsArrayMatcher
      */
     private $formOptionsArrayMatcher;
     /**
-     * @var FormTypeStringToTypeProvider
+     * @var \Rector\Symfony\FormHelper\FormTypeStringToTypeProvider
      */
     private $formTypeStringToTypeProvider;
     /**
-     * @var FormCollectionAnalyzer
+     * @var \Rector\Symfony\NodeAnalyzer\FormCollectionAnalyzer
      */
     private $formCollectionAnalyzer;
     public function __construct(\Rector\Symfony\NodeAnalyzer\FormAddMethodCallAnalyzer $formAddMethodCallAnalyzer, \Rector\Symfony\NodeAnalyzer\FormOptionsArrayMatcher $formOptionsArrayMatcher, \Rector\Symfony\FormHelper\FormTypeStringToTypeProvider $formTypeStringToTypeProvider, \Rector\Symfony\NodeAnalyzer\FormCollectionAnalyzer $formCollectionAnalyzer)

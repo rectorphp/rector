@@ -23,7 +23,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class AppUsesStaticCallToUseStatementRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var CakePHPFullyQualifiedClassNameResolver
+     * @var \Rector\CakePHP\Naming\CakePHPFullyQualifiedClassNameResolver
      */
     private $cakePHPFullyQualifiedClassNameResolver;
     public function __construct(\Rector\CakePHP\Naming\CakePHPFullyQualifiedClassNameResolver $cakePHPFullyQualifiedClassNameResolver)

@@ -9,9 +9,9 @@ use Rector\Symfony\ValueObject\ServiceDefinition;
 final class ServiceMap
 {
     /**
-     * @var ServiceDefinition[]
+     * @var mixed[]
      */
-    private $services = [];
+    private $services;
     /**
      * @param ServiceDefinition[] $services
      */

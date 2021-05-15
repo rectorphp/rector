@@ -10,6 +10,7 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Symfony\Bridge\NodeAnalyzer\ControllerMethodAnalyzer;
@@ -25,11 +26,11 @@ final class GetRequestRector extends \Rector\Core\Rector\AbstractRector
      */
     private const REQUEST_CLASS = 'Symfony\\Component\\HttpFoundation\\Request';
     /**
-     * @var string
+     * @var string|null
      */
     private $requestVariableAndParamName;
     /**
-     * @var ControllerMethodAnalyzer
+     * @var \Rector\Symfony\Bridge\NodeAnalyzer\ControllerMethodAnalyzer
      */
     private $controllerMethodAnalyzer;
     public function __construct(\Rector\Symfony\Bridge\NodeAnalyzer\ControllerMethodAnalyzer $controllerMethodAnalyzer)
@@ -76,12 +77,12 @@ CODE_SAMPLE
             $this->requestVariableAndParamName = $this->resolveUniqueName($node, 'request');
             if ($this->isActionWithGetRequestInBody($node)) {
                 $fullyQualified = new \PhpParser\Node\Name\FullyQualified(self::REQUEST_CLASS);
-                $node->params[] = new \PhpParser\Node\Param(new \PhpParser\Node\Expr\Variable($this->requestVariableAndParamName), null, $fullyQualified);
+                $node->params[] = new \PhpParser\Node\Param(new \PhpParser\Node\Expr\Variable($this->getRequestVariableAndParamName()), null, $fullyQualified);
                 return $node;
             }
         }
         if ($this->isGetRequestInAction($node)) {
-            return new \PhpParser\Node\Expr\Variable($this->requestVariableAndParamName);
+            return new \PhpParser\Node\Expr\Variable($this->getRequestVariableAndParamName());
         }
         return null;
     }
@@ -177,5 +178,12 @@ CODE_SAMPLE
         /** @var String_ $stringValue */
         $stringValue = $methodCall->args[0]->value;
         return $stringValue->value === 'request';
+    }
+    private function getRequestVariableAndParamName() : string
+    {
+        if ($this->requestVariableAndParamName === null) {
+            throw new \Rector\Core\Exception\ShouldNotHappenException();
+        }
+        return $this->requestVariableAndParamName;
     }
 }

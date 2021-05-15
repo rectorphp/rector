@@ -13,6 +13,7 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Expression;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -30,7 +31,7 @@ final class SimplifyWebTestCaseAssertionsRector extends \Rector\Core\Rector\Abst
      */
     private const ASSERT_SAME = 'assertSame';
     /**
-     * @var MethodCall
+     * @var \PhpParser\Node\Expr\MethodCall|null
      */
     private $getStatusCodeMethodCall;
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
@@ -100,7 +101,7 @@ CODE_SAMPLE
         // assertResponseIsSuccessful
         $args = [];
         $args[] = new \PhpParser\Node\Arg(new \PhpParser\Node\Scalar\LNumber(200));
-        $args[] = new \PhpParser\Node\Arg($this->getStatusCodeMethodCall);
+        $args[] = new \PhpParser\Node\Arg($this->getGetStatusCodeMethodCall());
         $methodCall = $this->nodeFactory->createLocalMethodCall(self::ASSERT_SAME, $args);
         if ($this->nodeComparator->areNodesEqual($node, $methodCall)) {
             return $this->nodeFactory->createLocalMethodCall('assertResponseIsSuccessful');
@@ -134,7 +135,7 @@ CODE_SAMPLE
         if (!$this->isName($methodCall->name, self::ASSERT_SAME)) {
             return null;
         }
-        if (!$this->nodeComparator->areNodesEqual($methodCall->args[1]->value, $this->getStatusCodeMethodCall)) {
+        if (!$this->nodeComparator->areNodesEqual($methodCall->args[1]->value, $this->getGetStatusCodeMethodCall())) {
             return null;
         }
         $statusCode = $this->valueResolver->getValue($methodCall->args[0]->value);
@@ -187,7 +188,7 @@ CODE_SAMPLE
         }
         $args = [];
         $args[] = new \PhpParser\Node\Arg(new \PhpParser\Node\Scalar\LNumber(301));
-        $args[] = new \PhpParser\Node\Arg($this->getStatusCodeMethodCall);
+        $args[] = new \PhpParser\Node\Arg($this->getGetStatusCodeMethodCall());
         $match = $this->nodeFactory->createLocalMethodCall(self::ASSERT_SAME, $args);
         if ($this->nodeComparator->areNodesEqual($previousNode, $match)) {
             $getResponseMethodCall = $this->nodeFactory->createMethodCall('client', 'getResponse');
@@ -205,5 +206,12 @@ CODE_SAMPLE
             }
         }
         return null;
+    }
+    private function getGetStatusCodeMethodCall() : \PhpParser\Node\Expr\MethodCall
+    {
+        if ($this->getStatusCodeMethodCall === null) {
+            throw new \Rector\Core\Exception\ShouldNotHappenException();
+        }
+        return $this->getStatusCodeMethodCall;
     }
 }

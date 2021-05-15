@@ -19,7 +19,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class EndsWithFunctionToNetteUtilsStringsRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var StrlenEndsWithResolver
+     * @var \Rector\Nette\NodeAnalyzer\StrlenEndsWithResolver
      */
     private $strlenEndsWithResolver;
     public function __construct(\Rector\Nette\NodeAnalyzer\StrlenEndsWithResolver $strlenEndsWithResolver)

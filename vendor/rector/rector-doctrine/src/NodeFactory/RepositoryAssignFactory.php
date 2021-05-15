@@ -13,11 +13,11 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class RepositoryAssignFactory
 {
     /**
-     * @var EntityObjectTypeResolver
+     * @var \Rector\Doctrine\NodeAnalyzer\EntityObjectTypeResolver
      */
     private $entityObjectTypeResolver;
     /**
-     * @var NodeFactory
+     * @var \Rector\Core\PhpParser\Node\NodeFactory
      */
     private $nodeFactory;
     public function __construct(\Rector\Doctrine\NodeAnalyzer\EntityObjectTypeResolver $entityObjectTypeResolver, \Rector\Core\PhpParser\Node\NodeFactory $nodeFactory)

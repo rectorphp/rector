@@ -10,11 +10,11 @@ use Rector\NodeNameResolver\NodeNameResolver;
 final class FormCollectionAnalyzer
 {
     /**
-     * @var ValueResolver
+     * @var \Rector\Core\PhpParser\Node\Value\ValueResolver
      */
     private $valueResolver;
     /**
-     * @var NodeNameResolver
+     * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     public function __construct(\Rector\Core\PhpParser\Node\Value\ValueResolver $valueResolver, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)

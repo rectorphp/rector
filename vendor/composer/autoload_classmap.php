@@ -2211,7 +2211,6 @@ return array(
     'Rector\\NetteToSymfony\\ValueObject\\NetteFormMethodToSymfonyTypeClass' => $vendorDir . '/rector/rector-nette-to-symfony/src/ValueObject/NetteFormMethodToSymfonyTypeClass.php',
     'Rector\\NetteToSymfony\\ValueObject\\RouteInfo' => $vendorDir . '/rector/rector-nette-to-symfony/src/ValueObject/RouteInfo.php',
     'Rector\\Nette\\Contract\\FormControlTypeResolverInterface' => $vendorDir . '/rector/rector-nette/src/Contract/FormControlTypeResolverInterface.php',
-    'Rector\\Nette\\Contract\\MethodNamesByInputNamesResolverAwareInterface' => $vendorDir . '/rector/rector-nette/src/Contract/MethodNamesByInputNamesResolverAwareInterface.php',
     'Rector\\Nette\\Contract\\PregToNetteUtilsStringInterface' => $vendorDir . '/rector/rector-nette/src/Contract/PregToNetteUtilsStringInterface.php',
     'Rector\\Nette\\Contract\\Rector\\NeonRectorInterface' => $vendorDir . '/rector/rector-nette/src/Contract/Rector/NeonRectorInterface.php',
     'Rector\\Nette\\Contract\\ValueObject\\ParameterArrayInterface' => $vendorDir . '/rector/rector-nette/src/Contract/ValueObject/ParameterArrayInterface.php',

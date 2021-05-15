@@ -24,19 +24,19 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class EntityObjectTypeResolver
 {
     /**
-     * @var PhpDocInfoFactory
+     * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
     private $phpDocInfoFactory;
     /**
-     * @var TypeFinder
+     * @var \Rector\Doctrine\TypeAnalyzer\TypeFinder
      */
     private $typeFinder;
     /**
-     * @var NodeRepository
+     * @var \Rector\NodeCollector\NodeCollector\NodeRepository
      */
     private $nodeRepository;
     /**
-     * @var NodeNameResolver
+     * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     public function __construct(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \Rector\Doctrine\TypeAnalyzer\TypeFinder $typeFinder, \Rector\NodeCollector\NodeCollector\NodeRepository $nodeRepository, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)

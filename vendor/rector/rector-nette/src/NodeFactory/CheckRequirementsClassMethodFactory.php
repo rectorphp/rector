@@ -19,7 +19,7 @@ final class CheckRequirementsClassMethodFactory
      */
     private const CHECK_REQUIREMENTS_METHOD_NAME = 'checkRequirements';
     /**
-     * @var ParentGetterStmtsToExternalStmtsFactory
+     * @var \Rector\Nette\NodeFactory\ParentGetterStmtsToExternalStmtsFactory
      */
     private $parentGetterStmtsToExternalStmtsFactory;
     public function __construct(\Rector\Nette\NodeFactory\ParentGetterStmtsToExternalStmtsFactory $parentGetterStmtsToExternalStmtsFactory)

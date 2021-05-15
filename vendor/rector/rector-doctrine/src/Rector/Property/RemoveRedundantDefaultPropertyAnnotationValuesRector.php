@@ -29,7 +29,7 @@ final class RemoveRedundantDefaultPropertyAnnotationValuesRector extends \Rector
      */
     private const LAZY = 'LAZY';
     /**
-     * @var DoctrineItemDefaultValueManipulator
+     * @var \Rector\Doctrine\NodeManipulator\DoctrineItemDefaultValueManipulator
      */
     private $doctrineItemDefaultValueManipulator;
     public function __construct(\Rector\Doctrine\NodeManipulator\DoctrineItemDefaultValueManipulator $doctrineItemDefaultValueManipulator)

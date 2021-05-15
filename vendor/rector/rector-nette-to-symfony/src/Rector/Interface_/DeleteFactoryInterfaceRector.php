@@ -15,7 +15,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DeleteFactoryInterfaceRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var NetteControlFactoryInterfaceAnalyzer
+     * @var \Rector\NetteToSymfony\NodeAnalyzer\NetteControlFactoryInterfaceAnalyzer
      */
     private $netteControlFactoryInterfaceAnalyzer;
     public function __construct(\Rector\NetteToSymfony\NodeAnalyzer\NetteControlFactoryInterfaceAnalyzer $netteControlFactoryInterfaceAnalyzer)

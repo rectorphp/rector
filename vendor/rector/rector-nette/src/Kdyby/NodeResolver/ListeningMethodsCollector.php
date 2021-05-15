@@ -31,22 +31,22 @@ final class ListeningMethodsCollector
      */
     private $eventClassesAndClassMethods = [];
     /**
-     * @var SimpleCallableNodeTraverser
+     * @var \Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser
      */
     private $simpleCallableNodeTraverser;
     /**
-     * @var ValueResolver
-     */
-    private $valueResolver;
-    /**
-     * @var EventClassNaming
+     * @var \Rector\Nette\Kdyby\Naming\EventClassNaming
      */
     private $eventClassNaming;
+    /**
+     * @var \Rector\Core\PhpParser\Node\Value\ValueResolver
+     */
+    private $valueResolver;
     public function __construct(\RectorPrefix20210515\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\Nette\Kdyby\Naming\EventClassNaming $eventClassNaming, \Rector\Core\PhpParser\Node\Value\ValueResolver $valueResolver)
     {
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
-        $this->valueResolver = $valueResolver;
         $this->eventClassNaming = $eventClassNaming;
+        $this->valueResolver = $valueResolver;
     }
     /**
      * @return EventClassAndClassMethod[]

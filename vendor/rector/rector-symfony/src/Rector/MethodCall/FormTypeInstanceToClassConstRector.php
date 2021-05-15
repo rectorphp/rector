@@ -44,27 +44,27 @@ final class FormTypeInstanceToClassConstRector extends \Rector\Core\Rector\Abstr
      */
     private $controllerObjectTypes = [];
     /**
-     * @var BuilderFormNodeFactory
+     * @var \Rector\Symfony\NodeFactory\BuilderFormNodeFactory
      */
     private $builderFormNodeFactory;
     /**
-     * @var ConfigureOptionsNodeFactory
+     * @var \Rector\Symfony\NodeFactory\ConfigureOptionsNodeFactory
      */
     private $configureOptionsNodeFactory;
     /**
-     * @var ReflectionProvider
+     * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
     /**
-     * @var FormAddMethodCallAnalyzer
+     * @var \Rector\Symfony\NodeAnalyzer\FormAddMethodCallAnalyzer
      */
     private $formAddMethodCallAnalyzer;
     /**
-     * @var FormOptionsArrayMatcher
+     * @var \Rector\Symfony\NodeAnalyzer\FormOptionsArrayMatcher
      */
     private $formOptionsArrayMatcher;
     /**
-     * @var FormCollectionAnalyzer
+     * @var \Rector\Symfony\NodeAnalyzer\FormCollectionAnalyzer
      */
     private $formCollectionAnalyzer;
     public function __construct(\Rector\Symfony\NodeFactory\BuilderFormNodeFactory $builderFormNodeFactory, \Rector\Symfony\NodeFactory\ConfigureOptionsNodeFactory $configureOptionsNodeFactory, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\Symfony\NodeAnalyzer\FormAddMethodCallAnalyzer $formAddMethodCallAnalyzer, \Rector\Symfony\NodeAnalyzer\FormOptionsArrayMatcher $formOptionsArrayMatcher, \Rector\Symfony\NodeAnalyzer\FormCollectionAnalyzer $formCollectionAnalyzer)
@@ -74,8 +74,8 @@ final class FormTypeInstanceToClassConstRector extends \Rector\Core\Rector\Abstr
         $this->reflectionProvider = $reflectionProvider;
         $this->formAddMethodCallAnalyzer = $formAddMethodCallAnalyzer;
         $this->formOptionsArrayMatcher = $formOptionsArrayMatcher;
-        $this->controllerObjectTypes = [new \PHPStan\Type\ObjectType('Symfony\\Bundle\\FrameworkBundle\\Controller\\Controller'), new \PHPStan\Type\ObjectType('Symfony\\Bundle\\FrameworkBundle\\Controller\\AbstractController')];
         $this->formCollectionAnalyzer = $formCollectionAnalyzer;
+        $this->controllerObjectTypes = [new \PHPStan\Type\ObjectType('Symfony\\Bundle\\FrameworkBundle\\Controller\\Controller'), new \PHPStan\Type\ObjectType('Symfony\\Bundle\\FrameworkBundle\\Controller\\AbstractController')];
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {

@@ -20,15 +20,15 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ReadOnlyOptionToAttributeRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var ArrayManipulator
+     * @var \Rector\Core\NodeManipulator\ArrayManipulator
      */
     private $arrayManipulator;
     /**
-     * @var FormAddMethodCallAnalyzer
+     * @var \Rector\Symfony\NodeAnalyzer\FormAddMethodCallAnalyzer
      */
     private $formAddMethodCallAnalyzer;
     /**
-     * @var FormOptionsArrayMatcher
+     * @var \Rector\Symfony\NodeAnalyzer\FormOptionsArrayMatcher
      */
     private $formOptionsArrayMatcher;
     public function __construct(\Rector\Core\NodeManipulator\ArrayManipulator $arrayManipulator, \Rector\Symfony\NodeAnalyzer\FormAddMethodCallAnalyzer $formAddMethodCallAnalyzer, \Rector\Symfony\NodeAnalyzer\FormOptionsArrayMatcher $formOptionsArrayMatcher)

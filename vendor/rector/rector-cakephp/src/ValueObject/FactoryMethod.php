@@ -15,19 +15,19 @@ final class FactoryMethod
      */
     private $method;
     /**
-     * @var int
-     */
-    private $position;
-    /**
      * @var string
      */
     private $newClass;
+    /**
+     * @var int
+     */
+    private $position;
     public function __construct(string $type, string $method, string $newClass, int $position)
     {
         $this->type = $type;
         $this->method = $method;
-        $this->position = $position;
         $this->newClass = $newClass;
+        $this->position = $position;
     }
     public function getObjectType() : \PHPStan\Type\ObjectType
     {

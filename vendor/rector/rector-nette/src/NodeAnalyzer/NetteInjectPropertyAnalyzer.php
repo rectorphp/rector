@@ -14,7 +14,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class NetteInjectPropertyAnalyzer
 {
     /**
-     * @var ClassChildAnalyzer
+     * @var \Rector\FamilyTree\NodeAnalyzer\ClassChildAnalyzer
      */
     private $classChildAnalyzer;
     public function __construct(\Rector\FamilyTree\NodeAnalyzer\ClassChildAnalyzer $classChildAnalyzer)

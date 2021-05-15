@@ -40,26 +40,26 @@ final class AddDoesNotPerformAssertionToNonAssertingTestRector extends \Rector\C
      */
     private $containsAssertCallByClassMethod = [];
     /**
-     * @var FileInfoParser
-     */
-    private $fileInfoParser;
-    /**
-     * @var ClassMethodReflectionFactory
-     */
-    private $classMethodReflectionFactory;
-    /**
      * @var ClassMethod[][]|null[][]
      */
     private $analyzedMethodsInFileName = [];
     /**
-     * @var TestsNodeAnalyzer
+     * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
      */
     private $testsNodeAnalyzer;
+    /**
+     * @var \Rector\Core\Reflection\ClassMethodReflectionFactory
+     */
+    private $classMethodReflectionFactory;
+    /**
+     * @var \Rector\FileSystemRector\Parser\FileInfoParser
+     */
+    private $fileInfoParser;
     public function __construct(\Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer $testsNodeAnalyzer, \Rector\Core\Reflection\ClassMethodReflectionFactory $classMethodReflectionFactory, \Rector\FileSystemRector\Parser\FileInfoParser $fileInfoParser)
     {
-        $this->fileInfoParser = $fileInfoParser;
-        $this->classMethodReflectionFactory = $classMethodReflectionFactory;
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
+        $this->classMethodReflectionFactory = $classMethodReflectionFactory;
+        $this->fileInfoParser = $fileInfoParser;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {

@@ -16,30 +16,30 @@ use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
 final class ArrayDimFetchControlTypeResolver implements \Rector\Nette\Contract\FormControlTypeResolverInterface
 {
     /**
-     * @var ControlDimFetchAnalyzer
+     * @var \Rector\Nette\NodeAnalyzer\ControlDimFetchAnalyzer
      */
     private $controlDimFetchAnalyzer;
     /**
-     * @var NodeTypeResolver
-     */
-    private $nodeTypeResolver;
-    /**
-     * @var NetteControlNaming
+     * @var \Rector\Nette\Naming\NetteControlNaming
      */
     private $netteControlNaming;
     /**
-     * @var ReturnTypeInferer
+     * @var \Rector\NodeTypeResolver\NodeTypeResolver
+     */
+    private $nodeTypeResolver;
+    /**
+     * @var \Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer
      */
     private $returnTypeInferer;
     /**
-     * @var NodeRepository
+     * @var \Rector\NodeCollector\NodeCollector\NodeRepository
      */
     private $nodeRepository;
     public function __construct(\Rector\Nette\NodeAnalyzer\ControlDimFetchAnalyzer $controlDimFetchAnalyzer, \Rector\Nette\Naming\NetteControlNaming $netteControlNaming, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer $returnTypeInferer, \Rector\NodeCollector\NodeCollector\NodeRepository $nodeRepository)
     {
         $this->controlDimFetchAnalyzer = $controlDimFetchAnalyzer;
-        $this->nodeTypeResolver = $nodeTypeResolver;
         $this->netteControlNaming = $netteControlNaming;
+        $this->nodeTypeResolver = $nodeTypeResolver;
         $this->returnTypeInferer = $returnTypeInferer;
         $this->nodeRepository = $nodeRepository;
     }

@@ -23,13 +23,13 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RequestStaticValidateToInjectRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var ClassMethodManipulator
-     */
-    private $classMethodManipulator;
-    /**
      * @var ObjectType[]
      */
     private $requestObjectTypes = [];
+    /**
+     * @var \Rector\Core\NodeManipulator\ClassMethodManipulator
+     */
+    private $classMethodManipulator;
     public function __construct(\Rector\Core\NodeManipulator\ClassMethodManipulator $classMethodManipulator)
     {
         $this->classMethodManipulator = $classMethodManipulator;

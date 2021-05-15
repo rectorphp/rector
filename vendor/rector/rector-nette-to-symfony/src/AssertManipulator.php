@@ -51,41 +51,41 @@ final class AssertManipulator
      */
     private const SELF = 'self';
     /**
-     * @var NodeNameResolver
+     * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     /**
-     * @var NodeTypeResolver
+     * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;
     /**
-     * @var ValueResolver
-     */
-    private $valueResolver;
-    /**
-     * @var StringTypeAnalyzer
-     */
-    private $stringTypeAnalyzer;
-    /**
-     * @var NodesToRemoveCollector
-     */
-    private $nodesToRemoveCollector;
-    /**
-     * @var NodesToAddCollector
+     * @var \Rector\PostRector\Collector\NodesToAddCollector
      */
     private $nodesToAddCollector;
     /**
-     * @var PhpDocInfoFactory
+     * @var \Rector\PostRector\Collector\NodesToRemoveCollector
+     */
+    private $nodesToRemoveCollector;
+    /**
+     * @var \Rector\NodeTypeResolver\TypeAnalyzer\StringTypeAnalyzer
+     */
+    private $stringTypeAnalyzer;
+    /**
+     * @var \Rector\Core\PhpParser\Node\Value\ValueResolver
+     */
+    private $valueResolver;
+    /**
+     * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
     private $phpDocInfoFactory;
     public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\PostRector\Collector\NodesToAddCollector $nodesToAddCollector, \Rector\PostRector\Collector\NodesToRemoveCollector $nodesToRemoveCollector, \Rector\NodeTypeResolver\TypeAnalyzer\StringTypeAnalyzer $stringTypeAnalyzer, \Rector\Core\PhpParser\Node\Value\ValueResolver $valueResolver, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
-        $this->valueResolver = $valueResolver;
-        $this->stringTypeAnalyzer = $stringTypeAnalyzer;
-        $this->nodesToRemoveCollector = $nodesToRemoveCollector;
         $this->nodesToAddCollector = $nodesToAddCollector;
+        $this->nodesToRemoveCollector = $nodesToRemoveCollector;
+        $this->stringTypeAnalyzer = $stringTypeAnalyzer;
+        $this->valueResolver = $valueResolver;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
     /**

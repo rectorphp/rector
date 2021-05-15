@@ -16,11 +16,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ActionSuffixRemoverRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var ControllerMethodAnalyzer
+     * @var \Rector\Symfony\Bridge\NodeAnalyzer\ControllerMethodAnalyzer
      */
     private $controllerMethodAnalyzer;
     /**
-     * @var IdentifierManipulator
+     * @var \Rector\Renaming\NodeManipulator\IdentifierManipulator
      */
     private $identifierManipulator;
     public function __construct(\Rector\Symfony\Bridge\NodeAnalyzer\ControllerMethodAnalyzer $controllerMethodAnalyzer, \Rector\Renaming\NodeManipulator\IdentifierManipulator $identifierManipulator)

@@ -11,13 +11,13 @@ final class GetterMethodBlueprint
      */
     private $methodName;
     /**
+     * @var \PhpParser\Node|null
+     */
+    private $returnTypeNode;
+    /**
      * @var string
      */
     private $variableName;
-    /**
-     * @var Node|null
-     */
-    private $returnTypeNode;
     public function __construct(string $methodName, ?\PhpParser\Node $returnTypeNode, string $variableName)
     {
         $this->methodName = $methodName;

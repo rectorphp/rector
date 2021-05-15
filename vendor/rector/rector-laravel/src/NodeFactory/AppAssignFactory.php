@@ -14,7 +14,7 @@ use Rector\Laravel\ValueObject\ServiceNameTypeAndVariableName;
 final class AppAssignFactory
 {
     /**
-     * @var PhpDocInfoFactory
+     * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
     private $phpDocInfoFactory;
     public function __construct(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory)

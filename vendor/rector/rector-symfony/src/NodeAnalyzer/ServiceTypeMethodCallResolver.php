@@ -15,11 +15,11 @@ use Rector\Symfony\DataProvider\ServiceMapProvider;
 final class ServiceTypeMethodCallResolver
 {
     /**
-     * @var ServiceMapProvider
+     * @var \Rector\Symfony\DataProvider\ServiceMapProvider
      */
     private $serviceMapProvider;
     /**
-     * @var NodeNameResolver
+     * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     public function __construct(\Rector\Symfony\DataProvider\ServiceMapProvider $serviceMapProvider, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)

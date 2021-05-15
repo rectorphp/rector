@@ -19,11 +19,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class MoveFinalGetUserToCheckRequirementsClassMethodRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var CheckRequirementsClassMethodFactory
+     * @var \Rector\Nette\NodeFactory\CheckRequirementsClassMethodFactory
      */
     private $checkRequirementsClassMethodFactory;
     /**
-     * @var ClassInsertManipulator
+     * @var \Rector\Core\NodeManipulator\ClassInsertManipulator
      */
     private $classInsertManipulator;
     public function __construct(\Rector\Nette\NodeFactory\CheckRequirementsClassMethodFactory $checkRequirementsClassMethodFactory, \Rector\Core\NodeManipulator\ClassInsertManipulator $classInsertManipulator)

@@ -14,11 +14,11 @@ use RectorPrefix20210515\Symplify\Astral\NodeTraverser\SimpleCallableNodeTravers
 final class GetSubscribedEventsArrayManipulator
 {
     /**
-     * @var SimpleCallableNodeTraverser
+     * @var \Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser
      */
     private $simpleCallableNodeTraverser;
     /**
-     * @var ValueResolver
+     * @var \Rector\Core\PhpParser\Node\Value\ValueResolver
      */
     private $valueResolver;
     public function __construct(\RectorPrefix20210515\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\Core\PhpParser\Node\Value\ValueResolver $valueResolver)

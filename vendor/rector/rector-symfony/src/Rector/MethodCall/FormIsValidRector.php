@@ -19,7 +19,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class FormIsValidRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var MethodCallManipulator
+     * @var \Rector\Core\NodeManipulator\MethodCallManipulator
      */
     private $methodCallManipulator;
     public function __construct(\Rector\Core\NodeManipulator\MethodCallManipulator $methodCallManipulator)

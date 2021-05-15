@@ -16,19 +16,19 @@ use Rector\PostRector\Collector\NodesToAddCollector;
 final class AssignAnalyzer
 {
     /**
-     * @var FunctionLikeFirstLevelStatementResolver
-     */
-    private $functionLikeFirstLevelStatementResolver;
-    /**
      * @var string[]
      */
     private $alreadyInitializedAssignsClassMethodObjectHashes = [];
     /**
-     * @var NodesToAddCollector
+     * @var \Rector\Nette\NodeAdding\FunctionLikeFirstLevelStatementResolver
+     */
+    private $functionLikeFirstLevelStatementResolver;
+    /**
+     * @var \Rector\PostRector\Collector\NodesToAddCollector
      */
     private $nodesToAddCollector;
     /**
-     * @var VarAnnotationManipulator
+     * @var \Rector\BetterPhpDocParser\PhpDocManipulator\VarAnnotationManipulator
      */
     private $varAnnotationManipulator;
     public function __construct(\Rector\Nette\NodeAdding\FunctionLikeFirstLevelStatementResolver $functionLikeFirstLevelStatementResolver, \Rector\PostRector\Collector\NodesToAddCollector $nodesToAddCollector, \Rector\BetterPhpDocParser\PhpDocManipulator\VarAnnotationManipulator $varAnnotationManipulator)

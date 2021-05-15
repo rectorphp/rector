@@ -20,11 +20,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class MoveInjectToExistingConstructorRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var PropertyUsageAnalyzer
+     * @var \Rector\FamilyTree\NodeAnalyzer\PropertyUsageAnalyzer
      */
     private $propertyUsageAnalyzer;
     /**
-     * @var PhpDocTagRemover
+     * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover
      */
     private $phpDocTagRemover;
     public function __construct(\Rector\FamilyTree\NodeAnalyzer\PropertyUsageAnalyzer $propertyUsageAnalyzer, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover $phpDocTagRemover)

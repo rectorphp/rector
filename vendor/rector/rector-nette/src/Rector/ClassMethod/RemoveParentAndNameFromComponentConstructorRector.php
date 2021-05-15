@@ -38,26 +38,26 @@ final class RemoveParentAndNameFromComponentConstructorRector extends \Rector\Co
      */
     private const NAME = 'name';
     /**
-     * @var StaticCallAnalyzer
+     * @var \PHPStan\Type\ObjectType
      */
-    private $staticCallAnalyzer;
+    private $controlObjectType;
     /**
-     * @var MethodReflectionProvider
-     */
-    private $methodReflectionProvider;
-    /**
-     * @var ParamFinder
+     * @var \Rector\Nette\NodeFinder\ParamFinder
      */
     private $paramFinder;
     /**
-     * @var ObjectType
+     * @var \Rector\Nette\NodeAnalyzer\StaticCallAnalyzer
      */
-    private $controlObjectType;
+    private $staticCallAnalyzer;
+    /**
+     * @var \Rector\NodeCollector\Reflection\MethodReflectionProvider
+     */
+    private $methodReflectionProvider;
     public function __construct(\Rector\Nette\NodeFinder\ParamFinder $paramFinder, \Rector\Nette\NodeAnalyzer\StaticCallAnalyzer $staticCallAnalyzer, \Rector\NodeCollector\Reflection\MethodReflectionProvider $methodReflectionProvider)
     {
+        $this->paramFinder = $paramFinder;
         $this->staticCallAnalyzer = $staticCallAnalyzer;
         $this->methodReflectionProvider = $methodReflectionProvider;
-        $this->paramFinder = $paramFinder;
         $this->controlObjectType = new \PHPStan\Type\ObjectType('Nette\\Application\\UI\\Control');
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition

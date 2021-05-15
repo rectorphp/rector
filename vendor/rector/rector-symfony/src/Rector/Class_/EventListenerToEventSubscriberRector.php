@@ -42,15 +42,17 @@ final class EventListenerToEventSubscriberRector extends \Rector\Core\Rector\Abs
      */
     private $eventNamesToClassConstants = [];
     /**
-     * @var ListenerServiceDefinitionProvider
+     * @var \Rector\Symfony\ApplicationMetadata\ListenerServiceDefinitionProvider
      */
     private $listenerServiceDefinitionProvider;
     /**
-     * @var GetSubscribedEventsClassMethodFactory
+     * @var \Rector\Symfony\NodeFactory\GetSubscribedEventsClassMethodFactory
      */
     private $getSubscribedEventsClassMethodFactory;
     public function __construct(\Rector\Symfony\ApplicationMetadata\ListenerServiceDefinitionProvider $listenerServiceDefinitionProvider, \Rector\Symfony\NodeFactory\GetSubscribedEventsClassMethodFactory $getSubscribedEventsClassMethodFactory)
     {
+        $this->listenerServiceDefinitionProvider = $listenerServiceDefinitionProvider;
+        $this->getSubscribedEventsClassMethodFactory = $getSubscribedEventsClassMethodFactory;
         $this->eventNamesToClassConstants = [
             // kernel events
             new \Rector\Symfony\ValueObject\EventNameToClassAndConstant('kernel.request', self::KERNEL_EVENTS_CLASS, 'REQUEST'),
@@ -66,8 +68,6 @@ final class EventListenerToEventSubscriberRector extends \Rector\Core\Rector\Abs
             new \Rector\Symfony\ValueObject\EventNameToClassAndConstant('console.terminate', self::CONSOLE_EVENTS_CLASS, 'TERMINATE'),
             new \Rector\Symfony\ValueObject\EventNameToClassAndConstant('console.error', self::CONSOLE_EVENTS_CLASS, 'ERROR'),
         ];
-        $this->listenerServiceDefinitionProvider = $listenerServiceDefinitionProvider;
-        $this->getSubscribedEventsClassMethodFactory = $getSubscribedEventsClassMethodFactory;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {

@@ -9,9 +9,6 @@ final class ConstantNameAndValue
      * @var string
      */
     private $name;
-    /**
-     * @var mixed
-     */
     private $value;
     /**
      * @param mixed $value

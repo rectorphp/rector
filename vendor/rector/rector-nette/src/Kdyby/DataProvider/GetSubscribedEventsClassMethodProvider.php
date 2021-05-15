@@ -8,7 +8,7 @@ use Rector\NodeCollector\NodeCollector\NodeRepository;
 final class GetSubscribedEventsClassMethodProvider
 {
     /**
-     * @var NodeRepository
+     * @var \Rector\NodeCollector\NodeCollector\NodeRepository
      */
     private $nodeRepository;
     public function __construct(\Rector\NodeCollector\NodeCollector\NodeRepository $nodeRepository)

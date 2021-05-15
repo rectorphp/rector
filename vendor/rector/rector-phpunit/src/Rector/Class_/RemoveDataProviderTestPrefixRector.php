@@ -25,7 +25,7 @@ final class RemoveDataProviderTestPrefixRector extends \Rector\Core\Rector\Abstr
      */
     private $providerMethodNamesToNewNames = [];
     /**
-     * @var TestsNodeAnalyzer
+     * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
      */
     private $testsNodeAnalyzer;
     public function __construct(\Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer $testsNodeAnalyzer)

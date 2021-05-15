@@ -44,26 +44,26 @@ final class TemplateAnnotationToThisRenderRector extends \Rector\Core\Rector\Abs
      */
     private const RESPONSE_CLASS = 'Symfony\\Component\\HttpFoundation\\Response';
     /**
-     * @var ReturnTypeDeclarationUpdater
-     */
-    private $returnTypeDeclarationUpdater;
-    /**
-     * @var ThisRenderFactory
-     */
-    private $thisRenderFactory;
-    /**
-     * @var ArrayUnionResponseTypeAnalyzer
+     * @var \Rector\Symfony\TypeAnalyzer\ArrayUnionResponseTypeAnalyzer
      */
     private $arrayUnionResponseTypeAnalyzer;
     /**
-     * @var PhpDocTagRemover
+     * @var \Rector\Symfony\TypeDeclaration\ReturnTypeDeclarationUpdater
+     */
+    private $returnTypeDeclarationUpdater;
+    /**
+     * @var \Rector\Symfony\NodeFactory\ThisRenderFactory
+     */
+    private $thisRenderFactory;
+    /**
+     * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover
      */
     private $phpDocTagRemover;
     public function __construct(\Rector\Symfony\TypeAnalyzer\ArrayUnionResponseTypeAnalyzer $arrayUnionResponseTypeAnalyzer, \Rector\Symfony\TypeDeclaration\ReturnTypeDeclarationUpdater $returnTypeDeclarationUpdater, \Rector\Symfony\NodeFactory\ThisRenderFactory $thisRenderFactory, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover $phpDocTagRemover)
     {
+        $this->arrayUnionResponseTypeAnalyzer = $arrayUnionResponseTypeAnalyzer;
         $this->returnTypeDeclarationUpdater = $returnTypeDeclarationUpdater;
         $this->thisRenderFactory = $thisRenderFactory;
-        $this->arrayUnionResponseTypeAnalyzer = $arrayUnionResponseTypeAnalyzer;
         $this->phpDocTagRemover = $phpDocTagRemover;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition

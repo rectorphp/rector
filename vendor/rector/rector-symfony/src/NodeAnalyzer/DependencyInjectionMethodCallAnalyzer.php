@@ -15,19 +15,19 @@ use Rector\PostRector\DependencyInjection\PropertyAdder;
 final class DependencyInjectionMethodCallAnalyzer
 {
     /**
-     * @var PropertyNaming
+     * @var \Rector\Naming\Naming\PropertyNaming
      */
     private $propertyNaming;
     /**
-     * @var ServiceTypeMethodCallResolver
+     * @var \Rector\Symfony\NodeAnalyzer\ServiceTypeMethodCallResolver
      */
     private $serviceTypeMethodCallResolver;
     /**
-     * @var NodeFactory
+     * @var \Rector\Core\PhpParser\Node\NodeFactory
      */
     private $nodeFactory;
     /**
-     * @var PropertyAdder
+     * @var \Rector\PostRector\DependencyInjection\PropertyAdder
      */
     private $propertyAdder;
     public function __construct(\Rector\Naming\Naming\PropertyNaming $propertyNaming, \Rector\Symfony\NodeAnalyzer\ServiceTypeMethodCallResolver $serviceTypeMethodCallResolver, \Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\PostRector\DependencyInjection\PropertyAdder $propertyAdder)

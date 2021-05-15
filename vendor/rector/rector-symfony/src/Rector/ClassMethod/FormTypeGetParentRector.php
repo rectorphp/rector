@@ -20,7 +20,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class FormTypeGetParentRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var FormTypeStringToTypeProvider
+     * @var \Rector\Symfony\FormHelper\FormTypeStringToTypeProvider
      */
     private $formTypeStringToTypeProvider;
     public function __construct(\Rector\Symfony\FormHelper\FormTypeStringToTypeProvider $formTypeStringToTypeProvider)

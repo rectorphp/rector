@@ -10,6 +10,14 @@ use PhpParser\Node\Stmt\Property;
 final class EventAndListenerTree
 {
     /**
+     * @var \PhpParser\Node\Expr\MethodCall
+     */
+    private $magicDispatchMethodCall;
+    /**
+     * @var \PhpParser\Node\Stmt\Property|null
+     */
+    private $onMagicProperty;
+    /**
      * @var string
      */
     private $eventClassName;
@@ -18,43 +26,35 @@ final class EventAndListenerTree
      */
     private $eventFileLocation;
     /**
-     * @var array<class-string, ClassMethod[]>
-     */
-    private $listenerMethodsByEventSubscriberClass = [];
-    /**
-     * @var GetterMethodBlueprint[]
-     */
-    private $getterMethodBlueprints = [];
-    /**
-     * @var MethodCall
-     */
-    private $magicDispatchMethodCall;
-    /**
-     * @var Namespace_
+     * @var \PhpParser\Node\Stmt\Namespace_
      */
     private $eventClassInNamespace;
     /**
-     * @var MethodCall
+     * @var \PhpParser\Node\Expr\MethodCall
      */
     private $eventDispatcherDispatchMethodCall;
     /**
-     * @var Property|null
+     * @var mixed[]
      */
-    private $onMagicProperty;
+    private $listenerMethodsByEventSubscriberClass;
+    /**
+     * @var mixed[]
+     */
+    private $getterMethodBlueprints;
     /**
      * @param array<class-string, ClassMethod[]> $listenerMethodsByEventSubscriberClass
-     * @param GetterMethodBlueprint[] $getterMethodsBlueprints
+     * @param GetterMethodBlueprint[] $getterMethodBlueprints
      */
-    public function __construct(\PhpParser\Node\Expr\MethodCall $magicDispatchMethodCall, ?\PhpParser\Node\Stmt\Property $onMagicProperty, string $eventClassName, string $eventFileLocation, \PhpParser\Node\Stmt\Namespace_ $eventClassInNamespace, \PhpParser\Node\Expr\MethodCall $eventDispatcherDispatchMethodCall, array $listenerMethodsByEventSubscriberClass, array $getterMethodsBlueprints)
+    public function __construct(\PhpParser\Node\Expr\MethodCall $magicDispatchMethodCall, ?\PhpParser\Node\Stmt\Property $onMagicProperty, string $eventClassName, string $eventFileLocation, \PhpParser\Node\Stmt\Namespace_ $eventClassInNamespace, \PhpParser\Node\Expr\MethodCall $eventDispatcherDispatchMethodCall, array $listenerMethodsByEventSubscriberClass, array $getterMethodBlueprints)
     {
         $this->magicDispatchMethodCall = $magicDispatchMethodCall;
         $this->onMagicProperty = $onMagicProperty;
         $this->eventClassName = $eventClassName;
         $this->eventFileLocation = $eventFileLocation;
         $this->eventClassInNamespace = $eventClassInNamespace;
-        $this->listenerMethodsByEventSubscriberClass = $listenerMethodsByEventSubscriberClass;
         $this->eventDispatcherDispatchMethodCall = $eventDispatcherDispatchMethodCall;
-        $this->getterMethodBlueprints = $getterMethodsBlueprints;
+        $this->listenerMethodsByEventSubscriberClass = $listenerMethodsByEventSubscriberClass;
+        $this->getterMethodBlueprints = $getterMethodBlueprints;
     }
     public function getEventClassName() : string
     {

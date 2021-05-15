@@ -22,15 +22,15 @@ final class ListeningClassMethodArgumentManipulator
      */
     private const EVENT_PARAMETER_REPLACED = 'event_parameter_replaced';
     /**
-     * @var ClassNaming
+     * @var \Rector\CodingStyle\Naming\ClassNaming
      */
     private $classNaming;
     /**
-     * @var ContributeEventClassResolver
+     * @var \Rector\Nette\Kdyby\ContributeEventClassResolver
      */
     private $contributeEventClassResolver;
     /**
-     * @var ParamAnalyzer
+     * @var \Rector\Core\NodeAnalyzer\ParamAnalyzer
      */
     private $paramAnalyzer;
     public function __construct(\Rector\CodingStyle\Naming\ClassNaming $classNaming, \Rector\Nette\Kdyby\ContributeEventClassResolver $contributeEventClassResolver, \Rector\Core\NodeAnalyzer\ParamAnalyzer $paramAnalyzer)

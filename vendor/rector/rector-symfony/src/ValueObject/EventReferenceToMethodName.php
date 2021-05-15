@@ -8,7 +8,7 @@ use Rector\Symfony\Contract\EventReferenceToMethodNameInterface;
 final class EventReferenceToMethodName implements \Rector\Symfony\Contract\EventReferenceToMethodNameInterface
 {
     /**
-     * @var ClassConstFetch
+     * @var \PhpParser\Node\Expr\ClassConstFetch
      */
     private $classConstFetch;
     /**

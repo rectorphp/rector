@@ -24,11 +24,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ReplaceEventManagerWithEventSubscriberRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var EventClassNaming
+     * @var \Rector\Nette\Kdyby\Naming\EventClassNaming
      */
     private $eventClassNaming;
     /**
-     * @var EventValueObjectClassFactory
+     * @var \Rector\Nette\Kdyby\NodeFactory\EventValueObjectClassFactory
      */
     private $eventValueObjectClassFactory;
     public function __construct(\Rector\Nette\Kdyby\Naming\EventClassNaming $eventClassNaming, \Rector\Nette\Kdyby\NodeFactory\EventValueObjectClassFactory $eventValueObjectClassFactory)

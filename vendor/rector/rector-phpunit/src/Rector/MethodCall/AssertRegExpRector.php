@@ -38,7 +38,7 @@ final class AssertRegExpRector extends \Rector\Core\Rector\AbstractRector
      */
     private const ASSERT_NOT_EQUALS = 'assertNotEquals';
     /**
-     * @var TestsNodeAnalyzer
+     * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
      */
     private $testsNodeAnalyzer;
     public function __construct(\Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer $testsNodeAnalyzer)

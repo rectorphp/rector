@@ -18,26 +18,26 @@ use Rector\NodeNameResolver\NodeNameResolver;
 final class RouteInfoFactory
 {
     /**
-     * @var NodeNameResolver
+     * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     /**
-     * @var ValueResolver
-     */
-    private $valueResolver;
-    /**
-     * @var NodeRepository
+     * @var \Rector\NodeCollector\NodeCollector\NodeRepository
      */
     private $nodeRepository;
     /**
-     * @var ReflectionProvider
+     * @var \Rector\Core\PhpParser\Node\Value\ValueResolver
+     */
+    private $valueResolver;
+    /**
+     * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
     public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeCollector\NodeCollector\NodeRepository $nodeRepository, \Rector\Core\PhpParser\Node\Value\ValueResolver $valueResolver, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
     {
         $this->nodeNameResolver = $nodeNameResolver;
-        $this->valueResolver = $valueResolver;
         $this->nodeRepository = $nodeRepository;
+        $this->valueResolver = $valueResolver;
         $this->reflectionProvider = $reflectionProvider;
     }
     public function createFromNode(\PhpParser\Node $node) : ?\Rector\NetteToSymfony\ValueObject\RouteInfo

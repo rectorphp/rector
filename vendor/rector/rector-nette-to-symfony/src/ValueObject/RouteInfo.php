@@ -18,7 +18,7 @@ final class RouteInfo
      */
     private $path;
     /**
-     * @var string[]
+     * @var mixed[]
      */
     private $httpMethods = [];
     /**

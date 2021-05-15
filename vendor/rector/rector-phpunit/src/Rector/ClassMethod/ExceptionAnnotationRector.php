@@ -26,15 +26,15 @@ final class ExceptionAnnotationRector extends \Rector\Core\Rector\AbstractRector
      */
     private const ANNOTATION_TO_METHOD = ['expectedExceptionMessageRegExp' => 'expectExceptionMessageRegExp', 'expectedExceptionMessage' => 'expectExceptionMessage', 'expectedExceptionCode' => 'expectExceptionCode', 'expectedException' => 'expectException'];
     /**
-     * @var ExpectExceptionMethodCallFactory
+     * @var \Rector\PHPUnit\NodeFactory\ExpectExceptionMethodCallFactory
      */
     private $expectExceptionMethodCallFactory;
     /**
-     * @var PhpDocTagRemover
+     * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover
      */
     private $phpDocTagRemover;
     /**
-     * @var TestsNodeAnalyzer
+     * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
      */
     private $testsNodeAnalyzer;
     public function __construct(\Rector\PHPUnit\NodeFactory\ExpectExceptionMethodCallFactory $expectExceptionMethodCallFactory, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover $phpDocTagRemover, \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer $testsNodeAnalyzer)

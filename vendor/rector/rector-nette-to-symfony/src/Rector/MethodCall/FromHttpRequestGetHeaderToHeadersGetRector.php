@@ -21,7 +21,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class FromHttpRequestGetHeaderToHeadersGetRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var ClassMethodManipulator
+     * @var \Rector\Core\NodeManipulator\ClassMethodManipulator
      */
     private $classMethodManipulator;
     public function __construct(\Rector\Core\NodeManipulator\ClassMethodManipulator $classMethodManipulator)

@@ -11,15 +11,15 @@ use Rector\NodeNameResolver\NodeNameResolver;
 final class ExpectExceptionMessageRegExpFactory
 {
     /**
-     * @var NodeNameResolver
+     * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     /**
-     * @var ArgumentShiftingFactory
+     * @var \Rector\PHPUnit\NodeFactory\ArgumentShiftingFactory
      */
     private $argumentShiftingFactory;
     /**
-     * @var NodeComparator
+     * @var \Rector\Core\PhpParser\Comparing\NodeComparator
      */
     private $nodeComparator;
     /**

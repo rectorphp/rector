@@ -24,7 +24,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ChangeBigIntEntityPropertyToIntTypeRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var DocBlockClassRenamer
+     * @var \Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockClassRenamer
      */
     private $docBlockClassRenamer;
     public function __construct(\Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockClassRenamer $docBlockClassRenamer)

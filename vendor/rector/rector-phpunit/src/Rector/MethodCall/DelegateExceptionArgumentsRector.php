@@ -22,11 +22,11 @@ final class DelegateExceptionArgumentsRector extends \Rector\Core\Rector\Abstrac
      */
     private const OLD_TO_NEW_METHOD = ['setExpectedException' => 'expectExceptionMessage', 'setExpectedExceptionRegExp' => 'expectExceptionMessageRegExp'];
     /**
-     * @var AssertCallFactory
+     * @var \Rector\PHPUnit\NodeFactory\AssertCallFactory
      */
     private $assertCallFactory;
     /**
-     * @var TestsNodeAnalyzer
+     * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
      */
     private $testsNodeAnalyzer;
     public function __construct(\Rector\PHPUnit\NodeFactory\AssertCallFactory $assertCallFactory, \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer $testsNodeAnalyzer)

@@ -26,11 +26,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class WithConsecutiveArgToArrayRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var MethodCallManipulator
+     * @var \Rector\Core\NodeManipulator\MethodCallManipulator
      */
     private $methodCallManipulator;
     /**
-     * @var ReflectionProvider
+     * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
     public function __construct(\Rector\Core\NodeManipulator\MethodCallManipulator $methodCallManipulator, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
