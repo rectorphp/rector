@@ -145,8 +145,6 @@ CODE_SAMPLE
 
         $node->type = $propertyTypeNode;
 
-        dump_node($node);
-
         return $node;
     }
 
