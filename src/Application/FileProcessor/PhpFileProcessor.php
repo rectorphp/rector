@@ -122,6 +122,7 @@ final class PhpFileProcessor implements \Rector\Core\Contract\Processor\FileProc
             $this->currentFileProvider->setFile($file);
             // cannot print file with errors, as print would break everything to original nodes
             if ($file->hasErrors()) {
+                $this->printFileErrors($file);
                 $this->advance($file, 'printing skipped due error');
                 continue;
             }
@@ -229,6 +230,18 @@ final class PhpFileProcessor implements \Rector\Core\Contract\Processor\FileProc
             $this->symfonyStyle->writeln($message);
         } elseif ($this->configuration->shouldShowProgressBar()) {
             $this->symfonyStyle->progressAdvance();
+        }
+    }
+    private function printFileErrors(\Rector\Core\ValueObject\Application\File $file) : void
+    {
+        if (!$this->symfonyStyle->isVerbose()) {
+            return;
+        }
+        if (!$file->hasErrors()) {
+            return;
+        }
+        foreach ($file->getErrors() as $error) {
+            $this->symfonyStyle->error($error->getMessage());
         }
     }
 }
