@@ -133,7 +133,6 @@ CODE_SAMPLE
         $this->removeDefaultValueForDoctrineCollection($node, $varType);
         $this->addDefaultValueNullForNullableType($node, $varType);
         $node->type = $propertyTypeNode;
-        dump_node($node);
         return $node;
     }
     public function configure(array $configuration) : void
