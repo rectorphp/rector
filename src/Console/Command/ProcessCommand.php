@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Core\Console\Command;
 
+use Nette\Utils\Strings;
 use PHPStan\Analyser\NodeScopeResolver;
 use Rector\Caching\Detector\ChangedFilesDetector;
 use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
@@ -14,9 +15,9 @@ use Rector\Core\Configuration\Configuration;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Console\Output\OutputFormatterCollector;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\FileSystem\PhpFilesFinder;
 use Rector\Core\Reporting\MissingRectorRulesReporter;
 use Rector\Core\StaticReflection\DynamicSourceLocatorDecorator;
+use Rector\Core\ValueObject\Application\File;
 use Rector\Core\ValueObject\ProcessResult;
 use Rector\Core\ValueObjectFactory\Application\FileFactory;
 use Rector\Core\ValueObjectFactory\ProcessResultFactory;
@@ -27,7 +28,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symplify\PackageBuilder\Console\ShellCode;
-use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ProcessCommand extends Command
 {
@@ -36,7 +36,6 @@ final class ProcessCommand extends Command
         private ChangedFilesDetector $changedFilesDetector,
         private Configuration $configuration,
         private OutputFormatterCollector $outputFormatterCollector,
-        private PhpFilesFinder $phpFilesFinder,
         private MissingRectorRulesReporter $missingRectorRulesReporter,
         private ApplicationFileProcessor $applicationFileProcessor,
         private FileFactory $fileFactory,
@@ -118,22 +117,22 @@ final class ProcessCommand extends Command
         $this->configuration->resolveFromInput($input);
         $this->configuration->validateConfigParameters();
 
-        $paths = $this->configuration->getPaths();
-        $phpFileInfos = $this->phpFilesFinder->findInPaths($paths);
-
         // register autoloaded and included files
         $this->bootstrapFilesIncluder->includeBootstrapFiles();
 
         $this->additionalAutoloader->autoloadInput($input);
         $this->additionalAutoloader->autoloadPaths();
 
-        // PHPStan has to know about all files!
-        $this->configurePHPStanNodeScopeResolver($phpFileInfos);
+        $paths = $this->configuration->getPaths();
 
         // 0. add files and directories to static locator
         $this->dynamicSourceLocatorDecorator->addPaths($paths);
 
         $files = $this->fileFactory->createFromPaths($paths);
+
+        // PHPStan has to know about all files!
+        $this->configurePHPStanNodeScopeResolver($files);
+
         $this->applicationFileProcessor->run($files);
 
         // report diffs and errors
@@ -201,13 +200,18 @@ final class ProcessCommand extends Command
     }
 
     /**
-     * @param SmartFileInfo[] $fileInfos
+     * @param File[] $files
      */
-    private function configurePHPStanNodeScopeResolver(array $fileInfos): void
+    private function configurePHPStanNodeScopeResolver(array $files): void
     {
         $filePaths = [];
-        foreach ($fileInfos as $fileInfo) {
-            $filePaths[] = $fileInfo->getPathname();
+        foreach ($files as $file) {
+            $smartFileInfo = $file->getSmartFileInfo();
+            $pathName = $smartFileInfo->getPathname();
+
+            if (Strings::endsWith($pathName, '.php')) {
+                $filePaths[] = $pathName;
+            }
         }
 
         $this->nodeScopeResolver->setAnalysedFiles($filePaths);

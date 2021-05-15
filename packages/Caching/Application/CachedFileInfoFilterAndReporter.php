@@ -24,13 +24,10 @@ final class CachedFileInfoFilterAndReporter
      */
     public function filterFileInfos(array $phpFileInfos): array
     {
-        if (! $this->configuration->isCacheEnabled()) {
-            return $phpFileInfos;
-        }
-
         // cache stuff
-        if ($this->configuration->shouldClearCache()) {
+        if (! $this->configuration->isCacheEnabled() || $this->configuration->shouldClearCache()) {
             $this->changedFilesDetector->clear();
+            return $phpFileInfos;
         }
 
         return $this->unchangedFilesFilter->filterAndJoinWithDependentFileInfos($phpFileInfos);
