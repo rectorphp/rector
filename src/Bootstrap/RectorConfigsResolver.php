@@ -6,78 +6,88 @@ namespace Rector\Core\Bootstrap;
 
 use Rector\Core\ValueObject\Bootstrap\BootstrapConfigs;
 use Symfony\Component\Console\Input\ArgvInput;
-use Symplify\SetConfigResolver\ConfigResolver;
+use Symfony\Component\Console\Input\InputInterface;
+use Symplify\SmartFileSystem\Exception\FileNotFoundException;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class RectorConfigsResolver
 {
-    private ConfigResolver $configResolver;
-
-    /**
-     * @var array<string, SmartFileInfo[]>
-     */
-    private array $resolvedConfigFileInfos = [];
-
-    private SetConfigResolver $setConfigResolver;
-
-    public function __construct()
-    {
-        $this->setConfigResolver = new SetConfigResolver();
-        $this->configResolver = new ConfigResolver();
-    }
-
-    /**
-     * @return SmartFileInfo[]
-     */
-    public function resolveFromConfigFileInfo(SmartFileInfo $configFileInfo): array
-    {
-        $hash = sha1_file($configFileInfo->getRealPath());
-        if ($hash === false) {
-            return [];
-        }
-
-        if (isset($this->resolvedConfigFileInfos[$hash])) {
-            return $this->resolvedConfigFileInfos[$hash];
-        }
-
-        $setFileInfos = $this->setConfigResolver->resolve($configFileInfo);
-        $configFileInfos = array_merge([$configFileInfo], $setFileInfos);
-
-        $this->resolvedConfigFileInfos[$hash] = $configFileInfos;
-
-        return $configFileInfos;
-    }
-
     public function provide(): BootstrapConfigs
     {
         $argvInput = new ArgvInput();
-        $mainConfigFileInfo = $this->configResolver->resolveFromInputWithFallback($argvInput, ['rector.php']);
+        $mainConfigFileInfo = $this->resolveFromInputWithFallback($argvInput, 'rector.php');
 
-        $configFileInfos = $mainConfigFileInfo instanceof SmartFileInfo ? $this->resolveFromConfigFileInfo(
-            $mainConfigFileInfo
-        ) : [];
+        $rectorRecipeConfigFileInfo = $this->resolveRectorRecipeConfig($argvInput);
 
-        $configFileInfos = $this->appendRectorRecipeConfig($argvInput, $configFileInfos);
+        $configFileInfos = [];
+        if ($rectorRecipeConfigFileInfo !== null) {
+            $configFileInfos[] = $rectorRecipeConfigFileInfo;
+        }
 
         return new BootstrapConfigs($mainConfigFileInfo, $configFileInfos);
     }
 
-    /**
-     * @param SmartFileInfo[] $configFileInfos
-     * @return SmartFileInfo[]
-     */
-    private function appendRectorRecipeConfig(ArgvInput $argvInput, array $configFileInfos): array
+    private function resolveRectorRecipeConfig(ArgvInput $argvInput): ?SmartFileInfo
     {
         if ($argvInput->getFirstArgument() !== 'generate') {
-            return $configFileInfos;
+            return null;
         }
 
         // autoload rector recipe file if present, just for \Rector\RectorGenerator\Command\GenerateCommand
         $rectorRecipeFilePath = getcwd() . '/rector-recipe.php';
-        if (file_exists($rectorRecipeFilePath)) {
-            $configFileInfos[] = new SmartFileInfo($rectorRecipeFilePath);
+        if (! file_exists($rectorRecipeFilePath)) {
+            return null;
         }
 
-        return $configFileInfos;
+        return new SmartFileInfo($rectorRecipeFilePath);
+    }
+
+    private function resolveFromInput(ArgvInput $argvInput): ?SmartFileInfo
+    {
+        $configValue = $this->getOptionValue($argvInput, ['config', 'c']);
+        if ($configValue === null) {
+            return null;
+        }
+
+        if (! file_exists($configValue)) {
+            $message = sprintf('File "%s" was not found', $configValue);
+            throw new FileNotFoundException($message);
+        }
+
+        return new SmartFileInfo($configValue);
+    }
+
+    private function resolveFromInputWithFallback(ArgvInput $argvInput, string $fallbackFile): ?SmartFileInfo
+    {
+        $configFileInfo = $this->resolveFromInput($argvInput);
+        if ($configFileInfo !== null) {
+            return $configFileInfo;
+        }
+
+        return $this->createFallbackFileInfoIfFound($fallbackFile);
+    }
+
+    private function createFallbackFileInfoIfFound(string $fallbackFile): ?SmartFileInfo
+    {
+        $rootFallbackFile = getcwd() . DIRECTORY_SEPARATOR . $fallbackFile;
+        if (! is_file($rootFallbackFile)) {
+            return null;
+        }
+
+        return new SmartFileInfo($rootFallbackFile);
+    }
+
+    /**
+     * @param string[] $optionNames
+     */
+    private function getOptionValue(ArgvInput $argvInput, array $optionNames): ?string
+    {
+        foreach ($optionNames as $optionName) {
+            if ($argvInput->hasParameterOption($optionName, true)) {
+                return $argvInput->getParameterOption($optionName, null, true);
+            }
+        }
+
+        return null;
     }
 }

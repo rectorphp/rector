@@ -13,7 +13,6 @@ use Rector\Core\Application\ApplicationFileProcessor;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\Autoloading\AdditionalAutoloader;
 use Rector\Core\Autoloading\BootstrapFilesIncluder;
-use Rector\Core\Bootstrap\RectorConfigsResolver;
 use Rector\Core\Configuration\Configuration;
 use Rector\Core\Configuration\Option;
 use Rector\Core\ValueObject\Application\File;
@@ -48,10 +47,7 @@ abstract class AbstractRectorTestCase extends AbstractTestCase implements Rector
         @ini_set('memory_limit', '-1');
 
         $configFileInfo = new SmartFileInfo($this->provideConfigFilePath());
-        $rectorConfigsResolver = new RectorConfigsResolver();
-
-        $configFileInfos = $rectorConfigsResolver->resolveFromConfigFileInfo($configFileInfo);
-        $this->bootFromConfigFileInfos($configFileInfos);
+        $this->bootFromConfigFileInfos([$configFileInfo]);
 
         $this->applicationFileProcessor = $this->getService(ApplicationFileProcessor::class);
         $this->parameterProvider = $this->getService(ParameterProvider::class);
