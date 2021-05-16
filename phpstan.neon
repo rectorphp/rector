@@ -137,7 +137,6 @@ parameters:
         - '#Parameter \#1 \$node of method Rector\\DeadCode\\Rector\\Plus\\RemoveDeadZeroAndOneOperationRector\:\:refactor\(\) expects PhpParser\\Node\\Expr\\AssignOp\\Div\|PhpParser\\Node\\Expr\\AssignOp\\Minus\|PhpParser\\Node\\Expr\\AssignOp\\Mul\|PhpParser\\Node\\Expr\\AssignOp\\Plus\|PhpParser\\Node\\Expr\\BinaryOp\\Div\|PhpParser\\Node\\Expr\\BinaryOp\\Minus\|PhpParser\\Node\\Expr\\BinaryOp\\Mul\|PhpParser\\Node\\Expr\\BinaryOp\\Plus, PhpParser\\Node\\Expr\\AssignOp\|PhpParser\\Node\\Expr\\BinaryOp given#'
 
         # symplify 9
-        - '#Use decoupled factory service to create "(.*?)" object#'
         - '#Use another value object over array with string\-keys and objects, array<string, ValueObject\>#'
         - '#Do not use factory/method call in constructor\. Put factory in config and get service with dependency injection#'
 
@@ -171,8 +170,6 @@ parameters:
             message: '#Do not use setter on a service#'
             paths:
                 - src/Configuration/Configuration.php
-                # prevent circular dependnecy
-                - packages/StaticTypeMapper/Naming/NameScopeFactory.php
 
         -
             message: '#Cannot cast array<string\>\|bool\|string\|null to string#'
@@ -253,12 +250,7 @@ parameters:
         -
             message: '#Function "class_exists\(\)" cannot be used/left in the code#'
             paths:
-                - bin/rector.php
                 - src/Bootstrap/ExtensionConfigResolver.php
-
-        -
-            message: '#Do not use static property#'
-            path: 'bin/rector.php'
 
         # @todo fix later
         -
@@ -282,10 +274,6 @@ parameters:
             message: '#\$this as argument is not allowed\. Refactor method to service composition#'
             paths:
                 - src/Rector/AbstractRector.php
-                # setter to avoid circular dependency in nested collector
-                - packages/StaticTypeMapper/StaticTypeMapper.php
-                - packages/PHPStanStaticTypeMapper/PHPStanStaticTypeMapper.php
-                # refactor later
 
         -
             message: '#Use defined constant Symplify\\ComposerJsonManipulator\\ValueObject\\ComposerJsonSection\:\:REQUIRE over string require#'
@@ -379,11 +367,6 @@ parameters:
             paths:
                 - packages/BetterPhpDocParser/ValueObject/Parser/BetterTokenIterator.php
 
-        -
-            message: '#Array with keys is not allowed\. Use value object to pass data instead#'
-            paths:
-                - rules/NetteToSymfony/Rector/ClassMethod/RouterListToControllerAnnotationsRector.php
-
         - '#Cognitive complexity for "Rector\\BetterPhpDocParser\\PhpDocParser\\DoctrineAnnotationDecorator\:\:mergeNestedDoctrineAnnotations\(\)" is \d+, keep it under 9#'
 
         - '#Cognitive complexity for "Rector\\BetterPhpDocParser\\Printer\\PhpDocInfoPrinter\:\:printDocChildNode\(\)" is \d+, keep it under 9#'
@@ -446,10 +429,6 @@ parameters:
         - '#Class with base "PhpVersion" name is already used in "PHPStan\\Php\\PhpVersion", "Rector\\Core\\ValueObject\\PhpVersion"\. Use unique name to make classes easy to recognize#'
 
         -
-            message: '#Use dependency injection instead of dependency juggling#'
-            path: src/HttpKernel/RectorKernel.php
-
-        -
             message: '#Use separate function calls with readable variable names#'
             path: src/FileSystem/FilesFinder.php
 
@@ -457,34 +436,12 @@ parameters:
         -
             message: '#Use dependency injection instead of dependency juggling#'
             paths:
-                 - src/Application/FileProcessor/PhpFileProcessor.php
-                 - rules/NetteToSymfony/Rector/ClassMethod/RouterListToControllerAnnotationsRector.php
-                 - packages/FamilyTree/Reflection/FamilyRelationsAnalyzer.php
-                 - packages/Caching/FileSystem/DependencyResolver.php
-                 - packages/BetterPhpDocParser/PhpDocNodeMapper.php
-                 - packages/NodeTypeResolver/NodeVisitor/FileNodeVisitor.php
-                 # hacking value object
-                 - packages/BetterPhpDocParser/PhpDocInfo/PhpDocInfo.php
                  # better reflection static design
                  - packages/NodeTypeResolver/Reflection/BetterReflection/SourceLocatorProvider/DynamicSourceLocatorProvider.php
 
         -
-            message: '#Use separate function calls with readable variable names#'
-            path: src/Application/ActiveRectorsProvider.php
-
-        # skip for define()
-        -
-           message: '#Do not compare call directly, use a variable assign#'
-           path:  src/constants.php
-
-        -
-            message: '#Method call on new expression is not allowed#'
-            path: utils/compiler/src/Command/DowngradePathsCommand.php
-
-        -
             message: '#Use value object over return of values#'
             paths:
-                 - rules/EarlyReturn/Rector/If_/ChangeNestedIfsToEarlyReturnRector.php
                  - rules/EarlyReturn/Rector/If_/ChangeAndIfToEarlyReturnRector.php
 
         - '#Class with base "PhpVersionFactory" name is already used in "PHPStan\\Php\\PhpVersionFactory", "Rector\\Core\\Util\\PhpVersionFactory"\. Use unique name to make classes easy to recognize#'
@@ -492,17 +449,6 @@ parameters:
         -
             message: '#Function "function_exists\(\)" cannot be used/left in the code#'
             path: src/functions/node_helper.php
-
-        # temporary out of order after rector-src extract
-        - '#Class like namespace "Rector\\(.*?)" does not follow PSR\-4 configuration in composer\.json#'
-
-        # temporary out of order after rector-src extract
-        - '#Class like namespace "Rector\\(.*?)" does not follow PSR\-4 configuration in composer\.json#'
-
-        # bug in PHP 8, fix in dev-main
-        -
-            message: '#Do not call parent method if parent method is empty#'
-            path: packages/BetterPhpDocParser/PhpDoc/DoctrineAnnotationTagValueNode.php
 
         # upgrade to PHP 7.4 wip
         - '#This property type might be inlined to PHP\. Do you have confidence it is correct\? Put it here#'
@@ -515,7 +461,6 @@ parameters:
         - '#Use required typed property over of nullable property#'
         - '#Method Rector\\BetterPhpDocParser\\PhpDocParser\\BetterPhpDocParser\:\:parseChildAndStoreItsPositions\(\) should return PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTagNode\|PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTextNode but returns PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocChildNode#'
 
-        - '#Parameter \#1 \$type of method Rector\\BetterPhpDocParser\\PhpDocInfo\\PhpDocInfo<PHPStan\\PhpDocParser\\Ast\\Node\>\:\:removeByType\(\) expects class\-string<PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTagValueNode\>, class\-string<PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTagValueNode\>\|PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTagValueNode given#'
 
         - '#Method Rector\\Core\\Application\\VersionResolver\:\:resolvePackageData\(\) return type has no value type specified in iterable type array#'
         - '#Cognitive complexity for "Rector\\Core\\Rector\\AbstractRector\:\:enterNode\(\)" is \d+, keep it under 9#'
@@ -525,19 +470,5 @@ parameters:
             path: src/Rector/AbstractRector.php
 
 
-        -
-            message: '#Method call argument on position 0 must use constant \(e\.g\. "Option\:\:NAME"\) over value#'
-            path: src/Rector/AbstractRector.php
-
-        -
-            message: '#Namespace "Rector\\Core\\Rector" is only reserved for "Rector"\. Move the class somewhere else#'
-            path: src/Rector/AbstractRector.php
-
-        -
-            message: '#Anonymous class is not allowed#'
-            path: src/Rector/AbstractRector.php
-
-        -
-            message: '#Class cognitive complexity is 38, keep it under 30#'
-            path: src/Rector/AbstractRector.php
-
+        # fixed in dev-main
+        - '#Class like namespace "Rector\\(.*?)" does not follow PSR\-4 configuration in composer\.json#'

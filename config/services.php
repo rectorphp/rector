@@ -72,6 +72,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             __DIR__ . '/../src/PhpParser/Node/CustomNode',
             __DIR__ . '/../src/functions',
             __DIR__ . '/../src/constants.php',
+            __DIR__ . '/../src/PhpParser/NodeVisitor/CreatedByRuleNodeVisitor.php',
         ]);
 
     $services->alias(SymfonyApplication::class, ConsoleApplication::class);
