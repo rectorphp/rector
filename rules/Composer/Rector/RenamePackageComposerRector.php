@@ -5,7 +5,7 @@ namespace Rector\Composer\Rector;
 
 use Rector\Composer\Contract\Rector\ComposerRectorInterface;
 use Rector\Composer\ValueObject\RenamePackage;
-use RectorPrefix20210515\Symplify\ComposerJsonManipulator\ValueObject\ComposerJson;
+use RectorPrefix20210516\Symplify\ComposerJsonManipulator\ValueObject\ComposerJson;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -21,7 +21,7 @@ final class RenamePackageComposerRector implements \Rector\Composer\Contract\Rec
      * @var RenamePackage[]
      */
     private $renamePackages = [];
-    public function refactor(\RectorPrefix20210515\Symplify\ComposerJsonManipulator\ValueObject\ComposerJson $composerJson) : void
+    public function refactor(\RectorPrefix20210516\Symplify\ComposerJsonManipulator\ValueObject\ComposerJson $composerJson) : void
     {
         foreach ($this->renamePackages as $renamePackage) {
             if ($composerJson->hasRequiredPackage($renamePackage->getOldPackageName())) {

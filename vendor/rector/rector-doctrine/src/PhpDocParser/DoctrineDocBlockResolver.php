@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Doctrine\PhpDocParser;
 
-use RectorPrefix20210515\Nette\Utils\Strings;
+use RectorPrefix20210516\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
@@ -96,6 +96,6 @@ final class DoctrineDocBlockResolver
             return \false;
         }
         // dummy check of 3rd party code without running it
-        return (bool) \RectorPrefix20210515\Nette\Utils\Strings::match($resolvedPhpDocBlock->getPhpDocString(), self::ORM_ENTITY_EMBEDDABLE_SHORT_ANNOTATION_REGEX);
+        return (bool) \RectorPrefix20210516\Nette\Utils\Strings::match($resolvedPhpDocBlock->getPhpDocString(), self::ORM_ENTITY_EMBEDDABLE_SHORT_ANNOTATION_REGEX);
     }
 }

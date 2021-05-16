@@ -8,15 +8,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210515\Symfony\Component\Console\Descriptor;
+namespace RectorPrefix20210516\Symfony\Component\Console\Descriptor;
 
-use RectorPrefix20210515\Symfony\Component\Console\Application;
-use RectorPrefix20210515\Symfony\Component\Console\Command\Command;
-use RectorPrefix20210515\Symfony\Component\Console\Helper\Helper;
-use RectorPrefix20210515\Symfony\Component\Console\Input\InputArgument;
-use RectorPrefix20210515\Symfony\Component\Console\Input\InputDefinition;
-use RectorPrefix20210515\Symfony\Component\Console\Input\InputOption;
-use RectorPrefix20210515\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix20210516\Symfony\Component\Console\Application;
+use RectorPrefix20210516\Symfony\Component\Console\Command\Command;
+use RectorPrefix20210516\Symfony\Component\Console\Helper\Helper;
+use RectorPrefix20210516\Symfony\Component\Console\Input\InputArgument;
+use RectorPrefix20210516\Symfony\Component\Console\Input\InputDefinition;
+use RectorPrefix20210516\Symfony\Component\Console\Input\InputOption;
+use RectorPrefix20210516\Symfony\Component\Console\Output\OutputInterface;
 /**
  * Markdown descriptor.
  *
@@ -24,12 +24,12 @@ use RectorPrefix20210515\Symfony\Component\Console\Output\OutputInterface;
  *
  * @internal
  */
-class MarkdownDescriptor extends \RectorPrefix20210515\Symfony\Component\Console\Descriptor\Descriptor
+class MarkdownDescriptor extends \RectorPrefix20210516\Symfony\Component\Console\Descriptor\Descriptor
 {
     /**
      * {@inheritdoc}
      */
-    public function describe(\RectorPrefix20210515\Symfony\Component\Console\Output\OutputInterface $output, $object, array $options = [])
+    public function describe(\RectorPrefix20210516\Symfony\Component\Console\Output\OutputInterface $output, $object, array $options = [])
     {
         $decorated = $output->isDecorated();
         $output->setDecorated(\false);
@@ -46,14 +46,14 @@ class MarkdownDescriptor extends \RectorPrefix20210515\Symfony\Component\Console
     /**
      * {@inheritdoc}
      */
-    protected function describeInputArgument(\RectorPrefix20210515\Symfony\Component\Console\Input\InputArgument $argument, array $options = [])
+    protected function describeInputArgument(\RectorPrefix20210516\Symfony\Component\Console\Input\InputArgument $argument, array $options = [])
     {
         $this->write('#### `' . ($argument->getName() ?: '<none>') . "`\n\n" . ($argument->getDescription() ? \preg_replace('/\\s*[\\r\\n]\\s*/', "\n", $argument->getDescription()) . "\n\n" : '') . '* Is required: ' . ($argument->isRequired() ? 'yes' : 'no') . "\n" . '* Is array: ' . ($argument->isArray() ? 'yes' : 'no') . "\n" . '* Default: `' . \str_replace("\n", '', \var_export($argument->getDefault(), \true)) . '`');
     }
     /**
      * {@inheritdoc}
      */
-    protected function describeInputOption(\RectorPrefix20210515\Symfony\Component\Console\Input\InputOption $option, array $options = [])
+    protected function describeInputOption(\RectorPrefix20210516\Symfony\Component\Console\Input\InputOption $option, array $options = [])
     {
         $name = '--' . $option->getName();
         if ($option->getShortcut()) {
@@ -64,7 +64,7 @@ class MarkdownDescriptor extends \RectorPrefix20210515\Symfony\Component\Console
     /**
      * {@inheritdoc}
      */
-    protected function describeInputDefinition(\RectorPrefix20210515\Symfony\Component\Console\Input\InputDefinition $definition, array $options = [])
+    protected function describeInputDefinition(\RectorPrefix20210516\Symfony\Component\Console\Input\InputDefinition $definition, array $options = [])
     {
         if ($showArguments = \count($definition->getArguments()) > 0) {
             $this->write('### Arguments');
@@ -91,10 +91,10 @@ class MarkdownDescriptor extends \RectorPrefix20210515\Symfony\Component\Console
     /**
      * {@inheritdoc}
      */
-    protected function describeCommand(\RectorPrefix20210515\Symfony\Component\Console\Command\Command $command, array $options = [])
+    protected function describeCommand(\RectorPrefix20210516\Symfony\Component\Console\Command\Command $command, array $options = [])
     {
         $command->mergeApplicationDefinition(\false);
-        $this->write('`' . $command->getName() . "`\n" . \str_repeat('-', \RectorPrefix20210515\Symfony\Component\Console\Helper\Helper::strlen($command->getName()) + 2) . "\n\n" . ($command->getDescription() ? $command->getDescription() . "\n\n" : '') . '### Usage' . "\n\n" . \array_reduce(\array_merge([$command->getSynopsis()], $command->getAliases(), $command->getUsages()), function ($carry, $usage) {
+        $this->write('`' . $command->getName() . "`\n" . \str_repeat('-', \RectorPrefix20210516\Symfony\Component\Console\Helper\Helper::strlen($command->getName()) + 2) . "\n\n" . ($command->getDescription() ? $command->getDescription() . "\n\n" : '') . '### Usage' . "\n\n" . \array_reduce(\array_merge([$command->getSynopsis()], $command->getAliases(), $command->getUsages()), function ($carry, $usage) {
             return $carry . '* `' . $usage . '`' . "\n";
         }));
         if ($help = $command->getProcessedHelp()) {
@@ -110,14 +110,14 @@ class MarkdownDescriptor extends \RectorPrefix20210515\Symfony\Component\Console
     /**
      * {@inheritdoc}
      */
-    protected function describeApplication(\RectorPrefix20210515\Symfony\Component\Console\Application $application, array $options = [])
+    protected function describeApplication(\RectorPrefix20210516\Symfony\Component\Console\Application $application, array $options = [])
     {
         $describedNamespace = $options['namespace'] ?? null;
-        $description = new \RectorPrefix20210515\Symfony\Component\Console\Descriptor\ApplicationDescription($application, $describedNamespace);
+        $description = new \RectorPrefix20210516\Symfony\Component\Console\Descriptor\ApplicationDescription($application, $describedNamespace);
         $title = $this->getApplicationTitle($application);
-        $this->write($title . "\n" . \str_repeat('=', \RectorPrefix20210515\Symfony\Component\Console\Helper\Helper::strlen($title)));
+        $this->write($title . "\n" . \str_repeat('=', \RectorPrefix20210516\Symfony\Component\Console\Helper\Helper::strlen($title)));
         foreach ($description->getNamespaces() as $namespace) {
-            if (\RectorPrefix20210515\Symfony\Component\Console\Descriptor\ApplicationDescription::GLOBAL_NAMESPACE !== $namespace['id']) {
+            if (\RectorPrefix20210516\Symfony\Component\Console\Descriptor\ApplicationDescription::GLOBAL_NAMESPACE !== $namespace['id']) {
                 $this->write("\n\n");
                 $this->write('**' . $namespace['id'] . ':**');
             }
@@ -133,7 +133,7 @@ class MarkdownDescriptor extends \RectorPrefix20210515\Symfony\Component\Console
             }
         }
     }
-    private function getApplicationTitle(\RectorPrefix20210515\Symfony\Component\Console\Application $application) : string
+    private function getApplicationTitle(\RectorPrefix20210516\Symfony\Component\Console\Application $application) : string
     {
         if ('UNKNOWN' !== $application->getName()) {
             if ('UNKNOWN' !== $application->getVersion()) {
