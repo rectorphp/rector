@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInita3a01dcabb577976ff00f21b50974d48
+class ComposerStaticInita12e7b5de1a942b41a17590912c45195
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -2096,6 +2096,7 @@ class ComposerStaticInita3a01dcabb577976ff00f21b50974d48
         'Rector\\Core\\PhpParser\\NodeFinder\\PropertyFetchFinder' => __DIR__ . '/../..' . '/src/PhpParser/NodeFinder/PropertyFetchFinder.php',
         'Rector\\Core\\PhpParser\\NodeTransformer' => __DIR__ . '/../..' . '/src/PhpParser/NodeTransformer.php',
         'Rector\\Core\\PhpParser\\NodeTraverser\\RectorNodeTraverser' => __DIR__ . '/../..' . '/src/PhpParser/NodeTraverser/RectorNodeTraverser.php',
+        'Rector\\Core\\PhpParser\\NodeVisitor\\CreatedByRuleNodeVisitor' => __DIR__ . '/../..' . '/src/PhpParser/NodeVisitor/CreatedByRuleNodeVisitor.php',
         'Rector\\Core\\PhpParser\\Node\\AssignAndBinaryMap' => __DIR__ . '/../..' . '/src/PhpParser/Node/AssignAndBinaryMap.php',
         'Rector\\Core\\PhpParser\\Node\\BetterNodeFinder' => __DIR__ . '/../..' . '/src/PhpParser/Node/BetterNodeFinder.php',
         'Rector\\Core\\PhpParser\\Node\\CustomNode\\FileWithoutNamespace' => __DIR__ . '/../..' . '/src/PhpParser/Node/CustomNode/FileWithoutNamespace.php',
@@ -2128,6 +2129,7 @@ class ComposerStaticInita3a01dcabb577976ff00f21b50974d48
         'Rector\\Core\\Template\\TemplateTypeNotFound' => __DIR__ . '/../..' . '/src/Template/TemplateTypeNotFound.php',
         'Rector\\Core\\Util\\PhpVersionFactory' => __DIR__ . '/../..' . '/src/Util/PhpVersionFactory.php',
         'Rector\\Core\\Util\\StaticRectorStrings' => __DIR__ . '/../..' . '/src/Util/StaticRectorStrings.php',
+        'Rector\\Core\\Validation\\InfiniteLoopValidator' => __DIR__ . '/../..' . '/src/Validation/InfiniteLoopValidator.php',
         'Rector\\Core\\ValueObjectFactory\\Application\\FileFactory' => __DIR__ . '/../..' . '/src/ValueObjectFactory/Application/FileFactory.php',
         'Rector\\Core\\ValueObjectFactory\\ProcessResultFactory' => __DIR__ . '/../..' . '/src/ValueObjectFactory/ProcessResultFactory.php',
         'Rector\\Core\\ValueObject\\Application\\File' => __DIR__ . '/../..' . '/src/ValueObject/Application/File.php',
@@ -3448,9 +3450,9 @@ class ComposerStaticInita3a01dcabb577976ff00f21b50974d48
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInita3a01dcabb577976ff00f21b50974d48::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInita3a01dcabb577976ff00f21b50974d48::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInita3a01dcabb577976ff00f21b50974d48::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInita12e7b5de1a942b41a17590912c45195::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInita12e7b5de1a942b41a17590912c45195::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInita12e7b5de1a942b41a17590912c45195::$classMap;
 
         }, null, ClassLoader::class);
     }
