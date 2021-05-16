@@ -47,7 +47,7 @@ final class NodesToAddCollector implements NodeCollectorInterface
             throw new ShouldNotHappenException($message);
         }
 
-        $position = $this->resolveNearestExpressionPosition($positionNode);
+        $position = $this->resolveNearestStmtPosition($positionNode);
         $this->nodesToAddBefore[$position][] = $this->wrapToExpression($addedNode);
 
         $this->rectorChangeCollector->notifyNodeFileInfo($positionNode);
@@ -58,7 +58,7 @@ final class NodesToAddCollector implements NodeCollectorInterface
      */
     public function addNodesAfterNode(array $addedNodes, Node $positionNode): void
     {
-        $position = $this->resolveNearestExpressionPosition($positionNode);
+        $position = $this->resolveNearestStmtPosition($positionNode);
         foreach ($addedNodes as $addedNode) {
             // prevent fluent method weird indent
             $addedNode->setAttribute(AttributeKey::ORIGINAL_NODE, null);
@@ -70,7 +70,7 @@ final class NodesToAddCollector implements NodeCollectorInterface
 
     public function addNodeAfterNode(Node $addedNode, Node $positionNode): void
     {
-        $position = $this->resolveNearestExpressionPosition($positionNode);
+        $position = $this->resolveNearestStmtPosition($positionNode);
         $this->nodesToAddAfter[$position][] = $this->wrapToExpression($addedNode);
 
         $this->rectorChangeCollector->notifyNodeFileInfo($positionNode);
@@ -118,13 +118,14 @@ final class NodesToAddCollector implements NodeCollectorInterface
         $this->rectorChangeCollector->notifyNodeFileInfo($positionNode);
     }
 
-    private function resolveNearestExpressionPosition(Node $node): string
+    private function resolveNearestStmtPosition(Node $node): string
     {
-        if ($node instanceof Expression || $node instanceof Stmt) {
+        if ($node instanceof Stmt) {
             return spl_object_hash($node);
         }
 
         $currentStmt = $node->getAttribute(AttributeKey::CURRENT_STATEMENT);
+
         if ($currentStmt instanceof Stmt) {
             return spl_object_hash($currentStmt);
         }
@@ -134,7 +135,7 @@ final class NodesToAddCollector implements NodeCollectorInterface
             return spl_object_hash($parent);
         }
 
-        $foundNode = $this->betterNodeFinder->findParentTypes($node, [Expression::class, Stmt::class]);
+        $foundNode = $this->betterNodeFinder->findParentType($node, Stmt::class);
 
         if (! $foundNode instanceof Stmt) {
             $printedNode = $this->betterStandardPrinter->print($node);

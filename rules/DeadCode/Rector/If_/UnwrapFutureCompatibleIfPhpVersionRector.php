@@ -65,7 +65,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?array
     {
-        if ((bool) $node->elseifs) {
+        if ($node->elseifs) {
             return null;
         }
 

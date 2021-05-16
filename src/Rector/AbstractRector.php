@@ -25,6 +25,7 @@ use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\Configuration\CurrentNodeProvider;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Contract\Rector\PhpRectorInterface;
+use Rector\Core\Exception\NodeTraverser\InfiniteLoopTraversingException;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Exclusion\ExclusionManager;
 use Rector\Core\Logging\CurrentRectorProvider;
@@ -38,6 +39,7 @@ use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Core\Provider\CurrentFileProvider;
 use Rector\Core\ValueObject\Application\File;
 use Rector\Core\ValueObject\ProjectType;
+use Rector\DowngradePhp80\Rector\NullsafeMethodCall\DowngradeNullsafeToTernaryOperatorRector;
 use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeRemoval\NodeRemover;
@@ -135,7 +137,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     private ChangedNodeAnalyzer $changedNodeAnalyzer;
 
     /**
-     * @var array<string, Node[]>
+     * @var array<string, Node[]|Node>
      */
     private array $nodesToReturn = [];
 
@@ -219,7 +221,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     }
 
     /**
-     * @return Expression|Node|Node[]|null
+     * @return Expression|Node|Node[]|int|null
      */
     final public function enterNode(Node $node)
     {
@@ -248,7 +250,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
             $originalNodeHash = spl_object_hash($originalNode);
             $this->nodesToReturn[$originalNodeHash] = $node;
 
-            if (($node !== []) > 0) {
+            if ($node !== []) {
                 $firstNodeKey = array_key_first($node);
                 $this->mirrorComments($node[$firstNodeKey], $originalNode);
             }
@@ -267,25 +269,72 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
             $rectorWithLineChange = new RectorWithLineChange($this, $originalNode->getLine());
             $this->file->addRectorClassWithLine($rectorWithLineChange);
 
-            // update parents relations
-            $this->connectParentNodes($node);
+            // update parents relations - must run before connectParentNodes()
             $this->mirrorAttributes($originalAttributes, $node);
+            $this->connectParentNodes($node);
+
+            // is different node type? do not traverse children to avoid looping
+            if (get_class($originalNode) !== get_class($node)) {
+                $createdByRule = $originalNode->getAttribute(AttributeKey::CREATED_BY_RULE);
+                // special case
+                if ($createdByRule === static::class && static::class !== DowngradeNullsafeToTernaryOperatorRector::class) {
+                    // does it contain the same node type as input?
+                    $hasNestedOriginalNodeType = $this->betterNodeFinder->findInstanceOf(
+                        $node,
+                        get_class($originalNode)
+                    );
+                    if ($hasNestedOriginalNodeType !== []) {
+                        throw new InfiniteLoopTraversingException(static::class);
+                    }
+                }
+
+                // hacking :)
+                $nodeTraverser = new NodeTraverser();
+                $nodeTraverser->addVisitor(new class(static::class) extends NodeVisitorAbstract {
+                    public function __construct(
+                        private string $rectorClass
+                    ) {
+                    }
+
+                    public function enterNode(Node $node)
+                    {
+                        $node->setAttribute(AttributeKey::CREATED_BY_RULE, $this->rectorClass);
+                        return $node;
+                    }
+                });
+                $nodeTraverser->traverse([$originalNode]);
+
+                // search "infinite recursion" in https://github.com/nikic/PHP-Parser/blob/master/doc/component/Walking_the_AST.markdown
+                $originalNodeHash = spl_object_hash($originalNode);
+
+                if ($originalNode instanceof Stmt && $node instanceof Expr) {
+                    $node = new Expression($node);
+                }
+
+                $this->nodesToReturn[$originalNodeHash] = $node;
+
+                return $node;
+            }
         }
 
-        // if stmt ("$value;") was replaced by expr ("$value"), add the ending ";" (Expression) to prevent breaking the code
+        // if Stmt ("$value;") was replaced by Expr ("$value"), add Expression (the ending ";") to prevent breaking the code
         if ($originalNode instanceof Stmt && $node instanceof Expr) {
-            return new Expression($node);
+            $node = new Expression($node);
         }
 
         return $node;
     }
 
+    /**
+     * Replacing nodes in leaveNode() method avoids infinite recursion
+     * see"infinite recursion" in https://github.com/nikic/PHP-Parser/blob/master/doc/component/Walking_the_AST.markdown
+     */
     public function leaveNode(Node $node)
     {
         $objectHash = spl_object_hash($node);
 
-        // update parents relations
-        return $this->nodesToReturn[$objectHash] ?? null;
+        // update parents relations!!!
+        return $this->nodesToReturn[$objectHash] ?? $node;
     }
 
     protected function isName(Node $node, string $name): bool

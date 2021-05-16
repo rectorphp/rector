@@ -163,6 +163,8 @@ final class PhpFileProcessor implements FileProcessorInterface
             }
 
             $callback($file);
+        } catch (ShouldNotHappenException $shouldNotHappenException) {
+            throw $shouldNotHappenException;
         } catch (AnalysedCodeException $analysedCodeException) {
             // inform about missing classes in tests
             if (StaticPHPUnitEnvironment::isPHPUnitRun()) {
@@ -190,9 +192,9 @@ final class PhpFileProcessor implements FileProcessorInterface
             return;
         }
 
-        $newContent = $this->configuration->isDryRun() ? $this->formatPerservingPrinter->printParsedStmstAndTokensToString(
-            $file
-        ) : $this->formatPerservingPrinter->printParsedStmstAndTokens($file);
+        $newContent = $this->configuration->isDryRun()
+            ? $this->formatPerservingPrinter->printParsedStmstAndTokensToString($file)
+            : $this->formatPerservingPrinter->printParsedStmstAndTokens($file);
 
         $file->changeFileContent($newContent);
         $this->fileDiffFileDecorator->decorate([$file]);

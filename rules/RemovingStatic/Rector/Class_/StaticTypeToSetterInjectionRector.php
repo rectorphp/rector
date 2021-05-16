@@ -157,7 +157,6 @@ CODE_SAMPLE
             $this->phpDocTypeChanger->changeVarType($phpDocInfo, $objectType);
 
             $class->stmts = array_merge([$entityFactoryProperty, $setEntityFactoryMethod], $class->stmts);
-
             break;
         }
 

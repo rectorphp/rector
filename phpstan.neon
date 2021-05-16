@@ -518,3 +518,26 @@ parameters:
         - '#Parameter \#1 \$type of method Rector\\BetterPhpDocParser\\PhpDocInfo\\PhpDocInfo<PHPStan\\PhpDocParser\\Ast\\Node\>\:\:removeByType\(\) expects class\-string<PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTagValueNode\>, class\-string<PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTagValueNode\>\|PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTagValueNode given#'
 
         - '#Method Rector\\Core\\Application\\VersionResolver\:\:resolvePackageData\(\) return type has no value type specified in iterable type array#'
+        - '#Cognitive complexity for "Rector\\Core\\Rector\\AbstractRector\:\:enterNode\(\)" is \d+, keep it under 9#'
+
+        -
+            message: '#Class cognitive complexity is 33, keep it under 30#'
+            path: src/Rector/AbstractRector.php
+
+
+        -
+            message: '#Method call argument on position 0 must use constant \(e\.g\. "Option\:\:NAME"\) over value#'
+            path: src/Rector/AbstractRector.php
+
+        -
+            message: '#Namespace "Rector\\Core\\Rector" is only reserved for "Rector"\. Move the class somewhere else#'
+            path: src/Rector/AbstractRector.php
+
+        -
+            message: '#Anonymous class is not allowed#'
+            path: src/Rector/AbstractRector.php
+
+        -
+            message: '#Class cognitive complexity is 38, keep it under 30#'
+            path: src/Rector/AbstractRector.php
+
