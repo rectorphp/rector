@@ -1713,6 +1713,7 @@ return array(
     'Rector\\Core\\Exception\\Application\\FileProcessingException' => $baseDir . '/src/Exception/Application/FileProcessingException.php',
     'Rector\\Core\\Exception\\Configuration\\InvalidConfigurationException' => $baseDir . '/src/Exception/Configuration/InvalidConfigurationException.php',
     'Rector\\Core\\Exception\\InvalidNodeTypeException' => $baseDir . '/src/Exception/InvalidNodeTypeException.php',
+    'Rector\\Core\\Exception\\NodeTraverser\\InfiniteLoopTraversingException' => $baseDir . '/src/Exception/NodeTraverser/InfiniteLoopTraversingException.php',
     'Rector\\Core\\Exception\\NotImplementedYetException' => $baseDir . '/src/Exception/NotImplementedYetException.php',
     'Rector\\Core\\Exception\\ShouldNotHappenException' => $baseDir . '/src/Exception/ShouldNotHappenException.php',
     'Rector\\Core\\Exception\\Testing\\SuperfluousAfterContentFixtureException' => $baseDir . '/src/Exception/Testing/SuperfluousAfterContentFixtureException.php',

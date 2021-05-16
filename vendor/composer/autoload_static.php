@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit963e7a858a12877c62609128dfc56900
+class ComposerStaticInita3a01dcabb577976ff00f21b50974d48
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -2042,6 +2042,7 @@ class ComposerStaticInit963e7a858a12877c62609128dfc56900
         'Rector\\Core\\Exception\\Application\\FileProcessingException' => __DIR__ . '/../..' . '/src/Exception/Application/FileProcessingException.php',
         'Rector\\Core\\Exception\\Configuration\\InvalidConfigurationException' => __DIR__ . '/../..' . '/src/Exception/Configuration/InvalidConfigurationException.php',
         'Rector\\Core\\Exception\\InvalidNodeTypeException' => __DIR__ . '/../..' . '/src/Exception/InvalidNodeTypeException.php',
+        'Rector\\Core\\Exception\\NodeTraverser\\InfiniteLoopTraversingException' => __DIR__ . '/../..' . '/src/Exception/NodeTraverser/InfiniteLoopTraversingException.php',
         'Rector\\Core\\Exception\\NotImplementedYetException' => __DIR__ . '/../..' . '/src/Exception/NotImplementedYetException.php',
         'Rector\\Core\\Exception\\ShouldNotHappenException' => __DIR__ . '/../..' . '/src/Exception/ShouldNotHappenException.php',
         'Rector\\Core\\Exception\\Testing\\SuperfluousAfterContentFixtureException' => __DIR__ . '/../..' . '/src/Exception/Testing/SuperfluousAfterContentFixtureException.php',
@@ -3447,9 +3448,9 @@ class ComposerStaticInit963e7a858a12877c62609128dfc56900
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit963e7a858a12877c62609128dfc56900::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit963e7a858a12877c62609128dfc56900::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit963e7a858a12877c62609128dfc56900::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInita3a01dcabb577976ff00f21b50974d48::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInita3a01dcabb577976ff00f21b50974d48::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInita3a01dcabb577976ff00f21b50974d48::$classMap;
 
         }, null, ClassLoader::class);
     }

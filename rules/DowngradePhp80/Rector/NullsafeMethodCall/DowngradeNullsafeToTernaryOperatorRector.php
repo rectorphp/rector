@@ -56,6 +56,7 @@ CODE_SAMPLE
         $tempVarName = $this->variableNaming->resolveFromNodeWithScopeCountAndFallbackName($node->var, $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE), '_');
         $variable = new \PhpParser\Node\Expr\Variable($tempVarName);
         $called = $node instanceof \PhpParser\Node\Expr\NullsafeMethodCall ? new \PhpParser\Node\Expr\MethodCall($variable, $node->name, $node->args) : new \PhpParser\Node\Expr\PropertyFetch($variable, $node->name);
-        return new \PhpParser\Node\Expr\Ternary(new \PhpParser\Node\Expr\Assign($variable, $node->var), $called, $this->nodeFactory->createNull());
+        $assign = new \PhpParser\Node\Expr\Assign($variable, $node->var);
+        return new \PhpParser\Node\Expr\Ternary($assign, $called, $this->nodeFactory->createNull());
     }
 }

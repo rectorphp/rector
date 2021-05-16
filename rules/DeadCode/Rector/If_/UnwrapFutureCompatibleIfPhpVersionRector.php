@@ -61,7 +61,7 @@ CODE_SAMPLE
      */
     public function refactor(\PhpParser\Node $node) : ?array
     {
-        if ((bool) $node->elseifs) {
+        if ($node->elseifs) {
             return null;
         }
         $condition = $this->conditionResolver->resolveFromExpr($node->cond);

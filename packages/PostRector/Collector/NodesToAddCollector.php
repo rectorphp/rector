@@ -52,7 +52,7 @@ final class NodesToAddCollector implements \Rector\PostRector\Contract\Collector
             $message = \sprintf('Switch arguments in "%s()" method', __METHOD__);
             throw new \Rector\Core\Exception\ShouldNotHappenException($message);
         }
-        $position = $this->resolveNearestExpressionPosition($positionNode);
+        $position = $this->resolveNearestStmtPosition($positionNode);
         $this->nodesToAddBefore[$position][] = $this->wrapToExpression($addedNode);
         $this->rectorChangeCollector->notifyNodeFileInfo($positionNode);
     }
@@ -61,7 +61,7 @@ final class NodesToAddCollector implements \Rector\PostRector\Contract\Collector
      */
     public function addNodesAfterNode(array $addedNodes, \PhpParser\Node $positionNode) : void
     {
-        $position = $this->resolveNearestExpressionPosition($positionNode);
+        $position = $this->resolveNearestStmtPosition($positionNode);
         foreach ($addedNodes as $addedNode) {
             // prevent fluent method weird indent
             $addedNode->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NODE, null);
@@ -71,7 +71,7 @@ final class NodesToAddCollector implements \Rector\PostRector\Contract\Collector
     }
     public function addNodeAfterNode(\PhpParser\Node $addedNode, \PhpParser\Node $positionNode) : void
     {
-        $position = $this->resolveNearestExpressionPosition($positionNode);
+        $position = $this->resolveNearestStmtPosition($positionNode);
         $this->nodesToAddAfter[$position][] = $this->wrapToExpression($addedNode);
         $this->rectorChangeCollector->notifyNodeFileInfo($positionNode);
     }
@@ -111,9 +111,9 @@ final class NodesToAddCollector implements \Rector\PostRector\Contract\Collector
         }
         $this->rectorChangeCollector->notifyNodeFileInfo($positionNode);
     }
-    private function resolveNearestExpressionPosition(\PhpParser\Node $node) : string
+    private function resolveNearestStmtPosition(\PhpParser\Node $node) : string
     {
-        if ($node instanceof \PhpParser\Node\Stmt\Expression || $node instanceof \PhpParser\Node\Stmt) {
+        if ($node instanceof \PhpParser\Node\Stmt) {
             return \spl_object_hash($node);
         }
         $currentStmt = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CURRENT_STATEMENT);
@@ -124,7 +124,7 @@ final class NodesToAddCollector implements \Rector\PostRector\Contract\Collector
         if ($parent instanceof \PhpParser\Node\Stmt\Return_) {
             return \spl_object_hash($parent);
         }
-        $foundNode = $this->betterNodeFinder->findParentTypes($node, [\PhpParser\Node\Stmt\Expression::class, \PhpParser\Node\Stmt::class]);
+        $foundNode = $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Stmt::class);
         if (!$foundNode instanceof \PhpParser\Node\Stmt) {
             $printedNode = $this->betterStandardPrinter->print($node);
             $errorMessage = \sprintf('Could not find parent Stmt of "%s" node', $printedNode);

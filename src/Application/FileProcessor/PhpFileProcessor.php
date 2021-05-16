@@ -178,6 +178,8 @@ final class PhpFileProcessor implements \Rector\Core\Contract\Processor\FileProc
                 return;
             }
             $callback($file);
+        } catch (\Rector\Core\Exception\ShouldNotHappenException $shouldNotHappenException) {
+            throw $shouldNotHappenException;
         } catch (\PHPStan\AnalysedCodeException $analysedCodeException) {
             // inform about missing classes in tests
             if (\Rector\Testing\PHPUnit\StaticPHPUnitEnvironment::isPHPUnitRun()) {
