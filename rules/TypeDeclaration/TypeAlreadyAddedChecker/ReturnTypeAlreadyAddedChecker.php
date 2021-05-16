@@ -19,6 +19,7 @@ use PHPStan\Type\IntersectionType;
 use PHPStan\Type\IterableType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectType;
+use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
@@ -79,6 +80,11 @@ final class ReturnTypeAlreadyAddedChecker
 
         if ($functionLike->returnType->toLowerString() !== 'self') {
             return false;
+        }
+
+        // skip "self" by "static" override
+        if ($returnType instanceof ThisType) {
+            return true;
         }
 
         $className = $functionLike->getAttribute(AttributeKey::CLASS_NAME);
