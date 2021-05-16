@@ -37,7 +37,6 @@ use Rector\DeadCode\Rector\If_\UnwrapFutureCompatibleIfFunctionExistsRector;
 use Rector\DeadCode\Rector\If_\UnwrapFutureCompatibleIfPhpVersionRector;
 use Rector\DeadCode\Rector\MethodCall\RemoveEmptyMethodCallRector;
 use Rector\DeadCode\Rector\Node\RemoveNonExistingVarAnnotationRector;
-use Rector\DeadCode\Rector\Property\RemoveSetterOnlyPropertyAndMethodCallRector;
 use Rector\DeadCode\Rector\Property\RemoveUnusedPrivatePropertyRector;
 use Rector\DeadCode\Rector\PropertyProperty\RemoveNullPropertyInitializationRector;
 use Rector\DeadCode\Rector\Return_\RemoveDeadConditionAboveReturnRector;
@@ -74,7 +73,6 @@ return static function (\RectorPrefix20210516\Symfony\Component\DependencyInject
     $services->set(\Rector\DeadCode\Rector\ClassMethod\RemoveDelegatingParentCallRector::class);
     $services->set(\Rector\DeadCode\Rector\BinaryOp\RemoveDuplicatedInstanceOfRector::class);
     $services->set(\Rector\DeadCode\Rector\Switch_\RemoveDuplicatedCaseInSwitchRector::class);
-    $services->set(\Rector\DeadCode\Rector\Property\RemoveSetterOnlyPropertyAndMethodCallRector::class);
     $services->set(\Rector\DeadCode\Rector\PropertyProperty\RemoveNullPropertyInitializationRector::class);
     $services->set(\Rector\DeadCode\Rector\Stmt\RemoveUnreachableStatementRector::class);
     $services->set(\Rector\DeadCode\Rector\If_\SimplifyIfElseWithSameContentRector::class);

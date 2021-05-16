@@ -18,16 +18,11 @@ use Rector\Core\PhpParser\NodeFinder\PropertyFetchFinder;
 use Rector\Core\ValueObject\MethodName;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeRemoval\AssignRemover;
-use Rector\NodeRemoval\ClassMethodRemover;
 use Rector\NodeRemoval\NodeRemover;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PostRector\Collector\NodesToRemoveCollector;
 final class ComplexNodeRemover
 {
-    /**
-     * @var \Rector\NodeRemoval\ClassMethodRemover
-     */
-    private $classMethodRemover;
     /**
      * @var \Rector\NodeRemoval\AssignRemover
      */
@@ -56,9 +51,8 @@ final class ComplexNodeRemover
      * @var \Rector\Core\PhpParser\Comparing\NodeComparator
      */
     private $nodeComparator;
-    public function __construct(\Rector\NodeRemoval\ClassMethodRemover $classMethodRemover, \Rector\NodeRemoval\AssignRemover $assignRemover, \Rector\Core\PhpParser\NodeFinder\PropertyFetchFinder $propertyFetchFinder, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\NodeRemoval\NodeRemover $nodeRemover, \Rector\PostRector\Collector\NodesToRemoveCollector $nodesToRemoveCollector, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator)
+    public function __construct(\Rector\NodeRemoval\AssignRemover $assignRemover, \Rector\Core\PhpParser\NodeFinder\PropertyFetchFinder $propertyFetchFinder, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\NodeRemoval\NodeRemover $nodeRemover, \Rector\PostRector\Collector\NodesToRemoveCollector $nodesToRemoveCollector, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator)
     {
-        $this->classMethodRemover = $classMethodRemover;
         $this->assignRemover = $assignRemover;
         $this->propertyFetchFinder = $propertyFetchFinder;
         $this->nodeNameResolver = $nodeNameResolver;
@@ -66,10 +60,6 @@ final class ComplexNodeRemover
         $this->nodeRemover = $nodeRemover;
         $this->nodesToRemoveCollector = $nodesToRemoveCollector;
         $this->nodeComparator = $nodeComparator;
-    }
-    public function removeClassMethodAndUsages(\PhpParser\Node\Stmt\ClassMethod $classMethod) : void
-    {
-        $this->classMethodRemover->removeClassMethodAndUsages($classMethod);
     }
     /**
      * @param string[] $classMethodNamesToSkip

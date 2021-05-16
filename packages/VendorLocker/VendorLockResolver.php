@@ -50,8 +50,4 @@ final class VendorLockResolver
     {
         return $this->propertyTypeVendorLockResolver->isVendorLocked($property);
     }
-    public function isClassMethodRemovalVendorLocked(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
-    {
-        return $this->classMethodVendorLockResolver->isRemovalVendorLocked($classMethod);
-    }
 }

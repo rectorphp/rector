@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit8b93c9fffd2ca039e9f9635d7b2a907d
+class ComposerStaticInit963e7a858a12877c62609128dfc56900
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -2205,7 +2205,6 @@ class ComposerStaticInit8b93c9fffd2ca039e9f9635d7b2a907d
         'Rector\\DeadCode\\Rector\\Node\\RemoveNonExistingVarAnnotationRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/Node/RemoveNonExistingVarAnnotationRector.php',
         'Rector\\DeadCode\\Rector\\Plus\\RemoveDeadZeroAndOneOperationRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/Plus/RemoveDeadZeroAndOneOperationRector.php',
         'Rector\\DeadCode\\Rector\\PropertyProperty\\RemoveNullPropertyInitializationRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/PropertyProperty/RemoveNullPropertyInitializationRector.php',
-        'Rector\\DeadCode\\Rector\\Property\\RemoveSetterOnlyPropertyAndMethodCallRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/Property/RemoveSetterOnlyPropertyAndMethodCallRector.php',
         'Rector\\DeadCode\\Rector\\Property\\RemoveUnusedPrivatePropertyRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/Property/RemoveUnusedPrivatePropertyRector.php',
         'Rector\\DeadCode\\Rector\\Property\\RemoveUselessVarTagRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/Property/RemoveUselessVarTagRector.php',
         'Rector\\DeadCode\\Rector\\Return_\\RemoveDeadConditionAboveReturnRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/Return_/RemoveDeadConditionAboveReturnRector.php',
@@ -2662,7 +2661,6 @@ class ComposerStaticInit8b93c9fffd2ca039e9f9635d7b2a907d
         'Rector\\NodeNestingScope\\ValueObject\\ControlStructure' => __DIR__ . '/../..' . '/packages/NodeNestingScope/ValueObject/ControlStructure.php',
         'Rector\\NodeRemoval\\AssignRemover' => __DIR__ . '/../..' . '/packages/NodeRemoval/AssignRemover.php',
         'Rector\\NodeRemoval\\BreakingRemovalGuard' => __DIR__ . '/../..' . '/packages/NodeRemoval/BreakingRemovalGuard.php',
-        'Rector\\NodeRemoval\\ClassMethodRemover' => __DIR__ . '/../..' . '/packages/NodeRemoval/ClassMethodRemover.php',
         'Rector\\NodeRemoval\\NodeRemover' => __DIR__ . '/../..' . '/packages/NodeRemoval/NodeRemover.php',
         'Rector\\NodeTypeResolver\\Contract\\NodeTypeResolverInterface' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/Contract/NodeTypeResolverInterface.php',
         'Rector\\NodeTypeResolver\\Contract\\SourceLocatorProviderInterface' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/Contract/SourceLocatorProviderInterface.php',
@@ -3449,9 +3447,9 @@ class ComposerStaticInit8b93c9fffd2ca039e9f9635d7b2a907d
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit8b93c9fffd2ca039e9f9635d7b2a907d::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit8b93c9fffd2ca039e9f9635d7b2a907d::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit8b93c9fffd2ca039e9f9635d7b2a907d::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit963e7a858a12877c62609128dfc56900::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit963e7a858a12877c62609128dfc56900::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit963e7a858a12877c62609128dfc56900::$classMap;
 
         }, null, ClassLoader::class);
     }
