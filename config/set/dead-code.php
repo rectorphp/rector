@@ -36,7 +36,6 @@ use Rector\DeadCode\Rector\If_\UnwrapFutureCompatibleIfFunctionExistsRector;
 use Rector\DeadCode\Rector\If_\UnwrapFutureCompatibleIfPhpVersionRector;
 use Rector\DeadCode\Rector\MethodCall\RemoveEmptyMethodCallRector;
 use Rector\DeadCode\Rector\Node\RemoveNonExistingVarAnnotationRector;
-use Rector\DeadCode\Rector\Property\RemoveSetterOnlyPropertyAndMethodCallRector;
 use Rector\DeadCode\Rector\Property\RemoveUnusedPrivatePropertyRector;
 use Rector\DeadCode\Rector\PropertyProperty\RemoveNullPropertyInitializationRector;
 use Rector\DeadCode\Rector\Return_\RemoveDeadConditionAboveReturnRector;
@@ -74,7 +73,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(RemoveDelegatingParentCallRector::class);
     $services->set(RemoveDuplicatedInstanceOfRector::class);
     $services->set(RemoveDuplicatedCaseInSwitchRector::class);
-    $services->set(RemoveSetterOnlyPropertyAndMethodCallRector::class);
     $services->set(RemoveNullPropertyInitializationRector::class);
     $services->set(RemoveUnreachableStatementRector::class);
     $services->set(SimplifyIfElseWithSameContentRector::class);

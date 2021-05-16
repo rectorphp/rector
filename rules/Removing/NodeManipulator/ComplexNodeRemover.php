@@ -19,7 +19,6 @@ use Rector\Core\PhpParser\NodeFinder\PropertyFetchFinder;
 use Rector\Core\ValueObject\MethodName;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeRemoval\AssignRemover;
-use Rector\NodeRemoval\ClassMethodRemover;
 use Rector\NodeRemoval\NodeRemover;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PostRector\Collector\NodesToRemoveCollector;
@@ -27,7 +26,6 @@ use Rector\PostRector\Collector\NodesToRemoveCollector;
 final class ComplexNodeRemover
 {
     public function __construct(
-        private ClassMethodRemover $classMethodRemover,
         private AssignRemover $assignRemover,
         private PropertyFetchFinder $propertyFetchFinder,
         private NodeNameResolver $nodeNameResolver,
@@ -36,11 +34,6 @@ final class ComplexNodeRemover
         private NodesToRemoveCollector $nodesToRemoveCollector,
         private NodeComparator $nodeComparator
     ) {
-    }
-
-    public function removeClassMethodAndUsages(ClassMethod $classMethod): void
-    {
-        $this->classMethodRemover->removeClassMethodAndUsages($classMethod);
     }
 
     /**

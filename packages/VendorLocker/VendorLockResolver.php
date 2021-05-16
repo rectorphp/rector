@@ -40,9 +40,4 @@ final class VendorLockResolver
     {
         return $this->propertyTypeVendorLockResolver->isVendorLocked($property);
     }
-
-    public function isClassMethodRemovalVendorLocked(ClassMethod $classMethod): bool
-    {
-        return $this->classMethodVendorLockResolver->isRemovalVendorLocked($classMethod);
-    }
 }
