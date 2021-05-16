@@ -113,7 +113,7 @@ abstract class AbstractRectorTestCase extends AbstractTestCase implements Rector
 
         try {
             $this->assertStringEqualsFile($expectedFileInfo->getRealPath(), $changedContent, $relativeFilePathFromCwd);
-        } catch (ExpectationFailedException $expectationFailedException) {
+        } catch (ExpectationFailedException) {
             StaticFixtureUpdater::updateFixtureContent($originalFileInfo, $changedContent, $fixtureFileInfo);
             $contents = $expectedFileInfo->getContents();
 

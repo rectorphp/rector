@@ -353,6 +353,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     }
 
     /**
+     * @deprecated Return array of stmts directly
      * @param Stmt[] $stmts
      */
     protected function unwrapStmts(array $stmts, Node $node): void

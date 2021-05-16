@@ -6,6 +6,7 @@ namespace Rector\DeadCode\Rector\If_;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\If_;
 use PHPStan\Type\ObjectType;
@@ -73,8 +74,9 @@ CODE_SAMPLE
 
     /**
      * @param If_ $node
+     * @return null|Stmt[]
      */
-    public function refactor(Node $node): ?Node
+    public function refactor(Node $node): ?array
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -97,10 +99,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $this->unwrapStmts($node->stmts, $node);
-        $this->removeNode($node);
-
-        return null;
+        return $node->stmts;
     }
 
     private function shouldSkip(If_ $if): bool
