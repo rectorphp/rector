@@ -120,8 +120,8 @@
         "phpstan": "vendor/bin/phpstan analyse --ansi --error-format symplify",
         "phpstan-config": "vendor/bin/phpstan analyse config --ansi --error-format symplify",
         "docs": [
-            "vendor/bin/rule-doc-generator generate packages rules --output-file docs/rector_rules_overview.md --ansi --categorize",
-            "vendor/bin/ecs check-markdown docs/rector_rules_overview.md --ansi --fix"
+            "vendor/bin/rule-doc-generator generate packages rules --output-file build/target-repository/docs/rector_rules_overview.md --ansi --categorize",
+            "vendor/bin/ecs check-markdown build/target-repository/docs/rector_rules_overview.md --ansi --fix"
         ],
         "rector": "bin/rector process --ansi"
     },
