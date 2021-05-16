@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\DeadCode\Rector\If_;
 
 use PhpParser\Node;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\If_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DeadCode\ConditionEvaluator;
@@ -56,8 +57,9 @@ CODE_SAMPLE
     }
     /**
      * @param If_ $node
+     * @return Stmt[]|null
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?array
     {
         if ((bool) $node->elseifs) {
             return null;
@@ -72,29 +74,31 @@ CODE_SAMPLE
         }
         // if is skipped
         if ($result) {
-            $this->refactorIsMatch($node);
-        } else {
-            $this->refactorIsNotMatch($node);
+            return $this->refactorIsMatch($node);
         }
-        return $node;
+        return $this->refactorIsNotMatch($node);
     }
-    private function refactorIsMatch(\PhpParser\Node\Stmt\If_ $if) : void
+    /**
+     * @return Stmt[]|null
+     */
+    private function refactorIsMatch(\PhpParser\Node\Stmt\If_ $if) : ?array
     {
-        if ((bool) $if->elseifs) {
-            return;
+        if ($if->elseifs) {
+            return null;
         }
-        $this->unwrapStmts($if->stmts, $if);
-        $this->removeNode($if);
+        return $if->stmts;
     }
-    private function refactorIsNotMatch(\PhpParser\Node\Stmt\If_ $if) : void
+    /**
+     * @return Stmt[]|null
+     */
+    private function refactorIsNotMatch(\PhpParser\Node\Stmt\If_ $if) : ?array
     {
         // no else → just remove the node
         if ($if->else === null) {
             $this->removeNode($if);
-            return;
+            return null;
         }
         // else is always used
-        $this->unwrapStmts($if->else->stmts, $if);
-        $this->removeNode($if);
+        return $if->else->stmts;
     }
 }

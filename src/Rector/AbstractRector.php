@@ -337,6 +337,7 @@ abstract class AbstractRector extends \PhpParser\NodeVisitorAbstract implements 
         $newNode->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::COMMENTS, $oldNode->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::COMMENTS));
     }
     /**
+     * @deprecated Return array of stmts directly
      * @param Stmt[] $stmts
      */
     protected function unwrapStmts(array $stmts, \PhpParser\Node $node) : void

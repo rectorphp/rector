@@ -6,6 +6,7 @@ namespace Rector\DeadCode\Rector\If_;
 use PhpParser\Node;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\Instanceof_;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\If_;
 use PHPStan\Analyser\Scope;
 use Rector\Core\NodeManipulator\IfManipulator;
@@ -61,8 +62,9 @@ CODE_SAMPLE
     }
     /**
      * @param If_ $node
+     * @return null|Stmt[]|If_
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node)
     {
         $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
         // a trait
@@ -80,7 +82,10 @@ CODE_SAMPLE
         }
         return $node;
     }
-    private function processMayDeadInstanceOf(\PhpParser\Node\Stmt\If_ $if, \PhpParser\Node\Expr\Instanceof_ $instanceof) : ?\PhpParser\Node\Stmt\If_
+    /**
+     * @return Stmt[]|null
+     */
+    private function processMayDeadInstanceOf(\PhpParser\Node\Stmt\If_ $if, \PhpParser\Node\Expr\Instanceof_ $instanceof) : ?array
     {
         $classType = $this->nodeTypeResolver->resolve($instanceof->class);
         $exprType = $this->nodeTypeResolver->resolve($instanceof->expr);
@@ -89,11 +94,9 @@ CODE_SAMPLE
             return null;
         }
         if ($if->cond === $instanceof) {
-            $this->unwrapStmts($if->stmts, $if);
-            $this->removeNode($if);
-            return null;
+            return $if->stmts;
         }
         $this->removeNode($if);
-        return $if;
+        return null;
     }
 }
