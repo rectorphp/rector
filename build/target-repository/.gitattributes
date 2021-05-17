@@ -21,6 +21,7 @@ Dockerfile export-ignore
 docs/images export-ignore
 .docker export-ignore
 .github export-ignore
+e2e export-ignore
 .dockerignore export-ignore
 
 # testing Windows spaces - https://help.github.com/en/github/using-git/configuring-git-to-handle-line-endings
