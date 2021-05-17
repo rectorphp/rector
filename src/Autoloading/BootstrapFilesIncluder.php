@@ -26,7 +26,7 @@ final class BootstrapFilesIncluder
 
         foreach ($bootstrapFiles as $bootstrapFile) {
             if (! is_file($bootstrapFile)) {
-                throw new ShouldNotHappenException('Bootstrap file %s does not exist.', $bootstrapFile);
+                throw new ShouldNotHappenException(sprintf('Bootstrap file "%s" does not exist.', $bootstrapFile));
             }
 
             try {
