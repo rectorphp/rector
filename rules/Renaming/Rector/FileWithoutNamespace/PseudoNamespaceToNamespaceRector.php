@@ -43,12 +43,9 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector implements C
     /**
      * @var PseudoNamespaceToNamespace[]
      */
-    private $pseudoNamespacesToNamespaces = [];
+    private array $pseudoNamespacesToNamespaces = [];
 
-    /**
-     * @var string|null
-     */
-    private $newNamespace;
+    private ?string $newNamespace = null;
 
     public function __construct(
         private PhpDocTypeRenamer $phpDocTypeRenamer

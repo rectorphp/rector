@@ -29,7 +29,7 @@ final class ReservedObjectRector extends AbstractRector implements ConfigurableR
     /**
      * @var array<string, string>
      */
-    private $reservedKeywordsToReplacements = [];
+    private array $reservedKeywordsToReplacements = [];
 
     public function getRuleDefinition(): RuleDefinition
     {

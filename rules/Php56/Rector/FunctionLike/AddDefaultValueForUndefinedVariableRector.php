@@ -42,7 +42,7 @@ final class AddDefaultValueForUndefinedVariableRector extends AbstractRector
     /**
      * @var string[]
      */
-    private $definedVariables = [];
+    private array $definedVariables = [];
 
     public function getRuleDefinition(): RuleDefinition
     {

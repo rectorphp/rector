@@ -183,11 +183,10 @@ CODE_SAMPLE
 
         $ifExprs = $this->betterNodeFinder->findInstanceOf($if->stmts, Expr::class);
         foreach ($ifExprs as $ifExpr) {
-            $isExprFoundInReturn = (bool) $this->betterNodeFinder->findFirst($return->expr, function (Node $node) use (
-                $ifExpr
-            ): bool {
-                return $this->nodeComparator->areNodesEqual($node, $ifExpr);
-            });
+            $isExprFoundInReturn = (bool) $this->betterNodeFinder->findFirst(
+                $return->expr,
+                fn (Node $node): bool => $this->nodeComparator->areNodesEqual($node, $ifExpr)
+            );
             if ($isExprFoundInReturn) {
                 return true;
             }

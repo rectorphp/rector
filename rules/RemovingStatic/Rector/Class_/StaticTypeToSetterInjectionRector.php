@@ -135,9 +135,7 @@ CODE_SAMPLE
 
             $containsEntityFactoryStaticCall = (bool) $this->betterNodeFinder->findFirst(
                 $class->stmts,
-                function (Node $node) use ($objectType): bool {
-                    return $this->isEntityFactoryStaticCall($node, $objectType);
-                }
+                fn (Node $node): bool => $this->isEntityFactoryStaticCall($node, $objectType)
             );
 
             if (! $containsEntityFactoryStaticCall) {

@@ -132,11 +132,10 @@ CODE_SAMPLE
     private function isAssignVarUsedInIfCond(array $ifsBefore, ?Expr $expr): bool
     {
         foreach ($ifsBefore as $ifBefore) {
-            $isUsedInIfCond = (bool) $this->betterNodeFinder->findFirst($ifBefore->cond, function (Node $node) use (
-                $expr
-            ): bool {
-                return $this->nodeComparator->areNodesEqual($node, $expr);
-            });
+            $isUsedInIfCond = (bool) $this->betterNodeFinder->findFirst(
+                $ifBefore->cond,
+                fn (Node $node): bool => $this->nodeComparator->areNodesEqual($node, $expr)
+            );
 
             if ($isUsedInIfCond) {
                 return true;
@@ -157,11 +156,10 @@ CODE_SAMPLE
             /** @var Assign $assign */
             $assign = $expression->expr;
 
-            $isUsedInAssignExpr = (bool) $this->betterNodeFinder->findFirst($assign->expr, function (Node $node) use (
-                $expr
-            ): bool {
-                return $this->nodeComparator->areNodesEqual($node, $expr);
-            });
+            $isUsedInAssignExpr = (bool) $this->betterNodeFinder->findFirst(
+                $assign->expr,
+                fn (Node $node): bool => $this->nodeComparator->areNodesEqual($node, $expr)
+            );
 
             if ($isUsedInAssignExpr) {
                 return true;

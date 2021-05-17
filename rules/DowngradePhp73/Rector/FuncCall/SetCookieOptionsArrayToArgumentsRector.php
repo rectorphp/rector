@@ -45,10 +45,7 @@ final class SetCookieOptionsArrayToArgumentsRector extends AbstractRector
         6 => false,
     ];
 
-    /**
-     * @var int
-     */
-    private $highestIndex = 1;
+    private int $highestIndex = 1;
 
     public function getRuleDefinition(): RuleDefinition
     {

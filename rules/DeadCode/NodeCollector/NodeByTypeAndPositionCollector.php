@@ -80,9 +80,7 @@ final class NodeByTypeAndPositionCollector
     {
         usort(
             $nodesByTypeAndPosition,
-            function (VariableNodeUse $firstVariableNodeUse, VariableNodeUse $secondVariableNodeUse): int {
-                return $firstVariableNodeUse->getStartTokenPosition() <=> $secondVariableNodeUse->getStartTokenPosition();
-            }
+            fn (VariableNodeUse $firstVariableNodeUse, VariableNodeUse $secondVariableNodeUse): int => $firstVariableNodeUse->getStartTokenPosition() <=> $secondVariableNodeUse->getStartTokenPosition()
         );
         return $nodesByTypeAndPosition;
     }

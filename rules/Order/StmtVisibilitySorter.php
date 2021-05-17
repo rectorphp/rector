@@ -127,9 +127,7 @@ final class StmtVisibilitySorter
     {
         uasort(
             $rankeables,
-            function (RankeableInterface $firstRankeable, RankeableInterface $secondRankeable): int {
-                return $firstRankeable->getRanks() <=> $secondRankeable->getRanks();
-            }
+            fn (RankeableInterface $firstRankeable, RankeableInterface $secondRankeable): int => $firstRankeable->getRanks() <=> $secondRankeable->getRanks()
         );
 
         $names = [];

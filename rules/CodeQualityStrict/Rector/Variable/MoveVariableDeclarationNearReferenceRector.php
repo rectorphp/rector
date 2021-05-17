@@ -136,9 +136,10 @@ CODE_SAMPLE
 
     private function hasPropertyInExpr(Expression $expression, Expr $expr): bool
     {
-        return (bool) $this->betterNodeFinder->findFirst($expr, function (Node $node): bool {
-            return $node instanceof PropertyFetch || $node instanceof StaticPropertyFetch;
-        });
+        return (bool) $this->betterNodeFinder->findFirst(
+            $expr,
+            fn (Node $node): bool => $node instanceof PropertyFetch || $node instanceof StaticPropertyFetch
+        );
     }
 
     private function shouldSkipReAssign(Expression $expression, Assign $assign): bool
@@ -204,11 +205,10 @@ CODE_SAMPLE
                 continue;
             }
 
-            $isFoundInKey = (bool) $this->betterNodeFinder->findFirst($dim, function (Node $node) use (
-                $variable
-            ): bool {
-                return $this->nodeComparator->areNodesEqual($node, $variable);
-            });
+            $isFoundInKey = (bool) $this->betterNodeFinder->findFirst(
+                $dim,
+                fn (Node $node): bool => $this->nodeComparator->areNodesEqual($node, $variable)
+            );
             if ($isFoundInKey) {
                 return true;
             }
@@ -228,9 +228,7 @@ CODE_SAMPLE
     private function hasReAssign(Expression $expression, Expr $expr): bool
     {
         $next = $expression->getAttribute(AttributeKey::NEXT_NODE);
-        $exprValues = $this->betterNodeFinder->find($expr, function (Node $node): bool {
-            return $node instanceof Variable;
-        });
+        $exprValues = $this->betterNodeFinder->find($expr, fn (Node $node): bool => $node instanceof Variable);
 
         if ($exprValues === []) {
             return false;

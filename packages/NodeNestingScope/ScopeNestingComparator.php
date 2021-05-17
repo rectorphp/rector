@@ -79,19 +79,19 @@ final class ScopeNestingComparator
             return false;
         }
 
-        $foundIfNode = $this->betterNodeFinder->find($foundParentNode->stmts, function ($node) use ($seekedExpr): bool {
-            return $this->nodeComparator->areNodesEqual($node, $seekedExpr);
-        });
+        $foundIfNode = $this->betterNodeFinder->find(
+            $foundParentNode->stmts,
+            fn ($node): bool => $this->nodeComparator->areNodesEqual($node, $seekedExpr)
+        );
 
         if ($foundParentNode->else === null) {
             return false;
         }
 
-        $foundElseNode = $this->betterNodeFinder->find($foundParentNode->else, function ($node) use (
-            $seekedExpr
-        ): bool {
-            return $this->nodeComparator->areNodesEqual($node, $seekedExpr);
-        });
+        $foundElseNode = $this->betterNodeFinder->find(
+            $foundParentNode->else,
+            fn ($node): bool => $this->nodeComparator->areNodesEqual($node, $seekedExpr)
+        );
 
         if ($foundIfNode && $foundElseNode) {
             $this->doubleIfBranchExprs[] = $seekedExpr;

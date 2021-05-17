@@ -472,3 +472,8 @@ parameters:
 
         # fixed in dev-main
         - '#Class like namespace "Rector\\(.*?)" does not follow PSR\-4 configuration in composer\.json#'
+
+        # deserves better architecture
+        -
+            message: '#Do not use chained method calls#'
+            path: packages/BetterPhpDocParser/Printer/PhpDocInfoPrinter.php

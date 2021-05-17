@@ -83,10 +83,11 @@ CODE_SAMPLE
     {
         uasort(
             $stmts,
-            function (Stmt $firstStmt, Stmt $secondStmt): int {
-                return [$this->resolveClassElementRank($firstStmt), $firstStmt->getLine()]
-                    <=> [$this->resolveClassElementRank($secondStmt), $secondStmt->getLine()];
-            }
+            fn (Stmt $firstStmt, Stmt $secondStmt): int => [
+                $this->resolveClassElementRank($firstStmt),
+                $firstStmt->getLine(),
+            ]
+                <=> [$this->resolveClassElementRank($secondStmt), $secondStmt->getLine()]
         );
 
         return $stmts;

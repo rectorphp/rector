@@ -160,11 +160,10 @@ CODE_SAMPLE
         }
 
         // ensure the variable only used once in foreach
-        $usedVariable = $this->betterNodeFinder->find($foreach->stmts, function (Node $node) use (
-            $assignVariable
-        ): bool {
-            return $this->nodeComparator->areNodesEqual($node, $assignVariable);
-        });
+        $usedVariable = $this->betterNodeFinder->find(
+            $foreach->stmts,
+            fn (Node $node): bool => $this->nodeComparator->areNodesEqual($node, $assignVariable)
+        );
         return count($usedVariable) > 1;
     }
 }

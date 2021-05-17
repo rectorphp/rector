@@ -96,10 +96,10 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $fileInfo = $this->file->getSmartFileInfo();
+        $smartFileInfo = $this->file->getSmartFileInfo();
 
         // this rule is parsing strings, so it heavy on performance; to lower it, we'll process only known opt-in files
-        if (! $this->isRelevantFileInfo($fileInfo)) {
+        if (! $this->isRelevantFileInfo($smartFileInfo)) {
             return null;
         }
 

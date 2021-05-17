@@ -229,11 +229,10 @@ CODE_SAMPLE
         /** @var Assign $assignNode */
         $assignNode = $nodeByTypeAndPosition->getParentNode();
 
-        $isVariableAssigned = (bool) $this->betterNodeFinder->findFirst($assignNode->expr, function (Node $node) use (
-            $nodeByTypeAndPosition
-        ): bool {
-            return $this->nodeComparator->areNodesEqual($node, $nodeByTypeAndPosition->getVariableNode());
-        });
+        $isVariableAssigned = (bool) $this->betterNodeFinder->findFirst(
+            $assignNode->expr,
+            fn (Node $node): bool => $this->nodeComparator->areNodesEqual($node, $nodeByTypeAndPosition->getVariableNode())
+        );
 
         return ! $isVariableAssigned;
     }

@@ -80,9 +80,10 @@ final class VariableManipulator
      */
     public function filterOutChangedVariables(array $assignsOfArrayToVariable, ClassMethod $classMethod): array
     {
-        return array_filter($assignsOfArrayToVariable, function (Assign $assign) use ($classMethod): bool {
-            return $this->isReadOnlyVariable($classMethod, $assign);
-        });
+        return array_filter(
+            $assignsOfArrayToVariable,
+            fn (Assign $assign): bool => $this->isReadOnlyVariable($classMethod, $assign)
+        );
     }
 
     private function isTestCaseExpectedVariable(Variable $variable): bool

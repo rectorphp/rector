@@ -30,9 +30,10 @@ final class PhpFilesFinder
         );
 
         // filter out non-PHP php files, e.g. blade templates in Laravel
-        $phpFileInfos = array_filter($phpFileInfos, function (SmartFileInfo $smartFileInfo): bool {
-            return ! Strings::endsWith($smartFileInfo->getPathname(), '.blade.php');
-        });
+        $phpFileInfos = array_filter(
+            $phpFileInfos,
+            fn (SmartFileInfo $smartFileInfo): bool => ! Strings::endsWith($smartFileInfo->getPathname(), '.blade.php')
+        );
 
         return $this->cachedFileInfoFilterAndReporter->filterFileInfos($phpFileInfos);
     }

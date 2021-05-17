@@ -61,9 +61,7 @@ final class SimplifyArraySearchRector extends AbstractRector
 
                 return $this->nodeNameResolver->isName($node, 'array_search');
             },
-            function (Node $node): bool {
-                return $this->valueResolver->isFalse($node);
-            }
+            fn (Node $node): bool => $this->valueResolver->isFalse($node)
         );
 
         if (! $twoNodeMatch instanceof TwoNodeMatch) {

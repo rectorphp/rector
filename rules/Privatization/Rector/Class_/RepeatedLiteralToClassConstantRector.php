@@ -241,9 +241,7 @@ CODE_SAMPLE
         $parts = explode(self::UNDERSCORE, $value);
 
         $parts = array_map(
-            function (string $value): string {
-                return StaticRectorStrings::camelCaseToUnderscore($value);
-            },
+            fn (string $value): string => StaticRectorStrings::camelCaseToUnderscore($value),
             $parts
         );
 
