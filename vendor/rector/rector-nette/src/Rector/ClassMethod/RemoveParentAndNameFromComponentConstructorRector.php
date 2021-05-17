@@ -12,7 +12,6 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\ObjectType;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Nette\NodeAnalyzer\StaticCallAnalyzer;
@@ -170,7 +169,7 @@ CODE_SAMPLE
         }
         $classReflection = $scope->getClassReflection();
         if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
-            throw new \Rector\Core\Exception\ShouldNotHappenException();
+            return \false;
         }
         // presenter is not a component
         if ($classReflection->isSubclassOf('Nette\\Application\\UI\\Presenter')) {
