@@ -14,12 +14,12 @@ final class DeprecationWarningCompilerPass implements \RectorPrefix20210517\Symf
     private const DEPRECATED_PARAMETERS = [\Rector\Core\Configuration\Option::SETS => 'Use $containerConfigurator->import(<set>); instead'];
     public function process(\RectorPrefix20210517\Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder) : void
     {
-        $parametersBag = $containerBuilder->getParameterBag();
+        $parameterBag = $containerBuilder->getParameterBag();
         foreach (self::DEPRECATED_PARAMETERS as $parameter => $message) {
-            if (!$parametersBag->has($parameter)) {
+            if (!$parameterBag->has($parameter)) {
                 continue;
             }
-            $setsParameters = $parametersBag->get($parameter);
+            $setsParameters = $parameterBag->get($parameter);
             if ($setsParameters === []) {
                 continue;
             }

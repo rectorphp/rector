@@ -52,6 +52,9 @@ CODE_SAMPLE
         if ($livingCode === []) {
             return $this->removeNodeAndKeepComments($node);
         }
+        if ($livingCode === [$node->expr]) {
+            return null;
+        }
         $firstExpr = \array_shift($livingCode);
         $node->expr = $firstExpr;
         $newNodes = [];
