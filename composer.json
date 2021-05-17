@@ -22,6 +22,12 @@
     "conflict": {
         "phpstan/phpdoc-parser": "<=0.5.3",
         "phpstan/phpstan": "<=0.12.82",
-        "rector/rector-prefixed": "*"
+        "rector/rector-prefixed": "*",
+        "rector/rector-phpunit": "*",
+        "rector/rector-symfony": "*",
+        "rector/rector-doctrine": "*",
+        "rector/rector-nette": "*",
+        "rector/rector-nette-to-symfony": "*",
+        "rector/rector-cakephp": "*"
     }
 }
