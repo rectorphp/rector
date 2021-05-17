@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Php80\Rector\Class_;
 
 use PhpParser\Node;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -94,6 +95,10 @@ CODE_SAMPLE
             $param = $promotionCandidate->getParam();
 
             if ($param->variadic) {
+                continue;
+            }
+
+            if ($param->type instanceof Identifier && $this->isName($param->type, 'callable')) {
                 continue;
             }
 
