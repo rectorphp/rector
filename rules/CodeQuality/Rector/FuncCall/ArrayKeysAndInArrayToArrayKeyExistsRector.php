@@ -69,9 +69,9 @@ CODE_SAMPLE
         $arrayVariable = $node->args[1]->value;
 
         /** @var Assign|Node|null $previousAssignArraysKeysFuncCall */
-        $previousAssignArraysKeysFuncCall = $this->betterNodeFinder->findFirstPreviousOfNode($node, function (Node $node) use (
-            $arrayVariable
-        ): bool {
+        $previousAssignArraysKeysFuncCall = $this->betterNodeFinder->findFirstPreviousOfNode($node, function (
+            Node $node
+        ) use ($arrayVariable): bool {
             // breaking out of scope
             if ($node instanceof FunctionLike) {
                 return true;
