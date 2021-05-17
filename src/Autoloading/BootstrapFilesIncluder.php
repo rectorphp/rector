@@ -26,7 +26,7 @@ final class BootstrapFilesIncluder
         $bootstrapFiles = $this->parameterProvider->provideArrayParameter(\Rector\Core\Configuration\Option::BOOTSTRAP_FILES);
         foreach ($bootstrapFiles as $bootstrapFile) {
             if (!\is_file($bootstrapFile)) {
-                throw new \Rector\Core\Exception\ShouldNotHappenException('Bootstrap file %s does not exist.', $bootstrapFile);
+                throw new \Rector\Core\Exception\ShouldNotHappenException(\sprintf('Bootstrap file "%s" does not exist.', $bootstrapFile));
             }
             try {
                 require_once $bootstrapFile;
