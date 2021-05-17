@@ -3,18 +3,13 @@
 declare (strict_types=1);
 namespace Rector\Arguments\ValueObject;
 
-use PHPStan\Type\ObjectType;
 use Rector\Arguments\Contract\ArgumentDefaultValueReplacerInterface;
-final class ArgumentDefaultValueReplacer implements \Rector\Arguments\Contract\ArgumentDefaultValueReplacerInterface
+final class FuncCallArgumentDefaultValueReplacer implements \Rector\Arguments\Contract\ArgumentDefaultValueReplacerInterface
 {
     /**
      * @var string
      */
-    private $class;
-    /**
-     * @var string
-     */
-    private $method;
+    private $function;
     /**
      * @var int
      */
@@ -25,21 +20,16 @@ final class ArgumentDefaultValueReplacer implements \Rector\Arguments\Contract\A
      * @param mixed $valueBefore
      * @param mixed $valueAfter
      */
-    public function __construct(string $class, string $method, int $position, $valueBefore, $valueAfter)
+    public function __construct(string $function, int $position, $valueBefore, $valueAfter)
     {
-        $this->class = $class;
-        $this->method = $method;
+        $this->function = $function;
         $this->position = $position;
         $this->valueBefore = $valueBefore;
         $this->valueAfter = $valueAfter;
     }
-    public function getObjectType() : \PHPStan\Type\ObjectType
+    public function getFunction() : string
     {
-        return new \PHPStan\Type\ObjectType($this->class);
-    }
-    public function getMethod() : string
-    {
-        return $this->method;
+        return $this->function;
     }
     public function getPosition() : int
     {

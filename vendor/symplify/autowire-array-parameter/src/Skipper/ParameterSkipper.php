@@ -13,7 +13,6 @@ final class ParameterSkipper
      * Classes that create circular dependencies
      *
      * @var string[]
-     * @noRector
      */
     private const DEFAULT_EXCLUDED_FATAL_CLASSES = ['RectorPrefix20210517\\Symfony\\Component\\Form\\FormExtensionInterface', 'RectorPrefix20210517\\Symfony\\Component\\Asset\\PackageInterface', 'RectorPrefix20210517\\Symfony\\Component\\Config\\Loader\\LoaderInterface', 'RectorPrefix20210517\\Symfony\\Component\\VarDumper\\Dumper\\ContextProvider\\ContextProviderInterface', 'RectorPrefix20210517\\EasyCorp\\Bundle\\EasyAdminBundle\\Form\\Type\\Configurator\\TypeConfiguratorInterface', 'RectorPrefix20210517\\Sonata\\CoreBundle\\Model\\Adapter\\AdapterInterface', 'RectorPrefix20210517\\Sonata\\Doctrine\\Adapter\\AdapterChain', 'RectorPrefix20210517\\Sonata\\Twig\\Extension\\TemplateExtension'];
     /**
