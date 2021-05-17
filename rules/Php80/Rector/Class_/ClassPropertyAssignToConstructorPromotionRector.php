@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\Php80\Rector\Class_;
 
 use PhpParser\Node;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -90,6 +91,9 @@ CODE_SAMPLE
             $property = $promotionCandidate->getProperty();
             $param = $promotionCandidate->getParam();
             if ($param->variadic) {
+                continue;
+            }
+            if ($param->type instanceof \PhpParser\Node\Identifier && $this->isName($param->type, 'callable')) {
                 continue;
             }
             $this->removeNode($property);
