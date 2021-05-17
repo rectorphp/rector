@@ -8,15 +8,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210516\Symfony\Component\Config\Loader;
+namespace RectorPrefix20210517\Symfony\Component\Config\Loader;
 
-use RectorPrefix20210516\Symfony\Component\Config\Exception\LoaderLoadException;
+use RectorPrefix20210517\Symfony\Component\Config\Exception\LoaderLoadException;
 /**
  * Loader is the abstract class used by all built-in loaders.
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-abstract class Loader implements \RectorPrefix20210516\Symfony\Component\Config\Loader\LoaderInterface
+abstract class Loader implements \RectorPrefix20210517\Symfony\Component\Config\Loader\LoaderInterface
 {
     protected $resolver;
     /**
@@ -29,7 +29,7 @@ abstract class Loader implements \RectorPrefix20210516\Symfony\Component\Config\
     /**
      * {@inheritdoc}
      */
-    public function setResolver(\RectorPrefix20210516\Symfony\Component\Config\Loader\LoaderResolverInterface $resolver)
+    public function setResolver(\RectorPrefix20210517\Symfony\Component\Config\Loader\LoaderResolverInterface $resolver)
     {
         $this->resolver = $resolver;
     }
@@ -62,7 +62,7 @@ abstract class Loader implements \RectorPrefix20210516\Symfony\Component\Config\
         }
         $loader = null === $this->resolver ? \false : $this->resolver->resolve($resource, $type);
         if (\false === $loader) {
-            throw new \RectorPrefix20210516\Symfony\Component\Config\Exception\LoaderLoadException($resource, null, 0, null, $type);
+            throw new \RectorPrefix20210517\Symfony\Component\Config\Exception\LoaderLoadException($resource, null, 0, null, $type);
         }
         return $loader;
     }

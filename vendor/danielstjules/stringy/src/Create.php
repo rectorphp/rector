@@ -1,8 +1,8 @@
 <?php
 
-namespace RectorPrefix20210516\Stringy;
+namespace RectorPrefix20210517\Stringy;
 
-if (!\function_exists('RectorPrefix20210516\\Stringy\\create')) {
+if (!\function_exists('RectorPrefix20210517\\Stringy\\create')) {
     /**
      * Creates a Stringy object and returns it on success.
      *
@@ -14,6 +14,6 @@ if (!\function_exists('RectorPrefix20210516\\Stringy\\create')) {
      */
     function create($str, $encoding = null)
     {
-        return new \RectorPrefix20210516\Stringy\Stringy($str, $encoding);
+        return new \RectorPrefix20210517\Stringy\Stringy($str, $encoding);
     }
 }

@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\FileFormatter\ValueObject;
 
-use RectorPrefix20210516\Nette\Utils\Strings;
+use RectorPrefix20210517\Nette\Utils\Strings;
 use Rector\FileFormatter\Exception\InvalidIndentSizeException;
 use Rector\FileFormatter\Exception\InvalidIndentStringException;
 use Rector\FileFormatter\Exception\InvalidIndentStyleException;
@@ -56,7 +56,7 @@ final class Indent
      */
     public static function fromString(string $content)
     {
-        $match = \RectorPrefix20210516\Nette\Utils\Strings::match($content, self::VALID_INDENT_REGEX);
+        $match = \RectorPrefix20210517\Nette\Utils\Strings::match($content, self::VALID_INDENT_REGEX);
         if ($match === null) {
             throw \Rector\FileFormatter\Exception\InvalidIndentStringException::fromString($content);
         }
@@ -95,7 +95,7 @@ final class Indent
      */
     public static function fromContent(string $content)
     {
-        $match = \RectorPrefix20210516\Nette\Utils\Strings::match($content, self::PARSE_INDENT_REGEX);
+        $match = \RectorPrefix20210517\Nette\Utils\Strings::match($content, self::PARSE_INDENT_REGEX);
         if (isset($match['indent'])) {
             return self::fromString($match['indent']);
         }
@@ -115,6 +115,6 @@ final class Indent
     }
     private function startsWithSpace() : bool
     {
-        return \RectorPrefix20210516\Nette\Utils\Strings::startsWith($this->string, ' ');
+        return \RectorPrefix20210517\Nette\Utils\Strings::startsWith($this->string, ' ');
     }
 }
