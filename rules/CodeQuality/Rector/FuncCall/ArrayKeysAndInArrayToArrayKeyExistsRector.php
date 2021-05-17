@@ -56,13 +56,15 @@ CODE_SAMPLE
         }
         $arrayVariable = $node->args[1]->value;
         /** @var Assign|Node|null $previousAssignArraysKeysFuncCall */
-        $previousAssignArraysKeysFuncCall = $this->betterNodeFinder->findFirstPrevious($node, function (\PhpParser\Node $node) use($arrayVariable) : bool {
+        $previousAssignArraysKeysFuncCall = $this->betterNodeFinder->findFirstPreviousOfNode($node, function (\PhpParser\Node $node) use($arrayVariable) : bool {
             // breaking out of scope
             if ($node instanceof \PhpParser\Node\FunctionLike) {
                 return \true;
             }
             if (!$node instanceof \PhpParser\Node\Expr\Assign) {
-                return \false;
+                return !(bool) $this->betterNodeFinder->find($node, function (\PhpParser\Node $n) use($arrayVariable) {
+                    return $this->nodeComparator->areNodesEqual($arrayVariable, $n);
+                });
             }
             if (!$this->nodeComparator->areNodesEqual($arrayVariable, $node->var)) {
                 return \false;
