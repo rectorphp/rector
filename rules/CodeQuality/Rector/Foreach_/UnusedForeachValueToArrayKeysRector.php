@@ -119,9 +119,10 @@ CODE_SAMPLE
 
     private function isVariableUsedInForeach(Variable $variable, Foreach_ $foreach): bool
     {
-        return (bool) $this->betterNodeFinder->findFirst($foreach->stmts, function (Node $node) use ($variable): bool {
-            return $this->nodeComparator->areNodesEqual($node, $variable);
-        });
+        return (bool) $this->betterNodeFinder->findFirst(
+            $foreach->stmts,
+            fn (Node $node): bool => $this->nodeComparator->areNodesEqual($node, $variable)
+        );
     }
 
     private function removeForeachValueAndUseArrayKeys(Foreach_ $foreach): void

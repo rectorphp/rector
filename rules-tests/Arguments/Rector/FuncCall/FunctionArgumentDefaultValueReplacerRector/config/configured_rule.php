@@ -9,7 +9,7 @@ use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
-    $services->set(Rector\Arguments\Rector\FuncCall\FunctionArgumentDefaultValueReplacerRector::class)
+    $services->set(FunctionArgumentDefaultValueReplacerRector::class)
         ->call('configure', [[
             FunctionArgumentDefaultValueReplacerRector::REPLACED_ARGUMENTS => ValueObjectInliner::inline([
                 new FuncCallArgumentDefaultValueReplacer('version_compare', 2, 'lte', 'le'),

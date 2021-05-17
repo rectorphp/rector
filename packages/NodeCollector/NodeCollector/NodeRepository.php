@@ -133,9 +133,7 @@ final class NodeRepository
     public function findStaticCallsByClassMethod(ClassMethod $classMethod): array
     {
         $calls = $this->findCallsByClassMethod($classMethod);
-        return array_filter($calls, function (Node $node): bool {
-            return $node instanceof StaticCall;
-        });
+        return array_filter($calls, fn (Node $node): bool => $node instanceof StaticCall);
     }
 
     public function findClassMethodByStaticCall(StaticCall $staticCall): ?ClassMethod
@@ -190,9 +188,7 @@ final class NodeRepository
     {
         $calls = Arrays::flatten($this->callsByTypeAndMethod);
 
-        return array_filter($calls, function (Node $node): bool {
-            return $node instanceof MethodCall;
-        });
+        return array_filter($calls, fn (Node $node): bool => $node instanceof MethodCall);
     }
 
     /**

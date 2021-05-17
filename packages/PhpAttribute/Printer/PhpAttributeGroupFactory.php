@@ -111,9 +111,10 @@ final class PhpAttributeGroupFactory
         }
 
         if ($value instanceof CurlyListNode) {
-            return array_map(function ($node) {
-                return $this->normalizeNodeValue($node);
-            }, $value->getValuesWithExplicitSilentAndWithoutQuotes());
+            return array_map(
+                fn ($node) => $this->normalizeNodeValue($node),
+                $value->getValuesWithExplicitSilentAndWithoutQuotes()
+            );
         }
 
         if ($value instanceof Node) {

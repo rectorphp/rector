@@ -113,9 +113,7 @@ final class MethodCallToVariableNameResolver
             return Strings::replace(
                 $argValueName,
                 self::CONSTANT_REGEX,
-                function ($matches): string {
-                    return strtoupper($matches[2]);
-                }
+                fn ($matches): string => strtoupper($matches[2])
             );
         }
 

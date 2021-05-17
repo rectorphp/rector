@@ -118,8 +118,6 @@ CODE_SAMPLE
         /** @var Assign[] $assigns */
         $assigns = $this->betterNodeFinder->findInstanceOf((array) $classMethod->stmts, Assign::class);
 
-        return array_filter($assigns, function (Assign $assign): bool {
-            return $assign->expr instanceof New_;
-        });
+        return array_filter($assigns, fn (Assign $assign): bool => $assign->expr instanceof New_);
     }
 }

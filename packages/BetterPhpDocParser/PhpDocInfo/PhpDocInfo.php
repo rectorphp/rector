@@ -116,9 +116,7 @@ final class PhpDocInfo
 
         $tags = $this->phpDocNode->getTags();
 
-        $tags = array_filter($tags, function (PhpDocTagNode $tag) use ($name): bool {
-            return $tag->name === $name;
-        });
+        $tags = array_filter($tags, fn (PhpDocTagNode $tag) => $tag->name === $name);
 
         $tags = array_values($tags);
         return array_values($tags);

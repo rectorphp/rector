@@ -96,8 +96,9 @@ CODE_SAMPLE
 
     private function isVariableUsedNext(Catch_ $catch, Variable $variable): bool
     {
-        return (bool) $this->betterNodeFinder->findFirstNext($catch, function (Node $node) use ($variable): bool {
-            return $this->nodeComparator->areNodesEqual($node, $variable);
-        });
+        return (bool) $this->betterNodeFinder->findFirstNext(
+            $catch,
+            fn (Node $node): bool => $this->nodeComparator->areNodesEqual($node, $variable)
+        );
     }
 }

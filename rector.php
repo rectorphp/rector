@@ -12,6 +12,7 @@ use Rector\Core\ValueObject\PhpVersion;
 use Rector\DeadCode\Rector\Stmt\RemoveUnreachableStatementRector;
 use Rector\Nette\Set\NetteSetList;
 use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
+use Rector\Php74\Rector\Closure\ClosureToArrowFunctionRector;
 use Rector\Php74\Rector\Property\TypedPropertyRector;
 use Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector;
 use Rector\PHPUnit\Rector\Class_\AddSeeTestAnnotationRector;
@@ -42,7 +43,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $containerConfigurator->import(PHPUnitSetList::PHPUNIT_CODE_QUALITY);
 
     $services = $containerConfigurator->services();
+
+    // PHP 7.4 and 8.0
     $services->set(TypedPropertyRector::class);
+    $services->set(ClassPropertyAssignToConstructorPromotionRector::class);
+    $services->set(ClosureToArrowFunctionRector::class);
 
     $configuration = ValueObjectInliner::inline([
         new InferParamFromClassMethodReturn(AbstractRector::class, 'refactor', 'getNodeTypes'),

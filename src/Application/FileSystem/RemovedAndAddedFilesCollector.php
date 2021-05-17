@@ -57,9 +57,10 @@ final class RemovedAndAddedFilesCollector
      */
     public function getAddedFilesWithContent(): array
     {
-        return array_filter($this->addedFiles, function (AddedFileInterface $addedFile): bool {
-            return $addedFile instanceof AddedFileWithContent;
-        });
+        return array_filter(
+            $this->addedFiles,
+            fn (AddedFileInterface $addedFile): bool => $addedFile instanceof AddedFileWithContent
+        );
     }
 
     /**
@@ -67,9 +68,10 @@ final class RemovedAndAddedFilesCollector
      */
     public function getAddedFilesWithNodes(): array
     {
-        return array_filter($this->addedFiles, function (AddedFileInterface $addedFile): bool {
-            return $addedFile instanceof AddedFileWithNodes;
-        });
+        return array_filter(
+            $this->addedFiles,
+            fn (AddedFileInterface $addedFile): bool => $addedFile instanceof AddedFileWithNodes
+        );
     }
 
     public function getAffectedFilesCount(): int

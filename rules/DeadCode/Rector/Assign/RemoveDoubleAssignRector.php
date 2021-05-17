@@ -108,9 +108,10 @@ CODE_SAMPLE
 
     private function isSelfReferencing(Assign $assign): bool
     {
-        return (bool) $this->betterNodeFinder->findFirst($assign->expr, function (Node $subNode) use ($assign): bool {
-            return $this->nodeComparator->areNodesEqual($assign->var, $subNode);
-        });
+        return (bool) $this->betterNodeFinder->findFirst(
+            $assign->expr,
+            fn (Node $subNode): bool => $this->nodeComparator->areNodesEqual($assign->var, $subNode)
+        );
     }
 
     private function areInSameClassMethod(Assign $assign, Expression $previousExpression): bool

@@ -110,9 +110,7 @@ CODE_SAMPLE
         // @see https://regex101.com/r/8nGS0F/1
         $parts = Strings::split($string->value, '#(' . implode('|', $quotedClassNames) . ')#');
 
-        return array_filter($parts, function (string $className): bool {
-            return $className !== '';
-        });
+        return array_filter($parts, fn (string $className): bool => $className !== '');
     }
 
     /**

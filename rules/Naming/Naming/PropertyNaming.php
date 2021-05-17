@@ -275,9 +275,10 @@ final class PropertyNaming
         }
 
         $classMethods = $this->betterNodeFinder->findInstanceOf($classLike, ClassMethod::class);
-        return array_filter($classMethods, function (ClassMethod $classMethod): bool {
-            return $this->isBoolishMethodName($classMethod);
-        });
+        return array_filter(
+            $classMethods,
+            fn (ClassMethod $classMethod): bool => $this->isBoolishMethodName($classMethod)
+        );
     }
 
     /**
@@ -290,9 +291,10 @@ final class PropertyNaming
     ): array {
         $classMethodName = $this->nodeNameResolver->getName($property);
 
-        return array_filter($prefixedClassMethods, function (ClassMethod $classMethod) use ($classMethodName): bool {
-            return $this->doesClassMethodMatchReturnPropertyFetch($classMethod, $classMethodName);
-        });
+        return array_filter(
+            $prefixedClassMethods,
+            fn (ClassMethod $classMethod): bool => $this->doesClassMethodMatchReturnPropertyFetch($classMethod, $classMethodName)
+        );
     }
 
     private function isPrefixedInterface(string $shortClassName): bool

@@ -57,9 +57,10 @@ final class InvertedIfFactory
             return null;
         }
 
-        return $this->betterNodeFinder->findFirstNext($if, function (Node $node): bool {
-            return $node instanceof Return_ && $node->expr instanceof Expr;
-        });
+        return $this->betterNodeFinder->findFirstNext(
+            $if,
+            fn (Node $node): bool => $node instanceof Return_ && $node->expr instanceof Expr
+        );
     }
 
     private function getIfNextReturn(If_ $if): ?Return_

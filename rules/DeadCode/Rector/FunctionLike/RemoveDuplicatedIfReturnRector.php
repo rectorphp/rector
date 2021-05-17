@@ -171,8 +171,6 @@ CODE_SAMPLE
      */
     private function filterOutSingleItemStmts(array $ifWithOnlyReturnsByHash): array
     {
-        return array_filter($ifWithOnlyReturnsByHash, function (array $stmts): bool {
-            return count($stmts) >= 2;
-        });
+        return array_filter($ifWithOnlyReturnsByHash, fn (array $stmts): bool => count($stmts) >= 2);
     }
 }

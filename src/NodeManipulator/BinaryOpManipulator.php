@@ -133,9 +133,7 @@ final class BinaryOpManipulator
             return $condition;
         }
 
-        return function (Node $node) use ($condition): bool {
-            return is_a($node, $condition, true);
-        };
+        return fn (Node $node): bool => is_a($node, $condition, true);
     }
 
     private function resolveInversedNodeClass(BinaryOp $binaryOp): ?string

@@ -323,9 +323,10 @@ final class BetterNodeFinder
      */
     public function findFirstPreviousOfTypes(Node $mainNode, array $types): ?Node
     {
-        return $this->findFirstPrevious($mainNode, function (Node $node) use ($types): bool {
-            return $this->typeChecker->isInstanceOf($node, $types);
-        });
+        return $this->findFirstPrevious(
+            $mainNode,
+            fn (Node $node): bool => $this->typeChecker->isInstanceOf($node, $types)
+        );
     }
 
     public function findFirstNext(Node $node, callable $filter): ?Node
