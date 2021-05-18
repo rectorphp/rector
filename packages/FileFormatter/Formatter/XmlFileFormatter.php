@@ -15,6 +15,18 @@ use Rector\FileFormatter\ValueObjectFactory\EditorConfigConfigurationBuilder;
 final class XmlFileFormatter implements \Rector\FileFormatter\Contract\Formatter\FileFormatterInterface
 {
     /**
+     * @var string
+     */
+    private const XML_PARTS = '#(>)(<)(\\/*)#';
+    /**
+     * @var string
+     */
+    private const IS_OPENING_TAG = '#^<[^\\/]*>$#';
+    /**
+     * @var string
+     */
+    private const IS_CLOSING_TAG = '#^\\s*<\\/#';
+    /**
      * @var int|null
      */
     private $depth;
@@ -67,8 +79,7 @@ final class XmlFileFormatter implements \Rector\FileFormatter\Contract\Formatter
      */
     private function getXmlParts(string $xml) : array
     {
-        $xmlParts = '#(>)(<)(\\/*)#';
-        $withNewLines = \RectorPrefix20210518\Nette\Utils\Strings::replace(\trim($xml), $xmlParts, "\$1\n\$2\$3");
+        $withNewLines = \RectorPrefix20210518\Nette\Utils\Strings::replace(\trim($xml), self::XML_PARTS, "\$1\n\$2\$3");
         return \explode("\n", $withNewLines);
     }
     private function getOutputForPart(string $part) : string
@@ -108,13 +119,11 @@ final class XmlFileFormatter implements \Rector\FileFormatter\Contract\Formatter
     }
     private function isOpeningTag(string $part) : bool
     {
-        $isOpeningTag = '#^<[^\\/]*>$#';
-        return (bool) \RectorPrefix20210518\Nette\Utils\Strings::match($part, $isOpeningTag);
+        return (bool) \RectorPrefix20210518\Nette\Utils\Strings::match($part, self::IS_OPENING_TAG);
     }
     private function isClosingTag(string $part) : bool
     {
-        $isClosingTag = '#^\\s*<\\/#';
-        return (bool) \RectorPrefix20210518\Nette\Utils\Strings::match($part, $isClosingTag);
+        return (bool) \RectorPrefix20210518\Nette\Utils\Strings::match($part, self::IS_CLOSING_TAG);
     }
     private function isOpeningCdataTag(string $part) : bool
     {
