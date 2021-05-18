@@ -20,18 +20,18 @@ jobs:
             fail-fast: false
             matrix:
                 package_name:
-                    - rector-nette
-                    - rector-symfony
-                    - rector-laravel
-                    - rector-phpunit
-                    - rector-cakephp
-                    - rector-doctrine
+                    - rectorphp/rector-nette
+                    - rectorphp/rector-symfony
+                    - rectorphp/rector-laravel
+                    - rectorphp/rector-phpunit
+                    - rectorphp/rector-cakephp
+                    - rectorphp/rector-doctrine
 
         steps:
             -
                 uses: "actions/checkout@v2"
                 with:
-                    repository: rectorphp/${{ matrix.package_name }}
+                    repository: ${{ matrix.package_name }}
 
             -
                 uses: shivammathur/setup-php@v2
