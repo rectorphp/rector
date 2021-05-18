@@ -151,7 +151,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(Printer::class);
     $services->alias(PrinterInterface::class, Printer::class);
 
-    $services->set(Formatter::class);
-
     $services->set(EditorConfig::class);
 };
