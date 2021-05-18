@@ -347,11 +347,19 @@ XX
     public static function detectColors() : bool
     {
         $streamIsatty = function ($stream) {
+            if (\function_exists('stream_isatty')) {
+                return \stream_isatty($stream);
+            }
+            if (!\is_resource($stream)) {
+                \trigger_error('stream_isatty() expects parameter 1 to be resource, ' . \gettype($stream) . ' given', \E_USER_WARNING);
+                return \false;
+            }
             if ('\\' === \DIRECTORY_SEPARATOR) {
                 $stat = @\fstat($stream);
+                // Check if formatted mode is S_IFCHR
                 return $stat ? 020000 === ($stat['mode'] & 0170000) : \false;
             }
-            return @\posix_isatty($stream);
+            return \function_exists('posix_isatty') && @\posix_isatty($stream);
         };
         return (\PHP_SAPI === 'cli' || \PHP_SAPI === 'phpdbg') && \getenv('NO_COLOR') === \false && (\getenv('FORCE_COLOR') || @$streamIsatty(\STDOUT) || (\defined('PHP_WINDOWS_VERSION_BUILD') && (\function_exists('sapi_windows_vt100_support') && \sapi_windows_vt100_support(\STDOUT)) || \getenv('ConEmuANSI') === 'ON' || \getenv('ANSICON') !== \false || \getenv('term') === 'xterm' || \getenv('term') === 'xterm-256color'));
     }
