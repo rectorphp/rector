@@ -1686,56 +1686,6 @@
             "install-path": "..\/sebastian\/diff"
         },
         {
-            "name": "shanethehat\/pretty-xml",
-            "version": "1.0.2",
-            "version_normalized": "1.0.2.0",
-            "source": {
-                "type": "git",
-                "url": "https:\/\/github.com\/shanethehat\/pretty-xml.git",
-                "reference": "2b063c6544c8dc9563c53cb72eb06d1d74c9e75f"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/shanethehat\/pretty-xml\/zipball\/2b063c6544c8dc9563c53cb72eb06d1d74c9e75f",
-                "reference": "2b063c6544c8dc9563c53cb72eb06d1d74c9e75f",
-                "shasum": ""
-            },
-            "require-dev": {
-                "behat\/behat": "~3.0",
-                "bossa\/phpspec2-expect": "*",
-                "phpspec\/phpspec": "~2.0"
-            },
-            "time": "2015-08-10T14:22:54+00:00",
-            "type": "library",
-            "installation-source": "dist",
-            "autoload": {
-                "psr-4": {
-                    "RectorPrefix20210518\\PrettyXml\\": "src\/PrettyXml\/"
-                }
-            },
-            "notification-url": "https:\/\/packagist.org\/downloads\/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Shane Auckland",
-                    "email": "shane.auckland@gmail.com",
-                    "homepage": "http:\/\/shaneauckland.co.uk"
-                }
-            ],
-            "description": "Library for pretty-printing XML",
-            "keywords": [
-                "pretty",
-                "xml"
-            ],
-            "support": {
-                "issues": "https:\/\/github.com\/shanethehat\/pretty-xml\/issues",
-                "source": "https:\/\/github.com\/shanethehat\/pretty-xml\/tree\/master"
-            },
-            "install-path": "..\/shanethehat\/pretty-xml"
-        },
-        {
             "name": "symfony\/config",
             "version": "v5.2.8",
             "version_normalized": "5.2.8.0",

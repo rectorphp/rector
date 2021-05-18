@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitfb933298d5e83dc5192f4c302fe5fbbe
+class ComposerStaticInit0e03e1fd7e22f066b2f5b697c50ea7a0
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -79,7 +79,6 @@ class ComposerStaticInitfb933298d5e83dc5192f4c302fe5fbbe
             'RectorPrefix20210518\\Psr\\Log\\' => 29,
             'RectorPrefix20210518\\Psr\\EventDispatcher\\' => 41,
             'RectorPrefix20210518\\Psr\\Container\\' => 35,
-            'RectorPrefix20210518\\PrettyXml\\' => 31,
             'RectorPrefix20210518\\Idiosyncratic\\EditorConfig\\' => 48,
             'RectorPrefix20210518\\Ergebnis\\Json\\Printer\\' => 43,
             'RectorPrefix20210518\\Doctrine\\Inflector\\' => 40,
@@ -295,10 +294,6 @@ class ComposerStaticInitfb933298d5e83dc5192f4c302fe5fbbe
         'RectorPrefix20210518\\Psr\\Container\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/container/src',
-        ),
-        'RectorPrefix20210518\\PrettyXml\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/shanethehat/pretty-xml/src/PrettyXml',
         ),
         'RectorPrefix20210518\\Idiosyncratic\\EditorConfig\\' => 
         array (
@@ -789,7 +784,6 @@ class ComposerStaticInitfb933298d5e83dc5192f4c302fe5fbbe
         'RectorPrefix20210518\\Nette\\Utils\\UnknownImageFileException' => __DIR__ . '/..' . '/nette/utils/src/Utils/exceptions.php',
         'RectorPrefix20210518\\Nette\\Utils\\Validators' => __DIR__ . '/..' . '/nette/utils/src/Utils/Validators.php',
         'RectorPrefix20210518\\Normalizer' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/Resources/stubs/Normalizer.php',
-        'RectorPrefix20210518\\PrettyXml\\Formatter' => __DIR__ . '/..' . '/shanethehat/pretty-xml/src/PrettyXml/Formatter.php',
         'RectorPrefix20210518\\Psr\\Container\\ContainerExceptionInterface' => __DIR__ . '/..' . '/psr/container/src/ContainerExceptionInterface.php',
         'RectorPrefix20210518\\Psr\\Container\\ContainerInterface' => __DIR__ . '/..' . '/psr/container/src/ContainerInterface.php',
         'RectorPrefix20210518\\Psr\\Container\\NotFoundExceptionInterface' => __DIR__ . '/..' . '/psr/container/src/NotFoundExceptionInterface.php',
@@ -3454,9 +3448,9 @@ class ComposerStaticInitfb933298d5e83dc5192f4c302fe5fbbe
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitfb933298d5e83dc5192f4c302fe5fbbe::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitfb933298d5e83dc5192f4c302fe5fbbe::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitfb933298d5e83dc5192f4c302fe5fbbe::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit0e03e1fd7e22f066b2f5b697c50ea7a0::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit0e03e1fd7e22f066b2f5b697c50ea7a0::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit0e03e1fd7e22f066b2f5b697c50ea7a0::$classMap;
 
         }, null, ClassLoader::class);
     }

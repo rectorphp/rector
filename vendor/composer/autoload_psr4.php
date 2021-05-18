@@ -56,7 +56,6 @@ return array(
     'RectorPrefix20210518\\Psr\\Log\\' => array($vendorDir . '/psr/log/Psr/Log'),
     'RectorPrefix20210518\\Psr\\EventDispatcher\\' => array($vendorDir . '/psr/event-dispatcher/src'),
     'RectorPrefix20210518\\Psr\\Container\\' => array($vendorDir . '/psr/container/src'),
-    'RectorPrefix20210518\\PrettyXml\\' => array($vendorDir . '/shanethehat/pretty-xml/src/PrettyXml'),
     'RectorPrefix20210518\\Idiosyncratic\\EditorConfig\\' => array($vendorDir . '/idiosyncratic/editorconfig/src'),
     'RectorPrefix20210518\\Ergebnis\\Json\\Printer\\' => array($vendorDir . '/ergebnis/json-printer/src'),
     'RectorPrefix20210518\\Doctrine\\Inflector\\' => array($vendorDir . '/doctrine/inflector/lib/Doctrine/Inflector'),

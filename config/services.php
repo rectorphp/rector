@@ -100,6 +100,5 @@ return static function (\RectorPrefix20210518\Symfony\Component\DependencyInject
     $services->set(\Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider::class)->factory([\RectorPrefix20210518\Symfony\Component\DependencyInjection\Loader\Configurator\service(\Rector\NodeTypeResolver\DependencyInjection\PHPStanServicesFactory::class), 'createDynamicSourceLocatorProvider']);
     $services->set(\RectorPrefix20210518\Ergebnis\Json\Printer\Printer::class);
     $services->alias(\RectorPrefix20210518\Ergebnis\Json\Printer\PrinterInterface::class, \RectorPrefix20210518\Ergebnis\Json\Printer\Printer::class);
-    $services->set(\RectorPrefix20210518\PrettyXml\Formatter::class);
     $services->set(\RectorPrefix20210518\Idiosyncratic\EditorConfig\EditorConfig::class);
 };

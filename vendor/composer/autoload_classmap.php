@@ -460,7 +460,6 @@ return array(
     'RectorPrefix20210518\\Nette\\Utils\\UnknownImageFileException' => $vendorDir . '/nette/utils/src/Utils/exceptions.php',
     'RectorPrefix20210518\\Nette\\Utils\\Validators' => $vendorDir . '/nette/utils/src/Utils/Validators.php',
     'RectorPrefix20210518\\Normalizer' => $vendorDir . '/symfony/polyfill-intl-normalizer/Resources/stubs/Normalizer.php',
-    'RectorPrefix20210518\\PrettyXml\\Formatter' => $vendorDir . '/shanethehat/pretty-xml/src/PrettyXml/Formatter.php',
     'RectorPrefix20210518\\Psr\\Container\\ContainerExceptionInterface' => $vendorDir . '/psr/container/src/ContainerExceptionInterface.php',
     'RectorPrefix20210518\\Psr\\Container\\ContainerInterface' => $vendorDir . '/psr/container/src/ContainerInterface.php',
     'RectorPrefix20210518\\Psr\\Container\\NotFoundExceptionInterface' => $vendorDir . '/psr/container/src/NotFoundExceptionInterface.php',

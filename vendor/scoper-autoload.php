@@ -21,17 +21,14 @@ if (!class_exists('SomeTestCase', false) && !interface_exists('SomeTestCase', fa
 if (!class_exists('CheckoutEntityFactory', false) && !interface_exists('CheckoutEntityFactory', false) && !trait_exists('CheckoutEntityFactory', false)) {
     spl_autoload_call('RectorPrefix20210518\CheckoutEntityFactory');
 }
-if (!class_exists('ComposerAutoloaderInitfb933298d5e83dc5192f4c302fe5fbbe', false) && !interface_exists('ComposerAutoloaderInitfb933298d5e83dc5192f4c302fe5fbbe', false) && !trait_exists('ComposerAutoloaderInitfb933298d5e83dc5192f4c302fe5fbbe', false)) {
-    spl_autoload_call('RectorPrefix20210518\ComposerAutoloaderInitfb933298d5e83dc5192f4c302fe5fbbe');
+if (!class_exists('ComposerAutoloaderInit0e03e1fd7e22f066b2f5b697c50ea7a0', false) && !interface_exists('ComposerAutoloaderInit0e03e1fd7e22f066b2f5b697c50ea7a0', false) && !trait_exists('ComposerAutoloaderInit0e03e1fd7e22f066b2f5b697c50ea7a0', false)) {
+    spl_autoload_call('RectorPrefix20210518\ComposerAutoloaderInit0e03e1fd7e22f066b2f5b697c50ea7a0');
 }
 if (!class_exists('Doctrine\Inflector\Inflector', false) && !interface_exists('Doctrine\Inflector\Inflector', false) && !trait_exists('Doctrine\Inflector\Inflector', false)) {
     spl_autoload_call('RectorPrefix20210518\Doctrine\Inflector\Inflector');
 }
 if (!class_exists('SomeFormType', false) && !interface_exists('SomeFormType', false) && !trait_exists('SomeFormType', false)) {
     spl_autoload_call('RectorPrefix20210518\SomeFormType');
-}
-if (!class_exists('FeatureContext', false) && !interface_exists('FeatureContext', false) && !trait_exists('FeatureContext', false)) {
-    spl_autoload_call('RectorPrefix20210518\FeatureContext');
 }
 if (!class_exists('Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator', false) && !interface_exists('Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator', false) && !trait_exists('Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator', false)) {
     spl_autoload_call('RectorPrefix20210518\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator');
@@ -95,9 +92,9 @@ if (!function_exists('print_node')) {
         return \RectorPrefix20210518\print_node(...func_get_args());
     }
 }
-if (!function_exists('composerRequirefb933298d5e83dc5192f4c302fe5fbbe')) {
-    function composerRequirefb933298d5e83dc5192f4c302fe5fbbe() {
-        return \RectorPrefix20210518\composerRequirefb933298d5e83dc5192f4c302fe5fbbe(...func_get_args());
+if (!function_exists('composerRequire0e03e1fd7e22f066b2f5b697c50ea7a0')) {
+    function composerRequire0e03e1fd7e22f066b2f5b697c50ea7a0() {
+        return \RectorPrefix20210518\composerRequire0e03e1fd7e22f066b2f5b697c50ea7a0(...func_get_args());
     }
 }
 if (!function_exists('parseArgs')) {
@@ -163,11 +160,6 @@ if (!function_exists('execCmd')) {
 if (!function_exists('ensureDirExists')) {
     function ensureDirExists() {
         return \RectorPrefix20210518\ensureDirExists(...func_get_args());
-    }
-}
-if (!function_exists('expect')) {
-    function expect() {
-        return \RectorPrefix20210518\expect(...func_get_args());
     }
 }
 if (!function_exists('setproctitle')) {
