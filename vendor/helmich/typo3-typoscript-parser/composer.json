@@ -1,0 +1,43 @@
+{
+    "name": "helmich\/typo3-typoscript-parser",
+    "description": "Parser for the TYPO3 configuration language TypoScript.",
+    "type": "library",
+    "license": "MIT",
+    "homepage": "https:\/\/github.com\/martin-helmich",
+    "authors": [
+        {
+            "name": "Martin Helmich",
+            "email": "m.helmich@mittwald.de",
+            "role": "lead"
+        }
+    ],
+    "support": {
+        "issues": "https:\/\/github.com\/martin-helmich\/typo3-typoscript-parser\/issues"
+    },
+    "require": {
+        "php": ">=7.2",
+        "symfony\/dependency-injection": "~3.0|~4.0|~5.0",
+        "symfony\/config": "~3.0|~4.0|~5.0",
+        "symfony\/yaml": "~3.0|~4.0|~5.0"
+    },
+    "require-dev": {
+        "phpunit\/phpunit": "^8.0",
+        "php-vfs\/php-vfs": "^1.3",
+        "symfony\/phpunit-bridge": "~2.7|~3.0|~4.0|~5.0",
+        "vimeo\/psalm": "^4.7"
+    },
+    "autoload": {
+        "psr-4": {
+            "RectorPrefix20210518\\Helmich\\TypoScriptParser\\": "src\/"
+        }
+    },
+    "autoload-dev": {
+        "files": [
+            "vendor\/phpunit\/phpunit\/src\/Framework\/Assert\/Functions.php"
+        ],
+        "psr-4": {
+            "RectorPrefix20210518\\Helmich\\TypoScriptParser\\Tests\\Functional\\": "tests\/functional",
+            "RectorPrefix20210518\\Helmich\\TypoScriptParser\\Tests\\Unit\\": "tests\/unit"
+        }
+    }
+}
