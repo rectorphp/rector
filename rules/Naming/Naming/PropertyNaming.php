@@ -293,7 +293,10 @@ final class PropertyNaming
 
         return array_filter(
             $prefixedClassMethods,
-            fn (ClassMethod $classMethod): bool => $this->doesClassMethodMatchReturnPropertyFetch($classMethod, $classMethodName)
+            fn (ClassMethod $classMethod): bool => $this->doesClassMethodMatchReturnPropertyFetch(
+                $classMethod,
+                $classMethodName
+            )
         );
     }
 

@@ -125,7 +125,10 @@ final class ClassMethodAssignManipulator
 
         return array_filter(
             $variableAssigns,
-            fn (Assign $assign): bool => ! $this->nodeNameResolver->isNames($assign->var, $arrayDestructionCreatedVariables)
+            fn (Assign $assign): bool => ! $this->nodeNameResolver->isNames(
+                $assign->var,
+                $arrayDestructionCreatedVariables
+            )
         );
     }
 

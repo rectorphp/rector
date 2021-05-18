@@ -184,9 +184,9 @@ CODE_SAMPLE
             $previousAssign = $this->betterNodeFinder->findFirstPreviousOfNode(
                 $assign,
                 fn (Node $node): bool => $node instanceof Assign && $this->usedVariableNameAnalyzer->isVariableNamed(
-                $node->var,
-                $variable
-            )
+                    $node->var,
+                    $variable
+                )
             );
 
             if ($previousAssign instanceof Assign) {

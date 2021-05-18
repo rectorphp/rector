@@ -231,7 +231,10 @@ CODE_SAMPLE
 
         $isVariableAssigned = (bool) $this->betterNodeFinder->findFirst(
             $assignNode->expr,
-            fn (Node $node): bool => $this->nodeComparator->areNodesEqual($node, $nodeByTypeAndPosition->getVariableNode())
+            fn (Node $node): bool => $this->nodeComparator->areNodesEqual(
+                $node,
+                $nodeByTypeAndPosition->getVariableNode()
+            )
         );
 
         return ! $isVariableAssigned;

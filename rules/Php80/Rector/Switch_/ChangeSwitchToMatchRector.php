@@ -140,7 +140,10 @@ CODE_SAMPLE
     {
         $prevInitializedAssign = $this->betterNodeFinder->findFirstPreviousOfNode(
             $switch,
-            fn (Node $node): bool => $node instanceof Assign && $this->nodeComparator->areNodesEqual($node->var, $assignExpr)
+            fn (Node $node): bool => $node instanceof Assign && $this->nodeComparator->areNodesEqual(
+                $node->var,
+                $assignExpr
+            )
         );
 
         $assign = new Assign($assignExpr, $match);
