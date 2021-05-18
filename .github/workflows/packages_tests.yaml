@@ -21,6 +21,7 @@ jobs:
             matrix:
                 package_name:
                     - rectorphp/rector-nette
+                    - rectorphp/rector-nette-to-symfony
                     - rectorphp/rector-symfony
                     - rectorphp/rector-laravel
                     - rectorphp/rector-phpunit
