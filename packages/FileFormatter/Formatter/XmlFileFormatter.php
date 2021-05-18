@@ -16,6 +16,24 @@ use Rector\FileFormatter\ValueObjectFactory\EditorConfigConfigurationBuilder;
  */
 final class XmlFileFormatter implements FileFormatterInterface
 {
+    /**
+     * @see https://regex101.com/r/uTmMcr/1
+     * @var string
+     */
+    private const XML_PARTS_REGEX = '#(>)(<)(\/*)#';
+
+    /**
+     * @see https://regex101.com/r/hSG1JT/1
+     * @var string
+     */
+    private const IS_OPENING_TAG_REGEX = '#^<[^\/]*>$#';
+
+    /**
+     * @see https://regex101.com/r/ywS62K/1
+     * @var string
+     */
+    private const IS_CLOSING_TAG_REGEX = '#^\s*<\/#';
+
     private ?int $depth = null;
 
     private int $indent = 4;
@@ -75,9 +93,7 @@ final class XmlFileFormatter implements FileFormatterInterface
      */
     private function getXmlParts(string $xml): array
     {
-        $xmlParts = '#(>)(<)(\/*)#';
-
-        $withNewLines = Strings::replace(trim($xml), $xmlParts, "$1\n$2$3");
+        $withNewLines = Strings::replace(trim($xml), self::XML_PARTS_REGEX, "$1\n$2$3");
         return explode("\n", $withNewLines);
     }
 
@@ -125,16 +141,12 @@ final class XmlFileFormatter implements FileFormatterInterface
 
     private function isOpeningTag(string $part): bool
     {
-        $isOpeningTag = '#^<[^\/]*>$#';
-
-        return (bool) Strings::match($part, $isOpeningTag);
+        return (bool) Strings::match($part, self::IS_OPENING_TAG_REGEX);
     }
 
     private function isClosingTag(string $part): bool
     {
-        $isClosingTag = '#^\s*<\/#';
-
-        return (bool) Strings::match($part, $isClosingTag);
+        return (bool) Strings::match($part, self::IS_CLOSING_TAG_REGEX);
     }
 
     private function isOpeningCdataTag(string $part): bool
