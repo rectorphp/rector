@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210517;
+namespace RectorPrefix20210518;
 
 use Rector\Php72\Rector\Assign\ListEachRector;
 use Rector\Php72\Rector\Assign\ReplaceEachAssignmentWithKeyCurrentRector;
@@ -14,8 +14,8 @@ use Rector\Php72\Rector\FuncCall\StringsAssertNakedRector;
 use Rector\Php72\Rector\Unset_\UnsetCastRector;
 use Rector\Php72\Rector\While_\WhileEachToForeachRector;
 use Rector\Renaming\Rector\FuncCall\RenameFunctionRector;
-use RectorPrefix20210517\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-return static function (\RectorPrefix20210517\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
+use RectorPrefix20210518\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+return static function (\RectorPrefix20210518\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->set(\Rector\Php72\Rector\While_\WhileEachToForeachRector::class);
     $services->set(\Rector\Php72\Rector\Assign\ListEachRector::class);

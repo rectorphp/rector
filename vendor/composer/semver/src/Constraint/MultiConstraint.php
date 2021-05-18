@@ -8,12 +8,12 @@
  * For the full copyright and license information, please view
  * the LICENSE file that was distributed with this source code.
  */
-namespace RectorPrefix20210517\Composer\Semver\Constraint;
+namespace RectorPrefix20210518\Composer\Semver\Constraint;
 
 /**
  * Defines a conjunctive or disjunctive set of constraints.
  */
-class MultiConstraint implements \RectorPrefix20210517\Composer\Semver\Constraint\ConstraintInterface
+class MultiConstraint implements \RectorPrefix20210518\Composer\Semver\Constraint\ConstraintInterface
 {
     /** @var ConstraintInterface[] */
     protected $constraints;
@@ -89,7 +89,7 @@ class MultiConstraint implements \RectorPrefix20210517\Composer\Semver\Constrain
      *
      * @return bool
      */
-    public function matches(\RectorPrefix20210517\Composer\Semver\Constraint\ConstraintInterface $provider)
+    public function matches(\RectorPrefix20210518\Composer\Semver\Constraint\ConstraintInterface $provider)
     {
         if (\false === $this->conjunctive) {
             foreach ($this->constraints as $constraint) {
@@ -167,7 +167,7 @@ class MultiConstraint implements \RectorPrefix20210517\Composer\Semver\Constrain
     public static function create(array $constraints, $conjunctive = \true)
     {
         if (0 === \count($constraints)) {
-            return new \RectorPrefix20210517\Composer\Semver\Constraint\MatchAllConstraint();
+            return new \RectorPrefix20210518\Composer\Semver\Constraint\MatchAllConstraint();
         }
         if (1 === \count($constraints)) {
             return $constraints[0];
@@ -197,7 +197,7 @@ class MultiConstraint implements \RectorPrefix20210517\Composer\Semver\Constrain
                 $right = $constraints[$i];
                 if ($left instanceof self && $left->conjunctive && $right instanceof self && $right->conjunctive && \count($left->constraints) === 2 && \count($right->constraints) === 2 && ($left0 = (string) $left->constraints[0]) && $left0[0] === '>' && $left0[1] === '=' && ($left1 = (string) $left->constraints[1]) && $left1[0] === '<' && ($right0 = (string) $right->constraints[0]) && $right0[0] === '>' && $right0[1] === '=' && ($right1 = (string) $right->constraints[1]) && $right1[0] === '<' && \substr($left1, 2) === \substr($right0, 3)) {
                     $optimized = \true;
-                    $left = new \RectorPrefix20210517\Composer\Semver\Constraint\MultiConstraint(array($left->constraints[0], $right->constraints[1]), \true);
+                    $left = new \RectorPrefix20210518\Composer\Semver\Constraint\MultiConstraint(array($left->constraints[0], $right->constraints[1]), \true);
                 } else {
                     $mergedConstraints[] = $left;
                     $left = $right;

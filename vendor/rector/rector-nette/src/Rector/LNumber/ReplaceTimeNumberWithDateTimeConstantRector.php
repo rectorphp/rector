@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Nette\Rector\LNumber;
 
-use RectorPrefix20210517\Nette\Utils\DateTime;
+use RectorPrefix20210518\Nette\Utils\DateTime;
 use PhpParser\Node;
 use PhpParser\Node\Scalar\LNumber;
 use Rector\Core\Rector\AbstractRector;
@@ -18,7 +18,7 @@ final class ReplaceTimeNumberWithDateTimeConstantRector extends \Rector\Core\Rec
      * @noRector
      * @var array<int, string>
      */
-    private const NUMBER_TO_CONSTANT_NAME = [\RectorPrefix20210517\Nette\Utils\DateTime::HOUR => 'HOUR', \RectorPrefix20210517\Nette\Utils\DateTime::DAY => 'DAY', \RectorPrefix20210517\Nette\Utils\DateTime::WEEK => 'WEEK', \RectorPrefix20210517\Nette\Utils\DateTime::MONTH => 'MONTH', \RectorPrefix20210517\Nette\Utils\DateTime::YEAR => 'YEAR'];
+    private const NUMBER_TO_CONSTANT_NAME = [\RectorPrefix20210518\Nette\Utils\DateTime::HOUR => 'HOUR', \RectorPrefix20210518\Nette\Utils\DateTime::DAY => 'DAY', \RectorPrefix20210518\Nette\Utils\DateTime::WEEK => 'WEEK', \RectorPrefix20210518\Nette\Utils\DateTime::MONTH => 'MONTH', \RectorPrefix20210518\Nette\Utils\DateTime::YEAR => 'YEAR'];
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
         return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Replace time numbers with Nette\\Utils\\DateTime constants', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'

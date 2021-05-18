@@ -13,8 +13,8 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\ValueObject\OldToNewType;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
-use RectorPrefix20210517\Symplify\SimplePhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor;
-final class ClassRenamePhpDocNodeVisitor extends \RectorPrefix20210517\Symplify\SimplePhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor
+use RectorPrefix20210518\Symplify\SimplePhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor;
+final class ClassRenamePhpDocNodeVisitor extends \RectorPrefix20210518\Symplify\SimplePhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor
 {
     /**
      * @var OldToNewType[]

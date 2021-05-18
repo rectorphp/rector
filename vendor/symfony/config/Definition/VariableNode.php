@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210517\Symfony\Component\Config\Definition;
+namespace RectorPrefix20210518\Symfony\Component\Config\Definition;
 
-use RectorPrefix20210517\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
+use RectorPrefix20210518\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 /**
  * This node represents a value of variable type in the config tree.
  *
@@ -19,7 +19,7 @@ use RectorPrefix20210517\Symfony\Component\Config\Definition\Exception\InvalidCo
  *
  * @author Jeremy Mikola <jmikola@gmail.com>
  */
-class VariableNode extends \RectorPrefix20210517\Symfony\Component\Config\Definition\BaseNode implements \RectorPrefix20210517\Symfony\Component\Config\Definition\PrototypeNodeInterface
+class VariableNode extends \RectorPrefix20210518\Symfony\Component\Config\Definition\BaseNode implements \RectorPrefix20210518\Symfony\Component\Config\Definition\PrototypeNodeInterface
 {
     protected $defaultValueSet = \false;
     protected $defaultValue;
@@ -74,7 +74,7 @@ class VariableNode extends \RectorPrefix20210517\Symfony\Component\Config\Defini
         // deny environment variables only when using custom validators
         // this avoids ever passing an empty value to final validation closures
         if (!$this->allowEmptyValue && $this->isHandlingPlaceholder() && $this->finalValidationClosures) {
-            $e = new \RectorPrefix20210517\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException(\sprintf('The path "%s" cannot contain an environment variable when empty values are not allowed by definition and are validated.', $this->getPath()));
+            $e = new \RectorPrefix20210518\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException(\sprintf('The path "%s" cannot contain an environment variable when empty values are not allowed by definition and are validated.', $this->getPath()));
             if ($hint = $this->getInfo()) {
                 $e->addHint($hint);
             }
@@ -82,7 +82,7 @@ class VariableNode extends \RectorPrefix20210517\Symfony\Component\Config\Defini
             throw $e;
         }
         if (!$this->allowEmptyValue && $this->isValueEmpty($value)) {
-            $ex = new \RectorPrefix20210517\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException(\sprintf('The path "%s" cannot contain an empty value, but got %s.', $this->getPath(), \json_encode($value)));
+            $ex = new \RectorPrefix20210518\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException(\sprintf('The path "%s" cannot contain an empty value, but got %s.', $this->getPath(), \json_encode($value)));
             if ($hint = $this->getInfo()) {
                 $ex->addHint($hint);
             }
