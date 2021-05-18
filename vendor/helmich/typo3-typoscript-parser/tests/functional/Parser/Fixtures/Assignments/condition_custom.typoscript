@@ -1,0 +1,3 @@
+[Foo\Bar\Custom = 42]
+foo = bar
+[global]

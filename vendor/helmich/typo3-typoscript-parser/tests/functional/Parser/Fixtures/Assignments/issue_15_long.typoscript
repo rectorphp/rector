@@ -1,0 +1,11 @@
+page {
+    20 = USER
+    20 {
+        userFunc = TYPO3\CMS\Extbase\Core\Bootstrap->run
+        switchableControllerActions {
+            {$plugin.tx_foo.settings.bar.controllerName} {
+                1 = {$plugin.tx_foo.settings.bar.actionName}
+            }
+        }
+    }
+}

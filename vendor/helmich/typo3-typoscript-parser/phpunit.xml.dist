@@ -1,0 +1,21 @@
+<phpunit
+        backupGlobals="true"
+        bootstrap="vendor/autoload.php"
+        colors="true"
+        convertErrorsToExceptions="true"
+        convertNoticesToExceptions="true"
+        convertWarningsToExceptions="true">
+    <testsuites>
+        <testsuite name="Unit tests">
+            <directory phpVersion="5.4.0" phpVersionOperator=">=">tests/unit</directory>
+        </testsuite>
+        <testsuite name="Functional tests">
+            <directory>tests/functional</directory>
+        </testsuite>
+    </testsuites>
+    <filter>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">src</directory>
+        </whitelist>
+    </filter>
+</phpunit>
