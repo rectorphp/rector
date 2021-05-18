@@ -1,0 +1,17 @@
+[globalVar = GP:foo=1]
+foo {
+    bar = 1
+}
+/*
+Hello
+World
+*/
+[else]
+/*
+Hello
+World
+*/
+foo {
+    bar = 2
+}
+[global]

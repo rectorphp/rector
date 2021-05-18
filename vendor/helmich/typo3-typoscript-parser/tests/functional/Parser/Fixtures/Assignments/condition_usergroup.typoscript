@@ -1,0 +1,5 @@
+[usergroup=6]
+foo = bar
+bar = baz
+[global]
+baz = foo

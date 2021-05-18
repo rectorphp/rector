@@ -1,0 +1,6 @@
+page {
+    meta {
+        foo:bar.cObject = TEXT
+        foo:bar.cObject.value = qux
+    }
+}
