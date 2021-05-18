@@ -1,0 +1,3 @@
+<INCLUDE_TYPOSCRIPT: source="DIR:foo/" condition="Your\Custom\ClassOne">
+<INCLUDE_TYPOSCRIPT: source="DIR:foo/" extensions="typoscript" condition="Your\Custom\ClassTwo">
+<INCLUDE_TYPOSCRIPT: source="DIR:foo/" extensions="typoscript" condition="Your\Custom\ClassThree">

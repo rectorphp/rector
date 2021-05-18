@@ -1,0 +1,2 @@
+<INCLUDE_TYPOSCRIPT: source="DIR:foo/" extensions="typoscript">
+<INCLUDE_TYPOSCRIPT: source="DIR:bar/">

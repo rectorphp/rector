@@ -1,0 +1,11 @@
+config.tx_extbase {
+
+    view {
+        # Configure where to look for widget templates
+        widget {
+            TYPO3\CMS\Fluid\ViewHelpers\Widget\PaginateViewHelper {
+                templateRootPath = EXT:ext_key/Resources/Private/Templates
+            }
+        }
+    }
+}
