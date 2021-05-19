@@ -7,9 +7,9 @@ use RectorPrefix20210519\Symfony\Component\Console\Command\Command;
 use RectorPrefix20210519\Symfony\Component\Console\Input\InputOption;
 use RectorPrefix20210519\Symfony\Component\Console\Style\SymfonyStyle;
 use RectorPrefix20210519\Symplify\PackageBuilder\ValueObject\Option;
-use Symplify\SmartFileSystem\FileSystemGuard;
-use Symplify\SmartFileSystem\Finder\SmartFinder;
-use Symplify\SmartFileSystem\SmartFileSystem;
+use RectorPrefix20210519\Symplify\SmartFileSystem\FileSystemGuard;
+use RectorPrefix20210519\Symplify\SmartFileSystem\Finder\SmartFinder;
+use RectorPrefix20210519\Symplify\SmartFileSystem\SmartFileSystem;
 abstract class AbstractSymplifyCommand extends \RectorPrefix20210519\Symfony\Component\Console\Command\Command
 {
     /**
@@ -36,7 +36,7 @@ abstract class AbstractSymplifyCommand extends \RectorPrefix20210519\Symfony\Com
     /**
      * @required
      */
-    public function autowireAbstractSymplifyCommand(\RectorPrefix20210519\Symfony\Component\Console\Style\SymfonyStyle $symfonyStyle, \Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \Symplify\SmartFileSystem\Finder\SmartFinder $smartFinder, \Symplify\SmartFileSystem\FileSystemGuard $fileSystemGuard) : void
+    public function autowireAbstractSymplifyCommand(\RectorPrefix20210519\Symfony\Component\Console\Style\SymfonyStyle $symfonyStyle, \RectorPrefix20210519\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \RectorPrefix20210519\Symplify\SmartFileSystem\Finder\SmartFinder $smartFinder, \RectorPrefix20210519\Symplify\SmartFileSystem\FileSystemGuard $fileSystemGuard) : void
     {
         $this->symfonyStyle = $symfonyStyle;
         $this->smartFileSystem = $smartFileSystem;

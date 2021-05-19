@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit3670e413fede6d5acf44836c228c967e
+class ComposerStaticInit1f9fb0606db39678e1e1f62f7a25c221
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -27,7 +27,6 @@ class ComposerStaticInit3670e413fede6d5acf44836c228c967e
         'S' => 
         array (
             'Symplify\\SymfonyPhpConfig\\' => 26,
-            'Symplify\\SmartFileSystem\\' => 25,
             'Symplify\\RuleDocGenerator\\' => 26,
             'Ssch\\TYPO3Rector\\PHPStan\\' => 25,
             'Ssch\\TYPO3Rector\\' => 17,
@@ -47,6 +46,7 @@ class ComposerStaticInit3670e413fede6d5acf44836c228c967e
             'Rector\\' => 7,
             'RectorPrefix20210519\\Webmozart\\Assert\\' => 38,
             'RectorPrefix20210519\\Symplify\\SymplifyKernel\\' => 45,
+            'RectorPrefix20210519\\Symplify\\SmartFileSystem\\' => 46,
             'RectorPrefix20210519\\Symplify\\Skipper\\' => 38,
             'RectorPrefix20210519\\Symplify\\SimplePhpDocParser\\' => 49,
             'RectorPrefix20210519\\Symplify\\PackageBuilder\\' => 45,
@@ -102,10 +102,6 @@ class ComposerStaticInit3670e413fede6d5acf44836c228c967e
         'Symplify\\SymfonyPhpConfig\\' => 
         array (
             0 => __DIR__ . '/..' . '/symplify/symfony-php-config/src',
-        ),
-        'Symplify\\SmartFileSystem\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symplify/smart-file-system/src',
         ),
         'Symplify\\RuleDocGenerator\\' => 
         array (
@@ -171,6 +167,10 @@ class ComposerStaticInit3670e413fede6d5acf44836c228c967e
         'RectorPrefix20210519\\Symplify\\SymplifyKernel\\' => 
         array (
             0 => __DIR__ . '/..' . '/symplify/symplify-kernel/src',
+        ),
+        'RectorPrefix20210519\\Symplify\\SmartFileSystem\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symplify/smart-file-system/src',
         ),
         'RectorPrefix20210519\\Symplify\\Skipper\\' => 
         array (
@@ -1778,6 +1778,16 @@ class ComposerStaticInit3670e413fede6d5acf44836c228c967e
         'RectorPrefix20210519\\Symplify\\Skipper\\Skipper\\SkipSkipper' => __DIR__ . '/..' . '/symplify/skipper/src/Skipper/SkipSkipper.php',
         'RectorPrefix20210519\\Symplify\\Skipper\\Skipper\\Skipper' => __DIR__ . '/..' . '/symplify/skipper/src/Skipper/Skipper.php',
         'RectorPrefix20210519\\Symplify\\Skipper\\ValueObject\\Option' => __DIR__ . '/..' . '/symplify/skipper/src/ValueObject/Option.php',
+        'RectorPrefix20210519\\Symplify\\SmartFileSystem\\Exception\\DirectoryNotFoundException' => __DIR__ . '/..' . '/symplify/smart-file-system/src/Exception/DirectoryNotFoundException.php',
+        'RectorPrefix20210519\\Symplify\\SmartFileSystem\\Exception\\FileNotFoundException' => __DIR__ . '/..' . '/symplify/smart-file-system/src/Exception/FileNotFoundException.php',
+        'RectorPrefix20210519\\Symplify\\SmartFileSystem\\FileSystemFilter' => __DIR__ . '/..' . '/symplify/smart-file-system/src/FileSystemFilter.php',
+        'RectorPrefix20210519\\Symplify\\SmartFileSystem\\FileSystemGuard' => __DIR__ . '/..' . '/symplify/smart-file-system/src/FileSystemGuard.php',
+        'RectorPrefix20210519\\Symplify\\SmartFileSystem\\Finder\\FinderSanitizer' => __DIR__ . '/..' . '/symplify/smart-file-system/src/Finder/FinderSanitizer.php',
+        'RectorPrefix20210519\\Symplify\\SmartFileSystem\\Finder\\SmartFinder' => __DIR__ . '/..' . '/symplify/smart-file-system/src/Finder/SmartFinder.php',
+        'RectorPrefix20210519\\Symplify\\SmartFileSystem\\Json\\JsonFileSystem' => __DIR__ . '/..' . '/symplify/smart-file-system/src/Json/JsonFileSystem.php',
+        'RectorPrefix20210519\\Symplify\\SmartFileSystem\\Normalizer\\PathNormalizer' => __DIR__ . '/..' . '/symplify/smart-file-system/src/Normalizer/PathNormalizer.php',
+        'RectorPrefix20210519\\Symplify\\SmartFileSystem\\SmartFileInfo' => __DIR__ . '/..' . '/symplify/smart-file-system/src/SmartFileInfo.php',
+        'RectorPrefix20210519\\Symplify\\SmartFileSystem\\SmartFileSystem' => __DIR__ . '/..' . '/symplify/smart-file-system/src/SmartFileSystem.php',
         'RectorPrefix20210519\\Symplify\\SymplifyKernel\\Bundle\\SymplifyKernelBundle' => __DIR__ . '/..' . '/symplify/symplify-kernel/src/Bundle/SymplifyKernelBundle.php',
         'RectorPrefix20210519\\Symplify\\SymplifyKernel\\DependencyInjection\\Extension\\SymplifyKernelExtension' => __DIR__ . '/..' . '/symplify/symplify-kernel/src/DependencyInjection/Extension/SymplifyKernelExtension.php',
         'RectorPrefix20210519\\Symplify\\SymplifyKernel\\Exception\\BootException' => __DIR__ . '/..' . '/symplify/symplify-kernel/src/Exception/BootException.php',
@@ -3792,16 +3802,6 @@ class ComposerStaticInit3670e413fede6d5acf44836c228c967e
         'Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\ConfiguredCodeSample' => __DIR__ . '/..' . '/symplify/rule-doc-generator-contracts/src/ValueObject/CodeSample/ConfiguredCodeSample.php',
         'Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\ExtraFileCodeSample' => __DIR__ . '/..' . '/symplify/rule-doc-generator-contracts/src/ValueObject/CodeSample/ExtraFileCodeSample.php',
         'Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition' => __DIR__ . '/..' . '/symplify/rule-doc-generator-contracts/src/ValueObject/RuleDefinition.php',
-        'Symplify\\SmartFileSystem\\Exception\\DirectoryNotFoundException' => __DIR__ . '/..' . '/symplify/smart-file-system/src/Exception/DirectoryNotFoundException.php',
-        'Symplify\\SmartFileSystem\\Exception\\FileNotFoundException' => __DIR__ . '/..' . '/symplify/smart-file-system/src/Exception/FileNotFoundException.php',
-        'Symplify\\SmartFileSystem\\FileSystemFilter' => __DIR__ . '/..' . '/symplify/smart-file-system/src/FileSystemFilter.php',
-        'Symplify\\SmartFileSystem\\FileSystemGuard' => __DIR__ . '/..' . '/symplify/smart-file-system/src/FileSystemGuard.php',
-        'Symplify\\SmartFileSystem\\Finder\\FinderSanitizer' => __DIR__ . '/..' . '/symplify/smart-file-system/src/Finder/FinderSanitizer.php',
-        'Symplify\\SmartFileSystem\\Finder\\SmartFinder' => __DIR__ . '/..' . '/symplify/smart-file-system/src/Finder/SmartFinder.php',
-        'Symplify\\SmartFileSystem\\Json\\JsonFileSystem' => __DIR__ . '/..' . '/symplify/smart-file-system/src/Json/JsonFileSystem.php',
-        'Symplify\\SmartFileSystem\\Normalizer\\PathNormalizer' => __DIR__ . '/..' . '/symplify/smart-file-system/src/Normalizer/PathNormalizer.php',
-        'Symplify\\SmartFileSystem\\SmartFileInfo' => __DIR__ . '/..' . '/symplify/smart-file-system/src/SmartFileInfo.php',
-        'Symplify\\SmartFileSystem\\SmartFileSystem' => __DIR__ . '/..' . '/symplify/smart-file-system/src/SmartFileSystem.php',
         'Symplify\\SymfonyPhpConfig\\Exception\\ValueObjectException' => __DIR__ . '/..' . '/symplify/symfony-php-config/src/Exception/ValueObjectException.php',
         'Symplify\\SymfonyPhpConfig\\Reflection\\ArgumentAndParameterFactory' => __DIR__ . '/..' . '/symplify/symfony-php-config/src/Reflection/ArgumentAndParameterFactory.php',
         'Symplify\\SymfonyPhpConfig\\ValueObjectInliner' => __DIR__ . '/..' . '/symplify/symfony-php-config/src/ValueObjectInliner.php',
@@ -3812,9 +3812,9 @@ class ComposerStaticInit3670e413fede6d5acf44836c228c967e
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit3670e413fede6d5acf44836c228c967e::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit3670e413fede6d5acf44836c228c967e::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit3670e413fede6d5acf44836c228c967e::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit1f9fb0606db39678e1e1f62f7a25c221::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit1f9fb0606db39678e1e1f62f7a25c221::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit1f9fb0606db39678e1e1f62f7a25c221::$classMap;
 
         }, null, ClassLoader::class);
     }

@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace Symplify\SmartFileSystem;
+namespace RectorPrefix20210519\Symplify\SmartFileSystem;
 
 use RectorPrefix20210519\Nette\Utils\Strings;
 use RectorPrefix20210519\Symfony\Component\Finder\SplFileInfo;
 use RectorPrefix20210519\Symplify\EasyTesting\PHPUnit\StaticPHPUnitEnvironment;
 use RectorPrefix20210519\Symplify\EasyTesting\StaticFixtureSplitter;
-use Symplify\SmartFileSystem\Exception\DirectoryNotFoundException;
-use Symplify\SmartFileSystem\Exception\FileNotFoundException;
+use RectorPrefix20210519\Symplify\SmartFileSystem\Exception\DirectoryNotFoundException;
+use RectorPrefix20210519\Symplify\SmartFileSystem\Exception\FileNotFoundException;
 /**
  * @see \Symplify\SmartFileSystem\Tests\SmartFileInfo\SmartFileInfoTest
  */
@@ -25,10 +25,10 @@ final class SmartFileInfo extends \RectorPrefix20210519\Symfony\Component\Finder
     private $smartFileSystem;
     public function __construct(string $filePath)
     {
-        $this->smartFileSystem = new \Symplify\SmartFileSystem\SmartFileSystem();
+        $this->smartFileSystem = new \RectorPrefix20210519\Symplify\SmartFileSystem\SmartFileSystem();
         // accepts also dirs
         if (!\file_exists($filePath)) {
-            throw new \Symplify\SmartFileSystem\Exception\FileNotFoundException(\sprintf('File path "%s" was not found while creating "%s" object.', $filePath, self::class));
+            throw new \RectorPrefix20210519\Symplify\SmartFileSystem\Exception\FileNotFoundException(\sprintf('File path "%s" was not found while creating "%s" object.', $filePath, self::class));
         }
         // real path doesn't work in PHAR: https://www.php.net/manual/en/function.realpath.php
         if (\RectorPrefix20210519\Nette\Utils\Strings::startsWith($filePath, 'phar://')) {
@@ -71,7 +71,7 @@ final class SmartFileInfo extends \RectorPrefix20210519\Symfony\Component\Finder
     public function getRelativeFilePathFromDirectory(string $directory) : string
     {
         if (!\file_exists($directory)) {
-            throw new \Symplify\SmartFileSystem\Exception\DirectoryNotFoundException(\sprintf('Directory "%s" was not found in %s.', $directory, self::class));
+            throw new \RectorPrefix20210519\Symplify\SmartFileSystem\Exception\DirectoryNotFoundException(\sprintf('Directory "%s" was not found in %s.', $directory, self::class));
         }
         $relativeFilePath = $this->smartFileSystem->makePathRelative($this->getNormalizedRealPath(), (string) \realpath($directory));
         return \rtrim($relativeFilePath, '/');
@@ -122,3 +122,7 @@ final class SmartFileInfo extends \RectorPrefix20210519\Symfony\Component\Finder
         return \str_replace('\\', '/', $path);
     }
 }
+/**
+ * @see \Symplify\SmartFileSystem\Tests\SmartFileInfo\SmartFileInfoTest
+ */
+\class_alias('RectorPrefix20210519\\Symplify\\SmartFileSystem\\SmartFileInfo', 'Symplify\\SmartFileSystem\\SmartFileInfo', \false);

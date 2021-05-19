@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Symplify\SmartFileSystem\Normalizer;
+namespace RectorPrefix20210519\Symplify\SmartFileSystem\Normalizer;
 
 use RectorPrefix20210519\Nette\Utils\Strings;
 /**

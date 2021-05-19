@@ -9,7 +9,7 @@ use RectorPrefix20210519\Symplify\ComposerJsonManipulator\Json\JsonInliner;
 use RectorPrefix20210519\Symplify\ComposerJsonManipulator\ValueObject\ComposerJson;
 use RectorPrefix20210519\Symplify\PackageBuilder\Configuration\StaticEolConfiguration;
 use Symplify\SmartFileSystem\SmartFileInfo;
-use Symplify\SmartFileSystem\SmartFileSystem;
+use RectorPrefix20210519\Symplify\SmartFileSystem\SmartFileSystem;
 /**
  * @see \Symplify\MonorepoBuilder\Tests\FileSystem\JsonFileManager\JsonFileManagerTest
  */
@@ -31,7 +31,7 @@ final class JsonFileManager
      * @var mixed[]
      */
     private $cachedJSONFiles = [];
-    public function __construct(\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \RectorPrefix20210519\Symplify\ComposerJsonManipulator\Json\JsonCleaner $jsonCleaner, \RectorPrefix20210519\Symplify\ComposerJsonManipulator\Json\JsonInliner $jsonInliner)
+    public function __construct(\RectorPrefix20210519\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \RectorPrefix20210519\Symplify\ComposerJsonManipulator\Json\JsonCleaner $jsonCleaner, \RectorPrefix20210519\Symplify\ComposerJsonManipulator\Json\JsonInliner $jsonInliner)
     {
         $this->smartFileSystem = $smartFileSystem;
         $this->jsonCleaner = $jsonCleaner;

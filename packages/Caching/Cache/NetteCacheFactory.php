@@ -7,7 +7,7 @@ use RectorPrefix20210519\Nette\Caching\Cache;
 use RectorPrefix20210519\Nette\Caching\Storages\FileStorage;
 use Rector\Core\Configuration\Option;
 use RectorPrefix20210519\Symplify\PackageBuilder\Parameter\ParameterProvider;
-use Symplify\SmartFileSystem\SmartFileSystem;
+use RectorPrefix20210519\Symplify\SmartFileSystem\SmartFileSystem;
 final class NetteCacheFactory
 {
     /**
@@ -18,7 +18,7 @@ final class NetteCacheFactory
      * @var \Symplify\SmartFileSystem\SmartFileSystem
      */
     private $smartFileSystem;
-    public function __construct(\RectorPrefix20210519\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem)
+    public function __construct(\RectorPrefix20210519\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \RectorPrefix20210519\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem)
     {
         $this->parameterProvider = $parameterProvider;
         $this->smartFileSystem = $smartFileSystem;
