@@ -29,13 +29,13 @@ final class BackendUtilityGetViewDomainToPageRouterRector extends \Rector\Core\R
      */
     public function refactor($node) : ?\PhpParser\Node
     {
-        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('RectorPrefix20210519\\TYPO3\\CMS\\Backend\\Utility\\BackendUtility'))) {
+        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Backend\\Utility\\BackendUtility'))) {
             return null;
         }
         if (!$this->isName($node->name, 'getViewDomain')) {
             return null;
         }
-        $siteNode = new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable('site'), $this->nodeFactory->createMethodCall($this->nodeFactory->createStaticCall('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'makeInstance', [$this->nodeFactory->createClassConstReference('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Site\\SiteFinder')]), 'getSiteByPageId', $node->args));
+        $siteNode = new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable('site'), $this->nodeFactory->createMethodCall($this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'makeInstance', [$this->nodeFactory->createClassConstReference('TYPO3\\CMS\\Core\\Site\\SiteFinder')]), 'getSiteByPageId', $node->args));
         $this->addNodeBeforeNode($siteNode, $node);
         return $this->nodeFactory->createMethodCall($this->nodeFactory->createMethodCall(new \PhpParser\Node\Expr\Variable('site'), 'getRouter'), 'generateUri', [$node->args[0]]);
     }

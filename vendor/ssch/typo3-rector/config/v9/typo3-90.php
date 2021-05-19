@@ -39,7 +39,7 @@ return static function (\RectorPrefix20210519\Symfony\Component\DependencyInject
     $services->set(\Ssch\TYPO3Rector\Rector\v9\v0\MoveRenderArgumentsToInitializeArgumentsMethodRector::class);
     $services->set(\Ssch\TYPO3Rector\Rector\v9\v0\InjectAnnotationRector::class);
     $services->set(\Ssch\TYPO3Rector\Rector\v9\v0\IgnoreValidationAnnotationRector::class);
-    $services->set('replace_extbase_annotations_to_doctrine_annotations')->class(\Ssch\TYPO3Rector\Rector\v9\v0\ReplaceAnnotationRector::class)->call('configure', [[\Ssch\TYPO3Rector\Rector\v9\v0\ReplaceAnnotationRector::OLD_TO_NEW_ANNOTATIONS => ['lazy' => 'RectorPrefix20210519\\TYPO3\\CMS\\Extbase\\Annotation\\ORM\\Lazy', 'cascade' => 'TYPO3\\CMS\\Extbase\\Annotation\\ORM\\Cascade("remove")', 'transient' => 'RectorPrefix20210519\\TYPO3\\CMS\\Extbase\\Annotation\\ORM\\Transient']]]);
+    $services->set('replace_extbase_annotations_to_doctrine_annotations')->class(\Ssch\TYPO3Rector\Rector\v9\v0\ReplaceAnnotationRector::class)->call('configure', [[\Ssch\TYPO3Rector\Rector\v9\v0\ReplaceAnnotationRector::OLD_TO_NEW_ANNOTATIONS => ['lazy' => 'TYPO3\\CMS\\Extbase\\Annotation\\ORM\\Lazy', 'cascade' => 'TYPO3\\CMS\\Extbase\\Annotation\\ORM\\Cascade("remove")', 'transient' => 'TYPO3\\CMS\\Extbase\\Annotation\\ORM\\Transient']]]);
     $services->set(\Ssch\TYPO3Rector\Rector\v9\v0\CheckForExtensionInfoRector::class);
     $services->set(\Ssch\TYPO3Rector\Rector\v9\v0\RefactorMethodsFromExtensionManagementUtilityRector::class);
     $services->set(\Ssch\TYPO3Rector\Rector\v9\v0\MetaTagManagementRector::class);
@@ -54,7 +54,7 @@ return static function (\RectorPrefix20210519\Symfony\Component\DependencyInject
     $services->set(\Ssch\TYPO3Rector\Rector\v9\v0\RemoveSecondArgumentGeneralUtilityMkdirDeepRector::class);
     $services->set(\Ssch\TYPO3Rector\Rector\v9\v0\CheckForExtensionVersionRector::class);
     $services->set(\Ssch\TYPO3Rector\Rector\v9\v0\RefactorDeprecationLogRector::class);
-    $services->set('general_utility_get_user_obj_to_make_instance')->class(\Rector\Renaming\Rector\MethodCall\RenameMethodRector::class)->call('configure', [[\Rector\Renaming\Rector\MethodCall\RenameMethodRector::METHOD_CALL_RENAMES => \Symplify\SymfonyPhpConfig\ValueObjectInliner::inline([new \Rector\Renaming\ValueObject\MethodCallRename('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'getUserObj', 'makeInstance')])]]);
+    $services->set('general_utility_get_user_obj_to_make_instance')->class(\Rector\Renaming\Rector\MethodCall\RenameMethodRector::class)->call('configure', [[\Rector\Renaming\Rector\MethodCall\RenameMethodRector::METHOD_CALL_RENAMES => \Symplify\SymfonyPhpConfig\ValueObjectInliner::inline([new \Rector\Renaming\ValueObject\MethodCallRename('TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'getUserObj', 'makeInstance')])]]);
     $services->set(\Ssch\TYPO3Rector\Rector\v9\v0\UseNewComponentIdForPageTreeRector::class);
     $services->set(\Ssch\TYPO3Rector\Rector\v9\v0\RefactorBackendUtilityGetPagesTSconfigRector::class);
     $services->set(\Ssch\TYPO3Rector\Rector\v9\v0\UseExtensionConfigurationApiRector::class);

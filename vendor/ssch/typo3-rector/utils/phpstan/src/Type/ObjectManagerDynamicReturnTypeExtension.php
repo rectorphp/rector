@@ -15,7 +15,7 @@ final class ObjectManagerDynamicReturnTypeExtension implements \PHPStan\Type\Dyn
 {
     public function getClass() : string
     {
-        return 'RectorPrefix20210519\\TYPO3\\CMS\\Extbase\\Object\\ObjectManagerInterface';
+        return 'TYPO3\\CMS\\Extbase\\Object\\ObjectManagerInterface';
     }
     public function isMethodSupported(\PHPStan\Reflection\MethodReflection $methodReflection) : bool
     {

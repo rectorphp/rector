@@ -27,14 +27,14 @@ final class TypeHandlingServiceToTypeHandlingUtilityRector extends \Rector\Core\
      */
     public function refactor($node) : ?\PhpParser\Node
     {
-        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('RectorPrefix20210519\\TYPO3\\CMS\\Extbase\\Service\\TypeHandlingService'))) {
+        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Extbase\\Service\\TypeHandlingService'))) {
             return null;
         }
         $methodCall = $this->getName($node->name);
         if (null === $methodCall) {
             return null;
         }
-        return $this->nodeFactory->createStaticCall('RectorPrefix20210519\\TYPO3\\CMS\\Extbase\\Utility\\TypeHandlingUtility', $methodCall, $node->args);
+        return $this->nodeFactory->createStaticCall('TYPO3\\CMS\\Extbase\\Utility\\TypeHandlingUtility', $methodCall, $node->args);
     }
     /**
      * @codeCoverageIgnore

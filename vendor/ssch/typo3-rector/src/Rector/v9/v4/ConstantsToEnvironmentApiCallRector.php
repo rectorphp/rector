@@ -51,7 +51,7 @@ final class ConstantsToEnvironmentApiCallRector extends \Rector\Core\Rector\Abst
         if (!$this->isNames($node->left, self::ALLOWED_NAMES) || !$this->isNames($node->right, self::ALLOWED_NAMES)) {
             return null;
         }
-        return $this->nodeFactory->createStaticCall('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Core\\Environment', 'isCli');
+        return $this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Core\\Environment', 'isCli');
     }
     private function refactorConstants(\PhpParser\Node\Expr\ConstFetch $node) : ?\PhpParser\Node
     {
@@ -67,17 +67,17 @@ final class ConstantsToEnvironmentApiCallRector extends \Rector\Core\Rector\Abst
             return null;
         }
         if ('PATH_thisScript' === $constantName) {
-            return $this->nodeFactory->createStaticCall('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Core\\Environment', 'getCurrentScript');
+            return $this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Core\\Environment', 'getCurrentScript');
         }
         if ('PATH_site' === $constantName) {
-            return new \PhpParser\Node\Expr\BinaryOp\Concat($this->nodeFactory->createStaticCall('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Core\\Environment', 'getPublicPath'), new \PhpParser\Node\Scalar\String_('/'));
+            return new \PhpParser\Node\Expr\BinaryOp\Concat($this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Core\\Environment', 'getPublicPath'), new \PhpParser\Node\Scalar\String_('/'));
         }
         if ('PATH_typo3' === $constantName) {
-            return $this->nodeFactory->createStaticCall('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Core\\Environment', 'getBackendPath');
+            return $this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Core\\Environment', 'getBackendPath');
         }
         if ('PATH_typo3conf' === $constantName) {
-            return $this->nodeFactory->createStaticCall('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Core\\Environment', 'getLegacyConfigPath');
+            return $this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Core\\Environment', 'getLegacyConfigPath');
         }
-        return new \PhpParser\Node\Expr\BinaryOp\BooleanOr($this->nodeFactory->createStaticCall('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Core\\Environment', 'isUnix'), $this->nodeFactory->createStaticCall('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Core\\Environment', 'isWindows'));
+        return new \PhpParser\Node\Expr\BinaryOp\BooleanOr($this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Core\\Environment', 'isUnix'), $this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Core\\Environment', 'isWindows'));
     }
 }

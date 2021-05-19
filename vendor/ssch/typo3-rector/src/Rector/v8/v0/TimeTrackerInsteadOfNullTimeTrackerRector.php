@@ -50,7 +50,7 @@ final class TimeTrackerInsteadOfNullTimeTrackerRector extends \Rector\Core\Recto
         if (null !== $changedNode) {
             return $changedNode;
         }
-        $renamedNode = $this->classRenamer->renameNode($node, ['RectorPrefix20210519\\TYPO3\\CMS\\Core\\TimeTracker\\NullTimeTracker' => 'RectorPrefix20210519\\TYPO3\\CMS\\Core\\TimeTracker\\TimeTracker']);
+        $renamedNode = $this->classRenamer->renameNode($node, ['TYPO3\\CMS\\Core\\TimeTracker\\NullTimeTracker' => 'TYPO3\\CMS\\Core\\TimeTracker\\TimeTracker']);
         if (null === $renamedNode) {
             return null;
         }
@@ -87,7 +87,7 @@ CODE_SAMPLE
         if (!$this->isMakeInstanceCall($node) && !$this->isObjectManagerCall($node)) {
             return null;
         }
-        if (!$this->valueResolver->isValue($node->args[0]->value, 'RectorPrefix20210519\\TYPO3\\CMS\\Core\\TimeTracker\\NullTimeTracker')) {
+        if (!$this->valueResolver->isValue($node->args[0]->value, 'TYPO3\\CMS\\Core\\TimeTracker\\NullTimeTracker')) {
             return null;
         }
         $node->args[1] = $this->nodeFactory->createArg(\false);
@@ -98,7 +98,7 @@ CODE_SAMPLE
         if (!$node instanceof \PhpParser\Node\Expr\StaticCall) {
             return \false;
         }
-        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Utility\\GeneralUtility'))) {
+        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Utility\\GeneralUtility'))) {
             return \false;
         }
         return $this->isName($node->name, 'makeInstance');
@@ -108,7 +108,7 @@ CODE_SAMPLE
         if (!$node instanceof \PhpParser\Node\Expr\MethodCall) {
             return \false;
         }
-        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('RectorPrefix20210519\\TYPO3\\CMS\\Extbase\\Object\\ObjectManager'))) {
+        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Extbase\\Object\\ObjectManager'))) {
             return \false;
         }
         return $this->isName($node->name, 'get');

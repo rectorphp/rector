@@ -33,7 +33,7 @@ final class CopyMethodGetPidForModTSconfigRector extends \Rector\Core\Rector\Abs
      */
     public function refactor($node) : ?\PhpParser\Node
     {
-        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('RectorPrefix20210519\\TYPO3\\CMS\\Backend\\Utility\\BackendUtility'))) {
+        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Backend\\Utility\\BackendUtility'))) {
             return null;
         }
         if (!$this->isName($node->name, 'getPidForModTSconfig')) {
@@ -44,7 +44,7 @@ final class CopyMethodGetPidForModTSconfigRector extends \Rector\Core\Rector\Abs
             $tableVariableNode = new \PhpParser\Node\Expr\Variable('table');
             $this->addNodeBeforeNode(new \PhpParser\Node\Expr\Assign($tableVariableNode, $node->args[0]->value), $node);
         }
-        return new \PhpParser\Node\Expr\Ternary(new \PhpParser\Node\Expr\BinaryOp\BooleanAnd(new \PhpParser\Node\Expr\BinaryOp\Identical($tableVariableNode, new \PhpParser\Node\Scalar\String_('pages')), $this->nodeFactory->createStaticCall('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Utility\\MathUtility', 'canBeInterpretedAsInteger', [$node->args[1]])), $node->args[1]->value, $node->args[2]->value);
+        return new \PhpParser\Node\Expr\Ternary(new \PhpParser\Node\Expr\BinaryOp\BooleanAnd(new \PhpParser\Node\Expr\BinaryOp\Identical($tableVariableNode, new \PhpParser\Node\Scalar\String_('pages')), $this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\MathUtility', 'canBeInterpretedAsInteger', [$node->args[1]])), $node->args[1]->value, $node->args[2]->value);
     }
     /**
      * @codeCoverageIgnore

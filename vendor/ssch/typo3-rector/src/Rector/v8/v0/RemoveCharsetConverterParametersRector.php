@@ -27,7 +27,7 @@ final class RemoveCharsetConverterParametersRector extends \Rector\Core\Rector\A
      */
     public function refactor($node) : ?\PhpParser\Node
     {
-        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Charset\\CharsetConverter'))) {
+        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Charset\\CharsetConverter'))) {
             return null;
         }
         if (!$this->isNames($node->name, ['entities_to_utf8', 'utf8_to_numberarray'])) {

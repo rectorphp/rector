@@ -35,7 +35,7 @@ final class InjectAnnotationRector extends \Rector\Core\Rector\AbstractRector
     /**
      * @var string
      */
-    private const NEW_ANNOTATION = 'RectorPrefix20210519\\TYPO3\\CMS\\Extbase\\Annotation\\Inject';
+    private const NEW_ANNOTATION = 'TYPO3\\CMS\\Extbase\\Annotation\\Inject';
     /**
      * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover
      */

@@ -37,7 +37,7 @@ final class BackendUtilityGetRecordRawRector extends \Rector\Core\Rector\Abstrac
      */
     public function refactor($node) : ?\PhpParser\Node
     {
-        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('RectorPrefix20210519\\TYPO3\\CMS\\Backend\\Utility\\BackendUtility'))) {
+        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Backend\\Utility\\BackendUtility'))) {
             return null;
         }
         if (!$this->isName($node->name, 'getRecordRaw')) {
@@ -83,12 +83,12 @@ CODE_SAMPLE
     }
     private function createQueryBuilderCall(\PhpParser\Node\Arg $firstArgument) : \PhpParser\Node\Expr\Assign
     {
-        $queryBuilder = $this->nodeFactory->createMethodCall($this->nodeFactory->createStaticCall('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'makeInstance', [$this->nodeFactory->createClassConstReference('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Database\\ConnectionPool')]), 'getQueryBuilderForTable', [$this->nodeFactory->createArg($firstArgument->value)]);
+        $queryBuilder = $this->nodeFactory->createMethodCall($this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'makeInstance', [$this->nodeFactory->createClassConstReference('TYPO3\\CMS\\Core\\Database\\ConnectionPool')]), 'getQueryBuilderForTable', [$this->nodeFactory->createArg($firstArgument->value)]);
         return new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable(self::QUERY_BUILDER), $queryBuilder);
     }
     private function fetchQueryBuilderResults(\PhpParser\Node\Arg $table, \PhpParser\Node\Arg $where, \PhpParser\Node\Arg $fields) : \PhpParser\Node\Expr\MethodCall
     {
         $queryBuilder = new \PhpParser\Node\Expr\Variable(self::QUERY_BUILDER);
-        return $this->nodeFactory->createMethodCall($this->nodeFactory->createMethodCall($this->nodeFactory->createMethodCall($this->nodeFactory->createMethodCall($this->nodeFactory->createMethodCall($queryBuilder, 'select', [$this->nodeFactory->createStaticCall('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'trimExplode', [new \PhpParser\Node\Scalar\String_(','), $this->nodeFactory->createArg($fields->value), $this->nodeFactory->createTrue()])]), 'from', [$this->nodeFactory->createArg($table->value)]), 'where', [$this->nodeFactory->createStaticCall('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Database\\Query\\QueryHelper', 'stripLogicalOperatorPrefix', [$this->nodeFactory->createArg($where->value)])]), 'execute'), 'fetch');
+        return $this->nodeFactory->createMethodCall($this->nodeFactory->createMethodCall($this->nodeFactory->createMethodCall($this->nodeFactory->createMethodCall($this->nodeFactory->createMethodCall($queryBuilder, 'select', [$this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'trimExplode', [new \PhpParser\Node\Scalar\String_(','), $this->nodeFactory->createArg($fields->value), $this->nodeFactory->createTrue()])]), 'from', [$this->nodeFactory->createArg($table->value)]), 'where', [$this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Database\\Query\\QueryHelper', 'stripLogicalOperatorPrefix', [$this->nodeFactory->createArg($where->value)])]), 'execute'), 'fetch');
     }
 }

@@ -17,7 +17,7 @@ final class ValidatorResolverDynamicReturnTypeExtension implements \PHPStan\Type
 {
     public function getClass() : string
     {
-        return 'RectorPrefix20210519\\TYPO3\\CMS\\Extbase\\Validation\\ValidatorResolver\\ValidatorResolver';
+        return 'TYPO3\\CMS\\Extbase\\Validation\\ValidatorResolver\\ValidatorResolver';
     }
     public function isMethodSupported(\PHPStan\Reflection\MethodReflection $methodReflection) : bool
     {

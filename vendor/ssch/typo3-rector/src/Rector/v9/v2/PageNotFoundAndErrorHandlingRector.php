@@ -124,7 +124,7 @@ CODE_SAMPLE
         if ($this->typo3NodeResolver->isAnyMethodCallOnGlobals($node, \Ssch\TYPO3Rector\Helper\Typo3NodeResolver::TYPO_SCRIPT_FRONTEND_CONTROLLER)) {
             return \false;
         }
-        return !$this->isObjectType($node->var, new \PHPStan\Type\ObjectType('RectorPrefix20210519\\TYPO3\\CMS\\Frontend\\Controller\\TypoScriptFrontendController'));
+        return !$this->isObjectType($node->var, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Frontend\\Controller\\TypoScriptFrontendController'));
     }
     private function createResponse(\PhpParser\Node\Expr\MethodCall $node) : ?\PhpParser\Node
     {
@@ -140,17 +140,17 @@ CODE_SAMPLE
         if (isset($node->args[0])) {
             $arguments[] = $node->args[0]->value;
         }
-        return new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable('response'), $this->nodeFactory->createMethodCall($this->nodeFactory->createStaticCall('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'makeInstance', [$this->nodeFactory->createClassConstReference('RectorPrefix20210519\\TYPO3\\CMS\\Frontend\\Controller\\ErrorController')]), self::MAP_METHODS[$methodCall], $arguments)));
+        return new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable('response'), $this->nodeFactory->createMethodCall($this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'makeInstance', [$this->nodeFactory->createClassConstReference('TYPO3\\CMS\\Frontend\\Controller\\ErrorController')]), self::MAP_METHODS[$methodCall], $arguments)));
     }
     private function throwException() : \PhpParser\Node
     {
-        return new \PhpParser\Node\Stmt\Throw_(new \PhpParser\Node\Expr\New_(new \PhpParser\Node\Name('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Http\\ImmediateResponseException'), $this->nodeFactory->createArgs([new \PhpParser\Node\Expr\Variable('response')])));
+        return new \PhpParser\Node\Stmt\Throw_(new \PhpParser\Node\Expr\New_(new \PhpParser\Node\Name('TYPO3\\CMS\\Core\\Http\\ImmediateResponseException'), $this->nodeFactory->createArgs([new \PhpParser\Node\Expr\Variable('response')])));
     }
     private function refactorCheckPageUnavailableHandlerMethod() : \PhpParser\Node
     {
         $devIpMask = new \PhpParser\Node\Expr\ArrayDimFetch(new \PhpParser\Node\Expr\ArrayDimFetch(new \PhpParser\Node\Expr\ArrayDimFetch(new \PhpParser\Node\Expr\Variable(\Ssch\TYPO3Rector\Helper\Typo3NodeResolver::GLOBALS), new \PhpParser\Node\Scalar\String_('TYPO3_CONF_VARS')), new \PhpParser\Node\Scalar\String_('SYS')), new \PhpParser\Node\Scalar\String_('devIPmask'));
         $pageUnavailableHandling = new \PhpParser\Node\Expr\ArrayDimFetch(new \PhpParser\Node\Expr\ArrayDimFetch(new \PhpParser\Node\Expr\ArrayDimFetch(new \PhpParser\Node\Expr\Variable(\Ssch\TYPO3Rector\Helper\Typo3NodeResolver::GLOBALS), new \PhpParser\Node\Scalar\String_('TYPO3_CONF_VARS')), new \PhpParser\Node\Scalar\String_('FE')), new \PhpParser\Node\Scalar\String_('pageUnavailable_handling'));
-        return new \PhpParser\Node\Expr\BinaryOp\BooleanAnd($pageUnavailableHandling, new \PhpParser\Node\Expr\BooleanNot($this->nodeFactory->createStaticCall('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'cmpIP', [$this->nodeFactory->createStaticCall('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'getIndpEnv', [new \PhpParser\Node\Scalar\String_('REMOTE_ADDR')]), $devIpMask])));
+        return new \PhpParser\Node\Expr\BinaryOp\BooleanAnd($pageUnavailableHandling, new \PhpParser\Node\Expr\BooleanNot($this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'cmpIP', [$this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'getIndpEnv', [new \PhpParser\Node\Scalar\String_('REMOTE_ADDR')]), $devIpMask])));
     }
     private function refactorPageErrorHandlerIfPossible(\PhpParser\Node\Expr\MethodCall $node) : ?\PhpParser\Node
     {
@@ -177,7 +177,7 @@ CODE_SAMPLE
             }
         }
         if (null !== $message) {
-            return new \PhpParser\Node\Stmt\Echo_([$this->nodeFactory->createMethodCall($this->nodeFactory->createStaticCall('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'makeInstance', [$this->nodeFactory->createClassConstReference('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Controller\\ErrorPageController')]), 'errorAction', ['Page Not Found', $message])]);
+            return new \PhpParser\Node\Stmt\Echo_([$this->nodeFactory->createMethodCall($this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'makeInstance', [$this->nodeFactory->createClassConstReference('TYPO3\\CMS\\Core\\Controller\\ErrorPageController')]), 'errorAction', ['Page Not Found', $message])]);
         }
         return null;
     }

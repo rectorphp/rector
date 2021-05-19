@@ -33,7 +33,7 @@ final class ConfigurationManagerAddControllerConfigurationMethodRector extends \
      */
     public function refactor($node) : ?\PhpParser\Node
     {
-        if (!$this->isObjectType($node, new \PHPStan\Type\ObjectType('RectorPrefix20210519\\TYPO3\\CMS\\Extbase\\Configuration\\AbstractConfigurationManager'))) {
+        if (!$this->isObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Extbase\\Configuration\\AbstractConfigurationManager'))) {
             return null;
         }
         $this->addMethodGetControllerConfiguration($node);

@@ -15,7 +15,7 @@ final class GeneralUtilityDynamicReturnTypeExtension implements \PHPStan\Type\Dy
 {
     public function getClass() : string
     {
-        return 'RectorPrefix20210519\\TYPO3\\CMS\\Core\\Utility\\GeneralUtility';
+        return 'TYPO3\\CMS\\Core\\Utility\\GeneralUtility';
     }
     public function isStaticMethodSupported(\PHPStan\Reflection\MethodReflection $methodReflection) : bool
     {

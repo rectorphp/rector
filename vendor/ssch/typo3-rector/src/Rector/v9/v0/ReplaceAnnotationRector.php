@@ -78,7 +78,7 @@ CODE_SAMPLE
 private $someProperty;
 
 CODE_SAMPLE
-, [self::OLD_TO_NEW_ANNOTATIONS => ['transient' => 'RectorPrefix20210519\\TYPO3\\CMS\\Extbase\\Annotation\\ORM\\Transient']])]);
+, [self::OLD_TO_NEW_ANNOTATIONS => ['transient' => 'TYPO3\\CMS\\Extbase\\Annotation\\ORM\\Transient']])]);
     }
     /**
      * @param mixed[] $configuration

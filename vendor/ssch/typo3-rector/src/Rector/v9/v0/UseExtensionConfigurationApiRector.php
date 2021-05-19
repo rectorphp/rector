@@ -75,7 +75,7 @@ final class UseExtensionConfigurationApiRector extends \Rector\Core\Rector\Abstr
         if ($parentNode instanceof \PhpParser\Node\Expr\Isset_) {
             return new \PhpParser\Node\Expr\ArrayDimFetch(new \PhpParser\Node\Expr\ArrayDimFetch(new \PhpParser\Node\Expr\ArrayDimFetch(new \PhpParser\Node\Expr\Variable('GLOBALS'), new \PhpParser\Node\Scalar\String_('TYPO3_CONF_VARS')), new \PhpParser\Node\Scalar\String_('EXTENSIONS')), $extensionConfiguration->dim);
         }
-        return $this->nodeFactory->createMethodCall($this->nodeFactory->createStaticCall('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'makeInstance', [$this->nodeFactory->createClassConstReference('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Configuration\\ExtensionConfiguration')]), 'get', [$extensionConfiguration->dim]);
+        return $this->nodeFactory->createMethodCall($this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'makeInstance', [$this->nodeFactory->createClassConstReference('TYPO3\\CMS\\Core\\Configuration\\ExtensionConfiguration')]), 'get', [$extensionConfiguration->dim]);
     }
     /**
      * @codeCoverageIgnore

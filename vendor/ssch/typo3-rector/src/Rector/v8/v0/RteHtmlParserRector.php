@@ -35,10 +35,10 @@ final class RteHtmlParserRector extends \Rector\Core\Rector\AbstractRector
             return $this->removeSecondArgumentFromMethod($node);
         }
         if ($this->isName($node->name, 'siteUrl')) {
-            return $this->nodeFactory->createStaticCall('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'getIndpEnv', [$this->nodeFactory->createArg(new \PhpParser\Node\Scalar\String_('TYPO3_SITE_URL'))]);
+            return $this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'getIndpEnv', [$this->nodeFactory->createArg(new \PhpParser\Node\Scalar\String_('TYPO3_SITE_URL'))]);
         }
         if ($this->isName($node->name, 'getUrl')) {
-            return $this->nodeFactory->createStaticCall('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'getUrl', [$node->args[0]]);
+            return $this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'getUrl', [$node->args[0]]);
         }
         return null;
     }
@@ -76,6 +76,6 @@ CODE_SAMPLE
     }
     private function shouldSkip(\PhpParser\Node\Expr\MethodCall $node) : bool
     {
-        return !$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Html\\RteHtmlParser'));
+        return !$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Html\\RteHtmlParser'));
     }
 }

@@ -86,10 +86,10 @@ CODE_SAMPLE
         if ($this->typo3NodeResolver->isMethodCallOnSysPageOfTSFE($node)) {
             return \false;
         }
-        return !$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('RectorPrefix20210519\\TYPO3\\CMS\\Frontend\\Page\\PageRepository'));
+        return !$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Frontend\\Page\\PageRepository'));
     }
     private function createCacheManager() : \PhpParser\Node\Expr\MethodCall
     {
-        return $this->nodeFactory->createMethodCall($this->nodeFactory->createStaticCall('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'makeInstance', [$this->nodeFactory->createClassConstReference('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Cache\\CacheManager')]), 'getCache', [new \PhpParser\Node\Scalar\String_('cache_hash')]);
+        return $this->nodeFactory->createMethodCall($this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'makeInstance', [$this->nodeFactory->createClassConstReference('TYPO3\\CMS\\Core\\Cache\\CacheManager')]), 'getCache', [new \PhpParser\Node\Scalar\String_('cache_hash')]);
     }
 }

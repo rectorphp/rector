@@ -53,7 +53,7 @@ final class ExcludeServiceKeysToArrayRector extends \Rector\Core\Rector\Abstract
             return null;
         }
         $args = [new \PhpParser\Node\Scalar\String_(','), $excludeServiceKeys, $this->nodeFactory->createTrue()];
-        $staticCall = $this->nodeFactory->createStaticCall('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'trimExplode', $args);
+        $staticCall = $this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'trimExplode', $args);
         $node->args[2] = new \PhpParser\Node\Arg($staticCall);
         return $node;
     }
@@ -74,9 +74,9 @@ CODE_SAMPLE
     }
     private function isExpectedObjectType(\PhpParser\Node\Expr\StaticCall $node) : bool
     {
-        if ($this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Utility\\ExtensionManagementUtility'))) {
+        if ($this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Utility\\ExtensionManagementUtility'))) {
             return \true;
         }
-        return $this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Utility\\GeneralUtility'));
+        return $this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Utility\\GeneralUtility'));
     }
 }

@@ -30,7 +30,7 @@ final class ChangeDefaultCachingFrameworkNamesRector extends \Rector\Core\Rector
      */
     public function refactor($node) : ?\PhpParser\Node
     {
-        if (!$this->nodeTypeResolver->isObjectType($node->var, new \PHPStan\Type\ObjectType('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Cache\\CacheManager'))) {
+        if (!$this->nodeTypeResolver->isObjectType($node->var, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Cache\\CacheManager'))) {
             return null;
         }
         if (!$this->isName($node->name, 'getCache')) {

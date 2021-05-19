@@ -27,7 +27,7 @@ final class RemoveInitMethodTemplateServiceRector extends \Rector\Core\Rector\Ab
      */
     public function refactor($node) : ?\PhpParser\Node
     {
-        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('RectorPrefix20210519\\TYPO3\\CMS\\Core\\TypoScript\\TemplateService'))) {
+        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\TypoScript\\TemplateService'))) {
             return null;
         }
         if (!$this->isName($node->name, 'init')) {

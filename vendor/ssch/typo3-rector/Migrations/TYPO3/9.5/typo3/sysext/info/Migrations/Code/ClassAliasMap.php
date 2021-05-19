@@ -2,4 +2,4 @@
 
 namespace RectorPrefix20210519;
 
-return ['RectorPrefix20210519\\TYPO3\\CMS\\Frontend\\Controller\\PageInformationController' => 'RectorPrefix20210519\\TYPO3\\CMS\\Info\\Controller\\PageInformationController', 'RectorPrefix20210519\\TYPO3\\CMS\\Frontend\\Controller\\TranslationStatusController' => 'RectorPrefix20210519\\TYPO3\\CMS\\Info\\Controller\\TranslationStatusController', 'RectorPrefix20210519\\TYPO3\\CMS\\InfoPagetsconfig\\Controller\\InfoPageTyposcriptConfigController' => 'RectorPrefix20210519\\TYPO3\\CMS\\Info\\Controller\\InfoPageTyposcriptConfigController'];
+return ['TYPO3\\CMS\\Frontend\\Controller\\PageInformationController' => 'TYPO3\\CMS\\Info\\Controller\\PageInformationController', 'TYPO3\\CMS\\Frontend\\Controller\\TranslationStatusController' => 'TYPO3\\CMS\\Info\\Controller\\TranslationStatusController', 'TYPO3\\CMS\\InfoPagetsconfig\\Controller\\InfoPageTyposcriptConfigController' => 'TYPO3\\CMS\\Info\\Controller\\InfoPageTyposcriptConfigController'];

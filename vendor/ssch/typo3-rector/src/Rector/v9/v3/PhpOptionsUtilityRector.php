@@ -32,7 +32,7 @@ final class PhpOptionsUtilityRector extends \Rector\Core\Rector\AbstractRector
      */
     public function refactor($node) : ?\PhpParser\Node
     {
-        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Utility\\PhpOptionsUtility'))) {
+        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Utility\\PhpOptionsUtility'))) {
             return null;
         }
         if (!$this->isNames($node->name, ['isSessionAutoStartEnabled', 'getIniValueBoolean'])) {

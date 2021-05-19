@@ -94,7 +94,7 @@ CODE_SAMPLE;
      */
     public function refactor($node) : ?\PhpParser\Node
     {
-        if (!$this->isObjectType($node, new \PHPStan\Type\ObjectType('RectorPrefix20210519\\TYPO3\\CMS\\Extbase\\Mvc\\Controller\\CommandController'))) {
+        if (!$this->isObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Extbase\\Mvc\\Controller\\CommandController'))) {
             return null;
         }
         $commandMethods = $this->findCommandMethods($node);
@@ -115,7 +115,7 @@ CODE_SAMPLE;
         $namespaceParts = $node->namespacedName->parts;
         $vendorName = \array_shift($namespaceParts);
         $extensionName = \array_shift($namespaceParts);
-        $commandNamespace = \sprintf('RectorPrefix20210519\\%s\\%s\\Command', $vendorName, $extensionName);
+        $commandNamespace = \sprintf('\%s\\%s\\Command', $vendorName, $extensionName);
         // Collect all new commands
         $newCommandsWithFullQualifiedNamespace = [];
         foreach ($commandMethods as $commandMethod) {

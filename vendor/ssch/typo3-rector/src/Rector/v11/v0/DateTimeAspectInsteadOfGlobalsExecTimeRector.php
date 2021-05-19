@@ -38,7 +38,7 @@ final class DateTimeAspectInsteadOfGlobalsExecTimeRector extends \Rector\Core\Re
         if (!$this->typo3NodeResolver->isTypo3Globals($node, [\Ssch\TYPO3Rector\Helper\Typo3NodeResolver::EXEC_TIME, \Ssch\TYPO3Rector\Helper\Typo3NodeResolver::SIM_ACCESS_TIME, \Ssch\TYPO3Rector\Helper\Typo3NodeResolver::SIM_EXEC_TIME, \Ssch\TYPO3Rector\Helper\Typo3NodeResolver::ACCESS_TIME])) {
             return null;
         }
-        return $this->nodeFactory->createMethodCall($this->nodeFactory->createStaticCall('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'makeInstance', [$this->nodeFactory->createClassConstReference('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Context\\Context')]), 'getPropertyFromAspect', ['date', 'timestamp']);
+        return $this->nodeFactory->createMethodCall($this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'makeInstance', [$this->nodeFactory->createClassConstReference('TYPO3\\CMS\\Core\\Context\\Context')]), 'getPropertyFromAspect', ['date', 'timestamp']);
     }
     /**
      * @codeCoverageIgnore
