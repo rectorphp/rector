@@ -30,7 +30,7 @@ final class RefactorDeprecatedConcatenateMethodsPageRendererRector extends \Rect
      */
     public function refactor($node) : ?\PhpParser\Node
     {
-        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Page\\PageRenderer'))) {
+        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Page\\PageRenderer'))) {
             return null;
         }
         if ($this->isName($node->name, 'getConcatenateFiles')) {

@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace Rector\PSR4\Composer;
 
 use RectorPrefix20210519\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection;
-use Symplify\SmartFileSystem\Json\JsonFileSystem;
+use RectorPrefix20210519\Symplify\SmartFileSystem\Json\JsonFileSystem;
 final class PSR4AutoloadPathsProvider
 {
     /**
@@ -15,7 +15,7 @@ final class PSR4AutoloadPathsProvider
      * @var \Symplify\SmartFileSystem\Json\JsonFileSystem
      */
     private $jsonFileSystem;
-    public function __construct(\Symplify\SmartFileSystem\Json\JsonFileSystem $jsonFileSystem)
+    public function __construct(\RectorPrefix20210519\Symplify\SmartFileSystem\Json\JsonFileSystem $jsonFileSystem)
     {
         $this->jsonFileSystem = $jsonFileSystem;
     }

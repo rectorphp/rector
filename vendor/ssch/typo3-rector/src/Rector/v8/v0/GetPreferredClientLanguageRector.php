@@ -35,7 +35,7 @@ final class GetPreferredClientLanguageRector extends \Rector\Core\Rector\Abstrac
         if (!$this->isCharsetConverterMethodCall($node) && !$this->isCallFromTypoScriptFrontendController($node)) {
             return null;
         }
-        return $this->nodeFactory->createMethodCall($this->nodeFactory->createStaticCall('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'makeInstance', [$this->nodeFactory->createClassConstReference('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Localization\\Locales')]), self::GET_PREFERRED_CLIENT_LANGUAGE, $node->args);
+        return $this->nodeFactory->createMethodCall($this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'makeInstance', [$this->nodeFactory->createClassConstReference('TYPO3\\CMS\\Core\\Localization\\Locales')]), self::GET_PREFERRED_CLIENT_LANGUAGE, $node->args);
     }
     /**
      * @codeCoverageIgnore
@@ -55,7 +55,7 @@ CODE_SAMPLE
     }
     private function isCharsetConverterMethodCall(\PhpParser\Node\Expr\MethodCall $node) : bool
     {
-        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Charset\\CharsetConverter'))) {
+        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Charset\\CharsetConverter'))) {
             return \false;
         }
         return $this->isName($node->name, self::GET_PREFERRED_CLIENT_LANGUAGE);

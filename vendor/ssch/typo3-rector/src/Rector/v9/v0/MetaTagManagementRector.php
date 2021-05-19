@@ -88,14 +88,14 @@ CODE_SAMPLE
     }
     private function isMethodAddMetaTag(\PhpParser\Node\Expr\MethodCall $node) : bool
     {
-        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Page\\PageRenderer'))) {
+        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Page\\PageRenderer'))) {
             return \false;
         }
         return $this->isName($node->name, 'addMetaTag');
     }
     private function isMethodXUaCompatible(\PhpParser\Node\Expr\MethodCall $node) : bool
     {
-        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('RectorPrefix20210519\\TYPO3\\CMS\\Backend\\Template\\DocumentTemplate'))) {
+        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Backend\\Template\\DocumentTemplate'))) {
             return \false;
         }
         return $this->isName($node->name, 'xUaCompatible');
@@ -121,6 +121,6 @@ CODE_SAMPLE
         if (\count($methodCall->args) > 0) {
             $value = $methodCall->args[0]->value;
         }
-        return $this->nodeFactory->createMethodCall($this->nodeFactory->createStaticCall('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'makeInstance', [$this->nodeFactory->createClassConstReference('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Page\\PageRenderer')]), 'setMetaTag', ['http-equiv', 'X-UA-Compatible', $value]);
+        return $this->nodeFactory->createMethodCall($this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'makeInstance', [$this->nodeFactory->createClassConstReference('TYPO3\\CMS\\Core\\Page\\PageRenderer')]), 'setMetaTag', ['http-equiv', 'X-UA-Compatible', $value]);
     }
 }

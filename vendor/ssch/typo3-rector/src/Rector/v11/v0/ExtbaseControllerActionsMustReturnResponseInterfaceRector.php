@@ -63,7 +63,7 @@ final class ExtbaseControllerActionsMustReturnResponseInterfaceRector extends \R
                 $returnCall->expr = $this->nodeFactory->createMethodCall(self::THIS, self::HTML_RESPONSE, $args);
             }
         }
-        $node->returnType = new \PhpParser\Node\Name\FullyQualified('RectorPrefix20210519\\Psr\\Http\\Message\\ResponseInterface');
+        $node->returnType = new \PhpParser\Node\Name\FullyQualified('Psr\\Http\\Message\\ResponseInterface');
         $statements = $node->stmts;
         $lastStatement = null;
         if (\is_array($statements)) {
@@ -106,7 +106,7 @@ CODE_SAMPLE
     }
     private function shouldSkip(\PhpParser\Node\Stmt\ClassMethod $node) : bool
     {
-        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('RectorPrefix20210519\\TYPO3\\CMS\\Extbase\\Mvc\\Controller\\ActionController'))) {
+        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Extbase\\Mvc\\Controller\\ActionController'))) {
             return \true;
         }
         if (!$node->isPublic()) {
@@ -145,7 +145,7 @@ CODE_SAMPLE
             if (!$node instanceof \PhpParser\Node\Expr\MethodCall) {
                 return \false;
             }
-            if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('RectorPrefix20210519\\TYPO3\\CMS\\Extbase\\Mvc\\Controller\\ActionController'))) {
+            if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Extbase\\Mvc\\Controller\\ActionController'))) {
                 return \false;
             }
             return $this->isNames($node->name, ['redirect', 'redirectToUri']);
@@ -170,7 +170,7 @@ CODE_SAMPLE
             if (!$returnType instanceof \PHPStan\Type\TypeWithClassName) {
                 continue;
             }
-            if ($returnType->isSuperTypeOf(new \PHPStan\Type\ObjectType('RectorPrefix20210519\\Psr\\Http\\Message\\ResponseInterface'))->yes()) {
+            if ($returnType->isSuperTypeOf(new \PHPStan\Type\ObjectType('Psr\\Http\\Message\\ResponseInterface'))->yes()) {
                 return \true;
             }
         }

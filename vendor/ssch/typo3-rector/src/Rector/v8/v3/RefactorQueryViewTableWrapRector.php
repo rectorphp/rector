@@ -30,7 +30,7 @@ final class RefactorQueryViewTableWrapRector extends \Rector\Core\Rector\Abstrac
      */
     public function refactor($node) : ?\PhpParser\Node
     {
-        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Database\\QueryView'))) {
+        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Database\\QueryView'))) {
             return null;
         }
         if (!$this->isName($node->name, 'tableWrap')) {

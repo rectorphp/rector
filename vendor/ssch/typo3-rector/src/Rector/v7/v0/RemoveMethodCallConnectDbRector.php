@@ -27,7 +27,7 @@ final class RemoveMethodCallConnectDbRector extends \Rector\Core\Rector\Abstract
      */
     public function refactor($node) : ?\PhpParser\Node
     {
-        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('RectorPrefix20210519\\TYPO3\\CMS\\Frontend\\Utility\\EidUtility'))) {
+        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Frontend\\Utility\\EidUtility'))) {
             return null;
         }
         if (!$this->isName($node->name, 'connectDB')) {

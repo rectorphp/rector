@@ -50,7 +50,7 @@ final class UseContextApiForVersioningWorkspaceIdRector extends \Rector\Core\Rec
         if ($parentNode instanceof \PhpParser\Node\Expr\Assign && $parentNode->var instanceof \PhpParser\Node\Expr\PropertyFetch) {
             return null;
         }
-        return $this->nodeFactory->createMethodCall($this->nodeFactory->createStaticCall('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'makeInstance', [$this->nodeFactory->createClassConstReference('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Context\\Context')]), 'getPropertyFromAspect', ['workspace', 'id', 0]);
+        return $this->nodeFactory->createMethodCall($this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'makeInstance', [$this->nodeFactory->createClassConstReference('TYPO3\\CMS\\Core\\Context\\Context')]), 'getPropertyFromAspect', ['workspace', 'id', 0]);
     }
     /**
      * @codeCoverageIgnore
@@ -76,7 +76,7 @@ CODE_SAMPLE
     private function shouldSkip(\PhpParser\Node\Expr\PropertyFetch $node) : bool
     {
         $node->var->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PHP_DOC_INFO, $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PHP_DOC_INFO));
-        if ($this->isObjectType($node->var, new \PHPStan\Type\ObjectType('RectorPrefix20210519\\TYPO3\\CMS\\Frontend\\Page\\PageRepository'))) {
+        if ($this->isObjectType($node->var, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Frontend\\Page\\PageRepository'))) {
             return \false;
         }
         if ($this->typo3NodeResolver->isPropertyFetchOnAnyPropertyOfGlobals($node->var, \Ssch\TYPO3Rector\Helper\Typo3NodeResolver::TYPO_SCRIPT_FRONTEND_CONTROLLER)) {

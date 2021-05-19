@@ -37,13 +37,13 @@ final class SetSystemLocaleFromSiteLanguageRector extends \Rector\Core\Rector\Ab
      */
     public function refactor($node) : ?\PhpParser\Node
     {
-        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('RectorPrefix20210519\\TYPO3\\CMS\\Frontend\\Controller\\TypoScriptFrontendController')) && !$this->typo3NodeResolver->isAnyMethodCallOnGlobals($node, \Ssch\TYPO3Rector\Helper\Typo3NodeResolver::TYPO_SCRIPT_FRONTEND_CONTROLLER)) {
+        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Frontend\\Controller\\TypoScriptFrontendController')) && !$this->typo3NodeResolver->isAnyMethodCallOnGlobals($node, \Ssch\TYPO3Rector\Helper\Typo3NodeResolver::TYPO_SCRIPT_FRONTEND_CONTROLLER)) {
             return null;
         }
         if (!$this->isName($node->name, 'settingLocale')) {
             return null;
         }
-        return $this->nodeFactory->createStaticCall('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Localization\\Locales', 'setSystemLocaleFromSiteLanguage', [$this->nodeFactory->createMethodCall($node->var, 'getLanguage')]);
+        return $this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Localization\\Locales', 'setSystemLocaleFromSiteLanguage', [$this->nodeFactory->createMethodCall($node->var, 'getLanguage')]);
     }
     /**
      * @codeCoverageIgnore

@@ -116,6 +116,6 @@ CODE_SAMPLE
     }
     private function createMode(int $mode) : \PhpParser\Node\Expr\ClassConstFetch
     {
-        return $this->nodeFactory->createClassConstFetch('RectorPrefix20210519\\Symfony\\Component\\Console\\Input\\InputArgument', self::MODE_MAPPING[$mode]);
+        return $this->nodeFactory->createClassConstFetch('Symfony\\Component\\Console\\Input\\InputArgument', self::MODE_MAPPING[$mode]);
     }
 }

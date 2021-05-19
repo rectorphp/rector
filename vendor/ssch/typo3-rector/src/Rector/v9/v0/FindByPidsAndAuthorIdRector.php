@@ -28,7 +28,7 @@ final class FindByPidsAndAuthorIdRector extends \Rector\Core\Rector\AbstractRect
      */
     public function refactor($node) : ?\PhpParser\Node
     {
-        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('RectorPrefix20210519\\TYPO3\\CMS\\SysNote\\Domain\\Repository\\SysNoteRepository'))) {
+        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\SysNote\\Domain\\Repository\\SysNoteRepository'))) {
             return null;
         }
         if (!$this->isName($node->name, 'findByPidsAndAuthor')) {

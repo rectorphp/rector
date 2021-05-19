@@ -28,14 +28,14 @@ final class ExtensionManagementUtilityExtRelPathRector extends \Rector\Core\Rect
      */
     public function refactor($node) : ?\PhpParser\Node
     {
-        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Utility\\ExtensionManagementUtility'))) {
+        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Utility\\ExtensionManagementUtility'))) {
             return null;
         }
         if (!$this->isName($node->name, 'extRelPath')) {
             return null;
         }
         $node->name = new \PhpParser\Node\Identifier('extPath');
-        return $this->nodeFactory->createStaticCall('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Utility\\PathUtility', 'getAbsoluteWebPath', [$node]);
+        return $this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\PathUtility', 'getAbsoluteWebPath', [$node]);
     }
     /**
      * @codeCoverageIgnore

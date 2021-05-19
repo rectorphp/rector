@@ -52,7 +52,7 @@ final class InjectEnvironmentServiceIfNeededInResponseRector extends \Rector\Cor
      */
     public function refactor($node) : ?\PhpParser\Node
     {
-        if (!$this->isObjectType($node, new \PHPStan\Type\ObjectType('RectorPrefix20210519\\TYPO3\\CMS\\Extbase\\Mvc\\Web\\Response'))) {
+        if (!$this->isObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Extbase\\Mvc\\Web\\Response'))) {
             return null;
         }
         if (!$this->isPropertyEnvironmentServiceInUse($node)) {
@@ -122,7 +122,7 @@ CODE_SAMPLE
     {
         $propertyBuilder = new \RectorPrefix20210519\Symplify\Astral\ValueObject\NodeBuilder\PropertyBuilder(self::ENVIRONMENT_SERVICE);
         $propertyBuilder->makeProtected();
-        $type = new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType('RectorPrefix20210519\\TYPO3\\CMS\\Extbase\\Service\\EnvironmentService');
+        $type = new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType('TYPO3\\CMS\\Extbase\\Service\\EnvironmentService');
         $propertyBuilder->setDocComment(new \PhpParser\Comment\Doc(\sprintf('/**%s * @var \\%s%s */', \PHP_EOL, $type->describe(\PHPStan\Type\VerbosityLevel::typeOnly()), \PHP_EOL)));
         return $propertyBuilder->getNode();
     }
@@ -143,7 +143,7 @@ CODE_SAMPLE
     private function addInjectEnvironmentServiceMethod(\PhpParser\Node\Stmt\Class_ $node) : void
     {
         $paramBuilder = new \RectorPrefix20210519\Symplify\Astral\ValueObject\NodeBuilder\ParamBuilder(self::ENVIRONMENT_SERVICE);
-        $paramBuilder->setType(new \PhpParser\Node\Name\FullyQualified('RectorPrefix20210519\\TYPO3\\CMS\\Extbase\\Service\\EnvironmentService'));
+        $paramBuilder->setType(new \PhpParser\Node\Name\FullyQualified('TYPO3\\CMS\\Extbase\\Service\\EnvironmentService'));
         $param = $paramBuilder->getNode();
         $propertyAssignNode = $this->nodeFactory->createPropertyAssignmentWithExpr(self::ENVIRONMENT_SERVICE, new \PhpParser\Node\Expr\Variable(self::ENVIRONMENT_SERVICE));
         $classMethodBuilder = new \RectorPrefix20210519\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder('injectEnvironmentService');

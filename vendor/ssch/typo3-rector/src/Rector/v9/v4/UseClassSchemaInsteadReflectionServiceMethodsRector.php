@@ -91,7 +91,7 @@ CODE_SAMPLE
      */
     public function refactor($node) : ?\PhpParser\Node
     {
-        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('RectorPrefix20210519\\TYPO3\\CMS\\Extbase\\Reflection\\ReflectionService'))) {
+        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Extbase\\Reflection\\ReflectionService'))) {
             return null;
         }
         if (!$this->isNames($node->name, ['getClassPropertyNames', 'getPropertyTagsValues', 'getPropertyTagValues', 'getClassTagsValues', 'getClassTagValues', 'getMethodTagsValues', self::HAS_METHOD, 'getMethodParameters', 'isClassTaggedWith', 'isPropertyTaggedWith'])) {

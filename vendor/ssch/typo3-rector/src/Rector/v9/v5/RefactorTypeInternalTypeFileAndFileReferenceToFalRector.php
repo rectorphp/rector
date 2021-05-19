@@ -106,7 +106,7 @@ final class RefactorTypeInternalTypeFileAndFileReferenceToFalRector extends \Rec
                 if (null !== $allowed) {
                     $args[] = $allowed;
                 }
-                $configValue->value = $this->nodeFactory->createStaticCall('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Utility\\ExtensionManagementUtility', 'getFileFieldTCAConfig', $args);
+                $configValue->value = $this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\ExtensionManagementUtility', 'getFileFieldTCAConfig', $args);
             }
         }
         if ($hasAstBeenChanged) {

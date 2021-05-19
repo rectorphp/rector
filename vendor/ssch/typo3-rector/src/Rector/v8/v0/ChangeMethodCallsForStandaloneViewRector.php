@@ -22,7 +22,7 @@ final class ChangeMethodCallsForStandaloneViewRector extends \Rector\Core\Rector
      *
      * @var array<string, array<string, string>>
      */
-    private const OLD_TO_NEW_METHODS_BY_CLASS = ['RectorPrefix20210519\\TYPO3\\CMS\\Fluid\\View\\StandaloneView' => ['setLayoutRootPath' => 'setLayoutRootPaths', 'getLayoutRootPath' => 'getLayoutRootPaths', 'setPartialRootPath' => 'setPartialRootPaths', 'getPartialRootPath' => 'getPartialRootPaths']];
+    private const OLD_TO_NEW_METHODS_BY_CLASS = ['TYPO3\\CMS\\Fluid\\View\\StandaloneView' => ['setLayoutRootPath' => 'setLayoutRootPaths', 'getLayoutRootPath' => 'getLayoutRootPaths', 'setPartialRootPath' => 'setPartialRootPaths', 'getPartialRootPath' => 'getPartialRootPaths']];
     /**
      * @codeCoverageIgnore
      */

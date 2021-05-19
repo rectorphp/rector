@@ -40,7 +40,7 @@ final class UseLogMethodInsteadOfNewLog2Rector extends \Rector\Core\Rector\Abstr
      */
     public function refactor($node) : ?\PhpParser\Node
     {
-        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('RectorPrefix20210519\\TYPO3\\CMS\\Core\\DataHandling\\DataHandler'))) {
+        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\DataHandling\\DataHandler'))) {
             return null;
         }
         if (!$this->isName($node->name, 'newlog2')) {

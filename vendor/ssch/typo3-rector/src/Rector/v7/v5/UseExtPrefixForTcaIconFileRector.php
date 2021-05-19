@@ -90,7 +90,7 @@ CODE_SAMPLE
             if (!$staticCall instanceof \PhpParser\Node\Expr\StaticCall) {
                 return;
             }
-            if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($staticCall, new \PHPStan\Type\ObjectType('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Utility\\ExtensionManagementUtility'))) {
+            if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($staticCall, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Utility\\ExtensionManagementUtility'))) {
                 return;
             }
             if (!$this->isName($staticCall->name, 'extRelPath')) {

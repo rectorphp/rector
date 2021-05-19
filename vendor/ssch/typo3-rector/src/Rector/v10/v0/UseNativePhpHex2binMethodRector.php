@@ -28,7 +28,7 @@ final class UseNativePhpHex2binMethodRector extends \Rector\Core\Rector\Abstract
      */
     public function refactor($node) : ?\PhpParser\Node
     {
-        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('RectorPrefix20210519\\TYPO3\\CMS\\Extbase\\Utility\\TypeHandlingUtility'))) {
+        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Extbase\\Utility\\TypeHandlingUtility'))) {
             return null;
         }
         if (!$this->isName($node->name, 'hex2bin')) {

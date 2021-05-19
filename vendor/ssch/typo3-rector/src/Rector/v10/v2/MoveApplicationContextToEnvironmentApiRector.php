@@ -27,13 +27,13 @@ final class MoveApplicationContextToEnvironmentApiRector extends \Rector\Core\Re
      */
     public function refactor($node) : ?\PhpParser\Node
     {
-        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Utility\\GeneralUtility'))) {
+        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Utility\\GeneralUtility'))) {
             return null;
         }
         if (!$this->isName($node->name, 'getApplicationContext')) {
             return null;
         }
-        return $this->nodeFactory->createStaticCall('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Core\\Environment', 'getContext', []);
+        return $this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Core\\Environment', 'getContext', []);
     }
     /**
      * @codeCoverageIgnore

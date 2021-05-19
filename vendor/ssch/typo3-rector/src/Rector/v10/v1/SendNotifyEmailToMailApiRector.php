@@ -80,7 +80,7 @@ final class SendNotifyEmailToMailApiRector extends \Rector\Core\Rector\AbstractR
      */
     public function refactor($node) : ?\PhpParser\Node
     {
-        if ($this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('RectorPrefix20210519\\TYPO3\\CMS\\Frontend\\ContentObject\\ContentObjectRenderer'))) {
+        if ($this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Frontend\\ContentObject\\ContentObjectRenderer'))) {
             return null;
         }
         if (!$this->isName($node->name, 'sendNotifyEmail')) {
@@ -152,7 +152,7 @@ CODE_SAMPLE
     }
     private function initializeMailClass() : \PhpParser\Node
     {
-        return new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable(self::MAIL), $this->nodeFactory->createStaticCall('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'makeInstance', [$this->nodeFactory->createClassConstReference('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Mail\\MailMessage')])));
+        return new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable(self::MAIL), $this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'makeInstance', [$this->nodeFactory->createClassConstReference('TYPO3\\CMS\\Core\\Mail\\MailMessage')])));
     }
     private function trimMessage(\PhpParser\Node\Expr\MethodCall $node) : \PhpParser\Node
     {
@@ -168,7 +168,7 @@ CODE_SAMPLE
     }
     private function mailFromMethodCall() : \PhpParser\Node\Expr\MethodCall
     {
-        return $this->nodeFactory->createMethodCall(self::MAIL, 'from', [new \PhpParser\Node\Expr\New_(new \PhpParser\Node\Name\FullyQualified('RectorPrefix20210519\\Symfony\\Component\\Mime\\Address'), [$this->nodeFactory->createArg(new \PhpParser\Node\Expr\Variable(self::SENDER_ADDRESS)), $this->nodeFactory->createArg(new \PhpParser\Node\Expr\Variable('senderName'))])]);
+        return $this->nodeFactory->createMethodCall(self::MAIL, 'from', [new \PhpParser\Node\Expr\New_(new \PhpParser\Node\Name\FullyQualified('Symfony\\Component\\Mime\\Address'), [$this->nodeFactory->createArg(new \PhpParser\Node\Expr\Variable(self::SENDER_ADDRESS)), $this->nodeFactory->createArg(new \PhpParser\Node\Expr\Variable('senderName'))])]);
     }
     private function ifSenderAddress() : \PhpParser\Node
     {
@@ -195,7 +195,7 @@ CODE_SAMPLE
     }
     private function parsedRecipients(\PhpParser\Node\Expr\MethodCall $node) : \PhpParser\Node\Stmt\Expression
     {
-        return new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable(self::PARSED_RECIPIENTS), $this->nodeFactory->createStaticCall('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Utility\\MailUtility', 'parseAddresses', [$node->args[1]])));
+        return new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable(self::PARSED_RECIPIENTS), $this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\MailUtility', 'parseAddresses', [$node->args[1]])));
     }
     private function ifParsedRecipients() : \PhpParser\Node\Stmt\If_
     {
@@ -210,7 +210,7 @@ CODE_SAMPLE
     }
     private function parsedReplyTo(\PhpParser\Node\Expr $replyTo) : \PhpParser\Node
     {
-        return new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable(self::PARSED_REPLY_TO), $this->nodeFactory->createStaticCall('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Utility\\MailUtility', 'parseAddresses', [$replyTo])));
+        return new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable(self::PARSED_REPLY_TO), $this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\MailUtility', 'parseAddresses', [$replyTo])));
     }
     private function methodReplyTo() : \PhpParser\Node
     {

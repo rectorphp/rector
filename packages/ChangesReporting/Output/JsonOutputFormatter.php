@@ -8,7 +8,7 @@ use Rector\ChangesReporting\Annotation\RectorsChangelogResolver;
 use Rector\ChangesReporting\Contract\Output\OutputFormatterInterface;
 use Rector\Core\Configuration\Configuration;
 use Rector\Core\ValueObject\ProcessResult;
-use Symplify\SmartFileSystem\SmartFileSystem;
+use RectorPrefix20210519\Symplify\SmartFileSystem\SmartFileSystem;
 final class JsonOutputFormatter implements \Rector\ChangesReporting\Contract\Output\OutputFormatterInterface
 {
     /**
@@ -27,7 +27,7 @@ final class JsonOutputFormatter implements \Rector\ChangesReporting\Contract\Out
      * @var \Rector\ChangesReporting\Annotation\RectorsChangelogResolver
      */
     private $rectorsChangelogResolver;
-    public function __construct(\Rector\Core\Configuration\Configuration $configuration, \Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \Rector\ChangesReporting\Annotation\RectorsChangelogResolver $rectorsChangelogResolver)
+    public function __construct(\Rector\Core\Configuration\Configuration $configuration, \RectorPrefix20210519\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \Rector\ChangesReporting\Annotation\RectorsChangelogResolver $rectorsChangelogResolver)
     {
         $this->configuration = $configuration;
         $this->smartFileSystem = $smartFileSystem;

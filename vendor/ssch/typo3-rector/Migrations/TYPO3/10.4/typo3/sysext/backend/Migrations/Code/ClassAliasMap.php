@@ -14,4 +14,4 @@ namespace RectorPrefix20210519;
  *
  * The TYPO3 project - inspiring people to share!
  */
-return ['RectorPrefix20210519\\TYPO3\\CMS\\Lowlevel\\Utility\\ArrayBrowser' => \RectorPrefix20210519\TYPO3\CMS\Backend\View\ArrayBrowser::class];
+return ['TYPO3\\CMS\\Lowlevel\\Utility\\ArrayBrowser' => \RectorPrefix20210519\TYPO3\CMS\Backend\View\ArrayBrowser::class];

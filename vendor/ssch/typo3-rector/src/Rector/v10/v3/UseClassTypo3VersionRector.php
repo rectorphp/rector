@@ -34,7 +34,7 @@ final class UseClassTypo3VersionRector extends \Rector\Core\Rector\AbstractRecto
             return null;
         }
         $methodCall = $this->isName($node->name, 'TYPO3_version') ? 'getVersion' : 'getBranch';
-        return $this->nodeFactory->createMethodCall($this->nodeFactory->createStaticCall('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'makeInstance', [$this->nodeFactory->createClassConstReference('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Information\\Typo3Version')]), $methodCall);
+        return $this->nodeFactory->createMethodCall($this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'makeInstance', [$this->nodeFactory->createClassConstReference('TYPO3\\CMS\\Core\\Information\\Typo3Version')]), $methodCall);
     }
     /**
      * @codeCoverageIgnore

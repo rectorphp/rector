@@ -42,7 +42,7 @@ final class RefactorProcessOutputRector extends \Rector\Core\Rector\AbstractRect
             $this->refactorToNewMethodCalls($node);
             return null;
         }
-        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('RectorPrefix20210519\\TYPO3\\CMS\\Frontend\\Controller\\TypoScriptFrontendController'))) {
+        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Frontend\\Controller\\TypoScriptFrontendController'))) {
             return null;
         }
         if (!$this->isName($node->name, 'processOutput')) {
