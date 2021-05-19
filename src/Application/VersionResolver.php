@@ -4,52 +4,47 @@ declare(strict_types=1);
 
 namespace Rector\Core\Application;
 
-use Composer\InstalledVersions;
-use Nette\Utils\Strings;
+use DateTimeInterface;
+use Rector\Core\Exception\VersionException;
+use Symfony\Component\Process\Process;
+use Symplify\PackageBuilder\Console\ShellCode;
 
 /**
- * Inspired by https://github.com/symplify/symplify/pull/3179/files
- * Local resolver is needed, because PHPStan is unprefixing its InstalledVersion classes and the API is changing way too often.
- * This makes sure it works without dependency on external conditions.
+ * Inspired by https://github.com/composer/composer/blob/master/src/Composer/Composer.php
+ * See https://github.com/composer/composer/blob/6587715d0f8cae0cd39073b3bc5f018d0e6b84fe/src/Composer/Compiler.php#L208
  */
 final class VersionResolver
 {
-    public function resolve(): string
-    {
-        // give local IntalledVersions a priority above anything else
-        $intalledVersionsFilepath = __DIR__ . '/../../vendor/composer/InstalledVersions.php';
-        if (file_exists($intalledVersionsFilepath)) {
-            require_once $intalledVersionsFilepath;
-        }
-
-        $installedRawData = InstalledVersions::getRawData();
-
-        $rectorPackageData = $this->resolvePackageData($installedRawData);
-        if ($rectorPackageData === null) {
-            return 'Unknown';
-        }
-
-        if (isset($rectorPackageData['replaced'])) {
-            return 'replaced@' . $rectorPackageData['replaced'][0];
-        }
-
-        if ($rectorPackageData['version'] === 'dev-main') {
-            $reference = $rectorPackageData['reference'] ?? null;
-            if ($reference === null) {
-                return 'dev-main';
-            }
-
-            return 'dev-main@' . Strings::substring($rectorPackageData['reference'], 0, 7);
-        }
-
-        return $rectorPackageData['version'];
-    }
+    /**
+     * @var string
+     */
+    public const PACKAGE_VERSION = '@package_version@';
 
     /**
-     * @param mixed[] $installedRawData
+     * @var string
      */
-    private function resolvePackageData(array $installedRawData): ?array
+    public const RELEASE_DATE = '@release_date@';
+
+    public static function resolvePackageVersion(): string
     {
-        return $installedRawData['versions']['rector/rector-src'] ?? $installedRawData['versions']['rector/rector'] ?? $installedRawData['root'] ?? null;
+        $process = new Process(['git', 'log', '--pretty="%H"', '-n1', 'HEAD'], __DIR__);
+        if ($process->run() !== ShellCode::SUCCESS) {
+            throw new VersionException(
+                'You must ensure to run compile from composer git repository clone and that git binary is available.'
+            );
+        }
+        return trim($process->getOutput());
+    }
+
+    public static function resolverReleaseDate(): DateTimeInterface
+    {
+        $process = new Process(['git', 'log', '-n1', '--pretty=%ci', 'HEAD'], __DIR__);
+        if ($process->run() !== ShellCode::ERROR) {
+            throw new VersionException(
+                'You must ensure to run compile from composer git repository clone and that git binary is available.'
+            );
+        }
+
+        return new \DateTime(trim($process->getOutput()));
     }
 }

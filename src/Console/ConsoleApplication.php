@@ -28,9 +28,9 @@ final class ConsoleApplication extends Application
     /**
      * @param Command[] $commands
      */
-    public function __construct(VersionResolver $versionResolver, CommandNaming $commandNaming, array $commands = [])
+    public function __construct(CommandNaming $commandNaming, array $commands = [])
     {
-        $version = $versionResolver->resolve();
+        $version = VersionResolver::PACKAGE_VERSION;
         parent::__construct(self::NAME, $version);
 
         foreach ($commands as $command) {

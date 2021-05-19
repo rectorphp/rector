@@ -7,6 +7,7 @@ use Nette\Utils\Strings;
 use Rector\Compiler\PhpScoper\StaticEasyPrefixer;
 use Rector\Compiler\Unprefixer;
 use Rector\Compiler\ValueObject\ScoperOption;
+use Rector\Core\Application\VersionResolver;
 
 require_once __DIR__ . '/vendor/autoload.php';
 
@@ -84,6 +85,21 @@ return [
             }
 
             return $content;
+        },
+
+
+        function (string $filePath, string $prefix, string $content): string {
+            if (! Strings::endsWith($filePath, 'src/Application/VersionResolver.php')) {
+                return $content;
+            }
+
+            return strtr(
+                $content,
+                [
+                    '@package_version@' => VersionResolver::resolvePackageVersion(),
+                    '@release_date@' => VersionResolver::resolverReleaseDate(),
+                ]
+            );
         },
 
         // unprefixed SmartFileInfo

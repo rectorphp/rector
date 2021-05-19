@@ -35,6 +35,7 @@
         "symfony/dependency-injection": "^5.2",
         "symfony/finder": "^5.2",
         "symfony/http-kernel": "^5.2",
+        "symfony/process": "^5.2",
         "symfony/yaml": "^5.2",
         "symplify/astral": "^9.3.10",
         "symplify/autowire-array-parameter": "^9.3.10",
