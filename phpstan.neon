@@ -448,7 +448,9 @@ parameters:
 
         -
             message: '#Function "function_exists\(\)" cannot be used/left in the code#'
-            path: src/functions/node_helper.php
+            paths:
+                 - src/functions/node_helper.php
+                 - packages/ReadWrite/Guard/VariableToConstantGuard.php
 
         # upgrade to PHP 7.4 wip
         - '#This property type might be inlined to PHP\. Do you have confidence it is correct\? Put it here#'

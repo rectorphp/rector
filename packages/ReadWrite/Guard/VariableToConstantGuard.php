@@ -73,7 +73,12 @@ final class VariableToConstantGuard
 
         // this is needed, as native function reflection does not have access to referenced parameters
         if ($functionReflection instanceof NativeFunctionReflection) {
-            $nativeFunctionReflection = new ReflectionFunction($functionReflection->getName());
+            $functionName = $functionReflection->getName();
+            if (! function_exists($functionName)) {
+                return [];
+            }
+
+            $nativeFunctionReflection = new ReflectionFunction($functionName);
         } else {
             $nativeFunctionReflection = $this->privatesAccessor->getPrivateProperty($functionReflection, 'reflection');
         }
