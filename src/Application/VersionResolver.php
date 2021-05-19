@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Core\Application;
 
-use DateTimeInterface;
+use DateTime;
 use Rector\Core\Exception\VersionException;
 use RectorPrefix20210519\Symfony\Component\Process\Process;
 use RectorPrefix20210519\Symplify\PackageBuilder\Console\ShellCode;
@@ -16,11 +16,11 @@ final class VersionResolver
     /**
      * @var string
      */
-    public const PACKAGE_VERSION = '"16b51b8226b05e04be7e463d098072b02835fbbf"';
+    public const PACKAGE_VERSION = '"6e5815c1791c173c8cd9932523c4fbbb769275d2"';
     /**
      * @var string
      */
-    public const RELEASE_DATE = '2021-05-19 08:04:18';
+    public const RELEASE_DATE = '2021-05-19 08:19:46';
     public static function resolvePackageVersion() : string
     {
         $process = new \RectorPrefix20210519\Symfony\Component\Process\Process(['git', 'log', '--pretty="%H"', '-n1', 'HEAD'], __DIR__);
@@ -29,7 +29,7 @@ final class VersionResolver
         }
         return \trim($process->getOutput());
     }
-    public static function resolverReleaseDateTime() : \DateTimeInterface
+    public static function resolverReleaseDateTime() : \DateTime
     {
         $process = new \RectorPrefix20210519\Symfony\Component\Process\Process(['git', 'log', '-n1', '--pretty=%ci', 'HEAD'], __DIR__);
         if ($process->run() !== \RectorPrefix20210519\Symplify\PackageBuilder\Console\ShellCode::SUCCESS) {
