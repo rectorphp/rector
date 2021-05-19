@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Core\Application;
 
-use DateTimeInterface;
+use DateTime;
 use Rector\Core\Exception\VersionException;
 use Symfony\Component\Process\Process;
 use Symplify\PackageBuilder\Console\ShellCode;
@@ -36,7 +36,7 @@ final class VersionResolver
         return trim($process->getOutput());
     }
 
-    public static function resolverReleaseDateTime(): DateTimeInterface
+    public static function resolverReleaseDateTime(): DateTime
     {
         $process = new Process(['git', 'log', '-n1', '--pretty=%ci', 'HEAD'], __DIR__);
         if ($process->run() !== ShellCode::SUCCESS) {
@@ -45,6 +45,6 @@ final class VersionResolver
             );
         }
 
-        return new \DateTime(trim($process->getOutput()));
+        return new DateTime(trim($process->getOutput()));
     }
 }

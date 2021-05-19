@@ -31,6 +31,7 @@
         "rector/rector-phpunit": "^0.11.1",
         "rector/rector-symfony": "^0.11.2",
         "sebastian/diff": "^4.0.4",
+        "ssch/typo3-rector": "^0.11.1",
         "symfony/console": "^5.2",
         "symfony/dependency-injection": "^5.2",
         "symfony/finder": "^5.2",

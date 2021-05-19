@@ -28,6 +28,7 @@ final class StaticEasyPrefixer
         'Rector\*',
         // we use this API a lot
         'PhpParser\*',
+        'Ssch\TYPO3Rector\*',
 
         // phpstan needs to be here, as phpstan-extracted/vendor autoload is statically generated and namespaces cannot be changed
         'PHPStan\*',
