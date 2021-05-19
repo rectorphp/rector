@@ -82,6 +82,7 @@ jobs:
             -   run: |
                     cp -R build/target-repository-php70/. rector-prefixed-downgraded-php70
                     cp -R templates rector-prefixed-downgraded-php70/
+                    cp CONTRIBUTING.md rector-prefixed-downgraded-php70/
 
             # 6. clone remote repository, so we can push it
             -
