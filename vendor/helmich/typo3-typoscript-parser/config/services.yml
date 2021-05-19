@@ -1,0 +1,10 @@
+services:
+  tokenizer:
+    class: RectorPrefix20210519\Helmich\TypoScriptParser\Tokenizer\Tokenizer
+  token_printer_structured:
+    class: RectorPrefix20210519\Helmich\TypoScriptParser\Tokenizer\Printer\StructuredTokenPrinter
+  token_printer_code:
+    class: RectorPrefix20210519\Helmich\TypoScriptParser\Tokenizer\Printer\CodeTokenPrinter
+  parser:
+    class: RectorPrefix20210519\Helmich\TypoScriptParser\Parser\Parser
+    arguments: ['@tokenizer']
