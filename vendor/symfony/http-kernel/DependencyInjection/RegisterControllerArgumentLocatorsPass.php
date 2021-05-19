@@ -116,7 +116,7 @@ class RegisterControllerArgumentLocatorsPass implements \RectorPrefix20210519\Sy
                 $args = [];
                 foreach ($parameters as $p) {
                     /** @var \ReflectionParameter $p */
-                    $type = \ltrim($target = \RectorPrefix20210519\Symfony\Component\DependencyInjection\LazyProxy\ProxyHelper::getTypeHint($r, $p), '\\');
+                    $type = \ltrim($target = (string) \RectorPrefix20210519\Symfony\Component\DependencyInjection\LazyProxy\ProxyHelper::getTypeHint($r, $p), '\\');
                     $invalidBehavior = \RectorPrefix20210519\Symfony\Component\DependencyInjection\ContainerInterface::IGNORE_ON_INVALID_REFERENCE;
                     if (isset($arguments[$r->name][$p->name])) {
                         $target = $arguments[$r->name][$p->name];

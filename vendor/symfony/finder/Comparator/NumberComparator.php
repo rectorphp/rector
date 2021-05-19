@@ -40,8 +40,8 @@ class NumberComparator extends \RectorPrefix20210519\Symfony\Component\Finder\Co
      */
     public function __construct(?string $test)
     {
-        if (!\preg_match('#^\\s*(==|!=|[<>]=?)?\\s*([0-9\\.]+)\\s*([kmg]i?)?\\s*$#i', $test, $matches)) {
-            throw new \InvalidArgumentException(\sprintf('Don\'t understand "%s" as a number test.', $test));
+        if (null === $test || !\preg_match('#^\\s*(==|!=|[<>]=?)?\\s*([0-9\\.]+)\\s*([kmg]i?)?\\s*$#i', $test, $matches)) {
+            throw new \InvalidArgumentException(\sprintf('Don\'t understand "%s" as a number test.', $test ?? 'null'));
         }
         $target = $matches[2];
         if (!\is_numeric($target)) {

@@ -80,10 +80,12 @@ class RegisterServiceSubscribersPass extends \RectorPrefix20210519\Symfony\Compo
                 }
                 $serviceMap[$key] = new \RectorPrefix20210519\Symfony\Component\DependencyInjection\Reference($type);
             }
-            if (\false !== ($i = \strpos($name, '::get'))) {
-                $name = \lcfirst(\substr($name, 5 + $i));
-            } elseif (\false !== \strpos($name, '::')) {
-                $name = null;
+            if ($name) {
+                if (\false !== ($i = \strpos($name, '::get'))) {
+                    $name = \lcfirst(\substr($name, 5 + $i));
+                } elseif (\false !== \strpos($name, '::')) {
+                    $name = null;
+                }
             }
             if (null !== $name && !$this->container->has($name) && !$this->container->has($type . ' $' . $name)) {
                 $camelCaseName = \lcfirst(\str_replace(' ', '', \ucwords(\preg_replace('/[^a-zA-Z0-9\\x7f-\\xff]++/', ' ', $name))));

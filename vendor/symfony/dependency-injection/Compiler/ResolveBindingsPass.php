@@ -147,7 +147,7 @@ class ResolveBindingsPass extends \RectorPrefix20210519\Symfony\Component\Depend
                     continue;
                 }
                 $typeHint = \RectorPrefix20210519\Symfony\Component\DependencyInjection\LazyProxy\ProxyHelper::getTypeHint($reflectionMethod, $parameter);
-                if (\array_key_exists($k = \ltrim($typeHint, '\\') . ' $' . $parameter->name, $bindings)) {
+                if ($typeHint && \array_key_exists($k = \ltrim($typeHint, '\\') . ' $' . $parameter->name, $bindings)) {
                     $arguments[$key] = $this->getBindingValue($bindings[$k]);
                     continue;
                 }

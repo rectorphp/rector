@@ -135,7 +135,7 @@ class RouterListener implements \RectorPrefix20210519\Symfony\Component\EventDis
     private function createWelcomeResponse() : \RectorPrefix20210519\Symfony\Component\HttpFoundation\Response
     {
         $version = \RectorPrefix20210519\Symfony\Component\HttpKernel\Kernel::VERSION;
-        $projectDir = \realpath($this->projectDir) . \DIRECTORY_SEPARATOR;
+        $projectDir = \realpath((string) $this->projectDir) . \DIRECTORY_SEPARATOR;
         $docVersion = \substr(\RectorPrefix20210519\Symfony\Component\HttpKernel\Kernel::VERSION, 0, 3);
         \ob_start();
         include \dirname(__DIR__) . '/Resources/welcome.html.php';

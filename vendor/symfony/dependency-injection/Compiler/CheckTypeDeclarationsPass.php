@@ -65,8 +65,13 @@ final class CheckTypeDeclarationsPass extends \RectorPrefix20210519\Symfony\Comp
         if (!$value instanceof \RectorPrefix20210519\Symfony\Component\DependencyInjection\Definition || $value->hasErrors() || $value->isDeprecated()) {
             return parent::processValue($value, $isRoot);
         }
-        if (!$this->autoload && !\class_exists($class = $value->getClass(), \false) && !\interface_exists($class, \false)) {
-            return parent::processValue($value, $isRoot);
+        if (!$this->autoload) {
+            if (!($class = $value->getClass())) {
+                return parent::processValue($value, $isRoot);
+            }
+            if (!\class_exists($class, \false) && !\interface_exists($class, \false)) {
+                return parent::processValue($value, $isRoot);
+            }
         }
         if (\RectorPrefix20210519\Symfony\Component\DependencyInjection\ServiceLocator::class === $value->getClass()) {
             return parent::processValue($value, $isRoot);
@@ -150,7 +155,7 @@ final class CheckTypeDeclarationsPass extends \RectorPrefix20210519\Symfony\Comp
         $class = null;
         if ($value instanceof \RectorPrefix20210519\Symfony\Component\DependencyInjection\Definition) {
             $class = $value->getClass();
-            if (isset(self::BUILTIN_TYPES[\strtolower($class)])) {
+            if ($class && isset(self::BUILTIN_TYPES[\strtolower($class)])) {
                 $class = \strtolower($class);
             } elseif (!$class || !$this->autoload && !\class_exists($class, \false) && !\interface_exists($class, \false)) {
                 return;
