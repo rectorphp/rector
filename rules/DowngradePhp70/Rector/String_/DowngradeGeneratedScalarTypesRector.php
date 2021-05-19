@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\DowngradePhp70\Rector\String_;
 
-use RectorPrefix20210518\Nette\Utils\Strings;
+use RectorPrefix20210519\Nette\Utils\Strings;
 use PhpParser\Error;
 use PhpParser\Node;
 use PhpParser\Node\Scalar\String_;
@@ -119,7 +119,7 @@ CODE_SAMPLE
             return \true;
         }
         foreach (self::FILES_TO_INCLUDE as $fileToInclude) {
-            if (\RectorPrefix20210518\Nette\Utils\Strings::endsWith($fileInfo->getRealPath(), $fileToInclude)) {
+            if (\RectorPrefix20210519\Nette\Utils\Strings::endsWith($fileInfo->getRealPath(), $fileToInclude)) {
                 return \true;
             }
         }

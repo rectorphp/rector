@@ -1,15 +1,15 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210518;
+namespace RectorPrefix20210519;
 
 use Rector\Core\Bootstrap\RectorConfigsResolver;
 use Rector\Core\Console\ConsoleApplication;
 use Rector\Core\Console\Style\SymfonyStyleFactory;
 use Rector\Core\DependencyInjection\RectorContainerFactory;
 use Rector\Core\HttpKernel\RectorKernel;
-use RectorPrefix20210518\Symplify\PackageBuilder\Console\ShellCode;
-use RectorPrefix20210518\Symplify\PackageBuilder\Reflection\PrivatesCaller;
+use RectorPrefix20210519\Symplify\PackageBuilder\Console\ShellCode;
+use RectorPrefix20210519\Symplify\PackageBuilder\Reflection\PrivatesCaller;
 // @ intentionally: continue anyway
 @\ini_set('memory_limit', '-1');
 // Performance boost
@@ -18,20 +18,20 @@ use RectorPrefix20210518\Symplify\PackageBuilder\Reflection\PrivatesCaller;
 \gc_disable();
 \define('__RECTOR_RUNNING__', \true);
 // Require Composer autoload.php
-$autoloadIncluder = new \RectorPrefix20210518\AutoloadIncluder();
+$autoloadIncluder = new \RectorPrefix20210519\AutoloadIncluder();
 $autoloadIncluder->includeDependencyOrRepositoryVendorAutoloadIfExists();
 // load extracted PHPStan with its own preload.php
 $extractedPhpstanAutoload = __DIR__ . '/../vendor/phpstan/phpstan-extracted/vendor/autoload.php';
 if (\file_exists($extractedPhpstanAutoload)) {
     require_once $extractedPhpstanAutoload;
-} elseif (\RectorPrefix20210518\should_include_preload()) {
+} elseif (\RectorPrefix20210519\should_include_preload()) {
     require_once __DIR__ . '/../preload.php';
 }
 require_once __DIR__ . '/../src/constants.php';
 $autoloadIncluder->loadIfExistsAndNotLoadedYet(__DIR__ . '/../vendor/scoper-autoload.php');
 $autoloadIncluder->autoloadProjectAutoloaderFile();
 $autoloadIncluder->autoloadFromCommandLine();
-$symfonyStyleFactory = new \Rector\Core\Console\Style\SymfonyStyleFactory(new \RectorPrefix20210518\Symplify\PackageBuilder\Reflection\PrivatesCaller());
+$symfonyStyleFactory = new \Rector\Core\Console\Style\SymfonyStyleFactory(new \RectorPrefix20210519\Symplify\PackageBuilder\Reflection\PrivatesCaller());
 $symfonyStyle = $symfonyStyleFactory->create();
 $rectorConfigsResolver = new \Rector\Core\Bootstrap\RectorConfigsResolver();
 try {
@@ -40,7 +40,7 @@ try {
     $container = $rectorContainerFactory->createFromBootstrapConfigs($bootstrapConfigs);
 } catch (\Throwable $throwable) {
     $symfonyStyle->error($throwable->getMessage());
-    exit(\RectorPrefix20210518\Symplify\PackageBuilder\Console\ShellCode::ERROR);
+    exit(\RectorPrefix20210519\Symplify\PackageBuilder\Console\ShellCode::ERROR);
 }
 /** @var ConsoleApplication $application */
 $application = $container->get(\Rector\Core\Console\ConsoleApplication::class);
@@ -94,7 +94,7 @@ final class AutoloadIncluder
         require_once $filePath;
     }
 }
-\class_alias('RectorPrefix20210518\\AutoloadIncluder', 'AutoloadIncluder', \false);
+\class_alias('RectorPrefix20210519\\AutoloadIncluder', 'AutoloadIncluder', \false);
 // load local php-parser only in prefixed version or development repository
 function should_include_preload() : bool
 {

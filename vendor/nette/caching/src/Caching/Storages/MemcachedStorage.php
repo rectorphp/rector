@@ -5,14 +5,14 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix20210518\Nette\Caching\Storages;
+namespace RectorPrefix20210519\Nette\Caching\Storages;
 
-use RectorPrefix20210518\Nette;
-use RectorPrefix20210518\Nette\Caching\Cache;
+use RectorPrefix20210519\Nette;
+use RectorPrefix20210519\Nette\Caching\Cache;
 /**
  * Memcached storage using memcached extension.
  */
-class MemcachedStorage implements \RectorPrefix20210518\Nette\Caching\Storage, \RectorPrefix20210518\Nette\Caching\BulkReader
+class MemcachedStorage implements \RectorPrefix20210519\Nette\Caching\Storage, \RectorPrefix20210519\Nette\Caching\BulkReader
 {
     use Nette\SmartObject;
     /** @internal cache structure */
@@ -30,10 +30,10 @@ class MemcachedStorage implements \RectorPrefix20210518\Nette\Caching\Storage, \
     {
         return \extension_loaded('memcached');
     }
-    public function __construct(string $host = 'localhost', int $port = 11211, string $prefix = '', \RectorPrefix20210518\Nette\Caching\Storages\Journal $journal = null)
+    public function __construct(string $host = 'localhost', int $port = 11211, string $prefix = '', \RectorPrefix20210519\Nette\Caching\Storages\Journal $journal = null)
     {
         if (!static::isAvailable()) {
-            throw new \RectorPrefix20210518\Nette\NotSupportedException("PHP extension 'memcached' is not loaded.");
+            throw new \RectorPrefix20210519\Nette\NotSupportedException("PHP extension 'memcached' is not loaded.");
         }
         $this->prefix = $prefix;
         $this->journal = $journal;
@@ -47,7 +47,7 @@ class MemcachedStorage implements \RectorPrefix20210518\Nette\Caching\Storage, \
         if (@$this->memcached->addServer($host, $port, 1) === \false) {
             // @ is escalated to exception
             $error = \error_get_last();
-            throw new \RectorPrefix20210518\Nette\InvalidStateException("Memcached::addServer(): {$error['message']}.");
+            throw new \RectorPrefix20210519\Nette\InvalidStateException("Memcached::addServer(): {$error['message']}.");
         }
     }
     public function getConnection() : \Memcached
@@ -68,7 +68,7 @@ class MemcachedStorage implements \RectorPrefix20210518\Nette\Caching\Storage, \
         //     callbacks => array of callbacks (function, args)
         // )
         // verify dependencies
-        if (!empty($meta[self::META_CALLBACKS]) && !\RectorPrefix20210518\Nette\Caching\Cache::checkCallbacks($meta[self::META_CALLBACKS])) {
+        if (!empty($meta[self::META_CALLBACKS]) && !\RectorPrefix20210519\Nette\Caching\Cache::checkCallbacks($meta[self::META_CALLBACKS])) {
             $this->memcached->delete($key, 0);
             return null;
         }
@@ -87,7 +87,7 @@ class MemcachedStorage implements \RectorPrefix20210518\Nette\Caching\Storage, \
         $result = [];
         $deleteKeys = [];
         foreach ($metas as $prefixedKey => $meta) {
-            if (!empty($meta[self::META_CALLBACKS]) && !\RectorPrefix20210518\Nette\Caching\Cache::checkCallbacks($meta[self::META_CALLBACKS])) {
+            if (!empty($meta[self::META_CALLBACKS]) && !\RectorPrefix20210519\Nette\Caching\Cache::checkCallbacks($meta[self::META_CALLBACKS])) {
                 $deleteKeys[] = $prefixedKey;
             } else {
                 $result[$keys[$prefixedKey]] = $meta[self::META_DATA];
@@ -106,25 +106,25 @@ class MemcachedStorage implements \RectorPrefix20210518\Nette\Caching\Storage, \
     }
     public function write(string $key, $data, array $dp) : void
     {
-        if (isset($dp[\RectorPrefix20210518\Nette\Caching\Cache::ITEMS])) {
-            throw new \RectorPrefix20210518\Nette\NotSupportedException('Dependent items are not supported by MemcachedStorage.');
+        if (isset($dp[\RectorPrefix20210519\Nette\Caching\Cache::ITEMS])) {
+            throw new \RectorPrefix20210519\Nette\NotSupportedException('Dependent items are not supported by MemcachedStorage.');
         }
         $key = \urlencode($this->prefix . $key);
         $meta = [self::META_DATA => $data];
         $expire = 0;
-        if (isset($dp[\RectorPrefix20210518\Nette\Caching\Cache::EXPIRATION])) {
-            $expire = (int) $dp[\RectorPrefix20210518\Nette\Caching\Cache::EXPIRATION];
-            if (!empty($dp[\RectorPrefix20210518\Nette\Caching\Cache::SLIDING])) {
+        if (isset($dp[\RectorPrefix20210519\Nette\Caching\Cache::EXPIRATION])) {
+            $expire = (int) $dp[\RectorPrefix20210519\Nette\Caching\Cache::EXPIRATION];
+            if (!empty($dp[\RectorPrefix20210519\Nette\Caching\Cache::SLIDING])) {
                 $meta[self::META_DELTA] = $expire;
                 // sliding time
             }
         }
-        if (isset($dp[\RectorPrefix20210518\Nette\Caching\Cache::CALLBACKS])) {
-            $meta[self::META_CALLBACKS] = $dp[\RectorPrefix20210518\Nette\Caching\Cache::CALLBACKS];
+        if (isset($dp[\RectorPrefix20210519\Nette\Caching\Cache::CALLBACKS])) {
+            $meta[self::META_CALLBACKS] = $dp[\RectorPrefix20210519\Nette\Caching\Cache::CALLBACKS];
         }
-        if (isset($dp[\RectorPrefix20210518\Nette\Caching\Cache::TAGS]) || isset($dp[\RectorPrefix20210518\Nette\Caching\Cache::PRIORITY])) {
+        if (isset($dp[\RectorPrefix20210519\Nette\Caching\Cache::TAGS]) || isset($dp[\RectorPrefix20210519\Nette\Caching\Cache::PRIORITY])) {
             if (!$this->journal) {
-                throw new \RectorPrefix20210518\Nette\InvalidStateException('CacheJournal has not been provided.');
+                throw new \RectorPrefix20210519\Nette\InvalidStateException('CacheJournal has not been provided.');
             }
             $this->journal->write($key, $dp);
         }
@@ -136,7 +136,7 @@ class MemcachedStorage implements \RectorPrefix20210518\Nette\Caching\Storage, \
     }
     public function clean(array $conditions) : void
     {
-        if (!empty($conditions[\RectorPrefix20210518\Nette\Caching\Cache::ALL])) {
+        if (!empty($conditions[\RectorPrefix20210519\Nette\Caching\Cache::ALL])) {
             $this->memcached->flush();
         } elseif ($this->journal) {
             foreach ($this->journal->clean($conditions) as $entry) {
