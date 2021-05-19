@@ -13,12 +13,11 @@ use PHPStan\Type\DynamicMethodReturnTypeExtension;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
-use RectorPrefix20210519\TYPO3\CMS\Extbase\Validation\ValidatorResolver\ValidatorResolver;
 final class ValidatorResolverDynamicReturnTypeExtension implements \PHPStan\Type\DynamicMethodReturnTypeExtension
 {
     public function getClass() : string
     {
-        return \RectorPrefix20210519\TYPO3\CMS\Extbase\Validation\ValidatorResolver\ValidatorResolver::class;
+        return 'RectorPrefix20210519\\TYPO3\\CMS\\Extbase\\Validation\\ValidatorResolver\\ValidatorResolver';
     }
     public function isMethodSupported(\PHPStan\Reflection\MethodReflection $methodReflection) : bool
     {

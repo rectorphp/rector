@@ -18,20 +18,20 @@ final class OldSeverityToLogLevelMapper
     public function mapSeverityToLogLevel(int $severityValue) : \PhpParser\Node\Expr\ClassConstFetch
     {
         if (0 === $severityValue) {
-            return $this->nodeFactory->createClassConstFetch('TYPO3\\CMS\\Core\\Log\\LogLevel', 'INFO');
+            return $this->nodeFactory->createClassConstFetch('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Log\\LogLevel', 'INFO');
         }
         if (1 === $severityValue) {
-            return $this->nodeFactory->createClassConstFetch('TYPO3\\CMS\\Core\\Log\\LogLevel', 'NOTICE');
+            return $this->nodeFactory->createClassConstFetch('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Log\\LogLevel', 'NOTICE');
         }
         if (2 === $severityValue) {
-            return $this->nodeFactory->createClassConstFetch('TYPO3\\CMS\\Core\\Log\\LogLevel', 'WARNING');
+            return $this->nodeFactory->createClassConstFetch('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Log\\LogLevel', 'WARNING');
         }
         if (3 === $severityValue) {
-            return $this->nodeFactory->createClassConstFetch('TYPO3\\CMS\\Core\\Log\\LogLevel', 'ERROR');
+            return $this->nodeFactory->createClassConstFetch('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Log\\LogLevel', 'ERROR');
         }
         if (4 === $severityValue) {
-            return $this->nodeFactory->createClassConstFetch('TYPO3\\CMS\\Core\\Log\\LogLevel', 'CRITICAL');
+            return $this->nodeFactory->createClassConstFetch('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Log\\LogLevel', 'CRITICAL');
         }
-        return $this->nodeFactory->createClassConstFetch('TYPO3\\CMS\\Core\\Log\\LogLevel', 'INFO');
+        return $this->nodeFactory->createClassConstFetch('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Log\\LogLevel', 'INFO');
     }
 }

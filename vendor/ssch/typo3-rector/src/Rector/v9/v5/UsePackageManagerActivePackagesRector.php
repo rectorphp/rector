@@ -36,7 +36,7 @@ final class UsePackageManagerActivePackagesRector extends \Rector\Core\Rector\Ab
     public function refactor($node) : ?\PhpParser\Node
     {
         if ($this->typo3NodeResolver->isTypo3Global($node, \Ssch\TYPO3Rector\Helper\Typo3NodeResolver::TYPO3_LOADED_EXT)) {
-            return $this->nodeFactory->createMethodCall($this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'makeInstance', [$this->nodeFactory->createClassConstReference('TYPO3\\CMS\\Core\\Package\\PackageManager')]), 'getActivePackages');
+            return $this->nodeFactory->createMethodCall($this->nodeFactory->createStaticCall('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'makeInstance', [$this->nodeFactory->createClassConstReference('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Package\\PackageManager')]), 'getActivePackages');
         }
         return null;
     }

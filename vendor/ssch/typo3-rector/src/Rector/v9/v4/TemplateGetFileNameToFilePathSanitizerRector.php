@@ -101,7 +101,7 @@ CODE_SAMPLE
     }
     private function createSanitizeMethod(\PhpParser\Node\Expr\Assign $parentNode, \PhpParser\Node\Expr\Cast\String_ $filePath) : \PhpParser\Node\Stmt\Expression
     {
-        return new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign($parentNode->var, $this->nodeFactory->createMethodCall($this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'makeInstance', [$this->nodeFactory->createClassConstReference('TYPO3\\CMS\\Frontend\\Resource\\FilePathSanitizer')]), 'sanitize', [$filePath])));
+        return new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign($parentNode->var, $this->nodeFactory->createMethodCall($this->nodeFactory->createStaticCall('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'makeInstance', [$this->nodeFactory->createClassConstReference('RectorPrefix20210519\\TYPO3\\CMS\\Frontend\\Resource\\FilePathSanitizer')]), 'sanitize', [$filePath])));
     }
     private function createNullAssignment(\PhpParser\Node\Expr\Assign $parentNode) : \PhpParser\Node\Stmt\Expression
     {
@@ -109,7 +109,7 @@ CODE_SAMPLE
     }
     private function createTimeTrackerLogMessage() : \PhpParser\Node\Stmt\Expression
     {
-        $makeInstanceOfTimeTracker = $this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'makeInstance', [$this->nodeFactory->createClassConstReference('TYPO3\\CMS\\Core\\TimeTracker\\TimeTracker')]);
+        $makeInstanceOfTimeTracker = $this->nodeFactory->createStaticCall('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'makeInstance', [$this->nodeFactory->createClassConstReference('RectorPrefix20210519\\TYPO3\\CMS\\Core\\TimeTracker\\TimeTracker')]);
         return new \PhpParser\Node\Stmt\Expression($this->nodeFactory->createMethodCall($makeInstanceOfTimeTracker, 'setTSlogMessage', [$this->nodeFactory->createMethodCall(new \PhpParser\Node\Expr\Variable('e'), 'getMessage'), $this->nodeFactory->createArg(3)]));
     }
     /**
@@ -117,11 +117,11 @@ CODE_SAMPLE
      */
     private function createCatchBlockToLog(array $stmts) : \PhpParser\Node\Stmt\Catch_
     {
-        return new \PhpParser\Node\Stmt\Catch_([new \PhpParser\Node\Name('TYPO3\\CMS\\Core\\Resource\\Exception\\InvalidPathException'), new \PhpParser\Node\Name('TYPO3\\CMS\\Core\\Resource\\Exception\\FileDoesNotExistException'), new \PhpParser\Node\Name('TYPO3\\CMS\\Core\\Resource\\Exception\\InvalidFileException')], new \PhpParser\Node\Expr\Variable('e'), $stmts);
+        return new \PhpParser\Node\Stmt\Catch_([new \PhpParser\Node\Name('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Resource\\Exception\\InvalidPathException'), new \PhpParser\Node\Name('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Resource\\Exception\\FileDoesNotExistException'), new \PhpParser\Node\Name('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Resource\\Exception\\InvalidFileException')], new \PhpParser\Node\Expr\Variable('e'), $stmts);
     }
     private function createCatchBlockToIgnore(\PhpParser\Node\Stmt\Expression $assignmentNodeNull) : \PhpParser\Node\Stmt\Catch_
     {
-        return new \PhpParser\Node\Stmt\Catch_([new \PhpParser\Node\Name('TYPO3\\CMS\\Core\\Resource\\Exception\\InvalidFileNameException')], new \PhpParser\Node\Expr\Variable('e'), [$assignmentNodeNull]);
+        return new \PhpParser\Node\Stmt\Catch_([new \PhpParser\Node\Name('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Resource\\Exception\\InvalidFileNameException')], new \PhpParser\Node\Expr\Variable('e'), [$assignmentNodeNull]);
     }
     private function createIfLog() : \PhpParser\Node\Stmt\If_
     {

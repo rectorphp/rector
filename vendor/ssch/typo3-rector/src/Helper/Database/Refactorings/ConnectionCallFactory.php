@@ -19,7 +19,7 @@ final class ConnectionCallFactory
     }
     public function createConnectionCall(\PhpParser\Node\Arg $firstArgument) : \PhpParser\Node\Expr\Assign
     {
-        $connection = $this->nodeFactory->createMethodCall($this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'makeInstance', [$this->nodeFactory->createClassConstReference('TYPO3\\CMS\\Core\\Database\\ConnectionPool')]), 'getConnectionForTable', [$this->nodeFactory->createArg($firstArgument->value)]);
+        $connection = $this->nodeFactory->createMethodCall($this->nodeFactory->createStaticCall('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'makeInstance', [$this->nodeFactory->createClassConstReference('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Database\\ConnectionPool')]), 'getConnectionForTable', [$this->nodeFactory->createArg($firstArgument->value)]);
         return new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable('connection'), $connection);
     }
 }

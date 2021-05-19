@@ -33,7 +33,7 @@ final class UseControllerClassesInExtbasePluginsAndModulesRector extends \Rector
      */
     public function refactor($node) : ?\PhpParser\Node
     {
-        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Extbase\\Utility\\ExtensionUtility'))) {
+        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('RectorPrefix20210519\\TYPO3\\CMS\\Extbase\\Utility\\ExtensionUtility'))) {
             return null;
         }
         if (!$this->isNames($node->name, ['configurePlugin', 'registerModule'])) {

@@ -32,7 +32,7 @@ final class BackendUtilityEditOnClickRector extends \Rector\Core\Rector\Abstract
      */
     public function refactor($node) : ?\PhpParser\Node
     {
-        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Backend\\Utility\\BackendUtility'))) {
+        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('RectorPrefix20210519\\TYPO3\\CMS\\Backend\\Utility\\BackendUtility'))) {
             return null;
         }
         if (!$this->isName($node->name, 'editOnClick')) {
@@ -60,10 +60,10 @@ CODE_SAMPLE
     }
     private function createUriBuilderCall(\PhpParser\Node\Arg $firstArgument) : \PhpParser\Node\Expr\BinaryOp\Concat
     {
-        return new \PhpParser\Node\Expr\BinaryOp\Concat(new \PhpParser\Node\Expr\BinaryOp\Concat($this->nodeFactory->createMethodCall($this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'makeInstance', [$this->nodeFactory->createClassConstReference('TYPO3\\CMS\\Backend\\Routing\\UriBuilder')]), 'buildUriFromRoute', [$this->nodeFactory->createArg('record_edit')]), $firstArgument->value), new \PhpParser\Node\Scalar\String_('&returnUrl='));
+        return new \PhpParser\Node\Expr\BinaryOp\Concat(new \PhpParser\Node\Expr\BinaryOp\Concat($this->nodeFactory->createMethodCall($this->nodeFactory->createStaticCall('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'makeInstance', [$this->nodeFactory->createClassConstReference('RectorPrefix20210519\\TYPO3\\CMS\\Backend\\Routing\\UriBuilder')]), 'buildUriFromRoute', [$this->nodeFactory->createArg('record_edit')]), $firstArgument->value), new \PhpParser\Node\Scalar\String_('&returnUrl='));
     }
     private function createRequestUriCall() : \PhpParser\Node\Expr\FuncCall
     {
-        return new \PhpParser\Node\Expr\FuncCall(new \PhpParser\Node\Name('rawurlencode'), [$this->nodeFactory->createArg($this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'getIndpEnv', [$this->nodeFactory->createArg('REQUEST_URI')]))]);
+        return new \PhpParser\Node\Expr\FuncCall(new \PhpParser\Node\Name('rawurlencode'), [$this->nodeFactory->createArg($this->nodeFactory->createStaticCall('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'getIndpEnv', [$this->nodeFactory->createArg('REQUEST_URI')]))]);
     }
 }

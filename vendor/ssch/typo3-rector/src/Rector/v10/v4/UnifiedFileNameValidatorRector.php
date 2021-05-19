@@ -32,10 +32,10 @@ final class UnifiedFileNameValidatorRector extends \Rector\Core\Rector\AbstractR
             return null;
         }
         if ($node instanceof \PhpParser\Node\Expr\StaticCall && $this->isMethodVerifyFilenameAgainstDenyPattern($node)) {
-            return $this->nodeFactory->createMethodCall($this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'makeInstance', [$this->nodeFactory->createClassConstReference('TYPO3\\CMS\\Core\\Resource\\Security\\FileNameValidator')]), 'isValid', $node->args);
+            return $this->nodeFactory->createMethodCall($this->nodeFactory->createStaticCall('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'makeInstance', [$this->nodeFactory->createClassConstReference('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Resource\\Security\\FileNameValidator')]), 'isValid', $node->args);
         }
         if ($this->isConstFileDenyPatternDefault($node)) {
-            return $this->nodeFactory->createClassConstFetch('TYPO3\\CMS\\Core\\Resource\\Security\\FileNameValidator', 'DEFAULT_FILE_DENY_PATTERN');
+            return $this->nodeFactory->createClassConstFetch('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Resource\\Security\\FileNameValidator', 'DEFAULT_FILE_DENY_PATTERN');
         }
         return null;
     }
@@ -74,7 +74,7 @@ CODE_SAMPLE
      */
     public function isMethodVerifyFilenameAgainstDenyPattern(\PhpParser\Node $node) : bool
     {
-        return $node instanceof \PhpParser\Node\Expr\StaticCall && $this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Utility\\GeneralUtility')) && $this->isName($node->name, 'verifyFilenameAgainstDenyPattern');
+        return $node instanceof \PhpParser\Node\Expr\StaticCall && $this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Utility\\GeneralUtility')) && $this->isName($node->name, 'verifyFilenameAgainstDenyPattern');
     }
     /**
      * @param ConstFetch|StaticCall $node

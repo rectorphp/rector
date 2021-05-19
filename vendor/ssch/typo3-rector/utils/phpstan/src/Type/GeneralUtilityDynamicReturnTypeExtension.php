@@ -11,12 +11,11 @@ use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Type\DynamicStaticMethodReturnTypeExtension;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
-use RectorPrefix20210519\TYPO3\CMS\Core\Utility\GeneralUtility;
 final class GeneralUtilityDynamicReturnTypeExtension implements \PHPStan\Type\DynamicStaticMethodReturnTypeExtension
 {
     public function getClass() : string
     {
-        return \RectorPrefix20210519\TYPO3\CMS\Core\Utility\GeneralUtility::class;
+        return 'RectorPrefix20210519\\TYPO3\\CMS\\Core\\Utility\\GeneralUtility';
     }
     public function isStaticMethodSupported(\PHPStan\Reflection\MethodReflection $methodReflection) : bool
     {

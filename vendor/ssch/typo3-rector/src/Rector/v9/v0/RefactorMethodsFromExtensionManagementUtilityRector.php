@@ -62,11 +62,11 @@ CODE_SAMPLE
     private function createNewMethodCallForSiteRelPath(\PhpParser\Node\Expr\StaticCall $node) : \PhpParser\Node\Expr\StaticCall
     {
         $firstArgument = $node->args[0];
-        return $this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\PathUtility', 'stripPathSitePrefix', [$this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\ExtensionManagementUtility', 'extPath', [$firstArgument])]);
+        return $this->nodeFactory->createStaticCall('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Utility\\PathUtility', 'stripPathSitePrefix', [$this->nodeFactory->createStaticCall('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Utility\\ExtensionManagementUtility', 'extPath', [$firstArgument])]);
     }
     private function createNewMethodCallForRemoveCacheFiles() : \PhpParser\Node\Expr\MethodCall
     {
-        return $this->nodeFactory->createMethodCall($this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'makeInstance', [$this->nodeFactory->createClassConstReference('TYPO3\\CMS\\Core\\Cache\\CacheManager')]), 'flushCachesInGroup', [$this->nodeFactory->createArg('system')]);
+        return $this->nodeFactory->createMethodCall($this->nodeFactory->createStaticCall('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'makeInstance', [$this->nodeFactory->createClassConstReference('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Cache\\CacheManager')]), 'flushCachesInGroup', [$this->nodeFactory->createArg('system')]);
     }
     private function removeSecondArgumentFromMethodIsLoaded(\PhpParser\Node\Expr\StaticCall $node) : \PhpParser\Node
     {

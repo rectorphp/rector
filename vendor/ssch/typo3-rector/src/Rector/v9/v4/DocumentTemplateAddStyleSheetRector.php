@@ -27,7 +27,7 @@ final class DocumentTemplateAddStyleSheetRector extends \Rector\Core\Rector\Abst
      */
     public function refactor($node) : ?\PhpParser\Node
     {
-        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Backend\\Template\\DocumentTemplate'))) {
+        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('RectorPrefix20210519\\TYPO3\\CMS\\Backend\\Template\\DocumentTemplate'))) {
             return null;
         }
         if (!$this->isName($node->name, 'addStyleSheet')) {
@@ -40,7 +40,7 @@ final class DocumentTemplateAddStyleSheetRector extends \Rector\Core\Rector\Abst
         $href = $this->valueResolver->getValue($args[1]->value);
         $title = isset($args[2]) ? $this->valueResolver->getValue($args[2]->value) : '';
         $relation = isset($args[3]) ? $this->valueResolver->getValue($args[3]->value) : 'stylesheet';
-        return $this->nodeFactory->createMethodCall($this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'makeInstance', [$this->nodeFactory->createClassConstReference('TYPO3\\CMS\\Core\\Page\\PageRenderer')]), 'addCssFile', [$href, $relation, 'screen', $title]);
+        return $this->nodeFactory->createMethodCall($this->nodeFactory->createStaticCall('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'makeInstance', [$this->nodeFactory->createClassConstReference('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Page\\PageRenderer')]), 'addCssFile', [$href, $relation, 'screen', $title]);
     }
     /**
      * @codeCoverageIgnore

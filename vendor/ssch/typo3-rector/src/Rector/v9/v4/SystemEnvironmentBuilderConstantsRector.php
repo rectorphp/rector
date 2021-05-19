@@ -41,7 +41,7 @@ final class SystemEnvironmentBuilderConstantsRector extends \Rector\Core\Rector\
         }
         $value = self::MAP_CONSTANTS_TO_STRING[$constantsName];
         if (\false !== \strpos($constantsName, 'T3_ERR')) {
-            return $this->nodeFactory->createClassConstFetch('TYPO3\\CMS\\Core\\Service\\AbstractService', $value);
+            return $this->nodeFactory->createClassConstFetch('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Service\\AbstractService', $value);
         }
         if ('SUB' === $constantsName) {
             return $this->nodeFactory->createFuncCall('chr', [(int) $value]);

@@ -30,7 +30,7 @@ final class UseRenderingContextGetControllerContextRector extends \Rector\Core\R
      */
     public function refactor($node) : ?\PhpParser\Node
     {
-        $desiredObjectTypes = [new \PHPStan\Type\ObjectType('TYPO3Fluid\\Fluid\\Core\\ViewHelper\\AbstractViewHelper'), new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Fluid\\Core\\ViewHelper\\AbstractViewHelper')];
+        $desiredObjectTypes = [new \PHPStan\Type\ObjectType('RectorPrefix20210519\\TYPO3Fluid\\Fluid\\Core\\ViewHelper\\AbstractViewHelper'), new \PHPStan\Type\ObjectType('RectorPrefix20210519\\TYPO3\\CMS\\Fluid\\Core\\ViewHelper\\AbstractViewHelper')];
         if (!$this->nodeTypeResolver->isObjectTypes($node, $desiredObjectTypes)) {
             return null;
         }

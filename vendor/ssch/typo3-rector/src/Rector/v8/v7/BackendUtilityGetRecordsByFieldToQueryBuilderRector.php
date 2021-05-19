@@ -49,7 +49,7 @@ final class BackendUtilityGetRecordsByFieldToQueryBuilderRector extends \Rector\
      */
     public function refactor($node) : ?\PhpParser\Node
     {
-        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Backend\\Utility\\BackendUtility'))) {
+        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('RectorPrefix20210519\\TYPO3\\CMS\\Backend\\Utility\\BackendUtility'))) {
             return null;
         }
         if (!$this->isName($node->name, 'getRecordsByField')) {
@@ -105,7 +105,7 @@ CODE_SAMPLE
             if (null === $table) {
                 $table = $tableArgument;
             }
-            $queryBuilder = $this->nodeFactory->createMethodCall($this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\GeneralUtility', self::MAKE_INSTANCE, [$this->nodeFactory->createClassConstReference('TYPO3\\CMS\\Core\\Database\\ConnectionPool')]), 'getQueryBuilderForTable', [$table]);
+            $queryBuilder = $this->nodeFactory->createMethodCall($this->nodeFactory->createStaticCall('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Utility\\GeneralUtility', self::MAKE_INSTANCE, [$this->nodeFactory->createClassConstReference('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Database\\ConnectionPool')]), 'getQueryBuilderForTable', [$table]);
         } else {
             $queryBuilder = $queryBuilderArgument->value;
         }
@@ -127,7 +127,7 @@ CODE_SAMPLE
     }
     private function addQueryBuilderBackendWorkspaceRestrictionNode(string $queryBuilderVariableName, \PhpParser\Node $positionNode) : void
     {
-        $newNode = $this->nodeFactory->createMethodCall($this->nodeFactory->createMethodCall($this->nodeFactory->createMethodCall($queryBuilderVariableName, 'getRestrictions'), 'removeAll'), 'add', [$this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\GeneralUtility', self::MAKE_INSTANCE, [$this->nodeFactory->createClassConstReference('TYPO3\\CMS\\Core\\Database\\Query\\Restriction\\BackendWorkspaceRestriction')])]);
+        $newNode = $this->nodeFactory->createMethodCall($this->nodeFactory->createMethodCall($this->nodeFactory->createMethodCall($queryBuilderVariableName, 'getRestrictions'), 'removeAll'), 'add', [$this->nodeFactory->createStaticCall('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Utility\\GeneralUtility', self::MAKE_INSTANCE, [$this->nodeFactory->createClassConstReference('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Database\\Query\\Restriction\\BackendWorkspaceRestriction')])]);
         $this->addNodeBeforeNode($newNode, $positionNode);
     }
     private function addQueryBuilderDeletedRestrictionNode(string $queryBuilderVariableName, \PhpParser\Node\Expr\StaticCall $node, \PhpParser\Node $positionNode) : void
@@ -137,7 +137,7 @@ CODE_SAMPLE
         if (\false === $useDeleteClause) {
             return;
         }
-        $deletedRestrictionNode = $this->nodeFactory->createMethodCall($this->nodeFactory->createMethodCall($queryBuilderVariableName, 'getRestrictions'), 'add', [$this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\GeneralUtility', self::MAKE_INSTANCE, [$this->nodeFactory->createClassConstReference('TYPO3\\CMS\\Core\\Database\\Query\\Restriction\\DeletedRestriction')])]);
+        $deletedRestrictionNode = $this->nodeFactory->createMethodCall($this->nodeFactory->createMethodCall($queryBuilderVariableName, 'getRestrictions'), 'add', [$this->nodeFactory->createStaticCall('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Utility\\GeneralUtility', self::MAKE_INSTANCE, [$this->nodeFactory->createClassConstReference('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Database\\Query\\Restriction\\DeletedRestriction')])]);
         if ($useDeleteClause) {
             $this->addNodeBeforeNode($deletedRestrictionNode, $positionNode);
             return;
@@ -162,7 +162,7 @@ CODE_SAMPLE
         if ('' === $whereClause) {
             return;
         }
-        $whereClauseNode = $this->nodeFactory->createMethodCall($queryBuilderVariableName, 'andWhere', [$this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Database\\Query\\QueryHelper', 'stripLogicalOperatorPrefix', [$node->args[3]])]);
+        $whereClauseNode = $this->nodeFactory->createMethodCall($queryBuilderVariableName, 'andWhere', [$this->nodeFactory->createStaticCall('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Database\\Query\\QueryHelper', 'stripLogicalOperatorPrefix', [$node->args[3]])]);
         if ($whereClause) {
             $this->addNodeBeforeNode($whereClauseNode, $positionNode);
             return;
@@ -181,7 +181,7 @@ CODE_SAMPLE
         if ('' === $groupBy) {
             return;
         }
-        $groupByNode = $this->nodeFactory->createMethodCall($queryBuilderVariableName, 'groupBy', [$this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Database\\Query\\QueryHelper', 'parseGroupBy', [$node->args[4]])]);
+        $groupByNode = $this->nodeFactory->createMethodCall($queryBuilderVariableName, 'groupBy', [$this->nodeFactory->createStaticCall('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Database\\Query\\QueryHelper', 'parseGroupBy', [$node->args[4]])]);
         if ($groupBy) {
             $this->addNodeBeforeNode($groupByNode, $positionNode);
             return;
@@ -203,7 +203,7 @@ CODE_SAMPLE
         if (null === $orderByArgument) {
             return;
         }
-        $orderByNode = new \PhpParser\Node\Stmt\Foreach_($this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Database\\Query\\QueryHelper', 'parseOrderBy', [$orderByArgument->value]), new \PhpParser\Node\Expr\Variable('orderPair'));
+        $orderByNode = new \PhpParser\Node\Stmt\Foreach_($this->nodeFactory->createStaticCall('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Database\\Query\\QueryHelper', 'parseOrderBy', [$orderByArgument->value]), new \PhpParser\Node\Expr\Variable('orderPair'));
         $orderByNode->stmts[] = new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign($this->nodeFactory->createFuncCall('list', [new \PhpParser\Node\Expr\Variable('fieldName'), new \PhpParser\Node\Expr\Variable('order')]), new \PhpParser\Node\Expr\Variable('orderPair')));
         $orderByNode->stmts[] = new \PhpParser\Node\Stmt\Expression($this->nodeFactory->createMethodCall($queryBuilderVariableName, 'addOrderBy', [new \PhpParser\Node\Expr\Variable('fieldName'), new \PhpParser\Node\Expr\Variable('order')]));
         if ($orderBy) {
@@ -225,7 +225,7 @@ CODE_SAMPLE
             return;
         }
         $limitNode = new \PhpParser\Node\Stmt\If_($this->nodeFactory->createFuncCall('strpos', [$limitArgument->value, ',']));
-        $limitNode->stmts[] = new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable(self::LIMIT_OFFSET_AND_MAX), $this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'intExplode', [new \PhpParser\Node\Scalar\String_(','), new \PhpParser\Node\Expr\Variable('limit')])));
+        $limitNode->stmts[] = new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable(self::LIMIT_OFFSET_AND_MAX), $this->nodeFactory->createStaticCall('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'intExplode', [new \PhpParser\Node\Scalar\String_(','), new \PhpParser\Node\Expr\Variable('limit')])));
         $limitNode->stmts[] = new \PhpParser\Node\Stmt\Expression($this->nodeFactory->createMethodCall($queryBuilderVariableName, 'setFirstResult', [new \PhpParser\Node\Expr\Cast\Int_(new \PhpParser\Node\Expr\ArrayDimFetch(new \PhpParser\Node\Expr\Variable(self::LIMIT_OFFSET_AND_MAX), new \PhpParser\Node\Scalar\LNumber(0)))]));
         $limitNode->stmts[] = new \PhpParser\Node\Stmt\Expression($this->nodeFactory->createMethodCall($queryBuilderVariableName, 'setMaxResults', [new \PhpParser\Node\Expr\Cast\Int_(new \PhpParser\Node\Expr\ArrayDimFetch(new \PhpParser\Node\Expr\Variable(self::LIMIT_OFFSET_AND_MAX), new \PhpParser\Node\Scalar\LNumber(1)))]));
         $limitNode->else = new \PhpParser\Node\Stmt\Else_();

@@ -10,7 +10,6 @@ use Ssch\TYPO3Rector\Rector\v8\v4\SubstituteOldWizardIconsRector;
 use Ssch\TYPO3Rector\Rector\v8\v5\MoveLanguageFilesFromLocallangToResourcesRector;
 use Ssch\TYPO3Rector\Rector\v8\v5\RemoveOptionVersioningFollowPagesRector;
 use Ssch\TYPO3Rector\Rector\v8\v5\RemoveSupportForTransForeignTableRector;
-use Ssch\TYPO3Rector\Rector\v8\v6\AddTypeToColumnConfigRector;
 use Ssch\TYPO3Rector\Rector\v8\v6\MigrateLastPiecesOfDefaultExtrasRector;
 use Ssch\TYPO3Rector\Rector\v8\v6\MigrateOptionsOfTypeGroupRector;
 use Ssch\TYPO3Rector\Rector\v8\v6\MigrateSelectShowIconTableRector;
@@ -39,7 +38,6 @@ return static function (\RectorPrefix20210519\Symfony\Component\DependencyInject
     $services->set(\Ssch\TYPO3Rector\Rector\v8\v6\RefactorTCARector::class);
     $services->set(\Ssch\TYPO3Rector\Rector\v8\v6\MigrateSelectShowIconTableRector::class);
     $services->set(\Ssch\TYPO3Rector\Rector\v8\v6\RemoveL10nModeNoCopyRector::class);
-    $services->set(\Ssch\TYPO3Rector\Rector\v8\v6\AddTypeToColumnConfigRector::class);
     $services->set(\Ssch\TYPO3Rector\Rector\v8\v6\MigrateOptionsOfTypeGroupRector::class);
     $services->set(\Ssch\TYPO3Rector\Rector\v8\v7\RemoveConfigMaxFromInputDateTimeFieldsRector::class);
     $services->set(\Ssch\TYPO3Rector\Rector\v8\v7\RemoveLocalizationModeKeepIfNeededRector::class);

@@ -38,7 +38,7 @@ final class ReplacedGeneralUtilitySysLogWithLogginApiRector extends \Rector\Core
      */
     public function refactor($node) : ?\PhpParser\Node
     {
-        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Utility\\GeneralUtility'))) {
+        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Utility\\GeneralUtility'))) {
             return null;
         }
         if (!$this->isNames($node->name, ['initSysLog', 'sysLog'])) {
@@ -48,10 +48,10 @@ final class ReplacedGeneralUtilitySysLogWithLogginApiRector extends \Rector\Core
             $this->removeNode($node);
             return null;
         }
-        $makeInstanceCall = $this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'makeInstance', [$this->nodeFactory->createClassConstReference('TYPO3\\CMS\\Core\\Log\\LogManager')]);
+        $makeInstanceCall = $this->nodeFactory->createStaticCall('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'makeInstance', [$this->nodeFactory->createClassConstReference('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Log\\LogManager')]);
         $loggerCall = $this->nodeFactory->createMethodCall($makeInstanceCall, 'getLogger', [new \PhpParser\Node\Scalar\MagicConst\Class_()]);
         $args = [];
-        $severity = $this->nodeFactory->createClassConstFetch('TYPO3\\CMS\\Core\\Log\\LogLevel', 'INFO');
+        $severity = $this->nodeFactory->createClassConstFetch('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Log\\LogLevel', 'INFO');
         if (isset($node->args[2]) && ($severityValue = $this->valueResolver->getValue($node->args[2]->value))) {
             $severity = $this->oldSeverityToLogLevelMapper->mapSeverityToLogLevel($severityValue);
         }

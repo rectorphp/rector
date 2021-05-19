@@ -22,7 +22,7 @@ final class BackendUserAuthenticationSimplelogRector extends \Rector\Core\Rector
      */
     public function refactor($node) : ?\PhpParser\Node
     {
-        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Authentication\\BackendUserAuthentication'))) {
+        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Authentication\\BackendUserAuthentication'))) {
             return null;
         }
         if (!$this->isName($node->name, 'simplelog')) {

@@ -11,14 +11,7 @@ use PHPStan\Reflection\MethodReflection;
 use PHPStan\Type\DynamicMethodReturnTypeExtension;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
-use RectorPrefix20210519\TYPO3\CMS\Core\Context\AspectInterface;
 use RectorPrefix20210519\TYPO3\CMS\Core\Context\Context;
-use RectorPrefix20210519\TYPO3\CMS\Core\Context\DateTimeAspect;
-use RectorPrefix20210519\TYPO3\CMS\Core\Context\LanguageAspect;
-use RectorPrefix20210519\TYPO3\CMS\Core\Context\TypoScriptAspect;
-use RectorPrefix20210519\TYPO3\CMS\Core\Context\UserAspect;
-use RectorPrefix20210519\TYPO3\CMS\Core\Context\VisibilityAspect;
-use RectorPrefix20210519\TYPO3\CMS\Core\Context\WorkspaceAspect;
 final class ContextGetAspectDynamicReturnTypeExtension implements \PHPStan\Type\DynamicMethodReturnTypeExtension
 {
     public function getClass() : string
@@ -31,7 +24,7 @@ final class ContextGetAspectDynamicReturnTypeExtension implements \PHPStan\Type\
     }
     public function getTypeFromMethodCall(\PHPStan\Reflection\MethodReflection $methodReflection, \PhpParser\Node\Expr\MethodCall $methodCall, \PHPStan\Analyser\Scope $scope) : \PHPStan\Type\Type
     {
-        $defaultObjectType = new \PHPStan\Type\ObjectType(\RectorPrefix20210519\TYPO3\CMS\Core\Context\AspectInterface::class);
+        $defaultObjectType = new \PHPStan\Type\ObjectType('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Context\\AspectInterface');
         if (!($argument = $methodCall->args[0] ?? null) instanceof \PhpParser\Node\Arg) {
             return $defaultObjectType;
         }
@@ -42,23 +35,23 @@ final class ContextGetAspectDynamicReturnTypeExtension implements \PHPStan\Type\
         /** @var String_ $string */
         switch ($string->value) {
             case 'date':
-                $type = new \PHPStan\Type\ObjectType(\RectorPrefix20210519\TYPO3\CMS\Core\Context\DateTimeAspect::class);
+                $type = new \PHPStan\Type\ObjectType('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Context\\DateTimeAspect');
                 break;
             case 'visibility':
-                $type = new \PHPStan\Type\ObjectType(\RectorPrefix20210519\TYPO3\CMS\Core\Context\VisibilityAspect::class);
+                $type = new \PHPStan\Type\ObjectType('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Context\\VisibilityAspect');
                 break;
             case 'frontend.user':
             case 'backend.user':
-                $type = new \PHPStan\Type\ObjectType(\RectorPrefix20210519\TYPO3\CMS\Core\Context\UserAspect::class);
+                $type = new \PHPStan\Type\ObjectType('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Context\\UserAspect');
                 break;
             case 'workspace':
-                $type = new \PHPStan\Type\ObjectType(\RectorPrefix20210519\TYPO3\CMS\Core\Context\WorkspaceAspect::class);
+                $type = new \PHPStan\Type\ObjectType('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Context\\WorkspaceAspect');
                 break;
             case 'language':
-                $type = new \PHPStan\Type\ObjectType(\RectorPrefix20210519\TYPO3\CMS\Core\Context\LanguageAspect::class);
+                $type = new \PHPStan\Type\ObjectType('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Context\\LanguageAspect');
                 break;
             case 'typoscript':
-                $type = new \PHPStan\Type\ObjectType(\RectorPrefix20210519\TYPO3\CMS\Core\Context\TypoScriptAspect::class);
+                $type = new \PHPStan\Type\ObjectType('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Context\\TypoScriptAspect');
                 break;
             default:
                 $type = $defaultObjectType;

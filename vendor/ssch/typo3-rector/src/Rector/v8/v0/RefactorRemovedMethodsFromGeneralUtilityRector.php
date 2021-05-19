@@ -34,7 +34,7 @@ final class RefactorRemovedMethodsFromGeneralUtilityRector extends \Rector\Core\
      */
     public function refactor($node) : ?\PhpParser\Node
     {
-        if (!$this->isName($node->class, 'TYPO3\\CMS\\Core\\Utility\\GeneralUtility')) {
+        if (!$this->isName($node->class, 'RectorPrefix20210519\\TYPO3\\CMS\\Core\\Utility\\GeneralUtility')) {
             return null;
         }
         $methodName = $this->getName($node->name);
@@ -42,23 +42,23 @@ final class RefactorRemovedMethodsFromGeneralUtilityRector extends \Rector\Core\
             return null;
         }
         if ('gif_compress' === $methodName) {
-            return $this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Imaging\\GraphicalFunctions', 'gifCompress', $node->args);
+            return $this->nodeFactory->createStaticCall('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Imaging\\GraphicalFunctions', 'gifCompress', $node->args);
         }
         if ('png_to_gif_by_imagemagick' === $methodName) {
-            return $this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Imaging\\GraphicalFunctions', 'pngToGifByImagemagick', $node->args);
+            return $this->nodeFactory->createStaticCall('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Imaging\\GraphicalFunctions', 'pngToGifByImagemagick', $node->args);
         }
         if ('read_png_gif' === $methodName) {
-            return $this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Imaging\\GraphicalFunctions', 'readPngGif', $node->args);
+            return $this->nodeFactory->createStaticCall('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Imaging\\GraphicalFunctions', 'readPngGif', $node->args);
         }
         if ('array_merge' === $methodName) {
             [$arg1, $arg2] = $node->args;
             return new \PhpParser\Node\Expr\BinaryOp\Plus($arg1->value, $arg2->value);
         }
         if ('cleanOutputBuffers' === $methodName) {
-            return $this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'flushOutputBuffers');
+            return $this->nodeFactory->createStaticCall('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'flushOutputBuffers');
         }
         if (\in_array($methodName, ['inArray', 'removeArrayEntryByValue', 'keepItemsInArray', 'remapArrayKeys', 'arrayDiffAssocRecursive', 'naturalKeySortRecursive'], \true)) {
-            return $this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\ArrayUtility', $methodName, $node->args);
+            return $this->nodeFactory->createStaticCall('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Utility\\ArrayUtility', $methodName, $node->args);
         }
         return null;
     }

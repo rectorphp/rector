@@ -30,7 +30,7 @@ final class RemoveRteHtmlParserEvalWriteFileRector extends \Rector\Core\Rector\A
      */
     public function refactor($node) : ?\PhpParser\Node
     {
-        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Html\\RteHtmlParser'))) {
+        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Html\\RteHtmlParser'))) {
             return null;
         }
         if ($this->isName($node->name, 'evalWriteFile')) {

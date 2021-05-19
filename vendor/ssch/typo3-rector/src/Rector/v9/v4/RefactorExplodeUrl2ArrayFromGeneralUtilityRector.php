@@ -35,7 +35,7 @@ final class RefactorExplodeUrl2ArrayFromGeneralUtilityRector extends \Rector\Cor
         }
         /** @var StaticCall|MethodCall $call */
         $call = $node->expr;
-        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($call, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Utility\\GeneralUtility'))) {
+        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($call, new \PHPStan\Type\ObjectType('RectorPrefix20210519\\TYPO3\\CMS\\Core\\Utility\\GeneralUtility'))) {
             return null;
         }
         if (!$this->isName($call->name, 'explodeUrl2Array')) {
