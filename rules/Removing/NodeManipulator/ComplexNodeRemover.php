@@ -51,10 +51,13 @@ final class ComplexNodeRemover
                 continue;
             }
 
-            // remove assigns
             $assign = $this->resolveAssign($propertyFetch);
-            $this->assignRemover->removeAssignNode($assign);
+            if (! $assign instanceof Assign) {
+                return;
+            }
 
+            // remove assigns
+            $this->assignRemover->removeAssignNode($assign);
             $this->removeConstructorDependency($assign);
         }
 
@@ -95,7 +98,7 @@ final class ComplexNodeRemover
     /**
      * @param PropertyFetch|StaticPropertyFetch $expr
      */
-    private function resolveAssign(Expr $expr): Assign
+    private function resolveAssign(Expr $expr): ?Assign
     {
         $assign = $expr->getAttribute(AttributeKey::PARENT_NODE);
 
@@ -104,7 +107,7 @@ final class ComplexNodeRemover
         }
 
         if (! $assign instanceof Assign) {
-            throw new ShouldNotHappenException("Can't handle this situation");
+            return null;
         }
 
         return $assign;
