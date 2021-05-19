@@ -24,7 +24,7 @@ final class DowngradePathsCommand extends Command
         foreach ($downgradePaths as $key => $downgradePath) {
             if (in_array(
                 $downgradePath,
-                ['vendor/symplify', 'vendor/symfony', 'vendor/nikic', 'vendor/psr', 'vendor/phpstan'],
+                ['vendor/symplify', 'vendor/symfony', 'vendor/nikic', 'vendor/psr', 'vendor/phpstan', 'vendor/ssch'],
                 true
             )) {
                 unset($downgradePaths[$key]);
@@ -39,7 +39,7 @@ final class DowngradePathsCommand extends Command
             'vendor/symfony/dependency-injection',
             'vendor/symfony/console',
             'vendor/symfony vendor/psr',
-            'vendor/symplify vendor/nikic bin src packages rector.php',
+            'vendor/symplify vendor/nikic vendor/ssch bin src packages rector.php',
             'rules',
         ], $downgradePaths);
 
