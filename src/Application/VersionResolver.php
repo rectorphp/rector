@@ -36,7 +36,7 @@ final class VersionResolver
         return trim($process->getOutput());
     }
 
-    public static function resolverReleaseDate(): DateTimeInterface
+    public static function resolverReleaseDateTime(): DateTimeInterface
     {
         $process = new Process(['git', 'log', '-n1', '--pretty=%ci', 'HEAD'], __DIR__);
         if ($process->run() !== ShellCode::ERROR) {

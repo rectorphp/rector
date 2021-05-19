@@ -93,11 +93,13 @@ return [
                 return $content;
             }
 
+            $releaseDateTime = VersionResolver::resolverReleaseDateTime();
+
             return strtr(
                 $content,
                 [
                     '@package_version@' => VersionResolver::resolvePackageVersion(),
-                    '@release_date@' => VersionResolver::resolverReleaseDate(),
+                    '@release_date@' => $releaseDateTime->format('Y-m-d H:i:s'),
                 ]
             );
         },
