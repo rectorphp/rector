@@ -16,18 +16,19 @@ final class VersionResolver
     /**
      * @var string
      */
-    public const PACKAGE_VERSION = '"3e80d2a454421ed4a498200694fca532ee46cfcd"';
+    public const PACKAGE_VERSION = '03640b20d33e80d09996ec0f6f67169e6161ac48';
     /**
      * @var string
      */
-    public const RELEASE_DATE = '2021-05-19 16:23:56';
+    public const RELEASE_DATE = '2021-05-19 20:09:26';
     public static function resolvePackageVersion() : string
     {
         $process = new \RectorPrefix20210519\Symfony\Component\Process\Process(['git', 'log', '--pretty="%H"', '-n1', 'HEAD'], __DIR__);
         if ($process->run() !== \RectorPrefix20210519\Symplify\PackageBuilder\Console\ShellCode::SUCCESS) {
             throw new \Rector\Core\Exception\VersionException('You must ensure to run compile from composer git repository clone and that git binary is available.');
         }
-        return \trim($process->getOutput());
+        $version = \trim($process->getOutput());
+        return \trim($version, '"');
     }
     public static function resolverReleaseDateTime() : \DateTime
     {
