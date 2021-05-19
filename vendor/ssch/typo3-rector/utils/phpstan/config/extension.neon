@@ -1,0 +1,20 @@
+parameters:
+    inferPrivatePropertyTypeFromConstructor: true
+
+    scanDirectories:
+            # static reflection
+            - ../../../stubs
+
+services:
+    -
+        class: Ssch\TYPO3Rector\PHPStan\Type\GeneralUtilityDynamicReturnTypeExtension
+        tags: [phpstan.broker.dynamicStaticMethodReturnTypeExtension]
+    -
+        class: Ssch\TYPO3Rector\PHPStan\Type\ObjectManagerDynamicReturnTypeExtension
+        tags: [phpstan.broker.dynamicMethodReturnTypeExtension]
+    -
+        class: Ssch\TYPO3Rector\PHPStan\Type\ContextGetAspectDynamicReturnTypeExtension
+        tags: [phpstan.broker.dynamicMethodReturnTypeExtension]
+    -
+        class: Ssch\TYPO3Rector\PHPStan\Type\ValidatorResolverDynamicReturnTypeExtension
+        tags: [phpstan.broker.dynamicMethodReturnTypeExtension]
