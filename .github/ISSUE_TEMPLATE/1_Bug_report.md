@@ -10,7 +10,7 @@ about: Report errors and problems
 
 | Subject        | Details                                                         |
 | :------------- | :---------------------------------------------------------------|
-| Rector version | e.g. v0.9.5 (invoke `vendor/bin/rector --version`)              |
+| Rector version | e.g. v0.11.5 (invoke `vendor/bin/rector --version`)              |
 | Installed as   | composer dependency / prefixed Rector                           |
 
 <!-- Please describe your problem here. -->
