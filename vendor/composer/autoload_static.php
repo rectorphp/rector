@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit34304b83c6b3974a0236e09463bf59eb
+class ComposerStaticInitb6ee3a1fa55ceefff76805b4beafe5ff
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -3546,7 +3546,6 @@ class ComposerStaticInit34304b83c6b3974a0236e09463bf59eb
         'Ssch\\TYPO3Rector\\Helper\\Database\\Refactorings\\ConnectionCallFactory' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Helper/Database/Refactorings/ConnectionCallFactory.php',
         'Ssch\\TYPO3Rector\\Helper\\Database\\Refactorings\\DatabaseConnectionExecInsertQueryRefactoring' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Helper/Database/Refactorings/DatabaseConnectionExecInsertQueryRefactoring.php',
         'Ssch\\TYPO3Rector\\Helper\\Database\\Refactorings\\DatabaseConnectionExecTruncateTableRefactoring' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Helper/Database/Refactorings/DatabaseConnectionExecTruncateTableRefactoring.php',
-        'Ssch\\TYPO3Rector\\Helper\\FileHelperTrait' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Helper/FileHelperTrait.php',
         'Ssch\\TYPO3Rector\\Helper\\FilesFinder' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Helper/FilesFinder.php',
         'Ssch\\TYPO3Rector\\Helper\\OldSeverityToLogLevelMapper' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Helper/OldSeverityToLogLevelMapper.php',
         'Ssch\\TYPO3Rector\\Helper\\StringUtility' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Helper/StringUtility.php',
@@ -3813,9 +3812,9 @@ class ComposerStaticInit34304b83c6b3974a0236e09463bf59eb
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit34304b83c6b3974a0236e09463bf59eb::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit34304b83c6b3974a0236e09463bf59eb::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit34304b83c6b3974a0236e09463bf59eb::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitb6ee3a1fa55ceefff76805b4beafe5ff::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitb6ee3a1fa55ceefff76805b4beafe5ff::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitb6ee3a1fa55ceefff76805b4beafe5ff::$classMap;
 
         }, null, ClassLoader::class);
     }

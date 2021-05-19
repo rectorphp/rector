@@ -9,7 +9,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\Rector\AbstractRector;
-use Ssch\TYPO3Rector\Helper\FileHelperTrait;
+use Ssch\TYPO3Rector\Helper\FilesFinder;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -18,7 +18,14 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class ConvertTypo3ConfVarsRector extends \Rector\Core\Rector\AbstractRector
 {
-    use FileHelperTrait;
+    /**
+     * @var \Ssch\TYPO3Rector\Helper\FilesFinder
+     */
+    private $filesFinder;
+    public function __construct(\Ssch\TYPO3Rector\Helper\FilesFinder $filesFinder)
+    {
+        $this->filesFinder = $filesFinder;
+    }
     /**
      * @codeCoverageIgnore
      */
@@ -50,7 +57,7 @@ CODE_SAMPLE
         if (!$this->isName($node->var, 'TYPO3_CONF_VARS')) {
             return null;
         }
-        if (!$this->isExtLocalConf($this->file->getSmartFileInfo()) && !$this->isExtTables($this->file->getSmartFileInfo())) {
+        if (!$this->filesFinder->isExtLocalConf($this->file->getSmartFileInfo()) && !$this->filesFinder->isExtTables($this->file->getSmartFileInfo())) {
             return null;
         }
         $node->var = new \PhpParser\Node\Expr\ArrayDimFetch(new \PhpParser\Node\Expr\Variable('GLOBALS'), new \PhpParser\Node\Scalar\String_('TYPO3_CONF_VARS'));

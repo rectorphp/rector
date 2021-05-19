@@ -65,9 +65,11 @@ abstract class AbstractTcaRector extends \Rector\Core\Rector\AbstractRector
             if (null !== $types) {
                 $this->refactorTypes($types);
             }
-            if (null !== $columns || null !== $types) {
-                return $this->hasAstBeenChanged ? $node : null;
+            $ctrl = $this->extractSubArrayByKey($node, 'ctrl');
+            if (null !== $ctrl) {
+                $this->refactorCtrl($ctrl);
             }
+            return $this->hasAstBeenChanged ? $node : null;
         }
         // this is not a full tca definition. Lets check some fuzzier stuff.
         // it could be a list of columns, as in ExtensionManagementUtility::addTcaColums('table', $node)
@@ -151,6 +153,31 @@ abstract class AbstractTcaRector extends \Rector\Core\Rector\AbstractRector
      */
     protected function refactorTypes(\PhpParser\Node\Expr\Array_ $types) : void
     {
+        foreach ($types->items as $typeItem) {
+            if (!$typeItem instanceof \PhpParser\Node\Expr\ArrayItem) {
+                continue;
+            }
+            $typeKey = $typeItem->key;
+            if (null === $typeKey) {
+                continue;
+            }
+            $typeConfig = $typeItem->value;
+            $this->refactorType($typeKey, $typeConfig);
+        }
+    }
+    /**
+     * refactors a single TCA type item with key `typeKey` such as [ 'showitem' => 'field_a,field_b' ], '1' => [
+     * 'showitem' => 'field_a']
+     */
+    protected function refactorType(\PhpParser\Node\Expr $typeKey, \PhpParser\Node\Expr $typeConfig) : void
+    {
+        // override this as needed in child-classes
+    }
+    /**
+     * refactors an TCA ctrl section such as ['label' => 'foo', 'tstamp' => 'tstamp', 'crdate' => 'crdate']
+     */
+    protected function refactorCtrl(\PhpParser\Node\Expr\Array_ $ctrl) : void
+    {
         // override this as needed in child-classes
     }
     /**
@@ -168,7 +195,7 @@ abstract class AbstractTcaRector extends \Rector\Core\Rector\AbstractRector
             if (null === $configNode->key || $this->valueResolver->getValue($configNode->key) === $key) {
                 break;
             }
-            $positionOfTypeInConfig++;
+            ++$positionOfTypeInConfig;
         }
         \array_splice($array->items, $positionOfTypeInConfig + 1, 0, [$newItem]);
     }

@@ -130,12 +130,12 @@ final class TypoScriptProcessor implements \Ssch\TYPO3Rector\Contract\Processor\
             $editorConfiguration = $this->editorConfigParser->extractConfigurationForFile($file, $editorConfigConfigurationBuilder);
             $prettyPrinterConfiguration = \RectorPrefix20210519\Helmich\TypoScriptParser\Parser\Printer\PrettyPrinterConfiguration::create();
             $prettyPrinterConfiguration = $prettyPrinterConfiguration->withEmptyLineBreaks();
-            $prettyPrinterConfiguration = $prettyPrinterConfiguration->withClosingGlobalStatement();
             if ('tab' === $editorConfiguration->getIndentStyle()) {
                 $prettyPrinterConfiguration = $prettyPrinterConfiguration->withTabs();
             } else {
                 $prettyPrinterConfiguration = $prettyPrinterConfiguration->withSpaceIndentation($editorConfiguration->getIndentSize());
             }
+            $prettyPrinterConfiguration = $prettyPrinterConfiguration->withClosingGlobalStatement();
             $this->typoscriptPrinter->setPrettyPrinterConfiguration($prettyPrinterConfiguration);
             $this->typoscriptPrinter->printStatements($originalStatements, $this->output);
             $typoScriptContent = \rtrim($this->output->fetch()) . $editorConfiguration->getNewLine();

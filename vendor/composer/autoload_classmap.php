@@ -3197,7 +3197,6 @@ return array(
     'Ssch\\TYPO3Rector\\Helper\\Database\\Refactorings\\ConnectionCallFactory' => $vendorDir . '/ssch/typo3-rector/src/Helper/Database/Refactorings/ConnectionCallFactory.php',
     'Ssch\\TYPO3Rector\\Helper\\Database\\Refactorings\\DatabaseConnectionExecInsertQueryRefactoring' => $vendorDir . '/ssch/typo3-rector/src/Helper/Database/Refactorings/DatabaseConnectionExecInsertQueryRefactoring.php',
     'Ssch\\TYPO3Rector\\Helper\\Database\\Refactorings\\DatabaseConnectionExecTruncateTableRefactoring' => $vendorDir . '/ssch/typo3-rector/src/Helper/Database/Refactorings/DatabaseConnectionExecTruncateTableRefactoring.php',
-    'Ssch\\TYPO3Rector\\Helper\\FileHelperTrait' => $vendorDir . '/ssch/typo3-rector/src/Helper/FileHelperTrait.php',
     'Ssch\\TYPO3Rector\\Helper\\FilesFinder' => $vendorDir . '/ssch/typo3-rector/src/Helper/FilesFinder.php',
     'Ssch\\TYPO3Rector\\Helper\\OldSeverityToLogLevelMapper' => $vendorDir . '/ssch/typo3-rector/src/Helper/OldSeverityToLogLevelMapper.php',
     'Ssch\\TYPO3Rector\\Helper\\StringUtility' => $vendorDir . '/ssch/typo3-rector/src/Helper/StringUtility.php',

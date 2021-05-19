@@ -15,7 +15,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Ssch\TYPO3Rector\Helper\FileHelperTrait;
+use Ssch\TYPO3Rector\Helper\FilesFinder;
 use Ssch\TYPO3Rector\Helper\Typo3NodeResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -25,7 +25,14 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class SubstituteConstantsModeAndRequestTypeRector extends \Rector\Core\Rector\AbstractRector
 {
-    use FileHelperTrait;
+    /**
+     * @var \Ssch\TYPO3Rector\Helper\FilesFinder
+     */
+    private $filesFinder;
+    public function __construct(\Ssch\TYPO3Rector\Helper\FilesFinder $filesFinder)
+    {
+        $this->filesFinder = $filesFinder;
+    }
     /**
      * @return array<class-string<Node>>
      */
@@ -42,7 +49,7 @@ final class SubstituteConstantsModeAndRequestTypeRector extends \Rector\Core\Rec
         if ($node instanceof \PhpParser\Node\Expr\FuncCall && $this->isName($node, 'defined')) {
             return $this->refactorProbablySecurityGate($node);
         }
-        if ($this->isExtLocalConf($fileInfo) || $this->isExtTables($fileInfo)) {
+        if ($this->filesFinder->isExtLocalConf($fileInfo) || $this->filesFinder->isExtTables($fileInfo)) {
             return null;
         }
         if (!$this->isNames($node, ['TYPO3_MODE', 'TYPO3_REQUESTTYPE_FE', 'TYPO3_REQUESTTYPE_BE'])) {

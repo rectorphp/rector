@@ -3,19 +3,16 @@
 declare (strict_types=1);
 namespace Ssch\TYPO3Rector\Rector\v7\v0;
 
-use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ArrayItem;
-use PhpParser\Node\Stmt\Return_;
-use Rector\Core\Rector\AbstractRector;
 use Ssch\TYPO3Rector\Helper\TcaHelperTrait;
+use Ssch\TYPO3Rector\Rector\Tca\AbstractTcaRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/7.0/Breaking-62833-Dividers2Tabs.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v7\v0\RemoveDivider2TabsConfigurationRector\RemoveDivider2TabsConfigurationRectorTest
  */
-final class RemoveDivider2TabsConfigurationRector extends \Rector\Core\Rector\AbstractRector
+final class RemoveDivider2TabsConfigurationRector extends \Ssch\TYPO3Rector\Rector\Tca\AbstractTcaRector
 {
     use TcaHelperTrait;
     /**
@@ -48,41 +45,12 @@ return [
 CODE_SAMPLE
 )]);
     }
-    /**
-     * @return array<class-string<Node>>
-     */
-    public function getNodeTypes() : array
+    protected function refactorCtrl(\PhpParser\Node\Expr\Array_ $ctrl) : void
     {
-        return [\PhpParser\Node\Stmt\Return_::class];
-    }
-    /**
-     * @param \PhpParser\Node $node
-     */
-    public function refactor($node) : ?\PhpParser\Node
-    {
-        if (!$this->isFullTca($node)) {
-            return null;
+        $nodeToRemove = $this->extractArrayItemByKey($ctrl, 'dividers2tabs');
+        if (null !== $nodeToRemove) {
+            $this->removeNode($nodeToRemove);
+            $this->hasAstBeenChanged = \true;
         }
-        $ctrl = $this->extractCtrl($node);
-        if (!$ctrl instanceof \PhpParser\Node\Expr\ArrayItem) {
-            return null;
-        }
-        $ctrlItems = $ctrl->value;
-        if (!$ctrlItems instanceof \PhpParser\Node\Expr\Array_) {
-            return null;
-        }
-        foreach ($ctrlItems->items as $fieldValue) {
-            if (!$fieldValue instanceof \PhpParser\Node\Expr\ArrayItem) {
-                continue;
-            }
-            if (null === $fieldValue->key) {
-                continue;
-            }
-            if ($this->valueResolver->isValue($fieldValue->key, 'dividers2tabs')) {
-                $this->removeNode($fieldValue);
-                return $node;
-            }
-        }
-        return null;
     }
 }

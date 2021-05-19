@@ -133,7 +133,7 @@ CODE_SAMPLE;
             $paramTags = $commandPhpDocInfo->getParamTagValueNodes();
             $descriptionPhpDocNode = $commandPhpDocInfo->getByType(\PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTextNode::class);
             $methodParameters = $commandMethod->params;
-            $commandDescription = $descriptionPhpDocNode ? (string) $descriptionPhpDocNode : '';
+            $commandDescription = null !== $descriptionPhpDocNode ? (string) $descriptionPhpDocNode : '';
             $commandTemplate = new \Symplify\SmartFileSystem\SmartFileInfo(__DIR__ . '/../../../../templates/maker/Command.tpl.php');
             $commandName = \RectorPrefix20210519\Nette\Utils\Strings::firstUpper($commandMethodName);
             $commandContent = $commandTemplate->getContents();
@@ -159,7 +159,7 @@ CODE_SAMPLE;
                 if (null === $methodParamName) {
                     continue;
                 }
-                $inputArguments[$methodParamName] = ['name' => $methodParamName, 'description' => $paramTag ? $paramTag->description : '', 'mode' => $methodParameter->default ? 2 : 1, 'default' => $methodParameter->default];
+                $inputArguments[$methodParamName] = ['name' => $methodParamName, 'description' => null !== $paramTag ? $paramTag->description : '', 'mode' => null !== $methodParameter->default ? 2 : 1, 'default' => $methodParameter->default];
             }
             $this->addArgumentToSymfonyCommandRector->configure([\Ssch\TYPO3Rector\Rector\v9\v5\ExtbaseCommandControllerToSymfonyCommand\AddArgumentToSymfonyCommandRector::INPUT_ARGUMENTS => $inputArguments]);
             $nodeTraverser->addVisitor($this->addArgumentToSymfonyCommandRector);
@@ -220,7 +220,7 @@ CODE_SAMPLE
     /**
      * @return Node[]|ClassMethod[]
      */
-    protected function findCommandMethods(\PhpParser\Node\Stmt\Class_ $node) : array
+    private function findCommandMethods(\PhpParser\Node\Stmt\Class_ $node) : array
     {
         return $this->betterNodeFinder->find($node->stmts, function (\PhpParser\Node $node) {
             if (!$node instanceof \PhpParser\Node\Stmt\ClassMethod) {
@@ -239,7 +239,7 @@ CODE_SAMPLE
     /**
      * @param array<string, string> $newCommandsWithFullQualifiedNamespace
      */
-    protected function addNewCommandsToCommandsFile(string $commandsFilePath, array $newCommandsWithFullQualifiedNamespace) : void
+    private function addNewCommandsToCommandsFile(string $commandsFilePath, array $newCommandsWithFullQualifiedNamespace) : void
     {
         if ($this->smartFileSystem->exists($commandsFilePath)) {
             $commandsSmartFileInfo = new \Symplify\SmartFileSystem\SmartFileInfo($commandsFilePath);
