@@ -39,7 +39,7 @@ final class VersionResolver
     public static function resolverReleaseDateTime(): DateTimeInterface
     {
         $process = new Process(['git', 'log', '-n1', '--pretty=%ci', 'HEAD'], __DIR__);
-        if ($process->run() !== ShellCode::ERROR) {
+        if ($process->run() !== ShellCode::SUCCESS) {
             throw new VersionException(
                 'You must ensure to run compile from composer git repository clone and that git binary is available.'
             );
