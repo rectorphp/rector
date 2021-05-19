@@ -6,7 +6,7 @@ namespace Rector\Core\Application\FileSystem;
 use Rector\Core\Configuration\Configuration;
 use Rector\Core\PhpParser\Printer\NodesWithFileDestinationPrinter;
 use RectorPrefix20210519\Symfony\Component\Console\Style\SymfonyStyle;
-use RectorPrefix20210519\Symplify\SmartFileSystem\SmartFileSystem;
+use Symplify\SmartFileSystem\SmartFileSystem;
 /**
  * Adds and removes scheduled file
  */
@@ -32,7 +32,7 @@ final class RemovedAndAddedFilesProcessor
      * @var \Symfony\Component\Console\Style\SymfonyStyle
      */
     private $symfonyStyle;
-    public function __construct(\Rector\Core\Configuration\Configuration $configuration, \RectorPrefix20210519\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \Rector\Core\PhpParser\Printer\NodesWithFileDestinationPrinter $nodesWithFileDestinationPrinter, \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector $removedAndAddedFilesCollector, \RectorPrefix20210519\Symfony\Component\Console\Style\SymfonyStyle $symfonyStyle)
+    public function __construct(\Rector\Core\Configuration\Configuration $configuration, \Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \Rector\Core\PhpParser\Printer\NodesWithFileDestinationPrinter $nodesWithFileDestinationPrinter, \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector $removedAndAddedFilesCollector, \RectorPrefix20210519\Symfony\Component\Console\Style\SymfonyStyle $symfonyStyle)
     {
         $this->configuration = $configuration;
         $this->smartFileSystem = $smartFileSystem;

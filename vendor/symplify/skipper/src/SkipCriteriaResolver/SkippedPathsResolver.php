@@ -6,7 +6,7 @@ namespace RectorPrefix20210519\Symplify\Skipper\SkipCriteriaResolver;
 use RectorPrefix20210519\Nette\Utils\Strings;
 use RectorPrefix20210519\Symplify\PackageBuilder\Parameter\ParameterProvider;
 use RectorPrefix20210519\Symplify\Skipper\ValueObject\Option;
-use RectorPrefix20210519\Symplify\SmartFileSystem\Normalizer\PathNormalizer;
+use Symplify\SmartFileSystem\Normalizer\PathNormalizer;
 /**
  * @see \Symplify\Skipper\Tests\SkipCriteriaResolver\SkippedPathsResolver\SkippedPathsResolverTest
  */
@@ -24,7 +24,7 @@ final class SkippedPathsResolver
      * @var PathNormalizer
      */
     private $pathNormalizer;
-    public function __construct(\RectorPrefix20210519\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \RectorPrefix20210519\Symplify\SmartFileSystem\Normalizer\PathNormalizer $pathNormalizer)
+    public function __construct(\RectorPrefix20210519\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \Symplify\SmartFileSystem\Normalizer\PathNormalizer $pathNormalizer)
     {
         $this->parameterProvider = $parameterProvider;
         $this->pathNormalizer = $pathNormalizer;

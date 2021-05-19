@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210519\Symplify\SmartFileSystem\Finder;
+namespace Symplify\SmartFileSystem\Finder;
 
 use RectorPrefix20210519\Nette\Utils\Finder as NetteFinder;
 use SplFileInfo;

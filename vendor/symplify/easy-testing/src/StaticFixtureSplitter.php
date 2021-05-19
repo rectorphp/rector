@@ -9,7 +9,7 @@ use RectorPrefix20210519\Symplify\EasyTesting\ValueObject\InputFileInfoAndExpect
 use RectorPrefix20210519\Symplify\EasyTesting\ValueObject\InputFileInfoAndExpectedFileInfo;
 use RectorPrefix20210519\Symplify\EasyTesting\ValueObject\SplitLine;
 use Symplify\SmartFileSystem\SmartFileInfo;
-use RectorPrefix20210519\Symplify\SmartFileSystem\SmartFileSystem;
+use Symplify\SmartFileSystem\SmartFileSystem;
 final class StaticFixtureSplitter
 {
     /**
@@ -50,7 +50,7 @@ final class StaticFixtureSplitter
     public static function createTemporaryFileInfo(\Symplify\SmartFileSystem\SmartFileInfo $fixtureSmartFileInfo, string $prefix, string $fileContent) : \Symplify\SmartFileSystem\SmartFileInfo
     {
         $temporaryFilePath = self::createTemporaryPathWithPrefix($fixtureSmartFileInfo, $prefix);
-        $smartFileSystem = new \RectorPrefix20210519\Symplify\SmartFileSystem\SmartFileSystem();
+        $smartFileSystem = new \Symplify\SmartFileSystem\SmartFileSystem();
         $smartFileSystem->dumpFile($temporaryFilePath, $fileContent);
         return new \Symplify\SmartFileSystem\SmartFileInfo($temporaryFilePath);
     }

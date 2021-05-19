@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210519\Symplify\SmartFileSystem\Json;
+namespace Symplify\SmartFileSystem\Json;
 
 use RectorPrefix20210519\Nette\Utils\Arrays;
 use RectorPrefix20210519\Nette\Utils\Json;
-use RectorPrefix20210519\Symplify\SmartFileSystem\FileSystemGuard;
-use RectorPrefix20210519\Symplify\SmartFileSystem\SmartFileSystem;
+use Symplify\SmartFileSystem\FileSystemGuard;
+use Symplify\SmartFileSystem\SmartFileSystem;
 /**
  * @see \Symplify\SmartFileSystem\Tests\Json\JsonFileSystem\JsonFileSystemTest
  */
@@ -20,7 +20,7 @@ final class JsonFileSystem
      * @var SmartFileSystem
      */
     private $smartFileSystem;
-    public function __construct(\RectorPrefix20210519\Symplify\SmartFileSystem\FileSystemGuard $fileSystemGuard, \RectorPrefix20210519\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem)
+    public function __construct(\Symplify\SmartFileSystem\FileSystemGuard $fileSystemGuard, \Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem)
     {
         $this->fileSystemGuard = $fileSystemGuard;
         $this->smartFileSystem = $smartFileSystem;

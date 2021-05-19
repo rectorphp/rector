@@ -73,11 +73,8 @@ final class ComplexNodeRemover
                 $shouldKeepProperty = \true;
                 continue;
             }
-            $assign = $this->resolveAssign($propertyFetch);
-            if (!$assign instanceof \PhpParser\Node\Expr\Assign) {
-                return;
-            }
             // remove assigns
+            $assign = $this->resolveAssign($propertyFetch);
             $this->assignRemover->removeAssignNode($assign);
             $this->removeConstructorDependency($assign);
         }
@@ -111,14 +108,14 @@ final class ComplexNodeRemover
     /**
      * @param PropertyFetch|StaticPropertyFetch $expr
      */
-    private function resolveAssign(\PhpParser\Node\Expr $expr) : ?\PhpParser\Node\Expr\Assign
+    private function resolveAssign(\PhpParser\Node\Expr $expr) : \PhpParser\Node\Expr\Assign
     {
         $assign = $expr->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
         while ($assign !== null && !$assign instanceof \PhpParser\Node\Expr\Assign) {
             $assign = $assign->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
         }
         if (!$assign instanceof \PhpParser\Node\Expr\Assign) {
-            return null;
+            throw new \Rector\Core\Exception\ShouldNotHappenException("Can't handle this situation");
         }
         return $assign;
     }
