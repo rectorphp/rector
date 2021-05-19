@@ -33,7 +33,9 @@ final class VersionResolver
                 'You must ensure to run compile from composer git repository clone and that git binary is available.'
             );
         }
-        return trim($process->getOutput());
+
+        $version = trim($process->getOutput());
+        return trim($version, '"');
     }
 
     public static function resolverReleaseDateTime(): DateTime
