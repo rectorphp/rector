@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\FileFormatter\EditorConfig;
 
-use RectorPrefix20210519\Idiosyncratic\EditorConfig\EditorConfig;
+use RectorPrefix20210520\Idiosyncratic\EditorConfig\EditorConfig;
 use Rector\Core\ValueObject\Application\File;
 use Rector\FileFormatter\ValueObject\EditorConfigConfiguration;
 use Rector\FileFormatter\ValueObject\EditorConfigOption;
@@ -17,7 +17,7 @@ final class EditorConfigParser
      * @var \Idiosyncratic\EditorConfig\EditorConfig
      */
     private $editorConfig;
-    public function __construct(\RectorPrefix20210519\Idiosyncratic\EditorConfig\EditorConfig $editorConfig)
+    public function __construct(\RectorPrefix20210520\Idiosyncratic\EditorConfig\EditorConfig $editorConfig)
     {
         $this->editorConfig = $editorConfig;
     }
@@ -40,9 +40,6 @@ final class EditorConfigParser
         if (\array_key_exists(\Rector\FileFormatter\ValueObject\EditorConfigOption::INSERT_FINAL_NEWLINE, $configuration)) {
             $insertFinalNewline = (bool) $configuration[\Rector\FileFormatter\ValueObject\EditorConfigOption::INSERT_FINAL_NEWLINE]->getValue();
             $editorConfigConfigurationBuilder->withInsertFinalNewline($insertFinalNewline);
-        }
-        if (\array_key_exists(\Rector\FileFormatter\ValueObject\EditorConfigOption::TAB_WIDTH, $configuration)) {
-            $editorConfigConfigurationBuilder->withIndentSize($configuration[\Rector\FileFormatter\ValueObject\EditorConfigOption::TAB_WIDTH]->getValue());
         }
         return $editorConfigConfigurationBuilder->build();
     }

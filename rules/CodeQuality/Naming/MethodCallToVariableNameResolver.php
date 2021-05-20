@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\CodeQuality\Naming;
 
-use RectorPrefix20210519\Nette\Utils\Strings;
+use RectorPrefix20210520\Nette\Utils\Strings;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
@@ -61,7 +61,7 @@ final class MethodCallToVariableNameResolver
             return null;
         }
         $result = $this->getVariableName($methodCall, $methodCallVarName, $methodCallName);
-        if (!\RectorPrefix20210519\Nette\Utils\Strings::match($result, self::SPACE_REGEX)) {
+        if (!\RectorPrefix20210520\Nette\Utils\Strings::match($result, self::SPACE_REGEX)) {
             return $result;
         }
         return $this->getFallbackVarName($methodCallVarName, $methodCallName);
@@ -102,7 +102,7 @@ final class MethodCallToVariableNameResolver
         $name = $classConstFetch->name;
         $argValueName = \strtolower($name->toString());
         if ($argValueName !== 'class') {
-            return \RectorPrefix20210519\Nette\Utils\Strings::replace($argValueName, self::CONSTANT_REGEX, function ($matches) : string {
+            return \RectorPrefix20210520\Nette\Utils\Strings::replace($argValueName, self::CONSTANT_REGEX, function ($matches) : string {
                 return \strtoupper($matches[2]);
             });
         }
@@ -114,7 +114,7 @@ final class MethodCallToVariableNameResolver
     private function getStringVarName(\PhpParser\Node\Scalar\String_ $string, string $methodCallVarName, string $fallbackVarName) : string
     {
         $normalizeStringVariableName = $this->normalizeStringVariableName($string->value . \ucfirst($fallbackVarName));
-        if (!\RectorPrefix20210519\Nette\Utils\Strings::match($normalizeStringVariableName, self::START_ALPHA_REGEX)) {
+        if (!\RectorPrefix20210520\Nette\Utils\Strings::match($normalizeStringVariableName, self::START_ALPHA_REGEX)) {
             return $fallbackVarName;
         }
         if ($normalizeStringVariableName === $methodCallVarName) {
@@ -124,7 +124,7 @@ final class MethodCallToVariableNameResolver
     }
     private function normalizeStringVariableName(string $string) : string
     {
-        if (!\RectorPrefix20210519\Nette\Utils\Strings::match($string, self::VALID_STRING_VARIABLE_REGEX)) {
+        if (!\RectorPrefix20210520\Nette\Utils\Strings::match($string, self::VALID_STRING_VARIABLE_REGEX)) {
             return '';
         }
         $get = \str_ireplace('get', '', $string);

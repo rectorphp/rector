@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Ssch\TYPO3Rector\TypoScript\Conditions;
 
-use RectorPrefix20210519\Nette\Utils\Strings;
+use RectorPrefix20210520\Nette\Utils\Strings;
 use Ssch\TYPO3Rector\Helper\ArrayUtility;
 final class GlobalStringConditionMatcher extends \Ssch\TYPO3Rector\TypoScript\Conditions\AbstractGlobalConditionMatcher
 {
@@ -41,10 +41,10 @@ final class GlobalStringConditionMatcher extends \Ssch\TYPO3Rector\TypoScript\Co
     }
     public function shouldApply(string $condition) : bool
     {
-        if (\RectorPrefix20210519\Nette\Utils\Strings::contains($condition, self::CONTAINS_CONSTANT)) {
+        if (\RectorPrefix20210520\Nette\Utils\Strings::contains($condition, self::CONTAINS_CONSTANT)) {
             return \false;
         }
-        return \RectorPrefix20210519\Nette\Utils\Strings::startsWith($condition, self::TYPE);
+        return \RectorPrefix20210520\Nette\Utils\Strings::startsWith($condition, self::TYPE);
     }
     private function refactorGetPost(string $property, string $operator, string $value) : string
     {

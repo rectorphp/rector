@@ -3,13 +3,13 @@
 declare (strict_types=1);
 namespace Rector\Nette\Rector\Neon;
 
-use RectorPrefix20210519\Nette\Utils\Strings;
+use RectorPrefix20210520\Nette\Utils\Strings;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Nette\Contract\Rector\NeonRectorInterface;
 use Rector\Renaming\ValueObject\MethodCallRename;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20210519\Webmozart\Assert\Assert;
+use RectorPrefix20210520\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Nette\Tests\Rector\Neon\RenameMethodNeonRector\RenameMethodNeonRectorTest
  */
@@ -47,7 +47,7 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $methodCallRenames = $configuration[self::RENAME_METHODS] ?? [];
-        \RectorPrefix20210519\Webmozart\Assert\Assert::allIsInstanceOf($methodCallRenames, \Rector\Renaming\ValueObject\MethodCallRename::class);
+        \RectorPrefix20210520\Webmozart\Assert\Assert::allIsInstanceOf($methodCallRenames, \Rector\Renaming\ValueObject\MethodCallRename::class);
         $this->methodCallRenames = $methodCallRenames;
     }
     public function changeContent(string $content) : string
@@ -59,7 +59,7 @@ CODE_SAMPLE
             $oldMethodName = $methodCallRename->getOldMethod();
             $newMethodName = $methodCallRename->getNewMethod();
             $pattern = '#\\n(.*?)(class|factory): ' . $className . '(\\n|\\((.*?)\\)\\n)\\1setup:(.*?)- ' . $oldMethodName . '\\(#s';
-            if (\RectorPrefix20210519\Nette\Utils\Strings::match($content, $pattern)) {
+            if (\RectorPrefix20210520\Nette\Utils\Strings::match($content, $pattern)) {
                 $content = \str_replace($oldMethodName . '(', $newMethodName . '(', $content);
             }
         }

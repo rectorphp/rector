@@ -8,39 +8,39 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210519\Symfony\Component\HttpKernel;
+namespace RectorPrefix20210520\Symfony\Component\HttpKernel;
 
-use RectorPrefix20210519\Symfony\Bridge\ProxyManager\LazyProxy\Instantiator\RuntimeInstantiator;
-use RectorPrefix20210519\Symfony\Bridge\ProxyManager\LazyProxy\PhpDumper\ProxyDumper;
-use RectorPrefix20210519\Symfony\Component\Config\ConfigCache;
-use RectorPrefix20210519\Symfony\Component\Config\Loader\DelegatingLoader;
-use RectorPrefix20210519\Symfony\Component\Config\Loader\LoaderResolver;
-use RectorPrefix20210519\Symfony\Component\Debug\DebugClassLoader as LegacyDebugClassLoader;
-use RectorPrefix20210519\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
-use RectorPrefix20210519\Symfony\Component\DependencyInjection\Compiler\PassConfig;
-use RectorPrefix20210519\Symfony\Component\DependencyInjection\ContainerBuilder;
-use RectorPrefix20210519\Symfony\Component\DependencyInjection\ContainerInterface;
-use RectorPrefix20210519\Symfony\Component\DependencyInjection\Dumper\PhpDumper;
-use RectorPrefix20210519\Symfony\Component\DependencyInjection\Dumper\Preloader;
-use RectorPrefix20210519\Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
-use RectorPrefix20210519\Symfony\Component\DependencyInjection\Loader\ClosureLoader;
-use RectorPrefix20210519\Symfony\Component\DependencyInjection\Loader\DirectoryLoader;
-use RectorPrefix20210519\Symfony\Component\DependencyInjection\Loader\GlobFileLoader;
-use RectorPrefix20210519\Symfony\Component\DependencyInjection\Loader\IniFileLoader;
-use RectorPrefix20210519\Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
-use RectorPrefix20210519\Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
-use RectorPrefix20210519\Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
-use RectorPrefix20210519\Symfony\Component\ErrorHandler\DebugClassLoader;
-use RectorPrefix20210519\Symfony\Component\Filesystem\Filesystem;
-use RectorPrefix20210519\Symfony\Component\HttpFoundation\Request;
-use RectorPrefix20210519\Symfony\Component\HttpFoundation\Response;
-use RectorPrefix20210519\Symfony\Component\HttpKernel\Bundle\BundleInterface;
-use RectorPrefix20210519\Symfony\Component\HttpKernel\CacheWarmer\WarmableInterface;
-use RectorPrefix20210519\Symfony\Component\HttpKernel\Config\FileLocator;
-use RectorPrefix20210519\Symfony\Component\HttpKernel\DependencyInjection\AddAnnotatedClassesToCachePass;
-use RectorPrefix20210519\Symfony\Component\HttpKernel\DependencyInjection\MergeExtensionConfigurationPass;
+use RectorPrefix20210520\Symfony\Bridge\ProxyManager\LazyProxy\Instantiator\RuntimeInstantiator;
+use RectorPrefix20210520\Symfony\Bridge\ProxyManager\LazyProxy\PhpDumper\ProxyDumper;
+use RectorPrefix20210520\Symfony\Component\Config\ConfigCache;
+use RectorPrefix20210520\Symfony\Component\Config\Loader\DelegatingLoader;
+use RectorPrefix20210520\Symfony\Component\Config\Loader\LoaderResolver;
+use RectorPrefix20210520\Symfony\Component\Debug\DebugClassLoader as LegacyDebugClassLoader;
+use RectorPrefix20210520\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use RectorPrefix20210520\Symfony\Component\DependencyInjection\Compiler\PassConfig;
+use RectorPrefix20210520\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix20210520\Symfony\Component\DependencyInjection\ContainerInterface;
+use RectorPrefix20210520\Symfony\Component\DependencyInjection\Dumper\PhpDumper;
+use RectorPrefix20210520\Symfony\Component\DependencyInjection\Dumper\Preloader;
+use RectorPrefix20210520\Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
+use RectorPrefix20210520\Symfony\Component\DependencyInjection\Loader\ClosureLoader;
+use RectorPrefix20210520\Symfony\Component\DependencyInjection\Loader\DirectoryLoader;
+use RectorPrefix20210520\Symfony\Component\DependencyInjection\Loader\GlobFileLoader;
+use RectorPrefix20210520\Symfony\Component\DependencyInjection\Loader\IniFileLoader;
+use RectorPrefix20210520\Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
+use RectorPrefix20210520\Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
+use RectorPrefix20210520\Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
+use RectorPrefix20210520\Symfony\Component\ErrorHandler\DebugClassLoader;
+use RectorPrefix20210520\Symfony\Component\Filesystem\Filesystem;
+use RectorPrefix20210520\Symfony\Component\HttpFoundation\Request;
+use RectorPrefix20210520\Symfony\Component\HttpFoundation\Response;
+use RectorPrefix20210520\Symfony\Component\HttpKernel\Bundle\BundleInterface;
+use RectorPrefix20210520\Symfony\Component\HttpKernel\CacheWarmer\WarmableInterface;
+use RectorPrefix20210520\Symfony\Component\HttpKernel\Config\FileLocator;
+use RectorPrefix20210520\Symfony\Component\HttpKernel\DependencyInjection\AddAnnotatedClassesToCachePass;
+use RectorPrefix20210520\Symfony\Component\HttpKernel\DependencyInjection\MergeExtensionConfigurationPass;
 // Help opcache.preload discover always-needed symbols
-\class_exists(\RectorPrefix20210519\Symfony\Component\Config\ConfigCache::class);
+\class_exists(\RectorPrefix20210520\Symfony\Component\Config\ConfigCache::class);
 /**
  * The Kernel is the heart of the Symfony system.
  *
@@ -51,7 +51,7 @@ use RectorPrefix20210519\Symfony\Component\HttpKernel\DependencyInjection\MergeE
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-abstract class Kernel implements \RectorPrefix20210519\Symfony\Component\HttpKernel\KernelInterface, \RectorPrefix20210519\Symfony\Component\HttpKernel\RebootableInterface, \RectorPrefix20210519\Symfony\Component\HttpKernel\TerminableInterface
+abstract class Kernel implements \RectorPrefix20210520\Symfony\Component\HttpKernel\KernelInterface, \RectorPrefix20210520\Symfony\Component\HttpKernel\RebootableInterface, \RectorPrefix20210520\Symfony\Component\HttpKernel\TerminableInterface
 {
     /**
      * @var BundleInterface[]
@@ -125,12 +125,12 @@ abstract class Kernel implements \RectorPrefix20210519\Symfony\Component\HttpKer
     /**
      * {@inheritdoc}
      */
-    public function terminate(\RectorPrefix20210519\Symfony\Component\HttpFoundation\Request $request, \RectorPrefix20210519\Symfony\Component\HttpFoundation\Response $response)
+    public function terminate(\RectorPrefix20210520\Symfony\Component\HttpFoundation\Request $request, \RectorPrefix20210520\Symfony\Component\HttpFoundation\Response $response)
     {
         if (\false === $this->booted) {
             return;
         }
-        if ($this->getHttpKernel() instanceof \RectorPrefix20210519\Symfony\Component\HttpKernel\TerminableInterface) {
+        if ($this->getHttpKernel() instanceof \RectorPrefix20210520\Symfony\Component\HttpKernel\TerminableInterface) {
             $this->getHttpKernel()->terminate($request, $response);
         }
     }
@@ -154,7 +154,7 @@ abstract class Kernel implements \RectorPrefix20210519\Symfony\Component\HttpKer
     /**
      * {@inheritdoc}
      */
-    public function handle(\RectorPrefix20210519\Symfony\Component\HttpFoundation\Request $request, int $type = \RectorPrefix20210519\Symfony\Component\HttpKernel\HttpKernelInterface::MASTER_REQUEST, bool $catch = \true)
+    public function handle(\RectorPrefix20210520\Symfony\Component\HttpFoundation\Request $request, int $type = \RectorPrefix20210520\Symfony\Component\HttpKernel\HttpKernelInterface::MASTER_REQUEST, bool $catch = \true)
     {
         if (!$this->booted) {
             $container = $this->container ?? $this->preBoot();
@@ -338,7 +338,7 @@ abstract class Kernel implements \RectorPrefix20210519\Symfony\Component\HttpKer
      *
      * Use this method to register compiler passes and manipulate the container during the building process.
      */
-    protected function build(\RectorPrefix20210519\Symfony\Component\DependencyInjection\ContainerBuilder $container)
+    protected function build(\RectorPrefix20210520\Symfony\Component\DependencyInjection\ContainerBuilder $container)
     {
     }
     /**
@@ -351,7 +351,7 @@ abstract class Kernel implements \RectorPrefix20210519\Symfony\Component\HttpKer
     protected function getContainerClass()
     {
         $class = static::class;
-        $class = \false !== \strpos($class, "@anonymous\0") ? \get_parent_class($class) . \str_replace('.', '_', \RectorPrefix20210519\Symfony\Component\DependencyInjection\ContainerBuilder::hash($class)) : $class;
+        $class = \false !== \strpos($class, "@anonymous\0") ? \get_parent_class($class) . \str_replace('.', '_', \RectorPrefix20210520\Symfony\Component\DependencyInjection\ContainerBuilder::hash($class)) : $class;
         $class = \str_replace('\\', '_', $class) . \ucfirst($this->environment) . ($this->debug ? 'Debug' : '') . 'Container';
         if (!\preg_match('/^[a-zA-Z_\\x7f-\\xff][a-zA-Z0-9_\\x7f-\\xff]*$/', $class)) {
             throw new \InvalidArgumentException(\sprintf('The environment "%s" contains invalid characters, it can only contain characters allowed in PHP class names.', $this->environment));
@@ -379,7 +379,7 @@ abstract class Kernel implements \RectorPrefix20210519\Symfony\Component\HttpKer
     {
         $class = $this->getContainerClass();
         $buildDir = $this->warmupDir ?: $this->getBuildDir();
-        $cache = new \RectorPrefix20210519\Symfony\Component\Config\ConfigCache($buildDir . '/' . $class . '.php', $this->debug);
+        $cache = new \RectorPrefix20210520\Symfony\Component\Config\ConfigCache($buildDir . '/' . $class . '.php', $this->debug);
         $cachePath = $cache->getPath();
         // Silence E_WARNING to ignore "include" failures - don't use "@" to prevent silencing fatal errors
         $errorLevel = \error_reporting(\E_ALL ^ \E_WARNING);
@@ -444,7 +444,7 @@ abstract class Kernel implements \RectorPrefix20210519\Symfony\Component\HttpKer
                 }
                 // Remove frames added by DebugClassLoader.
                 for ($i = \count($backtrace) - 2; 0 < $i; --$i) {
-                    if (\in_array($backtrace[$i]['class'] ?? null, [\RectorPrefix20210519\Symfony\Component\ErrorHandler\DebugClassLoader::class, \RectorPrefix20210519\Symfony\Component\Debug\DebugClassLoader::class], \true)) {
+                    if (\in_array($backtrace[$i]['class'] ?? null, [\RectorPrefix20210520\Symfony\Component\ErrorHandler\DebugClassLoader::class, \RectorPrefix20210520\Symfony\Component\Debug\DebugClassLoader::class], \true)) {
                         $backtrace = [$backtrace[$i + 1]];
                         break;
                     }
@@ -480,17 +480,17 @@ abstract class Kernel implements \RectorPrefix20210519\Symfony\Component\HttpKer
             $legacyContainers[$oldContainerDir . '.legacy'] = \true;
             foreach (\glob(\dirname($oldContainerDir) . \DIRECTORY_SEPARATOR . '*.legacy', \GLOB_NOSORT) as $legacyContainer) {
                 if (!isset($legacyContainers[$legacyContainer]) && @\unlink($legacyContainer)) {
-                    (new \RectorPrefix20210519\Symfony\Component\Filesystem\Filesystem())->remove(\substr($legacyContainer, 0, -7));
+                    (new \RectorPrefix20210520\Symfony\Component\Filesystem\Filesystem())->remove(\substr($legacyContainer, 0, -7));
                 }
             }
             \touch($oldContainerDir . '.legacy');
         }
-        $preload = $this instanceof \RectorPrefix20210519\Symfony\Component\HttpKernel\CacheWarmer\WarmableInterface ? (array) $this->warmUp($this->container->getParameter('kernel.cache_dir')) : [];
+        $preload = $this instanceof \RectorPrefix20210520\Symfony\Component\HttpKernel\CacheWarmer\WarmableInterface ? (array) $this->warmUp($this->container->getParameter('kernel.cache_dir')) : [];
         if ($this->container->has('cache_warmer')) {
             $preload = \array_merge($preload, (array) $this->container->get('cache_warmer')->warmUp($this->container->getParameter('kernel.cache_dir')));
         }
-        if ($preload && \method_exists(\RectorPrefix20210519\Symfony\Component\DependencyInjection\Dumper\Preloader::class, 'append') && \file_exists($preloadFile = $buildDir . '/' . $class . '.preload.php')) {
-            \RectorPrefix20210519\Symfony\Component\DependencyInjection\Dumper\Preloader::append($preloadFile, $preload);
+        if ($preload && \method_exists(\RectorPrefix20210520\Symfony\Component\DependencyInjection\Dumper\Preloader::class, 'append') && \file_exists($preloadFile = $buildDir . '/' . $class . '.preload.php')) {
+            \RectorPrefix20210520\Symfony\Component\DependencyInjection\Dumper\Preloader::append($preloadFile, $preload);
         }
     }
     /**
@@ -532,13 +532,13 @@ abstract class Kernel implements \RectorPrefix20210519\Symfony\Component\HttpKer
         if (null !== ($cont = $this->registerContainerConfiguration($this->getContainerLoader($container)))) {
             $container->merge($cont);
         }
-        $container->addCompilerPass(new \RectorPrefix20210519\Symfony\Component\HttpKernel\DependencyInjection\AddAnnotatedClassesToCachePass($this));
+        $container->addCompilerPass(new \RectorPrefix20210520\Symfony\Component\HttpKernel\DependencyInjection\AddAnnotatedClassesToCachePass($this));
         return $container;
     }
     /**
      * Prepares the ContainerBuilder before it is compiled.
      */
-    protected function prepareContainer(\RectorPrefix20210519\Symfony\Component\DependencyInjection\ContainerBuilder $container)
+    protected function prepareContainer(\RectorPrefix20210520\Symfony\Component\DependencyInjection\ContainerBuilder $container)
     {
         $extensions = [];
         foreach ($this->bundles as $bundle) {
@@ -557,7 +557,7 @@ abstract class Kernel implements \RectorPrefix20210519\Symfony\Component\HttpKer
             $extensions[] = $extension->getAlias();
         }
         // ensure these extensions are implicitly loaded
-        $container->getCompilerPassConfig()->setMergePass(new \RectorPrefix20210519\Symfony\Component\HttpKernel\DependencyInjection\MergeExtensionConfigurationPass($extensions));
+        $container->getCompilerPassConfig()->setMergePass(new \RectorPrefix20210520\Symfony\Component\HttpKernel\DependencyInjection\MergeExtensionConfigurationPass($extensions));
     }
     /**
      * Gets a new ContainerBuilder instance used to build the service container.
@@ -566,16 +566,16 @@ abstract class Kernel implements \RectorPrefix20210519\Symfony\Component\HttpKer
      */
     protected function getContainerBuilder()
     {
-        $container = new \RectorPrefix20210519\Symfony\Component\DependencyInjection\ContainerBuilder();
+        $container = new \RectorPrefix20210520\Symfony\Component\DependencyInjection\ContainerBuilder();
         $container->getParameterBag()->add($this->getKernelParameters());
-        if ($this instanceof \RectorPrefix20210519\Symfony\Component\DependencyInjection\Extension\ExtensionInterface) {
+        if ($this instanceof \RectorPrefix20210520\Symfony\Component\DependencyInjection\Extension\ExtensionInterface) {
             $container->registerExtension($this);
         }
-        if ($this instanceof \RectorPrefix20210519\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface) {
-            $container->addCompilerPass($this, \RectorPrefix20210519\Symfony\Component\DependencyInjection\Compiler\PassConfig::TYPE_BEFORE_OPTIMIZATION, -10000);
+        if ($this instanceof \RectorPrefix20210520\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface) {
+            $container->addCompilerPass($this, \RectorPrefix20210520\Symfony\Component\DependencyInjection\Compiler\PassConfig::TYPE_BEFORE_OPTIMIZATION, -10000);
         }
-        if (\class_exists(\RectorPrefix20210519\ProxyManager\Configuration::class) && \class_exists(\RectorPrefix20210519\Symfony\Bridge\ProxyManager\LazyProxy\Instantiator\RuntimeInstantiator::class)) {
-            $container->setProxyInstantiator(new \RectorPrefix20210519\Symfony\Bridge\ProxyManager\LazyProxy\Instantiator\RuntimeInstantiator());
+        if (\class_exists(\RectorPrefix20210520\ProxyManager\Configuration::class) && \class_exists(\RectorPrefix20210520\Symfony\Bridge\ProxyManager\LazyProxy\Instantiator\RuntimeInstantiator::class)) {
+            $container->setProxyInstantiator(new \RectorPrefix20210520\Symfony\Bridge\ProxyManager\LazyProxy\Instantiator\RuntimeInstantiator());
         }
         return $container;
     }
@@ -585,17 +585,17 @@ abstract class Kernel implements \RectorPrefix20210519\Symfony\Component\HttpKer
      * @param string $class     The name of the class to generate
      * @param string $baseClass The name of the container's base class
      */
-    protected function dumpContainer(\RectorPrefix20210519\Symfony\Component\Config\ConfigCache $cache, \RectorPrefix20210519\Symfony\Component\DependencyInjection\ContainerBuilder $container, string $class, string $baseClass)
+    protected function dumpContainer(\RectorPrefix20210520\Symfony\Component\Config\ConfigCache $cache, \RectorPrefix20210520\Symfony\Component\DependencyInjection\ContainerBuilder $container, string $class, string $baseClass)
     {
         // cache the container
-        $dumper = new \RectorPrefix20210519\Symfony\Component\DependencyInjection\Dumper\PhpDumper($container);
-        if (\class_exists(\RectorPrefix20210519\ProxyManager\Configuration::class) && \class_exists(\RectorPrefix20210519\Symfony\Bridge\ProxyManager\LazyProxy\PhpDumper\ProxyDumper::class)) {
-            $dumper->setProxyDumper(new \RectorPrefix20210519\Symfony\Bridge\ProxyManager\LazyProxy\PhpDumper\ProxyDumper());
+        $dumper = new \RectorPrefix20210520\Symfony\Component\DependencyInjection\Dumper\PhpDumper($container);
+        if (\class_exists(\RectorPrefix20210520\ProxyManager\Configuration::class) && \class_exists(\RectorPrefix20210520\Symfony\Bridge\ProxyManager\LazyProxy\PhpDumper\ProxyDumper::class)) {
+            $dumper->setProxyDumper(new \RectorPrefix20210520\Symfony\Bridge\ProxyManager\LazyProxy\PhpDumper\ProxyDumper());
         }
         $content = $dumper->dump(['class' => $class, 'base_class' => $baseClass, 'file' => $cache->getPath(), 'as_files' => \true, 'debug' => $this->debug, 'build_time' => $container->hasParameter('kernel.container_build_time') ? $container->getParameter('kernel.container_build_time') : \time(), 'preload_classes' => \array_map('get_class', $this->bundles)]);
         $rootCode = \array_pop($content);
         $dir = \dirname($cache->getPath()) . '/';
-        $fs = new \RectorPrefix20210519\Symfony\Component\Filesystem\Filesystem();
+        $fs = new \RectorPrefix20210520\Symfony\Component\Filesystem\Filesystem();
         foreach ($content as $file => $code) {
             $fs->dumpFile($dir . $file, $code);
             @\chmod($dir . $file, 0666 & ~\umask());
@@ -611,13 +611,13 @@ abstract class Kernel implements \RectorPrefix20210519\Symfony\Component\HttpKer
      *
      * @return DelegatingLoader The loader
      */
-    protected function getContainerLoader(\RectorPrefix20210519\Symfony\Component\DependencyInjection\ContainerInterface $container)
+    protected function getContainerLoader(\RectorPrefix20210520\Symfony\Component\DependencyInjection\ContainerInterface $container)
     {
-        $locator = new \RectorPrefix20210519\Symfony\Component\HttpKernel\Config\FileLocator($this);
-        $resolver = new \RectorPrefix20210519\Symfony\Component\Config\Loader\LoaderResolver([new \RectorPrefix20210519\Symfony\Component\DependencyInjection\Loader\XmlFileLoader($container, $locator), new \RectorPrefix20210519\Symfony\Component\DependencyInjection\Loader\YamlFileLoader($container, $locator), new \RectorPrefix20210519\Symfony\Component\DependencyInjection\Loader\IniFileLoader($container, $locator), new \RectorPrefix20210519\Symfony\Component\DependencyInjection\Loader\PhpFileLoader($container, $locator), new \RectorPrefix20210519\Symfony\Component\DependencyInjection\Loader\GlobFileLoader($container, $locator), new \RectorPrefix20210519\Symfony\Component\DependencyInjection\Loader\DirectoryLoader($container, $locator), new \RectorPrefix20210519\Symfony\Component\DependencyInjection\Loader\ClosureLoader($container)]);
-        return new \RectorPrefix20210519\Symfony\Component\Config\Loader\DelegatingLoader($resolver);
+        $locator = new \RectorPrefix20210520\Symfony\Component\HttpKernel\Config\FileLocator($this);
+        $resolver = new \RectorPrefix20210520\Symfony\Component\Config\Loader\LoaderResolver([new \RectorPrefix20210520\Symfony\Component\DependencyInjection\Loader\XmlFileLoader($container, $locator), new \RectorPrefix20210520\Symfony\Component\DependencyInjection\Loader\YamlFileLoader($container, $locator), new \RectorPrefix20210520\Symfony\Component\DependencyInjection\Loader\IniFileLoader($container, $locator), new \RectorPrefix20210520\Symfony\Component\DependencyInjection\Loader\PhpFileLoader($container, $locator), new \RectorPrefix20210520\Symfony\Component\DependencyInjection\Loader\GlobFileLoader($container, $locator), new \RectorPrefix20210520\Symfony\Component\DependencyInjection\Loader\DirectoryLoader($container, $locator), new \RectorPrefix20210520\Symfony\Component\DependencyInjection\Loader\ClosureLoader($container)]);
+        return new \RectorPrefix20210520\Symfony\Component\Config\Loader\DelegatingLoader($resolver);
     }
-    private function preBoot() : \RectorPrefix20210519\Symfony\Component\DependencyInjection\ContainerInterface
+    private function preBoot() : \RectorPrefix20210520\Symfony\Component\DependencyInjection\ContainerInterface
     {
         if ($this->debug) {
             $this->startTime = \microtime(\true);
@@ -631,10 +631,10 @@ abstract class Kernel implements \RectorPrefix20210519\Symfony\Component\HttpKer
         $this->initializeContainer();
         $container = $this->container;
         if ($container->hasParameter('kernel.trusted_hosts') && ($trustedHosts = $container->getParameter('kernel.trusted_hosts'))) {
-            \RectorPrefix20210519\Symfony\Component\HttpFoundation\Request::setTrustedHosts($trustedHosts);
+            \RectorPrefix20210520\Symfony\Component\HttpFoundation\Request::setTrustedHosts($trustedHosts);
         }
         if ($container->hasParameter('kernel.trusted_proxies') && $container->hasParameter('kernel.trusted_headers') && ($trustedProxies = $container->getParameter('kernel.trusted_proxies'))) {
-            \RectorPrefix20210519\Symfony\Component\HttpFoundation\Request::setTrustedProxies(\is_array($trustedProxies) ? $trustedProxies : \array_map('trim', \explode(',', $trustedProxies)), $container->getParameter('kernel.trusted_headers'));
+            \RectorPrefix20210520\Symfony\Component\HttpFoundation\Request::setTrustedProxies(\is_array($trustedProxies) ? $trustedProxies : \array_map('trim', \explode(',', $trustedProxies)), $container->getParameter('kernel.trusted_headers'));
         }
         return $container;
     }
