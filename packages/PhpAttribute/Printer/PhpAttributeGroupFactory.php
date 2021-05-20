@@ -24,7 +24,12 @@ final class PhpAttributeGroupFactory
 {
     public function createFromSimpleTag(AnnotationToAttribute $annotationToAttribute): AttributeGroup
     {
-        $fullyQualified = new FullyQualified($annotationToAttribute->getAttributeClass());
+        return $this->createFromClass($annotationToAttribute->getAttributeClass());
+    }
+
+    public function createFromClass(string $attributeClass): AttributeGroup
+    {
+        $fullyQualified = new FullyQualified($attributeClass);
         $attribute = new Attribute($fullyQualified);
         return new AttributeGroup([$attribute]);
     }

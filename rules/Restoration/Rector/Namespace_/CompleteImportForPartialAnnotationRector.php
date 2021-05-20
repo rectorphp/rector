@@ -16,6 +16,7 @@ use Rector\Restoration\ValueObject\CompleteImportForPartialAnnotation;
 use Symplify\Astral\ValueObject\NodeBuilder\UseBuilder;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Webmozart\Assert\Assert;
 
 /**
  * @see \Rector\Tests\Restoration\Rector\Namespace_\CompleteImportForPartialAnnotationRector\CompleteImportForPartialAnnotationRectorTest
@@ -99,17 +100,20 @@ CODE_SAMPLE
     }
 
     /**
-     * @param CompleteImportForPartialAnnotation[][] $configuration
+     * @param array<string, CompleteImportForPartialAnnotation[]> $configuration
      */
     public function configure(array $configuration): void
     {
+        $useImportsToRestore = $configuration[self::USE_IMPORTS_TO_RESTORE] ?? [];
+        Assert::allIsInstanceOf($useImportsToRestore, CompleteImportForPartialAnnotation::class);
+
         $default = [
             new CompleteImportForPartialAnnotation('Doctrine\ORM\Mapping', 'ORM'),
             new CompleteImportForPartialAnnotation('Symfony\Component\Validator\Constraints', 'Assert'),
             new CompleteImportForPartialAnnotation('JMS\Serializer\Annotation', 'Serializer'),
         ];
 
-        $this->useImportsToRestore = array_merge($configuration[self::USE_IMPORTS_TO_RESTORE] ?? [], $default);
+        $this->useImportsToRestore = array_merge($useImportsToRestore, $default);
     }
 
     private function addImportToNamespaceIfMissing(

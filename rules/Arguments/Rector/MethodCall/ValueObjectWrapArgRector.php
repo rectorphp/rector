@@ -19,6 +19,7 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Webmozart\Assert\Assert;
 
 /**
  * @see \Rector\Tests\Arguments\Rector\MethodCall\ValueObjectWrapArgRector\ValueObjectWrapArgRectorTest
@@ -111,7 +112,10 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $this->valueObjectWrapArgs = $configuration[self::VALUE_OBJECT_WRAP_ARGS] ?? [];
+        $valueObjectWrapArgs = $configuration[self::VALUE_OBJECT_WRAP_ARGS] ?? [];
+        Assert::allIsInstanceOf($valueObjectWrapArgs, ValueObjectWrapArg::class);
+
+        $this->valueObjectWrapArgs = $valueObjectWrapArgs;
     }
 
     private function wrapInNewWithType(ObjectType $newObjectType, Expr $expr): New_

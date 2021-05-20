@@ -11,6 +11,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Transform\ValueObject\ReplaceParentCallByPropertyCall;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Webmozart\Assert\Assert;
 
 /**
  * @see \Rector\Tests\Transform\Rector\MethodCall\ReplaceParentCallByPropertyCallRector\ReplaceParentCallByPropertyCallRectorTest
@@ -97,6 +98,9 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $this->parentCallToProperties = $configuration[self::PARENT_CALLS_TO_PROPERTIES] ?? [];
+        $parentCallToProperties = $configuration[self::PARENT_CALLS_TO_PROPERTIES] ?? [];
+        Assert::allIsInstanceOf($parentCallToProperties, ReplaceParentCallByPropertyCall::class);
+
+        $this->parentCallToProperties = $parentCallToProperties;
     }
 }

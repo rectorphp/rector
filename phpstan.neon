@@ -479,3 +479,7 @@ parameters:
         -
             message: '#Do not use chained method calls#'
             path: packages/BetterPhpDocParser/Printer/PhpDocInfoPrinter.php
+
+        -
+            message: '#Function "dump_node\(\)" cannot be used/left in the code#'
+            path: src/functions/node_helper.php

@@ -10,6 +10,7 @@ use Rector\Composer\ValueObject\PackageAndVersion;
 use Symplify\ComposerJsonManipulator\ValueObject\ComposerJson;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Webmozart\Assert\Assert;
 
 /**
  * @see \Rector\Tests\Composer\Rector\AddPackageToRequireDevComposerRector\AddPackageToRequireDevComposerRectorTest
@@ -70,6 +71,8 @@ CODE_SAMPLE
     public function configure(array $configuration): void
     {
         $packagesAndVersions = $configuration[self::PACKAGES_AND_VERSIONS] ?? [];
+        Assert::allIsInstanceOf($packagesAndVersions, PackageAndVersion::class);
+
         $this->versionGuard->validate($packagesAndVersions);
         $this->packageAndVersions = $packagesAndVersions;
     }
