@@ -90,8 +90,6 @@ It supports all versions of PHP from 5.3 and major open-source projects:
 composer require rector/rector --dev
 ```
 
-- Using a different PHP version than Rector supports? → Use the [Docker image](/docs/how_to_run_rector_in_docker.md)
-
 <br>
 
 ## Running Rector
