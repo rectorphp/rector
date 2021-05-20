@@ -2726,6 +2726,7 @@ return array(
     'Rector\\Php80\\Rector\\ClassMethod\\SetStateToStaticRector' => $baseDir . '/rules/Php80/Rector/ClassMethod/SetStateToStaticRector.php',
     'Rector\\Php80\\Rector\\Class_\\AnnotationToAttributeRector' => $baseDir . '/rules/Php80/Rector/Class_/AnnotationToAttributeRector.php',
     'Rector\\Php80\\Rector\\Class_\\ClassPropertyAssignToConstructorPromotionRector' => $baseDir . '/rules/Php80/Rector/Class_/ClassPropertyAssignToConstructorPromotionRector.php',
+    'Rector\\Php80\\Rector\\Class_\\DoctrineAnnotationClassToAttributeRector' => $baseDir . '/rules/Php80/Rector/Class_/DoctrineAnnotationClassToAttributeRector.php',
     'Rector\\Php80\\Rector\\Class_\\StringableForToStringRector' => $baseDir . '/rules/Php80/Rector/Class_/StringableForToStringRector.php',
     'Rector\\Php80\\Rector\\FuncCall\\ClassOnObjectRector' => $baseDir . '/rules/Php80/Rector/FuncCall/ClassOnObjectRector.php',
     'Rector\\Php80\\Rector\\FuncCall\\TokenGetAllToObjectRector' => $baseDir . '/rules/Php80/Rector/FuncCall/TokenGetAllToObjectRector.php',

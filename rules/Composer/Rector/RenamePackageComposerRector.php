@@ -8,6 +8,7 @@ use Rector\Composer\ValueObject\RenamePackage;
 use RectorPrefix20210520\Symplify\ComposerJsonManipulator\ValueObject\ComposerJson;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20210520\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Composer\Rector\RenamePackageComposerRector\RenamePackageComposerRectorTest
  */
@@ -57,6 +58,8 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $this->renamePackages = $configuration[self::RENAME_PACKAGES] ?? [];
+        $renamePackages = $configuration[self::RENAME_PACKAGES] ?? [];
+        \RectorPrefix20210520\Webmozart\Assert\Assert::allIsInstanceOf($renamePackages, \Rector\Composer\ValueObject\RenamePackage::class);
+        $this->renamePackages = $renamePackages;
     }
 }

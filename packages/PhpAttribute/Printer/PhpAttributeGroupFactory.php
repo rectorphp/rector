@@ -22,7 +22,11 @@ final class PhpAttributeGroupFactory
 {
     public function createFromSimpleTag(\Rector\Php80\ValueObject\AnnotationToAttribute $annotationToAttribute) : \PhpParser\Node\AttributeGroup
     {
-        $fullyQualified = new \PhpParser\Node\Name\FullyQualified($annotationToAttribute->getAttributeClass());
+        return $this->createFromClass($annotationToAttribute->getAttributeClass());
+    }
+    public function createFromClass(string $attributeClass) : \PhpParser\Node\AttributeGroup
+    {
+        $fullyQualified = new \PhpParser\Node\Name\FullyQualified($attributeClass);
         $attribute = new \PhpParser\Node\Attribute($fullyQualified);
         return new \PhpParser\Node\AttributeGroup([$attribute]);
     }
