@@ -37,7 +37,7 @@ final class IndentTest extends TestCase
     public function testFromSizeAndStyleWithInvalidSizeThrowsException(): void
     {
         $this->expectException(InvalidIndentSizeException::class);
-        Indent::createTabWithSize(0);
+        Indent::fromSizeAndStyle(0, 'invalid');
     }
 
     public function testFromSizeAndStyleWithInvalidStyleThrowsException(): void

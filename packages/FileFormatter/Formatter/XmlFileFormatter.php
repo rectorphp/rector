@@ -65,7 +65,7 @@ final class XmlFileFormatter implements FileFormatterInterface
     {
         $editorConfigConfigurationBuilder = new EditorConfigConfigurationBuilder();
 
-        $editorConfigConfigurationBuilder->withIndent(Indent::createTabWithSize(1));
+        $editorConfigConfigurationBuilder->withIndent(Indent::createTab());
 
         return $editorConfigConfigurationBuilder;
     }

@@ -51,12 +51,6 @@ final class EditorConfigParser
             $editorConfigConfigurationBuilder->withInsertFinalNewline($insertFinalNewline);
         }
 
-        if (array_key_exists(EditorConfigOption::TAB_WIDTH, $configuration)) {
-            $editorConfigConfigurationBuilder->withIndentSize(
-                $configuration[EditorConfigOption::TAB_WIDTH]->getValue()
-            );
-        }
-
         return $editorConfigConfigurationBuilder->build();
     }
 }

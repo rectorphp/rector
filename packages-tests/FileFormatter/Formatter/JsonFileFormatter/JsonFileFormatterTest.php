@@ -48,7 +48,7 @@ final class JsonFileFormatterTest extends AbstractTestCase
         $file = new File($inputFileInfo, $inputFileInfo->getContents());
 
         $editorConfigConfigurationBuilder = new EditorConfigConfigurationBuilder();
-        $editorConfigConfigurationBuilder->withIndent(Indent::createTabWithSize(1));
+        $editorConfigConfigurationBuilder->withIndent(Indent::createTab());
 
         $this->jsonFileFormatter->format($file, $editorConfigConfigurationBuilder->build());
 

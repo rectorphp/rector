@@ -30,11 +30,11 @@ final class EditorConfigConfigurationTest extends TestCase
     public function testIndentForTab(): void
     {
         $editorConfigConfigurationBuilder = new EditorConfigConfigurationBuilder();
-        $editorConfigConfigurationBuilder->withIndent(Indent::createTabWithSize(4));
+        $editorConfigConfigurationBuilder->withIndent(Indent::createTab());
 
         $editorConfigConfiguration = $editorConfigConfigurationBuilder->build();
 
-        $this->assertSame('				', $editorConfigConfiguration->getIndent());
+        $this->assertSame('	', $editorConfigConfiguration->getIndent());
     }
 
     public function testIndentForSpace(): void

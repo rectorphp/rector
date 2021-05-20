@@ -75,9 +75,9 @@ final class Indent
         return self::fromSizeAndStyle($size, self::SPACE);
     }
 
-    public static function createTabWithSize(int $size): self
+    public static function createTab(): self
     {
-        return self::fromSizeAndStyle($size, self::TAB);
+        return self::fromSizeAndStyle(1, self::TAB);
     }
 
     public static function fromSizeAndStyle(int $size, string $style): self

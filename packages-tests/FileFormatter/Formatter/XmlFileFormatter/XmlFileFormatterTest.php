@@ -48,7 +48,7 @@ final class XmlFileFormatterTest extends AbstractTestCase
         $file = new File($inputFileInfo, $inputFileInfo->getContents());
 
         $editorConfigConfigurationBuilder = new EditorConfigConfigurationBuilder();
-        $editorConfigConfigurationBuilder->withIndent(Indent::createTabWithSize(1));
+        $editorConfigConfigurationBuilder->withIndent(Indent::createTab());
 
         $this->xmlFileFormatter->format($file, $editorConfigConfigurationBuilder->build());
 
