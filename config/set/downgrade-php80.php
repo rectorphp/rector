@@ -10,6 +10,7 @@ use Rector\DowngradePhp80\Rector\ClassConstFetch\DowngradeClassOnObjectToGetClas
 use Rector\DowngradePhp80\Rector\ClassMethod\DowngradeStaticTypeDeclarationRector;
 use Rector\DowngradePhp80\Rector\ClassMethod\DowngradeTrailingCommasInParamUseRector;
 use Rector\DowngradePhp80\Rector\Expression\DowngradeMatchToSwitchRector;
+use Rector\DowngradePhp80\Rector\FuncCall\DowngradeStrContainsRector;
 use Rector\DowngradePhp80\Rector\FunctionLike\DowngradeMixedTypeDeclarationRector;
 use Rector\DowngradePhp80\Rector\FunctionLike\DowngradeUnionTypeDeclarationRector;
 use Rector\DowngradePhp80\Rector\NullsafeMethodCall\DowngradeNullsafeToTernaryOperatorRector;
@@ -27,6 +28,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(DowngradeStaticTypeDeclarationRector::class);
     $services->set(DowngradePropertyPromotionRector::class);
     $services->set(DowngradeNonCapturingCatchesRector::class);
+    $services->set(DowngradeStrContainsRector::class);
     $services->set(DowngradeMatchToSwitchRector::class);
     $services->set(DowngradeClassOnObjectToGetClassRector::class);
     $services->set(DowngradeNullsafeToTernaryOperatorRector::class);
