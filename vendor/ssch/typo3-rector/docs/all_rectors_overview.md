@@ -967,9 +967,10 @@ Turns properties with `@ignorevalidation` to properties with `@TYPO3\CMS\Extbase
 - class: [`Ssch\TYPO3Rector\Rector\v9\v0\IgnoreValidationAnnotationRector`](../src/Rector/v9/v0/IgnoreValidationAnnotationRector.php)
 
 ```diff
++use TYPO3\CMS\Extbase\Annotation as Extbase;
  /**
 - * @ignorevalidation $param
-+ * @TYPO3\CMS\Extbase\Annotation\IgnoreValidation("param")
++ * @Extbase\IgnoreValidation("param")
   */
  public function method($param)
  {
@@ -2888,9 +2889,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 ↓
 
 ```diff
++use TYPO3\CMS\Extbase\Annotation as Extbase;
  /**
 - * @transient
-+ * @TYPO3\CMS\Extbase\Annotation\ORM\Transient
++ * @Extbase\ORM\Transient
   */
  private $someProperty;
 ```
@@ -3995,11 +3997,12 @@ Turns properties with `@validate` to properties with `@TYPO3\CMS\Extbase\Annotat
 - class: [`Ssch\TYPO3Rector\Rector\v9\v3\ValidateAnnotationRector`](../src/Rector/v9/v3/ValidateAnnotationRector.php)
 
 ```diff
++use TYPO3\CMS\Extbase\Annotation as Extbase;
  /**
 - * @validate NotEmpty
 - * @validate StringLength(minimum=0, maximum=255)
-+ * @TYPO3\CMS\Extbase\Annotation\Validate("NotEmpty")
-+ * @TYPO3\CMS\Extbase\Annotation\Validate("StringLength", options={"minimum": 3, "maximum": 50})
++ * @Extbase\Validate("NotEmpty")
++ * @Extbase\Validate("StringLength", options={"minimum": 3, "maximum": 50})
   */
  private $someProperty;
 ```

@@ -1,10 +1,6 @@
 parameters:
     inferPrivatePropertyTypeFromConstructor: true
 
-    scanDirectories:
-            # static reflection
-            - ../../../stubs
-
 services:
     -
         class: Ssch\TYPO3Rector\PHPStan\Type\GeneralUtilityDynamicReturnTypeExtension

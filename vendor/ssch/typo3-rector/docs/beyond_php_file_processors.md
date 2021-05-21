@@ -42,6 +42,14 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 };
 ```
 
+Also you can update all your core packages and third party packages (that are on packageist and got a dependency against typo3/cms-core) with the following SetLists:
+```php
+use Ssch\TYPO3Rector\Set\Typo3SetList;
+...
+$containerConfigurator->import(Typo3SetList::COMPOSER_PACKAGES_104_CORE);
+$containerConfigurator->import(Typo3SetList::COMPOSER_PACKAGES_104_EXTENSIONS);
+```
+
 ## FormYamlProcessor
 The FormYamlProcessor only transforms the old single key value pair of the EmailFinisher to an array syntax and is part of the TYPO3_104 set.
 

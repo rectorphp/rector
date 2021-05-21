@@ -7,6 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PHPStan\Type\ObjectType;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Ssch\TYPO3Rector\Helper\Typo3NodeResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -41,13 +42,21 @@ final class RemoveMethodsFromEidUtilityAndTsfeRector extends \Rector\Core\Rector
             return null;
         }
         if ($this->isEidUtilityMethodCall($node)) {
-            $this->removeNode($node);
+            try {
+                $this->removeNode($node);
+            } catch (\Rector\Core\Exception\ShouldNotHappenException $shouldNotHappenException) {
+                return null;
+            }
             return null;
         }
         if (!$this->isNames($node->name, ['initFEuser', 'storeSessionData', 'previewInfo', 'hook_eofe', 'addTempContentHttpHeaders', 'sendCacheHeaders'])) {
             return null;
         }
-        $this->removeNode($node);
+        try {
+            $this->removeNode($node);
+        } catch (\Rector\Core\Exception\ShouldNotHappenException $shouldNotHappenException) {
+            return null;
+        }
         return null;
     }
     /**

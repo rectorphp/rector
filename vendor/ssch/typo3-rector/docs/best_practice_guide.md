@@ -11,6 +11,14 @@ You can use typo3-rector in various ways:
 ## Guide for a good upgrade
 
 
+### TLDR;
+
+- apply older or current version rulesets first (if you're going from v8 to v10, apply v7/v8 sets first )
+- composer package versions update via SetList (see [composer section below](#composer-packages-update))
+- add ClassAliasMap in case you're upgrading 2 versions to provide old classes to migrate
+- apply rulesets stepwise by version; first TCA only, then full set or combined
+- apply rulesets stepwise to your packages or multiple packages at once
+
 ### Starting
 Starting with an upgrade should start with installing typo3-rector and checking for the rector rules/sets of your current version, not the one you're targeting.
 Often there are things that were missed out in previous upgrades while rector adds rulesets for those.
@@ -29,7 +37,21 @@ Examples for often missed out upgrade steps:
 After making sure your current code base is properly upgraded you go on with the actual upgrade process.
 This requires manual action like allowing the core versions in your composer.json and ext_emconf.php files depending on your individual setup.
 
-The overall package upgrade is then followed by some more typo3-rector actions.
+#### Composer packages update
+We got your back with the version constraints of your packages though! For core packages but also extension packages we got a SetList that can be used to be processed and apply changes to your composer.json.
+
+```php
+use Ssch\TYPO3Rector\Set\Typo3SetList;
+...
+$containerConfigurator->import(Typo3SetList::COMPOSER_PACKAGES_95_CORE);
+$containerConfigurator->import(Typo3SetList::COMPOSER_PACKAGES_95_EXTENSIONS);
+```
+
+This will add the fitting constraints for each package available on packagist - **Be aware:** The list is based on extensions that got a dependency against *typo3/cms-core*
+
+Also: core packages that are not supported anymore (e.g. css_styled_content) will not be updated of course. This helps you to clean up a little!
+
+#### Applying rulesets
 
 Depending on the amount of version steps you should add the ClassAliasMap as mentioned above for e.g. v8 if you're going from v8 to v10 directly.
 
@@ -40,7 +62,6 @@ It also comes in handy to divide between TCA and TYPO3 changes AND/OR you're pac
 
 TCA changes are often not that big in their impact but necessary. Also custom packages do not necesserily provide that much own TCA.
 Both of that is reason to gather multiple packages for a combined TCA run with the following config:
-
 
 ```php
     $containerConfigurator->import(Typo3SetList::TCA_95);
@@ -76,8 +97,7 @@ The non-TCA rules are often a little more specific and should be applied in a se
 Those rules bring immense value as you don't have to find the replacement of classes and the actual changelog as it is provided for you already on execution.
 With `--dry-run` you can process the ruleset without applying the changes giving you a perfect overview **before** changing your code.
 
-You can focus on testing and possibly learning the new implementation of previous functions
-
+You can focus on testing and possibly learning the new implementation of previous functions.
 
 ## Special cases
 
@@ -94,8 +114,4 @@ An example for this would be the TCA change of replacing `'internal_type' => 'fi
 
 The TCA is changed easy, but the whole DB record type changes as previously the whole name of the file was saved into the DB column, while now with FAL, it would only create an index-count - the reference to the new files that are saved in sys_file and connected via sys_file_reference.
 (see [internal_type deprecation changelog](https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/9.5/Deprecation-86406-TCATypeGroupInternal_typeFileAndFile_reference.html))
-
-
-
-
 
