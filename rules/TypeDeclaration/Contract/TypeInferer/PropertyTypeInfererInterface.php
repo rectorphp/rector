@@ -9,5 +9,9 @@ use PHPStan\Type\Type;
 
 interface PropertyTypeInfererInterface extends PriorityAwareTypeInfererInterface
 {
-    public function inferProperty(Property $property): Type;
+    /**
+     * Return null if no type can be inferred.
+     * Return MixedType if unknown type is inferred.
+     */
+    public function inferProperty(Property $property): ?Type;
 }

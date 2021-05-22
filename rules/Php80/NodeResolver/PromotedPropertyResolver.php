@@ -12,18 +12,27 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Property;
+use PHPStan\Type\Type;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\ValueObject\MethodName;
 use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\NodeTypeResolver\NodeTypeResolver;
+use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
+use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
 use Rector\Php80\ValueObject\PropertyPromotionCandidate;
+use Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer;
 
 final class PromotedPropertyResolver
 {
     public function __construct(
         private NodeNameResolver $nodeNameResolver,
         private BetterNodeFinder $betterNodeFinder,
-        private NodeComparator $nodeComparator
+        private NodeComparator $nodeComparator,
+        private PropertyTypeInferer $propertyTypeInferer,
+        private NodeTypeResolver $nodeTypeResolver,
+        private TypeComparator $typeComparator,
+        private TypeFactory $typeFactory
     ) {
     }
 
@@ -61,7 +70,6 @@ final class PromotedPropertyResolver
         $onlyProperty = $property->props[0];
 
         $propertyName = $this->nodeNameResolver->getName($onlyProperty);
-
         $firstParamAsVariable = $this->resolveFirstParamUses($constructClassMethod);
 
         // match property name to assign in constructor
@@ -80,9 +88,7 @@ final class PromotedPropertyResolver
             }
 
             // 1. is param
-            // @todo 2. is default value
             $assignedExpr = $assign->expr;
-
             if (! $assignedExpr instanceof Variable) {
                 continue;
             }
@@ -92,12 +98,7 @@ final class PromotedPropertyResolver
                 continue;
             }
 
-            if ($matchedParam->flags !== 0) {
-                continue;
-            }
-
-            // is param used above assign?
-            if ($this->isParamUsedBeforeAssign($assignedExpr, $firstParamAsVariable)) {
+            if ($this->shouldSkipParam($matchedParam, $property, $assignedExpr, $firstParamAsVariable)) {
                 continue;
             }
 
@@ -164,5 +165,46 @@ final class PromotedPropertyResolver
         }
 
         return $firstVariablePosition < $variable->getStartTokenPos();
+    }
+
+    private function hasConflictingParamType(Param $param, Type $propertyType): bool
+    {
+        if ($param->type === null) {
+            return false;
+        }
+
+        $matchedParamType = $this->nodeTypeResolver->resolve($param);
+        if ($param->default !== null) {
+            $defaultValueType = $this->nodeTypeResolver->getStaticType($param->default);
+            $matchedParamType = $this->typeFactory->createMixedPassedOrUnionType(
+                [$matchedParamType, $defaultValueType]
+            );
+        }
+
+        // different types, not a good to fit
+        return ! $this->typeComparator->areTypesEqual($propertyType, $matchedParamType);
+    }
+
+    /**
+     * @param int[] $firstParamAsVariable
+     */
+    private function shouldSkipParam(
+        Param $matchedParam,
+        Property $property,
+        Variable $assignedVariable,
+        array $firstParamAsVariable
+    ): bool {
+        // already promoted
+        if ($matchedParam->flags !== 0) {
+            return true;
+        }
+
+        // @todo unknown type, not suitable?
+        $propertyType = $this->propertyTypeInferer->inferProperty($property);
+        if ($this->hasConflictingParamType($matchedParam, $propertyType)) {
+            return true;
+        }
+
+        return $this->isParamUsedBeforeAssign($assignedVariable, $firstParamAsVariable);
     }
 }

@@ -6,9 +6,9 @@ use DateTimeInterface;
 
 class NullableType
 {
-    private ?DatetimeInterface $time;
+    private ?DateTimeInterface $time;
 
-    public function __construct(DatetimeInterface $time = null)
+    public function __construct(DateTimeInterface $time = null)
     {
         $this->time = $time;
     }

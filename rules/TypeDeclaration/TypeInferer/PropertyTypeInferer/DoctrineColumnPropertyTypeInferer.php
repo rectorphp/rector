@@ -76,13 +76,13 @@ final class DoctrineColumnPropertyTypeInferer implements PropertyTypeInfererInte
         ];
     }
 
-    public function inferProperty(Property $property): Type
+    public function inferProperty(Property $property): ?Type
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
 
         $doctrineAnnotationTagValueNode = $phpDocInfo->getByAnnotationClass('Doctrine\ORM\Mapping\Column');
         if (! $doctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
-            return new MixedType();
+            return null;
         }
 
         $type = $doctrineAnnotationTagValueNode->getValueWithoutQuotes('type');

@@ -73,7 +73,7 @@ CODE_SAMPLE
 
         $haystack = $funcCall->args[0]->value;
         $needle = $funcCall->args[1]->value;
-        
+
         $funcCall = $this->nodeFactory->createFuncCall('strpos', [$haystack, $needle]);
 
         if ($node instanceof BooleanNot) {
@@ -89,12 +89,12 @@ CODE_SAMPLE
     private function matchStrContainsOrNotStrContains(Expr $expr): ?FuncCall
     {
         $expr = ($expr instanceof BooleanNot) ? $expr->expr : $expr;
-
-        if ($expr instanceof FuncCall) {
-            if ($this->isName($expr, 'str_contains')) {
-                return $expr;
-            }
+        if (! $expr instanceof FuncCall) {
+            return null;
         }
-        return null;
+        if (! $this->isName($expr, 'str_contains')) {
+            return null;
+        }
+        return $expr;
     }
 }

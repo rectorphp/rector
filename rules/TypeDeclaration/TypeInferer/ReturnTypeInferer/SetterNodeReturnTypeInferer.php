@@ -34,7 +34,14 @@ final class SetterNodeReturnTypeInferer implements ReturnTypeInfererInterface
 
         $types = [];
         foreach ($returnedPropertyNames as $returnedPropertyName) {
-            $types[] = $this->assignToPropertyTypeInferer->inferPropertyInClassLike($returnedPropertyName, $classLike);
+            $inferredPropertyType = $this->assignToPropertyTypeInferer->inferPropertyInClassLike(
+                $returnedPropertyName,
+                $classLike
+            );
+            if (! $inferredPropertyType instanceof Type) {
+                continue;
+            }
+            $types[] = $inferredPropertyType;
         }
 
         return $this->typeFactory->createMixedPassedOrUnionType($types);

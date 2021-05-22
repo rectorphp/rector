@@ -34,7 +34,7 @@ final class DoctrineRelationPropertyTypeInferer implements PropertyTypeInfererIn
     ) {
     }
 
-    public function inferProperty(Property $property): Type
+    public function inferProperty(Property $property): ?Type
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
 
@@ -61,7 +61,7 @@ final class DoctrineRelationPropertyTypeInferer implements PropertyTypeInfererIn
             );
         }
 
-        return new MixedType();
+        return null;
     }
 
     public function getPriority(): int

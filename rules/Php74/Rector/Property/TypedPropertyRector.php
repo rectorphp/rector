@@ -104,13 +104,7 @@ CODE_SAMPLE
             return null;
         }
 
-        // type is already set → skip
-        if ($node->type !== null) {
-            return null;
-        }
-
-        // skip multiple properties
-        if (count($node->props) > 1) {
+        if ($this->shouldSkipProperty($node)) {
             return null;
         }
 
@@ -126,6 +120,7 @@ CODE_SAMPLE
                     $types[0]->getBound(),
                     TypeKind::KIND_PROPERTY
                 );
+
                 return $node;
             }
         }
@@ -148,6 +143,9 @@ CODE_SAMPLE
         return $node;
     }
 
+    /**
+     * @param array<string, bool> $configuration
+     */
     public function configure(array $configuration): void
     {
         $this->classLikeTypeOnly = $configuration[self::CLASS_LIKE_TYPE_ONLY] ?? false;
@@ -190,12 +188,12 @@ CODE_SAMPLE
         }
 
         $typeName = $this->getName($node);
-        if ($typeName === 'null') {
-            return true;
-        }
-
         if ($typeName === null) {
             return false;
+        }
+
+        if ($typeName === 'null') {
+            return true;
         }
 
         if ($typeName === 'callable') {
@@ -237,5 +235,16 @@ CODE_SAMPLE
         }
 
         $onlyProperty->default = $this->nodeFactory->createNull();
+    }
+
+    private function shouldSkipProperty(Property $property): bool
+    {
+        // type is already set → skip
+        if ($property->type !== null) {
+            return true;
+        }
+
+        // skip multiple properties
+        return count($property->props) > 1;
     }
 }

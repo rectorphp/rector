@@ -28,12 +28,12 @@ final class GetterPropertyTypeInferer implements PropertyTypeInfererInterface
     ) {
     }
 
-    public function inferProperty(Property $property): Type
+    public function inferProperty(Property $property): ?Type
     {
         $classLike = $property->getAttribute(AttributeKey::CLASS_NODE);
         if (! $classLike instanceof Class_) {
             // anonymous class
-            return new MixedType();
+            return null;
         }
 
         /** @var string $propertyName */
@@ -54,7 +54,7 @@ final class GetterPropertyTypeInferer implements PropertyTypeInfererInterface
             }
         }
 
-        return new MixedType();
+        return null;
     }
 
     public function getPriority(): int

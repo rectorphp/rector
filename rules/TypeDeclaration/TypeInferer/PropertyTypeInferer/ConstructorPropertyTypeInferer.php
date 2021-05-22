@@ -11,7 +11,7 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
-use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\NodeTraverser;
@@ -21,6 +21,7 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
 use Rector\Core\NodeManipulator\ClassMethodPropertyFetchManipulator;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\ValueObject\MethodName;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -41,28 +42,28 @@ final class ConstructorPropertyTypeInferer implements PropertyTypeInfererInterfa
         private SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
         private TypeFactory $typeFactory,
         private StaticTypeMapper $staticTypeMapper,
-        private NodeTypeResolver $nodeTypeResolver
+        private NodeTypeResolver $nodeTypeResolver,
+        private BetterNodeFinder $betterNodeFinder
     ) {
     }
 
-    public function inferProperty(Property $property): Type
+    public function inferProperty(Property $property): ?Type
     {
-        $classLike = $property->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $classLike instanceof Class_) {
-            // anonymous class
-            return new MixedType();
+        $classLike = $this->betterNodeFinder->findParentType($property, ClassLike::class);
+        if (! $classLike instanceof ClassLike) {
+            return null;
         }
 
         $classMethod = $classLike->getMethod(MethodName::CONSTRUCT);
         if (! $classMethod instanceof ClassMethod) {
-            return new MixedType();
+            return null;
         }
 
         $propertyName = $this->nodeNameResolver->getName($property);
 
         $param = $this->classMethodPropertyFetchManipulator->resolveParamForPropertyFetch($classMethod, $propertyName);
         if (! $param instanceof Param) {
-            return new MixedType();
+            return null;
         }
 
         // A. infer from type declaration of parameter
@@ -70,7 +71,7 @@ final class ConstructorPropertyTypeInferer implements PropertyTypeInfererInterfa
             return $this->resolveFromParamType($param, $classMethod, $propertyName);
         }
 
-        return new MixedType();
+        return null;
     }
 
     public function getPriority(): int

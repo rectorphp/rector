@@ -34,7 +34,7 @@ final class AssignToPropertyTypeInferer
     ) {
     }
 
-    public function inferPropertyInClassLike(string $propertyName, ClassLike $classLike): Type
+    public function inferPropertyInClassLike(string $propertyName, ClassLike $classLike): ?Type
     {
         $assignedExprTypes = [];
 
@@ -52,9 +52,6 @@ final class AssignToPropertyTypeInferer
             }
 
             $exprStaticType = $this->resolveExprStaticTypeIncludingDimFetch($node);
-            if (! $exprStaticType instanceof Type) {
-                return null;
-            }
 
             $assignedExprTypes[] = $exprStaticType;
 
@@ -65,16 +62,16 @@ final class AssignToPropertyTypeInferer
             $assignedExprTypes[] = new NullType();
         }
 
-        return $this->typeFactory->createMixedPassedOrUnionType($assignedExprTypes);
-    }
-
-    private function resolveExprStaticTypeIncludingDimFetch(Assign $assign): ?Type
-    {
-        $exprStaticType = $this->nodeTypeResolver->getStaticType($assign->expr);
-        if ($exprStaticType instanceof MixedType) {
+        if ($assignedExprTypes === []) {
             return null;
         }
 
+        return $this->typeFactory->createMixedPassedOrUnionType($assignedExprTypes);
+    }
+
+    private function resolveExprStaticTypeIncludingDimFetch(Assign $assign): Type
+    {
+        $exprStaticType = $this->nodeTypeResolver->getStaticType($assign->expr);
         if ($assign->var instanceof ArrayDimFetch) {
             return new ArrayType(new MixedType(), $exprStaticType);
         }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\TypeDeclaration\TypeInferer;
 
+use PhpParser\Node\Expr;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;
@@ -46,16 +47,18 @@ final class PropertyTypeInferer
 
         foreach ($this->propertyTypeInferers as $propertyTypeInferer) {
             $type = $propertyTypeInferer->inferProperty($property);
-            if ($type instanceof VoidType) {
+            if (! $type instanceof Type) {
                 continue;
             }
 
-            if ($type instanceof MixedType) {
+            if ($type instanceof VoidType) {
                 continue;
             }
 
             $resolvedTypes[] = $type;
         }
+
+        $resolvedTypes = $this->typeFactory->uniquateTypes($resolvedTypes);
 
         // if nothing is clear from variable use, we use @var doc as fallback
         if ($resolvedTypes !== []) {
@@ -66,12 +69,8 @@ final class PropertyTypeInferer
 
         // default value type must be added to each resolved type if set
         $propertyDefaultValue = $property->props[0]->default;
-
-        if ($propertyDefaultValue !== null) {
-            $defaultValueType = $this->defaultValuePropertyTypeInferer->inferProperty($property);
-            if ($this->shouldUnionWithDefaultValue($defaultValueType, $resolvedType)) {
-                return $this->unionWithDefaultValueType($defaultValueType, $resolvedType);
-            }
+        if ($propertyDefaultValue instanceof Expr) {
+            $resolvedType = $this->unionTypeWithDefaultExpr($property, $resolvedType);
         }
 
         return $this->genericClassStringTypeNormalizer->normalize($resolvedType);
@@ -105,5 +104,19 @@ final class PropertyTypeInferer
         }
 
         return $this->typeFactory->createMixedPassedOrUnionType($types);
+    }
+
+    private function unionTypeWithDefaultExpr(Property $property, Type $resolvedType): Type
+    {
+        $defaultValueType = $this->defaultValuePropertyTypeInferer->inferProperty($property);
+        if (! $defaultValueType instanceof Type) {
+            return $resolvedType;
+        }
+
+        if (! $this->shouldUnionWithDefaultValue($defaultValueType, $resolvedType)) {
+            return $resolvedType;
+        }
+
+        return $this->unionWithDefaultValueType($defaultValueType, $resolvedType);
     }
 }

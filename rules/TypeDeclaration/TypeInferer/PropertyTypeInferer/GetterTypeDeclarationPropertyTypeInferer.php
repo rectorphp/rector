@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer;
 
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\TypeDeclaration\Contract\TypeInferer\PropertyTypeInfererInterface;
 use Rector\TypeDeclaration\FunctionLikeReturnTypeResolver;
 use Rector\TypeDeclaration\NodeAnalyzer\ClassMethodAndPropertyAnalyzer;
@@ -20,16 +21,17 @@ final class GetterTypeDeclarationPropertyTypeInferer implements PropertyTypeInfe
     public function __construct(
         private FunctionLikeReturnTypeResolver $functionLikeReturnTypeResolver,
         private ClassMethodAndPropertyAnalyzer $classMethodAndPropertyAnalyzer,
-        private NodeNameResolver $nodeNameResolver
+        private NodeNameResolver $nodeNameResolver,
+        private BetterNodeFinder $betterNodeFinder
     ) {
     }
 
-    public function inferProperty(Property $property): Type
+    public function inferProperty(Property $property): ?Type
     {
-        $classLike = $property->getAttribute(AttributeKey::CLASS_NODE);
+        $classLike = $this->betterNodeFinder->findParentType($property, ClassLike::class);
         if (! $classLike instanceof Class_) {
             // anonymous class
-            return new MixedType();
+            return null;
         }
 
         /** @var string $propertyName */
@@ -56,7 +58,7 @@ final class GetterTypeDeclarationPropertyTypeInferer implements PropertyTypeInfe
             }
         }
 
-        return new MixedType();
+        return null;
     }
 
     public function getPriority(): int

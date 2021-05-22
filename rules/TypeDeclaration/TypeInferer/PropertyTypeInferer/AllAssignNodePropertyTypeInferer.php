@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer;
 
-use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
-use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
+use Rector\Core\Exception\NotImplementedYetException;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\TypeDeclaration\Contract\TypeInferer\PropertyTypeInfererInterface;
@@ -21,12 +20,12 @@ final class AllAssignNodePropertyTypeInferer implements PropertyTypeInfererInter
     ) {
     }
 
-    public function inferProperty(Property $property): Type
+    public function inferProperty(Property $property): ?Type
     {
         $classLike = $property->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $classLike instanceof ClassLike) {
-            // anonymous class
-            return new MixedType();
+        if ($classLike === null) {
+            // anonymous class possibly?
+            throw new NotImplementedYetException();
         }
 
         $propertyName = $this->nodeNameResolver->getName($property);

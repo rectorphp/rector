@@ -19,7 +19,7 @@ final class DefaultValuePropertyTypeInferer
     ) {
     }
 
-    public function inferProperty(Property $property): Type
+    public function inferProperty(Property $property): ?Type
     {
         $propertyProperty = $property->props[0];
         if ($propertyProperty->default === null) {
