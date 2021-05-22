@@ -41,7 +41,11 @@ final class SetterNodeReturnTypeInferer implements \Rector\TypeDeclaration\Contr
         $returnedPropertyNames = $this->functionLikeManipulator->getReturnedLocalPropertyNames($functionLike);
         $types = [];
         foreach ($returnedPropertyNames as $returnedPropertyName) {
-            $types[] = $this->assignToPropertyTypeInferer->inferPropertyInClassLike($returnedPropertyName, $classLike);
+            $inferredPropertyType = $this->assignToPropertyTypeInferer->inferPropertyInClassLike($returnedPropertyName, $classLike);
+            if (!$inferredPropertyType instanceof \PHPStan\Type\Type) {
+                continue;
+            }
+            $types[] = $inferredPropertyType;
         }
         return $this->typeFactory->createMixedPassedOrUnionType($types);
     }

@@ -18,7 +18,7 @@ use Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector;
 use Rector\TypeDeclaration\AlreadyAssignDetector\NullTypeAssignDetector;
 use Rector\TypeDeclaration\AlreadyAssignDetector\PropertyDefaultAssignDetector;
 use Rector\TypeDeclaration\Matcher\PropertyAssignMatcher;
-use RectorPrefix20210521\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
+use RectorPrefix20210522\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 final class AssignToPropertyTypeInferer
 {
     /**
@@ -49,7 +49,7 @@ final class AssignToPropertyTypeInferer
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;
-    public function __construct(\Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector $constructorAssignDetector, \Rector\TypeDeclaration\Matcher\PropertyAssignMatcher $propertyAssignMatcher, \Rector\TypeDeclaration\AlreadyAssignDetector\PropertyDefaultAssignDetector $propertyDefaultAssignDetector, \Rector\TypeDeclaration\AlreadyAssignDetector\NullTypeAssignDetector $nullTypeAssignDetector, \RectorPrefix20210521\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory $typeFactory, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver)
+    public function __construct(\Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector $constructorAssignDetector, \Rector\TypeDeclaration\Matcher\PropertyAssignMatcher $propertyAssignMatcher, \Rector\TypeDeclaration\AlreadyAssignDetector\PropertyDefaultAssignDetector $propertyDefaultAssignDetector, \Rector\TypeDeclaration\AlreadyAssignDetector\NullTypeAssignDetector $nullTypeAssignDetector, \RectorPrefix20210522\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory $typeFactory, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver)
     {
         $this->constructorAssignDetector = $constructorAssignDetector;
         $this->propertyAssignMatcher = $propertyAssignMatcher;
@@ -59,7 +59,7 @@ final class AssignToPropertyTypeInferer
         $this->typeFactory = $typeFactory;
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
-    public function inferPropertyInClassLike(string $propertyName, \PhpParser\Node\Stmt\ClassLike $classLike) : \PHPStan\Type\Type
+    public function inferPropertyInClassLike(string $propertyName, \PhpParser\Node\Stmt\ClassLike $classLike) : ?\PHPStan\Type\Type
     {
         $assignedExprTypes = [];
         $this->simpleCallableNodeTraverser->traverseNodesWithCallable($classLike->stmts, function (\PhpParser\Node $node) use($propertyName, &$assignedExprTypes) {
@@ -71,23 +71,20 @@ final class AssignToPropertyTypeInferer
                 return null;
             }
             $exprStaticType = $this->resolveExprStaticTypeIncludingDimFetch($node);
-            if (!$exprStaticType instanceof \PHPStan\Type\Type) {
-                return null;
-            }
             $assignedExprTypes[] = $exprStaticType;
             return null;
         });
         if ($this->shouldAddNullType($classLike, $propertyName, $assignedExprTypes)) {
             $assignedExprTypes[] = new \PHPStan\Type\NullType();
         }
-        return $this->typeFactory->createMixedPassedOrUnionType($assignedExprTypes);
-    }
-    private function resolveExprStaticTypeIncludingDimFetch(\PhpParser\Node\Expr\Assign $assign) : ?\PHPStan\Type\Type
-    {
-        $exprStaticType = $this->nodeTypeResolver->getStaticType($assign->expr);
-        if ($exprStaticType instanceof \PHPStan\Type\MixedType) {
+        if ($assignedExprTypes === []) {
             return null;
         }
+        return $this->typeFactory->createMixedPassedOrUnionType($assignedExprTypes);
+    }
+    private function resolveExprStaticTypeIncludingDimFetch(\PhpParser\Node\Expr\Assign $assign) : \PHPStan\Type\Type
+    {
+        $exprStaticType = $this->nodeTypeResolver->getStaticType($assign->expr);
         if ($assign->var instanceof \PhpParser\Node\Expr\ArrayDimFetch) {
             return new \PHPStan\Type\ArrayType(new \PHPStan\Type\MixedType(), $exprStaticType);
         }

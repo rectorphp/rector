@@ -6,6 +6,7 @@ namespace Rector\TypeDeclaration\Rector\Property;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\MixedType;
+use PHPStan\Type\Type;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover;
@@ -76,6 +77,9 @@ CODE_SAMPLE
             return null;
         }
         $varType = $this->constructorPropertyTypeInferer->inferProperty($node);
+        if (!$varType instanceof \PHPStan\Type\Type) {
+            return null;
+        }
         if ($varType instanceof \PHPStan\Type\MixedType) {
             return null;
         }

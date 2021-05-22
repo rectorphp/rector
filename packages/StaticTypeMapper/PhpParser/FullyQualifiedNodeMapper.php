@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\StaticTypeMapper\PhpParser;
 
-use RectorPrefix20210521\Nette\Utils\Strings;
+use RectorPrefix20210522\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Name\FullyQualified;
 use PHPStan\Type\Type;
@@ -28,7 +28,7 @@ final class FullyQualifiedNodeMapper implements \Rector\StaticTypeMapper\Contrac
         $originalName = (string) $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NAME);
         $fullyQualifiedName = $node->toString();
         // is aliased?
-        if ($this->isAliasedName($originalName, $fullyQualifiedName)) {
+        if ($this->isAliasedName($originalName, $fullyQualifiedName) && $originalName !== $fullyQualifiedName) {
             return new \Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType($originalName, $fullyQualifiedName);
         }
         return new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType($fullyQualifiedName);
@@ -41,6 +41,6 @@ final class FullyQualifiedNodeMapper implements \Rector\StaticTypeMapper\Contrac
         if ($originalName === $fullyQualifiedName) {
             return \false;
         }
-        return !\RectorPrefix20210521\Nette\Utils\Strings::endsWith($fullyQualifiedName, '\\' . $originalName);
+        return !\RectorPrefix20210522\Nette\Utils\Strings::endsWith($fullyQualifiedName, '\\' . $originalName);
     }
 }

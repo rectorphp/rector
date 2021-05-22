@@ -11,11 +11,16 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Property;
+use PHPStan\Type\Type;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\ValueObject\MethodName;
 use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\NodeTypeResolver\NodeTypeResolver;
+use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
+use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
 use Rector\Php80\ValueObject\PropertyPromotionCandidate;
+use Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer;
 final class PromotedPropertyResolver
 {
     /**
@@ -30,11 +35,31 @@ final class PromotedPropertyResolver
      * @var \Rector\Core\PhpParser\Comparing\NodeComparator
      */
     private $nodeComparator;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator)
+    /**
+     * @var \Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer
+     */
+    private $propertyTypeInferer;
+    /**
+     * @var \Rector\NodeTypeResolver\NodeTypeResolver
+     */
+    private $nodeTypeResolver;
+    /**
+     * @var \Rector\NodeTypeResolver\TypeComparator\TypeComparator
+     */
+    private $typeComparator;
+    /**
+     * @var \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory
+     */
+    private $typeFactory;
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator, \Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer $propertyTypeInferer, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\NodeTypeResolver\TypeComparator\TypeComparator $typeComparator, \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory $typeFactory)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->nodeComparator = $nodeComparator;
+        $this->propertyTypeInferer = $propertyTypeInferer;
+        $this->nodeTypeResolver = $nodeTypeResolver;
+        $this->typeComparator = $typeComparator;
+        $this->typeFactory = $typeFactory;
     }
     /**
      * @return PropertyPromotionCandidate[]
@@ -76,7 +101,6 @@ final class PromotedPropertyResolver
                 continue;
             }
             // 1. is param
-            // @todo 2. is default value
             $assignedExpr = $assign->expr;
             if (!$assignedExpr instanceof \PhpParser\Node\Expr\Variable) {
                 continue;
@@ -85,11 +109,7 @@ final class PromotedPropertyResolver
             if (!$matchedParam instanceof \PhpParser\Node\Param) {
                 continue;
             }
-            if ($matchedParam->flags !== 0) {
-                continue;
-            }
-            // is param used above assign?
-            if ($this->isParamUsedBeforeAssign($assignedExpr, $firstParamAsVariable)) {
+            if ($this->shouldSkipParam($matchedParam, $property, $assignedExpr, $firstParamAsVariable)) {
                 continue;
             }
             return new \Rector\Php80\ValueObject\PropertyPromotionCandidate($property, $assign, $matchedParam);
@@ -138,5 +158,34 @@ final class PromotedPropertyResolver
             return \false;
         }
         return $firstVariablePosition < $variable->getStartTokenPos();
+    }
+    private function hasConflictingParamType(\PhpParser\Node\Param $param, \PHPStan\Type\Type $propertyType) : bool
+    {
+        if ($param->type === null) {
+            return \false;
+        }
+        $matchedParamType = $this->nodeTypeResolver->resolve($param);
+        if ($param->default !== null) {
+            $defaultValueType = $this->nodeTypeResolver->getStaticType($param->default);
+            $matchedParamType = $this->typeFactory->createMixedPassedOrUnionType([$matchedParamType, $defaultValueType]);
+        }
+        // different types, not a good to fit
+        return !$this->typeComparator->areTypesEqual($propertyType, $matchedParamType);
+    }
+    /**
+     * @param int[] $firstParamAsVariable
+     */
+    private function shouldSkipParam(\PhpParser\Node\Param $matchedParam, \PhpParser\Node\Stmt\Property $property, \PhpParser\Node\Expr\Variable $assignedVariable, array $firstParamAsVariable) : bool
+    {
+        // already promoted
+        if ($matchedParam->flags !== 0) {
+            return \true;
+        }
+        // @todo unknown type, not suitable?
+        $propertyType = $this->propertyTypeInferer->inferProperty($property);
+        if ($this->hasConflictingParamType($matchedParam, $propertyType)) {
+            return \true;
+        }
+        return $this->isParamUsedBeforeAssign($assignedVariable, $firstParamAsVariable);
     }
 }

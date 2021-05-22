@@ -45,12 +45,12 @@ final class GetterPropertyTypeInferer implements \Rector\TypeDeclaration\Contrac
         $this->classMethodAndPropertyAnalyzer = $classMethodAndPropertyAnalyzer;
         $this->nodeNameResolver = $nodeNameResolver;
     }
-    public function inferProperty(\PhpParser\Node\Stmt\Property $property) : \PHPStan\Type\Type
+    public function inferProperty(\PhpParser\Node\Stmt\Property $property) : ?\PHPStan\Type\Type
     {
         $classLike = $property->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
         if (!$classLike instanceof \PhpParser\Node\Stmt\Class_) {
             // anonymous class
-            return new \PHPStan\Type\MixedType();
+            return null;
         }
         /** @var string $propertyName */
         $propertyName = $this->nodeNameResolver->getName($property);
@@ -63,7 +63,7 @@ final class GetterPropertyTypeInferer implements \Rector\TypeDeclaration\Contrac
                 return $returnType;
             }
         }
-        return new \PHPStan\Type\MixedType();
+        return null;
     }
     public function getPriority() : int
     {

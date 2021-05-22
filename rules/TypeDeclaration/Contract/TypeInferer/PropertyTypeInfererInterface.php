@@ -7,5 +7,9 @@ use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\Type;
 interface PropertyTypeInfererInterface extends \Rector\TypeDeclaration\Contract\TypeInferer\PriorityAwareTypeInfererInterface
 {
-    public function inferProperty(\PhpParser\Node\Stmt\Property $property) : \PHPStan\Type\Type;
+    /**
+     * Return null if no type can be inferred.
+     * Return MixedType if unknown type is inferred.
+     */
+    public function inferProperty(\PhpParser\Node\Stmt\Property $property) : ?\PHPStan\Type\Type;
 }

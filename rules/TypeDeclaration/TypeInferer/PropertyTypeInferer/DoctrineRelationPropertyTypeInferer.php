@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer;
 
-use RectorPrefix20210521\Nette\Utils\Strings;
+use RectorPrefix20210522\Nette\Utils\Strings;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprTrueNode;
 use PHPStan\Type\ArrayType;
@@ -46,7 +46,7 @@ final class DoctrineRelationPropertyTypeInferer implements \Rector\TypeDeclarati
         $this->shortClassExpander = $shortClassExpander;
         $this->classAnnotationMatcher = $classAnnotationMatcher;
     }
-    public function inferProperty(\PhpParser\Node\Stmt\Property $property) : \PHPStan\Type\Type
+    public function inferProperty(\PhpParser\Node\Stmt\Property $property) : ?\PHPStan\Type\Type
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
         $toManyRelationTagValueNode = $phpDocInfo->getByAnnotationClasses(['Doctrine\\ORM\\Mapping\\OneToMany', 'Doctrine\\ORM\\Mapping\\ManyToMany']);
@@ -58,7 +58,7 @@ final class DoctrineRelationPropertyTypeInferer implements \Rector\TypeDeclarati
             $joinDoctrineAnnotationTagValueNode = $phpDocInfo->getByAnnotationClass('Doctrine\\ORM\\Mapping\\JoinColumn');
             return $this->processToOneRelation($property, $toOneRelationTagValueNode, $joinDoctrineAnnotationTagValueNode);
         }
-        return new \PHPStan\Type\MixedType();
+        return null;
     }
     public function getPriority() : int
     {
@@ -81,8 +81,8 @@ final class DoctrineRelationPropertyTypeInferer implements \Rector\TypeDeclarati
         if ($targetEntity === null) {
             return new \PHPStan\Type\MixedType();
         }
-        if (\RectorPrefix20210521\Nette\Utils\Strings::endsWith($targetEntity, '::class')) {
-            $targetEntity = \RectorPrefix20210521\Nette\Utils\Strings::before($targetEntity, '::class');
+        if (\RectorPrefix20210522\Nette\Utils\Strings::endsWith($targetEntity, '::class')) {
+            $targetEntity = \RectorPrefix20210522\Nette\Utils\Strings::before($targetEntity, '::class');
         }
         // resolve to FQN
         $tagFullyQualifiedName = $this->classAnnotationMatcher->resolveTagFullyQualifiedName($targetEntity, $property);
