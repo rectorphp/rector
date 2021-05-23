@@ -1,0 +1,138 @@
+<?php
+
+declare (strict_types=1);
+namespace Rector\DowngradePhp80\Rector\Class_;
+
+use RectorPrefix20210523\Nette\Utils\Strings;
+use PhpParser\Node;
+use PhpParser\Node\Attribute;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Property;
+use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
+use Rector\Core\Rector\AbstractRector;
+use Rector\DowngradePhp80\ValueObject\DowngradeAttributeToAnnotation;
+use Rector\PhpAttribute\Printer\DoctrineAnnotationFactory;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20210523\Webmozart\Assert\Assert;
+/**
+ * @changelog https://php.watch/articles/php-attributes#syntax
+ *
+ * @see \Rector\Tests\DowngradePhp80\Rector\Class_\DowngradeAttributeToAnnotationRector\DowngradeAttributeToAnnotationRectorTest
+ */
+final class DowngradeAttributeToAnnotationRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
+{
+    /**
+     * @var string
+     */
+    public const ATTRIBUTE_TO_ANNOTATION = 'attribute_to_annotation';
+    /**
+     * @var DowngradeAttributeToAnnotation[]
+     */
+    private $attributesToAnnotations = [];
+    /**
+     * @var \Rector\PhpAttribute\Printer\DoctrineAnnotationFactory
+     */
+    private $doctrineAnnotationFactory;
+    public function __construct(\Rector\PhpAttribute\Printer\DoctrineAnnotationFactory $doctrineAnnotationFactory)
+    {
+        $this->doctrineAnnotationFactory = $doctrineAnnotationFactory;
+    }
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    {
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Refactor PHP attribute markers to annotations notation', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
+use Symfony\Component\Routing\Annotation\Route;
+
+class SymfonyRoute
+{
+    #[Route(path: '/path', name: 'action')]
+    public function action()
+    {
+    }
+}
+CODE_SAMPLE
+, <<<'CODE_SAMPLE'
+use Symfony\Component\Routing\Annotation\Route;
+
+class SymfonyRoute
+{
+    /**
+     * @Route("/path", name="action")
+     */
+    public function action()
+    {
+    }
+}
+CODE_SAMPLE
+, [self::ATTRIBUTE_TO_ANNOTATION => [new \Rector\DowngradePhp80\ValueObject\DowngradeAttributeToAnnotation('Symfony\\Component\\Routing\\Annotation\\Route', 'Symfony\\Component\\Routing\\Annotation\\Route')]])]);
+    }
+    /**
+     * @return array<class-string<Node>>
+     */
+    public function getNodeTypes() : array
+    {
+        return [\PhpParser\Node\Stmt\Class_::class, \PhpParser\Node\Stmt\ClassMethod::class, \PhpParser\Node\Stmt\Property::class];
+    }
+    /**
+     * @param Class_|ClassMethod|Property $node
+     */
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    {
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
+        foreach ($node->attrGroups as $attrGroup) {
+            foreach ($attrGroup->attrs as $key => $attribute) {
+                $attributeToAnnotation = $this->matchAttributeToAnnotation($attribute, $this->attributesToAnnotations);
+                if (!$attributeToAnnotation instanceof \Rector\DowngradePhp80\ValueObject\DowngradeAttributeToAnnotation) {
+                    continue;
+                }
+                unset($attrGroup->attrs[$key]);
+                if (!\RectorPrefix20210523\Nette\Utils\Strings::contains($attributeToAnnotation->getTag(), '\\')) {
+                    $phpDocInfo->addPhpDocTagNode(new \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode('@' . $attributeToAnnotation->getTag(), new \PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode('')));
+                } else {
+                    $doctrineAnnotation = $this->doctrineAnnotationFactory->createFromAttribute($attribute, $attributeToAnnotation->getTag());
+                    $phpDocInfo->addTagValueNode($doctrineAnnotation);
+                }
+            }
+        }
+        // cleanup empty attr groups
+        $this->cleanupEmptyAttrGroups($node);
+        return $node;
+    }
+    /**
+     * @param array<string, DowngradeAttributeToAnnotation[]> $configuration
+     */
+    public function configure(array $configuration) : void
+    {
+        $attributesToAnnotations = $configuration[self::ATTRIBUTE_TO_ANNOTATION] ?? [];
+        \RectorPrefix20210523\Webmozart\Assert\Assert::allIsInstanceOf($attributesToAnnotations, \Rector\DowngradePhp80\ValueObject\DowngradeAttributeToAnnotation::class);
+        $this->attributesToAnnotations = $attributesToAnnotations;
+    }
+    /**
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\Class_ $node
+     */
+    private function cleanupEmptyAttrGroups($node) : void
+    {
+        foreach ($node->attrGroups as $key => $attrGroup) {
+            if (\count($attrGroup->attrs) !== 0) {
+                continue;
+            }
+            unset($node->attrGroups[$key]);
+        }
+    }
+    /**
+     * @param DowngradeAttributeToAnnotation[] $attributesToAnnotations
+     */
+    private function matchAttributeToAnnotation(\PhpParser\Node\Attribute $attribute, array $attributesToAnnotations) : ?\Rector\DowngradePhp80\ValueObject\DowngradeAttributeToAnnotation
+    {
+        foreach ($attributesToAnnotations as $attributeToAnnotation) {
+            if (!$this->isName($attribute->name, $attributeToAnnotation->getAttributeClass())) {
+                continue;
+            }
+            return $attributeToAnnotation;
+        }
+        return null;
+    }
+}
