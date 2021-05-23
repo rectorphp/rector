@@ -77,19 +77,19 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [Assign::class];
+        return [Assign::class, PropertyFetch::class];
     }
 
     /**
-     * @param Assign $node
+     * @param PropertyFetch|Assign $node
      */
     public function refactor(Node $node): ?Node
     {
-        if ($node->var instanceof PropertyFetch) {
+        if ($node instanceof Assign && $node->var instanceof PropertyFetch) {
             return $this->processSetter($node);
         }
 
-        if ($node->expr instanceof PropertyFetch) {
+        if ($node instanceof PropertyFetch) {
             return $this->processGetter($node);
         }
 
@@ -128,32 +128,29 @@ CODE_SAMPLE
         return $this->nodeFactory->createMethodCall($variable, $propertyToMethodCall->getNewSetMethod(), $args);
     }
 
-    private function processGetter(Assign $assign): ?Node
+    private function processGetter(PropertyFetch $propertyFetch): ?Node
     {
-        /** @var PropertyFetch $propertyFetchNode */
-        $propertyFetchNode = $assign->expr;
-
-        $propertyToMethodCall = $this->matchPropertyFetchCandidate($propertyFetchNode);
+        $propertyToMethodCall = $this->matchPropertyFetchCandidate($propertyFetch);
         if (! $propertyToMethodCall instanceof PropertyFetchToMethodCall) {
             return null;
         }
 
         // simple method name
         if ($propertyToMethodCall->getNewGetMethod() !== '') {
-            $assign->expr = $this->nodeFactory->createMethodCall(
-                $propertyFetchNode->var,
+            $methodCall = $this->nodeFactory->createMethodCall(
+                $propertyFetch->var,
                 $propertyToMethodCall->getNewGetMethod()
             );
 
             if ($propertyToMethodCall->getNewGetArguments() !== []) {
                 $args = $this->nodeFactory->createArgs($propertyToMethodCall->getNewGetArguments());
-                $assign->expr->args = $args;
+                $methodCall->args = $args;
             }
 
-            return $assign;
+            return $methodCall;
         }
 
-        return $assign;
+        return $propertyFetch;
     }
 
     private function matchPropertyFetchCandidate(PropertyFetch $propertyFetch): ?PropertyFetchToMethodCall
