@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Ssch\TYPO3Rector\TypoScript\Visitors;
 
-use RectorPrefix20210522\Helmich\TypoScriptParser\Parser\AST\ConditionalStatement;
-use RectorPrefix20210522\Helmich\TypoScriptParser\Parser\AST\Statement;
+use RectorPrefix20210523\Helmich\TypoScriptParser\Parser\AST\ConditionalStatement;
+use RectorPrefix20210523\Helmich\TypoScriptParser\Parser\AST\Statement;
 use LogicException;
 use Rector\ChangesReporting\ValueObject\RectorWithLineChange;
 use Rector\Core\Provider\CurrentFileProvider;
@@ -34,9 +34,9 @@ final class OldConditionToExpressionLanguageVisitor extends \Ssch\TYPO3Rector\Ty
         $this->currentFileProvider = $currentFileProvider;
         $this->conditionMatchers = $conditionMatchers;
     }
-    public function enterNode(\RectorPrefix20210522\Helmich\TypoScriptParser\Parser\AST\Statement $statement) : void
+    public function enterNode(\RectorPrefix20210523\Helmich\TypoScriptParser\Parser\AST\Statement $statement) : void
     {
-        if (!$statement instanceof \RectorPrefix20210522\Helmich\TypoScriptParser\Parser\AST\ConditionalStatement) {
+        if (!$statement instanceof \RectorPrefix20210523\Helmich\TypoScriptParser\Parser\AST\ConditionalStatement) {
             return;
         }
         \preg_match_all('#\\[(.*)]#imU', $statement->condition, $conditions, \PREG_SET_ORDER);

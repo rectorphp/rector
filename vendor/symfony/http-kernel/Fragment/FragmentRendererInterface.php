@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210522\Symfony\Component\HttpKernel\Fragment;
+namespace RectorPrefix20210523\Symfony\Component\HttpKernel\Fragment;
 
-use RectorPrefix20210522\Symfony\Component\HttpFoundation\Request;
-use RectorPrefix20210522\Symfony\Component\HttpFoundation\Response;
-use RectorPrefix20210522\Symfony\Component\HttpKernel\Controller\ControllerReference;
+use RectorPrefix20210523\Symfony\Component\HttpFoundation\Request;
+use RectorPrefix20210523\Symfony\Component\HttpFoundation\Response;
+use RectorPrefix20210523\Symfony\Component\HttpKernel\Controller\ControllerReference;
 /**
  * Interface implemented by all rendering strategies.
  *
@@ -27,7 +27,7 @@ interface FragmentRendererInterface
      *
      * @return Response A Response instance
      */
-    public function render($uri, \RectorPrefix20210522\Symfony\Component\HttpFoundation\Request $request, array $options = []);
+    public function render($uri, \RectorPrefix20210523\Symfony\Component\HttpFoundation\Request $request, array $options = []);
     /**
      * Gets the name of the strategy.
      *

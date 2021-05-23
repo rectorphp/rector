@@ -8,21 +8,21 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210522\Symfony\Component\DependencyInjection\Extension;
+namespace RectorPrefix20210523\Symfony\Component\DependencyInjection\Extension;
 
-use RectorPrefix20210522\Symfony\Component\Config\Definition\ConfigurationInterface;
-use RectorPrefix20210522\Symfony\Component\Config\Definition\Processor;
-use RectorPrefix20210522\Symfony\Component\DependencyInjection\Container;
-use RectorPrefix20210522\Symfony\Component\DependencyInjection\ContainerBuilder;
-use RectorPrefix20210522\Symfony\Component\DependencyInjection\Exception\BadMethodCallException;
-use RectorPrefix20210522\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
-use RectorPrefix20210522\Symfony\Component\DependencyInjection\Exception\LogicException;
+use RectorPrefix20210523\Symfony\Component\Config\Definition\ConfigurationInterface;
+use RectorPrefix20210523\Symfony\Component\Config\Definition\Processor;
+use RectorPrefix20210523\Symfony\Component\DependencyInjection\Container;
+use RectorPrefix20210523\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix20210523\Symfony\Component\DependencyInjection\Exception\BadMethodCallException;
+use RectorPrefix20210523\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
+use RectorPrefix20210523\Symfony\Component\DependencyInjection\Exception\LogicException;
 /**
  * Provides useful features shared by many extensions.
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-abstract class Extension implements \RectorPrefix20210522\Symfony\Component\DependencyInjection\Extension\ExtensionInterface, \RectorPrefix20210522\Symfony\Component\DependencyInjection\Extension\ConfigurationExtensionInterface
+abstract class Extension implements \RectorPrefix20210523\Symfony\Component\DependencyInjection\Extension\ExtensionInterface, \RectorPrefix20210523\Symfony\Component\DependencyInjection\Extension\ConfigurationExtensionInterface
 {
     private $processedConfigs = [];
     /**
@@ -63,15 +63,15 @@ abstract class Extension implements \RectorPrefix20210522\Symfony\Component\Depe
     {
         $className = static::class;
         if ('Extension' != \substr($className, -9)) {
-            throw new \RectorPrefix20210522\Symfony\Component\DependencyInjection\Exception\BadMethodCallException('This extension does not follow the naming convention; you must overwrite the getAlias() method.');
+            throw new \RectorPrefix20210523\Symfony\Component\DependencyInjection\Exception\BadMethodCallException('This extension does not follow the naming convention; you must overwrite the getAlias() method.');
         }
         $classBaseName = \substr(\strrchr($className, '\\'), 1, -9);
-        return \RectorPrefix20210522\Symfony\Component\DependencyInjection\Container::underscore($classBaseName);
+        return \RectorPrefix20210523\Symfony\Component\DependencyInjection\Container::underscore($classBaseName);
     }
     /**
      * {@inheritdoc}
      */
-    public function getConfiguration(array $config, \RectorPrefix20210522\Symfony\Component\DependencyInjection\ContainerBuilder $container)
+    public function getConfiguration(array $config, \RectorPrefix20210523\Symfony\Component\DependencyInjection\ContainerBuilder $container)
     {
         $class = static::class;
         if (\false !== \strpos($class, "\0")) {
@@ -83,17 +83,17 @@ abstract class Extension implements \RectorPrefix20210522\Symfony\Component\Depe
         if (!$class) {
             return null;
         }
-        if (!$class->implementsInterface(\RectorPrefix20210522\Symfony\Component\Config\Definition\ConfigurationInterface::class)) {
-            throw new \RectorPrefix20210522\Symfony\Component\DependencyInjection\Exception\LogicException(\sprintf('The extension configuration class "%s" must implement "%s".', $class->getName(), \RectorPrefix20210522\Symfony\Component\Config\Definition\ConfigurationInterface::class));
+        if (!$class->implementsInterface(\RectorPrefix20210523\Symfony\Component\Config\Definition\ConfigurationInterface::class)) {
+            throw new \RectorPrefix20210523\Symfony\Component\DependencyInjection\Exception\LogicException(\sprintf('The extension configuration class "%s" must implement "%s".', $class->getName(), \RectorPrefix20210523\Symfony\Component\Config\Definition\ConfigurationInterface::class));
         }
         if (!($constructor = $class->getConstructor()) || !$constructor->getNumberOfRequiredParameters()) {
             return $class->newInstance();
         }
         return null;
     }
-    protected final function processConfiguration(\RectorPrefix20210522\Symfony\Component\Config\Definition\ConfigurationInterface $configuration, array $configs) : array
+    protected final function processConfiguration(\RectorPrefix20210523\Symfony\Component\Config\Definition\ConfigurationInterface $configuration, array $configs) : array
     {
-        $processor = new \RectorPrefix20210522\Symfony\Component\Config\Definition\Processor();
+        $processor = new \RectorPrefix20210523\Symfony\Component\Config\Definition\Processor();
         return $this->processedConfigs[] = $processor->processConfiguration($configuration, $configs);
     }
     /**
@@ -112,10 +112,10 @@ abstract class Extension implements \RectorPrefix20210522\Symfony\Component\Depe
      *
      * @throws InvalidArgumentException When the config is not enableable
      */
-    protected function isConfigEnabled(\RectorPrefix20210522\Symfony\Component\DependencyInjection\ContainerBuilder $container, array $config)
+    protected function isConfigEnabled(\RectorPrefix20210523\Symfony\Component\DependencyInjection\ContainerBuilder $container, array $config)
     {
         if (!\array_key_exists('enabled', $config)) {
-            throw new \RectorPrefix20210522\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException("The config array has no 'enabled' key.");
+            throw new \RectorPrefix20210523\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException("The config array has no 'enabled' key.");
         }
         return (bool) $container->getParameterBag()->resolveValue($config['enabled']);
     }

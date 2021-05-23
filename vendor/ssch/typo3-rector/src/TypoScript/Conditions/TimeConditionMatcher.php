@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Ssch\TYPO3Rector\TypoScript\Conditions;
 
-use RectorPrefix20210522\Nette\Utils\Strings;
+use RectorPrefix20210523\Nette\Utils\Strings;
 use Ssch\TYPO3Rector\Contract\TypoScript\Conditions\TyposcriptConditionMatcher;
 use Ssch\TYPO3Rector\Helper\ArrayUtility;
 final class TimeConditionMatcher implements \Ssch\TYPO3Rector\Contract\TypoScript\Conditions\TyposcriptConditionMatcher
@@ -42,6 +42,6 @@ final class TimeConditionMatcher implements \Ssch\TYPO3Rector\Contract\TypoScrip
     }
     public function shouldApply(string $condition) : bool
     {
-        return null !== \RectorPrefix20210522\Nette\Utils\Strings::match($condition, '#' . self::ALLOWED_TIME_CONSTANTS . '#Ui');
+        return null !== \RectorPrefix20210523\Nette\Utils\Strings::match($condition, '#' . self::ALLOWED_TIME_CONSTANTS . '#Ui');
     }
 }

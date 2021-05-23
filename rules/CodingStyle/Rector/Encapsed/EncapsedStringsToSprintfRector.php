@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\CodingStyle\Rector\Encapsed;
 
-use RectorPrefix20210522\Nette\Utils\Strings;
+use RectorPrefix20210523\Nette\Utils\Strings;
 use const PHP_EOL;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
@@ -107,7 +107,7 @@ CODE_SAMPLE
         if ($string === '%s%s' && \count($argumentVariables) === 2 && $this->hasEndOfLine($argumentVariables)) {
             return new \PhpParser\Node\Expr\BinaryOp\Concat($argumentVariables[0], $argumentVariables[1]);
         }
-        if (\RectorPrefix20210522\Nette\Utils\Strings::contains($string, \PHP_EOL)) {
+        if (\RectorPrefix20210523\Nette\Utils\Strings::contains($string, \PHP_EOL)) {
             return null;
         }
         $arguments = [new \PhpParser\Node\Arg(new \PhpParser\Node\Scalar\String_($string))];

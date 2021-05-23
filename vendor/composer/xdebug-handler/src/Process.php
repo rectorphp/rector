@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view
  * the LICENSE file that was distributed with this source code.
  */
-namespace RectorPrefix20210522\Composer\XdebugHandler;
+namespace RectorPrefix20210523\Composer\XdebugHandler;
 
 /**
  * Process utility functions

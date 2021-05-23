@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\CodingStyle\Application;
 
-use RectorPrefix20210522\Nette\Utils\Strings;
+use RectorPrefix20210523\Nette\Utils\Strings;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Declare_;
 use PhpParser\Node\Stmt\Namespace_;
@@ -118,10 +118,10 @@ final class UseImportsAdder
     }
     private function isCurrentNamespace(string $namespaceName, \PHPStan\Type\ObjectType $objectType) : bool
     {
-        $afterCurrentNamespace = \RectorPrefix20210522\Nette\Utils\Strings::after($objectType->getClassName(), $namespaceName . '\\');
+        $afterCurrentNamespace = \RectorPrefix20210523\Nette\Utils\Strings::after($objectType->getClassName(), $namespaceName . '\\');
         if (!$afterCurrentNamespace) {
             return \false;
         }
-        return !\RectorPrefix20210522\Nette\Utils\Strings::contains($afterCurrentNamespace, '\\');
+        return !\RectorPrefix20210523\Nette\Utils\Strings::contains($afterCurrentNamespace, '\\');
     }
 }

@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Ssch\TYPO3Rector\TypoScript\Conditions;
 
-use RectorPrefix20210522\Nette\Utils\Strings;
+use RectorPrefix20210523\Nette\Utils\Strings;
 use Ssch\TYPO3Rector\Contract\TypoScript\Conditions\TyposcriptConditionMatcher;
 final class LanguageConditionMatcher implements \Ssch\TYPO3Rector\Contract\TypoScript\Conditions\TyposcriptConditionMatcher
 {
@@ -21,6 +21,6 @@ final class LanguageConditionMatcher implements \Ssch\TYPO3Rector\Contract\TypoS
     }
     public function shouldApply(string $condition) : bool
     {
-        return \RectorPrefix20210522\Nette\Utils\Strings::startsWith($condition, self::TYPE);
+        return \RectorPrefix20210523\Nette\Utils\Strings::startsWith($condition, self::TYPE);
     }
 }
