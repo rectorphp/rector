@@ -7,6 +7,7 @@ use Rector\Core\Stubs\PHPStanStubLoader;
 use Rector\DowngradePhp80\Rector\Class_\DowngradeAttributeToAnnotationRector;
 use Rector\Set\ValueObject\DowngradeSetList;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
 $phpStanStubLoader = new PHPStanStubLoader();
 $phpStanStubLoader->loadStubs();
