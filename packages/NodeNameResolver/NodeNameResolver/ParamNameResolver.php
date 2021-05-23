@@ -7,6 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Param;
 use Rector\NodeNameResolver\Contract\NodeNameResolverInterface;
 use Rector\NodeNameResolver\NodeNameResolver;
+use RectorPrefix20210523\Symfony\Contracts\Service\Attribute\Required;
 final class ParamNameResolver implements \Rector\NodeNameResolver\Contract\NodeNameResolverInterface
 {
     /**

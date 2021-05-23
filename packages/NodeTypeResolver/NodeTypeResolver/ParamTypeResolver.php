@@ -20,6 +20,7 @@ use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\StaticTypeMapper\StaticTypeMapper;
+use RectorPrefix20210523\Symfony\Contracts\Service\Attribute\Required;
 use RectorPrefix20210523\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 /**
  * @see \Rector\Tests\NodeTypeResolver\PerNodeTypeResolver\ParamTypeResolver\ParamTypeResolverTest

@@ -25,6 +25,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\TypeDeclaration\Contract\TypeInferer\ParamTypeInfererInterface;
+use RectorPrefix20210523\Symfony\Contracts\Service\Attribute\Required;
 final class PHPUnitDataProviderParamTypeInferer implements \Rector\TypeDeclaration\Contract\TypeInferer\ParamTypeInfererInterface
 {
     /**
@@ -54,8 +55,8 @@ final class PHPUnitDataProviderParamTypeInferer implements \Rector\TypeDeclarati
         $this->typeFactory = $typeFactory;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
+    // Prevents circular reference
     /**
-     * Prevents circular reference
      * @required
      */
     public function autowirePHPUnitDataProviderParamTypeInferer(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver) : void

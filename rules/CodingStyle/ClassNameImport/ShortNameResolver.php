@@ -27,6 +27,7 @@ use Rector\Core\ValueObject\Application\File;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use ReflectionClass;
+use RectorPrefix20210523\Symfony\Contracts\Service\Attribute\Required;
 use RectorPrefix20210523\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 final class ShortNameResolver
 {
@@ -71,8 +72,8 @@ final class ShortNameResolver
         $this->reflectionProvider = $reflectionProvider;
         $this->betterNodeFinder = $betterNodeFinder;
     }
+    // Avoids circular reference
     /**
-     * Avoids circular reference
      * @required
      */
     public function autowireShortNameResolver(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory) : void

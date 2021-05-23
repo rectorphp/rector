@@ -49,6 +49,7 @@ use Rector\PostRector\DependencyInjection\PropertyAdder;
 use Rector\Privatization\NodeManipulator\VisibilityManipulator;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use RectorPrefix20210523\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix20210523\Symfony\Contracts\Service\Attribute\Required;
 use RectorPrefix20210523\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 use RectorPrefix20210523\Symplify\PackageBuilder\Parameter\ParameterProvider;
 use RectorPrefix20210523\Symplify\Skipper\Skipper\Skipper;
