@@ -52,17 +52,17 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\Assign::class];
+        return [\PhpParser\Node\Expr\Assign::class, \PhpParser\Node\Expr\PropertyFetch::class];
     }
     /**
-     * @param Assign $node
+     * @param PropertyFetch|Assign $node
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if ($node->var instanceof \PhpParser\Node\Expr\PropertyFetch) {
+        if ($node instanceof \PhpParser\Node\Expr\Assign && $node->var instanceof \PhpParser\Node\Expr\PropertyFetch) {
             return $this->processSetter($node);
         }
-        if ($node->expr instanceof \PhpParser\Node\Expr\PropertyFetch) {
+        if ($node instanceof \PhpParser\Node\Expr\PropertyFetch) {
             return $this->processGetter($node);
         }
         return null;
@@ -92,24 +92,22 @@ CODE_SAMPLE
         $variable = $propertyFetchNode->var;
         return $this->nodeFactory->createMethodCall($variable, $propertyToMethodCall->getNewSetMethod(), $args);
     }
-    private function processGetter(\PhpParser\Node\Expr\Assign $assign) : ?\PhpParser\Node
+    private function processGetter(\PhpParser\Node\Expr\PropertyFetch $propertyFetch) : ?\PhpParser\Node
     {
-        /** @var PropertyFetch $propertyFetchNode */
-        $propertyFetchNode = $assign->expr;
-        $propertyToMethodCall = $this->matchPropertyFetchCandidate($propertyFetchNode);
+        $propertyToMethodCall = $this->matchPropertyFetchCandidate($propertyFetch);
         if (!$propertyToMethodCall instanceof \Rector\Transform\ValueObject\PropertyFetchToMethodCall) {
             return null;
         }
         // simple method name
         if ($propertyToMethodCall->getNewGetMethod() !== '') {
-            $assign->expr = $this->nodeFactory->createMethodCall($propertyFetchNode->var, $propertyToMethodCall->getNewGetMethod());
+            $methodCall = $this->nodeFactory->createMethodCall($propertyFetch->var, $propertyToMethodCall->getNewGetMethod());
             if ($propertyToMethodCall->getNewGetArguments() !== []) {
                 $args = $this->nodeFactory->createArgs($propertyToMethodCall->getNewGetArguments());
-                $assign->expr->args = $args;
+                $methodCall->args = $args;
             }
-            return $assign;
+            return $methodCall;
         }
-        return $assign;
+        return $propertyFetch;
     }
     private function matchPropertyFetchCandidate(\PhpParser\Node\Expr\PropertyFetch $propertyFetch) : ?\Rector\Transform\ValueObject\PropertyFetchToMethodCall
     {
