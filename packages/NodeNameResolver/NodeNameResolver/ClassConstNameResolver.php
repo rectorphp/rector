@@ -8,14 +8,13 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassConst;
 use Rector\NodeNameResolver\Contract\NodeNameResolverInterface;
 use Rector\NodeNameResolver\NodeNameResolver;
+use Symfony\Contracts\Service\Attribute\Required;
 
 final class ClassConstNameResolver implements NodeNameResolverInterface
 {
     private NodeNameResolver $nodeNameResolver;
 
-    /**
-     * @required
-     */
+    #[Required]
     public function autowireClassConstNameResolver(NodeNameResolver $nodeNameResolver): void
     {
         $this->nodeNameResolver = $nodeNameResolver;

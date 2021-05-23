@@ -16,6 +16,7 @@ use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
+use Symfony\Contracts\Service\Attribute\Required;
 
 final class ObjectWithoutClassTypeMapper implements TypeMapperInterface
 {
@@ -64,9 +65,7 @@ final class ObjectWithoutClassTypeMapper implements TypeMapperInterface
         return new Name('object');
     }
 
-    /**
-     * @required
-     */
+    #[Required]
     public function autowireObjectWithoutClassTypeMapper(PHPStanStaticTypeMapper $phpStanStaticTypeMapper): void
     {
         $this->phpStanStaticTypeMapper = $phpStanStaticTypeMapper;

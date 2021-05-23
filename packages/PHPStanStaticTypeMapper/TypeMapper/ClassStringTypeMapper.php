@@ -15,6 +15,7 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
+use Symfony\Contracts\Service\Attribute\Required;
 
 final class ClassStringTypeMapper implements TypeMapperInterface
 {
@@ -58,9 +59,7 @@ final class ClassStringTypeMapper implements TypeMapperInterface
         return null;
     }
 
-    /**
-     * @required
-     */
+    #[Required]
     public function autowireClassStringTypeMapper(PHPStanStaticTypeMapper $phpStanStaticTypeMapper): void
     {
         $this->phpStanStaticTypeMapper = $phpStanStaticTypeMapper;

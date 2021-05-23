@@ -11,6 +11,7 @@ use PHPStan\Type\Type;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\StaticTypeMapper\Contract\PhpParser\PhpParserNodeMapperInterface;
 use Rector\StaticTypeMapper\Mapper\PhpParserNodeMapper;
+use Symfony\Contracts\Service\Attribute\Required;
 
 final class NullableTypeNodeMapper implements PhpParserNodeMapperInterface
 {
@@ -21,9 +22,7 @@ final class NullableTypeNodeMapper implements PhpParserNodeMapperInterface
     ) {
     }
 
-    /**
-     * @required
-     */
+    #[Required]
     public function autowireNullableTypeNodeMapper(PhpParserNodeMapper $phpParserNodeMapper): void
     {
         $this->phpParserNodeMapper = $phpParserNodeMapper;

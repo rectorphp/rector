@@ -21,6 +21,7 @@ use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\StaticTypeMapper\StaticTypeMapper;
+use Symfony\Contracts\Service\Attribute\Required;
 use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
 /**
@@ -39,9 +40,7 @@ final class ParamTypeResolver implements NodeTypeResolverInterface
     ) {
     }
 
-    /**
-     * @required
-     */
+    #[Required]
     public function autowireParamTypeResolver(
         NodeTypeResolver $nodeTypeResolver,
         StaticTypeMapper $staticTypeMapper

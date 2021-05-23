@@ -49,6 +49,7 @@ use Rector\NodeTypeResolver\NodeTypeResolver\IdentifierTypeResolver;
 use Rector\NodeTypeResolver\TypeAnalyzer\ArrayTypeAnalyzer;
 use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
 use Rector\TypeDeclaration\PHPStan\Type\ObjectTypeSpecifier;
+use Symfony\Contracts\Service\Attribute\Required;
 
 final class NodeTypeResolver
 {
@@ -77,11 +78,9 @@ final class NodeTypeResolver
         }
     }
 
-    /**
-     * Prevents circular dependency
-     *
-     * @required
-     */
+    // Prevents circular dependency
+
+    #[Required]
     public function autowireNodeTypeResolver(ArrayTypeAnalyzer $arrayTypeAnalyzer): void
     {
         $this->arrayTypeAnalyzer = $arrayTypeAnalyzer;

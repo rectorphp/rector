@@ -50,6 +50,7 @@ use Rector\PostRector\DependencyInjection\PropertyAdder;
 use Rector\Privatization\NodeManipulator\VisibilityManipulator;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Contracts\Service\Attribute\Required;
 use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\Skipper\Skipper\Skipper;
@@ -142,9 +143,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
 
     private InfiniteLoopValidator $infiniteLoopValidator;
 
-    /**
-     * @required
-     */
+    #[Required]
     public function autowireAbstractRector(
         NodesToRemoveCollector $nodesToRemoveCollector,
         NodesToAddCollector $nodesToAddCollector,

@@ -10,6 +10,7 @@ use PHPStan\Type\Type;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\StaticTypeMapper\Contract\PhpParser\PhpParserNodeMapperInterface;
 use Rector\StaticTypeMapper\Mapper\PhpParserNodeMapper;
+use Symfony\Contracts\Service\Attribute\Required;
 
 final class UnionTypeNodeMapper implements PhpParserNodeMapperInterface
 {
@@ -20,9 +21,7 @@ final class UnionTypeNodeMapper implements PhpParserNodeMapperInterface
     ) {
     }
 
-    /**
-     * @required
-     */
+    #[Required]
     public function autowireUnionTypeNodeMapper(PhpParserNodeMapper $phpParserNodeMapper): void
     {
         $this->phpParserNodeMapper = $phpParserNodeMapper;

@@ -16,6 +16,7 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\StaticTypeMapper\StaticTypeMapper;
+use Symfony\Contracts\Service\Attribute\Required;
 
 /**
  * @see https://github.com/phpstan/phpstan-src/blob/8376548f76e2c845ae047e3010e873015b796818/src/Analyser/NameScope.php#L32
@@ -26,10 +27,9 @@ final class NameScopeFactory
 
     private PhpDocInfoFactory $phpDocInfoFactory;
 
-    /**
-     * This is needed to avoid circular references
-     * @required
-     */
+    // This is needed to avoid circular references
+
+    #[Required]
     public function autowireNameScopeFactory(
         PhpDocInfoFactory $phpDocInfoFactory,
         StaticTypeMapper $staticTypeMapper

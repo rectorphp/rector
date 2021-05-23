@@ -32,6 +32,7 @@ use Rector\PHPStanStaticTypeMapper\TypeAnalyzer\BoolUnionTypeAnalyzer;
 use Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeAnalyzer;
 use Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeCommonTypeNarrower;
 use Rector\PHPStanStaticTypeMapper\ValueObject\UnionTypeAnalysis;
+use Symfony\Contracts\Service\Attribute\Required;
 
 final class UnionTypeMapper implements TypeMapperInterface
 {
@@ -46,9 +47,7 @@ final class UnionTypeMapper implements TypeMapperInterface
     ) {
     }
 
-    /**
-     * @required
-     */
+    #[Required]
     public function autowireUnionTypeMapper(PHPStanStaticTypeMapper $phpStanStaticTypeMapper): void
     {
         $this->phpStanStaticTypeMapper = $phpStanStaticTypeMapper;

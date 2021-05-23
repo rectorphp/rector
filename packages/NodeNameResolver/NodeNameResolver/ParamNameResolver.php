@@ -8,14 +8,13 @@ use PhpParser\Node;
 use PhpParser\Node\Param;
 use Rector\NodeNameResolver\Contract\NodeNameResolverInterface;
 use Rector\NodeNameResolver\NodeNameResolver;
+use Symfony\Contracts\Service\Attribute\Required;
 
 final class ParamNameResolver implements NodeNameResolverInterface
 {
     private NodeNameResolver $nodeNameResolver;
 
-    /**
-     * @required
-     */
+    #[Required]
     public function autowireParamNameResolver(NodeNameResolver $nodeNameResolver): void
     {
         $this->nodeNameResolver = $nodeNameResolver;

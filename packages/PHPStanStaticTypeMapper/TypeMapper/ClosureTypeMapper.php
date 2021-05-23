@@ -12,6 +12,7 @@ use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareCallableTypeNode;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
+use Symfony\Contracts\Service\Attribute\Required;
 
 final class ClosureTypeMapper implements TypeMapperInterface
 {
@@ -50,9 +51,7 @@ final class ClosureTypeMapper implements TypeMapperInterface
         return $this->callableTypeMapper->mapToPhpParserNode($type, $kind);
     }
 
-    /**
-     * @required
-     */
+    #[Required]
     public function autowireClosureTypeMapper(PHPStanStaticTypeMapper $phpStanStaticTypeMapper): void
     {
         $this->phpStanStaticTypeMapper = $phpStanStaticTypeMapper;

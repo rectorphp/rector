@@ -22,6 +22,7 @@ use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedGenericObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\SelfObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
+use Symfony\Contracts\Service\Attribute\Required;
 
 final class ObjectTypeMapper implements TypeMapperInterface
 {
@@ -94,9 +95,7 @@ final class ObjectTypeMapper implements TypeMapperInterface
         return new Name('object');
     }
 
-    /**
-     * @required
-     */
+    #[Required]
     public function autowireObjectTypeMapper(PHPStanStaticTypeMapper $phpStanStaticTypeMapper): void
     {
         $this->phpStanStaticTypeMapper = $phpStanStaticTypeMapper;

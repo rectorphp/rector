@@ -25,6 +25,7 @@ use Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareArrayTypeNode;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
 use Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeCommonTypeNarrower;
+use Symfony\Contracts\Service\Attribute\Required;
 
 /**
  * @see \Rector\Tests\PHPStanStaticTypeMapper\TypeMapper\ArrayTypeMapperTest
@@ -42,10 +43,9 @@ final class ArrayTypeMapper implements TypeMapperInterface
 
     private ReflectionProvider $reflectionProvider;
 
-    /**
-     * To avoid circular dependency
-     * @required
-     */
+    // To avoid circular dependency
+
+    #[Required]
     public function autowireArrayTypeMapper(
         PHPStanStaticTypeMapper $phpStanStaticTypeMapper,
         UnionTypeCommonTypeNarrower $unionTypeCommonTypeNarrower,
