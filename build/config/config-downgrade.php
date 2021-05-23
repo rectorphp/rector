@@ -5,6 +5,7 @@ declare(strict_types=1);
 use Rector\Core\Configuration\Option;
 use Rector\Core\Stubs\PHPStanStubLoader;
 use Rector\DowngradePhp80\Rector\Class_\DowngradeAttributeToAnnotationRector;
+use Rector\DowngradePhp80\ValueObject\DowngradeAttributeToAnnotation;
 use Rector\Set\ValueObject\DowngradeSetList;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
@@ -27,11 +28,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services = $containerConfigurator->services();
     $services->set(DowngradeAttributeToAnnotationRector::class)
-        ->configurator('call', [
+        ->call('configure', [[
             DowngradeAttributeToAnnotationRector::ATTRIBUTE_TO_ANNOTATION => ValueObjectInliner::inline([
                 new DowngradeAttributeToAnnotation('Symfony\Contracts\Service\Attribute\Required', 'required'),
             ]),
-        ]);
+        ]]);
 };
 
 /**
