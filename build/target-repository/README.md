@@ -4,83 +4,49 @@
 
 <br>
 
-Rector helps you with 2 areas - major code changes and in daily work.
+Rector instantly upgrades and refactors the PHP code of your application.  It can help you 2 major areas:
 
-- Do you have a legacy code base? Do you want to have that latest version of PHP or your favorite framework?
-  → **Rector gets you there with instant upgrade**.
+### 1. Instant Upgrades
 
-<br>
+Rector now supports upgrades from PHP 5.3 to 8.0 and major open-source projects like [Symfony](https://github.com/rectorphp/rector-symfony), [PHPUnit](https://github.com/rectorphp/rector-phpunit), [Nette](https://github.com/rectorphp/rector-nette), [Laravel](https://github.com/rectorphp/rector-laravel), [CakePHP](https://github.com/rectorphp/rector-cakephp), [Doctrine](https://github.com/rectorphp/rector-doctrine) and [Typo3](https://github.com/sabbelasichon/typo3-rector) out of the box. Do you want to **be constantly on the latest PHP/framework version without effort**?
 
-- Do you have code quality you need, but struggle to keep it with new developers in your team? Do you wish to have  code-reviews for each member of your team, but don't have time for it?
-  → **Add Rector to you CI and let it fix your code for you. Get [instant feedback](https://tomasvotruba.com/blog/2020/01/13/why-is-first-instant-feedback-crucial-to-developers/) after each commit.**
+Use Rector to handle **instant upgrades** for you.
 
-<br>
+### 2. Automated Refactoring
 
-It's a tool that [we develop](https://getrector.org/) and share for free, so anyone can automate their refactoring.
+Do you have code quality you need, but struggle to keep it with new developers in your team? Do you want see smart code-reviews even when every senior developers sleeps?
 
-[Hire us](https://getrector.org/contact) to speed up learning Rector, AST and nodes, to educate your team about Rectors benefits and to setup Rector in your project, so that you can enjoy the 300 % development speed :+1:
+Add Rector to your CI and let it **continuously refactor your code** and keep the code quality high.
 
 <br>
 
-## Open-Source First
+## Read a First Book About Rector
 
-Rector **instantly upgrades and refactors the PHP code of your application**.
-It supports all versions of PHP from 5.3 and major open-source projects:
+Are you curious, how Rector works internally, how to create your own rules and test them and why Rector was born? In May 2021 we've released the very first book: *Rector - The Power of Automated Refactoring*.
 
-<br>
+<a href="https://leanpub.com/rector-the-power-of-automated-refactoring">
+<img src="https://github.com/rectorphp/the-power-of-automated-refactoring-feedback/raw/main/images/book_title.png">
+</a>
 
-<p align="center">
-    <img src="https://github.com/rectorphp/rector/blob/main/docs/images/php.png">
-    <img src="https://github.com/rectorphp/rector/blob/main/docs/images/space.png" width=30>
-    <a href="https://github.com/rectorphp/rector-phpunit"><img src="https://github.com/rectorphp/rector/blob/main/docs/images/phpunit.png"></a>
-    <img src="https://github.com/rectorphp/rector/blob/main/docs/images/space.png" width=30>
-    <a href="https://github.com/rectorphp/rector-symfony"><img src="https://github.com/rectorphp/rector/blob/main/docs/images/symfony.png"></a>
-    <img src="https://github.com/rectorphp/rector/blob/main/docs/images/space.png" width=30>
-    <a href="https://github.com/palantirnet/drupal-rector">
-        <img src="https://github.com/rectorphp/rector/blob/main/docs/images/drupal.png" alt="Drupal Rector rules">
-    </a>
-    <br>
-    <img src="https://github.com/rectorphp/rector/blob/main/docs/images/space.png" height=15>
-    <br>
-    <a href="https://github.com/rectorphp/rector-cakephp"><img src="https://github.com/rectorphp/rector/blob/main/docs/images/cakephp.png"></a>
-    <img src="https://github.com/rectorphp/rector/blob/main/docs/images/space.png" width=30>
-    <a href="https://github.com/sabbelasichon/typo3-rector">
-        <img src="https://github.com/rectorphp/rector/blob/main/docs/images/typo3.png">
-    </a>
-    <br>
-    <img src="https://github.com/rectorphp/rector/blob/main/docs/images/space.png" height=15>
-</p>
-
-### What Can Rector Do for You?
-
-- [Complete 2800 `@var` types in 2 minutes](https://tomasvotruba.com/blog/2019/07/29/how-we-completed-thousands-of-missing-var-annotations-in-a-day/)
-- [Upgrade 30 000 unit tests from PHPUnit 6 to 9](https://twitter.com/LBajsarowicz/status/1272947900016967683)
-- [Complete PHP 7.4 Property Types](https://tomasvotruba.com/blog/2018/11/15/how-to-get-php-74-typed-properties-to-your-code-in-few-seconds/)
-- [Migrate from Nette to Symfony](https://tomasvotruba.com/blog/2019/02/21/how-we-migrated-from-nette-to-symfony-in-3-weeks-part-1/)
-- [Refactor Laravel Facades to Dependency Injection](https://tomasvotruba.com/blog/2019/03/04/how-to-turn-laravel-from-static-to-dependency-injection-in-one-day/)
-- And much more...
+By [buying a book](https://leanpub.com/rector-the-power-of-automated-refactoring) you directly support maintainers who are working on Rector.
 
 <br>
 
 ## Documentation
 
 - [Explore 450+ Rector Rules](/docs/rector_rules_overview.md)
-- [How Does Rector Work?](/docs/how_it_works.md)
-- [PHP Parser Nodes](https://github.com/rectorphp/php-parser-nodes-docs/)
-
-### Advanced
-
 - [Auto Import Names](/docs/auto_import_names.md)
 - [How to Ignore Rule or Paths](/docs/how_to_ignore_rule_or_paths.md)
 - [Static Reflection and Autoload](/docs/static_reflection_and_autoload.md)
 - [How to Configure Rule](/docs/how_to_configure_rules.md)
-- [How to Generate Configuration file](/docs/init_command.md)
 
-### Contributing
+### For Rule Developers and Contributors
 
+- [How Does Rector Work?](/docs/how_it_works.md)
+- [PHP Parser Nodes](https://github.com/rectorphp/php-parser-nodes-docs/)
+- [How to Work with Doc Block and Comments](/docs/how_to_work_with_doc_block_and_comments.md)
+- [How to Generate New Rector Rule](/docs/create_own_rule.md)
 - [How to add Test for Rector Rule](/docs/how_to_add_test_for_rector_rule.md)
-- [How to work with Doc Block and Comments](/docs/how_to_work_with_doc_block_and_comments.md)
-- [How to Create New Rector Rule](/docs/create_own_rule.md)
 
 <br>
 
@@ -167,13 +133,21 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 <br>
 
+## Support
+
+Rector is a tool that [we develop](https://getrector.org/) and share for free, so anyone can automate their refactoring. But not everyone has dozens of hours to understand complexity of abstract-syntax-tree in their own time. **That's why we provide commercial support - to save your time**.
+
+Would you like to apply Rector on your code base but don't have time for the struggle with your project? [Hire us](https://getrector.org/contact) to get there faster.
+
+<br>
+
 ## How to Contribute
 
 See [the contribution guide](/CONTRIBUTING.md).
 
 <br>
 
-### Debugging
+## Debugging
 
 You can use `--debug` option, that will print nested exceptions output:
 
