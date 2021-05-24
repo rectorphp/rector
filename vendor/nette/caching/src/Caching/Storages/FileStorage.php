@@ -5,14 +5,14 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix20210523\Nette\Caching\Storages;
+namespace RectorPrefix20210524\Nette\Caching\Storages;
 
-use RectorPrefix20210523\Nette;
-use RectorPrefix20210523\Nette\Caching\Cache;
+use RectorPrefix20210524\Nette;
+use RectorPrefix20210524\Nette\Caching\Cache;
 /**
  * Cache file storage.
  */
-class FileStorage implements \RectorPrefix20210523\Nette\Caching\Storage
+class FileStorage implements \RectorPrefix20210524\Nette\Caching\Storage
 {
     use Nette\SmartObject;
     /**
@@ -40,10 +40,10 @@ class FileStorage implements \RectorPrefix20210523\Nette\Caching\Storage
     private $journal;
     /** @var array */
     private $locks;
-    public function __construct(string $dir, \RectorPrefix20210523\Nette\Caching\Storages\Journal $journal = null)
+    public function __construct(string $dir, \RectorPrefix20210524\Nette\Caching\Storages\Journal $journal = null)
     {
         if (!\is_dir($dir)) {
-            throw new \RectorPrefix20210523\Nette\DirectoryNotFoundException("Directory '{$dir}' not found.");
+            throw new \RectorPrefix20210524\Nette\DirectoryNotFoundException("Directory '{$dir}' not found.");
         }
         $this->dir = $dir;
         $this->journal = $journal;
@@ -71,7 +71,7 @@ class FileStorage implements \RectorPrefix20210523\Nette\Caching\Storage
             } elseif (!empty($meta[self::META_EXPIRE]) && $meta[self::META_EXPIRE] < \time()) {
                 break;
             }
-            if (!empty($meta[self::META_CALLBACKS]) && !\RectorPrefix20210523\Nette\Caching\Cache::checkCallbacks($meta[self::META_CALLBACKS])) {
+            if (!empty($meta[self::META_CALLBACKS]) && !\RectorPrefix20210524\Nette\Caching\Cache::checkCallbacks($meta[self::META_CALLBACKS])) {
                 break;
             }
             if (!empty($meta[self::META_ITEMS])) {
@@ -105,25 +105,25 @@ class FileStorage implements \RectorPrefix20210523\Nette\Caching\Storage
     public function write(string $key, $data, array $dp) : void
     {
         $meta = [self::META_TIME => \microtime()];
-        if (isset($dp[\RectorPrefix20210523\Nette\Caching\Cache::EXPIRATION])) {
-            if (empty($dp[\RectorPrefix20210523\Nette\Caching\Cache::SLIDING])) {
-                $meta[self::META_EXPIRE] = $dp[\RectorPrefix20210523\Nette\Caching\Cache::EXPIRATION] + \time();
+        if (isset($dp[\RectorPrefix20210524\Nette\Caching\Cache::EXPIRATION])) {
+            if (empty($dp[\RectorPrefix20210524\Nette\Caching\Cache::SLIDING])) {
+                $meta[self::META_EXPIRE] = $dp[\RectorPrefix20210524\Nette\Caching\Cache::EXPIRATION] + \time();
                 // absolute time
             } else {
-                $meta[self::META_DELTA] = (int) $dp[\RectorPrefix20210523\Nette\Caching\Cache::EXPIRATION];
+                $meta[self::META_DELTA] = (int) $dp[\RectorPrefix20210524\Nette\Caching\Cache::EXPIRATION];
                 // sliding time
             }
         }
-        if (isset($dp[\RectorPrefix20210523\Nette\Caching\Cache::ITEMS])) {
-            foreach ($dp[\RectorPrefix20210523\Nette\Caching\Cache::ITEMS] as $item) {
+        if (isset($dp[\RectorPrefix20210524\Nette\Caching\Cache::ITEMS])) {
+            foreach ($dp[\RectorPrefix20210524\Nette\Caching\Cache::ITEMS] as $item) {
                 $depFile = $this->getCacheFile($item);
                 $m = $this->readMetaAndLock($depFile, \LOCK_SH);
                 $meta[self::META_ITEMS][$depFile] = $m[self::META_TIME] ?? null;
                 unset($m);
             }
         }
-        if (isset($dp[\RectorPrefix20210523\Nette\Caching\Cache::CALLBACKS])) {
-            $meta[self::META_CALLBACKS] = $dp[\RectorPrefix20210523\Nette\Caching\Cache::CALLBACKS];
+        if (isset($dp[\RectorPrefix20210524\Nette\Caching\Cache::CALLBACKS])) {
+            $meta[self::META_CALLBACKS] = $dp[\RectorPrefix20210524\Nette\Caching\Cache::CALLBACKS];
         }
         if (!isset($this->locks[$key])) {
             $this->lock($key);
@@ -134,9 +134,9 @@ class FileStorage implements \RectorPrefix20210523\Nette\Caching\Storage
         $handle = $this->locks[$key];
         unset($this->locks[$key]);
         $cacheFile = $this->getCacheFile($key);
-        if (isset($dp[\RectorPrefix20210523\Nette\Caching\Cache::TAGS]) || isset($dp[\RectorPrefix20210523\Nette\Caching\Cache::PRIORITY])) {
+        if (isset($dp[\RectorPrefix20210524\Nette\Caching\Cache::TAGS]) || isset($dp[\RectorPrefix20210524\Nette\Caching\Cache::PRIORITY])) {
             if (!$this->journal) {
-                throw new \RectorPrefix20210523\Nette\InvalidStateException('CacheJournal has not been provided.');
+                throw new \RectorPrefix20210524\Nette\InvalidStateException('CacheJournal has not been provided.');
             }
             $this->journal->write($cacheFile, $dp);
         }
@@ -172,13 +172,13 @@ class FileStorage implements \RectorPrefix20210523\Nette\Caching\Storage
     }
     public function clean(array $conditions) : void
     {
-        $all = !empty($conditions[\RectorPrefix20210523\Nette\Caching\Cache::ALL]);
+        $all = !empty($conditions[\RectorPrefix20210524\Nette\Caching\Cache::ALL]);
         $collector = empty($conditions);
-        $namespaces = $conditions[\RectorPrefix20210523\Nette\Caching\Cache::NAMESPACES] ?? null;
+        $namespaces = $conditions[\RectorPrefix20210524\Nette\Caching\Cache::NAMESPACES] ?? null;
         // cleaning using file iterator
         if ($all || $collector) {
             $now = \time();
-            foreach (\RectorPrefix20210523\Nette\Utils\Finder::find('_*')->from($this->dir)->childFirst() as $entry) {
+            foreach (\RectorPrefix20210524\Nette\Utils\Finder::find('_*')->from($this->dir)->childFirst() as $entry) {
                 $path = (string) $entry;
                 if ($entry->isDir()) {
                     // collector: remove empty dirs
@@ -212,7 +212,7 @@ class FileStorage implements \RectorPrefix20210523\Nette\Caching\Storage
                 if (!\is_dir($dir)) {
                     continue;
                 }
-                foreach (\RectorPrefix20210523\Nette\Utils\Finder::findFiles('_*')->in($dir) as $entry) {
+                foreach (\RectorPrefix20210524\Nette\Utils\Finder::findFiles('_*')->in($dir) as $entry) {
                     $this->delete((string) $entry);
                 }
                 @\rmdir($dir);

@@ -8,14 +8,17 @@
  * For the full copyright and license information, please view
  * the LICENSE file that was distributed with this source code.
  */
-namespace RectorPrefix20210523\Composer\Semver\Constraint;
+namespace RectorPrefix20210524\Composer\Semver\Constraint;
 
 /**
  * Defines a conjunctive or disjunctive set of constraints.
  */
-class MultiConstraint implements \RectorPrefix20210523\Composer\Semver\Constraint\ConstraintInterface
+class MultiConstraint implements \RectorPrefix20210524\Composer\Semver\Constraint\ConstraintInterface
 {
-    /** @var ConstraintInterface[] */
+    /**
+     * @var ConstraintInterface[]
+     * @phpstan-var non-empty-array<ConstraintInterface>
+     */
     protected $constraints;
     /** @var string|null */
     protected $prettyString;
@@ -62,6 +65,9 @@ class MultiConstraint implements \RectorPrefix20210523\Composer\Semver\Constrain
     {
         return !$this->conjunctive;
     }
+    /**
+     * {@inheritDoc}
+     */
     public function compile($otherOperator)
     {
         $parts = array();
@@ -89,7 +95,7 @@ class MultiConstraint implements \RectorPrefix20210523\Composer\Semver\Constrain
      *
      * @return bool
      */
-    public function matches(\RectorPrefix20210523\Composer\Semver\Constraint\ConstraintInterface $provider)
+    public function matches(\RectorPrefix20210524\Composer\Semver\Constraint\ConstraintInterface $provider)
     {
         if (\false === $this->conjunctive) {
             foreach ($this->constraints as $constraint) {
@@ -99,6 +105,12 @@ class MultiConstraint implements \RectorPrefix20210523\Composer\Semver\Constrain
             }
             return \false;
         }
+        // when matching a conjunctive and a disjunctive multi constraint we have to iterate over the disjunctive one
+        // otherwise we'd return true if different parts of the disjunctive constraint match the conjunctive one
+        // which would lead to incorrect results, e.g. [>1 and <2] would match [<1 or >2] although they do not intersect
+        if ($provider instanceof \RectorPrefix20210524\Composer\Semver\Constraint\MultiConstraint && $provider->isDisjunctive()) {
+            return $provider->matches($this);
+        }
         foreach ($this->constraints as $constraint) {
             if (!$provider->matches($constraint)) {
                 return \false;
@@ -107,14 +119,14 @@ class MultiConstraint implements \RectorPrefix20210523\Composer\Semver\Constrain
         return \true;
     }
     /**
-     * @param string|null $prettyString
+     * {@inheritDoc}
      */
     public function setPrettyString($prettyString)
     {
         $this->prettyString = $prettyString;
     }
     /**
-     * @return string
+     * {@inheritDoc}
      */
     public function getPrettyString()
     {
@@ -124,7 +136,7 @@ class MultiConstraint implements \RectorPrefix20210523\Composer\Semver\Constrain
         return (string) $this;
     }
     /**
-     * @return string
+     * {@inheritDoc}
      */
     public function __toString()
     {
@@ -143,6 +155,9 @@ class MultiConstraint implements \RectorPrefix20210523\Composer\Semver\Constrain
     public function getLowerBound()
     {
         $this->extractBounds();
+        if (null === $this->lowerBound) {
+            throw new \LogicException('extractBounds should have populated the lowerBound property');
+        }
         return $this->lowerBound;
     }
     /**
@@ -151,6 +166,9 @@ class MultiConstraint implements \RectorPrefix20210523\Composer\Semver\Constrain
     public function getUpperBound()
     {
         $this->extractBounds();
+        if (null === $this->upperBound) {
+            throw new \LogicException('extractBounds should have populated the upperBound property');
+        }
         return $this->upperBound;
     }
     /**
@@ -167,7 +185,7 @@ class MultiConstraint implements \RectorPrefix20210523\Composer\Semver\Constrain
     public static function create(array $constraints, $conjunctive = \true)
     {
         if (0 === \count($constraints)) {
-            return new \RectorPrefix20210523\Composer\Semver\Constraint\MatchAllConstraint();
+            return new \RectorPrefix20210524\Composer\Semver\Constraint\MatchAllConstraint();
         }
         if (1 === \count($constraints)) {
             return $constraints[0];
@@ -182,7 +200,11 @@ class MultiConstraint implements \RectorPrefix20210523\Composer\Semver\Constrain
         return new self($constraints, $conjunctive);
     }
     /**
-     * @return array|null
+     * @param  ConstraintInterface[] $constraints
+     * @param  bool                  $conjunctive
+     * @return ?array
+     *
+     * @phpstan-return array{0: list<ConstraintInterface>, 1: bool}|null
      */
     private static function optimizeConstraints(array $constraints, $conjunctive)
     {
@@ -197,7 +219,7 @@ class MultiConstraint implements \RectorPrefix20210523\Composer\Semver\Constrain
                 $right = $constraints[$i];
                 if ($left instanceof self && $left->conjunctive && $right instanceof self && $right->conjunctive && \count($left->constraints) === 2 && \count($right->constraints) === 2 && ($left0 = (string) $left->constraints[0]) && $left0[0] === '>' && $left0[1] === '=' && ($left1 = (string) $left->constraints[1]) && $left1[0] === '<' && ($right0 = (string) $right->constraints[0]) && $right0[0] === '>' && $right0[1] === '=' && ($right1 = (string) $right->constraints[1]) && $right1[0] === '<' && \substr($left1, 2) === \substr($right0, 3)) {
                     $optimized = \true;
-                    $left = new \RectorPrefix20210523\Composer\Semver\Constraint\MultiConstraint(array($left->constraints[0], $right->constraints[1]), \true);
+                    $left = new \RectorPrefix20210524\Composer\Semver\Constraint\MultiConstraint(array($left->constraints[0], $right->constraints[1]), \true);
                 } else {
                     $mergedConstraints[] = $left;
                     $left = $right;
@@ -211,13 +233,16 @@ class MultiConstraint implements \RectorPrefix20210523\Composer\Semver\Constrain
         // TODO: Here's the place to put more optimizations
         return null;
     }
+    /**
+     * @return void
+     */
     private function extractBounds()
     {
         if (null !== $this->lowerBound) {
             return;
         }
         foreach ($this->constraints as $constraint) {
-            if (null === $this->lowerBound && null === $this->upperBound) {
+            if (null === $this->lowerBound || null === $this->upperBound) {
                 $this->lowerBound = $constraint->getLowerBound();
                 $this->upperBound = $constraint->getUpperBound();
                 continue;

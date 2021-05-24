@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view
  * the LICENSE file that was distributed with this source code.
  */
-namespace RectorPrefix20210523\Composer\Semver;
+namespace RectorPrefix20210524\Composer\Semver;
 
-use RectorPrefix20210523\Composer\Semver\Constraint\Constraint;
+use RectorPrefix20210524\Composer\Semver\Constraint\Constraint;
 class Semver
 {
     const SORT_ASC = 1;
@@ -28,34 +28,34 @@ class Semver
     public static function satisfies($version, $constraints)
     {
         if (null === self::$versionParser) {
-            self::$versionParser = new \RectorPrefix20210523\Composer\Semver\VersionParser();
+            self::$versionParser = new \RectorPrefix20210524\Composer\Semver\VersionParser();
         }
         $versionParser = self::$versionParser;
-        $provider = new \RectorPrefix20210523\Composer\Semver\Constraint\Constraint('==', $versionParser->normalize($version));
+        $provider = new \RectorPrefix20210524\Composer\Semver\Constraint\Constraint('==', $versionParser->normalize($version));
         $parsedConstraints = $versionParser->parseConstraints($constraints);
         return $parsedConstraints->matches($provider);
     }
     /**
      * Return all versions that satisfy given constraints.
      *
-     * @param array  $versions
-     * @param string $constraints
+     * @param string[] $versions
+     * @param string   $constraints
      *
-     * @return array
+     * @return string[]
      */
     public static function satisfiedBy(array $versions, $constraints)
     {
         $versions = \array_filter($versions, function ($version) use($constraints) {
-            return \RectorPrefix20210523\Composer\Semver\Semver::satisfies($version, $constraints);
+            return \RectorPrefix20210524\Composer\Semver\Semver::satisfies($version, $constraints);
         });
         return \array_values($versions);
     }
     /**
      * Sort given array of versions.
      *
-     * @param array $versions
+     * @param string[] $versions
      *
-     * @return array
+     * @return string[]
      */
     public static function sort(array $versions)
     {
@@ -64,24 +64,24 @@ class Semver
     /**
      * Sort given array of versions in reverse.
      *
-     * @param array $versions
+     * @param string[] $versions
      *
-     * @return array
+     * @return string[]
      */
     public static function rsort(array $versions)
     {
         return self::usort($versions, self::SORT_DESC);
     }
     /**
-     * @param array $versions
-     * @param int   $direction
+     * @param string[] $versions
+     * @param int      $direction
      *
-     * @return array
+     * @return string[]
      */
     private static function usort(array $versions, $direction)
     {
         if (null === self::$versionParser) {
-            self::$versionParser = new \RectorPrefix20210523\Composer\Semver\VersionParser();
+            self::$versionParser = new \RectorPrefix20210524\Composer\Semver\VersionParser();
         }
         $versionParser = self::$versionParser;
         $normalized = array();
@@ -96,7 +96,7 @@ class Semver
             if ($left[0] === $right[0]) {
                 return 0;
             }
-            if (\RectorPrefix20210523\Composer\Semver\Comparator::lessThan($left[0], $right[0])) {
+            if (\RectorPrefix20210524\Composer\Semver\Comparator::lessThan($left[0], $right[0])) {
                 return -$direction;
             }
             return $direction;

@@ -8,14 +8,14 @@
  * For the full copyright and license information, please view
  * the LICENSE file that was distributed with this source code.
  */
-namespace RectorPrefix20210523\Composer\Semver\Constraint;
+namespace RectorPrefix20210524\Composer\Semver\Constraint;
 
 /**
  * Defines the absence of a constraint.
  *
  * This constraint matches everything.
  */
-class MatchAllConstraint implements \RectorPrefix20210523\Composer\Semver\Constraint\ConstraintInterface
+class MatchAllConstraint implements \RectorPrefix20210524\Composer\Semver\Constraint\ConstraintInterface
 {
     /** @var string|null */
     protected $prettyString;
@@ -24,23 +24,26 @@ class MatchAllConstraint implements \RectorPrefix20210523\Composer\Semver\Constr
      *
      * @return bool
      */
-    public function matches(\RectorPrefix20210523\Composer\Semver\Constraint\ConstraintInterface $provider)
+    public function matches(\RectorPrefix20210524\Composer\Semver\Constraint\ConstraintInterface $provider)
     {
         return \true;
     }
-    public function compile($operator)
+    /**
+     * {@inheritDoc}
+     */
+    public function compile($otherOperator)
     {
         return 'true';
     }
     /**
-     * @param string|null $prettyString
+     * {@inheritDoc}
      */
     public function setPrettyString($prettyString)
     {
         $this->prettyString = $prettyString;
     }
     /**
-     * @return string
+     * {@inheritDoc}
      */
     public function getPrettyString()
     {
@@ -50,7 +53,7 @@ class MatchAllConstraint implements \RectorPrefix20210523\Composer\Semver\Constr
         return (string) $this;
     }
     /**
-     * @return string
+     * {@inheritDoc}
      */
     public function __toString()
     {
@@ -61,13 +64,13 @@ class MatchAllConstraint implements \RectorPrefix20210523\Composer\Semver\Constr
      */
     public function getUpperBound()
     {
-        return \RectorPrefix20210523\Composer\Semver\Constraint\Bound::positiveInfinity();
+        return \RectorPrefix20210524\Composer\Semver\Constraint\Bound::positiveInfinity();
     }
     /**
      * {@inheritDoc}
      */
     public function getLowerBound()
     {
-        return \RectorPrefix20210523\Composer\Semver\Constraint\Bound::zero();
+        return \RectorPrefix20210524\Composer\Semver\Constraint\Bound::zero();
     }
 }

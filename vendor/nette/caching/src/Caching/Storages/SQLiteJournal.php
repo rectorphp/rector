@@ -5,14 +5,14 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix20210523\Nette\Caching\Storages;
+namespace RectorPrefix20210524\Nette\Caching\Storages;
 
-use RectorPrefix20210523\Nette;
-use RectorPrefix20210523\Nette\Caching\Cache;
+use RectorPrefix20210524\Nette;
+use RectorPrefix20210524\Nette\Caching\Cache;
 /**
  * SQLite based journal.
  */
-class SQLiteJournal implements \RectorPrefix20210523\Nette\Caching\Storages\Journal
+class SQLiteJournal implements \RectorPrefix20210524\Nette\Caching\Storages\Journal
 {
     use Nette\SmartObject;
     /** @string */
@@ -22,7 +22,7 @@ class SQLiteJournal implements \RectorPrefix20210523\Nette\Caching\Storages\Jour
     public function __construct(string $path)
     {
         if (!\extension_loaded('pdo_sqlite')) {
-            throw new \RectorPrefix20210523\Nette\NotSupportedException('SQLiteJournal requires PHP extension pdo_sqlite which is not loaded.');
+            throw new \RectorPrefix20210524\Nette\NotSupportedException('SQLiteJournal requires PHP extension pdo_sqlite which is not loaded.');
         }
         $this->path = $path;
     }
@@ -57,16 +57,16 @@ class SQLiteJournal implements \RectorPrefix20210523\Nette\Caching\Storages\Jour
             $this->open();
         }
         $this->pdo->exec('BEGIN');
-        if (!empty($dependencies[\RectorPrefix20210523\Nette\Caching\Cache::TAGS])) {
+        if (!empty($dependencies[\RectorPrefix20210524\Nette\Caching\Cache::TAGS])) {
             $this->pdo->prepare('DELETE FROM tags WHERE key = ?')->execute([$key]);
-            foreach ($dependencies[\RectorPrefix20210523\Nette\Caching\Cache::TAGS] as $tag) {
+            foreach ($dependencies[\RectorPrefix20210524\Nette\Caching\Cache::TAGS] as $tag) {
                 $arr[] = $key;
                 $arr[] = $tag;
             }
             $this->pdo->prepare('INSERT INTO tags (key, tag) SELECT ?, ?' . \str_repeat('UNION SELECT ?, ?', \count($arr) / 2 - 1))->execute($arr);
         }
-        if (!empty($dependencies[\RectorPrefix20210523\Nette\Caching\Cache::PRIORITY])) {
-            $this->pdo->prepare('REPLACE INTO priorities (key, priority) VALUES (?, ?)')->execute([$key, (int) $dependencies[\RectorPrefix20210523\Nette\Caching\Cache::PRIORITY]]);
+        if (!empty($dependencies[\RectorPrefix20210524\Nette\Caching\Cache::PRIORITY])) {
+            $this->pdo->prepare('REPLACE INTO priorities (key, priority) VALUES (?, ?)')->execute([$key, (int) $dependencies[\RectorPrefix20210524\Nette\Caching\Cache::PRIORITY]]);
         }
         $this->pdo->exec('COMMIT');
     }
@@ -75,7 +75,7 @@ class SQLiteJournal implements \RectorPrefix20210523\Nette\Caching\Storages\Jour
         if (!$this->pdo) {
             $this->open();
         }
-        if (!empty($conditions[\RectorPrefix20210523\Nette\Caching\Cache::ALL])) {
+        if (!empty($conditions[\RectorPrefix20210524\Nette\Caching\Cache::ALL])) {
             $this->pdo->exec('
 				BEGIN;
 				DELETE FROM tags;
@@ -85,14 +85,14 @@ class SQLiteJournal implements \RectorPrefix20210523\Nette\Caching\Storages\Jour
             return null;
         }
         $unions = $args = [];
-        if (!empty($conditions[\RectorPrefix20210523\Nette\Caching\Cache::TAGS])) {
-            $tags = (array) $conditions[\RectorPrefix20210523\Nette\Caching\Cache::TAGS];
+        if (!empty($conditions[\RectorPrefix20210524\Nette\Caching\Cache::TAGS])) {
+            $tags = (array) $conditions[\RectorPrefix20210524\Nette\Caching\Cache::TAGS];
             $unions[] = 'SELECT DISTINCT key FROM tags WHERE tag IN (?' . \str_repeat(', ?', \count($tags) - 1) . ')';
             $args = $tags;
         }
-        if (!empty($conditions[\RectorPrefix20210523\Nette\Caching\Cache::PRIORITY])) {
+        if (!empty($conditions[\RectorPrefix20210524\Nette\Caching\Cache::PRIORITY])) {
             $unions[] = 'SELECT DISTINCT key FROM priorities WHERE priority <= ?';
-            $args[] = (int) $conditions[\RectorPrefix20210523\Nette\Caching\Cache::PRIORITY];
+            $args[] = (int) $conditions[\RectorPrefix20210524\Nette\Caching\Cache::PRIORITY];
         }
         if (empty($unions)) {
             return [];

@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view
  * the LICENSE file that was distributed with this source code.
  */
-namespace RectorPrefix20210523\Composer\Semver\Constraint;
+namespace RectorPrefix20210524\Composer\Semver\Constraint;
 
 /**
  * DO NOT IMPLEMENT this interface. It is only meant for usage as a type hint
@@ -25,7 +25,7 @@ interface ConstraintInterface
      *
      * @return bool
      */
-    public function matches(\RectorPrefix20210523\Composer\Semver\Constraint\ConstraintInterface $provider);
+    public function matches(\RectorPrefix20210524\Composer\Semver\Constraint\ConstraintInterface $provider);
     /**
      * Provides a compiled version of the constraint for the given operator
      * The compiled version must be a PHP expression.
@@ -36,11 +36,13 @@ interface ConstraintInterface
      * @see Constraint::OP_* for the list of available operators.
      * @example return '!$b && version_compare($v, '1.0', '>')';
      *
-     * @param int $operator one Constraint::OP_*
+     * @param int $otherOperator one Constraint::OP_*
      *
      * @return string
+     *
+     * @phpstan-param Constraint::OP_* $otherOperator
      */
-    public function compile($operator);
+    public function compile($otherOperator);
     /**
      * @return Bound
      */
@@ -55,6 +57,8 @@ interface ConstraintInterface
     public function getPrettyString();
     /**
      * @param string|null $prettyString
+     *
+     * @return void
      */
     public function setPrettyString($prettyString);
     /**

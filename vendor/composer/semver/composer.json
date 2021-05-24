@@ -39,12 +39,12 @@
     },
     "autoload": {
         "psr-4": {
-            "RectorPrefix20210523\\Composer\\Semver\\": "src"
+            "RectorPrefix20210524\\Composer\\Semver\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "RectorPrefix20210523\\Composer\\Semver\\": "tests"
+            "RectorPrefix20210524\\Composer\\Semver\\": "tests"
         }
     },
     "extra": {
@@ -53,6 +53,7 @@
         }
     },
     "scripts": {
-        "test": "vendor\/bin\/simple-phpunit"
+        "test": "SYMFONY_PHPUNIT_REMOVE_RETURN_TYPEHINT=1 vendor\/bin\/simple-phpunit",
+        "phpstan": "phpstan analyse"
     }
 }
