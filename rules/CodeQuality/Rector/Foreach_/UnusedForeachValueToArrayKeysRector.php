@@ -7,9 +7,11 @@ namespace Rector\CodeQuality\Rector\Foreach_;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
+use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Foreach_;
 use PHPStan\Type\ObjectType;
+use Rector\Core\NodeAnalyzer\CompactFuncCallAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -19,6 +21,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class UnusedForeachValueToArrayKeysRector extends AbstractRector
 {
+    public function __construct(
+        private CompactFuncCallAnalyzer $compactFuncCallAnalyzer
+    ) {
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
@@ -121,7 +128,18 @@ CODE_SAMPLE
     {
         return (bool) $this->betterNodeFinder->findFirst(
             $foreach->stmts,
-            fn (Node $node): bool => $this->nodeComparator->areNodesEqual($node, $variable)
+            function (Node $node) use ($variable): bool {
+                $isVariableUsed = $this->nodeComparator->areNodesEqual($node, $variable);
+                if ($isVariableUsed) {
+                    return true;
+                }
+
+                if (! $node instanceof FuncCall) {
+                    return false;
+                }
+
+                return $this->compactFuncCallAnalyzer->isInCompact($node, $variable);
+            }
         );
     }
 
