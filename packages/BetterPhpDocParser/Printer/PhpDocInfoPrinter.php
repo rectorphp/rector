@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\BetterPhpDocParser\Printer;
 
 use Nette\Utils\Strings;
+use PhpParser\Node\Stmt\InlineHTML;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocChildNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
@@ -93,6 +94,10 @@ final class PhpDocInfoPrinter
             return $this->docBlockInliner->inline($docContent);
         }
 
+        if ($phpDocInfo->getNode() instanceof InlineHTML) {
+            return '<?php'.PHP_EOL. $docContent .PHP_EOL.'?>';
+        }
+
         return $docContent;
     }
 
@@ -112,6 +117,10 @@ final class PhpDocInfoPrinter
             // completely new one, just print string version of it
             if ($phpDocInfo->getPhpDocNode()->children === []) {
                 return '';
+            }
+
+            if ($phpDocInfo->getNode() instanceof InlineHTML) {
+                return '<?php'.PHP_EOL. $phpDocInfo->getPhpDocNode() .PHP_EOL.'?>';
             }
 
             return (string) $phpDocInfo->getPhpDocNode();

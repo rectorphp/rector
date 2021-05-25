@@ -475,6 +475,10 @@ final class PhpDocInfo
         $this->isSingleLine = false;
     }
 
+    public function getNode(): \PhpParser\Node {
+        return $this->node;
+    }
+
     private function getTypeOrMixed(?PhpDocTagValueNode $phpDocTagValueNode): Type
     {
         if ($phpDocTagValueNode === null) {
