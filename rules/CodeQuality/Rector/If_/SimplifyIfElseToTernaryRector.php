@@ -9,6 +9,7 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Stmt;
+use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -95,7 +96,9 @@ CODE_SAMPLE
         if ($this->isNodeTooLong($assign)) {
             return null;
         }
-        return $assign;
+        $expression = new \PhpParser\Node\Stmt\Expression($assign);
+        $this->mirrorComments($expression, $node);
+        return $expression;
     }
     /**
      * @param Stmt[] $stmts
