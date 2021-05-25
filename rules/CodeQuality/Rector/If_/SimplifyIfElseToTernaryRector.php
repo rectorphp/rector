@@ -10,6 +10,7 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Stmt;
+use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -115,7 +116,10 @@ CODE_SAMPLE
             return null;
         }
 
-        return $assign;
+        $expression = new Expression($assign);
+        $this->mirrorComments($expression, $node);
+
+        return $expression;
     }
 
     /**
