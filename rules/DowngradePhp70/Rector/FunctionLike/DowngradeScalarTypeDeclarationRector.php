@@ -11,6 +11,7 @@ use PhpParser\Node\Expr\Cast\Bool_;
 use PhpParser\Node\Expr\Cast\Double;
 use PhpParser\Node\Expr\Cast\Int_;
 use PhpParser\Node\Expr\Cast\String_;
+use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Param;
@@ -44,7 +45,7 @@ final class DowngradeScalarTypeDeclarationRector extends AbstractRector
      */
     public function getNodeTypes(): array
     {
-        return [Function_::class, ClassMethod::class];
+        return [Function_::class, ClassMethod::class, Closure::class];
     }
 
     public function getRuleDefinition(): RuleDefinition
