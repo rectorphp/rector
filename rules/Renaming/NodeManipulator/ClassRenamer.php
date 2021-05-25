@@ -155,7 +155,7 @@ final class ClassRenamer
     }
     private function removeUseName(\PhpParser\Node\Name $oldName) : void
     {
-        $uses = $this->betterNodeFinder->findFirstPreviousOfNode($oldName, function (\PhpParser\Node $node) use($oldName) : bool {
+        $uses = $this->betterNodeFinder->findFirstPrevious($oldName, function (\PhpParser\Node $node) use($oldName) : bool {
             return $node instanceof \PhpParser\Node\Stmt\UseUse && $this->nodeNameResolver->areNamesEqual($node, $oldName);
         });
         if (!$uses instanceof \PhpParser\Node\Stmt\UseUse) {
