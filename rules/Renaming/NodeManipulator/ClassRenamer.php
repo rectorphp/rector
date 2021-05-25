@@ -139,7 +139,7 @@ final class ClassRenamer
 
     private function removeUseName(Name $oldName): void
     {
-        $uses = $this->betterNodeFinder->findFirstPreviousOfNode(
+        $uses = $this->betterNodeFinder->findFirstPrevious(
             $oldName,
             fn (Node $node): bool => $node instanceof UseUse && $this->nodeNameResolver->areNamesEqual($node, $oldName)
         );
