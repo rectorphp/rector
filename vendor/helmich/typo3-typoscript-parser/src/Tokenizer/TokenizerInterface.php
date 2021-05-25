@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210524\Helmich\TypoScriptParser\Tokenizer;
+namespace RectorPrefix20210525\Helmich\TypoScriptParser\Tokenizer;
 
 /**
  * Interface TokenizerInterface

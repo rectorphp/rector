@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210524\Helmich\TypoScriptParser\Parser\AST;
+namespace RectorPrefix20210525\Helmich\TypoScriptParser\Parser\AST;
 
 /**
  * A conditional statement with a condition, an if-branch and an optional else-branch.
@@ -9,7 +9,7 @@ namespace RectorPrefix20210524\Helmich\TypoScriptParser\Parser\AST;
  * @package    Helmich\TypoScriptParser
  * @subpackage Parser\AST
  */
-class ConditionalStatement extends \RectorPrefix20210524\Helmich\TypoScriptParser\Parser\AST\Statement
+class ConditionalStatement extends \RectorPrefix20210525\Helmich\TypoScriptParser\Parser\AST\Statement
 {
     /**
      * The condition to evaluate.

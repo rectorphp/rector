@@ -6,9 +6,11 @@ namespace Rector\CodeQuality\Rector\Foreach_;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
+use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Foreach_;
 use PHPStan\Type\ObjectType;
+use Rector\Core\NodeAnalyzer\CompactFuncCallAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -17,6 +19,14 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class UnusedForeachValueToArrayKeysRector extends \Rector\Core\Rector\AbstractRector
 {
+    /**
+     * @var \Rector\Core\NodeAnalyzer\CompactFuncCallAnalyzer
+     */
+    private $compactFuncCallAnalyzer;
+    public function __construct(\Rector\Core\NodeAnalyzer\CompactFuncCallAnalyzer $compactFuncCallAnalyzer)
+    {
+        $this->compactFuncCallAnalyzer = $compactFuncCallAnalyzer;
+    }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
         return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change foreach with unused $value but only $key, to array_keys()', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
@@ -99,7 +109,14 @@ CODE_SAMPLE
     private function isVariableUsedInForeach(\PhpParser\Node\Expr\Variable $variable, \PhpParser\Node\Stmt\Foreach_ $foreach) : bool
     {
         return (bool) $this->betterNodeFinder->findFirst($foreach->stmts, function (\PhpParser\Node $node) use($variable) : bool {
-            return $this->nodeComparator->areNodesEqual($node, $variable);
+            $isVariableUsed = $this->nodeComparator->areNodesEqual($node, $variable);
+            if ($isVariableUsed) {
+                return \true;
+            }
+            if (!$node instanceof \PhpParser\Node\Expr\FuncCall) {
+                return \false;
+            }
+            return $this->compactFuncCallAnalyzer->isInCompact($node, $variable);
         });
     }
     private function removeForeachValueAndUseArrayKeys(\PhpParser\Node\Stmt\Foreach_ $foreach) : void
