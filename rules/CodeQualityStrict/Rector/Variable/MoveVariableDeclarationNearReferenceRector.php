@@ -21,6 +21,7 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\For_;
 use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\If_;
+use PhpParser\Node\Stmt\InlineHTML;
 use PhpParser\Node\Stmt\Switch_;
 use PhpParser\Node\Stmt\TryCatch;
 use PhpParser\Node\Stmt\While_;
@@ -136,6 +137,9 @@ CODE_SAMPLE
         /** @var Node|null $next */
         $next = $expression->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::NEXT_NODE);
         if (!$next instanceof \PhpParser\Node) {
+            return null;
+        }
+        if ($next instanceof \PhpParser\Node\Stmt\InlineHTML) {
             return null;
         }
         if ($this->hasCall($next)) {
