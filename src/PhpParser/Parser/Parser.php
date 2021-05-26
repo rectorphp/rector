@@ -6,7 +6,7 @@ namespace Rector\Core\PhpParser\Parser;
 use PhpParser\Node\Stmt;
 use PhpParser\Parser as NikicParser;
 use Symplify\SmartFileSystem\SmartFileInfo;
-use RectorPrefix20210525\Symplify\SmartFileSystem\SmartFileSystem;
+use RectorPrefix20210526\Symplify\SmartFileSystem\SmartFileSystem;
 final class Parser
 {
     /**
@@ -21,7 +21,7 @@ final class Parser
      * @var \Symplify\SmartFileSystem\SmartFileSystem
      */
     private $smartFileSystem;
-    public function __construct(\PhpParser\Parser $nikicParser, \RectorPrefix20210525\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem)
+    public function __construct(\PhpParser\Parser $nikicParser, \RectorPrefix20210526\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem)
     {
         $this->nikicParser = $nikicParser;
         $this->smartFileSystem = $smartFileSystem;

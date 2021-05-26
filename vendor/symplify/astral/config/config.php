@@ -1,17 +1,17 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210525;
+namespace RectorPrefix20210526;
 
 use PhpParser\ConstExprEvaluator;
 use PhpParser\NodeFinder;
-use RectorPrefix20210525\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use RectorPrefix20210525\Symplify\PackageBuilder\Php\TypeChecker;
-return static function (\RectorPrefix20210525\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
+use RectorPrefix20210526\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use RectorPrefix20210526\Symplify\PackageBuilder\Php\TypeChecker;
+return static function (\RectorPrefix20210526\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->defaults()->autowire()->autoconfigure()->public();
-    $services->load('RectorPrefix20210525\Symplify\\Astral\\', __DIR__ . '/../src')->exclude([__DIR__ . '/../src/HttpKernel', __DIR__ . '/../src/StaticFactory', __DIR__ . '/../src/ValueObject']);
+    $services->load('RectorPrefix20210526\Symplify\\Astral\\', __DIR__ . '/../src')->exclude([__DIR__ . '/../src/HttpKernel', __DIR__ . '/../src/StaticFactory', __DIR__ . '/../src/ValueObject']);
     $services->set(\PhpParser\ConstExprEvaluator::class);
-    $services->set(\RectorPrefix20210525\Symplify\PackageBuilder\Php\TypeChecker::class);
+    $services->set(\RectorPrefix20210526\Symplify\PackageBuilder\Php\TypeChecker::class);
     $services->set(\PhpParser\NodeFinder::class);
 };

@@ -28,7 +28,7 @@ It adds an extension-key if it is missing. You can configure this Processor in y
 
 ```php
 # rector.php configuration file
-use Ssch\TYPO3Rector\Rector\Composer\ExtensionComposerRector;
+use Ssch\TYPO3Rector\FileProcessor\Composer\Rector\ExtensionComposerRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -60,7 +60,7 @@ This is also configurable in your rector.php configuration file:
 
 ```php
 # rector.php configuration file
-use Ssch\TYPO3Rector\TypoScript\TypoScriptProcessor;
+use Ssch\TYPO3Rector\FileProcessor\TypoScript\TypoScriptProcessor;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -89,7 +89,7 @@ To help you out typo3-rector adds a processor that rewrites the typoscript for y
 By adding the following configuration your code is automatically rewritten into the new PHP structure:
 
 ```php
-use Ssch\TYPO3Rector\TypoScript\Visitors\ExtbasePersistenceVisitor;
+use Ssch\TYPO3Rector\FileProcessor\TypoScript\Visitors\ExtbasePersistenceVisitor;
 ...
 $services = $containerConfigurator->services();
 $services->set(ExtbasePersistenceVisitor::class);

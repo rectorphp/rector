@@ -1,4 +1,4 @@
-# 196 Rules Overview
+# 203 Rules Overview
 
 ## AddArgumentToSymfonyCommandRector
 
@@ -563,6 +563,24 @@ Use DateTimeAspect instead of superglobals like `$GLOBALS['EXEC_TIME']`
 
 <br>
 
+## DefaultSwitchFluidRector
+
+Use <f:defaultCase> instead of <f:case default="1">
+
+- class: [`Ssch\TYPO3Rector\FileProcessor\Fluid\Rector\DefaultSwitchFluidRector`](../src/FileProcessor/Fluid/Rector/DefaultSwitchFluidRector.php)
+
+```diff
+ <f:switch expression="{someVariable}">
+     <f:case value="...">...</f:case>
+     <f:case value="...">...</f:case>
+     <f:case value="...">...</f:case>
+-    <f:case default="1">...</f:case>
++    <f:defaultCase>...</f:defaultCase>
+ </f:switch>
+```
+
+<br>
+
 ## DocumentTemplateAddStyleSheetRector
 
 Use PageRenderer::addCssFile instead of `DocumentTemplate::addStyleSheet()`
@@ -592,6 +610,24 @@ TCA: Drop additional palette
          ],
       ],
  ];
+```
+
+<br>
+
+## EmailFinisherRector
+
+Convert single recipient values to array for EmailFinisher
+
+- class: [`Ssch\TYPO3Rector\FileProcessor\Yaml\Form\Rector\EmailFinisherRector`](../src/FileProcessor/Yaml/Form/Rector/EmailFinisherRector.php)
+
+```diff
+ finishers:
+   -
+     options:
+-      recipientAddress: bar@domain.com
+-      recipientName: 'Bar'
++      recipients:
++        bar@domain.com: 'Bar'
 ```
 
 <br>
@@ -739,20 +775,63 @@ Extbase controller actions must return ResponseInterface
 
 <br>
 
-## ExtensionComposerRector
+## ExtbasePersistenceVisitor
 
-Add extra extension_key in `composer.json` and add option default constraint
+Convert extbase TypoScript persistence configuration to classes one
 
 :wrench: **configure it!**
 
-- class: [`Ssch\TYPO3Rector\Rector\Composer\ExtensionComposerRector`](../src/Rector/Composer/ExtensionComposerRector.php)
+- class: [`Ssch\TYPO3Rector\FileProcessor\TypoScript\Visitors\ExtbasePersistenceVisitor`](../src/FileProcessor/TypoScript/Visitors/ExtbasePersistenceVisitor.php)
 
 ```php
 <?php
 
 declare(strict_types=1);
 
-use Ssch\TYPO3Rector\Rector\Composer\ExtensionComposerRector;
+use Ssch\TYPO3Rector\FileProcessor\TypoScript\Visitors\ExtbasePersistenceVisitor;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+
+    $services->set(ExtbasePersistenceVisitor::class)
+        ->call('configure', [[ExtbasePersistenceVisitor::FILENAME => 'path/to/Configuration/Extbase/Persistence/Classes.php']]);
+};
+```
+
+↓
+
+```diff
+-config.tx_extbase.persistence.classes {
+-    GeorgRinger\News\Domain\Model\FileReference {
+-        mapping {
+-            tableName = sys_file_reference
+-        }
+-    }
+-}
++return [
++    \GeorgRinger\News\Domain\Model\FileReference::class => [
++        'tableName' => 'sys_file_reference',
++    ],
++];
+```
+
+<br>
+
+## ExtensionComposerRector
+
+Add extra extension_key in `composer.json` and add option default constraint
+
+:wrench: **configure it!**
+
+- class: [`Ssch\TYPO3Rector\FileProcessor\Composer\Rector\ExtensionComposerRector`](../src/FileProcessor/Composer/Rector/ExtensionComposerRector.php)
+
+```php
+<?php
+
+declare(strict_types=1);
+
+use Ssch\TYPO3Rector\FileProcessor\Composer\Rector\ExtensionComposerRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -795,6 +874,19 @@ Substitute `ExtensionManagementUtility::extRelPath()`
 
 -$relPath = ExtensionManagementUtility::extRelPath('my_extension');
 +$relPath = PathUtility::getAbsoluteWebPath(ExtensionManagementUtility::extPath('my_extension'));
+```
+
+<br>
+
+## FileIncludeToImportStatementVisitor
+
+Convert old include statement to new import syntax
+
+- class: [`Ssch\TYPO3Rector\FileProcessor\TypoScript\Visitors\FileIncludeToImportStatementVisitor`](../src/FileProcessor/TypoScript/Visitors/FileIncludeToImportStatementVisitor.php)
+
+```diff
+-<INCLUDE_TYPOSCRIPT: source="FILE:conditions.typoscript">
++@import conditions.typoscript
 ```
 
 <br>
@@ -956,6 +1048,19 @@ Use GraphicalFunctions->getTemporaryImageWithText instead of LocalImageProcessor
 ```diff
 -GeneralUtility::makeInstance(LocalImageProcessor::class)->getTemporaryImageWithText("foo", "bar", "baz", "foo")
 +GeneralUtility::makeInstance(GraphicalFunctions::class)->getTemporaryImageWithText("foo", "bar", "baz", "foo")
+```
+
+<br>
+
+## IconsRector
+
+Copy ext_icon.* to Resources/Icons/Extension.*
+
+- class: [`Ssch\TYPO3Rector\FileProcessor\Resources\Icons\Rector\IconsRector`](../src/FileProcessor/Resources/Icons/Rector/IconsRector.php)
+
+```diff
+-ext_icon.gif
++Resources/Icons/Extension.gif
 ```
 
 <br>
@@ -1428,6 +1533,19 @@ Migrate the "suggest" wizard in type=group to "hideSuggest" and "suggestOptions"
          ],
      ],
  ];
+```
+
+<br>
+
+## OldConditionToExpressionLanguageVisitor
+
+Convert old conditions to Symfony Expression Language
+
+- class: [`Ssch\TYPO3Rector\FileProcessor\TypoScript\Visitors\OldConditionToExpressionLanguageVisitor`](../src/FileProcessor/TypoScript/Visitors/OldConditionToExpressionLanguageVisitor.php)
+
+```diff
+-[globalVar = TSFE:id=17, TSFE:id=24]
++[getTSFE().id in [17,24]]
 ```
 
 <br>
@@ -2061,14 +2179,14 @@ Change package name in `composer.json`
 
 :wrench: **configure it!**
 
-- class: [`Ssch\TYPO3Rector\Rector\Composer\RemoveCmsPackageDirFromExtraComposerRector`](../src/Rector/Composer/RemoveCmsPackageDirFromExtraComposerRector.php)
+- class: [`Ssch\TYPO3Rector\FileProcessor\Composer\Rector\RemoveCmsPackageDirFromExtraComposerRector`](../src/FileProcessor/Composer/Rector/RemoveCmsPackageDirFromExtraComposerRector.php)
 
 ```php
 <?php
 
 declare(strict_types=1);
 
-use Ssch\TYPO3Rector\Rector\Composer\RemoveCmsPackageDirFromExtraComposerRector;
+use Ssch\TYPO3Rector\FileProcessor\Composer\Rector\RemoveCmsPackageDirFromExtraComposerRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -2858,6 +2976,25 @@ The property `$TSFE->renderCharset` is now always set to utf-8
 ```diff
 -mb_strlen(trim($this->gp[$this->formFieldName]), $GLOBALS['TSFE']->renderCharset) > 0;
 +mb_strlen(trim($this->gp[$this->formFieldName]), 'utf-8') > 0;
+```
+
+<br>
+
+## RenderTypeFlexFormRector
+
+Add renderType node in Flexforms xml
+
+- class: [`Ssch\TYPO3Rector\FileProcessor\FlexForms\Rector\RenderTypeFlexFormRector`](../src/FileProcessor/FlexForms/Rector/RenderTypeFlexFormRector.php)
+
+```diff
+ <type>select</type>
++<renderType>selectSingle</renderType>
+ <items>
+     <numIndex index="0" type="array">
+         <numIndex index="0">
+             LLL:EXT:news/Resources/Private/Language/locallang_be.xlf:flexforms_general.no-constraint
+         </numIndex>
+ </items>
 ```
 
 <br>

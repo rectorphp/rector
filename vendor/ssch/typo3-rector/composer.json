@@ -21,7 +21,6 @@
         "rector\/rector-generator": "^0.1.7",
         "rector\/rector-phpstan-rules": "^0.1",
         "rector\/rector-src": "^0.11",
-        "ssch\/typo3-rector-stubs": "^1.0",
         "symplify\/coding-standard": "^9.3",
         "symplify\/easy-coding-standard": "^9.3",
         "symplify\/phpstan-extensions": "^9.3",
@@ -36,6 +35,9 @@
         }
     },
     "autoload-dev": {
+        "classmap": [
+            "stubs"
+        ],
         "psr-4": {
             "Ssch\\TYPO3Rector\\ComposerPackages\\": "utils\/composer-packages\/src",
             "Ssch\\TYPO3Rector\\Generator\\": "utils\/generator\/src",
@@ -61,15 +63,15 @@
             "@fix-rector",
             "@fix-style"
         ],
-        "check-style": "vendor\/bin\/ecs check --ansi",
-        "fix-style": "vendor\/bin\/ecs check --fix --ansi",
-        "analyze": "vendor\/bin\/phpstan analyse --memory-limit=-1 --ansi --error-format symplify",
-        "test": "vendor\/bin\/phpunit",
-        "docs": "vendor\/bin\/rule-doc-generator generate src\/Rector --output-file docs\/all_rectors_overview.md --ansi",
-        "rector": "vendor\/bin\/rector process --dry-run --ansi",
-        "fix-rector": "vendor\/bin\/rector process --ansi",
-        "check-typo3-rector": "vendor\/bin\/rector process src\/Helper --config templates\/rector.php --dry-run --ansi",
-        "update-composer-packages": "vendor\/bin\/rector add-composer-typo3-extensions-to-config"
+        "check-style": "@php vendor\/bin\/ecs ecs check --ansi",
+        "fix-style": "@php vendor\/bin\/ecs check --fix --ansi",
+        "analyze": "@php vendor\/bin\/phpstan analyse --memory-limit=-1 --ansi --error-format symplify",
+        "test": "@php vendor\/bin\/phpunit",
+        "docs": "@php vendor\/bin\/rule-doc-generator generate src --output-file docs\/all_rectors_overview.md --ansi",
+        "rector": "@php vendor\/bin\/rector process --dry-run --ansi",
+        "fix-rector": "@php vendor\/bin\/rector process --ansi",
+        "check-typo3-rector": "@php vendor\/bin\/rector process src\/Helper --config templates\/rector.php --dry-run --ansi",
+        "update-composer-packages": "@php vendor\/bin\/rector add-composer-typo3-extensions-to-config"
     },
     "extra": {
         "rector": {

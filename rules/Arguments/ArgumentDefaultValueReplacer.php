@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Arguments;
 
-use RectorPrefix20210525\Nette\Utils\Strings;
+use RectorPrefix20210526\Nette\Utils\Strings;
 use PhpParser\BuilderHelpers;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
@@ -66,7 +66,7 @@ final class ArgumentDefaultValueReplacer
     private function normalizeValueToArgument($value) : \PhpParser\Node\Arg
     {
         // class constants → turn string to composite
-        if (\is_string($value) && \RectorPrefix20210525\Nette\Utils\Strings::contains($value, '::')) {
+        if (\is_string($value) && \RectorPrefix20210526\Nette\Utils\Strings::contains($value, '::')) {
             [$class, $constant] = \explode('::', $value);
             $classConstFetch = $this->nodeFactory->createClassConstFetch($class, $constant);
             return new \PhpParser\Node\Arg($classConstFetch);

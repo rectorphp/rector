@@ -8,24 +8,24 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210525\Symfony\Component\DependencyInjection\Loader;
+namespace RectorPrefix20210526\Symfony\Component\DependencyInjection\Loader;
 
-use RectorPrefix20210525\Symfony\Component\Config\Exception\FileLocatorFileNotFoundException;
-use RectorPrefix20210525\Symfony\Component\Config\Exception\LoaderLoadException;
-use RectorPrefix20210525\Symfony\Component\Config\FileLocatorInterface;
-use RectorPrefix20210525\Symfony\Component\Config\Loader\FileLoader as BaseFileLoader;
-use RectorPrefix20210525\Symfony\Component\Config\Loader\Loader;
-use RectorPrefix20210525\Symfony\Component\Config\Resource\GlobResource;
-use RectorPrefix20210525\Symfony\Component\DependencyInjection\ChildDefinition;
-use RectorPrefix20210525\Symfony\Component\DependencyInjection\ContainerBuilder;
-use RectorPrefix20210525\Symfony\Component\DependencyInjection\Definition;
-use RectorPrefix20210525\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
+use RectorPrefix20210526\Symfony\Component\Config\Exception\FileLocatorFileNotFoundException;
+use RectorPrefix20210526\Symfony\Component\Config\Exception\LoaderLoadException;
+use RectorPrefix20210526\Symfony\Component\Config\FileLocatorInterface;
+use RectorPrefix20210526\Symfony\Component\Config\Loader\FileLoader as BaseFileLoader;
+use RectorPrefix20210526\Symfony\Component\Config\Loader\Loader;
+use RectorPrefix20210526\Symfony\Component\Config\Resource\GlobResource;
+use RectorPrefix20210526\Symfony\Component\DependencyInjection\ChildDefinition;
+use RectorPrefix20210526\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix20210526\Symfony\Component\DependencyInjection\Definition;
+use RectorPrefix20210526\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
 /**
  * FileLoader is the abstract class used by all built-in loaders that are file based.
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-abstract class FileLoader extends \RectorPrefix20210525\Symfony\Component\Config\Loader\FileLoader
+abstract class FileLoader extends \RectorPrefix20210526\Symfony\Component\Config\Loader\FileLoader
 {
     public const ANONYMOUS_ID_REGEXP = '/^\\.\\d+_[^~]*+~[._a-zA-Z\\d]{7}$/';
     protected $container;
@@ -34,7 +34,7 @@ abstract class FileLoader extends \RectorPrefix20210525\Symfony\Component\Config
     protected $interfaces = [];
     protected $singlyImplemented = [];
     protected $autoRegisterAliasesForSinglyImplementedInterfaces = \true;
-    public function __construct(\RectorPrefix20210525\Symfony\Component\DependencyInjection\ContainerBuilder $container, \RectorPrefix20210525\Symfony\Component\Config\FileLocatorInterface $locator)
+    public function __construct(\RectorPrefix20210526\Symfony\Component\DependencyInjection\ContainerBuilder $container, \RectorPrefix20210526\Symfony\Component\Config\FileLocatorInterface $locator)
     {
         $this->container = $container;
         parent::__construct($locator);
@@ -54,12 +54,12 @@ abstract class FileLoader extends \RectorPrefix20210525\Symfony\Component\Config
         }
         try {
             parent::import(...$args);
-        } catch (\RectorPrefix20210525\Symfony\Component\Config\Exception\LoaderLoadException $e) {
-            if (!$ignoreNotFound || !($prev = $e->getPrevious()) instanceof \RectorPrefix20210525\Symfony\Component\Config\Exception\FileLocatorFileNotFoundException) {
+        } catch (\RectorPrefix20210526\Symfony\Component\Config\Exception\LoaderLoadException $e) {
+            if (!$ignoreNotFound || !($prev = $e->getPrevious()) instanceof \RectorPrefix20210526\Symfony\Component\Config\Exception\FileLocatorFileNotFoundException) {
                 throw $e;
             }
             foreach ($prev->getTrace() as $frame) {
-                if ('import' === ($frame['function'] ?? null) && \is_a($frame['class'] ?? '', \RectorPrefix20210525\Symfony\Component\Config\Loader\Loader::class, \true)) {
+                if ('import' === ($frame['function'] ?? null) && \is_a($frame['class'] ?? '', \RectorPrefix20210526\Symfony\Component\Config\Loader\Loader::class, \true)) {
                     break;
                 }
             }
@@ -76,13 +76,13 @@ abstract class FileLoader extends \RectorPrefix20210525\Symfony\Component\Config
      * @param string               $resource  The directory to look for classes, glob-patterns allowed
      * @param string|string[]|null $exclude   A globbed path of files to exclude or an array of globbed paths of files to exclude
      */
-    public function registerClasses(\RectorPrefix20210525\Symfony\Component\DependencyInjection\Definition $prototype, $namespace, $resource, $exclude = null)
+    public function registerClasses(\RectorPrefix20210526\Symfony\Component\DependencyInjection\Definition $prototype, $namespace, $resource, $exclude = null)
     {
         if ('\\' !== \substr($namespace, -1)) {
-            throw new \RectorPrefix20210525\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException(\sprintf('Namespace prefix must end with a "\\": "%s".', $namespace));
+            throw new \RectorPrefix20210526\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException(\sprintf('Namespace prefix must end with a "\\": "%s".', $namespace));
         }
         if (!\preg_match('/^(?:[a-zA-Z_\\x7f-\\xff][a-zA-Z0-9_\\x7f-\\xff]*+\\\\)++$/', $namespace)) {
-            throw new \RectorPrefix20210525\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException(\sprintf('Namespace is not a valid PSR-4 prefix: "%s".', $namespace));
+            throw new \RectorPrefix20210526\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException(\sprintf('Namespace is not a valid PSR-4 prefix: "%s".', $namespace));
         }
         $classes = $this->findClasses($namespace, $resource, (array) $exclude);
         // prepare for deep cloning
@@ -119,12 +119,12 @@ abstract class FileLoader extends \RectorPrefix20210525\Symfony\Component\Config
      *
      * @param string $id
      */
-    protected function setDefinition($id, \RectorPrefix20210525\Symfony\Component\DependencyInjection\Definition $definition)
+    protected function setDefinition($id, \RectorPrefix20210526\Symfony\Component\DependencyInjection\Definition $definition)
     {
         $this->container->removeBindings($id);
         if ($this->isLoadingInstanceof) {
-            if (!$definition instanceof \RectorPrefix20210525\Symfony\Component\DependencyInjection\ChildDefinition) {
-                throw new \RectorPrefix20210525\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException(\sprintf('Invalid type definition "%s": ChildDefinition expected, "%s" given.', $id, \get_debug_type($definition)));
+            if (!$definition instanceof \RectorPrefix20210526\Symfony\Component\DependencyInjection\ChildDefinition) {
+                throw new \RectorPrefix20210526\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException(\sprintf('Invalid type definition "%s": ChildDefinition expected, "%s" given.', $id, \get_debug_type($definition)));
             }
             $this->instanceof[$id] = $definition;
         } else {
@@ -154,7 +154,7 @@ abstract class FileLoader extends \RectorPrefix20210525\Symfony\Component\Config
             if (null === $prefixLen) {
                 $prefixLen = \strlen($resource->getPrefix());
                 if ($excludePrefix && 0 !== \strpos($excludePrefix, $resource->getPrefix())) {
-                    throw new \RectorPrefix20210525\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException(\sprintf('Invalid "exclude" pattern when importing classes for "%s": make sure your "exclude" pattern (%s) is a subset of the "resource" pattern (%s).', $namespace, $excludePattern, $pattern));
+                    throw new \RectorPrefix20210526\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException(\sprintf('Invalid "exclude" pattern when importing classes for "%s": make sure your "exclude" pattern (%s) is a subset of the "resource" pattern (%s).', $namespace, $excludePattern, $pattern));
                 }
             }
             if (isset($excludePaths[\str_replace('\\', '/', $path)])) {
@@ -175,14 +175,14 @@ abstract class FileLoader extends \RectorPrefix20210525\Symfony\Component\Config
             }
             // check to make sure the expected class exists
             if (!$r) {
-                throw new \RectorPrefix20210525\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException(\sprintf('Expected to find class "%s" in file "%s" while importing services from resource "%s", but it was not found! Check the namespace prefix used with the resource.', $class, $path, $pattern));
+                throw new \RectorPrefix20210526\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException(\sprintf('Expected to find class "%s" in file "%s" while importing services from resource "%s", but it was not found! Check the namespace prefix used with the resource.', $class, $path, $pattern));
             }
             if ($r->isInstantiable() || $r->isInterface()) {
                 $classes[$class] = null;
             }
         }
         // track only for new & removed files
-        if ($resource instanceof \RectorPrefix20210525\Symfony\Component\Config\Resource\GlobResource) {
+        if ($resource instanceof \RectorPrefix20210526\Symfony\Component\Config\Resource\GlobResource) {
             $this->container->addResource($resource);
         } else {
             foreach ($resource as $path) {
