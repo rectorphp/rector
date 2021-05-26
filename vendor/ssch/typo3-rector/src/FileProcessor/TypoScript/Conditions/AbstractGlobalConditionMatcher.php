@@ -16,6 +16,10 @@ abstract class AbstractGlobalConditionMatcher implements \Ssch\TYPO3Rector\Contr
      * @var string[]
      */
     public const IENV_KEEP_SERVER_PARAMS = ['HTTP_REFERER', 'HTTP_USER_AGENT', 'HTTP_ACCEPT_ENCODING', 'HTTP_ACCEPT_LANGUAGE', 'REMOTE_HOST', 'QUERY_STRING'];
+    /**
+     * @var array<string, string>
+     */
+    public const USER_PROPERTY_MAPPING = ['uid' => 'userId'];
     protected function refactorTsfe(string $property, string $operator, string $value) : string
     {
         if (\RectorPrefix20210526\Nette\Utils\Strings::startsWith($property, 'page')) {

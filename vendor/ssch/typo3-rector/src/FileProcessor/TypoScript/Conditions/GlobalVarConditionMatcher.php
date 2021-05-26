@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Ssch\TYPO3Rector\FileProcessor\TypoScript\Conditions;
 
 use RectorPrefix20210526\Nette\Utils\Strings;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Ssch\TYPO3Rector\Helper\ArrayUtility;
 final class GlobalVarConditionMatcher extends \Ssch\TYPO3Rector\FileProcessor\TypoScript\Conditions\AbstractGlobalConditionMatcher
 {
@@ -24,7 +25,7 @@ final class GlobalVarConditionMatcher extends \Ssch\TYPO3Rector\FileProcessor\Ty
         $subConditions = \Ssch\TYPO3Rector\Helper\ArrayUtility::trimExplode(',', $subConditions['subCondition']);
         $conditions = [];
         foreach ($subConditions as $subCondition) {
-            \preg_match('#(?<type>TSFE|GP|GPmerged|_POST|_GET|LIT|ENV|IENV)' . self::ZERO_ONE_OR_MORE_WHITESPACES . ':' . self::ZERO_ONE_OR_MORE_WHITESPACES . '(?<property>.*)\\s*(?<operator>' . self::ALLOWED_OPERATORS_REGEX . ')' . self::ZERO_ONE_OR_MORE_WHITESPACES . '(?<value>.*)$#Ui', $subCondition, $matches);
+            \preg_match('#(?<type>TSFE|GP|GPmerged|_POST|_GET|LIT|ENV|IENV|BE_USER)' . self::ZERO_ONE_OR_MORE_WHITESPACES . '[:|]' . self::ZERO_ONE_OR_MORE_WHITESPACES . '(?<property>.*)\\s*(?<operator>' . self::ALLOWED_OPERATORS_REGEX . ')' . self::ZERO_ONE_OR_MORE_WHITESPACES . '(?<value>.*)$#Ui', $subCondition, $matches);
             if (!\is_array($matches)) {
                 continue;
             }
@@ -46,6 +47,8 @@ final class GlobalVarConditionMatcher extends \Ssch\TYPO3Rector\FileProcessor\Ty
                 $conditions[$key][] = $this->createEnvCondition($property, $operator, $value);
             } elseif ('IENV' === $type) {
                 $conditions[$key][] = $this->createIndependentCondition($property, $operator, $value);
+            } elseif ('BE_USER' === $type) {
+                $conditions[$key][] = $this->createBackendUserCondition($property, $operator, $value);
             }
         }
         $keys = \array_keys($conditions);
@@ -87,5 +90,15 @@ final class GlobalVarConditionMatcher extends \Ssch\TYPO3Rector\FileProcessor\Ty
             return \sprintf('request.getQueryParams()[\'%1$s\'] %2$s %3$s', $parameters[0], self::OPERATOR_MAPPING[$operator], $value);
         }
         return \sprintf('traverse(request.getQueryParams(), \'%1$s\') %2$s %3$s || traverse(request.getParsedBody(), \'%1$s\') %2$s %3$s', \implode('/', $parameters), self::OPERATOR_MAPPING[$operator], $value);
+    }
+    private function createBackendUserCondition(string $property, string $operator, string $value) : string
+    {
+        $delimiter = \RectorPrefix20210526\Nette\Utils\Strings::contains($property, ':') ? ':' : '|';
+        [, $property] = \Ssch\TYPO3Rector\Helper\ArrayUtility::trimExplode($delimiter, $property, \true, 2);
+        if (!\array_key_exists($property, self::USER_PROPERTY_MAPPING)) {
+            $message = \sprintf('The property "%s" can not be mapped for condition BE_USER', $property);
+            throw new \Rector\Core\Exception\ShouldNotHappenException($message);
+        }
+        return \sprintf('backend.user.%s %s %s', self::USER_PROPERTY_MAPPING[$property], self::OPERATOR_MAPPING[$operator], $value);
     }
 }

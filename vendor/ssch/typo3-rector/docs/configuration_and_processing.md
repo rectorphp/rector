@@ -85,6 +85,20 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     // register a single rule
     // $services->set(InjectAnnotationRector::class);
+
+
+    // Optional non-php file functionalities:
+    // More info here: https://github.com/sabbelasichon/typo3-rector/blob/main/docs/beyond_php_file_processors.md
+
+    // Adapt your composer.json dependencies to the latest available version for the defined SetList
+    // $containerConfigurator->import(Typo3SetList::COMPOSER_PACKAGES_104_CORE);
+    // $containerConfigurator->import(Typo3SetList::COMPOSER_PACKAGES_104_EXTENSIONS);
+
+    // Rewrite your extbase persistence class mapping from typoscript into php according to official docs.
+    // This processor will create a summarized file with all of the typoscript rewrites combined into a single file.
+    // The filename can be passed as argument, "Configuration_Extbase_Persistence_Classes.php" is default.
+    // $services = $containerConfigurator->services();
+    // $services->set(ExtbasePersistenceVisitor::class);
 };
 ```
 
