@@ -1,2 +1,8 @@
+# make sure windows uses LF for files, which we expect to always use LF, no matter the platform
+*.yaml		text eol=lf
+*.json		text eol=lf
+*.xml		text eol=lf
+*.md		text eol=lf
+
 # testing Windows spaces - https://help.github.com/en/github/using-git/configuring-git-to-handle-line-endings
 packages-tests/FileFormatter/ValueObject/Fixture/composer_carriage_return_line_feed.json json eol=crlf
