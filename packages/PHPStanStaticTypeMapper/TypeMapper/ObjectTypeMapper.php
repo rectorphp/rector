@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\PHPStanStaticTypeMapper\TypeMapper;
 
-use RectorPrefix20210526\Nette\Utils\Strings;
+use RectorPrefix20210527\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
@@ -21,7 +21,7 @@ use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedGenericObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\SelfObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
-use RectorPrefix20210526\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix20210527\Symfony\Contracts\Service\Attribute\Required;
 final class ObjectTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface
 {
     /**
@@ -112,7 +112,7 @@ final class ObjectTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract
         if ($genericObjectType instanceof \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedGenericObjectType) {
             return '\\' . $genericObjectType->getClassName();
         }
-        if (\RectorPrefix20210526\Nette\Utils\Strings::contains($genericObjectType->getClassName(), '\\')) {
+        if (\RectorPrefix20210527\Nette\Utils\Strings::contains($genericObjectType->getClassName(), '\\')) {
             return '\\' . $genericObjectType->getClassName();
         }
         return $genericObjectType->getClassName();

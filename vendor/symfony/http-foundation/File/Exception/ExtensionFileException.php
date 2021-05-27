@@ -8,13 +8,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210526\Symfony\Component\HttpFoundation\File\Exception;
+namespace RectorPrefix20210527\Symfony\Component\HttpFoundation\File\Exception;
 
 /**
  * Thrown when an UPLOAD_ERR_EXTENSION error occurred with UploadedFile.
  *
  * @author Florent Mata <florentmata@gmail.com>
  */
-class ExtensionFileException extends \RectorPrefix20210526\Symfony\Component\HttpFoundation\File\Exception\FileException
+class ExtensionFileException extends \RectorPrefix20210527\Symfony\Component\HttpFoundation\File\Exception\FileException
 {
 }

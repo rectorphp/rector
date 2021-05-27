@@ -26,7 +26,7 @@
     },
     "autoload": {
         "psr-4": {
-            "RectorPrefix20210526\\Symfony\\Polyfill\\Mbstring\\": ""
+            "RectorPrefix20210527\\Symfony\\Polyfill\\Mbstring\\": ""
         },
         "files": [
             "bootstrap.php"
@@ -38,7 +38,7 @@
     "minimum-stability": "dev",
     "extra": {
         "branch-alias": {
-            "dev-main": "1.22-dev"
+            "dev-main": "1.23-dev"
         },
         "thanks": {
             "name": "symfony\/polyfill",

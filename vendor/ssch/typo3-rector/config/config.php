@@ -1,23 +1,23 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210526;
+namespace RectorPrefix20210527;
 
-use RectorPrefix20210526\Helmich\TypoScriptParser\Parser\Parser;
-use RectorPrefix20210526\Helmich\TypoScriptParser\Parser\ParserInterface;
-use RectorPrefix20210526\Helmich\TypoScriptParser\Parser\Printer\ASTPrinterInterface;
-use RectorPrefix20210526\Helmich\TypoScriptParser\Parser\Printer\PrettyPrinter;
-use RectorPrefix20210526\Helmich\TypoScriptParser\Parser\Traverser\Traverser;
-use RectorPrefix20210526\Helmich\TypoScriptParser\Tokenizer\Tokenizer;
-use RectorPrefix20210526\Helmich\TypoScriptParser\Tokenizer\TokenizerInterface;
+use RectorPrefix20210527\Helmich\TypoScriptParser\Parser\Parser;
+use RectorPrefix20210527\Helmich\TypoScriptParser\Parser\ParserInterface;
+use RectorPrefix20210527\Helmich\TypoScriptParser\Parser\Printer\ASTPrinterInterface;
+use RectorPrefix20210527\Helmich\TypoScriptParser\Parser\Printer\PrettyPrinter;
+use RectorPrefix20210527\Helmich\TypoScriptParser\Parser\Traverser\Traverser;
+use RectorPrefix20210527\Helmich\TypoScriptParser\Tokenizer\Tokenizer;
+use RectorPrefix20210527\Helmich\TypoScriptParser\Tokenizer\TokenizerInterface;
 use Ssch\TYPO3Rector\FileProcessor\Composer\Rector\ExtensionComposerRector;
 use Ssch\TYPO3Rector\FileProcessor\TypoScript\TypoScriptProcessor;
 use Ssch\TYPO3Rector\Rector\General\ConvertTypo3ConfVarsRector;
 use Ssch\TYPO3Rector\Rector\General\ExtEmConfRector;
-use RectorPrefix20210526\Symfony\Component\Console\Output\BufferedOutput;
-use RectorPrefix20210526\Symfony\Component\Console\Output\OutputInterface;
-use RectorPrefix20210526\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-return static function (\RectorPrefix20210526\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
+use RectorPrefix20210527\Symfony\Component\Console\Output\BufferedOutput;
+use RectorPrefix20210527\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix20210527\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+return static function (\RectorPrefix20210527\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
     $containerConfigurator->import(__DIR__ . '/../utils/**/config/config.php', null, \true);
     $services = $containerConfigurator->services();
     $services->defaults()->public()->autowire();
@@ -26,14 +26,14 @@ return static function (\RectorPrefix20210526\Symfony\Component\DependencyInject
     $services->set(\Ssch\TYPO3Rector\Rector\General\ConvertTypo3ConfVarsRector::class);
     $services->set(\Ssch\TYPO3Rector\Rector\General\ExtEmConfRector::class);
     $services->set(\Ssch\TYPO3Rector\FileProcessor\Composer\Rector\ExtensionComposerRector::class);
-    $services->set(\RectorPrefix20210526\Helmich\TypoScriptParser\Parser\Traverser\Traverser::class);
-    $services->set(\RectorPrefix20210526\Helmich\TypoScriptParser\Tokenizer\Tokenizer::class);
-    $services->alias(\RectorPrefix20210526\Helmich\TypoScriptParser\Tokenizer\TokenizerInterface::class, \RectorPrefix20210526\Helmich\TypoScriptParser\Tokenizer\Tokenizer::class);
-    $services->set(\RectorPrefix20210526\Helmich\TypoScriptParser\Parser\Printer\PrettyPrinter::class);
-    $services->alias(\RectorPrefix20210526\Helmich\TypoScriptParser\Parser\Printer\ASTPrinterInterface::class, \RectorPrefix20210526\Helmich\TypoScriptParser\Parser\Printer\PrettyPrinter::class);
-    $services->set(\RectorPrefix20210526\Helmich\TypoScriptParser\Parser\Parser::class);
-    $services->alias(\RectorPrefix20210526\Helmich\TypoScriptParser\Parser\ParserInterface::class, \RectorPrefix20210526\Helmich\TypoScriptParser\Parser\Parser::class);
-    $services->set(\RectorPrefix20210526\Symfony\Component\Console\Output\BufferedOutput::class);
-    $services->alias(\RectorPrefix20210526\Symfony\Component\Console\Output\OutputInterface::class, \RectorPrefix20210526\Symfony\Component\Console\Output\BufferedOutput::class);
+    $services->set(\RectorPrefix20210527\Helmich\TypoScriptParser\Parser\Traverser\Traverser::class);
+    $services->set(\RectorPrefix20210527\Helmich\TypoScriptParser\Tokenizer\Tokenizer::class);
+    $services->alias(\RectorPrefix20210527\Helmich\TypoScriptParser\Tokenizer\TokenizerInterface::class, \RectorPrefix20210527\Helmich\TypoScriptParser\Tokenizer\Tokenizer::class);
+    $services->set(\RectorPrefix20210527\Helmich\TypoScriptParser\Parser\Printer\PrettyPrinter::class);
+    $services->alias(\RectorPrefix20210527\Helmich\TypoScriptParser\Parser\Printer\ASTPrinterInterface::class, \RectorPrefix20210527\Helmich\TypoScriptParser\Parser\Printer\PrettyPrinter::class);
+    $services->set(\RectorPrefix20210527\Helmich\TypoScriptParser\Parser\Parser::class);
+    $services->alias(\RectorPrefix20210527\Helmich\TypoScriptParser\Parser\ParserInterface::class, \RectorPrefix20210527\Helmich\TypoScriptParser\Parser\Parser::class);
+    $services->set(\RectorPrefix20210527\Symfony\Component\Console\Output\BufferedOutput::class);
+    $services->alias(\RectorPrefix20210527\Symfony\Component\Console\Output\OutputInterface::class, \RectorPrefix20210527\Symfony\Component\Console\Output\BufferedOutput::class);
     $services->set(\Ssch\TYPO3Rector\FileProcessor\TypoScript\TypoScriptProcessor::class)->call('configure', [[\Ssch\TYPO3Rector\FileProcessor\TypoScript\TypoScriptProcessor::ALLOWED_FILE_EXTENSIONS => ['typoscript', 'ts', 'txt', 'pagets', 'constantsts', 'setupts', 'tsconfig', 't3s', 't3c', 'typoscriptconstants', 'typoscriptsetupts']]]);
 };

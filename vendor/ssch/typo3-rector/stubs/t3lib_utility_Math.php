@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210526;
+namespace RectorPrefix20210527;
 
 if (\class_exists('t3lib_utility_Math')) {
     return;
