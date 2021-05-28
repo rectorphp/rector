@@ -41,6 +41,16 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                     'Symfony\Component\Validator\Constraints\Choice',
                     'Symfony\Component\Validator\Constraints\Choice'
                 ),
+
+                new AnnotationToAttribute('Doctrine\ORM\Mapping\Table', 'Doctrine\ORM\Mapping\Table'),
+                new AnnotationToAttribute('Doctrine\ORM\Mapping\Entity', 'Doctrine\ORM\Mapping\Entity'),
+                new AnnotationToAttribute('Doctrine\ORM\Mapping\Id', 'Doctrine\ORM\Mapping\Id'),
+                new AnnotationToAttribute(
+                    'Doctrine\ORM\Mapping\GeneratedValue',
+                    'Doctrine\ORM\Mapping\GeneratedValue'
+                ),
+                new AnnotationToAttribute('Doctrine\ORM\Mapping\Column', 'Doctrine\ORM\Mapping\Column'),
+                new AnnotationToAttribute('Doctrine\ORM\Mapping\ChangeTrackingPolicy', 'Doctrine\ORM\Mapping\ChangeTrackingPolicy'),
             ]),
         ]]);
 };

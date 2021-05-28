@@ -110,6 +110,14 @@ final class PhpDocInfo
     /**
      * @return array<PhpDocTagNode>
      */
+    public function getAllTags(): array
+    {
+        return $this->phpDocNode->getTags();
+    }
+
+    /**
+     * @return array<PhpDocTagNode>
+     */
     public function getTagsByName(string $name): array
     {
         $name = $this->annotationNaming->normalizeName($name);
@@ -475,7 +483,8 @@ final class PhpDocInfo
         $this->isSingleLine = false;
     }
 
-    public function getNode(): \PhpParser\Node {
+    public function getNode(): \PhpParser\Node
+    {
         return $this->node;
     }
 
