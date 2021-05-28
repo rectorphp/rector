@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Rector\Caching\Detector;
 
-use RectorPrefix20210527\Nette\Caching\Cache;
-use RectorPrefix20210527\Nette\Utils\Strings;
+use RectorPrefix20210528\Nette\Caching\Cache;
+use RectorPrefix20210528\Nette\Utils\Strings;
 use Rector\Caching\Config\FileHashComputer;
 use Symplify\SmartFileSystem\SmartFileInfo;
 /**
@@ -25,7 +25,7 @@ final class ChangedFilesDetector
      * @var \Nette\Caching\Cache
      */
     private $cache;
-    public function __construct(\Rector\Caching\Config\FileHashComputer $fileHashComputer, \RectorPrefix20210527\Nette\Caching\Cache $cache)
+    public function __construct(\Rector\Caching\Config\FileHashComputer $fileHashComputer, \RectorPrefix20210528\Nette\Caching\Cache $cache)
     {
         $this->fileHashComputer = $fileHashComputer;
         $this->cache = $cache;
@@ -54,7 +54,7 @@ final class ChangedFilesDetector
     }
     public function clear() : void
     {
-        $this->cache->clean([\RectorPrefix20210527\Nette\Caching\Cache::ALL => \true]);
+        $this->cache->clean([\RectorPrefix20210528\Nette\Caching\Cache::ALL => \true]);
     }
     /**
      * @return SmartFileInfo[]
@@ -95,7 +95,7 @@ final class ChangedFilesDetector
     }
     private function storeConfigurationDataHash(\Symplify\SmartFileSystem\SmartFileInfo $fileInfo, string $configurationHash) : void
     {
-        $key = self::CONFIGURATION_HASH_KEY . '_' . \RectorPrefix20210527\Nette\Utils\Strings::webalize($fileInfo->getRealPath());
+        $key = self::CONFIGURATION_HASH_KEY . '_' . \RectorPrefix20210528\Nette\Utils\Strings::webalize($fileInfo->getRealPath());
         $this->invalidateCacheIfConfigurationChanged($key, $configurationHash);
         $this->cache->save($key, $configurationHash);
     }

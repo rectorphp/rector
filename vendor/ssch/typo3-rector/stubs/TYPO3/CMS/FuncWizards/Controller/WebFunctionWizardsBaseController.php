@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210527\TYPO3\CMS\FuncWizards\Controller;
+namespace RectorPrefix20210528\TYPO3\CMS\FuncWizards\Controller;
 
 if (\class_exists('TYPO3\\CMS\\FuncWizards\\Controller\\WebFunctionWizardsBaseController')) {
     return;

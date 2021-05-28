@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210527;
+namespace RectorPrefix20210528;
 
 if (\class_exists('Tx_Install_Service_BasicService')) {
     return;
