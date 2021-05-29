@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\CodingStyle\Node;
 
-use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
@@ -148,7 +147,7 @@ final class NameImporter
         $fullName = $name->toString();
 
         $autoImportNames = $this->parameterProvider->provideParameter(Option::AUTO_IMPORT_NAMES);
-        if ($autoImportNames && ! $parentNode instanceof Node && ! Strings::contains(
+        if ($autoImportNames && ! $parentNode instanceof Node && ! \str_contains(
             $fullName,
             '\\'
         ) && $this->reflectionProvider->hasFunction(new Name($fullName), null)) {

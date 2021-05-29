@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Core\NodeManipulator;
 
-use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Array_;
@@ -90,7 +89,7 @@ final class VariableManipulator
     {
         /** @var string $className */
         $className = $variable->getAttribute(AttributeKey::CLASS_NAME);
-        if (! Strings::endsWith($className, 'Test')) {
+        if (! \str_ends_with($className, 'Test')) {
             return false;
         }
 

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\DowngradePhp74\Rector\LNumber;
 
-use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Scalar\DNumber;
 use PhpParser\Node\Scalar\LNumber;
@@ -71,7 +70,7 @@ CODE_SAMPLE
 
         $numberNode = clone $node;
         $numberNodeValue = (string) $numberNode->value;
-        if (Strings::contains($numberNodeValue, '+')) {
+        if (\str_contains($numberNodeValue, '+')) {
             return null;
         }
 
@@ -84,7 +83,7 @@ CODE_SAMPLE
          * by adding ".0" at the end (eg: 0.0).
          * Then, add it again.
          */
-        if ($node instanceof DNumber && ! Strings::contains($node->value, '.')) {
+        if ($node instanceof DNumber && ! \str_contains($node->value, '.')) {
             $node->value .= '.0';
         }
         return $node;

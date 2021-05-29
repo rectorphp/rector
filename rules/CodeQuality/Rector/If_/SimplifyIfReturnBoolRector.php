@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\CodeQuality\Rector\If_;
 
-use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\Identical;
@@ -129,7 +128,7 @@ CODE_SAMPLE
         if (! $this->valueResolver->isFalse($returnedExpr)) {
             return ! $this->valueResolver->isTrueOrFalse($nextNode->expr);
         }
-        if (! Strings::contains($this->print($if->cond), '!=')) {
+        if (! \str_contains($this->print($if->cond), '!=')) {
             return ! $this->valueResolver->isTrueOrFalse($nextNode->expr);
         }
         return true;

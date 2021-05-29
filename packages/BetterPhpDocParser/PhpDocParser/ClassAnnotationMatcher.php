@@ -97,7 +97,7 @@ final class ClassAnnotationMatcher
         }
 
         $unaliasedShortClass = Strings::substring($tag, Strings::length($useUse->alias->toString()));
-        if (Strings::startsWith($unaliasedShortClass, '\\')) {
+        if (\str_starts_with($unaliasedShortClass, '\\')) {
             return $useUse->name . $unaliasedShortClass;
         }
 

@@ -184,7 +184,7 @@ final class ObjectTypeSpecifier
     private function matchPartialNamespaceObjectType(ObjectType $objectType, UseUse $useUse): ?ShortenedObjectType
     {
         // partial namespace
-        if (! Strings::startsWith($objectType->getClassName(), $useUse->name->getLast() . '\\')) {
+        if (! \str_starts_with($objectType->getClassName(), $useUse->name->getLast() . '\\')) {
             return null;
         }
 

@@ -57,7 +57,8 @@ final class BreakingVariableRenameGuard
         Variable $variable
     ): bool {
         // is the suffix? → also accepted
-        if (Strings::endsWith($currentName, ucfirst($expectedName))) {
+        $expectedNameCamelCase = ucfirst($expectedName);
+        if (\str_ends_with($currentName, $expectedNameCamelCase)) {
             return true;
         }
 
@@ -95,7 +96,8 @@ final class BreakingVariableRenameGuard
         Param $param
     ): bool {
         // is the suffix? → also accepted
-        if (Strings::endsWith($currentName, ucfirst($expectedName))) {
+        $expectedNameCamelCase = ucfirst($expectedName);
+        if (\str_ends_with($currentName, $expectedNameCamelCase)) {
             return true;
         }
 

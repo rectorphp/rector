@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\DowngradePhp80\Rector\Class_;
 
-use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Attribute;
 use PhpParser\Node\Stmt\Class_;
@@ -108,7 +107,7 @@ CODE_SAMPLE
 
                 unset($attrGroup->attrs[$key]);
 
-                if (! Strings::contains($attributeToAnnotation->getTag(), '\\')) {
+                if (! \str_contains($attributeToAnnotation->getTag(), '\\')) {
                     $phpDocInfo->addPhpDocTagNode(
                         new PhpDocTagNode('@' . $attributeToAnnotation->getTag(), new GenericTagValueNode(''))
                     );

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\PhpSpecToPHPUnit\Naming;
 
-use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
@@ -46,7 +45,7 @@ final class PhpSpecRenaming
         $classMethodName = $this->stringFormatConverter->underscoreAndHyphenToCamelCase($classMethodName);
 
         // add "test", so PHPUnit runs the method
-        if (! Strings::startsWith($classMethodName, 'test')) {
+        if (! \str_starts_with($classMethodName, 'test')) {
             $classMethodName = 'test' . ucfirst($classMethodName);
         }
 

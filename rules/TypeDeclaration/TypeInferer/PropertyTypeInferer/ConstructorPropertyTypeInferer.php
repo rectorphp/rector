@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer;
 
-use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
@@ -184,7 +183,7 @@ final class ConstructorPropertyTypeInferer implements PropertyTypeInfererInterfa
         }
 
         // if the FQN has different ending than the original, it was aliased and we need to return the alias
-        if (! Strings::endsWith($fullyQualifiedName, '\\' . $originalName->toString())) {
+        if (! \str_ends_with($fullyQualifiedName, '\\' . $originalName->toString())) {
             $className = $originalName->toString();
 
             if ($this->reflectionProvider->hasClass($className)) {

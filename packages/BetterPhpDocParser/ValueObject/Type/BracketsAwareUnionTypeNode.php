@@ -6,8 +6,9 @@ namespace Rector\BetterPhpDocParser\ValueObject\Type;
 
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
+use Stringable;
 
-final class BracketsAwareUnionTypeNode extends UnionTypeNode
+final class BracketsAwareUnionTypeNode extends UnionTypeNode implements Stringable
 {
     /**
      * @param TypeNode[] $types

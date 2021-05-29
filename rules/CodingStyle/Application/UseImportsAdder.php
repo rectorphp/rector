@@ -151,6 +151,6 @@ final class UseImportsAdder
             return false;
         }
 
-        return ! Strings::contains($afterCurrentNamespace, '\\');
+        return ! \str_contains($afterCurrentNamespace, '\\');
     }
 }

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\CodeQuality\Rector\Catch_;
 
-use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
@@ -158,7 +157,7 @@ CODE_SAMPLE
         $className = $this->getName($exceptionName);
 
         // is native exception?
-        if (! Strings::contains($className, '\\')) {
+        if (! \str_contains($className, '\\')) {
             return self::DEFAULT_EXCEPTION_ARGUMENT_POSITION;
         }
 

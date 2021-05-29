@@ -100,7 +100,7 @@ CODE_SAMPLE
             $assignOfNew->var = new Variable($expectedName);
 
             // 2. rename variable in the
-            $this->variableRenamer->renameVariableInFunctionLike($node, $assignOfNew, $currentName, $expectedName);
+            $this->variableRenamer->renameVariableInFunctionLike($node, $currentName, $expectedName, $assignOfNew);
         }
 
         if (! $hasChanged) {

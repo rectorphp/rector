@@ -9,11 +9,12 @@ use Rector\FileFormatter\Exception\InvalidIndentSizeException;
 use Rector\FileFormatter\Exception\InvalidIndentStringException;
 use Rector\FileFormatter\Exception\InvalidIndentStyleException;
 use Rector\FileFormatter\Exception\ParseIndentException;
+use Stringable;
 
 /**
  * @see \Rector\Tests\FileFormatter\ValueObject\IndentTest
  */
-final class Indent
+final class Indent implements Stringable
 {
     /**
      * @var array<string, string>
@@ -122,6 +123,6 @@ final class Indent
 
     private function startsWithSpace(): bool
     {
-        return Strings::startsWith($this->string, ' ');
+        return \str_starts_with($this->string, ' ');
     }
 }

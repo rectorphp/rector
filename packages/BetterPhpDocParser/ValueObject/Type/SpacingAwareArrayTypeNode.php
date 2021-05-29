@@ -8,10 +8,11 @@ use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\CallableTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
-
 use Rector\PHPStanStaticTypeMapper\TypeMapper\ArrayTypeMapper;
 
-final class SpacingAwareArrayTypeNode extends ArrayTypeNode
+use Stringable;
+
+final class SpacingAwareArrayTypeNode extends ArrayTypeNode implements Stringable
 {
     public function __toString(): string
     {

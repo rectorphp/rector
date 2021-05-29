@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Renaming\Rector\FuncCall;
 
-use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
@@ -79,7 +78,7 @@ final class RenameFunctionRector extends AbstractRector implements ConfigurableR
 
     private function createName(string $newFunction): Name
     {
-        if (Strings::contains($newFunction, '\\')) {
+        if (\str_contains($newFunction, '\\')) {
             return new FullyQualified($newFunction);
         }
 

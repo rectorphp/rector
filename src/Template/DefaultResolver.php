@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace Rector\Core\Template;
 
 use Rector\Core\Contract\Template\TemplateResolverInterface;
+use Stringable;
 
-final class DefaultResolver implements TemplateResolverInterface
+final class DefaultResolver implements TemplateResolverInterface, Stringable
 {
     /**
      * @var string

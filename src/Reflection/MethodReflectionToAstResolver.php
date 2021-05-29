@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Core\Reflection;
 
-use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Reflection\Php\PhpMethodReflection;
@@ -37,7 +36,7 @@ final class MethodReflectionToAstResolver
         }
 
         // skip vendor
-        if (Strings::contains($fileName, '#\/vendor\/#')) {
+        if (\str_contains($fileName, '#\/vendor\/#')) {
             return null;
         }
 

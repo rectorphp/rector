@@ -6,8 +6,9 @@ namespace Rector\BetterPhpDocParser\ValueObject\PhpDoc;
 
 use PHPStan\PhpDocParser\Ast\PhpDoc\TemplateTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
+use Stringable;
 
-final class SpacingAwareTemplateTagValueNode extends TemplateTagValueNode
+final class SpacingAwareTemplateTagValueNode extends TemplateTagValueNode implements Stringable
 {
     public function __construct(
         string $name,

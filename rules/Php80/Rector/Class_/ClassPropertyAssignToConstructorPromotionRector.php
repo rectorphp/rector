@@ -112,7 +112,7 @@ CODE_SAMPLE
             $propertyName = $this->getName($property->props[0]);
             /** @var string $oldName */
             $oldName = $this->getName($param->var);
-            $this->variableRenamer->renameVariableInFunctionLike($constructClassMethod, null, $oldName, $propertyName);
+            $this->variableRenamer->renameVariableInFunctionLike($constructClassMethod, $oldName, $propertyName, null);
 
             $paramTagValueNode = $classMethodPhpDocInfo->getParamTagValueNodeByName($paramName);
 

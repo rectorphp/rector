@@ -73,7 +73,7 @@ final class EregToPcreTransformer
 
     public function transform(string $ereg, bool $isCaseInsensitive): string
     {
-        if (! Strings::contains($ereg, $this->pcreDelimiter)) {
+        if (! \str_contains($ereg, $this->pcreDelimiter)) {
             return $this->ere2pcre($ereg, $isCaseInsensitive);
         }
 
@@ -144,7 +144,7 @@ final class EregToPcreTransformer
             } elseif ($char === '*' || $char === '+' || $char === '?') {
                 throw new InvalidEregException('unescaped metacharacter "' . $char . '"');
             } elseif ($char === '{') {
-                if ($i + 1 < $l && Strings::contains('0123456789', $content[$i + 1])) {
+                if ($i + 1 < $l && \str_contains('0123456789', $content[$i + 1])) {
                     $r[$rr] .= '\{';
                 } else {
                     throw new InvalidEregException('unescaped metacharacter "' . $char . '"');
@@ -223,7 +223,7 @@ final class EregToPcreTransformer
     private function processSquareBracket(string $s, int $i, int $l, string $cls, bool $start): array
     {
         do {
-            if ($s[$i] === '[' && $i + 1 < $l && Strings::contains('.=:', $s[$i + 1])) {
+            if ($s[$i] === '[' && $i + 1 < $l && \str_contains('.=:', $s[$i + 1])) {
                 /** @var string $cls */
                 [$cls, $i] = $this->processCharacterClass($s, $i, $cls);
             } else {
@@ -258,7 +258,7 @@ final class EregToPcreTransformer
             throw new InvalidEregException('a literal null byte in the regex');
         }
 
-        if (Strings::contains('\^$.[]|()?*+{}-/', $content)) {
+        if (\str_contains('\^$.[]|()?*+{}-/', $content)) {
             return '\\' . $content;
         }
 

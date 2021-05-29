@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Core\FileSystem;
 
-use Nette\Utils\Strings;
 use Symplify\SmartFileSystem\FileSystemGuard;
 
 final class FilesystemTweaker
@@ -25,7 +24,7 @@ final class FilesystemTweaker
         $absoluteDirectories = [];
         foreach ($directories as $directory) {
             // is fnmatch for directories
-            if (Strings::contains($directory, '*')) {
+            if (\str_contains($directory, '*')) {
                 $foundDirectories = $this->findDirectoriesInGlob($directory);
                 $absoluteDirectories = array_merge($absoluteDirectories, $foundDirectories);
             } else {
@@ -49,7 +48,7 @@ final class FilesystemTweaker
     {
         $absolutePathsFound = [];
         foreach ($paths as $path) {
-            if (Strings::contains($path, '*')) {
+            if (\str_contains($path, '*')) {
                 $foundPaths = $this->foundInGlob($path);
                 $absolutePathsFound = array_merge($absolutePathsFound, $foundPaths);
             } else {

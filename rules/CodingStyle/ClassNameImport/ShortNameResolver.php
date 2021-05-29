@@ -136,7 +136,7 @@ final class ShortNameResolver
             }
 
             // already short
-            if (Strings::contains($originalName->toString(), '\\')) {
+            if (\str_contains($originalName->toString(), '\\')) {
                 return;
             }
 
@@ -206,7 +206,7 @@ final class ShortNameResolver
             return null;
         }
 
-        if (Strings::contains($typeNode->name, '\\')) {
+        if (\str_contains($typeNode->name, '\\')) {
             return null;
         }
 

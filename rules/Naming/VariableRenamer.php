@@ -36,9 +36,9 @@ final class VariableRenamer
      */
     public function renameVariableInFunctionLike(
         FunctionLike $functionLike,
-        ?Assign $assign = null,
         string $oldName,
-        string $expectedName
+        string $expectedName,
+        ?Assign $assign = null
     ): void {
         $isRenamingActive = false;
 

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Autodiscovery\Rector\Class_;
 
 use Controller;
-use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\Type\ObjectType;
@@ -200,7 +199,7 @@ CODE_SAMPLE
         }
 
         foreach ($this->suffixes as $suffix) {
-            if (Strings::endsWith($className, $suffix)) {
+            if (\str_ends_with($className, $suffix)) {
                 return true;
             }
         }
@@ -211,7 +210,7 @@ CODE_SAMPLE
     private function isKnownServiceType(string $className): bool
     {
         foreach (self::COMMON_SERVICE_SUFFIXES as $commonServiceSuffix) {
-            if (Strings::endsWith($className, $commonServiceSuffix)) {
+            if (\str_ends_with($className, $commonServiceSuffix)) {
                 return true;
             }
         }

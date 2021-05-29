@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\PhpDocParser;
 
-use Nette\Utils\Strings;
 use PhpParser\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
@@ -142,7 +141,7 @@ final class DoctrineAnnotationDecorator
             );
 
             // not an annotations class
-            if (! Strings::contains($fullyQualifiedAnnotationClass, '\\')) {
+            if (! \str_contains($fullyQualifiedAnnotationClass, '\\')) {
                 continue;
             }
 
@@ -193,7 +192,7 @@ final class DoctrineAnnotationDecorator
             if ($composedTokenIterator->isCurrentTokenTypes([
                 Lexer::TOKEN_OPEN_CURLY_BRACKET,
                 Lexer::TOKEN_OPEN_PARENTHESES,
-            ]) || Strings::contains($composedTokenIterator->currentTokenValue(), '(')) {
+            ]) || \str_contains($composedTokenIterator->currentTokenValue(), '(')) {
                 ++$openBracketCount;
             }
 
@@ -201,7 +200,7 @@ final class DoctrineAnnotationDecorator
                 Lexer::TOKEN_CLOSE_CURLY_BRACKET,
                 Lexer::TOKEN_CLOSE_PARENTHESES,
                 // sometimes it gets mixed int    ")
-            ]) || Strings::contains($composedTokenIterator->currentTokenValue(), ')')) {
+            ]) || \str_contains($composedTokenIterator->currentTokenValue(), ')')) {
                 ++$closeBracketCount;
             }
 

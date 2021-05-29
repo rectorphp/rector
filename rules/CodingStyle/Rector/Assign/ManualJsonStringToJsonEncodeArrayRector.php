@@ -166,7 +166,7 @@ CODE_SAMPLE
 
         try {
             return (bool) Json::decode($stringValue, Json::FORCE_ARRAY);
-        } catch (JsonException $jsonException) {
+        } catch (JsonException) {
             return false;
         }
     }

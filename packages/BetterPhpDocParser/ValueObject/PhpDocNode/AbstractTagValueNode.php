@@ -7,12 +7,13 @@ namespace Rector\BetterPhpDocParser\ValueObject\PhpDocNode;
 use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\NodeAttributes;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Stringable;
 
 /**
  * @deprecated
  * Just for back compatibility
  */
-abstract class AbstractTagValueNode implements Node
+abstract class AbstractTagValueNode implements Node, Stringable
 {
     use NodeAttributes;
 

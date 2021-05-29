@@ -511,7 +511,7 @@ final class PhpDocInfo
 
     private function isFnmatch(string $currentValue, string $desiredValue): bool
     {
-        if (! Strings::contains($desiredValue, '*')) {
+        if (! \str_contains($desiredValue, '*')) {
             return false;
         }
 

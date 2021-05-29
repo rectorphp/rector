@@ -90,7 +90,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! Strings::contains($docContent, '@var')) {
+        if (! \str_contains($docContent, '@var')) {
             return null;
         }
 
@@ -156,7 +156,7 @@ CODE_SAMPLE
         // normalize content
 
         // starts with "/*", instead of "/**"
-        if (Strings::startsWith($docContent, '/* ')) {
+        if (\str_starts_with($docContent, '/* ')) {
             $docContent = Strings::replace($docContent, self::SINGLE_ASTERISK_COMMENT_START_REGEX, '/** ');
         }
 

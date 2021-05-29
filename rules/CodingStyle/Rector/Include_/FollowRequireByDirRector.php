@@ -81,7 +81,7 @@ CODE_SAMPLE
 
     private function isRefactorableStringPath(String_ $string): bool
     {
-        return ! Strings::startsWith($string->value, 'phar://');
+        return ! \str_starts_with($string->value, 'phar://');
     }
 
     private function prefixWithDir(String_ $string): Concat
@@ -97,7 +97,7 @@ CODE_SAMPLE
      */
     private function removeExtraDotSlash(String_ $string): void
     {
-        if (! Strings::startsWith($string->value, './')) {
+        if (! \str_starts_with($string->value, './')) {
             return;
         }
 
@@ -106,7 +106,7 @@ CODE_SAMPLE
 
     private function prependSlashIfMissing(String_ $string): void
     {
-        if (Strings::startsWith($string->value, '/')) {
+        if (\str_starts_with($string->value, '/')) {
             return;
         }
 

@@ -109,7 +109,7 @@ CODE_SAMPLE
             return $this->nodeComparator->areNodesEqual($node, $assignVariable);
         });
 
-        if ($this->shouldSkip($nextForeach, $variablePrevious, $node, $assignVariable)) {
+        if ($this->shouldSkip($nextForeach, $node, $assignVariable, $variablePrevious)) {
             return null;
         }
 
@@ -149,7 +149,7 @@ CODE_SAMPLE
         return $foreach;
     }
 
-    private function shouldSkip(Return_ $return, ?Expr $expr = null, Foreach_ $foreach, Expr $assignVariable): bool
+    private function shouldSkip(Return_ $return, Foreach_ $foreach, Expr $assignVariable, ?Expr $expr = null): bool
     {
         if (! $expr instanceof Expr) {
             return true;

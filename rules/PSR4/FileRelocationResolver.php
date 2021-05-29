@@ -70,7 +70,7 @@ final class FileRelocationResolver
      */
     private function resolveRootDirectory(SmartFileInfo $smartFileInfo, string $suffixName, array $groupNames): string
     {
-        if (Strings::startsWith($smartFileInfo->getRealPathDirectory(), '/tmp')) {
+        if (\str_starts_with($smartFileInfo->getRealPathDirectory(), '/tmp')) {
             $currentTraversePath = $smartFileInfo->getRealPathDirectory();
         } else {
             $currentTraversePath = $smartFileInfo->getRelativeDirectoryPath();

@@ -109,7 +109,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (Strings::contains($numericValueAsString, '.')) {
+        if (\str_contains($numericValueAsString, '.')) {
             [$mainPart, $decimalPart] = explode('.', $numericValueAsString);
 
             $chunks = $this->strSplitNegative($mainPart, self::GROUP_SIZE);
@@ -139,7 +139,7 @@ CODE_SAMPLE
         }
 
         // already separated
-        if (Strings::contains($numericValueAsString, '_')) {
+        if (\str_contains($numericValueAsString, '_')) {
             return true;
         }
 

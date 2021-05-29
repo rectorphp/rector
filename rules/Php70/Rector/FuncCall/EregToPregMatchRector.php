@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Php70\Rector\FuncCall;
 
-use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\ArrayDimFetch;
@@ -129,7 +128,7 @@ final class EregToPregMatchRector extends AbstractRector
      */
     private function processSplitLimitArgument(FuncCall $funcCall, string $functionName): void
     {
-        if (! Strings::startsWith($functionName, 'split')) {
+        if (! \str_starts_with($functionName, 'split')) {
             return;
         }
 
@@ -161,9 +160,9 @@ final class EregToPregMatchRector extends AbstractRector
 
     private function isCaseInsensitiveFunction(string $functionName): bool
     {
-        if (Strings::contains($functionName, 'eregi')) {
+        if (\str_contains($functionName, 'eregi')) {
             return true;
         }
-        return Strings::contains($functionName, 'spliti');
+        return \str_contains($functionName, 'spliti');
     }
 }

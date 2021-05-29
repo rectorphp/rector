@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation;
 
-final class CurlyListNode extends AbstractValuesAwareNode
+use Stringable;
+
+final class CurlyListNode extends AbstractValuesAwareNode implements Stringable
 {
     public function __toString(): string
     {

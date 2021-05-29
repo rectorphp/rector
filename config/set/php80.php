@@ -36,13 +36,13 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(StrEndsWithRector::class);
 
     $services->set(StaticCallToFuncCallRector::class)
-        ->call('configure', [
+        ->call('configure', [[
             StaticCallToFuncCallRector::STATIC_CALLS_TO_FUNCTIONS => ValueObjectInliner::inline([
                 new StaticCallToFuncCall('Nette\Utils\Strings', 'startsWith', 'str_starts_with'),
                 new StaticCallToFuncCall('Nette\Utils\Strings', 'endsWith', 'str_ends_with'),
                 new StaticCallToFuncCall('Nette\Utils\Strings', 'contains', 'str_contains'),
             ]),
-        ]);
+        ]]);
 
     $services->set(StringableForToStringRector::class);
     $services->set(ClassOnObjectRector::class);

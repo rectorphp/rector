@@ -83,7 +83,7 @@ final class UnderscoreRenamePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
             return true;
         }
 
-        if (! Strings::startsWith($staticType->getClassName(), $pseudoNamespaceToNamespace->getNamespacePrefix())) {
+        if (! \str_starts_with($staticType->getClassName(), $pseudoNamespaceToNamespace->getNamespacePrefix())) {
             return true;
         }
 

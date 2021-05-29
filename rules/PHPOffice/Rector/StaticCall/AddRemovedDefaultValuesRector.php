@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\PHPOffice\Rector\StaticCall;
 
-use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
@@ -93,7 +92,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            if (is_string($defaultValue) && Strings::contains($defaultValue, '::')) {
+            if (is_string($defaultValue) && \str_contains($defaultValue, '::')) {
                 [$className, $constant] = explode('::', $defaultValue);
                 $classConstant = $this->nodeFactory->createClassConstFetch($className, $constant);
                 $arg = new Arg($classConstant);

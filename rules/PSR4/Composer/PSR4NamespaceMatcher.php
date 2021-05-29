@@ -28,7 +28,7 @@ final class PSR4NamespaceMatcher implements PSR4AutoloadNamespaceMatcherInterfac
 
             foreach ($paths as $path) {
                 $path = rtrim($path, '/');
-                if (! Strings::startsWith($smartFileInfo->getRelativeDirectoryPath(), $path)) {
+                if (! \str_starts_with($smartFileInfo->getRelativeDirectoryPath(), $path)) {
                     continue;
                 }
 

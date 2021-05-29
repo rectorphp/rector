@@ -201,9 +201,9 @@ CODE_SAMPLE
 
         $this->variableRenamer->renameVariableInFunctionLike(
             $variableAndCallAssign->getFunctionLike(),
-            $variableAndCallAssign->getAssign(),
             $variableAndCallAssign->getVariableName(),
-            $expectedName
+            $expectedName,
+            $variableAndCallAssign->getAssign()
         );
     }
 

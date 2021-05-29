@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\NodeCollector\NodeCollector;
 
 use Nette\Utils\Arrays;
-use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Attribute;
 use PhpParser\Node\Expr;
@@ -158,7 +157,7 @@ final class NodeRepository
 
     public function findClassMethod(string $className, string $methodName): ?ClassMethod
     {
-        if (Strings::contains($methodName, '\\')) {
+        if (\str_contains($methodName, '\\')) {
             $message = sprintf('Class and method arguments are switched in "%s"', __METHOD__);
             throw new ShouldNotHappenException($message);
         }
@@ -282,7 +281,7 @@ final class NodeRepository
         $classNodes = [];
 
         foreach ($this->parsedNodeCollector->getClasses() as $className => $classNode) {
-            if (! Strings::endsWith($className, $suffix)) {
+            if (! \str_ends_with($className, $suffix)) {
                 continue;
             }
 

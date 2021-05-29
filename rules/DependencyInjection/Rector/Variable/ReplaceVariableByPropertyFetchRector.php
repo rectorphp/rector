@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\DependencyInjection\Rector\Variable;
 
-use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -116,7 +115,7 @@ CODE_SAMPLE
             return false;
         }
 
-        if (! Strings::endsWith($className, 'Controller')) {
+        if (! \str_ends_with($className, 'Controller')) {
             return false;
         }
 

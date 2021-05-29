@@ -211,7 +211,7 @@ final class NodeNameResolver
         }
 
         // is probably fnmatch
-        if (Strings::contains($name, '*')) {
+        if (\str_contains($name, '*')) {
             return fnmatch($name, $resolvedName, FNM_NOESCAPE);
         }
 

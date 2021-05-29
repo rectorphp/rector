@@ -51,7 +51,7 @@ final class VariableNaming
             $name = $fallbackName;
         }
 
-        if (Strings::contains($name, '\\')) {
+        if (\str_contains($name, '\\')) {
             $name = (string) Strings::after($name, '\\', - 1);
         }
 

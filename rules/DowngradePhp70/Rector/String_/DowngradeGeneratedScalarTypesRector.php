@@ -142,7 +142,7 @@ CODE_SAMPLE
         }
 
         foreach (self::FILES_TO_INCLUDE as $fileToInclude) {
-            if (Strings::endsWith($fileInfo->getRealPath(), $fileToInclude)) {
+            if (\str_ends_with($fileInfo->getRealPath(), $fileToInclude)) {
                 return true;
             }
         }

@@ -96,7 +96,7 @@ final class DoctrineRelationPropertyTypeInferer implements PropertyTypeInfererIn
             return new MixedType();
         }
 
-        if (Strings::endsWith($targetEntity, '::class')) {
+        if (\str_ends_with($targetEntity, '::class')) {
             $targetEntity = Strings::before($targetEntity, '::class');
         }
 

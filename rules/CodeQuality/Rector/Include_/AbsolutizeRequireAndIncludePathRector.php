@@ -76,17 +76,17 @@ CODE_SAMPLE
         $includeValue = $this->valueResolver->getValue($node->expr);
 
         // skip phar
-        if (Strings::startsWith($includeValue, 'phar://')) {
+        if (\str_starts_with($includeValue, 'phar://')) {
             return null;
         }
 
         // skip absolute paths
-        if (Strings::startsWith($includeValue, '/')) {
+        if (\str_starts_with($includeValue, '/')) {
             return null;
         }
 
         // add preslash to string
-        if (Strings::startsWith($includeValue, './')) {
+        if (\str_starts_with($includeValue, './')) {
             $node->expr->value = Strings::substring($includeValue, 1);
         } else {
             $node->expr->value = '/' . $includeValue;

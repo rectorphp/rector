@@ -124,9 +124,9 @@ CODE_SAMPLE
     {
         $this->variableRenamer->renameVariableInFunctionLike(
             $variableAndCallForeach->getFunctionLike(),
-            null,
             $variableAndCallForeach->getVariableName(),
-            $expectedName
+            $expectedName,
+            null
         );
     }
 }

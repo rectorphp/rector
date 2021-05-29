@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\CodingStyle\ClassNameImport\ClassNameImportSkipVoter;
 
-use Nette\Utils\Strings;
 use PhpParser\Node;
 use Rector\CodingStyle\ClassNameImport\AliasUsesResolver;
 use Rector\CodingStyle\Contract\ClassNameImport\ClassNameImportSkipVoterInterface;
@@ -34,7 +33,7 @@ final class AliasClassNameImportSkipVoter implements ClassNameImportSkipVoterInt
             $aliasedUseLowered = strtolower($aliasedUse);
 
             // its aliased, we cannot just rename it
-            if (Strings::endsWith($aliasedUseLowered, '\\' . $fullyQualifiedObjectType->getShortNameLowered())) {
+            if (\str_ends_with($aliasedUseLowered, '\\' . $fullyQualifiedObjectType->getShortNameLowered())) {
                 return true;
             }
         }

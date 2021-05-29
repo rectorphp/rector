@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\ValueObject\Type;
 
-use Nette\Utils\Strings;
 use PHPStan\PhpDocParser\Ast\NodeAttributes;
 use PHPStan\PhpDocParser\Ast\Type\CallableTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
+use Stringable;
 
-final class SpacingAwareCallableTypeNode extends CallableTypeNode
+final class SpacingAwareCallableTypeNode extends CallableTypeNode implements Stringable
 {
     use NodeAttributes;
 
@@ -28,7 +28,7 @@ final class SpacingAwareCallableTypeNode extends CallableTypeNode
         $parameterTypeString = $this->createParameterTypeString();
 
         $returnTypeAsString = (string) $returnType;
-        if (Strings::contains($returnTypeAsString, '|')) {
+        if (\str_contains($returnTypeAsString, '|')) {
             $returnTypeAsString = '(' . $returnTypeAsString . ')';
         }
 

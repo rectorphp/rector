@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\PhpSpecToPHPUnit\Rector\ClassMethod;
 
-use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -70,8 +69,8 @@ final class PhpSpecMethodToPHPUnitMethodRector extends AbstractPhpSpecToPHPUnitR
         $previousStmt = null;
         foreach ((array) $classMethod->stmts as $key => $stmt) {
             if ($previousStmt &&
-                Strings::contains($this->print($stmt), 'duringInstantiation') &&
-                Strings::contains($this->print($previousStmt), 'beConstructedThrough')
+                \str_contains($this->print($stmt), 'duringInstantiation') &&
+                \str_contains($this->print($previousStmt), 'beConstructedThrough')
             ) {
                 $classMethod->stmts[$key - 1] = $stmt;
                 $classMethod->stmts[$key] = $previousStmt;

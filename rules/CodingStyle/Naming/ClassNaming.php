@@ -85,7 +85,7 @@ final class ClassNaming
 
     public function replaceSuffix(string $content, string $oldSuffix, string $newSuffix): string
     {
-        if (! Strings::endsWith($content, $oldSuffix)) {
+        if (! \str_ends_with($content, $oldSuffix)) {
             return $content . $newSuffix;
         }
 

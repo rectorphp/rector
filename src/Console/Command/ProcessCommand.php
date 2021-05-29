@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Core\Console\Command;
 
-use Nette\Utils\Strings;
 use PHPStan\Analyser\NodeScopeResolver;
 use Rector\Caching\Detector\ChangedFilesDetector;
 use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
@@ -209,7 +208,7 @@ final class ProcessCommand extends Command
             $smartFileInfo = $file->getSmartFileInfo();
             $pathName = $smartFileInfo->getPathname();
 
-            if (Strings::endsWith($pathName, '.php')) {
+            if (\str_ends_with($pathName, '.php')) {
                 $filePaths[] = $pathName;
             }
         }

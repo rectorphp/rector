@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\TypeDeclaration\PhpDocParser;
 
-use Nette\Utils\Strings;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
@@ -143,7 +142,7 @@ final class NonInformativeReturnTagRemover
             return;
         }
 
-        if (! Strings::endsWith($nullabledReturnType->getClassName(), $nullabledReturnTagValueNode->name)) {
+        if (! \str_ends_with($nullabledReturnType->getClassName(), $nullabledReturnTagValueNode->name)) {
             return;
         }
 
@@ -239,6 +238,6 @@ final class NonInformativeReturnTagRemover
             return true;
         }
 
-        return Strings::endsWith($className, '\\' . $returnTagValueNodeType);
+        return \str_ends_with($className, '\\' . $returnTagValueNodeType);
     }
 }

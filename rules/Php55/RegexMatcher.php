@@ -46,7 +46,7 @@ final class RegexMatcher
 
             /** @var string $modifiers */
             $modifiers = Strings::after($pattern, $delimiter, -1);
-            if (! Strings::contains($modifiers, 'e')) {
+            if (! \str_contains($modifiers, 'e')) {
                 return null;
             }
 
@@ -80,7 +80,7 @@ final class RegexMatcher
             return null;
         }
 
-        if (! Strings::contains($matches['modifiers'], 'e')) {
+        if (! \str_contains($matches['modifiers'], 'e')) {
             return null;
         }
 

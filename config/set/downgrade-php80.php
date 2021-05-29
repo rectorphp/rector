@@ -15,6 +15,7 @@ use Rector\DowngradePhp80\Rector\FunctionLike\DowngradeMixedTypeDeclarationRecto
 use Rector\DowngradePhp80\Rector\FunctionLike\DowngradeUnionTypeDeclarationRector;
 use Rector\DowngradePhp80\Rector\NullsafeMethodCall\DowngradeNullsafeToTernaryOperatorRector;
 use Rector\DowngradePhp80\Rector\Property\DowngradeUnionTypeTypedPropertyRector;
+use Rector\Removing\Rector\Class_\RemoveInterfacesRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -22,6 +23,14 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters->set(Option::PHP_VERSION_FEATURES, PhpVersion::PHP_74);
 
     $services = $containerConfigurator->services();
+    $services->set(RemoveInterfacesRector::class)
+        ->call('configure', [[
+            RemoveInterfacesRector::INTERFACES_TO_REMOVE => [
+                // @see https://wiki.php.net/rfc/stringable
+                'Stringable',
+            ],
+        ]]);
+
     $services->set(DowngradeUnionTypeTypedPropertyRector::class);
     $services->set(DowngradeUnionTypeDeclarationRector::class);
     $services->set(DowngradeMixedTypeDeclarationRector::class);

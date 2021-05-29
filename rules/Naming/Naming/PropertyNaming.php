@@ -165,7 +165,7 @@ final class PropertyNaming
 
     private function resolveShortClassName(string $className): string
     {
-        if (Strings::contains($className, '\\')) {
+        if (\str_contains($className, '\\')) {
             return (string) Strings::after($className, '\\', -1);
         }
 
@@ -175,7 +175,7 @@ final class PropertyNaming
     private function removePrefixesAndSuffixes(string $shortClassName): string
     {
         // is SomeInterface
-        if (Strings::endsWith($shortClassName, self::INTERFACE)) {
+        if (\str_ends_with($shortClassName, self::INTERFACE)) {
             $shortClassName = Strings::substring($shortClassName, 0, -strlen(self::INTERFACE));
         }
 
@@ -185,7 +185,7 @@ final class PropertyNaming
         }
 
         // is AbstractClass
-        if (Strings::startsWith($shortClassName, 'Abstract')) {
+        if (\str_starts_with($shortClassName, 'Abstract')) {
             $shortClassName = Strings::substring($shortClassName, strlen('Abstract'));
         }
 
@@ -232,13 +232,13 @@ final class PropertyNaming
 
     private function fqnToShortName(string $fqn): string
     {
-        if (! Strings::contains($fqn, '\\')) {
+        if (! \str_contains($fqn, '\\')) {
             return $fqn;
         }
 
         /** @var string $lastNamePart */
         $lastNamePart = Strings::after($fqn, '\\', - 1);
-        if (Strings::endsWith($lastNamePart, self::INTERFACE)) {
+        if (\str_ends_with($lastNamePart, self::INTERFACE)) {
             return Strings::substring($lastNamePart, 0, - strlen(self::INTERFACE));
         }
 
@@ -257,7 +257,7 @@ final class PropertyNaming
             return Strings::substring($shortName, 1);
         }
 
-        if (Strings::endsWith($shortName, self::INTERFACE)) {
+        if (\str_ends_with($shortName, self::INTERFACE)) {
             return Strings::substring($shortName, -strlen(self::INTERFACE));
         }
 
@@ -306,7 +306,7 @@ final class PropertyNaming
             return false;
         }
 
-        if (! Strings::startsWith($shortClassName, 'I')) {
+        if (! \str_starts_with($shortClassName, 'I')) {
             return false;
         }
         if (! ctype_upper($shortClassName[1])) {

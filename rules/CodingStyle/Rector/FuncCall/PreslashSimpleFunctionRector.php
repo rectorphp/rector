@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\CodingStyle\Rector\FuncCall;
 
-use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name\FullyQualified;
@@ -71,7 +70,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (Strings::contains($functionName, '\\')) {
+        if (\str_contains($functionName, '\\')) {
             return null;
         }
 

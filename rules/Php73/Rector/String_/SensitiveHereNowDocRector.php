@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Php73\Rector\String_;
 
-use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\Rector\AbstractRector;
@@ -72,7 +71,7 @@ CODE_SAMPLE
         /** @var string $docLabel */
         $docLabel = $node->getAttribute(self::ATTRIBUTE_DOC_LABEL);
 
-        if (! Strings::contains($node->value, $docLabel)) {
+        if (! \str_contains($node->value, $docLabel)) {
             return null;
         }
 
@@ -90,7 +89,7 @@ CODE_SAMPLE
         $docLabelCounterTemplate = $docLabel . '_%d';
 
         $i = 0;
-        while (Strings::contains($value, $docLabel)) {
+        while (\str_contains($value, $docLabel)) {
             $docLabel = sprintf($docLabelCounterTemplate, ++$i);
         }
 

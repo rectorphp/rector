@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\StaticTypeMapper\PhpParser;
 
-use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Name\FullyQualified;
 use PHPStan\Type\Type;
@@ -50,6 +49,6 @@ final class FullyQualifiedNodeMapper implements PhpParserNodeMapperInterface
             return false;
         }
 
-        return ! Strings::endsWith($fullyQualifiedName, '\\' . $originalName);
+        return ! \str_ends_with($fullyQualifiedName, '\\' . $originalName);
     }
 }
