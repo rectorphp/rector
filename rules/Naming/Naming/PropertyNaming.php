@@ -161,7 +161,7 @@ final class PropertyNaming
     }
     private function resolveShortClassName(string $className) : string
     {
-        if (\RectorPrefix20210529\Nette\Utils\Strings::contains($className, '\\')) {
+        if (\strpos($className, '\\') !== \false) {
             return (string) \RectorPrefix20210529\Nette\Utils\Strings::after($className, '\\', -1);
         }
         return $className;
@@ -169,7 +169,7 @@ final class PropertyNaming
     private function removePrefixesAndSuffixes(string $shortClassName) : string
     {
         // is SomeInterface
-        if (\RectorPrefix20210529\Nette\Utils\Strings::endsWith($shortClassName, self::INTERFACE)) {
+        if (\str_ends_with($shortClassName, self::INTERFACE)) {
             $shortClassName = \RectorPrefix20210529\Nette\Utils\Strings::substring($shortClassName, 0, -\strlen(self::INTERFACE));
         }
         // is ISomeClass
@@ -177,7 +177,7 @@ final class PropertyNaming
             $shortClassName = \RectorPrefix20210529\Nette\Utils\Strings::substring($shortClassName, 1);
         }
         // is AbstractClass
-        if (\RectorPrefix20210529\Nette\Utils\Strings::startsWith($shortClassName, 'Abstract')) {
+        if (\str_starts_with($shortClassName, 'Abstract')) {
             $shortClassName = \RectorPrefix20210529\Nette\Utils\Strings::substring($shortClassName, \strlen('Abstract'));
         }
         return $shortClassName;
@@ -215,12 +215,12 @@ final class PropertyNaming
     }
     private function fqnToShortName(string $fqn) : string
     {
-        if (!\RectorPrefix20210529\Nette\Utils\Strings::contains($fqn, '\\')) {
+        if (\strpos($fqn, '\\') === \false) {
             return $fqn;
         }
         /** @var string $lastNamePart */
         $lastNamePart = \RectorPrefix20210529\Nette\Utils\Strings::after($fqn, '\\', -1);
-        if (\RectorPrefix20210529\Nette\Utils\Strings::endsWith($lastNamePart, self::INTERFACE)) {
+        if (\str_ends_with($lastNamePart, self::INTERFACE)) {
             return \RectorPrefix20210529\Nette\Utils\Strings::substring($lastNamePart, 0, -\strlen(self::INTERFACE));
         }
         return $lastNamePart;
@@ -235,7 +235,7 @@ final class PropertyNaming
         if (\RectorPrefix20210529\Nette\Utils\Strings::match($shortName, self::I_PREFIX_REGEX)) {
             return \RectorPrefix20210529\Nette\Utils\Strings::substring($shortName, 1);
         }
-        if (\RectorPrefix20210529\Nette\Utils\Strings::endsWith($shortName, self::INTERFACE)) {
+        if (\str_ends_with($shortName, self::INTERFACE)) {
             return \RectorPrefix20210529\Nette\Utils\Strings::substring($shortName, -\strlen(self::INTERFACE));
         }
         return $shortName;
@@ -270,7 +270,7 @@ final class PropertyNaming
         if (\strlen($shortClassName) <= 3) {
             return \false;
         }
-        if (!\RectorPrefix20210529\Nette\Utils\Strings::startsWith($shortClassName, 'I')) {
+        if (!\str_starts_with($shortClassName, 'I')) {
             return \false;
         }
         if (!\ctype_upper($shortClassName[1])) {

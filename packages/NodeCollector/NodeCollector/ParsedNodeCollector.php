@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\NodeCollector\NodeCollector;
 
-use RectorPrefix20210529\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ClassConstFetch;
@@ -115,7 +114,7 @@ final class ParsedNodeCollector
     public function findByShortName(string $shortName) : ?\PhpParser\Node\Stmt\Class_
     {
         foreach ($this->classes as $className => $classNode) {
-            if (\RectorPrefix20210529\Nette\Utils\Strings::endsWith($className, '\\' . $shortName)) {
+            if (\str_ends_with($className, '\\' . $shortName)) {
                 return $classNode;
             }
         }
@@ -123,7 +122,7 @@ final class ParsedNodeCollector
     }
     public function findClassConstant(string $className, string $constantName) : ?\PhpParser\Node\Stmt\ClassConst
     {
-        if (\RectorPrefix20210529\Nette\Utils\Strings::contains($constantName, '\\')) {
+        if (\strpos($constantName, '\\') !== \false) {
             throw new \Rector\Core\Exception\ShouldNotHappenException(\sprintf('Switched arguments in "%s"', __METHOD__));
         }
         return $this->constantsByType[$className][$constantName] ?? null;

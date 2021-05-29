@@ -230,7 +230,7 @@ final class PhpDocInfoPrinter
             --$from;
         }
         // skip extra empty lines above if this is the last one
-        if ($shouldSkipEmptyLinesAbove && \RectorPrefix20210529\Nette\Utils\Strings::contains($this->tokens[$from][0], \PHP_EOL) && \RectorPrefix20210529\Nette\Utils\Strings::contains($this->tokens[$from + 1][0], \PHP_EOL)) {
+        if ($shouldSkipEmptyLinesAbove && \strpos($this->tokens[$from][0], \PHP_EOL) !== \false && \strpos($this->tokens[$from + 1][0], \PHP_EOL) !== \false) {
             ++$from;
         }
         return $this->appendToOutput($output, $from, $to, $positionJumpSet);

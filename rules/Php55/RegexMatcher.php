@@ -42,7 +42,7 @@ final class RegexMatcher
             }
             /** @var string $modifiers */
             $modifiers = \RectorPrefix20210529\Nette\Utils\Strings::after($pattern, $delimiter, -1);
-            if (!\RectorPrefix20210529\Nette\Utils\Strings::contains($modifiers, 'e')) {
+            if (\strpos($modifiers, 'e') === \false) {
                 return null;
             }
             $patternWithoutE = $this->createPatternWithoutE($pattern, $delimiter, $modifiers);
@@ -68,7 +68,7 @@ final class RegexMatcher
         if (!isset($matches['modifiers'])) {
             return null;
         }
-        if (!\RectorPrefix20210529\Nette\Utils\Strings::contains($matches['modifiers'], 'e')) {
+        if (\strpos($matches['modifiers'], 'e') === \false) {
             return null;
         }
         // replace last "e" in the code

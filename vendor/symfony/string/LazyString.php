@@ -15,7 +15,7 @@ namespace RectorPrefix20210529\Symfony\Component\String;
  *
  * @author Nicolas Grekas <p@tchwork.com>
  */
-class LazyString implements \Stringable, \JsonSerializable
+class LazyString implements \JsonSerializable
 {
     private $value;
     /**

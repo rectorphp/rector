@@ -25,7 +25,7 @@ use RectorPrefix20210529\Symfony\Component\String\Exception\RuntimeException;
  *
  * @throws ExceptionInterface
  */
-abstract class AbstractString implements \Stringable, \JsonSerializable
+abstract class AbstractString implements \JsonSerializable
 {
     public const PREG_PATTERN_ORDER = \PREG_PATTERN_ORDER;
     public const PREG_SET_ORDER = \PREG_SET_ORDER;

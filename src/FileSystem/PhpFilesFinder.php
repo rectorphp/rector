@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\Core\FileSystem;
 
-use RectorPrefix20210529\Nette\Utils\Strings;
 use Rector\Caching\Application\CachedFileInfoFilterAndReporter;
 use Rector\Core\Configuration\Configuration;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -36,7 +35,7 @@ final class PhpFilesFinder
         $phpFileInfos = $this->filesFinder->findInDirectoriesAndFiles($paths, $this->configuration->getFileExtensions());
         // filter out non-PHP php files, e.g. blade templates in Laravel
         $phpFileInfos = \array_filter($phpFileInfos, function (\Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo) : bool {
-            return !\RectorPrefix20210529\Nette\Utils\Strings::endsWith($smartFileInfo->getPathname(), '.blade.php');
+            return !\str_ends_with($smartFileInfo->getPathname(), '.blade.php');
         });
         return $this->cachedFileInfoFilterAndReporter->filterFileInfos($phpFileInfos);
     }

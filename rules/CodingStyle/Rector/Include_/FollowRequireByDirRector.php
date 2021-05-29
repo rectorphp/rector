@@ -64,7 +64,7 @@ CODE_SAMPLE
     }
     private function isRefactorableStringPath(\PhpParser\Node\Scalar\String_ $string) : bool
     {
-        return !\RectorPrefix20210529\Nette\Utils\Strings::startsWith($string->value, 'phar://');
+        return !\str_starts_with($string->value, 'phar://');
     }
     private function prefixWithDir(\PhpParser\Node\Scalar\String_ $string) : \PhpParser\Node\Expr\BinaryOp\Concat
     {
@@ -77,14 +77,14 @@ CODE_SAMPLE
      */
     private function removeExtraDotSlash(\PhpParser\Node\Scalar\String_ $string) : void
     {
-        if (!\RectorPrefix20210529\Nette\Utils\Strings::startsWith($string->value, './')) {
+        if (!\str_starts_with($string->value, './')) {
             return;
         }
         $string->value = \RectorPrefix20210529\Nette\Utils\Strings::replace($string->value, '#^\\.\\/#', '/');
     }
     private function prependSlashIfMissing(\PhpParser\Node\Scalar\String_ $string) : void
     {
-        if (\RectorPrefix20210529\Nette\Utils\Strings::startsWith($string->value, '/')) {
+        if (\str_starts_with($string->value, '/')) {
             return;
         }
         $string->value = '/' . $string->value;

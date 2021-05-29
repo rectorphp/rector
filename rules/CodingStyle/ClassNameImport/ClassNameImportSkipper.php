@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\CodingStyle\ClassNameImport;
 
-use RectorPrefix20210529\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Use_;
@@ -35,7 +34,7 @@ final class ClassNameImportSkipper
     public function isShortNameInUseStatement(\PhpParser\Node\Name $name) : bool
     {
         $longName = $name->toString();
-        if (\RectorPrefix20210529\Nette\Utils\Strings::contains($longName, '\\')) {
+        if (\strpos($longName, '\\') !== \false) {
             return \false;
         }
         return $this->isFoundInUse($name);

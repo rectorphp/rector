@@ -10,7 +10,7 @@ use Stringable;
 /**
  * @see \Rector\Tests\FileFormatter\ValueObject\NewLineTest
  */
-final class NewLine implements \Stringable
+final class NewLine
 {
     /**
      * @var string

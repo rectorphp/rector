@@ -8,6 +8,7 @@ use Rector\FileFormatter\Exception\InvalidIndentSizeException;
 use Rector\FileFormatter\Exception\InvalidIndentStringException;
 use Rector\FileFormatter\Exception\InvalidIndentStyleException;
 use Rector\FileFormatter\Exception\ParseIndentException;
+use Stringable;
 /**
  * @see \Rector\Tests\FileFormatter\ValueObject\IndentTest
  */
@@ -115,6 +116,6 @@ final class Indent
     }
     private function startsWithSpace() : bool
     {
-        return \RectorPrefix20210529\Nette\Utils\Strings::startsWith($this->string, ' ');
+        return \str_starts_with($this->string, ' ');
     }
 }

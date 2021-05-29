@@ -138,7 +138,7 @@ final class ShortNameResolver
                 return;
             }
             // already short
-            if (\RectorPrefix20210529\Nette\Utils\Strings::contains($originalName->toString(), '\\')) {
+            if (\strpos($originalName->toString(), '\\') !== \false) {
                 return;
             }
             $fullyQualifiedName = $this->nodeNameResolver->getName($node);
@@ -190,7 +190,7 @@ final class ShortNameResolver
         if (!$typeNode instanceof \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode) {
             return null;
         }
-        if (\RectorPrefix20210529\Nette\Utils\Strings::contains($typeNode->name, '\\')) {
+        if (\strpos($typeNode->name, '\\') !== \false) {
             return null;
         }
         return $typeNode->name;

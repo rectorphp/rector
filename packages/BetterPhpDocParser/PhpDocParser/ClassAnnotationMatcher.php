@@ -84,7 +84,7 @@ final class ClassAnnotationMatcher
             return $useUse->name->toString();
         }
         $unaliasedShortClass = \RectorPrefix20210529\Nette\Utils\Strings::substring($tag, \RectorPrefix20210529\Nette\Utils\Strings::length($useUse->alias->toString()));
-        if (\RectorPrefix20210529\Nette\Utils\Strings::startsWith($unaliasedShortClass, '\\')) {
+        if (\str_starts_with($unaliasedShortClass, '\\')) {
             return $useUse->name . $unaliasedShortClass;
         }
         return $useUse->name . '\\' . $unaliasedShortClass;

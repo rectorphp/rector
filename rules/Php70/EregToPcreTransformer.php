@@ -68,7 +68,7 @@ final class EregToPcreTransformer
     }
     public function transform(string $ereg, bool $isCaseInsensitive) : string
     {
-        if (!\RectorPrefix20210529\Nette\Utils\Strings::contains($ereg, $this->pcreDelimiter)) {
+        if (\strpos($ereg, $this->pcreDelimiter) === \false) {
             return $this->ere2pcre($ereg, $isCaseInsensitive);
         }
         // fallback
@@ -132,7 +132,7 @@ final class EregToPcreTransformer
             } elseif ($char === '*' || $char === '+' || $char === '?') {
                 throw new \Rector\Php70\Exception\InvalidEregException('unescaped metacharacter "' . $char . '"');
             } elseif ($char === '{') {
-                if ($i + 1 < $l && \RectorPrefix20210529\Nette\Utils\Strings::contains('0123456789', $content[$i + 1])) {
+                if ($i + 1 < $l && \strpos('0123456789', $content[$i + 1]) !== \false) {
                     $r[$rr] .= '\\{';
                 } else {
                     throw new \Rector\Php70\Exception\InvalidEregException('unescaped metacharacter "' . $char . '"');
@@ -205,7 +205,7 @@ final class EregToPcreTransformer
     private function processSquareBracket(string $s, int $i, int $l, string $cls, bool $start) : array
     {
         do {
-            if ($s[$i] === '[' && $i + 1 < $l && \RectorPrefix20210529\Nette\Utils\Strings::contains('.=:', $s[$i + 1])) {
+            if ($s[$i] === '[' && $i + 1 < $l && \strpos('.=:', $s[$i + 1]) !== \false) {
                 /** @var string $cls */
                 [$cls, $i] = $this->processCharacterClass($s, $i, $cls);
             } else {
@@ -237,7 +237,7 @@ final class EregToPcreTransformer
         if ($content === "\0") {
             throw new \Rector\Php70\Exception\InvalidEregException('a literal null byte in the regex');
         }
-        if (\RectorPrefix20210529\Nette\Utils\Strings::contains('\\^$.[]|()?*+{}-/', $content)) {
+        if (\strpos('\\^$.[]|()?*+{}-/', $content) !== \false) {
             return '\\' . $content;
         }
         return $content;

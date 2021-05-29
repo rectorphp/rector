@@ -27,7 +27,7 @@ final class ParamRenamer
         // 1. rename param
         $paramRename->getVariable()->name = $paramRename->getExpectedName();
         // 2. rename param in the rest of the method
-        $this->variableRenamer->renameVariableInFunctionLike($paramRename->getFunctionLike(), null, $paramRename->getCurrentName(), $paramRename->getExpectedName());
+        $this->variableRenamer->renameVariableInFunctionLike($paramRename->getFunctionLike(), $paramRename->getCurrentName(), $paramRename->getExpectedName(), null);
         // 3. rename @param variable in docblock too
         $this->propertyDocBlockManipulator->renameParameterNameInDocBlock($paramRename);
     }

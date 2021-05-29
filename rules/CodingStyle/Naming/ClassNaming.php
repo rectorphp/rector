@@ -69,7 +69,7 @@ final class ClassNaming
     }
     public function replaceSuffix(string $content, string $oldSuffix, string $newSuffix) : string
     {
-        if (!\RectorPrefix20210529\Nette\Utils\Strings::endsWith($content, $oldSuffix)) {
+        if (!\str_ends_with($content, $oldSuffix)) {
             return $content . $newSuffix;
         }
         $contentWithoutOldSuffix = \RectorPrefix20210529\Nette\Utils\Strings::substring($content, 0, -\RectorPrefix20210529\Nette\Utils\Strings::length($oldSuffix));

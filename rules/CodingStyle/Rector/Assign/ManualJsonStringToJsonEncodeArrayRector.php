@@ -142,7 +142,7 @@ CODE_SAMPLE
         }
         try {
             return (bool) \RectorPrefix20210529\Nette\Utils\Json::decode($stringValue, \RectorPrefix20210529\Nette\Utils\Json::FORCE_ARRAY);
-        } catch (\RectorPrefix20210529\Nette\Utils\JsonException $jsonException) {
+        } catch (\RectorPrefix20210529\Nette\Utils\JsonException $exception) {
             return \false;
         }
     }

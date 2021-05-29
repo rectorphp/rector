@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\CodingStyle\Node;
 
-use RectorPrefix20210529\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
@@ -146,7 +145,7 @@ final class NameImporter
         $parentNode = $name->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
         $fullName = $name->toString();
         $autoImportNames = $this->parameterProvider->provideParameter(\Rector\Core\Configuration\Option::AUTO_IMPORT_NAMES);
-        if ($autoImportNames && !$parentNode instanceof \PhpParser\Node && !\RectorPrefix20210529\Nette\Utils\Strings::contains($fullName, '\\') && $this->reflectionProvider->hasFunction(new \PhpParser\Node\Name($fullName), null)) {
+        if ($autoImportNames && !$parentNode instanceof \PhpParser\Node && \strpos($fullName, '\\') === \false && $this->reflectionProvider->hasFunction(new \PhpParser\Node\Name($fullName), null)) {
             return \true;
         }
         if ($parentNode instanceof \PhpParser\Node\Expr\ConstFetch) {

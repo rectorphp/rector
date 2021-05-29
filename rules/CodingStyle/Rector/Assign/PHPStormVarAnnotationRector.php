@@ -72,7 +72,7 @@ CODE_SAMPLE
         if ($docContent === '') {
             return null;
         }
-        if (!\RectorPrefix20210529\Nette\Utils\Strings::contains($docContent, '@var')) {
+        if (\strpos($docContent, '@var') === \false) {
             return null;
         }
         if (!$node->var instanceof \PhpParser\Node\Expr\Variable) {
@@ -122,7 +122,7 @@ CODE_SAMPLE
         $docContent = $this->getDocContent($node);
         // normalize content
         // starts with "/*", instead of "/**"
-        if (\RectorPrefix20210529\Nette\Utils\Strings::startsWith($docContent, '/* ')) {
+        if (\str_starts_with($docContent, '/* ')) {
             $docContent = \RectorPrefix20210529\Nette\Utils\Strings::replace($docContent, self::SINGLE_ASTERISK_COMMENT_START_REGEX, '/** ');
         }
         // $value is first, instead of type is first

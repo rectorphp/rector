@@ -122,6 +122,6 @@ final class UseImportsAdder
         if (!$afterCurrentNamespace) {
             return \false;
         }
-        return !\RectorPrefix20210529\Nette\Utils\Strings::contains($afterCurrentNamespace, '\\');
+        return \strpos($afterCurrentNamespace, '\\') === \false;
     }
 }

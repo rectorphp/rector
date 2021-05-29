@@ -96,7 +96,7 @@ CODE_SAMPLE
             // 1. rename assigned variable
             $assignOfNew->var = new \PhpParser\Node\Expr\Variable($expectedName);
             // 2. rename variable in the
-            $this->variableRenamer->renameVariableInFunctionLike($node, $assignOfNew, $currentName, $expectedName);
+            $this->variableRenamer->renameVariableInFunctionLike($node, $currentName, $expectedName, $assignOfNew);
         }
         if (!$hasChanged) {
             return null;

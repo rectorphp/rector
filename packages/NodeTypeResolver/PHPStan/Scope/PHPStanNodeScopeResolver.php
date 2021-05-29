@@ -167,7 +167,7 @@ final class PHPStanNodeScopeResolver
             foreach ($dependentFiles as $dependentFile) {
                 $this->dependentFiles[] = $dependentFile;
             }
-        } catch (\PHPStan\AnalysedCodeException $analysedCodeException) {
+        } catch (\PHPStan\AnalysedCodeException $exception) {
             // @ignoreException
         }
     }

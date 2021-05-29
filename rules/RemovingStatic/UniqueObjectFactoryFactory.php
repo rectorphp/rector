@@ -84,7 +84,7 @@ final class UniqueObjectFactoryFactory
     }
     private function resolveClassShortName(string $name) : string
     {
-        if (\RectorPrefix20210529\Nette\Utils\Strings::contains($name, '\\')) {
+        if (\strpos($name, '\\') !== \false) {
             return (string) \RectorPrefix20210529\Nette\Utils\Strings::after($name, '\\', -1);
         }
         return $name;

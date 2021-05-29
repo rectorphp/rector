@@ -94,7 +94,7 @@ CODE_SAMPLE
             }
             return $this->nodeComparator->areNodesEqual($node, $assignVariable);
         });
-        if ($this->shouldSkip($nextForeach, $variablePrevious, $node, $assignVariable)) {
+        if ($this->shouldSkip($nextForeach, $node, $assignVariable, $variablePrevious)) {
             return null;
         }
         /** @var Assign $assignPreviousVariable */
@@ -121,7 +121,7 @@ CODE_SAMPLE
         $this->removeNode($assignPreviousVariable);
         return $foreach;
     }
-    private function shouldSkip(\PhpParser\Node\Stmt\Return_ $return, ?\PhpParser\Node\Expr $expr = null, \PhpParser\Node\Stmt\Foreach_ $foreach, \PhpParser\Node\Expr $assignVariable) : bool
+    private function shouldSkip(\PhpParser\Node\Stmt\Return_ $return, \PhpParser\Node\Stmt\Foreach_ $foreach, \PhpParser\Node\Expr $assignVariable, ?\PhpParser\Node\Expr $expr = null) : bool
     {
         if (!$expr instanceof \PhpParser\Node\Expr) {
             return \true;

@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\BetterPhpDocParser\ValueObject\PhpDoc;
 
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
+use Stringable;
 final class VariadicAwareParamTagValueNode extends \PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode
 {
     public function __toString() : string

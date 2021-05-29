@@ -81,7 +81,7 @@ final class DoctrineRelationPropertyTypeInferer implements \Rector\TypeDeclarati
         if ($targetEntity === null) {
             return new \PHPStan\Type\MixedType();
         }
-        if (\RectorPrefix20210529\Nette\Utils\Strings::endsWith($targetEntity, '::class')) {
+        if (\str_ends_with($targetEntity, '::class')) {
             $targetEntity = \RectorPrefix20210529\Nette\Utils\Strings::before($targetEntity, '::class');
         }
         // resolve to FQN

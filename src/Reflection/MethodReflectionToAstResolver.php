@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\Core\Reflection;
 
-use RectorPrefix20210529\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Reflection\Php\PhpMethodReflection;
@@ -43,7 +42,7 @@ final class MethodReflectionToAstResolver
             return null;
         }
         // skip vendor
-        if (\RectorPrefix20210529\Nette\Utils\Strings::contains($fileName, '#\\/vendor\\/#')) {
+        if (\strpos($fileName, '#\\/vendor\\/#') !== \false) {
             return null;
         }
         $methodName = $phpMethodReflection->getName();

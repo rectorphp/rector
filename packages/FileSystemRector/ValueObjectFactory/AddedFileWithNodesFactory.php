@@ -60,7 +60,7 @@ final class AddedFileWithNodesFactory
         }
         // is already in the right group
         $currentNamespaceName = $currentNamespace->name->toString();
-        if (\RectorPrefix20210529\Nette\Utils\Strings::endsWith($currentNamespaceName, '\\' . $desiredGroupName)) {
+        if (\str_ends_with($currentNamespaceName, '\\' . $desiredGroupName)) {
             return null;
         }
         $oldClassName = $currentNamespaceName . '\\' . $this->fileInfoDeletionAnalyzer->clearNameFromTestingPrefix($oldFileInfo->getBasenameWithoutSuffix());

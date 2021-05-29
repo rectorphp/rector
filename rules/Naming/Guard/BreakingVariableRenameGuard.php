@@ -73,7 +73,8 @@ final class BreakingVariableRenameGuard
     public function shouldSkipVariable(string $currentName, string $expectedName, \PhpParser\Node\FunctionLike $functionLike, \PhpParser\Node\Expr\Variable $variable) : bool
     {
         // is the suffix? → also accepted
-        if (\RectorPrefix20210529\Nette\Utils\Strings::endsWith($currentName, \ucfirst($expectedName))) {
+        $expectedNameCamelCase = \ucfirst($expectedName);
+        if (\str_ends_with($currentName, $expectedNameCamelCase)) {
             return \true;
         }
         if ($this->conflictingNameResolver->checkNameIsInFunctionLike($expectedName, $functionLike)) {
@@ -99,7 +100,8 @@ final class BreakingVariableRenameGuard
     public function shouldSkipParam(string $currentName, string $expectedName, \PhpParser\Node\Stmt\ClassMethod $classMethod, \PhpParser\Node\Param $param) : bool
     {
         // is the suffix? → also accepted
-        if (\RectorPrefix20210529\Nette\Utils\Strings::endsWith($currentName, \ucfirst($expectedName))) {
+        $expectedNameCamelCase = \ucfirst($expectedName);
+        if (\str_ends_with($currentName, $expectedNameCamelCase)) {
             return \true;
         }
         $conflictingNames = $this->conflictingNameResolver->resolveConflictingVariableNamesForParam($classMethod);

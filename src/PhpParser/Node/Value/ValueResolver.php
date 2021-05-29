@@ -85,7 +85,7 @@ final class ValueResolver
         try {
             $constExprEvaluator = $this->getConstExprEvaluator();
             $value = $constExprEvaluator->evaluateDirectly($expr);
-        } catch (\PhpParser\ConstExprEvaluationException $constExprEvaluationException) {
+        } catch (\PhpParser\ConstExprEvaluationException $exception) {
             $value = null;
         }
         if ($value !== null) {

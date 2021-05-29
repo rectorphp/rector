@@ -192,7 +192,7 @@ final class NodeNameResolver
             return (bool) \RectorPrefix20210529\Nette\Utils\Strings::match($resolvedName, $name);
         }
         // is probably fnmatch
-        if (\RectorPrefix20210529\Nette\Utils\Strings::contains($name, '*')) {
+        if (\strpos($name, '*') !== \false) {
             return \fnmatch($name, $resolvedName, \FNM_NOESCAPE);
         }
         // special case

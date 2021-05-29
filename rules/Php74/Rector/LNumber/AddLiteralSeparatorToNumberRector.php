@@ -90,7 +90,7 @@ CODE_SAMPLE
         if ($this->shouldSkip($node, $numericValueAsString)) {
             return null;
         }
-        if (\RectorPrefix20210529\Nette\Utils\Strings::contains($numericValueAsString, '.')) {
+        if (\strpos($numericValueAsString, '.') !== \false) {
             [$mainPart, $decimalPart] = \explode('.', $numericValueAsString);
             $chunks = $this->strSplitNegative($mainPart, self::GROUP_SIZE);
             $literalSeparatedNumber = \implode('_', $chunks) . '.' . $decimalPart;
@@ -114,7 +114,7 @@ CODE_SAMPLE
             return \true;
         }
         // already separated
-        if (\RectorPrefix20210529\Nette\Utils\Strings::contains($numericValueAsString, '_')) {
+        if (\strpos($numericValueAsString, '_') !== \false) {
             return \true;
         }
         $kind = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::KIND);

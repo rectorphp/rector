@@ -24,7 +24,7 @@ final class FullyQualifiedObjectType extends \PHPStan\Type\ObjectType
     }
     public function getShortName() : string
     {
-        if (!\RectorPrefix20210529\Nette\Utils\Strings::contains($this->getClassName(), '\\')) {
+        if (\strpos($this->getClassName(), '\\') === \false) {
             return $this->getClassName();
         }
         return (string) \RectorPrefix20210529\Nette\Utils\Strings::after($this->getClassName(), '\\', -1);

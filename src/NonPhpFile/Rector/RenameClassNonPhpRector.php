@@ -95,7 +95,7 @@ CODE_SAMPLE
     {
         foreach ($classRenames as $oldClass => $newClass) {
             // to prevent no slash override
-            if (!\RectorPrefix20210529\Nette\Utils\Strings::contains($oldClass, '\\')) {
+            if (\strpos($oldClass, '\\') === \false) {
                 continue;
             }
             $doubleSlashOldClass = \str_replace('\\', '\\\\', $oldClass);
@@ -113,7 +113,7 @@ CODE_SAMPLE
     }
     private function createOldClassRegex(string $oldClass) : string
     {
-        if (!\RectorPrefix20210529\Nette\Utils\Strings::contains($oldClass, '\\')) {
+        if (\strpos($oldClass, '\\') === \false) {
             return self::STANDALONE_CLASS_PREFIX_REGEX . \preg_quote($oldClass, '#') . self::STANDALONE_CLASS_SUFFIX_REGEX;
         }
         return '#' . \preg_quote($oldClass, '#') . '#';

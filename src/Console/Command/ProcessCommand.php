@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\Core\Console\Command;
 
-use RectorPrefix20210529\Nette\Utils\Strings;
 use PHPStan\Analyser\NodeScopeResolver;
 use Rector\Caching\Detector\ChangedFilesDetector;
 use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
@@ -181,7 +180,7 @@ final class ProcessCommand extends \RectorPrefix20210529\Symfony\Component\Conso
         foreach ($files as $file) {
             $smartFileInfo = $file->getSmartFileInfo();
             $pathName = $smartFileInfo->getPathname();
-            if (\RectorPrefix20210529\Nette\Utils\Strings::endsWith($pathName, '.php')) {
+            if (\str_ends_with($pathName, '.php')) {
                 $filePaths[] = $pathName;
             }
         }

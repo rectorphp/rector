@@ -69,7 +69,7 @@ final class UnderscoreRenamePhpDocNodeVisitor extends \RectorPrefix20210529\Symp
         if (!$staticType instanceof \PHPStan\Type\ObjectType) {
             return \true;
         }
-        if (!\RectorPrefix20210529\Nette\Utils\Strings::startsWith($staticType->getClassName(), $pseudoNamespaceToNamespace->getNamespacePrefix())) {
+        if (!\str_starts_with($staticType->getClassName(), $pseudoNamespaceToNamespace->getNamespacePrefix())) {
             return \true;
         }
         // excluded?

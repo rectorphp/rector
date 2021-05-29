@@ -5,6 +5,7 @@ namespace Rector\BetterPhpDocParser\ValueObject\PhpDoc;
 
 use PHPStan\PhpDocParser\Ast\PhpDoc\TemplateTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
+use Stringable;
 final class SpacingAwareTemplateTagValueNode extends \PHPStan\PhpDocParser\Ast\PhpDoc\TemplateTagValueNode
 {
     /**

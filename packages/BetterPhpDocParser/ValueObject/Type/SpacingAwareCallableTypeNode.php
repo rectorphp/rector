@@ -3,11 +3,11 @@
 declare (strict_types=1);
 namespace Rector\BetterPhpDocParser\ValueObject\Type;
 
-use RectorPrefix20210529\Nette\Utils\Strings;
 use PHPStan\PhpDocParser\Ast\NodeAttributes;
 use PHPStan\PhpDocParser\Ast\Type\CallableTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
+use Stringable;
 final class SpacingAwareCallableTypeNode extends \PHPStan\PhpDocParser\Ast\Type\CallableTypeNode
 {
     use NodeAttributes;
@@ -22,7 +22,7 @@ final class SpacingAwareCallableTypeNode extends \PHPStan\PhpDocParser\Ast\Type\
         $returnType = $this->returnType;
         $parameterTypeString = $this->createParameterTypeString();
         $returnTypeAsString = (string) $returnType;
-        if (\RectorPrefix20210529\Nette\Utils\Strings::contains($returnTypeAsString, '|')) {
+        if (\strpos($returnTypeAsString, '|') !== \false) {
             $returnTypeAsString = '(' . $returnTypeAsString . ')';
         }
         $parameterTypeString = $this->normalizeParameterType($parameterTypeString, $returnTypeAsString);

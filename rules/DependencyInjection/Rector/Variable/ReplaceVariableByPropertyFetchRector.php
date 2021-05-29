@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\DependencyInjection\Rector\Variable;
 
-use RectorPrefix20210529\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -102,7 +101,7 @@ CODE_SAMPLE
         if ($className === null) {
             return \false;
         }
-        if (!\RectorPrefix20210529\Nette\Utils\Strings::endsWith($className, 'Controller')) {
+        if (!\str_ends_with($className, 'Controller')) {
             return \false;
         }
         $classMethod = $variable->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::METHOD_NODE);

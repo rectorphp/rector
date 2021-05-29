@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\DowngradePhp80\Rector\Class_;
 
-use RectorPrefix20210529\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Attribute;
 use PhpParser\Node\Stmt\Class_;
@@ -89,7 +88,7 @@ CODE_SAMPLE
                     continue;
                 }
                 unset($attrGroup->attrs[$key]);
-                if (!\RectorPrefix20210529\Nette\Utils\Strings::contains($attributeToAnnotation->getTag(), '\\')) {
+                if (\strpos($attributeToAnnotation->getTag(), '\\') === \false) {
                     $phpDocInfo->addPhpDocTagNode(new \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode('@' . $attributeToAnnotation->getTag(), new \PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode('')));
                 } else {
                     $doctrineAnnotation = $this->doctrineAnnotationFactory->createFromAttribute($attribute, $attributeToAnnotation->getTag());

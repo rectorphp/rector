@@ -448,7 +448,7 @@ final class PhpDocInfo
     }
     private function isFnmatch(string $currentValue, string $desiredValue) : bool
     {
-        if (!\RectorPrefix20210529\Nette\Utils\Strings::contains($desiredValue, '*')) {
+        if (\strpos($desiredValue, '*') === \false) {
             return \false;
         }
         return \fnmatch($desiredValue, $currentValue, \FNM_NOESCAPE);

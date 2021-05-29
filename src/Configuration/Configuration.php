@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\Core\Configuration;
 
-use RectorPrefix20210529\Nette\Utils\Strings;
 use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
 use Rector\Core\Exception\Configuration\InvalidConfigurationException;
 use Rector\Core\ValueObject\Bootstrap\BootstrapConfigs;
@@ -199,7 +198,7 @@ final class Configuration
     {
         // fixes bash edge-case that to merges string with space to one
         foreach ($commandLinePaths as $commandLinePath) {
-            if (\RectorPrefix20210529\Nette\Utils\Strings::contains($commandLinePath, ' ')) {
+            if (\strpos($commandLinePath, ' ') !== \false) {
                 $commandLinePaths = \explode(' ', $commandLinePath);
             }
         }

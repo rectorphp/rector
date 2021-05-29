@@ -119,7 +119,7 @@ CODE_SAMPLE
             return \true;
         }
         foreach (self::FILES_TO_INCLUDE as $fileToInclude) {
-            if (\RectorPrefix20210529\Nette\Utils\Strings::endsWith($fileInfo->getRealPath(), $fileToInclude)) {
+            if (\str_ends_with($fileInfo->getRealPath(), $fileToInclude)) {
                 return \true;
             }
         }

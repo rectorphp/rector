@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\Core\DependencyInjection\CompilerPass;
 
-use RectorPrefix20210529\Nette\Utils\Strings;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use RectorPrefix20210529\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
@@ -17,7 +16,7 @@ final class VerifyRectorServiceExistsCompilerPass implements \RectorPrefix202105
             if ($class === null) {
                 continue;
             }
-            if (!\RectorPrefix20210529\Nette\Utils\Strings::endsWith($class, 'Rector')) {
+            if (!\str_ends_with($class, 'Rector')) {
                 continue;
             }
             if (!\is_a($class, \Rector\Core\Contract\Rector\RectorInterface::class, \true)) {

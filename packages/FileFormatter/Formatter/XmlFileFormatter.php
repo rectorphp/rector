@@ -69,7 +69,7 @@ final class XmlFileFormatter implements \Rector\FileFormatter\Contract\Formatter
         $output = '';
         $this->depth = 0;
         $parts = $this->getXmlParts($xml);
-        if (\strpos($parts[0], '<?xml') === 0) {
+        if (\str_starts_with($parts[0], '<?xml')) {
             $output = \array_shift($parts) . \PHP_EOL;
         }
         foreach ($parts as $part) {
@@ -130,10 +130,10 @@ final class XmlFileFormatter implements \Rector\FileFormatter\Contract\Formatter
     }
     private function isOpeningCdataTag(string $part) : bool
     {
-        return \RectorPrefix20210529\Nette\Utils\Strings::contains($part, '<![CDATA[');
+        return \strpos($part, '<![CDATA[') !== \false;
     }
     private function isClosingCdataTag(string $part) : bool
     {
-        return \RectorPrefix20210529\Nette\Utils\Strings::contains($part, ']]>');
+        return \strpos($part, ']]>') !== \false;
     }
 }

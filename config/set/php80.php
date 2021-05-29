@@ -33,7 +33,7 @@ return static function (\RectorPrefix20210529\Symfony\Component\DependencyInject
     $services->set(\Rector\Php80\Rector\NotIdentical\StrContainsRector::class);
     $services->set(\Rector\Php80\Rector\Identical\StrStartsWithRector::class);
     $services->set(\Rector\Php80\Rector\Identical\StrEndsWithRector::class);
-    $services->set(\Rector\Transform\Rector\StaticCall\StaticCallToFuncCallRector::class)->call('configure', [\Rector\Transform\Rector\StaticCall\StaticCallToFuncCallRector::STATIC_CALLS_TO_FUNCTIONS => \Symplify\SymfonyPhpConfig\ValueObjectInliner::inline([new \Rector\Transform\ValueObject\StaticCallToFuncCall('Nette\\Utils\\Strings', 'startsWith', 'str_starts_with'), new \Rector\Transform\ValueObject\StaticCallToFuncCall('Nette\\Utils\\Strings', 'endsWith', 'str_ends_with'), new \Rector\Transform\ValueObject\StaticCallToFuncCall('Nette\\Utils\\Strings', 'contains', 'str_contains')])]);
+    $services->set(\Rector\Transform\Rector\StaticCall\StaticCallToFuncCallRector::class)->call('configure', [[\Rector\Transform\Rector\StaticCall\StaticCallToFuncCallRector::STATIC_CALLS_TO_FUNCTIONS => \Symplify\SymfonyPhpConfig\ValueObjectInliner::inline([new \Rector\Transform\ValueObject\StaticCallToFuncCall('Nette\\Utils\\Strings', 'startsWith', 'str_starts_with'), new \Rector\Transform\ValueObject\StaticCallToFuncCall('Nette\\Utils\\Strings', 'endsWith', 'str_ends_with'), new \Rector\Transform\ValueObject\StaticCallToFuncCall('Nette\\Utils\\Strings', 'contains', 'str_contains')])]]);
     $services->set(\Rector\Php80\Rector\Class_\StringableForToStringRector::class);
     $services->set(\Rector\Php80\Rector\FuncCall\ClassOnObjectRector::class);
     $services->set(\Rector\Php80\Rector\Ternary\GetDebugTypeRector::class);

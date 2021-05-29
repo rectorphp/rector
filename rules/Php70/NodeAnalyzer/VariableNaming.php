@@ -56,7 +56,7 @@ final class VariableNaming
         if ($name === null) {
             $name = $fallbackName;
         }
-        if (\RectorPrefix20210529\Nette\Utils\Strings::contains($name, '\\')) {
+        if (\strpos($name, '\\') !== \false) {
             $name = (string) \RectorPrefix20210529\Nette\Utils\Strings::after($name, '\\', -1);
         }
         $countedValueName = $this->createCountedValueName($name, $scope);
