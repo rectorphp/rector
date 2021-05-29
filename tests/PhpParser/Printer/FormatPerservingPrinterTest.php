@@ -37,7 +37,7 @@ final class FormatPerservingPrinterTest extends AbstractTestCase
         if (defined('PHP_WINDOWS_VERSION_BUILD')) {
             $this->markTestSkipped('file modes are not supported on windows.');
         }
-        
+
         mkdir(__DIR__ . '/Fixture');
         touch(__DIR__ . '/Fixture/file.php');
 

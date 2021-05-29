@@ -8,7 +8,8 @@ use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class TestInlineHtmlTest extends AbstractRectorTestCase {
+final class TestInlineHtmlTest extends AbstractRectorTestCase
+{
     /**
      * @dataProvider provideData()
      */

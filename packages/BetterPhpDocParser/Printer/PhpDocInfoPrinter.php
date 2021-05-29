@@ -54,7 +54,7 @@ final class PhpDocInfoPrinter
     private const DOCBLOCK_START_REGEX = '#^(\/\/|\/\*\*|\/\*|\#)#';
 
     /**
-     * @var string Uses a hardcoded unix-newline since most codes use it (even on windows) - otherwise we would need to normalize newlines 
+     * @var string Uses a hardcoded unix-newline since most codes use it (even on windows) - otherwise we would need to normalize newlines
      */
     private const NEWLINE_WITH_ASTERISK = "\n" . ' * ';
 
@@ -95,7 +95,7 @@ final class PhpDocInfoPrinter
         }
 
         if ($phpDocInfo->getNode() instanceof InlineHTML) {
-            return '<?php'.PHP_EOL. $docContent .PHP_EOL.'?>';
+            return '<?php' . PHP_EOL . $docContent . PHP_EOL . '?>';
         }
 
         return $docContent;
@@ -120,7 +120,7 @@ final class PhpDocInfoPrinter
             }
 
             if ($phpDocInfo->getNode() instanceof InlineHTML) {
-                return '<?php'.PHP_EOL. $phpDocInfo->getPhpDocNode() .PHP_EOL.'?>';
+                return '<?php' . PHP_EOL . $phpDocInfo->getPhpDocNode() . PHP_EOL . '?>';
             }
 
             return (string) $phpDocInfo->getPhpDocNode();

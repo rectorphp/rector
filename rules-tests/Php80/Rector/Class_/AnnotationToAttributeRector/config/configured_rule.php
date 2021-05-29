@@ -50,7 +50,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                     'Doctrine\ORM\Mapping\GeneratedValue'
                 ),
                 new AnnotationToAttribute('Doctrine\ORM\Mapping\Column', 'Doctrine\ORM\Mapping\Column'),
-                new AnnotationToAttribute('Doctrine\ORM\Mapping\ChangeTrackingPolicy', 'Doctrine\ORM\Mapping\ChangeTrackingPolicy'),
+                new AnnotationToAttribute(
+                    'Doctrine\ORM\Mapping\ChangeTrackingPolicy',
+                    'Doctrine\ORM\Mapping\ChangeTrackingPolicy'
+                ),
             ]),
         ]]);
 };

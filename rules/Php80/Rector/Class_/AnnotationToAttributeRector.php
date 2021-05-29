@@ -174,10 +174,7 @@ CODE_SAMPLE
                 // 2. add attributes
                 /** @var DoctrineAnnotationTagValueNode $tagValue */
                 $tagValue = $tag->value;
-                $node->attrGroups[] = $this->phpAttributeGroupFactory->create(
-                    $tagValue,
-                    $annotationToAttribute
-                );
+                $node->attrGroups[] = $this->phpAttributeGroupFactory->create($tagValue, $annotationToAttribute);
 
                 $hasNewAttrGroups = true;
                 continue 2;
