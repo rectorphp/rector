@@ -2,6 +2,7 @@
 
 namespace RectorPrefix20210529\TYPO3\CMS\Frontend\Controller;
 
+use RectorPrefix20210529\Psr\Http\Message\ResponseInterface;
 use RectorPrefix20210529\TYPO3\CMS\Core\Charset\CharsetConverter;
 use RectorPrefix20210529\TYPO3\CMS\Core\Context\Context;
 use RectorPrefix20210529\TYPO3\CMS\Core\Page\PageRenderer;
@@ -142,7 +143,7 @@ class TypoScriptFrontendController
     /**
      * @return void
      */
-    public function applyHttpHeadersToResponse()
+    public function applyHttpHeadersToResponse(\RectorPrefix20210529\Psr\Http\Message\ResponseInterface $response)
     {
     }
     /**

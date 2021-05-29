@@ -1868,10 +1868,11 @@ Refactor printContent methods of classes TaskModuleController and PageLayoutCont
 ```diff
  use TYPO3\CMS\Core\Utility\GeneralUtility;
  use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
++use TYPO3\CMS\Core\Http\Response;
 
  $tsfe = GeneralUtility::makeInstance(TypoScriptFrontendController::class);
 -$tsfe->processOutput();
-+$tsfe->applyHttpHeadersToResponse();
++$tsfe->applyHttpHeadersToResponse(new Response());
 +$tsfe->processContentForOutput();
 ```
 

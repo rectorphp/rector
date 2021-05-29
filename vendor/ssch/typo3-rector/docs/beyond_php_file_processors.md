@@ -7,7 +7,7 @@ In TYPO3 Rector specifically we have already five of them:
 
 1. TypoScriptProcessor
 1. FlexFormsProcessor
-1. ExtensionComposerProcessor
+1. ComposerProcessor
 1. IconsProcessor
 1. FormYamlProcessor
 
@@ -22,8 +22,8 @@ The IconsProcessor is part of the TYPO3_87 set.
 The FlexFormsProcessor takes all xml files starting with the xml Node T3DataStructure and can do some modifications on it.
 For now only the renderType is added in the config section if missing.
 
-## ExtensionComposerProcessor
-The ExtensionComposerProcessor takes all composer.json files of type typo3-cms-extension.
+## ComposerProcessor
+The ComposerProcessor takes all composer.json files of type typo3-cms-extension.
 It adds an extension-key if it is missing. You can configure this Processor in your rector.php configuration file to add the typo3/cms-core dependency with the right version to your composer.json:
 
 ```php
