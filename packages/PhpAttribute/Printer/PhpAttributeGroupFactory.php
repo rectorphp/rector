@@ -8,7 +8,10 @@ use PhpParser\BuilderHelpers;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Attribute;
 use PhpParser\Node\AttributeGroup;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Identifier;
+use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprFalseNode;
 use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprIntegerNode;
@@ -91,7 +94,7 @@ final class PhpAttributeGroupFactory
 
     /**
      * @param mixed $value
-     * @return bool|float|int|string|array<mixed>
+     * @return bool|float|int|string|array<mixed>|Expr
      */
     private function normalizeNodeValue($value)
     {
@@ -120,6 +123,12 @@ final class PhpAttributeGroupFactory
                 fn ($node) => $this->normalizeNodeValue($node),
                 $value->getValuesWithExplicitSilentAndWithoutQuotes()
             );
+        }
+
+        if (is_string($value) && str_contains($value, '::')) {
+            // class const fetch
+            [$class, $constant] = explode('::', $value);
+            return new ClassConstFetch(new Name($class), $constant);
         }
 
         if ($value instanceof Node) {
