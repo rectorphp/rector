@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210528\TYPO3\CMS\Core\Database;
+namespace RectorPrefix20210529\TYPO3\CMS\Core\Database;
 
 if (\class_exists('TYPO3\\CMS\\Core\\Database\\Connection')) {
     return;

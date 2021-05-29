@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210528\Symfony\Component\HttpKernel\EventListener;
+namespace RectorPrefix20210529\Symfony\Component\HttpKernel\EventListener;
 
-use RectorPrefix20210528\Psr\Container\ContainerInterface;
-use RectorPrefix20210528\Symfony\Component\HttpFoundation\Session\SessionInterface;
+use RectorPrefix20210529\Psr\Container\ContainerInterface;
+use RectorPrefix20210529\Symfony\Component\HttpFoundation\Session\SessionInterface;
 /**
  * Sets the session in the request.
  *
@@ -19,15 +19,15 @@ use RectorPrefix20210528\Symfony\Component\HttpFoundation\Session\SessionInterfa
  *
  * @final
  */
-class TestSessionListener extends \RectorPrefix20210528\Symfony\Component\HttpKernel\EventListener\AbstractTestSessionListener
+class TestSessionListener extends \RectorPrefix20210529\Symfony\Component\HttpKernel\EventListener\AbstractTestSessionListener
 {
     private $container;
-    public function __construct(\RectorPrefix20210528\Psr\Container\ContainerInterface $container, array $sessionOptions = [])
+    public function __construct(\RectorPrefix20210529\Psr\Container\ContainerInterface $container, array $sessionOptions = [])
     {
         $this->container = $container;
         parent::__construct($sessionOptions);
     }
-    protected function getSession() : ?\RectorPrefix20210528\Symfony\Component\HttpFoundation\Session\SessionInterface
+    protected function getSession() : ?\RectorPrefix20210529\Symfony\Component\HttpFoundation\Session\SessionInterface
     {
         if (!$this->container->has('session')) {
             return null;

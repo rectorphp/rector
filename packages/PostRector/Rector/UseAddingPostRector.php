@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\PostRector\Rector;
 
-use RectorPrefix20210528\Nette\Utils\Strings;
+use RectorPrefix20210529\Nette\Utils\Strings;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Namespace_;
 use Rector\CodingStyle\Application\UseImportsAdder;
@@ -129,7 +129,7 @@ CODE_SAMPLE
     {
         $namespacedUseImportTypes = [];
         foreach ($useImportTypes as $useImportType) {
-            if (!\RectorPrefix20210528\Nette\Utils\Strings::contains($useImportType->getClassName(), '\\')) {
+            if (!\RectorPrefix20210529\Nette\Utils\Strings::contains($useImportType->getClassName(), '\\')) {
                 continue;
             }
             $namespacedUseImportTypes[] = $useImportType;

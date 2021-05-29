@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210528;
+namespace RectorPrefix20210529;
 
 use Rector\Arguments\Rector\ClassMethod\ArgumentAdderRector;
 use Rector\Arguments\Rector\FuncCall\FunctionArgumentDefaultValueReplacerRector;
@@ -25,9 +25,9 @@ use Rector\Php80\Rector\Ternary\GetDebugTypeRector;
 use Rector\Renaming\Rector\FuncCall\RenameFunctionRector;
 use Rector\Transform\Rector\StaticCall\StaticCallToFuncCallRector;
 use Rector\Transform\ValueObject\StaticCallToFuncCall;
-use RectorPrefix20210528\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use RectorPrefix20210529\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
-return static function (\RectorPrefix20210528\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
+return static function (\RectorPrefix20210529\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->set(\Rector\Php80\Rector\FunctionLike\UnionTypesRector::class);
     $services->set(\Rector\Php80\Rector\NotIdentical\StrContainsRector::class);

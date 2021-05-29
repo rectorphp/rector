@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210528;
+namespace RectorPrefix20210529;
 
 use Rector\Php71\Rector\Assign\AssignArrayToStringRector;
 use Rector\Php71\Rector\BinaryOp\BinaryOpBetweenNumberAndStringRector;
@@ -10,8 +10,8 @@ use Rector\Php71\Rector\FuncCall\CountOnNullRector;
 use Rector\Php71\Rector\FuncCall\RemoveExtraParametersRector;
 use Rector\Php71\Rector\List_\ListToArrayDestructRector;
 use Rector\Php71\Rector\TryCatch\MultiExceptionCatchRector;
-use RectorPrefix20210528\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-return static function (\RectorPrefix20210528\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
+use RectorPrefix20210529\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+return static function (\RectorPrefix20210529\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->set(\Rector\Php71\Rector\BooleanOr\IsIterableRector::class);
     $services->set(\Rector\Php71\Rector\TryCatch\MultiExceptionCatchRector::class);

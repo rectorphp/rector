@@ -1,17 +1,17 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210528\Symplify\EasyTesting\Command;
+namespace RectorPrefix20210529\Symplify\EasyTesting\Command;
 
-use RectorPrefix20210528\Symfony\Component\Console\Input\InputArgument;
-use RectorPrefix20210528\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix20210528\Symfony\Component\Console\Output\OutputInterface;
-use RectorPrefix20210528\Symplify\EasyTesting\Finder\FixtureFinder;
-use RectorPrefix20210528\Symplify\EasyTesting\MissplacedSkipPrefixResolver;
-use RectorPrefix20210528\Symplify\EasyTesting\ValueObject\Option;
-use RectorPrefix20210528\Symplify\PackageBuilder\Console\Command\AbstractSymplifyCommand;
-use RectorPrefix20210528\Symplify\PackageBuilder\Console\ShellCode;
-final class ValidateFixtureSkipNamingCommand extends \RectorPrefix20210528\Symplify\PackageBuilder\Console\Command\AbstractSymplifyCommand
+use RectorPrefix20210529\Symfony\Component\Console\Input\InputArgument;
+use RectorPrefix20210529\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix20210529\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix20210529\Symplify\EasyTesting\Finder\FixtureFinder;
+use RectorPrefix20210529\Symplify\EasyTesting\MissplacedSkipPrefixResolver;
+use RectorPrefix20210529\Symplify\EasyTesting\ValueObject\Option;
+use RectorPrefix20210529\Symplify\PackageBuilder\Console\Command\AbstractSymplifyCommand;
+use RectorPrefix20210529\Symplify\PackageBuilder\Console\ShellCode;
+final class ValidateFixtureSkipNamingCommand extends \RectorPrefix20210529\Symplify\PackageBuilder\Console\Command\AbstractSymplifyCommand
 {
     /**
      * @var MissplacedSkipPrefixResolver
@@ -21,7 +21,7 @@ final class ValidateFixtureSkipNamingCommand extends \RectorPrefix20210528\Sympl
      * @var FixtureFinder
      */
     private $fixtureFinder;
-    public function __construct(\RectorPrefix20210528\Symplify\EasyTesting\MissplacedSkipPrefixResolver $missplacedSkipPrefixResolver, \RectorPrefix20210528\Symplify\EasyTesting\Finder\FixtureFinder $fixtureFinder)
+    public function __construct(\RectorPrefix20210529\Symplify\EasyTesting\MissplacedSkipPrefixResolver $missplacedSkipPrefixResolver, \RectorPrefix20210529\Symplify\EasyTesting\Finder\FixtureFinder $fixtureFinder)
     {
         $this->missplacedSkipPrefixResolver = $missplacedSkipPrefixResolver;
         $this->fixtureFinder = $fixtureFinder;
@@ -29,18 +29,18 @@ final class ValidateFixtureSkipNamingCommand extends \RectorPrefix20210528\Sympl
     }
     protected function configure() : void
     {
-        $this->addArgument(\RectorPrefix20210528\Symplify\EasyTesting\ValueObject\Option::SOURCE, \RectorPrefix20210528\Symfony\Component\Console\Input\InputArgument::REQUIRED | \RectorPrefix20210528\Symfony\Component\Console\Input\InputArgument::IS_ARRAY, 'Paths to analyse');
+        $this->addArgument(\RectorPrefix20210529\Symplify\EasyTesting\ValueObject\Option::SOURCE, \RectorPrefix20210529\Symfony\Component\Console\Input\InputArgument::REQUIRED | \RectorPrefix20210529\Symfony\Component\Console\Input\InputArgument::IS_ARRAY, 'Paths to analyse');
         $this->setDescription('Check that skipped fixture files (without `-----` separator) have a "skip" prefix');
     }
-    protected function execute(\RectorPrefix20210528\Symfony\Component\Console\Input\InputInterface $input, \RectorPrefix20210528\Symfony\Component\Console\Output\OutputInterface $output) : int
+    protected function execute(\RectorPrefix20210529\Symfony\Component\Console\Input\InputInterface $input, \RectorPrefix20210529\Symfony\Component\Console\Output\OutputInterface $output) : int
     {
-        $source = (array) $input->getArgument(\RectorPrefix20210528\Symplify\EasyTesting\ValueObject\Option::SOURCE);
+        $source = (array) $input->getArgument(\RectorPrefix20210529\Symplify\EasyTesting\ValueObject\Option::SOURCE);
         $fixtureFileInfos = $this->fixtureFinder->find($source);
         $missplacedFixtureFileInfos = $this->missplacedSkipPrefixResolver->resolve($fixtureFileInfos);
         if ($missplacedFixtureFileInfos === []) {
             $message = \sprintf('All %d fixture files have valid names', \count($fixtureFileInfos));
             $this->symfonyStyle->success($message);
-            return \RectorPrefix20210528\Symplify\PackageBuilder\Console\ShellCode::SUCCESS;
+            return \RectorPrefix20210529\Symplify\PackageBuilder\Console\ShellCode::SUCCESS;
         }
         foreach ($missplacedFixtureFileInfos['incorrect_skips'] as $missplacedFixtureFileInfo) {
             $errorMessage = \sprintf('The file "%s" should drop the "skip/keep" prefix', $missplacedFixtureFileInfo->getRelativeFilePathFromCwd());
@@ -54,10 +54,10 @@ final class ValidateFixtureSkipNamingCommand extends \RectorPrefix20210528\Sympl
         if ($countError === 0) {
             $message = \sprintf('All %d fixture files have valid names', \count($fixtureFileInfos));
             $this->symfonyStyle->success($message);
-            return \RectorPrefix20210528\Symplify\PackageBuilder\Console\ShellCode::SUCCESS;
+            return \RectorPrefix20210529\Symplify\PackageBuilder\Console\ShellCode::SUCCESS;
         }
         $errorMessage = \sprintf('Found %d test file fixtures with wrong prefix', $countError);
         $this->symfonyStyle->error($errorMessage);
-        return \RectorPrefix20210528\Symplify\PackageBuilder\Console\ShellCode::ERROR;
+        return \RectorPrefix20210529\Symplify\PackageBuilder\Console\ShellCode::ERROR;
     }
 }

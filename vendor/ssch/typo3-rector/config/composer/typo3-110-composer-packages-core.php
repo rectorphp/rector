@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210528;
+namespace RectorPrefix20210529;
 
 use Rector\Composer\Rector\ChangePackageVersionComposerRector;
 use Rector\Composer\Rector\RemovePackageComposerRector;
 use Rector\Composer\ValueObject\PackageAndVersion;
-use RectorPrefix20210528\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use RectorPrefix20210529\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
-return static function (\RectorPrefix20210528\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
+return static function (\RectorPrefix20210529\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
     $containerConfigurator->import(__DIR__ . '/../config.php');
     $services = $containerConfigurator->services();
     $services->set('remove_typo3_cms_composer_package_version_110')->class(\Rector\Composer\Rector\RemovePackageComposerRector::class)->call('configure', [[\Rector\Composer\Rector\RemovePackageComposerRector::PACKAGE_NAMES => ['typo3/cms-context-help', 'typo3/cms-info-pagetsconfig', 'typo3/cms-wizard-crpages', 'typo3/cms-rsaauth']]]);

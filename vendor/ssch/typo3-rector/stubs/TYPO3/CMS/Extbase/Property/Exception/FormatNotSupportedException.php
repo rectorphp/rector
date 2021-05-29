@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210528\TYPO3\CMS\Extbase\Property\Exception;
+namespace RectorPrefix20210529\TYPO3\CMS\Extbase\Property\Exception;
 
 if (\class_exists('TYPO3\\CMS\\Extbase\\Property\\Exception\\FormatNotSupportedException')) {
     return;

@@ -8,44 +8,44 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210528\Symfony\Component\Console;
+namespace RectorPrefix20210529\Symfony\Component\Console;
 
-use RectorPrefix20210528\Symfony\Component\Console\Command\Command;
-use RectorPrefix20210528\Symfony\Component\Console\Command\HelpCommand;
-use RectorPrefix20210528\Symfony\Component\Console\Command\ListCommand;
-use RectorPrefix20210528\Symfony\Component\Console\Command\SignalableCommandInterface;
-use RectorPrefix20210528\Symfony\Component\Console\CommandLoader\CommandLoaderInterface;
-use RectorPrefix20210528\Symfony\Component\Console\Event\ConsoleCommandEvent;
-use RectorPrefix20210528\Symfony\Component\Console\Event\ConsoleErrorEvent;
-use RectorPrefix20210528\Symfony\Component\Console\Event\ConsoleSignalEvent;
-use RectorPrefix20210528\Symfony\Component\Console\Event\ConsoleTerminateEvent;
-use RectorPrefix20210528\Symfony\Component\Console\Exception\CommandNotFoundException;
-use RectorPrefix20210528\Symfony\Component\Console\Exception\ExceptionInterface;
-use RectorPrefix20210528\Symfony\Component\Console\Exception\LogicException;
-use RectorPrefix20210528\Symfony\Component\Console\Exception\NamespaceNotFoundException;
-use RectorPrefix20210528\Symfony\Component\Console\Exception\RuntimeException;
-use RectorPrefix20210528\Symfony\Component\Console\Formatter\OutputFormatter;
-use RectorPrefix20210528\Symfony\Component\Console\Helper\DebugFormatterHelper;
-use RectorPrefix20210528\Symfony\Component\Console\Helper\FormatterHelper;
-use RectorPrefix20210528\Symfony\Component\Console\Helper\Helper;
-use RectorPrefix20210528\Symfony\Component\Console\Helper\HelperSet;
-use RectorPrefix20210528\Symfony\Component\Console\Helper\ProcessHelper;
-use RectorPrefix20210528\Symfony\Component\Console\Helper\QuestionHelper;
-use RectorPrefix20210528\Symfony\Component\Console\Input\ArgvInput;
-use RectorPrefix20210528\Symfony\Component\Console\Input\ArrayInput;
-use RectorPrefix20210528\Symfony\Component\Console\Input\InputArgument;
-use RectorPrefix20210528\Symfony\Component\Console\Input\InputAwareInterface;
-use RectorPrefix20210528\Symfony\Component\Console\Input\InputDefinition;
-use RectorPrefix20210528\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix20210528\Symfony\Component\Console\Input\InputOption;
-use RectorPrefix20210528\Symfony\Component\Console\Output\ConsoleOutput;
-use RectorPrefix20210528\Symfony\Component\Console\Output\ConsoleOutputInterface;
-use RectorPrefix20210528\Symfony\Component\Console\Output\OutputInterface;
-use RectorPrefix20210528\Symfony\Component\Console\SignalRegistry\SignalRegistry;
-use RectorPrefix20210528\Symfony\Component\Console\Style\SymfonyStyle;
-use RectorPrefix20210528\Symfony\Component\ErrorHandler\ErrorHandler;
-use RectorPrefix20210528\Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
-use RectorPrefix20210528\Symfony\Contracts\Service\ResetInterface;
+use RectorPrefix20210529\Symfony\Component\Console\Command\Command;
+use RectorPrefix20210529\Symfony\Component\Console\Command\HelpCommand;
+use RectorPrefix20210529\Symfony\Component\Console\Command\ListCommand;
+use RectorPrefix20210529\Symfony\Component\Console\Command\SignalableCommandInterface;
+use RectorPrefix20210529\Symfony\Component\Console\CommandLoader\CommandLoaderInterface;
+use RectorPrefix20210529\Symfony\Component\Console\Event\ConsoleCommandEvent;
+use RectorPrefix20210529\Symfony\Component\Console\Event\ConsoleErrorEvent;
+use RectorPrefix20210529\Symfony\Component\Console\Event\ConsoleSignalEvent;
+use RectorPrefix20210529\Symfony\Component\Console\Event\ConsoleTerminateEvent;
+use RectorPrefix20210529\Symfony\Component\Console\Exception\CommandNotFoundException;
+use RectorPrefix20210529\Symfony\Component\Console\Exception\ExceptionInterface;
+use RectorPrefix20210529\Symfony\Component\Console\Exception\LogicException;
+use RectorPrefix20210529\Symfony\Component\Console\Exception\NamespaceNotFoundException;
+use RectorPrefix20210529\Symfony\Component\Console\Exception\RuntimeException;
+use RectorPrefix20210529\Symfony\Component\Console\Formatter\OutputFormatter;
+use RectorPrefix20210529\Symfony\Component\Console\Helper\DebugFormatterHelper;
+use RectorPrefix20210529\Symfony\Component\Console\Helper\FormatterHelper;
+use RectorPrefix20210529\Symfony\Component\Console\Helper\Helper;
+use RectorPrefix20210529\Symfony\Component\Console\Helper\HelperSet;
+use RectorPrefix20210529\Symfony\Component\Console\Helper\ProcessHelper;
+use RectorPrefix20210529\Symfony\Component\Console\Helper\QuestionHelper;
+use RectorPrefix20210529\Symfony\Component\Console\Input\ArgvInput;
+use RectorPrefix20210529\Symfony\Component\Console\Input\ArrayInput;
+use RectorPrefix20210529\Symfony\Component\Console\Input\InputArgument;
+use RectorPrefix20210529\Symfony\Component\Console\Input\InputAwareInterface;
+use RectorPrefix20210529\Symfony\Component\Console\Input\InputDefinition;
+use RectorPrefix20210529\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix20210529\Symfony\Component\Console\Input\InputOption;
+use RectorPrefix20210529\Symfony\Component\Console\Output\ConsoleOutput;
+use RectorPrefix20210529\Symfony\Component\Console\Output\ConsoleOutputInterface;
+use RectorPrefix20210529\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix20210529\Symfony\Component\Console\SignalRegistry\SignalRegistry;
+use RectorPrefix20210529\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix20210529\Symfony\Component\ErrorHandler\ErrorHandler;
+use RectorPrefix20210529\Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+use RectorPrefix20210529\Symfony\Contracts\Service\ResetInterface;
 /**
  * An Application is the container for a collection of commands.
  *
@@ -61,7 +61,7 @@ use RectorPrefix20210528\Symfony\Contracts\Service\ResetInterface;
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class Application implements \RectorPrefix20210528\Symfony\Contracts\Service\ResetInterface
+class Application implements \RectorPrefix20210529\Symfony\Contracts\Service\ResetInterface
 {
     private $commands = [];
     private $wantHelps = \false;
@@ -84,28 +84,28 @@ class Application implements \RectorPrefix20210528\Symfony\Contracts\Service\Res
     {
         $this->name = $name;
         $this->version = $version;
-        $this->terminal = new \RectorPrefix20210528\Symfony\Component\Console\Terminal();
+        $this->terminal = new \RectorPrefix20210529\Symfony\Component\Console\Terminal();
         $this->defaultCommand = 'list';
-        if (\defined('SIGINT') && \RectorPrefix20210528\Symfony\Component\Console\SignalRegistry\SignalRegistry::isSupported()) {
-            $this->signalRegistry = new \RectorPrefix20210528\Symfony\Component\Console\SignalRegistry\SignalRegistry();
+        if (\defined('SIGINT') && \RectorPrefix20210529\Symfony\Component\Console\SignalRegistry\SignalRegistry::isSupported()) {
+            $this->signalRegistry = new \RectorPrefix20210529\Symfony\Component\Console\SignalRegistry\SignalRegistry();
             $this->signalsToDispatchEvent = [\SIGINT, \SIGTERM, \SIGUSR1, \SIGUSR2];
         }
     }
     /**
      * @final
      */
-    public function setDispatcher(\RectorPrefix20210528\Symfony\Contracts\EventDispatcher\EventDispatcherInterface $dispatcher)
+    public function setDispatcher(\RectorPrefix20210529\Symfony\Contracts\EventDispatcher\EventDispatcherInterface $dispatcher)
     {
         $this->dispatcher = $dispatcher;
     }
-    public function setCommandLoader(\RectorPrefix20210528\Symfony\Component\Console\CommandLoader\CommandLoaderInterface $commandLoader)
+    public function setCommandLoader(\RectorPrefix20210529\Symfony\Component\Console\CommandLoader\CommandLoaderInterface $commandLoader)
     {
         $this->commandLoader = $commandLoader;
     }
-    public function getSignalRegistry() : \RectorPrefix20210528\Symfony\Component\Console\SignalRegistry\SignalRegistry
+    public function getSignalRegistry() : \RectorPrefix20210529\Symfony\Component\Console\SignalRegistry\SignalRegistry
     {
         if (!$this->signalRegistry) {
-            throw new \RectorPrefix20210528\Symfony\Component\Console\Exception\RuntimeException('Signals are not supported. Make sure that the `pcntl` extension is installed and that "pcntl_*" functions are not disabled by your php.ini\'s "disable_functions" directive.');
+            throw new \RectorPrefix20210529\Symfony\Component\Console\Exception\RuntimeException('Signals are not supported. Make sure that the `pcntl` extension is installed and that "pcntl_*" functions are not disabled by your php.ini\'s "disable_functions" directive.');
         }
         return $this->signalRegistry;
     }
@@ -120,20 +120,20 @@ class Application implements \RectorPrefix20210528\Symfony\Contracts\Service\Res
      *
      * @throws \Exception When running fails. Bypass this when {@link setCatchExceptions()}.
      */
-    public function run(\RectorPrefix20210528\Symfony\Component\Console\Input\InputInterface $input = null, \RectorPrefix20210528\Symfony\Component\Console\Output\OutputInterface $output = null)
+    public function run(\RectorPrefix20210529\Symfony\Component\Console\Input\InputInterface $input = null, \RectorPrefix20210529\Symfony\Component\Console\Output\OutputInterface $output = null)
     {
         if (\function_exists('putenv')) {
             @\putenv('LINES=' . $this->terminal->getHeight());
             @\putenv('COLUMNS=' . $this->terminal->getWidth());
         }
         if (null === $input) {
-            $input = new \RectorPrefix20210528\Symfony\Component\Console\Input\ArgvInput();
+            $input = new \RectorPrefix20210529\Symfony\Component\Console\Input\ArgvInput();
         }
         if (null === $output) {
-            $output = new \RectorPrefix20210528\Symfony\Component\Console\Output\ConsoleOutput();
+            $output = new \RectorPrefix20210529\Symfony\Component\Console\Output\ConsoleOutput();
         }
         $renderException = function (\Throwable $e) use($output) {
-            if ($output instanceof \RectorPrefix20210528\Symfony\Component\Console\Output\ConsoleOutputInterface) {
+            if ($output instanceof \RectorPrefix20210529\Symfony\Component\Console\Output\ConsoleOutputInterface) {
                 $this->renderThrowable($e, $output->getErrorOutput());
             } else {
                 $this->renderThrowable($e, $output);
@@ -141,7 +141,7 @@ class Application implements \RectorPrefix20210528\Symfony\Contracts\Service\Res
         };
         if ($phpHandler = \set_exception_handler($renderException)) {
             \restore_exception_handler();
-            if (!\is_array($phpHandler) || !$phpHandler[0] instanceof \RectorPrefix20210528\Symfony\Component\ErrorHandler\ErrorHandler) {
+            if (!\is_array($phpHandler) || !$phpHandler[0] instanceof \RectorPrefix20210529\Symfony\Component\ErrorHandler\ErrorHandler) {
                 $errorHandler = \true;
             } elseif ($errorHandler = $phpHandler[0]->setExceptionHandler($renderException)) {
                 $phpHandler[0]->setExceptionHandler($errorHandler);
@@ -192,7 +192,7 @@ class Application implements \RectorPrefix20210528\Symfony\Contracts\Service\Res
      *
      * @return int 0 if everything went fine, or an error code
      */
-    public function doRun(\RectorPrefix20210528\Symfony\Component\Console\Input\InputInterface $input, \RectorPrefix20210528\Symfony\Component\Console\Output\OutputInterface $output)
+    public function doRun(\RectorPrefix20210529\Symfony\Component\Console\Input\InputInterface $input, \RectorPrefix20210529\Symfony\Component\Console\Output\OutputInterface $output)
     {
         if (\true === $input->hasParameterOption(['--version', '-V'], \true)) {
             $output->writeln($this->getLongVersion());
@@ -201,14 +201,14 @@ class Application implements \RectorPrefix20210528\Symfony\Contracts\Service\Res
         try {
             // Makes ArgvInput::getFirstArgument() able to distinguish an option from an argument.
             $input->bind($this->getDefinition());
-        } catch (\RectorPrefix20210528\Symfony\Component\Console\Exception\ExceptionInterface $e) {
+        } catch (\RectorPrefix20210529\Symfony\Component\Console\Exception\ExceptionInterface $e) {
             // Errors must be ignored, full binding/validation happens later when the command is known.
         }
         $name = $this->getCommandName($input);
         if (\true === $input->hasParameterOption(['--help', '-h'], \true)) {
             if (!$name) {
                 $name = 'help';
-                $input = new \RectorPrefix20210528\Symfony\Component\Console\Input\ArrayInput(['command_name' => $this->defaultCommand]);
+                $input = new \RectorPrefix20210529\Symfony\Component\Console\Input\ArrayInput(['command_name' => $this->defaultCommand]);
             } else {
                 $this->wantHelps = \true;
             }
@@ -216,17 +216,17 @@ class Application implements \RectorPrefix20210528\Symfony\Contracts\Service\Res
         if (!$name) {
             $name = $this->defaultCommand;
             $definition = $this->getDefinition();
-            $definition->setArguments(\array_merge($definition->getArguments(), ['command' => new \RectorPrefix20210528\Symfony\Component\Console\Input\InputArgument('command', \RectorPrefix20210528\Symfony\Component\Console\Input\InputArgument::OPTIONAL, $definition->getArgument('command')->getDescription(), $name)]));
+            $definition->setArguments(\array_merge($definition->getArguments(), ['command' => new \RectorPrefix20210529\Symfony\Component\Console\Input\InputArgument('command', \RectorPrefix20210529\Symfony\Component\Console\Input\InputArgument::OPTIONAL, $definition->getArgument('command')->getDescription(), $name)]));
         }
         try {
             $this->runningCommand = null;
             // the command name MUST be the first element of the input
             $command = $this->find($name);
         } catch (\Throwable $e) {
-            if (!($e instanceof \RectorPrefix20210528\Symfony\Component\Console\Exception\CommandNotFoundException && !$e instanceof \RectorPrefix20210528\Symfony\Component\Console\Exception\NamespaceNotFoundException) || 1 !== \count($alternatives = $e->getAlternatives()) || !$input->isInteractive()) {
+            if (!($e instanceof \RectorPrefix20210529\Symfony\Component\Console\Exception\CommandNotFoundException && !$e instanceof \RectorPrefix20210529\Symfony\Component\Console\Exception\NamespaceNotFoundException) || 1 !== \count($alternatives = $e->getAlternatives()) || !$input->isInteractive()) {
                 if (null !== $this->dispatcher) {
-                    $event = new \RectorPrefix20210528\Symfony\Component\Console\Event\ConsoleErrorEvent($input, $output, $e);
-                    $this->dispatcher->dispatch($event, \RectorPrefix20210528\Symfony\Component\Console\ConsoleEvents::ERROR);
+                    $event = new \RectorPrefix20210529\Symfony\Component\Console\Event\ConsoleErrorEvent($input, $output, $e);
+                    $this->dispatcher->dispatch($event, \RectorPrefix20210529\Symfony\Component\Console\ConsoleEvents::ERROR);
                     if (0 === $event->getExitCode()) {
                         return 0;
                     }
@@ -235,12 +235,12 @@ class Application implements \RectorPrefix20210528\Symfony\Contracts\Service\Res
                 throw $e;
             }
             $alternative = $alternatives[0];
-            $style = new \RectorPrefix20210528\Symfony\Component\Console\Style\SymfonyStyle($input, $output);
+            $style = new \RectorPrefix20210529\Symfony\Component\Console\Style\SymfonyStyle($input, $output);
             $style->block(\sprintf("\nCommand \"%s\" is not defined.\n", $name), null, 'error');
             if (!$style->confirm(\sprintf('Do you want to run "%s" instead? ', $alternative), \false)) {
                 if (null !== $this->dispatcher) {
-                    $event = new \RectorPrefix20210528\Symfony\Component\Console\Event\ConsoleErrorEvent($input, $output, $e);
-                    $this->dispatcher->dispatch($event, \RectorPrefix20210528\Symfony\Component\Console\ConsoleEvents::ERROR);
+                    $event = new \RectorPrefix20210529\Symfony\Component\Console\Event\ConsoleErrorEvent($input, $output, $e);
+                    $this->dispatcher->dispatch($event, \RectorPrefix20210529\Symfony\Component\Console\ConsoleEvents::ERROR);
                     return $event->getExitCode();
                 }
                 return 1;
@@ -258,7 +258,7 @@ class Application implements \RectorPrefix20210528\Symfony\Contracts\Service\Res
     public function reset()
     {
     }
-    public function setHelperSet(\RectorPrefix20210528\Symfony\Component\Console\Helper\HelperSet $helperSet)
+    public function setHelperSet(\RectorPrefix20210529\Symfony\Component\Console\Helper\HelperSet $helperSet)
     {
         $this->helperSet = $helperSet;
     }
@@ -274,7 +274,7 @@ class Application implements \RectorPrefix20210528\Symfony\Contracts\Service\Res
         }
         return $this->helperSet;
     }
-    public function setDefinition(\RectorPrefix20210528\Symfony\Component\Console\Input\InputDefinition $definition)
+    public function setDefinition(\RectorPrefix20210529\Symfony\Component\Console\Input\InputDefinition $definition)
     {
         $this->definition = $definition;
     }
@@ -390,7 +390,7 @@ class Application implements \RectorPrefix20210528\Symfony\Contracts\Service\Res
      */
     public function register(string $name)
     {
-        return $this->add(new \RectorPrefix20210528\Symfony\Component\Console\Command\Command($name));
+        return $this->add(new \RectorPrefix20210529\Symfony\Component\Console\Command\Command($name));
     }
     /**
      * Adds an array of command objects.
@@ -413,7 +413,7 @@ class Application implements \RectorPrefix20210528\Symfony\Contracts\Service\Res
      *
      * @return Command|null The registered command if enabled or null
      */
-    public function add(\RectorPrefix20210528\Symfony\Component\Console\Command\Command $command)
+    public function add(\RectorPrefix20210529\Symfony\Component\Console\Command\Command $command)
     {
         $this->init();
         $command->setApplication($this);
@@ -424,7 +424,7 @@ class Application implements \RectorPrefix20210528\Symfony\Contracts\Service\Res
         // Will throw if the command is not correctly initialized.
         $command->getDefinition();
         if (!$command->getName()) {
-            throw new \RectorPrefix20210528\Symfony\Component\Console\Exception\LogicException(\sprintf('The command defined in "%s" cannot have an empty name.', \get_debug_type($command)));
+            throw new \RectorPrefix20210529\Symfony\Component\Console\Exception\LogicException(\sprintf('The command defined in "%s" cannot have an empty name.', \get_debug_type($command)));
         }
         $this->commands[$command->getName()] = $command;
         foreach ($command->getAliases() as $alias) {
@@ -443,11 +443,11 @@ class Application implements \RectorPrefix20210528\Symfony\Contracts\Service\Res
     {
         $this->init();
         if (!$this->has($name)) {
-            throw new \RectorPrefix20210528\Symfony\Component\Console\Exception\CommandNotFoundException(\sprintf('The command "%s" does not exist.', $name));
+            throw new \RectorPrefix20210529\Symfony\Component\Console\Exception\CommandNotFoundException(\sprintf('The command "%s" does not exist.', $name));
         }
         // When the command has a different name than the one used at the command loader level
         if (!isset($this->commands[$name])) {
-            throw new \RectorPrefix20210528\Symfony\Component\Console\Exception\CommandNotFoundException(\sprintf('The "%s" command cannot be found because it is registered under multiple names. Make sure you don\'t set a different name via constructor or "setName()".', $name));
+            throw new \RectorPrefix20210529\Symfony\Component\Console\Exception\CommandNotFoundException(\sprintf('The "%s" command cannot be found because it is registered under multiple names. Make sure you don\'t set a different name via constructor or "setName()".', $name));
         }
         $command = $this->commands[$name];
         if ($this->wantHelps) {
@@ -513,11 +513,11 @@ class Application implements \RectorPrefix20210528\Symfony\Contracts\Service\Res
                 }
                 $message .= \implode("\n    ", $alternatives);
             }
-            throw new \RectorPrefix20210528\Symfony\Component\Console\Exception\NamespaceNotFoundException($message, $alternatives);
+            throw new \RectorPrefix20210529\Symfony\Component\Console\Exception\NamespaceNotFoundException($message, $alternatives);
         }
         $exact = \in_array($namespace, $namespaces, \true);
         if (\count($namespaces) > 1 && !$exact) {
-            throw new \RectorPrefix20210528\Symfony\Component\Console\Exception\NamespaceNotFoundException(\sprintf("The namespace \"%s\" is ambiguous.\nDid you mean one of these?\n%s.", $namespace, $this->getAbbreviationSuggestions(\array_values($namespaces))), \array_values($namespaces));
+            throw new \RectorPrefix20210529\Symfony\Component\Console\Exception\NamespaceNotFoundException(\sprintf("The namespace \"%s\" is ambiguous.\nDid you mean one of these?\n%s.", $namespace, $this->getAbbreviationSuggestions(\array_values($namespaces))), \array_values($namespaces));
         }
         return $exact ? $namespace : \reset($namespaces);
     }
@@ -572,13 +572,13 @@ class Application implements \RectorPrefix20210528\Symfony\Contracts\Service\Res
                 }
                 $message .= \implode("\n    ", $alternatives);
             }
-            throw new \RectorPrefix20210528\Symfony\Component\Console\Exception\CommandNotFoundException($message, \array_values($alternatives));
+            throw new \RectorPrefix20210529\Symfony\Component\Console\Exception\CommandNotFoundException($message, \array_values($alternatives));
         }
         // filter out aliases for commands which are already on the list
         if (\count($commands) > 1) {
             $commandList = $this->commandLoader ? \array_merge(\array_flip($this->commandLoader->getNames()), $this->commands) : $this->commands;
             $commands = \array_unique(\array_filter($commands, function ($nameOrAlias) use(&$commandList, $commands, &$aliases) {
-                if (!$commandList[$nameOrAlias] instanceof \RectorPrefix20210528\Symfony\Component\Console\Command\Command) {
+                if (!$commandList[$nameOrAlias] instanceof \RectorPrefix20210529\Symfony\Component\Console\Command\Command) {
                     $commandList[$nameOrAlias] = $this->commandLoader->get($nameOrAlias);
                 }
                 $commandName = $commandList[$nameOrAlias]->getName();
@@ -591,7 +591,7 @@ class Application implements \RectorPrefix20210528\Symfony\Contracts\Service\Res
             $abbrevs = \array_values($commands);
             $maxLen = 0;
             foreach ($abbrevs as $abbrev) {
-                $maxLen = \max(\RectorPrefix20210528\Symfony\Component\Console\Helper\Helper::strlen($abbrev), $maxLen);
+                $maxLen = \max(\RectorPrefix20210529\Symfony\Component\Console\Helper\Helper::strlen($abbrev), $maxLen);
             }
             $abbrevs = \array_map(function ($cmd) use($commandList, $usableWidth, $maxLen, &$commands) {
                 if ($commandList[$cmd]->isHidden()) {
@@ -599,16 +599,16 @@ class Application implements \RectorPrefix20210528\Symfony\Contracts\Service\Res
                     return \false;
                 }
                 $abbrev = \str_pad($cmd, $maxLen, ' ') . ' ' . $commandList[$cmd]->getDescription();
-                return \RectorPrefix20210528\Symfony\Component\Console\Helper\Helper::strlen($abbrev) > $usableWidth ? \RectorPrefix20210528\Symfony\Component\Console\Helper\Helper::substr($abbrev, 0, $usableWidth - 3) . '...' : $abbrev;
+                return \RectorPrefix20210529\Symfony\Component\Console\Helper\Helper::strlen($abbrev) > $usableWidth ? \RectorPrefix20210529\Symfony\Component\Console\Helper\Helper::substr($abbrev, 0, $usableWidth - 3) . '...' : $abbrev;
             }, \array_values($commands));
             if (\count($commands) > 1) {
                 $suggestions = $this->getAbbreviationSuggestions(\array_filter($abbrevs));
-                throw new \RectorPrefix20210528\Symfony\Component\Console\Exception\CommandNotFoundException(\sprintf("Command \"%s\" is ambiguous.\nDid you mean one of these?\n%s.", $name, $suggestions), \array_values($commands));
+                throw new \RectorPrefix20210529\Symfony\Component\Console\Exception\CommandNotFoundException(\sprintf("Command \"%s\" is ambiguous.\nDid you mean one of these?\n%s.", $name, $suggestions), \array_values($commands));
             }
         }
         $command = $this->get(\reset($commands));
         if ($command->isHidden()) {
-            throw new \RectorPrefix20210528\Symfony\Component\Console\Exception\CommandNotFoundException(\sprintf('The command "%s" does not exist.', $name));
+            throw new \RectorPrefix20210529\Symfony\Component\Console\Exception\CommandNotFoundException(\sprintf('The command "%s" does not exist.', $name));
         }
         return $command;
     }
@@ -665,23 +665,23 @@ class Application implements \RectorPrefix20210528\Symfony\Contracts\Service\Res
         }
         return $abbrevs;
     }
-    public function renderThrowable(\Throwable $e, \RectorPrefix20210528\Symfony\Component\Console\Output\OutputInterface $output) : void
+    public function renderThrowable(\Throwable $e, \RectorPrefix20210529\Symfony\Component\Console\Output\OutputInterface $output) : void
     {
-        $output->writeln('', \RectorPrefix20210528\Symfony\Component\Console\Output\OutputInterface::VERBOSITY_QUIET);
+        $output->writeln('', \RectorPrefix20210529\Symfony\Component\Console\Output\OutputInterface::VERBOSITY_QUIET);
         $this->doRenderThrowable($e, $output);
         if (null !== $this->runningCommand) {
-            $output->writeln(\sprintf('<info>%s</info>', \sprintf($this->runningCommand->getSynopsis(), $this->getName())), \RectorPrefix20210528\Symfony\Component\Console\Output\OutputInterface::VERBOSITY_QUIET);
-            $output->writeln('', \RectorPrefix20210528\Symfony\Component\Console\Output\OutputInterface::VERBOSITY_QUIET);
+            $output->writeln(\sprintf('<info>%s</info>', \sprintf($this->runningCommand->getSynopsis(), $this->getName())), \RectorPrefix20210529\Symfony\Component\Console\Output\OutputInterface::VERBOSITY_QUIET);
+            $output->writeln('', \RectorPrefix20210529\Symfony\Component\Console\Output\OutputInterface::VERBOSITY_QUIET);
         }
     }
-    protected function doRenderThrowable(\Throwable $e, \RectorPrefix20210528\Symfony\Component\Console\Output\OutputInterface $output) : void
+    protected function doRenderThrowable(\Throwable $e, \RectorPrefix20210529\Symfony\Component\Console\Output\OutputInterface $output) : void
     {
         do {
             $message = \trim($e->getMessage());
-            if ('' === $message || \RectorPrefix20210528\Symfony\Component\Console\Output\OutputInterface::VERBOSITY_VERBOSE <= $output->getVerbosity()) {
+            if ('' === $message || \RectorPrefix20210529\Symfony\Component\Console\Output\OutputInterface::VERBOSITY_VERBOSE <= $output->getVerbosity()) {
                 $class = \get_debug_type($e);
                 $title = \sprintf('  [%s%s]  ', $class, 0 !== ($code = $e->getCode()) ? ' (' . $code . ')' : '');
-                $len = \RectorPrefix20210528\Symfony\Component\Console\Helper\Helper::strlen($title);
+                $len = \RectorPrefix20210529\Symfony\Component\Console\Helper\Helper::strlen($title);
             } else {
                 $len = 0;
             }
@@ -695,27 +695,27 @@ class Application implements \RectorPrefix20210528\Symfony\Contracts\Service\Res
             foreach ('' !== $message ? \preg_split('/\\r?\\n/', $message) : [] as $line) {
                 foreach ($this->splitStringByWidth($line, $width - 4) as $line) {
                     // pre-format lines to get the right string length
-                    $lineLength = \RectorPrefix20210528\Symfony\Component\Console\Helper\Helper::strlen($line) + 4;
+                    $lineLength = \RectorPrefix20210529\Symfony\Component\Console\Helper\Helper::strlen($line) + 4;
                     $lines[] = [$line, $lineLength];
                     $len = \max($lineLength, $len);
                 }
             }
             $messages = [];
-            if (!$e instanceof \RectorPrefix20210528\Symfony\Component\Console\Exception\ExceptionInterface || \RectorPrefix20210528\Symfony\Component\Console\Output\OutputInterface::VERBOSITY_VERBOSE <= $output->getVerbosity()) {
-                $messages[] = \sprintf('<comment>%s</comment>', \RectorPrefix20210528\Symfony\Component\Console\Formatter\OutputFormatter::escape(\sprintf('In %s line %s:', \basename($e->getFile()) ?: 'n/a', $e->getLine() ?: 'n/a')));
+            if (!$e instanceof \RectorPrefix20210529\Symfony\Component\Console\Exception\ExceptionInterface || \RectorPrefix20210529\Symfony\Component\Console\Output\OutputInterface::VERBOSITY_VERBOSE <= $output->getVerbosity()) {
+                $messages[] = \sprintf('<comment>%s</comment>', \RectorPrefix20210529\Symfony\Component\Console\Formatter\OutputFormatter::escape(\sprintf('In %s line %s:', \basename($e->getFile()) ?: 'n/a', $e->getLine() ?: 'n/a')));
             }
             $messages[] = $emptyLine = \sprintf('<error>%s</error>', \str_repeat(' ', $len));
-            if ('' === $message || \RectorPrefix20210528\Symfony\Component\Console\Output\OutputInterface::VERBOSITY_VERBOSE <= $output->getVerbosity()) {
-                $messages[] = \sprintf('<error>%s%s</error>', $title, \str_repeat(' ', \max(0, $len - \RectorPrefix20210528\Symfony\Component\Console\Helper\Helper::strlen($title))));
+            if ('' === $message || \RectorPrefix20210529\Symfony\Component\Console\Output\OutputInterface::VERBOSITY_VERBOSE <= $output->getVerbosity()) {
+                $messages[] = \sprintf('<error>%s%s</error>', $title, \str_repeat(' ', \max(0, $len - \RectorPrefix20210529\Symfony\Component\Console\Helper\Helper::strlen($title))));
             }
             foreach ($lines as $line) {
-                $messages[] = \sprintf('<error>  %s  %s</error>', \RectorPrefix20210528\Symfony\Component\Console\Formatter\OutputFormatter::escape($line[0]), \str_repeat(' ', $len - $line[1]));
+                $messages[] = \sprintf('<error>  %s  %s</error>', \RectorPrefix20210529\Symfony\Component\Console\Formatter\OutputFormatter::escape($line[0]), \str_repeat(' ', $len - $line[1]));
             }
             $messages[] = $emptyLine;
             $messages[] = '';
-            $output->writeln($messages, \RectorPrefix20210528\Symfony\Component\Console\Output\OutputInterface::VERBOSITY_QUIET);
-            if (\RectorPrefix20210528\Symfony\Component\Console\Output\OutputInterface::VERBOSITY_VERBOSE <= $output->getVerbosity()) {
-                $output->writeln('<comment>Exception trace:</comment>', \RectorPrefix20210528\Symfony\Component\Console\Output\OutputInterface::VERBOSITY_QUIET);
+            $output->writeln($messages, \RectorPrefix20210529\Symfony\Component\Console\Output\OutputInterface::VERBOSITY_QUIET);
+            if (\RectorPrefix20210529\Symfony\Component\Console\Output\OutputInterface::VERBOSITY_VERBOSE <= $output->getVerbosity()) {
+                $output->writeln('<comment>Exception trace:</comment>', \RectorPrefix20210529\Symfony\Component\Console\Output\OutputInterface::VERBOSITY_QUIET);
                 // exception related properties
                 $trace = $e->getTrace();
                 \array_unshift($trace, ['function' => '', 'file' => $e->getFile() ?: 'n/a', 'line' => $e->getLine() ?: 'n/a', 'args' => []]);
@@ -725,16 +725,16 @@ class Application implements \RectorPrefix20210528\Symfony\Contracts\Service\Res
                     $function = $trace[$i]['function'] ?? '';
                     $file = $trace[$i]['file'] ?? 'n/a';
                     $line = $trace[$i]['line'] ?? 'n/a';
-                    $output->writeln(\sprintf(' %s%s at <info>%s:%s</info>', $class, $function ? $type . $function . '()' : '', $file, $line), \RectorPrefix20210528\Symfony\Component\Console\Output\OutputInterface::VERBOSITY_QUIET);
+                    $output->writeln(\sprintf(' %s%s at <info>%s:%s</info>', $class, $function ? $type . $function . '()' : '', $file, $line), \RectorPrefix20210529\Symfony\Component\Console\Output\OutputInterface::VERBOSITY_QUIET);
                 }
-                $output->writeln('', \RectorPrefix20210528\Symfony\Component\Console\Output\OutputInterface::VERBOSITY_QUIET);
+                $output->writeln('', \RectorPrefix20210529\Symfony\Component\Console\Output\OutputInterface::VERBOSITY_QUIET);
             }
         } while ($e = $e->getPrevious());
     }
     /**
      * Configures the input and output instances based on the user arguments and options.
      */
-    protected function configureIO(\RectorPrefix20210528\Symfony\Component\Console\Input\InputInterface $input, \RectorPrefix20210528\Symfony\Component\Console\Output\OutputInterface $output)
+    protected function configureIO(\RectorPrefix20210529\Symfony\Component\Console\Input\InputInterface $input, \RectorPrefix20210529\Symfony\Component\Console\Output\OutputInterface $output)
     {
         if (\true === $input->hasParameterOption(['--ansi'], \true)) {
             $output->setDecorated(\true);
@@ -746,33 +746,33 @@ class Application implements \RectorPrefix20210528\Symfony\Contracts\Service\Res
         }
         switch ($shellVerbosity = (int) \getenv('SHELL_VERBOSITY')) {
             case -1:
-                $output->setVerbosity(\RectorPrefix20210528\Symfony\Component\Console\Output\OutputInterface::VERBOSITY_QUIET);
+                $output->setVerbosity(\RectorPrefix20210529\Symfony\Component\Console\Output\OutputInterface::VERBOSITY_QUIET);
                 break;
             case 1:
-                $output->setVerbosity(\RectorPrefix20210528\Symfony\Component\Console\Output\OutputInterface::VERBOSITY_VERBOSE);
+                $output->setVerbosity(\RectorPrefix20210529\Symfony\Component\Console\Output\OutputInterface::VERBOSITY_VERBOSE);
                 break;
             case 2:
-                $output->setVerbosity(\RectorPrefix20210528\Symfony\Component\Console\Output\OutputInterface::VERBOSITY_VERY_VERBOSE);
+                $output->setVerbosity(\RectorPrefix20210529\Symfony\Component\Console\Output\OutputInterface::VERBOSITY_VERY_VERBOSE);
                 break;
             case 3:
-                $output->setVerbosity(\RectorPrefix20210528\Symfony\Component\Console\Output\OutputInterface::VERBOSITY_DEBUG);
+                $output->setVerbosity(\RectorPrefix20210529\Symfony\Component\Console\Output\OutputInterface::VERBOSITY_DEBUG);
                 break;
             default:
                 $shellVerbosity = 0;
                 break;
         }
         if (\true === $input->hasParameterOption(['--quiet', '-q'], \true)) {
-            $output->setVerbosity(\RectorPrefix20210528\Symfony\Component\Console\Output\OutputInterface::VERBOSITY_QUIET);
+            $output->setVerbosity(\RectorPrefix20210529\Symfony\Component\Console\Output\OutputInterface::VERBOSITY_QUIET);
             $shellVerbosity = -1;
         } else {
             if ($input->hasParameterOption('-vvv', \true) || $input->hasParameterOption('--verbose=3', \true) || 3 === $input->getParameterOption('--verbose', \false, \true)) {
-                $output->setVerbosity(\RectorPrefix20210528\Symfony\Component\Console\Output\OutputInterface::VERBOSITY_DEBUG);
+                $output->setVerbosity(\RectorPrefix20210529\Symfony\Component\Console\Output\OutputInterface::VERBOSITY_DEBUG);
                 $shellVerbosity = 3;
             } elseif ($input->hasParameterOption('-vv', \true) || $input->hasParameterOption('--verbose=2', \true) || 2 === $input->getParameterOption('--verbose', \false, \true)) {
-                $output->setVerbosity(\RectorPrefix20210528\Symfony\Component\Console\Output\OutputInterface::VERBOSITY_VERY_VERBOSE);
+                $output->setVerbosity(\RectorPrefix20210529\Symfony\Component\Console\Output\OutputInterface::VERBOSITY_VERY_VERBOSE);
                 $shellVerbosity = 2;
             } elseif ($input->hasParameterOption('-v', \true) || $input->hasParameterOption('--verbose=1', \true) || $input->hasParameterOption('--verbose', \true) || $input->getParameterOption('--verbose', \false, \true)) {
-                $output->setVerbosity(\RectorPrefix20210528\Symfony\Component\Console\Output\OutputInterface::VERBOSITY_VERBOSE);
+                $output->setVerbosity(\RectorPrefix20210529\Symfony\Component\Console\Output\OutputInterface::VERBOSITY_VERBOSE);
                 $shellVerbosity = 1;
             }
         }
@@ -793,22 +793,22 @@ class Application implements \RectorPrefix20210528\Symfony\Contracts\Service\Res
      *
      * @return int 0 if everything went fine, or an error code
      */
-    protected function doRunCommand(\RectorPrefix20210528\Symfony\Component\Console\Command\Command $command, \RectorPrefix20210528\Symfony\Component\Console\Input\InputInterface $input, \RectorPrefix20210528\Symfony\Component\Console\Output\OutputInterface $output)
+    protected function doRunCommand(\RectorPrefix20210529\Symfony\Component\Console\Command\Command $command, \RectorPrefix20210529\Symfony\Component\Console\Input\InputInterface $input, \RectorPrefix20210529\Symfony\Component\Console\Output\OutputInterface $output)
     {
         foreach ($command->getHelperSet() as $helper) {
-            if ($helper instanceof \RectorPrefix20210528\Symfony\Component\Console\Input\InputAwareInterface) {
+            if ($helper instanceof \RectorPrefix20210529\Symfony\Component\Console\Input\InputAwareInterface) {
                 $helper->setInput($input);
             }
         }
-        if ($command instanceof \RectorPrefix20210528\Symfony\Component\Console\Command\SignalableCommandInterface) {
+        if ($command instanceof \RectorPrefix20210529\Symfony\Component\Console\Command\SignalableCommandInterface) {
             if (!$this->signalRegistry) {
-                throw new \RectorPrefix20210528\Symfony\Component\Console\Exception\RuntimeException('Unable to subscribe to signal events. Make sure that the `pcntl` extension is installed and that "pcntl_*" functions are not disabled by your php.ini\'s "disable_functions" directive.');
+                throw new \RectorPrefix20210529\Symfony\Component\Console\Exception\RuntimeException('Unable to subscribe to signal events. Make sure that the `pcntl` extension is installed and that "pcntl_*" functions are not disabled by your php.ini\'s "disable_functions" directive.');
             }
             if ($this->dispatcher) {
                 foreach ($this->signalsToDispatchEvent as $signal) {
-                    $event = new \RectorPrefix20210528\Symfony\Component\Console\Event\ConsoleSignalEvent($command, $input, $output, $signal);
+                    $event = new \RectorPrefix20210529\Symfony\Component\Console\Event\ConsoleSignalEvent($command, $input, $output, $signal);
                     $this->signalRegistry->register($signal, function ($signal, $hasNext) use($event) {
-                        $this->dispatcher->dispatch($event, \RectorPrefix20210528\Symfony\Component\Console\ConsoleEvents::SIGNAL);
+                        $this->dispatcher->dispatch($event, \RectorPrefix20210529\Symfony\Component\Console\ConsoleEvents::SIGNAL);
                         // No more handlers, we try to simulate PHP default behavior
                         if (!$hasNext) {
                             if (!\in_array($signal, [\SIGUSR1, \SIGUSR2], \true)) {
@@ -829,28 +829,28 @@ class Application implements \RectorPrefix20210528\Symfony\Contracts\Service\Res
         try {
             $command->mergeApplicationDefinition();
             $input->bind($command->getDefinition());
-        } catch (\RectorPrefix20210528\Symfony\Component\Console\Exception\ExceptionInterface $e) {
+        } catch (\RectorPrefix20210529\Symfony\Component\Console\Exception\ExceptionInterface $e) {
             // ignore invalid options/arguments for now, to allow the event listeners to customize the InputDefinition
         }
-        $event = new \RectorPrefix20210528\Symfony\Component\Console\Event\ConsoleCommandEvent($command, $input, $output);
+        $event = new \RectorPrefix20210529\Symfony\Component\Console\Event\ConsoleCommandEvent($command, $input, $output);
         $e = null;
         try {
-            $this->dispatcher->dispatch($event, \RectorPrefix20210528\Symfony\Component\Console\ConsoleEvents::COMMAND);
+            $this->dispatcher->dispatch($event, \RectorPrefix20210529\Symfony\Component\Console\ConsoleEvents::COMMAND);
             if ($event->commandShouldRun()) {
                 $exitCode = $command->run($input, $output);
             } else {
-                $exitCode = \RectorPrefix20210528\Symfony\Component\Console\Event\ConsoleCommandEvent::RETURN_CODE_DISABLED;
+                $exitCode = \RectorPrefix20210529\Symfony\Component\Console\Event\ConsoleCommandEvent::RETURN_CODE_DISABLED;
             }
         } catch (\Throwable $e) {
-            $event = new \RectorPrefix20210528\Symfony\Component\Console\Event\ConsoleErrorEvent($input, $output, $e, $command);
-            $this->dispatcher->dispatch($event, \RectorPrefix20210528\Symfony\Component\Console\ConsoleEvents::ERROR);
+            $event = new \RectorPrefix20210529\Symfony\Component\Console\Event\ConsoleErrorEvent($input, $output, $e, $command);
+            $this->dispatcher->dispatch($event, \RectorPrefix20210529\Symfony\Component\Console\ConsoleEvents::ERROR);
             $e = $event->getError();
             if (0 === ($exitCode = $event->getExitCode())) {
                 $e = null;
             }
         }
-        $event = new \RectorPrefix20210528\Symfony\Component\Console\Event\ConsoleTerminateEvent($command, $input, $output, $exitCode);
-        $this->dispatcher->dispatch($event, \RectorPrefix20210528\Symfony\Component\Console\ConsoleEvents::TERMINATE);
+        $event = new \RectorPrefix20210529\Symfony\Component\Console\Event\ConsoleTerminateEvent($command, $input, $output, $exitCode);
+        $this->dispatcher->dispatch($event, \RectorPrefix20210529\Symfony\Component\Console\ConsoleEvents::TERMINATE);
         if (null !== $e) {
             throw $e;
         }
@@ -861,7 +861,7 @@ class Application implements \RectorPrefix20210528\Symfony\Contracts\Service\Res
      *
      * @return string|null
      */
-    protected function getCommandName(\RectorPrefix20210528\Symfony\Component\Console\Input\InputInterface $input)
+    protected function getCommandName(\RectorPrefix20210529\Symfony\Component\Console\Input\InputInterface $input)
     {
         return $this->singleCommand ? $this->defaultCommand : $input->getFirstArgument();
     }
@@ -872,7 +872,7 @@ class Application implements \RectorPrefix20210528\Symfony\Contracts\Service\Res
      */
     protected function getDefaultInputDefinition()
     {
-        return new \RectorPrefix20210528\Symfony\Component\Console\Input\InputDefinition([new \RectorPrefix20210528\Symfony\Component\Console\Input\InputArgument('command', \RectorPrefix20210528\Symfony\Component\Console\Input\InputArgument::REQUIRED, 'The command to execute'), new \RectorPrefix20210528\Symfony\Component\Console\Input\InputOption('--help', '-h', \RectorPrefix20210528\Symfony\Component\Console\Input\InputOption::VALUE_NONE, 'Display help for the given command. When no command is given display help for the <info>' . $this->defaultCommand . '</info> command'), new \RectorPrefix20210528\Symfony\Component\Console\Input\InputOption('--quiet', '-q', \RectorPrefix20210528\Symfony\Component\Console\Input\InputOption::VALUE_NONE, 'Do not output any message'), new \RectorPrefix20210528\Symfony\Component\Console\Input\InputOption('--verbose', '-v|vv|vvv', \RectorPrefix20210528\Symfony\Component\Console\Input\InputOption::VALUE_NONE, 'Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug'), new \RectorPrefix20210528\Symfony\Component\Console\Input\InputOption('--version', '-V', \RectorPrefix20210528\Symfony\Component\Console\Input\InputOption::VALUE_NONE, 'Display this application version'), new \RectorPrefix20210528\Symfony\Component\Console\Input\InputOption('--ansi', '', \RectorPrefix20210528\Symfony\Component\Console\Input\InputOption::VALUE_NONE, 'Force ANSI output'), new \RectorPrefix20210528\Symfony\Component\Console\Input\InputOption('--no-ansi', '', \RectorPrefix20210528\Symfony\Component\Console\Input\InputOption::VALUE_NONE, 'Disable ANSI output'), new \RectorPrefix20210528\Symfony\Component\Console\Input\InputOption('--no-interaction', '-n', \RectorPrefix20210528\Symfony\Component\Console\Input\InputOption::VALUE_NONE, 'Do not ask any interactive question')]);
+        return new \RectorPrefix20210529\Symfony\Component\Console\Input\InputDefinition([new \RectorPrefix20210529\Symfony\Component\Console\Input\InputArgument('command', \RectorPrefix20210529\Symfony\Component\Console\Input\InputArgument::REQUIRED, 'The command to execute'), new \RectorPrefix20210529\Symfony\Component\Console\Input\InputOption('--help', '-h', \RectorPrefix20210529\Symfony\Component\Console\Input\InputOption::VALUE_NONE, 'Display help for the given command. When no command is given display help for the <info>' . $this->defaultCommand . '</info> command'), new \RectorPrefix20210529\Symfony\Component\Console\Input\InputOption('--quiet', '-q', \RectorPrefix20210529\Symfony\Component\Console\Input\InputOption::VALUE_NONE, 'Do not output any message'), new \RectorPrefix20210529\Symfony\Component\Console\Input\InputOption('--verbose', '-v|vv|vvv', \RectorPrefix20210529\Symfony\Component\Console\Input\InputOption::VALUE_NONE, 'Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug'), new \RectorPrefix20210529\Symfony\Component\Console\Input\InputOption('--version', '-V', \RectorPrefix20210529\Symfony\Component\Console\Input\InputOption::VALUE_NONE, 'Display this application version'), new \RectorPrefix20210529\Symfony\Component\Console\Input\InputOption('--ansi', '', \RectorPrefix20210529\Symfony\Component\Console\Input\InputOption::VALUE_NONE, 'Force ANSI output'), new \RectorPrefix20210529\Symfony\Component\Console\Input\InputOption('--no-ansi', '', \RectorPrefix20210529\Symfony\Component\Console\Input\InputOption::VALUE_NONE, 'Disable ANSI output'), new \RectorPrefix20210529\Symfony\Component\Console\Input\InputOption('--no-interaction', '-n', \RectorPrefix20210529\Symfony\Component\Console\Input\InputOption::VALUE_NONE, 'Do not ask any interactive question')]);
     }
     /**
      * Gets the default commands that should always be available.
@@ -881,7 +881,7 @@ class Application implements \RectorPrefix20210528\Symfony\Contracts\Service\Res
      */
     protected function getDefaultCommands()
     {
-        return [new \RectorPrefix20210528\Symfony\Component\Console\Command\HelpCommand(), new \RectorPrefix20210528\Symfony\Component\Console\Command\ListCommand()];
+        return [new \RectorPrefix20210529\Symfony\Component\Console\Command\HelpCommand(), new \RectorPrefix20210529\Symfony\Component\Console\Command\ListCommand()];
     }
     /**
      * Gets the default helper set with the helpers that should always be available.
@@ -890,7 +890,7 @@ class Application implements \RectorPrefix20210528\Symfony\Contracts\Service\Res
      */
     protected function getDefaultHelperSet()
     {
-        return new \RectorPrefix20210528\Symfony\Component\Console\Helper\HelperSet([new \RectorPrefix20210528\Symfony\Component\Console\Helper\FormatterHelper(), new \RectorPrefix20210528\Symfony\Component\Console\Helper\DebugFormatterHelper(), new \RectorPrefix20210528\Symfony\Component\Console\Helper\ProcessHelper(), new \RectorPrefix20210528\Symfony\Component\Console\Helper\QuestionHelper()]);
+        return new \RectorPrefix20210529\Symfony\Component\Console\Helper\HelperSet([new \RectorPrefix20210529\Symfony\Component\Console\Helper\FormatterHelper(), new \RectorPrefix20210529\Symfony\Component\Console\Helper\DebugFormatterHelper(), new \RectorPrefix20210529\Symfony\Component\Console\Helper\ProcessHelper(), new \RectorPrefix20210529\Symfony\Component\Console\Helper\QuestionHelper()]);
     }
     /**
      * Returns abbreviated suggestions in string format.

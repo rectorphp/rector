@@ -9,7 +9,7 @@ use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20210528\TYPO3\CMS\Backend\Utility\BackendUtility;
+use RectorPrefix20210529\TYPO3\CMS\Backend\Utility\BackendUtility;
 /**
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/9.4/Deprecation-84414-BackendUtilityshortcutExists.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v9\v4\BackendUtilityShortcutExistsRector\BackendUtilityShortcutExistsRectorTest
@@ -21,7 +21,7 @@ final class BackendUtilityShortcutExistsRector extends \Rector\Core\Rector\Abstr
      */
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('shortcutExists Static call replaced by method call of ShortcutRepository', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(\RectorPrefix20210528\TYPO3\CMS\Backend\Utility\BackendUtility::class . '::shortcutExists($url);', <<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('shortcutExists Static call replaced by method call of ShortcutRepository', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(\RectorPrefix20210529\TYPO3\CMS\Backend\Utility\BackendUtility::class . '::shortcutExists($url);', <<<'CODE_SAMPLE'
 GeneralUtility::makeInstance(ShortcutRepository::class)->shortcutExists($url);
 CODE_SAMPLE
 )]);
