@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\StaticTypeMapper\Mapper;
 
-use RectorPrefix20210529\Nette\Utils\Strings;
+use RectorPrefix20210530\Nette\Utils\Strings;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\BooleanType;
 use PHPStan\Type\CallableType;
@@ -26,7 +26,7 @@ final class ScalarStringToTypeMapper
     private const SCALAR_NAME_BY_TYPE = [\PHPStan\Type\StringType::class => ['string'], \PHPStan\Type\FloatType::class => ['float', 'real', 'double'], \PHPStan\Type\IntegerType::class => ['int', 'integer'], \PHPStan\Type\BooleanType::class => ['bool', 'boolean'], \PHPStan\Type\NullType::class => ['null'], \PHPStan\Type\VoidType::class => ['void'], \PHPStan\Type\ResourceType::class => ['resource'], \PHPStan\Type\CallableType::class => ['callback', 'callable'], \PHPStan\Type\ObjectWithoutClassType::class => ['object']];
     public function mapScalarStringToType(string $scalarName) : \PHPStan\Type\Type
     {
-        $loweredScalarName = \RectorPrefix20210529\Nette\Utils\Strings::lower($scalarName);
+        $loweredScalarName = \RectorPrefix20210530\Nette\Utils\Strings::lower($scalarName);
         if ($loweredScalarName === 'false') {
             return new \PHPStan\Type\Constant\ConstantBooleanType(\false);
         }

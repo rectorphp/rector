@@ -4,6 +4,9 @@ Never run this tool on production, only on development environment where code is
 
 # Rector for TYPO3
 
+This repository (`ssch/typo3-rector`) is for development TYPO3 Rector only.
+Head to [`rectorphp/rector`](http://github.com/rectorphp/rector) for installation.
+
 Apply automatic fixes on your TYPO3 code.
 
 [![Downloads](https://img.shields.io/packagist/dt/ssch/typo3-rector.svg?style=flat-square)](https://packagist.org/packages/ssch/typo3-rector)

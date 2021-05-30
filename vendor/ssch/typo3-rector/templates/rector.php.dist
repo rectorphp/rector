@@ -10,6 +10,9 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Ssch\TYPO3Rector\Set\Typo3SetList;
 use Ssch\TYPO3Rector\Rector\v9\v0\InjectAnnotationRector;
 use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
+use Ssch\TYPO3Rector\FileProcessor\Composer\Rector\ExtensionComposerRector;
+use Ssch\TYPO3Rector\Rector\General\ConvertTypo3ConfVarsRector;
+use Ssch\TYPO3Rector\Rector\General\ExtEmConfRector;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     // get parameters
@@ -68,7 +71,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     // ]);
 
     // get services (needed for register a single rule)
-    // $services = $containerConfigurator->services();
+    $services = $containerConfigurator->services();
 
     // register a single rule
     // $services->set(InjectAnnotationRector::class);
@@ -90,6 +93,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     // Rewrite your extbase persistence class mapping from typoscript into php according to official docs.
     // This processor will create a summarized file with all of the typoscript rewrites combined into a single file.
     // The filename can be passed as argument, "Configuration_Extbase_Persistence_Classes.php" is default.
-    // $services = $containerConfigurator->services();
     // $services->set(ExtbasePersistenceVisitor::class);
+    // Add some general TYPO3 rules
+    $services->set(ConvertTypo3ConfVarsRector::class);
+    $services->set(ExtEmConfRector::class);
+    $services->set(ExtensionComposerRector::class);
+
+
 };

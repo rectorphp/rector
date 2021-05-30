@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace PhpParser\Builder;
 
-use RectorPrefix20210529\PhpParser;
+use RectorPrefix20210530\PhpParser;
 use PhpParser\BuilderHelpers;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;

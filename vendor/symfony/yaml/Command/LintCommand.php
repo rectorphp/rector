@@ -8,26 +8,26 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210529\Symfony\Component\Yaml\Command;
+namespace RectorPrefix20210530\Symfony\Component\Yaml\Command;
 
-use RectorPrefix20210529\Symfony\Component\Console\Command\Command;
-use RectorPrefix20210529\Symfony\Component\Console\Exception\InvalidArgumentException;
-use RectorPrefix20210529\Symfony\Component\Console\Exception\RuntimeException;
-use RectorPrefix20210529\Symfony\Component\Console\Input\InputArgument;
-use RectorPrefix20210529\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix20210529\Symfony\Component\Console\Input\InputOption;
-use RectorPrefix20210529\Symfony\Component\Console\Output\OutputInterface;
-use RectorPrefix20210529\Symfony\Component\Console\Style\SymfonyStyle;
-use RectorPrefix20210529\Symfony\Component\Yaml\Exception\ParseException;
-use RectorPrefix20210529\Symfony\Component\Yaml\Parser;
-use RectorPrefix20210529\Symfony\Component\Yaml\Yaml;
+use RectorPrefix20210530\Symfony\Component\Console\Command\Command;
+use RectorPrefix20210530\Symfony\Component\Console\Exception\InvalidArgumentException;
+use RectorPrefix20210530\Symfony\Component\Console\Exception\RuntimeException;
+use RectorPrefix20210530\Symfony\Component\Console\Input\InputArgument;
+use RectorPrefix20210530\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix20210530\Symfony\Component\Console\Input\InputOption;
+use RectorPrefix20210530\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix20210530\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix20210530\Symfony\Component\Yaml\Exception\ParseException;
+use RectorPrefix20210530\Symfony\Component\Yaml\Parser;
+use RectorPrefix20210530\Symfony\Component\Yaml\Yaml;
 /**
  * Validates YAML files syntax and outputs encountered errors.
  *
  * @author Grégoire Pineau <lyrixx@lyrixx.info>
  * @author Robin Chalas <robin.chalas@gmail.com>
  */
-class LintCommand extends \RectorPrefix20210529\Symfony\Component\Console\Command\Command
+class LintCommand extends \RectorPrefix20210530\Symfony\Component\Console\Command\Command
 {
     protected static $defaultName = 'lint:yaml';
     private $parser;
@@ -46,7 +46,7 @@ class LintCommand extends \RectorPrefix20210529\Symfony\Component\Console\Comman
      */
     protected function configure()
     {
-        $this->setDescription('Lint a file and outputs encountered errors')->addArgument('filename', \RectorPrefix20210529\Symfony\Component\Console\Input\InputArgument::IS_ARRAY, 'A file, a directory or "-" for reading from STDIN')->addOption('format', null, \RectorPrefix20210529\Symfony\Component\Console\Input\InputOption::VALUE_REQUIRED, 'The output format', 'txt')->addOption('parse-tags', null, \RectorPrefix20210529\Symfony\Component\Console\Input\InputOption::VALUE_NONE, 'Parse custom tags')->setHelp(<<<EOF
+        $this->setDescription('Lint a file and outputs encountered errors')->addArgument('filename', \RectorPrefix20210530\Symfony\Component\Console\Input\InputArgument::IS_ARRAY, 'A file, a directory or "-" for reading from STDIN')->addOption('format', null, \RectorPrefix20210530\Symfony\Component\Console\Input\InputOption::VALUE_REQUIRED, 'The output format', 'txt')->addOption('parse-tags', null, \RectorPrefix20210530\Symfony\Component\Console\Input\InputOption::VALUE_NONE, 'Parse custom tags')->setHelp(<<<EOF
 The <info>%command.name%</info> command lints a YAML file and outputs to STDOUT
 the first encountered syntax error.
 
@@ -66,23 +66,23 @@ Or of a whole directory:
 EOF
 );
     }
-    protected function execute(\RectorPrefix20210529\Symfony\Component\Console\Input\InputInterface $input, \RectorPrefix20210529\Symfony\Component\Console\Output\OutputInterface $output)
+    protected function execute(\RectorPrefix20210530\Symfony\Component\Console\Input\InputInterface $input, \RectorPrefix20210530\Symfony\Component\Console\Output\OutputInterface $output)
     {
-        $io = new \RectorPrefix20210529\Symfony\Component\Console\Style\SymfonyStyle($input, $output);
+        $io = new \RectorPrefix20210530\Symfony\Component\Console\Style\SymfonyStyle($input, $output);
         $filenames = (array) $input->getArgument('filename');
         $this->format = $input->getOption('format');
         $this->displayCorrectFiles = $output->isVerbose();
-        $flags = $input->getOption('parse-tags') ? \RectorPrefix20210529\Symfony\Component\Yaml\Yaml::PARSE_CUSTOM_TAGS : 0;
+        $flags = $input->getOption('parse-tags') ? \RectorPrefix20210530\Symfony\Component\Yaml\Yaml::PARSE_CUSTOM_TAGS : 0;
         if (['-'] === $filenames) {
             return $this->display($io, [$this->validate(\file_get_contents('php://stdin'), $flags)]);
         }
         if (!$filenames) {
-            throw new \RectorPrefix20210529\Symfony\Component\Console\Exception\RuntimeException('Please provide a filename or pipe file content to STDIN.');
+            throw new \RectorPrefix20210530\Symfony\Component\Console\Exception\RuntimeException('Please provide a filename or pipe file content to STDIN.');
         }
         $filesInfo = [];
         foreach ($filenames as $filename) {
             if (!$this->isReadable($filename)) {
-                throw new \RectorPrefix20210529\Symfony\Component\Console\Exception\RuntimeException(\sprintf('File or directory "%s" is not readable.', $filename));
+                throw new \RectorPrefix20210530\Symfony\Component\Console\Exception\RuntimeException(\sprintf('File or directory "%s" is not readable.', $filename));
             }
             foreach ($this->getFiles($filename) as $file) {
                 $filesInfo[] = $this->validate(\file_get_contents($file), $flags, $file);
@@ -94,20 +94,20 @@ EOF
     {
         $prevErrorHandler = \set_error_handler(function ($level, $message, $file, $line) use(&$prevErrorHandler) {
             if (\E_USER_DEPRECATED === $level) {
-                throw new \RectorPrefix20210529\Symfony\Component\Yaml\Exception\ParseException($message, $this->getParser()->getRealCurrentLineNb() + 1);
+                throw new \RectorPrefix20210530\Symfony\Component\Yaml\Exception\ParseException($message, $this->getParser()->getRealCurrentLineNb() + 1);
             }
             return $prevErrorHandler ? $prevErrorHandler($level, $message, $file, $line) : \false;
         });
         try {
-            $this->getParser()->parse($content, \RectorPrefix20210529\Symfony\Component\Yaml\Yaml::PARSE_CONSTANT | $flags);
-        } catch (\RectorPrefix20210529\Symfony\Component\Yaml\Exception\ParseException $e) {
+            $this->getParser()->parse($content, \RectorPrefix20210530\Symfony\Component\Yaml\Yaml::PARSE_CONSTANT | $flags);
+        } catch (\RectorPrefix20210530\Symfony\Component\Yaml\Exception\ParseException $e) {
             return ['file' => $file, 'line' => $e->getParsedLine(), 'valid' => \false, 'message' => $e->getMessage()];
         } finally {
             \restore_error_handler();
         }
         return ['file' => $file, 'valid' => \true];
     }
-    private function display(\RectorPrefix20210529\Symfony\Component\Console\Style\SymfonyStyle $io, array $files) : int
+    private function display(\RectorPrefix20210530\Symfony\Component\Console\Style\SymfonyStyle $io, array $files) : int
     {
         switch ($this->format) {
             case 'txt':
@@ -115,10 +115,10 @@ EOF
             case 'json':
                 return $this->displayJson($io, $files);
             default:
-                throw new \RectorPrefix20210529\Symfony\Component\Console\Exception\InvalidArgumentException(\sprintf('The format "%s" is not supported.', $this->format));
+                throw new \RectorPrefix20210530\Symfony\Component\Console\Exception\InvalidArgumentException(\sprintf('The format "%s" is not supported.', $this->format));
         }
     }
-    private function displayTxt(\RectorPrefix20210529\Symfony\Component\Console\Style\SymfonyStyle $io, array $filesInfo) : int
+    private function displayTxt(\RectorPrefix20210530\Symfony\Component\Console\Style\SymfonyStyle $io, array $filesInfo) : int
     {
         $countFiles = \count($filesInfo);
         $erroredFiles = 0;
@@ -142,7 +142,7 @@ EOF
         }
         return \min($erroredFiles, 1);
     }
-    private function displayJson(\RectorPrefix20210529\Symfony\Component\Console\Style\SymfonyStyle $io, array $filesInfo) : int
+    private function displayJson(\RectorPrefix20210530\Symfony\Component\Console\Style\SymfonyStyle $io, array $filesInfo) : int
     {
         $errors = 0;
         \array_walk($filesInfo, function (&$v) use(&$errors) {
@@ -170,10 +170,10 @@ EOF
             (yield $file);
         }
     }
-    private function getParser() : \RectorPrefix20210529\Symfony\Component\Yaml\Parser
+    private function getParser() : \RectorPrefix20210530\Symfony\Component\Yaml\Parser
     {
         if (!$this->parser) {
-            $this->parser = new \RectorPrefix20210529\Symfony\Component\Yaml\Parser();
+            $this->parser = new \RectorPrefix20210530\Symfony\Component\Yaml\Parser();
         }
         return $this->parser;
     }

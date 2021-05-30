@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210529\Symfony\Component\Console\Helper;
+namespace RectorPrefix20210530\Symfony\Component\Console\Helper;
 
-use RectorPrefix20210529\Symfony\Component\Console\Command\Command;
-use RectorPrefix20210529\Symfony\Component\Console\Exception\InvalidArgumentException;
+use RectorPrefix20210530\Symfony\Component\Console\Command\Command;
+use RectorPrefix20210530\Symfony\Component\Console\Exception\InvalidArgumentException;
 /**
  * HelperSet represents a set of helpers to be used with a command.
  *
@@ -33,7 +33,7 @@ class HelperSet implements \IteratorAggregate
             $this->set($helper, \is_int($alias) ? null : $alias);
         }
     }
-    public function set(\RectorPrefix20210529\Symfony\Component\Console\Helper\HelperInterface $helper, string $alias = null)
+    public function set(\RectorPrefix20210530\Symfony\Component\Console\Helper\HelperInterface $helper, string $alias = null)
     {
         $this->helpers[$helper->getName()] = $helper;
         if (null !== $alias) {
@@ -60,11 +60,11 @@ class HelperSet implements \IteratorAggregate
     public function get(string $name)
     {
         if (!$this->has($name)) {
-            throw new \RectorPrefix20210529\Symfony\Component\Console\Exception\InvalidArgumentException(\sprintf('The helper "%s" is not defined.', $name));
+            throw new \RectorPrefix20210530\Symfony\Component\Console\Exception\InvalidArgumentException(\sprintf('The helper "%s" is not defined.', $name));
         }
         return $this->helpers[$name];
     }
-    public function setCommand(\RectorPrefix20210529\Symfony\Component\Console\Command\Command $command = null)
+    public function setCommand(\RectorPrefix20210530\Symfony\Component\Console\Command\Command $command = null)
     {
         $this->command = $command;
     }

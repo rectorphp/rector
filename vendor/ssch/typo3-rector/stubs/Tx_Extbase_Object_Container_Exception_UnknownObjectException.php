@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210529;
+namespace RectorPrefix20210530;
 
 if (\class_exists('Tx_Extbase_Object_Container_Exception_UnknownObjectException')) {
     return;

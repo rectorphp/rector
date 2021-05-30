@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\NetteToSymfony\Rector\ClassMethod;
 
-use RectorPrefix20210529\Nette\Utils\Strings;
+use RectorPrefix20210530\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
@@ -19,7 +19,7 @@ use Rector\NetteToSymfony\Route\RouteInfoFactory;
 use Rector\NetteToSymfony\Routing\ExplicitRouteAnnotationDecorator;
 use Rector\NetteToSymfony\ValueObject\RouteInfo;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
-use RectorPrefix20210529\Stringy\Stringy;
+use RectorPrefix20210530\Stringy\Stringy;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -253,11 +253,11 @@ CODE_SAMPLE
         /** @var string $presenterName */
         $presenterName = $this->getName($class);
         /** @var string $presenterPart */
-        $presenterPart = \RectorPrefix20210529\Nette\Utils\Strings::after($presenterName, '\\', -1);
-        $presenterPart = \RectorPrefix20210529\Nette\Utils\Strings::substring($presenterPart, 0, -\RectorPrefix20210529\Nette\Utils\Strings::length('Presenter'));
-        $stringy = new \RectorPrefix20210529\Stringy\Stringy($presenterPart);
+        $presenterPart = \RectorPrefix20210530\Nette\Utils\Strings::after($presenterName, '\\', -1);
+        $presenterPart = \RectorPrefix20210530\Nette\Utils\Strings::substring($presenterPart, 0, -\RectorPrefix20210530\Nette\Utils\Strings::length('Presenter'));
+        $stringy = new \RectorPrefix20210530\Stringy\Stringy($presenterPart);
         $presenterPart = (string) $stringy->dasherize();
-        $match = (array) \RectorPrefix20210529\Nette\Utils\Strings::match($this->getName($classMethod), self::ACTION_RENDER_NAME_MATCHING_REGEX);
+        $match = (array) \RectorPrefix20210530\Nette\Utils\Strings::match($this->getName($classMethod), self::ACTION_RENDER_NAME_MATCHING_REGEX);
         $actionPart = \lcfirst($match['short_action_name']);
         return $presenterPart . '/' . $actionPart;
     }

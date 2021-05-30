@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210529\TYPO3\CMS\Core\IO;
+namespace RectorPrefix20210530\TYPO3\CMS\Core\IO;
 
 if (\class_exists('TYPO3\\CMS\\Core\\IO\\PharStreamWrapper')) {
     return;

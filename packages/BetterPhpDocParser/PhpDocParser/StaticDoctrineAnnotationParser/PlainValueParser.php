@@ -14,7 +14,7 @@ use Rector\BetterPhpDocParser\PhpDocParser\StaticDoctrineAnnotationParser;
 use Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator;
 use Rector\Core\Configuration\CurrentNodeProvider;
 use Rector\Core\Exception\ShouldNotHappenException;
-use RectorPrefix20210529\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix20210530\Symfony\Contracts\Service\Attribute\Required;
 final class PlainValueParser
 {
     /**

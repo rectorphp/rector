@@ -5,9 +5,9 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix20210529\Nette\Caching;
+namespace RectorPrefix20210530\Nette\Caching;
 
-use RectorPrefix20210529\Nette;
+use RectorPrefix20210530\Nette;
 /**
  * Implements the cache for a application.
  */
@@ -22,7 +22,7 @@ class Cache
     private $storage;
     /** @var string */
     private $namespace;
-    public function __construct(\RectorPrefix20210529\Nette\Caching\Storage $storage, string $namespace = null)
+    public function __construct(\RectorPrefix20210530\Nette\Caching\Storage $storage, string $namespace = null)
     {
         $this->storage = $storage;
         $this->namespace = $namespace . self::NAMESPACE_SEPARATOR;
@@ -30,7 +30,7 @@ class Cache
     /**
      * Returns cache storage.
      */
-    public final function getStorage() : \RectorPrefix20210529\Nette\Caching\Storage
+    public final function getStorage() : \RectorPrefix20210530\Nette\Caching\Storage
     {
         return $this->storage;
     }
@@ -80,11 +80,11 @@ class Cache
         }
         foreach ($keys as $key) {
             if (!\is_scalar($key)) {
-                throw new \RectorPrefix20210529\Nette\InvalidArgumentException('Only scalar keys are allowed in bulkLoad()');
+                throw new \RectorPrefix20210530\Nette\InvalidArgumentException('Only scalar keys are allowed in bulkLoad()');
             }
         }
         $result = [];
-        if (!$this->storage instanceof \RectorPrefix20210529\Nette\Caching\BulkReader) {
+        if (!$this->storage instanceof \RectorPrefix20210530\Nette\Caching\BulkReader) {
             foreach ($keys as $key) {
                 $result[$key] = $this->load($key, $generator ? function (&$dependencies) use($key, $generator) {
                     return $generator(...[$key, &$dependencies]);
@@ -152,7 +152,7 @@ class Cache
     {
         // convert expire into relative amount of seconds
         if (isset($dp[self::EXPIRATION])) {
-            $dp[self::EXPIRATION] = \RectorPrefix20210529\Nette\Utils\DateTime::from($dp[self::EXPIRATION])->format('U') - \time();
+            $dp[self::EXPIRATION] = \RectorPrefix20210530\Nette\Utils\DateTime::from($dp[self::EXPIRATION])->format('U') - \time();
         }
         // make list from TAGS
         if (isset($dp[self::TAGS])) {
@@ -243,11 +243,11 @@ class Cache
      * Starts the output cache.
      * @param  mixed  $key
      */
-    public function capture($key) : ?\RectorPrefix20210529\Nette\Caching\OutputHelper
+    public function capture($key) : ?\RectorPrefix20210530\Nette\Caching\OutputHelper
     {
         $data = $this->load($key);
         if ($data === null) {
-            return new \RectorPrefix20210529\Nette\Caching\OutputHelper($this, $key);
+            return new \RectorPrefix20210530\Nette\Caching\OutputHelper($this, $key);
         }
         echo $data;
         return null;
@@ -255,7 +255,7 @@ class Cache
     /**
      * @deprecated  use capture()
      */
-    public function start($key) : ?\RectorPrefix20210529\Nette\Caching\OutputHelper
+    public function start($key) : ?\RectorPrefix20210530\Nette\Caching\OutputHelper
     {
         return $this->capture($key);
     }

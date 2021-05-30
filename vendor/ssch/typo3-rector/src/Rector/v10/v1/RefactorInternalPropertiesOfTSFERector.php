@@ -21,9 +21,9 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Ssch\TYPO3Rector\Helper\Typo3NodeResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20210529\TYPO3\CMS\Core\Utility\GeneralUtility;
-use RectorPrefix20210529\TYPO3\CMS\Core\Utility\HttpUtility;
-use RectorPrefix20210529\TYPO3\CMS\Frontend\Page\CacheHashCalculator;
+use RectorPrefix20210530\TYPO3\CMS\Core\Utility\GeneralUtility;
+use RectorPrefix20210530\TYPO3\CMS\Core\Utility\HttpUtility;
+use RectorPrefix20210530\TYPO3\CMS\Frontend\Page\CacheHashCalculator;
 /**
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/10.1/Deprecation-89001-InternalPublicTSFEProperties.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v10\v1\RefactorInternalPropertiesOfTSFERector\RefactorInternalPropertiesOfTSFERectorTest

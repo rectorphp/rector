@@ -1,4 +1,4 @@
-# 495 Rules Overview
+# 496 Rules Overview
 
 <br>
 
@@ -36,7 +36,7 @@
 
 - [DowngradePhp74](#downgradephp74) (11)
 
-- [DowngradePhp80](#downgradephp80) (11)
+- [DowngradePhp80](#downgradephp80) (12)
 
 - [EarlyReturn](#earlyreturn) (11)
 
@@ -5149,6 +5149,54 @@ Changes property type definition from type definitions to `@var` annotations.
 
 ## DowngradePhp80
 
+### DowngradeAttributeToAnnotationRector
+
+Refactor PHP attribute markers to annotations notation
+
+:wrench: **configure it!**
+
+- class: [`Rector\DowngradePhp80\Rector\Class_\DowngradeAttributeToAnnotationRector`](../rules/DowngradePhp80/Rector/Class_/DowngradeAttributeToAnnotationRector.php)
+
+```php
+use Rector\DowngradePhp80\Rector\Class_\DowngradeAttributeToAnnotationRector;
+use Rector\DowngradePhp80\ValueObject\DowngradeAttributeToAnnotation;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symplify\SymfonyPhpConfig\ValueObjectInliner;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+
+    $services->set(DowngradeAttributeToAnnotationRector::class)
+        ->call('configure', [[
+            DowngradeAttributeToAnnotationRector::ATTRIBUTE_TO_ANNOTATION => ValueObjectInliner::inline([
+                new DowngradeAttributeToAnnotation(
+                    'Symfony\Component\Routing\Annotation\Route',
+                    'Symfony\Component\Routing\Annotation\Route'
+                ),
+            ]),
+        ]]);
+};
+```
+
+↓
+
+```diff
+ use Symfony\Component\Routing\Annotation\Route;
+
+ class SymfonyRoute
+ {
+-    #[Route(path: '/path', name: 'action')]
++    /**
++     * @Route("/path", name="action")
++     */
+     public function action()
+     {
+     }
+ }
+```
+
+<br>
+
 ### DowngradeClassOnObjectToGetClassRector
 
 Change `$object::class` to get_class($object)
@@ -7212,7 +7260,7 @@ Changes is_array + Traversable check to is_iterable
 
 ### ListToArrayDestructRector
 
-Remove & from new &X
+Change `list()` to array destruct
 
 - class: [`Rector\Php71\Rector\List_\ListToArrayDestructRector`](../rules/Php71/Rector/List_/ListToArrayDestructRector.php)
 
