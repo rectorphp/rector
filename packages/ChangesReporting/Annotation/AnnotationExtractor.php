@@ -25,9 +25,11 @@ final class AnnotationExtractor
             return null;
         }
 
-        // @see https://regex101.com/r/oYGaWU/1
-        $pattern = '#' . preg_quote($annotation, '#') . '\s+(?<content>.*?)$#m';
+        // @see https://3v4l.org/ouYfB
+        // uses '\r?\n' instead of '$' because windows compat
+        $pattern = '#' . preg_quote($annotation, '#') . '\s+(?<content>.*?)\r?\n#m';
         $matches = Strings::match($docComment, $pattern);
+
         return $matches['content'] ?? null;
     }
 }
