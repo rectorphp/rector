@@ -21,9 +21,8 @@ final class AnnotationExtractor
         if (!\is_string($docComment)) {
             return null;
         }
-        // @see https://3v4l.org/ouYfB
-        // uses 'r?\n' instead of '$' because windows compat
-        $pattern = '#' . \preg_quote($annotation, '#') . '\\s+(?<content>.*?)\\r?\\n#m';
+        // @see https://regex101.com/r/oYGaWU/1
+        $pattern = '#' . \preg_quote($annotation, '#') . '\\s+(?<content>.*?)$#m';
         $matches = \RectorPrefix20210530\Nette\Utils\Strings::match($docComment, $pattern);
         return $matches['content'] ?? null;
     }
