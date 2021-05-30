@@ -146,9 +146,9 @@ final class UnionTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\
         return $unionTypeAnalysis->hasArray();
     }
     /**
-     * @return Name|NullableType|null
+     * @return \PhpParser\Node\Name|\PhpParser\Node\NullableType|null
      */
-    private function matchArrayTypes(\PHPStan\Type\UnionType $unionType) : ?\PhpParser\Node
+    private function matchArrayTypes(\PHPStan\Type\UnionType $unionType)
     {
         $unionTypeAnalysis = $this->unionTypeAnalyzer->analyseForNullableAndIterable($unionType);
         if (!$unionTypeAnalysis instanceof \Rector\PHPStanStaticTypeMapper\ValueObject\UnionTypeAnalysis) {

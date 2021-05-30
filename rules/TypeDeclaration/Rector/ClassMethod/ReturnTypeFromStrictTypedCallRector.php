@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\FunctionLike;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\NullableType;
@@ -121,9 +122,9 @@ CODE_SAMPLE
         return $node;
     }
     /**
-     * @param ClassMethod|Function_|Closure $node
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $node
      */
-    private function isSkipped(\PhpParser\Node $node) : bool
+    private function isSkipped($node) : bool
     {
         if (!$this->phpVersionProvider->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::SCALAR_TYPES)) {
             return \true;
@@ -135,7 +136,7 @@ CODE_SAMPLE
     }
     /**
      * @param Return_[] $returns
-     * @return array<Name|NullableType|UnionType>
+     * @return array<Identifier|Name|NullableType|PhpParserUnionType>
      */
     private function collectStrictReturnTypes(array $returns) : array
     {
@@ -186,9 +187,9 @@ CODE_SAMPLE
         return $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($returnType);
     }
     /**
-     * @return Name|NullableType|PhpParserUnionType|null
+     * @return \PhpParser\Node\Name|\PhpParser\Node\NullableType|PhpParserUnionType|null
      */
-    private function resolveFuncCallReturnNode(\PhpParser\Node\Expr\FuncCall $funcCall) : ?\PhpParser\Node
+    private function resolveFuncCallReturnNode(\PhpParser\Node\Expr\FuncCall $funcCall)
     {
         $returnType = $this->reflectionTypeResolver->resolveFuncCallReturnType($funcCall);
         if (!$returnType instanceof \PHPStan\Type\Type) {
@@ -197,10 +198,10 @@ CODE_SAMPLE
         return $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($returnType);
     }
     /**
-     * @param ClassMethod|Function_|Closure $functionLike
-     * @param Name|NullableType|PhpParserUnionType $returnedStrictTypeNode
+     * @param \PhpParser\Node\Identifier|\PhpParser\Node\Name|\PhpParser\Node\NullableType|PhpParserUnionType $returnedStrictTypeNode
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
      */
-    private function refactorSingleReturnType(\PhpParser\Node\Stmt\Return_ $return, \PhpParser\Node $returnedStrictTypeNode, \PhpParser\Node\FunctionLike $functionLike) : \PhpParser\Node\FunctionLike
+    private function refactorSingleReturnType(\PhpParser\Node\Stmt\Return_ $return, $returnedStrictTypeNode, $functionLike) : \PhpParser\Node\FunctionLike
     {
         $resolvedType = $this->nodeTypeResolver->resolve($return);
         if ($resolvedType instanceof \PHPStan\Type\UnionType) {

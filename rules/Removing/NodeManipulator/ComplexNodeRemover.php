@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace Rector\Removing\NodeManipulator;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticPropertyFetch;
@@ -95,10 +94,10 @@ final class ComplexNodeRemover
         $this->nodeRemover->removeNode($property);
     }
     /**
-     * @param StaticPropertyFetch|PropertyFetch $expr
      * @param string[] $classMethodNamesToSkip
+     * @param \PhpParser\Node\Expr\StaticPropertyFetch|\PhpParser\Node\Expr\PropertyFetch $expr
      */
-    private function shouldSkipPropertyForClassMethod(\PhpParser\Node\Expr $expr, array $classMethodNamesToSkip) : bool
+    private function shouldSkipPropertyForClassMethod($expr, array $classMethodNamesToSkip) : bool
     {
         $classMethodNode = $expr->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::METHOD_NODE);
         if (!$classMethodNode instanceof \PhpParser\Node\Stmt\ClassMethod) {
@@ -108,9 +107,9 @@ final class ComplexNodeRemover
         return \in_array($classMethodName, $classMethodNamesToSkip, \true);
     }
     /**
-     * @param PropertyFetch|StaticPropertyFetch $expr
+     * @param \PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\StaticPropertyFetch $expr
      */
-    private function resolveAssign(\PhpParser\Node\Expr $expr) : ?\PhpParser\Node\Expr\Assign
+    private function resolveAssign($expr) : ?\PhpParser\Node\Expr\Assign
     {
         $assign = $expr->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
         while ($assign !== null && !$assign instanceof \PhpParser\Node\Expr\Assign) {

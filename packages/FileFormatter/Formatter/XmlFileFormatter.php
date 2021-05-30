@@ -69,7 +69,7 @@ final class XmlFileFormatter implements \Rector\FileFormatter\Contract\Formatter
         $output = '';
         $this->depth = 0;
         $parts = $this->getXmlParts($xml);
-        if (\str_starts_with($parts[0], '<?xml')) {
+        if (\strncmp($parts[0], '<?xml', \strlen('<?xml')) === 0) {
             $output = \array_shift($parts) . \PHP_EOL;
         }
         foreach ($parts as $part) {

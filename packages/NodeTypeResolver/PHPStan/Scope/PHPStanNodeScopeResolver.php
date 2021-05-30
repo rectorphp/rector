@@ -6,7 +6,6 @@ namespace Rector\NodeTypeResolver\PHPStan\Scope;
 use RectorPrefix20210530\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Trait_;
 use PhpParser\NodeTraverser;
@@ -141,9 +140,9 @@ final class PHPStanNodeScopeResolver
         $nodeTraverser->traverse($nodes);
     }
     /**
-     * @param Class_|Interface_ $classLike
+     * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Interface_ $classLike
      */
-    private function resolveClassOrInterfaceScope(\PhpParser\Node\Stmt\ClassLike $classLike, \PHPStan\Analyser\Scope $scope) : \PHPStan\Analyser\Scope
+    private function resolveClassOrInterfaceScope($classLike, \PHPStan\Analyser\Scope $scope) : \PHPStan\Analyser\Scope
     {
         $className = $this->resolveClassName($classLike);
         // is anonymous class? - not possible to enter it since PHPStan 0.12.33, see https://github.com/phpstan/phpstan-src/commit/e87fb0ec26f9c8552bbeef26a868b1e5d8185e91
@@ -184,9 +183,9 @@ final class PHPStanNodeScopeResolver
         $this->changedFilesDetector->addFileWithDependencies($smartFileInfo, $dependentFiles);
     }
     /**
-     * @param Class_|Interface_|Trait_ $classLike
+     * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Interface_|\PhpParser\Node\Stmt\Trait_ $classLike
      */
-    private function resolveClassName(\PhpParser\Node\Stmt\ClassLike $classLike) : string
+    private function resolveClassName($classLike) : string
     {
         if (\property_exists($classLike, 'namespacedName')) {
             return (string) $classLike->namespacedName;

@@ -63,15 +63,15 @@ CODE_SAMPLE
         /** @var string $includeValue */
         $includeValue = $this->valueResolver->getValue($node->expr);
         // skip phar
-        if (\str_starts_with($includeValue, 'phar://')) {
+        if (\strncmp($includeValue, 'phar://', \strlen('phar://')) === 0) {
             return null;
         }
         // skip absolute paths
-        if (\str_starts_with($includeValue, '/')) {
+        if (\strncmp($includeValue, '/', \strlen('/')) === 0) {
             return null;
         }
         // add preslash to string
-        if (\str_starts_with($includeValue, './')) {
+        if (\strncmp($includeValue, './', \strlen('./')) === 0) {
             $node->expr->value = \RectorPrefix20210530\Nette\Utils\Strings::substring($includeValue, 1);
         } else {
             $node->expr->value = '/' . $includeValue;

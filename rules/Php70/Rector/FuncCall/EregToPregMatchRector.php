@@ -100,7 +100,7 @@ final class EregToPregMatchRector extends \Rector\Core\Rector\AbstractRector
      */
     private function processSplitLimitArgument(\PhpParser\Node\Expr\FuncCall $funcCall, string $functionName) : void
     {
-        if (!\str_starts_with($functionName, 'split')) {
+        if (\strncmp($functionName, 'split', \strlen('split')) !== 0) {
             return;
         }
         // 3rd argument - $limit, 0 → 1

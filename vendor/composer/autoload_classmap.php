@@ -2129,6 +2129,8 @@ return array(
     'Rector\\DowngradePhp80\\Rector\\Class_\\DowngradePropertyPromotionRector' => $baseDir . '/rules/DowngradePhp80/Rector/Class_/DowngradePropertyPromotionRector.php',
     'Rector\\DowngradePhp80\\Rector\\Expression\\DowngradeMatchToSwitchRector' => $baseDir . '/rules/DowngradePhp80/Rector/Expression/DowngradeMatchToSwitchRector.php',
     'Rector\\DowngradePhp80\\Rector\\FuncCall\\DowngradeStrContainsRector' => $baseDir . '/rules/DowngradePhp80/Rector/FuncCall/DowngradeStrContainsRector.php',
+    'Rector\\DowngradePhp80\\Rector\\FuncCall\\DowngradeStrEndsWithRector' => $baseDir . '/rules/DowngradePhp80/Rector/FuncCall/DowngradeStrEndsWithRector.php',
+    'Rector\\DowngradePhp80\\Rector\\FuncCall\\DowngradeStrStartsWithRector' => $baseDir . '/rules/DowngradePhp80/Rector/FuncCall/DowngradeStrStartsWithRector.php',
     'Rector\\DowngradePhp80\\Rector\\FunctionLike\\DowngradeMixedTypeDeclarationRector' => $baseDir . '/rules/DowngradePhp80/Rector/FunctionLike/DowngradeMixedTypeDeclarationRector.php',
     'Rector\\DowngradePhp80\\Rector\\FunctionLike\\DowngradeUnionTypeDeclarationRector' => $baseDir . '/rules/DowngradePhp80/Rector/FunctionLike/DowngradeUnionTypeDeclarationRector.php',
     'Rector\\DowngradePhp80\\Rector\\NullsafeMethodCall\\DowngradeNullsafeToTernaryOperatorRector' => $baseDir . '/rules/DowngradePhp80/Rector/NullsafeMethodCall/DowngradeNullsafeToTernaryOperatorRector.php',

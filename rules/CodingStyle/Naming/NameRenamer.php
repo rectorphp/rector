@@ -13,6 +13,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\TraitUse;
+use PhpParser\Node\UnionType;
 use Rector\CodingStyle\ValueObject\NameAndParent;
 use Rector\NodeNameResolver\NodeNameResolver;
 final class NameRenamer
@@ -53,6 +54,9 @@ final class NameRenamer
             }
             if ($parentNode instanceof \PhpParser\Node\Expr\StaticCall) {
                 $this->renameStaticCall($lastName, $parentNode);
+            }
+            if ($parentNode instanceof \PhpParser\Node\UnionType) {
+                $this->renameUnionType($lastName, $parentNode, $usedName);
             }
         }
     }
@@ -97,6 +101,18 @@ final class NameRenamer
             return;
         }
         $param->type = new \PhpParser\Node\Name($lastName);
+    }
+    private function renameUnionType(string $lastName, \PhpParser\Node\UnionType $unionType, \PhpParser\Node $usedNameNode) : void
+    {
+        foreach ($unionType->types as $key => $unionedType) {
+            if (!$this->nodeNameResolver->areNamesEqual($unionedType, $usedNameNode)) {
+                continue;
+            }
+            if (!$unionedType instanceof \PhpParser\Node\Name) {
+                continue;
+            }
+            $unionType->types[$key] = new \PhpParser\Node\Name($lastName);
+        }
     }
     /**
      * @param Name|Identifier $usedNameNode

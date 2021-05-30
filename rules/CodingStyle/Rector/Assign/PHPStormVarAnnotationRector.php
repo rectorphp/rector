@@ -122,7 +122,7 @@ CODE_SAMPLE
         $docContent = $this->getDocContent($node);
         // normalize content
         // starts with "/*", instead of "/**"
-        if (\str_starts_with($docContent, '/* ')) {
+        if (\strncmp($docContent, '/* ', \strlen('/* ')) === 0) {
             $docContent = \RectorPrefix20210530\Nette\Utils\Strings::replace($docContent, self::SINGLE_ASTERISK_COMMENT_START_REGEX, '/** ');
         }
         // $value is first, instead of type is first

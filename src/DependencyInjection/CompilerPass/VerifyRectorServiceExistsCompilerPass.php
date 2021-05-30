@@ -16,7 +16,7 @@ final class VerifyRectorServiceExistsCompilerPass implements \RectorPrefix202105
             if ($class === null) {
                 continue;
             }
-            if (!\str_ends_with($class, 'Rector')) {
+            if (\substr_compare($class, 'Rector', -\strlen('Rector')) !== 0) {
                 continue;
             }
             if (!\is_a($class, \Rector\Core\Contract\Rector\RectorInterface::class, \true)) {

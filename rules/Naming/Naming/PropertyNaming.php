@@ -169,7 +169,7 @@ final class PropertyNaming
     private function removePrefixesAndSuffixes(string $shortClassName) : string
     {
         // is SomeInterface
-        if (\str_ends_with($shortClassName, self::INTERFACE)) {
+        if (\substr_compare($shortClassName, self::INTERFACE, -\strlen(self::INTERFACE)) === 0) {
             $shortClassName = \RectorPrefix20210530\Nette\Utils\Strings::substring($shortClassName, 0, -\strlen(self::INTERFACE));
         }
         // is ISomeClass
@@ -177,7 +177,7 @@ final class PropertyNaming
             $shortClassName = \RectorPrefix20210530\Nette\Utils\Strings::substring($shortClassName, 1);
         }
         // is AbstractClass
-        if (\str_starts_with($shortClassName, 'Abstract')) {
+        if (\strncmp($shortClassName, 'Abstract', \strlen('Abstract')) === 0) {
             $shortClassName = \RectorPrefix20210530\Nette\Utils\Strings::substring($shortClassName, \strlen('Abstract'));
         }
         return $shortClassName;
@@ -220,7 +220,7 @@ final class PropertyNaming
         }
         /** @var string $lastNamePart */
         $lastNamePart = \RectorPrefix20210530\Nette\Utils\Strings::after($fqn, '\\', -1);
-        if (\str_ends_with($lastNamePart, self::INTERFACE)) {
+        if (\substr_compare($lastNamePart, self::INTERFACE, -\strlen(self::INTERFACE)) === 0) {
             return \RectorPrefix20210530\Nette\Utils\Strings::substring($lastNamePart, 0, -\strlen(self::INTERFACE));
         }
         return $lastNamePart;
@@ -235,7 +235,7 @@ final class PropertyNaming
         if (\RectorPrefix20210530\Nette\Utils\Strings::match($shortName, self::I_PREFIX_REGEX)) {
             return \RectorPrefix20210530\Nette\Utils\Strings::substring($shortName, 1);
         }
-        if (\str_ends_with($shortName, self::INTERFACE)) {
+        if (\substr_compare($shortName, self::INTERFACE, -\strlen(self::INTERFACE)) === 0) {
             return \RectorPrefix20210530\Nette\Utils\Strings::substring($shortName, -\strlen(self::INTERFACE));
         }
         return $shortName;
@@ -270,7 +270,7 @@ final class PropertyNaming
         if (\strlen($shortClassName) <= 3) {
             return \false;
         }
-        if (!\str_starts_with($shortClassName, 'I')) {
+        if (\strncmp($shortClassName, 'I', \strlen('I')) !== 0) {
             return \false;
         }
         if (!\ctype_upper($shortClassName[1])) {

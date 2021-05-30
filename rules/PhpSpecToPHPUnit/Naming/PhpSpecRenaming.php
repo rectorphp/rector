@@ -50,7 +50,7 @@ final class PhpSpecRenaming
         // from PhpSpec to PHPUnit method naming convention
         $classMethodName = $this->stringFormatConverter->underscoreAndHyphenToCamelCase($classMethodName);
         // add "test", so PHPUnit runs the method
-        if (!\str_starts_with($classMethodName, 'test')) {
+        if (\strncmp($classMethodName, 'test', \strlen('test')) !== 0) {
             $classMethodName = 'test' . \ucfirst($classMethodName);
         }
         $classMethod->name = new \PhpParser\Node\Identifier($classMethodName);

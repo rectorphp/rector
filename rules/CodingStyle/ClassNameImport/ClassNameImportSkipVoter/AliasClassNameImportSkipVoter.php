@@ -32,7 +32,7 @@ final class AliasClassNameImportSkipVoter implements \Rector\CodingStyle\Contrac
         foreach ($aliasedUses as $aliasedUse) {
             $aliasedUseLowered = \strtolower($aliasedUse);
             // its aliased, we cannot just rename it
-            if (\str_ends_with($aliasedUseLowered, '\\' . $fullyQualifiedObjectType->getShortNameLowered())) {
+            if (\substr_compare($aliasedUseLowered, '\\' . $fullyQualifiedObjectType->getShortNameLowered(), -\strlen('\\' . $fullyQualifiedObjectType->getShortNameLowered())) === 0) {
                 return \true;
             }
         }

@@ -100,7 +100,7 @@ final class VariableManipulator
     {
         /** @var string $className */
         $className = $variable->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);
-        if (!\str_ends_with($className, 'Test')) {
+        if (\substr_compare($className, 'Test', -\strlen('Test')) !== 0) {
             return \false;
         }
         return $this->nodeNameResolver->isName($variable, 'expect*');

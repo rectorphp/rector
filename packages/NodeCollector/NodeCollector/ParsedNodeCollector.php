@@ -114,7 +114,7 @@ final class ParsedNodeCollector
     public function findByShortName(string $shortName) : ?\PhpParser\Node\Stmt\Class_
     {
         foreach ($this->classes as $className => $classNode) {
-            if (\str_ends_with($className, '\\' . $shortName)) {
+            if (\substr_compare($className, '\\' . $shortName, -\strlen('\\' . $shortName)) === 0) {
                 return $classNode;
             }
         }

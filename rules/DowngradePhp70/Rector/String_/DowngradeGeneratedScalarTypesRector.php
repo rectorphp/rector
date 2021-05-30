@@ -119,7 +119,7 @@ CODE_SAMPLE
             return \true;
         }
         foreach (self::FILES_TO_INCLUDE as $fileToInclude) {
-            if (\str_ends_with($fileInfo->getRealPath(), $fileToInclude)) {
+            if (\substr_compare($fileInfo->getRealPath(), $fileToInclude, -\strlen($fileToInclude)) === 0) {
                 return \true;
             }
         }

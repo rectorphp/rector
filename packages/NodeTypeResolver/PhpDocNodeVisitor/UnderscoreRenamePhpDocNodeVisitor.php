@@ -69,7 +69,7 @@ final class UnderscoreRenamePhpDocNodeVisitor extends \RectorPrefix20210530\Symp
         if (!$staticType instanceof \PHPStan\Type\ObjectType) {
             return \true;
         }
-        if (!\str_starts_with($staticType->getClassName(), $pseudoNamespaceToNamespace->getNamespacePrefix())) {
+        if (\strncmp($staticType->getClassName(), $pseudoNamespaceToNamespace->getNamespacePrefix(), \strlen($pseudoNamespaceToNamespace->getNamespacePrefix())) !== 0) {
             return \true;
         }
         // excluded?

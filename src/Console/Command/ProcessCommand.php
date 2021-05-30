@@ -180,7 +180,7 @@ final class ProcessCommand extends \RectorPrefix20210530\Symfony\Component\Conso
         foreach ($files as $file) {
             $smartFileInfo = $file->getSmartFileInfo();
             $pathName = $smartFileInfo->getPathname();
-            if (\str_ends_with($pathName, '.php')) {
+            if (\substr_compare($pathName, '.php', -\strlen('.php')) === 0) {
                 $filePaths[] = $pathName;
             }
         }

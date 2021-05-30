@@ -167,7 +167,7 @@ CODE_SAMPLE
             return \false;
         }
         foreach ($this->suffixes as $suffix) {
-            if (\str_ends_with($className, $suffix)) {
+            if (\substr_compare($className, $suffix, -\strlen($suffix)) === 0) {
                 return \true;
             }
         }
@@ -176,7 +176,7 @@ CODE_SAMPLE
     private function isKnownServiceType(string $className) : bool
     {
         foreach (self::COMMON_SERVICE_SUFFIXES as $commonServiceSuffix) {
-            if (\str_ends_with($className, $commonServiceSuffix)) {
+            if (\substr_compare($className, $commonServiceSuffix, -\strlen($commonServiceSuffix)) === 0) {
                 return \true;
             }
         }

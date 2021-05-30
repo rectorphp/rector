@@ -43,12 +43,12 @@ final class NodeRemover
         $this->rectorChangeCollector->notifyNodeFileInfo($node);
     }
     /**
-     * @param Class_|ClassMethod|Function_ $nodeWithStatements
+     * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $nodeWithStatements
      */
-    public function removeNodeFromStatements(\PhpParser\Node $nodeWithStatements, \PhpParser\Node $nodeToRemove) : void
+    public function removeNodeFromStatements($nodeWithStatements, \PhpParser\Node $toBeRemovedNode) : void
     {
         foreach ((array) $nodeWithStatements->stmts as $key => $stmt) {
-            if ($nodeToRemove !== $stmt) {
+            if ($toBeRemovedNode !== $stmt) {
                 continue;
             }
             unset($nodeWithStatements->stmts[$key]);

@@ -44,7 +44,7 @@ final class StaticRectorStrings
     public static function removePrefixes(string $value, array $prefixesToRemove) : string
     {
         foreach ($prefixesToRemove as $prefixToRemove) {
-            if (\str_starts_with($value, $prefixToRemove)) {
+            if (\strncmp($value, $prefixToRemove, \strlen($prefixToRemove)) === 0) {
                 $value = \RectorPrefix20210530\Nette\Utils\Strings::substring($value, \RectorPrefix20210530\Nette\Utils\Strings::length($prefixToRemove));
             }
         }
@@ -56,7 +56,7 @@ final class StaticRectorStrings
     public static function removeSuffixes(string $value, array $suffixesToRemove) : string
     {
         foreach ($suffixesToRemove as $suffixToRemove) {
-            if (\str_ends_with($value, $suffixToRemove)) {
+            if (\substr_compare($value, $suffixToRemove, -\strlen($suffixToRemove)) === 0) {
                 $value = \RectorPrefix20210530\Nette\Utils\Strings::substring($value, 0, -\RectorPrefix20210530\Nette\Utils\Strings::length($suffixToRemove));
             }
         }

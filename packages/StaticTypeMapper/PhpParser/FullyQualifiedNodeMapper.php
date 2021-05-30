@@ -40,6 +40,6 @@ final class FullyQualifiedNodeMapper implements \Rector\StaticTypeMapper\Contrac
         if ($originalName === $fullyQualifiedName) {
             return \false;
         }
-        return !\str_ends_with($fullyQualifiedName, '\\' . $originalName);
+        return \substr_compare($fullyQualifiedName, '\\' . $originalName, -\strlen('\\' . $originalName)) !== 0;
     }
 }

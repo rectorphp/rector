@@ -145,7 +145,7 @@ final class ObjectTypeSpecifier
     private function matchPartialNamespaceObjectType(\PHPStan\Type\ObjectType $objectType, \PhpParser\Node\Stmt\UseUse $useUse) : ?\Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType
     {
         // partial namespace
-        if (!\str_starts_with($objectType->getClassName(), $useUse->name->getLast() . '\\')) {
+        if (\strncmp($objectType->getClassName(), $useUse->name->getLast() . '\\', \strlen($useUse->name->getLast() . '\\')) !== 0) {
             return null;
         }
         $classNameWithoutLastUsePart = \RectorPrefix20210530\Nette\Utils\Strings::after($objectType->getClassName(), '\\', 1);

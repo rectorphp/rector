@@ -101,7 +101,7 @@ CODE_SAMPLE
         if ($className === null) {
             return \false;
         }
-        if (!\str_ends_with($className, 'Controller')) {
+        if (\substr_compare($className, 'Controller', -\strlen('Controller')) !== 0) {
             return \false;
         }
         $classMethod = $variable->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::METHOD_NODE);

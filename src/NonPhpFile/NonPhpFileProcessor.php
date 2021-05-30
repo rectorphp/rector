@@ -37,7 +37,7 @@ final class NonPhpFileProcessor implements \Rector\Core\Contract\Processor\FileP
         $smartFileInfo = $file->getSmartFileInfo();
         // bug in path extension
         foreach ($this->getSupportedFileExtensions() as $supportedFileExtension) {
-            if (\str_ends_with($smartFileInfo->getPathname(), '.' . $supportedFileExtension)) {
+            if (\substr_compare($smartFileInfo->getPathname(), '.' . $supportedFileExtension, -\strlen('.' . $supportedFileExtension)) === 0) {
                 return \true;
             }
         }

@@ -180,7 +180,7 @@ final class ConstructorPropertyTypeInferer implements \Rector\TypeDeclaration\Co
             return null;
         }
         // if the FQN has different ending than the original, it was aliased and we need to return the alias
-        if (!\str_ends_with($fullyQualifiedName, '\\' . $originalName->toString())) {
+        if (\substr_compare($fullyQualifiedName, '\\' . $originalName->toString(), -\strlen('\\' . $originalName->toString())) !== 0) {
             $className = $originalName->toString();
             if ($this->reflectionProvider->hasClass($className)) {
                 return new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType($className);

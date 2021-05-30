@@ -269,7 +269,7 @@ final class NodeRepository
     {
         $classNodes = [];
         foreach ($this->parsedNodeCollector->getClasses() as $className => $classNode) {
-            if (!\str_ends_with($className, $suffix)) {
+            if (\substr_compare($className, $suffix, -\strlen($suffix)) !== 0) {
                 continue;
             }
             $classNodes[] = $classNode;

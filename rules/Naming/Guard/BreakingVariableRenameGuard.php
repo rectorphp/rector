@@ -74,7 +74,7 @@ final class BreakingVariableRenameGuard
     {
         // is the suffix? → also accepted
         $expectedNameCamelCase = \ucfirst($expectedName);
-        if (\str_ends_with($currentName, $expectedNameCamelCase)) {
+        if (\substr_compare($currentName, $expectedNameCamelCase, -\strlen($expectedNameCamelCase)) === 0) {
             return \true;
         }
         if ($this->conflictingNameResolver->checkNameIsInFunctionLike($expectedName, $functionLike)) {
@@ -101,7 +101,7 @@ final class BreakingVariableRenameGuard
     {
         // is the suffix? → also accepted
         $expectedNameCamelCase = \ucfirst($expectedName);
-        if (\str_ends_with($currentName, $expectedNameCamelCase)) {
+        if (\substr_compare($currentName, $expectedNameCamelCase, -\strlen($expectedNameCamelCase)) === 0) {
             return \true;
         }
         $conflictingNames = $this->conflictingNameResolver->resolveConflictingVariableNamesForParam($classMethod);

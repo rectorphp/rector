@@ -14,7 +14,7 @@ final class NamespaceMatcher
         \krsort($oldToNewNamespace);
         /** @var string $oldNamespace */
         foreach ($oldToNewNamespace as $oldNamespace => $newNamespace) {
-            if (\str_starts_with($name, $oldNamespace)) {
+            if (\strncmp($name, $oldNamespace, \strlen($oldNamespace)) === 0) {
                 return new \Rector\Renaming\ValueObject\RenamedNamespace($name, $oldNamespace, $newNamespace);
             }
         }

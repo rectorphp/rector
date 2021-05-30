@@ -112,7 +112,7 @@ final class NonInformativeReturnTagRemover
         if (!$nullabledReturnTagValueNode instanceof \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode) {
             return;
         }
-        if (!\str_ends_with($nullabledReturnType->getClassName(), $nullabledReturnTagValueNode->name)) {
+        if (\substr_compare($nullabledReturnType->getClassName(), $nullabledReturnTagValueNode->name, -\strlen($nullabledReturnTagValueNode->name)) !== 0) {
             return;
         }
         $phpDocInfo->removeByType(\PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode::class);
@@ -184,6 +184,6 @@ final class NonInformativeReturnTagRemover
         if ('\\' . $className === $returnTagValueNodeType) {
             return \true;
         }
-        return \str_ends_with($className, '\\' . $returnTagValueNodeType);
+        return \substr_compare($className, '\\' . $returnTagValueNodeType, -\strlen('\\' . $returnTagValueNodeType)) === 0;
     }
 }

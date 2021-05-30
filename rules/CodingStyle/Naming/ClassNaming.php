@@ -27,7 +27,7 @@ final class ClassNaming
         return \lcfirst($shortName);
     }
     /**
-     * @param string|Name|Identifier|ClassLike $name
+     * @param string|\PhpParser\Node\Name|\PhpParser\Node\Identifier|\PhpParser\Node\Stmt\ClassLike $name
      */
     public function getShortName($name) : string
     {
@@ -69,7 +69,7 @@ final class ClassNaming
     }
     public function replaceSuffix(string $content, string $oldSuffix, string $newSuffix) : string
     {
-        if (!\str_ends_with($content, $oldSuffix)) {
+        if (\substr_compare($content, $oldSuffix, -\strlen($oldSuffix)) !== 0) {
             return $content . $newSuffix;
         }
         $contentWithoutOldSuffix = \RectorPrefix20210530\Nette\Utils\Strings::substring($content, 0, -\RectorPrefix20210530\Nette\Utils\Strings::length($oldSuffix));

@@ -27,7 +27,7 @@ final class PSR4NamespaceMatcher implements \Rector\PSR4\Contract\PSR4AutoloadNa
             $paths = \is_array($path) ? $path : [$path];
             foreach ($paths as $path) {
                 $path = \rtrim($path, '/');
-                if (!\str_starts_with($smartFileInfo->getRelativeDirectoryPath(), $path)) {
+                if (\strncmp($smartFileInfo->getRelativeDirectoryPath(), $path, \strlen($path)) !== 0) {
                     continue;
                 }
                 $expectedNamespace = $namespace . $this->resolveExtraNamespace($smartFileInfo, $path);

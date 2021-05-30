@@ -54,7 +54,7 @@ final class FileRelocationResolver
      */
     private function resolveRootDirectory(\Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo, string $suffixName, array $groupNames) : string
     {
-        if (\str_starts_with($smartFileInfo->getRealPathDirectory(), '/tmp')) {
+        if (\strncmp($smartFileInfo->getRealPathDirectory(), '/tmp', \strlen('/tmp')) === 0) {
             $currentTraversePath = $smartFileInfo->getRealPathDirectory();
         } else {
             $currentTraversePath = $smartFileInfo->getRelativeDirectoryPath();

@@ -438,11 +438,11 @@ abstract class AbstractRector extends \PhpParser\NodeVisitorAbstract implements 
         $this->nodeRemover->removeNode($node);
     }
     /**
-     * @param Class_|ClassMethod|Function_ $nodeWithStatements
+     * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $nodeWithStatements
      */
-    protected function removeNodeFromStatements(\PhpParser\Node $nodeWithStatements, \PhpParser\Node $nodeToRemove) : void
+    protected function removeNodeFromStatements($nodeWithStatements, \PhpParser\Node $toBeRemovedNode) : void
     {
-        $this->nodeRemover->removeNodeFromStatements($nodeWithStatements, $nodeToRemove);
+        $this->nodeRemover->removeNodeFromStatements($nodeWithStatements, $toBeRemovedNode);
     }
     /**
      * @param Node[] $nodes

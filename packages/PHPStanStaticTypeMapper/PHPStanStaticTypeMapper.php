@@ -3,10 +3,9 @@
 declare (strict_types=1);
 namespace Rector\PHPStanStaticTypeMapper;
 
-use PhpParser\Node;
 use PhpParser\Node\Name;
 use PhpParser\Node\NullableType;
-use PhpParser\Node\UnionType as PhpParserUnionType;
+use PhpParser\Node\UnionType;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\Type;
 use Rector\Core\Exception\NotImplementedYetException;
@@ -35,9 +34,9 @@ final class PHPStanStaticTypeMapper
         throw new \Rector\Core\Exception\NotImplementedYetException(__METHOD__ . ' for ' . \get_class($type));
     }
     /**
-     * @return Name|NullableType|PhpParserUnionType|null
+     * @return \PhpParser\Node\Name|\PhpParser\Node\NullableType|\PhpParser\Node\UnionType|null
      */
-    public function mapToPhpParserNode(\PHPStan\Type\Type $type, ?string $kind = null) : ?\PhpParser\Node
+    public function mapToPhpParserNode(\PHPStan\Type\Type $type, ?string $kind = null)
     {
         foreach ($this->typeMappers as $typeMapper) {
             if (!\is_a($type, $typeMapper->getNodeClass(), \true)) {

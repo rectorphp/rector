@@ -128,9 +128,9 @@ CODE_SAMPLE
         return $this->isObjectType($classLike, $objectType);
     }
     /**
-     * @param ClassMethod|MethodCall|StaticCall $node
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
      */
-    private function processPositionWithDefaultValues(\PhpParser\Node $node, \Rector\Arguments\ValueObject\ArgumentAdder $argumentAdder) : void
+    private function processPositionWithDefaultValues($node, \Rector\Arguments\ValueObject\ArgumentAdder $argumentAdder) : void
     {
         if ($this->shouldSkipParameter($node, $argumentAdder)) {
             return;

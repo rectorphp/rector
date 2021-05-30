@@ -116,6 +116,6 @@ final class Indent
     }
     private function startsWithSpace() : bool
     {
-        return \str_starts_with($this->string, ' ');
+        return \strncmp($this->string, ' ', \strlen(' ')) === 0;
     }
 }
