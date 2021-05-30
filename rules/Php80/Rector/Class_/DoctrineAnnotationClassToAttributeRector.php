@@ -7,8 +7,6 @@ namespace Rector\Php80\Rector\Class_;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\AttributeGroup;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\BinaryOp\BitwiseOr;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\Type\MixedType;
@@ -16,10 +14,13 @@ use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
 use Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Php80\NodeFactory\AttributeFlagFactory;
 use Rector\PhpAttribute\Printer\PhpAttributeGroupFactory;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Webmozart\Assert\Assert;
 
 /**
  * @changelog https://php.watch/articles/php-attributes#syntax
@@ -29,8 +30,13 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php80\Rector\Class_\DoctrineAnnotationClassToAttributeRector\DoctrineAnnotationClassToAttributeRectorTest
  */
-final class DoctrineAnnotationClassToAttributeRector extends AbstractRector
+final class DoctrineAnnotationClassToAttributeRector extends AbstractRector implements ConfigurableRectorInterface
 {
+    /**
+     * @var string
+     */
+    public const REMOVE_ANNOTATIONS = 'remove_annotations';
+
     /**
      * @see https://github.com/doctrine/annotations/blob/e6e7b7d5b45a2f2abc5460cc6396480b2b1d321f/lib/Doctrine/Common/Annotations/Annotation/Target.php#L24-L29
      * @var array<string, string>
@@ -45,8 +51,11 @@ final class DoctrineAnnotationClassToAttributeRector extends AbstractRector
         'ANNOTATION' => 'TARGET_CLASS',
     ];
 
+    private bool $shouldRemoveAnnotations = true;
+
     public function __construct(
         private PhpDocTagRemover $phpDocTagRemover,
+        private AttributeFlagFactory $attributeFlagFactory,
         private PhpAttributeGroupFactory $phpAttributeGroupFactory
     ) {
     }
@@ -54,7 +63,7 @@ final class DoctrineAnnotationClassToAttributeRector extends AbstractRector
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Refactor Doctrine @annotation annotated class to a PHP 8.0 attribute class', [
-            new CodeSample(
+            new ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
 use Doctrine\Common\Annotations\Annotation\Target;
 
@@ -76,6 +85,10 @@ class SomeAnnotation
 {
 }
 CODE_SAMPLE
+                ,
+                [
+                    self::REMOVE_ANNOTATIONS => true,
+                ]
             ),
         ]);
     }
@@ -102,8 +115,10 @@ CODE_SAMPLE
             return null;
         }
 
-        $this->phpDocTagRemover->removeByName($phpDocInfo, 'annotation');
-        $this->phpDocTagRemover->removeByName($phpDocInfo, 'Annotation');
+        if ($this->shouldRemoveAnnotations) {
+            $this->phpDocTagRemover->removeByName($phpDocInfo, 'annotation');
+            $this->phpDocTagRemover->removeByName($phpDocInfo, 'Annotation');
+        }
 
         $attributeGroup = $this->phpAttributeGroupFactory->createFromClass('Attribute');
         $this->decorateTarget($phpDocInfo, $attributeGroup);
@@ -121,20 +136,35 @@ CODE_SAMPLE
                 continue;
             }
 
-            $this->phpDocTagRemover->removeTagValueFromNode(
-                $propertyPhpDocInfo,
-                $requiredDoctrineAnnotationTagValueNode
-            );
+            if ($this->shouldRemoveAnnotations) {
+                $this->phpDocTagRemover->removeTagValueFromNode(
+                    $propertyPhpDocInfo,
+                    $requiredDoctrineAnnotationTagValueNode
+                );
+            }
 
             // require in constructor
             $propertyName = $this->getName($property);
             $this->addConstructorDependencyToClass($node, new MixedType(), $propertyName, Class_::MODIFIER_PUBLIC);
-            $this->removeNode($property);
+
+            if ($this->shouldRemoveAnnotations) {
+                $this->removeNode($property);
+            }
         }
 
         $node->attrGroups[] = $attributeGroup;
 
         return $node;
+    }
+
+    /**
+     * @param array<string, bool> $configuration
+     */
+    public function configure(array $configuration): void
+    {
+        $shouldRemoveAnnotations = $configuration[self::REMOVE_ANNOTATIONS] ?? true;
+        Assert::boolean($shouldRemoveAnnotations);
+        $this->shouldRemoveAnnotations = $shouldRemoveAnnotations;
     }
 
     /**
@@ -155,24 +185,6 @@ CODE_SAMPLE
         return $flags;
     }
 
-    /**
-     * @param ClassConstFetch[] $flags
-     * @return ClassConstFetch|BitwiseOr|null
-     */
-    private function createFlagCollection(array $flags): ?Expr
-    {
-        if ($flags === []) {
-            return null;
-        }
-
-        $flagCollection = array_shift($flags);
-        foreach ($flags as $flag) {
-            $flagCollection = new BitwiseOr($flagCollection, $flag);
-        }
-
-        return $flagCollection;
-    }
-
     private function decorateTarget(PhpDocInfo $phpDocInfo, AttributeGroup $attributeGroup): void
     {
         $targetDoctrineAnnotationTagValueNode = $phpDocInfo->getByAnnotationClass(
@@ -183,7 +195,9 @@ CODE_SAMPLE
             return;
         }
 
-        $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $targetDoctrineAnnotationTagValueNode);
+        if ($this->shouldRemoveAnnotations) {
+            $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $targetDoctrineAnnotationTagValueNode);
+        }
 
         $targets = $targetDoctrineAnnotationTagValueNode->getSilentValue();
         if (! $targets instanceof CurlyListNode) {
@@ -193,7 +207,7 @@ CODE_SAMPLE
         $targetValues = $targets->getValuesWithExplicitSilentAndWithoutQuotes();
 
         $flags = $this->resolveFlags($targetValues);
-        $flagCollection = $this->createFlagCollection($flags);
+        $flagCollection = $this->attributeFlagFactory->createFlagCollection($flags);
         if ($flagCollection === null) {
             return;
         }

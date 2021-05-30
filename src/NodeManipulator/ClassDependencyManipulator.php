@@ -11,6 +11,7 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\Property;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\Type;
@@ -21,6 +22,7 @@ use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PostRector\Collector\NodesToRemoveCollector;
 use Rector\PostRector\ValueObject\PropertyMetadata;
 
 final class ClassDependencyManipulator
@@ -33,7 +35,8 @@ final class ClassDependencyManipulator
         private StmtsManipulator $stmtsManipulator,
         private PhpVersionProvider $phpVersionProvider,
         private PropertyPresenceChecker $propertyPresenceChecker,
-        private NodeNameResolver $nodeNameResolver
+        private NodeNameResolver $nodeNameResolver,
+        private NodesToRemoveCollector $nodesToRemoveCollector
     ) {
     }
 
@@ -51,7 +54,7 @@ final class ClassDependencyManipulator
             );
         }
 
-        if ($this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::PROPERTY_PROMOTION)) {
+        if ($this->shouldAddPromotedProperty($class, $propertyMetadata)) {
             $this->addPromotedProperty($class, $propertyMetadata);
         } else {
             $assign = $this->nodeFactory->createPropertyAssignment($propertyMetadata->getName());
@@ -217,5 +220,19 @@ final class ClassDependencyManipulator
         }
 
         return false;
+    }
+
+    private function shouldAddPromotedProperty(Class_ $class, PropertyMetadata $propertyMetadata): bool
+    {
+        if (! $this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::PROPERTY_PROMOTION)) {
+            return false;
+        }
+        // only if the property does not exist yet
+        $existingProperty = $class->getProperty($propertyMetadata->getName());
+        if (! $existingProperty instanceof Property) {
+            return true;
+        }
+
+        return $this->nodesToRemoveCollector->isNodeRemoved($existingProperty);
     }
 }
