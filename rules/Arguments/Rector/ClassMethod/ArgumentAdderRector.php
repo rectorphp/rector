@@ -159,11 +159,10 @@ CODE_SAMPLE
         return $this->isObjectType($classLike, $objectType);
     }
 
-    /**
-     * @param ClassMethod|MethodCall|StaticCall $node
-     */
-    private function processPositionWithDefaultValues(Node $node, ArgumentAdder $argumentAdder): void
-    {
+    private function processPositionWithDefaultValues(
+        ClassMethod | MethodCall | StaticCall $node,
+        ArgumentAdder $argumentAdder
+    ): void {
         if ($this->shouldSkipParameter($node, $argumentAdder)) {
             return;
         }

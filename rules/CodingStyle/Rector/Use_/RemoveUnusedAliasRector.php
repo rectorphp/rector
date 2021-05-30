@@ -195,7 +195,6 @@ CODE_SAMPLE
     private function refactorAliasName(string $aliasName, string $lastName, UseUse $useUse): void
     {
         // only alias name is used → use last name directly
-
         $lowerAliasName = strtolower($aliasName);
         if (! isset($this->resolvedNodeNames[$lowerAliasName])) {
             return;

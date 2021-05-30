@@ -95,10 +95,7 @@ final class YieldNodesReturnTypeInferer implements ReturnTypeInfererInterface
         return $yieldNodes;
     }
 
-    /**
-     * @param Yield_|YieldFrom $yieldExpr
-     */
-    private function resolveYieldValue(Expr $yieldExpr): ?Expr
+    private function resolveYieldValue(Yield_ | YieldFrom $yieldExpr): ?Expr
     {
         if ($yieldExpr instanceof Yield_) {
             return $yieldExpr->value;

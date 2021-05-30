@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Order;
 
-use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassLike;
@@ -26,10 +25,9 @@ final class StmtVisibilitySorter
     }
 
     /**
-     * @param Class_|Trait_ $classLike
      * @return string[]
      */
-    public function sortProperties(ClassLike $classLike): array
+    public function sortProperties(Class_ | Trait_ $classLike): array
     {
         $propertyRankeables = [];
 
@@ -79,10 +77,9 @@ final class StmtVisibilitySorter
     }
 
     /**
-     * @param Class_|Interface_ $classLike
      * @return string[]
      */
-    public function sortConstants(ClassLike $classLike): array
+    public function sortConstants(Class_ | Interface_ $classLike): array
     {
         $classConstsRankeables = [];
         foreach ($classLike->stmts as $position => $constantStmt) {
@@ -103,10 +100,7 @@ final class StmtVisibilitySorter
         return $this->sortByRanksAndGetNames($classConstsRankeables);
     }
 
-    /**
-     * @param ClassMethod|Property|ClassConst $stmt
-     */
-    private function getVisibilityLevelOrder(Stmt $stmt): int
+    private function getVisibilityLevelOrder(ClassMethod | Property | ClassConst $stmt): int
     {
         if ($stmt->isPrivate()) {
             return 2;

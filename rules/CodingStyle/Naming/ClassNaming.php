@@ -30,10 +30,7 @@ final class ClassNaming
         return lcfirst($shortName);
     }
 
-    /**
-     * @param string|Name|Identifier|ClassLike $name
-     */
-    public function getShortName($name): string
+    public function getShortName(string | Name | Identifier | ClassLike $name): string
     {
         if ($name instanceof ClassLike) {
             if ($name->name === null) {

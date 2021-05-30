@@ -56,7 +56,7 @@
         "phpstan/phpstan-nette": "^0.12.18",
         "phpunit/phpunit": "^9.5",
         "rector/rector-generator": "^0.1.7",
-        "rector/phpstan-rules": "^0.2.8",
+        "rector/phpstan-rules": "^0.3",
         "symplify/coding-standard": "^9.3.10",
         "symplify/easy-ci": "^9.3.10",
         "symplify/easy-coding-standard": "^9.3.10",

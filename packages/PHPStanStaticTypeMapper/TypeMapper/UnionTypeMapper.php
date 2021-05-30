@@ -144,10 +144,7 @@ final class UnionTypeMapper implements TypeMapperInterface
         return $unionTypeAnalysis->hasArray();
     }
 
-    /**
-     * @return Name|NullableType|null
-     */
-    private function matchArrayTypes(UnionType $unionType): ?Node
+    private function matchArrayTypes(UnionType $unionType): Name | NullableType | null
     {
         $unionTypeAnalysis = $this->unionTypeAnalyzer->analyseForNullableAndIterable($unionType);
         if (! $unionTypeAnalysis instanceof UnionTypeAnalysis) {

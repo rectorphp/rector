@@ -19,6 +19,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 'Form' => 'Collective\Html\FormFacade',
                 'Html' => 'Collective\Html\HtmlFacade',
             ],
-        ],
-        ]);
+        ]]);
 };

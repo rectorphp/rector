@@ -22,9 +22,8 @@ final class PhpVersionProvider
 
     public function provide(): int
     {
-        /** @var int|null $phpVersionFeatures */
-        $phpVersionFeatures = $this->parameterProvider->provideParameter(Option::PHP_VERSION_FEATURES);
-        if ($phpVersionFeatures !== null) {
+        $phpVersionFeatures = $this->parameterProvider->provideIntParameter(Option::PHP_VERSION_FEATURES);
+        if ($phpVersionFeatures > 0) {
             return $phpVersionFeatures;
         }
 

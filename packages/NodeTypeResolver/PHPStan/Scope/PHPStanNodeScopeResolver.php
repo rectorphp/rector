@@ -7,7 +7,6 @@ namespace Rector\NodeTypeResolver\PHPStan\Scope;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Trait_;
 use PhpParser\NodeTraverser;
@@ -121,10 +120,7 @@ final class PHPStanNodeScopeResolver
         $nodeTraverser->traverse($nodes);
     }
 
-    /**
-     * @param Class_|Interface_ $classLike
-     */
-    private function resolveClassOrInterfaceScope(ClassLike $classLike, Scope $scope): Scope
+    private function resolveClassOrInterfaceScope(Class_ | Interface_ $classLike, Scope $scope): Scope
     {
         $className = $this->resolveClassName($classLike);
 
@@ -172,10 +168,7 @@ final class PHPStanNodeScopeResolver
         $this->changedFilesDetector->addFileWithDependencies($smartFileInfo, $dependentFiles);
     }
 
-    /**
-     * @param Class_|Interface_|Trait_ $classLike
-     */
-    private function resolveClassName(ClassLike $classLike): string
+    private function resolveClassName(Class_ | Interface_ | Trait_ $classLike): string
     {
         if (property_exists($classLike, 'namespacedName')) {
             return (string) $classLike->namespacedName;

@@ -47,15 +47,14 @@ final class ClassTypeResolverTest extends AbstractNodeTypeResolverTest
 
         yield [__DIR__ . '/Source/ClassWithParentTrait.php', 0, new ObjectType(ClassWithParentTrait::class)];
     }
-    
+
     public function testAnonymousClass(): void
     {
         $file = __DIR__ . '/Source/AnonymousClass.php';
-        $nodePosition = 0;
-        
+
         $variableNodes = $this->getNodesForFileOfType($file, Class_::class);
 
-        $resolvedType = $this->nodeTypeResolver->resolve($variableNodes[$nodePosition]);
+        $resolvedType = $this->nodeTypeResolver->resolve($variableNodes[0]);
         $this->assertInstanceOf(TypeWithClassName::class, $resolvedType);
 
         /** @var TypeWithClassName $resolvedType */

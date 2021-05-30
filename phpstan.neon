@@ -487,3 +487,9 @@ parameters:
         -
             message: '#Use separate function calls with readable variable names#'
             path: 'src/FileSystem/PhpFilesFinder.php'
+
+        # union false positive
+        - '#Method Rector\\Comments\\CommentRemover\:\:removeFromNode\(\) has parameter \$node with no value type specified in iterable type array#'
+
+        # should be refactored to collector
+        - '#Cognitive complexity for "Rector\\CodingStyle\\Naming\\NameRenamer\:\:renameNameNode\(\)" is 10, keep it under 9#'
