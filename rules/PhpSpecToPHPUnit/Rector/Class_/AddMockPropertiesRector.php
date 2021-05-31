@@ -48,7 +48,7 @@ final class AddMockPropertiesRector extends \Rector\PhpSpecToPHPUnit\Rector\Abst
         /** @var string $class */
         $class = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);
         foreach ($classMocks as $name => $methods) {
-            if ((\is_countable($methods) ? \count($methods) : 0) <= 1) {
+            if ((\is_array($methods) || $methods instanceof \Countable ? \count($methods) : 0) <= 1) {
                 continue;
             }
             // non-ctor used mocks are probably local only

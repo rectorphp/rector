@@ -86,7 +86,7 @@ CODE_SAMPLE
             $this->removeNode($forwardMethodCall);
         }
         // Add returnType only if it is the only statement, otherwise it is not reliable
-        if (\is_countable($node->stmts) && 1 === \count($node->stmts)) {
+        if ((\is_array($node->stmts) || $node->stmts instanceof \Countable) && 1 === \count($node->stmts)) {
             $node->returnType = new \PhpParser\Node\Name\FullyQualified('Psr\\Http\\Message\\ResponseInterface');
         }
         return $node;
