@@ -10,6 +10,7 @@ use PhpParser\Node\Scalar\DNumber;
 use PhpParser\Node\Scalar\LNumber;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\Application\File;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
@@ -134,6 +135,22 @@ CODE_SAMPLE
      */
     private function shouldSkip(Node $node, string $numericValueAsString): bool
     {
+        /** @var int $startToken */
+        $startToken = $node->getAttribute(AttributeKey::START_TOKEN_POSITION);
+        /** @var File $file */
+        $file = $node->getAttribute(AttributeKey::FILE);
+        $oldTokens = $file->getOldTokens();
+
+        foreach ($oldTokens[$startToken] as $token) {
+            if (! is_string($token)) {
+                continue;
+            }
+            if (! str_contains($token, '_')) {
+                continue;
+            }
+            return true;
+        }
+
         if ($numericValueAsString < $this->limitValue) {
             return true;
         }
