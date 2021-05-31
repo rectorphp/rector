@@ -55,7 +55,11 @@ foreach ($fileInfos as $fileInfo) {
 
 ### 2.2.1 Order of Rectors
 
-- Rectors are run by they natural order in the configuration, meaning the first
+- Nodes to run rectors are iterated in the node traversal order.
+
+E.g. rectors for `Class_` node always run before rectors for `ClassMethod` in one class.
+
+- Rectors are run by the natural order in the configuration, meaning the first
 in the configuration will be run first.
 
 E.g. in this case, first the `@expectedException` annotation will be changed to a method,
