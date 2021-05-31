@@ -21,4 +21,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(DowngradeTrailingCommasInFunctionCallsRector::class);
     $services->set(DowngradeArrayKeyFirstLastRector::class);
     $services->set(SetCookieOptionsArrayToArgumentsRector::class);
+    $services->set(\Rector\DowngradePhp73\Rector\FuncCall\DowngradeIsCountableRector::class);
 };
