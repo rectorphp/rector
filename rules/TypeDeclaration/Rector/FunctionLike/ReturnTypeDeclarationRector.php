@@ -6,6 +6,7 @@ namespace Rector\TypeDeclaration\Rector\FunctionLike;
 use PhpParser\Node;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -198,6 +199,9 @@ CODE_SAMPLE
      */
     private function addReturnType(\PhpParser\Node\FunctionLike $functionLike, \PhpParser\Node $inferredReturnNode) : void
     {
+        if ($this->isExternalVoid($functionLike, $inferredReturnNode)) {
+            return;
+        }
         if ($functionLike->returnType === null) {
             $functionLike->returnType = $inferredReturnNode;
             return;
@@ -211,6 +215,23 @@ CODE_SAMPLE
             // type override with correct one
             $functionLike->returnType = $inferredReturnNode;
         }
+    }
+    /**
+     * @param ClassMethod|Function_ $functionLike
+     * @param Name|NullableType|PhpParserUnionType $inferredReturnNode
+     */
+    private function isExternalVoid(\PhpParser\Node\FunctionLike $functionLike, \PhpParser\Node $inferredReturnNode) : bool
+    {
+        $classLike = $functionLike->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
+        if (!$classLike instanceof \PhpParser\Node\Stmt\Class_) {
+            return \false;
+        }
+        if (!$classLike->extends instanceof \PhpParser\Node\Name\FullyQualified) {
+            return \false;
+        }
+        $className = (string) $this->getName($classLike->extends);
+        $parentFound = (bool) $this->nodeRepository->findClass($className);
+        return $functionLike->returnType === null && !$parentFound && $this->isName($inferredReturnNode, 'void');
     }
     private function isNullableTypeSubType(\PHPStan\Type\Type $currentType, \PHPStan\Type\Type $inferedType) : bool
     {
