@@ -20,6 +20,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node\Name\FullyQualified;
 /**
  * @changelog https://www.php.net/manual/en/migration72.new-features.php#migration72.new-features.param-type-widening
  * @see https://3v4l.org/fOgSE
@@ -108,6 +109,9 @@ CODE_SAMPLE
         if ($this->isEmptyClassReflection($scope)) {
             return null;
         }
+        if ($this->hasExtendExternal($node)) {
+            return null;
+        }
         $hasChanged = \false;
         $classMethods = $this->classLikeWithTraitsClassMethodResolver->resolve($node);
         foreach ($classMethods as $classMethod) {
@@ -123,6 +127,20 @@ CODE_SAMPLE
             return $node;
         }
         return null;
+    }
+    /**
+     * @param Class_|Interface_ $node
+     */
+    private function hasExtendExternal(\PhpParser\Node $node) : bool
+    {
+        if ($node->extends instanceof \PhpParser\Node\Name\FullyQualified) {
+            $className = (string) $this->getName($node->extends);
+            $parentFound = (bool) $this->nodeRepository->findClass($className);
+            if (!$parentFound) {
+                return \true;
+            }
+        }
+        return \false;
     }
     /**
      * The topmost class is the source of truth, so we go only down to avoid up/down collission
