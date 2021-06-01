@@ -21,7 +21,7 @@ final class ConfigurableCallValuesCollectingPhpFileLoader extends \RectorPrefix2
     }
     /**
      * @param mixed $resource
-     * @param null|string $type
+     * @param string|null $type
      */
     public function load($resource, $type = null) : void
     {
