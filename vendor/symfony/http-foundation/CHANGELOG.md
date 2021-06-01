@@ -1,6 +1,16 @@
 CHANGELOG
 =========
 
+5.3
+---
+
+ * Add the `SessionFactory`, `NativeSessionStorageFactory`, `PhpBridgeSessionStorageFactory` and `MockFileSessionStorageFactory` classes
+ * Calling `Request::getSession()` when there is no available session throws a `SessionNotFoundException`
+ * Add the `RequestStack::getSession` method
+ * Deprecate the `NamespacedAttributeBag` class
+ * Add `ResponseFormatSame` PHPUnit constraint
+ * Deprecate the `RequestStack::getMasterRequest()` method and add `getMainRequest()` as replacement
+
 5.2.0
 -----
 

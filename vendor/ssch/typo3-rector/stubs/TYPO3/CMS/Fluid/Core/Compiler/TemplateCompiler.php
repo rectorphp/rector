@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210531\TYPO3\CMS\Fluid\Core\Compiler;
+namespace RectorPrefix20210601\TYPO3\CMS\Fluid\Core\Compiler;
 
 if (\class_exists('TYPO3\\CMS\\Fluid\\Core\\Compiler\\TemplateCompiler')) {
     return;

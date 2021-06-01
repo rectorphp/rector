@@ -8,26 +8,26 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210531\Symfony\Component\HttpKernel\Event;
+namespace RectorPrefix20210601\Symfony\Component\HttpKernel\Event;
 
-use RectorPrefix20210531\Symfony\Component\HttpFoundation\Request;
-use RectorPrefix20210531\Symfony\Component\HttpKernel\HttpKernelInterface;
-use RectorPrefix20210531\Symfony\Contracts\EventDispatcher\Event;
+use RectorPrefix20210601\Symfony\Component\HttpFoundation\Request;
+use RectorPrefix20210601\Symfony\Component\HttpKernel\HttpKernelInterface;
+use RectorPrefix20210601\Symfony\Contracts\EventDispatcher\Event;
 /**
  * Base class for events thrown in the HttpKernel component.
  *
  * @author Bernhard Schussek <bschussek@gmail.com>
  */
-class KernelEvent extends \RectorPrefix20210531\Symfony\Contracts\EventDispatcher\Event
+class KernelEvent extends \RectorPrefix20210601\Symfony\Contracts\EventDispatcher\Event
 {
     private $kernel;
     private $request;
     private $requestType;
     /**
      * @param int $requestType The request type the kernel is currently processing; one of
-     *                         HttpKernelInterface::MASTER_REQUEST or HttpKernelInterface::SUB_REQUEST
+     *                         HttpKernelInterface::MAIN_REQUEST or HttpKernelInterface::SUB_REQUEST
      */
-    public function __construct(\RectorPrefix20210531\Symfony\Component\HttpKernel\HttpKernelInterface $kernel, \RectorPrefix20210531\Symfony\Component\HttpFoundation\Request $request, ?int $requestType)
+    public function __construct(\RectorPrefix20210601\Symfony\Component\HttpKernel\HttpKernelInterface $kernel, \RectorPrefix20210601\Symfony\Component\HttpFoundation\Request $request, ?int $requestType)
     {
         $this->kernel = $kernel;
         $this->request = $request;
@@ -54,7 +54,7 @@ class KernelEvent extends \RectorPrefix20210531\Symfony\Contracts\EventDispatche
     /**
      * Returns the request type the kernel is currently processing.
      *
-     * @return int One of HttpKernelInterface::MASTER_REQUEST and
+     * @return int One of HttpKernelInterface::MAIN_REQUEST and
      *             HttpKernelInterface::SUB_REQUEST
      */
     public function getRequestType()
@@ -62,12 +62,22 @@ class KernelEvent extends \RectorPrefix20210531\Symfony\Contracts\EventDispatche
         return $this->requestType;
     }
     /**
+     * Checks if this is the main request.
+     */
+    public function isMainRequest() : bool
+    {
+        return \RectorPrefix20210601\Symfony\Component\HttpKernel\HttpKernelInterface::MAIN_REQUEST === $this->requestType;
+    }
+    /**
      * Checks if this is a master request.
      *
      * @return bool True if the request is a master request
+     *
+     * @deprecated since symfony/http-kernel 5.3, use isMainRequest() instead
      */
     public function isMasterRequest()
     {
-        return \RectorPrefix20210531\Symfony\Component\HttpKernel\HttpKernelInterface::MASTER_REQUEST === $this->requestType;
+        trigger_deprecation('symfony/http-kernel', '5.3', '"%s()" is deprecated, use "isMainRequest()" instead.', __METHOD__);
+        return $this->isMainRequest();
     }
 }

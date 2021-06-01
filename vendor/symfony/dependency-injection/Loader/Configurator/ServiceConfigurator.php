@@ -8,14 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210531\Symfony\Component\DependencyInjection\Loader\Configurator;
+namespace RectorPrefix20210601\Symfony\Component\DependencyInjection\Loader\Configurator;
 
-use RectorPrefix20210531\Symfony\Component\DependencyInjection\ContainerBuilder;
-use RectorPrefix20210531\Symfony\Component\DependencyInjection\Definition;
+use RectorPrefix20210601\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix20210601\Symfony\Component\DependencyInjection\Definition;
 /**
  * @author Nicolas Grekas <p@tchwork.com>
  */
-class ServiceConfigurator extends \RectorPrefix20210531\Symfony\Component\DependencyInjection\Loader\Configurator\AbstractServiceConfigurator
+class ServiceConfigurator extends \RectorPrefix20210601\Symfony\Component\DependencyInjection\Loader\Configurator\AbstractServiceConfigurator
 {
     public const FACTORY = 'services';
     use Traits\AbstractTrait;
@@ -41,7 +41,8 @@ class ServiceConfigurator extends \RectorPrefix20210531\Symfony\Component\Depend
     private $instanceof;
     private $allowParent;
     private $path;
-    public function __construct(\RectorPrefix20210531\Symfony\Component\DependencyInjection\ContainerBuilder $container, array $instanceof, bool $allowParent, \RectorPrefix20210531\Symfony\Component\DependencyInjection\Loader\Configurator\ServicesConfigurator $parent, \RectorPrefix20210531\Symfony\Component\DependencyInjection\Definition $definition, $id, array $defaultTags, string $path = null)
+    private $destructed = \false;
+    public function __construct(\RectorPrefix20210601\Symfony\Component\DependencyInjection\ContainerBuilder $container, array $instanceof, bool $allowParent, \RectorPrefix20210601\Symfony\Component\DependencyInjection\Loader\Configurator\ServicesConfigurator $parent, \RectorPrefix20210601\Symfony\Component\DependencyInjection\Definition $definition, $id, array $defaultTags, string $path = null)
     {
         $this->container = $container;
         $this->instanceof = $instanceof;
@@ -51,6 +52,10 @@ class ServiceConfigurator extends \RectorPrefix20210531\Symfony\Component\Depend
     }
     public function __destruct()
     {
+        if ($this->destructed) {
+            return;
+        }
+        $this->destructed = \true;
         parent::__destruct();
         $this->container->removeBindings($this->id);
         $this->container->setDefinition($this->id, $this->definition->setInstanceofConditionals($this->instanceof));

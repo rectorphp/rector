@@ -13,7 +13,13 @@
         "php": ">=7.3"
     },
     "require-dev": {
-        "idiosyncratic\/devtools": "^0.2"
+        "idiosyncratic\/coding-standard": "^2.0",
+        "php-parallel-lint\/php-console-highlighter": "^0.5",
+        "php-parallel-lint\/php-parallel-lint": "^1.3",
+        "phploc\/phploc": "^7.0",
+        "phpstan\/phpstan": "^0.12",
+        "phpunit\/phpunit": "^9.5",
+        "sebastian\/phpcpd": "^6.0"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
@@ -26,12 +32,12 @@
     },
     "autoload": {
         "psr-4": {
-            "RectorPrefix20210531\\Idiosyncratic\\EditorConfig\\": "src"
+            "RectorPrefix20210601\\Idiosyncratic\\EditorConfig\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "RectorPrefix20210531\\Idiosyncratic\\EditorConfig\\": "tests"
+            "RectorPrefix20210601\\Idiosyncratic\\EditorConfig\\": "tests"
         }
     }
 }

@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210531\Symfony\Component\HttpFoundation\RateLimiter;
+namespace RectorPrefix20210601\Symfony\Component\HttpFoundation\RateLimiter;
 
-use RectorPrefix20210531\Symfony\Component\HttpFoundation\Request;
-use RectorPrefix20210531\Symfony\Component\RateLimiter\RateLimit;
+use RectorPrefix20210601\Symfony\Component\HttpFoundation\Request;
+use RectorPrefix20210601\Symfony\Component\RateLimiter\RateLimit;
 /**
  * A special type of limiter that deals with requests.
  *
@@ -20,10 +20,10 @@ use RectorPrefix20210531\Symfony\Component\RateLimiter\RateLimit;
  *
  * @author Wouter de Jong <wouter@wouterj.nl>
  *
- * @experimental in 5.2
+ * @experimental in 5.3
  */
 interface RequestRateLimiterInterface
 {
-    public function consume(\RectorPrefix20210531\Symfony\Component\HttpFoundation\Request $request) : \RectorPrefix20210531\Symfony\Component\RateLimiter\RateLimit;
-    public function reset(\RectorPrefix20210531\Symfony\Component\HttpFoundation\Request $request) : void;
+    public function consume(\RectorPrefix20210601\Symfony\Component\HttpFoundation\Request $request) : \RectorPrefix20210601\Symfony\Component\RateLimiter\RateLimit;
+    public function reset(\RectorPrefix20210601\Symfony\Component\HttpFoundation\Request $request) : void;
 }

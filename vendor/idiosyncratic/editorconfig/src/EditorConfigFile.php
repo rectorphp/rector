@@ -1,12 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210531\Idiosyncratic\EditorConfig;
+namespace RectorPrefix20210601\Idiosyncratic\EditorConfig;
 
-use RectorPrefix20210531\Idiosyncratic\EditorConfig\Declaration\Factory;
-use RectorPrefix20210531\Idiosyncratic\EditorConfig\Exception\InvalidValue;
+use RectorPrefix20210601\Idiosyncratic\EditorConfig\Declaration\Factory;
+use RectorPrefix20210601\Idiosyncratic\EditorConfig\Exception\InvalidValue;
 use RuntimeException;
-use const INI_SCANNER_RAW;
 use function array_merge;
 use function dirname;
 use function file_get_contents;
@@ -19,6 +18,7 @@ use function parse_ini_string;
 use function preg_replace;
 use function sprintf;
 use function strpos;
+use const INI_SCANNER_RAW;
 final class EditorConfigFile
 {
     /** @var string */
@@ -31,9 +31,9 @@ final class EditorConfigFile
     private $sections = [];
     /** @var Factory */
     private $declarationFactory;
-    public function __construct(string $path, ?\RectorPrefix20210531\Idiosyncratic\EditorConfig\Declaration\Factory $declarationFactory = null)
+    public function __construct(string $path, ?\RectorPrefix20210601\Idiosyncratic\EditorConfig\Declaration\Factory $declarationFactory = null)
     {
-        $this->declarationFactory = $declarationFactory ?? new \RectorPrefix20210531\Idiosyncratic\EditorConfig\Declaration\Factory();
+        $this->declarationFactory = $declarationFactory ?? new \RectorPrefix20210601\Idiosyncratic\EditorConfig\Declaration\Factory();
         if (\is_file($path) === \false || \is_readable($path) === \false) {
             throw new \RuntimeException(\sprintf('File %s does not exist or is not readable', $path));
         }
@@ -84,13 +84,13 @@ final class EditorConfigFile
             if (\is_array($declarations) === \false) {
                 continue;
             }
-            $this->sections[] = new \RectorPrefix20210531\Idiosyncratic\EditorConfig\Section($this->getGlobPrefix($glob), $glob, $declarations, $this->declarationFactory);
+            $this->sections[] = new \RectorPrefix20210601\Idiosyncratic\EditorConfig\Section($this->getGlobPrefix($glob), $glob, $declarations, $this->declarationFactory);
         }
     }
     private function setIsRoot(string $isRoot) : void
     {
         if (\in_array($isRoot, ['true', 'false']) === \false) {
-            throw new \RectorPrefix20210531\Idiosyncratic\EditorConfig\Exception\InvalidValue('root', $isRoot);
+            throw new \RectorPrefix20210601\Idiosyncratic\EditorConfig\Exception\InvalidValue('root', $isRoot);
         }
         $this->isRoot = $isRoot === 'true';
     }
@@ -109,6 +109,9 @@ final class EditorConfigFile
     private function cleanContent(string $path) : string
     {
         $content = \file_get_contents($path);
+        if ($content === \false) {
+            return '';
+        }
         return \preg_replace('/#.*$/m', '', $content) ?? $content;
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210531\TYPO3\CMS\Core\Context;
+namespace RectorPrefix20210601\TYPO3\CMS\Core\Context;
 
 if (\class_exists('TYPO3\\CMS\\Core\\Context\\TypoScriptAspect')) {
     return;

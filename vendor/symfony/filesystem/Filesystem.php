@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210531\Symfony\Component\Filesystem;
+namespace RectorPrefix20210601\Symfony\Component\Filesystem;
 
-use RectorPrefix20210531\Symfony\Component\Filesystem\Exception\FileNotFoundException;
-use RectorPrefix20210531\Symfony\Component\Filesystem\Exception\InvalidArgumentException;
-use RectorPrefix20210531\Symfony\Component\Filesystem\Exception\IOException;
+use RectorPrefix20210601\Symfony\Component\Filesystem\Exception\FileNotFoundException;
+use RectorPrefix20210601\Symfony\Component\Filesystem\Exception\InvalidArgumentException;
+use RectorPrefix20210601\Symfony\Component\Filesystem\Exception\IOException;
 /**
  * Provides basic utility to manipulate the file system.
  *
@@ -35,7 +35,7 @@ class Filesystem
     {
         $originIsLocal = \stream_is_local($originFile) || 0 === \stripos($originFile, 'file://');
         if ($originIsLocal && !\is_file($originFile)) {
-            throw new \RectorPrefix20210531\Symfony\Component\Filesystem\Exception\FileNotFoundException(\sprintf('Failed to copy "%s" because file does not exist.', $originFile), 0, null, $originFile);
+            throw new \RectorPrefix20210601\Symfony\Component\Filesystem\Exception\FileNotFoundException(\sprintf('Failed to copy "%s" because file does not exist.', $originFile), 0, null, $originFile);
         }
         $this->mkdir(\dirname($targetFile));
         $doCopy = \true;
@@ -44,25 +44,25 @@ class Filesystem
         }
         if ($doCopy) {
             // https://bugs.php.net/64634
-            if (\false === ($source = @\fopen($originFile, 'r'))) {
-                throw new \RectorPrefix20210531\Symfony\Component\Filesystem\Exception\IOException(\sprintf('Failed to copy "%s" to "%s" because source file could not be opened for reading.', $originFile, $targetFile), 0, null, $originFile);
+            if (!($source = self::box('fopen', $originFile, 'r'))) {
+                throw new \RectorPrefix20210601\Symfony\Component\Filesystem\Exception\IOException(\sprintf('Failed to copy "%s" to "%s" because source file could not be opened for reading: ', $originFile, $targetFile) . self::$lastError, 0, null, $originFile);
             }
             // Stream context created to allow files overwrite when using FTP stream wrapper - disabled by default
-            if (\false === ($target = @\fopen($targetFile, 'w', \false, \stream_context_create(['ftp' => ['overwrite' => \true]])))) {
-                throw new \RectorPrefix20210531\Symfony\Component\Filesystem\Exception\IOException(\sprintf('Failed to copy "%s" to "%s" because target file could not be opened for writing.', $originFile, $targetFile), 0, null, $originFile);
+            if (!($target = self::box('fopen', $targetFile, 'w', \false, \stream_context_create(['ftp' => ['overwrite' => \true]])))) {
+                throw new \RectorPrefix20210601\Symfony\Component\Filesystem\Exception\IOException(\sprintf('Failed to copy "%s" to "%s" because target file could not be opened for writing: ', $originFile, $targetFile) . self::$lastError, 0, null, $originFile);
             }
             $bytesCopied = \stream_copy_to_stream($source, $target);
             \fclose($source);
             \fclose($target);
             unset($source, $target);
             if (!\is_file($targetFile)) {
-                throw new \RectorPrefix20210531\Symfony\Component\Filesystem\Exception\IOException(\sprintf('Failed to copy "%s" to "%s".', $originFile, $targetFile), 0, null, $originFile);
+                throw new \RectorPrefix20210601\Symfony\Component\Filesystem\Exception\IOException(\sprintf('Failed to copy "%s" to "%s".', $originFile, $targetFile), 0, null, $originFile);
             }
             if ($originIsLocal) {
                 // Like `cp`, preserve executable permission bits
-                @\chmod($targetFile, \fileperms($targetFile) | \fileperms($originFile) & 0111);
+                self::box('chmod', $targetFile, \fileperms($targetFile) | \fileperms($originFile) & 0111);
                 if ($bytesCopied !== ($bytesOrigin = \filesize($originFile))) {
-                    throw new \RectorPrefix20210531\Symfony\Component\Filesystem\Exception\IOException(\sprintf('Failed to copy the whole content of "%s" to "%s" (%g of %g bytes copied).', $originFile, $targetFile, $bytesCopied, $bytesOrigin), 0, null, $originFile);
+                    throw new \RectorPrefix20210601\Symfony\Component\Filesystem\Exception\IOException(\sprintf('Failed to copy the whole content of "%s" to "%s" (%g of %g bytes copied).', $originFile, $targetFile, $bytesCopied, $bytesOrigin), 0, null, $originFile);
                 }
             }
         }
@@ -80,14 +80,8 @@ class Filesystem
             if (\is_dir($dir)) {
                 continue;
             }
-            if (!self::box('mkdir', $dir, $mode, \true)) {
-                if (!\is_dir($dir)) {
-                    // The directory was not created by a concurrent process. Let's throw an exception with a developer friendly error message if we have one
-                    if (self::$lastError) {
-                        throw new \RectorPrefix20210531\Symfony\Component\Filesystem\Exception\IOException(\sprintf('Failed to create "%s": ', $dir) . self::$lastError, 0, null, $dir);
-                    }
-                    throw new \RectorPrefix20210531\Symfony\Component\Filesystem\Exception\IOException(\sprintf('Failed to create "%s".', $dir), 0, null, $dir);
-                }
+            if (!self::box('mkdir', $dir, $mode, \true) && !\is_dir($dir)) {
+                throw new \RectorPrefix20210601\Symfony\Component\Filesystem\Exception\IOException(\sprintf('Failed to create "%s": ', $dir) . self::$lastError, 0, null, $dir);
             }
         }
     }
@@ -103,7 +97,7 @@ class Filesystem
         $maxPathLength = \PHP_MAXPATHLEN - 2;
         foreach ($this->toIterable($files) as $file) {
             if (\strlen($file) > $maxPathLength) {
-                throw new \RectorPrefix20210531\Symfony\Component\Filesystem\Exception\IOException(\sprintf('Could not check if file exist because path length exceeds %d characters.', $maxPathLength), 0, null, $file);
+                throw new \RectorPrefix20210601\Symfony\Component\Filesystem\Exception\IOException(\sprintf('Could not check if file exist because path length exceeds %d characters.', $maxPathLength), 0, null, $file);
             }
             if (!\file_exists($file)) {
                 return \false;
@@ -123,9 +117,8 @@ class Filesystem
     public function touch($files, int $time = null, int $atime = null)
     {
         foreach ($this->toIterable($files) as $file) {
-            $touch = $time ? @\touch($file, $time, $atime) : @\touch($file);
-            if (\true !== $touch) {
-                throw new \RectorPrefix20210531\Symfony\Component\Filesystem\Exception\IOException(\sprintf('Failed to touch "%s".', $file), 0, null, $file);
+            if (!($time ? self::box('touch', $file, $time, $atime) : self::box('touch', $file))) {
+                throw new \RectorPrefix20210601\Symfony\Component\Filesystem\Exception\IOException(\sprintf('Failed to touch "%s": ', $file) . self::$lastError, 0, null, $file);
             }
         }
     }
@@ -143,20 +136,44 @@ class Filesystem
         } elseif (!\is_array($files)) {
             $files = [$files];
         }
+        self::doRemove($files, \false);
+    }
+    private static function doRemove(array $files, bool $isRecursive) : void
+    {
         $files = \array_reverse($files);
         foreach ($files as $file) {
             if (\is_link($file)) {
                 // See https://bugs.php.net/52176
                 if (!(self::box('unlink', $file) || '\\' !== \DIRECTORY_SEPARATOR || self::box('rmdir', $file)) && \file_exists($file)) {
-                    throw new \RectorPrefix20210531\Symfony\Component\Filesystem\Exception\IOException(\sprintf('Failed to remove symlink "%s": ', $file) . self::$lastError);
+                    throw new \RectorPrefix20210601\Symfony\Component\Filesystem\Exception\IOException(\sprintf('Failed to remove symlink "%s": ', $file) . self::$lastError);
                 }
             } elseif (\is_dir($file)) {
-                $this->remove(new \FilesystemIterator($file, \FilesystemIterator::CURRENT_AS_PATHNAME | \FilesystemIterator::SKIP_DOTS));
-                if (!self::box('rmdir', $file) && \file_exists($file)) {
-                    throw new \RectorPrefix20210531\Symfony\Component\Filesystem\Exception\IOException(\sprintf('Failed to remove directory "%s": ', $file) . self::$lastError);
+                if (!$isRecursive) {
+                    $tmpName = \dirname(\realpath($file)) . '/.' . \strrev(\strtr(\base64_encode(\random_bytes(2)), '/=', '-.'));
+                    if (\file_exists($tmpName)) {
+                        try {
+                            self::doRemove([$tmpName], \true);
+                        } catch (\RectorPrefix20210601\Symfony\Component\Filesystem\Exception\IOException $e) {
+                        }
+                    }
+                    if (!\file_exists($tmpName) && self::box('rename', $file, $tmpName)) {
+                        $origFile = $file;
+                        $file = $tmpName;
+                    } else {
+                        $origFile = null;
+                    }
+                }
+                $files = new \FilesystemIterator($file, \FilesystemIterator::CURRENT_AS_PATHNAME | \FilesystemIterator::SKIP_DOTS);
+                self::doRemove(\iterator_to_array($files, \true), \true);
+                if (!self::box('rmdir', $file) && \file_exists($file) && !$isRecursive) {
+                    $lastError = self::$lastError;
+                    if (null !== $origFile && self::box('rename', $file, $origFile)) {
+                        $file = $origFile;
+                    }
+                    throw new \RectorPrefix20210601\Symfony\Component\Filesystem\Exception\IOException(\sprintf('Failed to remove directory "%s": ', $file) . $lastError);
                 }
             } elseif (!self::box('unlink', $file) && (\false !== \strpos(self::$lastError, 'Permission denied') || \file_exists($file))) {
-                throw new \RectorPrefix20210531\Symfony\Component\Filesystem\Exception\IOException(\sprintf('Failed to remove file "%s": ', $file) . self::$lastError);
+                throw new \RectorPrefix20210601\Symfony\Component\Filesystem\Exception\IOException(\sprintf('Failed to remove file "%s": ', $file) . self::$lastError);
             }
         }
     }
@@ -173,8 +190,8 @@ class Filesystem
     public function chmod($files, int $mode, int $umask = 00, bool $recursive = \false)
     {
         foreach ($this->toIterable($files) as $file) {
-            if ((\PHP_VERSION_ID < 80000 || \is_int($mode)) && \true !== @\chmod($file, $mode & ~$umask)) {
-                throw new \RectorPrefix20210531\Symfony\Component\Filesystem\Exception\IOException(\sprintf('Failed to chmod file "%s".', $file), 0, null, $file);
+            if ((\PHP_VERSION_ID < 80000 || \is_int($mode)) && !self::box('chmod', $file, $mode & ~$umask)) {
+                throw new \RectorPrefix20210601\Symfony\Component\Filesystem\Exception\IOException(\sprintf('Failed to chmod file "%s": ', $file) . self::$lastError, 0, null, $file);
             }
             if ($recursive && \is_dir($file) && !\is_link($file)) {
                 $this->chmod(new \FilesystemIterator($file), $mode, $umask, \true);
@@ -197,12 +214,12 @@ class Filesystem
                 $this->chown(new \FilesystemIterator($file), $user, \true);
             }
             if (\is_link($file) && \function_exists('lchown')) {
-                if (\true !== @\lchown($file, $user)) {
-                    throw new \RectorPrefix20210531\Symfony\Component\Filesystem\Exception\IOException(\sprintf('Failed to chown file "%s".', $file), 0, null, $file);
+                if (!self::box('lchown', $file, $user)) {
+                    throw new \RectorPrefix20210601\Symfony\Component\Filesystem\Exception\IOException(\sprintf('Failed to chown file "%s": ', $file) . self::$lastError, 0, null, $file);
                 }
             } else {
-                if (\true !== @\chown($file, $user)) {
-                    throw new \RectorPrefix20210531\Symfony\Component\Filesystem\Exception\IOException(\sprintf('Failed to chown file "%s".', $file), 0, null, $file);
+                if (!self::box('chown', $file, $user)) {
+                    throw new \RectorPrefix20210601\Symfony\Component\Filesystem\Exception\IOException(\sprintf('Failed to chown file "%s": ', $file) . self::$lastError, 0, null, $file);
                 }
             }
         }
@@ -223,12 +240,12 @@ class Filesystem
                 $this->chgrp(new \FilesystemIterator($file), $group, \true);
             }
             if (\is_link($file) && \function_exists('lchgrp')) {
-                if (\true !== @\lchgrp($file, $group)) {
-                    throw new \RectorPrefix20210531\Symfony\Component\Filesystem\Exception\IOException(\sprintf('Failed to chgrp file "%s".', $file), 0, null, $file);
+                if (!self::box('lchgrp', $file, $group)) {
+                    throw new \RectorPrefix20210601\Symfony\Component\Filesystem\Exception\IOException(\sprintf('Failed to chgrp file "%s": ', $file) . self::$lastError, 0, null, $file);
                 }
             } else {
-                if (\true !== @\chgrp($file, $group)) {
-                    throw new \RectorPrefix20210531\Symfony\Component\Filesystem\Exception\IOException(\sprintf('Failed to chgrp file "%s".', $file), 0, null, $file);
+                if (!self::box('chgrp', $file, $group)) {
+                    throw new \RectorPrefix20210601\Symfony\Component\Filesystem\Exception\IOException(\sprintf('Failed to chgrp file "%s": ', $file) . self::$lastError, 0, null, $file);
                 }
             }
         }
@@ -243,16 +260,16 @@ class Filesystem
     {
         // we check that target does not exist
         if (!$overwrite && $this->isReadable($target)) {
-            throw new \RectorPrefix20210531\Symfony\Component\Filesystem\Exception\IOException(\sprintf('Cannot rename because the target "%s" already exists.', $target), 0, null, $target);
+            throw new \RectorPrefix20210601\Symfony\Component\Filesystem\Exception\IOException(\sprintf('Cannot rename because the target "%s" already exists.', $target), 0, null, $target);
         }
-        if (\true !== @\rename($origin, $target)) {
+        if (!self::box('rename', $origin, $target)) {
             if (\is_dir($origin)) {
                 // See https://bugs.php.net/54097 & https://php.net/rename#113943
                 $this->mirror($origin, $target, null, ['override' => $overwrite, 'delete' => $overwrite]);
                 $this->remove($origin);
                 return;
             }
-            throw new \RectorPrefix20210531\Symfony\Component\Filesystem\Exception\IOException(\sprintf('Cannot rename "%s" to "%s".', $origin, $target), 0, null, $target);
+            throw new \RectorPrefix20210601\Symfony\Component\Filesystem\Exception\IOException(\sprintf('Cannot rename "%s" to "%s": ', $origin, $target) . self::$lastError, 0, null, $target);
         }
     }
     /**
@@ -264,7 +281,7 @@ class Filesystem
     {
         $maxPathLength = \PHP_MAXPATHLEN - 2;
         if (\strlen($filename) > $maxPathLength) {
-            throw new \RectorPrefix20210531\Symfony\Component\Filesystem\Exception\IOException(\sprintf('Could not check if file is readable because path length exceeds %d characters.', $maxPathLength), 0, null, $filename);
+            throw new \RectorPrefix20210601\Symfony\Component\Filesystem\Exception\IOException(\sprintf('Could not check if file is readable because path length exceeds %d characters.', $maxPathLength), 0, null, $filename);
         }
         return \is_readable($filename);
     }
@@ -305,10 +322,10 @@ class Filesystem
     public function hardlink(string $originFile, $targetFiles)
     {
         if (!$this->exists($originFile)) {
-            throw new \RectorPrefix20210531\Symfony\Component\Filesystem\Exception\FileNotFoundException(null, 0, null, $originFile);
+            throw new \RectorPrefix20210601\Symfony\Component\Filesystem\Exception\FileNotFoundException(null, 0, null, $originFile);
         }
         if (!\is_file($originFile)) {
-            throw new \RectorPrefix20210531\Symfony\Component\Filesystem\Exception\FileNotFoundException(\sprintf('Origin file "%s" is not a file.', $originFile));
+            throw new \RectorPrefix20210601\Symfony\Component\Filesystem\Exception\FileNotFoundException(\sprintf('Origin file "%s" is not a file.', $originFile));
         }
         foreach ($this->toIterable($targetFiles) as $targetFile) {
             if (\is_file($targetFile)) {
@@ -329,10 +346,10 @@ class Filesystem
     {
         if (self::$lastError) {
             if ('\\' === \DIRECTORY_SEPARATOR && \false !== \strpos(self::$lastError, 'error code(1314)')) {
-                throw new \RectorPrefix20210531\Symfony\Component\Filesystem\Exception\IOException(\sprintf('Unable to create "%s" link due to error code 1314: \'A required privilege is not held by the client\'. Do you have the required Administrator-rights?', $linkType), 0, null, $target);
+                throw new \RectorPrefix20210601\Symfony\Component\Filesystem\Exception\IOException(\sprintf('Unable to create "%s" link due to error code 1314: \'A required privilege is not held by the client\'. Do you have the required Administrator-rights?', $linkType), 0, null, $target);
             }
         }
-        throw new \RectorPrefix20210531\Symfony\Component\Filesystem\Exception\IOException(\sprintf('Failed to create "%s" link from "%s" to "%s".', $linkType, $origin, $target), 0, null, $target);
+        throw new \RectorPrefix20210601\Symfony\Component\Filesystem\Exception\IOException(\sprintf('Failed to create "%s" link from "%s" to "%s": ', $linkType, $origin, $target) . self::$lastError, 0, null, $target);
     }
     /**
      * Resolves links in paths.
@@ -356,12 +373,12 @@ class Filesystem
             if (!$this->exists($path)) {
                 return null;
             }
-            if ('\\' === \DIRECTORY_SEPARATOR) {
+            if ('\\' === \DIRECTORY_SEPARATOR && \PHP_VERSION_ID < 70410) {
                 $path = \readlink($path);
             }
             return \realpath($path);
         }
-        if ('\\' === \DIRECTORY_SEPARATOR) {
+        if ('\\' === \DIRECTORY_SEPARATOR && \PHP_VERSION_ID < 70400) {
             return \realpath($path);
         }
         return \readlink($path);
@@ -374,10 +391,10 @@ class Filesystem
     public function makePathRelative(string $endPath, string $startPath)
     {
         if (!$this->isAbsolutePath($startPath)) {
-            throw new \RectorPrefix20210531\Symfony\Component\Filesystem\Exception\InvalidArgumentException(\sprintf('The start path "%s" is not absolute.', $startPath));
+            throw new \RectorPrefix20210601\Symfony\Component\Filesystem\Exception\InvalidArgumentException(\sprintf('The start path "%s" is not absolute.', $startPath));
         }
         if (!$this->isAbsolutePath($endPath)) {
-            throw new \RectorPrefix20210531\Symfony\Component\Filesystem\Exception\InvalidArgumentException(\sprintf('The end path "%s" is not absolute.', $endPath));
+            throw new \RectorPrefix20210601\Symfony\Component\Filesystem\Exception\InvalidArgumentException(\sprintf('The end path "%s" is not absolute.', $endPath));
         }
         // Normalize separators on Windows
         if ('\\' === \DIRECTORY_SEPARATOR) {
@@ -447,7 +464,7 @@ class Filesystem
         $originDir = \rtrim($originDir, '/\\');
         $originDirLen = \strlen($originDir);
         if (!$this->exists($originDir)) {
-            throw new \RectorPrefix20210531\Symfony\Component\Filesystem\Exception\IOException(\sprintf('The origin directory specified "%s" was not found.', $originDir), 0, null, $originDir);
+            throw new \RectorPrefix20210601\Symfony\Component\Filesystem\Exception\IOException(\sprintf('The origin directory specified "%s" was not found.', $originDir), 0, null, $originDir);
         }
         // Iterate in destination folder to remove obsolete entries
         if ($this->exists($targetDir) && isset($options['delete']) && $options['delete']) {
@@ -484,7 +501,7 @@ class Filesystem
             } elseif (\is_file($file)) {
                 $this->copy($file, $target, $options['override'] ?? \false);
             } else {
-                throw new \RectorPrefix20210531\Symfony\Component\Filesystem\Exception\IOException(\sprintf('Unable to guess "%s" file type.', $file), 0, null, $file);
+                throw new \RectorPrefix20210601\Symfony\Component\Filesystem\Exception\IOException(\sprintf('Unable to guess "%s" file type.', $file), 0, null, $file);
             }
         }
     }
@@ -512,15 +529,14 @@ class Filesystem
         [$scheme, $hierarchy] = $this->getSchemeAndHierarchy($dir);
         // If no scheme or scheme is "file" or "gs" (Google Cloud) create temp file in local filesystem
         if ((null === $scheme || 'file' === $scheme || 'gs' === $scheme) && '' === $suffix) {
-            $tmpFile = @\tempnam($hierarchy, $prefix);
             // If tempnam failed or no scheme return the filename otherwise prepend the scheme
-            if (\false !== $tmpFile) {
+            if ($tmpFile = self::box('tempnam', $hierarchy, $prefix)) {
                 if (null !== $scheme && 'gs' !== $scheme) {
                     return $scheme . '://' . $tmpFile;
                 }
                 return $tmpFile;
             }
-            throw new \RectorPrefix20210531\Symfony\Component\Filesystem\Exception\IOException('A temporary file could not be created.');
+            throw new \RectorPrefix20210601\Symfony\Component\Filesystem\Exception\IOException('A temporary file could not be created: ' . self::$lastError);
         }
         // Loop until we create a valid temp file or have reached 10 attempts
         for ($i = 0; $i < 10; ++$i) {
@@ -528,16 +544,14 @@ class Filesystem
             $tmpFile = $dir . '/' . $prefix . \uniqid(\mt_rand(), \true) . $suffix;
             // Use fopen instead of file_exists as some streams do not support stat
             // Use mode 'x+' to atomically check existence and create to avoid a TOCTOU vulnerability
-            $handle = @\fopen($tmpFile, 'x+');
-            // If unsuccessful restart the loop
-            if (\false === $handle) {
+            if (!($handle = self::box('fopen', $tmpFile, 'x+'))) {
                 continue;
             }
             // Close the file if it was successfully opened
-            @\fclose($handle);
+            self::box('fclose', $handle);
             return $tmpFile;
         }
-        throw new \RectorPrefix20210531\Symfony\Component\Filesystem\Exception\IOException('A temporary file could not be created.');
+        throw new \RectorPrefix20210601\Symfony\Component\Filesystem\Exception\IOException('A temporary file could not be created: ' . self::$lastError);
     }
     /**
      * Atomically dumps content into a file.
@@ -556,20 +570,20 @@ class Filesystem
             $this->mkdir($dir);
         }
         if (!\is_writable($dir)) {
-            throw new \RectorPrefix20210531\Symfony\Component\Filesystem\Exception\IOException(\sprintf('Unable to write to the "%s" directory.', $dir), 0, null, $dir);
+            throw new \RectorPrefix20210601\Symfony\Component\Filesystem\Exception\IOException(\sprintf('Unable to write to the "%s" directory.', $dir), 0, null, $dir);
         }
         // Will create a temp file with 0600 access rights
         // when the filesystem supports chmod.
         $tmpFile = $this->tempnam($dir, \basename($filename));
         try {
-            if (\false === @\file_put_contents($tmpFile, $content)) {
-                throw new \RectorPrefix20210531\Symfony\Component\Filesystem\Exception\IOException(\sprintf('Failed to write file "%s".', $filename), 0, null, $filename);
+            if (\false === self::box('file_put_contents', $tmpFile, $content)) {
+                throw new \RectorPrefix20210601\Symfony\Component\Filesystem\Exception\IOException(\sprintf('Failed to write file "%s": ', $filename) . self::$lastError, 0, null, $filename);
             }
-            @\chmod($tmpFile, \file_exists($filename) ? \fileperms($filename) : 0666 & ~\umask());
+            self::box('chmod', $tmpFile, \file_exists($filename) ? \fileperms($filename) : 0666 & ~\umask());
             $this->rename($tmpFile, $filename, \true);
         } finally {
             if (\file_exists($tmpFile)) {
-                @\unlink($tmpFile);
+                self::box('unlink', $tmpFile);
             }
         }
     }
@@ -590,10 +604,10 @@ class Filesystem
             $this->mkdir($dir);
         }
         if (!\is_writable($dir)) {
-            throw new \RectorPrefix20210531\Symfony\Component\Filesystem\Exception\IOException(\sprintf('Unable to write to the "%s" directory.', $dir), 0, null, $dir);
+            throw new \RectorPrefix20210601\Symfony\Component\Filesystem\Exception\IOException(\sprintf('Unable to write to the "%s" directory.', $dir), 0, null, $dir);
         }
-        if (\false === @\file_put_contents($filename, $content, \FILE_APPEND)) {
-            throw new \RectorPrefix20210531\Symfony\Component\Filesystem\Exception\IOException(\sprintf('Failed to write file "%s".', $filename), 0, null, $filename);
+        if (\false === self::box('file_put_contents', $filename, $content, \FILE_APPEND)) {
+            throw new \RectorPrefix20210601\Symfony\Component\Filesystem\Exception\IOException(\sprintf('Failed to write file "%s": ', $filename) . self::$lastError, 0, null, $filename);
         }
     }
     private function toIterable($files) : iterable

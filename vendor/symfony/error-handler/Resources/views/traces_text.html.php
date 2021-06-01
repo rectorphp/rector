@@ -2,13 +2,13 @@
     <thead class="trace-head">
         <tr>
             <th class="sf-toggle" data-toggle-selector="#trace-text-<?php 
-namespace RectorPrefix20210531;
+namespace RectorPrefix20210601;
 
 echo $index;
 ?>" data-toggle-initial="<?php 
 echo 1 === $index ? 'display' : '';
 ?>">
-                <h3 class="trace-class">
+                <div class="trace-class">
                     <?php 
 if ($numExceptions > 1) {
     ?>
@@ -29,7 +29,7 @@ echo $this->include('assets/images/icon-minus-square-o.svg');
                     <span class="icon icon-open"><?php 
 echo $this->include('assets/images/icon-plus-square-o.svg');
 ?></span>
-                </h3>
+                </div>
             </th>
         </tr>
     </thead>

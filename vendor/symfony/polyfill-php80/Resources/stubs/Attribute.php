@@ -2,7 +2,9 @@
 
 
 
-#[Attribute(\Attribute::TARGET_CLASS)]
+/**
+ * @Attribute
+ */
 final class Attribute
 {
     public const TARGET_CLASS = 1;
@@ -20,4 +22,7 @@ final class Attribute
         $this->flags = $flags;
     }
 }
-\class_alias('RectorPrefix20210531\\Attribute', 'Attribute', \false);
+/**
+ * @Attribute
+ */
+\class_alias('RectorPrefix20210601\\Attribute', 'Attribute', \false);

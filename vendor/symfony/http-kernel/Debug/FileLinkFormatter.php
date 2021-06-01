@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210531\Symfony\Component\HttpKernel\Debug;
+namespace RectorPrefix20210601\Symfony\Component\HttpKernel\Debug;
 
-use RectorPrefix20210531\Symfony\Component\HttpFoundation\Request;
-use RectorPrefix20210531\Symfony\Component\HttpFoundation\RequestStack;
-use RectorPrefix20210531\Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use RectorPrefix20210601\Symfony\Component\HttpFoundation\Request;
+use RectorPrefix20210601\Symfony\Component\HttpFoundation\RequestStack;
+use RectorPrefix20210601\Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 /**
  * Formats debug file links.
  *
@@ -22,6 +22,7 @@ use RectorPrefix20210531\Symfony\Component\Routing\Generator\UrlGeneratorInterfa
  */
 class FileLinkFormatter
 {
+    private const FORMATS = ['textmate' => 'txmt://open?url=file://%f&line=%l', 'macvim' => 'mvim://open?url=file://%f&line=%l', 'emacs' => 'emacs://open?url=file://%f&line=%l', 'sublime' => 'subl://open?url=file://%f&line=%l', 'phpstorm' => 'phpstorm://open?file=%f&line=%l', 'atom' => 'atom://core/open/file?filename=%f&line=%l', 'vscode' => 'vscode://file/%f:%l'];
     private $fileLinkFormat;
     private $requestStack;
     private $baseDir;
@@ -29,9 +30,9 @@ class FileLinkFormatter
     /**
      * @param string|\Closure $urlFormat the URL format, or a closure that returns it on-demand
      */
-    public function __construct($fileLinkFormat = null, \RectorPrefix20210531\Symfony\Component\HttpFoundation\RequestStack $requestStack = null, string $baseDir = null, $urlFormat = null)
+    public function __construct($fileLinkFormat = null, \RectorPrefix20210601\Symfony\Component\HttpFoundation\RequestStack $requestStack = null, string $baseDir = null, $urlFormat = null)
     {
-        $fileLinkFormat = ($fileLinkFormat ?: \ini_get('xdebug.file_link_format')) ?: \get_cfg_var('xdebug.file_link_format');
+        $fileLinkFormat = (self::FORMATS[$fileLinkFormat] ?? $fileLinkFormat ?: \ini_get('xdebug.file_link_format')) ?: \get_cfg_var('xdebug.file_link_format');
         if ($fileLinkFormat && !\is_array($fileLinkFormat)) {
             $i = \strpos($f = $fileLinkFormat, '&', \max(\strrpos($f, '%f'), \strrpos($f, '%l'))) ?: \strlen($f);
             $fileLinkFormat = [\substr($f, 0, $i)] + \preg_split('/&([^>]++)>/', \substr($f, $i), -1, \PREG_SPLIT_DELIM_CAPTURE);
@@ -65,7 +66,7 @@ class FileLinkFormatter
     /**
      * @internal
      */
-    public static function generateUrlFormat(\RectorPrefix20210531\Symfony\Component\Routing\Generator\UrlGeneratorInterface $router, string $routeName, string $queryString) : ?string
+    public static function generateUrlFormat(\RectorPrefix20210601\Symfony\Component\Routing\Generator\UrlGeneratorInterface $router, string $routeName, string $queryString) : ?string
     {
         try {
             return $router->generate($routeName) . $queryString;
@@ -79,8 +80,8 @@ class FileLinkFormatter
             return $this->fileLinkFormat;
         }
         if ($this->requestStack && $this->baseDir && $this->urlFormat) {
-            $request = $this->requestStack->getMasterRequest();
-            if ($request instanceof \RectorPrefix20210531\Symfony\Component\HttpFoundation\Request && (!$this->urlFormat instanceof \Closure || ($this->urlFormat = ($this->urlFormat)()))) {
+            $request = $this->requestStack->getMainRequest();
+            if ($request instanceof \RectorPrefix20210601\Symfony\Component\HttpFoundation\Request && (!$this->urlFormat instanceof \Closure || ($this->urlFormat = ($this->urlFormat)()))) {
                 return [$request->getSchemeAndHttpHost() . $this->urlFormat, $this->baseDir . \DIRECTORY_SEPARATOR, ''];
             }
         }

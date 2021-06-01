@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210531;
+namespace RectorPrefix20210601;
 
 if (\class_exists('fileList_editIconHook')) {
     return;

@@ -8,28 +8,28 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210531\Symfony\Component\HttpKernel\Event;
+namespace RectorPrefix20210601\Symfony\Component\HttpKernel\Event;
 
-use RectorPrefix20210531\Symfony\Component\HttpFoundation\Request;
-use RectorPrefix20210531\Symfony\Component\HttpFoundation\Response;
-use RectorPrefix20210531\Symfony\Component\HttpKernel\HttpKernelInterface;
+use RectorPrefix20210601\Symfony\Component\HttpFoundation\Request;
+use RectorPrefix20210601\Symfony\Component\HttpFoundation\Response;
+use RectorPrefix20210601\Symfony\Component\HttpKernel\HttpKernelInterface;
 /**
  * Allows to execute logic after a response was sent.
  *
- * Since it's only triggered on master requests, the `getRequestType()` method
- * will always return the value of `HttpKernelInterface::MASTER_REQUEST`.
+ * Since it's only triggered on main requests, the `getRequestType()` method
+ * will always return the value of `HttpKernelInterface::MAIN_REQUEST`.
  *
  * @author Jordi Boggiano <j.boggiano@seld.be>
  */
-final class TerminateEvent extends \RectorPrefix20210531\Symfony\Component\HttpKernel\Event\KernelEvent
+final class TerminateEvent extends \RectorPrefix20210601\Symfony\Component\HttpKernel\Event\KernelEvent
 {
     private $response;
-    public function __construct(\RectorPrefix20210531\Symfony\Component\HttpKernel\HttpKernelInterface $kernel, \RectorPrefix20210531\Symfony\Component\HttpFoundation\Request $request, \RectorPrefix20210531\Symfony\Component\HttpFoundation\Response $response)
+    public function __construct(\RectorPrefix20210601\Symfony\Component\HttpKernel\HttpKernelInterface $kernel, \RectorPrefix20210601\Symfony\Component\HttpFoundation\Request $request, \RectorPrefix20210601\Symfony\Component\HttpFoundation\Response $response)
     {
-        parent::__construct($kernel, $request, \RectorPrefix20210531\Symfony\Component\HttpKernel\HttpKernelInterface::MASTER_REQUEST);
+        parent::__construct($kernel, $request, \RectorPrefix20210601\Symfony\Component\HttpKernel\HttpKernelInterface::MAIN_REQUEST);
         $this->response = $response;
     }
-    public function getResponse() : \RectorPrefix20210531\Symfony\Component\HttpFoundation\Response
+    public function getResponse() : \RectorPrefix20210601\Symfony\Component\HttpFoundation\Response
     {
         return $this->response;
     }

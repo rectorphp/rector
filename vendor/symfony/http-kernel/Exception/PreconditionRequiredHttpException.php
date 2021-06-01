@@ -8,14 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210531\Symfony\Component\HttpKernel\Exception;
+namespace RectorPrefix20210601\Symfony\Component\HttpKernel\Exception;
 
 /**
  * @author Ben Ramsey <ben@benramsey.com>
  *
  * @see http://tools.ietf.org/html/rfc6585
  */
-class PreconditionRequiredHttpException extends \RectorPrefix20210531\Symfony\Component\HttpKernel\Exception\HttpException
+class PreconditionRequiredHttpException extends \RectorPrefix20210601\Symfony\Component\HttpKernel\Exception\HttpException
 {
     /**
      * @param string|null     $message  The internal exception message
@@ -24,6 +24,10 @@ class PreconditionRequiredHttpException extends \RectorPrefix20210531\Symfony\Co
      */
     public function __construct(?string $message = '', \Throwable $previous = null, int $code = 0, array $headers = [])
     {
+        if (null === $message) {
+            trigger_deprecation('symfony/http-kernel', '5.3', 'Passing null as $message to "%s()" is deprecated, pass an empty string instead.', __METHOD__);
+            $message = '';
+        }
         parent::__construct(428, $message, $previous, $headers, $code);
     }
 }

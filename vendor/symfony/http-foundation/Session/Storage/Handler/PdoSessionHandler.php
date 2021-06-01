@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210531\Symfony\Component\HttpFoundation\Session\Storage\Handler;
+namespace RectorPrefix20210601\Symfony\Component\HttpFoundation\Session\Storage\Handler;
 
 /**
  * Session handler using a PDO connection to read and write data.
@@ -37,7 +37,7 @@ namespace RectorPrefix20210531\Symfony\Component\HttpFoundation\Session\Storage\
  * @author Michael Williams <michael.williams@funsational.com>
  * @author Tobias Schultze <http://tobion.de>
  */
-class PdoSessionHandler extends \RectorPrefix20210531\Symfony\Component\HttpFoundation\Session\Storage\Handler\AbstractSessionHandler
+class PdoSessionHandler extends \RectorPrefix20210601\Symfony\Component\HttpFoundation\Session\Storage\Handler\AbstractSessionHandler
 {
     /**
      * No locking is done. This means sessions are prone to loss of data due to
@@ -418,10 +418,30 @@ class PdoSessionHandler extends \RectorPrefix20210531\Symfony\Component\HttpFoun
         if (0 === \strpos($driver, 'pdo_') || 0 === \strpos($driver, 'pdo-')) {
             $driver = \substr($driver, 4);
         }
+        $dsn = null;
         switch ($driver) {
             case 'mysql':
+                $dsn = 'mysql:';
+                if ('' !== ($params['query'] ?? '')) {
+                    $queryParams = [];
+                    \parse_str($params['query'], $queryParams);
+                    if ('' !== ($queryParams['charset'] ?? '')) {
+                        $dsn .= 'charset=' . $queryParams['charset'] . ';';
+                    }
+                    if ('' !== ($queryParams['unix_socket'] ?? '')) {
+                        $dsn .= 'unix_socket=' . $queryParams['unix_socket'] . ';';
+                        if (isset($params['path'])) {
+                            $dbName = \substr($params['path'], 1);
+                            // Remove the leading slash
+                            $dsn .= 'dbname=' . $dbName . ';';
+                        }
+                        return $dsn;
+                    }
+                }
+            // If "unix_socket" is not in the query, we continue with the same process as pgsql
+            // no break
             case 'pgsql':
-                $dsn = $driver . ':';
+                $dsn ?? ($dsn = 'pgsql:');
                 if (isset($params['host']) && '' !== $params['host']) {
                     $dsn .= 'host=' . $params['host'] . ';';
                 }

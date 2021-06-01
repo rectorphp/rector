@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210531\TYPO3\CMS\Core\Resource;
+namespace RectorPrefix20210601\TYPO3\CMS\Core\Resource;
 
 if (\class_exists('TYPO3\\CMS\\Core\\Resource\\File')) {
     return;
@@ -19,6 +19,6 @@ class File
      */
     public function getMetaData()
     {
-        return new \RectorPrefix20210531\TYPO3\CMS\Core\Resource\MetaDataAspect();
+        return new \RectorPrefix20210601\TYPO3\CMS\Core\Resource\MetaDataAspect();
     }
 }

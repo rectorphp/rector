@@ -8,21 +8,21 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210531\Symfony\Component\HttpKernel\DependencyInjection;
+namespace RectorPrefix20210601\Symfony\Component\HttpKernel\DependencyInjection;
 
-use RectorPrefix20210531\Symfony\Component\DependencyInjection\Argument\IteratorArgument;
-use RectorPrefix20210531\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
-use RectorPrefix20210531\Symfony\Component\DependencyInjection\Compiler\PriorityTaggedServiceTrait;
-use RectorPrefix20210531\Symfony\Component\DependencyInjection\ContainerBuilder;
-use RectorPrefix20210531\Symfony\Component\DependencyInjection\Reference;
-use RectorPrefix20210531\Symfony\Component\HttpKernel\Controller\ArgumentResolver\TraceableValueResolver;
-use RectorPrefix20210531\Symfony\Component\Stopwatch\Stopwatch;
+use RectorPrefix20210601\Symfony\Component\DependencyInjection\Argument\IteratorArgument;
+use RectorPrefix20210601\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use RectorPrefix20210601\Symfony\Component\DependencyInjection\Compiler\PriorityTaggedServiceTrait;
+use RectorPrefix20210601\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix20210601\Symfony\Component\DependencyInjection\Reference;
+use RectorPrefix20210601\Symfony\Component\HttpKernel\Controller\ArgumentResolver\TraceableValueResolver;
+use RectorPrefix20210601\Symfony\Component\Stopwatch\Stopwatch;
 /**
  * Gathers and configures the argument value resolvers.
  *
  * @author Iltar van der Berg <kjarli@gmail.com>
  */
-class ControllerArgumentValueResolverPass implements \RectorPrefix20210531\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface
+class ControllerArgumentValueResolverPass implements \RectorPrefix20210601\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface
 {
     use PriorityTaggedServiceTrait;
     private $argumentResolverService;
@@ -30,22 +30,25 @@ class ControllerArgumentValueResolverPass implements \RectorPrefix20210531\Symfo
     private $traceableResolverStopwatch;
     public function __construct(string $argumentResolverService = 'argument_resolver', string $argumentValueResolverTag = 'controller.argument_value_resolver', string $traceableResolverStopwatch = 'debug.stopwatch')
     {
+        if (0 < \func_num_args()) {
+            trigger_deprecation('symfony/http-kernel', '5.3', 'Configuring "%s" is deprecated.', __CLASS__);
+        }
         $this->argumentResolverService = $argumentResolverService;
         $this->argumentValueResolverTag = $argumentValueResolverTag;
         $this->traceableResolverStopwatch = $traceableResolverStopwatch;
     }
-    public function process(\RectorPrefix20210531\Symfony\Component\DependencyInjection\ContainerBuilder $container)
+    public function process(\RectorPrefix20210601\Symfony\Component\DependencyInjection\ContainerBuilder $container)
     {
         if (!$container->hasDefinition($this->argumentResolverService)) {
             return;
         }
         $resolvers = $this->findAndSortTaggedServices($this->argumentValueResolverTag, $container);
-        if ($container->getParameter('kernel.debug') && \class_exists(\RectorPrefix20210531\Symfony\Component\Stopwatch\Stopwatch::class) && $container->has($this->traceableResolverStopwatch)) {
+        if ($container->getParameter('kernel.debug') && \class_exists(\RectorPrefix20210601\Symfony\Component\Stopwatch\Stopwatch::class) && $container->has($this->traceableResolverStopwatch)) {
             foreach ($resolvers as $resolverReference) {
                 $id = (string) $resolverReference;
-                $container->register("debug.{$id}", \RectorPrefix20210531\Symfony\Component\HttpKernel\Controller\ArgumentResolver\TraceableValueResolver::class)->setDecoratedService($id)->setArguments([new \RectorPrefix20210531\Symfony\Component\DependencyInjection\Reference("debug.{$id}.inner"), new \RectorPrefix20210531\Symfony\Component\DependencyInjection\Reference($this->traceableResolverStopwatch)]);
+                $container->register("debug.{$id}", \RectorPrefix20210601\Symfony\Component\HttpKernel\Controller\ArgumentResolver\TraceableValueResolver::class)->setDecoratedService($id)->setArguments([new \RectorPrefix20210601\Symfony\Component\DependencyInjection\Reference("debug.{$id}.inner"), new \RectorPrefix20210601\Symfony\Component\DependencyInjection\Reference($this->traceableResolverStopwatch)]);
             }
         }
-        $container->getDefinition($this->argumentResolverService)->replaceArgument(1, new \RectorPrefix20210531\Symfony\Component\DependencyInjection\Argument\IteratorArgument($resolvers));
+        $container->getDefinition($this->argumentResolverService)->replaceArgument(1, new \RectorPrefix20210601\Symfony\Component\DependencyInjection\Argument\IteratorArgument($resolvers));
     }
 }

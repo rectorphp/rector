@@ -1,6 +1,19 @@
 CHANGELOG
 =========
 
+5.3
+---
+
+ * Deprecate `ArgumentInterface`
+ * Add `ArgumentMetadata::getAttributes()`
+ * Deprecate `ArgumentMetadata::getAttribute()`, use `getAttributes()` instead
+ * Mark the class `Symfony\Component\HttpKernel\EventListener\DebugHandlersListener` as internal
+ * Deprecate returning a `ContainerBuilder` from `KernelInterface::registerContainerConfiguration()`
+ * Deprecate `HttpKernelInterface::MASTER_REQUEST` and add `HttpKernelInterface::MAIN_REQUEST` as replacement
+ * Deprecate `KernelEvent::isMasterRequest()` and add `isMainRequest()` as replacement
+ * Add `#[AsController]` attribute for declaring standalone controllers on PHP 8
+ * Add `FragmentUriGeneratorInterface` and `FragmentUriGenerator` to generate the URI of a fragment
+
 5.2.0
 -----
 

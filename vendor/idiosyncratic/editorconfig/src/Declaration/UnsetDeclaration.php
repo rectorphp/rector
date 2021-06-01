@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210531\Idiosyncratic\EditorConfig\Declaration;
+namespace RectorPrefix20210601\Idiosyncratic\EditorConfig\Declaration;
 
-final class UnsetDeclaration extends \RectorPrefix20210531\Idiosyncratic\EditorConfig\Declaration\Declaration
+final class UnsetDeclaration extends \RectorPrefix20210601\Idiosyncratic\EditorConfig\Declaration\Declaration
 {
     public function __construct(string $name)
     {

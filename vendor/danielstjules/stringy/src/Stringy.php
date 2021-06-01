@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210531\Stringy;
+namespace RectorPrefix20210601\Stringy;
 
 use ArrayAccess;
 use ArrayIterator;
@@ -1199,7 +1199,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
             if ($ignore && \in_array($match[0], $ignore)) {
                 return $match[0];
             }
-            $stringy = new \RectorPrefix20210531\Stringy\Stringy($match[0], $encoding);
+            $stringy = new \RectorPrefix20210601\Stringy\Stringy($match[0], $encoding);
             return (string) $stringy->toLowerCase()->upperCaseFirst();
         }, $stringy->str);
         return $stringy;

@@ -8,22 +8,22 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210531\Symfony\Component\Console\Helper;
+namespace RectorPrefix20210601\Symfony\Component\Console\Helper;
 
-use RectorPrefix20210531\Symfony\Component\Console\Formatter\OutputFormatterInterface;
-use RectorPrefix20210531\Symfony\Component\String\UnicodeString;
+use RectorPrefix20210601\Symfony\Component\Console\Formatter\OutputFormatterInterface;
+use RectorPrefix20210601\Symfony\Component\String\UnicodeString;
 /**
  * Helper is the base class for all helper classes.
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-abstract class Helper implements \RectorPrefix20210531\Symfony\Component\Console\Helper\HelperInterface
+abstract class Helper implements \RectorPrefix20210601\Symfony\Component\Console\Helper\HelperInterface
 {
     protected $helperSet = null;
     /**
      * {@inheritdoc}
      */
-    public function setHelperSet(\RectorPrefix20210531\Symfony\Component\Console\Helper\HelperSet $helperSet = null)
+    public function setHelperSet(\RectorPrefix20210601\Symfony\Component\Console\Helper\HelperSet $helperSet = null)
     {
         $this->helperSet = $helperSet;
     }
@@ -37,23 +37,24 @@ abstract class Helper implements \RectorPrefix20210531\Symfony\Component\Console
     /**
      * Returns the length of a string, using mb_strwidth if it is available.
      *
+     * @deprecated since 5.3
+     *
      * @return int The length of the string
      */
     public static function strlen(?string $string)
     {
+        trigger_deprecation('symfony/console', '5.3', 'Method "%s()" is deprecated and will be removed in Symfony 6.0. Use Helper::width() or Helper::length() instead.', __METHOD__);
         return self::width($string);
     }
     /**
      * Returns the width of a string, using mb_strwidth if it is available.
      * The width is how many characters positions the string will use.
-     *
-     * @internal in Symfony 5.2
      */
     public static function width(?string $string) : int
     {
         $string ?? ($string = '');
         if (\preg_match('//u', $string)) {
-            return (new \RectorPrefix20210531\Symfony\Component\String\UnicodeString($string))->width(\false);
+            return (new \RectorPrefix20210601\Symfony\Component\String\UnicodeString($string))->width(\false);
         }
         if (\false === ($encoding = \mb_detect_encoding($string, null, \true))) {
             return \strlen($string);
@@ -63,14 +64,12 @@ abstract class Helper implements \RectorPrefix20210531\Symfony\Component\Console
     /**
      * Returns the length of a string, using mb_strlen if it is available.
      * The length is related to how many bytes the string will use.
-     *
-     * @internal in Symfony 5.2
      */
     public static function length(?string $string) : int
     {
         $string ?? ($string = '');
         if (\preg_match('//u', $string)) {
-            return (new \RectorPrefix20210531\Symfony\Component\String\UnicodeString($string))->length();
+            return (new \RectorPrefix20210601\Symfony\Component\String\UnicodeString($string))->length();
         }
         if (\false === ($encoding = \mb_detect_encoding($string, null, \true))) {
             return \strlen($string);
@@ -117,11 +116,15 @@ abstract class Helper implements \RectorPrefix20210531\Symfony\Component\Console
         }
         return \sprintf('%d B', $memory);
     }
-    public static function strlenWithoutDecoration(\RectorPrefix20210531\Symfony\Component\Console\Formatter\OutputFormatterInterface $formatter, ?string $string)
+    /**
+     * @deprecated since 5.3
+     */
+    public static function strlenWithoutDecoration(\RectorPrefix20210601\Symfony\Component\Console\Formatter\OutputFormatterInterface $formatter, ?string $string)
     {
+        trigger_deprecation('symfony/console', '5.3', 'Method "%s()" is deprecated and will be removed in Symfony 6.0. Use Helper::removeDecoration() instead.', __METHOD__);
         return self::width(self::removeDecoration($formatter, $string));
     }
-    public static function removeDecoration(\RectorPrefix20210531\Symfony\Component\Console\Formatter\OutputFormatterInterface $formatter, ?string $string)
+    public static function removeDecoration(\RectorPrefix20210601\Symfony\Component\Console\Formatter\OutputFormatterInterface $formatter, ?string $string)
     {
         $isDecorated = $formatter->isDecorated();
         $formatter->setDecorated(\false);

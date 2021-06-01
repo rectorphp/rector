@@ -69,6 +69,10 @@ final class SymfonySetList implements \Rector\Set\Contract\SetListInterface
     /**
      * @var string
      */
+    public const SYMFONY_52_VALIDATOR_ATTRIBUTES = __DIR__ . '/../../config/sets/symfony/symfony52-validator-attributes.php';
+    /**
+     * @var string
+     */
     public const SYMFONY_CODE_QUALITY = __DIR__ . '/../../config/sets/symfony/symfony-code-quality.php';
     /**
      * @var string

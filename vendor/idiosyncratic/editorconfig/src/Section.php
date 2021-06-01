@@ -1,11 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210531\Idiosyncratic\EditorConfig;
+namespace RectorPrefix20210601\Idiosyncratic\EditorConfig;
 
 use ErrorException;
-use RectorPrefix20210531\Idiosyncratic\EditorConfig\Declaration\Factory;
-use const PREG_SET_ORDER;
+use RectorPrefix20210601\Idiosyncratic\EditorConfig\Declaration\Factory;
 use function array_key_exists;
 use function debug_backtrace;
 use function explode;
@@ -14,6 +13,7 @@ use function implode;
 use function preg_match;
 use function preg_match_all;
 use function sprintf;
+use const PREG_SET_ORDER;
 final class Section
 {
     /** @var string */
@@ -27,7 +27,7 @@ final class Section
     /**
      * @param array<string, mixed> $declarations
      */
-    public function __construct(string $globPrefix, string $glob, array $declarations, \RectorPrefix20210531\Idiosyncratic\EditorConfig\Declaration\Factory $declarationFactory)
+    public function __construct(string $globPrefix, string $glob, array $declarations, \RectorPrefix20210601\Idiosyncratic\EditorConfig\Declaration\Factory $declarationFactory)
     {
         $this->globPrefix = $globPrefix;
         $this->glob = $glob;
