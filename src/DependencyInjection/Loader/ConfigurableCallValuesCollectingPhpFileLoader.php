@@ -22,7 +22,6 @@ final class ConfigurableCallValuesCollectingPhpFileLoader extends PhpFileLoader
 
     /**
      * @param mixed $resource
-     * @param null|string $type
      */
     public function load($resource, string $type = null): void
     {
