@@ -24,7 +24,7 @@ final class FormControlToControllerAndFormTypeRectorTest extends \Rector\Testing
     public function provideData() : \Iterator
     {
         $smartFileSystem = new \RectorPrefix20210601\Symplify\SmartFileSystem\SmartFileSystem();
-        (yield [new \Symplify\SmartFileSystem\SmartFileInfo(__DIR__ . '/Fixture/fixture.php.inc'), new \Rector\FileSystemRector\ValueObject\AddedFileWithContent('src/Controller/SomeFormController.php', $smartFileSystem->readFile(__DIR__ . '/Source/extra_file.php'))]);
+        (yield [new \Symplify\SmartFileSystem\SmartFileInfo(__DIR__ . '/Fixture/fixture.php.inc'), new \Rector\FileSystemRector\ValueObject\AddedFileWithContent($this->getFixtureTempDirectory() . '/SomeController.php', $smartFileSystem->readFile(__DIR__ . '/Source/extra_file.php'))]);
     }
     public function provideConfigFilePath() : string
     {

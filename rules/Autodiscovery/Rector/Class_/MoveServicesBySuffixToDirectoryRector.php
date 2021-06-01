@@ -125,7 +125,7 @@ CODE_SAMPLE
     }
     private function moveFileToGroupName(\Symplify\SmartFileSystem\SmartFileInfo $fileInfo, \Rector\Core\ValueObject\Application\File $file, string $desiredGroupName) : void
     {
-        $addedFileWithNodes = $this->addedFileWithNodesFactory->createWithDesiredGroup($fileInfo, $this->file, $desiredGroupName);
+        $addedFileWithNodes = $this->addedFileWithNodesFactory->createWithDesiredGroup($fileInfo, $file, $desiredGroupName);
         if (!$addedFileWithNodes instanceof \Rector\FileSystemRector\ValueObject\AddedFileWithNodes) {
             return;
         }
