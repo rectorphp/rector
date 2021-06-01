@@ -23,7 +23,7 @@ final class ConfigurableCallValuesCollectingPhpFileLoader extends \RectorPrefix2
      * @param mixed $resource
      * @param string|null $type
      */
-    public function load($resource, $type = null) : void
+    public function load($resource, $type = null)
     {
         // this call collects root values
         $this->collectConfigureCallsFromJustImportedConfigurableRectorDefinitions();

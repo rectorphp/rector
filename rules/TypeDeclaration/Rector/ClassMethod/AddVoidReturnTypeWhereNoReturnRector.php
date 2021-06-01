@@ -71,7 +71,7 @@ CODE_SAMPLE
         if ($node instanceof \PhpParser\Node\Stmt\ClassMethod && ($node->isMagic() || $node->isAbstract())) {
             return null;
         }
-        if (!$this->silentVoidResolver->hasExlusiveVoid($node)) {
+        if (!$this->silentVoidResolver->hasExclusiveVoid($node)) {
             return null;
         }
         $node->returnType = new \PhpParser\Node\Identifier('void');

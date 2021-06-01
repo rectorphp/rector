@@ -6,6 +6,7 @@ namespace Rector\TypeDeclaration\TypeInferer;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Yield_;
 use PhpParser\Node\FunctionLike;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
@@ -30,7 +31,7 @@ final class SilentVoidResolver
     /**
      * @param ClassMethod|Closure|Function_ $functionLike
      */
-    public function hasExlusiveVoid(\PhpParser\Node\FunctionLike $functionLike) : bool
+    public function hasExclusiveVoid(\PhpParser\Node\FunctionLike $functionLike) : bool
     {
         $classLike = $functionLike->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
         if ($classLike instanceof \PhpParser\Node\Stmt\Interface_) {
@@ -40,6 +41,12 @@ final class SilentVoidResolver
             return \false;
         }
         if ($this->betterNodeFinder->hasInstancesOf((array) $functionLike->stmts, [\PhpParser\Node\Expr\Yield_::class])) {
+            return \false;
+        }
+        if ($classLike->extends instanceof \PhpParser\Node\Name\FullyQualified) {
+            return \false;
+        }
+        if ($classLike->getTraitUses() !== []) {
             return \false;
         }
         /** @var Return_[] $returns */
