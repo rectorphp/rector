@@ -150,7 +150,7 @@ CODE_SAMPLE
     {
         $addedFileWithNodes = $this->addedFileWithNodesFactory->createWithDesiredGroup(
             $fileInfo,
-            $this->file,
+            $file,
             $desiredGroupName
         );
 

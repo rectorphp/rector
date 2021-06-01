@@ -18,10 +18,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                     'Symfony\Component\Routing\Annotation\Route'
                 ),
                 new DowngradeAttributeToAnnotation('Symfony\Contracts\Service\Attribute\Required', 'required'),
-                new DowngradeAttributeToAnnotation(
-                    'Attribute',
-                    'Attribute'
-                ),
+                new DowngradeAttributeToAnnotation('Attribute', 'Attribute'),
             ]),
         ]]);
 };
