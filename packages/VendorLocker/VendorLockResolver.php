@@ -9,7 +9,6 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use Rector\VendorLocker\NodeVendorLocker\ClassMethodParamVendorLockResolver;
 use Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnVendorLockResolver;
-use Rector\VendorLocker\NodeVendorLocker\ClassMethodVendorLockResolver;
 use Rector\VendorLocker\NodeVendorLocker\PropertyTypeVendorLockResolver;
 
 final class VendorLockResolver
@@ -17,7 +16,6 @@ final class VendorLockResolver
     public function __construct(
         private ClassMethodParamVendorLockResolver $classMethodParamVendorLockResolver,
         private ClassMethodReturnVendorLockResolver $classMethodReturnVendorLockResolver,
-        private ClassMethodVendorLockResolver $classMethodVendorLockResolver,
         private PropertyTypeVendorLockResolver $propertyTypeVendorLockResolver
     ) {
     }

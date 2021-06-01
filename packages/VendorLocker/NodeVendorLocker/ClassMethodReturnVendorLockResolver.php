@@ -52,7 +52,10 @@ final class ClassMethodReturnVendorLockResolver
     private function isVendorLockedByParentClass(ClassReflection $classReflection, string $methodName): bool
     {
         foreach ($classReflection->getParents() as $parentClassReflections) {
-            if (! $parentClassReflections->hasMethod($methodName)) {
+            $nativeClassReflection = $parentClassReflections->getNativeReflection();
+
+            // this should avoid detecting @method as real method
+            if (! $nativeClassReflection->hasMethod($methodName)) {
                 continue;
             }
 
