@@ -21,6 +21,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node\Name\FullyQualified;
 
 /**
  * @changelog https://www.php.net/manual/en/migration72.new-features.php#migration72.new-features.param-type-widening
@@ -99,6 +100,10 @@ CODE_SAMPLE
             return null;
         }
 
+        if ($this->hasExtendExternal($node)) {
+            return null;
+        }
+
         $hasChanged = false;
         $classMethods = $this->classLikeWithTraitsClassMethodResolver->resolve($node);
 
@@ -118,6 +123,22 @@ CODE_SAMPLE
         }
 
         return null;
+    }
+
+    /**
+     * @param Class_|Interface_ $node
+     */
+    private function hasExtendExternal(Node $node): bool
+    {
+        if ($node->extends instanceof FullyQualified) {
+            $className   = (string) $this->getName($node->extends);
+            $parentFound = (bool) $this->nodeRepository->findClass($className);
+            if (! $parentFound) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
