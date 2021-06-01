@@ -8,7 +8,6 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use Rector\VendorLocker\NodeVendorLocker\ClassMethodParamVendorLockResolver;
 use Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnVendorLockResolver;
-use Rector\VendorLocker\NodeVendorLocker\ClassMethodVendorLockResolver;
 use Rector\VendorLocker\NodeVendorLocker\PropertyTypeVendorLockResolver;
 final class VendorLockResolver
 {
@@ -21,18 +20,13 @@ final class VendorLockResolver
      */
     private $classMethodReturnVendorLockResolver;
     /**
-     * @var \Rector\VendorLocker\NodeVendorLocker\ClassMethodVendorLockResolver
-     */
-    private $classMethodVendorLockResolver;
-    /**
      * @var \Rector\VendorLocker\NodeVendorLocker\PropertyTypeVendorLockResolver
      */
     private $propertyTypeVendorLockResolver;
-    public function __construct(\Rector\VendorLocker\NodeVendorLocker\ClassMethodParamVendorLockResolver $classMethodParamVendorLockResolver, \Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnVendorLockResolver $classMethodReturnVendorLockResolver, \Rector\VendorLocker\NodeVendorLocker\ClassMethodVendorLockResolver $classMethodVendorLockResolver, \Rector\VendorLocker\NodeVendorLocker\PropertyTypeVendorLockResolver $propertyTypeVendorLockResolver)
+    public function __construct(\Rector\VendorLocker\NodeVendorLocker\ClassMethodParamVendorLockResolver $classMethodParamVendorLockResolver, \Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnVendorLockResolver $classMethodReturnVendorLockResolver, \Rector\VendorLocker\NodeVendorLocker\PropertyTypeVendorLockResolver $propertyTypeVendorLockResolver)
     {
         $this->classMethodParamVendorLockResolver = $classMethodParamVendorLockResolver;
         $this->classMethodReturnVendorLockResolver = $classMethodReturnVendorLockResolver;
-        $this->classMethodVendorLockResolver = $classMethodVendorLockResolver;
         $this->propertyTypeVendorLockResolver = $propertyTypeVendorLockResolver;
     }
     public function isClassMethodParamLockedIn(\PhpParser\Node $node) : bool
