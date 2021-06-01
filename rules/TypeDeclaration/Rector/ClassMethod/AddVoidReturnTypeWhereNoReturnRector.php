@@ -80,7 +80,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->silentVoidResolver->hasExlusiveVoid($node)) {
+        if (! $this->silentVoidResolver->hasExclusiveVoid($node)) {
             return null;
         }
 
