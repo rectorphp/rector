@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\DowngradePhp72\Rector\Class_;
 
 use PhpParser\Node;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -21,7 +22,6 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use PhpParser\Node\Name\FullyQualified;
 
 /**
  * @changelog https://www.php.net/manual/en/migration72.new-features.php#migration72.new-features.param-type-widening
@@ -131,7 +131,7 @@ CODE_SAMPLE
     private function hasExtendExternal(Node $node): bool
     {
         if ($node->extends instanceof FullyQualified) {
-            $className   = (string) $this->getName($node->extends);
+            $className = (string) $this->getName($node->extends);
             $parentFound = (bool) $this->nodeRepository->findClass($className);
             if (! $parentFound) {
                 return true;
