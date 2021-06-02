@@ -10,8 +10,8 @@ use Rector\Php71\Rector\FuncCall\CountOnNullRector;
 use Rector\Php71\Rector\FuncCall\RemoveExtraParametersRector;
 use Rector\Php71\Rector\List_\ListToArrayDestructRector;
 use Rector\Php71\Rector\TryCatch\MultiExceptionCatchRector;
-use RectorPrefix20210602\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-return static function (\RectorPrefix20210602\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+return static function (\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->set(\Rector\Php71\Rector\BooleanOr\IsIterableRector::class);
     $services->set(\Rector\Php71\Rector\TryCatch\MultiExceptionCatchRector::class);

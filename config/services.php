@@ -36,7 +36,7 @@ use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocator\Intermedia
 use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider;
 use RectorPrefix20210602\Symfony\Component\Console\Application as SymfonyApplication;
 use RectorPrefix20210602\Symfony\Component\Console\Style\SymfonyStyle;
-use RectorPrefix20210602\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use function RectorPrefix20210602\Symfony\Component\DependencyInjection\Loader\Configurator\service;
 use RectorPrefix20210602\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 use RectorPrefix20210602\Symplify\PackageBuilder\Console\Command\CommandNaming;
@@ -51,7 +51,7 @@ use RectorPrefix20210602\Symplify\SmartFileSystem\FileSystemGuard;
 use RectorPrefix20210602\Symplify\SmartFileSystem\Finder\FinderSanitizer;
 use RectorPrefix20210602\Symplify\SmartFileSystem\Json\JsonFileSystem;
 use RectorPrefix20210602\Symplify\SmartFileSystem\SmartFileSystem;
-return static function (\RectorPrefix20210602\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
+return static function (\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->defaults()->public()->autowire()->autoconfigure();
     $services->load('Rector\\Core\\', __DIR__ . '/../src')->exclude([__DIR__ . '/../src/Rector', __DIR__ . '/../src/Exception', __DIR__ . '/../src/DependencyInjection/CompilerPass', __DIR__ . '/../src/DependencyInjection/Loader', __DIR__ . '/../src/HttpKernel', __DIR__ . '/../src/ValueObject', __DIR__ . '/../src/Bootstrap', __DIR__ . '/../src/PhpParser/Node/CustomNode', __DIR__ . '/../src/functions', __DIR__ . '/../src/constants.php', __DIR__ . '/../src/PhpParser/NodeVisitor/CreatedByRuleNodeVisitor.php']);

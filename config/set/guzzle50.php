@@ -10,9 +10,9 @@ use Rector\Transform\Rector\FuncCall\FuncCallToMethodCallRector;
 use Rector\Transform\Rector\StaticCall\StaticCallToFuncCallRector;
 use Rector\Transform\ValueObject\FuncCallToMethodCall;
 use Rector\Transform\ValueObject\StaticCallToFuncCall;
-use RectorPrefix20210602\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
-return static function (\RectorPrefix20210602\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
+return static function (\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     # both uses "%classes_to_defluent%
     $services->set(\Rector\Defluent\Rector\MethodCall\FluentChainMethodCallToNormalMethodCallRector::class);

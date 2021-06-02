@@ -25,9 +25,9 @@ use Rector\Php80\Rector\Ternary\GetDebugTypeRector;
 use Rector\Renaming\Rector\FuncCall\RenameFunctionRector;
 use Rector\Transform\Rector\StaticCall\StaticCallToFuncCallRector;
 use Rector\Transform\ValueObject\StaticCallToFuncCall;
-use RectorPrefix20210602\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
-return static function (\RectorPrefix20210602\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
+return static function (\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->set(\Rector\Php80\Rector\FunctionLike\UnionTypesRector::class);
     $services->set(\Rector\Php80\Rector\NotIdentical\StrContainsRector::class);

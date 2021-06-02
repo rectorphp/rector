@@ -20,7 +20,7 @@ use RectorPrefix20210602\Symfony\Component\DependencyInjection\ContainerBuilder;
 use RectorPrefix20210602\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
 use RectorPrefix20210602\Symfony\Component\DependencyInjection\Extension\ConfigurationExtensionInterface;
 use RectorPrefix20210602\Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
-use RectorPrefix20210602\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 /**
  * PhpFileLoader loads service definitions from a PHP file.
  *
@@ -56,7 +56,7 @@ class PhpFileLoader extends \RectorPrefix20210602\Symfony\Component\DependencyIn
         try {
             $callback = $load($path, $this->env);
             if (\is_object($callback) && \is_callable($callback)) {
-                $this->executeCallback($callback, new \RectorPrefix20210602\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator($this->container, $this, $this->instanceof, $path, $resource, $this->env), $path);
+                $this->executeCallback($callback, new \Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator($this->container, $this, $this->instanceof, $path, $resource, $this->env), $path);
             }
         } finally {
             $this->instanceof = [];
@@ -79,7 +79,7 @@ class PhpFileLoader extends \RectorPrefix20210602\Symfony\Component\DependencyIn
     /**
      * Resolve the parameters to the $callback and execute it.
      */
-    private function executeCallback(callable $callback, \RectorPrefix20210602\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator, string $path)
+    private function executeCallback(callable $callback, \Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator, string $path)
     {
         if (!$callback instanceof \Closure) {
             $callback = \Closure::fromCallable($callback);
@@ -102,11 +102,11 @@ class PhpFileLoader extends \RectorPrefix20210602\Symfony\Component\DependencyIn
         foreach ($r->getParameters() as $parameter) {
             $reflectionType = $parameter->getType();
             if (!$reflectionType instanceof \ReflectionNamedType) {
-                throw new \InvalidArgumentException(\sprintf('Could not resolve argument "$%s" for "%s". You must typehint it (for example with "%s" or "%s").', $parameter->getName(), $path, \RectorPrefix20210602\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator::class, \RectorPrefix20210602\Symfony\Component\DependencyInjection\ContainerBuilder::class));
+                throw new \InvalidArgumentException(\sprintf('Could not resolve argument "$%s" for "%s". You must typehint it (for example with "%s" or "%s").', $parameter->getName(), $path, \Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator::class, \RectorPrefix20210602\Symfony\Component\DependencyInjection\ContainerBuilder::class));
             }
             $type = $reflectionType->getName();
             switch ($type) {
-                case \RectorPrefix20210602\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator::class:
+                case \Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator::class:
                     $arguments[] = $containerConfigurator;
                     break;
                 case \RectorPrefix20210602\Symfony\Component\DependencyInjection\ContainerBuilder::class:
@@ -127,7 +127,7 @@ class PhpFileLoader extends \RectorPrefix20210602\Symfony\Component\DependencyIn
             }
         }
         // Force load ContainerConfigurator to make env(), param() etc available.
-        \class_exists(\RectorPrefix20210602\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator::class);
+        \class_exists(\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator::class);
         $callback(...$arguments);
         /** @var ConfigBuilderInterface $configBuilder */
         foreach ($configBuilders as $configBuilder) {

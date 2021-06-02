@@ -14,9 +14,9 @@ use Ssch\TYPO3Rector\Rector\v9\v3\RefactorTsConfigRelatedMethodsRector;
 use Ssch\TYPO3Rector\Rector\v9\v3\RemoveColPosParameterRector;
 use Ssch\TYPO3Rector\Rector\v9\v3\UseMethodGetPageShortcutDirectlyFromSysPageRector;
 use Ssch\TYPO3Rector\Rector\v9\v3\ValidateAnnotationRector;
-use RectorPrefix20210602\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
-return static function (\RectorPrefix20210602\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
+return static function (\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
     $containerConfigurator->import(__DIR__ . '/../config.php');
     $services = $containerConfigurator->services();
     $services->set(\Ssch\TYPO3Rector\Rector\v9\v3\RemoveColPosParameterRector::class);

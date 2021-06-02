@@ -14,8 +14,8 @@ use Rector\DowngradePhp70\Rector\GroupUse\SplitGroupedUseImportsRector;
 use Rector\DowngradePhp70\Rector\New_\DowngradeAnonymousClassRector;
 use Rector\DowngradePhp70\Rector\Spaceship\DowngradeSpaceshipRector;
 use Rector\DowngradePhp70\Rector\String_\DowngradeGeneratedScalarTypesRector;
-use RectorPrefix20210602\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-return static function (\RectorPrefix20210602\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+return static function (\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
     $parameters = $containerConfigurator->parameters();
     $parameters->set(\Rector\Core\Configuration\Option::PHP_VERSION_FEATURES, \Rector\Core\ValueObject\PhpVersion::PHP_56);
     $services = $containerConfigurator->services();

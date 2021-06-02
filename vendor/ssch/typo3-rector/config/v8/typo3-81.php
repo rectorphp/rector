@@ -6,8 +6,8 @@ namespace RectorPrefix20210602;
 use Ssch\TYPO3Rector\Rector\v8\v1\Array2XmlCsToArray2XmlRector;
 use Ssch\TYPO3Rector\Rector\v8\v1\RefactorDbConstantsRector;
 use Ssch\TYPO3Rector\Rector\v8\v1\TypoScriptFrontendControllerCharsetConverterRector;
-use RectorPrefix20210602\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-return static function (\RectorPrefix20210602\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+return static function (\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
     $containerConfigurator->import(__DIR__ . '/../config.php');
     $services = $containerConfigurator->services();
     $services->set(\Ssch\TYPO3Rector\Rector\v8\v1\RefactorDbConstantsRector::class);
