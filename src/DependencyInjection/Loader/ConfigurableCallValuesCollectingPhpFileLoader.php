@@ -37,9 +37,10 @@ final class ConfigurableCallValuesCollectingPhpFileLoader extends PhpFileLoader
         $resource,
         string $type = null,
         $ignoreErrors = false,
-        string $sourceResource = null,
+        $sourceResource = null,
         $exclude = null
-    ) {
+    )
+    {
         // this call collects root values
         $this->collectConfigureCallsFromJustImportedConfigurableRectorDefinitions();
 
