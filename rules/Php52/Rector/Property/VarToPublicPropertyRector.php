@@ -17,7 +17,7 @@ final class VarToPublicPropertyRector extends AbstractRector
 {
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Remove unused private method', [
+        return new RuleDefinition('Change property modifier from `var` to `public`', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 final class SomeController

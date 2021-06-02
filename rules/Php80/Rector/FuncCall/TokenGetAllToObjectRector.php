@@ -35,7 +35,7 @@ final class TokenGetAllToObjectRector extends AbstractRector
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
-            'Complete missing constructor dependency instance by type',
+            'Convert `token_get_all` to `PhpToken::getAll`',
             [
                 new CodeSample(
                     <<<'CODE_SAMPLE'

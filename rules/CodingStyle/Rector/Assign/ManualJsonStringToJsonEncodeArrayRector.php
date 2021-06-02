@@ -53,7 +53,7 @@ final class ManualJsonStringToJsonEncodeArrayRector extends AbstractRector
 
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Add extra space before new assign set', [
+        return new RuleDefinition('Convert manual JSON string to JSON::encode array', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 final class SomeClass

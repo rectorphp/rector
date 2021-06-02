@@ -26,7 +26,7 @@ final class ChangeOrIfContinueToMultiContinueRector extends AbstractRector
 
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Changes if && to early return', [
+        return new RuleDefinition('Changes if || to early return', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 class SomeClass

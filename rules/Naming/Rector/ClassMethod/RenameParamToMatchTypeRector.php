@@ -36,7 +36,7 @@ final class RenameParamToMatchTypeRector extends AbstractRector
 
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Rename variable to match new ClassType', [
+        return new RuleDefinition('Rename param to match ClassType', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 final class SomeClass

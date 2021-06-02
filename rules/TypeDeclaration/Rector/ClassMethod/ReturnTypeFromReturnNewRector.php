@@ -28,7 +28,7 @@ final class ReturnTypeFromReturnNewRector extends AbstractRector
 
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Add return type void to function like without any return', [
+        return new RuleDefinition('Add return type to function like with return new', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 final class SomeClass

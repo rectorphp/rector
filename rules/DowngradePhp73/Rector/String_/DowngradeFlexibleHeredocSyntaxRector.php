@@ -25,7 +25,7 @@ final class DowngradeFlexibleHeredocSyntaxRector extends AbstractRector
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
-            'Changes heredoc/nowdoc that contains closing word to safe wrapper name',
+            'Remove indentation from heredoc/nowdoc',
             [
                 new CodeSample(
                     <<<'CODE_SAMPLE'

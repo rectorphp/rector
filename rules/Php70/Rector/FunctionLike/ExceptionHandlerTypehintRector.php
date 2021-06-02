@@ -31,7 +31,7 @@ final class ExceptionHandlerTypehintRector extends AbstractRector
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
-            'Changes property `@var` annotations from annotation to type.',
+            'Change typehint from `Exception` to `Throwable`.',
             [
                 new CodeSample(
                     <<<'CODE_SAMPLE'
