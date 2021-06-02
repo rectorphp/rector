@@ -107,9 +107,18 @@ return [
         // unprefixed SmartFileInfo
         function (string $filePath, string $prefix, string $content): string {
             return Strings::replace(
-                $content, '
-                #' . $prefix . '\\\\Symplify\\\\SmartFileSystem\\\\SmartFileInfo#',
+                $content,
+                '#' . $prefix . '\\\\Symplify\\\\SmartFileSystem\\\\SmartFileInfo#',
                 'Symplify\SmartFileSystem\SmartFileInfo'
+            );
+        },
+
+        // unprefixed ContainerConfigurator
+        function (string $filePath, string $prefix, string $content): string {
+            return Strings::replace(
+                $content,
+                '#' . $prefix . '\\\\Symfony\\\\Component\\\\DependencyInjection\\\\Loader\\\\Configurator\\\\ContainerConfigurator#',
+                'Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator'
             );
         },
 
