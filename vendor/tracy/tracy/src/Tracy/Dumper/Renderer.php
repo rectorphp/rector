@@ -283,14 +283,9 @@ final class Renderer
                 $this->copySnapshot($v);
             }
         } elseif ($value instanceof \RectorPrefix20210602\Tracy\Dumper\Value && $value->type === \RectorPrefix20210602\Tracy\Dumper\Value::TYPE_REF) {
-            if (isset($this->snapshotSelection[$value->value])) {
-                return;
-            }
-            $ref = $this->snapshotSelection[$value->value] = $this->snapshot[$value->value];
-            if (!isset($this->parents[$value->value])) {
-                $this->parents[$value->value] = \true;
+            if (!isset($this->snapshotSelection[$value->value])) {
+                $ref = $this->snapshotSelection[$value->value] = $this->snapshot[$value->value];
                 $this->copySnapshot($ref);
-                unset($this->parents[$value->value]);
             }
         } elseif ($value instanceof \RectorPrefix20210602\Tracy\Dumper\Value && $value->items) {
             foreach ($value->items as [, $v]) {

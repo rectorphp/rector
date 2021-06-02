@@ -138,4 +138,17 @@ final class Exposer
         }
         $value->value = $class . ' (Incomplete Class)';
     }
+    public static function exposeDsCollection(\Ds\Collection $obj, \RectorPrefix20210602\Tracy\Dumper\Value $value, \RectorPrefix20210602\Tracy\Dumper\Describer $describer) : void
+    {
+        foreach ($obj as $k => $v) {
+            $describer->addPropertyTo($value, (string) $k, $v, \RectorPrefix20210602\Tracy\Dumper\Value::PROP_VIRTUAL);
+        }
+    }
+    public static function exposeDsMap(\Ds\Map $obj, \RectorPrefix20210602\Tracy\Dumper\Value $value, \RectorPrefix20210602\Tracy\Dumper\Describer $describer) : void
+    {
+        $i = 0;
+        foreach ($obj as $k => $v) {
+            $describer->addPropertyTo($value, (string) $i++, new \Ds\Pair($k, $v), \RectorPrefix20210602\Tracy\Dumper\Value::PROP_VIRTUAL);
+        }
+    }
 }

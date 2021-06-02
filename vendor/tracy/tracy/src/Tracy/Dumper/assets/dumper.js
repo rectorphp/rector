@@ -18,34 +18,27 @@ const
 class Dumper
 {
 	static init(context) {
-		(context || document).querySelectorAll('[itemprop=tracy-snapshot], [data-tracy-snapshot]').forEach((el) => {
-			let preList, snapshot = JSON.parse(el.getAttribute('data-tracy-snapshot'));
+		// full lazy
+		(context || document).querySelectorAll('[data-tracy-snapshot][data-tracy-dump]').forEach((pre) => { // <pre>
+			let snapshot = JSON.parse(pre.getAttribute('data-tracy-snapshot'));
+			pre.removeAttribute('data-tracy-snapshot');
+			pre.appendChild(build(JSON.parse(pre.getAttribute('data-tracy-dump')), snapshot, pre.classList.contains('tracy-collapsed')));
+			pre.removeAttribute('data-tracy-dump');
+			pre.classList.remove('tracy-collapsed');
+		});
 
-			if (el.tagName === 'META') { // <meta itemprop=tracy-snapshot>
-				snapshot = JSON.parse(el.getAttribute('content'));
-				preList = el.parentElement.querySelectorAll('[data-tracy-dump]');
-			} else if (el.matches('[data-tracy-dump]')) { // <pre data-tracy-snapshot data-tracy-dump>
-				preList = [el];
-				el.removeAttribute('data-tracy-snapshot');
-			} else { // <span data-tracy-dump>
-				el.querySelectorAll('[data-tracy-dump]').forEach((el) => {
-					if (el.nextSibling) {
-						el.parentNode.removeChild(el.nextSibling); // remove \n after toggler
-					}
-					el.parentNode.replaceChild( // replace toggler
-						build(JSON.parse(el.getAttribute('data-tracy-dump')), snapshot, el.classList.contains('tracy-collapsed')),
-						el
-					);
-				});
-				return;
-			}
-
-			preList.forEach((el) => { // <pre>
-				let built = build(JSON.parse(el.getAttribute('data-tracy-dump')), snapshot, el.classList.contains('tracy-collapsed'));
-				el.appendChild(built);
-				el.classList.remove('tracy-collapsed');
-				el.removeAttribute('data-tracy-dump');
+		// snapshots
+		(context || document).querySelectorAll('meta[itemprop=tracy-snapshot]').forEach((meta) => {
+			let snapshot = JSON.parse(meta.getAttribute('content'));
+			meta.parentElement.querySelectorAll('[data-tracy-dump]').forEach((pre) => { // <pre>
+				if (pre.closest('[data-tracy-snapshot]')) { // ignore unrelated <span data-tracy-dump>
+					return;
+				}
+				pre.appendChild(build(JSON.parse(pre.getAttribute('data-tracy-dump')), snapshot, pre.classList.contains('tracy-collapsed')));
+				pre.removeAttribute('data-tracy-dump');
+				pre.classList.remove('tracy-collapsed');
 			});
+			// <meta> must be left for debug bar panel content
 		});
 
 		if (Dumper.inited) {
@@ -53,12 +46,25 @@ class Dumper
 		}
 		Dumper.inited = true;
 
-		// enables <span data-tracy-href=""> & ctrl key
 		document.documentElement.addEventListener('click', (e) => {
 			let el;
+			// enables <span data-tracy-href=""> & ctrl key
 			if (e.ctrlKey && (el = e.target.closest('[data-tracy-href]'))) {
 				location.href = el.getAttribute('data-tracy-href');
 				return false;
+			}
+
+			// initializes lazy <span data-tracy-dump> inside <pre data-tracy-snapshot>
+			if ((el = e.target.closest('[data-tracy-snapshot]'))) {
+				let snapshot = JSON.parse(el.getAttribute('data-tracy-snapshot'));
+				el.removeAttribute('data-tracy-snapshot');
+				el.querySelectorAll('[data-tracy-dump]').forEach((toggler) => {
+					if (!toggler.nextSibling) {
+						toggler.after(document.createTextNode('\n')); // enforce \n after toggler
+					}
+					toggler.nextSibling.after(buildStruct(JSON.parse(toggler.getAttribute('data-tracy-dump')), snapshot, toggler, true, []));
+					toggler.removeAttribute('data-tracy-dump');
+				});
 			}
 		});
 
@@ -233,65 +239,72 @@ function build(data, repository, collapsed, parentIds, keyType) {
 		]);
 
 	} else { // object || resource || array
+		let span = data.array !== undefined
+			? [
+				createEl('span', {'class': 'tracy-dump-array'}, ['array']),
+				' (' + (data.length || data.items.length) + ')'
+			]
+			: [
+				createEl('span', {
+					'class': data.object ? 'tracy-dump-object' : 'tracy-dump-resource',
+					title: data.editor ? 'Declared in file ' + data.editor.file + ' on line ' + data.editor.line + (data.editor.url ? '\n' + HINT_CTRL : '') + '\n' + HINT_ALT : null,
+					'data-tracy-href': data.editor ? data.editor.url : null
+				}, [data.object || data.resource]),
+				...(id ? [' ', createEl('span', {'class': 'tracy-dump-hash'}, [data.resource ? '@' + id.substr(1) : '#' + id])] : [])
+			];
+
 		parentIds = parentIds ? parentIds.slice() : [];
 		let recursive = id && parentIds.indexOf(id) > -1;
 		parentIds.push(id);
 
-		return buildStruct(
-			data.array !== undefined
-				? [
-					createEl('span', {'class': 'tracy-dump-array'}, ['array']),
-					' (' + (data.length || data.items.length) + ')'
-				]
-				: [
-					createEl('span', {
-						'class': data.object ? 'tracy-dump-object' : 'tracy-dump-resource',
-						title: data.editor ? 'Declared in file ' + data.editor.file + ' on line ' + data.editor.line + (data.editor.url ? '\n' + HINT_CTRL : '') + '\n' + HINT_ALT : null,
-						'data-tracy-href': data.editor ? data.editor.url : null
-					}, [data.object || data.resource]),
-					...(id ? [' ', createEl('span', {'class': 'tracy-dump-hash'}, [data.resource ? '@' + id.substr(1) : '#' + id])] : [])
-				],
-			recursive ? ' RECURSION' : ' …',
-			recursive ? null : data.items,
-			collapsed === true || data.collapsed || (data.items && data.items.length >= collapseCount),
-			data.items && data.length > data.items.length,
-			data.object ? TYPE_OBJECT : data.resource ? TYPE_RESOURCE : TYPE_ARRAY,
-			repository,
-			parentIds
-		);
+		if (recursive || !data.items || !data.items.length) {
+			span.push(recursive ? ' RECURSION' : (!data.items || data.items.length ? ' …' : ''));
+			return createEl(null, null, span);
+		}
+
+		collapsed = collapsed === true || data.collapsed || (data.items && data.items.length >= collapseCount);
+		let toggle = createEl('span', {'class': collapsed ? 'tracy-toggle tracy-collapsed' : 'tracy-toggle'}, span);
+
+		return createEl(null, null, [
+			toggle,
+			'\n',
+			buildStruct(data, repository, toggle, collapsed, parentIds),
+		]);
 	}
 }
 
 
-function buildStruct(span, ellipsis, items, collapsed, cut, type, repository, parentIds) {
-	let res, toggle, div, handler;
+function buildStruct(data, repository, toggle, collapsed, parentIds) {
+	if (Array.isArray(data)) {
+		data = {items: data};
 
-	if (!items || !items.length) {
-		span.push(!items || items.length ? ellipsis : '');
-		return createEl(null, null, span);
+	} else if (data.ref) {
+		parentIds = parentIds.slice();
+		parentIds.push(data.ref);
+		data = repository[data.ref];
 	}
 
-	res = createEl(null, null, [
-		toggle = createEl('span', {'class': collapsed ? 'tracy-toggle tracy-collapsed' : 'tracy-toggle'}, span),
-		'\n',
-		div = createEl('div', {'class': collapsed ? 'tracy-collapsed' : null})
-	]);
+	let cut = data.items && data.length > data.items.length;
+	let type = data.object ? TYPE_OBJECT : data.resource ? TYPE_RESOURCE : TYPE_ARRAY;
+	let div = createEl('div', {'class': collapsed ? 'tracy-collapsed' : null});
 
 	if (collapsed) {
+		let handler;
 		toggle.addEventListener('tracy-toggle', handler = function() {
 			toggle.removeEventListener('tracy-toggle', handler);
-			createItems(div, items, type, repository, parentIds, null);
+			createItems(div, data.items, type, repository, parentIds, null);
 			if (cut) {
 				createEl(div, null, ['…\n']);
 			}
 		});
 	} else {
-		createItems(div, items, type, repository, parentIds, true);
+		createItems(div, data.items, type, repository, parentIds, true);
 		if (cut) {
 			createEl(div, null, ['…\n']);
 		}
 	}
-	return res;
+
+	return div;
 }
 
 

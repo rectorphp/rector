@@ -2629,17 +2629,17 @@
         },
         {
             "name": "symfony\/http-foundation",
-            "version": "v5.3.0",
-            "version_normalized": "5.3.0.0",
+            "version": "v5.3.1",
+            "version_normalized": "5.3.1.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/http-foundation.git",
-                "reference": "31f25d99b329a1461f42bcef8505b54926a30be6"
+                "reference": "8827b90cf8806e467124ad476acd15216c2fceb6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/http-foundation\/zipball\/31f25d99b329a1461f42bcef8505b54926a30be6",
-                "reference": "31f25d99b329a1461f42bcef8505b54926a30be6",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/http-foundation\/zipball\/8827b90cf8806e467124ad476acd15216c2fceb6",
+                "reference": "8827b90cf8806e467124ad476acd15216c2fceb6",
                 "shasum": ""
             },
             "require": {
@@ -2657,7 +2657,7 @@
             "suggest": {
                 "symfony\/mime": "To use the file extension guesser"
             },
-            "time": "2021-05-26T17:43:10+00:00",
+            "time": "2021-06-02T09:32:00+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -2685,7 +2685,7 @@
             "description": "Defines an object-oriented layer for the HTTP specification",
             "homepage": "https:\/\/symfony.com",
             "support": {
-                "source": "https:\/\/github.com\/symfony\/http-foundation\/tree\/v5.3.0"
+                "source": "https:\/\/github.com\/symfony\/http-foundation\/tree\/v5.3.1"
             },
             "funding": [
                 {
@@ -2705,17 +2705,17 @@
         },
         {
             "name": "symfony\/http-kernel",
-            "version": "v5.3.0",
-            "version_normalized": "5.3.0.0",
+            "version": "v5.3.1",
+            "version_normalized": "5.3.1.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/http-kernel.git",
-                "reference": "f8e8f5391b6909e2f0ba8c12220ab7af3050eb4f"
+                "reference": "74eb022e3bac36b3d3a897951a98759f2b32b864"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/http-kernel\/zipball\/f8e8f5391b6909e2f0ba8c12220ab7af3050eb4f",
-                "reference": "f8e8f5391b6909e2f0ba8c12220ab7af3050eb4f",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/http-kernel\/zipball\/74eb022e3bac36b3d3a897951a98759f2b32b864",
+                "reference": "74eb022e3bac36b3d3a897951a98759f2b32b864",
                 "shasum": ""
             },
             "require": {
@@ -2772,7 +2772,7 @@
                 "symfony\/console": "",
                 "symfony\/dependency-injection": ""
             },
-            "time": "2021-05-31T10:44:03+00:00",
+            "time": "2021-06-02T10:07:12+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -2800,7 +2800,7 @@
             "description": "Provides a structured process for converting a Request into a Response",
             "homepage": "https:\/\/symfony.com",
             "support": {
-                "source": "https:\/\/github.com\/symfony\/http-kernel\/tree\/v5.3.0"
+                "source": "https:\/\/github.com\/symfony\/http-kernel\/tree\/v5.3.1"
             },
             "funding": [
                 {
@@ -4633,17 +4633,17 @@
         },
         {
             "name": "tracy\/tracy",
-            "version": "v2.8.4",
-            "version_normalized": "2.8.4.0",
+            "version": "v2.8.5",
+            "version_normalized": "2.8.5.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/nette\/tracy.git",
-                "reference": "cb7d3dcd9469aa2aa6722edf6bee2d5d75188079"
+                "reference": "b23da41363546aa750d9f698f21e14815bd78913"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/nette\/tracy\/zipball\/cb7d3dcd9469aa2aa6722edf6bee2d5d75188079",
-                "reference": "cb7d3dcd9469aa2aa6722edf6bee2d5d75188079",
+                "url": "https:\/\/api.github.com\/repos\/nette\/tracy\/zipball\/b23da41363546aa750d9f698f21e14815bd78913",
+                "reference": "b23da41363546aa750d9f698f21e14815bd78913",
                 "shasum": ""
             },
             "require": {
@@ -4663,7 +4663,7 @@
                 "phpstan\/phpstan": "^0.12",
                 "psr\/log": "^1.0"
             },
-            "time": "2021-04-27T21:47:10+00:00",
+            "time": "2021-06-02T15:42:54+00:00",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -4704,7 +4704,7 @@
             ],
             "support": {
                 "issues": "https:\/\/github.com\/nette\/tracy\/issues",
-                "source": "https:\/\/github.com\/nette\/tracy\/tree\/v2.8.4"
+                "source": "https:\/\/github.com\/nette\/tracy\/tree\/v2.8.5"
             },
             "install-path": "..\/tracy\/tracy"
         },

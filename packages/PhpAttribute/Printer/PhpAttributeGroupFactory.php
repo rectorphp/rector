@@ -56,7 +56,11 @@ final class PhpAttributeGroupFactory
         foreach ($items as $key => $value) {
             $value = $this->normalizeNodeValue($value);
             $value = \PhpParser\BuilderHelpers::normalizeValue($value);
-            $args[] = $this->isArrayArguments($items) ? new \PhpParser\Node\Arg($value, \false, \false, [], new \PhpParser\Node\Identifier($key)) : new \PhpParser\Node\Arg($value);
+            $name = null;
+            if (\is_string($key)) {
+                $name = new \PhpParser\Node\Identifier($key);
+            }
+            $args[] = $this->isArrayArguments($items) ? new \PhpParser\Node\Arg($value, \false, \false, [], $name) : new \PhpParser\Node\Arg($value);
         }
         return $args;
     }

@@ -412,10 +412,10 @@ class Debug
 				let panel = Debug.panels[tab.rel];
 				if (panel.is(Panel.PEEK)) {
 					delete Debug.panels[tab.rel];
-					panel.elem.parentNode.removeChild(panel.elem);
+					panel.elem.remove();
 				}
 			});
-			row.parentNode.removeChild(row);
+			row.remove();
 		});
 
 		if (rows[0]) { // update content in first-row panels
@@ -508,7 +508,7 @@ class Debug
 
 	static loadScript(url) {
 		if (Debug.scriptElem) {
-			Debug.scriptElem.parentNode.removeChild(Debug.scriptElem);
+			Debug.scriptElem.remove();
 		}
 		Debug.scriptElem = document.createElement('script');
 		Debug.scriptElem.src = url;

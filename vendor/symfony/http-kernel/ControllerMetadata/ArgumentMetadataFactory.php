@@ -31,6 +31,7 @@ final class ArgumentMetadataFactory implements \RectorPrefix20210602\Symfony\Com
             $reflection = new \ReflectionFunction($controller);
         }
         foreach ($reflection->getParameters() as $param) {
+            $attributes = [];
             if (\PHP_VERSION_ID >= 80000) {
                 foreach ($param->getAttributes() as $reflectionAttribute) {
                     if (\class_exists($reflectionAttribute->getName())) {
@@ -38,7 +39,7 @@ final class ArgumentMetadataFactory implements \RectorPrefix20210602\Symfony\Com
                     }
                 }
             }
-            $arguments[] = new \RectorPrefix20210602\Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata($param->getName(), $this->getType($param, $reflection), $param->isVariadic(), $param->isDefaultValueAvailable(), $param->isDefaultValueAvailable() ? $param->getDefaultValue() : null, $param->allowsNull(), $attributes ?? []);
+            $arguments[] = new \RectorPrefix20210602\Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata($param->getName(), $this->getType($param, $reflection), $param->isVariadic(), $param->isDefaultValueAvailable(), $param->isDefaultValueAvailable() ? $param->getDefaultValue() : null, $param->allowsNull(), $attributes);
         }
         return $arguments;
     }

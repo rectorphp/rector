@@ -54,7 +54,7 @@ class BlueScreen
 	static loadAjax(content) {
 		let ajaxBs = document.getElementById('tracy-bs');
 		if (ajaxBs) {
-			ajaxBs.parentNode.removeChild(ajaxBs);
+			ajaxBs.remove();
 		}
 		document.body.insertAdjacentHTML('beforeend', content);
 		ajaxBs = document.getElementById('tracy-bs');
