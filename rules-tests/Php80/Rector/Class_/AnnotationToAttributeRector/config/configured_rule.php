@@ -51,6 +51,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                     'Doctrine\ORM\Mapping\ChangeTrackingPolicy',
                     'Doctrine\ORM\Mapping\ChangeTrackingPolicy'
                 ),
+                new AnnotationToAttribute('Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter', 'Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter'),
             ]),
         ]]);
 };

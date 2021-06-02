@@ -69,8 +69,13 @@ final class PhpAttributeGroupFactory
             $value = $this->normalizeNodeValue($value);
             $value = BuilderHelpers::normalizeValue($value);
 
+            $name = null;
+            if(is_string($key)) {
+                $name = new Identifier($key);
+            }
+
             $args[] = $this->isArrayArguments($items)
-                ? new Arg($value, false, false, [], new Identifier($key))
+                ? new Arg($value, false, false, [], $name)
                 : new Arg($value)
                 ;
         }
