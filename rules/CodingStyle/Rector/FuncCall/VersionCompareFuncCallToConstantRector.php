@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\CodingStyle\Rector\FuncCall;
 
-use RectorPrefix20210601\Nette\Utils\Strings;
+use RectorPrefix20210602\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp;
@@ -105,7 +105,7 @@ CODE_SAMPLE
         if (!$expr instanceof \PhpParser\Node\Scalar\String_) {
             throw new \Rector\Core\Exception\ShouldNotHappenException();
         }
-        if (!\RectorPrefix20210601\Nette\Utils\Strings::match($expr->value, self::SEMANTIC_VERSION_REGEX)) {
+        if (!\RectorPrefix20210602\Nette\Utils\Strings::match($expr->value, self::SEMANTIC_VERSION_REGEX)) {
             throw new \Rector\Core\Exception\ShouldNotHappenException();
         }
         $versionParts = \explode('.', $expr->value);

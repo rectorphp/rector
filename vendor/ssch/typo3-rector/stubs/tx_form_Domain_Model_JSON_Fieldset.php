@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210601;
+namespace RectorPrefix20210602;
 
 if (\class_exists('tx_form_Domain_Model_JSON_Fieldset')) {
     return;

@@ -5,7 +5,7 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix20210601\Nette\Caching;
+namespace RectorPrefix20210602\Nette\Caching;
 
 /**
  * Cache storage with a bulk read support.
@@ -18,4 +18,4 @@ interface BulkReader
      */
     function bulkRead(array $keys) : array;
 }
-\class_exists(\RectorPrefix20210601\Nette\Caching\IBulkReader::class);
+\class_exists(\RectorPrefix20210602\Nette\Caching\IBulkReader::class);

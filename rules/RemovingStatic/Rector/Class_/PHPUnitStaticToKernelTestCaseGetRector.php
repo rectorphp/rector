@@ -82,14 +82,14 @@ final class PHPUnitStaticToKernelTestCaseGetRector extends \Rector\Core\Rector\A
         return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Convert static calls in PHPUnit test cases, to get() from the container of KernelTestCase', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
 <?php
 
-namespace RectorPrefix20210601;
+namespace RectorPrefix20210602;
 
-use RectorPrefix20210601\PHPUnit\Framework\TestCase;
-final class SomeTestCase extends \RectorPrefix20210601\PHPUnit\Framework\TestCase
+use RectorPrefix20210602\PHPUnit\Framework\TestCase;
+final class SomeTestCase extends \RectorPrefix20210602\PHPUnit\Framework\TestCase
 {
     public function test()
     {
-        $product = \RectorPrefix20210601\EntityFactory::create('product');
+        $product = \RectorPrefix20210602\EntityFactory::create('product');
     }
 }
 \class_alias('SomeTestCase', 'SomeTestCase', \false);

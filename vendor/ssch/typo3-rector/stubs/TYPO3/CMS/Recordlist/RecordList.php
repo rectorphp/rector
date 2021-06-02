@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210601\TYPO3\CMS\Recordlist;
+namespace RectorPrefix20210602\TYPO3\CMS\Recordlist;
 
 if (\class_exists('TYPO3\\CMS\\Recordlist\\RecordList')) {
     return;

@@ -1,10 +1,10 @@
 <?php
 
-namespace RectorPrefix20210601\TYPO3\CMS\Fluid\Core\Rendering;
+namespace RectorPrefix20210602\TYPO3\CMS\Fluid\Core\Rendering;
 
 if (\class_exists('TYPO3\\CMS\\Fluid\\Core\\Rendering\\RenderingContext')) {
     return;
 }
-class RenderingContext extends \RectorPrefix20210601\TYPO3Fluid\Fluid\Core\Rendering\RenderingContext
+class RenderingContext extends \RectorPrefix20210602\TYPO3Fluid\Fluid\Core\Rendering\RenderingContext
 {
 }
