@@ -15,6 +15,11 @@ class SectionTest extends \RectorPrefix20210602\PHPUnit\Framework\TestCase
         $this->assertEquals(4, $section->indent_size->getValue());
         $this->assertFalse(isset($section->tab_width));
     }
+    public function testMatchingWindowsPath() : void
+    {
+        $section = new \RectorPrefix20210602\Idiosyncratic\EditorConfig\Section('**/', '*.php', ['indent_size' => '4', 'indent_style' => 'space'], new \RectorPrefix20210602\Idiosyncratic\EditorConfig\Declaration\Factory());
+        $this->assertTrue($section->matches('my\\composer.php'));
+    }
     public function testGetMissingDeclaration() : void
     {
         $section = new \RectorPrefix20210602\Idiosyncratic\EditorConfig\Section('**/', '*.php', ['indent_size' => '4', 'indent_style' => 'space'], new \RectorPrefix20210602\Idiosyncratic\EditorConfig\Declaration\Factory());

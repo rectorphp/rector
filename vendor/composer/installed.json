@@ -450,17 +450,17 @@
         },
         {
             "name": "idiosyncratic\/editorconfig",
-            "version": "0.1.2",
-            "version_normalized": "0.1.2.0",
+            "version": "0.1.3",
+            "version_normalized": "0.1.3.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/idiosyncratic-code\/editorconfig-php.git",
-                "reference": "a85e155129e969c931743e6bb00e68822edd88bc"
+                "reference": "3445fa4a1e00f95630d4edc729c2effb116db19b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/idiosyncratic-code\/editorconfig-php\/zipball\/a85e155129e969c931743e6bb00e68822edd88bc",
-                "reference": "a85e155129e969c931743e6bb00e68822edd88bc",
+                "url": "https:\/\/api.github.com\/repos\/idiosyncratic-code\/editorconfig-php\/zipball\/3445fa4a1e00f95630d4edc729c2effb116db19b",
+                "reference": "3445fa4a1e00f95630d4edc729c2effb116db19b",
                 "shasum": ""
             },
             "require": {
@@ -475,7 +475,7 @@
                 "phpunit\/phpunit": "^9.5",
                 "sebastian\/phpcpd": "^6.0"
             },
-            "time": "2021-05-31T23:55:39+00:00",
+            "time": "2021-06-02T16:24:34+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -496,7 +496,7 @@
             "description": "PHP implementation of EditorConfig",
             "support": {
                 "issues": "https:\/\/github.com\/idiosyncratic-code\/editorconfig-php\/issues",
-                "source": "https:\/\/github.com\/idiosyncratic-code\/editorconfig-php\/tree\/0.1.2"
+                "source": "https:\/\/github.com\/idiosyncratic-code\/editorconfig-php\/tree\/0.1.3"
             },
             "install-path": "..\/idiosyncratic\/editorconfig"
         },

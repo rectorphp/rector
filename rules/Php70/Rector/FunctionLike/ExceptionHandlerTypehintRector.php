@@ -27,7 +27,7 @@ final class ExceptionHandlerTypehintRector extends \Rector\Core\Rector\AbstractR
     private const HANDLE_INSENSITIVE_REGEX = '#handle#i';
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Changes property `@var` annotations from annotation to type.', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change typehint from `Exception` to `Throwable`.', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 function handler(Exception $exception) { ... }
 set_exception_handler('handler');
 CODE_SAMPLE
