@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210602;
+namespace RectorPrefix20210603;
 
 use PHPStan\Type\ObjectType;
 use Rector\Removing\Rector\ClassMethod\ArgumentRemoverRector;

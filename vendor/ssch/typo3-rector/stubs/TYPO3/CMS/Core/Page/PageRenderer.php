@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210602\TYPO3\CMS\Core\Page;
+namespace RectorPrefix20210603\TYPO3\CMS\Core\Page;
 
 if (\class_exists('TYPO3\\CMS\\Core\\Page\\PageRenderer')) {
     return;

@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210602;
+namespace RectorPrefix20210603;
 
 if (\class_exists('Tx_Extbase_DomainObject_AbstractDomainObject')) {
     return;

@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210602;
+namespace RectorPrefix20210603;
 
 if (\class_exists('t3lib_tree_pagetree_interfaces_CollectionProcessor')) {
     return;

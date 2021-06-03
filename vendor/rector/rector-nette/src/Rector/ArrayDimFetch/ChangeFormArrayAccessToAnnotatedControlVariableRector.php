@@ -17,7 +17,7 @@ use Rector\Nette\NodeAnalyzer\AssignAnalyzer;
 use Rector\Nette\NodeAnalyzer\ControlDimFetchAnalyzer;
 use Rector\Nette\NodeResolver\FormVariableInputNameTypeResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use RectorPrefix20210602\Symplify\PackageBuilder\Php\TypeChecker;
+use RectorPrefix20210603\Symplify\PackageBuilder\Php\TypeChecker;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -49,7 +49,7 @@ final class ChangeFormArrayAccessToAnnotatedControlVariableRector extends \Recto
      * @var \Rector\Nette\NodeAnalyzer\ControlDimFetchAnalyzer
      */
     private $controlDimFetchAnalyzer;
-    public function __construct(\Rector\Nette\NodeResolver\FormVariableInputNameTypeResolver $formVariableInputNameTypeResolver, \RectorPrefix20210602\Symplify\PackageBuilder\Php\TypeChecker $typeChecker, \Rector\Nette\NodeAnalyzer\ArrayDimFetchAnalyzer $arrayDimFetchAnalyzer, \Rector\Nette\Naming\NetteControlNaming $netteControlNaming, \Rector\Nette\NodeAnalyzer\AssignAnalyzer $assignAnalyzer, \Rector\Nette\NodeAnalyzer\ControlDimFetchAnalyzer $controlDimFetchAnalyzer)
+    public function __construct(\Rector\Nette\NodeResolver\FormVariableInputNameTypeResolver $formVariableInputNameTypeResolver, \RectorPrefix20210603\Symplify\PackageBuilder\Php\TypeChecker $typeChecker, \Rector\Nette\NodeAnalyzer\ArrayDimFetchAnalyzer $arrayDimFetchAnalyzer, \Rector\Nette\Naming\NetteControlNaming $netteControlNaming, \Rector\Nette\NodeAnalyzer\AssignAnalyzer $assignAnalyzer, \Rector\Nette\NodeAnalyzer\ControlDimFetchAnalyzer $controlDimFetchAnalyzer)
     {
         $this->formVariableInputNameTypeResolver = $formVariableInputNameTypeResolver;
         $this->typeChecker = $typeChecker;

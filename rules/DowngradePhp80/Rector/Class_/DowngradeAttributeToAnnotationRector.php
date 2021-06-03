@@ -16,7 +16,7 @@ use Rector\DowngradePhp80\ValueObject\DowngradeAttributeToAnnotation;
 use Rector\PhpAttribute\Printer\DoctrineAnnotationFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20210602\Webmozart\Assert\Assert;
+use RectorPrefix20210603\Webmozart\Assert\Assert;
 /**
  * @changelog https://php.watch/articles/php-attributes#syntax
  *
@@ -106,7 +106,7 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $attributesToAnnotations = $configuration[self::ATTRIBUTE_TO_ANNOTATION] ?? [];
-        \RectorPrefix20210602\Webmozart\Assert\Assert::allIsInstanceOf($attributesToAnnotations, \Rector\DowngradePhp80\ValueObject\DowngradeAttributeToAnnotation::class);
+        \RectorPrefix20210603\Webmozart\Assert\Assert::allIsInstanceOf($attributesToAnnotations, \Rector\DowngradePhp80\ValueObject\DowngradeAttributeToAnnotation::class);
         $this->attributesToAnnotations = $attributesToAnnotations;
     }
     /**
@@ -115,7 +115,7 @@ CODE_SAMPLE
     private function cleanupEmptyAttrGroups($node) : void
     {
         foreach ($node->attrGroups as $key => $attrGroup) {
-            if (\count($attrGroup->attrs) !== 0) {
+            if ($attrGroup->attrs !== []) {
                 continue;
             }
             unset($node->attrGroups[$key]);
