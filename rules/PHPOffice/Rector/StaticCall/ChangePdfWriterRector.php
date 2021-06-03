@@ -80,6 +80,11 @@ CODE_SAMPLE
             }
 
             $secondArgValue = $this->valueResolver->getValue($node->args[1]->value);
+
+            if(! is_string($secondArgValue)) {
+                return null;
+            }
+
             if (Strings::match($secondArgValue, '#pdf#i')) {
                 return new New_(new FullyQualified('PhpOffice\PhpSpreadsheet\Writer\Pdf\Mpdf'), [$node->args[0]]);
             }
