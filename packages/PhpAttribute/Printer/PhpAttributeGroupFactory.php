@@ -70,7 +70,7 @@ final class PhpAttributeGroupFactory
             $value = BuilderHelpers::normalizeValue($value);
 
             $name = null;
-            if(is_string($key)) {
+            if (is_string($key)) {
                 $name = new Identifier($key);
             }
 
