@@ -140,7 +140,7 @@ CODE_SAMPLE
         }
 
         // just one if
-        if (count($node->elseifs) !== 0) {
+        if ($node->elseifs !== []) {
             return false;
         }
 

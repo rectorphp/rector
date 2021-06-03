@@ -133,7 +133,7 @@ CODE_SAMPLE
             return true;
         }
 
-        return count((array) $classMethod->stmts) !== 0;
+        return (array) $classMethod->stmts !== [];
     }
 
     private function processArrowFunction(ArrowFunction $arrowFunction, MethodCall $methodCall): Expr

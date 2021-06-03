@@ -85,7 +85,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $processIdentical = $this->processIdentical($parent, $node, $expr);
+        $processIdentical = $this->processIdenticalOrNotIdentical($parent, $node, $expr);
         if ($processIdentical !== null) {
             return $processIdentical;
         }
@@ -131,16 +131,16 @@ CODE_SAMPLE
         return $scope->getType($expr) instanceof ArrayType;
     }
 
-    private function processIdentical(Node $node, FuncCall $funcCall, Expr $expr): ?Expr
+    private function processIdenticalOrNotIdentical(Node $node, FuncCall $funcCall, Expr $expr): ?Expr
     {
-        if ($node instanceof Identical && $node->right instanceof LNumber && $node->right->value === 0) {
+        if (($node instanceof Identical || $node instanceof NotIdentical) && $node->right instanceof LNumber && $node->right->value === 0) {
             $this->removeNode($funcCall);
             $node->right = new Array_([]);
 
             return $expr;
         }
 
-        if ($node instanceof Identical && $node->left instanceof LNumber && $node->left->value === 0) {
+        if (($node instanceof Identical || $node instanceof NotIdentical) && $node->left instanceof LNumber && $node->left->value === 0) {
             $this->removeNode($funcCall);
             $node->left = new Array_([]);
 

@@ -141,7 +141,7 @@ CODE_SAMPLE
     private function cleanupEmptyAttrGroups(ClassMethod | Property | Class_ $node): void
     {
         foreach ($node->attrGroups as $key => $attrGroup) {
-            if (count($attrGroup->attrs) !== 0) {
+            if ($attrGroup->attrs !== []) {
                 continue;
             }
 
