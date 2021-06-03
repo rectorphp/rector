@@ -68,7 +68,7 @@ CODE_SAMPLE
         if (!$parent instanceof \PhpParser\Node) {
             return null;
         }
-        $processIdentical = $this->processIdentical($parent, $node, $expr);
+        $processIdentical = $this->processIdenticalOrNotIdentical($parent, $node, $expr);
         if ($processIdentical !== null) {
             return $processIdentical;
         }
@@ -103,14 +103,14 @@ CODE_SAMPLE
         }
         return $scope->getType($expr) instanceof \PHPStan\Type\ArrayType;
     }
-    private function processIdentical(\PhpParser\Node $node, \PhpParser\Node\Expr\FuncCall $funcCall, \PhpParser\Node\Expr $expr) : ?\PhpParser\Node\Expr
+    private function processIdenticalOrNotIdentical(\PhpParser\Node $node, \PhpParser\Node\Expr\FuncCall $funcCall, \PhpParser\Node\Expr $expr) : ?\PhpParser\Node\Expr
     {
-        if ($node instanceof \PhpParser\Node\Expr\BinaryOp\Identical && $node->right instanceof \PhpParser\Node\Scalar\LNumber && $node->right->value === 0) {
+        if (($node instanceof \PhpParser\Node\Expr\BinaryOp\Identical || $node instanceof \PhpParser\Node\Expr\BinaryOp\NotIdentical) && $node->right instanceof \PhpParser\Node\Scalar\LNumber && $node->right->value === 0) {
             $this->removeNode($funcCall);
             $node->right = new \PhpParser\Node\Expr\Array_([]);
             return $expr;
         }
-        if ($node instanceof \PhpParser\Node\Expr\BinaryOp\Identical && $node->left instanceof \PhpParser\Node\Scalar\LNumber && $node->left->value === 0) {
+        if (($node instanceof \PhpParser\Node\Expr\BinaryOp\Identical || $node instanceof \PhpParser\Node\Expr\BinaryOp\NotIdentical) && $node->left instanceof \PhpParser\Node\Scalar\LNumber && $node->left->value === 0) {
             $this->removeNode($funcCall);
             $node->left = new \PhpParser\Node\Expr\Array_([]);
             return $expr;
