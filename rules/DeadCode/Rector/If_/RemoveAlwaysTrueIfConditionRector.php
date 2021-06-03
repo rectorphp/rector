@@ -58,7 +58,7 @@ CODE_SAMPLE
             return null;
         }
         // just one if
-        if ($node->elseifs !== []) {
+        if (\count($node->elseifs) !== 0) {
             return null;
         }
         $conditionStaticType = $this->getStaticType($node->cond);

@@ -115,7 +115,7 @@ CODE_SAMPLE
         if ($classMethod->isAbstract()) {
             return \true;
         }
-        return (array) $classMethod->stmts !== [];
+        return \count((array) $classMethod->stmts) !== 0;
     }
     private function processArrowFunction(\PhpParser\Node\Expr\ArrowFunction $arrowFunction, \PhpParser\Node\Expr\MethodCall $methodCall) : \PhpParser\Node\Expr
     {
