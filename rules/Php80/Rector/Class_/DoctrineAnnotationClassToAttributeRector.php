@@ -149,7 +149,7 @@ CODE_SAMPLE
         $this->shouldRemoveAnnotations = $shouldRemoveAnnotations;
     }
     /**
-     * @param array<string, mixed> $targetValues
+     * @param array<int|string, mixed> $targetValues
      * @return ClassConstFetch[]
      */
     private function resolveFlags(array $targetValues) : array

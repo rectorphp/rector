@@ -128,7 +128,7 @@ abstract class AbstractValuesAwareNode implements \PHPStan\PhpDocParser\Ast\PhpD
     }
     /**
      * Useful for attributes
-     * @return array<string, mixed>
+     * @return array<int|string, mixed>
      */
     public function getValuesWithExplicitSilentAndWithoutQuotes() : array
     {
@@ -138,7 +138,7 @@ abstract class AbstractValuesAwareNode implements \PHPStan\PhpDocParser\Ast\PhpD
             if (\is_int($key) && $this->silentKey !== null) {
                 $explicitKeysValues[$this->silentKey] = $valueWithoutQuotes;
             } else {
-                $explicitKeysValues[$key] = $valueWithoutQuotes;
+                $explicitKeysValues[$this->removeQuotes($key)] = $valueWithoutQuotes;
             }
         }
         return $explicitKeysValues;
@@ -149,6 +149,9 @@ abstract class AbstractValuesAwareNode implements \PHPStan\PhpDocParser\Ast\PhpD
      */
     protected function removeQuotes($value)
     {
+        if (\is_array($value)) {
+            return $this->removeQuotesFromArray($value);
+        }
         if (!\is_string($value)) {
             return $value;
         }
@@ -157,6 +160,20 @@ abstract class AbstractValuesAwareNode implements \PHPStan\PhpDocParser\Ast\PhpD
             return $value;
         }
         return $matches['content'];
+    }
+    /**
+     * @param mixed[] $values
+     * @return array<int|string, mixed>
+     */
+    protected function removeQuotesFromArray(array $values) : array
+    {
+        $unquotedArray = [];
+        foreach ($values as $key => $value) {
+            $unquotedKey = $this->removeQuotes($key);
+            $unquotedValue = $this->removeQuotes($value);
+            $unquotedArray[$unquotedKey] = $unquotedValue;
+        }
+        return $unquotedArray;
     }
     /**
      * @param mixed[] $values
