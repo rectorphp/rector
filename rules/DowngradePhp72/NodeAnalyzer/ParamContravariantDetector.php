@@ -4,34 +4,23 @@ declare(strict_types=1);
 
 namespace Rector\DowngradePhp72\NodeAnalyzer;
 
-use PhpParser\Node\Stmt\ClassMethod;
-use PHPStan\Analyser\Scope;
+use PhpParser\Node\Stmt\ClassLike;
 use PHPStan\Reflection\ClassReflection;
-use Rector\NodeCollector\NodeCollector\NodeRepository;
-use Rector\NodeNameResolver\NodeNameResolver;
 
 final class ParamContravariantDetector
 {
-    public function __construct(
-        private NodeNameResolver $nodeNameResolver,
-        private NodeRepository $nodeRepository
-    ) {
-    }
-
-    public function hasParentMethod(ClassMethod $classMethod, Scope $scope): bool
+    /**
+     * @param ClassReflection[] $ancestors
+     */
+    public function hasParentMethod(ClassReflection $classReflection, array $ancestors, string $classMethodName): bool
     {
-        $classReflection = $scope->getClassReflection();
-        if (! $classReflection instanceof ClassReflection) {
-            return false;
-        }
-
-        foreach ($classReflection->getAncestors() as $ancestorClassReflection) {
-            if ($classReflection === $ancestorClassReflection) {
+        foreach ($ancestors as $ancestor) {
+            if ($classReflection === $ancestor) {
                 continue;
             }
+            $ancestorHasMethod = $ancestor->hasMethod($classMethodName);
 
-            $classMethodName = $this->nodeNameResolver->getName($classMethod);
-            if ($ancestorClassReflection->hasMethod($classMethodName)) {
+            if ($ancestorHasMethod) {
                 return true;
             }
         }
@@ -39,18 +28,13 @@ final class ParamContravariantDetector
         return false;
     }
 
-    public function hasChildMethod(ClassMethod $classMethod, Scope $classScope): bool
+    /**
+     * @param ClassLike[] $classLikes
+     */
+    public function hasChildMethod(array $classLikes, string $classMethodName): bool
     {
-        $classReflection = $classScope->getClassReflection();
-        if (! $classReflection instanceof ClassReflection) {
-            return false;
-        }
-
-        $methodName = $this->nodeNameResolver->getName($classMethod);
-
-        $classLikes = $this->nodeRepository->findClassesAndInterfacesByType($classReflection->getName());
         foreach ($classLikes as $classLike) {
-            $currentClassMethod = $classLike->getMethod($methodName);
+            $currentClassMethod = $classLike->getMethod($classMethodName);
             if ($currentClassMethod !== null) {
                 return true;
             }

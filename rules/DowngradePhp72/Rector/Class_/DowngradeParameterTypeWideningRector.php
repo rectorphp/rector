@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Interface_;
 use PHPStan\Analyser\Scope;
@@ -96,7 +97,12 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($this->isEmptyClassReflection($scope)) {
+        $classReflection = $scope->getClassReflection();
+        if (! $classReflection instanceof ClassReflection) {
+            return null;
+        }
+
+        if ($this->isEmptyClassReflection($classReflection)) {
             return null;
         }
 
@@ -105,15 +111,19 @@ CODE_SAMPLE
         }
 
         $hasChanged = false;
-        $classMethods = $this->classLikeWithTraitsClassMethodResolver->resolve($node);
+        /** @var ClassReflection[] $ancestors */
+        $ancestors = $classReflection->getAncestors();
+        $classMethods = $this->classLikeWithTraitsClassMethodResolver->resolve($ancestors);
 
+        $classLikes = $this->nodeRepository->findClassesAndInterfacesByType($classReflection->getName());
+        $interfaces = $classReflection->getInterfaces();
         foreach ($classMethods as $classMethod) {
-            if ($this->skipClassMethod($classMethod, $scope)) {
+            if ($this->skipClassMethod($classMethod, $classReflection, $ancestors, $classLikes)) {
                 continue;
             }
 
             // refactor here
-            if ($this->refactorClassMethod($classMethod, $scope) !== null) {
+            if ($this->refactorClassMethod($classMethod, $classReflection, $ancestors, $interfaces) !== null) {
                 $hasChanged = true;
             }
         }
@@ -143,14 +153,10 @@ CODE_SAMPLE
 
     /**
      * The topmost class is the source of truth, so we go only down to avoid up/down collission
+     * @param ClassReflection[] $ancestors
+     * @param ClassReflection[] $interfaces
      */
-    private function refactorClassMethod(ClassMethod $classMethod, Scope $scope): ?ClassMethod
-    {
-        $classReflection = $scope->getClassReflection();
-        if (! $classReflection instanceof ClassReflection) {
-            return null;
-        }
-
+    private function refactorClassMethod(ClassMethod $classMethod, ClassReflection $classReflection, array $ancestors, array $interfaces): ?ClassMethod {
         /** @var string $methodName */
         $methodName = $this->nodeNameResolver->getName($classMethod);
 
@@ -167,11 +173,12 @@ CODE_SAMPLE
                 $classReflection,
                 $methodName,
                 $position,
-                $scope
+                $ancestors,
+                $interfaces
             );
 
             $uniqueTypes = $this->typeFactory->uniquateTypes($parameterTypesByParentClassLikes);
-            if (count($uniqueTypes) <= 1) {
+            if (! isset($uniqueTypes[1])) {
                 continue;
             }
 
@@ -190,11 +197,10 @@ CODE_SAMPLE
     {
         // It already has no type => nothing to do - check original param, as it could have been removed by this rule
         $originalParam = $param->getAttribute(AttributeKey::ORIGINAL_NODE);
-        if ($originalParam instanceof Param) {
-            if ($originalParam->type === null) {
-                return;
-            }
-        } elseif ($param->type === null) {
+        if ($originalParam instanceof Param && $originalParam->type === null) {
+            return;
+        }
+        if ($param->type === null) {
             return;
         }
 
@@ -203,7 +209,11 @@ CODE_SAMPLE
         $param->type = null;
     }
 
-    private function skipClassMethod(ClassMethod $classMethod, Scope $classScope): bool
+    /**
+     * @param ClassReflection[] $ancestors
+     * @param ClassLike[] $classLikes
+     */
+    private function skipClassMethod(ClassMethod $classMethod, ClassReflection $classReflection, array $ancestors, array $classLikes): bool
     {
         if ($classMethod->isMagic()) {
             return true;
@@ -213,20 +223,17 @@ CODE_SAMPLE
             return true;
         }
 
-        if ($this->paramContravariantDetector->hasChildMethod($classMethod, $classScope)) {
+        /** @var string $classMethodName */
+        $classMethodName = $this->nodeNameResolver->getName($classMethod);
+        if ($this->paramContravariantDetector->hasChildMethod($classLikes, $classMethodName)) {
             return false;
         }
 
-        return ! $this->paramContravariantDetector->hasParentMethod($classMethod, $classScope);
+        return ! $this->paramContravariantDetector->hasParentMethod($classReflection, $ancestors, $classMethodName);
     }
 
-    private function isEmptyClassReflection(Scope $scope): bool
+    private function isEmptyClassReflection(ClassReflection $classReflection): bool
     {
-        $classReflection = $scope->getClassReflection();
-        if (! $classReflection instanceof ClassReflection) {
-            return true;
-        }
-
         if ($classReflection->isInterface()) {
             return false;
         }
