@@ -68,7 +68,7 @@ use Doctrine\ORM\Mapping as ORM;
 class SomeClass
 {
     /**
-     * @ORM\OneToMany(targetEntity=Training::class, mappedBy="trainer")
+     * @ORM\OneToMany(targetEntity=Trainer::class, mappedBy="trainer")
      * @var Collection|Trainer[]
      */
     private $trainings = [];
@@ -84,8 +84,8 @@ use Doctrine\ORM\Mapping as ORM;
 class SomeClass
 {
     /**
-     * @ORM\OneToMany(targetEntity=Training::class, mappedBy="trainer")
-     * @var Collection<int, Training>|Trainer[]
+     * @ORM\OneToMany(targetEntity=Trainer::class, mappedBy="trainer")
+     * @var Collection<int, Trainer>|Trainer[]
      */
     private $trainings = [];
 }

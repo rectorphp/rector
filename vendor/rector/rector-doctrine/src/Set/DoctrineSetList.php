@@ -42,4 +42,8 @@ final class DoctrineSetList implements \Rector\Set\Contract\SetListInterface
      * @var string
      */
     public const DOCTRINE_REPOSITORY_AS_SERVICE = __DIR__ . '/../../config/sets/doctrine-repository-as-service.php';
+    /**
+     * @var string
+     */
+    public const DOCTRINE_ORM_29 = __DIR__ . '/../../config/sets/doctrine-orm-29.php';
 }

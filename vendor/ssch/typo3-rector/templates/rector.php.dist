@@ -65,8 +65,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     ]);
 
     // If you have trouble that rector cannot run because some TYPO3 constants are not defined add an additional constants file
-    // Have a look at https://github.com/sabbelasichon/typo3-rector/blob/master/typo3.constants.php
-    // $parameters->set(Option::AUTOLOAD_PATHS, [
+    // @see https://github.com/sabbelasichon/typo3-rector/blob/master/typo3.constants.php
+    // @see https://github.com/rectorphp/rector/blob/main/docs/static_reflection_and_autoload.md#include-files
+    // $parameters->set(Option::BOOTSTRAP_FILES, [
     //    __DIR__ . '/typo3.constants.php'
     // ]);
 
@@ -84,7 +85,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 
     // Optional non-php file functionalities:
-    // More info here: https://github.com/sabbelasichon/typo3-rector/blob/main/docs/beyond_php_file_processors.md
+    // @see https://github.com/sabbelasichon/typo3-rector/blob/main/docs/beyond_php_file_processors.md
 
     // Adapt your composer.json dependencies to the latest available version for the defined SetList
     // $containerConfigurator->import(Typo3SetList::COMPOSER_PACKAGES_104_CORE);

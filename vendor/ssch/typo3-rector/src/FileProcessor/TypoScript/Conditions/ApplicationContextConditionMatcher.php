@@ -22,9 +22,9 @@ final class ApplicationContextConditionMatcher implements \Ssch\TYPO3Rector\Cont
         $newConditions = [];
         foreach ($values as $value) {
             if ($this->isRegularExpression($value)) {
-                $newConditions[] = \sprintf('applicationContext matches %s', $value);
+                $newConditions[] = \sprintf('applicationContext matches "%s"', $value);
             } else {
-                $newConditions[] = \sprintf('applicationContext == %s', $value);
+                $newConditions[] = \sprintf('applicationContext == "%s"', $value);
             }
         }
         return \implode(' || ', $newConditions);

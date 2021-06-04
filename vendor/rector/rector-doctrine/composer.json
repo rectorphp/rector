@@ -12,7 +12,8 @@
         "symplify\/phpstan-extensions": "^9.2",
         "symplify\/easy-coding-standard": "^9.2",
         "symplify\/rule-doc-generator": "^9.2",
-        "rector\/rector-src": "^0.11.2"
+        "rector\/rector-src": "^0.11.2",
+        "doctrine\/orm": "^2.9"
     },
     "autoload": {
         "psr-4": {
