@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210603;
+namespace RectorPrefix20210604;
 
 if (\class_exists('Tx_Extbase_Utility_Debugger')) {
     return;

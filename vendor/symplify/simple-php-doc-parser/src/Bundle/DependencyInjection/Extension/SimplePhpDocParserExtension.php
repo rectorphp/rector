@@ -1,20 +1,20 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210603\Symplify\SimplePhpDocParser\Bundle\DependencyInjection\Extension;
+namespace RectorPrefix20210604\Symplify\SimplePhpDocParser\Bundle\DependencyInjection\Extension;
 
-use RectorPrefix20210603\Symfony\Component\Config\FileLocator;
-use RectorPrefix20210603\Symfony\Component\DependencyInjection\ContainerBuilder;
-use RectorPrefix20210603\Symfony\Component\DependencyInjection\Extension\Extension;
-use RectorPrefix20210603\Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
-final class SimplePhpDocParserExtension extends \RectorPrefix20210603\Symfony\Component\DependencyInjection\Extension\Extension
+use RectorPrefix20210604\Symfony\Component\Config\FileLocator;
+use RectorPrefix20210604\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix20210604\Symfony\Component\DependencyInjection\Extension\Extension;
+use RectorPrefix20210604\Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
+final class SimplePhpDocParserExtension extends \RectorPrefix20210604\Symfony\Component\DependencyInjection\Extension\Extension
 {
     /**
      * @param string[] $configs
      */
-    public function load(array $configs, \RectorPrefix20210603\Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder) : void
+    public function load(array $configs, \RectorPrefix20210604\Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder) : void
     {
-        $phpFileLoader = new \RectorPrefix20210603\Symfony\Component\DependencyInjection\Loader\PhpFileLoader($containerBuilder, new \RectorPrefix20210603\Symfony\Component\Config\FileLocator(__DIR__ . '/../../../../config'));
+        $phpFileLoader = new \RectorPrefix20210604\Symfony\Component\DependencyInjection\Loader\PhpFileLoader($containerBuilder, new \RectorPrefix20210604\Symfony\Component\Config\FileLocator(__DIR__ . '/../../../../config'));
         $phpFileLoader->load('config.php');
     }
 }

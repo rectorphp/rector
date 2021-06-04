@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210603;
+namespace RectorPrefix20210604;
 
 if (\class_exists('tslib_content_cObjGetSingleHook')) {
     return;

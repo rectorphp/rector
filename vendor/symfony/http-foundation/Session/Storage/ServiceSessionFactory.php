@@ -8,24 +8,24 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210603\Symfony\Component\HttpFoundation\Session\Storage;
+namespace RectorPrefix20210604\Symfony\Component\HttpFoundation\Session\Storage;
 
-use RectorPrefix20210603\Symfony\Component\HttpFoundation\Request;
+use RectorPrefix20210604\Symfony\Component\HttpFoundation\Request;
 /**
  * @author Jérémy Derussé <jeremy@derusse.com>
  *
  * @internal to be removed in Symfony 6
  */
-final class ServiceSessionFactory implements \RectorPrefix20210603\Symfony\Component\HttpFoundation\Session\Storage\SessionStorageFactoryInterface
+final class ServiceSessionFactory implements \RectorPrefix20210604\Symfony\Component\HttpFoundation\Session\Storage\SessionStorageFactoryInterface
 {
     private $storage;
-    public function __construct(\RectorPrefix20210603\Symfony\Component\HttpFoundation\Session\Storage\SessionStorageInterface $storage)
+    public function __construct(\RectorPrefix20210604\Symfony\Component\HttpFoundation\Session\Storage\SessionStorageInterface $storage)
     {
         $this->storage = $storage;
     }
-    public function createStorage(?\RectorPrefix20210603\Symfony\Component\HttpFoundation\Request $request) : \RectorPrefix20210603\Symfony\Component\HttpFoundation\Session\Storage\SessionStorageInterface
+    public function createStorage(?\RectorPrefix20210604\Symfony\Component\HttpFoundation\Request $request) : \RectorPrefix20210604\Symfony\Component\HttpFoundation\Session\Storage\SessionStorageInterface
     {
-        if ($this->storage instanceof \RectorPrefix20210603\Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage && $request && $request->isSecure()) {
+        if ($this->storage instanceof \RectorPrefix20210604\Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage && $request && $request->isSecure()) {
             $this->storage->setOptions(['cookie_secure' => \true]);
         }
         return $this->storage;

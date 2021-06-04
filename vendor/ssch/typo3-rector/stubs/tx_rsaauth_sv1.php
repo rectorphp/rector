@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210603;
+namespace RectorPrefix20210604;
 
 if (\class_exists('tx_rsaauth_sv1')) {
     return;

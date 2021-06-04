@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210603\Symfony\Component\HttpFoundation\Session\Attribute;
+namespace RectorPrefix20210604\Symfony\Component\HttpFoundation\Session\Attribute;
 
-trigger_deprecation('symfony/http-foundation', '5.3', 'The "%s" class is deprecated.', \RectorPrefix20210603\Symfony\Component\HttpFoundation\Session\Attribute\NamespacedAttributeBag::class);
+trigger_deprecation('symfony/http-foundation', '5.3', 'The "%s" class is deprecated.', \RectorPrefix20210604\Symfony\Component\HttpFoundation\Session\Attribute\NamespacedAttributeBag::class);
 /**
  * This class provides structured storage of session attributes using
  * a name spacing character in the key.
@@ -19,7 +19,7 @@ trigger_deprecation('symfony/http-foundation', '5.3', 'The "%s" class is depreca
  *
  * @deprecated since Symfony 5.3
  */
-class NamespacedAttributeBag extends \RectorPrefix20210603\Symfony\Component\HttpFoundation\Session\Attribute\AttributeBag
+class NamespacedAttributeBag extends \RectorPrefix20210604\Symfony\Component\HttpFoundation\Session\Attribute\AttributeBag
 {
     private $namespaceCharacter;
     /**

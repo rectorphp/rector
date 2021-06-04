@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation;
 
-use RectorPrefix20210603\Nette\Utils\Strings;
+use RectorPrefix20210604\Nette\Utils\Strings;
 use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\NodeAttributes;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
@@ -79,7 +79,7 @@ abstract class AbstractValuesAwareNode implements \PHPStan\PhpDocParser\Ast\PhpD
     {
         // is quoted?
         if (isset($this->values[$key])) {
-            $isQuoted = (bool) \RectorPrefix20210603\Nette\Utils\Strings::match($this->values[$key], self::UNQUOTED_VALUE_REGEX);
+            $isQuoted = (bool) \RectorPrefix20210604\Nette\Utils\Strings::match($this->values[$key], self::UNQUOTED_VALUE_REGEX);
             if ($isQuoted) {
                 $value = '"' . $value . '"';
             }
@@ -106,7 +106,7 @@ abstract class AbstractValuesAwareNode implements \PHPStan\PhpDocParser\Ast\PhpD
     public function changeSilentValue($value) : void
     {
         // is quoted?
-        $isQuoted = (bool) \RectorPrefix20210603\Nette\Utils\Strings::match($this->values[0], self::UNQUOTED_VALUE_REGEX);
+        $isQuoted = (bool) \RectorPrefix20210604\Nette\Utils\Strings::match($this->values[0], self::UNQUOTED_VALUE_REGEX);
         if ($isQuoted) {
             $value = '"' . $value . '"';
         }
@@ -128,7 +128,7 @@ abstract class AbstractValuesAwareNode implements \PHPStan\PhpDocParser\Ast\PhpD
     }
     /**
      * Useful for attributes
-     * @return array<string, mixed>
+     * @return array<int|string, mixed>
      */
     public function getValuesWithExplicitSilentAndWithoutQuotes() : array
     {
@@ -138,7 +138,7 @@ abstract class AbstractValuesAwareNode implements \PHPStan\PhpDocParser\Ast\PhpD
             if (\is_int($key) && $this->silentKey !== null) {
                 $explicitKeysValues[$this->silentKey] = $valueWithoutQuotes;
             } else {
-                $explicitKeysValues[$key] = $valueWithoutQuotes;
+                $explicitKeysValues[$this->removeQuotes($key)] = $valueWithoutQuotes;
             }
         }
         return $explicitKeysValues;
@@ -149,14 +149,31 @@ abstract class AbstractValuesAwareNode implements \PHPStan\PhpDocParser\Ast\PhpD
      */
     protected function removeQuotes($value)
     {
+        if (\is_array($value)) {
+            return $this->removeQuotesFromArray($value);
+        }
         if (!\is_string($value)) {
             return $value;
         }
-        $matches = \RectorPrefix20210603\Nette\Utils\Strings::match($value, self::UNQUOTED_VALUE_REGEX);
+        $matches = \RectorPrefix20210604\Nette\Utils\Strings::match($value, self::UNQUOTED_VALUE_REGEX);
         if ($matches === null) {
             return $value;
         }
         return $matches['content'];
+    }
+    /**
+     * @param mixed[] $values
+     * @return array<int|string, mixed>
+     */
+    protected function removeQuotesFromArray(array $values) : array
+    {
+        $unquotedArray = [];
+        foreach ($values as $key => $value) {
+            $unquotedKey = $this->removeQuotes($key);
+            $unquotedValue = $this->removeQuotes($value);
+            $unquotedArray[$unquotedKey] = $unquotedValue;
+        }
+        return $unquotedArray;
     }
     /**
      * @param mixed[] $values

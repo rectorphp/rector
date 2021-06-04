@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210603\Helmich\TypoScriptParser\Parser\AST\Operator;
+namespace RectorPrefix20210604\Helmich\TypoScriptParser\Parser\AST\Operator;
 
-use RectorPrefix20210603\Helmich\TypoScriptParser\Parser\AST\ObjectPath;
+use RectorPrefix20210604\Helmich\TypoScriptParser\Parser\AST\ObjectPath;
 /**
  * A copy assignment.
  *
@@ -15,7 +15,7 @@ use RectorPrefix20210603\Helmich\TypoScriptParser\Parser\AST\ObjectPath;
  * @package    Helmich\TypoScriptParser
  * @subpackage Parser\AST\Operator
  */
-class Copy extends \RectorPrefix20210603\Helmich\TypoScriptParser\Parser\AST\Operator\BinaryObjectOperator
+class Copy extends \RectorPrefix20210604\Helmich\TypoScriptParser\Parser\AST\Operator\BinaryObjectOperator
 {
     /**
      * Constructs a copy statement.
@@ -24,7 +24,7 @@ class Copy extends \RectorPrefix20210603\Helmich\TypoScriptParser\Parser\AST\Ope
      * @param ObjectPath $target     The object to copy the value from.
      * @param int        $sourceLine The original source line.
      */
-    public function __construct(\RectorPrefix20210603\Helmich\TypoScriptParser\Parser\AST\ObjectPath $object, \RectorPrefix20210603\Helmich\TypoScriptParser\Parser\AST\ObjectPath $target, int $sourceLine)
+    public function __construct(\RectorPrefix20210604\Helmich\TypoScriptParser\Parser\AST\ObjectPath $object, \RectorPrefix20210604\Helmich\TypoScriptParser\Parser\AST\ObjectPath $target, int $sourceLine)
     {
         parent::__construct($sourceLine);
         $this->object = $object;

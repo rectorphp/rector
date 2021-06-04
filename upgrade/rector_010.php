@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210603;
+namespace RectorPrefix20210604;
 
 use Rector\Arguments\Rector\MethodCall\ValueObjectWrapArgRector;
 use Rector\Arguments\ValueObject\ValueObjectWrapArg;

@@ -1,5 +1,5 @@
 <?php
 
-namespace RectorPrefix20210603;
+namespace RectorPrefix20210604;
 
 return ['TYPO3\\CMS\\Lowlevel\\View\\ConfigurationView' => 'TYPO3\\CMS\\Lowlevel\\Controller\\ConfigurationController', 'TYPO3\\CMS\\Lowlevel\\View\\DatabaseIntegrityView' => 'TYPO3\\CMS\\Lowlevel\\Controller\\DatabaseIntegrityController'];

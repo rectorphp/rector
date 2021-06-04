@@ -5,7 +5,7 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix20210603\Tracy;
+namespace RectorPrefix20210604\Tracy;
 
 /**
  * Debug Bar.
@@ -22,7 +22,7 @@ class Bar
      * Add custom panel.
      * @return static
      */
-    public function addPanel(\RectorPrefix20210603\Tracy\IBarPanel $panel, string $id = null)
+    public function addPanel(\RectorPrefix20210604\Tracy\IBarPanel $panel, string $id = null)
     {
         if ($id === null) {
             $c = 0;
@@ -36,7 +36,7 @@ class Bar
     /**
      * Returns panel with given id
      */
-    public function getPanel(string $id) : ?\RectorPrefix20210603\Tracy\IBarPanel
+    public function getPanel(string $id) : ?\RectorPrefix20210604\Tracy\IBarPanel
     {
         return $this->panels[$id] ?? null;
     }
@@ -50,7 +50,7 @@ class Bar
             throw new \LogicException('Start session before Tracy is enabled.');
         }
         $contentId = $this->contentId = $this->contentId ?: \substr(\md5(\uniqid('', \true)), 0, 10);
-        $nonce = \RectorPrefix20210603\Tracy\Helpers::getNonce();
+        $nonce = \RectorPrefix20210604\Tracy\Helpers::getNonce();
         $async = \true;
         require __DIR__ . '/assets/loader.phtml';
     }
@@ -68,7 +68,7 @@ class Bar
                 return isset($item['time']) && $item['time'] > \time() - 60;
             });
         }
-        if (\RectorPrefix20210603\Tracy\Helpers::isAjax()) {
+        if (\RectorPrefix20210604\Tracy\Helpers::isAjax()) {
             if ($useSession) {
                 $contentId = $_SERVER['HTTP_X_TRACY_AJAX'];
                 $_SESSION['_tracy']['bar'][$contentId] = ['content' => $this->renderHtml('ajax', '-ajax:' . $contentId), 'time' => \time()];
@@ -78,7 +78,7 @@ class Bar
             if ($useSession) {
                 $redirectQueue[] = ['content' => $this->renderHtml('redirect', '-r' . \count($redirectQueue)), 'time' => \time()];
             }
-        } elseif (\RectorPrefix20210603\Tracy\Helpers::isHtmlMode()) {
+        } elseif (\RectorPrefix20210604\Tracy\Helpers::isHtmlMode()) {
             $content = $this->renderHtml('main');
             foreach (\array_reverse((array) $redirectQueue) as $item) {
                 $content['bar'] .= $item['content']['bar'];
@@ -90,7 +90,7 @@ class Bar
                 $_SESSION['_tracy']['bar'][$this->contentId] = ['content' => $content, 'time' => \time()];
             } else {
                 $contentId = \substr(\md5(\uniqid('', \true)), 0, 10);
-                $nonce = \RectorPrefix20210603\Tracy\Helpers::getNonce();
+                $nonce = \RectorPrefix20210604\Tracy\Helpers::getNonce();
                 $async = \false;
                 require __DIR__ . '/assets/loader.phtml';
             }
@@ -99,9 +99,9 @@ class Bar
     private function renderHtml(string $type, string $suffix = '') : array
     {
         $panels = $this->renderPanels($suffix);
-        return ['bar' => \RectorPrefix20210603\Tracy\Helpers::capture(function () use($type, $panels) {
+        return ['bar' => \RectorPrefix20210604\Tracy\Helpers::capture(function () use($type, $panels) {
             require __DIR__ . '/assets/bar.phtml';
-        }), 'panels' => \RectorPrefix20210603\Tracy\Helpers::capture(function () use($type, $panels) {
+        }), 'panels' => \RectorPrefix20210604\Tracy\Helpers::capture(function () use($type, $panels) {
             require __DIR__ . '/assets/panels.phtml';
         })];
     }
@@ -126,7 +126,7 @@ class Bar
                 }
                 $idHtml = "error-{$idHtml}";
                 $tab = "Error in {$id}";
-                $panelHtml = "<h1>Error: {$id}</h1><div class='tracy-inner'>" . \nl2br(\RectorPrefix20210603\Tracy\Helpers::escapeHtml($e)) . '</div>';
+                $panelHtml = "<h1>Error: {$id}</h1><div class='tracy-inner'>" . \nl2br(\RectorPrefix20210604\Tracy\Helpers::escapeHtml($e)) . '</div>';
                 unset($e);
             }
             $panels[] = (object) ['id' => $idHtml, 'tab' => $tab, 'panel' => $panelHtml];
@@ -150,7 +150,7 @@ class Bar
             return \true;
         }
         $this->useSession = \session_status() === \PHP_SESSION_ACTIVE;
-        if ($this->useSession && \RectorPrefix20210603\Tracy\Helpers::isAjax()) {
+        if ($this->useSession && \RectorPrefix20210604\Tracy\Helpers::isAjax()) {
             \header('X-Tracy-Ajax: 1');
             // session must be already locked
         }
@@ -178,11 +178,11 @@ class Bar
     }
     private function renderAssets() : void
     {
-        $css = \array_map('file_get_contents', \array_merge([__DIR__ . '/assets/bar.css', __DIR__ . '/../Toggle/toggle.css', __DIR__ . '/../TableSort/table-sort.css', __DIR__ . '/../Dumper/assets/dumper-light.css', __DIR__ . '/../Dumper/assets/dumper-dark.css', __DIR__ . '/../BlueScreen/assets/bluescreen.css'], \RectorPrefix20210603\Tracy\Debugger::$customCssFiles));
-        echo "'use strict';\n(function(){\n\tvar el = document.createElement('style');\n\tel.setAttribute('nonce', document.currentScript.getAttribute('nonce') || document.currentScript.nonce);\n\tel.className='tracy-debug';\n\tel.textContent=" . \json_encode(\RectorPrefix20210603\Tracy\Helpers::minifyCss(\implode($css))) . ";\n\tdocument.head.appendChild(el);})\n();\n";
+        $css = \array_map('file_get_contents', \array_merge([__DIR__ . '/assets/bar.css', __DIR__ . '/../Toggle/toggle.css', __DIR__ . '/../TableSort/table-sort.css', __DIR__ . '/../Dumper/assets/dumper-light.css', __DIR__ . '/../Dumper/assets/dumper-dark.css', __DIR__ . '/../BlueScreen/assets/bluescreen.css'], \RectorPrefix20210604\Tracy\Debugger::$customCssFiles));
+        echo "'use strict';\n(function(){\n\tvar el = document.createElement('style');\n\tel.setAttribute('nonce', document.currentScript.getAttribute('nonce') || document.currentScript.nonce);\n\tel.className='tracy-debug';\n\tel.textContent=" . \json_encode(\RectorPrefix20210604\Tracy\Helpers::minifyCss(\implode($css))) . ";\n\tdocument.head.appendChild(el);})\n();\n";
         \array_map(function ($file) {
             echo '(function() {', \file_get_contents($file), '})();';
         }, [__DIR__ . '/assets/bar.js', __DIR__ . '/../Toggle/toggle.js', __DIR__ . '/../TableSort/table-sort.js', __DIR__ . '/../Dumper/assets/dumper.js', __DIR__ . '/../BlueScreen/assets/bluescreen.js']);
-        \array_map('readfile', \RectorPrefix20210603\Tracy\Debugger::$customJsFiles);
+        \array_map('readfile', \RectorPrefix20210604\Tracy\Debugger::$customJsFiles);
     }
 }
