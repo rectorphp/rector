@@ -156,7 +156,12 @@ CODE_SAMPLE
      * @param ClassReflection[] $ancestors
      * @param ClassReflection[] $interfaces
      */
-    private function refactorClassMethod(ClassMethod $classMethod, ClassReflection $classReflection, array $ancestors, array $interfaces): ?ClassMethod {
+    private function refactorClassMethod(
+        ClassMethod $classMethod,
+        ClassReflection $classReflection,
+        array $ancestors,
+        array $interfaces
+    ): ?ClassMethod {
         /** @var string $methodName */
         $methodName = $this->nodeNameResolver->getName($classMethod);
 
@@ -213,8 +218,12 @@ CODE_SAMPLE
      * @param ClassReflection[] $ancestors
      * @param ClassLike[] $classLikes
      */
-    private function skipClassMethod(ClassMethod $classMethod, ClassReflection $classReflection, array $ancestors, array $classLikes): bool
-    {
+    private function skipClassMethod(
+        ClassMethod $classMethod,
+        ClassReflection $classReflection,
+        array $ancestors,
+        array $classLikes
+    ): bool {
         if ($classMethod->isMagic()) {
             return true;
         }

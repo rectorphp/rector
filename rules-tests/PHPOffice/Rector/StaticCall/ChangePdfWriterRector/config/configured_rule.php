@@ -11,10 +11,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ChangePdfWriterRector::class);
 
     $services->set(RenameClassRector::class)
-             ->call('configure', [[
-                 RenameClassRector::OLD_TO_NEW_CLASSES => [
-                     'PHPExcel_IOFactory' => 'PhpOffice\PhpSpreadsheet\IOFactory',
-                 ]
-        ]
-    ]);
+        ->call('configure', [[
+            RenameClassRector::OLD_TO_NEW_CLASSES => [
+                'PHPExcel_IOFactory' => 'PhpOffice\PhpSpreadsheet\IOFactory',
+            ],
+        ],
+        ]);
 };

@@ -81,7 +81,7 @@ CODE_SAMPLE
 
             $secondArgValue = $this->valueResolver->getValue($node->args[1]->value);
 
-            if(! is_string($secondArgValue)) {
+            if (! is_string($secondArgValue)) {
                 return null;
             }
 
