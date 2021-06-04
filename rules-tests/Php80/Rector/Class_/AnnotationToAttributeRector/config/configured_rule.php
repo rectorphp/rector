@@ -55,6 +55,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                     'Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter',
                     'Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter'
                 ),
+                new AnnotationToAttribute(
+                    'ApiPlatform\Core\Annotation\ApiResource',
+                    'ApiPlatform\Core\Annotation\ApiResource'
+                ),
             ]),
         ]]);
 };
