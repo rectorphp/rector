@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitabdf37ef715dd84687a740f568e53b20
+class ComposerStaticInitda7e531b42f505ff3cdb7834df37d635
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -2164,6 +2164,7 @@ class ComposerStaticInitabdf37ef715dd84687a740f568e53b20
         'Rector\\Core\\Console\\ConsoleApplication' => __DIR__ . '/../..' . '/src/Console/ConsoleApplication.php',
         'Rector\\Core\\Console\\Output\\OutputFormatterCollector' => __DIR__ . '/../..' . '/src/Console/Output/OutputFormatterCollector.php',
         'Rector\\Core\\Console\\Output\\RectorOutputStyle' => __DIR__ . '/../..' . '/src/Console/Output/RectorOutputStyle.php',
+        'Rector\\Core\\Console\\Output\\ShowOutputFormatterCollector' => __DIR__ . '/../..' . '/src/Console/Output/ShowOutputFormatterCollector.php',
         'Rector\\Core\\Console\\Style\\SymfonyStyleFactory' => __DIR__ . '/../..' . '/src/Console/Style/SymfonyStyleFactory.php',
         'Rector\\Core\\Contract\\Application\\FileDecoratorInterface' => __DIR__ . '/../..' . '/src/Contract/Application/FileDecoratorInterface.php',
         'Rector\\Core\\Contract\\Console\\OutputStyleInterface' => __DIR__ . '/../..' . '/src/Contract/Console/OutputStyleInterface.php',
@@ -2590,6 +2591,8 @@ class ComposerStaticInitabdf37ef715dd84687a740f568e53b20
         'Rector\\Laravel\\ValueObject\\ServiceNameTypeAndVariableName' => __DIR__ . '/..' . '/rector/rector-laravel/src/ValueObject/ServiceNameTypeAndVariableName.php',
         'Rector\\Laravel\\ValueObject\\TypeToTimeMethodAndPosition' => __DIR__ . '/..' . '/rector/rector-laravel/src/ValueObject/TypeToTimeMethodAndPosition.php',
         'Rector\\LeagueEvent\\Rector\\MethodCall\\DispatchStringToObjectRector' => __DIR__ . '/../..' . '/rules/LeagueEvent/Rector/MethodCall/DispatchStringToObjectRector.php',
+        'Rector\\ListReporting\\Contract\\Output\\ShowOutputFormatterInterface' => __DIR__ . '/../..' . '/packages/ListReporting/Contract/Output/ShowOutputFormatterInterface.php',
+        'Rector\\ListReporting\\Output\\ConsoleOutputFormatter' => __DIR__ . '/../..' . '/packages/ListReporting/Output/ConsoleOutputFormatter.php',
         'Rector\\MockeryToProphecy\\Collector\\MockVariableCollector' => __DIR__ . '/../..' . '/rules/MockeryToProphecy/Collector/MockVariableCollector.php',
         'Rector\\MockeryToProphecy\\Rector\\ClassMethod\\MockeryCreateMockToProphizeRector' => __DIR__ . '/../..' . '/rules/MockeryToProphecy/Rector/ClassMethod/MockeryCreateMockToProphizeRector.php',
         'Rector\\MockeryToProphecy\\Rector\\StaticCall\\MockeryCloseRemoveRector' => __DIR__ . '/../..' . '/rules/MockeryToProphecy/Rector/StaticCall/MockeryCloseRemoveRector.php',
@@ -3869,9 +3872,9 @@ class ComposerStaticInitabdf37ef715dd84687a740f568e53b20
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitabdf37ef715dd84687a740f568e53b20::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitabdf37ef715dd84687a740f568e53b20::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitabdf37ef715dd84687a740f568e53b20::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitda7e531b42f505ff3cdb7834df37d635::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitda7e531b42f505ff3cdb7834df37d635::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitda7e531b42f505ff3cdb7834df37d635::$classMap;
 
         }, null, ClassLoader::class);
     }

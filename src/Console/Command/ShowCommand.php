@@ -3,19 +3,27 @@
 declare (strict_types=1);
 namespace Rector\Core\Console\Command;
 
+use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
+use Rector\Core\Configuration\Option;
+use Rector\Core\Console\Output\ShowOutputFormatterCollector;
+use Rector\Core\Contract\Console\OutputStyleInterface;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\PostRector\Contract\Rector\PostRectorInterface;
 use RectorPrefix20210604\Symfony\Component\Console\Command\Command;
 use RectorPrefix20210604\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix20210604\Symfony\Component\Console\Input\InputOption;
 use RectorPrefix20210604\Symfony\Component\Console\Output\OutputInterface;
-use RectorPrefix20210604\Symfony\Component\Console\Style\SymfonyStyle;
 use RectorPrefix20210604\Symplify\PackageBuilder\Console\ShellCode;
 final class ShowCommand extends \RectorPrefix20210604\Symfony\Component\Console\Command\Command
 {
     /**
-     * @var \Symfony\Component\Console\Style\SymfonyStyle
+     * @var \Rector\Core\Contract\Console\OutputStyleInterface
      */
-    private $symfonyStyle;
+    private $outputStyle;
+    /**
+     * @var \Rector\Core\Console\Output\ShowOutputFormatterCollector
+     */
+    private $showOutputFormatterCollector;
     /**
      * @var mixed[]
      */
@@ -23,37 +31,38 @@ final class ShowCommand extends \RectorPrefix20210604\Symfony\Component\Console\
     /**
      * @param RectorInterface[] $rectors
      */
-    public function __construct(\RectorPrefix20210604\Symfony\Component\Console\Style\SymfonyStyle $symfonyStyle, array $rectors)
+    public function __construct(\Rector\Core\Contract\Console\OutputStyleInterface $outputStyle, \Rector\Core\Console\Output\ShowOutputFormatterCollector $showOutputFormatterCollector, array $rectors)
     {
-        $this->symfonyStyle = $symfonyStyle;
+        $this->outputStyle = $outputStyle;
+        $this->showOutputFormatterCollector = $showOutputFormatterCollector;
         $this->rectors = $rectors;
         parent::__construct();
     }
     protected function configure() : void
     {
         $this->setDescription('Show loaded Rectors with their configuration');
+        $names = $this->showOutputFormatterCollector->getNames();
+        $description = \sprintf('Select output format: "%s".', \implode('", "', $names));
+        $this->addOption(\Rector\Core\Configuration\Option::OPTION_OUTPUT_FORMAT, 'o', \RectorPrefix20210604\Symfony\Component\Console\Input\InputOption::VALUE_OPTIONAL, $description, \Rector\ChangesReporting\Output\ConsoleOutputFormatter::NAME);
     }
     protected function execute(\RectorPrefix20210604\Symfony\Component\Console\Input\InputInterface $input, \RectorPrefix20210604\Symfony\Component\Console\Output\OutputInterface $output) : int
     {
-        $this->reportLoadedRectors();
+        $outputFormat = (string) $input->getOption(\Rector\Core\Configuration\Option::OPTION_OUTPUT_FORMAT);
+        $this->reportLoadedRectors($outputFormat);
         return \RectorPrefix20210604\Symplify\PackageBuilder\Console\ShellCode::SUCCESS;
     }
-    private function reportLoadedRectors() : void
+    private function reportLoadedRectors(string $outputFormat) : void
     {
         $rectors = \array_filter($this->rectors, function (\Rector\Core\Contract\Rector\RectorInterface $rector) : bool {
             return !$rector instanceof \Rector\PostRector\Contract\Rector\PostRectorInterface;
         });
         $rectorCount = \count($rectors);
-        if ($rectorCount > 0) {
-            $this->symfonyStyle->title('Loaded Rector rules');
-            foreach ($rectors as $rector) {
-                $this->symfonyStyle->writeln(' * ' . \get_class($rector));
-            }
-            $message = \sprintf('%d loaded Rectors', $rectorCount);
-            $this->symfonyStyle->success($message);
-        } else {
+        if ($rectorCount === 0) {
             $warningMessage = \sprintf('No Rectors were loaded.%sAre sure your "rector.php" config is in the root?%sTry "--config <path>" option to include it.', \PHP_EOL . \PHP_EOL, \PHP_EOL);
-            $this->symfonyStyle->warning($warningMessage);
+            $this->outputStyle->warning($warningMessage);
+            return;
         }
+        $outputFormatter = $this->showOutputFormatterCollector->getByName($outputFormat);
+        $outputFormatter->list($rectors);
     }
 }
