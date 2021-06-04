@@ -54,7 +54,7 @@ final class XmlFileFormatter implements FileFormatterInterface
         $this->padChar = $editorConfigConfiguration->getIndentStyleCharacter();
         $this->indent = $editorConfigConfiguration->getIndentSize();
 
-        $newFileContent = $this->formatXml($file->getFileContent());
+        $newFileContent = $this->formatXml($file->getFileContent(), $editorConfigConfiguration);
 
         $newFileContent .= $editorConfigConfiguration->getFinalNewline();
 
@@ -70,7 +70,7 @@ final class XmlFileFormatter implements FileFormatterInterface
         return $editorConfigConfigurationBuilder;
     }
 
-    private function formatXml(string $xml): string
+    private function formatXml(string $xml, EditorConfigConfiguration $editorConfigConfiguration): string
     {
         $output = '';
         $this->depth = 0;
@@ -78,11 +78,11 @@ final class XmlFileFormatter implements FileFormatterInterface
         $parts = $this->getXmlParts($xml);
 
         if (str_starts_with($parts[0], '<?xml')) {
-            $output = array_shift($parts) . PHP_EOL;
+            $output = array_shift($parts) . $editorConfigConfiguration->getNewline();
         }
 
         foreach ($parts as $part) {
-            $output .= $this->getOutputForPart($part);
+            $output .= $this->getOutputForPart($part, $editorConfigConfiguration);
         }
 
         return trim($output);
@@ -97,16 +97,16 @@ final class XmlFileFormatter implements FileFormatterInterface
         return explode("\n", $withNewLines);
     }
 
-    private function getOutputForPart(string $part): string
+    private function getOutputForPart(string $part, EditorConfigConfiguration $editorConfigConfiguration): string
     {
         $output = '';
         $this->runPre($part);
 
         if ($this->preserveWhitespace) {
-            $output .= $part . PHP_EOL;
+            $output .= $part . $editorConfigConfiguration->getNewline();
         } else {
             $part = trim($part);
-            $output .= $this->getPaddedString($part) . PHP_EOL;
+            $output .= $this->getPaddedString($part) . $editorConfigConfiguration->getNewline();
         }
 
         $this->runPost($part);
