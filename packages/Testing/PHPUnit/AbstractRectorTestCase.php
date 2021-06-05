@@ -46,6 +46,11 @@ abstract class AbstractRectorTestCase extends AbstractTestCase implements Rector
         // speed up
         @ini_set('memory_limit', '-1');
 
+        // include local files
+        if (file_exists(__DIR__ . '/../../../preload.php')) {
+            require_once __DIR__ . '/../../../preload.php';
+        }
+
         $configFileInfo = new SmartFileInfo($this->provideConfigFilePath());
         $this->bootFromConfigFileInfos([$configFileInfo]);
 
