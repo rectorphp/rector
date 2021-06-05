@@ -47,7 +47,7 @@ final class ShowCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $outputFormat = (string)$input->getOption(Option::OPTION_OUTPUT_FORMAT);
+        $outputFormat = (string) $input->getOption(Option::OPTION_OUTPUT_FORMAT);
 
         $this->reportLoadedRectors($outputFormat);
 
@@ -58,7 +58,7 @@ final class ShowCommand extends Command
     {
         $rectors = array_filter(
             $this->rectors,
-            fn(RectorInterface $rector): bool => ! $rector instanceof PostRectorInterface
+            fn (RectorInterface $rector): bool => ! $rector instanceof PostRectorInterface
         );
 
         $rectorCount = count($rectors);
@@ -66,7 +66,7 @@ final class ShowCommand extends Command
         if ($rectorCount === 0) {
             $warningMessage = sprintf(
                 'No Rectors were loaded.%sAre sure your "rector.php" config is in the root?%sTry "--config <path>" option to include it.',
-                PHP_EOL.PHP_EOL,
+                PHP_EOL . PHP_EOL,
                 PHP_EOL
             );
             $this->outputStyle->warning($warningMessage);

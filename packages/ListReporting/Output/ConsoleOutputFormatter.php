@@ -1,9 +1,8 @@
 <?php
+
 declare(strict_types=1);
 
-
 namespace Rector\ListReporting\Output;
-
 
 use Rector\Core\Contract\Console\OutputStyleInterface;
 use Rector\ListReporting\Contract\Output\ShowOutputFormatterInterface;
@@ -15,8 +14,9 @@ final class ConsoleOutputFormatter implements ShowOutputFormatterInterface
      */
     public const NAME = 'console';
 
-    public function __construct(private OutputStyleInterface $outputStyle)
-    {
+    public function __construct(
+        private OutputStyleInterface $outputStyle
+    ) {
     }
 
     public function list(array $rectors): void

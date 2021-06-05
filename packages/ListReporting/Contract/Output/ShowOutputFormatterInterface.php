@@ -1,9 +1,8 @@
 <?php
+
 declare(strict_types=1);
 
-
 namespace Rector\ListReporting\Contract\Output;
-
 
 use Rector\Core\Contract\Rector\RectorInterface;
 
