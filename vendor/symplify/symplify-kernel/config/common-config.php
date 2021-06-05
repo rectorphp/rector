@@ -5,7 +5,7 @@ namespace RectorPrefix20210605;
 
 use RectorPrefix20210605\Symfony\Component\Console\Style\SymfonyStyle;
 use RectorPrefix20210605\Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use RectorPrefix20210605\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use RectorPrefix20210605\Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory;
 use RectorPrefix20210605\Symplify\PackageBuilder\Parameter\ParameterProvider;
 use RectorPrefix20210605\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
@@ -15,7 +15,7 @@ use RectorPrefix20210605\Symplify\SmartFileSystem\Finder\FinderSanitizer;
 use RectorPrefix20210605\Symplify\SmartFileSystem\Finder\SmartFinder;
 use RectorPrefix20210605\Symplify\SmartFileSystem\SmartFileSystem;
 use function RectorPrefix20210605\Symfony\Component\DependencyInjection\Loader\Configurator\service;
-return static function (\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
+return static function (\RectorPrefix20210605\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->defaults()->public()->autowire()->autoconfigure();
     // symfony style

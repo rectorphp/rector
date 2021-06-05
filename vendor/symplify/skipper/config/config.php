@@ -3,11 +3,11 @@
 declare (strict_types=1);
 namespace RectorPrefix20210605;
 
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use RectorPrefix20210605\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use RectorPrefix20210605\Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker;
 use RectorPrefix20210605\Symplify\Skipper\ValueObject\Option;
 use RectorPrefix20210605\Symplify\SmartFileSystem\Normalizer\PathNormalizer;
-return static function (\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
+return static function (\RectorPrefix20210605\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
     $parameters = $containerConfigurator->parameters();
     $parameters->set(\RectorPrefix20210605\Symplify\Skipper\ValueObject\Option::SKIP, []);
     $parameters->set(\RectorPrefix20210605\Symplify\Skipper\ValueObject\Option::ONLY, []);

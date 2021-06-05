@@ -9,8 +9,8 @@ use Rector\Nette\Rector\Assign\ArrayAccessSetControlToAddComponentMethodCallRect
 use Rector\Nette\Rector\Assign\MakeGetComponentAssignAnnotatedRector;
 use Rector\Nette\Rector\ClassMethod\TemplateMagicAssignToExplicitVariableArrayRector;
 use Rector\Nette\Rector\Identical\SubstrMinusToStringEndsWithRector;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-return static function (\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
+use RectorPrefix20210605\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+return static function (\RectorPrefix20210605\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->set(\Rector\Nette\Rector\ClassMethod\TemplateMagicAssignToExplicitVariableArrayRector::class);
     $services->set(\Rector\Nette\Rector\Assign\MakeGetComponentAssignAnnotatedRector::class);
