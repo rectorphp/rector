@@ -41,9 +41,6 @@ final class StaticEasyPrefixer
 
         // for configuring sets with ValueObjectInliner
         'Symplify\SymfonyPhpConfig\*',
-
-        // doctrine annotations to autocomplete
-        'Doctrine\ORM\Mapping\*',
     ];
 
     /**
