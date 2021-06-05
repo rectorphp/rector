@@ -1,9 +1,8 @@
 <?php
+
 declare(strict_types=1);
 
-
 namespace Rector\Core\Console\Output;
-
 
 use Rector\ListReporting\Contract\Output\ShowOutputFormatterInterface;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
@@ -33,7 +32,7 @@ final class ShowOutputFormatterCollector
     }
 
     /**
-     * @return string[]
+     * @return int[]|string[]
      */
     public function getNames(): array
     {
