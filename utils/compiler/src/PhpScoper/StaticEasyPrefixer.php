@@ -12,6 +12,8 @@ final class StaticEasyPrefixer
     public const EXCLUDED_CLASSES = [
         // part of public interface of configs.php
         'Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator',
+        // @see https://github.com/rectorphp/the-power-of-automated-refactoring/pull/145/checks?check_run_id=2754125492
+        'Symfony\Component\DependencyInjection\ContainerBuilder',
         // this is not prefixed on few places by php-scoper by default, probably some bug
         'Doctrine\Inflector\Inflector',
         // for SmartFileInfo
