@@ -115,6 +115,11 @@ return [
 
         // unprefixed ContainerConfigurator
         function (string $filePath, string $prefix, string $content): string {
+            // keep vendor prefixed the prefixed file loading; not part of public API
+            if (str_contains($filePath, 'vendor')) {
+                return $content;
+            }
+
             return Strings::replace(
                 $content,
                 '#' . $prefix . '\\\\Symfony\\\\Component\\\\DependencyInjection\\\\Loader\\\\Configurator\\\\ContainerConfigurator#',
