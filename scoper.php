@@ -8,7 +8,6 @@ use Rector\Compiler\PhpScoper\StaticEasyPrefixer;
 use Rector\Compiler\Unprefixer;
 use Rector\Compiler\ValueObject\ScoperOption;
 use Rector\Core\Application\VersionResolver;
-use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 
 require_once __DIR__ . '/vendor/autoload.php';
 
