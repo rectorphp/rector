@@ -10,8 +10,8 @@ use Rector\Symfony\Rector\MethodCall\FormIsValidRector;
 use Rector\Symfony\Rector\MethodCall\ProcessBuilderGetProcessRector;
 use Rector\Symfony\Rector\MethodCall\VarDumperTestTraitMethodArgsRector;
 use Rector\Symfony\Rector\StaticCall\ProcessBuilderInstanceRector;
-use RectorPrefix20210605\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-return static function (\RectorPrefix20210605\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+return static function (\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->set(\Rector\Symfony\Rector\ConstFetch\ConstraintUrlOptionRector::class);
     $services->set(\Rector\Symfony\Rector\MethodCall\FormIsValidRector::class);
