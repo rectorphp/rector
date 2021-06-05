@@ -12,7 +12,7 @@ final class AnnotationToAttribute
      */
     public function __construct(
         private string $tag,
-        private string $attributeClass
+        private ?string $attributeClass = null
     ) {
     }
 
@@ -29,6 +29,10 @@ final class AnnotationToAttribute
      */
     public function getAttributeClass(): string
     {
+        if ($this->attributeClass === null) {
+            return $this->tag;
+        }
+
         return $this->attributeClass;
     }
 }

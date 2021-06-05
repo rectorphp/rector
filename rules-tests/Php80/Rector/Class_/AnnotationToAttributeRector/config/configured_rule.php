@@ -16,49 +16,24 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 new AnnotationToAttribute('inject', 'Nette\DI\Attributes\Inject'),
 
                 // symfony
-                new AnnotationToAttribute(
-                    'Symfony\Component\Routing\Annotation\Route',
-                    'Symfony\Component\Routing\Annotation\Route'
-                ),
+                new AnnotationToAttribute('Symfony\Component\Routing\Annotation\Route'),
 
                 // symfony/validation
-                new AnnotationToAttribute(
-                    'Symfony\Component\Validator\Constraints\Email',
-                    'Symfony\Component\Validator\Constraints\Email'
-                ),
-                new AnnotationToAttribute(
-                    'Symfony\Component\Validator\Constraints\Range',
-                    'Symfony\Component\Validator\Constraints\Range'
-                ),
-                new AnnotationToAttribute(
-                    'Symfony\Component\Validator\Constraints\NotBlank',
-                    'Symfony\Component\Validator\Constraints\NotBlank'
-                ),
-                new AnnotationToAttribute(
-                    'Symfony\Component\Validator\Constraints\Choice',
-                    'Symfony\Component\Validator\Constraints\Choice'
-                ),
+                new AnnotationToAttribute('Symfony\Component\Validator\Constraints\Email',),
+                new AnnotationToAttribute('Symfony\Component\Validator\Constraints\Range',),
+                new AnnotationToAttribute('Symfony\Component\Validator\Constraints\NotBlank',),
+                new AnnotationToAttribute('Symfony\Component\Validator\Constraints\Choice',),
 
-                new AnnotationToAttribute('Doctrine\ORM\Mapping\Table', 'Doctrine\ORM\Mapping\Table'),
-                new AnnotationToAttribute('Doctrine\ORM\Mapping\Entity', 'Doctrine\ORM\Mapping\Entity'),
-                new AnnotationToAttribute('Doctrine\ORM\Mapping\Id', 'Doctrine\ORM\Mapping\Id'),
+                new AnnotationToAttribute('Doctrine\ORM\Mapping\Table'),
+                new AnnotationToAttribute('Doctrine\ORM\Mapping\Entity'),
+                new AnnotationToAttribute('Doctrine\ORM\Mapping\Id'),
+                new AnnotationToAttribute('Doctrine\ORM\Mapping\GeneratedValue'),
+                new AnnotationToAttribute('Doctrine\ORM\Mapping\Column'),
+                new AnnotationToAttribute('Doctrine\ORM\Mapping\ChangeTrackingPolicy'),
                 new AnnotationToAttribute(
-                    'Doctrine\ORM\Mapping\GeneratedValue',
-                    'Doctrine\ORM\Mapping\GeneratedValue'
-                ),
-                new AnnotationToAttribute('Doctrine\ORM\Mapping\Column', 'Doctrine\ORM\Mapping\Column'),
-                new AnnotationToAttribute(
-                    'Doctrine\ORM\Mapping\ChangeTrackingPolicy',
-                    'Doctrine\ORM\Mapping\ChangeTrackingPolicy'
-                ),
-                new AnnotationToAttribute(
-                    'Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter',
                     'Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter'
                 ),
-                new AnnotationToAttribute(
-                    'ApiPlatform\Core\Annotation\ApiResource',
-                    'ApiPlatform\Core\Annotation\ApiResource'
-                ),
+                new AnnotationToAttribute('ApiPlatform\Core\Annotation\ApiResource'),
             ]),
         ]]);
 };
