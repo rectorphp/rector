@@ -1,5 +1,6 @@
 <?php
 
+declare (strict_types=1);
 namespace Rector\FileFormatter\Contract\Formatter;
 
 use Rector\Core\ValueObject\Application\File;
