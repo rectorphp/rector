@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Rector\Tests\FileFormatter\ValueObject;
 
 use Generator;

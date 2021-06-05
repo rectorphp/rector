@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Rector\Autodiscovery\Rector\Class_\MoveServicesBySuffixToDirectoryRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 

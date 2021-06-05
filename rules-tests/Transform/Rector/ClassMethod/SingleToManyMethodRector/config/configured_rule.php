@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Rector\Tests\Transform\Rector\ClassMethod\SingleToManyMethodRector\Source\OneToManyInterface;
 use Rector\Transform\Rector\ClassMethod\SingleToManyMethodRector;
 use Rector\Transform\ValueObject\SingleToManyMethod;

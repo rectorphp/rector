@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Rector\RemovingStatic\Rector\Class_\PHPUnitStaticToKernelTestCaseGetRector;
 use Rector\Tests\RemovingStatic\Rector\Class_\PHPUnitStaticToKernelTestCaseGetRector\Source\ClassWithStaticMethods;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;

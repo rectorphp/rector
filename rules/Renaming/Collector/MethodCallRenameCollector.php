@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Rector\Renaming\Collector;
 
 use Rector\Renaming\Contract\MethodCallRenameInterface;

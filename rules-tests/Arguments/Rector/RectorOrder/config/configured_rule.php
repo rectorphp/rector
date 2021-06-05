@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Rector\PHPUnit\Rector\MethodCall\AssertComparisonToSpecificMethodRector;
 use Rector\PHPUnit\Rector\MethodCall\AssertFalseStrposToContainsRector;
 use Rector\PHPUnit\Rector\MethodCall\AssertSameBoolNullToSpecificMethodRector;

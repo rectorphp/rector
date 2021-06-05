@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Rector\DependencyInjection\Rector\ClassMethod\AddMethodParentCallRector;
 use Rector\Tests\DependencyInjection\Rector\ClassMethod\AddMethodParentCallRector\Source\ParentClassWithNewConstructor;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;

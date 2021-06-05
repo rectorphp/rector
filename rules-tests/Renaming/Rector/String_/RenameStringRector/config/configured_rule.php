@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Rector\Renaming\Rector\String_\RenameStringRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 

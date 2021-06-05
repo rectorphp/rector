@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
 use Rector\Tests\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector\Contract\ParentInterfaceWithChangeTypeInterface;

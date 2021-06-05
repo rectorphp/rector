@@ -8,6 +8,7 @@ use Rector\Compiler\PhpScoper\StaticEasyPrefixer;
 use Rector\Compiler\Unprefixer;
 use Rector\Compiler\ValueObject\ScoperOption;
 use Rector\Core\Application\VersionResolver;
+use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 
 require_once __DIR__ . '/vendor/autoload.php';
 
@@ -116,7 +117,8 @@ return [
         // unprefixed ContainerConfigurator
         function (string $filePath, string $prefix, string $content): string {
             // keep vendor prefixed the prefixed file loading; not part of public API
-            if (str_contains($filePath, 'vendor/symfony')) {
+            // except @see https://github.com/symfony/symfony/commit/460b46f7302ec7319b8334a43809523363bfef39#diff-1cd56b329433fc34d950d6eeab9600752aa84a76cbe0693d3fab57fed0f547d3R110
+            if (str_contains($filePath, 'vendor/symfony') && ! str_ends_with($filePath, 'vendor/symfony/dependency-injection/Loader/PhpFileLoader.php')) {
                 return $content;
             }
 

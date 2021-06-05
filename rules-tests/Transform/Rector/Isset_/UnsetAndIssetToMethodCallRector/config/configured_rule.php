@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Rector\Tests\Transform\Rector\Isset_\UnsetAndIssetToMethodCallRector\Source\LocalContainer;
 use Rector\Transform\Rector\Isset_\UnsetAndIssetToMethodCallRector;
 use Rector\Transform\ValueObject\UnsetAndIssetToMethodCall;

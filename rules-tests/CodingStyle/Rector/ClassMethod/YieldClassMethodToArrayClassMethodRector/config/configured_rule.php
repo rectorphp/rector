@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Rector\CodingStyle\Rector\ClassMethod\YieldClassMethodToArrayClassMethodRector;
 use Rector\Tests\CodingStyle\Rector\ClassMethod\YieldClassMethodToArrayClassMethodRector\Source\EventSubscriberInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;

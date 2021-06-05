@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Rector\Tests\Transform\Rector\New_\NewToMethodCallRector\Source\MyClass;
 use Rector\Tests\Transform\Rector\New_\NewToMethodCallRector\Source\MyClassFactory;
 use Rector\Transform\Rector\New_\NewToMethodCallRector;

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Rector\Core\ValueObject\Visibility;
 use Rector\Tests\Visibility\Rector\ClassMethod\ChangeMethodVisibilityRector\Source\ParentObject;
 use Rector\Visibility\Rector\ClassMethod\ChangeMethodVisibilityRector;

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Rector\Restoration\Rector\Namespace_\CompleteImportForPartialAnnotationRector;
 use Rector\Restoration\ValueObject\CompleteImportForPartialAnnotation;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Rector\Removing\Rector\ClassMethod\ArgumentRemoverRector;
 use Rector\Removing\ValueObject\ArgumentRemover;
 use Rector\Tests\Removing\Rector\ClassMethod\ArgumentRemoverRector\Source\Persister;

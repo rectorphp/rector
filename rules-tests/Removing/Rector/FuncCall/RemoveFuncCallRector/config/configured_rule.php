@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Rector\Removing\Rector\FuncCall\RemoveFuncCallRector;
 use Rector\Removing\ValueObject\RemoveFuncCall;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Rector\Defluent\Rector\ClassMethod\NormalToFluentRector;
 use Rector\Defluent\ValueObject\NormalToFluent;
 use Rector\Tests\Defluent\Rector\ClassMethod\NormalToFluentRector\Source\FluentInterfaceClass;

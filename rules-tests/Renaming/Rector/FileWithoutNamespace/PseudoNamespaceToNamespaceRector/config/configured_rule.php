@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Rector\Renaming\Rector\FileWithoutNamespace\PseudoNamespaceToNamespaceRector;
 use Rector\Renaming\ValueObject\PseudoNamespaceToNamespace;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;

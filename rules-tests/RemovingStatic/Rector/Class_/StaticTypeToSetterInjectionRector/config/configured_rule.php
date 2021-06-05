@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Rector\RemovingStatic\Rector\Class_\StaticTypeToSetterInjectionRector;
 use Rector\Tests\RemovingStatic\Rector\Class_\StaticTypeToSetterInjectionRector\Source\GenericEntityFactory;
 use Rector\Tests\RemovingStatic\Rector\Class_\StaticTypeToSetterInjectionRector\Source\GenericEntityFactoryWithInterface;

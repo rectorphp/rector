@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Rector\Tests\Transform\Rector\Expression\MethodCallToReturnRector\Source\ReturnDeny;
 use Rector\Transform\Rector\Expression\MethodCallToReturnRector;
 use Rector\Transform\ValueObject\MethodCallToReturn;

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Rector\Removing\Rector\Class_\RemoveTraitRector;
 use Rector\Tests\Removing\Rector\Class_\RemoveTraitRector\Source\TraitToBeRemoved;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;

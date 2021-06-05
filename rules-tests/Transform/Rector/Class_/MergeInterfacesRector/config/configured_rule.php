@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Rector\Tests\Transform\Rector\Class_\MergeInterfacesRector\Source\SomeInterface;
 use Rector\Tests\Transform\Rector\Class_\MergeInterfacesRector\Source\SomeOldInterface;
 use Rector\Transform\Rector\Class_\MergeInterfacesRector;
