@@ -174,15 +174,6 @@ class PhpFileLoader extends \RectorPrefix20210605\Symfony\Component\DependencyIn
     }
 }
 /**
- * PhpFileLoader loads service definitions from a PHP file.
- *
- * The PHP file is required and the $container variable can be
- * used within the file to change the container.
- *
- * @author Fabien Potencier <fabien@symfony.com>
- */
-\class_alias('RectorPrefix20210605\\Symfony\\Component\\DependencyInjection\\Loader\\PhpFileLoader', 'Symfony\\Component\\DependencyInjection\\Loader\\PhpFileLoader', \false);
-/**
  * @internal
  */
 final class ProtectedPhpFileLoader extends \RectorPrefix20210605\Symfony\Component\DependencyInjection\Loader\PhpFileLoader
