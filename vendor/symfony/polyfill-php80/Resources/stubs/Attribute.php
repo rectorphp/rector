@@ -25,4 +25,4 @@ final class Attribute
 /**
  * @Attribute
  */
-\class_alias('RectorPrefix20210604\\Attribute', 'Attribute', \false);
+\class_alias('RectorPrefix20210605\\Attribute', 'Attribute', \false);

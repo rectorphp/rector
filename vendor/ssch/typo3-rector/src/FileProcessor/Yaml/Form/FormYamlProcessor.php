@@ -3,12 +3,12 @@
 declare (strict_types=1);
 namespace Ssch\TYPO3Rector\FileProcessor\Yaml\Form;
 
-use RectorPrefix20210604\Nette\Utils\Strings;
+use RectorPrefix20210605\Nette\Utils\Strings;
 use Rector\Core\Contract\Processor\FileProcessorInterface;
 use Rector\Core\Provider\CurrentFileProvider;
 use Rector\Core\ValueObject\Application\File;
 use Ssch\TYPO3Rector\Contract\FileProcessor\Yaml\Form\FormYamlRectorInterface;
-use RectorPrefix20210604\Symfony\Component\Yaml\Yaml;
+use RectorPrefix20210605\Symfony\Component\Yaml\Yaml;
 /**
  * @see \Ssch\TYPO3Rector\Tests\FileProcessor\Yaml\Form\FormYamlProcessorTest
  */
@@ -50,7 +50,7 @@ final class FormYamlProcessor implements \Rector\Core\Contract\Processor\FilePro
     public function supports(\Rector\Core\ValueObject\Application\File $file) : bool
     {
         $smartFileInfo = $file->getSmartFileInfo();
-        return \RectorPrefix20210604\Nette\Utils\Strings::endsWith($smartFileInfo->getFilename(), 'form.yaml');
+        return \RectorPrefix20210605\Nette\Utils\Strings::endsWith($smartFileInfo->getFilename(), 'form.yaml');
     }
     public function getSupportedFileExtensions() : array
     {
@@ -60,7 +60,7 @@ final class FormYamlProcessor implements \Rector\Core\Contract\Processor\FilePro
     {
         $this->currentFileProvider->setFile($file);
         $smartFileInfo = $file->getSmartFileInfo();
-        $yaml = \RectorPrefix20210604\Symfony\Component\Yaml\Yaml::parseFile($smartFileInfo->getRealPath());
+        $yaml = \RectorPrefix20210605\Symfony\Component\Yaml\Yaml::parseFile($smartFileInfo->getRealPath());
         if (!\is_array($yaml)) {
             return;
         }
@@ -72,7 +72,7 @@ final class FormYamlProcessor implements \Rector\Core\Contract\Processor\FilePro
         if ($newYaml === $yaml) {
             return;
         }
-        $newFileContent = \RectorPrefix20210604\Symfony\Component\Yaml\Yaml::dump($newYaml, 99);
+        $newFileContent = \RectorPrefix20210605\Symfony\Component\Yaml\Yaml::dump($newYaml, 99);
         $file->changeFileContent($newFileContent);
     }
 }

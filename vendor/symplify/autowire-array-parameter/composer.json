@@ -6,19 +6,19 @@
         "php": ">=7.3",
         "nette\/utils": "^3.2",
         "symfony\/dependency-injection": "^5.2",
-        "symplify\/package-builder": "^9.3.15"
+        "symplify\/package-builder": "^9.3.19"
     },
     "require-dev": {
         "phpunit\/phpunit": "^9.5"
     },
     "autoload": {
         "psr-4": {
-            "RectorPrefix20210604\\Symplify\\AutowireArrayParameter\\": "src"
+            "RectorPrefix20210605\\Symplify\\AutowireArrayParameter\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "RectorPrefix20210604\\Symplify\\AutowireArrayParameter\\Tests\\": "tests"
+            "RectorPrefix20210605\\Symplify\\AutowireArrayParameter\\Tests\\": "tests"
         }
     },
     "extra": {
