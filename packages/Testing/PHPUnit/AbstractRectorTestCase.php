@@ -54,6 +54,10 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractTe
     {
         // speed up
         @\ini_set('memory_limit', '-1');
+        // include local files
+        if (\file_exists(__DIR__ . '/../../../preload.php')) {
+            require_once __DIR__ . '/../../../preload.php';
+        }
         $configFileInfo = new \Symplify\SmartFileSystem\SmartFileInfo($this->provideConfigFilePath());
         $this->bootFromConfigFileInfos([$configFileInfo]);
         $this->applicationFileProcessor = $this->getService(\Rector\Core\Application\ApplicationFileProcessor::class);
