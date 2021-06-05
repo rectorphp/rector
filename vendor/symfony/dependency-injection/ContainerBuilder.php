@@ -1428,3 +1428,9 @@ class ContainerBuilder extends \RectorPrefix20210605\Symfony\Component\Dependenc
         return \false;
     }
 }
+/**
+ * ContainerBuilder is a DI container that provides an API to easily describe services.
+ *
+ * @author Fabien Potencier <fabien@symfony.com>
+ */
+\class_alias('RectorPrefix20210605\\Symfony\\Component\\DependencyInjection\\ContainerBuilder', 'Symfony\\Component\\DependencyInjection\\ContainerBuilder', \false);
