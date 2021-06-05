@@ -21,8 +21,8 @@ if (!class_exists('SomeTestCase', false) && !interface_exists('SomeTestCase', fa
 if (!class_exists('CheckoutEntityFactory', false) && !interface_exists('CheckoutEntityFactory', false) && !trait_exists('CheckoutEntityFactory', false)) {
     spl_autoload_call('RectorPrefix20210605\CheckoutEntityFactory');
 }
-if (!class_exists('ComposerAutoloaderInit21046b3adb206010f6f8f39722ba4fcf', false) && !interface_exists('ComposerAutoloaderInit21046b3adb206010f6f8f39722ba4fcf', false) && !trait_exists('ComposerAutoloaderInit21046b3adb206010f6f8f39722ba4fcf', false)) {
-    spl_autoload_call('RectorPrefix20210605\ComposerAutoloaderInit21046b3adb206010f6f8f39722ba4fcf');
+if (!class_exists('ComposerAutoloaderInit35dfa157bd819b54530f41a03fe081eb', false) && !interface_exists('ComposerAutoloaderInit35dfa157bd819b54530f41a03fe081eb', false) && !trait_exists('ComposerAutoloaderInit35dfa157bd819b54530f41a03fe081eb', false)) {
+    spl_autoload_call('RectorPrefix20210605\ComposerAutoloaderInit35dfa157bd819b54530f41a03fe081eb');
 }
 if (!class_exists('Doctrine\Inflector\Inflector', false) && !interface_exists('Doctrine\Inflector\Inflector', false) && !trait_exists('Doctrine\Inflector\Inflector', false)) {
     spl_autoload_call('RectorPrefix20210605\Doctrine\Inflector\Inflector');
@@ -3264,6 +3264,9 @@ if (!class_exists('Symfony\Component\DependencyInjection\ContainerBuilder', fals
 if (!class_exists('Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator', false) && !interface_exists('Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator', false) && !trait_exists('Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator', false)) {
     spl_autoload_call('RectorPrefix20210605\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator');
 }
+if (!class_exists('Symfony\Component\DependencyInjection\Loader\PhpFileLoader', false) && !interface_exists('Symfony\Component\DependencyInjection\Loader\PhpFileLoader', false) && !trait_exists('Symfony\Component\DependencyInjection\Loader\PhpFileLoader', false)) {
+    spl_autoload_call('RectorPrefix20210605\Symfony\Component\DependencyInjection\Loader\PhpFileLoader');
+}
 if (!class_exists('Normalizer', false) && !interface_exists('Normalizer', false) && !trait_exists('Normalizer', false)) {
     spl_autoload_call('RectorPrefix20210605\Normalizer');
 }
@@ -3326,9 +3329,9 @@ if (!function_exists('print_node')) {
         return \RectorPrefix20210605\print_node(...func_get_args());
     }
 }
-if (!function_exists('composerRequire21046b3adb206010f6f8f39722ba4fcf')) {
-    function composerRequire21046b3adb206010f6f8f39722ba4fcf() {
-        return \RectorPrefix20210605\composerRequire21046b3adb206010f6f8f39722ba4fcf(...func_get_args());
+if (!function_exists('composerRequire35dfa157bd819b54530f41a03fe081eb')) {
+    function composerRequire35dfa157bd819b54530f41a03fe081eb() {
+        return \RectorPrefix20210605\composerRequire35dfa157bd819b54530f41a03fe081eb(...func_get_args());
     }
 }
 if (!function_exists('parseArgs')) {
