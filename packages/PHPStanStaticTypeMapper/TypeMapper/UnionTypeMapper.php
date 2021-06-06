@@ -219,6 +219,7 @@ final class UnionTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\
             }
             $phpParserUnionedTypes[] = $phpParserNode;
         }
+        $phpParserUnionedTypes = \array_unique($phpParserUnionedTypes);
         return new \PhpParser\Node\UnionType($phpParserUnionedTypes);
     }
     private function resolveCompatibleObjectCandidate(\PHPStan\Type\UnionType $unionType) : ?\PHPStan\Type\TypeWithClassName
