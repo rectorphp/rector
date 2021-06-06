@@ -2,9 +2,9 @@
 
 namespace Rector\NetteToSymfony\Tests\Rector\Class_\FormControlToControllerAndFormTypeRector\Fixture;
 
-class SomeFormController extends \RectorPrefix20210605\Symfony\Bundle\FrameworkBundle\Controller\AbstractController
+class SomeFormController extends \RectorPrefix20210606\Symfony\Bundle\FrameworkBundle\Controller\AbstractController
 {
-    public function actionSomeForm(\RectorPrefix20210605\Symfony\Component\HttpFoundation\Request $request) : \RectorPrefix20210605\Symfony\Component\HttpFoundation\Response
+    public function actionSomeForm(\RectorPrefix20210606\Symfony\Component\HttpFoundation\Request $request) : \RectorPrefix20210606\Symfony\Component\HttpFoundation\Response
     {
         $form = $this->createForm(\Rector\NetteToSymfony\Tests\Rector\Class_\FormControlToControllerAndFormTypeRector\Fixture\SomeFormType::class);
         $form->handleRequest($request);

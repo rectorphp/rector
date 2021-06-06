@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210605\Symfony\Component\Config;
+namespace RectorPrefix20210606\Symfony\Component\Config;
 
-use RectorPrefix20210605\Symfony\Component\Config\Exception\FileLocatorFileNotFoundException;
+use RectorPrefix20210606\Symfony\Component\Config\Exception\FileLocatorFileNotFoundException;
 /**
  * @author Fabien Potencier <fabien@symfony.com>
  */

@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210605;
+namespace RectorPrefix20210606;
 
 if (\class_exists('tx_form_Domain_Factory_TyposcriptToJson')) {
     return;

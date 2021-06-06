@@ -1,16 +1,16 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210605\Helmich\TypoScriptParser\Parser\Traverser;
+namespace RectorPrefix20210606\Helmich\TypoScriptParser\Parser\Traverser;
 
-use RectorPrefix20210605\Helmich\TypoScriptParser\Parser\AST\Statement;
+use RectorPrefix20210606\Helmich\TypoScriptParser\Parser\AST\Statement;
 /**
  * Class AggregatingVisitor
  *
  * @package    Helmich\TypoScriptParser
  * @subpackage Parser\Traverser
  */
-class AggregatingVisitor implements \RectorPrefix20210605\Helmich\TypoScriptParser\Parser\Traverser\Visitor
+class AggregatingVisitor implements \RectorPrefix20210606\Helmich\TypoScriptParser\Parser\Traverser\Visitor
 {
     /** @var Visitor[] */
     private $visitors = [];
@@ -18,7 +18,7 @@ class AggregatingVisitor implements \RectorPrefix20210605\Helmich\TypoScriptPars
      * @param Visitor $visitor
      * @return void
      */
-    public function addVisitor(\RectorPrefix20210605\Helmich\TypoScriptParser\Parser\Traverser\Visitor $visitor) : void
+    public function addVisitor(\RectorPrefix20210606\Helmich\TypoScriptParser\Parser\Traverser\Visitor $visitor) : void
     {
         $this->visitors[\spl_object_hash($visitor)] = $visitor;
     }
@@ -36,7 +36,7 @@ class AggregatingVisitor implements \RectorPrefix20210605\Helmich\TypoScriptPars
      * @param Statement $statement
      * @return void
      */
-    public function enterNode(\RectorPrefix20210605\Helmich\TypoScriptParser\Parser\AST\Statement $statement) : void
+    public function enterNode(\RectorPrefix20210606\Helmich\TypoScriptParser\Parser\AST\Statement $statement) : void
     {
         foreach ($this->visitors as $visitor) {
             $visitor->enterNode($statement);
@@ -46,7 +46,7 @@ class AggregatingVisitor implements \RectorPrefix20210605\Helmich\TypoScriptPars
      * @param Statement $statement
      * @return void
      */
-    public function exitNode(\RectorPrefix20210605\Helmich\TypoScriptParser\Parser\AST\Statement $statement) : void
+    public function exitNode(\RectorPrefix20210606\Helmich\TypoScriptParser\Parser\AST\Statement $statement) : void
     {
         foreach ($this->visitors as $visitor) {
             $visitor->exitNode($statement);

@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210605\Symfony\Component\HttpKernel;
+namespace RectorPrefix20210606\Symfony\Component\HttpKernel;
 
-use RectorPrefix20210605\Symfony\Component\HttpFoundation\Request;
-use RectorPrefix20210605\Symfony\Component\HttpFoundation\Response;
+use RectorPrefix20210606\Symfony\Component\HttpFoundation\Request;
+use RectorPrefix20210606\Symfony\Component\HttpFoundation\Response;
 /**
  * HttpKernelInterface handles a Request to convert it to a Response.
  *
@@ -40,5 +40,5 @@ interface HttpKernelInterface
      *
      * @throws \Exception When an Exception occurs during processing
      */
-    public function handle(\RectorPrefix20210605\Symfony\Component\HttpFoundation\Request $request, int $type = self::MAIN_REQUEST, bool $catch = \true);
+    public function handle(\RectorPrefix20210606\Symfony\Component\HttpFoundation\Request $request, int $type = self::MAIN_REQUEST, bool $catch = \true);
 }

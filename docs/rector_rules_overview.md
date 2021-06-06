@@ -1,4 +1,4 @@
-# 496 Rules Overview
+# 500 Rules Overview
 
 <br>
 
@@ -32,11 +32,11 @@
 
 - [DowngradePhp72](#downgradephp72) (4)
 
-- [DowngradePhp73](#downgradephp73) (5)
+- [DowngradePhp73](#downgradephp73) (6)
 
 - [DowngradePhp74](#downgradephp74) (11)
 
-- [DowngradePhp80](#downgradephp80) (12)
+- [DowngradePhp80](#downgradephp80) (15)
 
 - [EarlyReturn](#earlyreturn) (11)
 
@@ -2224,7 +2224,7 @@ Make method visibility same as parent one
 
 ### ManualJsonStringToJsonEncodeArrayRector
 
-Add extra space before new assign set
+Convert manual JSON string to JSON::encode array
 
 - class: [`Rector\CodingStyle\Rector\Assign\ManualJsonStringToJsonEncodeArrayRector`](../rules/CodingStyle/Rector/Assign/ManualJsonStringToJsonEncodeArrayRector.php)
 
@@ -4811,7 +4811,7 @@ Downgrade `array_key_first()` and `array_key_last()` functions
 
 ### DowngradeFlexibleHeredocSyntaxRector
 
-Changes heredoc/nowdoc that contains closing word to safe wrapper name
+Remove indentation from heredoc/nowdoc
 
 - class: [`Rector\DowngradePhp73\Rector\String_\DowngradeFlexibleHeredocSyntaxRector`](../rules/DowngradePhp73/Rector/String_/DowngradeFlexibleHeredocSyntaxRector.php)
 
@@ -4825,6 +4825,20 @@ Changes heredoc/nowdoc that contains closing word to safe wrapper name
 +FROM `table`
 +WHERE `column` = true;
 +SQL;
+```
+
+<br>
+
+### DowngradeIsCountableRector
+
+Downgrade `is_countable()` to former version
+
+- class: [`Rector\DowngradePhp73\Rector\FuncCall\DowngradeIsCountableRector`](../rules/DowngradePhp73/Rector/FuncCall/DowngradeIsCountableRector.php)
+
+```diff
+ $items = [];
+-return is_countable($items);
++return is_array($items) || $items instanceof Countable;
 ```
 
 <br>
@@ -5272,6 +5286,29 @@ Remove the "mixed" param and return type, add a `@param` and `@return` tag inste
 
 <br>
 
+### DowngradeNamedArgumentRector
+
+Remove named argument
+
+- class: [`Rector\DowngradePhp80\Rector\MethodCall\DowngradeNamedArgumentRector`](../rules/DowngradePhp80/Rector/MethodCall/DowngradeNamedArgumentRector.php)
+
+```diff
+ class SomeClass
+ {
+     private function execute(?array $a = null, ?array $b = null)
+     {
+     }
+
+     public function run(string $name = null, array $attributes = [])
+     {
+-        $this->execute(a: [[$name ?? 0 => $attributes]]);
++        $this->execute([[$name ?? 0 => $attributes]]);
+     }
+ }
+```
+
+<br>
+
 ### DowngradeNonCapturingCatchesRector
 
 Downgrade catch () without variable to one
@@ -5368,6 +5405,32 @@ Replace `str_contains()` with `strpos()` !== false
 +        return strpos('abc', 'a') !== false;
      }
  }
+```
+
+<br>
+
+### DowngradeStrEndsWithRector
+
+Downgrade `str_ends_with()` to `strncmp()` version
+
+- class: [`Rector\DowngradePhp80\Rector\FuncCall\DowngradeStrEndsWithRector`](../rules/DowngradePhp80/Rector/FuncCall/DowngradeStrEndsWithRector.php)
+
+```diff
+-str_ends_with($haystack, $needle);
++"" === $needle || ("" !== $haystack && 0 === substr_compare($haystack, $needle, -\strlen($needle)));
+```
+
+<br>
+
+### DowngradeStrStartsWithRector
+
+Downgrade `str_starts_with()` to `strncmp()` version
+
+- class: [`Rector\DowngradePhp80\Rector\FuncCall\DowngradeStrStartsWithRector`](../rules/DowngradePhp80/Rector/FuncCall/DowngradeStrStartsWithRector.php)
+
+```diff
+-str_starts_with($haystack, $needle);
++strncmp($haystack, $needle, strlen($needle)) === 0;
 ```
 
 <br>
@@ -5566,7 +5629,7 @@ Change nested ifs to early return
 
 ### ChangeOrIfContinueToMultiContinueRector
 
-Changes if && to early return
+Changes if || to early return
 
 - class: [`Rector\EarlyReturn\Rector\If_\ChangeOrIfContinueToMultiContinueRector`](../rules/EarlyReturn/Rector/If_/ChangeOrIfContinueToMultiContinueRector.php)
 
@@ -6040,7 +6103,7 @@ Renames value variable name in foreach loop to match method type
 
 ### RenameParamToMatchTypeRector
 
-Rename variable to match new ClassType
+Rename param to match ClassType
 
 - class: [`Rector\Naming\Rector\ClassMethod\RenameParamToMatchTypeRector`](../rules/Naming/Rector/ClassMethod/RenameParamToMatchTypeRector.php)
 
@@ -6623,7 +6686,7 @@ Use break instead of continue in switch statements
 
 ### VarToPublicPropertyRector
 
-Remove unused private method
+Change property modifier from `var` to `public`
 
 - class: [`Rector\Php52\Rector\Property\VarToPublicPropertyRector`](../rules/Php52/Rector/Property/VarToPublicPropertyRector.php)
 
@@ -6935,7 +6998,7 @@ Changes ereg*() to preg*() calls
 
 ### ExceptionHandlerTypehintRector
 
-Changes property `@var` annotations from annotation to type.
+Change typehint from `Exception` to `Throwable`.
 
 - class: [`Rector\Php70\Rector\FunctionLike\ExceptionHandlerTypehintRector`](../rules/Php70/Rector/FunctionLike/ExceptionHandlerTypehintRector.php)
 
@@ -8043,10 +8106,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(AnnotationToAttributeRector::class)
         ->call('configure', [[
             AnnotationToAttributeRector::ANNOTATION_TO_ATTRIBUTE => ValueObjectInliner::inline([
-                new AnnotationToAttribute(
-                    'Symfony\Component\Routing\Annotation\Route',
-                    'Symfony\Component\Routing\Annotation\Route'
-                ),
+                new AnnotationToAttribute('Symfony\Component\Routing\Annotation\Route', null),
             ]),
         ]]);
 };
@@ -8150,7 +8210,25 @@ Change simple property init and assign to constructor promotion
 
 Refactor Doctrine `@annotation` annotated class to a PHP 8.0 attribute class
 
+:wrench: **configure it!**
+
 - class: [`Rector\Php80\Rector\Class_\DoctrineAnnotationClassToAttributeRector`](../rules/Php80/Rector/Class_/DoctrineAnnotationClassToAttributeRector.php)
+
+```php
+use Rector\Php80\Rector\Class_\DoctrineAnnotationClassToAttributeRector;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+
+    $services->set(DoctrineAnnotationClassToAttributeRector::class)
+        ->call('configure', [[
+            DoctrineAnnotationClassToAttributeRector::REMOVE_ANNOTATIONS => true,
+        ]]);
+};
+```
+
+↓
 
 ```diff
 -use Doctrine\Common\Annotations\Annotation\Target;
@@ -8368,7 +8446,7 @@ Add `Stringable` interface to classes with `__toString()` method
 
 ### TokenGetAllToObjectRector
 
-Complete missing constructor dependency instance by type
+Convert `token_get_all` to `PhpToken::getAll`
 
 - class: [`Rector\Php80\Rector\FuncCall\TokenGetAllToObjectRector`](../rules/Php80/Rector/FuncCall/TokenGetAllToObjectRector.php)
 
@@ -12257,7 +12335,7 @@ Change `@return` types and type from static analysis to type declarations if not
 
 ### ReturnTypeFromReturnNewRector
 
-Add return type void to function like without any return
+Add return type to function like with return new
 
 - class: [`Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromReturnNewRector`](../rules/TypeDeclaration/Rector/ClassMethod/ReturnTypeFromReturnNewRector.php)
 

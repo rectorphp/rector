@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210605;
+namespace RectorPrefix20210606;
 
 if (\class_exists('t3lib_tree_pagetree_extdirect_Commands')) {
     return;

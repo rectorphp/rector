@@ -8,26 +8,26 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210605\Symfony\Component\HttpKernel\DataCollector;
+namespace RectorPrefix20210606\Symfony\Component\HttpKernel\DataCollector;
 
-use RectorPrefix20210605\Symfony\Component\HttpFoundation\Request;
-use RectorPrefix20210605\Symfony\Component\HttpFoundation\RequestStack;
-use RectorPrefix20210605\Symfony\Component\HttpFoundation\Response;
-use RectorPrefix20210605\Symfony\Component\HttpKernel\Debug\FileLinkFormatter;
-use RectorPrefix20210605\Symfony\Component\Stopwatch\Stopwatch;
-use RectorPrefix20210605\Symfony\Component\VarDumper\Cloner\Data;
-use RectorPrefix20210605\Symfony\Component\VarDumper\Cloner\VarCloner;
-use RectorPrefix20210605\Symfony\Component\VarDumper\Dumper\CliDumper;
-use RectorPrefix20210605\Symfony\Component\VarDumper\Dumper\ContextProvider\SourceContextProvider;
-use RectorPrefix20210605\Symfony\Component\VarDumper\Dumper\DataDumperInterface;
-use RectorPrefix20210605\Symfony\Component\VarDumper\Dumper\HtmlDumper;
-use RectorPrefix20210605\Symfony\Component\VarDumper\Server\Connection;
+use RectorPrefix20210606\Symfony\Component\HttpFoundation\Request;
+use RectorPrefix20210606\Symfony\Component\HttpFoundation\RequestStack;
+use RectorPrefix20210606\Symfony\Component\HttpFoundation\Response;
+use RectorPrefix20210606\Symfony\Component\HttpKernel\Debug\FileLinkFormatter;
+use RectorPrefix20210606\Symfony\Component\Stopwatch\Stopwatch;
+use RectorPrefix20210606\Symfony\Component\VarDumper\Cloner\Data;
+use RectorPrefix20210606\Symfony\Component\VarDumper\Cloner\VarCloner;
+use RectorPrefix20210606\Symfony\Component\VarDumper\Dumper\CliDumper;
+use RectorPrefix20210606\Symfony\Component\VarDumper\Dumper\ContextProvider\SourceContextProvider;
+use RectorPrefix20210606\Symfony\Component\VarDumper\Dumper\DataDumperInterface;
+use RectorPrefix20210606\Symfony\Component\VarDumper\Dumper\HtmlDumper;
+use RectorPrefix20210606\Symfony\Component\VarDumper\Server\Connection;
 /**
  * @author Nicolas Grekas <p@tchwork.com>
  *
  * @final
  */
-class DumpDataCollector extends \RectorPrefix20210605\Symfony\Component\HttpKernel\DataCollector\DataCollector implements \RectorPrefix20210605\Symfony\Component\VarDumper\Dumper\DataDumperInterface
+class DumpDataCollector extends \RectorPrefix20210606\Symfony\Component\HttpKernel\DataCollector\DataCollector implements \RectorPrefix20210606\Symfony\Component\VarDumper\Dumper\DataDumperInterface
 {
     private $stopwatch;
     private $fileLinkFormat;
@@ -44,7 +44,7 @@ class DumpDataCollector extends \RectorPrefix20210605\Symfony\Component\HttpKern
      * @param string|FileLinkFormatter|null       $fileLinkFormat
      * @param DataDumperInterface|Connection|null $dumper
      */
-    public function __construct(\RectorPrefix20210605\Symfony\Component\Stopwatch\Stopwatch $stopwatch = null, $fileLinkFormat = null, string $charset = null, \RectorPrefix20210605\Symfony\Component\HttpFoundation\RequestStack $requestStack = null, $dumper = null)
+    public function __construct(\RectorPrefix20210606\Symfony\Component\Stopwatch\Stopwatch $stopwatch = null, $fileLinkFormat = null, string $charset = null, \RectorPrefix20210606\Symfony\Component\HttpFoundation\RequestStack $requestStack = null, $dumper = null)
     {
         $this->stopwatch = $stopwatch;
         $this->fileLinkFormat = ($fileLinkFormat ?: \ini_get('xdebug.file_link_format')) ?: \get_cfg_var('xdebug.file_link_format');
@@ -53,19 +53,19 @@ class DumpDataCollector extends \RectorPrefix20210605\Symfony\Component\HttpKern
         $this->dumper = $dumper;
         // All clones share these properties by reference:
         $this->rootRefs = [&$this->data, &$this->dataCount, &$this->isCollected, &$this->clonesCount];
-        $this->sourceContextProvider = $dumper instanceof \RectorPrefix20210605\Symfony\Component\VarDumper\Server\Connection && isset($dumper->getContextProviders()['source']) ? $dumper->getContextProviders()['source'] : new \RectorPrefix20210605\Symfony\Component\VarDumper\Dumper\ContextProvider\SourceContextProvider($this->charset);
+        $this->sourceContextProvider = $dumper instanceof \RectorPrefix20210606\Symfony\Component\VarDumper\Server\Connection && isset($dumper->getContextProviders()['source']) ? $dumper->getContextProviders()['source'] : new \RectorPrefix20210606\Symfony\Component\VarDumper\Dumper\ContextProvider\SourceContextProvider($this->charset);
     }
     public function __clone()
     {
         $this->clonesIndex = ++$this->clonesCount;
     }
-    public function dump(\RectorPrefix20210605\Symfony\Component\VarDumper\Cloner\Data $data)
+    public function dump(\RectorPrefix20210606\Symfony\Component\VarDumper\Cloner\Data $data)
     {
         if ($this->stopwatch) {
             $this->stopwatch->start('dump');
         }
         ['name' => $name, 'file' => $file, 'line' => $line, 'file_excerpt' => $fileExcerpt] = $this->sourceContextProvider->getContext();
-        if ($this->dumper instanceof \RectorPrefix20210605\Symfony\Component\VarDumper\Server\Connection) {
+        if ($this->dumper instanceof \RectorPrefix20210606\Symfony\Component\VarDumper\Server\Connection) {
             if (!$this->dumper->write($data)) {
                 $this->isCollected = \false;
             }
@@ -83,7 +83,7 @@ class DumpDataCollector extends \RectorPrefix20210605\Symfony\Component\HttpKern
             $this->stopwatch->stop('dump');
         }
     }
-    public function collect(\RectorPrefix20210605\Symfony\Component\HttpFoundation\Request $request, \RectorPrefix20210605\Symfony\Component\HttpFoundation\Response $response, \Throwable $exception = null)
+    public function collect(\RectorPrefix20210606\Symfony\Component\HttpFoundation\Request $request, \RectorPrefix20210606\Symfony\Component\HttpFoundation\Response $response, \Throwable $exception = null)
     {
         if (!$this->dataCount) {
             $this->data = [];
@@ -95,10 +95,10 @@ class DumpDataCollector extends \RectorPrefix20210605\Symfony\Component\HttpKern
         // In all other conditions that remove the web debug toolbar, dumps are written on the output.
         if (!$this->requestStack || !$response->headers->has('X-Debug-Token') || $response->isRedirection() || $response->headers->has('Content-Type') && \false === \strpos($response->headers->get('Content-Type'), 'html') || 'html' !== $request->getRequestFormat() || \false === \strripos($response->getContent(), '</body>')) {
             if ($response->headers->has('Content-Type') && \false !== \strpos($response->headers->get('Content-Type'), 'html')) {
-                $dumper = new \RectorPrefix20210605\Symfony\Component\VarDumper\Dumper\HtmlDumper('php://output', $this->charset);
+                $dumper = new \RectorPrefix20210606\Symfony\Component\VarDumper\Dumper\HtmlDumper('php://output', $this->charset);
                 $dumper->setDisplayOptions(['fileLinkFormat' => $this->fileLinkFormat]);
             } else {
-                $dumper = new \RectorPrefix20210605\Symfony\Component\VarDumper\Dumper\CliDumper('php://output', $this->charset);
+                $dumper = new \RectorPrefix20210606\Symfony\Component\VarDumper\Dumper\CliDumper('php://output', $this->charset);
                 if (\method_exists($dumper, 'setDisplayOptions')) {
                     $dumper->setDisplayOptions(['fileLinkFormat' => $this->fileLinkFormat]);
                 }
@@ -150,7 +150,7 @@ class DumpDataCollector extends \RectorPrefix20210605\Symfony\Component\HttpKern
                 throw new \BadMethodCallException('Cannot unserialize ' . __CLASS__);
             }
         }
-        self::__construct($this->stopwatch, \is_string($fileLinkFormat) || $fileLinkFormat instanceof \RectorPrefix20210605\Symfony\Component\HttpKernel\Debug\FileLinkFormatter ? $fileLinkFormat : null, \is_string($charset) ? $charset : null);
+        self::__construct($this->stopwatch, \is_string($fileLinkFormat) || $fileLinkFormat instanceof \RectorPrefix20210606\Symfony\Component\HttpKernel\Debug\FileLinkFormatter ? $fileLinkFormat : null, \is_string($charset) ? $charset : null);
     }
     public function getDumpsCount() : int
     {
@@ -160,7 +160,7 @@ class DumpDataCollector extends \RectorPrefix20210605\Symfony\Component\HttpKern
     {
         $data = \fopen('php://memory', 'r+');
         if ('html' === $format) {
-            $dumper = new \RectorPrefix20210605\Symfony\Component\VarDumper\Dumper\HtmlDumper($data, $this->charset);
+            $dumper = new \RectorPrefix20210606\Symfony\Component\VarDumper\Dumper\HtmlDumper($data, $this->charset);
             $dumper->setDisplayOptions(['fileLinkFormat' => $this->fileLinkFormat]);
         } else {
             throw new \InvalidArgumentException(\sprintf('Invalid dump format: "%s".', $format));
@@ -194,10 +194,10 @@ class DumpDataCollector extends \RectorPrefix20210605\Symfony\Component\HttpKern
                 --$i;
             }
             if (!\in_array(\PHP_SAPI, ['cli', 'phpdbg'], \true) && \stripos($h[$i], 'html')) {
-                $dumper = new \RectorPrefix20210605\Symfony\Component\VarDumper\Dumper\HtmlDumper('php://output', $this->charset);
+                $dumper = new \RectorPrefix20210606\Symfony\Component\VarDumper\Dumper\HtmlDumper('php://output', $this->charset);
                 $dumper->setDisplayOptions(['fileLinkFormat' => $this->fileLinkFormat]);
             } else {
-                $dumper = new \RectorPrefix20210605\Symfony\Component\VarDumper\Dumper\CliDumper('php://output', $this->charset);
+                $dumper = new \RectorPrefix20210606\Symfony\Component\VarDumper\Dumper\CliDumper('php://output', $this->charset);
                 if (\method_exists($dumper, 'setDisplayOptions')) {
                     $dumper->setDisplayOptions(['fileLinkFormat' => $this->fileLinkFormat]);
                 }
@@ -210,11 +210,11 @@ class DumpDataCollector extends \RectorPrefix20210605\Symfony\Component\HttpKern
             $this->dataCount = 0;
         }
     }
-    private function doDump(\RectorPrefix20210605\Symfony\Component\VarDumper\Dumper\DataDumperInterface $dumper, \RectorPrefix20210605\Symfony\Component\VarDumper\Cloner\Data $data, string $name, string $file, int $line)
+    private function doDump(\RectorPrefix20210606\Symfony\Component\VarDumper\Dumper\DataDumperInterface $dumper, \RectorPrefix20210606\Symfony\Component\VarDumper\Cloner\Data $data, string $name, string $file, int $line)
     {
-        if ($dumper instanceof \RectorPrefix20210605\Symfony\Component\VarDumper\Dumper\CliDumper) {
+        if ($dumper instanceof \RectorPrefix20210606\Symfony\Component\VarDumper\Dumper\CliDumper) {
             $contextDumper = function ($name, $file, $line, $fmt) {
-                if ($this instanceof \RectorPrefix20210605\Symfony\Component\VarDumper\Dumper\HtmlDumper) {
+                if ($this instanceof \RectorPrefix20210606\Symfony\Component\VarDumper\Dumper\HtmlDumper) {
                     if ($file) {
                         $s = $this->style('meta', '%s');
                         $f = \strip_tags($this->style('', $file));
@@ -236,7 +236,7 @@ class DumpDataCollector extends \RectorPrefix20210605\Symfony\Component\HttpKern
             $contextDumper = $contextDumper->bindTo($dumper, $dumper);
             $contextDumper($name, $file, $line, $this->fileLinkFormat);
         } else {
-            $cloner = new \RectorPrefix20210605\Symfony\Component\VarDumper\Cloner\VarCloner();
+            $cloner = new \RectorPrefix20210606\Symfony\Component\VarDumper\Cloner\VarCloner();
             $dumper->dump($cloner->cloneVar($name . ' on line ' . $line . ':'));
         }
         $dumper->dump($data);

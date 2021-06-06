@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210605\Symfony\Component\Translation;
+namespace RectorPrefix20210606\Symfony\Component\Translation;
 
 if (\interface_exists('Symfony\\Component\\Translation\\TranslatorInterface')) {
     return;

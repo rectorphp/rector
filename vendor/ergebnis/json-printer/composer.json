@@ -44,12 +44,12 @@
     },
     "autoload": {
         "psr-4": {
-            "RectorPrefix20210605\\Ergebnis\\Json\\Printer\\": "src\/"
+            "RectorPrefix20210606\\Ergebnis\\Json\\Printer\\": "src\/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "RectorPrefix20210605\\Ergebnis\\Json\\Printer\\Test\\": "test\/"
+            "RectorPrefix20210606\\Ergebnis\\Json\\Printer\\Test\\": "test\/"
         }
     },
     "support": {

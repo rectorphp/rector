@@ -8,19 +8,19 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210605\Symfony\Component\HttpKernel\Config;
+namespace RectorPrefix20210606\Symfony\Component\HttpKernel\Config;
 
-use RectorPrefix20210605\Symfony\Component\Config\FileLocator as BaseFileLocator;
-use RectorPrefix20210605\Symfony\Component\HttpKernel\KernelInterface;
+use RectorPrefix20210606\Symfony\Component\Config\FileLocator as BaseFileLocator;
+use RectorPrefix20210606\Symfony\Component\HttpKernel\KernelInterface;
 /**
  * FileLocator uses the KernelInterface to locate resources in bundles.
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class FileLocator extends \RectorPrefix20210605\Symfony\Component\Config\FileLocator
+class FileLocator extends \RectorPrefix20210606\Symfony\Component\Config\FileLocator
 {
     private $kernel;
-    public function __construct(\RectorPrefix20210605\Symfony\Component\HttpKernel\KernelInterface $kernel)
+    public function __construct(\RectorPrefix20210606\Symfony\Component\HttpKernel\KernelInterface $kernel)
     {
         $this->kernel = $kernel;
         parent::__construct();
