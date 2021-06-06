@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Naming\Rector\Class_;
 
 use PhpParser\Node;
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -134,7 +135,8 @@ CODE_SAMPLE
             return;
         }
 
-        foreach ($constructClassMethod->params as $param) {
+        $desiredPropertyNames = [];
+        foreach ($constructClassMethod->params as $key => $param) {
             if ($param->flags === 0) {
                 continue;
             }
@@ -145,10 +147,30 @@ CODE_SAMPLE
                 continue;
             }
 
-            $currentName = $this->getName($param);
-            $this->propertyFetchRenamer->renamePropertyFetchesInClass($classLike, $currentName, $desiredPropertyName);
+            if (in_array($desiredPropertyName, $desiredPropertyNames, true)) {
+                return;
+            }
 
-            $param->var->name = $desiredPropertyName;
+            $desiredPropertyNames[$key] = $desiredPropertyName;
+        }
+
+        $this->renameParamVarName($classLike, $constructClassMethod->params, $desiredPropertyNames);
+    }
+
+    /**
+     * @param Param[] $params
+     * @param string[] $desiredPropertyNames
+     */
+    private function renameParamVarName(ClassLike $classLike, array $params, array $desiredPropertyNames): void
+    {
+        $keys = array_keys($desiredPropertyNames);
+        foreach ($params as $key => $param) {
+            if (in_array($key, $keys, true)) {
+                $currentName = $this->getName($param);
+                $desiredPropertyName = $desiredPropertyNames[$key];
+                $this->propertyFetchRenamer->renamePropertyFetchesInClass($classLike, $currentName, $desiredPropertyName);
+                $param->var->name = $desiredPropertyName;
+            }
         }
     }
 }
