@@ -11,19 +11,19 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
     $services = $containerConfigurator->services();
     $services->set(\Rector\Renaming\Rector\MethodCall\RenameMethodRector::class)->call('configure', [[\Rector\Renaming\Rector\MethodCall\RenameMethodRector::METHOD_CALL_RENAMES => \Symplify\SymfonyPhpConfig\ValueObjectInliner::inline([
         // Rename is now move, specific for files.
-        new \Rector\Renaming\ValueObject\MethodCallRename('League\\Flysystem\\Filesystem', 'rename', 'move'),
+        new \Rector\Renaming\ValueObject\MethodCallRename('League\\Flysystem\\FilesystemInterface', 'rename', 'move'),
         // No arbitrary abbreviations
-        new \Rector\Renaming\ValueObject\MethodCallRename('League\\Flysystem\\Filesystem', 'createDir', 'createDirectory'),
+        new \Rector\Renaming\ValueObject\MethodCallRename('League\\Flysystem\\FilesystemInterface', 'createDir', 'createDirectory'),
         // Writes are now deterministic
-        new \Rector\Renaming\ValueObject\MethodCallRename('League\\Flysystem\\Filesystem', 'update', 'write'),
-        new \Rector\Renaming\ValueObject\MethodCallRename('League\\Flysystem\\Filesystem', 'updateStream', 'writeStream'),
-        new \Rector\Renaming\ValueObject\MethodCallRename('League\\Flysystem\\Filesystem', 'put', 'write'),
-        new \Rector\Renaming\ValueObject\MethodCallRename('League\\Flysystem\\Filesystem', 'putStream', 'writeStream'),
+        new \Rector\Renaming\ValueObject\MethodCallRename('League\\Flysystem\\FilesystemInterface', 'update', 'write'),
+        new \Rector\Renaming\ValueObject\MethodCallRename('League\\Flysystem\\FilesystemInterface', 'updateStream', 'writeStream'),
+        new \Rector\Renaming\ValueObject\MethodCallRename('League\\Flysystem\\FilesystemInterface', 'put', 'write'),
+        new \Rector\Renaming\ValueObject\MethodCallRename('League\\Flysystem\\FilesystemInterface', 'putStream', 'writeStream'),
         // Metadata getters are renamed
-        new \Rector\Renaming\ValueObject\MethodCallRename('League\\Flysystem\\Filesystem', 'getTimestamp', 'lastModified'),
-        new \Rector\Renaming\ValueObject\MethodCallRename('League\\Flysystem\\Filesystem', 'has', 'fileExists'),
-        new \Rector\Renaming\ValueObject\MethodCallRename('League\\Flysystem\\Filesystem', 'getMimetype', 'mimeType'),
-        new \Rector\Renaming\ValueObject\MethodCallRename('League\\Flysystem\\Filesystem', 'getSize', 'fileSize'),
-        new \Rector\Renaming\ValueObject\MethodCallRename('League\\Flysystem\\Filesystem', 'getVisibility', 'visibility'),
+        new \Rector\Renaming\ValueObject\MethodCallRename('League\\Flysystem\\FilesystemInterface', 'getTimestamp', 'lastModified'),
+        new \Rector\Renaming\ValueObject\MethodCallRename('League\\Flysystem\\FilesystemInterface', 'has', 'fileExists'),
+        new \Rector\Renaming\ValueObject\MethodCallRename('League\\Flysystem\\FilesystemInterface', 'getMimetype', 'mimeType'),
+        new \Rector\Renaming\ValueObject\MethodCallRename('League\\Flysystem\\FilesystemInterface', 'getSize', 'fileSize'),
+        new \Rector\Renaming\ValueObject\MethodCallRename('League\\Flysystem\\FilesystemInterface', 'getVisibility', 'visibility'),
     ])]]);
 };
