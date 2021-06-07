@@ -19,6 +19,10 @@ final class CondAndExpr
      */
     public const TYPE_RETURN = 'return';
     /**
+     * @var string
+     */
+    public const TYPE_THROW = 'throw';
+    /**
      * @var \PhpParser\Node\Expr|null
      */
     private $condExpr;

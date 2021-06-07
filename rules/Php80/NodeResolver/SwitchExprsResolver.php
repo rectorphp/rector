@@ -8,6 +8,7 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Switch_;
+use PhpParser\Node\Stmt\Throw_;
 use Rector\Php80\ValueObject\CondAndExpr;
 final class SwitchExprsResolver
 {
@@ -35,6 +36,9 @@ final class SwitchExprsResolver
                 $condAndExpr[] = new \Rector\Php80\ValueObject\CondAndExpr($case->cond, $expr, \Rector\Php80\ValueObject\CondAndExpr::TYPE_ASSIGN);
             } elseif ($expr instanceof \PhpParser\Node\Expr) {
                 $condAndExpr[] = new \Rector\Php80\ValueObject\CondAndExpr($case->cond, $expr, \Rector\Php80\ValueObject\CondAndExpr::TYPE_NORMAL);
+            } elseif ($expr instanceof \PhpParser\Node\Stmt\Throw_) {
+                $throwExpr = new \PhpParser\Node\Expr\Throw_($expr->expr);
+                $condAndExpr[] = new \Rector\Php80\ValueObject\CondAndExpr($case->cond, $throwExpr, \Rector\Php80\ValueObject\CondAndExpr::TYPE_THROW);
             } else {
                 return [];
             }

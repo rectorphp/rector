@@ -7,6 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Match_;
+use PhpParser\Node\Expr\Throw_;
 use PhpParser\Node\MatchArm;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
@@ -95,11 +96,8 @@ CODE_SAMPLE
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if ($this->matchSwitchAnalyzer->shouldSkipSwitch($node)) {
-            return null;
-        }
         $condAndExprs = $this->switchExprsResolver->resolve($node);
-        if ($condAndExprs === []) {
+        if ($this->matchSwitchAnalyzer->shouldSkipSwitch($node, $condAndExprs)) {
             return null;
         }
         if (!$this->matchSwitchAnalyzer->haveCondAndExprsMatchPotential($condAndExprs)) {
@@ -112,6 +110,9 @@ CODE_SAMPLE
                 break;
             }
             $expr = $condAndExpr->getExpr();
+            if ($expr instanceof \PhpParser\Node\Expr\Throw_) {
+                continue;
+            }
             if (!$expr instanceof \PhpParser\Node\Expr\Assign) {
                 return null;
             }
