@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit9442b424d317ba441a4197b0916079ce
+class ComposerStaticInitea19b3b4bfbc5f13cbcdfd361508f36c
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -3110,9 +3110,11 @@ class ComposerStaticInit9442b424d317ba441a4197b0916079ce
         'Rector\\Php80\\MatchAndRefactor\\StrStartsWithMatchAndRefactor\\StrncmpMatchAndRefactor' => __DIR__ . '/../..' . '/rules/Php80/MatchAndRefactor/StrStartsWithMatchAndRefactor/StrncmpMatchAndRefactor.php',
         'Rector\\Php80\\MatchAndRefactor\\StrStartsWithMatchAndRefactor\\StrposMatchAndRefactor' => __DIR__ . '/../..' . '/rules/Php80/MatchAndRefactor/StrStartsWithMatchAndRefactor/StrposMatchAndRefactor.php',
         'Rector\\Php80\\MatchAndRefactor\\StrStartsWithMatchAndRefactor\\SubstrMatchAndRefactor' => __DIR__ . '/../..' . '/rules/Php80/MatchAndRefactor/StrStartsWithMatchAndRefactor/SubstrMatchAndRefactor.php',
+        'Rector\\Php80\\NodeAnalyzer\\MatchSwitchAnalyzer' => __DIR__ . '/../..' . '/rules/Php80/NodeAnalyzer/MatchSwitchAnalyzer.php',
         'Rector\\Php80\\NodeAnalyzer\\PromotedPropertyResolver' => __DIR__ . '/../..' . '/rules/Php80/NodeAnalyzer/PromotedPropertyResolver.php',
         'Rector\\Php80\\NodeAnalyzer\\SwitchAnalyzer' => __DIR__ . '/../..' . '/rules/Php80/NodeAnalyzer/SwitchAnalyzer.php',
         'Rector\\Php80\\NodeFactory\\AttributeFlagFactory' => __DIR__ . '/../..' . '/rules/Php80/NodeFactory/AttributeFlagFactory.php',
+        'Rector\\Php80\\NodeFactory\\MatchArmsFactory' => __DIR__ . '/../..' . '/rules/Php80/NodeFactory/MatchArmsFactory.php',
         'Rector\\Php80\\NodeFactory\\StrStartsWithFuncCallFactory' => __DIR__ . '/../..' . '/rules/Php80/NodeFactory/StrStartsWithFuncCallFactory.php',
         'Rector\\Php80\\NodeManipulator\\TokenManipulator' => __DIR__ . '/../..' . '/rules/Php80/NodeManipulator/TokenManipulator.php',
         'Rector\\Php80\\NodeResolver\\ArgumentSorter' => __DIR__ . '/../..' . '/rules/Php80/NodeResolver/ArgumentSorter.php',
@@ -3872,9 +3874,9 @@ class ComposerStaticInit9442b424d317ba441a4197b0916079ce
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit9442b424d317ba441a4197b0916079ce::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit9442b424d317ba441a4197b0916079ce::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit9442b424d317ba441a4197b0916079ce::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitea19b3b4bfbc5f13cbcdfd361508f36c::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitea19b3b4bfbc5f13cbcdfd361508f36c::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitea19b3b4bfbc5f13cbcdfd361508f36c::$classMap;
 
         }, null, ClassLoader::class);
     }
