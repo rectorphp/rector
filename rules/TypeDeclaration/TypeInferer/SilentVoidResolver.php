@@ -15,6 +15,7 @@ use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Switch_;
 use PhpParser\Node\Stmt\Throw_;
+use PhpParser\Node\Stmt\Trait_;
 use PhpParser\Node\Stmt\TryCatch;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -29,12 +30,15 @@ final class SilentVoidResolver
         $this->betterNodeFinder = $betterNodeFinder;
     }
     /**
-     * @param ClassMethod|Closure|Function_ $functionLike
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\Function_ $functionLike
      */
-    public function hasExclusiveVoid(\PhpParser\Node\FunctionLike $functionLike) : bool
+    public function hasExclusiveVoid($functionLike) : bool
     {
         $classLike = $functionLike->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
         if ($classLike instanceof \PhpParser\Node\Stmt\Interface_) {
+            return \false;
+        }
+        if ($classLike instanceof \PhpParser\Node\Stmt\Trait_) {
             return \false;
         }
         if ($this->hasNeverType($functionLike)) {
