@@ -168,7 +168,11 @@ CODE_SAMPLE
             if (in_array($key, $keys, true)) {
                 $currentName = $this->getName($param);
                 $desiredPropertyName = $desiredPropertyNames[$key];
-                $this->propertyFetchRenamer->renamePropertyFetchesInClass($classLike, $currentName, $desiredPropertyName);
+                $this->propertyFetchRenamer->renamePropertyFetchesInClass(
+                    $classLike,
+                    $currentName,
+                    $desiredPropertyName
+                );
                 $param->var->name = $desiredPropertyName;
             }
         }

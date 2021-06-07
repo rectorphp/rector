@@ -30,9 +30,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 new AnnotationToAttribute('Doctrine\ORM\Mapping\GeneratedValue'),
                 new AnnotationToAttribute('Doctrine\ORM\Mapping\Column'),
                 new AnnotationToAttribute('Doctrine\ORM\Mapping\ChangeTrackingPolicy'),
-                new AnnotationToAttribute(
-                    'Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter'
-                ),
+                new AnnotationToAttribute('Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter'),
                 new AnnotationToAttribute('ApiPlatform\Core\Annotation\ApiResource'),
             ]),
         ]]);

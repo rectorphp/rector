@@ -95,9 +95,12 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         SplitStringClassConstantToClassConstFetchRector::class,
 
         // to be enabled when all rules for php 8 syntax applied
-        ReturnTypeFromStrictTypedCallRector::class, // PhpVersionFeature::UNION_TYPES
-        ClassOnObjectRector::class, // PhpVersionFeature::CLASS_ON_OBJECT
-        ReturnTypeDeclarationRector::class, // PhpVersionFeature::STATIC_RETURN_TYPE
+        // PhpVersionFeature::UNION_TYPES
+        ReturnTypeFromStrictTypedCallRector::class,
+        // PhpVersionFeature::CLASS_ON_OBJECT
+        ClassOnObjectRector::class,
+        // PhpVersionFeature::STATIC_RETURN_TYPE
+        ReturnTypeDeclarationRector::class,
         UnionTypesRector::class,
         ParamTypeDeclarationRector::class,
         RenamePropertyToMatchTypeRector::class,

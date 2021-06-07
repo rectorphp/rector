@@ -46,4 +46,15 @@ final class SwitchAnalyzer
 
         return true;
     }
+
+    public function hasDefault(Switch_ $switch): bool
+    {
+        foreach ($switch->cases as $case) {
+            if ($case->cond === null) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }
