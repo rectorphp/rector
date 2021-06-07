@@ -7,6 +7,7 @@ namespace Rector\Tests\PSR4\Rector\Namespace_\MultipleClassFileToPsr4ClassesRect
 use Iterator;
 use Rector\FileSystemRector\ValueObject\AddedFileWithContent;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Symplify\EasyTesting\StaticFixtureSplitter;
 use Symplify\SmartFileSystem\SmartFileInfo;
 use Symplify\SmartFileSystem\SmartFileSystem;
 
@@ -16,13 +17,24 @@ final class MultipleClassFileToPsr4ClassesRectorTest extends AbstractRectorTestC
      * @param AddedFileWithContent[] $expectedFilePathsWithContents
      * @dataProvider provideData()
      */
-    public function test(SmartFileInfo $originalFileInfo, array $expectedFilePathsWithContents): void
-    {
+    public function test(
+        SmartFileInfo $originalFileInfo,
+        array $expectedFilePathsWithContents,
+        bool $expectedOriginalFileWasRemoved = true
+    ): void {
         $this->doTestFileInfo($originalFileInfo);
 
         $this->assertCount($this->removedAndAddedFilesCollector->getAddedFileCount(), $expectedFilePathsWithContents);
 
         $this->assertFilesWereAdded($expectedFilePathsWithContents);
+
+        $inputFileInfoAndExpectedFileInfo = StaticFixtureSplitter::splitFileInfoToLocalInputAndExpectedFileInfos(
+            $originalFileInfo
+        );
+        self::assertSame(
+            $expectedOriginalFileWasRemoved,
+            $this->removedAndAddedFilesCollector->isFileRemoved($inputFileInfoAndExpectedFileInfo->getInputFileInfo())
+        );
     }
 
     /**
@@ -74,6 +86,15 @@ final class MultipleClassFileToPsr4ClassesRectorTest extends AbstractRectorTestC
         ];
 
         yield [new SmartFileInfo(__DIR__ . '/Fixture/class_trait_and_interface.php.inc'), $filePathsWithContents];
+
+        $filePathsWithContents = [
+            new AddedFileWithContent(
+                $this->getFixtureTempDirectory() . '/ClassMatchesFilenameException.php',
+                $smartFileSystem->readFile(__DIR__ . '/Expected/ClassMatchesFilenameException.php')
+            ),
+        ];
+
+        yield [new SmartFileInfo(__DIR__ . '/Fixture/ClassMatchesFilename.php.inc'), $filePathsWithContents, false];
     }
 
     public function provideConfigFilePath(): string

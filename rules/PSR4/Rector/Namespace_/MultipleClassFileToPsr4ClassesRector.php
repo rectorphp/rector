@@ -183,8 +183,6 @@ CODE_SAMPLE
 
         $fileDestination = $this->createClassLikeFileDestination($classLike, $smartFileInfo);
 
-        $this->removedAndAddedFilesCollector->removeFile($smartFileInfo);
-
         $addedFileWithNodes = new AddedFileWithNodes($fileDestination, $nodesToPrint);
         $this->removedAndAddedFilesCollector->addAddedFile($addedFileWithNodes);
     }
