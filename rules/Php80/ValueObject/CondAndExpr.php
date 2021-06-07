@@ -23,6 +23,11 @@ final class CondAndExpr
      */
     public const TYPE_RETURN = 'return';
 
+    /**
+     * @var string
+     */
+    public const TYPE_THROW = 'throw';
+
     public function __construct(
         private ?Expr $condExpr,
         private Expr $expr,

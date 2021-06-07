@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Match_;
+use PhpParser\Node\Expr\Throw_;
 use PhpParser\Node\MatchArm;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
@@ -92,12 +93,8 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($this->matchSwitchAnalyzer->shouldSkipSwitch($node)) {
-            return null;
-        }
-
         $condAndExprs = $this->switchExprsResolver->resolve($node);
-        if ($condAndExprs === []) {
+        if ($this->matchSwitchAnalyzer->shouldSkipSwitch($node, $condAndExprs)) {
             return null;
         }
 
@@ -113,6 +110,10 @@ CODE_SAMPLE
             }
 
             $expr = $condAndExpr->getExpr();
+            if ($expr instanceof Throw_) {
+                continue;
+            }
+
             if (! $expr instanceof Assign) {
                 return null;
             }

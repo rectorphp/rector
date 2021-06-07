@@ -18,8 +18,15 @@ final class MatchSwitchAnalyzer
     ) {
     }
 
-    public function shouldSkipSwitch(Switch_ $switch): bool
+    /**
+     * @param CondAndExpr[] $condAndExprs
+     */
+    public function shouldSkipSwitch(Switch_ $switch, array $condAndExprs): bool
     {
+        if ($condAndExprs === []) {
+            return true;
+        }
+
         if (! $this->switchAnalyzer->hasEachCaseBreak($switch)) {
             return true;
         }
@@ -36,7 +43,7 @@ final class MatchSwitchAnalyzer
      */
     public function haveCondAndExprsMatchPotential(array $condAndExprs): bool
     {
-        $uniqueCondAndExprKinds = $this->resolveUniqueKinds($condAndExprs);
+        $uniqueCondAndExprKinds = $this->resolveUniqueKindsWithoutThrows($condAndExprs);
         if (count($uniqueCondAndExprKinds) > 1) {
             return false;
         }
@@ -64,10 +71,14 @@ final class MatchSwitchAnalyzer
      * @param CondAndExpr[] $condAndExprs
      * @return string[]
      */
-    private function resolveUniqueKinds(array $condAndExprs): array
+    private function resolveUniqueKindsWithoutThrows(array $condAndExprs): array
     {
         $condAndExprKinds = [];
         foreach ($condAndExprs as $condAndExpr) {
+            if ($condAndExpr->getKind() === CondAndExpr::TYPE_THROW) {
+                continue;
+            }
+
             $condAndExprKinds[] = $condAndExpr->getKind();
         }
 
