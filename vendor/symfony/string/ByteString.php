@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210606\Symfony\Component\String;
+namespace RectorPrefix20210607\Symfony\Component\String;
 
-use RectorPrefix20210606\Symfony\Component\String\Exception\ExceptionInterface;
-use RectorPrefix20210606\Symfony\Component\String\Exception\InvalidArgumentException;
-use RectorPrefix20210606\Symfony\Component\String\Exception\RuntimeException;
+use RectorPrefix20210607\Symfony\Component\String\Exception\ExceptionInterface;
+use RectorPrefix20210607\Symfony\Component\String\Exception\InvalidArgumentException;
+use RectorPrefix20210607\Symfony\Component\String\Exception\RuntimeException;
 /**
  * Represents a binary-safe string of bytes.
  *
@@ -21,7 +21,7 @@ use RectorPrefix20210606\Symfony\Component\String\Exception\RuntimeException;
  *
  * @throws ExceptionInterface
  */
-class ByteString extends \RectorPrefix20210606\Symfony\Component\String\AbstractString
+class ByteString extends \RectorPrefix20210607\Symfony\Component\String\AbstractString
 {
     private const ALPHABET_ALPHANUMERIC = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
     public function __construct(string $string = '')
@@ -43,13 +43,13 @@ class ByteString extends \RectorPrefix20210606\Symfony\Component\String\Abstract
     public static function fromRandom(int $length = 16, string $alphabet = null)
     {
         if ($length <= 0) {
-            throw new \RectorPrefix20210606\Symfony\Component\String\Exception\InvalidArgumentException(\sprintf('A strictly positive length is expected, "%d" given.', $length));
+            throw new \RectorPrefix20210607\Symfony\Component\String\Exception\InvalidArgumentException(\sprintf('A strictly positive length is expected, "%d" given.', $length));
         }
         $alphabet = $alphabet ?? self::ALPHABET_ALPHANUMERIC;
         $alphabetSize = \strlen($alphabet);
         $bits = (int) \ceil(\log($alphabetSize, 2.0));
         if ($bits <= 0 || $bits > 56) {
-            throw new \RectorPrefix20210606\Symfony\Component\String\Exception\InvalidArgumentException('The length of the alphabet must in the [2^1, 2^56] range.');
+            throw new \RectorPrefix20210607\Symfony\Component\String\Exception\InvalidArgumentException('The length of the alphabet must in the [2^1, 2^56] range.');
         }
         $ret = '';
         while ($length > 0) {
@@ -98,7 +98,7 @@ class ByteString extends \RectorPrefix20210606\Symfony\Component\String\Abstract
     public function chunk(int $length = 1) : array
     {
         if (1 > $length) {
-            throw new \RectorPrefix20210606\Symfony\Component\String\Exception\InvalidArgumentException('The chunk length must be greater than zero.');
+            throw new \RectorPrefix20210607\Symfony\Component\String\Exception\InvalidArgumentException('The chunk length must be greater than zero.');
         }
         if ('' === $this->string) {
             return [];
@@ -200,17 +200,17 @@ class ByteString extends \RectorPrefix20210606\Symfony\Component\String\Abstract
             $regexp .= 'i';
         }
         \set_error_handler(static function ($t, $m) {
-            throw new \RectorPrefix20210606\Symfony\Component\String\Exception\InvalidArgumentException($m);
+            throw new \RectorPrefix20210607\Symfony\Component\String\Exception\InvalidArgumentException($m);
         });
         try {
             if (\false === $match($regexp, $this->string, $matches, $flags, $offset)) {
                 $lastError = \preg_last_error();
                 foreach (\get_defined_constants(\true)['pcre'] as $k => $v) {
                     if ($lastError === $v && '_ERROR' === \substr($k, -6)) {
-                        throw new \RectorPrefix20210606\Symfony\Component\String\Exception\RuntimeException('Matching failed with ' . $k . '.');
+                        throw new \RectorPrefix20210607\Symfony\Component\String\Exception\RuntimeException('Matching failed with ' . $k . '.');
                     }
                 }
-                throw new \RectorPrefix20210606\Symfony\Component\String\Exception\RuntimeException('Matching failed with unknown error code.');
+                throw new \RectorPrefix20210607\Symfony\Component\String\Exception\RuntimeException('Matching failed with unknown error code.');
             }
             \array_walk_recursive($matches, function (&$value) {
                 if ($value === '') {
@@ -268,17 +268,17 @@ class ByteString extends \RectorPrefix20210606\Symfony\Component\String\Abstract
             $replace = $to instanceof \Closure ? 'preg_replace_callback' : 'preg_replace';
         }
         \set_error_handler(static function ($t, $m) {
-            throw new \RectorPrefix20210606\Symfony\Component\String\Exception\InvalidArgumentException($m);
+            throw new \RectorPrefix20210607\Symfony\Component\String\Exception\InvalidArgumentException($m);
         });
         try {
             if (null === ($string = $replace($fromRegexp, $to, $this->string))) {
                 $lastError = \preg_last_error();
                 foreach (\get_defined_constants(\true)['pcre'] as $k => $v) {
                     if ($lastError === $v && '_ERROR' === \substr($k, -6)) {
-                        throw new \RectorPrefix20210606\Symfony\Component\String\Exception\RuntimeException('Matching failed with ' . $k . '.');
+                        throw new \RectorPrefix20210607\Symfony\Component\String\Exception\RuntimeException('Matching failed with ' . $k . '.');
                     }
                 }
-                throw new \RectorPrefix20210606\Symfony\Component\String\Exception\RuntimeException('Matching failed with unknown error code.');
+                throw new \RectorPrefix20210607\Symfony\Component\String\Exception\RuntimeException('Matching failed with unknown error code.');
             }
         } finally {
             \restore_error_handler();
@@ -302,7 +302,7 @@ class ByteString extends \RectorPrefix20210606\Symfony\Component\String\Abstract
     public function snake()
     {
         $str = $this->camel()->title();
-        $str->string = \strtolower(\preg_replace(['/([A-Z]+)([A-Z][a-z])/', '/([a-z\\d])([A-Z])/'], 'RectorPrefix20210606\\1_\\2', $str->string));
+        $str->string = \strtolower(\preg_replace(['/([A-Z]+)([A-Z][a-z])/', '/([a-z\\d])([A-Z])/'], 'RectorPrefix20210607\\1_\\2', $str->string));
         return $str;
     }
     public function splice(string $replacement, int $start = 0, int $length = null)
@@ -314,10 +314,10 @@ class ByteString extends \RectorPrefix20210606\Symfony\Component\String\Abstract
     public function split(string $delimiter, int $limit = null, int $flags = null) : array
     {
         if (1 > ($limit = $limit ?? \PHP_INT_MAX)) {
-            throw new \RectorPrefix20210606\Symfony\Component\String\Exception\InvalidArgumentException('Split limit must be a positive integer.');
+            throw new \RectorPrefix20210607\Symfony\Component\String\Exception\InvalidArgumentException('Split limit must be a positive integer.');
         }
         if ('' === $delimiter) {
-            throw new \RectorPrefix20210606\Symfony\Component\String\Exception\InvalidArgumentException('Split delimiter is empty.');
+            throw new \RectorPrefix20210607\Symfony\Component\String\Exception\InvalidArgumentException('Split delimiter is empty.');
         }
         if (null !== $flags) {
             return parent::split($delimiter, $limit, $flags);
@@ -348,27 +348,27 @@ class ByteString extends \RectorPrefix20210606\Symfony\Component\String\Abstract
     /**
      * @param string|null $fromEncoding
      */
-    public function toUnicodeString($fromEncoding = null) : \RectorPrefix20210606\Symfony\Component\String\UnicodeString
+    public function toUnicodeString($fromEncoding = null) : \RectorPrefix20210607\Symfony\Component\String\UnicodeString
     {
-        return new \RectorPrefix20210606\Symfony\Component\String\UnicodeString($this->toCodePointString($fromEncoding)->string);
+        return new \RectorPrefix20210607\Symfony\Component\String\UnicodeString($this->toCodePointString($fromEncoding)->string);
     }
     /**
      * @param string|null $fromEncoding
      */
-    public function toCodePointString($fromEncoding = null) : \RectorPrefix20210606\Symfony\Component\String\CodePointString
+    public function toCodePointString($fromEncoding = null) : \RectorPrefix20210607\Symfony\Component\String\CodePointString
     {
-        $u = new \RectorPrefix20210606\Symfony\Component\String\CodePointString();
+        $u = new \RectorPrefix20210607\Symfony\Component\String\CodePointString();
         if (\in_array($fromEncoding, [null, 'utf8', 'utf-8', 'UTF8', 'UTF-8'], \true) && \preg_match('//u', $this->string)) {
             $u->string = $this->string;
             return $u;
         }
         \set_error_handler(static function ($t, $m) {
-            throw new \RectorPrefix20210606\Symfony\Component\String\Exception\InvalidArgumentException($m);
+            throw new \RectorPrefix20210607\Symfony\Component\String\Exception\InvalidArgumentException($m);
         });
         try {
             try {
                 $validEncoding = \false !== \mb_detect_encoding($this->string, $fromEncoding ?? 'Windows-1252', \true);
-            } catch (\RectorPrefix20210606\Symfony\Component\String\Exception\InvalidArgumentException $e) {
+            } catch (\RectorPrefix20210607\Symfony\Component\String\Exception\InvalidArgumentException $e) {
                 if (!\function_exists('iconv')) {
                     throw $e;
                 }
@@ -379,7 +379,7 @@ class ByteString extends \RectorPrefix20210606\Symfony\Component\String\Abstract
             \restore_error_handler();
         }
         if (!$validEncoding) {
-            throw new \RectorPrefix20210606\Symfony\Component\String\Exception\InvalidArgumentException(\sprintf('Invalid "%s" string.', $fromEncoding ?? 'Windows-1252'));
+            throw new \RectorPrefix20210607\Symfony\Component\String\Exception\InvalidArgumentException(\sprintf('Invalid "%s" string.', $fromEncoding ?? 'Windows-1252'));
         }
         $u->string = \mb_convert_encoding($this->string, 'UTF-8', $fromEncoding ?? 'Windows-1252');
         return $u;
@@ -411,6 +411,6 @@ class ByteString extends \RectorPrefix20210606\Symfony\Component\String\Abstract
     public function width(bool $ignoreAnsiDecoration = \true) : int
     {
         $string = \preg_match('//u', $this->string) ? $this->string : \preg_replace('/[\\x80-\\xFF]/', '?', $this->string);
-        return (new \RectorPrefix20210606\Symfony\Component\String\CodePointString($string))->width($ignoreAnsiDecoration);
+        return (new \RectorPrefix20210607\Symfony\Component\String\CodePointString($string))->width($ignoreAnsiDecoration);
     }
 }

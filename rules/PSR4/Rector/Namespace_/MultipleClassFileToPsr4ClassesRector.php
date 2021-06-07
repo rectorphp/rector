@@ -157,7 +157,6 @@ CODE_SAMPLE
             $nodesToPrint = \array_merge($declares, [$mainNode]);
         }
         $fileDestination = $this->createClassLikeFileDestination($classLike, $smartFileInfo);
-        $this->removedAndAddedFilesCollector->removeFile($smartFileInfo);
         $addedFileWithNodes = new \Rector\FileSystemRector\ValueObject\AddedFileWithNodes($fileDestination, $nodesToPrint);
         $this->removedAndAddedFilesCollector->addAddedFile($addedFileWithNodes);
     }

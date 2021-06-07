@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210606;
+namespace RectorPrefix20210607;
 
 if (\class_exists('Tx_Install_Updates_Base')) {
     return;

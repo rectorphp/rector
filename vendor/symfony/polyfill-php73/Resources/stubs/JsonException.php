@@ -21,4 +21,4 @@ class JsonException extends \Exception
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-\class_alias('RectorPrefix20210606\\JsonException', 'JsonException', \false);
+\class_alias('RectorPrefix20210607\\JsonException', 'JsonException', \false);
