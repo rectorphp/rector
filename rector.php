@@ -8,19 +8,23 @@ use Rector\CodingStyle\Rector\String_\SplitStringClassConstantToClassConstFetchR
 use Rector\CodingStyle\ValueObject\PreferenceSelfThis;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\ValueObject\PhpVersion;
 use Rector\DeadCode\Rector\Stmt\RemoveUnreachableStatementRector;
+use Rector\Naming\Rector\Class_\RenamePropertyToMatchTypeRector;
 use Rector\Nette\Set\NetteSetList;
 use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
 use Rector\Php74\Rector\Closure\ClosureToArrowFunctionRector;
 use Rector\Php74\Rector\Property\TypedPropertyRector;
 use Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector;
+use Rector\Php80\Rector\FuncCall\ClassOnObjectRector;
+use Rector\Php80\Rector\FunctionLike\UnionTypesRector;
 use Rector\PHPUnit\Rector\Class_\AddSeeTestAnnotationRector;
 use Rector\PHPUnit\Set\PHPUnitSetList;
 use Rector\Privatization\Rector\Property\PrivatizeLocalPropertyToPrivatePropertyRector;
 use Rector\Restoration\Rector\ClassMethod\InferParamFromClassMethodReturnRector;
 use Rector\Restoration\ValueObject\InferParamFromClassMethodReturn;
 use Rector\Set\ValueObject\SetList;
+use Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictTypedCallRector;
+use Rector\TypeDeclaration\Rector\FunctionLike\ParamTypeDeclarationRector;
 use Rector\TypeDeclaration\Rector\FunctionLike\ReturnTypeDeclarationRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
@@ -90,6 +94,14 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         // some classes in config might not exist without dev dependencies
         SplitStringClassConstantToClassConstFetchRector::class,
 
+        // to be enabled when all rules for php 8 syntax applied
+        ReturnTypeFromStrictTypedCallRector::class, // PhpVersionFeature::UNION_TYPES
+        ClassOnObjectRector::class, // PhpVersionFeature::CLASS_ON_OBJECT
+        ReturnTypeDeclarationRector::class, // PhpVersionFeature::STATIC_RETURN_TYPE
+        UnionTypesRector::class,
+        ParamTypeDeclarationRector::class,
+        RenamePropertyToMatchTypeRector::class,
+
         RemoveUnreachableStatementRector::class => [
             __DIR__ . '/rules/Php70/Rector/FuncCall/MultiDirnameRector.php',
         ],
@@ -112,6 +124,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     ]);
 
     $parameters->set(Option::PHPSTAN_FOR_RECTOR_PATH, __DIR__ . '/phpstan-for-rector.neon');
-    $parameters->set(Option::PHP_VERSION_FEATURES, PhpVersion::PHP_74);
     $parameters->set(Option::ENABLE_CACHE, true);
 };

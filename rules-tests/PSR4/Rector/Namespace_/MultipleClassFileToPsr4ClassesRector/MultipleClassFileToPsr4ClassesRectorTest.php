@@ -31,7 +31,7 @@ final class MultipleClassFileToPsr4ClassesRectorTest extends AbstractRectorTestC
         $inputFileInfoAndExpectedFileInfo = StaticFixtureSplitter::splitFileInfoToLocalInputAndExpectedFileInfos(
             $originalFileInfo
         );
-        self::assertSame(
+        $this->assertSame(
             $expectedOriginalFileWasRemoved,
             $this->removedAndAddedFilesCollector->isFileRemoved($inputFileInfoAndExpectedFileInfo->getInputFileInfo())
         );
