@@ -121,6 +121,10 @@ CODE_SAMPLE
         }
 
         $match = $this->matchFactory->createFromCondAndExprs($node->cond, $condAndExprs);
+
+        // implicit return default after switch
+        $match = $this->processImplicitReturnAfterSwitch($node, $match, $condAndExprs);
+
         if ($isReturn) {
             return new Return_($match);
         }
@@ -171,5 +175,30 @@ CODE_SAMPLE
         }
 
         return null;
+    }
+
+    /**
+     * @param CondAndExpr[] $condAndExprs
+     */
+    private function processImplicitReturnAfterSwitch(Switch_ $switch, Match_ $match, array $condAndExprs): Match_
+    {
+        $nextNode = $switch->getAttribute(AttributeKey::NEXT_NODE);
+        if (! $nextNode instanceof Return_) {
+            return $match;
+        }
+
+        $returnedExpr = $nextNode->expr;
+        if (! $returnedExpr instanceof Expr) {
+            return $match;
+        }
+
+        if ($this->matchSwitchAnalyzer->hasDefaultValue($match)) {
+            return $match;
+        }
+
+        $this->removeNode($nextNode);
+
+        $condAndExprs[] = new CondAndExpr([], $returnedExpr, MatchKind::RETURN);
+        return $this->matchFactory->createFromCondAndExprs($switch->cond, $condAndExprs);
     }
 }

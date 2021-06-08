@@ -6,8 +6,11 @@ namespace Rector\Php80\NodeAnalyzer;
 
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\Match_;
+use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Switch_;
 use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php80\ValueObject\CondAndExpr;
 use Rector\Php80\ValueObject\MatchKind;
 
@@ -36,7 +39,17 @@ final class MatchSwitchAnalyzer
             return false;
         }
 
-        return ! $this->switchAnalyzer->hasDefault($switch);
+        if ($this->switchAnalyzer->hasDefault($switch)) {
+            return false;
+        }
+
+        // is followed by return? is considered implicit default
+        $parent = $switch->getAttribute(AttributeKey::NEXT_NODE);
+        if (! $parent instanceof Return_) {
+            return true;
+        }
+
+        return $parent->expr === null;
     }
 
     /**
@@ -66,6 +79,20 @@ final class MatchSwitchAnalyzer
 
         $assignVariableNames = array_unique($assignVariableNames);
         return count($assignVariableNames) <= 1;
+    }
+
+    public function hasDefaultValue(Match_ $match): bool
+    {
+        foreach ($match->arms as $matchArm) {
+            if ($matchArm->conds === null) {
+                return true;
+            }
+            if ($matchArm->conds === []) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
