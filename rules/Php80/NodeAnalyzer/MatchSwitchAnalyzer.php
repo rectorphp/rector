@@ -8,6 +8,7 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Match_;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Switch_;
+use PhpParser\Node\Stmt\Throw_;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php80\ValueObject\CondAndExpr;
@@ -45,11 +46,10 @@ final class MatchSwitchAnalyzer
             return \false;
         }
         // is followed by return? is considered implicit default
-        $parent = $switch->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::NEXT_NODE);
-        if (!$parent instanceof \PhpParser\Node\Stmt\Return_) {
-            return \true;
+        if ($this->isNextStmtReturnWithExpr($switch)) {
+            return \false;
         }
-        return $parent->expr === null;
+        return !$this->isNextStmtThrows($switch);
     }
     /**
      * @param CondAndExpr[] $condAndExprs
@@ -102,5 +102,18 @@ final class MatchSwitchAnalyzer
             $condAndExprKinds[] = $condAndExpr->getKind();
         }
         return \array_unique($condAndExprKinds);
+    }
+    private function isNextStmtReturnWithExpr(\PhpParser\Node\Stmt\Switch_ $switch) : bool
+    {
+        $parent = $switch->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::NEXT_NODE);
+        if (!$parent instanceof \PhpParser\Node\Stmt\Return_) {
+            return \false;
+        }
+        return $parent->expr !== null;
+    }
+    private function isNextStmtThrows(\PhpParser\Node\Stmt\Switch_ $switch) : bool
+    {
+        $parent = $switch->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::NEXT_NODE);
+        return $parent instanceof \PhpParser\Node\Stmt\Throw_;
     }
 }

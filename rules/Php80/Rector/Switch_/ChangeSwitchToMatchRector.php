@@ -11,6 +11,7 @@ use PhpParser\Node\Expr\Throw_;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Switch_;
+use PhpParser\Node\Stmt\Throw_ as ThrowsStmt;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php80\NodeAnalyzer\MatchSwitchAnalyzer;
@@ -49,38 +50,23 @@ final class ChangeSwitchToMatchRector extends \Rector\Core\Rector\AbstractRector
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
         return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change switch() to match()', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
-class SomeClass
-{
-    public function run()
-    {
-        switch ($this->lexer->lookahead['type']) {
-            case Lexer::T_SELECT:
-                $statement = $this->SelectStatement();
-                break;
-
-            case Lexer::T_UPDATE:
-                $statement = $this->UpdateStatement();
-                break;
-
-            default:
-                $statement = $this->syntaxError('SELECT, UPDATE or DELETE');
-                break;
-        }
-    }
+switch ($input) {
+    case Lexer::T_SELECT:
+        $statement = 'select';
+        break;
+    case Lexer::T_UPDATE:
+        $statement = 'update';
+        break;
+    default:
+        $statement = 'error';
 }
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
-class SomeClass
-{
-    public function run()
-    {
-        $statement = match ($this->lexer->lookahead['type']) {
-            Lexer::T_SELECT => $this->SelectStatement(),
-            Lexer::T_UPDATE => $this->UpdateStatement(),
-            default => $this->syntaxError('SELECT, UPDATE or DELETE'),
-        };
-    }
-}
+$statement = match ($input) {
+    Lexer::T_SELECT => 'select',
+    Lexer::T_UPDATE => 'update',
+    default => 'error',
+};
 CODE_SAMPLE
 )]);
     }
@@ -120,6 +106,7 @@ CODE_SAMPLE
         $match = $this->matchFactory->createFromCondAndExprs($node->cond, $condAndExprs);
         // implicit return default after switch
         $match = $this->processImplicitReturnAfterSwitch($node, $match, $condAndExprs);
+        $match = $this->processImplicitThrowsAfterSwitch($node, $match, $condAndExprs);
         if ($isReturn) {
             return new \PhpParser\Node\Stmt\Return_($match);
         }
@@ -176,6 +163,23 @@ CODE_SAMPLE
         }
         $this->removeNode($nextNode);
         $condAndExprs[] = new \Rector\Php80\ValueObject\CondAndExpr([], $returnedExpr, \Rector\Php80\ValueObject\MatchKind::RETURN);
+        return $this->matchFactory->createFromCondAndExprs($switch->cond, $condAndExprs);
+    }
+    /**
+     * @param CondAndExpr[] $condAndExprs
+     */
+    private function processImplicitThrowsAfterSwitch(\PhpParser\Node\Stmt\Switch_ $switch, \PhpParser\Node\Expr\Match_ $match, array $condAndExprs) : \PhpParser\Node\Expr\Match_
+    {
+        $nextNode = $switch->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::NEXT_NODE);
+        if (!$nextNode instanceof \PhpParser\Node\Stmt\Throw_) {
+            return $match;
+        }
+        if ($this->matchSwitchAnalyzer->hasDefaultValue($match)) {
+            return $match;
+        }
+        $this->removeNode($nextNode);
+        $throw = new \PhpParser\Node\Expr\Throw_($nextNode->expr);
+        $condAndExprs[] = new \Rector\Php80\ValueObject\CondAndExpr([], $throw, \Rector\Php80\ValueObject\MatchKind::RETURN);
         return $this->matchFactory->createFromCondAndExprs($switch->cond, $condAndExprs);
     }
 }
