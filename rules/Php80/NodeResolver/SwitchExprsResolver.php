@@ -61,6 +61,10 @@ final class SwitchExprsResolver
         if ($case->stmts[0] instanceof \PhpParser\Node\Stmt\Throw_) {
             return \true;
         }
+        // instant return
+        if ($case->stmts[0] instanceof \PhpParser\Node\Stmt\Return_) {
+            return \true;
+        }
         // default value
         return $case->cond === null;
     }
