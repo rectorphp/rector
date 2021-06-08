@@ -16,7 +16,7 @@ use PhpParser\Node\Stmt\Switch_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php80\NodeAnalyzer\MatchSwitchAnalyzer;
-use Rector\Php80\NodeFactory\MatchArmsFactory;
+use Rector\Php80\NodeFactory\MatchFactory;
 use Rector\Php80\NodeResolver\SwitchExprsResolver;
 use Rector\Php80\ValueObject\CondAndExpr;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -33,7 +33,7 @@ final class ChangeSwitchToMatchRector extends AbstractRector
     public function __construct(
         private SwitchExprsResolver $switchExprsResolver,
         private MatchSwitchAnalyzer $matchSwitchAnalyzer,
-        private MatchArmsFactory $matchArmsFactory,
+        private MatchFactory $matchFactory,
     ) {
     }
 
@@ -119,8 +119,7 @@ CODE_SAMPLE
             }
         }
 
-        $matchArms = $this->matchArmsFactory->createFromCondAndExprs($condAndExprs);
-        $match = new Match_($node->cond, $matchArms);
+        $match = $this->matchFactory->createFromCondAndExprs($node->cond, $condAndExprs);
 
         if ($isReturn) {
             return new Return_($match);
@@ -146,9 +145,14 @@ CODE_SAMPLE
 
         $assign = new Assign($assignExpr, $match);
         if ($prevInitializedAssign instanceof Assign) {
-            /** @var Match_ $expr */
-            $expr = $assign->expr;
-            $expr->arms[] = new MatchArm(null, $prevInitializedAssign->expr);
+
+            // avoid double default values
+            $hasDefault = $this->hasDefaultMatchArm($match);
+            if (! $hasDefault) {
+                /** @var Match_ $expr */
+                $expr = $assign->expr;
+                $expr->arms[] = new MatchArm(null, $prevInitializedAssign->expr);
+            }
 
             $parentAssign = $prevInitializedAssign->getAttribute(AttributeKey::PARENT_NODE);
             if ($parentAssign instanceof Expression) {
@@ -174,5 +178,16 @@ CODE_SAMPLE
         }
 
         return null;
+    }
+
+    private function hasDefaultMatchArm(Match_ $match): bool
+    {
+        foreach ($match->arms as $matchArm) {
+            if ($matchArm->conds === null) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
