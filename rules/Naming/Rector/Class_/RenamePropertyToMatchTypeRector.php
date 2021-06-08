@@ -11,14 +11,19 @@ use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Property;
+use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Naming\ExpectedNameResolver\MatchParamTypeExpectedNameResolver;
 use Rector\Naming\ExpectedNameResolver\MatchPropertyTypeExpectedNameResolver;
+use Rector\Naming\ParamRenamer\ParamRenamer;
 use Rector\Naming\PropertyRenamer\MatchTypePropertyRenamer;
 use Rector\Naming\PropertyRenamer\PropertyFetchRenamer;
+use Rector\Naming\ValueObject\ParamRename;
 use Rector\Naming\ValueObject\PropertyRename;
+use Rector\Naming\ValueObjectFactory\ParamRenameFactory;
 use Rector\Naming\ValueObjectFactory\PropertyRenameFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -35,7 +40,9 @@ final class RenamePropertyToMatchTypeRector extends AbstractRector
         private PropertyRenameFactory $propertyRenameFactory,
         private MatchPropertyTypeExpectedNameResolver $matchPropertyTypeExpectedNameResolver,
         private MatchParamTypeExpectedNameResolver $matchParamTypeExpectedNameResolver,
-        private PropertyFetchRenamer $propertyFetchRenamer
+        private PropertyFetchRenamer $propertyFetchRenamer,
+        private ParamRenameFactory $paramRenameFactory,
+        private ParamRenamer $paramRenamer
     ) {
     }
 
@@ -154,16 +161,21 @@ CODE_SAMPLE
             $desiredPropertyNames[$key] = $desiredPropertyName;
         }
 
-        $this->renameParamVarName($classLike, $constructClassMethod->params, $desiredPropertyNames);
+        $this->renameParamVarName($classLike, $constructClassMethod, $desiredPropertyNames);
     }
 
     /**
-     * @param Param[] $params
      * @param string[] $desiredPropertyNames
      */
-    private function renameParamVarName(ClassLike $classLike, array $params, array $desiredPropertyNames): void
-    {
+    private function renameParamVarName(
+        ClassLike $classLike,
+        ClassMethod $constructClassMethod,
+        array $desiredPropertyNames
+    ): void {
         $keys = array_keys($desiredPropertyNames);
+        $params = $constructClassMethod->params;
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($constructClassMethod);
+
         foreach ($params as $key => $param) {
             if (in_array($key, $keys, true)) {
                 $currentName = $this->getName($param);
@@ -173,8 +185,33 @@ CODE_SAMPLE
                     $currentName,
                     $desiredPropertyName
                 );
+
+                /** @var string $paramVarName */
+                $paramVarName = $param->var->name;
+                $this->renameParamDoc($phpDocInfo, $param, $paramVarName, $desiredPropertyName);
                 $param->var->name = $desiredPropertyName;
             }
         }
+    }
+
+    private function renameParamDoc(
+        PhpDocInfo $phpDocInfo,
+        Param $param,
+        string $paramVarName,
+        string $desiredPropertyName
+    ): void
+    {
+        $paramTagValueNode = $phpDocInfo->getParamTagValueNodeByName($paramVarName);
+
+        if (! $paramTagValueNode instanceof ParamTagValueNode) {
+            return;
+        }
+
+        $paramRename = $this->paramRenameFactory->createFromResolvedExpectedName($param, $desiredPropertyName);
+        if (! $paramRename instanceof ParamRename) {
+            return;
+        }
+
+        $this->paramRenamer->rename($paramRename);
     }
 }
