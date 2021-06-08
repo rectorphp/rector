@@ -15,7 +15,7 @@ use PhpParser\Node\Stmt\Switch_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php80\NodeAnalyzer\MatchSwitchAnalyzer;
-use Rector\Php80\NodeFactory\MatchArmsFactory;
+use Rector\Php80\NodeFactory\MatchFactory;
 use Rector\Php80\NodeResolver\SwitchExprsResolver;
 use Rector\Php80\ValueObject\CondAndExpr;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -37,14 +37,14 @@ final class ChangeSwitchToMatchRector extends \Rector\Core\Rector\AbstractRector
      */
     private $matchSwitchAnalyzer;
     /**
-     * @var \Rector\Php80\NodeFactory\MatchArmsFactory
+     * @var \Rector\Php80\NodeFactory\MatchFactory
      */
-    private $matchArmsFactory;
-    public function __construct(\Rector\Php80\NodeResolver\SwitchExprsResolver $switchExprsResolver, \Rector\Php80\NodeAnalyzer\MatchSwitchAnalyzer $matchSwitchAnalyzer, \Rector\Php80\NodeFactory\MatchArmsFactory $matchArmsFactory)
+    private $matchFactory;
+    public function __construct(\Rector\Php80\NodeResolver\SwitchExprsResolver $switchExprsResolver, \Rector\Php80\NodeAnalyzer\MatchSwitchAnalyzer $matchSwitchAnalyzer, \Rector\Php80\NodeFactory\MatchFactory $matchFactory)
     {
         $this->switchExprsResolver = $switchExprsResolver;
         $this->matchSwitchAnalyzer = $matchSwitchAnalyzer;
-        $this->matchArmsFactory = $matchArmsFactory;
+        $this->matchFactory = $matchFactory;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -117,8 +117,7 @@ CODE_SAMPLE
                 return null;
             }
         }
-        $matchArms = $this->matchArmsFactory->createFromCondAndExprs($condAndExprs);
-        $match = new \PhpParser\Node\Expr\Match_($node->cond, $matchArms);
+        $match = $this->matchFactory->createFromCondAndExprs($node->cond, $condAndExprs);
         if ($isReturn) {
             return new \PhpParser\Node\Stmt\Return_($match);
         }
@@ -135,9 +134,13 @@ CODE_SAMPLE
         });
         $assign = new \PhpParser\Node\Expr\Assign($assignExpr, $match);
         if ($prevInitializedAssign instanceof \PhpParser\Node\Expr\Assign) {
-            /** @var Match_ $expr */
-            $expr = $assign->expr;
-            $expr->arms[] = new \PhpParser\Node\MatchArm(null, $prevInitializedAssign->expr);
+            // avoid double default values
+            $hasDefault = $this->hasDefaultMatchArm($match);
+            if (!$hasDefault) {
+                /** @var Match_ $expr */
+                $expr = $assign->expr;
+                $expr->arms[] = new \PhpParser\Node\MatchArm(null, $prevInitializedAssign->expr);
+            }
             $parentAssign = $prevInitializedAssign->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
             if ($parentAssign instanceof \PhpParser\Node\Stmt\Expression) {
                 $this->removeNode($parentAssign);
@@ -158,5 +161,14 @@ CODE_SAMPLE
             return $expr->var;
         }
         return null;
+    }
+    private function hasDefaultMatchArm(\PhpParser\Node\Expr\Match_ $match) : bool
+    {
+        foreach ($match->arms as $matchArm) {
+            if ($matchArm->conds === null) {
+                return \true;
+            }
+        }
+        return \false;
     }
 }
