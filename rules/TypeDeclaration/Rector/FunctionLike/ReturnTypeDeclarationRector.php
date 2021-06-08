@@ -6,7 +6,6 @@ namespace Rector\TypeDeclaration\Rector\FunctionLike;
 use PhpParser\Node;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Name;
-use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -15,6 +14,7 @@ use PhpParser\Node\UnionType as PhpParserUnionType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
+use Rector\Core\NodeAnalyzer\ExternalFullyQualifiedAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -69,7 +69,11 @@ final class ReturnTypeDeclarationRector extends \Rector\Core\Rector\AbstractRect
      * @var \Rector\TypeDeclaration\TypeAnalyzer\ObjectTypeComparator
      */
     private $objectTypeComparator;
-    public function __construct(\Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer $returnTypeInferer, \Rector\TypeDeclaration\ChildPopulator\ChildReturnPopulator $childReturnPopulator, \Rector\TypeDeclaration\TypeAlreadyAddedChecker\ReturnTypeAlreadyAddedChecker $returnTypeAlreadyAddedChecker, \Rector\TypeDeclaration\PhpDocParser\NonInformativeReturnTagRemover $nonInformativeReturnTagRemover, \Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnTypeOverrideGuard $classMethodReturnTypeOverrideGuard, \Rector\VendorLocker\VendorLockResolver $vendorLockResolver, \Rector\TypeDeclaration\PhpParserTypeAnalyzer $phpParserTypeAnalyzer, \Rector\TypeDeclaration\TypeAnalyzer\ObjectTypeComparator $objectTypeComparator)
+    /**
+     * @var \Rector\Core\NodeAnalyzer\ExternalFullyQualifiedAnalyzer
+     */
+    private $externalFullyQualifiedAnalyzer;
+    public function __construct(\Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer $returnTypeInferer, \Rector\TypeDeclaration\ChildPopulator\ChildReturnPopulator $childReturnPopulator, \Rector\TypeDeclaration\TypeAlreadyAddedChecker\ReturnTypeAlreadyAddedChecker $returnTypeAlreadyAddedChecker, \Rector\TypeDeclaration\PhpDocParser\NonInformativeReturnTagRemover $nonInformativeReturnTagRemover, \Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnTypeOverrideGuard $classMethodReturnTypeOverrideGuard, \Rector\VendorLocker\VendorLockResolver $vendorLockResolver, \Rector\TypeDeclaration\PhpParserTypeAnalyzer $phpParserTypeAnalyzer, \Rector\TypeDeclaration\TypeAnalyzer\ObjectTypeComparator $objectTypeComparator, \Rector\Core\NodeAnalyzer\ExternalFullyQualifiedAnalyzer $externalFullyQualifiedAnalyzer)
     {
         $this->returnTypeInferer = $returnTypeInferer;
         $this->childReturnPopulator = $childReturnPopulator;
@@ -79,6 +83,7 @@ final class ReturnTypeDeclarationRector extends \Rector\Core\Rector\AbstractRect
         $this->vendorLockResolver = $vendorLockResolver;
         $this->phpParserTypeAnalyzer = $phpParserTypeAnalyzer;
         $this->objectTypeComparator = $objectTypeComparator;
+        $this->externalFullyQualifiedAnalyzer = $externalFullyQualifiedAnalyzer;
     }
     /**
      * @return array<class-string<Node>>
@@ -226,12 +231,8 @@ CODE_SAMPLE
         if (!$classLike instanceof \PhpParser\Node\Stmt\Class_) {
             return \false;
         }
-        if (!$classLike->extends instanceof \PhpParser\Node\Name\FullyQualified) {
-            return \false;
-        }
-        $className = (string) $this->getName($classLike->extends);
-        $parentFound = (bool) $this->nodeRepository->findClass($className);
-        return $functionLike->returnType === null && !$parentFound && $this->isName($inferredReturnNode, 'void');
+        $hasExternalClassOrInterfaceOrTrait = $this->externalFullyQualifiedAnalyzer->hasExternalFullyQualifieds($classLike);
+        return $functionLike->returnType === null && $hasExternalClassOrInterfaceOrTrait && $this->isName($inferredReturnNode, 'void');
     }
     private function isNullableTypeSubType(\PHPStan\Type\Type $currentType, \PHPStan\Type\Type $inferedType) : bool
     {

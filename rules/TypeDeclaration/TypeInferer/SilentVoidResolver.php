@@ -6,7 +6,6 @@ namespace Rector\TypeDeclaration\TypeInferer;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Yield_;
 use PhpParser\Node\FunctionLike;
-use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
@@ -17,6 +16,7 @@ use PhpParser\Node\Stmt\Switch_;
 use PhpParser\Node\Stmt\Throw_;
 use PhpParser\Node\Stmt\Trait_;
 use PhpParser\Node\Stmt\TryCatch;
+use Rector\Core\NodeAnalyzer\ExternalFullyQualifiedAnalyzer;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 final class SilentVoidResolver
@@ -25,9 +25,14 @@ final class SilentVoidResolver
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
-    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
+    /**
+     * @var \Rector\Core\NodeAnalyzer\ExternalFullyQualifiedAnalyzer
+     */
+    private $externalFullyQualifiedAnalyzer;
+    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Core\NodeAnalyzer\ExternalFullyQualifiedAnalyzer $externalFullyQualifiedAnalyzer)
     {
         $this->betterNodeFinder = $betterNodeFinder;
+        $this->externalFullyQualifiedAnalyzer = $externalFullyQualifiedAnalyzer;
     }
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\Function_ $functionLike
@@ -47,10 +52,7 @@ final class SilentVoidResolver
         if ($this->betterNodeFinder->hasInstancesOf((array) $functionLike->stmts, [\PhpParser\Node\Expr\Yield_::class])) {
             return \false;
         }
-        if ($classLike->extends instanceof \PhpParser\Node\Name\FullyQualified) {
-            return \false;
-        }
-        if ($classLike->getTraitUses() !== []) {
+        if ($this->externalFullyQualifiedAnalyzer->hasExternalFullyQualifieds($classLike)) {
             return \false;
         }
         /** @var Return_[] $returns */

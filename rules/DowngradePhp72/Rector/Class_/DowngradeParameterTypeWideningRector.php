@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace Rector\DowngradePhp72\Rector\Class_;
 
 use PhpParser\Node;
-use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
@@ -13,6 +12,7 @@ use PhpParser\Node\Stmt\Interface_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\NodeAnalyzer\ExternalFullyQualifiedAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DowngradePhp72\NodeAnalyzer\ClassLikeWithTraitsClassMethodResolver;
 use Rector\DowngradePhp72\NodeAnalyzer\ParamContravariantDetector;
@@ -50,13 +50,18 @@ final class DowngradeParameterTypeWideningRector extends \Rector\Core\Rector\Abs
      * @var \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory
      */
     private $typeFactory;
-    public function __construct(\Rector\DowngradePhp72\NodeAnalyzer\ClassLikeWithTraitsClassMethodResolver $classLikeWithTraitsClassMethodResolver, \Rector\DowngradePhp72\NodeAnalyzer\ParentChildClassMethodTypeResolver $parentChildClassMethodTypeResolver, \Rector\DowngradePhp72\PhpDoc\NativeParamToPhpDocDecorator $nativeParamToPhpDocDecorator, \Rector\DowngradePhp72\NodeAnalyzer\ParamContravariantDetector $paramContravariantDetector, \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory $typeFactory)
+    /**
+     * @var \Rector\Core\NodeAnalyzer\ExternalFullyQualifiedAnalyzer
+     */
+    private $externalFullyQualifiedAnalyzer;
+    public function __construct(\Rector\DowngradePhp72\NodeAnalyzer\ClassLikeWithTraitsClassMethodResolver $classLikeWithTraitsClassMethodResolver, \Rector\DowngradePhp72\NodeAnalyzer\ParentChildClassMethodTypeResolver $parentChildClassMethodTypeResolver, \Rector\DowngradePhp72\PhpDoc\NativeParamToPhpDocDecorator $nativeParamToPhpDocDecorator, \Rector\DowngradePhp72\NodeAnalyzer\ParamContravariantDetector $paramContravariantDetector, \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory $typeFactory, \Rector\Core\NodeAnalyzer\ExternalFullyQualifiedAnalyzer $externalFullyQualifiedAnalyzer)
     {
         $this->classLikeWithTraitsClassMethodResolver = $classLikeWithTraitsClassMethodResolver;
         $this->parentChildClassMethodTypeResolver = $parentChildClassMethodTypeResolver;
         $this->nativeParamToPhpDocDecorator = $nativeParamToPhpDocDecorator;
         $this->paramContravariantDetector = $paramContravariantDetector;
         $this->typeFactory = $typeFactory;
+        $this->externalFullyQualifiedAnalyzer = $externalFullyQualifiedAnalyzer;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -114,7 +119,7 @@ CODE_SAMPLE
         if ($this->isEmptyClassReflection($classReflection)) {
             return null;
         }
-        if ($this->hasExtendExternal($node)) {
+        if ($this->externalFullyQualifiedAnalyzer->hasExternalFullyQualifieds($node)) {
             return null;
         }
         $hasChanged = \false;
@@ -136,20 +141,6 @@ CODE_SAMPLE
             return $node;
         }
         return null;
-    }
-    /**
-     * @param Class_|Interface_ $node
-     */
-    private function hasExtendExternal(\PhpParser\Node $node) : bool
-    {
-        if ($node->extends instanceof \PhpParser\Node\Name\FullyQualified) {
-            $className = (string) $this->getName($node->extends);
-            $parentFound = (bool) $this->nodeRepository->findClass($className);
-            if (!$parentFound) {
-                return \true;
-            }
-        }
-        return \false;
     }
     /**
      * The topmost class is the source of truth, so we go only down to avoid up/down collission
