@@ -9,10 +9,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210607\Composer;
+namespace RectorPrefix20210608\Composer;
 
-use RectorPrefix20210607\Composer\Autoload\ClassLoader;
-use RectorPrefix20210607\Composer\Semver\VersionParser;
+use RectorPrefix20210608\Composer\Autoload\ClassLoader;
+use RectorPrefix20210608\Composer\Semver\VersionParser;
 /**
  * This class is copied in every Composer installed project and available to all
  *
@@ -91,7 +91,7 @@ class InstalledVersions
      * @param  string|null   $constraint  A version constraint to check for, if you pass one you have to make sure composer/semver is required by your package
      * @return bool
      */
-    public static function satisfies(\RectorPrefix20210607\Composer\Semver\VersionParser $parser, $packageName, $constraint)
+    public static function satisfies(\RectorPrefix20210608\Composer\Semver\VersionParser $parser, $packageName, $constraint)
     {
         $constraint = $parser->parseConstraints($constraint);
         $provided = $parser->parseConstraints(self::getVersionRanges($packageName));
@@ -214,7 +214,13 @@ class InstalledVersions
     {
         @\trigger_error('getRawData only returns the first dataset loaded, which may not be what you expect. Use getAllRawData() instead which returns all datasets for all autoloaders present in the process.', \E_USER_DEPRECATED);
         if (null === self::$installed) {
-            self::$installed = (include __DIR__ . '/installed.php');
+            // only require the installed.php file if this file is loaded from its dumped location,
+            // and not from its source location in the composer/composer package, see https://github.com/composer/composer/issues/9937
+            if (\substr(__DIR__, -8, 1) !== 'C') {
+                self::$installed = (include __DIR__ . '/installed.php');
+            } else {
+                self::$installed = array();
+            }
         }
         return self::$installed;
     }
@@ -258,11 +264,11 @@ class InstalledVersions
     private static function getInstalled()
     {
         if (null === self::$canGetVendors) {
-            self::$canGetVendors = \method_exists('RectorPrefix20210607\\Composer\\Autoload\\ClassLoader', 'getRegisteredLoaders');
+            self::$canGetVendors = \method_exists('RectorPrefix20210608\\Composer\\Autoload\\ClassLoader', 'getRegisteredLoaders');
         }
         $installed = array();
         if (self::$canGetVendors) {
-            foreach (\RectorPrefix20210607\Composer\Autoload\ClassLoader::getRegisteredLoaders() as $vendorDir => $loader) {
+            foreach (\RectorPrefix20210608\Composer\Autoload\ClassLoader::getRegisteredLoaders() as $vendorDir => $loader) {
                 if (isset(self::$installedByVendor[$vendorDir])) {
                     $installed[] = self::$installedByVendor[$vendorDir];
                 } elseif (\is_file($vendorDir . '/composer/installed.php')) {
@@ -274,7 +280,13 @@ class InstalledVersions
             }
         }
         if (null === self::$installed) {
-            self::$installed = (require __DIR__ . '/installed.php');
+            // only require the installed.php file if this file is loaded from its dumped location,
+            // and not from its source location in the composer/composer package, see https://github.com/composer/composer/issues/9937
+            if (\substr(__DIR__, -8, 1) !== 'C') {
+                self::$installed = (require __DIR__ . '/installed.php');
+            } else {
+                self::$installed = array();
+            }
         }
         $installed[] = self::$installed;
         return $installed;

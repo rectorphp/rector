@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210607;
+namespace RectorPrefix20210608;
 
 if (\class_exists('t3lib_error_http_BadRequestException')) {
     return;

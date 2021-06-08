@@ -3,12 +3,12 @@
 declare (strict_types=1);
 namespace Ssch\TYPO3Rector\FileProcessor\TypoScript;
 
-use RectorPrefix20210607\Helmich\TypoScriptParser\Parser\ParserInterface;
-use RectorPrefix20210607\Helmich\TypoScriptParser\Parser\Printer\ASTPrinterInterface;
-use RectorPrefix20210607\Helmich\TypoScriptParser\Parser\Printer\PrettyPrinterConfiguration;
-use RectorPrefix20210607\Helmich\TypoScriptParser\Parser\Traverser\Traverser;
-use RectorPrefix20210607\Helmich\TypoScriptParser\Parser\Traverser\Visitor;
-use RectorPrefix20210607\Helmich\TypoScriptParser\Tokenizer\TokenizerException;
+use RectorPrefix20210608\Helmich\TypoScriptParser\Parser\ParserInterface;
+use RectorPrefix20210608\Helmich\TypoScriptParser\Parser\Printer\ASTPrinterInterface;
+use RectorPrefix20210608\Helmich\TypoScriptParser\Parser\Printer\PrettyPrinterConfiguration;
+use RectorPrefix20210608\Helmich\TypoScriptParser\Parser\Traverser\Traverser;
+use RectorPrefix20210608\Helmich\TypoScriptParser\Parser\Traverser\Visitor;
+use RectorPrefix20210608\Helmich\TypoScriptParser\Tokenizer\TokenizerException;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\Console\Output\RectorOutputStyle;
 use Rector\Core\Provider\CurrentFileProvider;
@@ -19,7 +19,7 @@ use Rector\FileFormatter\ValueObjectFactory\EditorConfigConfigurationBuilder;
 use Ssch\TYPO3Rector\Contract\FileProcessor\TypoScript\ConvertToPhpFileInterface;
 use Ssch\TYPO3Rector\Contract\Processor\ConfigurableProcessorInterface;
 use Ssch\TYPO3Rector\FileProcessor\TypoScript\Visitors\AbstractVisitor;
-use RectorPrefix20210607\Symfony\Component\Console\Output\BufferedOutput;
+use RectorPrefix20210608\Symfony\Component\Console\Output\BufferedOutput;
 /**
  * @see \Ssch\TYPO3Rector\Tests\FileProcessor\TypoScript\TypoScriptProcessorTest
  */
@@ -68,7 +68,7 @@ final class TypoScriptProcessor implements \Ssch\TYPO3Rector\Contract\Processor\
     /**
      * @param Visitor[] $visitors
      */
-    public function __construct(\RectorPrefix20210607\Helmich\TypoScriptParser\Parser\ParserInterface $typoscriptParser, \RectorPrefix20210607\Symfony\Component\Console\Output\BufferedOutput $output, \RectorPrefix20210607\Helmich\TypoScriptParser\Parser\Printer\ASTPrinterInterface $typoscriptPrinter, \Rector\Core\Provider\CurrentFileProvider $currentFileProvider, \Rector\FileFormatter\EditorConfig\EditorConfigParser $editorConfigParser, \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector $removedAndAddedFilesCollector, \Rector\Core\Console\Output\RectorOutputStyle $rectorOutputStyle, array $visitors = [])
+    public function __construct(\RectorPrefix20210608\Helmich\TypoScriptParser\Parser\ParserInterface $typoscriptParser, \RectorPrefix20210608\Symfony\Component\Console\Output\BufferedOutput $output, \RectorPrefix20210608\Helmich\TypoScriptParser\Parser\Printer\ASTPrinterInterface $typoscriptPrinter, \Rector\Core\Provider\CurrentFileProvider $currentFileProvider, \Rector\FileFormatter\EditorConfig\EditorConfigParser $editorConfigParser, \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector $removedAndAddedFilesCollector, \Rector\Core\Console\Output\RectorOutputStyle $rectorOutputStyle, array $visitors = [])
     {
         $this->typoscriptParser = $typoscriptParser;
         $this->output = $output;
@@ -114,7 +114,7 @@ final class TypoScriptProcessor implements \Ssch\TYPO3Rector\Contract\Processor\
             $this->currentFileProvider->setFile($file);
             $smartFileInfo = $file->getSmartFileInfo();
             $originalStatements = $this->typoscriptParser->parseString($smartFileInfo->getContents());
-            $traverser = new \RectorPrefix20210607\Helmich\TypoScriptParser\Parser\Traverser\Traverser($originalStatements);
+            $traverser = new \RectorPrefix20210608\Helmich\TypoScriptParser\Parser\Traverser\Traverser($originalStatements);
             foreach ($this->visitors as $visitor) {
                 $traverser->addVisitor($visitor);
             }
@@ -128,7 +128,7 @@ final class TypoScriptProcessor implements \Ssch\TYPO3Rector\Contract\Processor\
             $editorConfigConfigurationBuilder = \Rector\FileFormatter\ValueObjectFactory\EditorConfigConfigurationBuilder::create();
             $editorConfigConfigurationBuilder->withIndent(\Rector\FileFormatter\ValueObject\Indent::createSpaceWithSize(4));
             $editorConfiguration = $this->editorConfigParser->extractConfigurationForFile($file, $editorConfigConfigurationBuilder);
-            $prettyPrinterConfiguration = \RectorPrefix20210607\Helmich\TypoScriptParser\Parser\Printer\PrettyPrinterConfiguration::create();
+            $prettyPrinterConfiguration = \RectorPrefix20210608\Helmich\TypoScriptParser\Parser\Printer\PrettyPrinterConfiguration::create();
             $prettyPrinterConfiguration = $prettyPrinterConfiguration->withEmptyLineBreaks();
             if ('tab' === $editorConfiguration->getIndentStyle()) {
                 $prettyPrinterConfiguration = $prettyPrinterConfiguration->withTabs();
@@ -140,7 +140,7 @@ final class TypoScriptProcessor implements \Ssch\TYPO3Rector\Contract\Processor\
             $this->typoscriptPrinter->printStatements($originalStatements, $this->output);
             $typoScriptContent = \rtrim($this->output->fetch()) . $editorConfiguration->getNewLine();
             $file->changeFileContent($typoScriptContent);
-        } catch (\RectorPrefix20210607\Helmich\TypoScriptParser\Tokenizer\TokenizerException $tokenizerException) {
+        } catch (\RectorPrefix20210608\Helmich\TypoScriptParser\Tokenizer\TokenizerException $tokenizerException) {
             return;
         }
     }
@@ -149,7 +149,7 @@ final class TypoScriptProcessor implements \Ssch\TYPO3Rector\Contract\Processor\
      */
     private function convertToPhpFileVisitors() : array
     {
-        return \array_filter($this->visitors, function (\RectorPrefix20210607\Helmich\TypoScriptParser\Parser\Traverser\Visitor $visitor) : bool {
+        return \array_filter($this->visitors, function (\RectorPrefix20210608\Helmich\TypoScriptParser\Parser\Traverser\Visitor $visitor) : bool {
             return \is_a($visitor, \Ssch\TYPO3Rector\Contract\FileProcessor\TypoScript\ConvertToPhpFileInterface::class, \true);
         });
     }

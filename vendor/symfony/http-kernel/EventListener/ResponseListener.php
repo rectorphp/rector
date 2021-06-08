@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210607\Symfony\Component\HttpKernel\EventListener;
+namespace RectorPrefix20210608\Symfony\Component\HttpKernel\EventListener;
 
-use RectorPrefix20210607\Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use RectorPrefix20210607\Symfony\Component\HttpKernel\Event\ResponseEvent;
-use RectorPrefix20210607\Symfony\Component\HttpKernel\KernelEvents;
+use RectorPrefix20210608\Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use RectorPrefix20210608\Symfony\Component\HttpKernel\Event\ResponseEvent;
+use RectorPrefix20210608\Symfony\Component\HttpKernel\KernelEvents;
 /**
  * ResponseListener fixes the Response headers based on the Request.
  *
@@ -20,7 +20,7 @@ use RectorPrefix20210607\Symfony\Component\HttpKernel\KernelEvents;
  *
  * @final
  */
-class ResponseListener implements \RectorPrefix20210607\Symfony\Component\EventDispatcher\EventSubscriberInterface
+class ResponseListener implements \RectorPrefix20210608\Symfony\Component\EventDispatcher\EventSubscriberInterface
 {
     private $charset;
     public function __construct(string $charset)
@@ -30,7 +30,7 @@ class ResponseListener implements \RectorPrefix20210607\Symfony\Component\EventD
     /**
      * Filters the Response.
      */
-    public function onKernelResponse(\RectorPrefix20210607\Symfony\Component\HttpKernel\Event\ResponseEvent $event)
+    public function onKernelResponse(\RectorPrefix20210608\Symfony\Component\HttpKernel\Event\ResponseEvent $event)
     {
         if (!$event->isMainRequest()) {
             return;
@@ -43,6 +43,6 @@ class ResponseListener implements \RectorPrefix20210607\Symfony\Component\EventD
     }
     public static function getSubscribedEvents() : array
     {
-        return [\RectorPrefix20210607\Symfony\Component\HttpKernel\KernelEvents::RESPONSE => 'onKernelResponse'];
+        return [\RectorPrefix20210608\Symfony\Component\HttpKernel\KernelEvents::RESPONSE => 'onKernelResponse'];
     }
 }

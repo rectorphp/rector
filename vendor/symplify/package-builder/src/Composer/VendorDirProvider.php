@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210607\Symplify\PackageBuilder\Composer;
+namespace RectorPrefix20210608\Symplify\PackageBuilder\Composer;
 
-use RectorPrefix20210607\Composer\Autoload\ClassLoader;
-use RectorPrefix20210607\Nette\Utils\Strings;
+use RectorPrefix20210608\Composer\Autoload\ClassLoader;
+use RectorPrefix20210608\Nette\Utils\Strings;
 use ReflectionClass;
 /**
  * @see \Symplify\PackageBuilder\Tests\Composer\VendorDirProviderTest
@@ -15,7 +15,7 @@ final class VendorDirProvider
     {
         $rootFolder = \getenv('SystemDrive', \true) . \DIRECTORY_SEPARATOR;
         $path = __DIR__;
-        while (!\RectorPrefix20210607\Nette\Utils\Strings::endsWith($path, 'vendor') && $path !== $rootFolder) {
+        while (!\RectorPrefix20210608\Nette\Utils\Strings::endsWith($path, 'vendor') && $path !== $rootFolder) {
             $path = \dirname($path);
         }
         if ($path !== $rootFolder) {
@@ -25,7 +25,7 @@ final class VendorDirProvider
     }
     private function reflectionFallback() : string
     {
-        $reflectionClass = new \ReflectionClass(\RectorPrefix20210607\Composer\Autoload\ClassLoader::class);
+        $reflectionClass = new \ReflectionClass(\RectorPrefix20210608\Composer\Autoload\ClassLoader::class);
         return \dirname($reflectionClass->getFileName(), 2);
     }
 }

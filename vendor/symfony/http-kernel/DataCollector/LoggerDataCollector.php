@@ -8,13 +8,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210607\Symfony\Component\HttpKernel\DataCollector;
+namespace RectorPrefix20210608\Symfony\Component\HttpKernel\DataCollector;
 
-use RectorPrefix20210607\Symfony\Component\ErrorHandler\Exception\SilencedErrorContext;
-use RectorPrefix20210607\Symfony\Component\HttpFoundation\Request;
-use RectorPrefix20210607\Symfony\Component\HttpFoundation\RequestStack;
-use RectorPrefix20210607\Symfony\Component\HttpFoundation\Response;
-use RectorPrefix20210607\Symfony\Component\HttpKernel\Log\DebugLoggerInterface;
+use RectorPrefix20210608\Symfony\Component\ErrorHandler\Exception\SilencedErrorContext;
+use RectorPrefix20210608\Symfony\Component\HttpFoundation\Request;
+use RectorPrefix20210608\Symfony\Component\HttpFoundation\RequestStack;
+use RectorPrefix20210608\Symfony\Component\HttpFoundation\Response;
+use RectorPrefix20210608\Symfony\Component\HttpKernel\Log\DebugLoggerInterface;
 /**
  * LogDataCollector.
  *
@@ -22,15 +22,15 @@ use RectorPrefix20210607\Symfony\Component\HttpKernel\Log\DebugLoggerInterface;
  *
  * @final
  */
-class LoggerDataCollector extends \RectorPrefix20210607\Symfony\Component\HttpKernel\DataCollector\DataCollector implements \RectorPrefix20210607\Symfony\Component\HttpKernel\DataCollector\LateDataCollectorInterface
+class LoggerDataCollector extends \RectorPrefix20210608\Symfony\Component\HttpKernel\DataCollector\DataCollector implements \RectorPrefix20210608\Symfony\Component\HttpKernel\DataCollector\LateDataCollectorInterface
 {
     private $logger;
     private $containerPathPrefix;
     private $currentRequest;
     private $requestStack;
-    public function __construct($logger = null, string $containerPathPrefix = null, \RectorPrefix20210607\Symfony\Component\HttpFoundation\RequestStack $requestStack = null)
+    public function __construct($logger = null, string $containerPathPrefix = null, \RectorPrefix20210608\Symfony\Component\HttpFoundation\RequestStack $requestStack = null)
     {
-        if (null !== $logger && $logger instanceof \RectorPrefix20210607\Symfony\Component\HttpKernel\Log\DebugLoggerInterface) {
+        if (null !== $logger && $logger instanceof \RectorPrefix20210608\Symfony\Component\HttpKernel\Log\DebugLoggerInterface) {
             $this->logger = $logger;
         }
         $this->containerPathPrefix = $containerPathPrefix;
@@ -39,7 +39,7 @@ class LoggerDataCollector extends \RectorPrefix20210607\Symfony\Component\HttpKe
     /**
      * {@inheritdoc}
      */
-    public function collect(\RectorPrefix20210607\Symfony\Component\HttpFoundation\Request $request, \RectorPrefix20210607\Symfony\Component\HttpFoundation\Response $response, \Throwable $exception = null)
+    public function collect(\RectorPrefix20210608\Symfony\Component\HttpFoundation\Request $request, \RectorPrefix20210608\Symfony\Component\HttpFoundation\Response $response, \Throwable $exception = null)
     {
         $this->currentRequest = $this->requestStack && $this->requestStack->getMainRequest() !== $request ? $request : null;
     }
@@ -48,7 +48,7 @@ class LoggerDataCollector extends \RectorPrefix20210607\Symfony\Component\HttpKe
      */
     public function reset()
     {
-        if ($this->logger instanceof \RectorPrefix20210607\Symfony\Component\HttpKernel\Log\DebugLoggerInterface) {
+        if ($this->logger instanceof \RectorPrefix20210608\Symfony\Component\HttpKernel\Log\DebugLoggerInterface) {
             $this->logger->clear();
         }
         $this->data = [];
@@ -115,7 +115,7 @@ class LoggerDataCollector extends \RectorPrefix20210607\Symfony\Component\HttpKe
         $bootTime = \filemtime($file);
         $logs = [];
         foreach (\unserialize($logContent) as $log) {
-            $log['context'] = ['exception' => new \RectorPrefix20210607\Symfony\Component\ErrorHandler\Exception\SilencedErrorContext($log['type'], $log['file'], $log['line'], $log['trace'], $log['count'])];
+            $log['context'] = ['exception' => new \RectorPrefix20210608\Symfony\Component\ErrorHandler\Exception\SilencedErrorContext($log['type'], $log['file'], $log['line'], $log['trace'], $log['count'])];
             $log['timestamp'] = $bootTime;
             $log['priority'] = 100;
             $log['priorityName'] = 'DEBUG';
@@ -152,7 +152,7 @@ class LoggerDataCollector extends \RectorPrefix20210607\Symfony\Component\HttpKe
             }
             $message = '_' . $log['message'];
             $exception = $log['context']['exception'];
-            if ($exception instanceof \RectorPrefix20210607\Symfony\Component\ErrorHandler\Exception\SilencedErrorContext) {
+            if ($exception instanceof \RectorPrefix20210608\Symfony\Component\ErrorHandler\Exception\SilencedErrorContext) {
                 if (isset($silencedLogs[$h = \spl_object_hash($exception)])) {
                     continue;
                 }
@@ -179,7 +179,7 @@ class LoggerDataCollector extends \RectorPrefix20210607\Symfony\Component\HttpKe
             return \false;
         }
         $exception = $log['context']['exception'];
-        if ($exception instanceof \RectorPrefix20210607\Symfony\Component\ErrorHandler\Exception\SilencedErrorContext) {
+        if ($exception instanceof \RectorPrefix20210608\Symfony\Component\ErrorHandler\Exception\SilencedErrorContext) {
             return \true;
         }
         if ($exception instanceof \ErrorException && \in_array($exception->getSeverity(), [\E_DEPRECATED, \E_USER_DEPRECATED], \true)) {
@@ -202,7 +202,7 @@ class LoggerDataCollector extends \RectorPrefix20210607\Symfony\Component\HttpKe
             }
             if ($this->isSilencedOrDeprecationErrorLog($log)) {
                 $exception = $log['context']['exception'];
-                if ($exception instanceof \RectorPrefix20210607\Symfony\Component\ErrorHandler\Exception\SilencedErrorContext) {
+                if ($exception instanceof \RectorPrefix20210608\Symfony\Component\ErrorHandler\Exception\SilencedErrorContext) {
                     if (isset($silencedLogs[$h = \spl_object_hash($exception)])) {
                         continue;
                     }

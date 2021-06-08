@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210607;
+namespace RectorPrefix20210608;
 
 use Rector\Core\Configuration\Option;
 use Rector\NetteToSymfony\Rector\Class_\RenameTesterTestToPHPUnitToTestFileRector;

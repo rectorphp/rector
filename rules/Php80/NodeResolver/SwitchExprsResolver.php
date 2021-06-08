@@ -5,6 +5,8 @@ namespace Rector\Php80\NodeResolver;
 
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Stmt\Break_;
+use PhpParser\Node\Stmt\Case_;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Switch_;
@@ -19,7 +21,8 @@ final class SwitchExprsResolver
     {
         $condAndExpr = [];
         foreach ($switch->cases as $case) {
-            if (!isset($case->stmts[0])) {
+            // must be exactly 1 stmt and break
+            if (!$this->isValidCase($case)) {
                 return [];
             }
             $expr = $case->stmts[0];
@@ -44,5 +47,21 @@ final class SwitchExprsResolver
             }
         }
         return $condAndExpr;
+    }
+    private function isValidCase(\PhpParser\Node\Stmt\Case_ $case) : bool
+    {
+        if (\count($case->stmts) === 2 && $case->stmts[1] instanceof \PhpParser\Node\Stmt\Break_) {
+            return \true;
+        }
+        // default throws stmts
+        if (\count($case->stmts) !== 1) {
+            return \false;
+        }
+        // throws expressoin
+        if ($case->stmts[0] instanceof \PhpParser\Node\Stmt\Throw_) {
+            return \true;
+        }
+        // default value
+        return $case->cond === null;
     }
 }
