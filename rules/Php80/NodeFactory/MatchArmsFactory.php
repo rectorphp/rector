@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\Php80\NodeFactory;
 
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\MatchArm;
 use Rector\Php80\ValueObject\CondAndExpr;
@@ -22,9 +21,8 @@ final class MatchArmsFactory
                 // $this->assignExpr = $expr->var;
                 $expr = $expr->expr;
             }
-            $condExpr = $condAndExpr->getCondExpr();
-            $condList = $condExpr instanceof \PhpParser\Node\Expr ? [$condExpr] : null;
-            $matchArms[] = new \PhpParser\Node\MatchArm($condList, $expr);
+            $condExprs = $condAndExpr->getCondExprs();
+            $matchArms[] = new \PhpParser\Node\MatchArm($condExprs, $expr);
         }
         return $matchArms;
     }

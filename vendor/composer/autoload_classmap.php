@@ -2789,6 +2789,7 @@ return array(
     'Rector\\Php80\\ValueObject\\AnnotationToAttribute' => $baseDir . '/rules/Php80/ValueObject/AnnotationToAttribute.php',
     'Rector\\Php80\\ValueObject\\ArrayDimFetchAndConstFetch' => $baseDir . '/rules/Php80/ValueObject/ArrayDimFetchAndConstFetch.php',
     'Rector\\Php80\\ValueObject\\CondAndExpr' => $baseDir . '/rules/Php80/ValueObject/CondAndExpr.php',
+    'Rector\\Php80\\ValueObject\\MatchKind' => $baseDir . '/rules/Php80/ValueObject/MatchKind.php',
     'Rector\\Php80\\ValueObject\\PropertyPromotionCandidate' => $baseDir . '/rules/Php80/ValueObject/PropertyPromotionCandidate.php',
     'Rector\\Php80\\ValueObject\\StrStartsWith' => $baseDir . '/rules/Php80/ValueObject/StrStartsWith.php',
     'Rector\\Php81\\NodeFactory\\EnumFactory' => $baseDir . '/rules/Php81/NodeFactory/EnumFactory.php',

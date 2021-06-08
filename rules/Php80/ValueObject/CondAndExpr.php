@@ -7,25 +7,9 @@ use PhpParser\Node\Expr;
 final class CondAndExpr
 {
     /**
-     * @var string
+     * @var mixed[]
      */
-    public const TYPE_NORMAL = 'normal';
-    /**
-     * @var string
-     */
-    public const TYPE_ASSIGN = 'assign';
-    /**
-     * @var string
-     */
-    public const TYPE_RETURN = 'return';
-    /**
-     * @var string
-     */
-    public const TYPE_THROW = 'throw';
-    /**
-     * @var \PhpParser\Node\Expr|null
-     */
-    private $condExpr;
+    private $condExprs;
     /**
      * @var \PhpParser\Node\Expr
      */
@@ -34,9 +18,12 @@ final class CondAndExpr
      * @var string
      */
     private $kind;
-    public function __construct(?\PhpParser\Node\Expr $condExpr, \PhpParser\Node\Expr $expr, string $kind)
+    /**
+     * @param Expr[] $condExprs
+     */
+    public function __construct(array $condExprs, \PhpParser\Node\Expr $expr, string $kind)
     {
-        $this->condExpr = $condExpr;
+        $this->condExprs = $condExprs;
         $this->expr = $expr;
         $this->kind = $kind;
     }
@@ -44,9 +31,12 @@ final class CondAndExpr
     {
         return $this->expr;
     }
-    public function getCondExpr() : ?\PhpParser\Node\Expr
+    /**
+     * @return Expr[]
+     */
+    public function getCondExprs() : array
     {
-        return $this->condExpr;
+        return $this->condExprs;
     }
     public function getKind() : string
     {

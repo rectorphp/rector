@@ -8,7 +8,6 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Match_;
 use PhpParser\Node\Expr\Throw_;
-use PhpParser\Node\MatchArm;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Switch_;
@@ -18,6 +17,7 @@ use Rector\Php80\NodeAnalyzer\MatchSwitchAnalyzer;
 use Rector\Php80\NodeFactory\MatchFactory;
 use Rector\Php80\NodeResolver\SwitchExprsResolver;
 use Rector\Php80\ValueObject\CondAndExpr;
+use Rector\Php80\ValueObject\MatchKind;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -105,7 +105,7 @@ CODE_SAMPLE
         }
         $isReturn = \false;
         foreach ($condAndExprs as $condAndExpr) {
-            if ($condAndExpr->getKind() === \Rector\Php80\ValueObject\CondAndExpr::TYPE_RETURN) {
+            if ($condAndExpr->getKind() === \Rector\Php80\ValueObject\MatchKind::RETURN) {
                 $isReturn = \true;
                 break;
             }
@@ -118,6 +118,8 @@ CODE_SAMPLE
             }
         }
         $match = $this->matchFactory->createFromCondAndExprs($node->cond, $condAndExprs);
+        // implicit return default after switch
+        $match = $this->processImplicitReturnAfterSwitch($node, $match, $condAndExprs);
         if ($isReturn) {
             return new \PhpParser\Node\Stmt\Return_($match);
         }
@@ -133,18 +135,12 @@ CODE_SAMPLE
             return $node instanceof \PhpParser\Node\Expr\Assign && $this->nodeComparator->areNodesEqual($node->var, $assignExpr);
         });
         $assign = new \PhpParser\Node\Expr\Assign($assignExpr, $match);
-        if ($prevInitializedAssign instanceof \PhpParser\Node\Expr\Assign) {
-            // avoid double default values
-            $hasDefault = $this->hasDefaultMatchArm($match);
-            if (!$hasDefault) {
-                /** @var Match_ $expr */
-                $expr = $assign->expr;
-                $expr->arms[] = new \PhpParser\Node\MatchArm(null, $prevInitializedAssign->expr);
-            }
-            $parentAssign = $prevInitializedAssign->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-            if ($parentAssign instanceof \PhpParser\Node\Stmt\Expression) {
-                $this->removeNode($parentAssign);
-            }
+        if (!$prevInitializedAssign instanceof \PhpParser\Node\Expr\Assign) {
+            return $assign;
+        }
+        $parentAssign = $prevInitializedAssign->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        if ($parentAssign instanceof \PhpParser\Node\Stmt\Expression) {
+            $this->removeNode($parentAssign);
         }
         return $assign;
     }
@@ -162,13 +158,24 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function hasDefaultMatchArm(\PhpParser\Node\Expr\Match_ $match) : bool
+    /**
+     * @param CondAndExpr[] $condAndExprs
+     */
+    private function processImplicitReturnAfterSwitch(\PhpParser\Node\Stmt\Switch_ $switch, \PhpParser\Node\Expr\Match_ $match, array $condAndExprs) : \PhpParser\Node\Expr\Match_
     {
-        foreach ($match->arms as $matchArm) {
-            if ($matchArm->conds === null) {
-                return \true;
-            }
+        $nextNode = $switch->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::NEXT_NODE);
+        if (!$nextNode instanceof \PhpParser\Node\Stmt\Return_) {
+            return $match;
         }
-        return \false;
+        $returnedExpr = $nextNode->expr;
+        if (!$returnedExpr instanceof \PhpParser\Node\Expr) {
+            return $match;
+        }
+        if ($this->matchSwitchAnalyzer->hasDefaultValue($match)) {
+            return $match;
+        }
+        $this->removeNode($nextNode);
+        $condAndExprs[] = new \Rector\Php80\ValueObject\CondAndExpr([], $returnedExpr, \Rector\Php80\ValueObject\MatchKind::RETURN);
+        return $this->matchFactory->createFromCondAndExprs($switch->cond, $condAndExprs);
     }
 }

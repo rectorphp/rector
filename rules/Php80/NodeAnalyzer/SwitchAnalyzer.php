@@ -20,7 +20,7 @@ final class SwitchAnalyzer
             if ($key === $totalCases - 1) {
                 return \true;
             }
-            if ($this->hasBreakOrReturn($case)) {
+            if ($this->hasBreakOrReturnOrEmpty($case)) {
                 continue;
             }
             return \false;
@@ -48,8 +48,11 @@ final class SwitchAnalyzer
         }
         return \false;
     }
-    private function hasBreakOrReturn(\PhpParser\Node\Stmt\Case_ $case) : bool
+    private function hasBreakOrReturnOrEmpty(\PhpParser\Node\Stmt\Case_ $case) : bool
     {
+        if ($case->stmts === []) {
+            return \true;
+        }
         foreach ($case->stmts as $caseStmt) {
             if ($caseStmt instanceof \PhpParser\Node\Stmt\Break_) {
                 return \true;
