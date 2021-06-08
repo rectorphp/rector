@@ -39,6 +39,7 @@ final class SwitchExprsResolver
                 if (! $returnedExpr instanceof Expr) {
                     return [];
                 }
+
                 $condAndExpr[] = new CondAndExpr($case->cond, $returnedExpr, CondAndExpr::TYPE_RETURN);
             } elseif ($expr instanceof Assign) {
                 $condAndExpr[] = new CondAndExpr($case->cond, $expr, CondAndExpr::TYPE_ASSIGN);
@@ -68,6 +69,11 @@ final class SwitchExprsResolver
 
         // throws expressoin
         if ($case->stmts[0] instanceof Throw_) {
+            return true;
+        }
+
+        // instant return
+        if ($case->stmts[0] instanceof Return_) {
             return true;
         }
 
