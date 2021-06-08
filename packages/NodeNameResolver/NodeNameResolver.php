@@ -49,7 +49,7 @@ final class NodeNameResolver
     /**
      * @param Node|Node[] $node
      */
-    public function isName($node, string $name): bool
+    public function isName(Node | array $node, string $name): bool
     {
         if ($node instanceof MethodCall) {
             return false;
@@ -159,10 +159,7 @@ final class NodeNameResolver
         return (bool) Strings::match($currentName, $suffixNamePattern);
     }
 
-    /**
-     * @param string|Name|Identifier|ClassLike $name
-     */
-    public function getShortName($name): string
+    public function getShortName(string | Name | Identifier | ClassLike $name): string
     {
         return $this->classNaming->getShortName($name);
     }

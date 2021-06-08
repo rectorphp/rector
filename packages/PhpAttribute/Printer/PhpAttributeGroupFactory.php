@@ -99,9 +99,9 @@ final class PhpAttributeGroupFactory
 
     /**
      * @param mixed $value
-     * @return bool|float|int|string|array<mixed>|Expr
+     * @return array<mixed>
      */
-    private function normalizeNodeValue($value)
+    private function normalizeNodeValue($value): bool | float | int | string | array | Expr
     {
         if ($value instanceof ConstExprIntegerNode) {
             return (int) $value->value;

@@ -98,7 +98,7 @@ final class BetterNodeFinder
      * @param Node|Node[]|Stmt[] $nodes
      * @return T[]
      */
-    public function findInstancesOf($nodes, array $types): array
+    public function findInstancesOf(Node | array $nodes, array $types): array
     {
         $foundInstances = [];
         foreach ($types as $type) {
@@ -115,7 +115,7 @@ final class BetterNodeFinder
      * @param Node|Node[]|Stmt[] $nodes
      * @return T[]
      */
-    public function findInstanceOf($nodes, string $type): array
+    public function findInstanceOf(Node | array $nodes, string $type): array
     {
         Assert::isAOf($type, Node::class);
         return $this->nodeFinder->findInstanceOf($nodes, $type);
@@ -127,7 +127,7 @@ final class BetterNodeFinder
      * @param Node|Node[] $nodes
      * @return T|null
      */
-    public function findFirstInstanceOf($nodes, string $type): ?Node
+    public function findFirstInstanceOf(Node | array $nodes, string $type): ?Node
     {
         Assert::isAOf($type, Node::class);
         return $this->nodeFinder->findFirstInstanceOf($nodes, $type);
@@ -137,7 +137,7 @@ final class BetterNodeFinder
      * @param class-string<Node> $type
      * @param Node|Node[] $nodes
      */
-    public function hasInstanceOfName($nodes, string $type, string $name): bool
+    public function hasInstanceOfName(Node | array $nodes, string $type, string $name): bool
     {
         Assert::isAOf($type, Node::class);
         return (bool) $this->findInstanceOfName($nodes, $type, $name);
@@ -146,7 +146,7 @@ final class BetterNodeFinder
     /**
      * @param Node|Node[] $nodes
      */
-    public function hasVariableOfName($nodes, string $name): bool
+    public function hasVariableOfName(Node | array $nodes, string $name): bool
     {
         return (bool) $this->findVariableOfName($nodes, $name);
     }
@@ -155,7 +155,7 @@ final class BetterNodeFinder
      * @param Node|Node[] $nodes
      * @return Variable|null
      */
-    public function findVariableOfName($nodes, string $name): ?Node
+    public function findVariableOfName(Node | array $nodes, string $name): ?Node
     {
         return $this->findInstanceOfName($nodes, Variable::class, $name);
     }
@@ -164,7 +164,7 @@ final class BetterNodeFinder
      * @param Node|Node[] $nodes
      * @param array<class-string<Node>> $types
      */
-    public function hasInstancesOf($nodes, array $types): bool
+    public function hasInstancesOf(Node | array $nodes, array $types): bool
     {
         Assert::allIsAOf($types, Node::class);
 
@@ -186,7 +186,7 @@ final class BetterNodeFinder
      * @param Node|Node[] $nodes
      * @return T|null
      */
-    public function findLastInstanceOf($nodes, string $type): ?Node
+    public function findLastInstanceOf(Node | array $nodes, string $type): ?Node
     {
         Assert::isAOf($type, Node::class);
 
@@ -203,7 +203,7 @@ final class BetterNodeFinder
      * @param Node|Node[] $nodes
      * @return Node[]
      */
-    public function find($nodes, callable $filter): array
+    public function find(Node | array $nodes, callable $filter): array
     {
         return $this->nodeFinder->find($nodes, $filter);
     }
@@ -214,7 +214,7 @@ final class BetterNodeFinder
      * @param Node[]|Node $nodes
      * @return ClassLike[]
      */
-    public function findClassLikes($nodes): array
+    public function findClassLikes(array | Node $nodes): array
     {
         return $this->find($nodes, function (Node $node): bool {
             if (! $node instanceof ClassLike) {
@@ -244,7 +244,7 @@ final class BetterNodeFinder
     /**
      * @param Node|Node[] $nodes
      */
-    public function findFirst($nodes, callable $filter): ?Node
+    public function findFirst(Node | array $nodes, callable $filter): ?Node
     {
         return $this->nodeFinder->findFirst($nodes, $filter);
     }
@@ -363,7 +363,7 @@ final class BetterNodeFinder
      * @param class-string<T> $type
      * @return T|null
      */
-    private function findInstanceOfName($nodes, string $type, string $name): ?Node
+    private function findInstanceOfName(Node | array $nodes, string $type, string $name): ?Node
     {
         Assert::isAOf($type, Node::class);
 

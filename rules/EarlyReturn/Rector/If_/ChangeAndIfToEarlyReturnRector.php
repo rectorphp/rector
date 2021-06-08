@@ -134,7 +134,7 @@ CODE_SAMPLE
      * @param Expr[] $conditions
      * @return If_|Node[]
      */
-    private function processReplaceIfs(If_ $node, array $conditions, Return_ $ifNextReturnClone)
+    private function processReplaceIfs(If_ $node, array $conditions, Return_ $ifNextReturnClone): If_ | array
     {
         $ifs = $this->invertedIfFactory->createFromConditions($node, $conditions, $ifNextReturnClone);
         $this->mirrorComments($ifs[0], $node);

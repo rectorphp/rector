@@ -31,10 +31,7 @@ final class ConditionEvaluator
         return null;
     }
 
-    /**
-     * @return bool|int
-     */
-    private function evaluateVersionCompareCondition(VersionCompareCondition $versionCompareCondition)
+    private function evaluateVersionCompareCondition(VersionCompareCondition $versionCompareCondition): bool | int
     {
         $compareSign = $versionCompareCondition->getCompareSign();
         if ($compareSign !== null) {

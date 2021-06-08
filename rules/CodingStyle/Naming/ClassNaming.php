@@ -21,10 +21,7 @@ final class ClassNaming
      */
     private const INPUT_HASH_NAMING_REGEX = '#input_(.*?)_#';
 
-    /**
-     * @param string|Name|Identifier $name
-     */
-    public function getVariableName($name): string
+    public function getVariableName(string | Name | Identifier $name): string
     {
         $shortName = $this->getShortName($name);
         return lcfirst($shortName);

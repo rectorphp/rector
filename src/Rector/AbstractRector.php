@@ -352,7 +352,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     /**
      * @param Node|Node[] $nodes
      */
-    protected function traverseNodesWithCallable($nodes, callable $callable): void
+    protected function traverseNodesWithCallable(Node | array $nodes, callable $callable): void
     {
         $this->simpleCallableNodeTraverser->traverseNodesWithCallable($nodes, $callable);
     }
@@ -554,7 +554,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     /**
      * @param Node|Node[] $node
      */
-    private function connectParentNodes($node): void
+    private function connectParentNodes(Node | array $node): void
     {
         $nodes = is_array($node) ? $node : [$node];
 

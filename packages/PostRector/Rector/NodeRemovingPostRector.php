@@ -68,10 +68,7 @@ final class NodeRemovingPostRector extends AbstractPostRector
         return $this->removePartOfBinaryOp($node);
     }
 
-    /**
-     * @return int|Node
-     */
-    public function leaveNode(Node $node)
+    public function leaveNode(Node $node): int | Node
     {
         foreach ($this->nodesToRemoveCollector->getNodesToRemove() as $key => $nodeToRemove) {
             $nodeToRemoveParent = $nodeToRemove->getAttribute(AttributeKey::PARENT_NODE);

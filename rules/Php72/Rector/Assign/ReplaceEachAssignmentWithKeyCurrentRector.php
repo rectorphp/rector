@@ -118,13 +118,10 @@ CODE_SAMPLE
         return $newNodes;
     }
 
-    /**
-     * @param string|int $dimValue
-     */
     private function createDimFetchAssignWithFuncCall(
         Expr $assignVariable,
         Expr $eachedVariable,
-        $dimValue,
+        string | int $dimValue,
         string $functionName
     ): Assign {
         $dim = BuilderHelpers::normalizeValue($dimValue);

@@ -270,10 +270,8 @@ CODE_SAMPLE
 
     /**
      * Return the key inside the ArrayItem, if provided, or the position otherwise
-     * @param int|string $position
-     * @return int|string
      */
-    private function getArrayItemKey(ArrayItem $arrayItem, $position)
+    private function getArrayItemKey(ArrayItem $arrayItem, int | string $position): int | string
     {
         if ($arrayItem->key instanceof String_) {
             return $arrayItem->key->value;
@@ -287,13 +285,12 @@ CODE_SAMPLE
     /**
      * Re-build the path to the variable with all accumulated indexes
      * @param (string|int)[] $nestedArrayIndexes The path to build nested lists
-     * @param string|int $arrayIndex
      */
     private function createAssignRefWithArrayDimFetch(
         Variable $assignVariable,
         Variable $exprVariable,
         array $nestedArrayIndexes,
-        $arrayIndex
+        string | int $arrayIndex
     ): AssignRef {
         $nestedExprVariable = $exprVariable;
         foreach ($nestedArrayIndexes as $nestedArrayIndex) {

@@ -78,10 +78,7 @@ final class NodeRemover
         unset($node->stmts[$key]);
     }
 
-    /**
-     * @param int|Param $keyOrParam
-     */
-    public function removeParam(ClassMethod $classMethod, $keyOrParam): void
+    public function removeParam(ClassMethod $classMethod, int | Param $keyOrParam): void
     {
         $key = $keyOrParam instanceof Param ? $keyOrParam->getAttribute(AttributeKey::PARAMETER_POSITION) : $keyOrParam;
 

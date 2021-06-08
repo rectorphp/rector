@@ -185,9 +185,8 @@ CODE_SAMPLE
      * We must then first extract it into a variable,
      * as to invoke it only once and avoid potential bugs,
      * such as a method executing some side-effect
-     * @param int|string $position
      */
-    private function createVariableFromNonVariable(Array_ $array, ArrayItem $arrayItem, $position): Variable
+    private function createVariableFromNonVariable(Array_ $array, ArrayItem $arrayItem, int | string $position): Variable
     {
         /** @var Scope $nodeScope */
         $nodeScope = $array->getAttribute(AttributeKey::SCOPE);

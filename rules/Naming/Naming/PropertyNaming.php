@@ -122,10 +122,7 @@ final class PropertyNaming
         return new ExpectedName($originalName, $this->rectorNamingInflector->singularize($originalName));
     }
 
-    /**
-     * @param ObjectType|string $objectType
-     */
-    public function fqnToVariableName($objectType): string
+    public function fqnToVariableName(ObjectType | string $objectType): string
     {
         $className = $this->resolveClassName($objectType);
 
@@ -218,10 +215,7 @@ final class PropertyNaming
         return lcfirst($shortClassName);
     }
 
-    /**
-     * @param ObjectType|string $objectType
-     */
-    private function resolveClassName($objectType): string
+    private function resolveClassName(ObjectType | string $objectType): string
     {
         if ($objectType instanceof ObjectType) {
             return $objectType->getClassName();

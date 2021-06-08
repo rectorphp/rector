@@ -35,7 +35,7 @@ final class NodeAddingPostRector extends AbstractPostRector
     /**
      * @return array<int|string, Node>|Node
      */
-    public function leaveNode(Node $node)
+    public function leaveNode(Node $node): array | Node
     {
         $newNodes = [$node];
 

@@ -57,10 +57,9 @@ abstract class AbstractValuesAwareNode implements PhpDocTagValueNode
     }
 
     /**
-     * @param string|int $key
      * @return mixed|Node|null
      */
-    public function getValue($key)
+    public function getValue(string | int $key)
     {
         // to allow false as default
         if (! array_key_exists($key, $this->values)) {
@@ -90,10 +89,9 @@ abstract class AbstractValuesAwareNode implements PhpDocTagValueNode
     }
 
     /**
-     * @param string|int $key
      * @return mixed|null
      */
-    public function getValueWithoutQuotes($key)
+    public function getValueWithoutQuotes(string | int $key)
     {
         $value = $this->getValue($key);
         if ($value === null) {
