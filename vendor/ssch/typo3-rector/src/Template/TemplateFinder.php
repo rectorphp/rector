@@ -16,15 +16,15 @@ final class TemplateFinder
     }
     public function getCommand() : \Symplify\SmartFileSystem\SmartFileInfo
     {
-        return $this->createSmartFileInfo('Commands/Command.tpl.php');
+        return $this->createSmartFileInfo('Commands/Command.tpl');
     }
     public function getCommandsConfiguration() : \Symplify\SmartFileSystem\SmartFileInfo
     {
-        return $this->createSmartFileInfo('Commands/Commands.tpl.php');
+        return $this->createSmartFileInfo('Commands/Commands.tpl');
     }
     public function getExtbasePersistenceConfiguration() : \Symplify\SmartFileSystem\SmartFileInfo
     {
-        return $this->createSmartFileInfo('Extbase/Persistence.tpl.php');
+        return $this->createSmartFileInfo('Extbase/Persistence.tpl');
     }
     private function createSmartFileInfo(string $template) : \Symplify\SmartFileSystem\SmartFileInfo
     {

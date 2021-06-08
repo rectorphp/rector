@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitd86b37bb77e23b700ff350c244dc4fcf
+class ComposerStaticInit046c81e84e0a47c5886401db4ffb9e1b
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -3634,6 +3634,7 @@ class ComposerStaticInitd86b37bb77e23b700ff350c244dc4fcf
         'Ssch\\TYPO3Rector\\FileProcessor\\TypoScript\\Visitors\\OldConditionToExpressionLanguageVisitor' => __DIR__ . '/..' . '/ssch/typo3-rector/src/FileProcessor/TypoScript/Visitors/OldConditionToExpressionLanguageVisitor.php',
         'Ssch\\TYPO3Rector\\FileProcessor\\Yaml\\Form\\FormYamlProcessor' => __DIR__ . '/..' . '/ssch/typo3-rector/src/FileProcessor/Yaml/Form/FormYamlProcessor.php',
         'Ssch\\TYPO3Rector\\FileProcessor\\Yaml\\Form\\Rector\\EmailFinisherRector' => __DIR__ . '/..' . '/ssch/typo3-rector/src/FileProcessor/Yaml/Form/Rector/EmailFinisherRector.php',
+        'Ssch\\TYPO3Rector\\FileProcessor\\Yaml\\Form\\Rector\\TranslationFileRector' => __DIR__ . '/..' . '/ssch/typo3-rector/src/FileProcessor/Yaml/Form/Rector/TranslationFileRector.php',
         'Ssch\\TYPO3Rector\\Helper\\ArrayUtility' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Helper/ArrayUtility.php',
         'Ssch\\TYPO3Rector\\Helper\\Database\\Refactorings\\ConnectionCallFactory' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Helper/Database/Refactorings/ConnectionCallFactory.php',
         'Ssch\\TYPO3Rector\\Helper\\Database\\Refactorings\\DatabaseConnectionExecInsertQueryRefactoring' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Helper/Database/Refactorings/DatabaseConnectionExecInsertQueryRefactoring.php',
@@ -3817,6 +3818,7 @@ class ComposerStaticInitd86b37bb77e23b700ff350c244dc4fcf
         'Ssch\\TYPO3Rector\\Rector\\v9\\v3\\RemoveColPosParameterRector' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Rector/v9/v3/RemoveColPosParameterRector.php',
         'Ssch\\TYPO3Rector\\Rector\\v9\\v3\\UseMethodGetPageShortcutDirectlyFromSysPageRector' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Rector/v9/v3/UseMethodGetPageShortcutDirectlyFromSysPageRector.php',
         'Ssch\\TYPO3Rector\\Rector\\v9\\v3\\ValidateAnnotationRector' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Rector/v9/v3/ValidateAnnotationRector.php',
+        'Ssch\\TYPO3Rector\\Rector\\v9\\v4\\AdditionalFieldProviderRector' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Rector/v9/v4/AdditionalFieldProviderRector.php',
         'Ssch\\TYPO3Rector\\Rector\\v9\\v4\\BackendUtilityShortcutExistsRector' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Rector/v9/v4/BackendUtilityShortcutExistsRector.php',
         'Ssch\\TYPO3Rector\\Rector\\v9\\v4\\CallEnableFieldsFromPageRepositoryRector' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Rector/v9/v4/CallEnableFieldsFromPageRepositoryRector.php',
         'Ssch\\TYPO3Rector\\Rector\\v9\\v4\\ConstantsToEnvironmentApiCallRector' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Rector/v9/v4/ConstantsToEnvironmentApiCallRector.php',
@@ -3877,9 +3879,9 @@ class ComposerStaticInitd86b37bb77e23b700ff350c244dc4fcf
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitd86b37bb77e23b700ff350c244dc4fcf::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitd86b37bb77e23b700ff350c244dc4fcf::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitd86b37bb77e23b700ff350c244dc4fcf::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit046c81e84e0a47c5886401db4ffb9e1b::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit046c81e84e0a47c5886401db4ffb9e1b::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit046c81e84e0a47c5886401db4ffb9e1b::$classMap;
 
         }, null, ClassLoader::class);
     }

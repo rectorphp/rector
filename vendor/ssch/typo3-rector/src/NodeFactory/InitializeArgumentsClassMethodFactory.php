@@ -28,6 +28,7 @@ use PHPStan\Type\VerbosityLevel;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Core\PhpParser\Node\NodeFactory;
+use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
@@ -69,7 +70,11 @@ final class InitializeArgumentsClassMethodFactory
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(\Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \Rector\TypeDeclaration\TypeInferer\ParamTypeInferer $paramTypeInferer, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
+    /**
+     * @var \Rector\Core\PhpParser\Node\Value\ValueResolver
+     */
+    private $valueResolver;
+    public function __construct(\Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \Rector\TypeDeclaration\TypeInferer\ParamTypeInferer $paramTypeInferer, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\Core\PhpParser\Node\Value\ValueResolver $valueResolver)
     {
         $this->nodeFactory = $nodeFactory;
         $this->nodeNameResolver = $nodeNameResolver;
@@ -77,6 +82,7 @@ final class InitializeArgumentsClassMethodFactory
         $this->paramTypeInferer = $paramTypeInferer;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->reflectionProvider = $reflectionProvider;
+        $this->valueResolver = $valueResolver;
     }
     public function decorateClass(\PhpParser\Node\Stmt\Class_ $class) : void
     {
@@ -126,8 +132,9 @@ final class InitializeArgumentsClassMethodFactory
             $args = [$paramName, $docString, $this->getDescription($paramTagValueNode)];
             if ($param->default instanceof \PhpParser\Node\Expr) {
                 $args[] = new \PhpParser\Node\Expr\ConstFetch(new \PhpParser\Node\Name('false'));
-                if (\property_exists($param->default, 'value')) {
-                    $args[] = $param->default->value;
+                $defaultValue = $this->valueResolver->getValue($param->default);
+                if (null !== $defaultValue) {
+                    $args[] = $defaultValue;
                 }
             } else {
                 $args[] = new \PhpParser\Node\Expr\ConstFetch(new \PhpParser\Node\Name('true'));

@@ -50,7 +50,7 @@ final class FormYamlProcessor implements \Rector\Core\Contract\Processor\FilePro
     public function supports(\Rector\Core\ValueObject\Application\File $file) : bool
     {
         $smartFileInfo = $file->getSmartFileInfo();
-        return \RectorPrefix20210608\Nette\Utils\Strings::endsWith($smartFileInfo->getFilename(), 'form.yaml');
+        return \RectorPrefix20210608\Nette\Utils\Strings::endsWith($smartFileInfo->getFilename(), 'yaml');
     }
     public function getSupportedFileExtensions() : array
     {

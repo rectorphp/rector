@@ -1758,17 +1758,17 @@
         },
         {
             "name": "ssch\/typo3-rector",
-            "version": "v0.11.14",
-            "version_normalized": "0.11.14.0",
+            "version": "v0.11.15",
+            "version_normalized": "0.11.15.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/sabbelasichon\/typo3-rector.git",
-                "reference": "0dce7c7bee1214ac1d5e67b18521a8b3c5bbc6ce"
+                "reference": "abd6bcb08fdaf9884487725df4a192fcd6c67960"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/sabbelasichon\/typo3-rector\/zipball\/0dce7c7bee1214ac1d5e67b18521a8b3c5bbc6ce",
-                "reference": "0dce7c7bee1214ac1d5e67b18521a8b3c5bbc6ce",
+                "url": "https:\/\/api.github.com\/repos\/sabbelasichon\/typo3-rector\/zipball\/abd6bcb08fdaf9884487725df4a192fcd6c67960",
+                "reference": "abd6bcb08fdaf9884487725df4a192fcd6c67960",
                 "shasum": ""
             },
             "require": {
@@ -1793,7 +1793,7 @@
                 "symplify\/rule-doc-generator": "^9.3",
                 "tracy\/tracy": "^2.8"
             },
-            "time": "2021-06-02T14:31:36+00:00",
+            "time": "2021-06-08T16:16:11+00:00",
             "type": "rector-extension",
             "extra": {
                 "rector": {
@@ -1822,7 +1822,7 @@
             "description": "Instant fixes for your TYPO3 code by using Rector.",
             "support": {
                 "issues": "https:\/\/github.com\/sabbelasichon\/typo3-rector\/issues",
-                "source": "https:\/\/github.com\/sabbelasichon\/typo3-rector\/tree\/v0.11.14"
+                "source": "https:\/\/github.com\/sabbelasichon\/typo3-rector\/tree\/v0.11.15"
             },
             "funding": [
                 {
