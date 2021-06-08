@@ -24,7 +24,6 @@ use Rector\Restoration\Rector\ClassMethod\InferParamFromClassMethodReturnRector;
 use Rector\Restoration\ValueObject\InferParamFromClassMethodReturn;
 use Rector\Set\ValueObject\SetList;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddVoidReturnTypeWhereNoReturnRector;
-use Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictTypedCallRector;
 use Rector\TypeDeclaration\Rector\FunctionLike\ParamTypeDeclarationRector;
 use Rector\TypeDeclaration\Rector\FunctionLike\ReturnTypeDeclarationRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -96,8 +95,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         SplitStringClassConstantToClassConstFetchRector::class,
 
         // to be enabled when all rules for php 8 syntax applied
-        // PhpVersionFeature::UNION_TYPES
-        ReturnTypeFromStrictTypedCallRector::class,
         // PhpVersionFeature::CLASS_ON_OBJECT
         ClassOnObjectRector::class,
         // PhpVersionFeature::STATIC_RETURN_TYPE
