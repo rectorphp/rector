@@ -17,6 +17,7 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PropertyTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\TemplateTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
+use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
 use PHPStan\PhpDocParser\Lexer\Lexer;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
@@ -25,6 +26,7 @@ use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDoc\SpacelessPhpDocTagNode;
 use Rector\BetterPhpDocParser\PhpDocNodeVisitor\ChangedPhpDocNodeVisitor;
 use Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator;
+use Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareUnionTypeNode;
 use Rector\ChangesReporting\Collector\RectorChangeCollector;
 use Rector\Core\Configuration\CurrentNodeProvider;
 use Rector\Core\Exception\NotImplementedYetException;
@@ -316,7 +318,10 @@ final class PhpDocInfo
                 continue;
             }
 
-            unset($this->phpDocNode->children[$key]);
+            /** @var PhpDocTagNode $children */
+            $children = $this->phpDocNode->children[$key];
+            $this->cleanChildrenValueType($children, $key);
+
             $this->markAsChanged();
         }
     }
@@ -486,6 +491,29 @@ final class PhpDocInfo
     public function getNode(): \PhpParser\Node
     {
         return $this->node;
+    }
+
+    private function cleanChildrenValueType(PhpDocTagNode $phpDocTagNode, int $key): void
+    {
+        /** @var PhpDocTagValueNode $value */
+        $value = $phpDocTagNode->value;
+        $type = $value->type;
+
+        $newChildrenTypes = [];
+        if ($type instanceof BracketsAwareUnionTypeNode) {
+            $brackedTypes = $type->types;
+            foreach ($brackedTypes as $brackedType) {
+                if ($brackedType instanceof GenericTypeNode) {
+                    $newChildrenTypes[] = $brackedType;
+                }
+            }
+        }
+
+        if ($newChildrenTypes === []) {
+            unset($this->phpDocNode->children[$key]);
+        } else {
+            $this->phpDocNode->children[$key]->value->type = new BracketsAwareUnionTypeNode($newChildrenTypes);
+        }
     }
 
     private function getTypeOrMixed(?PhpDocTagValueNode $phpDocTagValueNode): Type
