@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Match_;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Switch_;
+use PhpParser\Node\Stmt\Throw_;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php80\ValueObject\CondAndExpr;
@@ -44,12 +45,11 @@ final class MatchSwitchAnalyzer
         }
 
         // is followed by return? is considered implicit default
-        $parent = $switch->getAttribute(AttributeKey::NEXT_NODE);
-        if (! $parent instanceof Return_) {
-            return true;
+        if ($this->isNextStmtReturnWithExpr($switch)) {
+            return false;
         }
 
-        return $parent->expr === null;
+        return ! $this->isNextStmtThrows($switch);
     }
 
     /**
@@ -111,5 +111,21 @@ final class MatchSwitchAnalyzer
         }
 
         return array_unique($condAndExprKinds);
+    }
+
+    private function isNextStmtReturnWithExpr(Switch_ $switch): bool
+    {
+        $parent = $switch->getAttribute(AttributeKey::NEXT_NODE);
+        if (! $parent instanceof Return_) {
+            return false;
+        }
+
+        return $parent->expr !== null;
+    }
+
+    private function isNextStmtThrows(Switch_ $switch): bool
+    {
+        $parent = $switch->getAttribute(AttributeKey::NEXT_NODE);
+        return $parent instanceof Throw_;
     }
 }

@@ -16,7 +16,7 @@ final class SwitchAnalyzer
     {
         $totalCases = count($switch->cases);
         if ($totalCases === 1) {
-            return false;
+            return $this->containsCaseReturn($switch->cases[0]);
         }
 
         foreach ($switch->cases as $key => $case) {
@@ -70,6 +70,17 @@ final class SwitchAnalyzer
             }
 
             if ($caseStmt instanceof Return_) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function containsCaseReturn(Case_ $case): bool
+    {
+        foreach ($case->stmts as $stmt) {
+            if ($stmt instanceof Return_) {
                 return true;
             }
         }
