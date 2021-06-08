@@ -24,7 +24,7 @@ final class SwitchAnalyzer
                 return true;
             }
 
-            if ($this->hasBreakOrReturn($case)) {
+            if ($this->hasBreakOrReturnOrEmpty($case)) {
                 continue;
             }
 
@@ -58,8 +58,12 @@ final class SwitchAnalyzer
         return false;
     }
 
-    private function hasBreakOrReturn(Case_ $case): bool
+    private function hasBreakOrReturnOrEmpty(Case_ $case): bool
     {
+        if ($case->stmts === []) {
+            return true;
+        }
+
         foreach ($case->stmts as $caseStmt) {
             if ($caseStmt instanceof Break_) {
                 return true;

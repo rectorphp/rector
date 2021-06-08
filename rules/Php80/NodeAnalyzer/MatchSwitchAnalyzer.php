@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Stmt\Switch_;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\Php80\ValueObject\CondAndExpr;
+use Rector\Php80\ValueObject\MatchKind;
 
 final class MatchSwitchAnalyzer
 {
@@ -75,7 +76,7 @@ final class MatchSwitchAnalyzer
     {
         $condAndExprKinds = [];
         foreach ($condAndExprs as $condAndExpr) {
-            if ($condAndExpr->getKind() === CondAndExpr::TYPE_THROW) {
+            if ($condAndExpr->getKind() === MatchKind::THROW) {
                 continue;
             }
 

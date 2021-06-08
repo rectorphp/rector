@@ -13,6 +13,7 @@ use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Switch_;
 use PhpParser\Node\Stmt\Throw_;
 use Rector\Php80\ValueObject\CondAndExpr;
+use Rector\Php80\ValueObject\MatchKind;
 
 final class SwitchExprsResolver
 {
@@ -23,15 +24,31 @@ final class SwitchExprsResolver
     {
         $condAndExpr = [];
 
+        $previousCondExpr = null;
         foreach ($switch->cases as $case) {
-            // must be exactly 1 stmt and break
             if (! $this->isValidCase($case)) {
                 return [];
+            }
+
+            // prepend to previous one
+            if ($case->stmts === []) {
+                $previousCondExpr = $case->cond;
+                continue;
             }
 
             $expr = $case->stmts[0];
             if ($expr instanceof Expression) {
                 $expr = $expr->expr;
+            }
+
+            $condExprs = [];
+            if ($previousCondExpr instanceof Expr) {
+                $condExprs[] = $previousCondExpr;
+                $previousCondExpr = null;
+            }
+
+            if ($case->cond !== null) {
+                $condExprs[] = $case->cond;
             }
 
             if ($expr instanceof Return_) {
@@ -40,14 +57,14 @@ final class SwitchExprsResolver
                     return [];
                 }
 
-                $condAndExpr[] = new CondAndExpr($case->cond, $returnedExpr, CondAndExpr::TYPE_RETURN);
+                $condAndExpr[] = new CondAndExpr($condExprs, $returnedExpr, MatchKind::RETURN);
             } elseif ($expr instanceof Assign) {
-                $condAndExpr[] = new CondAndExpr($case->cond, $expr, CondAndExpr::TYPE_ASSIGN);
+                $condAndExpr[] = new CondAndExpr($condExprs, $expr, MatchKind::ASSIGN);
             } elseif ($expr instanceof Expr) {
-                $condAndExpr[] = new CondAndExpr($case->cond, $expr, CondAndExpr::TYPE_NORMAL);
+                $condAndExpr[] = new CondAndExpr($condExprs, $expr, MatchKind::NORMAL);
             } elseif ($expr instanceof Throw_) {
                 $throwExpr = new Expr\Throw_($expr->expr);
-                $condAndExpr[] = new CondAndExpr($case->cond, $throwExpr, CondAndExpr::TYPE_THROW);
+                $condAndExpr[] = new CondAndExpr($condExprs, $throwExpr, MatchKind::THROW);
             } else {
                 return [];
             }
@@ -58,6 +75,11 @@ final class SwitchExprsResolver
 
     private function isValidCase(Case_ $case): bool
     {
+        // prepend to previous one
+        if ($case->stmts === []) {
+            return true;
+        }
+
         if (count($case->stmts) === 2 && $case->stmts[1] instanceof Break_) {
             return true;
         }

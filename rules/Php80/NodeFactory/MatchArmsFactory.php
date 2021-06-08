@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Php80\NodeFactory;
 
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\MatchArm;
 use Rector\Php80\ValueObject\CondAndExpr;
@@ -26,10 +25,8 @@ final class MatchArmsFactory
                 $expr = $expr->expr;
             }
 
-            $condExpr = $condAndExpr->getCondExpr();
-
-            $condList = $condExpr instanceof Expr ? [$condExpr] : null;
-            $matchArms[] = new MatchArm($condList, $expr);
+            $condExprs = $condAndExpr->getCondExprs();
+            $matchArms[] = new MatchArm($condExprs, $expr);
         }
 
         return $matchArms;

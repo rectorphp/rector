@@ -9,7 +9,6 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Match_;
 use PhpParser\Node\Expr\Throw_;
-use PhpParser\Node\MatchArm;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Switch_;
@@ -19,6 +18,7 @@ use Rector\Php80\NodeAnalyzer\MatchSwitchAnalyzer;
 use Rector\Php80\NodeFactory\MatchFactory;
 use Rector\Php80\NodeResolver\SwitchExprsResolver;
 use Rector\Php80\ValueObject\CondAndExpr;
+use Rector\Php80\ValueObject\MatchKind;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -103,8 +103,9 @@ CODE_SAMPLE
         }
 
         $isReturn = false;
+
         foreach ($condAndExprs as $condAndExpr) {
-            if ($condAndExpr->getKind() === CondAndExpr::TYPE_RETURN) {
+            if ($condAndExpr->getKind() === MatchKind::RETURN) {
                 $isReturn = true;
                 break;
             }
@@ -120,7 +121,6 @@ CODE_SAMPLE
         }
 
         $match = $this->matchFactory->createFromCondAndExprs($node->cond, $condAndExprs);
-
         if ($isReturn) {
             return new Return_($match);
         }
@@ -144,20 +144,13 @@ CODE_SAMPLE
         );
 
         $assign = new Assign($assignExpr, $match);
-        if ($prevInitializedAssign instanceof Assign) {
+        if (! $prevInitializedAssign instanceof Assign) {
+            return $assign;
+        }
 
-            // avoid double default values
-            $hasDefault = $this->hasDefaultMatchArm($match);
-            if (! $hasDefault) {
-                /** @var Match_ $expr */
-                $expr = $assign->expr;
-                $expr->arms[] = new MatchArm(null, $prevInitializedAssign->expr);
-            }
-
-            $parentAssign = $prevInitializedAssign->getAttribute(AttributeKey::PARENT_NODE);
-            if ($parentAssign instanceof Expression) {
-                $this->removeNode($parentAssign);
-            }
+        $parentAssign = $prevInitializedAssign->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parentAssign instanceof Expression) {
+            $this->removeNode($parentAssign);
         }
 
         return $assign;
@@ -178,16 +171,5 @@ CODE_SAMPLE
         }
 
         return null;
-    }
-
-    private function hasDefaultMatchArm(Match_ $match): bool
-    {
-        foreach ($match->arms as $matchArm) {
-            if ($matchArm->conds === null) {
-                return true;
-            }
-        }
-
-        return false;
     }
 }

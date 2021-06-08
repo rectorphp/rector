@@ -9,27 +9,10 @@ use PhpParser\Node\Expr;
 final class CondAndExpr
 {
     /**
-     * @var string
+     * @param Expr[] $condExprs
      */
-    public const TYPE_NORMAL = 'normal';
-
-    /**
-     * @var string
-     */
-    public const TYPE_ASSIGN = 'assign';
-
-    /**
-     * @var string
-     */
-    public const TYPE_RETURN = 'return';
-
-    /**
-     * @var string
-     */
-    public const TYPE_THROW = 'throw';
-
     public function __construct(
-        private ?Expr $condExpr,
+        private array $condExprs,
         private Expr $expr,
         private string $kind
     ) {
@@ -40,9 +23,12 @@ final class CondAndExpr
         return $this->expr;
     }
 
-    public function getCondExpr(): ?Expr
+    /**
+     * @return Expr[]
+     */
+    public function getCondExprs(): array
     {
-        return $this->condExpr;
+        return $this->condExprs;
     }
 
     public function getKind(): string
