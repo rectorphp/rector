@@ -7,7 +7,6 @@ namespace Rector\TypeDeclaration\Rector\FunctionLike;
 use PhpParser\Node;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Name;
-use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -16,6 +15,7 @@ use PhpParser\Node\UnionType as PhpParserUnionType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
+use Rector\Core\NodeAnalyzer\ExternalFullyQualifiedAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -47,7 +47,8 @@ final class ReturnTypeDeclarationRector extends AbstractRector
         private ClassMethodReturnTypeOverrideGuard $classMethodReturnTypeOverrideGuard,
         private VendorLockResolver $vendorLockResolver,
         private PhpParserTypeAnalyzer $phpParserTypeAnalyzer,
-        private ObjectTypeComparator $objectTypeComparator
+        private ObjectTypeComparator $objectTypeComparator,
+        private ExternalFullyQualifiedAnalyzer $externalFullyQualifiedAnalyzer
     ) {
     }
 
@@ -242,14 +243,13 @@ CODE_SAMPLE
             return false;
         }
 
-        if (! $classLike->extends instanceof FullyQualified) {
-            return false;
-        }
-
-        $className = (string) $this->getName($classLike->extends);
-        $parentFound = (bool) $this->nodeRepository->findClass($className);
-
-        return $functionLike->returnType === null && ! $parentFound && $this->isName($inferredReturnNode, 'void');
+        $hasExternalClassOrInterfaceOrTrait = $this->externalFullyQualifiedAnalyzer->hasExternalFullyQualifieds(
+            $classLike
+        );
+        return $functionLike->returnType === null && $hasExternalClassOrInterfaceOrTrait && $this->isName(
+            $inferredReturnNode,
+            'void'
+        );
     }
 
     private function isNullableTypeSubType(Type $currentType, Type $inferedType): bool
