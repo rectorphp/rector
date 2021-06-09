@@ -107,11 +107,7 @@ final class PhpAttributeGroupFactory
             return (int) $value->value;
         }
 
-        if ($value instanceof ConstantFloatType) {
-            return $value->getValue();
-        }
-
-        if ($value instanceof ConstantBooleanType) {
+        if ($value instanceof ConstantFloatType || $value instanceof ConstantBooleanType) {
             return $value->getValue();
         }
 
@@ -138,6 +134,13 @@ final class PhpAttributeGroupFactory
 
         if ($value instanceof Node) {
             return (string) $value;
+        }
+
+        if (\is_array($value)) {
+            return array_map(
+                fn ($item) => $this->normalizeNodeValue($item),
+                $value
+            );
         }
 
         return $value;
