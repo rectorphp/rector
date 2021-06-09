@@ -33,6 +33,16 @@ final class PhpAttributeGroupFactory
         $attribute = new \PhpParser\Node\Attribute($fullyQualified);
         return new \PhpParser\Node\AttributeGroup([$attribute]);
     }
+    /**
+     * @param mixed[] $items
+     */
+    public function createFromClassWithItems(string $attributeClass, array $items) : \PhpParser\Node\AttributeGroup
+    {
+        $fullyQualified = new \PhpParser\Node\Name\FullyQualified($attributeClass);
+        $args = $this->createArgsFromItems($items);
+        $attribute = new \PhpParser\Node\Attribute($fullyQualified, $args);
+        return new \PhpParser\Node\AttributeGroup([$attribute]);
+    }
     public function create(\Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode, \Rector\Php80\ValueObject\AnnotationToAttribute $annotationToAttribute) : \PhpParser\Node\AttributeGroup
     {
         $fullyQualified = new \PhpParser\Node\Name\FullyQualified($annotationToAttribute->getAttributeClass());
