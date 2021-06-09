@@ -5,7 +5,7 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix20210608\Nette\Caching\Storages;
+namespace RectorPrefix20210609\Nette\Caching\Storages;
 
 /**
  * Cache journal provider.
@@ -22,4 +22,4 @@ interface Journal
      */
     function clean(array $conditions) : ?array;
 }
-\class_exists(\RectorPrefix20210608\Nette\Caching\Storages\IJournal::class);
+\class_exists(\RectorPrefix20210609\Nette\Caching\Storages\IJournal::class);

@@ -78,7 +78,7 @@ final class PhpAttributeGroupFactory
     }
     /**
      * @param mixed $value
-     * @return bool|float|int|string|array<mixed>|Expr
+     * @return bool|float|int|string|mixed[]|\PhpParser\Node\Expr
      */
     private function normalizeNodeValue($value)
     {

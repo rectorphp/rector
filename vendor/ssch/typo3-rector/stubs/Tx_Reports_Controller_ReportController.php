@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210608;
+namespace RectorPrefix20210609;
 
 if (\class_exists('Tx_Reports_Controller_ReportController')) {
     return;

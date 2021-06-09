@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210608\Helmich\TypoScriptParser\Parser\Printer;
+namespace RectorPrefix20210609\Helmich\TypoScriptParser\Parser\Printer;
 
-use RectorPrefix20210608\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix20210609\Symfony\Component\Console\Output\OutputInterface;
 interface ASTPrinterInterface
 {
     /**
@@ -11,9 +11,9 @@ interface ASTPrinterInterface
      * @param \Symfony\Component\Console\Output\OutputInterface $output
      * @return void
      */
-    public function printStatements(array $statements, \RectorPrefix20210608\Symfony\Component\Console\Output\OutputInterface $output) : void;
+    public function printStatements(array $statements, \RectorPrefix20210609\Symfony\Component\Console\Output\OutputInterface $output) : void;
     /**
      * @param PrettyPrinterConfiguration $prettyPrinterConfiguration
      */
-    public function setPrettyPrinterConfiguration(\RectorPrefix20210608\Helmich\TypoScriptParser\Parser\Printer\PrettyPrinterConfiguration $prettyPrinterConfiguration) : void;
+    public function setPrettyPrinterConfiguration(\RectorPrefix20210609\Helmich\TypoScriptParser\Parser\Printer\PrettyPrinterConfiguration $prettyPrinterConfiguration) : void;
 }

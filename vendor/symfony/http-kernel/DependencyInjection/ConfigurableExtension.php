@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210608\Symfony\Component\HttpKernel\DependencyInjection;
+namespace RectorPrefix20210609\Symfony\Component\HttpKernel\DependencyInjection;
 
-use RectorPrefix20210608\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix20210609\Symfony\Component\DependencyInjection\ContainerBuilder;
 /**
  * This extension sub-class provides first-class integration with the
  * Config/Definition Component.
@@ -23,17 +23,17 @@ use RectorPrefix20210608\Symfony\Component\DependencyInjection\ContainerBuilder;
  *
  * @author Johannes M. Schmitt <schmittjoh@gmail.com>
  */
-abstract class ConfigurableExtension extends \RectorPrefix20210608\Symfony\Component\HttpKernel\DependencyInjection\Extension
+abstract class ConfigurableExtension extends \RectorPrefix20210609\Symfony\Component\HttpKernel\DependencyInjection\Extension
 {
     /**
      * {@inheritdoc}
      */
-    public final function load(array $configs, \RectorPrefix20210608\Symfony\Component\DependencyInjection\ContainerBuilder $container)
+    public final function load(array $configs, \RectorPrefix20210609\Symfony\Component\DependencyInjection\ContainerBuilder $container)
     {
         $this->loadInternal($this->processConfiguration($this->getConfiguration($configs, $container), $configs), $container);
     }
     /**
      * Configures the passed container according to the merged configuration.
      */
-    protected abstract function loadInternal(array $mergedConfig, \RectorPrefix20210608\Symfony\Component\DependencyInjection\ContainerBuilder $container);
+    protected abstract function loadInternal(array $mergedConfig, \RectorPrefix20210609\Symfony\Component\DependencyInjection\ContainerBuilder $container);
 }

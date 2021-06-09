@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210608;
+namespace RectorPrefix20210609;
 
 if (\class_exists('ux_t3lib_DB')) {
     return;

@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation;
 
-use RectorPrefix20210608\Nette\Utils\Strings;
+use RectorPrefix20210609\Nette\Utils\Strings;
 use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\NodeAttributes;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
@@ -61,8 +61,8 @@ abstract class AbstractValuesAwareNode implements \PHPStan\PhpDocParser\Ast\PhpD
         return $this->values;
     }
     /**
-     * @param string|int $key
      * @return mixed|Node|null
+     * @param string|int $key
      */
     public function getValue($key)
     {
@@ -79,7 +79,7 @@ abstract class AbstractValuesAwareNode implements \PHPStan\PhpDocParser\Ast\PhpD
     {
         // is quoted?
         if (isset($this->values[$key])) {
-            $isQuoted = (bool) \RectorPrefix20210608\Nette\Utils\Strings::match($this->values[$key], self::UNQUOTED_VALUE_REGEX);
+            $isQuoted = (bool) \RectorPrefix20210609\Nette\Utils\Strings::match($this->values[$key], self::UNQUOTED_VALUE_REGEX);
             if ($isQuoted) {
                 $value = '"' . $value . '"';
             }
@@ -89,8 +89,8 @@ abstract class AbstractValuesAwareNode implements \PHPStan\PhpDocParser\Ast\PhpD
         $this->setAttribute(\Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey::ORIG_NODE, null);
     }
     /**
-     * @param string|int $key
      * @return mixed|null
+     * @param string|int $key
      */
     public function getValueWithoutQuotes($key)
     {
@@ -106,7 +106,7 @@ abstract class AbstractValuesAwareNode implements \PHPStan\PhpDocParser\Ast\PhpD
     public function changeSilentValue($value) : void
     {
         // is quoted?
-        $isQuoted = (bool) \RectorPrefix20210608\Nette\Utils\Strings::match($this->values[0], self::UNQUOTED_VALUE_REGEX);
+        $isQuoted = (bool) \RectorPrefix20210609\Nette\Utils\Strings::match($this->values[0], self::UNQUOTED_VALUE_REGEX);
         if ($isQuoted) {
             $value = '"' . $value . '"';
         }
@@ -155,7 +155,7 @@ abstract class AbstractValuesAwareNode implements \PHPStan\PhpDocParser\Ast\PhpD
         if (!\is_string($value)) {
             return $value;
         }
-        $matches = \RectorPrefix20210608\Nette\Utils\Strings::match($value, self::UNQUOTED_VALUE_REGEX);
+        $matches = \RectorPrefix20210609\Nette\Utils\Strings::match($value, self::UNQUOTED_VALUE_REGEX);
         if ($matches === null) {
             return $value;
         }

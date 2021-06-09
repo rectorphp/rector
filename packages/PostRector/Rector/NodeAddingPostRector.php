@@ -33,7 +33,7 @@ final class NodeAddingPostRector extends \Rector\PostRector\Rector\AbstractPostR
         return 1000;
     }
     /**
-     * @return array<int|string, Node>|Node
+     * @return mixed[]|\PhpParser\Node
      */
     public function leaveNode(\PhpParser\Node $node)
     {

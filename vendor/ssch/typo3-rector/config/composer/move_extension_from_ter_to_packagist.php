@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210608;
+namespace RectorPrefix20210609;
 
 use Rector\Composer\Rector\RenamePackageComposerRector;
 use Rector\Composer\ValueObject\RenamePackage;

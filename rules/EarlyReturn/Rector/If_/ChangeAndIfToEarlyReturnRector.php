@@ -126,7 +126,7 @@ CODE_SAMPLE
     }
     /**
      * @param Expr[] $conditions
-     * @return If_|Node[]
+     * @return \PhpParser\Node\Stmt\If_|mixed[]
      */
     private function processReplaceIfs(\PhpParser\Node\Stmt\If_ $node, array $conditions, \PhpParser\Node\Stmt\Return_ $ifNextReturnClone)
     {

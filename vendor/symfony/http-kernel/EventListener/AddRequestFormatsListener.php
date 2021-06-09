@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210608\Symfony\Component\HttpKernel\EventListener;
+namespace RectorPrefix20210609\Symfony\Component\HttpKernel\EventListener;
 
-use RectorPrefix20210608\Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use RectorPrefix20210608\Symfony\Component\HttpKernel\Event\RequestEvent;
-use RectorPrefix20210608\Symfony\Component\HttpKernel\KernelEvents;
+use RectorPrefix20210609\Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use RectorPrefix20210609\Symfony\Component\HttpKernel\Event\RequestEvent;
+use RectorPrefix20210609\Symfony\Component\HttpKernel\KernelEvents;
 /**
  * Adds configured formats to each request.
  *
@@ -20,7 +20,7 @@ use RectorPrefix20210608\Symfony\Component\HttpKernel\KernelEvents;
  *
  * @final
  */
-class AddRequestFormatsListener implements \RectorPrefix20210608\Symfony\Component\EventDispatcher\EventSubscriberInterface
+class AddRequestFormatsListener implements \RectorPrefix20210609\Symfony\Component\EventDispatcher\EventSubscriberInterface
 {
     protected $formats;
     public function __construct(array $formats)
@@ -30,7 +30,7 @@ class AddRequestFormatsListener implements \RectorPrefix20210608\Symfony\Compone
     /**
      * Adds request formats.
      */
-    public function onKernelRequest(\RectorPrefix20210608\Symfony\Component\HttpKernel\Event\RequestEvent $event)
+    public function onKernelRequest(\RectorPrefix20210609\Symfony\Component\HttpKernel\Event\RequestEvent $event)
     {
         $request = $event->getRequest();
         foreach ($this->formats as $format => $mimeTypes) {
@@ -42,6 +42,6 @@ class AddRequestFormatsListener implements \RectorPrefix20210608\Symfony\Compone
      */
     public static function getSubscribedEvents() : array
     {
-        return [\RectorPrefix20210608\Symfony\Component\HttpKernel\KernelEvents::REQUEST => ['onKernelRequest', 100]];
+        return [\RectorPrefix20210609\Symfony\Component\HttpKernel\KernelEvents::REQUEST => ['onKernelRequest', 100]];
     }
 }

@@ -19,12 +19,12 @@
     },
     "autoload": {
         "psr-4": {
-            "RectorPrefix20210608\\Symplify\\PackageBuilder\\": "src"
+            "RectorPrefix20210609\\Symplify\\PackageBuilder\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "RectorPrefix20210608\\Symplify\\PackageBuilder\\Tests\\": "tests"
+            "RectorPrefix20210609\\Symplify\\PackageBuilder\\Tests\\": "tests"
         }
     },
     "extra": {
