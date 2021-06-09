@@ -29,7 +29,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class MyFirstRector extends AbstractRector
 {
     /**
-     * @return string[]
+     * @return array<class-string<Node>>
      */
     public function getNodeTypes(): array
     {
@@ -60,7 +60,7 @@ final class MyFirstRector extends AbstractRector
     }
 
     /**
-     * From this method documentation is generated.
+     * This method helps other to understand the rule and to generate documentation.
      */
     public function getRuleDefinition(): RuleDefinition
     {
@@ -78,7 +78,24 @@ final class MyFirstRector extends AbstractRector
 }
 ```
 
-This is how the file structure should look like:
+
+## File Structure
+
+This is how the file structure for custom rule in your own project will look like:
+
+```bash
+/src/
+    /YourCode.php
+/utils
+    /rector
+        /src
+            /Rector
+                MyFirstRector.php
+rector.php
+composer.json
+```
+
+Writing test saves you lot of time in future debugging. Here is a file structure with tests:
 
 ```bash
 /src/
@@ -91,10 +108,16 @@ This is how the file structure should look like:
         /tests
             /Rector
                 /MyFirstRector
+                    /Fixture
+                        test_fixture.php.inc
+                    /config
+                        config.php
                     MyFirstRectorTest.php
 rector.php
 composer.json
 ```
+
+## Update `composer.json`
 
 We also need to load Rector rules in `composer.json`:
 
