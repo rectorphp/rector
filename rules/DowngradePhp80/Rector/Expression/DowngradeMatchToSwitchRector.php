@@ -13,6 +13,7 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Break_;
 use PhpParser\Node\Stmt\Case_;
 use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Switch_;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
@@ -74,35 +75,45 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [Expression::class];
+        return [Expression::class, Return_::class];
     }
 
     /**
-     * @param Expression $node
+     * @param Expression|Return_ $node
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $node->expr instanceof Assign) {
-            return null;
+        if ($node instanceof Expression) {
+            if (! $node->expr instanceof Assign) {
+                return null;
+            }
+
+            $assign = $node->expr;
+            if (! $assign->expr instanceof Match_) {
+                return null;
+            }
+
+            /** @var Match_ $match */
+            $match = $assign->expr;
+        } else {
+            if (! $node->expr instanceof Match_) {
+                return null;
+            }
+
+            /** @var Match_ $match */
+            $match = $node->expr;
         }
 
-        $assign = $node->expr;
-        if (! $assign->expr instanceof Match_) {
-            return null;
-        }
-
-        /** @var Match_ $match */
-        $match = $assign->expr;
-
-        $switchCases = $this->createSwitchCasesFromMatchArms($match->arms, $assign->var);
+        $switchCases = $this->createSwitchCasesFromMatchArms($node, $match->arms);
         return new Switch_($match->cond, $switchCases);
     }
 
     /**
+     * @param Expression|Return_ $node
      * @param MatchArm[] $matchArms
      * @return Case_[]
      */
-    private function createSwitchCasesFromMatchArms(array $matchArms, Expr $assignVarExpr): array
+    private function createSwitchCasesFromMatchArms(Node $node, array $matchArms): array
     {
         $switchCases = [];
 
@@ -119,9 +130,9 @@ CODE_SAMPLE
                     throw new ShouldNotHappenException();
                 }
 
-                $lastCase->stmts = $this->createSwitchStmts($matchArm, $assignVarExpr);
+                $lastCase->stmts = $this->createSwitchStmts($node, $matchArm);
             } else {
-                $stmts = $this->createSwitchStmts($matchArm, $assignVarExpr);
+                $stmts = $this->createSwitchStmts($node, $matchArm);
                 $switchCases[] = new Case_($matchArm->conds[0] ?? null, $stmts);
             }
         }
@@ -129,14 +140,21 @@ CODE_SAMPLE
     }
 
     /**
+     * @param Expression|Return_ $node
      * @return Stmt[]
      */
-    private function createSwitchStmts(MatchArm $matchArm, Expr $assignVarExpr): array
+    private function createSwitchStmts(Node $node, MatchArm $matchArm): array
     {
         $stmts = [];
 
-        $stmts[] = new Expression(new Assign($assignVarExpr, $matchArm->body));
-        $stmts[] = new Break_();
+        if ($node instanceof Expression) {
+            /** @var Assign */
+            $assign = $node->expr;
+            $stmts[] = new Expression(new Assign($assign->var, $matchArm->body));
+            $stmts[] = new Break_();
+        } else {
+            $stmts[] = new Return_($matchArm->body);
+        }
 
         return $stmts;
     }
