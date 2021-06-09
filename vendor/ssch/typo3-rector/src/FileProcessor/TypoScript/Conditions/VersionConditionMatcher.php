@@ -13,7 +13,7 @@ final class VersionConditionMatcher implements \Ssch\TYPO3Rector\Contract\FilePr
     private const TYPE = 'version';
     public function change(string $condition) : ?string
     {
-        return null;
+        return $condition;
     }
     public function shouldApply(string $condition) : bool
     {

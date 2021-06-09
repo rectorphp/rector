@@ -85,10 +85,7 @@ final class PhpAttributeGroupFactory
         if ($value instanceof \PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprIntegerNode) {
             return (int) $value->value;
         }
-        if ($value instanceof \PHPStan\Type\Constant\ConstantFloatType) {
-            return $value->getValue();
-        }
-        if ($value instanceof \PHPStan\Type\Constant\ConstantBooleanType) {
+        if ($value instanceof \PHPStan\Type\Constant\ConstantFloatType || $value instanceof \PHPStan\Type\Constant\ConstantBooleanType) {
             return $value->getValue();
         }
         if ($value instanceof \PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprTrueNode) {
@@ -109,6 +106,11 @@ final class PhpAttributeGroupFactory
         }
         if ($value instanceof \PHPStan\PhpDocParser\Ast\Node) {
             return (string) $value;
+        }
+        if (\is_array($value)) {
+            return \array_map(function ($item) {
+                return $this->normalizeNodeValue($item);
+            }, $value);
         }
         return $value;
     }
