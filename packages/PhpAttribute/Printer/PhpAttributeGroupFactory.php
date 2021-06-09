@@ -37,6 +37,18 @@ final class PhpAttributeGroupFactory
         return new AttributeGroup([$attribute]);
     }
 
+    /**
+     * @param mixed[] $items
+     */
+    public function createFromClassWithItems(string $attributeClass, array $items): AttributeGroup
+    {
+        $fullyQualified = new FullyQualified($attributeClass);
+        $args = $this->createArgsFromItems($items);
+        $attribute = new Attribute($fullyQualified, $args);
+
+        return new AttributeGroup([$attribute]);
+    }
+
     public function create(
         DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode,
         AnnotationToAttribute $annotationToAttribute
