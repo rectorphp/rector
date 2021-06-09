@@ -12,6 +12,7 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Break_;
 use PhpParser\Node\Stmt\Case_;
 use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Switch_;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
@@ -66,30 +67,39 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Expression::class];
+        return [\PhpParser\Node\Stmt\Expression::class, \PhpParser\Node\Stmt\Return_::class];
     }
     /**
-     * @param Expression $node
+     * @param Expression|Return_ $node
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if (!$node->expr instanceof \PhpParser\Node\Expr\Assign) {
-            return null;
+        if ($node instanceof \PhpParser\Node\Stmt\Expression) {
+            if (!$node->expr instanceof \PhpParser\Node\Expr\Assign) {
+                return null;
+            }
+            $assign = $node->expr;
+            if (!$assign->expr instanceof \PhpParser\Node\Expr\Match_) {
+                return null;
+            }
+            /** @var Match_ $match */
+            $match = $assign->expr;
+        } else {
+            if (!$node->expr instanceof \PhpParser\Node\Expr\Match_) {
+                return null;
+            }
+            /** @var Match_ $match */
+            $match = $node->expr;
         }
-        $assign = $node->expr;
-        if (!$assign->expr instanceof \PhpParser\Node\Expr\Match_) {
-            return null;
-        }
-        /** @var Match_ $match */
-        $match = $assign->expr;
-        $switchCases = $this->createSwitchCasesFromMatchArms($match->arms, $assign->var);
+        $switchCases = $this->createSwitchCasesFromMatchArms($node, $match->arms);
         return new \PhpParser\Node\Stmt\Switch_($match->cond, $switchCases);
     }
     /**
+     * @param Expression|Return_ $node
      * @param MatchArm[] $matchArms
      * @return Case_[]
      */
-    private function createSwitchCasesFromMatchArms(array $matchArms, \PhpParser\Node\Expr $assignVarExpr) : array
+    private function createSwitchCasesFromMatchArms(\PhpParser\Node $node, array $matchArms) : array
     {
         $switchCases = [];
         foreach ($matchArms as $matchArm) {
@@ -102,22 +112,29 @@ CODE_SAMPLE
                 if (!$lastCase instanceof \PhpParser\Node\Stmt\Case_) {
                     throw new \Rector\Core\Exception\ShouldNotHappenException();
                 }
-                $lastCase->stmts = $this->createSwitchStmts($matchArm, $assignVarExpr);
+                $lastCase->stmts = $this->createSwitchStmts($node, $matchArm);
             } else {
-                $stmts = $this->createSwitchStmts($matchArm, $assignVarExpr);
+                $stmts = $this->createSwitchStmts($node, $matchArm);
                 $switchCases[] = new \PhpParser\Node\Stmt\Case_($matchArm->conds[0] ?? null, $stmts);
             }
         }
         return $switchCases;
     }
     /**
+     * @param Expression|Return_ $node
      * @return Stmt[]
      */
-    private function createSwitchStmts(\PhpParser\Node\MatchArm $matchArm, \PhpParser\Node\Expr $assignVarExpr) : array
+    private function createSwitchStmts(\PhpParser\Node $node, \PhpParser\Node\MatchArm $matchArm) : array
     {
         $stmts = [];
-        $stmts[] = new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign($assignVarExpr, $matchArm->body));
-        $stmts[] = new \PhpParser\Node\Stmt\Break_();
+        if ($node instanceof \PhpParser\Node\Stmt\Expression) {
+            /** @var Assign */
+            $assign = $node->expr;
+            $stmts[] = new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign($assign->var, $matchArm->body));
+            $stmts[] = new \PhpParser\Node\Stmt\Break_();
+        } else {
+            $stmts[] = new \PhpParser\Node\Stmt\Return_($matchArm->body);
+        }
         return $stmts;
     }
 }
