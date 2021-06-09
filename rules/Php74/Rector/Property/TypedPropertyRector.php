@@ -5,8 +5,13 @@ declare(strict_types=1);
 namespace Rector\Php74\Rector\Property;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Name;
 use PhpParser\Node\NullableType;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\UnionType as PhpParserUnionType;
 use PHPStan\Reflection\ReflectionProvider;
@@ -16,9 +21,12 @@ use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
+use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer;
 use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
 use Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer;
@@ -52,7 +60,8 @@ final class TypedPropertyRector extends AbstractRector implements ConfigurableRe
         private VendorLockResolver $vendorLockResolver,
         private DoctrineTypeAnalyzer $doctrineTypeAnalyzer,
         private VarTagRemover $varTagRemover,
-        private ReflectionProvider $reflectionProvider
+        private ReflectionProvider $reflectionProvider,
+        private PropertyFetchAnalyzer $propertyFetchAnalyzer
     ) {
     }
 
@@ -231,6 +240,10 @@ CODE_SAMPLE
 
         // skip is already has value
         if ($onlyProperty->default !== null) {
+            return;
+        }
+
+        if ($this->propertyFetchAnalyzer->isFilledByConstructParam($property)) {
             return;
         }
 
