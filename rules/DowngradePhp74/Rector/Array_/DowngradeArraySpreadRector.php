@@ -186,7 +186,11 @@ CODE_SAMPLE
      * as to invoke it only once and avoid potential bugs,
      * such as a method executing some side-effect
      */
-    private function createVariableFromNonVariable(Array_ $array, ArrayItem $arrayItem, int | string $position): Variable
+    private function createVariableFromNonVariable(
+        Array_ $array,
+        ArrayItem $arrayItem,
+        int | string $position
+    ): Variable
     {
         /** @var Scope $nodeScope */
         $nodeScope = $array->getAttribute(AttributeKey::SCOPE);

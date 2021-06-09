@@ -172,8 +172,7 @@ final class PropertyFetchAnalyzer
         array $stmts,
         string $propertyName,
         string $kindPropertyFetch
-    ): bool
-    {
+    ): bool {
         foreach ($params as $param) {
             $paramVariable = $param->var;
             $isAssignWithParamVarName = $this->betterNodeFinder->findFirst($stmts, function (Node $node) use (

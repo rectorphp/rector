@@ -199,8 +199,7 @@ CODE_SAMPLE
         Param $param,
         string $paramVarName,
         string $desiredPropertyName
-    ): void
-    {
+    ): void {
         $paramTagValueNode = $phpDocInfo->getParamTagValueNodeByName($paramVarName);
 
         if (! $paramTagValueNode instanceof ParamTagValueNode) {
