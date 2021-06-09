@@ -35,7 +35,8 @@ jobs:
             # install only prod dependencies - do not use ramsey, it uses cache including "dev", we want to avoid it here
             -   run: composer install --no-dev --ansi
 
-            # early downgrade individual files of symfony Attribute classes
+            # early downgrade individual functions and files of symfony Attribute classes
+            -   run: bin/rector process src/functions -c build/config/config-downgrade-php70.php --ansi
             -   run: bin/rector process vendor/symfony/dependency-injection/Attribute/Autoconfigure.php -c build/config/config-downgrade-php70.php --ansi
             -   run: bin/rector process vendor/symfony/dependency-injection/Attribute/AutoconfigureTag.php -c build/config/config-downgrade-php70.php --ansi
 
