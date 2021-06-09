@@ -26,9 +26,9 @@ final class StaticDoctrineAnnotationParserTest extends AbstractTestCase
 
     /**
      * @dataProvider provideData()
-     * @param mixed $expectedValue
+     * @param CurlyListNode|array<string, CurlyListNode> $expectedValue
      */
-    public function test(string $docContent, $expectedValue): void
+    public function test(string $docContent, CurlyListNode | array $expectedValue): void
     {
         $betterTokenIterator = $this->tokenIteratorFactory->create($docContent);
 
