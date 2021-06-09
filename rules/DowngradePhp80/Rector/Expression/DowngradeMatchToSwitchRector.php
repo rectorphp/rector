@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\DowngradePhp80\Rector\Expression;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Match_;
 use PhpParser\Node\MatchArm;

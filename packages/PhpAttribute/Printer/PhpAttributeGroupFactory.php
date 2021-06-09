@@ -137,10 +137,7 @@ final class PhpAttributeGroupFactory
         }
 
         if (\is_array($value)) {
-            return array_map(
-                fn ($item) => $this->normalizeNodeValue($item),
-                $value
-            );
+            return array_map(fn ($item) => $this->normalizeNodeValue($item), $value);
         }
 
         return $value;

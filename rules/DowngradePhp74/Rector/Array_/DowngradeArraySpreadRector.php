@@ -190,8 +190,7 @@ CODE_SAMPLE
         Array_ $array,
         ArrayItem $arrayItem,
         int | string $position
-    ): Variable
-    {
+    ): Variable {
         /** @var Scope $nodeScope */
         $nodeScope = $array->getAttribute(AttributeKey::SCOPE);
         // The variable name will be item0Unpacked, item1Unpacked, etc,
