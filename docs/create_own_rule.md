@@ -14,7 +14,9 @@ Let's say we want to **change method calls from `set*` to `change*`**.
 Create a class that extends [`Rector\Core\Rector\AbstractRector`](/src/Rector/AbstractRector.php). It will inherit useful methods e.g. to check node type and name. See the source (or type `$this->` in an IDE) for a list of available methods.
 
 ```php
-namespace Utils\Rector;
+declare(strict_types=1);
+
+namespace Utils\Rector\Rector;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
@@ -79,8 +81,17 @@ final class MyFirstRector extends AbstractRector
 This is how the file structure should look like:
 
 ```bash
-/src/YourCode.php
-/utils/Rector/MyFirstRector.php
+/src/
+    /YourCode.php
+/utils
+    /rector
+        /src
+            /Rector
+                MyFirstRector.php
+        /tests
+            /Rector
+                /MyFirstRector
+                    MyFirstRectorTest.php
 rector.php
 composer.json
 ```
@@ -96,7 +107,8 @@ We also need to load Rector rules in `composer.json`:
     },
     "autoload-dev": {
         "psr-4": {
-            "Utils\\": "utils"
+            "Utils\\Rector\\": "utils/rector/src",
+            "Utils\\Rector\\Tests\\": "utils/rector/tests"
         }
     }
 }
@@ -117,7 +129,7 @@ composer dump-autoload
 declare(strict_types=1);
 
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Utils\Rector\MyFirstRector;
+use Utils\Rector\Rector\MyFirstRector;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
