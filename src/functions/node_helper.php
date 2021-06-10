@@ -7,10 +7,7 @@ use PhpParser\Node;
 use PhpParser\PrettyPrinter\Standard;
 use RectorPrefix20210610\Tracy\Dumper;
 if (!\function_exists('dn')) {
-    /**
-     * @return void
-     */
-    function dn(\PhpParser\Node $node, int $depth = 2)
+    function dn(\PhpParser\Node $node, int $depth = 2) : void
     {
         \RectorPrefix20210610\dump_node($node, $depth);
     }
@@ -18,9 +15,8 @@ if (!\function_exists('dn')) {
 if (!\function_exists('dump_node')) {
     /**
      * @param Node|Node[] $node
-     * @return void
      */
-    function dump_node($node, int $depth = 2)
+    function dump_node($node, int $depth = 2) : void
     {
         $nodes = \is_array($node) ? $node : [$node];
         foreach ($nodes as $node) {
@@ -31,9 +27,8 @@ if (!\function_exists('dump_node')) {
 if (!\function_exists('print_node')) {
     /**
      * @param Node|Node[] $node
-     * @return void
      */
-    function print_node($node)
+    function print_node($node) : void
     {
         $standard = new \PhpParser\PrettyPrinter\Standard();
         $nodes = \is_array($node) ? $node : [$node];

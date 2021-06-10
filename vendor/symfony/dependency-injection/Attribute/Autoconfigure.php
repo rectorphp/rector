@@ -57,15 +57,8 @@ class Autoconfigure
     /**
      * @param bool|string|null $lazy
      * @param mixed[]|string|null $configurator
-     * @param mixed[]|null $tags
-     * @param mixed[]|null $calls
-     * @param mixed[]|null $bind
-     * @param bool|null $public
-     * @param bool|null $shared
-     * @param bool|null $autowire
-     * @param mixed[]|null $properties
      */
-    public function __construct($tags = null, $calls = null, $bind = null, $lazy = null, $public = null, $shared = null, $autowire = null, $properties = null, $configurator = null)
+    public function __construct(?array $tags = null, ?array $calls = null, ?array $bind = null, $lazy = null, ?bool $public = null, ?bool $shared = null, ?bool $autowire = null, ?array $properties = null, $configurator = null)
     {
         $this->tags = $tags;
         $this->calls = $calls;
