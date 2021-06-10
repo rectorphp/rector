@@ -9,8 +9,8 @@ use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Php55\NodeFactory\AnonymousFunctionNodeFactory;
 use Rector\Php55\RegexMatcher;
+use Rector\Php72\NodeFactory\AnonymousFunctionFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -21,16 +21,16 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class PregReplaceEModifierRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var \Rector\Php55\NodeFactory\AnonymousFunctionNodeFactory
+     * @var \Rector\Php72\NodeFactory\AnonymousFunctionFactory
      */
-    private $anonymousFunctionNodeFactory;
+    private $anonymousFunctionFactory;
     /**
      * @var \Rector\Php55\RegexMatcher
      */
     private $regexMatcher;
-    public function __construct(\Rector\Php55\NodeFactory\AnonymousFunctionNodeFactory $anonymousFunctionNodeFactory, \Rector\Php55\RegexMatcher $regexMatcher)
+    public function __construct(\Rector\Php72\NodeFactory\AnonymousFunctionFactory $anonymousFunctionFactory, \Rector\Php55\RegexMatcher $regexMatcher)
     {
-        $this->anonymousFunctionNodeFactory = $anonymousFunctionNodeFactory;
+        $this->anonymousFunctionFactory = $anonymousFunctionFactory;
         $this->regexMatcher = $regexMatcher;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
@@ -78,7 +78,7 @@ CODE_SAMPLE
             return null;
         }
         $secondArgumentValue = $node->args[1]->value;
-        $anonymousFunction = $this->anonymousFunctionNodeFactory->createAnonymousFunctionFromString($secondArgumentValue);
+        $anonymousFunction = $this->anonymousFunctionFactory->createAnonymousFunctionFromString($secondArgumentValue);
         if (!$anonymousFunction instanceof \PhpParser\Node\Expr\Closure) {
             return null;
         }

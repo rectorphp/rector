@@ -23,9 +23,9 @@ use PHPStan\Reflection\ParametersAcceptor;
 use PHPStan\Type\MixedType;
 use Rector\Core\PHPStan\Reflection\CallReflectionResolver;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Naming\Naming\VariableNaming;
 use Rector\NodeNestingScope\ParentScopeFinder;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\Php70\NodeAnalyzer\VariableNaming;
 use Rector\Php70\ValueObject\VariableAssignPair;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -41,14 +41,14 @@ final class NonVariableToVariableOnFunctionCallRector extends \Rector\Core\Recto
      */
     private $callReflectionResolver;
     /**
-     * @var \Rector\Php70\NodeAnalyzer\VariableNaming
+     * @var \Rector\Naming\Naming\VariableNaming
      */
     private $variableNaming;
     /**
      * @var \Rector\NodeNestingScope\ParentScopeFinder
      */
     private $parentScopeFinder;
-    public function __construct(\Rector\Core\PHPStan\Reflection\CallReflectionResolver $callReflectionResolver, \Rector\Php70\NodeAnalyzer\VariableNaming $variableNaming, \Rector\NodeNestingScope\ParentScopeFinder $parentScopeFinder)
+    public function __construct(\Rector\Core\PHPStan\Reflection\CallReflectionResolver $callReflectionResolver, \Rector\Naming\Naming\VariableNaming $variableNaming, \Rector\NodeNestingScope\ParentScopeFinder $parentScopeFinder)
     {
         $this->callReflectionResolver = $callReflectionResolver;
         $this->variableNaming = $variableNaming;
@@ -79,7 +79,7 @@ final class NonVariableToVariableOnFunctionCallRector extends \Rector\Core\Recto
             return null;
         }
         $currentScope = $scopeNode->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
-        if (!$currentScope instanceof \PHPStan\Analyser\MutatingScope) {
+        if (!$currentScope instanceof \PHPStan\Analyser\Scope) {
             return null;
         }
         foreach ($arguments as $key => $argument) {
@@ -123,17 +123,19 @@ final class NonVariableToVariableOnFunctionCallRector extends \Rector\Core\Recto
         }
         return $arguments;
     }
-    private function getReplacementsFor(\PhpParser\Node\Expr $expr, \PHPStan\Analyser\MutatingScope $mutatingScope, \PhpParser\Node $scopeNode) : \Rector\Php70\ValueObject\VariableAssignPair
+    private function getReplacementsFor(\PhpParser\Node\Expr $expr, \PHPStan\Analyser\Scope $scope, \PhpParser\Node $scopeNode) : \Rector\Php70\ValueObject\VariableAssignPair
     {
         /** @var Assign|AssignOp|AssignRef $expr */
         if ($this->isAssign($expr) && $this->isVariableLikeNode($expr->var)) {
             return new \Rector\Php70\ValueObject\VariableAssignPair($expr->var, $expr);
         }
-        $variableName = $this->variableNaming->resolveFromNodeWithScopeCountAndFallbackName($expr, $mutatingScope, 'tmp');
+        $variableName = $this->variableNaming->resolveFromNodeWithScopeCountAndFallbackName($expr, $scope, 'tmp');
         $variable = new \PhpParser\Node\Expr\Variable($variableName);
         // add a new scope with this variable
-        $newVariableAwareScope = $mutatingScope->assignExpression($variable, new \PHPStan\Type\MixedType());
-        $scopeNode->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE, $newVariableAwareScope);
+        if ($scope instanceof \PHPStan\Analyser\MutatingScope) {
+            $mutatingScope = $scope->assignExpression($variable, new \PHPStan\Type\MixedType());
+            $scopeNode->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE, $mutatingScope);
+        }
         return new \Rector\Php70\ValueObject\VariableAssignPair($variable, new \PhpParser\Node\Expr\Assign($variable, $expr));
     }
     private function isVariableLikeNode(\PhpParser\Node $node) : bool

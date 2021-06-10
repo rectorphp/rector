@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210609;
+namespace RectorPrefix20210610;
 
 if (\class_exists('SC_listframe_loader')) {
     return;

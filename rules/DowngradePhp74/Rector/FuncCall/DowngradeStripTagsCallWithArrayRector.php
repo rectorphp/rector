@@ -20,8 +20,8 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Naming\Naming\VariableNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\Php70\NodeAnalyzer\VariableNaming;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -30,10 +30,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradeStripTagsCallWithArrayRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var \Rector\Php70\NodeAnalyzer\VariableNaming
+     * @var \Rector\Naming\Naming\VariableNaming
      */
     private $variableNaming;
-    public function __construct(\Rector\Php70\NodeAnalyzer\VariableNaming $variableNaming)
+    public function __construct(\Rector\Naming\Naming\VariableNaming $variableNaming)
     {
         $this->variableNaming = $variableNaming;
     }

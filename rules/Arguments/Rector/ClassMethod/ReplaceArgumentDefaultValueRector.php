@@ -7,23 +7,24 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\Arguments\ValueObject\ArgumentDefaultValueReplacer;
+use Rector\Arguments\ArgumentDefaultValueReplacer;
+use Rector\Arguments\ValueObject\ReplaceArgumentDefaultValue;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20210609\Webmozart\Assert\Assert;
+use RectorPrefix20210610\Webmozart\Assert\Assert;
 /**
- * @see \Rector\Tests\Arguments\Rector\ClassMethod\ArgumentDefaultValueReplacerRector\ArgumentDefaultValueReplacerRectorTest
+ * @see \Rector\Tests\Arguments\Rector\ClassMethod\ReplaceArgumentDefaultValueRector\ReplaceArgumentDefaultValueRectorTest
  */
-final class ArgumentDefaultValueReplacerRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
+final class ReplaceArgumentDefaultValueRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
      * @var string
      */
     public const REPLACED_ARGUMENTS = 'replaced_arguments';
     /**
-     * @var ArgumentDefaultValueReplacer[]
+     * @var ReplaceArgumentDefaultValue[]
      */
     private $replacedArguments = [];
     /**
@@ -44,7 +45,7 @@ CODE_SAMPLE
 $someObject = new SomeClass;
 $someObject->someMethod(false);'
 CODE_SAMPLE
-, [self::REPLACED_ARGUMENTS => [new \Rector\Arguments\ValueObject\ArgumentDefaultValueReplacer('SomeExampleClass', 'someMethod', 0, 'SomeClass::OLD_CONSTANT', \false)]])]);
+, [self::REPLACED_ARGUMENTS => [new \Rector\Arguments\ValueObject\ReplaceArgumentDefaultValue('SomeExampleClass', 'someMethod', 0, 'SomeClass::OLD_CONSTANT', \false)]])]);
     }
     /**
      * @return array<class-string<Node>>
@@ -70,12 +71,12 @@ CODE_SAMPLE
         return $node;
     }
     /**
-     * @param array<string, ArgumentDefaultValueReplacer[]> $configuration
+     * @param array<string, ReplaceArgumentDefaultValue[]> $configuration
      */
     public function configure(array $configuration) : void
     {
         $replacedArguments = $configuration[self::REPLACED_ARGUMENTS] ?? [];
-        \RectorPrefix20210609\Webmozart\Assert\Assert::allIsInstanceOf($replacedArguments, \Rector\Arguments\ValueObject\ArgumentDefaultValueReplacer::class);
+        \RectorPrefix20210610\Webmozart\Assert\Assert::allIsInstanceOf($replacedArguments, \Rector\Arguments\ValueObject\ReplaceArgumentDefaultValue::class);
         $this->replacedArguments = $replacedArguments;
     }
 }

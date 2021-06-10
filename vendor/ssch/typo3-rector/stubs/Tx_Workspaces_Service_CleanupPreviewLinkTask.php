@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210609;
+namespace RectorPrefix20210610;
 
 if (\class_exists('Tx_Workspaces_Service_CleanupPreviewLinkTask')) {
     return;

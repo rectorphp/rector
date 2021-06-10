@@ -4,8 +4,8 @@ declare (strict_types=1);
 namespace Rector\Arguments\ValueObject;
 
 use PHPStan\Type\ObjectType;
-use Rector\Arguments\Contract\ArgumentDefaultValueReplacerInterface;
-final class ArgumentDefaultValueReplacer implements \Rector\Arguments\Contract\ArgumentDefaultValueReplacerInterface
+use Rector\Arguments\Contract\ReplaceArgumentDefaultValueInterface;
+final class ReplaceArgumentDefaultValue implements \Rector\Arguments\Contract\ReplaceArgumentDefaultValueInterface
 {
     /**
      * @var string

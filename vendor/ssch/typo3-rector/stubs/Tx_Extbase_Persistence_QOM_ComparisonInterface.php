@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210609;
+namespace RectorPrefix20210610;
 
 if (\interface_exists('Tx_Extbase_Persistence_QOM_ComparisonInterface')) {
     return;

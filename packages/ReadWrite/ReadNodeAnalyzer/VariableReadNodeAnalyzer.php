@@ -19,14 +19,14 @@ final class VariableReadNodeAnalyzer implements \Rector\ReadWrite\Contract\ReadN
      */
     private $nodeUsageFinder;
     /**
-     * @var \Rector\ReadWrite\ReadNodeAnalyzer\ReadExprAnalyzer
+     * @var \Rector\ReadWrite\ReadNodeAnalyzer\JustReadExprAnalyzer
      */
-    private $readExprAnalyzer;
-    public function __construct(\Rector\NodeNestingScope\ParentScopeFinder $parentScopeFinder, \Rector\ReadWrite\NodeFinder\NodeUsageFinder $nodeUsageFinder, \Rector\ReadWrite\ReadNodeAnalyzer\ReadExprAnalyzer $readExprAnalyzer)
+    private $justReadExprAnalyzer;
+    public function __construct(\Rector\NodeNestingScope\ParentScopeFinder $parentScopeFinder, \Rector\ReadWrite\NodeFinder\NodeUsageFinder $nodeUsageFinder, \Rector\ReadWrite\ReadNodeAnalyzer\JustReadExprAnalyzer $justReadExprAnalyzer)
     {
         $this->parentScopeFinder = $parentScopeFinder;
         $this->nodeUsageFinder = $nodeUsageFinder;
-        $this->readExprAnalyzer = $readExprAnalyzer;
+        $this->justReadExprAnalyzer = $justReadExprAnalyzer;
     }
     public function supports(\PhpParser\Node $node) : bool
     {
@@ -43,7 +43,7 @@ final class VariableReadNodeAnalyzer implements \Rector\ReadWrite\Contract\ReadN
         }
         $variableUsages = $this->nodeUsageFinder->findVariableUsages((array) $parentScope->stmts, $node);
         foreach ($variableUsages as $variableUsage) {
-            if ($this->readExprAnalyzer->isReadContext($variableUsage)) {
+            if ($this->justReadExprAnalyzer->isReadContext($variableUsage)) {
                 return \true;
             }
         }

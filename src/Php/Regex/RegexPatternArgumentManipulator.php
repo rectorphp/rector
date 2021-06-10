@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Core\Php\Regex;
 
-use RectorPrefix20210609\Nette\Utils\Strings;
+use RectorPrefix20210610\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
@@ -30,7 +30,7 @@ final class RegexPatternArgumentManipulator
     /**
      * @var array<string, array<string, int>>
      */
-    private const STATIC_METHODS_WITH_PATTERNS_TO_ARGUMENT_POSITION = [\RectorPrefix20210609\Nette\Utils\Strings::class => ['match' => 1, 'matchAll' => 1, 'replace' => 1, 'split' => 1]];
+    private const STATIC_METHODS_WITH_PATTERNS_TO_ARGUMENT_POSITION = [\RectorPrefix20210610\Nette\Utils\Strings::class => ['match' => 1, 'matchAll' => 1, 'replace' => 1, 'split' => 1]];
     /**
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */

@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Arguments\Contract;
 
-interface ArgumentDefaultValueReplacerInterface
+interface ReplaceArgumentDefaultValueInterface
 {
     public function getPosition() : int;
     /**

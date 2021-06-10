@@ -13,9 +13,9 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
 use PHPStan\Reflection\Php\PhpMethodReflection;
 use Rector\CodeQuality\NodeAnalyzer\CallableClassMethodMatcher;
-use Rector\CodeQuality\NodeFactory\AnonymousFunctionFactory;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Php72\NodeFactory\AnonymousFunctionFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -32,10 +32,10 @@ final class CallableThisArrayToAnonymousFunctionRector extends \Rector\Core\Rect
      */
     private $callableClassMethodMatcher;
     /**
-     * @var \Rector\CodeQuality\NodeFactory\AnonymousFunctionFactory
+     * @var \Rector\Php72\NodeFactory\AnonymousFunctionFactory
      */
     private $anonymousFunctionFactory;
-    public function __construct(\Rector\CodeQuality\NodeAnalyzer\CallableClassMethodMatcher $callableClassMethodMatcher, \Rector\CodeQuality\NodeFactory\AnonymousFunctionFactory $anonymousFunctionFactory)
+    public function __construct(\Rector\CodeQuality\NodeAnalyzer\CallableClassMethodMatcher $callableClassMethodMatcher, \Rector\Php72\NodeFactory\AnonymousFunctionFactory $anonymousFunctionFactory)
     {
         $this->callableClassMethodMatcher = $callableClassMethodMatcher;
         $this->anonymousFunctionFactory = $anonymousFunctionFactory;
@@ -115,7 +115,7 @@ CODE_SAMPLE
         if (!$phpMethodReflection instanceof \PHPStan\Reflection\Php\PhpMethodReflection) {
             return null;
         }
-        return $this->anonymousFunctionFactory->create($phpMethodReflection, $objectVariable);
+        return $this->anonymousFunctionFactory->createFromPhpMethodReflection($phpMethodReflection, $objectVariable);
     }
     private function shouldSkipArray(\PhpParser\Node\Expr\Array_ $array) : bool
     {

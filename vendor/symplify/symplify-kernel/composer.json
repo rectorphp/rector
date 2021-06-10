@@ -7,17 +7,17 @@
         "symfony\/console": "^4.4|^5.2",
         "symfony\/http-kernel": "^4.4|^5.2",
         "symfony\/dependency-injection": "^5.2",
-        "symplify\/smart-file-system": "^9.3.20",
-        "symplify\/composer-json-manipulator": "^9.3.20",
-        "symplify\/autowire-array-parameter": "^9.3.20",
-        "symplify\/package-builder": "^9.3.20"
+        "symplify\/smart-file-system": "^9.3.22",
+        "symplify\/composer-json-manipulator": "^9.3.22",
+        "symplify\/autowire-array-parameter": "^9.3.22",
+        "symplify\/package-builder": "^9.3.22"
     },
     "require-dev": {
         "phpunit\/phpunit": "^9.5"
     },
     "autoload": {
         "psr-4": {
-            "RectorPrefix20210609\\Symplify\\SymplifyKernel\\": "src"
+            "RectorPrefix20210610\\Symplify\\SymplifyKernel\\": "src"
         }
     },
     "extra": {

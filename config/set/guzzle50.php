@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210609;
+namespace RectorPrefix20210610;
 
 use Rector\Defluent\Rector\MethodCall\FluentChainMethodCallToNormalMethodCallRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;

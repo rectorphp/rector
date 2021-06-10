@@ -4,6 +4,7 @@
     "license": "MIT",
     "require": {
         "php": ">=7.3",
+        "danielstjules\/stringy": "^3.1",
         "nette\/utils": "^3.2"
     },
     "autoload": {

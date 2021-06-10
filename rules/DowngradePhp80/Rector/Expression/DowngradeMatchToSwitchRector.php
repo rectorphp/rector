@@ -127,7 +127,7 @@ CODE_SAMPLE
     {
         $stmts = [];
         if ($node instanceof \PhpParser\Node\Stmt\Expression) {
-            /** @var Assign */
+            /** @var Assign $assign */
             $assign = $node->expr;
             $stmts[] = new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign($assign->var, $matchArm->body));
             $stmts[] = new \PhpParser\Node\Stmt\Break_();

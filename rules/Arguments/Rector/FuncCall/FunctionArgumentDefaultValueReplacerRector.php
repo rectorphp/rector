@@ -6,12 +6,12 @@ namespace Rector\Arguments\Rector\FuncCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use Rector\Arguments\ArgumentDefaultValueReplacer;
-use Rector\Arguments\ValueObject\FuncCallArgumentDefaultValueReplacer;
+use Rector\Arguments\ValueObject\ReplaceFuncCallArgumentDefaultValue;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20210609\Webmozart\Assert\Assert;
+use RectorPrefix20210610\Webmozart\Assert\Assert;
 /**
  * @changelog https://php.watch/versions/8.1/version_compare-operator-restrictions
  * @changelog https://github.com/rectorphp/rector/issues/6271
@@ -25,7 +25,7 @@ final class FunctionArgumentDefaultValueReplacerRector extends \Rector\Core\Rect
      */
     public const REPLACED_ARGUMENTS = 'replaced_arguments';
     /**
-     * @var FuncCallArgumentDefaultValueReplacer[]
+     * @var ReplaceFuncCallArgumentDefaultValue[]
      */
     private $replacedArguments = [];
     /**
@@ -44,7 +44,7 @@ CODE_SAMPLE
 , <<<'CODE_SAMPLE'
 version_compare(PHP_VERSION, '5.6', 'ge');
 CODE_SAMPLE
-, [self::REPLACED_ARGUMENTS => [new \Rector\Arguments\ValueObject\FuncCallArgumentDefaultValueReplacer('version_compare', 2, 'gte', 'ge')]])]);
+, [self::REPLACED_ARGUMENTS => [new \Rector\Arguments\ValueObject\ReplaceFuncCallArgumentDefaultValue('version_compare', 2, 'gte', 'ge')]])]);
     }
     /**
      * @return array<class-string<Node>>
@@ -67,12 +67,12 @@ CODE_SAMPLE
         return $node;
     }
     /**
-     * @param array<string, FuncCallArgumentDefaultValueReplacer[]> $configuration
+     * @param array<string, ReplaceFuncCallArgumentDefaultValue[]> $configuration
      */
     public function configure(array $configuration) : void
     {
         $replacedArguments = $configuration[self::REPLACED_ARGUMENTS] ?? [];
-        \RectorPrefix20210609\Webmozart\Assert\Assert::allIsInstanceOf($replacedArguments, \Rector\Arguments\ValueObject\FuncCallArgumentDefaultValueReplacer::class);
+        \RectorPrefix20210610\Webmozart\Assert\Assert::allIsInstanceOf($replacedArguments, \Rector\Arguments\ValueObject\ReplaceFuncCallArgumentDefaultValue::class);
         $this->replacedArguments = $replacedArguments;
     }
 }

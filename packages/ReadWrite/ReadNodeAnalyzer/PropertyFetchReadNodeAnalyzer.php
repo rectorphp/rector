@@ -10,16 +10,16 @@ use Rector\ReadWrite\NodeFinder\NodeUsageFinder;
 final class PropertyFetchReadNodeAnalyzer implements \Rector\ReadWrite\Contract\ReadNodeAnalyzerInterface
 {
     /**
-     * @var \Rector\ReadWrite\ReadNodeAnalyzer\ReadExprAnalyzer
+     * @var \Rector\ReadWrite\ReadNodeAnalyzer\JustReadExprAnalyzer
      */
-    private $readExprAnalyzer;
+    private $justReadExprAnalyzer;
     /**
      * @var \Rector\ReadWrite\NodeFinder\NodeUsageFinder
      */
     private $nodeUsageFinder;
-    public function __construct(\Rector\ReadWrite\ReadNodeAnalyzer\ReadExprAnalyzer $readExprAnalyzer, \Rector\ReadWrite\NodeFinder\NodeUsageFinder $nodeUsageFinder)
+    public function __construct(\Rector\ReadWrite\ReadNodeAnalyzer\JustReadExprAnalyzer $justReadExprAnalyzer, \Rector\ReadWrite\NodeFinder\NodeUsageFinder $nodeUsageFinder)
     {
-        $this->readExprAnalyzer = $readExprAnalyzer;
+        $this->justReadExprAnalyzer = $justReadExprAnalyzer;
         $this->nodeUsageFinder = $nodeUsageFinder;
     }
     public function supports(\PhpParser\Node $node) : bool
@@ -33,7 +33,7 @@ final class PropertyFetchReadNodeAnalyzer implements \Rector\ReadWrite\Contract\
     {
         $propertyFetchUsages = $this->nodeUsageFinder->findPropertyFetchUsages($node);
         foreach ($propertyFetchUsages as $propertyFetchUsage) {
-            if ($this->readExprAnalyzer->isReadContext($propertyFetchUsage)) {
+            if ($this->justReadExprAnalyzer->isReadContext($propertyFetchUsage)) {
                 return \true;
             }
         }
