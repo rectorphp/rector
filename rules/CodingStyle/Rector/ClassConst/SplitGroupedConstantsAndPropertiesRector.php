@@ -84,7 +84,8 @@ CODE_SAMPLE
         foreach ($allProperties as $allProperty) {
             $nextProperties[] = new \PhpParser\Node\Stmt\Property($node->flags, [$allProperty], $node->getAttributes());
         }
-        return \array_merge([$node], $nextProperties);
+        $item0Unpacked = [$node];
+        return \array_merge($item0Unpacked, $nextProperties);
     }
     /**
      * @param Const_[] $consts

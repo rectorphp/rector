@@ -8,6 +8,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
+use ReflectionNamedType;
 /**
  * Decorate setUp() and tearDown() with "void" when local TestClass class uses them
  */
@@ -36,7 +37,8 @@ final class PHPUnitTypeDeclarationDecorator
         if (!$reflectionMethod->hasReturnType()) {
             return;
         }
-        $returnType = (string) $reflectionMethod->getReturnType();
-        $classMethod->returnType = new \PhpParser\Node\Identifier($returnType);
+        $returnType = $reflectionMethod->getReturnType();
+        $returnTypeName = $returnType instanceof \ReflectionNamedType ? $returnType->getName() : (string) $returnType;
+        $classMethod->returnType = new \PhpParser\Node\Identifier($returnTypeName);
     }
 }
