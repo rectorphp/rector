@@ -518,6 +518,8 @@ final class NodeRepository
      */
     private function findCallsByClassAndMethod(string $className, string $methodName): array
     {
+        $methodName = strtolower($methodName);
+
         return $this->callsByTypeAndMethod[$className][$methodName] ?? $this->arrayCallablesByTypeAndMethod[$className][$methodName] ?? [];
     }
 
@@ -588,6 +590,9 @@ final class NodeRepository
      */
     private function addCallByType(Node $node, Type $classType, string $methodName): void
     {
+        // PHP is case insensitive for method names
+        $methodName = strtolower($methodName);
+
         if ($classType instanceof TypeWithClassName) {
             if ($classType instanceof ThisType) {
                 $classType = $classType->getStaticObjectType();
