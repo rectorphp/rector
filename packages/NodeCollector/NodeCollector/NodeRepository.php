@@ -461,6 +461,7 @@ final class NodeRepository
      */
     private function findCallsByClassAndMethod(string $className, string $methodName) : array
     {
+        $methodName = \strtolower($methodName);
         return $this->callsByTypeAndMethod[$className][$methodName] ?? $this->arrayCallablesByTypeAndMethod[$className][$methodName] ?? [];
     }
     private function isChildOrEqualClassLike(string $desiredClass, ?string $currentClassName) : bool
@@ -516,6 +517,8 @@ final class NodeRepository
      */
     private function addCallByType(\PhpParser\Node $node, \PHPStan\Type\Type $classType, string $methodName) : void
     {
+        // PHP is case insensitive for method names
+        $methodName = \strtolower($methodName);
         if ($classType instanceof \PHPStan\Type\TypeWithClassName) {
             if ($classType instanceof \PHPStan\Type\ThisType) {
                 $classType = $classType->getStaticObjectType();
