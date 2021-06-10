@@ -39,14 +39,14 @@ final class AddLiteralSeparatorToNumberRector extends AbstractRector implements 
      */
     private const GROUP_SIZE = 3;
 
-    private int $limitValue = 1000000;
+    private int $limitValue = 1_000_000;
 
     /**
      * @param mixed[] $configuration
      */
     public function configure(array $configuration): void
     {
-        $limitValue = $configuration[self::LIMIT_VALUE] ?? 1000000;
+        $limitValue = $configuration[self::LIMIT_VALUE] ?? 1_000_000;
         Assert::integer($limitValue);
 
         $this->limitValue = $limitValue;
@@ -81,7 +81,7 @@ class SomeClass
 CODE_SAMPLE
                     ,
                     [
-                        self::LIMIT_VALUE => 1000000,
+                        self::LIMIT_VALUE => 1_000_000,
                     ]
                 ),
             ]

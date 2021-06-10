@@ -78,7 +78,7 @@ final class PropertyPresenceChecker
                 ReflectionProperty::IS_PUBLIC | ReflectionProperty::IS_PROTECTED
             );
 
-            $propertyReflections = array_merge($propertyReflections, $currentPropertyReflections);
+            $propertyReflections = [...$propertyReflections, ...$currentPropertyReflections];
         }
 
         return $propertyReflections;

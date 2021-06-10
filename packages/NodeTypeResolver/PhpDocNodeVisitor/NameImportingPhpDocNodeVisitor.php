@@ -20,7 +20,7 @@ use Symplify\SimplePhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor;
 
 final class NameImportingPhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
 {
-    private ?PhpParserNode $currentPhpParserNode;
+    private ?PhpParserNode $currentPhpParserNode = null;
 
     public function __construct(
         private StaticTypeMapper $staticTypeMapper,

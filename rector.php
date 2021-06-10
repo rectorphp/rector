@@ -12,9 +12,7 @@ use Rector\DeadCode\Rector\Stmt\RemoveUnreachableStatementRector;
 use Rector\Naming\Rector\Class_\RenamePropertyToMatchTypeRector;
 use Rector\Nette\Set\NetteSetList;
 use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
-use Rector\Php74\Rector\Closure\ClosureToArrowFunctionRector;
-use Rector\Php74\Rector\Property\TypedPropertyRector;
-use Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector;
+use Rector\Php74\Rector\MethodCall\ChangeReflectionTypeToStringToGetNameRector;
 use Rector\PHPUnit\Rector\Class_\AddSeeTestAnnotationRector;
 use Rector\PHPUnit\Set\PHPUnitSetList;
 use Rector\Privatization\Rector\Property\PrivatizeLocalPropertyToPrivatePropertyRector;
@@ -38,28 +36,22 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $containerConfigurator->import(SetList::PHP_71);
     $containerConfigurator->import(SetList::PHP_72);
     $containerConfigurator->import(SetList::PHP_73);
+    $containerConfigurator->import(SetList::PHP_74);
     $containerConfigurator->import(SetList::PHP_80);
     $containerConfigurator->import(SetList::EARLY_RETURN);
     $containerConfigurator->import(SetList::TYPE_DECLARATION_STRICT);
     $containerConfigurator->import(NetteSetList::NETTE_UTILS_CODE_QUALITY);
     $containerConfigurator->import(PHPUnitSetList::PHPUNIT_CODE_QUALITY);
 
-    $services = $containerConfigurator->services();
-
-    // PHP 7.4 and 8.0
-    $services->set(TypedPropertyRector::class);
-    $services->set(ClassPropertyAssignToConstructorPromotionRector::class);
-    $services->set(ClosureToArrowFunctionRector::class);
-
     $configuration = ValueObjectInliner::inline([
         new InferParamFromClassMethodReturn(AbstractRector::class, 'refactor', 'getNodeTypes'),
     ]);
+
+    $services = $containerConfigurator->services();
     $services->set(InferParamFromClassMethodReturnRector::class)
         ->call('configure', [[
             InferParamFromClassMethodReturnRector::INFER_PARAMS_FROM_CLASS_METHOD_RETURNS => $configuration,
         ]]);
-
-    $services->set(ClassPropertyAssignToConstructorPromotionRector::class);
 
     $services->set(PreferThisOrSelfMethodCallRector::class)
         ->call('configure', [[
@@ -86,6 +78,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters->set(Option::SKIP, [
         // buggy in refactoring
         AddSeeTestAnnotationRector::class,
+        // buggy in check ReflectionNamedType
+        ChangeReflectionTypeToStringToGetNameRector::class,
 
         StringClassNameToClassConstantRector::class,
         // some classes in config might not exist without dev dependencies

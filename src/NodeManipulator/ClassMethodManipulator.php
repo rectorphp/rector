@@ -79,7 +79,7 @@ final class ClassMethodManipulator
 
     public function hasParentMethodOrInterfaceMethod(ClassMethod $classMethod, ?string $methodName = null): bool
     {
-        $methodName = $methodName ?? $this->nodeNameResolver->getName($classMethod->name);
+        $methodName ??= $this->nodeNameResolver->getName($classMethod->name);
         if ($methodName === null) {
             return false;
         }

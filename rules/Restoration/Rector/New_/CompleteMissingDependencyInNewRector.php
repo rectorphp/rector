@@ -12,6 +12,7 @@ use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use ReflectionMethod;
+use ReflectionNamedType;
 use ReflectionParameter;
 use ReflectionType;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
@@ -164,7 +165,9 @@ CODE_SAMPLE
             return null;
         }
 
-        $requiredType = (string) $reflectionType;
+        $requiredType = $reflectionType instanceof ReflectionNamedType
+            ? $reflectionType->getName()
+            : (string) $reflectionType;
 
         return $this->classToInstantiateByType[$requiredType] ?? null;
     }

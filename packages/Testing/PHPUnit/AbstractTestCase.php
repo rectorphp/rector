@@ -17,7 +17,7 @@ abstract class AbstractTestCase extends TestCase
      */
     private static array $kernelsByHash = [];
 
-    private static ?ContainerInterface $currentContainer;
+    private static ?ContainerInterface $currentContainer = null;
 
     protected function boot(): void
     {

@@ -9,7 +9,7 @@ use Rector\Core\Exception\ShouldNotHappenException;
 
 final class CurrentTokenIteratorProvider
 {
-    private ?BetterTokenIterator $betterTokenIterator;
+    private ?BetterTokenIterator $betterTokenIterator = null;
 
     public function setBetterTokenIterator(BetterTokenIterator $betterTokenIterator): void
     {

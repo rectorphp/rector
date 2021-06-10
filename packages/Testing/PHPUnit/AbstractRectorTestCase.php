@@ -33,9 +33,9 @@ abstract class AbstractRectorTestCase extends AbstractTestCase implements Rector
 
     protected RemovedAndAddedFilesCollector $removedAndAddedFilesCollector;
 
-    protected ?SmartFileInfo $originalTempFileInfo;
+    protected ?SmartFileInfo $originalTempFileInfo = null;
 
-    protected static ?ContainerInterface $allRectorContainer;
+    protected static ?ContainerInterface $allRectorContainer = null;
 
     private DynamicSourceLocatorProvider $dynamicSourceLocatorProvider;
 

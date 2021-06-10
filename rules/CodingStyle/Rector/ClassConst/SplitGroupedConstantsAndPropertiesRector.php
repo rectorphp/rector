@@ -103,7 +103,7 @@ CODE_SAMPLE
             $nextProperties[] = new Property($node->flags, [$allProperty], $node->getAttributes());
         }
 
-        return array_merge([$node], $nextProperties);
+        return [...[$node], ...$nextProperties];
     }
 
     /**
