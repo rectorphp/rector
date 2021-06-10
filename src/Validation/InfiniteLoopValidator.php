@@ -34,7 +34,7 @@ final class InfiniteLoopValidator
         // special case
         if ($createdByRule === $rectorClass) {
             // does it contain the same node type as input?
-            $originalNodeClass = get_class($originalNode);
+            $originalNodeClass = $originalNode::class;
 
             $hasNestedOriginalNodeType = $this->betterNodeFinder->findInstanceOf($node, $originalNodeClass);
             if ($hasNestedOriginalNodeType !== []) {

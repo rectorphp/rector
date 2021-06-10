@@ -25,7 +25,7 @@ final class ConsoleShowOutputFormatter implements ShowOutputFormatterInterface
         $this->outputStyle->title('Loaded Rector rules');
 
         foreach ($rectors as $rector) {
-            $this->outputStyle->writeln(' * ' . get_class($rector));
+            $this->outputStyle->writeln(' * ' . $rector::class);
         }
 
         $message = sprintf('%d loaded Rectors', $rectorCount);

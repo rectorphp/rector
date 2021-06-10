@@ -73,7 +73,7 @@ final class StaticTypeMapper
             return $this->mapPHPStanPhpDocTypeNodeToPHPStanType($phpDocTagValueNode->type, $node);
         }
 
-        throw new NotImplementedYetException(__METHOD__ . ' for ' . get_class($phpDocTagValueNode));
+        throw new NotImplementedYetException(__METHOD__ . ' for ' . $phpDocTagValueNode::class);
     }
 
     public function mapPHPStanPhpDocTypeNodeToPHPStanType(TypeNode $typeNode, Node $node): Type

@@ -129,14 +129,14 @@ CODE_SAMPLE
     {
         $parentNode = $callNode->getAttribute(AttributeKey::PARENT_NODE);
 
-        $callNodeClass = get_class($callNode);
+        $callNodeClass = $callNode::class;
 
         while ($parentNode) {
             $usedNodes = $this->betterNodeFinder->find($parentNode, function (Node $node) use (
                 $callNodeClass,
                 $callNode
             ): bool {
-                $nodeClass = get_class($node);
+                $nodeClass = $node::class;
                 if ($callNodeClass !== $nodeClass) {
                     return false;
                 }

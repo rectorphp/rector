@@ -227,7 +227,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
      */
     final public function enterNode(Node $node)
     {
-        $nodeClass = get_class($node);
+        $nodeClass = $node::class;
         if (! $this->isMatchingNodeType($nodeClass)) {
             return null;
         }
@@ -276,7 +276,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
             $this->connectParentNodes($node);
 
             // is different node type? do not traverse children to avoid looping
-            if (get_class($originalNode) !== get_class($node)) {
+            if ($originalNode::class !== $node::class) {
                 $this->infiniteLoopValidator->process($node, $originalNode, static::class);
 
                 // search "infinite recursion" in https://github.com/nikic/PHP-Parser/blob/master/doc/component/Walking_the_AST.markdown

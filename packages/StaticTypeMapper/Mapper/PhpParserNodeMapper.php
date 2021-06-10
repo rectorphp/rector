@@ -39,6 +39,6 @@ final class PhpParserNodeMapper
             }
         }
 
-        throw new NotImplementedYetException(get_class($node));
+        throw new NotImplementedYetException($node::class);
     }
 }

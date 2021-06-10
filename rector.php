@@ -15,7 +15,6 @@ use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
 use Rector\Php74\Rector\Closure\ClosureToArrowFunctionRector;
 use Rector\Php74\Rector\Property\TypedPropertyRector;
 use Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector;
-use Rector\Php80\Rector\FuncCall\ClassOnObjectRector;
 use Rector\PHPUnit\Rector\Class_\AddSeeTestAnnotationRector;
 use Rector\PHPUnit\Set\PHPUnitSetList;
 use Rector\Privatization\Rector\Property\PrivatizeLocalPropertyToPrivatePropertyRector;
@@ -93,8 +92,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         SplitStringClassConstantToClassConstFetchRector::class,
 
         // to be enabled when all rules for php 8 syntax applied
-        // PhpVersionFeature::CLASS_ON_OBJECT
-        ClassOnObjectRector::class,
         // PhpVersionFeature::STATIC_RETURN_TYPE
         ReturnTypeDeclarationRector::class,
         RenamePropertyToMatchTypeRector::class,

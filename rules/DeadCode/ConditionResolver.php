@@ -40,7 +40,7 @@ final class ConditionResolver
             return null;
         }
 
-        $binaryClass = get_class($expr);
+        $binaryClass = $expr::class;
 
         if ($this->isVersionCompareFuncCall($expr->left)) {
             /** @var FuncCall $funcCall */

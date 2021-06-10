@@ -77,7 +77,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $nodeClass = get_class($node);
+        $nodeClass = $node::class;
         if (! isset(self::CAST_CLASS_TO_NODE_TYPE[$nodeClass])) {
             return null;
         }

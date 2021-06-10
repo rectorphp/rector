@@ -163,7 +163,7 @@ final class VisibilityManipulator
             '"%s" only accepts "%s" types. "%s" given.',
             $location,
             implode('", "', self::ALLOWED_NODE_TYPES),
-            get_class($node)
+            $node::class
         ));
     }
 

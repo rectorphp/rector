@@ -534,7 +534,7 @@ final class PhpDocInfo
             }
         }
 
-        throw new NotImplementedYetException(get_class($phpDocTagValueNode));
+        throw new NotImplementedYetException($phpDocTagValueNode::class);
     }
 
     private function isFnmatch(string $currentValue, string $desiredValue): bool

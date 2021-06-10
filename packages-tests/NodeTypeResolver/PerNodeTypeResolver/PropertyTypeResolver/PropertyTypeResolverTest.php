@@ -31,7 +31,7 @@ final class PropertyTypeResolverTest extends AbstractNodeTypeResolverTest
         $resolvedType = $this->nodeTypeResolver->resolve($propertyNodes[$nodePosition]);
 
         // type is as expected
-        $expectedTypeClass = get_class($expectedType);
+        $expectedTypeClass = $expectedType::class;
         $this->assertInstanceOf($expectedTypeClass, $resolvedType);
 
         $expectedTypeAsString = $this->getStringFromType($expectedType);

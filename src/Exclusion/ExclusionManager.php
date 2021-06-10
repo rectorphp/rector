@@ -55,7 +55,7 @@ final class ExclusionManager
 
         /** @var PhpDocTagNode[] $noRectorTags */
         $noRectorTags = array_merge($phpDocInfo->getTagsByName('noRector'), $phpDocInfo->getTagsByName('norector'));
-        $rectorClass = get_class($phpRector);
+        $rectorClass = $phpRector::class;
 
         foreach ($noRectorTags as $noRectorTag) {
             if (! $noRectorTag->value instanceof GenericTagValueNode) {

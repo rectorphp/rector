@@ -19,7 +19,7 @@ final class RectorWithLineChange
      */
     public function getRectorClass(): string
     {
-        return get_class($this->rector);
+        return $this->rector::class;
     }
 
     public function getLine(): int

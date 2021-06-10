@@ -184,7 +184,7 @@ final class PropertyFetchAnalyzer
                     return false;
                 }
 
-                return $kindPropertyFetch === get_class($node->var) && $this->nodeNameResolver->isName(
+                return $kindPropertyFetch === $node->var::class && $this->nodeNameResolver->isName(
                     $node->var,
                     $propertyName
                 ) && $this->nodeComparator->areNodesEqual($node->expr, $paramVariable);

@@ -19,8 +19,8 @@ final class ScalarTypeComparator
     {
         if ($firstType instanceof StringType && $secondType instanceof StringType) {
             // prevents "class-string" vs "string"
-            $firstTypeClass = get_class($firstType);
-            $secondTypeClass = get_class($secondType);
+            $firstTypeClass = $firstType::class;
+            $secondTypeClass = $secondType::class;
 
             return $firstTypeClass === $secondTypeClass;
         }

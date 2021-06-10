@@ -17,9 +17,9 @@ final class ConflictingPriorityException extends Exception
             'There are 2 type inferers with %d priority:%s- %s%s- %s.%sChange value in "getPriority()" method in one of them to different value',
             $firstPriorityAwareTypeInferer->getPriority(),
             PHP_EOL,
-            get_class($firstPriorityAwareTypeInferer),
+            $firstPriorityAwareTypeInferer::class,
             PHP_EOL,
-            get_class($secondPriorityAwareTypeInferer),
+            $secondPriorityAwareTypeInferer::class,
             PHP_EOL
         );
 

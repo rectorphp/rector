@@ -77,8 +77,8 @@ final class NodeComparator
             return false;
         }
 
-        $firstClass = get_class($firstNode);
-        $secondClass = get_class($secondNode);
+        $firstClass = $firstNode::class;
+        $secondClass = $secondNode::class;
 
         return $firstClass === $secondClass;
     }

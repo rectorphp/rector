@@ -112,7 +112,7 @@ final class PhpDocFromTypeDeclarationDecorator
         if ($returnType instanceof UnionType) {
             $returnType = $this->typeUnwrapper->unwrapNullableType($returnType);
         }
-        return is_a($returnType, get_class($requireType), true);
+        return is_a($returnType, $requireType::class, true);
     }
 
     /**

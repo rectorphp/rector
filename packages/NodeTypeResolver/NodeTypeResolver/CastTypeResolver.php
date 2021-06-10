@@ -56,6 +56,6 @@ final class CastTypeResolver implements NodeTypeResolverInterface
             return new ArrayType(new MixedType(), new MixedType());
         }
 
-        throw new NotImplementedYetException(get_class($node));
+        throw new NotImplementedYetException($node::class);
     }
 }

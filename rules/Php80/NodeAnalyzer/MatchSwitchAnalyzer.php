@@ -71,9 +71,9 @@ final class MatchSwitchAnalyzer
 
             if ($expr->var instanceof ArrayDimFetch) {
                 $arrayDimFethName = $this->nodeNameResolver->getName($expr->var->var);
-                $assignVariableNames[] = get_class($expr->var) . $arrayDimFethName . '[]';
+                $assignVariableNames[] = $expr->var::class . $arrayDimFethName . '[]';
             } else {
-                $assignVariableNames[] = get_class($expr->var) . $this->nodeNameResolver->getName($expr->var);
+                $assignVariableNames[] = $expr->var::class . $this->nodeNameResolver->getName($expr->var);
             }
         }
 

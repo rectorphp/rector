@@ -34,7 +34,7 @@ final class BootstrapFilesIncluder
             } catch (Throwable $throwable) {
                 $errorMessage = sprintf(
                     '"%s" thrown in "%s" on line %d while loading bootstrap file %s: %s',
-                    get_class($throwable),
+                    $throwable::class,
                     $throwable->getFile(),
                     $throwable->getLine(),
                     $bootstrapFile,

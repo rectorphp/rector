@@ -94,6 +94,6 @@ final class InlineCodeParser
             return $this->betterStandardPrinter->print($expr);
         }
 
-        throw new ShouldNotHappenException(get_class($expr) . ' ' . __METHOD__);
+        throw new ShouldNotHappenException($expr::class . ' ' . __METHOD__);
     }
 }

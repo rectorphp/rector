@@ -31,6 +31,6 @@ final class ReadExprAnalyzer
             return $readNodeAnalyzer->isRead($expr);
         }
 
-        throw new NotImplementedYetException(get_class($expr));
+        throw new NotImplementedYetException($expr::class);
     }
 }

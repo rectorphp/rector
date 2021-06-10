@@ -483,3 +483,7 @@ parameters:
         -
             message: '#Access to an undefined property PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocChildNode\:\:\$value#'
             path: packages/BetterPhpDocParser/PhpDocInfo/PhpDocInfo.php #348
+
+        -
+            message: '#Class with base "StaticTypeMapper" name is already used in "Rector\\StaticTypeMapper\\StaticTypeMapper", "Rector\\PHPStanStaticTypeMapper\\TypeMapper\\StaticTypeMapper"\. Use unique name to make classes easy to recognize#'
+            path: packages/PHPStanStaticTypeMapper/TypeMapper/StaticTypeMapper.php #21

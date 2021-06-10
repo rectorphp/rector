@@ -32,7 +32,7 @@ final class InvalidNameNodeReporter
      */
     public function reportInvalidNodeForName(Node $node): void
     {
-        $message = sprintf('Pick more specific node than "%s", e.g. "$node->name"', get_class($node));
+        $message = sprintf('Pick more specific node than "%s", e.g. "$node->name"', $node::class);
 
         $file = $this->currentFileProvider->getFile();
 

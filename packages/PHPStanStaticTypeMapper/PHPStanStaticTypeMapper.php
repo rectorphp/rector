@@ -32,7 +32,7 @@ final class PHPStanStaticTypeMapper
             return $typeMapper->mapToPHPStanPhpDocTypeNode($type);
         }
 
-        throw new NotImplementedYetException(__METHOD__ . ' for ' . get_class($type));
+        throw new NotImplementedYetException(__METHOD__ . ' for ' . $type::class);
     }
 
     public function mapToPhpParserNode(Type $type, ?string $kind = null): Name | NullableType | UnionType | null
@@ -45,6 +45,6 @@ final class PHPStanStaticTypeMapper
             return $typeMapper->mapToPhpParserNode($type, $kind);
         }
 
-        throw new NotImplementedYetException(__METHOD__ . ' for ' . get_class($type));
+        throw new NotImplementedYetException(__METHOD__ . ' for ' . $type::class);
     }
 }
