@@ -5,11 +5,9 @@ namespace Rector\DowngradePhp80\Rector\ClassConstFetch;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Expr\StaticPropertyFetch;
-use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -19,10 +17,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class DowngradeClassOnObjectToGetClassRector extends \Rector\Core\Rector\AbstractRector
 {
-    /**
-     * @var string
-     */
-    private const GET_CLASS = 'get_class';
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
         return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change $object::class to get_class($object)', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
@@ -60,15 +54,9 @@ CODE_SAMPLE
         if (!$this->isName($node->name, 'class')) {
             return null;
         }
-        if ($node->class instanceof \PhpParser\Node\Expr\Variable) {
-            return new \PhpParser\Node\Expr\FuncCall(new \PhpParser\Node\Name(self::GET_CLASS), [new \PhpParser\Node\Arg($node->class)]);
+        if (!$node->class instanceof \PhpParser\Node\Expr) {
+            return null;
         }
-        if ($node->class instanceof \PhpParser\Node\Expr\PropertyFetch) {
-            return new \PhpParser\Node\Expr\FuncCall(new \PhpParser\Node\Name(self::GET_CLASS), [new \PhpParser\Node\Arg($node->class)]);
-        }
-        if ($node->class instanceof \PhpParser\Node\Expr\StaticPropertyFetch) {
-            return new \PhpParser\Node\Expr\FuncCall(new \PhpParser\Node\Name(self::GET_CLASS), [new \PhpParser\Node\Arg($node->class)]);
-        }
-        return null;
+        return new \PhpParser\Node\Expr\FuncCall(new \PhpParser\Node\Name('get_class'), [new \PhpParser\Node\Arg($node->class)]);
     }
 }
