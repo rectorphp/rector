@@ -18,7 +18,7 @@ use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover;
 use Rector\Naming\VariableRenamer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\Php80\NodeResolver\PromotedPropertyResolver;
+use Rector\Php80\NodeAnalyzer\PromotedPropertyCandidateResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -30,7 +30,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ClassPropertyAssignToConstructorPromotionRector extends AbstractRector
 {
     public function __construct(
-        private PromotedPropertyResolver $promotedPropertyResolver,
+        private PromotedPropertyCandidateResolver $promotedPropertyResolver,
         private VariableRenamer $variableRenamer,
         private VarTagRemover $varTagRemover
     ) {

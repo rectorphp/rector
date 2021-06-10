@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Rector\Tests\Arguments\Rector\ClassMethod\ArgumentDefaultValueReplacerRector;
+namespace Rector\Tests\Arguments\Rector\ClassMethod\ReplaceArgumentDefaultValueRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class ArgumentDefaultValueReplacerRectorTest extends AbstractRectorTestCase
+final class ReplaceArgumentDefaultValueRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()

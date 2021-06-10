@@ -10,8 +10,8 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\For_;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Naming\Naming\VariableNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\Php70\NodeAnalyzer\VariableNaming;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 

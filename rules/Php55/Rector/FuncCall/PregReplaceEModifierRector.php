@@ -10,8 +10,8 @@ use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Php55\NodeFactory\AnonymousFunctionNodeFactory;
 use Rector\Php55\RegexMatcher;
+use Rector\Php72\NodeFactory\AnonymousFunctionFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -23,7 +23,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class PregReplaceEModifierRector extends AbstractRector
 {
     public function __construct(
-        private AnonymousFunctionNodeFactory $anonymousFunctionNodeFactory,
+        private AnonymousFunctionFactory $anonymousFunctionFactory,
         private RegexMatcher $regexMatcher
     ) {
     }
@@ -84,7 +84,7 @@ CODE_SAMPLE
         }
 
         $secondArgumentValue = $node->args[1]->value;
-        $anonymousFunction = $this->anonymousFunctionNodeFactory->createAnonymousFunctionFromString(
+        $anonymousFunction = $this->anonymousFunctionFactory->createAnonymousFunctionFromString(
             $secondArgumentValue
         );
         if (! $anonymousFunction instanceof Closure) {

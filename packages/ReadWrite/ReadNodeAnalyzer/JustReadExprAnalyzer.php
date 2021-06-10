@@ -12,7 +12,7 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
-final class ReadExprAnalyzer
+final class JustReadExprAnalyzer
 {
     public function isReadContext(Expr $expr): bool
     {

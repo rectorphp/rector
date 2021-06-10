@@ -147,7 +147,7 @@ CODE_SAMPLE
         $stmts = [];
 
         if ($node instanceof Expression) {
-            /** @var Assign */
+            /** @var Assign $assign */
             $assign = $node->expr;
             $stmts[] = new Expression(new Assign($assign->var, $matchArm->body));
             $stmts[] = new Break_();

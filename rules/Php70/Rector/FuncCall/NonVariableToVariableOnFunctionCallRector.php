@@ -24,9 +24,9 @@ use PHPStan\Reflection\ParametersAcceptor;
 use PHPStan\Type\MixedType;
 use Rector\Core\PHPStan\Reflection\CallReflectionResolver;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Naming\Naming\VariableNaming;
 use Rector\NodeNestingScope\ParentScopeFinder;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\Php70\NodeAnalyzer\VariableNaming;
 use Rector\Php70\ValueObject\VariableAssignPair;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -77,7 +77,7 @@ final class NonVariableToVariableOnFunctionCallRector extends AbstractRector
         }
 
         $currentScope = $scopeNode->getAttribute(AttributeKey::SCOPE);
-        if (! $currentScope instanceof MutatingScope) {
+        if (! $currentScope instanceof Scope) {
             return null;
         }
 
@@ -147,24 +147,22 @@ final class NonVariableToVariableOnFunctionCallRector extends AbstractRector
         return $arguments;
     }
 
-    private function getReplacementsFor(Expr $expr, MutatingScope $mutatingScope, Node $scopeNode): VariableAssignPair
+    private function getReplacementsFor(Expr $expr, Scope $scope, Node $scopeNode): VariableAssignPair
     {
         /** @var Assign|AssignOp|AssignRef $expr */
         if ($this->isAssign($expr) && $this->isVariableLikeNode($expr->var)) {
             return new VariableAssignPair($expr->var, $expr);
         }
 
-        $variableName = $this->variableNaming->resolveFromNodeWithScopeCountAndFallbackName(
-            $expr,
-            $mutatingScope,
-            'tmp'
-        );
+        $variableName = $this->variableNaming->resolveFromNodeWithScopeCountAndFallbackName($expr, $scope, 'tmp');
 
         $variable = new Variable($variableName);
 
         // add a new scope with this variable
-        $newVariableAwareScope = $mutatingScope->assignExpression($variable, new MixedType());
-        $scopeNode->setAttribute(AttributeKey::SCOPE, $newVariableAwareScope);
+        if ($scope instanceof MutatingScope) {
+            $mutatingScope = $scope->assignExpression($variable, new MixedType());
+            $scopeNode->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+        }
 
         return new VariableAssignPair($variable, new Assign($variable, $expr));
     }

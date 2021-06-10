@@ -14,9 +14,9 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
 use PHPStan\Reflection\Php\PhpMethodReflection;
 use Rector\CodeQuality\NodeAnalyzer\CallableClassMethodMatcher;
-use Rector\CodeQuality\NodeFactory\AnonymousFunctionFactory;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Php72\NodeFactory\AnonymousFunctionFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -125,7 +125,7 @@ CODE_SAMPLE
             return null;
         }
 
-        return $this->anonymousFunctionFactory->create($phpMethodReflection, $objectVariable);
+        return $this->anonymousFunctionFactory->createFromPhpMethodReflection($phpMethodReflection, $objectVariable);
     }
 
     private function shouldSkipArray(Array_ $array): bool

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Tests\Arguments\Rector\ClassMethod\ArgumentDefaultValueReplacerRector\Fixture;
+namespace Rector\Tests\Arguments\Rector\ClassMethod\ReplaceArgumentDefaultValueRector\Fixture;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
@@ -15,7 +15,7 @@ function argumentDefalutValue()
 -----
 <?php
 
-namespace Rector\Tests\Arguments\Rector\ClassMethod\ArgumentDefaultValueReplacerRector\Fixture;
+namespace Rector\Tests\Arguments\Rector\ClassMethod\ReplaceArgumentDefaultValueRector\Fixture;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 

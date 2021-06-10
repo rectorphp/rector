@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Php80\NodeResolver;
+namespace Rector\Php80\NodeAnalyzer;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
@@ -23,7 +23,7 @@ use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
 use Rector\Php80\ValueObject\PropertyPromotionCandidate;
 use Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer;
 
-final class PromotedPropertyResolver
+final class PromotedPropertyCandidateResolver
 {
     public function __construct(
         private NodeNameResolver $nodeNameResolver,
@@ -48,7 +48,8 @@ final class PromotedPropertyResolver
 
         $propertyPromotionCandidates = [];
         foreach ($class->getProperties() as $property) {
-            if (count($property->props) !== 1) {
+            $propertyCount = count($property->props);
+            if ($propertyCount !== 1) {
                 continue;
             }
 

@@ -12,7 +12,7 @@ use Rector\ReadWrite\NodeFinder\NodeUsageFinder;
 final class PropertyFetchReadNodeAnalyzer implements ReadNodeAnalyzerInterface
 {
     public function __construct(
-        private ReadExprAnalyzer $readExprAnalyzer,
+        private JustReadExprAnalyzer $justReadExprAnalyzer,
         private NodeUsageFinder $nodeUsageFinder
     ) {
     }
@@ -29,7 +29,7 @@ final class PropertyFetchReadNodeAnalyzer implements ReadNodeAnalyzerInterface
     {
         $propertyFetchUsages = $this->nodeUsageFinder->findPropertyFetchUsages($node);
         foreach ($propertyFetchUsages as $propertyFetchUsage) {
-            if ($this->readExprAnalyzer->isReadContext($propertyFetchUsage)) {
+            if ($this->justReadExprAnalyzer->isReadContext($propertyFetchUsage)) {
                 return true;
             }
         }

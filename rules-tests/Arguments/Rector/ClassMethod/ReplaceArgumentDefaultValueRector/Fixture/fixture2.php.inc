@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Tests\Arguments\Rector\ClassMethod\ArgumentDefaultValueReplacerRector\Fixture;
+namespace Rector\Tests\Arguments\Rector\ClassMethod\ReplaceArgumentDefaultValueRector\Fixture;
 
 use Symfony\Component\Yaml\Yaml;
 
@@ -16,7 +16,7 @@ function argumentDefaultValue2()
 -----
 <?php
 
-namespace Rector\Tests\Arguments\Rector\ClassMethod\ArgumentDefaultValueReplacerRector\Fixture;
+namespace Rector\Tests\Arguments\Rector\ClassMethod\ReplaceArgumentDefaultValueRector\Fixture;
 
 use Symfony\Component\Yaml\Yaml;
 

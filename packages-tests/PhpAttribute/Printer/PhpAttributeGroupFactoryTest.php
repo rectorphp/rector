@@ -9,7 +9,7 @@ use PhpParser\Node\AttributeGroup;
 use Rector\PhpAttribute\Printer\PhpAttributeGroupFactory;
 use Rector\Testing\PHPUnit\AbstractTestCase;
 
-class PhpAttributeGroupFactoryTest extends AbstractTestCase
+final class PhpAttributeGroupFactoryTest extends AbstractTestCase
 {
     private PhpAttributeGroupFactory $phpAttributeGroupFactory;
 
@@ -24,20 +24,23 @@ class PhpAttributeGroupFactoryTest extends AbstractTestCase
     {
         $attributeGroup = $this->phpAttributeGroupFactory->createFromClassWithItems(
             'Symfony\Component\Routing\Annotation\Route',
-            ['path' => '/path', 'name' => 'action']
+            [
+                'path' => '/path',
+                'name' => 'action',
+            ]
         );
 
-        self::assertInstanceOf(AttributeGroup::class, $attributeGroup);
+        $this->assertInstanceOf(AttributeGroup::class, $attributeGroup);
     }
 
     public function testCreateArgsFromItems(): void
     {
-        $method = new \ReflectionMethod($this->phpAttributeGroupFactory, 'createArgsFromItems');
-        $method->setAccessible(true);
-        $args = $method->invokeArgs($this->phpAttributeGroupFactory, [['path' => '/path', 'name' => 'action']]);
+        $args = $this->phpAttributeGroupFactory->createArgsFromItems([
+            'path' => '/path',
+            'name' => 'action',
+        ]);
 
-        self::assertIsArray($args);
-        self::assertCount(2, $args);
-        self::assertContainsOnlyInstancesOf(Arg::class, $args);
+        $this->assertCount(2, $args);
+        $this->assertContainsOnlyInstancesOf(Arg::class, $args);
     }
 }

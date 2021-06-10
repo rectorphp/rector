@@ -7,7 +7,7 @@ namespace Rector\Arguments\Rector\FuncCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use Rector\Arguments\ArgumentDefaultValueReplacer;
-use Rector\Arguments\ValueObject\FuncCallArgumentDefaultValueReplacer;
+use Rector\Arguments\ValueObject\ReplaceFuncCallArgumentDefaultValue;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
@@ -28,7 +28,7 @@ final class FunctionArgumentDefaultValueReplacerRector extends AbstractRector im
     public const REPLACED_ARGUMENTS = 'replaced_arguments';
 
     /**
-     * @var FuncCallArgumentDefaultValueReplacer[]
+     * @var ReplaceFuncCallArgumentDefaultValue[]
      */
     private mixed $replacedArguments = [];
 
@@ -52,7 +52,7 @@ CODE_SAMPLE
             ,
                 [
                     self::REPLACED_ARGUMENTS => [
-                        new FuncCallArgumentDefaultValueReplacer('version_compare', 2, 'gte', 'ge',),
+                        new ReplaceFuncCallArgumentDefaultValue('version_compare', 2, 'gte', 'ge',),
                     ],
                 ]
             ),
@@ -84,12 +84,12 @@ CODE_SAMPLE
     }
 
     /**
-     * @param array<string, FuncCallArgumentDefaultValueReplacer[]> $configuration
+     * @param array<string, ReplaceFuncCallArgumentDefaultValue[]> $configuration
      */
     public function configure(array $configuration): void
     {
         $replacedArguments = $configuration[self::REPLACED_ARGUMENTS] ?? [];
-        Assert::allIsInstanceOf($replacedArguments, FuncCallArgumentDefaultValueReplacer::class);
+        Assert::allIsInstanceOf($replacedArguments, ReplaceFuncCallArgumentDefaultValue::class);
         $this->replacedArguments = $replacedArguments;
     }
 }

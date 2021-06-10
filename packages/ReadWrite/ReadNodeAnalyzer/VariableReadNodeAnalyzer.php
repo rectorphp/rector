@@ -15,7 +15,7 @@ final class VariableReadNodeAnalyzer implements ReadNodeAnalyzerInterface
     public function __construct(
         private ParentScopeFinder $parentScopeFinder,
         private NodeUsageFinder $nodeUsageFinder,
-        private ReadExprAnalyzer $readExprAnalyzer
+        private JustReadExprAnalyzer $justReadExprAnalyzer
     ) {
     }
 
@@ -36,7 +36,7 @@ final class VariableReadNodeAnalyzer implements ReadNodeAnalyzerInterface
 
         $variableUsages = $this->nodeUsageFinder->findVariableUsages((array) $parentScope->stmts, $node);
         foreach ($variableUsages as $variableUsage) {
-            if ($this->readExprAnalyzer->isReadContext($variableUsage)) {
+            if ($this->justReadExprAnalyzer->isReadContext($variableUsage)) {
                 return true;
             }
         }

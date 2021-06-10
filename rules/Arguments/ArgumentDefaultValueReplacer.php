@@ -12,7 +12,7 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\Arguments\Contract\ArgumentDefaultValueReplacerInterface;
+use Rector\Arguments\Contract\ReplaceArgumentDefaultValueInterface;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
 
@@ -29,14 +29,14 @@ final class ArgumentDefaultValueReplacer
      */
     public function processReplaces(
         Node $node,
-        ArgumentDefaultValueReplacerInterface $argumentDefaultValueReplacer
+        ReplaceArgumentDefaultValueInterface $replaceArgumentDefaultValue
     ): ?Node {
         if ($node instanceof ClassMethod) {
-            if (! isset($node->params[$argumentDefaultValueReplacer->getPosition()])) {
+            if (! isset($node->params[$replaceArgumentDefaultValue->getPosition()])) {
                 return null;
             }
-        } elseif (isset($node->args[$argumentDefaultValueReplacer->getPosition()])) {
-            $this->processArgs($node, $argumentDefaultValueReplacer);
+        } elseif (isset($node->args[$replaceArgumentDefaultValue->getPosition()])) {
+            $this->processArgs($node, $replaceArgumentDefaultValue);
         }
 
         return $node;
@@ -45,18 +45,18 @@ final class ArgumentDefaultValueReplacer
     /**
      * @param MethodCall|StaticCall|FuncCall $expr
      */
-    private function processArgs(Expr $expr, ArgumentDefaultValueReplacerInterface $argumentDefaultValueReplacer): void
+    private function processArgs(Expr $expr, ReplaceArgumentDefaultValueInterface $replaceArgumentDefaultValue): void
     {
-        $position = $argumentDefaultValueReplacer->getPosition();
+        $position = $replaceArgumentDefaultValue->getPosition();
 
         $argValue = $this->valueResolver->getValue($expr->args[$position]->value);
 
         if (is_scalar(
-            $argumentDefaultValueReplacer->getValueBefore()
-        ) && $argValue === $argumentDefaultValueReplacer->getValueBefore()) {
-            $expr->args[$position] = $this->normalizeValueToArgument($argumentDefaultValueReplacer->getValueAfter());
-        } elseif (is_array($argumentDefaultValueReplacer->getValueBefore())) {
-            $newArgs = $this->processArrayReplacement($expr->args, $argumentDefaultValueReplacer);
+            $replaceArgumentDefaultValue->getValueBefore()
+        ) && $argValue === $replaceArgumentDefaultValue->getValueBefore()) {
+            $expr->args[$position] = $this->normalizeValueToArgument($replaceArgumentDefaultValue->getValueAfter());
+        } elseif (is_array($replaceArgumentDefaultValue->getValueBefore())) {
+            $newArgs = $this->processArrayReplacement($expr->args, $replaceArgumentDefaultValue);
 
             if ($newArgs) {
                 $expr->args = $newArgs;
@@ -86,21 +86,21 @@ final class ArgumentDefaultValueReplacer
      */
     private function processArrayReplacement(
         array $argumentNodes,
-        ArgumentDefaultValueReplacerInterface $argumentDefaultValueReplacer
+        ReplaceArgumentDefaultValueInterface $replaceArgumentDefaultValue
     ): ?array {
-        $argumentValues = $this->resolveArgumentValuesToBeforeRecipe($argumentNodes, $argumentDefaultValueReplacer);
-        if ($argumentValues !== $argumentDefaultValueReplacer->getValueBefore()) {
+        $argumentValues = $this->resolveArgumentValuesToBeforeRecipe($argumentNodes, $replaceArgumentDefaultValue);
+        if ($argumentValues !== $replaceArgumentDefaultValue->getValueBefore()) {
             return null;
         }
 
-        if (is_string($argumentDefaultValueReplacer->getValueAfter())) {
-            $argumentNodes[$argumentDefaultValueReplacer->getPosition()] = $this->normalizeValueToArgument(
-                $argumentDefaultValueReplacer->getValueAfter()
+        if (is_string($replaceArgumentDefaultValue->getValueAfter())) {
+            $argumentNodes[$replaceArgumentDefaultValue->getPosition()] = $this->normalizeValueToArgument(
+                $replaceArgumentDefaultValue->getValueAfter()
             );
 
             // clear following arguments
-            $argumentCountToClear = count($argumentDefaultValueReplacer->getValueBefore());
-            for ($i = $argumentDefaultValueReplacer->getPosition() + 1; $i <= $argumentDefaultValueReplacer->getPosition() + $argumentCountToClear; ++$i) {
+            $argumentCountToClear = count($replaceArgumentDefaultValue->getValueBefore());
+            for ($i = $replaceArgumentDefaultValue->getPosition() + 1; $i <= $replaceArgumentDefaultValue->getPosition() + $argumentCountToClear; ++$i) {
                 unset($argumentNodes[$i]);
             }
         }
@@ -114,20 +114,20 @@ final class ArgumentDefaultValueReplacer
      */
     private function resolveArgumentValuesToBeforeRecipe(
         array $argumentNodes,
-        ArgumentDefaultValueReplacerInterface $argumentDefaultValueReplacer
+        ReplaceArgumentDefaultValueInterface $replaceArgumentDefaultValue
     ): array {
         $argumentValues = [];
 
         /** @var mixed[] $valueBefore */
-        $valueBefore = $argumentDefaultValueReplacer->getValueBefore();
+        $valueBefore = $replaceArgumentDefaultValue->getValueBefore();
         $beforeArgumentCount = count($valueBefore);
 
         for ($i = 0; $i < $beforeArgumentCount; ++$i) {
-            if (! isset($argumentNodes[$argumentDefaultValueReplacer->getPosition() + $i])) {
+            if (! isset($argumentNodes[$replaceArgumentDefaultValue->getPosition() + $i])) {
                 continue;
             }
 
-            $nextArg = $argumentNodes[$argumentDefaultValueReplacer->getPosition() + $i];
+            $nextArg = $argumentNodes[$replaceArgumentDefaultValue->getPosition() + $i];
             $argumentValues[] = $this->valueResolver->getValue($nextArg->value);
         }
 

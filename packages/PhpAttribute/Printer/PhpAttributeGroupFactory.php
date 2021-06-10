@@ -67,7 +67,7 @@ final class PhpAttributeGroupFactory
      * @param mixed[] $items
      * @return Arg[]
      */
-    private function createArgsFromItems(array $items, ?string $silentKey = null): array
+    public function createArgsFromItems(array $items, ?string $silentKey = null): array
     {
         $args = [];
 

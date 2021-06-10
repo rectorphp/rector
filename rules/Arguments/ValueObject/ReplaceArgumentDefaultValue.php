@@ -4,25 +4,32 @@ declare(strict_types=1);
 
 namespace Rector\Arguments\ValueObject;
 
-use Rector\Arguments\Contract\ArgumentDefaultValueReplacerInterface;
+use PHPStan\Type\ObjectType;
+use Rector\Arguments\Contract\ReplaceArgumentDefaultValueInterface;
 
-final class FuncCallArgumentDefaultValueReplacer implements ArgumentDefaultValueReplacerInterface
+final class ReplaceArgumentDefaultValue implements ReplaceArgumentDefaultValueInterface
 {
     /**
      * @param mixed $valueBefore
      * @param mixed $valueAfter
      */
     public function __construct(
-        private string $function,
+        private string $class,
+        private string $method,
         private int $position,
         private $valueBefore,
         private $valueAfter
     ) {
     }
 
-    public function getFunction(): string
+    public function getObjectType(): ObjectType
     {
-        return $this->function;
+        return new ObjectType($this->class);
+    }
+
+    public function getMethod(): string
+    {
+        return $this->method;
     }
 
     public function getPosition(): int

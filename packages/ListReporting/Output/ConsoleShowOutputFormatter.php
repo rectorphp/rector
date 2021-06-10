@@ -7,7 +7,7 @@ namespace Rector\ListReporting\Output;
 use Rector\Core\Contract\Console\OutputStyleInterface;
 use Rector\ListReporting\Contract\Output\ShowOutputFormatterInterface;
 
-final class ConsoleOutputFormatter implements ShowOutputFormatterInterface
+final class ConsoleShowOutputFormatter implements ShowOutputFormatterInterface
 {
     /**
      * @var string
