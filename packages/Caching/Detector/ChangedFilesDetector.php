@@ -3,29 +3,27 @@
 declare (strict_types=1);
 namespace Rector\Caching\Detector;
 
-use RectorPrefix20210611\Nette\Caching\Cache;
 use RectorPrefix20210611\Nette\Utils\Strings;
+use Rector\Caching\Cache;
 use Rector\Caching\Config\FileHashComputer;
+use Rector\Caching\Enum\CacheKey;
 use Symplify\SmartFileSystem\SmartFileInfo;
 /**
  * Inspired by https://github.com/symplify/symplify/pull/90/files#diff-72041b2e1029a08930e13d79d298ef11
- * @see \Rector\Caching\Tests\Detector\ChangedFilesDetectorTest
+ *
+ * @see \Rector\Tests\Caching\Detector\ChangedFilesDetectorTest
  */
 final class ChangedFilesDetector
 {
-    /**
-     * @var string
-     */
-    private const CONFIGURATION_HASH_KEY = 'configuration_hash';
     /**
      * @var \Rector\Caching\Config\FileHashComputer
      */
     private $fileHashComputer;
     /**
-     * @var \Nette\Caching\Cache
+     * @var \Rector\Caching\Cache
      */
     private $cache;
-    public function __construct(\Rector\Caching\Config\FileHashComputer $fileHashComputer, \RectorPrefix20210611\Nette\Caching\Cache $cache)
+    public function __construct(\Rector\Caching\Config\FileHashComputer $fileHashComputer, \Rector\Caching\Cache $cache)
     {
         $this->fileHashComputer = $fileHashComputer;
         $this->cache = $cache;
@@ -37,24 +35,24 @@ final class ChangedFilesDetector
     {
         $fileInfoCacheKey = $this->getFileInfoCacheKey($smartFileInfo);
         $hash = $this->hashFile($smartFileInfo);
-        $this->cache->save($fileInfoCacheKey, $hash);
-        $this->cache->save($fileInfoCacheKey . '_files', $dependentFiles);
+        $this->cache->save($fileInfoCacheKey, \Rector\Caching\Enum\CacheKey::FILE_HASH_KEY, $hash);
+        $this->cache->save($fileInfoCacheKey . '_files', \Rector\Caching\Enum\CacheKey::DEPENDENT_FILES_KEY, $dependentFiles);
     }
     public function hasFileChanged(\Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo) : bool
     {
         $currentFileHash = $this->hashFile($smartFileInfo);
         $fileInfoCacheKey = $this->getFileInfoCacheKey($smartFileInfo);
-        $cachedValue = $this->cache->load($fileInfoCacheKey);
+        $cachedValue = $this->cache->load($fileInfoCacheKey, \Rector\Caching\Enum\CacheKey::FILE_HASH_KEY);
         return $currentFileHash !== $cachedValue;
     }
     public function invalidateFile(\Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo) : void
     {
         $fileInfoCacheKey = $this->getFileInfoCacheKey($smartFileInfo);
-        $this->cache->remove($fileInfoCacheKey);
+        $this->cache->clean($fileInfoCacheKey);
     }
     public function clear() : void
     {
-        $this->cache->clean([\RectorPrefix20210611\Nette\Caching\Cache::ALL => \true]);
+        $this->cache->clear();
     }
     /**
      * @return SmartFileInfo[]
@@ -62,7 +60,7 @@ final class ChangedFilesDetector
     public function getDependentFileInfos(\Symplify\SmartFileSystem\SmartFileInfo $fileInfo) : array
     {
         $fileInfoCacheKey = $this->getFileInfoCacheKey($fileInfo);
-        $cacheValue = $this->cache->load($fileInfoCacheKey . '_files');
+        $cacheValue = $this->cache->load($fileInfoCacheKey . '_files', \Rector\Caching\Enum\CacheKey::DEPENDENT_FILES_KEY);
         if ($cacheValue === null) {
             return [];
         }
@@ -95,13 +93,13 @@ final class ChangedFilesDetector
     }
     private function storeConfigurationDataHash(\Symplify\SmartFileSystem\SmartFileInfo $fileInfo, string $configurationHash) : void
     {
-        $key = self::CONFIGURATION_HASH_KEY . '_' . \RectorPrefix20210611\Nette\Utils\Strings::webalize($fileInfo->getRealPath());
+        $key = \Rector\Caching\Enum\CacheKey::CONFIGURATION_HASH_KEY . '_' . \RectorPrefix20210611\Nette\Utils\Strings::webalize($fileInfo->getRealPath());
         $this->invalidateCacheIfConfigurationChanged($key, $configurationHash);
-        $this->cache->save($key, $configurationHash);
+        $this->cache->save($key, \Rector\Caching\Enum\CacheKey::CONFIGURATION_HASH_KEY, $configurationHash);
     }
     private function invalidateCacheIfConfigurationChanged(string $key, string $configurationHash) : void
     {
-        $oldCachedValue = $this->cache->load($key);
+        $oldCachedValue = $this->cache->load($key, \Rector\Caching\Enum\CacheKey::CONFIGURATION_HASH_KEY);
         if ($oldCachedValue === $configurationHash) {
             return;
         }

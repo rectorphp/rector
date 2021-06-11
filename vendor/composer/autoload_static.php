@@ -4,18 +4,18 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitfd1d68ed85dbe20b26c5f8338bc2c1d9
+class ComposerStaticInit9fbbffeb6d398152232255cef95e7fea
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
         '6e3fae29631ef280660b3cdad06f25a8' => __DIR__ . '/..' . '/symfony/deprecation-contracts/function.php',
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
-        '9b38cf48e83f5d8f60375221cd213eee' => __DIR__ . '/..' . '/phpstan/phpstan/bootstrap.php',
         '0d59ee240a4cd96ddbb4ff164fccea4d' => __DIR__ . '/..' . '/symfony/polyfill-php73/bootstrap.php',
         '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
-        'd507e002f7fce7f0c6dbf1f22edcb902' => __DIR__ . '/..' . '/tracy/tracy/src/Tracy/functions.php',
+        '9b38cf48e83f5d8f60375221cd213eee' => __DIR__ . '/..' . '/phpstan/phpstan/bootstrap.php',
         '667aeda72477189d0494fecd327c3641' => __DIR__ . '/..' . '/symfony/var-dumper/Resources/functions/dump.php',
         '23c18046f52bef3eea034657bafda50f' => __DIR__ . '/..' . '/symfony/polyfill-php81/bootstrap.php',
+        'd507e002f7fce7f0c6dbf1f22edcb902' => __DIR__ . '/..' . '/tracy/tracy/src/Tracy/functions.php',
         '65fec9ebcfbb3cbb4fd0d519687aea01' => __DIR__ . '/..' . '/danielstjules/stringy/src/Create.php',
         '8825ede83f2f289127722d4e842cf7e8' => __DIR__ . '/..' . '/symfony/polyfill-intl-grapheme/bootstrap.php',
         'e69f7f6ee287b969198c3c9d6777bd38' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/bootstrap.php',
@@ -805,23 +805,6 @@ class ComposerStaticInitfd1d68ed85dbe20b26c5f8338bc2c1d9
         'RectorPrefix20210611\\Idiosyncratic\\EditorConfig\\Exception\\InvalidValue' => __DIR__ . '/..' . '/idiosyncratic/editorconfig/src/Exception/InvalidValue.php',
         'RectorPrefix20210611\\Idiosyncratic\\EditorConfig\\Section' => __DIR__ . '/..' . '/idiosyncratic/editorconfig/src/Section.php',
         'RectorPrefix20210611\\Nette\\ArgumentOutOfRangeException' => __DIR__ . '/..' . '/nette/utils/src/exceptions.php',
-        'RectorPrefix20210611\\Nette\\Bridges\\CacheDI\\CacheExtension' => __DIR__ . '/..' . '/nette/caching/src/Bridges/CacheDI/CacheExtension.php',
-        'RectorPrefix20210611\\Nette\\Bridges\\CacheLatte\\CacheMacro' => __DIR__ . '/..' . '/nette/caching/src/Bridges/CacheLatte/CacheMacro.php',
-        'RectorPrefix20210611\\Nette\\Caching\\BulkReader' => __DIR__ . '/..' . '/nette/caching/src/Caching/BulkReader.php',
-        'RectorPrefix20210611\\Nette\\Caching\\Cache' => __DIR__ . '/..' . '/nette/caching/src/Caching/Cache.php',
-        'RectorPrefix20210611\\Nette\\Caching\\IBulkReader' => __DIR__ . '/..' . '/nette/caching/src/compatibility.php',
-        'RectorPrefix20210611\\Nette\\Caching\\IStorage' => __DIR__ . '/..' . '/nette/caching/src/compatibility.php',
-        'RectorPrefix20210611\\Nette\\Caching\\OutputHelper' => __DIR__ . '/..' . '/nette/caching/src/Caching/OutputHelper.php',
-        'RectorPrefix20210611\\Nette\\Caching\\Storage' => __DIR__ . '/..' . '/nette/caching/src/Caching/Storage.php',
-        'RectorPrefix20210611\\Nette\\Caching\\Storages\\DevNullStorage' => __DIR__ . '/..' . '/nette/caching/src/Caching/Storages/DevNullStorage.php',
-        'RectorPrefix20210611\\Nette\\Caching\\Storages\\FileStorage' => __DIR__ . '/..' . '/nette/caching/src/Caching/Storages/FileStorage.php',
-        'RectorPrefix20210611\\Nette\\Caching\\Storages\\IJournal' => __DIR__ . '/..' . '/nette/caching/src/compatibility.php',
-        'RectorPrefix20210611\\Nette\\Caching\\Storages\\Journal' => __DIR__ . '/..' . '/nette/caching/src/Caching/Storages/Journal.php',
-        'RectorPrefix20210611\\Nette\\Caching\\Storages\\MemcachedStorage' => __DIR__ . '/..' . '/nette/caching/src/Caching/Storages/MemcachedStorage.php',
-        'RectorPrefix20210611\\Nette\\Caching\\Storages\\MemoryStorage' => __DIR__ . '/..' . '/nette/caching/src/Caching/Storages/MemoryStorage.php',
-        'RectorPrefix20210611\\Nette\\Caching\\Storages\\NewMemcachedStorage' => __DIR__ . '/..' . '/nette/caching/src/Caching/Storages/NewMemcachedStorage.php',
-        'RectorPrefix20210611\\Nette\\Caching\\Storages\\SQLiteJournal' => __DIR__ . '/..' . '/nette/caching/src/Caching/Storages/SQLiteJournal.php',
-        'RectorPrefix20210611\\Nette\\Caching\\Storages\\SQLiteStorage' => __DIR__ . '/..' . '/nette/caching/src/Caching/Storages/SQLiteStorage.php',
         'RectorPrefix20210611\\Nette\\DeprecatedException' => __DIR__ . '/..' . '/nette/utils/src/exceptions.php',
         'RectorPrefix20210611\\Nette\\DirectoryNotFoundException' => __DIR__ . '/..' . '/nette/utils/src/exceptions.php',
         'RectorPrefix20210611\\Nette\\FileNotFoundException' => __DIR__ . '/..' . '/nette/utils/src/exceptions.php',
@@ -852,7 +835,6 @@ class ComposerStaticInitfd1d68ed85dbe20b26c5f8338bc2c1d9
         'RectorPrefix20210611\\Nette\\Utils\\Callback' => __DIR__ . '/..' . '/nette/utils/src/Utils/Callback.php',
         'RectorPrefix20210611\\Nette\\Utils\\DateTime' => __DIR__ . '/..' . '/nette/utils/src/Utils/DateTime.php',
         'RectorPrefix20210611\\Nette\\Utils\\FileSystem' => __DIR__ . '/..' . '/nette/utils/src/Utils/FileSystem.php',
-        'RectorPrefix20210611\\Nette\\Utils\\Finder' => __DIR__ . '/..' . '/nette/finder/src/Utils/Finder.php',
         'RectorPrefix20210611\\Nette\\Utils\\Floats' => __DIR__ . '/..' . '/nette/utils/src/Utils/Floats.php',
         'RectorPrefix20210611\\Nette\\Utils\\Helpers' => __DIR__ . '/..' . '/nette/utils/src/Utils/Helpers.php',
         'RectorPrefix20210611\\Nette\\Utils\\Html' => __DIR__ . '/..' . '/nette/utils/src/Utils/Html.php',
@@ -1934,11 +1916,16 @@ class ComposerStaticInitfd1d68ed85dbe20b26c5f8338bc2c1d9
         'Rector\\BetterPhpDocParser\\ValueObject\\Type\\SpacingAwareArrayTypeNode' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/ValueObject/Type/SpacingAwareArrayTypeNode.php',
         'Rector\\BetterPhpDocParser\\ValueObject\\Type\\SpacingAwareCallableTypeNode' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/ValueObject/Type/SpacingAwareCallableTypeNode.php',
         'Rector\\Caching\\Application\\CachedFileInfoFilterAndReporter' => __DIR__ . '/../..' . '/packages/Caching/Application/CachedFileInfoFilterAndReporter.php',
-        'Rector\\Caching\\Cache\\NetteCacheFactory' => __DIR__ . '/../..' . '/packages/Caching/Cache/NetteCacheFactory.php',
+        'Rector\\Caching\\Cache' => __DIR__ . '/../..' . '/packages/Caching/Cache.php',
+        'Rector\\Caching\\CacheFactory' => __DIR__ . '/../..' . '/packages/Caching/CacheFactory.php',
         'Rector\\Caching\\Config\\FileHashComputer' => __DIR__ . '/../..' . '/packages/Caching/Config/FileHashComputer.php',
         'Rector\\Caching\\Detector\\ChangedFilesDetector' => __DIR__ . '/../..' . '/packages/Caching/Detector/ChangedFilesDetector.php',
+        'Rector\\Caching\\Enum\\CacheKey' => __DIR__ . '/../..' . '/packages/Caching/Enum/CacheKey.php',
         'Rector\\Caching\\FileSystem\\DependencyResolver' => __DIR__ . '/../..' . '/packages/Caching/FileSystem/DependencyResolver.php',
         'Rector\\Caching\\UnchangedFilesFilter' => __DIR__ . '/../..' . '/packages/Caching/UnchangedFilesFilter.php',
+        'Rector\\Caching\\ValueObject\\CacheFilePaths' => __DIR__ . '/../..' . '/packages/Caching/ValueObject/CacheFilePaths.php',
+        'Rector\\Caching\\ValueObject\\CacheItem' => __DIR__ . '/../..' . '/packages/Caching/ValueObject/CacheItem.php',
+        'Rector\\Caching\\ValueObject\\Storage\\FileCacheStorage' => __DIR__ . '/../..' . '/packages/Caching/ValueObject/Storage/FileCacheStorage.php',
         'Rector\\CakePHP\\ImplicitNameResolver' => __DIR__ . '/..' . '/rector/rector-cakephp/src/ImplicitNameResolver.php',
         'Rector\\CakePHP\\Naming\\CakePHPFullyQualifiedClassNameResolver' => __DIR__ . '/..' . '/rector/rector-cakephp/src/Naming/CakePHPFullyQualifiedClassNameResolver.php',
         'Rector\\CakePHP\\Rector\\FileWithoutNamespace\\ImplicitShortClassNameUseStatementRector' => __DIR__ . '/..' . '/rector/rector-cakephp/src/Rector/FileWithoutNamespace/ImplicitShortClassNameUseStatementRector.php',
@@ -3876,9 +3863,9 @@ class ComposerStaticInitfd1d68ed85dbe20b26c5f8338bc2c1d9
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitfd1d68ed85dbe20b26c5f8338bc2c1d9::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitfd1d68ed85dbe20b26c5f8338bc2c1d9::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitfd1d68ed85dbe20b26c5f8338bc2c1d9::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit9fbbffeb6d398152232255cef95e7fea::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit9fbbffeb6d398152232255cef95e7fea::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit9fbbffeb6d398152232255cef95e7fea::$classMap;
 
         }, null, ClassLoader::class);
     }

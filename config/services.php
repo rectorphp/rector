@@ -9,7 +9,6 @@ use RectorPrefix20210611\Doctrine\Inflector\Rules\English\InflectorFactory;
 use RectorPrefix20210611\Ergebnis\Json\Printer\Printer;
 use RectorPrefix20210611\Ergebnis\Json\Printer\PrinterInterface;
 use RectorPrefix20210611\Idiosyncratic\EditorConfig\EditorConfig;
-use RectorPrefix20210611\Nette\Caching\Cache;
 use PhpParser\BuilderFactory;
 use PhpParser\Lexer;
 use PhpParser\NodeFinder;
@@ -27,7 +26,7 @@ use PHPStan\PhpDocParser\Parser\TypeParser;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\BetterPhpDocParser\PhpDocParser\BetterPhpDocParser;
 use Rector\BetterPhpDocParser\PhpDocParser\BetterTypeParser;
-use Rector\Caching\Cache\NetteCacheFactory;
+use Rector\Caching\CacheFactory;
 use Rector\Core\Console\ConsoleApplication;
 use Rector\Core\PhpParser\Parser\NikicPhpParserFactory;
 use Rector\Core\PhpParser\Parser\PhpParserLexerFactory;
@@ -87,7 +86,7 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
     // cache
     $services->set(\PHPStan\Dependency\DependencyResolver::class)->factory([\RectorPrefix20210611\Symfony\Component\DependencyInjection\Loader\Configurator\service(\Rector\NodeTypeResolver\DependencyInjection\PHPStanServicesFactory::class), 'createDependencyResolver']);
     $services->set(\PHPStan\File\FileHelper::class)->factory([\RectorPrefix20210611\Symfony\Component\DependencyInjection\Loader\Configurator\service(\Rector\NodeTypeResolver\DependencyInjection\PHPStanServicesFactory::class), 'createFileHelper']);
-    $services->set(\RectorPrefix20210611\Nette\Caching\Cache::class)->factory([\RectorPrefix20210611\Symfony\Component\DependencyInjection\Loader\Configurator\service(\Rector\Caching\Cache\NetteCacheFactory::class), 'create']);
+    $services->set(\Rector\Caching\Cache::class)->factory([\RectorPrefix20210611\Symfony\Component\DependencyInjection\Loader\Configurator\service(\Rector\Caching\CacheFactory::class), 'create']);
     // type resolving
     $services->set(\Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocator\IntermediateSourceLocator::class);
     $services->alias(\PHPStan\PhpDocParser\Parser\TypeParser::class, \Rector\BetterPhpDocParser\PhpDocParser\BetterTypeParser::class);

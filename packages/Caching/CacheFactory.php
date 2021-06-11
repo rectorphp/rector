@@ -1,14 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Caching\Cache;
+namespace Rector\Caching;
 
-use RectorPrefix20210611\Nette\Caching\Cache;
-use RectorPrefix20210611\Nette\Caching\Storages\FileStorage;
+use Rector\Caching\ValueObject\Storage\FileCacheStorage;
 use Rector\Core\Configuration\Option;
 use RectorPrefix20210611\Symplify\PackageBuilder\Parameter\ParameterProvider;
 use RectorPrefix20210611\Symplify\SmartFileSystem\SmartFileSystem;
-final class NetteCacheFactory
+final class CacheFactory
 {
     /**
      * @var \Symplify\PackageBuilder\Parameter\ParameterProvider
@@ -23,15 +22,14 @@ final class NetteCacheFactory
         $this->parameterProvider = $parameterProvider;
         $this->smartFileSystem = $smartFileSystem;
     }
-    public function create() : \RectorPrefix20210611\Nette\Caching\Cache
+    public function create() : \Rector\Caching\Cache
     {
         $cacheDirectory = $this->parameterProvider->provideStringParameter(\Rector\Core\Configuration\Option::CACHE_DIR);
         // ensure cache directory exists
         if (!$this->smartFileSystem->exists($cacheDirectory)) {
             $this->smartFileSystem->mkdir($cacheDirectory);
         }
-        $fileStorage = new \RectorPrefix20210611\Nette\Caching\Storages\FileStorage($cacheDirectory);
-        // namespace is unique per project
-        return new \RectorPrefix20210611\Nette\Caching\Cache($fileStorage, \getcwd());
+        $fileCacheStorage = new \Rector\Caching\ValueObject\Storage\FileCacheStorage($cacheDirectory, $this->smartFileSystem);
+        return new \Rector\Caching\Cache($fileCacheStorage);
     }
 }

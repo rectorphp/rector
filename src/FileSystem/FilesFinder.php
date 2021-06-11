@@ -3,9 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Core\FileSystem;
 
-use RectorPrefix20210611\Nette\Caching\Cache;
 use RectorPrefix20210611\Nette\Utils\Strings;
-use Rector\Core\Configuration\Configuration;
 use RectorPrefix20210611\Symfony\Component\Finder\Finder;
 use RectorPrefix20210611\Symfony\Component\Finder\SplFileInfo;
 use RectorPrefix20210611\Symplify\Skipper\SkipCriteriaResolver\SkippedPathsResolver;
@@ -43,22 +41,12 @@ final class FilesFinder
      * @var \Symplify\Skipper\SkipCriteriaResolver\SkippedPathsResolver
      */
     private $skippedPathsResolver;
-    /**
-     * @var \Rector\Core\Configuration\Configuration
-     */
-    private $configuration;
-    /**
-     * @var \Nette\Caching\Cache
-     */
-    private $cache;
-    public function __construct(\Rector\Core\FileSystem\FilesystemTweaker $filesystemTweaker, \RectorPrefix20210611\Symplify\SmartFileSystem\Finder\FinderSanitizer $finderSanitizer, \RectorPrefix20210611\Symplify\SmartFileSystem\FileSystemFilter $fileSystemFilter, \RectorPrefix20210611\Symplify\Skipper\SkipCriteriaResolver\SkippedPathsResolver $skippedPathsResolver, \Rector\Core\Configuration\Configuration $configuration, \RectorPrefix20210611\Nette\Caching\Cache $cache)
+    public function __construct(\Rector\Core\FileSystem\FilesystemTweaker $filesystemTweaker, \RectorPrefix20210611\Symplify\SmartFileSystem\Finder\FinderSanitizer $finderSanitizer, \RectorPrefix20210611\Symplify\SmartFileSystem\FileSystemFilter $fileSystemFilter, \RectorPrefix20210611\Symplify\Skipper\SkipCriteriaResolver\SkippedPathsResolver $skippedPathsResolver)
     {
         $this->filesystemTweaker = $filesystemTweaker;
         $this->finderSanitizer = $finderSanitizer;
         $this->fileSystemFilter = $fileSystemFilter;
         $this->skippedPathsResolver = $skippedPathsResolver;
-        $this->configuration = $configuration;
-        $this->cache = $cache;
     }
     /**
      * @param string[] $source
@@ -66,28 +54,6 @@ final class FilesFinder
      * @return SmartFileInfo[]
      */
     public function findInDirectoriesAndFiles(array $source, array $suffixes) : array
-    {
-        $cacheKey = \md5(\serialize($source) . \serialize($suffixes));
-        if (!$this->configuration->isCacheEnabled() || $this->configuration->shouldClearCache()) {
-            $this->cache->clean([\RectorPrefix20210611\Nette\Caching\Cache::ALL => \true]);
-            return $this->collectFileInfos($source, $suffixes);
-        }
-        $loadCache = $this->cache->load($cacheKey);
-        if ($loadCache) {
-            $stringFiles = \unserialize($loadCache);
-            return $this->getSmartFileInfosFromStringFiles($stringFiles);
-        }
-        $smartFileInfos = $this->collectFileInfos($source, $suffixes);
-        $stringFiles = \serialize($this->convertFileInfosToStringFiles($smartFileInfos));
-        $this->cache->save($cacheKey, $stringFiles);
-        return $smartFileInfos;
-    }
-    /**
-     * @param string[] $source
-     * @param string[] $suffixes
-     * @return SmartFileInfo[]
-     */
-    private function collectFileInfos(array $source, array $suffixes) : array
     {
         $filesAndDirectories = $this->filesystemTweaker->resolveWithFnmatch($source);
         $files = $this->fileSystemFilter->filterFiles($filesAndDirectories);
@@ -97,30 +63,6 @@ final class FilesFinder
             $smartFileInfos[] = new \Symplify\SmartFileSystem\SmartFileInfo($file);
         }
         return \array_merge($smartFileInfos, $this->findInDirectories($directories, $suffixes));
-    }
-    /**
-     * @param SmartFileInfo[] $smartFileInfos
-     * @return string[]
-     */
-    private function convertFileInfosToStringFiles(array $smartFileInfos) : array
-    {
-        $files = [];
-        foreach ($smartFileInfos as $smartFileInfo) {
-            $files[] = $smartFileInfo->getPathname();
-        }
-        return $files;
-    }
-    /**
-     * @param string[] $files
-     * @return SmartFileInfo[]
-     */
-    private function getSmartFileInfosFromStringFiles(array $files) : array
-    {
-        $smartFileInfos = [];
-        foreach ($files as $file) {
-            $smartFileInfos[] = new \Symplify\SmartFileSystem\SmartFileInfo($file);
-        }
-        return $smartFileInfos;
     }
     /**
      * @param string[] $directories
