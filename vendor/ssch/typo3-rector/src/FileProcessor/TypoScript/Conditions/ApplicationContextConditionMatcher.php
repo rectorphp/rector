@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Ssch\TYPO3Rector\FileProcessor\TypoScript\Conditions;
 
-use RectorPrefix20210610\Nette\Utils\Strings;
+use RectorPrefix20210611\Nette\Utils\Strings;
 use Ssch\TYPO3Rector\Contract\FileProcessor\TypoScript\Conditions\TyposcriptConditionMatcher;
 use Ssch\TYPO3Rector\Helper\ArrayUtility;
 final class ApplicationContextConditionMatcher implements \Ssch\TYPO3Rector\Contract\FileProcessor\TypoScript\Conditions\TyposcriptConditionMatcher
@@ -31,7 +31,7 @@ final class ApplicationContextConditionMatcher implements \Ssch\TYPO3Rector\Cont
     }
     public function shouldApply(string $condition) : bool
     {
-        if (\RectorPrefix20210610\Nette\Utils\Strings::contains($condition, self::CONTAINS_CONSTANT)) {
+        if (\RectorPrefix20210611\Nette\Utils\Strings::contains($condition, self::CONTAINS_CONSTANT)) {
             return \false;
         }
         return 1 === \preg_match('#^' . self::TYPE . self::ZERO_ONE_OR_MORE_WHITESPACES . '=[^=]#', $condition);

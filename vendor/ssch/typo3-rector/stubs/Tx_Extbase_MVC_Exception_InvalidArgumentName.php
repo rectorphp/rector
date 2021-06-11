@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210610;
+namespace RectorPrefix20210611;
 
 if (\class_exists('Tx_Extbase_MVC_Exception_InvalidArgumentName')) {
     return;

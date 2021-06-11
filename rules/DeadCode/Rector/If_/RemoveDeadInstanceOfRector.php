@@ -62,7 +62,7 @@ CODE_SAMPLE
     }
     /**
      * @param If_ $node
-     * @return null|Stmt[]|If_
+     * @return null|If_
      */
     public function refactor(\PhpParser\Node $node)
     {
@@ -82,10 +82,7 @@ CODE_SAMPLE
         }
         return $node;
     }
-    /**
-     * @return Stmt[]|null
-     */
-    private function processMayDeadInstanceOf(\PhpParser\Node\Stmt\If_ $if, \PhpParser\Node\Expr\Instanceof_ $instanceof) : ?array
+    private function processMayDeadInstanceOf(\PhpParser\Node\Stmt\If_ $if, \PhpParser\Node\Expr\Instanceof_ $instanceof) : ?\PhpParser\Node\Stmt\If_
     {
         $classType = $this->nodeTypeResolver->resolve($instanceof->class);
         $exprType = $this->nodeTypeResolver->resolve($instanceof->expr);
@@ -94,9 +91,9 @@ CODE_SAMPLE
             return null;
         }
         if ($if->cond === $instanceof) {
-            return $if->stmts;
+            $this->addNodesBeforeNode($if->stmts, $if);
         }
         $this->removeNode($if);
-        return null;
+        return $if;
     }
 }

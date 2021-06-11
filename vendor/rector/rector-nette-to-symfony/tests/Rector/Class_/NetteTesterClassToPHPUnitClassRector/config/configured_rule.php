@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210610;
+namespace RectorPrefix20210611;
 
 use Rector\NetteToSymfony\Rector\Class_\NetteTesterClassToPHPUnitClassRector;
 use Rector\NetteToSymfony\Rector\StaticCall\NetteAssertToPHPUnitAssertRector;

@@ -6,8 +6,8 @@ namespace Rector\Core\Configuration;
 use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
 use Rector\Core\Exception\Configuration\InvalidConfigurationException;
 use Rector\Core\ValueObject\Bootstrap\BootstrapConfigs;
-use RectorPrefix20210610\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix20210610\Symplify\PackageBuilder\Parameter\ParameterProvider;
+use RectorPrefix20210611\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix20210611\Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\SmartFileSystem\SmartFileInfo;
 final class Configuration
 {
@@ -59,7 +59,7 @@ final class Configuration
      * @var \Rector\Core\ValueObject\Bootstrap\BootstrapConfigs|null
      */
     private $bootstrapConfigs;
-    public function __construct(\RectorPrefix20210610\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider)
+    public function __construct(\RectorPrefix20210611\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider)
     {
         $this->isCacheEnabled = (bool) $parameterProvider->provideParameter(\Rector\Core\Configuration\Option::ENABLE_CACHE);
         $this->fileExtensions = (array) $parameterProvider->provideParameter(\Rector\Core\Configuration\Option::FILE_EXTENSIONS);
@@ -69,7 +69,7 @@ final class Configuration
     /**
      * Needs to run in the start of the life cycle, since the rest of workflow uses it.
      */
-    public function resolveFromInput(\RectorPrefix20210610\Symfony\Component\Console\Input\InputInterface $input) : void
+    public function resolveFromInput(\RectorPrefix20210611\Symfony\Component\Console\Input\InputInterface $input) : void
     {
         $this->isDryRun = (bool) $input->getOption(\Rector\Core\Configuration\Option::OPTION_DRY_RUN);
         $this->shouldClearCache = (bool) $input->getOption(\Rector\Core\Configuration\Option::OPTION_CLEAR_CACHE);
@@ -174,7 +174,7 @@ final class Configuration
         }
         return $mainConfigFileInfo->getRelativeFilePathFromCwd();
     }
-    private function canShowProgressBar(\RectorPrefix20210610\Symfony\Component\Console\Input\InputInterface $input) : bool
+    private function canShowProgressBar(\RectorPrefix20210611\Symfony\Component\Console\Input\InputInterface $input) : bool
     {
         $noProgressBar = (bool) $input->getOption(\Rector\Core\Configuration\Option::OPTION_NO_PROGRESS_BAR);
         if ($noProgressBar) {

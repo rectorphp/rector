@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210610;
+namespace RectorPrefix20210611;
 
 use Rector\PHPUnit\Rector\StaticCall\GetMockRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
