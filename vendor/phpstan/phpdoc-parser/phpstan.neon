@@ -1,3 +1,0 @@
-parameters:
-	ignoreErrors:
-		- '#^Dynamic call to static method PHPUnit\\Framework\\Assert#'

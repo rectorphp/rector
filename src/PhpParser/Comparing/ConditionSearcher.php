@@ -3,59 +3,95 @@
 declare (strict_types=1);
 namespace Rector\Core\PhpParser\Comparing;
 
+use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 final class ConditionSearcher
 {
+    /**
+     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
+     */
+    private $betterNodeFinder;
+    /**
+     * @var \Rector\Core\PhpParser\Comparing\NodeComparator
+     */
+    private $nodeComparator;
+    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator)
+    {
+        $this->betterNodeFinder = $betterNodeFinder;
+        $this->nodeComparator = $nodeComparator;
+    }
     public function searchIfAndElseForVariableRedeclaration(\PhpParser\Node\Expr\Assign $assign, \PhpParser\Node\Stmt\If_ $if) : bool
     {
+        $elseNode = $if->else;
+        if (!$elseNode instanceof \PhpParser\Node\Stmt\Else_) {
+            return \false;
+        }
         /** @var Variable $varNode */
         $varNode = $assign->var;
-        // search if for redeclaration of variable
-        foreach ($if->stmts as $statementIf) {
-            if (!$statementIf instanceof \PhpParser\Node\Stmt\Expression) {
-                continue;
+        if (!$this->searchForVariableRedeclaration($varNode, $if->stmts)) {
+            return \false;
+        }
+        foreach ($if->elseifs as $elseifNode) {
+            if (!$this->searchForVariableRedeclaration($varNode, $elseifNode->stmts)) {
+                return \false;
             }
-            if (!$statementIf->expr instanceof \PhpParser\Node\Expr\Assign) {
-                continue;
+        }
+        if (!$this->searchForVariableRedeclaration($varNode, $elseNode->stmts)) {
+            return \false;
+        }
+        return \true;
+    }
+    /**
+     * @param Stmt[] $stmts
+     */
+    private function searchForVariableRedeclaration(\PhpParser\Node\Expr\Variable $varNode, array $stmts) : bool
+    {
+        foreach ($stmts as $stmt) {
+            if ($this->checkIfVariableUsedInExpression($varNode, $stmt)) {
+                return \false;
             }
-            $assignVar = $statementIf->expr->var;
-            if (!$assignVar instanceof \PhpParser\Node\Expr\Variable) {
-                continue;
+            if ($this->checkForVariableRedeclaration($varNode, $stmt)) {
+                return \true;
             }
-            if ($varNode->name !== $assignVar->name) {
-                continue;
-            }
-            $elseNode = $if->else;
-            if (!$elseNode instanceof \PhpParser\Node\Stmt\Else_) {
-                continue;
-            }
-            // search else for redeclaration of variable
-            return $this->searchElseForVariableRedeclaration($assign, $elseNode);
         }
         return \false;
     }
-    private function searchElseForVariableRedeclaration(\PhpParser\Node\Expr\Assign $assign, \PhpParser\Node\Stmt\Else_ $else) : bool
+    private function checkIfVariableUsedInExpression(\PhpParser\Node\Expr\Variable $varNode, \PhpParser\Node\Stmt $stmt) : bool
     {
-        foreach ($else->stmts as $statementElse) {
-            if (!$statementElse instanceof \PhpParser\Node\Stmt\Expression) {
-                continue;
+        if ($stmt instanceof \PhpParser\Node\Stmt\Expression) {
+            if ($stmt->expr instanceof \PhpParser\Node\Expr\Assign) {
+                $node = $stmt->expr->expr;
+            } else {
+                $node = $stmt->expr;
             }
-            if (!$statementElse->expr instanceof \PhpParser\Node\Expr\Assign) {
-                continue;
-            }
-            /** @var Variable $varElse */
-            $varElse = $statementElse->expr->var;
-            /** @var Variable $varNode */
-            $varNode = $assign->var;
-            if ($varNode->name !== $varElse->name) {
-                continue;
-            }
-            return \true;
+        } else {
+            $node = $stmt;
         }
-        return \false;
+        return (bool) $this->betterNodeFinder->findFirst($node, function (\PhpParser\Node $subNode) use($varNode) : bool {
+            return $this->nodeComparator->areNodesEqual($varNode, $subNode);
+        });
+    }
+    private function checkForVariableRedeclaration(\PhpParser\Node\Expr\Variable $varNode, \PhpParser\Node\Stmt $stmt) : bool
+    {
+        if (!$stmt instanceof \PhpParser\Node\Stmt\Expression) {
+            return \false;
+        }
+        if (!$stmt->expr instanceof \PhpParser\Node\Expr\Assign) {
+            return \false;
+        }
+        $assignVar = $stmt->expr->var;
+        if (!$assignVar instanceof \PhpParser\Node\Expr\Variable) {
+            return \false;
+        }
+        if ($varNode->name !== $assignVar->name) {
+            return \false;
+        }
+        return \true;
     }
 }
