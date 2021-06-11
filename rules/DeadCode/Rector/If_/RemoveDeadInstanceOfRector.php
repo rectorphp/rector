@@ -67,7 +67,7 @@ CODE_SAMPLE
 
     /**
      * @param If_ $node
-     * @return null|Stmt[]|If_
+     * @return null|If_
      */
     public function refactor(Node $node)
     {
@@ -93,10 +93,7 @@ CODE_SAMPLE
         return $node;
     }
 
-    /**
-     * @return Stmt[]|null
-     */
-    private function processMayDeadInstanceOf(If_ $if, Instanceof_ $instanceof): ?array
+    private function processMayDeadInstanceOf(If_ $if, Instanceof_ $instanceof): ?If_
     {
         $classType = $this->nodeTypeResolver->resolve($instanceof->class);
         $exprType = $this->nodeTypeResolver->resolve($instanceof->expr);
@@ -108,10 +105,10 @@ CODE_SAMPLE
         }
 
         if ($if->cond === $instanceof) {
-            return $if->stmts;
+            $this->addNodesBeforeNode($if->stmts, $if);
         }
 
         $this->removeNode($if);
-        return null;
+        return $if;
     }
 }
