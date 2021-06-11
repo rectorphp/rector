@@ -7,7 +7,6 @@ namespace Rector\DeadCode\Rector\If_;
 use PhpParser\Node;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\Instanceof_;
-use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\If_;
 use PHPStan\Analyser\Scope;
 use Rector\Core\NodeManipulator\IfManipulator;

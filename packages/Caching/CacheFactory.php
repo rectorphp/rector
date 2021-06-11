@@ -2,15 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Rector\Caching\Cache;
+namespace Rector\Caching;
 
-use Nette\Caching\Cache;
-use Nette\Caching\Storages\FileStorage;
+use Rector\Caching\ValueObject\Storage\FileCacheStorage;
 use Rector\Core\Configuration\Option;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\SmartFileSystem\SmartFileSystem;
 
-final class NetteCacheFactory
+final class CacheFactory
 {
     public function __construct(
         private ParameterProvider $parameterProvider,
@@ -27,9 +26,7 @@ final class NetteCacheFactory
             $this->smartFileSystem->mkdir($cacheDirectory);
         }
 
-        $fileStorage = new FileStorage($cacheDirectory);
-
-        // namespace is unique per project
-        return new Cache($fileStorage, getcwd());
+        $fileCacheStorage = new FileCacheStorage($cacheDirectory, $this->smartFileSystem);
+        return new Cache($fileCacheStorage);
     }
 }

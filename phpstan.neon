@@ -487,3 +487,16 @@ parameters:
         -
             message: '#Class with base "StaticTypeMapper" name is already used in "Rector\\StaticTypeMapper\\StaticTypeMapper", "Rector\\PHPStanStaticTypeMapper\\TypeMapper\\StaticTypeMapper"\. Use unique name to make classes easy to recognize#'
             path: packages/PHPStanStaticTypeMapper/TypeMapper/StaticTypeMapper.php #21
+
+        - '#"@var_export\(new \\Rector\\Caching\\ValueObject\\CacheItem\(\$variableKey, \$data\), true\)" is forbidden to use#'
+
+        # resolve same named classes later
+        - '#Class with base "UnionTypeMapper" name is already used in "Rector\\StaticTypeMapper\\PhpDocParser\\UnionTypeMapper", "Rector\\PHPStanStaticTypeMapper\\TypeMapper\\UnionTypeMapper"\. Use unique name to make classes easy to recognize#'
+
+        # checking internal class
+        -
+            message: '#Instead of "instanceof/is_a\(\)" use ReflectionProvider service or "\(new ObjectType\(<desired_type\>\)\)\-\>isSuperTypeOf\(<element_type\>\)" for static reflection to work#'
+            path: packages/Caching/ValueObject/Storage/FileCacheStorage.php
+
+        # cache hacking
+        - '#"@var_export\(new \\Symplify\\EasyCodingStandard\\Caching\\ValueObject\\CacheItem\(\$variableKey, \$data\), true\)" is forbidden to use#'

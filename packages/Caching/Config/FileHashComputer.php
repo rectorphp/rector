@@ -15,7 +15,6 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
  * Inspired by https://github.com/symplify/easy-coding-standard/blob/e598ab54686e416788f28fcfe007fd08e0f371d9/packages/changed-files-detector/src/FileHashComputer.php
- * @see \Rector\Caching\Tests\Config\FileHashComputerTest
  */
 final class FileHashComputer
 {

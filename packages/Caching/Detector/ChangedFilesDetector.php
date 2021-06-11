@@ -4,22 +4,19 @@ declare(strict_types=1);
 
 namespace Rector\Caching\Detector;
 
-use Nette\Caching\Cache;
 use Nette\Utils\Strings;
+use Rector\Caching\Cache;
 use Rector\Caching\Config\FileHashComputer;
+use Rector\Caching\Enum\CacheKey;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
  * Inspired by https://github.com/symplify/symplify/pull/90/files#diff-72041b2e1029a08930e13d79d298ef11
- * @see \Rector\Caching\Tests\Detector\ChangedFilesDetectorTest
+ *
+ * @see \Rector\Tests\Caching\Detector\ChangedFilesDetectorTest
  */
 final class ChangedFilesDetector
 {
-    /**
-     * @var string
-     */
-    private const CONFIGURATION_HASH_KEY = 'configuration_hash';
-
     public function __construct(
         private FileHashComputer $fileHashComputer,
         private Cache $cache
@@ -34,8 +31,8 @@ final class ChangedFilesDetector
         $fileInfoCacheKey = $this->getFileInfoCacheKey($smartFileInfo);
         $hash = $this->hashFile($smartFileInfo);
 
-        $this->cache->save($fileInfoCacheKey, $hash);
-        $this->cache->save($fileInfoCacheKey . '_files', $dependentFiles);
+        $this->cache->save($fileInfoCacheKey, CacheKey::FILE_HASH_KEY, $hash);
+        $this->cache->save($fileInfoCacheKey . '_files', CacheKey::DEPENDENT_FILES_KEY, $dependentFiles);
     }
 
     public function hasFileChanged(SmartFileInfo $smartFileInfo): bool
@@ -44,21 +41,19 @@ final class ChangedFilesDetector
 
         $fileInfoCacheKey = $this->getFileInfoCacheKey($smartFileInfo);
 
-        $cachedValue = $this->cache->load($fileInfoCacheKey);
+        $cachedValue = $this->cache->load($fileInfoCacheKey, CacheKey::FILE_HASH_KEY);
         return $currentFileHash !== $cachedValue;
     }
 
     public function invalidateFile(SmartFileInfo $smartFileInfo): void
     {
         $fileInfoCacheKey = $this->getFileInfoCacheKey($smartFileInfo);
-        $this->cache->remove($fileInfoCacheKey);
+        $this->cache->clean($fileInfoCacheKey);
     }
 
     public function clear(): void
     {
-        $this->cache->clean([
-            Cache::ALL => true,
-        ]);
+        $this->cache->clear();
     }
 
     /**
@@ -68,7 +63,7 @@ final class ChangedFilesDetector
     {
         $fileInfoCacheKey = $this->getFileInfoCacheKey($fileInfo);
 
-        $cacheValue = $this->cache->load($fileInfoCacheKey . '_files');
+        $cacheValue = $this->cache->load($fileInfoCacheKey . '_files', CacheKey::DEPENDENT_FILES_KEY);
         if ($cacheValue === null) {
             return [];
         }
@@ -109,15 +104,15 @@ final class ChangedFilesDetector
 
     private function storeConfigurationDataHash(SmartFileInfo $fileInfo, string $configurationHash): void
     {
-        $key = self::CONFIGURATION_HASH_KEY . '_' . Strings::webalize($fileInfo->getRealPath());
+        $key = CacheKey::CONFIGURATION_HASH_KEY . '_' . Strings::webalize($fileInfo->getRealPath());
         $this->invalidateCacheIfConfigurationChanged($key, $configurationHash);
 
-        $this->cache->save($key, $configurationHash);
+        $this->cache->save($key, CacheKey::CONFIGURATION_HASH_KEY, $configurationHash);
     }
 
     private function invalidateCacheIfConfigurationChanged(string $key, string $configurationHash): void
     {
-        $oldCachedValue = $this->cache->load($key);
+        $oldCachedValue = $this->cache->load($key, CacheKey::CONFIGURATION_HASH_KEY);
         if ($oldCachedValue === $configurationHash) {
             return;
         }

@@ -18,6 +18,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             __DIR__ . '/../packages/BetterPhpDocParser/PhpDocInfo/PhpDocInfo.php',
             __DIR__ . '/../packages/Testing/PHPUnit',
             __DIR__ . '/../packages/BetterPhpDocParser/PhpDoc',
+            __DIR__ . '/../packages/Caching/Cache.php',
             __DIR__ . '/../packages/NodeTypeResolver/NodeVisitor/FileNodeVisitor.php',
 
             // used in PHPStan

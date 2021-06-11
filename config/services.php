@@ -8,7 +8,6 @@ use Doctrine\Inflector\Rules\English\InflectorFactory;
 use Ergebnis\Json\Printer\Printer;
 use Ergebnis\Json\Printer\PrinterInterface;
 use Idiosyncratic\EditorConfig\EditorConfig;
-use Nette\Caching\Cache;
 use PhpParser\BuilderFactory;
 use PhpParser\Lexer;
 use PhpParser\NodeFinder;
@@ -26,7 +25,7 @@ use PHPStan\PhpDocParser\Parser\TypeParser;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\BetterPhpDocParser\PhpDocParser\BetterPhpDocParser;
 use Rector\BetterPhpDocParser\PhpDocParser\BetterTypeParser;
-use Rector\Caching\Cache\NetteCacheFactory;
+use Rector\Caching\CacheFactory;
 use Rector\Core\Console\ConsoleApplication;
 use Rector\Core\PhpParser\Parser\NikicPhpParserFactory;
 use Rector\Core\PhpParser\Parser\PhpParserLexerFactory;
@@ -128,8 +127,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(FileHelper::class)
         ->factory([service(PHPStanServicesFactory::class), 'createFileHelper']);
 
-    $services->set(Cache::class)
-        ->factory([service(NetteCacheFactory::class), 'create']);
+    $services->set(\Rector\Caching\Cache::class)
+        ->factory([service(CacheFactory::class), 'create']);
 
     // type resolving
     $services->set(IntermediateSourceLocator::class);
