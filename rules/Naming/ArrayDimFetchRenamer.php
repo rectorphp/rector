@@ -29,7 +29,7 @@ final class ArrayDimFetchRenamer
         $this->nodeComparator = $nodeComparator;
     }
     /**
-     * @see \Rector\Naming\Rector\Class_\RenamePropertyToMatchTypeRector::renameVariableInClassMethod
+     * @see VariableRenamer::renameVariableInFunctionLike()
      */
     public function renameToVariable(\PhpParser\Node\Stmt\ClassMethod $classMethod, \PhpParser\Node\Expr\ArrayDimFetch $arrayDimFetch, string $variableName) : void
     {

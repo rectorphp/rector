@@ -107,7 +107,7 @@ final class VariableManipulator
     }
     /**
      * Inspiration
-     * @see \Rector\Core\NodeManipulator\PropertyManipulator::isReadOnlyProperty()
+     * @see \Rector\Core\NodeManipulator\PropertyManipulator::isPropertyUsedInReadContext()
      */
     private function isReadOnlyVariable(\PhpParser\Node\Stmt\ClassMethod $classMethod, \PhpParser\Node\Expr\Assign $assign) : bool
     {
