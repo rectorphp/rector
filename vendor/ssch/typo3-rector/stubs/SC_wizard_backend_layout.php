@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210611;
+namespace RectorPrefix20210612;
 
 if (\class_exists('SC_wizard_backend_layout')) {
     return;

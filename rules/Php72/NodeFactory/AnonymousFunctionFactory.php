@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Php72\NodeFactory;
 
-use RectorPrefix20210611\Nette\Utils\Strings;
+use RectorPrefix20210612\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
@@ -35,7 +35,7 @@ use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\StaticTypeMapper\StaticTypeMapper;
-use RectorPrefix20210611\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
+use RectorPrefix20210612\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 final class AnonymousFunctionFactory
 {
     /**
@@ -67,7 +67,7 @@ final class AnonymousFunctionFactory
      * @var \PhpParser\Parser
      */
     private $parser;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \RectorPrefix20210611\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \PhpParser\Parser $parser)
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \RectorPrefix20210612\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \PhpParser\Parser $parser)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->betterNodeFinder = $betterNodeFinder;
@@ -140,7 +140,7 @@ final class AnonymousFunctionFactory
             if (!$node instanceof \PhpParser\Node\Scalar\String_) {
                 return $node;
             }
-            $match = \RectorPrefix20210611\Nette\Utils\Strings::match($node->value, self::DIM_FETCH_REGEX);
+            $match = \RectorPrefix20210612\Nette\Utils\Strings::match($node->value, self::DIM_FETCH_REGEX);
             if (!$match) {
                 return $node;
             }

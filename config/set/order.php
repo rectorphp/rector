@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210611;
+namespace RectorPrefix20210612;
 
 use Rector\Order\Rector\Class_\OrderClassConstantsByIntegerValueRector;
 use Rector\Order\Rector\Class_\OrderConstantsByVisibilityRector;

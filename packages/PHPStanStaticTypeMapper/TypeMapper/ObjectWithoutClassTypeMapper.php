@@ -15,7 +15,7 @@ use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
-use RectorPrefix20210611\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix20210612\Symfony\Contracts\Service\Attribute\Required;
 final class ObjectWithoutClassTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface
 {
     /**

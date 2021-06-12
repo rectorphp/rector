@@ -5,24 +5,24 @@
     "require": {
         "php": ">=7.3",
         "nette\/utils": "^3.2",
-        "symfony\/dependency-injection": "^5.2",
-        "symplify\/autowire-array-parameter": "^9.3.22",
-        "symfony\/http-kernel": "^4.4|^5.2",
+        "symfony\/dependency-injection": "^5.3",
+        "symplify\/autowire-array-parameter": "^9.3.23",
+        "symfony\/http-kernel": "^4.4|^5.3",
         "nikic\/php-parser": "4.10.5",
-        "symplify\/package-builder": "^9.3.22"
+        "symplify\/package-builder": "^9.3.23"
     },
     "require-dev": {
-        "symplify\/easy-testing": "^9.3.22",
+        "symplify\/easy-testing": "^9.3.23",
         "phpunit\/phpunit": "^9.5"
     },
     "autoload": {
         "psr-4": {
-            "RectorPrefix20210611\\Symplify\\Astral\\": "src"
+            "RectorPrefix20210612\\Symplify\\Astral\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "RectorPrefix20210611\\Symplify\\Astral\\Tests\\": "tests"
+            "RectorPrefix20210612\\Symplify\\Astral\\Tests\\": "tests"
         }
     },
     "extra": {

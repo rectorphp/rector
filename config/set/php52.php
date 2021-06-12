@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210611;
+namespace RectorPrefix20210612;
 
 use Rector\Php52\Rector\Property\VarToPublicPropertyRector;
 use Rector\Php52\Rector\Switch_\ContinueToBreakInSwitchRector;

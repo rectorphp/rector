@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210611;
+namespace RectorPrefix20210612;
 
 use Rector\Defluent\Rector\ClassMethod\ReturnThisRemoveRector;
 use Rector\Defluent\Rector\MethodCall\FluentChainMethodCallToNormalMethodCallRector;

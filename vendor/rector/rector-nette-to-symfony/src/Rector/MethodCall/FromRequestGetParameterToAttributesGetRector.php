@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\NetteToSymfony\Rector\MethodCall;
 
-use RectorPrefix20210611\Nette\Application\Request;
+use RectorPrefix20210612\Nette\Application\Request;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;

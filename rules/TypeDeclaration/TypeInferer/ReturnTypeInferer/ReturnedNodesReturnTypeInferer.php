@@ -26,7 +26,7 @@ use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\TypeDeclaration\Contract\TypeInferer\ReturnTypeInfererInterface;
 use Rector\TypeDeclaration\TypeInferer\SilentVoidResolver;
 use Rector\TypeDeclaration\TypeInferer\SplArrayFixedTypeNarrower;
-use RectorPrefix20210611\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
+use RectorPrefix20210612\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 final class ReturnedNodesReturnTypeInferer implements \Rector\TypeDeclaration\Contract\TypeInferer\ReturnTypeInfererInterface
 {
     /**
@@ -53,7 +53,7 @@ final class ReturnedNodesReturnTypeInferer implements \Rector\TypeDeclaration\Co
      * @var \Rector\NodeCollector\NodeCollector\NodeRepository
      */
     private $nodeRepository;
-    public function __construct(\Rector\TypeDeclaration\TypeInferer\SilentVoidResolver $silentVoidResolver, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \RectorPrefix20210611\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory $typeFactory, \Rector\TypeDeclaration\TypeInferer\SplArrayFixedTypeNarrower $splArrayFixedTypeNarrower, \Rector\NodeCollector\NodeCollector\NodeRepository $nodeRepository)
+    public function __construct(\Rector\TypeDeclaration\TypeInferer\SilentVoidResolver $silentVoidResolver, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \RectorPrefix20210612\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory $typeFactory, \Rector\TypeDeclaration\TypeInferer\SplArrayFixedTypeNarrower $splArrayFixedTypeNarrower, \Rector\NodeCollector\NodeCollector\NodeRepository $nodeRepository)
     {
         $this->silentVoidResolver = $silentVoidResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;

@@ -1,26 +1,26 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210611;
+namespace RectorPrefix20210612;
 
-use RectorPrefix20210611\Symfony\Component\Console\Style\SymfonyStyle;
-use RectorPrefix20210611\Symfony\Component\DependencyInjection\ContainerInterface;
+use RectorPrefix20210612\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix20210612\Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use RectorPrefix20210611\Symplify\ComposerJsonManipulator\ValueObject\Option;
-use RectorPrefix20210611\Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory;
-use RectorPrefix20210611\Symplify\PackageBuilder\Parameter\ParameterProvider;
-use RectorPrefix20210611\Symplify\PackageBuilder\Reflection\PrivatesCaller;
-use RectorPrefix20210611\Symplify\SmartFileSystem\SmartFileSystem;
-use function RectorPrefix20210611\Symfony\Component\DependencyInjection\Loader\Configurator\service;
+use RectorPrefix20210612\Symplify\ComposerJsonManipulator\ValueObject\Option;
+use RectorPrefix20210612\Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory;
+use RectorPrefix20210612\Symplify\PackageBuilder\Parameter\ParameterProvider;
+use RectorPrefix20210612\Symplify\PackageBuilder\Reflection\PrivatesCaller;
+use RectorPrefix20210612\Symplify\SmartFileSystem\SmartFileSystem;
+use function RectorPrefix20210612\Symfony\Component\DependencyInjection\Loader\Configurator\service;
 return static function (\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
     $parameters = $containerConfigurator->parameters();
-    $parameters->set(\RectorPrefix20210611\Symplify\ComposerJsonManipulator\ValueObject\Option::INLINE_SECTIONS, ['keywords']);
+    $parameters->set(\RectorPrefix20210612\Symplify\ComposerJsonManipulator\ValueObject\Option::INLINE_SECTIONS, ['keywords']);
     $services = $containerConfigurator->services();
     $services->defaults()->public()->autowire()->autoconfigure();
-    $services->load('RectorPrefix20210611\Symplify\\ComposerJsonManipulator\\', __DIR__ . '/../src')->exclude([__DIR__ . '/../src/Bundle']);
-    $services->set(\RectorPrefix20210611\Symplify\SmartFileSystem\SmartFileSystem::class);
-    $services->set(\RectorPrefix20210611\Symplify\PackageBuilder\Reflection\PrivatesCaller::class);
-    $services->set(\RectorPrefix20210611\Symplify\PackageBuilder\Parameter\ParameterProvider::class)->args([\RectorPrefix20210611\Symfony\Component\DependencyInjection\Loader\Configurator\service(\RectorPrefix20210611\Symfony\Component\DependencyInjection\ContainerInterface::class)]);
-    $services->set(\RectorPrefix20210611\Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory::class);
-    $services->set(\RectorPrefix20210611\Symfony\Component\Console\Style\SymfonyStyle::class)->factory([\RectorPrefix20210611\Symfony\Component\DependencyInjection\Loader\Configurator\service(\RectorPrefix20210611\Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory::class), 'create']);
+    $services->load('RectorPrefix20210612\Symplify\\ComposerJsonManipulator\\', __DIR__ . '/../src')->exclude([__DIR__ . '/../src/Bundle']);
+    $services->set(\RectorPrefix20210612\Symplify\SmartFileSystem\SmartFileSystem::class);
+    $services->set(\RectorPrefix20210612\Symplify\PackageBuilder\Reflection\PrivatesCaller::class);
+    $services->set(\RectorPrefix20210612\Symplify\PackageBuilder\Parameter\ParameterProvider::class)->args([\RectorPrefix20210612\Symfony\Component\DependencyInjection\Loader\Configurator\service(\RectorPrefix20210612\Symfony\Component\DependencyInjection\ContainerInterface::class)]);
+    $services->set(\RectorPrefix20210612\Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory::class);
+    $services->set(\RectorPrefix20210612\Symfony\Component\Console\Style\SymfonyStyle::class)->factory([\RectorPrefix20210612\Symfony\Component\DependencyInjection\Loader\Configurator\service(\RectorPrefix20210612\Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory::class), 'create']);
 };
