@@ -98,7 +98,7 @@ final class VariableManipulator
 
     /**
      * Inspiration
-     * @see \Rector\Core\NodeManipulator\PropertyManipulator::isReadOnlyProperty()
+     * @see \Rector\Core\NodeManipulator\PropertyManipulator::isPropertyUsedInReadContext()
      */
     private function isReadOnlyVariable(ClassMethod $classMethod, Assign $assign): bool
     {

@@ -502,5 +502,5 @@ parameters:
         - '#"@var_export\(new \\Symplify\\EasyCodingStandard\\Caching\\ValueObject\\CacheItem\(\$variableKey, \$data\), true\)" is forbidden to use#'
 
         -
-            message: '#Missing sprintf\(\) function for a mask#'
-            path: rules/CodingStyle/Rector/Encapsed/EncapsedStringsToSprintfRector.php #124
+            message: '#Class "Doctrine\\DBAL\\Platforms\\MySqlPlatform" used in annotation is missing#'
+            path: rules/TypeDeclaration/TypeInferer/PropertyTypeInferer/DoctrineColumnPropertyTypeInferer.php
