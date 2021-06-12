@@ -500,3 +500,7 @@ parameters:
 
         # cache hacking
         - '#"@var_export\(new \\Symplify\\EasyCodingStandard\\Caching\\ValueObject\\CacheItem\(\$variableKey, \$data\), true\)" is forbidden to use#'
+
+        -
+            message: '#Missing sprintf\(\) function for a mask#'
+            path: rules/CodingStyle/Rector/Encapsed/EncapsedStringsToSprintfRector.php #124
