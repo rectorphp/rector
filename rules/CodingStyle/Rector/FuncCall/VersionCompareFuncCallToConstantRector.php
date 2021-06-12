@@ -21,6 +21,7 @@ use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Util\PhpVersionFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -49,11 +50,9 @@ final class VersionCompareFuncCallToConstantRector extends AbstractRector
         'le' => SmallerOrEqual::class,
     ];
 
-    /**
-     * @var string
-     * @see https://regex101.com/r/yl9g25/1
-     */
-    private const SEMANTIC_VERSION_REGEX = '#^\d+\.\d+\.\d+$#';
+    public function __construct(private PhpVersionFactory $phpVersionFactory)
+    {
+    }
 
     public function getRuleDefinition(): RuleDefinition
     {
@@ -145,12 +144,7 @@ CODE_SAMPLE
             throw new ShouldNotHappenException();
         }
 
-        if (! Strings::match($expr->value, self::SEMANTIC_VERSION_REGEX)) {
-            throw new ShouldNotHappenException();
-        }
-
-        $versionParts = explode('.', $expr->value);
-
-        return new LNumber((int) $versionParts[0] * 10000 + (int) $versionParts[1] * 100 + (int) $versionParts[2]);
+        $value = $this->phpVersionFactory->createIntVersion($expr->value);
+        return new LNumber($value);
     }
 }

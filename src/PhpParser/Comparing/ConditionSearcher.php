@@ -41,25 +41,20 @@ final class ConditionSearcher
                 return false;
             }
         }
-
-        if (! $this->searchForVariableRedeclaration($varNode, $elseNode->stmts)) {
-            return false;
-        }
-
-        return true;
+        return $this->searchForVariableRedeclaration($varNode, $elseNode->stmts);
     }
 
     /**
      * @param Stmt[] $stmts
      */
-    private function searchForVariableRedeclaration(Variable $varNode, array $stmts): bool
+    private function searchForVariableRedeclaration(Variable $variable, array $stmts): bool
     {
         foreach ($stmts as $stmt) {
-            if ($this->checkIfVariableUsedInExpression($varNode, $stmt)) {
+            if ($this->checkIfVariableUsedInExpression($variable, $stmt)) {
                 return false;
             }
 
-            if ($this->checkForVariableRedeclaration($varNode, $stmt)) {
+            if ($this->checkForVariableRedeclaration($variable, $stmt)) {
                 return true;
             }
         }
@@ -67,25 +62,21 @@ final class ConditionSearcher
         return false;
     }
 
-    private function checkIfVariableUsedInExpression(Variable $varNode, Stmt $stmt): bool
+    private function checkIfVariableUsedInExpression(Variable $variable, Stmt $stmt): bool
     {
         if ($stmt instanceof Expression) {
-            if ($stmt->expr instanceof Assign) {
-                $node = $stmt->expr->expr;
-            } else {
-                $node = $stmt->expr;
-            }
+            $node = $stmt->expr instanceof Assign ? $stmt->expr->expr : $stmt->expr;
         } else {
             $node = $stmt;
         }
 
         return (bool) $this->betterNodeFinder->findFirst(
             $node,
-            fn (Node $subNode): bool => $this->nodeComparator->areNodesEqual($varNode, $subNode)
+            fn (Node $subNode): bool => $this->nodeComparator->areNodesEqual($variable, $subNode)
         );
     }
 
-    private function checkForVariableRedeclaration(Variable $varNode, Stmt $stmt): bool
+    private function checkForVariableRedeclaration(Variable $variable, Stmt $stmt): bool
     {
         if (! $stmt instanceof Expression) {
             return false;
@@ -100,7 +91,7 @@ final class ConditionSearcher
             return false;
         }
 
-        if ($varNode->name !== $assignVar->name) {
+        if ($variable->name !== $assignVar->name) {
             return false;
         }
 
