@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\CodingStyle\Rector\FuncCall;
 
-use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp;
@@ -50,8 +49,9 @@ final class VersionCompareFuncCallToConstantRector extends AbstractRector
         'le' => SmallerOrEqual::class,
     ];
 
-    public function __construct(private PhpVersionFactory $phpVersionFactory)
-    {
+    public function __construct(
+        private PhpVersionFactory $phpVersionFactory
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition
