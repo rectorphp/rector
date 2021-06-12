@@ -4161,8 +4161,8 @@
         },
         {
             "name": "symplify\/rule-doc-generator-contracts",
-            "version": "v9.3.23",
-            "version_normalized": "9.3.23.0",
+            "version": "v9.3.25",
+            "version_normalized": "9.3.25.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symplify\/rule-doc-generator-contracts.git",
@@ -4198,7 +4198,7 @@
             ],
             "description": "Contracts for production code of RuleDocGenerator",
             "support": {
-                "source": "https:\/\/github.com\/symplify\/rule-doc-generator-contracts\/tree\/v9.3.23"
+                "source": "https:\/\/github.com\/symplify\/rule-doc-generator-contracts\/tree\/v9.3.25"
             },
             "funding": [
                 {
@@ -4336,8 +4336,8 @@
         },
         {
             "name": "symplify\/smart-file-system",
-            "version": "v9.3.23",
-            "version_normalized": "9.3.23.0",
+            "version": "v9.3.25",
+            "version_normalized": "9.3.25.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symplify\/smart-file-system.git",
@@ -4378,7 +4378,7 @@
             ],
             "description": "Sanitized FileInfo with safe getRealPath() and other handy methods",
             "support": {
-                "source": "https:\/\/github.com\/symplify\/smart-file-system\/tree\/v9.3.23"
+                "source": "https:\/\/github.com\/symplify\/smart-file-system\/tree\/v9.3.25"
             },
             "funding": [
                 {
