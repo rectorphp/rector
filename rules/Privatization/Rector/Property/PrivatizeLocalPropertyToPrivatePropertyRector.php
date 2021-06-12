@@ -135,8 +135,8 @@ CODE_SAMPLE
         if ($this->nodeTypeResolver->isObjectTypes($classLike, $this->excludedObjectTypes)) {
             return \true;
         }
-        if (!$classLike->isAbstract()) {
-            return \false;
+        if ($classLike->isAbstract()) {
+            return \true;
         }
         return $this->isOpenSourceProjectType();
     }
