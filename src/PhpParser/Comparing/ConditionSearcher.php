@@ -42,42 +42,35 @@ final class ConditionSearcher
                 return \false;
             }
         }
-        if (!$this->searchForVariableRedeclaration($varNode, $elseNode->stmts)) {
-            return \false;
-        }
-        return \true;
+        return $this->searchForVariableRedeclaration($varNode, $elseNode->stmts);
     }
     /**
      * @param Stmt[] $stmts
      */
-    private function searchForVariableRedeclaration(\PhpParser\Node\Expr\Variable $varNode, array $stmts) : bool
+    private function searchForVariableRedeclaration(\PhpParser\Node\Expr\Variable $variable, array $stmts) : bool
     {
         foreach ($stmts as $stmt) {
-            if ($this->checkIfVariableUsedInExpression($varNode, $stmt)) {
+            if ($this->checkIfVariableUsedInExpression($variable, $stmt)) {
                 return \false;
             }
-            if ($this->checkForVariableRedeclaration($varNode, $stmt)) {
+            if ($this->checkForVariableRedeclaration($variable, $stmt)) {
                 return \true;
             }
         }
         return \false;
     }
-    private function checkIfVariableUsedInExpression(\PhpParser\Node\Expr\Variable $varNode, \PhpParser\Node\Stmt $stmt) : bool
+    private function checkIfVariableUsedInExpression(\PhpParser\Node\Expr\Variable $variable, \PhpParser\Node\Stmt $stmt) : bool
     {
         if ($stmt instanceof \PhpParser\Node\Stmt\Expression) {
-            if ($stmt->expr instanceof \PhpParser\Node\Expr\Assign) {
-                $node = $stmt->expr->expr;
-            } else {
-                $node = $stmt->expr;
-            }
+            $node = $stmt->expr instanceof \PhpParser\Node\Expr\Assign ? $stmt->expr->expr : $stmt->expr;
         } else {
             $node = $stmt;
         }
-        return (bool) $this->betterNodeFinder->findFirst($node, function (\PhpParser\Node $subNode) use($varNode) : bool {
-            return $this->nodeComparator->areNodesEqual($varNode, $subNode);
+        return (bool) $this->betterNodeFinder->findFirst($node, function (\PhpParser\Node $subNode) use($variable) : bool {
+            return $this->nodeComparator->areNodesEqual($variable, $subNode);
         });
     }
-    private function checkForVariableRedeclaration(\PhpParser\Node\Expr\Variable $varNode, \PhpParser\Node\Stmt $stmt) : bool
+    private function checkForVariableRedeclaration(\PhpParser\Node\Expr\Variable $variable, \PhpParser\Node\Stmt $stmt) : bool
     {
         if (!$stmt instanceof \PhpParser\Node\Stmt\Expression) {
             return \false;
@@ -89,7 +82,7 @@ final class ConditionSearcher
         if (!$assignVar instanceof \PhpParser\Node\Expr\Variable) {
             return \false;
         }
-        if ($varNode->name !== $assignVar->name) {
+        if ($variable->name !== $assignVar->name) {
             return \false;
         }
         return \true;

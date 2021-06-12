@@ -10,8 +10,8 @@
         "symfony\/dependency-injection": "^5.3",
         "symfony\/finder": "^4.4|^5.3",
         "symfony\/http-kernel": "^4.4|^5.3",
-        "symplify\/symplify-kernel": "^9.3.23",
-        "symplify\/easy-testing": "^9.3.23",
+        "symplify\/symplify-kernel": "^9.3.26",
+        "symplify\/easy-testing": "^9.3.26",
         "nette\/neon": "^3.2"
     },
     "require-dev": {

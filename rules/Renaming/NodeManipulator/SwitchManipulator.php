@@ -22,11 +22,7 @@ final class SwitchManipulator
                 unset($stmts[$key]);
                 continue;
             }
-            if ($node->num->value === 2) {
-                $node->num = null;
-            } else {
-                $node->num = new \PhpParser\Node\Scalar\LNumber($node->num->value - 1);
-            }
+            $node->num = $node->num->value === 2 ? null : new \PhpParser\Node\Scalar\LNumber($node->num->value - 1);
         }
         return $stmts;
     }

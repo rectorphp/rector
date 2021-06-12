@@ -49,4 +49,12 @@ final class AttributeKey
      * @var string
      */
     public const COMMENTS = 'comments';
+    /**
+     * @var string
+     */
+    public const REFERENCED_CLASS_CONSTANTS = 'referenced_class_constants';
+    /**
+     * @var string
+     */
+    public const REFERENCED_METHOD_CALLS = 'referenced_method_calls';
 }

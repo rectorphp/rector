@@ -20,6 +20,7 @@ use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Util\PhpVersionFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -32,10 +33,13 @@ final class VersionCompareFuncCallToConstantRector extends \Rector\Core\Rector\A
      */
     private const OPERATOR_TO_COMPARISON = ['=' => \PhpParser\Node\Expr\BinaryOp\Identical::class, '==' => \PhpParser\Node\Expr\BinaryOp\Identical::class, 'eq' => \PhpParser\Node\Expr\BinaryOp\Identical::class, '!=' => \PhpParser\Node\Expr\BinaryOp\NotIdentical::class, '<>' => \PhpParser\Node\Expr\BinaryOp\NotIdentical::class, 'ne' => \PhpParser\Node\Expr\BinaryOp\NotIdentical::class, '>' => \PhpParser\Node\Expr\BinaryOp\Greater::class, 'gt' => \PhpParser\Node\Expr\BinaryOp\Greater::class, '<' => \PhpParser\Node\Expr\BinaryOp\Smaller::class, 'lt' => \PhpParser\Node\Expr\BinaryOp\Smaller::class, '>=' => \PhpParser\Node\Expr\BinaryOp\GreaterOrEqual::class, 'ge' => \PhpParser\Node\Expr\BinaryOp\GreaterOrEqual::class, '<=' => \PhpParser\Node\Expr\BinaryOp\SmallerOrEqual::class, 'le' => \PhpParser\Node\Expr\BinaryOp\SmallerOrEqual::class];
     /**
-     * @var string
-     * @see https://regex101.com/r/yl9g25/1
+     * @var \Rector\Core\Util\PhpVersionFactory
      */
-    private const SEMANTIC_VERSION_REGEX = '#^\\d+\\.\\d+\\.\\d+$#';
+    private $phpVersionFactory;
+    public function __construct(\Rector\Core\Util\PhpVersionFactory $phpVersionFactory)
+    {
+        $this->phpVersionFactory = $phpVersionFactory;
+    }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
         return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Changes use of call to version compare function to use of PHP version constant', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
@@ -105,10 +109,7 @@ CODE_SAMPLE
         if (!$expr instanceof \PhpParser\Node\Scalar\String_) {
             throw new \Rector\Core\Exception\ShouldNotHappenException();
         }
-        if (!\RectorPrefix20210612\Nette\Utils\Strings::match($expr->value, self::SEMANTIC_VERSION_REGEX)) {
-            throw new \Rector\Core\Exception\ShouldNotHappenException();
-        }
-        $versionParts = \explode('.', $expr->value);
-        return new \PhpParser\Node\Scalar\LNumber((int) $versionParts[0] * 10000 + (int) $versionParts[1] * 100 + (int) $versionParts[2]);
+        $value = $this->phpVersionFactory->createIntVersion($expr->value);
+        return new \PhpParser\Node\Scalar\LNumber($value);
     }
 }
