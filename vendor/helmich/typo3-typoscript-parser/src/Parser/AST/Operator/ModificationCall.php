@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210612\Helmich\TypoScriptParser\Parser\AST\Operator;
+namespace RectorPrefix20210613\Helmich\TypoScriptParser\Parser\AST\Operator;
 
 /**
  * A modification call (usually on the right-hand side of a modification statement).

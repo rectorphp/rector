@@ -8,18 +8,18 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210612\Symfony\Component\HttpKernel\Controller;
+namespace RectorPrefix20210613\Symfony\Component\HttpKernel\Controller;
 
-use RectorPrefix20210612\Symfony\Component\HttpFoundation\Request;
-use RectorPrefix20210612\Symfony\Component\Stopwatch\Stopwatch;
+use RectorPrefix20210613\Symfony\Component\HttpFoundation\Request;
+use RectorPrefix20210613\Symfony\Component\Stopwatch\Stopwatch;
 /**
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class TraceableArgumentResolver implements \RectorPrefix20210612\Symfony\Component\HttpKernel\Controller\ArgumentResolverInterface
+class TraceableArgumentResolver implements \RectorPrefix20210613\Symfony\Component\HttpKernel\Controller\ArgumentResolverInterface
 {
     private $resolver;
     private $stopwatch;
-    public function __construct(\RectorPrefix20210612\Symfony\Component\HttpKernel\Controller\ArgumentResolverInterface $resolver, \RectorPrefix20210612\Symfony\Component\Stopwatch\Stopwatch $stopwatch)
+    public function __construct(\RectorPrefix20210613\Symfony\Component\HttpKernel\Controller\ArgumentResolverInterface $resolver, \RectorPrefix20210613\Symfony\Component\Stopwatch\Stopwatch $stopwatch)
     {
         $this->resolver = $resolver;
         $this->stopwatch = $stopwatch;
@@ -27,7 +27,7 @@ class TraceableArgumentResolver implements \RectorPrefix20210612\Symfony\Compone
     /**
      * {@inheritdoc}
      */
-    public function getArguments(\RectorPrefix20210612\Symfony\Component\HttpFoundation\Request $request, callable $controller)
+    public function getArguments(\RectorPrefix20210613\Symfony\Component\HttpFoundation\Request $request, callable $controller)
     {
         $e = $this->stopwatch->start('controller.get_arguments');
         $ret = $this->resolver->getArguments($request, $controller);

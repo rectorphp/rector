@@ -8,18 +8,18 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210612\Symfony\Component\HttpFoundation\Session\Storage\Handler;
+namespace RectorPrefix20210613\Symfony\Component\HttpFoundation\Session\Storage\Handler;
 
-use RectorPrefix20210612\Predis\Response\ErrorInterface;
-use RectorPrefix20210612\Symfony\Component\Cache\Traits\RedisClusterProxy;
-use RectorPrefix20210612\Symfony\Component\Cache\Traits\RedisProxy;
+use RectorPrefix20210613\Predis\Response\ErrorInterface;
+use RectorPrefix20210613\Symfony\Component\Cache\Traits\RedisClusterProxy;
+use RectorPrefix20210613\Symfony\Component\Cache\Traits\RedisProxy;
 /**
  * Redis based session storage handler based on the Redis class
  * provided by the PHP redis extension.
  *
  * @author Dalibor Karlović <dalibor@flexolabs.io>
  */
-class RedisSessionHandler extends \RectorPrefix20210612\Symfony\Component\HttpFoundation\Session\Storage\Handler\AbstractSessionHandler
+class RedisSessionHandler extends \RectorPrefix20210613\Symfony\Component\HttpFoundation\Session\Storage\Handler\AbstractSessionHandler
 {
     private $redis;
     /**
@@ -41,7 +41,7 @@ class RedisSessionHandler extends \RectorPrefix20210612\Symfony\Component\HttpFo
      */
     public function __construct($redis, array $options = [])
     {
-        if (!$redis instanceof \Redis && !$redis instanceof \RedisArray && !$redis instanceof \RedisCluster && !$redis instanceof \RectorPrefix20210612\Predis\ClientInterface && !$redis instanceof \RectorPrefix20210612\Symfony\Component\Cache\Traits\RedisProxy && !$redis instanceof \RectorPrefix20210612\Symfony\Component\Cache\Traits\RedisClusterProxy) {
+        if (!$redis instanceof \Redis && !$redis instanceof \RedisArray && !$redis instanceof \RedisCluster && !$redis instanceof \RectorPrefix20210613\Predis\ClientInterface && !$redis instanceof \RectorPrefix20210613\Symfony\Component\Cache\Traits\RedisProxy && !$redis instanceof \RectorPrefix20210613\Symfony\Component\Cache\Traits\RedisClusterProxy) {
             throw new \InvalidArgumentException(\sprintf('"%s()" expects parameter 1 to be Redis, RedisArray, RedisCluster or Predis\\ClientInterface, "%s" given.', __METHOD__, \get_debug_type($redis)));
         }
         if ($diff = \array_diff(\array_keys($options), ['prefix', 'ttl'])) {
@@ -64,7 +64,7 @@ class RedisSessionHandler extends \RectorPrefix20210612\Symfony\Component\HttpFo
     protected function doWrite(string $sessionId, string $data) : bool
     {
         $result = $this->redis->setEx($this->prefix . $sessionId, (int) ($this->ttl ?? \ini_get('session.gc_maxlifetime')), $data);
-        return $result && !$result instanceof \RectorPrefix20210612\Predis\Response\ErrorInterface;
+        return $result && !$result instanceof \RectorPrefix20210613\Predis\Response\ErrorInterface;
     }
     /**
      * {@inheritdoc}

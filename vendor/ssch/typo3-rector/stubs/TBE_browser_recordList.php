@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210612;
+namespace RectorPrefix20210613;
 
 if (\class_exists('TBE_browser_recordList')) {
     return;

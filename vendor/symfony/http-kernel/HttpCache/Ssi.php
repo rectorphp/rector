@@ -8,16 +8,16 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210612\Symfony\Component\HttpKernel\HttpCache;
+namespace RectorPrefix20210613\Symfony\Component\HttpKernel\HttpCache;
 
-use RectorPrefix20210612\Symfony\Component\HttpFoundation\Request;
-use RectorPrefix20210612\Symfony\Component\HttpFoundation\Response;
+use RectorPrefix20210613\Symfony\Component\HttpFoundation\Request;
+use RectorPrefix20210613\Symfony\Component\HttpFoundation\Response;
 /**
  * Ssi implements the SSI capabilities to Request and Response instances.
  *
  * @author Sebastian Krebs <krebs.seb@gmail.com>
  */
-class Ssi extends \RectorPrefix20210612\Symfony\Component\HttpKernel\HttpCache\AbstractSurrogate
+class Ssi extends \RectorPrefix20210613\Symfony\Component\HttpKernel\HttpCache\AbstractSurrogate
 {
     /**
      * {@inheritdoc}
@@ -29,7 +29,7 @@ class Ssi extends \RectorPrefix20210612\Symfony\Component\HttpKernel\HttpCache\A
     /**
      * {@inheritdoc}
      */
-    public function addSurrogateControl(\RectorPrefix20210612\Symfony\Component\HttpFoundation\Response $response)
+    public function addSurrogateControl(\RectorPrefix20210613\Symfony\Component\HttpFoundation\Response $response)
     {
         if (\false !== \strpos($response->getContent(), '<!--#include')) {
             $response->headers->set('Surrogate-Control', 'content="SSI/1.0"');
@@ -45,7 +45,7 @@ class Ssi extends \RectorPrefix20210612\Symfony\Component\HttpKernel\HttpCache\A
     /**
      * {@inheritdoc}
      */
-    public function process(\RectorPrefix20210612\Symfony\Component\HttpFoundation\Request $request, \RectorPrefix20210612\Symfony\Component\HttpFoundation\Response $response)
+    public function process(\RectorPrefix20210613\Symfony\Component\HttpFoundation\Request $request, \RectorPrefix20210613\Symfony\Component\HttpFoundation\Response $response)
     {
         $type = $response->headers->get('Content-Type');
         if (empty($type)) {

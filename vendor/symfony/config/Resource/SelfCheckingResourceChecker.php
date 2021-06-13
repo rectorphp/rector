@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210612\Symfony\Component\Config\Resource;
+namespace RectorPrefix20210613\Symfony\Component\Config\Resource;
 
-use RectorPrefix20210612\Symfony\Component\Config\ResourceCheckerInterface;
+use RectorPrefix20210613\Symfony\Component\Config\ResourceCheckerInterface;
 /**
  * Resource checker for instances of SelfCheckingResourceInterface.
  *
@@ -19,13 +19,13 @@ use RectorPrefix20210612\Symfony\Component\Config\ResourceCheckerInterface;
  *
  * @author Matthias Pigulla <mp@webfactory.de>
  */
-class SelfCheckingResourceChecker implements \RectorPrefix20210612\Symfony\Component\Config\ResourceCheckerInterface
+class SelfCheckingResourceChecker implements \RectorPrefix20210613\Symfony\Component\Config\ResourceCheckerInterface
 {
-    public function supports(\RectorPrefix20210612\Symfony\Component\Config\Resource\ResourceInterface $metadata)
+    public function supports(\RectorPrefix20210613\Symfony\Component\Config\Resource\ResourceInterface $metadata)
     {
-        return $metadata instanceof \RectorPrefix20210612\Symfony\Component\Config\Resource\SelfCheckingResourceInterface;
+        return $metadata instanceof \RectorPrefix20210613\Symfony\Component\Config\Resource\SelfCheckingResourceInterface;
     }
-    public function isFresh(\RectorPrefix20210612\Symfony\Component\Config\Resource\ResourceInterface $resource, int $timestamp)
+    public function isFresh(\RectorPrefix20210613\Symfony\Component\Config\Resource\ResourceInterface $resource, int $timestamp)
     {
         /* @var SelfCheckingResourceInterface $resource */
         return $resource->isFresh($timestamp);
