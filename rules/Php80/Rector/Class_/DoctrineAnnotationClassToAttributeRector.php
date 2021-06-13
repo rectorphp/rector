@@ -16,6 +16,7 @@ use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
 use Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
 use Rector\Php80\NodeFactory\AttributeFlagFactory;
 use Rector\PhpAttribute\Printer\PhpAttributeGroupFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
@@ -51,12 +52,18 @@ final class DoctrineAnnotationClassToAttributeRector extends AbstractRector impl
         'ANNOTATION' => 'TARGET_CLASS',
     ];
 
+    /**
+     * @var string
+     */
+    private const ATTRIBUTE = 'Attribute';
+
     private bool $shouldRemoveAnnotations = true;
 
     public function __construct(
         private PhpDocTagRemover $phpDocTagRemover,
         private AttributeFlagFactory $attributeFlagFactory,
-        private PhpAttributeGroupFactory $phpAttributeGroupFactory
+        private PhpAttributeGroupFactory $phpAttributeGroupFactory,
+        private PhpAttributeAnalyzer $phpAttributeAnalyzer
     ) {
     }
 
@@ -111,7 +118,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $phpDocInfo->hasByNames(['Annotation', 'annotation'])) {
+        if ($this->shouldSkipClass($phpDocInfo, $node)) {
             return null;
         }
 
@@ -120,7 +127,7 @@ CODE_SAMPLE
             $this->phpDocTagRemover->removeByName($phpDocInfo, 'Annotation');
         }
 
-        $attributeGroup = $this->phpAttributeGroupFactory->createFromClass('Attribute');
+        $attributeGroup = $this->phpAttributeGroupFactory->createFromClass(self::ATTRIBUTE);
         $this->decorateTarget($phpDocInfo, $attributeGroup);
 
         foreach ($node->getProperties() as $property) {
@@ -179,7 +186,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            $flags[] = $this->nodeFactory->createClassConstFetch('Attribute', $constant);
+            $flags[] = $this->nodeFactory->createClassConstFetch(self::ATTRIBUTE, $constant);
         }
 
         return $flags;
@@ -213,5 +220,15 @@ CODE_SAMPLE
         }
 
         $attributeGroup->attrs[0]->args[] = new Arg($flagCollection);
+    }
+
+    private function shouldSkipClass(PhpDocInfo $phpDocInfo, Class_ $class): bool
+    {
+        if (! $phpDocInfo->hasByNames(['Annotation', 'annotation'])) {
+            return true;
+        }
+
+        // has attribute? skip it
+        return $this->phpAttributeAnalyzer->hasPhpAttribute($class, self::ATTRIBUTE);
     }
 }
