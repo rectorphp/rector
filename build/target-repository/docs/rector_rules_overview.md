@@ -172,42 +172,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 <br>
 
-### ArgumentDefaultValueReplacerRector
-
-Replaces defined map of arguments in defined methods and their calls.
-
-:wrench: **configure it!**
-
-- class: [`Rector\Arguments\Rector\ClassMethod\ArgumentDefaultValueReplacerRector`](../rules/Arguments/Rector/ClassMethod/ArgumentDefaultValueReplacerRector.php)
-
-```php
-use Rector\Arguments\Rector\ClassMethod\ReplaceArgumentDefaultValueRector;
-use Rector\Arguments\ValueObject\ReplaceArgumentDefaultValue;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Symplify\SymfonyPhpConfig\ValueObjectInliner;
-
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(ReplaceArgumentDefaultValueRector::class)
-        ->call('configure', [[
-            ReplaceArgumentDefaultValueRector::REPLACED_ARGUMENTS => ValueObjectInliner::inline([
-                new ReplaceArgumentDefaultValue('SomeExampleClass', 'someMethod', 0, 'SomeClass::OLD_CONSTANT', false),
-            ]),
-        ]]);
-};
-```
-
-↓
-
-```diff
- $someObject = new SomeClass;
--$someObject->someMethod(SomeClass::OLD_CONSTANT);
-+$someObject->someMethod(false);'
-```
-
-<br>
-
 ### FunctionArgumentDefaultValueReplacerRector
 
 Streamline the operator arguments of version_compare function
@@ -239,6 +203,42 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 ```diff
 -version_compare(PHP_VERSION, '5.6', 'gte');
 +version_compare(PHP_VERSION, '5.6', 'ge');
+```
+
+<br>
+
+### ReplaceArgumentDefaultValueRector
+
+Replaces defined map of arguments in defined methods and their calls.
+
+:wrench: **configure it!**
+
+- class: [`Rector\Arguments\Rector\ClassMethod\ReplaceArgumentDefaultValueRector`](../rules/Arguments/Rector/ClassMethod/ReplaceArgumentDefaultValueRector.php)
+
+```php
+use Rector\Arguments\Rector\ClassMethod\ReplaceArgumentDefaultValueRector;
+use Rector\Arguments\ValueObject\ReplaceArgumentDefaultValue;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symplify\SymfonyPhpConfig\ValueObjectInliner;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+
+    $services->set(ReplaceArgumentDefaultValueRector::class)
+        ->call('configure', [[
+            ReplaceArgumentDefaultValueRector::REPLACED_ARGUMENTS => ValueObjectInliner::inline([
+                new ReplaceArgumentDefaultValue('SomeExampleClass', 'someMethod', 0, 'SomeClass::OLD_CONSTANT', false),
+            ]),
+        ]]);
+};
+```
+
+↓
+
+```diff
+ $someObject = new SomeClass;
+-$someObject->someMethod(SomeClass::OLD_CONSTANT);
++$someObject->someMethod(false);'
 ```
 
 <br>
@@ -8138,30 +8138,21 @@ Change `switch()` to `match()`
 - class: [`Rector\Php80\Rector\Switch_\ChangeSwitchToMatchRector`](../rules/Php80/Rector/Switch_/ChangeSwitchToMatchRector.php)
 
 ```diff
- class SomeClass
- {
-     public function run()
-     {
--        switch ($this->lexer->lookahead['type']) {
--            case Lexer::T_SELECT:
--                $statement = $this->SelectStatement();
--                break;
--
--            case Lexer::T_UPDATE:
--                $statement = $this->UpdateStatement();
--                break;
--
--            default:
--                $statement = $this->syntaxError('SELECT, UPDATE or DELETE');
--                break;
--        }
-+        $statement = match ($this->lexer->lookahead['type']) {
-+            Lexer::T_SELECT => $this->SelectStatement(),
-+            Lexer::T_UPDATE => $this->UpdateStatement(),
-+            default => $this->syntaxError('SELECT, UPDATE or DELETE'),
-+        };
-     }
- }
+-switch ($input) {
+-    case Lexer::T_SELECT:
+-        $statement = 'select';
+-        break;
+-    case Lexer::T_UPDATE:
+-        $statement = 'update';
+-        break;
+-    default:
+-        $statement = 'error';
+-}
++$statement = match ($input) {
++    Lexer::T_SELECT => 'select',
++    Lexer::T_UPDATE => 'update',
++    default => 'error',
++};
 ```
 
 <br>
