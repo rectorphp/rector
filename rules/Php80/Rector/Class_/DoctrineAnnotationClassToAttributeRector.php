@@ -183,10 +183,13 @@ CODE_SAMPLE
             $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $targetDoctrineAnnotationTagValueNode);
         }
         $targets = $targetDoctrineAnnotationTagValueNode->getSilentValue();
-        if (!$targets instanceof \Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode) {
+        if ($targets instanceof \Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode) {
+            $targetValues = $targets->getValuesWithExplicitSilentAndWithoutQuotes();
+        } elseif (\is_string($targets)) {
+            $targetValues = [$targets];
+        } else {
             return;
         }
-        $targetValues = $targets->getValuesWithExplicitSilentAndWithoutQuotes();
         $flags = $this->resolveFlags($targetValues);
         $flagCollection = $this->attributeFlagFactory->createFlagCollection($flags);
         if ($flagCollection === null) {
