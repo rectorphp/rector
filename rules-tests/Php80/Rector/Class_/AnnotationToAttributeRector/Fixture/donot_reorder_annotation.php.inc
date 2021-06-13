@@ -4,12 +4,6 @@ namespace Rector\Tests\Php80\Rector\Class_\AnnotationToAttributeRector\FixtureAu
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * News
- *
- * @ORM\Table(name="news")
- * @ORM\Entity(repositoryClass="DoctrineFixtureDemo\Repository\NewsRepository")
- */
 class News
 {
     /**
@@ -17,7 +11,6 @@ class News
      *
      * @ORM\Column(name="id", type="bigint", nullable=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
     /**
@@ -42,11 +35,6 @@ namespace Rector\Tests\Php80\Rector\Class_\AnnotationToAttributeRector\FixtureAu
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * News
- */
-#[\Doctrine\ORM\Mapping\Table(name: 'news')]
-#[\Doctrine\ORM\Mapping\Entity(repositoryClass: 'DoctrineFixtureDemo\Repository\NewsRepository')]
 class News
 {
     /**
@@ -54,7 +42,6 @@ class News
      */
     #[\Doctrine\ORM\Mapping\Column(name: 'id', type: 'bigint', nullable: false)]
     #[\Doctrine\ORM\Mapping\Id]
-    #[\Doctrine\ORM\Mapping\GeneratedValue(strategy: 'IDENTITY')]
     private $id;
     /**
      * @var string

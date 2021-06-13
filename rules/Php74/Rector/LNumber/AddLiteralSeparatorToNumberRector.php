@@ -137,8 +137,14 @@ CODE_SAMPLE
     {
         /** @var int $startToken */
         $startToken = $node->getAttribute(AttributeKey::START_TOKEN_POSITION);
-        /** @var File $file */
+
         $file = $node->getAttribute(AttributeKey::FILE);
+
+        // new node
+        if (! $file instanceof File) {
+            return true;
+        }
+
         $oldTokens = $file->getOldTokens();
 
         foreach ($oldTokens[$startToken] as $token) {

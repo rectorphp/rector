@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Rector\Php74\Rector\LNumber\AddLiteralSeparatorToNumberRector;
 use Rector\Php80\Rector\Class_\AnnotationToAttributeRector;
 use Rector\Php80\ValueObject\AnnotationToAttribute;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -19,19 +20,15 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 new AnnotationToAttribute('Symfony\Component\Routing\Annotation\Route'),
 
                 // symfony/validation
-                new AnnotationToAttribute('Symfony\Component\Validator\Constraints\Email',),
                 new AnnotationToAttribute('Symfony\Component\Validator\Constraints\Range',),
-                new AnnotationToAttribute('Symfony\Component\Validator\Constraints\NotBlank',),
-                new AnnotationToAttribute('Symfony\Component\Validator\Constraints\Choice',),
+                new AnnotationToAttribute('Symfony\Component\Validator\Constraints\Choice'),
 
-                new AnnotationToAttribute('Doctrine\ORM\Mapping\Table'),
-                new AnnotationToAttribute('Doctrine\ORM\Mapping\Entity'),
                 new AnnotationToAttribute('Doctrine\ORM\Mapping\Id'),
-                new AnnotationToAttribute('Doctrine\ORM\Mapping\GeneratedValue'),
                 new AnnotationToAttribute('Doctrine\ORM\Mapping\Column'),
-                new AnnotationToAttribute('Doctrine\ORM\Mapping\ChangeTrackingPolicy'),
                 new AnnotationToAttribute('Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter'),
                 new AnnotationToAttribute('ApiPlatform\Core\Annotation\ApiResource'),
             ]),
         ]]);
+
+    $services->set(AddLiteralSeparatorToNumberRector::class);
 };

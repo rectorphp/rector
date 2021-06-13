@@ -23,7 +23,6 @@ use Rector\ChangesReporting\Collector\RectorChangeCollector;
 use Rector\ChangesReporting\ValueObject\RectorWithLineChange;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\Configuration\CurrentNodeProvider;
-use Rector\Core\Configuration\Option;
 use Rector\Core\Contract\Rector\PhpRectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Exclusion\ExclusionManager;
@@ -38,7 +37,6 @@ use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Core\Provider\CurrentFileProvider;
 use Rector\Core\Validation\InfiniteLoopValidator;
 use Rector\Core\ValueObject\Application\File;
-use Rector\Core\ValueObject\ProjectType;
 use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeRemoval\NodeRemover;
@@ -395,12 +393,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
 
             $this->addNodeAfterNode($ifStmt, $node);
         }
-    }
-
-    protected function isOpenSourceProjectType(): bool
-    {
-        $projectType = $this->parameterProvider->provideStringParameter(Option::PROJECT_TYPE);
-        return $projectType === ProjectType::OPEN_SOURCE;
     }
 
     /**

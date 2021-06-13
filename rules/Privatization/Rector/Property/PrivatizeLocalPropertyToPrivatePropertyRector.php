@@ -158,11 +158,7 @@ CODE_SAMPLE
             return true;
         }
 
-        if ($classLike->isAbstract()) {
-            return true;
-        }
-
-        return $this->isOpenSourceProjectType();
+        return $classLike->isAbstract();
     }
 
     private function shouldSkipProperty(Property $property): bool
