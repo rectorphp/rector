@@ -39,6 +39,7 @@ By [buying a book](https://leanpub.com/rector-the-power-of-automated-refactoring
 - [How to Ignore Rule or Paths](/docs/how_to_ignore_rule_or_paths.md)
 - [Static Reflection and Autoload](/docs/static_reflection_and_autoload.md)
 - [How to Configure Rule](/docs/how_to_configure_rules.md)
+- [Beyond PHP - Entering the realm of FileProcessors](/docs/beyond_php_file_processors.md)
 
 ### For Rule Developers and Contributors
 
@@ -47,7 +48,7 @@ By [buying a book](https://leanpub.com/rector-the-power-of-automated-refactoring
 - [How to Work with Doc Block and Comments](/docs/how_to_work_with_doc_block_and_comments.md)
 - [How to Generate New Rector Rule](/docs/create_own_rule.md)
 - [How to add Test for Rector Rule](/docs/how_to_add_test_for_rector_rule.md)
-
+- [How to create a custom FileProcessor](/docs/create_custom_fileprocessor.md)
 <br>
 
 ## Install
