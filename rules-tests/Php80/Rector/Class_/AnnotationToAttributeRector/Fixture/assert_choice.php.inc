@@ -12,7 +12,7 @@ final class EntityColumnAndAssertChoice
     public $phpVersion;
 
     /**
-     * @Assert\Choice(choices={"5.0", "5.1", "5.2"})
+     * @Assert\Choice(choices={"5.0", "5.1", "id": "5.2"})
      */
     public $sfVersion;
 
@@ -35,7 +35,7 @@ final class EntityColumnAndAssertChoice
     #[\Symfony\Component\Validator\Constraints\Choice(['php5', 'php7', 'php8'])]
     public $phpVersion;
 
-    #[\Symfony\Component\Validator\Constraints\Choice(choices: ['5.0', '5.1', '5.2'])]
+    #[\Symfony\Component\Validator\Constraints\Choice(choices: ['5.0', '5.1', 'id' => '5.2'])]
     public $sfVersion;
 
     #[\Symfony\Component\Validator\Constraints\Choice(choices: [2, 3, 5, 7, 11, 13, 17, 19])]

@@ -44,12 +44,17 @@ final class ArrayParser
         // 2nd+ item
         while ($tokenIterator->isCurrentTokenType(Lexer::TOKEN_COMMA)) {
             // optional trailing comma
-            if ($tokenIterator->isNextTokenType(Lexer::TOKEN_CLOSE_CURLY_BRACKET)) {
+            $tokenIterator->consumeTokenType(Lexer::TOKEN_COMMA);
+            $tokenIterator->tryConsumeTokenType(Lexer::TOKEN_PHPDOC_EOL);
+
+            if ($tokenIterator->isCurrentTokenType(Lexer::TOKEN_CLOSE_CURLY_BRACKET)) {
                 break;
             }
 
-            $tokenIterator->consumeTokenType(Lexer::TOKEN_COMMA);
             $values[] = $this->resolveArrayItem($tokenIterator);
+            if ($tokenIterator->isNextTokenType(Lexer::TOKEN_CLOSE_CURLY_BRACKET)) {
+                break;
+            }
 
             // skip newlines
             $tokenIterator->tryConsumeTokenType(Lexer::TOKEN_PHPDOC_EOL);
@@ -59,7 +64,7 @@ final class ArrayParser
 
         // special case for nested doctrine annotations
         if (! $tokenIterator->isCurrentTokenType(Lexer::TOKEN_CLOSE_PARENTHESES)) {
-            $tokenIterator->consumeTokenType(Lexer::TOKEN_CLOSE_CURLY_BRACKET);
+            $tokenIterator->tryConsumeTokenType(Lexer::TOKEN_CLOSE_CURLY_BRACKET);
         }
 
         return $this->createArrayFromValues($values);

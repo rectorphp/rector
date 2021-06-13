@@ -13,18 +13,6 @@ class News
      * @ORM\Id
      */
     private $id;
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="title", type="string", length=50, nullable=false)
-     */
-    private $title;
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="content", type="string", length=255, nullable=false)
-     */
-    private $content;
 }
 
 ?>
@@ -45,16 +33,6 @@ class News
     #[Column(name: 'id', type: 'bigint', nullable: false)]
     #[Id]
     private $id;
-    /**
-     * @var string
-     */
-    #[Column(name: 'title', type: 'string', length: 50, nullable: false)]
-    private $title;
-    /**
-     * @var string
-     */
-    #[Column(name: 'content', type: 'string', length: 255, nullable: false)]
-    private $content;
 }
 
 ?>

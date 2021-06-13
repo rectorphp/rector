@@ -117,8 +117,8 @@ CODE_SAMPLE
         }
 
         $tags = $phpDocInfo->getAllTags();
-        $hasNewAttrGroups = $this->processApplyAttrGroups($tags, $phpDocInfo, $node);
 
+        $hasNewAttrGroups = $this->processApplyAttrGroups($tags, $phpDocInfo, $node);
         if ($hasNewAttrGroups) {
             return $node;
         }
@@ -171,6 +171,7 @@ CODE_SAMPLE
                 // 2. add attributes
                 /** @var DoctrineAnnotationTagValueNode $tagValue */
                 $tagValue = $tag->value;
+
                 $node->attrGroups[] = $this->phpAttributeGroupFactory->create($tagValue, $annotationToAttribute);
 
                 $hasNewAttrGroups = true;

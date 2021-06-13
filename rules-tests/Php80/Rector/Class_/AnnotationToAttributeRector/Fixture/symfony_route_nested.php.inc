@@ -4,10 +4,13 @@ namespace Rector\Tests\Php80\Rector\Class_\AnnotationToAttributeRector\Fixture;
 
 use Symfony\Component\Routing\Annotation\Route;
 
-class SymfonyRoute
+final class SymfonyRouteNested
 {
     /**
-     * @Route("/path", name=EntityColumnAndAssertChoice::class)
+     * @Route(entityClasses={
+     *     'one',
+     *     'two',
+     * }, discriminator="changeReason")
      */
     public function action()
     {
@@ -22,9 +25,9 @@ namespace Rector\Tests\Php80\Rector\Class_\AnnotationToAttributeRector\Fixture;
 
 use Symfony\Component\Routing\Annotation\Route;
 
-class SymfonyRoute
+final class SymfonyRouteNested
 {
-    #[\Symfony\Component\Routing\Annotation\Route(path: '/path', name: EntityColumnAndAssertChoice::class)]
+    #[\Symfony\Component\Routing\Annotation\Route(entityClasses: ['one', 'two'], discriminator: 'changeReason')]
     public function action()
     {
     }
