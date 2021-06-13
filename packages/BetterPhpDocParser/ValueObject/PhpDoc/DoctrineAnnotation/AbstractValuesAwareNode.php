@@ -15,7 +15,7 @@ abstract class AbstractValuesAwareNode implements \PHPStan\PhpDocParser\Ast\PhpD
      * @var string
      * @see https://regex101.com/r/H6JjOG/1
      */
-    private const UNQUOTED_VALUE_REGEX = '#"(?<content>.*?)"#';
+    private const UNQUOTED_VALUE_REGEX = '#("|\')(?<content>.*?)("|\')#';
     /**
      * @var bool
      */
