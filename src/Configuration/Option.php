@@ -69,10 +69,6 @@ final class Option
     /**
      * @var string
      */
-    public const PROJECT_TYPE = 'project_type';
-    /**
-     * @var string
-     */
     public const PATHS = 'paths';
     /**
      * @var string

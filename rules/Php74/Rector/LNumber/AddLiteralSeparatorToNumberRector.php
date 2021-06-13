@@ -113,8 +113,11 @@ CODE_SAMPLE
     {
         /** @var int $startToken */
         $startToken = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::START_TOKEN_POSITION);
-        /** @var File $file */
         $file = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::FILE);
+        // new node
+        if (!$file instanceof \Rector\Core\ValueObject\Application\File) {
+            return \true;
+        }
         $oldTokens = $file->getOldTokens();
         foreach ($oldTokens[$startToken] as $token) {
             if (!\is_string($token)) {
