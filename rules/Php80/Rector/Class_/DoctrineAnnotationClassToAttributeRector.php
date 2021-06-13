@@ -139,6 +139,7 @@ CODE_SAMPLE
             $requiredDoctrineAnnotationTagValueNode = $propertyPhpDocInfo->getByAnnotationClass(
                 'Doctrine\Common\Annotations\Annotation\Required'
             );
+
             if (! $requiredDoctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
                 continue;
             }
@@ -207,11 +208,13 @@ CODE_SAMPLE
         }
 
         $targets = $targetDoctrineAnnotationTagValueNode->getSilentValue();
-        if (! $targets instanceof CurlyListNode) {
+        if ($targets instanceof CurlyListNode) {
+            $targetValues = $targets->getValuesWithExplicitSilentAndWithoutQuotes();
+        } elseif (is_string($targets)) {
+            $targetValues = [$targets];
+        } else {
             return;
         }
-
-        $targetValues = $targets->getValuesWithExplicitSilentAndWithoutQuotes();
 
         $flags = $this->resolveFlags($targetValues);
         $flagCollection = $this->attributeFlagFactory->createFlagCollection($flags);
