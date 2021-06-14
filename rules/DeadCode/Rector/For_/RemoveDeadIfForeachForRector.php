@@ -11,6 +11,7 @@ use PhpParser\Node\Stmt\For_;
 use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\If_;
 use Rector\Core\Rector\AbstractRector;
+use Rector\EarlyReturn\NodeTransformer\ConditionInverter;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -18,6 +19,14 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class RemoveDeadIfForeachForRector extends \Rector\Core\Rector\AbstractRector
 {
+    /**
+     * @var \Rector\EarlyReturn\NodeTransformer\ConditionInverter
+     */
+    private $conditionInverter;
+    public function __construct(\Rector\EarlyReturn\NodeTransformer\ConditionInverter $conditionInverter)
+    {
+        $this->conditionInverter = $conditionInverter;
+    }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
         return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove if, foreach and for that does not do anything', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
@@ -86,10 +95,13 @@ CODE_SAMPLE
         if ($if->stmts !== []) {
             return;
         }
-        if ($if->else !== null) {
+        if ($if->elseifs !== []) {
             return;
         }
-        if ($if->elseifs !== []) {
+        if ($if->else !== null) {
+            $if->cond = $this->conditionInverter->createInvertedCondition($if->cond);
+            $if->stmts = $if->else->stmts;
+            $if->else = null;
             return;
         }
         if ($this->isNodeWithSideEffect($if->cond)) {
