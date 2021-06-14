@@ -1167,17 +1167,17 @@
         },
         {
             "name": "rector\/rector-doctrine",
-            "version": "0.11.3",
-            "version_normalized": "0.11.3.0",
+            "version": "0.11.4",
+            "version_normalized": "0.11.4.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-doctrine.git",
-                "reference": "5899205a3e49d08d2dc05206fe08c36c127e6cd0"
+                "reference": "e890a52131d6f05808c1f78f18faeb1d5c597e46"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/5899205a3e49d08d2dc05206fe08c36c127e6cd0",
-                "reference": "5899205a3e49d08d2dc05206fe08c36c127e6cd0",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/e890a52131d6f05808c1f78f18faeb1d5c597e46",
+                "reference": "e890a52131d6f05808c1f78f18faeb1d5c597e46",
                 "shasum": ""
             },
             "require": {
@@ -1188,14 +1188,16 @@
             },
             "require-dev": {
                 "doctrine\/orm": "^2.9",
+                "phpstan\/extension-installer": "^1.1",
                 "phpunit\/phpunit": "^9.5",
+                "rector\/rector-generator": "^0.2",
                 "rector\/rector-src": "^0.11.2",
                 "symplify\/easy-coding-standard": "^9.2",
                 "symplify\/phpstan-extensions": "^9.2",
                 "symplify\/phpstan-rules": "^9.2",
                 "symplify\/rule-doc-generator": "^9.2"
             },
-            "time": "2021-06-03T12:35:00+00:00",
+            "time": "2021-06-14T22:51:40+00:00",
             "type": "rector-extension",
             "extra": {
                 "branch-alias": {
@@ -1220,7 +1222,7 @@
             "description": "Rector upgrades rules for Doctrine",
             "support": {
                 "issues": "https:\/\/github.com\/rectorphp\/rector-doctrine\/issues",
-                "source": "https:\/\/github.com\/rectorphp\/rector-doctrine\/tree\/0.11.3"
+                "source": "https:\/\/github.com\/rectorphp\/rector-doctrine\/tree\/0.11.4"
             },
             "install-path": "..\/rector\/rector-doctrine"
         },

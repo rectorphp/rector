@@ -2066,6 +2066,7 @@ return array(
     'Rector\\Doctrine\\Rector\\ClassMethod\\ServiceEntityRepositoryParentCallToDIRector' => $vendorDir . '/rector/rector-doctrine/src/Rector/ClassMethod/ServiceEntityRepositoryParentCallToDIRector.php',
     'Rector\\Doctrine\\Rector\\Class_\\AddEntityIdByConditionRector' => $vendorDir . '/rector/rector-doctrine/src/Rector/Class_/AddEntityIdByConditionRector.php',
     'Rector\\Doctrine\\Rector\\Class_\\BlameableBehaviorRector' => $vendorDir . '/rector/rector-doctrine/src/Rector/Class_/BlameableBehaviorRector.php',
+    'Rector\\Doctrine\\Rector\\Class_\\ClassAnnotationToNamedArgumentConstructorRector' => $vendorDir . '/rector/rector-doctrine/src/Rector/Class_/ClassAnnotationToNamedArgumentConstructorRector.php',
     'Rector\\Doctrine\\Rector\\Class_\\InitializeDefaultEntityCollectionRector' => $vendorDir . '/rector/rector-doctrine/src/Rector/Class_/InitializeDefaultEntityCollectionRector.php',
     'Rector\\Doctrine\\Rector\\Class_\\LoggableBehaviorRector' => $vendorDir . '/rector/rector-doctrine/src/Rector/Class_/LoggableBehaviorRector.php',
     'Rector\\Doctrine\\Rector\\Class_\\ManagerRegistryGetManagerToEntityManagerRector' => $vendorDir . '/rector/rector-doctrine/src/Rector/Class_/ManagerRegistryGetManagerToEntityManagerRector.php',

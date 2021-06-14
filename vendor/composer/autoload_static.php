@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticIniteee3c7b8a73ec51612a23479456abc41
+class ComposerStaticInit7ca01c3532cfed17a5a881fa84c4b98c
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -2421,6 +2421,7 @@ class ComposerStaticIniteee3c7b8a73ec51612a23479456abc41
         'Rector\\Doctrine\\Rector\\ClassMethod\\ServiceEntityRepositoryParentCallToDIRector' => __DIR__ . '/..' . '/rector/rector-doctrine/src/Rector/ClassMethod/ServiceEntityRepositoryParentCallToDIRector.php',
         'Rector\\Doctrine\\Rector\\Class_\\AddEntityIdByConditionRector' => __DIR__ . '/..' . '/rector/rector-doctrine/src/Rector/Class_/AddEntityIdByConditionRector.php',
         'Rector\\Doctrine\\Rector\\Class_\\BlameableBehaviorRector' => __DIR__ . '/..' . '/rector/rector-doctrine/src/Rector/Class_/BlameableBehaviorRector.php',
+        'Rector\\Doctrine\\Rector\\Class_\\ClassAnnotationToNamedArgumentConstructorRector' => __DIR__ . '/..' . '/rector/rector-doctrine/src/Rector/Class_/ClassAnnotationToNamedArgumentConstructorRector.php',
         'Rector\\Doctrine\\Rector\\Class_\\InitializeDefaultEntityCollectionRector' => __DIR__ . '/..' . '/rector/rector-doctrine/src/Rector/Class_/InitializeDefaultEntityCollectionRector.php',
         'Rector\\Doctrine\\Rector\\Class_\\LoggableBehaviorRector' => __DIR__ . '/..' . '/rector/rector-doctrine/src/Rector/Class_/LoggableBehaviorRector.php',
         'Rector\\Doctrine\\Rector\\Class_\\ManagerRegistryGetManagerToEntityManagerRector' => __DIR__ . '/..' . '/rector/rector-doctrine/src/Rector/Class_/ManagerRegistryGetManagerToEntityManagerRector.php',
@@ -3863,9 +3864,9 @@ class ComposerStaticIniteee3c7b8a73ec51612a23479456abc41
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticIniteee3c7b8a73ec51612a23479456abc41::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticIniteee3c7b8a73ec51612a23479456abc41::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticIniteee3c7b8a73ec51612a23479456abc41::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit7ca01c3532cfed17a5a881fa84c4b98c::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit7ca01c3532cfed17a5a881fa84c4b98c::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit7ca01c3532cfed17a5a881fa84c4b98c::$classMap;
 
         }, null, ClassLoader::class);
     }
