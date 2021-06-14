@@ -74,24 +74,31 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        // skip methods with no bodies (e.g interface methods)
+        if ($node->stmts === null) {
+            return null;
+        }
+
         $this->reset();
 
         $hasChanged = false;
+        $newStmts = [];
 
-        foreach ((array) $node->stmts as $key => $stmt) {
+        foreach ($node->stmts as $key => $stmt) {
             $currentStmtVariableName = $this->resolveCurrentStmtVariableName($stmt);
 
             if ($this->shouldAddEmptyLine($currentStmtVariableName, $node, $key)) {
                 $hasChanged = true;
-                // insert newline before
-                $stmts = (array) $node->stmts;
-                array_splice($stmts, $key, 0, [new Nop()]);
-                $node->stmts = $stmts;
+                // insert newline before stmt
+                $newStmts[] = new Nop();
             }
+            $newStmts[] = $stmt;
 
             $this->previousPreviousStmtVariableName = $this->previousStmtVariableName;
             $this->previousStmtVariableName = $currentStmtVariableName;
         }
+
+        $node->stmts = $newStmts;
 
         return $hasChanged ? $node : null;
     }
@@ -129,7 +136,7 @@ CODE_SAMPLE
         }
 
         // this is already empty line before
-        return ! $this->isPreceededByEmptyLine($node, $key);
+        return ! $this->isPrecededByEmptyLine($node, $key);
     }
 
     /**
@@ -169,7 +176,7 @@ CODE_SAMPLE
     /**
      * @param ClassMethod|Function_|Closure $node
      */
-    private function isPreceededByEmptyLine(Node $node, int $key): bool
+    private function isPrecededByEmptyLine(Node $node, int $key): bool
     {
         if ($node->stmts === null) {
             return false;
