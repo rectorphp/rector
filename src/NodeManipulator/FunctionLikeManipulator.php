@@ -9,7 +9,7 @@ use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\NodeNameResolver\NodeNameResolver;
-use RectorPrefix20210613\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
+use RectorPrefix20210614\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 final class FunctionLikeManipulator
 {
     /**
@@ -24,7 +24,7 @@ final class FunctionLikeManipulator
      * @var \Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer
      */
     private $propertyFetchAnalyzer;
-    public function __construct(\RectorPrefix20210613\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer $propertyFetchAnalyzer)
+    public function __construct(\RectorPrefix20210614\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer $propertyFetchAnalyzer)
     {
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->nodeNameResolver = $nodeNameResolver;

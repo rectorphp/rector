@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210613\TYPO3\CMS\Fluid\Core\Parser\SyntaxTree;
+namespace RectorPrefix20210614\TYPO3\CMS\Fluid\Core\Parser\SyntaxTree;
 
 if (\class_exists('TYPO3\\CMS\\Fluid\\Core\\Parser\\SyntaxTree\\ViewHelperNode')) {
     return;

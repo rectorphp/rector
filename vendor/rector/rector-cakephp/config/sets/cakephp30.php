@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210613;
+namespace RectorPrefix20210614;
 
 use Rector\CakePHP\Rector\FileWithoutNamespace\ImplicitShortClassNameUseStatementRector;
 use Rector\CakePHP\Rector\Namespace_\AppUsesStaticCallToUseStatementRector;

@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210613\TYPO3\CMS\Sv;
+namespace RectorPrefix20210614\TYPO3\CMS\Sv;
 
 if (\class_exists('TYPO3\\CMS\\Sv\\AuthenticationService')) {
     return;

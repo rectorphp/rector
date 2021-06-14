@@ -8,15 +8,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210613\Symfony\Component\Console\Formatter;
+namespace RectorPrefix20210614\Symfony\Component\Console\Formatter;
 
-use RectorPrefix20210613\Symfony\Component\Console\Color;
+use RectorPrefix20210614\Symfony\Component\Console\Color;
 /**
  * Formatter style class for defining styles.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class OutputFormatterStyle implements \RectorPrefix20210613\Symfony\Component\Console\Formatter\OutputFormatterStyleInterface
+class OutputFormatterStyle implements \RectorPrefix20210614\Symfony\Component\Console\Formatter\OutputFormatterStyleInterface
 {
     private $color;
     private $foreground;
@@ -32,21 +32,21 @@ class OutputFormatterStyle implements \RectorPrefix20210613\Symfony\Component\Co
      */
     public function __construct(string $foreground = null, string $background = null, array $options = [])
     {
-        $this->color = new \RectorPrefix20210613\Symfony\Component\Console\Color($this->foreground = $foreground ?: '', $this->background = $background ?: '', $this->options = $options);
+        $this->color = new \RectorPrefix20210614\Symfony\Component\Console\Color($this->foreground = $foreground ?: '', $this->background = $background ?: '', $this->options = $options);
     }
     /**
      * {@inheritdoc}
      */
     public function setForeground(string $color = null)
     {
-        $this->color = new \RectorPrefix20210613\Symfony\Component\Console\Color($this->foreground = $color ?: '', $this->background, $this->options);
+        $this->color = new \RectorPrefix20210614\Symfony\Component\Console\Color($this->foreground = $color ?: '', $this->background, $this->options);
     }
     /**
      * {@inheritdoc}
      */
     public function setBackground(string $color = null)
     {
-        $this->color = new \RectorPrefix20210613\Symfony\Component\Console\Color($this->foreground, $this->background = $color ?: '', $this->options);
+        $this->color = new \RectorPrefix20210614\Symfony\Component\Console\Color($this->foreground, $this->background = $color ?: '', $this->options);
     }
     public function setHref(string $url) : void
     {
@@ -58,7 +58,7 @@ class OutputFormatterStyle implements \RectorPrefix20210613\Symfony\Component\Co
     public function setOption(string $option)
     {
         $this->options[] = $option;
-        $this->color = new \RectorPrefix20210613\Symfony\Component\Console\Color($this->foreground, $this->background, $this->options);
+        $this->color = new \RectorPrefix20210614\Symfony\Component\Console\Color($this->foreground, $this->background, $this->options);
     }
     /**
      * {@inheritdoc}
@@ -69,14 +69,14 @@ class OutputFormatterStyle implements \RectorPrefix20210613\Symfony\Component\Co
         if (\false !== $pos) {
             unset($this->options[$pos]);
         }
-        $this->color = new \RectorPrefix20210613\Symfony\Component\Console\Color($this->foreground, $this->background, $this->options);
+        $this->color = new \RectorPrefix20210614\Symfony\Component\Console\Color($this->foreground, $this->background, $this->options);
     }
     /**
      * {@inheritdoc}
      */
     public function setOptions(array $options)
     {
-        $this->color = new \RectorPrefix20210613\Symfony\Component\Console\Color($this->foreground, $this->background, $this->options = $options);
+        $this->color = new \RectorPrefix20210614\Symfony\Component\Console\Color($this->foreground, $this->background, $this->options = $options);
     }
     /**
      * {@inheritdoc}

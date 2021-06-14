@@ -12,7 +12,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Transform\ValueObject\StaticCallToFuncCall;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20210613\Webmozart\Assert\Assert;
+use RectorPrefix20210614\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Transform\Rector\StaticCall\StaticCallToFuncCallRector\StaticCallToFuncCallRectorTest
  */
@@ -66,7 +66,7 @@ final class StaticCallToFuncCallRector extends \Rector\Core\Rector\AbstractRecto
     public function configure(array $configuration) : void
     {
         $staticCallsToFunctions = $configuration[self::STATIC_CALLS_TO_FUNCTIONS] ?? [];
-        \RectorPrefix20210613\Webmozart\Assert\Assert::allIsInstanceOf($staticCallsToFunctions, \Rector\Transform\ValueObject\StaticCallToFuncCall::class);
+        \RectorPrefix20210614\Webmozart\Assert\Assert::allIsInstanceOf($staticCallsToFunctions, \Rector\Transform\ValueObject\StaticCallToFuncCall::class);
         $this->staticCallsToFunctions = $staticCallsToFunctions;
     }
 }

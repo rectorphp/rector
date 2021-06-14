@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210613;
+namespace RectorPrefix20210614;
 
 use Rector\Php56\Rector\FuncCall\PowToExpRector;
 use Rector\Php56\Rector\FunctionLike\AddDefaultValueForUndefinedVariableRector;

@@ -10,7 +10,7 @@ use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Name\FullyQualified;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Nette\Kdyby\ValueObject\NetteEventToContributeEventClass;
-use RectorPrefix20210613\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
+use RectorPrefix20210614\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 final class GetSubscribedEventsArrayManipulator
 {
     /**
@@ -21,7 +21,7 @@ final class GetSubscribedEventsArrayManipulator
      * @var \Rector\Core\PhpParser\Node\Value\ValueResolver
      */
     private $valueResolver;
-    public function __construct(\RectorPrefix20210613\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\Core\PhpParser\Node\Value\ValueResolver $valueResolver)
+    public function __construct(\RectorPrefix20210614\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\Core\PhpParser\Node\Value\ValueResolver $valueResolver)
     {
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->valueResolver = $valueResolver;

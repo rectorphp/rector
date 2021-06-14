@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210613\Helmich\TypoScriptParser\Parser\AST;
+namespace RectorPrefix20210614\Helmich\TypoScriptParser\Parser\AST;
 
 /**
  * A nested assignment statement.
@@ -21,7 +21,7 @@ namespace RectorPrefix20210613\Helmich\TypoScriptParser\Parser\AST;
  * @package    Helmich\TypoScriptParser
  * @subpackage Parser\AST
  */
-class NestedAssignment extends \RectorPrefix20210613\Helmich\TypoScriptParser\Parser\AST\Statement
+class NestedAssignment extends \RectorPrefix20210614\Helmich\TypoScriptParser\Parser\AST\Statement
 {
     /**
      * The object to operate on.
@@ -40,7 +40,7 @@ class NestedAssignment extends \RectorPrefix20210613\Helmich\TypoScriptParser\Pa
      * @param Statement[] $statements The nested statements.
      * @param int         $sourceLine The original source line.
      */
-    public function __construct(\RectorPrefix20210613\Helmich\TypoScriptParser\Parser\AST\ObjectPath $object, array $statements, int $sourceLine)
+    public function __construct(\RectorPrefix20210614\Helmich\TypoScriptParser\Parser\AST\ObjectPath $object, array $statements, int $sourceLine)
     {
         parent::__construct($sourceLine);
         $this->object = $object;

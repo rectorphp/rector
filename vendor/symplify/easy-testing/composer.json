@@ -23,12 +23,12 @@
     },
     "autoload": {
         "psr-4": {
-            "RectorPrefix20210613\\Symplify\\EasyTesting\\": "src"
+            "RectorPrefix20210614\\Symplify\\EasyTesting\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "RectorPrefix20210613\\Symplify\\EasyTesting\\Tests\\": "tests"
+            "RectorPrefix20210614\\Symplify\\EasyTesting\\Tests\\": "tests"
         }
     },
     "extra": {

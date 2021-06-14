@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210613;
+namespace RectorPrefix20210614;
 
 use Rector\Symfony\Rector\Attribute\ExtractAttributeRouteNameConstantsRector;
 use Rector\Symfony\Rector\BinaryOp\ResponseStatusCodeRector;
