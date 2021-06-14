@@ -212,6 +212,11 @@ parameters:
             message: '#Call to function is_string\(\) with float will always evaluate to false#'
             path: src/PhpParser/Printer/BetterStandardPrinter.php
 
+        # class_exists is forbidden to enforce static reflection, but in a compiler pass we want runtime autoloading
+        -
+            message:  '#Function "class_exists\(\)" cannot be used/left in the code#'
+            path: src/DependencyInjection/CompilerPass/VerifyRectorServiceExistsCompilerPass.php         
+
         # known values from other methods
         -
             message: '#Negated boolean expression is always true#'
