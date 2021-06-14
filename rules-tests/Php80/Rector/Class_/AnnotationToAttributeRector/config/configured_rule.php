@@ -18,12 +18,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 new AnnotationToAttribute('Symfony\Component\Routing\Annotation\Route'),
                 new AnnotationToAttribute('Symfony\Component\Validator\Constraints\Choice'),
 
-                new AnnotationToAttribute('Doctrine\ORM\Mapping\Entity'),
-                new AnnotationToAttribute('Doctrine\ORM\Mapping\Table'),
                 new AnnotationToAttribute('Doctrine\ORM\Mapping\Id'),
                 new AnnotationToAttribute('Doctrine\ORM\Mapping\Column'),
-                new AnnotationToAttribute('Doctrine\ORM\Mapping\OrderBy'),
-                new AnnotationToAttribute('Doctrine\ORM\Mapping\OneToMany'),
                 new AnnotationToAttribute('ApiPlatform\Core\Annotation\ApiResource'),
             ]),
         ]]);
