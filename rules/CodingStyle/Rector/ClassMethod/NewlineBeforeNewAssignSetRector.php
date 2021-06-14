@@ -70,20 +70,25 @@ CODE_SAMPLE
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
+        // skip methods with no bodies (e.g interface methods)
+        if ($node->stmts === null) {
+            return null;
+        }
         $this->reset();
         $hasChanged = \false;
-        foreach ((array) $node->stmts as $key => $stmt) {
+        $newStmts = [];
+        foreach ($node->stmts as $key => $stmt) {
             $currentStmtVariableName = $this->resolveCurrentStmtVariableName($stmt);
             if ($this->shouldAddEmptyLine($currentStmtVariableName, $node, $key)) {
                 $hasChanged = \true;
-                // insert newline before
-                $stmts = (array) $node->stmts;
-                \array_splice($stmts, $key, 0, [new \PhpParser\Node\Stmt\Nop()]);
-                $node->stmts = $stmts;
+                // insert newline before stmt
+                $newStmts[] = new \PhpParser\Node\Stmt\Nop();
             }
+            $newStmts[] = $stmt;
             $this->previousPreviousStmtVariableName = $this->previousStmtVariableName;
             $this->previousStmtVariableName = $currentStmtVariableName;
         }
+        $node->stmts = $newStmts;
         return $hasChanged ? $node : null;
     }
     private function reset() : void
@@ -113,7 +118,7 @@ CODE_SAMPLE
             return \false;
         }
         // this is already empty line before
-        return !$this->isPreceededByEmptyLine($node, $key);
+        return !$this->isPrecededByEmptyLine($node, $key);
     }
     /**
      * @param Assign|MethodCall $node
@@ -145,7 +150,7 @@ CODE_SAMPLE
     /**
      * @param ClassMethod|Function_|Closure $node
      */
-    private function isPreceededByEmptyLine(\PhpParser\Node $node, int $key) : bool
+    private function isPrecededByEmptyLine(\PhpParser\Node $node, int $key) : bool
     {
         if ($node->stmts === null) {
             return \false;
