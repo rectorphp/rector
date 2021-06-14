@@ -8,6 +8,7 @@ use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Namespace_;
+use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\CodingStyle\ClassNameImport\AliasUsesResolver;
@@ -63,12 +64,15 @@ final class NameImporter
         $this->useNodesToAddCollector = $useNodesToAddCollector;
         $this->reflectionProvider = $reflectionProvider;
     }
-    public function importName(\PhpParser\Node\Name $name) : ?\PhpParser\Node\Name
+    /**
+     * @param Use_[] $uses
+     */
+    public function importName(\PhpParser\Node\Name $name, array $uses) : ?\PhpParser\Node\Name
     {
         if ($this->shouldSkipName($name)) {
             return null;
         }
-        if ($this->classNameImportSkipper->isShortNameInUseStatement($name)) {
+        if ($this->classNameImportSkipper->isShortNameInUseStatement($name, $uses)) {
             return null;
         }
         $staticType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($name);
@@ -97,8 +101,7 @@ final class NameImporter
             return \true;
         }
         // Importing root namespace classes (like \DateTime) is optional
-        $importShortClasses = $this->parameterProvider->provideParameter(\Rector\Core\Configuration\Option::IMPORT_SHORT_CLASSES);
-        if (!$importShortClasses) {
+        if (!$this->parameterProvider->provideBoolParameter(\Rector\Core\Configuration\Option::IMPORT_SHORT_CLASSES)) {
             $name = $this->nodeNameResolver->getName($name);
             if ($name !== null && \substr_count($name, '\\') === 0) {
                 return \true;
