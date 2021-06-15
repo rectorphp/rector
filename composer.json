@@ -23,7 +23,7 @@
         "phpstan/phpstan-phpunit": "^0.12.19",
         "rector/extension-installer": "^0.10.2",
         "rector/rector-cakephp": "^0.11.2",
-        "rector/rector-doctrine": "^0.11.3",
+        "rector/rector-doctrine": "^0.11.5",
         "rector/rector-laravel": "^0.11.1",
         "rector/rector-nette": "^0.11.4",
         "rector/rector-nette-to-symfony": "^0.11.3",
