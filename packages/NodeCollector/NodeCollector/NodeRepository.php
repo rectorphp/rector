@@ -422,7 +422,7 @@ final class NodeRepository
         if (!$classReflection->hasMethod($arrayCallable->getMethod())) {
             return;
         }
-        $this->arrayCallablesByTypeAndMethod[$arrayCallable->getClass()][$arrayCallable->getMethod()][] = $arrayCallable;
+        $this->arrayCallablesByTypeAndMethod[$arrayCallable->getClass()][\strtolower($arrayCallable->getMethod())][] = $arrayCallable;
     }
     private function addMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod) : void
     {
