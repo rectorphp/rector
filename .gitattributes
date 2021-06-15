@@ -6,3 +6,9 @@
 
 # testing Windows spaces - https://help.github.com/en/github/using-git/configuring-git-to-handle-line-endings
 packages-tests/FileFormatter/ValueObject/Fixture/composer_carriage_return_line_feed.json json eol=crlf
+
+
+# for 3rd party packages working with rector/rector-src as dependency
+rules-tests export-ignore
+packages-tests export-ignore
+tests export-ignore
