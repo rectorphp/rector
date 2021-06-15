@@ -2,7 +2,7 @@
 
 namespace Rector\Tests\EarlyReturn\Rector\If_\ChangeAndIfToEarlyReturnRector\Fixture;
 
-class BooleanNot
+final class SomeBooleanNot
 {
     public function canDrive(Car $car)
     {
@@ -20,7 +20,7 @@ class BooleanNot
 
 namespace Rector\Tests\EarlyReturn\Rector\If_\ChangeAndIfToEarlyReturnRector\Fixture;
 
-class BooleanNot
+final class SomeBooleanNot
 {
     public function canDrive(Car $car)
     {
