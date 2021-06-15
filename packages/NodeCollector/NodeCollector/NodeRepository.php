@@ -471,7 +471,7 @@ final class NodeRepository
             return;
         }
 
-        $this->arrayCallablesByTypeAndMethod[$arrayCallable->getClass()][$arrayCallable->getMethod()][] = $arrayCallable;
+        $this->arrayCallablesByTypeAndMethod[$arrayCallable->getClass()][strtolower($arrayCallable->getMethod())][] = $arrayCallable;
     }
 
     private function addMethod(ClassMethod $classMethod): void
