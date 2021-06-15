@@ -8,13 +8,13 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Namespace_;
 use PHPStan\Type\ObjectType;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\NodeManipulator\ClassInsertManipulator;
 use Rector\Core\NodeManipulator\ClassManipulator;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Doctrine\NodeAnalyzer\TranslatablePropertyCollectorAndRemover;
 use Rector\Doctrine\NodeFactory\TranslationClassNodeFactory;
+use Rector\Doctrine\ValueObject\PropertyNamesAndPhpDocInfos;
 use Rector\FileSystemRector\ValueObject\AddedFileWithNodes;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -42,15 +42,15 @@ final class TranslationBehaviorRector extends \Rector\Core\Rector\AbstractRector
      */
     private $translationClassNodeFactory;
     /**
-     * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover
+     * @var \Rector\Doctrine\NodeAnalyzer\TranslatablePropertyCollectorAndRemover
      */
-    private $phpDocTagRemover;
-    public function __construct(\Rector\Core\NodeManipulator\ClassInsertManipulator $classInsertManipulator, \Rector\Core\NodeManipulator\ClassManipulator $classManipulator, \Rector\Doctrine\NodeFactory\TranslationClassNodeFactory $translationClassNodeFactory, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover $phpDocTagRemover)
+    private $translatablePropertyCollectorAndRemover;
+    public function __construct(\Rector\Core\NodeManipulator\ClassInsertManipulator $classInsertManipulator, \Rector\Core\NodeManipulator\ClassManipulator $classManipulator, \Rector\Doctrine\NodeFactory\TranslationClassNodeFactory $translationClassNodeFactory, \Rector\Doctrine\NodeAnalyzer\TranslatablePropertyCollectorAndRemover $translatablePropertyCollectorAndRemover)
     {
         $this->classInsertManipulator = $classInsertManipulator;
         $this->classManipulator = $classManipulator;
         $this->translationClassNodeFactory = $translationClassNodeFactory;
-        $this->phpDocTagRemover = $phpDocTagRemover;
+        $this->translatablePropertyCollectorAndRemover = $translatablePropertyCollectorAndRemover;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -71,12 +71,6 @@ class Article implements Translatable
     private $title;
 
     /**
-     * @Gedmo\Translatable
-     * @ORM\Column(type="text")
-     */
-    private $content;
-
-    /**
      * @Gedmo\Locale
      */
     private $locale;
@@ -89,16 +83,6 @@ class Article implements Translatable
     public function getTitle()
     {
         return $this->title;
-    }
-
-    public function setContent($content)
-    {
-        $this->content = $content;
-    }
-
-    public function getContent()
-    {
-        return $this->content;
     }
 
     public function setTranslatableLocale($locale)
@@ -128,11 +112,6 @@ class SomeClassTranslation implements TranslationInterface
      * @ORM\Column(length=128)
      */
     private $title;
-
-    /**
-     * @ORM\Column(type="text")
-     */
-    private $content;
 }
 CODE_SAMPLE
 )]);
@@ -157,34 +136,10 @@ CODE_SAMPLE
         $this->classManipulator->removeInterface($node, 'Gedmo\\Translatable\\Translatable');
         $this->classInsertManipulator->addAsFirstTrait($node, 'Knp\\DoctrineBehaviors\\Model\\Translatable\\TranslatableTrait');
         $node->implements[] = new \PhpParser\Node\Name\FullyQualified('Knp\\DoctrineBehaviors\\Contract\\Entity\\TranslatableInterface');
-        $removedPropertyNameToPhpDocInfo = $this->collectAndRemoveTranslatableProperties($node);
-        $removePropertyNames = \array_keys($removedPropertyNameToPhpDocInfo);
-        $this->removeSetAndGetMethods($node, $removePropertyNames);
-        $this->dumpEntityTranslation($node, $removedPropertyNameToPhpDocInfo);
+        $propertyNamesAndPhpDocInfos = $this->translatablePropertyCollectorAndRemover->processClass($node);
+        $this->removeSetAndGetMethods($node, $propertyNamesAndPhpDocInfos->getPropertyNames());
+        $this->dumpEntityTranslation($node, $propertyNamesAndPhpDocInfos);
         return $node;
-    }
-    /**
-     * @return array<string, PhpDocInfo>
-     */
-    private function collectAndRemoveTranslatableProperties(\PhpParser\Node\Stmt\Class_ $class) : array
-    {
-        $removedPropertyNameToPhpDocInfo = [];
-        foreach ($class->getProperties() as $property) {
-            $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
-            if ($phpDocInfo->hasByAnnotationClass('Gedmo\\Mapping\\Annotation\\Locale')) {
-                $this->removeNode($property);
-                continue;
-            }
-            $doctrineAnnotationTagValueNode = $phpDocInfo->getByAnnotationClass('Gedmo\\Mapping\\Annotation\\Translatable');
-            if (!$doctrineAnnotationTagValueNode) {
-                continue;
-            }
-            $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $doctrineAnnotationTagValueNode);
-            $propertyName = $this->getName($property);
-            $removedPropertyNameToPhpDocInfo[$propertyName] = $phpDocInfo;
-            $this->removeNode($property);
-        }
-        return $removedPropertyNameToPhpDocInfo;
     }
     /**
      * @param string[] $removedPropertyNames
@@ -205,10 +160,7 @@ CODE_SAMPLE
             }
         }
     }
-    /**
-     * @param PhpDocInfo[] $translatedPropertyToPhpDocInfos
-     */
-    private function dumpEntityTranslation(\PhpParser\Node\Stmt\Class_ $class, array $translatedPropertyToPhpDocInfos) : void
+    private function dumpEntityTranslation(\PhpParser\Node\Stmt\Class_ $class, \Rector\Doctrine\ValueObject\PropertyNamesAndPhpDocInfos $propertyNamesAndPhpDocInfos) : void
     {
         $fileInfo = $this->file->getSmartFileInfo();
         $classShortName = $class->name . 'Translation';
@@ -219,9 +171,9 @@ CODE_SAMPLE
         }
         $namespace = new \PhpParser\Node\Stmt\Namespace_($namespace->name);
         $class = $this->translationClassNodeFactory->create($classShortName);
-        foreach ($translatedPropertyToPhpDocInfos as $translatedPropertyName => $translatedPhpDocInfo) {
-            $property = $this->nodeFactory->createPrivateProperty($translatedPropertyName);
-            $property->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PHP_DOC_INFO, $translatedPhpDocInfo);
+        foreach ($propertyNamesAndPhpDocInfos->all() as $propertyNameAndPhpDocInfo) {
+            $property = $this->nodeFactory->createPrivateProperty($propertyNameAndPhpDocInfo->getPropertyName());
+            $property->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PHP_DOC_INFO, $propertyNameAndPhpDocInfo->getPhpDocInfo());
             $class->stmts[] = $property;
         }
         $namespace->stmts[] = $class;
