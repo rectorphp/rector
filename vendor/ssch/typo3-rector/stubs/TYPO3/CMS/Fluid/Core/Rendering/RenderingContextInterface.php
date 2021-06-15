@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210614\TYPO3\CMS\Fluid\Core\Rendering;
+namespace RectorPrefix20210615\TYPO3\CMS\Fluid\Core\Rendering;
 
 if (\interface_exists('TYPO3\\CMS\\Fluid\\Core\\Rendering\\RenderingContextInterface')) {
     return;

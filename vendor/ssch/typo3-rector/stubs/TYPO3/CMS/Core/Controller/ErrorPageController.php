@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210614\TYPO3\CMS\Core\Controller;
+namespace RectorPrefix20210615\TYPO3\CMS\Core\Controller;
 
 if (\class_exists('TYPO3\\CMS\\Core\\Controller\\ErrorPageController')) {
     return;

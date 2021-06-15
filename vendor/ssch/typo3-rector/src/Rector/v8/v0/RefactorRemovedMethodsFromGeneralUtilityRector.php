@@ -9,7 +9,7 @@ use PhpParser\Node\Expr\StaticCall;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20210614\TYPO3\CMS\Core\Imaging\GraphicalFunctions;
+use RectorPrefix20210615\TYPO3\CMS\Core\Imaging\GraphicalFunctions;
 /**
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/8.0/Breaking-72342-RemovedDeprecatedCodeFromGeneralUtility.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v8\v0\RefactorRemovedMethodsFromGeneralUtilityRector\RefactorRemovedMethodsFromGeneralUtilityRectorTest
@@ -67,6 +67,6 @@ final class RefactorRemovedMethodsFromGeneralUtilityRector extends \Rector\Core\
      */
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Refactor removed methods from GeneralUtility.', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample('GeneralUtility::gif_compress();', \RectorPrefix20210614\TYPO3\CMS\Core\Imaging\GraphicalFunctions::class . '::gifCompress();')]);
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Refactor removed methods from GeneralUtility.', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample('GeneralUtility::gif_compress();', \RectorPrefix20210615\TYPO3\CMS\Core\Imaging\GraphicalFunctions::class . '::gifCompress();')]);
     }
 }

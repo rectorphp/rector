@@ -1,9 +1,9 @@
 <?php
 
-namespace RectorPrefix20210614\TYPO3\CMS\Core\Http;
+namespace RectorPrefix20210615\TYPO3\CMS\Core\Http;
 
-use RectorPrefix20210614\Psr\Http\Message\ServerRequestInterface;
-use RectorPrefix20210614\TYPO3\CMS\Core\Core\SystemEnvironmentBuilder;
+use RectorPrefix20210615\Psr\Http\Message\ServerRequestInterface;
+use RectorPrefix20210615\TYPO3\CMS\Core\Core\SystemEnvironmentBuilder;
 if (\class_exists('TYPO3\\CMS\\Core\\Http\\ApplicationType')) {
     return;
 }
@@ -18,7 +18,7 @@ class ApplicationType
     /**
      * @return $this
      */
-    public static function fromRequest(\RectorPrefix20210614\Psr\Http\Message\ServerRequestInterface $request)
+    public static function fromRequest(\RectorPrefix20210615\Psr\Http\Message\ServerRequestInterface $request)
     {
         return new self('foo');
     }

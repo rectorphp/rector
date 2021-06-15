@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210614;
+namespace RectorPrefix20210615;
 
 if (\class_exists('SC_t3lib_thumbs')) {
     return;

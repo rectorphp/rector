@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\NetteToSymfony\Rector\Class_;
 
-use RectorPrefix20210614\Nette\Utils\Strings;
+use RectorPrefix20210615\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name\FullyQualified;
@@ -95,16 +95,16 @@ CODE_SAMPLE
 , <<<'CODE_SAMPLE'
 <?php
 
-namespace RectorPrefix20210614;
+namespace RectorPrefix20210615;
 
-use RectorPrefix20210614\Symfony\Component\Form\AbstractType;
-use RectorPrefix20210614\Symfony\Component\Form\Extension\Core\Type\TextType;
-use RectorPrefix20210614\Symfony\Component\Form\FormBuilderInterface;
-class SomeFormType extends \RectorPrefix20210614\Symfony\Component\Form\AbstractType
+use RectorPrefix20210615\Symfony\Component\Form\AbstractType;
+use RectorPrefix20210615\Symfony\Component\Form\Extension\Core\Type\TextType;
+use RectorPrefix20210615\Symfony\Component\Form\FormBuilderInterface;
+class SomeFormType extends \RectorPrefix20210615\Symfony\Component\Form\AbstractType
 {
-    public function buildForm(\RectorPrefix20210614\Symfony\Component\Form\FormBuilderInterface $formBuilder, array $options)
+    public function buildForm(\RectorPrefix20210615\Symfony\Component\Form\FormBuilderInterface $formBuilder, array $options)
     {
-        $formBuilder->add('name', \RectorPrefix20210614\Symfony\Component\Form\Extension\Core\Type\TextType::class, ['label' => 'Your name']);
+        $formBuilder->add('name', \RectorPrefix20210615\Symfony\Component\Form\Extension\Core\Type\TextType::class, ['label' => 'Your name']);
     }
 }
 \class_alias('SomeFormType', 'SomeFormType', \false);
@@ -173,9 +173,9 @@ CODE_SAMPLE
     {
         $shortClassName = $this->nodeNameResolver->getShortName($class);
         if (\substr_compare($shortClassName, 'Form', -\strlen('Form')) === 0) {
-            $shortClassName = \RectorPrefix20210614\Nette\Utils\Strings::before($shortClassName, 'Form');
+            $shortClassName = \RectorPrefix20210615\Nette\Utils\Strings::before($shortClassName, 'Form');
         } else {
-            $shortClassName = \RectorPrefix20210614\Nette\Utils\Strings::before($shortClassName, 'Control');
+            $shortClassName = \RectorPrefix20210615\Nette\Utils\Strings::before($shortClassName, 'Control');
         }
         return $shortClassName . 'Controller';
     }

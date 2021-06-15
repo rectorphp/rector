@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210614;
+namespace RectorPrefix20210615;
 
 if (\class_exists('tx_lowlevel_double_files')) {
     return;

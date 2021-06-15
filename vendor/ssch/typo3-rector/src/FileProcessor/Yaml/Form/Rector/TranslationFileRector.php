@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Ssch\TYPO3Rector\FileProcessor\Yaml\Form\Rector;
 
-use RectorPrefix20210614\Nette\Utils\Strings;
+use RectorPrefix20210615\Nette\Utils\Strings;
 use Ssch\TYPO3Rector\Contract\FileProcessor\Yaml\Form\FormYamlRectorInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -79,7 +79,7 @@ CODE_SAMPLE
     {
         $newTranslations = [];
         foreach ($oldTranslations as $oldTranslationFileKey => $oldTranslationFile) {
-            if (!\RectorPrefix20210614\Nette\Utils\Strings::startsWith($oldTranslationFile, 'EXT:form')) {
+            if (!\RectorPrefix20210615\Nette\Utils\Strings::startsWith($oldTranslationFile, 'EXT:form')) {
                 $newTranslations[$oldTranslationFileKey] = $oldTranslationFile;
             }
         }

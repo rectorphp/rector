@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210614\TYPO3\CMS\Extbase\Validation\Exception;
+namespace RectorPrefix20210615\TYPO3\CMS\Extbase\Validation\Exception;
 
 if (\class_exists('TYPO3\\CMS\\Extbase\\Validation\\Exception\\NoValidatorFoundException')) {
     return;

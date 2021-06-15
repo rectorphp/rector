@@ -8,22 +8,22 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210614\Symfony\Component\Console\Helper;
+namespace RectorPrefix20210615\Symfony\Component\Console\Helper;
 
-use RectorPrefix20210614\Symfony\Component\Console\Formatter\OutputFormatterInterface;
-use RectorPrefix20210614\Symfony\Component\String\UnicodeString;
+use RectorPrefix20210615\Symfony\Component\Console\Formatter\OutputFormatterInterface;
+use RectorPrefix20210615\Symfony\Component\String\UnicodeString;
 /**
  * Helper is the base class for all helper classes.
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-abstract class Helper implements \RectorPrefix20210614\Symfony\Component\Console\Helper\HelperInterface
+abstract class Helper implements \RectorPrefix20210615\Symfony\Component\Console\Helper\HelperInterface
 {
     protected $helperSet = null;
     /**
      * {@inheritdoc}
      */
-    public function setHelperSet(\RectorPrefix20210614\Symfony\Component\Console\Helper\HelperSet $helperSet = null)
+    public function setHelperSet(\RectorPrefix20210615\Symfony\Component\Console\Helper\HelperSet $helperSet = null)
     {
         $this->helperSet = $helperSet;
     }
@@ -54,7 +54,7 @@ abstract class Helper implements \RectorPrefix20210614\Symfony\Component\Console
     {
         $string ?? ($string = '');
         if (\preg_match('//u', $string)) {
-            return (new \RectorPrefix20210614\Symfony\Component\String\UnicodeString($string))->width(\false);
+            return (new \RectorPrefix20210615\Symfony\Component\String\UnicodeString($string))->width(\false);
         }
         if (\false === ($encoding = \mb_detect_encoding($string, null, \true))) {
             return \strlen($string);
@@ -69,7 +69,7 @@ abstract class Helper implements \RectorPrefix20210614\Symfony\Component\Console
     {
         $string ?? ($string = '');
         if (\preg_match('//u', $string)) {
-            return (new \RectorPrefix20210614\Symfony\Component\String\UnicodeString($string))->length();
+            return (new \RectorPrefix20210615\Symfony\Component\String\UnicodeString($string))->length();
         }
         if (\false === ($encoding = \mb_detect_encoding($string, null, \true))) {
             return \strlen($string);
@@ -119,12 +119,12 @@ abstract class Helper implements \RectorPrefix20210614\Symfony\Component\Console
     /**
      * @deprecated since 5.3
      */
-    public static function strlenWithoutDecoration(\RectorPrefix20210614\Symfony\Component\Console\Formatter\OutputFormatterInterface $formatter, ?string $string)
+    public static function strlenWithoutDecoration(\RectorPrefix20210615\Symfony\Component\Console\Formatter\OutputFormatterInterface $formatter, ?string $string)
     {
         trigger_deprecation('symfony/console', '5.3', 'Method "%s()" is deprecated and will be removed in Symfony 6.0. Use Helper::removeDecoration() instead.', __METHOD__);
         return self::width(self::removeDecoration($formatter, $string));
     }
-    public static function removeDecoration(\RectorPrefix20210614\Symfony\Component\Console\Formatter\OutputFormatterInterface $formatter, ?string $string)
+    public static function removeDecoration(\RectorPrefix20210615\Symfony\Component\Console\Formatter\OutputFormatterInterface $formatter, ?string $string)
     {
         $isDecorated = $formatter->isDecorated();
         $formatter->setDecorated(\false);

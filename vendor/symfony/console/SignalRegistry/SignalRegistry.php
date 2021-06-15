@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210614\Symfony\Component\Console\SignalRegistry;
+namespace RectorPrefix20210615\Symfony\Component\Console\SignalRegistry;
 
 final class SignalRegistry
 {

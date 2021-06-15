@@ -7,7 +7,7 @@ use Iterator;
 use Rector\FileSystemRector\ValueObject\AddedFileWithContent;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
-use RectorPrefix20210614\Symplify\SmartFileSystem\SmartFileSystem;
+use RectorPrefix20210615\Symplify\SmartFileSystem\SmartFileSystem;
 final class FormControlToControllerAndFormTypeRectorTest extends \Rector\Testing\PHPUnit\AbstractRectorTestCase
 {
     /**
@@ -23,7 +23,7 @@ final class FormControlToControllerAndFormTypeRectorTest extends \Rector\Testing
      */
     public function provideData() : \Iterator
     {
-        $smartFileSystem = new \RectorPrefix20210614\Symplify\SmartFileSystem\SmartFileSystem();
+        $smartFileSystem = new \RectorPrefix20210615\Symplify\SmartFileSystem\SmartFileSystem();
         (yield [new \Symplify\SmartFileSystem\SmartFileInfo(__DIR__ . '/Fixture/fixture.php.inc'), new \Rector\FileSystemRector\ValueObject\AddedFileWithContent($this->getFixtureTempDirectory() . '/SomeController.php', $smartFileSystem->readFile(__DIR__ . '/Source/extra_file.php'))]);
     }
     public function provideConfigFilePath() : string

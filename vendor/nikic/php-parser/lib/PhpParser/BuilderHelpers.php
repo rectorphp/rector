@@ -68,7 +68,7 @@ final class BuilderHelpers
         if (\is_string($name)) {
             return new \PhpParser\Node\Identifier($name);
         }
-        throw new \LogicException('RectorPrefix20210614\\Expected string or instance of Node\\Identifier');
+        throw new \LogicException('RectorPrefix20210615\\Expected string or instance of Node\\Identifier');
     }
     /**
      * Normalizes strings to Identifier, also allowing expressions.
@@ -85,7 +85,7 @@ final class BuilderHelpers
         if (\is_string($name)) {
             return new \PhpParser\Node\Identifier($name);
         }
-        throw new \LogicException('RectorPrefix20210614\\Expected string or instance of Node\\Identifier or Node\\Expr');
+        throw new \LogicException('RectorPrefix20210615\\Expected string or instance of Node\\Identifier or Node\\Expr');
     }
     /**
      * Normalizes a name: Converts string names to Name nodes.
@@ -137,9 +137,9 @@ final class BuilderHelpers
             if ($name instanceof \PhpParser\Node\Expr) {
                 return $name;
             }
-            throw new \LogicException('RectorPrefix20210614\\Name must be a string or an instance of Node\\Name or Node\\Expr');
+            throw new \LogicException('RectorPrefix20210615\\Name must be a string or an instance of Node\\Name or Node\\Expr');
         } else {
-            throw new \LogicException('RectorPrefix20210614\\Name must be a string or an instance of Node\\Name');
+            throw new \LogicException('RectorPrefix20210615\\Name must be a string or an instance of Node\\Name');
         }
     }
     /**
@@ -233,7 +233,7 @@ final class BuilderHelpers
         } elseif (\is_string($docComment)) {
             return new \PhpParser\Comment\Doc($docComment);
         } else {
-            throw new \LogicException('RectorPrefix20210614\\Doc comment must be a string or an instance of PhpParser\\Comment\\Doc');
+            throw new \LogicException('RectorPrefix20210615\\Doc comment must be a string or an instance of PhpParser\\Comment\\Doc');
         }
     }
     /**
