@@ -21,14 +21,17 @@ final class SwitchExprsResolver
     public function resolve(\PhpParser\Node\Stmt\Switch_ $switch) : array
     {
         $condAndExpr = [];
-        $previousCondExpr = null;
-        foreach ($switch->cases as $case) {
+        $collectionEmptyCasesCond = [];
+        foreach ($switch->cases as $key => $case) {
             if (!$this->isValidCase($case)) {
                 return [];
             }
-            // prepend to previous one
+            if ($case->stmts === [] && $case->cond instanceof \PhpParser\Node\Expr) {
+                $collectionEmptyCasesCond[$key] = $case->cond;
+            }
+        }
+        foreach ($switch->cases as $key => $case) {
             if ($case->stmts === []) {
-                $previousCondExpr = $case->cond;
                 continue;
             }
             $expr = $case->stmts[0];
@@ -36,11 +39,16 @@ final class SwitchExprsResolver
                 $expr = $expr->expr;
             }
             $condExprs = [];
-            if ($previousCondExpr instanceof \PhpParser\Node\Expr) {
-                $condExprs[] = $previousCondExpr;
-                $previousCondExpr = null;
-            }
             if ($case->cond !== null) {
+                $emptyCasesCond = [];
+                foreach ($collectionEmptyCasesCond as $i => $collectionEmptyCaseCond) {
+                    if ($i > $key) {
+                        break;
+                    }
+                    $emptyCasesCond[$i] = $collectionEmptyCaseCond;
+                    unset($collectionEmptyCasesCond[$i]);
+                }
+                $condExprs = $emptyCasesCond;
                 $condExprs[] = $case->cond;
             }
             if ($expr instanceof \PhpParser\Node\Stmt\Return_) {

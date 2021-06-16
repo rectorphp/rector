@@ -8,25 +8,25 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210615\Symfony\Component\ErrorHandler\ErrorRenderer;
+namespace RectorPrefix20210616\Symfony\Component\ErrorHandler\ErrorRenderer;
 
-use RectorPrefix20210615\Symfony\Component\ErrorHandler\Exception\FlattenException;
-use RectorPrefix20210615\Symfony\Component\VarDumper\Cloner\VarCloner;
-use RectorPrefix20210615\Symfony\Component\VarDumper\Dumper\CliDumper;
+use RectorPrefix20210616\Symfony\Component\ErrorHandler\Exception\FlattenException;
+use RectorPrefix20210616\Symfony\Component\VarDumper\Cloner\VarCloner;
+use RectorPrefix20210616\Symfony\Component\VarDumper\Dumper\CliDumper;
 // Help opcache.preload discover always-needed symbols
-\class_exists(\RectorPrefix20210615\Symfony\Component\VarDumper\Dumper\CliDumper::class);
+\class_exists(\RectorPrefix20210616\Symfony\Component\VarDumper\Dumper\CliDumper::class);
 /**
  * @author Nicolas Grekas <p@tchwork.com>
  */
-class CliErrorRenderer implements \RectorPrefix20210615\Symfony\Component\ErrorHandler\ErrorRenderer\ErrorRendererInterface
+class CliErrorRenderer implements \RectorPrefix20210616\Symfony\Component\ErrorHandler\ErrorRenderer\ErrorRendererInterface
 {
     /**
      * {@inheritdoc}
      */
-    public function render(\Throwable $exception) : \RectorPrefix20210615\Symfony\Component\ErrorHandler\Exception\FlattenException
+    public function render(\Throwable $exception) : \RectorPrefix20210616\Symfony\Component\ErrorHandler\Exception\FlattenException
     {
-        $cloner = new \RectorPrefix20210615\Symfony\Component\VarDumper\Cloner\VarCloner();
-        $dumper = new class extends \RectorPrefix20210615\Symfony\Component\VarDumper\Dumper\CliDumper
+        $cloner = new \RectorPrefix20210616\Symfony\Component\VarDumper\Cloner\VarCloner();
+        $dumper = new class extends \RectorPrefix20210616\Symfony\Component\VarDumper\Dumper\CliDumper
         {
             protected function supportsColors() : bool
             {
@@ -39,6 +39,6 @@ class CliErrorRenderer implements \RectorPrefix20210615\Symfony\Component\ErrorH
                 }
             }
         };
-        return \RectorPrefix20210615\Symfony\Component\ErrorHandler\Exception\FlattenException::createFromThrowable($exception)->setAsString($dumper->dump($cloner->cloneVar($exception), \true));
+        return \RectorPrefix20210616\Symfony\Component\ErrorHandler\Exception\FlattenException::createFromThrowable($exception)->setAsString($dumper->dump($cloner->cloneVar($exception), \true));
     }
 }

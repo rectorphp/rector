@@ -13,7 +13,7 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\NodeNameResolver\NodeNameResolver;
-use RectorPrefix20210615\Symfony\Component\Form\Extension\Core\Type\TextType;
+use RectorPrefix20210616\Symfony\Component\Form\Extension\Core\Type\TextType;
 final class SymfonyMethodCallsFactory
 {
     /**
@@ -43,7 +43,7 @@ final class SymfonyMethodCallsFactory
             }
             // text input
             $inputName = $onFormVariableMethodCall->args[0];
-            $formTypeClassConstant = $this->nodeFactory->createClassConstReference(\RectorPrefix20210615\Symfony\Component\Form\Extension\Core\Type\TextType::class);
+            $formTypeClassConstant = $this->nodeFactory->createClassConstReference(\RectorPrefix20210616\Symfony\Component\Form\Extension\Core\Type\TextType::class);
             $args = $this->createAddTextArgs($inputName, $formTypeClassConstant, $onFormVariableMethodCall);
             $methodCall = new \PhpParser\Node\Expr\MethodCall($formBuilderVariable, 'add', $args);
             $symfonyMethodCalls[] = new \PhpParser\Node\Stmt\Expression($methodCall);

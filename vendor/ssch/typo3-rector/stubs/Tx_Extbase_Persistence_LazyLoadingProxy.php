@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210615;
+namespace RectorPrefix20210616;
 
 if (\class_exists('Tx_Extbase_Persistence_LazyLoadingProxy')) {
     return;

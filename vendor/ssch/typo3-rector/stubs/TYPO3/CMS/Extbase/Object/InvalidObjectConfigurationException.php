@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210615\TYPO3\CMS\Extbase\Object;
+namespace RectorPrefix20210616\TYPO3\CMS\Extbase\Object;
 
 if (\class_exists('TYPO3\\CMS\\Extbase\\Object\\InvalidObjectConfigurationException')) {
     return;

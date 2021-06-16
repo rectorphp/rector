@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210615\TYPO3\CMS\Scheduler\Controller;
+namespace RectorPrefix20210616\TYPO3\CMS\Scheduler\Controller;
 
 if (\class_exists('TYPO3\\CMS\\Scheduler\\Controller\\SchedulerModuleController')) {
     return;
