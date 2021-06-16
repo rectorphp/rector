@@ -24,15 +24,23 @@ final class VerifyRectorServiceExistsCompilerPass implements CompilerPassInterfa
                 continue;
             }
 
-            if (!class_exists($class)) {
+            if (! class_exists($class)) {
                 throw new ShouldNotHappenException(
-                    sprintf('Rector rule "%s" not found, please verify that the class exists and is autoloadable.', $class)
+                    sprintf(
+                        'Rector rule "%s" not found, please verify that the class exists and is autoloadable.',
+                        $class
+                    )
                 );
             }
 
             if (! is_a($class, RectorInterface::class, true)) {
                 throw new ShouldNotHappenException(
-                    sprintf('Rector rule "%s" should extend "%s" or implement "%s".', $class, AbstractRector::class, RectorInterface::class)
+                    sprintf(
+                        'Rector rule "%s" should extend "%s" or implement "%s".',
+                        $class,
+                        AbstractRector::class,
+                        RectorInterface::class
+                    )
                 );
             }
         }

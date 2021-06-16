@@ -22,7 +22,7 @@ final class SwitchExprsResolver
      */
     public function resolve(Switch_ $switch): array
     {
-        $condAndExpr          = [];
+        $condAndExpr = [];
         $collectionEmptyCasesCond = [];
 
         foreach ($switch->cases as $key => $case) {
