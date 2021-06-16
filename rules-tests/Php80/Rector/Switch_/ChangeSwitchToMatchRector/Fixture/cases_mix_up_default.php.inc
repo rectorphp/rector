@@ -2,17 +2,18 @@
 
 namespace Rector\Tests\Php80\Rector\Switch_\ChangeSwitchToMatchRector\Fixture;
 
-final class MultipleCases
+class CasesMixUpDefault
 {
     public function run($value)
     {
         switch ($value) {
-            case 'v1':
-            case 'v2':
-            case 'v3':
-                return 100;
+            case 'foo':
+                $string = 'foo';
+                break;
+            case 'other':
             default:
-                return 1000;
+                $string = 'bar';
+                break;
         }
     }
 }
@@ -23,13 +24,13 @@ final class MultipleCases
 
 namespace Rector\Tests\Php80\Rector\Switch_\ChangeSwitchToMatchRector\Fixture;
 
-final class MultipleCases
+class CasesMixUpDefault
 {
     public function run($value)
     {
-        return match ($value) {
-            'v1', 'v2', 'v3' => 100,
-            default => 1000,
+        $string = match ($value) {
+            'foo' => 'foo',
+            default => 'bar',
         };
     }
 }
