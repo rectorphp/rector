@@ -37,8 +37,9 @@ final class StaticRectorStrings
      */
     public static function isInArrayInsensitive(string $checkedItem, array $array): bool
     {
+        $checkedItem = strtolower($checkedItem);
         foreach ($array as $singleArray) {
-            if (strtolower($singleArray) === strtolower($checkedItem)) {
+            if (strtolower($singleArray) === $checkedItem) {
                 return true;
             }
         }
