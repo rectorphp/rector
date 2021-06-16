@@ -35,7 +35,8 @@ class ElseIf_
             bar();
         } elseif ($cond3) {
             baz();
-        } else {
+        }
+        else {
             foo();
         }
     }

@@ -46,7 +46,8 @@ class ProcessEmptyReturnLast
         if ($value - 1) {
             $value = 55;
             return 10;
-        } else {
+        }
+        else {
             return;
         }
     }

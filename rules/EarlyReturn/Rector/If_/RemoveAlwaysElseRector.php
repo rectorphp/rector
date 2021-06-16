@@ -7,6 +7,7 @@ namespace Rector\EarlyReturn\Rector\If_;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Exit_;
 use PhpParser\Node\Stmt\Continue_;
+use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\ElseIf_;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
@@ -77,16 +78,28 @@ CODE_SAMPLE
         }
 
         if ($node->elseifs !== []) {
+            $originalNode = clone $node;
             $if = new If_($node->cond);
             $if->stmts = $node->stmts;
 
             $this->addNodeBeforeNode($if, $node);
+            $this->mirrorComments($if, $node);
 
             /** @var ElseIf_ $firstElseIf */
             $firstElseIf = array_shift($node->elseifs);
             $node->cond = $firstElseIf->cond;
             $node->stmts = $firstElseIf->stmts;
             $this->mirrorComments($node, $firstElseIf);
+
+            $statements = $this->getStatementsElseIfs($node);
+            if ($statements !== []) {
+                $this->addNodesAfterNode($statements, $node);
+            }
+
+            if ($originalNode->else instanceof Else_) {
+                $node->else = null;
+                $this->addNodeAfterNode($originalNode->else, $node);
+            }
 
             return $node;
         }
@@ -100,9 +113,30 @@ CODE_SAMPLE
         return null;
     }
 
-    private function doesLastStatementBreakFlow(If_ $if): bool
+    /**
+     * @return ElseIf_[]
+     */
+    private function getStatementsElseIfs(If_ $if): array
     {
-        $lastStmt = end($if->stmts);
+        $statements = [];
+        foreach ($if->elseifs as $key => $elseif) {
+            if ($this->doesLastStatementBreakFlow($elseif) && $elseif->stmts !== []) {
+                continue;
+            }
+
+            $statements[] = $elseif;
+            unset($if->elseifs[$key]);
+        }
+
+        return $statements;
+    }
+
+    /**
+     * @param If_|ElseIf_ $node
+     */
+    private function doesLastStatementBreakFlow(Node $node): bool
+    {
+        $lastStmt = end($node->stmts);
 
         return ! ($lastStmt instanceof Return_
             || $lastStmt instanceof Throw_
