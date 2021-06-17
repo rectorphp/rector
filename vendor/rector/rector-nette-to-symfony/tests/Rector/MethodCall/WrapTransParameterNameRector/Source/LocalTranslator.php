@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\NetteToSymfony\Tests\Rector\MethodCall\WrapTransParameterNameRector\Source;
 
-use RectorPrefix20210616\Symfony\Component\Translation\TranslatorInterface;
-final class LocalTranslator implements \RectorPrefix20210616\Symfony\Component\Translation\TranslatorInterface
+use RectorPrefix20210617\Symfony\Component\Translation\TranslatorInterface;
+final class LocalTranslator implements \RectorPrefix20210617\Symfony\Component\Translation\TranslatorInterface
 {
 }

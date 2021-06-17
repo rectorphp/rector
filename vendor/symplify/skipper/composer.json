@@ -18,12 +18,12 @@
     },
     "autoload": {
         "psr-4": {
-            "RectorPrefix20210616\\Symplify\\Skipper\\": "src"
+            "RectorPrefix20210617\\Symplify\\Skipper\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "RectorPrefix20210616\\Symplify\\Skipper\\Tests\\": "tests"
+            "RectorPrefix20210617\\Symplify\\Skipper\\Tests\\": "tests"
         }
     },
     "extra": {

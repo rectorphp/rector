@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210616;
+namespace RectorPrefix20210617;
 
 if (\class_exists('t3lib_TCEforms_ValueSlider')) {
     return;

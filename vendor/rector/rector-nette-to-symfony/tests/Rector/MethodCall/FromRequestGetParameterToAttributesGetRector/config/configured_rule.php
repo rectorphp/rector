@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210616;
+namespace RectorPrefix20210617;
 
 use Rector\NetteToSymfony\Rector\MethodCall\FromRequestGetParameterToAttributesGetRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;

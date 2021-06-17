@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210616;
+namespace RectorPrefix20210617;
 
 require __DIR__ . '/../src/tracy.php';
-use RectorPrefix20210616\Tracy\Debugger;
+use RectorPrefix20210617\Tracy\Debugger;
 // For security reasons, Tracy is visible only on localhost.
 // You may force Tracy to run in development mode by passing the Debugger::DEVELOPMENT instead of Debugger::DETECT.
-\RectorPrefix20210616\Tracy\Debugger::enable(\RectorPrefix20210616\Tracy\Debugger::DETECT, __DIR__ . '/log');
+\RectorPrefix20210617\Tracy\Debugger::enable(\RectorPrefix20210617\Tracy\Debugger::DETECT, __DIR__ . '/log');
 ?>
 <!DOCTYPE html><html class=arrow><link rel="stylesheet" href="assets/style.css">
 
@@ -17,9 +17,9 @@ use RectorPrefix20210616\Tracy\Debugger;
 
 <?php 
 $arr = [10, 20.2, \true, null, 'hello', (object) null, []];
-\RectorPrefix20210616\bdump(\get_defined_vars());
-\RectorPrefix20210616\bdump($arr, 'The Array');
-\RectorPrefix20210616\bdump('<a href="#">test</a>', 'String');
-if (\RectorPrefix20210616\Tracy\Debugger::$productionMode) {
+\RectorPrefix20210617\bdump(\get_defined_vars());
+\RectorPrefix20210617\bdump($arr, 'The Array');
+\RectorPrefix20210617\bdump('<a href="#">test</a>', 'String');
+if (\RectorPrefix20210617\Tracy\Debugger::$productionMode) {
     echo '<p><b>For security reasons, Tracy is visible only on localhost. Look into the source code to see how to enable Tracy.</b></p>';
 }

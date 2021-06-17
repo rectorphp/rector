@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210616\TYPO3\CMS\Frontend\Page;
+namespace RectorPrefix20210617\TYPO3\CMS\Frontend\Page;
 
 if (\class_exists('TYPO3\\CMS\\Frontend\\Page\\CacheHashCalculator')) {
     return;

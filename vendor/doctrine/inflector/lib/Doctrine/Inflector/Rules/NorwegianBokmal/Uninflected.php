@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210616\Doctrine\Inflector\Rules\NorwegianBokmal;
+namespace RectorPrefix20210617\Doctrine\Inflector\Rules\NorwegianBokmal;
 
-use RectorPrefix20210616\Doctrine\Inflector\Rules\Pattern;
+use RectorPrefix20210617\Doctrine\Inflector\Rules\Pattern;
 final class Uninflected
 {
     /**
@@ -25,8 +25,8 @@ final class Uninflected
      */
     private static function getDefault() : iterable
     {
-        (yield new \RectorPrefix20210616\Doctrine\Inflector\Rules\Pattern('barn'));
-        (yield new \RectorPrefix20210616\Doctrine\Inflector\Rules\Pattern('fjell'));
-        (yield new \RectorPrefix20210616\Doctrine\Inflector\Rules\Pattern('hus'));
+        (yield new \RectorPrefix20210617\Doctrine\Inflector\Rules\Pattern('barn'));
+        (yield new \RectorPrefix20210617\Doctrine\Inflector\Rules\Pattern('fjell'));
+        (yield new \RectorPrefix20210617\Doctrine\Inflector\Rules\Pattern('hus'));
     }
 }

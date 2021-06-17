@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210616;
+namespace RectorPrefix20210617;
 
 use PHPStan\Type\ObjectType;
 use Rector\NetteToSymfony\Rector\Class_\FormControlToControllerAndFormTypeRector;

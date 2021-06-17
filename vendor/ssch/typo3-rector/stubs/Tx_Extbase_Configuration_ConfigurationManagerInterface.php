@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210616;
+namespace RectorPrefix20210617;
 
 if (\interface_exists('Tx_Extbase_Configuration_ConfigurationManagerInterface')) {
     return;
