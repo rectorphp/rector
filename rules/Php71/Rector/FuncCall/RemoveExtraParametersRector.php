@@ -11,6 +11,7 @@ use PhpParser\Node\Name;
 use PHPStan\Reflection\FunctionReflection;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ParametersAcceptor;
+use PHPStan\Reflection\Php\PhpMethodReflection;
 use PHPStan\Reflection\Type\UnionTypeMethodReflection;
 use Rector\Core\PHPStan\Reflection\CallReflectionResolver;
 use Rector\Core\Rector\AbstractRector;
@@ -58,6 +59,12 @@ final class RemoveExtraParametersRector extends \Rector\Core\Rector\AbstractRect
         }
         if ($functionLikeReflection === null) {
             return null;
+        }
+        if ($functionLikeReflection instanceof \PHPStan\Reflection\Php\PhpMethodReflection) {
+            $classReflection = $functionLikeReflection->getDeclaringClass();
+            if ($classReflection->isInterface()) {
+                return null;
+            }
         }
         $maximumAllowedParameterCount = $this->resolveMaximumAllowedParameterCount($functionLikeReflection);
         $numberOfArguments = \count($node->args);
