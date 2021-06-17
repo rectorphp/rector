@@ -13,9 +13,9 @@ final class InflectorSingularResolver
     private const SINGULAR_VERB = ['news' => 'new'];
     /**
      * @var string
-     * @see https://regex101.com/r/lbQaGC/1
+     * @see https://regex101.com/r/lbQaGC/3
      */
-    private const CAMELCASE_REGEX = '#(?<camelcase>([a-z]+|[A-Z]{1,}[a-z]+))#';
+    private const CAMELCASE_REGEX = '#(?<camelcase>([a-z]+|[A-Z]{1,}[a-z]+|_))#';
     /**
      * @var string
      * @see https://regex101.com/r/2aGdkZ/2
@@ -50,7 +50,7 @@ final class InflectorSingularResolver
         foreach ($camelCases as $camelCase) {
             $singularValueVarName .= $this->inflector->singularize($camelCase['camelcase']);
         }
-        if ($singularValueVarName === '') {
+        if ($singularValueVarName === '' || $singularValueVarName === '_') {
             return $currentName;
         }
         $singularValueVarName = $singularValueVarName === $currentName ? self::SINGLE . \ucfirst($singularValueVarName) : $singularValueVarName;
