@@ -12334,7 +12334,7 @@ Add return type to function like with return new
  final class SomeClass
  {
 -    public function action()
-+    public function action(): Respose
++    public function action(): Response
      {
          return new Response();
      }
