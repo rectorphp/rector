@@ -41,7 +41,7 @@ CODE_SAMPLE
 , <<<'CODE_SAMPLE'
 final class SomeClass
 {
-    public function action(): Respose
+    public function action(): Response
     {
         return new Response();
     }
