@@ -33,7 +33,7 @@ class ExprBuilder
      */
     public function always(\Closure $then = null)
     {
-        $this->ifPart = function ($v) {
+        $this->ifPart = function () {
             return \true;
         };
         if (null !== $then) {
@@ -162,7 +162,7 @@ class ExprBuilder
      */
     public function thenEmptyArray()
     {
-        $this->thenPart = function ($v) {
+        $this->thenPart = function () {
             return [];
         };
         return $this;
@@ -192,7 +192,7 @@ class ExprBuilder
      */
     public function thenUnset()
     {
-        $this->thenPart = function ($v) {
+        $this->thenPart = function () {
             throw new \RectorPrefix20210617\Symfony\Component\Config\Definition\Exception\UnsetKeyException('Unsetting key.');
         };
         return $this;

@@ -32,6 +32,9 @@ class EnumNode extends \RectorPrefix20210617\Symfony\Component\Config\Definition
     {
         return $this->values;
     }
+    /**
+     * {@inheritdoc}
+     */
     protected function finalizeValue($value)
     {
         $value = parent::finalizeValue($value);

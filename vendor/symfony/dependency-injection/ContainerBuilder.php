@@ -1268,6 +1268,9 @@ class ContainerBuilder extends \RectorPrefix20210617\Symfony\Component\Dependenc
         }
         // the package is installed but in dev-mode only, check if this applies to one of the parent packages too
         $rootPackage = \RectorPrefix20210617\Composer\InstalledVersions::getRootPackage()['name'] ?? '';
+        if ('symfony/symfony' === $rootPackage) {
+            return \true;
+        }
         foreach ($parentPackages as $parentPackage) {
             if ($rootPackage === $parentPackage || \RectorPrefix20210617\Composer\InstalledVersions::isInstalled($parentPackage) && !\RectorPrefix20210617\Composer\InstalledVersions::isInstalled($parentPackage, \false)) {
                 return \true;

@@ -23,7 +23,7 @@ abstract class NumericNodeDefinition extends \RectorPrefix20210617\Symfony\Compo
     /**
      * Ensures that the value is smaller than the given reference.
      *
-     * @param mixed $max
+     * @param int|float $max
      *
      * @return $this
      *
@@ -40,7 +40,7 @@ abstract class NumericNodeDefinition extends \RectorPrefix20210617\Symfony\Compo
     /**
      * Ensures that the value is bigger than the given reference.
      *
-     * @param mixed $min
+     * @param int|float $min
      *
      * @return $this
      *

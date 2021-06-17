@@ -93,7 +93,7 @@ abstract class FileLoader extends \RectorPrefix20210617\Symfony\Component\Config
         // prepare for deep cloning
         $serializedPrototype = \serialize($prototype);
         foreach ($classes as $class => $errorMessage) {
-            if ($autoconfigureAttributes && $this->env) {
+            if (null === $errorMessage && $autoconfigureAttributes && $this->env) {
                 $r = $this->container->getReflectionClass($class);
                 $attribute = null;
                 foreach ($r->getAttributes(\RectorPrefix20210617\Symfony\Component\DependencyInjection\Attribute\When::class) as $attribute) {

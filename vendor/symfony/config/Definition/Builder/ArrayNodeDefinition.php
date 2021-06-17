@@ -240,7 +240,7 @@ class ArrayNodeDefinition extends \RectorPrefix20210617\Symfony\Component\Config
      */
     public function canBeEnabled()
     {
-        $this->addDefaultsIfNotSet()->treatFalseLike(['enabled' => \false])->treatTrueLike(['enabled' => \true])->treatNullLike(['enabled' => \true])->beforeNormalization()->ifArray()->then(function ($v) {
+        $this->addDefaultsIfNotSet()->treatFalseLike(['enabled' => \false])->treatTrueLike(['enabled' => \true])->treatNullLike(['enabled' => \true])->beforeNormalization()->ifArray()->then(function (array $v) {
             $v['enabled'] = $v['enabled'] ?? \true;
             return $v;
         })->end()->children()->booleanNode('enabled')->defaultFalse();

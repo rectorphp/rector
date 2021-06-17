@@ -86,7 +86,15 @@ class Command
     public function __construct(string $name = null)
     {
         $this->definition = new \RectorPrefix20210617\Symfony\Component\Console\Input\InputDefinition();
-        if (null !== $name || null !== ($name = static::getDefaultName())) {
+        if (null === $name && null !== ($name = static::getDefaultName())) {
+            $aliases = \explode('|', $name);
+            if ('' === ($name = \array_shift($aliases))) {
+                $this->setHidden(\true);
+                $name = \array_shift($aliases);
+            }
+            $this->setAliases($aliases);
+        }
+        if (null !== $name) {
             $this->setName($name);
         }
         if ('' === $this->description) {

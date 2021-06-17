@@ -44,18 +44,18 @@ class XmlFileLoader extends \RectorPrefix20210617\Symfony\Component\DependencyIn
         $path = $this->locator->locate($resource);
         $xml = $this->parseFileToDOM($path);
         $this->container->fileExists($path);
-        $env = $this->env;
-        $this->env = null;
-        try {
-            $this->loadXml($xml, $path);
-        } finally {
-            $this->env = $env;
-        }
+        $this->loadXml($xml, $path);
         if ($this->env) {
             $xpath = new \DOMXPath($xml);
             $xpath->registerNamespace('container', self::NS);
             foreach ($xpath->query(\sprintf('//container:when[@env="%s"]', $this->env)) ?: [] as $root) {
-                $this->loadXml($xml, $path, $root);
+                $env = $this->env;
+                $this->env = null;
+                try {
+                    $this->loadXml($xml, $path, $root);
+                } finally {
+                    $this->env = $env;
+                }
             }
         }
     }

@@ -380,7 +380,7 @@ class Table
                 $formatLength = \RectorPrefix20210617\Symfony\Component\Console\Helper\Helper::width(\RectorPrefix20210617\Symfony\Component\Console\Helper\Helper::removeDecoration($formatter, \sprintf($titleFormat, '')));
                 $formattedTitle = \sprintf($titleFormat, \RectorPrefix20210617\Symfony\Component\Console\Helper\Helper::substr($title, 0, $limit - $formatLength - 3) . '...');
             }
-            $titleStart = ($markupLength - $titleLength) / 2;
+            $titleStart = \intdiv($markupLength - $titleLength, 2);
             if (\false === \mb_detect_encoding($markup, null, \true)) {
                 $markup = \substr_replace($markup, $formattedTitle, $titleStart, $titleLength);
             } else {

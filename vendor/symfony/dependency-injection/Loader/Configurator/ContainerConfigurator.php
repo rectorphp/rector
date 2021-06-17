@@ -80,6 +80,7 @@ class ContainerConfigurator extends \RectorPrefix20210617\Symfony\Component\Depe
     {
         $clone = clone $this;
         $clone->path = $clone->file = $path;
+        $clone->loader->setCurrentDir(\dirname($path));
         return $clone;
     }
 }

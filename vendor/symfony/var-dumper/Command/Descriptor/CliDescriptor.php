@@ -37,7 +37,7 @@ class CliDescriptor implements \RectorPrefix20210617\Symfony\Component\VarDumper
     {
         $io = $output instanceof \RectorPrefix20210617\Symfony\Component\Console\Style\SymfonyStyle ? $output : new \RectorPrefix20210617\Symfony\Component\Console\Style\SymfonyStyle(new \RectorPrefix20210617\Symfony\Component\Console\Input\ArrayInput([]), $output);
         $this->dumper->setColors($output->isDecorated());
-        $rows = [['date', \date('r', $context['timestamp'])]];
+        $rows = [['date', \date('r', (int) $context['timestamp'])]];
         $lastIdentifier = $this->lastIdentifier;
         $this->lastIdentifier = $clientId;
         $section = "Received from client #{$clientId}";

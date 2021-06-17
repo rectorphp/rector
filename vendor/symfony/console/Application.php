@@ -248,6 +248,9 @@ class Application implements \RectorPrefix20210617\Symfony\Contracts\Service\Res
             }
             $command = $this->find($alternative);
         }
+        if ($command instanceof \RectorPrefix20210617\Symfony\Component\Console\Command\LazyCommand) {
+            $command = $command->getCommand();
+        }
         $this->runningCommand = $command;
         $exitCode = $this->doRunCommand($command, $input, $output);
         $this->runningCommand = null;
@@ -669,7 +672,7 @@ class Application implements \RectorPrefix20210617\Symfony\Contracts\Service\Res
         $output->writeln('', \RectorPrefix20210617\Symfony\Component\Console\Output\OutputInterface::VERBOSITY_QUIET);
         $this->doRenderThrowable($e, $output);
         if (null !== $this->runningCommand) {
-            $output->writeln(\sprintf('<info>%s</info>', \sprintf($this->runningCommand->getSynopsis(), $this->getName())), \RectorPrefix20210617\Symfony\Component\Console\Output\OutputInterface::VERBOSITY_QUIET);
+            $output->writeln(\sprintf('<info>%s</info>', \RectorPrefix20210617\Symfony\Component\Console\Formatter\OutputFormatter::escape(\sprintf($this->runningCommand->getSynopsis(), $this->getName()))), \RectorPrefix20210617\Symfony\Component\Console\Output\OutputInterface::VERBOSITY_QUIET);
             $output->writeln('', \RectorPrefix20210617\Symfony\Component\Console\Output\OutputInterface::VERBOSITY_QUIET);
         }
     }
