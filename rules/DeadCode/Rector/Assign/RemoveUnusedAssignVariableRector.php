@@ -6,11 +6,14 @@ namespace Rector\DeadCode\Rector\Assign;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\If_;
 use PHPStan\Analyser\Scope;
+use Rector\Core\NodeAnalyzer\CompactFuncCallAnalyzer;
 use Rector\Core\Rector\AbstractRector;
+use Rector\DeadCode\NodeAnalyzer\UsedVariableNameAnalyzer;
 use Rector\DeadCode\NodeFinder\NextVariableUsageNodeFinder;
 use Rector\DeadCode\NodeFinder\PreviousVariableAssignNodeFinder;
 use Rector\DeadCode\SideEffect\SideEffectNodeDetector;
@@ -25,10 +28,12 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveUnusedAssignVariableRector extends AbstractRector
 {
     public function __construct(
+        private CompactFuncCallAnalyzer $compactFuncCallAnalyzer,
         private NextVariableUsageNodeFinder $nextVariableUsageNodeFinder,
         private PreviousVariableAssignNodeFinder $previousVariableAssignNodeFinder,
         private ScopeNestingComparator $scopeNestingComparator,
-        private SideEffectNodeDetector $sideEffectNodeDetector
+        private SideEffectNodeDetector $sideEffectNodeDetector,
+        private UsedVariableNameAnalyzer $usedVariableNameAnalyzer
     ) {
     }
 
@@ -89,6 +94,10 @@ CODE_SAMPLE
         }
 
         if ($this->isVariableTypeInScope($node) && ! $this->isPreviousVariablePartOfOverridingAssign($node)) {
+            return null;
+        }
+
+        if ($this->isInCompact($node)) {
             return null;
         }
 
@@ -164,5 +173,18 @@ CODE_SAMPLE
     {
         $parent = $assign->getAttribute(AttributeKey::PARENT_NODE);
         return $parent instanceof Assign;
+    }
+
+    private function isInCompact(Assign $assign): bool
+    {
+        /** @var Variable $variable */
+        $variable = $assign->var;
+
+        return (bool) $this->betterNodeFinder->findFirstNext($variable, function (Node $node) use ($variable): bool {
+            if ($node instanceof FuncCall) {
+                return $this->compactFuncCallAnalyzer->isInCompact($node, $variable);
+            }
+            return false;
+        });
     }
 }
