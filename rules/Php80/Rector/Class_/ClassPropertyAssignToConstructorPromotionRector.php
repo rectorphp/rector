@@ -30,7 +30,7 @@ final class ClassPropertyAssignToConstructorPromotionRector extends \Rector\Core
     /**
      * @var \Rector\Php80\NodeAnalyzer\PromotedPropertyCandidateResolver
      */
-    private $promotedPropertyResolver;
+    private $promotedPropertyCandidateResolver;
     /**
      * @var \Rector\Naming\VariableRenamer
      */
@@ -39,9 +39,9 @@ final class ClassPropertyAssignToConstructorPromotionRector extends \Rector\Core
      * @var \Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover
      */
     private $varTagRemover;
-    public function __construct(\Rector\Php80\NodeAnalyzer\PromotedPropertyCandidateResolver $promotedPropertyResolver, \Rector\Naming\VariableRenamer $variableRenamer, \Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover $varTagRemover)
+    public function __construct(\Rector\Php80\NodeAnalyzer\PromotedPropertyCandidateResolver $promotedPropertyCandidateResolver, \Rector\Naming\VariableRenamer $variableRenamer, \Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover $varTagRemover)
     {
-        $this->promotedPropertyResolver = $promotedPropertyResolver;
+        $this->promotedPropertyCandidateResolver = $promotedPropertyCandidateResolver;
         $this->variableRenamer = $variableRenamer;
         $this->varTagRemover = $varTagRemover;
     }
@@ -83,7 +83,7 @@ CODE_SAMPLE
         if (!$this->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::PROPERTY_PROMOTION)) {
             return null;
         }
-        $promotionCandidates = $this->promotedPropertyResolver->resolveFromClass($node);
+        $promotionCandidates = $this->promotedPropertyCandidateResolver->resolveFromClass($node);
         if ($promotionCandidates === []) {
             return null;
         }

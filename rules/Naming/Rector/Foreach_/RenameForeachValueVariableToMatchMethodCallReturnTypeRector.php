@@ -38,14 +38,14 @@ final class RenameForeachValueVariableToMatchMethodCallReturnTypeRector extends 
     /**
      * @var \Rector\Naming\Matcher\ForeachMatcher
      */
-    private $varValueAndCallForeachMatcher;
-    public function __construct(\Rector\Naming\Guard\BreakingVariableRenameGuard $breakingVariableRenameGuard, \Rector\Naming\Naming\ExpectedNameResolver $expectedNameResolver, \Rector\Naming\NamingConvention\NamingConventionAnalyzer $namingConventionAnalyzer, \Rector\Naming\VariableRenamer $variableRenamer, \Rector\Naming\Matcher\ForeachMatcher $varValueAndCallForeachMatcher)
+    private $foreachMatcher;
+    public function __construct(\Rector\Naming\Guard\BreakingVariableRenameGuard $breakingVariableRenameGuard, \Rector\Naming\Naming\ExpectedNameResolver $expectedNameResolver, \Rector\Naming\NamingConvention\NamingConventionAnalyzer $namingConventionAnalyzer, \Rector\Naming\VariableRenamer $variableRenamer, \Rector\Naming\Matcher\ForeachMatcher $foreachMatcher)
     {
         $this->breakingVariableRenameGuard = $breakingVariableRenameGuard;
         $this->expectedNameResolver = $expectedNameResolver;
         $this->namingConventionAnalyzer = $namingConventionAnalyzer;
         $this->variableRenamer = $variableRenamer;
-        $this->varValueAndCallForeachMatcher = $varValueAndCallForeachMatcher;
+        $this->foreachMatcher = $foreachMatcher;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -87,7 +87,7 @@ CODE_SAMPLE
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        $variableAndCallForeach = $this->varValueAndCallForeachMatcher->match($node);
+        $variableAndCallForeach = $this->foreachMatcher->match($node);
         if (!$variableAndCallForeach instanceof \Rector\Naming\ValueObject\VariableAndCallForeach) {
             return null;
         }

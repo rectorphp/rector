@@ -2277,6 +2277,7 @@ return array(
     'Rector\\Naming\\PropertyRenamer\\BoolPropertyRenamer' => $baseDir . '/rules/Naming/PropertyRenamer/BoolPropertyRenamer.php',
     'Rector\\Naming\\PropertyRenamer\\MatchTypePropertyRenamer' => $baseDir . '/rules/Naming/PropertyRenamer/MatchTypePropertyRenamer.php',
     'Rector\\Naming\\PropertyRenamer\\PropertyFetchRenamer' => $baseDir . '/rules/Naming/PropertyRenamer/PropertyFetchRenamer.php',
+    'Rector\\Naming\\PropertyRenamer\\PropertyPromotionRenamer' => $baseDir . '/rules/Naming/PropertyRenamer/PropertyPromotionRenamer.php',
     'Rector\\Naming\\PropertyRenamer\\PropertyRenamer' => $baseDir . '/rules/Naming/PropertyRenamer/PropertyRenamer.php',
     'Rector\\Naming\\RectorNamingInflector' => $baseDir . '/rules/Naming/RectorNamingInflector.php',
     'Rector\\Naming\\Rector\\Assign\\RenameVariableToMatchMethodCallReturnTypeRector' => $baseDir . '/rules/Naming/Rector/Assign/RenameVariableToMatchMethodCallReturnTypeRector.php',
