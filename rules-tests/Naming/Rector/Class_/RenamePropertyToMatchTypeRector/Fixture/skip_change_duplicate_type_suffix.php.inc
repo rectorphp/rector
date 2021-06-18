@@ -4,7 +4,7 @@ namespace Rector\Tests\Naming\Rector\Class_\RenamePropertyToMatchTypeRector\Fixt
 
 use Rector\Tests\Naming\Rector\Class_\RenamePropertyToMatchTypeRector\Source\EliteManager;
 
-class SomeClass
+final class SkipChangeDuplicateTypeSuffix
 {
     /**
      * @var EliteManager

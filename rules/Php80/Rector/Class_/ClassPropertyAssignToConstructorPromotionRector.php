@@ -30,7 +30,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ClassPropertyAssignToConstructorPromotionRector extends AbstractRector
 {
     public function __construct(
-        private PromotedPropertyCandidateResolver $promotedPropertyResolver,
+        private PromotedPropertyCandidateResolver $promotedPropertyCandidateResolver,
         private VariableRenamer $variableRenamer,
         private VarTagRemover $varTagRemover
     ) {
@@ -84,7 +84,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $promotionCandidates = $this->promotedPropertyResolver->resolveFromClass($node);
+        $promotionCandidates = $this->promotedPropertyCandidateResolver->resolveFromClass($node);
         if ($promotionCandidates === []) {
             return null;
         }

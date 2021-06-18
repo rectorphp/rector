@@ -26,7 +26,7 @@ final class RenameForeachValueVariableToMatchMethodCallReturnTypeRector extends 
         private ExpectedNameResolver $expectedNameResolver,
         private NamingConventionAnalyzer $namingConventionAnalyzer,
         private VariableRenamer $variableRenamer,
-        private ForeachMatcher $varValueAndCallForeachMatcher
+        private ForeachMatcher $foreachMatcher
     ) {
     }
 
@@ -80,7 +80,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $variableAndCallForeach = $this->varValueAndCallForeachMatcher->match($node);
+        $variableAndCallForeach = $this->foreachMatcher->match($node);
         if (! $variableAndCallForeach instanceof VariableAndCallForeach) {
             return null;
         }

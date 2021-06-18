@@ -39,6 +39,7 @@ final class ParamRenameFactory
         if ($currentName === null) {
             return null;
         }
+
         return new ParamRename($currentName, $expectedName, $param, $param->var, $functionLike);
     }
 }
