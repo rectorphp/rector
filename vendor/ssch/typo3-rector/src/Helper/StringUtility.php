@@ -3,13 +3,13 @@
 declare (strict_types=1);
 namespace Ssch\TYPO3Rector\Helper;
 
-use RectorPrefix20210617\Stringy\Stringy;
+use RectorPrefix20210618\Stringy\Stringy;
 final class StringUtility
 {
     public static function prepareExtensionName(string $extensionName, int $delimiterPosition) : string
     {
         $extensionName = \substr($extensionName, $delimiterPosition + 1);
-        $stringy = new \RectorPrefix20210617\Stringy\Stringy($extensionName);
+        $stringy = new \RectorPrefix20210618\Stringy\Stringy($extensionName);
         $underScoredExtensionName = (string) $stringy->underscored()->toLowerCase()->humanize();
         $underScoredExtensionName = \ucwords($underScoredExtensionName);
         return \str_replace(' ', '', $underScoredExtensionName);

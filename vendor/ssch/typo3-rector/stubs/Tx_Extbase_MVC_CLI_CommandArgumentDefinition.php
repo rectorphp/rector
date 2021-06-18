@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210617;
+namespace RectorPrefix20210618;
 
 if (\class_exists('Tx_Extbase_MVC_CLI_CommandArgumentDefinition')) {
     return;

@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210617\Symplify\PackageBuilder\Exception;
+namespace RectorPrefix20210618\Symplify\PackageBuilder\Exception;
 
 use Exception;
 final class NotImplementedYetException extends \Exception

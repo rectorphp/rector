@@ -10,10 +10,10 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name;
 use PHPStan\Reflection\FunctionReflection;
 use PHPStan\Reflection\MethodReflection;
-use PHPStan\Reflection\ParametersAcceptor;
 use PHPStan\Reflection\Php\PhpMethodReflection;
 use PHPStan\Reflection\Type\UnionTypeMethodReflection;
 use Rector\Core\PHPStan\Reflection\CallReflectionResolver;
+use Rector\Core\PHPStan\Reflection\VariadicAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -29,9 +29,14 @@ final class RemoveExtraParametersRector extends \Rector\Core\Rector\AbstractRect
      * @var \Rector\Core\PHPStan\Reflection\CallReflectionResolver
      */
     private $callReflectionResolver;
-    public function __construct(\Rector\Core\PHPStan\Reflection\CallReflectionResolver $callReflectionResolver)
+    /**
+     * @var \Rector\Core\PHPStan\Reflection\VariadicAnalyzer
+     */
+    private $variadicAnalyzer;
+    public function __construct(\Rector\Core\PHPStan\Reflection\CallReflectionResolver $callReflectionResolver, \Rector\Core\PHPStan\Reflection\VariadicAnalyzer $variadicAnalyzer)
     {
         $this->callReflectionResolver = $callReflectionResolver;
+        $this->variadicAnalyzer = $variadicAnalyzer;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -99,7 +104,7 @@ final class RemoveExtraParametersRector extends \Rector\Core\Rector\AbstractRect
         if ($functionReflection->getVariants() === []) {
             return \true;
         }
-        return $this->hasVariadicParameters($functionReflection->getVariants());
+        return $this->variadicAnalyzer->hasVariadicParameters($functionReflection);
     }
     /**
      * @param MethodReflection|FunctionReflection $reflection
@@ -111,18 +116,5 @@ final class RemoveExtraParametersRector extends \Rector\Core\Rector\AbstractRect
             $parameterCounts[] = \count($parametersAcceptor->getParameters());
         }
         return (int) \max($parameterCounts);
-    }
-    /**
-     * @param ParametersAcceptor[] $parameterAcceptors
-     */
-    private function hasVariadicParameters(array $parameterAcceptors) : bool
-    {
-        foreach ($parameterAcceptors as $parameterAcceptor) {
-            // can be any number of arguments → nothing to limit here
-            if ($parameterAcceptor->isVariadic()) {
-                return \true;
-            }
-        }
-        return \false;
     }
 }

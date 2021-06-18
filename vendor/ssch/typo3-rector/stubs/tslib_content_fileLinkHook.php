@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210617;
+namespace RectorPrefix20210618;
 
 if (\class_exists('tslib_content_fileLinkHook')) {
     return;

@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210617\TYPO3\CMS\T3editor;
+namespace RectorPrefix20210618\TYPO3\CMS\T3editor;
 
 if (\class_exists('TYPO3\\CMS\\T3editor\\TypoScriptReferenceLoader')) {
     return;

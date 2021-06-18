@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210617\TYPO3\CMS\Version\Hook;
+namespace RectorPrefix20210618\TYPO3\CMS\Version\Hook;
 
 if (\class_exists('TYPO3\\CMS\\Version\\Hook\\DataHandlerHook')) {
     return;

@@ -22,7 +22,7 @@ use Rector\Php80\ValueObject\AnnotationToAttribute;
 use Rector\PhpAttribute\Printer\PhpAttributeGroupFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20210617\Webmozart\Assert\Assert;
+use RectorPrefix20210618\Webmozart\Assert\Assert;
 /**
  * @changelog https://wiki.php.net/rfc/attributes_v2
  *
@@ -111,7 +111,7 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $annotationsToAttributes = $configuration[self::ANNOTATION_TO_ATTRIBUTE] ?? [];
-        \RectorPrefix20210617\Webmozart\Assert\Assert::allIsInstanceOf($annotationsToAttributes, \Rector\Php80\ValueObject\AnnotationToAttribute::class);
+        \RectorPrefix20210618\Webmozart\Assert\Assert::allIsInstanceOf($annotationsToAttributes, \Rector\Php80\ValueObject\AnnotationToAttribute::class);
         $this->annotationsToAttributes = $annotationsToAttributes;
     }
     /**

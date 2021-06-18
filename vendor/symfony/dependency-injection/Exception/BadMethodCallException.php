@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210617\Symfony\Component\DependencyInjection\Exception;
+namespace RectorPrefix20210618\Symfony\Component\DependencyInjection\Exception;
 
 /**
  * Base BadMethodCallException for Dependency Injection component.
  */
-class BadMethodCallException extends \BadMethodCallException implements \RectorPrefix20210617\Symfony\Component\DependencyInjection\Exception\ExceptionInterface
+class BadMethodCallException extends \BadMethodCallException implements \RectorPrefix20210618\Symfony\Component\DependencyInjection\Exception\ExceptionInterface
 {
 }
