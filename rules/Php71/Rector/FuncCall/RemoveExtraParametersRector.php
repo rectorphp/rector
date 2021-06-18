@@ -11,10 +11,10 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name;
 use PHPStan\Reflection\FunctionReflection;
 use PHPStan\Reflection\MethodReflection;
-use PHPStan\Reflection\ParametersAcceptor;
 use PHPStan\Reflection\Php\PhpMethodReflection;
 use PHPStan\Reflection\Type\UnionTypeMethodReflection;
 use Rector\Core\PHPStan\Reflection\CallReflectionResolver;
+use Rector\Core\PHPStan\Reflection\VariadicAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -28,7 +28,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveExtraParametersRector extends AbstractRector
 {
     public function __construct(
-        private CallReflectionResolver $callReflectionResolver
+        private CallReflectionResolver $callReflectionResolver,
+        private VariadicAnalyzer $variadicAnalyzer
     ) {
     }
 
@@ -115,7 +116,7 @@ final class RemoveExtraParametersRector extends AbstractRector
             return true;
         }
 
-        return $this->hasVariadicParameters($functionReflection->getVariants());
+        return $this->variadicAnalyzer->hasVariadicParameters($functionReflection);
     }
 
     /**
@@ -129,20 +130,5 @@ final class RemoveExtraParametersRector extends AbstractRector
         }
 
         return (int) max($parameterCounts);
-    }
-
-    /**
-     * @param ParametersAcceptor[] $parameterAcceptors
-     */
-    private function hasVariadicParameters(array $parameterAcceptors): bool
-    {
-        foreach ($parameterAcceptors as $parameterAcceptor) {
-            // can be any number of arguments → nothing to limit here
-            if ($parameterAcceptor->isVariadic()) {
-                return true;
-            }
-        }
-
-        return false;
     }
 }
