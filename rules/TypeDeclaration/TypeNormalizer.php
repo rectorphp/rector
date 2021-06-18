@@ -129,8 +129,9 @@ final class TypeNormalizer
     }
     /**
      * @param NestedArrayType[] $collectedNestedArrayTypes
+     * @return \PHPStan\Type\UnionType|\PHPStan\Type\ArrayType
      */
-    private function createUnionedTypesFromArrayTypes(array $collectedNestedArrayTypes) : \PHPStan\Type\Type
+    private function createUnionedTypesFromArrayTypes(array $collectedNestedArrayTypes)
     {
         $unionedTypes = [];
         foreach ($collectedNestedArrayTypes as $collectedNestedArrayType) {

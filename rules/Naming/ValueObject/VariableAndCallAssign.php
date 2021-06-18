@@ -52,9 +52,9 @@ final class VariableAndCallAssign
         return $this->variable;
     }
     /**
-     * @return FuncCall|StaticCall|MethodCall
+     * @return \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall
      */
-    public function getCall() : \PhpParser\Node\Expr
+    public function getCall()
     {
         return $this->call;
     }
@@ -63,9 +63,9 @@ final class VariableAndCallAssign
         return $this->variableName;
     }
     /**
-     * @return ClassMethod|Function_|Closure
+     * @return \PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_
      */
-    public function getFunctionLike() : \PhpParser\Node\FunctionLike
+    public function getFunctionLike()
     {
         return $this->functionLike;
     }

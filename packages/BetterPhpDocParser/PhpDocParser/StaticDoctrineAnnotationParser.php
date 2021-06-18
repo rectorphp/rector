@@ -3,7 +3,11 @@
 declare (strict_types=1);
 namespace Rector\BetterPhpDocParser\PhpDocParser;
 
+use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprFalseNode;
+use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprIntegerNode;
+use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprTrueNode;
 use PHPStan\PhpDocParser\Lexer\Lexer;
+use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocParser\StaticDoctrineAnnotationParser\ArrayParser;
 use Rector\BetterPhpDocParser\PhpDocParser\StaticDoctrineAnnotationParser\PlainValueParser;
 use Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator;
@@ -45,7 +49,7 @@ final class StaticDoctrineAnnotationParser
     }
     /**
      * @see https://github.com/doctrine/annotations/blob/c66f06b7c83e9a2a7523351a9d5a4b55f885e574/lib/Doctrine/Common/Annotations/DocParser.php#L1215-L1224
-     * @return mixed|mixed[]
+     * @return \Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode|string|mixed[]|\PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprFalseNode|\PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprTrueNode|\PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprIntegerNode|\Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode
      */
     public function resolveAnnotationValue(\Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator $tokenIterator)
     {
@@ -57,6 +61,7 @@ final class StaticDoctrineAnnotationParser
             return $this->parseValue($tokenIterator);
         }
         // 2. assign key = value - mimics FieldAssignment() https://github.com/doctrine/annotations/blob/0cb0cd2950a5c6cdbf22adbe2bfd5fd1ea68588f/lib/Doctrine/Common/Annotations/DocParser.php#L1291-L1303
+        /** @var int $key */
         $key = $this->parseValue($tokenIterator);
         $tokenIterator->consumeTokenType(\PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_EQUAL);
         // mimics https://github.com/doctrine/annotations/blob/1.13.x/lib/Doctrine/Common/Annotations/DocParser.php#L1236-L1238
@@ -68,7 +73,7 @@ final class StaticDoctrineAnnotationParser
     }
     /**
      * @see https://github.com/doctrine/annotations/blob/c66f06b7c83e9a2a7523351a9d5a4b55f885e574/lib/Doctrine/Common/Annotations/DocParser.php#L1051-L1079
-     * @return array<mixed, mixed>
+     * @return array<mixed>
      */
     private function resolveAnnotationValues(\Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator $tokenIterator) : array
     {
@@ -91,7 +96,7 @@ final class StaticDoctrineAnnotationParser
         return $values;
     }
     /**
-     * @return bool|int|mixed|mixed[]|string
+     * @return \Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode|string|mixed[]|\PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprFalseNode|\PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprTrueNode|\PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprIntegerNode|\Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode
      */
     private function parseValue(\Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator $tokenIterator)
     {

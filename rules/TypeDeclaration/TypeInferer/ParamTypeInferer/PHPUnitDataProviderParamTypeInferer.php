@@ -145,7 +145,10 @@ final class PHPUnitDataProviderParamTypeInferer implements \Rector\TypeDeclarati
         }
         return $this->typeFactory->createMixedPassedOrUnionType($paramOnPositionTypes);
     }
-    private function getTypeFromClassMethodYield(\PhpParser\Node\Expr\Array_ $classMethodYieldArrayNode) : \PHPStan\Type\Type
+    /**
+     * @return \PHPStan\Type\MixedType|\PHPStan\Type\Constant\ConstantArrayType
+     */
+    private function getTypeFromClassMethodYield(\PhpParser\Node\Expr\Array_ $classMethodYieldArrayNode)
     {
         $arrayTypes = $this->nodeTypeResolver->resolve($classMethodYieldArrayNode);
         // impossible to resolve

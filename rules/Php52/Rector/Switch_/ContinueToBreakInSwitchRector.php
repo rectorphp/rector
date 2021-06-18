@@ -6,7 +6,6 @@ namespace Rector\Php52\Rector\Switch_;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\LNumber;
-use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Break_;
 use PhpParser\Node\Stmt\Continue_;
 use PhpParser\Node\Stmt\Switch_;
@@ -73,7 +72,10 @@ CODE_SAMPLE
         }
         return $node;
     }
-    private function processContinueStatement(\PhpParser\Node\Stmt\Continue_ $continue) : \PhpParser\Node\Stmt
+    /**
+     * @return \PhpParser\Node\Stmt\Break_|\PhpParser\Node\Stmt\Continue_
+     */
+    private function processContinueStatement(\PhpParser\Node\Stmt\Continue_ $continue)
     {
         if ($continue->num === null) {
             return new \PhpParser\Node\Stmt\Break_();
@@ -88,7 +90,10 @@ CODE_SAMPLE
         }
         return $continue;
     }
-    private function processVariableNum(\PhpParser\Node\Stmt\Continue_ $continue, \PhpParser\Node\Expr\Variable $numVariable) : \PhpParser\Node\Stmt
+    /**
+     * @return \PhpParser\Node\Stmt\Continue_|\PhpParser\Node\Stmt\Break_
+     */
+    private function processVariableNum(\PhpParser\Node\Stmt\Continue_ $continue, \PhpParser\Node\Expr\Variable $numVariable)
     {
         $staticType = $this->getStaticType($numVariable);
         if (!$staticType instanceof \PHPStan\Type\ConstantType) {

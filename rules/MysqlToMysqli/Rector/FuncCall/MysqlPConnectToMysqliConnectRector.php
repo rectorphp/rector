@@ -59,7 +59,10 @@ CODE_SAMPLE
         $node->args[0]->value = $this->joinStringWithNode('p:', $node->args[0]->value);
         return $node;
     }
-    private function joinStringWithNode(string $string, \PhpParser\Node\Expr $expr) : \PhpParser\Node\Expr
+    /**
+     * @return \PhpParser\Node\Scalar\String_|\PhpParser\Node\Expr\BinaryOp\Concat
+     */
+    private function joinStringWithNode(string $string, \PhpParser\Node\Expr $expr)
     {
         if ($expr instanceof \PhpParser\Node\Scalar\String_) {
             return new \PhpParser\Node\Scalar\String_($string . $expr->value);

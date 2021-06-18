@@ -83,9 +83,10 @@ CODE_SAMPLE
         return $node instanceof \PhpParser\Node\Stmt\Expression;
     }
     /**
-     * @param PostInc|PostDec $node
+     * @param \PhpParser\Node\Expr\PostInc|\PhpParser\Node\Expr\PostDec $node
+     * @return \PhpParser\Node\Expr\PreInc|\PhpParser\Node\Expr\PreDec
      */
-    private function processPrePost(\PhpParser\Node $node) : \PhpParser\Node\Expr
+    private function processPrePost($node)
     {
         if ($node instanceof \PhpParser\Node\Expr\PostInc) {
             return new \PhpParser\Node\Expr\PreInc($node->var);
@@ -93,9 +94,9 @@ CODE_SAMPLE
         return new \PhpParser\Node\Expr\PreDec($node->var);
     }
     /**
-     * @param PostInc|PostDec $node
+     * @param \PhpParser\Node\Expr\PostInc|\PhpParser\Node\Expr\PostDec $node
      */
-    private function processPreArray(\PhpParser\Node $node, \PhpParser\Node\Expr\ArrayDimFetch $arrayDimFetch) : ?\PhpParser\Node\Expr
+    private function processPreArray($node, \PhpParser\Node\Expr\ArrayDimFetch $arrayDimFetch) : ?\PhpParser\Node\Expr
     {
         $parentOfArrayDimFetch = $arrayDimFetch->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
         if (!$this->isAnExpression($parentOfArrayDimFetch)) {
@@ -107,8 +108,9 @@ CODE_SAMPLE
     }
     /**
      * @param PostInc|PostDec $node
+     * @return \PhpParser\Node\Expr\PreDec|\PhpParser\Node\Expr\PreInc
      */
-    private function processPreFor(\PhpParser\Node $node, \PhpParser\Node\Stmt\For_ $for) : \PhpParser\Node\Expr
+    private function processPreFor(\PhpParser\Node $node, \PhpParser\Node\Stmt\For_ $for)
     {
         $for->loop = [$this->processPrePost($node)];
         return $for->loop[0];

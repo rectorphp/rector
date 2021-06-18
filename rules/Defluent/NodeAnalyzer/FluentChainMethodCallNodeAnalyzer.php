@@ -8,6 +8,7 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeFinder;
@@ -171,7 +172,10 @@ final class FluentChainMethodCallNodeAnalyzer
         }
         return $variableType->isSuperTypeOf($type)->yes();
     }
-    public function resolveRootExpr(\PhpParser\Node\Expr\MethodCall $methodCall) : \PhpParser\Node
+    /**
+     * @return \PhpParser\Node\Expr|\PhpParser\Node\Name
+     */
+    public function resolveRootExpr(\PhpParser\Node\Expr\MethodCall $methodCall)
     {
         $callerNode = $methodCall->var;
         while ($callerNode instanceof \PhpParser\Node\Expr\MethodCall || $callerNode instanceof \PhpParser\Node\Expr\StaticCall) {

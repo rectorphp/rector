@@ -13,7 +13,6 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
-use PHPStan\Type\SubtractableType;
 use PHPStan\Type\Type;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
@@ -30,9 +29,9 @@ final class ObjectTypeSpecifier
         $this->reflectionProvider = $reflectionProvider;
     }
     /**
-     * @return AliasedObjectType|FullyQualifiedObjectType|ObjectType|MixedType
+     * @return \PHPStan\Type\ObjectType|\Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType|\Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType|\Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType|\PHPStan\Type\MixedType
      */
-    public function narrowToFullyQualifiedOrAliasedObjectType(\PhpParser\Node $node, \PHPStan\Type\ObjectType $objectType) : \PHPStan\Type\SubtractableType
+    public function narrowToFullyQualifiedOrAliasedObjectType(\PhpParser\Node $node, \PHPStan\Type\ObjectType $objectType)
     {
         /** @var Use_[]|null $uses */
         $uses = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::USE_NODES);

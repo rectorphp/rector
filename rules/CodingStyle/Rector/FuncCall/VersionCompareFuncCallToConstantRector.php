@@ -96,7 +96,10 @@ CODE_SAMPLE
         }
         return $expr->name->toString() === 'PHP_VERSION';
     }
-    private function getNewNodeForArg(\PhpParser\Node\Expr $expr) : \PhpParser\Node\Expr
+    /**
+     * @return \PhpParser\Node\Expr\ConstFetch|\PhpParser\Node\Scalar\LNumber
+     */
+    private function getNewNodeForArg(\PhpParser\Node\Expr $expr)
     {
         if ($this->isPhpVersionConstant($expr)) {
             return new \PhpParser\Node\Expr\ConstFetch(new \PhpParser\Node\Name('PHP_VERSION_ID'));

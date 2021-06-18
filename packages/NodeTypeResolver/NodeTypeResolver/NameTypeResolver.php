@@ -45,9 +45,9 @@ final class NameTypeResolver implements \Rector\NodeTypeResolver\Contract\NodeTy
         return new \PHPStan\Type\ObjectType($fullyQualifiedName);
     }
     /**
-     * @return ObjectType|UnionType|MixedType
+     * @return \PHPStan\Type\MixedType|\PHPStan\Type\ObjectType|\PHPStan\Type\UnionType
      */
-    private function resolveParent(\PhpParser\Node\Name $name) : \PHPStan\Type\Type
+    private function resolveParent(\PhpParser\Node\Name $name)
     {
         $className = $name->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);
         if ($className === null) {

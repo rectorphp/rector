@@ -9,10 +9,12 @@ use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\StringType;
-use PHPStan\Type\Type;
 final class IdentifierTypeResolver
 {
-    public function resolve(\PhpParser\Node\Identifier $identifier) : \PHPStan\Type\Type
+    /**
+     * @return \PHPStan\Type\StringType|\PHPStan\Type\BooleanType|\PHPStan\Type\IntegerType|\PHPStan\Type\FloatType|\PHPStan\Type\MixedType
+     */
+    public function resolve(\PhpParser\Node\Identifier $identifier)
     {
         if ($identifier->toLowerString() === 'string') {
             return new \PHPStan\Type\StringType();

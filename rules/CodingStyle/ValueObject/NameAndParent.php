@@ -25,9 +25,9 @@ final class NameAndParent
         $this->parentNode = $parentNode;
     }
     /**
-     * @return Name|Identifier
+     * @return \PhpParser\Node\Identifier|\PhpParser\Node\Name
      */
-    public function getNameNode() : \PhpParser\Node
+    public function getNameNode()
     {
         return $this->nameNode;
     }

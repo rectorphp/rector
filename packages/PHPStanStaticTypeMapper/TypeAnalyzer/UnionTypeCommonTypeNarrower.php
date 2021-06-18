@@ -15,7 +15,6 @@ use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\Generic\GenericClassStringType;
 use PHPStan\Type\ObjectType;
-use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\NodeTypeResolver\NodeTypeCorrector\GenericClassStringTypeCorrector;
@@ -56,9 +55,9 @@ final class UnionTypeCommonTypeNarrower
         return null;
     }
     /**
-     * @return GenericClassStringType|UnionType
+     * @return \PHPStan\Type\UnionType|\PHPStan\Type\Generic\GenericClassStringType
      */
-    public function narrowToGenericClassStringType(\PHPStan\Type\UnionType $unionType) : \PHPStan\Type\Type
+    public function narrowToGenericClassStringType(\PHPStan\Type\UnionType $unionType)
     {
         $availableTypes = [];
         foreach ($unionType->getTypes() as $unionedType) {

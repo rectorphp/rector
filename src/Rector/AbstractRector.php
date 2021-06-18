@@ -385,7 +385,10 @@ abstract class AbstractRector extends \PhpParser\NodeVisitorAbstract implements 
         }
         return $currentArgs;
     }
-    protected function unwrapExpression(\PhpParser\Node\Stmt $stmt) : \PhpParser\Node
+    /**
+     * @return \PhpParser\Node\Expr|\PhpParser\Node\Stmt
+     */
+    protected function unwrapExpression(\PhpParser\Node\Stmt $stmt)
     {
         if ($stmt instanceof \PhpParser\Node\Stmt\Expression) {
             return $stmt->expr;

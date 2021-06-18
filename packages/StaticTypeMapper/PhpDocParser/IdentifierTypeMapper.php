@@ -12,7 +12,6 @@ use PHPStan\Type\IterableType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StaticType;
-use PHPStan\Type\SubtractableType;
 use PHPStan\Type\Type;
 use Rector\NodeCollector\ScopeResolver\ParentClassScopeResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -79,7 +78,10 @@ final class IdentifierTypeMapper implements \Rector\StaticTypeMapper\Contract\Ph
         $objectType = new \PHPStan\Type\ObjectType($typeNode->name);
         return $this->objectTypeSpecifier->narrowToFullyQualifiedOrAliasedObjectType($node, $objectType);
     }
-    private function mapSelf(\PhpParser\Node $node) : \PHPStan\Type\SubtractableType
+    /**
+     * @return \PHPStan\Type\MixedType|\Rector\StaticTypeMapper\ValueObject\Type\SelfObjectType
+     */
+    private function mapSelf(\PhpParser\Node $node)
     {
         /** @var string|null $className */
         $className = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);
@@ -89,7 +91,10 @@ final class IdentifierTypeMapper implements \Rector\StaticTypeMapper\Contract\Ph
         }
         return new \Rector\StaticTypeMapper\ValueObject\Type\SelfObjectType($className);
     }
-    private function mapParent(\PhpParser\Node $node) : \PHPStan\Type\Type
+    /**
+     * @return \Rector\StaticTypeMapper\ValueObject\Type\ParentStaticType|\PHPStan\Type\MixedType
+     */
+    private function mapParent(\PhpParser\Node $node)
     {
         $parentClassName = $this->parentClassScopeResolver->resolveParentClassName($node);
         if ($parentClassName !== null) {
@@ -97,7 +102,10 @@ final class IdentifierTypeMapper implements \Rector\StaticTypeMapper\Contract\Ph
         }
         return new \PHPStan\Type\MixedType();
     }
-    private function mapStatic(\PhpParser\Node $node) : \PHPStan\Type\Type
+    /**
+     * @return \PHPStan\Type\MixedType|\PHPStan\Type\StaticType
+     */
+    private function mapStatic(\PhpParser\Node $node)
     {
         /** @var string|null $className */
         $className = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);

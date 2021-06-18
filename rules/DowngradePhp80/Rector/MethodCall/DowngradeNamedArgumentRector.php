@@ -136,8 +136,9 @@ CODE_SAMPLE
     /**
      * @param MethodCall|StaticCall $node
      * @param Arg[] $args
+     * @return \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall
      */
-    private function processRemoveNamedArgument(\PhpParser\Node\Stmt\ClassMethod $classMethod, \PhpParser\Node $node, array $args) : \PhpParser\Node\Expr
+    private function processRemoveNamedArgument(\PhpParser\Node\Stmt\ClassMethod $classMethod, \PhpParser\Node $node, array $args)
     {
         $params = $classMethod->params;
         /** @var Arg[] $newArgs */
