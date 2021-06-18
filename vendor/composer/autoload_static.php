@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit2ae2f6e0aa81490d538740629dbe54a9
+class ComposerStaticInit6eb7042105862f732d268d726514ddaa
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -2877,12 +2877,7 @@ class ComposerStaticInit2ae2f6e0aa81490d538740629dbe54a9
         'Rector\\NodeTypeResolver\\ValueObject\\OldToNewType' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/ValueObject/OldToNewType.php',
         'Rector\\Order\\Contract\\RankeableInterface' => __DIR__ . '/../..' . '/rules/Order/Contract/RankeableInterface.php',
         'Rector\\Order\\Order\\OrderChangeAnalyzer' => __DIR__ . '/../..' . '/rules/Order/Order/OrderChangeAnalyzer.php',
-        'Rector\\Order\\Rector\\Class_\\OrderClassConstantsByIntegerValueRector' => __DIR__ . '/../..' . '/rules/Order/Rector/Class_/OrderClassConstantsByIntegerValueRector.php',
-        'Rector\\Order\\Rector\\Class_\\OrderConstantsByVisibilityRector' => __DIR__ . '/../..' . '/rules/Order/Rector/Class_/OrderConstantsByVisibilityRector.php',
-        'Rector\\Order\\Rector\\Class_\\OrderFirstLevelClassStatementsRector' => __DIR__ . '/../..' . '/rules/Order/Rector/Class_/OrderFirstLevelClassStatementsRector.php',
-        'Rector\\Order\\Rector\\Class_\\OrderMethodsByVisibilityRector' => __DIR__ . '/../..' . '/rules/Order/Rector/Class_/OrderMethodsByVisibilityRector.php',
         'Rector\\Order\\Rector\\Class_\\OrderPrivateMethodsByUseRector' => __DIR__ . '/../..' . '/rules/Order/Rector/Class_/OrderPrivateMethodsByUseRector.php',
-        'Rector\\Order\\Rector\\Class_\\OrderPropertiesByVisibilityRector' => __DIR__ . '/../..' . '/rules/Order/Rector/Class_/OrderPropertiesByVisibilityRector.php',
         'Rector\\Order\\StmtOrder' => __DIR__ . '/../..' . '/rules/Order/StmtOrder.php',
         'Rector\\Order\\StmtVisibilitySorter' => __DIR__ . '/../..' . '/rules/Order/StmtVisibilitySorter.php',
         'Rector\\Order\\ValueObject\\ClassConstRankeable' => __DIR__ . '/../..' . '/rules/Order/ValueObject/ClassConstRankeable.php',
@@ -3875,9 +3870,9 @@ class ComposerStaticInit2ae2f6e0aa81490d538740629dbe54a9
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit2ae2f6e0aa81490d538740629dbe54a9::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit2ae2f6e0aa81490d538740629dbe54a9::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit2ae2f6e0aa81490d538740629dbe54a9::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit6eb7042105862f732d268d726514ddaa::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit6eb7042105862f732d268d726514ddaa::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit6eb7042105862f732d268d726514ddaa::$classMap;
 
         }, null, ClassLoader::class);
     }
