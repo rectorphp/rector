@@ -13,7 +13,6 @@ use PHPStan\Type\IterableType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StaticType;
-use PHPStan\Type\SubtractableType;
 use PHPStan\Type\Type;
 use Rector\NodeCollector\ScopeResolver\ParentClassScopeResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -81,7 +80,7 @@ final class IdentifierTypeMapper implements PhpDocTypeMapperInterface
         return $this->objectTypeSpecifier->narrowToFullyQualifiedOrAliasedObjectType($node, $objectType);
     }
 
-    private function mapSelf(Node $node): SubtractableType
+    private function mapSelf(Node $node): MixedType | SelfObjectType
     {
         /** @var string|null $className */
         $className = $node->getAttribute(AttributeKey::CLASS_NAME);
@@ -93,7 +92,7 @@ final class IdentifierTypeMapper implements PhpDocTypeMapperInterface
         return new SelfObjectType($className);
     }
 
-    private function mapParent(Node $node): Type
+    private function mapParent(Node $node): ParentStaticType | MixedType
     {
         $parentClassName = $this->parentClassScopeResolver->resolveParentClassName($node);
         if ($parentClassName !== null) {
@@ -103,7 +102,7 @@ final class IdentifierTypeMapper implements PhpDocTypeMapperInterface
         return new MixedType();
     }
 
-    private function mapStatic(Node $node): Type
+    private function mapStatic(Node $node): MixedType | StaticType
     {
         /** @var string|null $className */
         $className = $node->getAttribute(AttributeKey::CLASS_NAME);

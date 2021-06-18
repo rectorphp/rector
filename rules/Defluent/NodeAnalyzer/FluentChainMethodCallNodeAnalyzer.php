@@ -9,6 +9,7 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeFinder;
@@ -186,7 +187,7 @@ final class FluentChainMethodCallNodeAnalyzer
             ->yes();
     }
 
-    public function resolveRootExpr(MethodCall $methodCall): Node
+    public function resolveRootExpr(MethodCall $methodCall): Expr | Name
     {
         $callerNode = $methodCall->var;
 

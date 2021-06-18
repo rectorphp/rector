@@ -145,7 +145,7 @@ final class TypeNormalizer
     /**
      * @param NestedArrayType[] $collectedNestedArrayTypes
      */
-    private function createUnionedTypesFromArrayTypes(array $collectedNestedArrayTypes): Type
+    private function createUnionedTypesFromArrayTypes(array $collectedNestedArrayTypes): UnionType | ArrayType
     {
         $unionedTypes = [];
         foreach ($collectedNestedArrayTypes as $collectedNestedArrayType) {

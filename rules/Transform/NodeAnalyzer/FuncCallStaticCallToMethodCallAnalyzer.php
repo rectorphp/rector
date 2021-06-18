@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Transform\NodeAnalyzer;
 
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
@@ -34,10 +33,12 @@ final class FuncCallStaticCallToMethodCallAnalyzer
 
     /**
      * @param ClassMethod|Function_ $functionLike
-     * @return MethodCall|PropertyFetch|Variable
      */
-    public function matchTypeProvidingExpr(Class_ $class, FunctionLike $functionLike, ObjectType $objectType): Expr
-    {
+    public function matchTypeProvidingExpr(
+        Class_ $class,
+        FunctionLike $functionLike,
+        ObjectType $objectType
+    ): MethodCall | PropertyFetch | Variable {
         $expr = $this->typeProvidingExprFromClassResolver->resolveTypeProvidingExprFromClass(
             $class,
             $functionLike,

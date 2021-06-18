@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Php70\ValueObject;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\AssignOp;
@@ -26,18 +25,12 @@ final class VariableAssignPair
     ) {
     }
 
-    /**
-     * @return Variable|ArrayDimFetch|PropertyFetch|StaticPropertyFetch
-     */
-    public function getVariable(): Expr
+    public function getVariable(): ArrayDimFetch | PropertyFetch | StaticPropertyFetch | Variable
     {
         return $this->variable;
     }
 
-    /**
-     * @return Assign|AssignOp|AssignRef
-     */
-    public function getAssign(): Expr
+    public function getAssign(): Assign | AssignOp | AssignRef
     {
         return $this->assign;
     }

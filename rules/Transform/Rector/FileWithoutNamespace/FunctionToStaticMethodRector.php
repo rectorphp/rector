@@ -7,7 +7,6 @@ namespace Rector\Transform\Rector\FileWithoutNamespace;
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Namespace_;
@@ -173,9 +172,8 @@ CODE_SAMPLE
 
     /**
      * @param Namespace_|FileWithoutNamespace $node
-     * @return Namespace_|Class_
      */
-    private function resolveNodeToPrint(Node $node, Class_ $class): Stmt
+    private function resolveNodeToPrint(Node $node, Class_ $class): Namespace_ | Class_
     {
         if ($node instanceof Namespace_) {
             return new Namespace_($node->name, [$class]);

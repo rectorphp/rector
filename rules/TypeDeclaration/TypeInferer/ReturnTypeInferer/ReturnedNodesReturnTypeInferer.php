@@ -109,7 +109,7 @@ final class ReturnedNodesReturnTypeInferer implements ReturnTypeInfererInterface
         return $returns;
     }
 
-    private function resolveNoLocalReturnNodes(ClassLike $classLike, FunctionLike $functionLike): Type
+    private function resolveNoLocalReturnNodes(ClassLike $classLike, FunctionLike $functionLike): VoidType | MixedType
     {
         // void type
         if (! $this->isAbstractMethod($classLike, $functionLike)) {

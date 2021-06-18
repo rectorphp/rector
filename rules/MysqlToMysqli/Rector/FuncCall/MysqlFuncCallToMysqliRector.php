@@ -102,7 +102,7 @@ CODE_SAMPLE
         return $funcCall;
     }
 
-    private function joinStringWithNode(string $string, Expr $expr): Expr
+    private function joinStringWithNode(string $string, Expr $expr): String_ | Concat
     {
         if ($expr instanceof String_) {
             return new String_($string . ' ' . $expr->value);

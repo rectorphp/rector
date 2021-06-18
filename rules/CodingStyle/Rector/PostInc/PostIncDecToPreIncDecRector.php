@@ -96,10 +96,7 @@ CODE_SAMPLE
         return $node instanceof Expression;
     }
 
-    /**
-     * @param PostInc|PostDec $node
-     */
-    private function processPrePost(Node $node): Expr
+    private function processPrePost(PostInc | PostDec $node): PreInc | PreDec
     {
         if ($node instanceof PostInc) {
             return new PreInc($node->var);
@@ -108,10 +105,7 @@ CODE_SAMPLE
         return new PreDec($node->var);
     }
 
-    /**
-     * @param PostInc|PostDec $node
-     */
-    private function processPreArray(Node $node, ArrayDimFetch $arrayDimFetch): ?Expr
+    private function processPreArray(PostInc | PostDec $node, ArrayDimFetch $arrayDimFetch): ?Expr
     {
         $parentOfArrayDimFetch = $arrayDimFetch->getAttribute(AttributeKey::PARENT_NODE);
         if (! $this->isAnExpression($parentOfArrayDimFetch)) {
@@ -127,7 +121,7 @@ CODE_SAMPLE
     /**
      * @param PostInc|PostDec $node
      */
-    private function processPreFor(Node $node, For_ $for): Expr
+    private function processPreFor(Node $node, For_ $for): PreDec | PreInc
     {
         $for->loop = [$this->processPrePost($node)];
         return $for->loop[0];

@@ -4,7 +4,11 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\PhpDocParser;
 
+use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprFalseNode;
+use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprIntegerNode;
+use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprTrueNode;
 use PHPStan\PhpDocParser\Lexer\Lexer;
+use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocParser\StaticDoctrineAnnotationParser\ArrayParser;
 use Rector\BetterPhpDocParser\PhpDocParser\StaticDoctrineAnnotationParser\PlainValueParser;
 use Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator;
@@ -44,10 +48,11 @@ final class StaticDoctrineAnnotationParser
 
     /**
      * @see https://github.com/doctrine/annotations/blob/c66f06b7c83e9a2a7523351a9d5a4b55f885e574/lib/Doctrine/Common/Annotations/DocParser.php#L1215-L1224
-     * @return mixed|mixed[]
+     * @return array<mixed>
      */
-    public function resolveAnnotationValue(BetterTokenIterator $tokenIterator)
-    {
+    public function resolveAnnotationValue(
+        BetterTokenIterator $tokenIterator
+    ): CurlyListNode | string | array | ConstExprFalseNode | ConstExprTrueNode | ConstExprIntegerNode | DoctrineAnnotationTagValueNode {
         // skips dummy tokens like newlines
         $tokenIterator->tryConsumeTokenType(Lexer::TOKEN_PHPDOC_EOL);
 
@@ -58,6 +63,7 @@ final class StaticDoctrineAnnotationParser
         }
 
         // 2. assign key = value - mimics FieldAssignment() https://github.com/doctrine/annotations/blob/0cb0cd2950a5c6cdbf22adbe2bfd5fd1ea68588f/lib/Doctrine/Common/Annotations/DocParser.php#L1291-L1303
+        /** @var int $key */
         $key = $this->parseValue($tokenIterator);
         $tokenIterator->consumeTokenType(Lexer::TOKEN_EQUAL);
 
@@ -72,7 +78,7 @@ final class StaticDoctrineAnnotationParser
 
     /**
      * @see https://github.com/doctrine/annotations/blob/c66f06b7c83e9a2a7523351a9d5a4b55f885e574/lib/Doctrine/Common/Annotations/DocParser.php#L1051-L1079
-     * @return array<mixed, mixed>
+     * @return array<mixed>
      */
     private function resolveAnnotationValues(BetterTokenIterator $tokenIterator): array
     {
@@ -101,10 +107,11 @@ final class StaticDoctrineAnnotationParser
     }
 
     /**
-     * @return bool|int|mixed|mixed[]|string
+     * @return array<mixed>
      */
-    private function parseValue(BetterTokenIterator $tokenIterator)
-    {
+    private function parseValue(
+        BetterTokenIterator $tokenIterator
+    ): CurlyListNode | string | array | ConstExprFalseNode | ConstExprTrueNode | ConstExprIntegerNode | DoctrineAnnotationTagValueNode {
         if ($tokenIterator->isCurrentTokenType(Lexer::TOKEN_OPEN_CURLY_BRACKET)) {
             $items = $this->arrayParser->parseCurlyArray($tokenIterator);
             return new CurlyListNode($items);

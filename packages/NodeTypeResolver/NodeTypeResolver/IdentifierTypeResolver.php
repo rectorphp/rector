@@ -10,11 +10,10 @@ use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\StringType;
-use PHPStan\Type\Type;
 
 final class IdentifierTypeResolver
 {
-    public function resolve(Identifier $identifier): Type
+    public function resolve(Identifier $identifier): StringType | BooleanType | IntegerType | FloatType | MixedType
     {
         if ($identifier->toLowerString() === 'string') {
             return new StringType();

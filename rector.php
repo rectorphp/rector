@@ -86,8 +86,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         SplitStringClassConstantToClassConstFetchRector::class,
 
         // to be enabled when all rules for php 8 syntax applied
-        // PhpVersionFeature::STATIC_RETURN_TYPE
-        ReturnTypeDeclarationRector::class,
         RenamePropertyToMatchTypeRector::class,
 
         RemoveUnreachableStatementRector::class => [

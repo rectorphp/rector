@@ -157,7 +157,7 @@ final class PHPUnitDataProviderParamTypeInferer implements ParamTypeInfererInter
         return $this->typeFactory->createMixedPassedOrUnionType($paramOnPositionTypes);
     }
 
-    private function getTypeFromClassMethodYield(Array_ $classMethodYieldArrayNode): Type
+    private function getTypeFromClassMethodYield(Array_ $classMethodYieldArrayNode): MixedType | ConstantArrayType
     {
         $arrayTypes = $this->nodeTypeResolver->resolve($classMethodYieldArrayNode);
 

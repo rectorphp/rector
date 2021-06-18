@@ -67,7 +67,7 @@ final class NameNodeMapper implements PhpParserNodeMapperInterface
         return in_array($name, $oldToNewClasses, true);
     }
 
-    private function createClassReferenceType(Name $name, string $reference): Type
+    private function createClassReferenceType(Name $name, string $reference): MixedType | StaticType | ThisType
     {
         $className = $name->getAttribute(AttributeKey::CLASS_NAME);
         if ($className === null) {
@@ -86,8 +86,9 @@ final class NameNodeMapper implements PhpParserNodeMapperInterface
         return new ThisType($className);
     }
 
-    private function createScalarType(string $name): Type
-    {
+    private function createScalarType(
+        string $name
+    ): ArrayType | IntegerType | FloatType | StringType | ConstantBooleanType | BooleanType | MixedType {
         if ($name === 'array') {
             return new ArrayType(new MixedType(), new MixedType());
         }

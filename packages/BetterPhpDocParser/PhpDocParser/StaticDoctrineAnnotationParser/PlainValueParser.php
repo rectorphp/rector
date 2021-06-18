@@ -39,10 +39,11 @@ final class PlainValueParser
     }
 
     /**
-     * @return bool|int|mixed|string
+     * @return mixed[]
      */
-    public function parseValue(BetterTokenIterator $tokenIterator)
-    {
+    public function parseValue(
+        BetterTokenIterator $tokenIterator
+    ): string | array | ConstExprFalseNode | ConstExprTrueNode | ConstExprIntegerNode | DoctrineAnnotationTagValueNode {
         $currentTokenValue = $tokenIterator->currentTokenValue();
 
         // temporary hackaround multi-line doctrine annotations

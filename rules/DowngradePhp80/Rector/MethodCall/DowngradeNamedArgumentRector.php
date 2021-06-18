@@ -154,8 +154,11 @@ CODE_SAMPLE
      * @param MethodCall|StaticCall $node
      * @param Arg[] $args
      */
-    private function processRemoveNamedArgument(ClassMethod $classMethod, Node $node, array $args): Expr
-    {
+    private function processRemoveNamedArgument(
+        ClassMethod $classMethod,
+        Node $node,
+        array $args
+    ): MethodCall | StaticCall {
         $params = $classMethod->params;
         /** @var Arg[] $newArgs */
         $newArgs = [];

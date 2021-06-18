@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Transform\Rector\FuncCall;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
@@ -224,13 +223,10 @@ CODE_SAMPLE
         );
     }
 
-    /**
-     * @return PropertyFetch|MethodCall
-     */
     private function refactorEmptyFuncCallArgs(
         ArgumentFuncCallToMethodCall $argumentFuncCallToMethodCall,
         PropertyFetch $propertyFetch
-    ): Expr {
+    ): MethodCall | PropertyFetch {
         if ($argumentFuncCallToMethodCall->getMethodIfNoArgs()) {
             $methodName = $argumentFuncCallToMethodCall->getMethodIfNoArgs();
             if (! is_string($methodName)) {

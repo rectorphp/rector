@@ -46,10 +46,7 @@ final class NameTypeResolver implements NodeTypeResolverInterface
         return new ObjectType($fullyQualifiedName);
     }
 
-    /**
-     * @return ObjectType|UnionType|MixedType
-     */
-    private function resolveParent(Name $name): Type
+    private function resolveParent(Name $name): MixedType | ObjectType | UnionType
     {
         $className = $name->getAttribute(AttributeKey::CLASS_NAME);
         if ($className === null) {

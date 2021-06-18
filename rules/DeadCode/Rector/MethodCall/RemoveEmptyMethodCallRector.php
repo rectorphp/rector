@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Rector\DeadCode\Rector\MethodCall;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -136,7 +136,7 @@ CODE_SAMPLE
         return (array) $classMethod->stmts !== [];
     }
 
-    private function processArrowFunction(ArrowFunction $arrowFunction, MethodCall $methodCall): Expr
+    private function processArrowFunction(ArrowFunction $arrowFunction, MethodCall $methodCall): MethodCall | ConstFetch
     {
         $parentOfParent = $arrowFunction->getAttribute(AttributeKey::PARENT_NODE);
         if ($parentOfParent instanceof Expression) {
