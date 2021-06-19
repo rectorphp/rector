@@ -17,7 +17,7 @@ final class RequireOptionalParamResolver
         $optionalParams = [];
         $requireParams = [];
         foreach ($functionLike->getParams() as $position => $param) {
-            if ($param->default === null && !$param->variadic) {
+            if ($param->default === null) {
                 $requireParams[$position] = $param;
             } else {
                 $optionalParams[$position] = $param;
