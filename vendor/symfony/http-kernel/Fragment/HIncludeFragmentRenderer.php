@@ -8,19 +8,19 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210618\Symfony\Component\HttpKernel\Fragment;
+namespace RectorPrefix20210619\Symfony\Component\HttpKernel\Fragment;
 
-use RectorPrefix20210618\Symfony\Component\HttpFoundation\Request;
-use RectorPrefix20210618\Symfony\Component\HttpFoundation\Response;
-use RectorPrefix20210618\Symfony\Component\HttpKernel\Controller\ControllerReference;
-use RectorPrefix20210618\Symfony\Component\HttpKernel\UriSigner;
-use RectorPrefix20210618\Twig\Environment;
+use RectorPrefix20210619\Symfony\Component\HttpFoundation\Request;
+use RectorPrefix20210619\Symfony\Component\HttpFoundation\Response;
+use RectorPrefix20210619\Symfony\Component\HttpKernel\Controller\ControllerReference;
+use RectorPrefix20210619\Symfony\Component\HttpKernel\UriSigner;
+use RectorPrefix20210619\Twig\Environment;
 /**
  * Implements the Hinclude rendering strategy.
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class HIncludeFragmentRenderer extends \RectorPrefix20210618\Symfony\Component\HttpKernel\Fragment\RoutableFragmentRenderer
+class HIncludeFragmentRenderer extends \RectorPrefix20210619\Symfony\Component\HttpKernel\Fragment\RoutableFragmentRenderer
 {
     private $globalDefaultTemplate;
     private $signer;
@@ -29,7 +29,7 @@ class HIncludeFragmentRenderer extends \RectorPrefix20210618\Symfony\Component\H
     /**
      * @param string $globalDefaultTemplate The global default content (it can be a template name or the content)
      */
-    public function __construct(\RectorPrefix20210618\Twig\Environment $twig = null, \RectorPrefix20210618\Symfony\Component\HttpKernel\UriSigner $signer = null, string $globalDefaultTemplate = null, string $charset = 'utf-8')
+    public function __construct(\RectorPrefix20210619\Twig\Environment $twig = null, \RectorPrefix20210619\Symfony\Component\HttpKernel\UriSigner $signer = null, string $globalDefaultTemplate = null, string $charset = 'utf-8')
     {
         $this->twig = $twig;
         $this->globalDefaultTemplate = $globalDefaultTemplate;
@@ -54,10 +54,10 @@ class HIncludeFragmentRenderer extends \RectorPrefix20210618\Symfony\Component\H
      *  * id:         An optional hx:include tag id attribute
      *  * attributes: An optional array of hx:include tag attributes
      */
-    public function render($uri, \RectorPrefix20210618\Symfony\Component\HttpFoundation\Request $request, array $options = [])
+    public function render($uri, \RectorPrefix20210619\Symfony\Component\HttpFoundation\Request $request, array $options = [])
     {
-        if ($uri instanceof \RectorPrefix20210618\Symfony\Component\HttpKernel\Controller\ControllerReference) {
-            $uri = (new \RectorPrefix20210618\Symfony\Component\HttpKernel\Fragment\FragmentUriGenerator($this->fragmentPath, $this->signer))->generate($uri, $request);
+        if ($uri instanceof \RectorPrefix20210619\Symfony\Component\HttpKernel\Controller\ControllerReference) {
+            $uri = (new \RectorPrefix20210619\Symfony\Component\HttpKernel\Fragment\FragmentUriGenerator($this->fragmentPath, $this->signer))->generate($uri, $request);
         }
         // We need to replace ampersands in the URI with the encoded form in order to return valid html/xml content.
         $uri = \str_replace('&', '&amp;', $uri);
@@ -78,7 +78,7 @@ class HIncludeFragmentRenderer extends \RectorPrefix20210618\Symfony\Component\H
                 $renderedAttributes .= \sprintf(' %s="%s"', \htmlspecialchars($attribute, $flags, $this->charset, \false), \htmlspecialchars($value, $flags, $this->charset, \false));
             }
         }
-        return new \RectorPrefix20210618\Symfony\Component\HttpFoundation\Response(\sprintf('<hx:include src="%s"%s>%s</hx:include>', $uri, $renderedAttributes, $content));
+        return new \RectorPrefix20210619\Symfony\Component\HttpFoundation\Response(\sprintf('<hx:include src="%s"%s>%s</hx:include>', $uri, $renderedAttributes, $content));
     }
     /**
      * {@inheritdoc}

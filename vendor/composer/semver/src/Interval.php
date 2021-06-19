@@ -8,16 +8,16 @@
  * For the full copyright and license information, please view
  * the LICENSE file that was distributed with this source code.
  */
-namespace RectorPrefix20210618\Composer\Semver;
+namespace RectorPrefix20210619\Composer\Semver;
 
-use RectorPrefix20210618\Composer\Semver\Constraint\Constraint;
+use RectorPrefix20210619\Composer\Semver\Constraint\Constraint;
 class Interval
 {
     /** @var Constraint */
     private $start;
     /** @var Constraint */
     private $end;
-    public function __construct(\RectorPrefix20210618\Composer\Semver\Constraint\Constraint $start, \RectorPrefix20210618\Composer\Semver\Constraint\Constraint $end)
+    public function __construct(\RectorPrefix20210619\Composer\Semver\Constraint\Constraint $start, \RectorPrefix20210619\Composer\Semver\Constraint\Constraint $end)
     {
         $this->start = $start;
         $this->end = $end;
@@ -43,7 +43,7 @@ class Interval
     {
         static $zero;
         if (null === $zero) {
-            $zero = new \RectorPrefix20210618\Composer\Semver\Constraint\Constraint('>=', '0.0.0.0-dev');
+            $zero = new \RectorPrefix20210619\Composer\Semver\Constraint\Constraint('>=', '0.0.0.0-dev');
         }
         return $zero;
     }
@@ -54,7 +54,7 @@ class Interval
     {
         static $positiveInfinity;
         if (null === $positiveInfinity) {
-            $positiveInfinity = new \RectorPrefix20210618\Composer\Semver\Constraint\Constraint('<', \PHP_INT_MAX . '.0.0.0');
+            $positiveInfinity = new \RectorPrefix20210619\Composer\Semver\Constraint\Constraint('<', \PHP_INT_MAX . '.0.0.0');
         }
         return $positiveInfinity;
     }

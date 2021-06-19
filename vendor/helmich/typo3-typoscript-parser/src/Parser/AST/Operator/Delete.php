@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210618\Helmich\TypoScriptParser\Parser\AST\Operator;
+namespace RectorPrefix20210619\Helmich\TypoScriptParser\Parser\AST\Operator;
 
 /**
  * A delete operator.
@@ -13,6 +13,6 @@ namespace RectorPrefix20210618\Helmich\TypoScriptParser\Parser\AST\Operator;
  * @package    Helmich\TypoScriptParser
  * @subpackage Parser\AST\Operator
  */
-class Delete extends \RectorPrefix20210618\Helmich\TypoScriptParser\Parser\AST\Operator\UnaryOperator
+class Delete extends \RectorPrefix20210619\Helmich\TypoScriptParser\Parser\AST\Operator\UnaryOperator
 {
 }

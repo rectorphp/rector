@@ -1,16 +1,16 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210618\Symplify\Skipper\HttpKernel;
+namespace RectorPrefix20210619\Symplify\Skipper\HttpKernel;
 
-use RectorPrefix20210618\Symfony\Component\Config\Loader\LoaderInterface;
-use RectorPrefix20210618\Symfony\Component\HttpKernel\Bundle\BundleInterface;
-use RectorPrefix20210618\Symplify\Skipper\Bundle\SkipperBundle;
-use RectorPrefix20210618\Symplify\SymplifyKernel\Bundle\SymplifyKernelBundle;
-use RectorPrefix20210618\Symplify\SymplifyKernel\HttpKernel\AbstractSymplifyKernel;
-final class SkipperKernel extends \RectorPrefix20210618\Symplify\SymplifyKernel\HttpKernel\AbstractSymplifyKernel
+use RectorPrefix20210619\Symfony\Component\Config\Loader\LoaderInterface;
+use RectorPrefix20210619\Symfony\Component\HttpKernel\Bundle\BundleInterface;
+use RectorPrefix20210619\Symplify\Skipper\Bundle\SkipperBundle;
+use RectorPrefix20210619\Symplify\SymplifyKernel\Bundle\SymplifyKernelBundle;
+use RectorPrefix20210619\Symplify\SymplifyKernel\HttpKernel\AbstractSymplifyKernel;
+final class SkipperKernel extends \RectorPrefix20210619\Symplify\SymplifyKernel\HttpKernel\AbstractSymplifyKernel
 {
-    public function registerContainerConfiguration(\RectorPrefix20210618\Symfony\Component\Config\Loader\LoaderInterface $loader) : void
+    public function registerContainerConfiguration(\RectorPrefix20210619\Symfony\Component\Config\Loader\LoaderInterface $loader) : void
     {
         $loader->load(__DIR__ . '/../../config/config.php');
         parent::registerContainerConfiguration($loader);
@@ -20,6 +20,6 @@ final class SkipperKernel extends \RectorPrefix20210618\Symplify\SymplifyKernel\
      */
     public function registerBundles() : iterable
     {
-        return [new \RectorPrefix20210618\Symplify\Skipper\Bundle\SkipperBundle(), new \RectorPrefix20210618\Symplify\SymplifyKernel\Bundle\SymplifyKernelBundle()];
+        return [new \RectorPrefix20210619\Symplify\Skipper\Bundle\SkipperBundle(), new \RectorPrefix20210619\Symplify\SymplifyKernel\Bundle\SymplifyKernelBundle()];
     }
 }

@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\NetteToSymfony\Tests\Rector\Class_\NetteTesterClassToPHPUnitClassRector\Source;
 
-use RectorPrefix20210618\Tester\TestCase;
-abstract class ORMTestCase extends \RectorPrefix20210618\Tester\TestCase
+use RectorPrefix20210619\Tester\TestCase;
+abstract class ORMTestCase extends \RectorPrefix20210619\Tester\TestCase
 {
 }

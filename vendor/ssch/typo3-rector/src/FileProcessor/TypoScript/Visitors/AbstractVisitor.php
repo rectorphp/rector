@@ -3,10 +3,10 @@
 declare (strict_types=1);
 namespace Ssch\TYPO3Rector\FileProcessor\TypoScript\Visitors;
 
-use RectorPrefix20210618\Helmich\TypoScriptParser\Parser\AST\Statement;
-use RectorPrefix20210618\Helmich\TypoScriptParser\Parser\Traverser\Visitor;
+use RectorPrefix20210619\Helmich\TypoScriptParser\Parser\AST\Statement;
+use RectorPrefix20210619\Helmich\TypoScriptParser\Parser\Traverser\Visitor;
 use Rector\Core\Contract\Rector\RectorInterface;
-abstract class AbstractVisitor implements \RectorPrefix20210618\Helmich\TypoScriptParser\Parser\Traverser\Visitor, \Rector\Core\Contract\Rector\RectorInterface
+abstract class AbstractVisitor implements \RectorPrefix20210619\Helmich\TypoScriptParser\Parser\Traverser\Visitor, \Rector\Core\Contract\Rector\RectorInterface
 {
     /**
      * @var bool
@@ -15,10 +15,10 @@ abstract class AbstractVisitor implements \RectorPrefix20210618\Helmich\TypoScri
     public function enterTree(array $statements) : void
     {
     }
-    public function enterNode(\RectorPrefix20210618\Helmich\TypoScriptParser\Parser\AST\Statement $statement) : void
+    public function enterNode(\RectorPrefix20210619\Helmich\TypoScriptParser\Parser\AST\Statement $statement) : void
     {
     }
-    public function exitNode(\RectorPrefix20210618\Helmich\TypoScriptParser\Parser\AST\Statement $statement) : void
+    public function exitNode(\RectorPrefix20210619\Helmich\TypoScriptParser\Parser\AST\Statement $statement) : void
     {
     }
     public function exitTree(array $statements) : void

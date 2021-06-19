@@ -12,7 +12,7 @@ use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\Php\PhpFunctionReflection;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
-use RectorPrefix20210618\Symplify\SmartFileSystem\SmartFileSystem;
+use RectorPrefix20210619\Symplify\SmartFileSystem\SmartFileSystem;
 final class VariadicAnalyzer
 {
     /**
@@ -31,7 +31,7 @@ final class VariadicAnalyzer
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(\PhpParser\Parser $parser, \RectorPrefix20210618\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
+    public function __construct(\PhpParser\Parser $parser, \RectorPrefix20210619\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
     {
         $this->parser = $parser;
         $this->smartFileSystem = $smartFileSystem;

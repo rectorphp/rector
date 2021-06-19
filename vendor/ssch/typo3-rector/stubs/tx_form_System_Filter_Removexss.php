@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210618;
+namespace RectorPrefix20210619;
 
 if (\class_exists('tx_form_System_Filter_Removexss')) {
     return;
