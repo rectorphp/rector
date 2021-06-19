@@ -84,7 +84,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         // some classes in config might not exist without dev dependencies
         SplitStringClassConstantToClassConstFetchRector::class,
 
-        // to be enabled when all rules for php 8 syntax applied
         RemoveUnreachableStatementRector::class => [
             __DIR__ . '/rules/Php70/Rector/FuncCall/MultiDirnameRector.php',
         ],
