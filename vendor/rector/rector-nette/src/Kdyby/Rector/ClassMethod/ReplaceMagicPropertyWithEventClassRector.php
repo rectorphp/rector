@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Nette\Kdyby\Rector\ClassMethod;
 
-use RectorPrefix20210619\Nette\Utils\Strings;
+use RectorPrefix20210620\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayItem;
@@ -124,7 +124,7 @@ CODE_SAMPLE
             }
             $eventPropertyReferenceName = $this->valueResolver->getValue($arrayKey);
             // is property?
-            if (!\RectorPrefix20210619\Nette\Utils\Strings::contains($eventPropertyReferenceName, '::')) {
+            if (!\RectorPrefix20210620\Nette\Utils\Strings::contains($eventPropertyReferenceName, '::')) {
                 return null;
             }
             $eventClassName = $this->eventClassNaming->createEventClassNameFromClassPropertyReference($eventPropertyReferenceName);

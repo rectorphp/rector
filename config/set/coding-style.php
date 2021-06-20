@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210619;
+namespace RectorPrefix20210620;
 
 use Rector\CodingStyle\Rector\Assign\ManualJsonStringToJsonEncodeArrayRector;
 use Rector\CodingStyle\Rector\Assign\PHPStormVarAnnotationRector;

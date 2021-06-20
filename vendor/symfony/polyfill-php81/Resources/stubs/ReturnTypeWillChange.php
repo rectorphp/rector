@@ -14,4 +14,4 @@ final class ReturnTypeWillChange
 /**
  * @Attribute
  */
-\class_alias('RectorPrefix20210619\\ReturnTypeWillChange', 'ReturnTypeWillChange', \false);
+\class_alias('RectorPrefix20210620\\ReturnTypeWillChange', 'ReturnTypeWillChange', \false);

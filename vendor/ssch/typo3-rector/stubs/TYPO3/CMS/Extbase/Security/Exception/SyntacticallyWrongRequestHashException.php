@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210619\TYPO3\CMS\Extbase\Security\Exception;
+namespace RectorPrefix20210620\TYPO3\CMS\Extbase\Security\Exception;
 
 if (\class_exists('TYPO3\\CMS\\Extbase\\Security\\Exception\\SyntacticallyWrongRequestHashException')) {
     return;

@@ -1,17 +1,17 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210619\Helmich\TypoScriptParser\Parser\AST\Operator;
+namespace RectorPrefix20210620\Helmich\TypoScriptParser\Parser\AST\Operator;
 
-use RectorPrefix20210619\Helmich\TypoScriptParser\Parser\AST\ObjectPath;
-use RectorPrefix20210619\Helmich\TypoScriptParser\Parser\AST\Statement;
+use RectorPrefix20210620\Helmich\TypoScriptParser\Parser\AST\ObjectPath;
+use RectorPrefix20210620\Helmich\TypoScriptParser\Parser\AST\Statement;
 /**
  * Abstract base class for statements with unary operators.
  *
  * @package    Helmich\TypoScriptParser
  * @subpackage Parser\AST\Operator
  */
-abstract class UnaryOperator extends \RectorPrefix20210619\Helmich\TypoScriptParser\Parser\AST\Statement
+abstract class UnaryOperator extends \RectorPrefix20210620\Helmich\TypoScriptParser\Parser\AST\Statement
 {
     /**
      * The object the operator should be applied on.
@@ -25,7 +25,7 @@ abstract class UnaryOperator extends \RectorPrefix20210619\Helmich\TypoScriptPar
      * @param ObjectPath $object     The object to operate on.
      * @param int        $sourceLine The original source line.
      */
-    public function __construct(\RectorPrefix20210619\Helmich\TypoScriptParser\Parser\AST\ObjectPath $object, int $sourceLine)
+    public function __construct(\RectorPrefix20210620\Helmich\TypoScriptParser\Parser\AST\ObjectPath $object, int $sourceLine)
     {
         parent::__construct($sourceLine);
         $this->object = $object;

@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\CodeQuality\Naming;
 
-use RectorPrefix20210619\Nette\Utils\Strings;
+use RectorPrefix20210620\Nette\Utils\Strings;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
@@ -52,33 +52,33 @@ final class MethodCallToVariableNameResolver
      */
     public function resolveVariableName(\PhpParser\Node\Expr\MethodCall $methodCall) : ?string
     {
-        $methodCallVarName = $this->nodeNameResolver->getName($methodCall->var);
+        $caller = $this->nodeNameResolver->getName($methodCall->var);
         $methodCallName = $this->nodeNameResolver->getName($methodCall->name);
-        if ($methodCallVarName === null) {
+        if ($caller === null) {
             return null;
         }
         if ($methodCallName === null) {
             return null;
         }
-        $result = $this->getVariableName($methodCall, $methodCallVarName, $methodCallName);
-        if (!\RectorPrefix20210619\Nette\Utils\Strings::match($result, self::SPACE_REGEX)) {
+        $result = $this->getVariableName($methodCall, $caller, $methodCallName);
+        if (!\RectorPrefix20210620\Nette\Utils\Strings::match($result, self::SPACE_REGEX)) {
             return $result;
         }
-        return $this->getFallbackVarName($methodCallVarName, $methodCallName);
+        return $this->getFallbackVarName($caller, $methodCallName);
     }
-    private function getVariableName(\PhpParser\Node\Expr\MethodCall $methodCall, string $methodCallVarName, string $methodCallName) : string
+    private function getVariableName(\PhpParser\Node\Expr\MethodCall $methodCall, string $caller, string $methodCallName) : string
     {
         $variableName = $this->expectedNameResolver->resolveForCall($methodCall);
-        if ($methodCall->args === [] && $variableName !== null && $variableName !== $methodCallVarName) {
+        if ($methodCall->args === [] && $variableName !== null && $variableName !== $caller) {
             return $variableName;
         }
-        $fallbackVarName = $this->getFallbackVarName($methodCallVarName, $methodCallName);
+        $fallbackVarName = $this->getFallbackVarName($caller, $methodCallName);
         $argValue = $methodCall->args[0]->value;
         if ($argValue instanceof \PhpParser\Node\Expr\ClassConstFetch && $argValue->name instanceof \PhpParser\Node\Identifier) {
             return $this->getClassConstFetchVarName($argValue, $methodCallName);
         }
         if ($argValue instanceof \PhpParser\Node\Scalar\String_) {
-            return $this->getStringVarName($argValue, $methodCallVarName, $fallbackVarName);
+            return $this->getStringVarName($argValue, $caller, $fallbackVarName);
         }
         $argumentName = $this->nodeNameResolver->getName($argValue);
         if (!$argValue instanceof \PhpParser\Node\Expr\Variable) {
@@ -92,9 +92,16 @@ final class MethodCallToVariableNameResolver
         }
         return $argumentName . \ucfirst($variableName);
     }
-    private function getFallbackVarName(string $methodCallVarName, string $methodCallName) : string
+    private function isNamespacedFunctionName(string $functionName) : bool
     {
-        return $methodCallVarName . \ucfirst($methodCallName);
+        return \strpos($functionName, '\\') !== \false;
+    }
+    private function getFallbackVarName(string $caller, string $methodCallName) : string
+    {
+        if ($this->isNamespacedFunctionName($caller)) {
+            $caller = \RectorPrefix20210620\Nette\Utils\Strings::after($caller, '\\', -1);
+        }
+        return $caller . \ucfirst($methodCallName);
     }
     private function getClassConstFetchVarName(\PhpParser\Node\Expr\ClassConstFetch $classConstFetch, string $methodCallName) : string
     {
@@ -102,7 +109,7 @@ final class MethodCallToVariableNameResolver
         $name = $classConstFetch->name;
         $argValueName = \strtolower($name->toString());
         if ($argValueName !== 'class') {
-            return \RectorPrefix20210619\Nette\Utils\Strings::replace($argValueName, self::CONSTANT_REGEX, function ($matches) : string {
+            return \RectorPrefix20210620\Nette\Utils\Strings::replace($argValueName, self::CONSTANT_REGEX, function ($matches) : string {
                 return \strtoupper($matches[2]);
             });
         }
@@ -111,20 +118,20 @@ final class MethodCallToVariableNameResolver
         }
         return $this->normalizeStringVariableName($methodCallName);
     }
-    private function getStringVarName(\PhpParser\Node\Scalar\String_ $string, string $methodCallVarName, string $fallbackVarName) : string
+    private function getStringVarName(\PhpParser\Node\Scalar\String_ $string, string $caller, string $fallbackVarName) : string
     {
         $normalizeStringVariableName = $this->normalizeStringVariableName($string->value . \ucfirst($fallbackVarName));
-        if (!\RectorPrefix20210619\Nette\Utils\Strings::match($normalizeStringVariableName, self::START_ALPHA_REGEX)) {
+        if (!\RectorPrefix20210620\Nette\Utils\Strings::match($normalizeStringVariableName, self::START_ALPHA_REGEX)) {
             return $fallbackVarName;
         }
-        if ($normalizeStringVariableName === $methodCallVarName) {
+        if ($normalizeStringVariableName === $caller) {
             return $fallbackVarName;
         }
         return $normalizeStringVariableName;
     }
     private function normalizeStringVariableName(string $string) : string
     {
-        if (!\RectorPrefix20210619\Nette\Utils\Strings::match($string, self::VALID_STRING_VARIABLE_REGEX)) {
+        if (!\RectorPrefix20210620\Nette\Utils\Strings::match($string, self::VALID_STRING_VARIABLE_REGEX)) {
             return '';
         }
         $get = \str_ireplace('get', '', $string);
