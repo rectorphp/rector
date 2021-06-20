@@ -35,8 +35,10 @@ final class NonPhpFileProcessor implements \Rector\Core\Contract\Processor\FileP
     public function supports(\Rector\Core\ValueObject\Application\File $file) : bool
     {
         $smartFileInfo = $file->getSmartFileInfo();
-        // bug in path extension
+        // early assign to variable for increase performance
+        // @see https://3v4l.org/FM3vY#focus=8.0.7 vs https://3v4l.org/JZW7b#focus=8.0.7
         $pathname = $smartFileInfo->getPathname();
+        // bug in path extension
         foreach ($this->getSupportedFileExtensions() as $supportedFileExtension) {
             if (\substr_compare($pathname, '.' . $supportedFileExtension, -\strlen('.' . $supportedFileExtension)) === 0) {
                 return \true;
