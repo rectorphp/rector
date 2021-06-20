@@ -36,8 +36,13 @@ final class RemovedAndAddedFilesCollector
 
     public function isFileRemoved(SmartFileInfo $smartFileInfo): bool
     {
+        if ($this->removedFileInfos === []) {
+            return false;
+        }
+
+        $pathname = $smartFileInfo->getPathname();
         foreach ($this->removedFileInfos as $removedFileInfo) {
-            if ($removedFileInfo->getPathname() !== $smartFileInfo->getPathname()) {
+            if ($removedFileInfo->getPathname() !== $pathname) {
                 continue;
             }
 
