@@ -51,38 +51,38 @@ final class MethodCallToVariableNameResolver
      */
     public function resolveVariableName(MethodCall $methodCall): ?string
     {
-        $caller = $this->nodeNameResolver->getName($methodCall->var);
+        $callerName = $this->nodeNameResolver->getName($methodCall->var);
         $methodCallName = $this->nodeNameResolver->getName($methodCall->name);
-        if ($caller === null) {
+        if ($callerName === null) {
             return null;
         }
         if ($methodCallName === null) {
             return null;
         }
 
-        $result = $this->getVariableName($methodCall, $caller, $methodCallName);
+        $result = $this->getVariableName($methodCall, $callerName, $methodCallName);
         if (! Strings::match($result, self::SPACE_REGEX)) {
             return $result;
         }
 
-        return $this->getFallbackVarName($caller, $methodCallName);
+        return $this->getFallbackVarName($callerName, $methodCallName);
     }
 
-    private function getVariableName(MethodCall $methodCall, string $caller, string $methodCallName): string
+    private function getVariableName(MethodCall $methodCall, string $callerName, string $methodCallName): string
     {
         $variableName = $this->expectedNameResolver->resolveForCall($methodCall);
-        if ($methodCall->args === [] && $variableName !== null && $variableName !== $caller) {
+        if ($methodCall->args === [] && $variableName !== null && $variableName !== $callerName) {
             return $variableName;
         }
 
-        $fallbackVarName = $this->getFallbackVarName($caller, $methodCallName);
+        $fallbackVarName = $this->getFallbackVarName($callerName, $methodCallName);
         $argValue = $methodCall->args[0]->value;
         if ($argValue instanceof ClassConstFetch && $argValue->name instanceof Identifier) {
             return $this->getClassConstFetchVarName($argValue, $methodCallName);
         }
 
         if ($argValue instanceof String_) {
-            return $this->getStringVarName($argValue, $caller, $fallbackVarName);
+            return $this->getStringVarName($argValue, $callerName, $fallbackVarName);
         }
 
         $argumentName = $this->nodeNameResolver->getName($argValue);
@@ -103,13 +103,13 @@ final class MethodCallToVariableNameResolver
         return str_contains($functionName, '\\');
     }
 
-    private function getFallbackVarName(string $caller, string $methodCallName): string
+    private function getFallbackVarName(string $callerName, string $methodCallName): string
     {
-        if ($this->isNamespacedFunctionName($caller)) {
-            $caller = Strings::after($caller, '\\', -1);
+        if ($this->isNamespacedFunctionName($callerName)) {
+            $callerName = Strings::after($callerName, '\\', -1);
         }
 
-        return $caller . ucfirst($methodCallName);
+        return $callerName . ucfirst($methodCallName);
     }
 
     private function getClassConstFetchVarName(ClassConstFetch $classConstFetch, string $methodCallName): string
@@ -133,13 +133,13 @@ final class MethodCallToVariableNameResolver
         return $this->normalizeStringVariableName($methodCallName);
     }
 
-    private function getStringVarName(String_ $string, string $caller, string $fallbackVarName): string
+    private function getStringVarName(String_ $string, string $callerName, string $fallbackVarName): string
     {
         $normalizeStringVariableName = $this->normalizeStringVariableName($string->value . ucfirst($fallbackVarName));
         if (! Strings::match($normalizeStringVariableName, self::START_ALPHA_REGEX)) {
             return $fallbackVarName;
         }
-        if ($normalizeStringVariableName === $caller) {
+        if ($normalizeStringVariableName === $callerName) {
             return $fallbackVarName;
         }
         return $normalizeStringVariableName;
