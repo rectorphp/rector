@@ -52,33 +52,33 @@ final class MethodCallToVariableNameResolver
      */
     public function resolveVariableName(\PhpParser\Node\Expr\MethodCall $methodCall) : ?string
     {
-        $caller = $this->nodeNameResolver->getName($methodCall->var);
+        $callerName = $this->nodeNameResolver->getName($methodCall->var);
         $methodCallName = $this->nodeNameResolver->getName($methodCall->name);
-        if ($caller === null) {
+        if ($callerName === null) {
             return null;
         }
         if ($methodCallName === null) {
             return null;
         }
-        $result = $this->getVariableName($methodCall, $caller, $methodCallName);
+        $result = $this->getVariableName($methodCall, $callerName, $methodCallName);
         if (!\RectorPrefix20210620\Nette\Utils\Strings::match($result, self::SPACE_REGEX)) {
             return $result;
         }
-        return $this->getFallbackVarName($caller, $methodCallName);
+        return $this->getFallbackVarName($callerName, $methodCallName);
     }
-    private function getVariableName(\PhpParser\Node\Expr\MethodCall $methodCall, string $caller, string $methodCallName) : string
+    private function getVariableName(\PhpParser\Node\Expr\MethodCall $methodCall, string $callerName, string $methodCallName) : string
     {
         $variableName = $this->expectedNameResolver->resolveForCall($methodCall);
-        if ($methodCall->args === [] && $variableName !== null && $variableName !== $caller) {
+        if ($methodCall->args === [] && $variableName !== null && $variableName !== $callerName) {
             return $variableName;
         }
-        $fallbackVarName = $this->getFallbackVarName($caller, $methodCallName);
+        $fallbackVarName = $this->getFallbackVarName($callerName, $methodCallName);
         $argValue = $methodCall->args[0]->value;
         if ($argValue instanceof \PhpParser\Node\Expr\ClassConstFetch && $argValue->name instanceof \PhpParser\Node\Identifier) {
             return $this->getClassConstFetchVarName($argValue, $methodCallName);
         }
         if ($argValue instanceof \PhpParser\Node\Scalar\String_) {
-            return $this->getStringVarName($argValue, $caller, $fallbackVarName);
+            return $this->getStringVarName($argValue, $callerName, $fallbackVarName);
         }
         $argumentName = $this->nodeNameResolver->getName($argValue);
         if (!$argValue instanceof \PhpParser\Node\Expr\Variable) {
@@ -96,12 +96,12 @@ final class MethodCallToVariableNameResolver
     {
         return \strpos($functionName, '\\') !== \false;
     }
-    private function getFallbackVarName(string $caller, string $methodCallName) : string
+    private function getFallbackVarName(string $callerName, string $methodCallName) : string
     {
-        if ($this->isNamespacedFunctionName($caller)) {
-            $caller = \RectorPrefix20210620\Nette\Utils\Strings::after($caller, '\\', -1);
+        if ($this->isNamespacedFunctionName($callerName)) {
+            $callerName = \RectorPrefix20210620\Nette\Utils\Strings::after($callerName, '\\', -1);
         }
-        return $caller . \ucfirst($methodCallName);
+        return $callerName . \ucfirst($methodCallName);
     }
     private function getClassConstFetchVarName(\PhpParser\Node\Expr\ClassConstFetch $classConstFetch, string $methodCallName) : string
     {
@@ -118,13 +118,13 @@ final class MethodCallToVariableNameResolver
         }
         return $this->normalizeStringVariableName($methodCallName);
     }
-    private function getStringVarName(\PhpParser\Node\Scalar\String_ $string, string $caller, string $fallbackVarName) : string
+    private function getStringVarName(\PhpParser\Node\Scalar\String_ $string, string $callerName, string $fallbackVarName) : string
     {
         $normalizeStringVariableName = $this->normalizeStringVariableName($string->value . \ucfirst($fallbackVarName));
         if (!\RectorPrefix20210620\Nette\Utils\Strings::match($normalizeStringVariableName, self::START_ALPHA_REGEX)) {
             return $fallbackVarName;
         }
-        if ($normalizeStringVariableName === $caller) {
+        if ($normalizeStringVariableName === $callerName) {
             return $fallbackVarName;
         }
         return $normalizeStringVariableName;
