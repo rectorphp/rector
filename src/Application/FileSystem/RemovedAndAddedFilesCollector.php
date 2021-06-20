@@ -40,6 +40,8 @@ final class RemovedAndAddedFilesCollector
             return false;
         }
 
+        // early assign to variable for increase performance
+        // @see https://3v4l.org/FM3vY#focus=8.0.7 vs https://3v4l.org/JZW7b#focus=8.0.7
         $pathname = $smartFileInfo->getPathname();
         foreach ($this->removedFileInfos as $removedFileInfo) {
             if ($removedFileInfo->getPathname() !== $pathname) {
