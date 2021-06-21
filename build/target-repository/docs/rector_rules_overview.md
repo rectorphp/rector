@@ -1,4 +1,4 @@
-# 500 Rules Overview
+# 495 Rules Overview
 
 <br>
 
@@ -50,7 +50,7 @@
 
 - [Naming](#naming) (9)
 
-- [Order](#order) (6)
+- [Order](#order) (1)
 
 - [PHPOffice](#phpoffice) (14)
 
@@ -6194,85 +6194,6 @@ Rename variable to match new ClassType
 
 ## Order
 
-### OrderClassConstantsByIntegerValueRector
-
-Order class constant order by their integer value
-
-- class: [`Rector\Order\Rector\Class_\OrderClassConstantsByIntegerValueRector`](../rules/Order/Rector/Class_/OrderClassConstantsByIntegerValueRector.php)
-
-```diff
- class SomeClass
- {
-     const MODE_ON = 0;
-
-+    const MODE_MAYBE = 1;
-+
-     const MODE_OFF = 2;
--
--    const MODE_MAYBE = 1;
- }
-```
-
-<br>
-
-### OrderConstantsByVisibilityRector
-
-Orders constants by visibility
-
-- class: [`Rector\Order\Rector\Class_\OrderConstantsByVisibilityRector`](../rules/Order/Rector/Class_/OrderConstantsByVisibilityRector.php)
-
-```diff
- final class SomeClass
- {
-+    public const PUBLIC_CONST = 'public';
-+    protected const PROTECTED_CONST = 'protected';
-     private const PRIVATE_CONST = 'private';
--    protected const PROTECTED_CONST = 'protected';
--    public const PUBLIC_CONST = 'public';
- }
-```
-
-<br>
-
-### OrderFirstLevelClassStatementsRector
-
-Orders first level Class statements
-
-- class: [`Rector\Order\Rector\Class_\OrderFirstLevelClassStatementsRector`](../rules/Order/Rector/Class_/OrderFirstLevelClassStatementsRector.php)
-
-```diff
- final class SomeClass
- {
-+    use TraitName;
-+    private const CONST_NAME = 'constant_value';
-+    protected $propertyName;
-     public function functionName();
--    protected $propertyName;
--    private const CONST_NAME = 'constant_value';
--    use TraitName;
- }
-```
-
-<br>
-
-### OrderMethodsByVisibilityRector
-
-Orders method by visibility
-
-- class: [`Rector\Order\Rector\Class_\OrderMethodsByVisibilityRector`](../rules/Order/Rector/Class_/OrderMethodsByVisibilityRector.php)
-
-```diff
- class SomeClass
- {
-+    public function publicFunctionName();
-     protected function protectedFunctionName();
-     private function privateFunctionName();
--    public function publicFunctionName();
- }
-```
-
-<br>
-
 ### OrderPrivateMethodsByUseRector
 
 Order private methods in order of their use
@@ -6297,24 +6218,6 @@ Order private methods in order of their use
 +    private function call2()
      {
      }
- }
-```
-
-<br>
-
-### OrderPropertiesByVisibilityRector
-
-Orders properties by visibility
-
-- class: [`Rector\Order\Rector\Class_\OrderPropertiesByVisibilityRector`](../rules/Order/Rector/Class_/OrderPropertiesByVisibilityRector.php)
-
-```diff
- final class SomeClass
- {
-+    public $publicProperty;
-     protected $protectedProperty;
-     private $privateProperty;
--    public $publicProperty;
  }
 ```
 
@@ -12334,7 +12237,7 @@ Add return type to function like with return new
  final class SomeClass
  {
 -    public function action()
-+    public function action(): Respose
++    public function action(): Response
      {
          return new Response();
      }
