@@ -48,10 +48,6 @@ final class Configuration
      */
     private $parameterProvider;
     /**
-     * @var string|null
-     */
-    private $outputFile;
-    /**
      * @var bool
      */
     private $showDiffs = \true;
@@ -76,9 +72,6 @@ final class Configuration
         $this->showProgressBar = $this->canShowProgressBar($input);
         $this->showDiffs = !(bool) $input->getOption(\Rector\Core\Configuration\Option::OPTION_NO_DIFFS);
         $this->isCacheDebug = (bool) $input->getOption(\Rector\Core\Configuration\Option::CACHE_DEBUG);
-        /** @var string|null $outputFileOption */
-        $outputFileOption = $input->getOption(\Rector\Core\Configuration\Option::OPTION_OUTPUT_FILE);
-        $this->outputFile = $this->sanitizeOutputFileValue($outputFileOption);
         $this->outputFormat = (string) $input->getOption(\Rector\Core\Configuration\Option::OPTION_OUTPUT_FORMAT);
         $commandLinePaths = (array) $input->getArgument(\Rector\Core\Configuration\Option::SOURCE);
         // manual command line value has priority
@@ -104,10 +97,6 @@ final class Configuration
             return \false;
         }
         return $this->showProgressBar;
-    }
-    public function getOutputFile() : ?string
-    {
-        return $this->outputFile;
     }
     public function shouldClearCache() : bool
     {
@@ -182,13 +171,6 @@ final class Configuration
         }
         $optionOutputFormat = $input->getOption(\Rector\Core\Configuration\Option::OPTION_OUTPUT_FORMAT);
         return $optionOutputFormat === \Rector\ChangesReporting\Output\ConsoleOutputFormatter::NAME;
-    }
-    private function sanitizeOutputFileValue(?string $outputFileOption) : ?string
-    {
-        if ($outputFileOption === '') {
-            return null;
-        }
-        return $outputFileOption;
     }
     /**
      * @param string[] $commandLinePaths

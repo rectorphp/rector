@@ -56,12 +56,7 @@ final class JsonOutputFormatter implements \Rector\ChangesReporting\Contract\Out
             $errorsArray['errors'] = $errorsData;
         }
         $json = \RectorPrefix20210621\Nette\Utils\Json::encode($errorsArray, \RectorPrefix20210621\Nette\Utils\Json::PRETTY);
-        $outputFile = $this->configuration->getOutputFile();
-        if ($outputFile !== null) {
-            $this->smartFileSystem->dumpFile($outputFile, $json . \PHP_EOL);
-        } else {
-            echo $json . \PHP_EOL;
-        }
+        echo $json . \PHP_EOL;
     }
     /**
      * @param mixed[] $errors
