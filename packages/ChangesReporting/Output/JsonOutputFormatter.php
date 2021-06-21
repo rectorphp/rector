@@ -70,13 +70,7 @@ final class JsonOutputFormatter implements OutputFormatterInterface
         }
 
         $json = Json::encode($errorsArray, Json::PRETTY);
-
-        $outputFile = $this->configuration->getOutputFile();
-        if ($outputFile !== null) {
-            $this->smartFileSystem->dumpFile($outputFile, $json . PHP_EOL);
-        } else {
-            echo $json . PHP_EOL;
-        }
+        echo $json . PHP_EOL;
     }
 
     /**

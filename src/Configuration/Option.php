@@ -66,11 +66,6 @@ final class Option
     /**
      * @var string
      */
-    public const OPTION_OUTPUT_FILE = 'output-file';
-
-    /**
-     * @var string
-     */
     public const OPTION_CLEAR_CACHE = 'clear-cache';
 
     /**

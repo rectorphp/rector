@@ -37,8 +37,6 @@ final class Configuration
 
     private ParameterProvider $parameterProvider;
 
-    private ?string $outputFile = null;
-
     private bool $showDiffs = true;
 
     private ?BootstrapConfigs $bootstrapConfigs = null;
@@ -62,10 +60,6 @@ final class Configuration
         $this->showProgressBar = $this->canShowProgressBar($input);
         $this->showDiffs = ! (bool) $input->getOption(Option::OPTION_NO_DIFFS);
         $this->isCacheDebug = (bool) $input->getOption(Option::CACHE_DEBUG);
-
-        /** @var string|null $outputFileOption */
-        $outputFileOption = $input->getOption(Option::OPTION_OUTPUT_FILE);
-        $this->outputFile = $this->sanitizeOutputFileValue($outputFileOption);
 
         $this->outputFormat = (string) $input->getOption(Option::OPTION_OUTPUT_FORMAT);
 
@@ -98,11 +92,6 @@ final class Configuration
         }
 
         return $this->showProgressBar;
-    }
-
-    public function getOutputFile(): ?string
-    {
-        return $this->outputFile;
     }
 
     public function shouldClearCache(): bool
@@ -200,15 +189,6 @@ final class Configuration
 
         $optionOutputFormat = $input->getOption(Option::OPTION_OUTPUT_FORMAT);
         return $optionOutputFormat === ConsoleOutputFormatter::NAME;
-    }
-
-    private function sanitizeOutputFileValue(?string $outputFileOption): ?string
-    {
-        if ($outputFileOption === '') {
-            return null;
-        }
-
-        return $outputFileOption;
     }
 
     /**

@@ -8,7 +8,6 @@ use Nette\Utils\Strings;
 use Rector\ChangesReporting\Annotation\RectorsChangelogResolver;
 use Rector\ChangesReporting\Contract\Output\OutputFormatterInterface;
 use Rector\Core\Configuration\Configuration;
-use Rector\Core\Configuration\Option;
 use Rector\Core\Contract\Console\OutputStyleInterface;
 use Rector\Core\ValueObject\Application\RectorError;
 use Rector\Core\ValueObject\ProcessResult;
@@ -36,16 +35,6 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
 
     public function report(ProcessResult $processResult): void
     {
-        if ($this->configuration->getOutputFile()) {
-            $message = sprintf(
-                'Option "--%s" can be used only with "--%s %s"',
-                Option::OPTION_OUTPUT_FILE,
-                Option::OPTION_OUTPUT_FORMAT,
-                'json'
-            );
-            $this->outputStyle->error($message);
-        }
-
         if ($this->configuration->shouldShowDiffs()) {
             $this->reportFileDiffs($processResult->getFileDiffs());
         }

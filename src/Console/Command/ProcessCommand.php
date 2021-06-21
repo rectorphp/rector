@@ -95,13 +95,6 @@ final class ProcessCommand extends Command
             'Hide diffs of changed files. Useful e.g. for nicer CI output.'
         );
 
-        $this->addOption(
-            Option::OPTION_OUTPUT_FILE,
-            null,
-            InputOption::VALUE_REQUIRED,
-            'Location for file to dump result in. Useful for Docker or automated processes'
-        );
-
         $this->addOption(Option::CACHE_DEBUG, null, InputOption::VALUE_NONE, 'Debug changed file cache');
         $this->addOption(Option::OPTION_CLEAR_CACHE, null, InputOption::VALUE_NONE, 'Clear unchaged files cache');
     }
