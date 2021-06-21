@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210620\Symfony\Component\Process\Pipes;
+namespace RectorPrefix20210621\Symfony\Component\Process\Pipes;
 
-use RectorPrefix20210620\Symfony\Component\Process\Exception\RuntimeException;
-use RectorPrefix20210620\Symfony\Component\Process\Process;
+use RectorPrefix20210621\Symfony\Component\Process\Exception\RuntimeException;
+use RectorPrefix20210621\Symfony\Component\Process\Process;
 /**
  * WindowsPipes implementation uses temporary files as handles.
  *
@@ -22,12 +22,12 @@ use RectorPrefix20210620\Symfony\Component\Process\Process;
  *
  * @internal
  */
-class WindowsPipes extends \RectorPrefix20210620\Symfony\Component\Process\Pipes\AbstractPipes
+class WindowsPipes extends \RectorPrefix20210621\Symfony\Component\Process\Pipes\AbstractPipes
 {
     private $files = [];
     private $fileHandles = [];
     private $lockHandles = [];
-    private $readBytes = [\RectorPrefix20210620\Symfony\Component\Process\Process::STDOUT => 0, \RectorPrefix20210620\Symfony\Component\Process\Process::STDERR => 0];
+    private $readBytes = [\RectorPrefix20210621\Symfony\Component\Process\Process::STDOUT => 0, \RectorPrefix20210621\Symfony\Component\Process\Process::STDERR => 0];
     private $haveReadSupport;
     public function __construct($input, bool $haveReadSupport)
     {
@@ -37,7 +37,7 @@ class WindowsPipes extends \RectorPrefix20210620\Symfony\Component\Process\Pipes
             // Workaround for this problem is to use temporary files instead of pipes on Windows platform.
             //
             // @see https://bugs.php.net/51800
-            $pipes = [\RectorPrefix20210620\Symfony\Component\Process\Process::STDOUT => \RectorPrefix20210620\Symfony\Component\Process\Process::OUT, \RectorPrefix20210620\Symfony\Component\Process\Process::STDERR => \RectorPrefix20210620\Symfony\Component\Process\Process::ERR];
+            $pipes = [\RectorPrefix20210621\Symfony\Component\Process\Process::STDOUT => \RectorPrefix20210621\Symfony\Component\Process\Process::OUT, \RectorPrefix20210621\Symfony\Component\Process\Process::STDERR => \RectorPrefix20210621\Symfony\Component\Process\Process::ERR];
             $tmpDir = \sys_get_temp_dir();
             $lastError = 'unknown reason';
             \set_error_handler(function ($type, $msg) use(&$lastError) {
@@ -51,7 +51,7 @@ class WindowsPipes extends \RectorPrefix20210620\Symfony\Component\Process\Pipes
                             continue 2;
                         }
                         \restore_error_handler();
-                        throw new \RectorPrefix20210620\Symfony\Component\Process\Exception\RuntimeException('A temporary file could not be opened to write the process output: ' . $lastError);
+                        throw new \RectorPrefix20210621\Symfony\Component\Process\Exception\RuntimeException('A temporary file could not be opened to write the process output: ' . $lastError);
                     }
                     if (!\flock($h, \LOCK_EX | \LOCK_NB)) {
                         continue 2;
@@ -119,9 +119,9 @@ class WindowsPipes extends \RectorPrefix20210620\Symfony\Component\Process\Pipes
         $read = $r = $e = [];
         if ($blocking) {
             if ($w) {
-                @\stream_select($r, $w, $e, 0, \RectorPrefix20210620\Symfony\Component\Process\Process::TIMEOUT_PRECISION * 1000000.0);
+                @\stream_select($r, $w, $e, 0, \RectorPrefix20210621\Symfony\Component\Process\Process::TIMEOUT_PRECISION * 1000000.0);
             } elseif ($this->fileHandles) {
-                \usleep(\RectorPrefix20210620\Symfony\Component\Process\Process::TIMEOUT_PRECISION * 1000000.0);
+                \usleep(\RectorPrefix20210621\Symfony\Component\Process\Process::TIMEOUT_PRECISION * 1000000.0);
             }
         }
         foreach ($this->fileHandles as $type => $fileHandle) {

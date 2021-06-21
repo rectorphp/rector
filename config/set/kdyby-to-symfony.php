@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210620;
+namespace RectorPrefix20210621;
 
 use Rector\Core\ValueObject\Visibility;
 use Rector\NetteToSymfony\Rector\MethodCall\WrapTransParameterNameRector;

@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210620\TYPO3\CMS\Core\Charset;
+namespace RectorPrefix20210621\TYPO3\CMS\Core\Charset;
 
 if (\class_exists('TYPO3\\CMS\\Core\\Charset\\CharsetConverter')) {
     return;

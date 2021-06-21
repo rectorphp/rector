@@ -8,14 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210620\Symfony\Component\HttpFoundation\File;
+namespace RectorPrefix20210621\Symfony\Component\HttpFoundation\File;
 
 /**
  * A PHP stream of unknown size.
  *
  * @author Nicolas Grekas <p@tchwork.com>
  */
-class Stream extends \RectorPrefix20210620\Symfony\Component\HttpFoundation\File\File
+class Stream extends \RectorPrefix20210621\Symfony\Component\HttpFoundation\File\File
 {
     /**
      * {@inheritdoc}

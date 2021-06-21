@@ -8,14 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210620\Symfony\Component\Console\Question;
+namespace RectorPrefix20210621\Symfony\Component\Console\Question;
 
 /**
  * Represents a yes/no question.
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class ConfirmationQuestion extends \RectorPrefix20210620\Symfony\Component\Console\Question\Question
+class ConfirmationQuestion extends \RectorPrefix20210621\Symfony\Component\Console\Question\Question
 {
     private $trueAnswerRegex;
     /**
