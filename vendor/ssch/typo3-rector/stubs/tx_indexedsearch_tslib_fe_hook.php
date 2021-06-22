@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210621;
+namespace RectorPrefix20210622;
 
 if (\class_exists('tx_indexedsearch_tslib_fe_hook')) {
     return;

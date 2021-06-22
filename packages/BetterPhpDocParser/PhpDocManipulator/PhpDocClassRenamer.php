@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\BetterPhpDocParser\PhpDocManipulator;
 
-use RectorPrefix20210621\Nette\Utils\Strings;
+use RectorPrefix20210622\Nette\Utils\Strings;
 use PhpParser\Node;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
@@ -79,7 +79,7 @@ final class PhpDocClassRenamer
                     $doctrineAnnotationTagValueNode->changeSilentValue($newClass);
                     continue;
                 }
-                $newContent = \RectorPrefix20210621\Nette\Utils\Strings::replace($className, '#\\b' . \preg_quote($oldClass, '#') . '\\b#', $newClass);
+                $newContent = \RectorPrefix20210622\Nette\Utils\Strings::replace($className, '#\\b' . \preg_quote($oldClass, '#') . '\\b#', $newClass);
                 if ($newContent === $className) {
                     continue;
                 }
@@ -98,11 +98,7 @@ final class PhpDocClassRenamer
      */
     private function processDoctrineToMany(\Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode, \PhpParser\Node $node, array $oldToNewClasses) : void
     {
-        if ($doctrineAnnotationTagValueNode->getAnnotationClass() === 'Doctrine\\ORM\\Mapping\\Embedded') {
-            $classKey = 'class';
-        } else {
-            $classKey = 'targetEntity';
-        }
+        $classKey = $doctrineAnnotationTagValueNode->hasClassName('Doctrine\\ORM\\Mapping\\Embedded') ? 'class' : 'targetEntity';
         $targetEntity = $doctrineAnnotationTagValueNode->getValueWithoutQuotes($classKey);
         if ($targetEntity === null) {
             return;

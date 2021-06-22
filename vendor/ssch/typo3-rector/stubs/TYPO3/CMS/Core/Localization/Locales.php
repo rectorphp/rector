@@ -1,8 +1,8 @@
 <?php
 
-namespace RectorPrefix20210621\TYPO3\CMS\Core\Localization;
+namespace RectorPrefix20210622\TYPO3\CMS\Core\Localization;
 
-use RectorPrefix20210621\TYPO3\CMS\Core\Site\Entity\SiteLanguage;
+use RectorPrefix20210622\TYPO3\CMS\Core\Site\Entity\SiteLanguage;
 if (\class_exists('TYPO3\\CMS\\Core\\Localization\\Locales')) {
     return;
 }
@@ -11,7 +11,7 @@ class Locales
     /**
      * @return void
      */
-    public static function setSystemLocaleFromSiteLanguage(\RectorPrefix20210621\TYPO3\CMS\Core\Site\Entity\SiteLanguage $siteLanguage)
+    public static function setSystemLocaleFromSiteLanguage(\RectorPrefix20210622\TYPO3\CMS\Core\Site\Entity\SiteLanguage $siteLanguage)
     {
     }
     /**

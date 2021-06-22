@@ -10,6 +10,14 @@ final class RenamedClassesDataCollector
      * @var array<string, string>
      */
     private $oldToNewClasses = [];
+    public function addOldToNewClass(string $oldClass, string $newClass) : void
+    {
+        $this->oldToNewClasses[$oldClass] = $newClass;
+    }
+    public function hasOldClass(string $oldClass) : bool
+    {
+        return isset($this->oldToNewClasses[$oldClass]);
+    }
     /**
      * @param array<string, string> $oldToNewClasses
      */
@@ -32,5 +40,12 @@ final class RenamedClassesDataCollector
             return null;
         }
         return new \PHPStan\Type\ObjectType($renamedClassName);
+    }
+    /**
+     * @return string[]
+     */
+    public function getOldClasses() : array
+    {
+        return \array_keys($this->oldToNewClasses);
     }
 }

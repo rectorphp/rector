@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210621\TYPO3\CMS\Core\Html;
+namespace RectorPrefix20210622\TYPO3\CMS\Core\Html;
 
 if (\class_exists('TYPO3\\CMS\\Core\\Html\\HtmlParser')) {
     return;

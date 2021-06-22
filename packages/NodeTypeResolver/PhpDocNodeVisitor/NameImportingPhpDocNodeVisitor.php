@@ -7,6 +7,9 @@ use PhpParser\Node as PhpParserNode;
 use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\TemplateTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
+use PHPStan\Type\ObjectType;
+use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
+use Rector\BetterPhpDocParser\PhpDoc\SpacelessPhpDocTagNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 use Rector\CodingStyle\ClassNameImport\ClassNameImportSkipper;
 use Rector\Core\Configuration\Option;
@@ -14,9 +17,9 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\PostRector\Collector\UseNodesToAddCollector;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
-use RectorPrefix20210621\Symplify\PackageBuilder\Parameter\ParameterProvider;
-use RectorPrefix20210621\Symplify\SimplePhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor;
-final class NameImportingPhpDocNodeVisitor extends \RectorPrefix20210621\Symplify\SimplePhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor
+use RectorPrefix20210622\Symplify\PackageBuilder\Parameter\ParameterProvider;
+use RectorPrefix20210622\Symplify\SimplePhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor;
+final class NameImportingPhpDocNodeVisitor extends \RectorPrefix20210622\Symplify\SimplePhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor
 {
     /**
      * @var PhpParserNode|null
@@ -38,7 +41,7 @@ final class NameImportingPhpDocNodeVisitor extends \RectorPrefix20210621\Symplif
      * @var \Rector\PostRector\Collector\UseNodesToAddCollector
      */
     private $useNodesToAddCollector;
-    public function __construct(\Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \RectorPrefix20210621\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \Rector\CodingStyle\ClassNameImport\ClassNameImportSkipper $classNameImportSkipper, \Rector\PostRector\Collector\UseNodesToAddCollector $useNodesToAddCollector)
+    public function __construct(\Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \RectorPrefix20210622\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \Rector\CodingStyle\ClassNameImport\ClassNameImportSkipper $classNameImportSkipper, \Rector\PostRector\Collector\UseNodesToAddCollector $useNodesToAddCollector)
     {
         $this->staticTypeMapper = $staticTypeMapper;
         $this->parameterProvider = $parameterProvider;
@@ -53,6 +56,13 @@ final class NameImportingPhpDocNodeVisitor extends \RectorPrefix20210621\Symplif
     }
     public function enterNode(\PHPStan\PhpDocParser\Ast\Node $node) : ?\PHPStan\PhpDocParser\Ast\Node
     {
+        if ($node instanceof \Rector\BetterPhpDocParser\PhpDoc\SpacelessPhpDocTagNode) {
+            return $this->enterSpacelessPhpDocTagNode($node);
+        }
+        if ($node instanceof \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode) {
+            $this->processDoctrineAnnotationTagValueNode($node);
+            return $node;
+        }
         if (!$node instanceof \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode) {
             return null;
         }
@@ -91,7 +101,7 @@ final class NameImportingPhpDocNodeVisitor extends \RectorPrefix20210621\Symplif
             }
             return $identifierTypeNode;
         }
-        $this->useNodesToAddCollector->addUseImport($phpParserNode, $fullyQualifiedObjectType);
+        $this->useNodesToAddCollector->addUseImport($fullyQualifiedObjectType);
         $newNode = new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode($fullyQualifiedObjectType->getShortName());
         if ($newNode->name !== $identifierTypeNode->name) {
             return $newNode;
@@ -105,5 +115,50 @@ final class NameImportingPhpDocNodeVisitor extends \RectorPrefix20210621\Symplif
             return \false;
         }
         return \substr_count($fullyQualifiedObjectType->getClassName(), '\\') === 0;
+    }
+    private function processDoctrineAnnotationTagValueNode(\Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode) : void
+    {
+        $identifierTypeNode = $doctrineAnnotationTagValueNode->identifierTypeNode;
+        $staticType = $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType($identifierTypeNode, $this->currentPhpParserNode);
+        if (!$staticType instanceof \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType) {
+            if (!$staticType instanceof \PHPStan\Type\ObjectType) {
+                return;
+            }
+            $staticType = new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType($staticType->getClassName());
+        }
+        $shortentedIdentifierTypeNode = $this->processFqnNameImport($this->currentPhpParserNode, $identifierTypeNode, $staticType);
+        if (!$shortentedIdentifierTypeNode instanceof \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode) {
+            return;
+        }
+        $doctrineAnnotationTagValueNode->identifierTypeNode = $shortentedIdentifierTypeNode;
+        $doctrineAnnotationTagValueNode->markAsChanged();
+    }
+    /**
+     * @return \Rector\BetterPhpDocParser\PhpDoc\SpacelessPhpDocTagNode|null
+     */
+    private function enterSpacelessPhpDocTagNode(\Rector\BetterPhpDocParser\PhpDoc\SpacelessPhpDocTagNode $spacelessPhpDocTagNode)
+    {
+        if (!$spacelessPhpDocTagNode->value instanceof \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode) {
+            return null;
+        }
+        // special case for doctrine annotation
+        if (\strncmp($spacelessPhpDocTagNode->name, '@', \strlen('@')) !== 0) {
+            return null;
+        }
+        $attributeClass = \ltrim($spacelessPhpDocTagNode->name, '@\\');
+        $identifierTypeNode = new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode($attributeClass);
+        $staticType = $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType(new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode($attributeClass), $this->currentPhpParserNode);
+        if (!$staticType instanceof \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType) {
+            if (!$staticType instanceof \PHPStan\Type\ObjectType) {
+                return null;
+            }
+            $staticType = new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType($staticType->getClassName());
+        }
+        $importedName = $this->processFqnNameImport($this->currentPhpParserNode, $identifierTypeNode, $staticType);
+        if ($importedName !== null) {
+            $spacelessPhpDocTagNode->name = '@' . $importedName->name;
+            return $spacelessPhpDocTagNode;
+        }
+        return null;
     }
 }

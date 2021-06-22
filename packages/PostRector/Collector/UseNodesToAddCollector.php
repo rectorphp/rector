@@ -42,7 +42,7 @@ final class UseNodesToAddCollector implements \Rector\PostRector\Contract\Collec
     /**
      * @param FullyQualifiedObjectType|AliasedObjectType $objectType
      */
-    public function addUseImport(\PhpParser\Node $positionNode, \PHPStan\Type\ObjectType $objectType) : void
+    public function addUseImport(\PHPStan\Type\ObjectType $objectType) : void
     {
         $file = $this->currentFileProvider->getFile();
         $smartFileInfo = $file->getSmartFileInfo();

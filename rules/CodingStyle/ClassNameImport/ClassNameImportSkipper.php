@@ -8,7 +8,7 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
 use Rector\CodingStyle\Contract\ClassNameImport\ClassNameImportSkipVoterInterface;
-use Rector\PSR4\Collector\RenamedClassesCollector;
+use Rector\Core\Configuration\RenamedClassesDataCollector;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 final class ClassNameImportSkipper
 {
@@ -17,16 +17,16 @@ final class ClassNameImportSkipper
      */
     private $classNameImportSkipVoters;
     /**
-     * @var \Rector\PSR4\Collector\RenamedClassesCollector
+     * @var \Rector\Core\Configuration\RenamedClassesDataCollector
      */
-    private $renamedClassesCollector;
+    private $renamedClassesDataCollector;
     /**
      * @param ClassNameImportSkipVoterInterface[] $classNameImportSkipVoters
      */
-    public function __construct(array $classNameImportSkipVoters, \Rector\PSR4\Collector\RenamedClassesCollector $renamedClassesCollector)
+    public function __construct(array $classNameImportSkipVoters, \Rector\Core\Configuration\RenamedClassesDataCollector $renamedClassesDataCollector)
     {
         $this->classNameImportSkipVoters = $classNameImportSkipVoters;
-        $this->renamedClassesCollector = $renamedClassesCollector;
+        $this->renamedClassesDataCollector = $renamedClassesDataCollector;
     }
     public function shouldSkipNameForFullyQualifiedObjectType(\PhpParser\Node $node, \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType $fullyQualifiedObjectType) : bool
     {
@@ -83,7 +83,7 @@ final class ClassNameImportSkipper
     private function isJustRenamedClass(\PhpParser\Node\Name $name, \PhpParser\Node\Stmt\UseUse $useUse) : bool
     {
         // is in renamed classes? skip it
-        foreach ($this->renamedClassesCollector->getOldToNewClasses() as $oldClass => $newClass) {
+        foreach ($this->renamedClassesDataCollector->getOldToNewClasses() as $oldClass => $newClass) {
             // is class being renamed in use imports?
             if ($name->toString() !== $newClass) {
                 continue;

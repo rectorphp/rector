@@ -7,6 +7,7 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Namespace_;
 use Rector\CodingStyle\Application\UseImportsAdder;
 use Rector\CodingStyle\Application\UseImportsRemover;
+use Rector\Core\Configuration\RenamedClassesDataCollector;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\Core\Provider\CurrentFileProvider;
@@ -41,7 +42,11 @@ final class UseAddingPostRector extends \Rector\PostRector\Rector\AbstractPostRe
      * @var \Rector\Core\Provider\CurrentFileProvider
      */
     private $currentFileProvider;
-    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory $typeFactory, \Rector\CodingStyle\Application\UseImportsAdder $useImportsAdder, \Rector\CodingStyle\Application\UseImportsRemover $useImportsRemover, \Rector\PostRector\Collector\UseNodesToAddCollector $useNodesToAddCollector, \Rector\Core\Provider\CurrentFileProvider $currentFileProvider)
+    /**
+     * @var \Rector\Core\Configuration\RenamedClassesDataCollector
+     */
+    private $renamedClassesDataCollector;
+    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory $typeFactory, \Rector\CodingStyle\Application\UseImportsAdder $useImportsAdder, \Rector\CodingStyle\Application\UseImportsRemover $useImportsRemover, \Rector\PostRector\Collector\UseNodesToAddCollector $useNodesToAddCollector, \Rector\Core\Provider\CurrentFileProvider $currentFileProvider, \Rector\Core\Configuration\RenamedClassesDataCollector $renamedClassesDataCollector)
     {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->typeFactory = $typeFactory;
@@ -49,6 +54,7 @@ final class UseAddingPostRector extends \Rector\PostRector\Rector\AbstractPostRe
         $this->useImportsRemover = $useImportsRemover;
         $this->useNodesToAddCollector = $useNodesToAddCollector;
         $this->currentFileProvider = $currentFileProvider;
+        $this->renamedClassesDataCollector = $renamedClassesDataCollector;
     }
     /**
      * @param Stmt[] $nodes
@@ -65,8 +71,9 @@ final class UseAddingPostRector extends \Rector\PostRector\Rector\AbstractPostRe
         $useImportTypes = $this->useNodesToAddCollector->getObjectImportsByFileInfo($smartFileInfo);
         $functionUseImportTypes = $this->useNodesToAddCollector->getFunctionImportsByFileInfo($smartFileInfo);
         $removedShortUses = $this->useNodesToAddCollector->getShortUsesByFileInfo($smartFileInfo);
+        $oldToNewClasses = $this->renamedClassesDataCollector->getOldToNewClasses();
         // nothing to import or remove
-        if ($useImportTypes === [] && $functionUseImportTypes === [] && $removedShortUses === []) {
+        if ($useImportTypes === [] && $functionUseImportTypes === [] && $removedShortUses === [] && $oldToNewClasses === []) {
             return $nodes;
         }
         /** @var FullyQualifiedObjectType[] $useImportTypes */
@@ -85,6 +92,7 @@ final class UseAddingPostRector extends \Rector\PostRector\Rector\AbstractPostRe
         if ($firstNode instanceof \Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace) {
             $nodes = $firstNode->stmts;
         }
+        $removedShortUses = \array_merge($removedShortUses, $this->renamedClassesDataCollector->getOldClasses());
         // B. no namespace? add in the top
         // first clean
         $nodes = $this->useImportsRemover->removeImportsFromStmts($nodes, $removedShortUses);

@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace Rector\PostRector\Rector;
 
 use PhpParser\Node;
-use Rector\PSR4\Collector\RenamedClassesCollector;
+use Rector\Core\Configuration\RenamedClassesDataCollector;
 use Rector\Renaming\NodeManipulator\ClassRenamer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -15,13 +15,13 @@ final class ClassRenamingPostRector extends \Rector\PostRector\Rector\AbstractPo
      */
     private $classRenamer;
     /**
-     * @var \Rector\PSR4\Collector\RenamedClassesCollector
+     * @var \Rector\Core\Configuration\RenamedClassesDataCollector
      */
-    private $renamedClassesCollector;
-    public function __construct(\Rector\Renaming\NodeManipulator\ClassRenamer $classRenamer, \Rector\PSR4\Collector\RenamedClassesCollector $renamedClassesCollector)
+    private $renamedClassesDataCollector;
+    public function __construct(\Rector\Renaming\NodeManipulator\ClassRenamer $classRenamer, \Rector\Core\Configuration\RenamedClassesDataCollector $renamedClassesDataCollector)
     {
         $this->classRenamer = $classRenamer;
-        $this->renamedClassesCollector = $renamedClassesCollector;
+        $this->renamedClassesDataCollector = $renamedClassesDataCollector;
     }
     public function getPriority() : int
     {
@@ -30,7 +30,7 @@ final class ClassRenamingPostRector extends \Rector\PostRector\Rector\AbstractPo
     }
     public function enterNode(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        $oldToNewClasses = $this->renamedClassesCollector->getOldToNewClasses();
+        $oldToNewClasses = $this->renamedClassesDataCollector->getOldToNewClasses();
         if ($oldToNewClasses === []) {
             return $node;
         }

@@ -16,23 +16,23 @@ use PHPStan\Type\StaticType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
+use Rector\Core\Configuration\RenamedClassesDataCollector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PSR4\Collector\RenamedClassesCollector;
 use Rector\StaticTypeMapper\Contract\PhpParser\PhpParserNodeMapperInterface;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 final class NameNodeMapper implements \Rector\StaticTypeMapper\Contract\PhpParser\PhpParserNodeMapperInterface
 {
     /**
-     * @var \Rector\PSR4\Collector\RenamedClassesCollector
+     * @var \Rector\Core\Configuration\RenamedClassesDataCollector
      */
-    private $renamedClassesCollector;
+    private $renamedClassesDataCollector;
     /**
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(\Rector\PSR4\Collector\RenamedClassesCollector $renamedClassesCollector, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
+    public function __construct(\Rector\Core\Configuration\RenamedClassesDataCollector $renamedClassesDataCollector, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
     {
-        $this->renamedClassesCollector = $renamedClassesCollector;
+        $this->renamedClassesDataCollector = $renamedClassesDataCollector;
         $this->reflectionProvider = $reflectionProvider;
     }
     /**
@@ -62,7 +62,7 @@ final class NameNodeMapper implements \Rector\StaticTypeMapper\Contract\PhpParse
             return \true;
         }
         // to be existing class names
-        $oldToNewClasses = $this->renamedClassesCollector->getOldToNewClasses();
+        $oldToNewClasses = $this->renamedClassesDataCollector->getOldToNewClasses();
         return \in_array($name, $oldToNewClasses, \true);
     }
     /**

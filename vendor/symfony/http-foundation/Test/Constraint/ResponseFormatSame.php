@@ -8,21 +8,21 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210621\Symfony\Component\HttpFoundation\Test\Constraint;
+namespace RectorPrefix20210622\Symfony\Component\HttpFoundation\Test\Constraint;
 
-use RectorPrefix20210621\PHPUnit\Framework\Constraint\Constraint;
-use RectorPrefix20210621\Symfony\Component\HttpFoundation\Request;
-use RectorPrefix20210621\Symfony\Component\HttpFoundation\Response;
+use RectorPrefix20210622\PHPUnit\Framework\Constraint\Constraint;
+use RectorPrefix20210622\Symfony\Component\HttpFoundation\Request;
+use RectorPrefix20210622\Symfony\Component\HttpFoundation\Response;
 /**
  * Asserts that the response is in the given format.
  *
  * @author Kévin Dunglas <dunglas@gmail.com>
  */
-final class ResponseFormatSame extends \RectorPrefix20210621\PHPUnit\Framework\Constraint\Constraint
+final class ResponseFormatSame extends \RectorPrefix20210622\PHPUnit\Framework\Constraint\Constraint
 {
     private $request;
     private $format;
-    public function __construct(\RectorPrefix20210621\Symfony\Component\HttpFoundation\Request $request, ?string $format)
+    public function __construct(\RectorPrefix20210622\Symfony\Component\HttpFoundation\Request $request, ?string $format)
     {
         $this->request = $request;
         $this->format = $format;

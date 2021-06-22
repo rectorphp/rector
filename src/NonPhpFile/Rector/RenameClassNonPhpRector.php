@@ -3,11 +3,10 @@
 declare (strict_types=1);
 namespace Rector\Core\NonPhpFile\Rector;
 
-use RectorPrefix20210621\Nette\Utils\Strings;
+use RectorPrefix20210622\Nette\Utils\Strings;
 use Rector\Core\Configuration\RenamedClassesDataCollector;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Contract\Rector\NonPhpRectorInterface;
-use Rector\PSR4\Collector\RenamedClassesCollector;
 use Symplify\RuleDocGenerator\Contract\ConfigurableRuleInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -37,14 +36,9 @@ final class RenameClassNonPhpRector implements \Rector\Core\Contract\Rector\NonP
      * @var \Rector\Core\Configuration\RenamedClassesDataCollector
      */
     private $renamedClassesDataCollector;
-    /**
-     * @var \Rector\PSR4\Collector\RenamedClassesCollector
-     */
-    private $renamedClassesCollector;
-    public function __construct(\Rector\Core\Configuration\RenamedClassesDataCollector $renamedClassesDataCollector, \Rector\PSR4\Collector\RenamedClassesCollector $renamedClassesCollector)
+    public function __construct(\Rector\Core\Configuration\RenamedClassesDataCollector $renamedClassesDataCollector)
     {
         $this->renamedClassesDataCollector = $renamedClassesDataCollector;
-        $this->renamedClassesCollector = $renamedClassesCollector;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -79,7 +73,7 @@ CODE_SAMPLE
         foreach ($classRenames as $oldClass => $newClass) {
             // the old class is without slashes, it can make mess as similar to a word in the text, so we have to be more strict about it
             $oldClassRegex = $this->createOldClassRegex($oldClass);
-            $newContent = \RectorPrefix20210621\Nette\Utils\Strings::replace($newContent, $oldClassRegex, function (array $match) use($newClass) : string {
+            $newContent = \RectorPrefix20210622\Nette\Utils\Strings::replace($newContent, $oldClassRegex, function (array $match) use($newClass) : string {
                 return ($match['extra_space'] ?? '') . $newClass;
             });
         }
@@ -109,7 +103,7 @@ CODE_SAMPLE
      */
     private function getRenameClasses() : array
     {
-        return \array_merge($this->renameClasses, $this->renamedClassesDataCollector->getOldToNewClasses(), $this->renamedClassesCollector->getOldToNewClasses());
+        return \array_merge($this->renameClasses, $this->renamedClassesDataCollector->getOldToNewClasses());
     }
     private function createOldClassRegex(string $oldClass) : string
     {

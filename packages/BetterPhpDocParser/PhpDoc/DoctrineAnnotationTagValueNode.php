@@ -3,20 +3,21 @@
 declare (strict_types=1);
 namespace Rector\BetterPhpDocParser\PhpDoc;
 
+use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\AbstractValuesAwareNode;
 use Stringable;
 final class DoctrineAnnotationTagValueNode extends \Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\AbstractValuesAwareNode
 {
     /**
-     * @var string
+     * @var \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode
      */
-    private $annotationClass;
+    public $identifierTypeNode;
     /**
      * @param array<mixed, mixed> $values
      */
-    public function __construct(string $annotationClass, ?string $originalContent = null, array $values = [], ?string $silentKey = null)
+    public function __construct(\PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode $identifierTypeNode, ?string $originalContent = null, array $values = [], ?string $silentKey = null)
     {
-        $this->annotationClass = $annotationClass;
+        $this->identifierTypeNode = $identifierTypeNode;
         $this->hasChanged = \true;
         parent::__construct($values, $originalContent, $silentKey);
     }
@@ -38,8 +39,8 @@ final class DoctrineAnnotationTagValueNode extends \Rector\BetterPhpDocParser\Va
         $itemContents = $this->printValuesContent($this->values);
         return \sprintf('(%s)', $itemContents);
     }
-    public function getAnnotationClass() : string
+    public function hasClassName(string $className) : bool
     {
-        return $this->annotationClass;
+        return $this->identifierTypeNode->name === $className;
     }
 }

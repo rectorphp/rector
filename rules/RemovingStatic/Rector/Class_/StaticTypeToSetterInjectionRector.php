@@ -51,13 +51,13 @@ final class StaticTypeToSetterInjectionRector extends \Rector\Core\Rector\Abstra
         return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Changes types to setter injection', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
 <?php
 
-namespace RectorPrefix20210621;
+namespace RectorPrefix20210622;
 
 final class CheckoutEntityFactory
 {
     public function run()
     {
-        return \RectorPrefix20210621\SomeStaticClass::go();
+        return \RectorPrefix20210622\SomeStaticClass::go();
     }
 }
 \class_alias('CheckoutEntityFactory', 'CheckoutEntityFactory', \false);
@@ -65,7 +65,7 @@ CODE_SAMPLE
 , <<<'CODE_SAMPLE'
 <?php
 
-namespace RectorPrefix20210621;
+namespace RectorPrefix20210622;
 
 final class CheckoutEntityFactory
 {
@@ -73,7 +73,7 @@ final class CheckoutEntityFactory
      * @var SomeStaticClass
      */
     private $someStaticClass;
-    public function setSomeStaticClass(\RectorPrefix20210621\SomeStaticClass $someStaticClass)
+    public function setSomeStaticClass(\RectorPrefix20210622\SomeStaticClass $someStaticClass)
     {
         $this->someStaticClass = $someStaticClass;
     }

@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210621;
+namespace RectorPrefix20210622;
 
 if (\class_exists('t3lib_cache_backend_MemcachedBackend')) {
     return;

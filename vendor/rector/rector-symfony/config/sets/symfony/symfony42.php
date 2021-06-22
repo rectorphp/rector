@@ -1,15 +1,15 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210621;
+namespace RectorPrefix20210622;
 
 use PHPStan\Type\IterableType;
 use PHPStan\Type\MixedType;
 use Rector\Arguments\NodeAnalyzer\ArgumentAddingScope;
 use Rector\Arguments\Rector\ClassMethod\ArgumentAdderRector;
-use Rector\Arguments\Rector\ClassMethod\ArgumentDefaultValueReplacerRector;
+use Rector\Arguments\Rector\ClassMethod\ReplaceArgumentDefaultValueRector;
 use Rector\Arguments\ValueObject\ArgumentAdder;
-use Rector\Arguments\ValueObject\ArgumentDefaultValueReplacer;
+use Rector\Arguments\ValueObject\ReplaceArgumentDefaultValue;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\Visibility;
 use Rector\Removing\Rector\ClassMethod\ArgumentRemoverRector;
@@ -64,9 +64,9 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
     $services->set(\Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationRector::class)->call('configure', [[\Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationRector::METHOD_RETURN_TYPES => \Symplify\SymfonyPhpConfig\ValueObjectInliner::inline([new \Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration('Symfony\\Component\\Form\\AbstractTypeExtension', 'getExtendedTypes', $iterableType)])]]);
     $services->set(\Rector\Visibility\Rector\ClassMethod\ChangeMethodVisibilityRector::class)->call('configure', [[\Rector\Visibility\Rector\ClassMethod\ChangeMethodVisibilityRector::METHOD_VISIBILITIES => \Symplify\SymfonyPhpConfig\ValueObjectInliner::inline([new \Rector\Visibility\ValueObject\ChangeMethodVisibility('Symfony\\Component\\Form\\AbstractTypeExtension', 'getExtendedTypes', \Rector\Core\ValueObject\Visibility::STATIC)])]]);
     $services->set(\Rector\Transform\Rector\ClassMethod\WrapReturnRector::class)->call('configure', [[\Rector\Transform\Rector\ClassMethod\WrapReturnRector::TYPE_METHOD_WRAPS => \Symplify\SymfonyPhpConfig\ValueObjectInliner::inline([new \Rector\Transform\ValueObject\WrapReturn('Symfony\\Component\\Form\\AbstractTypeExtension', 'getExtendedTypes', \true)])]]);
-    $services->set(\Rector\Arguments\Rector\ClassMethod\ArgumentDefaultValueReplacerRector::class)->call('configure', [[
+    $services->set(\Rector\Arguments\Rector\ClassMethod\ReplaceArgumentDefaultValueRector::class)->call('configure', [[
         // https://github.com/symfony/symfony/commit/9493cfd5f2366dab19bbdde0d0291d0575454567
-        \Rector\Arguments\Rector\ClassMethod\ArgumentDefaultValueReplacerRector::REPLACED_ARGUMENTS => \Symplify\SymfonyPhpConfig\ValueObjectInliner::inline([new \Rector\Arguments\ValueObject\ArgumentDefaultValueReplacer('Symfony\\Component\\HttpFoundation\\Cookie', \Rector\Core\ValueObject\MethodName::CONSTRUCT, 5, \false, null), new \Rector\Arguments\ValueObject\ArgumentDefaultValueReplacer('Symfony\\Component\\HttpFoundation\\Cookie', \Rector\Core\ValueObject\MethodName::CONSTRUCT, 8, null, 'lax')]),
+        \Rector\Arguments\Rector\ClassMethod\ReplaceArgumentDefaultValueRector::REPLACED_ARGUMENTS => \Symplify\SymfonyPhpConfig\ValueObjectInliner::inline([new \Rector\Arguments\ValueObject\ReplaceArgumentDefaultValue('Symfony\\Component\\HttpFoundation\\Cookie', \Rector\Core\ValueObject\MethodName::CONSTRUCT, 5, \false, null), new \Rector\Arguments\ValueObject\ReplaceArgumentDefaultValue('Symfony\\Component\\HttpFoundation\\Cookie', \Rector\Core\ValueObject\MethodName::CONSTRUCT, 8, null, 'lax')]),
     ]]);
     $services->set(\Rector\Removing\Rector\ClassMethod\ArgumentRemoverRector::class)->call('configure', [[
         # https://github.com/symfony/symfony/commit/f5c355e1ba399a1b3512367647d902148bdaf09f

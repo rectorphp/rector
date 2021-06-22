@@ -21,8 +21,8 @@ final class PhpDocTagRemover
                 $phpDocInfo->markAsChanged();
             }
             if ($phpDocChildNode->value instanceof \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode) {
-                $tagClass = $phpDocChildNode->value->getAnnotationClass();
-                if ($tagClass === $name) {
+                $doctrineAnnotationTagValueNode = $phpDocChildNode->value;
+                if ($doctrineAnnotationTagValueNode->hasClassName($name)) {
                     unset($phpDocNode->children[$key]);
                     $phpDocInfo->markAsChanged();
                 }
