@@ -58,19 +58,24 @@ final class ProcessCommand extends Command
 
         $this->addOption(
             Option::DRY_RUN,
-            'n',
+            Option::DRY_RUN_SHORT,
             InputOption::VALUE_NONE,
             'See diff of changes, do not save them to files.'
         );
 
-        $this->addOption(Option::AUTOLOAD_FILE, 'a', InputOption::VALUE_REQUIRED, 'File with extra autoload');
+        $this->addOption(
+            Option::AUTOLOAD_FILE,
+            Option::AUTOLOAD_FILE_SHORT,
+            InputOption::VALUE_REQUIRED,
+            'File with extra autoload'
+        );
 
         $names = $this->outputFormatterCollector->getNames();
 
         $description = sprintf('Select output format: "%s".', implode('", "', $names));
         $this->addOption(
             Option::OUTPUT_FORMAT,
-            'o',
+            Option::OUTPUT_FORMAT_SHORT,
             InputOption::VALUE_OPTIONAL,
             $description,
             ConsoleOutputFormatter::NAME

@@ -31,6 +31,11 @@ final class Option
     /**
      * @var string
      */
+    public const DRY_RUN_SHORT = 'n';
+
+    /**
+     * @var string
+     */
     public const OUTPUT_FORMAT = 'output-format';
 
     /**
@@ -142,4 +147,14 @@ final class Option
      * @var string
      */
     public const ENABLE_EDITORCONFIG = 'enable_editorconfig';
+
+    /**
+     * @var string
+     */
+    public const AUTOLOAD_FILE_SHORT = 'a';
+
+    /**
+     * @var string
+     */
+    public const OUTPUT_FORMAT_SHORT = 'o';
 }
