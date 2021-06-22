@@ -128,7 +128,7 @@ final class ConsoleApplication extends Application
     private function addCustomOptions(InputDefinition $inputDefinition): void
     {
         $inputDefinition->addOption(new InputOption(
-            Option::OPTION_CONFIG,
+            Option::CONFIG,
             'c',
             InputOption::VALUE_REQUIRED,
             'Path to config file',
@@ -136,7 +136,7 @@ final class ConsoleApplication extends Application
         ));
 
         $inputDefinition->addOption(new InputOption(
-            Option::OPTION_DEBUG,
+            Option::DEBUG,
             null,
             InputOption::VALUE_NONE,
             'Enable debug verbosity (-vvv)'
@@ -150,7 +150,7 @@ final class ConsoleApplication extends Application
         ));
 
         $inputDefinition->addOption(new InputOption(
-            Option::OPTION_CLEAR_CACHE,
+            Option::CLEAR_CACHE,
             null,
             InputOption::VALUE_NONE,
             'Clear cache'

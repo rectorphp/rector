@@ -57,24 +57,19 @@ final class ProcessCommand extends Command
         );
 
         $this->addOption(
-            Option::OPTION_DRY_RUN,
+            Option::DRY_RUN,
             'n',
             InputOption::VALUE_NONE,
             'See diff of changes, do not save them to files.'
         );
 
-        $this->addOption(
-            Option::OPTION_AUTOLOAD_FILE,
-            'a',
-            InputOption::VALUE_REQUIRED,
-            'File with extra autoload'
-        );
+        $this->addOption(Option::AUTOLOAD_FILE, 'a', InputOption::VALUE_REQUIRED, 'File with extra autoload');
 
         $names = $this->outputFormatterCollector->getNames();
 
         $description = sprintf('Select output format: "%s".', implode('", "', $names));
         $this->addOption(
-            Option::OPTION_OUTPUT_FORMAT,
+            Option::OUTPUT_FORMAT,
             'o',
             InputOption::VALUE_OPTIONAL,
             $description,
@@ -82,21 +77,21 @@ final class ProcessCommand extends Command
         );
 
         $this->addOption(
-            Option::OPTION_NO_PROGRESS_BAR,
+            Option::NO_PROGRESS_BAR,
             null,
             InputOption::VALUE_NONE,
             'Hide progress bar. Useful e.g. for nicer CI output.'
         );
 
         $this->addOption(
-            Option::OPTION_NO_DIFFS,
+            Option::NO_DIFFS,
             null,
             InputOption::VALUE_NONE,
             'Hide diffs of changed files. Useful e.g. for nicer CI output.'
         );
 
         $this->addOption(Option::CACHE_DEBUG, null, InputOption::VALUE_NONE, 'Debug changed file cache');
-        $this->addOption(Option::OPTION_CLEAR_CACHE, null, InputOption::VALUE_NONE, 'Clear unchaged files cache');
+        $this->addOption(Option::CLEAR_CACHE, null, InputOption::VALUE_NONE, 'Clear unchaged files cache');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -128,7 +123,7 @@ final class ProcessCommand extends Command
         $this->applicationFileProcessor->run($files);
 
         // report diffs and errors
-        $outputFormat = (string) $input->getOption(Option::OPTION_OUTPUT_FORMAT);
+        $outputFormat = (string) $input->getOption(Option::OUTPUT_FORMAT);
 
         $outputFormatter = $this->outputFormatterCollector->getByName($outputFormat);
 
@@ -149,7 +144,7 @@ final class ProcessCommand extends Command
             throw new ShouldNotHappenException();
         }
 
-        $optionDebug = (bool) $input->getOption(Option::OPTION_DEBUG);
+        $optionDebug = (bool) $input->getOption(Option::DEBUG);
         if ($optionDebug) {
             $application->setCatchExceptions(false);
 
@@ -159,7 +154,7 @@ final class ProcessCommand extends Command
         }
 
         // clear cache
-        $optionClearCache = (bool) $input->getOption(Option::OPTION_CLEAR_CACHE);
+        $optionClearCache = (bool) $input->getOption(Option::CLEAR_CACHE);
         if ($optionClearCache) {
             $this->changedFilesDetector->clear();
         }

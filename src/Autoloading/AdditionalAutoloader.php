@@ -24,12 +24,12 @@ final class AdditionalAutoloader
 
     public function autoloadInput(InputInterface $input): void
     {
-        if (! $input->hasOption(Option::OPTION_AUTOLOAD_FILE)) {
+        if (! $input->hasOption(Option::AUTOLOAD_FILE)) {
             return;
         }
 
         /** @var string|null $autoloadFile */
-        $autoloadFile = $input->getOption(Option::OPTION_AUTOLOAD_FILE);
+        $autoloadFile = $input->getOption(Option::AUTOLOAD_FILE);
         if ($autoloadFile === null) {
             return;
         }

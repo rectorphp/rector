@@ -54,14 +54,14 @@ final class Configuration
      */
     public function resolveFromInput(InputInterface $input): void
     {
-        $this->isDryRun = (bool) $input->getOption(Option::OPTION_DRY_RUN);
-        $this->shouldClearCache = (bool) $input->getOption(Option::OPTION_CLEAR_CACHE);
+        $this->isDryRun = (bool) $input->getOption(Option::DRY_RUN);
+        $this->shouldClearCache = (bool) $input->getOption(Option::CLEAR_CACHE);
 
         $this->showProgressBar = $this->canShowProgressBar($input);
-        $this->showDiffs = ! (bool) $input->getOption(Option::OPTION_NO_DIFFS);
+        $this->showDiffs = ! (bool) $input->getOption(Option::NO_DIFFS);
         $this->isCacheDebug = (bool) $input->getOption(Option::CACHE_DEBUG);
 
-        $this->outputFormat = (string) $input->getOption(Option::OPTION_OUTPUT_FORMAT);
+        $this->outputFormat = (string) $input->getOption(Option::OUTPUT_FORMAT);
 
         $commandLinePaths = (array) $input->getArgument(Option::SOURCE);
 
@@ -182,12 +182,12 @@ final class Configuration
 
     private function canShowProgressBar(InputInterface $input): bool
     {
-        $noProgressBar = (bool) $input->getOption(Option::OPTION_NO_PROGRESS_BAR);
+        $noProgressBar = (bool) $input->getOption(Option::NO_PROGRESS_BAR);
         if ($noProgressBar) {
             return false;
         }
 
-        $optionOutputFormat = $input->getOption(Option::OPTION_OUTPUT_FORMAT);
+        $optionOutputFormat = $input->getOption(Option::OUTPUT_FORMAT);
         return $optionOutputFormat === ConsoleOutputFormatter::NAME;
     }
 

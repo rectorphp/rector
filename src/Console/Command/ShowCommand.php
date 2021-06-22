@@ -37,7 +37,7 @@ final class ShowCommand extends Command
 
         $description = sprintf('Select output format: "%s".', implode('", "', $names));
         $this->addOption(
-            Option::OPTION_OUTPUT_FORMAT,
+            Option::OUTPUT_FORMAT,
             'o',
             InputOption::VALUE_OPTIONAL,
             $description,
@@ -47,7 +47,7 @@ final class ShowCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $outputFormat = (string) $input->getOption(Option::OPTION_OUTPUT_FORMAT);
+        $outputFormat = (string) $input->getOption(Option::OUTPUT_FORMAT);
 
         $this->reportLoadedRectors($outputFormat);
 
