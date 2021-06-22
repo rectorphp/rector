@@ -145,7 +145,7 @@ abstract class AbstractRectorTestCase extends AbstractTestCase implements Rector
         $nodeScopeResolver = $this->getService(NodeScopeResolver::class);
         $nodeScopeResolver->setAnalysedFiles([$fileInfo->getRealPath()]);
 
-        $configuration = new Configuration(isDryRun: true);
+        $configuration = new Configuration(true);
 
         $file = new File($fileInfo, $fileInfo->getContents());
         $this->applicationFileProcessor->run([$file], $configuration);
