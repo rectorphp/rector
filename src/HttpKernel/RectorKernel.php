@@ -6,7 +6,6 @@ namespace Rector\Core\HttpKernel;
 
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\DependencyInjection\Collector\ConfigureCallValuesCollector;
-use Rector\Core\DependencyInjection\CompilerPass\DeprecationWarningCompilerPass;
 use Rector\Core\DependencyInjection\CompilerPass\MakeRectorsPublicCompilerPass;
 use Rector\Core\DependencyInjection\CompilerPass\MergeImportedRectorConfigureCallValuesCompilerPass;
 use Rector\Core\DependencyInjection\CompilerPass\RemoveSkippedRectorsCompilerPass;
@@ -101,8 +100,6 @@ final class RectorKernel extends Kernel
         // autowire Rectors by default (mainly for tests)
         $containerBuilder->addCompilerPass(new AutowireInterfacesCompilerPass([RectorInterface::class]));
         $containerBuilder->addCompilerPass(new MakeRectorsPublicCompilerPass());
-
-        $containerBuilder->addCompilerPass(new DeprecationWarningCompilerPass());
 
         // add all merged arguments of Rector services
         $containerBuilder->addCompilerPass(

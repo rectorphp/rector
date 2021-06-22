@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Rector\CodingStyle\Rector\Encapsed;
 
-use const PHP_EOL;
 use Nette\Utils\Strings;
+use const PHP_EOL;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
