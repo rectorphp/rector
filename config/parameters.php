@@ -28,6 +28,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters->set(Option::PHPSTAN_FOR_RECTOR_PATH, null);
 
     // cache
-    $parameters->set(Option::ENABLE_CACHE, false);
     $parameters->set(Option::CACHE_DIR, sys_get_temp_dir() . '/rector_cached_files');
 };

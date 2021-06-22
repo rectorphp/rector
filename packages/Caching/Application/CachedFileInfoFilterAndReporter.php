@@ -25,7 +25,7 @@ final class CachedFileInfoFilterAndReporter
     public function filterFileInfos(array $phpFileInfos): array
     {
         // cache stuff
-        if (! $this->configuration->isCacheEnabled() || $this->configuration->shouldClearCache()) {
+        if ($this->configuration->shouldClearCache()) {
             $this->changedFilesDetector->clear();
             return $phpFileInfos;
         }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Core\FileSystem;
 
 use Nette\Utils\Strings;
+use Rector\Caching\UnchangedFilesFilter;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 use Symplify\Skipper\SkipCriteriaResolver\SkippedPathsResolver;
@@ -34,6 +35,7 @@ final class FilesFinder
         private FinderSanitizer $finderSanitizer,
         private FileSystemFilter $fileSystemFilter,
         private SkippedPathsResolver $skippedPathsResolver,
+        private UnchangedFilesFilter $unchangedFilesFilter
     ) {
     }
 
@@ -46,13 +48,16 @@ final class FilesFinder
     {
         $filesAndDirectories = $this->filesystemTweaker->resolveWithFnmatch($source);
 
-        $files = $this->fileSystemFilter->filterFiles($filesAndDirectories);
+        $filePaths = $this->fileSystemFilter->filterFiles($filesAndDirectories);
         $directories = $this->fileSystemFilter->filterDirectories($filesAndDirectories);
 
+
         $smartFileInfos = [];
-        foreach ($files as $file) {
-            $smartFileInfos[] = new SmartFileInfo($file);
+        foreach ($filePaths as $filePath) {
+            $smartFileInfos[] = new SmartFileInfo($filePath);
         }
+
+        $smartFileInfos = $this->unchangedFilesFilter->filterAndJoinWithDependentFileInfos($smartFileInfos);
 
         return array_merge($smartFileInfos, $this->findInDirectories($directories, $suffixes));
     }
@@ -81,7 +86,9 @@ final class FilesFinder
 
         $this->addFilterWithExcludedPaths($finder);
 
-        return $this->finderSanitizer->sanitize($finder);
+        $smartFileInfos = $this->finderSanitizer->sanitize($finder);
+
+        return $this->unchangedFilesFilter->filterAndJoinWithDependentFileInfos($smartFileInfos);
     }
 
     /**

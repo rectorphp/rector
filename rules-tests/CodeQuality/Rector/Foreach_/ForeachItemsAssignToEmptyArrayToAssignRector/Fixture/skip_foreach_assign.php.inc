@@ -2,6 +2,10 @@
 
 namespace Rector\Tests\CodeQuality\Rector\Foreach_\ForeachItemsAssignToEmptyArrayToAssignRector\Fixture;
 
+use PhpParser\Node;
+use PHPStan\Analyser\MutatingScope;
+use PHPStan\Dependency\DependencyResolver;
+
 class SkipForeachAssign
 {
     /**
@@ -14,13 +18,12 @@ class SkipForeachAssign
         $this->dependentFiles = [];
     }
 
-    private function resolveDependentFiles(Node $node, MutatingScope $mutatingScope): void
-    {
-        if (! $this->configuration->isCacheEnabled()) {
-            return;
-        }
-
-        foreach ($this->dependencyResolver->resolveDependencies($node, $mutatingScope) as $dependentFile) {
+    private function resolveDependentFiles(
+        DependencyResolver $dependencyResolver,
+        Node $node,
+        MutatingScope $mutatingScope
+    ): void {
+        foreach ($dependencyResolver->resolveDependencies($node, $mutatingScope) as $dependentFile) {
             $this->dependentFiles[] = $dependentFile;
         }
     }

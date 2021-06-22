@@ -21,8 +21,6 @@ final class Configuration
 
     private string $outputFormat;
 
-    private bool $isCacheEnabled = false;
-
     /**
      * @var string[]
      */
@@ -41,7 +39,6 @@ final class Configuration
 
     public function __construct(ParameterProvider $parameterProvider)
     {
-        $this->isCacheEnabled = (bool) $parameterProvider->provideParameter(Option::ENABLE_CACHE);
         $this->fileExtensions = (array) $parameterProvider->provideParameter(Option::FILE_EXTENSIONS);
         $this->paths = (array) $parameterProvider->provideParameter(Option::PATHS);
         $this->parameterProvider = $parameterProvider;
@@ -90,11 +87,6 @@ final class Configuration
     public function shouldClearCache(): bool
     {
         return $this->shouldClearCache;
-    }
-
-    public function isCacheEnabled(): bool
-    {
-        return $this->isCacheEnabled;
     }
 
     /**

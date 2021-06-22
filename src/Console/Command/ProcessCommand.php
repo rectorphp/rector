@@ -166,10 +166,6 @@ final class ProcessCommand extends Command
 
     private function invalidateCacheChangedFiles(ProcessResult $processResult): void
     {
-        if (! $this->configuration->isCacheEnabled()) {
-            return;
-        }
-
         foreach ($processResult->getChangedFileInfos() as $changedFileInfo) {
             $this->changedFilesDetector->invalidateFile($changedFileInfo);
         }
