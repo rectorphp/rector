@@ -7,7 +7,7 @@ namespace Rector\ChangesReporting\Output;
 use Nette\Utils\Json;
 use Rector\ChangesReporting\Annotation\RectorsChangelogResolver;
 use Rector\ChangesReporting\Contract\Output\OutputFormatterInterface;
-use Rector\Core\Configuration\Configuration;
+use Rector\Core\ValueObject\Configuration;
 use Rector\Core\ValueObject\ProcessResult;
 use Symplify\SmartFileSystem\SmartFileSystem;
 
@@ -19,7 +19,7 @@ final class JsonOutputFormatter implements OutputFormatterInterface
     public const NAME = 'json';
 
     public function __construct(
-        private Configuration $configuration,
+        // @todo add rector for unused promoted property
         private SmartFileSystem $smartFileSystem,
         private RectorsChangelogResolver $rectorsChangelogResolver
     ) {
@@ -30,11 +30,11 @@ final class JsonOutputFormatter implements OutputFormatterInterface
         return self::NAME;
     }
 
-    public function report(ProcessResult $processResult): void
+    public function report(ProcessResult $processResult, Configuration $configuration): void
     {
         $errorsArray = [
             'meta' => [
-                'config' => $this->configuration->getMainConfigFilePath(),
+                'config' => $configuration->getMainConfigFilePath(),
             ],
             'totals' => [
                 'changed_files' => count($processResult->getFileDiffs()),

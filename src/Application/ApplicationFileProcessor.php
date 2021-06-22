@@ -6,9 +6,9 @@ namespace Rector\Core\Application;
 
 use Rector\Core\Application\FileDecorator\FileDiffFileDecorator;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesProcessor;
-use Rector\Core\Configuration\Configuration;
 use Rector\Core\Contract\Processor\FileProcessorInterface;
 use Rector\Core\ValueObject\Application\File;
+use Rector\Core\ValueObject\Configuration;
 use Rector\FileFormatter\FileFormatter;
 use Symplify\SmartFileSystem\SmartFileSystem;
 
@@ -18,7 +18,6 @@ final class ApplicationFileProcessor
      * @param FileProcessorInterface[] $fileProcessors
      */
     public function __construct(
-        private Configuration $configuration,
         private SmartFileSystem $smartFileSystem,
         private FileDiffFileDecorator $fileDiffFileDecorator,
         private FileFormatter $fileFormatter,
@@ -30,37 +29,38 @@ final class ApplicationFileProcessor
     /**
      * @param File[] $files
      */
-    public function run(array $files): void
+    public function run(array $files, Configuration $configuration): void
     {
-        $this->processFiles($files);
-
+        $this->processFiles($files, $configuration);
         $this->fileFormatter->format($files);
 
         $this->fileDiffFileDecorator->decorate($files);
-
-        $this->printFiles($files);
+        $this->printFiles($files, $configuration);
     }
 
     /**
      * @param File[] $files
      */
-    private function processFiles(array $files): void
+    private function processFiles(array $files, Configuration $configuration): void
     {
         foreach ($this->fileProcessors as $fileProcessor) {
-            $supportedFiles = array_filter($files, fn (File $file): bool => $fileProcessor->supports($file));
+            $supportedFiles = array_filter(
+                $files,
+                fn (File $file): bool => $fileProcessor->supports($file, $configuration)
+            );
 
-            $fileProcessor->process($supportedFiles);
+            $fileProcessor->process($supportedFiles, $configuration);
         }
 
-        $this->removedAndAddedFilesProcessor->run();
+        $this->removedAndAddedFilesProcessor->run($configuration);
     }
 
     /**
      * @param File[] $files
      */
-    private function printFiles(array $files): void
+    private function printFiles(array $files, Configuration $configuration): void
     {
-        if ($this->configuration->isDryRun()) {
+        if ($configuration->isDryRun()) {
             return;
         }
 

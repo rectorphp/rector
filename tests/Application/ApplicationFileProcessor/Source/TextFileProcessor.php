@@ -7,6 +7,7 @@ namespace Rector\Core\Tests\Application\ApplicationFileProcessor\Source;
 use Rector\Core\Contract\Processor\FileProcessorInterface;
 use Rector\Core\Tests\Application\ApplicationFileProcessor\Source\Contract\TextRectorInterface;
 use Rector\Core\ValueObject\Application\File;
+use Rector\Core\ValueObject\Configuration;
 
 final class TextFileProcessor implements FileProcessorInterface
 {
@@ -26,7 +27,7 @@ final class TextFileProcessor implements FileProcessorInterface
     /**
      * @param File[] $files
      */
-    public function process(array $files): void
+    public function process(array $files, Configuration $configuration): void
     {
         foreach ($files as $file) {
             $fileContent = $file->getFileContent();
@@ -39,10 +40,10 @@ final class TextFileProcessor implements FileProcessorInterface
         }
     }
 
-    public function supports(File $file): bool
+    public function supports(File $file, Configuration $configuration): bool
     {
         $smartFileInfo = $file->getSmartFileInfo();
-        return $smartFileInfo->hasSuffixes($this->getSupportedFileExtensions());
+        return $smartFileInfo->getSuffix() === 'txt';
     }
 
     /**

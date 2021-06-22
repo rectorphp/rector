@@ -3,15 +3,14 @@
 namespace Rector\Tests\BetterPhpDocParser\PhpDocInlineHtml\Source;
 
 use PhpParser\Node;
+use PhpParser\Node\Stmt\InlineHTML;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use ViewScopeRector\Inferer\Rocket\FileLocator;
-use ViewScopeRector\Inferer\Rocket\ViewFileLocator;
 
-class InlineHtmlRector extends AbstractRector
+final class InlineHtmlRector extends AbstractRector
 {
     public function getRuleDefinition(): RuleDefinition
     {
@@ -20,11 +19,11 @@ class InlineHtmlRector extends AbstractRector
 
     public function getNodeTypes(): array
     {
-        return [Node\Stmt\InlineHTML::class];
+        return [InlineHTML::class];
     }
 
     /**
-     * @param Node\Stmt\InlineHTML $inlineHtml
+     * @param InlineHTML $inlineHtml
      */
     public function refactor(Node $inlineHtml): ?Node
     {

@@ -8,7 +8,5 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
-    $parameters = $containerConfigurator->parameters();
-
     $services->set(InlineHtmlRector::class);
 };

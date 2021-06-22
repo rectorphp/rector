@@ -7,6 +7,7 @@ namespace Rector\Composer\Application\FileProcessor;
 use Rector\Composer\Contract\Rector\ComposerRectorInterface;
 use Rector\Core\Contract\Processor\FileProcessorInterface;
 use Rector\Core\ValueObject\Application\File;
+use Rector\Core\ValueObject\Configuration;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use Symplify\ComposerJsonManipulator\ComposerJsonFactory;
 use Symplify\ComposerJsonManipulator\Printer\ComposerJsonPrinter;
@@ -27,7 +28,7 @@ final class ComposerFileProcessor implements FileProcessorInterface
     /**
      * @param File[] $files
      */
-    public function process(array $files): void
+    public function process(array $files, Configuration $configuration): void
     {
         if ($this->composerRectors === []) {
             return;
@@ -38,7 +39,7 @@ final class ComposerFileProcessor implements FileProcessorInterface
         }
     }
 
-    public function supports(File $file): bool
+    public function supports(File $file, Configuration $configuration): bool
     {
         $smartFileInfo = $file->getSmartFileInfo();
 

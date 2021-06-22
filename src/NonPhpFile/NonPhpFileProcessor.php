@@ -7,6 +7,7 @@ namespace Rector\Core\NonPhpFile;
 use Rector\Core\Contract\Processor\FileProcessorInterface;
 use Rector\Core\Contract\Rector\NonPhpRectorInterface;
 use Rector\Core\ValueObject\Application\File;
+use Rector\Core\ValueObject\Configuration;
 use Rector\Core\ValueObject\StaticNonPhpFileSuffixes;
 
 /**
@@ -25,14 +26,14 @@ final class NonPhpFileProcessor implements FileProcessorInterface
     /**
      * @param File[] $files
      */
-    public function process(array $files): void
+    public function process(array $files, Configuration $configuration): void
     {
         foreach ($files as $file) {
             $this->processFile($file);
         }
     }
 
-    public function supports(File $file): bool
+    public function supports(File $file, Configuration $configuration): bool
     {
         $smartFileInfo = $file->getSmartFileInfo();
 
@@ -40,8 +41,8 @@ final class NonPhpFileProcessor implements FileProcessorInterface
         // @see https://3v4l.org/FM3vY#focus=8.0.7 vs https://3v4l.org/JZW7b#focus=8.0.7
         $pathname = $smartFileInfo->getPathname();
         // bug in path extension
-        foreach ($this->getSupportedFileExtensions() as $supportedFileExtension) {
-            if (\str_ends_with($pathname, '.' . $supportedFileExtension)) {
+        foreach ($this->getSupportedFileExtensions() as $fileExtension) {
+            if (\str_ends_with($pathname, '.' . $fileExtension)) {
                 return true;
             }
         }
@@ -49,6 +50,9 @@ final class NonPhpFileProcessor implements FileProcessorInterface
         return false;
     }
 
+    /**
+     * @return string[]
+     */
     public function getSupportedFileExtensions(): array
     {
         return StaticNonPhpFileSuffixes::SUFFIXES;

@@ -5,15 +5,13 @@ declare(strict_types=1);
 namespace Rector\Core\FileSystem;
 
 use Rector\Caching\UnchangedFilesFilter;
-use Rector\Core\Configuration\Configuration;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class PhpFilesFinder
 {
     public function __construct(
         private FilesFinder $filesFinder,
-        private Configuration $configuration,
-        private UnchangedFilesFilter $unchangedFilesFilter,
+        private UnchangedFilesFilter $unchangedFilesFilter
     ) {
     }
 
@@ -23,10 +21,7 @@ final class PhpFilesFinder
      */
     public function findInPaths(array $paths): array
     {
-        $phpFileInfos = $this->filesFinder->findInDirectoriesAndFiles(
-            $paths,
-            $this->configuration->getFileExtensions()
-        );
+        $phpFileInfos = $this->filesFinder->findInDirectoriesAndFiles($paths);
 
         // filter out non-PHP php files, e.g. blade templates in Laravel
         $phpFileInfos = array_filter(

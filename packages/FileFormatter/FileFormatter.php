@@ -44,11 +44,9 @@ final class FileFormatter
                 }
 
                 $editorConfigConfigurationBuilder = $fileFormatter->createDefaultEditorConfigConfigurationBuilder();
-
                 $this->sniffOriginalFileContent($file, $editorConfigConfigurationBuilder);
 
                 $editorConfiguration = $this->createEditorConfiguration($file, $editorConfigConfigurationBuilder);
-
                 $fileFormatter->format($file, $editorConfiguration);
             }
         }

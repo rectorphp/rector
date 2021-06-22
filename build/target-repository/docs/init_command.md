@@ -41,15 +41,14 @@ use Rector\PostRector\Rector\NameImportingPostRector;
 use Rector\Core\Configuration\Option;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
-    // get parameters
-    $parameters = $containerConfigurator->parameters();
-
     $containerConfigurator->import(Typo3SetList::TYPO3_76);
     $containerConfigurator->import(Typo3SetList::TYPO3_87);
     $containerConfigurator->import(Typo3SetList::TYPO3_95);
     $containerConfigurator->import(Typo3SetList::TYPO3_104);
     $containerConfigurator->import(Typo3SetList::TYPO3_11);
 
+    // get parameters
+    $parameters = $containerConfigurator->parameters();
     $parameters->set(Option::SKIP, [
         NameImportingPostRector::class => [
             'ClassAliasMap.php',

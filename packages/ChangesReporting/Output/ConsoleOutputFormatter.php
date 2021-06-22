@@ -7,9 +7,9 @@ namespace Rector\ChangesReporting\Output;
 use Nette\Utils\Strings;
 use Rector\ChangesReporting\Annotation\RectorsChangelogResolver;
 use Rector\ChangesReporting\Contract\Output\OutputFormatterInterface;
-use Rector\Core\Configuration\Configuration;
 use Rector\Core\Contract\Console\OutputStyleInterface;
 use Rector\Core\ValueObject\Application\RectorError;
+use Rector\Core\ValueObject\Configuration;
 use Rector\Core\ValueObject\ProcessResult;
 use Rector\Core\ValueObject\Reporting\FileDiff;
 
@@ -27,15 +27,14 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
     private const ON_LINE_REGEX = '# on line #';
 
     public function __construct(
-        private Configuration $configuration,
         private OutputStyleInterface $outputStyle,
         private RectorsChangelogResolver $rectorsChangelogResolver
     ) {
     }
 
-    public function report(ProcessResult $processResult): void
+    public function report(ProcessResult $processResult, Configuration $configuration): void
     {
-        if ($this->configuration->shouldShowDiffs()) {
+        if ($configuration->shouldShowDiffs()) {
             $this->reportFileDiffs($processResult->getFileDiffs());
         }
 
@@ -46,7 +45,7 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
             return;
         }
 
-        $message = $this->createSuccessMessage($processResult);
+        $message = $this->createSuccessMessage($processResult, $configuration);
         $this->outputStyle->success($message);
     }
 
@@ -146,7 +145,7 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
         $this->outputStyle->warning($message);
     }
 
-    private function createSuccessMessage(ProcessResult $processResult): string
+    private function createSuccessMessage(ProcessResult $processResult, Configuration $configuration): string
     {
         $changeCount = count($processResult->getFileDiffs()) + $processResult->getRemovedAndAddedFilesCount();
 
@@ -158,7 +157,7 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
             '%d file%s %s by Rector',
             $changeCount,
             $changeCount > 1 ? 's' : '',
-            $this->configuration->isDryRun() ? 'would have changed (dry-run)' : ($changeCount === 1 ? 'has' : 'have') . ' been changed'
+            $configuration->isDryRun() ? 'would have changed (dry-run)' : ($changeCount === 1 ? 'has' : 'have') . ' been changed'
         );
     }
 

@@ -44,7 +44,7 @@ final class FilesFinder
      * @param string[] $suffixes
      * @return SmartFileInfo[]
      */
-    public function findInDirectoriesAndFiles(array $source, array $suffixes): array
+    public function findInDirectoriesAndFiles(array $source, array $suffixes = []): array
     {
         $filesAndDirectories = $this->filesystemTweaker->resolveWithFnmatch($source);
 
@@ -72,16 +72,18 @@ final class FilesFinder
             return [];
         }
 
-        $suffixesPattern = $this->normalizeSuffixesToPattern($suffixes);
-
         $finder = Finder::create()
             ->followLinks()
             ->files()
             // skip empty files
             ->size('> 0')
             ->in($directories)
-            ->name($suffixesPattern)
             ->sortByName();
+
+        if ($suffixes !== []) {
+            $suffixesPattern = $this->normalizeSuffixesToPattern($suffixes);
+            $finder->name($suffixesPattern);
+        }
 
         $this->addFilterWithExcludedPaths($finder);
 

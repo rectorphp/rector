@@ -174,7 +174,7 @@ parameters:
         -
             message: '#Cannot cast array<string\>\|bool\|string\|null to string#'
             paths:
-                - src/Configuration/Configuration.php
+                - src/Configuration/ConfigurationFactory.php
                 - src/Console/Command/*Command.php
 
         - '#Method (.*?) should return array<PhpParser\\Node\\(.*?)\> but returns array<PhpParser\\Node\>#'
@@ -486,3 +486,10 @@ parameters:
         -
             message: '#Class with base "StaticTypeMapper" name is already used in "Rector\\PHPStanStaticTypeMapper\\TypeMapper\\StaticTypeMapper", "Rector\\StaticTypeMapper\\StaticTypeMapper"\. Use unique name to make classes easy to recognize#'
             path: packages/StaticTypeMapper/StaticTypeMapper.php #31
+
+        # false positive
+        - '#Attribute class JetBrains\\PhpStorm\\Immutable does not exist#'
+
+
+        # temporary interface update
+        - '#Call to an undefined method Rector\\Core\\Contract\\Processor\\FileProcessorInterface\:\:(.*?)\(\)#'

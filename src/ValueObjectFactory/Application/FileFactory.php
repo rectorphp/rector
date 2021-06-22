@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Rector\Core\ValueObjectFactory\Application;
 
 use Rector\Caching\Detector\ChangedFilesDetector;
-use Rector\Core\Configuration\Configuration;
 use Rector\Core\Contract\Processor\FileProcessorInterface;
 use Rector\Core\FileSystem\FilesFinder;
 use Rector\Core\ValueObject\Application\File;
+use Rector\Core\ValueObject\Configuration;
 
 /**
  * @see \Rector\Core\ValueObject\Application\File
@@ -20,9 +20,8 @@ final class FileFactory
      */
     public function __construct(
         private FilesFinder $filesFinder,
-        private Configuration $configuration,
         private ChangedFilesDetector $changedFilesDetector,
-        private array $fileProcessors
+        private array $fileProcessors,
     ) {
     }
 
@@ -30,13 +29,13 @@ final class FileFactory
      * @param string[] $paths
      * @return File[]
      */
-    public function createFromPaths(array $paths): array
+    public function createFromPaths(array $paths, Configuration $configuration): array
     {
-        if ($this->configuration->shouldClearCache()) {
+        if ($configuration->shouldClearCache()) {
             $this->changedFilesDetector->clear();
         }
 
-        $supportedFileExtensions = $this->resolveSupportedFileExtensions();
+        $supportedFileExtensions = $this->resolveSupportedFileExtensions($configuration);
         $fileInfos = $this->filesFinder->findInDirectoriesAndFiles($paths, $supportedFileExtensions);
 
         $files = [];
@@ -50,7 +49,7 @@ final class FileFactory
     /**
      * @return string[]
      */
-    private function resolveSupportedFileExtensions(): array
+    private function resolveSupportedFileExtensions(Configuration $configuration): array
     {
         $supportedFileExtensions = [];
 
@@ -60,6 +59,9 @@ final class FileFactory
                 $fileProcessor->getSupportedFileExtensions()
             );
         }
+
+        // basic PHP extensions
+        $supportedFileExtensions = array_merge($supportedFileExtensions, $configuration->getFileExtensions());
 
         return array_unique($supportedFileExtensions);
     }

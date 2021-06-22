@@ -29,7 +29,6 @@ final class UnchangedFilesFilter
             }
 
             $changedFileInfos[] = $fileInfo;
-
             $this->changedFilesDetector->invalidateFile($fileInfo);
 
             $dependentFileInfos = array_merge(

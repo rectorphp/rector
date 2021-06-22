@@ -9,13 +9,13 @@ use Rector\ChangesReporting\ValueObjectFactory\ErrorFactory;
 use Rector\Core\Application\FileDecorator\FileDiffFileDecorator;
 use Rector\Core\Application\FileProcessor;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
-use Rector\Core\Configuration\Configuration;
 use Rector\Core\Contract\Processor\FileProcessorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Printer\FormatPerservingPrinter;
 use Rector\Core\Provider\CurrentFileProvider;
 use Rector\Core\ValueObject\Application\File;
 use Rector\Core\ValueObject\Application\RectorError;
+use Rector\Core\ValueObject\Configuration;
 use Rector\PostRector\Application\PostFileProcessor;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use Symfony\Component\Console\Helper\ProgressBar;
@@ -43,7 +43,6 @@ final class PhpFileProcessor implements FileProcessorInterface
     private array $notParsedFiles = [];
 
     public function __construct(
-        private Configuration $configuration,
         private FormatPerservingPrinter $formatPerservingPrinter,
         private FileProcessor $fileProcessor,
         private RemovedAndAddedFilesCollector $removedAndAddedFilesCollector,
@@ -59,24 +58,24 @@ final class PhpFileProcessor implements FileProcessorInterface
     /**
      * @param File[] $files
      */
-    public function process(array $files): void
+    public function process(array $files, Configuration $configuration): void
     {
         $fileCount = count($files);
         if ($fileCount === 0) {
             return;
         }
 
-        $this->prepareProgressBar($fileCount);
+        $this->prepareProgressBar($fileCount, $configuration);
 
         // 1. parse files to nodes
         foreach ($files as $file) {
             $this->tryCatchWrapper($file, function (File $file): void {
                 $this->fileProcessor->parseFileInfoToLocalCache($file);
-            }, 'parsing');
+            }, 'parsing', $configuration);
         }
 
         // 2. change nodes with Rectors
-        $this->refactorNodesWithRectors($files);
+        $this->refactorNodesWithRectors($files, $configuration);
 
         // 3. apply post rectors
         foreach ($files as $file) {
@@ -85,7 +84,7 @@ final class PhpFileProcessor implements FileProcessorInterface
 
                 // this is needed for new tokens added in "afterTraverse()"
                 $file->changeNewStmts($newStmts);
-            }, 'post rectors');
+            }, 'post rectors', $configuration);
         }
 
         // 4. print to file or string
@@ -95,24 +94,24 @@ final class PhpFileProcessor implements FileProcessorInterface
             // cannot print file with errors, as print would break everything to original nodes
             if ($file->hasErrors()) {
                 $this->printFileErrors($file);
-                $this->advance($file, 'printing skipped due error');
+                $this->advance($file, 'printing skipped due error', $configuration);
                 continue;
             }
 
-            $this->tryCatchWrapper($file, function (File $file): void {
-                $this->printFile($file);
-            }, 'printing');
+            $this->tryCatchWrapper($file, function (File $file) use ($configuration): void {
+                $this->printFile($file, $configuration);
+            }, 'printing', $configuration);
         }
 
-        if ($this->configuration->shouldShowProgressBar()) {
+        if ($configuration->shouldShowProgressBar()) {
             $this->symfonyStyle->newLine(2);
         }
     }
 
-    public function supports(File $file): bool
+    public function supports(File $file, Configuration $configuration): bool
     {
         $smartFileInfo = $file->getSmartFileInfo();
-        return $smartFileInfo->hasSuffixes($this->getSupportedFileExtensions());
+        return $smartFileInfo->hasSuffixes($configuration->getFileExtensions());
     }
 
     /**
@@ -120,16 +119,16 @@ final class PhpFileProcessor implements FileProcessorInterface
      */
     public function getSupportedFileExtensions(): array
     {
-        return $this->configuration->getFileExtensions();
+        return ['php'];
     }
 
-    private function prepareProgressBar(int $fileCount): void
+    private function prepareProgressBar(int $fileCount, Configuration $configuration): void
     {
         if ($this->symfonyStyle->isVerbose()) {
             return;
         }
 
-        if (! $this->configuration->shouldShowProgressBar()) {
+        if (! $configuration->shouldShowProgressBar()) {
             return;
         }
 
@@ -139,22 +138,22 @@ final class PhpFileProcessor implements FileProcessorInterface
     /**
      * @param File[] $files
      */
-    private function refactorNodesWithRectors(array $files): void
+    private function refactorNodesWithRectors(array $files, Configuration $configuration): void
     {
         foreach ($files as $file) {
             $this->currentFileProvider->setFile($file);
 
             $this->tryCatchWrapper($file, function (File $file): void {
                 $this->fileProcessor->refactor($file);
-            }, 'refactoring');
+            }, 'refactoring', $configuration);
         }
     }
 
-    private function tryCatchWrapper(File $file, callable $callback, string $phase): void
+    private function tryCatchWrapper(File $file, callable $callback, string $phase, Configuration $configuration): void
     {
         $this->currentFileProvider->setFile($file);
 
-        $this->advance($file, $phase);
+        $this->advance($file, $phase, $configuration);
 
         try {
             if (in_array($file, $this->notParsedFiles, true)) {
@@ -184,7 +183,7 @@ final class PhpFileProcessor implements FileProcessorInterface
         }
     }
 
-    private function printFile(File $file): void
+    private function printFile(File $file, Configuration $configuration): void
     {
         $smartFileInfo = $file->getSmartFileInfo();
         if ($this->removedAndAddedFilesCollector->isFileRemoved($smartFileInfo)) {
@@ -192,7 +191,7 @@ final class PhpFileProcessor implements FileProcessorInterface
             return;
         }
 
-        $newContent = $this->configuration->isDryRun()
+        $newContent = $configuration->isDryRun()
             ? $this->formatPerservingPrinter->printParsedStmstAndTokensToString($file)
             : $this->formatPerservingPrinter->printParsedStmstAndTokens($file);
 
@@ -220,14 +219,14 @@ final class PhpFileProcessor implements FileProcessorInterface
         $progressBar->setRedrawFrequency($redrawFrequency);
     }
 
-    private function advance(File $file, string $phase): void
+    private function advance(File $file, string $phase, Configuration $configuration): void
     {
         if ($this->symfonyStyle->isVerbose()) {
             $smartFileInfo = $file->getSmartFileInfo();
             $relativeFilePath = $smartFileInfo->getRelativeFilePathFromDirectory(getcwd());
             $message = sprintf('[%s] %s', $phase, $relativeFilePath);
             $this->symfonyStyle->writeln($message);
-        } elseif ($this->configuration->shouldShowProgressBar()) {
+        } elseif ($configuration->shouldShowProgressBar()) {
             $this->symfonyStyle->progressAdvance();
         }
     }
