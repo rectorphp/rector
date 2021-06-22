@@ -17,7 +17,6 @@ use Rector\NodeTypeResolver\NodeVisitor\FunctionMethodAndClassNodeVisitor;
 use Rector\NodeTypeResolver\NodeVisitor\NamespaceNodeVisitor;
 use Rector\NodeTypeResolver\NodeVisitor\StatementNodeVisitor;
 use Rector\NodeTypeResolver\PHPStan\Scope\PHPStanNodeScopeResolver;
-use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class NodeScopeAndMetadataDecorator
 {
@@ -37,7 +36,7 @@ final class NodeScopeAndMetadataDecorator
      * @param Stmt[] $nodes
      * @return Stmt[]
      */
-    public function decorateNodesFromFile(File $file, array $nodes, SmartFileInfo $smartFileInfo): array
+    public function decorateNodesFromFile(File $file, array $nodes): array
     {
         $nodeTraverser = new NodeTraverser();
         $nodeTraverser->addVisitor(new NameResolver(null, [
@@ -46,7 +45,10 @@ final class NodeScopeAndMetadataDecorator
             'replaceNodes' => true,
         ]));
 
+        /** @var Stmt[] $nodes */
         $nodes = $nodeTraverser->traverse($nodes);
+
+        $smartFileInfo = $file->getSmartFileInfo();
         $nodes = $this->phpStanNodeScopeResolver->processNodes($nodes, $smartFileInfo);
 
         $nodeTraverser = new NodeTraverser();

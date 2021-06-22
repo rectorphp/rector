@@ -37,7 +37,7 @@ final class TestingParser
         $nodes = $this->parser->parseFileInfo($smartFileInfo);
 
         $file = new File($smartFileInfo, $smartFileInfo->getContents());
-        return $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile($file, $nodes, $smartFileInfo);
+        return $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile($file, $nodes);
     }
 
     /**

@@ -57,7 +57,7 @@ final class FunctionLikeReflectionParser
         $smartFileInfo = new SmartFileInfo($fileName);
         $file = new File($smartFileInfo, $smartFileInfo->getContents());
 
-        $nodes = $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile($file, $nodes, $smartFileInfo);
+        $nodes = $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile($file, $nodes);
 
         $class = $this->nodeFinder->findFirstInstanceOf($nodes, Class_::class);
         if (! $class instanceof Class_) {

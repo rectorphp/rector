@@ -26,6 +26,6 @@ final class FileInfoParser
         $oldStmts = $this->parser->parseFileInfo($smartFileInfo);
         $file = new File($smartFileInfo, $smartFileInfo->getContents());
 
-        return $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile($file, $oldStmts, $smartFileInfo);
+        return $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile($file, $oldStmts);
     }
 }
