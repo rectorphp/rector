@@ -187,8 +187,7 @@ CODE_SAMPLE
         PhpDocInfo $phpDocInfo,
         PhpDocTagValueNode $phpDocTagValueNode,
         string $annotationToAttributeTag
-    ): bool
-    {
+    ): bool {
         if (! $phpDocInfo->hasByName($annotationToAttributeTag)) {
             return false;
         }

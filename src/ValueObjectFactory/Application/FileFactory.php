@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Rector\Core\ValueObjectFactory\Application;
 
+use Rector\Caching\Detector\ChangedFilesDetector;
+use Rector\Core\Configuration\Configuration;
 use Rector\Core\Contract\Processor\FileProcessorInterface;
 use Rector\Core\FileSystem\FilesFinder;
 use Rector\Core\ValueObject\Application\File;
@@ -18,6 +20,8 @@ final class FileFactory
      */
     public function __construct(
         private FilesFinder $filesFinder,
+        private Configuration $configuration,
+        private ChangedFilesDetector $changedFilesDetector,
         private array $fileProcessors
     ) {
     }
@@ -28,6 +32,10 @@ final class FileFactory
      */
     public function createFromPaths(array $paths): array
     {
+        if ($this->configuration->shouldClearCache()) {
+            $this->changedFilesDetector->clear();
+        }
+
         $supportedFileExtensions = $this->resolveSupportedFileExtensions();
         $fileInfos = $this->filesFinder->findInDirectoriesAndFiles($paths, $supportedFileExtensions);
 

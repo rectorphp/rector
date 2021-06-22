@@ -51,7 +51,6 @@ final class FilesFinder
         $filePaths = $this->fileSystemFilter->filterFiles($filesAndDirectories);
         $directories = $this->fileSystemFilter->filterDirectories($filesAndDirectories);
 
-
         $smartFileInfos = [];
         foreach ($filePaths as $filePath) {
             $smartFileInfos[] = new SmartFileInfo($filePath);

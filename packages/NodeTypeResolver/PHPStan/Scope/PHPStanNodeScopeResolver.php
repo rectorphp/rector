@@ -6,6 +6,7 @@ namespace Rector\NodeTypeResolver\PHPStan\Scope;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Trait_;
@@ -39,11 +40,6 @@ final class PHPStanNodeScopeResolver
      */
     private const ANONYMOUS_CLASS_START_REGEX = '#^AnonymousClass(\w+)#';
 
-    /**
-     * @var string[]
-     */
-    private array $dependentFiles = [];
-
     public function __construct(
         private ChangedFilesDetector $changedFilesDetector,
         private Configuration $configuration,
@@ -58,16 +54,14 @@ final class PHPStanNodeScopeResolver
     }
 
     /**
-     * @param Node[] $nodes
-     * @return Node[]
+     * @param Stmt[] $nodes
+     * @return Stmt[]
      */
     public function processNodes(array $nodes, SmartFileInfo $smartFileInfo): array
     {
         $this->removeDeepChainMethodCallNodes($nodes);
 
         $scope = $this->scopeFactory->createFromFile($smartFileInfo);
-
-        $this->dependentFiles = [];
 
         // skip chain method calls, performance issue: https://github.com/phpstan/phpstan/issues/254
         $nodeCallback = function (Node $node, Scope $scope): void {
@@ -98,14 +92,10 @@ final class PHPStanNodeScopeResolver
             }
         };
 
-        foreach ($nodes as $node) {
-            $this->resolveDependentFiles($node, $scope);
-        }
-
         /** @var MutatingScope $scope */
         $this->nodeScopeResolver->processNodes($nodes, $scope, $nodeCallback);
 
-        $this->changedFilesDetector->addFileWithDependencies($smartFileInfo, $this->dependentFiles);
+        $this->resolveAndSaveDependentFiles($nodes, $scope, $smartFileInfo);
 
         return $nodes;
     }
@@ -137,18 +127,6 @@ final class PHPStanNodeScopeResolver
         return $scope->enterClass($classReflection);
     }
 
-    private function resolveDependentFiles(Node $node, MutatingScope $mutatingScope): void
-    {
-        try {
-            $dependentFiles = $this->dependencyResolver->resolveDependencies($node, $mutatingScope);
-            foreach ($dependentFiles as $dependentFile) {
-                $this->dependentFiles[] = $dependentFile;
-            }
-        } catch (AnalysedCodeException) {
-            // @ignoreException
-        }
-    }
-
     private function resolveClassName(Class_ | Interface_ | Trait_ $classLike): string
     {
         if (property_exists($classLike, 'namespacedName')) {
@@ -160,5 +138,26 @@ final class PHPStanNodeScopeResolver
         }
 
         return $classLike->name->toString();
+    }
+
+    /**
+     * @param Stmt[] $stmts
+     */
+    private function resolveAndSaveDependentFiles(
+        array $stmts,
+        MutatingScope $mutatingScope,
+        SmartFileInfo $smartFileInfo
+    ): void {
+        $dependentFiles = [];
+        foreach ($stmts as $stmt) {
+            try {
+                $nodeDependentFiles = $this->dependencyResolver->resolveDependencies($stmt, $mutatingScope);
+                $dependentFiles = array_merge($dependentFiles, $nodeDependentFiles);
+            } catch (AnalysedCodeException) {
+                // @ignoreException
+            }
+        }
+
+        $this->changedFilesDetector->addFileWithDependencies($smartFileInfo, $dependentFiles);
     }
 }
