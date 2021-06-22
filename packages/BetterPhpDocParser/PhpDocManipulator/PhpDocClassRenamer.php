@@ -122,11 +122,9 @@ final class PhpDocClassRenamer
         Node $node,
         array $oldToNewClasses
     ): void {
-        if ($doctrineAnnotationTagValueNode->getAnnotationClass() === 'Doctrine\ORM\Mapping\Embedded') {
-            $classKey = 'class';
-        } else {
-            $classKey = 'targetEntity';
-        }
+        $classKey = $doctrineAnnotationTagValueNode->hasClassName(
+            'Doctrine\ORM\Mapping\Embedded'
+        ) ? 'class' : 'targetEntity';
 
         $targetEntity = $doctrineAnnotationTagValueNode->getValueWithoutQuotes($classKey);
         if ($targetEntity === null) {

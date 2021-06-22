@@ -178,7 +178,7 @@ final class NameImporter
         if ($parentNode instanceof FuncCall) {
             $this->useNodesToAddCollector->addFunctionUseImport($name, $fullyQualifiedObjectType);
         } else {
-            $this->useNodesToAddCollector->addUseImport($name, $fullyQualifiedObjectType);
+            $this->useNodesToAddCollector->addUseImport($fullyQualifiedObjectType);
         }
     }
 }

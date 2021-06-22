@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprFalseNode;
 use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprIntegerNode;
 use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprTrueNode;
+use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Lexer\Lexer;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocParser\ClassAnnotationMatcher;
@@ -109,6 +110,7 @@ final class PlainValueParser
         $tokenIterator->tryConsumeTokenType(Lexer::TOKEN_PHPDOC_EOL);
         $tokenIterator->consumeTokenType(Lexer::TOKEN_CLOSE_PARENTHESES);
 
-        return new DoctrineAnnotationTagValueNode($fullyQualifiedAnnotationClass, $annotationShortName, $values);
+        $identifierTypeNode = new IdentifierTypeNode($fullyQualifiedAnnotationClass);
+        return new DoctrineAnnotationTagValueNode($identifierTypeNode, $annotationShortName, $values);
     }
 }

@@ -59,11 +59,13 @@ final class UseImportsRemover
     {
         foreach ($use->uses as $usesKey => $useUse) {
             foreach ($removedShortUses as $removedShortUse) {
-                if ($useUse->name->getLast() !== $removedShortUse) {
-                    continue;
+                if ($useUse->name->getLast() === $removedShortUse) {
+                    unset($use->uses[$usesKey]);
                 }
 
-                unset($use->uses[$usesKey]);
+                if ($useUse->name->toString() === $removedShortUse) {
+                    unset($use->uses[$usesKey]);
+                }
             }
         }
     }

@@ -153,6 +153,11 @@ abstract class AbstractValuesAwareNode implements PhpDocTagValueNode
         return $explicitKeysValues;
     }
 
+    public function markAsChanged(): void
+    {
+        $this->hasChanged = true;
+    }
+
     /**
      * @param mixed|string $value
      * @return mixed|string

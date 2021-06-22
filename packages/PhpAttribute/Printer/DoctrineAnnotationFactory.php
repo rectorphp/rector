@@ -7,6 +7,7 @@ namespace Rector\PhpAttribute\Printer;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Attribute;
 use PhpParser\Node\Scalar\String_;
+use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -21,7 +22,9 @@ final class DoctrineAnnotationFactory
     public function createFromAttribute(Attribute $attribute, string $className): DoctrineAnnotationTagValueNode
     {
         $items = $this->createItemsFromArgs($attribute->args);
-        return new DoctrineAnnotationTagValueNode($className, null, $items);
+
+        $identifierTypeNode = new IdentifierTypeNode($className);
+        return new DoctrineAnnotationTagValueNode($identifierTypeNode, null, $items);
     }
 
     /**

@@ -9,7 +9,7 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
 use Rector\CodingStyle\Contract\ClassNameImport\ClassNameImportSkipVoterInterface;
-use Rector\PSR4\Collector\RenamedClassesCollector;
+use Rector\Core\Configuration\RenamedClassesDataCollector;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 
 final class ClassNameImportSkipper
@@ -19,7 +19,7 @@ final class ClassNameImportSkipper
      */
     public function __construct(
         private array $classNameImportSkipVoters,
-        private RenamedClassesCollector $renamedClassesCollector
+        private RenamedClassesDataCollector $renamedClassesDataCollector
     ) {
     }
 
@@ -90,7 +90,7 @@ final class ClassNameImportSkipper
     private function isJustRenamedClass(Name $name, UseUse $useUse): bool
     {
         // is in renamed classes? skip it
-        foreach ($this->renamedClassesCollector->getOldToNewClasses() as $oldClass => $newClass) {
+        foreach ($this->renamedClassesDataCollector->getOldToNewClasses() as $oldClass => $newClass) {
             // is class being renamed in use imports?
             if ($name->toString() !== $newClass) {
                 continue;

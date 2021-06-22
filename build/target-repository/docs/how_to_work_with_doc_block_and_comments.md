@@ -92,8 +92,8 @@ if (! $entityTagValueNode instanceof DoctrineAnnotationTagValueNode) {
     return null;
 }
 
-$annotationClass = $entityTagValueNode->getAnnotationClass();
-var_dump($annotationClass); // "Doctrine\ORM\Mapping\Entity"
+$annotationClass = $entityTagValueNode->identifierTypeNode;
+var_dump($annotationClass); // \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode("Doctrine\ORM\Mapping\Entity")
 
 $values = $entityTagValueNode->getValues();
 var_dump($values); // []

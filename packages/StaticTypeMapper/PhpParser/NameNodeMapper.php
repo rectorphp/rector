@@ -17,15 +17,15 @@ use PHPStan\Type\StaticType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
+use Rector\Core\Configuration\RenamedClassesDataCollector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PSR4\Collector\RenamedClassesCollector;
 use Rector\StaticTypeMapper\Contract\PhpParser\PhpParserNodeMapperInterface;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 
 final class NameNodeMapper implements PhpParserNodeMapperInterface
 {
     public function __construct(
-        private RenamedClassesCollector $renamedClassesCollector,
+        private RenamedClassesDataCollector $renamedClassesDataCollector,
         private ReflectionProvider $reflectionProvider
     ) {
     }
@@ -62,7 +62,7 @@ final class NameNodeMapper implements PhpParserNodeMapperInterface
         }
 
         // to be existing class names
-        $oldToNewClasses = $this->renamedClassesCollector->getOldToNewClasses();
+        $oldToNewClasses = $this->renamedClassesDataCollector->getOldToNewClasses();
 
         return in_array($name, $oldToNewClasses, true);
     }

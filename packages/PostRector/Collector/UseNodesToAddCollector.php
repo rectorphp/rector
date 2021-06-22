@@ -45,7 +45,7 @@ final class UseNodesToAddCollector implements NodeCollectorInterface
     /**
      * @param FullyQualifiedObjectType|AliasedObjectType $objectType
      */
-    public function addUseImport(Node $positionNode, ObjectType $objectType): void
+    public function addUseImport(ObjectType $objectType): void
     {
         $file = $this->currentFileProvider->getFile();
         $smartFileInfo = $file->getSmartFileInfo();

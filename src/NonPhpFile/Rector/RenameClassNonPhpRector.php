@@ -8,7 +8,6 @@ use Nette\Utils\Strings;
 use Rector\Core\Configuration\RenamedClassesDataCollector;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Contract\Rector\NonPhpRectorInterface;
-use Rector\PSR4\Collector\RenamedClassesCollector;
 use Symplify\RuleDocGenerator\Contract\ConfigurableRuleInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -41,7 +40,6 @@ final class RenameClassNonPhpRector implements NonPhpRectorInterface, Configurab
 
     public function __construct(
         private RenamedClassesDataCollector $renamedClassesDataCollector,
-        private RenamedClassesCollector $renamedClassesCollector
     ) {
     }
 
@@ -133,11 +131,7 @@ CODE_SAMPLE
      */
     private function getRenameClasses(): array
     {
-        return array_merge(
-            $this->renameClasses,
-            $this->renamedClassesDataCollector->getOldToNewClasses(),
-            $this->renamedClassesCollector->getOldToNewClasses()
-        );
+        return array_merge($this->renameClasses, $this->renamedClassesDataCollector->getOldToNewClasses());
     }
 
     private function createOldClassRegex(string $oldClass): string

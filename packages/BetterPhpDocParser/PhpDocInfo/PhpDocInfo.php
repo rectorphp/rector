@@ -258,13 +258,13 @@ final class PhpDocInfo
 
             $doctrineAnnotationTagValueNode = $phpDocChildNode->value;
 
-            $annotationClass = $doctrineAnnotationTagValueNode->getAnnotationClass();
-            if ($annotationClass === $desiredClass) {
+            if ($doctrineAnnotationTagValueNode->hasClassName($desiredClass)) {
                 return $doctrineAnnotationTagValueNode;
             }
 
             // fnmatch
-            if ($this->isFnmatch($annotationClass, $desiredClass)) {
+            $identifierTypeNode = $doctrineAnnotationTagValueNode->identifierTypeNode;
+            if ($this->isFnmatch($identifierTypeNode->name, $desiredClass)) {
                 return $doctrineAnnotationTagValueNode;
             }
         }
@@ -348,7 +348,7 @@ final class PhpDocInfo
     {
         if ($phpDocTagValueNode instanceof DoctrineAnnotationTagValueNode) {
             $spacelessPhpDocTagNode = new SpacelessPhpDocTagNode(
-                '@\\' . $phpDocTagValueNode->getAnnotationClass(),
+                '@\\' . $phpDocTagValueNode->identifierTypeNode,
                 $phpDocTagValueNode
             );
             $this->addPhpDocTagNode($spacelessPhpDocTagNode);

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\PhpDoc;
 
+use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\AbstractValuesAwareNode;
 use Stringable;
 
@@ -13,7 +14,7 @@ final class DoctrineAnnotationTagValueNode extends AbstractValuesAwareNode imple
      * @param array<mixed, mixed> $values
      */
     public function __construct(
-        private string $annotationClass,
+        public IdentifierTypeNode $identifierTypeNode,
         ?string $originalContent = null,
         array $values = [],
         ?string $silentKey = null
@@ -46,8 +47,8 @@ final class DoctrineAnnotationTagValueNode extends AbstractValuesAwareNode imple
         return sprintf('(%s)', $itemContents);
     }
 
-    public function getAnnotationClass(): string
+    public function hasClassName(string $className): bool
     {
-        return $this->annotationClass;
+        return $this->identifierTypeNode->name === $className;
     }
 }

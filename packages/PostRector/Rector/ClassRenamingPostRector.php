@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Rector\PostRector\Rector;
 
 use PhpParser\Node;
-use Rector\PSR4\Collector\RenamedClassesCollector;
+use Rector\Core\Configuration\RenamedClassesDataCollector;
 use Rector\Renaming\NodeManipulator\ClassRenamer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -14,7 +14,7 @@ final class ClassRenamingPostRector extends AbstractPostRector
 {
     public function __construct(
         private ClassRenamer $classRenamer,
-        private RenamedClassesCollector $renamedClassesCollector
+        private RenamedClassesDataCollector $renamedClassesDataCollector
     ) {
     }
 
@@ -26,7 +26,7 @@ final class ClassRenamingPostRector extends AbstractPostRector
 
     public function enterNode(Node $node): ?Node
     {
-        $oldToNewClasses = $this->renamedClassesCollector->getOldToNewClasses();
+        $oldToNewClasses = $this->renamedClassesDataCollector->getOldToNewClasses();
         if ($oldToNewClasses === []) {
             return $node;
         }

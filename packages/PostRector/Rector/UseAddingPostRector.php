@@ -8,6 +8,7 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Namespace_;
 use Rector\CodingStyle\Application\UseImportsAdder;
 use Rector\CodingStyle\Application\UseImportsRemover;
+use Rector\Core\Configuration\RenamedClassesDataCollector;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\Core\Provider\CurrentFileProvider;
@@ -25,7 +26,8 @@ final class UseAddingPostRector extends AbstractPostRector
         private UseImportsAdder $useImportsAdder,
         private UseImportsRemover $useImportsRemover,
         private UseNodesToAddCollector $useNodesToAddCollector,
-        private CurrentFileProvider $currentFileProvider
+        private CurrentFileProvider $currentFileProvider,
+        private RenamedClassesDataCollector $renamedClassesDataCollector
     ) {
     }
 
@@ -47,8 +49,10 @@ final class UseAddingPostRector extends AbstractPostRector
         $functionUseImportTypes = $this->useNodesToAddCollector->getFunctionImportsByFileInfo($smartFileInfo);
         $removedShortUses = $this->useNodesToAddCollector->getShortUsesByFileInfo($smartFileInfo);
 
+        $oldToNewClasses = $this->renamedClassesDataCollector->getOldToNewClasses();
+
         // nothing to import or remove
-        if ($useImportTypes === [] && $functionUseImportTypes === [] && $removedShortUses === []) {
+        if ($useImportTypes === [] && $functionUseImportTypes === [] && $removedShortUses === [] && $oldToNewClasses === []) {
             return $nodes;
         }
 
@@ -72,6 +76,8 @@ final class UseAddingPostRector extends AbstractPostRector
         if ($firstNode instanceof FileWithoutNamespace) {
             $nodes = $firstNode->stmts;
         }
+
+        $removedShortUses = array_merge($removedShortUses, $this->renamedClassesDataCollector->getOldClasses());
 
         // B. no namespace? add in the top
         // first clean

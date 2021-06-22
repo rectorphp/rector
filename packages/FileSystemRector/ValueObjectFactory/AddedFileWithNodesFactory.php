@@ -11,10 +11,10 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Namespace_;
 use Rector\Autodiscovery\Configuration\CategoryNamespaceProvider;
+use Rector\Core\Configuration\RenamedClassesDataCollector;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\ValueObject\Application\File;
 use Rector\FileSystemRector\ValueObject\AddedFileWithNodes;
-use Rector\PSR4\Collector\RenamedClassesCollector;
 use Rector\PSR4\FileInfoAnalyzer\FileInfoDeletionAnalyzer;
 use Rector\PSR4\FileRelocationResolver;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -25,7 +25,7 @@ final class AddedFileWithNodesFactory
         private BetterNodeFinder $betterNodeFinder,
         private CategoryNamespaceProvider $categoryNamespaceProvider,
         private FileRelocationResolver $fileRelocationResolver,
-        private RenamedClassesCollector $renamedClassesCollector,
+        private RenamedClassesDataCollector $renamedClassesDataCollector,
         private FileInfoDeletionAnalyzer $fileInfoDeletionAnalyzer
     ) {
     }
@@ -91,7 +91,7 @@ final class AddedFileWithNodesFactory
         $classLike = clone $classLike;
         $classLike->namespacedName = new FullyQualified($newClassName);
 
-        $this->renamedClassesCollector->addClassRename($oldClassName, $newClassName);
+        $this->renamedClassesDataCollector->addOldToNewClass($oldClassName, $newClassName);
 
         return new AddedFileWithNodes($newFileDestination, $fileNodes);
     }
