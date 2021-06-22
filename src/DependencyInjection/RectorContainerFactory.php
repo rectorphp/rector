@@ -4,10 +4,10 @@ declare (strict_types=1);
 namespace Rector\Core\DependencyInjection;
 
 use Rector\Caching\Detector\ChangedFilesDetector;
-use Rector\Core\Configuration\Configuration;
 use Rector\Core\HttpKernel\RectorKernel;
 use Rector\Core\Stubs\PHPStanStubLoader;
 use Rector\Core\ValueObject\Bootstrap\BootstrapConfigs;
+use Rector\Core\ValueObject\Configuration;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use RectorPrefix20210622\Symfony\Component\DependencyInjection\ContainerInterface;
 use RectorPrefix20210622\Symplify\PackageBuilder\Console\Input\StaticInputDetector;
@@ -43,9 +43,6 @@ final class RectorContainerFactory
             $changedFilesDetector = $container->get(\Rector\Caching\Detector\ChangedFilesDetector::class);
             $changedFilesDetector->setFirstResolvedConfigFileInfo($mainConfigFileInfo);
         }
-        /** @var Configuration $configuration */
-        $configuration = $container->get(\Rector\Core\Configuration\Configuration::class);
-        $configuration->setBootstrapConfigs($bootstrapConfigs);
         return $container;
     }
     /**

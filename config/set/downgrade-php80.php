@@ -13,6 +13,8 @@ use Rector\DowngradePhp80\Rector\ClassMethod\DowngradeStaticTypeDeclarationRecto
 use Rector\DowngradePhp80\Rector\ClassMethod\DowngradeTrailingCommasInParamUseRector;
 use Rector\DowngradePhp80\Rector\Expression\DowngradeMatchToSwitchRector;
 use Rector\DowngradePhp80\Rector\FuncCall\DowngradeStrContainsRector;
+use Rector\DowngradePhp80\Rector\FuncCall\DowngradeStrEndsWithRector;
+use Rector\DowngradePhp80\Rector\FuncCall\DowngradeStrStartsWithRector;
 use Rector\DowngradePhp80\Rector\FunctionLike\DowngradeMixedTypeDeclarationRector;
 use Rector\DowngradePhp80\Rector\FunctionLike\DowngradeUnionTypeDeclarationRector;
 use Rector\DowngradePhp80\Rector\MethodCall\DowngradeNamedArgumentRector;

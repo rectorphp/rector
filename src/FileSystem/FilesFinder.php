@@ -59,7 +59,7 @@ final class FilesFinder
      * @param string[] $suffixes
      * @return SmartFileInfo[]
      */
-    public function findInDirectoriesAndFiles(array $source, array $suffixes) : array
+    public function findInDirectoriesAndFiles(array $source, array $suffixes = []) : array
     {
         $filesAndDirectories = $this->filesystemTweaker->resolveWithFnmatch($source);
         $filePaths = $this->fileSystemFilter->filterFiles($filesAndDirectories);
@@ -81,8 +81,11 @@ final class FilesFinder
         if ($directories === []) {
             return [];
         }
-        $suffixesPattern = $this->normalizeSuffixesToPattern($suffixes);
-        $finder = \RectorPrefix20210622\Symfony\Component\Finder\Finder::create()->followLinks()->files()->size('> 0')->in($directories)->name($suffixesPattern)->sortByName();
+        $finder = \RectorPrefix20210622\Symfony\Component\Finder\Finder::create()->followLinks()->files()->size('> 0')->in($directories)->sortByName();
+        if ($suffixes !== []) {
+            $suffixesPattern = $this->normalizeSuffixesToPattern($suffixes);
+            $finder->name($suffixesPattern);
+        }
         $this->addFilterWithExcludedPaths($finder);
         $smartFileInfos = $this->finderSanitizer->sanitize($finder);
         return $this->unchangedFilesFilter->filterAndJoinWithDependentFileInfos($smartFileInfos);

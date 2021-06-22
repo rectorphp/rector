@@ -4,10 +4,10 @@ declare (strict_types=1);
 namespace Rector\Core\ValueObjectFactory\Application;
 
 use Rector\Caching\Detector\ChangedFilesDetector;
-use Rector\Core\Configuration\Configuration;
 use Rector\Core\Contract\Processor\FileProcessorInterface;
 use Rector\Core\FileSystem\FilesFinder;
 use Rector\Core\ValueObject\Application\File;
+use Rector\Core\ValueObject\Configuration;
 /**
  * @see \Rector\Core\ValueObject\Application\File
  */
@@ -17,10 +17,6 @@ final class FileFactory
      * @var \Rector\Core\FileSystem\FilesFinder
      */
     private $filesFinder;
-    /**
-     * @var \Rector\Core\Configuration\Configuration
-     */
-    private $configuration;
     /**
      * @var \Rector\Caching\Detector\ChangedFilesDetector
      */
@@ -32,10 +28,9 @@ final class FileFactory
     /**
      * @param FileProcessorInterface[] $fileProcessors
      */
-    public function __construct(\Rector\Core\FileSystem\FilesFinder $filesFinder, \Rector\Core\Configuration\Configuration $configuration, \Rector\Caching\Detector\ChangedFilesDetector $changedFilesDetector, array $fileProcessors)
+    public function __construct(\Rector\Core\FileSystem\FilesFinder $filesFinder, \Rector\Caching\Detector\ChangedFilesDetector $changedFilesDetector, array $fileProcessors)
     {
         $this->filesFinder = $filesFinder;
-        $this->configuration = $configuration;
         $this->changedFilesDetector = $changedFilesDetector;
         $this->fileProcessors = $fileProcessors;
     }
@@ -43,12 +38,12 @@ final class FileFactory
      * @param string[] $paths
      * @return File[]
      */
-    public function createFromPaths(array $paths) : array
+    public function createFromPaths(array $paths, \Rector\Core\ValueObject\Configuration $configuration) : array
     {
-        if ($this->configuration->shouldClearCache()) {
+        if ($configuration->shouldClearCache()) {
             $this->changedFilesDetector->clear();
         }
-        $supportedFileExtensions = $this->resolveSupportedFileExtensions();
+        $supportedFileExtensions = $this->resolveSupportedFileExtensions($configuration);
         $fileInfos = $this->filesFinder->findInDirectoriesAndFiles($paths, $supportedFileExtensions);
         $files = [];
         foreach ($fileInfos as $fileInfo) {
@@ -59,12 +54,14 @@ final class FileFactory
     /**
      * @return string[]
      */
-    private function resolveSupportedFileExtensions() : array
+    private function resolveSupportedFileExtensions(\Rector\Core\ValueObject\Configuration $configuration) : array
     {
         $supportedFileExtensions = [];
         foreach ($this->fileProcessors as $fileProcessor) {
             $supportedFileExtensions = \array_merge($supportedFileExtensions, $fileProcessor->getSupportedFileExtensions());
         }
+        // basic PHP extensions
+        $supportedFileExtensions = \array_merge($supportedFileExtensions, $configuration->getFileExtensions());
         return \array_unique($supportedFileExtensions);
     }
 }

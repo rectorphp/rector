@@ -6,7 +6,7 @@ namespace Rector\ChangesReporting\Output;
 use RectorPrefix20210622\Nette\Utils\Json;
 use Rector\ChangesReporting\Annotation\RectorsChangelogResolver;
 use Rector\ChangesReporting\Contract\Output\OutputFormatterInterface;
-use Rector\Core\Configuration\Configuration;
+use Rector\Core\ValueObject\Configuration;
 use Rector\Core\ValueObject\ProcessResult;
 use RectorPrefix20210622\Symplify\SmartFileSystem\SmartFileSystem;
 final class JsonOutputFormatter implements \Rector\ChangesReporting\Contract\Output\OutputFormatterInterface
@@ -16,10 +16,6 @@ final class JsonOutputFormatter implements \Rector\ChangesReporting\Contract\Out
      */
     public const NAME = 'json';
     /**
-     * @var \Rector\Core\Configuration\Configuration
-     */
-    private $configuration;
-    /**
      * @var \Symplify\SmartFileSystem\SmartFileSystem
      */
     private $smartFileSystem;
@@ -27,9 +23,12 @@ final class JsonOutputFormatter implements \Rector\ChangesReporting\Contract\Out
      * @var \Rector\ChangesReporting\Annotation\RectorsChangelogResolver
      */
     private $rectorsChangelogResolver;
-    public function __construct(\Rector\Core\Configuration\Configuration $configuration, \RectorPrefix20210622\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \Rector\ChangesReporting\Annotation\RectorsChangelogResolver $rectorsChangelogResolver)
+    public function __construct(
+        // @todo add rector for unused promoted property
+        \RectorPrefix20210622\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem,
+        \Rector\ChangesReporting\Annotation\RectorsChangelogResolver $rectorsChangelogResolver
+    )
     {
-        $this->configuration = $configuration;
         $this->smartFileSystem = $smartFileSystem;
         $this->rectorsChangelogResolver = $rectorsChangelogResolver;
     }
@@ -37,9 +36,9 @@ final class JsonOutputFormatter implements \Rector\ChangesReporting\Contract\Out
     {
         return self::NAME;
     }
-    public function report(\Rector\Core\ValueObject\ProcessResult $processResult) : void
+    public function report(\Rector\Core\ValueObject\ProcessResult $processResult, \Rector\Core\ValueObject\Configuration $configuration) : void
     {
-        $errorsArray = ['meta' => ['config' => $this->configuration->getMainConfigFilePath()], 'totals' => ['changed_files' => \count($processResult->getFileDiffs()), 'removed_and_added_files_count' => $processResult->getRemovedAndAddedFilesCount(), 'removed_node_count' => $processResult->getRemovedNodeCount()]];
+        $errorsArray = ['meta' => ['config' => $configuration->getMainConfigFilePath()], 'totals' => ['changed_files' => \count($processResult->getFileDiffs()), 'removed_and_added_files_count' => $processResult->getRemovedAndAddedFilesCount(), 'removed_node_count' => $processResult->getRemovedNodeCount()]];
         $fileDiffs = $processResult->getFileDiffs();
         \ksort($fileDiffs);
         foreach ($fileDiffs as $fileDiff) {

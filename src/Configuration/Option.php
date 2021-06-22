@@ -3,7 +3,9 @@
 declare (strict_types=1);
 namespace Rector\Core\Configuration;
 
+use RectorPrefix20210622\JetBrains\PhpStorm\Immutable;
 use RectorPrefix20210622\Symplify\Skipper\ValueObject\Option as SkipperOption;
+#[Immutable]
 final class Option
 {
     /**

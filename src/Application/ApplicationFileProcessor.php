@@ -5,17 +5,13 @@ namespace Rector\Core\Application;
 
 use Rector\Core\Application\FileDecorator\FileDiffFileDecorator;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesProcessor;
-use Rector\Core\Configuration\Configuration;
 use Rector\Core\Contract\Processor\FileProcessorInterface;
 use Rector\Core\ValueObject\Application\File;
+use Rector\Core\ValueObject\Configuration;
 use Rector\FileFormatter\FileFormatter;
 use RectorPrefix20210622\Symplify\SmartFileSystem\SmartFileSystem;
 final class ApplicationFileProcessor
 {
-    /**
-     * @var \Rector\Core\Configuration\Configuration
-     */
-    private $configuration;
     /**
      * @var \Symplify\SmartFileSystem\SmartFileSystem
      */
@@ -39,9 +35,8 @@ final class ApplicationFileProcessor
     /**
      * @param FileProcessorInterface[] $fileProcessors
      */
-    public function __construct(\Rector\Core\Configuration\Configuration $configuration, \RectorPrefix20210622\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \Rector\Core\Application\FileDecorator\FileDiffFileDecorator $fileDiffFileDecorator, \Rector\FileFormatter\FileFormatter $fileFormatter, \Rector\Core\Application\FileSystem\RemovedAndAddedFilesProcessor $removedAndAddedFilesProcessor, array $fileProcessors = [])
+    public function __construct(\RectorPrefix20210622\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \Rector\Core\Application\FileDecorator\FileDiffFileDecorator $fileDiffFileDecorator, \Rector\FileFormatter\FileFormatter $fileFormatter, \Rector\Core\Application\FileSystem\RemovedAndAddedFilesProcessor $removedAndAddedFilesProcessor, array $fileProcessors = [])
     {
-        $this->configuration = $configuration;
         $this->smartFileSystem = $smartFileSystem;
         $this->fileDiffFileDecorator = $fileDiffFileDecorator;
         $this->fileFormatter = $fileFormatter;
@@ -51,32 +46,32 @@ final class ApplicationFileProcessor
     /**
      * @param File[] $files
      */
-    public function run(array $files) : void
+    public function run(array $files, \Rector\Core\ValueObject\Configuration $configuration) : void
     {
-        $this->processFiles($files);
+        $this->processFiles($files, $configuration);
         $this->fileFormatter->format($files);
         $this->fileDiffFileDecorator->decorate($files);
-        $this->printFiles($files);
+        $this->printFiles($files, $configuration);
     }
     /**
      * @param File[] $files
      */
-    private function processFiles(array $files) : void
+    private function processFiles(array $files, \Rector\Core\ValueObject\Configuration $configuration) : void
     {
         foreach ($this->fileProcessors as $fileProcessor) {
-            $supportedFiles = \array_filter($files, function (\Rector\Core\ValueObject\Application\File $file) use($fileProcessor) : bool {
-                return $fileProcessor->supports($file);
+            $supportedFiles = \array_filter($files, function (\Rector\Core\ValueObject\Application\File $file) use($fileProcessor, $configuration) : bool {
+                return $fileProcessor->supports($file, $configuration);
             });
-            $fileProcessor->process($supportedFiles);
+            $fileProcessor->process($supportedFiles, $configuration);
         }
-        $this->removedAndAddedFilesProcessor->run();
+        $this->removedAndAddedFilesProcessor->run($configuration);
     }
     /**
      * @param File[] $files
      */
-    private function printFiles(array $files) : void
+    private function printFiles(array $files, \Rector\Core\ValueObject\Configuration $configuration) : void
     {
-        if ($this->configuration->isDryRun()) {
+        if ($configuration->isDryRun()) {
             return;
         }
         foreach ($files as $file) {

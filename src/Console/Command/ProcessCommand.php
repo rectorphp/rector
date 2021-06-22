@@ -9,13 +9,14 @@ use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
 use Rector\Core\Application\ApplicationFileProcessor;
 use Rector\Core\Autoloading\AdditionalAutoloader;
 use Rector\Core\Autoloading\BootstrapFilesIncluder;
-use Rector\Core\Configuration\Configuration;
+use Rector\Core\Configuration\ConfigurationFactory;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Console\Output\OutputFormatterCollector;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Reporting\MissingRectorRulesReporter;
 use Rector\Core\StaticReflection\DynamicSourceLocatorDecorator;
 use Rector\Core\ValueObject\Application\File;
+use Rector\Core\ValueObject\Configuration;
 use Rector\Core\ValueObject\ProcessResult;
 use Rector\Core\ValueObjectFactory\Application\FileFactory;
 use Rector\Core\ValueObjectFactory\ProcessResultFactory;
@@ -36,10 +37,6 @@ final class ProcessCommand extends \RectorPrefix20210622\Symfony\Component\Conso
      * @var \Rector\Caching\Detector\ChangedFilesDetector
      */
     private $changedFilesDetector;
-    /**
-     * @var \Rector\Core\Configuration\Configuration
-     */
-    private $configuration;
     /**
      * @var \Rector\Core\Console\Output\OutputFormatterCollector
      */
@@ -72,11 +69,14 @@ final class ProcessCommand extends \RectorPrefix20210622\Symfony\Component\Conso
      * @var \Rector\Core\StaticReflection\DynamicSourceLocatorDecorator
      */
     private $dynamicSourceLocatorDecorator;
-    public function __construct(\Rector\Core\Autoloading\AdditionalAutoloader $additionalAutoloader, \Rector\Caching\Detector\ChangedFilesDetector $changedFilesDetector, \Rector\Core\Configuration\Configuration $configuration, \Rector\Core\Console\Output\OutputFormatterCollector $outputFormatterCollector, \Rector\Core\Reporting\MissingRectorRulesReporter $missingRectorRulesReporter, \Rector\Core\Application\ApplicationFileProcessor $applicationFileProcessor, \Rector\Core\ValueObjectFactory\Application\FileFactory $fileFactory, \Rector\Core\Autoloading\BootstrapFilesIncluder $bootstrapFilesIncluder, \Rector\Core\ValueObjectFactory\ProcessResultFactory $processResultFactory, \PHPStan\Analyser\NodeScopeResolver $nodeScopeResolver, \Rector\Core\StaticReflection\DynamicSourceLocatorDecorator $dynamicSourceLocatorDecorator)
+    /**
+     * @var \Rector\Core\Configuration\ConfigurationFactory
+     */
+    private $configurationFactory;
+    public function __construct(\Rector\Core\Autoloading\AdditionalAutoloader $additionalAutoloader, \Rector\Caching\Detector\ChangedFilesDetector $changedFilesDetector, \Rector\Core\Console\Output\OutputFormatterCollector $outputFormatterCollector, \Rector\Core\Reporting\MissingRectorRulesReporter $missingRectorRulesReporter, \Rector\Core\Application\ApplicationFileProcessor $applicationFileProcessor, \Rector\Core\ValueObjectFactory\Application\FileFactory $fileFactory, \Rector\Core\Autoloading\BootstrapFilesIncluder $bootstrapFilesIncluder, \Rector\Core\ValueObjectFactory\ProcessResultFactory $processResultFactory, \PHPStan\Analyser\NodeScopeResolver $nodeScopeResolver, \Rector\Core\StaticReflection\DynamicSourceLocatorDecorator $dynamicSourceLocatorDecorator, \Rector\Core\Configuration\ConfigurationFactory $configurationFactory)
     {
         $this->additionalAutoloader = $additionalAutoloader;
         $this->changedFilesDetector = $changedFilesDetector;
-        $this->configuration = $configuration;
         $this->outputFormatterCollector = $outputFormatterCollector;
         $this->missingRectorRulesReporter = $missingRectorRulesReporter;
         $this->applicationFileProcessor = $applicationFileProcessor;
@@ -85,6 +85,7 @@ final class ProcessCommand extends \RectorPrefix20210622\Symfony\Component\Conso
         $this->processResultFactory = $processResultFactory;
         $this->nodeScopeResolver = $nodeScopeResolver;
         $this->dynamicSourceLocatorDecorator = $dynamicSourceLocatorDecorator;
+        $this->configurationFactory = $configurationFactory;
         parent::__construct();
     }
     protected function configure() : void
@@ -106,28 +107,27 @@ final class ProcessCommand extends \RectorPrefix20210622\Symfony\Component\Conso
         if ($exitCode !== null) {
             return $exitCode;
         }
-        $this->configuration->resolveFromInput($input);
-        $this->configuration->validateConfigParameters();
+        $configuration = $this->configurationFactory->createFromInput($input);
         // register autoloaded and included files
         $this->bootstrapFilesIncluder->includeBootstrapFiles();
         $this->additionalAutoloader->autoloadInput($input);
         $this->additionalAutoloader->autoloadPaths();
-        $paths = $this->configuration->getPaths();
+        $paths = $configuration->getPaths();
         // 0. add files and directories to static locator
         $this->dynamicSourceLocatorDecorator->addPaths($paths);
-        $files = $this->fileFactory->createFromPaths($paths);
+        $files = $this->fileFactory->createFromPaths($paths, $configuration);
         // PHPStan has to know about all files!
         $this->configurePHPStanNodeScopeResolver($files);
-        $this->applicationFileProcessor->run($files);
+        $this->applicationFileProcessor->run($files, $configuration);
         // report diffs and errors
         $outputFormat = (string) $input->getOption(\Rector\Core\Configuration\Option::OUTPUT_FORMAT);
         $outputFormatter = $this->outputFormatterCollector->getByName($outputFormat);
         // here should be value obect factory
         $processResult = $this->processResultFactory->create($files);
-        $outputFormatter->report($processResult);
+        $outputFormatter->report($processResult, $configuration);
         // invalidate affected files
         $this->invalidateCacheChangedFiles($processResult);
-        return $this->resolveReturnCode($processResult);
+        return $this->resolveReturnCode($processResult, $configuration);
     }
     protected function initialize(\RectorPrefix20210622\Symfony\Component\Console\Input\InputInterface $input, \RectorPrefix20210622\Symfony\Component\Console\Output\OutputInterface $output) : void
     {
@@ -154,14 +154,14 @@ final class ProcessCommand extends \RectorPrefix20210622\Symfony\Component\Conso
             $this->changedFilesDetector->invalidateFile($changedFileInfo);
         }
     }
-    private function resolveReturnCode(\Rector\Core\ValueObject\ProcessResult $processResult) : int
+    private function resolveReturnCode(\Rector\Core\ValueObject\ProcessResult $processResult, \Rector\Core\ValueObject\Configuration $configuration) : int
     {
         // some errors were found → fail
         if ($processResult->getErrors() !== []) {
             return \RectorPrefix20210622\Symplify\PackageBuilder\Console\ShellCode::ERROR;
         }
         // inverse error code for CI dry-run
-        if (!$this->configuration->isDryRun()) {
+        if (!$configuration->isDryRun()) {
             return \RectorPrefix20210622\Symplify\PackageBuilder\Console\ShellCode::SUCCESS;
         }
         return $processResult->getFileDiffs() === [] ? \RectorPrefix20210622\Symplify\PackageBuilder\Console\ShellCode::SUCCESS : \RectorPrefix20210622\Symplify\PackageBuilder\Console\ShellCode::ERROR;

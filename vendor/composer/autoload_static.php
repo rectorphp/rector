@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit02537cdb2637850b8e6e18edb9df94cb
+class ComposerStaticInit8babd35b8005ae82a5ffad65b7c65373
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -2139,7 +2139,7 @@ class ComposerStaticInit02537cdb2637850b8e6e18edb9df94cb
         'Rector\\Core\\Autoloading\\BootstrapFilesIncluder' => __DIR__ . '/../..' . '/src/Autoloading/BootstrapFilesIncluder.php',
         'Rector\\Core\\Bootstrap\\ExtensionConfigResolver' => __DIR__ . '/../..' . '/src/Bootstrap/ExtensionConfigResolver.php',
         'Rector\\Core\\Bootstrap\\RectorConfigsResolver' => __DIR__ . '/../..' . '/src/Bootstrap/RectorConfigsResolver.php',
-        'Rector\\Core\\Configuration\\Configuration' => __DIR__ . '/../..' . '/src/Configuration/Configuration.php',
+        'Rector\\Core\\Configuration\\ConfigurationFactory' => __DIR__ . '/../..' . '/src/Configuration/ConfigurationFactory.php',
         'Rector\\Core\\Configuration\\CurrentNodeProvider' => __DIR__ . '/../..' . '/src/Configuration/CurrentNodeProvider.php',
         'Rector\\Core\\Configuration\\Option' => __DIR__ . '/../..' . '/src/Configuration/Option.php',
         'Rector\\Core\\Configuration\\RenamedClassesDataCollector' => __DIR__ . '/../..' . '/src/Configuration/RenamedClassesDataCollector.php',
@@ -2268,6 +2268,7 @@ class ComposerStaticInit02537cdb2637850b8e6e18edb9df94cb
         'Rector\\Core\\ValueObject\\Application\\File' => __DIR__ . '/../..' . '/src/ValueObject/Application/File.php',
         'Rector\\Core\\ValueObject\\Application\\RectorError' => __DIR__ . '/../..' . '/src/ValueObject/Application/RectorError.php',
         'Rector\\Core\\ValueObject\\Bootstrap\\BootstrapConfigs' => __DIR__ . '/../..' . '/src/ValueObject/Bootstrap/BootstrapConfigs.php',
+        'Rector\\Core\\ValueObject\\Configuration' => __DIR__ . '/../..' . '/src/ValueObject/Configuration.php',
         'Rector\\Core\\ValueObject\\FrameworkName' => __DIR__ . '/../..' . '/src/ValueObject/FrameworkName.php',
         'Rector\\Core\\ValueObject\\MethodName' => __DIR__ . '/../..' . '/src/ValueObject/MethodName.php',
         'Rector\\Core\\ValueObject\\PhpVersion' => __DIR__ . '/../..' . '/src/ValueObject/PhpVersion.php',
@@ -3868,9 +3869,9 @@ class ComposerStaticInit02537cdb2637850b8e6e18edb9df94cb
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit02537cdb2637850b8e6e18edb9df94cb::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit02537cdb2637850b8e6e18edb9df94cb::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit02537cdb2637850b8e6e18edb9df94cb::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit8babd35b8005ae82a5ffad65b7c65373::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit8babd35b8005ae82a5ffad65b7c65373::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit8babd35b8005ae82a5ffad65b7c65373::$classMap;
 
         }, null, ClassLoader::class);
     }

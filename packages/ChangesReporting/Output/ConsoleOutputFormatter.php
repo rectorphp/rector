@@ -6,9 +6,9 @@ namespace Rector\ChangesReporting\Output;
 use RectorPrefix20210622\Nette\Utils\Strings;
 use Rector\ChangesReporting\Annotation\RectorsChangelogResolver;
 use Rector\ChangesReporting\Contract\Output\OutputFormatterInterface;
-use Rector\Core\Configuration\Configuration;
 use Rector\Core\Contract\Console\OutputStyleInterface;
 use Rector\Core\ValueObject\Application\RectorError;
+use Rector\Core\ValueObject\Configuration;
 use Rector\Core\ValueObject\ProcessResult;
 use Rector\Core\ValueObject\Reporting\FileDiff;
 final class ConsoleOutputFormatter implements \Rector\ChangesReporting\Contract\Output\OutputFormatterInterface
@@ -23,10 +23,6 @@ final class ConsoleOutputFormatter implements \Rector\ChangesReporting\Contract\
      */
     private const ON_LINE_REGEX = '# on line #';
     /**
-     * @var \Rector\Core\Configuration\Configuration
-     */
-    private $configuration;
-    /**
      * @var \Rector\Core\Contract\Console\OutputStyleInterface
      */
     private $outputStyle;
@@ -34,15 +30,14 @@ final class ConsoleOutputFormatter implements \Rector\ChangesReporting\Contract\
      * @var \Rector\ChangesReporting\Annotation\RectorsChangelogResolver
      */
     private $rectorsChangelogResolver;
-    public function __construct(\Rector\Core\Configuration\Configuration $configuration, \Rector\Core\Contract\Console\OutputStyleInterface $outputStyle, \Rector\ChangesReporting\Annotation\RectorsChangelogResolver $rectorsChangelogResolver)
+    public function __construct(\Rector\Core\Contract\Console\OutputStyleInterface $outputStyle, \Rector\ChangesReporting\Annotation\RectorsChangelogResolver $rectorsChangelogResolver)
     {
-        $this->configuration = $configuration;
         $this->outputStyle = $outputStyle;
         $this->rectorsChangelogResolver = $rectorsChangelogResolver;
     }
-    public function report(\Rector\Core\ValueObject\ProcessResult $processResult) : void
+    public function report(\Rector\Core\ValueObject\ProcessResult $processResult, \Rector\Core\ValueObject\Configuration $configuration) : void
     {
-        if ($this->configuration->shouldShowDiffs()) {
+        if ($configuration->shouldShowDiffs()) {
             $this->reportFileDiffs($processResult->getFileDiffs());
         }
         $this->reportErrors($processResult->getErrors());
@@ -50,7 +45,7 @@ final class ConsoleOutputFormatter implements \Rector\ChangesReporting\Contract\
         if ($processResult->getErrors() !== []) {
             return;
         }
-        $message = $this->createSuccessMessage($processResult);
+        $message = $this->createSuccessMessage($processResult, $configuration);
         $this->outputStyle->success($message);
     }
     public function getName() : string
@@ -125,13 +120,13 @@ final class ConsoleOutputFormatter implements \Rector\ChangesReporting\Contract\
         $message = \sprintf('%d nodes were removed', $processResult->getRemovedNodeCount());
         $this->outputStyle->warning($message);
     }
-    private function createSuccessMessage(\Rector\Core\ValueObject\ProcessResult $processResult) : string
+    private function createSuccessMessage(\Rector\Core\ValueObject\ProcessResult $processResult, \Rector\Core\ValueObject\Configuration $configuration) : string
     {
         $changeCount = \count($processResult->getFileDiffs()) + $processResult->getRemovedAndAddedFilesCount();
         if ($changeCount === 0) {
             return 'Rector is done!';
         }
-        return \sprintf('%d file%s %s by Rector', $changeCount, $changeCount > 1 ? 's' : '', $this->configuration->isDryRun() ? 'would have changed (dry-run)' : ($changeCount === 1 ? 'has' : 'have') . ' been changed');
+        return \sprintf('%d file%s %s by Rector', $changeCount, $changeCount > 1 ? 's' : '', $configuration->isDryRun() ? 'would have changed (dry-run)' : ($changeCount === 1 ? 'has' : 'have') . ' been changed');
     }
     /**
      * @return string[]
