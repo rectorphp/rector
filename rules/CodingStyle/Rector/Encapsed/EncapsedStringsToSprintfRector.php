@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\CodingStyle\Rector\Encapsed;
 
 use const PHP_EOL;
+use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
@@ -99,7 +100,7 @@ CODE_SAMPLE
             return;
         }
 
-        $this->sprintfFormat .= $stringValue;
+        $this->sprintfFormat .= Strings::replace($stringValue, '#%#', '%%');
     }
 
     private function collectExpr(Expr $expr): void

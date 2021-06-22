@@ -82,7 +82,7 @@ abstract class AbstractRectorTestCase extends AbstractTestCase implements Rector
         return StaticFixtureFinder::yieldDirectoryExclusively($directory, $suffix);
     }
 
-    protected function doTestFileInfo(SmartFileInfo $fixtureFileInfo): void
+    protected function doTestFileInfo(SmartFileInfo $fixtureFileInfo, bool $allowMatches = true): void
     {
         $inputFileInfoAndExpectedFileInfo = StaticFixtureSplitter::splitFileInfoToLocalInputAndExpectedFileInfos(
             $fixtureFileInfo
@@ -92,7 +92,7 @@ abstract class AbstractRectorTestCase extends AbstractTestCase implements Rector
         $this->originalTempFileInfo = $inputFileInfo;
 
         $expectedFileInfo = $inputFileInfoAndExpectedFileInfo->getExpectedFileInfo();
-        $this->doTestFileMatchesExpectedContent($inputFileInfo, $expectedFileInfo, $fixtureFileInfo);
+        $this->doTestFileMatchesExpectedContent($inputFileInfo, $expectedFileInfo, $fixtureFileInfo, $allowMatches);
     }
 
     protected function getFixtureTempDirectory(): string
@@ -103,7 +103,8 @@ abstract class AbstractRectorTestCase extends AbstractTestCase implements Rector
     private function doTestFileMatchesExpectedContent(
         SmartFileInfo $originalFileInfo,
         SmartFileInfo $expectedFileInfo,
-        SmartFileInfo $fixtureFileInfo
+        SmartFileInfo $fixtureFileInfo,
+        bool $allowMatches = true
     ): void {
         $this->parameterProvider->changeParameter(Option::SOURCE, [$originalFileInfo->getRealPath()]);
 
@@ -118,7 +119,10 @@ abstract class AbstractRectorTestCase extends AbstractTestCase implements Rector
 
         try {
             $this->assertStringEqualsFile($expectedFileInfo->getRealPath(), $changedContent, $relativeFilePathFromCwd);
-        } catch (ExpectationFailedException) {
+        } catch (ExpectationFailedException $expectationFailedException) {
+            if ($allowMatches === false) {
+                throw $expectationFailedException;
+            }
             StaticFixtureUpdater::updateFixtureContent($originalFileInfo, $changedContent, $fixtureFileInfo);
             $contents = $expectedFileInfo->getContents();
 

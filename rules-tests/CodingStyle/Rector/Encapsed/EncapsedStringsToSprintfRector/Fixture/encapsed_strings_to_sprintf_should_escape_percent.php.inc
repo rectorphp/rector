@@ -19,7 +19,7 @@ final class EncapsedStringsToSprintfShouldEscapePercent
 {
     public function run(string $value)
     {
-        return sprintf('%s%', $value);
+        return sprintf('%s%%', $value);
     }
 }
 ?>
