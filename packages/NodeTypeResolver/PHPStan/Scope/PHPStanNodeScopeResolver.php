@@ -127,7 +127,7 @@ final class PHPStanNodeScopeResolver
         }
         /** @var MutatingScope $scope */
         $this->nodeScopeResolver->processNodes($nodes, $scope, $nodeCallback);
-        $this->reportCacheDebugAndSaveDependentFiles($smartFileInfo, $this->dependentFiles);
+        $this->changedFilesDetector->addFileWithDependencies($smartFileInfo, $this->dependentFiles);
         return $nodes;
     }
     /**
@@ -158,9 +158,6 @@ final class PHPStanNodeScopeResolver
     }
     private function resolveDependentFiles(\PhpParser\Node $node, \PHPStan\Analyser\MutatingScope $mutatingScope) : void
     {
-        if (!$this->configuration->isCacheEnabled()) {
-            return;
-        }
         try {
             $dependentFiles = $this->dependencyResolver->resolveDependencies($node, $mutatingScope);
             foreach ($dependentFiles as $dependentFile) {
@@ -169,17 +166,6 @@ final class PHPStanNodeScopeResolver
         } catch (\PHPStan\AnalysedCodeException $exception) {
             // @ignoreException
         }
-    }
-    /**
-     * @param string[] $dependentFiles
-     */
-    private function reportCacheDebugAndSaveDependentFiles(\Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo, array $dependentFiles) : void
-    {
-        if (!$this->configuration->isCacheEnabled()) {
-            return;
-        }
-        // save for cache
-        $this->changedFilesDetector->addFileWithDependencies($smartFileInfo, $dependentFiles);
     }
     /**
      * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Interface_|\PhpParser\Node\Stmt\Trait_ $classLike

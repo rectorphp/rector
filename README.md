@@ -124,9 +124,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     // is your PHP version different from the one your refactor to? [default: your PHP version], uses PHP_VERSION_ID format
     $parameters->set(Option::PHP_VERSION_FEATURES, PhpVersion::PHP_72);
 
-    // Run Rector only on changed files
-    $parameters->set(Option::ENABLE_CACHE, true);
-
     // Path to phpstan with extensions, that PHPSTan in Rector uses to determine types
     $parameters->set(Option::PHPSTAN_FOR_RECTOR_PATH, getcwd() . '/phpstan-for-config.neon');
 };

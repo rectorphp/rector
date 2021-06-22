@@ -150,9 +150,6 @@ final class ProcessCommand extends \RectorPrefix20210622\Symfony\Component\Conso
     }
     private function invalidateCacheChangedFiles(\Rector\Core\ValueObject\ProcessResult $processResult) : void
     {
-        if (!$this->configuration->isCacheEnabled()) {
-            return;
-        }
         foreach ($processResult->getChangedFileInfos() as $changedFileInfo) {
             $this->changedFilesDetector->invalidateFile($changedFileInfo);
         }

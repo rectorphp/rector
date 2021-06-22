@@ -28,10 +28,6 @@ final class Configuration
      */
     private $outputFormat;
     /**
-     * @var bool
-     */
-    private $isCacheEnabled = \false;
-    /**
      * @var string[]
      */
     private $fileExtensions = [];
@@ -53,7 +49,6 @@ final class Configuration
     private $bootstrapConfigs;
     public function __construct(\RectorPrefix20210622\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider)
     {
-        $this->isCacheEnabled = (bool) $parameterProvider->provideParameter(\Rector\Core\Configuration\Option::ENABLE_CACHE);
         $this->fileExtensions = (array) $parameterProvider->provideParameter(\Rector\Core\Configuration\Option::FILE_EXTENSIONS);
         $this->paths = (array) $parameterProvider->provideParameter(\Rector\Core\Configuration\Option::PATHS);
         $this->parameterProvider = $parameterProvider;
@@ -93,10 +88,6 @@ final class Configuration
     public function shouldClearCache() : bool
     {
         return $this->shouldClearCache;
-    }
-    public function isCacheEnabled() : bool
-    {
-        return $this->isCacheEnabled;
     }
     /**
      * @return string[]
