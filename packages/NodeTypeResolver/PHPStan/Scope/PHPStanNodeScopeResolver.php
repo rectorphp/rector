@@ -9,7 +9,6 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Interface_;
-use PhpParser\Node\Stmt\Trait_;
 use PhpParser\NodeTraverser;
 use PHPStan\AnalysedCodeException;
 use PHPStan\Analyser\MutatingScope;
@@ -20,12 +19,10 @@ use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\Caching\Detector\ChangedFilesDetector;
 use Rector\Caching\FileSystem\DependencyResolver;
-use Rector\Core\Configuration\Configuration;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Collector\TraitNodeScopeCollector;
 use Rector\NodeTypeResolver\PHPStan\Scope\NodeVisitor\RemoveDeepChainMethodCallNodeVisitor;
-use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
@@ -42,13 +39,11 @@ final class PHPStanNodeScopeResolver
 
     public function __construct(
         private ChangedFilesDetector $changedFilesDetector,
-        private Configuration $configuration,
         private DependencyResolver $dependencyResolver,
         private NodeScopeResolver $nodeScopeResolver,
         private ReflectionProvider $reflectionProvider,
         private RemoveDeepChainMethodCallNodeVisitor $removeDeepChainMethodCallNodeVisitor,
         private ScopeFactory $scopeFactory,
-        private SymfonyStyle $symfonyStyle,
         private TraitNodeScopeCollector $traitNodeScopeCollector
     ) {
     }
@@ -127,7 +122,7 @@ final class PHPStanNodeScopeResolver
         return $scope->enterClass($classReflection);
     }
 
-    private function resolveClassName(Class_ | Interface_ | Trait_ $classLike): string
+    private function resolveClassName(Class_ | Interface_ $classLike): string
     {
         if (property_exists($classLike, 'namespacedName')) {
             return (string) $classLike->namespacedName;

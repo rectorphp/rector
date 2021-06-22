@@ -175,9 +175,7 @@ parameters:
             message: '#Cannot cast array<string\>\|bool\|string\|null to string#'
             paths:
                 - src/Configuration/Configuration.php
-                - src/Console/Command/ProcessCommand.php
-                - src/Console/Command/InitCommand.php
-                - src/Console/Command/ShowCommand.php
+                - src/Console/Command/*Command.php
 
         - '#Method (.*?) should return array<PhpParser\\Node\\(.*?)\> but returns array<PhpParser\\Node\>#'
         - '#Parameter \#1 (.*?) expects Symfony\\Component\\DependencyInjection\\ContainerBuilder, Symfony\\Component\\DependencyInjection\\ContainerInterface given#'
