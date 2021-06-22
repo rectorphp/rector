@@ -8,11 +8,11 @@ final class DowngradeAttributeToAnnotation
 {
     /**
      * @param class-string $attributeClass
-     * @param class-string|string $tag
+     * @param class-string|string|null $tag
      */
     public function __construct(
         private string $attributeClass,
-        private string $tag
+        private ?string $tag = null
     ) {
     }
 
@@ -23,6 +23,10 @@ final class DowngradeAttributeToAnnotation
 
     public function getTag(): string
     {
+        if ($this->tag === null) {
+            return $this->attributeClass;
+        }
+
         return $this->tag;
     }
 }

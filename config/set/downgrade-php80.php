@@ -38,7 +38,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(DowngradeAttributeToAnnotationRector::class)
         ->call('configure', [[
             DowngradeAttributeToAnnotationRector::ATTRIBUTE_TO_ANNOTATION => ValueObjectInliner::inline([
-                new DowngradeAttributeToAnnotation('Attribute', 'Attribute'),
+                new DowngradeAttributeToAnnotation('Attribute'),
             ]),
         ]]);
 

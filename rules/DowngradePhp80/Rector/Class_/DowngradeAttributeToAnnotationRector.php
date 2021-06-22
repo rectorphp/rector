@@ -73,10 +73,7 @@ CODE_SAMPLE
                 ,
                 [
                     self::ATTRIBUTE_TO_ANNOTATION => [
-                        new DowngradeAttributeToAnnotation(
-                            'Symfony\Component\Routing\Annotation\Route',
-                            'Symfony\Component\Routing\Annotation\Route'
-                        ),
+                        new DowngradeAttributeToAnnotation('Symfony\Component\Routing\Annotation\Route'),
                     ],
                 ]
             ),
