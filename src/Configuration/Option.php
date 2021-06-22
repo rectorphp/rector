@@ -71,11 +71,6 @@ final class Option
      */
     public const AUTOLOAD_PATHS = 'autoload_paths';
     /**
-     * @deprecated Use $containerConfigurator->import() as it does the same job, just better and more explicit
-     * @var string
-     */
-    public const SETS = 'sets';
-    /**
      * @var string
      */
     public const SKIP = \RectorPrefix20210622\Symplify\Skipper\ValueObject\Option::SKIP;

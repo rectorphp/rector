@@ -106,7 +106,7 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractTe
         try {
             $this->assertStringEqualsFile($expectedFileInfo->getRealPath(), $changedContent, $relativeFilePathFromCwd);
         } catch (\PHPUnit\Framework\ExpectationFailedException $expectationFailedException) {
-            if ($allowMatches === \false) {
+            if (!$allowMatches) {
                 throw $expectationFailedException;
             }
             \RectorPrefix20210622\Symplify\EasyTesting\DataProvider\StaticFixtureUpdater::updateFixtureContent($originalFileInfo, $changedContent, $fixtureFileInfo);

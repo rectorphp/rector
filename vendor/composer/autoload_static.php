@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitb68e0b01f8201626a837a01851d0ba43
+class ComposerStaticInitd80854e8a6fe965ca7944db3a256157f
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -2162,7 +2162,6 @@ class ComposerStaticInitb68e0b01f8201626a837a01851d0ba43
         'Rector\\Core\\Contract\\Rector\\RectorInterface' => __DIR__ . '/../..' . '/src/Contract/Rector/RectorInterface.php',
         'Rector\\Core\\Contract\\Template\\TemplateResolverInterface' => __DIR__ . '/../..' . '/src/Contract/Template/TemplateResolverInterface.php',
         'Rector\\Core\\DependencyInjection\\Collector\\ConfigureCallValuesCollector' => __DIR__ . '/../..' . '/src/DependencyInjection/Collector/ConfigureCallValuesCollector.php',
-        'Rector\\Core\\DependencyInjection\\CompilerPass\\DeprecationWarningCompilerPass' => __DIR__ . '/../..' . '/src/DependencyInjection/CompilerPass/DeprecationWarningCompilerPass.php',
         'Rector\\Core\\DependencyInjection\\CompilerPass\\MakeRectorsPublicCompilerPass' => __DIR__ . '/../..' . '/src/DependencyInjection/CompilerPass/MakeRectorsPublicCompilerPass.php',
         'Rector\\Core\\DependencyInjection\\CompilerPass\\MergeImportedRectorConfigureCallValuesCompilerPass' => __DIR__ . '/../..' . '/src/DependencyInjection/CompilerPass/MergeImportedRectorConfigureCallValuesCompilerPass.php',
         'Rector\\Core\\DependencyInjection\\CompilerPass\\RemoveSkippedRectorsCompilerPass' => __DIR__ . '/../..' . '/src/DependencyInjection/CompilerPass/RemoveSkippedRectorsCompilerPass.php',
@@ -3870,9 +3869,9 @@ class ComposerStaticInitb68e0b01f8201626a837a01851d0ba43
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitb68e0b01f8201626a837a01851d0ba43::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitb68e0b01f8201626a837a01851d0ba43::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitb68e0b01f8201626a837a01851d0ba43::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitd80854e8a6fe965ca7944db3a256157f::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitd80854e8a6fe965ca7944db3a256157f::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitd80854e8a6fe965ca7944db3a256157f::$classMap;
 
         }, null, ClassLoader::class);
     }

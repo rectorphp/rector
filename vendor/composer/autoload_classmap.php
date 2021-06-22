@@ -1807,7 +1807,6 @@ return array(
     'Rector\\Core\\Contract\\Rector\\RectorInterface' => $baseDir . '/src/Contract/Rector/RectorInterface.php',
     'Rector\\Core\\Contract\\Template\\TemplateResolverInterface' => $baseDir . '/src/Contract/Template/TemplateResolverInterface.php',
     'Rector\\Core\\DependencyInjection\\Collector\\ConfigureCallValuesCollector' => $baseDir . '/src/DependencyInjection/Collector/ConfigureCallValuesCollector.php',
-    'Rector\\Core\\DependencyInjection\\CompilerPass\\DeprecationWarningCompilerPass' => $baseDir . '/src/DependencyInjection/CompilerPass/DeprecationWarningCompilerPass.php',
     'Rector\\Core\\DependencyInjection\\CompilerPass\\MakeRectorsPublicCompilerPass' => $baseDir . '/src/DependencyInjection/CompilerPass/MakeRectorsPublicCompilerPass.php',
     'Rector\\Core\\DependencyInjection\\CompilerPass\\MergeImportedRectorConfigureCallValuesCompilerPass' => $baseDir . '/src/DependencyInjection/CompilerPass/MergeImportedRectorConfigureCallValuesCompilerPass.php',
     'Rector\\Core\\DependencyInjection\\CompilerPass\\RemoveSkippedRectorsCompilerPass' => $baseDir . '/src/DependencyInjection/CompilerPass/RemoveSkippedRectorsCompilerPass.php',
