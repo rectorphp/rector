@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use Rector\Core\Configuration\Option;
 use Rector\Core\ValueObject\PhpVersion;
+
 use Rector\DowngradePhp80\Rector\Catch_\DowngradeNonCapturingCatchesRector;
 use Rector\DowngradePhp80\Rector\Class_\DowngradeAttributeToAnnotationRector;
 use Rector\DowngradePhp80\Rector\Class_\DowngradePropertyPromotionRector;
@@ -12,6 +13,8 @@ use Rector\DowngradePhp80\Rector\ClassMethod\DowngradeStaticTypeDeclarationRecto
 use Rector\DowngradePhp80\Rector\ClassMethod\DowngradeTrailingCommasInParamUseRector;
 use Rector\DowngradePhp80\Rector\Expression\DowngradeMatchToSwitchRector;
 use Rector\DowngradePhp80\Rector\FuncCall\DowngradeStrContainsRector;
+use Rector\DowngradePhp80\Rector\FuncCall\DowngradeStrEndsWithRector;
+use Rector\DowngradePhp80\Rector\FuncCall\DowngradeStrStartsWithRector;
 use Rector\DowngradePhp80\Rector\FunctionLike\DowngradeMixedTypeDeclarationRector;
 use Rector\DowngradePhp80\Rector\FunctionLike\DowngradeUnionTypeDeclarationRector;
 use Rector\DowngradePhp80\Rector\MethodCall\DowngradeNamedArgumentRector;
@@ -53,7 +56,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(DowngradeClassOnObjectToGetClassRector::class);
     $services->set(DowngradeNullsafeToTernaryOperatorRector::class);
     $services->set(DowngradeTrailingCommasInParamUseRector::class);
-    $services->set(\Rector\DowngradePhp80\Rector\FuncCall\DowngradeStrStartsWithRector::class);
-    $services->set(\Rector\DowngradePhp80\Rector\FuncCall\DowngradeStrEndsWithRector::class);
+    $services->set(DowngradeStrStartsWithRector::class);
+    $services->set(DowngradeStrEndsWithRector::class);
     $services->set(DowngradeNamedArgumentRector::class);
 };

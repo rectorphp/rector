@@ -94,7 +94,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ]]);
     $services->set(OptionalParametersAfterRequiredRector::class);
 
-    $services->set(Rector\Arguments\Rector\FuncCall\FunctionArgumentDefaultValueReplacerRector::class)
+    $services->set(FunctionArgumentDefaultValueReplacerRector::class)
         ->call('configure', [[
             FunctionArgumentDefaultValueReplacerRector::REPLACED_ARGUMENTS => ValueObjectInliner::inline([
                 new ReplaceFuncCallArgumentDefaultValue('version_compare', 2, 'gte', 'ge'),

@@ -233,14 +233,6 @@ final class PhpFileProcessor implements FileProcessorInterface
 
     private function printFileErrors(File $file): void
     {
-        if (! $this->symfonyStyle->isVerbose()) {
-            return;
-        }
-
-        if (! $file->hasErrors()) {
-            return;
-        }
-
         foreach ($file->getErrors() as $rectorError) {
             $this->symfonyStyle->error($rectorError->getMessage());
         }
