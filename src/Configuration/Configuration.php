@@ -30,10 +30,6 @@ final class Configuration
     /**
      * @var bool
      */
-    private $isCacheDebug = \false;
-    /**
-     * @var bool
-     */
     private $isCacheEnabled = \false;
     /**
      * @var string[]
@@ -67,12 +63,11 @@ final class Configuration
      */
     public function resolveFromInput(\RectorPrefix20210622\Symfony\Component\Console\Input\InputInterface $input) : void
     {
-        $this->isDryRun = (bool) $input->getOption(\Rector\Core\Configuration\Option::OPTION_DRY_RUN);
-        $this->shouldClearCache = (bool) $input->getOption(\Rector\Core\Configuration\Option::OPTION_CLEAR_CACHE);
+        $this->isDryRun = (bool) $input->getOption(\Rector\Core\Configuration\Option::DRY_RUN);
+        $this->shouldClearCache = (bool) $input->getOption(\Rector\Core\Configuration\Option::CLEAR_CACHE);
         $this->showProgressBar = $this->canShowProgressBar($input);
-        $this->showDiffs = !(bool) $input->getOption(\Rector\Core\Configuration\Option::OPTION_NO_DIFFS);
-        $this->isCacheDebug = (bool) $input->getOption(\Rector\Core\Configuration\Option::CACHE_DEBUG);
-        $this->outputFormat = (string) $input->getOption(\Rector\Core\Configuration\Option::OPTION_OUTPUT_FORMAT);
+        $this->showDiffs = !(bool) $input->getOption(\Rector\Core\Configuration\Option::NO_DIFFS);
+        $this->outputFormat = (string) $input->getOption(\Rector\Core\Configuration\Option::OUTPUT_FORMAT);
         $commandLinePaths = (array) $input->getArgument(\Rector\Core\Configuration\Option::SOURCE);
         // manual command line value has priority
         if ($commandLinePaths !== []) {
@@ -93,18 +88,11 @@ final class Configuration
     }
     public function shouldShowProgressBar() : bool
     {
-        if ($this->isCacheDebug) {
-            return \false;
-        }
         return $this->showProgressBar;
     }
     public function shouldClearCache() : bool
     {
         return $this->shouldClearCache;
-    }
-    public function isCacheDebug() : bool
-    {
-        return $this->isCacheDebug;
     }
     public function isCacheEnabled() : bool
     {
@@ -165,11 +153,11 @@ final class Configuration
     }
     private function canShowProgressBar(\RectorPrefix20210622\Symfony\Component\Console\Input\InputInterface $input) : bool
     {
-        $noProgressBar = (bool) $input->getOption(\Rector\Core\Configuration\Option::OPTION_NO_PROGRESS_BAR);
+        $noProgressBar = (bool) $input->getOption(\Rector\Core\Configuration\Option::NO_PROGRESS_BAR);
         if ($noProgressBar) {
             return \false;
         }
-        $optionOutputFormat = $input->getOption(\Rector\Core\Configuration\Option::OPTION_OUTPUT_FORMAT);
+        $optionOutputFormat = $input->getOption(\Rector\Core\Configuration\Option::OUTPUT_FORMAT);
         return $optionOutputFormat === \Rector\ChangesReporting\Output\ConsoleOutputFormatter::NAME;
     }
     /**

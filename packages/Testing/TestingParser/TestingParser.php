@@ -47,7 +47,7 @@ final class TestingParser
         $this->parameterProvider->changeParameter(\Rector\Core\Configuration\Option::SOURCE, [$file]);
         $nodes = $this->parser->parseFileInfo($smartFileInfo);
         $file = new \Rector\Core\ValueObject\Application\File($smartFileInfo, $smartFileInfo->getContents());
-        return $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile($file, $nodes, $smartFileInfo);
+        return $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile($file, $nodes);
     }
     /**
      * @template T of Node

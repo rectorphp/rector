@@ -178,7 +178,6 @@ final class PHPStanNodeScopeResolver
         if (!$this->configuration->isCacheEnabled()) {
             return;
         }
-        $this->reportCacheDebug($smartFileInfo, $dependentFiles);
         // save for cache
         $this->changedFilesDetector->addFileWithDependencies($smartFileInfo, $dependentFiles);
     }
@@ -194,19 +193,5 @@ final class PHPStanNodeScopeResolver
             throw new \Rector\Core\Exception\ShouldNotHappenException();
         }
         return $classLike->name->toString();
-    }
-    /**
-     * @param string[] $dependentFiles
-     */
-    private function reportCacheDebug(\Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo, array $dependentFiles) : void
-    {
-        if (!$this->configuration->isCacheDebug()) {
-            return;
-        }
-        $message = \sprintf('[debug] %d dependencies for "%s" file', \count($dependentFiles), $smartFileInfo->getRealPath());
-        $this->symfonyStyle->note($message);
-        if ($dependentFiles !== []) {
-            $this->symfonyStyle->listing($dependentFiles);
-        }
     }
 }

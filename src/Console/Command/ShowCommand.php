@@ -43,11 +43,11 @@ final class ShowCommand extends \RectorPrefix20210622\Symfony\Component\Console\
         $this->setDescription('Show loaded Rectors with their configuration');
         $names = $this->showOutputFormatterCollector->getNames();
         $description = \sprintf('Select output format: "%s".', \implode('", "', $names));
-        $this->addOption(\Rector\Core\Configuration\Option::OPTION_OUTPUT_FORMAT, 'o', \RectorPrefix20210622\Symfony\Component\Console\Input\InputOption::VALUE_OPTIONAL, $description, \Rector\ChangesReporting\Output\ConsoleOutputFormatter::NAME);
+        $this->addOption(\Rector\Core\Configuration\Option::OUTPUT_FORMAT, 'o', \RectorPrefix20210622\Symfony\Component\Console\Input\InputOption::VALUE_OPTIONAL, $description, \Rector\ChangesReporting\Output\ConsoleOutputFormatter::NAME);
     }
     protected function execute(\RectorPrefix20210622\Symfony\Component\Console\Input\InputInterface $input, \RectorPrefix20210622\Symfony\Component\Console\Output\OutputInterface $output) : int
     {
-        $outputFormat = (string) $input->getOption(\Rector\Core\Configuration\Option::OPTION_OUTPUT_FORMAT);
+        $outputFormat = (string) $input->getOption(\Rector\Core\Configuration\Option::OUTPUT_FORMAT);
         $this->reportLoadedRectors($outputFormat);
         return \RectorPrefix20210622\Symplify\PackageBuilder\Console\ShellCode::SUCCESS;
     }

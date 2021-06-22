@@ -13,7 +13,7 @@ final class Option
     /**
      * @var string
      */
-    public const OPTION_AUTOLOAD_FILE = 'autoload-file';
+    public const AUTOLOAD_FILE = 'autoload-file';
     /**
      * @var string
      */
@@ -21,15 +21,19 @@ final class Option
     /**
      * @var string
      */
-    public const OPTION_DRY_RUN = 'dry-run';
+    public const DRY_RUN = 'dry-run';
     /**
      * @var string
      */
-    public const OPTION_OUTPUT_FORMAT = 'output-format';
+    public const DRY_RUN_SHORT = 'n';
     /**
      * @var string
      */
-    public const OPTION_NO_PROGRESS_BAR = 'no-progress-bar';
+    public const OUTPUT_FORMAT = 'output-format';
+    /**
+     * @var string
+     */
+    public const NO_PROGRESS_BAR = 'no-progress-bar';
     /**
      * @var string
      */
@@ -53,15 +57,11 @@ final class Option
     /**
      * @var string
      */
-    public const OPTION_CLEAR_CACHE = 'clear-cache';
+    public const CLEAR_CACHE = 'clear-cache';
     /**
      * @var string
      */
     public const ENABLE_CACHE = 'enable_cache';
-    /**
-     * @var string
-     */
-    public const CACHE_DEBUG = 'cache-debug';
     /**
      * @var string
      */
@@ -89,7 +89,7 @@ final class Option
     /**
      * @var string
      */
-    public const OPTION_DEBUG = 'debug';
+    public const DEBUG = 'debug';
     /**
      * @var string
      */
@@ -97,7 +97,7 @@ final class Option
     /**
      * @var string
      */
-    public const OPTION_CONFIG = 'config';
+    public const CONFIG = 'config';
     /**
      * @var string
      */
@@ -109,7 +109,7 @@ final class Option
     /**
      * @var string
      */
-    public const OPTION_NO_DIFFS = 'no-diffs';
+    public const NO_DIFFS = 'no-diffs';
     /**
      * @var string
      */
@@ -118,4 +118,12 @@ final class Option
      * @var string
      */
     public const ENABLE_EDITORCONFIG = 'enable_editorconfig';
+    /**
+     * @var string
+     */
+    public const AUTOLOAD_FILE_SHORT = 'a';
+    /**
+     * @var string
+     */
+    public const OUTPUT_FORMAT_SHORT = 'o';
 }
