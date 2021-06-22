@@ -76,11 +76,6 @@ final class Option
     /**
      * @var string
      */
-    public const CACHE_DEBUG = 'cache-debug';
-
-    /**
-     * @var string
-     */
     public const PATHS = 'paths';
 
     /**

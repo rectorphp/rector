@@ -90,7 +90,6 @@ final class ProcessCommand extends Command
             'Hide diffs of changed files. Useful e.g. for nicer CI output.'
         );
 
-        $this->addOption(Option::CACHE_DEBUG, null, InputOption::VALUE_NONE, 'Debug changed file cache');
         $this->addOption(Option::CLEAR_CACHE, null, InputOption::VALUE_NONE, 'Clear unchaged files cache');
     }
 

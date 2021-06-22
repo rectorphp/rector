@@ -21,8 +21,6 @@ final class Configuration
 
     private string $outputFormat;
 
-    private bool $isCacheDebug = false;
-
     private bool $isCacheEnabled = false;
 
     /**
@@ -59,7 +57,6 @@ final class Configuration
 
         $this->showProgressBar = $this->canShowProgressBar($input);
         $this->showDiffs = ! (bool) $input->getOption(Option::NO_DIFFS);
-        $this->isCacheDebug = (bool) $input->getOption(Option::CACHE_DEBUG);
 
         $this->outputFormat = (string) $input->getOption(Option::OUTPUT_FORMAT);
 
@@ -87,21 +84,12 @@ final class Configuration
 
     public function shouldShowProgressBar(): bool
     {
-        if ($this->isCacheDebug) {
-            return false;
-        }
-
         return $this->showProgressBar;
     }
 
     public function shouldClearCache(): bool
     {
         return $this->shouldClearCache;
-    }
-
-    public function isCacheDebug(): bool
-    {
-        return $this->isCacheDebug;
     }
 
     public function isCacheEnabled(): bool
