@@ -3,6 +3,8 @@
 declare (strict_types=1);
 namespace Rector\Core\ValueObjectFactory\Application;
 
+use Rector\Caching\Detector\ChangedFilesDetector;
+use Rector\Core\Configuration\Configuration;
 use Rector\Core\Contract\Processor\FileProcessorInterface;
 use Rector\Core\FileSystem\FilesFinder;
 use Rector\Core\ValueObject\Application\File;
@@ -16,15 +18,25 @@ final class FileFactory
      */
     private $filesFinder;
     /**
+     * @var \Rector\Core\Configuration\Configuration
+     */
+    private $configuration;
+    /**
+     * @var \Rector\Caching\Detector\ChangedFilesDetector
+     */
+    private $changedFilesDetector;
+    /**
      * @var mixed[]
      */
     private $fileProcessors;
     /**
      * @param FileProcessorInterface[] $fileProcessors
      */
-    public function __construct(\Rector\Core\FileSystem\FilesFinder $filesFinder, array $fileProcessors)
+    public function __construct(\Rector\Core\FileSystem\FilesFinder $filesFinder, \Rector\Core\Configuration\Configuration $configuration, \Rector\Caching\Detector\ChangedFilesDetector $changedFilesDetector, array $fileProcessors)
     {
         $this->filesFinder = $filesFinder;
+        $this->configuration = $configuration;
+        $this->changedFilesDetector = $changedFilesDetector;
         $this->fileProcessors = $fileProcessors;
     }
     /**
@@ -33,6 +45,9 @@ final class FileFactory
      */
     public function createFromPaths(array $paths) : array
     {
+        if ($this->configuration->shouldClearCache()) {
+            $this->changedFilesDetector->clear();
+        }
         $supportedFileExtensions = $this->resolveSupportedFileExtensions();
         $fileInfos = $this->filesFinder->findInDirectoriesAndFiles($paths, $supportedFileExtensions);
         $files = [];

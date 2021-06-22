@@ -1560,7 +1560,6 @@ return array(
     'Rector\\BetterPhpDocParser\\ValueObject\\Type\\FullyQualifiedIdentifierTypeNode' => $baseDir . '/packages/BetterPhpDocParser/ValueObject/Type/FullyQualifiedIdentifierTypeNode.php',
     'Rector\\BetterPhpDocParser\\ValueObject\\Type\\SpacingAwareArrayTypeNode' => $baseDir . '/packages/BetterPhpDocParser/ValueObject/Type/SpacingAwareArrayTypeNode.php',
     'Rector\\BetterPhpDocParser\\ValueObject\\Type\\SpacingAwareCallableTypeNode' => $baseDir . '/packages/BetterPhpDocParser/ValueObject/Type/SpacingAwareCallableTypeNode.php',
-    'Rector\\Caching\\Application\\CachedFileInfoFilterAndReporter' => $baseDir . '/packages/Caching/Application/CachedFileInfoFilterAndReporter.php',
     'Rector\\Caching\\Cache' => $baseDir . '/packages/Caching/Cache.php',
     'Rector\\Caching\\CacheFactory' => $baseDir . '/packages/Caching/CacheFactory.php',
     'Rector\\Caching\\Config\\FileHashComputer' => $baseDir . '/packages/Caching/Config/FileHashComputer.php',

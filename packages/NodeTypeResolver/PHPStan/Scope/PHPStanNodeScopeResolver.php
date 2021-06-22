@@ -5,6 +5,7 @@ namespace Rector\NodeTypeResolver\PHPStan\Scope;
 
 use RectorPrefix20210622\Nette\Utils\Strings;
 use PhpParser\Node;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Trait_;
@@ -36,10 +37,6 @@ final class PHPStanNodeScopeResolver
      * @see https://regex101.com/r/aXsCkK/1
      */
     private const ANONYMOUS_CLASS_START_REGEX = '#^AnonymousClass(\\w+)#';
-    /**
-     * @var string[]
-     */
-    private $dependentFiles = [];
     /**
      * @var \Rector\Caching\Detector\ChangedFilesDetector
      */
@@ -89,14 +86,13 @@ final class PHPStanNodeScopeResolver
         $this->traitNodeScopeCollector = $traitNodeScopeCollector;
     }
     /**
-     * @param Node[] $nodes
-     * @return Node[]
+     * @param Stmt[] $nodes
+     * @return Stmt[]
      */
     public function processNodes(array $nodes, \Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo) : array
     {
         $this->removeDeepChainMethodCallNodes($nodes);
         $scope = $this->scopeFactory->createFromFile($smartFileInfo);
-        $this->dependentFiles = [];
         // skip chain method calls, performance issue: https://github.com/phpstan/phpstan/issues/254
         $nodeCallback = function (\PhpParser\Node $node, \PHPStan\Analyser\Scope $scope) : void {
             // traversing trait inside class that is using it scope (from referenced) - the trait traversed by Rector is different (directly from parsed file)
@@ -122,12 +118,9 @@ final class PHPStanNodeScopeResolver
                 $node->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE, $scope);
             }
         };
-        foreach ($nodes as $node) {
-            $this->resolveDependentFiles($node, $scope);
-        }
         /** @var MutatingScope $scope */
         $this->nodeScopeResolver->processNodes($nodes, $scope, $nodeCallback);
-        $this->changedFilesDetector->addFileWithDependencies($smartFileInfo, $this->dependentFiles);
+        $this->resolveAndSaveDependentFiles($nodes, $scope, $smartFileInfo);
         return $nodes;
     }
     /**
@@ -156,17 +149,6 @@ final class PHPStanNodeScopeResolver
         /** @var MutatingScope $scope */
         return $scope->enterClass($classReflection);
     }
-    private function resolveDependentFiles(\PhpParser\Node $node, \PHPStan\Analyser\MutatingScope $mutatingScope) : void
-    {
-        try {
-            $dependentFiles = $this->dependencyResolver->resolveDependencies($node, $mutatingScope);
-            foreach ($dependentFiles as $dependentFile) {
-                $this->dependentFiles[] = $dependentFile;
-            }
-        } catch (\PHPStan\AnalysedCodeException $exception) {
-            // @ignoreException
-        }
-    }
     /**
      * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Interface_|\PhpParser\Node\Stmt\Trait_ $classLike
      */
@@ -179,5 +161,21 @@ final class PHPStanNodeScopeResolver
             throw new \Rector\Core\Exception\ShouldNotHappenException();
         }
         return $classLike->name->toString();
+    }
+    /**
+     * @param Stmt[] $stmts
+     */
+    private function resolveAndSaveDependentFiles(array $stmts, \PHPStan\Analyser\MutatingScope $mutatingScope, \Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo) : void
+    {
+        $dependentFiles = [];
+        foreach ($stmts as $stmt) {
+            try {
+                $nodeDependentFiles = $this->dependencyResolver->resolveDependencies($stmt, $mutatingScope);
+                $dependentFiles = \array_merge($dependentFiles, $nodeDependentFiles);
+            } catch (\PHPStan\AnalysedCodeException $exception) {
+                // @ignoreException
+            }
+        }
+        $this->changedFilesDetector->addFileWithDependencies($smartFileInfo, $dependentFiles);
     }
 }

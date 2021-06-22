@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Core\FileSystem;
 
-use Rector\Caching\Application\CachedFileInfoFilterAndReporter;
+use Rector\Caching\UnchangedFilesFilter;
 use Rector\Core\Configuration\Configuration;
 use Symplify\SmartFileSystem\SmartFileInfo;
 final class PhpFilesFinder
@@ -17,14 +17,14 @@ final class PhpFilesFinder
      */
     private $configuration;
     /**
-     * @var \Rector\Caching\Application\CachedFileInfoFilterAndReporter
+     * @var \Rector\Caching\UnchangedFilesFilter
      */
-    private $cachedFileInfoFilterAndReporter;
-    public function __construct(\Rector\Core\FileSystem\FilesFinder $filesFinder, \Rector\Core\Configuration\Configuration $configuration, \Rector\Caching\Application\CachedFileInfoFilterAndReporter $cachedFileInfoFilterAndReporter)
+    private $unchangedFilesFilter;
+    public function __construct(\Rector\Core\FileSystem\FilesFinder $filesFinder, \Rector\Core\Configuration\Configuration $configuration, \Rector\Caching\UnchangedFilesFilter $unchangedFilesFilter)
     {
         $this->filesFinder = $filesFinder;
         $this->configuration = $configuration;
-        $this->cachedFileInfoFilterAndReporter = $cachedFileInfoFilterAndReporter;
+        $this->unchangedFilesFilter = $unchangedFilesFilter;
     }
     /**
      * @param string[] $paths
@@ -37,6 +37,6 @@ final class PhpFilesFinder
         $phpFileInfos = \array_filter($phpFileInfos, function (\Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo) : bool {
             return \substr_compare($smartFileInfo->getPathname(), '.blade.php', -\strlen('.blade.php')) !== 0;
         });
-        return $this->cachedFileInfoFilterAndReporter->filterFileInfos($phpFileInfos);
+        return $this->unchangedFilesFilter->filterAndJoinWithDependentFileInfos($phpFileInfos);
     }
 }
