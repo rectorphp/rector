@@ -300,7 +300,7 @@ final class ClassMethodAssignManipulator
         }
 
         $variableName = $this->nodeNameResolver->getName($variable);
-        $parametersAcceptor = $this->callReflectionResolver->resolveParametersAcceptor($methodReflection, $node);
+        $parametersAcceptor = $this->callReflectionResolver->resolveParametersAcceptor($methodReflection);
         if (! $parametersAcceptor instanceof ParametersAcceptor) {
             return false;
         }
@@ -349,7 +349,7 @@ final class ClassMethodAssignManipulator
     private function isParameterReferencedInMethodReflection(New_ $new, int $argumentPosition): bool
     {
         $methodReflection = $this->callReflectionResolver->resolveConstructor($new);
-        $parametersAcceptor = $this->callReflectionResolver->resolveParametersAcceptor($methodReflection, $new);
+        $parametersAcceptor = $this->callReflectionResolver->resolveParametersAcceptor($methodReflection);
 
         if (! $parametersAcceptor instanceof ParametersAcceptor) {
             return false;

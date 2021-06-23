@@ -119,14 +119,6 @@ final class NodeRepository
     }
 
     /**
-     * @return array<string, MethodCall[]|StaticCall[]>
-     */
-    public function findMethodCallsOnClass(string $className): array
-    {
-        return $this->callsByTypeAndMethod[$className] ?? [];
-    }
-
-    /**
      * @return StaticCall[]
      */
     public function findStaticCallsByClassMethod(ClassMethod $classMethod): array
@@ -135,6 +127,10 @@ final class NodeRepository
         return array_filter($calls, fn (Node $node): bool => $node instanceof StaticCall);
     }
 
+    /**
+     * @deprecated Using external file node modification might result in unexpected output. Use reflection to read-only data instead
+     * @see \Rector\Core\PHPStan\Reflection\CallReflectionResolver::resolveCall()
+     */
     public function findClassMethodByStaticCall(StaticCall $staticCall): ?ClassMethod
     {
         $method = $this->nodeNameResolver->getName($staticCall->name);
@@ -348,6 +344,10 @@ final class NodeRepository
         return $this->parsedNodeCollector->findClass($name);
     }
 
+    /**
+     * Do not modify node in another file, that could result in unexpected outcome
+     * @deprecated Use reflection instead
+     */
     public function findClassMethodByMethodCall(MethodCall $methodCall): ?ClassMethod
     {
         $className = $this->resolveCallerClassName($methodCall);

@@ -2,9 +2,9 @@
 
 namespace Rector\Tests\RemovingStatic\Rector\ClassMethod\LocallyCalledStaticMethodToNonStaticRector\Fixture;
 
-class DoubleStaticMethod
+final class DoubleStaticMethod
 {
-    public static function run()
+    private static function run()
     {
         self::someStatic();
     }
@@ -20,9 +20,9 @@ class DoubleStaticMethod
 
 namespace Rector\Tests\RemovingStatic\Rector\ClassMethod\LocallyCalledStaticMethodToNonStaticRector\Fixture;
 
-class DoubleStaticMethod
+final class DoubleStaticMethod
 {
-    public function run()
+    private function run()
     {
         $this->someStatic();
     }

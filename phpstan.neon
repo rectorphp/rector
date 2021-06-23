@@ -493,3 +493,7 @@ parameters:
 
         # temporary interface update
         - '#Call to an undefined method Rector\\Core\\Contract\\Processor\\FileProcessorInterface\:\:(.*?)\(\)#'
+
+        -
+             message: '#Assign in loop is not allowed#'
+             path: rules/RemovingStatic/Rector/ClassMethod/LocallyCalledStaticMethodToNonStaticRector.php

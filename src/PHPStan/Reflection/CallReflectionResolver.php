@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Core\PHPStan\Reflection;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
@@ -56,25 +54,18 @@ final class CallReflectionResolver
         return $classType->getMethod(MethodName::CONSTRUCT, $scope);
     }
 
-    /**
-     * @param FuncCall|MethodCall|StaticCall $node
-     * @return MethodReflection|FunctionReflection|null
-     */
-    public function resolveCall(Node $node)
+    public function resolveCall(FuncCall | MethodCall | StaticCall $call): MethodReflection | FunctionReflection | null
     {
-        if ($node instanceof FuncCall) {
-            return $this->resolveFunctionCall($node);
+        if ($call instanceof FuncCall) {
+            return $this->resolveFunctionCall($call);
         }
 
-        return $this->resolveMethodCall($node);
+        return $this->resolveMethodCall($call);
     }
 
-    /**
-     * @param FunctionReflection|MethodReflection|null $reflection
-     * @param FuncCall|MethodCall|StaticCall|New_ $node
-     */
-    public function resolveParametersAcceptor($reflection, Node $node): ?ParametersAcceptor
-    {
+    public function resolveParametersAcceptor(
+        FunctionReflection | MethodReflection | null $reflection
+    ): ?ParametersAcceptor {
         if ($reflection === null) {
             return null;
         }
@@ -98,10 +89,7 @@ final class CallReflectionResolver
         return null;
     }
 
-    /**
-     * @return FunctionReflection|MethodReflection|null
-     */
-    private function resolveFunctionCall(FuncCall $funcCall)
+    private function resolveFunctionCall(FuncCall $funcCall): FunctionReflection | MethodReflection | null
     {
         /** @var Scope|null $scope */
         $scope = $funcCall->getAttribute(AttributeKey::SCOPE);
@@ -122,10 +110,7 @@ final class CallReflectionResolver
         return $this->typeToCallReflectionResolverRegistry->resolve($funcCallNameType, $scope);
     }
 
-    /**
-     * @param MethodCall|StaticCall $expr
-     */
-    private function resolveMethodCall(Expr $expr): ?MethodReflection
+    private function resolveMethodCall(MethodCall | StaticCall $expr): ?MethodReflection
     {
         $scope = $expr->getAttribute(AttributeKey::SCOPE);
         if (! $scope instanceof Scope) {

@@ -117,7 +117,6 @@ final class NonVariableToVariableOnFunctionCallRector extends AbstractRector
 
         $parametersAcceptor = $this->callReflectionResolver->resolveParametersAcceptor(
             $this->callReflectionResolver->resolveCall($node),
-            $node
         );
 
         if (! $parametersAcceptor instanceof ParametersAcceptor) {

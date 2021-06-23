@@ -8,8 +8,10 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Reflection\ClassReflection;
+use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Privatization\VisibilityGuard\ClassMethodVisibilityGuard;
@@ -79,6 +81,10 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         if ($node instanceof ClassMethod) {
+            if (! $node->isPrivate()) {
+                return null;
+            }
+
             return $this->refactorClassMethod($node);
         }
 
@@ -114,22 +120,28 @@ CODE_SAMPLE
 
     private function refactorStaticCall(StaticCall $staticCall): ?MethodCall
     {
-        $classMethod = $this->nodeRepository->findClassMethodByStaticCall($staticCall);
-        if (! $classMethod instanceof ClassMethod) {
+        $class = $staticCall->getAttribute(AttributeKey::CLASS_NODE);
+        if (! $class instanceof ClassLike) {
             return null;
         }
 
-        // is static call in the same as class method
-        if (! $this->haveSharedClass($classMethod, [$staticCall])) {
-            return null;
+        /** @var ClassMethod[] $classMethods */
+        $classMethods = $this->betterNodeFinder->findInstanceOf($class, ClassMethod::class);
+
+        foreach ($classMethods as $classMethod) {
+            if (! $this->isClassMethodMatchingStaticCall($classMethod, $staticCall)) {
+                continue;
+            }
+
+            if ($this->isInStaticClassMethod($staticCall)) {
+                continue;
+            }
+
+            $thisVariable = new Variable('this');
+            return new MethodCall($thisVariable, $staticCall->name, $staticCall->args);
         }
 
-        if ($this->isInStaticClassMethod($staticCall)) {
-            return null;
-        }
-
-        $thisVariable = new Variable('this');
-        return new MethodCall($thisVariable, $staticCall->name, $staticCall->args);
+        return null;
     }
 
     private function isClassMethodWithOnlyLocalStaticCalls(ClassMethod $classMethod): bool
@@ -141,13 +153,13 @@ CODE_SAMPLE
     }
 
     /**
-     * @param Node[] $nodes
+     * @param StaticCall[] $staticCalls
      */
-    private function haveSharedClass(Node $mainNode, array $nodes): bool
+    private function haveSharedClass(ClassMethod $classMethod, array $staticCalls): bool
     {
-        $mainNodeClass = $mainNode->getAttribute(AttributeKey::CLASS_NAME);
-        foreach ($nodes as $node) {
-            $nodeClass = $node->getAttribute(AttributeKey::CLASS_NAME);
+        $mainNodeClass = $classMethod->getAttribute(AttributeKey::CLASS_NAME);
+        foreach ($staticCalls as $staticCall) {
+            $nodeClass = $staticCall->getAttribute(AttributeKey::CLASS_NAME);
             if ($mainNodeClass !== $nodeClass) {
                 return false;
             }
@@ -164,5 +176,14 @@ CODE_SAMPLE
         }
 
         return $locationClassMethod->isStatic();
+    }
+
+    private function isClassMethodMatchingStaticCall(ClassMethod $classMethod, StaticCall $staticCall): bool
+    {
+        $className = $classMethod->getAttribute(AttributeKey::CLASS_NAME);
+        $objectType = new ObjectType($className);
+
+        $callerType = $this->nodeTypeResolver->resolve($staticCall->class);
+        return $objectType->equals($callerType);
     }
 }
