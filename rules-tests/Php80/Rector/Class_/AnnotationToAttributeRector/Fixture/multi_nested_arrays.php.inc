@@ -2,10 +2,10 @@
 
 namespace Rector\Tests\Php80\Rector\Class_\AnnotationToAttributeRector\Fixture;
 
-use ApiPlatform\Core\Annotation\ApiResource;
+use Rector\Tests\Php80\Rector\Class_\AnnotationToAttributeRector\Source\GenericAnnotation;
 
 /**
- * @ApiResource(
+ * @GenericAnnotation(
  *     collectionOperations={},
  *     graphql={
  *         "sumOnlyPersist"={
@@ -30,9 +30,9 @@ class ApiPlatformResource
 
 namespace Rector\Tests\Php80\Rector\Class_\AnnotationToAttributeRector\Fixture;
 
-use ApiPlatform\Core\Annotation\ApiResource;
+use Rector\Tests\Php80\Rector\Class_\AnnotationToAttributeRector\Source\GenericAnnotation;
 
-#[\ApiPlatform\Core\Annotation\ApiResource(collectionOperations: [], graphql: ['sumOnlyPersist' => ['mutation' => 'app.graphql.mutation_resolver.dummy_custom_only_persist', 'normalization_context' => ['groups' => ['result']], 'denormalization_context' => ['groups' => ['sum']], 'read' => false, 'deserialize' => false, 'validate' => false, 'serialize' => false]])]
+#[\Rector\Tests\Php80\Rector\Class_\AnnotationToAttributeRector\Source\GenericAnnotation(collectionOperations: [], graphql: ['sumOnlyPersist' => ['mutation' => 'app.graphql.mutation_resolver.dummy_custom_only_persist', 'normalization_context' => ['groups' => ['result']], 'denormalization_context' => ['groups' => ['sum']], 'read' => false, 'deserialize' => false, 'validate' => false, 'serialize' => false]])]
 class ApiPlatformResource
 {
 }

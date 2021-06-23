@@ -158,7 +158,6 @@ CODE_SAMPLE
                     );
 
                     $hasNewAttrGroups = true;
-
                     continue 2;
                 }
 

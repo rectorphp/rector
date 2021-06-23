@@ -16,6 +16,13 @@ final class ConfigurationFactory
     ) {
     }
 
+    public function createForTests(): Configuration
+    {
+        $fileExtensions = $this->parameterProvider->provideArrayParameter(Option::FILE_EXTENSIONS);
+
+        return new Configuration(isDryRun: false, fileExtensions: $fileExtensions);
+    }
+
     /**
      * Needs to run in the start of the life cycle, since the rest of workflow uses it.
      */

@@ -13,6 +13,7 @@ use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Scalar\String_;
 use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprFalseNode;
 use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprIntegerNode;
 use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprTrueNode;
@@ -21,6 +22,7 @@ use PHPStan\Type\Constant\ConstantBooleanType;
 use PHPStan\Type\Constant\ConstantFloatType;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php80\ValueObject\AnnotationToAttribute;
 
 final class PhpAttributeGroupFactory
@@ -73,6 +75,8 @@ final class PhpAttributeGroupFactory
 
         if ($silentKey !== null && isset($items[$silentKey])) {
             $silentValue = BuilderHelpers::normalizeValue($items[$silentKey]);
+            $this->normalizeStringDoubleQuote($silentValue);
+
             $args[] = new Arg($silentValue);
             unset($items[$silentKey]);
         }
@@ -80,6 +84,8 @@ final class PhpAttributeGroupFactory
         foreach ($items as $key => $value) {
             $value = $this->normalizeNodeValue($value);
             $value = BuilderHelpers::normalizeValue($value);
+
+            $this->normalizeStringDoubleQuote($value);
 
             $name = null;
             if (is_string($key)) {
@@ -153,5 +159,18 @@ final class PhpAttributeGroupFactory
         }
 
         return $value;
+    }
+
+    private function normalizeStringDoubleQuote(Expr $expr): void
+    {
+        if (! $expr instanceof String_) {
+            return;
+        }
+        // avoid escaping quotes
+        if (! str_contains($expr->value, "'")) {
+            return;
+        }
+
+        $expr->setAttribute(AttributeKey::KIND, String_::KIND_DOUBLE_QUOTED);
     }
 }
