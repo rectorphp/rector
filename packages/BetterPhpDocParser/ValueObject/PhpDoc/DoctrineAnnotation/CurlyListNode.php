@@ -10,22 +10,7 @@ final class CurlyListNode extends AbstractValuesAwareNode implements Stringable
 {
     public function __toString(): string
     {
-        $itemContents = '';
-        $lastItemKey = array_key_last($this->values);
-
-        foreach ($this->values as $key => $value) {
-            if (is_int($key)) {
-                $itemContents .= $this->stringifyValue($value);
-            } else {
-                $itemContents .= $key . '=' . $this->stringifyValue($value);
-            }
-
-            if ($lastItemKey !== $key) {
-                $itemContents .= ', ';
-            }
-        }
-
-        return '{' . $itemContents . '}';
+        return $this->implode($this->values);
     }
 
     /**
@@ -42,9 +27,32 @@ final class CurlyListNode extends AbstractValuesAwareNode implements Stringable
         }
 
         if (is_array($value)) {
-            return implode(', ', $value);
+            return $this->implode($value);
         }
 
         return (string) $value;
+    }
+    
+    /**
+     * @param mixed[] $array
+     */
+    private function implode(array $array): string
+    {
+        $itemContents = '';
+        $lastItemKey = array_key_last($array);
+
+        foreach ($array as $key => $value) {
+            if (is_int($key)) {
+                $itemContents .= $this->stringifyValue($value);
+            } else {
+                $itemContents .= $key . '=' . $this->stringifyValue($value);
+            }
+
+            if ($lastItemKey !== $key) {
+                $itemContents .= ', ';
+            }
+        }
+
+        return '{' . $itemContents . '}';
     }
 }
