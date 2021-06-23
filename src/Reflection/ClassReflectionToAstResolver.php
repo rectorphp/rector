@@ -10,7 +10,7 @@ use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use RectorPrefix20210622\Symplify\SmartFileSystem\SmartFileSystem;
+use RectorPrefix20210623\Symplify\SmartFileSystem\SmartFileSystem;
 final class ClassReflectionToAstResolver
 {
     /**
@@ -29,7 +29,7 @@ final class ClassReflectionToAstResolver
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(\PhpParser\Parser $parser, \RectorPrefix20210622\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
+    public function __construct(\PhpParser\Parser $parser, \RectorPrefix20210623\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
     {
         $this->parser = $parser;
         $this->smartFileSystem = $smartFileSystem;

@@ -1,4 +1,4 @@
-# 35 Rules Overview
+# 36 Rules Overview
 
 ## AddNextrasDatePickerToDateControlRector
 
@@ -546,33 +546,26 @@ Remove `$parent` and `$name` in control constructor
 
 <br>
 
+## RenameMethodLatteRector
+
+Renames method calls in LATTE templates
+
+- class: [`Rector\Nette\Rector\Latte\RenameMethodLatteRector`](../src/Rector/Latte/RenameMethodLatteRector.php)
+
+```diff
+ {varType SomeClass $someClass}
+
+-<div n:foreach="$someClass->oldCall() as $item"></div>
++<div n:foreach="$someClass->newCall() as $item"></div>
+```
+
+<br>
+
 ## RenameMethodNeonRector
 
 Renames method calls in NEON configs
 
-:wrench: **configure it!**
-
 - class: [`Rector\Nette\Rector\Neon\RenameMethodNeonRector`](../src/Rector/Neon/RenameMethodNeonRector.php)
-
-```php
-use Rector\Nette\Rector\Neon\RenameMethodNeonRector;
-use Rector\Renaming\ValueObject\MethodCallRename;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Symplify\SymfonyPhpConfig\ValueObjectInliner;
-
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(RenameMethodNeonRector::class)
-        ->call('configure', [[
-            RenameMethodNeonRector::RENAME_METHODS => ValueObjectInliner::inline([
-                new MethodCallRename('SomeClass', 'oldCall', 'newCall'),
-            ]),
-        ]]);
-};
-```
-
-↓
 
 ```diff
  services:

@@ -8,15 +8,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210622\Symfony\Component\HttpFoundation\Session\Attribute;
+namespace RectorPrefix20210623\Symfony\Component\HttpFoundation\Session\Attribute;
 
-use RectorPrefix20210622\Symfony\Component\HttpFoundation\Session\SessionBagInterface;
+use RectorPrefix20210623\Symfony\Component\HttpFoundation\Session\SessionBagInterface;
 /**
  * Attributes store.
  *
  * @author Drak <drak@zikula.org>
  */
-interface AttributeBagInterface extends \RectorPrefix20210622\Symfony\Component\HttpFoundation\Session\SessionBagInterface
+interface AttributeBagInterface extends \RectorPrefix20210623\Symfony\Component\HttpFoundation\Session\SessionBagInterface
 {
     /**
      * Checks if an attribute is defined.

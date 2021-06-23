@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210622;
+namespace RectorPrefix20210623;
 
 use Rector\Symfony\Rector\Return_\SimpleFunctionAndFilterRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;

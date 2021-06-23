@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210622;
+namespace RectorPrefix20210623;
 
 if (\class_exists('Tx_Extbase_MVC_Web_FrontendRequestHandler')) {
     return;

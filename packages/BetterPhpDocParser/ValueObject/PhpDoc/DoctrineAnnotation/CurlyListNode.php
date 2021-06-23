@@ -8,20 +8,7 @@ final class CurlyListNode extends \Rector\BetterPhpDocParser\ValueObject\PhpDoc\
 {
     public function __toString() : string
     {
-        $itemContents = '';
-        \end($this->values);
-        $lastItemKey = \key($this->values);
-        foreach ($this->values as $key => $value) {
-            if (\is_int($key)) {
-                $itemContents .= $this->stringifyValue($value);
-            } else {
-                $itemContents .= $key . '=' . $this->stringifyValue($value);
-            }
-            if ($lastItemKey !== $key) {
-                $itemContents .= ', ';
-            }
-        }
-        return '{' . $itemContents . '}';
+        return $this->implode($this->values);
     }
     /**
      * @param mixed $value
@@ -35,8 +22,28 @@ final class CurlyListNode extends \Rector\BetterPhpDocParser\ValueObject\PhpDoc\
             return 'true';
         }
         if (\is_array($value)) {
-            return \implode(', ', $value);
+            return $this->implode($value);
         }
         return (string) $value;
+    }
+    /**
+     * @param mixed[] $array
+     */
+    private function implode(array $array) : string
+    {
+        $itemContents = '';
+        \end($array);
+        $lastItemKey = \key($array);
+        foreach ($array as $key => $value) {
+            if (\is_int($key)) {
+                $itemContents .= $this->stringifyValue($value);
+            } else {
+                $itemContents .= $key . '=' . $this->stringifyValue($value);
+            }
+            if ($lastItemKey !== $key) {
+                $itemContents .= ', ';
+            }
+        }
+        return '{' . $itemContents . '}';
     }
 }

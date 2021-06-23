@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210622\Symfony\Component\Console\Output;
+namespace RectorPrefix20210623\Symfony\Component\Console\Output;
 
-use RectorPrefix20210622\Symfony\Component\Console\Formatter\NullOutputFormatter;
-use RectorPrefix20210622\Symfony\Component\Console\Formatter\OutputFormatterInterface;
+use RectorPrefix20210623\Symfony\Component\Console\Formatter\NullOutputFormatter;
+use RectorPrefix20210623\Symfony\Component\Console\Formatter\OutputFormatterInterface;
 /**
  * NullOutput suppresses all output.
  *
@@ -20,13 +20,13 @@ use RectorPrefix20210622\Symfony\Component\Console\Formatter\OutputFormatterInte
  * @author Fabien Potencier <fabien@symfony.com>
  * @author Tobias Schultze <http://tobion.de>
  */
-class NullOutput implements \RectorPrefix20210622\Symfony\Component\Console\Output\OutputInterface
+class NullOutput implements \RectorPrefix20210623\Symfony\Component\Console\Output\OutputInterface
 {
     private $formatter;
     /**
      * {@inheritdoc}
      */
-    public function setFormatter(\RectorPrefix20210622\Symfony\Component\Console\Formatter\OutputFormatterInterface $formatter)
+    public function setFormatter(\RectorPrefix20210623\Symfony\Component\Console\Formatter\OutputFormatterInterface $formatter)
     {
         // do nothing
     }
@@ -39,7 +39,7 @@ class NullOutput implements \RectorPrefix20210622\Symfony\Component\Console\Outp
             return $this->formatter;
         }
         // to comply with the interface we must return a OutputFormatterInterface
-        return $this->formatter = new \RectorPrefix20210622\Symfony\Component\Console\Formatter\NullOutputFormatter();
+        return $this->formatter = new \RectorPrefix20210623\Symfony\Component\Console\Formatter\NullOutputFormatter();
     }
     /**
      * {@inheritdoc}

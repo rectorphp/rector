@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210622;
+namespace RectorPrefix20210623;
 
 if (\class_exists('t3lib_tree_pagetree_DataProvider')) {
     return;

@@ -3,29 +3,27 @@
 declare (strict_types=1);
 namespace Rector\Nette\Rector\Neon;
 
-use RectorPrefix20210622\Nette\Utils\Strings;
-use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
+use RectorPrefix20210623\Nette\Utils\Strings;
 use Rector\Nette\Contract\Rector\NeonRectorInterface;
-use Rector\Renaming\ValueObject\MethodCallRename;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Rector\Renaming\Collector\MethodCallRenameCollector;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20210622\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Nette\Tests\Rector\Neon\RenameMethodNeonRector\RenameMethodNeonRectorTest
  */
-final class RenameMethodNeonRector implements \Rector\Nette\Contract\Rector\NeonRectorInterface, \Rector\Core\Contract\Rector\ConfigurableRectorInterface
+final class RenameMethodNeonRector implements \Rector\Nette\Contract\Rector\NeonRectorInterface
 {
     /**
-     * @var string
+     * @var \Rector\Renaming\Collector\MethodCallRenameCollector
      */
-    public const RENAME_METHODS = 'rename_methods';
-    /**
-     * @var MethodCallRename[]
-     */
-    private $methodCallRenames = [];
+    private $methodCallRenameCollector;
+    public function __construct(\Rector\Renaming\Collector\MethodCallRenameCollector $methodCallRenameCollector)
+    {
+        $this->methodCallRenameCollector = $methodCallRenameCollector;
+    }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Renames method calls in NEON configs', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Renames method calls in NEON configs', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 services:
     -
         class: SomeClass
@@ -39,27 +37,18 @@ services:
         setup:
             - newCall
 CODE_SAMPLE
-, [self::RENAME_METHODS => [new \Rector\Renaming\ValueObject\MethodCallRename('SomeClass', 'oldCall', 'newCall')]])]);
-    }
-    /**
-     * @param array<string, MethodCallRename[]> $configuration
-     */
-    public function configure(array $configuration) : void
-    {
-        $methodCallRenames = $configuration[self::RENAME_METHODS] ?? [];
-        \RectorPrefix20210622\Webmozart\Assert\Assert::allIsInstanceOf($methodCallRenames, \Rector\Renaming\ValueObject\MethodCallRename::class);
-        $this->methodCallRenames = $methodCallRenames;
+)]);
     }
     public function changeContent(string $content) : string
     {
-        foreach ($this->methodCallRenames as $methodCallRename) {
+        foreach ($this->methodCallRenameCollector->getMethodCallRenames() as $methodCallRename) {
             $oldObjectType = $methodCallRename->getOldObjectType();
             $objectClassName = $oldObjectType->getClassName();
             $className = \str_replace('\\', '\\\\', $objectClassName);
             $oldMethodName = $methodCallRename->getOldMethod();
             $newMethodName = $methodCallRename->getNewMethod();
             $pattern = '#\\n(.*?)(class|factory): ' . $className . '(\\n|\\((.*?)\\)\\n)\\1setup:(.*?)- ' . $oldMethodName . '\\(#s';
-            if (\RectorPrefix20210622\Nette\Utils\Strings::match($content, $pattern)) {
+            if (\RectorPrefix20210623\Nette\Utils\Strings::match($content, $pattern)) {
                 $content = \str_replace($oldMethodName . '(', $newMethodName . '(', $content);
             }
         }

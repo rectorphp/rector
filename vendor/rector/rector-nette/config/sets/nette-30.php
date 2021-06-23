@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210622;
+namespace RectorPrefix20210623;
 
-use Rector\Arguments\Rector\ClassMethod\ArgumentDefaultValueReplacerRector;
-use Rector\Arguments\ValueObject\ArgumentDefaultValueReplacer;
+use Rector\Arguments\Rector\ClassMethod\ReplaceArgumentDefaultValueRector;
+use Rector\Arguments\ValueObject\ReplaceArgumentDefaultValue;
 use Rector\DeadCode\Rector\StaticCall\RemoveParentCallWithoutParentRector;
 use Rector\Nette\Rector\ArrayDimFetch\ChangeFormArrayAccessToAnnotatedControlVariableRector;
 use Rector\Nette\Rector\Class_\MoveFinalGetUserToCheckRequirementsClassMethodRector;
@@ -48,11 +48,11 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
         'Nette\\DI\\Statement' => 'Nette\\DI\\Definitions\\Statement',
         'WebChemistry\\Forms\\Controls\\Multiplier' => 'Contributte\\FormMultiplier\\Multiplier',
     ]]]);
-    $services->set(\Rector\Arguments\Rector\ClassMethod\ArgumentDefaultValueReplacerRector::class)->call('configure', [[\Rector\Arguments\Rector\ClassMethod\ArgumentDefaultValueReplacerRector::REPLACED_ARGUMENTS => \Symplify\SymfonyPhpConfig\ValueObjectInliner::inline([
+    $services->set(\Rector\Arguments\Rector\ClassMethod\ReplaceArgumentDefaultValueRector::class)->call('configure', [[\Rector\Arguments\Rector\ClassMethod\ReplaceArgumentDefaultValueRector::REPLACED_ARGUMENTS => \Symplify\SymfonyPhpConfig\ValueObjectInliner::inline([
         // json 2nd argument is now `int` typed
-        new \Rector\Arguments\ValueObject\ArgumentDefaultValueReplacer('Nette\\Utils\\Json', 'decode', 1, \true, 'Nette\\Utils\\Json::FORCE_ARRAY'),
+        new \Rector\Arguments\ValueObject\ReplaceArgumentDefaultValue('Nette\\Utils\\Json', 'decode', 1, \true, 'Nette\\Utils\\Json::FORCE_ARRAY'),
         // @see https://github.com/nette/forms/commit/574b97f9d5e7a902a224e57d7d584e7afc9fefec
-        new \Rector\Arguments\ValueObject\ArgumentDefaultValueReplacer('Nette\\Forms\\Form', 'decode', 0, \true, 'array'),
+        new \Rector\Arguments\ValueObject\ReplaceArgumentDefaultValue('Nette\\Forms\\Form', 'decode', 0, \true, 'array'),
     ])]]);
     $services->set(\Rector\Renaming\Rector\MethodCall\RenameMethodRector::class)->call('configure', [[\Rector\Renaming\Rector\MethodCall\RenameMethodRector::METHOD_CALL_RENAMES => \Symplify\SymfonyPhpConfig\ValueObjectInliner::inline([
         // see https://github.com/nette/forms/commit/b99385aa9d24d729a18f6397a414ea88eab6895a
