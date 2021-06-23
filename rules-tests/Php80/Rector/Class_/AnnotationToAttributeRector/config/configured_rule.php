@@ -20,7 +20,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 new AnnotationToAttribute('inject', 'Nette\DI\Attributes\Inject'),
 
                 new AnnotationToAttribute('Symfony\Component\Routing\Annotation\Route'),
-                new AnnotationToAttribute('Symfony\Component\Validator\Constraints\Choice'),
             ]),
         ]]);
 };
