@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit2a4aefdf34b3e5e4f7af425c537f9623
+class ComposerStaticInitb1e0898381b03d7b46921e7fcdc4361d
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -1927,7 +1927,6 @@ class ComposerStaticInit2a4aefdf34b3e5e4f7af425c537f9623
         'Rector\\Caching\\ValueObject\\Storage\\FileCacheStorage' => __DIR__ . '/../..' . '/packages/Caching/ValueObject/Storage/FileCacheStorage.php',
         'Rector\\CakePHP\\ImplicitNameResolver' => __DIR__ . '/..' . '/rector/rector-cakephp/src/ImplicitNameResolver.php',
         'Rector\\CakePHP\\Naming\\CakePHPFullyQualifiedClassNameResolver' => __DIR__ . '/..' . '/rector/rector-cakephp/src/Naming/CakePHPFullyQualifiedClassNameResolver.php',
-        'Rector\\CakePHP\\Rector\\FileWithoutNamespace\\ImplicitShortClassNameUseStatementRector' => __DIR__ . '/..' . '/rector/rector-cakephp/src/Rector/FileWithoutNamespace/ImplicitShortClassNameUseStatementRector.php',
         'Rector\\CakePHP\\Rector\\MethodCall\\ArrayToFluentCallRector' => __DIR__ . '/..' . '/rector/rector-cakephp/src/Rector/MethodCall/ArrayToFluentCallRector.php',
         'Rector\\CakePHP\\Rector\\MethodCall\\ModalToGetSetRector' => __DIR__ . '/..' . '/rector/rector-cakephp/src/Rector/MethodCall/ModalToGetSetRector.php',
         'Rector\\CakePHP\\Rector\\MethodCall\\RenameMethodCallBasedOnParameterRector' => __DIR__ . '/..' . '/rector/rector-cakephp/src/Rector/MethodCall/RenameMethodCallBasedOnParameterRector.php',
@@ -3875,9 +3874,9 @@ class ComposerStaticInit2a4aefdf34b3e5e4f7af425c537f9623
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit2a4aefdf34b3e5e4f7af425c537f9623::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit2a4aefdf34b3e5e4f7af425c537f9623::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit2a4aefdf34b3e5e4f7af425c537f9623::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitb1e0898381b03d7b46921e7fcdc4361d::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitb1e0898381b03d7b46921e7fcdc4361d::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitb1e0898381b03d7b46921e7fcdc4361d::$classMap;
 
         }, null, ClassLoader::class);
     }

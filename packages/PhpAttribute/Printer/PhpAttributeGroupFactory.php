@@ -12,6 +12,7 @@ use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Scalar\String_;
 use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprFalseNode;
 use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprIntegerNode;
 use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprTrueNode;
@@ -20,6 +21,7 @@ use PHPStan\Type\Constant\ConstantBooleanType;
 use PHPStan\Type\Constant\ConstantFloatType;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php80\ValueObject\AnnotationToAttribute;
 final class PhpAttributeGroupFactory
 {
@@ -60,12 +62,14 @@ final class PhpAttributeGroupFactory
         $args = [];
         if ($silentKey !== null && isset($items[$silentKey])) {
             $silentValue = \PhpParser\BuilderHelpers::normalizeValue($items[$silentKey]);
+            $this->normalizeStringDoubleQuote($silentValue);
             $args[] = new \PhpParser\Node\Arg($silentValue);
             unset($items[$silentKey]);
         }
         foreach ($items as $key => $value) {
             $value = $this->normalizeNodeValue($value);
             $value = \PhpParser\BuilderHelpers::normalizeValue($value);
+            $this->normalizeStringDoubleQuote($value);
             $name = null;
             if (\is_string($key)) {
                 $name = new \PhpParser\Node\Identifier($key);
@@ -123,5 +127,16 @@ final class PhpAttributeGroupFactory
             }, $value);
         }
         return $value;
+    }
+    private function normalizeStringDoubleQuote(\PhpParser\Node\Expr $expr) : void
+    {
+        if (!$expr instanceof \PhpParser\Node\Scalar\String_) {
+            return;
+        }
+        // avoid escaping quotes
+        if (\strpos($expr->value, "'") === \false) {
+            return;
+        }
+        $expr->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::KIND, \PhpParser\Node\Scalar\String_::KIND_DOUBLE_QUOTED);
     }
 }

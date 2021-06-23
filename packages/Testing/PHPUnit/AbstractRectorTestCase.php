@@ -12,9 +12,9 @@ use Rector\Core\Application\ApplicationFileProcessor;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\Autoloading\AdditionalAutoloader;
 use Rector\Core\Autoloading\BootstrapFilesIncluder;
+use Rector\Core\Configuration\ConfigurationFactory;
 use Rector\Core\Configuration\Option;
 use Rector\Core\ValueObject\Application\File;
-use Rector\Core\ValueObject\Configuration;
 use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider;
 use Rector\Testing\Contract\RectorTestInterface;
 use Rector\Testing\PHPUnit\Behavior\MovingFilesTrait;
@@ -125,7 +125,9 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractTe
         /** @var NodeScopeResolver $nodeScopeResolver */
         $nodeScopeResolver = $this->getService(\PHPStan\Analyser\NodeScopeResolver::class);
         $nodeScopeResolver->setAnalysedFiles([$fileInfo->getRealPath()]);
-        $configuration = new \Rector\Core\ValueObject\Configuration(\true);
+        /** @var ConfigurationFactory $configurationFactory */
+        $configurationFactory = $this->getService(\Rector\Core\Configuration\ConfigurationFactory::class);
+        $configuration = $configurationFactory->createForTests();
         $file = new \Rector\Core\ValueObject\Application\File($fileInfo, $fileInfo->getContents());
         $this->applicationFileProcessor->run([$file], $configuration);
         return $file->getFileContent();

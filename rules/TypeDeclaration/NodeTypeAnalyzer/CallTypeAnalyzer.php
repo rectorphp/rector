@@ -51,7 +51,7 @@ final class CallTypeAnalyzer
     /**
      * @param StaticCall|MethodCall $node
      */
-    private function resolveCallerType(\PhpParser\Node $node) : \PHPStan\Type\Type
+    public function resolveCallerType(\PhpParser\Node $node) : \PHPStan\Type\Type
     {
         if ($node instanceof \PhpParser\Node\Expr\MethodCall) {
             return $this->nodeTypeResolver->getStaticType($node->var);

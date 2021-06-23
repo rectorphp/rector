@@ -1104,17 +1104,17 @@
         },
         {
             "name": "rector\/rector-cakephp",
-            "version": "0.11.2",
-            "version_normalized": "0.11.2.0",
+            "version": "0.11.3",
+            "version_normalized": "0.11.3.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-cakephp.git",
-                "reference": "6ccf728d9e57c8a7069c9972f48588158ce3b7d0"
+                "reference": "42e57ebb5573f0a65a680eecdfa0db536cca2db1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-cakephp\/zipball\/6ccf728d9e57c8a7069c9972f48588158ce3b7d0",
-                "reference": "6ccf728d9e57c8a7069c9972f48588158ce3b7d0",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-cakephp\/zipball\/42e57ebb5573f0a65a680eecdfa0db536cca2db1",
+                "reference": "42e57ebb5573f0a65a680eecdfa0db536cca2db1",
                 "shasum": ""
             },
             "require": {
@@ -1128,14 +1128,14 @@
             "require-dev": {
                 "phpstan\/extension-installer": "^1.1",
                 "phpunit\/phpunit": "^9.5",
-                "rector\/rector-phpstan-rules": "^0.2.8",
+                "rector\/rector-phpstan-rules": "^0.3.3",
                 "rector\/rector-src": "^0.11",
                 "symplify\/easy-coding-standard": "^9.3",
                 "symplify\/phpstan-extensions": "^9.3",
                 "symplify\/phpstan-rules": "^9.3",
                 "symplify\/rule-doc-generator": "^9.3"
             },
-            "time": "2021-05-15T08:08:12+00:00",
+            "time": "2021-06-23T12:53:55+00:00",
             "type": "rector-extension",
             "extra": {
                 "branch-alias": {
@@ -1160,7 +1160,7 @@
             "description": "Rector upgrades rules for CakePHP",
             "support": {
                 "issues": "https:\/\/github.com\/rectorphp\/rector-cakephp\/issues",
-                "source": "https:\/\/github.com\/rectorphp\/rector-cakephp\/tree\/0.11.2"
+                "source": "https:\/\/github.com\/rectorphp\/rector-cakephp\/tree\/0.11.3"
             },
             "install-path": "..\/rector\/rector-cakephp"
         },

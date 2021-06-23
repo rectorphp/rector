@@ -1572,7 +1572,6 @@ return array(
     'Rector\\Caching\\ValueObject\\Storage\\FileCacheStorage' => $baseDir . '/packages/Caching/ValueObject/Storage/FileCacheStorage.php',
     'Rector\\CakePHP\\ImplicitNameResolver' => $vendorDir . '/rector/rector-cakephp/src/ImplicitNameResolver.php',
     'Rector\\CakePHP\\Naming\\CakePHPFullyQualifiedClassNameResolver' => $vendorDir . '/rector/rector-cakephp/src/Naming/CakePHPFullyQualifiedClassNameResolver.php',
-    'Rector\\CakePHP\\Rector\\FileWithoutNamespace\\ImplicitShortClassNameUseStatementRector' => $vendorDir . '/rector/rector-cakephp/src/Rector/FileWithoutNamespace/ImplicitShortClassNameUseStatementRector.php',
     'Rector\\CakePHP\\Rector\\MethodCall\\ArrayToFluentCallRector' => $vendorDir . '/rector/rector-cakephp/src/Rector/MethodCall/ArrayToFluentCallRector.php',
     'Rector\\CakePHP\\Rector\\MethodCall\\ModalToGetSetRector' => $vendorDir . '/rector/rector-cakephp/src/Rector/MethodCall/ModalToGetSetRector.php',
     'Rector\\CakePHP\\Rector\\MethodCall\\RenameMethodCallBasedOnParameterRector' => $vendorDir . '/rector/rector-cakephp/src/Rector/MethodCall/RenameMethodCallBasedOnParameterRector.php',

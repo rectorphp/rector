@@ -16,7 +16,7 @@
         "symplify\/easy-coding-standard": "^9.3",
         "symplify\/rule-doc-generator": "^9.3",
         "phpstan\/extension-installer": "^1.1",
-        "rector\/rector-phpstan-rules": "^0.2.8"
+        "rector\/rector-phpstan-rules": "^0.3.3"
     },
     "autoload": {
         "psr-4": {
@@ -26,10 +26,7 @@
     "autoload-dev": {
         "psr-4": {
             "Rector\\CakePHP\\Tests\\": "tests"
-        },
-        "classmap": [
-            "tests\/Rector\/FileWithoutNamespace\/ImplicitShortClassNameUseStatementRector\/Source"
-        ]
+        }
     },
     "scripts": {
         "phpstan": "vendor\/bin\/phpstan analyse --ansi --error-format symplify",
