@@ -45,7 +45,7 @@ final class CallTypeAnalyzer
     /**
      * @param StaticCall|MethodCall $node
      */
-    private function resolveCallerType(Node $node): Type
+    public function resolveCallerType(Node $node): Type
     {
         if ($node instanceof MethodCall) {
             return $this->nodeTypeResolver->getStaticType($node->var);
