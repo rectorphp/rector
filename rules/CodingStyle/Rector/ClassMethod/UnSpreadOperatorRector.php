@@ -9,7 +9,11 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Reflection\FunctionReflection;
+use PHPStan\Reflection\MethodReflection;
+use PHPStan\Reflection\Php\PhpFunctionReflection;
 use Rector\CodingStyle\NodeAnalyzer\SpreadVariablesCollector;
+use Rector\Core\PHPStan\Reflection\CallReflectionResolver;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -20,7 +24,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class UnSpreadOperatorRector extends AbstractRector
 {
     public function __construct(
-        private SpreadVariablesCollector $spreadVariablesCollector
+        private SpreadVariablesCollector $spreadVariablesCollector,
+        private CallReflectionResolver $callReflectionResolver,
     ) {
     }
 
@@ -96,17 +101,24 @@ CODE_SAMPLE
 
     private function processUnspreadOperatorMethodCallArgs(MethodCall $methodCall): ?MethodCall
     {
-        $classMethod = $this->nodeRepository->findClassMethodByMethodCall($methodCall);
-        if (! $classMethod instanceof ClassMethod) {
+        $functionLikeReflection = $this->callReflectionResolver->resolveCall($methodCall);
+        if ($functionLikeReflection === null) {
             return null;
         }
 
-        $spreadParams = $this->spreadVariablesCollector->resolveFromClassMethod($classMethod);
-        if ($spreadParams === []) {
+        // skip those in vendor
+        if ($this->skipForVendor($functionLikeReflection)) {
             return null;
         }
 
-        $firstSpreadParamPosition = array_key_first($spreadParams);
+        $spreadParameterReflections = $this->spreadVariablesCollector->resolveFromMethodReflection(
+            $functionLikeReflection
+        );
+        if ($spreadParameterReflections === []) {
+            return null;
+        }
+
+        $firstSpreadParamPosition = array_key_first($spreadParameterReflections);
         $variadicArgs = $this->resolveVariadicArgsByVariadicParams($methodCall, $firstSpreadParamPosition);
 
         $hasUnpacked = false;
@@ -145,5 +157,24 @@ CODE_SAMPLE
         }
 
         return $variadicArgs;
+    }
+
+    private function skipForVendor(MethodReflection | FunctionReflection $functionLikeReflection): bool
+    {
+        if ($functionLikeReflection instanceof PhpFunctionReflection) {
+            $fileName = $functionLikeReflection->getFileName();
+        } elseif ($functionLikeReflection instanceof MethodReflection) {
+            $declaringClassReflection = $functionLikeReflection->getDeclaringClass();
+            $fileName = $declaringClassReflection->getFileName();
+        } else {
+            return false;
+        }
+
+        // probably internal
+        if ($fileName === false) {
+            return true;
+        }
+
+        return str_contains($fileName, '/vendor/');
     }
 }
