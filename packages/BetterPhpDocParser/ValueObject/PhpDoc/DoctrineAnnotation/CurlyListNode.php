@@ -32,7 +32,7 @@ final class CurlyListNode extends AbstractValuesAwareNode implements Stringable
 
         return (string) $value;
     }
-    
+
     /**
      * @param mixed[] $array
      */
