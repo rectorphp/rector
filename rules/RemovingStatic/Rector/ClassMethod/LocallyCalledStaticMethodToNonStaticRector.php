@@ -7,8 +7,10 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Reflection\ClassReflection;
+use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Privatization\VisibilityGuard\ClassMethodVisibilityGuard;
@@ -70,6 +72,9 @@ CODE_SAMPLE
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($node instanceof \PhpParser\Node\Stmt\ClassMethod) {
+            if (!$node->isPrivate()) {
+                return null;
+            }
             return $this->refactorClassMethod($node);
         }
         return $this->refactorStaticCall($node);
@@ -96,19 +101,23 @@ CODE_SAMPLE
     }
     private function refactorStaticCall(\PhpParser\Node\Expr\StaticCall $staticCall) : ?\PhpParser\Node\Expr\MethodCall
     {
-        $classMethod = $this->nodeRepository->findClassMethodByStaticCall($staticCall);
-        if (!$classMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
+        $class = $staticCall->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
+        if (!$class instanceof \PhpParser\Node\Stmt\ClassLike) {
             return null;
         }
-        // is static call in the same as class method
-        if (!$this->haveSharedClass($classMethod, [$staticCall])) {
-            return null;
+        /** @var ClassMethod[] $classMethods */
+        $classMethods = $this->betterNodeFinder->findInstanceOf($class, \PhpParser\Node\Stmt\ClassMethod::class);
+        foreach ($classMethods as $classMethod) {
+            if (!$this->isClassMethodMatchingStaticCall($classMethod, $staticCall)) {
+                continue;
+            }
+            if ($this->isInStaticClassMethod($staticCall)) {
+                continue;
+            }
+            $thisVariable = new \PhpParser\Node\Expr\Variable('this');
+            return new \PhpParser\Node\Expr\MethodCall($thisVariable, $staticCall->name, $staticCall->args);
         }
-        if ($this->isInStaticClassMethod($staticCall)) {
-            return null;
-        }
-        $thisVariable = new \PhpParser\Node\Expr\Variable('this');
-        return new \PhpParser\Node\Expr\MethodCall($thisVariable, $staticCall->name, $staticCall->args);
+        return null;
     }
     private function isClassMethodWithOnlyLocalStaticCalls(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
     {
@@ -117,13 +126,13 @@ CODE_SAMPLE
         return $this->haveSharedClass($classMethod, $staticCalls);
     }
     /**
-     * @param Node[] $nodes
+     * @param StaticCall[] $staticCalls
      */
-    private function haveSharedClass(\PhpParser\Node $mainNode, array $nodes) : bool
+    private function haveSharedClass(\PhpParser\Node\Stmt\ClassMethod $classMethod, array $staticCalls) : bool
     {
-        $mainNodeClass = $mainNode->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);
-        foreach ($nodes as $node) {
-            $nodeClass = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);
+        $mainNodeClass = $classMethod->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);
+        foreach ($staticCalls as $staticCall) {
+            $nodeClass = $staticCall->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);
             if ($mainNodeClass !== $nodeClass) {
                 return \false;
             }
@@ -137,5 +146,12 @@ CODE_SAMPLE
             return \false;
         }
         return $locationClassMethod->isStatic();
+    }
+    private function isClassMethodMatchingStaticCall(\PhpParser\Node\Stmt\ClassMethod $classMethod, \PhpParser\Node\Expr\StaticCall $staticCall) : bool
+    {
+        $className = $classMethod->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);
+        $objectType = new \PHPStan\Type\ObjectType($className);
+        $callerType = $this->nodeTypeResolver->resolve($staticCall->class);
+        return $objectType->equals($callerType);
     }
 }

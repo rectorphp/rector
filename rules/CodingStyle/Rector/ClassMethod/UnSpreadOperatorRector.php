@@ -8,7 +8,11 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Reflection\FunctionReflection;
+use PHPStan\Reflection\MethodReflection;
+use PHPStan\Reflection\Php\PhpFunctionReflection;
 use Rector\CodingStyle\NodeAnalyzer\SpreadVariablesCollector;
+use Rector\Core\PHPStan\Reflection\CallReflectionResolver;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -21,9 +25,14 @@ final class UnSpreadOperatorRector extends \Rector\Core\Rector\AbstractRector
      * @var \Rector\CodingStyle\NodeAnalyzer\SpreadVariablesCollector
      */
     private $spreadVariablesCollector;
-    public function __construct(\Rector\CodingStyle\NodeAnalyzer\SpreadVariablesCollector $spreadVariablesCollector)
+    /**
+     * @var \Rector\Core\PHPStan\Reflection\CallReflectionResolver
+     */
+    private $callReflectionResolver;
+    public function __construct(\Rector\CodingStyle\NodeAnalyzer\SpreadVariablesCollector $spreadVariablesCollector, \Rector\Core\PHPStan\Reflection\CallReflectionResolver $callReflectionResolver)
     {
         $this->spreadVariablesCollector = $spreadVariablesCollector;
+        $this->callReflectionResolver = $callReflectionResolver;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -86,16 +95,20 @@ CODE_SAMPLE
     }
     private function processUnspreadOperatorMethodCallArgs(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\PhpParser\Node\Expr\MethodCall
     {
-        $classMethod = $this->nodeRepository->findClassMethodByMethodCall($methodCall);
-        if (!$classMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
+        $functionLikeReflection = $this->callReflectionResolver->resolveCall($methodCall);
+        if ($functionLikeReflection === null) {
             return null;
         }
-        $spreadParams = $this->spreadVariablesCollector->resolveFromClassMethod($classMethod);
-        if ($spreadParams === []) {
+        // skip those in vendor
+        if ($this->skipForVendor($functionLikeReflection)) {
             return null;
         }
-        \reset($spreadParams);
-        $firstSpreadParamPosition = \key($spreadParams);
+        $spreadParameterReflections = $this->spreadVariablesCollector->resolveFromMethodReflection($functionLikeReflection);
+        if ($spreadParameterReflections === []) {
+            return null;
+        }
+        \reset($spreadParameterReflections);
+        $firstSpreadParamPosition = \key($spreadParameterReflections);
         $variadicArgs = $this->resolveVariadicArgsByVariadicParams($methodCall, $firstSpreadParamPosition);
         $hasUnpacked = \false;
         foreach ($variadicArgs as $position => $variadicArg) {
@@ -125,5 +138,24 @@ CODE_SAMPLE
             $this->nodeRemover->removeArg($methodCall, $position);
         }
         return $variadicArgs;
+    }
+    /**
+     * @param \PHPStan\Reflection\MethodReflection|\PHPStan\Reflection\FunctionReflection $functionLikeReflection
+     */
+    private function skipForVendor($functionLikeReflection) : bool
+    {
+        if ($functionLikeReflection instanceof \PHPStan\Reflection\Php\PhpFunctionReflection) {
+            $fileName = $functionLikeReflection->getFileName();
+        } elseif ($functionLikeReflection instanceof \PHPStan\Reflection\MethodReflection) {
+            $declaringClassReflection = $functionLikeReflection->getDeclaringClass();
+            $fileName = $declaringClassReflection->getFileName();
+        } else {
+            return \false;
+        }
+        // probably internal
+        if ($fileName === \false) {
+            return \true;
+        }
+        return \strpos($fileName, '/vendor/') !== \false;
     }
 }

@@ -3,55 +3,42 @@
 declare (strict_types=1);
 namespace Rector\DowngradePhp80\Rector\MethodCall;
 
-use RectorPrefix20210623\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
-use PhpParser\Node\Param;
-use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Parser;
-use PHPStan\Reflection\ClassReflection;
-use PHPStan\Reflection\ReflectionProvider;
-use PHPStan\Type\ObjectType;
+use PhpParser\Node\Name;
+use PHPStan\Reflection\FunctionReflection;
+use PHPStan\Reflection\MethodReflection;
+use PHPStan\Reflection\ParameterReflection;
+use PHPStan\Type\Type;
+use PHPStan\Type\VerbosityLevel;
+use Rector\Core\PHPStan\Reflection\CallReflectionResolver;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\ValueObject\MethodName;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\TypeDeclaration\NodeTypeAnalyzer\CallTypeAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20210623\Symplify\SmartFileSystem\SmartFileSystem;
 /**
  * @see \Rector\Tests\DowngradePhp80\Rector\MethodCall\DowngradeNamedArgumentRector\DowngradeNamedArgumentRectorTest
  */
 final class DowngradeNamedArgumentRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var \PHPStan\Reflection\ReflectionProvider
-     */
-    private $reflectionProvider;
-    /**
-     * @var \Symplify\SmartFileSystem\SmartFileSystem
-     */
-    private $smartFileSystem;
-    /**
-     * @var \PhpParser\Parser
-     */
-    private $parser;
-    /**
      * @var \Rector\TypeDeclaration\NodeTypeAnalyzer\CallTypeAnalyzer
      */
     private $callTypeAnalyzer;
-    public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider, \RectorPrefix20210623\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \PhpParser\Parser $parser, \Rector\TypeDeclaration\NodeTypeAnalyzer\CallTypeAnalyzer $callTypeAnalyzer)
+    /**
+     * @var \Rector\Core\PHPStan\Reflection\CallReflectionResolver
+     */
+    private $callReflectionResolver;
+    public function __construct(\Rector\TypeDeclaration\NodeTypeAnalyzer\CallTypeAnalyzer $callTypeAnalyzer, \Rector\Core\PHPStan\Reflection\CallReflectionResolver $callReflectionResolver)
     {
-        $this->reflectionProvider = $reflectionProvider;
-        $this->smartFileSystem = $smartFileSystem;
-        $this->parser = $parser;
         $this->callTypeAnalyzer = $callTypeAnalyzer;
+        $this->callReflectionResolver = $callReflectionResolver;
     }
     /**
      * @return array<class-string<Node>>
@@ -99,97 +86,43 @@ CODE_SAMPLE
         if ($this->shouldSkip($args)) {
             return null;
         }
-        $this->applyRemoveNamedArgument($node, $args);
+        $this->removeNamedArguments($node, $args);
         return $node;
     }
     /**
-     * @param MethodCall|StaticCall $node
      * @param Arg[] $args
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\New_ $node
      */
-    private function applyRemoveNamedArgument(\PhpParser\Node $node, array $args) : ?\PhpParser\Node
-    {
-        $caller = $this->getCaller($node);
-        if (!$caller instanceof \PhpParser\Node\Stmt\ClassMethod) {
-            return null;
-        }
-        return $this->processRemoveNamedArgument($caller, $node, $args);
-    }
-    private function getClassMethodOfNew(\PhpParser\Node\Expr\New_ $new) : ?\PhpParser\Node
-    {
-        $className = (string) $this->getName($new->class);
-        if (\in_array($className, ['self', 'static'], \true)) {
-            $className = (string) $new->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);
-        }
-        if (!$this->reflectionProvider->hasClass($className)) {
-            return null;
-        }
-        $classReflection = $this->reflectionProvider->getClass($className);
-        $className = \RectorPrefix20210623\Nette\Utils\Strings::after($className, '\\', -1);
-        return $this->getCallerNodeFromClassReflection($new, $classReflection, $className);
-    }
-    /**
-     * @param MethodCall|StaticCall|New_ $node
-     */
-    private function getCaller(\PhpParser\Node $node) : ?\PhpParser\Node
+    private function removeNamedArguments($node, array $args) : ?\PhpParser\Node
     {
         if ($node instanceof \PhpParser\Node\Expr\New_) {
-            return $this->getClassMethodOfNew($node);
-        }
-        $caller = $node instanceof \PhpParser\Node\Expr\StaticCall ? $this->nodeRepository->findClassMethodByStaticCall($node) : $this->nodeRepository->findClassMethodByMethodCall($node);
-        if ($caller instanceof \PhpParser\Node\Stmt\ClassMethod) {
-            return $caller;
-        }
-        $type = $this->callTypeAnalyzer->resolveCallerType($node);
-        if (!$type instanceof \PHPStan\Type\ObjectType) {
-            return null;
-        }
-        $classReflection = $this->reflectionProvider->getClass($type->getClassName());
-        return $this->getCallerNodeFromClassReflection($node, $classReflection);
-    }
-    /**
-     * @param MethodCall|StaticCall|New_ $node
-     */
-    private function getCallerNodeFromClassReflection(\PhpParser\Node $node, \PHPStan\Reflection\ClassReflection $classReflection, ?string $className = null) : ?\PhpParser\Node
-    {
-        $fileName = $classReflection->getFileName();
-        if (!\is_string($fileName)) {
-            return null;
-        }
-        $stmts = $this->parser->parse($this->smartFileSystem->readFile($fileName));
-        if ($node instanceof \PhpParser\Node\Expr\New_) {
-            /** @var string $className */
-            $class = $this->betterNodeFinder->findFirst((array) $stmts, function (\PhpParser\Node $node) use($className) : bool {
-                if (!$node instanceof \PhpParser\Node\Stmt\Class_) {
-                    return \false;
-                }
-                return $this->isName($node, $className);
-            });
-            if (!$class instanceof \PhpParser\Node\Stmt\Class_) {
+            $methodReflection = $this->callReflectionResolver->resolveConstructor($node);
+            if (!$methodReflection instanceof \PHPStan\Reflection\MethodReflection) {
                 return null;
             }
-            return $class->getMethod(\Rector\Core\ValueObject\MethodName::CONSTRUCT);
+            return $this->processRemoveNamedArgument($methodReflection, $node, $args);
         }
-        return $this->betterNodeFinder->findFirst((array) $stmts, function (\PhpParser\Node $n) use($node) : bool {
-            if (!$n instanceof \PhpParser\Node\Stmt\ClassMethod) {
-                return \false;
-            }
-            return $this->isName($n, (string) $this->getName($node->name));
-        });
+        $callerReflection = $this->callReflectionResolver->resolveCall($node);
+        if ($callerReflection === null) {
+            return null;
+        }
+        return $this->processRemoveNamedArgument($callerReflection, $node, $args);
     }
     /**
      * @param MethodCall|StaticCall|New_ $node
      * @param Arg[] $args
+     * @param \PHPStan\Reflection\MethodReflection|\PHPStan\Reflection\FunctionReflection $reflection
      * @return \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\New_
      */
-    private function processRemoveNamedArgument(\PhpParser\Node\Stmt\ClassMethod $classMethod, \PhpParser\Node $node, array $args)
+    private function processRemoveNamedArgument($reflection, \PhpParser\Node $node, array $args)
     {
-        $params = $classMethod->params;
         /** @var Arg[] $newArgs */
         $newArgs = [];
         $keyParam = 0;
-        foreach ($params as $keyParam => $param) {
-            /** @var string $paramName */
-            $paramName = $this->getName($param);
+        $parametersAcceptor = $reflection->getVariants()[0];
+        $parameterReflections = $parametersAcceptor->getParameters();
+        foreach ($parameterReflections as $keyParam => $parameterReflection) {
+            $paramName = $parameterReflection->getName();
             foreach ($args as $arg) {
                 /** @var string|null $argName */
                 $argName = $this->getName($arg);
@@ -198,20 +131,29 @@ CODE_SAMPLE
                 }
             }
         }
-        $this->replacePreviousArgs($node, $params, $keyParam, $newArgs);
+        $this->replacePreviousArgs($node, $parameterReflections, $keyParam, $newArgs);
         return $node;
     }
     /**
-     * @param MethodCall|StaticCall|New_ $node
-     * @param Param[] $params
+     * @param ParameterReflection[] $parameterReflections
      * @param Arg[] $newArgs
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\New_ $node
      */
-    private function replacePreviousArgs(\PhpParser\Node $node, array $params, int $keyParam, array $newArgs) : void
+    private function replacePreviousArgs($node, array $parameterReflections, int $keyParam, array $newArgs) : void
     {
         for ($i = $keyParam - 1; $i >= 0; --$i) {
-            if (!isset($newArgs[$i]) && $params[$i]->default instanceof \PhpParser\Node\Expr) {
-                $newArgs[$i] = new \PhpParser\Node\Arg($params[$i]->default);
+            $parameterReflection = $parameterReflections[$i];
+            if ($parameterReflection->getDefaultValue() === null) {
+                continue;
             }
+            $defaultValue = $this->mapPHPStanTypeToExpr($parameterReflection->getDefaultValue());
+            if (!$defaultValue instanceof \PhpParser\Node\Expr) {
+                continue;
+            }
+            if (isset($newArgs[$i])) {
+                continue;
+            }
+            $newArgs[$i] = new \PhpParser\Node\Arg($defaultValue);
         }
         $countNewArgs = \count($newArgs);
         for ($i = 0; $i < $countNewArgs; ++$i) {
@@ -232,5 +174,12 @@ CODE_SAMPLE
             }
         }
         return \true;
+    }
+    private function mapPHPStanTypeToExpr(?\PHPStan\Type\Type $type) : ?\PhpParser\Node\Expr
+    {
+        if ($type === null) {
+            return null;
+        }
+        return new \PhpParser\Node\Expr\ConstFetch(new \PhpParser\Node\Name($type->describe(\PHPStan\Type\VerbosityLevel::value())));
     }
 }

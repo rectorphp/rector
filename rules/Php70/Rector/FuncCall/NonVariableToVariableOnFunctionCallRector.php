@@ -102,7 +102,7 @@ final class NonVariableToVariableOnFunctionCallRector extends \Rector\Core\Recto
     private function getNonVariableArguments(\PhpParser\Node $node) : array
     {
         $arguments = [];
-        $parametersAcceptor = $this->callReflectionResolver->resolveParametersAcceptor($this->callReflectionResolver->resolveCall($node), $node);
+        $parametersAcceptor = $this->callReflectionResolver->resolveParametersAcceptor($this->callReflectionResolver->resolveCall($node));
         if (!$parametersAcceptor instanceof \PHPStan\Reflection\ParametersAcceptor) {
             return [];
         }

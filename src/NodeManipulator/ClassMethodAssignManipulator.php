@@ -263,7 +263,7 @@ final class ClassMethodAssignManipulator
             return \false;
         }
         $variableName = $this->nodeNameResolver->getName($variable);
-        $parametersAcceptor = $this->callReflectionResolver->resolveParametersAcceptor($methodReflection, $node);
+        $parametersAcceptor = $this->callReflectionResolver->resolveParametersAcceptor($methodReflection);
         if (!$parametersAcceptor instanceof \PHPStan\Reflection\ParametersAcceptor) {
             return \false;
         }
@@ -302,7 +302,7 @@ final class ClassMethodAssignManipulator
     private function isParameterReferencedInMethodReflection(\PhpParser\Node\Expr\New_ $new, int $argumentPosition) : bool
     {
         $methodReflection = $this->callReflectionResolver->resolveConstructor($new);
-        $parametersAcceptor = $this->callReflectionResolver->resolveParametersAcceptor($methodReflection, $new);
+        $parametersAcceptor = $this->callReflectionResolver->resolveParametersAcceptor($methodReflection);
         if (!$parametersAcceptor instanceof \PHPStan\Reflection\ParametersAcceptor) {
             return \false;
         }

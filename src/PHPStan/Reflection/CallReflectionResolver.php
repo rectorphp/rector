@@ -3,8 +3,6 @@
 declare (strict_types=1);
 namespace Rector\Core\PHPStan\Reflection;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
@@ -65,21 +63,20 @@ final class CallReflectionResolver
         return $classType->getMethod(\Rector\Core\ValueObject\MethodName::CONSTRUCT, $scope);
     }
     /**
-     * @param FuncCall|MethodCall|StaticCall $node
-     * @return MethodReflection|FunctionReflection|null
+     * @param \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $call
+     * @return \PHPStan\Reflection\MethodReflection|\PHPStan\Reflection\FunctionReflection|null
      */
-    public function resolveCall(\PhpParser\Node $node)
+    public function resolveCall($call)
     {
-        if ($node instanceof \PhpParser\Node\Expr\FuncCall) {
-            return $this->resolveFunctionCall($node);
+        if ($call instanceof \PhpParser\Node\Expr\FuncCall) {
+            return $this->resolveFunctionCall($call);
         }
-        return $this->resolveMethodCall($node);
+        return $this->resolveMethodCall($call);
     }
     /**
-     * @param FunctionReflection|MethodReflection|null $reflection
-     * @param FuncCall|MethodCall|StaticCall|New_ $node
+     * @param \PHPStan\Reflection\FunctionReflection|\PHPStan\Reflection\MethodReflection|null $reflection
      */
-    public function resolveParametersAcceptor($reflection, \PhpParser\Node $node) : ?\PHPStan\Reflection\ParametersAcceptor
+    public function resolveParametersAcceptor($reflection) : ?\PHPStan\Reflection\ParametersAcceptor
     {
         if ($reflection === null) {
             return null;
@@ -100,7 +97,7 @@ final class CallReflectionResolver
         return null;
     }
     /**
-     * @return FunctionReflection|MethodReflection|null
+     * @return \PHPStan\Reflection\FunctionReflection|\PHPStan\Reflection\MethodReflection|null
      */
     private function resolveFunctionCall(\PhpParser\Node\Expr\FuncCall $funcCall)
     {
@@ -119,9 +116,9 @@ final class CallReflectionResolver
         return $this->typeToCallReflectionResolverRegistry->resolve($funcCallNameType, $scope);
     }
     /**
-     * @param MethodCall|StaticCall $expr
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $expr
      */
-    private function resolveMethodCall(\PhpParser\Node\Expr $expr) : ?\PHPStan\Reflection\MethodReflection
+    private function resolveMethodCall($expr) : ?\PHPStan\Reflection\MethodReflection
     {
         $scope = $expr->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
         if (!$scope instanceof \PHPStan\Analyser\Scope) {

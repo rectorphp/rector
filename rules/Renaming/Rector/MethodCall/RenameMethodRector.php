@@ -11,7 +11,6 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
-use PHPStan\Type\ObjectType;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\NodeManipulator\ClassManipulator;
 use Rector\Core\Rector\AbstractRector;
@@ -113,10 +112,7 @@ CODE_SAMPLE
         if (!$node instanceof \PhpParser\Node\Stmt\ClassMethod) {
             return \false;
         }
-        if ($this->shouldSkipForAlreadyExistingClassMethod($node, $methodCallRename)) {
-            return \true;
-        }
-        return $this->shouldSkipForExactClassMethodForClassMethodOrTargetInvokePrivate($node, $methodCallRename->getOldObjectType(), $methodCallRename->getNewMethod());
+        return $this->shouldSkipForAlreadyExistingClassMethod($node, $methodCallRename);
     }
     private function shouldSkipForAlreadyExistingClassMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod, \Rector\Renaming\Contract\MethodCallRenameInterface $methodCallRename) : bool
     {
@@ -125,24 +121,5 @@ CODE_SAMPLE
             return \false;
         }
         return (bool) $classLike->getMethod($methodCallRename->getNewMethod());
-    }
-    private function shouldSkipForExactClassMethodForClassMethodOrTargetInvokePrivate(\PhpParser\Node\Stmt\ClassMethod $classMethod, \PHPStan\Type\ObjectType $objectType, string $newMethodName) : bool
-    {
-        $className = $classMethod->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);
-        $methodCalls = $this->nodeRepository->findMethodCallsOnClass($className);
-        $name = $this->getName($classMethod->name);
-        if (isset($methodCalls[$name])) {
-            return \false;
-        }
-        $classMethodClass = $classMethod->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);
-        if ($classMethodClass === $objectType) {
-            return \true;
-        }
-        if ($classMethod->isPublic()) {
-            return \false;
-        }
-        $newClassMethod = clone $classMethod;
-        $newClassMethod->name = new \PhpParser\Node\Identifier($newMethodName);
-        return $newClassMethod->isMagic();
     }
 }
