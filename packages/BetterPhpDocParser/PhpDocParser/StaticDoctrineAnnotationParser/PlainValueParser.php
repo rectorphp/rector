@@ -61,11 +61,11 @@ final class PlainValueParser
         $tokenIterator->next();
 
         // normalize value
-        if ($currentTokenValue === 'false') {
+        if (strtolower($currentTokenValue) === 'false') {
             return new ConstExprFalseNode();
         }
 
-        if ($currentTokenValue === 'true') {
+        if (strtolower($currentTokenValue) === 'true') {
             return new ConstExprTrueNode();
         }
 

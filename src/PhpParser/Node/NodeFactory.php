@@ -42,6 +42,7 @@ use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
+use PHPStan\Reflection\MethodReflection;
 use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
@@ -49,7 +50,9 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Configuration\CurrentNodeProvider;
 use Rector\Core\Exception\NotImplementedYetException;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Php\PhpVersionProvider;
+use Rector\Core\Reflection\FunctionLikeReflectionParser;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -97,7 +100,8 @@ final class NodeFactory
         private StaticTypeMapper $staticTypeMapper,
         private NodeNameResolver $nodeNameResolver,
         private PhpDocTypeChanger $phpDocTypeChanger,
-        private CurrentNodeProvider $currentNodeProvider
+        private CurrentNodeProvider $currentNodeProvider,
+        private FunctionLikeReflectionParser $functionLikeReflectionParser
     ) {
     }
 
@@ -526,6 +530,16 @@ final class NodeFactory
     public function createTrue(): ConstFetch
     {
         return new ConstFetch(new Name('true'));
+    }
+
+    public function createClosureFromMethodReflection(MethodReflection $methodReflection): Closure
+    {
+        $classMethod = $this->functionLikeReflectionParser->parseMethodReflection($methodReflection);
+        if (! $classMethod instanceof ClassMethod) {
+            throw new ShouldNotHappenException();
+        }
+
+        return $this->createClosureFromClassMethod($classMethod);
     }
 
     public function createClassConstFetchFromName(Name $className, string $constantName): ClassConstFetch

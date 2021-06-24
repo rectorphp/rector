@@ -116,22 +116,15 @@ CODE_SAMPLE
 
         $nativeReflectionClass = $classReflection->getNativeReflection();
 
-        $reflectionMethod = $nativeReflectionClass->getMethod($arrayCallable->getMethod());
-        $this->privatizeClassMethod($reflectionMethod);
+        $nativeReflectionMethod = $nativeReflectionClass->getMethod($arrayCallable->getMethod());
+        $this->privatizeClassMethod($nativeReflectionMethod);
 
-        if ($reflectionMethod->getNumberOfParameters() > 0) {
-            $classMethod = $this->nodeRepository->findClassMethod(
-                $arrayCallable->getClass(),
-                $arrayCallable->getMethod()
-            );
-            if ($classMethod !== null) {
-                return $this->nodeFactory->createClosureFromClassMethod($classMethod);
-            }
-
-            return null;
+        if ($nativeReflectionMethod->getNumberOfParameters() === 0) {
+            return new MethodCall(new Variable('this'), $arrayCallable->getMethod());
         }
 
-        return new MethodCall(new Variable('this'), $arrayCallable->getMethod());
+        $methodReflection = $classReflection->getNativeMethod($arrayCallable->getMethod());
+        return $this->nodeFactory->createClosureFromMethodReflection($methodReflection);
     }
 
     private function isAssignedToNetteMagicOnProperty(Array_ $array): bool
