@@ -52,11 +52,6 @@ final class ParsedNodeCollector
     private array $classes = [];
 
     /**
-     * @var array<string, ClassConst[]>
-     */
-    private array $constantsByType = [];
-
-    /**
      * @var Interface_[]
      */
     private array $interfaces = [];
@@ -124,15 +119,6 @@ final class ParsedNodeCollector
         return null;
     }
 
-    public function findClassConstant(string $className, string $constantName): ?ClassConst
-    {
-        if (\str_contains($constantName, '\\')) {
-            throw new ShouldNotHappenException(sprintf('Switched arguments in "%s"', __METHOD__));
-        }
-
-        return $this->constantsByType[$className][$constantName] ?? null;
-    }
-
     public function isCollectableNode(Node $node): bool
     {
         foreach (self::COLLECTABLE_NODE_TYPES as $collectableNodeType) {
@@ -157,33 +143,10 @@ final class ParsedNodeCollector
             return;
         }
 
-        if ($node instanceof ClassConst) {
-            $this->addClassConstant($node);
-            return;
-        }
-
         if ($node instanceof StaticCall) {
             $this->staticCalls[] = $node;
             return;
         }
-    }
-
-    public function findClassConstByClassConstFetch(ClassConstFetch $classConstFetch): ?ClassConst
-    {
-        $className = $this->nodeNameResolver->getName($classConstFetch->class);
-        if ($className === null) {
-            return null;
-        }
-
-        $class = $this->resolveClassConstant($classConstFetch, $className);
-        if ($class === null) {
-            return null;
-        }
-
-        /** @var string $constantName */
-        $constantName = $this->nodeNameResolver->getName($classConstFetch->name);
-
-        return $this->findClassConstant($class, $constantName);
     }
 
     /**
@@ -223,31 +186,5 @@ final class ParsedNodeCollector
         } elseif ($classLike instanceof Trait_) {
             $this->traits[$name] = $classLike;
         }
-    }
-
-    private function addClassConstant(ClassConst $classConst): void
-    {
-        $className = $classConst->getAttribute(AttributeKey::CLASS_NAME);
-        if ($className === null) {
-            // anonymous class constant
-            return;
-        }
-
-        $constantName = $this->nodeNameResolver->getName($classConst);
-
-        $this->constantsByType[$className][$constantName] = $classConst;
-    }
-
-    private function resolveClassConstant(ClassConstFetch $classConstFetch, string $className): ?string
-    {
-        if ($className === 'self') {
-            return $classConstFetch->getAttribute(AttributeKey::CLASS_NAME);
-        }
-
-        if ($className === 'parent') {
-            return $this->parentClassScopeResolver->resolveParentClassName($classConstFetch);
-        }
-
-        return $className;
     }
 }

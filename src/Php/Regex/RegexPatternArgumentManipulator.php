@@ -6,6 +6,7 @@ namespace Rector\Core\Php\Regex;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
+use PhpParser\Node\Const_;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\ClassConstFetch;
@@ -13,12 +14,11 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
-use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\ObjectType;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\NodeCollector\NodeCollector\NodeRepository;
+use Rector\Core\PhpParser\NodeFinder\LocalConstantFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -54,7 +54,7 @@ final class RegexPatternArgumentManipulator
         private BetterNodeFinder $betterNodeFinder,
         private NodeNameResolver $nodeNameResolver,
         private NodeTypeResolver $nodeTypeResolver,
-        private NodeRepository $nodeRepository,
+        private LocalConstantFinder $localConstantFinder,
         private NodeComparator $nodeComparator
     ) {
     }
@@ -143,7 +143,7 @@ final class RegexPatternArgumentManipulator
         }
 
         if ($expr instanceof ClassConstFetch) {
-            return $this->resolveClassConstFetchValue($expr);
+            return $this->matchClassConstFetchStringValue($expr);
         }
 
         return [];
@@ -175,15 +175,15 @@ final class RegexPatternArgumentManipulator
     /**
      * @return String_[]
      */
-    private function resolveClassConstFetchValue(ClassConstFetch $classConstFetch): array
+    private function matchClassConstFetchStringValue(ClassConstFetch $classConstFetch): array
     {
-        $classConstNode = $this->nodeRepository->findClassConstByClassConstFetch($classConstFetch);
-        if (! $classConstNode instanceof ClassConst) {
+        $classConst = $this->localConstantFinder->match($classConstFetch);
+        if (! $classConst instanceof Const_) {
             return [];
         }
 
-        if ($classConstNode->consts[0]->value instanceof String_) {
-            return [$classConstNode->consts[0]->value];
+        if ($classConst->value instanceof String_) {
+            return [$classConst->value];
         }
 
         return [];

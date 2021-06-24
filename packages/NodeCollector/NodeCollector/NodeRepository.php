@@ -8,14 +8,12 @@ use Nette\Utils\Arrays;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Interface_;
@@ -288,11 +286,6 @@ final class NodeRepository
         return $this->parsedNodeCollector->findClass($name);
     }
 
-    public function findClassConstByClassConstFetch(ClassConstFetch $classConstFetch): ?ClassConst
-    {
-        return $this->parsedNodeCollector->findClassConstByClassConstFetch($classConstFetch);
-    }
-
     /**
      * @param PropertyFetch|StaticPropertyFetch $expr
      */
@@ -325,11 +318,6 @@ final class NodeRepository
     public function getClasses(): array
     {
         return $this->parsedNodeCollector->getClasses();
-    }
-
-    public function findClassConstant(string $className, string $constantName): ?ClassConst
-    {
-        return $this->parsedNodeCollector->findClassConstant($className, $constantName);
     }
 
     public function findTrait(string $name): ?Trait_
