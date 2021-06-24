@@ -4,24 +4,19 @@ declare(strict_types=1);
 
 namespace Rector\NodeCollector\NodeCollector;
 
-use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
-use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Trait_;
-use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\TypeWithClassName;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
-use ReflectionMethod;
 
 /**
  * This service contains all the parsed nodes. E.g. all the functions, method call, classes, static calls etc. It's
@@ -29,11 +24,6 @@ use ReflectionMethod;
  */
 final class NodeRepository
 {
-    /**
-     * @var array<class-string, ClassMethod[]>
-     */
-    private array $classMethodsByType = [];
-
     public function __construct(
         private ParsedPropertyFetchNodeCollector $parsedPropertyFetchNodeCollector,
         private NodeNameResolver $nodeNameResolver,
@@ -41,51 +31,6 @@ final class NodeRepository
         private ReflectionProvider $reflectionProvider,
         private NodeTypeResolver $nodeTypeResolver
     ) {
-    }
-
-    public function collect(Node $node): void
-    {
-        if ($node instanceof ClassMethod) {
-            $this->addMethod($node);
-        }
-    }
-
-    public function findClassMethod(string $className, string $methodName): ?ClassMethod
-    {
-        if (\str_contains($methodName, '\\')) {
-            $message = sprintf('Class and method arguments are switched in "%s"', __METHOD__);
-            throw new ShouldNotHappenException($message);
-        }
-
-        if (isset($this->classMethodsByType[$className][$methodName])) {
-            return $this->classMethodsByType[$className][$methodName];
-        }
-
-        if (! $this->reflectionProvider->hasClass($className)) {
-            return null;
-        }
-
-        $classReflection = $this->reflectionProvider->getClass($className);
-        foreach ($classReflection->getParents() as $parentClassReflection) {
-            if (isset($this->classMethodsByType[$parentClassReflection->getName()][$methodName])) {
-                return $this->classMethodsByType[$parentClassReflection->getName()][$methodName];
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * @param MethodReflection|ReflectionMethod $methodReflection
-     */
-    public function findClassMethodByMethodReflection(object $methodReflection): ?ClassMethod
-    {
-        $methodName = $methodReflection->getName();
-
-        $declaringClass = $methodReflection->getDeclaringClass();
-        $className = $declaringClass->getName();
-
-        return $this->findClassMethod($className, $methodName);
     }
 
     /**
@@ -237,19 +182,6 @@ final class NodeRepository
         return $this->findClass($classLikeName) ?? $this->findInterface($classLikeName) ?? $this->findTrait(
             $classLikeName
         );
-    }
-
-    private function addMethod(ClassMethod $classMethod): void
-    {
-        $className = $classMethod->getAttribute(AttributeKey::CLASS_NAME);
-
-        // anonymous
-        if ($className === null) {
-            return;
-        }
-
-        $methodName = $this->nodeNameResolver->getName($classMethod);
-        $this->classMethodsByType[$className][$methodName] = $classMethod;
     }
 
     private function isChildOrEqualClassLike(string $desiredClass, ?string $currentClassName): bool

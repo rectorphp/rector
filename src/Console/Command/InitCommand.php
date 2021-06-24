@@ -6,7 +6,9 @@ namespace Rector\Core\Console\Command;
 
 use Rector\Core\Configuration\Option;
 use Rector\Core\Contract\Template\TemplateResolverInterface;
-use Rector\Core\Template\TemplateTypeNotFound;
+use Rector\Core\Exception\Template\TemplateTypeNotFoundException;
+use Rector\Core\Template\DefaultResolver;
+use Stringable;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -33,12 +35,13 @@ final class InitCommand extends Command
     protected function configure(): void
     {
         $this->setDescription('Generate rector.php configuration file');
+
         $this->addOption(
             Option::TEMPLATE_TYPE,
             null,
             InputOption::VALUE_OPTIONAL,
             'A template type like default, nette, doctrine etc.',
-            'default'
+            DefaultResolver::TYPE,
         );
     }
 
@@ -75,8 +78,16 @@ final class InitCommand extends Command
         }
 
         if ($rectorTemplateFilePath === null) {
-            $availableTemplateTypes = implode(', ', $this->templateResolvers);
-            throw TemplateTypeNotFound::typeNotFound($templateType, $availableTemplateTypes);
+            $templateResolverTypes = [];
+            foreach ($this->templateResolvers as $templateResolver) {
+                if (method_exists($templateResolver, 'getType')) {
+                    $templateResolverTypes[] = $templateResolver->getType();
+                } elseif ($templateResolver instanceof Stringable) {
+                    $templateResolverTypes[] = (string) $templateResolver;
+                }
+            }
+
+            throw new TemplateTypeNotFoundException($templateType, $templateResolverTypes);
         }
 
         return $rectorTemplateFilePath;

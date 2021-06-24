@@ -21,8 +21,6 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\NodeFinder\PropertyFetchFinder;
 use Rector\Core\PHPStan\Reflection\CallReflectionResolver;
-use Rector\Core\Reflection\FunctionLikeReflectionParser;
-use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\ReadWrite\Guard\VariableToConstantGuard;
 use Rector\ReadWrite\NodeAnalyzer\ReadWritePropertyAnalyzer;
@@ -41,8 +39,6 @@ final class PropertyManipulator
         private PhpDocInfoFactory $phpDocInfoFactory,
         private TypeChecker $typeChecker,
         private PropertyFetchFinder $propertyFetchFinder,
-        private NodeRepository $nodeRepository,
-        private FunctionLikeReflectionParser $functionLikeReflectionParser,
         private CallReflectionResolver $callReflectionResolver,
     ) {
     }

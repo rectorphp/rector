@@ -110,20 +110,6 @@ final class ClassMethodManipulator
     }
 
     /**
-     * Is method actually static, or has some $this-> calls?
-     */
-    public function isStaticClassMethod(ClassMethod $classMethod): bool
-    {
-        return (bool) $this->betterNodeFinder->findFirst((array) $classMethod->stmts, function (Node $node): bool {
-            if (! $node instanceof Variable) {
-                return false;
-            }
-
-            return $this->nodeNameResolver->isName($node, 'this');
-        });
-    }
-
-    /**
      * @param string[] $possibleNames
      */
     public function addMethodParameterIfMissing(Node $node, ObjectType $objectType, array $possibleNames): string

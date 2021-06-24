@@ -8,14 +8,12 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\MethodReflection;
-use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class ParentClassMethodTypeOverrideGuard
 {
     public function __construct(
-        private NodeRepository $nodeRepository,
         private NodeNameResolver $nodeNameResolver
     ) {
     }
@@ -43,12 +41,14 @@ final class ParentClassMethodTypeOverrideGuard
                 continue;
             }
 
-            $parentClassMethodReflection = $ancestorClassReflection->getMethod($methodName, $scope);
-            $parentClassMethod = $this->nodeRepository->findClassMethodByMethodReflection(
-                $parentClassMethodReflection
-            );
+            $fileName = $ancestorClassReflection->getFileName();
 
-            if (! $parentClassMethod instanceof ClassMethod) {
+            // PHP internal class
+            if ($fileName === false) {
+                continue;
+            }
+
+            if (str_contains($fileName, '/vendor/')) {
                 return true;
             }
         }
@@ -66,16 +66,15 @@ final class ParentClassMethodTypeOverrideGuard
             return true;
         }
 
-        $parentClassMethod = $this->nodeRepository->findClassMethodByMethodReflection(
-            $parentClassMethodReflection
-        );
+        $classReflection = $parentClassMethodReflection->getDeclaringClass();
+        $fileName = $classReflection->getFileName();
 
-        // if null, we're unable to override → skip it
-        if (! $parentClassMethod instanceof ClassMethod) {
-            return true;
+        // probably internal
+        if ($fileName === false) {
+            return false;
         }
 
-        return $parentClassMethod->returnType === null;
+        return ! str_contains($fileName, '/vendor/');
     }
 
     private function getParentClassMethod(ClassMethod $classMethod): ?MethodReflection

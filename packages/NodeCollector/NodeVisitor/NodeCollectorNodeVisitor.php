@@ -25,7 +25,6 @@ final class NodeCollectorNodeVisitor extends NodeVisitorAbstract
             $this->parsedNodeCollector->collect($node);
         }
 
-        $this->nodeRepository->collect($node);
         $this->parsedPropertyFetchNodeCollector->collect($node);
 
         return null;

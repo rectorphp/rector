@@ -5,19 +5,13 @@ declare(strict_types=1);
 namespace Rector\Core\Template;
 
 use Rector\Core\Contract\Template\TemplateResolverInterface;
-use Stringable;
 
-final class DefaultResolver implements TemplateResolverInterface, Stringable
+final class DefaultResolver implements TemplateResolverInterface
 {
     /**
      * @var string
      */
-    private const TYPE = 'default';
-
-    public function __toString(): string
-    {
-        return self::TYPE;
-    }
+    public const TYPE = 'default';
 
     public function provide(): string
     {
@@ -26,6 +20,11 @@ final class DefaultResolver implements TemplateResolverInterface, Stringable
 
     public function supports(string $type): bool
     {
-        return $type === self::TYPE || $type === '';
+        return $type === self::TYPE;
+    }
+
+    public function getType(): string
+    {
+        return self::TYPE;
     }
 }

@@ -10,7 +10,6 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
 use Rector\Core\NodeManipulator\ClassMethodManipulator;
@@ -113,21 +112,8 @@ CODE_SAMPLE
 
         if ($this->isInstantiable($className)) {
             $new = new New_($node->class);
-
             return new MethodCall($new, $node->name, $node->args);
         }
-
-        // can we add static to method?
-        $classMethodNode = $this->nodeRepository->findClassMethod($className, $methodName);
-        if (! $classMethodNode instanceof ClassMethod) {
-            return null;
-        }
-
-        if ($this->classMethodManipulator->isStaticClassMethod($classMethodNode)) {
-            return null;
-        }
-
-        $this->visibilityManipulator->makeStatic($classMethodNode);
 
         return null;
     }

@@ -37,6 +37,9 @@ parameters:
     checkGenericClassInNonGenericObjectType: false
 
     excludes_analyse:
+        # temporary stinrgable migration from template type provider
+        - src/Console/Command/InitCommand.php
+
         - */config.php
         - tests/debug_functions.php
 
