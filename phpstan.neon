@@ -500,3 +500,7 @@ parameters:
 
         # generics single place
         - '#Method Rector\\Php80\\NodeResolver\\ArgumentSorter\:\:sortArgsByExpectedParamOrder\(\) should return array<T of PhpParser\\Node\\Arg\|PhpParser\\Node\\Param\> but returns array<PhpParser\\Node\\Arg\|PhpParser\\Node\\Param\>#'
+
+        # resolve duplication later
+        - '#Class with base "StaticTypeMapper" name is already used in "Rector\\StaticTypeMapper\\StaticTypeMapper", "Rector\\PHPStanStaticTypeMapper\\TypeMapper\\StaticTypeMapper"\. Use unique name to make classes easy to recognize#'
+        - '#Class with base "UnionTypeMapper" name is already used in "Rector\\StaticTypeMapper\\PhpDocParser\\UnionTypeMapper", "Rector\\PHPStanStaticTypeMapper\\TypeMapper\\UnionTypeMapper"\. Use unique name to make classes easy to recognize#'

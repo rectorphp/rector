@@ -6,7 +6,6 @@ namespace Rector\NodeCollector\NodeCollector;
 
 use Nette\Utils\Arrays;
 use PhpParser\Node;
-use PhpParser\Node\Attribute;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ClassConstFetch;
@@ -19,7 +18,6 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Trait_;
@@ -29,7 +27,6 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
-use PHPStan\Type\TypeUtils;
 use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
 use Rector\Core\Exception\ShouldNotHappenException;
@@ -53,11 +50,6 @@ final class NodeRepository
     private array $classMethodsByType = [];
 
     /**
-     * @var array<string, Function_>
-     */
-    private array $functionsByName = [];
-
-    /**
      * @var array<class-string, array<array<MethodCall|StaticCall>>>
      */
     private array $callsByTypeAndMethod = [];
@@ -68,11 +60,6 @@ final class NodeRepository
      * @var array<string, array<string, ArrayCallable[]>>
      */
     private array $arrayCallablesByTypeAndMethod = [];
-
-    /**
-     * @var array<string, Attribute[]>
-     */
-    private array $attributes = [];
 
     public function __construct(
         private ArrayCallableMethodReferenceAnalyzer $arrayCallableMethodReferenceAnalyzer,
@@ -101,54 +88,6 @@ final class NodeRepository
         if ($node instanceof MethodCall || $node instanceof StaticCall) {
             $this->addCall($node);
         }
-
-        if ($node instanceof Function_) {
-            $functionName = $this->nodeNameResolver->getName($node);
-            $this->functionsByName[$functionName] = $node;
-        }
-
-        if ($node instanceof Attribute) {
-            $attributeClass = $this->nodeNameResolver->getName($node->name);
-            $this->attributes[$attributeClass][] = $node;
-        }
-    }
-
-    public function findFunction(string $name): ?Function_
-    {
-        return $this->functionsByName[$name] ?? null;
-    }
-
-    /**
-     * @return StaticCall[]
-     */
-    public function findStaticCallsByClassMethod(ClassMethod $classMethod): array
-    {
-        $calls = $this->findCallsByClassMethod($classMethod);
-        return array_filter($calls, fn (Node $node): bool => $node instanceof StaticCall);
-    }
-
-    /**
-     * @deprecated Using external file node modification might result in unexpected output. Use reflection to read-only data instead
-     * @see \Rector\Core\PHPStan\Reflection\CallReflectionResolver::resolveCall()
-     */
-    public function findClassMethodByStaticCall(StaticCall $staticCall): ?ClassMethod
-    {
-        $method = $this->nodeNameResolver->getName($staticCall->name);
-        if ($method === null) {
-            return null;
-        }
-
-        $objectType = $this->nodeTypeResolver->resolve($staticCall->class);
-        $classes = TypeUtils::getDirectClassNames($objectType);
-
-        foreach ($classes as $class) {
-            $possibleClassMethod = $this->findClassMethod($class, $method);
-            if ($possibleClassMethod !== null) {
-                return $possibleClassMethod;
-            }
-        }
-
-        return null;
     }
 
     public function findClassMethod(string $className, string $methodName): ?ClassMethod
@@ -233,6 +172,11 @@ final class NodeRepository
     }
 
     /**
+     * @deprecated Collecting all nodes it not safe for paralel run and static reflection
+     *
+     * Use reflection instead,
+     * @see \Rector\Core\PHPStan\Reflection\CallReflectionResolver::resolveCall()
+     *
      * @return MethodCall[]|StaticCall[]|ArrayCallable[]
      */
     public function findCallsByClassMethod(ClassMethod $classMethod): array
@@ -344,36 +288,9 @@ final class NodeRepository
         return $this->parsedNodeCollector->findClass($name);
     }
 
-    /**
-     * Do not modify node in another file, that could result in unexpected outcome
-     * @deprecated Use reflection instead
-     */
-    public function findClassMethodByMethodCall(MethodCall $methodCall): ?ClassMethod
-    {
-        $className = $this->resolveCallerClassName($methodCall);
-        if ($className === null) {
-            return null;
-        }
-
-        $methodName = $this->nodeNameResolver->getName($methodCall->name);
-        if ($methodName === null) {
-            return null;
-        }
-
-        return $this->findClassMethod($className, $methodName);
-    }
-
     public function findClassConstByClassConstFetch(ClassConstFetch $classConstFetch): ?ClassConst
     {
         return $this->parsedNodeCollector->findClassConstByClassConstFetch($classConstFetch);
-    }
-
-    /**
-     * @return Attribute[]
-     */
-    public function findAttributes(string $class): array
-    {
-        return $this->attributes[$class] ?? [];
     }
 
     /**

@@ -52,7 +52,7 @@ final class ParsedNodeCollector
     private array $classes = [];
 
     /**
-     * @var ClassConst[][]
+     * @var array<string, ClassConst[]>
      */
     private array $constantsByType = [];
 

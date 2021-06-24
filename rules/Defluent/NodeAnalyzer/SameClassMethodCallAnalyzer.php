@@ -5,15 +5,14 @@ declare(strict_types=1);
 namespace Rector\Defluent\NodeAnalyzer;
 
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Reflection\MethodReflection;
+use Rector\Core\PHPStan\Reflection\CallReflectionResolver;
 use Rector\Defluent\Contract\ValueObject\FirstCallFactoryAwareInterface;
-use Rector\NodeCollector\NodeCollector\NodeRepository;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class SameClassMethodCallAnalyzer
 {
     public function __construct(
-        private NodeRepository $nodeRepository
+        private CallReflectionResolver $callReflectionResolver
     ) {
     }
 
@@ -25,9 +24,11 @@ final class SameClassMethodCallAnalyzer
         // are method calls located in the same class?
         $classOfClassMethod = [];
         foreach ($chainMethodCalls as $chainMethodCall) {
-            $classMethod = $this->nodeRepository->findClassMethodByMethodCall($chainMethodCall);
-            if ($classMethod instanceof ClassMethod) {
-                $classOfClassMethod[] = $classMethod->getAttribute(AttributeKey::CLASS_NAME);
+            $functionLikeReflection = $this->callReflectionResolver->resolveCall($chainMethodCall);
+
+            if ($functionLikeReflection instanceof MethodReflection) {
+                $declaringClass = $functionLikeReflection->getDeclaringClass();
+                $classOfClassMethod[] = $declaringClass->getName();
             } else {
                 $classOfClassMethod[] = null;
             }

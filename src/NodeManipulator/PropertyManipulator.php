@@ -16,11 +16,11 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Stmt\ClassLike;
-use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\NodeFinder\PropertyFetchFinder;
+use Rector\Core\PHPStan\Reflection\CallReflectionResolver;
 use Rector\Core\Reflection\FunctionLikeReflectionParser;
 use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -42,7 +42,8 @@ final class PropertyManipulator
         private TypeChecker $typeChecker,
         private PropertyFetchFinder $propertyFetchFinder,
         private NodeRepository $nodeRepository,
-        private FunctionLikeReflectionParser $functionLikeReflectionParser
+        private FunctionLikeReflectionParser $functionLikeReflectionParser,
+        private CallReflectionResolver $callReflectionResolver,
     ) {
     }
 
@@ -123,26 +124,16 @@ final class PropertyManipulator
         return $this->assignManipulator->isLeftPartOfAssign($expr);
     }
 
-    /**
-     * @param MethodCall|StaticCall $node
-     */
-    private function isFoundByRefParam(Node $node): bool
+    private function isFoundByRefParam(MethodCall | StaticCall $node): bool
     {
-        $classMethod = $node instanceof MethodCall
-            ? $this->nodeRepository->findClassMethodByMethodCall($node)
-            : $this->nodeRepository->findClassMethodByStaticCall($node);
-
-        if (! $classMethod instanceof ClassMethod) {
-            $classMethod = $this->functionLikeReflectionParser->parseCaller($node);
-        }
-
-        if (! $classMethod instanceof ClassMethod) {
+        $functionLikeReflection = $this->callReflectionResolver->resolveCall($node);
+        if ($functionLikeReflection === null) {
             return false;
         }
 
-        $params = $classMethod->getParams();
-        foreach ($params as $param) {
-            if ($param->byRef) {
+        $parametersAcceptor = $functionLikeReflection->getVariants()[0];
+        foreach ($parametersAcceptor->getParameters() as $parameterReflection) {
+            if ($parameterReflection->passedByReference()->yes()) {
                 return true;
             }
         }

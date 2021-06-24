@@ -5,10 +5,18 @@ declare(strict_types=1);
 namespace Rector\DeadCode\Rector\ClassMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
+use PHPStan\Type\TypeWithClassName;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\MethodName;
+use Rector\NodeCollector\NodeAnalyzer\ArrayCallableMethodReferenceAnalyzer;
+use Rector\NodeCollector\ValueObject\ArrayCallable;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -18,6 +26,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class RemoveUnusedPrivateMethodRector extends AbstractRector
 {
+    public function __construct(
+        private ArrayCallableMethodReferenceAnalyzer $arrayCallableMethodReferenceAnalyzer
+    ) {
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove unused private method', [
@@ -67,8 +80,25 @@ CODE_SAMPLE
             return null;
         }
 
-        $calls = $this->nodeRepository->findCallsByClassMethod($node);
-        if ($calls !== []) {
+        $class = $node->getAttribute(AttributeKey::CLASS_NODE);
+        if (! $class instanceof Class_) {
+            return null;
+        }
+
+        $classMethodName = $this->nodeNameResolver->getName($node);
+
+        // 1. direct normal calls
+        if ($this->isClassMethodCalledInLocalMethodCall($class, $classMethodName)) {
+            return null;
+        }
+
+        // 2. direct static calls
+        if ($this->isClassMethodUsedInLocalStaticCall($class, $classMethodName)) {
+            return null;
+        }
+
+        // 3. magic array calls!
+        if ($this->isClassMethodCalledInLocalArrayCall($class, $node)) {
             return null;
         }
 
@@ -112,6 +142,79 @@ CODE_SAMPLE
             return true;
         }
 
-        return $classReflection->hasMethod('__call');
+        return $classReflection->hasMethod(MethodName::CALL);
+    }
+
+    private function isClassMethodUsedInLocalStaticCall(Class_ $class, string $classMethodName): bool
+    {
+        $className = $this->getName($class);
+
+        /** @var StaticCall[] $staticCalls */
+        $staticCalls = $this->betterNodeFinder->findInstanceOf($class, StaticCall::class);
+        foreach ($staticCalls as $staticCall) {
+            $callerType = $this->nodeTypeResolver->resolve($staticCall->class);
+            if (! $callerType instanceof TypeWithClassName) {
+                continue;
+            }
+
+            if ($callerType->getClassName() !== $className) {
+                continue;
+            }
+
+            if ($this->isName($staticCall->name, $classMethodName)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function isClassMethodCalledInLocalMethodCall(Class_ $class, string $classMethodName): bool
+    {
+        $className = $this->getName($class);
+
+        /** @var MethodCall[] $methodCalls */
+        $methodCalls = $this->betterNodeFinder->findInstanceOf($class, MethodCall::class);
+        foreach ($methodCalls as $methodCall) {
+            $callerType = $this->nodeTypeResolver->resolve($methodCall->var);
+            if (! $callerType instanceof TypeWithClassName) {
+                continue;
+            }
+
+            if ($callerType->getClassName() !== $className) {
+                continue;
+            }
+
+            // the method is used
+            if ($this->isName($methodCall->name, $classMethodName)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function isClassMethodCalledInLocalArrayCall(Class_ $class, ClassMethod $classMethod): bool
+    {
+        /** @var Array_[] $arrays */
+        $arrays = $this->betterNodeFinder->findInstanceOf($class, Array_::class);
+        foreach ($arrays as $array) {
+            $arrayCallable = $this->arrayCallableMethodReferenceAnalyzer->match($array);
+            if (! $arrayCallable instanceof ArrayCallable) {
+                continue;
+            }
+
+            // is current class method?
+            if (! $this->isName($class, $arrayCallable->getClass())) {
+                continue;
+            }
+
+            // the method is used
+            if ($this->nodeNameResolver->isName($classMethod->name, $arrayCallable->getMethod())) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

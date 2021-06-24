@@ -97,10 +97,6 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->isClassMethodWithOnlyLocalStaticCalls($classMethod)) {
-            return null;
-        }
-
         $scope = $classMethod->getAttribute(AttributeKey::SCOPE);
 
         $classReflection = $scope->getClassReflection();
@@ -142,30 +138,6 @@ CODE_SAMPLE
         }
 
         return null;
-    }
-
-    private function isClassMethodWithOnlyLocalStaticCalls(ClassMethod $classMethod): bool
-    {
-        $staticCalls = $this->nodeRepository->findStaticCallsByClassMethod($classMethod);
-
-        // get static staticCalls
-        return $this->haveSharedClass($classMethod, $staticCalls);
-    }
-
-    /**
-     * @param StaticCall[] $staticCalls
-     */
-    private function haveSharedClass(ClassMethod $classMethod, array $staticCalls): bool
-    {
-        $mainNodeClass = $classMethod->getAttribute(AttributeKey::CLASS_NAME);
-        foreach ($staticCalls as $staticCall) {
-            $nodeClass = $staticCall->getAttribute(AttributeKey::CLASS_NAME);
-            if ($mainNodeClass !== $nodeClass) {
-                return false;
-            }
-        }
-
-        return true;
     }
 
     private function isInStaticClassMethod(StaticCall $staticCall): bool
