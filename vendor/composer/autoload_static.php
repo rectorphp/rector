@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit6515764947f388ff945f44d9f30180c8
+class ComposerStaticInitec2b5ed5181d3276f344acf3c733d1a8
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -2227,6 +2227,7 @@ class ComposerStaticInit6515764947f388ff945f44d9f30180c8
         'Rector\\Core\\PhpParser\\Comparing\\ConditionSearcher' => __DIR__ . '/../..' . '/src/PhpParser/Comparing/ConditionSearcher.php',
         'Rector\\Core\\PhpParser\\Comparing\\NodeComparator' => __DIR__ . '/../..' . '/src/PhpParser/Comparing/NodeComparator.php',
         'Rector\\Core\\PhpParser\\NodeFinder\\LocalConstantFinder' => __DIR__ . '/../..' . '/src/PhpParser/NodeFinder/LocalConstantFinder.php',
+        'Rector\\Core\\PhpParser\\NodeFinder\\LocalMethodCallFinder' => __DIR__ . '/../..' . '/src/PhpParser/NodeFinder/LocalMethodCallFinder.php',
         'Rector\\Core\\PhpParser\\NodeFinder\\PropertyFetchFinder' => __DIR__ . '/../..' . '/src/PhpParser/NodeFinder/PropertyFetchFinder.php',
         'Rector\\Core\\PhpParser\\NodeTransformer' => __DIR__ . '/../..' . '/src/PhpParser/NodeTransformer.php',
         'Rector\\Core\\PhpParser\\NodeTraverser\\RectorNodeTraverser' => __DIR__ . '/../..' . '/src/PhpParser/NodeTraverser/RectorNodeTraverser.php',
@@ -2625,7 +2626,6 @@ class ComposerStaticInit6515764947f388ff945f44d9f30180c8
         'Rector\\Naming\\Naming\\OverridenExistingNamesResolver' => __DIR__ . '/../..' . '/rules/Naming/Naming/OverridenExistingNamesResolver.php',
         'Rector\\Naming\\Naming\\PropertyNaming' => __DIR__ . '/../..' . '/rules/Naming/Naming/PropertyNaming.php',
         'Rector\\Naming\\Naming\\VariableNaming' => __DIR__ . '/../..' . '/rules/Naming/Naming/VariableNaming.php',
-        'Rector\\Naming\\NodeRenamer\\MethodCallRenamer' => __DIR__ . '/../..' . '/rules/Naming/NodeRenamer/MethodCallRenamer.php',
         'Rector\\Naming\\ParamRenamer\\ParamRenamer' => __DIR__ . '/../..' . '/rules/Naming/ParamRenamer/ParamRenamer.php',
         'Rector\\Naming\\PhpArray\\ArrayFilter' => __DIR__ . '/../..' . '/rules/Naming/PhpArray/ArrayFilter.php',
         'Rector\\Naming\\PhpDoc\\VarTagValueNodeRenamer' => __DIR__ . '/../..' . '/rules/Naming/PhpDoc/VarTagValueNodeRenamer.php',
@@ -2636,8 +2636,6 @@ class ComposerStaticInit6515764947f388ff945f44d9f30180c8
         'Rector\\Naming\\PropertyRenamer\\PropertyRenamer' => __DIR__ . '/../..' . '/rules/Naming/PropertyRenamer/PropertyRenamer.php',
         'Rector\\Naming\\RectorNamingInflector' => __DIR__ . '/../..' . '/rules/Naming/RectorNamingInflector.php',
         'Rector\\Naming\\Rector\\Assign\\RenameVariableToMatchMethodCallReturnTypeRector' => __DIR__ . '/../..' . '/rules/Naming/Rector/Assign/RenameVariableToMatchMethodCallReturnTypeRector.php',
-        'Rector\\Naming\\Rector\\ClassMethod\\MakeGetterClassMethodNameStartWithGetRector' => __DIR__ . '/../..' . '/rules/Naming/Rector/ClassMethod/MakeGetterClassMethodNameStartWithGetRector.php',
-        'Rector\\Naming\\Rector\\ClassMethod\\MakeIsserClassMethodNameStartWithIsRector' => __DIR__ . '/../..' . '/rules/Naming/Rector/ClassMethod/MakeIsserClassMethodNameStartWithIsRector.php',
         'Rector\\Naming\\Rector\\ClassMethod\\RenameParamToMatchTypeRector' => __DIR__ . '/../..' . '/rules/Naming/Rector/ClassMethod/RenameParamToMatchTypeRector.php',
         'Rector\\Naming\\Rector\\ClassMethod\\RenameVariableToMatchNewTypeRector' => __DIR__ . '/../..' . '/rules/Naming/Rector/ClassMethod/RenameVariableToMatchNewTypeRector.php',
         'Rector\\Naming\\Rector\\Class_\\RenamePropertyToMatchTypeRector' => __DIR__ . '/../..' . '/rules/Naming/Rector/Class_/RenamePropertyToMatchTypeRector.php',
@@ -3520,7 +3518,6 @@ class ComposerStaticInit6515764947f388ff945f44d9f30180c8
         'Rector\\TypeDeclaration\\Rector\\ClassMethod\\AddArrayReturnDocTypeRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/AddArrayReturnDocTypeRector.php',
         'Rector\\TypeDeclaration\\Rector\\ClassMethod\\AddMethodCallBasedStrictParamTypeRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/AddMethodCallBasedStrictParamTypeRector.php',
         'Rector\\TypeDeclaration\\Rector\\ClassMethod\\AddParamTypeDeclarationRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/AddParamTypeDeclarationRector.php',
-        'Rector\\TypeDeclaration\\Rector\\ClassMethod\\AddParamTypeFromCallersRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/AddParamTypeFromCallersRector.php',
         'Rector\\TypeDeclaration\\Rector\\ClassMethod\\AddReturnTypeDeclarationRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/AddReturnTypeDeclarationRector.php',
         'Rector\\TypeDeclaration\\Rector\\ClassMethod\\AddVoidReturnTypeWhereNoReturnRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/AddVoidReturnTypeWhereNoReturnRector.php',
         'Rector\\TypeDeclaration\\Rector\\ClassMethod\\ReturnNeverTypeRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/ReturnNeverTypeRector.php',
@@ -3876,9 +3873,9 @@ class ComposerStaticInit6515764947f388ff945f44d9f30180c8
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit6515764947f388ff945f44d9f30180c8::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit6515764947f388ff945f44d9f30180c8::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit6515764947f388ff945f44d9f30180c8::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitec2b5ed5181d3276f344acf3c733d1a8::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitec2b5ed5181d3276f344acf3c733d1a8::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitec2b5ed5181d3276f344acf3c733d1a8::$classMap;
 
         }, null, ClassLoader::class);
     }

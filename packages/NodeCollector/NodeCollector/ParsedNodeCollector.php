@@ -7,7 +7,6 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassLike;
@@ -16,7 +15,6 @@ use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Trait_;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\NodeAnalyzer\ClassAnalyzer;
-use Rector\NodeCollector\ScopeResolver\ParentClassScopeResolver;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 /**
@@ -38,7 +36,6 @@ final class ParsedNodeCollector
         \PhpParser\Node\Stmt\Trait_::class,
         \PhpParser\Node\Stmt\ClassMethod::class,
         // simply collected
-        \PhpParser\Node\Expr\StaticCall::class,
         \PhpParser\Node\Expr\MethodCall::class,
         // for array callable - [$this, 'someCall']
         \PhpParser\Node\Expr\Array_::class,
@@ -56,25 +53,16 @@ final class ParsedNodeCollector
      */
     private $traits = [];
     /**
-     * @var StaticCall[]
-     */
-    private $staticCalls = [];
-    /**
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     /**
-     * @var \Rector\NodeCollector\ScopeResolver\ParentClassScopeResolver
-     */
-    private $parentClassScopeResolver;
-    /**
      * @var \Rector\Core\NodeAnalyzer\ClassAnalyzer
      */
     private $classAnalyzer;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeCollector\ScopeResolver\ParentClassScopeResolver $parentClassScopeResolver, \Rector\Core\NodeAnalyzer\ClassAnalyzer $classAnalyzer)
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\NodeAnalyzer\ClassAnalyzer $classAnalyzer)
     {
         $this->nodeNameResolver = $nodeNameResolver;
-        $this->parentClassScopeResolver = $parentClassScopeResolver;
         $this->classAnalyzer = $classAnalyzer;
     }
     /**
@@ -103,19 +91,6 @@ final class ParsedNodeCollector
     {
         return $this->traits[$name] ?? null;
     }
-    /**
-     * Guessing the nearest neighboor.
-     * Used e.g. for "XController"
-     */
-    public function findByShortName(string $shortName) : ?\PhpParser\Node\Stmt\Class_
-    {
-        foreach ($this->classes as $className => $classNode) {
-            if (\substr_compare($className, '\\' . $shortName, -\strlen('\\' . $shortName)) === 0) {
-                return $classNode;
-            }
-        }
-        return null;
-    }
     public function isCollectableNode(\PhpParser\Node $node) : bool
     {
         foreach (self::COLLECTABLE_NODE_TYPES as $collectableNodeType) {
@@ -136,17 +111,6 @@ final class ParsedNodeCollector
             $this->collectInterfaceOrTrait($node);
             return;
         }
-        if ($node instanceof \PhpParser\Node\Expr\StaticCall) {
-            $this->staticCalls[] = $node;
-            return;
-        }
-    }
-    /**
-     * @return StaticCall[]
-     */
-    public function getStaticCalls() : array
-    {
-        return $this->staticCalls;
     }
     private function addClass(\PhpParser\Node\Stmt\Class_ $class) : void
     {

@@ -11,10 +11,8 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Naming\Naming\PropertyNaming;
-use Rector\RemovingStatic\StaticTypesInClassResolver;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -26,7 +24,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class NewUniqueObjectToEntityFactoryRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
-     * @api
      * @var string
      */
     public const TYPES_TO_SERVICES = 'types_to_services';
@@ -43,21 +40,12 @@ final class NewUniqueObjectToEntityFactoryRector extends \Rector\Core\Rector\Abs
      */
     private $serviceObjectTypes = [];
     /**
-     * @var string[]
-     */
-    private $classesUsingTypes = [];
-    /**
      * @var \Rector\Naming\Naming\PropertyNaming
      */
     private $propertyNaming;
-    /**
-     * @var \Rector\RemovingStatic\StaticTypesInClassResolver
-     */
-    private $staticTypesInClassResolver;
-    public function __construct(\Rector\Naming\Naming\PropertyNaming $propertyNaming, \Rector\RemovingStatic\StaticTypesInClassResolver $staticTypesInClassResolver)
+    public function __construct(\Rector\Naming\Naming\PropertyNaming $propertyNaming)
     {
         $this->propertyNaming = $propertyNaming;
-        $this->staticTypesInClassResolver = $staticTypesInClassResolver;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -121,8 +109,7 @@ CODE_SAMPLE
     {
         $this->matchedObjectTypes = [];
         // collect classes with new to factory in all classes
-        $classesUsingTypes = $this->resolveClassesUsingTypes();
-        $this->traverseNodesWithCallable($node->stmts, function (\PhpParser\Node $node) use($classesUsingTypes) : ?MethodCall {
+        $this->traverseNodesWithCallable($node->stmts, function (\PhpParser\Node $node) : ?MethodCall {
             if (!$node instanceof \PhpParser\Node\Expr\New_) {
                 return null;
             }
@@ -130,7 +117,7 @@ CODE_SAMPLE
             if ($class === null) {
                 return null;
             }
-            if (!\in_array($class, $classesUsingTypes, \true)) {
+            if (!$this->isClassMatching($class)) {
                 return null;
             }
             $objectType = new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType($class);
@@ -156,30 +143,13 @@ CODE_SAMPLE
             $this->serviceObjectTypes[] = new \PHPStan\Type\ObjectType($typeToService);
         }
     }
-    /**
-     * @return string[]
-     */
-    private function resolveClassesUsingTypes() : array
+    private function isClassMatching(string $class) : bool
     {
-        if ($this->classesUsingTypes !== []) {
-            return $this->classesUsingTypes;
-        }
-        // temporary
-        $classes = $this->nodeRepository->getClasses();
-        if ($classes === []) {
-            return [];
-        }
-        foreach ($classes as $class) {
-            $hasTypes = (bool) $this->staticTypesInClassResolver->collectStaticCallTypeInClass($class, $this->serviceObjectTypes);
-            if ($hasTypes) {
-                $name = $this->getName($class);
-                if ($name === null) {
-                    throw new \Rector\Core\Exception\ShouldNotHappenException();
-                }
-                $this->classesUsingTypes[] = $name;
+        foreach ($this->serviceObjectTypes as $serviceObjectType) {
+            if ($serviceObjectType->isInstanceOf($class)->yes()) {
+                return \true;
             }
         }
-        $this->classesUsingTypes = \array_unique($this->classesUsingTypes);
-        return $this->classesUsingTypes;
+        return \false;
     }
 }
