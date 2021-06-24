@@ -6,11 +6,11 @@ namespace Rector\Core\DependencyInjection\CompilerPass;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
-use RectorPrefix20210623\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
-use RectorPrefix20210623\Symfony\Component\DependencyInjection\ContainerBuilder;
-final class VerifyRectorServiceExistsCompilerPass implements \RectorPrefix20210623\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface
+use RectorPrefix20210624\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use RectorPrefix20210624\Symfony\Component\DependencyInjection\ContainerBuilder;
+final class VerifyRectorServiceExistsCompilerPass implements \RectorPrefix20210624\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface
 {
-    public function process(\RectorPrefix20210623\Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder) : void
+    public function process(\RectorPrefix20210624\Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder) : void
     {
         foreach ($containerBuilder->getDefinitions() as $definition) {
             $class = $definition->getClass();

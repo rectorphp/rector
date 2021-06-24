@@ -3,12 +3,12 @@
 declare (strict_types=1);
 namespace Rector\ChangesReporting\Output;
 
-use RectorPrefix20210623\Nette\Utils\Json;
+use RectorPrefix20210624\Nette\Utils\Json;
 use Rector\ChangesReporting\Annotation\RectorsChangelogResolver;
 use Rector\ChangesReporting\Contract\Output\OutputFormatterInterface;
 use Rector\Core\ValueObject\Configuration;
 use Rector\Core\ValueObject\ProcessResult;
-use RectorPrefix20210623\Symplify\SmartFileSystem\SmartFileSystem;
+use RectorPrefix20210624\Symplify\SmartFileSystem\SmartFileSystem;
 final class JsonOutputFormatter implements \Rector\ChangesReporting\Contract\Output\OutputFormatterInterface
 {
     /**
@@ -25,7 +25,7 @@ final class JsonOutputFormatter implements \Rector\ChangesReporting\Contract\Out
     private $rectorsChangelogResolver;
     public function __construct(
         // @todo add rector for unused promoted property
-        \RectorPrefix20210623\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem,
+        \RectorPrefix20210624\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem,
         \Rector\ChangesReporting\Annotation\RectorsChangelogResolver $rectorsChangelogResolver
     )
     {
@@ -54,7 +54,7 @@ final class JsonOutputFormatter implements \Rector\ChangesReporting\Contract\Out
         if ($errorsData !== []) {
             $errorsArray['errors'] = $errorsData;
         }
-        $json = \RectorPrefix20210623\Nette\Utils\Json::encode($errorsArray, \RectorPrefix20210623\Nette\Utils\Json::PRETTY);
+        $json = \RectorPrefix20210624\Nette\Utils\Json::encode($errorsArray, \RectorPrefix20210624\Nette\Utils\Json::PRETTY);
         echo $json . \PHP_EOL;
     }
     /**

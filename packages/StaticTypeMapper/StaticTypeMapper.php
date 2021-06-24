@@ -6,6 +6,8 @@ namespace Rector\StaticTypeMapper;
 use PhpParser\Node;
 use PhpParser\Node\Name;
 use PhpParser\Node\NullableType;
+use PhpParser\Node\Param;
+use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\UnionType as PhpParserUnionType;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
@@ -18,6 +20,7 @@ use PHPStan\Type\Generic\TemplateTypeMap;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\Core\Exception\NotImplementedYetException;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
 use Rector\StaticTypeMapper\Mapper\PhpParserNodeMapper;
 use Rector\StaticTypeMapper\Naming\NameScopeFactory;
@@ -50,7 +53,6 @@ final class StaticTypeMapper
         $this->phpStanStaticTypeMapper = $phpStanStaticTypeMapper;
         $this->phpDocTypeMapper = $phpDocTypeMapper;
         $this->phpParserNodeMapper = $phpParserNodeMapper;
-        //        $this->nameScopeFactory->setStaticTypeMapper($this);
     }
     public function mapPHPStanTypeToPHPStanPhpDocTypeNode(\PHPStan\Type\Type $phpStanType) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
     {
@@ -84,6 +86,13 @@ final class StaticTypeMapper
     }
     public function mapPHPStanPhpDocTypeNodeToPHPStanType(\PHPStan\PhpDocParser\Ast\Type\TypeNode $typeNode, \PhpParser\Node $node) : \PHPStan\Type\Type
     {
+        if ($node instanceof \PhpParser\Node\Param) {
+            $classMethod = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+            if ($classMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
+                // param does not hany any clue about template map, but class method has
+                $node = $classMethod;
+            }
+        }
         $nameScope = $this->nameScopeFactory->createNameScopeFromNode($node);
         return $this->phpDocTypeMapper->mapToPHPStanType($typeNode, $node, $nameScope);
     }

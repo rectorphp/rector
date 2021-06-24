@@ -31,7 +31,7 @@
     },
     "autoload": {
         "psr-4": {
-            "RectorPrefix20210623\\Symfony\\Component\\VarExporter\\": ""
+            "RectorPrefix20210624\\Symfony\\Component\\VarExporter\\": ""
         },
         "exclude-from-classmap": [
             "\/Tests\/"

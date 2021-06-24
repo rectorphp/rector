@@ -8,17 +8,17 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210623\Symfony\Component\HttpKernel\Fragment;
+namespace RectorPrefix20210624\Symfony\Component\HttpKernel\Fragment;
 
-use RectorPrefix20210623\Symfony\Component\HttpFoundation\Request;
-use RectorPrefix20210623\Symfony\Component\HttpKernel\Controller\ControllerReference;
-use RectorPrefix20210623\Symfony\Component\HttpKernel\EventListener\FragmentListener;
+use RectorPrefix20210624\Symfony\Component\HttpFoundation\Request;
+use RectorPrefix20210624\Symfony\Component\HttpKernel\Controller\ControllerReference;
+use RectorPrefix20210624\Symfony\Component\HttpKernel\EventListener\FragmentListener;
 /**
  * Adds the possibility to generate a fragment URI for a given Controller.
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-abstract class RoutableFragmentRenderer implements \RectorPrefix20210623\Symfony\Component\HttpKernel\Fragment\FragmentRendererInterface
+abstract class RoutableFragmentRenderer implements \RectorPrefix20210624\Symfony\Component\HttpKernel\Fragment\FragmentRendererInterface
 {
     /**
      * @internal
@@ -41,8 +41,8 @@ abstract class RoutableFragmentRenderer implements \RectorPrefix20210623\Symfony
      *
      * @return string A fragment URI
      */
-    protected function generateFragmentUri(\RectorPrefix20210623\Symfony\Component\HttpKernel\Controller\ControllerReference $reference, \RectorPrefix20210623\Symfony\Component\HttpFoundation\Request $request, bool $absolute = \false, bool $strict = \true)
+    protected function generateFragmentUri(\RectorPrefix20210624\Symfony\Component\HttpKernel\Controller\ControllerReference $reference, \RectorPrefix20210624\Symfony\Component\HttpFoundation\Request $request, bool $absolute = \false, bool $strict = \true)
     {
-        return (new \RectorPrefix20210623\Symfony\Component\HttpKernel\Fragment\FragmentUriGenerator($this->fragmentPath))->generate($reference, $request, $absolute, $strict, \false);
+        return (new \RectorPrefix20210624\Symfony\Component\HttpKernel\Fragment\FragmentUriGenerator($this->fragmentPath))->generate($reference, $request, $absolute, $strict, \false);
     }
 }

@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210623\Helmich\TypoScriptParser\Tokenizer;
+namespace RectorPrefix20210624\Helmich\TypoScriptParser\Tokenizer;
 
 /**
  * An exception that represents an error during tokenization.

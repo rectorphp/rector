@@ -24,7 +24,7 @@ use Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareArrayTypeNode;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
 use Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeCommonTypeNarrower;
-use RectorPrefix20210623\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix20210624\Symfony\Contracts\Service\Attribute\Required;
 /**
  * @see \Rector\Tests\PHPStanStaticTypeMapper\TypeMapper\ArrayTypeMapperTest
  */

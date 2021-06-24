@@ -8,16 +8,16 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210623\Symfony\Component\EventDispatcher\DependencyInjection;
+namespace RectorPrefix20210624\Symfony\Component\EventDispatcher\DependencyInjection;
 
-use RectorPrefix20210623\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
-use RectorPrefix20210623\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix20210624\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use RectorPrefix20210624\Symfony\Component\DependencyInjection\ContainerBuilder;
 /**
  * This pass allows bundles to extend the list of event aliases.
  *
  * @author Alexander M. Turek <me@derrabus.de>
  */
-class AddEventAliasesPass implements \RectorPrefix20210623\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface
+class AddEventAliasesPass implements \RectorPrefix20210624\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface
 {
     private $eventAliases;
     private $eventAliasesParameter;
@@ -29,7 +29,7 @@ class AddEventAliasesPass implements \RectorPrefix20210623\Symfony\Component\Dep
         $this->eventAliases = $eventAliases;
         $this->eventAliasesParameter = $eventAliasesParameter;
     }
-    public function process(\RectorPrefix20210623\Symfony\Component\DependencyInjection\ContainerBuilder $container) : void
+    public function process(\RectorPrefix20210624\Symfony\Component\DependencyInjection\ContainerBuilder $container) : void
     {
         $eventAliases = $container->hasParameter($this->eventAliasesParameter) ? $container->getParameter($this->eventAliasesParameter) : [];
         $container->setParameter($this->eventAliasesParameter, \array_merge($eventAliases, $this->eventAliases));

@@ -14,7 +14,7 @@ use Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareUnionTypeNode;
 use Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareArrayTypeNode;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
-use RectorPrefix20210623\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix20210624\Symfony\Contracts\Service\Attribute\Required;
 final class IterableTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface
 {
     /**

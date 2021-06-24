@@ -9,11 +9,13 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\NodeFinder;
 use PhpParser\Parser;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\MethodReflection;
+use PHPStan\Reflection\Php\PhpFunctionReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\ThisType;
@@ -22,7 +24,7 @@ use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Symplify\SmartFileSystem\SmartFileInfo;
-use RectorPrefix20210623\Symplify\SmartFileSystem\SmartFileSystem;
+use RectorPrefix20210624\Symplify\SmartFileSystem\SmartFileSystem;
 final class FunctionLikeReflectionParser
 {
     /**
@@ -53,7 +55,7 @@ final class FunctionLikeReflectionParser
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(\PhpParser\Parser $parser, \RectorPrefix20210623\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \PhpParser\NodeFinder $nodeFinder, \Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
+    public function __construct(\PhpParser\Parser $parser, \RectorPrefix20210624\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \PhpParser\NodeFinder $nodeFinder, \Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
     {
         $this->parser = $parser;
         $this->smartFileSystem = $smartFileSystem;
@@ -83,6 +85,30 @@ final class FunctionLikeReflectionParser
             return null;
         }
         return $class->getMethod($methodReflection->getName());
+    }
+    public function parseFunctionReflection(\PHPStan\Reflection\Php\PhpFunctionReflection $phpFunctionReflection) : ?\PhpParser\Node\Stmt\Function_
+    {
+        $fileName = $phpFunctionReflection->getFileName();
+        if ($fileName === \false) {
+            return null;
+        }
+        $fileContent = $this->smartFileSystem->readFile($fileName);
+        if (!\is_string($fileContent)) {
+            return null;
+        }
+        $nodes = (array) $this->parser->parse($fileContent);
+        $smartFileInfo = new \Symplify\SmartFileSystem\SmartFileInfo($fileName);
+        $file = new \Rector\Core\ValueObject\Application\File($smartFileInfo, $smartFileInfo->getContents());
+        $nodes = $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile($file, $nodes);
+        /** @var Function_[] $functions */
+        $functions = $this->nodeFinder->findInstanceOf($nodes, \PhpParser\Node\Stmt\Function_::class);
+        foreach ($functions as $function) {
+            if (!$this->nodeNameResolver->isName($function, $phpFunctionReflection->getName())) {
+                continue;
+            }
+            return $function;
+        }
+        return null;
     }
     /**
      * @param MethodCall|StaticCall|Node $node
