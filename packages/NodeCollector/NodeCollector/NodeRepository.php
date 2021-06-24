@@ -4,15 +4,10 @@ declare(strict_types=1);
 
 namespace Rector\NodeCollector\NodeCollector;
 
-use Nette\Utils\Arrays;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\StaticPropertyFetch;
-use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -21,19 +16,11 @@ use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Trait_;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ReflectionProvider;
-use PHPStan\Type\MixedType;
-use PHPStan\Type\ObjectType;
-use PHPStan\Type\ThisType;
-use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
-use PHPStan\Type\UnionType;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\NodeCollector\NodeAnalyzer\ArrayCallableMethodReferenceAnalyzer;
-use Rector\NodeCollector\ValueObject\ArrayCallable;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
-use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
 use ReflectionMethod;
 
 /**
@@ -47,24 +34,10 @@ final class NodeRepository
      */
     private array $classMethodsByType = [];
 
-    /**
-     * @var array<class-string, array<array<MethodCall|StaticCall>>>
-     */
-    private array $callsByTypeAndMethod = [];
-
-    /**
-     * E.g. [$this, 'someLocalMethod']
-     *
-     * @var array<string, array<string, ArrayCallable[]>>
-     */
-    private array $arrayCallablesByTypeAndMethod = [];
-
     public function __construct(
-        private ArrayCallableMethodReferenceAnalyzer $arrayCallableMethodReferenceAnalyzer,
         private ParsedPropertyFetchNodeCollector $parsedPropertyFetchNodeCollector,
         private NodeNameResolver $nodeNameResolver,
         private ParsedNodeCollector $parsedNodeCollector,
-        private TypeUnwrapper $typeUnwrapper,
         private ReflectionProvider $reflectionProvider,
         private NodeTypeResolver $nodeTypeResolver
     ) {
@@ -74,17 +47,6 @@ final class NodeRepository
     {
         if ($node instanceof ClassMethod) {
             $this->addMethod($node);
-            return;
-        }
-
-        // array callable - [$this, 'someCall']
-        if ($node instanceof Array_) {
-            $this->collectArray($node);
-            return;
-        }
-
-        if ($node instanceof MethodCall || $node instanceof StaticCall) {
-            $this->addCall($node);
         }
     }
 
@@ -111,16 +73,6 @@ final class NodeRepository
         }
 
         return null;
-    }
-
-    /**
-     * @return MethodCall[]
-     */
-    public function getMethodsCalls(): array
-    {
-        $calls = Arrays::flatten($this->callsByTypeAndMethod);
-
-        return array_filter($calls, fn (Node $node): bool => $node instanceof MethodCall);
     }
 
     /**
@@ -169,25 +121,6 @@ final class NodeRepository
         return $this->parsedPropertyFetchNodeCollector->findPropertyFetchesByTypeAndName($className, $propertyName);
     }
 
-    /**
-     * @deprecated Collecting all nodes it not safe for paralel run and static reflection
-     *
-     * Use reflection instead,
-     * @see \Rector\Core\PHPStan\Reflection\CallReflectionResolver::resolveCall()
-     *
-     * @return MethodCall[]|StaticCall[]|ArrayCallable[]
-     */
-    public function findCallsByClassMethod(ClassMethod $classMethod): array
-    {
-        $class = $classMethod->getAttribute(AttributeKey::CLASS_NAME);
-        if (! is_string($class)) {
-            throw new ShouldNotHappenException();
-        }
-
-        $methodName = $this->nodeNameResolver->getName($classMethod);
-        return $this->findCallsByClassAndMethod($class, $methodName);
-    }
-
     public function hasClassChildren(Class_ $desiredClass): bool
     {
         $desiredClassName = $desiredClass->getAttribute(AttributeKey::CLASS_NAME);
@@ -209,24 +142,6 @@ final class NodeRepository
         }
 
         return false;
-    }
-
-    /**
-     * @return Class_[]
-     */
-    public function findClassesBySuffix(string $suffix): array
-    {
-        $classNodes = [];
-
-        foreach ($this->parsedNodeCollector->getClasses() as $className => $classNode) {
-            if (! \str_ends_with($className, $suffix)) {
-                continue;
-            }
-
-            $classNodes[] = $classNode;
-        }
-
-        return $classNodes;
     }
 
     /**
@@ -312,41 +227,9 @@ final class NodeRepository
         return $class->getProperty($propertyName);
     }
 
-    /**
-     * @return Class_[]
-     */
-    public function getClasses(): array
-    {
-        return $this->parsedNodeCollector->getClasses();
-    }
-
     public function findTrait(string $name): ?Trait_
     {
         return $this->parsedNodeCollector->findTrait($name);
-    }
-
-    public function findByShortName(string $shortName): ?Class_
-    {
-        return $this->parsedNodeCollector->findByShortName($shortName);
-    }
-
-    /**
-     * @return StaticCall[]
-     */
-    public function getStaticCalls(): array
-    {
-        return $this->parsedNodeCollector->getStaticCalls();
-    }
-
-    public function resolveCallerClassName(MethodCall $methodCall): ?string
-    {
-        $callerType = $this->nodeTypeResolver->getStaticType($methodCall->var);
-        $callerObjectType = $this->typeUnwrapper->unwrapFirstObjectTypeFromUnionType($callerType);
-        if (! $callerObjectType instanceof TypeWithClassName) {
-            return null;
-        }
-
-        return $callerObjectType->getClassName();
     }
 
     public function findClassLike(string $classLikeName): ?ClassLike
@@ -354,30 +237,6 @@ final class NodeRepository
         return $this->findClass($classLikeName) ?? $this->findInterface($classLikeName) ?? $this->findTrait(
             $classLikeName
         );
-    }
-
-    private function collectArray(Array_ $array): void
-    {
-        $arrayCallable = $this->arrayCallableMethodReferenceAnalyzer->match($array);
-        if (! $arrayCallable instanceof ArrayCallable) {
-            return;
-        }
-
-        if (! $this->reflectionProvider->hasClass($arrayCallable->getClass())) {
-            return;
-        }
-
-        $classReflection = $this->reflectionProvider->getClass($arrayCallable->getClass());
-        if (! $classReflection->isClass()) {
-            return;
-        }
-
-        if (! $classReflection->hasMethod($arrayCallable->getMethod())) {
-            return;
-        }
-
-        $methodName = strtolower($arrayCallable->getMethod());
-        $this->arrayCallablesByTypeAndMethod[$arrayCallable->getClass()][$methodName][] = $arrayCallable;
     }
 
     private function addMethod(ClassMethod $classMethod): void
@@ -391,42 +250,6 @@ final class NodeRepository
 
         $methodName = $this->nodeNameResolver->getName($classMethod);
         $this->classMethodsByType[$className][$methodName] = $classMethod;
-    }
-
-    /**
-     * @param MethodCall|StaticCall $node
-     */
-    private function addCall(Node $node): void
-    {
-        // one node can be of multiple-class types
-        if ($node instanceof MethodCall) {
-            $classType = $this->resolveNodeClassTypes($node->var);
-        } else {
-            /** @var StaticCall $node */
-            $classType = $this->resolveNodeClassTypes($node->class);
-        }
-
-        // anonymous
-        if ($classType instanceof MixedType) {
-            return;
-        }
-
-        $methodName = $this->nodeNameResolver->getName($node->name);
-        if ($methodName === null) {
-            return;
-        }
-
-        $this->addCallByType($node, $classType, $methodName);
-    }
-
-    /**
-     * @return MethodCall[]|StaticCall[]|ArrayCallable[]
-     */
-    private function findCallsByClassAndMethod(string $className, string $methodName): array
-    {
-        $methodName = strtolower($methodName);
-
-        return $this->callsByTypeAndMethod[$className][$methodName] ?? $this->arrayCallablesByTypeAndMethod[$className][$methodName] ?? [];
     }
 
     private function isChildOrEqualClassLike(string $desiredClass, ?string $currentClassName): bool
@@ -470,75 +293,5 @@ final class NodeRepository
         }
 
         return $implementerInterfaces;
-    }
-
-    private function resolveNodeClassTypes(Node $node): Type
-    {
-        if ($node instanceof MethodCall && $node->var instanceof Variable && $node->var->name === 'this') {
-            /** @var string|null $className */
-            $className = $node->getAttribute(AttributeKey::CLASS_NAME);
-            if ($className) {
-                return new ObjectType($className);
-            }
-
-            return new MixedType();
-        }
-
-        if ($node instanceof MethodCall) {
-            return $this->nodeTypeResolver->resolve($node->var);
-        }
-
-        return $this->nodeTypeResolver->resolve($node);
-    }
-
-    /**
-     * @param MethodCall|StaticCall $node
-     */
-    private function addCallByType(Node $node, Type $classType, string $methodName): void
-    {
-        // PHP is case insensitive for method names
-        $methodName = strtolower($methodName);
-
-        if ($classType instanceof TypeWithClassName) {
-            if ($classType instanceof ThisType) {
-                $classType = $classType->getStaticObjectType();
-            }
-
-            $this->callsByTypeAndMethod[$classType->getClassName()][$methodName][] = $node;
-            $this->addParentTypeWithClassName($classType, $node, $methodName);
-        }
-
-        if ($classType instanceof UnionType) {
-            foreach ($classType->getTypes() as $unionedType) {
-                if (! $unionedType instanceof ObjectType) {
-                    continue;
-                }
-
-                $this->callsByTypeAndMethod[$unionedType->getClassName()][$methodName][] = $node;
-            }
-        }
-    }
-
-    /**
-     * @param MethodCall|StaticCall $node
-     */
-    private function addParentTypeWithClassName(
-        TypeWithClassName $typeWithClassName,
-        Node $node,
-        string $methodName
-    ): void {
-        // include also parent types
-        if (! $typeWithClassName instanceof ObjectType) {
-            return;
-        }
-
-        if (! $this->reflectionProvider->hasClass($typeWithClassName->getClassName())) {
-            return;
-        }
-
-        $classReflection = $this->reflectionProvider->getClass($typeWithClassName->getClassName());
-        foreach ($classReflection->getAncestors() as $ancestorClassReflection) {
-            $this->callsByTypeAndMethod[$ancestorClassReflection->getName()][$methodName][] = $node;
-        }
     }
 }

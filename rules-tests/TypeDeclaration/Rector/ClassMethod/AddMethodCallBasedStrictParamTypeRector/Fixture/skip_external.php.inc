@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Rector\Tests\TypeDeclaration\Rector\ClassMethod\AddMethodCallBasedStrictParamTypeRector\Fixture;
 
-final class SkipDocTypes
+final class SkipExternal
 {
     public function getById($id)
     {
@@ -11,12 +13,9 @@ final class SkipDocTypes
 
 final class CallerOfDocTypes
 {
-    /**
-     * @param int $value
-     */
-    public function run($value)
+    public function run(int $value)
     {
-        $someClass = new SkipDocTypes();
+        $someClass = new SkipExternal();
         $someClass->getById($value);
     }
 }

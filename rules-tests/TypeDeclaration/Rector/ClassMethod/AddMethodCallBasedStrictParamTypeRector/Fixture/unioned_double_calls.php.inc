@@ -2,20 +2,16 @@
 
 namespace Rector\Tests\TypeDeclaration\Rector\ClassMethod\AddMethodCallBasedStrictParamTypeRector\Fixture;
 
-class UnionedDoubleCalls
-{
-    public function getById($id)
-    {
-    }
-}
-
-class CallerClassUnionedDoubleCalls
+final class UnionedDoubleCalls
 {
     public function run()
     {
-        $someClass = new UnionedDoubleCalls();
-        $someClass->getById(5);
-        $someClass->getById(null);
+        $this->getById(5);
+        $this->getById(null);
+    }
+
+    private function getById($id)
+    {
     }
 }
 
@@ -25,20 +21,16 @@ class CallerClassUnionedDoubleCalls
 
 namespace Rector\Tests\TypeDeclaration\Rector\ClassMethod\AddMethodCallBasedStrictParamTypeRector\Fixture;
 
-class UnionedDoubleCalls
-{
-    public function getById(?int $id)
-    {
-    }
-}
-
-class CallerClassUnionedDoubleCalls
+final class UnionedDoubleCalls
 {
     public function run()
     {
-        $someClass = new UnionedDoubleCalls();
-        $someClass->getById(5);
-        $someClass->getById(null);
+        $this->getById(5);
+        $this->getById(null);
+    }
+
+    private function getById(?int $id)
+    {
     }
 }
 

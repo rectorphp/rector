@@ -8,7 +8,6 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassLike;
@@ -17,7 +16,6 @@ use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Trait_;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\NodeAnalyzer\ClassAnalyzer;
-use Rector\NodeCollector\ScopeResolver\ParentClassScopeResolver;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
@@ -40,7 +38,6 @@ final class ParsedNodeCollector
         Trait_::class,
         ClassMethod::class,
         // simply collected
-        StaticCall::class,
         MethodCall::class,
         // for array callable - [$this, 'someCall']
         Array_::class,
@@ -61,14 +58,8 @@ final class ParsedNodeCollector
      */
     private array $traits = [];
 
-    /**
-     * @var StaticCall[]
-     */
-    private array $staticCalls = [];
-
     public function __construct(
         private NodeNameResolver $nodeNameResolver,
-        private ParentClassScopeResolver $parentClassScopeResolver,
         private ClassAnalyzer $classAnalyzer
     ) {
     }
@@ -104,21 +95,6 @@ final class ParsedNodeCollector
         return $this->traits[$name] ?? null;
     }
 
-    /**
-     * Guessing the nearest neighboor.
-     * Used e.g. for "XController"
-     */
-    public function findByShortName(string $shortName): ?Class_
-    {
-        foreach ($this->classes as $className => $classNode) {
-            if (\str_ends_with($className, '\\' . $shortName)) {
-                return $classNode;
-            }
-        }
-
-        return null;
-    }
-
     public function isCollectableNode(Node $node): bool
     {
         foreach (self::COLLECTABLE_NODE_TYPES as $collectableNodeType) {
@@ -142,19 +118,6 @@ final class ParsedNodeCollector
             $this->collectInterfaceOrTrait($node);
             return;
         }
-
-        if ($node instanceof StaticCall) {
-            $this->staticCalls[] = $node;
-            return;
-        }
-    }
-
-    /**
-     * @return StaticCall[]
-     */
-    public function getStaticCalls(): array
-    {
-        return $this->staticCalls;
     }
 
     private function addClass(Class_ $class): void

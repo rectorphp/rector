@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 use Rector\RemovingStatic\Rector\Class_\NewUniqueObjectToEntityFactoryRector;
 use Rector\RemovingStatic\Rector\Class_\PassFactoryToUniqueObjectRector;
+use Rector\Tests\RemovingStatic\Rector\Class_\PassFactoryToEntityRector\Fixture\AnotherClassWithMoreArguments;
 use Rector\Tests\RemovingStatic\Rector\Class_\PassFactoryToEntityRector\Source\TurnMeToService;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
-    $typesToServices = [TurnMeToService::class];
+    $typesToServices = [TurnMeToService::class, AnotherClassWithMoreArguments::class];
 
     $services->set(PassFactoryToUniqueObjectRector::class)
         ->call('configure', [[
