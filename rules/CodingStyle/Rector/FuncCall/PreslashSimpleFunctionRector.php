@@ -7,6 +7,7 @@ namespace Rector\CodingStyle\Rector\FuncCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Stmt\Function_;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -71,6 +72,19 @@ CODE_SAMPLE
         }
 
         if (\str_contains($functionName, '\\')) {
+            return null;
+        }
+
+        $isDefinedPreviousCall = (bool) $this->betterNodeFinder->findFirstPreviousOfNode($node, function (Node $node) use (
+            $functionName
+        ): bool {
+            if (! $node instanceof Function_) {
+                return false;
+            }
+
+            return $this->isName($node->name, $functionName);
+        });
+        if ($isDefinedPreviousCall) {
             return null;
         }
 
