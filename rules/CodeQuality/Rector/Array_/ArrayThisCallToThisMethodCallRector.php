@@ -106,16 +106,13 @@ CODE_SAMPLE
             return null;
         }
         $nativeReflectionClass = $classReflection->getNativeReflection();
-        $reflectionMethod = $nativeReflectionClass->getMethod($arrayCallable->getMethod());
-        $this->privatizeClassMethod($reflectionMethod);
-        if ($reflectionMethod->getNumberOfParameters() > 0) {
-            $classMethod = $this->nodeRepository->findClassMethod($arrayCallable->getClass(), $arrayCallable->getMethod());
-            if ($classMethod !== null) {
-                return $this->nodeFactory->createClosureFromClassMethod($classMethod);
-            }
-            return null;
+        $nativeReflectionMethod = $nativeReflectionClass->getMethod($arrayCallable->getMethod());
+        $this->privatizeClassMethod($nativeReflectionMethod);
+        if ($nativeReflectionMethod->getNumberOfParameters() === 0) {
+            return new \PhpParser\Node\Expr\MethodCall(new \PhpParser\Node\Expr\Variable('this'), $arrayCallable->getMethod());
         }
-        return new \PhpParser\Node\Expr\MethodCall(new \PhpParser\Node\Expr\Variable('this'), $arrayCallable->getMethod());
+        $methodReflection = $classReflection->getNativeMethod($arrayCallable->getMethod());
+        return $this->nodeFactory->createClosureFromMethodReflection($methodReflection);
     }
     private function isAssignedToNetteMagicOnProperty(\PhpParser\Node\Expr\Array_ $array) : bool
     {

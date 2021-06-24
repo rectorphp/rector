@@ -41,6 +41,7 @@ use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
+use PHPStan\Reflection\MethodReflection;
 use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
@@ -48,7 +49,9 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Configuration\CurrentNodeProvider;
 use Rector\Core\Exception\NotImplementedYetException;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Php\PhpVersionProvider;
+use Rector\Core\Reflection\FunctionLikeReflectionParser;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -111,7 +114,11 @@ final class NodeFactory
      * @var \Rector\Core\Configuration\CurrentNodeProvider
      */
     private $currentNodeProvider;
-    public function __construct(\PhpParser\BuilderFactory $builderFactory, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \Rector\Core\Php\PhpVersionProvider $phpVersionProvider, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger, \Rector\Core\Configuration\CurrentNodeProvider $currentNodeProvider)
+    /**
+     * @var \Rector\Core\Reflection\FunctionLikeReflectionParser
+     */
+    private $functionLikeReflectionParser;
+    public function __construct(\PhpParser\BuilderFactory $builderFactory, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \Rector\Core\Php\PhpVersionProvider $phpVersionProvider, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger, \Rector\Core\Configuration\CurrentNodeProvider $currentNodeProvider, \Rector\Core\Reflection\FunctionLikeReflectionParser $functionLikeReflectionParser)
     {
         $this->builderFactory = $builderFactory;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
@@ -120,6 +127,7 @@ final class NodeFactory
         $this->nodeNameResolver = $nodeNameResolver;
         $this->phpDocTypeChanger = $phpDocTypeChanger;
         $this->currentNodeProvider = $currentNodeProvider;
+        $this->functionLikeReflectionParser = $functionLikeReflectionParser;
     }
     /**
      * Creates "SomeClass::CONSTANT"
@@ -458,6 +466,14 @@ final class NodeFactory
     public function createTrue() : \PhpParser\Node\Expr\ConstFetch
     {
         return new \PhpParser\Node\Expr\ConstFetch(new \PhpParser\Node\Name('true'));
+    }
+    public function createClosureFromMethodReflection(\PHPStan\Reflection\MethodReflection $methodReflection) : \PhpParser\Node\Expr\Closure
+    {
+        $classMethod = $this->functionLikeReflectionParser->parseMethodReflection($methodReflection);
+        if (!$classMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
+            throw new \Rector\Core\Exception\ShouldNotHappenException();
+        }
+        return $this->createClosureFromClassMethod($classMethod);
     }
     public function createClassConstFetchFromName(\PhpParser\Node\Name $className, string $constantName) : \PhpParser\Node\Expr\ClassConstFetch
     {

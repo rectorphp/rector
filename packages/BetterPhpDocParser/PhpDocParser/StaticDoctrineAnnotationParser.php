@@ -86,6 +86,10 @@ final class StaticDoctrineAnnotationParser
         }
         while ($tokenIterator->isCurrentTokenType(\PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_COMMA)) {
             $tokenIterator->next();
+            // if is next item just closing brackets
+            if ($tokenIterator->isNextTokenType(\PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_CLOSE_PARENTHESES)) {
+                continue;
+            }
             $nestedValues = $this->resolveAnnotationValue($tokenIterator);
             if (\is_array($nestedValues)) {
                 $values = \array_merge($values, $nestedValues);

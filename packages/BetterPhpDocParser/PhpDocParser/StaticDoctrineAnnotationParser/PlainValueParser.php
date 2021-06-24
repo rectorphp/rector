@@ -64,10 +64,10 @@ final class PlainValueParser
         }
         $tokenIterator->next();
         // normalize value
-        if ($currentTokenValue === 'false') {
+        if (\strtolower($currentTokenValue) === 'false') {
             return new \PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprFalseNode();
         }
-        if ($currentTokenValue === 'true') {
+        if (\strtolower($currentTokenValue) === 'true') {
             return new \PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprTrueNode();
         }
         if (\is_numeric($currentTokenValue) && (string) (int) $currentTokenValue === $currentTokenValue) {
