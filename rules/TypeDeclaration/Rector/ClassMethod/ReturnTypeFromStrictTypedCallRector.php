@@ -17,15 +17,15 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\UnionType as PhpParserUnionType;
+use PHPStan\Type\MixedType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectType;
-use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\PHPStan\Reflection\CallReflectionResolver;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\TypeDeclaration\NodeAnalyzer\TypeNodeUnwrapper;
-use Rector\TypeDeclaration\Reflection\ReflectionTypeResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -35,8 +35,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ReturnTypeFromStrictTypedCallRector extends AbstractRector
 {
     public function __construct(
-        private ReflectionTypeResolver $reflectionTypeResolver,
-        private TypeNodeUnwrapper $typeNodeUnwrapper
+        private TypeNodeUnwrapper $typeNodeUnwrapper,
+        private CallReflectionResolver $callReflectionResolver
     ) {
     }
 
@@ -162,12 +162,8 @@ CODE_SAMPLE
 
             $returnedExpr = $return->expr;
 
-            if ($returnedExpr instanceof MethodCall) {
+            if ($returnedExpr instanceof MethodCall || $returnedExpr instanceof StaticCall || $returnedExpr instanceof FuncCall) {
                 $returnNode = $this->resolveMethodCallReturnNode($returnedExpr);
-            } elseif ($returnedExpr instanceof StaticCall) {
-                $returnNode = $this->resolveStaticCallReturnNode($returnedExpr);
-            } elseif ($returnedExpr instanceof FuncCall) {
-                $returnNode = $this->resolveFuncCallReturnNode($returnedExpr);
             } else {
                 return [];
             }
@@ -182,40 +178,16 @@ CODE_SAMPLE
         return $this->typeNodeUnwrapper->uniquateNodes($returnedStrictTypeNodes);
     }
 
-    private function resolveMethodCallReturnNode(MethodCall $methodCall): ?Node
+    private function resolveMethodCallReturnNode(MethodCall | StaticCall | FuncCall $call): ?Node
     {
-        $classMethod = $this->nodeRepository->findClassMethodByMethodCall($methodCall);
-        if ($classMethod instanceof ClassMethod) {
-            return $classMethod->returnType;
-        }
-
-        $returnType = $this->reflectionTypeResolver->resolveMethodCallReturnType($methodCall);
-        if (! $returnType instanceof Type) {
+        $methodReflection = $this->callReflectionResolver->resolveCall($call);
+        if ($methodReflection === null) {
             return null;
         }
 
-        return $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($returnType);
-    }
-
-    private function resolveStaticCallReturnNode(StaticCall $staticCall): ?Node
-    {
-        $classMethod = $this->nodeRepository->findClassMethodByStaticCall($staticCall);
-        if ($classMethod instanceof ClassMethod) {
-            return $classMethod->returnType;
-        }
-
-        $returnType = $this->reflectionTypeResolver->resolveStaticCallReturnType($staticCall);
-        if (! $returnType instanceof Type) {
-            return null;
-        }
-
-        return $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($returnType);
-    }
-
-    private function resolveFuncCallReturnNode(FuncCall $funcCall): Name | NullableType | PhpParserUnionType | null
-    {
-        $returnType = $this->reflectionTypeResolver->resolveFuncCallReturnType($funcCall);
-        if (! $returnType instanceof Type) {
+        $parametersAcceptor = $methodReflection->getVariants()[0];
+        $returnType = $parametersAcceptor->getReturnType();
+        if ($returnType instanceof MixedType) {
             return null;
         }
 

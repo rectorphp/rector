@@ -10,11 +10,13 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\NodeFinder;
 use PhpParser\Parser;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\MethodReflection;
+use PHPStan\Reflection\Php\PhpFunctionReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\ThisType;
@@ -65,6 +67,38 @@ final class FunctionLikeReflectionParser
         }
 
         return $class->getMethod($methodReflection->getName());
+    }
+
+    public function parseFunctionReflection(PhpFunctionReflection $phpFunctionReflection): ?Function_
+    {
+        $fileName = $phpFunctionReflection->getFileName();
+        if ($fileName === false) {
+            return null;
+        }
+
+        $fileContent = $this->smartFileSystem->readFile($fileName);
+        if (! is_string($fileContent)) {
+            return null;
+        }
+
+        $nodes = (array) $this->parser->parse($fileContent);
+
+        $smartFileInfo = new SmartFileInfo($fileName);
+        $file = new File($smartFileInfo, $smartFileInfo->getContents());
+
+        $nodes = $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile($file, $nodes);
+
+        /** @var Function_[] $functions */
+        $functions = $this->nodeFinder->findInstanceOf($nodes, Function_::class);
+        foreach ($functions as $function) {
+            if (! $this->nodeNameResolver->isName($function, $phpFunctionReflection->getName())) {
+                continue;
+            }
+
+            return $function;
+        }
+
+        return null;
     }
 
     /**

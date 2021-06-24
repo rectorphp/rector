@@ -246,6 +246,7 @@ CODE_SAMPLE
         $hasExternalClassOrInterfaceOrTrait = $this->externalFullyQualifiedAnalyzer->hasExternalFullyQualifieds(
             $classLike
         );
+
         return $functionLike->returnType === null && $hasExternalClassOrInterfaceOrTrait && $this->isName(
             $inferredReturnNode,
             'void'

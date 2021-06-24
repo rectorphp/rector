@@ -497,3 +497,6 @@ parameters:
         -
              message: '#Assign in loop is not allowed#'
              path: rules/RemovingStatic/Rector/ClassMethod/LocallyCalledStaticMethodToNonStaticRector.php
+
+        # generics single place
+        - '#Method Rector\\Php80\\NodeResolver\\ArgumentSorter\:\:sortArgsByExpectedParamOrder\(\) should return array<T of PhpParser\\Node\\Arg\|PhpParser\\Node\\Param\> but returns array<PhpParser\\Node\\Arg\|PhpParser\\Node\\Param\>#'

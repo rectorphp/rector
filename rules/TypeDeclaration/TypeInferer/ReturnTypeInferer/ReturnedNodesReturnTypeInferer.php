@@ -16,11 +16,15 @@ use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Trait_;
 use PhpParser\NodeTraverser;
+use PHPStan\Reflection\MethodReflection;
+use PHPStan\Reflection\Php\PhpFunctionReflection;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use PHPStan\Type\VoidType;
-use Rector\NodeCollector\NodeCollector\NodeRepository;
+use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
+use Rector\Core\PHPStan\Reflection\CallReflectionResolver;
+use Rector\Core\Reflection\FunctionLikeReflectionParser;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
@@ -37,7 +41,9 @@ final class ReturnedNodesReturnTypeInferer implements ReturnTypeInfererInterface
         private SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
         private TypeFactory $typeFactory,
         private SplArrayFixedTypeNarrower $splArrayFixedTypeNarrower,
-        private NodeRepository $nodeRepository
+        private CallReflectionResolver $callReflectionResolver,
+        private FunctionLikeReflectionParser $functionLikeReflectionParser,
+        private BetterStandardPrinter $betterStandardPrinter
     ) {
     }
 
@@ -137,17 +143,20 @@ final class ReturnedNodesReturnTypeInferer implements ReturnTypeInfererInterface
             return new MixedType();
         }
 
-        $classMethod = $this->nodeRepository->findClassMethodByMethodCall($return->expr);
-        if (! $classMethod instanceof ClassMethod) {
+        $callReflection = $this->callReflectionResolver->resolveCall($return->expr);
+        if ($callReflection === null) {
             return new MixedType();
         }
 
-        // avoid infinite looping over self call
-        if ($classMethod === $originalFunctionLike) {
-            return new MixedType();
+        if ($callReflection instanceof MethodReflection) {
+            return $this->resolveClassMethod($callReflection, $originalFunctionLike);
         }
 
-        return $this->inferFunctionLike($classMethod);
+        if ($callReflection instanceof PhpFunctionReflection) {
+            return $this->resolveFunction($callReflection, $originalFunctionLike);
+        }
+
+        return new MixedType();
     }
 
     private function isArrayTypeMixed(Type $type): bool
@@ -167,12 +176,47 @@ final class ReturnedNodesReturnTypeInferer implements ReturnTypeInfererInterface
     {
         if ($resolvedType instanceof MixedType || $this->isArrayTypeMixed($resolvedType)) {
             $correctedType = $this->inferFromReturnedMethodCall($return, $functionLike);
+
             // override only if has some extra value
-            if (! $correctedType instanceof MixedType) {
+            if (! $correctedType instanceof MixedType && ! $correctedType instanceof VoidType) {
                 return $correctedType;
             }
         }
 
         return $resolvedType;
+    }
+
+    private function resolveClassMethod(MethodReflection $methodReflection, FunctionLike $originalFunctionLike): Type
+    {
+        $classMethod = $this->functionLikeReflectionParser->parseMethodReflection($methodReflection);
+        if (! $classMethod instanceof ClassMethod) {
+            return new MixedType();
+        }
+
+        $classMethodCacheKey = $this->betterStandardPrinter->print($classMethod);
+        $functionLikeCacheKey = $this->betterStandardPrinter->print($originalFunctionLike);
+
+        if ($classMethodCacheKey === $functionLikeCacheKey) {
+            return new MixedType();
+        }
+
+        return $this->inferFunctionLike($classMethod);
+    }
+
+    private function resolveFunction(PhpFunctionReflection $phpFunctionReflection, FunctionLike $functionLike): Type
+    {
+        $function = $this->functionLikeReflectionParser->parseFunctionReflection($phpFunctionReflection);
+        if (! $function instanceof Function_) {
+            return new MixedType();
+        }
+
+        $classMethodCacheKey = $this->betterStandardPrinter->print($function);
+        $functionLikeCacheKey = $this->betterStandardPrinter->print($functionLike);
+
+        if ($classMethodCacheKey === $functionLikeCacheKey) {
+            return new MixedType();
+        }
+
+        return $this->inferFunctionLike($function);
     }
 }

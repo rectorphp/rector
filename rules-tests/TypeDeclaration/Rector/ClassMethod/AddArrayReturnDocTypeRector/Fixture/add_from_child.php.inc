@@ -2,22 +2,13 @@
 
 namespace Rector\Tests\TypeDeclaration\Rector\ClassMethod\AddArrayReturnDocTypeRector\Fixture;
 
+use Rector\Tests\TypeDeclaration\Rector\ClassMethod\AddArrayReturnDocTypeRector\Source\NestedGetData;
+
 final class AddFromChild
 {
-    public function getData(Nested $nested)
+    public function getData(NestedGetData $nested)
     {
         return $nested->getData();
-    }
-}
-
-final class Nested
-{
-    public function getData()
-    {
-        return [
-            'key',
-            'value'
-        ];
     }
 }
 
@@ -27,28 +18,16 @@ final class Nested
 
 namespace Rector\Tests\TypeDeclaration\Rector\ClassMethod\AddArrayReturnDocTypeRector\Fixture;
 
+use Rector\Tests\TypeDeclaration\Rector\ClassMethod\AddArrayReturnDocTypeRector\Source\NestedGetData;
+
 final class AddFromChild
 {
     /**
      * @return string[]
      */
-    public function getData(Nested $nested)
+    public function getData(NestedGetData $nested)
     {
         return $nested->getData();
-    }
-}
-
-final class Nested
-{
-    /**
-     * @return string[]
-     */
-    public function getData()
-    {
-        return [
-            'key',
-            'value'
-        ];
     }
 }
 
