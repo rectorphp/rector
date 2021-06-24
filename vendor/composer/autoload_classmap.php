@@ -1871,6 +1871,7 @@ return array(
     'Rector\\Core\\PHPStan\\Reflection\\VariadicAnalyzer' => $baseDir . '/src/PHPStan/Reflection/VariadicAnalyzer.php',
     'Rector\\Core\\PhpParser\\Comparing\\ConditionSearcher' => $baseDir . '/src/PhpParser/Comparing/ConditionSearcher.php',
     'Rector\\Core\\PhpParser\\Comparing\\NodeComparator' => $baseDir . '/src/PhpParser/Comparing/NodeComparator.php',
+    'Rector\\Core\\PhpParser\\NodeFinder\\LocalConstantFinder' => $baseDir . '/src/PhpParser/NodeFinder/LocalConstantFinder.php',
     'Rector\\Core\\PhpParser\\NodeFinder\\PropertyFetchFinder' => $baseDir . '/src/PhpParser/NodeFinder/PropertyFetchFinder.php',
     'Rector\\Core\\PhpParser\\NodeTransformer' => $baseDir . '/src/PhpParser/NodeTransformer.php',
     'Rector\\Core\\PhpParser\\NodeTraverser\\RectorNodeTraverser' => $baseDir . '/src/PhpParser/NodeTraverser/RectorNodeTraverser.php',

@@ -5,6 +5,7 @@ namespace Rector\Core\Php\Regex;
 
 use RectorPrefix20210624\Nette\Utils\Strings;
 use PhpParser\Node;
+use PhpParser\Node\Const_;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\ClassConstFetch;
@@ -12,12 +13,11 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
-use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\ObjectType;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\NodeCollector\NodeCollector\NodeRepository;
+use Rector\Core\PhpParser\NodeFinder\LocalConstantFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -44,19 +44,19 @@ final class RegexPatternArgumentManipulator
      */
     private $nodeTypeResolver;
     /**
-     * @var \Rector\NodeCollector\NodeCollector\NodeRepository
+     * @var \Rector\Core\PhpParser\NodeFinder\LocalConstantFinder
      */
-    private $nodeRepository;
+    private $localConstantFinder;
     /**
      * @var \Rector\Core\PhpParser\Comparing\NodeComparator
      */
     private $nodeComparator;
-    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\NodeCollector\NodeCollector\NodeRepository $nodeRepository, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator)
+    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\Core\PhpParser\NodeFinder\LocalConstantFinder $localConstantFinder, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator)
     {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
-        $this->nodeRepository = $nodeRepository;
+        $this->localConstantFinder = $localConstantFinder;
         $this->nodeComparator = $nodeComparator;
     }
     /**
@@ -128,7 +128,7 @@ final class RegexPatternArgumentManipulator
             return $strings;
         }
         if ($expr instanceof \PhpParser\Node\Expr\ClassConstFetch) {
-            return $this->resolveClassConstFetchValue($expr);
+            return $this->matchClassConstFetchStringValue($expr);
         }
         return [];
     }
@@ -154,14 +154,14 @@ final class RegexPatternArgumentManipulator
     /**
      * @return String_[]
      */
-    private function resolveClassConstFetchValue(\PhpParser\Node\Expr\ClassConstFetch $classConstFetch) : array
+    private function matchClassConstFetchStringValue(\PhpParser\Node\Expr\ClassConstFetch $classConstFetch) : array
     {
-        $classConstNode = $this->nodeRepository->findClassConstByClassConstFetch($classConstFetch);
-        if (!$classConstNode instanceof \PhpParser\Node\Stmt\ClassConst) {
+        $classConst = $this->localConstantFinder->match($classConstFetch);
+        if (!$classConst instanceof \PhpParser\Node\Const_) {
             return [];
         }
-        if ($classConstNode->consts[0]->value instanceof \PhpParser\Node\Scalar\String_) {
-            return [$classConstNode->consts[0]->value];
+        if ($classConst->value instanceof \PhpParser\Node\Scalar\String_) {
+            return [$classConst->value];
         }
         return [];
     }

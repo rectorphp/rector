@@ -48,10 +48,6 @@ final class ParsedNodeCollector
      */
     private $classes = [];
     /**
-     * @var array<string, ClassConst[]>
-     */
-    private $constantsByType = [];
-    /**
      * @var Interface_[]
      */
     private $interfaces = [];
@@ -120,13 +116,6 @@ final class ParsedNodeCollector
         }
         return null;
     }
-    public function findClassConstant(string $className, string $constantName) : ?\PhpParser\Node\Stmt\ClassConst
-    {
-        if (\strpos($constantName, '\\') !== \false) {
-            throw new \Rector\Core\Exception\ShouldNotHappenException(\sprintf('Switched arguments in "%s"', __METHOD__));
-        }
-        return $this->constantsByType[$className][$constantName] ?? null;
-    }
     public function isCollectableNode(\PhpParser\Node $node) : bool
     {
         foreach (self::COLLECTABLE_NODE_TYPES as $collectableNodeType) {
@@ -147,28 +136,10 @@ final class ParsedNodeCollector
             $this->collectInterfaceOrTrait($node);
             return;
         }
-        if ($node instanceof \PhpParser\Node\Stmt\ClassConst) {
-            $this->addClassConstant($node);
-            return;
-        }
         if ($node instanceof \PhpParser\Node\Expr\StaticCall) {
             $this->staticCalls[] = $node;
             return;
         }
-    }
-    public function findClassConstByClassConstFetch(\PhpParser\Node\Expr\ClassConstFetch $classConstFetch) : ?\PhpParser\Node\Stmt\ClassConst
-    {
-        $className = $this->nodeNameResolver->getName($classConstFetch->class);
-        if ($className === null) {
-            return null;
-        }
-        $class = $this->resolveClassConstant($classConstFetch, $className);
-        if ($class === null) {
-            return null;
-        }
-        /** @var string $constantName */
-        $constantName = $this->nodeNameResolver->getName($classConstFetch->name);
-        return $this->findClassConstant($class, $constantName);
     }
     /**
      * @return StaticCall[]
@@ -202,25 +173,5 @@ final class ParsedNodeCollector
         } elseif ($classLike instanceof \PhpParser\Node\Stmt\Trait_) {
             $this->traits[$name] = $classLike;
         }
-    }
-    private function addClassConstant(\PhpParser\Node\Stmt\ClassConst $classConst) : void
-    {
-        $className = $classConst->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);
-        if ($className === null) {
-            // anonymous class constant
-            return;
-        }
-        $constantName = $this->nodeNameResolver->getName($classConst);
-        $this->constantsByType[$className][$constantName] = $classConst;
-    }
-    private function resolveClassConstant(\PhpParser\Node\Expr\ClassConstFetch $classConstFetch, string $className) : ?string
-    {
-        if ($className === 'self') {
-            return $classConstFetch->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);
-        }
-        if ($className === 'parent') {
-            return $this->parentClassScopeResolver->resolveParentClassName($classConstFetch);
-        }
-        return $className;
     }
 }
