@@ -84,9 +84,6 @@ CODE_SAMPLE
         if (!$classMethod->isStatic()) {
             return null;
         }
-        if (!$this->isClassMethodWithOnlyLocalStaticCalls($classMethod)) {
-            return null;
-        }
         $scope = $classMethod->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
         $classReflection = $scope->getClassReflection();
         if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
@@ -118,26 +115,6 @@ CODE_SAMPLE
             return new \PhpParser\Node\Expr\MethodCall($thisVariable, $staticCall->name, $staticCall->args);
         }
         return null;
-    }
-    private function isClassMethodWithOnlyLocalStaticCalls(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
-    {
-        $staticCalls = $this->nodeRepository->findStaticCallsByClassMethod($classMethod);
-        // get static staticCalls
-        return $this->haveSharedClass($classMethod, $staticCalls);
-    }
-    /**
-     * @param StaticCall[] $staticCalls
-     */
-    private function haveSharedClass(\PhpParser\Node\Stmt\ClassMethod $classMethod, array $staticCalls) : bool
-    {
-        $mainNodeClass = $classMethod->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);
-        foreach ($staticCalls as $staticCall) {
-            $nodeClass = $staticCall->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);
-            if ($mainNodeClass !== $nodeClass) {
-                return \false;
-            }
-        }
-        return \true;
     }
     private function isInStaticClassMethod(\PhpParser\Node\Expr\StaticCall $staticCall) : bool
     {

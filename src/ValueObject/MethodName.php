@@ -37,4 +37,8 @@ final class MethodName
      * @var string
      */
     public const SET_UP_BEFORE_CLASS = 'setUpBeforeClass';
+    /**
+     * @var string
+     */
+    public const CALL = '__call';
 }
