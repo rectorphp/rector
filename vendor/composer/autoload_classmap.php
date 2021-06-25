@@ -1968,6 +1968,7 @@ return array(
     'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveUselessParamTagRector' => $baseDir . '/rules/DeadCode/Rector/ClassMethod/RemoveUselessParamTagRector.php',
     'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveUselessReturnTagRector' => $baseDir . '/rules/DeadCode/Rector/ClassMethod/RemoveUselessReturnTagRector.php',
     'Rector\\DeadCode\\Rector\\Concat\\RemoveConcatAutocastRector' => $baseDir . '/rules/DeadCode/Rector/Concat/RemoveConcatAutocastRector.php',
+    'Rector\\DeadCode\\Rector\\ConstFetch\\RemovePhpVersionIdCheckRector' => $baseDir . '/rules/DeadCode/Rector/ConstFetch/RemovePhpVersionIdCheckRector.php',
     'Rector\\DeadCode\\Rector\\Expression\\RemoveDeadStmtRector' => $baseDir . '/rules/DeadCode/Rector/Expression/RemoveDeadStmtRector.php',
     'Rector\\DeadCode\\Rector\\Expression\\SimplifyMirrorAssignRector' => $baseDir . '/rules/DeadCode/Rector/Expression/SimplifyMirrorAssignRector.php',
     'Rector\\DeadCode\\Rector\\For_\\RemoveDeadIfForeachForRector' => $baseDir . '/rules/DeadCode/Rector/For_/RemoveDeadIfForeachForRector.php',
