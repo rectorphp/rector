@@ -13,7 +13,6 @@ use PhpParser\Node\Stmt\If_;
 use PHPStan\Analyser\Scope;
 use Rector\Core\NodeAnalyzer\CompactFuncCallAnalyzer;
 use Rector\Core\Rector\AbstractRector;
-use Rector\DeadCode\NodeAnalyzer\UsedVariableNameAnalyzer;
 use Rector\DeadCode\NodeFinder\NextVariableUsageNodeFinder;
 use Rector\DeadCode\NodeFinder\PreviousVariableAssignNodeFinder;
 use Rector\DeadCode\SideEffect\SideEffectNodeDetector;
@@ -32,8 +31,7 @@ final class RemoveUnusedAssignVariableRector extends AbstractRector
         private NextVariableUsageNodeFinder $nextVariableUsageNodeFinder,
         private PreviousVariableAssignNodeFinder $previousVariableAssignNodeFinder,
         private ScopeNestingComparator $scopeNestingComparator,
-        private SideEffectNodeDetector $sideEffectNodeDetector,
-        private UsedVariableNameAnalyzer $usedVariableNameAnalyzer
+        private SideEffectNodeDetector $sideEffectNodeDetector
     ) {
     }
 

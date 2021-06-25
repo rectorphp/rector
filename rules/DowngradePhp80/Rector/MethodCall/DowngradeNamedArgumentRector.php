@@ -20,7 +20,6 @@ use PHPStan\Type\Type;
 use PHPStan\Type\VerbosityLevel;
 use Rector\Core\PHPStan\Reflection\CallReflectionResolver;
 use Rector\Core\Rector\AbstractRector;
-use Rector\TypeDeclaration\NodeTypeAnalyzer\CallTypeAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -30,7 +29,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradeNamedArgumentRector extends AbstractRector
 {
     public function __construct(
-        private CallTypeAnalyzer $callTypeAnalyzer,
         private CallReflectionResolver $callReflectionResolver,
     ) {
     }

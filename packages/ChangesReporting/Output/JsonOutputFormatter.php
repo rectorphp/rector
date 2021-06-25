@@ -9,7 +9,6 @@ use Rector\ChangesReporting\Annotation\RectorsChangelogResolver;
 use Rector\ChangesReporting\Contract\Output\OutputFormatterInterface;
 use Rector\Core\ValueObject\Configuration;
 use Rector\Core\ValueObject\ProcessResult;
-use Symplify\SmartFileSystem\SmartFileSystem;
 
 final class JsonOutputFormatter implements OutputFormatterInterface
 {
@@ -19,8 +18,6 @@ final class JsonOutputFormatter implements OutputFormatterInterface
     public const NAME = 'json';
 
     public function __construct(
-        // @todo add rector for unused promoted property
-        private SmartFileSystem $smartFileSystem,
         private RectorsChangelogResolver $rectorsChangelogResolver
     ) {
     }

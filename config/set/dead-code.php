@@ -94,4 +94,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(RemoveUselessParamTagRector::class);
     $services->set(RemoveUselessReturnTagRector::class);
     $services->set(RemoveNonExistingVarAnnotationRector::class);
+    $services->set(\Rector\DeadCode\Rector\ClassMethod\RemoveUnusedPromotedPropertyRector::class);
 };
