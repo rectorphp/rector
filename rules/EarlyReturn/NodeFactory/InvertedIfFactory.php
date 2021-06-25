@@ -5,7 +5,6 @@ namespace Rector\EarlyReturn\NodeFactory;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Stmt\Continue_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
@@ -55,10 +54,6 @@ final class InvertedIfFactory
     }
     private function getNextReturnExpr(\PhpParser\Node\Stmt\If_ $if) : ?\PhpParser\Node
     {
-        $closure = $this->betterNodeFinder->findParentType($if, \PhpParser\Node\Expr\Closure::class);
-        if ($closure instanceof \PhpParser\Node\Expr\Closure) {
-            return null;
-        }
         return $this->betterNodeFinder->findFirstNext($if, function (\PhpParser\Node $node) : bool {
             return $node instanceof \PhpParser\Node\Stmt\Return_ && $node->expr instanceof \PhpParser\Node\Expr;
         });
