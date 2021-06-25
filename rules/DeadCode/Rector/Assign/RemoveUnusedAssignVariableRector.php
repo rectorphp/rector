@@ -12,7 +12,6 @@ use PhpParser\Node\Stmt\If_;
 use PHPStan\Analyser\Scope;
 use Rector\Core\NodeAnalyzer\CompactFuncCallAnalyzer;
 use Rector\Core\Rector\AbstractRector;
-use Rector\DeadCode\NodeAnalyzer\UsedVariableNameAnalyzer;
 use Rector\DeadCode\NodeFinder\NextVariableUsageNodeFinder;
 use Rector\DeadCode\NodeFinder\PreviousVariableAssignNodeFinder;
 use Rector\DeadCode\SideEffect\SideEffectNodeDetector;
@@ -45,18 +44,13 @@ final class RemoveUnusedAssignVariableRector extends \Rector\Core\Rector\Abstrac
      * @var \Rector\DeadCode\SideEffect\SideEffectNodeDetector
      */
     private $sideEffectNodeDetector;
-    /**
-     * @var \Rector\DeadCode\NodeAnalyzer\UsedVariableNameAnalyzer
-     */
-    private $usedVariableNameAnalyzer;
-    public function __construct(\Rector\Core\NodeAnalyzer\CompactFuncCallAnalyzer $compactFuncCallAnalyzer, \Rector\DeadCode\NodeFinder\NextVariableUsageNodeFinder $nextVariableUsageNodeFinder, \Rector\DeadCode\NodeFinder\PreviousVariableAssignNodeFinder $previousVariableAssignNodeFinder, \Rector\NodeNestingScope\ScopeNestingComparator $scopeNestingComparator, \Rector\DeadCode\SideEffect\SideEffectNodeDetector $sideEffectNodeDetector, \Rector\DeadCode\NodeAnalyzer\UsedVariableNameAnalyzer $usedVariableNameAnalyzer)
+    public function __construct(\Rector\Core\NodeAnalyzer\CompactFuncCallAnalyzer $compactFuncCallAnalyzer, \Rector\DeadCode\NodeFinder\NextVariableUsageNodeFinder $nextVariableUsageNodeFinder, \Rector\DeadCode\NodeFinder\PreviousVariableAssignNodeFinder $previousVariableAssignNodeFinder, \Rector\NodeNestingScope\ScopeNestingComparator $scopeNestingComparator, \Rector\DeadCode\SideEffect\SideEffectNodeDetector $sideEffectNodeDetector)
     {
         $this->compactFuncCallAnalyzer = $compactFuncCallAnalyzer;
         $this->nextVariableUsageNodeFinder = $nextVariableUsageNodeFinder;
         $this->previousVariableAssignNodeFinder = $previousVariableAssignNodeFinder;
         $this->scopeNestingComparator = $scopeNestingComparator;
         $this->sideEffectNodeDetector = $sideEffectNodeDetector;
-        $this->usedVariableNameAnalyzer = $usedVariableNameAnalyzer;
     }
     /**
      * @return array<class-string<Node>>

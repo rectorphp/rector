@@ -59,4 +59,23 @@ final class PropertyFetchFinder
         });
         return $propertyFetches;
     }
+    /**
+     * @return PropertyFetch[]
+     */
+    public function findLocalPropertyFetchesByName(\PhpParser\Node\Stmt\Class_ $class, string $paramName) : array
+    {
+        /** @var PropertyFetch[] $propertyFetches */
+        $propertyFetches = $this->betterNodeFinder->findInstanceOf($class, \PhpParser\Node\Expr\PropertyFetch::class);
+        $foundPropertyFetches = [];
+        foreach ($propertyFetches as $propertyFetch) {
+            if (!$this->nodeNameResolver->isName($propertyFetch->var, 'this')) {
+                continue;
+            }
+            if (!$this->nodeNameResolver->isName($propertyFetch->name, $paramName)) {
+                continue;
+            }
+            $foundPropertyFetches[] = $propertyFetch;
+        }
+        return $foundPropertyFetches;
+    }
 }

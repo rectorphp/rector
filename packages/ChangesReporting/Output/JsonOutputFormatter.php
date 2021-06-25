@@ -8,7 +8,6 @@ use Rector\ChangesReporting\Annotation\RectorsChangelogResolver;
 use Rector\ChangesReporting\Contract\Output\OutputFormatterInterface;
 use Rector\Core\ValueObject\Configuration;
 use Rector\Core\ValueObject\ProcessResult;
-use RectorPrefix20210625\Symplify\SmartFileSystem\SmartFileSystem;
 final class JsonOutputFormatter implements \Rector\ChangesReporting\Contract\Output\OutputFormatterInterface
 {
     /**
@@ -16,20 +15,11 @@ final class JsonOutputFormatter implements \Rector\ChangesReporting\Contract\Out
      */
     public const NAME = 'json';
     /**
-     * @var \Symplify\SmartFileSystem\SmartFileSystem
-     */
-    private $smartFileSystem;
-    /**
      * @var \Rector\ChangesReporting\Annotation\RectorsChangelogResolver
      */
     private $rectorsChangelogResolver;
-    public function __construct(
-        // @todo add rector for unused promoted property
-        \RectorPrefix20210625\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem,
-        \Rector\ChangesReporting\Annotation\RectorsChangelogResolver $rectorsChangelogResolver
-    )
+    public function __construct(\Rector\ChangesReporting\Annotation\RectorsChangelogResolver $rectorsChangelogResolver)
     {
-        $this->smartFileSystem = $smartFileSystem;
         $this->rectorsChangelogResolver = $rectorsChangelogResolver;
     }
     public function getName() : string

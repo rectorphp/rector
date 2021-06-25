@@ -1965,6 +1965,7 @@ return array(
     'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveUnusedConstructorParamRector' => $baseDir . '/rules/DeadCode/Rector/ClassMethod/RemoveUnusedConstructorParamRector.php',
     'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveUnusedPrivateMethodParameterRector' => $baseDir . '/rules/DeadCode/Rector/ClassMethod/RemoveUnusedPrivateMethodParameterRector.php',
     'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveUnusedPrivateMethodRector' => $baseDir . '/rules/DeadCode/Rector/ClassMethod/RemoveUnusedPrivateMethodRector.php',
+    'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveUnusedPromotedPropertyRector' => $baseDir . '/rules/DeadCode/Rector/ClassMethod/RemoveUnusedPromotedPropertyRector.php',
     'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveUselessParamTagRector' => $baseDir . '/rules/DeadCode/Rector/ClassMethod/RemoveUselessParamTagRector.php',
     'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveUselessReturnTagRector' => $baseDir . '/rules/DeadCode/Rector/ClassMethod/RemoveUselessReturnTagRector.php',
     'Rector\\DeadCode\\Rector\\Concat\\RemoveConcatAutocastRector' => $baseDir . '/rules/DeadCode/Rector/Concat/RemoveConcatAutocastRector.php',
