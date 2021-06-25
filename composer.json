@@ -26,7 +26,6 @@
         "rector/rector-doctrine": "^0.11.5",
         "rector/rector-laravel": "^0.11.1",
         "rector/rector-nette": "^0.11.5",
-        "rector/rector-nette-to-symfony": "^0.11.3",
         "rector/rector-phpunit": "^0.11.1",
         "rector/rector-symfony": "^0.11.6",
         "sebastian/diff": "^4.0.4",

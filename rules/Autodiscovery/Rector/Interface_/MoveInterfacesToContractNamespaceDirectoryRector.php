@@ -9,7 +9,7 @@ use PhpParser\Node\Stmt\Interface_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\FileSystemRector\ValueObject\AddedFileWithNodes;
 use Rector\FileSystemRector\ValueObjectFactory\AddedFileWithNodesFactory;
-use Rector\NetteToSymfony\NodeAnalyzer\NetteControlFactoryInterfaceAnalyzer;
+use Rector\Nette\NodeAnalyzer\Component\NetteControlFactoryInterfaceAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 

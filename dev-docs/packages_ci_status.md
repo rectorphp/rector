@@ -29,9 +29,3 @@
 * https://github.com/rectorphp/rector-cakephp
 * ![](https://github.com/rectorphp/rector-cakephp/actions/workflows/tests.yaml/badge.svg)
 * ![](https://github.com/rectorphp/rector-cakephp/actions/workflows/code_analysis.yaml/badge.svg)
-
-## Nette to Symfony
-
-* https://github.com/rectorphp/rector-nette-to-symfony
-* ![](https://github.com/rectorphp/rector-nette-to-symfony/actions/workflows/tests.yaml/badge.svg)
-* ![](https://github.com/rectorphp/rector-nette-to-symfony/actions/workflows/code_analysis.yaml/badge.svg)

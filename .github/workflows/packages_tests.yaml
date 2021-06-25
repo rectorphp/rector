@@ -22,7 +22,6 @@ jobs:
                 repository_name:
                     # must be repository name, e.g. https://github.com/rectorphp/rector-nette
                     - rectorphp/rector-nette
-                    - rectorphp/rector-nette-to-symfony
                     - rectorphp/rector-symfony
                     - rectorphp/rector-laravel
                     - rectorphp/rector-phpunit

@@ -12,7 +12,6 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
-use Rector\Core\NodeManipulator\ClassMethodManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeCollector\ScopeResolver\ParentClassScopeResolver;
 use Rector\NodeCollector\StaticAnalyzer;
@@ -28,7 +27,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class StaticCallOnNonStaticToInstanceCallRector extends AbstractRector
 {
     public function __construct(
-        private ClassMethodManipulator $classMethodManipulator,
         private StaticAnalyzer $staticAnalyzer,
         private ReflectionProvider $reflectionProvider,
         private ParentClassScopeResolver $parentClassScopeResolver
