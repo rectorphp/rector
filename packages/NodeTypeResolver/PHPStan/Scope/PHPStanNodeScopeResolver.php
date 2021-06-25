@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\NodeTypeResolver\PHPStan\Scope;
 
-use RectorPrefix20210624\Nette\Utils\Strings;
+use RectorPrefix20210625\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
@@ -126,7 +126,7 @@ final class PHPStanNodeScopeResolver
     {
         $className = $this->resolveClassName($classLike);
         // is anonymous class? - not possible to enter it since PHPStan 0.12.33, see https://github.com/phpstan/phpstan-src/commit/e87fb0ec26f9c8552bbeef26a868b1e5d8185e91
-        if ($classLike instanceof \PhpParser\Node\Stmt\Class_ && \RectorPrefix20210624\Nette\Utils\Strings::match($className, self::ANONYMOUS_CLASS_START_REGEX)) {
+        if ($classLike instanceof \PhpParser\Node\Stmt\Class_ && \RectorPrefix20210625\Nette\Utils\Strings::match($className, self::ANONYMOUS_CLASS_START_REGEX)) {
             $classReflection = $this->reflectionProvider->getAnonymousClassReflection($classLike, $scope);
         } elseif (!$this->reflectionProvider->hasClass($className)) {
             return $scope;

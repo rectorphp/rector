@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210624\TYPO3\CMS\Extbase\Validation\ValidatorResolver;
+namespace RectorPrefix20210625\TYPO3\CMS\Extbase\Validation\ValidatorResolver;
 
 if (\class_exists('TYPO3\\CMS\\Extbase\\Validation\\ValidatorResolver\\ValidatorResolver')) {
     return;

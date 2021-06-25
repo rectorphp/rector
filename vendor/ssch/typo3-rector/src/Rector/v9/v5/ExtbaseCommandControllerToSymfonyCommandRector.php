@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Ssch\TYPO3Rector\Rector\v9\v5;
 
-use RectorPrefix20210624\Nette\Utils\Strings;
+use RectorPrefix20210625\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -12,12 +12,10 @@ use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\Parser as NikicParser;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTextNode;
 use PHPStan\Type\ObjectType;
-use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
-use Rector\Core\Configuration\Configuration;
 use Rector\Core\PhpParser\Parser\Parser;
-use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Core\Rector\AbstractRector;
 use Rector\FileSystemRector\ValueObject\AddedFileWithContent;
+use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use Ssch\TYPO3Rector\Helper\FilesFinder;
 use Ssch\TYPO3Rector\Rector\v9\v5\ExtbaseCommandControllerToSymfonyCommand\AddArgumentToSymfonyCommandRector;
 use Ssch\TYPO3Rector\Rector\v9\v5\ExtbaseCommandControllerToSymfonyCommand\AddCommandsToReturnRector;
@@ -25,7 +23,7 @@ use Ssch\TYPO3Rector\Template\TemplateFinder;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Symplify\SmartFileSystem\SmartFileInfo;
-use RectorPrefix20210624\Symplify\SmartFileSystem\SmartFileSystem;
+use RectorPrefix20210625\Symplify\SmartFileSystem\SmartFileSystem;
 /**
  * @changelog https://docs.typo3.org/m/typo3/reference-coreapi/9.5/en-us/ApiOverview/CommandControllers/Index.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v9\v5\ExtbaseCommandControllerToSymfonyCommandRector\ExtbaseCommandControllerToSymfonyCommandRectorTest
@@ -57,14 +55,10 @@ final class ExtbaseCommandControllerToSymfonyCommandRector extends \Rector\Core\
      */
     private $nikicParser;
     /**
-     * @var \Rector\Core\Configuration\Configuration
-     */
-    private $configuration;
-    /**
      * @var \Ssch\TYPO3Rector\Template\TemplateFinder
      */
     private $templateFinder;
-    public function __construct(\RectorPrefix20210624\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \Rector\Core\PhpParser\Parser\Parser $parser, \Rector\Core\PhpParser\Printer\BetterStandardPrinter $betterStandardPrinter, \Ssch\TYPO3Rector\Rector\v9\v5\ExtbaseCommandControllerToSymfonyCommand\AddArgumentToSymfonyCommandRector $addArgumentToSymfonyCommandRector, \Ssch\TYPO3Rector\Helper\FilesFinder $filesFinder, \Ssch\TYPO3Rector\Rector\v9\v5\ExtbaseCommandControllerToSymfonyCommand\AddCommandsToReturnRector $addCommandsToReturnRector, \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector $removedAndAddedFilesCollector, \PhpParser\Parser $nikicParser, \Rector\Core\Configuration\Configuration $configuration, \Ssch\TYPO3Rector\Template\TemplateFinder $templateFinder)
+    public function __construct(\RectorPrefix20210625\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \Rector\Core\PhpParser\Parser\Parser $parser, \Ssch\TYPO3Rector\Rector\v9\v5\ExtbaseCommandControllerToSymfonyCommand\AddArgumentToSymfonyCommandRector $addArgumentToSymfonyCommandRector, \Ssch\TYPO3Rector\Helper\FilesFinder $filesFinder, \Ssch\TYPO3Rector\Rector\v9\v5\ExtbaseCommandControllerToSymfonyCommand\AddCommandsToReturnRector $addCommandsToReturnRector, \PhpParser\Parser $nikicParser, \Ssch\TYPO3Rector\Template\TemplateFinder $templateFinder)
     {
         $this->smartFileSystem = $smartFileSystem;
         $this->parser = $parser;
@@ -72,10 +66,7 @@ final class ExtbaseCommandControllerToSymfonyCommandRector extends \Rector\Core\
         $this->filesFinder = $filesFinder;
         $this->addCommandsToReturnRector = $addCommandsToReturnRector;
         $this->nikicParser = $nikicParser;
-        $this->configuration = $configuration;
         $this->templateFinder = $templateFinder;
-        $this->betterStandardPrinter = $betterStandardPrinter;
-        $this->removedAndAddedFilesCollector = $removedAndAddedFilesCollector;
     }
     /**
      * @return array<class-string<Node>>
@@ -130,11 +121,11 @@ final class ExtbaseCommandControllerToSymfonyCommandRector extends \Rector\Core\
             $methodParameters = $commandMethod->params;
             $commandDescription = null !== $descriptionPhpDocNode ? (string) $descriptionPhpDocNode : '';
             $commandTemplate = $this->templateFinder->getCommand();
-            $commandName = \RectorPrefix20210624\Nette\Utils\Strings::firstUpper($commandMethodName);
+            $commandName = \RectorPrefix20210625\Nette\Utils\Strings::firstUpper($commandMethodName);
             $commandContent = $commandTemplate->getContents();
             $filePath = \sprintf('%s/Classes/Command/%s.php', $extensionDirectory, $commandName);
             // Do not overwrite existing file
-            if ($this->smartFileSystem->exists($filePath)) {
+            if ($this->smartFileSystem->exists($filePath) && !\Rector\Testing\PHPUnit\StaticPHPUnitEnvironment::isPHPUnitRun()) {
                 continue;
             }
             $commandVariables = ['__TEMPLATE_NAMESPACE__' => \ltrim($commandNamespace, '\\'), '__TEMPLATE_COMMAND_NAME__' => $commandName, '__TEMPLATE_DESCRIPTION__' => $commandDescription, '__TEMPLATE_COMMAND_BODY__' => $this->betterStandardPrinter->prettyPrint($commandMethod->stmts)];
@@ -160,9 +151,8 @@ final class ExtbaseCommandControllerToSymfonyCommandRector extends \Rector\Core\
             $nodeTraverser->addVisitor($this->addArgumentToSymfonyCommandRector);
             $nodes = $nodeTraverser->traverse($nodes);
             $changedSetConfigContent = $this->betterStandardPrinter->prettyPrintFile($nodes);
-            $this->createDeepDirectoryFromFilePath($filePath);
             $this->removedAndAddedFilesCollector->addAddedFile(new \Rector\FileSystemRector\ValueObject\AddedFileWithContent($filePath, $changedSetConfigContent));
-            $newCommandName = \sprintf('%s:%s', \RectorPrefix20210624\Nette\Utils\Strings::lower($vendorName), \RectorPrefix20210624\Nette\Utils\Strings::lower($commandName));
+            $newCommandName = \sprintf('%s:%s', \RectorPrefix20210625\Nette\Utils\Strings::lower($vendorName), \RectorPrefix20210625\Nette\Utils\Strings::lower($commandName));
             $newCommandsWithFullQualifiedNamespace[$newCommandName] = \sprintf('%s\\%s', $commandNamespace, $commandName);
         }
         $this->addNewCommandsToCommandsFile($commandsFilePath, $newCommandsWithFullQualifiedNamespace);
@@ -228,7 +218,7 @@ CODE_SAMPLE
             if (null === $methodName) {
                 return null;
             }
-            return \RectorPrefix20210624\Nette\Utils\Strings::endsWith($methodName, 'Command');
+            return \RectorPrefix20210625\Nette\Utils\Strings::endsWith($methodName, 'Command');
         });
     }
     /**
@@ -240,7 +230,6 @@ CODE_SAMPLE
             $commandsSmartFileInfo = new \Symplify\SmartFileSystem\SmartFileInfo($commandsFilePath);
             $nodes = $this->parser->parseFileInfo($commandsSmartFileInfo);
         } else {
-            $this->createDeepDirectoryFromFilePath($commandsFilePath);
             $defaultsCommandsTemplate = $this->templateFinder->getCommandsConfiguration();
             $nodes = $this->parser->parseFileInfo($defaultsCommandsTemplate);
         }
@@ -261,12 +250,5 @@ CODE_SAMPLE
         $nameResolverNodeTraverser = new \PhpParser\NodeTraverser();
         $nameResolverNodeTraverser->addVisitor(new \PhpParser\NodeVisitor\NameResolver());
         $nameResolverNodeTraverser->traverse($nodes);
-    }
-    private function createDeepDirectoryFromFilePath(string $filePath) : void
-    {
-        if ($this->configuration->isDryRun()) {
-            return;
-        }
-        $this->smartFileSystem->mkdir(\dirname($filePath));
     }
 }

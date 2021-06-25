@@ -20,7 +20,7 @@
         "phpunit\/phpunit": "^9.5",
         "rector\/rector-generator": "^0.1.7",
         "rector\/rector-phpstan-rules": "^0.1",
-        "rector\/rector-src": "^0.11",
+        "rector\/rector-src": "^0.11.22",
         "symplify\/coding-standard": "^9.3",
         "symplify\/easy-coding-standard": "^9.3",
         "symplify\/phpstan-extensions": "^9.3",
@@ -78,6 +78,9 @@
             "includes": [
                 "config\/config.php"
             ]
+        },
+        "branch-alias": {
+            "dev-main": "0.11-dev"
         }
     },
     "conflict": {

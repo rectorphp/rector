@@ -33,7 +33,6 @@ final class NodeCollectorNodeVisitor extends \PhpParser\NodeVisitorAbstract
         if ($this->parsedNodeCollector->isCollectableNode($node)) {
             $this->parsedNodeCollector->collect($node);
         }
-        $this->nodeRepository->collect($node);
         $this->parsedPropertyFetchNodeCollector->collect($node);
         return null;
     }

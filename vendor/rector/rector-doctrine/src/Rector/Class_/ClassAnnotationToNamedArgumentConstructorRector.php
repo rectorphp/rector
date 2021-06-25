@@ -8,6 +8,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\Type\ArrayType;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
@@ -122,7 +123,7 @@ CODE_SAMPLE
         if ($this->shouldSkipPhpDocInfo($phpDocInfo)) {
             return null;
         }
-        $doctrineAnnotationTagValueNode = new \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode('Doctrine\\Common\\Annotations\\Annotation\\NamedArgumentConstructor');
+        $doctrineAnnotationTagValueNode = new \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode(new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode('Doctrine\\Common\\Annotations\\Annotation\\NamedArgumentConstructor'));
         $phpDocInfo->addTagValueNode($doctrineAnnotationTagValueNode);
         $classMethod = $node->getMethod(\Rector\Core\ValueObject\MethodName::CONSTRUCT);
         if (!$classMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {

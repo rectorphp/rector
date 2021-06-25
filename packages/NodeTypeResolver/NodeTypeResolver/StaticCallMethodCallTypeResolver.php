@@ -15,7 +15,7 @@ use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
-use RectorPrefix20210624\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix20210625\Symfony\Contracts\Service\Attribute\Required;
 final class StaticCallMethodCallTypeResolver implements \Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface
 {
     /**

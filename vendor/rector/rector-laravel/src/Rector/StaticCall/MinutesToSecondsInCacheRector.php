@@ -7,12 +7,11 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\Mul;
-use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Scalar\LNumber;
-use PhpParser\Node\Stmt\ClassConst;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Laravel\Reflection\ClassConstantReflectionResolver;
 use Rector\Laravel\ValueObject\TypeToTimeMethodAndPosition;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -44,8 +43,13 @@ final class MinutesToSecondsInCacheRector extends \Rector\Core\Rector\AbstractRe
      * @var TypeToTimeMethodAndPosition[]
      */
     private $typeToTimeMethodsAndPositions = [];
-    public function __construct()
+    /**
+     * @var \Rector\Laravel\Reflection\ClassConstantReflectionResolver
+     */
+    private $classConstantReflectionResolver;
+    public function __construct(\Rector\Laravel\Reflection\ClassConstantReflectionResolver $classConstantReflectionResolver)
     {
+        $this->classConstantReflectionResolver = $classConstantReflectionResolver;
         $this->typeToTimeMethodsAndPositions = [new \Rector\Laravel\ValueObject\TypeToTimeMethodAndPosition('Illuminate\\Support\\Facades\\Cache', self::PUT, 2), new \Rector\Laravel\ValueObject\TypeToTimeMethodAndPosition('Illuminate\\Contracts\\Cache\\Repository', self::PUT, 2), new \Rector\Laravel\ValueObject\TypeToTimeMethodAndPosition('Illuminate\\Contracts\\Cache\\Store', self::PUT, 2), new \Rector\Laravel\ValueObject\TypeToTimeMethodAndPosition('Illuminate\\Contracts\\Cache\\Repository', self::ADD, 2), new \Rector\Laravel\ValueObject\TypeToTimeMethodAndPosition('Illuminate\\Contracts\\Cache\\Store', self::ADD, 2), new \Rector\Laravel\ValueObject\TypeToTimeMethodAndPosition('Illuminate\\Support\\Facades\\Cache', self::ADD, 2), new \Rector\Laravel\ValueObject\TypeToTimeMethodAndPosition('Illuminate\\Contracts\\Cache\\Repository', self::REMEMBER, 2), new \Rector\Laravel\ValueObject\TypeToTimeMethodAndPosition('Illuminate\\Support\\Facades\\Cache', self::REMEMBER, 2), new \Rector\Laravel\ValueObject\TypeToTimeMethodAndPosition('Illuminate\\Contracts\\Cache\\Store', self::REMEMBER, 2), new \Rector\Laravel\ValueObject\TypeToTimeMethodAndPosition('Illuminate\\Contracts\\Cache\\Store', 'putMany', 1)];
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
@@ -98,35 +102,17 @@ CODE_SAMPLE
         return $node;
     }
     /**
-     * @param StaticCall|MethodCall $node
-     * @return StaticCall|MethodCall|null
+     * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $node
+     * @return \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall|null
      */
-    private function processArgumentOnPosition(\PhpParser\Node $node, \PhpParser\Node\Expr $argExpr, int $argumentPosition) : ?\PhpParser\Node\Expr
+    private function processArgumentOnPosition($node, \PhpParser\Node\Expr $argExpr, int $argumentPosition)
     {
-        if ($argExpr instanceof \PhpParser\Node\Expr\ClassConstFetch) {
-            $this->refactorClassConstFetch($argExpr);
-            return null;
-        }
         if (!$this->nodeTypeResolver->isNumberType($argExpr)) {
             return null;
         }
         $mul = $this->mulByNumber($argExpr, 60);
         $node->args[$argumentPosition] = new \PhpParser\Node\Arg($mul);
         return $node;
-    }
-    private function refactorClassConstFetch(\PhpParser\Node\Expr\ClassConstFetch $classConstFetch) : void
-    {
-        $classConst = $this->nodeRepository->findClassConstByClassConstFetch($classConstFetch);
-        if (!$classConst instanceof \PhpParser\Node\Stmt\ClassConst) {
-            return;
-        }
-        $onlyConst = $classConst->consts[0];
-        $alreadyMultiplied = (bool) $onlyConst->getAttribute(self::ATTRIBUTE_KEY_ALREADY_MULTIPLIED);
-        if ($alreadyMultiplied) {
-            return;
-        }
-        $onlyConst->value = $this->mulByNumber($onlyConst->value, 60);
-        $onlyConst->setAttribute(self::ATTRIBUTE_KEY_ALREADY_MULTIPLIED, \true);
     }
     private function mulByNumber(\PhpParser\Node\Expr $argExpr, int $value) : \PhpParser\Node\Expr
     {

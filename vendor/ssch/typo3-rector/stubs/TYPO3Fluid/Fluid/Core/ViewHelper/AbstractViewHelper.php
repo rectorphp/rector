@@ -1,8 +1,8 @@
 <?php
 
-namespace RectorPrefix20210624\TYPO3Fluid\Fluid\Core\ViewHelper;
+namespace RectorPrefix20210625\TYPO3Fluid\Fluid\Core\ViewHelper;
 
-use RectorPrefix20210624\TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
+use RectorPrefix20210625\TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 if (\class_exists('TYPO3Fluid\\Fluid\\Core\\ViewHelper\\AbstractViewHelper')) {
     return;
 }

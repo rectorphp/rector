@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210624;
+namespace RectorPrefix20210625;
 
 if (\class_exists('Tx_Fluid_Core_ViewHelper_Exception_InvalidVariableException')) {
     return;

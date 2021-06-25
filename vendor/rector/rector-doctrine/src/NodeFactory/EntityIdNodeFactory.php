@@ -40,9 +40,9 @@ final class EntityIdNodeFactory
         $phpDocInfo->addTagValueNode($varTagValueNode);
         // add @ORM\Id
         $phpDocTagNodes = [];
-        $phpDocTagNodes[] = new \Rector\BetterPhpDocParser\PhpDoc\SpacelessPhpDocTagNode('@ORM\\Id', new \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode('Doctrine\\ORM\\Mapping\\Id', null, []));
-        $phpDocTagNodes[] = new \Rector\BetterPhpDocParser\PhpDoc\SpacelessPhpDocTagNode('@ORM\\Column', new \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode('Doctrine\\ORM\\Mapping\\Column', null, ['type' => '"integer"']));
-        $phpDocTagNodes[] = new \Rector\BetterPhpDocParser\PhpDoc\SpacelessPhpDocTagNode('@ORM\\GeneratedValue', new \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode('Doctrine\\ORM\\Mapping\\GeneratedValue', null, ['strategy' => '"AUTO"']));
+        $phpDocTagNodes[] = new \Rector\BetterPhpDocParser\PhpDoc\SpacelessPhpDocTagNode('@ORM\\Id', new \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode(new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode('Doctrine\\ORM\\Mapping\\Id'), null, []));
+        $phpDocTagNodes[] = new \Rector\BetterPhpDocParser\PhpDoc\SpacelessPhpDocTagNode('@ORM\\Column', new \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode(new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode('Doctrine\\ORM\\Mapping\\Column'), null, ['type' => '"integer"']));
+        $phpDocTagNodes[] = new \Rector\BetterPhpDocParser\PhpDoc\SpacelessPhpDocTagNode('@ORM\\GeneratedValue', new \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode(new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode('Doctrine\\ORM\\Mapping\\GeneratedValue'), null, ['strategy' => '"AUTO"']));
         foreach ($phpDocTagNodes as $phpDocTagNode) {
             $phpDocInfo->addPhpDocTagNode($phpDocTagNode);
         }

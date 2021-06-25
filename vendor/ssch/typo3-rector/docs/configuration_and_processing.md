@@ -72,6 +72,14 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             __DIR__ . '/**/Configuration/AjaxRoutes.php',
             __DIR__ . '/**/Configuration/Extbase/Persistence/Classes.php',
         ],
+
+        // We skip those directories on purpose as there might be node_modules or similar
+        // that include typescript which would result in false positive processing
+        __DIR__ . '/**/Resources/**/node_modules/*',
+        __DIR__ . '/**/Resources/**/NodeModules/*',
+        __DIR__ . '/**/Resources/**/BowerComponents/*',
+        __DIR__ . '/**/Resources/**/bower_components/*',
+        __DIR__ . '/**/Resources/**/build/*',
     ]);
 
     // If you have trouble that rector cannot run because some TYPO3 constants are not defined add an additional constants file

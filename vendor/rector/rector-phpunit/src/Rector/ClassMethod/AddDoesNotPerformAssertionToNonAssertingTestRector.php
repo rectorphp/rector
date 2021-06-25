@@ -9,8 +9,10 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
+use Rector\Core\PHPStan\Reflection\CallReflectionResolver;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Reflection\ClassMethodReflectionFactory;
+use Rector\Core\Reflection\FunctionLikeReflectionParser;
 use Rector\FileSystemRector\Parser\FileInfoParser;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use ReflectionMethod;
@@ -55,11 +57,21 @@ final class AddDoesNotPerformAssertionToNonAssertingTestRector extends \Rector\C
      * @var \Rector\FileSystemRector\Parser\FileInfoParser
      */
     private $fileInfoParser;
-    public function __construct(\Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer $testsNodeAnalyzer, \Rector\Core\Reflection\ClassMethodReflectionFactory $classMethodReflectionFactory, \Rector\FileSystemRector\Parser\FileInfoParser $fileInfoParser)
+    /**
+     * @var \Rector\Core\PHPStan\Reflection\CallReflectionResolver
+     */
+    private $callReflectionResolver;
+    /**
+     * @var \Rector\Core\Reflection\FunctionLikeReflectionParser
+     */
+    private $functionLikeReflectionParser;
+    public function __construct(\Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer $testsNodeAnalyzer, \Rector\Core\Reflection\ClassMethodReflectionFactory $classMethodReflectionFactory, \Rector\FileSystemRector\Parser\FileInfoParser $fileInfoParser, \Rector\Core\PHPStan\Reflection\CallReflectionResolver $callReflectionResolver, \Rector\Core\Reflection\FunctionLikeReflectionParser $functionLikeReflectionParser)
     {
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
         $this->classMethodReflectionFactory = $classMethodReflectionFactory;
         $this->fileInfoParser = $fileInfoParser;
+        $this->callReflectionResolver = $callReflectionResolver;
+        $this->functionLikeReflectionParser = $functionLikeReflectionParser;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -182,7 +194,7 @@ CODE_SAMPLE
             if (!$node instanceof \PhpParser\Node\Expr\MethodCall && !$node instanceof \PhpParser\Node\Expr\StaticCall) {
                 return \false;
             }
-            $classMethod = $this->findClassMethod($node);
+            $classMethod = $this->findClassMethodByParsingReflection($node);
             // skip circular self calls
             if ($currentClassMethod === $classMethod) {
                 return \false;
@@ -192,25 +204,6 @@ CODE_SAMPLE
             }
             return \false;
         });
-    }
-    /**
-     * @param MethodCall|StaticCall $node
-     */
-    private function findClassMethod(\PhpParser\Node $node) : ?\PhpParser\Node\Stmt\ClassMethod
-    {
-        if ($node instanceof \PhpParser\Node\Expr\MethodCall) {
-            $classMethod = $this->nodeRepository->findClassMethodByMethodCall($node);
-            if ($classMethod !== null) {
-                return $classMethod;
-            }
-        } elseif ($node instanceof \PhpParser\Node\Expr\StaticCall) {
-            $classMethod = $this->nodeRepository->findClassMethodByStaticCall($node);
-            if ($classMethod !== null) {
-                return $classMethod;
-            }
-        }
-        // in 3rd-party code
-        return $this->findClassMethodByParsingReflection($node);
     }
     /**
      * @param MethodCall|StaticCall $node

@@ -8,12 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210624\Symfony\Component\HttpKernel\EventListener;
+namespace RectorPrefix20210625\Symfony\Component\HttpKernel\EventListener;
 
-use RectorPrefix20210624\Psr\Container\ContainerInterface;
-use RectorPrefix20210624\Symfony\Component\HttpFoundation\Session\SessionInterface;
-use RectorPrefix20210624\Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage;
-use RectorPrefix20210624\Symfony\Component\HttpKernel\Event\RequestEvent;
+use RectorPrefix20210625\Psr\Container\ContainerInterface;
+use RectorPrefix20210625\Symfony\Component\HttpFoundation\Session\SessionInterface;
+use RectorPrefix20210625\Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage;
+use RectorPrefix20210625\Symfony\Component\HttpKernel\Event\RequestEvent;
 /**
  * Sets the session in the request.
  *
@@ -25,23 +25,23 @@ use RectorPrefix20210624\Symfony\Component\HttpKernel\Event\RequestEvent;
  *
  * @final
  */
-class SessionListener extends \RectorPrefix20210624\Symfony\Component\HttpKernel\EventListener\AbstractSessionListener
+class SessionListener extends \RectorPrefix20210625\Symfony\Component\HttpKernel\EventListener\AbstractSessionListener
 {
-    public function __construct(\RectorPrefix20210624\Psr\Container\ContainerInterface $container, bool $debug = \false)
+    public function __construct(\RectorPrefix20210625\Psr\Container\ContainerInterface $container, bool $debug = \false)
     {
         parent::__construct($container, $debug);
     }
-    public function onKernelRequest(\RectorPrefix20210624\Symfony\Component\HttpKernel\Event\RequestEvent $event)
+    public function onKernelRequest(\RectorPrefix20210625\Symfony\Component\HttpKernel\Event\RequestEvent $event)
     {
         parent::onKernelRequest($event);
         if (!$event->isMainRequest() || !$this->container->has('session')) {
             return;
         }
-        if ($this->container->has('session_storage') && ($storage = $this->container->get('session_storage')) instanceof \RectorPrefix20210624\Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage && ($mainRequest = $this->container->get('request_stack')->getMainRequest()) && $mainRequest->isSecure()) {
+        if ($this->container->has('session_storage') && ($storage = $this->container->get('session_storage')) instanceof \RectorPrefix20210625\Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage && ($mainRequest = $this->container->get('request_stack')->getMainRequest()) && $mainRequest->isSecure()) {
             $storage->setOptions(['cookie_secure' => \true]);
         }
     }
-    protected function getSession() : ?\RectorPrefix20210624\Symfony\Component\HttpFoundation\Session\SessionInterface
+    protected function getSession() : ?\RectorPrefix20210625\Symfony\Component\HttpFoundation\Session\SessionInterface
     {
         if (!$this->container->has('session')) {
             return null;

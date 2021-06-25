@@ -13,14 +13,11 @@ use PhpParser\Node\Stmt\Expression;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\SubtractableType;
-use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Doctrine\TypeAnalyzer\TypeFinder;
 use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 final class EntityObjectTypeResolver
 {
     /**
@@ -56,10 +53,6 @@ final class EntityObjectTypeResolver
         if (!$getterReturnType instanceof \PHPStan\Type\MixedType) {
             return $getterReturnType;
         }
-        $entityType = $this->resolveFromMatchingEntityAnnotation($repositoryClass);
-        if (!$entityType instanceof \PHPStan\Type\MixedType) {
-            return $entityType;
-        }
         return new \PHPStan\Type\MixedType();
     }
     private function resolveFromGetterReturnType(\PhpParser\Node\Stmt\Class_ $repositoryClass) : \PHPStan\Type\SubtractableType
@@ -75,33 +68,6 @@ final class EntityObjectTypeResolver
                 continue;
             }
             return $objectType;
-        }
-        return new \PHPStan\Type\MixedType();
-    }
-    private function resolveFromMatchingEntityAnnotation(\PhpParser\Node\Stmt\Class_ $repositoryClass) : \PHPStan\Type\SubtractableType
-    {
-        $repositoryClassName = $repositoryClass->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);
-        foreach ($this->nodeRepository->getClasses() as $class) {
-            if ($class->isFinal()) {
-                continue;
-            }
-            if ($class->isAbstract()) {
-                continue;
-            }
-            $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($class);
-            $doctrineAnnotationTagValueNode = $phpDocInfo->getByAnnotationClass('Doctrine\\ORM\\Mapping\\Entity');
-            if (!$doctrineAnnotationTagValueNode instanceof \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode) {
-                continue;
-            }
-            $repositoryClass = $doctrineAnnotationTagValueNode->getValueWithoutQuotes('repositoryClass');
-            if ($repositoryClass !== $repositoryClassName) {
-                continue;
-            }
-            $className = $this->nodeNameResolver->getName($class);
-            if (!\is_string($className)) {
-                throw new \Rector\Core\Exception\ShouldNotHappenException();
-            }
-            return new \PHPStan\Type\ObjectType($className);
         }
         return new \PHPStan\Type\MixedType();
     }

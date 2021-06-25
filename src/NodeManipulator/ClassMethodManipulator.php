@@ -112,18 +112,6 @@ final class ClassMethodManipulator
         return \false;
     }
     /**
-     * Is method actually static, or has some $this-> calls?
-     */
-    public function isStaticClassMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
-    {
-        return (bool) $this->betterNodeFinder->findFirst((array) $classMethod->stmts, function (\PhpParser\Node $node) : bool {
-            if (!$node instanceof \PhpParser\Node\Expr\Variable) {
-                return \false;
-            }
-            return $this->nodeNameResolver->isName($node, 'this');
-        });
-    }
-    /**
      * @param string[] $possibleNames
      */
     public function addMethodParameterIfMissing(\PhpParser\Node $node, \PHPStan\Type\ObjectType $objectType, array $possibleNames) : string

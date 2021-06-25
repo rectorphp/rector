@@ -6,6 +6,7 @@ namespace Ssch\TYPO3Rector\Rector\Migrations;
 use PhpParser\Node;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Name;
+use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Namespace_;
@@ -13,6 +14,7 @@ use PhpParser\Node\Stmt\Property;
 use Rector\Core\Configuration\RenamedClassesDataCollector;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Renaming\NodeManipulator\ClassRenamer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -76,13 +78,16 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Name::class, \PhpParser\Node\Stmt\Property::class, \PhpParser\Node\FunctionLike::class, \PhpParser\Node\Stmt\Expression::class, \PhpParser\Node\Stmt\ClassLike::class, \PhpParser\Node\Stmt\Namespace_::class];
+        return [\PhpParser\Node\Name::class, \PhpParser\Node\Stmt\Property::class, \PhpParser\Node\FunctionLike::class, \PhpParser\Node\Stmt\Expression::class, \PhpParser\Node\Stmt\ClassLike::class, \PhpParser\Node\Stmt\Namespace_::class, \PhpParser\Node\Scalar\String_::class];
     }
     /**
-     * @param Name|FunctionLike|Property $node
+     * @param Name|FunctionLike|Property|Name|Expression|String_ $node
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
+        if ($node instanceof \PhpParser\Node\Scalar\String_) {
+            return $this->stringClassNameToClassConstantRectorIfPossible($node);
+        }
         return $this->classRenamer->renameNode($node, $this->oldToNewClasses);
     }
     /**
@@ -101,5 +106,22 @@ CODE_SAMPLE
         if ([] !== $this->oldToNewClasses) {
             $this->renamedClassesDataCollector->addOldToNewClasses($this->oldToNewClasses);
         }
+    }
+    private function stringClassNameToClassConstantRectorIfPossible(\PhpParser\Node\Scalar\String_ $node) : ?\PhpParser\Node
+    {
+        if (!$this->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::CLASSNAME_CONSTANT)) {
+            return null;
+        }
+        $classLikeName = $node->value;
+        // remove leading slash
+        $classLikeName = \ltrim($classLikeName, '\\');
+        if ('' === $classLikeName) {
+            return null;
+        }
+        if (!\array_key_exists($classLikeName, $this->oldToNewClasses)) {
+            return null;
+        }
+        $newClassName = $this->oldToNewClasses[$classLikeName];
+        return $this->nodeFactory->createClassConstReference($newClassName);
     }
 }

@@ -7,22 +7,16 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\MethodReflection;
-use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 final class ParentClassMethodTypeOverrideGuard
 {
     /**
-     * @var \Rector\NodeCollector\NodeCollector\NodeRepository
-     */
-    private $nodeRepository;
-    /**
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(\Rector\NodeCollector\NodeCollector\NodeRepository $nodeRepository, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
     {
-        $this->nodeRepository = $nodeRepository;
         $this->nodeNameResolver = $nodeNameResolver;
     }
     public function hasParentMethodOutsideVendor(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
@@ -43,9 +37,12 @@ final class ParentClassMethodTypeOverrideGuard
             if (!$ancestorClassReflection->hasMethod($methodName)) {
                 continue;
             }
-            $parentClassMethodReflection = $ancestorClassReflection->getMethod($methodName, $scope);
-            $parentClassMethod = $this->nodeRepository->findClassMethodByMethodReflection($parentClassMethodReflection);
-            if (!$parentClassMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
+            $fileName = $ancestorClassReflection->getFileName();
+            // PHP internal class
+            if ($fileName === \false) {
+                continue;
+            }
+            if (\strpos($fileName, '/vendor/') !== \false) {
                 return \true;
             }
         }
@@ -59,12 +56,13 @@ final class ParentClassMethodTypeOverrideGuard
         if (!$parentClassMethodReflection instanceof \PHPStan\Reflection\MethodReflection) {
             return \true;
         }
-        $parentClassMethod = $this->nodeRepository->findClassMethodByMethodReflection($parentClassMethodReflection);
-        // if null, we're unable to override → skip it
-        if (!$parentClassMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
-            return \true;
+        $classReflection = $parentClassMethodReflection->getDeclaringClass();
+        $fileName = $classReflection->getFileName();
+        // probably internal
+        if ($fileName === \false) {
+            return \false;
         }
-        return $parentClassMethod->returnType === null;
+        return \strpos($fileName, '/vendor/') === \false;
     }
     private function getParentClassMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod) : ?\PHPStan\Reflection\MethodReflection
     {

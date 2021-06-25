@@ -38,7 +38,7 @@ final class ImportExtbaseAnnotationIfMissingFactory
         });
         $completeImportForPartialAnnotation = new \Rector\Restoration\ValueObject\CompleteImportForPartialAnnotation('TYPO3\\CMS\\Extbase\\Annotation', 'Extbase');
         if ($namespace instanceof \PhpParser\Node\Stmt\Namespace_ && $this->isImportMissing($namespace, $completeImportForPartialAnnotation)) {
-            $this->useNodesToAddCollector->addUseImport($node, new \Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType('Extbase', 'TYPO3\\CMS\\Extbase\\Annotation'));
+            $this->useNodesToAddCollector->addUseImport(new \Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType('Extbase', 'TYPO3\\CMS\\Extbase\\Annotation'));
         }
     }
     private function isImportMissing(\PhpParser\Node\Stmt\Namespace_ $namespace, \Rector\Restoration\ValueObject\CompleteImportForPartialAnnotation $completeImportForPartialAnnotation) : bool

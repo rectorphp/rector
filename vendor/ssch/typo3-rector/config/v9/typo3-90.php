@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210624;
+namespace RectorPrefix20210625;
 
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
@@ -63,4 +63,5 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
     $services->set(\Ssch\TYPO3Rector\Rector\v9\v0\SubstituteGeneralUtilityDevLogRector::class);
     $services->set(\Ssch\TYPO3Rector\Rector\v9\v0\ReplacedGeneralUtilitySysLogWithLogginApiRector::class);
     $services->set(\Ssch\TYPO3Rector\FileProcessor\FlexForms\Rector\RenderTypeFlexFormRector::class);
+    $services->set(\Ssch\TYPO3Rector\Rector\v9\v0\QueryLogicalOrAndLogicalAndToArrayParameterRector::class);
 };

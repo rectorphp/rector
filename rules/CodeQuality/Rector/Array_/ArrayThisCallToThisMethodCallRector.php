@@ -11,14 +11,12 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeCollector\NodeAnalyzer\ArrayCallableMethodReferenceAnalyzer;
 use Rector\NodeCollector\ValueObject\ArrayCallable;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use ReflectionMethod;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -107,7 +105,6 @@ CODE_SAMPLE
         }
         $nativeReflectionClass = $classReflection->getNativeReflection();
         $nativeReflectionMethod = $nativeReflectionClass->getMethod($arrayCallable->getMethod());
-        $this->privatizeClassMethod($nativeReflectionMethod);
         if ($nativeReflectionMethod->getNumberOfParameters() === 0) {
             return new \PhpParser\Node\Expr\MethodCall(new \PhpParser\Node\Expr\Variable('this'), $arrayCallable->getMethod());
         }
@@ -134,16 +131,5 @@ CODE_SAMPLE
     {
         $parentProperty = $this->betterNodeFinder->findParentType($array, \PhpParser\Node\Stmt\Property::class);
         return $parentProperty !== null;
-    }
-    private function privatizeClassMethod(\ReflectionMethod $reflectionMethod) : void
-    {
-        $classMethod = $this->nodeRepository->findClassMethodByMethodReflection($reflectionMethod);
-        if (!$classMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
-            return;
-        }
-        if ($classMethod->isPrivate()) {
-            return;
-        }
-        $this->visibilityManipulator->makePrivate($classMethod);
     }
 }

@@ -9,7 +9,6 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
 use Rector\Core\NodeManipulator\ClassMethodManipulator;
@@ -115,15 +114,6 @@ CODE_SAMPLE
             $new = new \PhpParser\Node\Expr\New_($node->class);
             return new \PhpParser\Node\Expr\MethodCall($new, $node->name, $node->args);
         }
-        // can we add static to method?
-        $classMethodNode = $this->nodeRepository->findClassMethod($className, $methodName);
-        if (!$classMethodNode instanceof \PhpParser\Node\Stmt\ClassMethod) {
-            return null;
-        }
-        if ($this->classMethodManipulator->isStaticClassMethod($classMethodNode)) {
-            return null;
-        }
-        $this->visibilityManipulator->makeStatic($classMethodNode);
         return null;
     }
     private function resolveStaticCallClassName(\PhpParser\Node\Expr\StaticCall $staticCall) : ?string

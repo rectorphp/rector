@@ -6,7 +6,7 @@ namespace Rector\Php80\Reflection;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Reflection\Php\PhpMethodReflection;
 use PHPStan\Reflection\ReflectionProvider;
-use Rector\Core\Reflection\MethodReflectionToAstResolver;
+use Rector\Core\Reflection\FunctionLikeReflectionParser;
 final class MethodReflectionClassMethodResolver
 {
     /**
@@ -14,13 +14,13 @@ final class MethodReflectionClassMethodResolver
      */
     private $reflectionProvider;
     /**
-     * @var \Rector\Core\Reflection\MethodReflectionToAstResolver
+     * @var \Rector\Core\Reflection\FunctionLikeReflectionParser
      */
-    private $methodReflectionToAstResolver;
-    public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\Core\Reflection\MethodReflectionToAstResolver $methodReflectionToAstResolver)
+    private $functionLikeReflectionParser;
+    public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\Core\Reflection\FunctionLikeReflectionParser $functionLikeReflectionParser)
     {
         $this->reflectionProvider = $reflectionProvider;
-        $this->methodReflectionToAstResolver = $methodReflectionToAstResolver;
+        $this->functionLikeReflectionParser = $functionLikeReflectionParser;
     }
     public function resolve(string $className, string $methodName) : ?\PhpParser\Node\Stmt\ClassMethod
     {
@@ -38,6 +38,6 @@ final class MethodReflectionClassMethodResolver
         if (!$constructorClassMethodReflection instanceof \PHPStan\Reflection\Php\PhpMethodReflection) {
             return null;
         }
-        return $this->methodReflectionToAstResolver->resolveProjectClassMethod($constructorClassMethodReflection);
+        return $this->functionLikeReflectionParser->parseMethodReflection($constructorClassMethodReflection);
     }
 }

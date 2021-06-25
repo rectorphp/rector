@@ -8,6 +8,7 @@ use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
 use Rector\PostRector\Rector\NameImportingPostRector;
 use Ssch\TYPO3Rector\Configuration\Typo3Option;
 use Ssch\TYPO3Rector\FileProcessor\Composer\Rector\ExtensionComposerRector;
+use Ssch\TYPO3Rector\FileProcessor\TypoScript\Visitors\FileIncludeToImportStatementVisitor;
 use Ssch\TYPO3Rector\Rector\v9\v0\InjectAnnotationRector;
 use Ssch\TYPO3Rector\Rector\General\ConvertTypo3ConfVarsRector;
 use Ssch\TYPO3Rector\Rector\General\ExtEmConfRector;
@@ -63,6 +64,14 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             __DIR__ . '/**/Configuration/RequestMiddlewares.php',
             __DIR__ . '/**/Configuration/TCA/*',
         ],
+
+        // We skip those directories on purpose as there might be node_modules or similar
+        // that include typescript which would result in false positive processing
+        __DIR__ . '/**/Resources/**/node_modules/*',
+        __DIR__ . '/**/Resources/**/NodeModules/*',
+        __DIR__ . '/**/Resources/**/BowerComponents/*',
+        __DIR__ . '/**/Resources/**/bower_components/*',
+        __DIR__ . '/**/Resources/**/build/*',
     ]);
 
     // If you have trouble that rector cannot run because some TYPO3 constants are not defined add an additional constants file
@@ -101,6 +110,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ExtEmConfRector::class);
     $services->set(ExtensionComposerRector::class);
 
-    // Run Rector only on changed files
-    // $parameters->set(Option::ENABLE_CACHE, true);
+    // Do you want to modernize your TypoScript include statements for files and move from <INCLUDE /> to @import use the FileIncludeToImportStatementVisitor
+    // $services->set(FileIncludeToImportStatementVisitor::class);
 };

@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210624\Helmich\TypoScriptParser\Parser\Traverser;
+namespace RectorPrefix20210625\Helmich\TypoScriptParser\Parser\Traverser;
 
-use RectorPrefix20210624\Helmich\TypoScriptParser\Parser\AST\ConditionalStatement;
-use RectorPrefix20210624\Helmich\TypoScriptParser\Parser\AST\NestedAssignment;
-use RectorPrefix20210624\Helmich\TypoScriptParser\Parser\AST\Statement;
+use RectorPrefix20210625\Helmich\TypoScriptParser\Parser\AST\ConditionalStatement;
+use RectorPrefix20210625\Helmich\TypoScriptParser\Parser\AST\NestedAssignment;
+use RectorPrefix20210625\Helmich\TypoScriptParser\Parser\AST\Statement;
 /**
  * Class Traverser
  *
@@ -24,12 +24,12 @@ class Traverser
     public function __construct(array $statements)
     {
         $this->statements = $statements;
-        $this->visitors = new \RectorPrefix20210624\Helmich\TypoScriptParser\Parser\Traverser\AggregatingVisitor();
+        $this->visitors = new \RectorPrefix20210625\Helmich\TypoScriptParser\Parser\Traverser\AggregatingVisitor();
     }
     /**
      * @param Visitor $visitor
      */
-    public function addVisitor(\RectorPrefix20210624\Helmich\TypoScriptParser\Parser\Traverser\Visitor $visitor) : void
+    public function addVisitor(\RectorPrefix20210625\Helmich\TypoScriptParser\Parser\Traverser\Visitor $visitor) : void
     {
         $this->visitors->addVisitor($visitor);
     }
@@ -50,9 +50,9 @@ class Traverser
     {
         foreach ($statements as $statement) {
             $this->visitors->enterNode($statement);
-            if ($statement instanceof \RectorPrefix20210624\Helmich\TypoScriptParser\Parser\AST\NestedAssignment) {
+            if ($statement instanceof \RectorPrefix20210625\Helmich\TypoScriptParser\Parser\AST\NestedAssignment) {
                 $statement->statements = $this->walkRecursive($statement->statements);
-            } elseif ($statement instanceof \RectorPrefix20210624\Helmich\TypoScriptParser\Parser\AST\ConditionalStatement) {
+            } elseif ($statement instanceof \RectorPrefix20210625\Helmich\TypoScriptParser\Parser\AST\ConditionalStatement) {
                 $statement->ifStatements = $this->walkRecursive($statement->ifStatements);
                 $statement->elseStatements = $this->walkRecursive($statement->elseStatements);
             }

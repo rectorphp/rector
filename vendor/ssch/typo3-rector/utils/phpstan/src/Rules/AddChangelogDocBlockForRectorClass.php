@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Ssch\TYPO3Rector\PHPStan\Rules;
 
-use RectorPrefix20210624\Nette\Utils\Strings;
+use RectorPrefix20210625\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\Analyser\Scope;
@@ -12,12 +12,14 @@ use PHPStan\Rules\Rule;
 use PHPStan\Type\FileTypeMapper;
 use Rector\Core\Contract\Rector\PhpRectorInterface;
 use Rector\Core\Contract\Rector\RectorInterface;
+use Ssch\TYPO3Rector\ComposerPackages\Rector\AddPackageVersionRector;
 use Ssch\TYPO3Rector\Rector\General\ConvertTypo3ConfVarsRector;
 use Ssch\TYPO3Rector\Rector\Migrations\RenameClassMapAliasRector;
 use Ssch\TYPO3Rector\Rector\Tca\AbstractTcaRector;
 use Ssch\TYPO3Rector\Rules\Rector\Misc\AddCodeCoverageIgnoreToMethodRectorDefinitionRector;
 /**
  * @see \Ssch\TYPO3Rector\PHPStan\Tests\Rules\AddChangelogDocBlockForRectorClass\AddChangelogDocBlockForRectorClassTest
+ * @implements Rule<Class_>
  */
 final class AddChangelogDocBlockForRectorClass implements \PHPStan\Rules\Rule
 {
@@ -28,7 +30,7 @@ final class AddChangelogDocBlockForRectorClass implements \PHPStan\Rules\Rule
     /**
      * @var array<class-string<RectorInterface>>
      */
-    private const ALLOWED_CLASSES_WITH_NON_CHANGELOG_DOC_BLOCK = [\Ssch\TYPO3Rector\Rector\Migrations\RenameClassMapAliasRector::class, \Ssch\TYPO3Rector\Rules\Rector\Misc\AddCodeCoverageIgnoreToMethodRectorDefinitionRector::class, \Ssch\TYPO3Rector\Rector\General\ConvertTypo3ConfVarsRector::class, \Ssch\TYPO3Rector\Rector\Tca\AbstractTcaRector::class];
+    private const ALLOWED_CLASSES_WITH_NON_CHANGELOG_DOC_BLOCK = [\Ssch\TYPO3Rector\Rector\Migrations\RenameClassMapAliasRector::class, \Ssch\TYPO3Rector\Rules\Rector\Misc\AddCodeCoverageIgnoreToMethodRectorDefinitionRector::class, \Ssch\TYPO3Rector\Rector\General\ConvertTypo3ConfVarsRector::class, \Ssch\TYPO3Rector\Rector\Tca\AbstractTcaRector::class, \Ssch\TYPO3Rector\ComposerPackages\Rector\AddPackageVersionRector::class];
     /**
      * @var \PHPStan\Broker\Broker
      */
@@ -70,7 +72,7 @@ final class AddChangelogDocBlockForRectorClass implements \PHPStan\Rules\Rule
         }
         $resolvedPhpDoc = $this->fileTypeMapper->getResolvedPhpDoc($scope->getFile(), $classReflection->getName(), null, null, $docComment->getText());
         $phpDocString = $resolvedPhpDoc->getPhpDocString();
-        if (\RectorPrefix20210624\Nette\Utils\Strings::contains($phpDocString, '@changelog')) {
+        if (\RectorPrefix20210625\Nette\Utils\Strings::contains($phpDocString, '@changelog')) {
             return [];
         }
         return [\sprintf(self::ERROR_MESSAGE, $className)];

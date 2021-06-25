@@ -3,17 +3,17 @@
 declare (strict_types=1);
 namespace Ssch\TYPO3Rector\PHPStan\Rules;
 
-use RectorPrefix20210624\Nette\Utils\Strings;
+use RectorPrefix20210625\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
-use PHPStan\Broker\Broker;
 use PHPStan\Rules\Rule;
 use PHPStan\ShouldNotHappenException;
 use PHPStan\Type\FileTypeMapper;
 use Rector\Core\Contract\Rector\PhpRectorInterface;
 /**
  * @see \Ssch\TYPO3Rector\PHPStan\Tests\Rules\AddCodeCoverageIgnoreForRectorDefinition\AddCodeCoverageIgnoreForRectorDefinitionTest
+ * @implements Rule<ClassMethod>
  */
 final class AddCodeCoverageIgnoreForRectorDefinition implements \PHPStan\Rules\Rule
 {
@@ -22,16 +22,11 @@ final class AddCodeCoverageIgnoreForRectorDefinition implements \PHPStan\Rules\R
      */
     public const ERROR_MESSAGE = 'Provide @codeCoverageIgnore doc block for "%s" RectorDefinition method';
     /**
-     * @var \PHPStan\Broker\Broker
-     */
-    private $broker;
-    /**
      * @var \PHPStan\Type\FileTypeMapper
      */
     private $fileTypeMapper;
-    public function __construct(\PHPStan\Broker\Broker $broker, \PHPStan\Type\FileTypeMapper $fileTypeMapper)
+    public function __construct(\PHPStan\Type\FileTypeMapper $fileTypeMapper)
     {
-        $this->broker = $broker;
         $this->fileTypeMapper = $fileTypeMapper;
     }
     public function getNodeType() : string
@@ -66,7 +61,7 @@ final class AddCodeCoverageIgnoreForRectorDefinition implements \PHPStan\Rules\R
         }
         $resolvedPhpDoc = $this->fileTypeMapper->getResolvedPhpDoc($scope->getFile(), $classReflection->getName(), null, $methodName, $docComment->getText());
         $phpDocString = $resolvedPhpDoc->getPhpDocString();
-        if (\RectorPrefix20210624\Nette\Utils\Strings::contains($phpDocString, '@codeCoverageIgnore')) {
+        if (\RectorPrefix20210625\Nette\Utils\Strings::contains($phpDocString, '@codeCoverageIgnore')) {
             return [];
         }
         return [\sprintf(self::ERROR_MESSAGE, $className)];

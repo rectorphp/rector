@@ -3,11 +3,13 @@
 declare (strict_types=1);
 namespace Ssch\TYPO3Rector\FileProcessor\Resources\Icons;
 
-use RectorPrefix20210624\Nette\Utils\Strings;
+use RectorPrefix20210625\Nette\Utils\Strings;
 use Rector\Core\Contract\Processor\FileProcessorInterface;
 use Rector\Core\ValueObject\Application\File;
+use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use Ssch\TYPO3Rector\Contract\FileProcessor\Resources\IconRectorInterface;
 use Ssch\TYPO3Rector\Helper\FilesFinder;
+use RectorPrefix20210625\Symplify\SmartFileSystem\SmartFileSystem;
 /**
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/8.3/Feature-77349-AdditionalLocationsForExtensionIcons.html
  * @see \Ssch\TYPO3Rector\Tests\FileProcessor\Resources\Icons\IconsProcessor\IconsProcessorTest
@@ -19,15 +21,20 @@ final class IconsProcessor implements \Rector\Core\Contract\Processor\FileProces
      */
     private $filesFinder;
     /**
+     * @var \Symplify\SmartFileSystem\SmartFileSystem
+     */
+    private $smartFileSystem;
+    /**
      * @var mixed[]
      */
     private $iconsRector;
     /**
      * @param IconRectorInterface[] $iconsRector
      */
-    public function __construct(\Ssch\TYPO3Rector\Helper\FilesFinder $filesFinder, array $iconsRector)
+    public function __construct(\Ssch\TYPO3Rector\Helper\FilesFinder $filesFinder, \RectorPrefix20210625\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, array $iconsRector)
     {
         $this->filesFinder = $filesFinder;
+        $this->smartFileSystem = $smartFileSystem;
         $this->iconsRector = $iconsRector;
     }
     /**
@@ -44,14 +51,17 @@ final class IconsProcessor implements \Rector\Core\Contract\Processor\FileProces
     public function supports(\Rector\Core\ValueObject\Application\File $file) : bool
     {
         $smartFileInfo = $file->getSmartFileInfo();
-        if (!\RectorPrefix20210624\Nette\Utils\Strings::contains($smartFileInfo->getFilename(), 'ext_icon')) {
+        if (!\RectorPrefix20210625\Nette\Utils\Strings::contains($smartFileInfo->getFilename(), 'ext_icon')) {
             return \false;
         }
         $extEmConfSmartFileInfo = $this->filesFinder->findExtEmConfRelativeFromGivenFileInfo($smartFileInfo);
         if (null === $extEmConfSmartFileInfo) {
             return \false;
         }
-        return !\file_exists($this->createIconPath($file));
+        if (\Rector\Testing\PHPUnit\StaticPHPUnitEnvironment::isPHPUnitRun()) {
+            return \true;
+        }
+        return !$this->smartFileSystem->exists($this->createIconPath($file));
     }
     public function getSupportedFileExtensions() : array
     {

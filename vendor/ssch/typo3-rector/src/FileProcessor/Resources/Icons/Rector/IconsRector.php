@@ -4,33 +4,41 @@ declare (strict_types=1);
 namespace Ssch\TYPO3Rector\FileProcessor\Resources\Icons\Rector;
 
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
-use Rector\Core\Configuration\Configuration;
+use Rector\Core\Configuration\Option;
 use Rector\Core\ValueObject\Application\File;
 use Rector\FileSystemRector\ValueObject\AddedFileWithContent;
+use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use Ssch\TYPO3Rector\Contract\FileProcessor\Resources\IconRectorInterface;
+use RectorPrefix20210625\Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20210625\Symplify\SmartFileSystem\SmartFileSystem;
 final class IconsRector implements \Ssch\TYPO3Rector\Contract\FileProcessor\Resources\IconRectorInterface
 {
     /**
-     * @var \Rector\Core\Configuration\Configuration
+     * @var \Symplify\PackageBuilder\Parameter\ParameterProvider
      */
-    private $configuration;
+    private $parameterProvider;
     /**
      * @var \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector
      */
     private $removedAndAddedFilesCollector;
-    public function __construct(\Rector\Core\Configuration\Configuration $configuration, \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector $removedAndAddedFilesCollector)
+    /**
+     * @var \Symplify\SmartFileSystem\SmartFileSystem
+     */
+    private $smartFileSystem;
+    public function __construct(\RectorPrefix20210625\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector $removedAndAddedFilesCollector, \RectorPrefix20210625\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem)
     {
-        $this->configuration = $configuration;
+        $this->parameterProvider = $parameterProvider;
         $this->removedAndAddedFilesCollector = $removedAndAddedFilesCollector;
+        $this->smartFileSystem = $smartFileSystem;
     }
     public function refactorFile(\Rector\Core\ValueObject\Application\File $file) : void
     {
         $smartFileInfo = $file->getSmartFileInfo();
         $newFullPath = $this->createIconPath($file);
-        $this->removedAndAddedFilesCollector->addAddedFile(new \Rector\FileSystemRector\ValueObject\AddedFileWithContent($newFullPath, $smartFileInfo->getContents()));
         $this->createDeepDirectory($newFullPath);
+        $this->removedAndAddedFilesCollector->addAddedFile(new \Rector\FileSystemRector\ValueObject\AddedFileWithContent($newFullPath, $smartFileInfo->getContents()));
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -44,13 +52,10 @@ CODE_SAMPLE
     }
     private function createDeepDirectory(string $newFullPath) : void
     {
-        if ($this->configuration->isDryRun()) {
+        if ($this->shouldSkip()) {
             return;
         }
-        $iconsDirectory = \dirname($newFullPath);
-        if (!\is_dir($iconsDirectory)) {
-            \mkdir($iconsDirectory, 0777, \true);
-        }
+        $this->smartFileSystem->mkdir(\dirname($newFullPath));
     }
     private function createIconPath(\Rector\Core\ValueObject\Application\File $file) : string
     {
@@ -58,5 +63,9 @@ CODE_SAMPLE
         $realPath = $smartFileInfo->getRealPathDirectory();
         $relativeTargetFilePath = \sprintf('/Resources/Public/Icons/Extension.%s', $smartFileInfo->getExtension());
         return $realPath . $relativeTargetFilePath;
+    }
+    private function shouldSkip() : bool
+    {
+        return $this->parameterProvider->provideBoolParameter(\Rector\Core\Configuration\Option::DRY_RUN) && !\Rector\Testing\PHPUnit\StaticPHPUnitEnvironment::isPHPUnitRun();
     }
 }

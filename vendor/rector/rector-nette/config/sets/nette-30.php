@@ -1,12 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210624;
+namespace RectorPrefix20210625;
 
 use Rector\Arguments\Rector\ClassMethod\ReplaceArgumentDefaultValueRector;
 use Rector\Arguments\ValueObject\ReplaceArgumentDefaultValue;
 use Rector\DeadCode\Rector\StaticCall\RemoveParentCallWithoutParentRector;
-use Rector\Nette\Rector\ArrayDimFetch\ChangeFormArrayAccessToAnnotatedControlVariableRector;
 use Rector\Nette\Rector\Class_\MoveFinalGetUserToCheckRequirementsClassMethodRector;
 use Rector\Nette\Rector\ClassMethod\RemoveParentAndNameFromComponentConstructorRector;
 use Rector\Nette\Rector\MethodCall\AddNextrasDatePickerToDateControlRector;
@@ -31,7 +30,6 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
     $containerConfigurator->import(__DIR__ . '/nette-30/nette-30-param-types.php');
     $services = $containerConfigurator->services();
     $services->set(\Rector\Nette\Rector\MethodCall\AddNextrasDatePickerToDateControlRector::class);
-    $services->set(\Rector\Nette\Rector\ArrayDimFetch\ChangeFormArrayAccessToAnnotatedControlVariableRector::class);
     $services->set(\Rector\Nette\Rector\MethodCall\MergeDefaultsInGetConfigCompilerExtensionRector::class);
     // Control class has remove __construct(), e.g. https://github.com/Pixidos/GPWebPay/pull/16/files#diff-fdc8251950f85c5467c63c249df05786
     $services->set(\Rector\DeadCode\Rector\StaticCall\RemoveParentCallWithoutParentRector::class);

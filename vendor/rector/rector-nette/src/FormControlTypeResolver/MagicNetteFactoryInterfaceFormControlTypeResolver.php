@@ -73,13 +73,7 @@ final class MagicNetteFactoryInterfaceFormControlTypeResolver implements \Rector
         if ($methodName === null) {
             return [];
         }
-        $classMethod = $this->nodeRepository->findClassMethodByMethodCall($node);
-        if (!$classMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
-            $classMethod = $this->resolveReflectionClassMethod($node, $methodName);
-            if (!$classMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
-                return [];
-            }
-        }
+        $classMethod = $this->resolveReflectionClassMethod($node, $methodName);
         $classReflection = $this->resolveClassReflectionByMethodCall($node);
         if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
             return [];
@@ -120,10 +114,11 @@ final class MagicNetteFactoryInterfaceFormControlTypeResolver implements \Rector
     }
     private function resolveClassReflectionByMethodCall(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\PHPStan\Reflection\ClassReflection
     {
-        $callerClassName = $this->nodeRepository->resolveCallerClassName($methodCall);
-        if ($callerClassName === null) {
+        $callerType = $this->nodeTypeResolver->resolve($methodCall->var);
+        if (!$callerType instanceof \PHPStan\Type\TypeWithClassName) {
             return null;
         }
+        $callerClassName = $callerType->getClassName();
         if (!$this->reflectionProvider->hasClass($callerClassName)) {
             return null;
         }
