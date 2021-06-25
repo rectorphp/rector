@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\NetteToSymfony\Rector\MethodCall;
+namespace Rector\Nette\Kdyby\Rector\MethodCall;
 
 use RectorPrefix20210625\Nette\Utils\Strings;
 use PhpParser\Node;
@@ -17,7 +17,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://github.com/Kdyby/Translation/blob/master/docs/en/index.md#placeholders
  * https://github.com/Kdyby/Translation/blob/6b0721c767a7be7f15b2fb13c529bea8536230aa/src/Translator.php#L172
  *
- * @see \Rector\NetteToSymfony\Tests\Rector\MethodCall\WrapTransParameterNameRector\WrapTransParameterNameRectorTest
+ * @see \Rector\Nette\Tests\Kdyby\Rector\MethodCall\WrapTransParameterNameRector\WrapTransParameterNameRectorTest
  */
 final class WrapTransParameterNameRector extends \Rector\Core\Rector\AbstractRector
 {

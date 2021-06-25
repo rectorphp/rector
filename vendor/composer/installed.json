@@ -1288,17 +1288,17 @@
         },
         {
             "name": "rector\/rector-nette",
-            "version": "0.11.6",
-            "version_normalized": "0.11.6.0",
+            "version": "0.11.8",
+            "version_normalized": "0.11.8.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-nette.git",
-                "reference": "62536cd20f2b7363644f725128615780f7d6c6c0"
+                "reference": "fa07ca590dfa50a17f4568bd3e6c5a7526db2a42"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-nette\/zipball\/62536cd20f2b7363644f725128615780f7d6c6c0",
-                "reference": "62536cd20f2b7363644f725128615780f7d6c6c0",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-nette\/zipball\/fa07ca590dfa50a17f4568bd3e6c5a7526db2a42",
+                "reference": "fa07ca590dfa50a17f4568bd3e6c5a7526db2a42",
                 "shasum": ""
             },
             "require": {
@@ -1324,7 +1324,7 @@
                 "symplify\/phpstan-rules": "^9.3",
                 "symplify\/rule-doc-generator": "^9.3"
             },
-            "time": "2021-06-24T22:09:45+00:00",
+            "time": "2021-06-25T16:20:20+00:00",
             "type": "rector-extension",
             "extra": {
                 "branch-alias": {
@@ -1349,80 +1349,9 @@
             "description": "Rector upgrades rules for Nette Framework",
             "support": {
                 "issues": "https:\/\/github.com\/rectorphp\/rector-nette\/issues",
-                "source": "https:\/\/github.com\/rectorphp\/rector-nette\/tree\/0.11.6"
+                "source": "https:\/\/github.com\/rectorphp\/rector-nette\/tree\/0.11.8"
             },
             "install-path": "..\/rector\/rector-nette"
-        },
-        {
-            "name": "rector\/rector-nette-to-symfony",
-            "version": "0.11.5",
-            "version_normalized": "0.11.5.0",
-            "source": {
-                "type": "git",
-                "url": "https:\/\/github.com\/rectorphp\/rector-nette-to-symfony.git",
-                "reference": "623ca58091b7a8313c72c9de82099da2492a99f1"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-nette-to-symfony\/zipball\/623ca58091b7a8313c72c9de82099da2492a99f1",
-                "reference": "623ca58091b7a8313c72c9de82099da2492a99f1",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=8.0",
-                "rector\/rector-nette": "^0.11"
-            },
-            "conflict": {
-                "rector\/rector": "<0.11"
-            },
-            "require-dev": {
-                "nette\/application": "^3.1",
-                "nette\/forms": "^3.1",
-                "phpstan\/extension-installer": "^1.1",
-                "phpstan\/phpstan-nette": "^0.12.16",
-                "phpunit\/phpunit": "^9.5",
-                "rector\/phpstan-rules": "^0.2.8",
-                "rector\/rector-src": "^0.11",
-                "symfony\/form": "^5.2",
-                "symplify\/easy-coding-standard": "^9.3",
-                "symplify\/phpstan-extensions": "^9.3",
-                "symplify\/phpstan-rules": "^9.3",
-                "symplify\/rule-doc-generator": "^9.3"
-            },
-            "time": "2021-06-24T16:29:59+00:00",
-            "type": "rector-extension",
-            "extra": {
-                "branch-alias": {
-                    "dev-main": "0.11-dev"
-                },
-                "rector": {
-                    "includes": [
-                        "config\/config.php"
-                    ]
-                }
-            },
-            "installation-source": "dist",
-            "autoload": {
-                "psr-4": {
-                    "Rector\\NetteToSymfony\\": "src"
-                }
-            },
-            "notification-url": "https:\/\/packagist.org\/downloads\/",
-            "license": [
-                "MIT"
-            ],
-            "description": "Generate Rector rules from command line",
-            "support": {
-                "issues": "https:\/\/github.com\/rectorphp\/rector-nette-to-symfony\/issues",
-                "source": "https:\/\/github.com\/rectorphp\/rector-nette-to-symfony\/tree\/0.11.5"
-            },
-            "funding": [
-                {
-                    "url": "https:\/\/github.com\/tomasvotruba",
-                    "type": "github"
-                }
-            ],
-            "install-path": "..\/rector\/rector-nette-to-symfony"
         },
         {
             "name": "rector\/rector-phpunit",

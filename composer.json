@@ -27,7 +27,6 @@
         "rector/rector-symfony": "*",
         "rector/rector-doctrine": "*",
         "rector/rector-nette": "*",
-        "rector/rector-nette-to-symfony": "*",
         "rector/rector-cakephp": "*"
     }
 }

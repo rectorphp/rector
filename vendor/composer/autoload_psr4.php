@@ -14,7 +14,6 @@ return array(
     'Rector\\RectorInstaller\\' => array($vendorDir . '/rector/extension-installer/src'),
     'Rector\\PHPUnit\\' => array($vendorDir . '/rector/rector-phpunit/src'),
     'Rector\\Nette\\' => array($vendorDir . '/rector/rector-nette/src'),
-    'Rector\\NetteToSymfony\\' => array($vendorDir . '/rector/rector-nette-to-symfony/src'),
     'Rector\\Laravel\\' => array($vendorDir . '/rector/rector-laravel/src'),
     'Rector\\Doctrine\\' => array($vendorDir . '/rector/rector-doctrine/src'),
     'Rector\\Core\\' => array($baseDir . '/src'),

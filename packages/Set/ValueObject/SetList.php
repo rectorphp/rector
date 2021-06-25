@@ -49,10 +49,6 @@ final class SetList implements \Rector\Set\Contract\SetListInterface
     /**
      * @var string
      */
-    public const KDYBY_TO_SYMFONY = __DIR__ . '/../../../config/set/kdyby-to-symfony.php';
-    /**
-     * @var string
-     */
     public const LEAGUE_EVENT_30 = __DIR__ . '/../../../config/set/league-event-30.php';
     /**
      * @var string
