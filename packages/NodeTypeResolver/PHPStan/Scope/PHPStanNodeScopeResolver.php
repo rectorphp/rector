@@ -14,11 +14,13 @@ use PHPStan\AnalysedCodeException;
 use PHPStan\Analyser\MutatingScope;
 use PHPStan\Analyser\NodeScopeResolver;
 use PHPStan\Analyser\Scope;
+use PHPStan\BetterReflection\Reflector\Exception\IdentifierNotFound;
 use PHPStan\Node\UnreachableStatementNode;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\Caching\Detector\ChangedFilesDetector;
 use Rector\Caching\FileSystem\DependencyResolver;
+use Rector\Core\Configuration\RenamedClassesDataCollector;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Collector\TraitNodeScopeCollector;
@@ -44,7 +46,8 @@ final class PHPStanNodeScopeResolver
         private ReflectionProvider $reflectionProvider,
         private RemoveDeepChainMethodCallNodeVisitor $removeDeepChainMethodCallNodeVisitor,
         private ScopeFactory $scopeFactory,
-        private TraitNodeScopeCollector $traitNodeScopeCollector
+        private TraitNodeScopeCollector $traitNodeScopeCollector,
+        private RenamedClassesDataCollector $renamedClassesDataCollector
     ) {
     }
 
@@ -87,8 +90,12 @@ final class PHPStanNodeScopeResolver
             }
         };
 
-        /** @var MutatingScope $scope */
-        $this->nodeScopeResolver->processNodes($nodes, $scope, $nodeCallback);
+        try {
+            /** @var MutatingScope $scope */
+            $this->nodeScopeResolver->processNodes($nodes, $scope, $nodeCallback);
+        } catch (IdentifierNotFound $identifierNotFound) {
+            $this->reportOrSkip($identifierNotFound);
+        }
 
         $this->resolveAndSaveDependentFiles($nodes, $scope, $smartFileInfo);
 
@@ -154,5 +161,23 @@ final class PHPStanNodeScopeResolver
         }
 
         $this->changedFilesDetector->addFileWithDependencies($smartFileInfo, $dependentFiles);
+    }
+
+    /**
+     * In case PHPStan tried to parse a file with missing class, it fails.
+     * But sometimes we want to rename old class that is missing with Rector..
+     *
+     * That's why we have to skip fatal errors of PHPStan caused by missing class,
+     * so Rector can fix it first. Then run Rector again to refactor code with new classes.
+     */
+    private function reportOrSkip(IdentifierNotFound $identifierNotFound): void
+    {
+        foreach ($this->renamedClassesDataCollector->getOldClasses() as $oldClass) {
+            if (str_contains($identifierNotFound->getMessage(), $oldClass)) {
+                return;
+            }
+        }
+
+        throw $identifierNotFound;
     }
 }
