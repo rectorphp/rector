@@ -22,6 +22,7 @@ use Rector\Core\Php\ReservedKeywordAnalyzer;
 use Rector\Core\PhpParser\Comparing\ConditionSearcher;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DeadCode\NodeAnalyzer\UsedVariableNameAnalyzer;
+use Rector\DeadCode\SideEffect\PureFunctionDetector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -35,7 +36,8 @@ final class RemoveUnusedVariableAssignRector extends AbstractRector
         private ReservedKeywordAnalyzer $reservedKeywordAnalyzer,
         private CompactFuncCallAnalyzer $compactFuncCallAnalyzer,
         private ConditionSearcher $conditionSearcher,
-        private UsedVariableNameAnalyzer $usedVariableNameAnalyzer
+        private UsedVariableNameAnalyzer $usedVariableNameAnalyzer,
+        private PureFunctionDetector $pureFunctionDetector
     ) {
     }
 
@@ -102,13 +104,24 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($node->expr instanceof MethodCall || $node->expr instanceof StaticCall) {
+        if ($node->expr instanceof MethodCall || $node->expr instanceof StaticCall || $this->isImpureFunction(
+            $node->expr
+        )) {
             // keep the expr, can have side effect
             return $node->expr;
         }
 
         $this->removeNode($node);
         return $node;
+    }
+
+    private function isImpureFunction(Expr $expr): bool
+    {
+        if (! $expr instanceof FuncCall) {
+            return false;
+        }
+
+        return ! $this->pureFunctionDetector->detect($expr);
     }
 
     private function shouldSkip(Assign $assign): bool
