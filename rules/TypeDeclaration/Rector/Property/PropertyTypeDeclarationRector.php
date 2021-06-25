@@ -83,9 +83,9 @@ CODE_SAMPLE
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
 
         // is already set
-        foreach(['@var', '@phpstan-var', '@psalm-var'] as $tagName) {
+        foreach (['@var', '@phpstan-var', '@psalm-var'] as $tagName) {
             $varType = $phpDocInfo->getVarType($tagName);
-            if (!$varType  instanceof MixedType) {
+            if (! $varType  instanceof MixedType) {
                 return null;
             }
         }

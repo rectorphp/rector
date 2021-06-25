@@ -204,8 +204,7 @@ CODE_SAMPLE
         ConstFetch $constFetch,
         GreaterOrEqual $greaterOrEqual,
         If_ $if
-    ): ?ConstFetch
-    {
+    ): ?ConstFetch {
         $value = $greaterOrEqual->right;
         if (! $value instanceof LNumber) {
             return null;
@@ -223,8 +222,7 @@ CODE_SAMPLE
         ConstFetch $constFetch,
         GreaterOrEqual $greaterOrEqual,
         If_ $if
-    ): ?ConstFetch
-    {
+    ): ?ConstFetch {
         $value = $greaterOrEqual->left;
         if (! $value instanceof LNumber) {
             return null;
