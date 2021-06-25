@@ -121,9 +121,9 @@ final class PhpDocInfo
     {
         return $this->betterTokenIterator->count();
     }
-    public function getVarTagValueNode() : ?\PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode
+    public function getVarTagValueNode(string $tagName = '@var') : ?\PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode
     {
-        return $this->phpDocNode->getVarTagValues()[0] ?? null;
+        return $this->phpDocNode->getVarTagValues($tagName)[0] ?? null;
     }
     /**
      * @return array<PhpDocTagNode>
@@ -167,9 +167,9 @@ final class PhpDocInfo
         }
         return null;
     }
-    public function getVarType() : \PHPStan\Type\Type
+    public function getVarType(string $tagName = '@var') : \PHPStan\Type\Type
     {
-        return $this->getTypeOrMixed($this->getVarTagValueNode());
+        return $this->getTypeOrMixed($this->getVarTagValueNode($tagName));
     }
     public function getReturnType() : \PHPStan\Type\Type
     {
