@@ -13,11 +13,13 @@ use PHPStan\AnalysedCodeException;
 use PHPStan\Analyser\MutatingScope;
 use PHPStan\Analyser\NodeScopeResolver;
 use PHPStan\Analyser\Scope;
+use PHPStan\BetterReflection\Reflector\Exception\IdentifierNotFound;
 use PHPStan\Node\UnreachableStatementNode;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\Caching\Detector\ChangedFilesDetector;
 use Rector\Caching\FileSystem\DependencyResolver;
+use Rector\Core\Configuration\RenamedClassesDataCollector;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Collector\TraitNodeScopeCollector;
@@ -62,7 +64,11 @@ final class PHPStanNodeScopeResolver
      * @var \Rector\NodeTypeResolver\PHPStan\Collector\TraitNodeScopeCollector
      */
     private $traitNodeScopeCollector;
-    public function __construct(\Rector\Caching\Detector\ChangedFilesDetector $changedFilesDetector, \Rector\Caching\FileSystem\DependencyResolver $dependencyResolver, \PHPStan\Analyser\NodeScopeResolver $nodeScopeResolver, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\NodeTypeResolver\PHPStan\Scope\NodeVisitor\RemoveDeepChainMethodCallNodeVisitor $removeDeepChainMethodCallNodeVisitor, \Rector\NodeTypeResolver\PHPStan\Scope\ScopeFactory $scopeFactory, \Rector\NodeTypeResolver\PHPStan\Collector\TraitNodeScopeCollector $traitNodeScopeCollector)
+    /**
+     * @var \Rector\Core\Configuration\RenamedClassesDataCollector
+     */
+    private $renamedClassesDataCollector;
+    public function __construct(\Rector\Caching\Detector\ChangedFilesDetector $changedFilesDetector, \Rector\Caching\FileSystem\DependencyResolver $dependencyResolver, \PHPStan\Analyser\NodeScopeResolver $nodeScopeResolver, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\NodeTypeResolver\PHPStan\Scope\NodeVisitor\RemoveDeepChainMethodCallNodeVisitor $removeDeepChainMethodCallNodeVisitor, \Rector\NodeTypeResolver\PHPStan\Scope\ScopeFactory $scopeFactory, \Rector\NodeTypeResolver\PHPStan\Collector\TraitNodeScopeCollector $traitNodeScopeCollector, \Rector\Core\Configuration\RenamedClassesDataCollector $renamedClassesDataCollector)
     {
         $this->changedFilesDetector = $changedFilesDetector;
         $this->dependencyResolver = $dependencyResolver;
@@ -71,6 +77,7 @@ final class PHPStanNodeScopeResolver
         $this->removeDeepChainMethodCallNodeVisitor = $removeDeepChainMethodCallNodeVisitor;
         $this->scopeFactory = $scopeFactory;
         $this->traitNodeScopeCollector = $traitNodeScopeCollector;
+        $this->renamedClassesDataCollector = $renamedClassesDataCollector;
     }
     /**
      * @param Stmt[] $nodes
@@ -105,8 +112,12 @@ final class PHPStanNodeScopeResolver
                 $node->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE, $scope);
             }
         };
-        /** @var MutatingScope $scope */
-        $this->nodeScopeResolver->processNodes($nodes, $scope, $nodeCallback);
+        try {
+            /** @var MutatingScope $scope */
+            $this->nodeScopeResolver->processNodes($nodes, $scope, $nodeCallback);
+        } catch (\PHPStan\BetterReflection\Reflector\Exception\IdentifierNotFound $identifierNotFound) {
+            $this->reportOrSkip($identifierNotFound);
+        }
         $this->resolveAndSaveDependentFiles($nodes, $scope, $smartFileInfo);
         return $nodes;
     }
@@ -164,5 +175,21 @@ final class PHPStanNodeScopeResolver
             }
         }
         $this->changedFilesDetector->addFileWithDependencies($smartFileInfo, $dependentFiles);
+    }
+    /**
+     * In case PHPStan tried to parse a file with missing class, it fails.
+     * But sometimes we want to rename old class that is missing with Rector..
+     *
+     * That's why we have to skip fatal errors of PHPStan caused by missing class,
+     * so Rector can fix it first. Then run Rector again to refactor code with new classes.
+     */
+    private function reportOrSkip(\PHPStan\BetterReflection\Reflector\Exception\IdentifierNotFound $identifierNotFound) : void
+    {
+        foreach ($this->renamedClassesDataCollector->getOldClasses() as $oldClass) {
+            if (\strpos($identifierNotFound->getMessage(), $oldClass) !== \false) {
+                return;
+            }
+        }
+        throw $identifierNotFound;
     }
 }
