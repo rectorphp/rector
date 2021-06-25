@@ -104,9 +104,9 @@ final class PhpDocInfo
         return $this->betterTokenIterator->count();
     }
 
-    public function getVarTagValueNode(): ?VarTagValueNode
+    public function getVarTagValueNode(string $tagName = '@var'): ?VarTagValueNode
     {
-        return $this->phpDocNode->getVarTagValues()[0] ?? null;
+        return $this->phpDocNode->getVarTagValues($tagName)[0] ?? null;
     }
 
     /**
@@ -160,9 +160,9 @@ final class PhpDocInfo
         return null;
     }
 
-    public function getVarType(): Type
+    public function getVarType(string $tagName = '@var'): Type
     {
-        return $this->getTypeOrMixed($this->getVarTagValueNode());
+        return $this->getTypeOrMixed($this->getVarTagValueNode($tagName));
     }
 
     public function getReturnType(): Type
