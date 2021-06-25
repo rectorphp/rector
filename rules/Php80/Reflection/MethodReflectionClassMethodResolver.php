@@ -7,13 +7,13 @@ namespace Rector\Php80\Reflection;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Reflection\Php\PhpMethodReflection;
 use PHPStan\Reflection\ReflectionProvider;
-use Rector\Core\Reflection\FunctionLikeReflectionParser;
+use Rector\Core\Reflection\ReflectionAstResolver;
 
 final class MethodReflectionClassMethodResolver
 {
     public function __construct(
         private ReflectionProvider $reflectionProvider,
-        private FunctionLikeReflectionParser $functionLikeReflectionParser
+        private ReflectionAstResolver $reflectionAstResolver
     ) {
     }
 
@@ -37,6 +37,6 @@ final class MethodReflectionClassMethodResolver
             return null;
         }
 
-        return $this->functionLikeReflectionParser->parseMethodReflection($constructorClassMethodReflection);
+        return $this->reflectionAstResolver->resolveMethodReflection($constructorClassMethodReflection);
     }
 }

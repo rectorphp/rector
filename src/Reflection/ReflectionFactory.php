@@ -10,14 +10,14 @@ use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
 use ReflectionMethod;
 
-final class ClassMethodReflectionFactory
+final class ReflectionFactory
 {
     public function __construct(
         private ReflectionProvider $reflectionProvider
     ) {
     }
 
-    public function createFromPHPStanTypeAndMethodName(Type $type, string $methodName): ?ReflectionMethod
+    public function createReflectionMethodFromTypeAndMethod(Type $type, string $methodName): ?ReflectionMethod
     {
         if ($type instanceof ThisType) {
             $type = $type->getStaticObjectType();

@@ -5,13 +5,9 @@ declare(strict_types=1);
 namespace Rector\Core\Reflection;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
-use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\NodeFinder;
 use PhpParser\Parser;
 use PHPStan\Reflection\ClassReflection;
@@ -19,28 +15,37 @@ use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\Php\PhpFunctionReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
-use PHPStan\Type\ThisType;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\ValueObject\Application\File;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
-use Rector\NodeTypeResolver\NodeTypeResolver;
 use Symplify\SmartFileSystem\SmartFileInfo;
 use Symplify\SmartFileSystem\SmartFileSystem;
 
-final class FunctionLikeReflectionParser
+final class ReflectionAstResolver
 {
     public function __construct(
         private Parser $parser,
         private SmartFileSystem $smartFileSystem,
         private NodeFinder $nodeFinder,
         private NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator,
-        private NodeTypeResolver $nodeTypeResolver,
+        private BetterNodeFinder $betterNodeFinder,
         private NodeNameResolver $nodeNameResolver,
         private ReflectionProvider $reflectionProvider
     ) {
     }
 
-    public function parseMethodReflection(MethodReflection $methodReflection): ?ClassMethod
+    public function resolveObjectType(ObjectType $objectType): ?Class_
+    {
+        if (! $this->reflectionProvider->hasClass($objectType->getClassName())) {
+            return null;
+        }
+
+        $classReflection = $this->reflectionProvider->getClass($objectType->getClassName());
+        return $this->resolveClassReflection($classReflection, $objectType->getClassName());
+    }
+
+    public function resolveMethodReflection(MethodReflection $methodReflection): ?ClassMethod
     {
         $classReflection = $methodReflection->getDeclaringClass();
 
@@ -101,87 +106,28 @@ final class FunctionLikeReflectionParser
         return null;
     }
 
-    /**
-     * @param MethodCall|StaticCall|Node $node
-     */
-    public function parseCaller(Node $node): ?ClassMethod
+    private function resolveClassReflection(ClassReflection $classReflection, string $className): ?Class_
     {
-        if (! $node instanceof MethodCall && ! $node instanceof StaticCall) {
+        if ($classReflection->isBuiltin()) {
             return null;
         }
 
-        /** @var ObjectType|ThisType $objectType */
-        $objectType = $node instanceof MethodCall
-            ? $this->nodeTypeResolver->resolve($node->var)
-            : $this->nodeTypeResolver->resolve($node->class);
-
-        if ($objectType instanceof ThisType) {
-            $objectType = $objectType->getStaticObjectType();
-        }
-
-        $className = $objectType->getClassName();
-        if (! $this->reflectionProvider->hasClass($className)) {
-            return null;
-        }
-
-        $classReflection = $this->reflectionProvider->getClass($className);
-        $methodName = (string) $this->nodeNameResolver->getName($node->name);
-        if (! $classReflection->hasMethod($methodName)) {
-            return null;
-        }
-
-        if ($classReflection->isBuiltIn()) {
-            return null;
-        }
-
+        /** @var string $fileName */
         $fileName = $classReflection->getFileName();
-        if (! $fileName) {
+
+        /** @var Node[] $contentNodes */
+        $contentNodes = $this->parser->parse($this->smartFileSystem->readFile($fileName));
+
+        /** @var Class_[] $classes */
+        $classes = $this->betterNodeFinder->findInstanceOf($contentNodes, Class_::class);
+        if ($classes === []) {
             return null;
         }
 
-        $fileContent = $this->smartFileSystem->readfile($fileName);
-        $nodes = $this->parser->parse($fileContent);
-        return $this->getClassMethodFromNodes((array) $nodes, $classReflection, $className, $methodName);
-    }
-
-    /**
-     * @param Stmt[] $nodes
-     */
-    private function getClassMethodFromNodes(
-        array $nodes,
-        ClassReflection $classReflection,
-        string $className,
-        string $methodName
-    ): ?ClassMethod {
-        $reflectionClass = $classReflection->getNativeReflection();
-        $shortName = $reflectionClass->getShortName();
-
-        foreach ($nodes as $node) {
-            if ($node instanceof Namespace_) {
-                /** @var Stmt[] $nodeStmts */
-                $nodeStmts = $node->stmts;
-                $classMethod = $this->getClassMethodFromNodes($nodeStmts, $classReflection, $className, $methodName);
-
-                if ($classMethod instanceof ClassMethod) {
-                    return $classMethod;
-                }
-            }
-
-            $classMethod = $this->getClassMethod($node, $shortName, $methodName);
-            if ($classMethod instanceof ClassMethod) {
-                return $classMethod;
-            }
-        }
-
-        return null;
-    }
-
-    private function getClassMethod(Stmt $stmt, string $shortClassName, string $methodName): ?ClassMethod
-    {
-        if ($stmt instanceof Class_) {
-            $name = (string) $this->nodeNameResolver->getName($stmt);
-            if ($name === $shortClassName) {
-                return $stmt->getMethod($methodName);
+        $reflectionClassName = $classReflection->getName();
+        foreach ($classes as $class) {
+            if ($reflectionClassName === $className) {
+                return $class;
             }
         }
 

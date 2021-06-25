@@ -52,7 +52,7 @@ use Rector\Core\Configuration\CurrentNodeProvider;
 use Rector\Core\Exception\NotImplementedYetException;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Php\PhpVersionProvider;
-use Rector\Core\Reflection\FunctionLikeReflectionParser;
+use Rector\Core\Reflection\ReflectionAstResolver;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -101,7 +101,7 @@ final class NodeFactory
         private NodeNameResolver $nodeNameResolver,
         private PhpDocTypeChanger $phpDocTypeChanger,
         private CurrentNodeProvider $currentNodeProvider,
-        private FunctionLikeReflectionParser $functionLikeReflectionParser
+        private ReflectionAstResolver $reflectionAstResolver,
     ) {
     }
 
@@ -534,7 +534,7 @@ final class NodeFactory
 
     public function createClosureFromMethodReflection(MethodReflection $methodReflection): Closure
     {
-        $classMethod = $this->functionLikeReflectionParser->parseMethodReflection($methodReflection);
+        $classMethod = $this->reflectionAstResolver->resolveMethodReflection($methodReflection);
         if (! $classMethod instanceof ClassMethod) {
             throw new ShouldNotHappenException();
         }

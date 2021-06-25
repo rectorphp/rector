@@ -24,7 +24,7 @@ use PHPStan\Type\Type;
 use PHPStan\Type\VoidType;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Core\PHPStan\Reflection\CallReflectionResolver;
-use Rector\Core\Reflection\FunctionLikeReflectionParser;
+use Rector\Core\Reflection\ReflectionAstResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
@@ -42,7 +42,7 @@ final class ReturnedNodesReturnTypeInferer implements ReturnTypeInfererInterface
         private TypeFactory $typeFactory,
         private SplArrayFixedTypeNarrower $splArrayFixedTypeNarrower,
         private CallReflectionResolver $callReflectionResolver,
-        private FunctionLikeReflectionParser $functionLikeReflectionParser,
+        private ReflectionAstResolver $reflectionAstResolver,
         private BetterStandardPrinter $betterStandardPrinter
     ) {
     }
@@ -188,7 +188,7 @@ final class ReturnedNodesReturnTypeInferer implements ReturnTypeInfererInterface
 
     private function resolveClassMethod(MethodReflection $methodReflection, FunctionLike $originalFunctionLike): Type
     {
-        $classMethod = $this->functionLikeReflectionParser->parseMethodReflection($methodReflection);
+        $classMethod = $this->reflectionAstResolver->resolveMethodReflection($methodReflection);
         if (! $classMethod instanceof ClassMethod) {
             return new MixedType();
         }
@@ -205,7 +205,7 @@ final class ReturnedNodesReturnTypeInferer implements ReturnTypeInfererInterface
 
     private function resolveFunction(PhpFunctionReflection $phpFunctionReflection, FunctionLike $functionLike): Type
     {
-        $function = $this->functionLikeReflectionParser->parseFunctionReflection($phpFunctionReflection);
+        $function = $this->reflectionAstResolver->parseFunctionReflection($phpFunctionReflection);
         if (! $function instanceof Function_) {
             return new MixedType();
         }

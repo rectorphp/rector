@@ -8,7 +8,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\TypeWithClassName;
-use Rector\Core\Reflection\FunctionLikeReflectionParser;
+use Rector\Core\Reflection\ReflectionAstResolver;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 
@@ -18,7 +18,7 @@ final class MethodCallToClassMethodParser
         private NodeTypeResolver $nodeTypeResolver,
         private NodeNameResolver $nodeNameResolver,
         private ReflectionProvider $reflectionProvider,
-        private FunctionLikeReflectionParser $functionLikeReflectionParser
+        private ReflectionAstResolver $reflectionAstResolver
     ) {
     }
 
@@ -37,6 +37,6 @@ final class MethodCallToClassMethodParser
 
         $methodReflection = $callerClassReflection->getNativeMethod($methodName);
 
-        return $this->functionLikeReflectionParser->parseMethodReflection($methodReflection);
+        return $this->reflectionAstResolver->resolveMethodReflection($methodReflection);
     }
 }

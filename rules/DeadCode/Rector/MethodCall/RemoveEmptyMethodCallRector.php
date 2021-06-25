@@ -17,7 +17,7 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\ThisType;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\Reflection\ClassReflectionToAstResolver;
+use Rector\Core\Reflection\ReflectionAstResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -28,7 +28,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveEmptyMethodCallRector extends AbstractRector
 {
     public function __construct(
-        private ClassReflectionToAstResolver $classReflectionToAstResolver
+        private ReflectionAstResolver $reflectionAstResolver
     ) {
     }
 
@@ -89,7 +89,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $class = $this->classReflectionToAstResolver->getClassFromObjectType($type);
+        $class = $this->reflectionAstResolver->resolveObjectType($type);
         if ($this->shouldSkipClassMethod($class, $node)) {
             return null;
         }
