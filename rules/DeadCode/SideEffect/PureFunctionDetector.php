@@ -64,6 +64,7 @@ final class PureFunctionDetector
         // output buffer
         'ob_start',
         'ob_end_clean',
+        'ob_get_clean',
         'readfile',
         'printf',
         'var_dump',

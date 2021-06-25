@@ -21,6 +21,7 @@ use Rector\Core\Php\ReservedKeywordAnalyzer;
 use Rector\Core\PhpParser\Comparing\ConditionSearcher;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DeadCode\NodeAnalyzer\UsedVariableNameAnalyzer;
+use Rector\DeadCode\SideEffect\PureFunctionDetector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -45,12 +46,17 @@ final class RemoveUnusedVariableAssignRector extends \Rector\Core\Rector\Abstrac
      * @var \Rector\DeadCode\NodeAnalyzer\UsedVariableNameAnalyzer
      */
     private $usedVariableNameAnalyzer;
-    public function __construct(\Rector\Core\Php\ReservedKeywordAnalyzer $reservedKeywordAnalyzer, \Rector\Core\NodeAnalyzer\CompactFuncCallAnalyzer $compactFuncCallAnalyzer, \Rector\Core\PhpParser\Comparing\ConditionSearcher $conditionSearcher, \Rector\DeadCode\NodeAnalyzer\UsedVariableNameAnalyzer $usedVariableNameAnalyzer)
+    /**
+     * @var \Rector\DeadCode\SideEffect\PureFunctionDetector
+     */
+    private $pureFunctionDetector;
+    public function __construct(\Rector\Core\Php\ReservedKeywordAnalyzer $reservedKeywordAnalyzer, \Rector\Core\NodeAnalyzer\CompactFuncCallAnalyzer $compactFuncCallAnalyzer, \Rector\Core\PhpParser\Comparing\ConditionSearcher $conditionSearcher, \Rector\DeadCode\NodeAnalyzer\UsedVariableNameAnalyzer $usedVariableNameAnalyzer, \Rector\DeadCode\SideEffect\PureFunctionDetector $pureFunctionDetector)
     {
         $this->reservedKeywordAnalyzer = $reservedKeywordAnalyzer;
         $this->compactFuncCallAnalyzer = $compactFuncCallAnalyzer;
         $this->conditionSearcher = $conditionSearcher;
         $this->usedVariableNameAnalyzer = $usedVariableNameAnalyzer;
+        $this->pureFunctionDetector = $pureFunctionDetector;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -104,12 +110,19 @@ CODE_SAMPLE
         if (!$parentNode instanceof \PhpParser\Node\Stmt\Expression) {
             return null;
         }
-        if ($node->expr instanceof \PhpParser\Node\Expr\MethodCall || $node->expr instanceof \PhpParser\Node\Expr\StaticCall) {
+        if ($node->expr instanceof \PhpParser\Node\Expr\MethodCall || $node->expr instanceof \PhpParser\Node\Expr\StaticCall || $this->isImpureFunction($node->expr)) {
             // keep the expr, can have side effect
             return $node->expr;
         }
         $this->removeNode($node);
         return $node;
+    }
+    private function isImpureFunction(\PhpParser\Node\Expr $expr) : bool
+    {
+        if (!$expr instanceof \PhpParser\Node\Expr\FuncCall) {
+            return \false;
+        }
+        return !$this->pureFunctionDetector->detect($expr);
     }
     private function shouldSkip(\PhpParser\Node\Expr\Assign $assign) : bool
     {
