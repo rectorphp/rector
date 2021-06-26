@@ -203,7 +203,7 @@ CODE_SAMPLE
 
         if ($resolvedType instanceof UnionType) {
             if (! $returnedStrictTypeNode instanceof NullableType) {
-                throw new ShouldNotHappenException();
+                return $functionLike;
             }
 
             return $this->processSingleUnionType($functionLike, $resolvedType, $returnedStrictTypeNode);
