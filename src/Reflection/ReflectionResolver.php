@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace Rector\Core\Reflection;
 
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\TypeUtils;
 use PHPStan\Type\TypeWithClassName;
+use Rector\Core\ValueObject\MethodName;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -103,5 +105,15 @@ final class ReflectionResolver
 
         $methodName = $this->nodeNameResolver->getName($classMethod);
         return $this->resolveMethodReflection($class, $methodName);
+    }
+
+    public function resolveMethodReflectionFromNew(New_ $new): ?MethodReflection
+    {
+        $newClassType = $this->nodeTypeResolver->resolve($new->class);
+        if (! $newClassType instanceof TypeWithClassName) {
+            return null;
+        }
+
+        return $this->resolveMethodReflection($newClassType->getClassName(), MethodName::CONSTRUCT);
     }
 }
