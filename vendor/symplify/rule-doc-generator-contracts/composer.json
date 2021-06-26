@@ -3,7 +3,7 @@
     "description": "Contracts for production code of RuleDocGenerator",
     "license": "MIT",
     "require": {
-        "php": ">=7.3",
+        "php": ">=8.0",
         "danielstjules\/stringy": "^3.1",
         "nette\/utils": "^3.2"
     },

@@ -12,8 +12,8 @@ final class ComposerJsonAwareCodeSample extends \Symplify\RuleDocGenerator\Value
     private $composerJson;
     public function __construct(string $badCode, string $goodCode, string $composerJson)
     {
-        parent::__construct($badCode, $goodCode);
         $this->composerJson = $composerJson;
+        parent::__construct($badCode, $goodCode);
     }
     public function getComposerJson() : string
     {

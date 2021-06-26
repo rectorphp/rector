@@ -34,15 +34,15 @@ final class AutowireArrayParameterCompilerPass implements \RectorPrefix20210626\
      */
     private $excludedFatalClasses = ['RectorPrefix20210626\\Symfony\\Component\\Form\\FormExtensionInterface', 'RectorPrefix20210626\\Symfony\\Component\\Asset\\PackageInterface', 'RectorPrefix20210626\\Symfony\\Component\\Config\\Loader\\LoaderInterface', 'RectorPrefix20210626\\Symfony\\Component\\VarDumper\\Dumper\\ContextProvider\\ContextProviderInterface', 'RectorPrefix20210626\\EasyCorp\\Bundle\\EasyAdminBundle\\Form\\Type\\Configurator\\TypeConfiguratorInterface', 'RectorPrefix20210626\\Sonata\\CoreBundle\\Model\\Adapter\\AdapterInterface', 'RectorPrefix20210626\\Sonata\\Doctrine\\Adapter\\AdapterChain', 'RectorPrefix20210626\\Sonata\\Twig\\Extension\\TemplateExtension', 'RectorPrefix20210626\\Symfony\\Component\\HttpKernel\\KernelInterface'];
     /**
-     * @var DefinitionFinder
+     * @var \Symplify\PackageBuilder\DependencyInjection\DefinitionFinder
      */
     private $definitionFinder;
     /**
-     * @var ParameterTypeResolver
+     * @var \Symplify\AutowireArrayParameter\TypeResolver\ParameterTypeResolver
      */
     private $parameterTypeResolver;
     /**
-     * @var ParameterSkipper
+     * @var \Symplify\AutowireArrayParameter\Skipper\ParameterSkipper
      */
     private $parameterSkipper;
     /**

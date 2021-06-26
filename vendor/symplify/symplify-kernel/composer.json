@@ -3,14 +3,14 @@
     "description": "Internal Kernel for Symplify packages",
     "license": "MIT",
     "require": {
-        "php": ">=7.3",
-        "symfony\/console": "^4.4|^5.3",
-        "symfony\/http-kernel": "^4.4|^5.3",
+        "php": ">=8.0",
+        "symfony\/console": "^5.3",
+        "symfony\/http-kernel": "^5.3",
         "symfony\/dependency-injection": "^5.3",
-        "symplify\/smart-file-system": "^9.3.26",
-        "symplify\/composer-json-manipulator": "^9.3.26",
-        "symplify\/autowire-array-parameter": "^9.3.26",
-        "symplify\/package-builder": "^9.3.26"
+        "symplify\/smart-file-system": "^9.3.27",
+        "symplify\/composer-json-manipulator": "^9.3.27",
+        "symplify\/autowire-array-parameter": "^9.3.27",
+        "symplify\/package-builder": "^9.3.27"
     },
     "require-dev": {
         "phpunit\/phpunit": "^9.5"

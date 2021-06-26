@@ -16,13 +16,13 @@ final class ParameterSkipper
      */
     private const DEFAULT_EXCLUDED_FATAL_CLASSES = ['RectorPrefix20210626\\Symfony\\Component\\Form\\FormExtensionInterface', 'RectorPrefix20210626\\Symfony\\Component\\Asset\\PackageInterface', 'RectorPrefix20210626\\Symfony\\Component\\Config\\Loader\\LoaderInterface', 'RectorPrefix20210626\\Symfony\\Component\\VarDumper\\Dumper\\ContextProvider\\ContextProviderInterface', 'RectorPrefix20210626\\EasyCorp\\Bundle\\EasyAdminBundle\\Form\\Type\\Configurator\\TypeConfiguratorInterface', 'RectorPrefix20210626\\Sonata\\CoreBundle\\Model\\Adapter\\AdapterInterface', 'RectorPrefix20210626\\Sonata\\Doctrine\\Adapter\\AdapterChain', 'RectorPrefix20210626\\Sonata\\Twig\\Extension\\TemplateExtension'];
     /**
-     * @var ParameterTypeResolver
-     */
-    private $parameterTypeResolver;
-    /**
      * @var string[]
      */
     private $excludedFatalClasses = [];
+    /**
+     * @var \Symplify\AutowireArrayParameter\TypeResolver\ParameterTypeResolver
+     */
+    private $parameterTypeResolver;
     /**
      * @param string[] $excludedFatalClasses
      */

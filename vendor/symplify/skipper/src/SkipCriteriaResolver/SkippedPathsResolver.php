@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace RectorPrefix20210626\Symplify\Skipper\SkipCriteriaResolver;
 
-use RectorPrefix20210626\Nette\Utils\Strings;
 use RectorPrefix20210626\Symplify\PackageBuilder\Parameter\ParameterProvider;
 use RectorPrefix20210626\Symplify\Skipper\ValueObject\Option;
 use RectorPrefix20210626\Symplify\SmartFileSystem\Normalizer\PathNormalizer;
@@ -13,15 +12,15 @@ use RectorPrefix20210626\Symplify\SmartFileSystem\Normalizer\PathNormalizer;
 final class SkippedPathsResolver
 {
     /**
-     * @var ParameterProvider
-     */
-    private $parameterProvider;
-    /**
      * @var string[]
      */
     private $skippedPaths = [];
     /**
-     * @var PathNormalizer
+     * @var \Symplify\PackageBuilder\Parameter\ParameterProvider
+     */
+    private $parameterProvider;
+    /**
+     * @var \Symplify\SmartFileSystem\Normalizer\PathNormalizer
      */
     private $pathNormalizer;
     public function __construct(\RectorPrefix20210626\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \RectorPrefix20210626\Symplify\SmartFileSystem\Normalizer\PathNormalizer $pathNormalizer)
@@ -46,7 +45,7 @@ final class SkippedPathsResolver
                 $this->skippedPaths[] = $this->pathNormalizer->normalizePath($value);
                 continue;
             }
-            if (\RectorPrefix20210626\Nette\Utils\Strings::contains($value, '*')) {
+            if (\strpos($value, '*') !== \false) {
                 $this->skippedPaths[] = $this->pathNormalizer->normalizePath($value);
                 continue;
             }

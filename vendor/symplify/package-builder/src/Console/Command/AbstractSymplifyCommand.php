@@ -6,6 +6,7 @@ namespace RectorPrefix20210626\Symplify\PackageBuilder\Console\Command;
 use RectorPrefix20210626\Symfony\Component\Console\Command\Command;
 use RectorPrefix20210626\Symfony\Component\Console\Input\InputOption;
 use RectorPrefix20210626\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix20210626\Symfony\Contracts\Service\Attribute\Required;
 use RectorPrefix20210626\Symplify\PackageBuilder\ValueObject\Option;
 use RectorPrefix20210626\Symplify\SmartFileSystem\FileSystemGuard;
 use RectorPrefix20210626\Symplify\SmartFileSystem\Finder\SmartFinder;
@@ -13,19 +14,19 @@ use RectorPrefix20210626\Symplify\SmartFileSystem\SmartFileSystem;
 abstract class AbstractSymplifyCommand extends \RectorPrefix20210626\Symfony\Component\Console\Command\Command
 {
     /**
-     * @var SymfonyStyle
+     * @var \Symfony\Component\Console\Style\SymfonyStyle
      */
     protected $symfonyStyle;
     /**
-     * @var SmartFileSystem
+     * @var \Symplify\SmartFileSystem\SmartFileSystem
      */
     protected $smartFileSystem;
     /**
-     * @var SmartFinder
+     * @var \Symplify\SmartFileSystem\Finder\SmartFinder
      */
     protected $smartFinder;
     /**
-     * @var FileSystemGuard
+     * @var \Symplify\SmartFileSystem\FileSystemGuard
      */
     protected $fileSystemGuard;
     public function __construct()

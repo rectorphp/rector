@@ -13,11 +13,11 @@ use RectorPrefix20210626\Symplify\SmartFileSystem\SmartFileSystem;
 final class JsonFileSystem
 {
     /**
-     * @var FileSystemGuard
+     * @var \Symplify\SmartFileSystem\FileSystemGuard
      */
     private $fileSystemGuard;
     /**
-     * @var SmartFileSystem
+     * @var \Symplify\SmartFileSystem\SmartFileSystem
      */
     private $smartFileSystem;
     public function __construct(\RectorPrefix20210626\Symplify\SmartFileSystem\FileSystemGuard $fileSystemGuard, \RectorPrefix20210626\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem)

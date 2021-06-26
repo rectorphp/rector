@@ -12,8 +12,8 @@ final class ExtraFileCodeSample extends \Symplify\RuleDocGenerator\ValueObject\A
     private $extraFile;
     public function __construct(string $badCode, string $goodCode, string $extraFile)
     {
-        parent::__construct($badCode, $goodCode);
         $this->extraFile = $extraFile;
+        parent::__construct($badCode, $goodCode);
     }
     public function getExtraFile() : string
     {

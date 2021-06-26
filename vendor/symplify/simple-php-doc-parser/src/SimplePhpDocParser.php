@@ -15,11 +15,11 @@ use RectorPrefix20210626\Symplify\SimplePhpDocParser\ValueObject\Ast\PhpDoc\Simp
 final class SimplePhpDocParser
 {
     /**
-     * @var PhpDocParser
+     * @var \PHPStan\PhpDocParser\Parser\PhpDocParser
      */
     private $phpDocParser;
     /**
-     * @var Lexer
+     * @var \PHPStan\PhpDocParser\Lexer\Lexer
      */
     private $lexer;
     public function __construct(\PHPStan\PhpDocParser\Parser\PhpDocParser $phpDocParser, \PHPStan\PhpDocParser\Lexer\Lexer $lexer)

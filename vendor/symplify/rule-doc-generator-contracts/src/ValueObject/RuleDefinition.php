@@ -11,21 +11,21 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 final class RuleDefinition
 {
     /**
-     * @var string
-     */
-    private $description;
-    /**
-     * @var string
+     * @var string|null
      */
     private $ruleClass;
     /**
-     * @var string
+     * @var string|null
      */
     private $ruleFilePath;
     /**
      * @var CodeSampleInterface[]
      */
     private $codeSamples = [];
+    /**
+     * @var string
+     */
+    private $description;
     /**
      * @param CodeSampleInterface[] $codeSamples
      */
@@ -66,6 +66,9 @@ final class RuleDefinition
     }
     public function getRuleShortClass() : string
     {
+        if ($this->ruleClass === null) {
+            throw new \Symplify\RuleDocGenerator\Exception\ShouldNotHappenException();
+        }
         return (string) \RectorPrefix20210626\Nette\Utils\Strings::after($this->ruleClass, '\\', -1);
     }
     /**

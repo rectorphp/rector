@@ -9,7 +9,7 @@ use RectorPrefix20210626\Symplify\SymplifyKernel\HttpKernel\AbstractSymplifyKern
 final class KernelUniqueHasher
 {
     /**
-     * @var StringsConverter
+     * @var \Symplify\SymplifyKernel\Strings\StringsConverter
      */
     private $stringsConverter;
     public function __construct()

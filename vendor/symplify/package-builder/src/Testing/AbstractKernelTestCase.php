@@ -7,7 +7,6 @@ use RectorPrefix20210626\PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use RectorPrefix20210626\Symfony\Component\Console\Output\OutputInterface;
 use RectorPrefix20210626\Symfony\Component\Console\Style\SymfonyStyle;
-use RectorPrefix20210626\Symfony\Component\DependencyInjection\Container;
 use RectorPrefix20210626\Symfony\Component\DependencyInjection\ContainerInterface;
 use RectorPrefix20210626\Symfony\Component\HttpKernel\KernelInterface;
 use RectorPrefix20210626\Symfony\Contracts\Service\ResetInterface;
@@ -23,11 +22,11 @@ use RectorPrefix20210626\Symplify\SymplifyKernel\Exception\ShouldNotHappenExcept
 abstract class AbstractKernelTestCase extends \RectorPrefix20210626\PHPUnit\Framework\TestCase
 {
     /**
-     * @var KernelInterface
+     * @var \Symfony\Component\HttpKernel\KernelInterface|null
      */
     protected static $kernel;
     /**
-     * @var ContainerInterface|Container
+     * @var \Symfony\Component\DependencyInjection\ContainerInterface|null
      */
     protected static $container;
     /**
@@ -79,7 +78,12 @@ abstract class AbstractKernelTestCase extends \RectorPrefix20210626\PHPUnit\Fram
         if (self::$container === null) {
             throw new \RectorPrefix20210626\Symplify\SymplifyKernel\Exception\ShouldNotHappenException('First, crewate container with booKernel(KernelClass::class)');
         }
-        return self::$container->get($type);
+        $service = self::$container->get($type);
+        if ($service === null) {
+            $errorMessage = \sprintf('Services "%s" was not found', $type);
+            throw new \RectorPrefix20210626\Symplify\Astral\Exception\ShouldNotHappenException($errorMessage);
+        }
+        return $service;
     }
     protected function bootKernel(string $kernelClass) : void
     {

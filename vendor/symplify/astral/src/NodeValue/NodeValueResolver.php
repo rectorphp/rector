@@ -19,6 +19,7 @@ use PhpParser\Node\Scalar\MagicConst\Dir;
 use PhpParser\Node\Scalar\MagicConst\File;
 use PhpParser\Node\Stmt\ClassLike;
 use ReflectionClassConstant;
+use RectorPrefix20210626\Symplify\Astral\Exception\ShouldNotHappenException;
 use RectorPrefix20210626\Symplify\Astral\Naming\SimpleNameResolver;
 use RectorPrefix20210626\Symplify\Astral\NodeFinder\SimpleNodeFinder;
 use RectorPrefix20210626\Symplify\PackageBuilder\Php\TypeChecker;
@@ -28,33 +29,33 @@ use RectorPrefix20210626\Symplify\PackageBuilder\Php\TypeChecker;
 final class NodeValueResolver
 {
     /**
-     * @var ConstExprEvaluator
+     * @var \PhpParser\ConstExprEvaluator
      */
     private $constExprEvaluator;
     /**
-     * @var SimpleNameResolver
-     */
-    private $simpleNameResolver;
-    /**
-     * @var TypeChecker
-     */
-    private $typeChecker;
-    /**
-     * @var string
+     * @var string|null
      */
     private $currentFilePath;
     /**
-     * @var SimpleNodeFinder
+     * @var \Symplify\Astral\Naming\SimpleNameResolver
+     */
+    private $simpleNameResolver;
+    /**
+     * @var \Symplify\PackageBuilder\Php\TypeChecker
+     */
+    private $typeChecker;
+    /**
+     * @var \Symplify\Astral\NodeFinder\SimpleNodeFinder
      */
     private $simpleNodeFinder;
     public function __construct(\RectorPrefix20210626\Symplify\Astral\Naming\SimpleNameResolver $simpleNameResolver, \RectorPrefix20210626\Symplify\PackageBuilder\Php\TypeChecker $typeChecker, \RectorPrefix20210626\Symplify\Astral\NodeFinder\SimpleNodeFinder $simpleNodeFinder)
     {
         $this->simpleNameResolver = $simpleNameResolver;
+        $this->typeChecker = $typeChecker;
+        $this->simpleNodeFinder = $simpleNodeFinder;
         $this->constExprEvaluator = new \PhpParser\ConstExprEvaluator(function (\PhpParser\Node\Expr $expr) {
             return $this->resolveByNode($expr);
         });
-        $this->typeChecker = $typeChecker;
-        $this->simpleNodeFinder = $simpleNodeFinder;
     }
     /**
      * @return array|bool|float|int|mixed|string|null
@@ -64,7 +65,7 @@ final class NodeValueResolver
         $this->currentFilePath = $filePath;
         try {
             return $this->constExprEvaluator->evaluateDirectly($expr);
-        } catch (\PhpParser\ConstExprEvaluationException $constExprEvaluationException) {
+        } catch (\PhpParser\ConstExprEvaluationException $exception) {
             return null;
         }
     }
@@ -96,6 +97,9 @@ final class NodeValueResolver
     }
     private function resolveMagicConst(\PhpParser\Node\Scalar\MagicConst $magicConst) : ?string
     {
+        if ($this->currentFilePath === null) {
+            throw new \RectorPrefix20210626\Symplify\Astral\Exception\ShouldNotHappenException();
+        }
         if ($magicConst instanceof \PhpParser\Node\Scalar\MagicConst\Dir) {
             return \dirname($this->currentFilePath);
         }
@@ -120,6 +124,9 @@ final class NodeValueResolver
      */
     private function resolveByNode(\PhpParser\Node\Expr $expr)
     {
+        if ($this->currentFilePath === null) {
+            throw new \RectorPrefix20210626\Symplify\Astral\Exception\ShouldNotHappenException();
+        }
         if ($expr instanceof \PhpParser\Node\Scalar\MagicConst) {
             return $this->resolveMagicConst($expr);
         }

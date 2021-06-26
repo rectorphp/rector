@@ -3,16 +3,16 @@
     "description": "Service integration of phpstan\/phpdoc-parser, with few extra goodies for practical simple use",
     "license": "MIT",
     "require": {
-        "php": ">=7.3",
+        "php": ">=8.0",
         "phpstan\/phpdoc-parser": "^0.5",
         "symfony\/dependency-injection": "^5.3",
-        "symfony\/config": "^4.4|^5.3",
-        "symfony\/http-kernel": "^4.4|^5.3",
-        "symplify\/package-builder": "^9.3.26"
+        "symfony\/config": "^5.3",
+        "symfony\/http-kernel": "^5.3",
+        "symplify\/package-builder": "^9.3.27"
     },
     "require-dev": {
         "phpunit\/phpunit": "^9.5",
-        "symplify\/easy-testing": "^9.3.26"
+        "symplify\/easy-testing": "^9.3.27"
     },
     "autoload": {
         "psr-4": {

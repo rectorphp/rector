@@ -7,12 +7,9 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class InputFileInfoAndExpected
 {
     /**
-     * @var SmartFileInfo
+     * @var \Symplify\SmartFileSystem\SmartFileInfo
      */
     private $inputFileInfo;
-    /**
-     * @var mixed
-     */
     private $expected;
     /**
      * @param mixed $expected

@@ -9,16 +9,13 @@ final class InputAndExpected
      * @var string
      */
     private $input;
-    /**
-     * @var mixed
-     */
     private $expected;
     /**
      * @param mixed $expected
      */
-    public function __construct(string $original, $expected)
+    public function __construct(string $input, $expected)
     {
-        $this->input = $original;
+        $this->input = $input;
         $this->expected = $expected;
     }
     public function getInput() : string

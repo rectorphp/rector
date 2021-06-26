@@ -29,7 +29,7 @@ final class PathNormalizer
         if (\RectorPrefix20210626\Nette\Utils\Strings::match($path, self::ONLY_STARTS_WITH_ASTERISK_REGEX)) {
             return $path . '*';
         }
-        if (\RectorPrefix20210626\Nette\Utils\Strings::contains($path, '..')) {
+        if (\strpos($path, '..') !== \false) {
             $path = \realpath($path);
             if ($path === \false) {
                 return '';

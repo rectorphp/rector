@@ -15,9 +15,9 @@ final class Skipper
      */
     private const FILE_ELEMENT = 'file_elements';
     /**
-     * @var SkipVoterInterface[]
+     * @var mixed[]
      */
-    private $skipVoters = [];
+    private $skipVoters;
     /**
      * @param SkipVoterInterface[] $skipVoters
      */

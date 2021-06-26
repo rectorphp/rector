@@ -184,7 +184,7 @@ CODE_SAMPLE
         $resolvedType = $this->nodeTypeResolver->resolve($return);
         if ($resolvedType instanceof \PHPStan\Type\UnionType) {
             if (!$returnedStrictTypeNode instanceof \PhpParser\Node\NullableType) {
-                throw new \Rector\Core\Exception\ShouldNotHappenException();
+                return $functionLike;
             }
             return $this->processSingleUnionType($functionLike, $resolvedType, $returnedStrictTypeNode);
         }

@@ -23,9 +23,9 @@ final class SimpleNameResolver
      */
     private const ANONYMOUS_CLASS_REGEX = '#^AnonymousClass[\\w+]#';
     /**
-     * @var NodeNameResolverInterface[]
+     * @var mixed[]
      */
-    private $nodeNameResolvers = [];
+    private $nodeNameResolvers;
     /**
      * @param NodeNameResolverInterface[] $nodeNameResolvers
      */
@@ -34,7 +34,7 @@ final class SimpleNameResolver
         $this->nodeNameResolvers = $nodeNameResolvers;
     }
     /**
-     * @param Node|string $node
+     * @param \PhpParser\Node|string $node
      */
     public function getName($node) : ?string
     {
@@ -72,7 +72,7 @@ final class SimpleNameResolver
         return \false;
     }
     /**
-     * @param string|Node $node
+     * @param string|\PhpParser\Node $node
      */
     public function isName($node, string $desiredName) : bool
     {
@@ -80,7 +80,7 @@ final class SimpleNameResolver
         if ($name === null) {
             return \false;
         }
-        if (\RectorPrefix20210626\Nette\Utils\Strings::contains($desiredName, '*')) {
+        if (\strpos($desiredName, '*') !== \false) {
             return \fnmatch($desiredName, $name);
         }
         return $name === $desiredName;
@@ -138,7 +138,7 @@ final class SimpleNameResolver
     }
     public function resolveShortName(string $className) : string
     {
-        if (!\RectorPrefix20210626\Nette\Utils\Strings::contains($className, '\\')) {
+        if (\strpos($className, '\\') === \false) {
             return $className;
         }
         return (string) \RectorPrefix20210626\Nette\Utils\Strings::after($className, '\\', -1);

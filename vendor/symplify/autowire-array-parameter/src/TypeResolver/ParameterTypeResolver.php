@@ -9,13 +9,13 @@ use RectorPrefix20210626\Symplify\AutowireArrayParameter\DocBlock\ParamTypeDocBl
 final class ParameterTypeResolver
 {
     /**
-     * @var ParamTypeDocBlockResolver
-     */
-    private $paramTypeDocBlockResolver;
-    /**
      * @var array<string, string>
      */
     private $resolvedParameterTypesCached = [];
+    /**
+     * @var \Symplify\AutowireArrayParameter\DocBlock\ParamTypeDocBlockResolver
+     */
+    private $paramTypeDocBlockResolver;
     public function __construct(\RectorPrefix20210626\Symplify\AutowireArrayParameter\DocBlock\ParamTypeDocBlockResolver $paramTypeDocBlockResolver)
     {
         $this->paramTypeDocBlockResolver = $paramTypeDocBlockResolver;

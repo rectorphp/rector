@@ -7,11 +7,11 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class InputFileInfoAndExpectedFileInfo
 {
     /**
-     * @var SmartFileInfo
+     * @var \Symplify\SmartFileSystem\SmartFileInfo
      */
     private $inputFileInfo;
     /**
-     * @var SmartFileInfo
+     * @var \Symplify\SmartFileSystem\SmartFileInfo
      */
     private $expectedFileInfo;
     public function __construct(\Symplify\SmartFileSystem\SmartFileInfo $inputFileInfo, \Symplify\SmartFileSystem\SmartFileInfo $expectedFileInfo)

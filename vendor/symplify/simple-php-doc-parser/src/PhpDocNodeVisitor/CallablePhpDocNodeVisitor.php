@@ -16,8 +16,8 @@ final class CallablePhpDocNodeVisitor extends \RectorPrefix20210626\Symplify\Sim
     private $docContent;
     public function __construct(callable $callable, ?string $docContent = null)
     {
-        $this->callable = $callable;
         $this->docContent = $docContent;
+        $this->callable = $callable;
     }
     public function enterNode(\PHPStan\PhpDocParser\Ast\Node $node) : ?\PHPStan\PhpDocParser\Ast\Node
     {

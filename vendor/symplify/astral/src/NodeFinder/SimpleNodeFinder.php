@@ -10,11 +10,11 @@ use RectorPrefix20210626\Symplify\PackageBuilder\Php\TypeChecker;
 final class SimpleNodeFinder
 {
     /**
-     * @var TypeChecker
+     * @var \Symplify\PackageBuilder\Php\TypeChecker
      */
     private $typeChecker;
     /**
-     * @var NodeFinder
+     * @var \PhpParser\NodeFinder
      */
     private $nodeFinder;
     public function __construct(\RectorPrefix20210626\Symplify\PackageBuilder\Php\TypeChecker $typeChecker, \PhpParser\NodeFinder $nodeFinder)
@@ -38,7 +38,8 @@ final class SimpleNodeFinder
     public function hasByTypes(\PhpParser\Node $node, array $nodeClasses) : bool
     {
         foreach ($nodeClasses as $nodeClass) {
-            if ($this->findByType($node, $nodeClass)) {
+            $foundNodes = $this->findByType($node, $nodeClass);
+            if ($foundNodes !== []) {
                 return \true;
             }
         }

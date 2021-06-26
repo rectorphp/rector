@@ -11,7 +11,7 @@ use RectorPrefix20210626\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 final class CompleteUnifiedDiffOutputBuilderFactory
 {
     /**
-     * @var PrivatesAccessor
+     * @var \Symplify\PackageBuilder\Reflection\PrivatesAccessor
      */
     private $privatesAccessor;
     public function __construct(\RectorPrefix20210626\Symplify\PackageBuilder\Reflection\PrivatesAccessor $privatesAccessor)

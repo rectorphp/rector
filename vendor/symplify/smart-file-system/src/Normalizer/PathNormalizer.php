@@ -38,7 +38,7 @@ final class PathNormalizer
         }
         $path = \str_replace('\\', '/', $path);
         $path = \RectorPrefix20210626\Nette\Utils\Strings::replace($path, self::TWO_AND_MORE_SLASHES_REGEX, '/');
-        $pathRoot = \strpos($path, '/') === 0 ? $directorySeparator : '';
+        $pathRoot = \strncmp($path, '/', \strlen('/')) === 0 ? $directorySeparator : '';
         $pathParts = \explode('/', \trim($path, '/'));
         $normalizedPathParts = $this->normalizePathParts($pathParts, $scheme);
         $pathStart = $scheme !== self::SCHEME_UNDEFINED ? $scheme . '://' : '';
@@ -64,7 +64,7 @@ final class PathNormalizer
             if ($scheme !== 'phar') {
                 continue;
             }
-            if (!\RectorPrefix20210626\Nette\Utils\Strings::endsWith($removedPart, '.phar')) {
+            if (\substr_compare($removedPart, '.phar', -\strlen('.phar')) !== 0) {
                 continue;
             }
             $scheme = self::SCHEME_UNDEFINED;

@@ -14,7 +14,7 @@ final class JsonInliner
      */
     private const SPACE_REGEX = '#\\s+#';
     /**
-     * @var ParameterProvider
+     * @var \Symplify\PackageBuilder\Parameter\ParameterProvider
      */
     private $parameterProvider;
     public function __construct(\RectorPrefix20210626\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider)
