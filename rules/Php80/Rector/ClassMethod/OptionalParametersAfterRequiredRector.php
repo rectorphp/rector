@@ -8,11 +8,9 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Reflection\MethodReflection;
-use PHPStan\Type\TypeWithClassName;
 use Rector\Core\PHPStan\Reflection\CallReflectionResolver;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Reflection\ReflectionResolver;
-use Rector\Core\ValueObject\MethodName;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php80\NodeResolver\ArgumentSorter;
 use Rector\Php80\NodeResolver\RequireOptionalParamResolver;
@@ -98,21 +96,11 @@ CODE_SAMPLE
         if (!$classMethodReflection instanceof \PHPStan\Reflection\MethodReflection) {
             return null;
         }
-        $classReflection = $classMethodReflection->getDeclaringClass();
-        $fileName = $classReflection->getFileName();
-        // probably internal class
-        if ($fileName === \false) {
+        $expectedArgOrParamOrder = $this->resolveExpectedArgParamOrderIfDifferent($classMethodReflection, $classMethod->params);
+        if ($expectedArgOrParamOrder === null) {
             return null;
         }
-        if (\strpos($fileName, '/vendor/') !== \false) {
-            return null;
-        }
-        $parametersAcceptor = $classMethodReflection->getVariants()[0];
-        $expectedOrderParameterReflections = $this->requireOptionalParamResolver->resolveFromReflection($classMethodReflection);
-        if ($parametersAcceptor->getParameters() === $expectedOrderParameterReflections) {
-            return null;
-        }
-        $newParams = $this->argumentSorter->sortArgsByExpectedParamOrder($classMethod->params, $expectedOrderParameterReflections);
+        $newParams = $this->argumentSorter->sortArgsByExpectedParamOrder($classMethod->params, $expectedArgOrParamOrder);
         $classMethod->params = $newParams;
         return $classMethod;
     }
@@ -121,14 +109,40 @@ CODE_SAMPLE
         if ($new->args === []) {
             return null;
         }
-        $newClassType = $this->nodeTypeResolver->resolve($new->class);
-        if (!$newClassType instanceof \PHPStan\Type\TypeWithClassName) {
-            return null;
-        }
-        $methodReflection = $this->reflectionResolver->resolveMethodReflection($newClassType->getClassName(), \Rector\Core\ValueObject\MethodName::CONSTRUCT);
+        $methodReflection = $this->reflectionResolver->resolveMethodReflectionFromNew($new);
         if (!$methodReflection instanceof \PHPStan\Reflection\MethodReflection) {
             return null;
         }
+        $expectedArgOrParamOrder = $this->resolveExpectedArgParamOrderIfDifferent($methodReflection, $new->args);
+        if ($expectedArgOrParamOrder === null) {
+            return null;
+        }
+        $new->args = $this->argumentSorter->sortArgsByExpectedParamOrder($new->args, $expectedArgOrParamOrder);
+        return $new;
+    }
+    private function refactorMethodCall(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\PhpParser\Node\Expr\MethodCall
+    {
+        $methodReflection = $this->callReflectionResolver->resolveCall($methodCall);
+        if (!$methodReflection instanceof \PHPStan\Reflection\MethodReflection) {
+            return null;
+        }
+        $expectedArgOrParamOrder = $this->resolveExpectedArgParamOrderIfDifferent($methodReflection, $methodCall->args);
+        if ($expectedArgOrParamOrder === null) {
+            return null;
+        }
+        $newArgs = $this->argumentSorter->sortArgsByExpectedParamOrder($methodCall->args, $expectedArgOrParamOrder);
+        if ($methodCall->args === $newArgs) {
+            return null;
+        }
+        $methodCall->args = $newArgs;
+        return $methodCall;
+    }
+    /**
+     * @param array<Node\Arg|Node\Param> $argsOrParams
+     * @return int[]|null
+     */
+    private function resolveExpectedArgParamOrderIfDifferent(\PHPStan\Reflection\MethodReflection $methodReflection, array $argsOrParams) : ?array
+    {
         $classReflection = $methodReflection->getDeclaringClass();
         $fileName = $classReflection->getFileName();
         // probably internal class
@@ -139,40 +153,13 @@ CODE_SAMPLE
             return null;
         }
         $parametersAcceptor = $methodReflection->getVariants()[0];
-        $expectedOrderedParameterReflections = $this->requireOptionalParamResolver->resolveFromReflection($methodReflection);
-        if ($expectedOrderedParameterReflections === $parametersAcceptor->getParameters()) {
+        $expectedParameterReflections = $this->requireOptionalParamResolver->resolveFromReflection($methodReflection);
+        if (\count($argsOrParams) !== \count($parametersAcceptor->getParameters())) {
             return null;
         }
-        $parametersAcceptor = $methodReflection->getVariants()[0];
-        if (\count($new->args) !== \count($parametersAcceptor->getParameters())) {
+        if ($expectedParameterReflections === $parametersAcceptor->getParameters()) {
             return null;
         }
-        $newArgs = $this->argumentSorter->sortArgsByExpectedParamOrder($new->args, $expectedOrderedParameterReflections);
-        if ($new->args === $newArgs) {
-            return null;
-        }
-        $new->args = $newArgs;
-        return $new;
-    }
-    private function refactorMethodCall(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\PhpParser\Node\Expr\MethodCall
-    {
-        $callReflection = $this->callReflectionResolver->resolveCall($methodCall);
-        if ($callReflection === null) {
-            return null;
-        }
-        $parametersAcceptor = $callReflection->getVariants()[0];
-        $expectedOrderedParameterReflections = $this->requireOptionalParamResolver->resolveFromReflection($callReflection);
-        if ($expectedOrderedParameterReflections === $parametersAcceptor->getParameters()) {
-            return null;
-        }
-        if (\count($methodCall->args) !== \count($parametersAcceptor->getParameters())) {
-            return null;
-        }
-        $newArgs = $this->argumentSorter->sortArgsByExpectedParamOrder($methodCall->args, $expectedOrderedParameterReflections);
-        if ($methodCall->args === $newArgs) {
-            return null;
-        }
-        $methodCall->args = $newArgs;
-        return $methodCall;
+        return \array_keys($expectedParameterReflections);
     }
 }
