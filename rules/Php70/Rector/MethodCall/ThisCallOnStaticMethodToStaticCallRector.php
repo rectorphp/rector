@@ -11,8 +11,9 @@ use PhpParser\Node\Stmt\Class_;
 use PHPStan\Reflection\Php\PhpMethodReflection;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeCollector\Reflection\MethodReflectionProvider;
+use Rector\Core\Reflection\ReflectionResolver;
 use Rector\NodeCollector\StaticAnalyzer;
+use Rector\NodeTypeResolver\MethodParameterTypeResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -25,7 +26,8 @@ final class ThisCallOnStaticMethodToStaticCallRector extends AbstractRector
 {
     public function __construct(
         private StaticAnalyzer $staticAnalyzer,
-        private MethodReflectionProvider $methodReflectionProvider
+        private MethodParameterTypeResolver $methodReflectionProvider,
+        private ReflectionResolver $reflectionResolver
     ) {
     }
 
@@ -124,7 +126,7 @@ CODE_SAMPLE
             return 'self';
         }
 
-        $methodReflection = $this->methodReflectionProvider->provideByMethodCall($methodCall);
+        $methodReflection = $this->reflectionResolver->resolveMethodReflectionFromMethodCall($methodCall);
         if (! $methodReflection instanceof PhpMethodReflection) {
             return 'static';
         }

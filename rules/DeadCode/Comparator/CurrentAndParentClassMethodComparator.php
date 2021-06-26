@@ -15,15 +15,15 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\DeadCode\Comparator\Parameter\ParameterDefaultsComparator;
 use Rector\DeadCode\Comparator\Parameter\ParameterTypeComparator;
-use Rector\NodeCollector\Reflection\MethodReflectionProvider;
 use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\NodeTypeResolver\MethodParameterTypeResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class CurrentAndParentClassMethodComparator
 {
     public function __construct(
         private NodeNameResolver $nodeNameResolver,
-        private MethodReflectionProvider $methodReflectionProvider,
+        private MethodParameterTypeResolver $methodReflectionProvider,
         private ParameterDefaultsComparator $parameterDefaultsComparator,
         private ParameterTypeComparator $parameterTypeComparator,
         private NodeComparator $nodeComparator

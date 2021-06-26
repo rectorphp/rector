@@ -6,7 +6,7 @@ namespace Rector\PhpSpecToPHPUnit;
 
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
-use PHPStan\Reflection\ReflectionProvider;
+use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use ReflectionNamedType;
@@ -17,25 +17,26 @@ use ReflectionNamedType;
 final class PHPUnitTypeDeclarationDecorator
 {
     public function __construct(
-        private ReflectionProvider $reflectionProvider
+        private ReflectionResolver $reflectionResolver
     ) {
     }
 
     public function decorate(ClassMethod $classMethod): void
     {
-        if (! $this->reflectionProvider->hasClass('PHPUnit\Framework\TestCase')) {
-            return;
-        }
-
         // skip test run
         if (StaticPHPUnitEnvironment::isPHPUnitRun()) {
             return;
         }
 
-        $classReflection = $this->reflectionProvider->getClass('PHPUnit\Framework\TestCase');
-        $reflectionClass = $classReflection->getNativeReflection();
+        $reflectionMethod = $this->reflectionResolver->resolveNativeClassMethodReflection(
+            'PHPUnit\Framework\TestCase',
+            MethodName::SET_UP
+        );
 
-        $reflectionMethod = $reflectionClass->getMethod(MethodName::SET_UP);
+        if ($reflectionMethod === null) {
+            return;
+        }
+
         if (! $reflectionMethod->hasReturnType()) {
             return;
         }

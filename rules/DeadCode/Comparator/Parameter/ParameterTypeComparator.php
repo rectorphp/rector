@@ -6,12 +6,12 @@ namespace Rector\DeadCode\Comparator\Parameter;
 
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\NodeCollector\Reflection\MethodReflectionProvider;
+use Rector\NodeTypeResolver\MethodParameterTypeResolver;
 
 final class ParameterTypeComparator
 {
     public function __construct(
-        private MethodReflectionProvider $methodReflectionProvider
+        private MethodParameterTypeResolver $methodReflectionProvider
     ) {
     }
 
