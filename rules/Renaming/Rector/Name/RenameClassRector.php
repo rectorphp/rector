@@ -17,6 +17,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Renaming\NodeManipulator\ClassRenamer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20210626\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Renaming\Rector\Name\RenameClassRector\RenameClassRectorTest
  */
@@ -27,9 +28,10 @@ final class RenameClassRector extends \Rector\Core\Rector\AbstractRector impleme
      */
     public const OLD_TO_NEW_CLASSES = 'old_to_new_classes';
     /**
-     * @var array<string, string>
+     * @api
+     * @var string
      */
-    private $oldToNewClasses = [];
+    public const CLASS_MAP_FILES = 'class_map_files';
     /**
      * @var \Rector\Core\Configuration\RenamedClassesDataCollector
      */
@@ -83,15 +85,30 @@ CODE_SAMPLE
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        return $this->classRenamer->renameNode($node, $this->oldToNewClasses);
+        $oldToNewClasses = $this->renamedClassesDataCollector->getOldToNewClasses();
+        return $this->classRenamer->renameNode($node, $oldToNewClasses);
     }
     /**
      * @param array<string, array<string, string>> $configuration
      */
     public function configure(array $configuration) : void
     {
-        $oldToNewClasses = $configuration[self::OLD_TO_NEW_CLASSES] ?? [];
+        $this->addOldToNewClasses($configuration[self::OLD_TO_NEW_CLASSES] ?? []);
+        $classMapFiles = $configuration[self::CLASS_MAP_FILES] ?? [];
+        \RectorPrefix20210626\Webmozart\Assert\Assert::allString($classMapFiles);
+        foreach ($classMapFiles as $classMapFile) {
+            \RectorPrefix20210626\Webmozart\Assert\Assert::fileExists($classMapFile);
+            $oldToNewClasses = (require_once $classMapFile);
+            $this->addOldToNewClasses($oldToNewClasses);
+        }
+    }
+    /**
+     * @param array<string, string> $oldToNewClasses
+     */
+    private function addOldToNewClasses(array $oldToNewClasses) : void
+    {
+        \RectorPrefix20210626\Webmozart\Assert\Assert::allString(\array_keys($oldToNewClasses));
+        \RectorPrefix20210626\Webmozart\Assert\Assert::allString($oldToNewClasses);
         $this->renamedClassesDataCollector->addOldToNewClasses($oldToNewClasses);
-        $this->oldToNewClasses = $this->renamedClassesDataCollector->getOldToNewClasses();
     }
 }

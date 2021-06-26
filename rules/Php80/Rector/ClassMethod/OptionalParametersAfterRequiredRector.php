@@ -10,10 +10,10 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Type\TypeWithClassName;
 use Rector\Core\PHPStan\Reflection\CallReflectionResolver;
-use Rector\Core\PHPStan\Reflection\ClassMethodReflectionResolver;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Core\ValueObject\MethodName;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php80\NodeResolver\ArgumentSorter;
 use Rector\Php80\NodeResolver\RequireOptionalParamResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -38,19 +38,14 @@ final class OptionalParametersAfterRequiredRector extends \Rector\Core\Rector\Ab
      */
     private $callReflectionResolver;
     /**
-     * @var \Rector\Core\PHPStan\Reflection\ClassMethodReflectionResolver
-     */
-    private $classMethodReflectionResolver;
-    /**
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
-    public function __construct(\Rector\Php80\NodeResolver\RequireOptionalParamResolver $requireOptionalParamResolver, \Rector\Php80\NodeResolver\ArgumentSorter $argumentSorter, \Rector\Core\PHPStan\Reflection\CallReflectionResolver $callReflectionResolver, \Rector\Core\PHPStan\Reflection\ClassMethodReflectionResolver $classMethodReflectionResolver, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver)
+    public function __construct(\Rector\Php80\NodeResolver\RequireOptionalParamResolver $requireOptionalParamResolver, \Rector\Php80\NodeResolver\ArgumentSorter $argumentSorter, \Rector\Core\PHPStan\Reflection\CallReflectionResolver $callReflectionResolver, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver)
     {
         $this->requireOptionalParamResolver = $requireOptionalParamResolver;
         $this->argumentSorter = $argumentSorter;
         $this->callReflectionResolver = $callReflectionResolver;
-        $this->classMethodReflectionResolver = $classMethodReflectionResolver;
         $this->reflectionResolver = $reflectionResolver;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
@@ -98,8 +93,18 @@ CODE_SAMPLE
         if ($classMethod->params === []) {
             return null;
         }
-        $classMethodReflection = $this->classMethodReflectionResolver->resolve($classMethod);
+        $classMethod->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);
+        $classMethodReflection = $this->reflectionResolver->resolveMethodReflectionFromClassMethod($classMethod);
         if (!$classMethodReflection instanceof \PHPStan\Reflection\MethodReflection) {
+            return null;
+        }
+        $classReflection = $classMethodReflection->getDeclaringClass();
+        $fileName = $classReflection->getFileName();
+        // probably internal class
+        if ($fileName === \false) {
+            return null;
+        }
+        if (\strpos($fileName, '/vendor/') !== \false) {
             return null;
         }
         $parametersAcceptor = $classMethodReflection->getVariants()[0];
@@ -122,6 +127,15 @@ CODE_SAMPLE
         }
         $methodReflection = $this->reflectionResolver->resolveMethodReflection($newClassType->getClassName(), \Rector\Core\ValueObject\MethodName::CONSTRUCT);
         if (!$methodReflection instanceof \PHPStan\Reflection\MethodReflection) {
+            return null;
+        }
+        $classReflection = $methodReflection->getDeclaringClass();
+        $fileName = $classReflection->getFileName();
+        // probably internal class
+        if ($fileName === \false) {
+            return null;
+        }
+        if (\strpos($fileName, '/vendor/') !== \false) {
             return null;
         }
         $parametersAcceptor = $methodReflection->getVariants()[0];

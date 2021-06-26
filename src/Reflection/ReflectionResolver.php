@@ -5,12 +5,15 @@ namespace Rector\Core\Reflection;
 
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\TypeUtils;
 use PHPStan\Type\TypeWithClassName;
 use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
+use ReflectionMethod;
 final class ReflectionResolver
 {
     /**
@@ -85,5 +88,14 @@ final class ReflectionResolver
             return null;
         }
         return $this->resolveMethodReflection($callerType->getClassName(), $methodName);
+    }
+    public function resolveMethodReflectionFromClassMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod) : ?\PHPStan\Reflection\MethodReflection
+    {
+        $class = $classMethod->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);
+        if ($class === null) {
+            return null;
+        }
+        $methodName = $this->nodeNameResolver->getName($classMethod);
+        return $this->resolveMethodReflection($class, $methodName);
     }
 }
