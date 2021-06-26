@@ -9,16 +9,12 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
-use Rector\Core\PHPStan\Reflection\CallReflectionResolver;
+use PHPStan\Type\TypeWithClassName;
+use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\Reflection\ClassMethodReflectionFactory;
-use Rector\Core\Reflection\FunctionLikeReflectionParser;
-use Rector\FileSystemRector\Parser\FileInfoParser;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
-use ReflectionMethod;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use Symplify\SmartFileSystem\SmartFileInfo;
 /**
  * @see https://phpunit.readthedocs.io/en/7.3/annotations.html#doesnotperformassertions
  * @see https://github.com/sebastianbergmann/phpunit/issues/2484
@@ -42,36 +38,17 @@ final class AddDoesNotPerformAssertionToNonAssertingTestRector extends \Rector\C
      */
     private $containsAssertCallByClassMethod = [];
     /**
-     * @var ClassMethod[][]|null[][]
-     */
-    private $analyzedMethodsInFileName = [];
-    /**
      * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
      */
     private $testsNodeAnalyzer;
     /**
-     * @var \Rector\Core\Reflection\ClassMethodReflectionFactory
+     * @var \Rector\Core\PhpParser\AstResolver
      */
-    private $classMethodReflectionFactory;
-    /**
-     * @var \Rector\FileSystemRector\Parser\FileInfoParser
-     */
-    private $fileInfoParser;
-    /**
-     * @var \Rector\Core\PHPStan\Reflection\CallReflectionResolver
-     */
-    private $callReflectionResolver;
-    /**
-     * @var \Rector\Core\Reflection\FunctionLikeReflectionParser
-     */
-    private $functionLikeReflectionParser;
-    public function __construct(\Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer $testsNodeAnalyzer, \Rector\Core\Reflection\ClassMethodReflectionFactory $classMethodReflectionFactory, \Rector\FileSystemRector\Parser\FileInfoParser $fileInfoParser, \Rector\Core\PHPStan\Reflection\CallReflectionResolver $callReflectionResolver, \Rector\Core\Reflection\FunctionLikeReflectionParser $functionLikeReflectionParser)
+    private $astResolver;
+    public function __construct(\Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer $testsNodeAnalyzer, \Rector\Core\PhpParser\AstResolver $astResolver)
     {
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
-        $this->classMethodReflectionFactory = $classMethodReflectionFactory;
-        $this->fileInfoParser = $fileInfoParser;
-        $this->callReflectionResolver = $callReflectionResolver;
-        $this->functionLikeReflectionParser = $functionLikeReflectionParser;
+        $this->astResolver = $astResolver;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -194,7 +171,7 @@ CODE_SAMPLE
             if (!$node instanceof \PhpParser\Node\Expr\MethodCall && !$node instanceof \PhpParser\Node\Expr\StaticCall) {
                 return \false;
             }
-            $classMethod = $this->findClassMethodByParsingReflection($node);
+            $classMethod = $this->resolveClassMethodFromCall($node);
             // skip circular self calls
             if ($currentClassMethod === $classMethod) {
                 return \false;
@@ -206,49 +183,23 @@ CODE_SAMPLE
         });
     }
     /**
-     * @param MethodCall|StaticCall $node
+     * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $call
      */
-    private function findClassMethodByParsingReflection(\PhpParser\Node $node) : ?\PhpParser\Node\Stmt\ClassMethod
+    private function resolveClassMethodFromCall($call) : ?\PhpParser\Node\Stmt\ClassMethod
     {
-        $methodName = $this->getName($node->name);
+        if ($call instanceof \PhpParser\Node\Expr\MethodCall) {
+            $objectType = $this->getObjectType($call->var);
+        } else {
+            // StaticCall
+            $objectType = $this->getObjectType($call->class);
+        }
+        if (!$objectType instanceof \PHPStan\Type\TypeWithClassName) {
+            return null;
+        }
+        $methodName = $this->getName($call->name);
         if ($methodName === null) {
             return null;
         }
-        if ($node instanceof \PhpParser\Node\Expr\MethodCall) {
-            $objectType = $this->getObjectType($node->var);
-        } else {
-            // StaticCall
-            $objectType = $this->getObjectType($node->class);
-        }
-        $reflectionMethod = $this->classMethodReflectionFactory->createFromPHPStanTypeAndMethodName($objectType, $methodName);
-        if (!$reflectionMethod instanceof \ReflectionMethod) {
-            return null;
-        }
-        $fileName = $reflectionMethod->getFileName();
-        if (!$fileName) {
-            return null;
-        }
-        if (!\file_exists($fileName)) {
-            return null;
-        }
-        return $this->findClassMethodInFile($fileName, $methodName);
-    }
-    private function findClassMethodInFile(string $fileName, string $methodName) : ?\PhpParser\Node\Stmt\ClassMethod
-    {
-        // skip already anayzed method to prevent cycling
-        if (isset($this->analyzedMethodsInFileName[$fileName][$methodName])) {
-            return $this->analyzedMethodsInFileName[$fileName][$methodName];
-        }
-        $smartFileInfo = new \Symplify\SmartFileSystem\SmartFileInfo($fileName);
-        $examinedMethodNodes = $this->fileInfoParser->parseFileInfoToNodesAndDecorate($smartFileInfo);
-        /** @var ClassMethod|null $examinedClassMethod */
-        $examinedClassMethod = $this->betterNodeFinder->findFirst($examinedMethodNodes, function (\PhpParser\Node $node) use($methodName) : bool {
-            if (!$node instanceof \PhpParser\Node\Stmt\ClassMethod) {
-                return \false;
-            }
-            return $this->isName($node, $methodName);
-        });
-        $this->analyzedMethodsInFileName[$fileName][$methodName] = $examinedClassMethod;
-        return $examinedClassMethod;
+        return $this->astResolver->resolveClassMethod($objectType->getClassName(), $methodName);
     }
 }

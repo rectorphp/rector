@@ -1288,17 +1288,17 @@
         },
         {
             "name": "rector\/rector-nette",
-            "version": "0.11.9",
-            "version_normalized": "0.11.9.0",
+            "version": "0.11.10",
+            "version_normalized": "0.11.10.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-nette.git",
-                "reference": "a8ab801753c9ddd54790be6ec74e5195276b62b2"
+                "reference": "f014b55cf626a0257f70a3cf42913a002de59001"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-nette\/zipball\/a8ab801753c9ddd54790be6ec74e5195276b62b2",
-                "reference": "a8ab801753c9ddd54790be6ec74e5195276b62b2",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-nette\/zipball\/f014b55cf626a0257f70a3cf42913a002de59001",
+                "reference": "f014b55cf626a0257f70a3cf42913a002de59001",
                 "shasum": ""
             },
             "require": {
@@ -1324,7 +1324,7 @@
                 "symplify\/phpstan-rules": "^9.3",
                 "symplify\/rule-doc-generator": "^9.3"
             },
-            "time": "2021-06-26T11:35:36+00:00",
+            "time": "2021-06-26T11:53:53+00:00",
             "type": "rector-extension",
             "extra": {
                 "branch-alias": {
@@ -1349,23 +1349,23 @@
             "description": "Rector upgrades rules for Nette Framework",
             "support": {
                 "issues": "https:\/\/github.com\/rectorphp\/rector-nette\/issues",
-                "source": "https:\/\/github.com\/rectorphp\/rector-nette\/tree\/0.11.9"
+                "source": "https:\/\/github.com\/rectorphp\/rector-nette\/tree\/0.11.10"
             },
             "install-path": "..\/rector\/rector-nette"
         },
         {
             "name": "rector\/rector-phpunit",
-            "version": "0.11.2",
-            "version_normalized": "0.11.2.0",
+            "version": "0.11.3",
+            "version_normalized": "0.11.3.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-phpunit.git",
-                "reference": "83a8f9bb9ba3c76da4ec7cdd27130be8bba56105"
+                "reference": "99805ade54e87c7cf9c836be4f2bb477822bfc1a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/83a8f9bb9ba3c76da4ec7cdd27130be8bba56105",
-                "reference": "83a8f9bb9ba3c76da4ec7cdd27130be8bba56105",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/99805ade54e87c7cf9c836be4f2bb477822bfc1a",
+                "reference": "99805ade54e87c7cf9c836be4f2bb477822bfc1a",
                 "shasum": ""
             },
             "require": {
@@ -1378,13 +1378,13 @@
                 "phpstan\/extension-installer": "^1.1",
                 "phpunit\/phpunit": "^9.5",
                 "rector\/rector-phpstan-rules": "^0.2.6",
-                "rector\/rector-src": "^0.11",
+                "rector\/rector-src": "dev-main",
                 "symplify\/easy-coding-standard": "^9.3",
                 "symplify\/phpstan-extensions": "^9.3",
                 "symplify\/phpstan-rules": "^9.2",
                 "symplify\/rule-doc-generator": "^9.3"
             },
-            "time": "2021-06-24T16:34:55+00:00",
+            "time": "2021-06-26T12:01:58+00:00",
             "type": "rector-extension",
             "extra": {
                 "branch-alias": {
@@ -1409,7 +1409,7 @@
             "description": "Rector upgrades rules for PHPUnit",
             "support": {
                 "issues": "https:\/\/github.com\/rectorphp\/rector-phpunit\/issues",
-                "source": "https:\/\/github.com\/rectorphp\/rector-phpunit\/tree\/0.11.2"
+                "source": "https:\/\/github.com\/rectorphp\/rector-phpunit\/tree\/0.11.3"
             },
             "install-path": "..\/rector\/rector-phpunit"
         },

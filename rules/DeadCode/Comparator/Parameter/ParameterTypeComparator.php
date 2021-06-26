@@ -11,15 +11,15 @@ final class ParameterTypeComparator
     /**
      * @var \Rector\NodeTypeResolver\MethodParameterTypeResolver
      */
-    private $methodReflectionProvider;
-    public function __construct(\Rector\NodeTypeResolver\MethodParameterTypeResolver $methodReflectionProvider)
+    private $methodParameterTypeResolver;
+    public function __construct(\Rector\NodeTypeResolver\MethodParameterTypeResolver $methodParameterTypeResolver)
     {
-        $this->methodReflectionProvider = $methodReflectionProvider;
+        $this->methodParameterTypeResolver = $methodParameterTypeResolver;
     }
     public function compareCurrentClassMethodAndParentStaticCall(\PhpParser\Node\Stmt\ClassMethod $classMethod, \PhpParser\Node\Expr\StaticCall $staticCall) : bool
     {
-        $currentParameterTypes = $this->methodReflectionProvider->provideParameterTypesByClassMethod($classMethod);
-        $parentParameterTypes = $this->methodReflectionProvider->provideParameterTypesByStaticCall($staticCall);
+        $currentParameterTypes = $this->methodParameterTypeResolver->provideParameterTypesByClassMethod($classMethod);
+        $parentParameterTypes = $this->methodParameterTypeResolver->provideParameterTypesByStaticCall($staticCall);
         foreach ($currentParameterTypes as $key => $currentParameterType) {
             if (!isset($parentParameterTypes[$key])) {
                 continue;

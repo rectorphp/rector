@@ -12,7 +12,6 @@ use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Reflection\ReflectionResolver;
 use Rector\NodeCollector\StaticAnalyzer;
-use Rector\NodeTypeResolver\MethodParameterTypeResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -27,17 +26,12 @@ final class ThisCallOnStaticMethodToStaticCallRector extends \Rector\Core\Rector
      */
     private $staticAnalyzer;
     /**
-     * @var \Rector\NodeTypeResolver\MethodParameterTypeResolver
-     */
-    private $methodReflectionProvider;
-    /**
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
-    public function __construct(\Rector\NodeCollector\StaticAnalyzer $staticAnalyzer, \Rector\NodeTypeResolver\MethodParameterTypeResolver $methodReflectionProvider, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver)
+    public function __construct(\Rector\NodeCollector\StaticAnalyzer $staticAnalyzer, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver)
     {
         $this->staticAnalyzer = $staticAnalyzer;
-        $this->methodReflectionProvider = $methodReflectionProvider;
         $this->reflectionResolver = $reflectionResolver;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition

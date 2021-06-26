@@ -26,7 +26,7 @@ final class CurrentAndParentClassMethodComparator
     /**
      * @var \Rector\NodeTypeResolver\MethodParameterTypeResolver
      */
-    private $methodReflectionProvider;
+    private $methodParameterTypeResolver;
     /**
      * @var \Rector\DeadCode\Comparator\Parameter\ParameterDefaultsComparator
      */
@@ -39,10 +39,10 @@ final class CurrentAndParentClassMethodComparator
      * @var \Rector\Core\PhpParser\Comparing\NodeComparator
      */
     private $nodeComparator;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeTypeResolver\MethodParameterTypeResolver $methodReflectionProvider, \Rector\DeadCode\Comparator\Parameter\ParameterDefaultsComparator $parameterDefaultsComparator, \Rector\DeadCode\Comparator\Parameter\ParameterTypeComparator $parameterTypeComparator, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator)
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeTypeResolver\MethodParameterTypeResolver $methodParameterTypeResolver, \Rector\DeadCode\Comparator\Parameter\ParameterDefaultsComparator $parameterDefaultsComparator, \Rector\DeadCode\Comparator\Parameter\ParameterTypeComparator $parameterTypeComparator, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator)
     {
         $this->nodeNameResolver = $nodeNameResolver;
-        $this->methodReflectionProvider = $methodReflectionProvider;
+        $this->methodParameterTypeResolver = $methodParameterTypeResolver;
         $this->parameterDefaultsComparator = $parameterDefaultsComparator;
         $this->parameterTypeComparator = $parameterTypeComparator;
         $this->nodeComparator = $nodeComparator;
@@ -145,7 +145,7 @@ final class CurrentAndParentClassMethodComparator
     }
     private function areParameterDefaultsDifferent(\PhpParser\Node\Stmt\ClassMethod $classMethod, \PHPStan\Reflection\MethodReflection $methodReflection) : bool
     {
-        $parameterReflections = $this->methodReflectionProvider->getParameterReflectionsFromMethodReflection($methodReflection);
+        $parameterReflections = $this->methodParameterTypeResolver->getParameterReflectionsFromMethodReflection($methodReflection);
         foreach ($parameterReflections as $key => $parameterReflection) {
             if (!isset($classMethod->params[$key])) {
                 if ($parameterReflection->getDefaultValue() !== null) {
