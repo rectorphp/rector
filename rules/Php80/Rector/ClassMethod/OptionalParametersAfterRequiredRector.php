@@ -10,10 +10,10 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Type\TypeWithClassName;
-use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\PHPStan\Reflection\CallReflectionResolver;
 use Rector\Core\PHPStan\Reflection\ClassMethodReflectionResolver;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Php80\NodeResolver\ArgumentSorter;
 use Rector\Php80\NodeResolver\RequireOptionalParamResolver;
@@ -32,7 +32,7 @@ final class OptionalParametersAfterRequiredRector extends AbstractRector
         private ArgumentSorter $argumentSorter,
         private CallReflectionResolver $callReflectionResolver,
         private ClassMethodReflectionResolver $classMethodReflectionResolver,
-        private AstResolver $astResolver
+        private ReflectionResolver $reflectionResolver
     ) {
     }
 
@@ -126,29 +126,26 @@ CODE_SAMPLE
             return null;
         }
 
-        $classMethod = $this->astResolver->resolveClassMethod(
+        $methodReflection = $this->reflectionResolver->resolveMethodReflection(
             $newClassType->getClassName(),
             MethodName::CONSTRUCT
         );
-        if (! $classMethod instanceof ClassMethod) {
+        if (! $methodReflection instanceof MethodReflection) {
             return null;
         }
 
-        $classMethodReflection = $this->classMethodReflectionResolver->resolve($classMethod);
-        if (! $classMethodReflection instanceof MethodReflection) {
-            return null;
-        }
-
-        $parametersAcceptor = $classMethodReflection->getVariants()[0];
+        $parametersAcceptor = $methodReflection->getVariants()[0];
 
         $expectedOrderedParameterReflections = $this->requireOptionalParamResolver->resolveFromReflection(
-            $classMethodReflection
+            $methodReflection
         );
         if ($expectedOrderedParameterReflections === $parametersAcceptor->getParameters()) {
             return null;
         }
 
-        if (count($new->args) !== count($classMethod->getParams())) {
+        $parametersAcceptor = $methodReflection->getVariants()[0];
+
+        if (count($new->args) !== count($parametersAcceptor->getParameters())) {
             return null;
         }
 

@@ -6,7 +6,7 @@ namespace Rector\Tests\Php80\Rector\ClassMethod\OptionalParametersAfterRequiredR
 
 final class SomeOutsideClass
 {
-    public function __construct($optional = 1, $required)
+    public function __construct($required, $optional = 1)
     {
     }
 }

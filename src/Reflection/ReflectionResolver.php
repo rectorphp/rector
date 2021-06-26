@@ -32,8 +32,11 @@ final class ReflectionResolver
         }
 
         $classReflection = $this->reflectionProvider->getClass($className);
+        if ($classReflection->hasMethod($methodName)) {
+            return $classReflection->getNativeMethod($methodName);
+        }
 
-        return $classReflection->hasMethod($methodName) ? $classReflection->getNativeMethod($methodName) : null;
+        return null;
     }
 
     /**
@@ -64,7 +67,7 @@ final class ReflectionResolver
         }
 
         foreach ($classes as $class) {
-            $methodReflection = $this->resolveNativeClassMethodReflection($class, $methodName);
+            $methodReflection = $this->resolveMethodReflection($class, $methodName);
             if ($methodReflection instanceof MethodReflection) {
                 return $methodReflection;
             }
