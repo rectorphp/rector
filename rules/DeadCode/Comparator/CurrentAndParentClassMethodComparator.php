@@ -23,7 +23,7 @@ final class CurrentAndParentClassMethodComparator
 {
     public function __construct(
         private NodeNameResolver $nodeNameResolver,
-        private MethodParameterTypeResolver $methodReflectionProvider,
+        private MethodParameterTypeResolver $methodParameterTypeResolver,
         private ParameterDefaultsComparator $parameterDefaultsComparator,
         private ParameterTypeComparator $parameterTypeComparator,
         private NodeComparator $nodeComparator
@@ -161,7 +161,7 @@ final class CurrentAndParentClassMethodComparator
         ClassMethod $classMethod,
         MethodReflection $methodReflection
     ): bool {
-        $parameterReflections = $this->methodReflectionProvider->getParameterReflectionsFromMethodReflection(
+        $parameterReflections = $this->methodParameterTypeResolver->getParameterReflectionsFromMethodReflection(
             $methodReflection
         );
 

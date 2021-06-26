@@ -9,6 +9,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
+use ReflectionMethod;
 use ReflectionNamedType;
 
 /**
@@ -33,7 +34,7 @@ final class PHPUnitTypeDeclarationDecorator
             MethodName::SET_UP
         );
 
-        if ($reflectionMethod === null) {
+        if (! $reflectionMethod instanceof ReflectionMethod) {
             return;
         }
 

@@ -11,7 +11,7 @@ use Rector\NodeTypeResolver\MethodParameterTypeResolver;
 final class ParameterTypeComparator
 {
     public function __construct(
-        private MethodParameterTypeResolver $methodReflectionProvider
+        private MethodParameterTypeResolver $methodParameterTypeResolver
     ) {
     }
 
@@ -19,8 +19,8 @@ final class ParameterTypeComparator
         ClassMethod $classMethod,
         StaticCall $staticCall
     ): bool {
-        $currentParameterTypes = $this->methodReflectionProvider->provideParameterTypesByClassMethod($classMethod);
-        $parentParameterTypes = $this->methodReflectionProvider->provideParameterTypesByStaticCall($staticCall);
+        $currentParameterTypes = $this->methodParameterTypeResolver->provideParameterTypesByClassMethod($classMethod);
+        $parentParameterTypes = $this->methodParameterTypeResolver->provideParameterTypesByStaticCall($staticCall);
 
         foreach ($currentParameterTypes as $key => $currentParameterType) {
             if (! isset($parentParameterTypes[$key])) {

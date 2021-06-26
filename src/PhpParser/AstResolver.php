@@ -6,6 +6,7 @@ namespace Rector\Core\PhpParser;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
@@ -131,25 +132,27 @@ final class AstResolver
 
     public function resolveClassMethodFromMethodCall(MethodCall $methodCall): ?ClassMethod
     {
-        $callerStaticType = $this->nodeTypeResolver->getStaticType($methodCall->var);
+        return $this->resolveClassMethodFromCall($methodCall);
+    }
+
+    public function resolveClassMethodFromCall(MethodCall | StaticCall $call): ?ClassMethod
+    {
+        if ($call instanceof MethodCall) {
+            $callerStaticType = $this->nodeTypeResolver->resolve($call->var);
+        } else {
+            $callerStaticType = $this->nodeTypeResolver->resolve($call->class);
+        }
+
         if (! $callerStaticType instanceof TypeWithClassName) {
             return null;
         }
 
-        $methodName = $this->nodeNameResolver->getName($methodCall->name);
+        $methodName = $this->nodeNameResolver->getName($call->name);
         if ($methodName === null) {
             return null;
         }
 
-        $methodReflection = $this->reflectionResolver->resolveMethodReflection(
-            $callerStaticType->getClassName(),
-            $methodName
-        );
-        if ($methodReflection === null) {
-            return null;
-        }
-
-        return $this->resolveClassMethodFromMethodReflection($methodReflection);
+        return $this->resolveClassMethod($callerStaticType->getClassName(), $methodName);
     }
 
     private function resolveClassFromClassReflection(ClassReflection $classReflection, string $className): ?Class_

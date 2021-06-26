@@ -4,7 +4,7 @@ namespace Rector\Tests\DowngradePhp80\Rector\MethodCall\DowngradeNamedArgumentRe
 
 use Rector\Tests\DowngradePhp80\Rector\MethodCall\DowngradeNamedArgumentRector\Source\Foo;
 
-class StaticCall extends Foo
+final class SomeStaticCall extends Foo
 {
     public function __construct(string $name = null, array $attributes = [])
     {
@@ -20,7 +20,7 @@ namespace Rector\Tests\DowngradePhp80\Rector\MethodCall\DowngradeNamedArgumentRe
 
 use Rector\Tests\DowngradePhp80\Rector\MethodCall\DowngradeNamedArgumentRector\Source\Foo;
 
-class StaticCall extends Foo
+final class SomeStaticCall extends Foo
 {
     public function __construct(string $name = null, array $attributes = [])
     {
