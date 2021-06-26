@@ -32,6 +32,27 @@ use RectorPrefix20210626\Symplify\SmartFileSystem\SmartFileSystem;
 final class AstResolver
 {
     /**
+     * Parsing files is very heavy performance, so this will help to leverage it
+     * The value can be also null, as the method might not exist in the class.
+     *
+     * @var array<class-string, array<string, ClassMethod|null>>
+     */
+    private $classMethodsByClassAndMethod = [];
+    /**
+     * Parsing files is very heavy performance, so this will help to leverage it
+     * The value can be also null, as the method might not exist in the class.
+     *
+     * @var array<string, Function_|null>>
+     */
+    private $functionsByName = [];
+    /**
+     * Parsing files is very heavy performance, so this will help to leverage it
+     * The value can be also null, as the method might not exist in the class.
+     *
+     * @var array<class-string, Class_|null>
+     */
+    private $classesByName = [];
+    /**
      * @var \PhpParser\Parser
      */
     private $parser;
@@ -90,12 +111,18 @@ final class AstResolver
     public function resolveClassMethodFromMethodReflection(\PHPStan\Reflection\MethodReflection $methodReflection) : ?\PhpParser\Node\Stmt\ClassMethod
     {
         $classReflection = $methodReflection->getDeclaringClass();
+        if (isset($this->classMethodsByClassAndMethod[$classReflection->getName()][$methodReflection->getName()])) {
+            return $this->classMethodsByClassAndMethod[$classReflection->getName()][$methodReflection->getName()];
+        }
         $fileName = $classReflection->getFileName();
+        // probably native PHP method → un-parseable
         if ($fileName === \false) {
             return null;
         }
         $fileContent = $this->smartFileSystem->readFile($fileName);
         if (!\is_string($fileContent)) {
+            // avoids parsing again falsy file
+            $this->classMethodsByClassAndMethod[$classReflection->getName()][$methodReflection->getName()] = null;
             return null;
         }
         $nodes = (array) $this->parser->parse($fileContent);
@@ -104,18 +131,27 @@ final class AstResolver
         $nodes = $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile($file, $nodes);
         $class = $this->nodeFinder->findFirstInstanceOf($nodes, \PhpParser\Node\Stmt\Class_::class);
         if (!$class instanceof \PhpParser\Node\Stmt\Class_) {
+            // avoids looking for a class in a file where is not present
+            $this->classMethodsByClassAndMethod[$classReflection->getName()][$methodReflection->getName()] = null;
             return null;
         }
-        return $class->getMethod($methodReflection->getName());
+        $classMethod = $class->getMethod($methodReflection->getName());
+        $this->classMethodsByClassAndMethod[$classReflection->getName()][$methodReflection->getName()] = $classMethod;
+        return $classMethod;
     }
     public function resolveFunctionFromFunctionReflection(\PHPStan\Reflection\Php\PhpFunctionReflection $phpFunctionReflection) : ?\PhpParser\Node\Stmt\Function_
     {
+        if (isset($this->functionsByName[$phpFunctionReflection->getName()])) {
+            return $this->functionsByName[$phpFunctionReflection->getName()];
+        }
         $fileName = $phpFunctionReflection->getFileName();
         if ($fileName === \false) {
             return null;
         }
         $fileContent = $this->smartFileSystem->readFile($fileName);
         if (!\is_string($fileContent)) {
+            // to avoid parsing missing function again
+            $this->functionsByName[$phpFunctionReflection->getName()] = null;
             return null;
         }
         $nodes = (array) $this->parser->parse($fileContent);
@@ -128,8 +164,12 @@ final class AstResolver
             if (!$this->nodeNameResolver->isName($function, $phpFunctionReflection->getName())) {
                 continue;
             }
+            // to avoid parsing missing function again
+            $this->functionsByName[$phpFunctionReflection->getName()] = $function;
             return $function;
         }
+        // to avoid parsing missing function again
+        $this->functionsByName[$phpFunctionReflection->getName()] = null;
         return null;
     }
     /**
@@ -171,18 +211,28 @@ final class AstResolver
         if ($classReflection->isBuiltin()) {
             return null;
         }
+        if (isset($this->classesByName[$classReflection->getName()])) {
+            return $this->classesByName[$classReflection->getName()];
+        }
         /** @var string $fileName */
         $fileName = $classReflection->getFileName();
-        /** @var Node[] $contentNodes */
-        $contentNodes = $this->parser->parse($this->smartFileSystem->readFile($fileName));
+        $nodes = $this->parser->parse($this->smartFileSystem->readFile($fileName));
+        if ($nodes === null) {
+            // avoid parsing falsy-file again
+            $this->classesByName[$classReflection->getName()] = null;
+            return null;
+        }
         /** @var Class_[] $classes */
-        $classes = $this->betterNodeFinder->findInstanceOf($contentNodes, \PhpParser\Node\Stmt\Class_::class);
+        $classes = $this->betterNodeFinder->findInstanceOf($nodes, \PhpParser\Node\Stmt\Class_::class);
         $reflectionClassName = $classReflection->getName();
         foreach ($classes as $class) {
-            if ($reflectionClassName === $className) {
-                return $class;
+            if ($reflectionClassName !== $className) {
+                continue;
             }
+            $this->classesByName[$classReflection->getName()] = $class;
+            return $class;
         }
+        $this->classesByName[$classReflection->getName()] = null;
         return null;
     }
 }

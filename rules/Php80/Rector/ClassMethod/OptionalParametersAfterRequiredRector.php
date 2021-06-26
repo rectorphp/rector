@@ -9,10 +9,10 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Type\TypeWithClassName;
-use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\PHPStan\Reflection\CallReflectionResolver;
 use Rector\Core\PHPStan\Reflection\ClassMethodReflectionResolver;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Php80\NodeResolver\ArgumentSorter;
 use Rector\Php80\NodeResolver\RequireOptionalParamResolver;
@@ -42,16 +42,16 @@ final class OptionalParametersAfterRequiredRector extends \Rector\Core\Rector\Ab
      */
     private $classMethodReflectionResolver;
     /**
-     * @var \Rector\Core\PhpParser\AstResolver
+     * @var \Rector\Core\Reflection\ReflectionResolver
      */
-    private $astResolver;
-    public function __construct(\Rector\Php80\NodeResolver\RequireOptionalParamResolver $requireOptionalParamResolver, \Rector\Php80\NodeResolver\ArgumentSorter $argumentSorter, \Rector\Core\PHPStan\Reflection\CallReflectionResolver $callReflectionResolver, \Rector\Core\PHPStan\Reflection\ClassMethodReflectionResolver $classMethodReflectionResolver, \Rector\Core\PhpParser\AstResolver $astResolver)
+    private $reflectionResolver;
+    public function __construct(\Rector\Php80\NodeResolver\RequireOptionalParamResolver $requireOptionalParamResolver, \Rector\Php80\NodeResolver\ArgumentSorter $argumentSorter, \Rector\Core\PHPStan\Reflection\CallReflectionResolver $callReflectionResolver, \Rector\Core\PHPStan\Reflection\ClassMethodReflectionResolver $classMethodReflectionResolver, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver)
     {
         $this->requireOptionalParamResolver = $requireOptionalParamResolver;
         $this->argumentSorter = $argumentSorter;
         $this->callReflectionResolver = $callReflectionResolver;
         $this->classMethodReflectionResolver = $classMethodReflectionResolver;
-        $this->astResolver = $astResolver;
+        $this->reflectionResolver = $reflectionResolver;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -120,20 +120,17 @@ CODE_SAMPLE
         if (!$newClassType instanceof \PHPStan\Type\TypeWithClassName) {
             return null;
         }
-        $classMethod = $this->astResolver->resolveClassMethod($newClassType->getClassName(), \Rector\Core\ValueObject\MethodName::CONSTRUCT);
-        if (!$classMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
+        $methodReflection = $this->reflectionResolver->resolveMethodReflection($newClassType->getClassName(), \Rector\Core\ValueObject\MethodName::CONSTRUCT);
+        if (!$methodReflection instanceof \PHPStan\Reflection\MethodReflection) {
             return null;
         }
-        $classMethodReflection = $this->classMethodReflectionResolver->resolve($classMethod);
-        if (!$classMethodReflection instanceof \PHPStan\Reflection\MethodReflection) {
-            return null;
-        }
-        $parametersAcceptor = $classMethodReflection->getVariants()[0];
-        $expectedOrderedParameterReflections = $this->requireOptionalParamResolver->resolveFromReflection($classMethodReflection);
+        $parametersAcceptor = $methodReflection->getVariants()[0];
+        $expectedOrderedParameterReflections = $this->requireOptionalParamResolver->resolveFromReflection($methodReflection);
         if ($expectedOrderedParameterReflections === $parametersAcceptor->getParameters()) {
             return null;
         }
-        if (\count($new->args) !== \count($classMethod->getParams())) {
+        $parametersAcceptor = $methodReflection->getVariants()[0];
+        if (\count($new->args) !== \count($parametersAcceptor->getParameters())) {
             return null;
         }
         $newArgs = $this->argumentSorter->sortArgsByExpectedParamOrder($new->args, $expectedOrderedParameterReflections);

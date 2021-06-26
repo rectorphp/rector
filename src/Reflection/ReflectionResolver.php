@@ -40,7 +40,10 @@ final class ReflectionResolver
             return null;
         }
         $classReflection = $this->reflectionProvider->getClass($className);
-        return $classReflection->hasMethod($methodName) ? $classReflection->getNativeMethod($methodName) : null;
+        if ($classReflection->hasMethod($methodName)) {
+            return $classReflection->getNativeMethod($methodName);
+        }
+        return null;
     }
     /**
      * @param class-string $className
@@ -64,7 +67,7 @@ final class ReflectionResolver
             return null;
         }
         foreach ($classes as $class) {
-            $methodReflection = $this->resolveNativeClassMethodReflection($class, $methodName);
+            $methodReflection = $this->resolveMethodReflection($class, $methodName);
             if ($methodReflection instanceof \PHPStan\Reflection\MethodReflection) {
                 return $methodReflection;
             }
