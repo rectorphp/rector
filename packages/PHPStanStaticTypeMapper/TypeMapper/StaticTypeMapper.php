@@ -36,7 +36,7 @@ final class StaticTypeMapper implements TypeMapperInterface
     /**
      * @param StaticType $type
      */
-    public function mapToPHPStanPhpDocTypeNode(Type $type): TypeNode
+    public function mapToPHPStanPhpDocTypeNode(Type $type, ?string $kind = null): TypeNode
     {
         return new ThisTypeNode();
     }

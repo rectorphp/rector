@@ -14,6 +14,7 @@ use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareCallableTypeNode;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
+use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
 use Symfony\Contracts\Service\Attribute\Required;
 
 final class CallableTypeMapper implements TypeMapperInterface
@@ -37,7 +38,7 @@ final class CallableTypeMapper implements TypeMapperInterface
     /**
      * @param CallableType $type
      */
-    public function mapToPHPStanPhpDocTypeNode(Type $type): TypeNode
+    public function mapToPHPStanPhpDocTypeNode(Type $type, ?string $kind = null): TypeNode
     {
         $returnTypeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($type->getReturnType());
 
@@ -49,7 +50,7 @@ final class CallableTypeMapper implements TypeMapperInterface
      */
     public function mapToPhpParserNode(Type $type, ?string $kind = null): ?Node
     {
-        if ($kind === 'property') {
+        if ($kind === TypeKind::KIND_PROPERTY) {
             return null;
         }
 

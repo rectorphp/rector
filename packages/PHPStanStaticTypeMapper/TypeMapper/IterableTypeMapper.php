@@ -38,7 +38,7 @@ final class IterableTypeMapper implements TypeMapperInterface
     /**
      * @param IterableType $type
      */
-    public function mapToPHPStanPhpDocTypeNode(Type $type): TypeNode
+    public function mapToPHPStanPhpDocTypeNode(Type $type, ?string $kind = null): TypeNode
     {
         $itemTypeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($type->getItemType());
         if ($itemTypeNode instanceof UnionTypeNode) {

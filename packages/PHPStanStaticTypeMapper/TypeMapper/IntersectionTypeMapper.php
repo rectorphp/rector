@@ -34,7 +34,7 @@ final class IntersectionTypeMapper implements TypeMapperInterface
     /**
      * @param IntersectionType $type
      */
-    public function mapToPHPStanPhpDocTypeNode(Type $type): TypeNode
+    public function mapToPHPStanPhpDocTypeNode(Type $type, ?string $kind = null): TypeNode
     {
         $intersectionTypesNodes = [];
 

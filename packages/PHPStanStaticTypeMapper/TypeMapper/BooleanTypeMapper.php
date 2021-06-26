@@ -33,7 +33,7 @@ final class BooleanTypeMapper implements TypeMapperInterface
     /**
      * @param BooleanType $type
      */
-    public function mapToPHPStanPhpDocTypeNode(Type $type): TypeNode
+    public function mapToPHPStanPhpDocTypeNode(Type $type, ?string $kind = null): TypeNode
     {
         if ($this->isFalseBooleanTypeWithUnion($type)) {
             return new IdentifierTypeNode('false');

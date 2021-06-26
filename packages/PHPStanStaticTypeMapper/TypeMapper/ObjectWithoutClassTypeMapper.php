@@ -38,7 +38,7 @@ final class ObjectWithoutClassTypeMapper implements TypeMapperInterface
     /**
      * @param ObjectWithoutClassType $type
      */
-    public function mapToPHPStanPhpDocTypeNode(Type $type): TypeNode
+    public function mapToPHPStanPhpDocTypeNode(Type $type, ?string $kind = null): TypeNode
     {
         if ($type instanceof TemplateObjectWithoutClassType) {
             $attributeAwareIdentifierTypeNode = new IdentifierTypeNode($type->getName());

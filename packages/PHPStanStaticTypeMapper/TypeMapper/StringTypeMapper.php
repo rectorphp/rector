@@ -32,7 +32,7 @@ final class StringTypeMapper implements TypeMapperInterface
     /**
      * @param StringType $type
      */
-    public function mapToPHPStanPhpDocTypeNode(Type $type): TypeNode
+    public function mapToPHPStanPhpDocTypeNode(Type $type, ?string $kind = null): TypeNode
     {
         return new IdentifierTypeNode('string');
     }

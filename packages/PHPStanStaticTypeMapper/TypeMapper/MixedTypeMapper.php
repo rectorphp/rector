@@ -24,7 +24,7 @@ final class MixedTypeMapper implements TypeMapperInterface
     /**
      * @param MixedType $type
      */
-    public function mapToPHPStanPhpDocTypeNode(Type $type): TypeNode
+    public function mapToPHPStanPhpDocTypeNode(Type $type, ?string $kind = null): TypeNode
     {
         return new IdentifierTypeNode('mixed');
     }
