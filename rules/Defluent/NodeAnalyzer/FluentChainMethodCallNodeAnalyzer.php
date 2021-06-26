@@ -17,7 +17,7 @@ use PHPStan\Analyser\MutatingScope;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
-use Rector\Defluent\Reflection\MethodCallToClassMethodParser;
+use Rector\Core\PhpParser\AstResolver;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -40,7 +40,7 @@ final class FluentChainMethodCallNodeAnalyzer
         private NodeNameResolver $nodeNameResolver,
         private NodeTypeResolver $nodeTypeResolver,
         private NodeFinder $nodeFinder,
-        private MethodCallToClassMethodParser $methodCallToClassMethodParser
+        private AstResolver $astResolver
     ) {
     }
 
@@ -224,7 +224,7 @@ final class FluentChainMethodCallNodeAnalyzer
 
     private function isMethodCallCreatingNewInstance(MethodCall $methodCall): bool
     {
-        $classMethod = $this->methodCallToClassMethodParser->parseMethodCall($methodCall);
+        $classMethod = $this->astResolver->resolveClassMethodFromMethodCall($methodCall);
         if (! $classMethod instanceof ClassMethod) {
             return false;
         }

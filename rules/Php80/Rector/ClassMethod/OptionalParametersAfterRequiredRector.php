@@ -10,13 +10,13 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Type\TypeWithClassName;
+use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\PHPStan\Reflection\CallReflectionResolver;
 use Rector\Core\PHPStan\Reflection\ClassMethodReflectionResolver;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Php80\NodeResolver\ArgumentSorter;
 use Rector\Php80\NodeResolver\RequireOptionalParamResolver;
-use Rector\Php80\Reflection\MethodReflectionClassMethodResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -30,9 +30,9 @@ final class OptionalParametersAfterRequiredRector extends AbstractRector
     public function __construct(
         private RequireOptionalParamResolver $requireOptionalParamResolver,
         private ArgumentSorter $argumentSorter,
-        private MethodReflectionClassMethodResolver $methodReflectionClassMethodResolver,
         private CallReflectionResolver $callReflectionResolver,
-        private ClassMethodReflectionResolver $classMethodReflectionResolver
+        private ClassMethodReflectionResolver $classMethodReflectionResolver,
+        private AstResolver $astResolver
     ) {
     }
 
@@ -126,7 +126,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $classMethod = $this->methodReflectionClassMethodResolver->resolve(
+        $classMethod = $this->astResolver->resolveClassMethod(
             $newClassType->getClassName(),
             MethodName::CONSTRUCT
         );
