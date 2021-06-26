@@ -31,7 +31,7 @@ final class ClassStringTypeMapper implements \Rector\PHPStanStaticTypeMapper\Con
     /**
      * @param ClassStringType $type
      */
-    public function mapToPHPStanPhpDocTypeNode(\PHPStan\Type\Type $type) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
+    public function mapToPHPStanPhpDocTypeNode(\PHPStan\Type\Type $type, ?string $kind = null) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
     {
         $attributeAwareIdentifierTypeNode = new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode('class-string');
         if ($type instanceof \PHPStan\Type\Generic\GenericClassStringType) {

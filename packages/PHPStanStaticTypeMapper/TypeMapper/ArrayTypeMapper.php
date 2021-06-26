@@ -66,7 +66,7 @@ final class ArrayTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\
     /**
      * @param ArrayType $type
      */
-    public function mapToPHPStanPhpDocTypeNode(\PHPStan\Type\Type $type) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
+    public function mapToPHPStanPhpDocTypeNode(\PHPStan\Type\Type $type, ?string $kind = null) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
     {
         $itemType = $type->getItemType();
         if ($itemType instanceof \PHPStan\Type\UnionType && !$type instanceof \PHPStan\Type\Constant\ConstantArrayType) {

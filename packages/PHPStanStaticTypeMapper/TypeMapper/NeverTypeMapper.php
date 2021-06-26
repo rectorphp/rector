@@ -9,6 +9,7 @@ use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\NeverType;
 use PHPStan\Type\Type;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
+use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
 final class NeverTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface
 {
     /**
@@ -21,8 +22,11 @@ final class NeverTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\
     /**
      * @param NeverType $type
      */
-    public function mapToPHPStanPhpDocTypeNode(\PHPStan\Type\Type $type) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
+    public function mapToPHPStanPhpDocTypeNode(\PHPStan\Type\Type $type, ?string $kind = null) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
     {
+        if ($kind === \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind::KIND_RETURN) {
+            return new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode('never');
+        }
         return new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode('mixed');
     }
     /**

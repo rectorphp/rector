@@ -33,7 +33,7 @@ final class BooleanTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contrac
     /**
      * @param BooleanType $type
      */
-    public function mapToPHPStanPhpDocTypeNode(\PHPStan\Type\Type $type) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
+    public function mapToPHPStanPhpDocTypeNode(\PHPStan\Type\Type $type, ?string $kind = null) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
     {
         if ($this->isFalseBooleanTypeWithUnion($type)) {
             return new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode('false');

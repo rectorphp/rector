@@ -21,7 +21,7 @@ final class ResourceTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contra
     /**
      * @param ResourceType $type
      */
-    public function mapToPHPStanPhpDocTypeNode(\PHPStan\Type\Type $type) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
+    public function mapToPHPStanPhpDocTypeNode(\PHPStan\Type\Type $type, ?string $kind = null) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
     {
         return new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode('resource');
     }

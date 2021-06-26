@@ -13,6 +13,7 @@ use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareCallableTypeNode;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
+use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
 use RectorPrefix20210626\Symfony\Contracts\Service\Attribute\Required;
 final class CallableTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface
 {
@@ -37,7 +38,7 @@ final class CallableTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contra
     /**
      * @param CallableType $type
      */
-    public function mapToPHPStanPhpDocTypeNode(\PHPStan\Type\Type $type) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
+    public function mapToPHPStanPhpDocTypeNode(\PHPStan\Type\Type $type, ?string $kind = null) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
     {
         $returnTypeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($type->getReturnType());
         return new \Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareCallableTypeNode(new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode('callable'), [], $returnTypeNode);
@@ -47,7 +48,7 @@ final class CallableTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contra
      */
     public function mapToPhpParserNode(\PHPStan\Type\Type $type, ?string $kind = null) : ?\PhpParser\Node
     {
-        if ($kind === 'property') {
+        if ($kind === \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind::KIND_PROPERTY) {
             return null;
         }
         return new \PhpParser\Node\Name('callable');

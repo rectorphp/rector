@@ -38,7 +38,7 @@ final class IterableTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contra
     /**
      * @param IterableType $type
      */
-    public function mapToPHPStanPhpDocTypeNode(\PHPStan\Type\Type $type) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
+    public function mapToPHPStanPhpDocTypeNode(\PHPStan\Type\Type $type, ?string $kind = null) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
     {
         $itemTypeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($type->getItemType());
         if ($itemTypeNode instanceof \PHPStan\PhpDocParser\Ast\Type\UnionTypeNode) {

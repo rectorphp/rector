@@ -23,7 +23,7 @@ final class NullTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\T
     /**
      * @param NullType $type
      */
-    public function mapToPHPStanPhpDocTypeNode(\PHPStan\Type\Type $type) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
+    public function mapToPHPStanPhpDocTypeNode(\PHPStan\Type\Type $type, ?string $kind = null) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
     {
         return new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode('null');
     }

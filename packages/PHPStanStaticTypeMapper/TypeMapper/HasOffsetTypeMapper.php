@@ -23,7 +23,7 @@ final class HasOffsetTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contr
     /**
      * @param HasOffsetType $type
      */
-    public function mapToPHPStanPhpDocTypeNode(\PHPStan\Type\Type $type) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
+    public function mapToPHPStanPhpDocTypeNode(\PHPStan\Type\Type $type, ?string $kind = null) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
     {
         return new \PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode(new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode('mixed'));
     }

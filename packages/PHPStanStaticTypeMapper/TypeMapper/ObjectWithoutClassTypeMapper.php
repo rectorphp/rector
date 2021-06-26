@@ -40,7 +40,7 @@ final class ObjectWithoutClassTypeMapper implements \Rector\PHPStanStaticTypeMap
     /**
      * @param ObjectWithoutClassType $type
      */
-    public function mapToPHPStanPhpDocTypeNode(\PHPStan\Type\Type $type) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
+    public function mapToPHPStanPhpDocTypeNode(\PHPStan\Type\Type $type, ?string $kind = null) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
     {
         if ($type instanceof \PHPStan\Type\Generic\TemplateObjectWithoutClassType) {
             $attributeAwareIdentifierTypeNode = new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode($type->getName());

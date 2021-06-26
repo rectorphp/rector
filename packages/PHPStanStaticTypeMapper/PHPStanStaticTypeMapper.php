@@ -10,6 +10,7 @@ use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\Type;
 use Rector\Core\Exception\NotImplementedYetException;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
+use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
 final class PHPStanStaticTypeMapper
 {
     /**
@@ -23,17 +24,21 @@ final class PHPStanStaticTypeMapper
     {
         $this->typeMappers = $typeMappers;
     }
-    public function mapToPHPStanPhpDocTypeNode(\PHPStan\Type\Type $type) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
+    /**
+     * @param TypeKind::*|null $kind
+     */
+    public function mapToPHPStanPhpDocTypeNode(\PHPStan\Type\Type $type, ?string $kind = null) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
     {
         foreach ($this->typeMappers as $typeMapper) {
             if (!\is_a($type, $typeMapper->getNodeClass(), \true)) {
                 continue;
             }
-            return $typeMapper->mapToPHPStanPhpDocTypeNode($type);
+            return $typeMapper->mapToPHPStanPhpDocTypeNode($type, $kind);
         }
         throw new \Rector\Core\Exception\NotImplementedYetException(__METHOD__ . ' for ' . \get_class($type));
     }
     /**
+     * @param TypeKind::*|null $kind
      * @return \PhpParser\Node\Name|\PhpParser\Node\NullableType|\PhpParser\Node\UnionType|null
      */
     public function mapToPhpParserNode(\PHPStan\Type\Type $type, ?string $kind = null)
