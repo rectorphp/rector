@@ -137,12 +137,16 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     // PHPStan services
     $services->set(ReflectionProvider::class)
         ->factory([service(PHPStanServicesFactory::class), 'createReflectionProvider']);
+
     $services->set(NodeScopeResolver::class)
         ->factory([service(PHPStanServicesFactory::class), 'createNodeScopeResolver']);
+
     $services->set(ScopeFactory::class)
         ->factory([service(PHPStanServicesFactory::class), 'createScopeFactory']);
+
     $services->set(TypeNodeResolver::class)
         ->factory([service(PHPStanServicesFactory::class), 'createTypeNodeResolver']);
+
     $services->set(DynamicSourceLocatorProvider::class)
         ->factory([service(PHPStanServicesFactory::class), 'createDynamicSourceLocatorProvider']);
 

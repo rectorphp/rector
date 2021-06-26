@@ -39,7 +39,7 @@ final class AstResolver
      *
      * @var array<class-string, array<string, ClassMethod|null>>
      */
-    private $classMethodsByClassAndMethod = [];
+    private array $classMethodsByClassAndMethod = [];
 
     /**
      * Parsing files is very heavy performance, so this will help to leverage it
@@ -47,7 +47,7 @@ final class AstResolver
      *
      * @var array<string, Function_|null>>
      */
-    private $functionsByName = [];
+    private array $functionsByName = [];
 
     /**
      * Parsing files is very heavy performance, so this will help to leverage it
@@ -55,7 +55,7 @@ final class AstResolver
      *
      * @var array<class-string, Class_|null>
      */
-    private $classesByName = [];
+    private array $classesByName = [];
 
     public function __construct(
         private Parser $parser,
@@ -172,7 +172,7 @@ final class AstResolver
     public function resolveClassMethod(string $className, string $methodName): ?ClassMethod
     {
         $methodReflection = $this->reflectionResolver->resolveMethodReflection($className, $methodName);
-        if ($methodReflection === null) {
+        if (! $methodReflection instanceof MethodReflection) {
             return null;
         }
 

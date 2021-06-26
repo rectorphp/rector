@@ -11,10 +11,10 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Type\TypeWithClassName;
 use Rector\Core\PHPStan\Reflection\CallReflectionResolver;
-use Rector\Core\PHPStan\Reflection\ClassMethodReflectionResolver;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Core\ValueObject\MethodName;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php80\NodeResolver\ArgumentSorter;
 use Rector\Php80\NodeResolver\RequireOptionalParamResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -31,7 +31,6 @@ final class OptionalParametersAfterRequiredRector extends AbstractRector
         private RequireOptionalParamResolver $requireOptionalParamResolver,
         private ArgumentSorter $argumentSorter,
         private CallReflectionResolver $callReflectionResolver,
-        private ClassMethodReflectionResolver $classMethodReflectionResolver,
         private ReflectionResolver $reflectionResolver
     ) {
     }
@@ -92,8 +91,22 @@ CODE_SAMPLE
             return null;
         }
 
-        $classMethodReflection = $this->classMethodReflectionResolver->resolve($classMethod);
+        $classMethod->getAttribute(AttributeKey::CLASS_NAME);
+        $classMethodReflection = $this->reflectionResolver->resolveMethodReflectionFromClassMethod($classMethod);
+
         if (! $classMethodReflection instanceof MethodReflection) {
+            return null;
+        }
+
+        $classReflection = $classMethodReflection->getDeclaringClass();
+        $fileName = $classReflection->getFileName();
+
+        // probably internal class
+        if ($fileName === false) {
+            return null;
+        }
+
+        if (str_contains($fileName, '/vendor/')) {
             return null;
         }
 
@@ -131,6 +144,18 @@ CODE_SAMPLE
             MethodName::CONSTRUCT
         );
         if (! $methodReflection instanceof MethodReflection) {
+            return null;
+        }
+
+        $classReflection = $methodReflection->getDeclaringClass();
+        $fileName = $classReflection->getFileName();
+
+        // probably internal class
+        if ($fileName === false) {
+            return null;
+        }
+
+        if (str_contains($fileName, '/vendor/')) {
             return null;
         }
 

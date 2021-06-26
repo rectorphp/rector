@@ -14,17 +14,20 @@ use PHPStan\AnalysedCodeException;
 use PHPStan\Analyser\MutatingScope;
 use PHPStan\Analyser\NodeScopeResolver;
 use PHPStan\Analyser\Scope;
-use PHPStan\BetterReflection\Reflector\Exception\IdentifierNotFound;
+use PHPStan\BetterReflection\Reflector\ClassReflector;
+use PHPStan\BetterReflection\SourceLocator\Type\AggregateSourceLocator;
+use PHPStan\BetterReflection\SourceLocator\Type\SourceLocator;
 use PHPStan\Node\UnreachableStatementNode;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\Caching\Detector\ChangedFilesDetector;
 use Rector\Caching\FileSystem\DependencyResolver;
-use Rector\Core\Configuration\RenamedClassesDataCollector;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\StaticReflection\SourceLocator\RenamedClassesSourceLocator;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Collector\TraitNodeScopeCollector;
 use Rector\NodeTypeResolver\PHPStan\Scope\NodeVisitor\RemoveDeepChainMethodCallNodeVisitor;
+use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
@@ -47,7 +50,8 @@ final class PHPStanNodeScopeResolver
         private RemoveDeepChainMethodCallNodeVisitor $removeDeepChainMethodCallNodeVisitor,
         private ScopeFactory $scopeFactory,
         private TraitNodeScopeCollector $traitNodeScopeCollector,
-        private RenamedClassesDataCollector $renamedClassesDataCollector
+        private PrivatesAccessor $privatesAccessor,
+        private RenamedClassesSourceLocator $renamedClassesSourceLocator,
     ) {
     }
 
@@ -90,12 +94,8 @@ final class PHPStanNodeScopeResolver
             }
         };
 
-        try {
-            /** @var MutatingScope $scope */
-            $this->nodeScopeResolver->processNodes($nodes, $scope, $nodeCallback);
-        } catch (IdentifierNotFound $identifierNotFound) {
-            $this->reportOrSkip($identifierNotFound);
-        }
+        $this->decoratePHPStanNodeScopeResolverWithRenamedClassSourceLocator($this->nodeScopeResolver);
+        $this->nodeScopeResolver->processNodes($nodes, $scope, $nodeCallback);
 
         $this->resolveAndSaveDependentFiles($nodes, $scope, $smartFileInfo);
 
@@ -170,14 +170,17 @@ final class PHPStanNodeScopeResolver
      * That's why we have to skip fatal errors of PHPStan caused by missing class,
      * so Rector can fix it first. Then run Rector again to refactor code with new classes.
      */
-    private function reportOrSkip(IdentifierNotFound $identifierNotFound): void
-    {
-        foreach ($this->renamedClassesDataCollector->getOldClasses() as $oldClass) {
-            if (str_contains($identifierNotFound->getMessage(), $oldClass)) {
-                return;
-            }
-        }
+    private function decoratePHPStanNodeScopeResolverWithRenamedClassSourceLocator(
+        NodeScopeResolver $nodeScopeResolver
+    ): void {
+        // 1. get PHPStan locator
+        /** @var ClassReflector $classReflector */
+        $classReflector = $this->privatesAccessor->getPrivateProperty($nodeScopeResolver, 'classReflector');
+        /** @var SourceLocator $sourceLocator */
+        $sourceLocator = $this->privatesAccessor->getPrivateProperty($classReflector, 'sourceLocator');
 
-        throw $identifierNotFound;
+        // 2. get Rector locator
+        $aggregateSourceLocator = new AggregateSourceLocator([$sourceLocator, $this->renamedClassesSourceLocator]);
+        $this->privatesAccessor->setPrivateProperty($classReflector, 'sourceLocator', $aggregateSourceLocator);
     }
 }

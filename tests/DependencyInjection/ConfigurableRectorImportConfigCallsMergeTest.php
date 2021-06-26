@@ -5,20 +5,13 @@ declare(strict_types=1);
 namespace Rector\Core\Tests\DependencyInjection;
 
 use Iterator;
+use Rector\Core\Configuration\RenamedClassesDataCollector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
-use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
+use Rector\Testing\PHPUnit\AbstractTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class ConfigurableRectorImportConfigCallsMergeTest extends AbstractRectorTestCase
+final class ConfigurableRectorImportConfigCallsMergeTest extends AbstractTestCase
 {
-    private PrivatesAccessor $privatesAccessor;
-
-    protected function setUp(): void
-    {
-        $this->privatesAccessor = new PrivatesAccessor();
-    }
-
     /**
      * @dataProvider provideData()
      * @param array<string, string> $expectedConfiguration
@@ -28,12 +21,13 @@ final class ConfigurableRectorImportConfigCallsMergeTest extends AbstractRectorT
         $configFileInfos = [new SmartFileInfo($config)];
         $this->bootFromConfigFileInfos($configFileInfos);
 
-        /** @var RenameClassRector $renameClassRector */
-        $renameClassRector = $this->getService(RenameClassRector::class);
+        // to invoke configure() method call
+        $this->getService(RenameClassRector::class);
 
-        $oldToNewClasses = $this->privatesAccessor->getPrivateProperty($renameClassRector, 'oldToNewClasses');
+        /** @var RenamedClassesDataCollector $renamedClassesDataCollector */
+        $renamedClassesDataCollector = $this->getService(RenamedClassesDataCollector::class);
 
-        $this->assertSame($expectedConfiguration, $oldToNewClasses);
+        $this->assertSame($expectedConfiguration, $renamedClassesDataCollector->getOldToNewClasses());
     }
 
     public function provideData(): Iterator
@@ -113,10 +107,5 @@ final class ConfigurableRectorImportConfigCallsMergeTest extends AbstractRectorT
                 'PHPUnit_Framework_MockObject_Invocation_Object' => 'PHPUnit\Framework\MockObject\Invocation\ObjectInvocation',
             ],
         ];
-    }
-
-    public function provideConfigFilePath(): string
-    {
-        return '';
     }
 }

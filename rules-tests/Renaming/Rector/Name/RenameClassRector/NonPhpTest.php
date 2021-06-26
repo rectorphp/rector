@@ -9,7 +9,7 @@ use Rector\Core\ValueObject\StaticNonPhpFileSuffixes;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class RenameNonPhpTest extends AbstractRectorTestCase
+final class NonPhpTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()

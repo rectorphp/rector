@@ -6,12 +6,15 @@ namespace Rector\Core\Reflection;
 
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\TypeUtils;
 use PHPStan\Type\TypeWithClassName;
 use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
+use ReflectionMethod;
 
 final class ReflectionResolver
 {
@@ -42,7 +45,7 @@ final class ReflectionResolver
     /**
      * @param class-string $className
      */
-    public function resolveNativeClassMethodReflection(string $className, string $methodName): ?\ReflectionMethod
+    public function resolveNativeClassMethodReflection(string $className, string $methodName): ?ReflectionMethod
     {
         if (! $this->reflectionProvider->hasClass($className)) {
             return null;
@@ -89,5 +92,16 @@ final class ReflectionResolver
         }
 
         return $this->resolveMethodReflection($callerType->getClassName(), $methodName);
+    }
+
+    public function resolveMethodReflectionFromClassMethod(ClassMethod $classMethod): ?MethodReflection
+    {
+        $class = $classMethod->getAttribute(AttributeKey::CLASS_NAME);
+        if ($class === null) {
+            return null;
+        }
+
+        $methodName = $this->nodeNameResolver->getName($classMethod);
+        return $this->resolveMethodReflection($class, $methodName);
     }
 }

@@ -19,6 +19,7 @@ use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Core\ValueObject\MethodName;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use ReflectionMethod;
 
 final class MethodParameterTypeResolver
 {
@@ -105,7 +106,7 @@ final class MethodParameterTypeResolver
                 $class,
                 MethodName::CONSTRUCT
             );
-            if ($constructMethodReflection === null) {
+            if (! $constructMethodReflection instanceof ReflectionMethod) {
                 continue;
             }
 
