@@ -1,10 +1,10 @@
 <?php
 
-namespace RectorPrefix20210625\TYPO3\CMS\Fluid\Core\ViewHelper;
+namespace RectorPrefix20210626\TYPO3\CMS\Fluid\Core\ViewHelper;
 
 if (\class_exists('TYPO3\\CMS\\Fluid\\Core\\ViewHelper\\AbstractConditionViewHelper')) {
     return;
 }
-class AbstractConditionViewHelper extends \RectorPrefix20210625\TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper
+class AbstractConditionViewHelper extends \RectorPrefix20210626\TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper
 {
 }

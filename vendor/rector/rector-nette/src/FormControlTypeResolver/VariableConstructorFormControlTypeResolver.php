@@ -5,13 +5,13 @@ namespace Rector\Nette\FormControlTypeResolver;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\TypeWithClassName;
+use Rector\Core\PhpParser\AstResolver;
+use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Nette\Contract\FormControlTypeResolverInterface;
 use Rector\Nette\NodeResolver\MethodNamesByInputNamesResolver;
-use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 final class VariableConstructorFormControlTypeResolver implements \Rector\Nette\Contract\FormControlTypeResolverInterface
@@ -29,19 +29,24 @@ final class VariableConstructorFormControlTypeResolver implements \Rector\Nette\
      */
     private $nodeNameResolver;
     /**
-     * @var \Rector\NodeCollector\NodeCollector\NodeRepository
-     */
-    private $nodeRepository;
-    /**
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeCollector\NodeCollector\NodeRepository $nodeRepository, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
+    /**
+     * @var \Rector\Core\Reflection\ReflectionResolver
+     */
+    private $reflectionResolver;
+    /**
+     * @var \Rector\Core\PhpParser\AstResolver
+     */
+    private $astResolver;
+    public function __construct(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver, \Rector\Core\PhpParser\AstResolver $astResolver)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->nodeNameResolver = $nodeNameResolver;
-        $this->nodeRepository = $nodeRepository;
         $this->reflectionProvider = $reflectionProvider;
+        $this->reflectionResolver = $reflectionResolver;
+        $this->astResolver = $astResolver;
     }
     /**
      * @return array<string, string>
@@ -63,11 +68,11 @@ final class VariableConstructorFormControlTypeResolver implements \Rector\Nette\
         if (!$formClassReflection->isSubclassOf('Nette\\Application\\UI\\Form')) {
             return [];
         }
-        $constructorClassMethod = $this->nodeRepository->findClassMethod($formType->getClassName(), \Rector\Core\ValueObject\MethodName::CONSTRUCT);
-        if (!$constructorClassMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
+        $classMethod = $this->astResolver->resolveClassMethod($formType->getClassName(), \Rector\Core\ValueObject\MethodName::CONSTRUCT);
+        if ($classMethod === null) {
             return [];
         }
-        return $this->methodNamesByInputNamesResolver->resolveExpr($constructorClassMethod);
+        return $this->methodNamesByInputNamesResolver->resolveExpr($classMethod);
     }
     /**
      * @required

@@ -16,7 +16,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Nette\NodeAnalyzer\StaticCallAnalyzer;
 use Rector\Nette\NodeFinder\ParamFinder;
-use Rector\NodeCollector\Reflection\MethodReflectionProvider;
+use Rector\NodeTypeResolver\MethodParameterTypeResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -49,14 +49,14 @@ final class RemoveParentAndNameFromComponentConstructorRector extends \Rector\Co
      */
     private $staticCallAnalyzer;
     /**
-     * @var \Rector\NodeCollector\Reflection\MethodReflectionProvider
+     * @var \Rector\NodeTypeResolver\MethodParameterTypeResolver
      */
-    private $methodReflectionProvider;
-    public function __construct(\Rector\Nette\NodeFinder\ParamFinder $paramFinder, \Rector\Nette\NodeAnalyzer\StaticCallAnalyzer $staticCallAnalyzer, \Rector\NodeCollector\Reflection\MethodReflectionProvider $methodReflectionProvider)
+    private $methodParameterTypeResolver;
+    public function __construct(\Rector\Nette\NodeFinder\ParamFinder $paramFinder, \Rector\Nette\NodeAnalyzer\StaticCallAnalyzer $staticCallAnalyzer, \Rector\NodeTypeResolver\MethodParameterTypeResolver $methodParameterTypeResolver)
     {
         $this->paramFinder = $paramFinder;
         $this->staticCallAnalyzer = $staticCallAnalyzer;
-        $this->methodReflectionProvider = $methodReflectionProvider;
+        $this->methodParameterTypeResolver = $methodParameterTypeResolver;
         $this->controlObjectType = new \PHPStan\Type\ObjectType('Nette\\Application\\UI\\Control');
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
@@ -148,7 +148,7 @@ CODE_SAMPLE
     }
     private function refactorNew(\PhpParser\Node\Expr\New_ $new) : void
     {
-        $parameterNames = $this->methodReflectionProvider->provideParameterNamesByNew($new);
+        $parameterNames = $this->methodParameterTypeResolver->provideParameterNamesByNew($new);
         foreach ($new->args as $position => $arg) {
             // is on position of $parent or $name?
             if (!isset($parameterNames[$position])) {

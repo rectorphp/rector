@@ -12,7 +12,7 @@ use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\PropertyProperty;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use RectorPrefix20210625\Stringy\Stringy;
+use RectorPrefix20210626\Stringy\Stringy;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -90,7 +90,7 @@ CODE_SAMPLE
         [$prefix, $table] = \explode('.', $string->value);
         $tableParts = \explode('/', $table);
         $pascalCaseTableParts = \array_map(function (string $token) : string {
-            $stringy = new \RectorPrefix20210625\Stringy\Stringy($token);
+            $stringy = new \RectorPrefix20210626\Stringy\Stringy($token);
             return (string) $stringy->upperCamelize();
         }, $tableParts);
         $table = \implode('/', $pascalCaseTableParts);

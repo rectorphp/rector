@@ -9,13 +9,13 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Type\TypeWithClassName;
+use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\PHPStan\Reflection\CallReflectionResolver;
 use Rector\Core\PHPStan\Reflection\ClassMethodReflectionResolver;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Php80\NodeResolver\ArgumentSorter;
 use Rector\Php80\NodeResolver\RequireOptionalParamResolver;
-use Rector\Php80\Reflection\MethodReflectionClassMethodResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -34,10 +34,6 @@ final class OptionalParametersAfterRequiredRector extends \Rector\Core\Rector\Ab
      */
     private $argumentSorter;
     /**
-     * @var \Rector\Php80\Reflection\MethodReflectionClassMethodResolver
-     */
-    private $methodReflectionClassMethodResolver;
-    /**
      * @var \Rector\Core\PHPStan\Reflection\CallReflectionResolver
      */
     private $callReflectionResolver;
@@ -45,13 +41,17 @@ final class OptionalParametersAfterRequiredRector extends \Rector\Core\Rector\Ab
      * @var \Rector\Core\PHPStan\Reflection\ClassMethodReflectionResolver
      */
     private $classMethodReflectionResolver;
-    public function __construct(\Rector\Php80\NodeResolver\RequireOptionalParamResolver $requireOptionalParamResolver, \Rector\Php80\NodeResolver\ArgumentSorter $argumentSorter, \Rector\Php80\Reflection\MethodReflectionClassMethodResolver $methodReflectionClassMethodResolver, \Rector\Core\PHPStan\Reflection\CallReflectionResolver $callReflectionResolver, \Rector\Core\PHPStan\Reflection\ClassMethodReflectionResolver $classMethodReflectionResolver)
+    /**
+     * @var \Rector\Core\PhpParser\AstResolver
+     */
+    private $astResolver;
+    public function __construct(\Rector\Php80\NodeResolver\RequireOptionalParamResolver $requireOptionalParamResolver, \Rector\Php80\NodeResolver\ArgumentSorter $argumentSorter, \Rector\Core\PHPStan\Reflection\CallReflectionResolver $callReflectionResolver, \Rector\Core\PHPStan\Reflection\ClassMethodReflectionResolver $classMethodReflectionResolver, \Rector\Core\PhpParser\AstResolver $astResolver)
     {
         $this->requireOptionalParamResolver = $requireOptionalParamResolver;
         $this->argumentSorter = $argumentSorter;
-        $this->methodReflectionClassMethodResolver = $methodReflectionClassMethodResolver;
         $this->callReflectionResolver = $callReflectionResolver;
         $this->classMethodReflectionResolver = $classMethodReflectionResolver;
+        $this->astResolver = $astResolver;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -120,7 +120,7 @@ CODE_SAMPLE
         if (!$newClassType instanceof \PHPStan\Type\TypeWithClassName) {
             return null;
         }
-        $classMethod = $this->methodReflectionClassMethodResolver->resolve($newClassType->getClassName(), \Rector\Core\ValueObject\MethodName::CONSTRUCT);
+        $classMethod = $this->astResolver->resolveClassMethod($newClassType->getClassName(), \Rector\Core\ValueObject\MethodName::CONSTRUCT);
         if (!$classMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
             return null;
         }

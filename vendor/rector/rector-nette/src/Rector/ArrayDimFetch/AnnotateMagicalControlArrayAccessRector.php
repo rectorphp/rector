@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Nette\Rector\ArrayDimFetch;
 
-use RectorPrefix20210625\Nette\Utils\Strings;
+use RectorPrefix20210626\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Isset_;
@@ -11,8 +11,6 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Unset_;
 use PHPStan\Type\ObjectType;
-use Rector\Core\Exception\NotImplementedYetException;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Naming\ArrayDimFetchRenamer;
 use Rector\Nette\Naming\NetteControlNaming;
@@ -123,11 +121,14 @@ CODE_SAMPLE
             return null;
         }
         // probably multiplier factory, nothing we can do... yet
-        if (\RectorPrefix20210625\Nette\Utils\Strings::contains($controlName, '-')) {
+        if (\RectorPrefix20210626\Nette\Utils\Strings::contains($controlName, '-')) {
             return null;
         }
         $variableName = $this->netteControlNaming->createVariableName($controlName);
         $controlObjectType = $this->resolveControlType($node, $controlName);
+        if ($controlObjectType === null) {
+            return null;
+        }
         $this->assignAnalyzer->addAssignExpressionForFirstCase($variableName, $node, $controlObjectType);
         $classMethod = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::METHOD_NODE);
         if ($classMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
@@ -146,14 +147,14 @@ CODE_SAMPLE
         }
         return !$arrayDimFetch->dim instanceof \PhpParser\Node\Expr\Variable;
     }
-    private function resolveControlType(\PhpParser\Node\Expr\ArrayDimFetch $arrayDimFetch, string $controlName) : \PHPStan\Type\ObjectType
+    private function resolveControlType(\PhpParser\Node\Expr\ArrayDimFetch $arrayDimFetch, string $controlName) : ?\PHPStan\Type\ObjectType
     {
         $controlTypes = $this->methodNamesByInputNamesResolver->resolveExpr($arrayDimFetch);
         if ($controlTypes === []) {
-            throw new \Rector\Core\Exception\NotImplementedYetException($controlName);
+            return null;
         }
         if (!isset($controlTypes[$controlName])) {
-            throw new \Rector\Core\Exception\ShouldNotHappenException($controlName);
+            return null;
         }
         return new \PHPStan\Type\ObjectType($controlTypes[$controlName]);
     }

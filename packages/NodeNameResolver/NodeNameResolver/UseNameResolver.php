@@ -7,7 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Use_;
 use Rector\NodeNameResolver\Contract\NodeNameResolverInterface;
 use Rector\NodeNameResolver\NodeNameResolver;
-use RectorPrefix20210625\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix20210626\Symfony\Contracts\Service\Attribute\Required;
 final class UseNameResolver implements \Rector\NodeNameResolver\Contract\NodeNameResolverInterface
 {
     /**

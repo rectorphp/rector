@@ -15,8 +15,8 @@ use PhpParser\Node\Stmt\If_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\ThisType;
+use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\Reflection\ClassReflectionToAstResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -26,12 +26,12 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveEmptyMethodCallRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var \Rector\Core\Reflection\ClassReflectionToAstResolver
+     * @var \Rector\Core\PhpParser\AstResolver
      */
-    private $classReflectionToAstResolver;
-    public function __construct(\Rector\Core\Reflection\ClassReflectionToAstResolver $classReflectionToAstResolver)
+    private $reflectionAstResolver;
+    public function __construct(\Rector\Core\PhpParser\AstResolver $reflectionAstResolver)
     {
-        $this->classReflectionToAstResolver = $classReflectionToAstResolver;
+        $this->reflectionAstResolver = $reflectionAstResolver;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -81,7 +81,7 @@ CODE_SAMPLE
         if (!$type instanceof \PHPStan\Type\ObjectType) {
             return null;
         }
-        $class = $this->classReflectionToAstResolver->getClassFromObjectType($type);
+        $class = $this->reflectionAstResolver->resolveClassFromObjectType($type);
         if ($this->shouldSkipClassMethod($class, $node)) {
             return null;
         }

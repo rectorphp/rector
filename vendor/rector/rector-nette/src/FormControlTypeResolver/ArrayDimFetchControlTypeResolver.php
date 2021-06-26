@@ -7,10 +7,11 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\TypeWithClassName;
+use Rector\Core\PhpParser\AstResolver;
+use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Nette\Contract\FormControlTypeResolverInterface;
 use Rector\Nette\Naming\NetteControlNaming;
 use Rector\Nette\NodeAnalyzer\ControlDimFetchAnalyzer;
-use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
 final class ArrayDimFetchControlTypeResolver implements \Rector\Nette\Contract\FormControlTypeResolverInterface
@@ -32,16 +33,21 @@ final class ArrayDimFetchControlTypeResolver implements \Rector\Nette\Contract\F
      */
     private $returnTypeInferer;
     /**
-     * @var \Rector\NodeCollector\NodeCollector\NodeRepository
+     * @var \Rector\Core\Reflection\ReflectionResolver
      */
-    private $nodeRepository;
-    public function __construct(\Rector\Nette\NodeAnalyzer\ControlDimFetchAnalyzer $controlDimFetchAnalyzer, \Rector\Nette\Naming\NetteControlNaming $netteControlNaming, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer $returnTypeInferer, \Rector\NodeCollector\NodeCollector\NodeRepository $nodeRepository)
+    private $reflectionResolver;
+    /**
+     * @var \Rector\Core\PhpParser\AstResolver
+     */
+    private $astResolver;
+    public function __construct(\Rector\Nette\NodeAnalyzer\ControlDimFetchAnalyzer $controlDimFetchAnalyzer, \Rector\Nette\Naming\NetteControlNaming $netteControlNaming, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer $returnTypeInferer, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver, \Rector\Core\PhpParser\AstResolver $astResolver)
     {
         $this->controlDimFetchAnalyzer = $controlDimFetchAnalyzer;
         $this->netteControlNaming = $netteControlNaming;
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->returnTypeInferer = $returnTypeInferer;
-        $this->nodeRepository = $nodeRepository;
+        $this->reflectionResolver = $reflectionResolver;
+        $this->astResolver = $astResolver;
     }
     /**
      * @return array<string, string>
@@ -71,7 +77,7 @@ final class ArrayDimFetchControlTypeResolver implements \Rector\Nette\Contract\F
         if (!$callerType instanceof \PHPStan\Type\TypeWithClassName) {
             return null;
         }
-        $createComponentClassMethodName = $this->netteControlNaming->createCreateComponentClassMethodName($controlShortName);
-        return $this->nodeRepository->findClassMethod($callerType->getClassName(), $createComponentClassMethodName);
+        $methodName = $this->netteControlNaming->createCreateComponentClassMethodName($controlShortName);
+        return $this->astResolver->resolveClassMethod($callerType->getClassName(), $methodName);
     }
 }

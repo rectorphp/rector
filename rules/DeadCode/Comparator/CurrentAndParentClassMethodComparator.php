@@ -14,8 +14,8 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\DeadCode\Comparator\Parameter\ParameterDefaultsComparator;
 use Rector\DeadCode\Comparator\Parameter\ParameterTypeComparator;
-use Rector\NodeCollector\Reflection\MethodReflectionProvider;
 use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\NodeTypeResolver\MethodParameterTypeResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 final class CurrentAndParentClassMethodComparator
 {
@@ -24,7 +24,7 @@ final class CurrentAndParentClassMethodComparator
      */
     private $nodeNameResolver;
     /**
-     * @var \Rector\NodeCollector\Reflection\MethodReflectionProvider
+     * @var \Rector\NodeTypeResolver\MethodParameterTypeResolver
      */
     private $methodReflectionProvider;
     /**
@@ -39,7 +39,7 @@ final class CurrentAndParentClassMethodComparator
      * @var \Rector\Core\PhpParser\Comparing\NodeComparator
      */
     private $nodeComparator;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeCollector\Reflection\MethodReflectionProvider $methodReflectionProvider, \Rector\DeadCode\Comparator\Parameter\ParameterDefaultsComparator $parameterDefaultsComparator, \Rector\DeadCode\Comparator\Parameter\ParameterTypeComparator $parameterTypeComparator, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator)
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeTypeResolver\MethodParameterTypeResolver $methodReflectionProvider, \Rector\DeadCode\Comparator\Parameter\ParameterDefaultsComparator $parameterDefaultsComparator, \Rector\DeadCode\Comparator\Parameter\ParameterTypeComparator $parameterTypeComparator, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->methodReflectionProvider = $methodReflectionProvider;

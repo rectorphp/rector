@@ -10,8 +10,9 @@ use PhpParser\Node\Stmt\Class_;
 use PHPStan\Reflection\Php\PhpMethodReflection;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeCollector\Reflection\MethodReflectionProvider;
+use Rector\Core\Reflection\ReflectionResolver;
 use Rector\NodeCollector\StaticAnalyzer;
+use Rector\NodeTypeResolver\MethodParameterTypeResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -26,13 +27,18 @@ final class ThisCallOnStaticMethodToStaticCallRector extends \Rector\Core\Rector
      */
     private $staticAnalyzer;
     /**
-     * @var \Rector\NodeCollector\Reflection\MethodReflectionProvider
+     * @var \Rector\NodeTypeResolver\MethodParameterTypeResolver
      */
     private $methodReflectionProvider;
-    public function __construct(\Rector\NodeCollector\StaticAnalyzer $staticAnalyzer, \Rector\NodeCollector\Reflection\MethodReflectionProvider $methodReflectionProvider)
+    /**
+     * @var \Rector\Core\Reflection\ReflectionResolver
+     */
+    private $reflectionResolver;
+    public function __construct(\Rector\NodeCollector\StaticAnalyzer $staticAnalyzer, \Rector\NodeTypeResolver\MethodParameterTypeResolver $methodReflectionProvider, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver)
     {
         $this->staticAnalyzer = $staticAnalyzer;
         $this->methodReflectionProvider = $methodReflectionProvider;
+        $this->reflectionResolver = $reflectionResolver;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -111,7 +117,7 @@ CODE_SAMPLE
         if ($classLike->isFinal()) {
             return 'self';
         }
-        $methodReflection = $this->methodReflectionProvider->provideByMethodCall($methodCall);
+        $methodReflection = $this->reflectionResolver->resolveMethodReflectionFromMethodCall($methodCall);
         if (!$methodReflection instanceof \PHPStan\Reflection\Php\PhpMethodReflection) {
             return 'static';
         }

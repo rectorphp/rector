@@ -16,7 +16,7 @@ use PHPStan\Analyser\MutatingScope;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
-use Rector\Defluent\Reflection\MethodCallToClassMethodParser;
+use Rector\Core\PhpParser\AstResolver;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -46,15 +46,15 @@ final class FluentChainMethodCallNodeAnalyzer
      */
     private $nodeFinder;
     /**
-     * @var \Rector\Defluent\Reflection\MethodCallToClassMethodParser
+     * @var \Rector\Core\PhpParser\AstResolver
      */
-    private $methodCallToClassMethodParser;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \PhpParser\NodeFinder $nodeFinder, \Rector\Defluent\Reflection\MethodCallToClassMethodParser $methodCallToClassMethodParser)
+    private $astResolver;
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \PhpParser\NodeFinder $nodeFinder, \Rector\Core\PhpParser\AstResolver $astResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->nodeFinder = $nodeFinder;
-        $this->methodCallToClassMethodParser = $methodCallToClassMethodParser;
+        $this->astResolver = $astResolver;
     }
     /**
      * Checks that in:
@@ -203,7 +203,7 @@ final class FluentChainMethodCallNodeAnalyzer
     }
     private function isMethodCallCreatingNewInstance(\PhpParser\Node\Expr\MethodCall $methodCall) : bool
     {
-        $classMethod = $this->methodCallToClassMethodParser->parseMethodCall($methodCall);
+        $classMethod = $this->astResolver->resolveClassMethodFromMethodCall($methodCall);
         if (!$classMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
             return \false;
         }

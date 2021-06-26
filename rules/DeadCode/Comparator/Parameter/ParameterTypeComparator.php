@@ -5,14 +5,14 @@ namespace Rector\DeadCode\Comparator\Parameter;
 
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\NodeCollector\Reflection\MethodReflectionProvider;
+use Rector\NodeTypeResolver\MethodParameterTypeResolver;
 final class ParameterTypeComparator
 {
     /**
-     * @var \Rector\NodeCollector\Reflection\MethodReflectionProvider
+     * @var \Rector\NodeTypeResolver\MethodParameterTypeResolver
      */
     private $methodReflectionProvider;
-    public function __construct(\Rector\NodeCollector\Reflection\MethodReflectionProvider $methodReflectionProvider)
+    public function __construct(\Rector\NodeTypeResolver\MethodParameterTypeResolver $methodReflectionProvider)
     {
         $this->methodReflectionProvider = $methodReflectionProvider;
     }

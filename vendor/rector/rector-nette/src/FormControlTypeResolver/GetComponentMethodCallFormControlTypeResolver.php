@@ -6,11 +6,12 @@ namespace Rector\Nette\FormControlTypeResolver;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Type\TypeWithClassName;
+use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
+use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Nette\Contract\FormControlTypeResolverInterface;
 use Rector\Nette\NodeResolver\MethodNamesByInputNamesResolver;
-use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
@@ -33,15 +34,20 @@ final class GetComponentMethodCallFormControlTypeResolver implements \Rector\Net
      */
     private $valueResolver;
     /**
-     * @var \Rector\NodeCollector\NodeCollector\NodeRepository
+     * @var \Rector\Core\Reflection\ReflectionResolver
      */
-    private $nodeRepository;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\Core\PhpParser\Node\Value\ValueResolver $valueResolver, \Rector\NodeCollector\NodeCollector\NodeRepository $nodeRepository)
+    private $reflectionResolver;
+    /**
+     * @var \Rector\Core\PhpParser\AstResolver
+     */
+    private $astResolver;
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\Core\PhpParser\Node\Value\ValueResolver $valueResolver, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver, \Rector\Core\PhpParser\AstResolver $astResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->valueResolver = $valueResolver;
-        $this->nodeRepository = $nodeRepository;
+        $this->reflectionResolver = $reflectionResolver;
+        $this->astResolver = $astResolver;
     }
     /**
      * @required
@@ -68,17 +74,18 @@ final class GetComponentMethodCallFormControlTypeResolver implements \Rector\Net
         }
         // combine constructor + method body name
         $constructorClassMethodData = [];
-        $constructorClassMethod = $this->nodeRepository->findClassMethod($staticType->getClassName(), \Rector\Core\ValueObject\MethodName::CONSTRUCT);
+        $constructorClassMethod = $this->astResolver->resolveClassMethod($staticType->getClassName(), \Rector\Core\ValueObject\MethodName::CONSTRUCT);
         if ($constructorClassMethod !== null) {
             $constructorClassMethodData = $this->methodNamesByInputNamesResolver->resolveExpr($constructorClassMethod);
         }
         $callerType = $this->nodeTypeResolver->getStaticType($node->var);
+        if (!$callerType instanceof \PHPStan\Type\TypeWithClassName) {
+            return $constructorClassMethodData;
+        }
         $createComponentClassMethodData = [];
-        if ($callerType instanceof \PHPStan\Type\TypeWithClassName) {
-            $createComponentClassMethod = $this->nodeRepository->findClassMethod($callerType->getClassName(), $createComponentClassMethodName);
-            if ($createComponentClassMethod !== null) {
-                $createComponentClassMethodData = $this->methodNamesByInputNamesResolver->resolveExpr($createComponentClassMethod);
-            }
+        $createComponentClassMethod = $this->astResolver->resolveClassMethod($callerType->getClassName(), $createComponentClassMethodName);
+        if ($createComponentClassMethod !== null) {
+            $createComponentClassMethodData = $this->methodNamesByInputNamesResolver->resolveExpr($createComponentClassMethod);
         }
         return \array_merge($constructorClassMethodData, $createComponentClassMethodData);
     }

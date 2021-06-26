@@ -5,11 +5,11 @@ namespace Rector\Nette\FormControlTypeResolver;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\New_;
-use PhpParser\Node\Stmt\ClassMethod;
+use Rector\Core\PhpParser\AstResolver;
+use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Nette\Contract\FormControlTypeResolverInterface;
 use Rector\Nette\NodeResolver\MethodNamesByInputNamesResolver;
-use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeNameResolver\NodeNameResolver;
 final class NewFormControlTypeResolver implements \Rector\Nette\Contract\FormControlTypeResolverInterface
 {
@@ -22,13 +22,18 @@ final class NewFormControlTypeResolver implements \Rector\Nette\Contract\FormCon
      */
     private $nodeNameResolver;
     /**
-     * @var \Rector\NodeCollector\NodeCollector\NodeRepository
+     * @var \Rector\Core\Reflection\ReflectionResolver
      */
-    private $nodeRepository;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeCollector\NodeCollector\NodeRepository $nodeRepository)
+    private $reflectionResolver;
+    /**
+     * @var \Rector\Core\PhpParser\AstResolver
+     */
+    private $astResolver;
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver, \Rector\Core\PhpParser\AstResolver $astResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
-        $this->nodeRepository = $nodeRepository;
+        $this->reflectionResolver = $reflectionResolver;
+        $this->astResolver = $astResolver;
     }
     /**
      * @required
@@ -49,10 +54,10 @@ final class NewFormControlTypeResolver implements \Rector\Nette\Contract\FormCon
         if ($className === null) {
             return [];
         }
-        $constructorClassMethod = $this->nodeRepository->findClassMethod($className, \Rector\Core\ValueObject\MethodName::CONSTRUCT);
-        if (!$constructorClassMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
+        $classMethod = $this->astResolver->resolveClassMethod($className, \Rector\Core\ValueObject\MethodName::CONSTRUCT);
+        if ($classMethod === null) {
             return [];
         }
-        return $this->methodNamesByInputNamesResolver->resolveExpr($constructorClassMethod);
+        return $this->methodNamesByInputNamesResolver->resolveExpr($classMethod);
     }
 }

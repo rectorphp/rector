@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210625;
+namespace RectorPrefix20210626;
 
 use Rector\Nette\Rector\ArrayDimFetch\AnnotateMagicalControlArrayAccessRector;
 use Rector\Nette\Rector\Assign\ArrayAccessGetControlToGetComponentMethodCallRector;
