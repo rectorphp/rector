@@ -70,9 +70,10 @@ CODE_SAMPLE
         if (!$class instanceof \PhpParser\Node\Stmt\Class_) {
             return null;
         }
+        $printedClass = $this->print($class);
         foreach ($this->useImportsToRestore as $useImportToRestore) {
             $annotationToSeek = '#\\*\\s+\\@' . $useImportToRestore->getAlias() . '#';
-            if (!\RectorPrefix20210627\Nette\Utils\Strings::match($this->print($class), $annotationToSeek)) {
+            if (!\RectorPrefix20210627\Nette\Utils\Strings::match($printedClass, $annotationToSeek)) {
                 continue;
             }
             $node = $this->addImportToNamespaceIfMissing($node, $useImportToRestore);

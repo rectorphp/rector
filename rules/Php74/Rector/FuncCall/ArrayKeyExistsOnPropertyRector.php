@@ -54,7 +54,8 @@ CODE_SAMPLE
         if (!$this->isName($node, 'array_key_exists')) {
             return null;
         }
-        if (!$this->getStaticType($node->args[1]->value) instanceof \PHPStan\Type\ObjectType) {
+        $firstArgStaticType = $this->getStaticType($node->args[1]->value);
+        if (!$firstArgStaticType instanceof \PHPStan\Type\ObjectType) {
             return null;
         }
         $node->name = new \PhpParser\Node\Name('property_exists');

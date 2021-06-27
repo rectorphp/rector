@@ -3,10 +3,13 @@
 declare (strict_types=1);
 namespace Rector\Core\Reflection;
 
+use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Reflection\FunctionReflection;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\TypeUtils;
@@ -91,6 +94,20 @@ final class ReflectionResolver
         }
         return $this->resolveMethodReflection($callerType->getClassName(), $methodName);
     }
+    /**
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\FuncCall $call
+     * @return \PHPStan\Reflection\MethodReflection|\PHPStan\Reflection\FunctionReflection|null
+     */
+    public function resolveFunctionLikeReflectionFromCall($call)
+    {
+        if ($call instanceof \PhpParser\Node\Expr\MethodCall) {
+            return $this->resolveMethodReflectionFromMethodCall($call);
+        }
+        if ($call instanceof \PhpParser\Node\Expr\StaticCall) {
+            return $this->resolveMethodReflectionFromStaticCall($call);
+        }
+        return $this->resolveFunctionReflectionFromFuncCall($call);
+    }
     public function resolveMethodReflectionFromClassMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod) : ?\PHPStan\Reflection\MethodReflection
     {
         $class = $classMethod->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);
@@ -107,5 +124,17 @@ final class ReflectionResolver
             return null;
         }
         return $this->resolveMethodReflection($newClassType->getClassName(), \Rector\Core\ValueObject\MethodName::CONSTRUCT);
+    }
+    private function resolveFunctionReflectionFromFuncCall(\PhpParser\Node\Expr\FuncCall $funcCall) : ?\PHPStan\Reflection\FunctionReflection
+    {
+        $functionName = $this->nodeNameResolver->getName($funcCall);
+        if ($functionName === null) {
+            return null;
+        }
+        $functionNameFullyQualified = new \PhpParser\Node\Name\FullyQualified($functionName);
+        if (!$this->reflectionProvider->hasFunction($functionNameFullyQualified, null)) {
+            return null;
+        }
+        return $this->reflectionProvider->getFunction($functionNameFullyQualified, null);
     }
 }

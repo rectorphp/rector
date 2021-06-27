@@ -83,7 +83,8 @@ CODE_SAMPLE
         } else {
             return null;
         }
-        if (\is_a($this->getStaticType($node->expr), \PHPStan\Type\ObjectType::class)) {
+        $exprType = $this->getStaticType($node->expr);
+        if ($exprType instanceof \PHPStan\Type\ObjectType) {
             return null;
         }
         $this->removeForeachValueAndUseArrayKeys($node);

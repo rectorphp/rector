@@ -214,9 +214,15 @@ final class AstResolver
         if (isset($this->classesByName[$classReflection->getName()])) {
             return $this->classesByName[$classReflection->getName()];
         }
-        /** @var string $fileName */
         $fileName = $classReflection->getFileName();
-        $nodes = $this->parser->parse($this->smartFileSystem->readFile($fileName));
+        // probably internal class
+        if ($fileName === \false) {
+            // avoid parsing falsy-file again
+            $this->classesByName[$classReflection->getName()] = null;
+            return null;
+        }
+        $fileContent = $this->smartFileSystem->readFile($fileName);
+        $nodes = $this->parser->parse($fileContent);
         if ($nodes === null) {
             // avoid parsing falsy-file again
             $this->classesByName[$classReflection->getName()] = null;

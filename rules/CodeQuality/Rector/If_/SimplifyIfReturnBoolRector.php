@@ -109,7 +109,8 @@ CODE_SAMPLE
         if (!$this->valueResolver->isFalse($returnedExpr)) {
             return !$this->valueResolver->isTrueOrFalse($nextNode->expr);
         }
-        if (\strpos($this->print($if->cond), '!=') === \false) {
+        $condString = $this->print($if->cond);
+        if (\strpos($condString, '!=') === \false) {
             return !$this->valueResolver->isTrueOrFalse($nextNode->expr);
         }
         return \true;

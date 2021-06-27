@@ -12,8 +12,8 @@ use PHPStan\Reflection\FunctionReflection;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\Php\PhpMethodReflection;
 use PHPStan\Reflection\Type\UnionTypeMethodReflection;
+use Rector\Core\NodeAnalyzer\VariadicAnalyzer;
 use Rector\Core\PHPStan\Reflection\CallReflectionResolver;
-use Rector\Core\PHPStan\Reflection\VariadicAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -30,10 +30,10 @@ final class RemoveExtraParametersRector extends \Rector\Core\Rector\AbstractRect
      */
     private $callReflectionResolver;
     /**
-     * @var \Rector\Core\PHPStan\Reflection\VariadicAnalyzer
+     * @var \Rector\Core\NodeAnalyzer\VariadicAnalyzer
      */
     private $variadicAnalyzer;
-    public function __construct(\Rector\Core\PHPStan\Reflection\CallReflectionResolver $callReflectionResolver, \Rector\Core\PHPStan\Reflection\VariadicAnalyzer $variadicAnalyzer)
+    public function __construct(\Rector\Core\PHPStan\Reflection\CallReflectionResolver $callReflectionResolver, \Rector\Core\NodeAnalyzer\VariadicAnalyzer $variadicAnalyzer)
     {
         $this->callReflectionResolver = $callReflectionResolver;
         $this->variadicAnalyzer = $variadicAnalyzer;
@@ -82,37 +82,30 @@ final class RemoveExtraParametersRector extends \Rector\Core\Rector\AbstractRect
         return $node;
     }
     /**
-     * @param FuncCall|MethodCall|StaticCall $node
+     * @param \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $call
      */
-    private function shouldSkip(\PhpParser\Node $node) : bool
+    private function shouldSkip($call) : bool
     {
-        if ($node->args === []) {
+        if ($call->args === []) {
             return \true;
         }
-        if ($node instanceof \PhpParser\Node\Expr\StaticCall) {
-            if (!$node->class instanceof \PhpParser\Node\Name) {
+        if ($call instanceof \PhpParser\Node\Expr\StaticCall) {
+            if (!$call->class instanceof \PhpParser\Node\Name) {
                 return \true;
             }
-            if ($this->isName($node->class, 'parent')) {
+            if ($this->isName($call->class, 'parent')) {
                 return \true;
             }
         }
-        $functionReflection = $this->callReflectionResolver->resolveCall($node);
-        if ($functionReflection === null) {
-            return \true;
-        }
-        if ($functionReflection->getVariants() === []) {
-            return \true;
-        }
-        return $this->variadicAnalyzer->hasVariadicParameters($functionReflection);
+        return $this->variadicAnalyzer->hasVariadicParameters($call);
     }
     /**
-     * @param MethodReflection|FunctionReflection $reflection
+     * @param \PHPStan\Reflection\MethodReflection|\PHPStan\Reflection\FunctionReflection $functionLikeReflection
      */
-    private function resolveMaximumAllowedParameterCount($reflection) : int
+    private function resolveMaximumAllowedParameterCount($functionLikeReflection) : int
     {
         $parameterCounts = [0];
-        foreach ($reflection->getVariants() as $parametersAcceptor) {
+        foreach ($functionLikeReflection->getVariants() as $parametersAcceptor) {
             $parameterCounts[] = \count($parametersAcceptor->getParameters());
         }
         return (int) \max($parameterCounts);

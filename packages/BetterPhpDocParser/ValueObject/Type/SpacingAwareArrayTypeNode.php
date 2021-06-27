@@ -30,7 +30,8 @@ final class SpacingAwareArrayTypeNode extends \PHPStan\PhpDocParser\Ast\Type\Arr
     }
     private function isGenericArrayCandidate(\PHPStan\PhpDocParser\Ast\Type\TypeNode $typeNode) : bool
     {
-        if (!$this->getAttribute(\Rector\PHPStanStaticTypeMapper\TypeMapper\ArrayTypeMapper::HAS_GENERIC_TYPE_PARENT)) {
+        $hasGenericTypeParent = (bool) $this->getAttribute(\Rector\PHPStanStaticTypeMapper\TypeMapper\ArrayTypeMapper::HAS_GENERIC_TYPE_PARENT);
+        if (!$hasGenericTypeParent) {
             return \false;
         }
         return $typeNode instanceof \PHPStan\PhpDocParser\Ast\Type\UnionTypeNode || $typeNode instanceof \PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
