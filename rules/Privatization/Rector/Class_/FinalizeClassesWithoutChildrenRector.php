@@ -78,15 +78,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($node->isFinal()) {
-            return null;
-        }
-
-        if ($node->isAbstract()) {
-            return null;
-        }
-
-        if ($this->classAnalyzer->isAnonymousClass($node)) {
+        if ($this->shouldSkipClass($node)) {
             return null;
         }
 
@@ -124,5 +116,18 @@ CODE_SAMPLE
         }
 
         return false;
+    }
+
+    private function shouldSkipClass(Class_ $class): bool
+    {
+        if ($class->isFinal()) {
+            return true;
+        }
+
+        if ($class->isAbstract()) {
+            return true;
+        }
+
+        return $this->classAnalyzer->isAnonymousClass($class);
     }
 }
