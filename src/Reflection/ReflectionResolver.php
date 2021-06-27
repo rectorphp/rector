@@ -48,7 +48,7 @@ final class ReflectionResolver
             return null;
         }
         $classReflection = $this->reflectionProvider->getClass($className);
-        if ($classReflection->hasMethod($methodName)) {
+        if ($classReflection->hasNativeMethod($methodName)) {
             return $classReflection->getNativeMethod($methodName);
         }
         return null;
