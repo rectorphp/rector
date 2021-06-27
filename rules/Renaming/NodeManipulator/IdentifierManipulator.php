@@ -29,15 +29,10 @@ final class IdentifierManipulator
     }
 
     /**
-     * @param ClassConstFetch|MethodCall|PropertyFetch|StaticCall|ClassMethod $node
      * @param string[] $renameMethodMap
      */
-    public function renameNodeWithMap(Node $node, array $renameMethodMap): void
+    public function renameNodeWithMap(ClassConstFetch|MethodCall|PropertyFetch|StaticCall|ClassMethod $node, array $renameMethodMap): void
     {
-        Assert::isAnyOf($node, [
-            ClassConstFetch::class, MethodCall::class, PropertyFetch::class, StaticCall::class, ClassMethod::class,
-        ]);
-
         $oldNodeMethodName = $this->resolveOldMethodName($node);
         if ($oldNodeMethodName === null) {
             return;
@@ -46,23 +41,14 @@ final class IdentifierManipulator
         $node->name = new Identifier($renameMethodMap[$oldNodeMethodName]);
     }
 
-    /**
-     * @param ClassConstFetch|MethodCall|PropertyFetch|StaticCall|ClassMethod $node
-     */
-    public function removeSuffix(Node $node, string $suffixToRemove): void
+    public function removeSuffix(ClassConstFetch|MethodCall|PropertyFetch|StaticCall|ClassMethod $node, string $suffixToRemove): void
     {
-        Assert::isAnyOf(
-            $node,
-            [ClassConstFetch::class, MethodCall::class, PropertyFetch::class, StaticCall::class, ClassMethod::class]
-        );
-
         $name = $this->nodeNameResolver->getName($node);
         if ($name === null) {
             return;
         }
 
         $newName = Strings::replace($name, sprintf('#%s$#', $suffixToRemove), '');
-
         $node->name = new Identifier($newName);
     }
 

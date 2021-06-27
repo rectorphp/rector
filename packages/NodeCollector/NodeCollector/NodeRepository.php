@@ -25,45 +25,11 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 final class NodeRepository
 {
     public function __construct(
-        private ParsedPropertyFetchNodeCollector $parsedPropertyFetchNodeCollector,
         private NodeNameResolver $nodeNameResolver,
         private ParsedNodeCollector $parsedNodeCollector,
         private ReflectionProvider $reflectionProvider,
         private NodeTypeResolver $nodeTypeResolver
     ) {
-    }
-
-    /**
-     * @return PropertyFetch[]
-     */
-    public function findPropertyFetchesByProperty(Property $property): array
-    {
-        /** @var string|null $className */
-        $className = $property->getAttribute(AttributeKey::CLASS_NAME);
-        if ($className === null) {
-            return [];
-        }
-
-        $propertyName = $this->nodeNameResolver->getName($property);
-        return $this->parsedPropertyFetchNodeCollector->findPropertyFetchesByTypeAndName($className, $propertyName);
-    }
-
-    /**
-     * @return PropertyFetch[]
-     */
-    public function findPropertyFetchesByPropertyFetch(PropertyFetch $propertyFetch): array
-    {
-        $propertyFetcheeType = $this->nodeTypeResolver->getStaticType($propertyFetch->var);
-        if (! $propertyFetcheeType instanceof TypeWithClassName) {
-            return [];
-        }
-
-        $className = $this->nodeTypeResolver->getFullyQualifiedClassName($propertyFetcheeType);
-
-        /** @var string $propertyName */
-        $propertyName = $this->nodeNameResolver->getName($propertyFetch);
-
-        return $this->parsedPropertyFetchNodeCollector->findPropertyFetchesByTypeAndName($className, $propertyName);
     }
 
     public function hasClassChildren(Class_ $desiredClass): bool
@@ -90,6 +56,7 @@ final class NodeRepository
     }
 
     /**
+     * @deprecated Use ReflectionProvider instead to resolve all the traits
      * @return Trait_[]
      */
     public function findUsedTraitsInClass(ClassLike $classLike): array

@@ -7,13 +7,11 @@ namespace Rector\NodeCollector\NodeVisitor;
 use PhpParser\Node;
 use PhpParser\NodeVisitorAbstract;
 use Rector\NodeCollector\NodeCollector\ParsedNodeCollector;
-use Rector\NodeCollector\NodeCollector\ParsedPropertyFetchNodeCollector;
 
 final class NodeCollectorNodeVisitor extends NodeVisitorAbstract
 {
     public function __construct(
         private ParsedNodeCollector $parsedNodeCollector,
-        private ParsedPropertyFetchNodeCollector $parsedPropertyFetchNodeCollector
     ) {
     }
 
@@ -22,8 +20,6 @@ final class NodeCollectorNodeVisitor extends NodeVisitorAbstract
         if ($this->parsedNodeCollector->isCollectableNode($node)) {
             $this->parsedNodeCollector->collect($node);
         }
-
-        $this->parsedPropertyFetchNodeCollector->collect($node);
 
         return null;
     }
