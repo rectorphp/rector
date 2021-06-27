@@ -12,8 +12,8 @@ use PHPStan\Reflection\FunctionReflection;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\Php\PhpFunctionReflection;
 use Rector\CodingStyle\NodeAnalyzer\SpreadVariablesCollector;
-use Rector\Core\PHPStan\Reflection\CallReflectionResolver;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Reflection\ReflectionResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -26,13 +26,13 @@ final class UnSpreadOperatorRector extends \Rector\Core\Rector\AbstractRector
      */
     private $spreadVariablesCollector;
     /**
-     * @var \Rector\Core\PHPStan\Reflection\CallReflectionResolver
+     * @var \Rector\Core\Reflection\ReflectionResolver
      */
-    private $callReflectionResolver;
-    public function __construct(\Rector\CodingStyle\NodeAnalyzer\SpreadVariablesCollector $spreadVariablesCollector, \Rector\Core\PHPStan\Reflection\CallReflectionResolver $callReflectionResolver)
+    private $reflectionResolver;
+    public function __construct(\Rector\CodingStyle\NodeAnalyzer\SpreadVariablesCollector $spreadVariablesCollector, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver)
     {
         $this->spreadVariablesCollector = $spreadVariablesCollector;
-        $this->callReflectionResolver = $callReflectionResolver;
+        $this->reflectionResolver = $reflectionResolver;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -95,15 +95,15 @@ CODE_SAMPLE
     }
     private function processUnspreadOperatorMethodCallArgs(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\PhpParser\Node\Expr\MethodCall
     {
-        $functionLikeReflection = $this->callReflectionResolver->resolveCall($methodCall);
-        if ($functionLikeReflection === null) {
+        $methodReflection = $this->reflectionResolver->resolveMethodReflectionFromMethodCall($methodCall);
+        if (!$methodReflection instanceof \PHPStan\Reflection\MethodReflection) {
             return null;
         }
         // skip those in vendor
-        if ($this->skipForVendor($functionLikeReflection)) {
+        if ($this->skipForVendor($methodReflection)) {
             return null;
         }
-        $spreadParameterReflections = $this->spreadVariablesCollector->resolveFromMethodReflection($functionLikeReflection);
+        $spreadParameterReflections = $this->spreadVariablesCollector->resolveFromMethodReflection($methodReflection);
         if ($spreadParameterReflections === []) {
             return null;
         }

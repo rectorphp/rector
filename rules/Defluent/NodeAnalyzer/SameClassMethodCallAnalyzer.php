@@ -5,17 +5,18 @@ namespace Rector\Defluent\NodeAnalyzer;
 
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Reflection\MethodReflection;
-use Rector\Core\PHPStan\Reflection\CallReflectionResolver;
+use PHPStan\Reflection\ReflectionProvider;
+use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Defluent\Contract\ValueObject\FirstCallFactoryAwareInterface;
 final class SameClassMethodCallAnalyzer
 {
     /**
-     * @var \Rector\Core\PHPStan\Reflection\CallReflectionResolver
+     * @var \Rector\Core\Reflection\ReflectionResolver
      */
-    private $callReflectionResolver;
-    public function __construct(\Rector\Core\PHPStan\Reflection\CallReflectionResolver $callReflectionResolver)
+    private $reflectionResolver;
+    public function __construct(\Rector\Core\Reflection\ReflectionResolver $reflectionResolver)
     {
-        $this->callReflectionResolver = $callReflectionResolver;
+        $this->reflectionResolver = $reflectionResolver;
     }
     /**
      * @param MethodCall[] $chainMethodCalls
@@ -25,9 +26,9 @@ final class SameClassMethodCallAnalyzer
         // are method calls located in the same class?
         $classOfClassMethod = [];
         foreach ($chainMethodCalls as $chainMethodCall) {
-            $functionLikeReflection = $this->callReflectionResolver->resolveCall($chainMethodCall);
-            if ($functionLikeReflection instanceof \PHPStan\Reflection\MethodReflection) {
-                $declaringClass = $functionLikeReflection->getDeclaringClass();
+            $methodReflection = $this->reflectionResolver->resolveMethodReflectionFromMethodCall($chainMethodCall);
+            if ($methodReflection instanceof \PHPStan\Reflection\MethodReflection) {
+                $declaringClass = $methodReflection->getDeclaringClass();
                 $classOfClassMethod[] = $declaringClass->getName();
             } else {
                 $classOfClassMethod[] = null;

@@ -20,8 +20,8 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\UnionType;
-use Rector\Core\PHPStan\Reflection\CallReflectionResolver;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\TypeDeclaration\NodeAnalyzer\TypeNodeUnwrapper;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -36,13 +36,13 @@ final class ReturnTypeFromStrictTypedCallRector extends \Rector\Core\Rector\Abst
      */
     private $typeNodeUnwrapper;
     /**
-     * @var \Rector\Core\PHPStan\Reflection\CallReflectionResolver
+     * @var \Rector\Core\Reflection\ReflectionResolver
      */
-    private $callReflectionResolver;
-    public function __construct(\Rector\TypeDeclaration\NodeAnalyzer\TypeNodeUnwrapper $typeNodeUnwrapper, \Rector\Core\PHPStan\Reflection\CallReflectionResolver $callReflectionResolver)
+    private $reflectionResolver;
+    public function __construct(\Rector\TypeDeclaration\NodeAnalyzer\TypeNodeUnwrapper $typeNodeUnwrapper, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver)
     {
         $this->typeNodeUnwrapper = $typeNodeUnwrapper;
-        $this->callReflectionResolver = $callReflectionResolver;
+        $this->reflectionResolver = $reflectionResolver;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -162,7 +162,7 @@ CODE_SAMPLE
      */
     private function resolveMethodCallReturnNode($call) : ?\PhpParser\Node
     {
-        $methodReflection = $this->callReflectionResolver->resolveCall($call);
+        $methodReflection = $this->reflectionResolver->resolveFunctionLikeReflectionFromCall($call);
         if ($methodReflection === null) {
             return null;
         }

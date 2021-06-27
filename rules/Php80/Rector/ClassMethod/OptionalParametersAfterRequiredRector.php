@@ -8,7 +8,6 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Reflection\MethodReflection;
-use Rector\Core\PHPStan\Reflection\CallReflectionResolver;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Reflection\ReflectionResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -32,18 +31,13 @@ final class OptionalParametersAfterRequiredRector extends \Rector\Core\Rector\Ab
      */
     private $argumentSorter;
     /**
-     * @var \Rector\Core\PHPStan\Reflection\CallReflectionResolver
-     */
-    private $callReflectionResolver;
-    /**
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
-    public function __construct(\Rector\Php80\NodeResolver\RequireOptionalParamResolver $requireOptionalParamResolver, \Rector\Php80\NodeResolver\ArgumentSorter $argumentSorter, \Rector\Core\PHPStan\Reflection\CallReflectionResolver $callReflectionResolver, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver)
+    public function __construct(\Rector\Php80\NodeResolver\RequireOptionalParamResolver $requireOptionalParamResolver, \Rector\Php80\NodeResolver\ArgumentSorter $argumentSorter, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver)
     {
         $this->requireOptionalParamResolver = $requireOptionalParamResolver;
         $this->argumentSorter = $argumentSorter;
-        $this->callReflectionResolver = $callReflectionResolver;
         $this->reflectionResolver = $reflectionResolver;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
@@ -122,7 +116,7 @@ CODE_SAMPLE
     }
     private function refactorMethodCall(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\PhpParser\Node\Expr\MethodCall
     {
-        $methodReflection = $this->callReflectionResolver->resolveCall($methodCall);
+        $methodReflection = $this->reflectionResolver->resolveFunctionLikeReflectionFromCall($methodCall);
         if (!$methodReflection instanceof \PHPStan\Reflection\MethodReflection) {
             return null;
         }

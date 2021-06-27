@@ -21,8 +21,8 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ParameterReflection;
 use PHPStan\Reflection\ParametersAcceptor;
 use PHPStan\Type\MixedType;
-use Rector\Core\PHPStan\Reflection\CallReflectionResolver;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Naming\Naming\VariableNaming;
 use Rector\NodeNestingScope\ParentScopeFinder;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -37,10 +37,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class NonVariableToVariableOnFunctionCallRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var \Rector\Core\PHPStan\Reflection\CallReflectionResolver
-     */
-    private $callReflectionResolver;
-    /**
      * @var \Rector\Naming\Naming\VariableNaming
      */
     private $variableNaming;
@@ -48,11 +44,15 @@ final class NonVariableToVariableOnFunctionCallRector extends \Rector\Core\Recto
      * @var \Rector\NodeNestingScope\ParentScopeFinder
      */
     private $parentScopeFinder;
-    public function __construct(\Rector\Core\PHPStan\Reflection\CallReflectionResolver $callReflectionResolver, \Rector\Naming\Naming\VariableNaming $variableNaming, \Rector\NodeNestingScope\ParentScopeFinder $parentScopeFinder)
+    /**
+     * @var \Rector\Core\Reflection\ReflectionResolver
+     */
+    private $reflectionResolver;
+    public function __construct(\Rector\Naming\Naming\VariableNaming $variableNaming, \Rector\NodeNestingScope\ParentScopeFinder $parentScopeFinder, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver)
     {
-        $this->callReflectionResolver = $callReflectionResolver;
         $this->variableNaming = $variableNaming;
         $this->parentScopeFinder = $parentScopeFinder;
+        $this->reflectionResolver = $reflectionResolver;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -95,27 +95,30 @@ final class NonVariableToVariableOnFunctionCallRector extends \Rector\Core\Recto
         return $node;
     }
     /**
-     * @param FuncCall|MethodCall|StaticCall $node
-     *
      * @return Expr[]
+     * @param \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $call
      */
-    private function getNonVariableArguments(\PhpParser\Node $node) : array
+    private function getNonVariableArguments($call) : array
     {
         $arguments = [];
-        $parametersAcceptor = $this->callReflectionResolver->resolveParametersAcceptor($this->callReflectionResolver->resolveCall($node));
+        $functionLikeReflection = $this->reflectionResolver->resolveFunctionLikeReflectionFromCall($call);
+        if ($functionLikeReflection === null) {
+            return [];
+        }
+        $parametersAcceptor = $functionLikeReflection->getVariants()[0] ?? null;
         if (!$parametersAcceptor instanceof \PHPStan\Reflection\ParametersAcceptor) {
             return [];
         }
         /** @var ParameterReflection $parameterReflection */
         foreach ($parametersAcceptor->getParameters() as $key => $parameterReflection) {
             // omitted optional parameter
-            if (!isset($node->args[$key])) {
+            if (!isset($call->args[$key])) {
                 continue;
             }
             if ($parameterReflection->passedByReference()->no()) {
                 continue;
             }
-            $argument = $node->args[$key]->value;
+            $argument = $call->args[$key]->value;
             if ($this->isVariableLikeNode($argument)) {
                 continue;
             }

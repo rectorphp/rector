@@ -13,8 +13,8 @@ use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\Php\PhpMethodReflection;
 use PHPStan\Reflection\Type\UnionTypeMethodReflection;
 use Rector\Core\NodeAnalyzer\VariadicAnalyzer;
-use Rector\Core\PHPStan\Reflection\CallReflectionResolver;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Reflection\ReflectionResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -26,17 +26,17 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveExtraParametersRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var \Rector\Core\PHPStan\Reflection\CallReflectionResolver
-     */
-    private $callReflectionResolver;
-    /**
      * @var \Rector\Core\NodeAnalyzer\VariadicAnalyzer
      */
     private $variadicAnalyzer;
-    public function __construct(\Rector\Core\PHPStan\Reflection\CallReflectionResolver $callReflectionResolver, \Rector\Core\NodeAnalyzer\VariadicAnalyzer $variadicAnalyzer)
+    /**
+     * @var \Rector\Core\Reflection\ReflectionResolver
+     */
+    private $reflectionResolver;
+    public function __construct(\Rector\Core\NodeAnalyzer\VariadicAnalyzer $variadicAnalyzer, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver)
     {
-        $this->callReflectionResolver = $callReflectionResolver;
         $this->variadicAnalyzer = $variadicAnalyzer;
+        $this->reflectionResolver = $reflectionResolver;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -58,7 +58,7 @@ final class RemoveExtraParametersRector extends \Rector\Core\Rector\AbstractRect
             return null;
         }
         // unreliable count of arguments
-        $functionLikeReflection = $this->callReflectionResolver->resolveCall($node);
+        $functionLikeReflection = $this->reflectionResolver->resolveFunctionLikeReflectionFromCall($node);
         if ($functionLikeReflection instanceof \PHPStan\Reflection\Type\UnionTypeMethodReflection) {
             return null;
         }

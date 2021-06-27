@@ -25,7 +25,7 @@ use PHPStan\Type\Type;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Node\NodeFactory;
-use Rector\Core\PHPStan\Reflection\CallReflectionResolver;
+use Rector\Core\Reflection\ReflectionResolver;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use RectorPrefix20210627\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
@@ -56,22 +56,22 @@ final class ClassMethodAssignManipulator
      */
     private $variableManipulator;
     /**
-     * @var \Rector\Core\PHPStan\Reflection\CallReflectionResolver
-     */
-    private $callReflectionResolver;
-    /**
      * @var \Rector\Core\PhpParser\Comparing\NodeComparator
      */
     private $nodeComparator;
-    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \RectorPrefix20210627\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\NodeManipulator\VariableManipulator $variableManipulator, \Rector\Core\PHPStan\Reflection\CallReflectionResolver $callReflectionResolver, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator)
+    /**
+     * @var \Rector\Core\Reflection\ReflectionResolver
+     */
+    private $reflectionResolver;
+    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \RectorPrefix20210627\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\NodeManipulator\VariableManipulator $variableManipulator, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver)
     {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->nodeFactory = $nodeFactory;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->variableManipulator = $variableManipulator;
-        $this->callReflectionResolver = $callReflectionResolver;
         $this->nodeComparator = $nodeComparator;
+        $this->reflectionResolver = $reflectionResolver;
     }
     /**
      * @return Assign[]
@@ -258,12 +258,12 @@ final class ClassMethodAssignManipulator
         if (!$node instanceof \PhpParser\Node\Expr\MethodCall) {
             return \false;
         }
-        $methodReflection = $this->callReflectionResolver->resolveCall($node);
+        $methodReflection = $this->reflectionResolver->resolveMethodReflectionFromMethodCall($node);
         if (!$methodReflection instanceof \PHPStan\Reflection\MethodReflection) {
             return \false;
         }
         $variableName = $this->nodeNameResolver->getName($variable);
-        $parametersAcceptor = $this->callReflectionResolver->resolveParametersAcceptor($methodReflection);
+        $parametersAcceptor = $methodReflection->getVariants()[0] ?? null;
         if (!$parametersAcceptor instanceof \PHPStan\Reflection\ParametersAcceptor) {
             return \false;
         }
@@ -301,8 +301,11 @@ final class ClassMethodAssignManipulator
     }
     private function isParameterReferencedInMethodReflection(\PhpParser\Node\Expr\New_ $new, int $argumentPosition) : bool
     {
-        $methodReflection = $this->callReflectionResolver->resolveConstructor($new);
-        $parametersAcceptor = $this->callReflectionResolver->resolveParametersAcceptor($methodReflection);
+        $methodReflection = $this->reflectionResolver->resolveMethodReflectionFromNew($new);
+        if (!$methodReflection instanceof \PHPStan\Reflection\MethodReflection) {
+            return \false;
+        }
+        $parametersAcceptor = $methodReflection->getVariants()[0] ?? null;
         if (!$parametersAcceptor instanceof \PHPStan\Reflection\ParametersAcceptor) {
             return \false;
         }

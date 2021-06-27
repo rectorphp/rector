@@ -1863,7 +1863,6 @@ return array(
     'Rector\\Core\\NodeManipulator\\VariableManipulator' => $baseDir . '/src/NodeManipulator/VariableManipulator.php',
     'Rector\\Core\\NonPhpFile\\NonPhpFileProcessor' => $baseDir . '/src/NonPhpFile/NonPhpFileProcessor.php',
     'Rector\\Core\\NonPhpFile\\Rector\\RenameClassNonPhpRector' => $baseDir . '/src/NonPhpFile/Rector/RenameClassNonPhpRector.php',
-    'Rector\\Core\\PHPStan\\Reflection\\CallReflectionResolver' => $baseDir . '/src/PHPStan/Reflection/CallReflectionResolver.php',
     'Rector\\Core\\PHPStan\\Reflection\\TypeToCallReflectionResolver\\ClosureTypeToCallReflectionResolver' => $baseDir . '/src/PHPStan/Reflection/TypeToCallReflectionResolver/ClosureTypeToCallReflectionResolver.php',
     'Rector\\Core\\PHPStan\\Reflection\\TypeToCallReflectionResolver\\ConstantArrayTypeToCallReflectionResolver' => $baseDir . '/src/PHPStan/Reflection/TypeToCallReflectionResolver/ConstantArrayTypeToCallReflectionResolver.php',
     'Rector\\Core\\PHPStan\\Reflection\\TypeToCallReflectionResolver\\ConstantStringTypeToCallReflectionResolver' => $baseDir . '/src/PHPStan/Reflection/TypeToCallReflectionResolver/ConstantStringTypeToCallReflectionResolver.php',

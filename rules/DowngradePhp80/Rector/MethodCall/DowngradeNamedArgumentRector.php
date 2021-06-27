@@ -17,8 +17,8 @@ use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ParameterReflection;
 use PHPStan\Type\Type;
 use PHPStan\Type\VerbosityLevel;
-use Rector\Core\PHPStan\Reflection\CallReflectionResolver;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Reflection\ReflectionResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -27,12 +27,12 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradeNamedArgumentRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var \Rector\Core\PHPStan\Reflection\CallReflectionResolver
+     * @var \Rector\Core\Reflection\ReflectionResolver
      */
-    private $callReflectionResolver;
-    public function __construct(\Rector\Core\PHPStan\Reflection\CallReflectionResolver $callReflectionResolver)
+    private $reflectionResolver;
+    public function __construct(\Rector\Core\Reflection\ReflectionResolver $reflectionResolver)
     {
-        $this->callReflectionResolver = $callReflectionResolver;
+        $this->reflectionResolver = $reflectionResolver;
     }
     /**
      * @return array<class-string<Node>>
@@ -90,17 +90,17 @@ CODE_SAMPLE
     private function removeNamedArguments($node, array $args) : ?\PhpParser\Node
     {
         if ($node instanceof \PhpParser\Node\Expr\New_) {
-            $methodReflection = $this->callReflectionResolver->resolveConstructor($node);
+            $methodReflection = $this->reflectionResolver->resolveMethodReflectionFromNew($node);
             if (!$methodReflection instanceof \PHPStan\Reflection\MethodReflection) {
                 return null;
             }
             return $this->processRemoveNamedArgument($methodReflection, $node, $args);
         }
-        $callerReflection = $this->callReflectionResolver->resolveCall($node);
-        if ($callerReflection === null) {
+        $functionLikeReflection = $this->reflectionResolver->resolveFunctionLikeReflectionFromCall($node);
+        if ($functionLikeReflection === null) {
             return null;
         }
-        return $this->processRemoveNamedArgument($callerReflection, $node, $args);
+        return $this->processRemoveNamedArgument($functionLikeReflection, $node, $args);
     }
     /**
      * @param MethodCall|StaticCall|New_ $node
