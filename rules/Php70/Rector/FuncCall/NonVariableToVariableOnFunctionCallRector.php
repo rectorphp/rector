@@ -109,7 +109,7 @@ final class NonVariableToVariableOnFunctionCallRector extends AbstractRector
     /**
      * @return Expr[]
      */
-    private function getNonVariableArguments(FuncCall|MethodCall|StaticCall $call): array
+    private function getNonVariableArguments(FuncCall | MethodCall | StaticCall $call): array
     {
         $arguments = [];
 

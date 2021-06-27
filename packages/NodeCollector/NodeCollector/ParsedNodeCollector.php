@@ -5,13 +5,8 @@ declare(strict_types=1);
 namespace Rector\NodeCollector\NodeCollector;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ClassConstFetch;
-use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassLike;
-use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Trait_;
 use Rector\Core\Exception\ShouldNotHappenException;

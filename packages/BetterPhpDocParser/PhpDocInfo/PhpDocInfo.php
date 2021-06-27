@@ -271,7 +271,7 @@ final class PhpDocInfo
 
             // FQN check
             $resolvedClass = $identifierTypeNode->getAttribute(PhpDocAttributeKey::RESOLVED_CLASS);
-            if (!is_string($resolvedClass)) {
+            if (! is_string($resolvedClass)) {
                 continue;
             }
 

@@ -13,7 +13,6 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Webmozart\Assert\Assert;
 
 /**
  * This class renames node identifier, e.g. ClassMethod rename:
@@ -31,8 +30,10 @@ final class IdentifierManipulator
     /**
      * @param string[] $renameMethodMap
      */
-    public function renameNodeWithMap(ClassConstFetch|MethodCall|PropertyFetch|StaticCall|ClassMethod $node, array $renameMethodMap): void
-    {
+    public function renameNodeWithMap(
+        ClassConstFetch | MethodCall | PropertyFetch | StaticCall | ClassMethod $node,
+        array $renameMethodMap
+    ): void {
         $oldNodeMethodName = $this->resolveOldMethodName($node);
         if ($oldNodeMethodName === null) {
             return;
@@ -41,8 +42,10 @@ final class IdentifierManipulator
         $node->name = new Identifier($renameMethodMap[$oldNodeMethodName]);
     }
 
-    public function removeSuffix(ClassConstFetch|MethodCall|PropertyFetch|StaticCall|ClassMethod $node, string $suffixToRemove): void
-    {
+    public function removeSuffix(
+        ClassConstFetch | MethodCall | PropertyFetch | StaticCall | ClassMethod $node,
+        string $suffixToRemove
+    ): void {
         $name = $this->nodeNameResolver->getName($node);
         if ($name === null) {
             return;

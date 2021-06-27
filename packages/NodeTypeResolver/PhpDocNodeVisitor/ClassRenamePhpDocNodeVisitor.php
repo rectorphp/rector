@@ -10,7 +10,6 @@ use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\ObjectType;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 use Rector\Core\Configuration\CurrentNodeProvider;
-use Rector\Core\Configuration\RenamedClassesDataCollector;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\ValueObject\OldToNewType;
 use Rector\StaticTypeMapper\StaticTypeMapper;

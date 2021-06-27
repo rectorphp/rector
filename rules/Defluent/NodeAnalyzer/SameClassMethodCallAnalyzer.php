@@ -6,7 +6,6 @@ namespace Rector\Defluent\NodeAnalyzer;
 
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Reflection\MethodReflection;
-use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Defluent\Contract\ValueObject\FirstCallFactoryAwareInterface;
 

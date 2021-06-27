@@ -17,7 +17,6 @@ use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Trait_;
 use PhpParser\NodeTraverser;
 use PHPStan\Reflection\MethodReflection;
-use PHPStan\Reflection\Php\PhpFunctionReflection;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
