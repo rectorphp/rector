@@ -17,10 +17,7 @@ final class NodeCollectorNodeVisitor extends NodeVisitorAbstract
 
     public function enterNode(Node $node)
     {
-        if ($this->parsedNodeCollector->isCollectableNode($node)) {
-            $this->parsedNodeCollector->collect($node);
-        }
-
+        $this->parsedNodeCollector->collect($node);
         return null;
     }
 }

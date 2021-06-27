@@ -28,22 +28,6 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class ParsedNodeCollector
 {
     /**
-     * @var array<class-string<Node>>
-     */
-    private const COLLECTABLE_NODE_TYPES = [
-        Class_::class,
-        Interface_::class,
-        ClassConst::class,
-        ClassConstFetch::class,
-        Trait_::class,
-        ClassMethod::class,
-        // simply collected
-        MethodCall::class,
-        // for array callable - [$this, 'someCall']
-        Array_::class,
-    ];
-
-    /**
      * @var Class_[]
      */
     private array $classes = [];
@@ -95,18 +79,6 @@ final class ParsedNodeCollector
         return $this->traits[$name] ?? null;
     }
 
-    public function isCollectableNode(Node $node): bool
-    {
-        foreach (self::COLLECTABLE_NODE_TYPES as $collectableNodeType) {
-            /** @var class-string<Node> $collectableNodeType */
-            if (is_a($node, $collectableNodeType, true)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     public function collect(Node $node): void
     {
         if ($node instanceof Class_) {
@@ -116,7 +88,6 @@ final class ParsedNodeCollector
 
         if ($node instanceof Interface_ || $node instanceof Trait_) {
             $this->collectInterfaceOrTrait($node);
-            return;
         }
     }
 
