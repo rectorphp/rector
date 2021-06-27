@@ -9,7 +9,6 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Reflection\MethodReflection;
-use Rector\Core\PHPStan\Reflection\CallReflectionResolver;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Reflection\ReflectionResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -28,7 +27,6 @@ final class OptionalParametersAfterRequiredRector extends AbstractRector
     public function __construct(
         private RequireOptionalParamResolver $requireOptionalParamResolver,
         private ArgumentSorter $argumentSorter,
-        private CallReflectionResolver $callReflectionResolver,
         private ReflectionResolver $reflectionResolver
     ) {
     }
@@ -137,7 +135,7 @@ CODE_SAMPLE
 
     private function refactorMethodCall(MethodCall $methodCall): ?MethodCall
     {
-        $methodReflection = $this->callReflectionResolver->resolveCall($methodCall);
+        $methodReflection = $this->reflectionResolver->resolveFunctionLikeReflectionFromCall($methodCall);
         if (! $methodReflection instanceof MethodReflection) {
             return null;
         }

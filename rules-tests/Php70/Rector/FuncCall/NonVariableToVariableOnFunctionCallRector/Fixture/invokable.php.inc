@@ -2,14 +2,11 @@
 
 namespace Rector\Tests\Php70\Rector\FuncCall\NonVariableToVariableOnFunctionCallRector\Fixture;
 
-class Invokable
-{
-    public function __invoke(&$bar) {}
-}
+use Rector\Tests\Php70\Rector\FuncCall\NonVariableToVariableOnFunctionCallRector\Source\InvokableConstructorArgument;
 
 function invokable()
 {
-    $invokable = new Invokable();
+    $invokable = new InvokableConstructorArgument();
     $invokable(bar());
 }
 
@@ -19,14 +16,11 @@ function invokable()
 
 namespace Rector\Tests\Php70\Rector\FuncCall\NonVariableToVariableOnFunctionCallRector\Fixture;
 
-class Invokable
-{
-    public function __invoke(&$bar) {}
-}
+use Rector\Tests\Php70\Rector\FuncCall\NonVariableToVariableOnFunctionCallRector\Source\InvokableConstructorArgument;
 
 function invokable()
 {
-    $invokable = new Invokable();
+    $invokable = new InvokableConstructorArgument();
     $bar = bar();
     $invokable($bar);
 }

@@ -14,8 +14,8 @@ use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\Php\PhpMethodReflection;
 use PHPStan\Reflection\Type\UnionTypeMethodReflection;
 use Rector\Core\NodeAnalyzer\VariadicAnalyzer;
-use Rector\Core\PHPStan\Reflection\CallReflectionResolver;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Reflection\ReflectionResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -28,8 +28,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveExtraParametersRector extends AbstractRector
 {
     public function __construct(
-        private CallReflectionResolver $callReflectionResolver,
-        private VariadicAnalyzer $variadicAnalyzer
+        private VariadicAnalyzer $variadicAnalyzer,
+        private ReflectionResolver $reflectionResolver
     ) {
     }
 
@@ -58,7 +58,7 @@ final class RemoveExtraParametersRector extends AbstractRector
         }
 
         // unreliable count of arguments
-        $functionLikeReflection = $this->callReflectionResolver->resolveCall($node);
+        $functionLikeReflection = $this->reflectionResolver->resolveFunctionLikeReflectionFromCall($node);
         if ($functionLikeReflection instanceof UnionTypeMethodReflection) {
             return null;
         }

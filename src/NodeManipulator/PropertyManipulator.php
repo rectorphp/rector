@@ -20,7 +20,7 @@ use PhpParser\Node\Stmt\Property;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\NodeFinder\PropertyFetchFinder;
-use Rector\Core\PHPStan\Reflection\CallReflectionResolver;
+use Rector\Core\Reflection\ReflectionResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\ReadWrite\Guard\VariableToConstantGuard;
 use Rector\ReadWrite\NodeAnalyzer\ReadWritePropertyAnalyzer;
@@ -39,7 +39,7 @@ final class PropertyManipulator
         private PhpDocInfoFactory $phpDocInfoFactory,
         private TypeChecker $typeChecker,
         private PropertyFetchFinder $propertyFetchFinder,
-        private CallReflectionResolver $callReflectionResolver,
+        private ReflectionResolver $reflectionResolver
     ) {
     }
 
@@ -122,7 +122,7 @@ final class PropertyManipulator
 
     private function isFoundByRefParam(MethodCall | StaticCall $node): bool
     {
-        $functionLikeReflection = $this->callReflectionResolver->resolveCall($node);
+        $functionLikeReflection = $this->reflectionResolver->resolveFunctionLikeReflectionFromCall($node);
         if ($functionLikeReflection === null) {
             return false;
         }

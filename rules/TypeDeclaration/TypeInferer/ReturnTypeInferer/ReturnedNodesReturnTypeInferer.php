@@ -24,7 +24,7 @@ use PHPStan\Type\Type;
 use PHPStan\Type\VoidType;
 use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
-use Rector\Core\PHPStan\Reflection\CallReflectionResolver;
+use Rector\Core\Reflection\ReflectionResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
@@ -41,9 +41,9 @@ final class ReturnedNodesReturnTypeInferer implements ReturnTypeInfererInterface
         private SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
         private TypeFactory $typeFactory,
         private SplArrayFixedTypeNarrower $splArrayFixedTypeNarrower,
-        private CallReflectionResolver $callReflectionResolver,
         private AstResolver $reflectionAstResolver,
-        private BetterStandardPrinter $betterStandardPrinter
+        private BetterStandardPrinter $betterStandardPrinter,
+        private ReflectionResolver $reflectionResolver
     ) {
     }
 
@@ -143,20 +143,12 @@ final class ReturnedNodesReturnTypeInferer implements ReturnTypeInfererInterface
             return new MixedType();
         }
 
-        $callReflection = $this->callReflectionResolver->resolveCall($return->expr);
-        if ($callReflection === null) {
+        $methodReflection = $this->reflectionResolver->resolveMethodReflectionFromMethodCall($return->expr);
+        if (! $methodReflection instanceof MethodReflection) {
             return new MixedType();
         }
 
-        if ($callReflection instanceof MethodReflection) {
-            return $this->resolveClassMethod($callReflection, $originalFunctionLike);
-        }
-
-        if ($callReflection instanceof PhpFunctionReflection) {
-            return $this->resolveFunction($callReflection, $originalFunctionLike);
-        }
-
-        return new MixedType();
+        return $this->resolveClassMethod($methodReflection, $originalFunctionLike);
     }
 
     private function isArrayTypeMixed(Type $type): bool
@@ -201,22 +193,5 @@ final class ReturnedNodesReturnTypeInferer implements ReturnTypeInfererInterface
         }
 
         return $this->inferFunctionLike($classMethod);
-    }
-
-    private function resolveFunction(PhpFunctionReflection $phpFunctionReflection, FunctionLike $functionLike): Type
-    {
-        $function = $this->reflectionAstResolver->resolveFunctionFromFunctionReflection($phpFunctionReflection);
-        if (! $function instanceof Function_) {
-            return new MixedType();
-        }
-
-        $classMethodCacheKey = $this->betterStandardPrinter->print($function);
-        $functionLikeCacheKey = $this->betterStandardPrinter->print($functionLike);
-
-        if ($classMethodCacheKey === $functionLikeCacheKey) {
-            return new MixedType();
-        }
-
-        return $this->inferFunctionLike($function);
     }
 }

@@ -21,8 +21,8 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\UnionType;
-use Rector\Core\PHPStan\Reflection\CallReflectionResolver;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\TypeDeclaration\NodeAnalyzer\TypeNodeUnwrapper;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -35,7 +35,7 @@ final class ReturnTypeFromStrictTypedCallRector extends AbstractRector
 {
     public function __construct(
         private TypeNodeUnwrapper $typeNodeUnwrapper,
-        private CallReflectionResolver $callReflectionResolver
+        private ReflectionResolver $reflectionResolver
     ) {
     }
 
@@ -179,7 +179,7 @@ CODE_SAMPLE
 
     private function resolveMethodCallReturnNode(MethodCall | StaticCall | FuncCall $call): ?Node
     {
-        $methodReflection = $this->callReflectionResolver->resolveCall($call);
+        $methodReflection = $this->reflectionResolver->resolveFunctionLikeReflectionFromCall($call);
         if ($methodReflection === null) {
             return null;
         }

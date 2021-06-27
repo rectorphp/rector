@@ -22,8 +22,8 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ParameterReflection;
 use PHPStan\Reflection\ParametersAcceptor;
 use PHPStan\Type\MixedType;
-use Rector\Core\PHPStan\Reflection\CallReflectionResolver;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Naming\Naming\VariableNaming;
 use Rector\NodeNestingScope\ParentScopeFinder;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -39,9 +39,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class NonVariableToVariableOnFunctionCallRector extends AbstractRector
 {
     public function __construct(
-        private CallReflectionResolver $callReflectionResolver,
         private VariableNaming $variableNaming,
-        private ParentScopeFinder $parentScopeFinder
+        private ParentScopeFinder $parentScopeFinder,
+        private ReflectionResolver $reflectionResolver
     ) {
     }
 
@@ -107,18 +107,19 @@ final class NonVariableToVariableOnFunctionCallRector extends AbstractRector
     }
 
     /**
-     * @param FuncCall|MethodCall|StaticCall $node
-     *
      * @return Expr[]
      */
-    private function getNonVariableArguments(Node $node): array
+    private function getNonVariableArguments(FuncCall|MethodCall|StaticCall $call): array
     {
         $arguments = [];
 
-        $parametersAcceptor = $this->callReflectionResolver->resolveParametersAcceptor(
-            $this->callReflectionResolver->resolveCall($node),
-        );
+        $functionLikeReflection = $this->reflectionResolver->resolveFunctionLikeReflectionFromCall($call);
 
+        if ($functionLikeReflection === null) {
+            return [];
+        }
+
+        $parametersAcceptor = $functionLikeReflection->getVariants()[0] ?? null;
         if (! $parametersAcceptor instanceof ParametersAcceptor) {
             return [];
         }
@@ -126,7 +127,7 @@ final class NonVariableToVariableOnFunctionCallRector extends AbstractRector
         /** @var ParameterReflection $parameterReflection */
         foreach ($parametersAcceptor->getParameters() as $key => $parameterReflection) {
             // omitted optional parameter
-            if (! isset($node->args[$key])) {
+            if (! isset($call->args[$key])) {
                 continue;
             }
 
@@ -134,7 +135,7 @@ final class NonVariableToVariableOnFunctionCallRector extends AbstractRector
                 continue;
             }
 
-            $argument = $node->args[$key]->value;
+            $argument = $call->args[$key]->value;
 
             if ($this->isVariableLikeNode($argument)) {
                 continue;

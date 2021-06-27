@@ -13,8 +13,8 @@ use PHPStan\Reflection\FunctionReflection;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\Php\PhpFunctionReflection;
 use Rector\CodingStyle\NodeAnalyzer\SpreadVariablesCollector;
-use Rector\Core\PHPStan\Reflection\CallReflectionResolver;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Reflection\ReflectionResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -25,7 +25,7 @@ final class UnSpreadOperatorRector extends AbstractRector
 {
     public function __construct(
         private SpreadVariablesCollector $spreadVariablesCollector,
-        private CallReflectionResolver $callReflectionResolver,
+        private ReflectionResolver $reflectionResolver
     ) {
     }
 
@@ -101,18 +101,18 @@ CODE_SAMPLE
 
     private function processUnspreadOperatorMethodCallArgs(MethodCall $methodCall): ?MethodCall
     {
-        $functionLikeReflection = $this->callReflectionResolver->resolveCall($methodCall);
-        if ($functionLikeReflection === null) {
+        $methodReflection = $this->reflectionResolver->resolveMethodReflectionFromMethodCall($methodCall);
+        if (! $methodReflection instanceof MethodReflection) {
             return null;
         }
 
         // skip those in vendor
-        if ($this->skipForVendor($functionLikeReflection)) {
+        if ($this->skipForVendor($methodReflection)) {
             return null;
         }
 
         $spreadParameterReflections = $this->spreadVariablesCollector->resolveFromMethodReflection(
-            $functionLikeReflection
+            $methodReflection
         );
         if ($spreadParameterReflections === []) {
             return null;
