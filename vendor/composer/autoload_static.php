@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInite0a0f2ad3d4ab2e96729a38a2da4cbdf
+class ComposerStaticInitb980ab87789b3e5a1b003eaec1ea1654
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -2755,7 +2755,6 @@ class ComposerStaticInite0a0f2ad3d4ab2e96729a38a2da4cbdf
         'Rector\\NodeCollector\\NodeAnalyzer\\BooleanAndAnalyzer' => __DIR__ . '/../..' . '/packages/NodeCollector/NodeAnalyzer/BooleanAndAnalyzer.php',
         'Rector\\NodeCollector\\NodeCollector\\NodeRepository' => __DIR__ . '/../..' . '/packages/NodeCollector/NodeCollector/NodeRepository.php',
         'Rector\\NodeCollector\\NodeCollector\\ParsedNodeCollector' => __DIR__ . '/../..' . '/packages/NodeCollector/NodeCollector/ParsedNodeCollector.php',
-        'Rector\\NodeCollector\\NodeCollector\\ParsedPropertyFetchNodeCollector' => __DIR__ . '/../..' . '/packages/NodeCollector/NodeCollector/ParsedPropertyFetchNodeCollector.php',
         'Rector\\NodeCollector\\NodeVisitor\\NodeCollectorNodeVisitor' => __DIR__ . '/../..' . '/packages/NodeCollector/NodeVisitor/NodeCollectorNodeVisitor.php',
         'Rector\\NodeCollector\\ScopeResolver\\ParentClassScopeResolver' => __DIR__ . '/../..' . '/packages/NodeCollector/ScopeResolver/ParentClassScopeResolver.php',
         'Rector\\NodeCollector\\StaticAnalyzer' => __DIR__ . '/../..' . '/packages/NodeCollector/StaticAnalyzer.php',
@@ -3161,7 +3160,6 @@ class ComposerStaticInite0a0f2ad3d4ab2e96729a38a2da4cbdf
         'Rector\\Privatization\\Rector\\MethodCall\\ReplaceStringWithClassConstantRector' => __DIR__ . '/../..' . '/rules/Privatization/Rector/MethodCall/ReplaceStringWithClassConstantRector.php',
         'Rector\\Privatization\\Rector\\Property\\ChangeReadOnlyPropertyWithDefaultValueToConstantRector' => __DIR__ . '/../..' . '/rules/Privatization/Rector/Property/ChangeReadOnlyPropertyWithDefaultValueToConstantRector.php',
         'Rector\\Privatization\\Rector\\Property\\PrivatizeFinalClassPropertyRector' => __DIR__ . '/../..' . '/rules/Privatization/Rector/Property/PrivatizeFinalClassPropertyRector.php',
-        'Rector\\Privatization\\Rector\\Property\\PrivatizeLocalPropertyToPrivatePropertyRector' => __DIR__ . '/../..' . '/rules/Privatization/Rector/Property/PrivatizeLocalPropertyToPrivatePropertyRector.php',
         'Rector\\Privatization\\Reflection\\ClassConstantsResolver' => __DIR__ . '/../..' . '/rules/Privatization/Reflection/ClassConstantsResolver.php',
         'Rector\\Privatization\\TypeManipulator\\NormalizeTypeToRespectArrayScalarType' => __DIR__ . '/../..' . '/rules/Privatization/TypeManipulator/NormalizeTypeToRespectArrayScalarType.php',
         'Rector\\Privatization\\ValueObject\\ConstantVisibility' => __DIR__ . '/../..' . '/rules/Privatization/ValueObject/ConstantVisibility.php',
@@ -3173,7 +3171,7 @@ class ComposerStaticInite0a0f2ad3d4ab2e96729a38a2da4cbdf
         'Rector\\ReadWrite\\NodeAnalyzer\\ReadWritePropertyAnalyzer' => __DIR__ . '/../..' . '/packages/ReadWrite/NodeAnalyzer/ReadWritePropertyAnalyzer.php',
         'Rector\\ReadWrite\\NodeFinder\\NodeUsageFinder' => __DIR__ . '/../..' . '/packages/ReadWrite/NodeFinder/NodeUsageFinder.php',
         'Rector\\ReadWrite\\ReadNodeAnalyzer\\JustReadExprAnalyzer' => __DIR__ . '/../..' . '/packages/ReadWrite/ReadNodeAnalyzer/JustReadExprAnalyzer.php',
-        'Rector\\ReadWrite\\ReadNodeAnalyzer\\PropertyFetchReadNodeAnalyzer' => __DIR__ . '/../..' . '/packages/ReadWrite/ReadNodeAnalyzer/PropertyFetchReadNodeAnalyzer.php',
+        'Rector\\ReadWrite\\ReadNodeAnalyzer\\LocalPropertyFetchReadNodeAnalyzer' => __DIR__ . '/../..' . '/packages/ReadWrite/ReadNodeAnalyzer/LocalPropertyFetchReadNodeAnalyzer.php',
         'Rector\\ReadWrite\\ReadNodeAnalyzer\\VariableReadNodeAnalyzer' => __DIR__ . '/../..' . '/packages/ReadWrite/ReadNodeAnalyzer/VariableReadNodeAnalyzer.php',
         'Rector\\RectorInstaller\\Filesystem' => __DIR__ . '/..' . '/rector/extension-installer/src/Filesystem.php',
         'Rector\\RectorInstaller\\GeneratedConfig' => __DIR__ . '/..' . '/rector/extension-installer/src/GeneratedConfig.php',
@@ -3834,9 +3832,9 @@ class ComposerStaticInite0a0f2ad3d4ab2e96729a38a2da4cbdf
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInite0a0f2ad3d4ab2e96729a38a2da4cbdf::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInite0a0f2ad3d4ab2e96729a38a2da4cbdf::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInite0a0f2ad3d4ab2e96729a38a2da4cbdf::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitb980ab87789b3e5a1b003eaec1ea1654::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitb980ab87789b3e5a1b003eaec1ea1654::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitb980ab87789b3e5a1b003eaec1ea1654::$classMap;
 
         }, null, ClassLoader::class);
     }

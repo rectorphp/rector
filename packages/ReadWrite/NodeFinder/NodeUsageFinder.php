@@ -5,12 +5,10 @@ namespace Rector\ReadWrite\NodeFinder;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Foreach_;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeNestingScope\NodeFinder\ScopeAwareNodeFinder;
 final class NodeUsageFinder
@@ -24,10 +22,6 @@ final class NodeUsageFinder
      */
     private $betterNodeFinder;
     /**
-     * @var \Rector\NodeCollector\NodeCollector\NodeRepository
-     */
-    private $nodeRepository;
-    /**
      * @var \Rector\NodeNestingScope\NodeFinder\ScopeAwareNodeFinder
      */
     private $scopeAwareNodeFinder;
@@ -35,11 +29,10 @@ final class NodeUsageFinder
      * @var \Rector\Core\PhpParser\Comparing\NodeComparator
      */
     private $nodeComparator;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\NodeCollector\NodeCollector\NodeRepository $nodeRepository, \Rector\NodeNestingScope\NodeFinder\ScopeAwareNodeFinder $scopeAwareNodeFinder, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator)
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\NodeNestingScope\NodeFinder\ScopeAwareNodeFinder $scopeAwareNodeFinder, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->betterNodeFinder = $betterNodeFinder;
-        $this->nodeRepository = $nodeRepository;
         $this->scopeAwareNodeFinder = $scopeAwareNodeFinder;
         $this->nodeComparator = $nodeComparator;
     }
@@ -62,21 +55,6 @@ final class NodeUsageFinder
             }
             return $this->nodeNameResolver->isName($node, $variableName);
         });
-    }
-    /**
-     * @return PropertyFetch[]
-     */
-    public function findPropertyFetchUsages(\PhpParser\Node\Expr\PropertyFetch $desiredPropertyFetch) : array
-    {
-        $propertyFetches = $this->nodeRepository->findPropertyFetchesByPropertyFetch($desiredPropertyFetch);
-        $propertyFetchesWithoutPropertyFetch = [];
-        foreach ($propertyFetches as $propertyFetch) {
-            if ($propertyFetch === $desiredPropertyFetch) {
-                continue;
-            }
-            $propertyFetchesWithoutPropertyFetch[] = $propertyFetch;
-        }
-        return $propertyFetchesWithoutPropertyFetch;
     }
     public function findPreviousForeachNodeUsage(\PhpParser\Node\Stmt\Foreach_ $foreach, \PhpParser\Node\Expr $expr) : ?\PhpParser\Node
     {

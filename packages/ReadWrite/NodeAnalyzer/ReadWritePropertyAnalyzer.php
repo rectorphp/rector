@@ -46,11 +46,10 @@ final class ReadWritePropertyAnalyzer
         $this->betterNodeFinder = $betterNodeFinder;
     }
     /**
-     * @param PropertyFetch|StaticPropertyFetch $node
+     * @param \PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\StaticPropertyFetch $node
      */
-    public function isRead(\PhpParser\Node $node) : bool
+    public function isRead($node) : bool
     {
-        \RectorPrefix20210627\Webmozart\Assert\Assert::isAnyOf($node, [\PhpParser\Node\Expr\PropertyFetch::class, \PhpParser\Node\Expr\StaticPropertyFetch::class]);
         $parent = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
         if (!$parent instanceof \PhpParser\Node) {
             throw new \Rector\Core\Exception\ShouldNotHappenException();

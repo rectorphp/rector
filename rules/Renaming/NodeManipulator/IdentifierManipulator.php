@@ -30,12 +30,11 @@ final class IdentifierManipulator
         $this->nodeNameResolver = $nodeNameResolver;
     }
     /**
-     * @param ClassConstFetch|MethodCall|PropertyFetch|StaticCall|ClassMethod $node
      * @param string[] $renameMethodMap
+     * @param \PhpParser\Node\Expr\ClassConstFetch|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Stmt\ClassMethod $node
      */
-    public function renameNodeWithMap(\PhpParser\Node $node, array $renameMethodMap) : void
+    public function renameNodeWithMap($node, array $renameMethodMap) : void
     {
-        \RectorPrefix20210627\Webmozart\Assert\Assert::isAnyOf($node, [\PhpParser\Node\Expr\ClassConstFetch::class, \PhpParser\Node\Expr\MethodCall::class, \PhpParser\Node\Expr\PropertyFetch::class, \PhpParser\Node\Expr\StaticCall::class, \PhpParser\Node\Stmt\ClassMethod::class]);
         $oldNodeMethodName = $this->resolveOldMethodName($node);
         if ($oldNodeMethodName === null) {
             return;
@@ -43,11 +42,10 @@ final class IdentifierManipulator
         $node->name = new \PhpParser\Node\Identifier($renameMethodMap[$oldNodeMethodName]);
     }
     /**
-     * @param ClassConstFetch|MethodCall|PropertyFetch|StaticCall|ClassMethod $node
+     * @param \PhpParser\Node\Expr\ClassConstFetch|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Stmt\ClassMethod $node
      */
-    public function removeSuffix(\PhpParser\Node $node, string $suffixToRemove) : void
+    public function removeSuffix($node, string $suffixToRemove) : void
     {
-        \RectorPrefix20210627\Webmozart\Assert\Assert::isAnyOf($node, [\PhpParser\Node\Expr\ClassConstFetch::class, \PhpParser\Node\Expr\MethodCall::class, \PhpParser\Node\Expr\PropertyFetch::class, \PhpParser\Node\Expr\StaticCall::class, \PhpParser\Node\Stmt\ClassMethod::class]);
         $name = $this->nodeNameResolver->getName($node);
         if ($name === null) {
             return;
