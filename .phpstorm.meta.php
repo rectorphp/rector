@@ -16,14 +16,18 @@ expectedArguments(
     PhpDocAttributeKey::START_AND_END,
     PhpDocAttributeKey::LAST_PHP_DOC_TOKEN_POSITION,
     PhpDocAttributeKey::PARENT,
+    PhpDocAttributeKey::ORIG_NODE,
+    PhpDocAttributeKey::RESOLVED_CLASS,
 );
 
 expectedArguments(
-    \PHPStan\PhpDocParser\Ast\Node::setAttribute(),
+    \PHPStan\PhpDocParser\Ast\NodeAttributes::getAttribute(),
     0,
     PhpDocAttributeKey::START_AND_END,
     PhpDocAttributeKey::LAST_PHP_DOC_TOKEN_POSITION,
     PhpDocAttributeKey::PARENT,
+    PhpDocAttributeKey::ORIG_NODE,
+    PhpDocAttributeKey::RESOLVED_CLASS,
 );
 
 expectedArguments(
@@ -32,6 +36,8 @@ expectedArguments(
     PhpDocAttributeKey::START_AND_END,
     PhpDocAttributeKey::LAST_PHP_DOC_TOKEN_POSITION,
     PhpDocAttributeKey::PARENT,
+    PhpDocAttributeKey::ORIG_NODE,
+    PhpDocAttributeKey::RESOLVED_CLASS,
 );
 
 

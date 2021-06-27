@@ -26,6 +26,7 @@ use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDoc\SpacelessPhpDocTagNode;
 use Rector\BetterPhpDocParser\PhpDocNodeVisitor\ChangedPhpDocNodeVisitor;
 use Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator;
+use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 use Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareUnionTypeNode;
 use Rector\ChangesReporting\Collector\RectorChangeCollector;
 use Rector\Core\Configuration\CurrentNodeProvider;
@@ -265,6 +266,16 @@ final class PhpDocInfo
             // fnmatch
             $identifierTypeNode = $doctrineAnnotationTagValueNode->identifierTypeNode;
             if ($this->isFnmatch($identifierTypeNode->name, $desiredClass)) {
+                return $doctrineAnnotationTagValueNode;
+            }
+
+            // FQN check
+            $resolvedClass = $identifierTypeNode->getAttribute(PhpDocAttributeKey::RESOLVED_CLASS);
+            if (!is_string($resolvedClass)) {
+                continue;
+            }
+
+            if ($this->isFnmatch($resolvedClass, $desiredClass)) {
                 return $doctrineAnnotationTagValueNode;
             }
         }

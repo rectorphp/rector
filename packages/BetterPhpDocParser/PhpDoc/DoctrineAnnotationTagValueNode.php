@@ -6,6 +6,7 @@ namespace Rector\BetterPhpDocParser\PhpDoc;
 
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\AbstractValuesAwareNode;
+use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 use Stringable;
 
 final class DoctrineAnnotationTagValueNode extends AbstractValuesAwareNode implements Stringable
@@ -49,6 +50,12 @@ final class DoctrineAnnotationTagValueNode extends AbstractValuesAwareNode imple
 
     public function hasClassName(string $className): bool
     {
-        return $this->identifierTypeNode->name === $className;
+        if ($this->identifierTypeNode->name === $className) {
+            return true;
+        }
+
+        // the name is not fully qualified in the original name, look for resolvd class attirubte
+        $resolvedClass = $this->identifierTypeNode->getAttribute(PhpDocAttributeKey::RESOLVED_CLASS);
+        return $resolvedClass === $className;
     }
 }

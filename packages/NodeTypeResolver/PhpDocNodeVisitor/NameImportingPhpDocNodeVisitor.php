@@ -132,7 +132,6 @@ final class NameImportingPhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
         DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode
     ): void {
         $identifierTypeNode = $doctrineAnnotationTagValueNode->identifierTypeNode;
-
         $staticType = $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType(
             $identifierTypeNode,
             $this->currentPhpParserNode

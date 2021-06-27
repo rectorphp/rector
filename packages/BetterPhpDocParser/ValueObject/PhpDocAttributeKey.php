@@ -14,6 +14,12 @@ final class PhpDocAttributeKey
     public const START_AND_END = 'start_and_end';
 
     /**
+     * Fully qualified name of identifier type class
+     * @var string
+     */
+    public const RESOLVED_CLASS = 'resolved_class';
+
+    /**
      * @var string
      */
     public const PARENT = NativePhpDocAttributeKey::PARENT;

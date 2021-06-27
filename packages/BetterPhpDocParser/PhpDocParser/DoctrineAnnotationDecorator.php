@@ -155,8 +155,11 @@ final class DoctrineAnnotationDecorator
 
             $formerStartEnd = $genericTagValueNode->getAttribute(PhpDocAttributeKey::START_AND_END);
 
+            $identifierTypeNode = new IdentifierTypeNode($phpDocChildNode->name);
+            $identifierTypeNode->setAttribute(PhpDocAttributeKey::RESOLVED_CLASS, $fullyQualifiedAnnotationClass);
+
             $doctrineAnnotationTagValueNode = new DoctrineAnnotationTagValueNode(
-                new IdentifierTypeNode($fullyQualifiedAnnotationClass),
+                $identifierTypeNode,
                 $genericTagValueNode->value,
                 $values,
                 SilentKeyMap::CLASS_NAMES_TO_SILENT_KEYS[$fullyQualifiedAnnotationClass] ?? null
