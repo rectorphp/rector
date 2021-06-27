@@ -128,9 +128,12 @@ CODE_SAMPLE
         if (! $this->valueResolver->isFalse($returnedExpr)) {
             return ! $this->valueResolver->isTrueOrFalse($nextNode->expr);
         }
-        if (! \str_contains($this->print($if->cond), '!=')) {
+
+        $condString = $this->print($if->cond);
+        if (! \str_contains($condString, '!=')) {
             return ! $this->valueResolver->isTrueOrFalse($nextNode->expr);
         }
+
         return true;
     }
 

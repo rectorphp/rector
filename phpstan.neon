@@ -513,3 +513,13 @@ parameters:
             message: '#Cannot return include_once/require_once#'
             path: rules/Renaming/Rector/Name/RenameClassRector.php
 
+        # required assigns - parent looping
+        -
+            message: '#foreach\(\.\.\.\), while\(\), for\(\) or if\(\.\.\.\) cannot contains a complex expression\. Extract it to a new variable assign on line before#'
+            paths:
+                - packages/NodeNestingScope/FlowOfControlLocator.php
+                - src/PhpParser/Node/BetterNodeFinder.php
+                - rules/Php70/Rector/FuncCall/MultiDirnameRector.php
+                - src/Application/FileProcessor.php
+                - rules/CodingStyle/Rector/Assign/ManualJsonStringToJsonEncodeArrayRector.php
+                - rules/CodeQuality/Rector/Return_/SimplifyUselessVariableRector.php

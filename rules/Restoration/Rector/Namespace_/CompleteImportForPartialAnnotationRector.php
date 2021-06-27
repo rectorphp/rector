@@ -87,9 +87,11 @@ CODE_SAMPLE
             return null;
         }
 
+        $printedClass = $this->print($class);
+
         foreach ($this->useImportsToRestore as $useImportToRestore) {
             $annotationToSeek = '#\*\s+\@' . $useImportToRestore->getAlias() . '#';
-            if (! Strings::match($this->print($class), $annotationToSeek)) {
+            if (! Strings::match($printedClass, $annotationToSeek)) {
                 continue;
             }
 

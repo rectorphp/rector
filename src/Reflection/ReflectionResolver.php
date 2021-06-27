@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace Rector\Core\Reflection;
 
+use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Reflection\FunctionReflection;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\TypeUtils;
@@ -96,6 +99,20 @@ final class ReflectionResolver
         return $this->resolveMethodReflection($callerType->getClassName(), $methodName);
     }
 
+    public function resolveFunctionLikeReflectionFromCall(
+        MethodCall | StaticCall | FuncCall $call
+    ): MethodReflection | FunctionReflection | null {
+        if ($call instanceof MethodCall) {
+            return $this->resolveMethodReflectionFromMethodCall($call);
+        }
+
+        if ($call instanceof StaticCall) {
+            return $this->resolveMethodReflectionFromStaticCall($call);
+        }
+
+        return $this->resolveFunctionReflectionFromFuncCall($call);
+    }
+
     public function resolveMethodReflectionFromClassMethod(ClassMethod $classMethod): ?MethodReflection
     {
         $class = $classMethod->getAttribute(AttributeKey::CLASS_NAME);
@@ -115,5 +132,20 @@ final class ReflectionResolver
         }
 
         return $this->resolveMethodReflection($newClassType->getClassName(), MethodName::CONSTRUCT);
+    }
+
+    private function resolveFunctionReflectionFromFuncCall(FuncCall $funcCall): ?FunctionReflection
+    {
+        $functionName = $this->nodeNameResolver->getName($funcCall);
+        if ($functionName === null) {
+            return null;
+        }
+
+        $functionNameFullyQualified = new FullyQualified($functionName);
+        if (! $this->reflectionProvider->hasFunction($functionNameFullyQualified, null)) {
+            return null;
+        }
+
+        return $this->reflectionProvider->getFunction($functionNameFullyQualified, null);
     }
 }

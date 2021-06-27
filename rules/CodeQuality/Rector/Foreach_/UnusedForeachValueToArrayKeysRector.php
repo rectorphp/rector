@@ -93,7 +93,8 @@ CODE_SAMPLE
             return null;
         }
 
-        if (is_a($this->getStaticType($node->expr), ObjectType::class)) {
+        $exprType = $this->getStaticType($node->expr);
+        if ($exprType instanceof ObjectType) {
             return null;
         }
 

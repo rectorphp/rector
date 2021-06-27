@@ -124,7 +124,8 @@ CODE_SAMPLE
             }
 
             // refactor here
-            if ($this->refactorClassMethod($classMethod, $classReflection, $ancestors, $interfaces) !== null) {
+            $changedClassMethod = $this->refactorClassMethod($classMethod, $classReflection, $ancestors, $interfaces);
+            if ($changedClassMethod !== null) {
                 $hasChanged = true;
             }
         }

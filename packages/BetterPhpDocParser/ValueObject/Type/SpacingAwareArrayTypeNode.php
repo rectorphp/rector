@@ -39,7 +39,8 @@ final class SpacingAwareArrayTypeNode extends ArrayTypeNode implements Stringabl
 
     private function isGenericArrayCandidate(TypeNode $typeNode): bool
     {
-        if (! $this->getAttribute(ArrayTypeMapper::HAS_GENERIC_TYPE_PARENT)) {
+        $hasGenericTypeParent = (bool) $this->getAttribute(ArrayTypeMapper::HAS_GENERIC_TYPE_PARENT);
+        if (! $hasGenericTypeParent) {
             return false;
         }
 
