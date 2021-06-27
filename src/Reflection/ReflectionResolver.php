@@ -6,13 +6,14 @@ namespace Rector\Core\Reflection;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name;
-use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\FunctionReflection;
 use PHPStan\Reflection\MethodReflection;
+use PHPStan\Reflection\Php\PhpPropertyReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\TypeUtils;
 use PHPStan\Type\TypeWithClassName;
@@ -141,6 +142,33 @@ final class ReflectionResolver
         }
         $scope = $new->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
         return $this->resolveMethodReflection($newClassType->getClassName(), \Rector\Core\ValueObject\MethodName::CONSTRUCT, $scope);
+    }
+    public function resolvePropertyReflectionFromPropertyFetch(\PhpParser\Node\Expr\PropertyFetch $propertyFetch) : ?\PHPStan\Reflection\Php\PhpPropertyReflection
+    {
+        $fetcheeType = $this->nodeTypeResolver->resolve($propertyFetch->var);
+        if (!$fetcheeType instanceof \PHPStan\Type\TypeWithClassName) {
+            return null;
+        }
+        if (!$this->reflectionProvider->hasClass($fetcheeType->getClassName())) {
+            return null;
+        }
+        $classReflection = $this->reflectionProvider->getClass($fetcheeType->getClassName());
+        $propertyName = $this->nodeNameResolver->getName($propertyFetch->name);
+        if ($propertyName === null) {
+            return null;
+        }
+        if (!$classReflection->hasProperty($propertyName)) {
+            return null;
+        }
+        $scope = $propertyFetch->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
+        if ($scope instanceof \PHPStan\Analyser\Scope) {
+            $propertyRelfection = $classReflection->getProperty($propertyName, $scope);
+            if ($propertyRelfection instanceof \PHPStan\Reflection\Php\PhpPropertyReflection) {
+                return $propertyRelfection;
+            }
+            return null;
+        }
+        return $classReflection->getNativeProperty($propertyName);
     }
     /**
      * @return \PHPStan\Reflection\FunctionReflection|\PHPStan\Reflection\MethodReflection|null

@@ -5,15 +5,13 @@ namespace Rector\TypeDeclaration\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Identifier;
-use PhpParser\Node\Name;
-use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Return_;
-use PhpParser\Node\UnionType;
+use PHPStan\Reflection\Php\PhpPropertyReflection;
 use PHPStan\Type\MixedType;
+use PHPStan\Type\Type;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -27,9 +25,14 @@ final class ReturnTypeFromStrictTypedPropertyRector extends \Rector\Core\Rector\
      * @var \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory
      */
     private $typeFactory;
-    public function __construct(\Rector\NodeTypeResolver\PHPStan\Type\TypeFactory $typeFactory)
+    /**
+     * @var \Rector\Core\Reflection\ReflectionResolver
+     */
+    private $reflectionResolver;
+    public function __construct(\Rector\NodeTypeResolver\PHPStan\Type\TypeFactory $typeFactory, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver)
     {
         $this->typeFactory = $typeFactory;
+        $this->reflectionResolver = $reflectionResolver;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -75,13 +78,9 @@ CODE_SAMPLE
         if ($node->returnType !== null) {
             return null;
         }
-        $propertyTypeNodes = $this->resolveReturnPropertyTypeNodes($node);
-        if ($propertyTypeNodes === []) {
+        $propertyTypes = $this->resolveReturnPropertyType($node);
+        if ($propertyTypes === []) {
             return null;
-        }
-        $propertyTypes = [];
-        foreach ($propertyTypeNodes as $propertyTypeNode) {
-            $propertyTypes[] = $this->staticTypeMapper->mapPhpParserNodePHPStanType($propertyTypeNode);
         }
         // add type to return type
         $propertyType = $this->typeFactory->createMixedPassedOrUnionType($propertyTypes);
@@ -96,9 +95,9 @@ CODE_SAMPLE
         return $node;
     }
     /**
-     * @return array<Identifier|Name|NullableType|UnionType>
+     * @return Type[]
      */
-    private function resolveReturnPropertyTypeNodes(\PhpParser\Node\Stmt\ClassMethod $classMethod) : array
+    private function resolveReturnPropertyType(\PhpParser\Node\Stmt\ClassMethod $classMethod) : array
     {
         /** @var Return_[] $returns */
         $returns = $this->betterNodeFinder->findInstanceOf($classMethod, \PhpParser\Node\Stmt\Return_::class);
@@ -110,14 +109,14 @@ CODE_SAMPLE
             if (!$return->expr instanceof \PhpParser\Node\Expr\PropertyFetch) {
                 return [];
             }
-            $property = $this->nodeRepository->findPropertyByPropertyFetch($return->expr);
-            if (!$property instanceof \PhpParser\Node\Stmt\Property) {
+            $propertyReflection = $this->reflectionResolver->resolvePropertyReflectionFromPropertyFetch($return->expr);
+            if (!$propertyReflection instanceof \PHPStan\Reflection\Php\PhpPropertyReflection) {
                 return [];
             }
-            if ($property->type === null) {
+            if ($propertyReflection->getNativeType() instanceof \PHPStan\Type\MixedType) {
                 return [];
             }
-            $propertyTypes[] = $property->type;
+            $propertyTypes[] = $propertyReflection->getNativeType();
         }
         return $propertyTypes;
     }

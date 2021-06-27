@@ -12,7 +12,6 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\NodeNameResolver\NodeNameResolver;
-use RectorPrefix20210627\Webmozart\Assert\Assert;
 /**
  * This class renames node identifier, e.g. ClassMethod rename:
  *

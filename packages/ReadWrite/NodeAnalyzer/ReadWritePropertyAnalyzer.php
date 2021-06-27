@@ -19,7 +19,6 @@ use Rector\Core\NodeManipulator\AssignManipulator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\ReadWrite\Guard\VariableToConstantGuard;
-use RectorPrefix20210627\Webmozart\Assert\Assert;
 final class ReadWritePropertyAnalyzer
 {
     /**
