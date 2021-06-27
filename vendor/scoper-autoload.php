@@ -21,8 +21,8 @@ if (!class_exists('SomeTestCase', false) && !interface_exists('SomeTestCase', fa
 if (!class_exists('CheckoutEntityFactory', false) && !interface_exists('CheckoutEntityFactory', false) && !trait_exists('CheckoutEntityFactory', false)) {
     spl_autoload_call('RectorPrefix20210627\CheckoutEntityFactory');
 }
-if (!class_exists('ComposerAutoloaderInit3849eb2619e64a959c0988a6c44181f1', false) && !interface_exists('ComposerAutoloaderInit3849eb2619e64a959c0988a6c44181f1', false) && !trait_exists('ComposerAutoloaderInit3849eb2619e64a959c0988a6c44181f1', false)) {
-    spl_autoload_call('RectorPrefix20210627\ComposerAutoloaderInit3849eb2619e64a959c0988a6c44181f1');
+if (!class_exists('ComposerAutoloaderInit70e9f1885c85dad3980d26aa1f1c1aa2', false) && !interface_exists('ComposerAutoloaderInit70e9f1885c85dad3980d26aa1f1c1aa2', false) && !trait_exists('ComposerAutoloaderInit70e9f1885c85dad3980d26aa1f1c1aa2', false)) {
+    spl_autoload_call('RectorPrefix20210627\ComposerAutoloaderInit70e9f1885c85dad3980d26aa1f1c1aa2');
 }
 if (!class_exists('Doctrine\Inflector\Inflector', false) && !interface_exists('Doctrine\Inflector\Inflector', false) && !trait_exists('Doctrine\Inflector\Inflector', false)) {
     spl_autoload_call('RectorPrefix20210627\Doctrine\Inflector\Inflector');
@@ -3320,9 +3320,9 @@ if (!function_exists('print_node')) {
         return \RectorPrefix20210627\print_node(...func_get_args());
     }
 }
-if (!function_exists('composerRequire3849eb2619e64a959c0988a6c44181f1')) {
-    function composerRequire3849eb2619e64a959c0988a6c44181f1() {
-        return \RectorPrefix20210627\composerRequire3849eb2619e64a959c0988a6c44181f1(...func_get_args());
+if (!function_exists('composerRequire70e9f1885c85dad3980d26aa1f1c1aa2')) {
+    function composerRequire70e9f1885c85dad3980d26aa1f1c1aa2() {
+        return \RectorPrefix20210627\composerRequire70e9f1885c85dad3980d26aa1f1c1aa2(...func_get_args());
     }
 }
 if (!function_exists('parseArgs')) {

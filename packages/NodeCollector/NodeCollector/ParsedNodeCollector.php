@@ -26,21 +26,6 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class ParsedNodeCollector
 {
     /**
-     * @var array<class-string<Node>>
-     */
-    private const COLLECTABLE_NODE_TYPES = [
-        \PhpParser\Node\Stmt\Class_::class,
-        \PhpParser\Node\Stmt\Interface_::class,
-        \PhpParser\Node\Stmt\ClassConst::class,
-        \PhpParser\Node\Expr\ClassConstFetch::class,
-        \PhpParser\Node\Stmt\Trait_::class,
-        \PhpParser\Node\Stmt\ClassMethod::class,
-        // simply collected
-        \PhpParser\Node\Expr\MethodCall::class,
-        // for array callable - [$this, 'someCall']
-        \PhpParser\Node\Expr\Array_::class,
-    ];
-    /**
      * @var Class_[]
      */
     private $classes = [];
@@ -91,16 +76,6 @@ final class ParsedNodeCollector
     {
         return $this->traits[$name] ?? null;
     }
-    public function isCollectableNode(\PhpParser\Node $node) : bool
-    {
-        foreach (self::COLLECTABLE_NODE_TYPES as $collectableNodeType) {
-            /** @var class-string<Node> $collectableNodeType */
-            if (\is_a($node, $collectableNodeType, \true)) {
-                return \true;
-            }
-        }
-        return \false;
-    }
     public function collect(\PhpParser\Node $node) : void
     {
         if ($node instanceof \PhpParser\Node\Stmt\Class_) {
@@ -109,7 +84,6 @@ final class ParsedNodeCollector
         }
         if ($node instanceof \PhpParser\Node\Stmt\Interface_ || $node instanceof \PhpParser\Node\Stmt\Trait_) {
             $this->collectInterfaceOrTrait($node);
-            return;
         }
     }
     private function addClass(\PhpParser\Node\Stmt\Class_ $class) : void
