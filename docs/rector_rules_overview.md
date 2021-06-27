@@ -1,4 +1,4 @@
-# 495 Rules Overview
+# 494 Rules Overview
 
 <br>
 
@@ -18,7 +18,7 @@
 
 - [Composer](#composer) (6)
 
-- [DeadCode](#deadcode) (46)
+- [DeadCode](#deadcode) (48)
 
 - [Defluent](#defluent) (9)
 
@@ -48,7 +48,7 @@
 
 - [MysqlToMysqli](#mysqltomysqli) (4)
 
-- [Naming](#naming) (9)
+- [Naming](#naming) (7)
 
 - [Order](#order) (1)
 
@@ -96,7 +96,7 @@
 
 - [Transform](#transform) (36)
 
-- [TypeDeclaration](#typedeclaration) (19)
+- [TypeDeclaration](#typedeclaration) (18)
 
 - [Visibility](#visibility) (3)
 
@@ -3586,6 +3586,45 @@ Remove unused parent call with no parent class
 
 <br>
 
+### RemovePhpVersionIdCheckRector
+
+Remove unneded PHP_VERSION_ID check
+
+:wrench: **configure it!**
+
+- class: [`Rector\DeadCode\Rector\ConstFetch\RemovePhpVersionIdCheckRector`](../rules/DeadCode/Rector/ConstFetch/RemovePhpVersionIdCheckRector.php)
+
+```php
+use Rector\DeadCode\Rector\ConstFetch\RemovePhpVersionIdCheckRector;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+
+    $services->set(RemovePhpVersionIdCheckRector::class)
+        ->call('configure', [[
+            RemovePhpVersionIdCheckRector::PHP_VERSION_CONSTRAINT => 80000,
+        ]]);
+};
+```
+
+↓
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        if (PHP_VERSION_ID < 80000) {
+-            return;
+-        }
+         echo 'do something';
+     }
+ }
+```
+
+<br>
+
 ### RemoveUnreachableStatementRector
 
 Remove unreachable statements
@@ -3764,6 +3803,30 @@ Remove unused private properties
  class SomeClass
  {
 -    private $property;
+ }
+```
+
+<br>
+
+### RemoveUnusedPromotedPropertyRector
+
+Remove unused promoted property
+
+- class: [`Rector\DeadCode\Rector\ClassMethod\RemoveUnusedPromotedPropertyRector`](../rules/DeadCode/Rector/ClassMethod/RemoveUnusedPromotedPropertyRector.php)
+
+```diff
+ class SomeClass
+ {
+     public function __construct(
+-        private $someUnusedDependency,
+         private $usedDependency
+     ) {
+     }
+
+     public function getUsedDependency()
+     {
+         return $this->usedDependency;
+     }
  }
 ```
 
@@ -5183,10 +5246,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(DowngradeAttributeToAnnotationRector::class)
         ->call('configure', [[
             DowngradeAttributeToAnnotationRector::ATTRIBUTE_TO_ANNOTATION => ValueObjectInliner::inline([
-                new DowngradeAttributeToAnnotation(
-                    'Symfony\Component\Routing\Annotation\Route',
-                    'Symfony\Component\Routing\Annotation\Route'
-                ),
+                new DowngradeAttributeToAnnotation('Symfony\Component\Routing\Annotation\Route', null),
             ]),
         ]]);
 };
@@ -6002,54 +6062,6 @@ Renames property to respect is/has/was method naming
 +    return $this->isFull;
  }
 +
- }
-```
-
-<br>
-
-### MakeGetterClassMethodNameStartWithGetRector
-
-Change getter method names to start with get/provide
-
-- class: [`Rector\Naming\Rector\ClassMethod\MakeGetterClassMethodNameStartWithGetRector`](../rules/Naming/Rector/ClassMethod/MakeGetterClassMethodNameStartWithGetRector.php)
-
-```diff
- class SomeClass
- {
-     /**
-      * @var string
-      */
-     private $name;
-
--    public function name(): string
-+    public function getName(): string
-     {
-         return $this->name;
-     }
- }
-```
-
-<br>
-
-### MakeIsserClassMethodNameStartWithIsRector
-
-Change is method names to start with is/has/was
-
-- class: [`Rector\Naming\Rector\ClassMethod\MakeIsserClassMethodNameStartWithIsRector`](../rules/Naming/Rector/ClassMethod/MakeIsserClassMethodNameStartWithIsRector.php)
-
-```diff
- class SomeClass
- {
-     /**
-      * @var bool
-      */
-     private $isActive = false;
-
--    public function getIsActive()
-+    public function isActive()
-     {
-         return $this->isActive;
-     }
  }
 ```
 
@@ -11900,7 +11912,25 @@ Add known return type to functions
 
 Change param type to strict type of passed expression
 
+:wrench: **configure it!**
+
 - class: [`Rector\TypeDeclaration\Rector\ClassMethod\AddMethodCallBasedStrictParamTypeRector`](../rules/TypeDeclaration/Rector/ClassMethod/AddMethodCallBasedStrictParamTypeRector.php)
+
+```php
+use Rector\TypeDeclaration\Rector\ClassMethod\AddMethodCallBasedStrictParamTypeRector;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+
+    $services->set(AddMethodCallBasedStrictParamTypeRector::class)
+        ->call('configure', [[
+            AddMethodCallBasedStrictParamTypeRector::TRUST_DOC_BLOCKS => false,
+        ]]);
+};
+```
+
+↓
 
 ```diff
  class SomeClass
@@ -11961,29 +11991,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
  {
 -    public function process($name)
 +    public function process(string $name)
-     {
-     }
- }
-```
-
-<br>
-
-### AddParamTypeFromCallersRector
-
-Add param type based on called types in that particular method
-
-- class: [`Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeFromCallersRector`](../rules/TypeDeclaration/Rector/ClassMethod/AddParamTypeFromCallersRector.php)
-
-```diff
- final class SomeClass
- {
-     public function run(Return_ $return)
-     {
-         $this->print($return);
-     }
-
--    public function print($return)
-+    public function print(Return_ $return)
      {
      }
  }

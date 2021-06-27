@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210626;
+namespace RectorPrefix20210627;
 
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Symfony\Rector\ConstFetch\ConstraintUrlOptionRector;

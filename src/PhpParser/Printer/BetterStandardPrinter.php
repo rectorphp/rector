@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Core\PhpParser\Printer;
 
-use RectorPrefix20210626\Nette\Utils\Strings;
+use RectorPrefix20210627\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\Closure;
@@ -95,7 +95,7 @@ final class BetterStandardPrinter extends \PhpParser\PrettyPrinter\Standard
         $this->tabOrSpaceIndentCharacter = $this->indentCharacterDetector->detect($origTokens);
         $content = parent::printFormatPreserving($newStmts, $origStmts, $origTokens);
         // add new line in case of added stmts
-        if (\count($stmts) !== \count($origStmts) && !(bool) \RectorPrefix20210626\Nette\Utils\Strings::match($content, self::NEWLINE_END_REGEX)) {
+        if (\count($stmts) !== \count($origStmts) && !(bool) \RectorPrefix20210627\Nette\Utils\Strings::match($content, self::NEWLINE_END_REGEX)) {
             $content .= $this->nl;
         }
         return $content;
@@ -178,7 +178,7 @@ final class BetterStandardPrinter extends \PhpParser\PrettyPrinter\Standard
         if (!$this->containsNop($nodes)) {
             return $content;
         }
-        return \RectorPrefix20210626\Nette\Utils\Strings::replace($content, self::EXTRA_SPACE_BEFORE_NOP_REGEX, '');
+        return \RectorPrefix20210627\Nette\Utils\Strings::replace($content, self::EXTRA_SPACE_BEFORE_NOP_REGEX, '');
     }
     /**
      * Do not preslash all slashes (parent behavior), but only those:
@@ -191,7 +191,7 @@ final class BetterStandardPrinter extends \PhpParser\PrettyPrinter\Standard
      */
     protected function pSingleQuotedString(string $string) : string
     {
-        return "'" . \RectorPrefix20210626\Nette\Utils\Strings::replace($string, self::QUOTED_SLASH_REGEX, '\\\\$0') . "'";
+        return "'" . \RectorPrefix20210627\Nette\Utils\Strings::replace($string, self::QUOTED_SLASH_REGEX, '\\\\$0') . "'";
     }
     /**
      * Emulates 1_000 in PHP 7.3- version
@@ -212,7 +212,7 @@ final class BetterStandardPrinter extends \PhpParser\PrettyPrinter\Standard
     protected function pExpr_Closure(\PhpParser\Node\Expr\Closure $closure) : string
     {
         $closureContent = parent::pExpr_Closure($closure);
-        return \RectorPrefix20210626\Nette\Utils\Strings::replace($closureContent, self::USE_REGEX, '$1 (');
+        return \RectorPrefix20210627\Nette\Utils\Strings::replace($closureContent, self::USE_REGEX, '$1 (');
     }
     /**
      * Do not add "()" on Expressions
@@ -273,7 +273,7 @@ final class BetterStandardPrinter extends \PhpParser\PrettyPrinter\Standard
     {
         $content = parent::pStmt_ClassMethod($classMethod);
         // this approach is chosen, to keep changes in parent pStmt_ClassMethod() updated
-        return \RectorPrefix20210626\Nette\Utils\Strings::replace($content, self::REPLACE_COLON_WITH_SPACE_REGEX, '$1: ');
+        return \RectorPrefix20210627\Nette\Utils\Strings::replace($content, self::REPLACE_COLON_WITH_SPACE_REGEX, '$1: ');
     }
     /**
      * Clean class and trait from empty "use x;" for traits causing invalid code
@@ -299,7 +299,7 @@ final class BetterStandardPrinter extends \PhpParser\PrettyPrinter\Standard
     protected function pStmt_Declare(\PhpParser\Node\Stmt\Declare_ $declare) : string
     {
         $declareString = parent::pStmt_Declare($declare);
-        return \RectorPrefix20210626\Nette\Utils\Strings::replace($declareString, '#\\s+#', '');
+        return \RectorPrefix20210627\Nette\Utils\Strings::replace($declareString, '#\\s+#', '');
     }
     /**
      * Remove extra \\ from FQN use imports, for easier use in the code

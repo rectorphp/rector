@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Rector\CodingStyle\ClassNameImport;
 
-use RectorPrefix20210626\Nette\Utils\Reflection;
-use RectorPrefix20210626\Nette\Utils\Strings;
+use RectorPrefix20210627\Nette\Utils\Reflection;
+use RectorPrefix20210627\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
@@ -27,8 +27,8 @@ use Rector\Core\ValueObject\Application\File;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use ReflectionClass;
-use RectorPrefix20210626\Symfony\Contracts\Service\Attribute\Required;
-use RectorPrefix20210626\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
+use RectorPrefix20210627\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix20210627\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 final class ShortNameResolver
 {
     /**
@@ -64,7 +64,7 @@ final class ShortNameResolver
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
-    public function __construct(\RectorPrefix20210626\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \PhpParser\NodeFinder $nodeFinder, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
+    public function __construct(\RectorPrefix20210627\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \PhpParser\NodeFinder $nodeFinder, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
     {
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->nodeNameResolver = $nodeNameResolver;
@@ -164,7 +164,7 @@ final class ShortNameResolver
                     continue;
                 }
                 if ($reflectionClass !== null) {
-                    $fullyQualifiedTagName = \RectorPrefix20210626\Nette\Utils\Reflection::expandClassName($shortTagName, $reflectionClass);
+                    $fullyQualifiedTagName = \RectorPrefix20210627\Nette\Utils\Reflection::expandClassName($shortTagName, $reflectionClass);
                 } else {
                     $fullyQualifiedTagName = $shortTagName;
                 }
@@ -180,7 +180,7 @@ final class ShortNameResolver
         }
         $tagName = \ltrim($phpDocChildNode->name, '@');
         // is annotation class - big letter?
-        if (\RectorPrefix20210626\Nette\Utils\Strings::match($tagName, self::BIG_LETTER_START_REGEX)) {
+        if (\RectorPrefix20210627\Nette\Utils\Strings::match($tagName, self::BIG_LETTER_START_REGEX)) {
             return $tagName;
         }
         if (!$this->isValueNodeWithType($phpDocChildNode->value)) {

@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210626\Symplify\EasyTesting\ValueObject;
+namespace RectorPrefix20210627\Symplify\EasyTesting\ValueObject;
 
 final class SplitLine
 {
