@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\FunctionReflection;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ReflectionProvider;
@@ -42,13 +43,18 @@ final class ReflectionResolver
     /**
      * @param class-string $className
      */
-    public function resolveMethodReflection(string $className, string $methodName) : ?\PHPStan\Reflection\MethodReflection
+    public function resolveMethodReflection(string $className, string $methodName, ?\PHPStan\Analyser\Scope $scope) : ?\PHPStan\Reflection\MethodReflection
     {
         if (!$this->reflectionProvider->hasClass($className)) {
             return null;
         }
         $classReflection = $this->reflectionProvider->getClass($className);
-        if ($classReflection->hasNativeMethod($methodName)) {
+        // better, with support for "@method" annotation methods
+        if ($scope instanceof \PHPStan\Analyser\Scope) {
+            if ($classReflection->hasMethod($methodName)) {
+                return $classReflection->getMethod($methodName, $scope);
+            }
+        } elseif ($classReflection->hasNativeMethod($methodName)) {
             return $classReflection->getNativeMethod($methodName);
         }
         return null;
@@ -74,8 +80,9 @@ final class ReflectionResolver
         if ($methodName === null) {
             return null;
         }
+        $scope = $staticCall->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
         foreach ($classes as $class) {
-            $methodReflection = $this->resolveMethodReflection($class, $methodName);
+            $methodReflection = $this->resolveMethodReflection($class, $methodName, $scope);
             if ($methodReflection instanceof \PHPStan\Reflection\MethodReflection) {
                 return $methodReflection;
             }
@@ -92,7 +99,8 @@ final class ReflectionResolver
         if ($methodName === null) {
             return null;
         }
-        return $this->resolveMethodReflection($callerType->getClassName(), $methodName);
+        $scope = $methodCall->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
+        return $this->resolveMethodReflection($callerType->getClassName(), $methodName, $scope);
     }
     /**
      * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\FuncCall $call
@@ -115,7 +123,8 @@ final class ReflectionResolver
             return null;
         }
         $methodName = $this->nodeNameResolver->getName($classMethod);
-        return $this->resolveMethodReflection($class, $methodName);
+        $scope = $classMethod->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
+        return $this->resolveMethodReflection($class, $methodName, $scope);
     }
     public function resolveMethodReflectionFromNew(\PhpParser\Node\Expr\New_ $new) : ?\PHPStan\Reflection\MethodReflection
     {
@@ -123,7 +132,8 @@ final class ReflectionResolver
         if (!$newClassType instanceof \PHPStan\Type\TypeWithClassName) {
             return null;
         }
-        return $this->resolveMethodReflection($newClassType->getClassName(), \Rector\Core\ValueObject\MethodName::CONSTRUCT);
+        $scope = $new->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
+        return $this->resolveMethodReflection($newClassType->getClassName(), \Rector\Core\ValueObject\MethodName::CONSTRUCT, $scope);
     }
     private function resolveFunctionReflectionFromFuncCall(\PhpParser\Node\Expr\FuncCall $funcCall) : ?\PHPStan\Reflection\FunctionReflection
     {

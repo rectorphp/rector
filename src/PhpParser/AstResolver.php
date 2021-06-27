@@ -177,7 +177,7 @@ final class AstResolver
      */
     public function resolveClassMethod(string $className, string $methodName) : ?\PhpParser\Node\Stmt\ClassMethod
     {
-        $methodReflection = $this->reflectionResolver->resolveMethodReflection($className, $methodName);
+        $methodReflection = $this->reflectionResolver->resolveMethodReflection($className, $methodName, null);
         if (!$methodReflection instanceof \PHPStan\Reflection\MethodReflection) {
             return null;
         }
