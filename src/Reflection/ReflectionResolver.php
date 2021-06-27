@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\FunctionReflection;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ReflectionProvider;
@@ -33,14 +34,20 @@ final class ReflectionResolver
     /**
      * @param class-string $className
      */
-    public function resolveMethodReflection(string $className, string $methodName): ?MethodReflection
+    public function resolveMethodReflection(string $className, string $methodName, ?Scope $scope): ?MethodReflection
     {
         if (! $this->reflectionProvider->hasClass($className)) {
             return null;
         }
 
         $classReflection = $this->reflectionProvider->getClass($className);
-        if ($classReflection->hasNativeMethod($methodName)) {
+
+        // better, with support for "@method" annotation methods
+        if ($scope instanceof Scope) {
+            if ($classReflection->hasMethod($methodName)) {
+                return $classReflection->getMethod($methodName, $scope);
+            }
+        } elseif ($classReflection->hasNativeMethod($methodName)) {
             return $classReflection->getNativeMethod($methodName);
         }
 
@@ -74,8 +81,10 @@ final class ReflectionResolver
             return null;
         }
 
+        $scope = $staticCall->getAttribute(AttributeKey::SCOPE);
+
         foreach ($classes as $class) {
-            $methodReflection = $this->resolveMethodReflection($class, $methodName);
+            $methodReflection = $this->resolveMethodReflection($class, $methodName, $scope);
             if ($methodReflection instanceof MethodReflection) {
                 return $methodReflection;
             }
@@ -96,7 +105,8 @@ final class ReflectionResolver
             return null;
         }
 
-        return $this->resolveMethodReflection($callerType->getClassName(), $methodName);
+        $scope = $methodCall->getAttribute(AttributeKey::SCOPE);
+        return $this->resolveMethodReflection($callerType->getClassName(), $methodName, $scope);
     }
 
     public function resolveFunctionLikeReflectionFromCall(
@@ -121,7 +131,9 @@ final class ReflectionResolver
         }
 
         $methodName = $this->nodeNameResolver->getName($classMethod);
-        return $this->resolveMethodReflection($class, $methodName);
+        $scope = $classMethod->getAttribute(AttributeKey::SCOPE);
+
+        return $this->resolveMethodReflection($class, $methodName, $scope);
     }
 
     public function resolveMethodReflectionFromNew(New_ $new): ?MethodReflection
@@ -131,7 +143,8 @@ final class ReflectionResolver
             return null;
         }
 
-        return $this->resolveMethodReflection($newClassType->getClassName(), MethodName::CONSTRUCT);
+        $scope = $new->getAttribute(AttributeKey::SCOPE);
+        return $this->resolveMethodReflection($newClassType->getClassName(), MethodName::CONSTRUCT, $scope);
     }
 
     private function resolveFunctionReflectionFromFuncCall(FuncCall $funcCall): ?FunctionReflection

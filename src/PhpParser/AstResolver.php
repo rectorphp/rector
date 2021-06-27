@@ -171,7 +171,7 @@ final class AstResolver
      */
     public function resolveClassMethod(string $className, string $methodName): ?ClassMethod
     {
-        $methodReflection = $this->reflectionResolver->resolveMethodReflection($className, $methodName);
+        $methodReflection = $this->reflectionResolver->resolveMethodReflection($className, $methodName, null);
         if (! $methodReflection instanceof MethodReflection) {
             return null;
         }
