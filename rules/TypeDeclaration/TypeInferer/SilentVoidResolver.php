@@ -48,7 +48,7 @@ final class SilentVoidResolver
             return false;
         }
 
-        if ($this->externalFullyQualifiedAnalyzer->hasExternalFullyQualifieds($classLike)) {
+        if ($classLike instanceof Stmt\Class_ && $this->externalFullyQualifiedAnalyzer->hasExternalFullyQualifieds($classLike)) {
             return false;
         }
 
