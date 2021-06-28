@@ -14,7 +14,7 @@ namespace RectorPrefix20210628\Symfony\Component\DependencyInjection\Attribute;
  * An attribute to tell how a base type should be tagged.
  *
  * @author Nicolas Grekas <p@tchwork.com>
- * @Attribute
+ * @annotation
  */
 class AutoconfigureTag extends \RectorPrefix20210628\Symfony\Component\DependencyInjection\Attribute\Autoconfigure
 {

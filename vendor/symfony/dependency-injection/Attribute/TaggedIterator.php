@@ -11,7 +11,7 @@
 namespace RectorPrefix20210628\Symfony\Component\DependencyInjection\Attribute;
 
 /**
- * @Attribute
+ * @annotation
  */
 class TaggedIterator
 {

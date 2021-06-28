@@ -8,12 +8,16 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Property;
+use PHPStan\Reflection\Php\PhpPropertyReflection;
 use PHPStan\Type\ObjectType;
+use Rector\Core\Reflection\ReflectionResolver;
 use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 final class SetterClassMethodAnalyzer
 {
@@ -29,11 +33,16 @@ final class SetterClassMethodAnalyzer
      * @var \Rector\NodeCollector\NodeCollector\NodeRepository
      */
     private $nodeRepository;
-    public function __construct(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeCollector\NodeCollector\NodeRepository $nodeRepository)
+    /**
+     * @var \Rector\Core\Reflection\ReflectionResolver
+     */
+    private $reflectionResolver;
+    public function __construct(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeCollector\NodeCollector\NodeRepository $nodeRepository, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeRepository = $nodeRepository;
+        $this->reflectionResolver = $reflectionResolver;
     }
     public function matchNullalbeClassMethodProperty(\PhpParser\Node\Stmt\ClassMethod $classMethod) : ?\PhpParser\Node\Stmt\Property
     {
@@ -41,7 +50,16 @@ final class SetterClassMethodAnalyzer
         if (!$propertyFetch instanceof \PhpParser\Node\Expr\PropertyFetch) {
             return null;
         }
-        return $this->nodeRepository->findPropertyByPropertyFetch($propertyFetch);
+        $phpPropertyReflection = $this->reflectionResolver->resolvePropertyReflectionFromPropertyFetch($propertyFetch);
+        if (!$phpPropertyReflection instanceof \PHPStan\Reflection\Php\PhpPropertyReflection) {
+            return null;
+        }
+        $class = $classMethod->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
+        if (!$class instanceof \PhpParser\Node\Stmt\ClassLike) {
+            return null;
+        }
+        $propertyName = (string) $this->nodeNameResolver->getName($propertyFetch);
+        return $class->getProperty($propertyName);
     }
     /**
      * Matches:

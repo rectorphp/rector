@@ -3,7 +3,7 @@
 
 
 /**
- * @Attribute
+ * @annotation
  */
 final class Attribute
 {
@@ -23,6 +23,6 @@ final class Attribute
     }
 }
 /**
- * @Attribute
+ * @annotation
  */
 \class_alias('RectorPrefix20210628\\Attribute', 'Attribute', \false);

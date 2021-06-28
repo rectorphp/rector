@@ -32,7 +32,13 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
         // @see https://wiki.php.net/rfc/stringable
         'Stringable',
     ]]]);
-    $services->set(\Rector\DowngradePhp80\Rector\Class_\DowngradeAttributeToAnnotationRector::class)->call('configure', [[\Rector\DowngradePhp80\Rector\Class_\DowngradeAttributeToAnnotationRector::ATTRIBUTE_TO_ANNOTATION => \Symplify\SymfonyPhpConfig\ValueObjectInliner::inline([new \Rector\DowngradePhp80\ValueObject\DowngradeAttributeToAnnotation('Attribute')])]]);
+    $services->set(\Rector\DowngradePhp80\Rector\Class_\DowngradeAttributeToAnnotationRector::class)->call('configure', [[\Rector\DowngradePhp80\Rector\Class_\DowngradeAttributeToAnnotationRector::ATTRIBUTE_TO_ANNOTATION => \Symplify\SymfonyPhpConfig\ValueObjectInliner::inline([
+        new \Rector\DowngradePhp80\ValueObject\DowngradeAttributeToAnnotation('Attribute', 'annotation'),
+        // Symfony
+        new \Rector\DowngradePhp80\ValueObject\DowngradeAttributeToAnnotation('Symfony\\Contracts\\Service\\Attribute\\Required', 'required'),
+        // Nette
+        new \Rector\DowngradePhp80\ValueObject\DowngradeAttributeToAnnotation('Nette\\DI\\Attributes\\Inject', 'inject'),
+    ])]]);
     $services->set(\Rector\DowngradePhp80\Rector\Property\DowngradeUnionTypeTypedPropertyRector::class);
     $services->set(\Rector\DowngradePhp80\Rector\FunctionLike\DowngradeUnionTypeDeclarationRector::class);
     $services->set(\Rector\DowngradePhp80\Rector\FunctionLike\DowngradeMixedTypeDeclarationRector::class);

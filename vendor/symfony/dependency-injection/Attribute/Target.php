@@ -15,7 +15,7 @@ use RectorPrefix20210628\Symfony\Component\DependencyInjection\Exception\Invalid
  * An attribute to tell how a dependency is used and hint named autowiring aliases.
  *
  * @author Nicolas Grekas <p@tchwork.com>
- * @Attribute
+ * @annotation
  */
 final class Target
 {

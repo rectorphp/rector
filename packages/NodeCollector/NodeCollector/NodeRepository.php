@@ -97,6 +97,9 @@ final class NodeRepository
     {
         return $this->parsedNodeCollector->findClass($name);
     }
+    /**
+     * @param class-string $name
+     */
     public function findTrait(string $name) : ?\PhpParser\Node\Stmt\Trait_
     {
         return $this->parsedNodeCollector->findTrait($name);

@@ -14,7 +14,7 @@ namespace RectorPrefix20210628\Symfony\Component\DependencyInjection\Attribute;
  * An attribute to tell under which environement this class should be registered as a service.
  *
  * @author Nicolas Grekas <p@tchwork.com>
- * @Attribute
+ * @annotation
  */
 class When
 {

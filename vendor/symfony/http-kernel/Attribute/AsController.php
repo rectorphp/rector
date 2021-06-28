@@ -12,7 +12,7 @@ namespace RectorPrefix20210628\Symfony\Component\HttpKernel\Attribute;
 
 /**
  * Service tag to autoconfigure controllers.
- * @Attribute
+ * @annotation
  */
 class AsController
 {

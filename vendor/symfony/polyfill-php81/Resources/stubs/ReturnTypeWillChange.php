@@ -3,7 +3,7 @@
 
 
 /**
- * @Attribute
+ * @annotation
  */
 final class ReturnTypeWillChange
 {
@@ -12,6 +12,6 @@ final class ReturnTypeWillChange
     }
 }
 /**
- * @Attribute
+ * @annotation
  */
 \class_alias('RectorPrefix20210628\\ReturnTypeWillChange', 'ReturnTypeWillChange', \false);

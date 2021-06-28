@@ -17,7 +17,7 @@ namespace RectorPrefix20210628\Symfony\Contracts\Service\Attribute;
  * considered during the instantiation process of the containing class.
  *
  * @author Alexander M. Turek <me@derrabus.de>
- * @Attribute
+ * @annotation
  */
 final class Required
 {

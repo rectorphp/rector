@@ -4,17 +4,21 @@ declare (strict_types=1);
 namespace Rector\Doctrine\Rector\Property;
 
 use PhpParser\Node;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
+use PHPStan\Reflection\Php\PhpPropertyReflection;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\NodeManipulator\AssignManipulator;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Doctrine\PhpDocParser\DoctrineDocBlockResolver;
 use Rector\Doctrine\TypeAnalyzer\CollectionTypeFactory;
 use Rector\Doctrine\TypeAnalyzer\CollectionTypeResolver;
 use Rector\Doctrine\TypeAnalyzer\CollectionVarTagValueNodeResolver;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -47,7 +51,11 @@ final class ImproveDoctrineCollectionDocTypeInEntityRector extends \Rector\Core\
      * @var \Rector\Doctrine\PhpDocParser\DoctrineDocBlockResolver
      */
     private $doctrineDocBlockResolver;
-    public function __construct(\Rector\Doctrine\TypeAnalyzer\CollectionTypeFactory $collectionTypeFactory, \Rector\Core\NodeManipulator\AssignManipulator $assignManipulator, \Rector\Doctrine\TypeAnalyzer\CollectionTypeResolver $collectionTypeResolver, \Rector\Doctrine\TypeAnalyzer\CollectionVarTagValueNodeResolver $collectionVarTagValueNodeResolver, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger, \Rector\Doctrine\PhpDocParser\DoctrineDocBlockResolver $doctrineDocBlockResolver)
+    /**
+     * @var \Rector\Core\Reflection\ReflectionResolver
+     */
+    private $reflectionResolver;
+    public function __construct(\Rector\Doctrine\TypeAnalyzer\CollectionTypeFactory $collectionTypeFactory, \Rector\Core\NodeManipulator\AssignManipulator $assignManipulator, \Rector\Doctrine\TypeAnalyzer\CollectionTypeResolver $collectionTypeResolver, \Rector\Doctrine\TypeAnalyzer\CollectionVarTagValueNodeResolver $collectionVarTagValueNodeResolver, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger, \Rector\Doctrine\PhpDocParser\DoctrineDocBlockResolver $doctrineDocBlockResolver, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver)
     {
         $this->collectionTypeFactory = $collectionTypeFactory;
         $this->assignManipulator = $assignManipulator;
@@ -55,6 +63,7 @@ final class ImproveDoctrineCollectionDocTypeInEntityRector extends \Rector\Core\
         $this->collectionVarTagValueNodeResolver = $collectionVarTagValueNodeResolver;
         $this->phpDocTypeChanger = $phpDocTypeChanger;
         $this->doctrineDocBlockResolver = $doctrineDocBlockResolver;
+        $this->reflectionResolver = $reflectionResolver;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -161,7 +170,16 @@ CODE_SAMPLE
         if (\count($propertyFetches) !== 1) {
             return null;
         }
-        $property = $this->nodeRepository->findPropertyByPropertyFetch($propertyFetches[0]);
+        $phpPropertyReflection = $this->reflectionResolver->resolvePropertyReflectionFromPropertyFetch($propertyFetches[0]);
+        if (!$phpPropertyReflection instanceof \PHPStan\Reflection\Php\PhpPropertyReflection) {
+            return null;
+        }
+        $class = $classMethod->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
+        if (!$class instanceof \PhpParser\Node\Stmt\ClassLike) {
+            return null;
+        }
+        $propertyName = (string) $this->nodeNameResolver->getName($propertyFetches[0]);
+        $property = $class->getProperty($propertyName);
         if (!$property instanceof \PhpParser\Node\Stmt\Property) {
             return null;
         }
