@@ -52,7 +52,7 @@ final class ParentClassMethodTypeOverrideGuard
     {
         // make sure return type is not protected by parent contract
         $parentClassMethodReflection = $this->getParentClassMethod($classMethod);
-        // nothing to check
+        // nothign to check
         if (!$parentClassMethodReflection instanceof \PHPStan\Reflection\MethodReflection) {
             return \true;
         }
