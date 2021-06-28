@@ -11,14 +11,17 @@ use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\Isset_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Scalar\String_;
-use PhpParser\Node\Stmt\Property;
+use PHPStan\Reflection\Php\PhpPropertyReflection;
 use PHPStan\Reflection\ReflectionProvider;
+use PHPStan\Type\MixedType;
 use PHPStan\Type\TypeWithClassName;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Reflection\ReflectionResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\CodeQuality\Rector\Isset_\IssetOnPropertyObjectToPropertyExistsRector\IssetOnPropertyObjectToPropertyExistsRectorTest
+ *
  * @see https://3v4l.org/TI8XL Change isset on property object to property_exists() with not null check
  */
 final class IssetOnPropertyObjectToPropertyExistsRector extends \Rector\Core\Rector\AbstractRector
@@ -27,9 +30,14 @@ final class IssetOnPropertyObjectToPropertyExistsRector extends \Rector\Core\Rec
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider)
+    /**
+     * @var \Rector\Core\Reflection\ReflectionResolver
+     */
+    private $reflectionResolver;
+    public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver)
     {
         $this->reflectionProvider = $reflectionProvider;
+        $this->reflectionResolver = $reflectionResolver;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -74,8 +82,8 @@ CODE_SAMPLE
             if (!$issetVar instanceof \PhpParser\Node\Expr\PropertyFetch) {
                 continue;
             }
-            $property = $this->nodeRepository->findPropertyByPropertyFetch($issetVar);
-            if ($property instanceof \PhpParser\Node\Stmt\Property && $property->type) {
+            // has property PHP 7.4 type?
+            if ($this->hasPropertyTypeDeclaration($issetVar)) {
                 continue;
             }
             $propertyFetchName = $this->getName($issetVar->name);
@@ -108,5 +116,13 @@ CODE_SAMPLE
     private function createNotIdenticalToNull(\PhpParser\Node\Expr $expr) : \PhpParser\Node\Expr\BinaryOp\NotIdentical
     {
         return new \PhpParser\Node\Expr\BinaryOp\NotIdentical($expr, $this->nodeFactory->createNull());
+    }
+    private function hasPropertyTypeDeclaration(\PhpParser\Node\Expr\PropertyFetch $propertyFetch) : bool
+    {
+        $phpPropertyReflection = $this->reflectionResolver->resolvePropertyReflectionFromPropertyFetch($propertyFetch);
+        if (!$phpPropertyReflection instanceof \PHPStan\Reflection\Php\PhpPropertyReflection) {
+            return \false;
+        }
+        return !$phpPropertyReflection->getNativeType() instanceof \PHPStan\Type\MixedType;
     }
 }

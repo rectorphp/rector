@@ -69,13 +69,7 @@ CODE_SAMPLE
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if ($node->isFinal()) {
-            return null;
-        }
-        if ($node->isAbstract()) {
-            return null;
-        }
-        if ($this->classAnalyzer->isAnonymousClass($node)) {
+        if ($this->shouldSkipClass($node)) {
             return null;
         }
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
@@ -105,5 +99,15 @@ CODE_SAMPLE
             }
         }
         return \false;
+    }
+    private function shouldSkipClass(\PhpParser\Node\Stmt\Class_ $class) : bool
+    {
+        if ($class->isFinal()) {
+            return \true;
+        }
+        if ($class->isAbstract()) {
+            return \true;
+        }
+        return $this->classAnalyzer->isAnonymousClass($class);
     }
 }
