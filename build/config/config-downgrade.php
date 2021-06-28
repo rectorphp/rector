@@ -25,14 +25,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $containerConfigurator->import(DowngradeSetList::PHP_74);
     $containerConfigurator->import(DowngradeSetList::PHP_73);
     $containerConfigurator->import(DowngradeSetList::PHP_72);
-
-    $services = $containerConfigurator->services();
-    $services->set(DowngradeAttributeToAnnotationRector::class)
-        ->call('configure', [[
-            DowngradeAttributeToAnnotationRector::ATTRIBUTE_TO_ANNOTATION => ValueObjectInliner::inline([
-                new DowngradeAttributeToAnnotation('Symfony\Contracts\Service\Attribute\Required', 'required'),
-            ]),
-        ]]);
 };
 
 /**

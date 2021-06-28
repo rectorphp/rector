@@ -100,6 +100,9 @@ final class NodeRepository
         return $this->parsedNodeCollector->findClass($name);
     }
 
+    /**
+     * @param class-string $name
+     */
     public function findTrait(string $name): ?Trait_
     {
         return $this->parsedNodeCollector->findTrait($name);

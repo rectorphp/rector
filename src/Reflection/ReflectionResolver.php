@@ -152,8 +152,9 @@ final class ReflectionResolver
         return $this->resolveMethodReflection($newClassType->getClassName(), MethodName::CONSTRUCT, $scope);
     }
 
-    public function resolvePropertyReflectionFromPropertyFetch(PropertyFetch | StaticPropertyFetch $propertyFetch): ?PhpPropertyReflection
-    {
+    public function resolvePropertyReflectionFromPropertyFetch(
+        PropertyFetch | StaticPropertyFetch $propertyFetch
+    ): ?PhpPropertyReflection {
         $fetcheeType = $propertyFetch instanceof PropertyFetch
             ? $this->nodeTypeResolver->resolve($propertyFetch->var)
             : $this->nodeTypeResolver->resolve($propertyFetch->class);
