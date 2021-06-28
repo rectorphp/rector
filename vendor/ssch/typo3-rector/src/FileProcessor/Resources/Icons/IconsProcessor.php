@@ -3,13 +3,13 @@
 declare (strict_types=1);
 namespace Ssch\TYPO3Rector\FileProcessor\Resources\Icons;
 
-use RectorPrefix20210627\Nette\Utils\Strings;
+use RectorPrefix20210628\Nette\Utils\Strings;
 use Rector\Core\Contract\Processor\FileProcessorInterface;
 use Rector\Core\ValueObject\Application\File;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use Ssch\TYPO3Rector\Contract\FileProcessor\Resources\IconRectorInterface;
 use Ssch\TYPO3Rector\Helper\FilesFinder;
-use RectorPrefix20210627\Symplify\SmartFileSystem\SmartFileSystem;
+use RectorPrefix20210628\Symplify\SmartFileSystem\SmartFileSystem;
 /**
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/8.3/Feature-77349-AdditionalLocationsForExtensionIcons.html
  * @see \Ssch\TYPO3Rector\Tests\FileProcessor\Resources\Icons\IconsProcessor\IconsProcessorTest
@@ -31,7 +31,7 @@ final class IconsProcessor implements \Rector\Core\Contract\Processor\FileProces
     /**
      * @param IconRectorInterface[] $iconsRector
      */
-    public function __construct(\Ssch\TYPO3Rector\Helper\FilesFinder $filesFinder, \RectorPrefix20210627\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, array $iconsRector)
+    public function __construct(\Ssch\TYPO3Rector\Helper\FilesFinder $filesFinder, \RectorPrefix20210628\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, array $iconsRector)
     {
         $this->filesFinder = $filesFinder;
         $this->smartFileSystem = $smartFileSystem;
@@ -51,7 +51,7 @@ final class IconsProcessor implements \Rector\Core\Contract\Processor\FileProces
     public function supports(\Rector\Core\ValueObject\Application\File $file) : bool
     {
         $smartFileInfo = $file->getSmartFileInfo();
-        if (!\RectorPrefix20210627\Nette\Utils\Strings::contains($smartFileInfo->getFilename(), 'ext_icon')) {
+        if (!\RectorPrefix20210628\Nette\Utils\Strings::contains($smartFileInfo->getFilename(), 'ext_icon')) {
             return \false;
         }
         $extEmConfSmartFileInfo = $this->filesFinder->findExtEmConfRelativeFromGivenFileInfo($smartFileInfo);

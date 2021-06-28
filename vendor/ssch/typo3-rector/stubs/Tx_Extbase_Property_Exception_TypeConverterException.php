@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210627;
+namespace RectorPrefix20210628;
 
 if (\class_exists('Tx_Extbase_Property_Exception_TypeConverterException')) {
     return;

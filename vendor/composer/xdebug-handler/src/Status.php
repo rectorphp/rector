@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view
  * the LICENSE file that was distributed with this source code.
  */
-namespace RectorPrefix20210627\Composer\XdebugHandler;
+namespace RectorPrefix20210628\Composer\XdebugHandler;
 
-use RectorPrefix20210627\Psr\Log\LoggerInterface;
-use RectorPrefix20210627\Psr\Log\LogLevel;
+use RectorPrefix20210628\Psr\Log\LoggerInterface;
+use RectorPrefix20210628\Psr\Log\LogLevel;
 /**
  * @author John Stevenson <john-stevenson@blueyonder.co.uk>
  * @internal
@@ -41,7 +41,7 @@ class Status
     public function __construct($envAllowXdebug, $debug)
     {
         $start = \getenv(self::ENV_RESTART);
-        \RectorPrefix20210627\Composer\XdebugHandler\Process::setEnv(self::ENV_RESTART);
+        \RectorPrefix20210628\Composer\XdebugHandler\Process::setEnv(self::ENV_RESTART);
         $this->time = $start ? \round((\microtime(\true) - $start) * 1000) : 0;
         $this->envAllowXdebug = $envAllowXdebug;
         $this->debug = $debug && \defined('STDERR');
@@ -49,7 +49,7 @@ class Status
     /**
      * @param LoggerInterface $logger
      */
-    public function setLogger(\RectorPrefix20210627\Psr\Log\LoggerInterface $logger)
+    public function setLogger(\RectorPrefix20210628\Psr\Log\LoggerInterface $logger)
     {
         $this->logger = $logger;
     }
@@ -74,7 +74,7 @@ class Status
     private function output($text, $level = null)
     {
         if ($this->logger) {
-            $this->logger->log($level ?: \RectorPrefix20210627\Psr\Log\LogLevel::DEBUG, $text);
+            $this->logger->log($level ?: \RectorPrefix20210628\Psr\Log\LogLevel::DEBUG, $text);
         }
         if ($this->debug) {
             \fwrite(\STDERR, \sprintf('xdebug-handler[%d] %s', \getmypid(), $text . \PHP_EOL));
@@ -91,7 +91,7 @@ class Status
     }
     private function reportError($error)
     {
-        $this->output(\sprintf('No restart (%s)', $error), \RectorPrefix20210627\Psr\Log\LogLevel::WARNING);
+        $this->output(\sprintf('No restart (%s)', $error), \RectorPrefix20210628\Psr\Log\LogLevel::WARNING);
     }
     private function reportInfo($info)
     {
@@ -111,13 +111,13 @@ class Status
     private function reportRestart()
     {
         $this->output($this->getLoadedMessage());
-        \RectorPrefix20210627\Composer\XdebugHandler\Process::setEnv(self::ENV_RESTART, (string) \microtime(\true));
+        \RectorPrefix20210628\Composer\XdebugHandler\Process::setEnv(self::ENV_RESTART, (string) \microtime(\true));
     }
     private function reportRestarted()
     {
         $loaded = $this->getLoadedMessage();
         $text = \sprintf('Restarted (%d ms). %s', $this->time, $loaded);
-        $level = $this->loaded ? \RectorPrefix20210627\Psr\Log\LogLevel::WARNING : null;
+        $level = $this->loaded ? \RectorPrefix20210628\Psr\Log\LogLevel::WARNING : null;
         $this->output($text, $level);
     }
     private function reportRestarting($command)

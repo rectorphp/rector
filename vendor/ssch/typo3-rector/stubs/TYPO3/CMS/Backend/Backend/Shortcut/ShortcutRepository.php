@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210627\TYPO3\CMS\Backend\Backend\Shortcut;
+namespace RectorPrefix20210628\TYPO3\CMS\Backend\Backend\Shortcut;
 
 if (\class_exists('TYPO3\\CMS\\Backend\\Backend\\Shortcut\\ShortcutRepository')) {
     return;

@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210627\Helmich\TypoScriptParser\Parser\AST;
+namespace RectorPrefix20210628\Helmich\TypoScriptParser\Parser\AST;
 
 /**
  * A scalar value.

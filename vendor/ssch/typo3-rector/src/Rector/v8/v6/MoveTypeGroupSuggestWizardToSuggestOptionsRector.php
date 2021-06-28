@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Ssch\TYPO3Rector\Rector\v8\v6;
 
-use RectorPrefix20210627\Nette\Utils\Strings;
+use RectorPrefix20210628\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
@@ -178,7 +178,7 @@ CODE_SAMPLE
                 if (null === $item->key) {
                     continue;
                 }
-                if (!\RectorPrefix20210627\Nette\Utils\Strings::startsWith($this->valueResolver->getValue($item->key), '_')) {
+                if (!\RectorPrefix20210628\Nette\Utils\Strings::startsWith($this->valueResolver->getValue($item->key), '_')) {
                     $nodeEmpty = \false;
                     break;
                 }
