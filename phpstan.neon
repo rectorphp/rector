@@ -523,3 +523,9 @@ parameters:
                 - src/Application/FileProcessor.php
                 - rules/CodingStyle/Rector/Assign/ManualJsonStringToJsonEncodeArrayRector.php
                 - rules/CodeQuality/Rector/Return_/SimplifyUselessVariableRector.php
+
+        # is fixed in next symplify version
+        -
+            message: '#Do not use @method tag in class docblock#'
+            paths:
+                - rules/*/Enum/*

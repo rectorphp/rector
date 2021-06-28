@@ -15,11 +15,11 @@ use PhpParser\Node\Stmt\Switch_;
 use PhpParser\Node\Stmt\Throw_ as ThrowsStmt;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Php80\Enum\MatchKind;
 use Rector\Php80\NodeAnalyzer\MatchSwitchAnalyzer;
 use Rector\Php80\NodeFactory\MatchFactory;
 use Rector\Php80\NodeResolver\SwitchExprsResolver;
 use Rector\Php80\ValueObject\CondAndExpr;
-use Rector\Php80\ValueObject\MatchKind;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -91,7 +91,7 @@ CODE_SAMPLE
         $isReturn = false;
 
         foreach ($condAndExprs as $condAndExpr) {
-            if ($condAndExpr->getKind() === MatchKind::RETURN) {
+            if ($condAndExpr->equalsMatchKind(MatchKind::RETURN())) {
                 $isReturn = true;
                 break;
             }
@@ -186,7 +186,7 @@ CODE_SAMPLE
 
         $this->removeNode($nextNode);
 
-        $condAndExprs[] = new CondAndExpr([], $returnedExpr, MatchKind::RETURN);
+        $condAndExprs[] = new CondAndExpr([], $returnedExpr, MatchKind::RETURN());
         return $this->matchFactory->createFromCondAndExprs($switch->cond, $condAndExprs);
     }
 
@@ -208,7 +208,7 @@ CODE_SAMPLE
 
         $throw = new Throw_($nextNode->expr);
 
-        $condAndExprs[] = new CondAndExpr([], $throw, MatchKind::RETURN);
+        $condAndExprs[] = new CondAndExpr([], $throw, MatchKind::RETURN());
         return $this->matchFactory->createFromCondAndExprs($switch->cond, $condAndExprs);
     }
 }

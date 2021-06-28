@@ -22,5 +22,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->alias(PSR4AutoloadNamespaceMatcherInterface::class, PSR4NamespaceMatcher::class);
 
     $services->load('Rector\\', __DIR__ . '/../rules')
-        ->exclude([__DIR__ . '/../rules/*/{ValueObject,Rector,Contract,Exception}']);
+        ->exclude([__DIR__ . '/../rules/*/{ValueObject,Rector,Contract,Exception,Enum}']);
 };

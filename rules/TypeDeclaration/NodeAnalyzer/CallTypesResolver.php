@@ -15,7 +15,7 @@ use PHPStan\Type\UnionType;
 use Rector\NodeCollector\ValueObject\ArrayCallable;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
-use Rector\TypeDeclaration\ValueObject\TypeStrictness;
+use Rector\TypeDeclaration\Enum\TypeStrictness;
 
 final class CallTypesResolver
 {
@@ -31,7 +31,7 @@ final class CallTypesResolver
      */
     public function resolveStrictTypesFromCalls(array $calls): array
     {
-        return $this->resolveTypesFromCalls($calls, TypeStrictness::STRICTNESS_TYPE_DECLARATION);
+        return $this->resolveTypesFromCalls($calls, TypeStrictness::STRICTNESS_TYPE_DECLARATION());
     }
 
     /**
@@ -40,14 +40,14 @@ final class CallTypesResolver
      */
     public function resolveWeakTypesFromCalls(array $calls): array
     {
-        return $this->resolveTypesFromCalls($calls, TypeStrictness::STRICTNESS_DOCBLOCK);
+        return $this->resolveTypesFromCalls($calls, TypeStrictness::STRICTNESS_DOCBLOCK());
     }
 
     /**
      * @param MethodCall[]|StaticCall[]|ArrayCallable[] $calls
      * @return Type[]
      */
-    private function resolveTypesFromCalls(array $calls, string $strictnessLevel): array
+    private function resolveTypesFromCalls(array $calls, TypeStrictness $typeStrictness): array
     {
         $staticTypesByArgumentPosition = [];
 
@@ -57,7 +57,7 @@ final class CallTypesResolver
             }
 
             foreach ($call->args as $position => $arg) {
-                $argValueType = $this->resolveArgValueType($strictnessLevel, $arg);
+                $argValueType = $this->resolveArgValueType($typeStrictness, $arg);
                 $staticTypesByArgumentPosition[$position][] = $argValueType;
             }
         }
@@ -66,9 +66,9 @@ final class CallTypesResolver
         return $this->unionToSingleType($staticTypesByArgumentPosition);
     }
 
-    private function resolveArgValueType(string $strictnessLevel, Arg $arg): Type
+    private function resolveArgValueType(TypeStrictness $typeStrictness, Arg $arg): Type
     {
-        if ($strictnessLevel === TypeStrictness::STRICTNESS_TYPE_DECLARATION) {
+        if ($typeStrictness->equals(TypeStrictness::STRICTNESS_TYPE_DECLARATION())) {
             $argValueType = $this->nodeTypeResolver->getNativeType($arg->value);
         } else {
             $argValueType = $this->nodeTypeResolver->resolve($arg->value);
