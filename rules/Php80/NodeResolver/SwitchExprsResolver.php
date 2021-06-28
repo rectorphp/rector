@@ -11,8 +11,8 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Switch_;
 use PhpParser\Node\Stmt\Throw_;
+use Rector\Php80\Enum\MatchKind;
 use Rector\Php80\ValueObject\CondAndExpr;
-use Rector\Php80\ValueObject\MatchKind;
 final class SwitchExprsResolver
 {
     /**
@@ -56,14 +56,14 @@ final class SwitchExprsResolver
                 if (!$returnedExpr instanceof \PhpParser\Node\Expr) {
                     return [];
                 }
-                $condAndExpr[] = new \Rector\Php80\ValueObject\CondAndExpr($condExprs, $returnedExpr, \Rector\Php80\ValueObject\MatchKind::RETURN);
+                $condAndExpr[] = new \Rector\Php80\ValueObject\CondAndExpr($condExprs, $returnedExpr, \Rector\Php80\Enum\MatchKind::RETURN());
             } elseif ($expr instanceof \PhpParser\Node\Expr\Assign) {
-                $condAndExpr[] = new \Rector\Php80\ValueObject\CondAndExpr($condExprs, $expr, \Rector\Php80\ValueObject\MatchKind::ASSIGN);
+                $condAndExpr[] = new \Rector\Php80\ValueObject\CondAndExpr($condExprs, $expr, \Rector\Php80\Enum\MatchKind::ASSIGN());
             } elseif ($expr instanceof \PhpParser\Node\Expr) {
-                $condAndExpr[] = new \Rector\Php80\ValueObject\CondAndExpr($condExprs, $expr, \Rector\Php80\ValueObject\MatchKind::NORMAL);
+                $condAndExpr[] = new \Rector\Php80\ValueObject\CondAndExpr($condExprs, $expr, \Rector\Php80\Enum\MatchKind::NORMAL());
             } elseif ($expr instanceof \PhpParser\Node\Stmt\Throw_) {
                 $throwExpr = new \PhpParser\Node\Expr\Throw_($expr->expr);
-                $condAndExpr[] = new \Rector\Php80\ValueObject\CondAndExpr($condExprs, $throwExpr, \Rector\Php80\ValueObject\MatchKind::THROW);
+                $condAndExpr[] = new \Rector\Php80\ValueObject\CondAndExpr($condExprs, $throwExpr, \Rector\Php80\Enum\MatchKind::THROW());
             } else {
                 return [];
             }

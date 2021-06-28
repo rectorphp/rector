@@ -14,5 +14,5 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
     $services->defaults()->public()->autowire()->autoconfigure();
     // psr-4
     $services->alias(\Rector\PSR4\Contract\PSR4AutoloadNamespaceMatcherInterface::class, \Rector\PSR4\Composer\PSR4NamespaceMatcher::class);
-    $services->load('Rector\\', __DIR__ . '/../rules')->exclude([__DIR__ . '/../rules/*/{ValueObject,Rector,Contract,Exception}']);
+    $services->load('Rector\\', __DIR__ . '/../rules')->exclude([__DIR__ . '/../rules/*/{ValueObject,Rector,Contract,Exception,Enum}']);
 };

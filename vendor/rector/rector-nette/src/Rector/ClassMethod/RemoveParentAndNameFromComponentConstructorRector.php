@@ -11,8 +11,11 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
+use PHPStan\Reflection\ParameterReflection;
+use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Nette\NodeAnalyzer\StaticCallAnalyzer;
 use Rector\Nette\NodeFinder\ParamFinder;
@@ -52,11 +55,16 @@ final class RemoveParentAndNameFromComponentConstructorRector extends \Rector\Co
      * @var \Rector\NodeTypeResolver\MethodParameterTypeResolver
      */
     private $methodParameterTypeResolver;
-    public function __construct(\Rector\Nette\NodeFinder\ParamFinder $paramFinder, \Rector\Nette\NodeAnalyzer\StaticCallAnalyzer $staticCallAnalyzer, \Rector\NodeTypeResolver\MethodParameterTypeResolver $methodParameterTypeResolver)
+    /**
+     * @var \Rector\Core\Reflection\ReflectionResolver
+     */
+    private $reflectionResolver;
+    public function __construct(\Rector\Nette\NodeFinder\ParamFinder $paramFinder, \Rector\Nette\NodeAnalyzer\StaticCallAnalyzer $staticCallAnalyzer, \Rector\NodeTypeResolver\MethodParameterTypeResolver $methodParameterTypeResolver, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver)
     {
         $this->paramFinder = $paramFinder;
         $this->staticCallAnalyzer = $staticCallAnalyzer;
         $this->methodParameterTypeResolver = $methodParameterTypeResolver;
+        $this->reflectionResolver = $reflectionResolver;
         $this->controlObjectType = new \PHPStan\Type\ObjectType('Nette\\Application\\UI\\Control');
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
@@ -148,7 +156,16 @@ CODE_SAMPLE
     }
     private function refactorNew(\PhpParser\Node\Expr\New_ $new) : void
     {
-        $parameterNames = $this->methodParameterTypeResolver->provideParameterNamesByNew($new);
+        $methodReflection = $this->reflectionResolver->resolveMethodReflectionFromNew($new);
+        if ($methodReflection === null) {
+            return;
+        }
+        $parameterNames = [];
+        $parametersAcceptor = \PHPStan\Reflection\ParametersAcceptorSelector::selectSingle($methodReflection->getVariants());
+        foreach ($parametersAcceptor->getParameters() as $parameterReflection) {
+            /** @var ParameterReflection $parameterReflection */
+            $parameterNames[] = $parameterReflection->getName();
+        }
         foreach ($new->args as $position => $arg) {
             // is on position of $parent or $name?
             if (!isset($parameterNames[$position])) {

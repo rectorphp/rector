@@ -60,6 +60,7 @@ return array(
     'RectorPrefix20210628\\Psr\\Log\\' => array($vendorDir . '/psr/log/Psr/Log'),
     'RectorPrefix20210628\\Psr\\EventDispatcher\\' => array($vendorDir . '/psr/event-dispatcher/src'),
     'RectorPrefix20210628\\Psr\\Container\\' => array($vendorDir . '/psr/container/src'),
+    'RectorPrefix20210628\\MyCLabs\\Enum\\' => array($vendorDir . '/myclabs/php-enum/src'),
     'RectorPrefix20210628\\Idiosyncratic\\EditorConfig\\' => array($vendorDir . '/idiosyncratic/editorconfig/src'),
     'RectorPrefix20210628\\Helmich\\TypoScriptParser\\' => array($vendorDir . '/helmich/typo3-typoscript-parser/src'),
     'RectorPrefix20210628\\Ergebnis\\Json\\Printer\\' => array($vendorDir . '/ergebnis/json-printer/src'),

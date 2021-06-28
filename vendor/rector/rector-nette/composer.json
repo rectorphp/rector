@@ -21,7 +21,7 @@
         "nette\/forms": "3.0.*",
         "symplify\/rule-doc-generator": "^9.3",
         "phpstan\/extension-installer": "^1.1",
-        "rector\/rector-phpstan-rules": "^0.2.8"
+        "rector\/rector-phpstan-rules": "^0.3.4"
     },
     "autoload": {
         "psr-4": {

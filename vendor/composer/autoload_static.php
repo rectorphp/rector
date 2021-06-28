@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit92899c2fe71c7ff99a7daca0252b51b7
+class ComposerStaticInit17aa69144b9ef7ee6ca87e81037b6988
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -84,6 +84,7 @@ class ComposerStaticInit92899c2fe71c7ff99a7daca0252b51b7
             'RectorPrefix20210628\\Psr\\Log\\' => 29,
             'RectorPrefix20210628\\Psr\\EventDispatcher\\' => 41,
             'RectorPrefix20210628\\Psr\\Container\\' => 35,
+            'RectorPrefix20210628\\MyCLabs\\Enum\\' => 34,
             'RectorPrefix20210628\\Idiosyncratic\\EditorConfig\\' => 48,
             'RectorPrefix20210628\\Helmich\\TypoScriptParser\\' => 46,
             'RectorPrefix20210628\\Ergebnis\\Json\\Printer\\' => 43,
@@ -316,6 +317,10 @@ class ComposerStaticInit92899c2fe71c7ff99a7daca0252b51b7
         'RectorPrefix20210628\\Psr\\Container\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/container/src',
+        ),
+        'RectorPrefix20210628\\MyCLabs\\Enum\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/myclabs/php-enum/src',
         ),
         'RectorPrefix20210628\\Idiosyncratic\\EditorConfig\\' => 
         array (
@@ -799,6 +804,8 @@ class ComposerStaticInit92899c2fe71c7ff99a7daca0252b51b7
         'RectorPrefix20210628\\Idiosyncratic\\EditorConfig\\EditorConfigFile' => __DIR__ . '/..' . '/idiosyncratic/editorconfig/src/EditorConfigFile.php',
         'RectorPrefix20210628\\Idiosyncratic\\EditorConfig\\Exception\\InvalidValue' => __DIR__ . '/..' . '/idiosyncratic/editorconfig/src/Exception/InvalidValue.php',
         'RectorPrefix20210628\\Idiosyncratic\\EditorConfig\\Section' => __DIR__ . '/..' . '/idiosyncratic/editorconfig/src/Section.php',
+        'RectorPrefix20210628\\MyCLabs\\Enum\\Enum' => __DIR__ . '/..' . '/myclabs/php-enum/src/Enum.php',
+        'RectorPrefix20210628\\MyCLabs\\Enum\\PHPUnit\\Comparator' => __DIR__ . '/..' . '/myclabs/php-enum/src/PHPUnit/Comparator.php',
         'RectorPrefix20210628\\Nette\\ArgumentOutOfRangeException' => __DIR__ . '/..' . '/nette/utils/src/exceptions.php',
         'RectorPrefix20210628\\Nette\\DeprecatedException' => __DIR__ . '/..' . '/nette/utils/src/exceptions.php',
         'RectorPrefix20210628\\Nette\\DirectoryNotFoundException' => __DIR__ . '/..' . '/nette/utils/src/exceptions.php',
@@ -2046,6 +2053,7 @@ class ComposerStaticInit92899c2fe71c7ff99a7daca0252b51b7
         'Rector\\CodingStyle\\ClassNameImport\\UseImportsTraverser' => __DIR__ . '/../..' . '/rules/CodingStyle/ClassNameImport/UseImportsTraverser.php',
         'Rector\\CodingStyle\\ClassNameImport\\UsedImportsResolver' => __DIR__ . '/../..' . '/rules/CodingStyle/ClassNameImport/UsedImportsResolver.php',
         'Rector\\CodingStyle\\Contract\\ClassNameImport\\ClassNameImportSkipVoterInterface' => __DIR__ . '/../..' . '/rules/CodingStyle/Contract/ClassNameImport/ClassNameImportSkipVoterInterface.php',
+        'Rector\\CodingStyle\\Enum\\PreferenceSelfThis' => __DIR__ . '/../..' . '/rules/CodingStyle/Enum/PreferenceSelfThis.php',
         'Rector\\CodingStyle\\Naming\\ClassNaming' => __DIR__ . '/../..' . '/rules/CodingStyle/Naming/ClassNaming.php',
         'Rector\\CodingStyle\\Naming\\NameRenamer' => __DIR__ . '/../..' . '/rules/CodingStyle/Naming/NameRenamer.php',
         'Rector\\CodingStyle\\NodeAnalyzer\\ImplodeAnalyzer' => __DIR__ . '/../..' . '/rules/CodingStyle/NodeAnalyzer/ImplodeAnalyzer.php',
@@ -2103,7 +2111,6 @@ class ComposerStaticInit92899c2fe71c7ff99a7daca0252b51b7
         'Rector\\CodingStyle\\ValueObject\\NameAndParent' => __DIR__ . '/../..' . '/rules/CodingStyle/ValueObject/NameAndParent.php',
         'Rector\\CodingStyle\\ValueObject\\NodeToRemoveAndConcatItem' => __DIR__ . '/../..' . '/rules/CodingStyle/ValueObject/NodeToRemoveAndConcatItem.php',
         'Rector\\CodingStyle\\ValueObject\\ObjectMagicMethods' => __DIR__ . '/../..' . '/rules/CodingStyle/ValueObject/ObjectMagicMethods.php',
-        'Rector\\CodingStyle\\ValueObject\\PreferenceSelfThis' => __DIR__ . '/../..' . '/rules/CodingStyle/ValueObject/PreferenceSelfThis.php',
         'Rector\\CodingStyle\\ValueObject\\ReturnArrayClassMethodToYield' => __DIR__ . '/../..' . '/rules/CodingStyle/ValueObject/ReturnArrayClassMethodToYield.php',
         'Rector\\Comments\\CommentRemover' => __DIR__ . '/../..' . '/packages/Comments/CommentRemover.php',
         'Rector\\Comments\\NodeDocBlock\\DocBlockUpdater' => __DIR__ . '/../..' . '/packages/Comments/NodeDocBlock/DocBlockUpdater.php',
@@ -3061,6 +3068,7 @@ class ComposerStaticInit92899c2fe71c7ff99a7daca0252b51b7
         'Rector\\Php74\\Rector\\Property\\TypedPropertyRector' => __DIR__ . '/../..' . '/rules/Php74/Rector/Property/TypedPropertyRector.php',
         'Rector\\Php74\\Rector\\StaticCall\\ExportToReflectionFunctionRector' => __DIR__ . '/../..' . '/rules/Php74/Rector/StaticCall/ExportToReflectionFunctionRector.php',
         'Rector\\Php80\\Contract\\StrStartWithMatchAndRefactorInterface' => __DIR__ . '/../..' . '/rules/Php80/Contract/StrStartWithMatchAndRefactorInterface.php',
+        'Rector\\Php80\\Enum\\MatchKind' => __DIR__ . '/../..' . '/rules/Php80/Enum/MatchKind.php',
         'Rector\\Php80\\MatchAndRefactor\\StrStartsWithMatchAndRefactor\\StrncmpMatchAndRefactor' => __DIR__ . '/../..' . '/rules/Php80/MatchAndRefactor/StrStartsWithMatchAndRefactor/StrncmpMatchAndRefactor.php',
         'Rector\\Php80\\MatchAndRefactor\\StrStartsWithMatchAndRefactor\\StrposMatchAndRefactor' => __DIR__ . '/../..' . '/rules/Php80/MatchAndRefactor/StrStartsWithMatchAndRefactor/StrposMatchAndRefactor.php',
         'Rector\\Php80\\MatchAndRefactor\\StrStartsWithMatchAndRefactor\\SubstrMatchAndRefactor' => __DIR__ . '/../..' . '/rules/Php80/MatchAndRefactor/StrStartsWithMatchAndRefactor/SubstrMatchAndRefactor.php',
@@ -3098,7 +3106,6 @@ class ComposerStaticInit92899c2fe71c7ff99a7daca0252b51b7
         'Rector\\Php80\\ValueObject\\AnnotationToAttribute' => __DIR__ . '/../..' . '/rules/Php80/ValueObject/AnnotationToAttribute.php',
         'Rector\\Php80\\ValueObject\\ArrayDimFetchAndConstFetch' => __DIR__ . '/../..' . '/rules/Php80/ValueObject/ArrayDimFetchAndConstFetch.php',
         'Rector\\Php80\\ValueObject\\CondAndExpr' => __DIR__ . '/../..' . '/rules/Php80/ValueObject/CondAndExpr.php',
-        'Rector\\Php80\\ValueObject\\MatchKind' => __DIR__ . '/../..' . '/rules/Php80/ValueObject/MatchKind.php',
         'Rector\\Php80\\ValueObject\\PropertyPromotionCandidate' => __DIR__ . '/../..' . '/rules/Php80/ValueObject/PropertyPromotionCandidate.php',
         'Rector\\Php80\\ValueObject\\StrStartsWith' => __DIR__ . '/../..' . '/rules/Php80/ValueObject/StrStartsWith.php',
         'Rector\\Php81\\NodeFactory\\EnumFactory' => __DIR__ . '/../..' . '/rules/Php81/NodeFactory/EnumFactory.php',
@@ -3454,6 +3461,7 @@ class ComposerStaticInit92899c2fe71c7ff99a7daca0252b51b7
         'Rector\\TypeDeclaration\\Contract\\TypeInferer\\PriorityAwareTypeInfererInterface' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Contract/TypeInferer/PriorityAwareTypeInfererInterface.php',
         'Rector\\TypeDeclaration\\Contract\\TypeInferer\\PropertyTypeInfererInterface' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Contract/TypeInferer/PropertyTypeInfererInterface.php',
         'Rector\\TypeDeclaration\\Contract\\TypeInferer\\ReturnTypeInfererInterface' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Contract/TypeInferer/ReturnTypeInfererInterface.php',
+        'Rector\\TypeDeclaration\\Enum\\TypeStrictness' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Enum/TypeStrictness.php',
         'Rector\\TypeDeclaration\\Exception\\ConflictingPriorityException' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Exception/ConflictingPriorityException.php',
         'Rector\\TypeDeclaration\\FunctionLikeReturnTypeResolver' => __DIR__ . '/../..' . '/rules/TypeDeclaration/FunctionLikeReturnTypeResolver.php',
         'Rector\\TypeDeclaration\\Matcher\\PropertyAssignMatcher' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Matcher/PropertyAssignMatcher.php',
@@ -3524,7 +3532,6 @@ class ComposerStaticInit92899c2fe71c7ff99a7daca0252b51b7
         'Rector\\TypeDeclaration\\ValueObject\\AddReturnTypeDeclaration' => __DIR__ . '/../..' . '/rules/TypeDeclaration/ValueObject/AddReturnTypeDeclaration.php',
         'Rector\\TypeDeclaration\\ValueObject\\NestedArrayType' => __DIR__ . '/../..' . '/rules/TypeDeclaration/ValueObject/NestedArrayType.php',
         'Rector\\TypeDeclaration\\ValueObject\\NewType' => __DIR__ . '/../..' . '/rules/TypeDeclaration/ValueObject/NewType.php',
-        'Rector\\TypeDeclaration\\ValueObject\\TypeStrictness' => __DIR__ . '/../..' . '/rules/TypeDeclaration/ValueObject/TypeStrictness.php',
         'Rector\\VendorLocker\\Contract\\NodeVendorLockerInterface' => __DIR__ . '/../..' . '/packages/VendorLocker/Contract/NodeVendorLockerInterface.php',
         'Rector\\VendorLocker\\NodeVendorLocker\\ClassMethodParamVendorLockResolver' => __DIR__ . '/../..' . '/packages/VendorLocker/NodeVendorLocker/ClassMethodParamVendorLockResolver.php',
         'Rector\\VendorLocker\\NodeVendorLocker\\ClassMethodReturnTypeOverrideGuard' => __DIR__ . '/../..' . '/packages/VendorLocker/NodeVendorLocker/ClassMethodReturnTypeOverrideGuard.php',
@@ -3831,9 +3838,9 @@ class ComposerStaticInit92899c2fe71c7ff99a7daca0252b51b7
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit92899c2fe71c7ff99a7daca0252b51b7::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit92899c2fe71c7ff99a7daca0252b51b7::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit92899c2fe71c7ff99a7daca0252b51b7::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit17aa69144b9ef7ee6ca87e81037b6988::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit17aa69144b9ef7ee6ca87e81037b6988::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit17aa69144b9ef7ee6ca87e81037b6988::$classMap;
 
         }, null, ClassLoader::class);
     }

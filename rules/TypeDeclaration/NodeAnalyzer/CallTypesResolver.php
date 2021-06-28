@@ -14,7 +14,7 @@ use PHPStan\Type\UnionType;
 use Rector\NodeCollector\ValueObject\ArrayCallable;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
-use Rector\TypeDeclaration\ValueObject\TypeStrictness;
+use Rector\TypeDeclaration\Enum\TypeStrictness;
 final class CallTypesResolver
 {
     /**
@@ -36,7 +36,7 @@ final class CallTypesResolver
      */
     public function resolveStrictTypesFromCalls(array $calls) : array
     {
-        return $this->resolveTypesFromCalls($calls, \Rector\TypeDeclaration\ValueObject\TypeStrictness::STRICTNESS_TYPE_DECLARATION);
+        return $this->resolveTypesFromCalls($calls, \Rector\TypeDeclaration\Enum\TypeStrictness::STRICTNESS_TYPE_DECLARATION());
     }
     /**
      * @param MethodCall[]|StaticCall[]|ArrayCallable[] $calls
@@ -44,13 +44,13 @@ final class CallTypesResolver
      */
     public function resolveWeakTypesFromCalls(array $calls) : array
     {
-        return $this->resolveTypesFromCalls($calls, \Rector\TypeDeclaration\ValueObject\TypeStrictness::STRICTNESS_DOCBLOCK);
+        return $this->resolveTypesFromCalls($calls, \Rector\TypeDeclaration\Enum\TypeStrictness::STRICTNESS_DOCBLOCK());
     }
     /**
      * @param MethodCall[]|StaticCall[]|ArrayCallable[] $calls
      * @return Type[]
      */
-    private function resolveTypesFromCalls(array $calls, string $strictnessLevel) : array
+    private function resolveTypesFromCalls(array $calls, \Rector\TypeDeclaration\Enum\TypeStrictness $typeStrictness) : array
     {
         $staticTypesByArgumentPosition = [];
         foreach ($calls as $call) {
@@ -58,16 +58,16 @@ final class CallTypesResolver
                 continue;
             }
             foreach ($call->args as $position => $arg) {
-                $argValueType = $this->resolveArgValueType($strictnessLevel, $arg);
+                $argValueType = $this->resolveArgValueType($typeStrictness, $arg);
                 $staticTypesByArgumentPosition[$position][] = $argValueType;
             }
         }
         // unite to single type
         return $this->unionToSingleType($staticTypesByArgumentPosition);
     }
-    private function resolveArgValueType(string $strictnessLevel, \PhpParser\Node\Arg $arg) : \PHPStan\Type\Type
+    private function resolveArgValueType(\Rector\TypeDeclaration\Enum\TypeStrictness $typeStrictness, \PhpParser\Node\Arg $arg) : \PHPStan\Type\Type
     {
-        if ($strictnessLevel === \Rector\TypeDeclaration\ValueObject\TypeStrictness::STRICTNESS_TYPE_DECLARATION) {
+        if ($typeStrictness->equals(\Rector\TypeDeclaration\Enum\TypeStrictness::STRICTNESS_TYPE_DECLARATION())) {
             $argValueType = $this->nodeTypeResolver->getNativeType($arg->value);
         } else {
             $argValueType = $this->nodeTypeResolver->resolve($arg->value);

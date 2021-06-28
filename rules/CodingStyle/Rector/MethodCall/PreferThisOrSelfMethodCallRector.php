@@ -7,9 +7,8 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PHPStan\Type\ObjectType;
-use Rector\CodingStyle\ValueObject\PreferenceSelfThis;
+use Rector\CodingStyle\Enum\PreferenceSelfThis;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
-use Rector\Core\Exception\Configuration\InvalidConfigurationException;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -29,7 +28,7 @@ final class PreferThisOrSelfMethodCallRector extends \Rector\Core\Rector\Abstrac
      */
     private const SELF = 'self';
     /**
-     * @var array<class-string, string>
+     * @var array<class-string, PreferenceSelfThis>
      */
     private $typeToPreference = [];
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
@@ -52,7 +51,7 @@ class SomeClass extends \PHPUnit\Framework\TestCase
     }
 }
 CODE_SAMPLE
-, [self::TYPE_TO_PREFERENCE => ['PHPUnit\\Framework\\TestCase' => \Rector\CodingStyle\ValueObject\PreferenceSelfThis::PREFER_SELF]])]);
+, [self::TYPE_TO_PREFERENCE => ['PHPUnit\\Framework\\TestCase' => \Rector\CodingStyle\Enum\PreferenceSelfThis::PREFER_SELF()]])]);
     }
     /**
      * @return array<class-string<Node>>
@@ -70,7 +69,8 @@ CODE_SAMPLE
             if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType($type))) {
                 continue;
             }
-            if ($preference === \Rector\CodingStyle\ValueObject\PreferenceSelfThis::PREFER_SELF) {
+            /** @var PreferenceSelfThis $preference */
+            if ($preference->equals(\Rector\CodingStyle\Enum\PreferenceSelfThis::PREFER_SELF())) {
                 return $this->processToSelf($node);
             }
             return $this->processToThis($node);
@@ -78,15 +78,12 @@ CODE_SAMPLE
         return null;
     }
     /**
-     * @param array<string, array<class-string, string>> $configuration
+     * @param array<string, array<class-string, PreferenceSelfThis>> $configuration
      */
     public function configure(array $configuration) : void
     {
         $typeToPreference = $configuration[self::TYPE_TO_PREFERENCE] ?? [];
-        \RectorPrefix20210628\Webmozart\Assert\Assert::allString($typeToPreference);
-        foreach ($typeToPreference as $singleTypeToPreference) {
-            $this->ensurePreferenceIsValid($singleTypeToPreference);
-        }
+        \RectorPrefix20210628\Webmozart\Assert\Assert::allIsAOf($typeToPreference, \Rector\CodingStyle\Enum\PreferenceSelfThis::class);
         $this->typeToPreference = $typeToPreference;
     }
     /**
@@ -122,12 +119,5 @@ CODE_SAMPLE
             return null;
         }
         return $this->nodeFactory->createMethodCall('this', $name, $node->args);
-    }
-    private function ensurePreferenceIsValid(string $preference) : void
-    {
-        if (\in_array($preference, \Rector\CodingStyle\ValueObject\PreferenceSelfThis::ALLOWED_VALUES, \true)) {
-            return;
-        }
-        throw new \Rector\Core\Exception\Configuration\InvalidConfigurationException(\sprintf('Preference configuration "%s" for "%s" is not valid. Use one of "%s"', $preference, self::class, \implode('", "', \Rector\CodingStyle\ValueObject\PreferenceSelfThis::ALLOWED_VALUES)));
     }
 }

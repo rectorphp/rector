@@ -11,8 +11,8 @@ use PhpParser\Node\Stmt\Switch_;
 use PhpParser\Node\Stmt\Throw_;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Php80\Enum\MatchKind;
 use Rector\Php80\ValueObject\CondAndExpr;
-use Rector\Php80\ValueObject\MatchKind;
 final class MatchSwitchAnalyzer
 {
     /**
@@ -90,16 +90,16 @@ final class MatchSwitchAnalyzer
     }
     /**
      * @param CondAndExpr[] $condAndExprs
-     * @return string[]
+     * @return MatchKind[]
      */
     private function resolveUniqueKindsWithoutThrows(array $condAndExprs) : array
     {
         $condAndExprKinds = [];
         foreach ($condAndExprs as $condAndExpr) {
-            if ($condAndExpr->getKind() === \Rector\Php80\ValueObject\MatchKind::THROW) {
+            if ($condAndExpr->equalsMatchKind(\Rector\Php80\Enum\MatchKind::THROW())) {
                 continue;
             }
-            $condAndExprKinds[] = $condAndExpr->getKind();
+            $condAndExprKinds[] = $condAndExpr->getMatchKind();
         }
         return \array_unique($condAndExprKinds);
     }

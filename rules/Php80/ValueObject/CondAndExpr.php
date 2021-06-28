@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\Php80\ValueObject;
 
 use PhpParser\Node\Expr;
+use Rector\Php80\Enum\MatchKind;
 final class CondAndExpr
 {
     /**
@@ -15,17 +16,17 @@ final class CondAndExpr
      */
     private $expr;
     /**
-     * @var string
+     * @var \Rector\Php80\Enum\MatchKind
      */
-    private $kind;
+    private $matchKind;
     /**
      * @param Expr[] $condExprs
      */
-    public function __construct(array $condExprs, \PhpParser\Node\Expr $expr, string $kind)
+    public function __construct(array $condExprs, \PhpParser\Node\Expr $expr, \Rector\Php80\Enum\MatchKind $matchKind)
     {
         $this->condExprs = $condExprs;
         $this->expr = $expr;
-        $this->kind = $kind;
+        $this->matchKind = $matchKind;
     }
     public function getExpr() : \PhpParser\Node\Expr
     {
@@ -38,8 +39,12 @@ final class CondAndExpr
     {
         return $this->condExprs;
     }
-    public function getKind() : string
+    public function getMatchKind() : \Rector\Php80\Enum\MatchKind
     {
-        return $this->kind;
+        return $this->matchKind;
+    }
+    public function equalsMatchKind(\Rector\Php80\Enum\MatchKind $matchKind) : bool
+    {
+        return $this->matchKind->equals($matchKind);
     }
 }

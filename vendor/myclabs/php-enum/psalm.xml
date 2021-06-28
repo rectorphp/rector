@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<psalm
+    totallyTyped="true"
+    resolveFromConfigFile="true"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="https://getpsalm.org/schema/config"
+    xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
+>
+    <projectFiles>
+        <directory name="src" />
+        <directory name="static-analysis" />
+        <ignoreFiles>
+            <directory name="vendor" />
+            <directory name="src/PHPUnit" />
+        </ignoreFiles>
+    </projectFiles>
+
+    <issueHandlers>
+        <MixedAssignment errorLevel="info" />
+
+        <ImpureStaticProperty>
+            <!-- self::$... usages in Enum are used to populate an internal cache, and cause no side-effects -->
+            <errorLevel type="suppress">
+                <file name="src/Enum.php"/>
+            </errorLevel>
+        </ImpureStaticProperty>
+
+        <ImpureVariable>
+            <!-- $this usages in Enum point themselves to an immutable instance -->
+            <errorLevel type="suppress">
+                <file name="src/Enum.php"/>
+            </errorLevel>
+        </ImpureVariable>
+    </issueHandlers>
+</psalm>
