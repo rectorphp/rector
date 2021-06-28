@@ -122,18 +122,19 @@ CODE_SAMPLE
                 return [];
             }
 
-            $propertyReflection = $this->reflectionResolver->resolvePropertyReflectionFromPropertyFetch(
+            $phpPropertyReflection = $this->reflectionResolver->resolvePropertyReflectionFromPropertyFetch(
                 $return->expr
             );
-            if (! $propertyReflection instanceof PhpPropertyReflection) {
+            if (! $phpPropertyReflection instanceof PhpPropertyReflection) {
                 return [];
             }
 
-            if ($propertyReflection->getNativeType() instanceof MixedType) {
+            // all property must have type declaration
+            if ($phpPropertyReflection->getNativeType() instanceof MixedType) {
                 return [];
             }
 
-            $propertyTypes[] = $propertyReflection->getNativeType();
+            $propertyTypes[] = $phpPropertyReflection->getNativeType();
         }
 
         return $propertyTypes;

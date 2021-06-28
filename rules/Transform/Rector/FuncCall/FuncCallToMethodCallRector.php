@@ -117,6 +117,7 @@ CODE_SAMPLE
                 $classMethod,
                 $funcNameToMethodCallName->getNewObjectType()
             );
+
             return $this->nodeFactory->createMethodCall(
                 $expr,
                 $funcNameToMethodCallName->getNewMethodName(),

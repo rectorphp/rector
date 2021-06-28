@@ -8,6 +8,7 @@ use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Yield_;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Function_;
@@ -48,7 +49,9 @@ final class SilentVoidResolver
             return false;
         }
 
-        if ($classLike instanceof Stmt\Class_ && $this->externalFullyQualifiedAnalyzer->hasExternalFullyQualifieds($classLike)) {
+        if ($classLike instanceof Class_ && $this->externalFullyQualifiedAnalyzer->hasExternalFullyQualifieds(
+            $classLike
+        )) {
             return false;
         }
 

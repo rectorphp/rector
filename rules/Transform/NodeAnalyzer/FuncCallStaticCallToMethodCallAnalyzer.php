@@ -44,6 +44,7 @@ final class FuncCallStaticCallToMethodCallAnalyzer
             $functionLike,
             $objectType
         );
+
         if ($expr !== null) {
             if ($expr instanceof Variable) {
                 $this->addClassMethodParamForVariable($expr, $objectType, $functionLike);

@@ -10,15 +10,15 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
-use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\UnionType;
 use PHPStan\Analyser\Scope;
+use PHPStan\Reflection\Php\PhpPropertyReflection;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\TypeDeclaration\Reflection\ReflectionTypeResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -28,7 +28,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ParamTypeFromStrictTypedPropertyRector extends AbstractRector
 {
     public function __construct(
-        private ReflectionTypeResolver $reflectionTypeResolver
+        private ReflectionResolver $reflectionResolver
     ) {
     }
 
@@ -127,39 +127,30 @@ CODE_SAMPLE
     }
 
     /**
-     * @return Node\Identifier|Node\Name|UnionType|NullableType|null
+     * @return Node\Name|UnionType|NullableType|null
      */
     private function matchPropertySingleTypeNode(PropertyFetch $propertyFetch): ?Node
     {
-        $property = $this->nodeRepository->findPropertyByPropertyFetch($propertyFetch);
-        if (! $property instanceof Property) {
-            // code from /vendor
-            $propertyFetchType = $this->reflectionTypeResolver->resolvePropertyFetchType($propertyFetch);
-            if (! $propertyFetchType instanceof Type) {
-                return null;
-            }
-
-            return $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($propertyFetchType);
-        }
-
-        if ($property->type === null) {
+        $phpPropertyReflection = $this->reflectionResolver->resolvePropertyReflectionFromPropertyFetch($propertyFetch);
+        if (! $phpPropertyReflection instanceof PhpPropertyReflection) {
             return null;
         }
 
-        // move type to param if not union type
-        if ($property->type instanceof UnionType) {
+        $propertyType = $phpPropertyReflection->getNativeType();
+
+        if ($propertyType instanceof MixedType) {
             return null;
         }
 
-        if ($property->type instanceof NullableType) {
+        if ($propertyType instanceof \PHPStan\Type\UnionType) {
             return null;
         }
 
-        // needed to avoid reprinting original tokens bug
-        $typeNode = clone $property->type;
-        $typeNode->setAttribute(AttributeKey::ORIGINAL_NODE, null);
+        if ($propertyType instanceof NullableType) {
+            return null;
+        }
 
-        return $typeNode;
+        return $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($propertyType);
     }
 
     private function hasTypeChangedBeforeAssign(Assign $assign, string $paramName, Type $originalType): bool
