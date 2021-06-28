@@ -11,19 +11,18 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\MethodReflection;
+use PHPStan\Reflection\ParametersAcceptorSelector;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\DeadCode\Comparator\Parameter\ParameterDefaultsComparator;
 use Rector\DeadCode\Comparator\Parameter\ParameterTypeComparator;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\MethodParameterTypeResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class CurrentAndParentClassMethodComparator
 {
     public function __construct(
         private NodeNameResolver $nodeNameResolver,
-        private MethodParameterTypeResolver $methodParameterTypeResolver,
         private ParameterDefaultsComparator $parameterDefaultsComparator,
         private ParameterTypeComparator $parameterTypeComparator,
         private NodeComparator $nodeComparator
@@ -161,11 +160,9 @@ final class CurrentAndParentClassMethodComparator
         ClassMethod $classMethod,
         MethodReflection $methodReflection
     ): bool {
-        $parameterReflections = $this->methodParameterTypeResolver->getParameterReflectionsFromMethodReflection(
-            $methodReflection
-        );
+        $parametersAcceptor = ParametersAcceptorSelector::selectSingle($methodReflection->getVariants());
 
-        foreach ($parameterReflections as $key => $parameterReflection) {
+        foreach ($parametersAcceptor->getParameters() as $key => $parameterReflection) {
             if (! isset($classMethod->params[$key])) {
                 if ($parameterReflection->getDefaultValue() !== null) {
                     continue;

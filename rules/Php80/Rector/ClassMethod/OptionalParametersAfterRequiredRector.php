@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Reflection\MethodReflection;
+use PHPStan\Reflection\ParametersAcceptorSelector;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Reflection\ReflectionResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -179,7 +180,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $parametersAcceptor = $methodReflection->getVariants()[0];
+        $parametersAcceptor = ParametersAcceptorSelector::selectSingle($methodReflection->getVariants());
 
         $expectedParameterReflections = $this->requireOptionalParamResolver->resolveFromReflection(
             $methodReflection

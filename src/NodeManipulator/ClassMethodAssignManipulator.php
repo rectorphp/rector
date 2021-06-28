@@ -21,7 +21,7 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Foreach_;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ParameterReflection;
-use PHPStan\Reflection\ParametersAcceptor;
+use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Type\Type;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
@@ -300,11 +300,7 @@ final class ClassMethodAssignManipulator
         }
 
         $variableName = $this->nodeNameResolver->getName($variable);
-        $parametersAcceptor = $methodReflection->getVariants()[0] ?? null;
-
-        if (! $parametersAcceptor instanceof ParametersAcceptor) {
-            return false;
-        }
+        $parametersAcceptor = ParametersAcceptorSelector::selectSingle($methodReflection->getVariants());
 
         /** @var ParameterReflection $parameterReflection */
         foreach ($parametersAcceptor->getParameters() as $parameterReflection) {
@@ -354,10 +350,7 @@ final class ClassMethodAssignManipulator
             return false;
         }
 
-        $parametersAcceptor = $methodReflection->getVariants()[0] ?? null;
-        if (! $parametersAcceptor instanceof ParametersAcceptor) {
-            return false;
-        }
+        $parametersAcceptor = ParametersAcceptorSelector::selectSingle($methodReflection->getVariants());
 
         /** @var ParameterReflection $parameterReflection */
         foreach ($parametersAcceptor->getParameters() as $parameterPosition => $parameterReflection) {
