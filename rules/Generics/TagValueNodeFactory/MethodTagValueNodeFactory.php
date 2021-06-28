@@ -12,6 +12,7 @@ use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ParameterReflection;
+use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Type\Generic\TemplateTypeMap;
 use PHPStan\Type\Type;
 use Rector\Core\Exception\ShouldNotHappenException;
@@ -36,7 +37,8 @@ final class MethodTagValueNodeFactory
     {
         $templateTypeMap = $childParentClassReflections->getTemplateTypeMap();
         $returnTagTypeNode = $this->resolveReturnTagTypeNode($returnTagValueNode, $templateTypeMap);
-        $parameterReflections = $methodReflection->getVariants()[0]->getParameters();
+        $parametersAcceptor = \PHPStan\Reflection\ParametersAcceptorSelector::selectSingle($methodReflection->getVariants());
+        $parameterReflections = $parametersAcceptor->getParameters();
         $stringParameters = $this->resolveStringParameters($parameterReflections);
         return new \PHPStan\PhpDocParser\Ast\PhpDoc\MethodTagValueNode(\false, $returnTagTypeNode, $methodReflection->getName(), $stringParameters, '');
     }

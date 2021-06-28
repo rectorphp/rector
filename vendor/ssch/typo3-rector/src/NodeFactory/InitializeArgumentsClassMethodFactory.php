@@ -6,6 +6,7 @@ namespace Ssch\TYPO3Rector\NodeFactory;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ConstFetch;
+use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
@@ -20,6 +21,7 @@ use PhpParser\Node\UnionType;
 use PHPStan\Analyser\Scope;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
+use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
@@ -27,6 +29,7 @@ use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\VerbosityLevel;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -74,7 +77,11 @@ final class InitializeArgumentsClassMethodFactory
      * @var \Rector\Core\PhpParser\Node\Value\ValueResolver
      */
     private $valueResolver;
-    public function __construct(\Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \Rector\TypeDeclaration\TypeInferer\ParamTypeInferer $paramTypeInferer, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\Core\PhpParser\Node\Value\ValueResolver $valueResolver)
+    /**
+     * @var \Rector\Core\PhpParser\AstResolver
+     */
+    private $astResolver;
+    public function __construct(\Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \Rector\TypeDeclaration\TypeInferer\ParamTypeInferer $paramTypeInferer, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\Core\PhpParser\Node\Value\ValueResolver $valueResolver, \Rector\Core\PhpParser\AstResolver $astResolver)
     {
         $this->nodeFactory = $nodeFactory;
         $this->nodeNameResolver = $nodeNameResolver;
@@ -83,6 +90,7 @@ final class InitializeArgumentsClassMethodFactory
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->reflectionProvider = $reflectionProvider;
         $this->valueResolver = $valueResolver;
+        $this->astResolver = $astResolver;
     }
     public function decorateClass(\PhpParser\Node\Stmt\Class_ $class) : void
     {
@@ -90,7 +98,7 @@ final class InitializeArgumentsClassMethodFactory
         if (null === $renderClassMethod) {
             return;
         }
-        $newStmts = $this->createStmts($renderClassMethod);
+        $newStmts = $this->createStmts($renderClassMethod, $class);
         $classMethod = $this->findOrCreateInitializeArgumentsClassMethod($class);
         $classMethod->stmts = \array_merge((array) $classMethod->stmts, $newStmts);
     }
@@ -121,12 +129,16 @@ final class InitializeArgumentsClassMethodFactory
     /**
      * @return Expression[]
      */
-    private function createStmts(\PhpParser\Node\Stmt\ClassMethod $renderMethod) : array
+    private function createStmts(\PhpParser\Node\Stmt\ClassMethod $renderMethod, \PhpParser\Node\Stmt\Class_ $class) : array
     {
+        $argumentsAlreadyDefinedInParentCall = $this->extractArgumentsFromParentClasses($class);
         $paramTagsByName = $this->getParamTagsByName($renderMethod);
         $stmts = [];
         foreach ($renderMethod->params as $param) {
             $paramName = $this->nodeNameResolver->getName($param->var);
+            if (\in_array($paramName, $argumentsAlreadyDefinedInParentCall, \true)) {
+                continue;
+            }
             $paramTagValueNode = $paramTagsByName[$paramName] ?? null;
             $docString = $this->createTypeInString($paramTagValueNode, $param);
             $args = [$paramName, $docString, $this->getDescription($paramTagValueNode)];
@@ -176,14 +188,14 @@ final class InitializeArgumentsClassMethodFactory
         if (null !== $paramTagValueNode && $paramTagValueNode->type instanceof \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode) {
             return $paramTagValueNode->type->name;
         }
-        $inferedType = $this->paramTypeInferer->inferParam($param);
-        if ($inferedType instanceof \PHPStan\Type\MixedType) {
+        $inferredType = $this->paramTypeInferer->inferParam($param);
+        if ($inferredType instanceof \PHPStan\Type\MixedType) {
             return self::MIXED;
         }
-        if ($this->isTraitType($inferedType)) {
+        if ($this->isTraitType($inferredType)) {
             return self::MIXED;
         }
-        $paramTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($inferedType, \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind::KIND_PARAM);
+        $paramTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($inferredType, \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind::KIND_PARAM);
         if ($paramTypeNode instanceof \PhpParser\Node\UnionType) {
             return self::MIXED;
         }
@@ -229,21 +241,63 @@ final class InitializeArgumentsClassMethodFactory
         }
         return $this->nodeNameResolver->getName($paramType) ?? self::MIXED;
     }
-    private function doesParentClassMethodExist(\PhpParser\Node\Stmt\Class_ $class, string $methodName) : bool
+    /**
+     * @return MethodReflection[]
+     */
+    private function getParentClassesMethodReflection(\PhpParser\Node\Stmt\Class_ $class, string $methodName) : array
     {
         $scope = $class->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
         if (!$scope instanceof \PHPStan\Analyser\Scope) {
-            return \false;
+            return [];
         }
         $classReflection = $scope->getClassReflection();
         if (null === $classReflection) {
-            return \false;
+            return [];
         }
+        $parentMethods = [];
         foreach ($classReflection->getParents() as $parentClassReflection) {
             if ($parentClassReflection->hasMethod($methodName)) {
-                return \true;
+                $parentMethods[] = $parentClassReflection->getMethod($methodName, $scope);
             }
         }
-        return \false;
+        return $parentMethods;
+    }
+    private function doesParentClassMethodExist(\PhpParser\Node\Stmt\Class_ $class, string $methodName) : bool
+    {
+        return [] !== $this->getParentClassesMethodReflection($class, $methodName);
+    }
+    /**
+     * @return array<int, string>
+     */
+    private function extractArgumentsFromParentClasses(\PhpParser\Node\Stmt\Class_ $class) : array
+    {
+        $definedArguments = [];
+        $methodReflections = $this->getParentClassesMethodReflection($class, self::METHOD_NAME);
+        foreach ($methodReflections as $methodReflection) {
+            $classMethod = $this->astResolver->resolveClassMethodFromMethodReflection($methodReflection);
+            if (!$classMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
+                continue;
+            }
+            if (null === $classMethod->stmts) {
+                continue;
+            }
+            foreach ($classMethod->stmts as $stmt) {
+                if (!$stmt instanceof \PhpParser\Node\Stmt\Expression) {
+                    continue;
+                }
+                if (!$stmt->expr instanceof \PhpParser\Node\Expr\MethodCall) {
+                    continue;
+                }
+                if (!$this->nodeNameResolver->isName($stmt->expr->name, 'registerArgument')) {
+                    continue;
+                }
+                $value = $this->valueResolver->getValue($stmt->expr->args[0]->value);
+                if (null === $value) {
+                    continue;
+                }
+                $definedArguments[] = $value;
+            }
+        }
+        return $definedArguments;
     }
 }

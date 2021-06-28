@@ -14,6 +14,7 @@ use PhpParser\Node\Stmt\Property;
 use Rector\Core\Configuration\RenamedClassesDataCollector;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Util\StaticRectorStrings;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Renaming\NodeManipulator\ClassRenamer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
@@ -30,9 +31,21 @@ final class RenameClassMapAliasRector extends \Rector\Core\Rector\AbstractRector
      */
     public const CLASS_ALIAS_MAPS = 'class_alias_maps';
     /**
+     * @api
+     * @var string
+     */
+    public const CLASSES_TO_SKIP = 'classes_to_skip';
+    /**
      * @var array<string, string>
      */
     private $oldToNewClasses = [];
+    /**
+     * @var string[]
+     */
+    private $classesToSkip = [
+        // can be string
+        'language',
+    ];
     /**
      * @var \Rector\Core\Configuration\RenamedClassesDataCollector
      */
@@ -106,6 +119,9 @@ CODE_SAMPLE
         if ([] !== $this->oldToNewClasses) {
             $this->renamedClassesDataCollector->addOldToNewClasses($this->oldToNewClasses);
         }
+        if (isset($configuration[self::CLASSES_TO_SKIP])) {
+            $this->classesToSkip = $configuration[self::CLASSES_TO_SKIP];
+        }
     }
     private function stringClassNameToClassConstantRectorIfPossible(\PhpParser\Node\Scalar\String_ $node) : ?\PhpParser\Node
     {
@@ -119,6 +135,9 @@ CODE_SAMPLE
             return null;
         }
         if (!\array_key_exists($classLikeName, $this->oldToNewClasses)) {
+            return null;
+        }
+        if (\Rector\Core\Util\StaticRectorStrings::isInArrayInsensitive($classLikeName, $this->classesToSkip)) {
             return null;
         }
         $newClassName = $this->oldToNewClasses[$classLikeName];

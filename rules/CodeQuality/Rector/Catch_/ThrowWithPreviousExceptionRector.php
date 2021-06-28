@@ -13,6 +13,7 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Catch_;
 use PhpParser\Node\Stmt\Throw_;
 use PhpParser\NodeTraverser;
+use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\TypeWithClassName;
@@ -146,7 +147,7 @@ CODE_SAMPLE
             return self::DEFAULT_EXCEPTION_ARGUMENT_POSITION;
         }
         $constructorReflectionMethod = $classReflection->getConstructor();
-        $parametersAcceptor = $constructorReflectionMethod->getVariants()[0];
+        $parametersAcceptor = \PHPStan\Reflection\ParametersAcceptorSelector::selectSingle($constructorReflectionMethod->getVariants());
         foreach ($parametersAcceptor->getParameters() as $position => $parameterReflection) {
             $parameterType = $parameterReflection->getType();
             if (!$parameterType instanceof \PHPStan\Type\TypeWithClassName) {

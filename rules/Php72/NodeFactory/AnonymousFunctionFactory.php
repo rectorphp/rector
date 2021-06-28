@@ -26,6 +26,7 @@ use PhpParser\Node\UnionType;
 use PhpParser\Parser;
 use PHPStan\Reflection\FunctionVariantWithPhpDocs;
 use PHPStan\Reflection\ParameterReflection;
+use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Reflection\Php\PhpMethodReflection;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\VoidType;
@@ -101,7 +102,7 @@ final class AnonymousFunctionFactory
     public function createFromPhpMethodReflection(\PHPStan\Reflection\Php\PhpMethodReflection $phpMethodReflection, \PhpParser\Node\Expr $expr) : \PhpParser\Node\Expr\Closure
     {
         /** @var FunctionVariantWithPhpDocs $functionVariantWithPhpDoc */
-        $functionVariantWithPhpDoc = $phpMethodReflection->getVariants()[0];
+        $functionVariantWithPhpDoc = \PHPStan\Reflection\ParametersAcceptorSelector::selectSingle($phpMethodReflection->getVariants());
         $anonymousFunction = new \PhpParser\Node\Expr\Closure();
         $newParams = $this->createParams($functionVariantWithPhpDoc->getParameters());
         $anonymousFunction->params = $newParams;

@@ -19,7 +19,7 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
     $containerConfigurator->import(__DIR__ . '/../utils/**/config/config.php', null, \true);
     $services = $containerConfigurator->services();
     $services->defaults()->public()->autowire();
-    $services->load('Ssch\\TYPO3Rector\\', __DIR__ . '/../src')->exclude([__DIR__ . '/../src/Rector', __DIR__ . '/../src/Set', __DIR__ . '/../src/ValueObject', __DIR__ . '/../src/FileProcessor/TypoScript/Conditions', __DIR__ . '/../src/FileProcessor/TypoScript/Visitors', __DIR__ . '/../src/FileProcessor/Yaml/Form/Rector', __DIR__ . '/../src/FileProcessor/Composer/Rector', __DIR__ . '/../src/FileProcessor/FlexForms/Rector', __DIR__ . '/../src/FileProcessor/Resources/Icons/Rector', __DIR__ . '/../src/FileProcessor/Fluid/Rector']);
+    $services->load('Ssch\\TYPO3Rector\\', __DIR__ . '/../src')->exclude([__DIR__ . '/../src/Rector', __DIR__ . '/../src/Set', __DIR__ . '/../src/ValueObject', __DIR__ . '/../src/FileProcessor/TypoScript/Conditions', __DIR__ . '/../src/FileProcessor/TypoScript/Rector', __DIR__ . '/../src/FileProcessor/Yaml/Form/Rector', __DIR__ . '/../src/FileProcessor/Composer/Rector', __DIR__ . '/../src/FileProcessor/FlexForms/Rector', __DIR__ . '/../src/FileProcessor/Resources/Icons/Rector', __DIR__ . '/../src/FileProcessor/Fluid/Rector']);
     $services->set(\RectorPrefix20210628\Helmich\TypoScriptParser\Parser\Traverser\Traverser::class);
     $services->set(\RectorPrefix20210628\Helmich\TypoScriptParser\Tokenizer\Tokenizer::class);
     $services->alias(\RectorPrefix20210628\Helmich\TypoScriptParser\Tokenizer\TokenizerInterface::class, \RectorPrefix20210628\Helmich\TypoScriptParser\Tokenizer\Tokenizer::class);

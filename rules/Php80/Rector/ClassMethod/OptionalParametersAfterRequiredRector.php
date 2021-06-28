@@ -8,6 +8,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Reflection\MethodReflection;
+use PHPStan\Reflection\ParametersAcceptorSelector;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Reflection\ReflectionResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -146,7 +147,7 @@ CODE_SAMPLE
         if (\strpos($fileName, '/vendor/') !== \false) {
             return null;
         }
-        $parametersAcceptor = $methodReflection->getVariants()[0];
+        $parametersAcceptor = \PHPStan\Reflection\ParametersAcceptorSelector::selectSingle($methodReflection->getVariants());
         $expectedParameterReflections = $this->requireOptionalParamResolver->resolveFromReflection($methodReflection);
         if (\count($argsOrParams) !== \count($parametersAcceptor->getParameters())) {
             return null;

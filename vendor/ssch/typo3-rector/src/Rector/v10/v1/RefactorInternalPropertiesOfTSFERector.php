@@ -21,9 +21,6 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Ssch\TYPO3Rector\Helper\Typo3NodeResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20210628\TYPO3\CMS\Core\Utility\GeneralUtility;
-use RectorPrefix20210628\TYPO3\CMS\Core\Utility\HttpUtility;
-use RectorPrefix20210628\TYPO3\CMS\Frontend\Page\CacheHashCalculator;
 /**
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/10.1/Deprecation-89001-InternalPublicTSFEProperties.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v10\v1\RefactorInternalPropertiesOfTSFERector\RefactorInternalPropertiesOfTSFERectorTest
@@ -116,7 +113,6 @@ CODE_SAMPLE
     private function getRelevantParametersFromCacheHashCalculator() : \PhpParser\Node
     {
         $ifNode = new \PhpParser\Node\Stmt\If_(new \PhpParser\Node\Expr\BinaryOp\BooleanAnd(new \PhpParser\Node\Expr\BooleanNot(new \PhpParser\Node\Expr\Empty_(new \PhpParser\Node\Expr\Variable(self::QUERY_PARAMS))), new \PhpParser\Node\Expr\BinaryOp\Coalesce(new \PhpParser\Node\Expr\ArrayDimFetch($this->nodeFactory->createMethodCall(new \PhpParser\Node\Expr\Variable(self::PAGE_ARGUMENTS), 'getArguments'), new \PhpParser\Node\Scalar\String_(self::HASH)), $this->nodeFactory->createFalse())));
-        // $relevantParametersForCachingFromPageArguments = GeneralUtility::makeInstance(CacheHashCalculator::class)->getRelevantParameters(HttpUtility::buildQueryString($queryParams));
         $ifNode->stmts[] = new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\ArrayDimFetch(new \PhpParser\Node\Expr\Variable(self::QUERY_PARAMS), new \PhpParser\Node\Scalar\String_('id')), $this->nodeFactory->createMethodCall(new \PhpParser\Node\Expr\Variable(self::PAGE_ARGUMENTS), 'getPageId')));
         $ifNode->stmts[] = new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable(self::RELEVANT_PARAMETERS_FOR_CACHING_FROM_PAGE_ARGUMENTS), $this->nodeFactory->createMethodCall($this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'makeInstance', [$this->nodeFactory->createClassConstReference('TYPO3\\CMS\\Frontend\\Page\\CacheHashCalculator')]), 'getRelevantParameters', [$this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\HttpUtility', 'buildQueryString', [new \PhpParser\Node\Expr\Variable(self::QUERY_PARAMS)])])));
         return $ifNode;

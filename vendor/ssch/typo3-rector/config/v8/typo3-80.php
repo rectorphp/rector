@@ -7,7 +7,7 @@ use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\StaticCall\RenameStaticMethodRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
 use Rector\Renaming\ValueObject\RenameStaticMethod;
-use Ssch\TYPO3Rector\FileProcessor\TypoScript\Visitors\AdditionalHeadersToArrayVisitor;
+use Ssch\TYPO3Rector\FileProcessor\TypoScript\Rector\AdditionalHeadersToArrayTypoScriptRector;
 use Ssch\TYPO3Rector\Rector\v8\v0\ChangeMethodCallsForStandaloneViewRector;
 use Ssch\TYPO3Rector\Rector\v8\v0\GetFileAbsFileNameRemoveDeprecatedArgumentsRector;
 use Ssch\TYPO3Rector\Rector\v8\v0\GetPreferredClientLanguageRector;
@@ -52,5 +52,5 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
     $services->set(\Ssch\TYPO3Rector\Rector\v8\v0\GetFileAbsFileNameRemoveDeprecatedArgumentsRector::class);
     $services->set(\Ssch\TYPO3Rector\Rector\v8\v0\RemoveLangCsConvObjAndParserFactoryRector::class);
     $services->set(\Ssch\TYPO3Rector\Rector\v8\v0\RenderCharsetDefaultsToUtf8Rector::class);
-    $services->set(\Ssch\TYPO3Rector\FileProcessor\TypoScript\Visitors\AdditionalHeadersToArrayVisitor::class);
+    $services->set(\Ssch\TYPO3Rector\FileProcessor\TypoScript\Rector\AdditionalHeadersToArrayTypoScriptRector::class);
 };

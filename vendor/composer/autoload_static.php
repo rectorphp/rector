@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit3cfb20840cff7ae2eeb60a0de461b097
+class ComposerStaticInit92899c2fe71c7ff99a7daca0252b51b7
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -3546,6 +3546,7 @@ class ComposerStaticInit3cfb20840cff7ae2eeb60a0de461b097
         'Ssch\\TYPO3Rector\\Contract\\FileProcessor\\Resources\\IconRectorInterface' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Contract/FileProcessor/Resources/IconRectorInterface.php',
         'Ssch\\TYPO3Rector\\Contract\\FileProcessor\\TypoScript\\Conditions\\TyposcriptConditionMatcher' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Contract/FileProcessor/TypoScript/Conditions/TyposcriptConditionMatcher.php',
         'Ssch\\TYPO3Rector\\Contract\\FileProcessor\\TypoScript\\ConvertToPhpFileInterface' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Contract/FileProcessor/TypoScript/ConvertToPhpFileInterface.php',
+        'Ssch\\TYPO3Rector\\Contract\\FileProcessor\\TypoScript\\TypoScriptRectorInterface' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Contract/FileProcessor/TypoScript/TypoScriptRectorInterface.php',
         'Ssch\\TYPO3Rector\\Contract\\FileProcessor\\Yaml\\Form\\FormYamlRectorInterface' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Contract/FileProcessor/Yaml/Form/FormYamlRectorInterface.php',
         'Ssch\\TYPO3Rector\\Contract\\Helper\\Database\\Refactorings\\DatabaseConnectionToDbalRefactoring' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Contract/Helper/Database/Refactorings/DatabaseConnectionToDbalRefactoring.php',
         'Ssch\\TYPO3Rector\\Contract\\Processor\\ConfigurableProcessorInterface' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Contract/Processor/ConfigurableProcessorInterface.php',
@@ -3576,12 +3577,12 @@ class ComposerStaticInit3cfb20840cff7ae2eeb60a0de461b097
         'Ssch\\TYPO3Rector\\FileProcessor\\TypoScript\\Conditions\\TreeLevelConditionMatcher' => __DIR__ . '/..' . '/ssch/typo3-rector/src/FileProcessor/TypoScript/Conditions/TreeLevelConditionMatcher.php',
         'Ssch\\TYPO3Rector\\FileProcessor\\TypoScript\\Conditions\\UsergroupConditionMatcherMatcher' => __DIR__ . '/..' . '/ssch/typo3-rector/src/FileProcessor/TypoScript/Conditions/UsergroupConditionMatcherMatcher.php',
         'Ssch\\TYPO3Rector\\FileProcessor\\TypoScript\\Conditions\\VersionConditionMatcher' => __DIR__ . '/..' . '/ssch/typo3-rector/src/FileProcessor/TypoScript/Conditions/VersionConditionMatcher.php',
+        'Ssch\\TYPO3Rector\\FileProcessor\\TypoScript\\Rector\\AbstractTypoScriptRector' => __DIR__ . '/..' . '/ssch/typo3-rector/src/FileProcessor/TypoScript/Rector/AbstractTypoScriptRector.php',
+        'Ssch\\TYPO3Rector\\FileProcessor\\TypoScript\\Rector\\AdditionalHeadersToArrayTypoScriptRector' => __DIR__ . '/..' . '/ssch/typo3-rector/src/FileProcessor/TypoScript/Rector/AdditionalHeadersToArrayTypoScriptRector.php',
+        'Ssch\\TYPO3Rector\\FileProcessor\\TypoScript\\Rector\\ExtbasePersistenceTypoScriptRector' => __DIR__ . '/..' . '/ssch/typo3-rector/src/FileProcessor/TypoScript/Rector/ExtbasePersistenceTypoScriptRector.php',
+        'Ssch\\TYPO3Rector\\FileProcessor\\TypoScript\\Rector\\FileIncludeToImportStatementTypoScriptRector' => __DIR__ . '/..' . '/ssch/typo3-rector/src/FileProcessor/TypoScript/Rector/FileIncludeToImportStatementTypoScriptRector.php',
+        'Ssch\\TYPO3Rector\\FileProcessor\\TypoScript\\Rector\\OldConditionToExpressionLanguageTypoScriptRector' => __DIR__ . '/..' . '/ssch/typo3-rector/src/FileProcessor/TypoScript/Rector/OldConditionToExpressionLanguageTypoScriptRector.php',
         'Ssch\\TYPO3Rector\\FileProcessor\\TypoScript\\TypoScriptProcessor' => __DIR__ . '/..' . '/ssch/typo3-rector/src/FileProcessor/TypoScript/TypoScriptProcessor.php',
-        'Ssch\\TYPO3Rector\\FileProcessor\\TypoScript\\Visitors\\AbstractVisitor' => __DIR__ . '/..' . '/ssch/typo3-rector/src/FileProcessor/TypoScript/Visitors/AbstractVisitor.php',
-        'Ssch\\TYPO3Rector\\FileProcessor\\TypoScript\\Visitors\\AdditionalHeadersToArrayVisitor' => __DIR__ . '/..' . '/ssch/typo3-rector/src/FileProcessor/TypoScript/Visitors/AdditionalHeadersToArrayVisitor.php',
-        'Ssch\\TYPO3Rector\\FileProcessor\\TypoScript\\Visitors\\ExtbasePersistenceVisitor' => __DIR__ . '/..' . '/ssch/typo3-rector/src/FileProcessor/TypoScript/Visitors/ExtbasePersistenceVisitor.php',
-        'Ssch\\TYPO3Rector\\FileProcessor\\TypoScript\\Visitors\\FileIncludeToImportStatementVisitor' => __DIR__ . '/..' . '/ssch/typo3-rector/src/FileProcessor/TypoScript/Visitors/FileIncludeToImportStatementVisitor.php',
-        'Ssch\\TYPO3Rector\\FileProcessor\\TypoScript\\Visitors\\OldConditionToExpressionLanguageVisitor' => __DIR__ . '/..' . '/ssch/typo3-rector/src/FileProcessor/TypoScript/Visitors/OldConditionToExpressionLanguageVisitor.php',
         'Ssch\\TYPO3Rector\\FileProcessor\\Yaml\\Form\\FormYamlProcessor' => __DIR__ . '/..' . '/ssch/typo3-rector/src/FileProcessor/Yaml/Form/FormYamlProcessor.php',
         'Ssch\\TYPO3Rector\\FileProcessor\\Yaml\\Form\\Rector\\EmailFinisherRector' => __DIR__ . '/..' . '/ssch/typo3-rector/src/FileProcessor/Yaml/Form/Rector/EmailFinisherRector.php',
         'Ssch\\TYPO3Rector\\FileProcessor\\Yaml\\Form\\Rector\\TranslationFileRector' => __DIR__ . '/..' . '/ssch/typo3-rector/src/FileProcessor/Yaml/Form/Rector/TranslationFileRector.php',
@@ -3830,9 +3831,9 @@ class ComposerStaticInit3cfb20840cff7ae2eeb60a0de461b097
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit3cfb20840cff7ae2eeb60a0de461b097::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit3cfb20840cff7ae2eeb60a0de461b097::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit3cfb20840cff7ae2eeb60a0de461b097::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit92899c2fe71c7ff99a7daca0252b51b7::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit92899c2fe71c7ff99a7daca0252b51b7::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit92899c2fe71c7ff99a7daca0252b51b7::$classMap;
 
         }, null, ClassLoader::class);
     }

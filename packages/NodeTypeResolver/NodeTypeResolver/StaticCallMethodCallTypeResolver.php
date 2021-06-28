@@ -7,6 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PHPStan\Analyser\Scope;
+use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Reflection\Php\PhpMethodReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\MixedType;
@@ -92,7 +93,7 @@ final class StaticCallMethodCallTypeResolver implements \Rector\NodeTypeResolver
             }
             $methodReflection = $ancestorClassReflection->getMethod($methodName, $scope);
             if ($methodReflection instanceof \PHPStan\Reflection\Php\PhpMethodReflection) {
-                $parametersAcceptor = $methodReflection->getVariants()[0];
+                $parametersAcceptor = \PHPStan\Reflection\ParametersAcceptorSelector::selectSingle($methodReflection->getVariants());
                 return $parametersAcceptor->getReturnType();
             }
         }

@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Ssch\TYPO3Rector\FileProcessor\TypoScript\Visitors;
+namespace Ssch\TYPO3Rector\FileProcessor\TypoScript\Rector;
 
 use RectorPrefix20210628\Helmich\TypoScriptParser\Parser\AST\FileIncludeStatement;
 use RectorPrefix20210628\Helmich\TypoScriptParser\Parser\AST\Statement;
@@ -14,7 +14,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/9.0/Feature-82812-NewSyntaxForImportingTypoScriptFiles.html
  * @see \Ssch\TYPO3Rector\Tests\FileProcessor\TypoScript\TypoScriptProcessorTest
  */
-final class FileIncludeToImportStatementVisitor extends \Ssch\TYPO3Rector\FileProcessor\TypoScript\Visitors\AbstractVisitor
+final class FileIncludeToImportStatementTypoScriptRector extends \Ssch\TYPO3Rector\FileProcessor\TypoScript\Rector\AbstractTypoScriptRector
 {
     /**
      * @var \Rector\Core\Provider\CurrentFileProvider

@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Ssch\TYPO3Rector\FileProcessor\TypoScript\Visitors;
+namespace Ssch\TYPO3Rector\FileProcessor\TypoScript\Rector;
 
 use RectorPrefix20210628\Helmich\TypoScriptParser\Parser\AST\ConditionalStatement;
 use RectorPrefix20210628\Helmich\TypoScriptParser\Parser\AST\Statement;
@@ -14,9 +14,9 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/9.4/Feature-85829-ImplementSymfonyExpressionLanguageForTypoScriptConditions.html
- * @see \Ssch\TYPO3Rector\Tests\FileProcessor\TypoScript\Visitors\OldConditionToExpressionLanguageVisitorTest
+ * @see \Ssch\TYPO3Rector\Tests\FileProcessor\TypoScript\Rector\OldConditionToExpressionLanguageRectorTest
  */
-final class OldConditionToExpressionLanguageVisitor extends \Ssch\TYPO3Rector\FileProcessor\TypoScript\Visitors\AbstractVisitor
+final class OldConditionToExpressionLanguageTypoScriptRector extends \Ssch\TYPO3Rector\FileProcessor\TypoScript\Rector\AbstractTypoScriptRector
 {
     /**
      * @var \Rector\Core\Provider\CurrentFileProvider

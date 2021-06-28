@@ -10,12 +10,12 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\MethodReflection;
+use PHPStan\Reflection\ParametersAcceptorSelector;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\DeadCode\Comparator\Parameter\ParameterDefaultsComparator;
 use Rector\DeadCode\Comparator\Parameter\ParameterTypeComparator;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\MethodParameterTypeResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 final class CurrentAndParentClassMethodComparator
 {
@@ -23,10 +23,6 @@ final class CurrentAndParentClassMethodComparator
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
-    /**
-     * @var \Rector\NodeTypeResolver\MethodParameterTypeResolver
-     */
-    private $methodParameterTypeResolver;
     /**
      * @var \Rector\DeadCode\Comparator\Parameter\ParameterDefaultsComparator
      */
@@ -39,10 +35,9 @@ final class CurrentAndParentClassMethodComparator
      * @var \Rector\Core\PhpParser\Comparing\NodeComparator
      */
     private $nodeComparator;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeTypeResolver\MethodParameterTypeResolver $methodParameterTypeResolver, \Rector\DeadCode\Comparator\Parameter\ParameterDefaultsComparator $parameterDefaultsComparator, \Rector\DeadCode\Comparator\Parameter\ParameterTypeComparator $parameterTypeComparator, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator)
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\DeadCode\Comparator\Parameter\ParameterDefaultsComparator $parameterDefaultsComparator, \Rector\DeadCode\Comparator\Parameter\ParameterTypeComparator $parameterTypeComparator, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator)
     {
         $this->nodeNameResolver = $nodeNameResolver;
-        $this->methodParameterTypeResolver = $methodParameterTypeResolver;
         $this->parameterDefaultsComparator = $parameterDefaultsComparator;
         $this->parameterTypeComparator = $parameterTypeComparator;
         $this->nodeComparator = $nodeComparator;
@@ -145,8 +140,8 @@ final class CurrentAndParentClassMethodComparator
     }
     private function areParameterDefaultsDifferent(\PhpParser\Node\Stmt\ClassMethod $classMethod, \PHPStan\Reflection\MethodReflection $methodReflection) : bool
     {
-        $parameterReflections = $this->methodParameterTypeResolver->getParameterReflectionsFromMethodReflection($methodReflection);
-        foreach ($parameterReflections as $key => $parameterReflection) {
+        $parametersAcceptor = \PHPStan\Reflection\ParametersAcceptorSelector::selectSingle($methodReflection->getVariants());
+        foreach ($parametersAcceptor->getParameters() as $key => $parameterReflection) {
             if (!isset($classMethod->params[$key])) {
                 if ($parameterReflection->getDefaultValue() !== null) {
                     continue;

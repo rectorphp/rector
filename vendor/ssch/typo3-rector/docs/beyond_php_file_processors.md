@@ -89,10 +89,10 @@ To help you out typo3-rector adds a processor that rewrites the typoscript for y
 By adding the following configuration your code is automatically rewritten into the new PHP structure:
 
 ```php
-use Ssch\TYPO3Rector\FileProcessor\TypoScript\Visitors\ExtbasePersistenceVisitor;
+use Ssch\TYPO3Rector\FileProcessor\TypoScript\Rector\ExtbasePersistenceTypoScriptRector;
 ...
 $services = $containerConfigurator->services();
-$services->set(ExtbasePersistenceVisitor::class);
+$services->set(ExtbasePersistenceTypoScriptRector::class);
 ```
 
 Currently all of your packages are summarized into a single file.

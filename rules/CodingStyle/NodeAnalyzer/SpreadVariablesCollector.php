@@ -8,6 +8,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Reflection\FunctionReflection;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ParameterReflection;
+use PHPStan\Reflection\ParametersAcceptorSelector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 final class SpreadVariablesCollector
 {
@@ -18,7 +19,7 @@ final class SpreadVariablesCollector
     public function resolveFromMethodReflection($functionLikeReflection) : array
     {
         $spreadParameterReflections = [];
-        $parametersAcceptor = $functionLikeReflection->getVariants()[0];
+        $parametersAcceptor = \PHPStan\Reflection\ParametersAcceptorSelector::selectSingle($functionLikeReflection->getVariants());
         foreach ($parametersAcceptor->getParameters() as $key => $parameterReflection) {
             if (!$parameterReflection->isVariadic()) {
                 continue;

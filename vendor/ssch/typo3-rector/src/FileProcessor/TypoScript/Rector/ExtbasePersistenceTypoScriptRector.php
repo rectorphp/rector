@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Ssch\TYPO3Rector\FileProcessor\TypoScript\Visitors;
+namespace Ssch\TYPO3Rector\FileProcessor\TypoScript\Rector;
 
 use RectorPrefix20210628\Helmich\TypoScriptParser\Parser\AST\Operator\Assignment;
 use RectorPrefix20210628\Helmich\TypoScriptParser\Parser\AST\Scalar as ScalarValue;
@@ -19,7 +19,7 @@ use Symplify\SmartFileSystem\SmartFileInfo;
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/10.0/Breaking-87623-ReplaceConfigpersistenceclassesTyposcriptConfiguration.html
  * @see \Ssch\TYPO3Rector\Tests\FileProcessor\TypoScript\TypoScriptProcessorTest
  */
-final class ExtbasePersistenceVisitor extends \Ssch\TYPO3Rector\FileProcessor\TypoScript\Visitors\AbstractVisitor implements \Ssch\TYPO3Rector\Contract\FileProcessor\TypoScript\ConvertToPhpFileInterface, \Rector\Core\Contract\Rector\ConfigurableRectorInterface
+final class ExtbasePersistenceTypoScriptRector extends \Ssch\TYPO3Rector\FileProcessor\TypoScript\Rector\AbstractTypoScriptRector implements \Ssch\TYPO3Rector\Contract\FileProcessor\TypoScript\ConvertToPhpFileInterface, \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
      * @var string

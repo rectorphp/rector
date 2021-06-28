@@ -15,6 +15,7 @@ use PhpParser\Node\Name;
 use PHPStan\Reflection\FunctionReflection;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ParameterReflection;
+use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Type\Type;
 use PHPStan\Type\VerbosityLevel;
 use Rector\Core\Rector\AbstractRector;
@@ -113,7 +114,7 @@ CODE_SAMPLE
         /** @var Arg[] $newArgs */
         $newArgs = [];
         $keyParam = 0;
-        $parametersAcceptor = $reflection->getVariants()[0];
+        $parametersAcceptor = \PHPStan\Reflection\ParametersAcceptorSelector::selectSingle($reflection->getVariants());
         $parameterReflections = $parametersAcceptor->getParameters();
         foreach ($parameterReflections as $keyParam => $parameterReflection) {
             $paramName = $parameterReflection->getName();

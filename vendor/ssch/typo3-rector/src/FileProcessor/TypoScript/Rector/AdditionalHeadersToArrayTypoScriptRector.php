@@ -1,9 +1,8 @@
 <?php
 
 declare (strict_types=1);
-namespace Ssch\TYPO3Rector\FileProcessor\TypoScript\Visitors;
+namespace Ssch\TYPO3Rector\FileProcessor\TypoScript\Rector;
 
-use RectorPrefix20210628\Helmich\TypoScriptParser\Parser\AST\Builder;
 use RectorPrefix20210628\Helmich\TypoScriptParser\Parser\AST\Operator\Assignment;
 use RectorPrefix20210628\Helmich\TypoScriptParser\Parser\AST\Statement;
 use RectorPrefix20210628\Nette\Utils\Strings;
@@ -12,16 +11,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://docs.typo3.org/m/typo3/reference-typoscript/master/en-us/Setup/Config/Index.html#additionalheaders
  */
-final class AdditionalHeadersToArrayVisitor extends \Ssch\TYPO3Rector\FileProcessor\TypoScript\Visitors\AbstractVisitor
+final class AdditionalHeadersToArrayTypoScriptRector extends \Ssch\TYPO3Rector\FileProcessor\TypoScript\Rector\AbstractTypoScriptRector
 {
-    /**
-     * @var \Helmich\TypoScriptParser\Parser\AST\Builder
-     */
-    private $builder;
-    public function __construct(\RectorPrefix20210628\Helmich\TypoScriptParser\Parser\AST\Builder $builder)
-    {
-        $this->builder = $builder;
-    }
     public function enterNode(\RectorPrefix20210628\Helmich\TypoScriptParser\Parser\AST\Statement $statement) : void
     {
         if (!$statement instanceof \RectorPrefix20210628\Helmich\TypoScriptParser\Parser\AST\Operator\Assignment) {

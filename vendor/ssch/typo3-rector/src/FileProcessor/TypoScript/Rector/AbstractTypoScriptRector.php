@@ -1,12 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace Ssch\TYPO3Rector\FileProcessor\TypoScript\Visitors;
+namespace Ssch\TYPO3Rector\FileProcessor\TypoScript\Rector;
 
 use RectorPrefix20210628\Helmich\TypoScriptParser\Parser\AST\Statement;
-use RectorPrefix20210628\Helmich\TypoScriptParser\Parser\Traverser\Visitor;
-use Rector\Core\Contract\Rector\RectorInterface;
-abstract class AbstractVisitor implements \RectorPrefix20210628\Helmich\TypoScriptParser\Parser\Traverser\Visitor, \Rector\Core\Contract\Rector\RectorInterface
+use Ssch\TYPO3Rector\Contract\FileProcessor\TypoScript\TypoScriptRectorInterface;
+abstract class AbstractTypoScriptRector implements \Ssch\TYPO3Rector\Contract\FileProcessor\TypoScript\TypoScriptRectorInterface
 {
     /**
      * @var bool

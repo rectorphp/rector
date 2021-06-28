@@ -1548,17 +1548,17 @@
         },
         {
             "name": "ssch\/typo3-rector",
-            "version": "v0.11.17",
-            "version_normalized": "0.11.17.0",
+            "version": "v0.11.18",
+            "version_normalized": "0.11.18.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/sabbelasichon\/typo3-rector.git",
-                "reference": "b7056e236ecb907afe85338f9bb9272fe688fea2"
+                "reference": "9a3c6b919856617f22da15866440885d88c1139b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/sabbelasichon\/typo3-rector\/zipball\/b7056e236ecb907afe85338f9bb9272fe688fea2",
-                "reference": "b7056e236ecb907afe85338f9bb9272fe688fea2",
+                "url": "https:\/\/api.github.com\/repos\/sabbelasichon\/typo3-rector\/zipball\/9a3c6b919856617f22da15866440885d88c1139b",
+                "reference": "9a3c6b919856617f22da15866440885d88c1139b",
                 "shasum": ""
             },
             "require": {
@@ -1574,7 +1574,7 @@
                 "phpstan\/extension-installer": "^1.1",
                 "phpunit\/phpunit": "^9.5",
                 "rector\/rector-generator": "^0.1.7",
-                "rector\/rector-phpstan-rules": "^0.1",
+                "rector\/rector-phpstan-rules": "^0.3.4",
                 "rector\/rector-src": "^0.11.22",
                 "symplify\/coding-standard": "^9.3",
                 "symplify\/easy-coding-standard": "^9.3",
@@ -1583,7 +1583,7 @@
                 "symplify\/rule-doc-generator": "^9.3",
                 "tracy\/tracy": "^2.8"
             },
-            "time": "2021-06-24T20:24:01+00:00",
+            "time": "2021-06-28T08:40:32+00:00",
             "type": "rector-extension",
             "extra": {
                 "rector": {
@@ -1615,7 +1615,7 @@
             "description": "Instant fixes for your TYPO3 code by using Rector.",
             "support": {
                 "issues": "https:\/\/github.com\/sabbelasichon\/typo3-rector\/issues",
-                "source": "https:\/\/github.com\/sabbelasichon\/typo3-rector\/tree\/v0.11.17"
+                "source": "https:\/\/github.com\/sabbelasichon\/typo3-rector\/tree\/v0.11.18"
             },
             "funding": [
                 {
