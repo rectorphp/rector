@@ -8,6 +8,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
@@ -143,9 +144,12 @@ final class ReflectionResolver
         $scope = $new->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
         return $this->resolveMethodReflection($newClassType->getClassName(), \Rector\Core\ValueObject\MethodName::CONSTRUCT, $scope);
     }
-    public function resolvePropertyReflectionFromPropertyFetch(\PhpParser\Node\Expr\PropertyFetch $propertyFetch) : ?\PHPStan\Reflection\Php\PhpPropertyReflection
+    /**
+     * @param \PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\StaticPropertyFetch $propertyFetch
+     */
+    public function resolvePropertyReflectionFromPropertyFetch($propertyFetch) : ?\PHPStan\Reflection\Php\PhpPropertyReflection
     {
-        $fetcheeType = $this->nodeTypeResolver->resolve($propertyFetch->var);
+        $fetcheeType = $propertyFetch instanceof \PhpParser\Node\Expr\PropertyFetch ? $this->nodeTypeResolver->resolve($propertyFetch->var) : $this->nodeTypeResolver->resolve($propertyFetch->class);
         if (!$fetcheeType instanceof \PHPStan\Type\TypeWithClassName) {
             return null;
         }
