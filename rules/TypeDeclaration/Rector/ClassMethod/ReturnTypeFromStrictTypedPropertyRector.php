@@ -109,14 +109,15 @@ CODE_SAMPLE
             if (!$return->expr instanceof \PhpParser\Node\Expr\PropertyFetch) {
                 return [];
             }
-            $propertyReflection = $this->reflectionResolver->resolvePropertyReflectionFromPropertyFetch($return->expr);
-            if (!$propertyReflection instanceof \PHPStan\Reflection\Php\PhpPropertyReflection) {
+            $phpPropertyReflection = $this->reflectionResolver->resolvePropertyReflectionFromPropertyFetch($return->expr);
+            if (!$phpPropertyReflection instanceof \PHPStan\Reflection\Php\PhpPropertyReflection) {
                 return [];
             }
-            if ($propertyReflection->getNativeType() instanceof \PHPStan\Type\MixedType) {
+            // all property must have type declaration
+            if ($phpPropertyReflection->getNativeType() instanceof \PHPStan\Type\MixedType) {
                 return [];
             }
-            $propertyTypes[] = $propertyReflection->getNativeType();
+            $propertyTypes[] = $phpPropertyReflection->getNativeType();
         }
         return $propertyTypes;
     }

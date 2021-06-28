@@ -3138,7 +3138,6 @@ return array(
     'Rector\\TypeDeclaration\\Rector\\Property\\CompleteVarDocTypePropertyRector' => $baseDir . '/rules/TypeDeclaration/Rector/Property/CompleteVarDocTypePropertyRector.php',
     'Rector\\TypeDeclaration\\Rector\\Property\\PropertyTypeDeclarationRector' => $baseDir . '/rules/TypeDeclaration/Rector/Property/PropertyTypeDeclarationRector.php',
     'Rector\\TypeDeclaration\\Rector\\Property\\TypedPropertyFromStrictConstructorRector' => $baseDir . '/rules/TypeDeclaration/Rector/Property/TypedPropertyFromStrictConstructorRector.php',
-    'Rector\\TypeDeclaration\\Reflection\\ReflectionTypeResolver' => $baseDir . '/rules/TypeDeclaration/Reflection/ReflectionTypeResolver.php',
     'Rector\\TypeDeclaration\\Sorter\\TypeInfererSorter' => $baseDir . '/rules/TypeDeclaration/Sorter/TypeInfererSorter.php',
     'Rector\\TypeDeclaration\\TypeAlreadyAddedChecker\\ReturnTypeAlreadyAddedChecker' => $baseDir . '/rules/TypeDeclaration/TypeAlreadyAddedChecker/ReturnTypeAlreadyAddedChecker.php',
     'Rector\\TypeDeclaration\\TypeAnalyzer\\AdvancedArrayAnalyzer' => $baseDir . '/rules/TypeDeclaration/TypeAnalyzer/AdvancedArrayAnalyzer.php',

@@ -9,15 +9,15 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
-use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\UnionType;
 use PHPStan\Analyser\Scope;
+use PHPStan\Reflection\Php\PhpPropertyReflection;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\TypeDeclaration\Reflection\ReflectionTypeResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -26,12 +26,12 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ParamTypeFromStrictTypedPropertyRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var \Rector\TypeDeclaration\Reflection\ReflectionTypeResolver
+     * @var \Rector\Core\Reflection\ReflectionResolver
      */
-    private $reflectionTypeResolver;
-    public function __construct(\Rector\TypeDeclaration\Reflection\ReflectionTypeResolver $reflectionTypeResolver)
+    private $reflectionResolver;
+    public function __construct(\Rector\Core\Reflection\ReflectionResolver $reflectionResolver)
     {
-        $this->reflectionTypeResolver = $reflectionTypeResolver;
+        $this->reflectionResolver = $reflectionResolver;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -109,33 +109,25 @@ CODE_SAMPLE
         return null;
     }
     /**
-     * @return Node\Identifier|Node\Name|UnionType|NullableType|null
+     * @return Node\Name|UnionType|NullableType|null
      */
     private function matchPropertySingleTypeNode(\PhpParser\Node\Expr\PropertyFetch $propertyFetch) : ?\PhpParser\Node
     {
-        $property = $this->nodeRepository->findPropertyByPropertyFetch($propertyFetch);
-        if (!$property instanceof \PhpParser\Node\Stmt\Property) {
-            // code from /vendor
-            $propertyFetchType = $this->reflectionTypeResolver->resolvePropertyFetchType($propertyFetch);
-            if (!$propertyFetchType instanceof \PHPStan\Type\Type) {
-                return null;
-            }
-            return $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($propertyFetchType);
-        }
-        if ($property->type === null) {
+        $phpPropertyReflection = $this->reflectionResolver->resolvePropertyReflectionFromPropertyFetch($propertyFetch);
+        if (!$phpPropertyReflection instanceof \PHPStan\Reflection\Php\PhpPropertyReflection) {
             return null;
         }
-        // move type to param if not union type
-        if ($property->type instanceof \PhpParser\Node\UnionType) {
+        $propertyType = $phpPropertyReflection->getNativeType();
+        if ($propertyType instanceof \PHPStan\Type\MixedType) {
             return null;
         }
-        if ($property->type instanceof \PhpParser\Node\NullableType) {
+        if ($propertyType instanceof \PHPStan\Type\UnionType) {
             return null;
         }
-        // needed to avoid reprinting original tokens bug
-        $typeNode = clone $property->type;
-        $typeNode->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NODE, null);
-        return $typeNode;
+        if ($propertyType instanceof \PhpParser\Node\NullableType) {
+            return null;
+        }
+        return $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($propertyType);
     }
     private function hasTypeChangedBeforeAssign(\PhpParser\Node\Expr\Assign $assign, string $paramName, \PHPStan\Type\Type $originalType) : bool
     {
