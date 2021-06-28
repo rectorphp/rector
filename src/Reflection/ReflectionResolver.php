@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
@@ -151,9 +152,12 @@ final class ReflectionResolver
         return $this->resolveMethodReflection($newClassType->getClassName(), MethodName::CONSTRUCT, $scope);
     }
 
-    public function resolvePropertyReflectionFromPropertyFetch(PropertyFetch $propertyFetch): ?PhpPropertyReflection
+    public function resolvePropertyReflectionFromPropertyFetch(PropertyFetch | StaticPropertyFetch $propertyFetch): ?PhpPropertyReflection
     {
-        $fetcheeType = $this->nodeTypeResolver->resolve($propertyFetch->var);
+        $fetcheeType = $propertyFetch instanceof PropertyFetch
+            ? $this->nodeTypeResolver->resolve($propertyFetch->var)
+            : $this->nodeTypeResolver->resolve($propertyFetch->class);
+
         if (! $fetcheeType instanceof TypeWithClassName) {
             return null;
         }
