@@ -204,6 +204,10 @@ final class ReflectionResolver
             return null;
         }
 
+        if (! $scope instanceof Scope) {
+            return null;
+        }
+
         // fallback to callable
         $funcCallNameType = $scope->getType($funcCall->name);
         return $this->typeToCallReflectionResolverRegistry->resolve($funcCallNameType, $scope);
