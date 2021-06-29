@@ -20,6 +20,8 @@ use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover;
+use Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer;
 use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
 use Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer;
@@ -54,7 +56,8 @@ final class TypedPropertyRector extends AbstractRector implements ConfigurableRe
         private DoctrineTypeAnalyzer $doctrineTypeAnalyzer,
         private VarTagRemover $varTagRemover,
         private ReflectionProvider $reflectionProvider,
-        private PropertyFetchAnalyzer $propertyFetchAnalyzer
+        private PropertyFetchAnalyzer $propertyFetchAnalyzer,
+        private FamilyRelationsAnalyzer $familyRelationsAnalyzer
     ) {
     }
 
@@ -135,6 +138,16 @@ CODE_SAMPLE
         if ($this->isNullOrNonClassLikeTypeOrMixedOrVendorLockedIn($propertyTypeNode, $node)) {
             return null;
         }
+
+        $scope = $node->getAttribute(AttributeKey::SCOPE);
+        $propertyType = $this->familyRelationsAnalyzer->getPossibleUnionPropertyType(
+            $node,
+            $varType,
+            $scope,
+            $propertyTypeNode
+        );
+        $varType = $propertyType->getVarType();
+        $propertyTypeNode = $propertyType->getPropertyTypeNode();
 
         $this->varTagRemover->removeVarPhpTagValueNodeIfNotComment($node, $varType);
         $this->removeDefaultValueForDoctrineCollection($node, $varType);
