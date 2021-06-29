@@ -30,9 +30,9 @@ final class ArgumentDefaultValueReplacer
         $this->valueResolver = $valueResolver;
     }
     /**
-     * @param MethodCall|StaticCall|ClassMethod|Expr\FuncCall $node
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Expr\FuncCall $node
      */
-    public function processReplaces(\PhpParser\Node $node, \Rector\Arguments\Contract\ReplaceArgumentDefaultValueInterface $replaceArgumentDefaultValue) : ?\PhpParser\Node
+    public function processReplaces($node, \Rector\Arguments\Contract\ReplaceArgumentDefaultValueInterface $replaceArgumentDefaultValue) : ?\PhpParser\Node
     {
         if ($node instanceof \PhpParser\Node\Stmt\ClassMethod) {
             if (!isset($node->params[$replaceArgumentDefaultValue->getPosition()])) {

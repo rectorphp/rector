@@ -8,7 +8,6 @@ use RectorPrefix20210629\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Foreach_;
@@ -68,9 +67,9 @@ final class BreakingVariableRenameGuard
         $this->nodeNameResolver = $nodeNameResolver;
     }
     /**
-     * @param ClassMethod|Function_|Closure $functionLike
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
      */
-    public function shouldSkipVariable(string $currentName, string $expectedName, \PhpParser\Node\FunctionLike $functionLike, \PhpParser\Node\Expr\Variable $variable) : bool
+    public function shouldSkipVariable(string $currentName, string $expectedName, $functionLike, \PhpParser\Node\Expr\Variable $variable) : bool
     {
         // is the suffix? → also accepted
         $expectedNameCamelCase = \ucfirst($expectedName);
@@ -143,16 +142,16 @@ final class BreakingVariableRenameGuard
         return $trinaryLogic->maybe();
     }
     /**
-     * @param ClassMethod|Function_|Closure $functionLike
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
      */
-    private function skipOnConflictOtherVariable(\PhpParser\Node\FunctionLike $functionLike, string $newName) : bool
+    private function skipOnConflictOtherVariable($functionLike, string $newName) : bool
     {
         return $this->betterNodeFinder->hasInstanceOfName((array) $functionLike->stmts, \PhpParser\Node\Expr\Variable::class, $newName);
     }
     /**
-     * @param ClassMethod|Function_|Closure $functionLike
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
      */
-    private function isUsedInClosureUsesName(string $expectedName, \PhpParser\Node\FunctionLike $functionLike) : bool
+    private function isUsedInClosureUsesName(string $expectedName, $functionLike) : bool
     {
         if (!$functionLike instanceof \PhpParser\Node\Expr\Closure) {
             return \false;

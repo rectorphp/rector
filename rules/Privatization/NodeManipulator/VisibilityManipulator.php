@@ -19,23 +19,23 @@ final class VisibilityManipulator
      */
     private const ALLOWED_NODE_TYPES = [\PhpParser\Node\Stmt\ClassMethod::class, \PhpParser\Node\Stmt\Property::class, \PhpParser\Node\Stmt\ClassConst::class, \PhpParser\Node\Stmt\Class_::class];
     /**
-     * @param ClassMethod|Property|ClassConst $node
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\ClassConst $node
      */
-    public function makeStatic(\PhpParser\Node $node) : void
+    public function makeStatic($node) : void
     {
         $this->addVisibilityFlag($node, \Rector\Core\ValueObject\Visibility::STATIC);
     }
     /**
-     * @param ClassMethod|Class_ $node
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Class_ $node
      */
-    public function makeAbstract(\PhpParser\Node $node) : void
+    public function makeAbstract($node) : void
     {
         $this->addVisibilityFlag($node, \Rector\Core\ValueObject\Visibility::ABSTRACT);
     }
     /**
-     * @param ClassMethod|Property $node
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property $node
      */
-    public function makeNonStatic(\PhpParser\Node $node) : void
+    public function makeNonStatic($node) : void
     {
         if (!$node->isStatic()) {
             return;

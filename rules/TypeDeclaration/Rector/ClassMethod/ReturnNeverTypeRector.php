@@ -91,7 +91,7 @@ CODE_SAMPLE
         return $node;
     }
     /**
-     * @param ClassMethod|Function_ $node
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $node
      */
     private function shouldSkip($node) : bool
     {
@@ -99,7 +99,7 @@ CODE_SAMPLE
         if ($returns !== []) {
             return \true;
         }
-        $notNeverNodes = $this->betterNodeFinder->findInstancesOf($node, [\PhpParser\Node\Expr\Yield_::class]);
+        $notNeverNodes = $this->betterNodeFinder->findInstanceOf($node, \PhpParser\Node\Expr\Yield_::class);
         if ($notNeverNodes !== []) {
             return \true;
         }
@@ -111,10 +111,7 @@ CODE_SAMPLE
         if ($node instanceof \PhpParser\Node\Stmt\ClassMethod && !$this->parentClassMethodTypeOverrideGuard->isReturnTypeChangeAllowed($node)) {
             return \true;
         }
-        if ($node->returnType && $this->isName($node->returnType, 'never')) {
-            return \true;
-        }
-        return \false;
+        return $node->returnType && $this->isName($node->returnType, 'never');
     }
     /**
      * @param ClassMethod|Function_ $functionLike

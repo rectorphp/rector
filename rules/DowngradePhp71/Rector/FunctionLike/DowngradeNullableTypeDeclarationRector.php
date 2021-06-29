@@ -5,7 +5,6 @@ namespace Rector\DowngradePhp71\Rector\FunctionLike;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Closure;
-use PhpParser\Node\FunctionLike;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -96,9 +95,9 @@ CODE_SAMPLE
         return $param->type instanceof \PhpParser\Node\NullableType;
     }
     /**
-     * @param ClassMethod|Function_|Closure $functionLike
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
      */
-    private function refactorParamType(\PhpParser\Node\Param $param, \PhpParser\Node\FunctionLike $functionLike) : bool
+    private function refactorParamType(\PhpParser\Node\Param $param, $functionLike) : bool
     {
         if (!$this->isNullableParam($param)) {
             return \false;
@@ -108,9 +107,9 @@ CODE_SAMPLE
         return \true;
     }
     /**
-     * @param ClassMethod|Function_|Closure $functionLike
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
      */
-    private function decorateWithDocBlock(\PhpParser\Node\FunctionLike $functionLike, \PhpParser\Node\Param $param) : void
+    private function decorateWithDocBlock($functionLike, \PhpParser\Node\Param $param) : void
     {
         if ($param->type === null) {
             return;

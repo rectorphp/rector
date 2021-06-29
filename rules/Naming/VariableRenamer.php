@@ -7,7 +7,6 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
@@ -49,9 +48,9 @@ final class VariableRenamer
         $this->betterNodeFinder = $betterNodeFinder;
     }
     /**
-     * @param ClassMethod|Function_|Closure $functionLike
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
      */
-    public function renameVariableInFunctionLike(\PhpParser\Node\FunctionLike $functionLike, string $oldName, string $expectedName, ?\PhpParser\Node\Expr\Assign $assign = null) : void
+    public function renameVariableInFunctionLike($functionLike, string $oldName, string $expectedName, ?\PhpParser\Node\Expr\Assign $assign = null) : void
     {
         $isRenamingActive = \false;
         if ($assign === null) {

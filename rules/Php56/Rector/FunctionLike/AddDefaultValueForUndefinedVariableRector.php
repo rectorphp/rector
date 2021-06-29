@@ -99,10 +99,10 @@ CODE_SAMPLE
         return $node;
     }
     /**
-     * @param ClassMethod|Function_|Closure $node
      * @return string[]
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $node
      */
-    private function collectUndefinedVariableScope(\PhpParser\Node $node) : array
+    private function collectUndefinedVariableScope($node) : array
     {
         $undefinedVariables = [];
         $this->traverseNodesWithCallable((array) $node->stmts, function (\PhpParser\Node $node) use(&$undefinedVariables) : ?int {

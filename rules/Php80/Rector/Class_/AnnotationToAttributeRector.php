@@ -117,9 +117,9 @@ CODE_SAMPLE
     }
     /**
      * @param array<PhpDocTagNode> $tags
-     * @param Class_|Property|ClassMethod|Function_|Closure|ArrowFunction $node
+     * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Expr\ArrowFunction $node
      */
-    private function processApplyAttrGroups(array $tags, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo, \PhpParser\Node $node) : bool
+    private function processApplyAttrGroups(array $tags, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo, $node) : bool
     {
         $hasNewAttrGroups = \false;
         foreach ($tags as $tag) {

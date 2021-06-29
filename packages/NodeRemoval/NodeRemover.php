@@ -65,16 +65,16 @@ final class NodeRemover
         }
     }
     /**
-     * @param Closure|ClassMethod|Function_ $node
+     * @param \PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
      */
-    public function removeStmt(\PhpParser\Node $node, int $key) : void
+    public function removeStmt($functionLike, int $key) : void
     {
-        if ($node->stmts === null) {
+        if ($functionLike->stmts === null) {
             throw new \Rector\Core\Exception\ShouldNotHappenException();
         }
         // notify about remove node
-        $this->rectorChangeCollector->notifyNodeFileInfo($node->stmts[$key]);
-        unset($node->stmts[$key]);
+        $this->rectorChangeCollector->notifyNodeFileInfo($functionLike->stmts[$key]);
+        unset($functionLike->stmts[$key]);
     }
     /**
      * @param int|\PhpParser\Node\Param $keyOrParam

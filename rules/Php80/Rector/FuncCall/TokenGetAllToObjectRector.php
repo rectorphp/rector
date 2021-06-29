@@ -8,7 +8,6 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\Function_;
@@ -101,9 +100,9 @@ CODE_SAMPLE
         $this->replaceGetNameOrGetValue($classMethodOrFunction, $assign->var);
     }
     /**
-     * @param ClassMethod|Function_ $functionLike
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
      */
-    private function replaceGetNameOrGetValue(\PhpParser\Node\FunctionLike $functionLike, \PhpParser\Node\Expr $assignedExpr) : void
+    private function replaceGetNameOrGetValue($functionLike, \PhpParser\Node\Expr $assignedExpr) : void
     {
         $tokensForeaches = $this->findForeachesOverTokenVariable($functionLike, $assignedExpr);
         foreach ($tokensForeaches as $tokenForeach) {
@@ -111,10 +110,10 @@ CODE_SAMPLE
         }
     }
     /**
-     * @param ClassMethod|Function_ $functionLike
      * @return Foreach_[]
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
      */
-    private function findForeachesOverTokenVariable(\PhpParser\Node\FunctionLike $functionLike, \PhpParser\Node\Expr $assignedExpr) : array
+    private function findForeachesOverTokenVariable($functionLike, \PhpParser\Node\Expr $assignedExpr) : array
     {
         return $this->betterNodeFinder->find((array) $functionLike->stmts, function (\PhpParser\Node $node) use($assignedExpr) : bool {
             if (!$node instanceof \PhpParser\Node\Stmt\Foreach_) {

@@ -6,7 +6,6 @@ namespace Rector\Php80\Rector\FunctionLike;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Closure;
-use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Name;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -90,7 +89,7 @@ CODE_SAMPLE
         return [\PhpParser\Node\Stmt\ClassMethod::class, \PhpParser\Node\Stmt\Function_::class, \PhpParser\Node\Expr\Closure::class, \PhpParser\Node\Expr\ArrowFunction::class];
     }
     /**
-     * @param ClassMethod|Function_|Closure|ArrowFunction $node
+     * @param ClassMethod | Function_ | Closure | ArrowFunction $node
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
@@ -105,9 +104,9 @@ CODE_SAMPLE
         return $node;
     }
     /**
-     * @param ClassMethod|Function_|Closure|ArrowFunction $functionLike
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Expr\ArrowFunction $functionLike
      */
-    private function refactorParamTypes(\PhpParser\Node\FunctionLike $functionLike, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo) : void
+    private function refactorParamTypes($functionLike, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo) : void
     {
         if ($functionLike instanceof \PhpParser\Node\Stmt\ClassMethod && $this->classMethodParamVendorLockResolver->isVendorLocked($functionLike)) {
             return;
@@ -145,9 +144,9 @@ CODE_SAMPLE
         $param->type = new \PhpParser\Node\Name('object');
     }
     /**
-     * @param ClassMethod|Function_|Closure|ArrowFunction $functionLike
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Expr\ArrowFunction $functionLike
      */
-    private function refactorReturnType(\PhpParser\Node\FunctionLike $functionLike, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo) : void
+    private function refactorReturnType($functionLike, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo) : void
     {
         // do not override existing return type
         if ($functionLike->getReturnType() !== null) {

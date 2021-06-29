@@ -7,7 +7,6 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
@@ -73,9 +72,9 @@ CODE_SAMPLE
         return $node;
     }
     /**
-     * @param ClassMethod|Function_ $functionLike
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
      */
-    private function matchFuncGetArgsVariableAssign(\PhpParser\Node\FunctionLike $functionLike) : ?\PhpParser\Node\Expr\Assign
+    private function matchFuncGetArgsVariableAssign($functionLike) : ?\PhpParser\Node\Expr\Assign
     {
         /** @var Assign[] $assigns */
         $assigns = $this->betterNodeFinder->findInstanceOf((array) $functionLike->stmts, \PhpParser\Node\Expr\Assign::class);

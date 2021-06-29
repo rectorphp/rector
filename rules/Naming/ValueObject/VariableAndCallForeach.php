@@ -3,13 +3,11 @@
 declare (strict_types=1);
 namespace Rector\Naming\ValueObject;
 
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 final class VariableAndCallForeach
@@ -19,7 +17,7 @@ final class VariableAndCallForeach
      */
     private $variable;
     /**
-     * @var \PhpParser\Node\Expr
+     * @var \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall
      */
     private $expr;
     /**
@@ -27,14 +25,14 @@ final class VariableAndCallForeach
      */
     private $variableName;
     /**
-     * @var \PhpParser\Node\FunctionLike
+     * @var \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure
      */
     private $functionLike;
     /**
-     * @param FuncCall|StaticCall|MethodCall $expr
-     * @param ClassMethod|Function_|Closure $functionLike
+     * @param \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $expr
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
      */
-    public function __construct(\PhpParser\Node\Expr\Variable $variable, \PhpParser\Node\Expr $expr, string $variableName, \PhpParser\Node\FunctionLike $functionLike)
+    public function __construct(\PhpParser\Node\Expr\Variable $variable, $expr, string $variableName, $functionLike)
     {
         $this->variable = $variable;
         $this->expr = $expr;

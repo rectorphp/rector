@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Core\PHPStan\Reflection\TypeToCallReflectionResolver;
 
-use PHPStan\Reflection\ClassMemberAccessAnswerer;
+use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\Constant\ConstantArrayType;
@@ -34,7 +34,7 @@ final class ConstantArrayTypeToCallReflectionResolver implements \Rector\Core\Co
     /**
      * @param ConstantArrayType $type
      */
-    public function resolve(\PHPStan\Type\Type $type, \PHPStan\Reflection\ClassMemberAccessAnswerer $classMemberAccessAnswerer) : ?\PHPStan\Reflection\MethodReflection
+    public function resolve(\PHPStan\Type\Type $type, \PHPStan\Analyser\Scope $scope) : ?\PHPStan\Reflection\MethodReflection
     {
         $constantArrayTypeAndMethod = $this->findTypeAndMethodName($type);
         if (!$constantArrayTypeAndMethod instanceof \PHPStan\Type\Constant\ConstantArrayTypeAndMethod) {
@@ -47,8 +47,8 @@ final class ConstantArrayTypeToCallReflectionResolver implements \Rector\Core\Co
             return null;
         }
         $constantArrayType = $constantArrayTypeAndMethod->getType();
-        $methodReflection = $constantArrayType->getMethod($constantArrayTypeAndMethod->getMethod(), $classMemberAccessAnswerer);
-        if (!$classMemberAccessAnswerer->canCallMethod($methodReflection)) {
+        $methodReflection = $constantArrayType->getMethod($constantArrayTypeAndMethod->getMethod(), $scope);
+        if (!$scope->canCallMethod($methodReflection)) {
             return null;
         }
         return $methodReflection;

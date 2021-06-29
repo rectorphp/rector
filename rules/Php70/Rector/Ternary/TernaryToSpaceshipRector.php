@@ -89,7 +89,7 @@ CODE_SAMPLE
         if (!$nestedTernary->cond instanceof \PhpParser\Node\Expr\BinaryOp\Greater) {
             return null;
         }
-        if (!$this->valueResolver->areValues([$node->if, $nestedTernary->if, $nestedTernary->else], [-1, 1, 0])) {
+        if (!$this->valueResolver->areValuesEqual([$node->if, $nestedTernary->if, $nestedTernary->else], [-1, 1, 0])) {
             return null;
         }
         return new \PhpParser\Node\Expr\BinaryOp\Spaceship($node->cond->left, $node->cond->right);
@@ -105,7 +105,7 @@ CODE_SAMPLE
         if (!$nestedTernary->cond instanceof \PhpParser\Node\Expr\BinaryOp\Smaller) {
             return null;
         }
-        if (!$this->valueResolver->areValues([$node->if, $nestedTernary->if, $nestedTernary->else], [-1, 1, 0])) {
+        if (!$this->valueResolver->areValuesEqual([$node->if, $nestedTernary->if, $nestedTernary->else], [-1, 1, 0])) {
             return null;
         }
         return new \PhpParser\Node\Expr\BinaryOp\Spaceship($node->cond->right, $node->cond->left);

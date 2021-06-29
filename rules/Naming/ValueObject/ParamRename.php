@@ -5,7 +5,6 @@ namespace Rector\Naming\ValueObject;
 
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
@@ -29,13 +28,13 @@ final class ParamRename implements \Rector\Naming\Contract\RenameParamValueObjec
      */
     private $variable;
     /**
-     * @var \PhpParser\Node\FunctionLike
+     * @var \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure
      */
     private $functionLike;
     /**
-     * @param ClassMethod|Function_|Closure $functionLike
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
      */
-    public function __construct(string $currentName, string $expectedName, \PhpParser\Node\Param $param, \PhpParser\Node\Expr\Variable $variable, \PhpParser\Node\FunctionLike $functionLike)
+    public function __construct(string $currentName, string $expectedName, \PhpParser\Node\Param $param, \PhpParser\Node\Expr\Variable $variable, $functionLike)
     {
         $this->currentName = $currentName;
         $this->expectedName = $expectedName;
@@ -52,9 +51,9 @@ final class ParamRename implements \Rector\Naming\Contract\RenameParamValueObjec
         return $this->expectedName;
     }
     /**
-     * @return ClassMethod|Function_|Closure
+     * @return \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure
      */
-    public function getFunctionLike() : \PhpParser\Node\FunctionLike
+    public function getFunctionLike()
     {
         return $this->functionLike;
     }

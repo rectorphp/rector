@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\Naming\Matcher;
 
-use PhpParser\Node;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -52,9 +51,9 @@ final class ForeachMatcher
         return new \Rector\Naming\ValueObject\VariableAndCallForeach($foreach->valueVar, $call, $variableName, $functionLike);
     }
     /**
-     * @return ClassMethod|Function_|Closure|null
+     * @return \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure|null
      */
-    private function getFunctionLike(\PhpParser\Node\Stmt\Foreach_ $foreach) : ?\PhpParser\Node
+    private function getFunctionLike(\PhpParser\Node\Stmt\Foreach_ $foreach)
     {
         return $this->betterNodeFinder->findParentTypes($foreach, [\PhpParser\Node\Expr\Closure::class, \PhpParser\Node\Stmt\ClassMethod::class, \PhpParser\Node\Stmt\Function_::class]);
     }

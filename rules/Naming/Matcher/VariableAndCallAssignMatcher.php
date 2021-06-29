@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\Naming\Matcher;
 
-use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Variable;
@@ -53,9 +52,9 @@ final class VariableAndCallAssignMatcher
         return new \Rector\Naming\ValueObject\VariableAndCallAssign($assign->var, $call, $assign, $variableName, $functionLike);
     }
     /**
-     * @return ClassMethod|Function_|Closure|null
+     * @return \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure|null
      */
-    private function getFunctionLike(\PhpParser\Node\Expr\Assign $assign) : ?\PhpParser\Node
+    private function getFunctionLike(\PhpParser\Node\Expr\Assign $assign)
     {
         return $this->betterNodeFinder->findParentTypes($assign, [\PhpParser\Node\Expr\Closure::class, \PhpParser\Node\Stmt\ClassMethod::class, \PhpParser\Node\Stmt\Function_::class]);
     }

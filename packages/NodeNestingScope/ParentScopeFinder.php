@@ -21,9 +21,9 @@ final class ParentScopeFinder
         $this->betterNodeFinder = $betterNodeFinder;
     }
     /**
-     * @return ClassMethod|Function_|Class_|Namespace_|Closure|null
+     * @return \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Namespace_|\PhpParser\Node\Expr\Closure|null
      */
-    public function find(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function find(\PhpParser\Node $node)
     {
         return $this->betterNodeFinder->findParentTypes($node, [\PhpParser\Node\Expr\Closure::class, \PhpParser\Node\Stmt\Function_::class, \PhpParser\Node\Stmt\ClassMethod::class, \PhpParser\Node\Stmt\Class_::class, \PhpParser\Node\Stmt\Namespace_::class]);
     }

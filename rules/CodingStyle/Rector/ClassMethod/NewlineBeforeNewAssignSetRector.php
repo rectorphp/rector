@@ -110,9 +110,9 @@ CODE_SAMPLE
         return null;
     }
     /**
-     * @param ClassMethod|Function_|Closure $node
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $node
      */
-    private function shouldAddEmptyLine(?string $currentStmtVariableName, \PhpParser\Node $node, int $key) : bool
+    private function shouldAddEmptyLine(?string $currentStmtVariableName, $node, int $key) : bool
     {
         if (!$this->isNewVariableThanBefore($currentStmtVariableName)) {
             return \false;
@@ -148,9 +148,9 @@ CODE_SAMPLE
         return $this->previousStmtVariableName !== $currentStmtVariableName;
     }
     /**
-     * @param ClassMethod|Function_|Closure $node
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $node
      */
-    private function isPrecededByEmptyLine(\PhpParser\Node $node, int $key) : bool
+    private function isPrecededByEmptyLine($node, int $key) : bool
     {
         if ($node->stmts === null) {
             return \false;

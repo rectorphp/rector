@@ -189,9 +189,9 @@ CODE_SAMPLE
         return null;
     }
     /**
-     * @param ClassMethod|Function_ $functionLike
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
      */
-    private function refactorParam(\PhpParser\Node\Param $param, \PhpParser\Node\FunctionLike $functionLike) : void
+    private function refactorParam(\PhpParser\Node\Param $param, $functionLike) : void
     {
         if (!$this->isNullableParam($param, $functionLike)) {
             return;
@@ -200,9 +200,9 @@ CODE_SAMPLE
         $param->type = null;
     }
     /**
-     * @param ClassMethod|Function_ $functionLike
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
      */
-    private function decorateWithDocBlock(\PhpParser\Node\FunctionLike $functionLike, \PhpParser\Node\Param $param) : void
+    private function decorateWithDocBlock($functionLike, \PhpParser\Node\Param $param) : void
     {
         if ($param->type === null) {
             return;

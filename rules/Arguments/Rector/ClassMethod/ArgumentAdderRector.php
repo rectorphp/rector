@@ -151,9 +151,9 @@ CODE_SAMPLE
         }
     }
     /**
-     * @param ClassMethod|MethodCall|StaticCall $node
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
      */
-    private function shouldSkipParameter(\PhpParser\Node $node, \Rector\Arguments\ValueObject\ArgumentAdder $argumentAdder) : bool
+    private function shouldSkipParameter($node, \Rector\Arguments\ValueObject\ArgumentAdder $argumentAdder) : bool
     {
         $position = $argumentAdder->getPosition();
         $argumentName = $argumentAdder->getArgumentName();

@@ -110,9 +110,9 @@ CODE_SAMPLE
         $this->cleanTrailingComma($node, $node->uses);
     }
     /**
-     * @param ClassMethod|Function_|Closure $node
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $node
      */
-    private function processParams(\PhpParser\Node $node) : ?\PhpParser\Node
+    private function processParams($node) : ?\PhpParser\Node
     {
         if ($node->params === []) {
             return null;

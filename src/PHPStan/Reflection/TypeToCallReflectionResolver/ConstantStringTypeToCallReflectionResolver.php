@@ -5,7 +5,7 @@ namespace Rector\Core\PHPStan\Reflection\TypeToCallReflectionResolver;
 
 use RectorPrefix20210629\Nette\Utils\Strings;
 use PhpParser\Node\Name;
-use PHPStan\Reflection\ClassMemberAccessAnswerer;
+use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\FunctionReflection;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ReflectionProvider;
@@ -24,7 +24,15 @@ final class ConstantStringTypeToCallReflectionResolver implements \Rector\Core\C
      *
      * @var string
      */
-    private const STATIC_METHOD_REGEX = '#^(?<class>[a-zA-Z_\\x7f-\\xff\\\\][a-zA-Z0-9_\\x7f-\\xff\\\\]*)::(?<method>[a-zA-Z_\\x7f-\\xff][a-zA-Z0-9_\\x7f-\\xff]*)\\z#';
+    private const STATIC_METHOD_REGEX = '#^(?<' . self::CLASS_KEY . '>[a-zA-Z_\\x7f-\\xff\\\\][a-zA-Z0-9_\\x7f-\\xff\\\\]*)::(?<' . self::METHOD_KEY . '>[a-zA-Z_\\x7f-\\xff][a-zA-Z0-9_\\x7f-\\xff]*)\\z#';
+    /**
+     * @var string
+     */
+    private const CLASS_KEY = 'class';
+    /**
+     * @var string
+     */
+    private const METHOD_KEY = 'method';
     /**
      * @var \PHPStan\Reflection\ReflectionProvider
      */
@@ -41,7 +49,7 @@ final class ConstantStringTypeToCallReflectionResolver implements \Rector\Core\C
      * @param ConstantStringType $type
      * @return FunctionReflection|MethodReflection|null
      */
-    public function resolve(\PHPStan\Type\Type $type, \PHPStan\Reflection\ClassMemberAccessAnswerer $classMemberAccessAnswerer)
+    public function resolve(\PHPStan\Type\Type $type, \PHPStan\Analyser\Scope $scope)
     {
         $value = $type->getValue();
         // 'my_function'
@@ -54,13 +62,15 @@ final class ConstantStringTypeToCallReflectionResolver implements \Rector\Core\C
         if ($matches === null) {
             return null;
         }
-        if (!$this->reflectionProvider->hasClass($matches['class'])) {
+        $class = $matches[self::CLASS_KEY];
+        if (!$this->reflectionProvider->hasClass($class)) {
             return null;
         }
-        $classReflection = $this->reflectionProvider->getClass($matches['class']);
-        if (!$classReflection->hasMethod($matches['method'])) {
+        $classReflection = $this->reflectionProvider->getClass($class);
+        $method = $matches[self::METHOD_KEY];
+        if (!$classReflection->hasMethod($method)) {
             return null;
         }
-        return $classReflection->getMethod($matches['method'], $classMemberAccessAnswerer);
+        return $classReflection->getMethod($method, $scope);
     }
 }
