@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210628;
+namespace RectorPrefix20210629;
 
 if (\class_exists('t3lib_cache_backend_RedisBackend')) {
     return;

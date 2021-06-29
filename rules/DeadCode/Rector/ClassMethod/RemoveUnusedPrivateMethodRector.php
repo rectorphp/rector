@@ -14,7 +14,7 @@ use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\TypeWithClassName;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
-use Rector\NodeCollector\NodeAnalyzer\ArrayCallableMethodReferenceAnalyzer;
+use Rector\NodeCollector\NodeAnalyzer\ArrayCallableMethodMatcher;
 use Rector\NodeCollector\ValueObject\ArrayCallable;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -25,12 +25,12 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveUnusedPrivateMethodRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var \Rector\NodeCollector\NodeAnalyzer\ArrayCallableMethodReferenceAnalyzer
+     * @var \Rector\NodeCollector\NodeAnalyzer\ArrayCallableMethodMatcher
      */
-    private $arrayCallableMethodReferenceAnalyzer;
-    public function __construct(\Rector\NodeCollector\NodeAnalyzer\ArrayCallableMethodReferenceAnalyzer $arrayCallableMethodReferenceAnalyzer)
+    private $arrayCallableMethodMatcher;
+    public function __construct(\Rector\NodeCollector\NodeAnalyzer\ArrayCallableMethodMatcher $arrayCallableMethodMatcher)
     {
-        $this->arrayCallableMethodReferenceAnalyzer = $arrayCallableMethodReferenceAnalyzer;
+        $this->arrayCallableMethodMatcher = $arrayCallableMethodMatcher;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -168,7 +168,7 @@ CODE_SAMPLE
         /** @var Array_[] $arrays */
         $arrays = $this->betterNodeFinder->findInstanceOf($class, \PhpParser\Node\Expr\Array_::class);
         foreach ($arrays as $array) {
-            $arrayCallable = $this->arrayCallableMethodReferenceAnalyzer->match($array);
+            $arrayCallable = $this->arrayCallableMethodMatcher->match($array);
             if (!$arrayCallable instanceof \Rector\NodeCollector\ValueObject\ArrayCallable) {
                 continue;
             }

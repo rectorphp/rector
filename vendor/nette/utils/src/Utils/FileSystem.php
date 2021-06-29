@@ -5,9 +5,9 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix20210628\Nette\Utils;
+namespace RectorPrefix20210629\Nette\Utils;
 
-use RectorPrefix20210628\Nette;
+use RectorPrefix20210629\Nette;
 /**
  * File system tool.
  */
@@ -22,7 +22,7 @@ final class FileSystem
     {
         if (!\is_dir($dir) && !@\mkdir($dir, $mode, \true) && !\is_dir($dir)) {
             // @ - dir may already exist
-            throw new \RectorPrefix20210628\Nette\IOException("Unable to create directory '{$dir}' with mode " . \decoct($mode) . '. ' . \RectorPrefix20210628\Nette\Utils\Helpers::getLastError());
+            throw new \RectorPrefix20210629\Nette\IOException("Unable to create directory '{$dir}' with mode " . \decoct($mode) . '. ' . \RectorPrefix20210629\Nette\Utils\Helpers::getLastError());
         }
     }
     /**
@@ -33,9 +33,9 @@ final class FileSystem
     public static function copy(string $origin, string $target, bool $overwrite = \true) : void
     {
         if (\stream_is_local($origin) && !\file_exists($origin)) {
-            throw new \RectorPrefix20210628\Nette\IOException("File or directory '{$origin}' not found.");
+            throw new \RectorPrefix20210629\Nette\IOException("File or directory '{$origin}' not found.");
         } elseif (!$overwrite && \file_exists($target)) {
-            throw new \RectorPrefix20210628\Nette\InvalidStateException("File or directory '{$target}' already exists.");
+            throw new \RectorPrefix20210629\Nette\InvalidStateException("File or directory '{$target}' already exists.");
         } elseif (\is_dir($origin)) {
             static::createDir($target);
             foreach (new \FilesystemIterator($target) as $item) {
@@ -52,7 +52,7 @@ final class FileSystem
             static::createDir(\dirname($target));
             if (($s = @\fopen($origin, 'rb')) && ($d = @\fopen($target, 'wb')) && @\stream_copy_to_stream($s, $d) === \false) {
                 // @ is escalated to exception
-                throw new \RectorPrefix20210628\Nette\IOException("Unable to copy file '{$origin}' to '{$target}'. " . \RectorPrefix20210628\Nette\Utils\Helpers::getLastError());
+                throw new \RectorPrefix20210629\Nette\IOException("Unable to copy file '{$origin}' to '{$target}'. " . \RectorPrefix20210629\Nette\Utils\Helpers::getLastError());
             }
         }
     }
@@ -66,7 +66,7 @@ final class FileSystem
             $func = \DIRECTORY_SEPARATOR === '\\' && \is_dir($path) ? 'rmdir' : 'unlink';
             if (!@$func($path)) {
                 // @ is escalated to exception
-                throw new \RectorPrefix20210628\Nette\IOException("Unable to delete '{$path}'. " . \RectorPrefix20210628\Nette\Utils\Helpers::getLastError());
+                throw new \RectorPrefix20210629\Nette\IOException("Unable to delete '{$path}'. " . \RectorPrefix20210629\Nette\Utils\Helpers::getLastError());
             }
         } elseif (\is_dir($path)) {
             foreach (new \FilesystemIterator($path) as $item) {
@@ -74,7 +74,7 @@ final class FileSystem
             }
             if (!@\rmdir($path)) {
                 // @ is escalated to exception
-                throw new \RectorPrefix20210628\Nette\IOException("Unable to delete directory '{$path}'. " . \RectorPrefix20210628\Nette\Utils\Helpers::getLastError());
+                throw new \RectorPrefix20210629\Nette\IOException("Unable to delete directory '{$path}'. " . \RectorPrefix20210629\Nette\Utils\Helpers::getLastError());
             }
         }
     }
@@ -86,9 +86,9 @@ final class FileSystem
     public static function rename(string $origin, string $target, bool $overwrite = \true) : void
     {
         if (!$overwrite && \file_exists($target)) {
-            throw new \RectorPrefix20210628\Nette\InvalidStateException("File or directory '{$target}' already exists.");
+            throw new \RectorPrefix20210629\Nette\InvalidStateException("File or directory '{$target}' already exists.");
         } elseif (!\file_exists($origin)) {
-            throw new \RectorPrefix20210628\Nette\IOException("File or directory '{$origin}' not found.");
+            throw new \RectorPrefix20210629\Nette\IOException("File or directory '{$origin}' not found.");
         } else {
             static::createDir(\dirname($target));
             if (\realpath($origin) !== \realpath($target)) {
@@ -96,7 +96,7 @@ final class FileSystem
             }
             if (!@\rename($origin, $target)) {
                 // @ is escalated to exception
-                throw new \RectorPrefix20210628\Nette\IOException("Unable to rename file or directory '{$origin}' to '{$target}'. " . \RectorPrefix20210628\Nette\Utils\Helpers::getLastError());
+                throw new \RectorPrefix20210629\Nette\IOException("Unable to rename file or directory '{$origin}' to '{$target}'. " . \RectorPrefix20210629\Nette\Utils\Helpers::getLastError());
             }
         }
     }
@@ -109,7 +109,7 @@ final class FileSystem
         $content = @\file_get_contents($file);
         // @ is escalated to exception
         if ($content === \false) {
-            throw new \RectorPrefix20210628\Nette\IOException("Unable to read file '{$file}'. " . \RectorPrefix20210628\Nette\Utils\Helpers::getLastError());
+            throw new \RectorPrefix20210629\Nette\IOException("Unable to read file '{$file}'. " . \RectorPrefix20210629\Nette\Utils\Helpers::getLastError());
         }
         return $content;
     }
@@ -122,11 +122,11 @@ final class FileSystem
         static::createDir(\dirname($file));
         if (@\file_put_contents($file, $content) === \false) {
             // @ is escalated to exception
-            throw new \RectorPrefix20210628\Nette\IOException("Unable to write file '{$file}'. " . \RectorPrefix20210628\Nette\Utils\Helpers::getLastError());
+            throw new \RectorPrefix20210629\Nette\IOException("Unable to write file '{$file}'. " . \RectorPrefix20210629\Nette\Utils\Helpers::getLastError());
         }
         if ($mode !== null && !@\chmod($file, $mode)) {
             // @ is escalated to exception
-            throw new \RectorPrefix20210628\Nette\IOException("Unable to chmod file '{$file}' to mode " . \decoct($mode) . '. ' . \RectorPrefix20210628\Nette\Utils\Helpers::getLastError());
+            throw new \RectorPrefix20210629\Nette\IOException("Unable to chmod file '{$file}' to mode " . \decoct($mode) . '. ' . \RectorPrefix20210629\Nette\Utils\Helpers::getLastError());
         }
     }
     /**

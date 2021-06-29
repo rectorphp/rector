@@ -1,6 +1,6 @@
 #!/usr/bin/env php
 <?php 
-namespace RectorPrefix20210628;
+namespace RectorPrefix20210629;
 
 /*
  * This file is part of the Symfony package.
@@ -15,31 +15,31 @@ namespace RectorPrefix20210628;
  *
  * @author Maxime Steinhausser <maxime.steinhausser@gmail.com>
  */
-use RectorPrefix20210628\Psr\Log\LoggerInterface;
-use RectorPrefix20210628\Symfony\Component\Console\Application;
-use RectorPrefix20210628\Symfony\Component\Console\Input\ArgvInput;
-use RectorPrefix20210628\Symfony\Component\Console\Input\InputOption;
-use RectorPrefix20210628\Symfony\Component\Console\Logger\ConsoleLogger;
-use RectorPrefix20210628\Symfony\Component\Console\Output\ConsoleOutput;
-use RectorPrefix20210628\Symfony\Component\VarDumper\Command\ServerDumpCommand;
-use RectorPrefix20210628\Symfony\Component\VarDumper\Server\DumpServer;
+use RectorPrefix20210629\Psr\Log\LoggerInterface;
+use RectorPrefix20210629\Symfony\Component\Console\Application;
+use RectorPrefix20210629\Symfony\Component\Console\Input\ArgvInput;
+use RectorPrefix20210629\Symfony\Component\Console\Input\InputOption;
+use RectorPrefix20210629\Symfony\Component\Console\Logger\ConsoleLogger;
+use RectorPrefix20210629\Symfony\Component\Console\Output\ConsoleOutput;
+use RectorPrefix20210629\Symfony\Component\VarDumper\Command\ServerDumpCommand;
+use RectorPrefix20210629\Symfony\Component\VarDumper\Server\DumpServer;
 function includeIfExists(string $file) : bool
 {
     return \file_exists($file) && (include $file);
 }
-if (!\RectorPrefix20210628\includeIfExists(__DIR__ . '/../../../../autoload.php') && !\RectorPrefix20210628\includeIfExists(__DIR__ . '/../../vendor/autoload.php') && !\RectorPrefix20210628\includeIfExists(__DIR__ . '/../../../../../../vendor/autoload.php')) {
+if (!\RectorPrefix20210629\includeIfExists(__DIR__ . '/../../../../autoload.php') && !\RectorPrefix20210629\includeIfExists(__DIR__ . '/../../vendor/autoload.php') && !\RectorPrefix20210629\includeIfExists(__DIR__ . '/../../../../../../vendor/autoload.php')) {
     \fwrite(\STDERR, 'Install dependencies using Composer.' . \PHP_EOL);
     exit(1);
 }
-if (!\class_exists(\RectorPrefix20210628\Symfony\Component\Console\Application::class)) {
+if (!\class_exists(\RectorPrefix20210629\Symfony\Component\Console\Application::class)) {
     \fwrite(\STDERR, 'You need the "symfony/console" component in order to run the VarDumper server.' . \PHP_EOL);
     exit(1);
 }
-$input = new \RectorPrefix20210628\Symfony\Component\Console\Input\ArgvInput();
-$output = new \RectorPrefix20210628\Symfony\Component\Console\Output\ConsoleOutput();
+$input = new \RectorPrefix20210629\Symfony\Component\Console\Input\ArgvInput();
+$output = new \RectorPrefix20210629\Symfony\Component\Console\Output\ConsoleOutput();
 $defaultHost = '127.0.0.1:9912';
 $host = $input->getParameterOption(['--host'], $_SERVER['VAR_DUMPER_SERVER'] ?? $defaultHost, \true);
-$logger = \interface_exists(\RectorPrefix20210628\Psr\Log\LoggerInterface::class) ? new \RectorPrefix20210628\Symfony\Component\Console\Logger\ConsoleLogger($output->getErrorOutput()) : null;
-$app = new \RectorPrefix20210628\Symfony\Component\Console\Application();
-$app->getDefinition()->addOption(new \RectorPrefix20210628\Symfony\Component\Console\Input\InputOption('--host', null, \RectorPrefix20210628\Symfony\Component\Console\Input\InputOption::VALUE_REQUIRED, 'The address the server should listen to', $defaultHost));
-$app->add($command = new \RectorPrefix20210628\Symfony\Component\VarDumper\Command\ServerDumpCommand(new \RectorPrefix20210628\Symfony\Component\VarDumper\Server\DumpServer($host, $logger)))->getApplication()->setDefaultCommand($command->getName(), \true)->run($input, $output);
+$logger = \interface_exists(\RectorPrefix20210629\Psr\Log\LoggerInterface::class) ? new \RectorPrefix20210629\Symfony\Component\Console\Logger\ConsoleLogger($output->getErrorOutput()) : null;
+$app = new \RectorPrefix20210629\Symfony\Component\Console\Application();
+$app->getDefinition()->addOption(new \RectorPrefix20210629\Symfony\Component\Console\Input\InputOption('--host', null, \RectorPrefix20210629\Symfony\Component\Console\Input\InputOption::VALUE_REQUIRED, 'The address the server should listen to', $defaultHost));
+$app->add($command = new \RectorPrefix20210629\Symfony\Component\VarDumper\Command\ServerDumpCommand(new \RectorPrefix20210629\Symfony\Component\VarDumper\Server\DumpServer($host, $logger)))->getApplication()->setDefaultCommand($command->getName(), \true)->run($input, $output);

@@ -14,7 +14,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeCollector\NodeAnalyzer\ArrayCallableMethodReferenceAnalyzer;
+use Rector\NodeCollector\NodeAnalyzer\ArrayCallableMethodMatcher;
 use Rector\NodeCollector\ValueObject\ArrayCallable;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -25,16 +25,16 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ArrayThisCallToThisMethodCallRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var \Rector\NodeCollector\NodeAnalyzer\ArrayCallableMethodReferenceAnalyzer
+     * @var \Rector\NodeCollector\NodeAnalyzer\ArrayCallableMethodMatcher
      */
-    private $arrayCallableMethodReferenceAnalyzer;
+    private $arrayCallableMethodMatcher;
     /**
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(\Rector\NodeCollector\NodeAnalyzer\ArrayCallableMethodReferenceAnalyzer $arrayCallableMethodReferenceAnalyzer, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
+    public function __construct(\Rector\NodeCollector\NodeAnalyzer\ArrayCallableMethodMatcher $arrayCallableMethodMatcher, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
     {
-        $this->arrayCallableMethodReferenceAnalyzer = $arrayCallableMethodReferenceAnalyzer;
+        $this->arrayCallableMethodMatcher = $arrayCallableMethodMatcher;
         $this->reflectionProvider = $reflectionProvider;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
@@ -81,7 +81,7 @@ CODE_SAMPLE
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        $arrayCallable = $this->arrayCallableMethodReferenceAnalyzer->match($node);
+        $arrayCallable = $this->arrayCallableMethodMatcher->match($node);
         if (!$arrayCallable instanceof \Rector\NodeCollector\ValueObject\ArrayCallable) {
             return null;
         }

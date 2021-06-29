@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210628;
+namespace RectorPrefix20210629;
 
 if (\interface_exists('Tx_Extbase_Core_BootstrapInterface')) {
     return;

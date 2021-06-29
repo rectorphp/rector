@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210628\TYPO3\CMS\Core\Database\Query\Restriction;
+namespace RectorPrefix20210629\TYPO3\CMS\Core\Database\Query\Restriction;
 
 if (\class_exists('TYPO3\\CMS\\Core\\Database\\Query\\Restriction\\BackendWorkspaceRestriction')) {
     return;

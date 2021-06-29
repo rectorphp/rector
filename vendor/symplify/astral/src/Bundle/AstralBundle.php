@@ -1,20 +1,20 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210628\Symplify\Astral\Bundle;
+namespace RectorPrefix20210629\Symplify\Astral\Bundle;
 
-use RectorPrefix20210628\Symfony\Component\DependencyInjection\ContainerBuilder;
-use RectorPrefix20210628\Symfony\Component\HttpKernel\Bundle\Bundle;
-use RectorPrefix20210628\Symplify\Astral\DependencyInjection\Extension\AstralExtension;
-use RectorPrefix20210628\Symplify\AutowireArrayParameter\DependencyInjection\CompilerPass\AutowireArrayParameterCompilerPass;
-final class AstralBundle extends \RectorPrefix20210628\Symfony\Component\HttpKernel\Bundle\Bundle
+use RectorPrefix20210629\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix20210629\Symfony\Component\HttpKernel\Bundle\Bundle;
+use RectorPrefix20210629\Symplify\Astral\DependencyInjection\Extension\AstralExtension;
+use RectorPrefix20210629\Symplify\AutowireArrayParameter\DependencyInjection\CompilerPass\AutowireArrayParameterCompilerPass;
+final class AstralBundle extends \RectorPrefix20210629\Symfony\Component\HttpKernel\Bundle\Bundle
 {
-    public function build(\RectorPrefix20210628\Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder) : void
+    public function build(\RectorPrefix20210629\Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder) : void
     {
-        $containerBuilder->addCompilerPass(new \RectorPrefix20210628\Symplify\AutowireArrayParameter\DependencyInjection\CompilerPass\AutowireArrayParameterCompilerPass());
+        $containerBuilder->addCompilerPass(new \RectorPrefix20210629\Symplify\AutowireArrayParameter\DependencyInjection\CompilerPass\AutowireArrayParameterCompilerPass());
     }
-    protected function createContainerExtension() : ?\RectorPrefix20210628\Symfony\Component\DependencyInjection\Extension\ExtensionInterface
+    protected function createContainerExtension() : ?\RectorPrefix20210629\Symfony\Component\DependencyInjection\Extension\ExtensionInterface
     {
-        return new \RectorPrefix20210628\Symplify\Astral\DependencyInjection\Extension\AstralExtension();
+        return new \RectorPrefix20210629\Symplify\Astral\DependencyInjection\Extension\AstralExtension();
     }
 }

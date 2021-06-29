@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210628;
+namespace RectorPrefix20210629;
 
 if (\class_exists('tslib_content_EditPanel')) {
     return;

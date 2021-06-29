@@ -8,19 +8,19 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210628\Symfony\Component\HttpKernel\Bundle;
+namespace RectorPrefix20210629\Symfony\Component\HttpKernel\Bundle;
 
-use RectorPrefix20210628\Symfony\Component\Console\Application;
-use RectorPrefix20210628\Symfony\Component\DependencyInjection\Container;
-use RectorPrefix20210628\Symfony\Component\DependencyInjection\ContainerAwareTrait;
-use RectorPrefix20210628\Symfony\Component\DependencyInjection\ContainerBuilder;
-use RectorPrefix20210628\Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
+use RectorPrefix20210629\Symfony\Component\Console\Application;
+use RectorPrefix20210629\Symfony\Component\DependencyInjection\Container;
+use RectorPrefix20210629\Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use RectorPrefix20210629\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix20210629\Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 /**
  * An implementation of BundleInterface that adds a few conventions for DependencyInjection extensions.
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-abstract class Bundle implements \RectorPrefix20210628\Symfony\Component\HttpKernel\Bundle\BundleInterface
+abstract class Bundle implements \RectorPrefix20210629\Symfony\Component\HttpKernel\Bundle\BundleInterface
 {
     use ContainerAwareTrait;
     protected $name;
@@ -45,7 +45,7 @@ abstract class Bundle implements \RectorPrefix20210628\Symfony\Component\HttpKer
      * This method can be overridden to register compilation passes,
      * other extensions, ...
      */
-    public function build(\RectorPrefix20210628\Symfony\Component\DependencyInjection\ContainerBuilder $container)
+    public function build(\RectorPrefix20210629\Symfony\Component\DependencyInjection\ContainerBuilder $container)
     {
     }
     /**
@@ -60,12 +60,12 @@ abstract class Bundle implements \RectorPrefix20210628\Symfony\Component\HttpKer
         if (null === $this->extension) {
             $extension = $this->createContainerExtension();
             if (null !== $extension) {
-                if (!$extension instanceof \RectorPrefix20210628\Symfony\Component\DependencyInjection\Extension\ExtensionInterface) {
+                if (!$extension instanceof \RectorPrefix20210629\Symfony\Component\DependencyInjection\Extension\ExtensionInterface) {
                     throw new \LogicException(\sprintf('Extension "%s" must implement Symfony\\Component\\DependencyInjection\\Extension\\ExtensionInterface.', \get_debug_type($extension)));
                 }
                 // check naming convention
                 $basename = \preg_replace('/Bundle$/', '', $this->getName());
-                $expectedAlias = \RectorPrefix20210628\Symfony\Component\DependencyInjection\Container::underscore($basename);
+                $expectedAlias = \RectorPrefix20210629\Symfony\Component\DependencyInjection\Container::underscore($basename);
                 if ($expectedAlias != $extension->getAlias()) {
                     throw new \LogicException(\sprintf('Users will expect the alias of the default extension of a bundle to be the underscored version of the bundle name ("%s"). You can override "Bundle::getContainerExtension()" if you want to use "%s" or another alias.', $expectedAlias, $extension->getAlias()));
                 }
@@ -107,7 +107,7 @@ abstract class Bundle implements \RectorPrefix20210628\Symfony\Component\HttpKer
         }
         return $this->name;
     }
-    public function registerCommands(\RectorPrefix20210628\Symfony\Component\Console\Application $application)
+    public function registerCommands(\RectorPrefix20210629\Symfony\Component\Console\Application $application)
     {
     }
     /**

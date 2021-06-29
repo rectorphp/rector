@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\TypeDeclaration\TypeInferer\ParamTypeInferer;
 
-use RectorPrefix20210628\Nette\Utils\Strings;
+use RectorPrefix20210629\Nette\Utils\Strings;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Yield_;
@@ -25,7 +25,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\TypeDeclaration\Contract\TypeInferer\ParamTypeInfererInterface;
-use RectorPrefix20210628\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix20210629\Symfony\Contracts\Service\Attribute\Required;
 final class PHPUnitDataProviderParamTypeInferer implements \Rector\TypeDeclaration\Contract\TypeInferer\ParamTypeInfererInterface
 {
     /**
@@ -97,7 +97,7 @@ final class PHPUnitDataProviderParamTypeInferer implements \Rector\TypeDeclarati
             return null;
         }
         $content = $phpDocTagNode->value->value;
-        $match = \RectorPrefix20210628\Nette\Utils\Strings::match($content, self::METHOD_NAME_REGEX);
+        $match = \RectorPrefix20210629\Nette\Utils\Strings::match($content, self::METHOD_NAME_REGEX);
         if ($match === null) {
             return null;
         }
