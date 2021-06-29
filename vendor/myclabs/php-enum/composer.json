@@ -30,6 +30,6 @@
     "require-dev": {
         "phpunit\/phpunit": "^9.5",
         "squizlabs\/php_codesniffer": "1.*",
-        "vimeo\/psalm": "^4.5.1"
+        "vimeo\/psalm": "^4.6.2"
     }
 }

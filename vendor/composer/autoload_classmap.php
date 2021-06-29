@@ -2186,6 +2186,7 @@ return array(
     'Rector\\FamilyTree\\NodeAnalyzer\\ClassChildAnalyzer' => $baseDir . '/packages/FamilyTree/NodeAnalyzer/ClassChildAnalyzer.php',
     'Rector\\FamilyTree\\NodeAnalyzer\\PropertyUsageAnalyzer' => $baseDir . '/packages/FamilyTree/NodeAnalyzer/PropertyUsageAnalyzer.php',
     'Rector\\FamilyTree\\Reflection\\FamilyRelationsAnalyzer' => $baseDir . '/packages/FamilyTree/Reflection/FamilyRelationsAnalyzer.php',
+    'Rector\\FamilyTree\\ValueObject\\PropertyType' => $baseDir . '/packages/FamilyTree/ValueObject/PropertyType.php',
     'Rector\\FileFormatter\\Contract\\Formatter\\FileFormatterInterface' => $baseDir . '/packages/FileFormatter/Contract/Formatter/FileFormatterInterface.php',
     'Rector\\FileFormatter\\EditorConfig\\EditorConfigParser' => $baseDir . '/packages/FileFormatter/EditorConfig/EditorConfigParser.php',
     'Rector\\FileFormatter\\Exception\\InvalidIndentSizeException' => $baseDir . '/packages/FileFormatter/Exception/InvalidIndentSizeException.php',
