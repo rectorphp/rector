@@ -49,10 +49,7 @@ final class VarTagRemover
         $phpDocInfo->removeByType(VarTagValueNode::class);
     }
 
-    /**
-     * @param Expression|Property|Param $node
-     */
-    public function removeVarPhpTagValueNodeIfNotComment(Node $node, Type $type): void
+    public function removeVarPhpTagValueNodeIfNotComment(Expression | Property | Param $node, Type $type): void
     {
         // keep doctrine collection narrow type
         if ($this->doctrineTypeAnalyzer->isDoctrineCollectionWithIterableUnionType($type)) {
@@ -84,10 +81,7 @@ final class VarTagRemover
         $phpDocInfo->removeByType(VarTagValueNode::class);
     }
 
-    /**
-     * @param Expression|Param|Property $node
-     */
-    private function isNonBasicArrayType(Node $node, VarTagValueNode $varTagValueNode): bool
+    private function isNonBasicArrayType(Expression | Param | Property $node, VarTagValueNode $varTagValueNode): bool
     {
         if ($varTagValueNode->type instanceof BracketsAwareUnionTypeNode) {
             foreach ($varTagValueNode->type->types as $type) {

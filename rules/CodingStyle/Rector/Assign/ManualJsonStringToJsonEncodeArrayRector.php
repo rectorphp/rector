@@ -239,11 +239,10 @@ CODE_SAMPLE
         return $this->jsonEncodeStaticCallFactory->createFromArray($assign->var, $jsonArray);
     }
 
-    /**
-     * @param Assign|ConcatAssign $currentNode
-     */
-    private function matchNextExprAssignConcatToSameVariable(Expr $expr, Node $currentNode): ?NodeToRemoveAndConcatItem
-    {
+    private function matchNextExprAssignConcatToSameVariable(
+        Expr $expr,
+        Assign | ConcatAssign | Expression | Node $currentNode
+    ): ?NodeToRemoveAndConcatItem {
         $nextExpression = $this->getNextExpression($currentNode);
         if (! $nextExpression instanceof Expression) {
             return null;

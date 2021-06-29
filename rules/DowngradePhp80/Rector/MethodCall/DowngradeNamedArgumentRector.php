@@ -117,12 +117,11 @@ CODE_SAMPLE
     }
 
     /**
-     * @param MethodCall|StaticCall|New_ $node
      * @param Arg[] $args
      */
     private function processRemoveNamedArgument(
         MethodReflection | FunctionReflection $reflection,
-        Node $node,
+        MethodCall | StaticCall | New_ $node,
         array $args
     ): MethodCall | StaticCall | New_ {
         /** @var Arg[] $newArgs */

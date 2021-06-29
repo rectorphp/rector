@@ -7,7 +7,6 @@ namespace Rector\Transform\NodeAnalyzer;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
@@ -31,12 +30,9 @@ final class FuncCallStaticCallToMethodCallAnalyzer
     ) {
     }
 
-    /**
-     * @param ClassMethod|Function_ $functionLike
-     */
     public function matchTypeProvidingExpr(
         Class_ $class,
-        FunctionLike $functionLike,
+        ClassMethod | Function_ $functionLike,
         ObjectType $objectType
     ): MethodCall | PropertyFetch | Variable {
         $expr = $this->typeProvidingExprFromClassResolver->resolveTypeProvidingExprFromClass(
@@ -58,13 +54,10 @@ final class FuncCallStaticCallToMethodCallAnalyzer
         return $this->propertyFetchFactory->createFromType($objectType);
     }
 
-    /**
-     * @param ClassMethod|Function_ $functionLike
-     */
     private function addClassMethodParamForVariable(
         Variable $variable,
         ObjectType $objectType,
-        FunctionLike $functionLike
+        ClassMethod | Function_ $functionLike
     ): void {
         /** @var string $variableName */
         $variableName = $this->nodeNameResolver->getName($variable);

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\NodeNameResolver\Error;
 
-use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use Rector\Core\Contract\Rector\RectorInterface;
@@ -27,10 +26,7 @@ final class InvalidNameNodeReporter
     ) {
     }
 
-    /**
-     * @param MethodCall|StaticCall $node
-     */
-    public function reportInvalidNodeForName(Node $node): void
+    public function reportInvalidNodeForName(MethodCall | StaticCall $node): void
     {
         $message = sprintf('Pick more specific node than "%s", e.g. "$node->name"', $node::class);
 

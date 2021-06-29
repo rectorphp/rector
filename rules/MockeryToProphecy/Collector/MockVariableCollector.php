@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\MockeryToProphecy\Collector;
 
-use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\StaticCall;
@@ -22,10 +21,9 @@ final class MockVariableCollector
     }
 
     /**
-     * @param FuncCall|StaticCall $node
      * @return array<string, class-string>
      */
-    public function collectMockVariableName(Node $node): array
+    public function collectMockVariableName(FuncCall | StaticCall $node): array
     {
         $mockVariableTypesByNames = [];
 

@@ -124,10 +124,7 @@ CODE_SAMPLE
         return $this->processType($node, $inferedReturnType);
     }
 
-    /**
-     * @param ClassMethod|Function_ $node
-     */
-    private function processType(Node $node, Type $inferedType): ?Node
+    private function processType(ClassMethod | Function_ $node, Type $inferedType): ?Node
     {
         $inferredReturnNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode(
             $inferedType,
@@ -169,10 +166,7 @@ CODE_SAMPLE
         return $this->vendorLockResolver->isReturnChangeVendorLockedIn($classMethod);
     }
 
-    /**
-     * @param ClassMethod|Function_ $functionLike
-     */
-    private function shouldSkipInferredReturnNode(FunctionLike $functionLike): bool
+    private function shouldSkipInferredReturnNode(ClassMethod | Function_ $functionLike): bool
     {
         // already overridden by previous populateChild() method run
         if ($functionLike->returnType === null) {
@@ -182,10 +176,7 @@ CODE_SAMPLE
         return (bool) $functionLike->returnType->getAttribute(AttributeKey::DO_NOT_CHANGE);
     }
 
-    /**
-     * @param ClassMethod|Function_ $functionLike
-     */
-    private function shouldSkipExistingReturnType(FunctionLike $functionLike, Type $inferedType): bool
+    private function shouldSkipExistingReturnType(ClassMethod | Function_ $functionLike, Type $inferedType): bool
     {
         if ($functionLike->returnType === null) {
             return false;
@@ -205,12 +196,10 @@ CODE_SAMPLE
         return $this->isNullableTypeSubType($currentType, $inferedType);
     }
 
-    /**
-     * @param ClassMethod|Function_ $functionLike
-     * @param Name|NullableType|PhpParserUnionType $inferredReturnNode
-     */
-    private function addReturnType(FunctionLike $functionLike, Node $inferredReturnNode): void
-    {
+    private function addReturnType(
+        ClassMethod | Function_ $functionLike,
+        Name | NullableType | PhpParserUnionType $inferredReturnNode
+    ): void {
         if ($this->isExternalVoid($functionLike, $inferredReturnNode)) {
             return;
         }
@@ -232,12 +221,10 @@ CODE_SAMPLE
         }
     }
 
-    /**
-     * @param ClassMethod|Function_ $functionLike
-     * @param Name|NullableType|PhpParserUnionType $inferredReturnNode
-     */
-    private function isExternalVoid(FunctionLike $functionLike, Node $inferredReturnNode): bool
-    {
+    private function isExternalVoid(
+        ClassMethod | Function_ $functionLike,
+        Name | NullableType | PhpParserUnionType $inferredReturnNode
+    ): bool {
         $classLike = $functionLike->getAttribute(AttributeKey::CLASS_NODE);
         if (! $classLike instanceof Class_) {
             return false;

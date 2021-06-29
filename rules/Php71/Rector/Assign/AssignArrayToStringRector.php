@@ -119,10 +119,7 @@ CODE_SAMPLE
         return $assign;
     }
 
-    /**
-     * @param PropertyFetch|StaticPropertyFetch $propertyFetchExpr
-     */
-    private function refactorPropertyFetch(Expr $propertyFetchExpr): bool
+    private function refactorPropertyFetch(PropertyFetch | StaticPropertyFetch $propertyFetchExpr): bool
     {
         foreach ($this->emptyStringProperties as $emptyStringProperty) {
             if (! $this->nodeNameResolver->areNamesEqual($emptyStringProperty, $propertyFetchExpr)) {
@@ -136,10 +133,7 @@ CODE_SAMPLE
         return false;
     }
 
-    /**
-     * @param Variable|PropertyFetch|StaticPropertyFetch|Expr $expr
-     */
-    private function processVariable(Assign $assign, Expr $expr): bool
+    private function processVariable(Assign $assign, Variable | PropertyFetch | StaticPropertyFetch | Expr $expr): bool
     {
         if ($this->shouldSkipVariable($expr)) {
             return true;

@@ -55,11 +55,9 @@ final class IdentifierManipulator
         $node->name = new Identifier($newName);
     }
 
-    /**
-     * @param ClassConstFetch|MethodCall|PropertyFetch|StaticCall|ClassMethod $node
-     */
-    private function resolveOldMethodName(Node $node): ?string
-    {
+    private function resolveOldMethodName(
+        ClassConstFetch | MethodCall | PropertyFetch | StaticCall | ClassMethod $node
+    ): ?string {
         if ($node instanceof StaticCall || $node instanceof MethodCall) {
             return $this->nodeNameResolver->getName($node->name);
         }

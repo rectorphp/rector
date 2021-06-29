@@ -131,10 +131,7 @@ CODE_SAMPLE
         return $statements;
     }
 
-    /**
-     * @param If_|ElseIf_ $node
-     */
-    private function doesLastStatementBreakFlow(Node $node): bool
+    private function doesLastStatementBreakFlow(If_ | ElseIf_ $node): bool
     {
         $lastStmt = end($node->stmts);
 

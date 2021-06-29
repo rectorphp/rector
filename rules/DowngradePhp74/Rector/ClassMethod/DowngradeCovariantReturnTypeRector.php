@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\DowngradePhp74\Rector\ClassMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -131,11 +132,10 @@ CODE_SAMPLE
         return $node;
     }
 
-    /**
-     * @param UnionType|NullableType|Name|Node\Identifier $returnTypeNode
-     */
-    private function resolveDifferentAncestorReturnType(ClassMethod $classMethod, Node $returnTypeNode): Type
-    {
+    private function resolveDifferentAncestorReturnType(
+        ClassMethod $classMethod,
+        UnionType | NullableType | Name | Identifier $returnTypeNode
+    ): Type {
         $scope = $classMethod->getAttribute(AttributeKey::SCOPE);
         if (! $scope instanceof Scope) {
             // possibly trait

@@ -103,10 +103,7 @@ final class ExpectedNameResolver
         return $expectedName->getName();
     }
 
-    /**
-     * @param MethodCall|StaticCall|FuncCall $expr
-     */
-    public function resolveForCall(Expr $expr): ?string
+    public function resolveForCall(MethodCall | StaticCall | FuncCall $expr): ?string
     {
         if ($this->isDynamicNameCall($expr)) {
             return null;
@@ -146,10 +143,7 @@ final class ExpectedNameResolver
         return null;
     }
 
-    /**
-     * @param MethodCall|StaticCall|FuncCall $expr
-     */
-    public function resolveForForeach(Expr $expr): ?string
+    public function resolveForForeach(MethodCall | StaticCall | FuncCall $expr): ?string
     {
         if ($this->isDynamicNameCall($expr)) {
             return null;
@@ -190,10 +184,7 @@ final class ExpectedNameResolver
         return $expectedNameFromMethodName->getSingularized();
     }
 
-    /**
-     * @param MethodCall|StaticCall|FuncCall $expr
-     */
-    private function isDynamicNameCall(Expr $expr): bool
+    private function isDynamicNameCall(MethodCall | StaticCall | FuncCall $expr): bool
     {
         if ($expr->name instanceof StaticCall) {
             return true;

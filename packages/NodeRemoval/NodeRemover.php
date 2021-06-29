@@ -89,10 +89,7 @@ final class NodeRemover
         unset($classMethod->params[$key]);
     }
 
-    /**
-     * @param FuncCall|MethodCall|StaticCall $node
-     */
-    public function removeArg(Node $node, int $key): void
+    public function removeArg(FuncCall | MethodCall | StaticCall $node, int $key): void
     {
         if ($node->args === null) {
             throw new ShouldNotHappenException();

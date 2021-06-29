@@ -153,13 +153,10 @@ CODE_SAMPLE
         return $stmts;
     }
 
-    /**
-     * @param Namespace_|FileWithoutNamespace $node
-     */
     private function printStaticMethodClass(
         SmartFileInfo $smartFileInfo,
         string $shortClassName,
-        Node $node,
+        Namespace_ | FileWithoutNamespace $node,
         Class_ $class
     ): void {
         $classFileDestination = $smartFileInfo->getPath() . DIRECTORY_SEPARATOR . $shortClassName . '.php';
@@ -170,10 +167,7 @@ CODE_SAMPLE
         $this->removedAndAddedFilesCollector->addAddedFile($addedFileWithNodes);
     }
 
-    /**
-     * @param Namespace_|FileWithoutNamespace $node
-     */
-    private function resolveNodeToPrint(Node $node, Class_ $class): Namespace_ | Class_
+    private function resolveNodeToPrint(Namespace_ | FileWithoutNamespace $node, Class_ $class): Namespace_ | Class_
     {
         if ($node instanceof Namespace_) {
             return new Namespace_($node->name, [$class]);

@@ -7,7 +7,6 @@ namespace Rector\Core\NodeManipulator;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Trait_;
@@ -27,10 +26,9 @@ final class ClassManipulator
 
     /**
      * @deprecated
-     * @param Class_|Trait_ $classLike
      * @return array<string, Name>
      */
-    public function getUsedTraits(ClassLike $classLike): array
+    public function getUsedTraits(Class_ | Trait_ $classLike): array
     {
         $usedTraits = [];
         foreach ($classLike->getTraitUses() as $traitUse) {
@@ -118,10 +116,9 @@ final class ClassManipulator
     }
 
     /**
-     * @param Class_|Interface_ $classLike
      * @return string[]
      */
-    public function getClassLikeNodeParentInterfaceNames(ClassLike $classLike): array
+    public function getClassLikeNodeParentInterfaceNames(Class_ | Interface_ $classLike): array
     {
         if ($classLike instanceof Class_) {
             return $this->nodeNameResolver->getNames($classLike->implements);

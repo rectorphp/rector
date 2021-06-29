@@ -169,10 +169,7 @@ CODE_SAMPLE
         return ! $this->nodeComparator->areNodesEqual($if->cond->vars[0], $firstElseStmt->expr->var);
     }
 
-    /**
-     * @param If_|Else_ $node
-     */
-    private function hasOnlyStatementAssign(Node $node): bool
+    private function hasOnlyStatementAssign(If_ | Else_ $node): bool
     {
         if (count($node->stmts) !== 1) {
             return false;

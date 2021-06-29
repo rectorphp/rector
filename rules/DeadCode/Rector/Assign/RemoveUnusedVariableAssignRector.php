@@ -183,11 +183,10 @@ CODE_SAMPLE
         });
     }
 
-    /**
-     * @param FuncCall|MethodCall|New_|NullsafeMethodCall|StaticCall $expr
-     */
-    private function isUsedInAssignExpr(Expr $expr, Assign $assign): bool
-    {
+    private function isUsedInAssignExpr(
+        FuncCall | MethodCall | New_ | NullsafeMethodCall | StaticCall $expr,
+        Assign $assign
+    ): bool {
         foreach ($expr->args as $arg) {
             $variable = $arg->value;
             if (! $variable instanceof Variable) {

@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace Rector\TypeDeclaration\TypeAlreadyAddedChecker;
 
 use Iterator;
-use PhpParser\Node;
-use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\NullableType;
@@ -42,10 +40,7 @@ final class ReturnTypeAlreadyAddedChecker
     ) {
     }
 
-    /**
-     * @param ClassMethod|Function_ $functionLike
-     */
-    public function isSameOrBetterReturnTypeAlreadyAdded(FunctionLike $functionLike, Type $returnType): bool
+    public function isSameOrBetterReturnTypeAlreadyAdded(ClassMethod | Function_ $functionLike, Type $returnType): bool
     {
         $nodeReturnType = $functionLike->returnType;
 
@@ -95,11 +90,10 @@ final class ReturnTypeAlreadyAddedChecker
         return $nodeContentWithoutPreslash === $className;
     }
 
-    /**
-     * @param Identifier|Name|NullableType|PhpParserUnionType $returnTypeNode
-     */
-    private function isArrayIterableIteratorCoType(Node $returnTypeNode, Type $returnType): bool
-    {
+    private function isArrayIterableIteratorCoType(
+        Identifier | Name | NullableType | PhpParserUnionType $returnTypeNode,
+        Type $returnType
+    ): bool {
         if (! $this->nodeNameResolver->isNames($returnTypeNode, self::FOREACHABLE_TYPES)) {
             return false;
         }
@@ -107,11 +101,10 @@ final class ReturnTypeAlreadyAddedChecker
         return $this->isStaticTypeIterable($returnType);
     }
 
-    /**
-     * @param Identifier|Name|NullableType|PhpParserUnionType $returnTypeNode
-     */
-    private function isUnionCoType(Node $returnTypeNode, Type $type): bool
-    {
+    private function isUnionCoType(
+        Identifier | Name | NullableType | PhpParserUnionType $returnTypeNode,
+        Type $type
+    ): bool {
         if (! $type instanceof UnionType) {
             return false;
         }

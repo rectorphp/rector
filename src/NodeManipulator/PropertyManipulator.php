@@ -88,10 +88,7 @@ final class PropertyManipulator
         return false;
     }
 
-    /**
-     * @param PropertyFetch|StaticPropertyFetch $expr
-     */
-    private function isChangeableContext(Expr $expr): bool
+    private function isChangeableContext(PropertyFetch | StaticPropertyFetch $expr): bool
     {
         $parent = $expr->getAttribute(AttributeKey::PARENT_NODE);
         if (! $parent instanceof Node) {

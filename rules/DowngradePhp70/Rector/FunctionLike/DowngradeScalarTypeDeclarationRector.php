@@ -13,7 +13,6 @@ use PhpParser\Node\Expr\Cast\Int_;
 use PhpParser\Node\Expr\Cast\String_;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
@@ -114,10 +113,7 @@ CODE_SAMPLE
         return $node;
     }
 
-    /**
-     * @param Function_|ClassMethod $functionLike
-     */
-    private function resolveRecastAssign(Param $param, FunctionLike $functionLike): ?Expression
+    private function resolveRecastAssign(Param $param, Function_ | ClassMethod | Closure $functionLike): ?Expression
     {
         if ($functionLike->stmts === null) {
             return null;

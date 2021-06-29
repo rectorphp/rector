@@ -29,10 +29,7 @@ final class ClassInsertManipulator
     ) {
     }
 
-    /**
-     * @param ClassMethod|Property|ClassConst|ClassMethod $stmt
-     */
-    public function addAsFirstMethod(Class_ $class, Stmt $stmt): void
+    public function addAsFirstMethod(Class_ $class, Property | ClassConst | ClassMethod $stmt): void
     {
         if ($this->isSuccessToInsertBeforeFirstMethod($class, $stmt)) {
             return;

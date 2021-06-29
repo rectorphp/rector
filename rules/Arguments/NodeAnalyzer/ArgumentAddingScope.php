@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Arguments\NodeAnalyzer;
 
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name;
@@ -33,10 +32,7 @@ final class ArgumentAddingScope
     ) {
     }
 
-    /**
-     * @param MethodCall|StaticCall $expr
-     */
-    public function isInCorrectScope(Expr $expr, ArgumentAdder $argumentAdder): bool
+    public function isInCorrectScope(MethodCall | StaticCall $expr, ArgumentAdder $argumentAdder): bool
     {
         if ($argumentAdder->getScope() === null) {
             return true;

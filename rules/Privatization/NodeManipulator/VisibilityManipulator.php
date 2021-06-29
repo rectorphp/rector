@@ -40,18 +40,12 @@ final class VisibilityManipulator
         $node->flags -= Class_::MODIFIER_STATIC;
     }
 
-    /**
-     * @param Class_|ClassMethod $node
-     */
-    public function makeFinal(Node $node): void
+    public function makeFinal(Class_ | ClassMethod $node): void
     {
         $this->addVisibilityFlag($node, Visibility::FINAL);
     }
 
-    /**
-     * @param Class_|ClassMethod $node
-     */
-    public function makeNonFinal(Node $node): void
+    public function makeNonFinal(Class_ | ClassMethod $node): void
     {
         if (! $node->isFinal()) {
             return;
@@ -62,10 +56,8 @@ final class VisibilityManipulator
 
     /**
      * This way "abstract", "static", "final" are kept
-     *
-     * @param ClassMethod|Property|ClassConst $node
      */
-    public function removeVisibility(Node $node): void
+    public function removeVisibility(ClassMethod | Property | ClassConst $node): void
     {
         $this->ensureIsClassMethodOrProperty($node, __METHOD__);
 
@@ -87,10 +79,7 @@ final class VisibilityManipulator
         }
     }
 
-    /**
-     * @param ClassMethod|Property|ClassConst $node
-     */
-    public function changeNodeVisibility(Node $node, int $visibility): void
+    public function changeNodeVisibility(ClassMethod | Property | ClassConst $node, int $visibility): void
     {
         Assert::oneOf($visibility, [
             Visibility::PUBLIC,
@@ -104,26 +93,17 @@ final class VisibilityManipulator
         $this->replaceVisibilityFlag($node, $visibility);
     }
 
-    /**
-     * @param ClassMethod|Property|ClassConst $node
-     */
-    public function makePublic(Node $node): void
+    public function makePublic(ClassMethod | Property | ClassConst $node): void
     {
         $this->replaceVisibilityFlag($node, Visibility::PUBLIC);
     }
 
-    /**
-     * @param ClassMethod|Property|ClassConst $node
-     */
-    public function makeProtected(Node $node): void
+    public function makeProtected(ClassMethod | Property | ClassConst $node): void
     {
         $this->replaceVisibilityFlag($node, Visibility::PROTECTED);
     }
 
-    /**
-     * @param ClassMethod|Property|ClassConst $node
-     */
-    public function makePrivate(Node $node): void
+    public function makePrivate(ClassMethod | Property | ClassConst $node): void
     {
         $this->replaceVisibilityFlag($node, Visibility::PRIVATE);
     }
@@ -133,10 +113,7 @@ final class VisibilityManipulator
         $class->flags -= Class_::MODIFIER_FINAL;
     }
 
-    /**
-     * @param Class_|ClassMethod|Property|ClassConst $node
-     */
-    private function addVisibilityFlag(Node $node, int $visibility): void
+    private function addVisibilityFlag(Class_ | ClassMethod | Property | ClassConst $node, int $visibility): void
     {
         $this->ensureIsClassMethodOrProperty($node, __METHOD__);
         $node->flags |= $visibility;
@@ -158,10 +135,7 @@ final class VisibilityManipulator
         ));
     }
 
-    /**
-     * @param ClassMethod|Property|ClassConst $node
-     */
-    private function replaceVisibilityFlag(Node $node, int $visibility): void
+    private function replaceVisibilityFlag(ClassMethod | Property | ClassConst $node, int $visibility): void
     {
         $isStatic = $node instanceof ClassMethod && $node->isStatic();
         if ($isStatic) {

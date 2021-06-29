@@ -162,10 +162,7 @@ CODE_SAMPLE
         return $nodeToReturn;
     }
 
-    /**
-     * @param Namespace_|FileWithoutNamespace $mainNode
-     */
-    private function printNewNodes(ClassLike $classLike, Node $mainNode): void
+    private function printNewNodes(ClassLike $classLike, Namespace_ | FileWithoutNamespace $mainNode): void
     {
         $smartFileInfo = $this->file->getSmartFileInfo();
 

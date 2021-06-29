@@ -120,11 +120,8 @@ CODE_SAMPLE
         return $node;
     }
 
-    /**
-     * @param Class_|Trait_ $classLike
-     */
     private function getSortedAndOriginalClassMethods(
-        ClassLike $classLike
+        Class_ | Trait_ $classLike
     ): SortedClassMethodsAndOriginalClassMethods {
         return new SortedClassMethodsAndOriginalClassMethods(
             $this->getLocalPrivateMethodCallOrder($classLike),

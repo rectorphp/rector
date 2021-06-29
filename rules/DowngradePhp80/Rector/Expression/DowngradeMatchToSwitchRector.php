@@ -108,11 +108,10 @@ CODE_SAMPLE
     }
 
     /**
-     * @param Expression|Return_ $node
      * @param MatchArm[] $matchArms
      * @return Case_[]
      */
-    private function createSwitchCasesFromMatchArms(Node $node, array $matchArms): array
+    private function createSwitchCasesFromMatchArms(Expression | Return_ $node, array $matchArms): array
     {
         $switchCases = [];
 
@@ -139,10 +138,9 @@ CODE_SAMPLE
     }
 
     /**
-     * @param Expression|Return_ $node
      * @return Stmt[]
      */
-    private function createSwitchStmts(Node $node, MatchArm $matchArm): array
+    private function createSwitchStmts(Expression | Return_ $node, MatchArm $matchArm): array
     {
         $stmts = [];
 

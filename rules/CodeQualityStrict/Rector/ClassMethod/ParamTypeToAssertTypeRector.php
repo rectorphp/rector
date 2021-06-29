@@ -128,10 +128,9 @@ CODE_SAMPLE
 
     /**
      * @param Param[] $params
-     * @param ObjectType|UnionType $type
      * @return ObjectType|UnionType
      */
-    private function getToBeProcessedTypes(array $params, string $key, Type $type): ?Type
+    private function getToBeProcessedTypes(array $params, string $key, ObjectType | UnionType $type): ?Type
     {
         foreach ($params as $param) {
             $paramName = ltrim($key, '$');

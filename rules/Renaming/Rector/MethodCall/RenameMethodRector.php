@@ -129,11 +129,10 @@ CODE_SAMPLE
         $this->methodCallRenameCollector->addMethodCallRenames($methodCallRenames);
     }
 
-    /**
-     * @param MethodCall|StaticCall|ClassMethod $node
-     */
-    private function skipClassMethod(Node $node, MethodCallRenameInterface $methodCallRename): bool
-    {
+    private function skipClassMethod(
+        MethodCall | StaticCall | ClassMethod $node,
+        MethodCallRenameInterface $methodCallRename
+    ): bool {
         if (! $node instanceof ClassMethod) {
             return false;
         }

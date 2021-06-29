@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Core\NodeManipulator;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PHPStan\Analyser\Scope;
@@ -32,10 +31,7 @@ final class MagicPropertyFetchAnalyzer
     ) {
     }
 
-    /**
-     * @param PropertyFetch|Node\Expr\StaticPropertyFetch $expr
-     */
-    public function isMagicOnType(Expr $expr, Type $type): bool
+    public function isMagicOnType(PropertyFetch | StaticPropertyFetch $expr, Type $type): bool
     {
         $varNodeType = $this->nodeTypeResolver->resolve($expr);
 
@@ -59,10 +55,7 @@ final class MagicPropertyFetchAnalyzer
         return ! $this->hasPublicProperty($expr, $nodeName);
     }
 
-    /**
-     * @param PropertyFetch|StaticPropertyFetch $expr
-     */
-    private function hasPublicProperty(Expr $expr, string $propertyName): bool
+    private function hasPublicProperty(PropertyFetch | StaticPropertyFetch $expr, string $propertyName): bool
     {
         $scope = $expr->getAttribute(AttributeKey::SCOPE);
         if (! $scope instanceof Scope) {

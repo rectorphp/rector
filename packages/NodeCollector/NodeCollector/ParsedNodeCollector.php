@@ -6,7 +6,6 @@ namespace Rector\NodeCollector\NodeCollector;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Trait_;
 use Rector\Core\Exception\ShouldNotHappenException;
@@ -100,10 +99,7 @@ final class ParsedNodeCollector
         $this->classes[$className] = $class;
     }
 
-    /**
-     * @param Interface_|Trait_ $classLike
-     */
-    private function collectInterfaceOrTrait(ClassLike $classLike): void
+    private function collectInterfaceOrTrait(Interface_ | Trait_ $classLike): void
     {
         $name = $this->nodeNameResolver->getName($classLike);
         if ($name === null) {

@@ -116,11 +116,8 @@ CODE_SAMPLE
         return null;
     }
 
-    /**
-     * @param ClassMethod|Function_|Closure $node
-     */
     private function processSingleUnionType(
-        Node $node,
+        ClassMethod | Function_ | Closure $node,
         UnionType $unionType,
         NullableType $nullableType
     ): Closure | ClassMethod | Function_ {

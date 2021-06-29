@@ -130,10 +130,7 @@ CODE_SAMPLE
         return $node;
     }
 
-    /**
-     * @param LNumber|DNumber $node
-     */
-    private function shouldSkip(Node $node, string $numericValueAsString): bool
+    private function shouldSkip(LNumber | DNumber $node, string $numericValueAsString): bool
     {
         /** @var int $startToken */
         $startToken = $node->getAttribute(AttributeKey::START_TOKEN_POSITION);

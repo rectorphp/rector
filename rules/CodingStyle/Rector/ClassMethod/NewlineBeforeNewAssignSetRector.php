@@ -139,10 +139,7 @@ CODE_SAMPLE
         return ! $this->isPrecededByEmptyLine($node, $key);
     }
 
-    /**
-     * @param Assign|MethodCall $node
-     */
-    private function shouldSkipLeftVariable(Node $node): bool
+    private function shouldSkipLeftVariable(Assign | MethodCall $node): bool
     {
         if (! $node->var instanceof Variable) {
             return false;

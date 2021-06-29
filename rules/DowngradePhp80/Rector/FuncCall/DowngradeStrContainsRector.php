@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\DowngradePhp80\Rector\FuncCall;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\BooleanNot;
@@ -83,10 +82,9 @@ CODE_SAMPLE
     }
 
     /**
-     * @param FuncCall|BooleanNot $expr
      * @return FuncCall
      */
-    private function matchStrContainsOrNotStrContains(Expr $expr): ?FuncCall
+    private function matchStrContainsOrNotStrContains(FuncCall | BooleanNot $expr): ?FuncCall
     {
         $expr = ($expr instanceof BooleanNot) ? $expr->expr : $expr;
         if (! $expr instanceof FuncCall) {

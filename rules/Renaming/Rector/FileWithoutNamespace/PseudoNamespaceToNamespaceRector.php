@@ -155,10 +155,9 @@ CODE_SAMPLE
     }
 
     /**
-     * @param Name|Identifier $node
      * @return Name|Identifier
      */
-    private function processNameOrIdentifier(Node $node): ?Node
+    private function processNameOrIdentifier(Name | Identifier $node): ?Node
     {
         // no name → skip
         if ($node->toString() === '') {

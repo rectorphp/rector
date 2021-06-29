@@ -68,10 +68,7 @@ final class NameRenamer
         }
     }
 
-    /**
-     * @param Name|Identifier $usedNameNode
-     */
-    private function renameTraitUse(string $lastName, TraitUse $traitUse, Node $usedNameNode): void
+    private function renameTraitUse(string $lastName, TraitUse $traitUse, Name | Identifier $usedNameNode): void
     {
         foreach ($traitUse->traits as $key => $traitName) {
             if (! $this->nodeNameResolver->areNamesEqual($traitName, $usedNameNode)) {
@@ -82,10 +79,7 @@ final class NameRenamer
         }
     }
 
-    /**
-     * @param Name|Identifier $usedNameNode
-     */
-    private function renameClass(string $lastName, Class_ $class, Node $usedNameNode): void
+    private function renameClass(string $lastName, Class_ $class, Name | Identifier $usedNameNode): void
     {
         if ($class->name !== null && $this->nodeNameResolver->areNamesEqual($class->name, $usedNameNode)) {
             $class->name = new Identifier($lastName);
@@ -102,10 +96,7 @@ final class NameRenamer
         }
     }
 
-    /**
-     * @param Name|Identifier $usedNameNode
-     */
-    private function renameParam(string $lastName, Param $param, Node $usedNameNode): void
+    private function renameParam(string $lastName, Param $param, Name | Identifier $usedNameNode): void
     {
         if ($param->type === null) {
             return;
@@ -133,21 +124,18 @@ final class NameRenamer
         }
     }
 
-    /**
-     * @param Name|Identifier $usedNameNode
-     */
-    private function renameNew(string $lastName, New_ $new, Node $usedNameNode): void
+    private function renameNew(string $lastName, New_ $new, Name | Identifier $usedNameNode): void
     {
         if ($this->nodeNameResolver->areNamesEqual($new->class, $usedNameNode)) {
             $new->class = new Name($lastName);
         }
     }
 
-    /**
-     * @param Name|Identifier $usedNameNode
-     */
-    private function renameClassMethod(string $lastName, ClassMethod $classMethod, Node $usedNameNode): void
-    {
+    private function renameClassMethod(
+        string $lastName,
+        ClassMethod $classMethod,
+        Name | Identifier $usedNameNode
+    ): void {
         if ($classMethod->returnType === null) {
             return;
         }
@@ -159,10 +147,7 @@ final class NameRenamer
         $classMethod->returnType = new Name($lastName);
     }
 
-    /**
-     * @param Name|Identifier $usedNameNode
-     */
-    private function renameInterface(string $lastName, Interface_ $interface, Node $usedNameNode): void
+    private function renameInterface(string $lastName, Interface_ $interface, Name | Identifier $usedNameNode): void
     {
         foreach ($interface->extends as $key => $extendInterfaceName) {
             if (! $this->nodeNameResolver->areNamesEqual($extendInterfaceName, $usedNameNode)) {

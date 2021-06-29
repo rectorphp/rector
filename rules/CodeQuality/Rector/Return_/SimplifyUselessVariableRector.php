@@ -161,11 +161,10 @@ CODE_SAMPLE
         return ! $phpDocInfo->getVarType() instanceof MixedType;
     }
 
-    /**
-     * @param AssignOp|Assign $previousNode
-     */
-    private function isPreviousExpressionVisuallySimilar(Expression $previousExpression, Node $previousNode): bool
-    {
+    private function isPreviousExpressionVisuallySimilar(
+        Expression $previousExpression,
+        AssignOp | Assign $previousNode
+    ): bool {
         $prePreviousExpression = $previousExpression->getAttribute(AttributeKey::PREVIOUS_STATEMENT);
         if (! $prePreviousExpression instanceof Expression) {
             return false;

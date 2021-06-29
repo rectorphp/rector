@@ -115,10 +115,7 @@ CODE_SAMPLE
         return $this->processParams($node);
     }
 
-    /**
-     * @param FuncCall|MethodCall|StaticCall|New_ $node
-     */
-    private function processArgs(Node $node): ?Node
+    private function processArgs(FuncCall | MethodCall | StaticCall | New_ $node): ?Node
     {
         if ($node->args === []) {
             return null;

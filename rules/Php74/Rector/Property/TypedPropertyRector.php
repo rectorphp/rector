@@ -192,10 +192,7 @@ CODE_SAMPLE
         return true;
     }
 
-    /**
-     * @param Name|NullableType|PhpParserUnionType $node
-     */
-    private function shouldSkipNonClassLikeType(Node $node): bool
+    private function shouldSkipNonClassLikeType(Name | NullableType | PhpParserUnionType $node): bool
     {
         // unwrap nullable type
         if ($node instanceof NullableType) {

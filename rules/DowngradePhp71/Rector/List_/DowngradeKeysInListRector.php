@@ -125,10 +125,9 @@ CODE_SAMPLE
     }
 
     /**
-     * @param List_|Array_ $node
      * @return Expression[]
      */
-    private function processExtractToItsOwnVariable(Node $node, Node $parent, Node $parentExpression): array
+    private function processExtractToItsOwnVariable(List_ | Array_ $node, Node $parent, Node $parentExpression): array
     {
         $items = $node->items;
         $assignExpressions = [];

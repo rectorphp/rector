@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Naming\Rector\Assign;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
@@ -122,10 +121,7 @@ CODE_SAMPLE
         return $node;
     }
 
-    /**
-     * @param FuncCall|StaticCall|MethodCall $callNode
-     */
-    private function isMultipleCall(Node $callNode): bool
+    private function isMultipleCall(FuncCall | StaticCall | MethodCall $callNode): bool
     {
         $parentNode = $callNode->getAttribute(AttributeKey::PARENT_NODE);
 
@@ -207,10 +203,7 @@ CODE_SAMPLE
         );
     }
 
-    /**
-     * @param StaticCall|MethodCall|FuncCall $expr
-     */
-    private function isClassTypeWithChildren(Expr $expr): bool
+    private function isClassTypeWithChildren(StaticCall | MethodCall | FuncCall $expr): bool
     {
         $callStaticType = $this->getStaticType($expr);
         $callStaticType = $this->typeUnwrapper->unwrapNullableType($callStaticType);

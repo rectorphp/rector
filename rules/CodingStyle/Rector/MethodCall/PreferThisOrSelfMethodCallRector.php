@@ -109,10 +109,7 @@ CODE_SAMPLE
         $this->typeToPreference = $typeToPreference;
     }
 
-    /**
-     * @param MethodCall|StaticCall $node
-     */
-    private function processToSelf(Node $node): ?StaticCall
+    private function processToSelf(MethodCall | StaticCall $node): ?StaticCall
     {
         if ($node instanceof StaticCall && ! $this->isNames($node->class, [self::SELF, 'static'])) {
             return null;
@@ -130,10 +127,7 @@ CODE_SAMPLE
         return $this->nodeFactory->createStaticCall(self::SELF, $name, $node->args);
     }
 
-    /**
-     * @param MethodCall|StaticCall $node
-     */
-    private function processToThis(Node $node): ?MethodCall
+    private function processToThis(MethodCall | StaticCall $node): ?MethodCall
     {
         if ($node instanceof MethodCall) {
             return null;

@@ -146,10 +146,7 @@ final class NodesToAddCollector implements NodeCollectorInterface
         return spl_object_hash($foundNode);
     }
 
-    /**
-     * @param Expr|Stmt $node
-     */
-    private function wrapToExpression(Node $node): Stmt
+    private function wrapToExpression(Expr | Stmt $node): Stmt
     {
         return $node instanceof Stmt ? $node : new Expression($node);
     }

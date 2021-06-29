@@ -229,10 +229,7 @@ final class VariableNaming
         return $varName . ucfirst($propertyName);
     }
 
-    /**
-     * @param MethodCall|NullsafeMethodCall|StaticCall $node
-     */
-    private function resolveFromMethodCall(Node $node): ?string
+    private function resolveFromMethodCall(MethodCall | NullsafeMethodCall | StaticCall $node): ?string
     {
         if ($node->name instanceof MethodCall) {
             return $this->resolveFromMethodCall($node->name);

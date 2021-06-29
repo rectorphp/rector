@@ -6,7 +6,6 @@ namespace Rector\TypeDeclaration\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Yield_;
-use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -123,10 +122,7 @@ CODE_SAMPLE
         return $node->returnType && $this->isName($node->returnType, 'never');
     }
 
-    /**
-     * @param ClassMethod|Function_ $functionLike
-     */
-    private function resolveHasNeverFuncCall(FunctionLike $functionLike): bool
+    private function resolveHasNeverFuncCall(ClassMethod | Function_ $functionLike): bool
     {
         $hasNeverType = false;
 

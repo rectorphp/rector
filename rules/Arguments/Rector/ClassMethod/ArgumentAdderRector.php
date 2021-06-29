@@ -134,10 +134,7 @@ CODE_SAMPLE
         $this->addedArguments = $addedArguments;
     }
 
-    /**
-     * @param MethodCall|StaticCall|ClassMethod $node
-     */
-    private function isObjectTypeMatch(Node $node, ObjectType $objectType): bool
+    private function isObjectTypeMatch(MethodCall | StaticCall | ClassMethod $node, ObjectType $objectType): bool
     {
         if ($node instanceof MethodCall) {
             return $this->isObjectType($node->var, $objectType);

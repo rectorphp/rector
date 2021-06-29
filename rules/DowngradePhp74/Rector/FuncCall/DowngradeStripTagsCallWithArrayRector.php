@@ -6,7 +6,6 @@ namespace Rector\DowngradePhp74\Rector\FuncCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
@@ -154,11 +153,9 @@ CODE_SAMPLE
         return ! $this->valueResolver->isNull($allowableTagsParam);
     }
 
-    /**
-     * @param Array_|Variable|PropertyFetch|ConstFetch|ClassConstFetch $expr
-     */
-    private function createArrayFromString(Expr $expr): Concat
-    {
+    private function createArrayFromString(
+        Array_ | Variable | PropertyFetch | ConstFetch | ClassConstFetch $expr
+    ): Concat {
         $args = [new Arg(new String_('><')), new Arg($expr)];
         $implodeFuncCall = new FuncCall(new Name('implode'), $args);
 
@@ -166,11 +163,9 @@ CODE_SAMPLE
         return new Concat($concat, new String_('>'));
     }
 
-    /**
-     * @param Variable|PropertyFetch|ConstFetch|ClassConstFetch $expr
-     */
-    private function createIsArrayTernaryFromExpression(Expr $expr): Ternary
-    {
+    private function createIsArrayTernaryFromExpression(
+        Variable | PropertyFetch | ConstFetch | ClassConstFetch $expr
+    ): Ternary {
         $isArrayFuncCall = new FuncCall(new Name('is_array'), [new Arg($expr)]);
         $nullNotIdentical = new NotIdentical($expr, $this->nodeFactory->createNull());
         $booleanAnd = new BooleanAnd($nullNotIdentical, $isArrayFuncCall);

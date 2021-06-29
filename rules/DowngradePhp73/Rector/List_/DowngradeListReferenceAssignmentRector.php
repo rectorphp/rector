@@ -119,10 +119,9 @@ CODE_SAMPLE
      * Remove the right-side-most params by reference or empty from `list()`,
      * since they are not needed anymore.
      * If all of them can be removed, then directly remove `list()`.
-     * @param List_|Array_ $node
      * @return List_|Array_|null
      */
-    public function removeStaleParams(Node $node, int $rightSideRemovableParamsCount): ?Node
+    public function removeStaleParams(List_ | Array_ $node, int $rightSideRemovableParamsCount): ?Node
     {
         $nodeItemsCount = count($node->items);
         if ($rightSideRemovableParamsCount === $nodeItemsCount) {
@@ -138,10 +137,7 @@ CODE_SAMPLE
         return $node;
     }
 
-    /**
-     * @param List_|Array_ $node
-     */
-    private function shouldRefactor(Node $node): bool
+    private function shouldRefactor(List_ | Array_ $node): bool
     {
         $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
         // Check it follows `list(...) = $foo`

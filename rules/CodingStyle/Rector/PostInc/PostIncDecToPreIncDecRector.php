@@ -118,10 +118,7 @@ CODE_SAMPLE
         return $arrayDimFetch->dim;
     }
 
-    /**
-     * @param PostInc|PostDec $node
-     */
-    private function processPreFor(Node $node, For_ $for): PreDec | PreInc
+    private function processPreFor(PostInc | PostDec $node, For_ $for): PreDec | PreInc
     {
         $for->loop = [$this->processPrePost($node)];
         return $for->loop[0];

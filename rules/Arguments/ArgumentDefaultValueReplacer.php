@@ -7,7 +7,6 @@ namespace Rector\Arguments;
 use PhpParser\BuilderHelpers;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
@@ -39,11 +38,10 @@ final class ArgumentDefaultValueReplacer
         return $node;
     }
 
-    /**
-     * @param MethodCall|StaticCall|FuncCall $expr
-     */
-    private function processArgs(Expr $expr, ReplaceArgumentDefaultValueInterface $replaceArgumentDefaultValue): void
-    {
+    private function processArgs(
+        MethodCall | StaticCall | FuncCall $expr,
+        ReplaceArgumentDefaultValueInterface $replaceArgumentDefaultValue
+    ): void {
         $position = $replaceArgumentDefaultValue->getPosition();
 
         $argValue = $this->valueResolver->getValue($expr->args[$position]->value);

@@ -38,12 +38,11 @@ final class TypeProvidingExprFromClassResolver
     }
 
     /**
-     * @param ClassMethod|Function_ $functionLike
      * @return MethodCall|PropertyFetch|Variable|null
      */
     public function resolveTypeProvidingExprFromClass(
         Class_ $class,
-        FunctionLike $functionLike,
+        ClassMethod | Function_ $functionLike,
         ObjectType $objectType
     ): ?Expr {
         $className = $class->getAttribute(AttributeKey::CLASS_NAME);

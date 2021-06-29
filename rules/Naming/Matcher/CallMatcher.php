@@ -14,10 +14,9 @@ use PhpParser\Node\Stmt\Foreach_;
 final class CallMatcher
 {
     /**
-     * @param Assign|Foreach_ $node
      * @return FuncCall|StaticCall|MethodCall|null
      */
-    public function matchCall(Node $node): ?Node
+    public function matchCall(Assign | Foreach_ $node): ?Node
     {
         if ($node->expr instanceof MethodCall) {
             return $node->expr;

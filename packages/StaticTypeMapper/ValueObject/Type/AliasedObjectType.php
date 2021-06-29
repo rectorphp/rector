@@ -35,10 +35,7 @@ final class AliasedObjectType extends ObjectType
         return $this->getClassName();
     }
 
-    /**
-     * @param AliasedObjectType|FullyQualifiedObjectType $comparedObjectType
-     */
-    public function areShortNamesEqual(ObjectType $comparedObjectType): bool
+    public function areShortNamesEqual(self | FullyQualifiedObjectType $comparedObjectType): bool
     {
         return $this->getShortName() === $comparedObjectType->getShortName();
     }

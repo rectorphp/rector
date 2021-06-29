@@ -89,10 +89,7 @@ CODE_SAMPLE
         return $node;
     }
 
-    /**
-     * @param LNumber|DNumber $node
-     */
-    public function shouldRefactor(Node $node): bool
+    public function shouldRefactor(LNumber | DNumber $node): bool
     {
         // "_" notation can be applied to decimal numbers only
         if ($node instanceof LNumber) {

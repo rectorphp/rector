@@ -81,10 +81,9 @@ CODE_SAMPLE
     }
 
     /**
-     * @param StaticCall|MethodCall $node
      * @param array<int, mixed> $defaultValuesByPosition
      */
-    private function refactorArgs(Node $node, array $defaultValuesByPosition): void
+    private function refactorArgs(StaticCall | MethodCall $node, array $defaultValuesByPosition): void
     {
         foreach ($defaultValuesByPosition as $position => $defaultValue) {
             // value is already set
@@ -104,10 +103,7 @@ CODE_SAMPLE
         }
     }
 
-    /**
-     * @param StaticCall|MethodCall $node
-     */
-    private function isCallerObjectType(Node $node, ObjectType $objectType): bool
+    private function isCallerObjectType(StaticCall | MethodCall $node, ObjectType $objectType): bool
     {
         return $this->isObjectType($node instanceof MethodCall ? $node->var : $node->class, $objectType);
     }

@@ -153,11 +153,9 @@ CODE_SAMPLE
         return null;
     }
 
-    /**
-     * @param Plus|Minus $binaryOp
-     */
-    private function processBinaryPlusAndMinus(BinaryOp $binaryOp): ?Expr
-    {
+    private function processBinaryPlusAndMinus(
+        \PhpParser\Node\Expr\BinaryOp\Plus | \PhpParser\Node\Expr\BinaryOp\Minus $binaryOp
+    ): ?Expr {
         if ($this->valueResolver->isValue($binaryOp->left, 0) && $this->nodeTypeResolver->isNumberType(
             $binaryOp->right
         )) {
@@ -178,11 +176,9 @@ CODE_SAMPLE
         return $binaryOp->left;
     }
 
-    /**
-     * @param Mul|Div $binaryOp
-     */
-    private function processBinaryMulAndDiv(BinaryOp $binaryOp): ?Expr
-    {
+    private function processBinaryMulAndDiv(
+        \PhpParser\Node\Expr\BinaryOp\Mul | \PhpParser\Node\Expr\BinaryOp\Div $binaryOp
+    ): ?Expr {
         if ($binaryOp instanceof Mul && $this->valueResolver->isValue(
             $binaryOp->left,
             1
