@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Core\PHPStan\Reflection\TypeToCallReflectionResolver;
 
-use PHPStan\Reflection\ClassMemberAccessAnswerer;
+use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\Native\NativeFunctionReflection;
 use PHPStan\TrinaryLogic;
 use PHPStan\Type\ClosureType;
@@ -21,11 +21,11 @@ final class ClosureTypeToCallReflectionResolver implements TypeToCallReflectionR
     /**
      * @param ClosureType $type
      */
-    public function resolve(Type $type, ClassMemberAccessAnswerer $classMemberAccessAnswerer): NativeFunctionReflection
+    public function resolve(Type $type, Scope $scope): NativeFunctionReflection
     {
         return new NativeFunctionReflection(
             '{closure}',
-            $type->getCallableParametersAcceptors($classMemberAccessAnswerer),
+            $type->getCallableParametersAcceptors($scope),
             null,
             TrinaryLogic::createMaybe()
         );

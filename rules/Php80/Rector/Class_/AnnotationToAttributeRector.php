@@ -140,10 +140,12 @@ CODE_SAMPLE
 
     /**
      * @param array<PhpDocTagNode> $tags
-     * @param Class_|Property|ClassMethod|Function_|Closure|ArrowFunction $node
      */
-    private function processApplyAttrGroups(array $tags, PhpDocInfo $phpDocInfo, Node $node): bool
-    {
+    private function processApplyAttrGroups(
+        array $tags,
+        PhpDocInfo $phpDocInfo,
+        Class_ | Property | ClassMethod | Function_ | Closure | ArrowFunction $node
+    ): bool {
         $hasNewAttrGroups = false;
         foreach ($tags as $tag) {
             foreach ($this->annotationsToAttributes as $annotationToAttribute) {

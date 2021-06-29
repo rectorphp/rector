@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Core\PHPStan\Reflection\TypeToCallReflectionResolver;
 
-use PHPStan\Reflection\ClassMemberAccessAnswerer;
+use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
@@ -29,7 +29,7 @@ final class ObjectTypeToCallReflectionResolver implements TypeToCallReflectionRe
     /**
      * @param ObjectType $type
      */
-    public function resolve(Type $type, ClassMemberAccessAnswerer $classMemberAccessAnswerer): ?MethodReflection
+    public function resolve(Type $type, Scope $scope): ?MethodReflection
     {
         $className = $type->getClassName();
         if (! $this->reflectionProvider->hasClass($className)) {

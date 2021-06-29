@@ -19,10 +19,7 @@ final class ParentScopeFinder
     ) {
     }
 
-    /**
-     * @return ClassMethod|Function_|Class_|Namespace_|Closure|null
-     */
-    public function find(Node $node): ?Node
+    public function find(Node $node): ClassMethod | Function_ | Class_ | Namespace_ | Closure | null
     {
         return $this->betterNodeFinder->findParentTypes($node, [
             Closure::class,

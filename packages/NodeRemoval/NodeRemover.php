@@ -63,19 +63,16 @@ final class NodeRemover
         }
     }
 
-    /**
-     * @param Closure|ClassMethod|Function_ $node
-     */
-    public function removeStmt(Node $node, int $key): void
+    public function removeStmt(Closure | ClassMethod | Function_ $functionLike, int $key): void
     {
-        if ($node->stmts === null) {
+        if ($functionLike->stmts === null) {
             throw new ShouldNotHappenException();
         }
 
         // notify about remove node
-        $this->rectorChangeCollector->notifyNodeFileInfo($node->stmts[$key]);
+        $this->rectorChangeCollector->notifyNodeFileInfo($functionLike->stmts[$key]);
 
-        unset($node->stmts[$key]);
+        unset($functionLike->stmts[$key]);
     }
 
     public function removeParam(ClassMethod $classMethod, int | Param $keyOrParam): void

@@ -21,26 +21,17 @@ final class VisibilityManipulator
      */
     private const ALLOWED_NODE_TYPES = [ClassMethod::class, Property::class, ClassConst::class, Class_::class];
 
-    /**
-     * @param ClassMethod|Property|ClassConst $node
-     */
-    public function makeStatic(Node $node): void
+    public function makeStatic(ClassMethod | Property | ClassConst $node): void
     {
         $this->addVisibilityFlag($node, Visibility::STATIC);
     }
 
-    /**
-     * @param ClassMethod|Class_ $node
-     */
-    public function makeAbstract(Node $node): void
+    public function makeAbstract(ClassMethod | Class_ $node): void
     {
         $this->addVisibilityFlag($node, Visibility::ABSTRACT);
     }
 
-    /**
-     * @param ClassMethod|Property $node
-     */
-    public function makeNonStatic(Node $node): void
+    public function makeNonStatic(ClassMethod | Property $node): void
     {
         if (! $node->isStatic()) {
             return;

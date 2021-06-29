@@ -6,7 +6,6 @@ namespace Rector\Naming\ValueObject;
 
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
@@ -14,15 +13,12 @@ use Rector\Naming\Contract\RenameParamValueObjectInterface;
 
 final class ParamRename implements RenameParamValueObjectInterface
 {
-    /**
-     * @param ClassMethod|Function_|Closure $functionLike
-     */
     public function __construct(
         private string $currentName,
         private string $expectedName,
         private Param $param,
         private Variable $variable,
-        private FunctionLike $functionLike
+        private ClassMethod | Function_ | Closure $functionLike
     ) {
     }
 
@@ -36,10 +32,7 @@ final class ParamRename implements RenameParamValueObjectInterface
         return $this->expectedName;
     }
 
-    /**
-     * @return ClassMethod|Function_|Closure
-     */
-    public function getFunctionLike(): FunctionLike
+    public function getFunctionLike(): ClassMethod | Function_ | Closure
     {
         return $this->functionLike;
     }

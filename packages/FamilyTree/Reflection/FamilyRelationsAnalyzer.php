@@ -155,8 +155,7 @@ final class FamilyRelationsAnalyzer
         ClassMethod $classMethod,
         string $propertyName,
         string $kindPropertyFetch
-    ): bool
-    {
+    ): bool {
         if ($classMethod->stmts === null) {
             return false;
         }

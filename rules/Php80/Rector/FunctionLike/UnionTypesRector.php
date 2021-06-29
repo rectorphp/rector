@@ -7,7 +7,6 @@ namespace Rector\Php80\Rector\FunctionLike;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Closure;
-use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Name;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -82,7 +81,7 @@ CODE_SAMPLE
     }
 
     /**
-     * @param ClassMethod|Function_|Closure|ArrowFunction $node
+     * @param ClassMethod | Function_ | Closure | ArrowFunction $node
      */
     public function refactor(Node $node): ?Node
     {
@@ -101,11 +100,10 @@ CODE_SAMPLE
         return $node;
     }
 
-    /**
-     * @param ClassMethod|Function_|Closure|ArrowFunction $functionLike
-     */
-    private function refactorParamTypes(FunctionLike $functionLike, PhpDocInfo $phpDocInfo): void
-    {
+    private function refactorParamTypes(
+        ClassMethod | Function_ | Closure | ArrowFunction $functionLike,
+        PhpDocInfo $phpDocInfo
+    ): void {
         if ($functionLike instanceof ClassMethod && $this->classMethodParamVendorLockResolver->isVendorLocked(
             $functionLike
         )) {
@@ -152,11 +150,10 @@ CODE_SAMPLE
         $param->type = new Name('object');
     }
 
-    /**
-     * @param ClassMethod|Function_|Closure|ArrowFunction $functionLike
-     */
-    private function refactorReturnType(FunctionLike $functionLike, PhpDocInfo $phpDocInfo): void
-    {
+    private function refactorReturnType(
+        ClassMethod | Function_ | Closure | ArrowFunction $functionLike,
+        PhpDocInfo $phpDocInfo
+    ): void {
         // do not override existing return type
         if ($functionLike->getReturnType() !== null) {
             return;

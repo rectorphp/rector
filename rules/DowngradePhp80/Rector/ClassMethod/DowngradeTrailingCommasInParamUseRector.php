@@ -136,10 +136,7 @@ CODE_SAMPLE
         $this->cleanTrailingComma($node, $node->uses);
     }
 
-    /**
-     * @param ClassMethod|Function_|Closure $node
-     */
-    private function processParams(Node $node): ?Node
+    private function processParams(ClassMethod | Function_ | Closure $node): ?Node
     {
         if ($node->params === []) {
             return null;

@@ -9,7 +9,6 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Foreach_;
@@ -47,13 +46,10 @@ final class BreakingVariableRenameGuard
     ) {
     }
 
-    /**
-     * @param ClassMethod|Function_|Closure $functionLike
-     */
     public function shouldSkipVariable(
         string $currentName,
         string $expectedName,
-        FunctionLike $functionLike,
+        ClassMethod | Function_ | Closure $functionLike,
         Variable $variable
     ): bool {
         // is the suffix? → also accepted
@@ -152,19 +148,15 @@ final class BreakingVariableRenameGuard
         return $trinaryLogic->maybe();
     }
 
-    /**
-     * @param ClassMethod|Function_|Closure $functionLike
-     */
-    private function skipOnConflictOtherVariable(FunctionLike $functionLike, string $newName): bool
+    private function skipOnConflictOtherVariable(ClassMethod | Function_ | Closure $functionLike, string $newName): bool
     {
         return $this->betterNodeFinder->hasInstanceOfName((array) $functionLike->stmts, Variable::class, $newName);
     }
 
-    /**
-     * @param ClassMethod|Function_|Closure $functionLike
-     */
-    private function isUsedInClosureUsesName(string $expectedName, FunctionLike $functionLike): bool
-    {
+    private function isUsedInClosureUsesName(
+        string $expectedName,
+        ClassMethod | Function_ | Closure $functionLike
+    ): bool {
         if (! $functionLike instanceof Closure) {
             return false;
         }

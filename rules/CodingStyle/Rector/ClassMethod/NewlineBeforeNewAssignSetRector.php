@@ -126,11 +126,11 @@ CODE_SAMPLE
         return null;
     }
 
-    /**
-     * @param ClassMethod|Function_|Closure $node
-     */
-    private function shouldAddEmptyLine(?string $currentStmtVariableName, Node $node, int $key): bool
-    {
+    private function shouldAddEmptyLine(
+        ?string $currentStmtVariableName,
+        ClassMethod | Function_ | Closure $node,
+        int $key
+    ): bool {
         if (! $this->isNewVariableThanBefore($currentStmtVariableName)) {
             return false;
         }
@@ -173,10 +173,7 @@ CODE_SAMPLE
         return $this->previousStmtVariableName !== $currentStmtVariableName;
     }
 
-    /**
-     * @param ClassMethod|Function_|Closure $node
-     */
-    private function isPrecededByEmptyLine(Node $node, int $key): bool
+    private function isPrecededByEmptyLine(ClassMethod | Function_ | Closure $node, int $key): bool
     {
         if ($node->stmts === null) {
             return false;

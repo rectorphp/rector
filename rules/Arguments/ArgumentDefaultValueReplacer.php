@@ -24,11 +24,8 @@ final class ArgumentDefaultValueReplacer
     ) {
     }
 
-    /**
-     * @param MethodCall|StaticCall|ClassMethod|Expr\FuncCall $node
-     */
     public function processReplaces(
-        Node $node,
+        MethodCall | StaticCall | ClassMethod | FuncCall $node,
         ReplaceArgumentDefaultValueInterface $replaceArgumentDefaultValue
     ): ?Node {
         if ($node instanceof ClassMethod) {

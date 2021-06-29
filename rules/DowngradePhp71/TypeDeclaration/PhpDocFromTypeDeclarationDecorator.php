@@ -6,7 +6,6 @@ namespace Rector\DowngradePhp71\TypeDeclaration;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Closure;
-use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
@@ -30,10 +29,9 @@ final class PhpDocFromTypeDeclarationDecorator
     }
 
     /**
-     * @param ClassMethod|Function_|Closure $functionLike
      * @return bool True if node was changed
      */
-    public function decorate(FunctionLike $functionLike): bool
+    public function decorate(ClassMethod | Function_ | Closure $functionLike): bool
     {
         if ($functionLike->returnType === null) {
             return false;
@@ -49,11 +47,13 @@ final class PhpDocFromTypeDeclarationDecorator
     }
 
     /**
-     * @param ClassMethod|Function_ $functionLike
      * @param array<class-string<Type>> $requiredTypes
      */
-    public function decorateParam(Param $param, FunctionLike $functionLike, array $requiredTypes): void
-    {
+    public function decorateParam(
+        Param $param,
+        ClassMethod | Function_ | Closure $functionLike,
+        array $requiredTypes
+    ): void {
         if ($param->type === null) {
             return;
         }
@@ -67,12 +67,9 @@ final class PhpDocFromTypeDeclarationDecorator
         $this->moveParamTypeToParamDoc($functionLike, $param, $type);
     }
 
-    /**
-     * @param ClassMethod|Function_ $functionLike
-     */
     public function decorateParamWithSpecificType(
         Param $param,
-        FunctionLike $functionLike,
+        ClassMethod | Function_ | Closure $functionLike,
         Type $requireType
     ): void {
         if ($param->type === null) {
@@ -88,11 +85,12 @@ final class PhpDocFromTypeDeclarationDecorator
     }
 
     /**
-     * @param ClassMethod|Function_|Closure $functionLike
      * @return bool True if node was changed
      */
-    public function decorateReturnWithSpecificType(FunctionLike $functionLike, Type $requireType): bool
-    {
+    public function decorateReturnWithSpecificType(
+        ClassMethod | Function_ | Closure $functionLike,
+        Type $requireType
+    ): bool {
         if ($functionLike->returnType === null) {
             return false;
         }
@@ -115,11 +113,11 @@ final class PhpDocFromTypeDeclarationDecorator
         return is_a($returnType, $requireType::class, true);
     }
 
-    /**
-     * @param ClassMethod|Function_ $functionLike
-     */
-    private function moveParamTypeToParamDoc(FunctionLike $functionLike, Param $param, Type $type): void
-    {
+    private function moveParamTypeToParamDoc(
+        ClassMethod | Function_ | Closure $functionLike,
+        Param $param,
+        Type $type
+    ): void {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($functionLike);
         $paramName = $this->nodeNameResolver->getName($param);
         $this->phpDocTypeChanger->changeParamType($phpDocInfo, $type, $param, $paramName);

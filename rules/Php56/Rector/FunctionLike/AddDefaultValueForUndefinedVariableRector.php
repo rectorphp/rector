@@ -117,10 +117,9 @@ CODE_SAMPLE
     }
 
     /**
-     * @param ClassMethod|Function_|Closure $node
      * @return string[]
      */
-    private function collectUndefinedVariableScope(Node $node): array
+    private function collectUndefinedVariableScope(ClassMethod | Function_ | Closure $node): array
     {
         $undefinedVariables = [];
 

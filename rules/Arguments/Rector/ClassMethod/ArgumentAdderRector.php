@@ -186,11 +186,10 @@ CODE_SAMPLE
         }
     }
 
-    /**
-     * @param ClassMethod|MethodCall|StaticCall $node
-     */
-    private function shouldSkipParameter(Node $node, ArgumentAdder $argumentAdder): bool
-    {
+    private function shouldSkipParameter(
+        ClassMethod | MethodCall | StaticCall $node,
+        ArgumentAdder $argumentAdder
+    ): bool {
         $position = $argumentAdder->getPosition();
         $argumentName = $argumentAdder->getArgumentName();
 

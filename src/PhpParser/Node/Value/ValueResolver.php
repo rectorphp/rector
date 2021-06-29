@@ -134,7 +134,7 @@ final class ValueResolver
      * @param Expr[]|null[] $nodes
      * @param mixed[] $expectedValues
      */
-    public function areValues(array $nodes, array $expectedValues): bool
+    public function areValuesEqual(array $nodes, array $expectedValues): bool
     {
         foreach ($nodes as $i => $node) {
             if ($node === null) {

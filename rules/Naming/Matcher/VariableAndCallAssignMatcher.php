@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Naming\Matcher;
 
-use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Variable;
@@ -48,10 +47,7 @@ final class VariableAndCallAssignMatcher
         return new VariableAndCallAssign($assign->var, $call, $assign, $variableName, $functionLike);
     }
 
-    /**
-     * @return ClassMethod|Function_|Closure|null
-     */
-    private function getFunctionLike(Assign $assign): ?Node
+    private function getFunctionLike(Assign $assign): ClassMethod | Function_ | Closure | null
     {
         return $this->betterNodeFinder->findParentTypes(
             $assign,

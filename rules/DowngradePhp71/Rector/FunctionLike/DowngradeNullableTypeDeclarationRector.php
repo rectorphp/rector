@@ -6,7 +6,6 @@ namespace Rector\DowngradePhp71\Rector\FunctionLike;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Closure;
-use PhpParser\Node\FunctionLike;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -105,10 +104,7 @@ CODE_SAMPLE
         return $param->type instanceof NullableType;
     }
 
-    /**
-     * @param ClassMethod|Function_|Closure $functionLike
-     */
-    private function refactorParamType(Param $param, FunctionLike $functionLike): bool
+    private function refactorParamType(Param $param, ClassMethod | Function_ | Closure $functionLike): bool
     {
         if (! $this->isNullableParam($param)) {
             return false;
@@ -120,10 +116,7 @@ CODE_SAMPLE
         return true;
     }
 
-    /**
-     * @param ClassMethod|Function_|Closure $functionLike
-     */
-    private function decorateWithDocBlock(FunctionLike $functionLike, Param $param): void
+    private function decorateWithDocBlock(ClassMethod | Function_ | Closure $functionLike, Param $param): void
     {
         if ($param->type === null) {
             return;

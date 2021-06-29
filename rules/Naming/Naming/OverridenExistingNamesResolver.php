@@ -7,7 +7,6 @@ namespace Rector\Naming\Naming;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
@@ -28,11 +27,10 @@ final class OverridenExistingNamesResolver
     ) {
     }
 
-    /**
-     * @param ClassMethod|Function_|Closure $functionLike
-     */
-    public function checkNameInClassMethodForNew(string $variableName, FunctionLike $functionLike): bool
-    {
+    public function checkNameInClassMethodForNew(
+        string $variableName,
+        ClassMethod | Function_ | Closure $functionLike
+    ): bool {
         $overridenVariableNames = $this->resolveOveriddenNamesForNew($functionLike);
         return in_array($variableName, $overridenVariableNames, true);
     }
@@ -59,10 +57,9 @@ final class OverridenExistingNamesResolver
     }
 
     /**
-     * @param ClassMethod|Function_|Closure $functionLike
      * @return string[]
      */
-    private function resolveOveriddenNamesForNew(FunctionLike $functionLike): array
+    private function resolveOveriddenNamesForNew(ClassMethod | Function_ | Closure $functionLike): array
     {
         $classMethodHash = spl_object_hash($functionLike);
 

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Core\PHPStan\Reflection\TypeToCallReflectionResolver;
 
-use PHPStan\Reflection\ClassMemberAccessAnswerer;
+use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\Constant\ConstantArrayType;
@@ -34,7 +34,7 @@ final class ConstantArrayTypeToCallReflectionResolver implements TypeToCallRefle
     /**
      * @param ConstantArrayType $type
      */
-    public function resolve(Type $type, ClassMemberAccessAnswerer $classMemberAccessAnswerer): ?MethodReflection
+    public function resolve(Type $type, Scope $scope): ?MethodReflection
     {
         $constantArrayTypeAndMethod = $this->findTypeAndMethodName($type);
         if (! $constantArrayTypeAndMethod instanceof ConstantArrayTypeAndMethod) {
@@ -49,11 +49,8 @@ final class ConstantArrayTypeToCallReflectionResolver implements TypeToCallRefle
 
         $constantArrayType = $constantArrayTypeAndMethod->getType();
 
-        $methodReflection = $constantArrayType->getMethod(
-            $constantArrayTypeAndMethod->getMethod(),
-            $classMemberAccessAnswerer
-        );
-        if (! $classMemberAccessAnswerer->canCallMethod($methodReflection)) {
+        $methodReflection = $constantArrayType->getMethod($constantArrayTypeAndMethod->getMethod(), $scope);
+        if (! $scope->canCallMethod($methodReflection)) {
             return null;
         }
 

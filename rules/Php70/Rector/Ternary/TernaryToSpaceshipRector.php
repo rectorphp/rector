@@ -112,7 +112,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->valueResolver->areValues([$node->if, $nestedTernary->if, $nestedTernary->else], [-1, 1, 0])) {
+        if (! $this->valueResolver->areValuesEqual([$node->if, $nestedTernary->if, $nestedTernary->else], [-1, 1, 0])) {
             return null;
         }
 
@@ -132,7 +132,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->valueResolver->areValues([$node->if, $nestedTernary->if, $nestedTernary->else], [-1, 1, 0])) {
+        if (! $this->valueResolver->areValuesEqual([$node->if, $nestedTernary->if, $nestedTernary->else], [-1, 1, 0])) {
             return null;
         }
 
