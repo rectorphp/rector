@@ -71,6 +71,9 @@ CODE_SAMPLE
         if ($this->contextAnalyzer->isInLoop($node)) {
             return null;
         }
+        if ($this->contextAnalyzer->isInSwitch($node)) {
+            return null;
+        }
         if ($this->contextAnalyzer->isInIf($node)) {
             return new \PhpParser\Node\Stmt\Return_();
         }

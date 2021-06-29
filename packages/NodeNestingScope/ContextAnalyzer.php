@@ -29,7 +29,7 @@ final class ContextAnalyzer
     /**
      * @var array<class-string<Stmt>>
      */
-    private const LOOP_NODES = [\PhpParser\Node\Stmt\For_::class, \PhpParser\Node\Stmt\Foreach_::class, \PhpParser\Node\Stmt\While_::class, \PhpParser\Node\Stmt\Do_::class, \PhpParser\Node\Stmt\Switch_::class];
+    private const LOOP_NODES = [\PhpParser\Node\Stmt\For_::class, \PhpParser\Node\Stmt\Foreach_::class, \PhpParser\Node\Stmt\While_::class, \PhpParser\Node\Stmt\Do_::class];
     /**
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
@@ -56,6 +56,10 @@ final class ContextAnalyzer
             }
         }
         return \false;
+    }
+    public function isInSwitch(\PhpParser\Node $node) : bool
+    {
+        return (bool) $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Stmt\Switch_::class);
     }
     public function isInIf(\PhpParser\Node $node) : bool
     {
