@@ -20,6 +20,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 new AnnotationToAttribute('inject', 'Nette\DI\Attributes\Inject'),
 
                 new AnnotationToAttribute('Symfony\Component\Routing\Annotation\Route'),
+                new AnnotationToAttribute(
+                    'Rector\Tests\Php80\Rector\Class_\AnnotationToAttributeRector\Source\Attribute\Path'
+                ),
             ]),
         ]]);
 };
