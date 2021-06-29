@@ -14,6 +14,7 @@ use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Throw_;
 use PHPStan\Type\NeverType;
+use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Defluent\ConflictGuard\ParentClassMethodTypeOverrideGuard;
@@ -30,13 +31,18 @@ final class ReturnNeverTypeRector extends \Rector\Core\Rector\AbstractRector
      * @var \Rector\Defluent\ConflictGuard\ParentClassMethodTypeOverrideGuard
      */
     private $parentClassMethodTypeOverrideGuard;
-    public function __construct(\Rector\Defluent\ConflictGuard\ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard)
+    /**
+     * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger
+     */
+    private $phpDocTypeChanger;
+    public function __construct(\Rector\Defluent\ConflictGuard\ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger)
     {
         $this->parentClassMethodTypeOverrideGuard = $parentClassMethodTypeOverrideGuard;
+        $this->phpDocTypeChanger = $phpDocTypeChanger;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Add "never" type for methods that never return anything', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Add "never" return-type for methods that never return anything', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run()
@@ -48,7 +54,10 @@ CODE_SAMPLE
 , <<<'CODE_SAMPLE'
 final class SomeClass
 {
-    public function run(): never
+    /**
+     * @return never
+     */
+    public function run()
     {
         throw new InvalidException();
     }
@@ -68,27 +77,44 @@ CODE_SAMPLE
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if (!$this->phpVersionProvider->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::NEVER_TYPE)) {
+        if ($this->shouldSkip($node)) {
             return null;
         }
+        if ($this->phpVersionProvider->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::NEVER_TYPE)) {
+            // never-type supported natively
+            $node->returnType = new \PhpParser\Node\Name('never');
+        } else {
+            // static anlysis based never type
+            $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
+            $this->phpDocTypeChanger->changeReturnType($phpDocInfo, new \PHPStan\Type\NeverType());
+        }
+        return $node;
+    }
+    /**
+     * @param ClassMethod|Function_ $node
+     */
+    private function shouldSkip($node) : bool
+    {
         $returns = $this->betterNodeFinder->findInstanceOf($node, \PhpParser\Node\Stmt\Return_::class);
         if ($returns !== []) {
-            return null;
+            return \true;
         }
         $notNeverNodes = $this->betterNodeFinder->findInstancesOf($node, [\PhpParser\Node\Expr\Yield_::class]);
         if ($notNeverNodes !== []) {
-            return null;
+            return \true;
         }
         $neverNodes = $this->betterNodeFinder->findInstancesOf($node, [\PhpParser\Node\Expr\Throw_::class, \PhpParser\Node\Stmt\Throw_::class]);
         $hasNeverFuncCall = $this->resolveHasNeverFuncCall($node);
         if ($neverNodes === [] && !$hasNeverFuncCall) {
-            return null;
+            return \true;
         }
         if ($node instanceof \PhpParser\Node\Stmt\ClassMethod && !$this->parentClassMethodTypeOverrideGuard->isReturnTypeChangeAllowed($node)) {
-            return null;
+            return \true;
         }
-        $node->returnType = new \PhpParser\Node\Name('never');
-        return $node;
+        if ($node->returnType && $this->isName($node->returnType, 'never')) {
+            return \true;
+        }
+        return \false;
     }
     /**
      * @param ClassMethod|Function_ $functionLike

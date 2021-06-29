@@ -12,6 +12,7 @@ use PHPStan\Type\NeverType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
+use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\TypeDeclaration\PhpDocParser\ParamPhpDocNodeFactory;
 final class PhpDocTypeChanger
@@ -71,7 +72,7 @@ final class PhpDocTypeChanger
             return;
         }
         // override existing type
-        $newPHPStanPhpDocType = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($newType);
+        $newPHPStanPhpDocType = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($newType, \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind::KIND_RETURN);
         $currentReturnTagValueNode = $phpDocInfo->getReturnTagValue();
         if ($currentReturnTagValueNode !== null) {
             // only change type
