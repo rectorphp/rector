@@ -32,7 +32,7 @@ final class ContextAnalyzer
     /**
      * @var array<class-string<Stmt>>
      */
-    private const LOOP_NODES = [For_::class, Foreach_::class, While_::class, Do_::class, Switch_::class];
+    private const LOOP_NODES = [For_::class, Foreach_::class, While_::class, Do_::class];
 
     public function __construct(
         private BetterNodeFinder $betterNodeFinder,
@@ -56,6 +56,11 @@ final class ContextAnalyzer
         }
 
         return false;
+    }
+
+    public function isInSwitch(Node $node): bool
+    {
+        return (bool) $this->betterNodeFinder->findParentType($node, Switch_::class);
     }
 
     public function isInIf(Node $node): bool

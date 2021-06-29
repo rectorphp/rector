@@ -80,6 +80,10 @@ CODE_SAMPLE
             return null;
         }
 
+        if ($this->contextAnalyzer->isInSwitch($node)) {
+            return null;
+        }
+
         if ($this->contextAnalyzer->isInIf($node)) {
             return new Return_();
         }
