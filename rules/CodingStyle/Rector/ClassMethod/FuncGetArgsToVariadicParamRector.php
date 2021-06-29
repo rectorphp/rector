@@ -5,6 +5,7 @@ namespace Rector\CodingStyle\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Param;
@@ -41,10 +42,10 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\ClassMethod::class, \PhpParser\Node\Stmt\Function_::class];
+        return [\PhpParser\Node\Stmt\ClassMethod::class, \PhpParser\Node\Stmt\Function_::class, \PhpParser\Node\Expr\Closure::class];
     }
     /**
-     * @param ClassMethod|Function_ $node
+     * @param ClassMethod|Function_|Closure $node
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
@@ -68,11 +69,38 @@ CODE_SAMPLE
             $variableName = 'args';
             $assign->expr = new \PhpParser\Node\Expr\Variable('args');
         }
-        $node->params[] = $this->createVariadicParam($variableName);
+        $param = $this->createVariadicParam($variableName);
+        $variableParam = $param->var;
+        if ($variableParam instanceof \PhpParser\Node\Expr\Variable && $this->hasFunctionOrClosureInside($node, $variableParam)) {
+            return null;
+        }
+        $node->params[] = $param;
         return $node;
     }
     /**
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
+     */
+    private function hasFunctionOrClosureInside($functionLike, \PhpParser\Node\Expr\Variable $variable) : bool
+    {
+        if ($functionLike->stmts === null) {
+            return \false;
+        }
+        return (bool) $this->betterNodeFinder->findFirst($functionLike->stmts, function (\PhpParser\Node $node) use($variable) : bool {
+            if (!$node instanceof \PhpParser\Node\Expr\Closure && !$node instanceof \PhpParser\Node\Stmt\Function_) {
+                return \false;
+            }
+            if ($node->params !== []) {
+                return \false;
+            }
+            $assign = $this->matchFuncGetArgsVariableAssign($node);
+            if (!$assign instanceof \PhpParser\Node\Expr\Assign) {
+                return \false;
+            }
+            return $this->nodeComparator->areNodesEqual($assign->var, $variable);
+        });
+    }
+    /**
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
      */
     private function matchFuncGetArgsVariableAssign($functionLike) : ?\PhpParser\Node\Expr\Assign
     {
