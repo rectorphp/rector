@@ -6,6 +6,7 @@ namespace Rector\CodingStyle\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Param;
@@ -49,11 +50,11 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [ClassMethod::class, Function_::class];
+        return [ClassMethod::class, Function_::class, Closure::class];
     }
 
     /**
-     * @param ClassMethod|Function_ $node
+     * @param ClassMethod|Function_|Closure $node
      */
     public function refactor(Node $node): ?Node
     {
@@ -82,12 +83,46 @@ CODE_SAMPLE
             $assign->expr = new Variable('args');
         }
 
-        $node->params[] = $this->createVariadicParam($variableName);
+        $param = $this->createVariadicParam($variableName);
+        $variableParam = $param->var;
+        if ($variableParam instanceof Variable && $this->hasFunctionOrClosureInside($node, $variableParam)) {
+            return null;
+        }
 
+        $node->params[] = $param;
         return $node;
     }
 
-    private function matchFuncGetArgsVariableAssign(ClassMethod | Function_ $functionLike): ?Assign
+    private function hasFunctionOrClosureInside(
+        ClassMethod | Function_ | Closure $functionLike,
+        Variable $variable
+    ): bool
+    {
+        if ($functionLike->stmts === null) {
+            return false;
+        }
+
+        return (bool) $this->betterNodeFinder->findFirst($functionLike->stmts, function (Node $node) use (
+            $variable
+        ): bool {
+            if (! $node instanceof Closure && ! $node instanceof Function_) {
+                return false;
+            }
+
+            if ($node->params !== []) {
+                return false;
+            }
+
+            $assign = $this->matchFuncGetArgsVariableAssign($node);
+            if (! $assign instanceof Assign) {
+                return false;
+            }
+
+            return $this->nodeComparator->areNodesEqual($assign->var, $variable);
+        });
+    }
+
+    private function matchFuncGetArgsVariableAssign(ClassMethod | Function_ | Closure $functionLike): ?Assign
     {
         /** @var Assign[] $assigns */
         $assigns = $this->betterNodeFinder->findInstanceOf((array) $functionLike->stmts, Assign::class);
