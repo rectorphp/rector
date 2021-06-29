@@ -20,7 +20,7 @@ final class ConfigurationFactory
     {
         $fileExtensions = $this->parameterProvider->provideArrayParameter(Option::FILE_EXTENSIONS);
 
-        return new Configuration(isDryRun: false, fileExtensions: $fileExtensions);
+        return new Configuration(isDryRun: true, fileExtensions: $fileExtensions);
     }
 
     /**

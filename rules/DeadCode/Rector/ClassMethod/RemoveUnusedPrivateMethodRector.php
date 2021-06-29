@@ -15,7 +15,7 @@ use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\TypeWithClassName;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
-use Rector\NodeCollector\NodeAnalyzer\ArrayCallableMethodReferenceAnalyzer;
+use Rector\NodeCollector\NodeAnalyzer\ArrayCallableMethodMatcher;
 use Rector\NodeCollector\ValueObject\ArrayCallable;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -27,7 +27,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveUnusedPrivateMethodRector extends AbstractRector
 {
     public function __construct(
-        private ArrayCallableMethodReferenceAnalyzer $arrayCallableMethodReferenceAnalyzer
+        private ArrayCallableMethodMatcher $arrayCallableMethodMatcher
     ) {
     }
 
@@ -198,8 +198,9 @@ CODE_SAMPLE
     {
         /** @var Array_[] $arrays */
         $arrays = $this->betterNodeFinder->findInstanceOf($class, Array_::class);
+
         foreach ($arrays as $array) {
-            $arrayCallable = $this->arrayCallableMethodReferenceAnalyzer->match($array);
+            $arrayCallable = $this->arrayCallableMethodMatcher->match($array);
             if (! $arrayCallable instanceof ArrayCallable) {
                 continue;
             }

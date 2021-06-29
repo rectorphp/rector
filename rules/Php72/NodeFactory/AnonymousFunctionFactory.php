@@ -12,7 +12,6 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\ClosureUse;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
@@ -81,9 +80,6 @@ final class AnonymousFunctionFactory
         return $anonymousFunctionNode;
     }
 
-    /**
-     * @param Variable|PropertyFetch $expr
-     */
     public function createFromPhpMethodReflection(PhpMethodReflection $phpMethodReflection, Expr $expr): Closure
     {
         /** @var FunctionVariantWithPhpDocs $functionVariantWithPhpDoc */

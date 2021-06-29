@@ -5,16 +5,12 @@ declare(strict_types=1);
 namespace Rector\CodeQuality\Rector\Array_;
 
 use PhpParser\Node;
-use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ArrayItem;
-use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Scalar\String_;
 use PHPStan\Reflection\Php\PhpMethodReflection;
-use Rector\CodeQuality\NodeAnalyzer\CallableClassMethodMatcher;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Reflection\ReflectionResolver;
+use Rector\NodeCollector\NodeAnalyzer\ArrayCallableMethodMatcher;
+use Rector\NodeCollector\ValueObject\ArrayCallable;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php72\NodeFactory\AnonymousFunctionFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -30,8 +26,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class CallableThisArrayToAnonymousFunctionRector extends AbstractRector
 {
     public function __construct(
-        private CallableClassMethodMatcher $callableClassMethodMatcher,
-        private AnonymousFunctionFactory $anonymousFunctionFactory
+        private AnonymousFunctionFactory $anonymousFunctionFactory,
+        private ReflectionResolver $reflectionResolver,
+        private ArrayCallableMethodMatcher $arrayCallableMethodMatcher
     ) {
     }
 
@@ -96,72 +93,26 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($this->shouldSkipArray($node)) {
+        $arrayCallable = $this->arrayCallableMethodMatcher->match($node);
+        if (! $arrayCallable instanceof ArrayCallable) {
             return null;
         }
 
-        $firstArrayItem = $node->items[0];
-        if (! $firstArrayItem instanceof ArrayItem) {
-            return null;
-        }
+        $scope = $node->getAttribute(AttributeKey::SCOPE);
 
-        $objectVariable = $firstArrayItem->value;
-        if (! $objectVariable instanceof Variable && ! $objectVariable instanceof PropertyFetch) {
-            return null;
-        }
+        $phpMethodReflection = $this->reflectionResolver->resolveMethodReflection(
+            $arrayCallable->getClass(),
+            $arrayCallable->getMethod(),
+            $scope
+        );
 
-        $secondArrayItem = $node->items[1];
-        if (! $secondArrayItem instanceof ArrayItem) {
-            return null;
-        }
-
-        $methodName = $secondArrayItem->value;
-        if (! $methodName instanceof String_) {
-            return null;
-        }
-
-        $phpMethodReflection = $this->callableClassMethodMatcher->match($objectVariable, $methodName);
         if (! $phpMethodReflection instanceof PhpMethodReflection) {
             return null;
         }
 
-        return $this->anonymousFunctionFactory->createFromPhpMethodReflection($phpMethodReflection, $objectVariable);
-    }
-
-    private function shouldSkipArray(Array_ $array): bool
-    {
-        // callback is exactly "[$two, 'items']"
-        if (count($array->items) !== 2) {
-            return true;
-        }
-
-        // can be totally empty in case of "[, $value]"
-        if ($array->items[0] === null) {
-            return true;
-        }
-
-        if ($array->items[1] === null) {
-            return true;
-        }
-
-        return $this->isCallbackAtFunctionNames($array, ['register_shutdown_function', 'forward_static_call']);
-    }
-
-    /**
-     * @param string[] $functionNames
-     */
-    private function isCallbackAtFunctionNames(Array_ $array, array $functionNames): bool
-    {
-        $parentNode = $array->getAttribute(AttributeKey::PARENT_NODE);
-        if (! $parentNode instanceof Arg) {
-            return false;
-        }
-
-        $parentParentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
-        if (! $parentParentNode instanceof FuncCall) {
-            return false;
-        }
-
-        return $this->isNames($parentParentNode, $functionNames);
+        return $this->anonymousFunctionFactory->createFromPhpMethodReflection(
+            $phpMethodReflection,
+            $arrayCallable->getCallerExpr()
+        );
     }
 }

@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace Rector\NodeCollector\ValueObject;
 
+use PhpParser\Node\Expr;
+
 final class ArrayCallable
 {
     public function __construct(
+        private Expr $callerExpr,
         private string $class,
         private string $method
     ) {
@@ -20,5 +23,10 @@ final class ArrayCallable
     public function getMethod(): string
     {
         return $this->method;
+    }
+
+    public function getCallerExpr(): Expr
+    {
+        return $this->callerExpr;
     }
 }
