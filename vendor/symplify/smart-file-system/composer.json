@@ -24,7 +24,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-main": "9.4-dev"
+            "dev-main": "9.5-dev"
         }
     },
     "minimum-stability": "dev",

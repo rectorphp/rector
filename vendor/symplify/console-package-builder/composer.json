@@ -6,11 +6,11 @@
         "php": ">=8.0",
         "symfony\/dependency-injection": "^5.3",
         "symfony\/console": "^5.3",
-        "symplify\/symplify-kernel": "^9.3.27"
+        "symplify\/symplify-kernel": "^9.4.1"
     },
     "require-dev": {
         "symfony\/http-kernel": "^5.3",
-        "symplify\/package-builder": "^9.3.27",
+        "symplify\/package-builder": "^9.4.1",
         "phpunit\/phpunit": "^9.5"
     },
     "autoload": {
@@ -25,7 +25,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-main": "9.4-dev"
+            "dev-main": "9.5-dev"
         }
     },
     "minimum-stability": "dev",

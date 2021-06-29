@@ -10,8 +10,8 @@
         "symfony\/dependency-injection": "^5.3",
         "symfony\/finder": "^5.3",
         "symfony\/http-kernel": "^5.3",
-        "symplify\/symplify-kernel": "^9.3.27",
-        "symplify\/easy-testing": "^9.3.27",
+        "symplify\/symplify-kernel": "^9.4.1",
+        "symplify\/easy-testing": "^9.4.1",
         "nette\/neon": "^3.2"
     },
     "require-dev": {
@@ -29,7 +29,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-main": "9.4-dev"
+            "dev-main": "9.5-dev"
         }
     },
     "minimum-stability": "dev",
