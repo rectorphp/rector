@@ -137,9 +137,9 @@ CODE_SAMPLE
         return !$phpDocInfo->getVarType() instanceof \PHPStan\Type\MixedType;
     }
     /**
-     * @param AssignOp|Assign $previousNode
+     * @param \PhpParser\Node\Expr\AssignOp|\PhpParser\Node\Expr\Assign $previousNode
      */
-    private function isPreviousExpressionVisuallySimilar(\PhpParser\Node\Stmt\Expression $previousExpression, \PhpParser\Node $previousNode) : bool
+    private function isPreviousExpressionVisuallySimilar(\PhpParser\Node\Stmt\Expression $previousExpression, $previousNode) : bool
     {
         $prePreviousExpression = $previousExpression->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PREVIOUS_STATEMENT);
         if (!$prePreviousExpression instanceof \PhpParser\Node\Stmt\Expression) {

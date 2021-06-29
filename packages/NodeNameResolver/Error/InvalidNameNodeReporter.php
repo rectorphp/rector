@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\NodeNameResolver\Error;
 
-use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use Rector\Core\Contract\Rector\RectorInterface;
@@ -32,9 +31,9 @@ final class InvalidNameNodeReporter
         $this->betterStandardPrinter = $betterStandardPrinter;
     }
     /**
-     * @param MethodCall|StaticCall $node
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
      */
-    public function reportInvalidNodeForName(\PhpParser\Node $node) : void
+    public function reportInvalidNodeForName($node) : void
     {
         $message = \sprintf('Pick more specific node than "%s", e.g. "$node->name"', \get_class($node));
         $file = $this->currentFileProvider->getFile();

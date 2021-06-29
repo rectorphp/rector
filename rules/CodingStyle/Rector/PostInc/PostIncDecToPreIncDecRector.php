@@ -107,10 +107,10 @@ CODE_SAMPLE
         return $arrayDimFetch->dim;
     }
     /**
-     * @param PostInc|PostDec $node
+     * @param \PhpParser\Node\Expr\PostInc|\PhpParser\Node\Expr\PostDec $node
      * @return \PhpParser\Node\Expr\PreDec|\PhpParser\Node\Expr\PreInc
      */
-    private function processPreFor(\PhpParser\Node $node, \PhpParser\Node\Stmt\For_ $for)
+    private function processPreFor($node, \PhpParser\Node\Stmt\For_ $for)
     {
         $for->loop = [$this->processPrePost($node)];
         return $for->loop[0];

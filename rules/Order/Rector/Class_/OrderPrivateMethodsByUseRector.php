@@ -103,9 +103,9 @@ CODE_SAMPLE
         return $node;
     }
     /**
-     * @param Class_|Trait_ $classLike
+     * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Trait_ $classLike
      */
-    private function getSortedAndOriginalClassMethods(\PhpParser\Node\Stmt\ClassLike $classLike) : \Rector\Order\ValueObject\SortedClassMethodsAndOriginalClassMethods
+    private function getSortedAndOriginalClassMethods($classLike) : \Rector\Order\ValueObject\SortedClassMethodsAndOriginalClassMethods
     {
         return new \Rector\Order\ValueObject\SortedClassMethodsAndOriginalClassMethods($this->getLocalPrivateMethodCallOrder($classLike), $this->resolvePrivateClassMethods($classLike));
     }

@@ -94,11 +94,11 @@ CODE_SAMPLE
         return new \PhpParser\Node\Stmt\Switch_($match->cond, $switchCases);
     }
     /**
-     * @param Expression|Return_ $node
      * @param MatchArm[] $matchArms
      * @return Case_[]
+     * @param \PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\Return_ $node
      */
-    private function createSwitchCasesFromMatchArms(\PhpParser\Node $node, array $matchArms) : array
+    private function createSwitchCasesFromMatchArms($node, array $matchArms) : array
     {
         $switchCases = [];
         foreach ($matchArms as $matchArm) {
@@ -120,10 +120,10 @@ CODE_SAMPLE
         return $switchCases;
     }
     /**
-     * @param Expression|Return_ $node
      * @return Stmt[]
+     * @param \PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\Return_ $node
      */
-    private function createSwitchStmts(\PhpParser\Node $node, \PhpParser\Node\MatchArm $matchArm) : array
+    private function createSwitchStmts($node, \PhpParser\Node\MatchArm $matchArm) : array
     {
         $stmts = [];
         if ($node instanceof \PhpParser\Node\Stmt\Expression) {

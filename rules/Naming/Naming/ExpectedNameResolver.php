@@ -102,9 +102,9 @@ final class ExpectedNameResolver
         return $expectedName->getName();
     }
     /**
-     * @param MethodCall|StaticCall|FuncCall $expr
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\FuncCall $expr
      */
-    public function resolveForCall(\PhpParser\Node\Expr $expr) : ?string
+    public function resolveForCall($expr) : ?string
     {
         if ($this->isDynamicNameCall($expr)) {
             return null;
@@ -135,9 +135,9 @@ final class ExpectedNameResolver
         return null;
     }
     /**
-     * @param MethodCall|StaticCall|FuncCall $expr
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\FuncCall $expr
      */
-    public function resolveForForeach(\PhpParser\Node\Expr $expr) : ?string
+    public function resolveForForeach($expr) : ?string
     {
         if ($this->isDynamicNameCall($expr)) {
             return null;
@@ -170,9 +170,9 @@ final class ExpectedNameResolver
         return $expectedNameFromMethodName->getSingularized();
     }
     /**
-     * @param MethodCall|StaticCall|FuncCall $expr
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\FuncCall $expr
      */
-    private function isDynamicNameCall(\PhpParser\Node\Expr $expr) : bool
+    private function isDynamicNameCall($expr) : bool
     {
         if ($expr->name instanceof \PhpParser\Node\Expr\StaticCall) {
             return \true;

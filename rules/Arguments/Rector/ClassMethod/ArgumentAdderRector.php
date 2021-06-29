@@ -108,9 +108,9 @@ CODE_SAMPLE
         $this->addedArguments = $addedArguments;
     }
     /**
-     * @param MethodCall|StaticCall|ClassMethod $node
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Stmt\ClassMethod $node
      */
-    private function isObjectTypeMatch(\PhpParser\Node $node, \PHPStan\Type\ObjectType $objectType) : bool
+    private function isObjectTypeMatch($node, \PHPStan\Type\ObjectType $objectType) : bool
     {
         if ($node instanceof \PhpParser\Node\Expr\MethodCall) {
             return $this->isObjectType($node->var, $objectType);

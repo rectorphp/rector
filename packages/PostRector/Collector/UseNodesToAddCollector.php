@@ -5,7 +5,6 @@ namespace Rector\PostRector\Collector;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Use_;
-use PHPStan\Type\ObjectType;
 use Rector\Core\Provider\CurrentFileProvider;
 use Rector\Core\ValueObject\Application\File;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -40,9 +39,9 @@ final class UseNodesToAddCollector implements \Rector\PostRector\Contract\Collec
         return $this->useImportTypesInFilePath !== [] || $this->functionUseImportTypesInFilePath !== [];
     }
     /**
-     * @param FullyQualifiedObjectType|AliasedObjectType $objectType
+     * @param \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType|\Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType $objectType
      */
-    public function addUseImport(\PHPStan\Type\ObjectType $objectType) : void
+    public function addUseImport($objectType) : void
     {
         $file = $this->currentFileProvider->getFile();
         $smartFileInfo = $file->getSmartFileInfo();

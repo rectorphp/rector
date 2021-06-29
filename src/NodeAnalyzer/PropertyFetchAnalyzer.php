@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace Rector\Core\NodeAnalyzer;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
@@ -71,9 +70,9 @@ final class PropertyFetchAnalyzer
         });
     }
     /**
-     * @param PropertyFetch|StaticPropertyFetch $expr
+     * @param \PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\StaticPropertyFetch $expr
      */
-    public function isPropertyToSelf(\PhpParser\Node\Expr $expr) : bool
+    public function isPropertyToSelf($expr) : bool
     {
         if ($expr instanceof \PhpParser\Node\Expr\PropertyFetch && !$this->nodeNameResolver->isName($expr->var, 'this')) {
             return \false;

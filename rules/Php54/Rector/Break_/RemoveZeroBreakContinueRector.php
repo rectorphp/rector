@@ -6,7 +6,6 @@ namespace Rector\Php54\Rector\Break_;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\LNumber;
-use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Break_;
 use PhpParser\Node\Stmt\Continue_;
 use PHPStan\Type\Constant\ConstantIntegerType;
@@ -87,9 +86,9 @@ CODE_SAMPLE
         return null;
     }
     /**
-     * @param Break_|Continue_ $stmt
+     * @param \PhpParser\Node\Stmt\Break_|\PhpParser\Node\Stmt\Continue_ $stmt
      */
-    private function processVariableNum(\PhpParser\Node\Stmt $stmt, \PhpParser\Node\Expr\Variable $numVariable) : ?\PhpParser\Node
+    private function processVariableNum($stmt, \PhpParser\Node\Expr\Variable $numVariable) : ?\PhpParser\Node
     {
         $staticType = $this->getStaticType($numVariable);
         if ($staticType instanceof \PHPStan\Type\ConstantType) {

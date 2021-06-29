@@ -104,12 +104,12 @@ CODE_SAMPLE
         return $this->processRemoveNamedArgument($functionLikeReflection, $node, $args);
     }
     /**
-     * @param MethodCall|StaticCall|New_ $node
      * @param Arg[] $args
      * @param \PHPStan\Reflection\MethodReflection|\PHPStan\Reflection\FunctionReflection $reflection
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\New_ $node
      * @return \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\New_
      */
-    private function processRemoveNamedArgument($reflection, \PhpParser\Node $node, array $args)
+    private function processRemoveNamedArgument($reflection, $node, array $args)
     {
         /** @var Arg[] $newArgs */
         $newArgs = [];

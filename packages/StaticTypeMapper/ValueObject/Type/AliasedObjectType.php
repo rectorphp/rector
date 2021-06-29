@@ -33,9 +33,9 @@ final class AliasedObjectType extends \PHPStan\Type\ObjectType
         return $this->getClassName();
     }
     /**
-     * @param AliasedObjectType|FullyQualifiedObjectType $comparedObjectType
+     * @param $this|\Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType $comparedObjectType
      */
-    public function areShortNamesEqual(\PHPStan\Type\ObjectType $comparedObjectType) : bool
+    public function areShortNamesEqual($comparedObjectType) : bool
     {
         return $this->getShortName() === $comparedObjectType->getShortName();
     }

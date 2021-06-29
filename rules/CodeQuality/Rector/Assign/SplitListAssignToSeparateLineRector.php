@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace Rector\CodeQuality\Rector\Assign;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Assign;
@@ -82,10 +81,10 @@ CODE_SAMPLE
         return $this->isValueSwap($assign->var, $assignExpr);
     }
     /**
-     * @param Array_|List_ $expr
      * @return Assign[]
+     * @param \PhpParser\Node\Expr\Array_|\PhpParser\Node\Expr\List_ $expr
      */
-    private function createStandaloneAssigns(\PhpParser\Node\Expr $expr, \PhpParser\Node\Expr\Array_ $rightArray) : array
+    private function createStandaloneAssigns($expr, \PhpParser\Node\Expr\Array_ $rightArray) : array
     {
         $standaloneAssigns = [];
         foreach ($expr->items as $key => $leftArrayItem) {
@@ -101,18 +100,18 @@ CODE_SAMPLE
         return $standaloneAssigns;
     }
     /**
-     * @param Array_|List_ $expr
+     * @param \PhpParser\Node\Expr\Array_|\PhpParser\Node\Expr\List_ $expr
      */
-    private function isValueSwap(\PhpParser\Node\Expr $expr, \PhpParser\Node\Expr\Array_ $secondArray) : bool
+    private function isValueSwap($expr, \PhpParser\Node\Expr\Array_ $secondArray) : bool
     {
         $firstArrayItemsHash = $this->getArrayItemsHash($expr);
         $secondArrayItemsHash = $this->getArrayItemsHash($secondArray);
         return $firstArrayItemsHash === $secondArrayItemsHash;
     }
     /**
-     * @param Array_|List_ $node
+     * @param \PhpParser\Node\Expr\Array_|\PhpParser\Node\Expr\List_ $node
      */
-    private function getArrayItemsHash(\PhpParser\Node $node) : string
+    private function getArrayItemsHash($node) : string
     {
         $arrayItemsHashes = [];
         foreach ($node->items as $arrayItem) {

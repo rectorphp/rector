@@ -141,9 +141,9 @@ CODE_SAMPLE
         return null;
     }
     /**
-     * @param ClassMethod|Function_ $functionLike
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
      */
-    private function refactorParam(\PhpParser\Node\Param $param, \PhpParser\Node\FunctionLike $functionLike, int $position) : void
+    private function refactorParam(\PhpParser\Node\Param $param, $functionLike, int $position) : void
     {
         if ($this->shouldSkipParam($param, $functionLike)) {
             return;

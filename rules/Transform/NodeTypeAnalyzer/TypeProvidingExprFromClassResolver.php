@@ -51,10 +51,10 @@ final class TypeProvidingExprFromClassResolver
         $this->propertyNaming = $propertyNaming;
     }
     /**
-     * @param ClassMethod|Function_ $functionLike
      * @return MethodCall|PropertyFetch|Variable|null
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
      */
-    public function resolveTypeProvidingExprFromClass(\PhpParser\Node\Stmt\Class_ $class, \PhpParser\Node\FunctionLike $functionLike, \PHPStan\Type\ObjectType $objectType) : ?\PhpParser\Node\Expr
+    public function resolveTypeProvidingExprFromClass(\PhpParser\Node\Stmt\Class_ $class, $functionLike, \PHPStan\Type\ObjectType $objectType) : ?\PhpParser\Node\Expr
     {
         $className = $class->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);
         if ($className === null) {

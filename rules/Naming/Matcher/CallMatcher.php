@@ -12,10 +12,10 @@ use PhpParser\Node\Stmt\Foreach_;
 final class CallMatcher
 {
     /**
-     * @param Assign|Foreach_ $node
      * @return FuncCall|StaticCall|MethodCall|null
+     * @param \PhpParser\Node\Expr\Assign|\PhpParser\Node\Stmt\Foreach_ $node
      */
-    public function matchCall(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function matchCall($node) : ?\PhpParser\Node
     {
         if ($node->expr instanceof \PhpParser\Node\Expr\MethodCall) {
             return $node->expr;

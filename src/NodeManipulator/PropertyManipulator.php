@@ -109,9 +109,9 @@ final class PropertyManipulator
         return \false;
     }
     /**
-     * @param PropertyFetch|StaticPropertyFetch $expr
+     * @param \PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\StaticPropertyFetch $expr
      */
-    private function isChangeableContext(\PhpParser\Node\Expr $expr) : bool
+    private function isChangeableContext($expr) : bool
     {
         $parent = $expr->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
         if (!$parent instanceof \PhpParser\Node) {

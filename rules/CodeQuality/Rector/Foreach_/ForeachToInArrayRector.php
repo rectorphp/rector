@@ -165,9 +165,9 @@ CODE_SAMPLE
         return $this->valueResolver->isTrueOrFalse($ifStatment->expr);
     }
     /**
-     * @param Identical|Equal $binaryOp
+     * @param \PhpParser\Node\Expr\BinaryOp\Identical|\PhpParser\Node\Expr\BinaryOp\Equal $binaryOp
      */
-    private function createInArrayFunction(\PhpParser\Node\Expr $expr, \PhpParser\Node\Expr\BinaryOp $binaryOp, \PhpParser\Node\Stmt\Foreach_ $foreach) : \PhpParser\Node\Expr\FuncCall
+    private function createInArrayFunction(\PhpParser\Node\Expr $expr, $binaryOp, \PhpParser\Node\Stmt\Foreach_ $foreach) : \PhpParser\Node\Expr\FuncCall
     {
         $arguments = $this->nodeFactory->createArgs([$expr, $foreach->expr]);
         if ($binaryOp instanceof \PhpParser\Node\Expr\BinaryOp\Identical) {

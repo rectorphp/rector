@@ -4,8 +4,6 @@ declare (strict_types=1);
 namespace Rector\TypeDeclaration\TypeAlreadyAddedChecker;
 
 use Iterator;
-use PhpParser\Node;
-use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\NullableType;
@@ -51,9 +49,9 @@ final class ReturnTypeAlreadyAddedChecker
         $this->nodeComparator = $nodeComparator;
     }
     /**
-     * @param ClassMethod|Function_ $functionLike
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
      */
-    public function isSameOrBetterReturnTypeAlreadyAdded(\PhpParser\Node\FunctionLike $functionLike, \PHPStan\Type\Type $returnType) : bool
+    public function isSameOrBetterReturnTypeAlreadyAdded($functionLike, \PHPStan\Type\Type $returnType) : bool
     {
         $nodeReturnType = $functionLike->returnType;
         /** @param Identifier|Name|NullableType|PhpParserUnionType|null $returnTypeNode */
@@ -92,9 +90,9 @@ final class ReturnTypeAlreadyAddedChecker
         return $nodeContentWithoutPreslash === $className;
     }
     /**
-     * @param Identifier|Name|NullableType|PhpParserUnionType $returnTypeNode
+     * @param \PhpParser\Node\Identifier|\PhpParser\Node\Name|\PhpParser\Node\NullableType|PhpParserUnionType $returnTypeNode
      */
-    private function isArrayIterableIteratorCoType(\PhpParser\Node $returnTypeNode, \PHPStan\Type\Type $returnType) : bool
+    private function isArrayIterableIteratorCoType($returnTypeNode, \PHPStan\Type\Type $returnType) : bool
     {
         if (!$this->nodeNameResolver->isNames($returnTypeNode, self::FOREACHABLE_TYPES)) {
             return \false;
@@ -102,9 +100,9 @@ final class ReturnTypeAlreadyAddedChecker
         return $this->isStaticTypeIterable($returnType);
     }
     /**
-     * @param Identifier|Name|NullableType|PhpParserUnionType $returnTypeNode
+     * @param \PhpParser\Node\Identifier|\PhpParser\Node\Name|\PhpParser\Node\NullableType|PhpParserUnionType $returnTypeNode
      */
-    private function isUnionCoType(\PhpParser\Node $returnTypeNode, \PHPStan\Type\Type $type) : bool
+    private function isUnionCoType($returnTypeNode, \PHPStan\Type\Type $type) : bool
     {
         if (!$type instanceof \PHPStan\Type\UnionType) {
             return \false;

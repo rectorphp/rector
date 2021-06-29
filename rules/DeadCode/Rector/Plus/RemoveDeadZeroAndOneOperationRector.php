@@ -121,9 +121,9 @@ CODE_SAMPLE
         return null;
     }
     /**
-     * @param Plus|Minus $binaryOp
+     * @param \PhpParser\Node\Expr\BinaryOp\Plus|\PhpParser\Node\Expr\BinaryOp\Minus $binaryOp
      */
-    private function processBinaryPlusAndMinus(\PhpParser\Node\Expr\BinaryOp $binaryOp) : ?\PhpParser\Node\Expr
+    private function processBinaryPlusAndMinus($binaryOp) : ?\PhpParser\Node\Expr
     {
         if ($this->valueResolver->isValue($binaryOp->left, 0) && $this->nodeTypeResolver->isNumberType($binaryOp->right)) {
             if ($binaryOp instanceof \PhpParser\Node\Expr\BinaryOp\Minus) {
@@ -140,9 +140,9 @@ CODE_SAMPLE
         return $binaryOp->left;
     }
     /**
-     * @param Mul|Div $binaryOp
+     * @param \PhpParser\Node\Expr\BinaryOp\Mul|\PhpParser\Node\Expr\BinaryOp\Div $binaryOp
      */
-    private function processBinaryMulAndDiv(\PhpParser\Node\Expr\BinaryOp $binaryOp) : ?\PhpParser\Node\Expr
+    private function processBinaryMulAndDiv($binaryOp) : ?\PhpParser\Node\Expr
     {
         if ($binaryOp instanceof \PhpParser\Node\Expr\BinaryOp\Mul && $this->valueResolver->isValue($binaryOp->left, 1) && $this->nodeTypeResolver->isNumberType($binaryOp->right)) {
             return $binaryOp->right;

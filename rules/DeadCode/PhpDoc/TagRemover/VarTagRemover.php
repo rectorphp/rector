@@ -64,9 +64,9 @@ final class VarTagRemover
         $phpDocInfo->removeByType(\PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode::class);
     }
     /**
-     * @param Expression|Property|Param $node
+     * @param \PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $node
      */
-    public function removeVarPhpTagValueNodeIfNotComment(\PhpParser\Node $node, \PHPStan\Type\Type $type) : void
+    public function removeVarPhpTagValueNodeIfNotComment($node, \PHPStan\Type\Type $type) : void
     {
         // keep doctrine collection narrow type
         if ($this->doctrineTypeAnalyzer->isDoctrineCollectionWithIterableUnionType($type)) {
@@ -92,9 +92,9 @@ final class VarTagRemover
         $phpDocInfo->removeByType(\PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode::class);
     }
     /**
-     * @param Expression|Param|Property $node
+     * @param \PhpParser\Node\Stmt\Expression|\PhpParser\Node\Param|\PhpParser\Node\Stmt\Property $node
      */
-    private function isNonBasicArrayType(\PhpParser\Node $node, \PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode $varTagValueNode) : bool
+    private function isNonBasicArrayType($node, \PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode $varTagValueNode) : bool
     {
         if ($varTagValueNode->type instanceof \Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareUnionTypeNode) {
             foreach ($varTagValueNode->type->types as $type) {

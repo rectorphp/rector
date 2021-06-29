@@ -54,9 +54,9 @@ CODE_SAMPLE
         return $this->processForStringOrVariableOrProperty($node);
     }
     /**
-     * @param String_|Variable|PropertyFetch|StaticPropertyFetch $expr
+     * @param \PhpParser\Node\Scalar\String_|\PhpParser\Node\Expr\Variable|\PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\StaticPropertyFetch $expr
      */
-    private function processForStringOrVariableOrProperty(\PhpParser\Node\Expr $expr) : ?\PhpParser\Node\Expr
+    private function processForStringOrVariableOrProperty($expr) : ?\PhpParser\Node\Expr
     {
         $nextNode = $expr->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::NEXT_NODE);
         if (!$nextNode instanceof \PhpParser\Node\Expr\UnaryMinus) {

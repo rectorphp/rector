@@ -53,9 +53,9 @@ final class IdentifierManipulator
         $node->name = new \PhpParser\Node\Identifier($newName);
     }
     /**
-     * @param ClassConstFetch|MethodCall|PropertyFetch|StaticCall|ClassMethod $node
+     * @param \PhpParser\Node\Expr\ClassConstFetch|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Stmt\ClassMethod $node
      */
-    private function resolveOldMethodName(\PhpParser\Node $node) : ?string
+    private function resolveOldMethodName($node) : ?string
     {
         if ($node instanceof \PhpParser\Node\Expr\StaticCall || $node instanceof \PhpParser\Node\Expr\MethodCall) {
             return $this->nodeNameResolver->getName($node->name);

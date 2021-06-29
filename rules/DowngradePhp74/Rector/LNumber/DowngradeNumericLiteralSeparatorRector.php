@@ -75,9 +75,9 @@ CODE_SAMPLE
         return $node;
     }
     /**
-     * @param LNumber|DNumber $node
+     * @param \PhpParser\Node\Scalar\LNumber|\PhpParser\Node\Scalar\DNumber $node
      */
-    public function shouldRefactor(\PhpParser\Node $node) : bool
+    public function shouldRefactor($node) : bool
     {
         // "_" notation can be applied to decimal numbers only
         if ($node instanceof \PhpParser\Node\Scalar\LNumber) {

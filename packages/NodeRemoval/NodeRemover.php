@@ -90,9 +90,9 @@ final class NodeRemover
         unset($classMethod->params[$key]);
     }
     /**
-     * @param FuncCall|MethodCall|StaticCall $node
+     * @param \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
      */
-    public function removeArg(\PhpParser\Node $node, int $key) : void
+    public function removeArg($node, int $key) : void
     {
         if ($node->args === null) {
             throw new \Rector\Core\Exception\ShouldNotHappenException();

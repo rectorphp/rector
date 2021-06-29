@@ -112,9 +112,6 @@ CODE_SAMPLE
             return;
         }
         foreach ($functionLike->getParams() as $param) {
-            if ($param->type !== null) {
-                continue;
-            }
             /** @var string $paramName */
             $paramName = $this->getName($param->var);
             $paramType = $phpDocInfo->getParamType($paramName);

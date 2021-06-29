@@ -133,9 +133,9 @@ final class NodesToAddCollector implements \Rector\PostRector\Contract\Collector
         return \spl_object_hash($foundNode);
     }
     /**
-     * @param Expr|Stmt $node
+     * @param \PhpParser\Node\Expr|\PhpParser\Node\Stmt $node
      */
-    private function wrapToExpression(\PhpParser\Node $node) : \PhpParser\Node\Stmt
+    private function wrapToExpression($node) : \PhpParser\Node\Stmt
     {
         return $node instanceof \PhpParser\Node\Stmt ? $node : new \PhpParser\Node\Stmt\Expression($node);
     }

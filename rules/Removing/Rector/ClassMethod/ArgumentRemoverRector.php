@@ -72,9 +72,9 @@ CODE_SAMPLE
         $this->removedArguments = $removedArguments;
     }
     /**
-     * @param ClassMethod|StaticCall|MethodCall $node
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $node
      */
-    private function processPosition(\PhpParser\Node $node, \Rector\Removing\ValueObject\ArgumentRemover $argumentRemover) : void
+    private function processPosition($node, \Rector\Removing\ValueObject\ArgumentRemover $argumentRemover) : void
     {
         if ($argumentRemover->getValue() === null) {
             if ($node instanceof \PhpParser\Node\Expr\MethodCall || $node instanceof \PhpParser\Node\Expr\StaticCall) {
@@ -101,9 +101,9 @@ CODE_SAMPLE
         }
     }
     /**
-     * @param ClassMethod|StaticCall|MethodCall $node
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $node
      */
-    private function removeByName(\PhpParser\Node $node, int $position, string $name) : void
+    private function removeByName($node, int $position, string $name) : void
     {
         if ($node instanceof \PhpParser\Node\Expr\MethodCall || $node instanceof \PhpParser\Node\Expr\StaticCall) {
             if (isset($node->args[$position]) && $this->isName($node->args[$position], $name)) {

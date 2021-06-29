@@ -100,10 +100,10 @@ CODE_SAMPLE
      * Remove the right-side-most params by reference or empty from `list()`,
      * since they are not needed anymore.
      * If all of them can be removed, then directly remove `list()`.
-     * @param List_|Array_ $node
      * @return List_|Array_|null
+     * @param \PhpParser\Node\Expr\List_|\PhpParser\Node\Expr\Array_ $node
      */
-    public function removeStaleParams(\PhpParser\Node $node, int $rightSideRemovableParamsCount) : ?\PhpParser\Node
+    public function removeStaleParams($node, int $rightSideRemovableParamsCount) : ?\PhpParser\Node
     {
         $nodeItemsCount = \count($node->items);
         if ($rightSideRemovableParamsCount === $nodeItemsCount) {
@@ -119,9 +119,9 @@ CODE_SAMPLE
         return $node;
     }
     /**
-     * @param List_|Array_ $node
+     * @param \PhpParser\Node\Expr\List_|\PhpParser\Node\Expr\Array_ $node
      */
-    private function shouldRefactor(\PhpParser\Node $node) : bool
+    private function shouldRefactor($node) : bool
     {
         $parentNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
         // Check it follows `list(...) = $foo`

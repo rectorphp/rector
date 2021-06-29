@@ -93,9 +93,9 @@ CODE_SAMPLE
         return $this->processParams($node);
     }
     /**
-     * @param FuncCall|MethodCall|StaticCall|New_ $node
+     * @param \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\New_ $node
      */
-    private function processArgs(\PhpParser\Node $node) : ?\PhpParser\Node
+    private function processArgs($node) : ?\PhpParser\Node
     {
         if ($node->args === []) {
             return null;

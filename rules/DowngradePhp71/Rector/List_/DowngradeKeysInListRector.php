@@ -112,10 +112,10 @@ CODE_SAMPLE
         return null;
     }
     /**
-     * @param List_|Array_ $node
      * @return Expression[]
+     * @param \PhpParser\Node\Expr\List_|\PhpParser\Node\Expr\Array_ $node
      */
-    private function processExtractToItsOwnVariable(\PhpParser\Node $node, \PhpParser\Node $parent, \PhpParser\Node $parentExpression) : array
+    private function processExtractToItsOwnVariable($node, \PhpParser\Node $parent, \PhpParser\Node $parentExpression) : array
     {
         $items = $node->items;
         $assignExpressions = [];

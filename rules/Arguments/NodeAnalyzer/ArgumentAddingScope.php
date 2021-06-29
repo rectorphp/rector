@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\Arguments\NodeAnalyzer;
 
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name;
@@ -32,9 +31,9 @@ final class ArgumentAddingScope
         $this->nodeNameResolver = $nodeNameResolver;
     }
     /**
-     * @param MethodCall|StaticCall $expr
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $expr
      */
-    public function isInCorrectScope(\PhpParser\Node\Expr $expr, \Rector\Arguments\ValueObject\ArgumentAdder $argumentAdder) : bool
+    public function isInCorrectScope($expr, \Rector\Arguments\ValueObject\ArgumentAdder $argumentAdder) : bool
     {
         if ($argumentAdder->getScope() === null) {
             return \true;

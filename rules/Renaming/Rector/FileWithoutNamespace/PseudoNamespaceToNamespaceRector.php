@@ -129,10 +129,10 @@ CODE_SAMPLE
         return $stmts;
     }
     /**
-     * @param Name|Identifier $node
      * @return Name|Identifier
+     * @param \PhpParser\Node\Name|\PhpParser\Node\Identifier $node
      */
-    private function processNameOrIdentifier(\PhpParser\Node $node) : ?\PhpParser\Node
+    private function processNameOrIdentifier($node) : ?\PhpParser\Node
     {
         // no name → skip
         if ($node->toString() === '') {

@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace Rector\Naming\Rector\Assign;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
@@ -144,9 +143,9 @@ CODE_SAMPLE
         return $node;
     }
     /**
-     * @param FuncCall|StaticCall|MethodCall $callNode
+     * @param \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $callNode
      */
-    private function isMultipleCall(\PhpParser\Node $callNode) : bool
+    private function isMultipleCall($callNode) : bool
     {
         $parentNode = $callNode->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
         $callNodeClass = \get_class($callNode);
@@ -191,9 +190,9 @@ CODE_SAMPLE
         $this->variableRenamer->renameVariableInFunctionLike($variableAndCallAssign->getFunctionLike(), $variableAndCallAssign->getVariableName(), $expectedName, $variableAndCallAssign->getAssign());
     }
     /**
-     * @param StaticCall|MethodCall|FuncCall $expr
+     * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\FuncCall $expr
      */
-    private function isClassTypeWithChildren(\PhpParser\Node\Expr $expr) : bool
+    private function isClassTypeWithChildren($expr) : bool
     {
         $callStaticType = $this->getStaticType($expr);
         $callStaticType = $this->typeUnwrapper->unwrapNullableType($callStaticType);

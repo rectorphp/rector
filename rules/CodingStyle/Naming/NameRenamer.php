@@ -61,9 +61,9 @@ final class NameRenamer
         }
     }
     /**
-     * @param Name|Identifier $usedNameNode
+     * @param \PhpParser\Node\Name|\PhpParser\Node\Identifier $usedNameNode
      */
-    private function renameTraitUse(string $lastName, \PhpParser\Node\Stmt\TraitUse $traitUse, \PhpParser\Node $usedNameNode) : void
+    private function renameTraitUse(string $lastName, \PhpParser\Node\Stmt\TraitUse $traitUse, $usedNameNode) : void
     {
         foreach ($traitUse->traits as $key => $traitName) {
             if (!$this->nodeNameResolver->areNamesEqual($traitName, $usedNameNode)) {
@@ -73,9 +73,9 @@ final class NameRenamer
         }
     }
     /**
-     * @param Name|Identifier $usedNameNode
+     * @param \PhpParser\Node\Name|\PhpParser\Node\Identifier $usedNameNode
      */
-    private function renameClass(string $lastName, \PhpParser\Node\Stmt\Class_ $class, \PhpParser\Node $usedNameNode) : void
+    private function renameClass(string $lastName, \PhpParser\Node\Stmt\Class_ $class, $usedNameNode) : void
     {
         if ($class->name !== null && $this->nodeNameResolver->areNamesEqual($class->name, $usedNameNode)) {
             $class->name = new \PhpParser\Node\Identifier($lastName);
@@ -90,9 +90,9 @@ final class NameRenamer
         }
     }
     /**
-     * @param Name|Identifier $usedNameNode
+     * @param \PhpParser\Node\Name|\PhpParser\Node\Identifier $usedNameNode
      */
-    private function renameParam(string $lastName, \PhpParser\Node\Param $param, \PhpParser\Node $usedNameNode) : void
+    private function renameParam(string $lastName, \PhpParser\Node\Param $param, $usedNameNode) : void
     {
         if ($param->type === null) {
             return;
@@ -115,18 +115,18 @@ final class NameRenamer
         }
     }
     /**
-     * @param Name|Identifier $usedNameNode
+     * @param \PhpParser\Node\Name|\PhpParser\Node\Identifier $usedNameNode
      */
-    private function renameNew(string $lastName, \PhpParser\Node\Expr\New_ $new, \PhpParser\Node $usedNameNode) : void
+    private function renameNew(string $lastName, \PhpParser\Node\Expr\New_ $new, $usedNameNode) : void
     {
         if ($this->nodeNameResolver->areNamesEqual($new->class, $usedNameNode)) {
             $new->class = new \PhpParser\Node\Name($lastName);
         }
     }
     /**
-     * @param Name|Identifier $usedNameNode
+     * @param \PhpParser\Node\Name|\PhpParser\Node\Identifier $usedNameNode
      */
-    private function renameClassMethod(string $lastName, \PhpParser\Node\Stmt\ClassMethod $classMethod, \PhpParser\Node $usedNameNode) : void
+    private function renameClassMethod(string $lastName, \PhpParser\Node\Stmt\ClassMethod $classMethod, $usedNameNode) : void
     {
         if ($classMethod->returnType === null) {
             return;
@@ -137,9 +137,9 @@ final class NameRenamer
         $classMethod->returnType = new \PhpParser\Node\Name($lastName);
     }
     /**
-     * @param Name|Identifier $usedNameNode
+     * @param \PhpParser\Node\Name|\PhpParser\Node\Identifier $usedNameNode
      */
-    private function renameInterface(string $lastName, \PhpParser\Node\Stmt\Interface_ $interface, \PhpParser\Node $usedNameNode) : void
+    private function renameInterface(string $lastName, \PhpParser\Node\Stmt\Interface_ $interface, $usedNameNode) : void
     {
         foreach ($interface->extends as $key => $extendInterfaceName) {
             if (!$this->nodeNameResolver->areNamesEqual($extendInterfaceName, $usedNameNode)) {

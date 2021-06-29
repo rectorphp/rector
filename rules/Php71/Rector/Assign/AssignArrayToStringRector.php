@@ -99,9 +99,9 @@ CODE_SAMPLE
         return $assign;
     }
     /**
-     * @param PropertyFetch|StaticPropertyFetch $propertyFetchExpr
+     * @param \PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\StaticPropertyFetch $propertyFetchExpr
      */
-    private function refactorPropertyFetch(\PhpParser\Node\Expr $propertyFetchExpr) : bool
+    private function refactorPropertyFetch($propertyFetchExpr) : bool
     {
         foreach ($this->emptyStringProperties as $emptyStringProperty) {
             if (!$this->nodeNameResolver->areNamesEqual($emptyStringProperty, $propertyFetchExpr)) {
@@ -113,9 +113,9 @@ CODE_SAMPLE
         return \false;
     }
     /**
-     * @param Variable|PropertyFetch|StaticPropertyFetch|Expr $expr
+     * @param \PhpParser\Node\Expr\Variable|\PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\StaticPropertyFetch|\PhpParser\Node\Expr $expr
      */
-    private function processVariable(\PhpParser\Node\Expr\Assign $assign, \PhpParser\Node\Expr $expr) : bool
+    private function processVariable(\PhpParser\Node\Expr\Assign $assign, $expr) : bool
     {
         if ($this->shouldSkipVariable($expr)) {
             return \true;

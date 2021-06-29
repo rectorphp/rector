@@ -109,9 +109,9 @@ CODE_SAMPLE
         return $statements;
     }
     /**
-     * @param If_|ElseIf_ $node
+     * @param \PhpParser\Node\Stmt\If_|\PhpParser\Node\Stmt\ElseIf_ $node
      */
-    private function doesLastStatementBreakFlow(\PhpParser\Node $node) : bool
+    private function doesLastStatementBreakFlow($node) : bool
     {
         $lastStmt = \end($node->stmts);
         return !($lastStmt instanceof \PhpParser\Node\Stmt\Return_ || $lastStmt instanceof \PhpParser\Node\Stmt\Throw_ || $lastStmt instanceof \PhpParser\Node\Stmt\Continue_ || $lastStmt instanceof \PhpParser\Node\Stmt\Expression && $lastStmt->expr instanceof \PhpParser\Node\Expr\Exit_);

@@ -141,9 +141,9 @@ CODE_SAMPLE
         return $nodeToReturn;
     }
     /**
-     * @param Namespace_|FileWithoutNamespace $mainNode
+     * @param \PhpParser\Node\Stmt\Namespace_|\Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace $mainNode
      */
-    private function printNewNodes(\PhpParser\Node\Stmt\ClassLike $classLike, \PhpParser\Node $mainNode) : void
+    private function printNewNodes(\PhpParser\Node\Stmt\ClassLike $classLike, $mainNode) : void
     {
         $smartFileInfo = $this->file->getSmartFileInfo();
         $declares = [];

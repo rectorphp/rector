@@ -110,10 +110,10 @@ CODE_SAMPLE
         return null;
     }
     /**
-     * @param ClassMethod|Function_|Closure $node
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $node
      * @return \PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_
      */
-    private function processSingleUnionType(\PhpParser\Node $node, \PHPStan\Type\UnionType $unionType, \PhpParser\Node\NullableType $nullableType)
+    private function processSingleUnionType($node, \PHPStan\Type\UnionType $unionType, \PhpParser\Node\NullableType $nullableType)
     {
         $types = $unionType->getTypes();
         $returnType = $types[0] instanceof \PHPStan\Type\ObjectType && $types[1] instanceof \PHPStan\Type\NullType ? new \PhpParser\Node\NullableType(new \PhpParser\Node\Name\FullyQualified($types[0]->getClassName())) : $nullableType;

@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace Rector\DowngradePhp80\Rector\FuncCall;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\BooleanNot;
@@ -67,10 +66,10 @@ CODE_SAMPLE
         return new \PhpParser\Node\Expr\BinaryOp\NotIdentical($funcCall, $this->nodeFactory->createFalse());
     }
     /**
-     * @param FuncCall|BooleanNot $expr
      * @return FuncCall
+     * @param \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\BooleanNot $expr
      */
-    private function matchStrContainsOrNotStrContains(\PhpParser\Node\Expr $expr) : ?\PhpParser\Node\Expr\FuncCall
+    private function matchStrContainsOrNotStrContains($expr) : ?\PhpParser\Node\Expr\FuncCall
     {
         $expr = $expr instanceof \PhpParser\Node\Expr\BooleanNot ? $expr->expr : $expr;
         if (!$expr instanceof \PhpParser\Node\Expr\FuncCall) {

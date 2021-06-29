@@ -6,7 +6,6 @@ namespace Rector\Transform\NodeAnalyzer;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
@@ -53,10 +52,10 @@ final class FuncCallStaticCallToMethodCallAnalyzer
         $this->propertyAdder = $propertyAdder;
     }
     /**
-     * @param ClassMethod|Function_ $functionLike
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
      * @return \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\Variable
      */
-    public function matchTypeProvidingExpr(\PhpParser\Node\Stmt\Class_ $class, \PhpParser\Node\FunctionLike $functionLike, \PHPStan\Type\ObjectType $objectType)
+    public function matchTypeProvidingExpr(\PhpParser\Node\Stmt\Class_ $class, $functionLike, \PHPStan\Type\ObjectType $objectType)
     {
         $expr = $this->typeProvidingExprFromClassResolver->resolveTypeProvidingExprFromClass($class, $functionLike, $objectType);
         if ($expr !== null) {
@@ -70,9 +69,9 @@ final class FuncCallStaticCallToMethodCallAnalyzer
         return $this->propertyFetchFactory->createFromType($objectType);
     }
     /**
-     * @param ClassMethod|Function_ $functionLike
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
      */
-    private function addClassMethodParamForVariable(\PhpParser\Node\Expr\Variable $variable, \PHPStan\Type\ObjectType $objectType, \PhpParser\Node\FunctionLike $functionLike) : void
+    private function addClassMethodParamForVariable(\PhpParser\Node\Expr\Variable $variable, \PHPStan\Type\ObjectType $objectType, $functionLike) : void
     {
         /** @var string $variableName */
         $variableName = $this->nodeNameResolver->getName($variable);

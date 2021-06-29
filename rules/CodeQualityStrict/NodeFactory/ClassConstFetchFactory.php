@@ -6,7 +6,6 @@ namespace Rector\CodeQualityStrict\NodeFactory;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Name\FullyQualified;
 use PHPStan\Type\ObjectType;
-use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
 use Rector\Core\Exception\ShouldNotHappenException;
@@ -14,10 +13,10 @@ use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
 final class ClassConstFetchFactory
 {
     /**
-     * @param ObjectType|UnionType $type
      * @return ClassConstFetch[]
+     * @param \PHPStan\Type\ObjectType|\PHPStan\Type\UnionType $type
      */
-    public function createFromType(\PHPStan\Type\Type $type) : array
+    public function createFromType($type) : array
     {
         $classConstTypes = [];
         if ($type instanceof \Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType) {

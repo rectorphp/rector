@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\DowngradePhp74\Rector\ClassMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -128,9 +129,9 @@ CODE_SAMPLE
         return $node;
     }
     /**
-     * @param UnionType|NullableType|Name|Node\Identifier $returnTypeNode
+     * @param \PhpParser\Node\UnionType|\PhpParser\Node\NullableType|\PhpParser\Node\Name|\PhpParser\Node\Identifier $returnTypeNode
      */
-    private function resolveDifferentAncestorReturnType(\PhpParser\Node\Stmt\ClassMethod $classMethod, \PhpParser\Node $returnTypeNode) : \PHPStan\Type\Type
+    private function resolveDifferentAncestorReturnType(\PhpParser\Node\Stmt\ClassMethod $classMethod, $returnTypeNode) : \PHPStan\Type\Type
     {
         $scope = $classMethod->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
         if (!$scope instanceof \PHPStan\Analyser\Scope) {

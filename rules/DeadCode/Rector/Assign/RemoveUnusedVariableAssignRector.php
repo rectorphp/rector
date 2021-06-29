@@ -169,9 +169,9 @@ CODE_SAMPLE
         });
     }
     /**
-     * @param FuncCall|MethodCall|New_|NullsafeMethodCall|StaticCall $expr
+     * @param \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\New_|\PhpParser\Node\Expr\NullsafeMethodCall|\PhpParser\Node\Expr\StaticCall $expr
      */
-    private function isUsedInAssignExpr(\PhpParser\Node\Expr $expr, \PhpParser\Node\Expr\Assign $assign) : bool
+    private function isUsedInAssignExpr($expr, \PhpParser\Node\Expr\Assign $assign) : bool
     {
         foreach ($expr->args as $arg) {
             $variable = $arg->value;

@@ -87,9 +87,9 @@ CODE_SAMPLE
         $this->typeToPreference = $typeToPreference;
     }
     /**
-     * @param MethodCall|StaticCall $node
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
      */
-    private function processToSelf(\PhpParser\Node $node) : ?\PhpParser\Node\Expr\StaticCall
+    private function processToSelf($node) : ?\PhpParser\Node\Expr\StaticCall
     {
         if ($node instanceof \PhpParser\Node\Expr\StaticCall && !$this->isNames($node->class, [self::SELF, 'static'])) {
             return null;
@@ -104,9 +104,9 @@ CODE_SAMPLE
         return $this->nodeFactory->createStaticCall(self::SELF, $name, $node->args);
     }
     /**
-     * @param MethodCall|StaticCall $node
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
      */
-    private function processToThis(\PhpParser\Node $node) : ?\PhpParser\Node\Expr\MethodCall
+    private function processToThis($node) : ?\PhpParser\Node\Expr\MethodCall
     {
         if ($node instanceof \PhpParser\Node\Expr\MethodCall) {
             return null;

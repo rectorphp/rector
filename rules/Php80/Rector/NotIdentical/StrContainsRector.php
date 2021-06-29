@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace Rector\Php80\Rector\NotIdentical;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\BooleanNot;
@@ -69,9 +68,9 @@ CODE_SAMPLE
         return $funcCall;
     }
     /**
-     * @param Identical|NotIdentical $expr
+     * @param \PhpParser\Node\Expr\BinaryOp\Identical|\PhpParser\Node\Expr\BinaryOp\NotIdentical $expr
      */
-    private function matchIdenticalOrNotIdenticalToFalse(\PhpParser\Node\Expr $expr) : ?\PhpParser\Node\Expr\FuncCall
+    private function matchIdenticalOrNotIdenticalToFalse($expr) : ?\PhpParser\Node\Expr\FuncCall
     {
         if ($this->valueResolver->isFalse($expr->left)) {
             if (!$expr->right instanceof \PhpParser\Node\Expr\FuncCall) {

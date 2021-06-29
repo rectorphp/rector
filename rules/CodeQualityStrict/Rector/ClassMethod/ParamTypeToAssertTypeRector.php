@@ -116,10 +116,10 @@ CODE_SAMPLE
     }
     /**
      * @param Param[] $params
-     * @param ObjectType|UnionType $type
      * @return ObjectType|UnionType
+     * @param \PHPStan\Type\ObjectType|\PHPStan\Type\UnionType $type
      */
-    private function getToBeProcessedTypes(array $params, string $key, \PHPStan\Type\Type $type) : ?\PHPStan\Type\Type
+    private function getToBeProcessedTypes(array $params, string $key, $type) : ?\PHPStan\Type\Type
     {
         foreach ($params as $param) {
             $paramName = \ltrim($key, '$');

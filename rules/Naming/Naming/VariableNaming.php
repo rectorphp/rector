@@ -198,9 +198,9 @@ final class VariableNaming
         return $varName . \ucfirst($propertyName);
     }
     /**
-     * @param MethodCall|NullsafeMethodCall|StaticCall $node
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\NullsafeMethodCall|\PhpParser\Node\Expr\StaticCall $node
      */
-    private function resolveFromMethodCall(\PhpParser\Node $node) : ?string
+    private function resolveFromMethodCall($node) : ?string
     {
         if ($node->name instanceof \PhpParser\Node\Expr\MethodCall) {
             return $this->resolveFromMethodCall($node->name);

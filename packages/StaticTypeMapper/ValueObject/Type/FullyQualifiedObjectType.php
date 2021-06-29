@@ -16,9 +16,9 @@ final class FullyQualifiedObjectType extends \PHPStan\Type\ObjectType
         return new \Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType($this->getShortName(), $this->getClassName());
     }
     /**
-     * @param AliasedObjectType|FullyQualifiedObjectType $comparedObjectType
+     * @param \Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType|\Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType $comparedObjectType
      */
-    public function areShortNamesEqual(\PHPStan\Type\ObjectType $comparedObjectType) : bool
+    public function areShortNamesEqual($comparedObjectType) : bool
     {
         return $this->getShortName() === $comparedObjectType->getShortName();
     }

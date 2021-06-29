@@ -5,7 +5,6 @@ namespace Rector\DowngradePhp74\Rector\FuncCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
@@ -133,9 +132,9 @@ CODE_SAMPLE
         return !$this->valueResolver->isNull($allowableTagsParam);
     }
     /**
-     * @param Array_|Variable|PropertyFetch|ConstFetch|ClassConstFetch $expr
+     * @param \PhpParser\Node\Expr\Array_|\PhpParser\Node\Expr\Variable|\PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\ConstFetch|\PhpParser\Node\Expr\ClassConstFetch $expr
      */
-    private function createArrayFromString(\PhpParser\Node\Expr $expr) : \PhpParser\Node\Expr\BinaryOp\Concat
+    private function createArrayFromString($expr) : \PhpParser\Node\Expr\BinaryOp\Concat
     {
         $args = [new \PhpParser\Node\Arg(new \PhpParser\Node\Scalar\String_('><')), new \PhpParser\Node\Arg($expr)];
         $implodeFuncCall = new \PhpParser\Node\Expr\FuncCall(new \PhpParser\Node\Name('implode'), $args);
@@ -143,9 +142,9 @@ CODE_SAMPLE
         return new \PhpParser\Node\Expr\BinaryOp\Concat($concat, new \PhpParser\Node\Scalar\String_('>'));
     }
     /**
-     * @param Variable|PropertyFetch|ConstFetch|ClassConstFetch $expr
+     * @param \PhpParser\Node\Expr\Variable|\PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\ConstFetch|\PhpParser\Node\Expr\ClassConstFetch $expr
      */
-    private function createIsArrayTernaryFromExpression(\PhpParser\Node\Expr $expr) : \PhpParser\Node\Expr\Ternary
+    private function createIsArrayTernaryFromExpression($expr) : \PhpParser\Node\Expr\Ternary
     {
         $isArrayFuncCall = new \PhpParser\Node\Expr\FuncCall(new \PhpParser\Node\Name('is_array'), [new \PhpParser\Node\Arg($expr)]);
         $nullNotIdentical = new \PhpParser\Node\Expr\BinaryOp\NotIdentical($expr, $this->nodeFactory->createNull());

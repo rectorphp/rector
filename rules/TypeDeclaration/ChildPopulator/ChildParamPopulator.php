@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\TypeDeclaration\ChildPopulator;
 
-use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -42,9 +41,9 @@ final class ChildParamPopulator
     }
     /**
      * Add typehint to all children
-     * @param ClassMethod|Function_ $functionLike
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
      */
-    public function populateChildClassMethod(\PhpParser\Node\FunctionLike $functionLike, int $position, \PHPStan\Type\Type $paramType) : void
+    public function populateChildClassMethod($functionLike, int $position, \PHPStan\Type\Type $paramType) : void
     {
         if (!$functionLike instanceof \PhpParser\Node\Stmt\ClassMethod) {
             return;

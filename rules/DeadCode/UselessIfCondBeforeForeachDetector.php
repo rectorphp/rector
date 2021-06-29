@@ -5,7 +5,6 @@ namespace Rector\DeadCode;
 
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\BinaryOp\NotEqual;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\BooleanNot;
@@ -68,9 +67,9 @@ final class UselessIfCondBeforeForeachDetector
         return $this->isMatchingNotBinaryOp($notIdentical, $foreachExpr);
     }
     /**
-     * @param NotIdentical|NotEqual $binaryOp
+     * @param \PhpParser\Node\Expr\BinaryOp\NotIdentical|\PhpParser\Node\Expr\BinaryOp\NotEqual $binaryOp
      */
-    private function isMatchingNotBinaryOp(\PhpParser\Node\Expr\BinaryOp $binaryOp, \PhpParser\Node\Expr $foreachExpr) : bool
+    private function isMatchingNotBinaryOp($binaryOp, \PhpParser\Node\Expr $foreachExpr) : bool
     {
         if ($this->isEmptyArrayAndForeachedVariable($binaryOp->left, $binaryOp->right, $foreachExpr)) {
             return \true;

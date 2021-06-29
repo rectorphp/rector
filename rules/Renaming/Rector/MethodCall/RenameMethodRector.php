@@ -105,9 +105,9 @@ CODE_SAMPLE
         $this->methodCallRenameCollector->addMethodCallRenames($methodCallRenames);
     }
     /**
-     * @param MethodCall|StaticCall|ClassMethod $node
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Stmt\ClassMethod $node
      */
-    private function skipClassMethod(\PhpParser\Node $node, \Rector\Renaming\Contract\MethodCallRenameInterface $methodCallRename) : bool
+    private function skipClassMethod($node, \Rector\Renaming\Contract\MethodCallRenameInterface $methodCallRename) : bool
     {
         if (!$node instanceof \PhpParser\Node\Stmt\ClassMethod) {
             return \false;

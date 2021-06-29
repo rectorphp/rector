@@ -107,9 +107,9 @@ CODE_SAMPLE
         return $node;
     }
     /**
-     * @param LNumber|DNumber $node
+     * @param \PhpParser\Node\Scalar\LNumber|\PhpParser\Node\Scalar\DNumber $node
      */
-    private function shouldSkip(\PhpParser\Node $node, string $numericValueAsString) : bool
+    private function shouldSkip($node, string $numericValueAsString) : bool
     {
         /** @var int $startToken */
         $startToken = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::START_TOKEN_POSITION);

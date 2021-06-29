@@ -121,9 +121,9 @@ CODE_SAMPLE
         return !$this->isPrecededByEmptyLine($node, $key);
     }
     /**
-     * @param Assign|MethodCall $node
+     * @param \PhpParser\Node\Expr\Assign|\PhpParser\Node\Expr\MethodCall $node
      */
-    private function shouldSkipLeftVariable(\PhpParser\Node $node) : bool
+    private function shouldSkipLeftVariable($node) : bool
     {
         if (!$node->var instanceof \PhpParser\Node\Expr\Variable) {
             return \false;

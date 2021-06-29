@@ -134,9 +134,9 @@ CODE_SAMPLE
         return $stmts;
     }
     /**
-     * @param Namespace_|FileWithoutNamespace $node
+     * @param \PhpParser\Node\Stmt\Namespace_|\Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace $node
      */
-    private function printStaticMethodClass(\Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo, string $shortClassName, \PhpParser\Node $node, \PhpParser\Node\Stmt\Class_ $class) : void
+    private function printStaticMethodClass(\Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo, string $shortClassName, $node, \PhpParser\Node\Stmt\Class_ $class) : void
     {
         $classFileDestination = $smartFileInfo->getPath() . \DIRECTORY_SEPARATOR . $shortClassName . '.php';
         $nodesToPrint = [$this->resolveNodeToPrint($node, $class)];
@@ -144,10 +144,10 @@ CODE_SAMPLE
         $this->removedAndAddedFilesCollector->addAddedFile($addedFileWithNodes);
     }
     /**
-     * @param Namespace_|FileWithoutNamespace $node
+     * @param \PhpParser\Node\Stmt\Namespace_|\Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace $node
      * @return \PhpParser\Node\Stmt\Namespace_|\PhpParser\Node\Stmt\Class_
      */
-    private function resolveNodeToPrint(\PhpParser\Node $node, \PhpParser\Node\Stmt\Class_ $class)
+    private function resolveNodeToPrint($node, \PhpParser\Node\Stmt\Class_ $class)
     {
         if ($node instanceof \PhpParser\Node\Stmt\Namespace_) {
             return new \PhpParser\Node\Stmt\Namespace_($node->name, [$class]);

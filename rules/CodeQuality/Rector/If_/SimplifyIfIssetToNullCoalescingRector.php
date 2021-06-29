@@ -137,9 +137,9 @@ CODE_SAMPLE
         return !$this->nodeComparator->areNodesEqual($if->cond->vars[0], $firstElseStmt->expr->var);
     }
     /**
-     * @param If_|Else_ $node
+     * @param \PhpParser\Node\Stmt\If_|\PhpParser\Node\Stmt\Else_ $node
      */
-    private function hasOnlyStatementAssign(\PhpParser\Node $node) : bool
+    private function hasOnlyStatementAssign($node) : bool
     {
         if (\count($node->stmts) !== 1) {
             return \false;

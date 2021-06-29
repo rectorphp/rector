@@ -176,9 +176,9 @@ CODE_SAMPLE
         return \true;
     }
     /**
-     * @param Name|NullableType|PhpParserUnionType $node
+     * @param \PhpParser\Node\Name|\PhpParser\Node\NullableType|PhpParserUnionType $node
      */
-    private function shouldSkipNonClassLikeType(\PhpParser\Node $node) : bool
+    private function shouldSkipNonClassLikeType($node) : bool
     {
         // unwrap nullable type
         if ($node instanceof \PhpParser\Node\NullableType) {

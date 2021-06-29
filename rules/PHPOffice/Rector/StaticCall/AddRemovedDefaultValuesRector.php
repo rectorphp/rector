@@ -69,10 +69,10 @@ CODE_SAMPLE
         return $node;
     }
     /**
-     * @param StaticCall|MethodCall $node
      * @param array<int, mixed> $defaultValuesByPosition
+     * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $node
      */
-    private function refactorArgs(\PhpParser\Node $node, array $defaultValuesByPosition) : void
+    private function refactorArgs($node, array $defaultValuesByPosition) : void
     {
         foreach ($defaultValuesByPosition as $position => $defaultValue) {
             // value is already set
@@ -90,9 +90,9 @@ CODE_SAMPLE
         }
     }
     /**
-     * @param StaticCall|MethodCall $node
+     * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $node
      */
-    private function isCallerObjectType(\PhpParser\Node $node, \PHPStan\Type\ObjectType $objectType) : bool
+    private function isCallerObjectType($node, \PHPStan\Type\ObjectType $objectType) : bool
     {
         return $this->isObjectType($node instanceof \PhpParser\Node\Expr\MethodCall ? $node->var : $node->class, $objectType);
     }

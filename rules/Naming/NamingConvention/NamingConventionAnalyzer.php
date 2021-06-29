@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace Rector\Naming\NamingConvention;
 
 use RectorPrefix20210629\Nette\Utils\Strings;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
@@ -25,10 +24,9 @@ final class NamingConventionAnalyzer
      * $someNameSuffix = $this->getSomeName();
      * $prefixSomeName = $this->getSomeName();
      * $someName = $this->getSomeName();
-     *
-     * @param FuncCall|StaticCall|MethodCall $expr
+     * @param \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $expr
      */
-    public function isCallMatchingVariableName(\PhpParser\Node\Expr $expr, string $currentName, string $expectedName) : bool
+    public function isCallMatchingVariableName($expr, string $currentName, string $expectedName) : bool
     {
         // skip "$call = $method->call();" based conventions
         $callName = $this->nodeNameResolver->getName($expr->name);
