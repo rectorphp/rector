@@ -103,7 +103,7 @@ final class NodeTypeResolver
     public function isObjectType(Node $node, ObjectType $requiredObjectType): bool
     {
         if ($node instanceof ClassConstFetch) {
-            throw new ShouldNotHappenException();
+            return false;
         }
 
         $resolvedType = $this->resolve($node);

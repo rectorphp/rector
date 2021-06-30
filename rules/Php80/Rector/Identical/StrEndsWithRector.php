@@ -101,7 +101,6 @@ CODE_SAMPLE
         }
 
         $isPositive = $binaryOp instanceof Identical;
-
         return $this->buildReturnNode($haystack, $needle, $isPositive);
     }
 
@@ -153,12 +152,12 @@ CODE_SAMPLE
 
     private function buildReturnNode(?Expr $haystack, ?Expr $needle, bool $isPositive): FuncCall | BooleanNot
     {
-        $endsWithNode = $this->nodeFactory->createFuncCall('str_ends_with', [$haystack, $needle]);
+        $funcCall = $this->nodeFactory->createFuncCall('str_ends_with', [$haystack, $needle]);
 
         if (! $isPositive) {
-            return new BooleanNot($endsWithNode);
+            return new BooleanNot($funcCall);
         }
 
-        return $endsWithNode;
+        return $funcCall;
     }
 }

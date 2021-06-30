@@ -22,9 +22,6 @@ final class ClosureTypeMapper implements TypeMapperInterface
 {
     private PHPStanStaticTypeMapper $phpStanStaticTypeMapper;
 
-    public function __construct() {
-    }
-
     /**
      * @return class-string<Type>
      */

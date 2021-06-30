@@ -169,10 +169,6 @@ CODE_SAMPLE
             ? $param->type->type
             : $param->type;
 
-        if ($type instanceof Identifier && $this->isName($type, 'callable')) {
-            return true;
-        }
-
-        return false;
+        return $type instanceof Identifier && $this->isName($type, 'callable');
     }
 }

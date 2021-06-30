@@ -6,11 +6,9 @@ namespace Rector\Core\NodeManipulator;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
-use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\ClosureUse;
 use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\List_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\Variable;
@@ -21,7 +19,6 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Foreach_;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ParameterReflection;
-use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Type\Type;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
@@ -45,7 +42,8 @@ final class ClassMethodAssignManipulator
         private NodeNameResolver $nodeNameResolver,
         private VariableManipulator $variableManipulator,
         private NodeComparator $nodeComparator,
-        private ReflectionResolver $reflectionResolver
+        private ReflectionResolver $reflectionResolver,
+        private ArrayDestructVariableFilter $arrayDestructVariableFilter
     ) {
     }
 
@@ -59,7 +57,7 @@ final class ClassMethodAssignManipulator
         );
 
         // filter out [$value] = $array, array destructing
-        $readOnlyVariableAssigns = $this->filterOutArrayDestructedVariables(
+        $readOnlyVariableAssigns = $this->arrayDestructVariableFilter->filterOut(
             $assignsOfScalarOrArrayToVariable,
             $classMethod
         );
@@ -86,50 +84,6 @@ final class ClassMethodAssignManipulator
 
         $classMethodHash = spl_object_hash($classMethod);
         $this->alreadyAddedClassMethodNames[$classMethodHash][] = $name;
-    }
-
-    /**
-     * @param Assign[] $variableAssigns
-     * @return Assign[]
-     */
-    private function filterOutArrayDestructedVariables(array $variableAssigns, ClassMethod $classMethod): array
-    {
-        $arrayDestructionCreatedVariables = [];
-
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($classMethod, function (Node $node) use (
-            &$arrayDestructionCreatedVariables
-        ) {
-            if (! $node instanceof Assign) {
-                return null;
-            }
-
-            if (! $node->var instanceof Array_ && ! $node->var instanceof List_) {
-                return null;
-            }
-
-            foreach ($node->var->items as $arrayItem) {
-                // empty item
-                if ($arrayItem === null) {
-                    continue;
-                }
-
-                if (! $arrayItem->value instanceof Variable) {
-                    continue;
-                }
-
-                /** @var string $variableName */
-                $variableName = $this->nodeNameResolver->getName($arrayItem->value);
-                $arrayDestructionCreatedVariables[] = $variableName;
-            }
-        });
-
-        return array_filter(
-            $variableAssigns,
-            fn (Assign $assign): bool => ! $this->nodeNameResolver->isNames(
-                $assign->var,
-                $arrayDestructionCreatedVariables
-            )
-        );
     }
 
     /**
@@ -300,16 +254,16 @@ final class ClassMethodAssignManipulator
         }
 
         $variableName = $this->nodeNameResolver->getName($variable);
-        $parametersAcceptor = ParametersAcceptorSelector::selectSingle($methodReflection->getVariants());
 
-        /** @var ParameterReflection $parameterReflection */
-        foreach ($parametersAcceptor->getParameters() as $parameterReflection) {
-            if ($parameterReflection->getName() !== $variableName) {
-                continue;
+        foreach ($methodReflection->getVariants() as $parametersAcceptor) {
+            foreach ($parametersAcceptor->getParameters() as $parameterReflection) {
+                if ($parameterReflection->getName() !== $variableName) {
+                    continue;
+                }
+
+                return $parameterReflection->passedByReference()
+                    ->yes();
             }
-
-            return $parameterReflection->passedByReference()
-                ->yes();
         }
 
         return false;
@@ -350,16 +304,15 @@ final class ClassMethodAssignManipulator
             return false;
         }
 
-        $parametersAcceptor = ParametersAcceptorSelector::selectSingle($methodReflection->getVariants());
-
-        /** @var ParameterReflection $parameterReflection */
-        foreach ($parametersAcceptor->getParameters() as $parameterPosition => $parameterReflection) {
-            if ($parameterPosition !== $argumentPosition) {
-                continue;
+        foreach ($methodReflection->getVariants() as $parametersAcceptor) {
+            /** @var ParameterReflection $parameterReflection */
+            foreach ($parametersAcceptor->getParameters() as $parameterPosition => $parameterReflection) {
+                if ($parameterPosition !== $argumentPosition) {
+                    continue;
+                }
+                return $parameterReflection->passedByReference()
+                    ->yes();
             }
-
-            return $parameterReflection->passedByReference()
-                ->yes();
         }
 
         return false;
