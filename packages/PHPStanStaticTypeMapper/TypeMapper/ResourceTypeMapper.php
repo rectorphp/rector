@@ -9,6 +9,9 @@ use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\ResourceType;
 use PHPStan\Type\Type;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
+/**
+ * @implements TypeMapperInterface<ResourceType>
+ */
 final class ResourceTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface
 {
     /**

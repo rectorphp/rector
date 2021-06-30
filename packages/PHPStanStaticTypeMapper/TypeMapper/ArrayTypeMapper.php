@@ -27,6 +27,8 @@ use Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeCommonTypeNarrower;
 use RectorPrefix20210630\Symfony\Contracts\Service\Attribute\Required;
 /**
  * @see \Rector\Tests\PHPStanStaticTypeMapper\TypeMapper\ArrayTypeMapperTest
+ *
+ * @implements TypeMapperInterface<ArrayType>
  */
 final class ArrayTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface
 {

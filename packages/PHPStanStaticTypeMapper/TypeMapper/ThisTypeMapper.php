@@ -10,6 +10,9 @@ use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
+/**
+ * @implements TypeMapperInterface<ThisType>
+ */
 final class ThisTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface
 {
     /**

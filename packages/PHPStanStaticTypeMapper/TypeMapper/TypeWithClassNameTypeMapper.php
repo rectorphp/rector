@@ -4,20 +4,26 @@ declare (strict_types=1);
 namespace Rector\PHPStanStaticTypeMapper\TypeMapper;
 
 use PhpParser\Node;
+use PhpParser\Node\Name;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
+use Rector\Core\Php\PhpVersionProvider;
+use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
+/**
+ * @implements TypeMapperInterface<TypeWithClassName>
+ */
 final class TypeWithClassNameTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface
 {
     /**
-     * @var \Rector\PHPStanStaticTypeMapper\TypeMapper\StringTypeMapper
+     * @var \Rector\Core\Php\PhpVersionProvider
      */
-    private $stringTypeMapper;
-    public function __construct(\Rector\PHPStanStaticTypeMapper\TypeMapper\StringTypeMapper $stringTypeMapper)
+    private $phpVersionProvider;
+    public function __construct(\Rector\Core\Php\PhpVersionProvider $phpVersionProvider)
     {
-        $this->stringTypeMapper = $stringTypeMapper;
+        $this->phpVersionProvider = $phpVersionProvider;
     }
     /**
      * @return class-string<Type>
@@ -38,6 +44,9 @@ final class TypeWithClassNameTypeMapper implements \Rector\PHPStanStaticTypeMapp
      */
     public function mapToPhpParserNode(\PHPStan\Type\Type $type, ?string $kind = null) : ?\PhpParser\Node
     {
-        return $this->stringTypeMapper->mapToPhpParserNode($type, $kind);
+        if (!$this->phpVersionProvider->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::SCALAR_TYPES)) {
+            return null;
+        }
+        return new \PhpParser\Node\Name('string');
     }
 }

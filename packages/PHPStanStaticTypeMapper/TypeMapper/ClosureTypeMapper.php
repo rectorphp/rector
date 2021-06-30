@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\PHPStanStaticTypeMapper\TypeMapper;
 
 use PhpParser\Node;
+use PhpParser\Node\Name;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\ClosureType;
@@ -12,19 +13,17 @@ use Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareCallableTypeNode;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
 use RectorPrefix20210630\Symfony\Contracts\Service\Attribute\Required;
+/**
+ * @implements TypeMapperInterface<ClosureType>
+ */
 final class ClosureTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface
 {
     /**
      * @var \Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper
      */
     private $phpStanStaticTypeMapper;
-    /**
-     * @var \Rector\PHPStanStaticTypeMapper\TypeMapper\CallableTypeMapper
-     */
-    private $callableTypeMapper;
-    public function __construct(\Rector\PHPStanStaticTypeMapper\TypeMapper\CallableTypeMapper $callableTypeMapper)
+    public function __construct()
     {
-        $this->callableTypeMapper = $callableTypeMapper;
     }
     /**
      * @return class-string<Type>
@@ -47,7 +46,10 @@ final class ClosureTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contrac
      */
     public function mapToPhpParserNode(\PHPStan\Type\Type $type, ?string $kind = null) : ?\PhpParser\Node
     {
-        return $this->callableTypeMapper->mapToPhpParserNode($type, $kind);
+        if ($kind === 'property') {
+            return null;
+        }
+        return new \PhpParser\Node\Name('callable');
     }
     /**
      * @required

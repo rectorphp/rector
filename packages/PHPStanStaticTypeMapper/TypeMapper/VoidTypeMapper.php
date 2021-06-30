@@ -13,6 +13,9 @@ use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
+/**
+ * @implements TypeMapperInterface<VoidType>
+ */
 final class VoidTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface
 {
     /**

@@ -11,6 +11,9 @@ use PHPStan\Type\Accessory\NonEmptyArrayType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareArrayTypeNode;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
+/**
+ * @implements TypeMapperInterface<NonEmptyArrayType>
+ */
 final class NonEmptyArrayTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface
 {
     /**

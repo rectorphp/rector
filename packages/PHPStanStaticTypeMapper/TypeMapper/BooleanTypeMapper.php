@@ -13,6 +13,9 @@ use PHPStan\Type\Type;
 use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
+/**
+ * @implements TypeMapperInterface<BooleanType>
+ */
 final class BooleanTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface
 {
     /**

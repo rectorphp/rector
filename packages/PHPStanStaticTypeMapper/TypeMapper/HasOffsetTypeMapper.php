@@ -11,6 +11,9 @@ use PHPStan\Type\Accessory\HasOffsetType;
 use PHPStan\Type\Type;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
+/**
+ * @implements TypeMapperInterface<HasOffsetType>
+ */
 final class HasOffsetTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface
 {
     /**

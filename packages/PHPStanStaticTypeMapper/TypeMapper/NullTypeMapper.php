@@ -11,6 +11,9 @@ use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
+/**
+ * @implements TypeMapperInterface<NullType>
+ */
 final class NullTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface
 {
     /**
