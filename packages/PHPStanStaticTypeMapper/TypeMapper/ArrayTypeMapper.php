@@ -29,6 +29,8 @@ use Symfony\Contracts\Service\Attribute\Required;
 
 /**
  * @see \Rector\Tests\PHPStanStaticTypeMapper\TypeMapper\ArrayTypeMapperTest
+ *
+ * @implements TypeMapperInterface<ArrayType>
  */
 final class ArrayTypeMapper implements TypeMapperInterface
 {

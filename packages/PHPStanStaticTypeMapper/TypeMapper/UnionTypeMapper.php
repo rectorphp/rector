@@ -34,6 +34,9 @@ use Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeCommonTypeNarrower;
 use Rector\PHPStanStaticTypeMapper\ValueObject\UnionTypeAnalysis;
 use Symfony\Contracts\Service\Attribute\Required;
 
+/**
+ * @implements TypeMapperInterface<UnionType>
+ */
 final class UnionTypeMapper implements TypeMapperInterface
 {
     private PHPStanStaticTypeMapper $phpStanStaticTypeMapper;

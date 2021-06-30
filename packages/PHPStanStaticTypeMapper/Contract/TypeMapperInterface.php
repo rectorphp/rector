@@ -12,6 +12,9 @@ use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\Type;
 use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
 
+/**
+ * @template T of Type
+ */
 interface TypeMapperInterface
 {
     /**
@@ -20,14 +23,16 @@ interface TypeMapperInterface
     public function getNodeClass(): string;
 
     /**
+     * @param T $type
      * @param TypeKind::*|null $kind
      */
     public function mapToPHPStanPhpDocTypeNode(Type $type, ?string $kind = null): TypeNode;
-
+    
     /**
+     * @param T $type
      * @param TypeKind::*|null $kind
      *
      * @return Name|NullableType|UnionType|null
      */
-    public function mapToPhpParserNode(Type $type, ?string $kind = null): ?Node;
+    public function mapToPhpParserNode(Type $type, ?string $kind = null): ?Node;    
 }

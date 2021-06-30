@@ -12,6 +12,9 @@ use PHPStan\Type\Type;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Rector\StaticTypeMapper\ValueObject\Type\SelfObjectType;
 
+/**
+ * @implements TypeMapperInterface<SelfObjectType>
+ */
 final class SelfObjectTypeMapper implements TypeMapperInterface
 {
     /**

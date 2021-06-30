@@ -11,6 +11,9 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 
+/**
+ * @implements TypeMapperInterface<MixedType>
+ */
 final class MixedTypeMapper implements TypeMapperInterface
 {
     /**

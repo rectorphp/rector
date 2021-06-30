@@ -17,6 +17,8 @@ use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 
 /**
  * @see \Rector\Tests\NodeTypeResolver\StaticTypeMapper\StaticTypeMapperTest
+ *
+ * @implements TypeMapperInterface<StaticType>
  */
 final class StaticTypeMapper implements TypeMapperInterface
 {

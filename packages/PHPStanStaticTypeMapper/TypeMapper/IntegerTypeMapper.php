@@ -14,6 +14,9 @@ use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 
+/**
+ * @implements TypeMapperInterface<IntegerType>
+ */
 final class IntegerTypeMapper implements TypeMapperInterface
 {
     public function __construct(

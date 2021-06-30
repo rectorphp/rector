@@ -11,6 +11,9 @@ use PHPStan\Type\ResourceType;
 use PHPStan\Type\Type;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 
+/**
+ * @implements TypeMapperInterface<ResourceType>
+ */
 final class ResourceTypeMapper implements TypeMapperInterface
 {
     /**

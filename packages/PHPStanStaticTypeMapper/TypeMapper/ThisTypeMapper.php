@@ -12,6 +12,9 @@ use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 
+/**
+ * @implements TypeMapperInterface<ThisType>
+ */
 final class ThisTypeMapper implements TypeMapperInterface
 {
     /**
