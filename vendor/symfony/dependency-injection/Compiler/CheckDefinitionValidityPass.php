@@ -41,7 +41,7 @@ class CheckDefinitionValidityPass implements \RectorPrefix20210630\Symfony\Compo
                 throw new \RectorPrefix20210630\Symfony\Component\DependencyInjection\Exception\RuntimeException(\sprintf('A synthetic service ("%s") must be public.', $id));
             }
             // non-synthetic, non-abstract service has class
-            if (!$definition->isAbstract() && !$definition->isSynthetic() && !$definition->getClass() && (!$definition->getFactory() || !\preg_match(\RectorPrefix20210630\Symfony\Component\DependencyInjection\Loader\FileLoader::ANONYMOUS_ID_REGEXP, $id))) {
+            if (!$definition->isAbstract() && !$definition->isSynthetic() && !$definition->getClass() && !$definition->hasTag('container.service_locator') && (!$definition->getFactory() || !\preg_match(\RectorPrefix20210630\Symfony\Component\DependencyInjection\Loader\FileLoader::ANONYMOUS_ID_REGEXP, $id))) {
                 if ($definition->getFactory()) {
                     throw new \RectorPrefix20210630\Symfony\Component\DependencyInjection\Exception\RuntimeException(\sprintf('Please add the class to service "%s" even if it is constructed by a factory since we might need to add method calls based on compile-time checks.', $id));
                 }

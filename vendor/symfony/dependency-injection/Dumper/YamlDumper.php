@@ -253,6 +253,8 @@ class YamlDumper extends \RectorPrefix20210630\Symfony\Component\DependencyInjec
             return $this->getExpressionCall((string) $value);
         } elseif ($value instanceof \RectorPrefix20210630\Symfony\Component\DependencyInjection\Definition) {
             return new \RectorPrefix20210630\Symfony\Component\Yaml\Tag\TaggedValue('service', (new \RectorPrefix20210630\Symfony\Component\Yaml\Parser())->parse("_:\n" . $this->addService('_', $value), \RectorPrefix20210630\Symfony\Component\Yaml\Yaml::PARSE_CUSTOM_TAGS)['_']['_']);
+        } elseif ($value instanceof \RectorPrefix20210630\UnitEnum) {
+            return new \RectorPrefix20210630\Symfony\Component\Yaml\Tag\TaggedValue('php/const', \sprintf('%s::%s', \get_class($value), $value->name));
         } elseif ($value instanceof \RectorPrefix20210630\Symfony\Component\DependencyInjection\Argument\AbstractArgument) {
             return new \RectorPrefix20210630\Symfony\Component\Yaml\Tag\TaggedValue('abstract', $value->getText());
         } elseif (\is_object($value) || \is_resource($value)) {

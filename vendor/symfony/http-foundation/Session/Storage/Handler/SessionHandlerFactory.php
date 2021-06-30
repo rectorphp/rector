@@ -42,7 +42,8 @@ class SessionHandlerFactory
             case !\is_string($connection):
                 throw new \InvalidArgumentException(\sprintf('Unsupported Connection: "%s".', \get_debug_type($connection)));
             case 0 === \strpos($connection, 'file://'):
-                return new \RectorPrefix20210630\Symfony\Component\HttpFoundation\Session\Storage\Handler\StrictSessionHandler(new \RectorPrefix20210630\Symfony\Component\HttpFoundation\Session\Storage\Handler\NativeFileSessionHandler(\substr($connection, 7)));
+                $savePath = \substr($connection, 7);
+                return new \RectorPrefix20210630\Symfony\Component\HttpFoundation\Session\Storage\Handler\StrictSessionHandler(new \RectorPrefix20210630\Symfony\Component\HttpFoundation\Session\Storage\Handler\NativeFileSessionHandler('' === $savePath ? null : $savePath));
             case 0 === \strpos($connection, 'redis:'):
             case 0 === \strpos($connection, 'rediss:'):
             case 0 === \strpos($connection, 'memcached:'):

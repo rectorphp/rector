@@ -10,14 +10,18 @@
  */
 namespace RectorPrefix20210630\Symfony\Component\ErrorHandler;
 
+use RectorPrefix20210630\Symfony\Component\ErrorHandler\Exception\SilencedErrorContext;
 /**
  * @internal
  */
 class ThrowableUtils
 {
-    public static function getSeverity(\Throwable $throwable) : int
+    /**
+     * @param SilencedErrorContext|\Throwable
+     */
+    public static function getSeverity($throwable) : int
     {
-        if ($throwable instanceof \ErrorException) {
+        if ($throwable instanceof \ErrorException || $throwable instanceof \RectorPrefix20210630\Symfony\Component\ErrorHandler\Exception\SilencedErrorContext) {
             return $throwable->getSeverity();
         }
         if ($throwable instanceof \ParseError) {

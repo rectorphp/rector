@@ -13,6 +13,7 @@ namespace RectorPrefix20210630\Symfony\Component\DependencyInjection\Compiler;
 use RectorPrefix20210630\Symfony\Component\DependencyInjection\Alias;
 use RectorPrefix20210630\Symfony\Component\DependencyInjection\ContainerBuilder;
 use RectorPrefix20210630\Symfony\Component\DependencyInjection\ContainerInterface;
+use RectorPrefix20210630\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
 use RectorPrefix20210630\Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 use RectorPrefix20210630\Symfony\Component\DependencyInjection\Reference;
 /**
@@ -62,6 +63,7 @@ class DecoratorServicePass extends \RectorPrefix20210630\Symfony\Component\Depen
                 $public = $alias->isPublic();
                 $private = $alias->isPrivate();
                 $container->setAlias($renamedId, new \RectorPrefix20210630\Symfony\Component\DependencyInjection\Alias((string) $alias, \false));
+                $decoratedDefinition = $container->findDefinition($alias);
             } elseif ($container->hasDefinition($inner)) {
                 $decoratedDefinition = $container->getDefinition($inner);
                 $public = $decoratedDefinition->isPublic();
@@ -75,8 +77,12 @@ class DecoratorServicePass extends \RectorPrefix20210630\Symfony\Component\Depen
             } elseif (\RectorPrefix20210630\Symfony\Component\DependencyInjection\ContainerInterface::NULL_ON_INVALID_REFERENCE === $invalidBehavior) {
                 $public = $definition->isPublic();
                 $private = $definition->isPrivate();
+                $decoratedDefinition = null;
             } else {
                 throw new \RectorPrefix20210630\Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException($inner, $id);
+            }
+            if ($decoratedDefinition && $decoratedDefinition->isSynthetic()) {
+                throw new \RectorPrefix20210630\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException(\sprintf('A synthetic service cannot be decorated: service "%s" cannot decorate "%s".', $id, $inner));
             }
             if (isset($decoratingDefinitions[$inner])) {
                 $decoratingDefinition = $decoratingDefinitions[$inner];

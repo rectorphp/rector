@@ -569,9 +569,6 @@ class Filesystem
         if (!\is_dir($dir)) {
             $this->mkdir($dir);
         }
-        if (!\is_writable($dir)) {
-            throw new \RectorPrefix20210630\Symfony\Component\Filesystem\Exception\IOException(\sprintf('Unable to write to the "%s" directory.', $dir), 0, null, $dir);
-        }
         // Will create a temp file with 0600 access rights
         // when the filesystem supports chmod.
         $tmpFile = $this->tempnam($dir, \basename($filename));
@@ -602,9 +599,6 @@ class Filesystem
         $dir = \dirname($filename);
         if (!\is_dir($dir)) {
             $this->mkdir($dir);
-        }
-        if (!\is_writable($dir)) {
-            throw new \RectorPrefix20210630\Symfony\Component\Filesystem\Exception\IOException(\sprintf('Unable to write to the "%s" directory.', $dir), 0, null, $dir);
         }
         if (\false === self::box('file_put_contents', $filename, $content, \FILE_APPEND)) {
             throw new \RectorPrefix20210630\Symfony\Component\Filesystem\Exception\IOException(\sprintf('Failed to write file "%s": ', $filename) . self::$lastError, 0, null, $filename);

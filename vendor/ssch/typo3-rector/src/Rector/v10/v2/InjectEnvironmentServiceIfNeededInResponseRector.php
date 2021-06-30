@@ -59,8 +59,9 @@ final class InjectEnvironmentServiceIfNeededInResponseRector extends \Rector\Cor
             return null;
         }
         $this->addInjectEnvironmentServiceMethod($node);
-        $this->classInsertManipulator->addAsFirstMethod($node, $this->createEnvironmentServiceProperty());
-        $this->classInsertManipulator->addAsFirstMethod($node, new \PhpParser\Node\Stmt\Nop());
+        $property = $this->createEnvironmentServiceProperty();
+        $this->addNodeAfterNode(new \PhpParser\Node\Stmt\Nop(), $property);
+        $this->classInsertManipulator->addAsFirstMethod($node, $property);
         return $node;
     }
     /**

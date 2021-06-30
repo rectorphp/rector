@@ -11,12 +11,13 @@
 namespace RectorPrefix20210630\Symfony\Component\DependencyInjection\Loader\Configurator\Traits;
 
 use RectorPrefix20210630\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
+use RectorPrefix20210630\Symfony\Component\DependencyInjection\Loader\Configurator\ReferenceConfigurator;
 trait FactoryTrait
 {
     /**
      * Sets a factory.
      *
-     * @param string|array $factory A PHP callable reference
+     * @param string|array|ReferenceConfigurator $factory A PHP callable reference
      *
      * @return $this
      */

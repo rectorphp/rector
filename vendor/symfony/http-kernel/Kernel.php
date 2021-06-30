@@ -68,11 +68,11 @@ abstract class Kernel implements \RectorPrefix20210630\Symfony\Component\HttpKer
     private $requestStackSize = 0;
     private $resetServices = \false;
     private static $freshCache = [];
-    public const VERSION = '5.3.2';
-    public const VERSION_ID = 50302;
+    public const VERSION = '5.3.3';
+    public const VERSION_ID = 50303;
     public const MAJOR_VERSION = 5;
     public const MINOR_VERSION = 3;
-    public const RELEASE_VERSION = 2;
+    public const RELEASE_VERSION = 3;
     public const EXTRA_VERSION = '';
     public const END_OF_MAINTENANCE = '01/2022';
     public const END_OF_LIFE = '01/2022';

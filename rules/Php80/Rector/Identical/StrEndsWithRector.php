@@ -8,6 +8,7 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
+use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\UnaryMinus;
 use Rector\Core\Rector\AbstractRector;
@@ -38,6 +39,8 @@ class SomeClass
     public function run()
     {
         $isMatch = substr($haystack, -strlen($needle)) === $needle;
+
+        $isNotMatch = substr($haystack, -strlen($needle)) !== $needle;
     }
 }
 CODE_SAMPLE
@@ -47,6 +50,8 @@ class SomeClass
     public function run()
     {
         $isMatch = str_ends_with($haystack, $needle);
+
+        $isNotMatch = !str_ends_with($haystack, $needle);
     }
 }
 CODE_SAMPLE
@@ -69,8 +74,9 @@ CODE_SAMPLE
     /**
      * Covers:
      * $isMatch = substr($haystack, -strlen($needle)) === $needle;
+     * @return \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\BooleanNot|null
      */
-    private function refactorSubstr(\PhpParser\Node\Expr\BinaryOp $binaryOp) : ?\PhpParser\Node\Expr\FuncCall
+    private function refactorSubstr(\PhpParser\Node\Expr\BinaryOp $binaryOp)
     {
         if ($binaryOp->left instanceof \PhpParser\Node\Expr\FuncCall && $this->isName($binaryOp->left, 'substr')) {
             $substrFuncCall = $binaryOp->left;
@@ -86,7 +92,11 @@ CODE_SAMPLE
         if (!$this->nodeComparator->areNodesEqual($needle, $comparedNeedleExpr)) {
             return null;
         }
-        return $this->nodeFactory->createFuncCall('str_ends_with', [$haystack, $needle]);
+        $endsWithNode = $this->nodeFactory->createFuncCall('str_ends_with', [$haystack, $needle]);
+        if ($binaryOp instanceof \PhpParser\Node\Expr\BinaryOp\NotIdentical) {
+            return new \PhpParser\Node\Expr\BooleanNot($endsWithNode);
+        }
+        return $endsWithNode;
     }
     private function refactorSubstrCompare(\PhpParser\Node\Expr\BinaryOp $binaryOp) : ?\PhpParser\Node\Expr\FuncCall
     {

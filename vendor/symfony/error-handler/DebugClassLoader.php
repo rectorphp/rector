@@ -14,6 +14,7 @@ use RectorPrefix20210630\Composer\InstalledVersions;
 use RectorPrefix20210630\Doctrine\Common\Persistence\Proxy as LegacyProxy;
 use RectorPrefix20210630\Doctrine\Persistence\Proxy;
 use RectorPrefix20210630\Mockery\MockInterface;
+use RectorPrefix20210630\Phake\IMock;
 use RectorPrefix20210630\PHPUnit\Framework\MockObject\Matcher\StatelessInvocation;
 use RectorPrefix20210630\PHPUnit\Framework\MockObject\MockObject;
 use RectorPrefix20210630\Prophecy\Prophecy\ProphecySubjectInterface;
@@ -164,7 +165,7 @@ class DebugClassLoader
         foreach ($offsets as $getSymbols => $i) {
             $symbols = $getSymbols();
             for (; $i < \count($symbols); ++$i) {
-                if (!\is_subclass_of($symbols[$i], \RectorPrefix20210630\PHPUnit\Framework\MockObject\MockObject::class) && !\is_subclass_of($symbols[$i], \RectorPrefix20210630\Prophecy\Prophecy\ProphecySubjectInterface::class) && !\is_subclass_of($symbols[$i], \RectorPrefix20210630\Doctrine\Persistence\Proxy::class) && !\is_subclass_of($symbols[$i], \RectorPrefix20210630\ProxyManager\Proxy\ProxyInterface::class) && !\is_subclass_of($symbols[$i], \RectorPrefix20210630\Doctrine\Common\Persistence\Proxy::class) && !\is_subclass_of($symbols[$i], \RectorPrefix20210630\Mockery\MockInterface::class)) {
+                if (!\is_subclass_of($symbols[$i], \RectorPrefix20210630\PHPUnit\Framework\MockObject\MockObject::class) && !\is_subclass_of($symbols[$i], \RectorPrefix20210630\Prophecy\Prophecy\ProphecySubjectInterface::class) && !\is_subclass_of($symbols[$i], \RectorPrefix20210630\Doctrine\Persistence\Proxy::class) && !\is_subclass_of($symbols[$i], \RectorPrefix20210630\ProxyManager\Proxy\ProxyInterface::class) && !\is_subclass_of($symbols[$i], \RectorPrefix20210630\Doctrine\Common\Persistence\Proxy::class) && !\is_subclass_of($symbols[$i], \RectorPrefix20210630\Mockery\MockInterface::class) && !\is_subclass_of($symbols[$i], \RectorPrefix20210630\Phake\IMock::class)) {
                     $loader->checkClass($symbols[$i]);
                 }
             }

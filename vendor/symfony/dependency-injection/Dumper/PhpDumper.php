@@ -1577,6 +1577,8 @@ EOF;
                 $code = \str_replace('%%', '%', \preg_replace_callback('/(?<!%)(%)([^%]+)\\1/', $replaceParameters, $this->export($value)));
                 return $code;
             }
+        } elseif ($value instanceof \RectorPrefix20210630\UnitEnum) {
+            return \sprintf('\\%s::%s', \get_class($value), $value->name);
         } elseif ($value instanceof \RectorPrefix20210630\Symfony\Component\DependencyInjection\Argument\AbstractArgument) {
             throw new \RectorPrefix20210630\Symfony\Component\DependencyInjection\Exception\RuntimeException($value->getTextWithContext());
         } elseif (\is_object($value) || \is_resource($value)) {

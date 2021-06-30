@@ -142,6 +142,9 @@ class ReflectionClassResource implements \RectorPrefix20210630\Symfony\Component
                 (yield \print_r(isset($defaults[$p->name]) && !\is_object($defaults[$p->name]) ? $defaults[$p->name] : null, \true));
             }
         }
+        $defined = \Closure::bind(static function ($c) {
+            return \defined($c);
+        }, null, $class->name);
         foreach ($class->getMethods(\ReflectionMethod::IS_PUBLIC | \ReflectionMethod::IS_PROTECTED) as $m) {
             if (\PHP_VERSION_ID >= 80000) {
                 foreach ($m->getAttributes() as $a) {
@@ -164,7 +167,7 @@ class ReflectionClassResource implements \RectorPrefix20210630\Symfony\Component
                     $defaults[$p->name] = null;
                     continue;
                 }
-                if (!$p->isDefaultValueConstant() || \defined($p->getDefaultValueConstantName())) {
+                if (!$p->isDefaultValueConstant() || $defined($p->getDefaultValueConstantName())) {
                     $defaults[$p->name] = $p->getDefaultValue();
                     continue;
                 }

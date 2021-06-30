@@ -284,6 +284,9 @@ class XmlDumper extends \RectorPrefix20210630\Symfony\Component\DependencyInject
                 $element->setAttribute('type', 'binary');
                 $text = $this->document->createTextNode(self::phpToXml(\base64_encode($value)));
                 $element->appendChild($text);
+            } elseif ($value instanceof \RectorPrefix20210630\UnitEnum) {
+                $element->setAttribute('type', 'constant');
+                $element->appendChild($this->document->createTextNode(self::phpToXml($value)));
             } elseif ($value instanceof \RectorPrefix20210630\Symfony\Component\DependencyInjection\Argument\AbstractArgument) {
                 $element->setAttribute('type', 'abstract');
                 $text = $this->document->createTextNode(self::phpToXml($value->getText()));
@@ -336,6 +339,8 @@ class XmlDumper extends \RectorPrefix20210630\Symfony\Component\DependencyInject
                 return 'false';
             case $value instanceof \RectorPrefix20210630\Symfony\Component\DependencyInjection\Parameter:
                 return '%' . $value . '%';
+            case $value instanceof \RectorPrefix20210630\UnitEnum:
+                return \sprintf('%s::%s', \get_class($value), $value->name);
             case \is_object($value) || \is_resource($value):
                 throw new \RectorPrefix20210630\Symfony\Component\DependencyInjection\Exception\RuntimeException('Unable to dump a service container if a parameter is an object or a resource.');
             default:
