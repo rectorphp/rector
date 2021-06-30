@@ -132,7 +132,7 @@ CODE_SAMPLE
             if (!$propertyPhpDocInfo instanceof \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo) {
                 continue;
             }
-            $requiredDoctrineAnnotationTagValueNode = $propertyPhpDocInfo->getByAnnotationClass('Doctrine\\Common\\Annotations\\Annotation\\Required');
+            $requiredDoctrineAnnotationTagValueNode = $propertyPhpDocInfo->findOneByAnnotationClass('Doctrine\\Common\\Annotations\\Annotation\\Required');
             if (!$requiredDoctrineAnnotationTagValueNode instanceof \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode) {
                 continue;
             }
@@ -175,7 +175,7 @@ CODE_SAMPLE
     }
     private function decorateTarget(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo, \PhpParser\Node\AttributeGroup $attributeGroup) : void
     {
-        $targetDoctrineAnnotationTagValueNode = $phpDocInfo->getByAnnotationClass('Doctrine\\Common\\Annotations\\Annotation\\Target');
+        $targetDoctrineAnnotationTagValueNode = $phpDocInfo->findOneByAnnotationClass('Doctrine\\Common\\Annotations\\Annotation\\Target');
         if (!$targetDoctrineAnnotationTagValueNode instanceof \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode) {
             return;
         }

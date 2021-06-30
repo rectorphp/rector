@@ -25,6 +25,7 @@ use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDoc\SpacelessPhpDocTagNode;
 use Rector\BetterPhpDocParser\PhpDocNodeVisitor\ChangedPhpDocNodeVisitor;
 use Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator;
+use Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 use Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareUnionTypeNode;
 use Rector\ChangesReporting\Collector\RectorChangeCollector;
@@ -138,8 +139,12 @@ final class PhpDocInfo
      */
     public function getTagsByName(string $name) : array
     {
-        $name = $this->annotationNaming->normalizeName($name);
+        // for simple tag names only
+        if (\strpos($name, '\\') !== \false) {
+            return [];
+        }
         $tags = $this->phpDocNode->getTags();
+        $name = $this->annotationNaming->normalizeName($name);
         $tags = \array_filter($tags, function (\PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode $tag) use($name) {
             return $tag->name === $name;
         });
@@ -216,21 +221,28 @@ final class PhpDocInfo
         return $this->getTagsByName($name)[0] ?? null;
     }
     /**
-     * @param string[] $classes
+     * @param class-string[] $classes
      */
     public function getByAnnotationClasses(array $classes) : ?\Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode
     {
         foreach ($classes as $class) {
-            $tagValueNode = $this->getByAnnotationClass($class);
+            $tagValueNode = $this->findOneByAnnotationClass($class);
             if ($tagValueNode instanceof \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode) {
                 return $tagValueNode;
             }
         }
         return null;
     }
+    /**
+     * @param class-string $class
+     */
+    public function getByAnnotationClass(string $class) : ?\Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode
+    {
+        return $this->findOneByAnnotationClass($class);
+    }
     public function hasByAnnotationClass(string $class) : bool
     {
-        return $this->getByAnnotationClass($class) !== null;
+        return $this->findByAnnotationClass($class) !== [];
     }
     /**
      * @param string[] $annotationsClasses
@@ -239,35 +251,21 @@ final class PhpDocInfo
     {
         return $this->getByAnnotationClasses($annotationsClasses) !== null;
     }
-    public function getByAnnotationClass(string $desiredClass) : ?\Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode
+    /**
+     * @param class-string $desiredClass
+     */
+    public function findOneByAnnotationClass(string $desiredClass) : ?\Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode
     {
-        foreach ($this->phpDocNode->children as $phpDocChildNode) {
-            if (!$phpDocChildNode instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode) {
-                continue;
-            }
-            // new approach
-            if (!$phpDocChildNode->value instanceof \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode) {
-                continue;
-            }
-            $doctrineAnnotationTagValueNode = $phpDocChildNode->value;
-            if ($doctrineAnnotationTagValueNode->hasClassName($desiredClass)) {
-                return $doctrineAnnotationTagValueNode;
-            }
-            // fnmatch
-            $identifierTypeNode = $doctrineAnnotationTagValueNode->identifierTypeNode;
-            if ($this->isFnmatch($identifierTypeNode->name, $desiredClass)) {
-                return $doctrineAnnotationTagValueNode;
-            }
-            // FQN check
-            $resolvedClass = $identifierTypeNode->getAttribute(\Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey::RESOLVED_CLASS);
-            if (!\is_string($resolvedClass)) {
-                continue;
-            }
-            if ($this->isFnmatch($resolvedClass, $desiredClass)) {
-                return $doctrineAnnotationTagValueNode;
-            }
-        }
-        return null;
+        $foundTagValueNodes = $this->findByAnnotationClass($desiredClass);
+        return $foundTagValueNodes[0] ?? null;
+    }
+    /**
+     * @param class-string $desiredClass
+     * @return DoctrineAnnotationTagValueNode[]
+     */
+    public function findByAnnotationClass(string $desiredClass) : array
+    {
+        return $this->filterDoctrineTagValuesNodesINcludingNested($desiredClass);
     }
     /**
      * @param class-string<TNode> $type
@@ -485,5 +483,73 @@ final class PhpDocInfo
             return \false;
         }
         return \fnmatch($desiredValue, $currentValue, \FNM_NOESCAPE);
+    }
+    /**
+     * @return DoctrineAnnotationTagValueNode[]
+     */
+    private function filterDoctrineTagValuesNodesINcludingNested(string $desiredClass) : array
+    {
+        $desiredDoctrineTagValueNodes = [];
+        $doctrineTagValueNodes = $this->getDoctrineTagValueNodesNestedIncluded();
+        foreach ($doctrineTagValueNodes as $doctrineTagValueNode) {
+            if ($this->isMatchingDesiredClass($doctrineTagValueNode, $desiredClass)) {
+                $desiredDoctrineTagValueNodes[] = $doctrineTagValueNode;
+            }
+        }
+        return $desiredDoctrineTagValueNodes;
+    }
+    private function isMatchingDesiredClass(\Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode, string $desiredClass) : bool
+    {
+        if ($doctrineAnnotationTagValueNode->hasClassName($desiredClass)) {
+            return \true;
+        }
+        $identifierTypeNode = $doctrineAnnotationTagValueNode->identifierTypeNode;
+        if ($this->isFnmatch($identifierTypeNode->name, $desiredClass)) {
+            return \true;
+        }
+        // FQN check
+        $resolvedClass = $identifierTypeNode->getAttribute(\Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey::RESOLVED_CLASS);
+        return \is_string($resolvedClass) && $this->isFnmatch($resolvedClass, $desiredClass);
+    }
+    /**
+     * @return DoctrineAnnotationTagValueNode[]
+     */
+    private function getDoctrineTagValueNodesNestedIncluded() : array
+    {
+        $doctrineTagValueNodes = [];
+        foreach ($this->phpDocNode->children as $phpDocChildNode) {
+            if (!$phpDocChildNode instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode) {
+                continue;
+            }
+            if (!$phpDocChildNode->value instanceof \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode) {
+                continue;
+            }
+            $doctrineTagValueNodes[] = $phpDocChildNode->value;
+        }
+        // search nested tags too
+        $nestedDoctrineTagValueNodes = $this->resolveNestedDoctrineTagValueNodes($doctrineTagValueNodes);
+        return \array_merge($doctrineTagValueNodes, $nestedDoctrineTagValueNodes);
+    }
+    /**
+     * @param DoctrineAnnotationTagValueNode[] $doctrineTagValueNodes
+     * @return DoctrineAnnotationTagValueNode[]
+     */
+    private function resolveNestedDoctrineTagValueNodes(array $doctrineTagValueNodes) : array
+    {
+        $nestedDoctrineAnnotationTagValueNodes = [];
+        foreach ($doctrineTagValueNodes as $doctrineTagValueNode) {
+            foreach ($doctrineTagValueNode->getValues() as $nestedTagValue) {
+                if (!$nestedTagValue instanceof \Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode) {
+                    continue;
+                }
+                foreach ($nestedTagValue->getValues() as $nestedTagValueNestedValue) {
+                    if (!$nestedTagValueNestedValue instanceof \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode) {
+                        continue;
+                    }
+                    $nestedDoctrineAnnotationTagValueNodes[] = $nestedTagValueNestedValue;
+                }
+            }
+        }
+        return $nestedDoctrineAnnotationTagValueNodes;
     }
 }
