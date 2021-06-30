@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\PhpDocParser;
 
-use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprFalseNode;
-use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprIntegerNode;
-use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprTrueNode;
+use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprNode;
 use PHPStan\PhpDocParser\Lexer\Lexer;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocParser\StaticDoctrineAnnotationParser\ArrayParser;
@@ -52,7 +50,7 @@ final class StaticDoctrineAnnotationParser
      */
     public function resolveAnnotationValue(
         BetterTokenIterator $tokenIterator
-    ): CurlyListNode | string | array | ConstExprFalseNode | ConstExprTrueNode | ConstExprIntegerNode | DoctrineAnnotationTagValueNode {
+    ): CurlyListNode | string | array | ConstExprNode | DoctrineAnnotationTagValueNode {
         // skips dummy tokens like newlines
         $tokenIterator->tryConsumeTokenType(Lexer::TOKEN_PHPDOC_EOL);
 
@@ -116,7 +114,7 @@ final class StaticDoctrineAnnotationParser
      */
     private function parseValue(
         BetterTokenIterator $tokenIterator
-    ): CurlyListNode | string | array | ConstExprFalseNode | ConstExprTrueNode | ConstExprIntegerNode | DoctrineAnnotationTagValueNode {
+    ): CurlyListNode | string | array | ConstExprNode | DoctrineAnnotationTagValueNode {
         if ($tokenIterator->isCurrentTokenType(Lexer::TOKEN_OPEN_CURLY_BRACKET)) {
             $items = $this->arrayParser->parseCurlyArray($tokenIterator);
             return new CurlyListNode($items);

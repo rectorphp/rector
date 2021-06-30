@@ -96,8 +96,7 @@ CODE_SAMPLE
     private function hasFunctionOrClosureInside(
         ClassMethod | Function_ | Closure $functionLike,
         Variable $variable
-    ): bool
-    {
+    ): bool {
         if ($functionLike->stmts === null) {
             return false;
         }

@@ -29,14 +29,7 @@ final class MethodParameterTypeResolver
             return [];
         }
 
-        $parametersAcceptor = ParametersAcceptorSelector::selectSingle($methodReflection->getVariants());
-
-        $parameterTypes = [];
-        foreach ($parametersAcceptor->getParameters() as $parameterReflection) {
-            $parameterTypes[] = $parameterReflection->getType();
-        }
-
-        return $parameterTypes;
+        return $this->provideParameterTypesFromMethodReflection($methodReflection);
     }
 
     /**

@@ -75,7 +75,6 @@ final class PhpAttributeGroupFactory
     public function createArgsFromItems(array $items, ?string $silentKey = null): array
     {
         $args = [];
-
         if ($silentKey !== null && isset($items[$silentKey])) {
             $silentValue = BuilderHelpers::normalizeValue($items[$silentKey]);
             $this->normalizeStringDoubleQuote($silentValue);

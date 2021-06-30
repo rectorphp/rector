@@ -7,6 +7,7 @@ namespace Rector\BetterPhpDocParser\PhpDocParser\StaticDoctrineAnnotationParser;
 use PhpParser\Node;
 use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprFalseNode;
 use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprIntegerNode;
+use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprNode;
 use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprTrueNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Lexer\Lexer;
@@ -44,7 +45,7 @@ final class PlainValueParser
      */
     public function parseValue(
         BetterTokenIterator $tokenIterator
-    ): string | array | ConstExprFalseNode | ConstExprTrueNode | ConstExprIntegerNode | DoctrineAnnotationTagValueNode {
+    ): string | array | ConstExprNode | DoctrineAnnotationTagValueNode {
         $currentTokenValue = $tokenIterator->currentTokenValue();
 
         // temporary hackaround multi-line doctrine annotations
@@ -61,16 +62,9 @@ final class PlainValueParser
         $tokenIterator->next();
 
         // normalize value
-        if (strtolower($currentTokenValue) === 'false') {
-            return new ConstExprFalseNode();
-        }
-
-        if (strtolower($currentTokenValue) === 'true') {
-            return new ConstExprTrueNode();
-        }
-
-        if (is_numeric($currentTokenValue) && (string) (int) $currentTokenValue === $currentTokenValue) {
-            return new ConstExprIntegerNode($currentTokenValue);
+        $constantValue = $this->matchConstantValue($currentTokenValue);
+        if ($constantValue !== null) {
+            return $constantValue;
         }
 
         while ($tokenIterator->isCurrentTokenType(Lexer::TOKEN_DOUBLE_COLON) ||
@@ -83,6 +77,21 @@ final class PlainValueParser
         // nested entity!
         if ($tokenIterator->isCurrentTokenType(Lexer::TOKEN_OPEN_PARENTHESES)) {
             return $this->parseNestedDoctrineAnnotationTagValueNode($currentTokenValue, $tokenIterator);
+        }
+
+        $start = $tokenIterator->currentPosition();
+
+        if ($tokenIterator->isCurrentTokenType(Lexer::TOKEN_PHPDOC_EOL)) {
+            while ($tokenIterator->isCurrentTokenTypes(
+                [Lexer::TOKEN_PHPDOC_EOL, Lexer::TOKEN_IDENTIFIER, Lexer::TOKEN_COLON]
+            )) {
+                $tokenIterator->next();
+            }
+        }
+
+        $end = $tokenIterator->currentPosition();
+        if ($start + 1 < $end) {
+            return $tokenIterator->printFromTo($start, $end);
         }
 
         return $currentTokenValue;
@@ -112,5 +121,23 @@ final class PlainValueParser
 
         $identifierTypeNode = new IdentifierTypeNode($fullyQualifiedAnnotationClass);
         return new DoctrineAnnotationTagValueNode($identifierTypeNode, $annotationShortName, $values);
+    }
+
+    private function matchConstantValue(string $currentTokenValue): ConstExprNode | null
+    {
+        if (strtolower($currentTokenValue) === 'false') {
+            return new ConstExprFalseNode();
+        }
+
+        if (strtolower($currentTokenValue) === 'true') {
+            return new ConstExprTrueNode();
+        }
+        if (! is_numeric($currentTokenValue)) {
+            return null;
+        }
+        if ((string) (int) $currentTokenValue !== $currentTokenValue) {
+            return null;
+        }
+        return new ConstExprIntegerNode($currentTokenValue);
     }
 }
