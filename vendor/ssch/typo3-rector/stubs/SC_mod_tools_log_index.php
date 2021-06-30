@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210629;
+namespace RectorPrefix20210630;
 
 if (\class_exists('SC_mod_tools_log_index')) {
     return;

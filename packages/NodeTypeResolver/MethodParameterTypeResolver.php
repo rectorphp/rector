@@ -29,12 +29,7 @@ final class MethodParameterTypeResolver
         if (!$methodReflection instanceof \PHPStan\Reflection\MethodReflection) {
             return [];
         }
-        $parametersAcceptor = \PHPStan\Reflection\ParametersAcceptorSelector::selectSingle($methodReflection->getVariants());
-        $parameterTypes = [];
-        foreach ($parametersAcceptor->getParameters() as $parameterReflection) {
-            $parameterTypes[] = $parameterReflection->getType();
-        }
-        return $parameterTypes;
+        return $this->provideParameterTypesFromMethodReflection($methodReflection);
     }
     /**
      * @return Type[]

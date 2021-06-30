@@ -6,6 +6,7 @@ namespace Rector\BetterPhpDocParser\PhpDocParser\StaticDoctrineAnnotationParser;
 use PhpParser\Node;
 use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprFalseNode;
 use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprIntegerNode;
+use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprNode;
 use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprTrueNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Lexer\Lexer;
@@ -15,7 +16,7 @@ use Rector\BetterPhpDocParser\PhpDocParser\StaticDoctrineAnnotationParser;
 use Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator;
 use Rector\Core\Configuration\CurrentNodeProvider;
 use Rector\Core\Exception\ShouldNotHappenException;
-use RectorPrefix20210629\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix20210630\Symfony\Contracts\Service\Attribute\Required;
 final class PlainValueParser
 {
     /**
@@ -48,7 +49,7 @@ final class PlainValueParser
         $this->arrayParser = $arrayParser;
     }
     /**
-     * @return string|mixed[]|\PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprFalseNode|\PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprTrueNode|\PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprIntegerNode|\Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode
+     * @return string|mixed[]|\PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprNode|\Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode
      */
     public function parseValue(\Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator $tokenIterator)
     {
@@ -64,14 +65,9 @@ final class PlainValueParser
         }
         $tokenIterator->next();
         // normalize value
-        if (\strtolower($currentTokenValue) === 'false') {
-            return new \PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprFalseNode();
-        }
-        if (\strtolower($currentTokenValue) === 'true') {
-            return new \PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprTrueNode();
-        }
-        if (\is_numeric($currentTokenValue) && (string) (int) $currentTokenValue === $currentTokenValue) {
-            return new \PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprIntegerNode($currentTokenValue);
+        $constantValue = $this->matchConstantValue($currentTokenValue);
+        if ($constantValue !== null) {
+            return $constantValue;
         }
         while ($tokenIterator->isCurrentTokenType(\PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_DOUBLE_COLON) || $tokenIterator->isCurrentTokenType(\PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_IDENTIFIER)) {
             $currentTokenValue .= $tokenIterator->currentTokenValue();
@@ -80,6 +76,16 @@ final class PlainValueParser
         // nested entity!
         if ($tokenIterator->isCurrentTokenType(\PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_OPEN_PARENTHESES)) {
             return $this->parseNestedDoctrineAnnotationTagValueNode($currentTokenValue, $tokenIterator);
+        }
+        $start = $tokenIterator->currentPosition();
+        if ($tokenIterator->isCurrentTokenType(\PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_PHPDOC_EOL)) {
+            while ($tokenIterator->isCurrentTokenTypes([\PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_PHPDOC_EOL, \PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_IDENTIFIER, \PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_COLON])) {
+                $tokenIterator->next();
+            }
+        }
+        $end = $tokenIterator->currentPosition();
+        if ($start + 1 < $end) {
+            return $tokenIterator->printFromTo($start, $end);
         }
         return $currentTokenValue;
     }
@@ -98,5 +104,24 @@ final class PlainValueParser
         $tokenIterator->consumeTokenType(\PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_CLOSE_PARENTHESES);
         $identifierTypeNode = new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode($fullyQualifiedAnnotationClass);
         return new \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode($identifierTypeNode, $annotationShortName, $values);
+    }
+    /**
+     * @return \PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprNode|null
+     */
+    private function matchConstantValue(string $currentTokenValue)
+    {
+        if (\strtolower($currentTokenValue) === 'false') {
+            return new \PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprFalseNode();
+        }
+        if (\strtolower($currentTokenValue) === 'true') {
+            return new \PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprTrueNode();
+        }
+        if (!\is_numeric($currentTokenValue)) {
+            return null;
+        }
+        if ((string) (int) $currentTokenValue !== $currentTokenValue) {
+            return null;
+        }
+        return new \PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprIntegerNode($currentTokenValue);
     }
 }

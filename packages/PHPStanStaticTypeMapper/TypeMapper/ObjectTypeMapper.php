@@ -20,7 +20,7 @@ use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedGenericObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\SelfObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
-use RectorPrefix20210629\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix20210630\Symfony\Contracts\Service\Attribute\Required;
 final class ObjectTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface
 {
     /**
