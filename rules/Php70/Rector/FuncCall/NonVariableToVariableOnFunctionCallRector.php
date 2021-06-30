@@ -20,7 +20,6 @@ use PhpParser\Node\Stmt\Return_;
 use PHPStan\Analyser\MutatingScope;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ParameterReflection;
-use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Type\MixedType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Reflection\ReflectionResolver;
@@ -119,26 +118,26 @@ final class NonVariableToVariableOnFunctionCallRector extends AbstractRector
             return [];
         }
 
-        $parametersAcceptor = ParametersAcceptorSelector::selectSingle($functionLikeReflection->getVariants());
+        foreach ($functionLikeReflection->getVariants() as $parametersAcceptor) {
+            /** @var ParameterReflection $parameterReflection */
+            foreach ($parametersAcceptor->getParameters() as $key => $parameterReflection) {
+                // omitted optional parameter
+                if (! isset($call->args[$key])) {
+                    continue;
+                }
 
-        /** @var ParameterReflection $parameterReflection */
-        foreach ($parametersAcceptor->getParameters() as $key => $parameterReflection) {
-            // omitted optional parameter
-            if (! isset($call->args[$key])) {
-                continue;
+                if ($parameterReflection->passedByReference()->no()) {
+                    continue;
+                }
+
+                $argument = $call->args[$key]->value;
+
+                if ($this->isVariableLikeNode($argument)) {
+                    continue;
+                }
+
+                $arguments[$key] = $argument;
             }
-
-            if ($parameterReflection->passedByReference()->no()) {
-                continue;
-            }
-
-            $argument = $call->args[$key]->value;
-
-            if ($this->isVariableLikeNode($argument)) {
-                continue;
-            }
-
-            $arguments[$key] = $argument;
         }
 
         return $arguments;
