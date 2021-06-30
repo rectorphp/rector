@@ -100,16 +100,12 @@ CODE_SAMPLE
             return null;
         }
 
-        $endsWithNode = $this->nodeFactory->createFuncCall('str_ends_with', [$haystack, $needle]);
+        $isPositive = $binaryOp instanceof Identical;
 
-        if ($binaryOp instanceof NotIdentical) {
-            return new BooleanNot($endsWithNode);
-        }
-
-        return $endsWithNode;
+        return $this->buildReturnNode($haystack, $needle, $isPositive);
     }
 
-    private function refactorSubstrCompare(BinaryOp $binaryOp): ?FuncCall
+    private function refactorSubstrCompare(BinaryOp $binaryOp): FuncCall | BooleanNot | null
     {
         $funcCallAndExpr = $this->binaryOpAnalyzer->matchFuncCallAndOtherExpr($binaryOp, 'substr_compare');
         if (! $funcCallAndExpr instanceof FuncCallAndExpr) {
@@ -130,7 +126,9 @@ CODE_SAMPLE
             return null;
         }
 
-        return $this->nodeFactory->createFuncCall('str_ends_with', [$haystack, $needle]);
+        $isPositive = $binaryOp instanceof Identical;
+
+        return $this->buildReturnNode($haystack, $needle, $isPositive);
     }
 
     private function matchUnaryMinusStrlenFuncCallArgValue(Node $node): ?Expr
@@ -151,5 +149,16 @@ CODE_SAMPLE
         $funcCall = $node->expr;
 
         return $funcCall->args[0]->value;
+    }
+
+    private function buildReturnNode(?Expr $haystack, ?Expr $needle, bool $isPositive): FuncCall | BooleanNot
+    {
+        $endsWithNode = $this->nodeFactory->createFuncCall('str_ends_with', [$haystack, $needle]);
+
+        if (! $isPositive) {
+            return new BooleanNot($endsWithNode);
+        }
+
+        return $endsWithNode;
     }
 }
