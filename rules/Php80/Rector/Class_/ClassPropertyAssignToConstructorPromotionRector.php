@@ -6,6 +6,7 @@ namespace Rector\Php80\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Identifier;
+use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -99,11 +100,7 @@ CODE_SAMPLE
             $property = $promotionCandidate->getProperty();
             $param = $promotionCandidate->getParam();
 
-            if ($param->variadic) {
-                continue;
-            }
-
-            if ($param->type instanceof Identifier && $this->isName($param->type, 'callable')) {
+            if ($this->shouldSkipParam($param)) {
                 continue;
             }
 
@@ -160,5 +157,22 @@ CODE_SAMPLE
 
         $paramType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($param->type);
         $this->varTagRemover->removeVarPhpTagValueNodeIfNotComment($param, $paramType);
+    }
+
+    private function shouldSkipParam(Param $param): bool
+    {
+        if ($param->variadic) {
+            return true;
+        }
+
+        $type = $param->type instanceof NullableType
+            ? $param->type->type
+            : $param->type;
+
+        if ($type instanceof Identifier && $this->isName($type, 'callable')) {
+            return true;
+        }
+
+        return false;
     }
 }
