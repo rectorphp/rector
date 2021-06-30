@@ -147,9 +147,6 @@ CODE_SAMPLE
             return \true;
         }
         $type = $param->type instanceof \PhpParser\Node\NullableType ? $param->type->type : $param->type;
-        if ($type instanceof \PhpParser\Node\Identifier && $this->isName($type, 'callable')) {
-            return \true;
-        }
-        return \false;
+        return $type instanceof \PhpParser\Node\Identifier && $this->isName($type, 'callable');
     }
 }

@@ -126,7 +126,7 @@ final class NodeTypeResolver
     public function isObjectType(\PhpParser\Node $node, \PHPStan\Type\ObjectType $requiredObjectType) : bool
     {
         if ($node instanceof \PhpParser\Node\Expr\ClassConstFetch) {
-            throw new \Rector\Core\Exception\ShouldNotHappenException();
+            return \false;
         }
         $resolvedType = $this->resolve($node);
         if ($resolvedType instanceof \PHPStan\Type\MixedType) {

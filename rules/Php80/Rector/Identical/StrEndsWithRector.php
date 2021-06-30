@@ -92,13 +92,13 @@ CODE_SAMPLE
         if (!$this->nodeComparator->areNodesEqual($needle, $comparedNeedleExpr)) {
             return null;
         }
-        $endsWithNode = $this->nodeFactory->createFuncCall('str_ends_with', [$haystack, $needle]);
-        if ($binaryOp instanceof \PhpParser\Node\Expr\BinaryOp\NotIdentical) {
-            return new \PhpParser\Node\Expr\BooleanNot($endsWithNode);
-        }
-        return $endsWithNode;
+        $isPositive = $binaryOp instanceof \PhpParser\Node\Expr\BinaryOp\Identical;
+        return $this->buildReturnNode($haystack, $needle, $isPositive);
     }
-    private function refactorSubstrCompare(\PhpParser\Node\Expr\BinaryOp $binaryOp) : ?\PhpParser\Node\Expr\FuncCall
+    /**
+     * @return \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\BooleanNot|null
+     */
+    private function refactorSubstrCompare(\PhpParser\Node\Expr\BinaryOp $binaryOp)
     {
         $funcCallAndExpr = $this->binaryOpAnalyzer->matchFuncCallAndOtherExpr($binaryOp, 'substr_compare');
         if (!$funcCallAndExpr instanceof \Rector\Nette\ValueObject\FuncCallAndExpr) {
@@ -115,7 +115,8 @@ CODE_SAMPLE
         if (!$this->nodeComparator->areNodesEqual($needle, $comparedNeedleExpr)) {
             return null;
         }
-        return $this->nodeFactory->createFuncCall('str_ends_with', [$haystack, $needle]);
+        $isPositive = $binaryOp instanceof \PhpParser\Node\Expr\BinaryOp\Identical;
+        return $this->buildReturnNode($haystack, $needle, $isPositive);
     }
     private function matchUnaryMinusStrlenFuncCallArgValue(\PhpParser\Node $node) : ?\PhpParser\Node\Expr
     {
@@ -131,5 +132,16 @@ CODE_SAMPLE
         /** @var FuncCall $funcCall */
         $funcCall = $node->expr;
         return $funcCall->args[0]->value;
+    }
+    /**
+     * @return \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\BooleanNot
+     */
+    private function buildReturnNode(?\PhpParser\Node\Expr $haystack, ?\PhpParser\Node\Expr $needle, bool $isPositive)
+    {
+        $funcCall = $this->nodeFactory->createFuncCall('str_ends_with', [$haystack, $needle]);
+        if (!$isPositive) {
+            return new \PhpParser\Node\Expr\BooleanNot($funcCall);
+        }
+        return $funcCall;
     }
 }
