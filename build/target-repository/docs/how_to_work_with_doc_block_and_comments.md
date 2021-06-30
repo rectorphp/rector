@@ -87,7 +87,7 @@ use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 
 /** @var PhpDocInfo $phpDocInfo */
-$entityTagValueNode = $phpDocInfo->getByAnnotationClass('Doctrine\ORM\Mapping\Entity');
+$entityTagValueNode = $phpDocInfo->findOneByAnnotationClass('Doctrine\ORM\Mapping\Entity');
 if (! $entityTagValueNode instanceof DoctrineAnnotationTagValueNode) {
     return null;
 }

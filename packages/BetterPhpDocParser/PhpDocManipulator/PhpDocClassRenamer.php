@@ -35,7 +35,9 @@ final class PhpDocClassRenamer
      */
     private function processAssertChoiceTagValueNode(array $oldToNewClasses, PhpDocInfo $phpDocInfo): void
     {
-        $assertChoiceTagValueNode = $phpDocInfo->getByAnnotationClass('Symfony\Component\Validator\Constraints\Choice');
+        $assertChoiceTagValueNode = $phpDocInfo->findOneByAnnotationClass(
+            'Symfony\Component\Validator\Constraints\Choice'
+        );
         if (! $assertChoiceTagValueNode instanceof DoctrineAnnotationTagValueNode) {
             return;
         }
@@ -83,7 +85,7 @@ final class PhpDocClassRenamer
      */
     private function processSerializerTypeTagValueNode(array $oldToNewClasses, PhpDocInfo $phpDocInfo): void
     {
-        $doctrineAnnotationTagValueNode = $phpDocInfo->getByAnnotationClass('JMS\Serializer\Annotation\Type');
+        $doctrineAnnotationTagValueNode = $phpDocInfo->findOneByAnnotationClass('JMS\Serializer\Annotation\Type');
         if (! $doctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
             return;
         }

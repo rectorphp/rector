@@ -136,10 +136,9 @@ CODE_SAMPLE
                 continue;
             }
 
-            $requiredDoctrineAnnotationTagValueNode = $propertyPhpDocInfo->getByAnnotationClass(
+            $requiredDoctrineAnnotationTagValueNode = $propertyPhpDocInfo->findOneByAnnotationClass(
                 'Doctrine\Common\Annotations\Annotation\Required'
             );
-
             if (! $requiredDoctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
                 continue;
             }
@@ -195,7 +194,7 @@ CODE_SAMPLE
 
     private function decorateTarget(PhpDocInfo $phpDocInfo, AttributeGroup $attributeGroup): void
     {
-        $targetDoctrineAnnotationTagValueNode = $phpDocInfo->getByAnnotationClass(
+        $targetDoctrineAnnotationTagValueNode = $phpDocInfo->findOneByAnnotationClass(
             'Doctrine\Common\Annotations\Annotation\Target'
         );
 

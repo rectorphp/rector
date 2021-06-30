@@ -9,8 +9,8 @@ class News
     /**
      * @var integer
      *
-     * @ORM\Column(name="id", type="bigint", nullable=false)
      * @ORM\Id
+     * @ORM\Column(name="id", type="bigint", nullable=false)
      */
     private $id;
 }
@@ -21,8 +21,8 @@ class News
 
 namespace Rector\Tests\Php80\Rector\Class_\AnnotationToAttributeRector\FixtureAutoImported;
 
-use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Id;
+use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping as ORM;
 
 class News
@@ -30,8 +30,8 @@ class News
     /**
      * @var integer
      */
-    #[Column(name: 'id', type: 'bigint', nullable: false)]
     #[Id]
+    #[Column(name: 'id', type: 'bigint', nullable: false)]
     private $id;
 }
 

@@ -55,7 +55,7 @@ final class TestModifyReprintTest extends AbstractTestCase
         $phpDocInfo = $this->parseFileAndGetFirstNodeOfType($inputFileInfo, ClassMethod::class);
 
         /** @var DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode */
-        $doctrineAnnotationTagValueNode = $phpDocInfo->getByAnnotationClass(
+        $doctrineAnnotationTagValueNode = $phpDocInfo->findOneByAnnotationClass(
             'Symfony\Component\Routing\Annotation\Route'
         );
         // this will extended tokens of first node
