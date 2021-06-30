@@ -87,7 +87,7 @@ final class ClassAnnotationMatcher
         $shortName = $useUse->alias !== null ? $useUse->alias->name : $useUse->name->getLast();
         $shortNamePattern = preg_quote($shortName, '#');
 
-        return (bool) Strings::match($tag, '#' . $shortNamePattern . '(\\\\[\w]+)?#i');
+        return (bool) Strings::match($tag, '#' . $shortNamePattern . '(\\\\[\w]+)?$#i');
     }
 
     private function resolveName(string $tag, UseUse $useUse): string
