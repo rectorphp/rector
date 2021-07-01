@@ -15,6 +15,7 @@ use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocParser\ClassAnnotationMatcher;
 use Rector\BetterPhpDocParser\PhpDocParser\StaticDoctrineAnnotationParser;
 use Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator;
+use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 use Rector\Core\Configuration\CurrentNodeProvider;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Symfony\Contracts\Service\Attribute\Required;
@@ -119,7 +120,10 @@ final class PlainValueParser
         $tokenIterator->tryConsumeTokenType(Lexer::TOKEN_PHPDOC_EOL);
         $tokenIterator->consumeTokenType(Lexer::TOKEN_CLOSE_PARENTHESES);
 
-        $identifierTypeNode = new IdentifierTypeNode($fullyQualifiedAnnotationClass);
+        // keep original name to differentiate between short and FQN class
+        $identifierTypeNode = new IdentifierTypeNode($annotationShortName);
+        $identifierTypeNode->setAttribute(PhpDocAttributeKey::RESOLVED_CLASS, $fullyQualifiedAnnotationClass);
+
         return new DoctrineAnnotationTagValueNode($identifierTypeNode, $annotationShortName, $values);
     }
 
