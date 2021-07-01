@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\BetterPhpDocParser\PhpDocInfo;
 
-use RectorPrefix20210701\Nette\Utils\Strings;
 use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\InvalidTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\MethodTagValueNode;
@@ -24,9 +23,9 @@ use Rector\BetterPhpDocParser\Annotation\AnnotationNaming;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDoc\SpacelessPhpDocTagNode;
 use Rector\BetterPhpDocParser\PhpDocNodeFinder\DoctrineAnnotationMatcher;
+use Rector\BetterPhpDocParser\PhpDocNodeFinder\PhpDocNodeByTypeFinder;
 use Rector\BetterPhpDocParser\PhpDocNodeVisitor\ChangedPhpDocNodeVisitor;
 use Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator;
-use Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode;
 use Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareUnionTypeNode;
 use Rector\ChangesReporting\Collector\RectorChangeCollector;
 use Rector\Core\Configuration\CurrentNodeProvider;
@@ -87,7 +86,11 @@ final class PhpDocInfo
      * @var \Rector\BetterPhpDocParser\PhpDocNodeFinder\DoctrineAnnotationMatcher
      */
     private $doctrineAnnotationMatcher;
-    public function __construct(\PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode $phpDocNode, \Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator $betterTokenIterator, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \PhpParser\Node $node, \Rector\BetterPhpDocParser\Annotation\AnnotationNaming $annotationNaming, \Rector\Core\Configuration\CurrentNodeProvider $currentNodeProvider, \Rector\ChangesReporting\Collector\RectorChangeCollector $rectorChangeCollector, \Rector\BetterPhpDocParser\PhpDocNodeFinder\DoctrineAnnotationMatcher $doctrineAnnotationMatcher)
+    /**
+     * @var \Rector\BetterPhpDocParser\PhpDocNodeFinder\PhpDocNodeByTypeFinder
+     */
+    private $phpDocNodeByTypeFinder;
+    public function __construct(\PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode $phpDocNode, \Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator $betterTokenIterator, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \PhpParser\Node $node, \Rector\BetterPhpDocParser\Annotation\AnnotationNaming $annotationNaming, \Rector\Core\Configuration\CurrentNodeProvider $currentNodeProvider, \Rector\ChangesReporting\Collector\RectorChangeCollector $rectorChangeCollector, \Rector\BetterPhpDocParser\PhpDocNodeFinder\DoctrineAnnotationMatcher $doctrineAnnotationMatcher, \Rector\BetterPhpDocParser\PhpDocNodeFinder\PhpDocNodeByTypeFinder $phpDocNodeByTypeFinder)
     {
         $this->phpDocNode = $phpDocNode;
         $this->betterTokenIterator = $betterTokenIterator;
@@ -97,6 +100,7 @@ final class PhpDocInfo
         $this->currentNodeProvider = $currentNodeProvider;
         $this->rectorChangeCollector = $rectorChangeCollector;
         $this->doctrineAnnotationMatcher = $doctrineAnnotationMatcher;
+        $this->phpDocNodeByTypeFinder = $phpDocNodeByTypeFinder;
         $this->originalPhpDocNode = clone $phpDocNode;
         if (!$betterTokenIterator->containsTokenType(\PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_PHPDOC_EOL)) {
             $this->isSingleLine = \true;
@@ -191,7 +195,19 @@ final class PhpDocInfo
      */
     public function hasByType(string $type) : bool
     {
-        return (bool) $this->getByType($type);
+        foreach ($this->phpDocNode->children as $phpDocChildNode) {
+            if (\is_a($phpDocChildNode, $type, \true)) {
+                return \true;
+            }
+            if (!$phpDocChildNode instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode) {
+                continue;
+            }
+            if (!\is_a($phpDocChildNode->value, $type, \true)) {
+                continue;
+            }
+            return \true;
+        }
+        return \false;
     }
     /**
      * @param array<class-string<TNode>> $types
@@ -245,6 +261,9 @@ final class PhpDocInfo
     {
         return $this->findOneByAnnotationClass($class);
     }
+    /**
+     * @param class-string $class
+     */
     public function hasByAnnotationClass(string $class) : bool
     {
         return $this->findByAnnotationClass($class) !== [];
@@ -270,27 +289,15 @@ final class PhpDocInfo
      */
     public function findByAnnotationClass(string $desiredClass) : array
     {
-        return $this->filterDoctrineTagValuesNodesINcludingNested($desiredClass);
-    }
-    /**
-     * @param class-string<TNode> $type
-     * @return TNode|null
-     */
-    public function getByType(string $type)
-    {
-        foreach ($this->phpDocNode->children as $phpDocChildNode) {
-            if (\is_a($phpDocChildNode, $type, \true)) {
-                return $phpDocChildNode;
+        $desiredDoctrineTagValueNodes = [];
+        /** @var DoctrineAnnotationTagValueNode[] $doctrineTagValueNodes */
+        $doctrineTagValueNodes = $this->phpDocNodeByTypeFinder->findByType($this->phpDocNode, \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode::class);
+        foreach ($doctrineTagValueNodes as $doctrineTagValueNode) {
+            if ($this->doctrineAnnotationMatcher->matches($doctrineTagValueNode, $desiredClass)) {
+                $desiredDoctrineTagValueNodes[] = $doctrineTagValueNode;
             }
-            if (!$phpDocChildNode instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode) {
-                continue;
-            }
-            if (!\is_a($phpDocChildNode->value, $type, \true)) {
-                continue;
-            }
-            return $phpDocChildNode->value;
         }
-        return null;
+        return $desiredDoctrineTagValueNodes;
     }
     /**
      * @deprecated, should accept only strings, to make it useful for developer who don't know internal logics of tag nodes; also not each tag requires node class
@@ -481,60 +488,5 @@ final class PhpDocInfo
             }
         }
         throw new \Rector\Core\Exception\NotImplementedYetException(\get_class($phpDocTagValueNode));
-    }
-    /**
-     * @return DoctrineAnnotationTagValueNode[]
-     */
-    private function filterDoctrineTagValuesNodesINcludingNested(string $desiredClass) : array
-    {
-        $desiredDoctrineTagValueNodes = [];
-        $doctrineTagValueNodes = $this->getDoctrineTagValueNodesNestedIncluded();
-        foreach ($doctrineTagValueNodes as $doctrineTagValueNode) {
-            if ($this->doctrineAnnotationMatcher->matches($doctrineTagValueNode, $desiredClass)) {
-                $desiredDoctrineTagValueNodes[] = $doctrineTagValueNode;
-            }
-        }
-        return $desiredDoctrineTagValueNodes;
-    }
-    /**
-     * @return DoctrineAnnotationTagValueNode[]
-     */
-    private function getDoctrineTagValueNodesNestedIncluded() : array
-    {
-        $doctrineTagValueNodes = [];
-        foreach ($this->phpDocNode->children as $phpDocChildNode) {
-            if (!$phpDocChildNode instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode) {
-                continue;
-            }
-            if (!$phpDocChildNode->value instanceof \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode) {
-                continue;
-            }
-            $doctrineTagValueNodes[] = $phpDocChildNode->value;
-        }
-        // search nested tags too
-        $nestedDoctrineTagValueNodes = $this->resolveNestedDoctrineTagValueNodes($doctrineTagValueNodes);
-        return \array_merge($doctrineTagValueNodes, $nestedDoctrineTagValueNodes);
-    }
-    /**
-     * @param DoctrineAnnotationTagValueNode[] $doctrineTagValueNodes
-     * @return DoctrineAnnotationTagValueNode[]
-     */
-    private function resolveNestedDoctrineTagValueNodes(array $doctrineTagValueNodes) : array
-    {
-        $nestedDoctrineAnnotationTagValueNodes = [];
-        foreach ($doctrineTagValueNodes as $doctrineTagValueNode) {
-            foreach ($doctrineTagValueNode->getValues() as $nestedTagValue) {
-                if (!$nestedTagValue instanceof \Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode) {
-                    continue;
-                }
-                foreach ($nestedTagValue->getValues() as $nestedTagValueNestedValue) {
-                    if (!$nestedTagValueNestedValue instanceof \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode) {
-                        continue;
-                    }
-                    $nestedDoctrineAnnotationTagValueNodes[] = $nestedTagValueNestedValue;
-                }
-            }
-        }
-        return $nestedDoctrineAnnotationTagValueNodes;
     }
 }

@@ -1522,6 +1522,7 @@ return array(
     'Rector\\BetterPhpDocParser\\PhpDocManipulator\\PropertyDocBlockManipulator' => $baseDir . '/packages/BetterPhpDocParser/PhpDocManipulator/PropertyDocBlockManipulator.php',
     'Rector\\BetterPhpDocParser\\PhpDocManipulator\\VarAnnotationManipulator' => $baseDir . '/packages/BetterPhpDocParser/PhpDocManipulator/VarAnnotationManipulator.php',
     'Rector\\BetterPhpDocParser\\PhpDocNodeFinder\\DoctrineAnnotationMatcher' => $baseDir . '/packages/BetterPhpDocParser/PhpDocNodeFinder/DoctrineAnnotationMatcher.php',
+    'Rector\\BetterPhpDocParser\\PhpDocNodeFinder\\PhpDocNodeByTypeFinder' => $baseDir . '/packages/BetterPhpDocParser/PhpDocNodeFinder/PhpDocNodeByTypeFinder.php',
     'Rector\\BetterPhpDocParser\\PhpDocNodeMapper' => $baseDir . '/packages/BetterPhpDocParser/PhpDocNodeMapper.php',
     'Rector\\BetterPhpDocParser\\PhpDocNodeTraverser\\ChangedPhpDocNodeTraverserFactory' => $baseDir . '/packages/BetterPhpDocParser/PhpDocNodeTraverser/ChangedPhpDocNodeTraverserFactory.php',
     'Rector\\BetterPhpDocParser\\PhpDocNodeVisitor\\ArrayTypePhpDocNodeVisitor' => $baseDir . '/packages/BetterPhpDocParser/PhpDocNodeVisitor/ArrayTypePhpDocNodeVisitor.php',
