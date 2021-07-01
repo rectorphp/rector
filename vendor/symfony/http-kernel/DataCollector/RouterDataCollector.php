@@ -8,16 +8,16 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210630\Symfony\Component\HttpKernel\DataCollector;
+namespace RectorPrefix20210701\Symfony\Component\HttpKernel\DataCollector;
 
-use RectorPrefix20210630\Symfony\Component\HttpFoundation\RedirectResponse;
-use RectorPrefix20210630\Symfony\Component\HttpFoundation\Request;
-use RectorPrefix20210630\Symfony\Component\HttpFoundation\Response;
-use RectorPrefix20210630\Symfony\Component\HttpKernel\Event\ControllerEvent;
+use RectorPrefix20210701\Symfony\Component\HttpFoundation\RedirectResponse;
+use RectorPrefix20210701\Symfony\Component\HttpFoundation\Request;
+use RectorPrefix20210701\Symfony\Component\HttpFoundation\Response;
+use RectorPrefix20210701\Symfony\Component\HttpKernel\Event\ControllerEvent;
 /**
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class RouterDataCollector extends \RectorPrefix20210630\Symfony\Component\HttpKernel\DataCollector\DataCollector
+class RouterDataCollector extends \RectorPrefix20210701\Symfony\Component\HttpKernel\DataCollector\DataCollector
 {
     /**
      * @var \SplObjectStorage
@@ -32,9 +32,9 @@ class RouterDataCollector extends \RectorPrefix20210630\Symfony\Component\HttpKe
      *
      * @final
      */
-    public function collect(\RectorPrefix20210630\Symfony\Component\HttpFoundation\Request $request, \RectorPrefix20210630\Symfony\Component\HttpFoundation\Response $response, \Throwable $exception = null)
+    public function collect(\RectorPrefix20210701\Symfony\Component\HttpFoundation\Request $request, \RectorPrefix20210701\Symfony\Component\HttpFoundation\Response $response, \Throwable $exception = null)
     {
-        if ($response instanceof \RectorPrefix20210630\Symfony\Component\HttpFoundation\RedirectResponse) {
+        if ($response instanceof \RectorPrefix20210701\Symfony\Component\HttpFoundation\RedirectResponse) {
             $this->data['redirect'] = \true;
             $this->data['url'] = $response->getTargetUrl();
             if ($this->controllers->contains($request)) {
@@ -48,14 +48,14 @@ class RouterDataCollector extends \RectorPrefix20210630\Symfony\Component\HttpKe
         $this->controllers = new \SplObjectStorage();
         $this->data = ['redirect' => \false, 'url' => null, 'route' => null];
     }
-    protected function guessRoute(\RectorPrefix20210630\Symfony\Component\HttpFoundation\Request $request, $controller)
+    protected function guessRoute(\RectorPrefix20210701\Symfony\Component\HttpFoundation\Request $request, $controller)
     {
         return 'n/a';
     }
     /**
      * Remembers the controller associated to each request.
      */
-    public function onKernelController(\RectorPrefix20210630\Symfony\Component\HttpKernel\Event\ControllerEvent $event)
+    public function onKernelController(\RectorPrefix20210701\Symfony\Component\HttpKernel\Event\ControllerEvent $event)
     {
         $this->controllers[$event->getRequest()] = $event->getController();
     }

@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210630;
+namespace RectorPrefix20210701;
 
 if (\class_exists('Tx_Extbase_MVC_Controller_Exception_RequiredArgumentMissingException')) {
     return;

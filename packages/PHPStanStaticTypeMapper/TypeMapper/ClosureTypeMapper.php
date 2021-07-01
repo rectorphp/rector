@@ -12,7 +12,7 @@ use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareCallableTypeNode;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
-use RectorPrefix20210630\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix20210701\Symfony\Contracts\Service\Attribute\Required;
 /**
  * @implements TypeMapperInterface<ClosureType>
  */

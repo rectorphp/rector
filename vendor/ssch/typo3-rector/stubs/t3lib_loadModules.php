@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210630;
+namespace RectorPrefix20210701;
 
 if (\class_exists('t3lib_loadModules')) {
     return;

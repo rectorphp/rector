@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210630;
+namespace RectorPrefix20210701;
 
 use Rector\Removing\Rector\Class_\RemoveTraitRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;

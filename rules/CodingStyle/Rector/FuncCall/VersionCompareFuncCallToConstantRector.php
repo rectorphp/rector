@@ -17,7 +17,6 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Util\PhpVersionFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -84,6 +83,12 @@ CODE_SAMPLE
         }
         $left = $this->getNewNodeForArg($node->args[0]->value);
         $right = $this->getNewNodeForArg($node->args[1]->value);
+        if ($left === null) {
+            return null;
+        }
+        if ($right === null) {
+            return null;
+        }
         /** @var String_ $operator */
         $operator = $node->args[2]->value;
         $comparisonClass = self::OPERATOR_TO_COMPARISON[$operator->value];
@@ -97,7 +102,7 @@ CODE_SAMPLE
         return $expr->name->toString() === 'PHP_VERSION';
     }
     /**
-     * @return \PhpParser\Node\Expr\ConstFetch|\PhpParser\Node\Scalar\LNumber
+     * @return \PhpParser\Node\Expr\ConstFetch|\PhpParser\Node\Scalar\LNumber|null
      */
     private function getNewNodeForArg(\PhpParser\Node\Expr $expr)
     {
@@ -106,10 +111,10 @@ CODE_SAMPLE
         }
         return $this->getVersionNumberFormVersionString($expr);
     }
-    private function getVersionNumberFormVersionString(\PhpParser\Node\Expr $expr) : \PhpParser\Node\Scalar\LNumber
+    private function getVersionNumberFormVersionString(\PhpParser\Node\Expr $expr) : ?\PhpParser\Node\Scalar\LNumber
     {
         if (!$expr instanceof \PhpParser\Node\Scalar\String_) {
-            throw new \Rector\Core\Exception\ShouldNotHappenException();
+            return null;
         }
         $value = $this->phpVersionFactory->createIntVersion($expr->value);
         return new \PhpParser\Node\Scalar\LNumber($value);
