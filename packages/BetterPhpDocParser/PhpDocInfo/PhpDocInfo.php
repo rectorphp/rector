@@ -23,7 +23,6 @@ use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\Annotation\AnnotationNaming;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDoc\SpacelessPhpDocTagNode;
-use Rector\BetterPhpDocParser\PhpDocNodeFinder\DoctrineAnnotationMatcher;
 use Rector\BetterPhpDocParser\PhpDocNodeFinder\PhpDocNodeByTypeFinder;
 use Rector\BetterPhpDocParser\PhpDocNodeVisitor\ChangedPhpDocNodeVisitor;
 use Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator;
@@ -65,7 +64,6 @@ final class PhpDocInfo
         private AnnotationNaming $annotationNaming,
         private CurrentNodeProvider $currentNodeProvider,
         private RectorChangeCollector $rectorChangeCollector,
-        private DoctrineAnnotationMatcher $doctrineAnnotationMatcher,
         private PhpDocNodeByTypeFinder $phpDocNodeByTypeFinder
     ) {
         $this->originalPhpDocNode = clone $phpDocNode;
@@ -182,23 +180,7 @@ final class PhpDocInfo
      */
     public function hasByType(string $type): bool
     {
-        foreach ($this->phpDocNode->children as $phpDocChildNode) {
-            if (is_a($phpDocChildNode, $type, true)) {
-                return true;
-            }
-
-            if (! $phpDocChildNode instanceof PhpDocTagNode) {
-                continue;
-            }
-
-            if (! is_a($phpDocChildNode->value, $type, true)) {
-                continue;
-            }
-
-            return true;
-        }
-
-        return false;
+        return $this->phpDocNodeByTypeFinder->findByType($this->phpDocNode, $type) !== [];
     }
 
     /**
@@ -244,14 +226,11 @@ final class PhpDocInfo
      */
     public function getByAnnotationClasses(array $classes): ?DoctrineAnnotationTagValueNode
     {
-        foreach ($classes as $class) {
-            $tagValueNode = $this->findOneByAnnotationClass($class);
-            if ($tagValueNode instanceof DoctrineAnnotationTagValueNode) {
-                return $tagValueNode;
-            }
-        }
-
-        return null;
+        $doctrineAnnotationTagValueNodes = $this->phpDocNodeByTypeFinder->findDoctrineAnnotationsByClasses(
+            $this->phpDocNode,
+            $classes
+        );
+        return $doctrineAnnotationTagValueNodes[0] ?? null;
     }
 
     /**
@@ -259,7 +238,11 @@ final class PhpDocInfo
      */
     public function getByAnnotationClass(string $class): ?DoctrineAnnotationTagValueNode
     {
-        return $this->findOneByAnnotationClass($class);
+        $doctrineAnnotationTagValueNodes = $this->phpDocNodeByTypeFinder->findDoctrineAnnotationsByClass(
+            $this->phpDocNode,
+            $class
+        );
+        return $doctrineAnnotationTagValueNodes[0] ?? null;
     }
 
     /**
@@ -293,21 +276,7 @@ final class PhpDocInfo
      */
     public function findByAnnotationClass(string $desiredClass): array
     {
-        $desiredDoctrineTagValueNodes = [];
-
-        /** @var DoctrineAnnotationTagValueNode[] $doctrineTagValueNodes */
-        $doctrineTagValueNodes = $this->phpDocNodeByTypeFinder->findByType(
-            $this->phpDocNode,
-            DoctrineAnnotationTagValueNode::class
-        );
-
-        foreach ($doctrineTagValueNodes as $doctrineTagValueNode) {
-            if ($this->doctrineAnnotationMatcher->matches($doctrineTagValueNode, $desiredClass)) {
-                $desiredDoctrineTagValueNodes[] = $doctrineTagValueNode;
-            }
-        }
-
-        return $desiredDoctrineTagValueNodes;
+        return $this->phpDocNodeByTypeFinder->findDoctrineAnnotationsByClass($this->phpDocNode, $desiredClass);
     }
 
     /**
