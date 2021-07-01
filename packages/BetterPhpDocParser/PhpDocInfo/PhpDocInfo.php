@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\PhpDocInfo;
 
-use Nette\Utils\Strings;
 use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\InvalidTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\MethodTagValueNode;
@@ -25,9 +24,9 @@ use Rector\BetterPhpDocParser\Annotation\AnnotationNaming;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDoc\SpacelessPhpDocTagNode;
 use Rector\BetterPhpDocParser\PhpDocNodeFinder\DoctrineAnnotationMatcher;
+use Rector\BetterPhpDocParser\PhpDocNodeFinder\PhpDocNodeByTypeFinder;
 use Rector\BetterPhpDocParser\PhpDocNodeVisitor\ChangedPhpDocNodeVisitor;
 use Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator;
-use Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode;
 use Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareUnionTypeNode;
 use Rector\ChangesReporting\Collector\RectorChangeCollector;
 use Rector\Core\Configuration\CurrentNodeProvider;
@@ -66,7 +65,8 @@ final class PhpDocInfo
         private AnnotationNaming $annotationNaming,
         private CurrentNodeProvider $currentNodeProvider,
         private RectorChangeCollector $rectorChangeCollector,
-        private DoctrineAnnotationMatcher $doctrineAnnotationMatcher
+        private DoctrineAnnotationMatcher $doctrineAnnotationMatcher,
+        private PhpDocNodeByTypeFinder $phpDocNodeByTypeFinder
     ) {
         $this->originalPhpDocNode = clone $phpDocNode;
 
@@ -182,7 +182,23 @@ final class PhpDocInfo
      */
     public function hasByType(string $type): bool
     {
-        return (bool) $this->getByType($type);
+        foreach ($this->phpDocNode->children as $phpDocChildNode) {
+            if (is_a($phpDocChildNode, $type, true)) {
+                return true;
+            }
+
+            if (! $phpDocChildNode instanceof PhpDocTagNode) {
+                continue;
+            }
+
+            if (! is_a($phpDocChildNode->value, $type, true)) {
+                continue;
+            }
+
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -246,6 +262,9 @@ final class PhpDocInfo
         return $this->findOneByAnnotationClass($class);
     }
 
+    /**
+     * @param class-string $class
+     */
     public function hasByAnnotationClass(string $class): bool
     {
         return $this->findByAnnotationClass($class) !== [];
@@ -274,32 +293,21 @@ final class PhpDocInfo
      */
     public function findByAnnotationClass(string $desiredClass): array
     {
-        return $this->filterDoctrineTagValuesNodesINcludingNested($desiredClass);
-    }
+        $desiredDoctrineTagValueNodes = [];
 
-    /**
-     * @param class-string<TNode> $type
-     * @return TNode|null
-     */
-    public function getByType(string $type)
-    {
-        foreach ($this->phpDocNode->children as $phpDocChildNode) {
-            if (is_a($phpDocChildNode, $type, true)) {
-                return $phpDocChildNode;
+        /** @var DoctrineAnnotationTagValueNode[] $doctrineTagValueNodes */
+        $doctrineTagValueNodes = $this->phpDocNodeByTypeFinder->findByType(
+            $this->phpDocNode,
+            DoctrineAnnotationTagValueNode::class
+        );
+
+        foreach ($doctrineTagValueNodes as $doctrineTagValueNode) {
+            if ($this->doctrineAnnotationMatcher->matches($doctrineTagValueNode, $desiredClass)) {
+                $desiredDoctrineTagValueNodes[] = $doctrineTagValueNode;
             }
-
-            if (! $phpDocChildNode instanceof PhpDocTagNode) {
-                continue;
-            }
-
-            if (! is_a($phpDocChildNode->value, $type, true)) {
-                continue;
-            }
-
-            return $phpDocChildNode->value;
         }
 
-        return null;
+        return $desiredDoctrineTagValueNodes;
     }
 
     /**
@@ -540,74 +548,5 @@ final class PhpDocInfo
         }
 
         throw new NotImplementedYetException($phpDocTagValueNode::class);
-    }
-
-    /**
-     * @return DoctrineAnnotationTagValueNode[]
-     */
-    private function filterDoctrineTagValuesNodesINcludingNested(string $desiredClass): array
-    {
-        $desiredDoctrineTagValueNodes = [];
-
-        $doctrineTagValueNodes = $this->getDoctrineTagValueNodesNestedIncluded();
-        foreach ($doctrineTagValueNodes as $doctrineTagValueNode) {
-            if ($this->doctrineAnnotationMatcher->matches($doctrineTagValueNode, $desiredClass)) {
-                $desiredDoctrineTagValueNodes[] = $doctrineTagValueNode;
-            }
-        }
-
-        return $desiredDoctrineTagValueNodes;
-    }
-
-    /**
-     * @return DoctrineAnnotationTagValueNode[]
-     */
-    private function getDoctrineTagValueNodesNestedIncluded(): array
-    {
-        $doctrineTagValueNodes = [];
-
-        foreach ($this->phpDocNode->children as $phpDocChildNode) {
-            if (! $phpDocChildNode instanceof PhpDocTagNode) {
-                continue;
-            }
-
-            if (! $phpDocChildNode->value instanceof DoctrineAnnotationTagValueNode) {
-                continue;
-            }
-
-            $doctrineTagValueNodes[] = $phpDocChildNode->value;
-        }
-
-        // search nested tags too
-        $nestedDoctrineTagValueNodes = $this->resolveNestedDoctrineTagValueNodes($doctrineTagValueNodes);
-
-        return array_merge($doctrineTagValueNodes, $nestedDoctrineTagValueNodes);
-    }
-
-    /**
-     * @param DoctrineAnnotationTagValueNode[] $doctrineTagValueNodes
-     * @return DoctrineAnnotationTagValueNode[]
-     */
-    private function resolveNestedDoctrineTagValueNodes(array $doctrineTagValueNodes): array
-    {
-        $nestedDoctrineAnnotationTagValueNodes = [];
-
-        foreach ($doctrineTagValueNodes as $doctrineTagValueNode) {
-            foreach ($doctrineTagValueNode->getValues() as $nestedTagValue) {
-                if (! $nestedTagValue instanceof CurlyListNode) {
-                    continue;
-                }
-
-                foreach ($nestedTagValue->getValues() as $nestedTagValueNestedValue) {
-                    if (! $nestedTagValueNestedValue instanceof DoctrineAnnotationTagValueNode) {
-                        continue;
-                    }
-
-                    $nestedDoctrineAnnotationTagValueNodes[] = $nestedTagValueNestedValue;
-                }
-            }
-        }
-
-        return $nestedDoctrineAnnotationTagValueNodes;
     }
 }

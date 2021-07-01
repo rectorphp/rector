@@ -10,6 +10,7 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use PHPStan\PhpDocParser\Lexer\Lexer;
 use Rector\BetterPhpDocParser\Annotation\AnnotationNaming;
 use Rector\BetterPhpDocParser\PhpDocNodeFinder\DoctrineAnnotationMatcher;
+use Rector\BetterPhpDocParser\PhpDocNodeFinder\PhpDocNodeByTypeFinder;
 use Rector\BetterPhpDocParser\PhpDocNodeMapper;
 use Rector\BetterPhpDocParser\PhpDocParser\BetterPhpDocParser;
 use Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator;
@@ -35,7 +36,8 @@ final class PhpDocInfoFactory
         private StaticTypeMapper $staticTypeMapper,
         private AnnotationNaming $annotationNaming,
         private RectorChangeCollector $rectorChangeCollector,
-        private DoctrineAnnotationMatcher $doctrineAnnotationMatcher
+        private DoctrineAnnotationMatcher $doctrineAnnotationMatcher,
+        private PhpDocNodeByTypeFinder $phpDocNodeByTypeFinder
     ) {
     }
 
@@ -138,7 +140,8 @@ final class PhpDocInfoFactory
             $this->annotationNaming,
             $this->currentNodeProvider,
             $this->rectorChangeCollector,
-            $this->doctrineAnnotationMatcher
+            $this->doctrineAnnotationMatcher,
+            $this->phpDocNodeByTypeFinder
         );
 
         $node->setAttribute(AttributeKey::PHP_DOC_INFO, $phpDocInfo);
