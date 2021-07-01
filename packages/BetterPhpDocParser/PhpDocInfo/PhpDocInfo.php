@@ -24,10 +24,10 @@ use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\Annotation\AnnotationNaming;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDoc\SpacelessPhpDocTagNode;
+use Rector\BetterPhpDocParser\PhpDocNodeFinder\DoctrineAnnotationMatcher;
 use Rector\BetterPhpDocParser\PhpDocNodeVisitor\ChangedPhpDocNodeVisitor;
 use Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator;
 use Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode;
-use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 use Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareUnionTypeNode;
 use Rector\ChangesReporting\Collector\RectorChangeCollector;
 use Rector\Core\Configuration\CurrentNodeProvider;
@@ -65,7 +65,8 @@ final class PhpDocInfo
         private \PhpParser\Node $node,
         private AnnotationNaming $annotationNaming,
         private CurrentNodeProvider $currentNodeProvider,
-        private RectorChangeCollector $rectorChangeCollector
+        private RectorChangeCollector $rectorChangeCollector,
+        private DoctrineAnnotationMatcher $doctrineAnnotationMatcher
     ) {
         $this->originalPhpDocNode = clone $phpDocNode;
 
@@ -541,15 +542,6 @@ final class PhpDocInfo
         throw new NotImplementedYetException($phpDocTagValueNode::class);
     }
 
-    private function isFnmatch(string $currentValue, string $desiredValue): bool
-    {
-        if (! \str_contains($desiredValue, '*')) {
-            return false;
-        }
-
-        return fnmatch($desiredValue, $currentValue, FNM_NOESCAPE);
-    }
-
     /**
      * @return DoctrineAnnotationTagValueNode[]
      */
@@ -559,30 +551,12 @@ final class PhpDocInfo
 
         $doctrineTagValueNodes = $this->getDoctrineTagValueNodesNestedIncluded();
         foreach ($doctrineTagValueNodes as $doctrineTagValueNode) {
-            if ($this->isMatchingDesiredClass($doctrineTagValueNode, $desiredClass)) {
+            if ($this->doctrineAnnotationMatcher->matches($doctrineTagValueNode, $desiredClass)) {
                 $desiredDoctrineTagValueNodes[] = $doctrineTagValueNode;
             }
         }
 
         return $desiredDoctrineTagValueNodes;
-    }
-
-    private function isMatchingDesiredClass(
-        DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode,
-        string $desiredClass
-    ): bool {
-        if ($doctrineAnnotationTagValueNode->hasClassName($desiredClass)) {
-            return true;
-        }
-
-        $identifierTypeNode = $doctrineAnnotationTagValueNode->identifierTypeNode;
-        if ($this->isFnmatch($identifierTypeNode->name, $desiredClass)) {
-            return true;
-        }
-
-        // FQN check
-        $resolvedClass = $identifierTypeNode->getAttribute(PhpDocAttributeKey::RESOLVED_CLASS);
-        return is_string($resolvedClass) && $this->isFnmatch($resolvedClass, $desiredClass);
     }
 
     /**

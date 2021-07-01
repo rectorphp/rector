@@ -9,7 +9,7 @@ use PhpParser\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use PHPStan\PhpDocParser\Lexer\Lexer;
 use Rector\BetterPhpDocParser\Annotation\AnnotationNaming;
-use Rector\BetterPhpDocParser\Contract\PhpDocNodeFactoryInterface;
+use Rector\BetterPhpDocParser\PhpDocNodeFinder\DoctrineAnnotationMatcher;
 use Rector\BetterPhpDocParser\PhpDocNodeMapper;
 use Rector\BetterPhpDocParser\PhpDocParser\BetterPhpDocParser;
 use Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator;
@@ -34,7 +34,8 @@ final class PhpDocInfoFactory
         private BetterPhpDocParser $betterPhpDocParser,
         private StaticTypeMapper $staticTypeMapper,
         private AnnotationNaming $annotationNaming,
-        private RectorChangeCollector $rectorChangeCollector
+        private RectorChangeCollector $rectorChangeCollector,
+        private DoctrineAnnotationMatcher $doctrineAnnotationMatcher
     ) {
     }
 
@@ -61,7 +62,7 @@ final class PhpDocInfoFactory
             return $this->phpDocInfosByObjectHash[$objectHash];
         }
 
-        /** needed for @see PhpDocNodeFactoryInterface */
+        /** @see \Rector\BetterPhpDocParser\PhpDocParser\DoctrineAnnotationDecorator::decorate() */
         $this->currentNodeProvider->setNode($node);
 
         $docComment = $node->getDocComment();
@@ -91,7 +92,7 @@ final class PhpDocInfoFactory
 
     public function createEmpty(Node $node): PhpDocInfo
     {
-        /** needed for @see PhpDocNodeFactoryInterface */
+        /** @see \Rector\BetterPhpDocParser\PhpDocParser\DoctrineAnnotationDecorator::decorate() */
         $this->currentNodeProvider->setNode($node);
 
         $phpDocNode = new PhpDocNode([]);
@@ -136,7 +137,8 @@ final class PhpDocInfoFactory
             $node,
             $this->annotationNaming,
             $this->currentNodeProvider,
-            $this->rectorChangeCollector
+            $this->rectorChangeCollector,
+            $this->doctrineAnnotationMatcher
         );
 
         $node->setAttribute(AttributeKey::PHP_DOC_INFO, $phpDocInfo);
