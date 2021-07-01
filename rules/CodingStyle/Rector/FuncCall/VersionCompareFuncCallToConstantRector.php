@@ -18,7 +18,6 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Util\PhpVersionFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -113,6 +112,12 @@ CODE_SAMPLE
 
         $left = $this->getNewNodeForArg($node->args[0]->value);
         $right = $this->getNewNodeForArg($node->args[1]->value);
+        if ($left === null) {
+            return null;
+        }
+        if ($right === null) {
+            return null;
+        }
 
         /** @var String_ $operator */
         $operator = $node->args[2]->value;
@@ -129,7 +134,7 @@ CODE_SAMPLE
         return $expr->name->toString() === 'PHP_VERSION';
     }
 
-    private function getNewNodeForArg(Expr $expr): ConstFetch | LNumber
+    private function getNewNodeForArg(Expr $expr): ConstFetch | LNumber | null
     {
         if ($this->isPhpVersionConstant($expr)) {
             return new ConstFetch(new Name('PHP_VERSION_ID'));
@@ -138,10 +143,10 @@ CODE_SAMPLE
         return $this->getVersionNumberFormVersionString($expr);
     }
 
-    private function getVersionNumberFormVersionString(Expr $expr): LNumber
+    private function getVersionNumberFormVersionString(Expr $expr): ?LNumber
     {
         if (! $expr instanceof String_) {
-            throw new ShouldNotHappenException();
+            return null;
         }
 
         $value = $this->phpVersionFactory->createIntVersion($expr->value);
