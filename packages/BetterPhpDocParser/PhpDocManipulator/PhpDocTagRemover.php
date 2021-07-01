@@ -7,6 +7,7 @@ use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use RectorPrefix20210701\Symplify\SimplePhpDocParser\PhpDocNodeTraverser;
 final class PhpDocTagRemover
 {
     public function removeByName(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo, string $name) : void
@@ -32,21 +33,14 @@ final class PhpDocTagRemover
     public function removeTagValueFromNode(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo, \PHPStan\PhpDocParser\Ast\Node $desiredNode) : void
     {
         $phpDocNode = $phpDocInfo->getPhpDocNode();
-        foreach ($phpDocNode->children as $key => $phpDocChildNode) {
-            if ($phpDocChildNode === $desiredNode) {
-                unset($phpDocNode->children[$key]);
-                $phpDocInfo->markAsChanged();
-                continue;
+        $phpDocNodeTraverser = new \RectorPrefix20210701\Symplify\SimplePhpDocParser\PhpDocNodeTraverser();
+        $phpDocNodeTraverser->traverseWithCallable($phpDocNode, '', function ($node) use($desiredNode, $phpDocInfo) {
+            if ($node !== $desiredNode) {
+                return $node;
             }
-            if (!$phpDocChildNode instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode) {
-                continue;
-            }
-            if ($phpDocChildNode->value !== $desiredNode) {
-                continue;
-            }
-            unset($phpDocNode->children[$key]);
             $phpDocInfo->markAsChanged();
-        }
+            return \RectorPrefix20210701\Symplify\SimplePhpDocParser\PhpDocNodeTraverser::NODE_REMOVE;
+        });
     }
     private function areAnnotationNamesEqual(string $firstAnnotationName, string $secondAnnotationName) : bool
     {
