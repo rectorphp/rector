@@ -16,7 +16,6 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PropertyTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\TemplateTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
-use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
 use PHPStan\PhpDocParser\Lexer\Lexer;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
@@ -26,7 +25,6 @@ use Rector\BetterPhpDocParser\PhpDoc\SpacelessPhpDocTagNode;
 use Rector\BetterPhpDocParser\PhpDocNodeFinder\PhpDocNodeByTypeFinder;
 use Rector\BetterPhpDocParser\PhpDocNodeVisitor\ChangedPhpDocNodeVisitor;
 use Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator;
-use Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareUnionTypeNode;
 use Rector\ChangesReporting\Collector\RectorChangeCollector;
 use Rector\Core\Configuration\CurrentNodeProvider;
 use Rector\Core\Exception\NotImplementedYetException;
@@ -281,32 +279,21 @@ final class PhpDocInfo
     }
 
     /**
-     * @deprecated, should accept only strings, to make it useful for developer who don't know internal logics of tag nodes; also not each tag requires node class
      * @template T of \PHPStan\PhpDocParser\Ast\Node
-     * @param class-string<T> $type
+     * @param class-string<T> $typeToRemove
      */
-    public function removeByType(string $type): void
+    public function removeByType(string $typeToRemove): void
     {
-        foreach ($this->phpDocNode->children as $key => $phpDocChildNode) {
-            if (is_a($phpDocChildNode, $type, true)) {
-                unset($this->phpDocNode->children[$key]);
-                $this->markAsChanged();
+        $phpDocNodeTraverser = new PhpDocNodeTraverser();
+        $phpDocNodeTraverser->traverseWithCallable($this->phpDocNode, '', function (Node $node) use ($typeToRemove) {
+            if (! is_a($node, $typeToRemove, true)) {
+                return null;
             }
-
-            if (! $phpDocChildNode instanceof PhpDocTagNode) {
-                continue;
-            }
-
-            if (! is_a($phpDocChildNode->value, $type, true)) {
-                continue;
-            }
-
-            /** @var PhpDocTagNode $children */
-            $children = $this->phpDocNode->children[$key];
-            $this->cleanChildrenValueType($children, $key);
 
             $this->markAsChanged();
-        }
+
+            return PhpDocNodeTraverser::NODE_REMOVE;
+        });
     }
 
     /**
@@ -318,10 +305,12 @@ final class PhpDocInfo
 
         foreach ($this->phpDocNode->getParamTagValues() as $paramTagValueNode) {
             $parameterName = $paramTagValueNode->parameterName;
-            $paramTypesByName[$parameterName] = $this->staticTypeMapper->mapPHPStanPhpDocTypeToPHPStanType(
+            $parameterType = $this->staticTypeMapper->mapPHPStanPhpDocTypeToPHPStanType(
                 $paramTagValueNode,
                 $this->node
             );
+
+            $paramTypesByName[$parameterName] = $parameterType;
         }
 
         return $paramTypesByName;
@@ -474,29 +463,6 @@ final class PhpDocInfo
     public function getNode(): \PhpParser\Node
     {
         return $this->node;
-    }
-
-    private function cleanChildrenValueType(PhpDocTagNode $phpDocTagNode, int $key): void
-    {
-        /** @var PhpDocTagValueNode $value */
-        $value = $phpDocTagNode->value;
-        $type = $value->type;
-
-        $newChildrenTypes = [];
-        if ($type instanceof BracketsAwareUnionTypeNode) {
-            $brackedTypes = $type->types;
-            foreach ($brackedTypes as $brackedType) {
-                if ($brackedType instanceof GenericTypeNode) {
-                    $newChildrenTypes[] = $brackedType;
-                }
-            }
-        }
-
-        if ($newChildrenTypes === []) {
-            unset($this->phpDocNode->children[$key]);
-        } else {
-            $this->phpDocNode->children[$key]->value->type = new BracketsAwareUnionTypeNode($newChildrenTypes);
-        }
     }
 
     private function getTypeOrMixed(?PhpDocTagValueNode $phpDocTagValueNode): Type

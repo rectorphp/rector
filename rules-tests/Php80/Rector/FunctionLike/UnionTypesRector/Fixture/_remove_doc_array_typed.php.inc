@@ -2,7 +2,7 @@
 
 namespace Rector\Tests\Php80\Rector\FunctionLike\UnionTypesRector\Fixture;
 
-class DoNotRemoveDocArrayTyped
+final class RemoveDocArrayTyped
 {
     /**
      * @return bool|float|int|string|array<mixed>
@@ -19,11 +19,8 @@ class DoNotRemoveDocArrayTyped
 
 namespace Rector\Tests\Php80\Rector\FunctionLike\UnionTypesRector\Fixture;
 
-class DoNotRemoveDocArrayTyped
+final class RemoveDocArrayTyped
 {
-    /**
-     * @return array<mixed>
-     */
     public function normalizeNodeValue($value): bool|float|int|string|array
     {
         return $value;
