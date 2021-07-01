@@ -23,10 +23,10 @@ use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\Annotation\AnnotationNaming;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDoc\SpacelessPhpDocTagNode;
+use Rector\BetterPhpDocParser\PhpDocNodeFinder\DoctrineAnnotationMatcher;
 use Rector\BetterPhpDocParser\PhpDocNodeVisitor\ChangedPhpDocNodeVisitor;
 use Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator;
 use Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode;
-use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 use Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareUnionTypeNode;
 use Rector\ChangesReporting\Collector\RectorChangeCollector;
 use Rector\Core\Configuration\CurrentNodeProvider;
@@ -83,7 +83,11 @@ final class PhpDocInfo
      * @var \Rector\ChangesReporting\Collector\RectorChangeCollector
      */
     private $rectorChangeCollector;
-    public function __construct(\PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode $phpDocNode, \Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator $betterTokenIterator, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \PhpParser\Node $node, \Rector\BetterPhpDocParser\Annotation\AnnotationNaming $annotationNaming, \Rector\Core\Configuration\CurrentNodeProvider $currentNodeProvider, \Rector\ChangesReporting\Collector\RectorChangeCollector $rectorChangeCollector)
+    /**
+     * @var \Rector\BetterPhpDocParser\PhpDocNodeFinder\DoctrineAnnotationMatcher
+     */
+    private $doctrineAnnotationMatcher;
+    public function __construct(\PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode $phpDocNode, \Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator $betterTokenIterator, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \PhpParser\Node $node, \Rector\BetterPhpDocParser\Annotation\AnnotationNaming $annotationNaming, \Rector\Core\Configuration\CurrentNodeProvider $currentNodeProvider, \Rector\ChangesReporting\Collector\RectorChangeCollector $rectorChangeCollector, \Rector\BetterPhpDocParser\PhpDocNodeFinder\DoctrineAnnotationMatcher $doctrineAnnotationMatcher)
     {
         $this->phpDocNode = $phpDocNode;
         $this->betterTokenIterator = $betterTokenIterator;
@@ -92,6 +96,7 @@ final class PhpDocInfo
         $this->annotationNaming = $annotationNaming;
         $this->currentNodeProvider = $currentNodeProvider;
         $this->rectorChangeCollector = $rectorChangeCollector;
+        $this->doctrineAnnotationMatcher = $doctrineAnnotationMatcher;
         $this->originalPhpDocNode = clone $phpDocNode;
         if (!$betterTokenIterator->containsTokenType(\PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_PHPDOC_EOL)) {
             $this->isSingleLine = \true;
@@ -477,13 +482,6 @@ final class PhpDocInfo
         }
         throw new \Rector\Core\Exception\NotImplementedYetException(\get_class($phpDocTagValueNode));
     }
-    private function isFnmatch(string $currentValue, string $desiredValue) : bool
-    {
-        if (\strpos($desiredValue, '*') === \false) {
-            return \false;
-        }
-        return \fnmatch($desiredValue, $currentValue, \FNM_NOESCAPE);
-    }
     /**
      * @return DoctrineAnnotationTagValueNode[]
      */
@@ -492,24 +490,11 @@ final class PhpDocInfo
         $desiredDoctrineTagValueNodes = [];
         $doctrineTagValueNodes = $this->getDoctrineTagValueNodesNestedIncluded();
         foreach ($doctrineTagValueNodes as $doctrineTagValueNode) {
-            if ($this->isMatchingDesiredClass($doctrineTagValueNode, $desiredClass)) {
+            if ($this->doctrineAnnotationMatcher->matches($doctrineTagValueNode, $desiredClass)) {
                 $desiredDoctrineTagValueNodes[] = $doctrineTagValueNode;
             }
         }
         return $desiredDoctrineTagValueNodes;
-    }
-    private function isMatchingDesiredClass(\Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode, string $desiredClass) : bool
-    {
-        if ($doctrineAnnotationTagValueNode->hasClassName($desiredClass)) {
-            return \true;
-        }
-        $identifierTypeNode = $doctrineAnnotationTagValueNode->identifierTypeNode;
-        if ($this->isFnmatch($identifierTypeNode->name, $desiredClass)) {
-            return \true;
-        }
-        // FQN check
-        $resolvedClass = $identifierTypeNode->getAttribute(\Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey::RESOLVED_CLASS);
-        return \is_string($resolvedClass) && $this->isFnmatch($resolvedClass, $desiredClass);
     }
     /**
      * @return DoctrineAnnotationTagValueNode[]
