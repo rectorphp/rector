@@ -11,6 +11,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
@@ -19,6 +20,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Php80\PhpDocNodeVisitor\AnnotationToAttributePhpDocNodeVisitor;
 use Rector\Php80\ValueObject\AnnotationToAttribute;
+use Rector\Php80\ValueObject\DoctrineTagAndAnnotationToAttribute;
 use Rector\PhpAttribute\Printer\PhpAttributeGroupFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -159,11 +161,7 @@ CODE_SAMPLE
      */
     private function processDoctrineAnnotationClasses(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo, $node) : void
     {
-        $phpDocNodeTraverser = new \RectorPrefix20210701\Symplify\SimplePhpDocParser\PhpDocNodeTraverser();
-        $this->annotationToAttributePhpDocNodeVisitor->configureAnnotationsToAttributes($this->annotationsToAttributes);
-        $phpDocNodeTraverser->addPhpDocNodeVisitor($this->annotationToAttributePhpDocNodeVisitor);
-        $phpDocNodeTraverser->traverse($phpDocInfo->getPhpDocNode());
-        $doctrineTagAndAnnotationToAttributes = $this->annotationToAttributePhpDocNodeVisitor->provideFound();
+        $doctrineTagAndAnnotationToAttributes = $this->collectDoctrineTagAndAnnotationToAttribute($phpDocInfo->getPhpDocNode());
         foreach ($doctrineTagAndAnnotationToAttributes as $doctrineTagAndAnnotationToAttribute) {
             $doctrineAnnotationTagValueNode = $doctrineTagAndAnnotationToAttribute->getDoctrineAnnotationTagValueNode();
             // 1. remove php-doc tag
@@ -171,5 +169,16 @@ CODE_SAMPLE
             // 2. add attributes
             $node->attrGroups[] = $this->phpAttributeGroupFactory->create($doctrineAnnotationTagValueNode, $doctrineTagAndAnnotationToAttribute->getAnnotationToAttribute());
         }
+    }
+    /**
+     * @return DoctrineTagAndAnnotationToAttribute[]
+     */
+    private function collectDoctrineTagAndAnnotationToAttribute(\PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode $phpDocNode) : array
+    {
+        $phpDocNodeTraverser = new \RectorPrefix20210701\Symplify\SimplePhpDocParser\PhpDocNodeTraverser();
+        $this->annotationToAttributePhpDocNodeVisitor->configureAnnotationsToAttributes($this->annotationsToAttributes);
+        $phpDocNodeTraverser->addPhpDocNodeVisitor($this->annotationToAttributePhpDocNodeVisitor);
+        $phpDocNodeTraverser->traverse($phpDocNode);
+        return $this->annotationToAttributePhpDocNodeVisitor->provideFound();
     }
 }

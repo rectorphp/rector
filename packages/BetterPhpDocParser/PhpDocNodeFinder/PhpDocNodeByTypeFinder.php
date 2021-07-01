@@ -12,14 +12,6 @@ use RectorPrefix20210701\Symplify\SimplePhpDocParser\PhpDocNodeTraverser;
 final class PhpDocNodeByTypeFinder
 {
     /**
-     * @var \Rector\BetterPhpDocParser\PhpDocNodeFinder\DoctrineAnnotationMatcher
-     */
-    private $doctrineAnnotationMatcher;
-    public function __construct(\Rector\BetterPhpDocParser\PhpDocNodeFinder\DoctrineAnnotationMatcher $doctrineAnnotationMatcher)
-    {
-        $this->doctrineAnnotationMatcher = $doctrineAnnotationMatcher;
-    }
-    /**
      * @param class-string<TNode> $desiredType
      * @return array<TNode>
      */
@@ -60,7 +52,7 @@ final class PhpDocNodeByTypeFinder
         /** @var DoctrineAnnotationTagValueNode[] $doctrineTagValueNodes */
         $doctrineTagValueNodes = $this->findByType($phpDocNode, \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode::class);
         foreach ($doctrineTagValueNodes as $doctrineTagValueNode) {
-            if ($this->doctrineAnnotationMatcher->matches($doctrineTagValueNode, $desiredClass)) {
+            if ($doctrineTagValueNode->hasClassName($desiredClass)) {
                 $desiredDoctrineTagValueNodes[] = $doctrineTagValueNode;
             }
         }
