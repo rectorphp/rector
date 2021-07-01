@@ -17,7 +17,8 @@ final class DoctrineAnnotationMatcher
             return \false;
         }
         $identifierTypeNode = $doctrineAnnotationTagValueNode->identifierTypeNode;
-        if ($this->isFnmatch($identifierTypeNode->name, $desiredClass)) {
+        $className = \trim($identifierTypeNode->name, '@');
+        if ($this->isFnmatch($className, $desiredClass)) {
             return \true;
         }
         // FQN check

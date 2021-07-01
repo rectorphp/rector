@@ -23,7 +23,7 @@ abstract class AbstractValuesAwareNode implements \PHPStan\PhpDocParser\Ast\PhpD
     /**
      * @var mixed[]
      */
-    protected $values = [];
+    public $values = [];
     /**
      * @var string|null
      */
@@ -33,7 +33,7 @@ abstract class AbstractValuesAwareNode implements \PHPStan\PhpDocParser\Ast\PhpD
      */
     protected $silentKey;
     /**
-     * @param mixed[] $values
+     * @param mixed[] $values Must be public so node traverser can go through them
      */
     public function __construct(array $values = [], ?string $originalContent = null, ?string $silentKey = null)
     {

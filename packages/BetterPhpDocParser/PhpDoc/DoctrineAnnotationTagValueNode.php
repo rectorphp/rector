@@ -42,7 +42,8 @@ final class DoctrineAnnotationTagValueNode extends \Rector\BetterPhpDocParser\Va
     }
     public function hasClassName(string $className) : bool
     {
-        if ($this->identifierTypeNode->name === $className) {
+        $annotationName = \trim($this->identifierTypeNode->name, '@');
+        if ($annotationName === $className) {
             return \true;
         }
         // the name is not fully qualified in the original name, look for resolvd class attirubte
