@@ -12,6 +12,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
@@ -20,6 +21,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Php80\PhpDocNodeVisitor\AnnotationToAttributePhpDocNodeVisitor;
 use Rector\Php80\ValueObject\AnnotationToAttribute;
+use Rector\Php80\ValueObject\DoctrineTagAndAnnotationToAttribute;
 use Rector\PhpAttribute\Printer\PhpAttributeGroupFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -188,12 +190,10 @@ CODE_SAMPLE
         PhpDocInfo $phpDocInfo,
         ClassMethod | Function_ | Closure | ArrowFunction | Property | Class_ $node
     ): void {
-        $phpDocNodeTraverser = new PhpDocNodeTraverser();
-        $this->annotationToAttributePhpDocNodeVisitor->configureAnnotationsToAttributes($this->annotationsToAttributes);
-        $phpDocNodeTraverser->addPhpDocNodeVisitor($this->annotationToAttributePhpDocNodeVisitor);
-        $phpDocNodeTraverser->traverse($phpDocInfo->getPhpDocNode());
+        $doctrineTagAndAnnotationToAttributes = $this->collectDoctrineTagAndAnnotationToAttribute(
+            $phpDocInfo->getPhpDocNode()
+        );
 
-        $doctrineTagAndAnnotationToAttributes = $this->annotationToAttributePhpDocNodeVisitor->provideFound();
         foreach ($doctrineTagAndAnnotationToAttributes as $doctrineTagAndAnnotationToAttribute) {
             $doctrineAnnotationTagValueNode = $doctrineTagAndAnnotationToAttribute->getDoctrineAnnotationTagValueNode();
 
@@ -206,5 +206,19 @@ CODE_SAMPLE
                 $doctrineTagAndAnnotationToAttribute->getAnnotationToAttribute()
             );
         }
+    }
+
+    /**
+     * @return DoctrineTagAndAnnotationToAttribute[]
+     */
+    private function collectDoctrineTagAndAnnotationToAttribute(PhpDocNode $phpDocNode): array
+    {
+        $phpDocNodeTraverser = new PhpDocNodeTraverser();
+        $this->annotationToAttributePhpDocNodeVisitor->configureAnnotationsToAttributes($this->annotationsToAttributes);
+        $phpDocNodeTraverser->addPhpDocNodeVisitor($this->annotationToAttributePhpDocNodeVisitor);
+
+        $phpDocNodeTraverser->traverse($phpDocNode);
+
+        return $this->annotationToAttributePhpDocNodeVisitor->provideFound();
     }
 }

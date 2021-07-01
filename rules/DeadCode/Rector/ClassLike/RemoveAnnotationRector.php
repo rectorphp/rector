@@ -85,10 +85,11 @@ CODE_SAMPLE
 
         foreach ($this->annotationsToRemove as $annotationToRemove) {
             $this->phpDocTagRemover->removeByName($phpDocInfo, $annotationToRemove);
-
-            if (is_a($annotationToRemove, PhpDocTagValueNode::class, true)) {
-                $phpDocInfo->removeByType($annotationToRemove);
+            if (! is_a($annotationToRemove, PhpDocTagValueNode::class, true)) {
+                continue;
             }
+
+            $phpDocInfo->removeByType($annotationToRemove);
         }
 
         if ($phpDocInfo->hasChanged()) {

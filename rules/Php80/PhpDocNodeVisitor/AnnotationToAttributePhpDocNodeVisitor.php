@@ -6,7 +6,6 @@ namespace Rector\Php80\PhpDocNodeVisitor;
 
 use PHPStan\PhpDocParser\Ast\Node;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
-use Rector\BetterPhpDocParser\PhpDocNodeFinder\DoctrineAnnotationMatcher;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Php80\ValueObject\AnnotationToAttribute;
@@ -25,11 +24,6 @@ final class AnnotationToAttributePhpDocNodeVisitor extends AbstractPhpDocNodeVis
      * @var DoctrineTagAndAnnotationToAttribute[]
      */
     private array $doctrineTagAndAnnotationToAttributes = [];
-
-    public function __construct(
-        private DoctrineAnnotationMatcher $doctrineAnnotationMatcher
-    ) {
-    }
 
     /**
      * @param AnnotationToAttribute[] $annotationsToAttributes
@@ -59,7 +53,7 @@ final class AnnotationToAttributePhpDocNodeVisitor extends AbstractPhpDocNodeVis
         }
 
         foreach ($this->annotationsToAttributes as $annotationToAttribute) {
-            if (! $this->doctrineAnnotationMatcher->matches($node, $annotationToAttribute->getTag())) {
+            if (! $node->hasClassName($annotationToAttribute->getTag())) {
                 continue;
             }
 

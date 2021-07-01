@@ -47,7 +47,15 @@ final class PropertyManipulator
     public function isPropertyUsedInReadContext(Property $property): bool
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
-        if ($phpDocInfo->hasByAnnotationClasses(['Doctrine\ORM\*', 'JMS\Serializer\Annotation\Type'])) {
+        if ($phpDocInfo->hasByAnnotationClasses([
+            'Doctrine\ORM\Mapping\Id',
+            'Doctrine\ORM\Mapping\Column',
+            'Doctrine\ORM\Mapping\OneToMany',
+            'Doctrine\ORM\Mapping\ManyToMany',
+            'Doctrine\ORM\Mapping\ManyToOne',
+            'Doctrine\ORM\Mapping\OneToOne',
+            'JMS\Serializer\Annotation\Type',
+        ])) {
             return true;
         }
 

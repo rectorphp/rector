@@ -230,6 +230,7 @@ final class PhpDocInfo
             $this->phpDocNode,
             $classes
         );
+
         return $doctrineAnnotationTagValueNodes[0] ?? null;
     }
 

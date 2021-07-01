@@ -13,11 +13,6 @@ use Symplify\SimplePhpDocParser\PhpDocNodeTraverser;
  */
 final class PhpDocNodeByTypeFinder
 {
-    public function __construct(
-        private DoctrineAnnotationMatcher $doctrineAnnotationMatcher
-    ) {
-    }
-
     /**
      * @param class-string<TNode> $desiredType
      * @return array<TNode>
@@ -72,7 +67,7 @@ final class PhpDocNodeByTypeFinder
         $doctrineTagValueNodes = $this->findByType($phpDocNode, DoctrineAnnotationTagValueNode::class);
 
         foreach ($doctrineTagValueNodes as $doctrineTagValueNode) {
-            if ($this->doctrineAnnotationMatcher->matches($doctrineTagValueNode, $desiredClass)) {
+            if ($doctrineTagValueNode->hasClassName($desiredClass)) {
                 $desiredDoctrineTagValueNodes[] = $doctrineTagValueNode;
             }
         }
