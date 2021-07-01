@@ -13,7 +13,10 @@ abstract class AbstractPhpDocNodeVisitor implements \RectorPrefix20210701\Sympli
     public function beforeTraverse(\PHPStan\PhpDocParser\Ast\Node $node) : void
     {
     }
-    public function enterNode(\PHPStan\PhpDocParser\Ast\Node $node) : ?\PHPStan\PhpDocParser\Ast\Node
+    /**
+     * @return int|Node|null
+     */
+    public function enterNode(\PHPStan\PhpDocParser\Ast\Node $node)
     {
         return null;
     }

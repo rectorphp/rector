@@ -17,7 +17,7 @@ final class FinderSanitizer
      * @param NetteFinder|SymfonyFinder|SplFileInfo[]|SymfonySplFileInfo[]|string[] $files
      * @return SmartFileInfo[]
      */
-    public function sanitize(iterable $files) : array
+    public function sanitize($files) : array
     {
         $smartFileInfos = [];
         foreach ($files as $file) {

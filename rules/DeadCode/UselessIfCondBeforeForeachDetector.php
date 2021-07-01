@@ -3,15 +3,20 @@
 declare (strict_types=1);
 namespace Rector\DeadCode;
 
+use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\BinaryOp\NotEqual;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\Empty_;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\NullableType;
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\If_;
-use PHPStan\Type\MixedType;
+use PHPStan\Type\ArrayType;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 final class UselessIfCondBeforeForeachDetector
 {
@@ -23,10 +28,15 @@ final class UselessIfCondBeforeForeachDetector
      * @var \Rector\Core\PhpParser\Comparing\NodeComparator
      */
     private $nodeComparator;
-    public function __construct(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator)
+    /**
+     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
+     */
+    private $betterNodeFinder;
+    public function __construct(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->nodeComparator = $nodeComparator;
+        $this->betterNodeFinder = $betterNodeFinder;
     }
     /**
      * Matches:
@@ -48,7 +58,19 @@ final class UselessIfCondBeforeForeachDetector
         }
         // is array though?
         $arrayType = $this->nodeTypeResolver->resolve($empty->expr);
-        return !$arrayType instanceof \PHPStan\Type\MixedType;
+        if (!$arrayType instanceof \PHPStan\Type\ArrayType) {
+            return \false;
+        }
+        $previousParam = $this->fromPreviousParam($foreachExpr);
+        if (!$previousParam instanceof \PhpParser\Node\Param) {
+            return \true;
+        }
+        return $this->isNullableParam($previousParam);
+    }
+    public function isNullableParam(\PhpParser\Node\Param $param) : bool
+    {
+        $type = $this->nodeTypeResolver->resolve($param->var);
+        return $type instanceof \PhpParser\Node\NullableType;
     }
     /**
      * Matches:
@@ -65,6 +87,18 @@ final class UselessIfCondBeforeForeachDetector
         /** @var NotIdentical|NotEqual $notIdentical */
         $notIdentical = $if->cond;
         return $this->isMatchingNotBinaryOp($notIdentical, $foreachExpr);
+    }
+    private function fromPreviousParam(\PhpParser\Node\Expr $expr) : ?\PhpParser\Node
+    {
+        return $this->betterNodeFinder->findFirstPreviousOfNode($expr, function (\PhpParser\Node $node) use($expr) : bool {
+            if (!$node instanceof \PhpParser\Node\Param) {
+                return \false;
+            }
+            if (!$node->var instanceof \PhpParser\Node\Expr\Variable) {
+                return \false;
+            }
+            return $this->nodeComparator->areNodesEqual($node->var, $expr);
+        });
     }
     /**
      * @param \PhpParser\Node\Expr\BinaryOp\NotIdentical|\PhpParser\Node\Expr\BinaryOp\NotEqual $binaryOp

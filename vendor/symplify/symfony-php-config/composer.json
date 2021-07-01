@@ -3,15 +3,15 @@
     "description": "Tools that easy work with Symfony PHP Configs",
     "license": "MIT",
     "require": {
-        "php": ">=7.3",
-        "symfony\/dependency-injection": "^5.2",
-        "symplify\/symplify-kernel": "^9.3.22",
-        "symplify\/package-builder": "^9.3.22"
+        "php": ">=8.0",
+        "symfony\/dependency-injection": "^5.3",
+        "symplify\/symplify-kernel": "^9.4.3",
+        "symplify\/package-builder": "^9.4.3"
     },
     "require-dev": {
-        "symfony\/http-kernel": "^4.4|^5.2",
+        "symfony\/http-kernel": "^5.3",
         "phpunit\/phpunit": "^9.5",
-        "phpstan\/phpstan": "^0.12.88"
+        "phpstan\/phpstan": "^0.12.90"
     },
     "autoload": {
         "psr-4": {
@@ -25,7 +25,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-main": "9.4-dev"
+            "dev-main": "9.5-dev"
         }
     },
     "minimum-stability": "dev",

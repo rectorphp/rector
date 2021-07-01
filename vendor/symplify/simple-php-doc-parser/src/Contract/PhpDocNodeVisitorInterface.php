@@ -10,7 +10,10 @@ use PHPStan\PhpDocParser\Ast\Node;
 interface PhpDocNodeVisitorInterface
 {
     public function beforeTraverse(\PHPStan\PhpDocParser\Ast\Node $node) : void;
-    public function enterNode(\PHPStan\PhpDocParser\Ast\Node $node) : ?\PHPStan\PhpDocParser\Ast\Node;
+    /**
+     * @return int|Node|null
+     */
+    public function enterNode(\PHPStan\PhpDocParser\Ast\Node $node);
     public function leaveNode(\PHPStan\PhpDocParser\Ast\Node $node) : void;
     public function afterTraverse(\PHPStan\PhpDocParser\Ast\Node $node) : void;
 }
