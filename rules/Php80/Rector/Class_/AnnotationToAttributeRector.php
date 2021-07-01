@@ -17,10 +17,12 @@ use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\Php80\PhpDocNodeVisitor\AnnotationToAttributePhpDocNodeVisitor;
 use Rector\Php80\ValueObject\AnnotationToAttribute;
 use Rector\PhpAttribute\Printer\PhpAttributeGroupFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20210701\Symplify\SimplePhpDocParser\PhpDocNodeTraverser;
 use RectorPrefix20210701\Webmozart\Assert\Assert;
 /**
  * @changelog https://wiki.php.net/rfc/attributes_v2
@@ -45,10 +47,15 @@ final class AnnotationToAttributeRector extends \Rector\Core\Rector\AbstractRect
      * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover
      */
     private $phpDocTagRemover;
-    public function __construct(\Rector\PhpAttribute\Printer\PhpAttributeGroupFactory $phpAttributeGroupFactory, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover $phpDocTagRemover)
+    /**
+     * @var \Rector\Php80\PhpDocNodeVisitor\AnnotationToAttributePhpDocNodeVisitor
+     */
+    private $annotationToAttributePhpDocNodeVisitor;
+    public function __construct(\Rector\PhpAttribute\Printer\PhpAttributeGroupFactory $phpAttributeGroupFactory, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover $phpDocTagRemover, \Rector\Php80\PhpDocNodeVisitor\AnnotationToAttributePhpDocNodeVisitor $annotationToAttributePhpDocNodeVisitor)
     {
         $this->phpAttributeGroupFactory = $phpAttributeGroupFactory;
         $this->phpDocTagRemover = $phpDocTagRemover;
+        $this->annotationToAttributePhpDocNodeVisitor = $annotationToAttributePhpDocNodeVisitor;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -152,14 +159,17 @@ CODE_SAMPLE
      */
     private function processDoctrineAnnotationClasses(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo, $node) : void
     {
-        foreach ($this->annotationsToAttributes as $annotationToAttribute) {
-            $doctrineAnnotationTagValueNodes = $phpDocInfo->findByAnnotationClass($annotationToAttribute->getTag());
-            foreach ($doctrineAnnotationTagValueNodes as $doctrineAnnotationTagValueNode) {
-                // 1. remove php-doc tag
-                $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $doctrineAnnotationTagValueNode);
-                // 2. add attributes
-                $node->attrGroups[] = $this->phpAttributeGroupFactory->create($doctrineAnnotationTagValueNode, $annotationToAttribute);
-            }
+        $phpDocNodeTraverser = new \RectorPrefix20210701\Symplify\SimplePhpDocParser\PhpDocNodeTraverser();
+        $this->annotationToAttributePhpDocNodeVisitor->configureAnnotationsToAttributes($this->annotationsToAttributes);
+        $phpDocNodeTraverser->addPhpDocNodeVisitor($this->annotationToAttributePhpDocNodeVisitor);
+        $phpDocNodeTraverser->traverse($phpDocInfo->getPhpDocNode());
+        $doctrineTagAndAnnotationToAttributes = $this->annotationToAttributePhpDocNodeVisitor->provideFound();
+        foreach ($doctrineTagAndAnnotationToAttributes as $doctrineTagAndAnnotationToAttribute) {
+            $doctrineAnnotationTagValueNode = $doctrineTagAndAnnotationToAttribute->getDoctrineAnnotationTagValueNode();
+            // 1. remove php-doc tag
+            $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $doctrineAnnotationTagValueNode);
+            // 2. add attributes
+            $node->attrGroups[] = $this->phpAttributeGroupFactory->create($doctrineAnnotationTagValueNode, $doctrineTagAndAnnotationToAttribute->getAnnotationToAttribute());
         }
     }
 }
