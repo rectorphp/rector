@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit4f55e3728435ecf404229bd8139abf22
+class ComposerStaticInit3d7f6d8a1338c503d8530ac877d072f4
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -3088,6 +3088,7 @@ class ComposerStaticInit4f55e3728435ecf404229bd8139abf22
         'Rector\\Php80\\NodeResolver\\ArgumentSorter' => __DIR__ . '/../..' . '/rules/Php80/NodeResolver/ArgumentSorter.php',
         'Rector\\Php80\\NodeResolver\\RequireOptionalParamResolver' => __DIR__ . '/../..' . '/rules/Php80/NodeResolver/RequireOptionalParamResolver.php',
         'Rector\\Php80\\NodeResolver\\SwitchExprsResolver' => __DIR__ . '/../..' . '/rules/Php80/NodeResolver/SwitchExprsResolver.php',
+        'Rector\\Php80\\PhpDocNodeVisitor\\AnnotationToAttributePhpDocNodeVisitor' => __DIR__ . '/../..' . '/rules/Php80/PhpDocNodeVisitor/AnnotationToAttributePhpDocNodeVisitor.php',
         'Rector\\Php80\\Rector\\Catch_\\RemoveUnusedVariableInCatchRector' => __DIR__ . '/../..' . '/rules/Php80/Rector/Catch_/RemoveUnusedVariableInCatchRector.php',
         'Rector\\Php80\\Rector\\ClassMethod\\FinalPrivateToPrivateVisibilityRector' => __DIR__ . '/../..' . '/rules/Php80/Rector/ClassMethod/FinalPrivateToPrivateVisibilityRector.php',
         'Rector\\Php80\\Rector\\ClassMethod\\OptionalParametersAfterRequiredRector' => __DIR__ . '/../..' . '/rules/Php80/Rector/ClassMethod/OptionalParametersAfterRequiredRector.php',
@@ -3109,6 +3110,7 @@ class ComposerStaticInit4f55e3728435ecf404229bd8139abf22
         'Rector\\Php80\\ValueObject\\AnnotationToAttribute' => __DIR__ . '/../..' . '/rules/Php80/ValueObject/AnnotationToAttribute.php',
         'Rector\\Php80\\ValueObject\\ArrayDimFetchAndConstFetch' => __DIR__ . '/../..' . '/rules/Php80/ValueObject/ArrayDimFetchAndConstFetch.php',
         'Rector\\Php80\\ValueObject\\CondAndExpr' => __DIR__ . '/../..' . '/rules/Php80/ValueObject/CondAndExpr.php',
+        'Rector\\Php80\\ValueObject\\DoctrineTagAndAnnotationToAttribute' => __DIR__ . '/../..' . '/rules/Php80/ValueObject/DoctrineTagAndAnnotationToAttribute.php',
         'Rector\\Php80\\ValueObject\\PropertyPromotionCandidate' => __DIR__ . '/../..' . '/rules/Php80/ValueObject/PropertyPromotionCandidate.php',
         'Rector\\Php80\\ValueObject\\StrStartsWith' => __DIR__ . '/../..' . '/rules/Php80/ValueObject/StrStartsWith.php',
         'Rector\\Php81\\NodeFactory\\EnumFactory' => __DIR__ . '/../..' . '/rules/Php81/NodeFactory/EnumFactory.php',
@@ -3843,9 +3845,9 @@ class ComposerStaticInit4f55e3728435ecf404229bd8139abf22
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit4f55e3728435ecf404229bd8139abf22::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit4f55e3728435ecf404229bd8139abf22::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit4f55e3728435ecf404229bd8139abf22::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit3d7f6d8a1338c503d8530ac877d072f4::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit3d7f6d8a1338c503d8530ac877d072f4::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit3d7f6d8a1338c503d8530ac877d072f4::$classMap;
 
         }, null, ClassLoader::class);
     }
