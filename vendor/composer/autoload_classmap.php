@@ -1419,6 +1419,7 @@ return array(
     'RectorPrefix20210701\\Symplify\\SimplePhpDocParser\\Bundle\\DependencyInjection\\Extension\\SimplePhpDocParserExtension' => $vendorDir . '/symplify/simple-php-doc-parser/src/Bundle/DependencyInjection/Extension/SimplePhpDocParserExtension.php',
     'RectorPrefix20210701\\Symplify\\SimplePhpDocParser\\Bundle\\SimplePhpDocParserBundle' => $vendorDir . '/symplify/simple-php-doc-parser/src/Bundle/SimplePhpDocParserBundle.php',
     'RectorPrefix20210701\\Symplify\\SimplePhpDocParser\\Contract\\PhpDocNodeVisitorInterface' => $vendorDir . '/symplify/simple-php-doc-parser/src/Contract/PhpDocNodeVisitorInterface.php',
+    'RectorPrefix20210701\\Symplify\\SimplePhpDocParser\\Exception\\InvalidTraverseException' => $vendorDir . '/symplify/simple-php-doc-parser/src/Exception/InvalidTraverseException.php',
     'RectorPrefix20210701\\Symplify\\SimplePhpDocParser\\PhpDocNodeTraverser' => $vendorDir . '/symplify/simple-php-doc-parser/src/PhpDocNodeTraverser.php',
     'RectorPrefix20210701\\Symplify\\SimplePhpDocParser\\PhpDocNodeVisitor\\AbstractPhpDocNodeVisitor' => $vendorDir . '/symplify/simple-php-doc-parser/src/PhpDocNodeVisitor/AbstractPhpDocNodeVisitor.php',
     'RectorPrefix20210701\\Symplify\\SimplePhpDocParser\\PhpDocNodeVisitor\\CallablePhpDocNodeVisitor' => $vendorDir . '/symplify/simple-php-doc-parser/src/PhpDocNodeVisitor/CallablePhpDocNodeVisitor.php',

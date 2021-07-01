@@ -90,6 +90,7 @@ CODE_SAMPLE
         foreach ($spreadParams as $spreadParam) {
             $spreadParam->variadic = \false;
             $spreadParam->type = new \PhpParser\Node\Identifier('array');
+            $spreadParam->default = $this->nodeFactory->createArray([]);
         }
         return $classMethod;
     }
@@ -121,7 +122,9 @@ CODE_SAMPLE
         if ($hasUnpacked) {
             return $methodCall;
         }
-        $methodCall->args[$firstSpreadParamPosition] = new \PhpParser\Node\Arg($this->nodeFactory->createArray($variadicArgs));
+        if ($variadicArgs !== []) {
+            $methodCall->args[$firstSpreadParamPosition] = new \PhpParser\Node\Arg($this->nodeFactory->createArray($variadicArgs));
+        }
         return $methodCall;
     }
     /**

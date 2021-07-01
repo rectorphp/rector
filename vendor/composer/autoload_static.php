@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit1c9e3949af4333ae7135f6da34396aa3
+class ComposerStaticInitac92cf09b1d0764cec44d082404f1965
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -1774,6 +1774,7 @@ class ComposerStaticInit1c9e3949af4333ae7135f6da34396aa3
         'RectorPrefix20210701\\Symplify\\SimplePhpDocParser\\Bundle\\DependencyInjection\\Extension\\SimplePhpDocParserExtension' => __DIR__ . '/..' . '/symplify/simple-php-doc-parser/src/Bundle/DependencyInjection/Extension/SimplePhpDocParserExtension.php',
         'RectorPrefix20210701\\Symplify\\SimplePhpDocParser\\Bundle\\SimplePhpDocParserBundle' => __DIR__ . '/..' . '/symplify/simple-php-doc-parser/src/Bundle/SimplePhpDocParserBundle.php',
         'RectorPrefix20210701\\Symplify\\SimplePhpDocParser\\Contract\\PhpDocNodeVisitorInterface' => __DIR__ . '/..' . '/symplify/simple-php-doc-parser/src/Contract/PhpDocNodeVisitorInterface.php',
+        'RectorPrefix20210701\\Symplify\\SimplePhpDocParser\\Exception\\InvalidTraverseException' => __DIR__ . '/..' . '/symplify/simple-php-doc-parser/src/Exception/InvalidTraverseException.php',
         'RectorPrefix20210701\\Symplify\\SimplePhpDocParser\\PhpDocNodeTraverser' => __DIR__ . '/..' . '/symplify/simple-php-doc-parser/src/PhpDocNodeTraverser.php',
         'RectorPrefix20210701\\Symplify\\SimplePhpDocParser\\PhpDocNodeVisitor\\AbstractPhpDocNodeVisitor' => __DIR__ . '/..' . '/symplify/simple-php-doc-parser/src/PhpDocNodeVisitor/AbstractPhpDocNodeVisitor.php',
         'RectorPrefix20210701\\Symplify\\SimplePhpDocParser\\PhpDocNodeVisitor\\CallablePhpDocNodeVisitor' => __DIR__ . '/..' . '/symplify/simple-php-doc-parser/src/PhpDocNodeVisitor/CallablePhpDocNodeVisitor.php',
@@ -3844,9 +3845,9 @@ class ComposerStaticInit1c9e3949af4333ae7135f6da34396aa3
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit1c9e3949af4333ae7135f6da34396aa3::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit1c9e3949af4333ae7135f6da34396aa3::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit1c9e3949af4333ae7135f6da34396aa3::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitac92cf09b1d0764cec44d082404f1965::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitac92cf09b1d0764cec44d082404f1965::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitac92cf09b1d0764cec44d082404f1965::$classMap;
 
         }, null, ClassLoader::class);
     }

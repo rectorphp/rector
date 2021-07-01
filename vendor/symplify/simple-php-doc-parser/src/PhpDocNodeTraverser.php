@@ -4,7 +4,9 @@ declare (strict_types=1);
 namespace RectorPrefix20210701\Symplify\SimplePhpDocParser;
 
 use PHPStan\PhpDocParser\Ast\Node;
+use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use RectorPrefix20210701\Symplify\SimplePhpDocParser\Contract\PhpDocNodeVisitorInterface;
+use RectorPrefix20210701\Symplify\SimplePhpDocParser\Exception\InvalidTraverseException;
 use RectorPrefix20210701\Symplify\SimplePhpDocParser\PhpDocNodeVisitor\CallablePhpDocNodeVisitor;
 /**
  * Mimics
@@ -34,6 +36,9 @@ final class PhpDocNodeTraverser
             $phpDocNodeVisitor->beforeTraverse($node);
         }
         $node = $this->traverseNode($node);
+        if (\is_int($node)) {
+            throw new \RectorPrefix20210701\Symplify\SimplePhpDocParser\Exception\InvalidTraverseException();
+        }
         foreach ($this->phpDocNodeVisitors as $phpDocNodeVisitor) {
             $phpDocNodeVisitor->afterTraverse($node);
         }
@@ -48,9 +53,9 @@ final class PhpDocNodeTraverser
     /**
      * @template TNode of Node
      * @param TNode $node
-     * @return TNode
+     * @return \PHPStan\PhpDocParser\Ast\Node|int
      */
-    private function traverseNode(\PHPStan\PhpDocParser\Ast\Node $node) : \PHPStan\PhpDocParser\Ast\Node
+    private function traverseNode(\PHPStan\PhpDocParser\Ast\Node $node)
     {
         $subNodeNames = \array_keys(\get_object_vars($node));
         foreach ($subNodeNames as $subNodeName) {
@@ -62,9 +67,19 @@ final class PhpDocNodeTraverser
                     $return = $phpDocNodeVisitor->enterNode($subNode);
                     if ($return instanceof \PHPStan\PhpDocParser\Ast\Node) {
                         $subNode = $return;
+                    } elseif ($return === self::NODE_REMOVE) {
+                        if ($subNode instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode) {
+                            // we have to remove the node above
+                            return self::NODE_REMOVE;
+                        }
+                        $subNode = null;
+                        continue 2;
                     }
                 }
                 $subNode = $this->traverseNode($subNode);
+                if (\is_int($subNode)) {
+                    throw new \RectorPrefix20210701\Symplify\SimplePhpDocParser\Exception\InvalidTraverseException();
+                }
                 foreach ($this->phpDocNodeVisitors as $phpDocNodeVisitor) {
                     $phpDocNodeVisitor->leaveNode($subNode);
                 }
@@ -88,11 +103,21 @@ final class PhpDocNodeTraverser
                 if ($return instanceof \PHPStan\PhpDocParser\Ast\Node) {
                     $node = $return;
                 } elseif ($return === self::NODE_REMOVE) {
+                    // remove node
                     unset($nodes[$key]);
                     continue 2;
                 }
             }
-            $node = $this->traverseNode($node);
+            $return = $this->traverseNode($node);
+            // remove value node
+            if ($return === self::NODE_REMOVE) {
+                unset($nodes[$key]);
+                continue;
+            }
+            if (\is_int($return)) {
+                throw new \RectorPrefix20210701\Symplify\SimplePhpDocParser\Exception\InvalidTraverseException();
+            }
+            $node = $return;
             foreach ($this->phpDocNodeVisitors as $phpDocNodeVisitor) {
                 $phpDocNodeVisitor->leaveNode($node);
             }
