@@ -11,8 +11,8 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
+use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
@@ -49,15 +49,10 @@ final class AnnotationToAttributeRector extends \Rector\Core\Rector\AbstractRect
      * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover
      */
     private $phpDocTagRemover;
-    /**
-     * @var \Rector\Php80\PhpDocNodeVisitor\AnnotationToAttributePhpDocNodeVisitor
-     */
-    private $annotationToAttributePhpDocNodeVisitor;
-    public function __construct(\Rector\PhpAttribute\Printer\PhpAttributeGroupFactory $phpAttributeGroupFactory, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover $phpDocTagRemover, \Rector\Php80\PhpDocNodeVisitor\AnnotationToAttributePhpDocNodeVisitor $annotationToAttributePhpDocNodeVisitor)
+    public function __construct(\Rector\PhpAttribute\Printer\PhpAttributeGroupFactory $phpAttributeGroupFactory, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover $phpDocTagRemover)
     {
         $this->phpAttributeGroupFactory = $phpAttributeGroupFactory;
         $this->phpDocTagRemover = $phpDocTagRemover;
-        $this->annotationToAttributePhpDocNodeVisitor = $annotationToAttributePhpDocNodeVisitor;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -161,7 +156,23 @@ CODE_SAMPLE
      */
     private function processDoctrineAnnotationClasses(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo, $node) : void
     {
-        $doctrineTagAndAnnotationToAttributes = $this->collectDoctrineTagAndAnnotationToAttribute($phpDocInfo->getPhpDocNode());
+        $doctrineTagAndAnnotationToAttributes = [];
+        $phpDocNodeTraverser = new \RectorPrefix20210701\Symplify\SimplePhpDocParser\PhpDocNodeTraverser();
+        $phpDocNodeTraverser->traverseWithCallable($phpDocInfo->getPhpDocNode(), '', function ($node) use(&$doctrineTagAndAnnotationToAttributes, $phpDocInfo) {
+            if (!$node instanceof \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode) {
+                return $node;
+            }
+            foreach ($this->annotationsToAttributes as $annotationToAttribute) {
+                if (!$node->hasClassName($annotationToAttribute->getTag())) {
+                    continue;
+                }
+                $doctrineTagAndAnnotationToAttributes[] = new \Rector\Php80\ValueObject\DoctrineTagAndAnnotationToAttribute($node, $annotationToAttribute);
+                $phpDocInfo->markAsChanged();
+                // remove the original doctrine annotation, it becomes an attribute
+                return \RectorPrefix20210701\Symplify\SimplePhpDocParser\PhpDocNodeTraverser::NODE_REMOVE;
+            }
+            return $node;
+        });
         foreach ($doctrineTagAndAnnotationToAttributes as $doctrineTagAndAnnotationToAttribute) {
             $doctrineAnnotationTagValueNode = $doctrineTagAndAnnotationToAttribute->getDoctrineAnnotationTagValueNode();
             // 1. remove php-doc tag
@@ -169,16 +180,5 @@ CODE_SAMPLE
             // 2. add attributes
             $node->attrGroups[] = $this->phpAttributeGroupFactory->create($doctrineAnnotationTagValueNode, $doctrineTagAndAnnotationToAttribute->getAnnotationToAttribute());
         }
-    }
-    /**
-     * @return DoctrineTagAndAnnotationToAttribute[]
-     */
-    private function collectDoctrineTagAndAnnotationToAttribute(\PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode $phpDocNode) : array
-    {
-        $phpDocNodeTraverser = new \RectorPrefix20210701\Symplify\SimplePhpDocParser\PhpDocNodeTraverser();
-        $this->annotationToAttributePhpDocNodeVisitor->configureAnnotationsToAttributes($this->annotationsToAttributes);
-        $phpDocNodeTraverser->addPhpDocNodeVisitor($this->annotationToAttributePhpDocNodeVisitor);
-        $phpDocNodeTraverser->traverse($phpDocNode);
-        return $this->annotationToAttributePhpDocNodeVisitor->provideFound();
     }
 }

@@ -2733,7 +2733,6 @@ return array(
     'Rector\\Php80\\NodeResolver\\ArgumentSorter' => $baseDir . '/rules/Php80/NodeResolver/ArgumentSorter.php',
     'Rector\\Php80\\NodeResolver\\RequireOptionalParamResolver' => $baseDir . '/rules/Php80/NodeResolver/RequireOptionalParamResolver.php',
     'Rector\\Php80\\NodeResolver\\SwitchExprsResolver' => $baseDir . '/rules/Php80/NodeResolver/SwitchExprsResolver.php',
-    'Rector\\Php80\\PhpDocNodeVisitor\\AnnotationToAttributePhpDocNodeVisitor' => $baseDir . '/rules/Php80/PhpDocNodeVisitor/AnnotationToAttributePhpDocNodeVisitor.php',
     'Rector\\Php80\\Rector\\Catch_\\RemoveUnusedVariableInCatchRector' => $baseDir . '/rules/Php80/Rector/Catch_/RemoveUnusedVariableInCatchRector.php',
     'Rector\\Php80\\Rector\\ClassMethod\\FinalPrivateToPrivateVisibilityRector' => $baseDir . '/rules/Php80/Rector/ClassMethod/FinalPrivateToPrivateVisibilityRector.php',
     'Rector\\Php80\\Rector\\ClassMethod\\OptionalParametersAfterRequiredRector' => $baseDir . '/rules/Php80/Rector/ClassMethod/OptionalParametersAfterRequiredRector.php',
