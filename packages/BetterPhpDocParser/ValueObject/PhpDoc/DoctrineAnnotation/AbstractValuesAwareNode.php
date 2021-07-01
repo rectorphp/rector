@@ -23,10 +23,10 @@ abstract class AbstractValuesAwareNode implements PhpDocTagValueNode
     protected bool $hasChanged = false;
 
     /**
-     * @param mixed[] $values
+     * @param mixed[] $values Must be public so node traverser can go through them
      */
     public function __construct(
-        protected array $values = [],
+        public array $values = [],
         protected ?string $originalContent = null,
         protected ?string $silentKey = null
     ) {

@@ -50,7 +50,8 @@ final class DoctrineAnnotationTagValueNode extends AbstractValuesAwareNode imple
 
     public function hasClassName(string $className): bool
     {
-        if ($this->identifierTypeNode->name === $className) {
+        $annotationName = trim($this->identifierTypeNode->name, '@');
+        if ($annotationName === $className) {
             return true;
         }
 
