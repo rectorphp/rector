@@ -2,15 +2,15 @@
 
 namespace Rector\Tests\CodingStyle\Rector\ClassMethod\UnSpreadOperatorRector\Fixture;
 
-final class Fixture
+final class NotPassArg
 {
     public function run(...$args)
     {
     }
 
-    public function execute(array $data)
+    public function execute()
     {
-        $this->run(...$data);
+        $this->run();
     }
 }
 
@@ -20,15 +20,15 @@ final class Fixture
 
 namespace Rector\Tests\CodingStyle\Rector\ClassMethod\UnSpreadOperatorRector\Fixture;
 
-final class Fixture
+final class NotPassArg
 {
     public function run(array $args = [])
     {
     }
 
-    public function execute(array $data)
+    public function execute()
     {
-        $this->run($data);
+        $this->run();
     }
 }
 

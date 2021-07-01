@@ -27,7 +27,7 @@ final class HandleMultipleItemsToArray
         $this->run('John', [1, 2, 3, 4, 5]);
     }
 
-    public function run(string $name, array $items)
+    public function run(string $name, array $items = [])
     {
     }
 }

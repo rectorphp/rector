@@ -17,7 +17,7 @@ namespace Rector\Tests\CodingStyle\Rector\ClassMethod\UnSpreadOperatorRector\Fix
 
 final class TypedParamVariadic
 {
-    public function run(array $var)
+    public function run(array $var = [])
     {
     }
 }

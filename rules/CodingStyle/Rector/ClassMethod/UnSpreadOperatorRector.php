@@ -94,6 +94,7 @@ CODE_SAMPLE
         foreach ($spreadParams as $spreadParam) {
             $spreadParam->variadic = false;
             $spreadParam->type = new Identifier('array');
+            $spreadParam->default = $this->nodeFactory->createArray([]);
         }
 
         return $classMethod;
@@ -135,7 +136,10 @@ CODE_SAMPLE
             return $methodCall;
         }
 
-        $methodCall->args[$firstSpreadParamPosition] = new Arg($this->nodeFactory->createArray($variadicArgs));
+        if ($variadicArgs !== []) {
+            $methodCall->args[$firstSpreadParamPosition] = new Arg($this->nodeFactory->createArray($variadicArgs));
+        }
+
         return $methodCall;
     }
 
