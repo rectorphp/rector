@@ -22,7 +22,6 @@ use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\Annotation\AnnotationNaming;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDoc\SpacelessPhpDocTagNode;
-use Rector\BetterPhpDocParser\PhpDocNodeFinder\DoctrineAnnotationMatcher;
 use Rector\BetterPhpDocParser\PhpDocNodeFinder\PhpDocNodeByTypeFinder;
 use Rector\BetterPhpDocParser\PhpDocNodeVisitor\ChangedPhpDocNodeVisitor;
 use Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator;
@@ -83,14 +82,10 @@ final class PhpDocInfo
      */
     private $rectorChangeCollector;
     /**
-     * @var \Rector\BetterPhpDocParser\PhpDocNodeFinder\DoctrineAnnotationMatcher
-     */
-    private $doctrineAnnotationMatcher;
-    /**
      * @var \Rector\BetterPhpDocParser\PhpDocNodeFinder\PhpDocNodeByTypeFinder
      */
     private $phpDocNodeByTypeFinder;
-    public function __construct(\PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode $phpDocNode, \Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator $betterTokenIterator, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \PhpParser\Node $node, \Rector\BetterPhpDocParser\Annotation\AnnotationNaming $annotationNaming, \Rector\Core\Configuration\CurrentNodeProvider $currentNodeProvider, \Rector\ChangesReporting\Collector\RectorChangeCollector $rectorChangeCollector, \Rector\BetterPhpDocParser\PhpDocNodeFinder\DoctrineAnnotationMatcher $doctrineAnnotationMatcher, \Rector\BetterPhpDocParser\PhpDocNodeFinder\PhpDocNodeByTypeFinder $phpDocNodeByTypeFinder)
+    public function __construct(\PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode $phpDocNode, \Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator $betterTokenIterator, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \PhpParser\Node $node, \Rector\BetterPhpDocParser\Annotation\AnnotationNaming $annotationNaming, \Rector\Core\Configuration\CurrentNodeProvider $currentNodeProvider, \Rector\ChangesReporting\Collector\RectorChangeCollector $rectorChangeCollector, \Rector\BetterPhpDocParser\PhpDocNodeFinder\PhpDocNodeByTypeFinder $phpDocNodeByTypeFinder)
     {
         $this->phpDocNode = $phpDocNode;
         $this->betterTokenIterator = $betterTokenIterator;
@@ -99,7 +94,6 @@ final class PhpDocInfo
         $this->annotationNaming = $annotationNaming;
         $this->currentNodeProvider = $currentNodeProvider;
         $this->rectorChangeCollector = $rectorChangeCollector;
-        $this->doctrineAnnotationMatcher = $doctrineAnnotationMatcher;
         $this->phpDocNodeByTypeFinder = $phpDocNodeByTypeFinder;
         $this->originalPhpDocNode = clone $phpDocNode;
         if (!$betterTokenIterator->containsTokenType(\PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_PHPDOC_EOL)) {
@@ -195,19 +189,7 @@ final class PhpDocInfo
      */
     public function hasByType(string $type) : bool
     {
-        foreach ($this->phpDocNode->children as $phpDocChildNode) {
-            if (\is_a($phpDocChildNode, $type, \true)) {
-                return \true;
-            }
-            if (!$phpDocChildNode instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode) {
-                continue;
-            }
-            if (!\is_a($phpDocChildNode->value, $type, \true)) {
-                continue;
-            }
-            return \true;
-        }
-        return \false;
+        return $this->phpDocNodeByTypeFinder->findByType($this->phpDocNode, $type) !== [];
     }
     /**
      * @param array<class-string<TNode>> $types
@@ -246,20 +228,16 @@ final class PhpDocInfo
      */
     public function getByAnnotationClasses(array $classes) : ?\Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode
     {
-        foreach ($classes as $class) {
-            $tagValueNode = $this->findOneByAnnotationClass($class);
-            if ($tagValueNode instanceof \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode) {
-                return $tagValueNode;
-            }
-        }
-        return null;
+        $doctrineAnnotationTagValueNodes = $this->phpDocNodeByTypeFinder->findDoctrineAnnotationsByClasses($this->phpDocNode, $classes);
+        return $doctrineAnnotationTagValueNodes[0] ?? null;
     }
     /**
      * @param class-string $class
      */
     public function getByAnnotationClass(string $class) : ?\Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode
     {
-        return $this->findOneByAnnotationClass($class);
+        $doctrineAnnotationTagValueNodes = $this->phpDocNodeByTypeFinder->findDoctrineAnnotationsByClass($this->phpDocNode, $class);
+        return $doctrineAnnotationTagValueNodes[0] ?? null;
     }
     /**
      * @param class-string $class
@@ -289,15 +267,7 @@ final class PhpDocInfo
      */
     public function findByAnnotationClass(string $desiredClass) : array
     {
-        $desiredDoctrineTagValueNodes = [];
-        /** @var DoctrineAnnotationTagValueNode[] $doctrineTagValueNodes */
-        $doctrineTagValueNodes = $this->phpDocNodeByTypeFinder->findByType($this->phpDocNode, \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode::class);
-        foreach ($doctrineTagValueNodes as $doctrineTagValueNode) {
-            if ($this->doctrineAnnotationMatcher->matches($doctrineTagValueNode, $desiredClass)) {
-                $desiredDoctrineTagValueNodes[] = $doctrineTagValueNode;
-            }
-        }
-        return $desiredDoctrineTagValueNodes;
+        return $this->phpDocNodeByTypeFinder->findDoctrineAnnotationsByClass($this->phpDocNode, $desiredClass);
     }
     /**
      * @deprecated, should accept only strings, to make it useful for developer who don't know internal logics of tag nodes; also not each tag requires node class
