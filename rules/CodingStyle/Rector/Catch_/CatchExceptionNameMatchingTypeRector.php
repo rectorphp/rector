@@ -5,9 +5,13 @@ namespace Rector\CodingStyle\Rector\Catch_;
 
 use RectorPrefix20210702\Nette\Utils\Strings;
 use PhpParser\Node;
+use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\Catch_;
+use PhpParser\Node\Stmt\TryCatch;
 use Rector\Core\Rector\AbstractRector;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -106,5 +110,52 @@ CODE_SAMPLE
             }
             $node->name = $newVariableName;
         });
+        /** @var TryCatch $tryCatch */
+        $tryCatch = $catch->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        $next = $tryCatch->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::NEXT_NODE);
+        $this->replaceNextUsageVariable($tryCatch, $next, $oldVariableName, $newVariableName);
+    }
+    private function replaceNextUsageVariable(\PhpParser\Node $currentNode, ?\PhpParser\Node $nextNode, string $oldVariableName, string $newVariableName) : void
+    {
+        if (!$nextNode instanceof \PhpParser\Node) {
+            $parent = $currentNode->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+            if (!$parent instanceof \PhpParser\Node) {
+                return;
+            }
+            if ($parent instanceof \PhpParser\Node\FunctionLike) {
+                return;
+            }
+            $nextNode = $parent->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::NEXT_NODE);
+            $this->replaceNextUsageVariable($parent, $nextNode, $oldVariableName, $newVariableName);
+            return;
+        }
+        /** @var Variable[] $variables */
+        $variables = $this->betterNodeFinder->find($nextNode, function (\PhpParser\Node $node) use($oldVariableName) : bool {
+            if (!$node instanceof \PhpParser\Node\Expr\Variable) {
+                return \false;
+            }
+            return $this->nodeNameResolver->isName($node, $oldVariableName);
+        });
+        $processRenameVariables = $this->processRenameVariable($variables, $oldVariableName, $newVariableName);
+        if (!$processRenameVariables) {
+            return;
+        }
+        $currentNode = $nextNode;
+        $nextNode = $nextNode->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::NEXT_NODE);
+        $this->replaceNextUsageVariable($currentNode, $nextNode, $oldVariableName, $newVariableName);
+    }
+    /**
+     * @param Variable[] $variables
+     */
+    private function processRenameVariable(array $variables, string $oldVariableName, string $newVariableName) : bool
+    {
+        foreach ($variables as $variable) {
+            $parent = $variable->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+            if ($parent instanceof \PhpParser\Node\Expr\Assign && $this->nodeComparator->areNodesEqual($parent->var, $variable) && $this->nodeNameResolver->isName($parent->var, $oldVariableName) && !$this->nodeComparator->areNodesEqual($parent->expr, $variable)) {
+                return \false;
+            }
+            $variable->name = $newVariableName;
+        }
+        return \true;
     }
 }

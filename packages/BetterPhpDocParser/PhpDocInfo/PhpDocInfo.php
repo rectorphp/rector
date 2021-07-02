@@ -274,7 +274,7 @@ final class PhpDocInfo
     public function removeByType(string $typeToRemove) : void
     {
         $phpDocNodeTraverser = new \RectorPrefix20210702\Symplify\SimplePhpDocParser\PhpDocNodeTraverser();
-        $phpDocNodeTraverser->traverseWithCallable($this->phpDocNode, '', function (\PHPStan\PhpDocParser\Ast\Node $node) use($typeToRemove) {
+        $phpDocNodeTraverser->traverseWithCallable($this->phpDocNode, '', function (\PHPStan\PhpDocParser\Ast\Node $node) use($typeToRemove) : ?int {
             if (!\is_a($node, $typeToRemove, \true)) {
                 return null;
             }
