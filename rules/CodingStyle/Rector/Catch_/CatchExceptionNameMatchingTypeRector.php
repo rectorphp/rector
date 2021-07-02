@@ -6,9 +6,13 @@ namespace Rector\CodingStyle\Rector\Catch_;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
+use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\Catch_;
+use PhpParser\Node\Stmt\TryCatch;
 use Rector\Core\Rector\AbstractRector;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -140,5 +144,71 @@ CODE_SAMPLE
 
             $node->name = $newVariableName;
         });
+
+        /** @var TryCatch $tryCatch */
+        $tryCatch = $catch->getAttribute(AttributeKey::PARENT_NODE);
+        $next = $tryCatch->getAttribute(AttributeKey::NEXT_NODE);
+
+        $this->replaceNextUsageVariable($tryCatch, $next, $oldVariableName, $newVariableName);
+    }
+
+    private function replaceNextUsageVariable(
+        Node $currentNode,
+        ?Node $nextNode,
+        string $oldVariableName,
+        string $newVariableName
+    ): void {
+        if (! $nextNode instanceof Node) {
+            $parent = $currentNode->getAttribute(AttributeKey::PARENT_NODE);
+            if (! $parent instanceof Node) {
+                return;
+            }
+            if ($parent instanceof FunctionLike) {
+                return;
+            }
+            $nextNode = $parent->getAttribute(AttributeKey::NEXT_NODE);
+            $this->replaceNextUsageVariable($parent, $nextNode, $oldVariableName, $newVariableName);
+
+            return;
+        }
+
+        /** @var Variable[] $variables */
+        $variables = $this->betterNodeFinder->find($nextNode, function (Node $node) use ($oldVariableName): bool {
+            if (! $node instanceof Variable) {
+                return false;
+            }
+
+            return $this->nodeNameResolver->isName($node, $oldVariableName);
+        });
+
+        $processRenameVariables = $this->processRenameVariable($variables, $oldVariableName, $newVariableName);
+        if (! $processRenameVariables) {
+            return;
+        }
+
+        $currentNode = $nextNode;
+        $nextNode = $nextNode->getAttribute(AttributeKey::NEXT_NODE);
+        $this->replaceNextUsageVariable($currentNode, $nextNode, $oldVariableName, $newVariableName);
+    }
+
+    /**
+     * @param Variable[] $variables
+     */
+    private function processRenameVariable(array $variables, string $oldVariableName, string $newVariableName): bool
+    {
+        foreach ($variables as $variable) {
+            $parent = $variable->getAttribute(AttributeKey::PARENT_NODE);
+            if ($parent instanceof Assign && $this->nodeComparator->areNodesEqual(
+                $parent->var,
+                $variable
+            ) && $this->nodeNameResolver->isName($parent->var, $oldVariableName)
+            && ! $this->nodeComparator->areNodesEqual($parent->expr, $variable)
+            ) {
+                return false;
+            }
+            $variable->name = $newVariableName;
+        }
+
+        return true;
     }
 }
