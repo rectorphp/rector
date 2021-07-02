@@ -5,11 +5,10 @@ namespace Rector\DependencyInjection\Rector\Variable;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DependencyInjection\Collector\VariablesToPropertyFetchCollection;
-use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\DependencyInjection\NodeAnalyzer\ControllerClassMethodAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -21,9 +20,14 @@ final class ReplaceVariableByPropertyFetchRector extends \Rector\Core\Rector\Abs
      * @var \Rector\DependencyInjection\Collector\VariablesToPropertyFetchCollection
      */
     private $variablesToPropertyFetchCollection;
-    public function __construct(\Rector\DependencyInjection\Collector\VariablesToPropertyFetchCollection $variablesToPropertyFetchCollection)
+    /**
+     * @var \Rector\DependencyInjection\NodeAnalyzer\ControllerClassMethodAnalyzer
+     */
+    private $controllerClassMethodAnalyzer;
+    public function __construct(\Rector\DependencyInjection\Collector\VariablesToPropertyFetchCollection $variablesToPropertyFetchCollection, \Rector\DependencyInjection\NodeAnalyzer\ControllerClassMethodAnalyzer $controllerClassMethodAnalyzer)
     {
         $this->variablesToPropertyFetchCollection = $variablesToPropertyFetchCollection;
+        $this->controllerClassMethodAnalyzer = $controllerClassMethodAnalyzer;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -79,7 +83,7 @@ CODE_SAMPLE
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if (!$this->isInControllerActionMethod($node)) {
+        if (!$this->controllerClassMethodAnalyzer->isInControllerActionMethod($node)) {
             return null;
         }
         foreach ($this->variablesToPropertyFetchCollection->getVariableNamesAndTypes() as $name => $type) {
@@ -93,22 +97,5 @@ CODE_SAMPLE
             return $this->nodeFactory->createPropertyFetch('this', $name);
         }
         return null;
-    }
-    private function isInControllerActionMethod(\PhpParser\Node\Expr\Variable $variable) : bool
-    {
-        /** @var string|null $className */
-        $className = $variable->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);
-        if ($className === null) {
-            return \false;
-        }
-        if (\substr_compare($className, 'Controller', -\strlen('Controller')) !== 0) {
-            return \false;
-        }
-        $classMethod = $variable->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::METHOD_NODE);
-        if (!$classMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
-            return \false;
-        }
-        // is probably in controller action
-        return $classMethod->isPublic();
     }
 }

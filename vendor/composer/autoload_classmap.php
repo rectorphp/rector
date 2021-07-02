@@ -2043,6 +2043,7 @@ return array(
     'Rector\\Defluent\\ValueObject\\FluentMethodCalls' => $baseDir . '/rules/Defluent/ValueObject/FluentMethodCalls.php',
     'Rector\\Defluent\\ValueObject\\NormalToFluent' => $baseDir . '/rules/Defluent/ValueObject/NormalToFluent.php',
     'Rector\\DependencyInjection\\Collector\\VariablesToPropertyFetchCollection' => $baseDir . '/rules/DependencyInjection/Collector/VariablesToPropertyFetchCollection.php',
+    'Rector\\DependencyInjection\\NodeAnalyzer\\ControllerClassMethodAnalyzer' => $baseDir . '/rules/DependencyInjection/NodeAnalyzer/ControllerClassMethodAnalyzer.php',
     'Rector\\DependencyInjection\\NodeFactory\\InjectMethodFactory' => $baseDir . '/rules/DependencyInjection/NodeFactory/InjectMethodFactory.php',
     'Rector\\DependencyInjection\\NodeManipulator\\PropertyConstructorInjectionManipulator' => $baseDir . '/rules/DependencyInjection/NodeManipulator/PropertyConstructorInjectionManipulator.php',
     'Rector\\DependencyInjection\\NodeRemover\\ClassMethodNodeRemover' => $baseDir . '/rules/DependencyInjection/NodeRemover/ClassMethodNodeRemover.php',
