@@ -38,6 +38,11 @@ final class AnnotationToAttributeRector extends \Rector\Core\Rector\AbstractRect
      */
     public const ANNOTATION_TO_ATTRIBUTE = 'annotation_to_attribute';
     /**
+     * List of annotations that should not be unwrapped
+     * @var class-string[]
+     */
+    private const SKIP_UNWRAP_ANNOTATIONS = ['Symfony\\Component\\Validator\\Constraints\\All', 'Symfony\\Component\\Validator\\Constraints\\AtLeastOneOf', 'Symfony\\Component\\Validator\\Constraints\\Collection', 'Symfony\\Component\\Validator\\Constraints\\Sequentially'];
+    /**
      * @var AnnotationToAttribute[]
      */
     private $annotationsToAttributes = [];
@@ -156,6 +161,9 @@ CODE_SAMPLE
      */
     private function processDoctrineAnnotationClasses(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo, $node) : void
     {
+        if ($this->shouldSkip($phpDocInfo)) {
+            return;
+        }
         $doctrineTagAndAnnotationToAttributes = [];
         $phpDocNodeTraverser = new \RectorPrefix20210702\Symplify\SimplePhpDocParser\PhpDocNodeTraverser();
         $phpDocNodeTraverser->traverseWithCallable($phpDocInfo->getPhpDocNode(), '', function ($node) use(&$doctrineTagAndAnnotationToAttributes, $phpDocInfo) {
@@ -180,5 +188,9 @@ CODE_SAMPLE
             // 2. add attributes
             $node->attrGroups[] = $this->phpAttributeGroupFactory->create($doctrineAnnotationTagValueNode, $doctrineTagAndAnnotationToAttribute->getAnnotationToAttribute());
         }
+    }
+    private function shouldSkip(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo) : bool
+    {
+        return $phpDocInfo->hasByAnnotationClasses(self::SKIP_UNWRAP_ANNOTATIONS);
     }
 }
