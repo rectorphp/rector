@@ -6,11 +6,10 @@ namespace Rector\DependencyInjection\Rector\Variable;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DependencyInjection\Collector\VariablesToPropertyFetchCollection;
-use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\DependencyInjection\NodeAnalyzer\ControllerClassMethodAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -20,7 +19,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ReplaceVariableByPropertyFetchRector extends AbstractRector
 {
     public function __construct(
-        private VariablesToPropertyFetchCollection $variablesToPropertyFetchCollection
+        private VariablesToPropertyFetchCollection $variablesToPropertyFetchCollection,
+        private ControllerClassMethodAnalyzer $controllerClassMethodAnalyzer
     ) {
     }
 
@@ -87,7 +87,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isInControllerActionMethod($node)) {
+        if (! $this->controllerClassMethodAnalyzer->isInControllerActionMethod($node)) {
             return null;
         }
 
@@ -105,26 +105,5 @@ CODE_SAMPLE
         }
 
         return null;
-    }
-
-    private function isInControllerActionMethod(Variable $variable): bool
-    {
-        /** @var string|null $className */
-        $className = $variable->getAttribute(AttributeKey::CLASS_NAME);
-        if ($className === null) {
-            return false;
-        }
-
-        if (! \str_ends_with($className, 'Controller')) {
-            return false;
-        }
-
-        $classMethod = $variable->getAttribute(AttributeKey::METHOD_NODE);
-        if (! $classMethod instanceof ClassMethod) {
-            return false;
-        }
-
-        // is probably in controller action
-        return $classMethod->isPublic();
     }
 }

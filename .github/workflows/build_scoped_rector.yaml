@@ -37,7 +37,8 @@ jobs:
 
             # early downgrade individual functions and files of symfony Attribute classes
             -   run: bin/rector process src/functions -c build/config/config-downgrade.php --ansi
-            -   run: bin/rector process vendor/symfony/dependency-injection/Attribute -c build/config/config-downgrade.php --ansi
+            -   run: bin/rector process vendor/symfony/dependency-injection/Attribute/Autoconfigure.php -c build/config/config-downgrade.php --ansi
+            -   run: bin/rector process vendor/symfony/dependency-injection/Attribute/AutoconfigureTag.php -c build/config/config-downgrade.php --ansi
 
             # 1. copy files to $NESTED_DIRECTORY directory Exclude the scoped/nested directories to prevent rsync from copying in a loop
             -  run: rsync --exclude rector-build -av * rector-build --quiet
