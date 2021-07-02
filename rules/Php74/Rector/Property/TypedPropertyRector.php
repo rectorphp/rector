@@ -93,13 +93,13 @@ final class SomeClass
     /**
      * @var int
      */
-    private count;
+    private $count;
 }
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
 final class SomeClass
 {
-    private int count;
+    private int $count;
 }
 CODE_SAMPLE
 , [self::CLASS_LIKE_TYPE_ONLY => \false])]);

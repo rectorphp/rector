@@ -43,7 +43,7 @@ final class AddReturnTypeDeclarationRector extends \Rector\Core\Rector\AbstractR
         return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Changes defined return typehint of method and class.', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
-    public getData()
+    public function getData()
     {
     }
 }
@@ -51,7 +51,7 @@ CODE_SAMPLE
 , <<<'CODE_SAMPLE'
 class SomeClass
 {
-    public getData(): array
+    public function getData(): array
     {
     }
 }

@@ -20,13 +20,13 @@ final class WrapEncapsedVariableInCurlyBracesRector extends \Rector\Core\Rector\
         return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Wrap encapsed variables in curly braces', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 function run($world)
 {
-    echo "Hello $world!"
+    echo "Hello $world!";
 }
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
 function run($world)
 {
-    echo "Hello {$world}!"
+    echo "Hello {$world}!";
 }
 CODE_SAMPLE
 )]);

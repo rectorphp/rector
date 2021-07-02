@@ -39,14 +39,14 @@ final class ChangeMethodVisibilityRector extends \Rector\Core\Rector\AbstractRec
         return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change visibility of method from parent class.', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
 class FrameworkClass
 {
-    protected someMethod()
+    protected function someMethod()
     {
     }
 }
 
 class MyClass extends FrameworkClass
 {
-    public someMethod()
+    public function someMethod()
     {
     }
 }
@@ -54,14 +54,14 @@ CODE_SAMPLE
 , <<<'CODE_SAMPLE'
 class FrameworkClass
 {
-    protected someMethod()
+    protected function someMethod()
     {
     }
 }
 
 class MyClass extends FrameworkClass
 {
-    protected someMethod()
+    protected function someMethod()
     {
     }
 }

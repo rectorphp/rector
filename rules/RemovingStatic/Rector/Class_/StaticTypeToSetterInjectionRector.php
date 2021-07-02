@@ -49,40 +49,32 @@ final class StaticTypeToSetterInjectionRector extends \Rector\Core\Rector\Abstra
     {
         // custom made only for Elasticr
         return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Changes types to setter injection', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
-<?php
-
-namespace RectorPrefix20210702;
-
 final class CheckoutEntityFactory
 {
     public function run()
     {
-        return \RectorPrefix20210702\SomeStaticClass::go();
+        return SomeStaticClass::go();
     }
 }
-\class_alias('CheckoutEntityFactory', 'CheckoutEntityFactory', \false);
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
-<?php
-
-namespace RectorPrefix20210702;
-
 final class CheckoutEntityFactory
 {
     /**
      * @var SomeStaticClass
      */
     private $someStaticClass;
-    public function setSomeStaticClass(\RectorPrefix20210702\SomeStaticClass $someStaticClass)
+
+    public function setSomeStaticClass(SomeStaticClass $someStaticClass)
     {
         $this->someStaticClass = $someStaticClass;
     }
+
     public function run()
     {
         return $this->someStaticClass->go();
     }
 }
-\class_alias('CheckoutEntityFactory', 'CheckoutEntityFactory', \false);
 CODE_SAMPLE
 , [self::STATIC_TYPES => ['SomeStaticClass']])]);
     }

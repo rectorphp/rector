@@ -27,7 +27,7 @@ final class SimplifyIfNotNullReturnRector extends \Rector\Core\Rector\AbstractRe
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
         return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Changes redundant null check to instant return', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
-$newNode = 'something ;
+$newNode = 'something';
 if ($newNode !== null) {
     return $newNode;
 }
@@ -35,7 +35,7 @@ if ($newNode !== null) {
 return null;
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
-$newNode = 'something ;
+$newNode = 'something';
 return $newNode;
 CODE_SAMPLE
 )]);

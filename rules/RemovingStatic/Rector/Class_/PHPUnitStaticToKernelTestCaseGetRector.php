@@ -80,19 +80,15 @@ final class PHPUnitStaticToKernelTestCaseGetRector extends \Rector\Core\Rector\A
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
         return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Convert static calls in PHPUnit test cases, to get() from the container of KernelTestCase', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
-<?php
+use PHPUnit\Framework\TestCase;
 
-namespace RectorPrefix20210702;
-
-use RectorPrefix20210702\PHPUnit\Framework\TestCase;
-final class SomeTestCase extends \RectorPrefix20210702\PHPUnit\Framework\TestCase
+final class SomeTestCase extends TestCase
 {
     public function test()
     {
-        $product = \RectorPrefix20210702\EntityFactory::create('product');
+        $product = EntityFactory::create('product');
     }
 }
-\class_alias('SomeTestCase', 'SomeTestCase', \false);
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;

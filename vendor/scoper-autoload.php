@@ -9,20 +9,8 @@ $loader = require_once __DIR__.'/autoload.php';
 if (!class_exists('AutoloadIncluder', false) && !interface_exists('AutoloadIncluder', false) && !trait_exists('AutoloadIncluder', false)) {
     spl_autoload_call('RectorPrefix20210702\AutoloadIncluder');
 }
-if (!class_exists('SomeClass', false) && !interface_exists('SomeClass', false) && !trait_exists('SomeClass', false)) {
-    spl_autoload_call('RectorPrefix20210702\SomeClass');
-}
-if (!class_exists('AnotherClass', false) && !interface_exists('AnotherClass', false) && !trait_exists('AnotherClass', false)) {
-    spl_autoload_call('RectorPrefix20210702\AnotherClass');
-}
-if (!class_exists('SomeTestCase', false) && !interface_exists('SomeTestCase', false) && !trait_exists('SomeTestCase', false)) {
-    spl_autoload_call('RectorPrefix20210702\SomeTestCase');
-}
-if (!class_exists('CheckoutEntityFactory', false) && !interface_exists('CheckoutEntityFactory', false) && !trait_exists('CheckoutEntityFactory', false)) {
-    spl_autoload_call('RectorPrefix20210702\CheckoutEntityFactory');
-}
-if (!class_exists('ComposerAutoloaderInitc53299b65ab18da8caadd6851b169519', false) && !interface_exists('ComposerAutoloaderInitc53299b65ab18da8caadd6851b169519', false) && !trait_exists('ComposerAutoloaderInitc53299b65ab18da8caadd6851b169519', false)) {
-    spl_autoload_call('RectorPrefix20210702\ComposerAutoloaderInitc53299b65ab18da8caadd6851b169519');
+if (!class_exists('ComposerAutoloaderInit2f99c91a92e2d2798382f953da572255', false) && !interface_exists('ComposerAutoloaderInit2f99c91a92e2d2798382f953da572255', false) && !trait_exists('ComposerAutoloaderInit2f99c91a92e2d2798382f953da572255', false)) {
+    spl_autoload_call('RectorPrefix20210702\ComposerAutoloaderInit2f99c91a92e2d2798382f953da572255');
 }
 if (!class_exists('Doctrine\Inflector\Inflector', false) && !interface_exists('Doctrine\Inflector\Inflector', false) && !trait_exists('Doctrine\Inflector\Inflector', false)) {
     spl_autoload_call('RectorPrefix20210702\Doctrine\Inflector\Inflector');
@@ -3320,9 +3308,9 @@ if (!function_exists('print_node')) {
         return \RectorPrefix20210702\print_node(...func_get_args());
     }
 }
-if (!function_exists('composerRequirec53299b65ab18da8caadd6851b169519')) {
-    function composerRequirec53299b65ab18da8caadd6851b169519() {
-        return \RectorPrefix20210702\composerRequirec53299b65ab18da8caadd6851b169519(...func_get_args());
+if (!function_exists('composerRequire2f99c91a92e2d2798382f953da572255')) {
+    function composerRequire2f99c91a92e2d2798382f953da572255() {
+        return \RectorPrefix20210702\composerRequire2f99c91a92e2d2798382f953da572255(...func_get_args());
     }
 }
 if (!function_exists('parseArgs')) {
