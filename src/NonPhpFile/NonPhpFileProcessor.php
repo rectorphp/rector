@@ -23,13 +23,11 @@ final class NonPhpFileProcessor implements FileProcessorInterface
     ) {
     }
 
-    /**
-     * @param File[] $files
-     */
-    public function process(array $files, Configuration $configuration): void
+    public function process(File $file, Configuration $configuration): void
     {
-        foreach ($files as $file) {
-            $this->processFile($file);
+        foreach ($this->nonPhpRectors as $nonPhpRector) {
+            $newFileContent = $nonPhpRector->refactorFileContent($file->getFileContent());
+            $file->changeFileContent($newFileContent);
         }
     }
 
@@ -56,13 +54,5 @@ final class NonPhpFileProcessor implements FileProcessorInterface
     public function getSupportedFileExtensions(): array
     {
         return StaticNonPhpFileSuffixes::SUFFIXES;
-    }
-
-    private function processFile(File $file): void
-    {
-        foreach ($this->nonPhpRectors as $nonPhpRector) {
-            $newFileContent = $nonPhpRector->refactorFileContent($file->getFileContent());
-            $file->changeFileContent($newFileContent);
-        }
     }
 }

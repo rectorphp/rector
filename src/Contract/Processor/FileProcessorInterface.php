@@ -9,11 +9,9 @@ use Rector\Core\ValueObject\Configuration;
 
 interface FileProcessorInterface
 {
-    // @todo wait for implementers to adapt with 2nd parameters of Configuration $configuration
-    // public function supports(File $file, Configuration $configuration): bool;
+    public function supports(File $file, Configuration $configuration): bool;
 
-
-    // public function process(array $files, Configuration $configuration): void;
+    public function process(File $file, Configuration $configuration): void;
 
     /**
      * @return string[]

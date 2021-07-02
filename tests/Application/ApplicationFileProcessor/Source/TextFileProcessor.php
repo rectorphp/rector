@@ -24,20 +24,15 @@ final class TextFileProcessor implements FileProcessorInterface
         $this->textRectors = $textRectors;
     }
 
-    /**
-     * @param File[] $files
-     */
-    public function process(array $files, Configuration $configuration): void
+    public function process(File $file, Configuration $configuration): void
     {
-        foreach ($files as $file) {
-            $fileContent = $file->getFileContent();
+        $fileContent = $file->getFileContent();
 
-            foreach ($this->textRectors as $textRector) {
-                $fileContent = $textRector->refactorContent($fileContent);
-            }
-
-            $file->changeFileContent($fileContent);
+        foreach ($this->textRectors as $textRector) {
+            $fileContent = $textRector->refactorContent($fileContent);
         }
+
+        $file->changeFileContent($fileContent);
     }
 
     public function supports(File $file, Configuration $configuration): bool

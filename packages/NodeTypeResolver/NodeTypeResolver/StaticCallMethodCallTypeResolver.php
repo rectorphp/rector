@@ -96,8 +96,10 @@ final class StaticCallMethodCallTypeResolver implements NodeTypeResolverInterfac
 
             $methodReflection = $ancestorClassReflection->getMethod($methodName, $scope);
             if ($methodReflection instanceof PhpMethodReflection) {
-                $parametersAcceptor = ParametersAcceptorSelector::selectSingle($methodReflection->getVariants());
-                return $parametersAcceptor->getReturnType();
+                $parametersAcceptorWithPhpDocs = ParametersAcceptorSelector::selectSingle(
+                    $methodReflection->getVariants()
+                );
+                return $parametersAcceptorWithPhpDocs->getReturnType();
             }
         }
 

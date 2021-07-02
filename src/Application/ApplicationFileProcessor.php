@@ -10,6 +10,7 @@ use Rector\Core\Contract\Processor\FileProcessorInterface;
 use Rector\Core\ValueObject\Application\File;
 use Rector\Core\ValueObject\Configuration;
 use Rector\FileFormatter\FileFormatter;
+use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\SmartFileSystem\SmartFileSystem;
 
 final class ApplicationFileProcessor
@@ -22,6 +23,7 @@ final class ApplicationFileProcessor
         private FileDiffFileDecorator $fileDiffFileDecorator,
         private FileFormatter $fileFormatter,
         private RemovedAndAddedFilesProcessor $removedAndAddedFilesProcessor,
+        private SymfonyStyle $symfonyStyle,
         private array $fileProcessors = []
     ) {
     }
@@ -43,13 +45,24 @@ final class ApplicationFileProcessor
      */
     private function processFiles(array $files, Configuration $configuration): void
     {
-        foreach ($this->fileProcessors as $fileProcessor) {
-            $supportedFiles = array_filter(
-                $files,
-                fn (File $file): bool => $fileProcessor->supports($file, $configuration)
-            );
+        if ($configuration->shouldShowDiffs()) {
+            $fileCount = count($files);
+            $this->symfonyStyle->progressStart($fileCount);
+        }
 
-            $fileProcessor->process($supportedFiles, $configuration);
+        foreach ($files as $file) {
+            foreach ($this->fileProcessors as $fileProcessor) {
+                if (! $fileProcessor->supports($file, $configuration)) {
+                    continue;
+                }
+
+                $fileProcessor->process($file, $configuration);
+            }
+
+            // progress bar +1
+            if ($configuration->shouldShowProgressBar()) {
+                $this->symfonyStyle->progressAdvance();
+            }
         }
 
         $this->removedAndAddedFilesProcessor->run($configuration);

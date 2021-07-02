@@ -42,7 +42,7 @@ final class AnnotationToAttributeRector extends AbstractRector implements Config
 
     /**
      * List of annotations that should not be unwrapped
-     * @var class-string[]
+     * @var string[]
      */
     private const SKIP_UNWRAP_ANNOTATIONS = [
         'Symfony\Component\Validator\Constraints\All',

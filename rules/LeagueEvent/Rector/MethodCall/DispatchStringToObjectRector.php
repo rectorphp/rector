@@ -10,6 +10,7 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
@@ -23,6 +24,7 @@ use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\MethodName;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -141,9 +143,11 @@ CODE_SAMPLE
      */
     private function createAnonymousEventClassBody(): array
     {
+        $return = new Return_(new PropertyFetch(new Variable('this'), 'name'));
+
         return [
             new Property(Class_::MODIFIER_PRIVATE, [new PropertyProperty(self::NAME)]),
-            new ClassMethod('__construct', [
+            new ClassMethod(MethodName::CONSTRUCT, [
                 'flags' => Class_::MODIFIER_PUBLIC,
                 'params' => $this->createConstructParams(),
                 self::STMTS => [new Expression($this->createConstructAssign())],
@@ -151,7 +155,7 @@ CODE_SAMPLE
             new ClassMethod('eventName', [
                 'flags' => Class_::MODIFIER_PUBLIC,
                 'returnType' => 'string',
-                self::STMTS => [new Return_(new Variable('this->name'))],
+                self::STMTS => [$return],
             ]),
         ];
     }
@@ -166,6 +170,7 @@ CODE_SAMPLE
 
     private function createConstructAssign(): Assign
     {
-        return new Assign(new Variable('this->name'), new Variable(self::NAME));
+        $propertyFetch = new PropertyFetch(new Variable('this'), 'name');
+        return new Assign($propertyFetch, new Variable(self::NAME));
     }
 }

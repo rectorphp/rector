@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Rector\PHPOffice\ValueObject;
 
+use Rector\Core\ValueObject\MethodName;
+
 final class PHPExcelMethodDefaultValues
 {
     /**
@@ -109,7 +111,7 @@ final class PHPExcelMethodDefaultValues
             'setDataValues' => [[], true],
         ],
         'PHPExcel_Chart_Layout' => [
-            '__construct' => [[]],
+            MethodName::CONSTRUCT => [[]],
         ],
         'PHPExcel_Chart_Legend' => [
             'setPosition' => ['PHPExcel_Chart_Legend::POSITION_RIGHT'],
@@ -117,7 +119,7 @@ final class PHPExcelMethodDefaultValues
             'setOverlay' => [false],
         ],
         'PHPExcel_Chart_PlotArea' => [
-            '__construct' => [null, []],
+            MethodName::CONSTRUCT => [null, []],
             'setPlotSeries' => [[]],
         ],
         'PHPExcel_Chart_Title' => [
