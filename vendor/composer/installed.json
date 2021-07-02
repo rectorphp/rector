@@ -4158,8 +4158,8 @@
         },
         {
             "name": "symplify\/rule-doc-generator-contracts",
-            "version": "9.4.4",
-            "version_normalized": "9.4.4.0",
+            "version": "9.4.5",
+            "version_normalized": "9.4.5.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symplify\/rule-doc-generator-contracts.git",
