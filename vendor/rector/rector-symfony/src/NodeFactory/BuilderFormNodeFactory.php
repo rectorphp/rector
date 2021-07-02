@@ -12,6 +12,8 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
+use PHPStan\Reflection\MethodReflection;
+use Rector\Core\PhpParser\AstResolver;
 use Rector\NodeNameResolver\NodeNameResolver;
 use RectorPrefix20210702\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
 use RectorPrefix20210702\Symplify\Astral\ValueObject\NodeBuilder\ParamBuilder;
@@ -21,18 +23,26 @@ final class BuilderFormNodeFactory
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
+    /**
+     * @var \Rector\Core\PhpParser\AstResolver
+     */
+    private $astResolver;
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\AstResolver $astResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
+        $this->astResolver = $astResolver;
     }
-    public function create(\PhpParser\Node\Stmt\ClassMethod $constructorClassMethod) : \PhpParser\Node\Stmt\ClassMethod
+    public function create(\PHPStan\Reflection\MethodReflection $methodReflection) : ?\PhpParser\Node\Stmt\ClassMethod
     {
+        $constructorClassMethod = $this->astResolver->resolveClassMethodFromMethodReflection($methodReflection);
+        if ($constructorClassMethod === null) {
+            return null;
+        }
         $formBuilderParam = $this->createBuilderParam();
         $optionsParam = $this->createOptionsParam();
         $classMethodBuilder = new \RectorPrefix20210702\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder('buildForm');
         $classMethodBuilder->makePublic();
-        $classMethodBuilder->addParam($formBuilderParam);
-        $classMethodBuilder->addParam($optionsParam);
+        $classMethodBuilder->addParams([$formBuilderParam, $optionsParam]);
         // raw copy stmts from ctor
         $options = $this->replaceParameterAssignWithOptionAssign((array) $constructorClassMethod->stmts, $optionsParam);
         $classMethodBuilder->addStmts($options);
