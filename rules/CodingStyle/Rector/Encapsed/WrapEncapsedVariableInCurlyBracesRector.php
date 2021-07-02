@@ -24,14 +24,14 @@ final class WrapEncapsedVariableInCurlyBracesRector extends AbstractRector
                 <<<'CODE_SAMPLE'
 function run($world)
 {
-    echo "Hello $world!"
+    echo "Hello $world!";
 }
 CODE_SAMPLE
                 ,
                 <<<'CODE_SAMPLE'
 function run($world)
 {
-    echo "Hello {$world}!"
+    echo "Hello {$world}!";
 }
 CODE_SAMPLE
             ),

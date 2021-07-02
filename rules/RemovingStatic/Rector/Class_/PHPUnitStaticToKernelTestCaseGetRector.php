@@ -64,8 +64,6 @@ final class PHPUnitStaticToKernelTestCaseGetRector extends AbstractRector implem
         return new RuleDefinition('Convert static calls in PHPUnit test cases, to get() from the container of KernelTestCase', [
             new ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
-<?php
-
 use PHPUnit\Framework\TestCase;
 
 final class SomeTestCase extends TestCase

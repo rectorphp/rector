@@ -49,7 +49,7 @@ final class AddReturnTypeDeclarationRector extends AbstractRector implements Con
                 <<<'CODE_SAMPLE'
 class SomeClass
 {
-    public getData()
+    public function getData()
     {
     }
 }
@@ -58,7 +58,7 @@ CODE_SAMPLE
                 <<<'CODE_SAMPLE'
 class SomeClass
 {
-    public getData(): array
+    public function getData(): array
     {
     }
 }

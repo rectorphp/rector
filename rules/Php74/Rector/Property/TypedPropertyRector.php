@@ -73,14 +73,14 @@ final class SomeClass
     /**
      * @var int
      */
-    private count;
+    private $count;
 }
 CODE_SAMPLE
                     ,
                     <<<'CODE_SAMPLE'
 final class SomeClass
 {
-    private int count;
+    private int $count;
 }
 CODE_SAMPLE
                     ,

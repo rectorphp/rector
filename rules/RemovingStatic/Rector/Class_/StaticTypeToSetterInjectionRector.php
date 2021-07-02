@@ -48,8 +48,6 @@ final class StaticTypeToSetterInjectionRector extends AbstractRector implements 
         return new RuleDefinition('Changes types to setter injection', [
             new ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
-<?php
-
 final class CheckoutEntityFactory
 {
     public function run()
@@ -60,8 +58,6 @@ final class CheckoutEntityFactory
 CODE_SAMPLE
                 ,
                 <<<'CODE_SAMPLE'
-<?php
-
 final class CheckoutEntityFactory
 {
     /**

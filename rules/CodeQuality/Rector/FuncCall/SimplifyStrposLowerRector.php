@@ -20,7 +20,7 @@ final class SimplifyStrposLowerRector extends AbstractRector
     {
         return new RuleDefinition(
             'Simplify strpos(strtolower(), "...") calls',
-            [new CodeSample('strpos(strtolower($var), "...")"', 'stripos($var, "...")"')]
+            [new CodeSample('strpos(strtolower($var), "...")', 'stripos($var, "...")')]
         );
     }
 

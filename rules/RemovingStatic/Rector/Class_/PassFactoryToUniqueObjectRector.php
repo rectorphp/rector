@@ -53,8 +53,6 @@ final class PassFactoryToUniqueObjectRector extends AbstractRector implements Co
             [
                 new ConfiguredCodeSample(
                     <<<'CODE_SAMPLE'
-<?php
-
 class SomeClass
 {
     public function run()

@@ -30,7 +30,7 @@ final class SimplifyIfNotNullReturnRector extends AbstractRector
             [
                 new CodeSample(
                     <<<'CODE_SAMPLE'
-$newNode = 'something ;
+$newNode = 'something';
 if ($newNode !== null) {
     return $newNode;
 }
@@ -39,7 +39,7 @@ return null;
 CODE_SAMPLE
                     ,
                     <<<'CODE_SAMPLE'
-$newNode = 'something ;
+$newNode = 'something';
 return $newNode;
 CODE_SAMPLE
                 ),

@@ -44,14 +44,14 @@ final class ChangeMethodVisibilityRector extends AbstractRector implements Confi
                     <<<'CODE_SAMPLE'
 class FrameworkClass
 {
-    protected someMethod()
+    protected function someMethod()
     {
     }
 }
 
 class MyClass extends FrameworkClass
 {
-    public someMethod()
+    public function someMethod()
     {
     }
 }
@@ -60,14 +60,14 @@ CODE_SAMPLE
                     <<<'CODE_SAMPLE'
 class FrameworkClass
 {
-    protected someMethod()
+    protected function someMethod()
     {
     }
 }
 
 class MyClass extends FrameworkClass
 {
-    protected someMethod()
+    protected function someMethod()
     {
     }
 }

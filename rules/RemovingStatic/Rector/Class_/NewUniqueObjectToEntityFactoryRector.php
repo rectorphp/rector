@@ -55,8 +55,6 @@ final class NewUniqueObjectToEntityFactoryRector extends AbstractRector implemen
         return new RuleDefinition('Convert new X to new factories', [
             new ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
-<?php
-
 class SomeClass
 {
     public function run()
