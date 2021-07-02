@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit3fdfa6bca686bb37b70e1d60bcfc21a8
+class ComposerStaticInit972662b421f57f3ae62f5a2e27c071e3
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -3551,7 +3551,6 @@ class ComposerStaticInit3fdfa6bca686bb37b70e1d60bcfc21a8
         'Rector\\VendorLocker\\VendorLockResolver' => __DIR__ . '/../..' . '/packages/VendorLocker/VendorLockResolver.php',
         'Rector\\Visibility\\Rector\\ClassConst\\ChangeConstantVisibilityRector' => __DIR__ . '/../..' . '/rules/Visibility/Rector/ClassConst/ChangeConstantVisibilityRector.php',
         'Rector\\Visibility\\Rector\\ClassMethod\\ChangeMethodVisibilityRector' => __DIR__ . '/../..' . '/rules/Visibility/Rector/ClassMethod/ChangeMethodVisibilityRector.php',
-        'Rector\\Visibility\\Rector\\Property\\ChangePropertyVisibilityRector' => __DIR__ . '/../..' . '/rules/Visibility/Rector/Property/ChangePropertyVisibilityRector.php',
         'Rector\\Visibility\\ValueObject\\ChangeConstantVisibility' => __DIR__ . '/../..' . '/rules/Visibility/ValueObject/ChangeConstantVisibility.php',
         'Rector\\Visibility\\ValueObject\\ChangeMethodVisibility' => __DIR__ . '/../..' . '/rules/Visibility/ValueObject/ChangeMethodVisibility.php',
         'ReturnTypeWillChange' => __DIR__ . '/..' . '/symfony/polyfill-php81/Resources/stubs/ReturnTypeWillChange.php',
@@ -3846,9 +3845,9 @@ class ComposerStaticInit3fdfa6bca686bb37b70e1d60bcfc21a8
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit3fdfa6bca686bb37b70e1d60bcfc21a8::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit3fdfa6bca686bb37b70e1d60bcfc21a8::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit3fdfa6bca686bb37b70e1d60bcfc21a8::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit972662b421f57f3ae62f5a2e27c071e3::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit972662b421f57f3ae62f5a2e27c071e3::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit972662b421f57f3ae62f5a2e27c071e3::$classMap;
 
         }, null, ClassLoader::class);
     }
