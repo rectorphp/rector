@@ -1611,8 +1611,8 @@
         },
         {
             "name": "ssch\/typo3-rector",
-            "version": "dev-main",
-            "version_normalized": "dev-main",
+            "version": "v0.11.20",
+            "version_normalized": "0.11.20.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/sabbelasichon\/typo3-rector.git",
@@ -1647,7 +1647,6 @@
                 "tracy\/tracy": "^2.8"
             },
             "time": "2021-07-02T19:36:25+00:00",
-            "default-branch": true,
             "type": "rector-extension",
             "extra": {
                 "rector": {
