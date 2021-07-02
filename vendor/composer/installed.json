@@ -1351,17 +1351,17 @@
         },
         {
             "name": "rector\/rector-nette",
-            "version": "0.11.11",
-            "version_normalized": "0.11.11.0",
+            "version": "0.11.14",
+            "version_normalized": "0.11.14.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-nette.git",
-                "reference": "7120e3e1db27d404fe4f169134980d598caaa49c"
+                "reference": "7fb9c218c4d89ad05e2c331f11c24e73f38c43f5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-nette\/zipball\/7120e3e1db27d404fe4f169134980d598caaa49c",
-                "reference": "7120e3e1db27d404fe4f169134980d598caaa49c",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-nette\/zipball\/7fb9c218c4d89ad05e2c331f11c24e73f38c43f5",
+                "reference": "7fb9c218c4d89ad05e2c331f11c24e73f38c43f5",
                 "shasum": ""
             },
             "require": {
@@ -1387,7 +1387,7 @@
                 "symplify\/phpstan-rules": "^9.3",
                 "symplify\/rule-doc-generator": "^9.3"
             },
-            "time": "2021-06-28T18:53:07+00:00",
+            "time": "2021-07-02T17:44:29+00:00",
             "type": "rector-extension",
             "extra": {
                 "branch-alias": {
@@ -1412,7 +1412,7 @@
             "description": "Rector upgrades rules for Nette Framework",
             "support": {
                 "issues": "https:\/\/github.com\/rectorphp\/rector-nette\/issues",
-                "source": "https:\/\/github.com\/rectorphp\/rector-nette\/tree\/0.11.11"
+                "source": "https:\/\/github.com\/rectorphp\/rector-nette\/tree\/0.11.14"
             },
             "install-path": "..\/rector\/rector-nette"
         },
@@ -1611,17 +1611,17 @@
         },
         {
             "name": "ssch\/typo3-rector",
-            "version": "v0.11.19",
-            "version_normalized": "0.11.19.0",
+            "version": "dev-main",
+            "version_normalized": "dev-main",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/sabbelasichon\/typo3-rector.git",
-                "reference": "5eeda76afb010828142d79965044d5da63ef5a72"
+                "reference": "8117d4e663d624cc5dac7dcaf3bae78a5f846656"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/sabbelasichon\/typo3-rector\/zipball\/5eeda76afb010828142d79965044d5da63ef5a72",
-                "reference": "5eeda76afb010828142d79965044d5da63ef5a72",
+                "url": "https:\/\/api.github.com\/repos\/sabbelasichon\/typo3-rector\/zipball\/8117d4e663d624cc5dac7dcaf3bae78a5f846656",
+                "reference": "8117d4e663d624cc5dac7dcaf3bae78a5f846656",
                 "shasum": ""
             },
             "require": {
@@ -1638,7 +1638,7 @@
                 "phpunit\/phpunit": "^9.5",
                 "rector\/rector-generator": "^0.1.7",
                 "rector\/rector-phpstan-rules": "^0.3.4",
-                "rector\/rector-src": "^0.11.22",
+                "rector\/rector-src": "dev-main#d807e48",
                 "symplify\/coding-standard": "^9.3",
                 "symplify\/easy-coding-standard": "^9.3",
                 "symplify\/phpstan-extensions": "^9.3",
@@ -1646,7 +1646,8 @@
                 "symplify\/rule-doc-generator": "^9.3",
                 "tracy\/tracy": "^2.8"
             },
-            "time": "2021-06-30T07:01:53+00:00",
+            "time": "2021-07-02T19:36:25+00:00",
+            "default-branch": true,
             "type": "rector-extension",
             "extra": {
                 "rector": {
@@ -1678,7 +1679,7 @@
             "description": "Instant fixes for your TYPO3 code by using Rector.",
             "support": {
                 "issues": "https:\/\/github.com\/sabbelasichon\/typo3-rector\/issues",
-                "source": "https:\/\/github.com\/sabbelasichon\/typo3-rector\/tree\/v0.11.19"
+                "source": "https:\/\/github.com\/sabbelasichon\/typo3-rector\/tree\/main"
             },
             "funding": [
                 {

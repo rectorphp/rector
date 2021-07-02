@@ -5,6 +5,7 @@ namespace Rector\Nette\FileProcessor;
 
 use Rector\Core\Contract\Processor\FileProcessorInterface;
 use Rector\Core\ValueObject\Application\File;
+use Rector\Core\ValueObject\Configuration;
 use Rector\Nette\Contract\Rector\LatteRectorInterface;
 final class LatteFileProcessor implements \Rector\Core\Contract\Processor\FileProcessorInterface
 {
@@ -19,20 +20,15 @@ final class LatteFileProcessor implements \Rector\Core\Contract\Processor\FilePr
     {
         $this->latteRectors = $latteRectors;
     }
-    /**
-     * @param File[] $files
-     */
-    public function process(array $files) : void
+    public function process(\Rector\Core\ValueObject\Application\File $file, \Rector\Core\ValueObject\Configuration $configuration) : void
     {
-        foreach ($files as $file) {
-            $fileContent = $file->getFileContent();
-            foreach ($this->latteRectors as $latteRector) {
-                $fileContent = $latteRector->changeContent($fileContent);
-            }
-            $file->changeFileContent($fileContent);
+        $fileContent = $file->getFileContent();
+        foreach ($this->latteRectors as $latteRector) {
+            $fileContent = $latteRector->changeContent($fileContent);
         }
+        $file->changeFileContent($fileContent);
     }
-    public function supports(\Rector\Core\ValueObject\Application\File $file) : bool
+    public function supports(\Rector\Core\ValueObject\Application\File $file, \Rector\Core\ValueObject\Configuration $configuration) : bool
     {
         $fileInfo = $file->getSmartFileInfo();
         return $fileInfo->hasSuffixes($this->getSupportedFileExtensions());

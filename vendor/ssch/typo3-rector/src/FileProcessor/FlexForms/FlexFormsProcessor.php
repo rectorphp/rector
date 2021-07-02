@@ -7,6 +7,7 @@ use DOMDocument;
 use Exception;
 use Rector\Core\Contract\Processor\FileProcessorInterface;
 use Rector\Core\ValueObject\Application\File;
+use Rector\Core\ValueObject\Configuration;
 use Ssch\TYPO3Rector\Contract\FileProcessor\FlexForms\Rector\FlexFormRectorInterface;
 use UnexpectedValueException;
 /**
@@ -25,41 +26,11 @@ final class FlexFormsProcessor implements \Rector\Core\Contract\Processor\FilePr
     {
         $this->flexFormRectors = $flexFormRectors;
     }
-    /**
-     * @param File[] $files
-     */
-    public function process(array $files) : void
+    public function process(\Rector\Core\ValueObject\Application\File $file, \Rector\Core\ValueObject\Configuration $configuration) : void
     {
         if ([] === $this->flexFormRectors) {
             return;
         }
-        foreach ($files as $file) {
-            $this->processFile($file);
-        }
-    }
-    public function supports(\Rector\Core\ValueObject\Application\File $file) : bool
-    {
-        $smartFileInfo = $file->getSmartFileInfo();
-        if (!\in_array($smartFileInfo->getExtension(), $this->getSupportedFileExtensions(), \true)) {
-            return \false;
-        }
-        $fileContent = $file->getFileContent();
-        try {
-            $xml = @\simplexml_load_string($fileContent);
-        } catch (\Exception $exception) {
-            return \false;
-        }
-        if (\false === $xml) {
-            return \false;
-        }
-        return 'T3DataStructure' === $xml->getName();
-    }
-    public function getSupportedFileExtensions() : array
-    {
-        return ['xml'];
-    }
-    private function processFile(\Rector\Core\ValueObject\Application\File $file) : void
-    {
         $domDocument = new \DOMDocument();
         $domDocument->formatOutput = \true;
         $domDocument->loadXML($file->getFileContent());
@@ -79,5 +50,26 @@ final class FlexFormsProcessor implements \Rector\Core\Contract\Processor\FilePr
         }
         $newFileContent = \html_entity_decode($xml);
         $file->changeFileContent($newFileContent);
+    }
+    public function supports(\Rector\Core\ValueObject\Application\File $file, \Rector\Core\ValueObject\Configuration $configuration) : bool
+    {
+        $smartFileInfo = $file->getSmartFileInfo();
+        if (!\in_array($smartFileInfo->getExtension(), $this->getSupportedFileExtensions(), \true)) {
+            return \false;
+        }
+        $fileContent = $file->getFileContent();
+        try {
+            $xml = @\simplexml_load_string($fileContent);
+        } catch (\Exception $exception) {
+            return \false;
+        }
+        if (\false === $xml) {
+            return \false;
+        }
+        return 'T3DataStructure' === $xml->getName();
+    }
+    public function getSupportedFileExtensions() : array
+    {
+        return ['xml'];
     }
 }

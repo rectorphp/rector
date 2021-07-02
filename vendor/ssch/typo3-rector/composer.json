@@ -20,7 +20,7 @@
         "phpunit\/phpunit": "^9.5",
         "rector\/rector-generator": "^0.1.7",
         "rector\/rector-phpstan-rules": "^0.3.4",
-        "rector\/rector-src": "^0.11.22",
+        "rector\/rector-src": "dev-main#d807e48",
         "symplify\/coding-standard": "^9.3",
         "symplify\/easy-coding-standard": "^9.3",
         "symplify\/phpstan-extensions": "^9.3",

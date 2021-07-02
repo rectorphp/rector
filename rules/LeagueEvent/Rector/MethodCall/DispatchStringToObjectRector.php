@@ -9,6 +9,7 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
@@ -22,6 +23,7 @@ use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\MethodName;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -113,7 +115,8 @@ CODE_SAMPLE
      */
     private function createAnonymousEventClassBody() : array
     {
-        return [new \PhpParser\Node\Stmt\Property(\PhpParser\Node\Stmt\Class_::MODIFIER_PRIVATE, [new \PhpParser\Node\Stmt\PropertyProperty(self::NAME)]), new \PhpParser\Node\Stmt\ClassMethod('__construct', ['flags' => \PhpParser\Node\Stmt\Class_::MODIFIER_PUBLIC, 'params' => $this->createConstructParams(), self::STMTS => [new \PhpParser\Node\Stmt\Expression($this->createConstructAssign())]]), new \PhpParser\Node\Stmt\ClassMethod('eventName', ['flags' => \PhpParser\Node\Stmt\Class_::MODIFIER_PUBLIC, 'returnType' => 'string', self::STMTS => [new \PhpParser\Node\Stmt\Return_(new \PhpParser\Node\Expr\Variable('this->name'))]])];
+        $return = new \PhpParser\Node\Stmt\Return_(new \PhpParser\Node\Expr\PropertyFetch(new \PhpParser\Node\Expr\Variable('this'), 'name'));
+        return [new \PhpParser\Node\Stmt\Property(\PhpParser\Node\Stmt\Class_::MODIFIER_PRIVATE, [new \PhpParser\Node\Stmt\PropertyProperty(self::NAME)]), new \PhpParser\Node\Stmt\ClassMethod(\Rector\Core\ValueObject\MethodName::CONSTRUCT, ['flags' => \PhpParser\Node\Stmt\Class_::MODIFIER_PUBLIC, 'params' => $this->createConstructParams(), self::STMTS => [new \PhpParser\Node\Stmt\Expression($this->createConstructAssign())]]), new \PhpParser\Node\Stmt\ClassMethod('eventName', ['flags' => \PhpParser\Node\Stmt\Class_::MODIFIER_PUBLIC, 'returnType' => 'string', self::STMTS => [$return]])];
     }
     /**
      * @return Param[]
@@ -124,6 +127,7 @@ CODE_SAMPLE
     }
     private function createConstructAssign() : \PhpParser\Node\Expr\Assign
     {
-        return new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable('this->name'), new \PhpParser\Node\Expr\Variable(self::NAME));
+        $propertyFetch = new \PhpParser\Node\Expr\PropertyFetch(new \PhpParser\Node\Expr\Variable('this'), 'name');
+        return new \PhpParser\Node\Expr\Assign($propertyFetch, new \PhpParser\Node\Expr\Variable(self::NAME));
     }
 }

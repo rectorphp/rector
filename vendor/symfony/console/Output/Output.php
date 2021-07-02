@@ -148,8 +148,6 @@ abstract class Output implements \RectorPrefix20210702\Symfony\Component\Console
     }
     /**
      * Writes a message to the output.
-     * @param string $message
-     * @param bool $newline
      */
-    protected abstract function doWrite($message, $newline);
+    protected abstract function doWrite(string $message, bool $newline);
 }

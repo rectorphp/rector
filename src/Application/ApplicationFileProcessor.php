@@ -9,6 +9,7 @@ use Rector\Core\Contract\Processor\FileProcessorInterface;
 use Rector\Core\ValueObject\Application\File;
 use Rector\Core\ValueObject\Configuration;
 use Rector\FileFormatter\FileFormatter;
+use RectorPrefix20210702\Symfony\Component\Console\Style\SymfonyStyle;
 use RectorPrefix20210702\Symplify\SmartFileSystem\SmartFileSystem;
 final class ApplicationFileProcessor
 {
@@ -29,18 +30,23 @@ final class ApplicationFileProcessor
      */
     private $removedAndAddedFilesProcessor;
     /**
+     * @var \Symfony\Component\Console\Style\SymfonyStyle
+     */
+    private $symfonyStyle;
+    /**
      * @var mixed[]
      */
     private $fileProcessors = [];
     /**
      * @param FileProcessorInterface[] $fileProcessors
      */
-    public function __construct(\RectorPrefix20210702\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \Rector\Core\Application\FileDecorator\FileDiffFileDecorator $fileDiffFileDecorator, \Rector\FileFormatter\FileFormatter $fileFormatter, \Rector\Core\Application\FileSystem\RemovedAndAddedFilesProcessor $removedAndAddedFilesProcessor, array $fileProcessors = [])
+    public function __construct(\RectorPrefix20210702\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \Rector\Core\Application\FileDecorator\FileDiffFileDecorator $fileDiffFileDecorator, \Rector\FileFormatter\FileFormatter $fileFormatter, \Rector\Core\Application\FileSystem\RemovedAndAddedFilesProcessor $removedAndAddedFilesProcessor, \RectorPrefix20210702\Symfony\Component\Console\Style\SymfonyStyle $symfonyStyle, array $fileProcessors = [])
     {
         $this->smartFileSystem = $smartFileSystem;
         $this->fileDiffFileDecorator = $fileDiffFileDecorator;
         $this->fileFormatter = $fileFormatter;
         $this->removedAndAddedFilesProcessor = $removedAndAddedFilesProcessor;
+        $this->symfonyStyle = $symfonyStyle;
         $this->fileProcessors = $fileProcessors;
     }
     /**
@@ -58,11 +64,21 @@ final class ApplicationFileProcessor
      */
     private function processFiles(array $files, \Rector\Core\ValueObject\Configuration $configuration) : void
     {
-        foreach ($this->fileProcessors as $fileProcessor) {
-            $supportedFiles = \array_filter($files, function (\Rector\Core\ValueObject\Application\File $file) use($fileProcessor, $configuration) : bool {
-                return $fileProcessor->supports($file, $configuration);
-            });
-            $fileProcessor->process($supportedFiles, $configuration);
+        if ($configuration->shouldShowDiffs()) {
+            $fileCount = \count($files);
+            $this->symfonyStyle->progressStart($fileCount);
+        }
+        foreach ($files as $file) {
+            foreach ($this->fileProcessors as $fileProcessor) {
+                if (!$fileProcessor->supports($file, $configuration)) {
+                    continue;
+                }
+                $fileProcessor->process($file, $configuration);
+            }
+            // progress bar +1
+            if ($configuration->shouldShowProgressBar()) {
+                $this->symfonyStyle->progressAdvance();
+            }
         }
         $this->removedAndAddedFilesProcessor->run($configuration);
     }

@@ -38,9 +38,8 @@ final class InputBag extends \RectorPrefix20210702\Symfony\Component\HttpFoundat
     }
     /**
      * {@inheritdoc}
-     * @param string|null $key
      */
-    public function all($key = null) : array
+    public function all(string $key = null) : array
     {
         return parent::all($key);
     }

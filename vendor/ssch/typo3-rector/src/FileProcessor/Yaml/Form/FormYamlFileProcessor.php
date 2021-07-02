@@ -7,12 +7,13 @@ use RectorPrefix20210702\Nette\Utils\Strings;
 use Rector\Core\Contract\Processor\FileProcessorInterface;
 use Rector\Core\Provider\CurrentFileProvider;
 use Rector\Core\ValueObject\Application\File;
+use Rector\Core\ValueObject\Configuration;
 use Ssch\TYPO3Rector\Contract\FileProcessor\Yaml\Form\FormYamlRectorInterface;
 use RectorPrefix20210702\Symfony\Component\Yaml\Yaml;
 /**
  * @see \Ssch\TYPO3Rector\Tests\FileProcessor\Yaml\Form\FormYamlProcessorTest
  */
-final class FormYamlProcessor implements \Rector\Core\Contract\Processor\FileProcessorInterface
+final class FormYamlFileProcessor implements \Rector\Core\Contract\Processor\FileProcessorInterface
 {
     /**
      * @var string[]
@@ -34,30 +35,12 @@ final class FormYamlProcessor implements \Rector\Core\Contract\Processor\FilePro
         $this->currentFileProvider = $currentFileProvider;
         $this->transformer = $transformer;
     }
-    /**
-     * @param File[] $files
-     */
-    public function process(array $files) : void
+    public function process(\Rector\Core\ValueObject\Application\File $file, \Rector\Core\ValueObject\Configuration $configuration) : void
     {
         // Prevent unnecessary processing
         if ([] === $this->transformer) {
             return;
         }
-        foreach ($files as $file) {
-            $this->processFile($file);
-        }
-    }
-    public function supports(\Rector\Core\ValueObject\Application\File $file) : bool
-    {
-        $smartFileInfo = $file->getSmartFileInfo();
-        return \RectorPrefix20210702\Nette\Utils\Strings::endsWith($smartFileInfo->getFilename(), 'yaml');
-    }
-    public function getSupportedFileExtensions() : array
-    {
-        return self::ALLOWED_FILE_EXTENSIONS;
-    }
-    private function processFile(\Rector\Core\ValueObject\Application\File $file) : void
-    {
         $this->currentFileProvider->setFile($file);
         $smartFileInfo = $file->getSmartFileInfo();
         $yaml = \RectorPrefix20210702\Symfony\Component\Yaml\Yaml::parseFile($smartFileInfo->getRealPath());
@@ -74,5 +57,17 @@ final class FormYamlProcessor implements \Rector\Core\Contract\Processor\FilePro
         }
         $newFileContent = \RectorPrefix20210702\Symfony\Component\Yaml\Yaml::dump($newYaml, 99);
         $file->changeFileContent($newFileContent);
+    }
+    public function supports(\Rector\Core\ValueObject\Application\File $file, \Rector\Core\ValueObject\Configuration $configuration) : bool
+    {
+        $smartFileInfo = $file->getSmartFileInfo();
+        return \RectorPrefix20210702\Nette\Utils\Strings::endsWith($smartFileInfo->getFilename(), 'yaml');
+    }
+    /**
+     * @return string[]
+     */
+    public function getSupportedFileExtensions() : array
+    {
+        return self::ALLOWED_FILE_EXTENSIONS;
     }
 }

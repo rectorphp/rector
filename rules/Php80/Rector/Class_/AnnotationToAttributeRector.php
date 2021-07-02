@@ -39,7 +39,7 @@ final class AnnotationToAttributeRector extends \Rector\Core\Rector\AbstractRect
     public const ANNOTATION_TO_ATTRIBUTE = 'annotation_to_attribute';
     /**
      * List of annotations that should not be unwrapped
-     * @var class-string[]
+     * @var string[]
      */
     private const SKIP_UNWRAP_ANNOTATIONS = ['Symfony\\Component\\Validator\\Constraints\\All', 'Symfony\\Component\\Validator\\Constraints\\AtLeastOneOf', 'Symfony\\Component\\Validator\\Constraints\\Collection', 'Symfony\\Component\\Validator\\Constraints\\Sequentially'];
     /**

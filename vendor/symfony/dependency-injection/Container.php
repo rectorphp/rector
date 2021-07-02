@@ -172,7 +172,7 @@ class Container implements \RectorPrefix20210702\Symfony\Component\DependencyInj
      *
      * @return bool true if the service is defined, false otherwise
      */
-    public function has($id)
+    public function has(string $id)
     {
         if (isset($this->aliases[$id])) {
             $id = $this->aliases[$id];
@@ -199,7 +199,7 @@ class Container implements \RectorPrefix20210702\Symfony\Component\DependencyInj
      *
      * @see Reference
      */
-    public function get($id, $invalidBehavior = 1)
+    public function get(string $id, int $invalidBehavior = 1)
     {
         return $this->services[$id] ?? $this->services[$id = $this->aliases[$id] ?? $id] ?? ('service_container' === $id ? $this : ($this->factories[$id] ?? [$this, 'make'])($id, $invalidBehavior));
     }

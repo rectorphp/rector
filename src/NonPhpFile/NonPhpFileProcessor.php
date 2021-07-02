@@ -24,13 +24,11 @@ final class NonPhpFileProcessor implements \Rector\Core\Contract\Processor\FileP
     {
         $this->nonPhpRectors = $nonPhpRectors;
     }
-    /**
-     * @param File[] $files
-     */
-    public function process(array $files, \Rector\Core\ValueObject\Configuration $configuration) : void
+    public function process(\Rector\Core\ValueObject\Application\File $file, \Rector\Core\ValueObject\Configuration $configuration) : void
     {
-        foreach ($files as $file) {
-            $this->processFile($file);
+        foreach ($this->nonPhpRectors as $nonPhpRector) {
+            $newFileContent = $nonPhpRector->refactorFileContent($file->getFileContent());
+            $file->changeFileContent($newFileContent);
         }
     }
     public function supports(\Rector\Core\ValueObject\Application\File $file, \Rector\Core\ValueObject\Configuration $configuration) : bool
@@ -53,12 +51,5 @@ final class NonPhpFileProcessor implements \Rector\Core\Contract\Processor\FileP
     public function getSupportedFileExtensions() : array
     {
         return \Rector\Core\ValueObject\StaticNonPhpFileSuffixes::SUFFIXES;
-    }
-    private function processFile(\Rector\Core\ValueObject\Application\File $file) : void
-    {
-        foreach ($this->nonPhpRectors as $nonPhpRector) {
-            $newFileContent = $nonPhpRector->refactorFileContent($file->getFileContent());
-            $file->changeFileContent($newFileContent);
-        }
     }
 }

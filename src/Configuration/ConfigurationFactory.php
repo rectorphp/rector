@@ -6,6 +6,7 @@ namespace Rector\Core\Configuration;
 use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
 use Rector\Core\ValueObject\Configuration;
 use RectorPrefix20210702\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix20210702\Symfony\Component\Console\Style\SymfonyStyle;
 use RectorPrefix20210702\Symplify\PackageBuilder\Parameter\ParameterProvider;
 final class ConfigurationFactory
 {
@@ -13,9 +14,14 @@ final class ConfigurationFactory
      * @var \Symplify\PackageBuilder\Parameter\ParameterProvider
      */
     private $parameterProvider;
-    public function __construct(\RectorPrefix20210702\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider)
+    /**
+     * @var \Symfony\Component\Console\Style\SymfonyStyle
+     */
+    private $symfonyStyle;
+    public function __construct(\RectorPrefix20210702\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \RectorPrefix20210702\Symfony\Component\Console\Style\SymfonyStyle $symfonyStyle)
     {
         $this->parameterProvider = $parameterProvider;
+        $this->symfonyStyle = $symfonyStyle;
     }
     public function createForTests() : \Rector\Core\ValueObject\Configuration
     {
@@ -40,6 +46,9 @@ final class ConfigurationFactory
     {
         $noProgressBar = (bool) $input->getOption(\Rector\Core\Configuration\Option::NO_PROGRESS_BAR);
         if ($noProgressBar) {
+            return \false;
+        }
+        if ($this->symfonyStyle->isVerbose()) {
             return \false;
         }
         return $outputFormat === \Rector\ChangesReporting\Output\ConsoleOutputFormatter::NAME;

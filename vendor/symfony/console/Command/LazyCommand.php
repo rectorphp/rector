@@ -50,11 +50,7 @@ final class LazyCommand extends \RectorPrefix20210702\Symfony\Component\Console\
     {
         return $this->isEnabled ?? $this->getCommand()->isEnabled();
     }
-    /**
-     * @param \Symfony\Component\Console\Input\InputInterface $input
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
-     */
-    public function run($input, $output) : int
+    public function run(\RectorPrefix20210702\Symfony\Component\Console\Input\InputInterface $input, \RectorPrefix20210702\Symfony\Component\Console\Output\OutputInterface $output) : int
     {
         return $this->getCommand()->run($input, $output);
     }

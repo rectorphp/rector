@@ -85,7 +85,7 @@ abstract class AbstractCloner implements \RectorPrefix20210702\Symfony\Component
      *
      * @return Data The cloned variable represented by a Data object
      */
-    public function cloneVar($var, $filter = 0)
+    public function cloneVar($var, int $filter = 0)
     {
         $this->prevErrorHandler = \set_error_handler(function ($type, $msg, $file, $line, $context = []) {
             if (\E_RECOVERABLE_ERROR === $type || \E_USER_ERROR === $type) {

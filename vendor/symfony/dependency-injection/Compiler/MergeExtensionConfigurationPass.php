@@ -164,9 +164,8 @@ class MergeExtensionConfigurationContainerBuilder extends \RectorPrefix20210702\
     }
     /**
      * {@inheritdoc}
-     * @param bool $resolveEnvPlaceholders
      */
-    public function compile($resolveEnvPlaceholders = \false)
+    public function compile(bool $resolveEnvPlaceholders = \false)
     {
         throw new \RectorPrefix20210702\Symfony\Component\DependencyInjection\Exception\LogicException(\sprintf('Cannot compile the container in extension "%s".', $this->extensionClass));
     }

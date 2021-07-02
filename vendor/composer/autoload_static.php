@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit577045cc1c27702c2f2acb95e3525e0f
+class ComposerStaticInitf490057658a548a4f3c4a64f6c05a882
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -2170,6 +2170,7 @@ class ComposerStaticInit577045cc1c27702c2f2acb95e3525e0f
         'Rector\\Core\\DependencyInjection\\Loader\\ConfigurableCallValuesCollectingPhpFileLoader' => __DIR__ . '/../..' . '/src/DependencyInjection/Loader/ConfigurableCallValuesCollectingPhpFileLoader.php',
         'Rector\\Core\\DependencyInjection\\RectorContainerFactory' => __DIR__ . '/../..' . '/src/DependencyInjection/RectorContainerFactory.php',
         'Rector\\Core\\Differ\\DefaultDiffer' => __DIR__ . '/../..' . '/src/Differ/DefaultDiffer.php',
+        'Rector\\Core\\Enum\\ApplicationPhase' => __DIR__ . '/../..' . '/src/Enum/ApplicationPhase.php',
         'Rector\\Core\\Error\\ExceptionCorrector' => __DIR__ . '/../..' . '/src/Error/ExceptionCorrector.php',
         'Rector\\Core\\Exception\\Application\\FileProcessingException' => __DIR__ . '/../..' . '/src/Exception/Application/FileProcessingException.php',
         'Rector\\Core\\Exception\\Configuration\\InvalidConfigurationException' => __DIR__ . '/../..' . '/src/Exception/Configuration/InvalidConfigurationException.php',
@@ -3567,9 +3568,9 @@ class ComposerStaticInit577045cc1c27702c2f2acb95e3525e0f
         'Ssch\\TYPO3Rector\\FileProcessor\\Composer\\Rector\\RemoveCmsPackageDirFromExtraComposerRector' => __DIR__ . '/..' . '/ssch/typo3-rector/src/FileProcessor/Composer/Rector/RemoveCmsPackageDirFromExtraComposerRector.php',
         'Ssch\\TYPO3Rector\\FileProcessor\\FlexForms\\FlexFormsProcessor' => __DIR__ . '/..' . '/ssch/typo3-rector/src/FileProcessor/FlexForms/FlexFormsProcessor.php',
         'Ssch\\TYPO3Rector\\FileProcessor\\FlexForms\\Rector\\RenderTypeFlexFormRector' => __DIR__ . '/..' . '/ssch/typo3-rector/src/FileProcessor/FlexForms/Rector/RenderTypeFlexFormRector.php',
-        'Ssch\\TYPO3Rector\\FileProcessor\\Fluid\\FluidProcessor' => __DIR__ . '/..' . '/ssch/typo3-rector/src/FileProcessor/Fluid/FluidProcessor.php',
+        'Ssch\\TYPO3Rector\\FileProcessor\\Fluid\\FluidFileProcessor' => __DIR__ . '/..' . '/ssch/typo3-rector/src/FileProcessor/Fluid/FluidFileProcessor.php',
         'Ssch\\TYPO3Rector\\FileProcessor\\Fluid\\Rector\\DefaultSwitchFluidRector' => __DIR__ . '/..' . '/ssch/typo3-rector/src/FileProcessor/Fluid/Rector/DefaultSwitchFluidRector.php',
-        'Ssch\\TYPO3Rector\\FileProcessor\\Resources\\Icons\\IconsProcessor' => __DIR__ . '/..' . '/ssch/typo3-rector/src/FileProcessor/Resources/Icons/IconsProcessor.php',
+        'Ssch\\TYPO3Rector\\FileProcessor\\Resources\\Icons\\IconsFileProcessor' => __DIR__ . '/..' . '/ssch/typo3-rector/src/FileProcessor/Resources/Icons/IconsFileProcessor.php',
         'Ssch\\TYPO3Rector\\FileProcessor\\Resources\\Icons\\Rector\\IconsRector' => __DIR__ . '/..' . '/ssch/typo3-rector/src/FileProcessor/Resources/Icons/Rector/IconsRector.php',
         'Ssch\\TYPO3Rector\\FileProcessor\\TypoScript\\Conditions\\AbstractGlobalConditionMatcher' => __DIR__ . '/..' . '/ssch/typo3-rector/src/FileProcessor/TypoScript/Conditions/AbstractGlobalConditionMatcher.php',
         'Ssch\\TYPO3Rector\\FileProcessor\\TypoScript\\Conditions\\AbstractRootlineConditionMatcher' => __DIR__ . '/..' . '/ssch/typo3-rector/src/FileProcessor/TypoScript/Conditions/AbstractRootlineConditionMatcher.php',
@@ -3595,8 +3596,8 @@ class ComposerStaticInit577045cc1c27702c2f2acb95e3525e0f
         'Ssch\\TYPO3Rector\\FileProcessor\\TypoScript\\Rector\\ExtbasePersistenceTypoScriptRector' => __DIR__ . '/..' . '/ssch/typo3-rector/src/FileProcessor/TypoScript/Rector/ExtbasePersistenceTypoScriptRector.php',
         'Ssch\\TYPO3Rector\\FileProcessor\\TypoScript\\Rector\\FileIncludeToImportStatementTypoScriptRector' => __DIR__ . '/..' . '/ssch/typo3-rector/src/FileProcessor/TypoScript/Rector/FileIncludeToImportStatementTypoScriptRector.php',
         'Ssch\\TYPO3Rector\\FileProcessor\\TypoScript\\Rector\\OldConditionToExpressionLanguageTypoScriptRector' => __DIR__ . '/..' . '/ssch/typo3-rector/src/FileProcessor/TypoScript/Rector/OldConditionToExpressionLanguageTypoScriptRector.php',
-        'Ssch\\TYPO3Rector\\FileProcessor\\TypoScript\\TypoScriptProcessor' => __DIR__ . '/..' . '/ssch/typo3-rector/src/FileProcessor/TypoScript/TypoScriptProcessor.php',
-        'Ssch\\TYPO3Rector\\FileProcessor\\Yaml\\Form\\FormYamlProcessor' => __DIR__ . '/..' . '/ssch/typo3-rector/src/FileProcessor/Yaml/Form/FormYamlProcessor.php',
+        'Ssch\\TYPO3Rector\\FileProcessor\\TypoScript\\TypoScriptFileProcessor' => __DIR__ . '/..' . '/ssch/typo3-rector/src/FileProcessor/TypoScript/TypoScriptFileProcessor.php',
+        'Ssch\\TYPO3Rector\\FileProcessor\\Yaml\\Form\\FormYamlFileProcessor' => __DIR__ . '/..' . '/ssch/typo3-rector/src/FileProcessor/Yaml/Form/FormYamlFileProcessor.php',
         'Ssch\\TYPO3Rector\\FileProcessor\\Yaml\\Form\\Rector\\EmailFinisherRector' => __DIR__ . '/..' . '/ssch/typo3-rector/src/FileProcessor/Yaml/Form/Rector/EmailFinisherRector.php',
         'Ssch\\TYPO3Rector\\FileProcessor\\Yaml\\Form\\Rector\\TranslationFileRector' => __DIR__ . '/..' . '/ssch/typo3-rector/src/FileProcessor/Yaml/Form/Rector/TranslationFileRector.php',
         'Ssch\\TYPO3Rector\\Helper\\ArrayUtility' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Helper/ArrayUtility.php',
@@ -3844,9 +3845,9 @@ class ComposerStaticInit577045cc1c27702c2f2acb95e3525e0f
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit577045cc1c27702c2f2acb95e3525e0f::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit577045cc1c27702c2f2acb95e3525e0f::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit577045cc1c27702c2f2acb95e3525e0f::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitf490057658a548a4f3c4a64f6c05a882::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitf490057658a548a4f3c4a64f6c05a882::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitf490057658a548a4f3c4a64f6c05a882::$classMap;
 
         }, null, ClassLoader::class);
     }

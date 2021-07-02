@@ -184,6 +184,14 @@ final class PhpDocInfo
     }
     /**
      * @param class-string<TNode> $type
+     * @return TNode[]
+     */
+    public function getByType(string $type) : array
+    {
+        return $this->phpDocNodeByTypeFinder->findByType($this->phpDocNode, $type);
+    }
+    /**
+     * @param class-string<TNode> $type
      */
     public function hasByType(string $type) : bool
     {

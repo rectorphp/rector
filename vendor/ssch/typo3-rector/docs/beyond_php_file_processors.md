@@ -60,7 +60,7 @@ This is also configurable in your rector.php configuration file:
 
 ```php
 # rector.php configuration file
-use Ssch\TYPO3Rector\FileProcessor\TypoScript\TypoScriptProcessor;
+use Ssch\TYPO3Rector\FileProcessor\TypoScript\TypoScriptFileProcessor;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -68,9 +68,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services = $containerConfigurator->services();
 
-    $services->set(TypoScriptProcessor::class)
+    $services->set(TypoScriptFileProcessor::class)
         ->call('configure', [[
-            TypoScriptProcessor::ALLOWED_FILE_EXTENSIONS => [
+            TypoScriptFileProcessor::ALLOWED_FILE_EXTENSIONS => [
                 'special',
             ],
         ]]);

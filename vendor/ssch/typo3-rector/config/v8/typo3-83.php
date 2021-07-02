@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace RectorPrefix20210702;
 
-use Ssch\TYPO3Rector\FileProcessor\Resources\Icons\IconsProcessor;
+use Ssch\TYPO3Rector\FileProcessor\Resources\Icons\IconsFileProcessor;
 use Ssch\TYPO3Rector\FileProcessor\Resources\Icons\Rector\IconsRector;
 use Ssch\TYPO3Rector\Rector\v8\v3\RefactorMethodFileContentRector;
 use Ssch\TYPO3Rector\Rector\v8\v3\RefactorQueryViewTableWrapRector;
@@ -14,5 +14,5 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
     $services->set(\Ssch\TYPO3Rector\Rector\v8\v3\RefactorMethodFileContentRector::class);
     $services->set(\Ssch\TYPO3Rector\Rector\v8\v3\RefactorQueryViewTableWrapRector::class);
     $services->set(\Ssch\TYPO3Rector\FileProcessor\Resources\Icons\Rector\IconsRector::class);
-    $services->set(\Ssch\TYPO3Rector\FileProcessor\Resources\Icons\IconsProcessor::class)->autowire();
+    $services->set(\Ssch\TYPO3Rector\FileProcessor\Resources\Icons\IconsFileProcessor::class)->autowire();
 };

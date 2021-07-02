@@ -17,10 +17,7 @@ trait TcaHelperTrait
         $columns = $this->extractColumns($node);
         return null !== $ctrl && null !== $columns;
     }
-    /**
-     * @param \PhpParser\Node|null $node
-     */
-    protected function extractArrayItemByKey($node, string $key) : ?\PhpParser\Node\Expr\ArrayItem
+    protected function extractArrayItemByKey(?\PhpParser\Node $node, string $key) : ?\PhpParser\Node\Expr\ArrayItem
     {
         if (null === $node) {
             return null;
@@ -42,10 +39,7 @@ trait TcaHelperTrait
         }
         return null;
     }
-    /**
-     * @param \PhpParser\Node|null $node
-     */
-    protected function extractSubArrayByKey($node, string $key) : ?\PhpParser\Node\Expr\Array_
+    protected function extractSubArrayByKey(?\PhpParser\Node $node, string $key) : ?\PhpParser\Node\Expr\Array_
     {
         if (null === $node) {
             return null;
@@ -60,10 +54,7 @@ trait TcaHelperTrait
         }
         return $columnItems;
     }
-    /**
-     * @param \PhpParser\Node|null $node
-     */
-    protected function extractArrayValueByKey($node, string $key) : ?\PhpParser\Node\Expr
+    protected function extractArrayValueByKey(?\PhpParser\Node $node, string $key) : ?\PhpParser\Node\Expr
     {
         $item = $this->extractArrayItemByKey($node, $key);
         if (null === $item || null === $item->value) {

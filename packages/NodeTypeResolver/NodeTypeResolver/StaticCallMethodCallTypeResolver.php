@@ -93,8 +93,8 @@ final class StaticCallMethodCallTypeResolver implements \Rector\NodeTypeResolver
             }
             $methodReflection = $ancestorClassReflection->getMethod($methodName, $scope);
             if ($methodReflection instanceof \PHPStan\Reflection\Php\PhpMethodReflection) {
-                $parametersAcceptor = \PHPStan\Reflection\ParametersAcceptorSelector::selectSingle($methodReflection->getVariants());
-                return $parametersAcceptor->getReturnType();
+                $parametersAcceptorWithPhpDocs = \PHPStan\Reflection\ParametersAcceptorSelector::selectSingle($methodReflection->getVariants());
+                return $parametersAcceptorWithPhpDocs->getReturnType();
             }
         }
         return new \PHPStan\Type\MixedType();

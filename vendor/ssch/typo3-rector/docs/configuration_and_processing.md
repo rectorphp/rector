@@ -25,7 +25,9 @@ declare(strict_types=1);
 use Rector\Core\Configuration\Option;
 use Rector\Core\ValueObject\PhpVersion;
 use Rector\PostRector\Rector\NameImportingPostRector;
-use Ssch\TYPO3Rector\Configuration\Typo3Option;
+use Ssch\TYPO3Rector\FileProcessor\Composer\Rector\ExtensionComposerRector;
+use Ssch\TYPO3Rector\Rector\General\ConvertTypo3ConfVarsRector;
+use Ssch\TYPO3Rector\Rector\General\ExtEmConfRector;
 use Ssch\TYPO3Rector\Set\Typo3SetList;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
@@ -89,14 +91,20 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     // ]);
 
     // get services (needed for register a single rule)
-    // $services = $containerConfigurator->services();
+    $services = $containerConfigurator->services();
 
     // register a single rule
     // $services->set(InjectAnnotationRector::class);
 
+    /**
+     * Useful rule from RectorPHP itself to transform i.e. GeneralUtility::makeInstance('TYPO3\CMS\Core\Log\LogManager')
+     * to GeneralUtility::makeInstance(\TYPO3\CMS\Core\Log\LogManager::class) calls.
+     * But be warned, sometimes it produces false positives (edge cases), so watch out
+     */
+    // $services->set(StringClassNameToClassConstantRector::class);
 
     // Optional non-php file functionalities:
-    // More info here: https://github.com/sabbelasichon/typo3-rector/blob/main/docs/beyond_php_file_processors.md
+    // @see https://github.com/sabbelasichon/typo3-rector/blob/main/docs/beyond_php_file_processors.md
 
     // Adapt your composer.json dependencies to the latest available version for the defined SetList
     // $containerConfigurator->import(Typo3SetList::COMPOSER_PACKAGES_104_CORE);
@@ -105,8 +113,14 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     // Rewrite your extbase persistence class mapping from typoscript into php according to official docs.
     // This processor will create a summarized file with all of the typoscript rewrites combined into a single file.
     // The filename can be passed as argument, "Configuration_Extbase_Persistence_Classes.php" is default.
-    // $services = $containerConfigurator->services();
-    // $services->set(ExtbasePersistenceVisitor::class);
+    // $services->set(ExtbasePersistenceTypoScriptRector::class);
+    // Add some general TYPO3 rules
+    $services->set(ConvertTypo3ConfVarsRector::class);
+    $services->set(ExtEmConfRector::class);
+    $services->set(ExtensionComposerRector::class);
+
+    // Do you want to modernize your TypoScript include statements for files and move from <INCLUDE /> to @import use the FileIncludeToImportStatementVisitor
+    // $services->set(FileIncludeToImportStatementVisitor::class);
 };
 ```
 

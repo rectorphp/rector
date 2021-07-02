@@ -104,7 +104,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     // Rewrite your extbase persistence class mapping from typoscript into php according to official docs.
     // This processor will create a summarized file with all of the typoscript rewrites combined into a single file.
     // The filename can be passed as argument, "Configuration_Extbase_Persistence_Classes.php" is default.
-    // $services->set(ExtbasePersistenceVisitor::class);
+    // $services->set(ExtbasePersistenceTypoScriptRector::class);
     // Add some general TYPO3 rules
     $services->set(ConvertTypo3ConfVarsRector::class);
     $services->set(ExtEmConfRector::class);

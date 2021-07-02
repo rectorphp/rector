@@ -433,7 +433,7 @@ class ContainerBuilder extends \RectorPrefix20210702\Symfony\Component\Dependenc
      *
      * @return bool true if the service is defined, false otherwise
      */
-    public function has($id)
+    public function has(string $id)
     {
         return isset($this->definitions[$id]) || isset($this->aliasDefinitions[$id]) || parent::has($id);
     }
@@ -452,7 +452,7 @@ class ContainerBuilder extends \RectorPrefix20210702\Symfony\Component\Dependenc
      *
      * @see Reference
      */
-    public function get($id, $invalidBehavior = \RectorPrefix20210702\Symfony\Component\DependencyInjection\ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE)
+    public function get(string $id, int $invalidBehavior = \RectorPrefix20210702\Symfony\Component\DependencyInjection\ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE)
     {
         if ($this->isCompiled() && isset($this->removedIds[$id]) && \RectorPrefix20210702\Symfony\Component\DependencyInjection\ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE >= $invalidBehavior) {
             return parent::get($id);
@@ -620,7 +620,7 @@ class ContainerBuilder extends \RectorPrefix20210702\Symfony\Component\Dependenc
      *                                     Set to "true" when you want to use the current ContainerBuilder
      *                                     directly, keep to "false" when the container is dumped instead.
      */
-    public function compile($resolveEnvPlaceholders = \false)
+    public function compile(bool $resolveEnvPlaceholders = \false)
     {
         $compiler = $this->getCompiler();
         if ($this->trackResources) {
@@ -1065,9 +1065,8 @@ class ContainerBuilder extends \RectorPrefix20210702\Symfony\Component\Dependenc
      *     }
      *
      * @return array An array of tags with the tagged service as key, holding a list of attribute arrays
-     * @param bool $throwOnAbstract
      */
-    public function findTaggedServiceIds(string $name, $throwOnAbstract = \false)
+    public function findTaggedServiceIds(string $name, bool $throwOnAbstract = \false)
     {
         $this->usedTags[] = $name;
         $tags = [];

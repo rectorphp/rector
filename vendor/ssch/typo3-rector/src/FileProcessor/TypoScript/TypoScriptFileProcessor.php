@@ -14,6 +14,7 @@ use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\Console\Output\RectorOutputStyle;
 use Rector\Core\Provider\CurrentFileProvider;
 use Rector\Core\ValueObject\Application\File;
+use Rector\Core\ValueObject\Configuration;
 use Rector\FileFormatter\EditorConfig\EditorConfigParser;
 use Rector\FileFormatter\ValueObject\Indent;
 use Rector\FileFormatter\ValueObjectFactory\EditorConfigConfigurationBuilder;
@@ -25,7 +26,7 @@ use RectorPrefix20210702\Symfony\Component\Console\Output\BufferedOutput;
 /**
  * @see \Ssch\TYPO3Rector\Tests\FileProcessor\TypoScript\TypoScriptProcessorTest
  */
-final class TypoScriptProcessor implements \Ssch\TYPO3Rector\Contract\Processor\ConfigurableProcessorInterface
+final class TypoScriptFileProcessor implements \Ssch\TYPO3Rector\Contract\Processor\ConfigurableProcessorInterface
 {
     /**
      * @var string
@@ -81,23 +82,18 @@ final class TypoScriptProcessor implements \Ssch\TYPO3Rector\Contract\Processor\
         $this->rectorOutputStyle = $rectorOutputStyle;
         $this->typoScriptRectors = $typoScriptRectors;
     }
-    /**
-     * @param File[] $files
-     */
-    public function process(array $files) : void
-    {
-        foreach ($files as $file) {
-            $this->processFile($file);
-        }
-        $this->convertTypoScriptToPhpFiles();
-    }
-    public function supports(\Rector\Core\ValueObject\Application\File $file) : bool
+    public function supports(\Rector\Core\ValueObject\Application\File $file, \Rector\Core\ValueObject\Configuration $configuration) : bool
     {
         if ([] === $this->typoScriptRectors) {
             return \false;
         }
         $smartFileInfo = $file->getSmartFileInfo();
         return \in_array($smartFileInfo->getExtension(), $this->allowedFileExtensions, \true);
+    }
+    public function process(\Rector\Core\ValueObject\Application\File $file, \Rector\Core\ValueObject\Configuration $configuration) : void
+    {
+        $this->processFile($file);
+        $this->convertTypoScriptToPhpFiles();
     }
     /**
      * @return string[]

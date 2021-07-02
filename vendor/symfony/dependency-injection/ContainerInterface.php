@@ -53,7 +53,7 @@ interface ContainerInterface extends \RectorPrefix20210702\Psr\Container\Contain
      *
      * @return bool true if the service is defined, false otherwise
      */
-    public function has($id);
+    public function has(string $id);
     /**
      * Check for whether or not a service has been initialized.
      *

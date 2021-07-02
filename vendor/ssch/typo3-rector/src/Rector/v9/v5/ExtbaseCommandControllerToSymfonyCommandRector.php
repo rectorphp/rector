@@ -117,9 +117,9 @@ final class ExtbaseCommandControllerToSymfonyCommandRector extends \Rector\Core\
             }
             $commandPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($commandMethod);
             $paramTags = $commandPhpDocInfo->getParamTagValueNodes();
-            $descriptionPhpDocNode = $commandPhpDocInfo->getByType(\PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTextNode::class);
+            $descriptionPhpDocNodes = $commandPhpDocInfo->getByType(\PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTextNode::class);
             $methodParameters = $commandMethod->params;
-            $commandDescription = null !== $descriptionPhpDocNode ? (string) $descriptionPhpDocNode : '';
+            $commandDescription = (string) $descriptionPhpDocNodes[0] ?? '';
             $commandTemplate = $this->templateFinder->getCommand();
             $commandName = \RectorPrefix20210702\Nette\Utils\Strings::firstUpper($commandMethodName);
             $commandContent = $commandTemplate->getContents();

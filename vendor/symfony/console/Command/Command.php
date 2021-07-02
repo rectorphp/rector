@@ -215,10 +215,8 @@ class Command
      *
      * @see setCode()
      * @see execute()
-     * @param \Symfony\Component\Console\Input\InputInterface $input
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
      */
-    public function run($input, $output)
+    public function run(\RectorPrefix20210702\Symfony\Component\Console\Input\InputInterface $input, \RectorPrefix20210702\Symfony\Component\Console\Output\OutputInterface $output)
     {
         // add the application arguments and options
         $this->mergeApplicationDefinition();
