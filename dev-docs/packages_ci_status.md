@@ -35,3 +35,10 @@
 * https://github.com/rectorphp/rector-doctrine
 * ![](https://github.com/rectorphp/rector-doctrine/actions/workflows/tests.yaml/badge.svg)
 * ![](https://github.com/rectorphp/rector-doctrine/actions/workflows/code_analysis.yaml/badge.svg)
+
+## Typo3
+
+* https://github.com/sabbelasichon/typo3-rector
+* ![](https://github.com/sabbelasichon/typo3-rector/actions/workflows/tests.yaml/badge.svg)
+* ![](https://github.com/sabbelasichon/typo3-rector/actions/workflows/phpstan.yaml/badge.svg)
+* ![](https://github.com/sabbelasichon/typo3-rector/actions/workflows/rector.yaml/badge.svg)
