@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210701\TYPO3\CMS\Fluid\Core\ViewHelper;
+namespace RectorPrefix20210702\TYPO3\CMS\Fluid\Core\ViewHelper;
 
 if (\interface_exists('TYPO3\\CMS\\Fluid\\Core\\ViewHelper\\ViewHelperInterface')) {
     return;

@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210701\Helmich\TypoScriptParser\Tokenizer;
+namespace RectorPrefix20210702\Helmich\TypoScriptParser\Tokenizer;
 
 class ScannerLine
 {
