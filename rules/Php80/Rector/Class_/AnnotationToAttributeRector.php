@@ -41,6 +41,17 @@ final class AnnotationToAttributeRector extends AbstractRector implements Config
     public const ANNOTATION_TO_ATTRIBUTE = 'annotation_to_attribute';
 
     /**
+     * List of annotations that should not be unwrapped
+     * @var class-string[]
+     */
+    private const SKIP_UNWRAP_ANNOTATIONS = [
+        'Symfony\Component\Validator\Constraints\All',
+        'Symfony\Component\Validator\Constraints\AtLeastOneOf',
+        'Symfony\Component\Validator\Constraints\Collection',
+        'Symfony\Component\Validator\Constraints\Sequentially',
+    ];
+
+    /**
      * @var AnnotationToAttribute[]
      */
     private array $annotationsToAttributes = [];
@@ -190,6 +201,9 @@ CODE_SAMPLE
         PhpDocInfo $phpDocInfo,
         ClassMethod | Function_ | Closure | ArrowFunction | Property | Class_ $node
     ): void {
+        if ($this->shouldSkip($phpDocInfo)) {
+            return;
+        }
         $doctrineTagAndAnnotationToAttributes = [];
 
         $phpDocNodeTraverser = new PhpDocNodeTraverser();
@@ -232,5 +246,10 @@ CODE_SAMPLE
                 $doctrineTagAndAnnotationToAttribute->getAnnotationToAttribute()
             );
         }
+    }
+
+    private function shouldSkip(PhpDocInfo $phpDocInfo): bool
+    {
+        return $phpDocInfo->hasByAnnotationClasses(self::SKIP_UNWRAP_ANNOTATIONS);
     }
 }
