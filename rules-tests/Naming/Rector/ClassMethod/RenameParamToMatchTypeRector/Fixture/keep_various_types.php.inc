@@ -2,7 +2,7 @@
 
 namespace Rector\Tests\Naming\Rector\ClassMethod\RenameParamToMatchTypeRector\Fixture;
 
-use Rector\Tests\Naming\Rector\ClassMethod\RenameParamToMatchTypeRector\Source\ContainerInterface;
+use Rector\Tests\DowngradePhp72\Rector\Class_\DowngradeParameterTypeWideningRector\Source\UniqueType;
 use Rector\Tests\Naming\Rector\ClassMethod\RenameParamToMatchTypeRector\Source\ILoader;
 use Rector\Tests\Naming\Rector\ClassMethod\RenameParamToMatchTypeRector\Source\SingleSomeClass;
 use SplFileInfo;
@@ -25,12 +25,12 @@ class KeepVariousTypes
     private $loader;
 
     /**
-     * @var ContainerInterface
+     * @var UniqueType
      */
     private static $cachedContainer;
 
     /**
-     * @var ContainerInterface
+     * @var UniqueType
      */
     private static $smartContainer;
 

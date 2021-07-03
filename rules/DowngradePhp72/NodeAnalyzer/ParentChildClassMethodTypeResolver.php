@@ -21,47 +21,50 @@ final class ParentChildClassMethodTypeResolver
     }
 
     /**
-     * @return array<class-string, Type>
-     * @param ClassReflection[] $ancestors
-     * @param ClassReflection[] $interfaces
+     * @param ClassReflection[] $ancestorClassReflections
+     * @param ClassReflection[] $interfaceClassReflections
+     *@return array<class-string, Type>
      */
     public function resolve(
         ClassReflection $classReflection,
         string $methodName,
         int $paramPosition,
-        array $ancestors,
-        array $interfaces
+        array $ancestorClassReflections,
+        array $interfaceClassReflections
     ): array {
         $parameterTypesByClassName = [];
 
         // include types of class scope in case of trait
         if ($classReflection->isTrait()) {
             $parameterTypesByInterfaceName = $this->resolveInterfaceTypeByClassName(
-                $interfaces,
+                $interfaceClassReflections,
                 $methodName,
                 $paramPosition
             );
             $parameterTypesByClassName = array_merge($parameterTypesByClassName, $parameterTypesByInterfaceName);
         }
 
-        foreach ($ancestors as $ancestor) {
-            $ancestorHasMethod = $ancestor->hasMethod($methodName);
-            if (! $ancestorHasMethod) {
+        foreach ($ancestorClassReflections as $ancestorClassReflection) {
+            if (! $ancestorClassReflection->hasMethod($methodName)) {
                 continue;
             }
 
             $parameterType = $this->nativeTypeClassTreeResolver->resolveParameterReflectionType(
-                $ancestor,
+                $ancestorClassReflection,
                 $methodName,
                 $paramPosition
             );
 
-            $parameterTypesByClassName[$ancestor->getName()] = $parameterType;
+            if (! $parameterType instanceof Type) {
+                continue;
+            }
+
+            $parameterTypesByClassName[$ancestorClassReflection->getName()] = $parameterType;
 
             // collect other children
-            if ($ancestor->isInterface() || $ancestor->isClass()) {
+            if ($ancestorClassReflection->isInterface() || $ancestorClassReflection->isClass()) {
                 $interfaceParameterTypesByClassName = $this->collectInterfaceImplenters(
-                    $ancestor,
+                    $ancestorClassReflection,
                     $methodName,
                     $paramPosition
                 );
@@ -95,6 +98,11 @@ final class ParentChildClassMethodTypeResolver
                 $methodName,
                 $position
             );
+
+            // parameter does not exist
+            if (! $parameterType instanceof Type) {
+                continue;
+            }
 
             $typesByClassName[$interface->getName()] = $parameterType;
         }
@@ -135,6 +143,10 @@ final class ParentChildClassMethodTypeResolver
                 $methodName,
                 $paramPosition
             );
+
+            if (! $parameterType instanceof Type) {
+                continue;
+            }
 
             $parameterTypesByClassName[$interfaceImplementerClassLikeName] = $parameterType;
         }

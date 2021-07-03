@@ -50,11 +50,6 @@ jobs:
                 run: composer require rector/rector-src dev-main#${{github.event.pull_request.head.sha}} --no-install
                 if: ${{ github.event_name == 'pull_request' }}
 
-            # temporary - remove after typo3-rector gets tagged
-            -
-                run: composer require ssch/typo3-rector dev-main --no-install
-                if: ${{ github.event_name == 'pull_request' }}
-
             -   run: composer install --ansi
 
             -   run: vendor/bin/phpunit

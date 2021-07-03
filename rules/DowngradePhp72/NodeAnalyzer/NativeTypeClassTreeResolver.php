@@ -26,13 +26,14 @@ final class NativeTypeClassTreeResolver
         ClassReflection $classReflection,
         string $methodName,
         int $position
-    ): Type {
+    ): ?Type {
         $nativeReflectionClass = $classReflection->getNativeReflection();
 
         $reflectionMethod = $nativeReflectionClass->getMethod($methodName);
         $parameterReflection = $reflectionMethod->getParameters()[$position] ?? null;
         if (! $parameterReflection instanceof \ReflectionParameter) {
-            return new MixedType();
+            // no parameter found - e.g. when child class has an extra parameter with default value
+            return null;
         }
 
         // "native" reflection from PHPStan removes the type, so we need to check with both reflection and php-paser
