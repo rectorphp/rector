@@ -6,8 +6,11 @@ namespace Rector\DowngradePhp80\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Attribute;
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Function_;
+use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
@@ -85,11 +88,11 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [Class_::class, ClassMethod::class, Property::class];
+        return [Class_::class, ClassMethod::class, Property::class, Interface_::class, Param::class, Function_::class];
     }
 
     /**
-     * @param Class_|ClassMethod|Property $node
+     * @param Class_|ClassMethod|Property|Interface_|Param|Function_  $node
      */
     public function refactor(Node $node): ?Node
     {
@@ -135,8 +138,9 @@ CODE_SAMPLE
         $this->attributesToAnnotations = $attributesToAnnotations;
     }
 
-    private function cleanupEmptyAttrGroups(ClassMethod | Property | Class_ $node): void
-    {
+    private function cleanupEmptyAttrGroups(
+        ClassMethod | Property | Class_ | Interface_ | Param | Function_ $node
+    ): void {
         foreach ($node->attrGroups as $key => $attrGroup) {
             if ($attrGroup->attrs !== []) {
                 continue;

@@ -23,6 +23,7 @@ use PHPStan\Reflection\ReflectionProvider;
 use Rector\Caching\Detector\ChangedFilesDetector;
 use Rector\Caching\FileSystem\DependencyResolver;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\StaticReflection\SourceLocator\ParentAttributeSourceLocator;
 use Rector\Core\StaticReflection\SourceLocator\RenamedClassesSourceLocator;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Collector\TraitNodeScopeCollector;
@@ -52,6 +53,7 @@ final class PHPStanNodeScopeResolver
         private TraitNodeScopeCollector $traitNodeScopeCollector,
         private PrivatesAccessor $privatesAccessor,
         private RenamedClassesSourceLocator $renamedClassesSourceLocator,
+        private ParentAttributeSourceLocator $parentAttributeSourceLocator
     ) {
     }
 
@@ -176,11 +178,16 @@ final class PHPStanNodeScopeResolver
         // 1. get PHPStan locator
         /** @var ClassReflector $classReflector */
         $classReflector = $this->privatesAccessor->getPrivateProperty($nodeScopeResolver, 'classReflector');
+
         /** @var SourceLocator $sourceLocator */
         $sourceLocator = $this->privatesAccessor->getPrivateProperty($classReflector, 'sourceLocator');
 
         // 2. get Rector locator
-        $aggregateSourceLocator = new AggregateSourceLocator([$sourceLocator, $this->renamedClassesSourceLocator]);
+        $aggregateSourceLocator = new AggregateSourceLocator([
+            $sourceLocator,
+            $this->renamedClassesSourceLocator,
+            $this->parentAttributeSourceLocator,
+        ]);
         $this->privatesAccessor->setPrivateProperty($classReflector, 'sourceLocator', $aggregateSourceLocator);
     }
 }

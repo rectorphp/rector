@@ -204,7 +204,7 @@ final class AstResolver
         return $this->resolveClassMethod($callerStaticType->getClassName(), $methodName);
     }
 
-    private function resolveClassFromClassReflection(ClassReflection $classReflection, string $className): ?Class_
+    public function resolveClassFromClassReflection(ClassReflection $classReflection, string $className): ?Class_
     {
         if ($classReflection->isBuiltin()) {
             return null;

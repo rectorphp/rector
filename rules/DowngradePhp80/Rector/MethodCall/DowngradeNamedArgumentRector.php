@@ -16,11 +16,12 @@ use PhpParser\Node\Name;
 use PHPStan\Reflection\FunctionReflection;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ParameterReflection;
-use PHPStan\Reflection\ParametersAcceptorSelector;
+use PHPStan\Reflection\ParametersAcceptor;
 use PHPStan\Type\Type;
 use PHPStan\Type\VerbosityLevel;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Reflection\ReflectionResolver;
+use Rector\DeadCode\Comparator\Parameter\ParameterDefaultsComparator;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -30,7 +31,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradeNamedArgumentRector extends AbstractRector
 {
     public function __construct(
-        private ReflectionResolver $reflectionResolver
+        private ReflectionResolver $reflectionResolver,
+        private ParameterDefaultsComparator $parameterDefaultsComparator
     ) {
     }
 
@@ -51,13 +53,13 @@ final class DowngradeNamedArgumentRector extends AbstractRector
                     <<<'CODE_SAMPLE'
 class SomeClass
 {
-    private function execute(?array $a = null, ?array $b = null)
+    public function run()
     {
+        $this->execute(b: 100);
     }
 
-    public function run(string $name = null, array $attributes = [])
+    private function execute($a = null, $b = null)
     {
-        $this->execute(a: [[$name ?? 0 => $attributes]]);
     }
 }
 CODE_SAMPLE
@@ -65,13 +67,13 @@ CODE_SAMPLE
                     <<<'CODE_SAMPLE'
 class SomeClass
 {
-    private function execute(?array $a = null, ?array $b = null)
+    public function run()
     {
+        $this->execute(null,  100);
     }
 
-    public function run(string $name = null, array $attributes = [])
+    private function execute($a = null, $b = null)
     {
-        $this->execute([[$name ?? 0 => $attributes]]);
     }
 }
 CODE_SAMPLE
@@ -120,37 +122,34 @@ CODE_SAMPLE
      * @param Arg[] $args
      */
     private function processRemoveNamedArgument(
-        MethodReflection | FunctionReflection $reflection,
+        MethodReflection | FunctionReflection $functionLikeReflection,
         MethodCall | StaticCall | New_ $node,
         array $args
-    ): MethodCall | StaticCall | New_ {
-        /** @var Arg[] $newArgs */
+    ): MethodCall | StaticCall | New_ | null {
         $newArgs = [];
-        $keyParam = 0;
 
-        $parametersAcceptor = ParametersAcceptorSelector::selectSingle($reflection->getVariants());
-        $parameterReflections = $parametersAcceptor->getParameters();
+        $parametersAcceptor = $functionLikeReflection->getVariants()[0] ?? null;
+        if (! $parametersAcceptor instanceof ParametersAcceptor) {
+            return null;
+        }
 
-        foreach ($parameterReflections as $keyParam => $parameterReflection) {
-            $paramName = $parameterReflection->getName();
-
+        foreach ($parametersAcceptor->getParameters() as $paramPosition => $parameterReflection) {
             foreach ($args as $arg) {
-                /** @var string|null $argName */
-                $argName = $this->getName($arg);
-
-                if ($paramName === $argName) {
-                    $newArgs[$keyParam] = new Arg(
-                        $arg->value,
-                        $arg->byRef,
-                        $arg->unpack,
-                        $arg->getAttributes(),
-                        null
-                    );
+                if ($this->shouldSkipParam($arg, $parameterReflection)) {
+                    continue;
                 }
+
+                $newArgs[$paramPosition] = new Arg(
+                    $arg->value,
+                    $arg->byRef,
+                    $arg->unpack,
+                    $arg->getAttributes(),
+                    null
+                );
             }
         }
 
-        $this->replacePreviousArgs($node, $parameterReflections, $keyParam, $newArgs);
+        $this->replacePreviousArgs($node, $parametersAcceptor->getParameters(), $newArgs);
         return $node;
     }
 
@@ -161,11 +160,16 @@ CODE_SAMPLE
     private function replacePreviousArgs(
         MethodCall | StaticCall | New_ $node,
         array $parameterReflections,
-        int $keyParam,
         array $newArgs
     ): void {
-        for ($i = $keyParam - 1; $i >= 0; --$i) {
-            $parameterReflection = $parameterReflections[$i];
+        $parameterPosition = count($newArgs);
+
+        for ($i = $parameterPosition - 1; $i >= 0; --$i) {
+            $parameterReflection = $parameterReflections[$i] ?? null;
+            if (! $parameterReflection instanceof ParameterReflection) {
+                continue;
+            }
+
             if ($parameterReflection->getDefaultValue() === null) {
                 continue;
             }
@@ -193,10 +197,6 @@ CODE_SAMPLE
      */
     private function shouldSkip(array $args): bool
     {
-        if ($args === []) {
-            return true;
-        }
-
         foreach ($args as $arg) {
             if ($arg->name instanceof Identifier) {
                 return false;
@@ -213,5 +213,29 @@ CODE_SAMPLE
         }
 
         return new ConstFetch(new Name($type->describe(VerbosityLevel::value())));
+    }
+
+    private function areArgValueAndParameterDefaultValueEqual(ParameterReflection $parameterReflection, Arg $arg): bool
+    {
+        // arg value vs parameter default value
+        if ($parameterReflection->getDefaultValue() === null) {
+            return false;
+        }
+
+        $parameterDefaultValue = $this->parameterDefaultsComparator->resolveParameterReflectionDefaultValue(
+            $parameterReflection
+        );
+
+        // default value is set already, let's skip it
+        return $this->valueResolver->isValue($arg->value, $parameterDefaultValue);
+    }
+
+    private function shouldSkipParam(Arg $arg, ParameterReflection $parameterReflection): bool
+    {
+        if (! $this->isName($arg, $parameterReflection->getName())) {
+            return true;
+        }
+
+        return $this->areArgValueAndParameterDefaultValueEqual($parameterReflection, $arg);
     }
 }

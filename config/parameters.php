@@ -22,7 +22,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters->set(Option::IMPORT_DOC_BLOCKS, true);
 
     $parameters->set(Option::PHP_VERSION_FEATURES, null);
-    $parameters->set(Option::NESTED_CHAIN_METHOD_CALL_LIMIT, 30);
+    $parameters->set(Option::NESTED_CHAIN_METHOD_CALL_LIMIT, 60);
     $parameters->set(Option::SKIP, []);
 
     $parameters->set(Option::PHPSTAN_FOR_RECTOR_PATH, null);
