@@ -98,4 +98,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     ]);
 
     $parameters->set(Option::LINE_ENDING, "\n");
+    $parameters->set(Option::PARALLEL, true);
 };
