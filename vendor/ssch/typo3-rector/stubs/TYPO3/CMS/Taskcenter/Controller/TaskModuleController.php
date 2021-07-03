@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210702\TYPO3\CMS\Taskcenter\Controller;
+namespace RectorPrefix20210703\TYPO3\CMS\Taskcenter\Controller;
 
 if (\class_exists('TYPO3\\CMS\\Taskcenter\\Controller\\TaskModuleController')) {
     return;

@@ -1,5 +1,5 @@
 <div class="exception-summary <?php 
-namespace RectorPrefix20210702;
+namespace RectorPrefix20210703;
 
 echo !$exceptionMessage ? 'exception-without-message' : '';
 ?>">

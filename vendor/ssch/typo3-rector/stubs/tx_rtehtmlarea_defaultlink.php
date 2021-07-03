@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210702;
+namespace RectorPrefix20210703;
 
 if (\class_exists('tx_rtehtmlarea_defaultlink')) {
     return;

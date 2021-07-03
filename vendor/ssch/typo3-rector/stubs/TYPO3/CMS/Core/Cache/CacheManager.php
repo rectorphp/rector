@@ -1,8 +1,8 @@
 <?php
 
-namespace RectorPrefix20210702\TYPO3\CMS\Core\Cache;
+namespace RectorPrefix20210703\TYPO3\CMS\Core\Cache;
 
-use RectorPrefix20210702\TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
+use RectorPrefix20210703\TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 if (\class_exists('TYPO3\\CMS\\Core\\Cache\\CacheManager')) {
     return;
 }
@@ -15,7 +15,7 @@ class CacheManager
     public function getCache($identifier)
     {
         $identifier = (string) $identifier;
-        return new \RectorPrefix20210702\TYPO3\CMS\Core\Cache\Anonymous__80f9d48e45a850436cae4f188819f43c__0();
+        return new \RectorPrefix20210703\TYPO3\CMS\Core\Cache\Anonymous__80f9d48e45a850436cae4f188819f43c__0();
     }
     /**
      * @return void
@@ -24,7 +24,7 @@ class CacheManager
     {
     }
 }
-class Anonymous__80f9d48e45a850436cae4f188819f43c__0 implements \RectorPrefix20210702\TYPO3\CMS\Core\Cache\Frontend\FrontendInterface
+class Anonymous__80f9d48e45a850436cae4f188819f43c__0 implements \RectorPrefix20210703\TYPO3\CMS\Core\Cache\Frontend\FrontendInterface
 {
     public function set($entryIdentifier, $data, array $tags = [], $lifetime = null) : void
     {

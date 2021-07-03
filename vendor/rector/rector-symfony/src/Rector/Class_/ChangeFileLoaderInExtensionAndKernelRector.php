@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Symfony\Rector\Class_;
 
-use RectorPrefix20210702\Nette\Utils\Strings;
+use RectorPrefix20210703\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
@@ -15,9 +15,9 @@ use PHPStan\Type\ObjectType;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Symfony\Exception\InvalidConfigurationException;
-use RectorPrefix20210702\Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
-use RectorPrefix20210702\Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
-use RectorPrefix20210702\Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
+use RectorPrefix20210703\Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
+use RectorPrefix20210703\Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
+use RectorPrefix20210703\Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -161,7 +161,7 @@ CODE_SAMPLE
             if (!$node instanceof \PhpParser\Node\Scalar\String_) {
                 return null;
             }
-            $node->value = \RectorPrefix20210702\Nette\Utils\Strings::replace($node->value, '#\\.' . $from . '$#', '.' . $to);
+            $node->value = \RectorPrefix20210703\Nette\Utils\Strings::replace($node->value, '#\\.' . $from . '$#', '.' . $to);
             return $node;
         });
     }

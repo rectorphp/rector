@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210702\TYPO3\CMS\Sv\Report;
+namespace RectorPrefix20210703\TYPO3\CMS\Sv\Report;
 
 if (\class_exists('TYPO3\\CMS\\Sv\\Report\\ServicesListReport')) {
     return;
