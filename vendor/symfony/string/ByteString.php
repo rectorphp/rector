@@ -345,17 +345,11 @@ class ByteString extends \RectorPrefix20210703\Symfony\Component\String\Abstract
         $str->string = $allWords ? \ucwords($str->string) : \ucfirst($str->string);
         return $str;
     }
-    /**
-     * @param string|null $fromEncoding
-     */
-    public function toUnicodeString($fromEncoding = null) : \RectorPrefix20210703\Symfony\Component\String\UnicodeString
+    public function toUnicodeString(string $fromEncoding = null) : \RectorPrefix20210703\Symfony\Component\String\UnicodeString
     {
         return new \RectorPrefix20210703\Symfony\Component\String\UnicodeString($this->toCodePointString($fromEncoding)->string);
     }
-    /**
-     * @param string|null $fromEncoding
-     */
-    public function toCodePointString($fromEncoding = null) : \RectorPrefix20210703\Symfony\Component\String\CodePointString
+    public function toCodePointString(string $fromEncoding = null) : \RectorPrefix20210703\Symfony\Component\String\CodePointString
     {
         $u = new \RectorPrefix20210703\Symfony\Component\String\CodePointString();
         if (\in_array($fromEncoding, [null, 'utf8', 'utf-8', 'UTF8', 'UTF-8'], \true) && \preg_match('//u', $this->string)) {

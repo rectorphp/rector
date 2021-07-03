@@ -45,7 +45,7 @@ interface ContainerInterface extends \RectorPrefix20210703\Psr\Container\Contain
      *
      * @see Reference
      */
-    public function get($id, $invalidBehavior = self::EXCEPTION_ON_INVALID_REFERENCE);
+    public function get($id, int $invalidBehavior = self::EXCEPTION_ON_INVALID_REFERENCE);
     /**
      * Returns true if the given service is defined.
      *

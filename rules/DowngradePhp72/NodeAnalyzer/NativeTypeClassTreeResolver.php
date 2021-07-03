@@ -27,13 +27,14 @@ final class NativeTypeClassTreeResolver
         $this->staticTypeMapper = $staticTypeMapper;
         $this->privatesAccessor = $privatesAccessor;
     }
-    public function resolveParameterReflectionType(\PHPStan\Reflection\ClassReflection $classReflection, string $methodName, int $position) : \PHPStan\Type\Type
+    public function resolveParameterReflectionType(\PHPStan\Reflection\ClassReflection $classReflection, string $methodName, int $position) : ?\PHPStan\Type\Type
     {
         $nativeReflectionClass = $classReflection->getNativeReflection();
         $reflectionMethod = $nativeReflectionClass->getMethod($methodName);
         $parameterReflection = $reflectionMethod->getParameters()[$position] ?? null;
         if (!$parameterReflection instanceof \ReflectionParameter) {
-            return new \PHPStan\Type\MixedType();
+            // no parameter found - e.g. when child class has an extra parameter with default value
+            return null;
         }
         // "native" reflection from PHPStan removes the type, so we need to check with both reflection and php-paser
         $nativeType = $this->resolveNativeType($parameterReflection);

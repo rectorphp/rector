@@ -467,9 +467,8 @@ class CliDumper extends \RectorPrefix20210703\Symfony\Component\VarDumper\Dumper
     }
     /**
      * {@inheritdoc}
-     * @param bool $endOfValue
      */
-    protected function dumpLine(int $depth, $endOfValue = \false)
+    protected function dumpLine(int $depth, bool $endOfValue = \false)
     {
         if ($this->colors) {
             $this->line = \sprintf("\33[%sm%s\33[m", $this->styles['default'], $this->line);

@@ -34,28 +34,30 @@ final class ParentChildClassMethodTypeResolver
         $this->nodeNameResolver = $nodeNameResolver;
     }
     /**
-     * @return array<class-string, Type>
-     * @param ClassReflection[] $ancestors
-     * @param ClassReflection[] $interfaces
+     * @param ClassReflection[] $ancestorClassReflections
+     * @param ClassReflection[] $interfaceClassReflections
+     *@return array<class-string, Type>
      */
-    public function resolve(\PHPStan\Reflection\ClassReflection $classReflection, string $methodName, int $paramPosition, array $ancestors, array $interfaces) : array
+    public function resolve(\PHPStan\Reflection\ClassReflection $classReflection, string $methodName, int $paramPosition, array $ancestorClassReflections, array $interfaceClassReflections) : array
     {
         $parameterTypesByClassName = [];
         // include types of class scope in case of trait
         if ($classReflection->isTrait()) {
-            $parameterTypesByInterfaceName = $this->resolveInterfaceTypeByClassName($interfaces, $methodName, $paramPosition);
+            $parameterTypesByInterfaceName = $this->resolveInterfaceTypeByClassName($interfaceClassReflections, $methodName, $paramPosition);
             $parameterTypesByClassName = \array_merge($parameterTypesByClassName, $parameterTypesByInterfaceName);
         }
-        foreach ($ancestors as $ancestor) {
-            $ancestorHasMethod = $ancestor->hasMethod($methodName);
-            if (!$ancestorHasMethod) {
+        foreach ($ancestorClassReflections as $ancestorClassReflection) {
+            if (!$ancestorClassReflection->hasMethod($methodName)) {
                 continue;
             }
-            $parameterType = $this->nativeTypeClassTreeResolver->resolveParameterReflectionType($ancestor, $methodName, $paramPosition);
-            $parameterTypesByClassName[$ancestor->getName()] = $parameterType;
+            $parameterType = $this->nativeTypeClassTreeResolver->resolveParameterReflectionType($ancestorClassReflection, $methodName, $paramPosition);
+            if (!$parameterType instanceof \PHPStan\Type\Type) {
+                continue;
+            }
+            $parameterTypesByClassName[$ancestorClassReflection->getName()] = $parameterType;
             // collect other children
-            if ($ancestor->isInterface() || $ancestor->isClass()) {
-                $interfaceParameterTypesByClassName = $this->collectInterfaceImplenters($ancestor, $methodName, $paramPosition);
+            if ($ancestorClassReflection->isInterface() || $ancestorClassReflection->isClass()) {
+                $interfaceParameterTypesByClassName = $this->collectInterfaceImplenters($ancestorClassReflection, $methodName, $paramPosition);
                 $parameterTypesByClassName = \array_merge($parameterTypesByClassName, $interfaceParameterTypesByClassName);
             }
         }
@@ -74,6 +76,10 @@ final class ParentChildClassMethodTypeResolver
                 continue;
             }
             $parameterType = $this->nativeTypeClassTreeResolver->resolveParameterReflectionType($interface, $methodName, $position);
+            // parameter does not exist
+            if (!$parameterType instanceof \PHPStan\Type\Type) {
+                continue;
+            }
             $typesByClassName[$interface->getName()] = $parameterType;
         }
         return $typesByClassName;
@@ -96,6 +102,9 @@ final class ParentChildClassMethodTypeResolver
             }
             $interfaceImplementerClassReflection = $this->reflectionProvider->getClass($interfaceImplementerClassLikeName);
             $parameterType = $this->nativeTypeClassTreeResolver->resolveParameterReflectionType($interfaceImplementerClassReflection, $methodName, $paramPosition);
+            if (!$parameterType instanceof \PHPStan\Type\Type) {
+                continue;
+            }
             $parameterTypesByClassName[$interfaceImplementerClassLikeName] = $parameterType;
         }
         return $parameterTypesByClassName;

@@ -157,10 +157,7 @@ abstract class AbstractUnicodeString extends \RectorPrefix20210703\Symfony\Compo
         }
         return $codePoints;
     }
-    /**
-     * @param bool $compat
-     */
-    public function folded($compat = \true)
+    public function folded(bool $compat = \true)
     {
         $str = clone $this;
         if (!$compat || \PHP_VERSION_ID < 70300 || !\defined('Normalizer::NFKC_CF')) {
