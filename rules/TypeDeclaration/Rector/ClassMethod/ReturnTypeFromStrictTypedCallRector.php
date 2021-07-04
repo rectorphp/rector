@@ -24,6 +24,7 @@ use PHPStan\Type\UnionType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
 use Rector\TypeDeclaration\NodeAnalyzer\TypeNodeUnwrapper;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -187,7 +188,7 @@ CODE_SAMPLE
             return null;
         }
 
-        return $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($returnType);
+        return $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($returnType, TypeKind::RETURN());
     }
 
     private function refactorSingleReturnType(

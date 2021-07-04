@@ -123,17 +123,14 @@ CODE_SAMPLE
             if (count($types) === 2 && $types[0] instanceof TemplateType) {
                 $node->type = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode(
                     $types[0]->getBound(),
-                    TypeKind::KIND_PROPERTY
+                    TypeKind::PROPERTY()
                 );
 
                 return $node;
             }
         }
 
-        $propertyTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode(
-            $varType,
-            TypeKind::KIND_PROPERTY
-        );
+        $propertyTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($varType, TypeKind::PROPERTY());
 
         if ($this->isNullOrNonClassLikeTypeOrMixedOrVendorLockedIn($propertyTypeNode, $node)) {
             return null;
@@ -166,11 +163,10 @@ CODE_SAMPLE
         $this->classLikeTypeOnly = $configuration[self::CLASS_LIKE_TYPE_ONLY] ?? false;
     }
 
-    /**
-     * @param Name|NullableType|PhpParserUnionType|null $node
-     */
-    private function isNullOrNonClassLikeTypeOrMixedOrVendorLockedIn(?Node $node, Property $property): bool
-    {
+    private function isNullOrNonClassLikeTypeOrMixedOrVendorLockedIn(
+        Name | NullableType | PhpParserUnionType | null $node,
+        Property $property
+    ): bool {
         if (! $node instanceof Node) {
             return true;
         }

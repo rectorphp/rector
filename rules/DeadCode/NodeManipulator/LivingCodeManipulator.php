@@ -48,10 +48,9 @@ final class LivingCodeManipulator
     }
 
     /**
-     * @param Node|int|string|null $expr
      * @return Expr[]|mixed[]
      */
-    public function keepLivingCodeFromExpr($expr): array
+    public function keepLivingCodeFromExpr(Node | int | string | null $expr): array
     {
         if (! $expr instanceof Expr) {
             return [];

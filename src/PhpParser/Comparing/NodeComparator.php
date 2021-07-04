@@ -21,7 +21,7 @@ final class NodeComparator
      * Removes all comments from both nodes
      * @param Node|Node[]|null $node
      */
-    public function printWithoutComments($node): string
+    public function printWithoutComments(Node | array | null $node): string
     {
         $node = $this->commentRemover->removeFromNode($node);
         $content = $this->betterStandardPrinter->print($node);
@@ -33,7 +33,7 @@ final class NodeComparator
      * @param Node|Node[]|null $firstNode
      * @param Node|Node[]|null $secondNode
      */
-    public function areNodesEqual($firstNode, $secondNode): bool
+    public function areNodesEqual(Node | array | null $firstNode, Node | array | null $secondNode): bool
     {
         return $this->printWithoutComments($firstNode) === $this->printWithoutComments($secondNode);
     }

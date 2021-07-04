@@ -31,6 +31,7 @@ use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
 use Rector\PHPStanStaticTypeMapper\TypeAnalyzer\BoolUnionTypeAnalyzer;
 use Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeAnalyzer;
 use Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeCommonTypeNarrower;
+use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
 use Rector\PHPStanStaticTypeMapper\ValueObject\UnionTypeAnalysis;
 use Symfony\Contracts\Service\Attribute\Required;
 
@@ -67,7 +68,7 @@ final class UnionTypeMapper implements TypeMapperInterface
     /**
      * @param UnionType $type
      */
-    public function mapToPHPStanPhpDocTypeNode(Type $type, ?string $kind = null): TypeNode
+    public function mapToPHPStanPhpDocTypeNode(Type $type, TypeKind $typeKind): TypeNode
     {
         $unionTypesNodes = [];
         $skipIterable = $this->shouldSkipIterable($type);
@@ -77,7 +78,7 @@ final class UnionTypeMapper implements TypeMapperInterface
                 continue;
             }
 
-            $unionTypesNodes[] = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($unionedType);
+            $unionTypesNodes[] = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($unionedType, $typeKind);
         }
 
         $unionTypesNodes = array_unique($unionTypesNodes);
@@ -87,7 +88,7 @@ final class UnionTypeMapper implements TypeMapperInterface
     /**
      * @param UnionType $type
      */
-    public function mapToPhpParserNode(Type $type, ?string $kind = null): ?Node
+    public function mapToPhpParserNode(Type $type, TypeKind $typeKind): ?Node
     {
         $arrayNode = $this->matchArrayTypes($type);
         if ($arrayNode !== null) {
@@ -111,7 +112,7 @@ final class UnionTypeMapper implements TypeMapperInterface
         $nullabledType = $this->matchTypeForNullableUnionType($type);
         if (! $nullabledType instanceof Type) {
             // use first unioned type in case of unioned object types
-            return $this->matchTypeForUnionedObjectTypes($type);
+            return $this->matchTypeForUnionedObjectTypes($type, $typeKind);
         }
 
         // void cannot be nullable
@@ -119,7 +120,7 @@ final class UnionTypeMapper implements TypeMapperInterface
             return null;
         }
 
-        $nullabledTypeNode = $this->phpStanStaticTypeMapper->mapToPhpParserNode($nullabledType);
+        $nullabledTypeNode = $this->phpStanStaticTypeMapper->mapToPhpParserNode($nullabledType, $typeKind);
         if (! $nullabledTypeNode instanceof Node) {
             return null;
         }
@@ -185,9 +186,9 @@ final class UnionTypeMapper implements TypeMapperInterface
     /**
      * @return Name|FullyQualified|PhpParserUnionType|null
      */
-    private function matchTypeForUnionedObjectTypes(UnionType $unionType): ?Node
+    private function matchTypeForUnionedObjectTypes(UnionType $unionType, TypeKind $typeKind): ?Node
     {
-        $phpParserUnionType = $this->matchPhpParserUnionType($unionType);
+        $phpParserUnionType = $this->matchPhpParserUnionType($unionType, $typeKind);
         if ($phpParserUnionType !== null) {
             if (! $this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::UNION_TYPES)) {
                 // maybe all one type?
@@ -214,7 +215,7 @@ final class UnionTypeMapper implements TypeMapperInterface
         return new FullyQualified($compatibleObjectType->getClassName());
     }
 
-    private function matchPhpParserUnionType(UnionType $unionType): ?PhpParserUnionType
+    private function matchPhpParserUnionType(UnionType $unionType, TypeKind $typeKind): ?PhpParserUnionType
     {
         if (! $this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::UNION_TYPES)) {
             return null;
@@ -229,7 +230,7 @@ final class UnionTypeMapper implements TypeMapperInterface
             }
 
             /** @var Identifier|Name|null $phpParserNode */
-            $phpParserNode = $this->phpStanStaticTypeMapper->mapToPhpParserNode($unionedType);
+            $phpParserNode = $this->phpStanStaticTypeMapper->mapToPhpParserNode($unionedType, $typeKind);
             if ($phpParserNode === null) {
                 return null;
             }

@@ -14,6 +14,7 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 
 final class PropertyTypeDecorator
@@ -44,7 +45,10 @@ final class PropertyTypeDecorator
         }
 
         if ($this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::TYPED_PROPERTIES)) {
-            $phpParserNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($propertyType);
+            $phpParserNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode(
+                $propertyType,
+                TypeKind::PROPERTY()
+            );
             if (! $phpParserNode instanceof Node) {
                 // fallback to doc type in PHP 7.4
                 $this->phpDocTypeChanger->changeVarType($phpDocInfo, $propertyType);
@@ -60,7 +64,7 @@ final class PropertyTypeDecorator
             return;
         }
 
-        $phpParserNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($propertyType);
+        $phpParserNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($propertyType, TypeKind::PROPERTY());
         if (! $phpParserNode instanceof Node) {
             return;
         }

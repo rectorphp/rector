@@ -23,6 +23,7 @@ use PHPStan\Type\UnionType;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Traversable;
 
@@ -49,7 +50,7 @@ final class ReturnTypeAlreadyAddedChecker
             return false;
         }
 
-        $returnNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($returnType);
+        $returnNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($returnType, TypeKind::RETURN());
         if ($this->nodeComparator->areNodesEqual($nodeReturnType, $returnNode)) {
             return true;
         }

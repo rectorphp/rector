@@ -10,6 +10,7 @@ use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\Type;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
+use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
 use Rector\StaticTypeMapper\ValueObject\Type\ParentStaticType;
 
 /**
@@ -28,7 +29,7 @@ final class ParentStaticTypeMapper implements TypeMapperInterface
     /**
      * @param ParentStaticType $type
      */
-    public function mapToPHPStanPhpDocTypeNode(Type $type, ?string $kind = null): TypeNode
+    public function mapToPHPStanPhpDocTypeNode(Type $type, TypeKind $typeKind): TypeNode
     {
         return new IdentifierTypeNode('parent');
     }
@@ -36,7 +37,7 @@ final class ParentStaticTypeMapper implements TypeMapperInterface
     /**
      * @param ParentStaticType $type
      */
-    public function mapToPhpParserNode(Type $type, ?string $kind = null): ?Node
+    public function mapToPhpParserNode(Type $type, TypeKind $typeKind): ?Node
     {
         return new Name('parent');
     }

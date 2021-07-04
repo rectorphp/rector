@@ -14,6 +14,7 @@ use PHPStan\Type\Type;
 use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
+use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
 
 /**
  * @see \Rector\Tests\NodeTypeResolver\StaticTypeMapper\StaticTypeMapperTest
@@ -38,7 +39,7 @@ final class StaticTypeMapper implements TypeMapperInterface
     /**
      * @param StaticType $type
      */
-    public function mapToPHPStanPhpDocTypeNode(Type $type, ?string $kind = null): TypeNode
+    public function mapToPHPStanPhpDocTypeNode(Type $type, TypeKind $typeKind): TypeNode
     {
         return new ThisTypeNode();
     }
@@ -46,7 +47,7 @@ final class StaticTypeMapper implements TypeMapperInterface
     /**
      * @param StaticType $type
      */
-    public function mapToPhpParserNode(Type $type, ?string $kind = null): ?Node
+    public function mapToPhpParserNode(Type $type, TypeKind $typeKind): ?Node
     {
         if ($type instanceof ThisType) {
             // @todo wait for PHPStan to differentiate between self/static

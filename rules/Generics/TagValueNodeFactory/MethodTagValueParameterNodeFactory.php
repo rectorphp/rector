@@ -7,6 +7,7 @@ namespace Rector\Generics\TagValueNodeFactory;
 use PHPStan\PhpDocParser\Ast\PhpDoc\MethodTagValueParameterNode;
 use PHPStan\Reflection\ParameterReflection;
 use PHPStan\Type\MixedType;
+use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 
 final class MethodTagValueParameterNodeFactory
@@ -22,7 +23,10 @@ final class MethodTagValueParameterNodeFactory
         if ($parameterType instanceof MixedType && ! $parameterType->isExplicitMixed()) {
             $parameterTypeNode = null;
         } else {
-            $parameterTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($parameterType);
+            $parameterTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode(
+                $parameterType,
+                TypeKind::PARAM()
+            );
         }
 
         return new MethodTagValueParameterNode(

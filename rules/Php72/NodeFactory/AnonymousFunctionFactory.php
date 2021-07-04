@@ -35,6 +35,7 @@ use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
@@ -59,10 +60,12 @@ final class AnonymousFunctionFactory
     /**
      * @param Param[] $params
      * @param Stmt[] $stmts
-     * @param Identifier|Name|NullableType|UnionType|null $returnTypeNode
      */
-    public function create(array $params, array $stmts, ?Node $returnTypeNode): Closure
-    {
+    public function create(
+        array $params,
+        array $stmts,
+        Identifier | Name | NullableType | UnionType | null $returnTypeNode
+    ): Closure {
         $useVariables = $this->createUseVariablesFromParams($stmts, $params);
 
         $anonymousFunctionNode = new Closure();
@@ -95,7 +98,8 @@ final class AnonymousFunctionFactory
 
         if (! $functionVariantWithPhpDoc->getReturnType() instanceof MixedType) {
             $returnType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode(
-                $functionVariantWithPhpDoc->getReturnType()
+                $functionVariantWithPhpDoc->getReturnType(),
+                TypeKind::RETURN()
             );
             $anonymousFunction->returnType = $returnType;
         }
@@ -213,8 +217,10 @@ final class AnonymousFunctionFactory
             $param = new Param(new Variable($parameterReflection->getName()));
 
             if (! $parameterReflection->getType() instanceof MixedType) {
-                $paramType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($parameterReflection->getType());
-                $param->type = $paramType;
+                $param->type = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode(
+                    $parameterReflection->getType(),
+                    TypeKind::PARAM()
+                );
             }
 
             $params[] = $param;

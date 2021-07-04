@@ -358,7 +358,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     /**
      * @param Node|Node[]|null $node
      */
-    protected function print($node): string
+    protected function print(Node | array | null $node): string
     {
         return $this->betterStandardPrinter->print($node);
     }

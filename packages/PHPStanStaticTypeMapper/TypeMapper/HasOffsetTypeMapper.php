@@ -12,6 +12,7 @@ use PHPStan\Type\Accessory\HasOffsetType;
 use PHPStan\Type\Type;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
+use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
 
 /**
  * @implements TypeMapperInterface<HasOffsetType>
@@ -29,7 +30,7 @@ final class HasOffsetTypeMapper implements TypeMapperInterface
     /**
      * @param HasOffsetType $type
      */
-    public function mapToPHPStanPhpDocTypeNode(Type $type, ?string $kind = null): TypeNode
+    public function mapToPHPStanPhpDocTypeNode(Type $type, TypeKind $typeKind): TypeNode
     {
         return new ArrayTypeNode(new IdentifierTypeNode('mixed'));
     }
@@ -37,7 +38,7 @@ final class HasOffsetTypeMapper implements TypeMapperInterface
     /**
      * @param HasOffsetType $type
      */
-    public function mapToPhpParserNode(Type $type, ?string $kind = null): ?Node
+    public function mapToPhpParserNode(Type $type, TypeKind $typeKind): ?Node
     {
         throw new ShouldNotHappenException();
     }

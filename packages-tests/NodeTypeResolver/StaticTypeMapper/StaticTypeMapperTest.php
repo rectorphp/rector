@@ -16,6 +16,7 @@ use PHPStan\Type\ClassStringType;
 use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\IterableType;
 use PHPStan\Type\MixedType;
+use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\Testing\PHPUnit\AbstractTestCase;
 
@@ -60,7 +61,10 @@ final class StaticTypeMapperTest extends AbstractTestCase
     {
         $iterableType = new IterableType(new MixedType(), new ClassStringType());
 
-        $phpStanDocTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($iterableType);
+        $phpStanDocTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode(
+            $iterableType,
+            TypeKind::ANY()
+        );
         $this->assertInstanceOf(ArrayTypeNode::class, $phpStanDocTypeNode);
 
         /** @var ArrayTypeNode $phpStanDocTypeNode */
@@ -71,7 +75,10 @@ final class StaticTypeMapperTest extends AbstractTestCase
     {
         $mixedType = new MixedType();
 
-        $phpStanDocTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($mixedType);
+        $phpStanDocTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode(
+            $mixedType,
+            TypeKind::ANY()
+        );
         $this->assertInstanceOf(IdentifierTypeNode::class, $phpStanDocTypeNode);
     }
 

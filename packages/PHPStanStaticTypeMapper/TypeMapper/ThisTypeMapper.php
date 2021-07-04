@@ -11,6 +11,7 @@ use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
+use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
 
 /**
  * @implements TypeMapperInterface<ThisType>
@@ -28,7 +29,7 @@ final class ThisTypeMapper implements TypeMapperInterface
     /**
      * @param ThisType $type
      */
-    public function mapToPHPStanPhpDocTypeNode(Type $type, ?string $kind = null): TypeNode
+    public function mapToPHPStanPhpDocTypeNode(Type $type, TypeKind $typeKind): TypeNode
     {
         return new ThisTypeNode();
     }
@@ -36,7 +37,7 @@ final class ThisTypeMapper implements TypeMapperInterface
     /**
      * @param ThisType $type
      */
-    public function mapToPhpParserNode(Type $type, ?string $kind = null): ?Node
+    public function mapToPhpParserNode(Type $type, TypeKind $typeKind): ?Node
     {
         return new Name('self');
     }

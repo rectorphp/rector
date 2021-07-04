@@ -12,6 +12,7 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StaticType;
 use PHPStan\Type\Type;
+use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\StaticTypeMapper\ValueObject\Type\SelfObjectType;
 
@@ -25,7 +26,7 @@ final class ChildTypeResolver
     /**
      * @return Name|NullableType|UnionType|null
      */
-    public function resolveChildTypeNode(Type $type): ?Node
+    public function resolveChildTypeNode(Type $type, TypeKind $typeKind): ?Node
     {
         if ($type instanceof MixedType) {
             return null;
@@ -35,6 +36,6 @@ final class ChildTypeResolver
             $type = new ObjectType($type->getClassName());
         }
 
-        return $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type);
+        return $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type, $typeKind);
     }
 }

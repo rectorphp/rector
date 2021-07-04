@@ -21,6 +21,7 @@ use Rector\Core\NodeManipulator\ClassInsertManipulator;
 use Rector\PhpSpecToPHPUnit\LetManipulator;
 use Rector\PhpSpecToPHPUnit\Naming\PhpSpecRenaming;
 use Rector\PhpSpecToPHPUnit\Rector\AbstractPhpSpecToPHPUnitRector;
+use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
 use Rector\PHPUnit\NodeFactory\SetUpClassMethodFactory;
 
 /**
@@ -84,13 +85,15 @@ final class PhpSpecClassToPHPUnitClassRector extends AbstractPhpSpecToPHPUnitRec
     {
         $propertyFetch = new PropertyFetch(new Variable('this'), $propertyName);
 
-        $testedObjectType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($testedObjectType);
+        $testedObjectType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode(
+            $testedObjectType,
+            TypeKind::RETURN()
+        );
         if (! $testedObjectType instanceof Name) {
             throw new ShouldNotHappenException();
         }
 
         $new = new New_($testedObjectType);
-
         $assign = new Assign($propertyFetch, $new);
 
         return $this->setUpClassMethodFactory->createSetUpMethod([$assign]);

@@ -10,6 +10,7 @@ use PHPStan\Type\CallableType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
+use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\VendorLocker\NodeVendorLocker\ClassMethodParamVendorLockResolver;
 
@@ -33,7 +34,10 @@ final class ClassMethodParamTypeCompleter
                 continue;
             }
 
-            $phpParserTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($argumentStaticType);
+            $phpParserTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode(
+                $argumentStaticType,
+                TypeKind::PARAM()
+            );
             if (! $phpParserTypeNode instanceof Node) {
                 continue;
             }

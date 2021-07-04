@@ -19,6 +19,7 @@ use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DeadCode\PhpDoc\TagRemover\ReturnTagRemover;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
 use Symplify\PackageBuilder\Reflection\PrivatesCaller;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -110,7 +111,10 @@ CODE_SAMPLE
         // The return type name could either be a classname, without the leading "\",
         // or one among the reserved identifiers ("static", "self", "iterable", etc)
         // To find out which is the case, check if this name exists as a class
-        $parentReturnTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($parentReturnType);
+        $parentReturnTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode(
+            $parentReturnType,
+            TypeKind::RETURN()
+        );
         if (! $parentReturnTypeNode instanceof Node) {
             return null;
         }

@@ -44,7 +44,10 @@ final class PhpDocTypeChanger
         }
 
         // override existing type
-        $newPHPStanPhpDocType = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($newType);
+        $newPHPStanPhpDocType = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode(
+            $newType,
+            TypeKind::PROPERTY()
+        );
 
         $currentVarTagValueNode = $phpDocInfo->getVarTagValueNode();
         if ($currentVarTagValueNode !== null) {
@@ -72,7 +75,7 @@ final class PhpDocTypeChanger
         // override existing type
         $newPHPStanPhpDocType = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode(
             $newType,
-            TypeKind::KIND_RETURN
+            TypeKind::RETURN()
         );
         $currentReturnTagValueNode = $phpDocInfo->getReturnTagValue();
 
@@ -93,7 +96,7 @@ final class PhpDocTypeChanger
             return;
         }
 
-        $phpDocType = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($newType);
+        $phpDocType = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($newType, TypeKind::PARAM());
         $paramTagValueNode = $phpDocInfo->getParamTagValueByName($paramName);
 
         // override existing type

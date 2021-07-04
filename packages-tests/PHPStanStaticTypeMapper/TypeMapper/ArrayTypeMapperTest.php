@@ -11,6 +11,7 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\UnionType;
 use Rector\PHPStanStaticTypeMapper\TypeMapper\ArrayTypeMapper;
+use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
 use Rector\Testing\PHPUnit\AbstractTestCase;
 
 final class ArrayTypeMapperTest extends AbstractTestCase
@@ -30,7 +31,7 @@ final class ArrayTypeMapperTest extends AbstractTestCase
      */
     public function testWithoutKeys(ArrayType $arrayType, string $expectedResult): void
     {
-        $actualTypeNode = $this->arrayTypeMapper->mapToPHPStanPhpDocTypeNode($arrayType);
+        $actualTypeNode = $this->arrayTypeMapper->mapToPHPStanPhpDocTypeNode($arrayType, TypeKind::ANY());
         $this->assertSame($expectedResult, (string) $actualTypeNode);
     }
 
@@ -39,7 +40,7 @@ final class ArrayTypeMapperTest extends AbstractTestCase
      */
     public function testWithKeys(ArrayType $arrayType, string $expectedResult): void
     {
-        $actualTypeNode = $this->arrayTypeMapper->mapToPHPStanPhpDocTypeNode($arrayType);
+        $actualTypeNode = $this->arrayTypeMapper->mapToPHPStanPhpDocTypeNode($arrayType, TypeKind::ANY());
         $this->assertSame($expectedResult, (string) $actualTypeNode);
     }
 

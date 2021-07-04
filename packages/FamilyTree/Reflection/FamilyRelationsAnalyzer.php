@@ -64,14 +64,11 @@ final class FamilyRelationsAnalyzer
         return $childrenClassReflections;
     }
 
-    /**
-     * @param Name|NullableType|PhpParserUnionType|null $propertyTypeNode
-     */
     public function getPossibleUnionPropertyType(
         Property $property,
         Type $varType,
         ?Scope $scope,
-        ?Node $propertyTypeNode
+        Name | NullableType | PhpParserUnionType | null $propertyTypeNode
     ): PropertyType {
         if ($varType instanceof UnionType) {
             return new PropertyType($varType, $propertyTypeNode);
@@ -114,7 +111,7 @@ final class FamilyRelationsAnalyzer
             $varType = new UnionType([$varType, new NullType()]);
             $propertyTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode(
                 $varType,
-                TypeKind::KIND_PROPERTY
+                TypeKind::PROPERTY()
             );
 
             return new PropertyType($varType, $propertyTypeNode);

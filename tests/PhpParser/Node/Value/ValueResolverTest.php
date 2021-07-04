@@ -24,10 +24,9 @@ final class ValueResolverTest extends AbstractTestCase
     }
 
     /**
-     * @param mixed $expectedValue
      * @dataProvider dataProvider
      */
-    public function test(Expr $expr, $expectedValue): void
+    public function test(Expr $expr, string | bool | int | float | null $expectedValue): void
     {
         $resolvedValue = $this->valueResolver->getValue($expr);
         $this->assertSame($expectedValue, $resolvedValue);

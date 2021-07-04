@@ -24,6 +24,7 @@ use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Naming\Naming\PropertyNaming;
 use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Symplify\Astral\ValueObject\NodeBuilder\ClassBuilder;
 use Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
@@ -94,7 +95,7 @@ final class UniqueObjectFactoryFactory
         $propertyName = $this->propertyNaming->fqnToVariableName($objectType);
         $paramBuilder = new ParamBuilder($propertyName);
 
-        $typeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($objectType);
+        $typeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($objectType, TypeKind::PARAM());
         if ($typeNode !== null) {
             $paramBuilder->setType($typeNode);
         }
