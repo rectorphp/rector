@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Php72\NodeFactory;
 
-use RectorPrefix20210703\Nette\Utils\Strings;
+use RectorPrefix20210704\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
@@ -34,8 +34,9 @@ use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
 use Rector\StaticTypeMapper\StaticTypeMapper;
-use RectorPrefix20210703\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
+use RectorPrefix20210704\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 final class AnonymousFunctionFactory
 {
     /**
@@ -67,7 +68,7 @@ final class AnonymousFunctionFactory
      * @var \PhpParser\Parser
      */
     private $parser;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \RectorPrefix20210703\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \PhpParser\Parser $parser)
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \RectorPrefix20210704\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \PhpParser\Parser $parser)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->betterNodeFinder = $betterNodeFinder;
@@ -79,9 +80,9 @@ final class AnonymousFunctionFactory
     /**
      * @param Param[] $params
      * @param Stmt[] $stmts
-     * @param Identifier|Name|NullableType|UnionType|null $returnTypeNode
+     * @param \PhpParser\Node\Identifier|\PhpParser\Node\Name|\PhpParser\Node\NullableType|\PhpParser\Node\UnionType|null $returnTypeNode
      */
-    public function create(array $params, array $stmts, ?\PhpParser\Node $returnTypeNode) : \PhpParser\Node\Expr\Closure
+    public function create(array $params, array $stmts, $returnTypeNode) : \PhpParser\Node\Expr\Closure
     {
         $useVariables = $this->createUseVariablesFromParams($stmts, $params);
         $anonymousFunctionNode = new \PhpParser\Node\Expr\Closure();
@@ -105,7 +106,7 @@ final class AnonymousFunctionFactory
         $innerMethodCall = new \PhpParser\Node\Expr\MethodCall($expr, $phpMethodReflection->getName());
         $innerMethodCall->args = $this->nodeFactory->createArgsFromParams($newParams);
         if (!$functionVariantWithPhpDoc->getReturnType() instanceof \PHPStan\Type\MixedType) {
-            $returnType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($functionVariantWithPhpDoc->getReturnType());
+            $returnType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($functionVariantWithPhpDoc->getReturnType(), \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind::RETURN());
             $anonymousFunction->returnType = $returnType;
         }
         // does method return something?
@@ -137,7 +138,7 @@ final class AnonymousFunctionFactory
             if (!$node instanceof \PhpParser\Node\Scalar\String_) {
                 return $node;
             }
-            $match = \RectorPrefix20210703\Nette\Utils\Strings::match($node->value, self::DIM_FETCH_REGEX);
+            $match = \RectorPrefix20210704\Nette\Utils\Strings::match($node->value, self::DIM_FETCH_REGEX);
             if (!$match) {
                 return $node;
             }
@@ -196,8 +197,7 @@ final class AnonymousFunctionFactory
         foreach ($parameterReflections as $parameterReflection) {
             $param = new \PhpParser\Node\Param(new \PhpParser\Node\Expr\Variable($parameterReflection->getName()));
             if (!$parameterReflection->getType() instanceof \PHPStan\Type\MixedType) {
-                $paramType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($parameterReflection->getType());
-                $param->type = $paramType;
+                $param->type = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($parameterReflection->getType(), \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind::PARAM());
             }
             $params[] = $param;
         }

@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210703\Helmich\TypoScriptParser\Tokenizer;
+namespace RectorPrefix20210704\Helmich\TypoScriptParser\Tokenizer;
 
-class Token implements \RectorPrefix20210703\Helmich\TypoScriptParser\Tokenizer\TokenInterface
+class Token implements \RectorPrefix20210704\Helmich\TypoScriptParser\Tokenizer\TokenInterface
 {
     /** @var string */
     private $type;

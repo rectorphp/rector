@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Name;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 final class SelfContainerFactory
 {
@@ -25,7 +26,7 @@ final class SelfContainerFactory
     {
         $staticPropertyFetch = new \PhpParser\Node\Expr\StaticPropertyFetch(new \PhpParser\Node\Name('self'), 'container');
         $getMethodCall = new \PhpParser\Node\Expr\MethodCall($staticPropertyFetch, 'get');
-        $className = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($objectType);
+        $className = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($objectType, \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind::RETURN());
         if (!$className instanceof \PhpParser\Node\Name) {
             throw new \Rector\Core\Exception\ShouldNotHappenException();
         }

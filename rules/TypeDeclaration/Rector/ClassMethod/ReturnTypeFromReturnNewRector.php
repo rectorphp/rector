@@ -12,6 +12,7 @@ use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
+use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -85,7 +86,7 @@ CODE_SAMPLE
             $newTypes[] = new \PHPStan\Type\ObjectType($className);
         }
         $returnType = $this->typeFactory->createMixedPassedOrUnionType($newTypes);
-        $returnTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($returnType);
+        $returnTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($returnType, \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind::RETURN());
         $node->returnType = $returnTypeNode;
         return $node;
     }

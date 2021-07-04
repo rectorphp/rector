@@ -8,6 +8,7 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\MethodTagValueNode;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\Generic\TemplateTypeHelper;
 use PHPStan\Type\Generic\TemplateTypeMap;
+use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 final class GenericTypeSpecifier
 {
@@ -36,7 +37,7 @@ final class GenericTypeSpecifier
             }
             $returnType = $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanTypeWithTemplateTypeMap($methodTagValueNode->returnType, $node, $templateTypeMap);
             $resolvedType = \PHPStan\Type\Generic\TemplateTypeHelper::resolveTemplateTypes($returnType, $templateTypeMap);
-            $resolvedTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($resolvedType);
+            $resolvedTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($resolvedType, \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind::RETURN());
             $methodTagValueNode->returnType = $resolvedTypeNode;
         }
     }

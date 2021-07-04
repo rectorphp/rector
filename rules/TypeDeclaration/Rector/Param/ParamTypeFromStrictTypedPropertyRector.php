@@ -18,6 +18,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -127,7 +128,7 @@ CODE_SAMPLE
         if ($propertyType instanceof \PhpParser\Node\NullableType) {
             return null;
         }
-        return $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($propertyType);
+        return $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($propertyType, \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind::PROPERTY());
     }
     private function hasTypeChangedBeforeAssign(\PhpParser\Node\Expr\Assign $assign, string $paramName, \PHPStan\Type\Type $originalType) : bool
     {

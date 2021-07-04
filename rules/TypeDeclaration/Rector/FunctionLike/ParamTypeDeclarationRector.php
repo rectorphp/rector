@@ -155,7 +155,7 @@ CODE_SAMPLE
         if ($this->traitTypeAnalyzer->isTraitType($inferedType)) {
             return;
         }
-        $paramTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($inferedType, \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind::KIND_PARAM);
+        $paramTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($inferedType, \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind::PARAM());
         if (!$paramTypeNode instanceof \PhpParser\Node) {
             return;
         }

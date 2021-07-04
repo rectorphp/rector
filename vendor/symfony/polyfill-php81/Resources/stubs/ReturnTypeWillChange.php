@@ -2,16 +2,11 @@
 
 
 
-/**
- * @annotation
- */
+#[Attribute(\Attribute::TARGET_METHOD)]
 final class ReturnTypeWillChange
 {
     public function __construct()
     {
     }
 }
-/**
- * @annotation
- */
-\class_alias('RectorPrefix20210703\\ReturnTypeWillChange', 'ReturnTypeWillChange', \false);
+\class_alias('RectorPrefix20210704\\ReturnTypeWillChange', 'ReturnTypeWillChange', \false);

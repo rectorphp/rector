@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210703\Symfony\Contracts\Service\Attribute;
+namespace RectorPrefix20210704\Symfony\Contracts\Service\Attribute;
 
 /**
  * A required dependency.
@@ -17,8 +17,8 @@ namespace RectorPrefix20210703\Symfony\Contracts\Service\Attribute;
  * considered during the instantiation process of the containing class.
  *
  * @author Alexander M. Turek <me@derrabus.de>
- * @annotation
  */
+#[\Attribute(\Attribute::TARGET_METHOD | \Attribute::TARGET_PROPERTY)]
 final class Required
 {
 }

@@ -8,14 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210703\Symfony\Component\DependencyInjection\Attribute;
+namespace RectorPrefix20210704\Symfony\Component\DependencyInjection\Attribute;
 
 /**
  * An attribute to tell under which environement this class should be registered as a service.
  *
  * @author Nicolas Grekas <p@tchwork.com>
- * @annotation
  */
+#[\Attribute(\Attribute::TARGET_CLASS | \Attribute::TARGET_METHOD | \Attribute::IS_REPEATABLE)]
 class When
 {
     /**

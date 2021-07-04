@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210703;
+namespace RectorPrefix20210704;
 
 use Rector\Core\Configuration\Option;
 use Rector\Core\ValueObject\PhpVersion;
@@ -32,8 +32,8 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
         // @see https://wiki.php.net/rfc/stringable
         'Stringable',
     ]]]);
+    $services->set(\Rector\DowngradePhp80\Rector\MethodCall\DowngradeNamedArgumentRector::class);
     $services->set(\Rector\DowngradePhp80\Rector\Class_\DowngradeAttributeToAnnotationRector::class)->call('configure', [[\Rector\DowngradePhp80\Rector\Class_\DowngradeAttributeToAnnotationRector::ATTRIBUTE_TO_ANNOTATION => \Symplify\SymfonyPhpConfig\ValueObjectInliner::inline([
-        new \Rector\DowngradePhp80\ValueObject\DowngradeAttributeToAnnotation('Attribute', 'annotation'),
         // Symfony
         new \Rector\DowngradePhp80\ValueObject\DowngradeAttributeToAnnotation('Symfony\\Contracts\\Service\\Attribute\\Required', 'required'),
         // Nette
@@ -52,5 +52,4 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
     $services->set(\Rector\DowngradePhp80\Rector\ClassMethod\DowngradeTrailingCommasInParamUseRector::class);
     $services->set(\Rector\DowngradePhp80\Rector\FuncCall\DowngradeStrStartsWithRector::class);
     $services->set(\Rector\DowngradePhp80\Rector\FuncCall\DowngradeStrEndsWithRector::class);
-    $services->set(\Rector\DowngradePhp80\Rector\MethodCall\DowngradeNamedArgumentRector::class);
 };

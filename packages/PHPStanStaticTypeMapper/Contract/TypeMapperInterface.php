@@ -21,14 +21,11 @@ interface TypeMapperInterface
     public function getNodeClass() : string;
     /**
      * @param T $type
-     * @param TypeKind::*|null $kind
      */
-    public function mapToPHPStanPhpDocTypeNode(\PHPStan\Type\Type $type, ?string $kind = null) : \PHPStan\PhpDocParser\Ast\Type\TypeNode;
+    public function mapToPHPStanPhpDocTypeNode(\PHPStan\Type\Type $type, \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind $typeKind) : \PHPStan\PhpDocParser\Ast\Type\TypeNode;
     /**
      * @param T $type
-     * @param TypeKind::*|null $kind
-     *
      * @return Name|NullableType|UnionType|null
      */
-    public function mapToPhpParserNode(\PHPStan\Type\Type $type, ?string $kind = null) : ?\PhpParser\Node;
+    public function mapToPhpParserNode(\PHPStan\Type\Type $type, \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind $typeTypeKind) : ?\PhpParser\Node;
 }

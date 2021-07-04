@@ -5,8 +5,11 @@ namespace Rector\DowngradePhp80\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Attribute;
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Function_;
+use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
@@ -16,7 +19,7 @@ use Rector\DowngradePhp80\ValueObject\DowngradeAttributeToAnnotation;
 use Rector\PhpAttribute\Printer\DoctrineAnnotationFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20210703\Webmozart\Assert\Assert;
+use RectorPrefix20210704\Webmozart\Assert\Assert;
 /**
  * @changelog https://php.watch/articles/php-attributes#syntax
  *
@@ -73,10 +76,10 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Class_::class, \PhpParser\Node\Stmt\ClassMethod::class, \PhpParser\Node\Stmt\Property::class];
+        return [\PhpParser\Node\Stmt\Class_::class, \PhpParser\Node\Stmt\ClassMethod::class, \PhpParser\Node\Stmt\Property::class, \PhpParser\Node\Stmt\Interface_::class, \PhpParser\Node\Param::class, \PhpParser\Node\Stmt\Function_::class];
     }
     /**
-     * @param Class_|ClassMethod|Property $node
+     * @param Class_|ClassMethod|Property|Interface_|Param|Function_  $node
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
@@ -106,11 +109,11 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $attributesToAnnotations = $configuration[self::ATTRIBUTE_TO_ANNOTATION] ?? [];
-        \RectorPrefix20210703\Webmozart\Assert\Assert::allIsInstanceOf($attributesToAnnotations, \Rector\DowngradePhp80\ValueObject\DowngradeAttributeToAnnotation::class);
+        \RectorPrefix20210704\Webmozart\Assert\Assert::allIsInstanceOf($attributesToAnnotations, \Rector\DowngradePhp80\ValueObject\DowngradeAttributeToAnnotation::class);
         $this->attributesToAnnotations = $attributesToAnnotations;
     }
     /**
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\Class_ $node
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Interface_|\PhpParser\Node\Param|\PhpParser\Node\Stmt\Function_ $node
      */
     private function cleanupEmptyAttrGroups($node) : void
     {

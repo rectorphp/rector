@@ -17,6 +17,7 @@ use PHPStan\Type\Generic\TemplateTypeMap;
 use PHPStan\Type\Type;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Generics\ValueObject\ChildParentClassReflections;
+use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 final class MethodTagValueNodeFactory
 {
@@ -86,7 +87,7 @@ final class MethodTagValueNodeFactory
         $typeName = $identifierTypeNode->name;
         $genericType = $templateTypeMap->getType($typeName);
         if ($genericType instanceof \PHPStan\Type\Type) {
-            return $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($genericType);
+            return $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($genericType, \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind::RETURN());
         }
         return $fallbackTypeNode;
     }

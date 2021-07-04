@@ -5,7 +5,9 @@ namespace Rector\Defluent\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Defluent\Matcher\AssignAndRootExprAndNodesToAddMatcher;
@@ -14,7 +16,7 @@ use Rector\Defluent\ValueObject\AssignAndRootExprAndNodesToAdd;
 use Rector\Defluent\ValueObject\FluentCallsKind;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Symfony\NodeAnalyzer\FluentNodeRemover;
-use RectorPrefix20210703\Symplify\PackageBuilder\Php\TypeChecker;
+use RectorPrefix20210704\Symplify\PackageBuilder\Php\TypeChecker;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -41,7 +43,7 @@ final class NewFluentChainMethodCallToNonFluentRector extends \Rector\Core\Recto
      * @var \Rector\Defluent\Skipper\FluentMethodCallSkipper
      */
     private $fluentMethodCallSkipper;
-    public function __construct(\RectorPrefix20210703\Symplify\PackageBuilder\Php\TypeChecker $typeChecker, \Rector\Symfony\NodeAnalyzer\FluentNodeRemover $fluentNodeRemover, \Rector\Defluent\Matcher\AssignAndRootExprAndNodesToAddMatcher $assignAndRootExprAndNodesToAddMatcher, \Rector\Defluent\Skipper\FluentMethodCallSkipper $fluentMethodCallSkipper)
+    public function __construct(\RectorPrefix20210704\Symplify\PackageBuilder\Php\TypeChecker $typeChecker, \Rector\Symfony\NodeAnalyzer\FluentNodeRemover $fluentNodeRemover, \Rector\Defluent\Matcher\AssignAndRootExprAndNodesToAddMatcher $assignAndRootExprAndNodesToAddMatcher, \Rector\Defluent\Skipper\FluentMethodCallSkipper $fluentMethodCallSkipper)
     {
         $this->typeChecker = $typeChecker;
         $this->fluentNodeRemover = $fluentNodeRemover;
@@ -78,6 +80,14 @@ CODE_SAMPLE
         if ($this->typeChecker->isInstanceOf($parent, [\PhpParser\Node\Stmt\Return_::class, \PhpParser\Node\Arg::class])) {
             return null;
         }
+        if (!$parent instanceof \PhpParser\Node\Expr\Assign) {
+            return null;
+        }
+        $statement = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CURRENT_STATEMENT);
+        $previous = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PREVIOUS_NODE);
+        if ($this->isFoundInPrevious($statement, $previous)) {
+            return null;
+        }
         if ($this->fluentMethodCallSkipper->shouldSkipRootMethodCall($node)) {
             return null;
         }
@@ -88,5 +98,22 @@ CODE_SAMPLE
         $this->fluentNodeRemover->removeCurrentNode($node);
         $this->addNodesAfterNode($assignAndRootExprAndNodesToAdd->getNodesToAdd(), $node);
         return null;
+    }
+    private function isFoundInPrevious(\PhpParser\Node\Stmt $stmt, ?\PhpParser\Node $previous) : bool
+    {
+        if (!$previous instanceof \PhpParser\Node) {
+            return \false;
+        }
+        $isFoundInPreviousAssign = (bool) $this->betterNodeFinder->findFirstPreviousOfNode($stmt, function (\PhpParser\Node $node) use($previous) : bool {
+            if (!$node instanceof \PhpParser\Node\Expr\Assign) {
+                return \false;
+            }
+            return $this->nodeComparator->areNodesEqual($node->var, $previous);
+        });
+        if ($isFoundInPreviousAssign) {
+            return \true;
+        }
+        $previous = $previous->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PREVIOUS_NODE);
+        return $this->isFoundInPrevious($stmt, $previous);
     }
 }

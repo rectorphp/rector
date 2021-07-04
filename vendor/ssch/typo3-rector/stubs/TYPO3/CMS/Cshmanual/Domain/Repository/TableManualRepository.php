@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210703\TYPO3\CMS\Cshmanual\Domain\Repository;
+namespace RectorPrefix20210704\TYPO3\CMS\Cshmanual\Domain\Repository;
 
 if (\class_exists('TYPO3\\CMS\\Cshmanual\\Domain\\Repository\\TableManualRepository')) {
     return;

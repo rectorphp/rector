@@ -5,7 +5,7 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix20210703\Tracy;
+namespace RectorPrefix20210704\Tracy;
 
 /**
  * Logger.

@@ -10,7 +10,8 @@ use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareIntersectionTypeNode;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
-use RectorPrefix20210703\Symfony\Contracts\Service\Attribute\Required;
+use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
+use RectorPrefix20210704\Symfony\Contracts\Service\Attribute\Required;
 /**
  * @implements TypeMapperInterface<IntersectionType>
  */
@@ -37,11 +38,11 @@ final class IntersectionTypeMapper implements \Rector\PHPStanStaticTypeMapper\Co
     /**
      * @param IntersectionType $type
      */
-    public function mapToPHPStanPhpDocTypeNode(\PHPStan\Type\Type $type, ?string $kind = null) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
+    public function mapToPHPStanPhpDocTypeNode(\PHPStan\Type\Type $type, \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind $typeKind) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
     {
         $intersectionTypesNodes = [];
         foreach ($type->getTypes() as $intersectionedType) {
-            $intersectionTypesNodes[] = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($intersectionedType);
+            $intersectionTypesNodes[] = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($intersectionedType, $typeKind);
         }
         $intersectionTypesNodes = \array_unique($intersectionTypesNodes);
         return new \Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareIntersectionTypeNode($intersectionTypesNodes);
@@ -49,7 +50,7 @@ final class IntersectionTypeMapper implements \Rector\PHPStanStaticTypeMapper\Co
     /**
      * @param IntersectionType $type
      */
-    public function mapToPhpParserNode(\PHPStan\Type\Type $type, ?string $kind = null) : ?\PhpParser\Node
+    public function mapToPhpParserNode(\PHPStan\Type\Type $type, \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind $typeKind) : ?\PhpParser\Node
     {
         // intersection types in PHP are not yet supported
         return null;

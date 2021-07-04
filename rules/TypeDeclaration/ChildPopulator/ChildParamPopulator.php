@@ -12,6 +12,7 @@ use Rector\ChangesReporting\Collector\RectorChangeCollector;
 use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
 use Rector\TypeDeclaration\NodeTypeAnalyzer\ChildTypeResolver;
 use Rector\TypeDeclaration\ValueObject\NewType;
 final class ChildParamPopulator
@@ -81,7 +82,7 @@ final class ChildParamPopulator
         if ($paramNode->type !== null) {
             return;
         }
-        $resolvedChildType = $this->childTypeResolver->resolveChildTypeNode($paramType);
+        $resolvedChildType = $this->childTypeResolver->resolveChildTypeNode($paramType, \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind::PARAM());
         if ($resolvedChildType === null) {
             return;
         }

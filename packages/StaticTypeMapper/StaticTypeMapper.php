@@ -55,21 +55,16 @@ final class StaticTypeMapper
         $this->phpDocTypeMapper = $phpDocTypeMapper;
         $this->phpParserNodeMapper = $phpParserNodeMapper;
     }
-    /**
-     * @param TypeKind::*|null $kind
-     */
-    public function mapPHPStanTypeToPHPStanPhpDocTypeNode(\PHPStan\Type\Type $phpStanType, ?string $kind = null) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
+    public function mapPHPStanTypeToPHPStanPhpDocTypeNode(\PHPStan\Type\Type $phpStanType, \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind $typeKind) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
     {
-        return $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($phpStanType, $kind);
+        return $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($phpStanType, $typeKind);
     }
     /**
-     * @param TypeKind::*|null $kind
-     *
      * @return Name|NullableType|PhpParserUnionType|null
      */
-    public function mapPHPStanTypeToPhpParserNode(\PHPStan\Type\Type $phpStanType, ?string $kind = null) : ?\PhpParser\Node
+    public function mapPHPStanTypeToPhpParserNode(\PHPStan\Type\Type $phpStanType, \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind $typeKind) : ?\PhpParser\Node
     {
-        return $this->phpStanStaticTypeMapper->mapToPhpParserNode($phpStanType, $kind);
+        return $this->phpStanStaticTypeMapper->mapToPhpParserNode($phpStanType, $typeKind);
     }
     public function mapPhpParserNodePHPStanType(\PhpParser\Node $node) : \PHPStan\Type\Type
     {

@@ -15,12 +15,13 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
+use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
 use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedGenericObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\SelfObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
-use RectorPrefix20210703\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix20210704\Symfony\Contracts\Service\Attribute\Required;
 /**
  * @implements TypeMapperInterface<ObjectType>
  */
@@ -40,7 +41,7 @@ final class ObjectTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract
     /**
      * @param ObjectType $type
      */
-    public function mapToPHPStanPhpDocTypeNode(\PHPStan\Type\Type $type, ?string $kind = null) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
+    public function mapToPHPStanPhpDocTypeNode(\PHPStan\Type\Type $type, \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind $typeKind) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
     {
         if ($type instanceof \Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType) {
             return new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode($type->getClassName());
@@ -49,14 +50,14 @@ final class ObjectTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract
             return new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode($type->getClassName());
         }
         if ($type instanceof \PHPStan\Type\Generic\GenericObjectType) {
-            return $this->mapGenericObjectType($type);
+            return $this->mapGenericObjectType($type, $typeKind);
         }
         return new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode('\\' . $type->getClassName());
     }
     /**
      * @param ObjectType $type
      */
-    public function mapToPhpParserNode(\PHPStan\Type\Type $type, ?string $kind = null) : ?\PhpParser\Node
+    public function mapToPhpParserNode(\PHPStan\Type\Type $type, \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind $typeKind) : ?\PhpParser\Node
     {
         if ($type instanceof \Rector\StaticTypeMapper\ValueObject\Type\SelfObjectType) {
             return new \PhpParser\Node\Name('self');
@@ -91,7 +92,7 @@ final class ObjectTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract
     {
         $this->phpStanStaticTypeMapper = $phpStanStaticTypeMapper;
     }
-    private function mapGenericObjectType(\PHPStan\Type\Generic\GenericObjectType $genericObjectType) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
+    private function mapGenericObjectType(\PHPStan\Type\Generic\GenericObjectType $genericObjectType, \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind $typeKind) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
     {
         $name = $this->resolveGenericObjectTypeName($genericObjectType);
         $identifierTypeNode = new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode($name);
@@ -101,7 +102,7 @@ final class ObjectTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract
             if ($name === 'Iterator' && $genericType instanceof \PHPStan\Type\MixedType && $key === 0) {
                 continue;
             }
-            $typeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($genericType);
+            $typeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($genericType, $typeKind);
             $genericTypeNodes[] = $typeNode;
         }
         if ($genericTypeNodes === []) {

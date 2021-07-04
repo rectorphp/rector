@@ -15,7 +15,8 @@ use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
-use RectorPrefix20210703\Symfony\Contracts\Service\Attribute\Required;
+use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
+use RectorPrefix20210704\Symfony\Contracts\Service\Attribute\Required;
 /**
  * @implements TypeMapperInterface<ObjectWithoutClassType>
  */
@@ -43,7 +44,7 @@ final class ObjectWithoutClassTypeMapper implements \Rector\PHPStanStaticTypeMap
     /**
      * @param ObjectWithoutClassType $type
      */
-    public function mapToPHPStanPhpDocTypeNode(\PHPStan\Type\Type $type, ?string $kind = null) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
+    public function mapToPHPStanPhpDocTypeNode(\PHPStan\Type\Type $type, \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind $typeKind) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
     {
         if ($type instanceof \PHPStan\Type\Generic\TemplateObjectWithoutClassType) {
             $attributeAwareIdentifierTypeNode = new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode($type->getName());
@@ -54,11 +55,11 @@ final class ObjectWithoutClassTypeMapper implements \Rector\PHPStanStaticTypeMap
     /**
      * @param ObjectWithoutClassType $type
      */
-    public function mapToPhpParserNode(\PHPStan\Type\Type $type, ?string $kind = null) : ?\PhpParser\Node
+    public function mapToPhpParserNode(\PHPStan\Type\Type $type, \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind $typeKind) : ?\PhpParser\Node
     {
         $subtractedType = $type->getSubtractedType();
         if ($subtractedType !== null) {
-            return $this->phpStanStaticTypeMapper->mapToPhpParserNode($subtractedType);
+            return $this->phpStanStaticTypeMapper->mapToPhpParserNode($subtractedType, $typeKind);
         }
         if (!$this->phpVersionProvider->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::OBJECT_TYPE)) {
             return null;

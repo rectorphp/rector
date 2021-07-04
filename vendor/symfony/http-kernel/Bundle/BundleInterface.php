@@ -8,17 +8,17 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210703\Symfony\Component\HttpKernel\Bundle;
+namespace RectorPrefix20210704\Symfony\Component\HttpKernel\Bundle;
 
-use RectorPrefix20210703\Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use RectorPrefix20210703\Symfony\Component\DependencyInjection\ContainerBuilder;
-use RectorPrefix20210703\Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
+use RectorPrefix20210704\Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use RectorPrefix20210704\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix20210704\Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 /**
  * BundleInterface.
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-interface BundleInterface extends \RectorPrefix20210703\Symfony\Component\DependencyInjection\ContainerAwareInterface
+interface BundleInterface extends \RectorPrefix20210704\Symfony\Component\DependencyInjection\ContainerAwareInterface
 {
     /**
      * Boots the Bundle.
@@ -33,7 +33,7 @@ interface BundleInterface extends \RectorPrefix20210703\Symfony\Component\Depend
      *
      * It is only ever called once when the cache is empty.
      */
-    public function build(\RectorPrefix20210703\Symfony\Component\DependencyInjection\ContainerBuilder $container);
+    public function build(\RectorPrefix20210704\Symfony\Component\DependencyInjection\ContainerBuilder $container);
     /**
      * Returns the container extension that should be implicitly loaded.
      *

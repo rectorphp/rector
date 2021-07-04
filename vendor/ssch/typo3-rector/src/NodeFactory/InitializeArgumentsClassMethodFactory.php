@@ -38,7 +38,7 @@ use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
 use Rector\TypeDeclaration\TypeInferer\ParamTypeInferer;
-use RectorPrefix20210703\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
+use RectorPrefix20210704\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
 final class InitializeArgumentsClassMethodFactory
 {
     /**
@@ -121,7 +121,7 @@ final class InitializeArgumentsClassMethodFactory
     }
     private function createNewClassMethod() : \PhpParser\Node\Stmt\ClassMethod
     {
-        $methodBuilder = new \RectorPrefix20210703\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder(self::METHOD_NAME);
+        $methodBuilder = new \RectorPrefix20210704\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder(self::METHOD_NAME);
         $methodBuilder->makePublic();
         $methodBuilder->setReturnType('void');
         return $methodBuilder->getNode();
@@ -195,7 +195,7 @@ final class InitializeArgumentsClassMethodFactory
         if ($this->isTraitType($inferredType)) {
             return self::MIXED;
         }
-        $paramTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($inferredType, \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind::KIND_PARAM);
+        $paramTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($inferredType, \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind::PARAM());
         if ($paramTypeNode instanceof \PhpParser\Node\UnionType) {
             return self::MIXED;
         }

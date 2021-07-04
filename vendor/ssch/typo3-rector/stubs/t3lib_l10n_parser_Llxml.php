@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210703;
+namespace RectorPrefix20210704;
 
 if (\class_exists('t3lib_l10n_parser_Llxml')) {
     return;

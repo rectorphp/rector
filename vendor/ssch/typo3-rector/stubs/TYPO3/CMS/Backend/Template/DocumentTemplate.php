@@ -1,8 +1,8 @@
 <?php
 
-namespace RectorPrefix20210703\TYPO3\CMS\Backend\Template;
+namespace RectorPrefix20210704\TYPO3\CMS\Backend\Template;
 
-use RectorPrefix20210703\TYPO3\CMS\Core\Page\PageRenderer;
+use RectorPrefix20210704\TYPO3\CMS\Core\Page\PageRenderer;
 if (\class_exists('TYPO3\\CMS\\Backend\\Template\\DocumentTemplate')) {
     return;
 }
@@ -20,7 +20,7 @@ class DocumentTemplate
      */
     public function getPageRenderer()
     {
-        return new \RectorPrefix20210703\TYPO3\CMS\Core\Page\PageRenderer();
+        return new \RectorPrefix20210704\TYPO3\CMS\Core\Page\PageRenderer();
     }
     /**
      * @return void

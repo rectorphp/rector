@@ -131,6 +131,12 @@ final class ValueResolver
     {
         return $this->constFetchAnalyzer->isNull($node);
     }
+    public function isValueEqual(\PhpParser\Node\Expr $firstExpr, \PhpParser\Node\Expr $secondExpr) : bool
+    {
+        $firstValue = $this->getValue($firstExpr);
+        $secondValue = $this->getValue($secondExpr);
+        return $firstValue === $secondValue;
+    }
     /**
      * @param Expr[]|null[] $nodes
      * @param mixed[] $expectedValues

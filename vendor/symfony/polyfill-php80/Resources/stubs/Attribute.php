@@ -2,9 +2,7 @@
 
 
 
-/**
- * @annotation
- */
+#[Attribute(\Attribute::TARGET_CLASS)]
 final class Attribute
 {
     public const TARGET_CLASS = 1;
@@ -22,7 +20,4 @@ final class Attribute
         $this->flags = $flags;
     }
 }
-/**
- * @annotation
- */
-\class_alias('RectorPrefix20210703\\Attribute', 'Attribute', \false);
+\class_alias('RectorPrefix20210704\\Attribute', 'Attribute', \false);

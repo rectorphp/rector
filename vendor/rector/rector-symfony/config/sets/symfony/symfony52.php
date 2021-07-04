@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210703;
+namespace RectorPrefix20210704;
 
 use PHPStan\Type\ObjectType;
 use Rector\Php80\Rector\Class_\AnnotationToAttributeRector;

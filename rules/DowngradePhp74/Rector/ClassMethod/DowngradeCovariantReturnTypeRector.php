@@ -18,7 +18,8 @@ use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DeadCode\PhpDoc\TagRemover\ReturnTagRemover;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use RectorPrefix20210703\Symplify\PackageBuilder\Reflection\PrivatesCaller;
+use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
+use RectorPrefix20210704\Symplify\PackageBuilder\Reflection\PrivatesCaller;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -40,7 +41,7 @@ final class DowngradeCovariantReturnTypeRector extends \Rector\Core\Rector\Abstr
      * @var \Rector\DeadCode\PhpDoc\TagRemover\ReturnTagRemover
      */
     private $returnTagRemover;
-    public function __construct(\Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger, \RectorPrefix20210703\Symplify\PackageBuilder\Reflection\PrivatesCaller $privatesCaller, \Rector\DeadCode\PhpDoc\TagRemover\ReturnTagRemover $returnTagRemover)
+    public function __construct(\Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger, \RectorPrefix20210704\Symplify\PackageBuilder\Reflection\PrivatesCaller $privatesCaller, \Rector\DeadCode\PhpDoc\TagRemover\ReturnTagRemover $returnTagRemover)
     {
         $this->phpDocTypeChanger = $phpDocTypeChanger;
         $this->privatesCaller = $privatesCaller;
@@ -111,7 +112,7 @@ CODE_SAMPLE
         // The return type name could either be a classname, without the leading "\",
         // or one among the reserved identifiers ("static", "self", "iterable", etc)
         // To find out which is the case, check if this name exists as a class
-        $parentReturnTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($parentReturnType);
+        $parentReturnTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($parentReturnType, \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind::RETURN());
         if (!$parentReturnTypeNode instanceof \PhpParser\Node) {
             return null;
         }

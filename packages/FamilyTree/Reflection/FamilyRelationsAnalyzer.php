@@ -26,8 +26,8 @@ use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
 use Rector\StaticTypeMapper\StaticTypeMapper;
-use RectorPrefix20210703\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
-use RectorPrefix20210703\Symplify\SmartFileSystem\SmartFileSystem;
+use RectorPrefix20210704\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
+use RectorPrefix20210704\Symplify\SmartFileSystem\SmartFileSystem;
 final class FamilyRelationsAnalyzer
 {
     /**
@@ -58,7 +58,7 @@ final class FamilyRelationsAnalyzer
      * @var \PhpParser\Parser
      */
     private $parser;
-    public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider, \RectorPrefix20210703\Symplify\PackageBuilder\Reflection\PrivatesAccessor $privatesAccessor, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \RectorPrefix20210703\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \PhpParser\Parser $parser)
+    public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider, \RectorPrefix20210704\Symplify\PackageBuilder\Reflection\PrivatesAccessor $privatesAccessor, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \RectorPrefix20210704\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \PhpParser\Parser $parser)
     {
         $this->reflectionProvider = $reflectionProvider;
         $this->privatesAccessor = $privatesAccessor;
@@ -85,9 +85,9 @@ final class FamilyRelationsAnalyzer
         return $childrenClassReflections;
     }
     /**
-     * @param Name|NullableType|PhpParserUnionType|null $propertyTypeNode
+     * @param \PhpParser\Node\Name|\PhpParser\Node\NullableType|PhpParserUnionType|null $propertyTypeNode
      */
-    public function getPossibleUnionPropertyType(\PhpParser\Node\Stmt\Property $property, \PHPStan\Type\Type $varType, ?\PHPStan\Analyser\Scope $scope, ?\PhpParser\Node $propertyTypeNode) : \Rector\FamilyTree\ValueObject\PropertyType
+    public function getPossibleUnionPropertyType(\PhpParser\Node\Stmt\Property $property, \PHPStan\Type\Type $varType, ?\PHPStan\Analyser\Scope $scope, $propertyTypeNode) : \Rector\FamilyTree\ValueObject\PropertyType
     {
         if ($varType instanceof \PHPStan\Type\UnionType) {
             return new \Rector\FamilyTree\ValueObject\PropertyType($varType, $propertyTypeNode);
@@ -122,7 +122,7 @@ final class FamilyRelationsAnalyzer
                 continue;
             }
             $varType = new \PHPStan\Type\UnionType([$varType, new \PHPStan\Type\NullType()]);
-            $propertyTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($varType, \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind::KIND_PROPERTY);
+            $propertyTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($varType, \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind::PROPERTY());
             return new \Rector\FamilyTree\ValueObject\PropertyType($varType, $propertyTypeNode);
         }
         return new \Rector\FamilyTree\ValueObject\PropertyType($varType, $propertyTypeNode);

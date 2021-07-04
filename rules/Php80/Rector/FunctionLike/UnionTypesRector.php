@@ -21,6 +21,7 @@ use Rector\DeadCode\PhpDoc\TagRemover\ParamTagRemover;
 use Rector\DeadCode\PhpDoc\TagRemover\ReturnTagRemover;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeAnalyzer;
+use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
 use Rector\VendorLocker\NodeVendorLocker\ClassMethodParamVendorLockResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -126,7 +127,7 @@ CODE_SAMPLE
             if (!$uniqueatedParamType instanceof \PHPStan\Type\UnionType) {
                 continue;
             }
-            $phpParserUnionType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($uniqueatedParamType);
+            $phpParserUnionType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($uniqueatedParamType, \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind::PARAM());
             if (!$phpParserUnionType instanceof \PhpParser\Node\UnionType) {
                 continue;
             }
@@ -157,7 +158,7 @@ CODE_SAMPLE
         if (!$uniqueatedReturnType instanceof \PHPStan\Type\UnionType) {
             return;
         }
-        $phpParserUnionType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($uniqueatedReturnType);
+        $phpParserUnionType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($uniqueatedReturnType, \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind::RETURN());
         if (!$phpParserUnionType instanceof \PhpParser\Node\UnionType) {
             return;
         }

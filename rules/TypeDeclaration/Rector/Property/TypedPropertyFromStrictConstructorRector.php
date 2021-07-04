@@ -83,7 +83,7 @@ CODE_SAMPLE
         if ($varType instanceof \PHPStan\Type\MixedType) {
             return null;
         }
-        $propertyTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($varType, \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind::KIND_PROPERTY);
+        $propertyTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($varType, \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind::PROPERTY());
         if (!$propertyTypeNode instanceof \PhpParser\Node) {
             return null;
         }

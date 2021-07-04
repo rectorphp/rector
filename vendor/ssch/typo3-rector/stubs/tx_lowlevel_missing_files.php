@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210703;
+namespace RectorPrefix20210704;
 
 if (\class_exists('tx_lowlevel_missing_files')) {
     return;

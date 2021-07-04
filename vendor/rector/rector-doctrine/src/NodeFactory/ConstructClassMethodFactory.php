@@ -15,7 +15,8 @@ use Rector\Core\ValueObject\MethodName;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\StaticTypeMapper\StaticTypeMapper;
-use RectorPrefix20210703\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
+use RectorPrefix20210704\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
+use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
 final class ConstructClassMethodFactory
 {
     /**
@@ -50,7 +51,7 @@ final class ConstructClassMethodFactory
             $params[] = $this->createParam($publicProperty, $propertyName);
             $assigns[] = $this->createAssign($propertyName);
         }
-        $methodBuilder = new \RectorPrefix20210703\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder(\Rector\Core\ValueObject\MethodName::CONSTRUCT);
+        $methodBuilder = new \RectorPrefix20210704\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder(\Rector\Core\ValueObject\MethodName::CONSTRUCT);
         $methodBuilder->makePublic();
         $methodBuilder->addParams($params);
         $methodBuilder->addStmts($assigns);
@@ -80,7 +81,7 @@ final class ConstructClassMethodFactory
     private function createParam(\PhpParser\Node\Stmt\Property $property, string $propertyName) : \PhpParser\Node\Param
     {
         $propertyType = $this->nodeTypeResolver->resolve($property);
-        $propertyTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($propertyType);
+        $propertyTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($propertyType, \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind::PROPERTY());
         $paramVariable = new \PhpParser\Node\Expr\Variable($propertyName);
         $param = new \PhpParser\Node\Param($paramVariable);
         $param->type = $propertyTypeNode;

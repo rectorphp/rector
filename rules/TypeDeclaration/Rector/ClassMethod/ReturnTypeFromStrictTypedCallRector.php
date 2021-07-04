@@ -23,6 +23,7 @@ use PHPStan\Type\UnionType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
 use Rector\TypeDeclaration\NodeAnalyzer\TypeNodeUnwrapper;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -171,7 +172,7 @@ CODE_SAMPLE
         if ($returnType instanceof \PHPStan\Type\MixedType) {
             return null;
         }
-        return $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($returnType);
+        return $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($returnType, \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind::RETURN());
     }
     /**
      * @param \PhpParser\Node\Identifier|\PhpParser\Node\Name|\PhpParser\Node\NullableType|PhpParserUnionType $returnedStrictTypeNode

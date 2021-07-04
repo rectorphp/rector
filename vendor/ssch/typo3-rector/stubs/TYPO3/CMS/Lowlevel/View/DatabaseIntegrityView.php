@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210703\TYPO3\CMS\Lowlevel\View;
+namespace RectorPrefix20210704\TYPO3\CMS\Lowlevel\View;
 
 if (\class_exists('TYPO3\\CMS\\Lowlevel\\View\\DatabaseIntegrityView')) {
     return;

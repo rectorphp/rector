@@ -10,6 +10,7 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
 use Rector\TypeDeclaration\NodeTypeAnalyzer\ChildTypeResolver;
 final class ChildReturnPopulator
 {
@@ -60,7 +61,7 @@ final class ChildReturnPopulator
         if (!$currentClassMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
             return;
         }
-        $resolvedChildTypeNode = $this->childTypeResolver->resolveChildTypeNode($returnType);
+        $resolvedChildTypeNode = $this->childTypeResolver->resolveChildTypeNode($returnType, \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind::RETURN());
         if ($resolvedChildTypeNode === null) {
             return;
         }

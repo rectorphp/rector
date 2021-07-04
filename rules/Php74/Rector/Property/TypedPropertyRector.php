@@ -129,11 +129,11 @@ CODE_SAMPLE
         if ($varType instanceof \PHPStan\Type\UnionType) {
             $types = $varType->getTypes();
             if (\count($types) === 2 && $types[0] instanceof \PHPStan\Type\Generic\TemplateType) {
-                $node->type = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($types[0]->getBound(), \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind::KIND_PROPERTY);
+                $node->type = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($types[0]->getBound(), \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind::PROPERTY());
                 return $node;
             }
         }
-        $propertyTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($varType, \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind::KIND_PROPERTY);
+        $propertyTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($varType, \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind::PROPERTY());
         if ($this->isNullOrNonClassLikeTypeOrMixedOrVendorLockedIn($propertyTypeNode, $node)) {
             return null;
         }
@@ -155,9 +155,9 @@ CODE_SAMPLE
         $this->classLikeTypeOnly = $configuration[self::CLASS_LIKE_TYPE_ONLY] ?? \false;
     }
     /**
-     * @param Name|NullableType|PhpParserUnionType|null $node
+     * @param \PhpParser\Node\Name|\PhpParser\Node\NullableType|PhpParserUnionType|null $node
      */
-    private function isNullOrNonClassLikeTypeOrMixedOrVendorLockedIn(?\PhpParser\Node $node, \PhpParser\Node\Stmt\Property $property) : bool
+    private function isNullOrNonClassLikeTypeOrMixedOrVendorLockedIn($node, \PhpParser\Node\Stmt\Property $property) : bool
     {
         if (!$node instanceof \PhpParser\Node) {
             return \true;

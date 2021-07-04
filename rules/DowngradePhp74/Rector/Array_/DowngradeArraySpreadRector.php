@@ -228,13 +228,13 @@ CODE_SAMPLE
         return new \PhpParser\Node\Arg(new \PhpParser\Node\Expr\Ternary($inArrayFuncCall, $arrayItem, $iteratorToArrayFuncCall));
     }
     /**
-     * Iterables: either objects declaring the interface Traversable,
-     * or the pseudo-type iterable
+     * Iterables: objects declaring the interface Traversable,
+     * For "iterable" type, it can be array
      */
     private function isIterableType(\PHPStan\Type\Type $type) : bool
     {
         if ($type instanceof \PHPStan\Type\IterableType) {
-            return \true;
+            return \false;
         }
         $traversableObjectType = new \PHPStan\Type\ObjectType('Traversable');
         return $traversableObjectType->isSuperTypeOf($type)->yes();

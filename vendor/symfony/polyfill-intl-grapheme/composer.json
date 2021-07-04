@@ -27,7 +27,7 @@
     },
     "autoload": {
         "psr-4": {
-            "RectorPrefix20210703\\Symfony\\Polyfill\\Intl\\Grapheme\\": ""
+            "RectorPrefix20210704\\Symfony\\Polyfill\\Intl\\Grapheme\\": ""
         },
         "files": [
             "bootstrap.php"

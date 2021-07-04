@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210703;
+namespace RectorPrefix20210704;
 
 if (\interface_exists('Tx_Fluid_Core_ViewHelper_Facets_CompilableInterface')) {
     return;

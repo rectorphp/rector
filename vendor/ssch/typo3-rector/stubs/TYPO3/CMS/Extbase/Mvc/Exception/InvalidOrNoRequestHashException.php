@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210703\TYPO3\CMS\Extbase\Mvc\Exception;
+namespace RectorPrefix20210704\TYPO3\CMS\Extbase\Mvc\Exception;
 
 if (\class_exists('TYPO3\\CMS\\Extbase\\Mvc\\Exception\\InvalidOrNoRequestHashException')) {
     return;

@@ -21,6 +21,7 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\PHPUnit\NodeFactory\DataProviderClassMethodFactory;
 use Rector\PHPUnit\NodeManipulator\ParamAndArgFromArrayResolver;
@@ -29,7 +30,7 @@ use Rector\PHPUnit\ValueObject\DataProviderClassMethodRecipe;
 use Rector\PHPUnit\ValueObject\ParamAndArg;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20210703\Webmozart\Assert\Assert;
+use RectorPrefix20210704\Webmozart\Assert\Assert;
 /**
  * @see \Rector\PHPUnit\Tests\Rector\Class_\ArrayArgumentToDataProviderRector\ArrayArgumentToDataProviderRectorTest
  *
@@ -142,7 +143,7 @@ CODE_SAMPLE
     public function configure(array $arrayArgumentsToDataProviders) : void
     {
         $arrayArgumentsToDataProviders = $arrayArgumentsToDataProviders[self::ARRAY_ARGUMENTS_TO_DATA_PROVIDERS] ?? [];
-        \RectorPrefix20210703\Webmozart\Assert\Assert::allIsInstanceOf($arrayArgumentsToDataProviders, \Rector\PHPUnit\ValueObject\ArrayArgumentToDataProvider::class);
+        \RectorPrefix20210704\Webmozart\Assert\Assert::allIsInstanceOf($arrayArgumentsToDataProviders, \Rector\PHPUnit\ValueObject\ArrayArgumentToDataProvider::class);
         $this->arrayArgumentsToDataProviders = $arrayArgumentsToDataProviders;
     }
     private function refactorMethodCallWithConfiguration(\PhpParser\Node\Expr\MethodCall $methodCall, \Rector\PHPUnit\ValueObject\ArrayArgumentToDataProvider $arrayArgumentToDataProvider) : void
@@ -222,7 +223,7 @@ CODE_SAMPLE
             /** @var string $paramName */
             $paramName = $this->getName($paramAndArg->getVariable());
             /** @var TypeNode $staticTypeNode */
-            $staticTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($staticType);
+            $staticTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($staticType, \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind::PARAM());
             $paramTagValueNode = $this->createParamTagNode($paramName, $staticTypeNode);
             $phpDocInfo->addTagValueNode($paramTagValueNode);
         }
@@ -258,7 +259,7 @@ CODE_SAMPLE
         if ($staticType instanceof \PHPStan\Type\UnionType) {
             return;
         }
-        $phpNodeType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($staticType);
+        $phpNodeType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($staticType, \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind::PARAM());
         if ($phpNodeType === null) {
             return;
         }
