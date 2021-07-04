@@ -3,6 +3,7 @@
 namespace Rector\Tests\Naming\Rector\Class_\RenamePropertyToMatchTypeRector\Fixture;
 
 use Rector\Tests\Naming\Rector\Class_\RenamePropertyToMatchTypeRector\Source\ContainerInterface;
+use Rector\Tests\Naming\Rector\Class_\RenamePropertyToMatchTypeRector\Source\EliteManager;
 use Rector\Tests\Naming\Rector\Class_\RenamePropertyToMatchTypeRector\Source\ILoader;
 use Rector\Tests\Naming\Rector\Class_\RenamePropertyToMatchTypeRector\Source\SingleSomeClass;
 use SplFileInfo;
@@ -25,14 +26,14 @@ class KeepVariousTypes
     private $loader;
 
     /**
-     * @var ContainerInterface
+     * @var EliteManager
      */
-    private static $cachedContainer;
+    private static $first;
 
     /**
-     * @var ContainerInterface
+     * @var EliteManager
      */
-    private static $smartContainer;
+    private static $second;
 
     /**
      * @var callable|IPresenter
