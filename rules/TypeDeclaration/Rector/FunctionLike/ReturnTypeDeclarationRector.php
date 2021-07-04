@@ -15,7 +15,6 @@ use PhpParser\Node\UnionType as PhpParserUnionType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
-use Rector\Core\NodeAnalyzer\ExternalFullyQualifiedAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -48,7 +47,6 @@ final class ReturnTypeDeclarationRector extends AbstractRector
         private VendorLockResolver $vendorLockResolver,
         private PhpParserTypeAnalyzer $phpParserTypeAnalyzer,
         private ObjectTypeComparator $objectTypeComparator,
-        private ExternalFullyQualifiedAnalyzer $externalFullyQualifiedAnalyzer
     ) {
     }
 
@@ -200,10 +198,6 @@ CODE_SAMPLE
         ClassMethod | Function_ $functionLike,
         Name | NullableType | PhpParserUnionType $inferredReturnNode
     ): void {
-        if ($this->isExternalVoid($functionLike, $inferredReturnNode)) {
-            return;
-        }
-
         if ($functionLike->returnType === null) {
             $functionLike->returnType = $inferredReturnNode;
             return;
@@ -219,22 +213,6 @@ CODE_SAMPLE
             // type override with correct one
             $functionLike->returnType = $inferredReturnNode;
         }
-    }
-
-    private function isExternalVoid(
-        ClassMethod | Function_ $functionLike,
-        Name | NullableType | PhpParserUnionType $inferredReturnNode
-    ): bool {
-        $classLike = $functionLike->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $classLike instanceof Class_) {
-            return false;
-        }
-
-        if (! $this->externalFullyQualifiedAnalyzer->hasVendorLocatedDependency($classLike)) {
-            return false;
-        }
-
-        return $functionLike->returnType === null && $this->isName($inferredReturnNode, 'void');
     }
 
     private function isNullableTypeSubType(Type $currentType, Type $inferedType): bool

@@ -83,7 +83,7 @@ CODE_SAMPLE
     /**
      * @param ClassMethod $node
      */
-    public function refactor(Node $node): ?Node
+    public function refactor(Node $node): ClassMethod
     {
         foreach ($this->methodsByType as $type => $methods) {
             if (! $this->isObjectType($node, new ObjectType($type))) {

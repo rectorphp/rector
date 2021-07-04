@@ -51,7 +51,7 @@ CODE_SAMPLE
     /**
      * @param Coalesce $node
      */
-    public function refactor(Node $node): ?Node
+    public function refactor(Node $node): Ternary
     {
         $if = $node->left;
         $else = $node->right;

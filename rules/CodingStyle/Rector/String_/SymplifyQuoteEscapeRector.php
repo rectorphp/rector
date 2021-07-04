@@ -66,7 +66,7 @@ CODE_SAMPLE
     /**
      * @param String_ $node
      */
-    public function refactor(Node $node): ?Node
+    public function refactor(Node $node): String_
     {
         $doubleQuoteCount = substr_count($node->value, '"');
         $singleQuoteCount = substr_count($node->value, "'");

@@ -62,7 +62,7 @@ CODE_SAMPLE
      * @param TryCatch $node
      * @return Stmt[]|null
      */
-    public function refactor(Node $node)
+    public function refactor(Node $node): ?array
     {
         if (count($node->catches) !== 1) {
             return null;

@@ -56,7 +56,7 @@ CODE_SAMPLE
     /**
      * @param NullsafeMethodCall|NullsafePropertyFetch $node
      */
-    public function refactor(Node $node): ?Node
+    public function refactor(Node $node): Ternary
     {
         $tempVarName = $this->variableNaming->resolveFromNodeWithScopeCountAndFallbackName(
             $node->var,

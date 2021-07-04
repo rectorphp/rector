@@ -86,9 +86,8 @@ CODE_SAMPLE
 
     /**
      * @param MethodCall $node
-     * @return Node|Node[]|null
      */
-    public function refactor(Node $node)
+    public function refactor(Node $node): ?MethodCall
     {
         foreach ($this->callableInMethodCallToVariable as $singleCallableInMethodCallToVariable) {
             if (! $this->isObjectType($node->var, $singleCallableInMethodCallToVariable->getObjectType())) {

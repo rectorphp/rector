@@ -112,7 +112,7 @@ CODE_SAMPLE
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node): ?Node
+    public function refactor(Node $node): Class_
     {
         $this->matchedObjectTypes = [];
 

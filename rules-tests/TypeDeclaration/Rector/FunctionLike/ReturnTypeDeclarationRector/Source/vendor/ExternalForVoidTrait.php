@@ -6,7 +6,7 @@ namespace Rector\Tests\TypeDeclaration\Rector\FunctionLike\ReturnTypeDeclaration
 
 trait ExternalForVoidTrait
 {
-    public function run()
+    public function run(): bool
     {
     }
 }

@@ -90,7 +90,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ReturnTypeDeclarationRector::class => [
             __DIR__ . '/packages/PHPStanStaticTypeMapper/TypeMapper/ArrayTypeMapper.php',
             __DIR__ . '/packages/PHPStanStaticTypeMapper/TypeMapper/ObjectTypeMapper.php',
-            __DIR__ . '/src/DependencyInjection/Loader/ConfigurableCallValuesCollectingPhpFileLoader.php',
         ],
 
         AddVoidReturnTypeWhereNoReturnRector::class => [

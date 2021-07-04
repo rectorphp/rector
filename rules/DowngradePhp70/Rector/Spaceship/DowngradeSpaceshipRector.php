@@ -70,7 +70,7 @@ CODE_SAMPLE
     /**
      * @param Spaceship $node
      */
-    public function refactor(Node $node): ?Node
+    public function refactor(Node $node): FuncCall
     {
         $leftVariableParam = new Variable('left');
         $rightVariableParam = new Variable('right');

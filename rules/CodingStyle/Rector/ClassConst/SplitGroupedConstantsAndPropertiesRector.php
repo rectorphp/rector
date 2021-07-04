@@ -68,9 +68,9 @@ CODE_SAMPLE
 
     /**
      * @param ClassConst|Property $node
-     * @return Node|Node[]|null
+     * @return Node[]|null
      */
-    public function refactor(Node $node)
+    public function refactor(Node $node): ?array
     {
         if ($node instanceof ClassConst) {
             if (count($node->consts) < 2) {

@@ -56,7 +56,7 @@ CODE_SAMPLE
     /**
      * @param ClassConst $node
      */
-    public function refactor(Node $node): ?Node
+    public function refactor(Node $node): ClassConst
     {
         $this->visibilityManipulator->removeVisibility($node);
 

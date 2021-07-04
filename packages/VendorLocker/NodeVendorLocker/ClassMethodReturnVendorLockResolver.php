@@ -11,12 +11,10 @@ use PHPStan\Reflection\FunctionVariantWithPhpDocs;
 use PHPStan\Type\MixedType;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\VendorLocker\Reflection\MethodReflectionContractAnalyzer;
 
 final class ClassMethodReturnVendorLockResolver
 {
     public function __construct(
-        private MethodReflectionContractAnalyzer $methodReflectionContractAnalyzer,
         private NodeNameResolver $nodeNameResolver
     ) {
     }
@@ -33,33 +31,29 @@ final class ClassMethodReturnVendorLockResolver
             return false;
         }
 
-        if (count($classReflection->getAncestors()) === 1) {
-            return false;
-        }
-
         $methodName = $this->nodeNameResolver->getName($classMethod);
-        if ($this->isVendorLockedByParentClass($classReflection, $methodName)) {
+        if ($this->isVendorLockedByAncestors($classReflection, $methodName)) {
             return true;
         }
 
-        if ($classReflection->isTrait()) {
-            return false;
-        }
-
-        return $this->methodReflectionContractAnalyzer->hasInterfaceContract($classReflection, $methodName);
+        return $classReflection->isTrait();
     }
 
-    private function isVendorLockedByParentClass(ClassReflection $classReflection, string $methodName): bool
+    private function isVendorLockedByAncestors(ClassReflection $classReflection, string $methodName): bool
     {
-        foreach ($classReflection->getParents() as $parentClassReflections) {
-            $nativeClassReflection = $parentClassReflections->getNativeReflection();
+        foreach ($classReflection->getAncestors() as $ancestorClassReflections) {
+            if ($ancestorClassReflections === $classReflection) {
+                continue;
+            }
+
+            $nativeClassReflection = $ancestorClassReflections->getNativeReflection();
 
             // this should avoid detecting @method as real method
             if (! $nativeClassReflection->hasMethod($methodName)) {
                 continue;
             }
 
-            $parentClassMethodReflection = $parentClassReflections->getNativeMethod($methodName);
+            $parentClassMethodReflection = $ancestorClassReflections->getNativeMethod($methodName);
             $parametersAcceptor = $parentClassMethodReflection->getVariants()[0];
             if (! $parametersAcceptor instanceof FunctionVariantWithPhpDocs) {
                 continue;

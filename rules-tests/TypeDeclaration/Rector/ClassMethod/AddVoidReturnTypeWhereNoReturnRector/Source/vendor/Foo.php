@@ -4,7 +4,7 @@ namespace Rector\Tests\TypeDeclaration\Rector\ClassMethod\AddVoidReturnTypeWhere
 
 trait Foo
 {
-    public function load($resource, string $type = null)
+    public function load($resource, string $type = null): string
     {
     }
 }

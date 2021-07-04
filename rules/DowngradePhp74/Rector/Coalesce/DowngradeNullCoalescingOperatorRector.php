@@ -46,7 +46,7 @@ CODE_SAMPLE
     /**
      * @param AssignCoalesce $node
      */
-    public function refactor(Node $node): ?Node
+    public function refactor(Node $node): Assign
     {
         return new Assign($node->var, new Coalesce($node->var, $node->expr));
     }

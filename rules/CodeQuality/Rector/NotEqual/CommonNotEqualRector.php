@@ -58,7 +58,7 @@ CODE_SAMPLE
     /**
      * @param NotEqual $node
      */
-    public function refactor(Node $node): ?Node
+    public function refactor(Node $node): NotEqual
     {
         // invoke override to default "!="
         $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);

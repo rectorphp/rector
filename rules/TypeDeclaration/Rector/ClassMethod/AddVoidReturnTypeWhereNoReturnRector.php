@@ -12,6 +12,7 @@ use PhpParser\Node\Stmt\Function_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\TypeDeclaration\TypeInferer\SilentVoidResolver;
+use Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnVendorLockResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -21,7 +22,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class AddVoidReturnTypeWhereNoReturnRector extends AbstractRector
 {
     public function __construct(
-        private SilentVoidResolver $silentVoidResolver
+        private SilentVoidResolver $silentVoidResolver,
+        private ClassMethodReturnVendorLockResolver $classMethodReturnVendorLockResolver
     ) {
     }
 
@@ -81,6 +83,10 @@ CODE_SAMPLE
         }
 
         if (! $this->silentVoidResolver->hasExclusiveVoid($node)) {
+            return null;
+        }
+
+        if ($node instanceof ClassMethod && $this->classMethodReturnVendorLockResolver->isVendorLocked($node)) {
             return null;
         }
 

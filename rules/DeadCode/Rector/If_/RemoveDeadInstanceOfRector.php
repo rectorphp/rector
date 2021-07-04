@@ -66,9 +66,8 @@ CODE_SAMPLE
 
     /**
      * @param If_ $node
-     * @return null|If_
      */
-    public function refactor(Node $node)
+    public function refactor(Node $node): ?If_
     {
         $scope = $node->getAttribute(AttributeKey::SCOPE);
 

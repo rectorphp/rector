@@ -68,7 +68,7 @@ CODE_SAMPLE
     /**
      * @param Switch_ $node
      */
-    public function refactor(Node $node): ?Node
+    public function refactor(Node $node): Switch_
     {
         foreach ($node->cases as $case) {
             foreach ($case->stmts as $key => $caseStmt) {

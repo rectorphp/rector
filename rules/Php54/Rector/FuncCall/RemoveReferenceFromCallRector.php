@@ -53,7 +53,7 @@ CODE_SAMPLE
     /**
      * @param FuncCall $node
      */
-    public function refactor(Node $node): ?Node
+    public function refactor(Node $node): FuncCall
     {
         foreach ($node->args as $nodeArg) {
             if ($nodeArg->byRef) {

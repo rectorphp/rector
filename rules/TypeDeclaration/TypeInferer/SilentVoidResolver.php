@@ -7,7 +7,6 @@ namespace Rector\TypeDeclaration\TypeInferer;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Yield_;
 use PhpParser\Node\Stmt;
-use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Function_;
@@ -17,7 +16,6 @@ use PhpParser\Node\Stmt\Switch_;
 use PhpParser\Node\Stmt\Throw_;
 use PhpParser\Node\Stmt\Trait_;
 use PhpParser\Node\Stmt\TryCatch;
-use Rector\Core\NodeAnalyzer\ExternalFullyQualifiedAnalyzer;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
@@ -25,7 +23,6 @@ final class SilentVoidResolver
 {
     public function __construct(
         private BetterNodeFinder $betterNodeFinder,
-        private ExternalFullyQualifiedAnalyzer $externalFullyQualifiedAnalyzer
     ) {
     }
 
@@ -45,12 +42,6 @@ final class SilentVoidResolver
         }
 
         if ($this->betterNodeFinder->hasInstancesOf((array) $functionLike->stmts, [Yield_::class])) {
-            return false;
-        }
-
-        if ($classLike instanceof Class_ && $this->externalFullyQualifiedAnalyzer->hasVendorLocatedDependency(
-            $classLike
-        )) {
             return false;
         }
 

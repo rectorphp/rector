@@ -6,6 +6,7 @@ namespace Rector\DowngradePhp74\Rector\ArrowFunction;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\ArrowFunction;
+use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Php72\NodeFactory\AnonymousFunctionFactory;
@@ -66,7 +67,7 @@ CODE_SAMPLE
     /**
      * @param ArrowFunction $node
      */
-    public function refactor(Node $node): ?Node
+    public function refactor(Node $node): Closure
     {
         $stmts = [new Return_($node->expr)];
 

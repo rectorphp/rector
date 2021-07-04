@@ -70,7 +70,7 @@ CODE_SAMPLE
     /**
      * @param FuncCall $node
      */
-    public function refactor(Node $node): ?Node
+    public function refactor(Node $node): FuncCall
     {
         foreach ($this->functionArgumentSwaps as $functionArgumentSwap) {
             if (! $this->isName($node, $functionArgumentSwap->getFunction())) {
