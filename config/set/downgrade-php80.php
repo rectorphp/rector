@@ -38,6 +38,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             ],
         ]]);
 
+    $services->set(DowngradeNamedArgumentRector::class);
     $services->set(DowngradeAttributeToAnnotationRector::class)
         ->call('configure', [[
             DowngradeAttributeToAnnotationRector::ATTRIBUTE_TO_ANNOTATION => ValueObjectInliner::inline([
@@ -61,5 +62,4 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(DowngradeTrailingCommasInParamUseRector::class);
     $services->set(DowngradeStrStartsWithRector::class);
     $services->set(DowngradeStrEndsWithRector::class);
-    $services->set(DowngradeNamedArgumentRector::class);
 };

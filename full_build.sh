@@ -14,10 +14,6 @@ set -u
 
 composer install --no-dev --ansi
 
-# early downgrade individual files of symfony Attribute classes
-bin/rector process vendor/symfony/dependency-injection/Attribute/Autoconfigure.php -c build/config/config-downgrade-php70.php --ansi
-bin/rector process vendor/symfony/dependency-injection/Attribute/AutoconfigureTag.php -c build/config/config-downgrade-php70.php --ansi
-
 rsync --exclude rector-build -av * rector-build --quiet
 rm -rf rector-build/packages-tests rector-build/rules-tests rector-build/tests
 
