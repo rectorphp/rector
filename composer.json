@@ -31,7 +31,7 @@
         "rector/rector-symfony": "^0.11.8",
         "sebastian/diff": "^4.0.4",
         "ssch/typo3-rector": "dev-main#e75102b",
-        "symfony/console": "^5.3",
+        "symfony/console": "5.3.x-dev",
         "symfony/dependency-injection": "^5.3",
         "symfony/finder": "^5.3",
         "symfony/http-kernel": "^5.3",
