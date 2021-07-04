@@ -45,11 +45,9 @@ class InputOption
     private $default;
     private $description;
     /**
-     * @param string                    $name        The option name
-     * @param string|array|null         $shortcut    The shortcuts, can be null, a string of shortcuts delimited by | or an array of shortcuts
-     * @param int|null                  $mode        The option mode: One of the VALUE_* constants
-     * @param string                    $description A description text
-     * @param string|string[]|bool|null $default     The default value (must be null for self::VALUE_NONE)
+     * @param string|array|null $shortcut The shortcuts, can be null, a string of shortcuts delimited by | or an array of shortcuts
+     * @param int|null          $mode     The option mode: One of the VALUE_* constants
+     * @param mixed             $default  The default value (must be null for self::VALUE_NONE)
      *
      * @throws InvalidArgumentException If option mode is invalid or incompatible
      */
@@ -153,7 +151,7 @@ class InputOption
     /**
      * Sets the default value.
      *
-     * @param string|string[]|bool|null $default The default value
+     * @param mixed $default The default value
      *
      * @throws LogicException When incorrect default value is given
      */
@@ -174,7 +172,7 @@ class InputOption
     /**
      * Returns the default value.
      *
-     * @return string|string[]|bool|null The default value
+     * @return mixed
      */
     public function getDefault()
     {

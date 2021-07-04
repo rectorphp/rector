@@ -143,13 +143,11 @@ abstract class Output implements \RectorPrefix20210704\Symfony\Component\Console
                     $message = \strip_tags($this->formatter->format($message));
                     break;
             }
-            $this->doWrite($message, $newline);
+            $this->doWrite($message ?? '', $newline);
         }
     }
     /**
      * Writes a message to the output.
-     * @param string $message
-     * @param bool $newline
      */
-    protected abstract function doWrite($message, $newline);
+    protected abstract function doWrite(string $message, bool $newline);
 }

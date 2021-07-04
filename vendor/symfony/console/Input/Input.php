@@ -111,7 +111,7 @@ abstract class Input implements \RectorPrefix20210704\Symfony\Component\Console\
     /**
      * {@inheritdoc}
      */
-    public function hasArgument($name)
+    public function hasArgument(string $name)
     {
         return $this->definition->hasArgument($name);
     }

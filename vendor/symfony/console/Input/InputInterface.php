@@ -75,7 +75,7 @@ interface InputInterface
     /**
      * Returns the argument value for a given argument name.
      *
-     * @return string|string[]|null The argument value
+     * @return mixed
      *
      * @throws InvalidArgumentException When argument given doesn't exist
      */
@@ -83,7 +83,7 @@ interface InputInterface
     /**
      * Sets an argument value by name.
      *
-     * @param string|string[]|null $value The argument value
+     * @param mixed $value The argument value
      *
      * @throws InvalidArgumentException When argument given doesn't exist
      */
@@ -91,11 +91,9 @@ interface InputInterface
     /**
      * Returns true if an InputArgument object exists by name or position.
      *
-     * @param string|int $name The InputArgument name or position
-     *
      * @return bool true if the InputArgument object exists, false otherwise
      */
-    public function hasArgument($name);
+    public function hasArgument(string $name);
     /**
      * Returns all the given options merged with the default values.
      *
@@ -105,7 +103,7 @@ interface InputInterface
     /**
      * Returns the option value for a given option name.
      *
-     * @return string|string[]|bool|null The option value
+     * @return mixed
      *
      * @throws InvalidArgumentException When option given doesn't exist
      */
@@ -113,7 +111,7 @@ interface InputInterface
     /**
      * Sets an option value by name.
      *
-     * @param string|string[]|bool|null $value The option value
+     * @param mixed $value The option value
      *
      * @throws InvalidArgumentException When option given doesn't exist
      */

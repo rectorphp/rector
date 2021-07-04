@@ -19,8 +19,6 @@ use RectorPrefix20210704\Symfony\Component\Console\Output\OutputInterface;
 interface DescriptorInterface
 {
     /**
-     * Describes an object if supported.
-     *
      * @param object $object
      */
     public function describe(\RectorPrefix20210704\Symfony\Component\Console\Output\OutputInterface $output, $object, array $options = []);

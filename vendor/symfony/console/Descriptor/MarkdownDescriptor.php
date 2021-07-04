@@ -28,6 +28,7 @@ class MarkdownDescriptor extends \RectorPrefix20210704\Symfony\Component\Console
 {
     /**
      * {@inheritdoc}
+     * @param object $object
      */
     public function describe(\RectorPrefix20210704\Symfony\Component\Console\Output\OutputInterface $output, $object, array $options = [])
     {

@@ -53,7 +53,7 @@ class SymfonyStyle extends \RectorPrefix20210704\Symfony\Component\Console\Style
      *
      * @param string|array $messages The message to write in the block
      */
-    public function block($messages, ?string $type = null, ?string $style = null, string $prefix = ' ', bool $padding = \false, bool $escape = \true)
+    public function block($messages, string $type = null, string $style = null, string $prefix = ' ', bool $padding = \false, bool $escape = \true)
     {
         $messages = \is_array($messages) ? \array_values($messages) : [$messages];
         $this->autoPrependBlock();
@@ -227,7 +227,7 @@ class SymfonyStyle extends \RectorPrefix20210704\Symfony\Component\Console\Style
     /**
      * {@inheritdoc}
      */
-    public function ask(string $question, ?string $default = null, $validator = null)
+    public function ask(string $question, string $default = null, callable $validator = null)
     {
         $question = new \RectorPrefix20210704\Symfony\Component\Console\Question\Question($question, $default);
         $question->setValidator($validator);
@@ -236,7 +236,7 @@ class SymfonyStyle extends \RectorPrefix20210704\Symfony\Component\Console\Style
     /**
      * {@inheritdoc}
      */
-    public function askHidden(string $question, $validator = null)
+    public function askHidden(string $question, callable $validator = null)
     {
         $question = new \RectorPrefix20210704\Symfony\Component\Console\Question\Question($question);
         $question->setHidden(\true);

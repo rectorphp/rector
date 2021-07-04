@@ -1773,17 +1773,17 @@
         },
         {
             "name": "symfony\/console",
-            "version": "v5.3.2",
-            "version_normalized": "5.3.2.0",
+            "version": "5.3.x-dev",
+            "version_normalized": "5.3.9999999.9999999-dev",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/console.git",
-                "reference": "649730483885ff2ca99ca0560ef0e5f6b03f2ac1"
+                "reference": "8d91db2115506edcf6adef0a8ab2782498597126"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/console\/zipball\/649730483885ff2ca99ca0560ef0e5f6b03f2ac1",
-                "reference": "649730483885ff2ca99ca0560ef0e5f6b03f2ac1",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/console\/zipball\/8d91db2115506edcf6adef0a8ab2782498597126",
+                "reference": "8d91db2115506edcf6adef0a8ab2782498597126",
                 "shasum": ""
             },
             "require": {
@@ -1820,7 +1820,8 @@
                 "symfony\/lock": "",
                 "symfony\/process": ""
             },
-            "time": "2021-06-12T09:42:48+00:00",
+            "time": "2021-07-04T09:35:31+00:00",
+            "default-branch": true,
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -1854,7 +1855,7 @@
                 "terminal"
             ],
             "support": {
-                "source": "https:\/\/github.com\/symfony\/console\/tree\/v5.3.2"
+                "source": "https:\/\/github.com\/symfony\/console\/tree\/5.3"
             },
             "funding": [
                 {

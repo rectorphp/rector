@@ -82,7 +82,7 @@ class ConsoleSectionOutput extends \RectorPrefix20210704\Symfony\Component\Conso
     /**
      * {@inheritdoc}
      */
-    protected function doWrite($message, $newline)
+    protected function doWrite(string $message, bool $newline)
     {
         if (!$this->isDecorated()) {
             parent::doWrite($message, $newline);

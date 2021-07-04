@@ -58,10 +58,8 @@ class StreamOutput extends \RectorPrefix20210704\Symfony\Component\Console\Outpu
     }
     /**
      * {@inheritdoc}
-     * @param string $message
-     * @param bool $newline
      */
-    protected function doWrite($message, $newline)
+    protected function doWrite(string $message, bool $newline)
     {
         if ($newline) {
             $message .= \PHP_EOL;

@@ -43,7 +43,7 @@ class TrimmedBufferOutput extends \RectorPrefix20210704\Symfony\Component\Consol
     /**
      * {@inheritdoc}
      */
-    protected function doWrite($message, $newline)
+    protected function doWrite(string $message, bool $newline)
     {
         $this->buffer .= $message;
         if ($newline) {
