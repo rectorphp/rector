@@ -199,7 +199,7 @@ class Container implements \RectorPrefix20210704\Symfony\Component\DependencyInj
      *
      * @see Reference
      */
-    public function get(string $id, int $invalidBehavior = 1)
+    public function get($id, int $invalidBehavior = 1)
     {
         return $this->services[$id] ?? $this->services[$id = $this->aliases[$id] ?? $id] ?? ('service_container' === $id ? $this : ($this->factories[$id] ?? [$this, 'make'])($id, $invalidBehavior));
     }

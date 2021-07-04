@@ -11,10 +11,13 @@ use PHPStan\Type\NeverType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
+use PHPStan\Type\TypeTraverser;
 use PHPStan\Type\UnionType;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\StaticTypeMapper\TypeFactory\UnionTypeFactory;
 use Rector\TypeDeclaration\ValueObject\NestedArrayType;
+use RectorPrefix20210704\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
+use RectorPrefix20210704\Symplify\SimplePhpDocParser\PhpDocNodeTraverser;
 /**
  * @see \Rector\Tests\TypeDeclaration\TypeNormalizerTest
  */
@@ -32,10 +35,20 @@ final class TypeNormalizer
      * @var \Rector\StaticTypeMapper\TypeFactory\UnionTypeFactory
      */
     private $unionTypeFactory;
-    public function __construct(\Rector\NodeTypeResolver\PHPStan\Type\TypeFactory $typeFactory, \Rector\StaticTypeMapper\TypeFactory\UnionTypeFactory $unionTypeFactory)
+    /**
+     * @var \Symplify\PackageBuilder\Reflection\PrivatesAccessor
+     */
+    private $privatesAccessor;
+    public function __construct(
+        \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory $typeFactory,
+        \Rector\StaticTypeMapper\TypeFactory\UnionTypeFactory $unionTypeFactory,
+        //        private PhpDocNodeTraverser $phpDocNodeTraverser,
+        \RectorPrefix20210704\Symplify\PackageBuilder\Reflection\PrivatesAccessor $privatesAccessor
+    )
     {
         $this->typeFactory = $typeFactory;
         $this->unionTypeFactory = $unionTypeFactory;
+        $this->privatesAccessor = $privatesAccessor;
     }
     public function convertConstantArrayTypeToArrayType(\PHPStan\Type\Constant\ConstantArrayType $constantArrayType) : ?\PHPStan\Type\ArrayType
     {
@@ -88,20 +101,32 @@ final class TypeNormalizer
      */
     public function normalizeArrayTypeAndArrayNever(\PHPStan\Type\Type $type) : \PHPStan\Type\Type
     {
-        if (!$type instanceof \PHPStan\Type\UnionType) {
-            return $type;
-        }
-        $nonNeverTypes = [];
-        foreach ($type->getTypes() as $unionedType) {
-            if (!$unionedType instanceof \PHPStan\Type\ArrayType) {
-                return $type;
+        return \PHPStan\Type\TypeTraverser::map($type, function (\PHPStan\Type\Type $traversedType, callable $traverserCallable) : Type {
+            if ($traversedType instanceof \PHPStan\Type\Constant\ConstantArrayType && $traversedType->getKeyType() instanceof \PHPStan\Type\NeverType && $traversedType->getItemType() instanceof \PHPStan\Type\NeverType) {
+                // not sure why, but with direct new node everything gets nulled to MixedType
+                $this->privatesAccessor->setPrivateProperty($traversedType, 'keyType', new \PHPStan\Type\MixedType());
+                $this->privatesAccessor->setPrivateProperty($traversedType, 'itemType', new \PHPStan\Type\MixedType());
+                return $traversedType;
             }
-            if ($unionedType->getItemType() instanceof \PHPStan\Type\NeverType) {
-                continue;
+            if ($traversedType instanceof \PHPStan\Type\UnionType) {
+                $collectedTypes = [];
+                foreach ($traversedType->getTypes() as $unionedType) {
+                    // basically an empty array - not useful at all
+                    if ($this->isArrayNeverType($unionedType)) {
+                        continue;
+                    }
+                    $collectedTypes[] = $unionedType;
+                }
+                // re-create new union types
+                if (\count($traversedType->getTypes()) !== \count($collectedTypes)) {
+                    return $this->typeFactory->createMixedPassedOrUnionType($collectedTypes);
+                }
             }
-            $nonNeverTypes[] = $unionedType;
-        }
-        return $this->typeFactory->createMixedPassedOrUnionType($nonNeverTypes);
+            if ($traversedType instanceof \PHPStan\Type\NeverType) {
+                return new \PHPStan\Type\MixedType();
+            }
+            return $traverserCallable($traversedType, $traverserCallable);
+        });
     }
     /**
      * @param array<string|int, Type> $nonConstantValueTypes
@@ -146,5 +171,12 @@ final class TypeNormalizer
             return $this->unionTypeFactory->createUnionObjectType($unionedTypes);
         }
         return $unionedTypes[0];
+    }
+    private function isArrayNeverType(\PHPStan\Type\Type $type) : bool
+    {
+        if (!$type instanceof \PHPStan\Type\ArrayType) {
+            return \false;
+        }
+        return $type->getKeyType() instanceof \PHPStan\Type\NeverType && $type->getItemType() instanceof \PHPStan\Type\NeverType;
     }
 }

@@ -166,9 +166,6 @@ CODE_SAMPLE
         if ($newType instanceof \PHPStan\Type\ArrayType && $this->shouldSkipArrayType($newType, $classMethod, $phpDocInfo)) {
             return \true;
         }
-        if ($this->detailedTypeAnalyzer->isTooDetailed($newType)) {
-            return \true;
-        }
         // not an array type
         if ($newType instanceof \PHPStan\Type\VoidType) {
             return \true;

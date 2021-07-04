@@ -4,7 +4,9 @@ declare (strict_types=1);
 namespace Rector\DeadCode\Rector\ClassMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -61,14 +63,10 @@ CODE_SAMPLE
         if ($this->shouldSkipClass($classLike)) {
             return null;
         }
-        if ($node->stmts === null) {
+        $onlyStmt = $this->matchClassMethodOnlyStmt($node);
+        if ($onlyStmt === null) {
             return null;
         }
-        if (\count($node->stmts) !== 1) {
-            return null;
-        }
-        $stmtsValues = \array_values($node->stmts);
-        $onlyStmt = $this->unwrapExpression($stmtsValues[0]);
         // are both return?
         if ($this->isMethodReturnType($node, 'void') && !$onlyStmt instanceof \PhpParser\Node\Stmt\Return_) {
             return null;
@@ -119,5 +117,20 @@ CODE_SAMPLE
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
         return $phpDocInfo->hasByName('required');
+    }
+    /**
+     * @return null|\PhpParser\Node\Stmt|\PhpParser\Node\Expr
+     */
+    private function matchClassMethodOnlyStmt(\PhpParser\Node\Stmt\ClassMethod $classMethod)
+    {
+        if ($classMethod->stmts === null) {
+            return null;
+        }
+        if (\count($classMethod->stmts) !== 1) {
+            return null;
+        }
+        // recount empty notes
+        $stmtsValues = \array_values($classMethod->stmts);
+        return $this->unwrapExpression($stmtsValues[0]);
     }
 }

@@ -1,24 +1,23 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\DowngradePhp72\Rector\Class_;
+namespace Rector\DowngradePhp72\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Param;
-use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Interface_;
+use PhpParser\Node\Stmt\Trait_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\NodeAnalyzer\ExternalFullyQualifiedAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DowngradePhp72\NodeAnalyzer\ClassLikeWithTraitsClassMethodResolver;
 use Rector\DowngradePhp72\NodeAnalyzer\ParamContravariantDetector;
 use Rector\DowngradePhp72\NodeAnalyzer\ParentChildClassMethodTypeResolver;
 use Rector\DowngradePhp72\PhpDoc\NativeParamToPhpDocDecorator;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\NodeTypeResolver\PHPStan\Collector\TraitNodeScopeCollector;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -26,7 +25,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://www.php.net/manual/en/migration72.new-features.php#migration72.new-features.param-type-widening
  * @see https://3v4l.org/fOgSE
  *
- * @see \Rector\Tests\DowngradePhp72\Rector\Class_\DowngradeParameterTypeWideningRector\DowngradeParameterTypeWideningRectorTest
+ * @see \Rector\Tests\DowngradePhp72\Rector\ClassMethod\DowngradeParameterTypeWideningRector\DowngradeParameterTypeWideningRectorTest
  */
 final class DowngradeParameterTypeWideningRector extends \Rector\Core\Rector\AbstractRector
 {
@@ -51,17 +50,17 @@ final class DowngradeParameterTypeWideningRector extends \Rector\Core\Rector\Abs
      */
     private $typeFactory;
     /**
-     * @var \Rector\Core\NodeAnalyzer\ExternalFullyQualifiedAnalyzer
+     * @var \Rector\NodeTypeResolver\PHPStan\Collector\TraitNodeScopeCollector
      */
-    private $externalFullyQualifiedAnalyzer;
-    public function __construct(\Rector\DowngradePhp72\NodeAnalyzer\ClassLikeWithTraitsClassMethodResolver $classLikeWithTraitsClassMethodResolver, \Rector\DowngradePhp72\NodeAnalyzer\ParentChildClassMethodTypeResolver $parentChildClassMethodTypeResolver, \Rector\DowngradePhp72\PhpDoc\NativeParamToPhpDocDecorator $nativeParamToPhpDocDecorator, \Rector\DowngradePhp72\NodeAnalyzer\ParamContravariantDetector $paramContravariantDetector, \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory $typeFactory, \Rector\Core\NodeAnalyzer\ExternalFullyQualifiedAnalyzer $externalFullyQualifiedAnalyzer)
+    private $traitNodeScopeCollector;
+    public function __construct(\Rector\DowngradePhp72\NodeAnalyzer\ClassLikeWithTraitsClassMethodResolver $classLikeWithTraitsClassMethodResolver, \Rector\DowngradePhp72\NodeAnalyzer\ParentChildClassMethodTypeResolver $parentChildClassMethodTypeResolver, \Rector\DowngradePhp72\PhpDoc\NativeParamToPhpDocDecorator $nativeParamToPhpDocDecorator, \Rector\DowngradePhp72\NodeAnalyzer\ParamContravariantDetector $paramContravariantDetector, \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory $typeFactory, \Rector\NodeTypeResolver\PHPStan\Collector\TraitNodeScopeCollector $traitNodeScopeCollector)
     {
         $this->classLikeWithTraitsClassMethodResolver = $classLikeWithTraitsClassMethodResolver;
         $this->parentChildClassMethodTypeResolver = $parentChildClassMethodTypeResolver;
         $this->nativeParamToPhpDocDecorator = $nativeParamToPhpDocDecorator;
         $this->paramContravariantDetector = $paramContravariantDetector;
         $this->typeFactory = $typeFactory;
-        $this->externalFullyQualifiedAnalyzer = $externalFullyQualifiedAnalyzer;
+        $this->traitNodeScopeCollector = $traitNodeScopeCollector;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -101,14 +100,14 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Class_::class, \PhpParser\Node\Stmt\Interface_::class];
+        return [\PhpParser\Node\Stmt\ClassMethod::class];
     }
     /**
-     * @param Class_|Interface_ $node
+     * @param ClassMethod $node
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
+        $scope = $this->resolveScope($node);
         if (!$scope instanceof \PHPStan\Analyser\Scope) {
             return null;
         }
@@ -119,21 +118,18 @@ CODE_SAMPLE
         if ($this->isEmptyClassReflection($classReflection)) {
             return null;
         }
-        if ($this->externalFullyQualifiedAnalyzer->hasExternalFullyQualifieds($node)) {
-            return null;
-        }
         $hasChanged = \false;
         /** @var ClassReflection[] $ancestors */
         $ancestors = $classReflection->getAncestors();
         $classMethods = $this->classLikeWithTraitsClassMethodResolver->resolve($ancestors);
         $classLikes = $this->nodeRepository->findClassesAndInterfacesByType($classReflection->getName());
-        $interfaces = $classReflection->getInterfaces();
+        $interfaceClassReflections = $classReflection->getInterfaces();
         foreach ($classMethods as $classMethod) {
             if ($this->skipClassMethod($classMethod, $classReflection, $ancestors, $classLikes)) {
                 continue;
             }
             // refactor here
-            $changedClassMethod = $this->refactorClassMethod($classMethod, $classReflection, $ancestors, $interfaces);
+            $changedClassMethod = $this->refactorClassMethod($classMethod, $classReflection, $ancestors, $interfaceClassReflections);
             if ($changedClassMethod !== null) {
                 $hasChanged = \true;
             }
@@ -212,5 +208,19 @@ CODE_SAMPLE
             return \false;
         }
         return \count($classReflection->getAncestors()) === 1;
+    }
+    private function resolveScope(\PhpParser\Node\Stmt\ClassMethod $classMethod) : ?\PHPStan\Analyser\Scope
+    {
+        $scope = $classMethod->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
+        if ($scope instanceof \PHPStan\Analyser\Scope) {
+            return $scope;
+        }
+        // fallback to a trait method
+        $classLike = $classMethod->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
+        if ($classLike instanceof \PhpParser\Node\Stmt\Trait_) {
+            $traitName = $this->getName($classLike);
+            return $this->traitNodeScopeCollector->getScopeForTrait($traitName);
+        }
+        return null;
     }
 }

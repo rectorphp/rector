@@ -231,8 +231,10 @@ CODE_SAMPLE
         if (!$classLike instanceof \PhpParser\Node\Stmt\Class_) {
             return \false;
         }
-        $hasExternalClassOrInterfaceOrTrait = $this->externalFullyQualifiedAnalyzer->hasExternalFullyQualifieds($classLike);
-        return $functionLike->returnType === null && $hasExternalClassOrInterfaceOrTrait && $this->isName($inferredReturnNode, 'void');
+        if (!$this->externalFullyQualifiedAnalyzer->hasVendorLocatedDependency($classLike)) {
+            return \false;
+        }
+        return $functionLike->returnType === null && $this->isName($inferredReturnNode, 'void');
     }
     private function isNullableTypeSubType(\PHPStan\Type\Type $currentType, \PHPStan\Type\Type $inferedType) : bool
     {

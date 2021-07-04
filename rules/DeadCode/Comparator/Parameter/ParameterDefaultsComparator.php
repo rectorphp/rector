@@ -6,21 +6,21 @@ namespace Rector\DeadCode\Comparator\Parameter;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Param;
 use PHPStan\Reflection\ParameterReflection;
-use Rector\Core\PhpParser\Node\Value\ValueResolver;
+use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\DowngradePhp80\Reflection\DefaultParameterValueResolver;
 final class ParameterDefaultsComparator
 {
     /**
-     * @var \Rector\Core\PhpParser\Node\Value\ValueResolver
+     * @var \Rector\Core\PhpParser\Comparing\NodeComparator
      */
-    private $valueResolver;
+    private $nodeComparator;
     /**
      * @var \Rector\DowngradePhp80\Reflection\DefaultParameterValueResolver
      */
     private $defaultParameterValueResolver;
-    public function __construct(\Rector\Core\PhpParser\Node\Value\ValueResolver $valueResolver, \Rector\DowngradePhp80\Reflection\DefaultParameterValueResolver $defaultParameterValueResolver)
+    public function __construct(\Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator, \Rector\DowngradePhp80\Reflection\DefaultParameterValueResolver $defaultParameterValueResolver)
     {
-        $this->valueResolver = $valueResolver;
+        $this->nodeComparator = $nodeComparator;
         $this->defaultParameterValueResolver = $defaultParameterValueResolver;
     }
     public function areDefaultValuesDifferent(\PHPStan\Reflection\ParameterReflection $parameterReflection, \PhpParser\Node\Param $param) : bool
@@ -34,26 +34,8 @@ final class ParameterDefaultsComparator
         /** @var Expr $paramDefault */
         $paramDefault = $param->default;
         $firstParameterValue = $this->defaultParameterValueResolver->resolveFromParameterReflection($parameterReflection);
-        $secondParameterValue = $this->valueResolver->getValue($paramDefault);
-        return $firstParameterValue !== $secondParameterValue;
+        return !$this->nodeComparator->areNodesEqual($paramDefault, $firstParameterValue);
     }
-    //    /**
-    //     * @return bool|float|int|string|mixed[]|null
-    //     */
-    //    public function resolveParameterReflectionDefaultValue(ParameterReflection $parameterReflection)
-    //    {
-    //        $defaultValue = $parameterReflection->getDefaultValue();
-    //        if (! $defaultValue instanceof ConstantType) {
-    //            throw new ShouldNotHappenException();
-    //        }
-    //
-    //        if ($defaultValue instanceof ConstantArrayType) {
-    //            return $defaultValue->getAllArrays();
-    //        }
-    //
-    //        /** @var ConstantStringType|ConstantIntegerType|ConstantFloatType|ConstantBooleanType|NullType $defaultValue */
-    //        return $defaultValue->getValue();
-    //    }
     private function isMutuallyExclusiveNull(\PHPStan\Reflection\ParameterReflection $parameterReflection, \PhpParser\Node\Param $param) : bool
     {
         if ($parameterReflection->getDefaultValue() === null && $param->default !== null) {

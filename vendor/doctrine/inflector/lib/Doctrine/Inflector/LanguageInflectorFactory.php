@@ -12,16 +12,18 @@ interface LanguageInflectorFactory
      * @param bool $reset If true, will unset default inflections for all new rules
      *
      * @return $this
+     * @param \Doctrine\Inflector\Rules\Ruleset|null $singularRules
      */
-    public function withSingularRules(?\RectorPrefix20210704\Doctrine\Inflector\Rules\Ruleset $singularRules, bool $reset = \false);
+    public function withSingularRules($singularRules, bool $reset = \false);
     /**
      * Applies custom rules for pluralisation
      *
      * @param bool $reset If true, will unset default inflections for all new rules
      *
      * @return $this
+     * @param \Doctrine\Inflector\Rules\Ruleset|null $pluralRules
      */
-    public function withPluralRules(?\RectorPrefix20210704\Doctrine\Inflector\Rules\Ruleset $pluralRules, bool $reset = \false);
+    public function withPluralRules($pluralRules, bool $reset = \false);
     /**
      * Builds the inflector instance with all applicable rules
      */

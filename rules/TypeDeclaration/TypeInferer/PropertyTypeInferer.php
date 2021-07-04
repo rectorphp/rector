@@ -73,7 +73,11 @@ final class PropertyTypeInferer
         if ($resolvedTypes !== []) {
             $resolvedType = $this->typeFactory->createMixedPassedOrUnionType($resolvedTypes);
         } else {
+            // void type is not allowed in properties
             $resolvedType = $this->varDocPropertyTypeInferer->inferProperty($property);
+            if ($resolvedType instanceof \PHPStan\Type\VoidType) {
+                return new \PHPStan\Type\MixedType();
+            }
         }
         // default value type must be added to each resolved type if set
         $propertyDefaultValue = $property->props[0]->default;

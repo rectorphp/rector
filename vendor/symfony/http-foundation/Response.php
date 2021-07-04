@@ -247,8 +247,9 @@ class Response
      * @return static
      *
      * @deprecated since Symfony 5.1, use __construct() instead.
+     * @param string|null $content
      */
-    public static function create(?string $content = '', int $status = 200, array $headers = [])
+    public static function create($content = '', int $status = 200, array $headers = [])
     {
         trigger_deprecation('symfony/http-foundation', '5.1', 'The "%s()" method is deprecated, use "new %s()" instead.', __METHOD__, static::class);
         return new static($content, $status, $headers);

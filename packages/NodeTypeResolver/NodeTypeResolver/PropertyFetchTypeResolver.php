@@ -76,7 +76,7 @@ final class PropertyFetchTypeResolver implements \Rector\NodeTypeResolver\Contra
             if ($classNode instanceof \PhpParser\Node\Stmt\Trait_) {
                 /** @var string $traitName */
                 $traitName = $classNode->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);
-                $scope = $this->traitNodeScopeCollector->getScopeForTraitAndNode($traitName, $node);
+                $scope = $this->traitNodeScopeCollector->getScopeForTrait($traitName);
             }
         }
         if (!$scope instanceof \PHPStan\Analyser\Scope) {

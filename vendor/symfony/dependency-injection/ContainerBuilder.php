@@ -452,7 +452,7 @@ class ContainerBuilder extends \RectorPrefix20210704\Symfony\Component\Dependenc
      *
      * @see Reference
      */
-    public function get(string $id, int $invalidBehavior = \RectorPrefix20210704\Symfony\Component\DependencyInjection\ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE)
+    public function get($id, int $invalidBehavior = \RectorPrefix20210704\Symfony\Component\DependencyInjection\ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE)
     {
         if ($this->isCompiled() && isset($this->removedIds[$id]) && \RectorPrefix20210704\Symfony\Component\DependencyInjection\ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE >= $invalidBehavior) {
             return parent::get($id);

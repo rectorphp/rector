@@ -90,7 +90,7 @@ final class VariableTypeResolver implements \Rector\NodeTypeResolver\Contract\No
         if ($classLike instanceof \PhpParser\Node\Stmt\Trait_) {
             /** @var string $traitName */
             $traitName = $variable->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);
-            $traitNodeScope = $this->traitNodeScopeCollector->getScopeForTraitAndNode($traitName, $variable);
+            $traitNodeScope = $this->traitNodeScopeCollector->getScopeForTrait($traitName);
             if ($traitNodeScope !== null) {
                 return $traitNodeScope;
             }

@@ -52,7 +52,7 @@ final class SilentVoidResolver
         if ($this->betterNodeFinder->hasInstancesOf((array) $functionLike->stmts, [\PhpParser\Node\Expr\Yield_::class])) {
             return \false;
         }
-        if ($classLike instanceof \PhpParser\Node\Stmt\Class_ && $this->externalFullyQualifiedAnalyzer->hasExternalFullyQualifieds($classLike)) {
+        if ($classLike instanceof \PhpParser\Node\Stmt\Class_ && $this->externalFullyQualifiedAnalyzer->hasVendorLocatedDependency($classLike)) {
             return \false;
         }
         /** @var Return_[] $returns */

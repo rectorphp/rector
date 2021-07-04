@@ -4766,7 +4766,7 @@ Remove the "object" param and return type, add a `@param` and `@return` tags ins
 
 Change param type to match the lowest type in whole family tree
 
-- class: [`Rector\DowngradePhp72\Rector\Class_\DowngradeParameterTypeWideningRector`](../rules/DowngradePhp72/Rector/Class_/DowngradeParameterTypeWideningRector.php)
+- class: [`Rector\DowngradePhp72\Rector\ClassMethod\DowngradeParameterTypeWideningRector`](../rules/DowngradePhp72/Rector/Class_/DowngradeParameterTypeWideningRector.php)
 
 ```diff
  interface SomeInterface

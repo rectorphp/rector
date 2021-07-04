@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Interface_;
+use PhpParser\Node\Stmt\Trait_;
 use PhpParser\NodeTraverser;
 use PHPStan\AnalysedCodeException;
 use PHPStan\Analyser\MutatingScope;
@@ -105,10 +106,14 @@ final class PHPStanNodeScopeResolver
         $nodeCallback = function (\PhpParser\Node $node, \PHPStan\Analyser\Scope $scope) : void {
             // traversing trait inside class that is using it scope (from referenced) - the trait traversed by Rector is different (directly from parsed file)
             if ($scope->isInTrait()) {
-                /** @var ClassReflection $classReflection */
-                $classReflection = $scope->getTraitReflection();
-                $traitName = $classReflection->getName();
-                $this->traitNodeScopeCollector->addForTraitAndNode($traitName, $node, $scope);
+                // has just entereted trait, to avoid adding it for ever ynode
+                $parentNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+                if ($parentNode instanceof \PhpParser\Node\Stmt\Trait_) {
+                    /** @var ClassReflection $classReflection */
+                    $classReflection = $scope->getTraitReflection();
+                    $traitName = $classReflection->getName();
+                    $this->traitNodeScopeCollector->addForTrait($traitName, $scope);
+                }
                 return;
             }
             // the class reflection is resolved AFTER entering to class node
