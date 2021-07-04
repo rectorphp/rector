@@ -543,3 +543,8 @@ parameters:
         -
             message: '#foreach\(\.\.\.\), while\(\), for\(\) or if\(\.\.\.\) cannot contains a complex expression\. Extract it to a new variable assign on line before#'
             path: src/Application/ApplicationFileProcessor.php
+
+
+        - '#Callable callable\(PHPStan\\Type\\Type\)\: PHPStan\\Type\\Type invoked with 2 parameters, 1 required#'
+        # leave for now
+        - '#Cognitive complexity for "Rector\\TypeDeclaration\\TypeNormalizer\:\:normalizeArrayTypeAndArrayNever\(\)" is 14, keep it under 9#'

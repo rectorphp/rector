@@ -178,10 +178,6 @@ CODE_SAMPLE
             return true;
         }
 
-        if ($this->detailedTypeAnalyzer->isTooDetailed($newType)) {
-            return true;
-        }
-
         // not an array type
         if ($newType instanceof VoidType) {
             return true;

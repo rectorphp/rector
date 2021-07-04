@@ -90,7 +90,7 @@ final class VariableTypeResolver implements NodeTypeResolverInterface
         if ($classLike instanceof Trait_) {
             /** @var string $traitName */
             $traitName = $variable->getAttribute(AttributeKey::CLASS_NAME);
-            $traitNodeScope = $this->traitNodeScopeCollector->getScopeForTraitAndNode($traitName, $variable);
+            $traitNodeScope = $this->traitNodeScopeCollector->getScopeForTrait($traitName);
 
             if ($traitNodeScope !== null) {
                 return $traitNodeScope;

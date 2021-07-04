@@ -2,7 +2,7 @@
 
 namespace Rector\Tests\TypeDeclaration\Rector\ClassMethod\AddVoidReturnTypeWhereNoReturnRector\Fixture;
 
-use Rector\Tests\TypeDeclaration\Rector\ClassMethod\AddVoidReturnTypeWhereNoReturnRector\Source\Foo;
+use Rector\Tests\TypeDeclaration\Rector\ClassMethod\AddVoidReturnTypeWhereNoReturnRector\Source\vendor\Foo;
 
 final class SkipFromExternal2
 {
@@ -12,5 +12,3 @@ final class SkipFromExternal2
     {
     }
 }
-
-?>

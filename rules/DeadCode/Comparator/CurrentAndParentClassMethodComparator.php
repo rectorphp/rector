@@ -138,22 +138,17 @@ final class CurrentAndParentClassMethodComparator
         $parentMethodReflection = $classReflection->getMethod($methodName, $scope);
 
         // 3rd party code
-        if ($parentMethodReflection !== null) {
-            if (! $parentMethodReflection->isPrivate() && ! $parentMethodReflection->isPublic() && $classMethod->isPublic()) {
-                return true;
-            }
-
-            if ($parentMethodReflection->isInternal()->yes()) {
-                // we can't know for certain so we assume its a override with purpose
-                return true;
-            }
-
-            if ($this->areParameterDefaultsDifferent($classMethod, $parentMethodReflection)) {
-                return true;
-            }
+//        if ($parentMethodReflection !== null) {
+        if (! $parentMethodReflection->isPrivate() && ! $parentMethodReflection->isPublic() && $classMethod->isPublic()) {
+            return true;
         }
 
-        return false;
+        if ($parentMethodReflection->isInternal()->yes()) {
+            // we can't know for certain so we assume its a override with purpose
+            return true;
+        }
+
+        return $this->areParameterDefaultsDifferent($classMethod, $parentMethodReflection);
     }
 
     private function areParameterDefaultsDifferent(

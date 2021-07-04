@@ -64,7 +64,11 @@ final class PropertyTypeInferer
         if ($resolvedTypes !== []) {
             $resolvedType = $this->typeFactory->createMixedPassedOrUnionType($resolvedTypes);
         } else {
+            // void type is not allowed in properties
             $resolvedType = $this->varDocPropertyTypeInferer->inferProperty($property);
+            if ($resolvedType instanceof VoidType) {
+                return new MixedType();
+            }
         }
 
         // default value type must be added to each resolved type if set

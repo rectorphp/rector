@@ -2,11 +2,11 @@
 
 namespace Rector\Tests\CodingStyle\Rector\Namespace_\ImportFullyQualifiedNamesRector\Fixture;
 
-use Rector\Tests\CodingStyle\Rector\Namespace_\ImportFullyQualifiedNamesRector\Source\Some\Trait_;
+use Rector\Tests\CodingStyle\Rector\Namespace_\ImportFullyQualifiedNamesRector\Source\Some\SomeTrait;
 
 final class SameEndWithExistingImport
 {
-    public function __construct(\Rector\Tests\CodingStyle\Rector\Namespace_\ImportFullyQualifiedNamesRector\Source\Some\Trait_ $firstTrait)
+    public function __construct(\Rector\Tests\CodingStyle\Rector\Namespace_\ImportFullyQualifiedNamesRector\Source\Some\SomeTrait $firstTrait)
     {
     }
 }
@@ -17,11 +17,11 @@ final class SameEndWithExistingImport
 
 namespace Rector\Tests\CodingStyle\Rector\Namespace_\ImportFullyQualifiedNamesRector\Fixture;
 
-use Rector\Tests\CodingStyle\Rector\Namespace_\ImportFullyQualifiedNamesRector\Source\Some\Trait_;
+use Rector\Tests\CodingStyle\Rector\Namespace_\ImportFullyQualifiedNamesRector\Source\Some\SomeTrait;
 
 final class SameEndWithExistingImport
 {
-    public function __construct(Trait_ $firstTrait)
+    public function __construct(SomeTrait $firstTrait)
     {
     }
 }

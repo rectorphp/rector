@@ -2,7 +2,7 @@
 
 namespace Rector\Tests\Naming\Rector\ClassMethod\RenameParamToMatchTypeRector\Fixture;
 
-use Rector\Tests\DowngradePhp72\Rector\Class_\DowngradeParameterTypeWideningRector\Source\UniqueType;
+use Rector\Tests\DowngradePhp72\Rector\ClassMethod\DowngradeParameterTypeWideningRector\Source\UniqueType;
 use Rector\Tests\Naming\Rector\ClassMethod\RenameParamToMatchTypeRector\Source\ILoader;
 use Rector\Tests\Naming\Rector\ClassMethod\RenameParamToMatchTypeRector\Source\SingleSomeClass;
 use SplFileInfo;

@@ -77,6 +77,7 @@ final class PhpDocTypeChanger
             $newType,
             TypeKind::RETURN()
         );
+
         $currentReturnTagValueNode = $phpDocInfo->getReturnTagValue();
 
         if ($currentReturnTagValueNode !== null) {

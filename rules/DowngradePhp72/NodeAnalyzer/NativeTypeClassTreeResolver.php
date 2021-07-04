@@ -8,8 +8,11 @@ use PhpParser\Node;
 use PhpParser\Node\Param;
 use PHPStan\BetterReflection\Reflection\Adapter\ReflectionParameter;
 use PHPStan\Reflection\ClassReflection;
+use PHPStan\Reflection\ParameterReflection;
 use PHPStan\Type\MixedType;
+use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
+use PHPStan\Type\TypeCombinator;
 use PHPStan\Type\TypehintHelper;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
@@ -29,6 +32,20 @@ final class NativeTypeClassTreeResolver
     ): ?Type {
         $nativeReflectionClass = $classReflection->getNativeReflection();
 
+        if (! $classReflection->hasNativeMethod($methodName)) {
+            return null;
+        }
+
+        $phpstanParameterReflection = null;
+        $methodReflection = $classReflection->getNativeMethod($methodName);
+        foreach ($methodReflection->getVariants() as $parametersAcceptor) {
+            $phpstanParameterReflection = $parametersAcceptor->getParameters()[$position] ?? null;
+        }
+
+        if (! $phpstanParameterReflection instanceof ParameterReflection) {
+            return null;
+        }
+
         $reflectionMethod = $nativeReflectionClass->getMethod($methodName);
         $parameterReflection = $reflectionMethod->getParameters()[$position] ?? null;
         if (! $parameterReflection instanceof \ReflectionParameter) {
@@ -37,7 +54,7 @@ final class NativeTypeClassTreeResolver
         }
 
         // "native" reflection from PHPStan removes the type, so we need to check with both reflection and php-paser
-        $nativeType = $this->resolveNativeType($parameterReflection);
+        $nativeType = $this->resolveNativeType($parameterReflection, $phpstanParameterReflection);
         if (! $nativeType instanceof MixedType) {
             return $nativeType;
         }
@@ -50,8 +67,10 @@ final class NativeTypeClassTreeResolver
         );
     }
 
-    private function resolveNativeType(\ReflectionParameter $reflectionParameter): Type
-    {
+    private function resolveNativeType(
+        \ReflectionParameter $reflectionParameter,
+        ParameterReflection $parameterReflection
+    ): Type {
         if (! $reflectionParameter instanceof ReflectionParameter) {
             return new MixedType();
         }
@@ -70,6 +89,21 @@ final class NativeTypeClassTreeResolver
             return new MixedType();
         }
 
-        return $this->staticTypeMapper->mapPhpParserNodePHPStanType($param->type);
+        $paramType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($param->type);
+        return $this->joinWithNullTypeIfNullDefaultValue($parameterReflection, $paramType);
+    }
+
+    private function joinWithNullTypeIfNullDefaultValue(ParameterReflection $parameterReflection, Type $paramType): Type
+    {
+        // nullable type!
+        if (! $parameterReflection->getDefaultValue() instanceof NullType) {
+            return $paramType;
+        }
+
+        if (TypeCombinator::containsNull($paramType)) {
+            return $paramType;
+        }
+
+        return TypeCombinator::addNull($paramType);
     }
 }

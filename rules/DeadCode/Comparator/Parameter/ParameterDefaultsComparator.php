@@ -7,13 +7,13 @@ namespace Rector\DeadCode\Comparator\Parameter;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Param;
 use PHPStan\Reflection\ParameterReflection;
-use Rector\Core\PhpParser\Node\Value\ValueResolver;
+use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\DowngradePhp80\Reflection\DefaultParameterValueResolver;
 
 final class ParameterDefaultsComparator
 {
     public function __construct(
-        private ValueResolver $valueResolver,
+        private NodeComparator $nodeComparator,
         private DefaultParameterValueResolver $defaultParameterValueResolver
     ) {
     }
@@ -34,28 +34,9 @@ final class ParameterDefaultsComparator
         $firstParameterValue = $this->defaultParameterValueResolver->resolveFromParameterReflection(
             $parameterReflection
         );
-        $secondParameterValue = $this->valueResolver->getValue($paramDefault);
 
-        return $firstParameterValue !== $secondParameterValue;
+        return ! $this->nodeComparator->areNodesEqual($paramDefault, $firstParameterValue);
     }
-
-//    /**
-//     * @return bool|float|int|string|mixed[]|null
-//     */
-//    public function resolveParameterReflectionDefaultValue(ParameterReflection $parameterReflection)
-//    {
-//        $defaultValue = $parameterReflection->getDefaultValue();
-//        if (! $defaultValue instanceof ConstantType) {
-//            throw new ShouldNotHappenException();
-//        }
-//
-//        if ($defaultValue instanceof ConstantArrayType) {
-//            return $defaultValue->getAllArrays();
-//        }
-//
-//        /** @var ConstantStringType|ConstantIntegerType|ConstantFloatType|ConstantBooleanType|NullType $defaultValue */
-//        return $defaultValue->getValue();
-//    }
 
     private function isMutuallyExclusiveNull(ParameterReflection $parameterReflection, Param $param): bool
     {

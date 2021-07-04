@@ -15,11 +15,6 @@ final class ClassWithProperty
     private $multiCount;
 
     /**
-     * @var void
-     */
-    private $shouldBeSkipped;
-
-    /**
      * @var callable
      */
     private $shouldBeSkippedToo;
@@ -44,11 +39,6 @@ final class ClassWithProperty
      * @var int|null|bool
      */
     private $multiCount;
-
-    /**
-     * @var void
-     */
-    private $shouldBeSkipped;
 
     /**
      * @var callable
