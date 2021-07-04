@@ -257,13 +257,13 @@ CODE_SAMPLE
     }
 
     /**
-     * Iterables: either objects declaring the interface Traversable,
-     * or the pseudo-type iterable
+     * Iterables: objects declaring the interface Traversable,
+     * For "iterable" type, it can be array
      */
     private function isIterableType(Type $type): bool
     {
         if ($type instanceof IterableType) {
-            return true;
+            return false;
         }
 
         $traversableObjectType = new ObjectType('Traversable');
