@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\DowngradePhp53\Rector\Dir;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Scalar\MagicConst\Dir;
 use PhpParser\Node\Scalar\MagicConst\File;
 use Rector\Core\Rector\AbstractRector;
@@ -48,7 +49,7 @@ CODE_SAMPLE
     /**
      * @param Dir $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : \PhpParser\Node\Expr\FuncCall
     {
         return $this->nodeFactory->createFuncCall('dirname', [new \PhpParser\Node\Scalar\MagicConst\File()]);
     }

@@ -75,7 +75,7 @@ CODE_SAMPLE
     /**
      * @param ClassMethod $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : \PhpParser\Node\Stmt\ClassMethod
     {
         foreach ($this->methodsByType as $type => $methods) {
             if (!$this->isObjectType($node, new \PHPStan\Type\ObjectType($type))) {

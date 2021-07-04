@@ -54,7 +54,7 @@ CODE_SAMPLE
     /**
      * @param String_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : \PhpParser\Node\Scalar\String_
     {
         $doubleQuoteCount = \substr_count($node->value, '"');
         $singleQuoteCount = \substr_count($node->value, "'");

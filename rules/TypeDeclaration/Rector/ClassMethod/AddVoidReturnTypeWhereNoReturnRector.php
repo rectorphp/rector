@@ -11,6 +11,7 @@ use PhpParser\Node\Stmt\Function_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\TypeDeclaration\TypeInferer\SilentVoidResolver;
+use Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnVendorLockResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -22,9 +23,14 @@ final class AddVoidReturnTypeWhereNoReturnRector extends \Rector\Core\Rector\Abs
      * @var \Rector\TypeDeclaration\TypeInferer\SilentVoidResolver
      */
     private $silentVoidResolver;
-    public function __construct(\Rector\TypeDeclaration\TypeInferer\SilentVoidResolver $silentVoidResolver)
+    /**
+     * @var \Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnVendorLockResolver
+     */
+    private $classMethodReturnVendorLockResolver;
+    public function __construct(\Rector\TypeDeclaration\TypeInferer\SilentVoidResolver $silentVoidResolver, \Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnVendorLockResolver $classMethodReturnVendorLockResolver)
     {
         $this->silentVoidResolver = $silentVoidResolver;
+        $this->classMethodReturnVendorLockResolver = $classMethodReturnVendorLockResolver;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -72,6 +78,9 @@ CODE_SAMPLE
             return null;
         }
         if (!$this->silentVoidResolver->hasExclusiveVoid($node)) {
+            return null;
+        }
+        if ($node instanceof \PhpParser\Node\Stmt\ClassMethod && $this->classMethodReturnVendorLockResolver->isVendorLocked($node)) {
             return null;
         }
         $node->returnType = new \PhpParser\Node\Identifier('void');

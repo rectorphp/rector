@@ -45,7 +45,7 @@ CODE_SAMPLE
     /**
      * @param FuncCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : \PhpParser\Node\Expr\FuncCall
     {
         foreach ($node->args as $nodeArg) {
             if ($nodeArg->byRef) {

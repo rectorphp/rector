@@ -100,7 +100,7 @@ CODE_SAMPLE
     /**
      * @param Class_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : \PhpParser\Node\Stmt\Class_
     {
         $this->matchedObjectTypes = [];
         // collect classes with new to factory in all classes

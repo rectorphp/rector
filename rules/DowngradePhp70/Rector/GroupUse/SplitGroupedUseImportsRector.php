@@ -40,9 +40,9 @@ CODE_SAMPLE
     }
     /**
      * @param GroupUse $node
-     * @return Use_[]|null
+     * @return Use_[]
      */
-    public function refactor(\PhpParser\Node $node)
+    public function refactor(\PhpParser\Node $node) : array
     {
         $prefix = $this->getName($node->prefix);
         $uses = [];

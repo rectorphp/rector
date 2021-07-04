@@ -40,7 +40,7 @@ CODE_SAMPLE
     /**
      * @param Coalesce $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : \PhpParser\Node\Expr\Ternary
     {
         $if = $node->left;
         $else = $node->right;

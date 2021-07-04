@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitfbed5e30872de338ac03dddfdc4d41a1
+class ComposerStaticInitd12afff95d0d64dcd0dd26bf8b6c1fc2
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -2192,7 +2192,6 @@ class ComposerStaticInitfbed5e30872de338ac03dddfdc4d41a1
         'Rector\\Core\\NodeAnalyzer\\ClassAnalyzer' => __DIR__ . '/../..' . '/src/NodeAnalyzer/ClassAnalyzer.php',
         'Rector\\Core\\NodeAnalyzer\\CompactFuncCallAnalyzer' => __DIR__ . '/../..' . '/src/NodeAnalyzer/CompactFuncCallAnalyzer.php',
         'Rector\\Core\\NodeAnalyzer\\ConstFetchAnalyzer' => __DIR__ . '/../..' . '/src/NodeAnalyzer/ConstFetchAnalyzer.php',
-        'Rector\\Core\\NodeAnalyzer\\ExternalFullyQualifiedAnalyzer' => __DIR__ . '/../..' . '/src/NodeAnalyzer/ExternalFullyQualifiedAnalyzer.php',
         'Rector\\Core\\NodeAnalyzer\\ParamAnalyzer' => __DIR__ . '/../..' . '/src/NodeAnalyzer/ParamAnalyzer.php',
         'Rector\\Core\\NodeAnalyzer\\PromotedPropertyParamCleaner' => __DIR__ . '/../..' . '/src/NodeAnalyzer/PromotedPropertyParamCleaner.php',
         'Rector\\Core\\NodeAnalyzer\\PropertyFetchAnalyzer' => __DIR__ . '/../..' . '/src/NodeAnalyzer/PropertyFetchAnalyzer.php',
@@ -3547,10 +3546,8 @@ class ComposerStaticInitfbed5e30872de338ac03dddfdc4d41a1
         'Rector\\VendorLocker\\NodeVendorLocker\\ClassMethodParamVendorLockResolver' => __DIR__ . '/../..' . '/packages/VendorLocker/NodeVendorLocker/ClassMethodParamVendorLockResolver.php',
         'Rector\\VendorLocker\\NodeVendorLocker\\ClassMethodReturnTypeOverrideGuard' => __DIR__ . '/../..' . '/packages/VendorLocker/NodeVendorLocker/ClassMethodReturnTypeOverrideGuard.php',
         'Rector\\VendorLocker\\NodeVendorLocker\\ClassMethodReturnVendorLockResolver' => __DIR__ . '/../..' . '/packages/VendorLocker/NodeVendorLocker/ClassMethodReturnVendorLockResolver.php',
-        'Rector\\VendorLocker\\NodeVendorLocker\\ClassMethodVendorLockResolver' => __DIR__ . '/../..' . '/packages/VendorLocker/NodeVendorLocker/ClassMethodVendorLockResolver.php',
         'Rector\\VendorLocker\\NodeVendorLocker\\PropertyTypeVendorLockResolver' => __DIR__ . '/../..' . '/packages/VendorLocker/NodeVendorLocker/PropertyTypeVendorLockResolver.php',
         'Rector\\VendorLocker\\NodeVendorLocker\\PropertyVisibilityVendorLockResolver' => __DIR__ . '/../..' . '/packages/VendorLocker/NodeVendorLocker/PropertyVisibilityVendorLockResolver.php',
-        'Rector\\VendorLocker\\Reflection\\MethodReflectionContractAnalyzer' => __DIR__ . '/../..' . '/packages/VendorLocker/Reflection/MethodReflectionContractAnalyzer.php',
         'Rector\\VendorLocker\\VendorLockResolver' => __DIR__ . '/../..' . '/packages/VendorLocker/VendorLockResolver.php',
         'Rector\\Visibility\\Rector\\ClassConst\\ChangeConstantVisibilityRector' => __DIR__ . '/../..' . '/rules/Visibility/Rector/ClassConst/ChangeConstantVisibilityRector.php',
         'Rector\\Visibility\\Rector\\ClassMethod\\ChangeMethodVisibilityRector' => __DIR__ . '/../..' . '/rules/Visibility/Rector/ClassMethod/ChangeMethodVisibilityRector.php',
@@ -3848,9 +3845,9 @@ class ComposerStaticInitfbed5e30872de338ac03dddfdc4d41a1
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitfbed5e30872de338ac03dddfdc4d41a1::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitfbed5e30872de338ac03dddfdc4d41a1::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitfbed5e30872de338ac03dddfdc4d41a1::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitd12afff95d0d64dcd0dd26bf8b6c1fc2::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitd12afff95d0d64dcd0dd26bf8b6c1fc2::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitd12afff95d0d64dcd0dd26bf8b6c1fc2::$classMap;
 
         }, null, ClassLoader::class);
     }

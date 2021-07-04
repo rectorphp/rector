@@ -61,9 +61,8 @@ CODE_SAMPLE
     }
     /**
      * @param If_ $node
-     * @return null|If_
      */
-    public function refactor(\PhpParser\Node $node)
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node\Stmt\If_
     {
         $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
         // a trait

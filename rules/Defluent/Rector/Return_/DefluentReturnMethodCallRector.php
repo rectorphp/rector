@@ -49,7 +49,7 @@ CODE_SAMPLE
      * @param Return_ $node
      * @return null|Expression[]|Return_[]
      */
-    public function refactor(\PhpParser\Node $node)
+    public function refactor(\PhpParser\Node $node) : ?array
     {
         if (!$node->expr instanceof \PhpParser\Node\Expr\MethodCall) {
             return null;

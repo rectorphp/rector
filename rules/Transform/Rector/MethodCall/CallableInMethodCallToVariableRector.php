@@ -73,9 +73,8 @@ CODE_SAMPLE
     }
     /**
      * @param MethodCall $node
-     * @return Node|Node[]|null
      */
-    public function refactor(\PhpParser\Node $node)
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node\Expr\MethodCall
     {
         foreach ($this->callableInMethodCallToVariable as $singleCallableInMethodCallToVariable) {
             if (!$this->isObjectType($node->var, $singleCallableInMethodCallToVariable->getObjectType())) {

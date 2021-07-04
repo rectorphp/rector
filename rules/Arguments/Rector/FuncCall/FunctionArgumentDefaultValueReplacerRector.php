@@ -56,7 +56,7 @@ CODE_SAMPLE
     /**
      * @param FuncCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : \PhpParser\Node\Expr\FuncCall
     {
         foreach ($this->replacedArguments as $replacedArgument) {
             if (!$this->isName($node->name, $replacedArgument->getFunction())) {

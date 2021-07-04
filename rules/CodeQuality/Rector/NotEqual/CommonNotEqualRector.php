@@ -47,7 +47,7 @@ CODE_SAMPLE
     /**
      * @param NotEqual $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : \PhpParser\Node\Expr\BinaryOp\NotEqual
     {
         // invoke override to default "!="
         $node->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NODE, null);

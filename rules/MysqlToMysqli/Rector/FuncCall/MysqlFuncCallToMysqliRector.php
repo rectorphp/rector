@@ -44,7 +44,7 @@ CODE_SAMPLE
     /**
      * @param FuncCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : \PhpParser\Node\Expr\FuncCall
     {
         if ($this->isName($node, 'mysql_create_db')) {
             return $this->processMysqlCreateDb($node);

@@ -57,9 +57,9 @@ CODE_SAMPLE
     }
     /**
      * @param ClassConst|Property $node
-     * @return Node|Node[]|null
+     * @return Node[]|null
      */
-    public function refactor(\PhpParser\Node $node)
+    public function refactor(\PhpParser\Node $node) : ?array
     {
         if ($node instanceof \PhpParser\Node\Stmt\ClassConst) {
             if (\count($node->consts) < 2) {
