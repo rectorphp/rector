@@ -38,6 +38,8 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
+use PhpParser\Node\Expr\ClassConstFetch;
+use PhpParser\Node\Expr\StaticCall;
 
 final class AnonymousFunctionFactory
 {
@@ -93,7 +95,15 @@ final class AnonymousFunctionFactory
 
         $anonymousFunction->params = $newParams;
 
-        $innerMethodCall = new MethodCall($expr, $phpMethodReflection->getName());
+        if ($expr instanceof ClassConstFetch && $expr->name instanceof Identifier && $this->nodeNameResolver->isName($expr->name, 'class')) {
+            /** @var Expr $expr */
+            $expr = $expr->class;
+        }
+
+        $innerMethodCall = $phpMethodReflection->isStatic()
+            ? new StaticCall($expr, $phpMethodReflection->getName())
+            : new MethodCall($expr, $phpMethodReflection->getName());
+
         $innerMethodCall->args = $this->nodeFactory->createArgsFromParams($newParams);
 
         if (! $functionVariantWithPhpDoc->getReturnType() instanceof MixedType) {
