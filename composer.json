@@ -33,7 +33,7 @@
         "sebastian/diff": "^4.0.4",
         "ssch/typo3-rector": "dev-main#e75102b",
         "symfony/console": "5.3.x-dev",
-        "symfony/dependency-injection": "^5.3",
+        "symfony/dependency-injection": "5.3.x-dev",
         "symfony/finder": "^5.3",
         "symfony/http-kernel": "^5.3",
         "symfony/process": "^5.3",
@@ -142,11 +142,6 @@
         "patches": {
             "symfony/console": [
                 "patches/symfony-console-style-symfonystyle-php.patch"
-            ],
-            "symfony/dependency-injection": [
-                "patches/symfony-dependency-injection-servicelocator-php.patch",
-                "patches/symfony-dependency-injection-argument-servicelocator-php.patch",
-                "patches/symfony-dependency-injection-parameterbag-containerbag-php.patch"
             ]
         }
     },
