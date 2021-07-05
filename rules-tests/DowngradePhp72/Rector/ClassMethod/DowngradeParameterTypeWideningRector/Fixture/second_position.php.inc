@@ -23,14 +23,18 @@ namespace Rector\Tests\DowngradePhp72\Rector\ClassMethod\DowngradeParameterTypeW
 interface SecondPositionInterface
 {
     /**
+     * @param string $id
      * @param callable $callable
      */
-    public function has(string $id, $callable);
+    public function has($id, $callable);
 }
 
 final class SomeSecondPosition implements SecondPositionInterface
 {
-    public function has(string $id, $callable)
+    /**
+     * @param string $id
+     */
+    public function has($id, $callable)
     {
     }
 }

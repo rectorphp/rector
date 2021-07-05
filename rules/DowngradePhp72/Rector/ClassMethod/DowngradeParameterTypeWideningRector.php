@@ -9,14 +9,13 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
-use Rector\DowngradePhp72\NodeAnalyzer\ParentChildClassMethodTypeResolver;
 use Rector\DowngradePhp72\PhpDoc\NativeParamToPhpDocDecorator;
 use Rector\DowngradePhp72\PHPStan\ClassLikeScopeResolver;
-use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Webmozart\Assert\Assert;
 
 /**
  * @changelog https://www.php.net/manual/en/migration72.new-features.php#migration72.new-features.param-type-widening
@@ -24,18 +23,20 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\DowngradePhp72\Rector\ClassMethod\DowngradeParameterTypeWideningRector\DowngradeParameterTypeWideningRectorTest
  */
-final class DowngradeParameterTypeWideningRector extends AbstractRector
+final class DowngradeParameterTypeWideningRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
-     * Methods that are downgraded on a parent stack, by class, then method name
-     * @var array<class-string, array<string, ClassMethod[]>>
+     * @var string
      */
-    private array $classMethodStack = [];
+    public const SAFE_TYPES = 'safe_types';
+
+    /**
+     * @var class-string[]
+     */
+    private array $safeTypes = [];
 
     public function __construct(
-        private ParentChildClassMethodTypeResolver $parentChildClassMethodTypeResolver,
         private NativeParamToPhpDocDecorator $nativeParamToPhpDocDecorator,
-        private TypeFactory $typeFactory,
         private ClassLikeScopeResolver $classLikeScopeResolver
     ) {
     }
@@ -43,7 +44,7 @@ final class DowngradeParameterTypeWideningRector extends AbstractRector
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change param type to match the lowest type in whole family tree', [
-            new CodeSample(
+            new ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
 interface SomeInterface
 {
@@ -74,6 +75,10 @@ final class SomeClass implements SomeInterface
     }
 }
 CODE_SAMPLE
+            ,
+                [
+                    self::SAFE_TYPES => [],
+                ]
             ),
         ]);
     }
@@ -101,62 +106,36 @@ CODE_SAMPLE
             return null;
         }
 
-        $classMethodName = $this->getName($node);
+        if ($this->isSealedClass($classReflection)) {
+            return null;
+        }
 
-        // the method can be implemented (interface), or extended (class), but we don't know who implements it and how, so we'll put it on stack and get back to it, if one of the child class/interface appears to visit it :)
-
-        $this->classMethodStack[$classReflection->getName()][$classMethodName][] = $node;
+        foreach ($this->safeTypes as $safeType) {
+            if ($classReflection->isSubclassOf($safeType)) {
+                return null;
+            }
+        }
 
         if ($this->skipClassMethod($node)) {
             return null;
         }
 
-        return $this->refactorClassMethod($node, $classReflection);
+        // Downgrade every scalar parameter, just to be sure
+        foreach (array_keys($node->params) as $paramPosition) {
+            $this->removeParamTypeFromMethod($node, $paramPosition);
+        }
+
+        return $node;
     }
 
     /**
-     * The topmost class is the source of truth, so we go only down to avoid up/down collission
+     * @param array<string, class-string[]> $configuration
      */
-    private function refactorClassMethod(ClassMethod $classMethod, ClassReflection $classReflection): ?ClassMethod
+    public function configure(array $configuration): void
     {
-        /** @var string $methodName */
-        $methodName = $this->nodeNameResolver->getName($classMethod);
-
-        $hasChanged = false;
-        foreach (array_keys($classMethod->params) as $paramPosition) {
-            $parameterTypesByParentClassLikes = $this->parentChildClassMethodTypeResolver->resolve(
-                $classReflection,
-                $methodName,
-                $paramPosition,
-                $this->classMethodStack
-            );
-
-            $uniqueTypes = $this->typeFactory->uniquateTypes($parameterTypesByParentClassLikes);
-
-            // all methods from now to the top share the same param type → nothing to change for this parameter
-            if (count($uniqueTypes) === 1) {
-                continue;
-            }
-
-            $hasChanged = true;
-            $this->removeParamTypeFromMethod($classMethod, $paramPosition);
-
-            // update also all the ancestors in the stack
-            foreach ($classReflection->getAncestors() as $ancestorClassReflection) {
-                // skip self, because its handled directly here
-                if ($ancestorClassReflection === $classReflection) {
-                    continue;
-                }
-
-                $stackedClassMethods = $this->classMethodStack[$ancestorClassReflection->getName()][$methodName] ?? [];
-
-                foreach ($stackedClassMethods as $stackedClassMethod) {
-                    $this->removeParamTypeFromMethod($stackedClassMethod, $paramPosition);
-                }
-            }
-        }
-
-        return $hasChanged ? $classMethod : null;
+        $safeTypes = $configuration[self::SAFE_TYPES] ?? [];
+        Assert::allString($safeTypes);
+        $this->safeTypes = $safeTypes;
     }
 
     private function removeParamTypeFromMethod(ClassMethod $classMethod, int $paramPosition): void
@@ -167,10 +146,6 @@ CODE_SAMPLE
         }
 
         // It already has no type => nothing to do - check original param, as it could have been removed by this rule
-        $originalParam = $param->getAttribute(AttributeKey::ORIGINAL_NODE);
-        if ($originalParam instanceof Param && $originalParam->type === null) {
-            return;
-        }
         if ($param->type === null) {
             return;
         }
@@ -187,5 +162,21 @@ CODE_SAMPLE
         }
 
         return $classMethod->params === [];
+    }
+
+    /**
+     * This method is perfectly sealed, nothing to downgrade here
+     */
+    private function isSealedClass(ClassReflection $classReflection): bool
+    {
+        if (! $classReflection->isClass()) {
+            return false;
+        }
+
+        if (! $classReflection->isFinal()) {
+            return false;
+        }
+
+        return count($classReflection->getAncestors()) === 1;
     }
 }

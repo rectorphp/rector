@@ -51,7 +51,10 @@ final class ConfigurableCallValuesCollectingPhpFileLoader extends PhpFileLoader
     private function collectConfigureCallsFromJustImportedConfigurableRectorDefinitions(): void
     {
         foreach ($this->container->getDefinitions() as $class => $definition) {
-            /** @var string $class */
+            if (! is_string($class)) {
+                continue;
+            }
+
             if (! is_a($class, ConfigurableRectorInterface::class, true)) {
                 continue;
             }

@@ -3,12 +3,11 @@
 declare(strict_types=1);
 
 use Rector\Core\Configuration\Option;
+use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\Stubs\PHPStanStubLoader;
-use Rector\DowngradePhp80\Rector\Class_\DowngradeAttributeToAnnotationRector;
-use Rector\DowngradePhp80\ValueObject\DowngradeAttributeToAnnotation;
+use Rector\DowngradePhp72\Rector\ClassMethod\DowngradeParameterTypeWideningRector;
 use Rector\Set\ValueObject\DowngradeSetList;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
 $phpStanStubLoader = new PHPStanStubLoader();
 $phpStanStubLoader->loadStubs();
@@ -25,6 +24,14 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $containerConfigurator->import(DowngradeSetList::PHP_74);
     $containerConfigurator->import(DowngradeSetList::PHP_73);
     $containerConfigurator->import(DowngradeSetList::PHP_72);
+
+    $services = $containerConfigurator->services();
+    $services->set(DowngradeParameterTypeWideningRector::class)
+        ->call('configure', [[
+            DowngradeParameterTypeWideningRector::SAFE_TYPES => [
+                RectorInterface::class,
+            ]
+        ]]);
 };
 
 /**
