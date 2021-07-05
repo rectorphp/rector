@@ -1978,7 +1978,8 @@
             "type": "library",
             "extra": {
                 "patches_applied": [
-                    "patches\/symfony-dependency-injection-servicelocator-php.patch"
+                    "patches\/symfony-dependency-injection-servicelocator-php.patch",
+                    "patches\/symfony-dependency-injection-argument-servicelocator-php.patch"
                 ]
             },
             "installation-source": "dist",
