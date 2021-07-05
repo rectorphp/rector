@@ -4,47 +4,32 @@ declare(strict_types=1);
 
 namespace Rector\DowngradePhp72\NodeAnalyzer;
 
+use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\Type;
-use Rector\NodeCollector\NodeCollector\NodeRepository;
-use Rector\NodeNameResolver\NodeNameResolver;
 
 final class ParentChildClassMethodTypeResolver
 {
     public function __construct(
         private NativeTypeClassTreeResolver $nativeTypeClassTreeResolver,
-        private NodeRepository $nodeRepository,
-        private ReflectionProvider $reflectionProvider,
-        private NodeNameResolver $nodeNameResolver
+        private ReflectionProvider $reflectionProvider
     ) {
     }
 
     /**
-     * @param ClassReflection[] $ancestorClassReflections
-     * @param ClassReflection[] $interfaceClassReflections
-     *@return array<class-string, Type>
+     * @param array<class-string, array<string, ClassMethod[]>> $classMethodStack
+     * @return array<class-string, Type>
      */
     public function resolve(
         ClassReflection $classReflection,
         string $methodName,
         int $paramPosition,
-        array $ancestorClassReflections,
-        array $interfaceClassReflections
+        array $classMethodStack
     ): array {
         $parameterTypesByClassName = [];
 
-        // include types of class scope in case of trait
-        if ($classReflection->isTrait()) {
-            $parameterTypesByInterfaceName = $this->resolveInterfaceTypeByClassName(
-                $interfaceClassReflections,
-                $methodName,
-                $paramPosition
-            );
-            $parameterTypesByClassName = array_merge($parameterTypesByClassName, $parameterTypesByInterfaceName);
-        }
-
-        foreach ($ancestorClassReflections as $ancestorClassReflection) {
+        foreach ($classReflection->getAncestors() as $ancestorClassReflection) {
             if (! $ancestorClassReflection->hasMethod($methodName)) {
                 continue;
             }
@@ -60,97 +45,56 @@ final class ParentChildClassMethodTypeResolver
             }
 
             $parameterTypesByClassName[$ancestorClassReflection->getName()] = $parameterType;
+        }
 
-            // collect other children
-            if ($ancestorClassReflection->isInterface() || $ancestorClassReflection->isClass()) {
-                $interfaceParameterTypesByClassName = $this->collectInterfaceImplenters(
-                    $ancestorClassReflection,
+        $stackedParameterTypesByClassName = $this->resolveStackedClassMethodTypes(
+            $classReflection,
+            $classMethodStack,
+            $methodName,
+            $paramPosition
+        );
+
+        return array_merge($parameterTypesByClassName, $stackedParameterTypesByClassName);
+    }
+
+    /**
+     * @param array<class-string, array<string, ClassMethod[]>> $classMethodStack
+     * @return array<class-string, Type>
+     */
+    private function resolveStackedClassMethodTypes(
+        ClassReflection $classReflection,
+        array $classMethodStack,
+        string $methodName,
+        int $paramPosition
+    ): array {
+        $stackedParameterTypesByClassName = [];
+
+        // get subclasses of ancestors too
+        foreach ($classReflection->getAncestors() as $ancestorClassReflection) {
+            foreach (array_keys($classMethodStack) as $className) {
+                if (! $this->reflectionProvider->hasClass($className)) {
+                    continue;
+                }
+
+                $stackedClassReflection = $this->reflectionProvider->getClass($className);
+                if (! $stackedClassReflection->isSubclassOf($ancestorClassReflection->getName())) {
+                    continue;
+                }
+
+                $parameterType = $this->nativeTypeClassTreeResolver->resolveParameterReflectionType(
+                    $stackedClassReflection,
                     $methodName,
                     $paramPosition
                 );
 
-                $parameterTypesByClassName = array_merge(
-                    $parameterTypesByClassName,
-                    $interfaceParameterTypesByClassName
-                );
+                if (! $parameterType instanceof Type) {
+                    continue;
+                }
+
+                $stackedParameterTypesByClassName[$className] = $parameterType;
             }
         }
 
-        return $parameterTypesByClassName;
-    }
-
-    /**
-     * @param ClassReflection[] $interfaces
-     * @return array<class-string, Type>
-     */
-    private function resolveInterfaceTypeByClassName(array $interfaces, string $methodName, int $position): array
-    {
-        $typesByClassName = [];
-
-        foreach ($interfaces as $interface) {
-            $interfaceHasMethod = $interface->hasMethod($methodName);
-            if (! $interfaceHasMethod) {
-                continue;
-            }
-
-            $parameterType = $this->nativeTypeClassTreeResolver->resolveParameterReflectionType(
-                $interface,
-                $methodName,
-                $position
-            );
-
-            // parameter does not exist
-            if (! $parameterType instanceof Type) {
-                continue;
-            }
-
-            $typesByClassName[$interface->getName()] = $parameterType;
-        }
-
-        return $typesByClassName;
-    }
-
-    /**
-     * @return array<class-string, Type>
-     */
-    private function collectInterfaceImplenters(
-        ClassReflection $ancestorClassReflection,
-        string $methodName,
-        int $paramPosition
-    ): array {
-        $parameterTypesByClassName = [];
-
-        $interfaceImplementerClassLikes = $this->nodeRepository->findClassesAndInterfacesByType(
-            $ancestorClassReflection->getName()
-        );
-
-        foreach ($interfaceImplementerClassLikes as $interfaceImplementerClassLike) {
-            $interfaceImplementerClassLikeName = $this->nodeNameResolver->getName($interfaceImplementerClassLike);
-            if ($interfaceImplementerClassLikeName === null) {
-                continue;
-            }
-
-            /** @var class-string $interfaceImplementerClassLikeName */
-            if (! $this->reflectionProvider->hasClass($interfaceImplementerClassLikeName)) {
-                continue;
-            }
-
-            $interfaceImplementerClassReflection = $this->reflectionProvider->getClass(
-                $interfaceImplementerClassLikeName
-            );
-            $parameterType = $this->nativeTypeClassTreeResolver->resolveParameterReflectionType(
-                $interfaceImplementerClassReflection,
-                $methodName,
-                $paramPosition
-            );
-
-            if (! $parameterType instanceof Type) {
-                continue;
-            }
-
-            $parameterTypesByClassName[$interfaceImplementerClassLikeName] = $parameterType;
-        }
-
-        return $parameterTypesByClassName;
+        return $stackedParameterTypesByClassName;
     }
 }

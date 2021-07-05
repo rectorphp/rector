@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Core\Tests\Issues;
+namespace Rector\Core\Tests\Issues\CovariantTrio;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;

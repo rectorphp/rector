@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Core\Tests\Issues;
+namespace Rector\Core\Tests\Issues\DowngradeCombo;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
@@ -23,7 +23,7 @@ final class CallableInterfaceDowngradeTest extends AbstractRectorTestCase
      */
     public function provideData(): Iterator
     {
-        return $this->yieldFilesFromDirectory(__DIR__ . '/CallableFixture');
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     public function provideConfigFilePath(): string

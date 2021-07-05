@@ -6,19 +6,14 @@ namespace Rector\DowngradePhp72\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Param;
-use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Trait_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
-use Rector\DowngradePhp72\NodeAnalyzer\ClassLikeWithTraitsClassMethodResolver;
-use Rector\DowngradePhp72\NodeAnalyzer\ParamContravariantDetector;
 use Rector\DowngradePhp72\NodeAnalyzer\ParentChildClassMethodTypeResolver;
 use Rector\DowngradePhp72\PhpDoc\NativeParamToPhpDocDecorator;
+use Rector\DowngradePhp72\PHPStan\ClassLikeScopeResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\NodeTypeResolver\PHPStan\Collector\TraitNodeScopeCollector;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -31,13 +26,17 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class DowngradeParameterTypeWideningRector extends AbstractRector
 {
+    /**
+     * Methods that are downgraded on a parent stack, by class, then method name
+     * @var array<class-string, array<string, ClassMethod[]>>
+     */
+    private array $classMethodStack = [];
+
     public function __construct(
-        private ClassLikeWithTraitsClassMethodResolver $classLikeWithTraitsClassMethodResolver,
         private ParentChildClassMethodTypeResolver $parentChildClassMethodTypeResolver,
         private NativeParamToPhpDocDecorator $nativeParamToPhpDocDecorator,
-        private ParamContravariantDetector $paramContravariantDetector,
         private TypeFactory $typeFactory,
-        private TraitNodeScopeCollector $traitNodeScopeCollector
+        private ClassLikeScopeResolver $classLikeScopeResolver
     ) {
     }
 
@@ -92,7 +91,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $scope = $this->resolveScope($node);
+        $scope = $this->classLikeScopeResolver->resolveScope($node);
         if (! $scope instanceof Scope) {
             return null;
         }
@@ -102,91 +101,71 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($this->isEmptyClassReflection($classReflection)) {
+        $classMethodName = $this->getName($node);
+
+        // the method can be implemented (interface), or extended (class), but we don't know who implements it and how, so we'll put it on stack and get back to it, if one of the child class/interface appears to visit it :)
+
+        $this->classMethodStack[$classReflection->getName()][$classMethodName][] = $node;
+
+        if ($this->skipClassMethod($node)) {
             return null;
         }
 
-        $hasChanged = false;
-        /** @var ClassReflection[] $ancestors */
-        $ancestors = $classReflection->getAncestors();
-        $classMethods = $this->classLikeWithTraitsClassMethodResolver->resolve($ancestors);
-
-        $classLikes = $this->nodeRepository->findClassesAndInterfacesByType($classReflection->getName());
-
-        $interfaceClassReflections = $classReflection->getInterfaces();
-        foreach ($classMethods as $classMethod) {
-            if ($this->skipClassMethod($classMethod, $classReflection, $ancestors, $classLikes)) {
-                continue;
-            }
-
-            // refactor here
-            $changedClassMethod = $this->refactorClassMethod(
-                $classMethod,
-                $classReflection,
-                $ancestors,
-                $interfaceClassReflections
-            );
-            if ($changedClassMethod !== null) {
-                $hasChanged = true;
-            }
-        }
-
-        if ($hasChanged) {
-            return $node;
-        }
-
-        return null;
+        return $this->refactorClassMethod($node, $classReflection);
     }
 
     /**
      * The topmost class is the source of truth, so we go only down to avoid up/down collission
-     * @param ClassReflection[] $ancestors
-     * @param ClassReflection[] $interfaces
      */
-    private function refactorClassMethod(
-        ClassMethod $classMethod,
-        ClassReflection $classReflection,
-        array $ancestors,
-        array $interfaces
-    ): ?ClassMethod {
+    private function refactorClassMethod(ClassMethod $classMethod, ClassReflection $classReflection): ?ClassMethod
+    {
         /** @var string $methodName */
         $methodName = $this->nodeNameResolver->getName($classMethod);
 
         $hasChanged = false;
-        foreach ($classMethod->params as $position => $param) {
-            if (! is_int($position)) {
-                throw new ShouldNotHappenException();
-            }
-
-            // Resolve the types in:
-            // - all ancestors + their descendant classes
-            // @todo - all implemented interfaces + their implementing classes
+        foreach (array_keys($classMethod->params) as $paramPosition) {
             $parameterTypesByParentClassLikes = $this->parentChildClassMethodTypeResolver->resolve(
                 $classReflection,
                 $methodName,
-                $position,
-                $ancestors,
-                $interfaces
+                $paramPosition,
+                $this->classMethodStack
             );
 
             $uniqueTypes = $this->typeFactory->uniquateTypes($parameterTypesByParentClassLikes);
-            if (! isset($uniqueTypes[1])) {
+
+            // all methods from now to the top share the same param type → nothing to change for this parameter
+            if (count($uniqueTypes) === 1) {
                 continue;
             }
 
-            $this->removeParamTypeFromMethod($classMethod, $param);
             $hasChanged = true;
+            $this->removeParamTypeFromMethod($classMethod, $paramPosition);
+
+            // update also all the ancestors in the stack
+            foreach ($classReflection->getAncestors() as $ancestorClassReflection) {
+                // skip self, because its handled directly here
+                if ($ancestorClassReflection === $classReflection) {
+                    continue;
+                }
+
+                $stackedClassMethods = $this->classMethodStack[$ancestorClassReflection->getName()][$methodName] ?? [];
+
+                foreach ($stackedClassMethods as $stackedClassMethod) {
+                    $this->removeParamTypeFromMethod($stackedClassMethod, $paramPosition);
+                }
+            }
         }
 
-        if ($hasChanged) {
-            return $classMethod;
-        }
-
-        return null;
+        return $hasChanged ? $classMethod : null;
     }
 
-    private function removeParamTypeFromMethod(ClassMethod $classMethod, Param $param): void
+    private function removeParamTypeFromMethod(ClassMethod $classMethod, int $paramPosition): void
     {
+        $param = $classMethod->params[$paramPosition] ?? null;
+        if (! $param instanceof Param) {
+            return;
+        }
+
         // It already has no type => nothing to do - check original param, as it could have been removed by this rule
         $originalParam = $param->getAttribute(AttributeKey::ORIGINAL_NODE);
         if ($originalParam instanceof Param && $originalParam->type === null) {
@@ -201,56 +180,12 @@ CODE_SAMPLE
         $param->type = null;
     }
 
-    /**
-     * @param ClassReflection[] $ancestors
-     * @param ClassLike[] $classLikes
-     */
-    private function skipClassMethod(
-        ClassMethod $classMethod,
-        ClassReflection $classReflection,
-        array $ancestors,
-        array $classLikes
-    ): bool {
+    private function skipClassMethod(ClassMethod $classMethod): bool
+    {
         if ($classMethod->isMagic()) {
             return true;
         }
 
-        if ($classMethod->params === []) {
-            return true;
-        }
-
-        /** @var string $classMethodName */
-        $classMethodName = $this->nodeNameResolver->getName($classMethod);
-        if ($this->paramContravariantDetector->hasChildMethod($classLikes, $classMethodName)) {
-            return false;
-        }
-
-        return ! $this->paramContravariantDetector->hasParentMethod($classReflection, $ancestors, $classMethodName);
-    }
-
-    private function isEmptyClassReflection(ClassReflection $classReflection): bool
-    {
-        if ($classReflection->isInterface()) {
-            return false;
-        }
-
-        return count($classReflection->getAncestors()) === 1;
-    }
-
-    private function resolveScope(ClassMethod $classMethod): ?Scope
-    {
-        $scope = $classMethod->getAttribute(AttributeKey::SCOPE);
-        if ($scope instanceof Scope) {
-            return $scope;
-        }
-
-        // fallback to a trait method
-        $classLike = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
-        if ($classLike instanceof Trait_) {
-            $traitName = $this->getName($classLike);
-            return $this->traitNodeScopeCollector->getScopeForTrait($traitName);
-        }
-
-        return null;
+        return $classMethod->params === [];
     }
 }

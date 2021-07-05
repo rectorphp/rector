@@ -58,6 +58,7 @@ final class NodeRepository
 
     /**
      * @return Class_[]|Interface_[]
+     * @deprecated Use static reflection instead
      */
     public function findClassesAndInterfacesByType(string $type): array
     {
@@ -65,6 +66,8 @@ final class NodeRepository
     }
 
     /**
+     * @deprecated Use static reflection instead
+     *
      * @param class-string $class
      * @return Class_[]
      */
@@ -85,6 +88,8 @@ final class NodeRepository
     }
 
     /**
+     * @deprecated Use static reflection instead
+     *
      * @param class-string $class
      */
     public function findInterface(string $class): ?Interface_
@@ -93,6 +98,8 @@ final class NodeRepository
     }
 
     /**
+     * @deprecated Use static reflection instead
+     *
      * @param class-string $name
      */
     public function findClass(string $name): ?Class_
@@ -101,18 +108,13 @@ final class NodeRepository
     }
 
     /**
+     * @deprecated Use static reflection instead
+     *
      * @param class-string $name
      */
     public function findTrait(string $name): ?Trait_
     {
         return $this->parsedNodeCollector->findTrait($name);
-    }
-
-    public function findClassLike(string $classLikeName): ?ClassLike
-    {
-        return $this->findClass($classLikeName) ?? $this->findInterface($classLikeName) ?? $this->findTrait(
-            $classLikeName
-        );
     }
 
     private function isChildOrEqualClassLike(string $desiredClass, ?string $currentClassName): bool

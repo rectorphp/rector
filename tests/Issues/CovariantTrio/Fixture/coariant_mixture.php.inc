@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Core\Tests\Issues\Fixture;
+namespace Rector\Core\Tests\Issues\CovariantTrio\Fixture;
 
 final class CoriantMixture
 {
@@ -15,7 +15,7 @@ final class CoriantMixture
 -----
 <?php
 
-namespace Rector\Core\Tests\Issues\Fixture;
+namespace Rector\Core\Tests\Issues\CovariantTrio\Fixture;
 
 final class CoriantMixture
 {

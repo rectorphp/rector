@@ -31,7 +31,6 @@ final class NativeTypeClassTreeResolver
         int $position
     ): ?Type {
         $nativeReflectionClass = $classReflection->getNativeReflection();
-
         if (! $classReflection->hasNativeMethod($methodName)) {
             return null;
         }

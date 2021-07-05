@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Core\Tests\Issues;
+namespace Rector\Core\Tests\Issues\InfiniteLoop;
 
 use Rector\Core\Exception\NodeTraverser\InfiniteLoopTraversingException;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
@@ -14,13 +14,13 @@ final class InfiniteLoopTest extends AbstractRectorTestCase
     {
         $this->expectException(InfiniteLoopTraversingException::class);
 
-        $fixtureFileInfo = new SmartFileInfo(__DIR__ . '/FixtureInfiniteLoop/some_method_call_infinity.php.inc');
+        $fixtureFileInfo = new SmartFileInfo(__DIR__ . '/Fixture/some_method_call_infinity.php.inc');
         $this->doTestFileInfo($fixtureFileInfo);
     }
 
     public function testPass(): void
     {
-        $fixtureFileInfo = new SmartFileInfo(__DIR__ . '/FixtureInfiniteLoop/de_morgan.php.inc');
+        $fixtureFileInfo = new SmartFileInfo(__DIR__ . '/Fixture/de_morgan.php.inc');
         $this->doTestFileInfo($fixtureFileInfo);
     }
 
