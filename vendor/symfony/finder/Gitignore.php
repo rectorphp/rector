@@ -47,10 +47,7 @@ class Gitignore
         }
         return '~^(?:' . $res . ')~s';
     }
-    /**
-     * @param string $gitignoreLine
-     */
-    private static function lineToRegex($gitignoreLine) : string
+    private static function lineToRegex(string $gitignoreLine) : string
     {
         if ('' === $gitignoreLine) {
             return '$f';

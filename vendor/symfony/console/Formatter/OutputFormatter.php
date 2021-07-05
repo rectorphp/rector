@@ -177,9 +177,8 @@ class OutputFormatter implements \RectorPrefix20210705\Symfony\Component\Console
     }
     /**
      * Tries to create new style instance from string.
-     * @param string $string
      */
-    private function createStyleFromString($string) : ?\RectorPrefix20210705\Symfony\Component\Console\Formatter\OutputFormatterStyleInterface
+    private function createStyleFromString(string $string) : ?\RectorPrefix20210705\Symfony\Component\Console\Formatter\OutputFormatterStyleInterface
     {
         if (isset($this->styles[$string])) {
             return $this->styles[$string];
@@ -211,12 +210,8 @@ class OutputFormatter implements \RectorPrefix20210705\Symfony\Component\Console
     }
     /**
      * Applies current style from stack to text, if must be applied.
-     * @param string $text
-     * @param string $current
-     * @param int $width
-     * @param int $currentLineLength
      */
-    private function applyCurrentStyle($text, $current, $width, &$currentLineLength) : string
+    private function applyCurrentStyle(string $text, string $current, int $width, int &$currentLineLength) : string
     {
         if ('' === $text) {
             return '';

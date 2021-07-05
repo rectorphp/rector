@@ -1223,7 +1223,7 @@ class Process implements \IteratorAggregate
      *
      * @throws LogicException in case output has been disabled or process is not started
      */
-    private function readPipesForOutput($caller, $blocking = \false)
+    private function readPipesForOutput(string $caller, bool $blocking = \false)
     {
         if ($this->outputDisabled) {
             throw new \RectorPrefix20210705\Symfony\Component\Process\Exception\LogicException('Output has been disabled.');
@@ -1235,9 +1235,8 @@ class Process implements \IteratorAggregate
      * Validates and returns the filtered timeout.
      *
      * @throws InvalidArgumentException if the given timeout is a negative number
-     * @param float|null $timeout
      */
-    private function validateTimeout($timeout) : ?float
+    private function validateTimeout(?float $timeout) : ?float
     {
         $timeout = (float) $timeout;
         if (0.0 === $timeout) {
@@ -1253,7 +1252,7 @@ class Process implements \IteratorAggregate
      * @param bool $blocking Whether to use blocking calls or not
      * @param bool $close    Whether to close file handles or not
      */
-    private function readPipes($blocking, $close)
+    private function readPipes(bool $blocking, bool $close)
     {
         $result = $this->processPipes->readAndWrite($blocking, $close);
         $callback = $this->callback;
@@ -1323,7 +1322,7 @@ class Process implements \IteratorAggregate
      * @throws RuntimeException In case --enable-sigchild is activated and the process can't be killed
      * @throws RuntimeException In case of failure
      */
-    private function doSignal($signal, $throwException) : bool
+    private function doSignal(int $signal, bool $throwException) : bool
     {
         if (null === ($pid = $this->getPid())) {
             if ($throwException) {
@@ -1360,11 +1359,7 @@ class Process implements \IteratorAggregate
         $this->fallbackStatus['termsig'] = $this->latestSignal;
         return \true;
     }
-    /**
-     * @param string $cmd
-     * @param mixed[] $env
-     */
-    private function prepareWindowsCommandLine($cmd, &$env) : string
+    private function prepareWindowsCommandLine(string $cmd, array &$env) : string
     {
         $uid = \uniqid('', \true);
         $varCount = 0;
@@ -1404,9 +1399,8 @@ class Process implements \IteratorAggregate
      * Ensures the process is running or terminated, throws a LogicException if the process has a not started.
      *
      * @throws LogicException if the process has not run
-     * @param string $functionName
      */
-    private function requireProcessIsStarted($functionName)
+    private function requireProcessIsStarted(string $functionName)
     {
         if (!$this->isStarted()) {
             throw new \RectorPrefix20210705\Symfony\Component\Process\Exception\LogicException(\sprintf('Process must be started before calling "%s()".', $functionName));
@@ -1416,9 +1410,8 @@ class Process implements \IteratorAggregate
      * Ensures the process is terminated, throws a LogicException if the process has a status different than "terminated".
      *
      * @throws LogicException if the process is not yet terminated
-     * @param string $functionName
      */
-    private function requireProcessIsTerminated($functionName)
+    private function requireProcessIsTerminated(string $functionName)
     {
         if (!$this->isTerminated()) {
             throw new \RectorPrefix20210705\Symfony\Component\Process\Exception\LogicException(\sprintf('Process must be terminated before calling "%s()".', $functionName));
@@ -1426,9 +1419,8 @@ class Process implements \IteratorAggregate
     }
     /**
      * Escapes a string to be used as a shell argument.
-     * @param string|null $argument
      */
-    private function escapeArgument($argument) : string
+    private function escapeArgument(?string $argument) : string
     {
         if ('' === $argument || null === $argument) {
             return '""';
@@ -1445,11 +1437,7 @@ class Process implements \IteratorAggregate
         $argument = \preg_replace('/(\\\\+)$/', '$1$1', $argument);
         return '"' . \str_replace(['"', '^', '%', '!', "\n"], ['""', '"^^"', '"^%"', '"^!"', '!LF!'], $argument) . '"';
     }
-    /**
-     * @param string $commandline
-     * @param mixed[] $env
-     */
-    private function replacePlaceholders($commandline, $env)
+    private function replacePlaceholders(string $commandline, array $env)
     {
         return \preg_replace_callback('/"\\$\\{:([_a-zA-Z]++[_a-zA-Z0-9]*+)\\}"/', function ($matches) use($commandline, $env) {
             if (!isset($env[$matches[1]]) || \false === $env[$matches[1]]) {

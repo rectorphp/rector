@@ -133,10 +133,7 @@ class ResourceCheckerConfigCache implements \RectorPrefix20210705\Symfony\Compon
     {
         return $this->file . '.meta';
     }
-    /**
-     * @param string $file
-     */
-    private function safelyUnserialize($file)
+    private function safelyUnserialize(string $file)
     {
         $meta = \false;
         $content = \file_get_contents($file);

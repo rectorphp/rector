@@ -175,10 +175,7 @@ class GlobResource implements \IteratorAggregate, \RectorPrefix20210705\Symfony\
         }
         return \hash_final($hash);
     }
-    /**
-     * @param string $pattern
-     */
-    private function expandGlob($pattern) : array
+    private function expandGlob(string $pattern) : array
     {
         $segments = \preg_split('/\\{([^{}]*+)\\}/', $pattern, -1, \PREG_SPLIT_DELIM_CAPTURE);
         $paths = [$segments[0]];

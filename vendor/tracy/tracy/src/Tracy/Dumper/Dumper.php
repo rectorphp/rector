@@ -146,9 +146,8 @@ class Dumper
     }
     /**
      * Dumps variable to x-terminal.
-     * @param mixed[] $colors
      */
-    private function asTerminal($var, $colors = []) : string
+    private function asTerminal($var, array $colors = []) : string
     {
         $model = $this->describer->describe($var);
         return $this->renderer->renderAsText($model, $colors);

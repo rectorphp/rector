@@ -469,13 +469,7 @@ class ContainerBuilder extends \RectorPrefix20210705\Symfony\Component\Dependenc
         }
         return $this->doGet($id, $invalidBehavior);
     }
-    /**
-     * @param string $id
-     * @param int $invalidBehavior
-     * @param mixed[]|null $inlineServices
-     * @param bool $isConstructorArgument
-     */
-    private function doGet($id, $invalidBehavior = \RectorPrefix20210705\Symfony\Component\DependencyInjection\ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE, &$inlineServices = null, $isConstructorArgument = \false)
+    private function doGet(string $id, int $invalidBehavior = \RectorPrefix20210705\Symfony\Component\DependencyInjection\ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE, array &$inlineServices = null, bool $isConstructorArgument = \false)
     {
         if (isset($inlineServices[$id])) {
             return $inlineServices[$id];
@@ -907,13 +901,8 @@ class ContainerBuilder extends \RectorPrefix20210705\Symfony\Component\Dependenc
      * @throws RuntimeException         When the factory definition is incomplete
      * @throws RuntimeException         When the service is a synthetic service
      * @throws InvalidArgumentException When configure callable is not callable
-     * @param \Symfony\Component\DependencyInjection\Definition $definition
-     * @param mixed[] $inlineServices
-     * @param bool $isConstructorArgument
-     * @param string|null $id
-     * @param bool $tryProxy
      */
-    private function createService($definition, &$inlineServices, $isConstructorArgument = \false, $id = null, $tryProxy = \true)
+    private function createService(\RectorPrefix20210705\Symfony\Component\DependencyInjection\Definition $definition, array &$inlineServices, bool $isConstructorArgument = \false, string $id = null, bool $tryProxy = \true)
     {
         if (null === $id && isset($inlineServices[$h = \spl_object_hash($definition)])) {
             return $inlineServices[$h];
@@ -1014,11 +1003,7 @@ class ContainerBuilder extends \RectorPrefix20210705\Symfony\Component\Dependenc
     {
         return $this->doResolveServices($value);
     }
-    /**
-     * @param mixed[] $inlineServices
-     * @param bool $isConstructorArgument
-     */
-    private function doResolveServices($value, &$inlineServices = [], $isConstructorArgument = \false)
+    private function doResolveServices($value, array &$inlineServices = [], bool $isConstructorArgument = \false)
     {
         if (\is_array($value)) {
             foreach ($value as $k => $v) {
@@ -1430,10 +1415,8 @@ class ContainerBuilder extends \RectorPrefix20210705\Symfony\Component\Dependenc
     }
     /**
      * @param object $service
-     * @param mixed[] $call
-     * @param mixed[] $inlineServices
      */
-    private function callMethod($service, $call, &$inlineServices)
+    private function callMethod($service, array $call, array &$inlineServices)
     {
         foreach (self::getServiceConditionals($call[1]) as $s) {
             if (!$this->has($s)) {
@@ -1452,11 +1435,8 @@ class ContainerBuilder extends \RectorPrefix20210705\Symfony\Component\Dependenc
      * Shares a given service in the container.
      *
      * @param mixed $service
-     * @param \Symfony\Component\DependencyInjection\Definition $definition
-     * @param string|null $id
-     * @param mixed[] $inlineServices
      */
-    private function shareService($definition, $service, $id, &$inlineServices)
+    private function shareService(\RectorPrefix20210705\Symfony\Component\DependencyInjection\Definition $definition, $service, ?string $id, array &$inlineServices)
     {
         $inlineServices[null !== $id ? $id : \spl_object_hash($definition)] = $service;
         if (null !== $id && $definition->isShared()) {
@@ -1474,10 +1454,7 @@ class ContainerBuilder extends \RectorPrefix20210705\Symfony\Component\Dependenc
         }
         return $this->expressionLanguage;
     }
-    /**
-     * @param string $path
-     */
-    private function inVendors($path) : bool
+    private function inVendors(string $path) : bool
     {
         if (null === $this->vendors) {
             $this->vendors = (new \RectorPrefix20210705\Symfony\Component\Config\Resource\ComposerResource())->getVendors();

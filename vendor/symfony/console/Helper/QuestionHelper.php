@@ -92,10 +92,8 @@ class QuestionHelper extends \RectorPrefix20210705\Symfony\Component\Console\Hel
      * @return mixed
      *
      * @throws RuntimeException In case the fallback is deactivated and the response cannot be hidden
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
-     * @param \Symfony\Component\Console\Question\Question $question
      */
-    private function doAsk($output, $question)
+    private function doAsk(\RectorPrefix20210705\Symfony\Component\Console\Output\OutputInterface $output, \RectorPrefix20210705\Symfony\Component\Console\Question\Question $question)
     {
         $this->writePrompt($output, $question);
         $inputStream = $this->inputStream ?: \STDIN;
@@ -136,9 +134,8 @@ class QuestionHelper extends \RectorPrefix20210705\Symfony\Component\Console\Hel
     }
     /**
      * @return mixed
-     * @param \Symfony\Component\Console\Question\Question $question
      */
-    private function getDefaultAnswer($question)
+    private function getDefaultAnswer(\RectorPrefix20210705\Symfony\Component\Console\Question\Question $question)
     {
         $default = $question->getDefault();
         if (null === $default) {
@@ -206,11 +203,8 @@ class QuestionHelper extends \RectorPrefix20210705\Symfony\Component\Console\Hel
      * Autocompletes a question.
      *
      * @param resource $inputStream
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
-     * @param \Symfony\Component\Console\Question\Question $question
-     * @param callable $autocomplete
      */
-    private function autocomplete($output, $question, $inputStream, $autocomplete) : string
+    private function autocomplete(\RectorPrefix20210705\Symfony\Component\Console\Output\OutputInterface $output, \RectorPrefix20210705\Symfony\Component\Console\Question\Question $question, $inputStream, callable $autocomplete) : string
     {
         $cursor = new \RectorPrefix20210705\Symfony\Component\Console\Cursor($output, $inputStream);
         $fullChoice = '';
@@ -317,10 +311,7 @@ class QuestionHelper extends \RectorPrefix20210705\Symfony\Component\Console\Hel
         \shell_exec(\sprintf('stty %s', $sttyMode));
         return $fullChoice;
     }
-    /**
-     * @param string $entered
-     */
-    private function mostRecentlyEnteredValue($entered) : string
+    private function mostRecentlyEnteredValue(string $entered) : string
     {
         // Determine the most recent value that the user entered
         if (\false === \strpos($entered, ',')) {
@@ -339,9 +330,8 @@ class QuestionHelper extends \RectorPrefix20210705\Symfony\Component\Console\Hel
      * @param bool     $trimmable   Is the answer trimmable
      *
      * @throws RuntimeException In case the fallback is deactivated and the response cannot be hidden
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
      */
-    private function getHiddenResponse($output, $inputStream, $trimmable = \true) : string
+    private function getHiddenResponse(\RectorPrefix20210705\Symfony\Component\Console\Output\OutputInterface $output, $inputStream, bool $trimmable = \true) : string
     {
         if ('\\' === \DIRECTORY_SEPARATOR) {
             $exe = __DIR__ . '/../Resources/bin/hiddeninput.exe';
@@ -386,10 +376,8 @@ class QuestionHelper extends \RectorPrefix20210705\Symfony\Component\Console\Hel
      * @return mixed The validated response
      *
      * @throws \Exception In case the max number of attempts has been reached and no valid response has been given
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
-     * @param \Symfony\Component\Console\Question\Question $question
      */
-    private function validateAttempts($interviewer, $output, $question)
+    private function validateAttempts(callable $interviewer, \RectorPrefix20210705\Symfony\Component\Console\Output\OutputInterface $output, \RectorPrefix20210705\Symfony\Component\Console\Question\Question $question)
     {
         $error = null;
         $attempts = $question->getMaxAttempts();
@@ -464,7 +452,7 @@ class QuestionHelper extends \RectorPrefix20210705\Symfony\Component\Console\Hel
      *
      * @return string|bool The input received, false in case input could not be read
      */
-    private function readInput($inputStream, $question)
+    private function readInput($inputStream, \RectorPrefix20210705\Symfony\Component\Console\Question\Question $question)
     {
         if (!$question->isMultiline()) {
             $cp = $this->setIOCodepage();
@@ -505,9 +493,8 @@ class QuestionHelper extends \RectorPrefix20210705\Symfony\Component\Console\Hel
      * @param string|false $input
      *
      * @return string|false
-     * @param int $cp
      */
-    private function resetIOCodepage($cp, $input)
+    private function resetIOCodepage(int $cp, $input)
     {
         if (0 !== $cp) {
             \sapi_windows_cp_set($cp);

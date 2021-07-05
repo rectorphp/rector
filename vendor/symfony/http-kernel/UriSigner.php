@@ -80,18 +80,11 @@ class UriSigner
         // we cannot use $request->getUri() here as we want to work with the original URI (no query string reordering)
         return $this->check($request->getSchemeAndHttpHost() . $request->getBaseUrl() . $request->getPathInfo() . $qs);
     }
-    /**
-     * @param string $uri
-     */
-    private function computeHash($uri) : string
+    private function computeHash(string $uri) : string
     {
         return \base64_encode(\hash_hmac('sha256', $uri, $this->secret, \true));
     }
-    /**
-     * @param mixed[] $url
-     * @param mixed[] $params
-     */
-    private function buildUrl($url, $params = []) : string
+    private function buildUrl(array $url, array $params = []) : string
     {
         \ksort($params, \SORT_STRING);
         $url['query'] = \http_build_query($params, '', '&');

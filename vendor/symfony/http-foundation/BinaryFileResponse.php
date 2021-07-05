@@ -237,10 +237,7 @@ class BinaryFileResponse extends \RectorPrefix20210705\Symfony\Component\HttpFou
         }
         return $this;
     }
-    /**
-     * @param string|null $header
-     */
-    private function hasValidIfRangeHeader($header) : bool
+    private function hasValidIfRangeHeader(?string $header) : bool
     {
         if ($this->getEtag() === $header) {
             return \true;

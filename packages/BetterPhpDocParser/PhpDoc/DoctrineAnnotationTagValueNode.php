@@ -40,10 +40,7 @@ final class DoctrineAnnotationTagValueNode extends \Rector\BetterPhpDocParser\Va
         $itemContents = $this->printValuesContent($this->values);
         return \sprintf('(%s)', $itemContents);
     }
-    /**
-     * @param string $className
-     */
-    public function hasClassName($className) : bool
+    public function hasClassName(string $className) : bool
     {
         $annotationName = \trim($this->identifierTypeNode->name, '@');
         if ($annotationName === $className) {

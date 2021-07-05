@@ -209,11 +209,7 @@ class DebugClassLoader
         }
         $this->checkClass($class, $file);
     }
-    /**
-     * @param string $class
-     * @param string|null $file
-     */
-    private function checkClass($class, $file = null) : void
+    private function checkClass(string $class, string $file = null) : void
     {
         $exists = null === $file || \class_exists($class, \false) || \interface_exists($class, \false) || \trait_exists($class, \false);
         if (null !== $file && $class && '\\' === $class[0]) {
@@ -514,9 +510,8 @@ class DebugClassLoader
     }
     /**
      * `realpath` on MacOSX doesn't normalize the case of characters.
-     * @param string $real
      */
-    private function darwinRealpath($real) : string
+    private function darwinRealpath(string $real) : string
     {
         $i = 1 + \strrpos($real, '/');
         $file = \substr($real, $i);
@@ -575,10 +570,8 @@ class DebugClassLoader
      * `class_implements` includes interfaces from the parents so we have to manually exclude them.
      *
      * @return string[]
-     * @param string $class
-     * @param string|null $parent
      */
-    private function getOwnInterfaces($class, $parent) : array
+    private function getOwnInterfaces(string $class, ?string $parent) : array
     {
         $ownInterfaces = \class_implements($class, \false);
         if ($parent) {
@@ -593,12 +586,7 @@ class DebugClassLoader
         }
         return $ownInterfaces;
     }
-    /**
-     * @param string $types
-     * @param \ReflectionMethod $method
-     * @param string|null $parent
-     */
-    private function setReturnType($types, $method, $parent) : void
+    private function setReturnType(string $types, \ReflectionMethod $method, ?string $parent) : void
     {
         $nullable = \false;
         $typesMap = [];
@@ -657,12 +645,7 @@ class DebugClassLoader
         }
         self::$returnTypes[$method->class][$method->name] = [$normalizedType, $returnType, $method->class, $method->getFileName()];
     }
-    /**
-     * @param string $type
-     * @param string $class
-     * @param string|null $parent
-     */
-    private function normalizeType($type, $class, $parent) : string
+    private function normalizeType(string $type, string $class, ?string $parent) : string
     {
         if (isset(self::SPECIAL_RETURN_TYPES[$lcType = \strtolower($type)])) {
             if ('parent' === ($lcType = self::SPECIAL_RETURN_TYPES[$lcType])) {
@@ -684,12 +667,8 @@ class DebugClassLoader
     }
     /**
      * Utility method to add @return annotations to the Symfony code-base where it triggers a self-deprecations.
-     * @param \ReflectionMethod $method
-     * @param string $returnType
-     * @param string $declaringFile
-     * @param string $normalizedType
      */
-    private function patchMethod($method, $returnType, $declaringFile, $normalizedType)
+    private function patchMethod(\ReflectionMethod $method, string $returnType, string $declaringFile, string $normalizedType)
     {
         static $patchedMethods = [];
         static $useStatements = [];
@@ -766,10 +745,7 @@ EOTXT;
         \file_put_contents($file, $code);
         $this->fixReturnStatements($method, $nullable . $normalizedType);
     }
-    /**
-     * @param string $file
-     */
-    private static function getUseStatements($file) : array
+    private static function getUseStatements(string $file) : array
     {
         $namespace = '';
         $useMap = [];
@@ -802,11 +778,7 @@ EOTXT;
         }
         return [$namespace, $useOffset, $useMap];
     }
-    /**
-     * @param \ReflectionMethod $method
-     * @param string $returnType
-     */
-    private function fixReturnStatements($method, $returnType)
+    private function fixReturnStatements(\ReflectionMethod $method, string $returnType)
     {
         if ('7.1' === $this->patchTypes['php'] && 'object' === \ltrim($returnType, '?') && 'docblock' !== $this->patchTypes['force']) {
             return;

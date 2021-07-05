@@ -36,9 +36,8 @@ class StringInput extends \RectorPrefix20210705\Symfony\Component\Console\Input\
      * Tokenizes a string.
      *
      * @throws InvalidArgumentException When unable to parse input (should never happen)
-     * @param string $input
      */
-    private function tokenize($input) : array
+    private function tokenize(string $input) : array
     {
         $tokens = [];
         $length = \strlen($input);

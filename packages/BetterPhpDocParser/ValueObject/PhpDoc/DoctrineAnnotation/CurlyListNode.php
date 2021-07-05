@@ -29,7 +29,7 @@ final class CurlyListNode extends \Rector\BetterPhpDocParser\ValueObject\PhpDoc\
     /**
      * @param mixed[] $array
      */
-    private function implode($array) : string
+    private function implode(array $array) : string
     {
         $itemContents = '';
         \end($array);

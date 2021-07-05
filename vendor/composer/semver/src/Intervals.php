@@ -244,9 +244,8 @@ class Intervals
      * @param bool $stopOnFirstValidInterval
      *
      * @phpstan-return array{'numeric': Interval[], 'branches': array{'names': string[], 'exclude': bool}}
-     * @param \Composer\Semver\Constraint\ConstraintInterface $constraint
      */
-    private static function generateIntervals($constraint, $stopOnFirstValidInterval = \false)
+    private static function generateIntervals(\RectorPrefix20210705\Composer\Semver\Constraint\ConstraintInterface $constraint, $stopOnFirstValidInterval = \false)
     {
         if ($constraint instanceof \RectorPrefix20210705\Composer\Semver\Constraint\MatchAllConstraint) {
             return array('numeric' => array(new \RectorPrefix20210705\Composer\Semver\Interval(\RectorPrefix20210705\Composer\Semver\Interval::fromZero(), \RectorPrefix20210705\Composer\Semver\Interval::untilPositiveInfinity())), 'branches' => \RectorPrefix20210705\Composer\Semver\Interval::anyDev());
@@ -371,9 +370,8 @@ class Intervals
     }
     /**
      * @phpstan-return array{'numeric': Interval[], 'branches': array{'names': string[], 'exclude': bool}}}
-     * @param \Composer\Semver\Constraint\Constraint $constraint
      */
-    private static function generateSingleConstraintIntervals($constraint)
+    private static function generateSingleConstraintIntervals(\RectorPrefix20210705\Composer\Semver\Constraint\Constraint $constraint)
     {
         $op = $constraint->getOperator();
         // handle branch constraints first

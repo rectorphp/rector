@@ -61,11 +61,7 @@ class LocaleAwareListener implements \RectorPrefix20210705\Symfony\Component\Eve
             \RectorPrefix20210705\Symfony\Component\HttpKernel\KernelEvents::FINISH_REQUEST => [['onKernelFinishRequest', -15]],
         ];
     }
-    /**
-     * @param string $locale
-     * @param string $defaultLocale
-     */
-    private function setLocale($locale, $defaultLocale) : void
+    private function setLocale(string $locale, string $defaultLocale) : void
     {
         foreach ($this->localeAwareServices as $service) {
             try {

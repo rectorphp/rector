@@ -77,10 +77,7 @@ final class ConsoleApplication extends \RectorPrefix20210705\Symfony\Component\C
         $this->addCustomOptions($defaultInputDefinition);
         return $defaultInputDefinition;
     }
-    /**
-     * @param \Symfony\Component\Console\Input\InputInterface $input
-     */
-    private function getNewWorkingDir($input) : string
+    private function getNewWorkingDir(\RectorPrefix20210705\Symfony\Component\Console\Input\InputInterface $input) : string
     {
         $workingDir = $input->getParameterOption('--working-dir');
         if ($workingDir !== \false && !\is_dir($workingDir)) {
@@ -89,10 +86,7 @@ final class ConsoleApplication extends \RectorPrefix20210705\Symfony\Component\C
         }
         return (string) $workingDir;
     }
-    /**
-     * @param \Symfony\Component\Console\Input\InputInterface $input
-     */
-    private function shouldPrintMetaInformation($input) : bool
+    private function shouldPrintMetaInformation(\RectorPrefix20210705\Symfony\Component\Console\Input\InputInterface $input) : bool
     {
         $hasNoArguments = $input->getFirstArgument() === null;
         if ($hasNoArguments) {
@@ -105,19 +99,13 @@ final class ConsoleApplication extends \RectorPrefix20210705\Symfony\Component\C
         $outputFormat = $input->getParameterOption(['-o', '--output-format']);
         return $outputFormat === \Rector\ChangesReporting\Output\ConsoleOutputFormatter::NAME;
     }
-    /**
-     * @param \Symfony\Component\Console\Input\InputDefinition $inputDefinition
-     */
-    private function removeUnusedOptions($inputDefinition) : void
+    private function removeUnusedOptions(\RectorPrefix20210705\Symfony\Component\Console\Input\InputDefinition $inputDefinition) : void
     {
         $options = $inputDefinition->getOptions();
         unset($options['quiet'], $options['no-interaction']);
         $inputDefinition->setOptions($options);
     }
-    /**
-     * @param \Symfony\Component\Console\Input\InputDefinition $inputDefinition
-     */
-    private function addCustomOptions($inputDefinition) : void
+    private function addCustomOptions(\RectorPrefix20210705\Symfony\Component\Console\Input\InputDefinition $inputDefinition) : void
     {
         $inputDefinition->addOption(new \RectorPrefix20210705\Symfony\Component\Console\Input\InputOption(\Rector\Core\Configuration\Option::CONFIG, 'c', \RectorPrefix20210705\Symfony\Component\Console\Input\InputOption::VALUE_REQUIRED, 'Path to config file', $this->getDefaultConfigPath()));
         $inputDefinition->addOption(new \RectorPrefix20210705\Symfony\Component\Console\Input\InputOption(\Rector\Core\Configuration\Option::DEBUG, null, \RectorPrefix20210705\Symfony\Component\Console\Input\InputOption::VALUE_NONE, 'Enable debug verbosity (-vvv)'));

@@ -190,10 +190,7 @@ class NameContext
         }
         return $shortestName;
     }
-    /**
-     * @param \PhpParser\Node\Name $name
-     */
-    private function resolveAlias($name, $type)
+    private function resolveAlias(\PhpParser\Node\Name $name, $type)
     {
         $firstPart = $name->getFirst();
         if ($name->isQualified()) {
@@ -214,12 +211,7 @@ class NameContext
         // No applicable aliases
         return null;
     }
-    /**
-     * @param string $name
-     * @param string $lcName
-     * @param int $type
-     */
-    private function getNamespaceRelativeName($name, $lcName, $type)
+    private function getNamespaceRelativeName(string $name, string $lcName, int $type)
     {
         if (null === $this->namespace) {
             return new \PhpParser\Node\Name($name);
@@ -237,10 +229,7 @@ class NameContext
         }
         return null;
     }
-    /**
-     * @param string $name
-     */
-    private function normalizeConstName($name)
+    private function normalizeConstName(string $name)
     {
         $nsSep = \strrpos($name, '\\');
         if (\false === $nsSep) {

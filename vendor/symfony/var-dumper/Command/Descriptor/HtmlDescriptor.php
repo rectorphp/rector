@@ -86,18 +86,11 @@ class HtmlDescriptor implements \RectorPrefix20210705\Symfony\Component\VarDumpe
 HTML
 );
     }
-    /**
-     * @param mixed[] $context
-     * @param string $format
-     */
-    private function extractDate($context, $format = 'r') : string
+    private function extractDate(array $context, string $format = 'r') : string
     {
         return \date($format, (int) $context['timestamp']);
     }
-    /**
-     * @param mixed[] $tags
-     */
-    private function renderTags($tags) : string
+    private function renderTags(array $tags) : string
     {
         if (!$tags) {
             return '';

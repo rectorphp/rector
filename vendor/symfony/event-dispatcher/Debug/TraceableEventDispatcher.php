@@ -261,10 +261,7 @@ class TraceableEventDispatcher implements \RectorPrefix20210705\Symfony\Componen
     protected function afterDispatch($eventName, $event)
     {
     }
-    /**
-     * @param string $eventName
-     */
-    private function preProcess($eventName) : void
+    private function preProcess(string $eventName) : void
     {
         if (!$this->dispatcher->hasListeners($eventName)) {
             $this->orphanedEvents[$this->currentRequestHash][] = $eventName;
@@ -279,10 +276,7 @@ class TraceableEventDispatcher implements \RectorPrefix20210705\Symfony\Componen
             $this->callStack->attach($wrappedListener, [$eventName, $this->currentRequestHash]);
         }
     }
-    /**
-     * @param string $eventName
-     */
-    private function postProcess($eventName) : void
+    private function postProcess(string $eventName) : void
     {
         unset($this->wrappedListeners[$eventName]);
         $skipped = \false;
@@ -316,11 +310,7 @@ class TraceableEventDispatcher implements \RectorPrefix20210705\Symfony\Componen
             }
         }
     }
-    /**
-     * @param mixed[] $a
-     * @param mixed[] $b
-     */
-    private function sortNotCalledListeners($a, $b)
+    private function sortNotCalledListeners(array $a, array $b)
     {
         if (0 !== ($cmp = \strcmp($a['event'], $b['event']))) {
             return $cmp;

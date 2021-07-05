@@ -187,9 +187,8 @@ class ResolveBindingsPass extends \RectorPrefix20210705\Symfony\Component\Depend
     }
     /**
      * @return mixed
-     * @param \Symfony\Component\DependencyInjection\Argument\BoundArgument $binding
      */
-    private function getBindingValue($binding)
+    private function getBindingValue(\RectorPrefix20210705\Symfony\Component\DependencyInjection\Argument\BoundArgument $binding)
     {
         [$bindingValue, $bindingId] = $binding->getValues();
         $this->usedBindings[$bindingId] = \true;

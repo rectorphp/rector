@@ -76,10 +76,7 @@ final class ComposerFileProcessor implements \Rector\Core\Contract\Processor\Fil
     {
         return ['json'];
     }
-    /**
-     * @param \Symplify\SmartFileSystem\SmartFileInfo $fileInfo
-     */
-    private function isJsonInTests($fileInfo) : bool
+    private function isJsonInTests(\Symplify\SmartFileSystem\SmartFileInfo $fileInfo) : bool
     {
         if (!\Rector\Testing\PHPUnit\StaticPHPUnitEnvironment::isPHPUnitRun()) {
             return \false;

@@ -110,11 +110,7 @@ final class NodesToRemoveCollector implements \Rector\PostRector\Contract\Collec
     {
         unset($this->nodesToRemove[$key]);
     }
-    /**
-     * @param \PhpParser\Node $node
-     * @param \PhpParser\Node $parentNode
-     */
-    private function isUsedInArg($node, $parentNode) : bool
+    private function isUsedInArg(\PhpParser\Node $node, \PhpParser\Node $parentNode) : bool
     {
         if (!$node instanceof \PhpParser\Node\Param) {
             return \false;
@@ -137,10 +133,7 @@ final class NodesToRemoveCollector implements \Rector\PostRector\Contract\Collec
         }
         return \false;
     }
-    /**
-     * @param \PhpParser\Node $node
-     */
-    private function ensureIsNotPartOfChainMethodCall($node) : void
+    private function ensureIsNotPartOfChainMethodCall(\PhpParser\Node $node) : void
     {
         if (!$node instanceof \PhpParser\Node\Expr\MethodCall) {
             return;

@@ -79,9 +79,8 @@ class FireLogger implements \RectorPrefix20210705\Tracy\ILogger
      * Dump implementation for JSON.
      * @param  mixed  $var
      * @return array|int|float|bool|string|null
-     * @param int $level
      */
-    private function jsonDump(&$var, $level = 0)
+    private function jsonDump(&$var, int $level = 0)
     {
         if (\is_bool($var) || $var === null || \is_int($var) || \is_float($var)) {
             return $var;

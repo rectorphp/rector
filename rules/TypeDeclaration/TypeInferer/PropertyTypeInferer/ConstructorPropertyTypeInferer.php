@@ -103,12 +103,7 @@ final class ConstructorPropertyTypeInferer implements \Rector\TypeDeclaration\Co
     {
         return 800;
     }
-    /**
-     * @param \PhpParser\Node\Param $param
-     * @param \PhpParser\Node\Stmt\ClassMethod $classMethod
-     * @param string $propertyName
-     */
-    private function resolveFromParamType($param, $classMethod, $propertyName) : \PHPStan\Type\Type
+    private function resolveFromParamType(\PhpParser\Node\Param $param, \PhpParser\Node\Stmt\ClassMethod $classMethod, string $propertyName) : \PHPStan\Type\Type
     {
         $type = $this->resolveParamTypeToPHPStanType($param);
         if ($type instanceof \PHPStan\Type\MixedType) {
@@ -126,10 +121,7 @@ final class ConstructorPropertyTypeInferer implements \Rector\TypeDeclaration\Co
         }
         return $this->typeFactory->createMixedPassedOrUnionType($types);
     }
-    /**
-     * @param \PhpParser\Node\Param $param
-     */
-    private function resolveParamTypeToPHPStanType($param) : \PHPStan\Type\Type
+    private function resolveParamTypeToPHPStanType(\PhpParser\Node\Param $param) : \PHPStan\Type\Type
     {
         if ($param->type === null) {
             return new \PHPStan\Type\MixedType();
@@ -149,11 +141,7 @@ final class ConstructorPropertyTypeInferer implements \Rector\TypeDeclaration\Co
         }
         return $this->staticTypeMapper->mapPhpParserNodePHPStanType($param->type);
     }
-    /**
-     * @param \PhpParser\Node\Stmt\ClassMethod $classMethod
-     * @param string $propertyName
-     */
-    private function getResolveParamStaticTypeAsPHPStanType($classMethod, $propertyName) : \PHPStan\Type\Type
+    private function getResolveParamStaticTypeAsPHPStanType(\PhpParser\Node\Stmt\ClassMethod $classMethod, string $propertyName) : \PHPStan\Type\Type
     {
         $paramStaticType = new \PHPStan\Type\ArrayType(new \PHPStan\Type\MixedType(), new \PHPStan\Type\MixedType());
         $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $classMethod->stmts, function (\PhpParser\Node $node) use($propertyName, &$paramStaticType) : ?int {
@@ -168,10 +156,7 @@ final class ConstructorPropertyTypeInferer implements \Rector\TypeDeclaration\Co
         });
         return $paramStaticType;
     }
-    /**
-     * @param \PhpParser\Node\Param $param
-     */
-    private function isParamNullable($param) : bool
+    private function isParamNullable(\PhpParser\Node\Param $param) : bool
     {
         if ($param->type instanceof \PhpParser\Node\NullableType) {
             return \true;
@@ -184,10 +169,7 @@ final class ConstructorPropertyTypeInferer implements \Rector\TypeDeclaration\Co
         }
         return \false;
     }
-    /**
-     * @param \PhpParser\Node\Param $param
-     */
-    private function resolveFullyQualifiedOrAliasedObjectType($param) : ?\PHPStan\Type\Type
+    private function resolveFullyQualifiedOrAliasedObjectType(\PhpParser\Node\Param $param) : ?\PHPStan\Type\Type
     {
         if ($param->type === null) {
             return null;

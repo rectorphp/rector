@@ -44,13 +44,7 @@ class XmlReferenceDumper
         $this->reference = null;
         return $ref;
     }
-    /**
-     * @param \Symfony\Component\Config\Definition\NodeInterface $node
-     * @param int $depth
-     * @param bool $root
-     * @param string|null $namespace
-     */
-    private function writeNode($node, $depth = 0, $root = \false, $namespace = null)
+    private function writeNode(\RectorPrefix20210705\Symfony\Component\Config\Definition\NodeInterface $node, int $depth = 0, bool $root = \false, string $namespace = null)
     {
         $rootName = $root ? 'config' : $node->getName();
         $rootNamespace = $namespace ?: ($root ? 'http://example.org/schema/dic/' . $node->getName() : null);
@@ -223,10 +217,8 @@ class XmlReferenceDumper
     }
     /**
      * Outputs a single config reference line.
-     * @param string $text
-     * @param int $indent
      */
-    private function writeLine($text, $indent = 0)
+    private function writeLine(string $text, int $indent = 0)
     {
         $indent = \strlen($text) + $indent;
         $format = '%' . $indent . 's';

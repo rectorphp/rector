@@ -83,9 +83,8 @@ class MemoryDataCollector extends \RectorPrefix20210705\Symfony\Component\HttpKe
     }
     /**
      * @return int|float
-     * @param string $memoryLimit
      */
-    private function convertToBytes($memoryLimit)
+    private function convertToBytes(string $memoryLimit)
     {
         if ('-1' === $memoryLimit) {
             return -1;

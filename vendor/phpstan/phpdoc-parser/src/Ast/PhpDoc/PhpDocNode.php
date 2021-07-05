@@ -30,7 +30,7 @@ class PhpDocNode implements \PHPStan\PhpDocParser\Ast\Node
      * @param  string $tagName
      * @return PhpDocTagNode[]
      */
-    public function getTagsByName($tagName) : array
+    public function getTagsByName(string $tagName) : array
     {
         return \array_filter($this->getTags(), static function (\PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode $tag) use($tagName) : bool {
             return $tag->name === $tagName;
@@ -38,9 +38,8 @@ class PhpDocNode implements \PHPStan\PhpDocParser\Ast\Node
     }
     /**
      * @return VarTagValueNode[]
-     * @param string $tagName
      */
-    public function getVarTagValues($tagName = '@var') : array
+    public function getVarTagValues(string $tagName = '@var') : array
     {
         return \array_column(\array_filter($this->getTagsByName($tagName), static function (\PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode $tag) : bool {
             return $tag->value instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
@@ -48,9 +47,8 @@ class PhpDocNode implements \PHPStan\PhpDocParser\Ast\Node
     }
     /**
      * @return ParamTagValueNode[]
-     * @param string $tagName
      */
-    public function getParamTagValues($tagName = '@param') : array
+    public function getParamTagValues(string $tagName = '@param') : array
     {
         return \array_column(\array_filter($this->getTagsByName($tagName), static function (\PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode $tag) : bool {
             return $tag->value instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
@@ -58,9 +56,8 @@ class PhpDocNode implements \PHPStan\PhpDocParser\Ast\Node
     }
     /**
      * @return TemplateTagValueNode[]
-     * @param string $tagName
      */
-    public function getTemplateTagValues($tagName = '@template') : array
+    public function getTemplateTagValues(string $tagName = '@template') : array
     {
         return \array_column(\array_filter($this->getTagsByName($tagName), static function (\PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode $tag) : bool {
             return $tag->value instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\TemplateTagValueNode;
@@ -68,9 +65,8 @@ class PhpDocNode implements \PHPStan\PhpDocParser\Ast\Node
     }
     /**
      * @return ExtendsTagValueNode[]
-     * @param string $tagName
      */
-    public function getExtendsTagValues($tagName = '@extends') : array
+    public function getExtendsTagValues(string $tagName = '@extends') : array
     {
         return \array_column(\array_filter($this->getTagsByName($tagName), static function (\PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode $tag) : bool {
             return $tag->value instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\ExtendsTagValueNode;
@@ -78,9 +74,8 @@ class PhpDocNode implements \PHPStan\PhpDocParser\Ast\Node
     }
     /**
      * @return ImplementsTagValueNode[]
-     * @param string $tagName
      */
-    public function getImplementsTagValues($tagName = '@implements') : array
+    public function getImplementsTagValues(string $tagName = '@implements') : array
     {
         return \array_column(\array_filter($this->getTagsByName($tagName), static function (\PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode $tag) : bool {
             return $tag->value instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\ImplementsTagValueNode;
@@ -88,9 +83,8 @@ class PhpDocNode implements \PHPStan\PhpDocParser\Ast\Node
     }
     /**
      * @return UsesTagValueNode[]
-     * @param string $tagName
      */
-    public function getUsesTagValues($tagName = '@use') : array
+    public function getUsesTagValues(string $tagName = '@use') : array
     {
         return \array_column(\array_filter($this->getTagsByName($tagName), static function (\PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode $tag) : bool {
             return $tag->value instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\UsesTagValueNode;
@@ -98,9 +92,8 @@ class PhpDocNode implements \PHPStan\PhpDocParser\Ast\Node
     }
     /**
      * @return ReturnTagValueNode[]
-     * @param string $tagName
      */
-    public function getReturnTagValues($tagName = '@return') : array
+    public function getReturnTagValues(string $tagName = '@return') : array
     {
         return \array_column(\array_filter($this->getTagsByName($tagName), static function (\PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode $tag) : bool {
             return $tag->value instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
@@ -108,9 +101,8 @@ class PhpDocNode implements \PHPStan\PhpDocParser\Ast\Node
     }
     /**
      * @return ThrowsTagValueNode[]
-     * @param string $tagName
      */
-    public function getThrowsTagValues($tagName = '@throws') : array
+    public function getThrowsTagValues(string $tagName = '@throws') : array
     {
         return \array_column(\array_filter($this->getTagsByName($tagName), static function (\PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode $tag) : bool {
             return $tag->value instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\ThrowsTagValueNode;
@@ -118,9 +110,8 @@ class PhpDocNode implements \PHPStan\PhpDocParser\Ast\Node
     }
     /**
      * @return MixinTagValueNode[]
-     * @param string $tagName
      */
-    public function getMixinTagValues($tagName = '@mixin') : array
+    public function getMixinTagValues(string $tagName = '@mixin') : array
     {
         return \array_column(\array_filter($this->getTagsByName($tagName), static function (\PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode $tag) : bool {
             return $tag->value instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\MixinTagValueNode;
@@ -137,9 +128,8 @@ class PhpDocNode implements \PHPStan\PhpDocParser\Ast\Node
     }
     /**
      * @return PropertyTagValueNode[]
-     * @param string $tagName
      */
-    public function getPropertyTagValues($tagName = '@property') : array
+    public function getPropertyTagValues(string $tagName = '@property') : array
     {
         return \array_column(\array_filter($this->getTagsByName($tagName), static function (\PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode $tag) : bool {
             return $tag->value instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\PropertyTagValueNode;
@@ -147,9 +137,8 @@ class PhpDocNode implements \PHPStan\PhpDocParser\Ast\Node
     }
     /**
      * @return PropertyTagValueNode[]
-     * @param string $tagName
      */
-    public function getPropertyReadTagValues($tagName = '@property-read') : array
+    public function getPropertyReadTagValues(string $tagName = '@property-read') : array
     {
         return \array_column(\array_filter($this->getTagsByName($tagName), static function (\PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode $tag) : bool {
             return $tag->value instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\PropertyTagValueNode;
@@ -157,9 +146,8 @@ class PhpDocNode implements \PHPStan\PhpDocParser\Ast\Node
     }
     /**
      * @return PropertyTagValueNode[]
-     * @param string $tagName
      */
-    public function getPropertyWriteTagValues($tagName = '@property-write') : array
+    public function getPropertyWriteTagValues(string $tagName = '@property-write') : array
     {
         return \array_column(\array_filter($this->getTagsByName($tagName), static function (\PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode $tag) : bool {
             return $tag->value instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\PropertyTagValueNode;
@@ -167,9 +155,8 @@ class PhpDocNode implements \PHPStan\PhpDocParser\Ast\Node
     }
     /**
      * @return MethodTagValueNode[]
-     * @param string $tagName
      */
-    public function getMethodTagValues($tagName = '@method') : array
+    public function getMethodTagValues(string $tagName = '@method') : array
     {
         return \array_column(\array_filter($this->getTagsByName($tagName), static function (\PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode $tag) : bool {
             return $tag->value instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\MethodTagValueNode;
@@ -177,9 +164,8 @@ class PhpDocNode implements \PHPStan\PhpDocParser\Ast\Node
     }
     /**
      * @return TypeAliasTagValueNode[]
-     * @param string $tagName
      */
-    public function getTypeAliasTagValues($tagName = '@phpstan-type') : array
+    public function getTypeAliasTagValues(string $tagName = '@phpstan-type') : array
     {
         return \array_column(\array_filter($this->getTagsByName($tagName), static function (\PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode $tag) : bool {
             return $tag->value instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\TypeAliasTagValueNode;
@@ -187,9 +173,8 @@ class PhpDocNode implements \PHPStan\PhpDocParser\Ast\Node
     }
     /**
      * @return TypeAliasImportTagValueNode[]
-     * @param string $tagName
      */
-    public function getTypeAliasImportTagValues($tagName = '@phpstan-import-type') : array
+    public function getTypeAliasImportTagValues(string $tagName = '@phpstan-import-type') : array
     {
         return \array_column(\array_filter($this->getTagsByName($tagName), static function (\PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode $tag) : bool {
             return $tag->value instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\TypeAliasImportTagValueNode;

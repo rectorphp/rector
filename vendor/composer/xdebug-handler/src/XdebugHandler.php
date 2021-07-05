@@ -233,7 +233,7 @@ class XdebugHandler
      *
      * @param array $command
      */
-    private function doRestart($command)
+    private function doRestart(array $command)
     {
         $this->tryEnableSignals();
         $this->notify(\RectorPrefix20210705\Composer\XdebugHandler\Status::RESTARTING, \implode(' ', $command));
@@ -309,7 +309,7 @@ class XdebugHandler
      *
      * @return bool
      */
-    private function writeTmpIni($iniFiles, $tmpDir, &$error)
+    private function writeTmpIni(array $iniFiles, $tmpDir, &$error)
     {
         if (!($this->tmpIni = @\tempnam($tmpDir, ''))) {
             return \false;
@@ -362,7 +362,7 @@ class XdebugHandler
      *
      * @return bool
      */
-    private function setEnvironment($scannedInis, $iniFiles)
+    private function setEnvironment($scannedInis, array $iniFiles)
     {
         $scanDir = \getenv('PHP_INI_SCAN_DIR');
         $phprc = \getenv('PHPRC');
@@ -398,7 +398,7 @@ class XdebugHandler
      *
      * @return string
      */
-    private function mergeLoadedConfig($loadedConfig, $iniConfig)
+    private function mergeLoadedConfig(array $loadedConfig, array $iniConfig)
     {
         $content = '';
         foreach ($loadedConfig as $name => $value) {
@@ -450,7 +450,7 @@ class XdebugHandler
      *
      * @param array $settings
      */
-    private function syncSettings($settings)
+    private function syncSettings(array $settings)
     {
         if (\false === \getenv($this->envOriginalInis)) {
             // Called by another app, so make original inis available

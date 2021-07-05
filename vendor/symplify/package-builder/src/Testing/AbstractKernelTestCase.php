@@ -142,20 +142,14 @@ abstract class AbstractKernelTestCase extends \RectorPrefix20210705\PHPUnit\Fram
         }
         return $configFilePaths;
     }
-    /**
-     * @param \Symfony\Component\HttpKernel\KernelInterface $kernel
-     */
-    private function ensureIsConfigAwareKernel($kernel) : void
+    private function ensureIsConfigAwareKernel(\RectorPrefix20210705\Symfony\Component\HttpKernel\KernelInterface $kernel) : void
     {
         if ($kernel instanceof \RectorPrefix20210705\Symplify\PackageBuilder\Contract\HttpKernel\ExtraConfigAwareKernelInterface) {
             return;
         }
         throw new \RectorPrefix20210705\Symplify\PackageBuilder\Exception\HttpKernel\MissingInterfaceException(\sprintf('"%s" is missing an "%s" interface', \get_class($kernel), \RectorPrefix20210705\Symplify\PackageBuilder\Contract\HttpKernel\ExtraConfigAwareKernelInterface::class));
     }
-    /**
-     * @param \Symfony\Component\HttpKernel\KernelInterface $kernel
-     */
-    private function bootAndReturnKernel($kernel) : \RectorPrefix20210705\Symfony\Component\HttpKernel\KernelInterface
+    private function bootAndReturnKernel(\RectorPrefix20210705\Symfony\Component\HttpKernel\KernelInterface $kernel) : \RectorPrefix20210705\Symfony\Component\HttpKernel\KernelInterface
     {
         $kernel->boot();
         $container = $kernel->getContainer();
@@ -176,10 +170,8 @@ abstract class AbstractKernelTestCase extends \RectorPrefix20210705\PHPUnit\Fram
     }
     /**
      * @param string[] $configFilePaths
-     * @param string $kernelClass
-     * @param string $configsHash
      */
-    private function createBootedKernelFromConfigs($kernelClass, $configsHash, $configFilePaths) : \RectorPrefix20210705\Symfony\Component\HttpKernel\KernelInterface
+    private function createBootedKernelFromConfigs(string $kernelClass, string $configsHash, array $configFilePaths) : \RectorPrefix20210705\Symfony\Component\HttpKernel\KernelInterface
     {
         $kernel = new $kernelClass('test_' . $configsHash, \true);
         $this->ensureIsConfigAwareKernel($kernel);

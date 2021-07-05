@@ -67,10 +67,7 @@ final class NewTypeResolver implements \Rector\NodeTypeResolver\Contract\NodeTyp
         }
         return $scope->getType($node);
     }
-    /**
-     * @param \PhpParser\Node\Expr\New_ $new
-     */
-    private function resolveAnonymousClassType($new) : \PHPStan\Type\ObjectWithoutClassType
+    private function resolveAnonymousClassType(\PhpParser\Node\Expr\New_ $new) : \PHPStan\Type\ObjectWithoutClassType
     {
         if (!$new->class instanceof \PhpParser\Node\Stmt\Class_) {
             return new \PHPStan\Type\ObjectWithoutClassType();

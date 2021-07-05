@@ -72,10 +72,7 @@ final class FragmentUriGenerator implements \RectorPrefix20210705\Symfony\Compon
         $fragmentUri = $this->signer->sign($fragmentUri);
         return $absolute ? $fragmentUri : \substr($fragmentUri, \strlen($request->getSchemeAndHttpHost()));
     }
-    /**
-     * @param mixed[] $values
-     */
-    private function checkNonScalar($values) : void
+    private function checkNonScalar(array $values) : void
     {
         foreach ($values as $key => $value) {
             if (\is_array($value)) {

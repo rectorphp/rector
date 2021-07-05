@@ -52,12 +52,7 @@ final class GlobalStringConditionMatcher extends \Ssch\TYPO3Rector\FileProcessor
         }
         return \RectorPrefix20210705\Nette\Utils\Strings::startsWith($condition, self::TYPE);
     }
-    /**
-     * @param string $property
-     * @param string $operator
-     * @param string $value
-     */
-    private function refactorGetPost($property, $operator, $value) : string
+    private function refactorGetPost(string $property, string $operator, string $value) : string
     {
         $parameters = \Ssch\TYPO3Rector\Helper\ArrayUtility::trimExplode('|', $property);
         if (!\is_numeric($value)) {

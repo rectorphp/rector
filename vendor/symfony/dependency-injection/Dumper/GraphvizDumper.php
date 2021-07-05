@@ -85,13 +85,8 @@ class GraphvizDumper extends \RectorPrefix20210705\Symfony\Component\DependencyI
     }
     /**
      * Finds all edges belonging to a specific service id.
-     * @param string $id
-     * @param mixed[] $arguments
-     * @param bool $required
-     * @param string $name
-     * @param bool $lazy
      */
-    private function findEdges($id, $arguments, $required, $name, $lazy = \false) : array
+    private function findEdges(string $id, array $arguments, bool $required, string $name, bool $lazy = \false) : array
     {
         $edges = [];
         foreach ($arguments as $argument) {
@@ -167,10 +162,7 @@ class GraphvizDumper extends \RectorPrefix20210705\Symfony\Component\DependencyI
     {
         return "}\n";
     }
-    /**
-     * @param mixed[] $attributes
-     */
-    private function addAttributes($attributes) : string
+    private function addAttributes(array $attributes) : string
     {
         $code = [];
         foreach ($attributes as $k => $v) {
@@ -178,10 +170,7 @@ class GraphvizDumper extends \RectorPrefix20210705\Symfony\Component\DependencyI
         }
         return $code ? ', ' . \implode(', ', $code) : '';
     }
-    /**
-     * @param mixed[] $options
-     */
-    private function addOptions($options) : string
+    private function addOptions(array $options) : string
     {
         $code = [];
         foreach ($options as $k => $v) {
@@ -189,17 +178,11 @@ class GraphvizDumper extends \RectorPrefix20210705\Symfony\Component\DependencyI
         }
         return \implode(' ', $code);
     }
-    /**
-     * @param string $id
-     */
-    private function dotize($id) : string
+    private function dotize(string $id) : string
     {
         return \preg_replace('/\\W/i', '_', $id);
     }
-    /**
-     * @param string $id
-     */
-    private function getAliases($id) : array
+    private function getAliases(string $id) : array
     {
         $aliases = [];
         foreach ($this->container->getAliases() as $alias => $origin) {

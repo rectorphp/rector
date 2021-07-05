@@ -82,9 +82,8 @@ final class IdentifierTypeMapper implements \Rector\StaticTypeMapper\Contract\Ph
     }
     /**
      * @return \PHPStan\Type\MixedType|\Rector\StaticTypeMapper\ValueObject\Type\SelfObjectType
-     * @param \PhpParser\Node $node
      */
-    private function mapSelf($node)
+    private function mapSelf(\PhpParser\Node $node)
     {
         /** @var string|null $className */
         $className = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);
@@ -96,9 +95,8 @@ final class IdentifierTypeMapper implements \Rector\StaticTypeMapper\Contract\Ph
     }
     /**
      * @return \Rector\StaticTypeMapper\ValueObject\Type\ParentStaticType|\PHPStan\Type\MixedType
-     * @param \PhpParser\Node $node
      */
-    private function mapParent($node)
+    private function mapParent(\PhpParser\Node $node)
     {
         $parentClassName = $this->parentClassScopeResolver->resolveParentClassName($node);
         if ($parentClassName !== null) {
@@ -108,9 +106,8 @@ final class IdentifierTypeMapper implements \Rector\StaticTypeMapper\Contract\Ph
     }
     /**
      * @return \PHPStan\Type\MixedType|\PHPStan\Type\StaticType
-     * @param \PhpParser\Node $node
      */
-    private function mapStatic($node)
+    private function mapStatic(\PhpParser\Node $node)
     {
         /** @var string|null $className */
         $className = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);

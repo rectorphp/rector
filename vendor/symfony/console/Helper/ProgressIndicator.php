@@ -177,9 +177,8 @@ class ProgressIndicator
     }
     /**
      * Overwrites a previous message to the output.
-     * @param string $message
      */
-    private function overwrite($message)
+    private function overwrite(string $message)
     {
         if ($this->output->isDecorated()) {
             $this->output->write("\r\33[2K");

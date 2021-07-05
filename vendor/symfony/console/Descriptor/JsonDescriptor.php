@@ -93,33 +93,21 @@ class JsonDescriptor extends \RectorPrefix20210705\Symfony\Component\Console\Des
     }
     /**
      * Writes data as json.
-     * @param mixed[] $data
-     * @param mixed[] $options
      */
-    private function writeData($data, $options)
+    private function writeData(array $data, array $options)
     {
         $flags = $options['json_encoding'] ?? 0;
         $this->write(\json_encode($data, $flags));
     }
-    /**
-     * @param \Symfony\Component\Console\Input\InputArgument $argument
-     */
-    private function getInputArgumentData($argument) : array
+    private function getInputArgumentData(\RectorPrefix20210705\Symfony\Component\Console\Input\InputArgument $argument) : array
     {
         return ['name' => $argument->getName(), 'is_required' => $argument->isRequired(), 'is_array' => $argument->isArray(), 'description' => \preg_replace('/\\s*[\\r\\n]\\s*/', ' ', $argument->getDescription()), 'default' => \INF === $argument->getDefault() ? 'INF' : $argument->getDefault()];
     }
-    /**
-     * @param \Symfony\Component\Console\Input\InputOption $option
-     * @param bool $negated
-     */
-    private function getInputOptionData($option, $negated = \false) : array
+    private function getInputOptionData(\RectorPrefix20210705\Symfony\Component\Console\Input\InputOption $option, bool $negated = \false) : array
     {
         return $negated ? ['name' => '--no-' . $option->getName(), 'shortcut' => '', 'accept_value' => \false, 'is_value_required' => \false, 'is_multiple' => \false, 'description' => 'Negate the "--' . $option->getName() . '" option', 'default' => \false] : ['name' => '--' . $option->getName(), 'shortcut' => $option->getShortcut() ? '-' . \str_replace('|', '|-', $option->getShortcut()) : '', 'accept_value' => $option->acceptValue(), 'is_value_required' => $option->isValueRequired(), 'is_multiple' => $option->isArray(), 'description' => \preg_replace('/\\s*[\\r\\n]\\s*/', ' ', $option->getDescription()), 'default' => \INF === $option->getDefault() ? 'INF' : $option->getDefault()];
     }
-    /**
-     * @param \Symfony\Component\Console\Input\InputDefinition $definition
-     */
-    private function getInputDefinitionData($definition) : array
+    private function getInputDefinitionData(\RectorPrefix20210705\Symfony\Component\Console\Input\InputDefinition $definition) : array
     {
         $inputArguments = [];
         foreach ($definition->getArguments() as $name => $argument) {
@@ -134,11 +122,7 @@ class JsonDescriptor extends \RectorPrefix20210705\Symfony\Component\Console\Des
         }
         return ['arguments' => $inputArguments, 'options' => $inputOptions];
     }
-    /**
-     * @param \Symfony\Component\Console\Command\Command $command
-     * @param bool $short
-     */
-    private function getCommandData($command, $short = \false) : array
+    private function getCommandData(\RectorPrefix20210705\Symfony\Component\Console\Command\Command $command, bool $short = \false) : array
     {
         $data = ['name' => $command->getName(), 'description' => $command->getDescription()];
         if ($short) {

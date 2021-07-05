@@ -239,7 +239,7 @@ class Store implements \RectorPrefix20210705\Symfony\Component\HttpKernel\HttpCa
      * @param array       $env1 A Request HTTP header array
      * @param array       $env2 A Request HTTP header array
      */
-    private function requestsMatch($vary, $env1, $env2) : bool
+    private function requestsMatch(?string $vary, array $env1, array $env2) : bool
     {
         if (empty($vary)) {
             return \true;
@@ -258,9 +258,8 @@ class Store implements \RectorPrefix20210705\Symfony\Component\HttpKernel\HttpCa
      * Gets all data associated with the given key.
      *
      * Use this method only if you know what you are doing.
-     * @param string $key
      */
-    private function getMetadata($key) : array
+    private function getMetadata(string $key) : array
     {
         if (!($entries = $this->load($key))) {
             return [];
@@ -285,9 +284,8 @@ class Store implements \RectorPrefix20210705\Symfony\Component\HttpKernel\HttpCa
     }
     /**
      * Purges data for the given URL.
-     * @param string $url
      */
-    private function doPurge($url) : bool
+    private function doPurge(string $url) : bool
     {
         $key = $this->getCacheKey(\RectorPrefix20210705\Symfony\Component\HttpFoundation\Request::create($url));
         if (isset($this->locks[$key])) {
@@ -303,20 +301,16 @@ class Store implements \RectorPrefix20210705\Symfony\Component\HttpKernel\HttpCa
     }
     /**
      * Loads data for the given key.
-     * @param string $key
      */
-    private function load($key) : ?string
+    private function load(string $key) : ?string
     {
         $path = $this->getPath($key);
         return \is_file($path) && \false !== ($contents = @\file_get_contents($path)) ? $contents : null;
     }
     /**
      * Save data for the given key.
-     * @param string $key
-     * @param string $data
-     * @param bool $overwrite
      */
-    private function save($key, $data, $overwrite = \true) : bool
+    private function save(string $key, string $data, bool $overwrite = \true) : bool
     {
         $path = $this->getPath($key);
         if (!$overwrite && \file_exists($path)) {
@@ -380,9 +374,8 @@ class Store implements \RectorPrefix20210705\Symfony\Component\HttpKernel\HttpCa
     }
     /**
      * Returns a cache key for the given Request.
-     * @param \Symfony\Component\HttpFoundation\Request $request
      */
-    private function getCacheKey($request) : string
+    private function getCacheKey(\RectorPrefix20210705\Symfony\Component\HttpFoundation\Request $request) : string
     {
         if (isset($this->keyCache[$request])) {
             return $this->keyCache[$request];
@@ -391,17 +384,15 @@ class Store implements \RectorPrefix20210705\Symfony\Component\HttpKernel\HttpCa
     }
     /**
      * Persists the Request HTTP headers.
-     * @param \Symfony\Component\HttpFoundation\Request $request
      */
-    private function persistRequest($request) : array
+    private function persistRequest(\RectorPrefix20210705\Symfony\Component\HttpFoundation\Request $request) : array
     {
         return $request->headers->all();
     }
     /**
      * Persists the Response HTTP headers.
-     * @param \Symfony\Component\HttpFoundation\Response $response
      */
-    private function persistResponse($response) : array
+    private function persistResponse(\RectorPrefix20210705\Symfony\Component\HttpFoundation\Response $response) : array
     {
         $headers = $response->headers->all();
         $headers['X-Status'] = [$response->getStatusCode()];
@@ -409,10 +400,8 @@ class Store implements \RectorPrefix20210705\Symfony\Component\HttpKernel\HttpCa
     }
     /**
      * Restores a Response from the HTTP headers and body.
-     * @param mixed[] $headers
-     * @param string|null $path
      */
-    private function restoreResponse($headers, $path = null) : \RectorPrefix20210705\Symfony\Component\HttpFoundation\Response
+    private function restoreResponse(array $headers, string $path = null) : \RectorPrefix20210705\Symfony\Component\HttpFoundation\Response
     {
         $status = $headers['X-Status'][0];
         unset($headers['X-Status']);

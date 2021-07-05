@@ -206,7 +206,7 @@ class MultiConstraint implements \RectorPrefix20210705\Composer\Semver\Constrain
      *
      * @phpstan-return array{0: list<ConstraintInterface>, 1: bool}|null
      */
-    private static function optimizeConstraints($constraints, $conjunctive)
+    private static function optimizeConstraints(array $constraints, $conjunctive)
     {
         // parse the two OR groups and if they are contiguous we collapse
         // them into one constraint

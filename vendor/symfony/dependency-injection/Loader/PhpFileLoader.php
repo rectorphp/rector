@@ -80,11 +80,8 @@ class PhpFileLoader extends \RectorPrefix20210705\Symfony\Component\DependencyIn
     }
     /**
      * Resolve the parameters to the $callback and execute it.
-     * @param callable $callback
-     * @param \Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator
-     * @param string $path
      */
-    private function executeCallback($callback, $containerConfigurator, $path)
+    private function executeCallback(callable $callback, \Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator, string $path)
     {
         if (!$callback instanceof \Closure) {
             $callback = \Closure::fromCallable($callback);
@@ -142,7 +139,7 @@ class PhpFileLoader extends \RectorPrefix20210705\Symfony\Component\DependencyIn
     /**
      * @param string $namespace FQCN string for a class implementing ConfigBuilderInterface
      */
-    private function configBuilder($namespace) : \RectorPrefix20210705\Symfony\Component\Config\Builder\ConfigBuilderInterface
+    private function configBuilder(string $namespace) : \RectorPrefix20210705\Symfony\Component\Config\Builder\ConfigBuilderInterface
     {
         if (!\class_exists(\RectorPrefix20210705\Symfony\Component\Config\Builder\ConfigBuilderGenerator::class)) {
             throw new \LogicException('You cannot use the config builder as the Config component is not installed. Try running "composer require symfony/config".');

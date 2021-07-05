@@ -150,13 +150,7 @@ abstract class FileLoader extends \RectorPrefix20210705\Symfony\Component\Config
             $this->container->setDefinition($id, $definition->setInstanceofConditionals($this->instanceof));
         }
     }
-    /**
-     * @param string $namespace
-     * @param string $pattern
-     * @param mixed[] $excludePatterns
-     * @param \Symfony\Component\DependencyInjection\Compiler\RegisterAutoconfigureAttributesPass|null $autoconfigureAttributes
-     */
-    private function findClasses($namespace, $pattern, $excludePatterns, $autoconfigureAttributes) : array
+    private function findClasses(string $namespace, string $pattern, array $excludePatterns, ?\RectorPrefix20210705\Symfony\Component\DependencyInjection\Compiler\RegisterAutoconfigureAttributesPass $autoconfigureAttributes) : array
     {
         $parameterBag = $this->container->getParameterBag();
         $excludePaths = [];

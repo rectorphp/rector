@@ -73,9 +73,8 @@ final class YieldNodesReturnTypeInferer implements \Rector\TypeDeclaration\Contr
     }
     /**
      * @return Yield_[]|YieldFrom[]
-     * @param \PhpParser\Node\FunctionLike $functionLike
      */
-    private function findCurrentScopeYieldNodes($functionLike) : array
+    private function findCurrentScopeYieldNodes(\PhpParser\Node\FunctionLike $functionLike) : array
     {
         $yieldNodes = [];
         $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $functionLike->getStmts(), function (\PhpParser\Node $node) use(&$yieldNodes) : ?int {

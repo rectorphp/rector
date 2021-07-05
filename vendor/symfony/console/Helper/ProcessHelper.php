@@ -120,10 +120,7 @@ class ProcessHelper extends \RectorPrefix20210705\Symfony\Component\Console\Help
             }
         };
     }
-    /**
-     * @param string $str
-     */
-    private function escapeString($str) : string
+    private function escapeString(string $str) : string
     {
         return \str_replace('<', '\\<', $str);
     }

@@ -31,9 +31,8 @@ final class RemoveSkippedRectorsCompilerPass implements \RectorPrefix20210705\Sy
     }
     /**
      * @return string[]
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder
      */
-    private function resolveSkippedRectorClasses($containerBuilder) : array
+    private function resolveSkippedRectorClasses(\RectorPrefix20210705\Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder) : array
     {
         $skipParameters = (array) $containerBuilder->getParameter(\Rector\Core\Configuration\Option::SKIP);
         return \array_filter($skipParameters, function ($element) : bool {

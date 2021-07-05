@@ -60,7 +60,7 @@ abstract class AbstractTestCase extends \PHPUnit\Framework\TestCase
     /**
      * @param SmartFileInfo[] $configFileInfos
      */
-    private function createConfigsHash($configFileInfos) : string
+    private function createConfigsHash(array $configFileInfos) : string
     {
         $configHash = '';
         foreach ($configFileInfos as $configFileInfo) {

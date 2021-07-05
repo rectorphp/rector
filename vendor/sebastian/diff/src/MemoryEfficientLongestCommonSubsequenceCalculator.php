@@ -56,11 +56,7 @@ final class MemoryEfficientLongestCommonSubsequenceCalculator implements \Rector
         $toEnd = \array_slice($to, $jMax);
         return \array_merge($this->calculate($fromStart, $toStart), $this->calculate($fromEnd, $toEnd));
     }
-    /**
-     * @param mixed[] $from
-     * @param mixed[] $to
-     */
-    private function length($from, $to) : array
+    private function length(array $from, array $to) : array
     {
         $current = \array_fill(0, \count($to) + 1, 0);
         $cFrom = \count($from);

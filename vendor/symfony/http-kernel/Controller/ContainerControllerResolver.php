@@ -58,11 +58,7 @@ class ContainerControllerResolver extends \RectorPrefix20210705\Symfony\Componen
         }
         throw new \InvalidArgumentException(\sprintf('Controller "%s" does neither exist as service nor as class.', $class), 0, $e);
     }
-    /**
-     * @param string $controller
-     * @param \Throwable $previous
-     */
-    private function throwExceptionIfControllerWasRemoved($controller, $previous)
+    private function throwExceptionIfControllerWasRemoved(string $controller, \Throwable $previous)
     {
         if ($this->container instanceof \RectorPrefix20210705\Symfony\Component\DependencyInjection\Container && isset($this->container->getRemovedIds()[$controller])) {
             throw new \InvalidArgumentException(\sprintf('Controller "%s" cannot be fetched from the container because it is private. Did you forget to tag the service with "controller.service_arguments"?', $controller), 0, $previous);

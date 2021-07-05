@@ -143,10 +143,8 @@ class InlineServiceDefinitionsPass extends \RectorPrefix20210705\Symfony\Compone
     }
     /**
      * Checks if the definition is inlineable.
-     * @param string $id
-     * @param \Symfony\Component\DependencyInjection\Definition $definition
      */
-    private function isInlineableDefinition($id, $definition) : bool
+    private function isInlineableDefinition(string $id, \RectorPrefix20210705\Symfony\Component\DependencyInjection\Definition $definition) : bool
     {
         if ($definition->hasErrors() || $definition->isDeprecated() || $definition->isLazy() || $definition->isSynthetic()) {
             return \false;

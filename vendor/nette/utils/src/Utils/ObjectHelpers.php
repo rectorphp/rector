@@ -112,11 +112,7 @@ final class ObjectHelpers
         }
         return $best;
     }
-    /**
-     * @param \ReflectionClass $rc
-     * @param string $pattern
-     */
-    private static function parseFullDoc($rc, $pattern) : array
+    private static function parseFullDoc(\ReflectionClass $rc, string $pattern) : array
     {
         do {
             $doc[] = $rc->getDocComment();

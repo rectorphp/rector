@@ -363,7 +363,7 @@ final class BetterStandardPrinter extends \PhpParser\PrettyPrinter\Standard
      * @param Node[] $stmts
      * @return Node[]|mixed[]
      */
-    private function resolveNewStmts($stmts) : array
+    private function resolveNewStmts(array $stmts) : array
     {
         if (\count($stmts) === 1 && $stmts[0] instanceof \Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace) {
             return $stmts[0]->stmts;
@@ -373,7 +373,7 @@ final class BetterStandardPrinter extends \PhpParser\PrettyPrinter\Standard
     /**
      * @param array<Node|null> $nodes
      */
-    private function moveCommentsFromAttributeObjectToCommentsAttribute($nodes) : void
+    private function moveCommentsFromAttributeObjectToCommentsAttribute(array $nodes) : void
     {
         // move phpdoc from node to "comment" attribute
         foreach ($nodes as $node) {
@@ -386,7 +386,7 @@ final class BetterStandardPrinter extends \PhpParser\PrettyPrinter\Standard
     /**
      * @param Node[] $nodes
      */
-    private function containsNop($nodes) : bool
+    private function containsNop(array $nodes) : bool
     {
         foreach ($nodes as $node) {
             if ($node instanceof \PhpParser\Node\Stmt\Nop) {
@@ -395,11 +395,7 @@ final class BetterStandardPrinter extends \PhpParser\PrettyPrinter\Standard
         }
         return \false;
     }
-    /**
-     * @param \PhpParser\Node\Scalar\String_ $string
-     * @param string $wrap
-     */
-    private function wrapValueWith($string, $wrap) : string
+    private function wrapValueWith(\PhpParser\Node\Scalar\String_ $string, string $wrap) : string
     {
         return $wrap . $string->value . $wrap;
     }

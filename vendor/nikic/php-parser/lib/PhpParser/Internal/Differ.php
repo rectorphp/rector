@@ -51,11 +51,7 @@ class Differ
     {
         return $this->coalesceReplacements($this->diff($old, $new));
     }
-    /**
-     * @param mixed[] $a
-     * @param mixed[] $b
-     */
-    private function calculateTrace($a, $b)
+    private function calculateTrace(array $a, array $b)
     {
         $n = \count($a);
         $m = \count($b);
@@ -83,14 +79,7 @@ class Differ
         }
         throw new \Exception('Should not happen');
     }
-    /**
-     * @param mixed[] $trace
-     * @param int $x
-     * @param int $y
-     * @param mixed[] $a
-     * @param mixed[] $b
-     */
-    private function extractDiff($trace, $x, $y, $a, $b)
+    private function extractDiff(array $trace, int $x, int $y, array $a, array $b)
     {
         $result = [];
         for ($d = \count($trace) - 1; $d >= 0; $d--) {
@@ -128,7 +117,7 @@ class Differ
      * @param DiffElem[] $diff
      * @return DiffElem[]
      */
-    private function coalesceReplacements($diff)
+    private function coalesceReplacements(array $diff)
     {
         $newDiff = [];
         $c = \count($diff);

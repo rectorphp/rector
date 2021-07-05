@@ -334,10 +334,7 @@ class Debugger
         return \false;
         // calls normal error handler to fill-in error_get_last()
     }
-    /**
-     * @param bool $errorOccurred
-     */
-    private static function removeOutputBuffers($errorOccurred) : void
+    private static function removeOutputBuffers(bool $errorOccurred) : void
     {
         while (\ob_get_level() > self::$obLevel) {
             $status = \ob_get_status();

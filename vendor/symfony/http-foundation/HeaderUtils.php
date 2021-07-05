@@ -227,12 +227,7 @@ class HeaderUtils
         }
         return $query;
     }
-    /**
-     * @param mixed[] $matches
-     * @param string $separators
-     * @param bool $first
-     */
-    private static function groupParts($matches, $separators, $first = \true) : array
+    private static function groupParts(array $matches, string $separators, bool $first = \true) : array
     {
         $separator = $separators[0];
         $partSeparators = \substr($separators, 1);

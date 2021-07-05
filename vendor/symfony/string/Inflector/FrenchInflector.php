@@ -123,10 +123,7 @@ final class FrenchInflector implements \RectorPrefix20210705\Symfony\Component\S
         }
         return [$singular . 's'];
     }
-    /**
-     * @param string $word
-     */
-    private function isInflectedWord($word) : bool
+    private function isInflectedWord(string $word) : bool
     {
         return 1 === \preg_match(self::UNINFLECTED, $word);
     }

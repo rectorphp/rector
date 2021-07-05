@@ -80,11 +80,7 @@ class Bridge
         }
         return null;
     }
-    /**
-     * @param string $code
-     * @param int $line
-     */
-    private static function highlightNeon($code, $line) : string
+    private static function highlightNeon(string $code, int $line) : string
     {
         $code = \htmlspecialchars($code, \ENT_IGNORE, 'UTF-8');
         $code = \str_replace(' ', "<span class='tracy-dump-whitespace'>·</span>", $code);

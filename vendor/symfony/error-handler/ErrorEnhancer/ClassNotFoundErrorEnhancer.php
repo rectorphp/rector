@@ -63,7 +63,7 @@ class ClassNotFoundErrorEnhancer implements \RectorPrefix20210705\Symfony\Compon
      *
      * Returns an array of possible fully qualified class names
      */
-    private function getClassCandidates($class) : array
+    private function getClassCandidates(string $class) : array
     {
         if (!\is_array($functions = \spl_autoload_functions())) {
             return [];
@@ -96,12 +96,7 @@ class ClassNotFoundErrorEnhancer implements \RectorPrefix20210705\Symfony\Compon
         }
         return \array_unique($classes);
     }
-    /**
-     * @param string $path
-     * @param string $class
-     * @param string $prefix
-     */
-    private function findClassInPath($path, $class, $prefix) : array
+    private function findClassInPath(string $path, string $class, string $prefix) : array
     {
         if (!($path = (\realpath($path . '/' . \strtr($prefix, '\\_', '//')) ?: \realpath($path . '/' . \dirname(\strtr($prefix, '\\_', '//')))) ?: \realpath($path))) {
             return [];
@@ -115,12 +110,7 @@ class ClassNotFoundErrorEnhancer implements \RectorPrefix20210705\Symfony\Compon
         }
         return $classes;
     }
-    /**
-     * @param string $path
-     * @param string $file
-     * @param string $prefix
-     */
-    private function convertFileToClass($path, $file, $prefix) : ?string
+    private function convertFileToClass(string $path, string $file, string $prefix) : ?string
     {
         $candidates = [
             // namespaced class
@@ -161,10 +151,7 @@ class ClassNotFoundErrorEnhancer implements \RectorPrefix20210705\Symfony\Compon
         }
         return null;
     }
-    /**
-     * @param string $class
-     */
-    private function classExists($class) : bool
+    private function classExists(string $class) : bool
     {
         return \class_exists($class, \false) || \interface_exists($class, \false) || \trait_exists($class, \false);
     }

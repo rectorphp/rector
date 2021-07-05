@@ -452,10 +452,7 @@ abstract class ParserAbstract implements \PhpParser\Parser
             return $resultStmts;
         }
     }
-    /**
-     * @param \PhpParser\Node\Stmt\Namespace_ $stmt
-     */
-    private function fixupNamespaceAttributes($stmt)
+    private function fixupNamespaceAttributes(\PhpParser\Node\Stmt\Namespace_ $stmt)
     {
         // We moved the statements into the namespace node, as such the end of the namespace node
         // needs to be extended to the end of the statements.
@@ -479,7 +476,7 @@ abstract class ParserAbstract implements \PhpParser\Parser
      *
      * @return null|string One of "semicolon", "brace" or null (no namespaces)
      */
-    private function getNamespacingStyle($stmts)
+    private function getNamespacingStyle(array $stmts)
     {
         $style = null;
         $hasNotAllowedStmts = \false;
@@ -797,10 +794,7 @@ abstract class ParserAbstract implements \PhpParser\Parser
             $this->emitError(new \PhpParser\Error(\sprintf('Cannot use \'%s\' as class name as it is reserved', $name), $this->getAttributesAt($namePos)));
         }
     }
-    /**
-     * @param mixed[] $interfaces
-     */
-    private function checkImplementedInterfaces($interfaces)
+    private function checkImplementedInterfaces(array $interfaces)
     {
         foreach ($interfaces as $interface) {
             if ($interface->isSpecialClassName()) {

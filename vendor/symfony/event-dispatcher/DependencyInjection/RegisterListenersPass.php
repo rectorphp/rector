@@ -156,12 +156,7 @@ class RegisterListenersPass implements \RectorPrefix20210705\Symfony\Component\D
             \RectorPrefix20210705\Symfony\Component\EventDispatcher\DependencyInjection\ExtractingEventDispatcher::$aliases = [];
         }
     }
-    /**
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
-     * @param string $id
-     * @param string $method
-     */
-    private function getEventFromTypeDeclaration($container, $id, $method) : string
+    private function getEventFromTypeDeclaration(\RectorPrefix20210705\Symfony\Component\DependencyInjection\ContainerBuilder $container, string $id, string $method) : string
     {
         if (null === ($class = $container->getDefinition($id)->getClass()) || !($r = $container->getReflectionClass($class, \false)) || !$r->hasMethod($method) || 1 > ($m = $r->getMethod($method))->getNumberOfParameters() || !($type = $m->getParameters()[0]->getType()) instanceof \ReflectionNamedType || $type->isBuiltin() || \RectorPrefix20210705\Symfony\Contracts\EventDispatcher\Event::class === ($name = $type->getName())) {
             throw new \RectorPrefix20210705\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException(\sprintf('Service "%s" must define the "event" attribute on "%s" tags.', $id, $this->listenerTag));

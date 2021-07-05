@@ -414,11 +414,8 @@ class Strings
     }
     /**
      * Returns position in bytes of $nth occurence of $needle in $haystack or null if the needle was not found.
-     * @param string $haystack
-     * @param string $needle
-     * @param int $nth
      */
-    private static function pos($haystack, $needle, $nth = 1) : ?int
+    private static function pos(string $haystack, string $needle, int $nth = 1) : ?int
     {
         if (!$nth) {
             return null;

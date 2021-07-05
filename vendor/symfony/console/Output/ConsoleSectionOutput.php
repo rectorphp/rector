@@ -99,9 +99,8 @@ class ConsoleSectionOutput extends \RectorPrefix20210705\Symfony\Component\Conso
     /**
      * At initial stage, cursor is at the end of stream output. This method makes cursor crawl upwards until it hits
      * current section. Then it erases content it crawled through. Optionally, it erases part of current section too.
-     * @param int $numberOfLinesToClearFromCurrentSection
      */
-    private function popStreamContentUntilCurrentSection($numberOfLinesToClearFromCurrentSection = 0) : string
+    private function popStreamContentUntilCurrentSection(int $numberOfLinesToClearFromCurrentSection = 0) : string
     {
         $numberOfLinesToClear = $numberOfLinesToClearFromCurrentSection;
         $erasedContent = [];
@@ -120,10 +119,7 @@ class ConsoleSectionOutput extends \RectorPrefix20210705\Symfony\Component\Conso
         }
         return \implode('', \array_reverse($erasedContent));
     }
-    /**
-     * @param string $text
-     */
-    private function getDisplayLength($text) : int
+    private function getDisplayLength(string $text) : int
     {
         return \RectorPrefix20210705\Symfony\Component\Console\Helper\Helper::width(\RectorPrefix20210705\Symfony\Component\Console\Helper\Helper::removeDecoration($this->getFormatter(), \str_replace("\t", '        ', $text)));
     }

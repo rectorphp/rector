@@ -46,7 +46,7 @@ class CheckCircularReferencesPass implements \RectorPrefix20210705\Symfony\Compo
      *
      * @throws ServiceCircularReferenceException when a circular reference is found
      */
-    private function checkOutEdges($edges)
+    private function checkOutEdges(array $edges)
     {
         foreach ($edges as $edge) {
             $node = $edge->getDestNode();

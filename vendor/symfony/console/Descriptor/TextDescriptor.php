@@ -221,18 +221,15 @@ class TextDescriptor extends \RectorPrefix20210705\Symfony\Component\Console\Des
     }
     /**
      * {@inheritdoc}
-     * @param string $content
-     * @param mixed[] $options
      */
-    private function writeText($content, $options = [])
+    private function writeText(string $content, array $options = [])
     {
         $this->write(isset($options['raw_text']) && $options['raw_text'] ? \strip_tags($content) : $content, isset($options['raw_output']) ? !$options['raw_output'] : \true);
     }
     /**
      * Formats command aliases to show them in the command description.
-     * @param \Symfony\Component\Console\Command\Command $command
      */
-    private function getCommandAliasesText($command) : string
+    private function getCommandAliasesText(\RectorPrefix20210705\Symfony\Component\Console\Command\Command $command) : string
     {
         $text = '';
         $aliases = $command->getAliases();
@@ -265,7 +262,7 @@ class TextDescriptor extends \RectorPrefix20210705\Symfony\Component\Console\Des
     /**
      * @param array<Command|string> $commands
      */
-    private function getColumnWidth($commands) : int
+    private function getColumnWidth(array $commands) : int
     {
         $widths = [];
         foreach ($commands as $command) {
@@ -283,7 +280,7 @@ class TextDescriptor extends \RectorPrefix20210705\Symfony\Component\Console\Des
     /**
      * @param InputOption[] $options
      */
-    private function calculateTotalWidthForOptions($options) : int
+    private function calculateTotalWidthForOptions(array $options) : int
     {
         $totalWidth = 0;
         foreach ($options as $option) {

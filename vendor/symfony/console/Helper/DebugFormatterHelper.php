@@ -90,10 +90,7 @@ class DebugFormatterHelper extends \RectorPrefix20210705\Symfony\Component\Conso
         unset($this->started[$id]['out'], $this->started[$id]['err']);
         return $message;
     }
-    /**
-     * @param string $id
-     */
-    private function getBorder($id) : string
+    private function getBorder(string $id) : string
     {
         return \sprintf('<bg=%s> </>', $this->colors[$this->started[$id]['border']]);
     }

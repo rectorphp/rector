@@ -55,10 +55,7 @@ final class ShowCommand extends \RectorPrefix20210705\Symfony\Component\Console\
         $this->reportLoadedRectors($outputFormat);
         return \RectorPrefix20210705\Symplify\PackageBuilder\Console\ShellCode::SUCCESS;
     }
-    /**
-     * @param string $outputFormat
-     */
-    private function reportLoadedRectors($outputFormat) : void
+    private function reportLoadedRectors(string $outputFormat) : void
     {
         $rectors = \array_filter($this->rectors, function (\Rector\Core\Contract\Rector\RectorInterface $rector) : bool {
             return !$rector instanceof \Rector\PostRector\Contract\Rector\PostRectorInterface;

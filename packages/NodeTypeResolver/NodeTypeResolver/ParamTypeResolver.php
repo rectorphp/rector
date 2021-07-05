@@ -85,10 +85,7 @@ final class ParamTypeResolver implements \Rector\NodeTypeResolver\Contract\NodeT
         }
         return $this->resolveFromFunctionDocBlock($node);
     }
-    /**
-     * @param \PhpParser\Node\Param $param
-     */
-    private function resolveFromParamType($param) : \PHPStan\Type\Type
+    private function resolveFromParamType(\PhpParser\Node\Param $param) : \PHPStan\Type\Type
     {
         if ($param->type === null) {
             return new \PHPStan\Type\MixedType();
@@ -98,10 +95,7 @@ final class ParamTypeResolver implements \Rector\NodeTypeResolver\Contract\NodeT
         }
         return $this->staticTypeMapper->mapPhpParserNodePHPStanType($param->type);
     }
-    /**
-     * @param \PhpParser\Node\Param $param
-     */
-    private function resolveFromFirstVariableUse($param) : \PHPStan\Type\Type
+    private function resolveFromFirstVariableUse(\PhpParser\Node\Param $param) : \PHPStan\Type\Type
     {
         $classMethod = $param->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::METHOD_NODE);
         if (!$classMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
@@ -122,19 +116,13 @@ final class ParamTypeResolver implements \Rector\NodeTypeResolver\Contract\NodeT
         });
         return $paramStaticType;
     }
-    /**
-     * @param \PhpParser\Node\Param $param
-     */
-    private function resolveFromFunctionDocBlock($param) : \PHPStan\Type\Type
+    private function resolveFromFunctionDocBlock(\PhpParser\Node\Param $param) : \PHPStan\Type\Type
     {
         $phpDocInfo = $this->getFunctionLikePhpDocInfo($param);
         $paramName = $this->nodeNameResolver->getName($param);
         return $phpDocInfo->getParamType($paramName);
     }
-    /**
-     * @param \PhpParser\Node\Param $param
-     */
-    private function getFunctionLikePhpDocInfo($param) : \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo
+    private function getFunctionLikePhpDocInfo(\PhpParser\Node\Param $param) : \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo
     {
         $parentNode = $param->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
         if (!$parentNode instanceof \PhpParser\Node\FunctionLike) {

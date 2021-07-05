@@ -31,10 +31,7 @@ class JsonDecoder
         }
         return $value;
     }
-    /**
-     * @param mixed[] $array
-     */
-    private function decodeArray($array) : array
+    private function decodeArray(array $array) : array
     {
         $decodedArray = [];
         foreach ($array as $key => $value) {
@@ -42,10 +39,7 @@ class JsonDecoder
         }
         return $decodedArray;
     }
-    /**
-     * @param mixed[] $value
-     */
-    private function decodeNode($value) : \PhpParser\Node
+    private function decodeNode(array $value) : \PhpParser\Node
     {
         $nodeType = $value['nodeType'];
         if (!\is_string($nodeType)) {
@@ -68,10 +62,7 @@ class JsonDecoder
         }
         return $node;
     }
-    /**
-     * @param mixed[] $value
-     */
-    private function decodeComment($value) : \PhpParser\Comment
+    private function decodeComment(array $value) : \PhpParser\Comment
     {
         $className = $value['nodeType'] === 'Comment' ? \PhpParser\Comment::class : \PhpParser\Comment\Doc::class;
         if (!isset($value['text'])) {
@@ -79,10 +70,7 @@ class JsonDecoder
         }
         return new $className($value['text'], $value['line'] ?? -1, $value['filePos'] ?? -1, $value['tokenPos'] ?? -1, $value['endLine'] ?? -1, $value['endFilePos'] ?? -1, $value['endTokenPos'] ?? -1);
     }
-    /**
-     * @param string $nodeType
-     */
-    private function reflectionClassFromNodeType($nodeType) : \ReflectionClass
+    private function reflectionClassFromNodeType(string $nodeType) : \ReflectionClass
     {
         if (!isset($this->reflectionClassCache[$nodeType])) {
             $className = $this->classNameFromNodeType($nodeType);
@@ -90,10 +78,7 @@ class JsonDecoder
         }
         return $this->reflectionClassCache[$nodeType];
     }
-    /**
-     * @param string $nodeType
-     */
-    private function classNameFromNodeType($nodeType) : string
+    private function classNameFromNodeType(string $nodeType) : string
     {
         $className = 'PhpParser\\Node\\' . \strtr($nodeType, '_', '\\');
         if (\class_exists($className)) {

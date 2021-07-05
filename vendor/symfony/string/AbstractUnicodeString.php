@@ -425,10 +425,8 @@ abstract class AbstractUnicodeString extends \RectorPrefix20210705\Symfony\Compo
     /**
      * @return mixed
      * @param $this $pad
-     * @param int $len
-     * @param int $type
      */
-    private function pad($len, $pad, $type)
+    private function pad(int $len, $pad, int $type)
     {
         $sLen = $this->length();
         if ($len <= $sLen) {
@@ -456,9 +454,8 @@ abstract class AbstractUnicodeString extends \RectorPrefix20210705\Symfony\Compo
     }
     /**
      * Based on https://github.com/jquast/wcwidth, a Python implementation of https://www.cl.cam.ac.uk/~mgk25/ucs/wcwidth.c.
-     * @param string $string
      */
-    private function wcswidth($string) : int
+    private function wcswidth(string $string) : int
     {
         $width = 0;
         foreach (\preg_split('//u', $string, -1, \PREG_SPLIT_NO_EMPTY) as $c) {

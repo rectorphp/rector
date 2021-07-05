@@ -74,14 +74,7 @@ class GithubActionReporter
     {
         $this->log('debug', $message, $file, $line, $col);
     }
-    /**
-     * @param string $type
-     * @param string $message
-     * @param string|null $file
-     * @param int|null $line
-     * @param int|null $col
-     */
-    private function log($type, $message, $file = null, $line = null, $col = null) : void
+    private function log(string $type, string $message, string $file = null, int $line = null, int $col = null) : void
     {
         // Some values must be encoded.
         $message = \strtr($message, self::ESCAPED_DATA);

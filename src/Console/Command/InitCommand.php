@@ -69,10 +69,7 @@ final class InitCommand extends \RectorPrefix20210705\Symfony\Component\Console\
         }
         return \RectorPrefix20210705\Symplify\PackageBuilder\Console\ShellCode::SUCCESS;
     }
-    /**
-     * @param string $templateType
-     */
-    private function resolveTemplateFilePathByType($templateType) : string
+    private function resolveTemplateFilePathByType(string $templateType) : string
     {
         $rectorTemplateFilePath = null;
         foreach ($this->templateResolvers as $templateResolver) {

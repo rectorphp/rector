@@ -141,10 +141,7 @@ BODY
     {
         return $this->properties;
     }
-    /**
-     * @param string $input
-     */
-    private function camelCase($input) : string
+    private function camelCase(string $input) : string
     {
         $output = \lcfirst(\str_replace(' ', '', \ucwords(\str_replace('_', ' ', $input))));
         return \preg_replace('#\\W#', '', $output);

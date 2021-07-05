@@ -30,10 +30,7 @@ final class UnionTypeNodePhpDocNodeVisitor extends \RectorPrefix20210705\Symplif
         $this->currentTokenIteratorProvider = $currentTokenIteratorProvider;
         $this->attributeMirrorer = $attributeMirrorer;
     }
-    /**
-     * @param \PHPStan\PhpDocParser\Ast\Node $node
-     */
-    public function enterNode($node) : ?\PHPStan\PhpDocParser\Ast\Node
+    public function enterNode(\PHPStan\PhpDocParser\Ast\Node $node) : ?\PHPStan\PhpDocParser\Ast\Node
     {
         if (!$node instanceof \PHPStan\PhpDocParser\Ast\Type\UnionTypeNode) {
             return null;
@@ -52,11 +49,7 @@ final class UnionTypeNodePhpDocNodeVisitor extends \RectorPrefix20210705\Symplif
         $this->attributeMirrorer->mirror($node, $bracketsAwareUnionTypeNode);
         return $bracketsAwareUnionTypeNode;
     }
-    /**
-     * @param \Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator $betterTokenProvider
-     * @param \Rector\BetterPhpDocParser\ValueObject\StartAndEnd $startAndEnd
-     */
-    private function isWrappedInCurlyBrackets($betterTokenProvider, $startAndEnd) : bool
+    private function isWrappedInCurlyBrackets(\Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator $betterTokenProvider, \Rector\BetterPhpDocParser\ValueObject\StartAndEnd $startAndEnd) : bool
     {
         $previousPosition = $startAndEnd->getStart() - 1;
         if ($betterTokenProvider->isTokenTypeOnPosition(\PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_OPEN_PARENTHESES, $previousPosition)) {

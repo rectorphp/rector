@@ -73,18 +73,11 @@ abstract class AbstractSurrogateFragmentRenderer extends \RectorPrefix20210705\S
         $tag = $this->surrogate->renderIncludeTag($uri, $alt, $options['ignore_errors'] ?? \false, $options['comment'] ?? '');
         return new \RectorPrefix20210705\Symfony\Component\HttpFoundation\Response($tag);
     }
-    /**
-     * @param \Symfony\Component\HttpKernel\Controller\ControllerReference $uri
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     */
-    private function generateSignedFragmentUri($uri, $request) : string
+    private function generateSignedFragmentUri(\RectorPrefix20210705\Symfony\Component\HttpKernel\Controller\ControllerReference $uri, \RectorPrefix20210705\Symfony\Component\HttpFoundation\Request $request) : string
     {
         return (new \RectorPrefix20210705\Symfony\Component\HttpKernel\Fragment\FragmentUriGenerator($this->fragmentPath, $this->signer))->generate($uri, $request);
     }
-    /**
-     * @param mixed[] $values
-     */
-    private function containsNonScalars($values) : bool
+    private function containsNonScalars(array $values) : bool
     {
         foreach ($values as $value) {
             if (\is_array($value)) {

@@ -117,10 +117,7 @@ final class TypoScriptFileProcessor implements \Ssch\TYPO3Rector\Contract\Proces
     {
         $this->allowedFileExtensions = $configuration[self::ALLOWED_FILE_EXTENSIONS] ?? [];
     }
-    /**
-     * @param \Rector\Core\ValueObject\Application\File $file
-     */
-    private function processFile($file) : void
+    private function processFile(\Rector\Core\ValueObject\Application\File $file) : void
     {
         try {
             $this->currentFileProvider->setFile($file);

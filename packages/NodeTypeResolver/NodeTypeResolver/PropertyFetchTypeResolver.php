@@ -92,10 +92,7 @@ final class PropertyFetchTypeResolver implements \Rector\NodeTypeResolver\Contra
         }
         return $scope->getType($node);
     }
-    /**
-     * @param \PhpParser\Node\Expr\PropertyFetch $propertyFetch
-     */
-    private function getVendorPropertyFetchType($propertyFetch) : \PHPStan\Type\Type
+    private function getVendorPropertyFetchType(\PhpParser\Node\Expr\PropertyFetch $propertyFetch) : \PHPStan\Type\Type
     {
         // 3rd party code
         $propertyName = $this->nodeNameResolver->getName($propertyFetch->name);

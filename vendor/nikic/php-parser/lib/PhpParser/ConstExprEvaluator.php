@@ -94,10 +94,7 @@ class ConstExprEvaluator
     {
         return $this->evaluate($expr);
     }
-    /**
-     * @param \PhpParser\Node\Expr $expr
-     */
-    private function evaluate($expr)
+    private function evaluate(\PhpParser\Node\Expr $expr)
     {
         if ($expr instanceof \PhpParser\Node\Scalar\LNumber || $expr instanceof \PhpParser\Node\Scalar\DNumber || $expr instanceof \PhpParser\Node\Scalar\String_) {
             return $expr->value;
@@ -132,10 +129,7 @@ class ConstExprEvaluator
         }
         return ($this->fallbackEvaluator)($expr);
     }
-    /**
-     * @param \PhpParser\Node\Expr\Array_ $expr
-     */
-    private function evaluateArray($expr)
+    private function evaluateArray(\PhpParser\Node\Expr\Array_ $expr)
     {
         $array = [];
         foreach ($expr->items as $item) {
@@ -147,20 +141,14 @@ class ConstExprEvaluator
         }
         return $array;
     }
-    /**
-     * @param \PhpParser\Node\Expr\Ternary $expr
-     */
-    private function evaluateTernary($expr)
+    private function evaluateTernary(\PhpParser\Node\Expr\Ternary $expr)
     {
         if (null === $expr->if) {
             return $this->evaluate($expr->cond) ?: $this->evaluate($expr->else);
         }
         return $this->evaluate($expr->cond) ? $this->evaluate($expr->if) : $this->evaluate($expr->else);
     }
-    /**
-     * @param \PhpParser\Node\Expr\BinaryOp $expr
-     */
-    private function evaluateBinaryOp($expr)
+    private function evaluateBinaryOp(\PhpParser\Node\Expr\BinaryOp $expr)
     {
         if ($expr instanceof \PhpParser\Node\Expr\BinaryOp\Coalesce && $expr->left instanceof \PhpParser\Node\Expr\ArrayDimFetch) {
             // This needs to be special cased to respect BP_VAR_IS fetch semantics
@@ -228,10 +216,7 @@ class ConstExprEvaluator
         }
         throw new \Exception('Should not happen');
     }
-    /**
-     * @param \PhpParser\Node\Expr\ConstFetch $expr
-     */
-    private function evaluateConstFetch($expr)
+    private function evaluateConstFetch(\PhpParser\Node\Expr\ConstFetch $expr)
     {
         $name = $expr->name->toLowerString();
         switch ($name) {

@@ -91,10 +91,7 @@ final class GetComponentMethodCallFormControlTypeResolver implements \Rector\Net
         }
         return \array_merge($constructorClassMethodData, $createComponentClassMethodData);
     }
-    /**
-     * @param \PhpParser\Node\Expr\MethodCall $methodCall
-     */
-    private function createCreateComponentMethodName($methodCall) : string
+    private function createCreateComponentMethodName(\PhpParser\Node\Expr\MethodCall $methodCall) : string
     {
         $firstArgumentValue = $methodCall->args[0]->value;
         return 'createComponent' . \ucfirst($this->valueResolver->getValue($firstArgumentValue));

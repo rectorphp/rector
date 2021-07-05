@@ -52,11 +52,7 @@ class YamlDumper extends \RectorPrefix20210705\Symfony\Component\DependencyInjec
         }
         return $this->container->resolveEnvPlaceholders($this->addParameters() . "\n" . $this->addServices());
     }
-    /**
-     * @param string $id
-     * @param \Symfony\Component\DependencyInjection\Definition $definition
-     */
-    private function addService($id, $definition) : string
+    private function addService(string $id, \RectorPrefix20210705\Symfony\Component\DependencyInjection\Definition $definition) : string
     {
         $code = "    {$id}:\n";
         if ($class = $definition->getClass()) {
@@ -143,11 +139,7 @@ class YamlDumper extends \RectorPrefix20210705\Symfony\Component\DependencyInjec
         }
         return $code;
     }
-    /**
-     * @param string $alias
-     * @param \Symfony\Component\DependencyInjection\Alias $id
-     */
-    private function addServiceAlias($alias, $id) : string
+    private function addServiceAlias(string $alias, \RectorPrefix20210705\Symfony\Component\DependencyInjection\Alias $id) : string
     {
         $deprecated = '';
         if ($id->isDeprecated()) {
@@ -271,11 +263,7 @@ class YamlDumper extends \RectorPrefix20210705\Symfony\Component\DependencyInjec
         }
         return $value;
     }
-    /**
-     * @param string $id
-     * @param \Symfony\Component\DependencyInjection\Reference|null $reference
-     */
-    private function getServiceCall($id, $reference = null) : string
+    private function getServiceCall(string $id, \RectorPrefix20210705\Symfony\Component\DependencyInjection\Reference $reference = null) : string
     {
         if (null !== $reference) {
             switch ($reference->getInvalidBehavior()) {
@@ -291,25 +279,15 @@ class YamlDumper extends \RectorPrefix20210705\Symfony\Component\DependencyInjec
         }
         return \sprintf('@%s', $id);
     }
-    /**
-     * @param string $id
-     */
-    private function getParameterCall($id) : string
+    private function getParameterCall(string $id) : string
     {
         return \sprintf('%%%s%%', $id);
     }
-    /**
-     * @param string $expression
-     */
-    private function getExpressionCall($expression) : string
+    private function getExpressionCall(string $expression) : string
     {
         return \sprintf('@=%s', $expression);
     }
-    /**
-     * @param mixed[] $parameters
-     * @param bool $escape
-     */
-    private function prepareParameters($parameters, $escape = \true) : array
+    private function prepareParameters(array $parameters, bool $escape = \true) : array
     {
         $filtered = [];
         foreach ($parameters as $key => $value) {
@@ -322,10 +300,7 @@ class YamlDumper extends \RectorPrefix20210705\Symfony\Component\DependencyInjec
         }
         return $escape ? $this->escape($filtered) : $filtered;
     }
-    /**
-     * @param mixed[] $arguments
-     */
-    private function escape($arguments) : array
+    private function escape(array $arguments) : array
     {
         $args = [];
         foreach ($arguments as $k => $v) {

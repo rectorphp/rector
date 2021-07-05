@@ -215,9 +215,8 @@ class EventDispatcher implements \RectorPrefix20210705\Symfony\Component\EventDi
     }
     /**
      * Sorts the internal list of listeners for the given event by priority.
-     * @param string $eventName
      */
-    private function sortListeners($eventName)
+    private function sortListeners(string $eventName)
     {
         \krsort($this->listeners[$eventName]);
         $this->sorted[$eventName] = [];
@@ -233,9 +232,8 @@ class EventDispatcher implements \RectorPrefix20210705\Symfony\Component\EventDi
     }
     /**
      * Optimizes the internal list of listeners for the given event by priority.
-     * @param string $eventName
      */
-    private function optimizeListeners($eventName) : array
+    private function optimizeListeners(string $eventName) : array
     {
         \krsort($this->listeners[$eventName]);
         $this->optimized[$eventName] = [];

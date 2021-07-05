@@ -55,12 +55,7 @@ final class RegisterAutoconfigureAttributesPass implements \RectorPrefix20210705
             self::registerForAutoconfiguration($container, $class, $attribute);
         }
     }
-    /**
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
-     * @param \ReflectionClass $class
-     * @param \ReflectionAttribute $attribute
-     */
-    private static function registerForAutoconfiguration($container, $class, $attribute)
+    private static function registerForAutoconfiguration(\RectorPrefix20210705\Symfony\Component\DependencyInjection\ContainerBuilder $container, \ReflectionClass $class, \ReflectionAttribute $attribute)
     {
         if (self::$registerForAutoconfiguration) {
             return (self::$registerForAutoconfiguration)($container, $class, $attribute);

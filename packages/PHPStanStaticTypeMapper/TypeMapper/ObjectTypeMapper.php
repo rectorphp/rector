@@ -95,11 +95,7 @@ final class ObjectTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract
     {
         $this->phpStanStaticTypeMapper = $phpStanStaticTypeMapper;
     }
-    /**
-     * @param \PHPStan\Type\Generic\GenericObjectType $genericObjectType
-     * @param \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind $typeKind
-     */
-    private function mapGenericObjectType($genericObjectType, $typeKind) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
+    private function mapGenericObjectType(\PHPStan\Type\Generic\GenericObjectType $genericObjectType, \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind $typeKind) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
     {
         $name = $this->resolveGenericObjectTypeName($genericObjectType);
         $identifierTypeNode = new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode($name);
@@ -117,10 +113,7 @@ final class ObjectTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract
         }
         return new \PHPStan\PhpDocParser\Ast\Type\GenericTypeNode($identifierTypeNode, $genericTypeNodes);
     }
-    /**
-     * @param \PHPStan\Type\Generic\GenericObjectType $genericObjectType
-     */
-    private function resolveGenericObjectTypeName($genericObjectType) : string
+    private function resolveGenericObjectTypeName(\PHPStan\Type\Generic\GenericObjectType $genericObjectType) : string
     {
         if ($genericObjectType instanceof \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedGenericObjectType) {
             return '\\' . $genericObjectType->getClassName();

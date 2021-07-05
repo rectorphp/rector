@@ -1703,10 +1703,7 @@ class Request
     {
         static::$formats = ['html' => ['text/html', 'application/xhtml+xml'], 'txt' => ['text/plain'], 'js' => ['application/javascript', 'application/x-javascript', 'text/javascript'], 'css' => ['text/css'], 'json' => ['application/json', 'application/x-json'], 'jsonld' => ['application/ld+json'], 'xml' => ['text/xml', 'application/xml', 'application/x-xml'], 'rdf' => ['application/rdf+xml'], 'atom' => ['application/atom+xml'], 'rss' => ['application/rss+xml'], 'form' => ['application/x-www-form-urlencoded']];
     }
-    /**
-     * @param string $locale
-     */
-    private function setPhpDefaultLocale($locale) : void
+    private function setPhpDefaultLocale(string $locale) : void
     {
         // if either the class Locale doesn't exist, or an exception is thrown when
         // setting the default locale, the intl module is not installed, and
@@ -1721,10 +1718,8 @@ class Request
     /**
      * Returns the prefix as encoded in the string when the string starts with
      * the given prefix, null otherwise.
-     * @param string $string
-     * @param string $prefix
      */
-    private function getUrlencodedPrefix($string, $prefix) : ?string
+    private function getUrlencodedPrefix(string $string, string $prefix) : ?string
     {
         if (0 !== \strpos(\rawurldecode($string), $prefix)) {
             return null;
@@ -1737,14 +1732,8 @@ class Request
     }
     /**
      * @return $this
-     * @param mixed[] $query
-     * @param mixed[] $request
-     * @param mixed[] $attributes
-     * @param mixed[] $cookies
-     * @param mixed[] $files
-     * @param mixed[] $server
      */
-    private static function createRequestFromFactory($query = [], $request = [], $attributes = [], $cookies = [], $files = [], $server = [], $content = null)
+    private static function createRequestFromFactory(array $query = [], array $request = [], array $attributes = [], array $cookies = [], array $files = [], array $server = [], $content = null)
     {
         if (self::$requestFactory) {
             $request = (self::$requestFactory)($query, $request, $attributes, $cookies, $files, $server, $content);
@@ -1767,11 +1756,7 @@ class Request
     {
         return self::$trustedProxies && \RectorPrefix20210705\Symfony\Component\HttpFoundation\IpUtils::checkIp($this->server->get('REMOTE_ADDR', ''), self::$trustedProxies);
     }
-    /**
-     * @param int $type
-     * @param string|null $ip
-     */
-    private function getTrustedValues($type, $ip = null) : array
+    private function getTrustedValues(int $type, string $ip = null) : array
     {
         $clientValues = [];
         $forwardedValues = [];
@@ -1814,11 +1799,7 @@ class Request
         $this->isForwardedValid = \false;
         throw new \RectorPrefix20210705\Symfony\Component\HttpFoundation\Exception\ConflictingHeadersException(\sprintf('The request has both a trusted "%s" header and a trusted "%s" header, conflicting with each other. You should either configure your proxy to remove one of them, or configure your project to distrust the offending one.', self::TRUSTED_HEADERS[self::HEADER_FORWARDED], self::TRUSTED_HEADERS[$type]));
     }
-    /**
-     * @param mixed[] $clientIps
-     * @param string $ip
-     */
-    private function normalizeAndFilterClientIps($clientIps, $ip) : array
+    private function normalizeAndFilterClientIps(array $clientIps, string $ip) : array
     {
         if (!$clientIps) {
             return [];

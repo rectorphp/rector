@@ -78,7 +78,7 @@ class Semver
      *
      * @return string[]
      */
-    private static function usort($versions, $direction)
+    private static function usort(array $versions, $direction)
     {
         if (null === self::$versionParser) {
             self::$versionParser = new \RectorPrefix20210705\Composer\Semver\VersionParser();

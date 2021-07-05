@@ -49,10 +49,7 @@ final class RenamedClassesSourceLocator implements \PHPStan\BetterReflection\Sou
     {
         return [];
     }
-    /**
-     * @param string $oldClass
-     */
-    private function createFakeReflectionClassFromClassName($oldClass) : \PHPStan\BetterReflection\Reflection\ReflectionClass
+    private function createFakeReflectionClassFromClassName(string $oldClass) : \PHPStan\BetterReflection\Reflection\ReflectionClass
     {
         $classBuilder = new \RectorPrefix20210705\Symplify\Astral\ValueObject\NodeBuilder\ClassBuilder($oldClass);
         $class = $classBuilder->getNode();

@@ -58,7 +58,7 @@ class Unescaper
      *
      * @return string The unescaped character
      */
-    private function unescapeCharacter($value) : string
+    private function unescapeCharacter(string $value) : string
     {
         switch ($value[1]) {
             case '0':
@@ -113,9 +113,8 @@ class Unescaper
     }
     /**
      * Get the UTF-8 character for the given code point.
-     * @param int $c
      */
-    private static function utf8chr($c) : string
+    private static function utf8chr(int $c) : string
     {
         if (0x80 > ($c %= 0x200000)) {
             return \chr($c);

@@ -66,10 +66,7 @@ class ReflectionClassResource implements \RectorPrefix20210705\Symfony\Component
         }
         return ['files', 'className', 'hash'];
     }
-    /**
-     * @param \ReflectionClass $class
-     */
-    private function loadFiles($class)
+    private function loadFiles(\ReflectionClass $class)
     {
         foreach ($class->getInterfaces() as $v) {
             $this->loadFiles($v);
@@ -108,10 +105,7 @@ class ReflectionClassResource implements \RectorPrefix20210705\Symfony\Component
         }
         return \hash_final($hash);
     }
-    /**
-     * @param \ReflectionClass $class
-     */
-    private function generateSignature($class) : iterable
+    private function generateSignature(\ReflectionClass $class) : iterable
     {
         if (\PHP_VERSION_ID >= 80000) {
             $attributes = [];

@@ -46,9 +46,8 @@ final class NameTypeResolver implements \Rector\NodeTypeResolver\Contract\NodeTy
     }
     /**
      * @return \PHPStan\Type\MixedType|\PHPStan\Type\ObjectType|\PHPStan\Type\UnionType
-     * @param \PhpParser\Node\Name $name
      */
-    private function resolveParent($name)
+    private function resolveParent(\PhpParser\Node\Name $name)
     {
         $className = $name->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);
         if ($className === null) {
@@ -70,10 +69,7 @@ final class NameTypeResolver implements \Rector\NodeTypeResolver\Contract\NodeTy
         }
         return new \PHPStan\Type\UnionType($parentClassObjectTypes);
     }
-    /**
-     * @param \PhpParser\Node\Name $name
-     */
-    private function resolveFullyQualifiedName($name) : string
+    private function resolveFullyQualifiedName(\PhpParser\Node\Name $name) : string
     {
         $nameValue = $name->toString();
         if (\in_array($nameValue, ['self', 'static', 'this'], \true)) {

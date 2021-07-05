@@ -268,11 +268,8 @@ class Data implements \ArrayAccess, \Countable, \IteratorAggregate
      * Depth-first dumping of items.
      *
      * @param mixed $item A Stub object or the original value being dumped
-     * @param \Symfony\Component\VarDumper\Cloner\DumperInterface $dumper
-     * @param \Symfony\Component\VarDumper\Cloner\Cursor $cursor
-     * @param mixed[] $refs
      */
-    private function dumpItem($dumper, $cursor, &$refs, $item)
+    private function dumpItem(\RectorPrefix20210705\Symfony\Component\VarDumper\Cloner\DumperInterface $dumper, \RectorPrefix20210705\Symfony\Component\VarDumper\Cloner\Cursor $cursor, array &$refs, $item)
     {
         $cursor->refIndex = 0;
         $cursor->softRefTo = $cursor->softRefHandle = $cursor->softRefCount = 0;
@@ -365,15 +362,8 @@ class Data implements \ArrayAccess, \Countable, \IteratorAggregate
      * Dumps children of hash structures.
      *
      * @return int The final number of removed items
-     * @param \Symfony\Component\VarDumper\Cloner\DumperInterface $dumper
-     * @param \Symfony\Component\VarDumper\Cloner\Cursor $parentCursor
-     * @param mixed[] $refs
-     * @param mixed[] $children
-     * @param int $hashCut
-     * @param int $hashType
-     * @param bool $dumpKeys
      */
-    private function dumpChildren($dumper, $parentCursor, &$refs, $children, $hashCut, $hashType, $dumpKeys) : int
+    private function dumpChildren(\RectorPrefix20210705\Symfony\Component\VarDumper\Cloner\DumperInterface $dumper, \RectorPrefix20210705\Symfony\Component\VarDumper\Cloner\Cursor $parentCursor, array &$refs, array $children, int $hashCut, int $hashType, bool $dumpKeys) : int
     {
         $cursor = clone $parentCursor;
         ++$cursor->depth;

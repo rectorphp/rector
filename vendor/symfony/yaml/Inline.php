@@ -209,7 +209,7 @@ class Inline
      *
      * @return string The YAML string representing the PHP array
      */
-    private static function dumpArray($value, $flags) : string
+    private static function dumpArray(array $value, int $flags) : string
     {
         // array
         if (($value || \RectorPrefix20210705\Symfony\Component\Yaml\Yaml::DUMP_EMPTY_ARRAY_AS_SEQUENCE & $flags) && !self::isHash($value)) {
@@ -226,10 +226,7 @@ class Inline
         }
         return \sprintf('{ %s }', \implode(', ', $output));
     }
-    /**
-     * @param int $flags
-     */
-    private static function dumpNull($flags) : string
+    private static function dumpNull(int $flags) : string
     {
         if (\RectorPrefix20210705\Symfony\Component\Yaml\Yaml::DUMP_NULL_AS_TILDE & $flags) {
             return '~';
@@ -293,10 +290,8 @@ class Inline
      * Parses a YAML quoted scalar.
      *
      * @throws ParseException When malformed inline YAML string is parsed
-     * @param string $scalar
-     * @param int $i
      */
-    private static function parseQuotedScalar($scalar, &$i) : string
+    private static function parseQuotedScalar(string $scalar, int &$i) : string
     {
         if (!\RectorPrefix20210705\Symfony\Component\Yaml\Parser::preg_match('/' . self::REGEX_QUOTED_STRING . '/Au', \substr($scalar, $i), $match)) {
             throw new \RectorPrefix20210705\Symfony\Component\Yaml\Exception\ParseException(\sprintf('Malformed inline YAML string: "%s".', \substr($scalar, $i)), self::$parsedLineNumber + 1, $scalar, self::$parsedFilename);
@@ -315,12 +310,8 @@ class Inline
      * Parses a YAML sequence.
      *
      * @throws ParseException When malformed inline YAML string is parsed
-     * @param string $sequence
-     * @param int $flags
-     * @param int $i
-     * @param mixed[] $references
      */
-    private static function parseSequence($sequence, $flags, &$i = 0, &$references = []) : array
+    private static function parseSequence(string $sequence, int $flags, int &$i = 0, array &$references = []) : array
     {
         $output = [];
         $len = \strlen($sequence);
@@ -377,12 +368,8 @@ class Inline
      * @return array|\stdClass
      *
      * @throws ParseException When malformed inline YAML string is parsed
-     * @param string $mapping
-     * @param int $flags
-     * @param int $i
-     * @param mixed[] $references
      */
-    private static function parseMapping($mapping, $flags, &$i = 0, &$references = [])
+    private static function parseMapping(string $mapping, int $flags, int &$i = 0, array &$references = [])
     {
         $output = [];
         $len = \strlen($mapping);
@@ -510,11 +497,8 @@ class Inline
      * @return mixed The evaluated YAML string
      *
      * @throws ParseException when object parsing support was disabled and the parser detected a PHP object or when a reference could not be resolved
-     * @param string $scalar
-     * @param int $flags
-     * @param mixed[] $references
      */
-    private static function evaluateScalar($scalar, $flags, &$references = [])
+    private static function evaluateScalar(string $scalar, int $flags, array &$references = [])
     {
         $scalar = \trim($scalar);
         if ('*' === ($scalar[0] ?? '')) {
@@ -641,12 +625,7 @@ class Inline
         }
         return (string) $scalar;
     }
-    /**
-     * @param string $value
-     * @param int $i
-     * @param int $flags
-     */
-    private static function parseTag($value, &$i, $flags) : ?string
+    private static function parseTag(string $value, int &$i, int $flags) : ?string
     {
         if ('!' !== $value[$i]) {
             return null;
@@ -690,10 +669,7 @@ class Inline
         }
         return \base64_decode($parsedBinaryData, \true);
     }
-    /**
-     * @param string $value
-     */
-    private static function isBinaryString($value) : bool
+    private static function isBinaryString(string $value) : bool
     {
         return !\preg_match('//u', $value) || \preg_match('/[^\\x00\\x07-\\x0d\\x1B\\x20-\\xff]/', $value);
     }

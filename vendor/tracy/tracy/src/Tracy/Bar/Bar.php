@@ -99,11 +99,7 @@ class Bar
             }
         }
     }
-    /**
-     * @param string $type
-     * @param string $suffix
-     */
-    private function renderHtml($type, $suffix = '') : array
+    private function renderHtml(string $type, string $suffix = '') : array
     {
         $panels = $this->renderPanels($suffix);
         return ['bar' => \RectorPrefix20210705\Tracy\Helpers::capture(function () use($type, $panels) {
@@ -112,10 +108,7 @@ class Bar
             require __DIR__ . '/assets/panels.phtml';
         })];
     }
-    /**
-     * @param string $suffix
-     */
-    private function renderPanels($suffix = '') : array
+    private function renderPanels(string $suffix = '') : array
     {
         \set_error_handler(function (int $severity, string $message, string $file, int $line) {
             if (\error_reporting() & $severity) {

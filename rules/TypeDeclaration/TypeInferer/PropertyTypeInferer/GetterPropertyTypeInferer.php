@@ -72,10 +72,7 @@ final class GetterPropertyTypeInferer implements \Rector\TypeDeclaration\Contrac
     {
         return 1700;
     }
-    /**
-     * @param \PhpParser\Node\Stmt\ClassMethod $classMethod
-     */
-    private function inferClassMethodReturnType($classMethod) : \PHPStan\Type\Type
+    private function inferClassMethodReturnType(\PhpParser\Node\Stmt\ClassMethod $classMethod) : \PHPStan\Type\Type
     {
         $returnTypeDeclarationType = $this->functionLikeReturnTypeResolver->resolveFunctionLikeReturnTypeToPHPStanType($classMethod);
         if (!$returnTypeDeclarationType instanceof \PHPStan\Type\MixedType) {

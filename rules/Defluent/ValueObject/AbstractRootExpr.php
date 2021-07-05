@@ -69,10 +69,7 @@ abstract class AbstractRootExpr implements \Rector\Defluent\Contract\ValueObject
         $assignExpr = $currentMethodCall;
         return $this->createAssign($assignVar, $assignExpr);
     }
-    /**
-     * @param \PhpParser\Node\Expr\MethodCall $currentMethodCall
-     */
-    private function resolveLastMethodCall($currentMethodCall) : \PhpParser\Node\Expr\MethodCall
+    private function resolveLastMethodCall(\PhpParser\Node\Expr\MethodCall $currentMethodCall) : \PhpParser\Node\Expr\MethodCall
     {
         while ($currentMethodCall->var instanceof \PhpParser\Node\Expr\MethodCall) {
             $currentMethodCall = $currentMethodCall->var;

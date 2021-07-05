@@ -157,10 +157,7 @@ class MarkdownDescriptor extends \RectorPrefix20210705\Symfony\Component\Console
             }
         }
     }
-    /**
-     * @param \Symfony\Component\Console\Application $application
-     */
-    private function getApplicationTitle($application) : string
+    private function getApplicationTitle(\RectorPrefix20210705\Symfony\Component\Console\Application $application) : string
     {
         if ('UNKNOWN' !== $application->getName()) {
             if ('UNKNOWN' !== $application->getVersion()) {

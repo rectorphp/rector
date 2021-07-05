@@ -67,10 +67,7 @@ final class ClassStringTypeMapper implements \Rector\PHPStanStaticTypeMapper\Con
     {
         $this->phpStanStaticTypeMapper = $phpStanStaticTypeMapper;
     }
-    /**
-     * @param string $classType
-     */
-    private function normalizeType($classType) : string
+    private function normalizeType(string $classType) : string
     {
         if (\is_a($classType, \PhpParser\Node\Expr::class, \true)) {
             return \PhpParser\Node\Expr::class;

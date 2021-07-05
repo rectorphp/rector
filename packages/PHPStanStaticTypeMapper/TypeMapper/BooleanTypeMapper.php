@@ -59,10 +59,7 @@ final class BooleanTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contrac
         }
         return new \PhpParser\Node\Name('bool');
     }
-    /**
-     * @param \PHPStan\Type\Type $type
-     */
-    private function isFalseBooleanTypeWithUnion($type) : bool
+    private function isFalseBooleanTypeWithUnion(\PHPStan\Type\Type $type) : bool
     {
         if (!$type instanceof \PHPStan\Type\Constant\ConstantBooleanType) {
             return \false;

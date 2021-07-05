@@ -129,10 +129,7 @@ final class NodesToAddCollector implements \Rector\PostRector\Contract\Collector
         }
         $this->rectorChangeCollector->notifyNodeFileInfo($positionNode);
     }
-    /**
-     * @param \PhpParser\Node $node
-     */
-    private function resolveNearestStmtPosition($node) : string
+    private function resolveNearestStmtPosition(\PhpParser\Node $node) : string
     {
         if ($node instanceof \PhpParser\Node\Stmt) {
             return \spl_object_hash($node);

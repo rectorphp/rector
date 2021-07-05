@@ -68,10 +68,7 @@ class RouterListener implements \RectorPrefix20210705\Symfony\Component\EventDis
         $this->projectDir = $projectDir;
         $this->debug = $debug;
     }
-    /**
-     * @param \Symfony\Component\HttpFoundation\Request|null $request
-     */
-    private function setCurrentRequest($request = null)
+    private function setCurrentRequest(\RectorPrefix20210705\Symfony\Component\HttpFoundation\Request $request = null)
     {
         if (null !== $request) {
             try {

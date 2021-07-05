@@ -78,10 +78,7 @@ class CheckExceptionOnInvalidReferenceBehaviorPass extends \RectorPrefix20210705
         }
         throw new \RectorPrefix20210705\Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException($id, $currentId, null, $this->getAlternatives($id));
     }
-    /**
-     * @param string $id
-     */
-    private function getAlternatives($id) : array
+    private function getAlternatives(string $id) : array
     {
         $alternatives = [];
         foreach ($this->container->getServiceIds() as $knownId) {

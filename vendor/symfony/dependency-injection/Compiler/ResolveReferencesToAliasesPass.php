@@ -47,11 +47,7 @@ class ResolveReferencesToAliasesPass extends \RectorPrefix20210705\Symfony\Compo
         $defId = $this->getDefinitionId($id = (string) $value, $this->container);
         return $defId !== $id ? new \RectorPrefix20210705\Symfony\Component\DependencyInjection\Reference($defId, $value->getInvalidBehavior()) : $value;
     }
-    /**
-     * @param string $id
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
-     */
-    private function getDefinitionId($id, $container) : string
+    private function getDefinitionId(string $id, \RectorPrefix20210705\Symfony\Component\DependencyInjection\ContainerBuilder $container) : string
     {
         if (!$container->hasAlias($id)) {
             return $id;

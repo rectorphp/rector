@@ -245,12 +245,7 @@ class Exporter
         }
         throw new \UnexpectedValueException(\sprintf('Cannot export value of type "%s".', \get_debug_type($value)));
     }
-    /**
-     * @param \Symfony\Component\VarExporter\Internal\Registry $value
-     * @param string $indent
-     * @param string $subIndent
-     */
-    private static function exportRegistry($value, $indent, $subIndent) : string
+    private static function exportRegistry(\RectorPrefix20210705\Symfony\Component\VarExporter\Internal\Registry $value, string $indent, string $subIndent) : string
     {
         $code = '';
         $serializables = [];
@@ -316,12 +311,7 @@ class Exporter
         }
         return '$o = ' . $code;
     }
-    /**
-     * @param \Symfony\Component\VarExporter\Internal\Hydrator $value
-     * @param string $indent
-     * @param string $subIndent
-     */
-    private static function exportHydrator($value, $indent, $subIndent) : string
+    private static function exportHydrator(\RectorPrefix20210705\Symfony\Component\VarExporter\Internal\Hydrator $value, string $indent, string $subIndent) : string
     {
         $code = '';
         foreach ($value->properties as $class => $properties) {
@@ -333,9 +323,8 @@ class Exporter
     /**
      * @param \ArrayIterator|\ArrayObject $value
      * @param \ArrayIterator|\ArrayObject $proto
-     * @param mixed[] $arrayValue
      */
-    private static function getArrayObjectProperties($value, &$arrayValue, $proto) : array
+    private static function getArrayObjectProperties($value, array &$arrayValue, $proto) : array
     {
         $reflector = $value instanceof \ArrayIterator ? 'ArrayIterator' : 'ArrayObject';
         $reflector = \RectorPrefix20210705\Symfony\Component\VarExporter\Internal\Registry::$reflectors[$reflector] ?? \RectorPrefix20210705\Symfony\Component\VarExporter\Internal\Registry::getClassReflector($reflector);

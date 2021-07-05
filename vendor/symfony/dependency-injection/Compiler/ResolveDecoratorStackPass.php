@@ -68,11 +68,7 @@ class ResolveDecoratorStackPass implements \RectorPrefix20210705\Symfony\Compone
         }
         $container->setDefinitions($resolvedDefinitions);
     }
-    /**
-     * @param mixed[] $stacks
-     * @param mixed[] $path
-     */
-    private function resolveStack($stacks, $path) : array
+    private function resolveStack(array $stacks, array $path) : array
     {
         $definitions = [];
         $id = \end($path);

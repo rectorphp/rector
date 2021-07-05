@@ -189,11 +189,7 @@ final class UseNodesToAddCollector implements \Rector\PostRector\Contract\Collec
         $smartFileInfo = $file->getSmartFileInfo();
         return $smartFileInfo->getRealPath();
     }
-    /**
-     * @param string $filePath
-     * @param string $shortName
-     */
-    private function isShortClassImported($filePath, $shortName) : bool
+    private function isShortClassImported(string $filePath, string $shortName) : bool
     {
         $fileUseImports = $this->useImportTypesInFilePath[$filePath] ?? [];
         foreach ($fileUseImports as $fileUseImport) {

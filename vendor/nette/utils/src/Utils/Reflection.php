@@ -80,10 +80,8 @@ final class Reflection
     /**
      * @param  \ReflectionFunction|\ReflectionMethod|\ReflectionParameter|\ReflectionProperty  $reflection
      * @return string|array|null
-     * @param \ReflectionType|null $type
-     * @param bool $asArray
      */
-    private static function getType($reflection, $type, $asArray = \false)
+    private static function getType($reflection, ?\ReflectionType $type, bool $asArray = \false)
     {
         if ($type === null) {
             return $asArray ? [] : null;
@@ -108,9 +106,8 @@ final class Reflection
     }
     /**
      * @param  \ReflectionFunction|\ReflectionMethod|\ReflectionParameter|\ReflectionProperty  $reflection
-     * @param string $type
      */
-    private static function normalizeType($type, $reflection) : string
+    private static function normalizeType(string $type, $reflection) : string
     {
         $lower = \strtolower($type);
         if ($reflection instanceof \ReflectionFunction) {
@@ -268,10 +265,8 @@ final class Reflection
     }
     /**
      * Parses PHP code to [class => [alias => class, ...]]
-     * @param string $code
-     * @param string|null $forClass
      */
-    private static function parseUseStatements($code, $forClass = null) : array
+    private static function parseUseStatements(string $code, string $forClass = null) : array
     {
         try {
             $tokens = \token_get_all($code, \TOKEN_PARSE);
@@ -341,10 +336,7 @@ final class Reflection
         }
         return $res;
     }
-    /**
-     * @param mixed[] $tokens
-     */
-    private static function fetch(&$tokens, $take) : ?string
+    private static function fetch(array &$tokens, $take) : ?string
     {
         $res = null;
         while ($token = \current($tokens)) {

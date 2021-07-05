@@ -624,10 +624,7 @@ class Finder implements \IteratorAggregate, \Countable
     {
         return \iterator_count($this->getIterator());
     }
-    /**
-     * @param string $dir
-     */
-    private function searchInDirectory($dir) : \Iterator
+    private function searchInDirectory(string $dir) : \Iterator
     {
         $exclude = $this->exclude;
         $notPaths = $this->notPaths;
@@ -703,9 +700,8 @@ class Finder implements \IteratorAggregate, \Countable
      * Normalizes given directory names by removing trailing slashes.
      *
      * Excluding: (s)ftp:// or ssh2.(s)ftp:// wrapper
-     * @param string $dir
      */
-    private function normalizeDir($dir) : string
+    private function normalizeDir(string $dir) : string
     {
         if ('/' === $dir) {
             return $dir;

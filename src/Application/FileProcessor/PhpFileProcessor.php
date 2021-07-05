@@ -114,22 +114,14 @@ final class PhpFileProcessor implements \Rector\Core\Contract\Processor\FileProc
     {
         return ['php'];
     }
-    /**
-     * @param \Rector\Core\ValueObject\Application\File $file
-     */
-    private function refactorNodesWithRectors($file) : void
+    private function refactorNodesWithRectors(\Rector\Core\ValueObject\Application\File $file) : void
     {
         $this->currentFileProvider->setFile($file);
         $this->tryCatchWrapper($file, function (\Rector\Core\ValueObject\Application\File $file) : void {
             $this->fileProcessor->refactor($file);
         }, \Rector\Core\Enum\ApplicationPhase::REFACTORING());
     }
-    /**
-     * @param \Rector\Core\ValueObject\Application\File $file
-     * @param callable $callback
-     * @param \Rector\Core\Enum\ApplicationPhase $applicationPhase
-     */
-    private function tryCatchWrapper($file, $callback, $applicationPhase) : void
+    private function tryCatchWrapper(\Rector\Core\ValueObject\Application\File $file, callable $callback, \Rector\Core\Enum\ApplicationPhase $applicationPhase) : void
     {
         $this->currentFileProvider->setFile($file);
         $this->notifyPhase($file, $applicationPhase);
@@ -157,11 +149,7 @@ final class PhpFileProcessor implements \Rector\Core\Contract\Processor\FileProc
             $file->addRectorError($rectorError);
         }
     }
-    /**
-     * @param \Rector\Core\ValueObject\Application\File $file
-     * @param \Rector\Core\ValueObject\Configuration $configuration
-     */
-    private function printFile($file, $configuration) : void
+    private function printFile(\Rector\Core\ValueObject\Application\File $file, \Rector\Core\ValueObject\Configuration $configuration) : void
     {
         $smartFileInfo = $file->getSmartFileInfo();
         if ($this->removedAndAddedFilesCollector->isFileRemoved($smartFileInfo)) {
@@ -172,11 +160,7 @@ final class PhpFileProcessor implements \Rector\Core\Contract\Processor\FileProc
         $file->changeFileContent($newContent);
         $this->fileDiffFileDecorator->decorate([$file]);
     }
-    /**
-     * @param \Rector\Core\ValueObject\Application\File $file
-     * @param \Rector\Core\Enum\ApplicationPhase $applicationPhase
-     */
-    private function notifyPhase($file, $applicationPhase) : void
+    private function notifyPhase(\Rector\Core\ValueObject\Application\File $file, \Rector\Core\Enum\ApplicationPhase $applicationPhase) : void
     {
         if (!$this->symfonyStyle->isVerbose()) {
             return;

@@ -531,11 +531,8 @@ class Image
     /**
      * Outputs image to browser or file.
      * @throws ImageException
-     * @param int $type
-     * @param int|null $quality
-     * @param string|null $file
      */
-    private function output($type, $quality, $file = null) : void
+    private function output(int $type, ?int $quality, string $file = null) : void
     {
         switch ($type) {
             case self::JPEG:

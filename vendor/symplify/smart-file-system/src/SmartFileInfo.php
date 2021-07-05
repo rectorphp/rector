@@ -130,10 +130,7 @@ final class SmartFileInfo extends \RectorPrefix20210705\Symfony\Component\Finder
     {
         return $this->normalizePath($this->getRealPath());
     }
-    /**
-     * @param string $path
-     */
-    private function normalizePath($path) : string
+    private function normalizePath(string $path) : string
     {
         return \str_replace('\\', '/', $path);
     }

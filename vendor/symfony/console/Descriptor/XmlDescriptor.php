@@ -154,10 +154,8 @@ class XmlDescriptor extends \RectorPrefix20210705\Symfony\Component\Console\Desc
     }
     /**
      * Appends document children to parent node.
-     * @param \DOMNode $parentNode
-     * @param \DOMNode $importedParent
      */
-    private function appendDocument($parentNode, $importedParent)
+    private function appendDocument(\DOMNode $parentNode, \DOMNode $importedParent)
     {
         foreach ($importedParent->childNodes as $childNode) {
             $parentNode->appendChild($parentNode->ownerDocument->importNode($childNode, \true));
@@ -165,17 +163,13 @@ class XmlDescriptor extends \RectorPrefix20210705\Symfony\Component\Console\Desc
     }
     /**
      * Writes DOM document.
-     * @param \DOMDocument $dom
      */
-    private function writeDocument($dom)
+    private function writeDocument(\DOMDocument $dom)
     {
         $dom->formatOutput = \true;
         $this->write($dom->saveXML());
     }
-    /**
-     * @param \Symfony\Component\Console\Input\InputArgument $argument
-     */
-    private function getInputArgumentDocument($argument) : \DOMDocument
+    private function getInputArgumentDocument(\RectorPrefix20210705\Symfony\Component\Console\Input\InputArgument $argument) : \DOMDocument
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
         $dom->appendChild($objectXML = $dom->createElement('argument'));
@@ -192,10 +186,7 @@ class XmlDescriptor extends \RectorPrefix20210705\Symfony\Component\Console\Desc
         }
         return $dom;
     }
-    /**
-     * @param \Symfony\Component\Console\Input\InputOption $option
-     */
-    private function getInputOptionDocument($option) : \DOMDocument
+    private function getInputOptionDocument(\RectorPrefix20210705\Symfony\Component\Console\Input\InputOption $option) : \DOMDocument
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
         $dom->appendChild($objectXML = $dom->createElement('option'));

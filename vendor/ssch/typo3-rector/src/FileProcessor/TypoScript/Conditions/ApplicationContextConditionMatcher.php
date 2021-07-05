@@ -42,10 +42,7 @@ final class ApplicationContextConditionMatcher implements \Ssch\TYPO3Rector\Cont
         }
         return 1 === \preg_match('#^' . self::TYPE . self::ZERO_ONE_OR_MORE_WHITESPACES . '=[^=]#', $condition);
     }
-    /**
-     * @param string $regularExpression
-     */
-    private function isRegularExpression($regularExpression) : bool
+    private function isRegularExpression(string $regularExpression) : bool
     {
         return \false !== @\preg_match($regularExpression, '');
     }

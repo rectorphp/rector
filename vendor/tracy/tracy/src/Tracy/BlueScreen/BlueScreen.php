@@ -97,11 +97,7 @@ class BlueScreen
         }
         return \false;
     }
-    /**
-     * @param \Throwable $exception
-     * @param string $template
-     */
-    private function renderTemplate($exception, $template, $toScreen = \true) : void
+    private function renderTemplate(\Throwable $exception, string $template, $toScreen = \true) : void
     {
         $showEnvironment = $this->showEnvironment && \strpos($exception->getMessage(), 'Allowed memory size') === \false;
         $info = \array_filter($this->info);
@@ -129,9 +125,8 @@ class BlueScreen
     }
     /**
      * @return \stdClass[]
-     * @param \Throwable|null $ex
      */
-    private function renderPanels($ex) : array
+    private function renderPanels(?\Throwable $ex) : array
     {
         $obLevel = \ob_get_level();
         $res = [];
@@ -156,9 +151,8 @@ class BlueScreen
     }
     /**
      * @return array[]
-     * @param \Throwable $ex
      */
-    private function renderActions($ex) : array
+    private function renderActions(\Throwable $ex) : array
     {
         $actions = [];
         foreach ($this->actions as $callback) {

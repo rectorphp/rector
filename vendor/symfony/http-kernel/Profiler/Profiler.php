@@ -217,10 +217,7 @@ class Profiler implements \RectorPrefix20210705\Symfony\Contracts\Service\ResetI
         }
         return $this->collectors[$name];
     }
-    /**
-     * @param string|null $value
-     */
-    private function getTimestamp($value) : ?int
+    private function getTimestamp(?string $value) : ?int
     {
         if (null === $value || '' === $value) {
             return null;

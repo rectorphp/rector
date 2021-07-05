@@ -145,7 +145,7 @@ class TokenIterator
      * @param  int $expectedTokenType
      * @throws \PHPStan\PhpDocParser\Parser\ParserException
      */
-    private function throwError($expectedTokenType) : void
+    private function throwError(int $expectedTokenType) : void
     {
         throw new \PHPStan\PhpDocParser\Parser\ParserException($this->currentTokenValue(), $this->currentTokenType(), $this->currentTokenOffset(), $expectedTokenType);
     }

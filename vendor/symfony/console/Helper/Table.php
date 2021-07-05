@@ -372,11 +372,8 @@ class Table
      * Example:
      *
      *     +-----+-----------+-------+
-     * @param int $type
-     * @param string|null $title
-     * @param string|null $titleFormat
      */
-    private function renderRowSeparator($type = self::SEPARATOR_MID, $title = null, $titleFormat = null)
+    private function renderRowSeparator(int $type = self::SEPARATOR_MID, string $title = null, string $titleFormat = null)
     {
         if (0 === ($count = $this->numberOfColumns)) {
             return;
@@ -419,9 +416,8 @@ class Table
     }
     /**
      * Renders vertical column separator.
-     * @param int $type
      */
-    private function renderColumnSeparator($type = self::BORDER_OUTSIDE) : string
+    private function renderColumnSeparator(int $type = self::BORDER_OUTSIDE) : string
     {
         $borders = $this->style->getBorderChars();
         return \sprintf($this->style->getBorderFormat(), self::BORDER_OUTSIDE === $type ? $borders[1] : $borders[3]);
@@ -432,11 +428,8 @@ class Table
      * Example:
      *
      *     | 9971-5-0210-0 | A Tale of Two Cities  | Charles Dickens  |
-     * @param mixed[] $row
-     * @param string $cellFormat
-     * @param string|null $firstCellFormat
      */
-    private function renderRow($row, $cellFormat, $firstCellFormat = null)
+    private function renderRow(array $row, string $cellFormat, string $firstCellFormat = null)
     {
         $rowContent = $this->renderColumnSeparator(self::BORDER_OUTSIDE);
         $columns = $this->getRowColumns($row);
@@ -453,11 +446,8 @@ class Table
     }
     /**
      * Renders table cell with padding.
-     * @param mixed[] $row
-     * @param int $column
-     * @param string $cellFormat
      */
-    private function renderCell($row, $column, $cellFormat) : string
+    private function renderCell(array $row, int $column, string $cellFormat) : string
     {
         $cell = $row[$column] ?? '';
         $width = $this->effectiveColumnWidths[$column];
@@ -501,9 +491,8 @@ class Table
     }
     /**
      * Calculate number of columns for this table.
-     * @param mixed[] $rows
      */
-    private function calculateNumberOfColumns($rows)
+    private function calculateNumberOfColumns(array $rows)
     {
         $columns = [0];
         foreach ($rows as $row) {
@@ -514,10 +503,7 @@ class Table
         }
         $this->numberOfColumns = \max($columns);
     }
-    /**
-     * @param mixed[] $rows
-     */
-    private function buildTableRows($rows) : \RectorPrefix20210705\Symfony\Component\Console\Helper\TableRows
+    private function buildTableRows(array $rows) : \RectorPrefix20210705\Symfony\Component\Console\Helper\TableRows
     {
         /** @var WrappableOutputFormatterInterface $formatter */
         $formatter = $this->output->getFormatter();
@@ -579,10 +565,8 @@ class Table
      * fill rows that contains rowspan > 1.
      *
      * @throws InvalidArgumentException
-     * @param mixed[] $rows
-     * @param int $line
      */
-    private function fillNextRows($rows, $line) : array
+    private function fillNextRows(array $rows, int $line) : array
     {
         $unmergedRows = [];
         foreach ($rows[$line] as $column => $cell) {
@@ -630,9 +614,8 @@ class Table
     }
     /**
      * fill cells for a row that contains colspan > 1.
-     * @param mixed[] $row
      */
-    private function fillCells($row)
+    private function fillCells(iterable $row)
     {
         $newRow = [];
         foreach ($row as $column => $cell) {
@@ -646,11 +629,7 @@ class Table
         }
         return $newRow ?: $row;
     }
-    /**
-     * @param mixed[] $rows
-     * @param int $line
-     */
-    private function copyRow($rows, $line) : array
+    private function copyRow(array $rows, int $line) : array
     {
         $row = $rows[$line];
         foreach ($row as $cellKey => $cellValue) {
@@ -663,9 +642,8 @@ class Table
     }
     /**
      * Gets number of columns by row.
-     * @param mixed[] $row
      */
-    private function getNumberOfColumns($row) : int
+    private function getNumberOfColumns(array $row) : int
     {
         $columns = \count($row);
         foreach ($row as $column) {
@@ -675,9 +653,8 @@ class Table
     }
     /**
      * Gets list of columns for the given row.
-     * @param mixed[] $row
      */
-    private function getRowColumns($row) : array
+    private function getRowColumns(array $row) : array
     {
         $columns = \range(0, $this->numberOfColumns - 1);
         foreach ($row as $cellKey => $cell) {
@@ -690,9 +667,8 @@ class Table
     }
     /**
      * Calculates columns widths.
-     * @param mixed[] $rows
      */
-    private function calculateColumnsWidth($rows)
+    private function calculateColumnsWidth(iterable $rows)
     {
         for ($column = 0; $column < $this->numberOfColumns; ++$column) {
             $lengths = [];
@@ -721,11 +697,7 @@ class Table
     {
         return \RectorPrefix20210705\Symfony\Component\Console\Helper\Helper::width(\sprintf($this->style->getBorderFormat(), $this->style->getBorderChars()[3]));
     }
-    /**
-     * @param mixed[] $row
-     * @param int $column
-     */
-    private function getCellWidth($row, $column) : int
+    private function getCellWidth(array $row, int $column) : int
     {
         $cellWidth = 0;
         if (isset($row[$column])) {

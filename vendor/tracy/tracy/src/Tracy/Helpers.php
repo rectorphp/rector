@@ -242,9 +242,8 @@ class Helpers
     }
     /**
      * Escape a string to be used as a shell argument.
-     * @param string $s
      */
-    private static function escapeArg($s) : string
+    private static function escapeArg(string $s) : string
     {
         if (\preg_match('#^[a-z0-9._=/:-]+$#Di', $s)) {
             return $s;

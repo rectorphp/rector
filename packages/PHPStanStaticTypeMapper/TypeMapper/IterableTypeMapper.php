@@ -60,10 +60,7 @@ final class IterableTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contra
     {
         return new \PhpParser\Node\Name('iterable');
     }
-    /**
-     * @param \PHPStan\PhpDocParser\Ast\Type\UnionTypeNode $unionTypeNode
-     */
-    private function convertUnionArrayTypeNodesToArrayTypeOfUnionTypeNodes($unionTypeNode) : \Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareUnionTypeNode
+    private function convertUnionArrayTypeNodesToArrayTypeOfUnionTypeNodes(\PHPStan\PhpDocParser\Ast\Type\UnionTypeNode $unionTypeNode) : \Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareUnionTypeNode
     {
         $unionedArrayType = [];
         foreach ($unionTypeNode->types as $unionedType) {

@@ -137,10 +137,7 @@ class DebugHandlersListener implements \RectorPrefix20210705\Symfony\Component\E
             $this->exceptionHandler = null;
         }
     }
-    /**
-     * @param \Symfony\Component\ErrorHandler\ErrorHandler $handler
-     */
-    private function setDefaultLoggers($handler) : void
+    private function setDefaultLoggers(\RectorPrefix20210705\Symfony\Component\ErrorHandler\ErrorHandler $handler) : void
     {
         if (\is_array($this->levels)) {
             $levelsDeprecatedOnly = [];

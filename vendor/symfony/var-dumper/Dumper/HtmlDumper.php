@@ -909,11 +909,7 @@ EOHTML
         }
         \RectorPrefix20210705\Symfony\Component\VarDumper\Dumper\AbstractDumper::dumpLine($depth);
     }
-    /**
-     * @param string $file
-     * @param int $line
-     */
-    private function getSourceLink($file, $line)
+    private function getSourceLink(string $file, int $line)
     {
         $options = $this->extraDisplayOptions + $this->displayOptions;
         if ($fmt = $options['fileLinkFormat']) {

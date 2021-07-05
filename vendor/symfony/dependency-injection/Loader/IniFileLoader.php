@@ -65,9 +65,8 @@ class IniFileLoader extends \RectorPrefix20210705\Symfony\Component\DependencyIn
      *  * string concatenation ("foo" "bar").
      *
      * @return mixed
-     * @param string $value
      */
-    private function phpize($value)
+    private function phpize(string $value)
     {
         // trim on the right as comments removal keep whitespaces
         if ($value !== ($v = \rtrim($value))) {

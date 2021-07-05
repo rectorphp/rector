@@ -92,10 +92,7 @@ class ApplicationDescription
             $this->namespaces[$namespace] = ['id' => $namespace, 'commands' => $names];
         }
     }
-    /**
-     * @param mixed[] $commands
-     */
-    private function sortCommands($commands) : array
+    private function sortCommands(array $commands) : array
     {
         $namespacedCommands = [];
         $globalCommands = [];

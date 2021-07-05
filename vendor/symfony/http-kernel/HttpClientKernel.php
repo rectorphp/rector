@@ -64,10 +64,7 @@ final class HttpClientKernel implements \RectorPrefix20210705\Symfony\Component\
         };
         return $response;
     }
-    /**
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     */
-    private function getBody($request) : ?\RectorPrefix20210705\Symfony\Component\Mime\Part\AbstractPart
+    private function getBody(\RectorPrefix20210705\Symfony\Component\HttpFoundation\Request $request) : ?\RectorPrefix20210705\Symfony\Component\Mime\Part\AbstractPart
     {
         if (\in_array($request->getMethod(), ['GET', 'HEAD'])) {
             return null;
@@ -84,10 +81,7 @@ final class HttpClientKernel implements \RectorPrefix20210705\Symfony\Component\
         }
         return new \RectorPrefix20210705\Symfony\Component\Mime\Part\Multipart\FormDataPart($fields);
     }
-    /**
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     */
-    private function getHeaders($request) : array
+    private function getHeaders(\RectorPrefix20210705\Symfony\Component\HttpFoundation\Request $request) : array
     {
         $headers = [];
         foreach ($request->headers as $key => $value) {

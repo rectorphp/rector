@@ -141,11 +141,7 @@ class NameResolver extends \PhpParser\NodeVisitorAbstract
         }
         return null;
     }
-    /**
-     * @param \PhpParser\Node\Stmt\UseUse $use
-     * @param \PhpParser\Node\Name|null $prefix
-     */
-    private function addAlias($use, $type, $prefix = null)
+    private function addAlias(\PhpParser\Node\Stmt\UseUse $use, $type, \PhpParser\Node\Name $prefix = null)
     {
         // Add prefix for group uses
         $name = $prefix ? \PhpParser\Node\Name::concat($prefix, $use->name) : $use->name;

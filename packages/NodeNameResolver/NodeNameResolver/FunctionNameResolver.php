@@ -18,9 +18,9 @@ final class FunctionNameResolver implements \Rector\NodeNameResolver\Contract\No
         return \PhpParser\Node\Stmt\Function_::class;
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param Function_ $node
      */
-    public function resolve($node) : ?string
+    public function resolve(\PhpParser\Node $node) : ?string
     {
         $bareName = (string) $node->name;
         $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);

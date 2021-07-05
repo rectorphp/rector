@@ -199,7 +199,7 @@ class Comment implements \JsonSerializable
      * @param string $str String to check
      * @return int Length in characters. Tabs count as single characters.
      */
-    private function getShortestWhitespacePrefixLen($str) : int
+    private function getShortestWhitespacePrefixLen(string $str) : int
     {
         $lines = \explode("\n", $str);
         $shortestPrefixLen = \INF;

@@ -129,10 +129,7 @@ class LoggerDataCollector extends \RectorPrefix20210705\Symfony\Component\HttpKe
         }
         return $logs;
     }
-    /**
-     * @param string|null $compilerLogsFilepath
-     */
-    private function getContainerCompilerLogs($compilerLogsFilepath = null) : array
+    private function getContainerCompilerLogs(string $compilerLogsFilepath = null) : array
     {
         if (!\is_file($compilerLogsFilepath)) {
             return [];
@@ -147,10 +144,7 @@ class LoggerDataCollector extends \RectorPrefix20210705\Symfony\Component\HttpKe
         }
         return $logs;
     }
-    /**
-     * @param mixed[] $logs
-     */
-    private function sanitizeLogs($logs)
+    private function sanitizeLogs(array $logs)
     {
         $sanitizedLogs = [];
         $silencedLogs = [];
@@ -182,10 +176,7 @@ class LoggerDataCollector extends \RectorPrefix20210705\Symfony\Component\HttpKe
         }
         return \array_values($sanitizedLogs);
     }
-    /**
-     * @param mixed[] $log
-     */
-    private function isSilencedOrDeprecationErrorLog($log) : bool
+    private function isSilencedOrDeprecationErrorLog(array $log) : bool
     {
         if (!isset($log['context']['exception'])) {
             return \false;
@@ -199,10 +190,7 @@ class LoggerDataCollector extends \RectorPrefix20210705\Symfony\Component\HttpKe
         }
         return \false;
     }
-    /**
-     * @param mixed[] $containerDeprecationLogs
-     */
-    private function computeErrorsCount($containerDeprecationLogs) : array
+    private function computeErrorsCount(array $containerDeprecationLogs) : array
     {
         $silencedLogs = [];
         $count = ['error_count' => $this->logger->countErrors($this->currentRequest), 'deprecation_count' => 0, 'warning_count' => 0, 'scream_count' => 0, 'priorities' => []];

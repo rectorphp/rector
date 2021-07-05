@@ -71,11 +71,7 @@ final class XmlFileFormatter implements \Rector\FileFormatter\Contract\Formatter
         $editorConfigConfigurationBuilder->withIndent(\Rector\FileFormatter\ValueObject\Indent::createTab());
         return $editorConfigConfigurationBuilder;
     }
-    /**
-     * @param string $xml
-     * @param \Rector\FileFormatter\ValueObject\EditorConfigConfiguration $editorConfigConfiguration
-     */
-    private function formatXml($xml, $editorConfigConfiguration) : string
+    private function formatXml(string $xml, \Rector\FileFormatter\ValueObject\EditorConfigConfiguration $editorConfigConfiguration) : string
     {
         $output = '';
         $this->depth = 0;
@@ -90,18 +86,13 @@ final class XmlFileFormatter implements \Rector\FileFormatter\Contract\Formatter
     }
     /**
      * @return string[]
-     * @param string $xml
      */
-    private function getXmlParts($xml) : array
+    private function getXmlParts(string $xml) : array
     {
         $withNewLines = \RectorPrefix20210705\Nette\Utils\Strings::replace(\trim($xml), self::XML_PARTS_REGEX, "\$1\n\$2\$3");
         return \explode("\n", $withNewLines);
     }
-    /**
-     * @param string $part
-     * @param \Rector\FileFormatter\ValueObject\EditorConfigConfiguration $editorConfigConfiguration
-     */
-    private function getOutputForPart($part, $editorConfigConfiguration) : string
+    private function getOutputForPart(string $part, \Rector\FileFormatter\ValueObject\EditorConfigConfiguration $editorConfigConfiguration) : string
     {
         $output = '';
         $this->runPre($part);
@@ -114,19 +105,13 @@ final class XmlFileFormatter implements \Rector\FileFormatter\Contract\Formatter
         $this->runPost($part);
         return $output;
     }
-    /**
-     * @param string $part
-     */
-    private function runPre($part) : void
+    private function runPre(string $part) : void
     {
         if ($this->isClosingTag($part)) {
             --$this->depth;
         }
     }
-    /**
-     * @param string $part
-     */
-    private function runPost($part) : void
+    private function runPost(string $part) : void
     {
         if ($this->isOpeningTag($part)) {
             ++$this->depth;
@@ -138,38 +123,23 @@ final class XmlFileFormatter implements \Rector\FileFormatter\Contract\Formatter
             $this->preserveWhitespace = \true;
         }
     }
-    /**
-     * @param string $part
-     */
-    private function getPaddedString($part) : string
+    private function getPaddedString(string $part) : string
     {
         return \str_pad($part, \strlen($part) + $this->depth * $this->indent, $this->padChar, \STR_PAD_LEFT);
     }
-    /**
-     * @param string $part
-     */
-    private function isOpeningTag($part) : bool
+    private function isOpeningTag(string $part) : bool
     {
         return (bool) \RectorPrefix20210705\Nette\Utils\Strings::match($part, self::IS_OPENING_TAG_REGEX);
     }
-    /**
-     * @param string $part
-     */
-    private function isClosingTag($part) : bool
+    private function isClosingTag(string $part) : bool
     {
         return (bool) \RectorPrefix20210705\Nette\Utils\Strings::match($part, self::IS_CLOSING_TAG_REGEX);
     }
-    /**
-     * @param string $part
-     */
-    private function isOpeningCdataTag($part) : bool
+    private function isOpeningCdataTag(string $part) : bool
     {
         return \strpos($part, '<![CDATA[') !== \false;
     }
-    /**
-     * @param string $part
-     */
-    private function isClosingCdataTag($part) : bool
+    private function isClosingCdataTag(string $part) : bool
     {
         return \strpos($part, ']]>') !== \false;
     }

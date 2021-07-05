@@ -52,17 +52,15 @@ final class FunctionLikeDocParamTypeInferer implements \Rector\TypeDeclaration\C
     }
     /**
      * @return ClassMethod|Function_|null
-     * @param \PhpParser\Node\Param $param
      */
-    private function resolveScopeNode($param) : ?\PhpParser\Node
+    private function resolveScopeNode(\PhpParser\Node\Param $param) : ?\PhpParser\Node
     {
         return $this->betterNodeFinder->findParentTypes($param, [\PhpParser\Node\Stmt\ClassMethod::class, \PhpParser\Node\Stmt\Function_::class]);
     }
     /**
      * @param Type[] $paramWithTypes
-     * @param \PhpParser\Node\Param $param
      */
-    private function matchParamNodeFromDoc($paramWithTypes, $param) : \PHPStan\Type\Type
+    private function matchParamNodeFromDoc(array $paramWithTypes, \PhpParser\Node\Param $param) : \PHPStan\Type\Type
     {
         $paramNodeName = '$' . $this->nodeNameResolver->getName($param->var);
         return $paramWithTypes[$paramNodeName] ?? new \PHPStan\Type\MixedType();

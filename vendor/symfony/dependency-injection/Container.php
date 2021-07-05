@@ -203,10 +203,8 @@ class Container implements \RectorPrefix20210705\Symfony\Component\DependencyInj
      * Creates a service.
      *
      * As a separate method to allow "get()" to use the really fast `??` operator.
-     * @param string $id
-     * @param int $invalidBehavior
      */
-    private function make($id, $invalidBehavior)
+    private function make(string $id, int $invalidBehavior)
     {
         if (isset($this->loading[$id])) {
             throw new \RectorPrefix20210705\Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException($id, \array_merge(\array_keys($this->loading), [$id]));

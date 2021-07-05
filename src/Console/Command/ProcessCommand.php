@@ -156,20 +156,13 @@ final class ProcessCommand extends \RectorPrefix20210705\Symfony\Component\Conso
             $this->changedFilesDetector->clear();
         }
     }
-    /**
-     * @param \Rector\Core\ValueObject\ProcessResult $processResult
-     */
-    private function invalidateCacheChangedFiles($processResult) : void
+    private function invalidateCacheChangedFiles(\Rector\Core\ValueObject\ProcessResult $processResult) : void
     {
         foreach ($processResult->getChangedFileInfos() as $changedFileInfo) {
             $this->changedFilesDetector->invalidateFile($changedFileInfo);
         }
     }
-    /**
-     * @param \Rector\Core\ValueObject\ProcessResult $processResult
-     * @param \Rector\Core\ValueObject\Configuration $configuration
-     */
-    private function resolveReturnCode($processResult, $configuration) : int
+    private function resolveReturnCode(\Rector\Core\ValueObject\ProcessResult $processResult, \Rector\Core\ValueObject\Configuration $configuration) : int
     {
         // some errors were found → fail
         if ($processResult->getErrors() !== []) {
@@ -184,7 +177,7 @@ final class ProcessCommand extends \RectorPrefix20210705\Symfony\Component\Conso
     /**
      * @param File[] $files
      */
-    private function configurePHPStanNodeScopeResolver($files) : void
+    private function configurePHPStanNodeScopeResolver(array $files) : void
     {
         $filePaths = [];
         foreach ($files as $file) {

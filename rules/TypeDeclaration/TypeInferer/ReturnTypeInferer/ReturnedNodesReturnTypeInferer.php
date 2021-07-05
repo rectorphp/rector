@@ -109,9 +109,8 @@ final class ReturnedNodesReturnTypeInferer implements \Rector\TypeDeclaration\Co
     }
     /**
      * @return Return_[]
-     * @param \PhpParser\Node\FunctionLike $functionLike
      */
-    private function collectReturns($functionLike) : array
+    private function collectReturns(\PhpParser\Node\FunctionLike $functionLike) : array
     {
         $returns = [];
         $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $functionLike->getStmts(), function (\PhpParser\Node $node) use(&$returns) : ?int {
@@ -129,10 +128,8 @@ final class ReturnedNodesReturnTypeInferer implements \Rector\TypeDeclaration\Co
     }
     /**
      * @return \PHPStan\Type\VoidType|\PHPStan\Type\MixedType
-     * @param \PhpParser\Node\Stmt\ClassLike $classLike
-     * @param \PhpParser\Node\FunctionLike $functionLike
      */
-    private function resolveNoLocalReturnNodes($classLike, $functionLike)
+    private function resolveNoLocalReturnNodes(\PhpParser\Node\Stmt\ClassLike $classLike, \PhpParser\Node\FunctionLike $functionLike)
     {
         // void type
         if (!$this->isAbstractMethod($classLike, $functionLike)) {
@@ -140,11 +137,7 @@ final class ReturnedNodesReturnTypeInferer implements \Rector\TypeDeclaration\Co
         }
         return new \PHPStan\Type\MixedType();
     }
-    /**
-     * @param \PhpParser\Node\Stmt\ClassLike $classLike
-     * @param \PhpParser\Node\FunctionLike $functionLike
-     */
-    private function isAbstractMethod($classLike, $functionLike) : bool
+    private function isAbstractMethod(\PhpParser\Node\Stmt\ClassLike $classLike, \PhpParser\Node\FunctionLike $functionLike) : bool
     {
         if ($functionLike instanceof \PhpParser\Node\Stmt\ClassMethod && $functionLike->isAbstract()) {
             return \true;
@@ -154,11 +147,7 @@ final class ReturnedNodesReturnTypeInferer implements \Rector\TypeDeclaration\Co
         }
         return $classLike->isAbstract();
     }
-    /**
-     * @param \PhpParser\Node\Stmt\Return_ $return
-     * @param \PhpParser\Node\FunctionLike $originalFunctionLike
-     */
-    private function inferFromReturnedMethodCall($return, $originalFunctionLike) : \PHPStan\Type\Type
+    private function inferFromReturnedMethodCall(\PhpParser\Node\Stmt\Return_ $return, \PhpParser\Node\FunctionLike $originalFunctionLike) : \PHPStan\Type\Type
     {
         if (!$return->expr instanceof \PhpParser\Node\Expr\MethodCall) {
             return new \PHPStan\Type\MixedType();
@@ -169,10 +158,7 @@ final class ReturnedNodesReturnTypeInferer implements \Rector\TypeDeclaration\Co
         }
         return $this->resolveClassMethod($methodReflection, $originalFunctionLike);
     }
-    /**
-     * @param \PHPStan\Type\Type $type
-     */
-    private function isArrayTypeMixed($type) : bool
+    private function isArrayTypeMixed(\PHPStan\Type\Type $type) : bool
     {
         if (!$type instanceof \PHPStan\Type\ArrayType) {
             return \false;
@@ -182,12 +168,7 @@ final class ReturnedNodesReturnTypeInferer implements \Rector\TypeDeclaration\Co
         }
         return $type->getKeyType() instanceof \PHPStan\Type\MixedType;
     }
-    /**
-     * @param \PHPStan\Type\Type $resolvedType
-     * @param \PhpParser\Node\Stmt\Return_ $return
-     * @param \PhpParser\Node\FunctionLike $functionLike
-     */
-    private function correctWithNestedType($resolvedType, $return, $functionLike) : \PHPStan\Type\Type
+    private function correctWithNestedType(\PHPStan\Type\Type $resolvedType, \PhpParser\Node\Stmt\Return_ $return, \PhpParser\Node\FunctionLike $functionLike) : \PHPStan\Type\Type
     {
         if ($resolvedType instanceof \PHPStan\Type\MixedType || $this->isArrayTypeMixed($resolvedType)) {
             $correctedType = $this->inferFromReturnedMethodCall($return, $functionLike);
@@ -198,11 +179,7 @@ final class ReturnedNodesReturnTypeInferer implements \Rector\TypeDeclaration\Co
         }
         return $resolvedType;
     }
-    /**
-     * @param \PHPStan\Reflection\MethodReflection $methodReflection
-     * @param \PhpParser\Node\FunctionLike $originalFunctionLike
-     */
-    private function resolveClassMethod($methodReflection, $originalFunctionLike) : \PHPStan\Type\Type
+    private function resolveClassMethod(\PHPStan\Reflection\MethodReflection $methodReflection, \PhpParser\Node\FunctionLike $originalFunctionLike) : \PHPStan\Type\Type
     {
         $classMethod = $this->reflectionAstResolver->resolveClassMethodFromMethodReflection($methodReflection);
         if (!$classMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {

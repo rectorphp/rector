@@ -71,10 +71,7 @@ final class IconsFileProcessor implements \Rector\Core\Contract\Processor\FilePr
     {
         return ['png', 'gif', 'svg'];
     }
-    /**
-     * @param \Rector\Core\ValueObject\Application\File $file
-     */
-    private function createIconPath($file) : string
+    private function createIconPath(\Rector\Core\ValueObject\Application\File $file) : string
     {
         $smartFileInfo = $file->getSmartFileInfo();
         $realPath = $smartFileInfo->getRealPathDirectory();

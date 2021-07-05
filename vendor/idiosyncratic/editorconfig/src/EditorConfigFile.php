@@ -73,10 +73,7 @@ final class EditorConfigFile
         }
         return $configuration;
     }
-    /**
-     * @param string $content
-     */
-    private function parse($content) : void
+    private function parse(string $content) : void
     {
         $this->fileContent = $content;
         $content = \preg_replace('/^\\s/m', '', $this->fileContent) ?? $this->fileContent;
@@ -91,36 +88,26 @@ final class EditorConfigFile
             $this->sections[] = new \RectorPrefix20210705\Idiosyncratic\EditorConfig\Section($this->getGlobPrefix($glob), $glob, $declarations, $this->declarationFactory);
         }
     }
-    /**
-     * @param string $isRoot
-     */
-    private function setIsRoot($isRoot) : void
+    private function setIsRoot(string $isRoot) : void
     {
         if (\in_array($isRoot, ['true', 'false']) === \false) {
             throw new \RectorPrefix20210705\Idiosyncratic\EditorConfig\Exception\InvalidValue('root', $isRoot);
         }
         $this->isRoot = $isRoot === 'true';
     }
-    /**
-     * @param string $glob
-     */
-    private function getGlobPrefix($glob) : string
+    private function getGlobPrefix(string $glob) : string
     {
         return \strpos($glob, '/') === 0 ? \dirname($this->path) : '**/';
     }
     /**
      * @return array<string, mixed>
-     * @param string $content
      */
-    private function parseIniString($content) : array
+    private function parseIniString(string $content) : array
     {
         $parsedContent = \parse_ini_string($content, \true, \INI_SCANNER_RAW);
         return \is_array($parsedContent) === \true ? $parsedContent : [];
     }
-    /**
-     * @param string $path
-     */
-    private function cleanContent($path) : string
+    private function cleanContent(string $path) : string
     {
         $content = \file_get_contents($path);
         if ($content === \false) {

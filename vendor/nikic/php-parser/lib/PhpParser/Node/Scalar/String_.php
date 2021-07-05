@@ -92,7 +92,7 @@ class String_ extends \PhpParser\Node\Scalar
      *
      * @return string UTF-8 representation of code point
      */
-    private static function codePointToUtf8($num) : string
+    private static function codePointToUtf8(int $num) : string
     {
         if ($num <= 0x7f) {
             return \chr($num);

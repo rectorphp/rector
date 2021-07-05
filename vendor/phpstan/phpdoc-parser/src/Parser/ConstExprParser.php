@@ -71,11 +71,7 @@ class ConstExprParser
         }
         throw new \LogicException($tokens->currentTokenValue());
     }
-    /**
-     * @param \PHPStan\PhpDocParser\Parser\TokenIterator $tokens
-     * @param int $endToken
-     */
-    private function parseArray($tokens, $endToken) : \PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprArrayNode
+    private function parseArray(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens, int $endToken) : \PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprArrayNode
     {
         $items = [];
         if (!$tokens->tryConsumeTokenType($endToken)) {
@@ -86,10 +82,7 @@ class ConstExprParser
         }
         return new \PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprArrayNode($items);
     }
-    /**
-     * @param \PHPStan\PhpDocParser\Parser\TokenIterator $tokens
-     */
-    private function parseArrayItem($tokens) : \PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprArrayItemNode
+    private function parseArrayItem(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens) : \PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprArrayItemNode
     {
         $expr = $this->parse($tokens);
         if ($tokens->tryConsumeTokenType(\PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_DOUBLE_ARROW)) {

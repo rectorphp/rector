@@ -30,11 +30,7 @@ final class MergeImportedRectorConfigureCallValuesCompilerPass implements \Recto
             $this->completeCollectedArguments($id, $definition);
         }
     }
-    /**
-     * @param string $serviceClass
-     * @param \Symfony\Component\DependencyInjection\Definition $definition
-     */
-    private function completeCollectedArguments($serviceClass, $definition) : void
+    private function completeCollectedArguments(string $serviceClass, \RectorPrefix20210705\Symfony\Component\DependencyInjection\Definition $definition) : void
     {
         $configureCallValues = $this->configureCallValuesCollector->getConfigureCallValues($serviceClass);
         if ($configureCallValues === []) {

@@ -939,9 +939,8 @@ class Application implements \RectorPrefix20210705\Symfony\Contracts\Service\Res
     }
     /**
      * Returns abbreviated suggestions in string format.
-     * @param mixed[] $abbrevs
      */
-    private function getAbbreviationSuggestions($abbrevs) : string
+    private function getAbbreviationSuggestions(array $abbrevs) : string
     {
         return '    ' . \implode("\n    ", $abbrevs);
     }
@@ -964,10 +963,8 @@ class Application implements \RectorPrefix20210705\Symfony\Contracts\Service\Res
      * if nothing is found in $collection, try in $abbrevs.
      *
      * @return string[] A sorted array of similar string
-     * @param string $name
-     * @param mixed[] $collection
      */
-    private function findAlternatives($name, $collection) : array
+    private function findAlternatives(string $name, iterable $collection) : array
     {
         $threshold = 1000.0;
         $alternatives = [];
@@ -1028,11 +1025,7 @@ class Application implements \RectorPrefix20210705\Symfony\Contracts\Service\Res
     {
         return $this->singleCommand;
     }
-    /**
-     * @param string $string
-     * @param int $width
-     */
-    private function splitStringByWidth($string, $width) : array
+    private function splitStringByWidth(string $string, int $width) : array
     {
         // str_split is not suitable for multi-byte characters, we should use preg_split to get char array properly.
         // additionally, array_slice() is not enough as some character has doubled width.
@@ -1065,9 +1058,8 @@ class Application implements \RectorPrefix20210705\Symfony\Contracts\Service\Res
      * Returns all namespaces of the command name.
      *
      * @return string[] The namespaces of the command
-     * @param string $name
      */
-    private function extractAllNamespaces($name) : array
+    private function extractAllNamespaces(string $name) : array
     {
         // -1 as third argument is needed to skip the command short name when exploding
         $parts = \explode(':', $name, -1);

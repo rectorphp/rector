@@ -115,10 +115,8 @@ class HttpKernel implements \RectorPrefix20210705\Symfony\Component\HttpKernel\H
      *
      * @throws \LogicException       If one of the listener does not behave as expected
      * @throws NotFoundHttpException When controller cannot be found
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     * @param int $type
      */
-    private function handleRaw($request, $type = self::MAIN_REQUEST) : \RectorPrefix20210705\Symfony\Component\HttpFoundation\Response
+    private function handleRaw(\RectorPrefix20210705\Symfony\Component\HttpFoundation\Request $request, int $type = self::MAIN_REQUEST) : \RectorPrefix20210705\Symfony\Component\HttpFoundation\Response
     {
         $this->requestStack->push($request);
         // request
@@ -163,11 +161,8 @@ class HttpKernel implements \RectorPrefix20210705\Symfony\Component\HttpKernel\H
      * Filters a response object.
      *
      * @throws \RuntimeException if the passed object is not a Response instance
-     * @param \Symfony\Component\HttpFoundation\Response $response
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     * @param int $type
      */
-    private function filterResponse($response, $request, $type) : \RectorPrefix20210705\Symfony\Component\HttpFoundation\Response
+    private function filterResponse(\RectorPrefix20210705\Symfony\Component\HttpFoundation\Response $response, \RectorPrefix20210705\Symfony\Component\HttpFoundation\Request $request, int $type) : \RectorPrefix20210705\Symfony\Component\HttpFoundation\Response
     {
         $event = new \RectorPrefix20210705\Symfony\Component\HttpKernel\Event\ResponseEvent($this, $request, $type, $response);
         $this->dispatcher->dispatch($event, \RectorPrefix20210705\Symfony\Component\HttpKernel\KernelEvents::RESPONSE);
@@ -180,10 +175,8 @@ class HttpKernel implements \RectorPrefix20210705\Symfony\Component\HttpKernel\H
      * Note that the order of the operations is important here, otherwise
      * operations such as {@link RequestStack::getParentRequest()} can lead to
      * weird results.
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     * @param int $type
      */
-    private function finishRequest($request, $type)
+    private function finishRequest(\RectorPrefix20210705\Symfony\Component\HttpFoundation\Request $request, int $type)
     {
         $this->dispatcher->dispatch(new \RectorPrefix20210705\Symfony\Component\HttpKernel\Event\FinishRequestEvent($this, $request, $type), \RectorPrefix20210705\Symfony\Component\HttpKernel\KernelEvents::FINISH_REQUEST);
         $this->requestStack->pop();
@@ -192,11 +185,8 @@ class HttpKernel implements \RectorPrefix20210705\Symfony\Component\HttpKernel\H
      * Handles a throwable by trying to convert it to a Response.
      *
      * @throws \Exception
-     * @param \Throwable $e
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     * @param int $type
      */
-    private function handleThrowable($e, $request, $type) : \RectorPrefix20210705\Symfony\Component\HttpFoundation\Response
+    private function handleThrowable(\Throwable $e, \RectorPrefix20210705\Symfony\Component\HttpFoundation\Request $request, int $type) : \RectorPrefix20210705\Symfony\Component\HttpFoundation\Response
     {
         $event = new \RectorPrefix20210705\Symfony\Component\HttpKernel\Event\ExceptionEvent($this, $request, $type, $e);
         $this->dispatcher->dispatch($event, \RectorPrefix20210705\Symfony\Component\HttpKernel\KernelEvents::EXCEPTION);

@@ -623,9 +623,8 @@ class Command
      * It must be non-empty and parts can optionally be separated by ":".
      *
      * @throws InvalidArgumentException When the name is invalid
-     * @param string $name
      */
-    private function validateName($name)
+    private function validateName(string $name)
     {
         if (!\preg_match('/^[^\\:]++(\\:[^\\:]++)*$/', $name)) {
             throw new \RectorPrefix20210705\Symfony\Component\Console\Exception\InvalidArgumentException(\sprintf('Command name "%s" is invalid.', $name));

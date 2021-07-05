@@ -61,19 +61,13 @@ class LocaleListener implements \RectorPrefix20210705\Symfony\Component\EventDis
             $this->setRouterContext($parentRequest);
         }
     }
-    /**
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     */
-    private function setLocale($request)
+    private function setLocale(\RectorPrefix20210705\Symfony\Component\HttpFoundation\Request $request)
     {
         if ($locale = $request->attributes->get('_locale')) {
             $request->setLocale($locale);
         }
     }
-    /**
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     */
-    private function setRouterContext($request)
+    private function setRouterContext(\RectorPrefix20210705\Symfony\Component\HttpFoundation\Request $request)
     {
         if (null !== $this->router) {
             $this->router->getContext()->setParameter('_locale', $request->getLocale());

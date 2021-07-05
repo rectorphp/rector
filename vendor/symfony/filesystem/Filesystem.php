@@ -142,11 +142,7 @@ class Filesystem
         }
         self::doRemove($files, \false);
     }
-    /**
-     * @param mixed[] $files
-     * @param bool $isRecursive
-     */
-    private static function doRemove($files, $isRecursive) : void
+    private static function doRemove(array $files, bool $isRecursive) : void
     {
         $files = \array_reverse($files);
         foreach ($files as $file) {
@@ -287,9 +283,8 @@ class Filesystem
      * Tells whether a file exists and is readable.
      *
      * @throws IOException When windows path is longer than 258 characters
-     * @param string $filename
      */
-    private function isReadable($filename) : bool
+    private function isReadable(string $filename) : bool
     {
         $maxPathLength = \PHP_MAXPATHLEN - 2;
         if (\strlen($filename) > $maxPathLength) {
@@ -357,10 +352,8 @@ class Filesystem
     }
     /**
      * @param string $linkType Name of the link type, typically 'symbolic' or 'hard'
-     * @param string $origin
-     * @param string $target
      */
-    private function linkException($origin, $target, $linkType)
+    private function linkException(string $origin, string $target, string $linkType)
     {
         if (self::$lastError) {
             if ('\\' === \DIRECTORY_SEPARATOR && \false !== \strpos(self::$lastError, 'error code(1314)')) {
@@ -638,9 +631,8 @@ class Filesystem
     }
     /**
      * Gets a 2-tuple of scheme (may be null) and hierarchical part of a filename (e.g. file:///tmp -> [file, tmp]).
-     * @param string $filename
      */
-    private function getSchemeAndHierarchy($filename) : array
+    private function getSchemeAndHierarchy(string $filename) : array
     {
         $components = \explode('://', $filename, 2);
         return 2 === \count($components) ? [$components[0], $components[1]] : [null, $components[0]];
@@ -649,9 +641,8 @@ class Filesystem
      * @param mixed ...$args
      *
      * @return mixed
-     * @param callable $func
      */
-    private static function box($func, ...$args)
+    private static function box(callable $func, ...$args)
     {
         self::$lastError = null;
         \set_error_handler(__CLASS__ . '::handleError');

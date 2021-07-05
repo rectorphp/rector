@@ -46,7 +46,7 @@ class Traverser
      * @param Statement[] $statements
      * @return Statement[]
      */
-    private function walkRecursive($statements) : array
+    private function walkRecursive(array $statements) : array
     {
         foreach ($statements as $statement) {
             $this->visitors->enterNode($statement);

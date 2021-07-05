@@ -87,9 +87,8 @@ final class BetterPhpDocParser extends \PHPStan\PhpDocParser\Parser\PhpDocParser
     }
     /**
      * @return PhpDocTextNode|PhpDocTagNode
-     * @param \PHPStan\PhpDocParser\Parser\TokenIterator $tokenIterator
      */
-    private function parseChildAndStoreItsPositions($tokenIterator) : \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocChildNode
+    private function parseChildAndStoreItsPositions(\PHPStan\PhpDocParser\Parser\TokenIterator $tokenIterator) : \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocChildNode
     {
         $betterTokenIterator = $this->tokenIteratorFactory->createFromTokenIterator($tokenIterator);
         $startPosition = $betterTokenIterator->currentPosition();
@@ -100,10 +99,7 @@ final class BetterPhpDocParser extends \PHPStan\PhpDocParser\Parser\PhpDocParser
         $phpDocNode->setAttribute(\Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey::START_AND_END, $startAndEnd);
         return $phpDocNode;
     }
-    /**
-     * @param \Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator $tokenIterator
-     */
-    private function resolveTag($tokenIterator) : string
+    private function resolveTag(\Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator $tokenIterator) : string
     {
         $tag = $tokenIterator->currentTokenValue();
         $tokenIterator->next();

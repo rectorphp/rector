@@ -72,10 +72,7 @@ class ServiceLocator implements \RectorPrefix20210705\Symfony\Contracts\Service\
         $locator->container = $container;
         return $locator;
     }
-    /**
-     * @param string $id
-     */
-    private function createNotFoundException($id) : \RectorPrefix20210705\Psr\Container\NotFoundExceptionInterface
+    private function createNotFoundException(string $id) : \RectorPrefix20210705\Psr\Container\NotFoundExceptionInterface
     {
         if ($this->loading) {
             $msg = \sprintf('The service "%s" has a dependency on a non-existent service "%s". This locator %s', \end($this->loading), $id, $this->formatAlternatives());
@@ -116,19 +113,11 @@ class ServiceLocator implements \RectorPrefix20210705\Symfony\Contracts\Service\
         }
         return new \RectorPrefix20210705\Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException($id, \end($this->loading) ?: null, null, [], \implode(' ', $msg));
     }
-    /**
-     * @param string $id
-     * @param mixed[] $path
-     */
-    private function createCircularReferenceException($id, $path) : \RectorPrefix20210705\Psr\Container\ContainerExceptionInterface
+    private function createCircularReferenceException(string $id, array $path) : \RectorPrefix20210705\Psr\Container\ContainerExceptionInterface
     {
         return new \RectorPrefix20210705\Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException($id, $path);
     }
-    /**
-     * @param mixed[]|null $alternatives
-     * @param string $separator
-     */
-    private function formatAlternatives($alternatives = null, $separator = 'and') : string
+    private function formatAlternatives(array $alternatives = null, string $separator = 'and') : string
     {
         $format = '"%s"%s';
         if (null === $alternatives) {

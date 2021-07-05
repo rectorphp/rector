@@ -567,11 +567,7 @@ class CliDumper extends \RectorPrefix20210705\Symfony\Component\VarDumper\Dumper
         }
         return $result;
     }
-    /**
-     * @param string $file
-     * @param int $line
-     */
-    private function getSourceLink($file, $line)
+    private function getSourceLink(string $file, int $line)
     {
         if ($fmt = $this->displayOptions['fileLinkFormat']) {
             return \is_string($fmt) ? \strtr($fmt, ['%f' => $file, '%l' => $line]) : ($fmt->format($file, $line) ?: 'file://' . $file . '#L' . $line);

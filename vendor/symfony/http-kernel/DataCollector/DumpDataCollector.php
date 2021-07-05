@@ -218,14 +218,7 @@ class DumpDataCollector extends \RectorPrefix20210705\Symfony\Component\HttpKern
             $this->dataCount = 0;
         }
     }
-    /**
-     * @param \Symfony\Component\VarDumper\Dumper\DataDumperInterface $dumper
-     * @param \Symfony\Component\VarDumper\Cloner\Data $data
-     * @param string $name
-     * @param string $file
-     * @param int $line
-     */
-    private function doDump($dumper, $data, $name, $file, $line)
+    private function doDump(\RectorPrefix20210705\Symfony\Component\VarDumper\Dumper\DataDumperInterface $dumper, \RectorPrefix20210705\Symfony\Component\VarDumper\Cloner\Data $data, string $name, string $file, int $line)
     {
         if ($dumper instanceof \RectorPrefix20210705\Symfony\Component\VarDumper\Dumper\CliDumper) {
             $contextDumper = function ($name, $file, $line, $fmt) {

@@ -75,13 +75,7 @@ class Logger extends \RectorPrefix20210705\Psr\Log\AbstractLogger
             \error_log($formatter($level, $message, $context, \false));
         }
     }
-    /**
-     * @param string $level
-     * @param string $message
-     * @param mixed[] $context
-     * @param bool $prefixDate
-     */
-    private function format($level, $message, $context, $prefixDate = \true) : string
+    private function format(string $level, string $message, array $context, bool $prefixDate = \true) : string
     {
         if (\false !== \strpos($message, '{')) {
             $replacements = [];

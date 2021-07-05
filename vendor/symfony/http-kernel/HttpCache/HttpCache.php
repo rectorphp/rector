@@ -104,10 +104,7 @@ class HttpCache implements \RectorPrefix20210705\Symfony\Component\HttpKernel\Ht
     {
         return $this->traces;
     }
-    /**
-     * @param \Symfony\Component\HttpFoundation\Response $response
-     */
-    private function addTraces($response)
+    private function addTraces(\RectorPrefix20210705\Symfony\Component\HttpFoundation\Response $response)
     {
         $traceString = null;
         if ('full' === $this->options['trace_level']) {
@@ -543,10 +540,8 @@ class HttpCache implements \RectorPrefix20210705\Symfony\Component\HttpKernel\Ht
     }
     /**
      * Restores the Response body.
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     * @param \Symfony\Component\HttpFoundation\Response $response
      */
-    private function restoreResponseBody($request, $response)
+    private function restoreResponseBody(\RectorPrefix20210705\Symfony\Component\HttpFoundation\Request $request, \RectorPrefix20210705\Symfony\Component\HttpFoundation\Response $response)
     {
         if ($response->headers->has('X-Body-Eval')) {
             \ob_start();
@@ -584,9 +579,8 @@ class HttpCache implements \RectorPrefix20210705\Symfony\Component\HttpKernel\Ht
     /**
      * Checks if the Request includes authorization or other sensitive information
      * that should cause the Response to be considered private by default.
-     * @param \Symfony\Component\HttpFoundation\Request $request
      */
-    private function isPrivateRequest($request) : bool
+    private function isPrivateRequest(\RectorPrefix20210705\Symfony\Component\HttpFoundation\Request $request) : bool
     {
         foreach ($this->options['private_headers'] as $key) {
             $key = \strtolower(\str_replace('HTTP_', '', $key));
@@ -602,18 +596,15 @@ class HttpCache implements \RectorPrefix20210705\Symfony\Component\HttpKernel\Ht
     }
     /**
      * Records that an event took place.
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     * @param string $event
      */
-    private function record($request, $event)
+    private function record(\RectorPrefix20210705\Symfony\Component\HttpFoundation\Request $request, string $event)
     {
         $this->traces[$this->getTraceKey($request)][] = $event;
     }
     /**
      * Calculates the key we use in the "trace" array for a given request.
-     * @param \Symfony\Component\HttpFoundation\Request $request
      */
-    private function getTraceKey($request) : string
+    private function getTraceKey(\RectorPrefix20210705\Symfony\Component\HttpFoundation\Request $request) : string
     {
         $path = $request->getPathInfo();
         if ($qs = $request->getQueryString()) {
@@ -624,9 +615,8 @@ class HttpCache implements \RectorPrefix20210705\Symfony\Component\HttpKernel\Ht
     /**
      * Checks whether the given (cached) response may be served as "stale" when a revalidation
      * is currently in progress.
-     * @param \Symfony\Component\HttpFoundation\Response $entry
      */
-    private function mayServeStaleWhileRevalidate($entry) : bool
+    private function mayServeStaleWhileRevalidate(\RectorPrefix20210705\Symfony\Component\HttpFoundation\Response $entry) : bool
     {
         $timeout = $entry->headers->getCacheControlDirective('stale-while-revalidate');
         if (null === $timeout) {
@@ -636,9 +626,8 @@ class HttpCache implements \RectorPrefix20210705\Symfony\Component\HttpKernel\Ht
     }
     /**
      * Waits for the store to release a locked entry.
-     * @param \Symfony\Component\HttpFoundation\Request $request
      */
-    private function waitForLock($request) : bool
+    private function waitForLock(\RectorPrefix20210705\Symfony\Component\HttpFoundation\Request $request) : bool
     {
         $wait = 0;
         while ($this->store->isLocked($request) && $wait < 100) {

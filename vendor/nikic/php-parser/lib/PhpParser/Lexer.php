@@ -81,10 +81,7 @@ class Lexer
             \ini_set('xdebug.scream', $scream);
         }
     }
-    /**
-     * @param \PhpParser\ErrorHandler $errorHandler
-     */
-    private function handleInvalidCharacterRange($start, $end, $line, $errorHandler)
+    private function handleInvalidCharacterRange($start, $end, $line, \PhpParser\ErrorHandler $errorHandler)
     {
         $tokens = [];
         for ($i = $start; $i < $end; $i++) {

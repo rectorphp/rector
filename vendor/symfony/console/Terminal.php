@@ -129,10 +129,7 @@ class Terminal
     {
         return self::readFromProcess('stty -a | grep columns');
     }
-    /**
-     * @param string $command
-     */
-    private static function readFromProcess($command) : ?string
+    private static function readFromProcess(string $command) : ?string
     {
         if (!\function_exists('proc_open')) {
             return null;

@@ -16,9 +16,8 @@ final class ClassConstNameResolver implements \Rector\NodeNameResolver\Contract\
     private $nodeNameResolver;
     /**
      * @required
-     * @param \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver
      */
-    public function autowireClassConstNameResolver($nodeNameResolver) : void
+    public function autowireClassConstNameResolver(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver) : void
     {
         $this->nodeNameResolver = $nodeNameResolver;
     }
@@ -30,9 +29,9 @@ final class ClassConstNameResolver implements \Rector\NodeNameResolver\Contract\
         return \PhpParser\Node\Stmt\ClassConst::class;
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param ClassConst $node
      */
-    public function resolve($node) : ?string
+    public function resolve(\PhpParser\Node $node) : ?string
     {
         if ($node->consts === []) {
             return null;

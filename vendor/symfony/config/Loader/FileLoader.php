@@ -122,12 +122,7 @@ abstract class FileLoader extends \RectorPrefix20210705\Symfony\Component\Config
         $resource = new \RectorPrefix20210705\Symfony\Component\Config\Resource\GlobResource($prefix, $pattern, $recursive, $forExclusion, $excluded);
         yield from $resource;
     }
-    /**
-     * @param string|null $type
-     * @param bool $ignoreErrors
-     * @param string|null $sourceResource
-     */
-    private function doImport($resource, $type = null, $ignoreErrors = \false, $sourceResource = null)
+    private function doImport($resource, string $type = null, bool $ignoreErrors = \false, string $sourceResource = null)
     {
         try {
             $loader = $this->resolve($resource, $type);

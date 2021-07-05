@@ -68,13 +68,7 @@ class YamlReferenceDumper
         $this->reference = null;
         return $ref;
     }
-    /**
-     * @param \Symfony\Component\Config\Definition\NodeInterface $node
-     * @param \Symfony\Component\Config\Definition\NodeInterface|null $parentNode
-     * @param int $depth
-     * @param bool $prototypedArray
-     */
-    private function writeNode($node, $parentNode = null, $depth = 0, $prototypedArray = \false)
+    private function writeNode(\RectorPrefix20210705\Symfony\Component\Config\Definition\NodeInterface $node, \RectorPrefix20210705\Symfony\Component\Config\Definition\NodeInterface $parentNode = null, int $depth = 0, bool $prototypedArray = \false)
     {
         $comments = [];
         $default = '';
@@ -163,20 +157,14 @@ class YamlReferenceDumper
     }
     /**
      * Outputs a single config reference line.
-     * @param string $text
-     * @param int $indent
      */
-    private function writeLine($text, $indent = 0)
+    private function writeLine(string $text, int $indent = 0)
     {
         $indent = \strlen($text) + $indent;
         $format = '%' . $indent . 's';
         $this->reference .= \sprintf($format, $text) . "\n";
     }
-    /**
-     * @param mixed[] $array
-     * @param int $depth
-     */
-    private function writeArray($array, $depth)
+    private function writeArray(array $array, int $depth)
     {
         $isIndexed = \array_values($array) === $array;
         foreach ($array as $key => $value) {
@@ -195,10 +183,7 @@ class YamlReferenceDumper
             }
         }
     }
-    /**
-     * @param \Symfony\Component\Config\Definition\PrototypedArrayNode $node
-     */
-    private function getPrototypeChildren($node) : array
+    private function getPrototypeChildren(\RectorPrefix20210705\Symfony\Component\Config\Definition\PrototypedArrayNode $node) : array
     {
         $prototype = $node->getPrototype();
         $key = $node->getKeyAttribute();

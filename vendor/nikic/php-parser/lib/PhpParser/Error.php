@@ -146,7 +146,7 @@ class Error extends \RuntimeException
      *
      * @return int 1-based column (relative to start of line)
      */
-    private function toColumn($code, $pos) : int
+    private function toColumn(string $code, int $pos) : int
     {
         if ($pos > \strlen($code)) {
             throw new \RuntimeException('Invalid position information');

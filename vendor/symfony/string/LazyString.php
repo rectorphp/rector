@@ -115,10 +115,7 @@ class LazyString implements \JsonSerializable
     private function __construct()
     {
     }
-    /**
-     * @param callable $callback
-     */
-    private static function getPrettyName($callback) : string
+    private static function getPrettyName(callable $callback) : string
     {
         if (\is_string($callback)) {
             return $callback;
