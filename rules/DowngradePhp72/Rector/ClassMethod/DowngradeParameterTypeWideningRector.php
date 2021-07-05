@@ -100,14 +100,8 @@ CODE_SAMPLE
         if ($this->isSealedClass($classReflection)) {
             return null;
         }
-        foreach ($this->safeTypes as $safeType) {
-            if ($classReflection->isSubclassOf($safeType)) {
-                return null;
-            }
-            // skip self too
-            if ($classReflection->getName() === $safeType) {
-                return null;
-            }
+        if ($this->skipSafeType($classReflection)) {
+            return null;
         }
         if ($node->isPrivate()) {
             return null;
@@ -163,5 +157,18 @@ CODE_SAMPLE
             return \false;
         }
         return \count($classReflection->getAncestors()) === 1;
+    }
+    private function skipSafeType(\PHPStan\Reflection\ClassReflection $classReflection) : bool
+    {
+        foreach ($this->safeTypes as $safeType) {
+            if ($classReflection->isSubclassOf($safeType)) {
+                return \true;
+            }
+            // skip self too
+            if ($classReflection->getName() === $safeType) {
+                return \true;
+            }
+        }
+        return \false;
     }
 }
