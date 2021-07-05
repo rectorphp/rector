@@ -110,15 +110,8 @@ CODE_SAMPLE
             return null;
         }
 
-        foreach ($this->safeTypes as $safeType) {
-            if ($classReflection->isSubclassOf($safeType)) {
-                return null;
-            }
-
-            // skip self too
-            if ($classReflection->getName() === $safeType) {
-                return null;
-            }
+        if ($this->skipSafeType($classReflection)) {
+            return null;
         }
 
         if ($node->isPrivate()) {
@@ -187,5 +180,21 @@ CODE_SAMPLE
         }
 
         return count($classReflection->getAncestors()) === 1;
+    }
+
+    private function skipSafeType(ClassReflection $classReflection): bool
+    {
+        foreach ($this->safeTypes as $safeType) {
+            if ($classReflection->isSubclassOf($safeType)) {
+                return true;
+            }
+
+            // skip self too
+            if ($classReflection->getName() === $safeType) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
