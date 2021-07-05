@@ -34,6 +34,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->call('configure', [[
             DowngradeParameterTypeWideningRector::SAFE_TYPES => [
                 RectorInterface::class,
+                \Symfony\Component\Console\Output\OutputInterface::class,
                 StyleInterface::class,
                 PhpDocNodeVisitorInterface::class,
                 Node::class,
