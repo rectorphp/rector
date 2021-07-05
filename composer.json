@@ -12,6 +12,7 @@
         "ext-json": "*",
         "composer/semver": "^3.2",
         "composer/xdebug-handler": "^2.0",
+        "cweagans/composer-patches": "^1.7",
         "danielstjules/stringy": "^3.1",
         "doctrine/inflector": "^2.0",
         "ergebnis/json-printer": "^3.1",
@@ -47,10 +48,9 @@
         "symplify/skipper": "^9.4.4",
         "symplify/smart-file-system": "^9.4.4",
         "symplify/symfony-php-config": "^9.4.4",
+        "symplify/vendor-patches": "^9.4",
         "tracy/tracy": "^2.8",
-        "webmozart/assert": "^1.10",
-        "cweagans/composer-patches": "^1.7",
-        "symplify/vendor-patches": "^9.4"
+        "webmozart/assert": "^1.10"
     },
     "require-dev": {
         "phpstan/extension-installer": "^1.1",
@@ -142,6 +142,9 @@
         "patches": {
             "symfony/console": [
                 "patches/symfony-console-style-symfonystyle-php.patch"
+            ],
+            "symfony/dependency-injection": [
+                "patches/symfony-dependency-injection-servicelocator-php.patch"
             ]
         }
     },

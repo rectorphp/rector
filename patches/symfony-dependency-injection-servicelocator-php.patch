@@ -1,0 +1,11 @@
+--- /dev/null
++++ ../ServiceLocator.php
+@@ -38,7 +38,7 @@
+      *
+      * @return mixed
+      */
+-    public function get($id)
++    public function get(string $id)
+     {
+         if (!$this->externalId) {
+             return $this->doGet($id);
