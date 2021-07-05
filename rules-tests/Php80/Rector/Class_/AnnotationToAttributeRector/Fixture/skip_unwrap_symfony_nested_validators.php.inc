@@ -12,7 +12,8 @@ final class SkipUnwrapSymfonyNestedValidators
      * @Assert\All(
      *     constraints={
      *         @GenericAnnotation("firstConstraint"),
-     *         @GenericAnnotation("secondConstraint")
+     *         @GenericAnnotation("secondConstraint"),
+     *         @Assert\NotNull()
      *     }
      * )
      */
