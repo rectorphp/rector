@@ -10,8 +10,9 @@ class HttpUtility
     const HTTP_STATUS_400 = 'HTTP/1.1 400 Bad Request';
     /**
      * @return string
+     * @param mixed[] $queryParams
      */
-    public static function buildQueryString(array $queryParams)
+    public static function buildQueryString($queryParams)
     {
         return '';
     }

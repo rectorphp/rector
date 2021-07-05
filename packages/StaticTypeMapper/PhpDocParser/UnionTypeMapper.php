@@ -35,15 +35,18 @@ final class UnionTypeMapper implements \Rector\StaticTypeMapper\Contract\PhpDocP
     }
     /**
      * @required
+     * @param \Rector\StaticTypeMapper\PhpDoc\PhpDocTypeMapper $phpDocTypeMapper
      */
-    public function autowireUnionTypeMapper(\Rector\StaticTypeMapper\PhpDoc\PhpDocTypeMapper $phpDocTypeMapper) : void
+    public function autowireUnionTypeMapper($phpDocTypeMapper) : void
     {
         $this->phpDocTypeMapper = $phpDocTypeMapper;
     }
     /**
-     * @param UnionTypeNode $typeNode
+     * @param \PHPStan\PhpDocParser\Ast\Type\TypeNode $typeNode
+     * @param \PhpParser\Node $node
+     * @param \PHPStan\Analyser\NameScope $nameScope
      */
-    public function mapToPHPStanType(\PHPStan\PhpDocParser\Ast\Type\TypeNode $typeNode, \PhpParser\Node $node, \PHPStan\Analyser\NameScope $nameScope) : \PHPStan\Type\Type
+    public function mapToPHPStanType($typeNode, $node, $nameScope) : \PHPStan\Type\Type
     {
         $unionedTypes = [];
         foreach ($typeNode->types as $unionedTypeNode) {

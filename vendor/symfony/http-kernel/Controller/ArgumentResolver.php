@@ -37,8 +37,10 @@ final class ArgumentResolver implements \RectorPrefix20210705\Symfony\Component\
     }
     /**
      * {@inheritdoc}
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param callable $controller
      */
-    public function getArguments(\RectorPrefix20210705\Symfony\Component\HttpFoundation\Request $request, callable $controller) : array
+    public function getArguments($request, $controller) : array
     {
         $arguments = [];
         foreach ($this->argumentMetadataFactory->createArgumentMetadata($controller) as $metadata) {

@@ -40,7 +40,7 @@ CODE_SAMPLE
     /**
      * @param Unset_|Assign $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($node instanceof \PhpParser\Node\Expr\Assign) {
             if ($node->expr instanceof \PhpParser\Node\Expr\Cast\Unset_) {

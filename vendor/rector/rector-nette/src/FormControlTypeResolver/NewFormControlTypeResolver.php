@@ -31,15 +31,17 @@ final class NewFormControlTypeResolver implements \Rector\Nette\Contract\FormCon
     }
     /**
      * @required
+     * @param \Rector\Nette\NodeResolver\MethodNamesByInputNamesResolver $methodNamesByInputNamesResolver
      */
-    public function autowireNewFormControlTypeResolver(\Rector\Nette\NodeResolver\MethodNamesByInputNamesResolver $methodNamesByInputNamesResolver) : void
+    public function autowireNewFormControlTypeResolver($methodNamesByInputNamesResolver) : void
     {
         $this->methodNamesByInputNamesResolver = $methodNamesByInputNamesResolver;
     }
     /**
      * @return array<string, string>
+     * @param \PhpParser\Node $node
      */
-    public function resolve(\PhpParser\Node $node) : array
+    public function resolve($node) : array
     {
         if (!$node instanceof \PhpParser\Node\Expr\New_) {
             return [];

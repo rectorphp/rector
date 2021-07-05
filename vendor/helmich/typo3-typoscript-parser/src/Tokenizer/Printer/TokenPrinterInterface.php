@@ -16,5 +16,5 @@ interface TokenPrinterInterface
      * @param TokenInterface[] $tokens
      * @return string
      */
-    public function printTokenStream(array $tokens) : string;
+    public function printTokenStream($tokens) : string;
 }

@@ -40,8 +40,9 @@ class YamlDumper extends \RectorPrefix20210705\Symfony\Component\DependencyInjec
      * Dumps the service container as an YAML string.
      *
      * @return string A YAML string representing of the service container
+     * @param mixed[] $options
      */
-    public function dump(array $options = [])
+    public function dump($options = [])
     {
         if (!\class_exists(\RectorPrefix20210705\Symfony\Component\Yaml\Dumper::class)) {
             throw new \RectorPrefix20210705\Symfony\Component\DependencyInjection\Exception\LogicException('Unable to dump the container as the Symfony Yaml Component is not installed.');
@@ -142,7 +143,11 @@ class YamlDumper extends \RectorPrefix20210705\Symfony\Component\DependencyInjec
         }
         return $code;
     }
-    private function addServiceAlias(string $alias, \RectorPrefix20210705\Symfony\Component\DependencyInjection\Alias $id) : string
+    /**
+     * @param string $alias
+     * @param \Symfony\Component\DependencyInjection\Alias $id
+     */
+    private function addServiceAlias($alias, $id) : string
     {
         $deprecated = '';
         if ($id->isDeprecated()) {
@@ -266,7 +271,11 @@ class YamlDumper extends \RectorPrefix20210705\Symfony\Component\DependencyInjec
         }
         return $value;
     }
-    private function getServiceCall(string $id, \RectorPrefix20210705\Symfony\Component\DependencyInjection\Reference $reference = null) : string
+    /**
+     * @param string $id
+     * @param \Symfony\Component\DependencyInjection\Reference|null $reference
+     */
+    private function getServiceCall($id, $reference = null) : string
     {
         if (null !== $reference) {
             switch ($reference->getInvalidBehavior()) {
@@ -282,15 +291,25 @@ class YamlDumper extends \RectorPrefix20210705\Symfony\Component\DependencyInjec
         }
         return \sprintf('@%s', $id);
     }
-    private function getParameterCall(string $id) : string
+    /**
+     * @param string $id
+     */
+    private function getParameterCall($id) : string
     {
         return \sprintf('%%%s%%', $id);
     }
-    private function getExpressionCall(string $expression) : string
+    /**
+     * @param string $expression
+     */
+    private function getExpressionCall($expression) : string
     {
         return \sprintf('@=%s', $expression);
     }
-    private function prepareParameters(array $parameters, bool $escape = \true) : array
+    /**
+     * @param mixed[] $parameters
+     * @param bool $escape
+     */
+    private function prepareParameters($parameters, $escape = \true) : array
     {
         $filtered = [];
         foreach ($parameters as $key => $value) {
@@ -303,7 +322,10 @@ class YamlDumper extends \RectorPrefix20210705\Symfony\Component\DependencyInjec
         }
         return $escape ? $this->escape($filtered) : $filtered;
     }
-    private function escape(array $arguments) : array
+    /**
+     * @param mixed[] $arguments
+     */
+    private function escape($arguments) : array
     {
         $args = [];
         foreach ($arguments as $k => $v) {

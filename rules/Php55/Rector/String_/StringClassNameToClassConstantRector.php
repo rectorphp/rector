@@ -84,9 +84,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Scalar\String_::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param String_ $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$this->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::CLASSNAME_CONSTANT)) {
             return null;
@@ -125,11 +125,7 @@ CODE_SAMPLE
         }
         return $this->nodeNameResolver->isName($parentParent, 'is_a');
     }
-    /**
-     * @param string $classLikeName
-     * @param \PhpParser\Node\Scalar\String_ $string
-     */
-    private function shouldSkip($classLikeName, $string) : bool
+    private function shouldSkip(string $classLikeName, \PhpParser\Node\Scalar\String_ $string) : bool
     {
         if (!$this->classLikeExistenceChecker->doesClassLikeInsensitiveExists($classLikeName)) {
             return \true;

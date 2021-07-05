@@ -32,14 +32,20 @@ final class LazyCommand extends \RectorPrefix20210705\Symfony\Component\Console\
     {
         $this->getCommand()->ignoreValidationErrors();
     }
-    public function setApplication(\RectorPrefix20210705\Symfony\Component\Console\Application $application = null) : void
+    /**
+     * @param \Symfony\Component\Console\Application|null $application
+     */
+    public function setApplication($application = null) : void
     {
         if ($this->command instanceof parent) {
             $this->command->setApplication($application);
         }
         parent::setApplication($application);
     }
-    public function setHelperSet(\RectorPrefix20210705\Symfony\Component\Console\Helper\HelperSet $helperSet) : void
+    /**
+     * @param \Symfony\Component\Console\Helper\HelperSet $helperSet
+     */
+    public function setHelperSet($helperSet) : void
     {
         if ($this->command instanceof parent) {
             $this->command->setHelperSet($helperSet);
@@ -50,22 +56,28 @@ final class LazyCommand extends \RectorPrefix20210705\Symfony\Component\Console\
     {
         return $this->isEnabled ?? $this->getCommand()->isEnabled();
     }
-    public function run(\RectorPrefix20210705\Symfony\Component\Console\Input\InputInterface $input, \RectorPrefix20210705\Symfony\Component\Console\Output\OutputInterface $output) : int
+    /**
+     * @param \Symfony\Component\Console\Input\InputInterface $input
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     */
+    public function run($input, $output) : int
     {
         return $this->getCommand()->run($input, $output);
     }
     /**
      * @return $this
+     * @param callable $code
      */
-    public function setCode(callable $code)
+    public function setCode($code)
     {
         $this->getCommand()->setCode($code);
         return $this;
     }
     /**
      * @internal
+     * @param bool $mergeArgs
      */
-    public function mergeApplicationDefinition(bool $mergeArgs = \true) : void
+    public function mergeApplicationDefinition($mergeArgs = \true) : void
     {
         $this->getCommand()->mergeApplicationDefinition($mergeArgs);
     }
@@ -87,32 +99,40 @@ final class LazyCommand extends \RectorPrefix20210705\Symfony\Component\Console\
     }
     /**
      * @return $this
+     * @param string $name
+     * @param int|null $mode
+     * @param string $description
      */
-    public function addArgument(string $name, int $mode = null, string $description = '', $default = null)
+    public function addArgument($name, $mode = null, $description = '', $default = null)
     {
         $this->getCommand()->addArgument($name, $mode, $description, $default);
         return $this;
     }
     /**
      * @return $this
+     * @param string $name
+     * @param int|null $mode
+     * @param string $description
      */
-    public function addOption(string $name, $shortcut = null, int $mode = null, string $description = '', $default = null)
+    public function addOption($name, $shortcut = null, $mode = null, $description = '', $default = null)
     {
         $this->getCommand()->addOption($name, $shortcut, $mode, $description, $default);
         return $this;
     }
     /**
      * @return $this
+     * @param string $title
      */
-    public function setProcessTitle(string $title)
+    public function setProcessTitle($title)
     {
         $this->getCommand()->setProcessTitle($title);
         return $this;
     }
     /**
      * @return $this
+     * @param string $help
      */
-    public function setHelp(string $help)
+    public function setHelp($help)
     {
         $this->getCommand()->setHelp($help);
         return $this;
@@ -125,14 +145,18 @@ final class LazyCommand extends \RectorPrefix20210705\Symfony\Component\Console\
     {
         return $this->getCommand()->getProcessedHelp();
     }
-    public function getSynopsis(bool $short = \false) : string
+    /**
+     * @param bool $short
+     */
+    public function getSynopsis($short = \false) : string
     {
         return $this->getCommand()->getSynopsis($short);
     }
     /**
      * @return $this
+     * @param string $usage
      */
-    public function addUsage(string $usage)
+    public function addUsage($usage)
     {
         $this->getCommand()->addUsage($usage);
         return $this;
@@ -143,8 +167,9 @@ final class LazyCommand extends \RectorPrefix20210705\Symfony\Component\Console\
     }
     /**
      * @return mixed
+     * @param string $name
      */
-    public function getHelper(string $name)
+    public function getHelper($name)
     {
         return $this->getCommand()->getHelper($name);
     }

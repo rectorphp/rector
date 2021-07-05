@@ -59,10 +59,7 @@ CODE_SAMPLE
         }
         return $this->generateNewInstances($node);
     }
-    /**
-     * @param \PhpParser\Node\Expr\New_ $new
-     */
-    private function shouldSkip($new) : bool
+    private function shouldSkip(\PhpParser\Node\Expr\New_ $new) : bool
     {
         if (!$new->class instanceof \PhpParser\Node\Name) {
             return \true;

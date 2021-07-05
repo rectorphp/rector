@@ -29,14 +29,16 @@ interface ResourceCheckerInterface
      * resource or not.
      *
      * @return bool True if the ResourceChecker can handle this resource type, false if not
+     * @param \Symfony\Component\Config\Resource\ResourceInterface $metadata
      */
-    public function supports(\RectorPrefix20210705\Symfony\Component\Config\Resource\ResourceInterface $metadata);
+    public function supports($metadata);
     /**
      * Validates the resource.
      *
      * @param int $timestamp The timestamp at which the cache associated with this resource was created
      *
      * @return bool True if the resource has not changed since the given timestamp, false otherwise
+     * @param \Symfony\Component\Config\Resource\ResourceInterface $resource
      */
-    public function isFresh(\RectorPrefix20210705\Symfony\Component\Config\Resource\ResourceInterface $resource, int $timestamp);
+    public function isFresh($resource, $timestamp);
 }

@@ -22,15 +22,19 @@ final class RequestValueResolver implements \RectorPrefix20210705\Symfony\Compon
 {
     /**
      * {@inheritdoc}
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata $argument
      */
-    public function supports(\RectorPrefix20210705\Symfony\Component\HttpFoundation\Request $request, \RectorPrefix20210705\Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata $argument) : bool
+    public function supports($request, $argument) : bool
     {
         return \RectorPrefix20210705\Symfony\Component\HttpFoundation\Request::class === $argument->getType() || \is_subclass_of($argument->getType(), \RectorPrefix20210705\Symfony\Component\HttpFoundation\Request::class);
     }
     /**
      * {@inheritdoc}
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata $argument
      */
-    public function resolve(\RectorPrefix20210705\Symfony\Component\HttpFoundation\Request $request, \RectorPrefix20210705\Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata $argument) : iterable
+    public function resolve($request, $argument) : iterable
     {
         (yield $request);
     }

@@ -12,7 +12,10 @@ final class HostnameConditionMatcher implements \Ssch\TYPO3Rector\Contract\FileP
      * @var string
      */
     private const TYPE = 'hostname';
-    public function change(string $condition) : ?string
+    /**
+     * @param string $condition
+     */
+    public function change($condition) : ?string
     {
         \preg_match('#' . self::TYPE . self::ZERO_ONE_OR_MORE_WHITESPACES . '=' . self::ZERO_ONE_OR_MORE_WHITESPACES . '(.*)#', $condition, $matches);
         if (!\is_array($matches)) {
@@ -29,7 +32,10 @@ final class HostnameConditionMatcher implements \Ssch\TYPO3Rector\Contract\FileP
         }
         return \implode(' || ', $newConditions);
     }
-    public function shouldApply(string $condition) : bool
+    /**
+     * @param string $condition
+     */
+    public function shouldApply($condition) : bool
     {
         if (\RectorPrefix20210705\Nette\Utils\Strings::contains($condition, self::CONTAINS_CONSTANT)) {
             return \false;

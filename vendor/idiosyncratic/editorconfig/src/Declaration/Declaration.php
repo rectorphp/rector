@@ -48,14 +48,18 @@ abstract class Declaration
     {
         return \sprintf('%s=%s', $this->getName(), $this->getStringValue());
     }
-    protected function setName(string $name) : void
+    /**
+     * @param string $name
+     */
+    protected function setName($name) : void
     {
         $this->name = \strtolower($name);
     }
     /**
      * @return mixed
+     * @param string $value
      */
-    protected function getTypedValue(string $value)
+    protected function getTypedValue($value)
     {
         if (\in_array($value, ['true', 'false']) === \true) {
             return $value === 'true';
@@ -65,7 +69,10 @@ abstract class Declaration
         }
         return $value;
     }
-    protected final function setStringValue(string $value) : void
+    /**
+     * @param string $value
+     */
+    protected final function setStringValue($value) : void
     {
         $this->stringValue = $value;
     }

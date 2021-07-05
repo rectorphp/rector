@@ -34,9 +34,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Expr\AssignRef::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param AssignRef $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$node->expr instanceof \PhpParser\Node\Expr\New_) {
             return null;

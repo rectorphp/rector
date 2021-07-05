@@ -20,6 +20,7 @@ interface ConfigBuilderGeneratorInterface
 {
     /**
      * @return \Closure that will return the root config class
+     * @param \Symfony\Component\Config\Definition\ConfigurationInterface $configuration
      */
-    public function build(\RectorPrefix20210705\Symfony\Component\Config\Definition\ConfigurationInterface $configuration) : \Closure;
+    public function build($configuration) : \Closure;
 }

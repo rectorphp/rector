@@ -15,10 +15,10 @@ interface TokenizerInterface
      * @param string $inputString
      * @return TokenInterface[]
      */
-    public function tokenizeString(string $inputString) : array;
+    public function tokenizeString($inputString) : array;
     /**
      * @param string $inputStream
      * @return TokenInterface[]
      */
-    public function tokenizeStream(string $inputStream) : array;
+    public function tokenizeStream($inputStream) : array;
 }

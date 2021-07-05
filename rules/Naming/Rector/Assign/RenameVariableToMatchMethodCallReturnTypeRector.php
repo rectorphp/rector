@@ -117,9 +117,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Expr\Assign::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param Assign $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $variableAndCallAssign = $this->variableAndCallAssignMatcher->match($node);
         if (!$variableAndCallAssign instanceof \Rector\Naming\ValueObject\VariableAndCallAssign) {
@@ -172,11 +172,7 @@ CODE_SAMPLE
         }
         return \false;
     }
-    /**
-     * @param \Rector\Naming\ValueObject\VariableAndCallAssign $variableAndCallAssign
-     * @param string $expectedName
-     */
-    private function shouldSkip($variableAndCallAssign, $expectedName) : bool
+    private function shouldSkip(\Rector\Naming\ValueObject\VariableAndCallAssign $variableAndCallAssign, string $expectedName) : bool
     {
         if ($this->namingConventionAnalyzer->isCallMatchingVariableName($variableAndCallAssign->getCall(), $variableAndCallAssign->getVariableName(), $expectedName)) {
             return \true;

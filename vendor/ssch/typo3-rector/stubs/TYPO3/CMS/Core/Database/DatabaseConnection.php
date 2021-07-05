@@ -31,7 +31,7 @@ class DatabaseConnection
      *
      * @return bool|\mysqli_result|object MySQLi result object / DBAL object
      */
-    public function exec_INSERTmultipleRows($table, array $fields, array $rows, $no_quote_fields = \false)
+    public function exec_INSERTmultipleRows($table, $fields, $rows, $no_quote_fields = \false)
     {
         return \false;
     }
@@ -200,7 +200,7 @@ class DatabaseConnection
      *
      * @return string|NULL Full SQL query for INSERT, NULL if $rows is empty
      */
-    public function INSERTmultipleRows($table, array $fields, array $rows, $no_quote_fields = \false)
+    public function INSERTmultipleRows($table, $fields, $rows, $no_quote_fields = \false)
     {
         return null;
     }
@@ -345,7 +345,7 @@ class DatabaseConnection
      *
      * @return PreparedStatement Prepared statement
      */
-    public function prepare_SELECTquery($select_fields, $from_table, $where_clause, $groupBy = '', $orderBy = '', $limit = '', array $input_parameters = [])
+    public function prepare_SELECTquery($select_fields, $from_table, $where_clause, $groupBy = '', $orderBy = '', $limit = '', $input_parameters = [])
     {
         return new \RectorPrefix20210705\TYPO3\CMS\Core\Database\PreparedStatement();
     }
@@ -357,7 +357,7 @@ class DatabaseConnection
      *
      * @return PreparedStatement Prepared statement
      */
-    public function prepare_SELECTqueryArray(array $queryParts, array $input_parameters = [])
+    public function prepare_SELECTqueryArray($queryParts, $input_parameters = [])
     {
         return new \RectorPrefix20210705\TYPO3\CMS\Core\Database\PreparedStatement();
     }

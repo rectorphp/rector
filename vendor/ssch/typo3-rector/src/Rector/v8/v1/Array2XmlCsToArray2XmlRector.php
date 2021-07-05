@@ -28,9 +28,9 @@ final class Array2XmlCsToArray2XmlRector extends \Rector\Core\Rector\AbstractRec
         return [\PhpParser\Node\Expr\StaticCall::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param StaticCall $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Utility\\GeneralUtility'))) {
             return null;

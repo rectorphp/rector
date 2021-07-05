@@ -11,8 +11,9 @@ class Helpers
 {
     /**
      * Executes a callback and returns the captured output as a string.
+     * @param callable $func
      */
-    public static function capture(callable $func) : string
+    public static function capture($func) : string
     {
         \ob_start(function () {
         });
@@ -47,8 +48,9 @@ class Helpers
     /**
      * Looks for a string from possibilities that is most similar to value, but not the same (for 8-bit encoding).
      * @param  string[]  $possibilities
+     * @param string $value
      */
-    public static function getSuggestion(array $possibilities, string $value) : ?string
+    public static function getSuggestion($possibilities, $value) : ?string
     {
         $best = null;
         $min = (\strlen($value) / 4 + 1) * 10 + 0.1;

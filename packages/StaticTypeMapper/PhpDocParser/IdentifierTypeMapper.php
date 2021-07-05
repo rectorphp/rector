@@ -48,9 +48,11 @@ final class IdentifierTypeMapper implements \Rector\StaticTypeMapper\Contract\Ph
         return \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode::class;
     }
     /**
-     * @param IdentifierTypeNode $typeNode
+     * @param \PHPStan\PhpDocParser\Ast\Type\TypeNode $typeNode
+     * @param \PhpParser\Node $node
+     * @param \PHPStan\Analyser\NameScope $nameScope
      */
-    public function mapToPHPStanType(\PHPStan\PhpDocParser\Ast\Type\TypeNode $typeNode, \PhpParser\Node $node, \PHPStan\Analyser\NameScope $nameScope) : \PHPStan\Type\Type
+    public function mapToPHPStanType($typeNode, $node, $nameScope) : \PHPStan\Type\Type
     {
         $type = $this->scalarStringToTypeMapper->mapScalarStringToType($typeNode->name);
         if (!$type instanceof \PHPStan\Type\MixedType) {
@@ -80,8 +82,9 @@ final class IdentifierTypeMapper implements \Rector\StaticTypeMapper\Contract\Ph
     }
     /**
      * @return \PHPStan\Type\MixedType|\Rector\StaticTypeMapper\ValueObject\Type\SelfObjectType
+     * @param \PhpParser\Node $node
      */
-    private function mapSelf(\PhpParser\Node $node)
+    private function mapSelf($node)
     {
         /** @var string|null $className */
         $className = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);
@@ -93,8 +96,9 @@ final class IdentifierTypeMapper implements \Rector\StaticTypeMapper\Contract\Ph
     }
     /**
      * @return \Rector\StaticTypeMapper\ValueObject\Type\ParentStaticType|\PHPStan\Type\MixedType
+     * @param \PhpParser\Node $node
      */
-    private function mapParent(\PhpParser\Node $node)
+    private function mapParent($node)
     {
         $parentClassName = $this->parentClassScopeResolver->resolveParentClassName($node);
         if ($parentClassName !== null) {
@@ -104,8 +108,9 @@ final class IdentifierTypeMapper implements \Rector\StaticTypeMapper\Contract\Ph
     }
     /**
      * @return \PHPStan\Type\MixedType|\PHPStan\Type\StaticType
+     * @param \PhpParser\Node $node
      */
-    private function mapStatic(\PhpParser\Node $node)
+    private function mapStatic($node)
     {
         /** @var string|null $className */
         $className = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);

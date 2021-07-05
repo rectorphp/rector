@@ -41,9 +41,9 @@ final class DatabaseConnectionToDbalRector extends \Rector\Core\Rector\AbstractR
         return [\PhpParser\Node\Expr\MethodCall::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param MethodCall $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -90,10 +90,7 @@ $connectionPool = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CM
 CODE_SAMPLE
 )]);
     }
-    /**
-     * @param \PhpParser\Node\Expr\MethodCall $node
-     */
-    private function shouldSkip($node) : bool
+    private function shouldSkip(\PhpParser\Node\Expr\MethodCall $node) : bool
     {
         return !$this->typo3NodeResolver->isAnyMethodCallOnGlobals($node, \Ssch\TYPO3Rector\Helper\Typo3NodeResolver::TYPO3_DB);
     }

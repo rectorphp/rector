@@ -41,7 +41,7 @@ interface ResponseInterface
      * @throws ClientExceptionInterface      On a 4xx when $throw is true
      * @throws ServerExceptionInterface      On a 5xx when $throw is true
      */
-    public function getHeaders(bool $throw = \true) : array;
+    public function getHeaders($throw = \true) : array;
     /**
      * Gets the response body as a string.
      *
@@ -52,7 +52,7 @@ interface ResponseInterface
      * @throws ClientExceptionInterface      On a 4xx when $throw is true
      * @throws ServerExceptionInterface      On a 5xx when $throw is true
      */
-    public function getContent(bool $throw = \true) : string;
+    public function getContent($throw = \true) : string;
     /**
      * Gets the response body decoded as array, typically from a JSON payload.
      *
@@ -64,7 +64,7 @@ interface ResponseInterface
      * @throws ClientExceptionInterface      On a 4xx when $throw is true
      * @throws ServerExceptionInterface      On a 5xx when $throw is true
      */
-    public function toArray(bool $throw = \true) : array;
+    public function toArray($throw = \true) : array;
     /**
      * Closes the response stream and all related buffers.
      *
@@ -97,6 +97,7 @@ interface ResponseInterface
      *
      * @return mixed An array of all available info, or one of them when $type is
      *               provided, or null when an unsupported type is requested
+     * @param string|null $type
      */
-    public function getInfo(string $type = null);
+    public function getInfo($type = null);
 }

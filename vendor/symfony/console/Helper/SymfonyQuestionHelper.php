@@ -25,8 +25,10 @@ class SymfonyQuestionHelper extends \RectorPrefix20210705\Symfony\Component\Cons
 {
     /**
      * {@inheritdoc}
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     * @param \Symfony\Component\Console\Question\Question $question
      */
-    protected function writePrompt(\RectorPrefix20210705\Symfony\Component\Console\Output\OutputInterface $output, \RectorPrefix20210705\Symfony\Component\Console\Question\Question $question)
+    protected function writePrompt($output, $question)
     {
         $text = \RectorPrefix20210705\Symfony\Component\Console\Formatter\OutputFormatter::escapeTrailingBackslash($question->getQuestion());
         $default = $question->getDefault();
@@ -65,8 +67,10 @@ class SymfonyQuestionHelper extends \RectorPrefix20210705\Symfony\Component\Cons
     }
     /**
      * {@inheritdoc}
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     * @param \Exception $error
      */
-    protected function writeError(\RectorPrefix20210705\Symfony\Component\Console\Output\OutputInterface $output, \Exception $error)
+    protected function writeError($output, $error)
     {
         if ($output instanceof \RectorPrefix20210705\Symfony\Component\Console\Style\SymfonyStyle) {
             $output->newLine();

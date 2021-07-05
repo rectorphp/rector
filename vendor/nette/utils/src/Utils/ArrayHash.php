@@ -16,8 +16,10 @@ class ArrayHash extends \stdClass implements \ArrayAccess, \Countable, \Iterator
     /**
      * Transforms array to ArrayHash.
      * @return static
+     * @param mixed[] $array
+     * @param bool $recursive
      */
-    public static function from(array $array, bool $recursive = \true)
+    public static function from($array, $recursive = \true)
     {
         $obj = new static();
         foreach ($array as $key => $value) {

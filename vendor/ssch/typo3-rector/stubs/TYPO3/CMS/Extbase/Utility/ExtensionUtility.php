@@ -30,14 +30,18 @@ class ExtensionUtility
     }
     /**
      * @return void
+     * @param mixed[] $controllerActions
+     * @param mixed[] $moduleConfiguration
      */
-    public static function registerModule($extensionName, $mainModuleName = '', $subModuleName = '', $position = '', array $controllerActions = [], array $moduleConfiguration = [])
+    public static function registerModule($extensionName, $mainModuleName = '', $subModuleName = '', $position = '', $controllerActions = [], $moduleConfiguration = [])
     {
     }
     /**
      * @return void
+     * @param mixed[] $controllerActions
+     * @param mixed[] $nonCacheableControllerActions
      */
-    public static function configurePlugin($extensionName, $pluginName, array $controllerActions, array $nonCacheableControllerActions = [], $pluginType = self::PLUGIN_TYPE_PLUGIN)
+    public static function configurePlugin($extensionName, $pluginName, $controllerActions, $nonCacheableControllerActions = [], $pluginType = self::PLUGIN_TYPE_PLUGIN)
     {
     }
 }

@@ -28,8 +28,9 @@ final class AssignDimFetchFormTypeResolver implements \Rector\Nette\Contract\For
     }
     /**
      * @return array<string, string>
+     * @param \PhpParser\Node $node
      */
-    public function resolve(\PhpParser\Node $node) : array
+    public function resolve($node) : array
     {
         if (!$node instanceof \PhpParser\Node\Expr\ArrayDimFetch) {
             return [];

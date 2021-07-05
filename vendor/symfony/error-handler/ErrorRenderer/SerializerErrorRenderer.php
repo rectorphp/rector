@@ -46,8 +46,9 @@ class SerializerErrorRenderer implements \RectorPrefix20210705\Symfony\Component
     }
     /**
      * {@inheritdoc}
+     * @param \Throwable $exception
      */
-    public function render(\Throwable $exception) : \RectorPrefix20210705\Symfony\Component\ErrorHandler\Exception\FlattenException
+    public function render($exception) : \RectorPrefix20210705\Symfony\Component\ErrorHandler\Exception\FlattenException
     {
         $headers = [];
         $debug = \is_bool($this->debug) ? $this->debug : ($this->debug)($exception);
@@ -64,7 +65,10 @@ class SerializerErrorRenderer implements \RectorPrefix20210705\Symfony\Component
             return $this->fallbackErrorRenderer->render($exception);
         }
     }
-    public static function getPreferredFormat(\RectorPrefix20210705\Symfony\Component\HttpFoundation\RequestStack $requestStack) : \Closure
+    /**
+     * @param \Symfony\Component\HttpFoundation\RequestStack $requestStack
+     */
+    public static function getPreferredFormat($requestStack) : \Closure
     {
         return static function () use($requestStack) {
             if (!($request = $requestStack->getCurrentRequest())) {

@@ -70,7 +70,7 @@ CODE_SAMPLE
     /**
      * @param MethodCall|StaticCall|ClassMethod $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         foreach ($this->methodCallRenames as $methodCallRename) {
             $implementsInterface = $this->classManipulator->hasParentMethodOrInterface($methodCallRename->getOldObjectType(), $methodCallRename->getOldMethod());

@@ -25,7 +25,10 @@ class Bridge
         $blueScreen->addAction([self::class, 'renderMemberAccessException']);
         $blueScreen->addPanel([self::class, 'renderNeonError']);
     }
-    public static function renderLatteError(?\Throwable $e) : ?array
+    /**
+     * @param \Throwable|null $e
+     */
+    public static function renderLatteError($e) : ?array
     {
         if ($e instanceof \RectorPrefix20210705\Latte\CompileException && $e->sourceName) {
             return ['tab' => 'Template', 'panel' => (\preg_match('#\\n|\\?#', $e->sourceName) ? '' : '<p>' . (@\is_file($e->sourceName) ? '<b>File:</b> ' . \RectorPrefix20210705\Tracy\Helpers::editorLink($e->sourceName, $e->sourceLine) : '<b>' . \htmlspecialchars($e->sourceName . ($e->sourceLine ? ':' . $e->sourceLine : '')) . '</b>') . '</p>') . '<pre class=code><div>' . \RectorPrefix20210705\Tracy\BlueScreen::highlightLine(\htmlspecialchars($e->sourceCode, \ENT_IGNORE, 'UTF-8'), $e->sourceLine) . '</div></pre>'];
@@ -40,14 +43,20 @@ class Bridge
         }
         return null;
     }
-    public static function renderLatteUnknownMacro(?\Throwable $e) : ?array
+    /**
+     * @param \Throwable|null $e
+     */
+    public static function renderLatteUnknownMacro($e) : ?array
     {
         if ($e instanceof \RectorPrefix20210705\Latte\CompileException && $e->sourceName && @\is_file($e->sourceName) && (\preg_match('#Unknown macro (\\{\\w+)\\}, did you mean (\\{\\w+)\\}\\?#A', $e->getMessage(), $m) || \preg_match('#Unknown attribute (n:\\w+), did you mean (n:\\w+)\\?#A', $e->getMessage(), $m))) {
             return ['link' => \RectorPrefix20210705\Tracy\Helpers::editorUri($e->sourceName, $e->sourceLine, 'fix', $m[1], $m[2]), 'label' => 'fix it'];
         }
         return null;
     }
-    public static function renderMemberAccessException(?\Throwable $e) : ?array
+    /**
+     * @param \Throwable|null $e
+     */
+    public static function renderMemberAccessException($e) : ?array
     {
         if (!$e instanceof \RectorPrefix20210705\Nette\MemberAccessException && !$e instanceof \LogicException) {
             return null;
@@ -61,14 +70,21 @@ class Bridge
         }
         return null;
     }
-    public static function renderNeonError(?\Throwable $e) : ?array
+    /**
+     * @param \Throwable|null $e
+     */
+    public static function renderNeonError($e) : ?array
     {
         if ($e instanceof \RectorPrefix20210705\Nette\Neon\Exception && \preg_match('#line (\\d+)#', $e->getMessage(), $m) && ($trace = \RectorPrefix20210705\Tracy\Helpers::findTrace($e->getTrace(), [\RectorPrefix20210705\Nette\Neon\Decoder::class, 'decode']))) {
             return ['tab' => 'NEON', 'panel' => ($trace2 = \RectorPrefix20210705\Tracy\Helpers::findTrace($e->getTrace(), [\RectorPrefix20210705\Nette\DI\Config\Adapters\NeonAdapter::class, 'load'])) ? '<p><b>File:</b> ' . \RectorPrefix20210705\Tracy\Helpers::editorLink($trace2['args'][0], (int) $m[1]) . '</p>' . self::highlightNeon(\file_get_contents($trace2['args'][0]), (int) $m[1]) : self::highlightNeon($trace['args'][0], (int) $m[1])];
         }
         return null;
     }
-    private static function highlightNeon(string $code, int $line) : string
+    /**
+     * @param string $code
+     * @param int $line
+     */
+    private static function highlightNeon($code, $line) : string
     {
         $code = \htmlspecialchars($code, \ENT_IGNORE, 'UTF-8');
         $code = \str_replace(' ', "<span class='tracy-dump-whitespace'>·</span>", $code);

@@ -16,20 +16,20 @@ interface Visitor
      * @param Statement[] $statements
      * @return void
      */
-    public function enterTree(array $statements) : void;
+    public function enterTree($statements) : void;
     /**
      * @param Statement $statement
      * @return void
      */
-    public function enterNode(\RectorPrefix20210705\Helmich\TypoScriptParser\Parser\AST\Statement $statement) : void;
+    public function enterNode($statement) : void;
     /**
      * @param Statement $statement
      * @return void
      */
-    public function exitNode(\RectorPrefix20210705\Helmich\TypoScriptParser\Parser\AST\Statement $statement) : void;
+    public function exitNode($statement) : void;
     /**
      * @param Statement[] $statements
      * @return void
      */
-    public function exitTree(array $statements) : void;
+    public function exitTree($statements) : void;
 }

@@ -37,9 +37,9 @@ final class RenamePropertyRector extends \Rector\Core\Rector\AbstractRector impl
         return [\PhpParser\Node\Expr\PropertyFetch::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param PropertyFetch $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         foreach ($this->renamedProperties as $renamedProperty) {
             if (!$this->isObjectType($node->var, $renamedProperty->getObjectType())) {

@@ -40,8 +40,9 @@ class ConsoleLogger extends \RectorPrefix20210705\Psr\Log\AbstractLogger
      * {@inheritdoc}
      *
      * @return void
+     * @param mixed[] $context
      */
-    public function log($level, $message, array $context = [])
+    public function log($level, $message, $context = [])
     {
         if (!isset($this->verbosityLevelMap[$level])) {
             throw new \RectorPrefix20210705\Psr\Log\InvalidArgumentException(\sprintf('The log level "%s" does not exist.', $level));
@@ -73,8 +74,10 @@ class ConsoleLogger extends \RectorPrefix20210705\Psr\Log\AbstractLogger
      * Interpolates context values into the message placeholders.
      *
      * @author PHP Framework Interoperability Group
+     * @param string $message
+     * @param mixed[] $context
      */
-    private function interpolate(string $message, array $context) : string
+    private function interpolate($message, $context) : string
     {
         if (\false === \strpos($message, '{')) {
             return $message;

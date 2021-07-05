@@ -46,7 +46,10 @@ class TreeBuilder implements \RectorPrefix20210705\Symfony\Component\Config\Defi
         }
         return $this->tree = $this->root->getNode(\true);
     }
-    public function setPathSeparator(string $separator)
+    /**
+     * @param string $separator
+     */
+    public function setPathSeparator($separator)
     {
         // unset last built as changing path separator changes all nodes
         $this->tree = null;

@@ -16,7 +16,10 @@ final class GlobalVarConditionMatcher extends \Ssch\TYPO3Rector\FileProcessor\Ty
      * @var string
      */
     private const VALUE = 'value';
-    public function change(string $condition) : ?string
+    /**
+     * @param string $condition
+     */
+    public function change($condition) : ?string
     {
         \preg_match('#' . self::TYPE . '\\s*=\\s*(?<subCondition>.*)#', $condition, $subConditions);
         if (!\is_string($subConditions['subCondition'])) {
@@ -73,11 +76,19 @@ final class GlobalVarConditionMatcher extends \Ssch\TYPO3Rector\FileProcessor\Ty
         }
         return \implode(' || ', $newConditions);
     }
-    public function shouldApply(string $condition) : bool
+    /**
+     * @param string $condition
+     */
+    public function shouldApply($condition) : bool
     {
         return \RectorPrefix20210705\Nette\Utils\Strings::startsWith($condition, self::TYPE);
     }
-    private function refactorGetPost(string $property, string $operator, string $value) : string
+    /**
+     * @param string $property
+     * @param string $operator
+     * @param string $value
+     */
+    private function refactorGetPost($property, $operator, $value) : string
     {
         if ('L' === $property) {
             return \sprintf('siteLanguage("languageId") %s "%s"', self::OPERATOR_MAPPING[$operator], $value);
@@ -91,7 +102,12 @@ final class GlobalVarConditionMatcher extends \Ssch\TYPO3Rector\FileProcessor\Ty
         }
         return \sprintf('traverse(request.getQueryParams(), \'%1$s\') %2$s %3$s || traverse(request.getParsedBody(), \'%1$s\') %2$s %3$s', \implode('/', $parameters), self::OPERATOR_MAPPING[$operator], $value);
     }
-    private function createBackendUserCondition(string $property, string $operator, string $value) : string
+    /**
+     * @param string $property
+     * @param string $operator
+     * @param string $value
+     */
+    private function createBackendUserCondition($property, $operator, $value) : string
     {
         $delimiter = \RectorPrefix20210705\Nette\Utils\Strings::contains($property, ':') ? ':' : '|';
         [, $property] = \Ssch\TYPO3Rector\Helper\ArrayUtility::trimExplode($delimiter, $property, \true, 2);

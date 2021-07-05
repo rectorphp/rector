@@ -11,8 +11,9 @@ class RequestFactory
      * @return void
      * @param string $uri
      * @param string $method
+     * @param mixed[] $options
      */
-    public function request($uri, $method = 'GET', array $options = [])
+    public function request($uri, $method = 'GET', $options = [])
     {
     }
 }

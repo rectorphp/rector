@@ -18,7 +18,7 @@ class AggregatingVisitor implements \RectorPrefix20210705\Helmich\TypoScriptPars
      * @param Visitor $visitor
      * @return void
      */
-    public function addVisitor(\RectorPrefix20210705\Helmich\TypoScriptParser\Parser\Traverser\Visitor $visitor) : void
+    public function addVisitor($visitor) : void
     {
         $this->visitors[\spl_object_hash($visitor)] = $visitor;
     }
@@ -26,7 +26,7 @@ class AggregatingVisitor implements \RectorPrefix20210705\Helmich\TypoScriptPars
      * @param Statement[] $statements
      * @return void
      */
-    public function enterTree(array $statements) : void
+    public function enterTree($statements) : void
     {
         foreach ($this->visitors as $visitor) {
             $visitor->enterTree($statements);
@@ -36,7 +36,7 @@ class AggregatingVisitor implements \RectorPrefix20210705\Helmich\TypoScriptPars
      * @param Statement $statement
      * @return void
      */
-    public function enterNode(\RectorPrefix20210705\Helmich\TypoScriptParser\Parser\AST\Statement $statement) : void
+    public function enterNode($statement) : void
     {
         foreach ($this->visitors as $visitor) {
             $visitor->enterNode($statement);
@@ -46,7 +46,7 @@ class AggregatingVisitor implements \RectorPrefix20210705\Helmich\TypoScriptPars
      * @param Statement $statement
      * @return void
      */
-    public function exitNode(\RectorPrefix20210705\Helmich\TypoScriptParser\Parser\AST\Statement $statement) : void
+    public function exitNode($statement) : void
     {
         foreach ($this->visitors as $visitor) {
             $visitor->exitNode($statement);
@@ -56,7 +56,7 @@ class AggregatingVisitor implements \RectorPrefix20210705\Helmich\TypoScriptPars
      * @param Statement[] $statements
      * @return void
      */
-    public function exitTree(array $statements) : void
+    public function exitTree($statements) : void
     {
         foreach ($this->visitors as $visitor) {
             $visitor->exitTree($statements);

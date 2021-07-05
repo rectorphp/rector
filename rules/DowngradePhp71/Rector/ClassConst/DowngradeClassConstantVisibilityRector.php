@@ -43,9 +43,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Stmt\ClassConst::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param ClassConst $node
      */
-    public function refactor($node) : \PhpParser\Node\Stmt\ClassConst
+    public function refactor(\PhpParser\Node $node) : \PhpParser\Node\Stmt\ClassConst
     {
         $this->visibilityManipulator->removeVisibility($node);
         return $node;

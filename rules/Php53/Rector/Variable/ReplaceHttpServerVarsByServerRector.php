@@ -30,9 +30,9 @@ final class ReplaceHttpServerVarsByServerRector extends \Rector\Core\Rector\Abst
         return [\PhpParser\Node\Expr\Variable::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param Variable $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         foreach (self::VARIABLE_RENAME_MAP as $oldName => $newName) {
             if (!$this->isName($node, $oldName)) {

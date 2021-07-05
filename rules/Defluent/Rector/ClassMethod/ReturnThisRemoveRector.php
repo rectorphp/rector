@@ -67,9 +67,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Stmt\ClassMethod::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param ClassMethod $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $returnThis = $this->matchSingleReturnThis($node);
         if (!$returnThis instanceof \PhpParser\Node\Stmt\Return_) {
@@ -114,11 +114,7 @@ CODE_SAMPLE
         }
         return $return;
     }
-    /**
-     * @param \PhpParser\Node\Stmt\Return_ $return
-     * @param \PhpParser\Node\Stmt\ClassMethod $classMethod
-     */
-    private function shouldSkip($return, $classMethod) : bool
+    private function shouldSkip(\PhpParser\Node\Stmt\Return_ $return, \PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
     {
         if ($this->parentClassMethodTypeOverrideGuard->hasParentMethodOutsideVendor($classMethod)) {
             return \true;

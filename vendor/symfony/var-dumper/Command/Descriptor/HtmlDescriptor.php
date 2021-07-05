@@ -28,7 +28,13 @@ class HtmlDescriptor implements \RectorPrefix20210705\Symfony\Component\VarDumpe
     {
         $this->dumper = $dumper;
     }
-    public function describe(\RectorPrefix20210705\Symfony\Component\Console\Output\OutputInterface $output, \RectorPrefix20210705\Symfony\Component\VarDumper\Cloner\Data $data, array $context, int $clientId) : void
+    /**
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     * @param \Symfony\Component\VarDumper\Cloner\Data $data
+     * @param mixed[] $context
+     * @param int $clientId
+     */
+    public function describe($output, $data, $context, $clientId) : void
     {
         if (!$this->initialized) {
             $styles = \file_get_contents(__DIR__ . '/../../Resources/css/htmlDescriptor.css');
@@ -80,11 +86,18 @@ class HtmlDescriptor implements \RectorPrefix20210705\Symfony\Component\VarDumpe
 HTML
 );
     }
-    private function extractDate(array $context, string $format = 'r') : string
+    /**
+     * @param mixed[] $context
+     * @param string $format
+     */
+    private function extractDate($context, $format = 'r') : string
     {
         return \date($format, (int) $context['timestamp']);
     }
-    private function renderTags(array $tags) : string
+    /**
+     * @param mixed[] $tags
+     */
+    private function renderTags($tags) : string
     {
         if (!$tags) {
             return '';

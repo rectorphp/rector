@@ -7,5 +7,8 @@ interface TemplateResolverInterface
 {
     // public function getType(): string;
     public function provide() : string;
-    public function supports(string $type) : bool;
+    /**
+     * @param string $type
+     */
+    public function supports($type) : bool;
 }

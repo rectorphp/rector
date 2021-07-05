@@ -22,7 +22,7 @@ class MatchNoneConstraint implements \RectorPrefix20210705\Composer\Semver\Const
      *
      * @return bool
      */
-    public function matches(\RectorPrefix20210705\Composer\Semver\Constraint\ConstraintInterface $provider)
+    public function matches($provider)
     {
         return \false;
     }

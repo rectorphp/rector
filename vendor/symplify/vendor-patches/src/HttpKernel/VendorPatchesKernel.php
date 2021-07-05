@@ -10,7 +10,10 @@ use RectorPrefix20210705\Symplify\SymplifyKernel\Bundle\SymplifyKernelBundle;
 use RectorPrefix20210705\Symplify\SymplifyKernel\HttpKernel\AbstractSymplifyKernel;
 final class VendorPatchesKernel extends \RectorPrefix20210705\Symplify\SymplifyKernel\HttpKernel\AbstractSymplifyKernel
 {
-    public function registerContainerConfiguration(\RectorPrefix20210705\Symfony\Component\Config\Loader\LoaderInterface $loader) : void
+    /**
+     * @param \Symfony\Component\Config\Loader\LoaderInterface $loader
+     */
+    public function registerContainerConfiguration($loader) : void
     {
         $loader->load(__DIR__ . '/../../config/config.php');
     }

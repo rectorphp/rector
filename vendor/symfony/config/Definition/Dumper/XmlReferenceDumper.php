@@ -24,11 +24,19 @@ use RectorPrefix20210705\Symfony\Component\Config\Definition\PrototypedArrayNode
 class XmlReferenceDumper
 {
     private $reference;
-    public function dump(\RectorPrefix20210705\Symfony\Component\Config\Definition\ConfigurationInterface $configuration, string $namespace = null)
+    /**
+     * @param \Symfony\Component\Config\Definition\ConfigurationInterface $configuration
+     * @param string|null $namespace
+     */
+    public function dump($configuration, $namespace = null)
     {
         return $this->dumpNode($configuration->getConfigTreeBuilder()->buildTree(), $namespace);
     }
-    public function dumpNode(\RectorPrefix20210705\Symfony\Component\Config\Definition\NodeInterface $node, string $namespace = null)
+    /**
+     * @param \Symfony\Component\Config\Definition\NodeInterface $node
+     * @param string|null $namespace
+     */
+    public function dumpNode($node, $namespace = null)
     {
         $this->reference = '';
         $this->writeNode($node, 0, \true, $namespace);
@@ -36,7 +44,13 @@ class XmlReferenceDumper
         $this->reference = null;
         return $ref;
     }
-    private function writeNode(\RectorPrefix20210705\Symfony\Component\Config\Definition\NodeInterface $node, int $depth = 0, bool $root = \false, string $namespace = null)
+    /**
+     * @param \Symfony\Component\Config\Definition\NodeInterface $node
+     * @param int $depth
+     * @param bool $root
+     * @param string|null $namespace
+     */
+    private function writeNode($node, $depth = 0, $root = \false, $namespace = null)
     {
         $rootName = $root ? 'config' : $node->getName();
         $rootNamespace = $namespace ?: ($root ? 'http://example.org/schema/dic/' . $node->getName() : null);
@@ -209,8 +223,10 @@ class XmlReferenceDumper
     }
     /**
      * Outputs a single config reference line.
+     * @param string $text
+     * @param int $indent
      */
-    private function writeLine(string $text, int $indent = 0)
+    private function writeLine($text, $indent = 0)
     {
         $indent = \strlen($text) + $indent;
         $format = '%' . $indent . 's';

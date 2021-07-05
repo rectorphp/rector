@@ -79,8 +79,10 @@ class File extends \SplFileInfo
      * @return self A File object representing the new file
      *
      * @throws FileException if the target file could not be created
+     * @param string $directory
+     * @param string|null $name
      */
-    public function move(string $directory, string $name = null)
+    public function move($directory, $name = null)
     {
         $target = $this->getTargetFile($directory, $name);
         \set_error_handler(function ($type, $msg) use(&$error) {
@@ -104,8 +106,10 @@ class File extends \SplFileInfo
     }
     /**
      * @return self
+     * @param string $directory
+     * @param string|null $name
      */
-    protected function getTargetFile(string $directory, string $name = null)
+    protected function getTargetFile($directory, $name = null)
     {
         if (!\is_dir($directory)) {
             if (\false === @\mkdir($directory, 0777, \true) && !\is_dir($directory)) {
@@ -121,8 +125,9 @@ class File extends \SplFileInfo
      * Returns locale independent base name of the given path.
      *
      * @return string
+     * @param string $name
      */
-    protected function getName(string $name)
+    protected function getName($name)
     {
         $originalName = \str_replace('\\', '/', $name);
         $pos = \strrpos($originalName, '/');

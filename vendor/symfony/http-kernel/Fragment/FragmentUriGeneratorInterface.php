@@ -27,6 +27,8 @@ interface FragmentUriGeneratorInterface
      * @param bool $sign     Whether to sign the URL or not
      *
      * @return string A fragment URI
+     * @param \Symfony\Component\HttpKernel\Controller\ControllerReference $controller
+     * @param \Symfony\Component\HttpFoundation\Request|null $request
      */
-    public function generate(\RectorPrefix20210705\Symfony\Component\HttpKernel\Controller\ControllerReference $controller, \RectorPrefix20210705\Symfony\Component\HttpFoundation\Request $request = null, bool $absolute = \false, bool $strict = \true, bool $sign = \true) : string;
+    public function generate($controller, $request = null, $absolute = \false, $strict = \true, $sign = \true) : string;
 }

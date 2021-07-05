@@ -19,9 +19,9 @@ final class RamseyUuidInterfaceGuard implements \Rector\Naming\Contract\Guard\Co
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
     /**
-     * @param PropertyRename $renameValueObject
+     * @param \Rector\Naming\Contract\RenameValueObjectInterface $renameValueObject
      */
-    public function isConflicting(\Rector\Naming\Contract\RenameValueObjectInterface $renameValueObject) : bool
+    public function isConflicting($renameValueObject) : bool
     {
         return $this->nodeTypeResolver->isObjectType($renameValueObject->getProperty(), new \PHPStan\Type\ObjectType('Ramsey\\Uuid\\UuidInterface'));
     }

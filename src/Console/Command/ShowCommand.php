@@ -45,13 +45,20 @@ final class ShowCommand extends \RectorPrefix20210705\Symfony\Component\Console\
         $description = \sprintf('Select output format: "%s".', \implode('", "', $names));
         $this->addOption(\Rector\Core\Configuration\Option::OUTPUT_FORMAT, 'o', \RectorPrefix20210705\Symfony\Component\Console\Input\InputOption::VALUE_OPTIONAL, $description, \Rector\ChangesReporting\Output\ConsoleOutputFormatter::NAME);
     }
-    protected function execute(\RectorPrefix20210705\Symfony\Component\Console\Input\InputInterface $input, \RectorPrefix20210705\Symfony\Component\Console\Output\OutputInterface $output) : int
+    /**
+     * @param \Symfony\Component\Console\Input\InputInterface $input
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     */
+    protected function execute($input, $output) : int
     {
         $outputFormat = (string) $input->getOption(\Rector\Core\Configuration\Option::OUTPUT_FORMAT);
         $this->reportLoadedRectors($outputFormat);
         return \RectorPrefix20210705\Symplify\PackageBuilder\Console\ShellCode::SUCCESS;
     }
-    private function reportLoadedRectors(string $outputFormat) : void
+    /**
+     * @param string $outputFormat
+     */
+    private function reportLoadedRectors($outputFormat) : void
     {
         $rectors = \array_filter($this->rectors, function (\Rector\Core\Contract\Rector\RectorInterface $rector) : bool {
             return !$rector instanceof \Rector\PostRector\Contract\Rector\PostRectorInterface;

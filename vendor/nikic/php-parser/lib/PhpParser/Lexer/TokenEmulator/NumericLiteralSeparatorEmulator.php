@@ -17,11 +17,18 @@ final class NumericLiteralSeparatorEmulator extends \PhpParser\Lexer\TokenEmulat
     {
         return \PhpParser\Lexer\Emulative::PHP_7_4;
     }
-    public function isEmulationNeeded(string $code) : bool
+    /**
+     * @param string $code
+     */
+    public function isEmulationNeeded($code) : bool
     {
         return \preg_match('~[0-9]_[0-9]~', $code) || \preg_match('~0x[0-9a-f]+_[0-9a-f]~i', $code);
     }
-    public function emulate(string $code, array $tokens) : array
+    /**
+     * @param string $code
+     * @param mixed[] $tokens
+     */
+    public function emulate($code, $tokens) : array
     {
         // We need to manually iterate and manage a count because we'll change
         // the tokens array on the way
@@ -66,7 +73,10 @@ final class NumericLiteralSeparatorEmulator extends \PhpParser\Lexer\TokenEmulat
         }
         return $tokens;
     }
-    private function resolveIntegerOrFloatToken(string $str) : int
+    /**
+     * @param string $str
+     */
+    private function resolveIntegerOrFloatToken($str) : int
     {
         $str = \str_replace('_', '', $str);
         if (\stripos($str, '0b') === 0) {
@@ -80,7 +90,11 @@ final class NumericLiteralSeparatorEmulator extends \PhpParser\Lexer\TokenEmulat
         }
         return \is_float($num) ? \T_DNUMBER : \T_LNUMBER;
     }
-    public function reverseEmulate(string $code, array $tokens) : array
+    /**
+     * @param string $code
+     * @param mixed[] $tokens
+     */
+    public function reverseEmulate($code, $tokens) : array
     {
         // Numeric separators were not legal code previously, don't bother.
         return $tokens;

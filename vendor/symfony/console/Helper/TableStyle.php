@@ -49,8 +49,9 @@ class TableStyle
      * Sets padding character, used for cell padding.
      *
      * @return $this
+     * @param string $paddingChar
      */
-    public function setPaddingChar(string $paddingChar)
+    public function setPaddingChar($paddingChar)
     {
         if (!$paddingChar) {
             throw new \RectorPrefix20210705\Symfony\Component\Console\Exception\LogicException('The padding char must not be empty.');
@@ -81,8 +82,10 @@ class TableStyle
      * ╚═══════════════╧══════════════════════════╧══════════════════╝
      * </code>
      * @return $this
+     * @param string $outside
+     * @param string|null $inside
      */
-    public function setHorizontalBorderChars(string $outside, string $inside = null)
+    public function setHorizontalBorderChars($outside, $inside = null)
     {
         $this->horizontalOutsideBorderChar = $outside;
         $this->horizontalInsideBorderChar = $inside ?? $outside;
@@ -103,8 +106,10 @@ class TableStyle
      * ╚═══════════════╧══════════════════════════╧══════════════════╝
      * </code>
      * @return $this
+     * @param string $outside
+     * @param string|null $inside
      */
-    public function setVerticalBorderChars(string $outside, string $inside = null)
+    public function setVerticalBorderChars($outside, $inside = null)
     {
         $this->verticalOutsideBorderChar = $outside;
         $this->verticalInsideBorderChar = $inside ?? $outside;
@@ -149,7 +154,7 @@ class TableStyle
      * @param string|null $topRightBottom Top right bottom char (see #4' of example), equals to $midRight if null
      * @return $this
      */
-    public function setCrossingChars(string $cross, string $topLeft, string $topMid, string $topRight, string $midRight, string $bottomRight, string $bottomMid, string $bottomLeft, string $midLeft, string $topLeftBottom = null, string $topMidBottom = null, string $topRightBottom = null)
+    public function setCrossingChars($cross, $topLeft, $topMid, $topRight, $midRight, $bottomRight, $bottomMid, $bottomLeft, $midLeft, $topLeftBottom = null, $topMidBottom = null, $topRightBottom = null)
     {
         $this->crossingChar = $cross;
         $this->crossingTopLeftChar = $topLeft;
@@ -170,8 +175,9 @@ class TableStyle
      *
      * @see {@link setCrossingChars()} for setting each crossing individually.
      * @return $this
+     * @param string $char
      */
-    public function setDefaultCrossingChar(string $char)
+    public function setDefaultCrossingChar($char)
     {
         return $this->setCrossingChars($char, $char, $char, $char, $char, $char, $char, $char, $char);
     }
@@ -197,8 +203,9 @@ class TableStyle
      * Sets header cell format.
      *
      * @return $this
+     * @param string $cellHeaderFormat
      */
-    public function setCellHeaderFormat(string $cellHeaderFormat)
+    public function setCellHeaderFormat($cellHeaderFormat)
     {
         $this->cellHeaderFormat = $cellHeaderFormat;
         return $this;
@@ -216,8 +223,9 @@ class TableStyle
      * Sets row cell format.
      *
      * @return $this
+     * @param string $cellRowFormat
      */
-    public function setCellRowFormat(string $cellRowFormat)
+    public function setCellRowFormat($cellRowFormat)
     {
         $this->cellRowFormat = $cellRowFormat;
         return $this;
@@ -235,8 +243,9 @@ class TableStyle
      * Sets row cell content format.
      *
      * @return $this
+     * @param string $cellRowContentFormat
      */
-    public function setCellRowContentFormat(string $cellRowContentFormat)
+    public function setCellRowContentFormat($cellRowContentFormat)
     {
         $this->cellRowContentFormat = $cellRowContentFormat;
         return $this;
@@ -254,8 +263,9 @@ class TableStyle
      * Sets table border format.
      *
      * @return $this
+     * @param string $borderFormat
      */
-    public function setBorderFormat(string $borderFormat)
+    public function setBorderFormat($borderFormat)
     {
         $this->borderFormat = $borderFormat;
         return $this;
@@ -273,8 +283,9 @@ class TableStyle
      * Sets cell padding type.
      *
      * @return $this
+     * @param int $padType
      */
-    public function setPadType(int $padType)
+    public function setPadType($padType)
     {
         if (!\in_array($padType, [\STR_PAD_LEFT, \STR_PAD_RIGHT, \STR_PAD_BOTH], \true)) {
             throw new \RectorPrefix20210705\Symfony\Component\Console\Exception\InvalidArgumentException('Invalid padding type. Expected one of (STR_PAD_LEFT, STR_PAD_RIGHT, STR_PAD_BOTH).');
@@ -297,8 +308,9 @@ class TableStyle
     }
     /**
      * @return $this
+     * @param string $format
      */
-    public function setHeaderTitleFormat(string $format)
+    public function setHeaderTitleFormat($format)
     {
         $this->headerTitleFormat = $format;
         return $this;
@@ -309,8 +321,9 @@ class TableStyle
     }
     /**
      * @return $this
+     * @param string $format
      */
-    public function setFooterTitleFormat(string $format)
+    public function setFooterTitleFormat($format)
     {
         $this->footerTitleFormat = $format;
         return $this;

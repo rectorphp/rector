@@ -58,8 +58,9 @@ class DirectoryResource implements \RectorPrefix20210705\Symfony\Component\Confi
     }
     /**
      * {@inheritdoc}
+     * @param int $timestamp
      */
-    public function isFresh(int $timestamp) : bool
+    public function isFresh($timestamp) : bool
     {
         if (!\is_dir($this->resource)) {
             return \false;

@@ -19,8 +19,9 @@ class ResolveFactoryClassPass extends \RectorPrefix20210705\Symfony\Component\De
 {
     /**
      * {@inheritdoc}
+     * @param bool $isRoot
      */
-    protected function processValue($value, bool $isRoot = \false)
+    protected function processValue($value, $isRoot = \false)
     {
         if ($value instanceof \RectorPrefix20210705\Symfony\Component\DependencyInjection\Definition && \is_array($factory = $value->getFactory()) && null === $factory[0]) {
             if (null === ($class = $value->getClass())) {

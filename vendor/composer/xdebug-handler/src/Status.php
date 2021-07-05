@@ -49,7 +49,7 @@ class Status
     /**
      * @param LoggerInterface $logger
      */
-    public function setLogger(\RectorPrefix20210705\Psr\Log\LoggerInterface $logger)
+    public function setLogger($logger)
     {
         $this->logger = $logger;
     }

@@ -71,7 +71,7 @@ CODE_SAMPLE
     /**
      * @param ClassMethod|New_|MethodCall $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($node instanceof \PhpParser\Node\Stmt\ClassMethod) {
             return $this->refactorClassMethod($node);
@@ -99,10 +99,7 @@ CODE_SAMPLE
         $classMethod->params = $newParams;
         return $classMethod;
     }
-    /**
-     * @param \PhpParser\Node\Expr\New_ $new
-     */
-    private function refactorNew($new) : ?\PhpParser\Node\Expr\New_
+    private function refactorNew(\PhpParser\Node\Expr\New_ $new) : ?\PhpParser\Node\Expr\New_
     {
         if ($new->args === []) {
             return null;
@@ -118,10 +115,7 @@ CODE_SAMPLE
         $new->args = $this->argumentSorter->sortArgsByExpectedParamOrder($new->args, $expectedArgOrParamOrder);
         return $new;
     }
-    /**
-     * @param \PhpParser\Node\Expr\MethodCall $methodCall
-     */
-    private function refactorMethodCall($methodCall) : ?\PhpParser\Node\Expr\MethodCall
+    private function refactorMethodCall(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\PhpParser\Node\Expr\MethodCall
     {
         $methodReflection = $this->reflectionResolver->resolveFunctionLikeReflectionFromCall($methodCall);
         if (!$methodReflection instanceof \PHPStan\Reflection\MethodReflection) {

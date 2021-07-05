@@ -47,15 +47,20 @@ class Compiler
     }
     /**
      * Adds a pass to the PassConfig.
+     * @param \Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface $pass
+     * @param string $type
+     * @param int $priority
      */
-    public function addPass(\RectorPrefix20210705\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface $pass, string $type = \RectorPrefix20210705\Symfony\Component\DependencyInjection\Compiler\PassConfig::TYPE_BEFORE_OPTIMIZATION, int $priority = 0)
+    public function addPass($pass, $type = \RectorPrefix20210705\Symfony\Component\DependencyInjection\Compiler\PassConfig::TYPE_BEFORE_OPTIMIZATION, $priority = 0)
     {
         $this->passConfig->addPass($pass, $type, $priority);
     }
     /**
      * @final
+     * @param \Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface $pass
+     * @param string $message
      */
-    public function log(\RectorPrefix20210705\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface $pass, string $message)
+    public function log($pass, $message)
     {
         if (\false !== \strpos($message, "\n")) {
             $message = \str_replace("\n", "\n" . \get_class($pass) . ': ', \trim($message));
@@ -73,8 +78,9 @@ class Compiler
     }
     /**
      * Run the Compiler and process all Passes.
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      */
-    public function compile(\RectorPrefix20210705\Symfony\Component\DependencyInjection\ContainerBuilder $container)
+    public function compile($container)
     {
         try {
             foreach ($this->passConfig->getPasses() as $pass) {

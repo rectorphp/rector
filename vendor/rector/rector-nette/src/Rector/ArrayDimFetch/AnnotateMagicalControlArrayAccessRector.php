@@ -136,10 +136,7 @@ CODE_SAMPLE
         }
         return new \PhpParser\Node\Expr\Variable($variableName);
     }
-    /**
-     * @param \PhpParser\Node\Expr\ArrayDimFetch $arrayDimFetch
-     */
-    private function shouldSkip($arrayDimFetch) : bool
+    private function shouldSkip(\PhpParser\Node\Expr\ArrayDimFetch $arrayDimFetch) : bool
     {
         if ($this->arrayDimFetchAnalyzer->isBeingAssignedOrInitialized($arrayDimFetch)) {
             return \true;

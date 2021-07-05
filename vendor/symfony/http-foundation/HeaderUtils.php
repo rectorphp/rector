@@ -38,8 +38,9 @@ class HeaderUtils
      *
      * @return array Nested array with as many levels as there are characters in
      *               $separators
+     * @param string $header
      */
-    public static function split(string $header, string $separators) : array
+    public static function split($header, $separators) : array
     {
         $quotedSeparators = \preg_quote($separators, '/');
         \preg_match_all('
@@ -73,8 +74,9 @@ class HeaderUtils
      *
      *     HeaderUtils::combine([["foo", "abc"], ["bar"]])
      *     // => ["foo" => "abc", "bar" => true]
+     * @param mixed[] $parts
      */
-    public static function combine(array $parts) : array
+    public static function combine($parts) : array
     {
         $assoc = [];
         foreach ($parts as $part) {
@@ -95,8 +97,10 @@ class HeaderUtils
      *
      *     HeaderUtils::toString(["foo" => "abc", "bar" => true, "baz" => "a b c"], ",")
      *     // => 'foo=abc, bar, baz="a b c"'
+     * @param mixed[] $assoc
+     * @param string $separator
      */
-    public static function toString(array $assoc, string $separator) : string
+    public static function toString($assoc, $separator) : string
     {
         $parts = [];
         foreach ($assoc as $name => $value) {
@@ -114,8 +118,9 @@ class HeaderUtils
      * If a string contains characters not allowed by the "token" construct in
      * the HTTP specification, it is backslash-escaped and enclosed in quotes
      * to match the "quoted-string" construct.
+     * @param string $s
      */
-    public static function quote(string $s) : string
+    public static function quote($s) : string
     {
         if (\preg_match('/^[a-z0-9!#$%&\'*.^_`|~-]+$/i', $s)) {
             return $s;
@@ -127,8 +132,9 @@ class HeaderUtils
      *
      * If passed an unquoted string that matches the "token" construct (as
      * defined in the HTTP specification), it is passed through verbatimly.
+     * @param string $s
      */
-    public static function unquote(string $s) : string
+    public static function unquote($s) : string
     {
         return \preg_replace('/\\\\(.)|"/', '$1', $s);
     }
@@ -147,7 +153,7 @@ class HeaderUtils
      *
      * @see RFC 6266
      */
-    public static function makeDisposition(string $disposition, string $filename, string $filenameFallback = '') : string
+    public static function makeDisposition($disposition, $filename, $filenameFallback = '') : string
     {
         if (!\in_array($disposition, [self::DISPOSITION_ATTACHMENT, self::DISPOSITION_INLINE])) {
             throw new \InvalidArgumentException(\sprintf('The disposition must be either "%s" or "%s".', self::DISPOSITION_ATTACHMENT, self::DISPOSITION_INLINE));
@@ -175,8 +181,11 @@ class HeaderUtils
     }
     /**
      * Like parse_str(), but preserves dots in variable names.
+     * @param string $query
+     * @param bool $ignoreBrackets
+     * @param string $separator
      */
-    public static function parseQuery(string $query, bool $ignoreBrackets = \false, string $separator = '&') : array
+    public static function parseQuery($query, $ignoreBrackets = \false, $separator = '&') : array
     {
         $q = [];
         foreach (\explode($separator, $query) as $v) {
@@ -218,7 +227,12 @@ class HeaderUtils
         }
         return $query;
     }
-    private static function groupParts(array $matches, string $separators, bool $first = \true) : array
+    /**
+     * @param mixed[] $matches
+     * @param string $separators
+     * @param bool $first
+     */
+    private static function groupParts($matches, $separators, $first = \true) : array
     {
         $separator = $separators[0];
         $partSeparators = \substr($separators, 1);

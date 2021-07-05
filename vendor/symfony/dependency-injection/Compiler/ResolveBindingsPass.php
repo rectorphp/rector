@@ -31,8 +31,9 @@ class ResolveBindingsPass extends \RectorPrefix20210705\Symfony\Component\Depend
     private $errorMessages = [];
     /**
      * {@inheritdoc}
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      */
-    public function process(\RectorPrefix20210705\Symfony\Component\DependencyInjection\ContainerBuilder $container)
+    public function process($container)
     {
         $this->usedBindings = $container->getRemovedBindingIds();
         try {
@@ -79,8 +80,9 @@ class ResolveBindingsPass extends \RectorPrefix20210705\Symfony\Component\Depend
     }
     /**
      * {@inheritdoc}
+     * @param bool $isRoot
      */
-    protected function processValue($value, bool $isRoot = \false)
+    protected function processValue($value, $isRoot = \false)
     {
         if ($value instanceof \RectorPrefix20210705\Symfony\Component\DependencyInjection\TypedReference && $value->getType() === (string) $value) {
             // Already checked
@@ -185,8 +187,9 @@ class ResolveBindingsPass extends \RectorPrefix20210705\Symfony\Component\Depend
     }
     /**
      * @return mixed
+     * @param \Symfony\Component\DependencyInjection\Argument\BoundArgument $binding
      */
-    private function getBindingValue(\RectorPrefix20210705\Symfony\Component\DependencyInjection\Argument\BoundArgument $binding)
+    private function getBindingValue($binding)
     {
         [$bindingValue, $bindingId] = $binding->getValues();
         $this->usedBindings[$bindingId] = \true;

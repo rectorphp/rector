@@ -32,9 +32,9 @@ final class TraitTypeResolver implements \Rector\NodeTypeResolver\Contract\NodeT
         return [\PhpParser\Node\Stmt\Trait_::class];
     }
     /**
-     * @param Trait_ $traitNode
+     * @param \PhpParser\Node $traitNode
      */
-    public function resolve(\PhpParser\Node $traitNode) : \PHPStan\Type\Type
+    public function resolve($traitNode) : \PHPStan\Type\Type
     {
         $traitName = (string) $traitNode->namespacedName;
         if (!$this->reflectionProvider->hasClass($traitName)) {

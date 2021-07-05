@@ -64,7 +64,7 @@ CODE_SAMPLE
     /**
      * @param ClassLike|FunctionLike|Property|ClassConst $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($this->annotationsToRemove === []) {
             return null;

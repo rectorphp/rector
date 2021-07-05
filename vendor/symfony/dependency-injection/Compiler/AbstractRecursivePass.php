@@ -33,8 +33,9 @@ abstract class AbstractRecursivePass implements \RectorPrefix20210705\Symfony\Co
     private $inExpression = \false;
     /**
      * {@inheritdoc}
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      */
-    public function process(\RectorPrefix20210705\Symfony\Component\DependencyInjection\ContainerBuilder $container)
+    public function process($container)
     {
         $this->container = $container;
         try {
@@ -47,7 +48,10 @@ abstract class AbstractRecursivePass implements \RectorPrefix20210705\Symfony\Co
     {
         $this->processExpressions = \true;
     }
-    protected function inExpression(bool $reset = \true) : bool
+    /**
+     * @param bool $reset
+     */
+    protected function inExpression($reset = \true) : bool
     {
         $inExpression = $this->inExpression;
         if ($reset) {
@@ -61,8 +65,9 @@ abstract class AbstractRecursivePass implements \RectorPrefix20210705\Symfony\Co
      * @param mixed $value
      *
      * @return mixed The processed value
+     * @param bool $isRoot
      */
-    protected function processValue($value, bool $isRoot = \false)
+    protected function processValue($value, $isRoot = \false)
     {
         if (\is_array($value)) {
             foreach ($value as $k => $v) {
@@ -95,8 +100,10 @@ abstract class AbstractRecursivePass implements \RectorPrefix20210705\Symfony\Co
      * @return \ReflectionFunctionAbstract|null
      *
      * @throws RuntimeException
+     * @param \Symfony\Component\DependencyInjection\Definition $definition
+     * @param bool $required
      */
-    protected function getConstructor(\RectorPrefix20210705\Symfony\Component\DependencyInjection\Definition $definition, bool $required)
+    protected function getConstructor($definition, $required)
     {
         if ($definition->isSynthetic()) {
             return null;
@@ -146,8 +153,10 @@ abstract class AbstractRecursivePass implements \RectorPrefix20210705\Symfony\Co
      * @throws RuntimeException
      *
      * @return \ReflectionFunctionAbstract
+     * @param \Symfony\Component\DependencyInjection\Definition $definition
+     * @param string $method
      */
-    protected function getReflectionMethod(\RectorPrefix20210705\Symfony\Component\DependencyInjection\Definition $definition, string $method)
+    protected function getReflectionMethod($definition, $method)
     {
         if ('__construct' === $method) {
             return $this->getConstructor($definition, \true);

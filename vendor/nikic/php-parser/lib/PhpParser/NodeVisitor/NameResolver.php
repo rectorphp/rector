@@ -47,12 +47,18 @@ class NameResolver extends \PhpParser\NodeVisitorAbstract
     {
         return $this->nameContext;
     }
-    public function beforeTraverse(array $nodes)
+    /**
+     * @param mixed[] $nodes
+     */
+    public function beforeTraverse($nodes)
     {
         $this->nameContext->startNamespace();
         return null;
     }
-    public function enterNode(\PhpParser\Node $node)
+    /**
+     * @param \PhpParser\Node $node
+     */
+    public function enterNode($node)
     {
         if ($node instanceof \PhpParser\Node\Stmt\Namespace_) {
             $this->nameContext->startNamespace($node->name);
@@ -135,7 +141,11 @@ class NameResolver extends \PhpParser\NodeVisitorAbstract
         }
         return null;
     }
-    private function addAlias(\PhpParser\Node\Stmt\UseUse $use, $type, \PhpParser\Node\Name $prefix = null)
+    /**
+     * @param \PhpParser\Node\Stmt\UseUse $use
+     * @param \PhpParser\Node\Name|null $prefix
+     */
+    private function addAlias($use, $type, $prefix = null)
     {
         // Add prefix for group uses
         $name = $prefix ? \PhpParser\Node\Name::concat($prefix, $use->name) : $use->name;
@@ -177,7 +187,7 @@ class NameResolver extends \PhpParser\NodeVisitorAbstract
      *
      * @return Name Resolved name, or original name with attribute
      */
-    protected function resolveName(\PhpParser\Node\Name $name, int $type) : \PhpParser\Node\Name
+    protected function resolveName($name, $type) : \PhpParser\Node\Name
     {
         if (!$this->replaceNodes) {
             $resolvedName = $this->nameContext->getResolvedName($name, $type);
@@ -203,15 +213,24 @@ class NameResolver extends \PhpParser\NodeVisitorAbstract
         $name->setAttribute('namespacedName', \PhpParser\Node\Name\FullyQualified::concat($this->nameContext->getNamespace(), $name, $name->getAttributes()));
         return $name;
     }
-    protected function resolveClassName(\PhpParser\Node\Name $name)
+    /**
+     * @param \PhpParser\Node\Name $name
+     */
+    protected function resolveClassName($name)
     {
         return $this->resolveName($name, \PhpParser\Node\Stmt\Use_::TYPE_NORMAL);
     }
-    protected function addNamespacedName(\PhpParser\Node $node)
+    /**
+     * @param \PhpParser\Node $node
+     */
+    protected function addNamespacedName($node)
     {
         $node->namespacedName = \PhpParser\Node\Name::concat($this->nameContext->getNamespace(), (string) $node->name);
     }
-    protected function resolveAttrGroups(\PhpParser\Node $node)
+    /**
+     * @param \PhpParser\Node $node
+     */
+    protected function resolveAttrGroups($node)
     {
         foreach ($node->attrGroups as $attrGroup) {
             foreach ($attrGroup->attrs as $attr) {

@@ -60,7 +60,11 @@ and redirecting the output to a file:
 EOF
 );
     }
-    protected function execute(\RectorPrefix20210705\Symfony\Component\Console\Input\InputInterface $input, \RectorPrefix20210705\Symfony\Component\Console\Output\OutputInterface $output) : int
+    /**
+     * @param \Symfony\Component\Console\Input\InputInterface $input
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     */
+    protected function execute($input, $output) : int
     {
         $io = new \RectorPrefix20210705\Symfony\Component\Console\Style\SymfonyStyle($input, $output);
         $format = $input->getOption('format');

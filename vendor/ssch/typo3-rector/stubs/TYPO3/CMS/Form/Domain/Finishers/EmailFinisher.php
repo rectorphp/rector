@@ -38,8 +38,9 @@ class EmailFinisher
     }
     /**
      * @return void
+     * @param mixed[] $options
      */
-    public function setOptions(array $options)
+    public function setOptions($options)
     {
         $this->options = $options;
     }

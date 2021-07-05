@@ -23,8 +23,9 @@ final class IntersectionTypeMapper implements \Rector\PHPStanStaticTypeMapper\Co
     private $phpStanStaticTypeMapper;
     /**
      * @required
+     * @param \Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper $phpStanStaticTypeMapper
      */
-    public function autowireIntersectionTypeMapper(\Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper $phpStanStaticTypeMapper) : void
+    public function autowireIntersectionTypeMapper($phpStanStaticTypeMapper) : void
     {
         $this->phpStanStaticTypeMapper = $phpStanStaticTypeMapper;
     }
@@ -36,9 +37,10 @@ final class IntersectionTypeMapper implements \Rector\PHPStanStaticTypeMapper\Co
         return \PHPStan\Type\IntersectionType::class;
     }
     /**
-     * @param IntersectionType $type
+     * @param \PHPStan\Type\Type $type
+     * @param \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind $typeKind
      */
-    public function mapToPHPStanPhpDocTypeNode(\PHPStan\Type\Type $type, \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind $typeKind) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
+    public function mapToPHPStanPhpDocTypeNode($type, $typeKind) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
     {
         $intersectionTypesNodes = [];
         foreach ($type->getTypes() as $intersectionedType) {
@@ -48,9 +50,10 @@ final class IntersectionTypeMapper implements \Rector\PHPStanStaticTypeMapper\Co
         return new \Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareIntersectionTypeNode($intersectionTypesNodes);
     }
     /**
-     * @param IntersectionType $type
+     * @param \PHPStan\Type\Type $type
+     * @param \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind $typeKind
      */
-    public function mapToPhpParserNode(\PHPStan\Type\Type $type, \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind $typeKind) : ?\PhpParser\Node
+    public function mapToPhpParserNode($type, $typeKind) : ?\PhpParser\Node
     {
         // intersection types in PHP are not yet supported
         return null;

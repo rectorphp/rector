@@ -8,7 +8,10 @@ use PhpParser\NodeVisitorAbstract;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 final class CommentRemovingNodeVisitor extends \PhpParser\NodeVisitorAbstract
 {
-    public function enterNode(\PhpParser\Node $node) : \PhpParser\Node
+    /**
+     * @param \PhpParser\Node $node
+     */
+    public function enterNode($node) : \PhpParser\Node
     {
         // the node must be cloned, so original node is not touched in final print
         $clonedNode = clone $node;

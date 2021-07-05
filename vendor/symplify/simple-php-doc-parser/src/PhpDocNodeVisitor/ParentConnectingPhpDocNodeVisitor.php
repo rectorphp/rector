@@ -16,14 +16,18 @@ final class ParentConnectingPhpDocNodeVisitor extends \RectorPrefix20210705\Symp
      * @var Node[]
      */
     private $stack = [];
-    public function beforeTraverse(\PHPStan\PhpDocParser\Ast\Node $node) : void
+    /**
+     * @param \PHPStan\PhpDocParser\Ast\Node $node
+     */
+    public function beforeTraverse($node) : void
     {
         $this->stack = [$node];
     }
     /**
      * @return int|Node|null
+     * @param \PHPStan\PhpDocParser\Ast\Node $node
      */
-    public function enterNode(\PHPStan\PhpDocParser\Ast\Node $node)
+    public function enterNode($node)
     {
         if ($this->stack !== []) {
             $parentNode = $this->stack[\count($this->stack) - 1];
@@ -32,7 +36,10 @@ final class ParentConnectingPhpDocNodeVisitor extends \RectorPrefix20210705\Symp
         $this->stack[] = $node;
         return $node;
     }
-    public function leaveNode(\PHPStan\PhpDocParser\Ast\Node $node) : void
+    /**
+     * @param \PHPStan\PhpDocParser\Ast\Node $node
+     */
+    public function leaveNode($node) : void
     {
         \array_pop($this->stack);
     }

@@ -63,7 +63,7 @@ CODE_SAMPLE
     /**
      * @param FuncCall|MethodCall|StaticCall $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($node->args) {
             \end($node->args);

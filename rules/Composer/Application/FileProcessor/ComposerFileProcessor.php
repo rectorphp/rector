@@ -34,7 +34,11 @@ final class ComposerFileProcessor implements \Rector\Core\Contract\Processor\Fil
         $this->composerJsonPrinter = $composerJsonPrinter;
         $this->composerRectors = $composerRectors;
     }
-    public function process(\Rector\Core\ValueObject\Application\File $file, \Rector\Core\ValueObject\Configuration $configuration) : void
+    /**
+     * @param \Rector\Core\ValueObject\Application\File $file
+     * @param \Rector\Core\ValueObject\Configuration $configuration
+     */
+    public function process($file, $configuration) : void
     {
         if ($this->composerRectors === []) {
             return;
@@ -53,7 +57,11 @@ final class ComposerFileProcessor implements \Rector\Core\Contract\Processor\Fil
         $changeFileContent = $this->composerJsonPrinter->printToString($composerJson);
         $file->changeFileContent($changeFileContent);
     }
-    public function supports(\Rector\Core\ValueObject\Application\File $file, \Rector\Core\ValueObject\Configuration $configuration) : bool
+    /**
+     * @param \Rector\Core\ValueObject\Application\File $file
+     * @param \Rector\Core\ValueObject\Configuration $configuration
+     */
+    public function supports($file, $configuration) : bool
     {
         $smartFileInfo = $file->getSmartFileInfo();
         if ($this->isJsonInTests($smartFileInfo)) {
@@ -68,7 +76,10 @@ final class ComposerFileProcessor implements \Rector\Core\Contract\Processor\Fil
     {
         return ['json'];
     }
-    private function isJsonInTests(\Symplify\SmartFileSystem\SmartFileInfo $fileInfo) : bool
+    /**
+     * @param \Symplify\SmartFileSystem\SmartFileInfo $fileInfo
+     */
+    private function isJsonInTests($fileInfo) : bool
     {
         if (!\Rector\Testing\PHPUnit\StaticPHPUnitEnvironment::isPHPUnitRun()) {
             return \false;

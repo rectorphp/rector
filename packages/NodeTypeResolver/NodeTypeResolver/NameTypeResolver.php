@@ -34,9 +34,9 @@ final class NameTypeResolver implements \Rector\NodeTypeResolver\Contract\NodeTy
         return [\PhpParser\Node\Name::class, \PhpParser\Node\Name\FullyQualified::class];
     }
     /**
-     * @param Name $node
+     * @param \PhpParser\Node $node
      */
-    public function resolve(\PhpParser\Node $node) : \PHPStan\Type\Type
+    public function resolve($node) : \PHPStan\Type\Type
     {
         if ($node->toString() === 'parent') {
             return $this->resolveParent($node);
@@ -46,8 +46,9 @@ final class NameTypeResolver implements \Rector\NodeTypeResolver\Contract\NodeTy
     }
     /**
      * @return \PHPStan\Type\MixedType|\PHPStan\Type\ObjectType|\PHPStan\Type\UnionType
+     * @param \PhpParser\Node\Name $name
      */
-    private function resolveParent(\PhpParser\Node\Name $name)
+    private function resolveParent($name)
     {
         $className = $name->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);
         if ($className === null) {
@@ -69,7 +70,10 @@ final class NameTypeResolver implements \Rector\NodeTypeResolver\Contract\NodeTy
         }
         return new \PHPStan\Type\UnionType($parentClassObjectTypes);
     }
-    private function resolveFullyQualifiedName(\PhpParser\Node\Name $name) : string
+    /**
+     * @param \PhpParser\Node\Name $name
+     */
+    private function resolveFullyQualifiedName($name) : string
     {
         $nameValue = $name->toString();
         if (\in_array($nameValue, ['self', 'static', 'this'], \true)) {

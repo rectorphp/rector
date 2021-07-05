@@ -41,15 +41,19 @@ final class ConstantStringTypeToCallReflectionResolver implements \Rector\Core\C
     {
         $this->reflectionProvider = $reflectionProvider;
     }
-    public function supports(\PHPStan\Type\Type $type) : bool
+    /**
+     * @param \PHPStan\Type\Type $type
+     */
+    public function supports($type) : bool
     {
         return $type instanceof \PHPStan\Type\Constant\ConstantStringType;
     }
     /**
-     * @param ConstantStringType $type
+     * @param \PHPStan\Type\Type $type
      * @return FunctionReflection|MethodReflection|null
+     * @param \PHPStan\Analyser\Scope $scope
      */
-    public function resolve(\PHPStan\Type\Type $type, \PHPStan\Analyser\Scope $scope)
+    public function resolve($type, $scope)
     {
         $value = $type->getValue();
         // 'my_function'

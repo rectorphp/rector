@@ -21,7 +21,12 @@ use RectorPrefix20210705\Symfony\Component\HttpFoundation\Response;
  */
 class AjaxDataCollector extends \RectorPrefix20210705\Symfony\Component\HttpKernel\DataCollector\DataCollector
 {
-    public function collect(\RectorPrefix20210705\Symfony\Component\HttpFoundation\Request $request, \RectorPrefix20210705\Symfony\Component\HttpFoundation\Response $response, \Throwable $exception = null)
+    /**
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \Symfony\Component\HttpFoundation\Response $response
+     * @param \Throwable|null $exception
+     */
+    public function collect($request, $response, $exception = null)
     {
         // all collecting is done client side
     }

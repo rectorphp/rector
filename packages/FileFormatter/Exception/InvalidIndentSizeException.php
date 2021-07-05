@@ -8,8 +8,10 @@ final class InvalidIndentSizeException extends \InvalidArgumentException
 {
     /**
      * @return $this
+     * @param int $size
+     * @param int $minimumSize
      */
-    public static function fromSizeAndMinimumSize(int $size, int $minimumSize)
+    public static function fromSizeAndMinimumSize($size, $minimumSize)
     {
         $message = \sprintf('Size %d must be greater than %d', $size, $minimumSize);
         return new self($message);

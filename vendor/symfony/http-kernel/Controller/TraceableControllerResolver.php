@@ -26,8 +26,9 @@ class TraceableControllerResolver implements \RectorPrefix20210705\Symfony\Compo
     }
     /**
      * {@inheritdoc}
+     * @param \Symfony\Component\HttpFoundation\Request $request
      */
-    public function getController(\RectorPrefix20210705\Symfony\Component\HttpFoundation\Request $request)
+    public function getController($request)
     {
         $e = $this->stopwatch->start('controller.get_callable');
         $ret = $this->resolver->getController($request);

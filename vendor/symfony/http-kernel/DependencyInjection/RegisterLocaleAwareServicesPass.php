@@ -31,7 +31,10 @@ class RegisterLocaleAwareServicesPass implements \RectorPrefix20210705\Symfony\C
         $this->listenerServiceId = $listenerServiceId;
         $this->localeAwareTag = $localeAwareTag;
     }
-    public function process(\RectorPrefix20210705\Symfony\Component\DependencyInjection\ContainerBuilder $container)
+    /**
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     */
+    public function process($container)
     {
         if (!$container->hasDefinition($this->listenerServiceId)) {
             return;

@@ -67,9 +67,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Stmt\Expression::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param Expression $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$node->expr instanceof \PhpParser\Node\Expr\MethodCall) {
             return null;
@@ -86,10 +86,7 @@ CODE_SAMPLE
         \RectorPrefix20210705\Webmozart\Assert\Assert::allIsInstanceOf($methodCallWraps, \Rector\Transform\ValueObject\MethodCallToReturn::class);
         $this->methodCallWraps = $methodCallWraps;
     }
-    /**
-     * @param \PhpParser\Node\Expr\MethodCall $methodCall
-     */
-    private function refactorMethodCall($methodCall) : ?\PhpParser\Node
+    private function refactorMethodCall(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\PhpParser\Node
     {
         $parent = $methodCall->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
         foreach ($this->methodCallWraps as $methodCallWrap) {

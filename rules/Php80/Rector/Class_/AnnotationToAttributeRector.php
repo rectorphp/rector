@@ -97,7 +97,7 @@ CODE_SAMPLE
     /**
      * @param Class_|Property|ClassMethod|Function_|Closure|ArrowFunction $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$this->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::ATTRIBUTES)) {
             return null;
@@ -189,10 +189,7 @@ CODE_SAMPLE
             $node->attrGroups[] = $this->phpAttributeGroupFactory->create($doctrineAnnotationTagValueNode, $doctrineTagAndAnnotationToAttribute->getAnnotationToAttribute());
         }
     }
-    /**
-     * @param \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo
-     */
-    private function shouldSkip($phpDocInfo) : bool
+    private function shouldSkip(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo) : bool
     {
         return $phpDocInfo->hasByAnnotationClasses(self::SKIP_UNWRAP_ANNOTATIONS);
     }

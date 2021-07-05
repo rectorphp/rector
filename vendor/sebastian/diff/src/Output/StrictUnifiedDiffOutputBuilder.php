@@ -87,7 +87,10 @@ final class StrictUnifiedDiffOutputBuilder implements \RectorPrefix20210705\Seba
         $this->commonLineThreshold = $options['commonLineThreshold'];
         $this->contextLines = $options['contextLines'];
     }
-    public function getDiff(array $diff) : string
+    /**
+     * @param mixed[] $diff
+     */
+    public function getDiff($diff) : string
     {
         if (0 === \count($diff)) {
             return '';
@@ -107,7 +110,10 @@ final class StrictUnifiedDiffOutputBuilder implements \RectorPrefix20210705\Seba
         $last = \substr($diff, -1);
         return "\n" !== $last && "\r" !== $last ? $diff . "\n" : $diff;
     }
-    private function writeDiffHunks($output, array $diff) : void
+    /**
+     * @param mixed[] $diff
+     */
+    private function writeDiffHunks($output, $diff) : void
     {
         // detect "No newline at end of file" and insert into `$diff` if needed
         $upperLimit = \count($diff);
@@ -201,7 +207,16 @@ final class StrictUnifiedDiffOutputBuilder implements \RectorPrefix20210705\Seba
         $toRange -= $sameCount;
         $this->writeHunk($diff, $hunkCapture - $contextStartOffset, $i - $sameCount + $contextEndOffset + 1, $fromStart - $contextStartOffset, $fromRange + $contextStartOffset + $contextEndOffset, $toStart - $contextStartOffset, $toRange + $contextStartOffset + $contextEndOffset, $output);
     }
-    private function writeHunk(array $diff, int $diffStartIndex, int $diffEndIndex, int $fromStart, int $fromRange, int $toStart, int $toRange, $output) : void
+    /**
+     * @param mixed[] $diff
+     * @param int $diffStartIndex
+     * @param int $diffEndIndex
+     * @param int $fromStart
+     * @param int $fromRange
+     * @param int $toStart
+     * @param int $toRange
+     */
+    private function writeHunk($diff, $diffStartIndex, $diffEndIndex, $fromStart, $fromRange, $toStart, $toRange, $output) : void
     {
         \fwrite($output, '@@ -' . $fromStart);
         if (!$this->collapseRanges || 1 !== $fromRange) {
@@ -232,13 +247,21 @@ final class StrictUnifiedDiffOutputBuilder implements \RectorPrefix20210705\Seba
             //}
         }
     }
-    private function assertString(array $options, string $option) : void
+    /**
+     * @param mixed[] $options
+     * @param string $option
+     */
+    private function assertString($options, $option) : void
     {
         if (!\is_string($options[$option])) {
             throw new \RectorPrefix20210705\SebastianBergmann\Diff\ConfigurationException($option, 'a string', $options[$option]);
         }
     }
-    private function assertStringOrNull(array $options, string $option) : void
+    /**
+     * @param mixed[] $options
+     * @param string $option
+     */
+    private function assertStringOrNull($options, $option) : void
     {
         if (null !== $options[$option] && !\is_string($options[$option])) {
             throw new \RectorPrefix20210705\SebastianBergmann\Diff\ConfigurationException($option, 'a string or <null>', $options[$option]);

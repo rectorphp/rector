@@ -37,9 +37,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Expr\Assign::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param Assign $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$this->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::NULL_COALESCE_ASSIGN)) {
             return null;

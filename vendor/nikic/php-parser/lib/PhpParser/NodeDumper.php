@@ -38,7 +38,7 @@ class NodeDumper
      *
      * @return string Dumped value
      */
-    public function dump($node, string $code = null) : string
+    public function dump($node, $code = null) : string
     {
         $this->code = $code;
         return $this->dumpRecursive($node);
@@ -150,7 +150,7 @@ class NodeDumper
      *
      * @return string|null Dump of position, or null if position information not available
      */
-    protected function dumpPosition(\PhpParser\Node $node)
+    protected function dumpPosition($node)
     {
         if (!$node->hasAttribute('startLine') || !$node->hasAttribute('endLine')) {
             return null;

@@ -40,7 +40,10 @@ class Profile
     {
         $this->token = $token;
     }
-    public function setToken(string $token)
+    /**
+     * @param string $token
+     */
+    public function setToken($token)
     {
         $this->token = $token;
     }
@@ -88,7 +91,10 @@ class Profile
     {
         return $this->ip;
     }
-    public function setIp(?string $ip)
+    /**
+     * @param string|null $ip
+     */
+    public function setIp($ip)
     {
         $this->ip = $ip;
     }
@@ -101,7 +107,10 @@ class Profile
     {
         return $this->method;
     }
-    public function setMethod(string $method)
+    /**
+     * @param string $method
+     */
+    public function setMethod($method)
     {
         $this->method = $method;
     }
@@ -114,7 +123,10 @@ class Profile
     {
         return $this->url;
     }
-    public function setUrl(?string $url)
+    /**
+     * @param string|null $url
+     */
+    public function setUrl($url)
     {
         $this->url = $url;
     }
@@ -128,11 +140,17 @@ class Profile
         }
         return $this->time;
     }
-    public function setTime(int $time)
+    /**
+     * @param int $time
+     */
+    public function setTime($time)
     {
         $this->time = $time;
     }
-    public function setStatusCode(int $statusCode)
+    /**
+     * @param int $statusCode
+     */
+    public function setStatusCode($statusCode)
     {
         $this->statusCode = $statusCode;
     }
@@ -157,7 +175,7 @@ class Profile
      *
      * @param Profile[] $children
      */
-    public function setChildren(array $children)
+    public function setChildren($children)
     {
         $this->children = [];
         foreach ($children as $child) {
@@ -175,8 +193,9 @@ class Profile
     }
     /**
      * @return $this|null
+     * @param string $token
      */
-    public function getChildByToken(string $token)
+    public function getChildByToken($token)
     {
         foreach ($this->children as $child) {
             if ($token === $child->getToken()) {
@@ -191,8 +210,9 @@ class Profile
      * @return DataCollectorInterface A DataCollectorInterface instance
      *
      * @throws \InvalidArgumentException if the collector does not exist
+     * @param string $name
      */
-    public function getCollector(string $name)
+    public function getCollector($name)
     {
         if (!isset($this->collectors[$name])) {
             throw new \InvalidArgumentException(\sprintf('Collector "%s" does not exist.', $name));
@@ -213,7 +233,7 @@ class Profile
      *
      * @param DataCollectorInterface[] $collectors
      */
-    public function setCollectors(array $collectors)
+    public function setCollectors($collectors)
     {
         $this->collectors = [];
         foreach ($collectors as $collector) {
@@ -222,15 +242,17 @@ class Profile
     }
     /**
      * Adds a Collector.
+     * @param \Symfony\Component\HttpKernel\DataCollector\DataCollectorInterface $collector
      */
-    public function addCollector(\RectorPrefix20210705\Symfony\Component\HttpKernel\DataCollector\DataCollectorInterface $collector)
+    public function addCollector($collector)
     {
         $this->collectors[$collector->getName()] = $collector;
     }
     /**
      * @return bool
+     * @param string $name
      */
-    public function hasCollector(string $name)
+    public function hasCollector($name)
     {
         return isset($this->collectors[$name]);
     }

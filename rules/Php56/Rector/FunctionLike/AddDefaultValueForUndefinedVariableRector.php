@@ -80,7 +80,7 @@ CODE_SAMPLE
     /**
      * @param ClassMethod|Function_|Closure $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $this->definedVariables = [];
         $undefinedVariables = $this->collectUndefinedVariableScope($node);
@@ -136,9 +136,8 @@ CODE_SAMPLE
     }
     /**
      * @param Stmt[] $stmts
-     * @param string $undefinedVariable
      */
-    private function isArray($undefinedVariable, array $stmts) : bool
+    private function isArray(string $undefinedVariable, array $stmts) : bool
     {
         return (bool) $this->betterNodeFinder->findFirst($stmts, function (\PhpParser\Node $node) use($undefinedVariable) : bool {
             if (!$node instanceof \PhpParser\Node\Expr\ArrayDimFetch) {

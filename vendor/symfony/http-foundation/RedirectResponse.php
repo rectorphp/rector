@@ -49,8 +49,10 @@ class RedirectResponse extends \RectorPrefix20210705\Symfony\Component\HttpFound
      * @return static
      *
      * @deprecated since Symfony 5.1, use __construct() instead.
+     * @param int $status
+     * @param mixed[] $headers
      */
-    public static function create($url = '', int $status = 302, array $headers = [])
+    public static function create($url = '', $status = 302, $headers = [])
     {
         trigger_deprecation('symfony/http-foundation', '5.1', 'The "%s()" method is deprecated, use "new %s()" instead.', __METHOD__, static::class);
         return new static($url, $status, $headers);
@@ -70,8 +72,9 @@ class RedirectResponse extends \RectorPrefix20210705\Symfony\Component\HttpFound
      * @return $this
      *
      * @throws \InvalidArgumentException
+     * @param string $url
      */
-    public function setTargetUrl(string $url)
+    public function setTargetUrl($url)
     {
         if ('' === $url) {
             throw new \InvalidArgumentException('Cannot redirect to an empty URL.');

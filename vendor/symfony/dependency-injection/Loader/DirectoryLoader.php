@@ -19,8 +19,9 @@ class DirectoryLoader extends \RectorPrefix20210705\Symfony\Component\Dependency
 {
     /**
      * {@inheritdoc}
+     * @param string|null $type
      */
-    public function load($file, string $type = null)
+    public function load($file, $type = null)
     {
         $file = \rtrim($file, '/');
         $path = $this->locator->locate($file);
@@ -38,8 +39,9 @@ class DirectoryLoader extends \RectorPrefix20210705\Symfony\Component\Dependency
     }
     /**
      * {@inheritdoc}
+     * @param string|null $type
      */
-    public function supports($resource, string $type = null)
+    public function supports($resource, $type = null)
     {
         if ('directory' === $type) {
             return \true;

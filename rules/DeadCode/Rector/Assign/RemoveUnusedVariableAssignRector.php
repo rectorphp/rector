@@ -87,9 +87,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Expr\Assign::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param Assign $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -124,10 +124,7 @@ CODE_SAMPLE
         }
         return !$this->pureFunctionDetector->detect($expr);
     }
-    /**
-     * @param \PhpParser\Node\Expr\Assign $assign
-     */
-    private function shouldSkip($assign) : bool
+    private function shouldSkip(\PhpParser\Node\Expr\Assign $assign) : bool
     {
         $classMethod = $assign->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::METHOD_NODE);
         if (!$classMethod instanceof \PhpParser\Node\FunctionLike) {

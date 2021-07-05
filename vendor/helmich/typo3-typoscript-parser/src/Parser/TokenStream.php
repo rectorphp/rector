@@ -27,7 +27,7 @@ class TokenStream implements \Iterator, \ArrayAccess
      * @param int $lookAhead
      * @return TokenInterface
      */
-    public function current(int $lookAhead = 0) : \RectorPrefix20210705\Helmich\TypoScriptParser\Tokenizer\TokenInterface
+    public function current($lookAhead = 0) : \RectorPrefix20210705\Helmich\TypoScriptParser\Tokenizer\TokenInterface
     {
         return $this[$this->index + $lookAhead];
     }
@@ -35,7 +35,7 @@ class TokenStream implements \Iterator, \ArrayAccess
      * @param int $increment
      * @return void
      */
-    public function next(int $increment = 1) : void
+    public function next($increment = 1) : void
     {
         if ($this->index < \count($this->tokens)) {
             $this->index += $increment;

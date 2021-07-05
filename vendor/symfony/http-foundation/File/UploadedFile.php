@@ -158,8 +158,10 @@ class UploadedFile extends \RectorPrefix20210705\Symfony\Component\HttpFoundatio
      * @return File A File object representing the new file
      *
      * @throws FileException if, for any reason, the file could not have been moved
+     * @param string $directory
+     * @param string|null $name
      */
-    public function move(string $directory, string $name = null)
+    public function move($directory, $name = null)
     {
         if ($this->isValid()) {
             if ($this->test) {

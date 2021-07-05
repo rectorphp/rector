@@ -26,8 +26,9 @@ class MailSender
     }
     /**
      * @param  mixed  $message
+     * @param string $email
      */
-    public function send($message, string $email) : void
+    public function send($message, $email) : void
     {
         $host = \preg_replace('#[^\\w.-]+#', '', $_SERVER['SERVER_NAME'] ?? \php_uname('n'));
         $mail = new \RectorPrefix20210705\Nette\Mail\Message();

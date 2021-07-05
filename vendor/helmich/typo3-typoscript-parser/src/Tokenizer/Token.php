@@ -48,7 +48,7 @@ class Token implements \RectorPrefix20210705\Helmich\TypoScriptParser\Tokenizer\
      * @param string $string
      * @return string|null
      */
-    public function getSubMatch(string $string) : ?string
+    public function getSubMatch($string) : ?string
     {
         return isset($this->patternMatches[$string]) ? $this->patternMatches[$string] : null;
     }

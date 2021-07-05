@@ -48,7 +48,10 @@ class ArgvInput extends \RectorPrefix20210705\Symfony\Component\Console\Input\In
         $this->tokens = $argv;
         parent::__construct($definition);
     }
-    protected function setTokens(array $tokens)
+    /**
+     * @param mixed[] $tokens
+     */
+    protected function setTokens($tokens)
     {
         $this->tokens = $tokens;
     }
@@ -75,8 +78,9 @@ class ArgvInput extends \RectorPrefix20210705\Symfony\Component\Console\Input\In
     }
     /**
      * Parses a short option.
+     * @param string $token
      */
-    private function parseShortOption(string $token)
+    private function parseShortOption($token)
     {
         $name = \substr($token, 1);
         if (\strlen($name) > 1) {
@@ -94,8 +98,9 @@ class ArgvInput extends \RectorPrefix20210705\Symfony\Component\Console\Input\In
      * Parses a short option set.
      *
      * @throws RuntimeException When option given doesn't exist
+     * @param string $name
      */
-    private function parseShortOptionSet(string $name)
+    private function parseShortOptionSet($name)
     {
         $len = \strlen($name);
         for ($i = 0; $i < $len; ++$i) {
@@ -114,8 +119,9 @@ class ArgvInput extends \RectorPrefix20210705\Symfony\Component\Console\Input\In
     }
     /**
      * Parses a long option.
+     * @param string $token
      */
-    private function parseLongOption(string $token)
+    private function parseLongOption($token)
     {
         $name = \substr($token, 2);
         if (\false !== ($pos = \strpos($name, '='))) {
@@ -131,8 +137,9 @@ class ArgvInput extends \RectorPrefix20210705\Symfony\Component\Console\Input\In
      * Parses an argument.
      *
      * @throws RuntimeException When too many arguments are given
+     * @param string $token
      */
-    private function parseArgument(string $token)
+    private function parseArgument($token)
     {
         $c = \count($this->arguments);
         // if input is expecting another argument, add it
@@ -170,8 +177,9 @@ class ArgvInput extends \RectorPrefix20210705\Symfony\Component\Console\Input\In
      * Adds a short option value.
      *
      * @throws RuntimeException When option given doesn't exist
+     * @param string $shortcut
      */
-    private function addShortOption(string $shortcut, $value)
+    private function addShortOption($shortcut, $value)
     {
         if (!$this->definition->hasShortcut($shortcut)) {
             throw new \RectorPrefix20210705\Symfony\Component\Console\Exception\RuntimeException(\sprintf('The "-%s" option does not exist.', $shortcut));
@@ -182,8 +190,9 @@ class ArgvInput extends \RectorPrefix20210705\Symfony\Component\Console\Input\In
      * Adds a long option value.
      *
      * @throws RuntimeException When option given doesn't exist
+     * @param string $name
      */
-    private function addLongOption(string $name, $value)
+    private function addLongOption($name, $value)
     {
         if (!$this->definition->hasOption($name)) {
             if (!$this->definition->hasNegation($name)) {
@@ -255,8 +264,9 @@ class ArgvInput extends \RectorPrefix20210705\Symfony\Component\Console\Input\In
     }
     /**
      * {@inheritdoc}
+     * @param bool $onlyParams
      */
-    public function hasParameterOption($values, bool $onlyParams = \false)
+    public function hasParameterOption($values, $onlyParams = \false)
     {
         $values = (array) $values;
         foreach ($this->tokens as $token) {
@@ -277,8 +287,9 @@ class ArgvInput extends \RectorPrefix20210705\Symfony\Component\Console\Input\In
     }
     /**
      * {@inheritdoc}
+     * @param bool $onlyParams
      */
-    public function getParameterOption($values, $default = \false, bool $onlyParams = \false)
+    public function getParameterOption($values, $default = \false, $onlyParams = \false)
     {
         $values = (array) $values;
         $tokens = $this->tokens;

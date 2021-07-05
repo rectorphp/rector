@@ -34,8 +34,9 @@ class PrototypedArrayNode extends \RectorPrefix20210705\Symfony\Component\Config
     /**
      * Sets the minimum number of elements that a prototype based node must
      * contain. By default this is zero, meaning no elements.
+     * @param int $number
      */
-    public function setMinNumberOfElements(int $number)
+    public function setMinNumberOfElements($number)
     {
         $this->minNumberOfElements = $number;
     }
@@ -63,7 +64,7 @@ class PrototypedArrayNode extends \RectorPrefix20210705\Symfony\Component\Config
      * @param string $attribute The name of the attribute which value is to be used as a key
      * @param bool   $remove    Whether or not to remove the key
      */
-    public function setKeyAttribute(string $attribute, bool $remove = \true)
+    public function setKeyAttribute($attribute, $remove = \true)
     {
         $this->keyAttribute = $attribute;
         $this->removeKeyAttribute = $remove;
@@ -79,8 +80,9 @@ class PrototypedArrayNode extends \RectorPrefix20210705\Symfony\Component\Config
     }
     /**
      * Sets the default value of this node.
+     * @param mixed[] $value
      */
-    public function setDefaultValue(array $value)
+    public function setDefaultValue($value)
     {
         $this->defaultValue = $value;
     }
@@ -124,8 +126,9 @@ class PrototypedArrayNode extends \RectorPrefix20210705\Symfony\Component\Config
     }
     /**
      * Sets the node prototype.
+     * @param \Symfony\Component\Config\Definition\PrototypeNodeInterface $node
      */
-    public function setPrototype(\RectorPrefix20210705\Symfony\Component\Config\Definition\PrototypeNodeInterface $node)
+    public function setPrototype($node)
     {
         $this->prototype = $node;
     }
@@ -142,8 +145,9 @@ class PrototypedArrayNode extends \RectorPrefix20210705\Symfony\Component\Config
      * Disable adding concrete children for prototyped nodes.
      *
      * @throws Exception
+     * @param \Symfony\Component\Config\Definition\NodeInterface $node
      */
-    public function addChild(\RectorPrefix20210705\Symfony\Component\Config\Definition\NodeInterface $node)
+    public function addChild($node)
     {
         throw new \RectorPrefix20210705\Symfony\Component\Config\Definition\Exception\Exception('A prototyped array node can not have concrete children.');
     }
@@ -300,8 +304,9 @@ class PrototypedArrayNode extends \RectorPrefix20210705\Symfony\Component\Config
      * the prototype of child node 'name001' should be a ScalarNode instead of an ArrayNode instance.
      *
      * @return mixed The prototype instance
+     * @param string $key
      */
-    private function getPrototypeForChild(string $key)
+    private function getPrototypeForChild($key)
     {
         $prototype = $this->valuePrototypes[$key] ?? $this->prototype;
         $prototype->setName($key);

@@ -68,7 +68,11 @@ Or of a whole directory:
 EOF
 );
     }
-    protected function execute(\RectorPrefix20210705\Symfony\Component\Console\Input\InputInterface $input, \RectorPrefix20210705\Symfony\Component\Console\Output\OutputInterface $output)
+    /**
+     * @param \Symfony\Component\Console\Input\InputInterface $input
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     */
+    protected function execute($input, $output)
     {
         $io = new \RectorPrefix20210705\Symfony\Component\Console\Style\SymfonyStyle($input, $output);
         $filenames = (array) $input->getArgument('filename');
@@ -99,7 +103,12 @@ EOF
         }
         return $this->display($io, $filesInfo);
     }
-    private function validate(string $content, int $flags, string $file = null)
+    /**
+     * @param string $content
+     * @param int $flags
+     * @param string|null $file
+     */
+    private function validate($content, $flags, $file = null)
     {
         $prevErrorHandler = \set_error_handler(function ($level, $message, $file, $line) use(&$prevErrorHandler) {
             if (\E_USER_DEPRECATED === $level) {
@@ -116,7 +125,11 @@ EOF
         }
         return ['file' => $file, 'valid' => \true];
     }
-    private function display(\RectorPrefix20210705\Symfony\Component\Console\Style\SymfonyStyle $io, array $files) : int
+    /**
+     * @param \Symfony\Component\Console\Style\SymfonyStyle $io
+     * @param mixed[] $files
+     */
+    private function display($io, $files) : int
     {
         switch ($this->format) {
             case 'txt':
@@ -129,7 +142,12 @@ EOF
                 throw new \RectorPrefix20210705\Symfony\Component\Console\Exception\InvalidArgumentException(\sprintf('The format "%s" is not supported.', $this->format));
         }
     }
-    private function displayTxt(\RectorPrefix20210705\Symfony\Component\Console\Style\SymfonyStyle $io, array $filesInfo, bool $errorAsGithubAnnotations = \false) : int
+    /**
+     * @param \Symfony\Component\Console\Style\SymfonyStyle $io
+     * @param mixed[] $filesInfo
+     * @param bool $errorAsGithubAnnotations
+     */
+    private function displayTxt($io, $filesInfo, $errorAsGithubAnnotations = \false) : int
     {
         $countFiles = \count($filesInfo);
         $erroredFiles = 0;
@@ -159,7 +177,11 @@ EOF
         }
         return \min($erroredFiles, 1);
     }
-    private function displayJson(\RectorPrefix20210705\Symfony\Component\Console\Style\SymfonyStyle $io, array $filesInfo) : int
+    /**
+     * @param \Symfony\Component\Console\Style\SymfonyStyle $io
+     * @param mixed[] $filesInfo
+     */
+    private function displayJson($io, $filesInfo) : int
     {
         $errors = 0;
         \array_walk($filesInfo, function (&$v) use(&$errors) {
@@ -174,7 +196,10 @@ EOF
         $io->writeln(\json_encode($filesInfo, \JSON_PRETTY_PRINT | \JSON_UNESCAPED_SLASHES));
         return \min($errors, 1);
     }
-    private function getFiles(string $fileOrDirectory) : iterable
+    /**
+     * @param string $fileOrDirectory
+     */
+    private function getFiles($fileOrDirectory) : iterable
     {
         if (\is_file($fileOrDirectory)) {
             (yield new \SplFileInfo($fileOrDirectory));
@@ -194,7 +219,10 @@ EOF
         }
         return $this->parser;
     }
-    private function getDirectoryIterator(string $directory) : iterable
+    /**
+     * @param string $directory
+     */
+    private function getDirectoryIterator($directory) : iterable
     {
         $default = function ($directory) {
             return new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($directory, \FilesystemIterator::SKIP_DOTS | \FilesystemIterator::FOLLOW_SYMLINKS), \RecursiveIteratorIterator::LEAVES_ONLY);
@@ -204,7 +232,10 @@ EOF
         }
         return $default($directory);
     }
-    private function isReadable(string $fileOrDirectory) : bool
+    /**
+     * @param string $fileOrDirectory
+     */
+    private function isReadable($fileOrDirectory) : bool
     {
         $default = function ($fileOrDirectory) {
             return \is_readable($fileOrDirectory);

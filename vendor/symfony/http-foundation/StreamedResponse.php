@@ -45,8 +45,10 @@ class StreamedResponse extends \RectorPrefix20210705\Symfony\Component\HttpFound
      * @return static
      *
      * @deprecated since Symfony 5.1, use __construct() instead.
+     * @param int $status
+     * @param mixed[] $headers
      */
-    public static function create($callback = null, int $status = 200, array $headers = [])
+    public static function create($callback = null, $status = 200, $headers = [])
     {
         trigger_deprecation('symfony/http-foundation', '5.1', 'The "%s()" method is deprecated, use "new %s()" instead.', __METHOD__, static::class);
         return new static($callback, $status, $headers);
@@ -102,8 +104,9 @@ class StreamedResponse extends \RectorPrefix20210705\Symfony\Component\HttpFound
      * @throws \LogicException when the content is not null
      *
      * @return $this
+     * @param string|null $content
      */
-    public function setContent(?string $content)
+    public function setContent($content)
     {
         if (null !== $content) {
             throw new \LogicException('The content cannot be set on a StreamedResponse instance.');

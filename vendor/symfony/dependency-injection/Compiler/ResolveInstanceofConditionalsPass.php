@@ -24,8 +24,9 @@ class ResolveInstanceofConditionalsPass implements \RectorPrefix20210705\Symfony
 {
     /**
      * {@inheritdoc}
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      */
-    public function process(\RectorPrefix20210705\Symfony\Component\DependencyInjection\ContainerBuilder $container)
+    public function process($container)
     {
         foreach ($container->getAutoconfiguredInstanceof() as $interface => $definition) {
             if ($definition->getArguments()) {
@@ -43,7 +44,13 @@ class ResolveInstanceofConditionalsPass implements \RectorPrefix20210705\Symfony
             $container->getParameterBag()->remove('container.behavior_describing_tags');
         }
     }
-    private function processDefinition(\RectorPrefix20210705\Symfony\Component\DependencyInjection\ContainerBuilder $container, string $id, \RectorPrefix20210705\Symfony\Component\DependencyInjection\Definition $definition, array $tagsToKeep) : \RectorPrefix20210705\Symfony\Component\DependencyInjection\Definition
+    /**
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     * @param string $id
+     * @param \Symfony\Component\DependencyInjection\Definition $definition
+     * @param mixed[] $tagsToKeep
+     */
+    private function processDefinition($container, $id, $definition, $tagsToKeep) : \RectorPrefix20210705\Symfony\Component\DependencyInjection\Definition
     {
         $instanceofConditionals = $definition->getInstanceofConditionals();
         $autoconfiguredInstanceof = $definition->isAutoconfigured() ? $container->getAutoconfiguredInstanceof() : [];
@@ -124,7 +131,12 @@ class ResolveInstanceofConditionalsPass implements \RectorPrefix20210705\Symfony
         }
         return $definition;
     }
-    private function mergeConditionals(array $autoconfiguredInstanceof, array $instanceofConditionals, \RectorPrefix20210705\Symfony\Component\DependencyInjection\ContainerBuilder $container) : array
+    /**
+     * @param mixed[] $autoconfiguredInstanceof
+     * @param mixed[] $instanceofConditionals
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     */
+    private function mergeConditionals($autoconfiguredInstanceof, $instanceofConditionals, $container) : array
     {
         // make each value an array of ChildDefinition
         $conditionals = \array_map(function ($childDef) {

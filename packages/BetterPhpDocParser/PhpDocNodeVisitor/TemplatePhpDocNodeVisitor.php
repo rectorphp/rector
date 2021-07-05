@@ -30,7 +30,10 @@ final class TemplatePhpDocNodeVisitor extends \RectorPrefix20210705\Symplify\Sim
         $this->currentTokenIteratorProvider = $currentTokenIteratorProvider;
         $this->attributeMirrorer = $attributeMirrorer;
     }
-    public function enterNode(\PHPStan\PhpDocParser\Ast\Node $node) : ?\PHPStan\PhpDocParser\Ast\Node
+    /**
+     * @param \PHPStan\PhpDocParser\Ast\Node $node
+     */
+    public function enterNode($node) : ?\PHPStan\PhpDocParser\Ast\Node
     {
         if (!$node instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\TemplateTagValueNode) {
             return null;
@@ -48,7 +51,11 @@ final class TemplatePhpDocNodeVisitor extends \RectorPrefix20210705\Symplify\Sim
         $this->attributeMirrorer->mirror($node, $spacingAwareTemplateTagValueNode);
         return $spacingAwareTemplateTagValueNode;
     }
-    private function resolvePreposition(\Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator $betterTokenIterator, \Rector\BetterPhpDocParser\ValueObject\StartAndEnd $startAndEnd) : string
+    /**
+     * @param \Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator $betterTokenIterator
+     * @param \Rector\BetterPhpDocParser\ValueObject\StartAndEnd $startAndEnd
+     */
+    private function resolvePreposition($betterTokenIterator, $startAndEnd) : string
     {
         $partialTokens = $betterTokenIterator->partialTokens($startAndEnd->getStart(), $startAndEnd->getEnd());
         foreach ($partialTokens as $partialToken) {

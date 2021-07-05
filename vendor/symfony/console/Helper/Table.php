@@ -85,8 +85,10 @@ class Table
     }
     /**
      * Sets a style definition.
+     * @param string $name
+     * @param \Symfony\Component\Console\Helper\TableStyle $style
      */
-    public static function setStyleDefinition(string $name, \RectorPrefix20210705\Symfony\Component\Console\Helper\TableStyle $style)
+    public static function setStyleDefinition($name, $style)
     {
         if (!self::$styles) {
             self::$styles = self::initStyles();
@@ -97,8 +99,9 @@ class Table
      * Gets a style definition by name.
      *
      * @return TableStyle
+     * @param string $name
      */
-    public static function getStyleDefinition(string $name)
+    public static function getStyleDefinition($name)
     {
         if (!self::$styles) {
             self::$styles = self::initStyles();
@@ -135,8 +138,9 @@ class Table
      * @param TableStyle|string $name The style name or a TableStyle instance
      *
      * @return $this
+     * @param int $columnIndex
      */
-    public function setColumnStyle(int $columnIndex, $name)
+    public function setColumnStyle($columnIndex, $name)
     {
         $this->columnStyles[$columnIndex] = $this->resolveStyle($name);
         return $this;
@@ -147,8 +151,9 @@ class Table
      * If style was not set, it returns the global table style.
      *
      * @return TableStyle
+     * @param int $columnIndex
      */
-    public function getColumnStyle(int $columnIndex)
+    public function getColumnStyle($columnIndex)
     {
         return $this->columnStyles[$columnIndex] ?? $this->getStyle();
     }
@@ -156,8 +161,10 @@ class Table
      * Sets the minimum width of a column.
      *
      * @return $this
+     * @param int $columnIndex
+     * @param int $width
      */
-    public function setColumnWidth(int $columnIndex, int $width)
+    public function setColumnWidth($columnIndex, $width)
     {
         $this->columnWidths[$columnIndex] = $width;
         return $this;
@@ -166,8 +173,9 @@ class Table
      * Sets the minimum width of all columns.
      *
      * @return $this
+     * @param mixed[] $widths
      */
-    public function setColumnWidths(array $widths)
+    public function setColumnWidths($widths)
     {
         $this->columnWidths = [];
         foreach ($widths as $index => $width) {
@@ -182,8 +190,10 @@ class Table
      * formatted strings are preserved.
      *
      * @return $this
+     * @param int $columnIndex
+     * @param int $width
      */
-    public function setColumnMaxWidth(int $columnIndex, int $width)
+    public function setColumnMaxWidth($columnIndex, $width)
     {
         if (!$this->output->getFormatter() instanceof \RectorPrefix20210705\Symfony\Component\Console\Formatter\WrappableOutputFormatterInterface) {
             throw new \LogicException(\sprintf('Setting a maximum column width is only supported when using a "%s" formatter, got "%s".', \RectorPrefix20210705\Symfony\Component\Console\Formatter\WrappableOutputFormatterInterface::class, \get_debug_type($this->output->getFormatter())));
@@ -191,7 +201,10 @@ class Table
         $this->columnMaxWidths[$columnIndex] = $width;
         return $this;
     }
-    public function setHeaders(array $headers)
+    /**
+     * @param mixed[] $headers
+     */
+    public function setHeaders($headers)
     {
         $headers = \array_values($headers);
         if (!empty($headers) && !\is_array($headers[0])) {
@@ -200,12 +213,18 @@ class Table
         $this->headers = $headers;
         return $this;
     }
-    public function setRows(array $rows)
+    /**
+     * @param mixed[] $rows
+     */
+    public function setRows($rows)
     {
         $this->rows = [];
         return $this->addRows($rows);
     }
-    public function addRows(array $rows)
+    /**
+     * @param mixed[] $rows
+     */
+    public function addRows($rows)
     {
         foreach ($rows as $row) {
             $this->addRow($row);
@@ -240,31 +259,37 @@ class Table
         $this->render();
         return $this;
     }
-    public function setRow($column, array $row)
+    /**
+     * @param mixed[] $row
+     */
+    public function setRow($column, $row)
     {
         $this->rows[$column] = $row;
         return $this;
     }
     /**
      * @return $this
+     * @param string|null $title
      */
-    public function setHeaderTitle(?string $title)
+    public function setHeaderTitle($title)
     {
         $this->headerTitle = $title;
         return $this;
     }
     /**
      * @return $this
+     * @param string|null $title
      */
-    public function setFooterTitle(?string $title)
+    public function setFooterTitle($title)
     {
         $this->footerTitle = $title;
         return $this;
     }
     /**
      * @return $this
+     * @param bool $horizontal
      */
-    public function setHorizontal(bool $horizontal = \true)
+    public function setHorizontal($horizontal = \true)
     {
         $this->horizontal = $horizontal;
         return $this;
@@ -347,8 +372,11 @@ class Table
      * Example:
      *
      *     +-----+-----------+-------+
+     * @param int $type
+     * @param string|null $title
+     * @param string|null $titleFormat
      */
-    private function renderRowSeparator(int $type = self::SEPARATOR_MID, string $title = null, string $titleFormat = null)
+    private function renderRowSeparator($type = self::SEPARATOR_MID, $title = null, $titleFormat = null)
     {
         if (0 === ($count = $this->numberOfColumns)) {
             return;
@@ -391,8 +419,9 @@ class Table
     }
     /**
      * Renders vertical column separator.
+     * @param int $type
      */
-    private function renderColumnSeparator(int $type = self::BORDER_OUTSIDE) : string
+    private function renderColumnSeparator($type = self::BORDER_OUTSIDE) : string
     {
         $borders = $this->style->getBorderChars();
         return \sprintf($this->style->getBorderFormat(), self::BORDER_OUTSIDE === $type ? $borders[1] : $borders[3]);
@@ -403,8 +432,11 @@ class Table
      * Example:
      *
      *     | 9971-5-0210-0 | A Tale of Two Cities  | Charles Dickens  |
+     * @param mixed[] $row
+     * @param string $cellFormat
+     * @param string|null $firstCellFormat
      */
-    private function renderRow(array $row, string $cellFormat, string $firstCellFormat = null)
+    private function renderRow($row, $cellFormat, $firstCellFormat = null)
     {
         $rowContent = $this->renderColumnSeparator(self::BORDER_OUTSIDE);
         $columns = $this->getRowColumns($row);
@@ -421,8 +453,11 @@ class Table
     }
     /**
      * Renders table cell with padding.
+     * @param mixed[] $row
+     * @param int $column
+     * @param string $cellFormat
      */
-    private function renderCell(array $row, int $column, string $cellFormat) : string
+    private function renderCell($row, $column, $cellFormat) : string
     {
         $cell = $row[$column] ?? '';
         $width = $this->effectiveColumnWidths[$column];
@@ -466,8 +501,9 @@ class Table
     }
     /**
      * Calculate number of columns for this table.
+     * @param mixed[] $rows
      */
-    private function calculateNumberOfColumns(array $rows)
+    private function calculateNumberOfColumns($rows)
     {
         $columns = [0];
         foreach ($rows as $row) {
@@ -478,7 +514,10 @@ class Table
         }
         $this->numberOfColumns = \max($columns);
     }
-    private function buildTableRows(array $rows) : \RectorPrefix20210705\Symfony\Component\Console\Helper\TableRows
+    /**
+     * @param mixed[] $rows
+     */
+    private function buildTableRows($rows) : \RectorPrefix20210705\Symfony\Component\Console\Helper\TableRows
     {
         /** @var WrappableOutputFormatterInterface $formatter */
         $formatter = $this->output->getFormatter();
@@ -540,8 +579,10 @@ class Table
      * fill rows that contains rowspan > 1.
      *
      * @throws InvalidArgumentException
+     * @param mixed[] $rows
+     * @param int $line
      */
-    private function fillNextRows(array $rows, int $line) : array
+    private function fillNextRows($rows, $line) : array
     {
         $unmergedRows = [];
         foreach ($rows[$line] as $column => $cell) {
@@ -589,8 +630,9 @@ class Table
     }
     /**
      * fill cells for a row that contains colspan > 1.
+     * @param mixed[] $row
      */
-    private function fillCells(iterable $row)
+    private function fillCells($row)
     {
         $newRow = [];
         foreach ($row as $column => $cell) {
@@ -604,7 +646,11 @@ class Table
         }
         return $newRow ?: $row;
     }
-    private function copyRow(array $rows, int $line) : array
+    /**
+     * @param mixed[] $rows
+     * @param int $line
+     */
+    private function copyRow($rows, $line) : array
     {
         $row = $rows[$line];
         foreach ($row as $cellKey => $cellValue) {
@@ -617,8 +663,9 @@ class Table
     }
     /**
      * Gets number of columns by row.
+     * @param mixed[] $row
      */
-    private function getNumberOfColumns(array $row) : int
+    private function getNumberOfColumns($row) : int
     {
         $columns = \count($row);
         foreach ($row as $column) {
@@ -628,8 +675,9 @@ class Table
     }
     /**
      * Gets list of columns for the given row.
+     * @param mixed[] $row
      */
-    private function getRowColumns(array $row) : array
+    private function getRowColumns($row) : array
     {
         $columns = \range(0, $this->numberOfColumns - 1);
         foreach ($row as $cellKey => $cell) {
@@ -642,8 +690,9 @@ class Table
     }
     /**
      * Calculates columns widths.
+     * @param mixed[] $rows
      */
-    private function calculateColumnsWidth(iterable $rows)
+    private function calculateColumnsWidth($rows)
     {
         for ($column = 0; $column < $this->numberOfColumns; ++$column) {
             $lengths = [];
@@ -672,7 +721,11 @@ class Table
     {
         return \RectorPrefix20210705\Symfony\Component\Console\Helper\Helper::width(\sprintf($this->style->getBorderFormat(), $this->style->getBorderChars()[3]));
     }
-    private function getCellWidth(array $row, int $column) : int
+    /**
+     * @param mixed[] $row
+     * @param int $column
+     */
+    private function getCellWidth($row, $column) : int
     {
         $cellWidth = 0;
         if (isset($row[$column])) {

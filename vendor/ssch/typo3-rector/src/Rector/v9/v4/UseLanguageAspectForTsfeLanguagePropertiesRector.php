@@ -38,9 +38,9 @@ final class UseLanguageAspectForTsfeLanguagePropertiesRector extends \Rector\Cor
         return [\PhpParser\Node\Expr\PropertyFetch::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param PropertyFetch $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -75,10 +75,7 @@ $languageUid = GeneralUtility::makeInstance(Context::class)->getPropertyFromAspe
 CODE_SAMPLE
 )]);
     }
-    /**
-     * @param \PhpParser\Node\Expr\PropertyFetch $node
-     */
-    private function shouldSkip($node) : bool
+    private function shouldSkip(\PhpParser\Node\Expr\PropertyFetch $node) : bool
     {
         if ($this->isObjectType($node->var, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Frontend\\Controller\\TypoScriptFrontendController'))) {
             return \false;

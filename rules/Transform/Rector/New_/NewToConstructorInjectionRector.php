@@ -87,7 +87,7 @@ CODE_SAMPLE
     /**
      * @param New_|Assign|MethodCall $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($node instanceof \PhpParser\Node\Expr\MethodCall) {
             return $this->refactorMethodCall($node);
@@ -110,10 +110,7 @@ CODE_SAMPLE
             $this->constructorInjectionObjectTypes[] = new \PHPStan\Type\ObjectType($typeToConstructorInjection);
         }
     }
-    /**
-     * @param \PhpParser\Node\Expr\MethodCall $methodCall
-     */
-    private function refactorMethodCall($methodCall) : ?\PhpParser\Node\Expr\MethodCall
+    private function refactorMethodCall(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\PhpParser\Node\Expr\MethodCall
     {
         foreach ($this->constructorInjectionObjectTypes as $constructorInjectionObjectType) {
             if (!$methodCall->var instanceof \PhpParser\Node\Expr\Variable) {
@@ -142,10 +139,7 @@ CODE_SAMPLE
             $this->removeNode($assign);
         }
     }
-    /**
-     * @param \PhpParser\Node\Expr\New_ $new
-     */
-    private function refactorNew($new) : void
+    private function refactorNew(\PhpParser\Node\Expr\New_ $new) : void
     {
         foreach ($this->constructorInjectionObjectTypes as $constructorInjectionObjectType) {
             if (!$this->isObjectType($new->class, $constructorInjectionObjectType)) {

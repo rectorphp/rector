@@ -12,7 +12,10 @@ final class TreeLevelConditionMatcher implements \Ssch\TYPO3Rector\Contract\File
      * @var string
      */
     private const TYPE = 'treeLevel';
-    public function change(string $condition) : ?string
+    /**
+     * @param string $condition
+     */
+    public function change($condition) : ?string
     {
         \preg_match('#' . self::TYPE . '\\s*=\\s*(.*)#', $condition, $matches);
         if (!\is_array($matches)) {
@@ -21,7 +24,10 @@ final class TreeLevelConditionMatcher implements \Ssch\TYPO3Rector\Contract\File
         $values = \Ssch\TYPO3Rector\Helper\ArrayUtility::trimExplode(',', $matches[1], \true);
         return \sprintf('tree.level in [%s]', \implode(',', $values));
     }
-    public function shouldApply(string $condition) : bool
+    /**
+     * @param string $condition
+     */
+    public function shouldApply($condition) : bool
     {
         if (\RectorPrefix20210705\Nette\Utils\Strings::contains($condition, self::CONTAINS_CONSTANT)) {
             return \false;

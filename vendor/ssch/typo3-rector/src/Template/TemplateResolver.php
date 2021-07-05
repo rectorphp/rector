@@ -18,7 +18,10 @@ final class TemplateResolver implements \Rector\Core\Contract\Template\TemplateR
     {
         return __DIR__ . '/../../templates/rector.php.dist';
     }
-    public function supports(string $type) : bool
+    /**
+     * @param string $type
+     */
+    public function supports($type) : bool
     {
         return self::TYPE === $type;
     }

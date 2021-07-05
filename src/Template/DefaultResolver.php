@@ -14,7 +14,10 @@ final class DefaultResolver implements \Rector\Core\Contract\Template\TemplateRe
     {
         return __DIR__ . '/../../templates/rector.php.dist';
     }
-    public function supports(string $type) : bool
+    /**
+     * @param string $type
+     */
+    public function supports($type) : bool
     {
         return $type === self::TYPE;
     }

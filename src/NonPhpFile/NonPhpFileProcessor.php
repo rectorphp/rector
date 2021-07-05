@@ -24,14 +24,22 @@ final class NonPhpFileProcessor implements \Rector\Core\Contract\Processor\FileP
     {
         $this->nonPhpRectors = $nonPhpRectors;
     }
-    public function process(\Rector\Core\ValueObject\Application\File $file, \Rector\Core\ValueObject\Configuration $configuration) : void
+    /**
+     * @param \Rector\Core\ValueObject\Application\File $file
+     * @param \Rector\Core\ValueObject\Configuration $configuration
+     */
+    public function process($file, $configuration) : void
     {
         foreach ($this->nonPhpRectors as $nonPhpRector) {
             $newFileContent = $nonPhpRector->refactorFileContent($file->getFileContent());
             $file->changeFileContent($newFileContent);
         }
     }
-    public function supports(\Rector\Core\ValueObject\Application\File $file, \Rector\Core\ValueObject\Configuration $configuration) : bool
+    /**
+     * @param \Rector\Core\ValueObject\Application\File $file
+     * @param \Rector\Core\ValueObject\Configuration $configuration
+     */
+    public function supports($file, $configuration) : bool
     {
         $smartFileInfo = $file->getSmartFileInfo();
         // early assign to variable for increase performance

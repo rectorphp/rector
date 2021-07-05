@@ -42,8 +42,15 @@ class FileProfilerStorage implements \RectorPrefix20210705\Symfony\Component\Htt
     }
     /**
      * {@inheritdoc}
+     * @param string|null $ip
+     * @param string|null $url
+     * @param int|null $limit
+     * @param string|null $method
+     * @param int|null $start
+     * @param int|null $end
+     * @param string|null $statusCode
      */
-    public function find(?string $ip, ?string $url, ?int $limit, ?string $method, int $start = null, int $end = null, string $statusCode = null) : array
+    public function find($ip, $url, $limit, $method, $start = null, $end = null, $statusCode = null) : array
     {
         $file = $this->getIndexFilename();
         if (!\file_exists($file)) {
@@ -88,8 +95,9 @@ class FileProfilerStorage implements \RectorPrefix20210705\Symfony\Component\Htt
     }
     /**
      * {@inheritdoc}
+     * @param string $token
      */
-    public function read(string $token) : ?\RectorPrefix20210705\Symfony\Component\HttpKernel\Profiler\Profile
+    public function read($token) : ?\RectorPrefix20210705\Symfony\Component\HttpKernel\Profiler\Profile
     {
         if (!$token || !\file_exists($file = $this->getFilename($token))) {
             return null;
@@ -103,8 +111,9 @@ class FileProfilerStorage implements \RectorPrefix20210705\Symfony\Component\Htt
      * {@inheritdoc}
      *
      * @throws \RuntimeException
+     * @param \Symfony\Component\HttpKernel\Profiler\Profile $profile
      */
-    public function write(\RectorPrefix20210705\Symfony\Component\HttpKernel\Profiler\Profile $profile) : bool
+    public function write($profile) : bool
     {
         $file = $this->getFilename($profile->getToken());
         $profileIndexed = \is_file($file);
@@ -146,8 +155,9 @@ class FileProfilerStorage implements \RectorPrefix20210705\Symfony\Component\Htt
      * Gets filename to store data, associated to the token.
      *
      * @return string The profile filename
+     * @param string $token
      */
-    protected function getFilename(string $token)
+    protected function getFilename($token)
     {
         // Uses 4 last characters, because first are mostly the same.
         $folderA = \substr($token, -2, 2);
@@ -201,7 +211,12 @@ class FileProfilerStorage implements \RectorPrefix20210705\Symfony\Component\Htt
         }
         return '' === $line ? null : $line;
     }
-    protected function createProfileFromData(string $token, array $data, \RectorPrefix20210705\Symfony\Component\HttpKernel\Profiler\Profile $parent = null)
+    /**
+     * @param string $token
+     * @param mixed[] $data
+     * @param \Symfony\Component\HttpKernel\Profiler\Profile|null $parent
+     */
+    protected function createProfileFromData($token, $data, $parent = null)
     {
         $profile = new \RectorPrefix20210705\Symfony\Component\HttpKernel\Profiler\Profile($token);
         $profile->setIp($data['ip']);

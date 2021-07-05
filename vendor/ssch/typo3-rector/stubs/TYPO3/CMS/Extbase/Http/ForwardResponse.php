@@ -74,8 +74,9 @@ class ForwardResponse implements \RectorPrefix20210705\Psr\Http\Message\Response
     }
     /**
      * @return $this
+     * @param mixed[] $arguments
      */
-    public function withArguments(array $arguments)
+    public function withArguments($arguments)
     {
         $clone = clone $this;
         $clone->arguments = $arguments;

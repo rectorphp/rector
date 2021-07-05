@@ -26,7 +26,10 @@ class CacheManager
 }
 class Anonymous__80f9d48e45a850436cae4f188819f43c__0 implements \RectorPrefix20210705\TYPO3\CMS\Core\Cache\Frontend\FrontendInterface
 {
-    public function set($entryIdentifier, $data, array $tags = [], $lifetime = null) : void
+    /**
+     * @param mixed[] $tags
+     */
+    public function set($entryIdentifier, $data, $tags = [], $lifetime = null) : void
     {
     }
     public function get($entryIdentifier)

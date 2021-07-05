@@ -58,9 +58,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Expr\StaticCall::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param Node\Expr\StaticCall $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         foreach ($this->staticCallsToNews as $staticCallToNews) {
             if (!$this->isName($node->class, $staticCallToNews->getClass())) {

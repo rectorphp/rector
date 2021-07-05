@@ -50,7 +50,7 @@ CODE_SAMPLE
      * @param MethodCall|StaticCall|ClassMethod $node
      * @return \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Stmt\ClassMethod
      */
-    public function refactor($node)
+    public function refactor(\PhpParser\Node $node)
     {
         foreach ($this->removedArguments as $removedArgument) {
             if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, $removedArgument->getObjectType())) {

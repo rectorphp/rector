@@ -24,8 +24,9 @@ final class InputBag extends \RectorPrefix20210705\Symfony\Component\HttpFoundat
      * @param string|int|float|bool|null $default The default value if the input key does not exist
      *
      * @return string|int|float|bool|null
+     * @param string $key
      */
-    public function get(string $key, $default = null)
+    public function get($key, $default = null)
     {
         if (null !== $default && !\is_scalar($default) && !(\is_object($default) && \method_exists($default, '__toString'))) {
             trigger_deprecation('symfony/http-foundation', '5.1', 'Passing a non-scalar value as 2nd argument to "%s()" is deprecated, pass a scalar or null instead.', __METHOD__);
@@ -38,23 +39,26 @@ final class InputBag extends \RectorPrefix20210705\Symfony\Component\HttpFoundat
     }
     /**
      * {@inheritdoc}
+     * @param string|null $key
      */
-    public function all(string $key = null) : array
+    public function all($key = null) : array
     {
         return parent::all($key);
     }
     /**
      * Replaces the current input values by a new set.
+     * @param mixed[] $inputs
      */
-    public function replace(array $inputs = [])
+    public function replace($inputs = [])
     {
         $this->parameters = [];
         $this->add($inputs);
     }
     /**
      * Adds input values.
+     * @param mixed[] $inputs
      */
-    public function add(array $inputs = [])
+    public function add($inputs = [])
     {
         foreach ($inputs as $input => $value) {
             $this->set($input, $value);
@@ -76,8 +80,9 @@ final class InputBag extends \RectorPrefix20210705\Symfony\Component\HttpFoundat
     /**
      * {@inheritdoc}
      * @param string $key
+     * @param int $filter
      */
-    public function filter($key, $default = null, int $filter = \FILTER_DEFAULT, $options = [])
+    public function filter($key, $default = null, $filter = \FILTER_DEFAULT, $options = [])
     {
         $value = $this->has($key) ? $this->all()[$key] : $default;
         // Always turn $options into an array - this allows filter_var option shortcuts.

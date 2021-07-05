@@ -37,11 +37,17 @@ class TokenIterator
         }
         return $offset;
     }
-    public function isCurrentTokenValue(string $tokenValue) : bool
+    /**
+     * @param string $tokenValue
+     */
+    public function isCurrentTokenValue($tokenValue) : bool
     {
         return $this->tokens[$this->index][\PHPStan\PhpDocParser\Lexer\Lexer::VALUE_OFFSET] === $tokenValue;
     }
-    public function isCurrentTokenType(int $tokenType) : bool
+    /**
+     * @param int $tokenType
+     */
+    public function isCurrentTokenType($tokenType) : bool
     {
         return $this->tokens[$this->index][\PHPStan\PhpDocParser\Lexer\Lexer::TYPE_OFFSET] === $tokenType;
     }
@@ -53,7 +59,7 @@ class TokenIterator
      * @param  int $tokenType
      * @throws \PHPStan\PhpDocParser\Parser\ParserException
      */
-    public function consumeTokenType(int $tokenType) : void
+    public function consumeTokenType($tokenType) : void
     {
         if ($this->tokens[$this->index][\PHPStan\PhpDocParser\Lexer\Lexer::TYPE_OFFSET] !== $tokenType) {
             $this->throwError($tokenType);
@@ -64,8 +70,9 @@ class TokenIterator
         }
         $this->index++;
     }
-    /** @phpstan-impure */
-    public function tryConsumeTokenValue(string $tokenValue) : bool
+    /** @phpstan-impure
+     * @param string $tokenValue */
+    public function tryConsumeTokenValue($tokenValue) : bool
     {
         if ($this->tokens[$this->index][\PHPStan\PhpDocParser\Lexer\Lexer::VALUE_OFFSET] !== $tokenValue) {
             return \false;
@@ -76,8 +83,9 @@ class TokenIterator
         }
         return \true;
     }
-    /** @phpstan-impure */
-    public function tryConsumeTokenType(int $tokenType) : bool
+    /** @phpstan-impure
+     * @param int $tokenType */
+    public function tryConsumeTokenType($tokenType) : bool
     {
         if ($this->tokens[$this->index][\PHPStan\PhpDocParser\Lexer\Lexer::TYPE_OFFSET] !== $tokenType) {
             return \false;
@@ -95,8 +103,9 @@ class TokenIterator
         }
         return '';
     }
-    /** @phpstan-impure */
-    public function joinUntil(int ...$tokenType) : string
+    /** @phpstan-impure
+     * @param int ...$tokenType */
+    public function joinUntil(...$tokenType) : string
     {
         $s = '';
         while (!\in_array($this->tokens[$this->index][\PHPStan\PhpDocParser\Lexer\Lexer::TYPE_OFFSET], $tokenType, \true)) {
@@ -136,7 +145,7 @@ class TokenIterator
      * @param  int $expectedTokenType
      * @throws \PHPStan\PhpDocParser\Parser\ParserException
      */
-    private function throwError(int $expectedTokenType) : void
+    private function throwError($expectedTokenType) : void
     {
         throw new \PHPStan\PhpDocParser\Parser\ParserException($this->currentTokenValue(), $this->currentTokenType(), $this->currentTokenOffset(), $expectedTokenType);
     }

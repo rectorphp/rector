@@ -48,8 +48,9 @@ class FileExistenceResource implements \RectorPrefix20210705\Symfony\Component\C
     }
     /**
      * {@inheritdoc}
+     * @param int $timestamp
      */
-    public function isFresh(int $timestamp) : bool
+    public function isFresh($timestamp) : bool
     {
         return \file_exists($this->resource) === $this->exists;
     }

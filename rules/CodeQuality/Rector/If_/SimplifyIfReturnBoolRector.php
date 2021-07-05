@@ -80,10 +80,7 @@ CODE_SAMPLE
         $this->removeNode($nextNode);
         return $newReturnNode;
     }
-    /**
-     * @param \PhpParser\Node\Stmt\If_ $if
-     */
-    private function shouldSkip($if) : bool
+    private function shouldSkip(\PhpParser\Node\Stmt\If_ $if) : bool
     {
         if ($if->elseifs !== []) {
             return \true;

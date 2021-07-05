@@ -11,7 +11,10 @@ final class GlobalStringConditionMatcher extends \Ssch\TYPO3Rector\FileProcessor
      * @var string
      */
     private const TYPE = 'globalString';
-    public function change(string $condition) : ?string
+    /**
+     * @param string $condition
+     */
+    public function change($condition) : ?string
     {
         \preg_match('#' . self::TYPE . self::ZERO_ONE_OR_MORE_WHITESPACES . '=' . self::ZERO_ONE_OR_MORE_WHITESPACES . '(?<subCondition>.*)#', $condition, $subConditions);
         if (!\is_string($subConditions['subCondition'])) {
@@ -39,14 +42,22 @@ final class GlobalStringConditionMatcher extends \Ssch\TYPO3Rector\FileProcessor
         }
         return \implode(' || ', $newConditions);
     }
-    public function shouldApply(string $condition) : bool
+    /**
+     * @param string $condition
+     */
+    public function shouldApply($condition) : bool
     {
         if (\RectorPrefix20210705\Nette\Utils\Strings::contains($condition, self::CONTAINS_CONSTANT)) {
             return \false;
         }
         return \RectorPrefix20210705\Nette\Utils\Strings::startsWith($condition, self::TYPE);
     }
-    private function refactorGetPost(string $property, string $operator, string $value) : string
+    /**
+     * @param string $property
+     * @param string $operator
+     * @param string $value
+     */
+    private function refactorGetPost($property, $operator, $value) : string
     {
         $parameters = \Ssch\TYPO3Rector\Helper\ArrayUtility::trimExplode('|', $property);
         if (!\is_numeric($value)) {

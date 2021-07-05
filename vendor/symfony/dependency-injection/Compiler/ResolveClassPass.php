@@ -20,8 +20,9 @@ class ResolveClassPass implements \RectorPrefix20210705\Symfony\Component\Depend
 {
     /**
      * {@inheritdoc}
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      */
-    public function process(\RectorPrefix20210705\Symfony\Component\DependencyInjection\ContainerBuilder $container)
+    public function process($container)
     {
         foreach ($container->getDefinitions() as $id => $definition) {
             if ($definition->isSynthetic() || null !== $definition->getClass()) {

@@ -43,8 +43,10 @@ class ApplicationTester
      *  * capture_stderr_separately: Make output of stdOut and stdErr separately available
      *
      * @return int The command exit code
+     * @param mixed[] $input
+     * @param mixed[] $options
      */
-    public function run(array $input, array $options = [])
+    public function run($input, $options = [])
     {
         $this->input = new \RectorPrefix20210705\Symfony\Component\Console\Input\ArrayInput($input);
         if (isset($options['interactive'])) {

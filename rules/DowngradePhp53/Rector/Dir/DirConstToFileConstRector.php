@@ -47,9 +47,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Scalar\MagicConst\Dir::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param Dir $node
      */
-    public function refactor($node) : \PhpParser\Node\Expr\FuncCall
+    public function refactor(\PhpParser\Node $node) : \PhpParser\Node\Expr\FuncCall
     {
         return $this->nodeFactory->createFuncCall('dirname', [new \PhpParser\Node\Scalar\MagicConst\File()]);
     }

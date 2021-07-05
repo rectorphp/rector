@@ -26,14 +26,16 @@ interface DebugLoggerInterface
      * It can also have an optional context key containing an array.
      *
      * @return array An array of logs
+     * @param \Symfony\Component\HttpFoundation\Request|null $request
      */
-    public function getLogs(\RectorPrefix20210705\Symfony\Component\HttpFoundation\Request $request = null);
+    public function getLogs($request = null);
     /**
      * Returns the number of errors.
      *
      * @return int The number of errors
+     * @param \Symfony\Component\HttpFoundation\Request|null $request
      */
-    public function countErrors(\RectorPrefix20210705\Symfony\Component\HttpFoundation\Request $request = null);
+    public function countErrors($request = null);
     /**
      * Removes all log records.
      */

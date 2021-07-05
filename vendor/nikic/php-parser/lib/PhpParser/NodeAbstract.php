@@ -128,7 +128,7 @@ abstract class NodeAbstract implements \PhpParser\Node, \JsonSerializable
      *
      * @param Comment\Doc $docComment Doc comment to set
      */
-    public function setDocComment(\PhpParser\Comment\Doc $docComment)
+    public function setDocComment($docComment)
     {
         $comments = $this->getComments();
         for ($i = \count($comments) - 1; $i >= 0; $i--) {
@@ -143,15 +143,24 @@ abstract class NodeAbstract implements \PhpParser\Node, \JsonSerializable
         $comments[] = $docComment;
         $this->setAttribute('comments', $comments);
     }
-    public function setAttribute(string $key, $value)
+    /**
+     * @param string $key
+     */
+    public function setAttribute($key, $value)
     {
         $this->attributes[$key] = $value;
     }
-    public function hasAttribute(string $key) : bool
+    /**
+     * @param string $key
+     */
+    public function hasAttribute($key) : bool
     {
         return \array_key_exists($key, $this->attributes);
     }
-    public function getAttribute(string $key, $default = null)
+    /**
+     * @param string $key
+     */
+    public function getAttribute($key, $default = null)
     {
         if (\array_key_exists($key, $this->attributes)) {
             return $this->attributes[$key];
@@ -162,7 +171,10 @@ abstract class NodeAbstract implements \PhpParser\Node, \JsonSerializable
     {
         return $this->attributes;
     }
-    public function setAttributes(array $attributes)
+    /**
+     * @param mixed[] $attributes
+     */
+    public function setAttributes($attributes)
     {
         $this->attributes = $attributes;
     }

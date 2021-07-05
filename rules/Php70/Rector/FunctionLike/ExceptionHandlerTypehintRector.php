@@ -47,7 +47,7 @@ CODE_SAMPLE
     /**
      * @param Function_|ClassMethod $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$this->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::THROWABLE_TYPE)) {
             return null;

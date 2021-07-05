@@ -38,9 +38,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Stmt\ClassLike::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param ClassLike $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $className = $this->getName($node);
         if ($className === null) {

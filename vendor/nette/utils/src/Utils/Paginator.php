@@ -38,8 +38,9 @@ class Paginator
     /**
      * Sets current page number.
      * @return static
+     * @param int $page
      */
-    public function setPage(int $page)
+    public function setPage($page)
     {
         $this->page = $page;
         return $this;
@@ -68,8 +69,9 @@ class Paginator
     /**
      * Sets first page (base) number.
      * @return static
+     * @param int $base
      */
-    public function setBase(int $base)
+    public function setBase($base)
     {
         $this->base = $base;
         return $this;
@@ -113,8 +115,9 @@ class Paginator
     /**
      * Sets the number of items to display on a single page.
      * @return static
+     * @param int $itemsPerPage
      */
-    public function setItemsPerPage(int $itemsPerPage)
+    public function setItemsPerPage($itemsPerPage)
     {
         $this->itemsPerPage = \max(1, $itemsPerPage);
         return $this;
@@ -129,8 +132,9 @@ class Paginator
     /**
      * Sets the total number of items.
      * @return static
+     * @param int|null $itemCount
      */
-    public function setItemCount(int $itemCount = null)
+    public function setItemCount($itemCount = null)
     {
         $this->itemCount = $itemCount === null ? null : \max(0, $itemCount);
         return $this;

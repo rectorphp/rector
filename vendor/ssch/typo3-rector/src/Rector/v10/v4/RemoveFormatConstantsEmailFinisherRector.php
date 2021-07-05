@@ -43,9 +43,9 @@ final class RemoveFormatConstantsEmailFinisherRector extends \Rector\Core\Rector
         return [\PhpParser\Node\Expr\ClassConstFetch::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param ClassConstFetch $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$this->isObjectType($node->class, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Form\\Domain\\Finishers\\EmailFinisher'))) {
             return null;

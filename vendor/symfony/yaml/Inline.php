@@ -29,7 +29,12 @@ class Inline
     private static $objectSupport = \false;
     private static $objectForMap = \false;
     private static $constantSupport = \false;
-    public static function initialize(int $flags, int $parsedLineNumber = null, string $parsedFilename = null)
+    /**
+     * @param int $flags
+     * @param int|null $parsedLineNumber
+     * @param string|null $parsedFilename
+     */
+    public static function initialize($flags, $parsedLineNumber = null, $parsedFilename = null)
     {
         self::$exceptionOnInvalidType = (bool) (\RectorPrefix20210705\Symfony\Component\Yaml\Yaml::PARSE_EXCEPTION_ON_INVALID_TYPE & $flags);
         self::$objectSupport = (bool) (\RectorPrefix20210705\Symfony\Component\Yaml\Yaml::PARSE_OBJECT & $flags);
@@ -51,7 +56,7 @@ class Inline
      *
      * @throws ParseException
      */
-    public static function parse(string $value = null, int $flags = 0, array &$references = [])
+    public static function parse($value = null, $flags = 0, &$references = [])
     {
         self::initialize($flags);
         $value = \trim($value);
@@ -101,7 +106,7 @@ class Inline
      *
      * @throws DumpException When trying to dump PHP resource
      */
-    public static function dump($value, int $flags = 0) : string
+    public static function dump($value, $flags = 0) : string
     {
         switch (\true) {
             case \is_resource($value):
@@ -204,7 +209,7 @@ class Inline
      *
      * @return string The YAML string representing the PHP array
      */
-    private static function dumpArray(array $value, int $flags) : string
+    private static function dumpArray($value, $flags) : string
     {
         // array
         if (($value || \RectorPrefix20210705\Symfony\Component\Yaml\Yaml::DUMP_EMPTY_ARRAY_AS_SEQUENCE & $flags) && !self::isHash($value)) {
@@ -221,7 +226,10 @@ class Inline
         }
         return \sprintf('{ %s }', \implode(', ', $output));
     }
-    private static function dumpNull(int $flags) : string
+    /**
+     * @param int $flags
+     */
+    private static function dumpNull($flags) : string
     {
         if (\RectorPrefix20210705\Symfony\Component\Yaml\Yaml::DUMP_NULL_AS_TILDE & $flags) {
             return '~';
@@ -234,8 +242,14 @@ class Inline
      * @return mixed
      *
      * @throws ParseException When malformed inline YAML string is parsed
+     * @param string $scalar
+     * @param int $flags
+     * @param mixed[]|null $delimiters
+     * @param int $i
+     * @param bool $evaluate
+     * @param mixed[] $references
      */
-    public static function parseScalar(string $scalar, int $flags = 0, array $delimiters = null, int &$i = 0, bool $evaluate = \true, array &$references = [])
+    public static function parseScalar($scalar, $flags = 0, $delimiters = null, &$i = 0, $evaluate = \true, &$references = [])
     {
         if (\in_array($scalar[$i], ['"', "'"], \true)) {
             // quoted scalar
@@ -279,8 +293,10 @@ class Inline
      * Parses a YAML quoted scalar.
      *
      * @throws ParseException When malformed inline YAML string is parsed
+     * @param string $scalar
+     * @param int $i
      */
-    private static function parseQuotedScalar(string $scalar, int &$i) : string
+    private static function parseQuotedScalar($scalar, &$i) : string
     {
         if (!\RectorPrefix20210705\Symfony\Component\Yaml\Parser::preg_match('/' . self::REGEX_QUOTED_STRING . '/Au', \substr($scalar, $i), $match)) {
             throw new \RectorPrefix20210705\Symfony\Component\Yaml\Exception\ParseException(\sprintf('Malformed inline YAML string: "%s".', \substr($scalar, $i)), self::$parsedLineNumber + 1, $scalar, self::$parsedFilename);
@@ -299,8 +315,12 @@ class Inline
      * Parses a YAML sequence.
      *
      * @throws ParseException When malformed inline YAML string is parsed
+     * @param string $sequence
+     * @param int $flags
+     * @param int $i
+     * @param mixed[] $references
      */
-    private static function parseSequence(string $sequence, int $flags, int &$i = 0, array &$references = []) : array
+    private static function parseSequence($sequence, $flags, &$i = 0, &$references = []) : array
     {
         $output = [];
         $len = \strlen($sequence);
@@ -357,8 +377,12 @@ class Inline
      * @return array|\stdClass
      *
      * @throws ParseException When malformed inline YAML string is parsed
+     * @param string $mapping
+     * @param int $flags
+     * @param int $i
+     * @param mixed[] $references
      */
-    private static function parseMapping(string $mapping, int $flags, int &$i = 0, array &$references = [])
+    private static function parseMapping($mapping, $flags, &$i = 0, &$references = [])
     {
         $output = [];
         $len = \strlen($mapping);
@@ -486,8 +510,11 @@ class Inline
      * @return mixed The evaluated YAML string
      *
      * @throws ParseException when object parsing support was disabled and the parser detected a PHP object or when a reference could not be resolved
+     * @param string $scalar
+     * @param int $flags
+     * @param mixed[] $references
      */
-    private static function evaluateScalar(string $scalar, int $flags, array &$references = [])
+    private static function evaluateScalar($scalar, $flags, &$references = [])
     {
         $scalar = \trim($scalar);
         if ('*' === ($scalar[0] ?? '')) {
@@ -614,7 +641,12 @@ class Inline
         }
         return (string) $scalar;
     }
-    private static function parseTag(string $value, int &$i, int $flags) : ?string
+    /**
+     * @param string $value
+     * @param int $i
+     * @param int $flags
+     */
+    private static function parseTag($value, &$i, $flags) : ?string
     {
         if ('!' !== $value[$i]) {
             return null;
@@ -644,7 +676,10 @@ class Inline
         }
         throw new \RectorPrefix20210705\Symfony\Component\Yaml\Exception\ParseException(\sprintf('Tags support is not enabled. Enable the "Yaml::PARSE_CUSTOM_TAGS" flag to use "!%s".', $tag), self::$parsedLineNumber + 1, $value, self::$parsedFilename);
     }
-    public static function evaluateBinaryScalar(string $scalar) : string
+    /**
+     * @param string $scalar
+     */
+    public static function evaluateBinaryScalar($scalar) : string
     {
         $parsedBinaryData = self::parseScalar(\preg_replace('/\\s/', '', $scalar));
         if (0 !== \strlen($parsedBinaryData) % 4) {
@@ -655,7 +690,10 @@ class Inline
         }
         return \base64_decode($parsedBinaryData, \true);
     }
-    private static function isBinaryString(string $value) : bool
+    /**
+     * @param string $value
+     */
+    private static function isBinaryString($value) : bool
     {
         return !\preg_match('//u', $value) || \preg_match('/[^\\x00\\x07-\\x0d\\x1B\\x20-\\xff]/', $value);
     }

@@ -87,10 +87,7 @@ CODE_SAMPLE
         }
         return $this->createAssignNode($node, $name, $arrayDimFetch);
     }
-    /**
-     * @param \PhpParser\Node\Stmt\Foreach_ $foreach
-     */
-    private function shouldSkip($foreach) : bool
+    private function shouldSkip(\PhpParser\Node\Stmt\Foreach_ $foreach) : bool
     {
         if (\count($foreach->stmts) !== 1) {
             return \true;

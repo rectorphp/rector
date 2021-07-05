@@ -20,9 +20,9 @@ final class FullyQualifiedNodeMapper implements \Rector\StaticTypeMapper\Contrac
         return \PhpParser\Node\Name\FullyQualified::class;
     }
     /**
-     * @param FullyQualified $node
+     * @param \PhpParser\Node $node
      */
-    public function mapToPHPStan(\PhpParser\Node $node) : \PHPStan\Type\Type
+    public function mapToPHPStan($node) : \PHPStan\Type\Type
     {
         $originalName = (string) $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NAME);
         $fullyQualifiedName = $node->toString();
@@ -32,7 +32,11 @@ final class FullyQualifiedNodeMapper implements \Rector\StaticTypeMapper\Contrac
         }
         return new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType($fullyQualifiedName);
     }
-    private function isAliasedName(string $originalName, string $fullyQualifiedName) : bool
+    /**
+     * @param string $originalName
+     * @param string $fullyQualifiedName
+     */
+    private function isAliasedName($originalName, $fullyQualifiedName) : bool
     {
         if ($originalName === '') {
             return \false;

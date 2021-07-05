@@ -102,7 +102,10 @@ class TraitUseAdaptation implements \PhpParser\Builder
         }
         return $this;
     }
-    protected function setModifier(int $modifier)
+    /**
+     * @param int $modifier
+     */
+    protected function setModifier($modifier)
     {
         if ($this->type === self::TYPE_UNDEFINED) {
             $this->type = self::TYPE_ALIAS;

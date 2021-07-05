@@ -29,7 +29,7 @@ final class ClassAndInterfaceTypeResolver implements \Rector\NodeTypeResolver\Co
     /**
      * @param Class_|Interface_ $node
      */
-    public function resolve(\PhpParser\Node $node) : \PHPStan\Type\Type
+    public function resolve($node) : \PHPStan\Type\Type
     {
         $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
         if (!$scope instanceof \PHPStan\Analyser\Scope) {

@@ -17,11 +17,19 @@ final class ContextGetAspectDynamicReturnTypeExtension implements \PHPStan\Type\
     {
         return 'TYPO3\\CMS\\Core\\Context\\Context';
     }
-    public function isMethodSupported(\PHPStan\Reflection\MethodReflection $methodReflection) : bool
+    /**
+     * @param \PHPStan\Reflection\MethodReflection $methodReflection
+     */
+    public function isMethodSupported($methodReflection) : bool
     {
         return 'getAspect' === $methodReflection->getName();
     }
-    public function getTypeFromMethodCall(\PHPStan\Reflection\MethodReflection $methodReflection, \PhpParser\Node\Expr\MethodCall $methodCall, \PHPStan\Analyser\Scope $scope) : \PHPStan\Type\Type
+    /**
+     * @param \PHPStan\Reflection\MethodReflection $methodReflection
+     * @param \PhpParser\Node\Expr\MethodCall $methodCall
+     * @param \PHPStan\Analyser\Scope $scope
+     */
+    public function getTypeFromMethodCall($methodReflection, $methodCall, $scope) : \PHPStan\Type\Type
     {
         $defaultObjectType = new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Context\\AspectInterface');
         if (!($argument = $methodCall->args[0] ?? null) instanceof \PhpParser\Node\Arg) {

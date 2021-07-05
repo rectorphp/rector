@@ -81,10 +81,7 @@ CODE_SAMPLE
         }
         return null;
     }
-    /**
-     * @param \PhpParser\Node\Expr\MethodCall $methodCall
-     */
-    private function shouldSkip($methodCall) : bool
+    private function shouldSkip(\PhpParser\Node\Expr\MethodCall $methodCall) : bool
     {
         if (!$this->isObjectType($methodCall->var, new \PHPStan\Type\ObjectType('Symfony\\Contracts\\EventDispatcher\\EventDispatcherInterface'))) {
             return \true;

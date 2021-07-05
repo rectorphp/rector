@@ -31,8 +31,9 @@ class ContainerCommandLoader implements \RectorPrefix20210705\Symfony\Component\
     }
     /**
      * {@inheritdoc}
+     * @param string $name
      */
-    public function get(string $name)
+    public function get($name)
     {
         if (!$this->has($name)) {
             throw new \RectorPrefix20210705\Symfony\Component\Console\Exception\CommandNotFoundException(\sprintf('Command "%s" does not exist.', $name));
@@ -41,8 +42,9 @@ class ContainerCommandLoader implements \RectorPrefix20210705\Symfony\Component\
     }
     /**
      * {@inheritdoc}
+     * @param string $name
      */
-    public function has(string $name)
+    public function has($name)
     {
         return isset($this->commandMap[$name]) && $this->container->has($this->commandMap[$name]);
     }

@@ -10,5 +10,5 @@ interface ExtraConfigAwareKernelInterface extends \RectorPrefix20210705\Symfony\
     /**
      * @param string[]|SmartFileInfo[] $configs
      */
-    public function setConfigs(array $configs) : void;
+    public function setConfigs($configs) : void;
 }

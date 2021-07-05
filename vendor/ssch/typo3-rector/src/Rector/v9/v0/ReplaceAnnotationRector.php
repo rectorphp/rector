@@ -53,7 +53,7 @@ final class ReplaceAnnotationRector extends \Rector\Core\Rector\AbstractRector i
     /**
      * @param Property|ClassMethod $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         $annotationChanged = \false;

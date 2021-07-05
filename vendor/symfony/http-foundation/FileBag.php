@@ -29,8 +29,9 @@ class FileBag extends \RectorPrefix20210705\Symfony\Component\HttpFoundation\Par
     }
     /**
      * {@inheritdoc}
+     * @param mixed[] $files
      */
-    public function replace(array $files = [])
+    public function replace($files = [])
     {
         $this->parameters = [];
         $this->add($files);
@@ -48,8 +49,9 @@ class FileBag extends \RectorPrefix20210705\Symfony\Component\HttpFoundation\Par
     }
     /**
      * {@inheritdoc}
+     * @param mixed[] $files
      */
-    public function add(array $files = [])
+    public function add($files = [])
     {
         foreach ($files as $key => $file) {
             $this->set($key, $file);

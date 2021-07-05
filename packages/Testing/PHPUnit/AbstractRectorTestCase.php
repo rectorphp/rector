@@ -74,12 +74,18 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractTe
     }
     /**
      * @return Iterator<SmartFileInfo>
+     * @param string $directory
+     * @param string $suffix
      */
-    protected function yieldFilesFromDirectory(string $directory, string $suffix = '*.php.inc') : \Iterator
+    protected function yieldFilesFromDirectory($directory, $suffix = '*.php.inc') : \Iterator
     {
         return \RectorPrefix20210705\Symplify\EasyTesting\DataProvider\StaticFixtureFinder::yieldDirectoryExclusively($directory, $suffix);
     }
-    protected function doTestFileInfo(\Symplify\SmartFileSystem\SmartFileInfo $fixtureFileInfo, bool $allowMatches = \true) : void
+    /**
+     * @param \Symplify\SmartFileSystem\SmartFileInfo $fixtureFileInfo
+     * @param bool $allowMatches
+     */
+    protected function doTestFileInfo($fixtureFileInfo, $allowMatches = \true) : void
     {
         $inputFileInfoAndExpectedFileInfo = \RectorPrefix20210705\Symplify\EasyTesting\StaticFixtureSplitter::splitFileInfoToLocalInputAndExpectedFileInfos($fixtureFileInfo);
         $inputFileInfo = $inputFileInfoAndExpectedFileInfo->getInputFileInfo();
@@ -91,7 +97,13 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractTe
     {
         return \sys_get_temp_dir() . '/_temp_fixture_easy_testing';
     }
-    private function doTestFileMatchesExpectedContent(\Symplify\SmartFileSystem\SmartFileInfo $originalFileInfo, \Symplify\SmartFileSystem\SmartFileInfo $expectedFileInfo, \Symplify\SmartFileSystem\SmartFileInfo $fixtureFileInfo, bool $allowMatches = \true) : void
+    /**
+     * @param \Symplify\SmartFileSystem\SmartFileInfo $originalFileInfo
+     * @param \Symplify\SmartFileSystem\SmartFileInfo $expectedFileInfo
+     * @param \Symplify\SmartFileSystem\SmartFileInfo $fixtureFileInfo
+     * @param bool $allowMatches
+     */
+    private function doTestFileMatchesExpectedContent($originalFileInfo, $expectedFileInfo, $fixtureFileInfo, $allowMatches = \true) : void
     {
         $this->parameterProvider->changeParameter(\Rector\Core\Configuration\Option::SOURCE, [$originalFileInfo->getRealPath()]);
         $changedContent = $this->processFileInfo($originalFileInfo);
@@ -114,11 +126,17 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractTe
             $this->assertStringMatchesFormat($contents, $changedContent, $relativeFilePathFromCwd);
         }
     }
-    private function normalizeNewlines(string $string) : string
+    /**
+     * @param string $string
+     */
+    private function normalizeNewlines($string) : string
     {
         return \RectorPrefix20210705\Nette\Utils\Strings::replace($string, '#\\r\\n|\\r|\\n#', "\n");
     }
-    private function processFileInfo(\Symplify\SmartFileSystem\SmartFileInfo $fileInfo) : string
+    /**
+     * @param \Symplify\SmartFileSystem\SmartFileInfo $fileInfo
+     */
+    private function processFileInfo($fileInfo) : string
     {
         $this->dynamicSourceLocatorProvider->setFileInfo($fileInfo);
         // needed for PHPStan, because the analyzed file is just created in /temp - need for trait and similar deps

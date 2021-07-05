@@ -73,8 +73,9 @@ class RequestMatcher implements \RectorPrefix20210705\Symfony\Component\HttpFoun
     }
     /**
      * Adds a check for the URL host name.
+     * @param string|null $regexp
      */
-    public function matchHost(?string $regexp)
+    public function matchHost($regexp)
     {
         $this->host = $regexp;
     }
@@ -83,14 +84,15 @@ class RequestMatcher implements \RectorPrefix20210705\Symfony\Component\HttpFoun
      *
      * @param int|null $port The port number to connect to
      */
-    public function matchPort(?int $port)
+    public function matchPort($port)
     {
         $this->port = $port;
     }
     /**
      * Adds a check for the URL path info.
+     * @param string|null $regexp
      */
-    public function matchPath(?string $regexp)
+    public function matchPath($regexp)
     {
         $this->path = $regexp;
     }
@@ -99,7 +101,7 @@ class RequestMatcher implements \RectorPrefix20210705\Symfony\Component\HttpFoun
      *
      * @param string $ip A specific IP address or a range specified using IP/netmask like 192.168.1.0/24
      */
-    public function matchIp(string $ip)
+    public function matchIp($ip)
     {
         $this->matchIps($ip);
     }
@@ -126,15 +128,18 @@ class RequestMatcher implements \RectorPrefix20210705\Symfony\Component\HttpFoun
     }
     /**
      * Adds a check for request attribute.
+     * @param string $key
+     * @param string $regexp
      */
-    public function matchAttribute(string $key, string $regexp)
+    public function matchAttribute($key, $regexp)
     {
         $this->attributes[$key] = $regexp;
     }
     /**
      * {@inheritdoc}
+     * @param \Symfony\Component\HttpFoundation\Request $request
      */
-    public function matches(\RectorPrefix20210705\Symfony\Component\HttpFoundation\Request $request)
+    public function matches($request)
     {
         if ($this->schemes && !\in_array($request->getScheme(), $this->schemes, \true)) {
             return \false;

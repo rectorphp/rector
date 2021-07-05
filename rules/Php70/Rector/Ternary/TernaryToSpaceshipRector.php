@@ -41,9 +41,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Expr\Ternary::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param Ternary $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$this->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::SPACESHIP)) {
             return null;
@@ -59,10 +59,7 @@ CODE_SAMPLE
         }
         return $this->processGreaterThanTernary($node, $nestedTernary);
     }
-    /**
-     * @param \PhpParser\Node\Expr\Ternary $ternary
-     */
-    private function shouldSkip($ternary) : bool
+    private function shouldSkip(\PhpParser\Node\Expr\Ternary $ternary) : bool
     {
         if (!$ternary->cond instanceof \PhpParser\Node\Expr\BinaryOp) {
             return \true;

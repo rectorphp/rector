@@ -31,8 +31,9 @@ class SurrogateListener implements \RectorPrefix20210705\Symfony\Component\Event
     }
     /**
      * Filters the Response.
+     * @param \Symfony\Component\HttpKernel\Event\ResponseEvent $event
      */
-    public function onKernelResponse(\RectorPrefix20210705\Symfony\Component\HttpKernel\Event\ResponseEvent $event)
+    public function onKernelResponse($event)
     {
         if (!$event->isMainRequest()) {
             return;

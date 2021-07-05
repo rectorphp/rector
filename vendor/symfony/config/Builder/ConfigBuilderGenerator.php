@@ -37,8 +37,9 @@ class ConfigBuilderGenerator implements \RectorPrefix20210705\Symfony\Component\
     }
     /**
      * @return \Closure that will return the root config class
+     * @param \Symfony\Component\Config\Definition\ConfigurationInterface $configuration
      */
-    public function build(\RectorPrefix20210705\Symfony\Component\Config\Definition\ConfigurationInterface $configuration) : \Closure
+    public function build($configuration) : \Closure
     {
         $this->classes = [];
         $rootNode = $configuration->getConfigTreeBuilder()->buildTree();
@@ -64,7 +65,10 @@ public function NAME(): string
         });
         return $loader;
     }
-    private function getFullPath(\RectorPrefix20210705\Symfony\Component\Config\Builder\ClassBuilder $class) : string
+    /**
+     * @param \Symfony\Component\Config\Builder\ClassBuilder $class
+     */
+    private function getFullPath($class) : string
     {
         $directory = $this->outputDir . \DIRECTORY_SEPARATOR . $class->getDirectory();
         if (!\is_dir($directory)) {
@@ -81,7 +85,12 @@ public function NAME(): string
         }
         $this->classes = [];
     }
-    private function buildNode(\RectorPrefix20210705\Symfony\Component\Config\Definition\NodeInterface $node, \RectorPrefix20210705\Symfony\Component\Config\Builder\ClassBuilder $class, string $namespace) : void
+    /**
+     * @param \Symfony\Component\Config\Definition\NodeInterface $node
+     * @param \Symfony\Component\Config\Builder\ClassBuilder $class
+     * @param string $namespace
+     */
+    private function buildNode($node, $class, $namespace) : void
     {
         if (!$node instanceof \RectorPrefix20210705\Symfony\Component\Config\Definition\ArrayNode) {
             throw new \LogicException('The node was expected to be an ArrayNode. This Configuration includes an edge case not supported yet.');
@@ -105,7 +114,12 @@ public function NAME(): string
             }
         }
     }
-    private function handleArrayNode(\RectorPrefix20210705\Symfony\Component\Config\Definition\ArrayNode $node, \RectorPrefix20210705\Symfony\Component\Config\Builder\ClassBuilder $class, string $namespace) : void
+    /**
+     * @param \Symfony\Component\Config\Definition\ArrayNode $node
+     * @param \Symfony\Component\Config\Builder\ClassBuilder $class
+     * @param string $namespace
+     */
+    private function handleArrayNode($node, $class, $namespace) : void
     {
         $childClass = new \RectorPrefix20210705\Symfony\Component\Config\Builder\ClassBuilder($namespace, $node->getName());
         $class->addRequire($childClass);
@@ -126,7 +140,11 @@ public function NAME(array $value = []): CLASS
         $class->addMethod($node->getName(), $body, ['PROPERTY' => $property->getName(), 'CLASS' => $childClass->getFqcn()]);
         $this->buildNode($node, $childClass, $this->getSubNamespace($childClass));
     }
-    private function handleVariableNode(\RectorPrefix20210705\Symfony\Component\Config\Definition\VariableNode $node, \RectorPrefix20210705\Symfony\Component\Config\Builder\ClassBuilder $class) : void
+    /**
+     * @param \Symfony\Component\Config\Definition\VariableNode $node
+     * @param \Symfony\Component\Config\Builder\ClassBuilder $class
+     */
+    private function handleVariableNode($node, $class) : void
     {
         $comment = $this->getComment($node);
         $property = $class->addProperty($node->getName());
@@ -143,7 +161,12 @@ public function NAME($valueDEFAULT): self
 }';
         $class->addMethod($node->getName(), $body, ['PROPERTY' => $property->getName(), 'COMMENT' => $comment, 'DEFAULT' => $node->hasDefaultValue() ? ' = ' . \var_export($node->getDefaultValue(), \true) : '']);
     }
-    private function handlePrototypedArrayNode(\RectorPrefix20210705\Symfony\Component\Config\Definition\PrototypedArrayNode $node, \RectorPrefix20210705\Symfony\Component\Config\Builder\ClassBuilder $class, string $namespace) : void
+    /**
+     * @param \Symfony\Component\Config\Definition\PrototypedArrayNode $node
+     * @param \Symfony\Component\Config\Builder\ClassBuilder $class
+     * @param string $namespace
+     */
+    private function handlePrototypedArrayNode($node, $class, $namespace) : void
     {
         $name = $this->getSingularName($node);
         $prototype = $node->getPrototype();
@@ -211,7 +234,11 @@ public function NAME(string $VAR, array $VALUE = []): CLASS
         }
         $this->buildNode($prototype, $childClass, $namespace . '\\' . $childClass->getName());
     }
-    private function handleScalarNode(\RectorPrefix20210705\Symfony\Component\Config\Definition\ScalarNode $node, \RectorPrefix20210705\Symfony\Component\Config\Builder\ClassBuilder $class) : void
+    /**
+     * @param \Symfony\Component\Config\Definition\ScalarNode $node
+     * @param \Symfony\Component\Config\Builder\ClassBuilder $class
+     */
+    private function handleScalarNode($node, $class) : void
     {
         $comment = $this->getComment($node);
         $property = $class->addProperty($node->getName());
@@ -228,7 +255,10 @@ public function NAME($value): self
 }';
         $class->addMethod($node->getName(), $body, ['PROPERTY' => $property->getName(), 'COMMENT' => $comment]);
     }
-    private function getParameterType(\RectorPrefix20210705\Symfony\Component\Config\Definition\NodeInterface $node) : ?string
+    /**
+     * @param \Symfony\Component\Config\Definition\NodeInterface $node
+     */
+    private function getParameterType($node) : ?string
     {
         if ($node instanceof \RectorPrefix20210705\Symfony\Component\Config\Definition\BooleanNode) {
             return 'bool';
@@ -252,7 +282,10 @@ public function NAME($value): self
         }
         return null;
     }
-    private function getComment(\RectorPrefix20210705\Symfony\Component\Config\Definition\VariableNode $node) : string
+    /**
+     * @param \Symfony\Component\Config\Definition\VariableNode $node
+     */
+    private function getComment($node) : string
     {
         $comment = '';
         if ('' !== ($info = (string) $node->getInfo())) {
@@ -282,8 +315,9 @@ public function NAME($value): self
     }
     /**
      * Pick a good singular name.
+     * @param \Symfony\Component\Config\Definition\PrototypedArrayNode $node
      */
-    private function getSingularName(\RectorPrefix20210705\Symfony\Component\Config\Definition\PrototypedArrayNode $node) : string
+    private function getSingularName($node) : string
     {
         $name = $node->getName();
         if ('s' !== \substr($name, -1)) {
@@ -299,7 +333,10 @@ public function NAME($value): self
         }
         return $name;
     }
-    private function buildToArray(\RectorPrefix20210705\Symfony\Component\Config\Builder\ClassBuilder $class) : void
+    /**
+     * @param \Symfony\Component\Config\Builder\ClassBuilder $class
+     */
+    private function buildToArray($class) : void
     {
         $body = '$output = [];';
         foreach ($class->getProperties() as $p) {
@@ -325,7 +362,10 @@ public function NAME(): array
 }
 ');
     }
-    private function buildConstructor(\RectorPrefix20210705\Symfony\Component\Config\Builder\ClassBuilder $class) : void
+    /**
+     * @param \Symfony\Component\Config\Builder\ClassBuilder $class
+     */
+    private function buildConstructor($class) : void
     {
         $body = '';
         foreach ($class->getProperties() as $p) {
@@ -356,7 +396,10 @@ public function __construct(array $value = [])
 }
 ');
     }
-    private function getSubNamespace(\RectorPrefix20210705\Symfony\Component\Config\Builder\ClassBuilder $rootClass) : string
+    /**
+     * @param \Symfony\Component\Config\Builder\ClassBuilder $rootClass
+     */
+    private function getSubNamespace($rootClass) : string
     {
         return \sprintf('%s\\%s', $rootClass->getNamespace(), \substr($rootClass->getName(), 0, -6));
     }

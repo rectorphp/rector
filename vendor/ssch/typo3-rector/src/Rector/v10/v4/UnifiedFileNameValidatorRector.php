@@ -26,7 +26,7 @@ final class UnifiedFileNameValidatorRector extends \Rector\Core\Rector\AbstractR
     /**
      * @param ConstFetch|StaticCall $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -79,7 +79,7 @@ CODE_SAMPLE
     /**
      * @param ConstFetch|StaticCall $node
      */
-    private function shouldSkip($node) : bool
+    private function shouldSkip(\PhpParser\Node $node) : bool
     {
         if ($this->isMethodVerifyFilenameAgainstDenyPattern($node)) {
             return \false;

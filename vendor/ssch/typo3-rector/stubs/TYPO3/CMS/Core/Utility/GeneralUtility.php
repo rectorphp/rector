@@ -230,8 +230,10 @@ class GeneralUtility
     }
     /**
      * @return string
+     * @param mixed[] $array
+     * @param mixed[] $options
      */
-    public static function array2xml_cs(array $array, $docTag = 'phparray', array $options = [], $charset = '')
+    public static function array2xml_cs($array, $docTag = 'phparray', $options = [], $charset = '')
     {
         // Set default charset unless explicitly specified
         $charset = $charset ?: 'utf-8';
@@ -240,15 +242,19 @@ class GeneralUtility
     }
     /**
      * @return string
+     * @param mixed[] $array
+     * @param mixed[] $options
+     * @param mixed[] $stackData
      */
-    public static function array2xml(array $array, $NSprefix = '', $level = 0, $docTag = 'phparray', $spaceInd = 0, array $options = [], array $stackData = [])
+    public static function array2xml($array, $NSprefix = '', $level = 0, $docTag = 'phparray', $spaceInd = 0, $options = [], $stackData = [])
     {
         return 'xml';
     }
     /**
      * @return void
+     * @param mixed[] $row
      */
-    public static function csvValues(array $row, $delim = ',', $quote = '"')
+    public static function csvValues($row, $delim = ',', $quote = '"')
     {
     }
     /**

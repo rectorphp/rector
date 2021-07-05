@@ -21,8 +21,9 @@ class EnumNodeDefinition extends \RectorPrefix20210705\Symfony\Component\Config\
     private $values;
     /**
      * @return $this
+     * @param mixed[] $values
      */
-    public function values(array $values)
+    public function values($values)
     {
         $values = \array_unique($values);
         if (empty($values)) {

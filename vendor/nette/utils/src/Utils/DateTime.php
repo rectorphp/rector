@@ -50,8 +50,14 @@ class DateTime extends \DateTime implements \JsonSerializable
      * Creates DateTime object.
      * @return static
      * @throws Nette\InvalidArgumentException if the date and time are not valid.
+     * @param int $year
+     * @param int $month
+     * @param int $day
+     * @param int $hour
+     * @param int $minute
+     * @param float $second
      */
-    public static function fromParts(int $year, int $month, int $day, int $hour = 0, int $minute = 0, float $second = 0.0)
+    public static function fromParts($year, $month, $day, $hour = 0, $minute = 0, $second = 0.0)
     {
         $s = \sprintf('%04d-%02d-%02d %02d:%02d:%02.5F', $year, $month, $day, $hour, $minute, $second);
         if (!\checkdate($month, $day, $year) || $hour < 0 || $hour > 23 || $minute < 0 || $minute > 59 || $second < 0 || $second >= 60) {
@@ -95,8 +101,9 @@ class DateTime extends \DateTime implements \JsonSerializable
     /**
      * Creates a copy with a modified time.
      * @return static
+     * @param string $modify
      */
-    public function modifyClone(string $modify = '')
+    public function modifyClone($modify = '')
     {
         $dolly = clone $this;
         return $modify ? $dolly->modify($modify) : $dolly;

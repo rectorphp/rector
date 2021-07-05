@@ -49,7 +49,7 @@ class NodeTraverser implements \PhpParser\NodeTraverserInterface
      *
      * @param NodeVisitor $visitor Visitor to add
      */
-    public function addVisitor(\PhpParser\NodeVisitor $visitor)
+    public function addVisitor($visitor)
     {
         $this->visitors[] = $visitor;
     }
@@ -58,7 +58,7 @@ class NodeTraverser implements \PhpParser\NodeTraverserInterface
      *
      * @param NodeVisitor $visitor
      */
-    public function removeVisitor(\PhpParser\NodeVisitor $visitor)
+    public function removeVisitor($visitor)
     {
         foreach ($this->visitors as $index => $storedVisitor) {
             if ($storedVisitor === $visitor) {
@@ -74,7 +74,7 @@ class NodeTraverser implements \PhpParser\NodeTraverserInterface
      *
      * @return Node[] Traversed array of nodes
      */
-    public function traverse(array $nodes) : array
+    public function traverse($nodes) : array
     {
         $this->stopTraversal = \false;
         foreach ($this->visitors as $visitor) {
@@ -97,7 +97,7 @@ class NodeTraverser implements \PhpParser\NodeTraverserInterface
      *
      * @return Node Result of traversal (may be original node or new one)
      */
-    protected function traverseNode(\PhpParser\Node $node) : \PhpParser\Node
+    protected function traverseNode($node) : \PhpParser\Node
     {
         foreach ($node->getSubNodeNames() as $name) {
             $subNode =& $node->{$name};
@@ -165,7 +165,7 @@ class NodeTraverser implements \PhpParser\NodeTraverserInterface
      *
      * @return array Result of traversal (may be original array or changed one)
      */
-    protected function traverseArray(array $nodes) : array
+    protected function traverseArray($nodes) : array
     {
         $doNodes = [];
         foreach ($nodes as $i => &$node) {

@@ -10,11 +10,18 @@ final class AttributeEmulator extends \PhpParser\Lexer\TokenEmulator\TokenEmulat
     {
         return \PhpParser\Lexer\Emulative::PHP_8_0;
     }
-    public function isEmulationNeeded(string $code) : bool
+    /**
+     * @param string $code
+     */
+    public function isEmulationNeeded($code) : bool
     {
         return \strpos($code, '#[') !== \false;
     }
-    public function emulate(string $code, array $tokens) : array
+    /**
+     * @param string $code
+     * @param mixed[] $tokens
+     */
+    public function emulate($code, $tokens) : array
     {
         // We need to manually iterate and manage a count because we'll change
         // the tokens array on the way.
@@ -31,12 +38,20 @@ final class AttributeEmulator extends \PhpParser\Lexer\TokenEmulator\TokenEmulat
         }
         return $tokens;
     }
-    public function reverseEmulate(string $code, array $tokens) : array
+    /**
+     * @param string $code
+     * @param mixed[] $tokens
+     */
+    public function reverseEmulate($code, $tokens) : array
     {
         // TODO
         return $tokens;
     }
-    public function preprocessCode(string $code, array &$patches) : string
+    /**
+     * @param string $code
+     * @param mixed[] $patches
+     */
+    public function preprocessCode($code, &$patches) : string
     {
         $pos = 0;
         while (\false !== ($pos = \strpos($code, '#[', $pos))) {

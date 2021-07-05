@@ -55,8 +55,10 @@ abstract class BaseNode implements \RectorPrefix20210705\Symfony\Component\Confi
      * successfully processed the configuration value is returned as is, thus preserving the placeholder.
      *
      * @internal
+     * @param string $placeholder
+     * @param mixed[] $values
      */
-    public static function setPlaceholder(string $placeholder, array $values) : void
+    public static function setPlaceholder($placeholder, $values) : void
     {
         if (!$values) {
             throw new \InvalidArgumentException('At least one value must be provided.');
@@ -70,8 +72,9 @@ abstract class BaseNode implements \RectorPrefix20210705\Symfony\Component\Confi
      * placeholder. An exact match provided by {@see setPlaceholder()} might take precedence.
      *
      * @internal
+     * @param string $prefix
      */
-    public static function setPlaceholderUniquePrefix(string $prefix) : void
+    public static function setPlaceholderUniquePrefix($prefix) : void
     {
         self::$placeholderUniquePrefixes[] = $prefix;
     }
@@ -85,21 +88,26 @@ abstract class BaseNode implements \RectorPrefix20210705\Symfony\Component\Confi
         self::$placeholderUniquePrefixes = [];
         self::$placeholders = [];
     }
-    public function setAttribute(string $key, $value)
+    /**
+     * @param string $key
+     */
+    public function setAttribute($key, $value)
     {
         $this->attributes[$key] = $value;
     }
     /**
      * @return mixed
+     * @param string $key
      */
-    public function getAttribute(string $key, $default = null)
+    public function getAttribute($key, $default = null)
     {
         return $this->attributes[$key] ?? $default;
     }
     /**
      * @return bool
+     * @param string $key
      */
-    public function hasAttribute(string $key)
+    public function hasAttribute($key)
     {
         return isset($this->attributes[$key]);
     }
@@ -110,18 +118,25 @@ abstract class BaseNode implements \RectorPrefix20210705\Symfony\Component\Confi
     {
         return $this->attributes;
     }
-    public function setAttributes(array $attributes)
+    /**
+     * @param mixed[] $attributes
+     */
+    public function setAttributes($attributes)
     {
         $this->attributes = $attributes;
     }
-    public function removeAttribute(string $key)
+    /**
+     * @param string $key
+     */
+    public function removeAttribute($key)
     {
         unset($this->attributes[$key]);
     }
     /**
      * Sets an info message.
+     * @param string $info
      */
-    public function setInfo(string $info)
+    public function setInfo($info)
     {
         $this->setAttribute('info', $info);
     }
@@ -167,7 +182,7 @@ abstract class BaseNode implements \RectorPrefix20210705\Symfony\Component\Confi
      *
      * @param bool $boolean Required node
      */
-    public function setRequired(bool $boolean)
+    public function setRequired($boolean)
     {
         $this->required = $boolean;
     }
@@ -181,7 +196,7 @@ abstract class BaseNode implements \RectorPrefix20210705\Symfony\Component\Confi
      * You can use %node% and %path% placeholders in your message to display,
      * respectively, the node name and its complete path
      */
-    public function setDeprecated(?string $package)
+    public function setDeprecated($package)
     {
         $args = \func_get_args();
         if (\func_num_args() < 2) {
@@ -202,8 +217,9 @@ abstract class BaseNode implements \RectorPrefix20210705\Symfony\Component\Confi
     }
     /**
      * Sets if this node can be overridden.
+     * @param bool $allow
      */
-    public function setAllowOverwrite(bool $allow)
+    public function setAllowOverwrite($allow)
     {
         $this->allowOverwrite = $allow;
     }
@@ -212,7 +228,7 @@ abstract class BaseNode implements \RectorPrefix20210705\Symfony\Component\Confi
      *
      * @param \Closure[] $closures An array of Closures used for normalization
      */
-    public function setNormalizationClosures(array $closures)
+    public function setNormalizationClosures($closures)
     {
         $this->normalizationClosures = $closures;
     }
@@ -221,7 +237,7 @@ abstract class BaseNode implements \RectorPrefix20210705\Symfony\Component\Confi
      *
      * @param \Closure[] $closures An array of Closures used for final validation
      */
-    public function setFinalValidationClosures(array $closures)
+    public function setFinalValidationClosures($closures)
     {
         $this->finalValidationClosures = $closures;
     }
@@ -251,7 +267,7 @@ abstract class BaseNode implements \RectorPrefix20210705\Symfony\Component\Confi
      *
      * @deprecated since Symfony 5.1, use "getDeprecation()" instead.
      */
-    public function getDeprecationMessage(string $node, string $path)
+    public function getDeprecationMessage($node, $path)
     {
         trigger_deprecation('symfony/config', '5.1', 'The "%s()" method is deprecated, use "getDeprecation()" instead.', __METHOD__);
         return $this->getDeprecation($node, $path)['message'];
@@ -260,7 +276,7 @@ abstract class BaseNode implements \RectorPrefix20210705\Symfony\Component\Confi
      * @param string $node The configuration node name
      * @param string $path The path of the node
      */
-    public function getDeprecation(string $node, string $path) : array
+    public function getDeprecation($node, $path) : array
     {
         return ['package' => $this->deprecation['package'] ?? '', 'version' => $this->deprecation['version'] ?? '', 'message' => \strtr($this->deprecation['message'] ?? '', ['%node%' => $node, '%path%' => $path])];
     }

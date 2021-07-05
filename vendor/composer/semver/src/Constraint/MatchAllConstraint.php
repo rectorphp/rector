@@ -24,7 +24,7 @@ class MatchAllConstraint implements \RectorPrefix20210705\Composer\Semver\Constr
      *
      * @return bool
      */
-    public function matches(\RectorPrefix20210705\Composer\Semver\Constraint\ConstraintInterface $provider)
+    public function matches($provider)
     {
         return \true;
     }

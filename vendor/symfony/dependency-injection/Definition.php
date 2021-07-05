@@ -77,7 +77,7 @@ class Definition
      *
      * @return $this
      */
-    public function setChanges(array $changes)
+    public function setChanges($changes)
     {
         $this->changes = $changes;
         return $this;
@@ -118,8 +118,10 @@ class Definition
      * @return $this
      *
      * @throws InvalidArgumentException in case the decorated service id and the new decorated service id are equals
+     * @param int $priority
+     * @param int $invalidBehavior
      */
-    public function setDecoratedService(?string $id, string $renamedId = null, int $priority = 0, int $invalidBehavior = \RectorPrefix20210705\Symfony\Component\DependencyInjection\ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE)
+    public function setDecoratedService($id, $renamedId = null, $priority = 0, $invalidBehavior = \RectorPrefix20210705\Symfony\Component\DependencyInjection\ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE)
     {
         if ($renamedId && $id === $renamedId) {
             throw new \RectorPrefix20210705\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException(\sprintf('The decorated service inner name for "%s" must be different than the service name itself.', $id));
@@ -148,8 +150,9 @@ class Definition
      * Sets the service class.
      *
      * @return $this
+     * @param string|null $class
      */
-    public function setClass(?string $class)
+    public function setClass($class)
     {
         $this->changes['class'] = \true;
         $this->class = $class;
@@ -168,8 +171,9 @@ class Definition
      * Sets the arguments to pass to the service constructor/factory method.
      *
      * @return $this
+     * @param mixed[] $arguments
      */
-    public function setArguments(array $arguments)
+    public function setArguments($arguments)
     {
         $this->arguments = $arguments;
         return $this;
@@ -178,8 +182,9 @@ class Definition
      * Sets the properties to define when creating the service.
      *
      * @return $this
+     * @param mixed[] $properties
      */
-    public function setProperties(array $properties)
+    public function setProperties($properties)
     {
         $this->properties = $properties;
         return $this;
@@ -199,8 +204,9 @@ class Definition
      * @param mixed $value
      *
      * @return $this
+     * @param string $name
      */
-    public function setProperty(string $name, $value)
+    public function setProperty($name, $value)
     {
         $this->properties[$name] = $value;
         return $this;
@@ -283,8 +289,9 @@ class Definition
      * Sets the methods to call after service initialization.
      *
      * @return $this
+     * @param mixed[] $calls
      */
-    public function setMethodCalls(array $calls = [])
+    public function setMethodCalls($calls = [])
     {
         $this->calls = [];
         foreach ($calls as $call) {
@@ -303,7 +310,7 @@ class Definition
      *
      * @throws InvalidArgumentException on empty $method param
      */
-    public function addMethodCall(string $method, array $arguments = [], bool $returnsClone = \false)
+    public function addMethodCall($method, $arguments = [], $returnsClone = \false)
     {
         if (empty($method)) {
             throw new \RectorPrefix20210705\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException('Method name cannot be empty.');
@@ -315,8 +322,9 @@ class Definition
      * Removes a method to call after service initialization.
      *
      * @return $this
+     * @param string $method
      */
-    public function removeMethodCall(string $method)
+    public function removeMethodCall($method)
     {
         foreach ($this->calls as $i => $call) {
             if ($call[0] === $method) {
@@ -329,8 +337,9 @@ class Definition
      * Check if the current definition has a given method to call after service initialization.
      *
      * @return bool
+     * @param string $method
      */
-    public function hasMethodCall(string $method)
+    public function hasMethodCall($method)
     {
         foreach ($this->calls as $call) {
             if ($call[0] === $method) {
@@ -355,7 +364,7 @@ class Definition
      *
      * @return $this
      */
-    public function setInstanceofConditionals(array $instanceof)
+    public function setInstanceofConditionals($instanceof)
     {
         $this->instanceof = $instanceof;
         return $this;
@@ -373,8 +382,9 @@ class Definition
      * Sets whether or not instanceof conditionals should be prepended with a global set.
      *
      * @return $this
+     * @param bool $autoconfigured
      */
-    public function setAutoconfigured(bool $autoconfigured)
+    public function setAutoconfigured($autoconfigured)
     {
         $this->changes['autoconfigured'] = \true;
         $this->autoconfigured = $autoconfigured;
@@ -391,8 +401,9 @@ class Definition
      * Sets tags for this definition.
      *
      * @return $this
+     * @param mixed[] $tags
      */
-    public function setTags(array $tags)
+    public function setTags($tags)
     {
         $this->tags = $tags;
         return $this;
@@ -410,8 +421,9 @@ class Definition
      * Gets a tag by name.
      *
      * @return array An array of attributes
+     * @param string $name
      */
-    public function getTag(string $name)
+    public function getTag($name)
     {
         return $this->tags[$name] ?? [];
     }
@@ -419,8 +431,10 @@ class Definition
      * Adds a tag for this definition.
      *
      * @return $this
+     * @param string $name
+     * @param mixed[] $attributes
      */
-    public function addTag(string $name, array $attributes = [])
+    public function addTag($name, $attributes = [])
     {
         $this->tags[$name][] = $attributes;
         return $this;
@@ -429,8 +443,9 @@ class Definition
      * Whether this definition has a tag with the given name.
      *
      * @return bool
+     * @param string $name
      */
-    public function hasTag(string $name)
+    public function hasTag($name)
     {
         return isset($this->tags[$name]);
     }
@@ -438,8 +453,9 @@ class Definition
      * Clears all tags for a given name.
      *
      * @return $this
+     * @param string $name
      */
-    public function clearTag(string $name)
+    public function clearTag($name)
     {
         unset($this->tags[$name]);
         return $this;
@@ -458,8 +474,9 @@ class Definition
      * Sets a file to require before creating the service.
      *
      * @return $this
+     * @param string|null $file
      */
-    public function setFile(?string $file)
+    public function setFile($file)
     {
         $this->changes['file'] = \true;
         $this->file = $file;
@@ -478,8 +495,9 @@ class Definition
      * Sets if the service must be shared or not.
      *
      * @return $this
+     * @param bool $shared
      */
-    public function setShared(bool $shared)
+    public function setShared($shared)
     {
         $this->changes['shared'] = \true;
         $this->shared = $shared;
@@ -498,8 +516,9 @@ class Definition
      * Sets the visibility of this service.
      *
      * @return $this
+     * @param bool $boolean
      */
-    public function setPublic(bool $boolean)
+    public function setPublic($boolean)
     {
         $this->changes['public'] = \true;
         $this->public = $boolean;
@@ -520,8 +539,9 @@ class Definition
      * @return $this
      *
      * @deprecated since Symfony 5.2, use setPublic() instead
+     * @param bool $boolean
      */
-    public function setPrivate(bool $boolean)
+    public function setPrivate($boolean)
     {
         trigger_deprecation('symfony/dependency-injection', '5.2', 'The "%s()" method is deprecated, use "setPublic()" instead.', __METHOD__);
         return $this->setPublic(!$boolean);
@@ -539,8 +559,9 @@ class Definition
      * Sets the lazy flag of this service.
      *
      * @return $this
+     * @param bool $lazy
      */
-    public function setLazy(bool $lazy)
+    public function setLazy($lazy)
     {
         $this->changes['lazy'] = \true;
         $this->lazy = $lazy;
@@ -560,8 +581,9 @@ class Definition
      * container, but dynamically injected.
      *
      * @return $this
+     * @param bool $boolean
      */
-    public function setSynthetic(bool $boolean)
+    public function setSynthetic($boolean)
     {
         $this->synthetic = $boolean;
         if (!isset($this->changes['public'])) {
@@ -584,8 +606,9 @@ class Definition
      * template for other definitions.
      *
      * @return $this
+     * @param bool $boolean
      */
-    public function setAbstract(bool $boolean)
+    public function setAbstract($boolean)
     {
         $this->abstract = $boolean;
         return $this;
@@ -660,7 +683,7 @@ class Definition
      *
      * @return string
      */
-    public function getDeprecationMessage(string $id)
+    public function getDeprecationMessage($id)
     {
         trigger_deprecation('symfony/dependency-injection', '5.1', 'The "%s()" method is deprecated, use "getDeprecation()" instead.', __METHOD__);
         return $this->getDeprecation($id)['message'];
@@ -668,7 +691,7 @@ class Definition
     /**
      * @param string $id Service id relying on this definition
      */
-    public function getDeprecation(string $id) : array
+    public function getDeprecation($id) : array
     {
         return ['package' => $this->deprecation['package'], 'version' => $this->deprecation['version'], 'message' => \str_replace('%service_id%', $id, $this->deprecation['message'])];
     }
@@ -712,8 +735,9 @@ class Definition
      * Enables/disables autowiring.
      *
      * @return $this
+     * @param bool $autowired
      */
-    public function setAutowired(bool $autowired)
+    public function setAutowired($autowired)
     {
         $this->changes['autowired'] = \true;
         $this->autowired = $autowired;
@@ -736,8 +760,9 @@ class Definition
      * called and of controller actions).
      *
      * @return $this
+     * @param mixed[] $bindings
      */
-    public function setBindings(array $bindings)
+    public function setBindings($bindings)
     {
         foreach ($bindings as $key => $binding) {
             if (0 < \strpos($key, '$') && $key !== ($k = \preg_replace('/[ \\t]*\\$/', ' $', $key))) {

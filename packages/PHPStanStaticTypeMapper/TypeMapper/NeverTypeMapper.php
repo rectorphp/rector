@@ -23,9 +23,10 @@ final class NeverTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\
         return \PHPStan\Type\NeverType::class;
     }
     /**
-     * @param NeverType $type
+     * @param \PHPStan\Type\Type $type
+     * @param \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind $typeKind
      */
-    public function mapToPHPStanPhpDocTypeNode(\PHPStan\Type\Type $type, \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind $typeKind) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
+    public function mapToPHPStanPhpDocTypeNode($type, $typeKind) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
     {
         if ($typeKind->equals(\Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind::RETURN())) {
             return new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode('never');
@@ -33,9 +34,10 @@ final class NeverTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\
         return new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode('mixed');
     }
     /**
-     * @param NeverType $type
+     * @param \PHPStan\Type\Type $type
+     * @param \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind $typeKind
      */
-    public function mapToPhpParserNode(\PHPStan\Type\Type $type, \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind $typeKind) : ?\PhpParser\Node
+    public function mapToPhpParserNode($type, $typeKind) : ?\PhpParser\Node
     {
         return null;
     }

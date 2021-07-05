@@ -19,7 +19,10 @@ final class ConsoleShowOutputFormatter implements \Rector\ListReporting\Contract
     {
         $this->outputStyle = $outputStyle;
     }
-    public function list(array $rectors) : void
+    /**
+     * @param mixed[] $rectors
+     */
+    public function list($rectors) : void
     {
         $rectorCount = \count($rectors);
         $this->outputStyle->title('Loaded Rector rules');

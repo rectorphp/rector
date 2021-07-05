@@ -61,9 +61,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Stmt\ClassConst::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param ClassConst $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($this->shouldSkipClassConst($node)) {
             return null;

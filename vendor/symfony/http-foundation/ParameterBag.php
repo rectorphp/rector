@@ -55,15 +55,17 @@ class ParameterBag implements \IteratorAggregate, \Countable
     }
     /**
      * Replaces the current parameters by a new set.
+     * @param mixed[] $parameters
      */
-    public function replace(array $parameters = [])
+    public function replace($parameters = [])
     {
         $this->parameters = $parameters;
     }
     /**
      * Adds parameters.
+     * @param mixed[] $parameters
      */
-    public function add(array $parameters = [])
+    public function add($parameters = [])
     {
         $this->parameters = \array_replace($this->parameters, $parameters);
     }
@@ -73,8 +75,9 @@ class ParameterBag implements \IteratorAggregate, \Countable
      * @param mixed $default The default value if the parameter key does not exist
      *
      * @return mixed
+     * @param string $key
      */
-    public function get(string $key, $default = null)
+    public function get($key, $default = null)
     {
         return \array_key_exists($key, $this->parameters) ? $this->parameters[$key] : $default;
     }
@@ -92,15 +95,17 @@ class ParameterBag implements \IteratorAggregate, \Countable
      * Returns true if the parameter is defined.
      *
      * @return bool true if the parameter exists, false otherwise
+     * @param string $key
      */
-    public function has(string $key)
+    public function has($key)
     {
         return \array_key_exists($key, $this->parameters);
     }
     /**
      * Removes a parameter.
+     * @param string $key
      */
-    public function remove(string $key)
+    public function remove($key)
     {
         unset($this->parameters[$key]);
     }
@@ -108,8 +113,10 @@ class ParameterBag implements \IteratorAggregate, \Countable
      * Returns the alphabetic characters of the parameter value.
      *
      * @return string The filtered value
+     * @param string $key
+     * @param string $default
      */
-    public function getAlpha(string $key, string $default = '')
+    public function getAlpha($key, $default = '')
     {
         return \preg_replace('/[^[:alpha:]]/', '', $this->get($key, $default));
     }
@@ -117,8 +124,10 @@ class ParameterBag implements \IteratorAggregate, \Countable
      * Returns the alphabetic characters and digits of the parameter value.
      *
      * @return string The filtered value
+     * @param string $key
+     * @param string $default
      */
-    public function getAlnum(string $key, string $default = '')
+    public function getAlnum($key, $default = '')
     {
         return \preg_replace('/[^[:alnum:]]/', '', $this->get($key, $default));
     }
@@ -126,8 +135,10 @@ class ParameterBag implements \IteratorAggregate, \Countable
      * Returns the digits of the parameter value.
      *
      * @return string The filtered value
+     * @param string $key
+     * @param string $default
      */
-    public function getDigits(string $key, string $default = '')
+    public function getDigits($key, $default = '')
     {
         // we need to remove - and + because they're allowed in the filter
         return \str_replace(['-', '+'], '', $this->filter($key, $default, \FILTER_SANITIZE_NUMBER_INT));
@@ -136,8 +147,10 @@ class ParameterBag implements \IteratorAggregate, \Countable
      * Returns the parameter value converted to integer.
      *
      * @return int The filtered value
+     * @param string $key
+     * @param int $default
      */
-    public function getInt(string $key, int $default = 0)
+    public function getInt($key, $default = 0)
     {
         return (int) $this->get($key, $default);
     }
@@ -145,8 +158,10 @@ class ParameterBag implements \IteratorAggregate, \Countable
      * Returns the parameter value converted to boolean.
      *
      * @return bool The filtered value
+     * @param string $key
+     * @param bool $default
      */
-    public function getBoolean(string $key, bool $default = \false)
+    public function getBoolean($key, $default = \false)
     {
         return $this->filter($key, $default, \FILTER_VALIDATE_BOOLEAN);
     }
@@ -162,7 +177,7 @@ class ParameterBag implements \IteratorAggregate, \Countable
      * @return mixed
      * @param string $key
      */
-    public function filter($key, $default = null, int $filter = \FILTER_DEFAULT, $options = [])
+    public function filter($key, $default = null, $filter = \FILTER_DEFAULT, $options = [])
     {
         $value = $this->get($key, $default);
         // Always turn $options into an array - this allows filter_var option shortcuts.

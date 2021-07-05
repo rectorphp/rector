@@ -33,8 +33,9 @@ class ServiceLocator implements \RectorPrefix20210705\Symfony\Contracts\Service\
      * {@inheritdoc}
      *
      * @return mixed
+     * @param string $id
      */
-    public function get(string $id)
+    public function get($id)
     {
         if (!$this->externalId) {
             return $this->doGet($id);
@@ -61,15 +62,20 @@ class ServiceLocator implements \RectorPrefix20210705\Symfony\Contracts\Service\
      * @internal
      *
      * @return static
+     * @param string $externalId
+     * @param \Symfony\Component\DependencyInjection\Container $container
      */
-    public function withContext(string $externalId, \RectorPrefix20210705\Symfony\Component\DependencyInjection\Container $container)
+    public function withContext($externalId, $container)
     {
         $locator = clone $this;
         $locator->externalId = $externalId;
         $locator->container = $container;
         return $locator;
     }
-    private function createNotFoundException(string $id) : \RectorPrefix20210705\Psr\Container\NotFoundExceptionInterface
+    /**
+     * @param string $id
+     */
+    private function createNotFoundException($id) : \RectorPrefix20210705\Psr\Container\NotFoundExceptionInterface
     {
         if ($this->loading) {
             $msg = \sprintf('The service "%s" has a dependency on a non-existent service "%s". This locator %s', \end($this->loading), $id, $this->formatAlternatives());
@@ -110,11 +116,19 @@ class ServiceLocator implements \RectorPrefix20210705\Symfony\Contracts\Service\
         }
         return new \RectorPrefix20210705\Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException($id, \end($this->loading) ?: null, null, [], \implode(' ', $msg));
     }
-    private function createCircularReferenceException(string $id, array $path) : \RectorPrefix20210705\Psr\Container\ContainerExceptionInterface
+    /**
+     * @param string $id
+     * @param mixed[] $path
+     */
+    private function createCircularReferenceException($id, $path) : \RectorPrefix20210705\Psr\Container\ContainerExceptionInterface
     {
         return new \RectorPrefix20210705\Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException($id, $path);
     }
-    private function formatAlternatives(array $alternatives = null, string $separator = 'and') : string
+    /**
+     * @param mixed[]|null $alternatives
+     * @param string $separator
+     */
+    private function formatAlternatives($alternatives = null, $separator = 'and') : string
     {
         $format = '"%s"%s';
         if (null === $alternatives) {

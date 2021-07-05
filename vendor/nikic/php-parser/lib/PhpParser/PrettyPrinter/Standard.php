@@ -16,90 +16,153 @@ use PhpParser\PrettyPrinterAbstract;
 class Standard extends \PhpParser\PrettyPrinterAbstract
 {
     // Special nodes
-    protected function pParam(\PhpParser\Node\Param $node)
+    /**
+     * @param \PhpParser\Node\Param $node
+     */
+    protected function pParam($node)
     {
         return $this->pAttrGroups($node->attrGroups, \true) . $this->pModifiers($node->flags) . ($node->type ? $this->p($node->type) . ' ' : '') . ($node->byRef ? '&' : '') . ($node->variadic ? '...' : '') . $this->p($node->var) . ($node->default ? ' = ' . $this->p($node->default) : '');
     }
-    protected function pArg(\PhpParser\Node\Arg $node)
+    /**
+     * @param \PhpParser\Node\Arg $node
+     */
+    protected function pArg($node)
     {
         return ($node->name ? $node->name->toString() . ': ' : '') . ($node->byRef ? '&' : '') . ($node->unpack ? '...' : '') . $this->p($node->value);
     }
-    protected function pConst(\PhpParser\Node\Const_ $node)
+    /**
+     * @param \PhpParser\Node\Const_ $node
+     */
+    protected function pConst($node)
     {
         return $node->name . ' = ' . $this->p($node->value);
     }
-    protected function pNullableType(\PhpParser\Node\NullableType $node)
+    /**
+     * @param \PhpParser\Node\NullableType $node
+     */
+    protected function pNullableType($node)
     {
         return '?' . $this->p($node->type);
     }
-    protected function pUnionType(\PhpParser\Node\UnionType $node)
+    /**
+     * @param \PhpParser\Node\UnionType $node
+     */
+    protected function pUnionType($node)
     {
         return $this->pImplode($node->types, '|');
     }
-    protected function pIdentifier(\PhpParser\Node\Identifier $node)
+    /**
+     * @param \PhpParser\Node\Identifier $node
+     */
+    protected function pIdentifier($node)
     {
         return $node->name;
     }
-    protected function pVarLikeIdentifier(\PhpParser\Node\VarLikeIdentifier $node)
+    /**
+     * @param \PhpParser\Node\VarLikeIdentifier $node
+     */
+    protected function pVarLikeIdentifier($node)
     {
         return '$' . $node->name;
     }
-    protected function pAttribute(\PhpParser\Node\Attribute $node)
+    /**
+     * @param \PhpParser\Node\Attribute $node
+     */
+    protected function pAttribute($node)
     {
         return $this->p($node->name) . ($node->args ? '(' . $this->pCommaSeparated($node->args) . ')' : '');
     }
-    protected function pAttributeGroup(\PhpParser\Node\AttributeGroup $node)
+    /**
+     * @param \PhpParser\Node\AttributeGroup $node
+     */
+    protected function pAttributeGroup($node)
     {
         return '#[' . $this->pCommaSeparated($node->attrs) . ']';
     }
     // Names
-    protected function pName(\PhpParser\Node\Name $node)
+    /**
+     * @param \PhpParser\Node\Name $node
+     */
+    protected function pName($node)
     {
         return \implode('\\', $node->parts);
     }
-    protected function pName_FullyQualified(\PhpParser\Node\Name\FullyQualified $node)
+    /**
+     * @param \PhpParser\Node\Name\FullyQualified $node
+     */
+    protected function pName_FullyQualified($node)
     {
         return '\\' . \implode('\\', $node->parts);
     }
-    protected function pName_Relative(\PhpParser\Node\Name\Relative $node)
+    /**
+     * @param \PhpParser\Node\Name\Relative $node
+     */
+    protected function pName_Relative($node)
     {
         return 'namespace\\' . \implode('\\', $node->parts);
     }
     // Magic Constants
-    protected function pScalar_MagicConst_Class(\PhpParser\Node\Scalar\MagicConst\Class_ $node)
+    /**
+     * @param \PhpParser\Node\Scalar\MagicConst\Class_ $node
+     */
+    protected function pScalar_MagicConst_Class($node)
     {
         return '__CLASS__';
     }
-    protected function pScalar_MagicConst_Dir(\PhpParser\Node\Scalar\MagicConst\Dir $node)
+    /**
+     * @param \PhpParser\Node\Scalar\MagicConst\Dir $node
+     */
+    protected function pScalar_MagicConst_Dir($node)
     {
         return '__DIR__';
     }
-    protected function pScalar_MagicConst_File(\PhpParser\Node\Scalar\MagicConst\File $node)
+    /**
+     * @param \PhpParser\Node\Scalar\MagicConst\File $node
+     */
+    protected function pScalar_MagicConst_File($node)
     {
         return '__FILE__';
     }
-    protected function pScalar_MagicConst_Function(\PhpParser\Node\Scalar\MagicConst\Function_ $node)
+    /**
+     * @param \PhpParser\Node\Scalar\MagicConst\Function_ $node
+     */
+    protected function pScalar_MagicConst_Function($node)
     {
         return '__FUNCTION__';
     }
-    protected function pScalar_MagicConst_Line(\PhpParser\Node\Scalar\MagicConst\Line $node)
+    /**
+     * @param \PhpParser\Node\Scalar\MagicConst\Line $node
+     */
+    protected function pScalar_MagicConst_Line($node)
     {
         return '__LINE__';
     }
-    protected function pScalar_MagicConst_Method(\PhpParser\Node\Scalar\MagicConst\Method $node)
+    /**
+     * @param \PhpParser\Node\Scalar\MagicConst\Method $node
+     */
+    protected function pScalar_MagicConst_Method($node)
     {
         return '__METHOD__';
     }
-    protected function pScalar_MagicConst_Namespace(\PhpParser\Node\Scalar\MagicConst\Namespace_ $node)
+    /**
+     * @param \PhpParser\Node\Scalar\MagicConst\Namespace_ $node
+     */
+    protected function pScalar_MagicConst_Namespace($node)
     {
         return '__NAMESPACE__';
     }
-    protected function pScalar_MagicConst_Trait(\PhpParser\Node\Scalar\MagicConst\Trait_ $node)
+    /**
+     * @param \PhpParser\Node\Scalar\MagicConst\Trait_ $node
+     */
+    protected function pScalar_MagicConst_Trait($node)
     {
         return '__TRAIT__';
     }
     // Scalars
-    protected function pScalar_String(\PhpParser\Node\Scalar\String_ $node)
+    /**
+     * @param \PhpParser\Node\Scalar\String_ $node
+     */
+    protected function pScalar_String($node)
     {
         $kind = $node->getAttribute('kind', \PhpParser\Node\Scalar\String_::KIND_SINGLE_QUOTED);
         switch ($kind) {
@@ -129,7 +192,10 @@ class Standard extends \PhpParser\PrettyPrinterAbstract
         }
         throw new \Exception('Invalid string kind');
     }
-    protected function pScalar_Encapsed(\PhpParser\Node\Scalar\Encapsed $node)
+    /**
+     * @param \PhpParser\Node\Scalar\Encapsed $node
+     */
+    protected function pScalar_Encapsed($node)
     {
         if ($node->getAttribute('kind') === \PhpParser\Node\Scalar\String_::KIND_HEREDOC) {
             $label = $node->getAttribute('docLabel');
@@ -142,7 +208,10 @@ class Standard extends \PhpParser\PrettyPrinterAbstract
         }
         return '"' . $this->pEncapsList($node->parts, '"') . '"';
     }
-    protected function pScalar_LNumber(\PhpParser\Node\Scalar\LNumber $node)
+    /**
+     * @param \PhpParser\Node\Scalar\LNumber $node
+     */
+    protected function pScalar_LNumber($node)
     {
         if ($node->value === -\PHP_INT_MAX - 1) {
             // PHP_INT_MIN cannot be represented as a literal,
@@ -170,7 +239,10 @@ class Standard extends \PhpParser\PrettyPrinterAbstract
         }
         throw new \Exception('Invalid number kind');
     }
-    protected function pScalar_DNumber(\PhpParser\Node\Scalar\DNumber $node)
+    /**
+     * @param \PhpParser\Node\Scalar\DNumber $node
+     */
+    protected function pScalar_DNumber($node)
     {
         if (!\is_finite($node->value)) {
             if ($node->value === \INF) {
@@ -193,195 +265,336 @@ class Standard extends \PhpParser\PrettyPrinterAbstract
         // ensure that number is really printed as float
         return \preg_match('/^-?[0-9]+$/', $stringValue) ? $stringValue . '.0' : $stringValue;
     }
-    protected function pScalar_EncapsedStringPart(\PhpParser\Node\Scalar\EncapsedStringPart $node)
+    /**
+     * @param \PhpParser\Node\Scalar\EncapsedStringPart $node
+     */
+    protected function pScalar_EncapsedStringPart($node)
     {
         throw new \LogicException('Cannot directly print EncapsedStringPart');
     }
     // Assignments
-    protected function pExpr_Assign(\PhpParser\Node\Expr\Assign $node)
+    /**
+     * @param \PhpParser\Node\Expr\Assign $node
+     */
+    protected function pExpr_Assign($node)
     {
         return $this->pInfixOp(\PhpParser\Node\Expr\Assign::class, $node->var, ' = ', $node->expr);
     }
-    protected function pExpr_AssignRef(\PhpParser\Node\Expr\AssignRef $node)
+    /**
+     * @param \PhpParser\Node\Expr\AssignRef $node
+     */
+    protected function pExpr_AssignRef($node)
     {
         return $this->pInfixOp(\PhpParser\Node\Expr\AssignRef::class, $node->var, ' =& ', $node->expr);
     }
-    protected function pExpr_AssignOp_Plus(\PhpParser\Node\Expr\AssignOp\Plus $node)
+    /**
+     * @param \PhpParser\Node\Expr\AssignOp\Plus $node
+     */
+    protected function pExpr_AssignOp_Plus($node)
     {
         return $this->pInfixOp(\PhpParser\Node\Expr\AssignOp\Plus::class, $node->var, ' += ', $node->expr);
     }
-    protected function pExpr_AssignOp_Minus(\PhpParser\Node\Expr\AssignOp\Minus $node)
+    /**
+     * @param \PhpParser\Node\Expr\AssignOp\Minus $node
+     */
+    protected function pExpr_AssignOp_Minus($node)
     {
         return $this->pInfixOp(\PhpParser\Node\Expr\AssignOp\Minus::class, $node->var, ' -= ', $node->expr);
     }
-    protected function pExpr_AssignOp_Mul(\PhpParser\Node\Expr\AssignOp\Mul $node)
+    /**
+     * @param \PhpParser\Node\Expr\AssignOp\Mul $node
+     */
+    protected function pExpr_AssignOp_Mul($node)
     {
         return $this->pInfixOp(\PhpParser\Node\Expr\AssignOp\Mul::class, $node->var, ' *= ', $node->expr);
     }
-    protected function pExpr_AssignOp_Div(\PhpParser\Node\Expr\AssignOp\Div $node)
+    /**
+     * @param \PhpParser\Node\Expr\AssignOp\Div $node
+     */
+    protected function pExpr_AssignOp_Div($node)
     {
         return $this->pInfixOp(\PhpParser\Node\Expr\AssignOp\Div::class, $node->var, ' /= ', $node->expr);
     }
-    protected function pExpr_AssignOp_Concat(\PhpParser\Node\Expr\AssignOp\Concat $node)
+    /**
+     * @param \PhpParser\Node\Expr\AssignOp\Concat $node
+     */
+    protected function pExpr_AssignOp_Concat($node)
     {
         return $this->pInfixOp(\PhpParser\Node\Expr\AssignOp\Concat::class, $node->var, ' .= ', $node->expr);
     }
-    protected function pExpr_AssignOp_Mod(\PhpParser\Node\Expr\AssignOp\Mod $node)
+    /**
+     * @param \PhpParser\Node\Expr\AssignOp\Mod $node
+     */
+    protected function pExpr_AssignOp_Mod($node)
     {
         return $this->pInfixOp(\PhpParser\Node\Expr\AssignOp\Mod::class, $node->var, ' %= ', $node->expr);
     }
-    protected function pExpr_AssignOp_BitwiseAnd(\PhpParser\Node\Expr\AssignOp\BitwiseAnd $node)
+    /**
+     * @param \PhpParser\Node\Expr\AssignOp\BitwiseAnd $node
+     */
+    protected function pExpr_AssignOp_BitwiseAnd($node)
     {
         return $this->pInfixOp(\PhpParser\Node\Expr\AssignOp\BitwiseAnd::class, $node->var, ' &= ', $node->expr);
     }
-    protected function pExpr_AssignOp_BitwiseOr(\PhpParser\Node\Expr\AssignOp\BitwiseOr $node)
+    /**
+     * @param \PhpParser\Node\Expr\AssignOp\BitwiseOr $node
+     */
+    protected function pExpr_AssignOp_BitwiseOr($node)
     {
         return $this->pInfixOp(\PhpParser\Node\Expr\AssignOp\BitwiseOr::class, $node->var, ' |= ', $node->expr);
     }
-    protected function pExpr_AssignOp_BitwiseXor(\PhpParser\Node\Expr\AssignOp\BitwiseXor $node)
+    /**
+     * @param \PhpParser\Node\Expr\AssignOp\BitwiseXor $node
+     */
+    protected function pExpr_AssignOp_BitwiseXor($node)
     {
         return $this->pInfixOp(\PhpParser\Node\Expr\AssignOp\BitwiseXor::class, $node->var, ' ^= ', $node->expr);
     }
-    protected function pExpr_AssignOp_ShiftLeft(\PhpParser\Node\Expr\AssignOp\ShiftLeft $node)
+    /**
+     * @param \PhpParser\Node\Expr\AssignOp\ShiftLeft $node
+     */
+    protected function pExpr_AssignOp_ShiftLeft($node)
     {
         return $this->pInfixOp(\PhpParser\Node\Expr\AssignOp\ShiftLeft::class, $node->var, ' <<= ', $node->expr);
     }
-    protected function pExpr_AssignOp_ShiftRight(\PhpParser\Node\Expr\AssignOp\ShiftRight $node)
+    /**
+     * @param \PhpParser\Node\Expr\AssignOp\ShiftRight $node
+     */
+    protected function pExpr_AssignOp_ShiftRight($node)
     {
         return $this->pInfixOp(\PhpParser\Node\Expr\AssignOp\ShiftRight::class, $node->var, ' >>= ', $node->expr);
     }
-    protected function pExpr_AssignOp_Pow(\PhpParser\Node\Expr\AssignOp\Pow $node)
+    /**
+     * @param \PhpParser\Node\Expr\AssignOp\Pow $node
+     */
+    protected function pExpr_AssignOp_Pow($node)
     {
         return $this->pInfixOp(\PhpParser\Node\Expr\AssignOp\Pow::class, $node->var, ' **= ', $node->expr);
     }
-    protected function pExpr_AssignOp_Coalesce(\PhpParser\Node\Expr\AssignOp\Coalesce $node)
+    /**
+     * @param \PhpParser\Node\Expr\AssignOp\Coalesce $node
+     */
+    protected function pExpr_AssignOp_Coalesce($node)
     {
         return $this->pInfixOp(\PhpParser\Node\Expr\AssignOp\Coalesce::class, $node->var, ' ??= ', $node->expr);
     }
     // Binary expressions
-    protected function pExpr_BinaryOp_Plus(\PhpParser\Node\Expr\BinaryOp\Plus $node)
+    /**
+     * @param \PhpParser\Node\Expr\BinaryOp\Plus $node
+     */
+    protected function pExpr_BinaryOp_Plus($node)
     {
         return $this->pInfixOp(\PhpParser\Node\Expr\BinaryOp\Plus::class, $node->left, ' + ', $node->right);
     }
-    protected function pExpr_BinaryOp_Minus(\PhpParser\Node\Expr\BinaryOp\Minus $node)
+    /**
+     * @param \PhpParser\Node\Expr\BinaryOp\Minus $node
+     */
+    protected function pExpr_BinaryOp_Minus($node)
     {
         return $this->pInfixOp(\PhpParser\Node\Expr\BinaryOp\Minus::class, $node->left, ' - ', $node->right);
     }
-    protected function pExpr_BinaryOp_Mul(\PhpParser\Node\Expr\BinaryOp\Mul $node)
+    /**
+     * @param \PhpParser\Node\Expr\BinaryOp\Mul $node
+     */
+    protected function pExpr_BinaryOp_Mul($node)
     {
         return $this->pInfixOp(\PhpParser\Node\Expr\BinaryOp\Mul::class, $node->left, ' * ', $node->right);
     }
-    protected function pExpr_BinaryOp_Div(\PhpParser\Node\Expr\BinaryOp\Div $node)
+    /**
+     * @param \PhpParser\Node\Expr\BinaryOp\Div $node
+     */
+    protected function pExpr_BinaryOp_Div($node)
     {
         return $this->pInfixOp(\PhpParser\Node\Expr\BinaryOp\Div::class, $node->left, ' / ', $node->right);
     }
-    protected function pExpr_BinaryOp_Concat(\PhpParser\Node\Expr\BinaryOp\Concat $node)
+    /**
+     * @param \PhpParser\Node\Expr\BinaryOp\Concat $node
+     */
+    protected function pExpr_BinaryOp_Concat($node)
     {
         return $this->pInfixOp(\PhpParser\Node\Expr\BinaryOp\Concat::class, $node->left, ' . ', $node->right);
     }
-    protected function pExpr_BinaryOp_Mod(\PhpParser\Node\Expr\BinaryOp\Mod $node)
+    /**
+     * @param \PhpParser\Node\Expr\BinaryOp\Mod $node
+     */
+    protected function pExpr_BinaryOp_Mod($node)
     {
         return $this->pInfixOp(\PhpParser\Node\Expr\BinaryOp\Mod::class, $node->left, ' % ', $node->right);
     }
-    protected function pExpr_BinaryOp_BooleanAnd(\PhpParser\Node\Expr\BinaryOp\BooleanAnd $node)
+    /**
+     * @param \PhpParser\Node\Expr\BinaryOp\BooleanAnd $node
+     */
+    protected function pExpr_BinaryOp_BooleanAnd($node)
     {
         return $this->pInfixOp(\PhpParser\Node\Expr\BinaryOp\BooleanAnd::class, $node->left, ' && ', $node->right);
     }
-    protected function pExpr_BinaryOp_BooleanOr(\PhpParser\Node\Expr\BinaryOp\BooleanOr $node)
+    /**
+     * @param \PhpParser\Node\Expr\BinaryOp\BooleanOr $node
+     */
+    protected function pExpr_BinaryOp_BooleanOr($node)
     {
         return $this->pInfixOp(\PhpParser\Node\Expr\BinaryOp\BooleanOr::class, $node->left, ' || ', $node->right);
     }
-    protected function pExpr_BinaryOp_BitwiseAnd(\PhpParser\Node\Expr\BinaryOp\BitwiseAnd $node)
+    /**
+     * @param \PhpParser\Node\Expr\BinaryOp\BitwiseAnd $node
+     */
+    protected function pExpr_BinaryOp_BitwiseAnd($node)
     {
         return $this->pInfixOp(\PhpParser\Node\Expr\BinaryOp\BitwiseAnd::class, $node->left, ' & ', $node->right);
     }
-    protected function pExpr_BinaryOp_BitwiseOr(\PhpParser\Node\Expr\BinaryOp\BitwiseOr $node)
+    /**
+     * @param \PhpParser\Node\Expr\BinaryOp\BitwiseOr $node
+     */
+    protected function pExpr_BinaryOp_BitwiseOr($node)
     {
         return $this->pInfixOp(\PhpParser\Node\Expr\BinaryOp\BitwiseOr::class, $node->left, ' | ', $node->right);
     }
-    protected function pExpr_BinaryOp_BitwiseXor(\PhpParser\Node\Expr\BinaryOp\BitwiseXor $node)
+    /**
+     * @param \PhpParser\Node\Expr\BinaryOp\BitwiseXor $node
+     */
+    protected function pExpr_BinaryOp_BitwiseXor($node)
     {
         return $this->pInfixOp(\PhpParser\Node\Expr\BinaryOp\BitwiseXor::class, $node->left, ' ^ ', $node->right);
     }
-    protected function pExpr_BinaryOp_ShiftLeft(\PhpParser\Node\Expr\BinaryOp\ShiftLeft $node)
+    /**
+     * @param \PhpParser\Node\Expr\BinaryOp\ShiftLeft $node
+     */
+    protected function pExpr_BinaryOp_ShiftLeft($node)
     {
         return $this->pInfixOp(\PhpParser\Node\Expr\BinaryOp\ShiftLeft::class, $node->left, ' << ', $node->right);
     }
-    protected function pExpr_BinaryOp_ShiftRight(\PhpParser\Node\Expr\BinaryOp\ShiftRight $node)
+    /**
+     * @param \PhpParser\Node\Expr\BinaryOp\ShiftRight $node
+     */
+    protected function pExpr_BinaryOp_ShiftRight($node)
     {
         return $this->pInfixOp(\PhpParser\Node\Expr\BinaryOp\ShiftRight::class, $node->left, ' >> ', $node->right);
     }
-    protected function pExpr_BinaryOp_Pow(\PhpParser\Node\Expr\BinaryOp\Pow $node)
+    /**
+     * @param \PhpParser\Node\Expr\BinaryOp\Pow $node
+     */
+    protected function pExpr_BinaryOp_Pow($node)
     {
         return $this->pInfixOp(\PhpParser\Node\Expr\BinaryOp\Pow::class, $node->left, ' ** ', $node->right);
     }
-    protected function pExpr_BinaryOp_LogicalAnd(\PhpParser\Node\Expr\BinaryOp\LogicalAnd $node)
+    /**
+     * @param \PhpParser\Node\Expr\BinaryOp\LogicalAnd $node
+     */
+    protected function pExpr_BinaryOp_LogicalAnd($node)
     {
         return $this->pInfixOp(\PhpParser\Node\Expr\BinaryOp\LogicalAnd::class, $node->left, ' and ', $node->right);
     }
-    protected function pExpr_BinaryOp_LogicalOr(\PhpParser\Node\Expr\BinaryOp\LogicalOr $node)
+    /**
+     * @param \PhpParser\Node\Expr\BinaryOp\LogicalOr $node
+     */
+    protected function pExpr_BinaryOp_LogicalOr($node)
     {
         return $this->pInfixOp(\PhpParser\Node\Expr\BinaryOp\LogicalOr::class, $node->left, ' or ', $node->right);
     }
-    protected function pExpr_BinaryOp_LogicalXor(\PhpParser\Node\Expr\BinaryOp\LogicalXor $node)
+    /**
+     * @param \PhpParser\Node\Expr\BinaryOp\LogicalXor $node
+     */
+    protected function pExpr_BinaryOp_LogicalXor($node)
     {
         return $this->pInfixOp(\PhpParser\Node\Expr\BinaryOp\LogicalXor::class, $node->left, ' xor ', $node->right);
     }
-    protected function pExpr_BinaryOp_Equal(\PhpParser\Node\Expr\BinaryOp\Equal $node)
+    /**
+     * @param \PhpParser\Node\Expr\BinaryOp\Equal $node
+     */
+    protected function pExpr_BinaryOp_Equal($node)
     {
         return $this->pInfixOp(\PhpParser\Node\Expr\BinaryOp\Equal::class, $node->left, ' == ', $node->right);
     }
-    protected function pExpr_BinaryOp_NotEqual(\PhpParser\Node\Expr\BinaryOp\NotEqual $node)
+    /**
+     * @param \PhpParser\Node\Expr\BinaryOp\NotEqual $node
+     */
+    protected function pExpr_BinaryOp_NotEqual($node)
     {
         return $this->pInfixOp(\PhpParser\Node\Expr\BinaryOp\NotEqual::class, $node->left, ' != ', $node->right);
     }
-    protected function pExpr_BinaryOp_Identical(\PhpParser\Node\Expr\BinaryOp\Identical $node)
+    /**
+     * @param \PhpParser\Node\Expr\BinaryOp\Identical $node
+     */
+    protected function pExpr_BinaryOp_Identical($node)
     {
         return $this->pInfixOp(\PhpParser\Node\Expr\BinaryOp\Identical::class, $node->left, ' === ', $node->right);
     }
-    protected function pExpr_BinaryOp_NotIdentical(\PhpParser\Node\Expr\BinaryOp\NotIdentical $node)
+    /**
+     * @param \PhpParser\Node\Expr\BinaryOp\NotIdentical $node
+     */
+    protected function pExpr_BinaryOp_NotIdentical($node)
     {
         return $this->pInfixOp(\PhpParser\Node\Expr\BinaryOp\NotIdentical::class, $node->left, ' !== ', $node->right);
     }
-    protected function pExpr_BinaryOp_Spaceship(\PhpParser\Node\Expr\BinaryOp\Spaceship $node)
+    /**
+     * @param \PhpParser\Node\Expr\BinaryOp\Spaceship $node
+     */
+    protected function pExpr_BinaryOp_Spaceship($node)
     {
         return $this->pInfixOp(\PhpParser\Node\Expr\BinaryOp\Spaceship::class, $node->left, ' <=> ', $node->right);
     }
-    protected function pExpr_BinaryOp_Greater(\PhpParser\Node\Expr\BinaryOp\Greater $node)
+    /**
+     * @param \PhpParser\Node\Expr\BinaryOp\Greater $node
+     */
+    protected function pExpr_BinaryOp_Greater($node)
     {
         return $this->pInfixOp(\PhpParser\Node\Expr\BinaryOp\Greater::class, $node->left, ' > ', $node->right);
     }
-    protected function pExpr_BinaryOp_GreaterOrEqual(\PhpParser\Node\Expr\BinaryOp\GreaterOrEqual $node)
+    /**
+     * @param \PhpParser\Node\Expr\BinaryOp\GreaterOrEqual $node
+     */
+    protected function pExpr_BinaryOp_GreaterOrEqual($node)
     {
         return $this->pInfixOp(\PhpParser\Node\Expr\BinaryOp\GreaterOrEqual::class, $node->left, ' >= ', $node->right);
     }
-    protected function pExpr_BinaryOp_Smaller(\PhpParser\Node\Expr\BinaryOp\Smaller $node)
+    /**
+     * @param \PhpParser\Node\Expr\BinaryOp\Smaller $node
+     */
+    protected function pExpr_BinaryOp_Smaller($node)
     {
         return $this->pInfixOp(\PhpParser\Node\Expr\BinaryOp\Smaller::class, $node->left, ' < ', $node->right);
     }
-    protected function pExpr_BinaryOp_SmallerOrEqual(\PhpParser\Node\Expr\BinaryOp\SmallerOrEqual $node)
+    /**
+     * @param \PhpParser\Node\Expr\BinaryOp\SmallerOrEqual $node
+     */
+    protected function pExpr_BinaryOp_SmallerOrEqual($node)
     {
         return $this->pInfixOp(\PhpParser\Node\Expr\BinaryOp\SmallerOrEqual::class, $node->left, ' <= ', $node->right);
     }
-    protected function pExpr_BinaryOp_Coalesce(\PhpParser\Node\Expr\BinaryOp\Coalesce $node)
+    /**
+     * @param \PhpParser\Node\Expr\BinaryOp\Coalesce $node
+     */
+    protected function pExpr_BinaryOp_Coalesce($node)
     {
         return $this->pInfixOp(\PhpParser\Node\Expr\BinaryOp\Coalesce::class, $node->left, ' ?? ', $node->right);
     }
-    protected function pExpr_Instanceof(\PhpParser\Node\Expr\Instanceof_ $node)
+    /**
+     * @param \PhpParser\Node\Expr\Instanceof_ $node
+     */
+    protected function pExpr_Instanceof($node)
     {
         list($precedence, $associativity) = $this->precedenceMap[\PhpParser\Node\Expr\Instanceof_::class];
         return $this->pPrec($node->expr, $precedence, $associativity, -1) . ' instanceof ' . $this->pNewVariable($node->class);
     }
     // Unary expressions
-    protected function pExpr_BooleanNot(\PhpParser\Node\Expr\BooleanNot $node)
+    /**
+     * @param \PhpParser\Node\Expr\BooleanNot $node
+     */
+    protected function pExpr_BooleanNot($node)
     {
         return $this->pPrefixOp(\PhpParser\Node\Expr\BooleanNot::class, '!', $node->expr);
     }
-    protected function pExpr_BitwiseNot(\PhpParser\Node\Expr\BitwiseNot $node)
+    /**
+     * @param \PhpParser\Node\Expr\BitwiseNot $node
+     */
+    protected function pExpr_BitwiseNot($node)
     {
         return $this->pPrefixOp(\PhpParser\Node\Expr\BitwiseNot::class, '~', $node->expr);
     }
-    protected function pExpr_UnaryMinus(\PhpParser\Node\Expr\UnaryMinus $node)
+    /**
+     * @param \PhpParser\Node\Expr\UnaryMinus $node
+     */
+    protected function pExpr_UnaryMinus($node)
     {
         if ($node->expr instanceof \PhpParser\Node\Expr\UnaryMinus || $node->expr instanceof \PhpParser\Node\Expr\PreDec) {
             // Enforce -(-$expr) instead of --$expr
@@ -389,7 +602,10 @@ class Standard extends \PhpParser\PrettyPrinterAbstract
         }
         return $this->pPrefixOp(\PhpParser\Node\Expr\UnaryMinus::class, '-', $node->expr);
     }
-    protected function pExpr_UnaryPlus(\PhpParser\Node\Expr\UnaryPlus $node)
+    /**
+     * @param \PhpParser\Node\Expr\UnaryPlus $node
+     */
+    protected function pExpr_UnaryPlus($node)
     {
         if ($node->expr instanceof \PhpParser\Node\Expr\UnaryPlus || $node->expr instanceof \PhpParser\Node\Expr\PreInc) {
             // Enforce +(+$expr) instead of ++$expr
@@ -397,40 +613,67 @@ class Standard extends \PhpParser\PrettyPrinterAbstract
         }
         return $this->pPrefixOp(\PhpParser\Node\Expr\UnaryPlus::class, '+', $node->expr);
     }
-    protected function pExpr_PreInc(\PhpParser\Node\Expr\PreInc $node)
+    /**
+     * @param \PhpParser\Node\Expr\PreInc $node
+     */
+    protected function pExpr_PreInc($node)
     {
         return $this->pPrefixOp(\PhpParser\Node\Expr\PreInc::class, '++', $node->var);
     }
-    protected function pExpr_PreDec(\PhpParser\Node\Expr\PreDec $node)
+    /**
+     * @param \PhpParser\Node\Expr\PreDec $node
+     */
+    protected function pExpr_PreDec($node)
     {
         return $this->pPrefixOp(\PhpParser\Node\Expr\PreDec::class, '--', $node->var);
     }
-    protected function pExpr_PostInc(\PhpParser\Node\Expr\PostInc $node)
+    /**
+     * @param \PhpParser\Node\Expr\PostInc $node
+     */
+    protected function pExpr_PostInc($node)
     {
         return $this->pPostfixOp(\PhpParser\Node\Expr\PostInc::class, $node->var, '++');
     }
-    protected function pExpr_PostDec(\PhpParser\Node\Expr\PostDec $node)
+    /**
+     * @param \PhpParser\Node\Expr\PostDec $node
+     */
+    protected function pExpr_PostDec($node)
     {
         return $this->pPostfixOp(\PhpParser\Node\Expr\PostDec::class, $node->var, '--');
     }
-    protected function pExpr_ErrorSuppress(\PhpParser\Node\Expr\ErrorSuppress $node)
+    /**
+     * @param \PhpParser\Node\Expr\ErrorSuppress $node
+     */
+    protected function pExpr_ErrorSuppress($node)
     {
         return $this->pPrefixOp(\PhpParser\Node\Expr\ErrorSuppress::class, '@', $node->expr);
     }
-    protected function pExpr_YieldFrom(\PhpParser\Node\Expr\YieldFrom $node)
+    /**
+     * @param \PhpParser\Node\Expr\YieldFrom $node
+     */
+    protected function pExpr_YieldFrom($node)
     {
         return $this->pPrefixOp(\PhpParser\Node\Expr\YieldFrom::class, 'yield from ', $node->expr);
     }
-    protected function pExpr_Print(\PhpParser\Node\Expr\Print_ $node)
+    /**
+     * @param \PhpParser\Node\Expr\Print_ $node
+     */
+    protected function pExpr_Print($node)
     {
         return $this->pPrefixOp(\PhpParser\Node\Expr\Print_::class, 'print ', $node->expr);
     }
     // Casts
-    protected function pExpr_Cast_Int(\PhpParser\Node\Expr\Cast\Int_ $node)
+    /**
+     * @param \PhpParser\Node\Expr\Cast\Int_ $node
+     */
+    protected function pExpr_Cast_Int($node)
     {
         return $this->pPrefixOp(\PhpParser\Node\Expr\Cast\Int_::class, '(int) ', $node->expr);
     }
-    protected function pExpr_Cast_Double(\PhpParser\Node\Expr\Cast\Double $node)
+    /**
+     * @param \PhpParser\Node\Expr\Cast\Double $node
+     */
+    protected function pExpr_Cast_Double($node)
     {
         $kind = $node->getAttribute('kind', \PhpParser\Node\Expr\Cast\Double::KIND_DOUBLE);
         if ($kind === \PhpParser\Node\Expr\Cast\Double::KIND_DOUBLE) {
@@ -442,70 +685,118 @@ class Standard extends \PhpParser\PrettyPrinterAbstract
         }
         return $this->pPrefixOp(\PhpParser\Node\Expr\Cast\Double::class, $cast . ' ', $node->expr);
     }
-    protected function pExpr_Cast_String(\PhpParser\Node\Expr\Cast\String_ $node)
+    /**
+     * @param \PhpParser\Node\Expr\Cast\String_ $node
+     */
+    protected function pExpr_Cast_String($node)
     {
         return $this->pPrefixOp(\PhpParser\Node\Expr\Cast\String_::class, '(string) ', $node->expr);
     }
-    protected function pExpr_Cast_Array(\PhpParser\Node\Expr\Cast\Array_ $node)
+    /**
+     * @param \PhpParser\Node\Expr\Cast\Array_ $node
+     */
+    protected function pExpr_Cast_Array($node)
     {
         return $this->pPrefixOp(\PhpParser\Node\Expr\Cast\Array_::class, '(array) ', $node->expr);
     }
-    protected function pExpr_Cast_Object(\PhpParser\Node\Expr\Cast\Object_ $node)
+    /**
+     * @param \PhpParser\Node\Expr\Cast\Object_ $node
+     */
+    protected function pExpr_Cast_Object($node)
     {
         return $this->pPrefixOp(\PhpParser\Node\Expr\Cast\Object_::class, '(object) ', $node->expr);
     }
-    protected function pExpr_Cast_Bool(\PhpParser\Node\Expr\Cast\Bool_ $node)
+    /**
+     * @param \PhpParser\Node\Expr\Cast\Bool_ $node
+     */
+    protected function pExpr_Cast_Bool($node)
     {
         return $this->pPrefixOp(\PhpParser\Node\Expr\Cast\Bool_::class, '(bool) ', $node->expr);
     }
-    protected function pExpr_Cast_Unset(\PhpParser\Node\Expr\Cast\Unset_ $node)
+    /**
+     * @param \PhpParser\Node\Expr\Cast\Unset_ $node
+     */
+    protected function pExpr_Cast_Unset($node)
     {
         return $this->pPrefixOp(\PhpParser\Node\Expr\Cast\Unset_::class, '(unset) ', $node->expr);
     }
     // Function calls and similar constructs
-    protected function pExpr_FuncCall(\PhpParser\Node\Expr\FuncCall $node)
+    /**
+     * @param \PhpParser\Node\Expr\FuncCall $node
+     */
+    protected function pExpr_FuncCall($node)
     {
         return $this->pCallLhs($node->name) . '(' . $this->pMaybeMultiline($node->args) . ')';
     }
-    protected function pExpr_MethodCall(\PhpParser\Node\Expr\MethodCall $node)
+    /**
+     * @param \PhpParser\Node\Expr\MethodCall $node
+     */
+    protected function pExpr_MethodCall($node)
     {
         return $this->pDereferenceLhs($node->var) . '->' . $this->pObjectProperty($node->name) . '(' . $this->pMaybeMultiline($node->args) . ')';
     }
-    protected function pExpr_NullsafeMethodCall(\PhpParser\Node\Expr\NullsafeMethodCall $node)
+    /**
+     * @param \PhpParser\Node\Expr\NullsafeMethodCall $node
+     */
+    protected function pExpr_NullsafeMethodCall($node)
     {
         return $this->pDereferenceLhs($node->var) . '?->' . $this->pObjectProperty($node->name) . '(' . $this->pMaybeMultiline($node->args) . ')';
     }
-    protected function pExpr_StaticCall(\PhpParser\Node\Expr\StaticCall $node)
+    /**
+     * @param \PhpParser\Node\Expr\StaticCall $node
+     */
+    protected function pExpr_StaticCall($node)
     {
         return $this->pDereferenceLhs($node->class) . '::' . ($node->name instanceof \PhpParser\Node\Expr ? $node->name instanceof \PhpParser\Node\Expr\Variable ? $this->p($node->name) : '{' . $this->p($node->name) . '}' : $node->name) . '(' . $this->pMaybeMultiline($node->args) . ')';
     }
-    protected function pExpr_Empty(\PhpParser\Node\Expr\Empty_ $node)
+    /**
+     * @param \PhpParser\Node\Expr\Empty_ $node
+     */
+    protected function pExpr_Empty($node)
     {
         return 'empty(' . $this->p($node->expr) . ')';
     }
-    protected function pExpr_Isset(\PhpParser\Node\Expr\Isset_ $node)
+    /**
+     * @param \PhpParser\Node\Expr\Isset_ $node
+     */
+    protected function pExpr_Isset($node)
     {
         return 'isset(' . $this->pCommaSeparated($node->vars) . ')';
     }
-    protected function pExpr_Eval(\PhpParser\Node\Expr\Eval_ $node)
+    /**
+     * @param \PhpParser\Node\Expr\Eval_ $node
+     */
+    protected function pExpr_Eval($node)
     {
         return 'eval(' . $this->p($node->expr) . ')';
     }
-    protected function pExpr_Include(\PhpParser\Node\Expr\Include_ $node)
+    /**
+     * @param \PhpParser\Node\Expr\Include_ $node
+     */
+    protected function pExpr_Include($node)
     {
         static $map = [\PhpParser\Node\Expr\Include_::TYPE_INCLUDE => 'include', \PhpParser\Node\Expr\Include_::TYPE_INCLUDE_ONCE => 'include_once', \PhpParser\Node\Expr\Include_::TYPE_REQUIRE => 'require', \PhpParser\Node\Expr\Include_::TYPE_REQUIRE_ONCE => 'require_once'];
         return $map[$node->type] . ' ' . $this->p($node->expr);
     }
-    protected function pExpr_List(\PhpParser\Node\Expr\List_ $node)
+    /**
+     * @param \PhpParser\Node\Expr\List_ $node
+     */
+    protected function pExpr_List($node)
     {
         return 'list(' . $this->pCommaSeparated($node->items) . ')';
     }
     // Other
-    protected function pExpr_Error(\PhpParser\Node\Expr\Error $node)
+    /**
+     * @param \PhpParser\Node\Expr\Error $node
+     */
+    protected function pExpr_Error($node)
     {
         throw new \LogicException('Cannot pretty-print AST with Error nodes');
     }
-    protected function pExpr_Variable(\PhpParser\Node\Expr\Variable $node)
+    /**
+     * @param \PhpParser\Node\Expr\Variable $node
+     */
+    protected function pExpr_Variable($node)
     {
         if ($node->name instanceof \PhpParser\Node\Expr) {
             return '${' . $this->p($node->name) . '}';
@@ -513,7 +804,10 @@ class Standard extends \PhpParser\PrettyPrinterAbstract
             return '$' . $node->name;
         }
     }
-    protected function pExpr_Array(\PhpParser\Node\Expr\Array_ $node)
+    /**
+     * @param \PhpParser\Node\Expr\Array_ $node
+     */
+    protected function pExpr_Array($node)
     {
         $syntax = $node->getAttribute('kind', $this->options['shortArraySyntax'] ? \PhpParser\Node\Expr\Array_::KIND_SHORT : \PhpParser\Node\Expr\Array_::KIND_LONG);
         if ($syntax === \PhpParser\Node\Expr\Array_::KIND_SHORT) {
@@ -522,59 +816,101 @@ class Standard extends \PhpParser\PrettyPrinterAbstract
             return 'array(' . $this->pMaybeMultiline($node->items, \true) . ')';
         }
     }
-    protected function pExpr_ArrayItem(\PhpParser\Node\Expr\ArrayItem $node)
+    /**
+     * @param \PhpParser\Node\Expr\ArrayItem $node
+     */
+    protected function pExpr_ArrayItem($node)
     {
         return (null !== $node->key ? $this->p($node->key) . ' => ' : '') . ($node->byRef ? '&' : '') . ($node->unpack ? '...' : '') . $this->p($node->value);
     }
-    protected function pExpr_ArrayDimFetch(\PhpParser\Node\Expr\ArrayDimFetch $node)
+    /**
+     * @param \PhpParser\Node\Expr\ArrayDimFetch $node
+     */
+    protected function pExpr_ArrayDimFetch($node)
     {
         return $this->pDereferenceLhs($node->var) . '[' . (null !== $node->dim ? $this->p($node->dim) : '') . ']';
     }
-    protected function pExpr_ConstFetch(\PhpParser\Node\Expr\ConstFetch $node)
+    /**
+     * @param \PhpParser\Node\Expr\ConstFetch $node
+     */
+    protected function pExpr_ConstFetch($node)
     {
         return $this->p($node->name);
     }
-    protected function pExpr_ClassConstFetch(\PhpParser\Node\Expr\ClassConstFetch $node)
+    /**
+     * @param \PhpParser\Node\Expr\ClassConstFetch $node
+     */
+    protected function pExpr_ClassConstFetch($node)
     {
         return $this->pDereferenceLhs($node->class) . '::' . $this->p($node->name);
     }
-    protected function pExpr_PropertyFetch(\PhpParser\Node\Expr\PropertyFetch $node)
+    /**
+     * @param \PhpParser\Node\Expr\PropertyFetch $node
+     */
+    protected function pExpr_PropertyFetch($node)
     {
         return $this->pDereferenceLhs($node->var) . '->' . $this->pObjectProperty($node->name);
     }
-    protected function pExpr_NullsafePropertyFetch(\PhpParser\Node\Expr\NullsafePropertyFetch $node)
+    /**
+     * @param \PhpParser\Node\Expr\NullsafePropertyFetch $node
+     */
+    protected function pExpr_NullsafePropertyFetch($node)
     {
         return $this->pDereferenceLhs($node->var) . '?->' . $this->pObjectProperty($node->name);
     }
-    protected function pExpr_StaticPropertyFetch(\PhpParser\Node\Expr\StaticPropertyFetch $node)
+    /**
+     * @param \PhpParser\Node\Expr\StaticPropertyFetch $node
+     */
+    protected function pExpr_StaticPropertyFetch($node)
     {
         return $this->pDereferenceLhs($node->class) . '::$' . $this->pObjectProperty($node->name);
     }
-    protected function pExpr_ShellExec(\PhpParser\Node\Expr\ShellExec $node)
+    /**
+     * @param \PhpParser\Node\Expr\ShellExec $node
+     */
+    protected function pExpr_ShellExec($node)
     {
         return '`' . $this->pEncapsList($node->parts, '`') . '`';
     }
-    protected function pExpr_Closure(\PhpParser\Node\Expr\Closure $node)
+    /**
+     * @param \PhpParser\Node\Expr\Closure $node
+     */
+    protected function pExpr_Closure($node)
     {
         return $this->pAttrGroups($node->attrGroups, \true) . ($node->static ? 'static ' : '') . 'function ' . ($node->byRef ? '&' : '') . '(' . $this->pCommaSeparated($node->params) . ')' . (!empty($node->uses) ? ' use(' . $this->pCommaSeparated($node->uses) . ')' : '') . (null !== $node->returnType ? ' : ' . $this->p($node->returnType) : '') . ' {' . $this->pStmts($node->stmts) . $this->nl . '}';
     }
-    protected function pExpr_Match(\PhpParser\Node\Expr\Match_ $node)
+    /**
+     * @param \PhpParser\Node\Expr\Match_ $node
+     */
+    protected function pExpr_Match($node)
     {
         return 'match (' . $this->p($node->cond) . ') {' . $this->pCommaSeparatedMultiline($node->arms, \true) . $this->nl . '}';
     }
-    protected function pMatchArm(\PhpParser\Node\MatchArm $node)
+    /**
+     * @param \PhpParser\Node\MatchArm $node
+     */
+    protected function pMatchArm($node)
     {
         return ($node->conds ? $this->pCommaSeparated($node->conds) : 'default') . ' => ' . $this->p($node->body);
     }
-    protected function pExpr_ArrowFunction(\PhpParser\Node\Expr\ArrowFunction $node)
+    /**
+     * @param \PhpParser\Node\Expr\ArrowFunction $node
+     */
+    protected function pExpr_ArrowFunction($node)
     {
         return $this->pAttrGroups($node->attrGroups, \true) . ($node->static ? 'static ' : '') . 'fn' . ($node->byRef ? '&' : '') . '(' . $this->pCommaSeparated($node->params) . ')' . (null !== $node->returnType ? ': ' . $this->p($node->returnType) : '') . ' => ' . $this->p($node->expr);
     }
-    protected function pExpr_ClosureUse(\PhpParser\Node\Expr\ClosureUse $node)
+    /**
+     * @param \PhpParser\Node\Expr\ClosureUse $node
+     */
+    protected function pExpr_ClosureUse($node)
     {
         return ($node->byRef ? '&' : '') . $this->p($node->var);
     }
-    protected function pExpr_New(\PhpParser\Node\Expr\New_ $node)
+    /**
+     * @param \PhpParser\Node\Expr\New_ $node
+     */
+    protected function pExpr_New($node)
     {
         if ($node->class instanceof \PhpParser\Node\Stmt\Class_) {
             $args = $node->args ? '(' . $this->pMaybeMultiline($node->args) . ')' : '';
@@ -582,26 +918,41 @@ class Standard extends \PhpParser\PrettyPrinterAbstract
         }
         return 'new ' . $this->pNewVariable($node->class) . '(' . $this->pMaybeMultiline($node->args) . ')';
     }
-    protected function pExpr_Clone(\PhpParser\Node\Expr\Clone_ $node)
+    /**
+     * @param \PhpParser\Node\Expr\Clone_ $node
+     */
+    protected function pExpr_Clone($node)
     {
         return 'clone ' . $this->p($node->expr);
     }
-    protected function pExpr_Ternary(\PhpParser\Node\Expr\Ternary $node)
+    /**
+     * @param \PhpParser\Node\Expr\Ternary $node
+     */
+    protected function pExpr_Ternary($node)
     {
         // a bit of cheating: we treat the ternary as a binary op where the ?...: part is the operator.
         // this is okay because the part between ? and : never needs parentheses.
         return $this->pInfixOp(\PhpParser\Node\Expr\Ternary::class, $node->cond, ' ?' . (null !== $node->if ? ' ' . $this->p($node->if) . ' ' : '') . ': ', $node->else);
     }
-    protected function pExpr_Exit(\PhpParser\Node\Expr\Exit_ $node)
+    /**
+     * @param \PhpParser\Node\Expr\Exit_ $node
+     */
+    protected function pExpr_Exit($node)
     {
         $kind = $node->getAttribute('kind', \PhpParser\Node\Expr\Exit_::KIND_DIE);
         return ($kind === \PhpParser\Node\Expr\Exit_::KIND_EXIT ? 'exit' : 'die') . (null !== $node->expr ? '(' . $this->p($node->expr) . ')' : '');
     }
-    protected function pExpr_Throw(\PhpParser\Node\Expr\Throw_ $node)
+    /**
+     * @param \PhpParser\Node\Expr\Throw_ $node
+     */
+    protected function pExpr_Throw($node)
     {
         return 'throw ' . $this->p($node->expr);
     }
-    protected function pExpr_Yield(\PhpParser\Node\Expr\Yield_ $node)
+    /**
+     * @param \PhpParser\Node\Expr\Yield_ $node
+     */
+    protected function pExpr_Yield($node)
     {
         if ($node->value === null) {
             return 'yield';
@@ -611,7 +962,10 @@ class Standard extends \PhpParser\PrettyPrinterAbstract
         }
     }
     // Declarations
-    protected function pStmt_Namespace(\PhpParser\Node\Stmt\Namespace_ $node)
+    /**
+     * @param \PhpParser\Node\Stmt\Namespace_ $node
+     */
+    protected function pStmt_Namespace($node)
     {
         if ($this->canUseSemicolonNamespaces) {
             return 'namespace ' . $this->p($node->name) . ';' . $this->nl . $this->pStmts($node->stmts, \false);
@@ -619,15 +973,24 @@ class Standard extends \PhpParser\PrettyPrinterAbstract
             return 'namespace' . (null !== $node->name ? ' ' . $this->p($node->name) : '') . ' {' . $this->pStmts($node->stmts) . $this->nl . '}';
         }
     }
-    protected function pStmt_Use(\PhpParser\Node\Stmt\Use_ $node)
+    /**
+     * @param \PhpParser\Node\Stmt\Use_ $node
+     */
+    protected function pStmt_Use($node)
     {
         return 'use ' . $this->pUseType($node->type) . $this->pCommaSeparated($node->uses) . ';';
     }
-    protected function pStmt_GroupUse(\PhpParser\Node\Stmt\GroupUse $node)
+    /**
+     * @param \PhpParser\Node\Stmt\GroupUse $node
+     */
+    protected function pStmt_GroupUse($node)
     {
         return 'use ' . $this->pUseType($node->type) . $this->pName($node->prefix) . '\\{' . $this->pCommaSeparated($node->uses) . '};';
     }
-    protected function pStmt_UseUse(\PhpParser\Node\Stmt\UseUse $node)
+    /**
+     * @param \PhpParser\Node\Stmt\UseUse $node
+     */
+    protected function pStmt_UseUse($node)
     {
         return $this->pUseType($node->type) . $this->p($node->name) . (null !== $node->alias ? ' as ' . $node->alias : '');
     }
@@ -635,183 +998,315 @@ class Standard extends \PhpParser\PrettyPrinterAbstract
     {
         return $type === \PhpParser\Node\Stmt\Use_::TYPE_FUNCTION ? 'function ' : ($type === \PhpParser\Node\Stmt\Use_::TYPE_CONSTANT ? 'const ' : '');
     }
-    protected function pStmt_Interface(\PhpParser\Node\Stmt\Interface_ $node)
+    /**
+     * @param \PhpParser\Node\Stmt\Interface_ $node
+     */
+    protected function pStmt_Interface($node)
     {
         return $this->pAttrGroups($node->attrGroups) . 'interface ' . $node->name . (!empty($node->extends) ? ' extends ' . $this->pCommaSeparated($node->extends) : '') . $this->nl . '{' . $this->pStmts($node->stmts) . $this->nl . '}';
     }
-    protected function pStmt_Enum(\PhpParser\Node\Stmt\Enum_ $node)
+    /**
+     * @param \PhpParser\Node\Stmt\Enum_ $node
+     */
+    protected function pStmt_Enum($node)
     {
         return $this->pAttrGroups($node->attrGroups) . 'enum ' . $node->name . (!empty($node->implements) ? ' implements ' . $this->pCommaSeparated($node->implements) : '') . $this->nl . '{' . $this->pStmts($node->stmts) . $this->nl . '}';
     }
-    protected function pStmt_Class(\PhpParser\Node\Stmt\Class_ $node)
+    /**
+     * @param \PhpParser\Node\Stmt\Class_ $node
+     */
+    protected function pStmt_Class($node)
     {
         return $this->pClassCommon($node, ' ' . $node->name);
     }
-    protected function pStmt_Trait(\PhpParser\Node\Stmt\Trait_ $node)
+    /**
+     * @param \PhpParser\Node\Stmt\Trait_ $node
+     */
+    protected function pStmt_Trait($node)
     {
         return $this->pAttrGroups($node->attrGroups) . 'trait ' . $node->name . $this->nl . '{' . $this->pStmts($node->stmts) . $this->nl . '}';
     }
-    protected function pStmt_EnumCase(\PhpParser\Node\Stmt\EnumCase $node)
+    /**
+     * @param \PhpParser\Node\Stmt\EnumCase $node
+     */
+    protected function pStmt_EnumCase($node)
     {
         return $this->pAttrGroups($node->attrGroups) . 'case ' . $node->name . ($node->expr ? ' = ' . $this->p($node->expr) : '') . ';';
     }
-    protected function pStmt_TraitUse(\PhpParser\Node\Stmt\TraitUse $node)
+    /**
+     * @param \PhpParser\Node\Stmt\TraitUse $node
+     */
+    protected function pStmt_TraitUse($node)
     {
         return 'use ' . $this->pCommaSeparated($node->traits) . (empty($node->adaptations) ? ';' : ' {' . $this->pStmts($node->adaptations) . $this->nl . '}');
     }
-    protected function pStmt_TraitUseAdaptation_Precedence(\PhpParser\Node\Stmt\TraitUseAdaptation\Precedence $node)
+    /**
+     * @param \PhpParser\Node\Stmt\TraitUseAdaptation\Precedence $node
+     */
+    protected function pStmt_TraitUseAdaptation_Precedence($node)
     {
         return $this->p($node->trait) . '::' . $node->method . ' insteadof ' . $this->pCommaSeparated($node->insteadof) . ';';
     }
-    protected function pStmt_TraitUseAdaptation_Alias(\PhpParser\Node\Stmt\TraitUseAdaptation\Alias $node)
+    /**
+     * @param \PhpParser\Node\Stmt\TraitUseAdaptation\Alias $node
+     */
+    protected function pStmt_TraitUseAdaptation_Alias($node)
     {
         return (null !== $node->trait ? $this->p($node->trait) . '::' : '') . $node->method . ' as' . (null !== $node->newModifier ? ' ' . \rtrim($this->pModifiers($node->newModifier), ' ') : '') . (null !== $node->newName ? ' ' . $node->newName : '') . ';';
     }
-    protected function pStmt_Property(\PhpParser\Node\Stmt\Property $node)
+    /**
+     * @param \PhpParser\Node\Stmt\Property $node
+     */
+    protected function pStmt_Property($node)
     {
         return $this->pAttrGroups($node->attrGroups) . (0 === $node->flags ? 'var ' : $this->pModifiers($node->flags)) . ($node->type ? $this->p($node->type) . ' ' : '') . $this->pCommaSeparated($node->props) . ';';
     }
-    protected function pStmt_PropertyProperty(\PhpParser\Node\Stmt\PropertyProperty $node)
+    /**
+     * @param \PhpParser\Node\Stmt\PropertyProperty $node
+     */
+    protected function pStmt_PropertyProperty($node)
     {
         return '$' . $node->name . (null !== $node->default ? ' = ' . $this->p($node->default) : '');
     }
-    protected function pStmt_ClassMethod(\PhpParser\Node\Stmt\ClassMethod $node)
+    /**
+     * @param \PhpParser\Node\Stmt\ClassMethod $node
+     */
+    protected function pStmt_ClassMethod($node)
     {
         return $this->pAttrGroups($node->attrGroups) . $this->pModifiers($node->flags) . 'function ' . ($node->byRef ? '&' : '') . $node->name . '(' . $this->pMaybeMultiline($node->params) . ')' . (null !== $node->returnType ? ' : ' . $this->p($node->returnType) : '') . (null !== $node->stmts ? $this->nl . '{' . $this->pStmts($node->stmts) . $this->nl . '}' : ';');
     }
-    protected function pStmt_ClassConst(\PhpParser\Node\Stmt\ClassConst $node)
+    /**
+     * @param \PhpParser\Node\Stmt\ClassConst $node
+     */
+    protected function pStmt_ClassConst($node)
     {
         return $this->pAttrGroups($node->attrGroups) . $this->pModifiers($node->flags) . 'const ' . $this->pCommaSeparated($node->consts) . ';';
     }
-    protected function pStmt_Function(\PhpParser\Node\Stmt\Function_ $node)
+    /**
+     * @param \PhpParser\Node\Stmt\Function_ $node
+     */
+    protected function pStmt_Function($node)
     {
         return $this->pAttrGroups($node->attrGroups) . 'function ' . ($node->byRef ? '&' : '') . $node->name . '(' . $this->pCommaSeparated($node->params) . ')' . (null !== $node->returnType ? ' : ' . $this->p($node->returnType) : '') . $this->nl . '{' . $this->pStmts($node->stmts) . $this->nl . '}';
     }
-    protected function pStmt_Const(\PhpParser\Node\Stmt\Const_ $node)
+    /**
+     * @param \PhpParser\Node\Stmt\Const_ $node
+     */
+    protected function pStmt_Const($node)
     {
         return 'const ' . $this->pCommaSeparated($node->consts) . ';';
     }
-    protected function pStmt_Declare(\PhpParser\Node\Stmt\Declare_ $node)
+    /**
+     * @param \PhpParser\Node\Stmt\Declare_ $node
+     */
+    protected function pStmt_Declare($node)
     {
         return 'declare (' . $this->pCommaSeparated($node->declares) . ')' . (null !== $node->stmts ? ' {' . $this->pStmts($node->stmts) . $this->nl . '}' : ';');
     }
-    protected function pStmt_DeclareDeclare(\PhpParser\Node\Stmt\DeclareDeclare $node)
+    /**
+     * @param \PhpParser\Node\Stmt\DeclareDeclare $node
+     */
+    protected function pStmt_DeclareDeclare($node)
     {
         return $node->key . '=' . $this->p($node->value);
     }
     // Control flow
-    protected function pStmt_If(\PhpParser\Node\Stmt\If_ $node)
+    /**
+     * @param \PhpParser\Node\Stmt\If_ $node
+     */
+    protected function pStmt_If($node)
     {
         return 'if (' . $this->p($node->cond) . ') {' . $this->pStmts($node->stmts) . $this->nl . '}' . ($node->elseifs ? ' ' . $this->pImplode($node->elseifs, ' ') : '') . (null !== $node->else ? ' ' . $this->p($node->else) : '');
     }
-    protected function pStmt_ElseIf(\PhpParser\Node\Stmt\ElseIf_ $node)
+    /**
+     * @param \PhpParser\Node\Stmt\ElseIf_ $node
+     */
+    protected function pStmt_ElseIf($node)
     {
         return 'elseif (' . $this->p($node->cond) . ') {' . $this->pStmts($node->stmts) . $this->nl . '}';
     }
-    protected function pStmt_Else(\PhpParser\Node\Stmt\Else_ $node)
+    /**
+     * @param \PhpParser\Node\Stmt\Else_ $node
+     */
+    protected function pStmt_Else($node)
     {
         return 'else {' . $this->pStmts($node->stmts) . $this->nl . '}';
     }
-    protected function pStmt_For(\PhpParser\Node\Stmt\For_ $node)
+    /**
+     * @param \PhpParser\Node\Stmt\For_ $node
+     */
+    protected function pStmt_For($node)
     {
         return 'for (' . $this->pCommaSeparated($node->init) . ';' . (!empty($node->cond) ? ' ' : '') . $this->pCommaSeparated($node->cond) . ';' . (!empty($node->loop) ? ' ' : '') . $this->pCommaSeparated($node->loop) . ') {' . $this->pStmts($node->stmts) . $this->nl . '}';
     }
-    protected function pStmt_Foreach(\PhpParser\Node\Stmt\Foreach_ $node)
+    /**
+     * @param \PhpParser\Node\Stmt\Foreach_ $node
+     */
+    protected function pStmt_Foreach($node)
     {
         return 'foreach (' . $this->p($node->expr) . ' as ' . (null !== $node->keyVar ? $this->p($node->keyVar) . ' => ' : '') . ($node->byRef ? '&' : '') . $this->p($node->valueVar) . ') {' . $this->pStmts($node->stmts) . $this->nl . '}';
     }
-    protected function pStmt_While(\PhpParser\Node\Stmt\While_ $node)
+    /**
+     * @param \PhpParser\Node\Stmt\While_ $node
+     */
+    protected function pStmt_While($node)
     {
         return 'while (' . $this->p($node->cond) . ') {' . $this->pStmts($node->stmts) . $this->nl . '}';
     }
-    protected function pStmt_Do(\PhpParser\Node\Stmt\Do_ $node)
+    /**
+     * @param \PhpParser\Node\Stmt\Do_ $node
+     */
+    protected function pStmt_Do($node)
     {
         return 'do {' . $this->pStmts($node->stmts) . $this->nl . '} while (' . $this->p($node->cond) . ');';
     }
-    protected function pStmt_Switch(\PhpParser\Node\Stmt\Switch_ $node)
+    /**
+     * @param \PhpParser\Node\Stmt\Switch_ $node
+     */
+    protected function pStmt_Switch($node)
     {
         return 'switch (' . $this->p($node->cond) . ') {' . $this->pStmts($node->cases) . $this->nl . '}';
     }
-    protected function pStmt_Case(\PhpParser\Node\Stmt\Case_ $node)
+    /**
+     * @param \PhpParser\Node\Stmt\Case_ $node
+     */
+    protected function pStmt_Case($node)
     {
         return (null !== $node->cond ? 'case ' . $this->p($node->cond) : 'default') . ':' . $this->pStmts($node->stmts);
     }
-    protected function pStmt_TryCatch(\PhpParser\Node\Stmt\TryCatch $node)
+    /**
+     * @param \PhpParser\Node\Stmt\TryCatch $node
+     */
+    protected function pStmt_TryCatch($node)
     {
         return 'try {' . $this->pStmts($node->stmts) . $this->nl . '}' . ($node->catches ? ' ' . $this->pImplode($node->catches, ' ') : '') . ($node->finally !== null ? ' ' . $this->p($node->finally) : '');
     }
-    protected function pStmt_Catch(\PhpParser\Node\Stmt\Catch_ $node)
+    /**
+     * @param \PhpParser\Node\Stmt\Catch_ $node
+     */
+    protected function pStmt_Catch($node)
     {
         return 'catch (' . $this->pImplode($node->types, '|') . ($node->var !== null ? ' ' . $this->p($node->var) : '') . ') {' . $this->pStmts($node->stmts) . $this->nl . '}';
     }
-    protected function pStmt_Finally(\PhpParser\Node\Stmt\Finally_ $node)
+    /**
+     * @param \PhpParser\Node\Stmt\Finally_ $node
+     */
+    protected function pStmt_Finally($node)
     {
         return 'finally {' . $this->pStmts($node->stmts) . $this->nl . '}';
     }
-    protected function pStmt_Break(\PhpParser\Node\Stmt\Break_ $node)
+    /**
+     * @param \PhpParser\Node\Stmt\Break_ $node
+     */
+    protected function pStmt_Break($node)
     {
         return 'break' . ($node->num !== null ? ' ' . $this->p($node->num) : '') . ';';
     }
-    protected function pStmt_Continue(\PhpParser\Node\Stmt\Continue_ $node)
+    /**
+     * @param \PhpParser\Node\Stmt\Continue_ $node
+     */
+    protected function pStmt_Continue($node)
     {
         return 'continue' . ($node->num !== null ? ' ' . $this->p($node->num) : '') . ';';
     }
-    protected function pStmt_Return(\PhpParser\Node\Stmt\Return_ $node)
+    /**
+     * @param \PhpParser\Node\Stmt\Return_ $node
+     */
+    protected function pStmt_Return($node)
     {
         return 'return' . (null !== $node->expr ? ' ' . $this->p($node->expr) : '') . ';';
     }
-    protected function pStmt_Throw(\PhpParser\Node\Stmt\Throw_ $node)
+    /**
+     * @param \PhpParser\Node\Stmt\Throw_ $node
+     */
+    protected function pStmt_Throw($node)
     {
         return 'throw ' . $this->p($node->expr) . ';';
     }
-    protected function pStmt_Label(\PhpParser\Node\Stmt\Label $node)
+    /**
+     * @param \PhpParser\Node\Stmt\Label $node
+     */
+    protected function pStmt_Label($node)
     {
         return $node->name . ':';
     }
-    protected function pStmt_Goto(\PhpParser\Node\Stmt\Goto_ $node)
+    /**
+     * @param \PhpParser\Node\Stmt\Goto_ $node
+     */
+    protected function pStmt_Goto($node)
     {
         return 'goto ' . $node->name . ';';
     }
     // Other
-    protected function pStmt_Expression(\PhpParser\Node\Stmt\Expression $node)
+    /**
+     * @param \PhpParser\Node\Stmt\Expression $node
+     */
+    protected function pStmt_Expression($node)
     {
         return $this->p($node->expr) . ';';
     }
-    protected function pStmt_Echo(\PhpParser\Node\Stmt\Echo_ $node)
+    /**
+     * @param \PhpParser\Node\Stmt\Echo_ $node
+     */
+    protected function pStmt_Echo($node)
     {
         return 'echo ' . $this->pCommaSeparated($node->exprs) . ';';
     }
-    protected function pStmt_Static(\PhpParser\Node\Stmt\Static_ $node)
+    /**
+     * @param \PhpParser\Node\Stmt\Static_ $node
+     */
+    protected function pStmt_Static($node)
     {
         return 'static ' . $this->pCommaSeparated($node->vars) . ';';
     }
-    protected function pStmt_Global(\PhpParser\Node\Stmt\Global_ $node)
+    /**
+     * @param \PhpParser\Node\Stmt\Global_ $node
+     */
+    protected function pStmt_Global($node)
     {
         return 'global ' . $this->pCommaSeparated($node->vars) . ';';
     }
-    protected function pStmt_StaticVar(\PhpParser\Node\Stmt\StaticVar $node)
+    /**
+     * @param \PhpParser\Node\Stmt\StaticVar $node
+     */
+    protected function pStmt_StaticVar($node)
     {
         return $this->p($node->var) . (null !== $node->default ? ' = ' . $this->p($node->default) : '');
     }
-    protected function pStmt_Unset(\PhpParser\Node\Stmt\Unset_ $node)
+    /**
+     * @param \PhpParser\Node\Stmt\Unset_ $node
+     */
+    protected function pStmt_Unset($node)
     {
         return 'unset(' . $this->pCommaSeparated($node->vars) . ');';
     }
-    protected function pStmt_InlineHTML(\PhpParser\Node\Stmt\InlineHTML $node)
+    /**
+     * @param \PhpParser\Node\Stmt\InlineHTML $node
+     */
+    protected function pStmt_InlineHTML($node)
     {
         $newline = $node->getAttribute('hasLeadingNewline', \true) ? "\n" : '';
         return '?>' . $newline . $node->value . '<?php ';
     }
-    protected function pStmt_HaltCompiler(\PhpParser\Node\Stmt\HaltCompiler $node)
+    /**
+     * @param \PhpParser\Node\Stmt\HaltCompiler $node
+     */
+    protected function pStmt_HaltCompiler($node)
     {
         return '__halt_compiler();' . $node->remaining;
     }
-    protected function pStmt_Nop(\PhpParser\Node\Stmt\Nop $node)
+    /**
+     * @param \PhpParser\Node\Stmt\Nop $node
+     */
+    protected function pStmt_Nop($node)
     {
         return '';
     }
     // Helpers
-    protected function pClassCommon(\PhpParser\Node\Stmt\Class_ $node, $afterClassToken)
+    /**
+     * @param \PhpParser\Node\Stmt\Class_ $node
+     */
+    protected function pClassCommon($node, $afterClassToken)
     {
         return $this->pAttrGroups($node->attrGroups, $node->name === null) . $this->pModifiers($node->flags) . 'class' . $afterClassToken . (null !== $node->extends ? ' extends ' . $this->p($node->extends) : '') . (!empty($node->implements) ? ' implements ' . $this->pCommaSeparated($node->implements) : '') . $this->nl . '{' . $this->pStmts($node->stmts) . $this->nl . '}';
     }
@@ -823,7 +1318,10 @@ class Standard extends \PhpParser\PrettyPrinterAbstract
             return $node;
         }
     }
-    protected function pEncapsList(array $encapsList, $quote)
+    /**
+     * @param mixed[] $encapsList
+     */
+    protected function pEncapsList($encapsList, $quote)
     {
         $return = '';
         foreach ($encapsList as $element) {
@@ -835,7 +1333,10 @@ class Standard extends \PhpParser\PrettyPrinterAbstract
         }
         return $return;
     }
-    protected function pSingleQuotedString(string $string)
+    /**
+     * @param string $string
+     */
+    protected function pSingleQuotedString($string)
     {
         return '\'' . \addcslashes($string, '\'\\') . '\'';
     }
@@ -876,7 +1377,10 @@ class Standard extends \PhpParser\PrettyPrinterAbstract
         $end = $atEnd ? '(?:$|[;\\r\\n])' : '[;\\r\\n]';
         return \false !== \strpos($string, $label) && \preg_match('/' . $start . $label . $end . '/', $string);
     }
-    protected function encapsedContainsEndLabel(array $parts, $label)
+    /**
+     * @param mixed[] $parts
+     */
+    protected function encapsedContainsEndLabel($parts, $label)
     {
         foreach ($parts as $i => $part) {
             $atStart = $i === 0;
@@ -887,7 +1391,10 @@ class Standard extends \PhpParser\PrettyPrinterAbstract
         }
         return \false;
     }
-    protected function pDereferenceLhs(\PhpParser\Node $node)
+    /**
+     * @param \PhpParser\Node $node
+     */
+    protected function pDereferenceLhs($node)
     {
         if (!$this->dereferenceLhsRequiresParens($node)) {
             return $this->p($node);
@@ -895,7 +1402,10 @@ class Standard extends \PhpParser\PrettyPrinterAbstract
             return '(' . $this->p($node) . ')';
         }
     }
-    protected function pCallLhs(\PhpParser\Node $node)
+    /**
+     * @param \PhpParser\Node $node
+     */
+    protected function pCallLhs($node)
     {
         if (!$this->callLhsRequiresParens($node)) {
             return $this->p($node);
@@ -903,7 +1413,10 @@ class Standard extends \PhpParser\PrettyPrinterAbstract
             return '(' . $this->p($node) . ')';
         }
     }
-    protected function pNewVariable(\PhpParser\Node $node)
+    /**
+     * @param \PhpParser\Node $node
+     */
+    protected function pNewVariable($node)
     {
         // TODO: This is not fully accurate.
         return $this->pDereferenceLhs($node);
@@ -912,7 +1425,7 @@ class Standard extends \PhpParser\PrettyPrinterAbstract
      * @param Node[] $nodes
      * @return bool
      */
-    protected function hasNodeWithComments(array $nodes)
+    protected function hasNodeWithComments($nodes)
     {
         foreach ($nodes as $node) {
             if ($node && $node->getComments()) {
@@ -921,7 +1434,11 @@ class Standard extends \PhpParser\PrettyPrinterAbstract
         }
         return \false;
     }
-    protected function pMaybeMultiline(array $nodes, bool $trailingComma = \false)
+    /**
+     * @param mixed[] $nodes
+     * @param bool $trailingComma
+     */
+    protected function pMaybeMultiline($nodes, $trailingComma = \false)
     {
         if (!$this->hasNodeWithComments($nodes)) {
             return $this->pCommaSeparated($nodes);
@@ -929,7 +1446,11 @@ class Standard extends \PhpParser\PrettyPrinterAbstract
             return $this->pCommaSeparatedMultiline($nodes, $trailingComma) . $this->nl;
         }
     }
-    protected function pAttrGroups(array $nodes, bool $inline = \false) : string
+    /**
+     * @param mixed[] $nodes
+     * @param bool $inline
+     */
+    protected function pAttrGroups($nodes, $inline = \false) : string
     {
         $result = '';
         $sep = $inline ? ' ' : $this->nl;

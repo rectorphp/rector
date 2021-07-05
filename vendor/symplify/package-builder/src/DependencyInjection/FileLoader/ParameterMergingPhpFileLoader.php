@@ -27,8 +27,9 @@ final class ParameterMergingPhpFileLoader extends \RectorPrefix20210705\Symfony\
      * Same as parent, just merging parameters instead overriding them
      *
      * @see https://github.com/symplify/symplify/pull/697
+     * @param string|null $type
      */
-    public function load($resource, string $type = null) : void
+    public function load($resource, $type = null) : void
     {
         // get old parameters
         $parameterBag = $this->container->getParameterBag();

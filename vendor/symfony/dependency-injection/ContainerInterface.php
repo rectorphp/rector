@@ -30,8 +30,9 @@ interface ContainerInterface extends \RectorPrefix20210705\Psr\Container\Contain
     /**
      * Sets a service.
      * @param object|null $service
+     * @param string $id
      */
-    public function set(string $id, $service);
+    public function set($id, $service);
     /**
      * Gets a service.
      *
@@ -45,32 +46,36 @@ interface ContainerInterface extends \RectorPrefix20210705\Psr\Container\Contain
      *
      * @see Reference
      */
-    public function get(string $id, int $invalidBehavior = self::EXCEPTION_ON_INVALID_REFERENCE);
+    public function get($id, $invalidBehavior = self::EXCEPTION_ON_INVALID_REFERENCE);
     /**
      * @return bool true if the service is defined, false otherwise
+     * @param string $id
      */
-    public function has(string $id);
+    public function has($id);
     /**
      * Check for whether or not a service has been initialized.
      *
      * @return bool true if the service has been initialized, false otherwise
+     * @param string $id
      */
-    public function initialized(string $id);
+    public function initialized($id);
     /**
      * @return array|bool|string|int|float|null
      *
      * @throws InvalidArgumentException if the parameter is not defined
+     * @param string $name
      */
-    public function getParameter(string $name);
+    public function getParameter($name);
     /**
      * @return bool
+     * @param string $name
      */
-    public function hasParameter(string $name);
+    public function hasParameter($name);
     /**
      * Sets a parameter.
      *
      * @param string                           $name  The parameter name
      * @param array|bool|string|int|float|null $value The parameter value
      */
-    public function setParameter(string $name, $value);
+    public function setParameter($name, $value);
 }

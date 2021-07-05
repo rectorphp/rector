@@ -22,8 +22,9 @@ class Gitignore
      * Returns a regexp which is the equivalent of the gitignore pattern.
      *
      * Format specification: https://git-scm.com/docs/gitignore#_pattern_format
+     * @param string $gitignoreFileContent
      */
-    public static function toRegex(string $gitignoreFileContent) : string
+    public static function toRegex($gitignoreFileContent) : string
     {
         $gitignoreFileContent = \preg_replace('~(?<!\\\\)#[^\\n\\r]*~', '', $gitignoreFileContent);
         $gitignoreLines = \preg_split('~\\r\\n?|\\n~', $gitignoreFileContent);
@@ -46,7 +47,10 @@ class Gitignore
         }
         return '~^(?:' . $res . ')~s';
     }
-    private static function lineToRegex(string $gitignoreLine) : string
+    /**
+     * @param string $gitignoreLine
+     */
+    private static function lineToRegex($gitignoreLine) : string
     {
         if ('' === $gitignoreLine) {
             return '$f';

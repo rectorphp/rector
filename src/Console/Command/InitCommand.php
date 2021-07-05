@@ -50,7 +50,11 @@ final class InitCommand extends \RectorPrefix20210705\Symfony\Component\Console\
         $this->setDescription('Generate rector.php configuration file');
         $this->addOption(\Rector\Core\Configuration\Option::TEMPLATE_TYPE, null, \RectorPrefix20210705\Symfony\Component\Console\Input\InputOption::VALUE_OPTIONAL, 'A template type like default, nette, doctrine etc.', \Rector\Core\Template\DefaultResolver::TYPE);
     }
-    protected function execute(\RectorPrefix20210705\Symfony\Component\Console\Input\InputInterface $input, \RectorPrefix20210705\Symfony\Component\Console\Output\OutputInterface $output) : int
+    /**
+     * @param \Symfony\Component\Console\Input\InputInterface $input
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     */
+    protected function execute($input, $output) : int
     {
         $templateType = (string) $input->getOption(\Rector\Core\Configuration\Option::TEMPLATE_TYPE);
         $rectorTemplateFilePath = $this->resolveTemplateFilePathByType($templateType);
@@ -65,7 +69,10 @@ final class InitCommand extends \RectorPrefix20210705\Symfony\Component\Console\
         }
         return \RectorPrefix20210705\Symplify\PackageBuilder\Console\ShellCode::SUCCESS;
     }
-    private function resolveTemplateFilePathByType(string $templateType) : string
+    /**
+     * @param string $templateType
+     */
+    private function resolveTemplateFilePathByType($templateType) : string
     {
         $rectorTemplateFilePath = null;
         foreach ($this->templateResolvers as $templateResolver) {

@@ -32,9 +32,9 @@ final class InstantiatePageRendererExplicitlyRector extends \Rector\Core\Rector\
         return [\PhpParser\Node\Expr\MethodCall::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param MethodCall $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -51,10 +51,7 @@ final class InstantiatePageRendererExplicitlyRector extends \Rector\Core\Rector\
     {
         return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Instantiate PageRenderer explicitly', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample('$pageRenderer = $GLOBALS[\'TSFE\']->getPageRenderer();', '$pageRenderer = GeneralUtility::makeInstance(PageRenderer::class);')]);
     }
-    /**
-     * @param \PhpParser\Node\Expr\MethodCall $node
-     */
-    private function shouldSkip($node) : bool
+    private function shouldSkip(\PhpParser\Node\Expr\MethodCall $node) : bool
     {
         if ($this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Backend\\Controller\\BackendController'))) {
             return \false;

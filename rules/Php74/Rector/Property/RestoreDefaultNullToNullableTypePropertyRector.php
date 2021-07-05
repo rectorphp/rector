@@ -45,9 +45,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Stmt\Property::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param Property $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -56,10 +56,7 @@ CODE_SAMPLE
         $onlyProperty->default = $this->nodeFactory->createNull();
         return $node;
     }
-    /**
-     * @param \PhpParser\Node\Stmt\Property $property
-     */
-    private function shouldSkip($property) : bool
+    private function shouldSkip(\PhpParser\Node\Stmt\Property $property) : bool
     {
         if (!$this->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::TYPED_PROPERTIES)) {
             return \true;

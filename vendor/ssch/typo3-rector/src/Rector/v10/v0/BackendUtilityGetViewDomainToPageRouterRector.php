@@ -25,9 +25,9 @@ final class BackendUtilityGetViewDomainToPageRouterRector extends \Rector\Core\R
         return [\PhpParser\Node\Expr\StaticCall::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param StaticCall $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Backend\\Utility\\BackendUtility'))) {
             return null;

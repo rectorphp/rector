@@ -51,15 +51,17 @@ final class GetComponentMethodCallFormControlTypeResolver implements \Rector\Net
     }
     /**
      * @required
+     * @param \Rector\Nette\NodeResolver\MethodNamesByInputNamesResolver $methodNamesByInputNamesResolver
      */
-    public function autowireGetComponentMethodCallFormControlTypeResolver(\Rector\Nette\NodeResolver\MethodNamesByInputNamesResolver $methodNamesByInputNamesResolver) : void
+    public function autowireGetComponentMethodCallFormControlTypeResolver($methodNamesByInputNamesResolver) : void
     {
         $this->methodNamesByInputNamesResolver = $methodNamesByInputNamesResolver;
     }
     /**
      * @return array<string, string>
+     * @param \PhpParser\Node $node
      */
-    public function resolve(\PhpParser\Node $node) : array
+    public function resolve($node) : array
     {
         if (!$node instanceof \PhpParser\Node\Expr\MethodCall) {
             return [];
@@ -89,7 +91,10 @@ final class GetComponentMethodCallFormControlTypeResolver implements \Rector\Net
         }
         return \array_merge($constructorClassMethodData, $createComponentClassMethodData);
     }
-    private function createCreateComponentMethodName(\PhpParser\Node\Expr\MethodCall $methodCall) : string
+    /**
+     * @param \PhpParser\Node\Expr\MethodCall $methodCall
+     */
+    private function createCreateComponentMethodName($methodCall) : string
     {
         $firstArgumentValue = $methodCall->args[0]->value;
         return 'createComponent' . \ucfirst($this->valueResolver->getValue($firstArgumentValue));

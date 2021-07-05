@@ -19,7 +19,10 @@ use RectorPrefix20210705\Psr\Log\AbstractLogger;
 class BufferingLogger extends \RectorPrefix20210705\Psr\Log\AbstractLogger
 {
     private $logs = [];
-    public function log($level, $message, array $context = []) : void
+    /**
+     * @param mixed[] $context
+     */
+    public function log($level, $message, $context = []) : void
     {
         $this->logs[] = [$level, $message, $context];
     }

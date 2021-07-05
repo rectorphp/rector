@@ -39,7 +39,10 @@ final class GetterTypeDeclarationPropertyTypeInferer implements \Rector\TypeDecl
         $this->nodeNameResolver = $nodeNameResolver;
         $this->betterNodeFinder = $betterNodeFinder;
     }
-    public function inferProperty(\PhpParser\Node\Stmt\Property $property) : ?\PHPStan\Type\Type
+    /**
+     * @param \PhpParser\Node\Stmt\Property $property
+     */
+    public function inferProperty($property) : ?\PHPStan\Type\Type
     {
         $classLike = $this->betterNodeFinder->findParentType($property, \PhpParser\Node\Stmt\ClassLike::class);
         if (!$classLike instanceof \PhpParser\Node\Stmt\Class_) {

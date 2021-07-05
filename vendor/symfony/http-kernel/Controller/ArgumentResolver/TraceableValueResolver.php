@@ -30,8 +30,10 @@ final class TraceableValueResolver implements \RectorPrefix20210705\Symfony\Comp
     }
     /**
      * {@inheritdoc}
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata $argument
      */
-    public function supports(\RectorPrefix20210705\Symfony\Component\HttpFoundation\Request $request, \RectorPrefix20210705\Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata $argument) : bool
+    public function supports($request, $argument) : bool
     {
         $method = \get_class($this->inner) . '::' . __FUNCTION__;
         $this->stopwatch->start($method, 'controller.argument_value_resolver');
@@ -41,8 +43,10 @@ final class TraceableValueResolver implements \RectorPrefix20210705\Symfony\Comp
     }
     /**
      * {@inheritdoc}
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata $argument
      */
-    public function resolve(\RectorPrefix20210705\Symfony\Component\HttpFoundation\Request $request, \RectorPrefix20210705\Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata $argument) : iterable
+    public function resolve($request, $argument) : iterable
     {
         $method = \get_class($this->inner) . '::' . __FUNCTION__;
         $this->stopwatch->start($method, 'controller.argument_value_resolver');

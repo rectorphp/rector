@@ -91,8 +91,9 @@ class BackendUtility
     }
     /**
      * @return void
+     * @param mixed[]|null $rootLine
      */
-    public static function getRawPagesTSconfig($id, array $rootLine = null)
+    public static function getRawPagesTSconfig($id, $rootLine = null)
     {
     }
     /**

@@ -14,8 +14,10 @@ class Helpers
 {
     /**
      * Returns HTML link to editor.
+     * @param string $file
+     * @param int|null $line
      */
-    public static function editorLink(string $file, int $line = null) : string
+    public static function editorLink($file, $line = null) : string
     {
         $file = \strtr($origFile = $file, \RectorPrefix20210705\Tracy\Debugger::$editorMapping);
         if ($editor = self::editorUri($origFile, $line)) {
@@ -31,8 +33,13 @@ class Helpers
     }
     /**
      * Returns link to editor.
+     * @param string $file
+     * @param int|null $line
+     * @param string $action
+     * @param string $search
+     * @param string $replace
      */
-    public static function editorUri(string $file, int $line = null, string $action = 'open', string $search = '', string $replace = '') : ?string
+    public static function editorUri($file, $line = null, $action = 'open', $search = '', $replace = '') : ?string
     {
         if (\RectorPrefix20210705\Tracy\Debugger::$editor && $file && ($action === 'create' || \is_file($file))) {
             $file = \strtr($file, '/', \DIRECTORY_SEPARATOR);
@@ -41,7 +48,10 @@ class Helpers
         }
         return null;
     }
-    public static function formatHtml(string $mask) : string
+    /**
+     * @param string $mask
+     */
+    public static function formatHtml($mask) : string
     {
         $args = \func_get_args();
         return \preg_replace_callback('#%#', function () use(&$args, &$count) : string {
@@ -52,7 +62,11 @@ class Helpers
     {
         return \htmlspecialchars((string) $s, \ENT_QUOTES | \ENT_SUBSTITUTE | \ENT_HTML5, 'UTF-8');
     }
-    public static function findTrace(array $trace, $method, int &$index = null) : ?array
+    /**
+     * @param mixed[] $trace
+     * @param int|null $index
+     */
+    public static function findTrace($trace, $method, &$index = null) : ?array
     {
         $m = \is_array($method) ? $method : \explode('::', $method);
         foreach ($trace as $i => $item) {
@@ -67,8 +81,9 @@ class Helpers
     {
         return \explode("\0", \get_class($obj))[0];
     }
-    /** @internal */
-    public static function fixStack(\Throwable $exception) : \Throwable
+    /** @internal
+     * @param \Throwable $exception */
+    public static function fixStack($exception) : \Throwable
     {
         if (\function_exists('xdebug_get_function_stack')) {
             $stack = [];
@@ -89,8 +104,9 @@ class Helpers
         }
         return $exception;
     }
-    /** @internal */
-    public static function errorTypeToString(int $type) : string
+    /** @internal
+     * @param int $type */
+    public static function errorTypeToString($type) : string
     {
         $types = [\E_ERROR => 'Fatal Error', \E_USER_ERROR => 'User Error', \E_RECOVERABLE_ERROR => 'Recoverable Error', \E_CORE_ERROR => 'Core Error', \E_COMPILE_ERROR => 'Compile Error', \E_PARSE => 'Parse Error', \E_WARNING => 'Warning', \E_CORE_WARNING => 'Core Warning', \E_COMPILE_WARNING => 'Compile Warning', \E_USER_WARNING => 'User Warning', \E_NOTICE => 'Notice', \E_USER_NOTICE => 'User Notice', \E_STRICT => 'Strict standards', \E_DEPRECATED => 'Deprecated', \E_USER_DEPRECATED => 'User Deprecated'];
         return $types[$type] ?? 'Unknown error';
@@ -104,8 +120,9 @@ class Helpers
             return 'CLI (PID: ' . \getmypid() . ')' . (isset($_SERVER['argv']) ? ': ' . \implode(' ', \array_map([self::class, 'escapeArg'], $_SERVER['argv'])) : '');
         }
     }
-    /** @internal */
-    public static function improveException(\Throwable $e) : void
+    /** @internal
+     * @param \Throwable $e */
+    public static function improveException($e) : void
     {
         $message = $e->getMessage();
         if (!$e instanceof \Error && !$e instanceof \ErrorException || $e instanceof \RectorPrefix20210705\Nette\MemberAccessException || \strpos($e->getMessage(), 'did you mean')) {
@@ -147,8 +164,10 @@ class Helpers
             $e->tracyAction = ['link' => self::editorUri($e->getFile(), $e->getLine(), 'fix', $replace[0], $replace[1]), 'label' => 'fix it'];
         }
     }
-    /** @internal */
-    public static function improveError(string $message, array $context = []) : string
+    /** @internal
+     * @param string $message
+     * @param mixed[] $context */
+    public static function improveError($message, $context = []) : string
     {
         if (\preg_match('#^Undefined variable:? \\$?(\\w+)#', $message, $m) && $context) {
             $hint = self::getSuggestion(\array_keys($context), $m[1]);
@@ -163,8 +182,9 @@ class Helpers
         }
         return $message;
     }
-    /** @internal */
-    public static function guessClassFile(string $class) : ?string
+    /** @internal
+     * @param string $class */
+    public static function guessClassFile($class) : ?string
     {
         $segments = \explode('\\', $class);
         $res = null;
@@ -187,8 +207,10 @@ class Helpers
     /**
      * Finds the best suggestion.
      * @internal
+     * @param mixed[] $items
+     * @param string $value
      */
-    public static function getSuggestion(array $items, string $value) : ?string
+    public static function getSuggestion($items, $value) : ?string
     {
         $best = null;
         $min = (\strlen($value) / 4 + 1) * 10 + 0.1;
@@ -220,8 +242,9 @@ class Helpers
     }
     /**
      * Escape a string to be used as a shell argument.
+     * @param string $s
      */
-    private static function escapeArg(string $s) : string
+    private static function escapeArg($s) : string
     {
         if (\preg_match('#^[a-z0-9._=/:-]+$#Di', $s)) {
             return $s;
@@ -230,8 +253,9 @@ class Helpers
     }
     /**
      * Captures PHP output into a string.
+     * @param callable $func
      */
-    public static function capture(callable $func) : string
+    public static function capture($func) : string
     {
         \ob_start(function () {
         });
@@ -243,8 +267,10 @@ class Helpers
             throw $e;
         }
     }
-    /** @internal */
-    public static function encodeString(string $s, int $maxLength = null, &$utf = null) : string
+    /** @internal
+     * @param string $s
+     * @param int|null $maxLength */
+    public static function encodeString($s, $maxLength = null, &$utf = null) : string
     {
         static $tableU, $tableB;
         if ($tableU === null) {
@@ -262,8 +288,11 @@ class Helpers
         $s = \preg_replace('~\\n$~D', '', $s);
         return $s;
     }
-    /** @internal */
-    public static function truncateString(string $s, int $len, bool $utf) : string
+    /** @internal
+     * @param string $s
+     * @param int $len
+     * @param bool $utf */
+    public static function truncateString($s, $len, $utf) : string
     {
         if (!$utf) {
             return $len < 0 ? \substr($s, $len) : \substr($s, 0, $len);
@@ -274,8 +303,9 @@ class Helpers
             return $m[0];
         }
     }
-    /** @internal */
-    public static function minifyJs(string $s) : string
+    /** @internal
+     * @param string $s */
+    public static function minifyJs($s) : string
     {
         // author: Jakub Vrana https://php.vrana.cz/minifikace-javascriptu.php
         $last = '';
@@ -312,8 +342,9 @@ XX
             return $result;
         }, $s . "\n");
     }
-    /** @internal */
-    public static function minifyCss(string $s) : string
+    /** @internal
+     * @param string $s */
+    public static function minifyCss($s) : string
     {
         $last = '';
         return \preg_replace_callback(<<<'XX'

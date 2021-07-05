@@ -27,13 +27,17 @@ abstract class ConfigurableExtension extends \RectorPrefix20210705\Symfony\Compo
 {
     /**
      * {@inheritdoc}
+     * @param mixed[] $configs
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      */
-    public final function load(array $configs, \RectorPrefix20210705\Symfony\Component\DependencyInjection\ContainerBuilder $container)
+    public final function load($configs, $container)
     {
         $this->loadInternal($this->processConfiguration($this->getConfiguration($configs, $container), $configs), $container);
     }
     /**
      * Configures the passed container according to the merged configuration.
+     * @param mixed[] $mergedConfig
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      */
-    protected abstract function loadInternal(array $mergedConfig, \RectorPrefix20210705\Symfony\Component\DependencyInjection\ContainerBuilder $container);
+    protected abstract function loadInternal($mergedConfig, $container);
 }

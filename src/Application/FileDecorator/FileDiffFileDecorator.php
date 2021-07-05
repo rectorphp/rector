@@ -19,7 +19,7 @@ final class FileDiffFileDecorator implements \Rector\Core\Contract\Application\F
     /**
      * @param File[] $files
      */
-    public function decorate(array $files) : void
+    public function decorate($files) : void
     {
         foreach ($files as $file) {
             if (!$file->hasChanged()) {

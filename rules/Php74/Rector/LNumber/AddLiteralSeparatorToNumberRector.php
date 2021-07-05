@@ -82,7 +82,7 @@ CODE_SAMPLE
     /**
      * @param LNumber|DNumber $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$this->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::LITERAL_SEPARATOR)) {
             return null;
@@ -108,9 +108,8 @@ CODE_SAMPLE
     }
     /**
      * @param \PhpParser\Node\Scalar\LNumber|\PhpParser\Node\Scalar\DNumber $node
-     * @param string $numericValueAsString
      */
-    private function shouldSkip($node, $numericValueAsString) : bool
+    private function shouldSkip($node, string $numericValueAsString) : bool
     {
         /** @var int $startToken */
         $startToken = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::START_TOKEN_POSITION);

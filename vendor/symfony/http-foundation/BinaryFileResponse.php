@@ -61,7 +61,7 @@ class BinaryFileResponse extends \RectorPrefix20210705\Symfony\Component\HttpFou
      *
      * @deprecated since Symfony 5.2, use __construct() instead.
      */
-    public static function create($file = null, int $status = 200, array $headers = [], bool $public = \true, string $contentDisposition = null, bool $autoEtag = \false, bool $autoLastModified = \true)
+    public static function create($file = null, $status = 200, $headers = [], $public = \true, $contentDisposition = null, $autoEtag = \false, $autoLastModified = \true)
     {
         trigger_deprecation('symfony/http-foundation', '5.2', 'The "%s()" method is deprecated, use "new %s()" instead.', __METHOD__, static::class);
         return new static($file, $status, $headers, $public, $contentDisposition, $autoEtag, $autoLastModified);
@@ -74,8 +74,11 @@ class BinaryFileResponse extends \RectorPrefix20210705\Symfony\Component\HttpFou
      * @return $this
      *
      * @throws FileException
+     * @param string|null $contentDisposition
+     * @param bool $autoEtag
+     * @param bool $autoLastModified
      */
-    public function setFile($file, string $contentDisposition = null, bool $autoEtag = \false, bool $autoLastModified = \true)
+    public function setFile($file, $contentDisposition = null, $autoEtag = \false, $autoLastModified = \true)
     {
         if (!$file instanceof \RectorPrefix20210705\Symfony\Component\HttpFoundation\File\File) {
             if ($file instanceof \SplFileInfo) {
@@ -133,7 +136,7 @@ class BinaryFileResponse extends \RectorPrefix20210705\Symfony\Component\HttpFou
      *
      * @return $this
      */
-    public function setContentDisposition(string $disposition, string $filename = '', string $filenameFallback = '')
+    public function setContentDisposition($disposition, $filename = '', $filenameFallback = '')
     {
         if ('' === $filename) {
             $filename = $this->file->getFilename();
@@ -155,8 +158,9 @@ class BinaryFileResponse extends \RectorPrefix20210705\Symfony\Component\HttpFou
     }
     /**
      * {@inheritdoc}
+     * @param \Symfony\Component\HttpFoundation\Request $request
      */
-    public function prepare(\RectorPrefix20210705\Symfony\Component\HttpFoundation\Request $request)
+    public function prepare($request)
     {
         if (!$this->headers->has('Content-Type')) {
             $this->headers->set('Content-Type', $this->file->getMimeType() ?: 'application/octet-stream');
@@ -233,7 +237,10 @@ class BinaryFileResponse extends \RectorPrefix20210705\Symfony\Component\HttpFou
         }
         return $this;
     }
-    private function hasValidIfRangeHeader(?string $header) : bool
+    /**
+     * @param string|null $header
+     */
+    private function hasValidIfRangeHeader($header) : bool
     {
         if ($this->getEtag() === $header) {
             return \true;
@@ -270,8 +277,9 @@ class BinaryFileResponse extends \RectorPrefix20210705\Symfony\Component\HttpFou
      * {@inheritdoc}
      *
      * @throws \LogicException when the content is not null
+     * @param string|null $content
      */
-    public function setContent(?string $content)
+    public function setContent($content)
     {
         if (null !== $content) {
             throw new \LogicException('The content cannot be set on a BinaryFileResponse instance.');
@@ -297,8 +305,9 @@ class BinaryFileResponse extends \RectorPrefix20210705\Symfony\Component\HttpFou
      * Note: If the X-Sendfile header is used, the deleteFileAfterSend setting will not be used.
      *
      * @return $this
+     * @param bool $shouldDelete
      */
-    public function deleteFileAfterSend(bool $shouldDelete = \true)
+    public function deleteFileAfterSend($shouldDelete = \true)
     {
         $this->deleteFileAfterSend = $shouldDelete;
         return $this;

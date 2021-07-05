@@ -78,8 +78,10 @@ final class ServiceLocatorTagPass extends \RectorPrefix20210705\Symfony\Componen
     }
     /**
      * @param Reference[] $refMap
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     * @param string|null $callerId
      */
-    public static function register(\RectorPrefix20210705\Symfony\Component\DependencyInjection\ContainerBuilder $container, array $refMap, string $callerId = null) : \RectorPrefix20210705\Symfony\Component\DependencyInjection\Reference
+    public static function register($container, $refMap, $callerId = null) : \RectorPrefix20210705\Symfony\Component\DependencyInjection\Reference
     {
         foreach ($refMap as $id => $ref) {
             if (!$ref instanceof \RectorPrefix20210705\Symfony\Component\DependencyInjection\Reference) {

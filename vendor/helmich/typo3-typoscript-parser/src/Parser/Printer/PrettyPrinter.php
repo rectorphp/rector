@@ -35,7 +35,10 @@ class PrettyPrinter implements \RectorPrefix20210705\Helmich\TypoScriptParser\Pa
     {
         $this->prettyPrinterConfiguration = $prettyPrinterConfiguration ?? \RectorPrefix20210705\Helmich\TypoScriptParser\Parser\Printer\PrettyPrinterConfiguration::create();
     }
-    public function setPrettyPrinterConfiguration(\RectorPrefix20210705\Helmich\TypoScriptParser\Parser\Printer\PrettyPrinterConfiguration $prettyPrinterConfiguration) : void
+    /**
+     * @param \Helmich\TypoScriptParser\Parser\Printer\PrettyPrinterConfiguration $prettyPrinterConfiguration
+     */
+    public function setPrettyPrinterConfiguration($prettyPrinterConfiguration) : void
     {
         $this->prettyPrinterConfiguration = $prettyPrinterConfiguration;
     }
@@ -44,7 +47,7 @@ class PrettyPrinter implements \RectorPrefix20210705\Helmich\TypoScriptParser\Pa
      * @param OutputInterface $output
      * @return void
      */
-    public function printStatements(array $statements, \RectorPrefix20210705\Symfony\Component\Console\Output\OutputInterface $output) : void
+    public function printStatements($statements, $output) : void
     {
         $this->printStatementList($statements, $output, 0);
     }
@@ -54,7 +57,7 @@ class PrettyPrinter implements \RectorPrefix20210705\Helmich\TypoScriptParser\Pa
      * @param int             $nesting
      * @return void
      */
-    private function printStatementList(array $statements, \RectorPrefix20210705\Symfony\Component\Console\Output\OutputInterface $output, int $nesting = 0) : void
+    private function printStatementList($statements, $output, $nesting = 0) : void
     {
         $indent = $this->getIndent($nesting);
         $count = \count($statements);
@@ -85,11 +88,19 @@ class PrettyPrinter implements \RectorPrefix20210705\Helmich\TypoScriptParser\Pa
             }
         }
     }
-    private function getIndent(int $nesting) : string
+    /**
+     * @param int $nesting
+     */
+    private function getIndent($nesting) : string
     {
         return \str_repeat($this->prettyPrinterConfiguration->getIndentation(), $nesting);
     }
-    private function printBinaryObjectOperator(\RectorPrefix20210705\Symfony\Component\Console\Output\OutputInterface $output, \RectorPrefix20210705\Helmich\TypoScriptParser\Parser\AST\Operator\BinaryObjectOperator $operator, int $nesting) : void
+    /**
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     * @param \Helmich\TypoScriptParser\Parser\AST\Operator\BinaryObjectOperator $operator
+     * @param int $nesting
+     */
+    private function printBinaryObjectOperator($output, $operator, $nesting) : void
     {
         $targetObjectPath = $operator->target->relativeName;
         if ($operator instanceof \RectorPrefix20210705\Helmich\TypoScriptParser\Parser\AST\Operator\Copy) {
@@ -98,7 +109,11 @@ class PrettyPrinter implements \RectorPrefix20210705\Helmich\TypoScriptParser\Pa
             $output->writeln($this->getIndent($nesting) . $operator->object->relativeName . ' =< ' . $targetObjectPath);
         }
     }
-    private function printIncludeStatement(\RectorPrefix20210705\Symfony\Component\Console\Output\OutputInterface $output, \RectorPrefix20210705\Helmich\TypoScriptParser\Parser\AST\IncludeStatement $statement) : void
+    /**
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     * @param \Helmich\TypoScriptParser\Parser\AST\IncludeStatement $statement
+     */
+    private function printIncludeStatement($output, $statement) : void
     {
         if ($statement instanceof \RectorPrefix20210705\Helmich\TypoScriptParser\Parser\AST\FileIncludeStatement) {
             $this->printFileIncludeStatement($output, $statement);
@@ -106,7 +121,11 @@ class PrettyPrinter implements \RectorPrefix20210705\Helmich\TypoScriptParser\Pa
             $this->printDirectoryIncludeStatement($output, $statement);
         }
     }
-    private function printFileIncludeStatement(\RectorPrefix20210705\Symfony\Component\Console\Output\OutputInterface $output, \RectorPrefix20210705\Helmich\TypoScriptParser\Parser\AST\FileIncludeStatement $statement) : void
+    /**
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     * @param \Helmich\TypoScriptParser\Parser\AST\FileIncludeStatement $statement
+     */
+    private function printFileIncludeStatement($output, $statement) : void
     {
         if ($statement->newSyntax) {
             $output->writeln('@import \'' . $statement->filename . '\'');
@@ -118,7 +137,11 @@ class PrettyPrinter implements \RectorPrefix20210705\Helmich\TypoScriptParser\Pa
             $output->writeln('<INCLUDE_TYPOSCRIPT: source="FILE:' . $statement->filename . '"' . $attributes . '>');
         }
     }
-    private function printDirectoryIncludeStatement(\RectorPrefix20210705\Symfony\Component\Console\Output\OutputInterface $output, \RectorPrefix20210705\Helmich\TypoScriptParser\Parser\AST\DirectoryIncludeStatement $statement) : void
+    /**
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     * @param \Helmich\TypoScriptParser\Parser\AST\DirectoryIncludeStatement $statement
+     */
+    private function printDirectoryIncludeStatement($output, $statement) : void
     {
         $attributes = "";
         if ($statement->extensions) {
@@ -135,7 +158,7 @@ class PrettyPrinter implements \RectorPrefix20210705\Helmich\TypoScriptParser\Pa
      * @param int              $nesting
      * @param NestedAssignment $statement
      */
-    private function printNestedAssignment(\RectorPrefix20210705\Symfony\Component\Console\Output\OutputInterface $output, $nesting, \RectorPrefix20210705\Helmich\TypoScriptParser\Parser\AST\NestedAssignment $statement) : void
+    private function printNestedAssignment($output, $nesting, $statement) : void
     {
         $output->writeln($this->getIndent($nesting) . $statement->object->relativeName . ' {');
         $this->printStatementList($statement->statements, $output, $nesting + 1);
@@ -148,7 +171,7 @@ class PrettyPrinter implements \RectorPrefix20210705\Helmich\TypoScriptParser\Pa
      * @param bool                 $hasNext
      * @param bool                 $hasPrevious
      */
-    private function printConditionalStatement(\RectorPrefix20210705\Symfony\Component\Console\Output\OutputInterface $output, int $nesting, \RectorPrefix20210705\Helmich\TypoScriptParser\Parser\AST\ConditionalStatement $statement, bool $hasNext = \false, bool $hasPrevious = \false) : void
+    private function printConditionalStatement($output, $nesting, $statement, $hasNext = \false, $hasPrevious = \false) : void
     {
         if (!$hasPrevious) {
             $output->writeln('');
@@ -168,7 +191,7 @@ class PrettyPrinter implements \RectorPrefix20210705\Helmich\TypoScriptParser\Pa
      * @param Assignment      $statement
      * @param string          $indent
      */
-    private function printAssignment(\RectorPrefix20210705\Symfony\Component\Console\Output\OutputInterface $output, \RectorPrefix20210705\Helmich\TypoScriptParser\Parser\AST\Operator\Assignment $statement, string $indent) : void
+    private function printAssignment($output, $statement, $indent) : void
     {
         if (\strpos($statement->value->value, "\n") !== \false) {
             $output->writeln($indent . $statement->object->relativeName . ' (');
@@ -178,13 +201,19 @@ class PrettyPrinter implements \RectorPrefix20210705\Helmich\TypoScriptParser\Pa
         }
         $output->writeln($indent . $statement->object->relativeName . ' = ' . $statement->value->value);
     }
-    private function printNopStatement(\RectorPrefix20210705\Symfony\Component\Console\Output\OutputInterface $output) : void
+    /**
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     */
+    private function printNopStatement($output) : void
     {
         if ($this->prettyPrinterConfiguration->shouldIncludeEmptyLineBreaks()) {
             $output->writeln('');
         }
     }
-    private function closeCondition(bool $hasNext) : bool
+    /**
+     * @param bool $hasNext
+     */
+    private function closeCondition($hasNext) : bool
     {
         return !$hasNext || $this->prettyPrinterConfiguration->shouldAddClosingGlobal();
     }

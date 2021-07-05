@@ -43,8 +43,10 @@ class RegisterListenersPass implements \RectorPrefix20210705\Symfony\Component\D
     }
     /**
      * @return $this
+     * @param mixed[] $hotPathEvents
+     * @param string $tagName
      */
-    public function setHotPathEvents(array $hotPathEvents, string $tagName = 'container.hot_path')
+    public function setHotPathEvents($hotPathEvents, $tagName = 'container.hot_path')
     {
         $this->hotPathEvents = \array_flip($hotPathEvents);
         $this->hotPathTagName = $tagName;
@@ -52,14 +54,19 @@ class RegisterListenersPass implements \RectorPrefix20210705\Symfony\Component\D
     }
     /**
      * @return $this
+     * @param mixed[] $noPreloadEvents
+     * @param string $tagName
      */
-    public function setNoPreloadEvents(array $noPreloadEvents, string $tagName = 'container.no_preload')
+    public function setNoPreloadEvents($noPreloadEvents, $tagName = 'container.no_preload')
     {
         $this->noPreloadEvents = \array_flip($noPreloadEvents);
         $this->noPreloadTagName = $tagName;
         return $this;
     }
-    public function process(\RectorPrefix20210705\Symfony\Component\DependencyInjection\ContainerBuilder $container)
+    /**
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     */
+    public function process($container)
     {
         if (!$container->hasDefinition($this->dispatcherService) && !$container->hasAlias($this->dispatcherService)) {
             return;
@@ -149,7 +156,12 @@ class RegisterListenersPass implements \RectorPrefix20210705\Symfony\Component\D
             \RectorPrefix20210705\Symfony\Component\EventDispatcher\DependencyInjection\ExtractingEventDispatcher::$aliases = [];
         }
     }
-    private function getEventFromTypeDeclaration(\RectorPrefix20210705\Symfony\Component\DependencyInjection\ContainerBuilder $container, string $id, string $method) : string
+    /**
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     * @param string $id
+     * @param string $method
+     */
+    private function getEventFromTypeDeclaration($container, $id, $method) : string
     {
         if (null === ($class = $container->getDefinition($id)->getClass()) || !($r = $container->getReflectionClass($class, \false)) || !$r->hasMethod($method) || 1 > ($m = $r->getMethod($method))->getNumberOfParameters() || !($type = $m->getParameters()[0]->getType()) instanceof \ReflectionNamedType || $type->isBuiltin() || \RectorPrefix20210705\Symfony\Contracts\EventDispatcher\Event::class === ($name = $type->getName())) {
             throw new \RectorPrefix20210705\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException(\sprintf('Service "%s" must define the "event" attribute on "%s" tags.', $id, $this->listenerTag));
@@ -165,7 +177,11 @@ class ExtractingEventDispatcher extends \RectorPrefix20210705\Symfony\Component\
     public $listeners = [];
     public static $aliases = [];
     public static $subscriber;
-    public function addListener(string $eventName, $listener, int $priority = 0)
+    /**
+     * @param string $eventName
+     * @param int $priority
+     */
+    public function addListener($eventName, $listener, $priority = 0)
     {
         $this->listeners[] = [$eventName, $listener[1], $priority];
     }

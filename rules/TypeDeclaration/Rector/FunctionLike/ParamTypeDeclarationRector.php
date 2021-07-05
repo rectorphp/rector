@@ -127,7 +127,7 @@ CODE_SAMPLE
     /**
      * @param ClassMethod|Function_ $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$this->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::SCALAR_TYPES)) {
             return null;
@@ -168,10 +168,7 @@ CODE_SAMPLE
         $this->paramTagRemover->removeParamTagsIfUseless($functionLikePhpDocInfo, $functionLike);
         $this->childParamPopulator->populateChildClassMethod($functionLike, $position, $inferedType);
     }
-    /**
-     * @param \PhpParser\Node\FunctionLike $functionLike
-     */
-    private function shouldSkipParam(\PhpParser\Node\Param $param, $functionLike) : bool
+    private function shouldSkipParam(\PhpParser\Node\Param $param, \PhpParser\Node\FunctionLike $functionLike) : bool
     {
         if ($param->variadic) {
             return \true;

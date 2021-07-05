@@ -13,8 +13,9 @@ final class CloningPhpDocNodeVisitor extends \RectorPrefix20210705\Symplify\Simp
 {
     /**
      * @return int|Node|null
+     * @param \PHPStan\PhpDocParser\Ast\Node $origNode
      */
-    public function enterNode(\PHPStan\PhpDocParser\Ast\Node $origNode)
+    public function enterNode($origNode)
     {
         $node = clone $origNode;
         $node->setAttribute(\RectorPrefix20210705\Symplify\SimplePhpDocParser\ValueObject\PhpDocAttributeKey::ORIG_NODE, $origNode);

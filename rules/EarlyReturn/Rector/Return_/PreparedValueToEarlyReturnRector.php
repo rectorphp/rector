@@ -76,9 +76,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Stmt\Return_::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param Return_ $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $ifsBefore = $this->getIfsBefore($node);
         if ($this->shouldSkip($ifsBefore, $node->expr)) {
@@ -145,9 +145,8 @@ CODE_SAMPLE
     }
     /**
      * @param If_[] $ifsBefore
-     * @param \PhpParser\Node\Expr|null $returnExpr
      */
-    private function shouldSkip($ifsBefore, $returnExpr) : bool
+    private function shouldSkip(array $ifsBefore, ?\PhpParser\Node\Expr $returnExpr) : bool
     {
         if ($ifsBefore === []) {
             return \true;

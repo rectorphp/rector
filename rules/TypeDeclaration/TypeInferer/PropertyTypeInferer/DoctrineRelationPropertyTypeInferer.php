@@ -46,7 +46,10 @@ final class DoctrineRelationPropertyTypeInferer implements \Rector\TypeDeclarati
         $this->shortClassExpander = $shortClassExpander;
         $this->classAnnotationMatcher = $classAnnotationMatcher;
     }
-    public function inferProperty(\PhpParser\Node\Stmt\Property $property) : ?\PHPStan\Type\Type
+    /**
+     * @param \PhpParser\Node\Stmt\Property $property
+     */
+    public function inferProperty($property) : ?\PHPStan\Type\Type
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
         $toManyRelationTagValueNode = $phpDocInfo->getByAnnotationClasses(['Doctrine\\ORM\\Mapping\\OneToMany', 'Doctrine\\ORM\\Mapping\\ManyToMany']);
@@ -64,7 +67,11 @@ final class DoctrineRelationPropertyTypeInferer implements \Rector\TypeDeclarati
     {
         return 2100;
     }
-    private function processToManyRelation(\PhpParser\Node\Stmt\Property $property, \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode) : \PHPStan\Type\Type
+    /**
+     * @param \PhpParser\Node\Stmt\Property $property
+     * @param \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode
+     */
+    private function processToManyRelation($property, $doctrineAnnotationTagValueNode) : \PHPStan\Type\Type
     {
         $types = [];
         $targetEntity = $doctrineAnnotationTagValueNode->getValueWithoutQuotes('targetEntity');
@@ -75,7 +82,12 @@ final class DoctrineRelationPropertyTypeInferer implements \Rector\TypeDeclarati
         $types[] = new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType(self::COLLECTION_TYPE);
         return $this->typeFactory->createMixedPassedOrUnionType($types);
     }
-    private function processToOneRelation(\PhpParser\Node\Stmt\Property $property, \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode $toOneDoctrineAnnotationTagValueNode, ?\Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode $joinDoctrineAnnotationTagValueNode) : \PHPStan\Type\Type
+    /**
+     * @param \PhpParser\Node\Stmt\Property $property
+     * @param \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode $toOneDoctrineAnnotationTagValueNode
+     * @param \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode|null $joinDoctrineAnnotationTagValueNode
+     */
+    private function processToOneRelation($property, $toOneDoctrineAnnotationTagValueNode, $joinDoctrineAnnotationTagValueNode) : \PHPStan\Type\Type
     {
         $targetEntity = $toOneDoctrineAnnotationTagValueNode->getValueWithoutQuotes('targetEntity');
         if ($targetEntity === null) {
@@ -93,7 +105,10 @@ final class DoctrineRelationPropertyTypeInferer implements \Rector\TypeDeclarati
         }
         return $this->typeFactory->createMixedPassedOrUnionType($types);
     }
-    private function shouldAddNullType(?\Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode) : bool
+    /**
+     * @param \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode|null $doctrineAnnotationTagValueNode
+     */
+    private function shouldAddNullType($doctrineAnnotationTagValueNode) : bool
     {
         if ($doctrineAnnotationTagValueNode === null) {
             return \true;

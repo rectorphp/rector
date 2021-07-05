@@ -52,7 +52,11 @@ class Emulative extends \PhpParser\Lexer
             }
         }
     }
-    public function startLexing(string $code, \PhpParser\ErrorHandler $errorHandler = null)
+    /**
+     * @param string $code
+     * @param \PhpParser\ErrorHandler|null $errorHandler
+     */
+    public function startLexing($code, $errorHandler = null)
     {
         $emulators = \array_filter($this->emulators, function ($emulator) use($code) {
             return $emulator->isEmulationNeeded($code);
@@ -81,11 +85,17 @@ class Emulative extends \PhpParser\Lexer
             $this->tokens = $emulator->emulate($code, $this->tokens);
         }
     }
-    private function isForwardEmulationNeeded(string $emulatorPhpVersion) : bool
+    /**
+     * @param string $emulatorPhpVersion
+     */
+    private function isForwardEmulationNeeded($emulatorPhpVersion) : bool
     {
         return \version_compare(\PHP_VERSION, $emulatorPhpVersion, '<') && \version_compare($this->targetPhpVersion, $emulatorPhpVersion, '>=');
     }
-    private function isReverseEmulationNeeded(string $emulatorPhpVersion) : bool
+    /**
+     * @param string $emulatorPhpVersion
+     */
+    private function isReverseEmulationNeeded($emulatorPhpVersion) : bool
     {
         return \version_compare(\PHP_VERSION, $emulatorPhpVersion, '>=') && \version_compare($this->targetPhpVersion, $emulatorPhpVersion, '<');
     }
@@ -173,7 +183,7 @@ class Emulative extends \PhpParser\Lexer
      *
      * @param Error[] $errors
      */
-    private function fixupErrors(array $errors)
+    private function fixupErrors($errors)
     {
         foreach ($errors as $error) {
             $attrs = $error->getAttributes();

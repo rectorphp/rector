@@ -27,14 +27,18 @@ final class ConstantArrayTypeToCallReflectionResolver implements \Rector\Core\Co
     {
         $this->reflectionProvider = $reflectionProvider;
     }
-    public function supports(\PHPStan\Type\Type $type) : bool
+    /**
+     * @param \PHPStan\Type\Type $type
+     */
+    public function supports($type) : bool
     {
         return $type instanceof \PHPStan\Type\Constant\ConstantArrayType;
     }
     /**
-     * @param ConstantArrayType $type
+     * @param \PHPStan\Type\Type $type
+     * @param \PHPStan\Analyser\Scope $scope
      */
-    public function resolve(\PHPStan\Type\Type $type, \PHPStan\Analyser\Scope $scope) : ?\PHPStan\Reflection\MethodReflection
+    public function resolve($type, $scope) : ?\PHPStan\Reflection\MethodReflection
     {
         $constantArrayTypeAndMethod = $this->findTypeAndMethodName($type);
         if (!$constantArrayTypeAndMethod instanceof \PHPStan\Type\Constant\ConstantArrayTypeAndMethod) {
@@ -55,8 +59,9 @@ final class ConstantArrayTypeToCallReflectionResolver implements \Rector\Core\Co
     }
     /**
      * @see https://github.com/phpstan/phpstan-src/blob/b1fd47bda2a7a7d25091197b125c0adf82af6757/src/Type/Constant/ConstantArrayType.php#L209
+     * @param \PHPStan\Type\Constant\ConstantArrayType $constantArrayType
      */
-    private function findTypeAndMethodName(\PHPStan\Type\Constant\ConstantArrayType $constantArrayType) : ?\PHPStan\Type\Constant\ConstantArrayTypeAndMethod
+    private function findTypeAndMethodName($constantArrayType) : ?\PHPStan\Type\Constant\ConstantArrayTypeAndMethod
     {
         if (!$this->areKeyTypesValid($constantArrayType)) {
             return null;
@@ -88,7 +93,10 @@ final class ConstantArrayTypeToCallReflectionResolver implements \Rector\Core\Co
         }
         return null;
     }
-    private function areKeyTypesValid(\PHPStan\Type\Constant\ConstantArrayType $constantArrayType) : bool
+    /**
+     * @param \PHPStan\Type\Constant\ConstantArrayType $constantArrayType
+     */
+    private function areKeyTypesValid($constantArrayType) : bool
     {
         $keyTypes = $constantArrayType->getKeyTypes();
         if (\count($keyTypes) !== 2) {

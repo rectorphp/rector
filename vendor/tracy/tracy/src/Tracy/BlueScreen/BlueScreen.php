@@ -40,8 +40,9 @@ class BlueScreen
     /**
      * Add custom panel as function (?\Throwable $e): ?array
      * @return static
+     * @param callable $panel
      */
-    public function addPanel(callable $panel)
+    public function addPanel($panel)
     {
         if (!\in_array($panel, $this->panels, \true)) {
             $this->panels[] = $panel;
@@ -51,16 +52,18 @@ class BlueScreen
     /**
      * Add action.
      * @return static
+     * @param callable $action
      */
-    public function addAction(callable $action)
+    public function addAction($action)
     {
         $this->actions[] = $action;
         return $this;
     }
     /**
      * Renders blue screen.
+     * @param \Throwable $exception
      */
-    public function render(\Throwable $exception) : void
+    public function render($exception) : void
     {
         if (\RectorPrefix20210705\Tracy\Helpers::isAjax() && \session_status() === \PHP_SESSION_ACTIVE) {
             $_SESSION['_tracy']['bluescreen'][$_SERVER['HTTP_X_TRACY_AJAX']] = ['content' => \RectorPrefix20210705\Tracy\Helpers::capture(function () use($exception) {
@@ -75,8 +78,10 @@ class BlueScreen
     }
     /**
      * Renders blue screen to file (if file exists, it will not be overwritten).
+     * @param \Throwable $exception
+     * @param string $file
      */
-    public function renderToFile(\Throwable $exception, string $file) : bool
+    public function renderToFile($exception, $file) : bool
     {
         if ($handle = @\fopen($file, 'x')) {
             \ob_start();
@@ -92,7 +97,11 @@ class BlueScreen
         }
         return \false;
     }
-    private function renderTemplate(\Throwable $exception, string $template, $toScreen = \true) : void
+    /**
+     * @param \Throwable $exception
+     * @param string $template
+     */
+    private function renderTemplate($exception, $template, $toScreen = \true) : void
     {
         $showEnvironment = $this->showEnvironment && \strpos($exception->getMessage(), 'Allowed memory size') === \false;
         $info = \array_filter($this->info);
@@ -120,8 +129,9 @@ class BlueScreen
     }
     /**
      * @return \stdClass[]
+     * @param \Throwable|null $ex
      */
-    private function renderPanels(?\Throwable $ex) : array
+    private function renderPanels($ex) : array
     {
         $obLevel = \ob_get_level();
         $res = [];
@@ -146,8 +156,9 @@ class BlueScreen
     }
     /**
      * @return array[]
+     * @param \Throwable $ex
      */
-    private function renderActions(\Throwable $ex) : array
+    private function renderActions($ex) : array
     {
         $actions = [];
         foreach ($this->actions as $callback) {
@@ -178,8 +189,11 @@ class BlueScreen
     }
     /**
      * Returns syntax highlighted source code.
+     * @param string $file
+     * @param int $line
+     * @param int $lines
      */
-    public static function highlightFile(string $file, int $line, int $lines = 15) : ?string
+    public static function highlightFile($file, $line, $lines = 15) : ?string
     {
         $source = @\file_get_contents($file);
         // @ file may not exist
@@ -194,8 +208,11 @@ class BlueScreen
     }
     /**
      * Returns syntax highlighted source code.
+     * @param string $source
+     * @param int $line
+     * @param int $lines
      */
-    public static function highlightPhp(string $source, int $line, int $lines = 15) : string
+    public static function highlightPhp($source, $line, $lines = 15) : string
     {
         if (\function_exists('ini_set')) {
             \ini_set('highlight.comment', '#998; font-style: italic');
@@ -216,8 +233,11 @@ class BlueScreen
     }
     /**
      * Returns highlighted line in HTML code.
+     * @param string $html
+     * @param int $line
+     * @param int $lines
      */
-    public static function highlightLine(string $html, int $line, int $lines = 15) : string
+    public static function highlightLine($html, $line, $lines = 15) : string
     {
         $source = \explode("\n", "\n" . \str_replace("\r\n", "\n", $html));
         $out = '';
@@ -252,8 +272,9 @@ class BlueScreen
     /**
      * Should a file be collapsed in stack trace?
      * @internal
+     * @param string $file
      */
-    public function isCollapsed(string $file) : bool
+    public function isCollapsed($file) : bool
     {
         $file = \strtr($file, '\\', '/') . '/';
         foreach ($this->collapsePaths as $path) {
@@ -271,7 +292,10 @@ class BlueScreen
             return \RectorPrefix20210705\Tracy\Dumper::toHtml($v, [\RectorPrefix20210705\Tracy\Dumper::DEPTH => $this->maxDepth, \RectorPrefix20210705\Tracy\Dumper::TRUNCATE => $this->maxLength, \RectorPrefix20210705\Tracy\Dumper::SNAPSHOT => &$this->snapshot, \RectorPrefix20210705\Tracy\Dumper::LOCATION => \RectorPrefix20210705\Tracy\Dumper::LOCATION_CLASS, \RectorPrefix20210705\Tracy\Dumper::SCRUBBER => $this->scrubber, \RectorPrefix20210705\Tracy\Dumper::KEYS_TO_HIDE => $this->keysToHide], $k);
         };
     }
-    public function formatMessage(\Throwable $exception) : string
+    /**
+     * @param \Throwable $exception
+     */
+    public function formatMessage($exception) : string
     {
         $msg = \RectorPrefix20210705\Tracy\Helpers::encodeString(\trim((string) $exception->getMessage()), self::MAX_MESSAGE_LENGTH);
         $msg = \str_replace('<i>\\n</i>', '', $msg);

@@ -48,13 +48,19 @@ final class NameImportingPhpDocNodeVisitor extends \RectorPrefix20210705\Symplif
         $this->classNameImportSkipper = $classNameImportSkipper;
         $this->useNodesToAddCollector = $useNodesToAddCollector;
     }
-    public function beforeTraverse(\PHPStan\PhpDocParser\Ast\Node $node) : void
+    /**
+     * @param \PHPStan\PhpDocParser\Ast\Node $node
+     */
+    public function beforeTraverse($node) : void
     {
         if ($this->currentPhpParserNode === null) {
             throw new \Rector\Core\Exception\ShouldNotHappenException('Set "$currentPhpParserNode" first');
         }
     }
-    public function enterNode(\PHPStan\PhpDocParser\Ast\Node $node) : ?\PHPStan\PhpDocParser\Ast\Node
+    /**
+     * @param \PHPStan\PhpDocParser\Ast\Node $node
+     */
+    public function enterNode($node) : ?\PHPStan\PhpDocParser\Ast\Node
     {
         if ($node instanceof \Rector\BetterPhpDocParser\PhpDoc\SpacelessPhpDocTagNode) {
             return $this->enterSpacelessPhpDocTagNode($node);
@@ -76,11 +82,19 @@ final class NameImportingPhpDocNodeVisitor extends \RectorPrefix20210705\Symplif
         }
         return $this->processFqnNameImport($this->currentPhpParserNode, $node, $staticType);
     }
-    public function setCurrentNode(\PhpParser\Node $phpParserNode) : void
+    /**
+     * @param PhpParserNode $phpParserNode
+     */
+    public function setCurrentNode($phpParserNode) : void
     {
         $this->currentPhpParserNode = $phpParserNode;
     }
-    private function processFqnNameImport(\PhpParser\Node $phpParserNode, \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode $identifierTypeNode, \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType $fullyQualifiedObjectType) : ?\PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode
+    /**
+     * @param PhpParserNode $phpParserNode
+     * @param \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode $identifierTypeNode
+     * @param \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType $fullyQualifiedObjectType
+     */
+    private function processFqnNameImport($phpParserNode, $identifierTypeNode, $fullyQualifiedObjectType) : ?\PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode
     {
         if ($this->classNameImportSkipper->shouldSkipNameForFullyQualifiedObjectType($phpParserNode, $fullyQualifiedObjectType)) {
             return $identifierTypeNode;
@@ -108,7 +122,10 @@ final class NameImportingPhpDocNodeVisitor extends \RectorPrefix20210705\Symplif
         }
         return $identifierTypeNode;
     }
-    private function shouldSkipShortClassName(\Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType $fullyQualifiedObjectType) : bool
+    /**
+     * @param \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType $fullyQualifiedObjectType
+     */
+    private function shouldSkipShortClassName($fullyQualifiedObjectType) : bool
     {
         $importShortClasses = $this->parameterProvider->provideBoolParameter(\Rector\Core\Configuration\Option::IMPORT_SHORT_CLASSES);
         if ($importShortClasses) {
@@ -116,7 +133,10 @@ final class NameImportingPhpDocNodeVisitor extends \RectorPrefix20210705\Symplif
         }
         return \substr_count($fullyQualifiedObjectType->getClassName(), '\\') === 0;
     }
-    private function processDoctrineAnnotationTagValueNode(\Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode) : void
+    /**
+     * @param \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode
+     */
+    private function processDoctrineAnnotationTagValueNode($doctrineAnnotationTagValueNode) : void
     {
         $identifierTypeNode = $doctrineAnnotationTagValueNode->identifierTypeNode;
         $staticType = $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType($identifierTypeNode, $this->currentPhpParserNode);
@@ -135,8 +155,9 @@ final class NameImportingPhpDocNodeVisitor extends \RectorPrefix20210705\Symplif
     }
     /**
      * @return \Rector\BetterPhpDocParser\PhpDoc\SpacelessPhpDocTagNode|null
+     * @param \Rector\BetterPhpDocParser\PhpDoc\SpacelessPhpDocTagNode $spacelessPhpDocTagNode
      */
-    private function enterSpacelessPhpDocTagNode(\Rector\BetterPhpDocParser\PhpDoc\SpacelessPhpDocTagNode $spacelessPhpDocTagNode)
+    private function enterSpacelessPhpDocTagNode($spacelessPhpDocTagNode)
     {
         if (!$spacelessPhpDocTagNode->value instanceof \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode) {
             return null;

@@ -7,5 +7,8 @@ use PhpParser\Node\FunctionLike;
 use PHPStan\Type\Type;
 interface ReturnTypeInfererInterface extends \Rector\TypeDeclaration\Contract\TypeInferer\PriorityAwareTypeInfererInterface
 {
-    public function inferFunctionLike(\PhpParser\Node\FunctionLike $functionLike) : \PHPStan\Type\Type;
+    /**
+     * @param \PhpParser\Node\FunctionLike $functionLike
+     */
+    public function inferFunctionLike($functionLike) : \PHPStan\Type\Type;
 }

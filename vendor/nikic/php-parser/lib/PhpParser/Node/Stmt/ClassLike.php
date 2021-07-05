@@ -61,7 +61,7 @@ abstract class ClassLike extends \PhpParser\Node\Stmt
      *
      * @return Property|null Property node or null if the property does not exist
      */
-    public function getProperty(string $name)
+    public function getProperty($name)
     {
         foreach ($this->stmts as $stmt) {
             if ($stmt instanceof \PhpParser\Node\Stmt\Property) {
@@ -96,7 +96,7 @@ abstract class ClassLike extends \PhpParser\Node\Stmt
      *
      * @return ClassMethod|null Method node or null if the method does not exist
      */
-    public function getMethod(string $name)
+    public function getMethod($name)
     {
         $lowerName = \strtolower($name);
         foreach ($this->stmts as $stmt) {

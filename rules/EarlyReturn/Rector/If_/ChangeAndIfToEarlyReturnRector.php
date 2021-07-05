@@ -89,10 +89,10 @@ CODE_SAMPLE
         return [\PhpParser\Node\Stmt\If_::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param If_ $node
      * @return Node|Node[]|null
      */
-    public function refactor($node)
+    public function refactor(\PhpParser\Node $node)
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -141,10 +141,7 @@ CODE_SAMPLE
         }
         return $node;
     }
-    /**
-     * @param \PhpParser\Node\Stmt\If_ $if
-     */
-    private function shouldSkip($if) : bool
+    private function shouldSkip(\PhpParser\Node\Stmt\If_ $if) : bool
     {
         if (!$this->ifManipulator->isIfWithOnlyOneStmt($if)) {
             return \true;

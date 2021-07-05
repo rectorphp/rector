@@ -44,8 +44,9 @@ final class BoundArgument implements \RectorPrefix20210705\Symfony\Component\Dep
     }
     /**
      * {@inheritdoc}
+     * @param mixed[] $values
      */
-    public function setValues(array $values)
+    public function setValues($values)
     {
         if (5 === \count($values)) {
             [$this->value, $this->identifier, $this->used, $this->type, $this->file] = $values;

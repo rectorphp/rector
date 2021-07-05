@@ -15,8 +15,9 @@ interface ViewInterface
     public function assign($key, $value);
     /**
      * @return void
+     * @param mixed[] $values
      */
-    public function assignMultiple(array $values);
+    public function assignMultiple($values);
     /**
      * @return string
      */

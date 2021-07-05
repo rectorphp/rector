@@ -13,5 +13,10 @@ interface PhpDocTypeMapperInterface
      * @return class-string<TypeNode>
      */
     public function getNodeType() : string;
-    public function mapToPHPStanType(\PHPStan\PhpDocParser\Ast\Type\TypeNode $typeNode, \PhpParser\Node $node, \PHPStan\Analyser\NameScope $nameScope) : \PHPStan\Type\Type;
+    /**
+     * @param \PHPStan\PhpDocParser\Ast\Type\TypeNode $typeNode
+     * @param \PhpParser\Node $node
+     * @param \PHPStan\Analyser\NameScope $nameScope
+     */
+    public function mapToPHPStanType($typeNode, $node, $nameScope) : \PHPStan\Type\Type;
 }

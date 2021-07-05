@@ -17,11 +17,19 @@ final class GeneralUtilityDynamicReturnTypeExtension implements \PHPStan\Type\Dy
     {
         return 'TYPO3\\CMS\\Core\\Utility\\GeneralUtility';
     }
-    public function isStaticMethodSupported(\PHPStan\Reflection\MethodReflection $methodReflection) : bool
+    /**
+     * @param \PHPStan\Reflection\MethodReflection $methodReflection
+     */
+    public function isStaticMethodSupported($methodReflection) : bool
     {
         return 'makeInstance' === $methodReflection->getName();
     }
-    public function getTypeFromStaticMethodCall(\PHPStan\Reflection\MethodReflection $methodReflection, \PhpParser\Node\Expr\StaticCall $methodCall, \PHPStan\Analyser\Scope $scope) : \PHPStan\Type\Type
+    /**
+     * @param \PHPStan\Reflection\MethodReflection $methodReflection
+     * @param \PhpParser\Node\Expr\StaticCall $methodCall
+     * @param \PHPStan\Analyser\Scope $scope
+     */
+    public function getTypeFromStaticMethodCall($methodReflection, $methodCall, $scope) : \PHPStan\Type\Type
     {
         $arg = $methodCall->args[0]->value;
         if (!$arg instanceof \PhpParser\Node\Expr\ClassConstFetch) {

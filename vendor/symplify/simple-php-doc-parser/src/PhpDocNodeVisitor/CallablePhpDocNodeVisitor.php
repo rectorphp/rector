@@ -21,8 +21,9 @@ final class CallablePhpDocNodeVisitor extends \RectorPrefix20210705\Symplify\Sim
     }
     /**
      * @return int|Node|null
+     * @param \PHPStan\PhpDocParser\Ast\Node $node
      */
-    public function enterNode(\PHPStan\PhpDocParser\Ast\Node $node)
+    public function enterNode($node)
     {
         $callable = $this->callable;
         return $callable($node, $this->docContent);

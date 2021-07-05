@@ -55,8 +55,10 @@ final class ParamTypeResolver implements \Rector\NodeTypeResolver\Contract\NodeT
     }
     /**
      * @required
+     * @param \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver
+     * @param \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper
      */
-    public function autowireParamTypeResolver(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper) : void
+    public function autowireParamTypeResolver($nodeTypeResolver, $staticTypeMapper) : void
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->staticTypeMapper = $staticTypeMapper;
@@ -69,9 +71,9 @@ final class ParamTypeResolver implements \Rector\NodeTypeResolver\Contract\NodeT
         return [\PhpParser\Node\Param::class];
     }
     /**
-     * @param Param $node
+     * @param \PhpParser\Node $node
      */
-    public function resolve(\PhpParser\Node $node) : \PHPStan\Type\Type
+    public function resolve($node) : \PHPStan\Type\Type
     {
         $paramType = $this->resolveFromParamType($node);
         if (!$paramType instanceof \PHPStan\Type\MixedType) {
@@ -83,7 +85,10 @@ final class ParamTypeResolver implements \Rector\NodeTypeResolver\Contract\NodeT
         }
         return $this->resolveFromFunctionDocBlock($node);
     }
-    private function resolveFromParamType(\PhpParser\Node\Param $param) : \PHPStan\Type\Type
+    /**
+     * @param \PhpParser\Node\Param $param
+     */
+    private function resolveFromParamType($param) : \PHPStan\Type\Type
     {
         if ($param->type === null) {
             return new \PHPStan\Type\MixedType();
@@ -93,7 +98,10 @@ final class ParamTypeResolver implements \Rector\NodeTypeResolver\Contract\NodeT
         }
         return $this->staticTypeMapper->mapPhpParserNodePHPStanType($param->type);
     }
-    private function resolveFromFirstVariableUse(\PhpParser\Node\Param $param) : \PHPStan\Type\Type
+    /**
+     * @param \PhpParser\Node\Param $param
+     */
+    private function resolveFromFirstVariableUse($param) : \PHPStan\Type\Type
     {
         $classMethod = $param->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::METHOD_NODE);
         if (!$classMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
@@ -114,13 +122,19 @@ final class ParamTypeResolver implements \Rector\NodeTypeResolver\Contract\NodeT
         });
         return $paramStaticType;
     }
-    private function resolveFromFunctionDocBlock(\PhpParser\Node\Param $param) : \PHPStan\Type\Type
+    /**
+     * @param \PhpParser\Node\Param $param
+     */
+    private function resolveFromFunctionDocBlock($param) : \PHPStan\Type\Type
     {
         $phpDocInfo = $this->getFunctionLikePhpDocInfo($param);
         $paramName = $this->nodeNameResolver->getName($param);
         return $phpDocInfo->getParamType($paramName);
     }
-    private function getFunctionLikePhpDocInfo(\PhpParser\Node\Param $param) : \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo
+    /**
+     * @param \PhpParser\Node\Param $param
+     */
+    private function getFunctionLikePhpDocInfo($param) : \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo
     {
         $parentNode = $param->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
         if (!$parentNode instanceof \PhpParser\Node\FunctionLike) {

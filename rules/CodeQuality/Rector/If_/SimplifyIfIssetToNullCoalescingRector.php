@@ -100,10 +100,7 @@ CODE_SAMPLE
         $funcCall = new \PhpParser\Node\Expr\FuncCall(new \PhpParser\Node\Name('array_merge'), $args);
         return new \PhpParser\Node\Expr\Assign($valueNode, $funcCall);
     }
-    /**
-     * @param \PhpParser\Node\Stmt\If_ $if
-     */
-    private function shouldSkip($if) : bool
+    private function shouldSkip(\PhpParser\Node\Stmt\If_ $if) : bool
     {
         if ($if->else === null) {
             return \true;

@@ -44,8 +44,9 @@ class ArrayInput extends \RectorPrefix20210705\Symfony\Component\Console\Input\I
     }
     /**
      * {@inheritdoc}
+     * @param bool $onlyParams
      */
-    public function hasParameterOption($values, bool $onlyParams = \false)
+    public function hasParameterOption($values, $onlyParams = \false)
     {
         $values = (array) $values;
         foreach ($this->parameters as $k => $v) {
@@ -63,8 +64,9 @@ class ArrayInput extends \RectorPrefix20210705\Symfony\Component\Console\Input\I
     }
     /**
      * {@inheritdoc}
+     * @param bool $onlyParams
      */
-    public function getParameterOption($values, $default = \false, bool $onlyParams = \false)
+    public function getParameterOption($values, $default = \false, $onlyParams = \false)
     {
         $values = (array) $values;
         foreach ($this->parameters as $k => $v) {
@@ -127,8 +129,9 @@ class ArrayInput extends \RectorPrefix20210705\Symfony\Component\Console\Input\I
      * Adds a short option value.
      *
      * @throws InvalidOptionException When option given doesn't exist
+     * @param string $shortcut
      */
-    private function addShortOption(string $shortcut, $value)
+    private function addShortOption($shortcut, $value)
     {
         if (!$this->definition->hasShortcut($shortcut)) {
             throw new \RectorPrefix20210705\Symfony\Component\Console\Exception\InvalidOptionException(\sprintf('The "-%s" option does not exist.', $shortcut));
@@ -140,8 +143,9 @@ class ArrayInput extends \RectorPrefix20210705\Symfony\Component\Console\Input\I
      *
      * @throws InvalidOptionException When option given doesn't exist
      * @throws InvalidOptionException When a required value is missing
+     * @param string $name
      */
-    private function addLongOption(string $name, $value)
+    private function addLongOption($name, $value)
     {
         if (!$this->definition->hasOption($name)) {
             if (!$this->definition->hasNegation($name)) {

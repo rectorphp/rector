@@ -45,8 +45,10 @@ abstract class FileLoader extends \RectorPrefix20210705\Symfony\Component\Config
      * {@inheritdoc}
      *
      * @param bool|string $ignoreErrors Whether errors should be ignored; pass "not_found" to ignore only when the loaded resource is not found
+     * @param string|null $type
+     * @param string|null $sourceResource
      */
-    public function import($resource, string $type = null, $ignoreErrors = \false, string $sourceResource = null, $exclude = null)
+    public function import($resource, $type = null, $ignoreErrors = \false, $sourceResource = null, $exclude = null)
     {
         $args = \func_get_args();
         if ($ignoreNotFound = 'not_found' === $ignoreErrors) {
@@ -78,7 +80,7 @@ abstract class FileLoader extends \RectorPrefix20210705\Symfony\Component\Config
      * @param string               $resource  The directory to look for classes, glob-patterns allowed
      * @param string|string[]|null $exclude   A globbed path of files to exclude or an array of globbed paths of files to exclude
      */
-    public function registerClasses(\RectorPrefix20210705\Symfony\Component\DependencyInjection\Definition $prototype, string $namespace, string $resource, $exclude = null)
+    public function registerClasses($prototype, $namespace, $resource, $exclude = null)
     {
         if ('\\' !== \substr($namespace, -1)) {
             throw new \RectorPrefix20210705\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException(\sprintf('Namespace prefix must end with a "\\": "%s".', $namespace));
@@ -133,8 +135,10 @@ abstract class FileLoader extends \RectorPrefix20210705\Symfony\Component\Config
     }
     /**
      * Registers a definition in the container with its instanceof-conditionals.
+     * @param string $id
+     * @param \Symfony\Component\DependencyInjection\Definition $definition
      */
-    protected function setDefinition(string $id, \RectorPrefix20210705\Symfony\Component\DependencyInjection\Definition $definition)
+    protected function setDefinition($id, $definition)
     {
         $this->container->removeBindings($id);
         if ($this->isLoadingInstanceof) {
@@ -146,7 +150,13 @@ abstract class FileLoader extends \RectorPrefix20210705\Symfony\Component\Config
             $this->container->setDefinition($id, $definition->setInstanceofConditionals($this->instanceof));
         }
     }
-    private function findClasses(string $namespace, string $pattern, array $excludePatterns, ?\RectorPrefix20210705\Symfony\Component\DependencyInjection\Compiler\RegisterAutoconfigureAttributesPass $autoconfigureAttributes) : array
+    /**
+     * @param string $namespace
+     * @param string $pattern
+     * @param mixed[] $excludePatterns
+     * @param \Symfony\Component\DependencyInjection\Compiler\RegisterAutoconfigureAttributesPass|null $autoconfigureAttributes
+     */
+    private function findClasses($namespace, $pattern, $excludePatterns, $autoconfigureAttributes) : array
     {
         $parameterBag = $this->container->getParameterBag();
         $excludePaths = [];

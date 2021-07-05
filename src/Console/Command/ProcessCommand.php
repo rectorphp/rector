@@ -101,7 +101,11 @@ final class ProcessCommand extends \RectorPrefix20210705\Symfony\Component\Conso
         $this->addOption(\Rector\Core\Configuration\Option::NO_DIFFS, null, \RectorPrefix20210705\Symfony\Component\Console\Input\InputOption::VALUE_NONE, 'Hide diffs of changed files. Useful e.g. for nicer CI output.');
         $this->addOption(\Rector\Core\Configuration\Option::CLEAR_CACHE, null, \RectorPrefix20210705\Symfony\Component\Console\Input\InputOption::VALUE_NONE, 'Clear unchaged files cache');
     }
-    protected function execute(\RectorPrefix20210705\Symfony\Component\Console\Input\InputInterface $input, \RectorPrefix20210705\Symfony\Component\Console\Output\OutputInterface $output) : int
+    /**
+     * @param \Symfony\Component\Console\Input\InputInterface $input
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     */
+    protected function execute($input, $output) : int
     {
         $exitCode = $this->missingRectorRulesReporter->reportIfMissing();
         if ($exitCode !== null) {
@@ -129,7 +133,11 @@ final class ProcessCommand extends \RectorPrefix20210705\Symfony\Component\Conso
         $this->invalidateCacheChangedFiles($processResult);
         return $this->resolveReturnCode($processResult, $configuration);
     }
-    protected function initialize(\RectorPrefix20210705\Symfony\Component\Console\Input\InputInterface $input, \RectorPrefix20210705\Symfony\Component\Console\Output\OutputInterface $output) : void
+    /**
+     * @param \Symfony\Component\Console\Input\InputInterface $input
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     */
+    protected function initialize($input, $output) : void
     {
         $application = $this->getApplication();
         if (!$application instanceof \RectorPrefix20210705\Symfony\Component\Console\Application) {
@@ -148,13 +156,20 @@ final class ProcessCommand extends \RectorPrefix20210705\Symfony\Component\Conso
             $this->changedFilesDetector->clear();
         }
     }
-    private function invalidateCacheChangedFiles(\Rector\Core\ValueObject\ProcessResult $processResult) : void
+    /**
+     * @param \Rector\Core\ValueObject\ProcessResult $processResult
+     */
+    private function invalidateCacheChangedFiles($processResult) : void
     {
         foreach ($processResult->getChangedFileInfos() as $changedFileInfo) {
             $this->changedFilesDetector->invalidateFile($changedFileInfo);
         }
     }
-    private function resolveReturnCode(\Rector\Core\ValueObject\ProcessResult $processResult, \Rector\Core\ValueObject\Configuration $configuration) : int
+    /**
+     * @param \Rector\Core\ValueObject\ProcessResult $processResult
+     * @param \Rector\Core\ValueObject\Configuration $configuration
+     */
+    private function resolveReturnCode($processResult, $configuration) : int
     {
         // some errors were found → fail
         if ($processResult->getErrors() !== []) {
@@ -169,7 +184,7 @@ final class ProcessCommand extends \RectorPrefix20210705\Symfony\Component\Conso
     /**
      * @param File[] $files
      */
-    private function configurePHPStanNodeScopeResolver(array $files) : void
+    private function configurePHPStanNodeScopeResolver($files) : void
     {
         $filePaths = [];
         foreach ($files as $file) {

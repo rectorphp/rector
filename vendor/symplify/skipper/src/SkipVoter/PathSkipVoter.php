@@ -31,8 +31,9 @@ final class PathSkipVoter implements \RectorPrefix20210705\Symplify\Skipper\Cont
     }
     /**
      * @param string|object $element
+     * @param \Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo
      */
-    public function shouldSkip($element, \Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo) : bool
+    public function shouldSkip($element, $smartFileInfo) : bool
     {
         $skippedPaths = $this->skippedPathsResolver->resolve();
         return $this->fileInfoMatcher->doesFileInfoMatchPatterns($smartFileInfo, $skippedPaths);

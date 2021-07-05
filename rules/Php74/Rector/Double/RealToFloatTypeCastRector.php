@@ -49,9 +49,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Expr\Cast\Double::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param Double $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $kind = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::KIND);
         if ($kind !== \PhpParser\Node\Expr\Cast\Double::KIND_REAL) {

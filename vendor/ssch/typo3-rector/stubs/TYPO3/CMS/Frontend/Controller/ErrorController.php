@@ -10,22 +10,25 @@ class ErrorController
     /**
      * @return void
      * @param string $message
+     * @param mixed[] $reasons
      */
-    public function unavailableAction($request, $message, array $reasons = [])
+    public function unavailableAction($request, $message, $reasons = [])
     {
     }
     /**
      * @return void
      * @param string $message
+     * @param mixed[] $reasons
      */
-    public function pageNotFoundAction($request, $message, array $reasons = [])
+    public function pageNotFoundAction($request, $message, $reasons = [])
     {
     }
     /**
      * @return void
      * @param string $message
+     * @param mixed[] $reasons
      */
-    public function accessDeniedAction($request, $message, array $reasons = [])
+    public function accessDeniedAction($request, $message, $reasons = [])
     {
     }
 }

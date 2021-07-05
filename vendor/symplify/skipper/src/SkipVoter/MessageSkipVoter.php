@@ -34,8 +34,9 @@ final class MessageSkipVoter implements \RectorPrefix20210705\Symplify\Skipper\C
     }
     /**
      * @param string|object $element
+     * @param \Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo
      */
-    public function shouldSkip($element, \Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo) : bool
+    public function shouldSkip($element, $smartFileInfo) : bool
     {
         if (\is_object($element)) {
             return \false;

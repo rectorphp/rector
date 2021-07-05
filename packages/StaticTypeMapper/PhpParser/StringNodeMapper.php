@@ -18,9 +18,9 @@ final class StringNodeMapper implements \Rector\StaticTypeMapper\Contract\PhpPar
         return \PhpParser\Node\Scalar\String_::class;
     }
     /**
-     * @param String_ $node
+     * @param \PhpParser\Node $node
      */
-    public function mapToPHPStan(\PhpParser\Node $node) : \PHPStan\Type\Type
+    public function mapToPHPStan($node) : \PHPStan\Type\Type
     {
         return new \PHPStan\Type\StringType();
     }

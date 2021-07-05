@@ -64,9 +64,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Stmt\Break_::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param Break_ $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($this->contextAnalyzer->isInLoop($node)) {
             return null;

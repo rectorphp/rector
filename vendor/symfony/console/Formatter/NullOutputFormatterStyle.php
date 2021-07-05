@@ -17,43 +17,49 @@ final class NullOutputFormatterStyle implements \RectorPrefix20210705\Symfony\Co
 {
     /**
      * {@inheritdoc}
+     * @param string $text
      */
-    public function apply(string $text) : string
+    public function apply($text) : string
     {
         return $text;
     }
     /**
      * {@inheritdoc}
+     * @param string|null $color
      */
-    public function setBackground(string $color = null) : void
+    public function setBackground($color = null) : void
     {
         // do nothing
     }
     /**
      * {@inheritdoc}
+     * @param string|null $color
      */
-    public function setForeground(string $color = null) : void
+    public function setForeground($color = null) : void
     {
         // do nothing
     }
     /**
      * {@inheritdoc}
+     * @param string $option
      */
-    public function setOption(string $option) : void
+    public function setOption($option) : void
     {
         // do nothing
     }
     /**
      * {@inheritdoc}
+     * @param mixed[] $options
      */
-    public function setOptions(array $options) : void
+    public function setOptions($options) : void
     {
         // do nothing
     }
     /**
      * {@inheritdoc}
+     * @param string $option
      */
-    public function unsetOption(string $option) : void
+    public function unsetOption($option) : void
     {
         // do nothing
     }

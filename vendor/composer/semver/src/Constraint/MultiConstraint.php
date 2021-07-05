@@ -95,7 +95,7 @@ class MultiConstraint implements \RectorPrefix20210705\Composer\Semver\Constrain
      *
      * @return bool
      */
-    public function matches(\RectorPrefix20210705\Composer\Semver\Constraint\ConstraintInterface $provider)
+    public function matches($provider)
     {
         if (\false === $this->conjunctive) {
             foreach ($this->constraints as $constraint) {
@@ -182,7 +182,7 @@ class MultiConstraint implements \RectorPrefix20210705\Composer\Semver\Constrain
      *
      * @return ConstraintInterface
      */
-    public static function create(array $constraints, $conjunctive = \true)
+    public static function create($constraints, $conjunctive = \true)
     {
         if (0 === \count($constraints)) {
             return new \RectorPrefix20210705\Composer\Semver\Constraint\MatchAllConstraint();
@@ -206,7 +206,7 @@ class MultiConstraint implements \RectorPrefix20210705\Composer\Semver\Constrain
      *
      * @phpstan-return array{0: list<ConstraintInterface>, 1: bool}|null
      */
-    private static function optimizeConstraints(array $constraints, $conjunctive)
+    private static function optimizeConstraints($constraints, $conjunctive)
     {
         // parse the two OR groups and if they are contiguous we collapse
         // them into one constraint

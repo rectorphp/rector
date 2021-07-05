@@ -21,8 +21,10 @@ class ArrayUtility
     }
     /**
      * @return mixed[]
+     * @param mixed[] $firstArray
+     * @param mixed[] $secondArray
      */
-    public static function arrayMergeRecursiveOverrule(array $firstArray, array $secondArray, $dontAddNewKeys = \false, $emptyValuesOverride = \true)
+    public static function arrayMergeRecursiveOverrule($firstArray, $secondArray, $dontAddNewKeys = \false, $emptyValuesOverride = \true)
     {
     }
     /**

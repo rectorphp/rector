@@ -59,7 +59,7 @@ class Process
      *
      * @return string The escaped command line
      */
-    public static function escapeShellCommand(array $args)
+    public static function escapeShellCommand($args)
     {
         $cmd = self::escape(\array_shift($args), \true, \true);
         foreach ($args as $arg) {

@@ -38,7 +38,10 @@ class Connection
     {
         return $this->contextProviders;
     }
-    public function write(\RectorPrefix20210705\Symfony\Component\VarDumper\Cloner\Data $data) : bool
+    /**
+     * @param \Symfony\Component\VarDumper\Cloner\Data $data
+     */
+    public function write($data) : bool
     {
         $socketIsFresh = !$this->socket;
         if (!($this->socket = $this->socket ?: $this->createSocket())) {

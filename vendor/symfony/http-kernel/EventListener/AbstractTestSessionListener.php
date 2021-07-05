@@ -35,7 +35,10 @@ abstract class AbstractTestSessionListener implements \RectorPrefix20210705\Symf
     {
         $this->sessionOptions = $sessionOptions;
     }
-    public function onKernelRequest(\RectorPrefix20210705\Symfony\Component\HttpKernel\Event\RequestEvent $event)
+    /**
+     * @param \Symfony\Component\HttpKernel\Event\RequestEvent $event
+     */
+    public function onKernelRequest($event)
     {
         if (!$event->isMainRequest()) {
             return;
@@ -53,8 +56,9 @@ abstract class AbstractTestSessionListener implements \RectorPrefix20210705\Symf
     /**
      * Checks if session was initialized and saves if current request is the main request
      * Runs on 'kernel.response' in test environment.
+     * @param \Symfony\Component\HttpKernel\Event\ResponseEvent $event
      */
-    public function onKernelResponse(\RectorPrefix20210705\Symfony\Component\HttpKernel\Event\ResponseEvent $event)
+    public function onKernelResponse($event)
     {
         if (!$event->isMainRequest()) {
             return;

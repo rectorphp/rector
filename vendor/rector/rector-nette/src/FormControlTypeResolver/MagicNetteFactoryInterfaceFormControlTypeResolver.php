@@ -45,15 +45,17 @@ final class MagicNetteFactoryInterfaceFormControlTypeResolver implements \Rector
     }
     /**
      * @required
+     * @param \Rector\Nette\NodeResolver\MethodNamesByInputNamesResolver $methodNamesByInputNamesResolver
      */
-    public function autowireMagicNetteFactoryInterfaceFormControlTypeResolver(\Rector\Nette\NodeResolver\MethodNamesByInputNamesResolver $methodNamesByInputNamesResolver) : void
+    public function autowireMagicNetteFactoryInterfaceFormControlTypeResolver($methodNamesByInputNamesResolver) : void
     {
         $this->methodNamesByInputNamesResolver = $methodNamesByInputNamesResolver;
     }
     /**
      * @return array<string, string>
+     * @param \PhpParser\Node $node
      */
-    public function resolve(\PhpParser\Node $node) : array
+    public function resolve($node) : array
     {
         if (!$node instanceof \PhpParser\Node\Expr\MethodCall) {
             return [];
@@ -80,7 +82,10 @@ final class MagicNetteFactoryInterfaceFormControlTypeResolver implements \Rector
         }
         return $this->methodNamesByInputNamesResolver->resolveExpr($classMethod);
     }
-    private function resolveClassReflectionByExpr(\PhpParser\Node\Expr $expr) : ?\PHPStan\Reflection\ClassReflection
+    /**
+     * @param \PhpParser\Node\Expr $expr
+     */
+    private function resolveClassReflectionByExpr($expr) : ?\PHPStan\Reflection\ClassReflection
     {
         $staticType = $this->nodeTypeResolver->resolve($expr);
         if (!$staticType instanceof \PHPStan\Type\TypeWithClassName) {

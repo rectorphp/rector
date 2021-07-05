@@ -22,7 +22,10 @@ class TracyToPsrLoggerAdapter extends \RectorPrefix20210705\Psr\Log\AbstractLogg
     {
         $this->tracyLogger = $tracyLogger;
     }
-    public function log($level, $message, array $context = [])
+    /**
+     * @param mixed[] $context
+     */
+    public function log($level, $message, $context = [])
     {
         $level = self::LEVEL_MAP[$level] ?? \RectorPrefix20210705\Tracy\ILogger::ERROR;
         if (isset($context['exception']) && $context['exception'] instanceof \Throwable) {

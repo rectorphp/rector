@@ -438,7 +438,7 @@ class VersionParser
      *
      * @phpstan-param string[] $matches
      */
-    private function manipulateVersionString(array $matches, $position, $increment = 0, $pad = '0')
+    private function manipulateVersionString($matches, $position, $increment = 0, $pad = '0')
     {
         for ($i = 4; $i > 0; --$i) {
             if ($i > $position) {

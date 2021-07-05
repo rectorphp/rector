@@ -10,13 +10,13 @@ interface NodeTraverserInterface
      *
      * @param NodeVisitor $visitor Visitor to add
      */
-    public function addVisitor(\PhpParser\NodeVisitor $visitor);
+    public function addVisitor($visitor);
     /**
      * Removes an added visitor.
      *
      * @param NodeVisitor $visitor
      */
-    public function removeVisitor(\PhpParser\NodeVisitor $visitor);
+    public function removeVisitor($visitor);
     /**
      * Traverses an array of nodes using the registered visitors.
      *
@@ -24,5 +24,5 @@ interface NodeTraverserInterface
      *
      * @return Node[] Traversed array of nodes
      */
-    public function traverse(array $nodes) : array;
+    public function traverse($nodes) : array;
 }

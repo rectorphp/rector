@@ -9,5 +9,9 @@ if (\interface_exists('TYPO3\\CMS\\Scheduler\\AdditionalFieldProviderInterface')
 }
 interface AdditionalFieldProviderInterface
 {
-    public function getAdditionalFields(array &$taskInfo, $task, \RectorPrefix20210705\TYPO3\CMS\Scheduler\Controller\SchedulerModuleController $schedulerModule);
+    /**
+     * @param mixed[] $taskInfo
+     * @param \TYPO3\CMS\Scheduler\Controller\SchedulerModuleController $schedulerModule
+     */
+    public function getAdditionalFields(&$taskInfo, $task, $schedulerModule);
 }

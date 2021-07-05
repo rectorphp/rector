@@ -173,7 +173,10 @@ class DebugClassLoader
         }
         return \true;
     }
-    public function findFile(string $class) : ?string
+    /**
+     * @param string $class
+     */
+    public function findFile($class) : ?string
     {
         return $this->isFinder ? $this->classLoader[0]->findFile($class) ?: null : null;
     }
@@ -181,8 +184,9 @@ class DebugClassLoader
      * Loads the given class or interface.
      *
      * @throws \RuntimeException
+     * @param string $class
      */
-    public function loadClass(string $class) : void
+    public function loadClass($class) : void
     {
         $e = \error_reporting(\error_reporting() | \E_PARSE | \E_ERROR | \E_CORE_ERROR | \E_COMPILE_ERROR);
         try {
@@ -205,7 +209,11 @@ class DebugClassLoader
         }
         $this->checkClass($class, $file);
     }
-    private function checkClass(string $class, string $file = null) : void
+    /**
+     * @param string $class
+     * @param string|null $file
+     */
+    private function checkClass($class, $file = null) : void
     {
         $exists = null === $file || \class_exists($class, \false) || \interface_exists($class, \false) || \trait_exists($class, \false);
         if (null !== $file && $class && '\\' === $class[0]) {
@@ -242,7 +250,11 @@ class DebugClassLoader
             throw new \RuntimeException(\sprintf('Case mismatch between class and real file names: "%s" vs "%s" in "%s".', $message[0], $message[1], $message[2]));
         }
     }
-    public function checkAnnotations(\ReflectionClass $refl, string $class) : array
+    /**
+     * @param \ReflectionClass $refl
+     * @param string $class
+     */
+    public function checkAnnotations($refl, $class) : array
     {
         if ('Symfony\\Bridge\\PhpUnit\\Legacy\\SymfonyTestsListenerForV7' === $class || 'Symfony\\Bridge\\PhpUnit\\Legacy\\SymfonyTestsListenerForV6' === $class) {
             return [];
@@ -470,7 +482,12 @@ class DebugClassLoader
         }
         return $deprecations;
     }
-    public function checkCase(\ReflectionClass $refl, string $file, string $class) : ?array
+    /**
+     * @param \ReflectionClass $refl
+     * @param string $file
+     * @param string $class
+     */
+    public function checkCase($refl, $file, $class) : ?array
     {
         $real = \explode('\\', $class . \strrchr($file, '.'));
         $tail = \explode(\DIRECTORY_SEPARATOR, \str_replace('/', \DIRECTORY_SEPARATOR, $file));
@@ -497,8 +514,9 @@ class DebugClassLoader
     }
     /**
      * `realpath` on MacOSX doesn't normalize the case of characters.
+     * @param string $real
      */
-    private function darwinRealpath(string $real) : string
+    private function darwinRealpath($real) : string
     {
         $i = 1 + \strrpos($real, '/');
         $file = \substr($real, $i);
@@ -557,8 +575,10 @@ class DebugClassLoader
      * `class_implements` includes interfaces from the parents so we have to manually exclude them.
      *
      * @return string[]
+     * @param string $class
+     * @param string|null $parent
      */
-    private function getOwnInterfaces(string $class, ?string $parent) : array
+    private function getOwnInterfaces($class, $parent) : array
     {
         $ownInterfaces = \class_implements($class, \false);
         if ($parent) {
@@ -573,7 +593,12 @@ class DebugClassLoader
         }
         return $ownInterfaces;
     }
-    private function setReturnType(string $types, \ReflectionMethod $method, ?string $parent) : void
+    /**
+     * @param string $types
+     * @param \ReflectionMethod $method
+     * @param string|null $parent
+     */
+    private function setReturnType($types, $method, $parent) : void
     {
         $nullable = \false;
         $typesMap = [];
@@ -632,7 +657,12 @@ class DebugClassLoader
         }
         self::$returnTypes[$method->class][$method->name] = [$normalizedType, $returnType, $method->class, $method->getFileName()];
     }
-    private function normalizeType(string $type, string $class, ?string $parent) : string
+    /**
+     * @param string $type
+     * @param string $class
+     * @param string|null $parent
+     */
+    private function normalizeType($type, $class, $parent) : string
     {
         if (isset(self::SPECIAL_RETURN_TYPES[$lcType = \strtolower($type)])) {
             if ('parent' === ($lcType = self::SPECIAL_RETURN_TYPES[$lcType])) {
@@ -654,8 +684,12 @@ class DebugClassLoader
     }
     /**
      * Utility method to add @return annotations to the Symfony code-base where it triggers a self-deprecations.
+     * @param \ReflectionMethod $method
+     * @param string $returnType
+     * @param string $declaringFile
+     * @param string $normalizedType
      */
-    private function patchMethod(\ReflectionMethod $method, string $returnType, string $declaringFile, string $normalizedType)
+    private function patchMethod($method, $returnType, $declaringFile, $normalizedType)
     {
         static $patchedMethods = [];
         static $useStatements = [];
@@ -732,7 +766,10 @@ EOTXT;
         \file_put_contents($file, $code);
         $this->fixReturnStatements($method, $nullable . $normalizedType);
     }
-    private static function getUseStatements(string $file) : array
+    /**
+     * @param string $file
+     */
+    private static function getUseStatements($file) : array
     {
         $namespace = '';
         $useMap = [];
@@ -765,7 +802,11 @@ EOTXT;
         }
         return [$namespace, $useOffset, $useMap];
     }
-    private function fixReturnStatements(\ReflectionMethod $method, string $returnType)
+    /**
+     * @param \ReflectionMethod $method
+     * @param string $returnType
+     */
+    private function fixReturnStatements($method, $returnType)
     {
         if ('7.1' === $this->patchTypes['php'] && 'object' === \ltrim($returnType, '?') && 'docblock' !== $this->patchTypes['force']) {
             return;

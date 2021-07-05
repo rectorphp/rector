@@ -38,8 +38,11 @@ class EnvVarProcessor implements \RectorPrefix20210705\Symfony\Component\Depende
     }
     /**
      * {@inheritdoc}
+     * @param string $prefix
+     * @param string $name
+     * @param \Closure $getEnv
      */
-    public function getEnv(string $prefix, string $name, \Closure $getEnv)
+    public function getEnv($prefix, $name, $getEnv)
     {
         $i = \strpos($name, ':');
         if ('key' === $prefix) {

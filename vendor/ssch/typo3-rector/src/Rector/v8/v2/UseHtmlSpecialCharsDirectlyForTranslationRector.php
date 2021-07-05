@@ -67,9 +67,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Expr\MethodCall::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param MethodCall $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -79,20 +79,14 @@ CODE_SAMPLE
         }
         return $this->refactorAbstractPluginCall($node);
     }
-    /**
-     * @param \PhpParser\Node\Expr\MethodCall $node
-     */
-    private function shouldSkip($node) : bool
+    private function shouldSkip(\PhpParser\Node\Expr\MethodCall $node) : bool
     {
         if ($this->isLanguageServiceCall($node)) {
             return \false;
         }
         return !$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Frontend\\Plugin\\AbstractPlugin'));
     }
-    /**
-     * @param \PhpParser\Node\Expr\MethodCall $node
-     */
-    private function isLanguageServiceCall($node) : bool
+    private function isLanguageServiceCall(\PhpParser\Node\Expr\MethodCall $node) : bool
     {
         if ($this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Lang\\LanguageService'))) {
             return \true;
@@ -106,10 +100,7 @@ CODE_SAMPLE
         }
         return $this->refactorToHtmlSpecialChars($node, 2);
     }
-    /**
-     * @param \PhpParser\Node\Expr\MethodCall $node
-     */
-    private function refactorLanguageServiceCall($node) : ?\PhpParser\Node
+    private function refactorLanguageServiceCall(\PhpParser\Node\Expr\MethodCall $node) : ?\PhpParser\Node
     {
         if (!$this->isNames($node->name, ['sL', 'getLL', 'getLLL'])) {
             return null;

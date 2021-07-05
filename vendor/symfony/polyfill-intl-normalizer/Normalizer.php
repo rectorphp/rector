@@ -36,7 +36,11 @@ class Normalizer
     private static $cC;
     private static $ulenMask = ["À" => 2, "Ð" => 2, "à" => 3, "ð" => 4];
     private static $ASCII = " eiasntrolud][cmp'\ng|hv.fb,:=-q10C2*yx)(L9AS/P\"EjMIk3>5T<D4}B{8FwR67UGN;JzV#HOW_&!K?XQ%Y\\\tZ+~^\$@`\0\1\2\3\4\5\6\7\10\v\f\r\16\17\20\21\22\23\24\25\26\27\30\31\32\33\34\35\36\37";
-    public static function isNormalized(string $s, int $form = self::FORM_C)
+    /**
+     * @param string $s
+     * @param int $form
+     */
+    public static function isNormalized($s, $form = self::FORM_C)
     {
         if (!\in_array($form, [self::NFD, self::NFKD, self::NFC, self::NFKC])) {
             return \false;
@@ -49,7 +53,11 @@ class Normalizer
         }
         return self::normalize($s, $form) === $s;
     }
-    public static function normalize(string $s, int $form = self::FORM_C)
+    /**
+     * @param string $s
+     * @param int $form
+     */
+    public static function normalize($s, $form = self::FORM_C)
     {
         if (!\preg_match('//u', $s)) {
             return \false;

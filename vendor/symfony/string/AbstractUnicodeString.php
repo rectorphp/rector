@@ -44,8 +44,9 @@ abstract class AbstractUnicodeString extends \RectorPrefix20210705\Symfony\Compo
     private static $transliterators = [];
     /**
      * @return static
+     * @param int ...$codes
      */
-    public static function fromCodePoints(int ...$codes)
+    public static function fromCodePoints(...$codes)
     {
         $string = '';
         foreach ($codes as $code) {
@@ -69,7 +70,7 @@ abstract class AbstractUnicodeString extends \RectorPrefix20210705\Symfony\Compo
      * @param string[]|\Transliterator[]|\Closure[] $rules See "*-Latin" rules from Transliterator::listIDs()
      * @return $this
      */
-    public function ascii(array $rules = [])
+    public function ascii($rules = [])
     {
         $str = clone $this;
         $s = $str->string;
@@ -144,8 +145,9 @@ abstract class AbstractUnicodeString extends \RectorPrefix20210705\Symfony\Compo
     }
     /**
      * @return int[]
+     * @param int $offset
      */
-    public function codePointsAt(int $offset) : array
+    public function codePointsAt($offset) : array
     {
         $str = $this->slice($offset, 1);
         if ('' === $str->string) {
@@ -157,7 +159,10 @@ abstract class AbstractUnicodeString extends \RectorPrefix20210705\Symfony\Compo
         }
         return $codePoints;
     }
-    public function folded(bool $compat = \true)
+    /**
+     * @param bool $compat
+     */
+    public function folded($compat = \true)
     {
         $str = clone $this;
         if (!$compat || \PHP_VERSION_ID < 70300 || !\defined('Normalizer::NFKC_CF')) {
@@ -168,7 +173,11 @@ abstract class AbstractUnicodeString extends \RectorPrefix20210705\Symfony\Compo
         }
         return $str;
     }
-    public function join(array $strings, string $lastGlue = null)
+    /**
+     * @param mixed[] $strings
+     * @param string|null $lastGlue
+     */
+    public function join($strings, $lastGlue = null)
     {
         $str = clone $this;
         $tail = null !== $lastGlue && 1 < \count($strings) ? $lastGlue . \array_pop($strings) : '';
@@ -184,7 +193,12 @@ abstract class AbstractUnicodeString extends \RectorPrefix20210705\Symfony\Compo
         $str->string = \mb_strtolower(\str_replace('İ', 'i̇', $str->string), 'UTF-8');
         return $str;
     }
-    public function match(string $regexp, int $flags = 0, int $offset = 0) : array
+    /**
+     * @param string $regexp
+     * @param int $flags
+     * @param int $offset
+     */
+    public function match($regexp, $flags = 0, $offset = 0) : array
     {
         $match = (\PREG_PATTERN_ORDER | \PREG_SET_ORDER) & $flags ? 'preg_match_all' : 'preg_match';
         if ($this->ignoreCase) {
@@ -215,8 +229,9 @@ abstract class AbstractUnicodeString extends \RectorPrefix20210705\Symfony\Compo
     }
     /**
      * @return static
+     * @param int $form
      */
-    public function normalize(int $form = self::NFC)
+    public function normalize($form = self::NFC)
     {
         if (!\in_array($form, [self::NFC, self::NFD, self::NFKC, self::NFKD])) {
             throw new \RectorPrefix20210705\Symfony\Component\String\Exception\InvalidArgumentException('Unsupported normalization form.');
@@ -225,7 +240,11 @@ abstract class AbstractUnicodeString extends \RectorPrefix20210705\Symfony\Compo
         \normalizer_is_normalized($str->string, $form) ?: ($str->string = \normalizer_normalize($str->string, $form));
         return $str;
     }
-    public function padBoth(int $length, string $padStr = ' ')
+    /**
+     * @param int $length
+     * @param string $padStr
+     */
+    public function padBoth($length, $padStr = ' ')
     {
         if ('' === $padStr || !\preg_match('//u', $padStr)) {
             throw new \RectorPrefix20210705\Symfony\Component\String\Exception\InvalidArgumentException('Invalid UTF-8 string.');
@@ -234,7 +253,11 @@ abstract class AbstractUnicodeString extends \RectorPrefix20210705\Symfony\Compo
         $pad->string = $padStr;
         return $this->pad($length, $pad, \STR_PAD_BOTH);
     }
-    public function padEnd(int $length, string $padStr = ' ')
+    /**
+     * @param int $length
+     * @param string $padStr
+     */
+    public function padEnd($length, $padStr = ' ')
     {
         if ('' === $padStr || !\preg_match('//u', $padStr)) {
             throw new \RectorPrefix20210705\Symfony\Component\String\Exception\InvalidArgumentException('Invalid UTF-8 string.');
@@ -243,7 +266,11 @@ abstract class AbstractUnicodeString extends \RectorPrefix20210705\Symfony\Compo
         $pad->string = $padStr;
         return $this->pad($length, $pad, \STR_PAD_RIGHT);
     }
-    public function padStart(int $length, string $padStr = ' ')
+    /**
+     * @param int $length
+     * @param string $padStr
+     */
+    public function padStart($length, $padStr = ' ')
     {
         if ('' === $padStr || !\preg_match('//u', $padStr)) {
             throw new \RectorPrefix20210705\Symfony\Component\String\Exception\InvalidArgumentException('Invalid UTF-8 string.');
@@ -252,7 +279,10 @@ abstract class AbstractUnicodeString extends \RectorPrefix20210705\Symfony\Compo
         $pad->string = $padStr;
         return $this->pad($length, $pad, \STR_PAD_LEFT);
     }
-    public function replaceMatches(string $fromRegexp, $to)
+    /**
+     * @param string $fromRegexp
+     */
+    public function replaceMatches($fromRegexp, $to)
     {
         if ($this->ignoreCase) {
             $fromRegexp .= 'i';
@@ -306,7 +336,10 @@ abstract class AbstractUnicodeString extends \RectorPrefix20210705\Symfony\Compo
         $str->string = \mb_strtolower(\preg_replace(['/(\\p{Lu}+)(\\p{Lu}\\p{Ll})/u', '/([\\p{Ll}0-9])(\\p{Lu})/u'], 'RectorPrefix20210705\\1_\\2', $str->string), 'UTF-8');
         return $str;
     }
-    public function title(bool $allWords = \false)
+    /**
+     * @param bool $allWords
+     */
+    public function title($allWords = \false)
     {
         $str = clone $this;
         $limit = $allWords ? -1 : 1;
@@ -315,7 +348,10 @@ abstract class AbstractUnicodeString extends \RectorPrefix20210705\Symfony\Compo
         }, $str->string, $limit);
         return $str;
     }
-    public function trim(string $chars = " \t\n\r\0\v\f ﻿")
+    /**
+     * @param string $chars
+     */
+    public function trim($chars = " \t\n\r\0\v\f ﻿")
     {
         if (" \t\n\r\0\v\f ﻿" !== $chars && !\preg_match('//u', $chars)) {
             throw new \RectorPrefix20210705\Symfony\Component\String\Exception\InvalidArgumentException('Invalid UTF-8 chars.');
@@ -325,7 +361,10 @@ abstract class AbstractUnicodeString extends \RectorPrefix20210705\Symfony\Compo
         $str->string = \preg_replace("{^[{$chars}]++|[{$chars}]++\$}uD", '', $str->string);
         return $str;
     }
-    public function trimEnd(string $chars = " \t\n\r\0\v\f ﻿")
+    /**
+     * @param string $chars
+     */
+    public function trimEnd($chars = " \t\n\r\0\v\f ﻿")
     {
         if (" \t\n\r\0\v\f ﻿" !== $chars && !\preg_match('//u', $chars)) {
             throw new \RectorPrefix20210705\Symfony\Component\String\Exception\InvalidArgumentException('Invalid UTF-8 chars.');
@@ -335,7 +374,10 @@ abstract class AbstractUnicodeString extends \RectorPrefix20210705\Symfony\Compo
         $str->string = \preg_replace("{[{$chars}]++\$}uD", '', $str->string);
         return $str;
     }
-    public function trimStart(string $chars = " \t\n\r\0\v\f ﻿")
+    /**
+     * @param string $chars
+     */
+    public function trimStart($chars = " \t\n\r\0\v\f ﻿")
     {
         if (" \t\n\r\0\v\f ﻿" !== $chars && !\preg_match('//u', $chars)) {
             throw new \RectorPrefix20210705\Symfony\Component\String\Exception\InvalidArgumentException('Invalid UTF-8 chars.');
@@ -354,7 +396,10 @@ abstract class AbstractUnicodeString extends \RectorPrefix20210705\Symfony\Compo
         }
         return $str;
     }
-    public function width(bool $ignoreAnsiDecoration = \true) : int
+    /**
+     * @param bool $ignoreAnsiDecoration
+     */
+    public function width($ignoreAnsiDecoration = \true) : int
     {
         $width = 0;
         $s = \str_replace(["\0", "\5", "\7"], '', $this->string);
@@ -380,8 +425,10 @@ abstract class AbstractUnicodeString extends \RectorPrefix20210705\Symfony\Compo
     /**
      * @return mixed
      * @param $this $pad
+     * @param int $len
+     * @param int $type
      */
-    private function pad(int $len, $pad, int $type)
+    private function pad($len, $pad, $type)
     {
         $sLen = $this->length();
         if ($len <= $sLen) {
@@ -409,8 +456,9 @@ abstract class AbstractUnicodeString extends \RectorPrefix20210705\Symfony\Compo
     }
     /**
      * Based on https://github.com/jquast/wcwidth, a Python implementation of https://www.cl.cam.ac.uk/~mgk25/ucs/wcwidth.c.
+     * @param string $string
      */
-    private function wcswidth(string $string) : int
+    private function wcswidth($string) : int
     {
         $width = 0;
         foreach (\preg_split('//u', $string, -1, \PREG_SPLIT_NO_EMPTY) as $c) {

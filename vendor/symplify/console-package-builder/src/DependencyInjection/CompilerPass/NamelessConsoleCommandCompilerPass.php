@@ -12,7 +12,10 @@ use RectorPrefix20210705\Symplify\PackageBuilder\Console\Command\CommandNaming;
  */
 final class NamelessConsoleCommandCompilerPass implements \RectorPrefix20210705\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface
 {
-    public function process(\RectorPrefix20210705\Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder) : void
+    /**
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder
+     */
+    public function process($containerBuilder) : void
     {
         foreach ($containerBuilder->getDefinitions() as $definition) {
             $definitionClass = $definition->getClass();

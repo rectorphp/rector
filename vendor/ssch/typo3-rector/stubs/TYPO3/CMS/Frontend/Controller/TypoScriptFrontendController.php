@@ -142,8 +142,9 @@ class TypoScriptFrontendController
     }
     /**
      * @return void
+     * @param \Psr\Http\Message\ResponseInterface $response
      */
-    public function applyHttpHeadersToResponse(\RectorPrefix20210705\Psr\Http\Message\ResponseInterface $response)
+    public function applyHttpHeadersToResponse($response)
     {
     }
     /**

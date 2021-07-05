@@ -17,8 +17,9 @@ class ApplicationType
     }
     /**
      * @return $this
+     * @param \Psr\Http\Message\ServerRequestInterface $request
      */
-    public static function fromRequest(\RectorPrefix20210705\Psr\Http\Message\ServerRequestInterface $request)
+    public static function fromRequest($request)
     {
         return new self('foo');
     }

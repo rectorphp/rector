@@ -27,11 +27,18 @@ use RectorPrefix20210705\Symfony\Component\Yaml\Inline;
 class YamlReferenceDumper
 {
     private $reference;
-    public function dump(\RectorPrefix20210705\Symfony\Component\Config\Definition\ConfigurationInterface $configuration)
+    /**
+     * @param \Symfony\Component\Config\Definition\ConfigurationInterface $configuration
+     */
+    public function dump($configuration)
     {
         return $this->dumpNode($configuration->getConfigTreeBuilder()->buildTree());
     }
-    public function dumpAtPath(\RectorPrefix20210705\Symfony\Component\Config\Definition\ConfigurationInterface $configuration, string $path)
+    /**
+     * @param \Symfony\Component\Config\Definition\ConfigurationInterface $configuration
+     * @param string $path
+     */
+    public function dumpAtPath($configuration, $path)
     {
         $rootNode = $node = $configuration->getConfigTreeBuilder()->buildTree();
         foreach (\explode('.', $path) as $step) {
@@ -50,7 +57,10 @@ class YamlReferenceDumper
         }
         return $this->dumpNode($node);
     }
-    public function dumpNode(\RectorPrefix20210705\Symfony\Component\Config\Definition\NodeInterface $node)
+    /**
+     * @param \Symfony\Component\Config\Definition\NodeInterface $node
+     */
+    public function dumpNode($node)
     {
         $this->reference = '';
         $this->writeNode($node);
@@ -58,7 +68,13 @@ class YamlReferenceDumper
         $this->reference = null;
         return $ref;
     }
-    private function writeNode(\RectorPrefix20210705\Symfony\Component\Config\Definition\NodeInterface $node, \RectorPrefix20210705\Symfony\Component\Config\Definition\NodeInterface $parentNode = null, int $depth = 0, bool $prototypedArray = \false)
+    /**
+     * @param \Symfony\Component\Config\Definition\NodeInterface $node
+     * @param \Symfony\Component\Config\Definition\NodeInterface|null $parentNode
+     * @param int $depth
+     * @param bool $prototypedArray
+     */
+    private function writeNode($node, $parentNode = null, $depth = 0, $prototypedArray = \false)
     {
         $comments = [];
         $default = '';
@@ -147,14 +163,20 @@ class YamlReferenceDumper
     }
     /**
      * Outputs a single config reference line.
+     * @param string $text
+     * @param int $indent
      */
-    private function writeLine(string $text, int $indent = 0)
+    private function writeLine($text, $indent = 0)
     {
         $indent = \strlen($text) + $indent;
         $format = '%' . $indent . 's';
         $this->reference .= \sprintf($format, $text) . "\n";
     }
-    private function writeArray(array $array, int $depth)
+    /**
+     * @param mixed[] $array
+     * @param int $depth
+     */
+    private function writeArray($array, $depth)
     {
         $isIndexed = \array_values($array) === $array;
         foreach ($array as $key => $value) {
@@ -173,7 +195,10 @@ class YamlReferenceDumper
             }
         }
     }
-    private function getPrototypeChildren(\RectorPrefix20210705\Symfony\Component\Config\Definition\PrototypedArrayNode $node) : array
+    /**
+     * @param \Symfony\Component\Config\Definition\PrototypedArrayNode $node
+     */
+    private function getPrototypeChildren($node) : array
     {
         $prototype = $node->getPrototype();
         $key = $node->getKeyAttribute();

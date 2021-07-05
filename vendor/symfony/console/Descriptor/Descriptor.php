@@ -31,8 +31,10 @@ abstract class Descriptor implements \RectorPrefix20210705\Symfony\Component\Con
     /**
      * {@inheritdoc}
      * @param object $object
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     * @param mixed[] $options
      */
-    public function describe(\RectorPrefix20210705\Symfony\Component\Console\Output\OutputInterface $output, $object, array $options = [])
+    public function describe($output, $object, $options = [])
     {
         $this->output = $output;
         switch (\true) {
@@ -57,29 +59,41 @@ abstract class Descriptor implements \RectorPrefix20210705\Symfony\Component\Con
     }
     /**
      * Writes content to output.
+     * @param string $content
+     * @param bool $decorated
      */
-    protected function write(string $content, bool $decorated = \false)
+    protected function write($content, $decorated = \false)
     {
         $this->output->write($content, \false, $decorated ? \RectorPrefix20210705\Symfony\Component\Console\Output\OutputInterface::OUTPUT_NORMAL : \RectorPrefix20210705\Symfony\Component\Console\Output\OutputInterface::OUTPUT_RAW);
     }
     /**
      * Describes an InputArgument instance.
+     * @param \Symfony\Component\Console\Input\InputArgument $argument
+     * @param mixed[] $options
      */
-    protected abstract function describeInputArgument(\RectorPrefix20210705\Symfony\Component\Console\Input\InputArgument $argument, array $options = []);
+    protected abstract function describeInputArgument($argument, $options = []);
     /**
      * Describes an InputOption instance.
+     * @param \Symfony\Component\Console\Input\InputOption $option
+     * @param mixed[] $options
      */
-    protected abstract function describeInputOption(\RectorPrefix20210705\Symfony\Component\Console\Input\InputOption $option, array $options = []);
+    protected abstract function describeInputOption($option, $options = []);
     /**
      * Describes an InputDefinition instance.
+     * @param \Symfony\Component\Console\Input\InputDefinition $definition
+     * @param mixed[] $options
      */
-    protected abstract function describeInputDefinition(\RectorPrefix20210705\Symfony\Component\Console\Input\InputDefinition $definition, array $options = []);
+    protected abstract function describeInputDefinition($definition, $options = []);
     /**
      * Describes a Command instance.
+     * @param \Symfony\Component\Console\Command\Command $command
+     * @param mixed[] $options
      */
-    protected abstract function describeCommand(\RectorPrefix20210705\Symfony\Component\Console\Command\Command $command, array $options = []);
+    protected abstract function describeCommand($command, $options = []);
     /**
      * Describes an Application instance.
+     * @param \Symfony\Component\Console\Application $application
+     * @param mixed[] $options
      */
-    protected abstract function describeApplication(\RectorPrefix20210705\Symfony\Component\Console\Application $application, array $options = []);
+    protected abstract function describeApplication($application, $options = []);
 }

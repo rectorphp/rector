@@ -22,22 +22,27 @@ class NullDumper implements \RectorPrefix20210705\Symfony\Component\DependencyIn
 {
     /**
      * {@inheritdoc}
+     * @param \Symfony\Component\DependencyInjection\Definition $definition
      */
-    public function isProxyCandidate(\RectorPrefix20210705\Symfony\Component\DependencyInjection\Definition $definition) : bool
+    public function isProxyCandidate($definition) : bool
     {
         return \false;
     }
     /**
      * {@inheritdoc}
+     * @param \Symfony\Component\DependencyInjection\Definition $definition
+     * @param string $id
+     * @param string $factoryCode
      */
-    public function getProxyFactoryCode(\RectorPrefix20210705\Symfony\Component\DependencyInjection\Definition $definition, string $id, string $factoryCode) : string
+    public function getProxyFactoryCode($definition, $id, $factoryCode) : string
     {
         return '';
     }
     /**
      * {@inheritdoc}
+     * @param \Symfony\Component\DependencyInjection\Definition $definition
      */
-    public function getProxyCode(\RectorPrefix20210705\Symfony\Component\DependencyInjection\Definition $definition) : string
+    public function getProxyCode($definition) : string
     {
         return '';
     }

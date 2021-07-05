@@ -9,8 +9,10 @@ class ArrayUtility
 {
     /**
      * @return void
+     * @param mixed[] $original
+     * @param mixed[] $overrule
      */
-    public static function mergeRecursiveWithOverrule(array &$original, array $overrule, $addKeys = \true, $includeEmptyValues = \true, $enableUnsetFeature = \true)
+    public static function mergeRecursiveWithOverrule(&$original, $overrule, $addKeys = \true, $includeEmptyValues = \true, $enableUnsetFeature = \true)
     {
     }
     /**
@@ -39,8 +41,9 @@ class ArrayUtility
     }
     /**
      * @return bool
+     * @param mixed[] $in_array
      */
-    public static function inArray(array $in_array, $item)
+    public static function inArray($in_array, $item)
     {
         return \true;
     }

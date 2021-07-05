@@ -26,7 +26,11 @@ final class FlexFormsProcessor implements \Rector\Core\Contract\Processor\FilePr
     {
         $this->flexFormRectors = $flexFormRectors;
     }
-    public function process(\Rector\Core\ValueObject\Application\File $file, \Rector\Core\ValueObject\Configuration $configuration) : void
+    /**
+     * @param \Rector\Core\ValueObject\Application\File $file
+     * @param \Rector\Core\ValueObject\Configuration $configuration
+     */
+    public function process($file, $configuration) : void
     {
         if ([] === $this->flexFormRectors) {
             return;
@@ -51,7 +55,11 @@ final class FlexFormsProcessor implements \Rector\Core\Contract\Processor\FilePr
         $newFileContent = \html_entity_decode($xml);
         $file->changeFileContent($newFileContent);
     }
-    public function supports(\Rector\Core\ValueObject\Application\File $file, \Rector\Core\ValueObject\Configuration $configuration) : bool
+    /**
+     * @param \Rector\Core\ValueObject\Application\File $file
+     * @param \Rector\Core\ValueObject\Configuration $configuration
+     */
+    public function supports($file, $configuration) : bool
     {
         $smartFileInfo = $file->getSmartFileInfo();
         if (!\in_array($smartFileInfo->getExtension(), $this->getSupportedFileExtensions(), \true)) {

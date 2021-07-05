@@ -30,8 +30,9 @@ class ExprBuilder
      * Marks the expression as being always used.
      *
      * @return $this
+     * @param \Closure|null $then
      */
-    public function always(\Closure $then = null)
+    public function always($then = null)
     {
         $this->ifPart = function () {
             return \true;
@@ -47,8 +48,9 @@ class ExprBuilder
      * The default one tests if the value is true.
      *
      * @return $this
+     * @param \Closure|null $closure
      */
-    public function ifTrue(\Closure $closure = null)
+    public function ifTrue($closure = null)
     {
         if (null === $closure) {
             $closure = function ($v) {
@@ -110,8 +112,9 @@ class ExprBuilder
      * Tests if the value is in an array.
      *
      * @return $this
+     * @param mixed[] $array
      */
-    public function ifInArray(array $array)
+    public function ifInArray($array)
     {
         $this->ifPart = function ($v) use($array) {
             return \in_array($v, $array, \true);
@@ -122,8 +125,9 @@ class ExprBuilder
      * Tests if the value is not in an array.
      *
      * @return $this
+     * @param mixed[] $array
      */
-    public function ifNotInArray(array $array)
+    public function ifNotInArray($array)
     {
         $this->ifPart = function ($v) use($array) {
             return !\in_array($v, $array, \true);
@@ -149,8 +153,9 @@ class ExprBuilder
      * Sets the closure to run if the test pass.
      *
      * @return $this
+     * @param \Closure $closure
      */
-    public function then(\Closure $closure)
+    public function then($closure)
     {
         $this->thenPart = $closure;
         return $this;
@@ -175,8 +180,9 @@ class ExprBuilder
      * @return $this
      *
      * @throws \InvalidArgumentException
+     * @param string $message
      */
-    public function thenInvalid(string $message)
+    public function thenInvalid($message)
     {
         $this->thenPart = function ($v) use($message) {
             throw new \InvalidArgumentException(\sprintf($message, \json_encode($v)));
@@ -221,7 +227,7 @@ class ExprBuilder
      *
      * @return array
      */
-    public static function buildExpressions(array $expressions)
+    public static function buildExpressions($expressions)
     {
         foreach ($expressions as $k => $expr) {
             if ($expr instanceof self) {

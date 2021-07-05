@@ -41,7 +41,7 @@ final class ConstantsToEnvironmentApiCallRector extends \Rector\Core\Rector\Abst
     /**
      * @param ConstFetch|BitwiseAnd $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($node instanceof \PhpParser\Node\Expr\ConstFetch) {
             return $this->refactorConstants($node);

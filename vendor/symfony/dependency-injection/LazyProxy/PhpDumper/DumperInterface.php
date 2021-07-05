@@ -22,18 +22,23 @@ interface DumperInterface
      * Inspects whether the given definitions should produce proxy instantiation logic in the dumped container.
      *
      * @return bool
+     * @param \Symfony\Component\DependencyInjection\Definition $definition
      */
-    public function isProxyCandidate(\RectorPrefix20210705\Symfony\Component\DependencyInjection\Definition $definition);
+    public function isProxyCandidate($definition);
     /**
      * Generates the code to be used to instantiate a proxy in the dumped factory code.
      *
      * @return string
+     * @param \Symfony\Component\DependencyInjection\Definition $definition
+     * @param string $id
+     * @param string $factoryCode
      */
-    public function getProxyFactoryCode(\RectorPrefix20210705\Symfony\Component\DependencyInjection\Definition $definition, string $id, string $factoryCode);
+    public function getProxyFactoryCode($definition, $id, $factoryCode);
     /**
      * Generates the code for the lazy proxy.
      *
      * @return string
+     * @param \Symfony\Component\DependencyInjection\Definition $definition
      */
-    public function getProxyCode(\RectorPrefix20210705\Symfony\Component\DependencyInjection\Definition $definition);
+    public function getProxyCode($definition);
 }

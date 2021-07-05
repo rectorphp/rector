@@ -45,8 +45,9 @@ class GraphvizDumper extends \RectorPrefix20210705\Symfony\Component\DependencyI
      *  * node.missing: The default options for missing services
      *
      * @return string The dot representation of the service container
+     * @param mixed[] $options
      */
-    public function dump(array $options = [])
+    public function dump($options = [])
     {
         foreach (['graph', 'node', 'edge', 'node.instance', 'node.definition', 'node.missing'] as $key) {
             if (isset($options[$key])) {
@@ -84,8 +85,13 @@ class GraphvizDumper extends \RectorPrefix20210705\Symfony\Component\DependencyI
     }
     /**
      * Finds all edges belonging to a specific service id.
+     * @param string $id
+     * @param mixed[] $arguments
+     * @param bool $required
+     * @param string $name
+     * @param bool $lazy
      */
-    private function findEdges(string $id, array $arguments, bool $required, string $name, bool $lazy = \false) : array
+    private function findEdges($id, $arguments, $required, $name, $lazy = \false) : array
     {
         $edges = [];
         foreach ($arguments as $argument) {
@@ -161,7 +167,10 @@ class GraphvizDumper extends \RectorPrefix20210705\Symfony\Component\DependencyI
     {
         return "}\n";
     }
-    private function addAttributes(array $attributes) : string
+    /**
+     * @param mixed[] $attributes
+     */
+    private function addAttributes($attributes) : string
     {
         $code = [];
         foreach ($attributes as $k => $v) {
@@ -169,7 +178,10 @@ class GraphvizDumper extends \RectorPrefix20210705\Symfony\Component\DependencyI
         }
         return $code ? ', ' . \implode(', ', $code) : '';
     }
-    private function addOptions(array $options) : string
+    /**
+     * @param mixed[] $options
+     */
+    private function addOptions($options) : string
     {
         $code = [];
         foreach ($options as $k => $v) {
@@ -177,11 +189,17 @@ class GraphvizDumper extends \RectorPrefix20210705\Symfony\Component\DependencyI
         }
         return \implode(' ', $code);
     }
-    private function dotize(string $id) : string
+    /**
+     * @param string $id
+     */
+    private function dotize($id) : string
     {
         return \preg_replace('/\\W/i', '_', $id);
     }
-    private function getAliases(string $id) : array
+    /**
+     * @param string $id
+     */
+    private function getAliases($id) : array
     {
         $aliases = [];
         foreach ($this->container->getAliases() as $alias => $origin) {

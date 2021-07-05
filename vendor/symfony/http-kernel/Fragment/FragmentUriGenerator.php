@@ -33,8 +33,13 @@ final class FragmentUriGenerator implements \RectorPrefix20210705\Symfony\Compon
     }
     /**
      * {@inheritDoc}
+     * @param \Symfony\Component\HttpKernel\Controller\ControllerReference $controller
+     * @param \Symfony\Component\HttpFoundation\Request|null $request
+     * @param bool $absolute
+     * @param bool $strict
+     * @param bool $sign
      */
-    public function generate(\RectorPrefix20210705\Symfony\Component\HttpKernel\Controller\ControllerReference $controller, \RectorPrefix20210705\Symfony\Component\HttpFoundation\Request $request = null, bool $absolute = \false, bool $strict = \true, bool $sign = \true) : string
+    public function generate($controller, $request = null, $absolute = \false, $strict = \true, $sign = \true) : string
     {
         if (null === $request && (null === $this->requestStack || null === ($request = $this->requestStack->getCurrentRequest()))) {
             throw new \LogicException('Generating a fragment URL can only be done when handling a Request.');
@@ -67,7 +72,10 @@ final class FragmentUriGenerator implements \RectorPrefix20210705\Symfony\Compon
         $fragmentUri = $this->signer->sign($fragmentUri);
         return $absolute ? $fragmentUri : \substr($fragmentUri, \strlen($request->getSchemeAndHttpHost()));
     }
-    private function checkNonScalar(array $values) : void
+    /**
+     * @param mixed[] $values
+     */
+    private function checkNonScalar($values) : void
     {
         foreach ($values as $key => $value) {
             if (\is_array($value)) {

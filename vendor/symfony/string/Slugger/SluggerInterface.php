@@ -20,6 +20,9 @@ interface SluggerInterface
 {
     /**
      * Creates a slug for the given string and locale, using appropriate transliteration when needed.
+     * @param string $string
+     * @param string $separator
+     * @param string|null $locale
      */
-    public function slug(string $string, string $separator = '-', string $locale = null) : \RectorPrefix20210705\Symfony\Component\String\AbstractUnicodeString;
+    public function slug($string, $separator = '-', $locale = null) : \RectorPrefix20210705\Symfony\Component\String\AbstractUnicodeString;
 }

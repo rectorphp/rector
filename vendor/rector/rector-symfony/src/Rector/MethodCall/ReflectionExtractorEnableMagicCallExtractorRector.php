@@ -87,10 +87,7 @@ CODE_SAMPLE
         $contextOptions->items[] = new \PhpParser\Node\Expr\ArrayItem($this->prepareEnableMagicMethodsExtractionFlags($contextOptionValue), new \PhpParser\Node\Scalar\String_(self::NEW_OPTION_NAME));
         return $node;
     }
-    /**
-     * @param \PhpParser\Node\Expr\MethodCall $methodCall
-     */
-    private function shouldSkip($methodCall) : bool
+    private function shouldSkip(\PhpParser\Node\Expr\MethodCall $methodCall) : bool
     {
         if (!$this->isObjectType($methodCall->var, new \PHPStan\Type\ObjectType('Symfony\\Component\\PropertyInfo\\Extractor\\ReflectionExtractor'))) {
             return \true;

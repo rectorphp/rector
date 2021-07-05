@@ -23,7 +23,7 @@ final class ReturnTagReturnTypeInferer implements \Rector\TypeDeclaration\Contra
     /**
      * @param ClassMethod|Closure|Function_ $functionLike
      */
-    public function inferFunctionLike(\PhpParser\Node\FunctionLike $functionLike) : \PHPStan\Type\Type
+    public function inferFunctionLike($functionLike) : \PHPStan\Type\Type
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($functionLike);
         return $phpDocInfo->getReturnType();

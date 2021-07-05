@@ -9,8 +9,9 @@ class CsvUtility
 {
     /**
      * @return void
+     * @param mixed[] $row
      */
-    public static function csvValues(array $row, $delim = ',', $quote = '"')
+    public static function csvValues($row, $delim = ',', $quote = '"')
     {
     }
 }

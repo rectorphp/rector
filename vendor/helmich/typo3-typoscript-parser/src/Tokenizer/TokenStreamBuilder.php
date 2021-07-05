@@ -34,7 +34,7 @@ class TokenStreamBuilder
      * @param array  $patternMatches Subpattern matches
      * @return void
      */
-    public function append(string $type, string $value, int $line, array $patternMatches = []) : void
+    public function append($type, $value, $line, $patternMatches = []) : void
     {
         if ($this->currentLine !== $line) {
             $this->currentLine = $line;
@@ -49,7 +49,7 @@ class TokenStreamBuilder
      * @param TokenInterface $token The token to append
      * @return void
      */
-    public function appendToken(\RectorPrefix20210705\Helmich\TypoScriptParser\Tokenizer\TokenInterface $token) : void
+    public function appendToken($token) : void
     {
         $this->tokens->append($token);
     }

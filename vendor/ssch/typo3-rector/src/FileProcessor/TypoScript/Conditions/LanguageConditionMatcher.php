@@ -11,7 +11,10 @@ final class LanguageConditionMatcher implements \Ssch\TYPO3Rector\Contract\FileP
      * @var string
      */
     private const TYPE = 'language';
-    public function change(string $condition) : ?string
+    /**
+     * @param string $condition
+     */
+    public function change($condition) : ?string
     {
         \preg_match('#^' . self::TYPE . '\\s*=\\s*(?<value>.*)$#iUm', $condition, $matches);
         if (!\is_string($matches['value'])) {
@@ -19,7 +22,10 @@ final class LanguageConditionMatcher implements \Ssch\TYPO3Rector\Contract\FileP
         }
         return \sprintf('siteLanguage("twoLetterIsoCode") == "%s"', \trim($matches['value']));
     }
-    public function shouldApply(string $condition) : bool
+    /**
+     * @param string $condition
+     */
+    public function shouldApply($condition) : bool
     {
         return \RectorPrefix20210705\Nette\Utils\Strings::startsWith($condition, self::TYPE);
     }

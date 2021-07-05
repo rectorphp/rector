@@ -22,10 +22,7 @@ abstract class AbstractTypoScriptRector implements \Ssch\TYPO3Rector\Contract\Fi
     public function enterTree(array $statements) : void
     {
     }
-    /**
-     * @param \Helmich\TypoScriptParser\Parser\AST\Statement $statement
-     */
-    public function enterNode($statement) : void
+    public function enterNode(\RectorPrefix20210705\Helmich\TypoScriptParser\Parser\AST\Statement $statement) : void
     {
     }
     public function exitNode(\RectorPrefix20210705\Helmich\TypoScriptParser\Parser\AST\Statement $statement) : void

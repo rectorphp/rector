@@ -41,7 +41,7 @@ final class RefactorRemovedMarkerMethodsFromHtmlParserRector extends \Rector\Cor
     /**
      * @param StaticCall|MethodCall $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Html\\HtmlParser'))) {
             return null;
@@ -164,7 +164,7 @@ CODE_SAMPLE
     /**
      * @param StaticCall|MethodCall $node
      */
-    private function shouldSkip($node) : bool
+    private function shouldSkip(\PhpParser\Node $node) : bool
     {
         $skip = \false;
         if (!$this->isNames($node->name, self::MOVED_METHODS_TO_MARKER_BASED_TEMPLATES) && !$this->isNames($node->name, self::REMOVED_METHODS) && !$this->isName($node->name, self::RENAMED_METHOD)) {

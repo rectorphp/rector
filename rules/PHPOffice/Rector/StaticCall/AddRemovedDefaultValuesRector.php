@@ -54,7 +54,7 @@ CODE_SAMPLE
      * @param StaticCall|MethodCall $node
      * @return \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall
      */
-    public function refactor($node)
+    public function refactor(\PhpParser\Node $node)
     {
         foreach (\Rector\PHPOffice\ValueObject\PHPExcelMethodDefaultValues::METHOD_NAMES_BY_TYPE_WITH_VALUE as $type => $defaultValuesByMethodName) {
             if (!$this->isCallerObjectType($node, new \PHPStan\Type\ObjectType($type))) {

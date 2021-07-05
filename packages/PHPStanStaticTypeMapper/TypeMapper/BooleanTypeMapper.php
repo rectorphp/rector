@@ -35,9 +35,10 @@ final class BooleanTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contrac
         return \PHPStan\Type\BooleanType::class;
     }
     /**
-     * @param BooleanType $type
+     * @param \PHPStan\Type\Type $type
+     * @param \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind $typeKind
      */
-    public function mapToPHPStanPhpDocTypeNode(\PHPStan\Type\Type $type, \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind $typeKind) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
+    public function mapToPHPStanPhpDocTypeNode($type, $typeKind) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
     {
         if ($this->isFalseBooleanTypeWithUnion($type)) {
             return new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode('false');
@@ -45,9 +46,10 @@ final class BooleanTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contrac
         return new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode('bool');
     }
     /**
-     * @param BooleanType $type
+     * @param \PHPStan\Type\Type $type
+     * @param \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind $typeKind
      */
-    public function mapToPhpParserNode(\PHPStan\Type\Type $type, \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind $typeKind) : ?\PhpParser\Node
+    public function mapToPhpParserNode($type, $typeKind) : ?\PhpParser\Node
     {
         if (!$this->phpVersionProvider->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::SCALAR_TYPES)) {
             return null;
@@ -57,7 +59,10 @@ final class BooleanTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contrac
         }
         return new \PhpParser\Node\Name('bool');
     }
-    private function isFalseBooleanTypeWithUnion(\PHPStan\Type\Type $type) : bool
+    /**
+     * @param \PHPStan\Type\Type $type
+     */
+    private function isFalseBooleanTypeWithUnion($type) : bool
     {
         if (!$type instanceof \PHPStan\Type\Constant\ConstantBooleanType) {
             return \false;

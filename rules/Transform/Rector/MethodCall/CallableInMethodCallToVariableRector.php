@@ -72,9 +72,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Expr\MethodCall::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param MethodCall $node
      */
-    public function refactor($node) : ?\PhpParser\Node\Expr\MethodCall
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node\Expr\MethodCall
     {
         foreach ($this->callableInMethodCallToVariable as $singleCallableInMethodCallToVariable) {
             if (!$this->isObjectType($node->var, $singleCallableInMethodCallToVariable->getObjectType())) {

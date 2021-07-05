@@ -91,9 +91,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Stmt\Class_::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param Class_ $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $readOnlyVariableAssigns = $this->collectReadOnlyVariableAssigns($node);
         $readOnlyVariableAssigns = $this->filterOutUniqueNames($readOnlyVariableAssigns);
@@ -162,9 +162,8 @@ CODE_SAMPLE
     }
     /**
      * @param Assign[] $readOnlyVariableAssigns
-     * @param \PhpParser\Node\Stmt\Class_ $class
      */
-    private function refactorClassMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod, $class, array $readOnlyVariableAssigns) : void
+    private function refactorClassMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod, \PhpParser\Node\Stmt\Class_ $class, array $readOnlyVariableAssigns) : void
     {
         foreach ($readOnlyVariableAssigns as $readOnlyVariableAssign) {
             $this->removeNode($readOnlyVariableAssign);

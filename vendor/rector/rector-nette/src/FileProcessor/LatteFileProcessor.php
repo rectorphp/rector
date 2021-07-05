@@ -20,7 +20,11 @@ final class LatteFileProcessor implements \Rector\Core\Contract\Processor\FilePr
     {
         $this->latteRectors = $latteRectors;
     }
-    public function process(\Rector\Core\ValueObject\Application\File $file, \Rector\Core\ValueObject\Configuration $configuration) : void
+    /**
+     * @param \Rector\Core\ValueObject\Application\File $file
+     * @param \Rector\Core\ValueObject\Configuration $configuration
+     */
+    public function process($file, $configuration) : void
     {
         $fileContent = $file->getFileContent();
         foreach ($this->latteRectors as $latteRector) {
@@ -28,7 +32,11 @@ final class LatteFileProcessor implements \Rector\Core\Contract\Processor\FilePr
         }
         $file->changeFileContent($fileContent);
     }
-    public function supports(\Rector\Core\ValueObject\Application\File $file, \Rector\Core\ValueObject\Configuration $configuration) : bool
+    /**
+     * @param \Rector\Core\ValueObject\Application\File $file
+     * @param \Rector\Core\ValueObject\Configuration $configuration
+     */
+    public function supports($file, $configuration) : bool
     {
         $fileInfo = $file->getSmartFileInfo();
         return $fileInfo->hasSuffixes($this->getSupportedFileExtensions());

@@ -21,11 +21,18 @@ use RectorPrefix20210705\Symfony\Component\Config\ResourceCheckerInterface;
  */
 class SelfCheckingResourceChecker implements \RectorPrefix20210705\Symfony\Component\Config\ResourceCheckerInterface
 {
-    public function supports(\RectorPrefix20210705\Symfony\Component\Config\Resource\ResourceInterface $metadata)
+    /**
+     * @param \Symfony\Component\Config\Resource\ResourceInterface $metadata
+     */
+    public function supports($metadata)
     {
         return $metadata instanceof \RectorPrefix20210705\Symfony\Component\Config\Resource\SelfCheckingResourceInterface;
     }
-    public function isFresh(\RectorPrefix20210705\Symfony\Component\Config\Resource\ResourceInterface $resource, int $timestamp)
+    /**
+     * @param \Symfony\Component\Config\Resource\ResourceInterface $resource
+     * @param int $timestamp
+     */
+    public function isFresh($resource, $timestamp)
     {
         /* @var SelfCheckingResourceInterface $resource */
         return $resource->isFresh($timestamp);

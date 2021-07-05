@@ -18,9 +18,9 @@ final class HasMagicGetSetGuard implements \Rector\Naming\Contract\Guard\Conflic
         $this->reflectionProvider = $reflectionProvider;
     }
     /**
-     * @param PropertyRename $renameValueObject
+     * @param \Rector\Naming\Contract\RenameValueObjectInterface $renameValueObject
      */
-    public function isConflicting(\Rector\Naming\Contract\RenameValueObjectInterface $renameValueObject) : bool
+    public function isConflicting($renameValueObject) : bool
     {
         if (!$this->reflectionProvider->hasClass($renameValueObject->getClassLikeName())) {
             return \false;

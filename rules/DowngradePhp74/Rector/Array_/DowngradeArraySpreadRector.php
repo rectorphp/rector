@@ -82,19 +82,16 @@ CODE_SAMPLE
         return [\PhpParser\Node\Expr\Array_::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param Array_ $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$this->shouldRefactor($node)) {
             return null;
         }
         return $this->refactorNode($node);
     }
-    /**
-     * @param \PhpParser\Node\Expr\Array_ $array
-     */
-    private function shouldRefactor($array) : bool
+    private function shouldRefactor(\PhpParser\Node\Expr\Array_ $array) : bool
     {
         // Check that any item in the array is the spread
         foreach ($array->items as $item) {

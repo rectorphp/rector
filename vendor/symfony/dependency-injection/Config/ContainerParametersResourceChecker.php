@@ -26,15 +26,18 @@ class ContainerParametersResourceChecker implements \RectorPrefix20210705\Symfon
     }
     /**
      * {@inheritdoc}
+     * @param \Symfony\Component\Config\Resource\ResourceInterface $metadata
      */
-    public function supports(\RectorPrefix20210705\Symfony\Component\Config\Resource\ResourceInterface $metadata)
+    public function supports($metadata)
     {
         return $metadata instanceof \RectorPrefix20210705\Symfony\Component\DependencyInjection\Config\ContainerParametersResource;
     }
     /**
      * {@inheritdoc}
+     * @param \Symfony\Component\Config\Resource\ResourceInterface $resource
+     * @param int $timestamp
      */
-    public function isFresh(\RectorPrefix20210705\Symfony\Component\Config\Resource\ResourceInterface $resource, int $timestamp)
+    public function isFresh($resource, $timestamp)
     {
         foreach ($resource->getParameters() as $key => $value) {
             if (!$this->container->hasParameter($key) || $this->container->getParameter($key) !== $value) {

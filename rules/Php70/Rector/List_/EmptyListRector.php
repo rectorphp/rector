@@ -34,9 +34,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Expr\List_::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param List_ $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         foreach ($node->items as $item) {
             if ($item !== null) {

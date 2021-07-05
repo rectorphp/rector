@@ -35,8 +35,9 @@ class LoaderResolver implements \RectorPrefix20210705\Symfony\Component\Config\L
     }
     /**
      * {@inheritdoc}
+     * @param string|null $type
      */
-    public function resolve($resource, string $type = null)
+    public function resolve($resource, $type = null)
     {
         foreach ($this->loaders as $loader) {
             if ($loader->supports($resource, $type)) {
@@ -45,7 +46,10 @@ class LoaderResolver implements \RectorPrefix20210705\Symfony\Component\Config\L
         }
         return \false;
     }
-    public function addLoader(\RectorPrefix20210705\Symfony\Component\Config\Loader\LoaderInterface $loader)
+    /**
+     * @param \Symfony\Component\Config\Loader\LoaderInterface $loader
+     */
+    public function addLoader($loader)
     {
         $this->loaders[] = $loader;
         $loader->setResolver($this);

@@ -23,8 +23,9 @@ class HtmlParser
     }
     /**
      * @return string
+     * @param mixed[] $subpartsContent
      */
-    public function substituteSubpartArray($content, array $subpartsContent)
+    public function substituteSubpartArray($content, $subpartsContent)
     {
         return 'html';
     }
@@ -44,8 +45,9 @@ class HtmlParser
     }
     /**
      * @return string
+     * @param mixed[] $markersAndSubparts
      */
-    public function substituteMarkerAndSubpartArrayRecursive($content, array $markersAndSubparts, $wrap = '', $uppercase = \false, $deleteUnused = \false)
+    public function substituteMarkerAndSubpartArrayRecursive($content, $markersAndSubparts, $wrap = '', $uppercase = \false, $deleteUnused = \false)
     {
         return 'html';
     }

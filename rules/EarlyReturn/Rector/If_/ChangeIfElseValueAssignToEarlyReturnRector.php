@@ -75,10 +75,10 @@ CODE_SAMPLE
         return [\PhpParser\Node\Stmt\If_::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param If_ $node
      * @return Stmt[]|null
      */
-    public function refactor($node) : ?array
+    public function refactor(\PhpParser\Node $node) : ?array
     {
         $nextNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::NEXT_NODE);
         if (!$nextNode instanceof \PhpParser\Node\Stmt\Return_) {

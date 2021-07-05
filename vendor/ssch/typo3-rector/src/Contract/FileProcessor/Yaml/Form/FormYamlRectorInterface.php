@@ -10,5 +10,5 @@ interface FormYamlRectorInterface extends \Rector\Core\Contract\Rector\RectorInt
      * @param mixed[] $yaml
      * @return mixed[]
      */
-    public function refactor($yaml) : array;
+    public function refactor(array $yaml) : array;
 }

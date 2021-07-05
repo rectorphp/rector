@@ -27,7 +27,10 @@ class ContainerControllerResolver extends \RectorPrefix20210705\Symfony\Componen
         $this->container = $container;
         parent::__construct($logger);
     }
-    protected function createController(string $controller)
+    /**
+     * @param string $controller
+     */
+    protected function createController($controller)
     {
         if (1 === \substr_count($controller, ':')) {
             $controller = \str_replace(':', '::', $controller);
@@ -37,8 +40,9 @@ class ContainerControllerResolver extends \RectorPrefix20210705\Symfony\Componen
     }
     /**
      * {@inheritdoc}
+     * @param string $class
      */
-    protected function instantiateController(string $class)
+    protected function instantiateController($class)
     {
         $class = \ltrim($class, '\\');
         if ($this->container->has($class)) {
@@ -54,7 +58,11 @@ class ContainerControllerResolver extends \RectorPrefix20210705\Symfony\Componen
         }
         throw new \InvalidArgumentException(\sprintf('Controller "%s" does neither exist as service nor as class.', $class), 0, $e);
     }
-    private function throwExceptionIfControllerWasRemoved(string $controller, \Throwable $previous)
+    /**
+     * @param string $controller
+     * @param \Throwable $previous
+     */
+    private function throwExceptionIfControllerWasRemoved($controller, $previous)
     {
         if ($this->container instanceof \RectorPrefix20210705\Symfony\Component\DependencyInjection\Container && isset($this->container->getRemovedIds()[$controller])) {
             throw new \InvalidArgumentException(\sprintf('Controller "%s" cannot be fetched from the container because it is private. Did you forget to tag the service with "controller.service_arguments"?', $controller), 0, $previous);

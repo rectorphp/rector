@@ -35,8 +35,9 @@ class ParameterBag implements \RectorPrefix20210705\Symfony\Component\Dependency
     }
     /**
      * {@inheritdoc}
+     * @param mixed[] $parameters
      */
-    public function add(array $parameters)
+    public function add($parameters)
     {
         foreach ($parameters as $key => $value) {
             $this->set($key, $value);
@@ -51,8 +52,9 @@ class ParameterBag implements \RectorPrefix20210705\Symfony\Component\Dependency
     }
     /**
      * {@inheritdoc}
+     * @param string $name
      */
-    public function get(string $name)
+    public function get($name)
     {
         if (!\array_key_exists($name, $this->parameters)) {
             if (!$name) {
@@ -85,22 +87,25 @@ class ParameterBag implements \RectorPrefix20210705\Symfony\Component\Dependency
     }
     /**
      * {@inheritdoc}
+     * @param string $name
      */
-    public function set(string $name, $value)
+    public function set($name, $value)
     {
         $this->parameters[$name] = $value;
     }
     /**
      * {@inheritdoc}
+     * @param string $name
      */
-    public function has(string $name)
+    public function has($name)
     {
         return \array_key_exists((string) $name, $this->parameters);
     }
     /**
      * {@inheritdoc}
+     * @param string $name
      */
-    public function remove(string $name)
+    public function remove($name)
     {
         unset($this->parameters[$name]);
     }
@@ -137,7 +142,7 @@ class ParameterBag implements \RectorPrefix20210705\Symfony\Component\Dependency
      * @throws ParameterCircularReferenceException if a circular reference if detected
      * @throws RuntimeException                    when a given parameter has a type problem
      */
-    public function resolveValue($value, array $resolving = [])
+    public function resolveValue($value, $resolving = [])
     {
         if (\is_array($value)) {
             $args = [];
@@ -161,8 +166,9 @@ class ParameterBag implements \RectorPrefix20210705\Symfony\Component\Dependency
      * @throws ParameterNotFoundException          if a placeholder references a parameter that does not exist
      * @throws ParameterCircularReferenceException if a circular reference if detected
      * @throws RuntimeException                    when a given parameter has a type problem
+     * @param string $value
      */
-    public function resolveString(string $value, array $resolving = [])
+    public function resolveString($value, $resolving = [])
     {
         // we do this to deal with non string values (Boolean, integer, ...)
         // as the preg_replace_callback throw an exception when trying

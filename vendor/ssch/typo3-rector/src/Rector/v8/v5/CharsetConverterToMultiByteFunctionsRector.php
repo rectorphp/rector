@@ -26,9 +26,9 @@ final class CharsetConverterToMultiByteFunctionsRector extends \Rector\Core\Rect
         return [\PhpParser\Node\Expr\MethodCall::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param MethodCall $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -73,10 +73,7 @@ mb_strlen('string', 'utf-8');
 CODE_SAMPLE
 )]);
     }
-    /**
-     * @param \PhpParser\Node\Expr\MethodCall $node
-     */
-    private function shouldSkip($node) : bool
+    private function shouldSkip(\PhpParser\Node\Expr\MethodCall $node) : bool
     {
         if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Charset\\CharsetConverter'))) {
             return \true;

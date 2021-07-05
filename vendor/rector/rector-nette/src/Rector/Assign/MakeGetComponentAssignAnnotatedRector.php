@@ -134,10 +134,7 @@ CODE_SAMPLE
         }
         return \true;
     }
-    /**
-     * @param \PhpParser\Node\Expr\Assign $assign
-     */
-    private function resolveControlType($assign) : \PHPStan\Type\Type
+    private function resolveControlType(\PhpParser\Node\Expr\Assign $assign) : \PHPStan\Type\Type
     {
         if ($assign->expr instanceof \PhpParser\Node\Expr\MethodCall) {
             /** @var MethodCall $methodCall */

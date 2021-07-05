@@ -29,7 +29,7 @@ class Traverser
     /**
      * @param Visitor $visitor
      */
-    public function addVisitor(\RectorPrefix20210705\Helmich\TypoScriptParser\Parser\Traverser\Visitor $visitor) : void
+    public function addVisitor($visitor) : void
     {
         $this->visitors->addVisitor($visitor);
     }
@@ -46,7 +46,7 @@ class Traverser
      * @param Statement[] $statements
      * @return Statement[]
      */
-    private function walkRecursive(array $statements) : array
+    private function walkRecursive($statements) : array
     {
         foreach ($statements as $statement) {
             $this->visitors->enterNode($statement);

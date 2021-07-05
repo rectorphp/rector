@@ -82,7 +82,11 @@ final class TypoScriptFileProcessor implements \Ssch\TYPO3Rector\Contract\Proces
         $this->rectorOutputStyle = $rectorOutputStyle;
         $this->typoScriptRectors = $typoScriptRectors;
     }
-    public function supports(\Rector\Core\ValueObject\Application\File $file, \Rector\Core\ValueObject\Configuration $configuration) : bool
+    /**
+     * @param \Rector\Core\ValueObject\Application\File $file
+     * @param \Rector\Core\ValueObject\Configuration $configuration
+     */
+    public function supports($file, $configuration) : bool
     {
         if ([] === $this->typoScriptRectors) {
             return \false;
@@ -90,7 +94,11 @@ final class TypoScriptFileProcessor implements \Ssch\TYPO3Rector\Contract\Proces
         $smartFileInfo = $file->getSmartFileInfo();
         return \in_array($smartFileInfo->getExtension(), $this->allowedFileExtensions, \true);
     }
-    public function process(\Rector\Core\ValueObject\Application\File $file, \Rector\Core\ValueObject\Configuration $configuration) : void
+    /**
+     * @param \Rector\Core\ValueObject\Application\File $file
+     * @param \Rector\Core\ValueObject\Configuration $configuration
+     */
+    public function process($file, $configuration) : void
     {
         $this->processFile($file);
         $this->convertTypoScriptToPhpFiles();
@@ -102,11 +110,17 @@ final class TypoScriptFileProcessor implements \Ssch\TYPO3Rector\Contract\Proces
     {
         return $this->allowedFileExtensions;
     }
-    public function configure(array $configuration) : void
+    /**
+     * @param mixed[] $configuration
+     */
+    public function configure($configuration) : void
     {
         $this->allowedFileExtensions = $configuration[self::ALLOWED_FILE_EXTENSIONS] ?? [];
     }
-    private function processFile(\Rector\Core\ValueObject\Application\File $file) : void
+    /**
+     * @param \Rector\Core\ValueObject\Application\File $file
+     */
+    private function processFile($file) : void
     {
         try {
             $this->currentFileProvider->setFile($file);

@@ -46,7 +46,10 @@ final class Section
     {
         return $this->declarations;
     }
-    public function matches(string $path) : bool
+    /**
+     * @param string $path
+     */
+    public function matches($path) : bool
     {
         // normalize path to unix-style directory separator,
         // because the glob pattern assumes linux-style directory separators
@@ -60,7 +63,7 @@ final class Section
     /**
      * @param array<string, mixed> $declarations
      */
-    private function setDeclarations(array $declarations) : void
+    private function setDeclarations($declarations) : void
     {
         foreach ($declarations as $name => $value) {
             $this->setDeclaration($name, $value);
@@ -68,8 +71,9 @@ final class Section
     }
     /**
      * @param mixed $value
+     * @param string $name
      */
-    private function setDeclaration(string $name, $value) : void
+    private function setDeclaration($name, $value) : void
     {
         $declaration = $this->declarationFactory->getDeclaration($name, $value);
         $this->declarations[$declaration->getName()] = $declaration;
@@ -89,7 +93,10 @@ final class Section
     {
         return \array_key_exists($property, $this->declarations);
     }
-    private function matchesWithCurlBracesExpansion(string $path) : bool
+    /**
+     * @param string $path
+     */
+    private function matchesWithCurlBracesExpansion($path) : bool
     {
         \preg_match_all('#(?<prefix>.*){(?<subpattern>.*)}#', $this->glob, $matches, \PREG_SET_ORDER);
         foreach ($matches as $match) {

@@ -24,8 +24,9 @@ class ValidateRequestListener implements \RectorPrefix20210705\Symfony\Component
 {
     /**
      * Performs the validation.
+     * @param \Symfony\Component\HttpKernel\Event\RequestEvent $event
      */
-    public function onKernelRequest(\RectorPrefix20210705\Symfony\Component\HttpKernel\Event\RequestEvent $event)
+    public function onKernelRequest($event)
     {
         if (!$event->isMainRequest()) {
             return;

@@ -44,7 +44,7 @@ abstract class FunctionLike extends \PhpParser\Builder\Declaration
      *
      * @return $this The builder instance (for fluid interface)
      */
-    public function addParams(array $params)
+    public function addParams($params)
     {
         foreach ($params as $param) {
             $this->addParam($param);

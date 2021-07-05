@@ -55,7 +55,7 @@ CODE_SAMPLE
     /**
      * @param MethodCall|StaticCall $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -81,7 +81,7 @@ CODE_SAMPLE
     /**
      * @param MethodCall|StaticCall $node
      */
-    private function shouldSkip($node) : bool
+    private function shouldSkip(\PhpParser\Node $node) : bool
     {
         if ($this->typo3NodeResolver->isMethodCallOnSysPageOfTSFE($node)) {
             return \false;

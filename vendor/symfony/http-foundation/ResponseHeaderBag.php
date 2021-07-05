@@ -58,8 +58,9 @@ class ResponseHeaderBag extends \RectorPrefix20210705\Symfony\Component\HttpFoun
     }
     /**
      * {@inheritdoc}
+     * @param mixed[] $headers
      */
-    public function replace(array $headers = [])
+    public function replace($headers = [])
     {
         $this->headerNames = [];
         parent::replace($headers);
@@ -72,8 +73,9 @@ class ResponseHeaderBag extends \RectorPrefix20210705\Symfony\Component\HttpFoun
     }
     /**
      * {@inheritdoc}
+     * @param string|null $key
      */
-    public function all(string $key = null)
+    public function all($key = null)
     {
         $headers = parent::all();
         if (null !== $key) {
@@ -88,8 +90,9 @@ class ResponseHeaderBag extends \RectorPrefix20210705\Symfony\Component\HttpFoun
     /**
      * {@inheritdoc}
      * @param string $key
+     * @param bool $replace
      */
-    public function set($key, $values, bool $replace = \true)
+    public function set($key, $values, $replace = \true)
     {
         $uniqueKey = \strtr($key, self::UPPER, self::LOWER);
         if ('set-cookie' === $uniqueKey) {
@@ -113,8 +116,9 @@ class ResponseHeaderBag extends \RectorPrefix20210705\Symfony\Component\HttpFoun
     }
     /**
      * {@inheritdoc}
+     * @param string $key
      */
-    public function remove(string $key)
+    public function remove($key)
     {
         $uniqueKey = \strtr($key, self::UPPER, self::LOWER);
         unset($this->headerNames[$uniqueKey]);
@@ -132,27 +136,35 @@ class ResponseHeaderBag extends \RectorPrefix20210705\Symfony\Component\HttpFoun
     }
     /**
      * {@inheritdoc}
+     * @param string $key
      */
-    public function hasCacheControlDirective(string $key)
+    public function hasCacheControlDirective($key)
     {
         return \array_key_exists($key, $this->computedCacheControl);
     }
     /**
      * {@inheritdoc}
+     * @param string $key
      */
-    public function getCacheControlDirective(string $key)
+    public function getCacheControlDirective($key)
     {
         return \array_key_exists($key, $this->computedCacheControl) ? $this->computedCacheControl[$key] : null;
     }
-    public function setCookie(\RectorPrefix20210705\Symfony\Component\HttpFoundation\Cookie $cookie)
+    /**
+     * @param \Symfony\Component\HttpFoundation\Cookie $cookie
+     */
+    public function setCookie($cookie)
     {
         $this->cookies[$cookie->getDomain()][$cookie->getPath()][$cookie->getName()] = $cookie;
         $this->headerNames['set-cookie'] = 'Set-Cookie';
     }
     /**
      * Removes a cookie from the array, but does not unset it in the browser.
+     * @param string $name
+     * @param string|null $path
+     * @param string|null $domain
      */
-    public function removeCookie(string $name, ?string $path = '/', string $domain = null)
+    public function removeCookie($name, $path = '/', $domain = null)
     {
         if (null === $path) {
             $path = '/';
@@ -174,8 +186,9 @@ class ResponseHeaderBag extends \RectorPrefix20210705\Symfony\Component\HttpFoun
      * @return Cookie[]
      *
      * @throws \InvalidArgumentException When the $format is invalid
+     * @param string $format
      */
-    public function getCookies(string $format = self::COOKIES_FLAT)
+    public function getCookies($format = self::COOKIES_FLAT)
     {
         if (!\in_array($format, [self::COOKIES_FLAT, self::COOKIES_ARRAY])) {
             throw new \InvalidArgumentException(\sprintf('Format "%s" invalid (%s).', $format, \implode(', ', [self::COOKIES_FLAT, self::COOKIES_ARRAY])));
@@ -195,15 +208,24 @@ class ResponseHeaderBag extends \RectorPrefix20210705\Symfony\Component\HttpFoun
     }
     /**
      * Clears a cookie in the browser.
+     * @param string $name
+     * @param string|null $path
+     * @param string|null $domain
+     * @param bool $secure
+     * @param bool $httpOnly
+     * @param string|null $sameSite
      */
-    public function clearCookie(string $name, ?string $path = '/', string $domain = null, bool $secure = \false, bool $httpOnly = \true, string $sameSite = null)
+    public function clearCookie($name, $path = '/', $domain = null, $secure = \false, $httpOnly = \true, $sameSite = null)
     {
         $this->setCookie(new \RectorPrefix20210705\Symfony\Component\HttpFoundation\Cookie($name, null, 1, $path, $domain, $secure, $httpOnly, \false, $sameSite));
     }
     /**
      * @see HeaderUtils::makeDisposition()
+     * @param string $disposition
+     * @param string $filename
+     * @param string $filenameFallback
      */
-    public function makeDisposition(string $disposition, string $filename, string $filenameFallback = '')
+    public function makeDisposition($disposition, $filename, $filenameFallback = '')
     {
         return \RectorPrefix20210705\Symfony\Component\HttpFoundation\HeaderUtils::makeDisposition($disposition, $filename, $filenameFallback);
     }

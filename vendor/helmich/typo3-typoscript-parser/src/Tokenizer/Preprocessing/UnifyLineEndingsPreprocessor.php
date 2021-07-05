@@ -20,7 +20,7 @@ class UnifyLineEndingsPreprocessor implements \RectorPrefix20210705\Helmich\Typo
      * @param string $contents Un-processed Typoscript contents
      * @return string Processed TypoScript contents
      */
-    public function preprocess(string $contents) : string
+    public function preprocess($contents) : string
     {
         return \preg_replace(",(\r\n|\r|\n),", $this->eolCharacter, $contents);
     }

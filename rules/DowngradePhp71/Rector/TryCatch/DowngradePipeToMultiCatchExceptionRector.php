@@ -42,9 +42,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Stmt\TryCatch::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param TryCatch $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $originalCatches = $node->catches;
         foreach ($node->catches as $key => $catch) {

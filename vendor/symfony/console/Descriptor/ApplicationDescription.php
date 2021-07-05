@@ -61,8 +61,9 @@ class ApplicationDescription
     }
     /**
      * @throws CommandNotFoundException
+     * @param string $name
      */
-    public function getCommand(string $name) : \RectorPrefix20210705\Symfony\Component\Console\Command\Command
+    public function getCommand($name) : \RectorPrefix20210705\Symfony\Component\Console\Command\Command
     {
         if (!isset($this->commands[$name]) && !isset($this->aliases[$name])) {
             throw new \RectorPrefix20210705\Symfony\Component\Console\Exception\CommandNotFoundException(\sprintf('Command "%s" does not exist.', $name));
@@ -91,7 +92,10 @@ class ApplicationDescription
             $this->namespaces[$namespace] = ['id' => $namespace, 'commands' => $names];
         }
     }
-    private function sortCommands(array $commands) : array
+    /**
+     * @param mixed[] $commands
+     */
+    private function sortCommands($commands) : array
     {
         $namespacedCommands = [];
         $globalCommands = [];

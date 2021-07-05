@@ -53,8 +53,10 @@ class HIncludeFragmentRenderer extends \RectorPrefix20210705\Symfony\Component\H
      *  * default:    The default content (it can be a template name or the content)
      *  * id:         An optional hx:include tag id attribute
      *  * attributes: An optional array of hx:include tag attributes
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param mixed[] $options
      */
-    public function render($uri, \RectorPrefix20210705\Symfony\Component\HttpFoundation\Request $request, array $options = [])
+    public function render($uri, $request, $options = [])
     {
         if ($uri instanceof \RectorPrefix20210705\Symfony\Component\HttpKernel\Controller\ControllerReference) {
             $uri = (new \RectorPrefix20210705\Symfony\Component\HttpKernel\Fragment\FragmentUriGenerator($this->fragmentPath, $this->signer))->generate($uri, $request);

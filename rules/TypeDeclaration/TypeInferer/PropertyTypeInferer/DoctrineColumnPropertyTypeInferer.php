@@ -78,7 +78,10 @@ final class DoctrineColumnPropertyTypeInferer implements \Rector\TypeDeclaration
             'year' => new \PHPStan\Type\ObjectType(self::DATE_TIME_INTERFACE),
         ];
     }
-    public function inferProperty(\PhpParser\Node\Stmt\Property $property) : ?\PHPStan\Type\Type
+    /**
+     * @param \PhpParser\Node\Stmt\Property $property
+     */
+    public function inferProperty($property) : ?\PHPStan\Type\Type
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
         $doctrineAnnotationTagValueNode = $phpDocInfo->findOneByAnnotationClass('Doctrine\\ORM\\Mapping\\Column');

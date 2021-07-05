@@ -31,8 +31,9 @@ class Esi extends \RectorPrefix20210705\Symfony\Component\HttpKernel\HttpCache\A
     }
     /**
      * {@inheritdoc}
+     * @param \Symfony\Component\HttpFoundation\Response $response
      */
-    public function addSurrogateControl(\RectorPrefix20210705\Symfony\Component\HttpFoundation\Response $response)
+    public function addSurrogateControl($response)
     {
         if (\false !== \strpos($response->getContent(), '<esi:include')) {
             $response->headers->set('Surrogate-Control', 'content="ESI/1.0"');
@@ -40,8 +41,12 @@ class Esi extends \RectorPrefix20210705\Symfony\Component\HttpKernel\HttpCache\A
     }
     /**
      * {@inheritdoc}
+     * @param string $uri
+     * @param string|null $alt
+     * @param bool $ignoreErrors
+     * @param string $comment
      */
-    public function renderIncludeTag(string $uri, string $alt = null, bool $ignoreErrors = \true, string $comment = '')
+    public function renderIncludeTag($uri, $alt = null, $ignoreErrors = \true, $comment = '')
     {
         $html = \sprintf('<esi:include src="%s"%s%s />', $uri, $ignoreErrors ? ' onerror="continue"' : '', $alt ? \sprintf(' alt="%s"', $alt) : '');
         if (!empty($comment)) {
@@ -51,8 +56,10 @@ class Esi extends \RectorPrefix20210705\Symfony\Component\HttpKernel\HttpCache\A
     }
     /**
      * {@inheritdoc}
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \Symfony\Component\HttpFoundation\Response $response
      */
-    public function process(\RectorPrefix20210705\Symfony\Component\HttpFoundation\Request $request, \RectorPrefix20210705\Symfony\Component\HttpFoundation\Response $response)
+    public function process($request, $response)
     {
         $type = $response->headers->get('Content-Type');
         if (empty($type)) {

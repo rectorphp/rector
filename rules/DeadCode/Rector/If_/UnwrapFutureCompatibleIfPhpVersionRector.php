@@ -56,10 +56,10 @@ CODE_SAMPLE
         return [\PhpParser\Node\Stmt\If_::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param If_ $node
      * @return Stmt[]|null
      */
-    public function refactor($node) : ?array
+    public function refactor(\PhpParser\Node $node) : ?array
     {
         if ($node->elseifs) {
             return null;

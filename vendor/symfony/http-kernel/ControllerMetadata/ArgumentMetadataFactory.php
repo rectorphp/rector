@@ -45,8 +45,10 @@ final class ArgumentMetadataFactory implements \RectorPrefix20210705\Symfony\Com
     }
     /**
      * Returns an associated type to the given parameter if available.
+     * @param \ReflectionParameter $parameter
+     * @param \ReflectionFunctionAbstract $function
      */
-    private function getType(\ReflectionParameter $parameter, \ReflectionFunctionAbstract $function) : ?string
+    private function getType($parameter, $function) : ?string
     {
         if (!($type = $parameter->getType())) {
             return null;

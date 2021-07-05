@@ -23,9 +23,9 @@ final class RemovePropertyExtensionNameRector extends \Rector\Core\Rector\Abstra
         return [\PhpParser\Node\Expr\PropertyFetch::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param PropertyFetch $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$this->isObjectType($node->var, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Extbase\\Mvc\\Controller\\AbstractController')) || !$this->isObjectType($node->var, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Extbase\\Mvc\\Controller\\ActionController'))) {
             return null;

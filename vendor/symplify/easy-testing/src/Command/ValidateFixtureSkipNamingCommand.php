@@ -32,7 +32,11 @@ final class ValidateFixtureSkipNamingCommand extends \RectorPrefix20210705\Sympl
         $this->addArgument(\RectorPrefix20210705\Symplify\EasyTesting\ValueObject\Option::SOURCE, \RectorPrefix20210705\Symfony\Component\Console\Input\InputArgument::REQUIRED | \RectorPrefix20210705\Symfony\Component\Console\Input\InputArgument::IS_ARRAY, 'Paths to analyse');
         $this->setDescription('Check that skipped fixture files (without `-----` separator) have a "skip" prefix');
     }
-    protected function execute(\RectorPrefix20210705\Symfony\Component\Console\Input\InputInterface $input, \RectorPrefix20210705\Symfony\Component\Console\Output\OutputInterface $output) : int
+    /**
+     * @param \Symfony\Component\Console\Input\InputInterface $input
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     */
+    protected function execute($input, $output) : int
     {
         $source = (array) $input->getArgument(\RectorPrefix20210705\Symplify\EasyTesting\ValueObject\Option::SOURCE);
         $fixtureFileInfos = $this->fixtureFinder->find($source);

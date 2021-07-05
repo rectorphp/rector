@@ -48,9 +48,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Stmt\Switch_::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param Switch_ $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $defaultCases = [];
         foreach ($node->cases as $case) {

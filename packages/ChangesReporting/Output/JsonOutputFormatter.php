@@ -26,7 +26,11 @@ final class JsonOutputFormatter implements \Rector\ChangesReporting\Contract\Out
     {
         return self::NAME;
     }
-    public function report(\Rector\Core\ValueObject\ProcessResult $processResult, \Rector\Core\ValueObject\Configuration $configuration) : void
+    /**
+     * @param \Rector\Core\ValueObject\ProcessResult $processResult
+     * @param \Rector\Core\ValueObject\Configuration $configuration
+     */
+    public function report($processResult, $configuration) : void
     {
         $errorsArray = ['meta' => ['config' => $configuration->getMainConfigFilePath()], 'totals' => ['changed_files' => \count($processResult->getFileDiffs()), 'removed_and_added_files_count' => $processResult->getRemovedAndAddedFilesCount(), 'removed_node_count' => $processResult->getRemovedNodeCount()]];
         $fileDiffs = $processResult->getFileDiffs();
@@ -51,7 +55,7 @@ final class JsonOutputFormatter implements \Rector\ChangesReporting\Contract\Out
      * @param mixed[] $errors
      * @return mixed[]
      */
-    private function createErrorsData(array $errors) : array
+    private function createErrorsData($errors) : array
     {
         $errorsData = [];
         foreach ($errors as $error) {

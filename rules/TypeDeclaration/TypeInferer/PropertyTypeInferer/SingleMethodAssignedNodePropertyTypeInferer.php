@@ -43,7 +43,10 @@ final class SingleMethodAssignedNodePropertyTypeInferer implements \Rector\TypeD
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->betterNodeFinder = $betterNodeFinder;
     }
-    public function inferProperty(\PhpParser\Node\Stmt\Property $property) : ?\PHPStan\Type\Type
+    /**
+     * @param \PhpParser\Node\Stmt\Property $property
+     */
+    public function inferProperty($property) : ?\PHPStan\Type\Type
     {
         $classLike = $this->betterNodeFinder->findParentType($property, \PhpParser\Node\Stmt\ClassLike::class);
         if (!$classLike instanceof \PhpParser\Node\Stmt\Class_) {
@@ -64,7 +67,11 @@ final class SingleMethodAssignedNodePropertyTypeInferer implements \Rector\TypeD
     {
         return 750;
     }
-    private function resolveAssignedNodeToProperty(\PhpParser\Node\Stmt\ClassMethod $classMethod, string $propertyName) : ?\PhpParser\Node\Expr
+    /**
+     * @param \PhpParser\Node\Stmt\ClassMethod $classMethod
+     * @param string $propertyName
+     */
+    private function resolveAssignedNodeToProperty($classMethod, $propertyName) : ?\PhpParser\Node\Expr
     {
         $assignedNode = null;
         $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $classMethod->stmts, function (\PhpParser\Node $node) use($propertyName, &$assignedNode) : ?int {

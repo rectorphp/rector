@@ -43,7 +43,7 @@ final class SubstituteConstantsModeAndRequestTypeRector extends \Rector\Core\Rec
     /**
      * @param ConstFetch|FuncCall $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $fileInfo = $this->file->getSmartFileInfo();
         if ($node instanceof \PhpParser\Node\Expr\FuncCall && $this->isName($node, 'defined')) {

@@ -27,7 +27,7 @@ final class CheckForExtensionVersionRector extends \Rector\Core\Rector\AbstractR
     /**
      * @param MethodCall|StaticCall $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$this->isExtensionManagementUtilityIsLoaded($node) && !$this->isPackageManagerIsActivePackage($node)) {
             return null;

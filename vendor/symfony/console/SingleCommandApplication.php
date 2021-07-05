@@ -23,8 +23,9 @@ class SingleCommandApplication extends \RectorPrefix20210705\Symfony\Component\C
     private $running = \false;
     /**
      * @return $this
+     * @param string $version
      */
-    public function setVersion(string $version)
+    public function setVersion($version)
     {
         $this->version = $version;
         return $this;
@@ -32,8 +33,9 @@ class SingleCommandApplication extends \RectorPrefix20210705\Symfony\Component\C
     /**
      * @final
      * @return $this
+     * @param bool $autoExit
      */
-    public function setAutoExit(bool $autoExit)
+    public function setAutoExit($autoExit)
     {
         $this->autoExit = $autoExit;
         return $this;

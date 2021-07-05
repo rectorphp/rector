@@ -69,7 +69,7 @@ CODE_SAMPLE
     /**
      * @param ClassMethod|StaticCall $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($node instanceof \PhpParser\Node\Stmt\ClassMethod) {
             if (!$node->isPrivate()) {

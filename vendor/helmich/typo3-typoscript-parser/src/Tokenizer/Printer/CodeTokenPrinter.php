@@ -10,7 +10,7 @@ class CodeTokenPrinter implements \RectorPrefix20210705\Helmich\TypoScriptParser
      * @param TokenInterface[] $tokens
      * @return string
      */
-    public function printTokenStream(array $tokens) : string
+    public function printTokenStream($tokens) : string
     {
         $content = '';
         foreach ($tokens as $token) {

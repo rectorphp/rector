@@ -100,19 +100,34 @@ BODY
     {
         $this->require[] = $class;
     }
-    public function addUse(string $class) : void
+    /**
+     * @param string $class
+     */
+    public function addUse($class) : void
     {
         $this->use[$class] = \true;
     }
-    public function addImplements(string $interface) : void
+    /**
+     * @param string $interface
+     */
+    public function addImplements($interface) : void
     {
         $this->implements[] = '\\' . \ltrim($interface, '\\');
     }
-    public function addMethod(string $name, string $body, array $params = []) : void
+    /**
+     * @param string $name
+     * @param string $body
+     * @param mixed[] $params
+     */
+    public function addMethod($name, $body, $params = []) : void
     {
         $this->methods[] = new \RectorPrefix20210705\Symfony\Component\Config\Builder\Method(\strtr($body, ['NAME' => $this->camelCase($name)] + $params));
     }
-    public function addProperty(string $name, string $classType = null) : \RectorPrefix20210705\Symfony\Component\Config\Builder\Property
+    /**
+     * @param string $name
+     * @param string|null $classType
+     */
+    public function addProperty($name, $classType = null) : \RectorPrefix20210705\Symfony\Component\Config\Builder\Property
     {
         $property = new \RectorPrefix20210705\Symfony\Component\Config\Builder\Property($name, $this->camelCase($name));
         if (null !== $classType) {
@@ -126,7 +141,10 @@ BODY
     {
         return $this->properties;
     }
-    private function camelCase(string $input) : string
+    /**
+     * @param string $input
+     */
+    private function camelCase($input) : string
     {
         $output = \lcfirst(\str_replace(' ', '', \ucwords(\str_replace('_', ' ', $input))));
         return \preg_replace('#\\W#', '', $output);

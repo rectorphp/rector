@@ -34,7 +34,7 @@ abstract class AbstractSymplifyKernel extends \RectorPrefix20210705\Symfony\Comp
     /**
      * @param string[]|SmartFileInfo[] $configs
      */
-    public function setConfigs(array $configs) : void
+    public function setConfigs($configs) : void
     {
         foreach ($configs as $config) {
             if ($config instanceof \Symplify\SmartFileSystem\SmartFileInfo) {
@@ -43,7 +43,10 @@ abstract class AbstractSymplifyKernel extends \RectorPrefix20210705\Symfony\Comp
             $this->configs[] = $config;
         }
     }
-    public function registerContainerConfiguration(\RectorPrefix20210705\Symfony\Component\Config\Loader\LoaderInterface $loader) : void
+    /**
+     * @param \Symfony\Component\Config\Loader\LoaderInterface $loader
+     */
+    public function registerContainerConfiguration($loader) : void
     {
         foreach ($this->configs as $config) {
             $loader->load($config);

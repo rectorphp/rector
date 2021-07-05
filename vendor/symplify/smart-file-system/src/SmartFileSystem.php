@@ -18,8 +18,9 @@ final class SmartFileSystem extends \RectorPrefix20210705\Symfony\Component\File
     private const BEFORE_COLLON_REGEX = '#^\\w+\\(.*?\\): #';
     /**
      * @see https://github.com/symfony/filesystem/pull/4/files
+     * @param string $filename
      */
-    public function readFile(string $filename) : string
+    public function readFile($filename) : string
     {
         $source = @\file_get_contents($filename);
         if (!$source) {
@@ -28,7 +29,10 @@ final class SmartFileSystem extends \RectorPrefix20210705\Symfony\Component\File
         }
         return $source;
     }
-    public function readFileToSmartFileInfo(string $filename) : \Symplify\SmartFileSystem\SmartFileInfo
+    /**
+     * @param string $filename
+     */
+    public function readFileToSmartFileInfo($filename) : \Symplify\SmartFileSystem\SmartFileInfo
     {
         return new \Symplify\SmartFileSystem\SmartFileInfo($filename);
     }
@@ -36,8 +40,9 @@ final class SmartFileSystem extends \RectorPrefix20210705\Symfony\Component\File
      * Converts given HTML code to plain text
      *
      * @source https://github.com/nette/utils/blob/e7bd59f1dd860d25dbbb1ac720dddd0fa1388f4c/src/Utils/Html.php#L325-L331
+     * @param string $html
      */
-    public function htmlToText(string $html) : string
+    public function htmlToText($html) : string
     {
         $content = \strip_tags($html);
         return \html_entity_decode($content, \ENT_QUOTES | \ENT_HTML5, 'UTF-8');
@@ -46,7 +51,7 @@ final class SmartFileSystem extends \RectorPrefix20210705\Symfony\Component\File
      * @param SmartFileInfo[] $fileInfos
      * @return string[]
      */
-    public function resolveFilePathsFromFileInfos(array $fileInfos) : array
+    public function resolveFilePathsFromFileInfos($fileInfos) : array
     {
         $filePaths = [];
         foreach ($fileInfos as $fileInfo) {

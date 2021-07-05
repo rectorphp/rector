@@ -39,8 +39,10 @@ class ByteString extends \RectorPrefix20210705\Symfony\Component\String\Abstract
      */
     /**
      * @return $this
+     * @param int $length
+     * @param string|null $alphabet
      */
-    public static function fromRandom(int $length = 16, string $alphabet = null)
+    public static function fromRandom($length = 16, $alphabet = null)
     {
         if ($length <= 0) {
             throw new \RectorPrefix20210705\Symfony\Component\String\Exception\InvalidArgumentException(\sprintf('A strictly positive length is expected, "%d" given.', $length));
@@ -78,12 +80,18 @@ class ByteString extends \RectorPrefix20210705\Symfony\Component\String\Abstract
         }
         return new static($ret);
     }
-    public function bytesAt(int $offset) : array
+    /**
+     * @param int $offset
+     */
+    public function bytesAt($offset) : array
     {
         $str = $this->string[$offset] ?? '';
         return '' === $str ? [] : [\ord($str)];
     }
-    public function append(string ...$suffix)
+    /**
+     * @param string ...$suffix
+     */
+    public function append(...$suffix)
     {
         $str = clone $this;
         $str->string .= 1 >= \count($suffix) ? $suffix[0] ?? '' : \implode('', $suffix);
@@ -95,7 +103,10 @@ class ByteString extends \RectorPrefix20210705\Symfony\Component\String\Abstract
         $str->string = \lcfirst(\str_replace(' ', '', \ucwords(\preg_replace('/[^a-zA-Z0-9\\x7f-\\xff]++/', ' ', $this->string))));
         return $str;
     }
-    public function chunk(int $length = 1) : array
+    /**
+     * @param int $length
+     */
+    public function chunk($length = 1) : array
     {
         if (1 > $length) {
             throw new \RectorPrefix20210705\Symfony\Component\String\Exception\InvalidArgumentException('The chunk length must be greater than zero.');
@@ -142,7 +153,10 @@ class ByteString extends \RectorPrefix20210705\Symfony\Component\String\Abstract
         $str->string = \strtolower($str->string);
         return $str;
     }
-    public function indexOf($needle, int $offset = 0) : ?int
+    /**
+     * @param int $offset
+     */
+    public function indexOf($needle, $offset = 0) : ?int
     {
         if ($needle instanceof parent) {
             $needle = $needle->string;
@@ -157,7 +171,10 @@ class ByteString extends \RectorPrefix20210705\Symfony\Component\String\Abstract
         $i = $this->ignoreCase ? \stripos($this->string, $needle, $offset) : \strpos($this->string, $needle, $offset);
         return \false === $i ? null : $i;
     }
-    public function indexOfLast($needle, int $offset = 0) : ?int
+    /**
+     * @param int $offset
+     */
+    public function indexOfLast($needle, $offset = 0) : ?int
     {
         if ($needle instanceof parent) {
             $needle = $needle->string;
@@ -176,7 +193,11 @@ class ByteString extends \RectorPrefix20210705\Symfony\Component\String\Abstract
     {
         return '' === $this->string || \preg_match('//u', $this->string);
     }
-    public function join(array $strings, string $lastGlue = null)
+    /**
+     * @param mixed[] $strings
+     * @param string|null $lastGlue
+     */
+    public function join($strings, $lastGlue = null)
     {
         $str = clone $this;
         $tail = null !== $lastGlue && 1 < \count($strings) ? $lastGlue . \array_pop($strings) : '';
@@ -193,7 +214,12 @@ class ByteString extends \RectorPrefix20210705\Symfony\Component\String\Abstract
         $str->string = \strtolower($str->string);
         return $str;
     }
-    public function match(string $regexp, int $flags = 0, int $offset = 0) : array
+    /**
+     * @param string $regexp
+     * @param int $flags
+     * @param int $offset
+     */
+    public function match($regexp, $flags = 0, $offset = 0) : array
     {
         $match = (\PREG_PATTERN_ORDER | \PREG_SET_ORDER) & $flags ? 'preg_match_all' : 'preg_match';
         if ($this->ignoreCase) {
@@ -222,25 +248,40 @@ class ByteString extends \RectorPrefix20210705\Symfony\Component\String\Abstract
         }
         return $matches;
     }
-    public function padBoth(int $length, string $padStr = ' ')
+    /**
+     * @param int $length
+     * @param string $padStr
+     */
+    public function padBoth($length, $padStr = ' ')
     {
         $str = clone $this;
         $str->string = \str_pad($this->string, $length, $padStr, \STR_PAD_BOTH);
         return $str;
     }
-    public function padEnd(int $length, string $padStr = ' ')
+    /**
+     * @param int $length
+     * @param string $padStr
+     */
+    public function padEnd($length, $padStr = ' ')
     {
         $str = clone $this;
         $str->string = \str_pad($this->string, $length, $padStr, \STR_PAD_RIGHT);
         return $str;
     }
-    public function padStart(int $length, string $padStr = ' ')
+    /**
+     * @param int $length
+     * @param string $padStr
+     */
+    public function padStart($length, $padStr = ' ')
     {
         $str = clone $this;
         $str->string = \str_pad($this->string, $length, $padStr, \STR_PAD_LEFT);
         return $str;
     }
-    public function prepend(string ...$prefix)
+    /**
+     * @param string ...$prefix
+     */
+    public function prepend(...$prefix)
     {
         $str = clone $this;
         $str->string = (1 >= \count($prefix) ? $prefix[0] ?? '' : \implode('', $prefix)) . $str->string;
@@ -248,8 +289,9 @@ class ByteString extends \RectorPrefix20210705\Symfony\Component\String\Abstract
     }
     /**
      * @param string $from
+     * @param string $to
      */
-    public function replace($from, string $to)
+    public function replace($from, $to)
     {
         $str = clone $this;
         if ('' !== $from) {
@@ -257,7 +299,10 @@ class ByteString extends \RectorPrefix20210705\Symfony\Component\String\Abstract
         }
         return $str;
     }
-    public function replaceMatches(string $fromRegexp, $to)
+    /**
+     * @param string $fromRegexp
+     */
+    public function replaceMatches($fromRegexp, $to)
     {
         if ($this->ignoreCase) {
             $fromRegexp .= 'i';
@@ -296,7 +341,11 @@ class ByteString extends \RectorPrefix20210705\Symfony\Component\String\Abstract
         $str->string = \strrev($str->string);
         return $str;
     }
-    public function slice(int $start = 0, int $length = null)
+    /**
+     * @param int $start
+     * @param int|null $length
+     */
+    public function slice($start = 0, $length = null)
     {
         $str = clone $this;
         $str->string = (string) \substr($this->string, $start, $length ?? \PHP_INT_MAX);
@@ -308,13 +357,23 @@ class ByteString extends \RectorPrefix20210705\Symfony\Component\String\Abstract
         $str->string = \strtolower(\preg_replace(['/([A-Z]+)([A-Z][a-z])/', '/([a-z\\d])([A-Z])/'], 'RectorPrefix20210705\\1_\\2', $str->string));
         return $str;
     }
-    public function splice(string $replacement, int $start = 0, int $length = null)
+    /**
+     * @param string $replacement
+     * @param int $start
+     * @param int|null $length
+     */
+    public function splice($replacement, $start = 0, $length = null)
     {
         $str = clone $this;
         $str->string = \substr_replace($this->string, $replacement, $start, $length ?? \PHP_INT_MAX);
         return $str;
     }
-    public function split(string $delimiter, int $limit = null, int $flags = null) : array
+    /**
+     * @param string $delimiter
+     * @param int|null $limit
+     * @param int|null $flags
+     */
+    public function split($delimiter, $limit = null, $flags = null) : array
     {
         if (1 > ($limit = $limit ?? \PHP_INT_MAX)) {
             throw new \RectorPrefix20210705\Symfony\Component\String\Exception\InvalidArgumentException('Split limit must be a positive integer.');
@@ -342,17 +401,26 @@ class ByteString extends \RectorPrefix20210705\Symfony\Component\String\Abstract
         }
         return '' !== $prefix && 0 === ($this->ignoreCase ? \strncasecmp($this->string, $prefix, \strlen($prefix)) : \strncmp($this->string, $prefix, \strlen($prefix)));
     }
-    public function title(bool $allWords = \false)
+    /**
+     * @param bool $allWords
+     */
+    public function title($allWords = \false)
     {
         $str = clone $this;
         $str->string = $allWords ? \ucwords($str->string) : \ucfirst($str->string);
         return $str;
     }
-    public function toUnicodeString(string $fromEncoding = null) : \RectorPrefix20210705\Symfony\Component\String\UnicodeString
+    /**
+     * @param string|null $fromEncoding
+     */
+    public function toUnicodeString($fromEncoding = null) : \RectorPrefix20210705\Symfony\Component\String\UnicodeString
     {
         return new \RectorPrefix20210705\Symfony\Component\String\UnicodeString($this->toCodePointString($fromEncoding)->string);
     }
-    public function toCodePointString(string $fromEncoding = null) : \RectorPrefix20210705\Symfony\Component\String\CodePointString
+    /**
+     * @param string|null $fromEncoding
+     */
+    public function toCodePointString($fromEncoding = null) : \RectorPrefix20210705\Symfony\Component\String\CodePointString
     {
         $u = new \RectorPrefix20210705\Symfony\Component\String\CodePointString();
         if (\in_array($fromEncoding, [null, 'utf8', 'utf-8', 'UTF8', 'UTF-8'], \true) && \preg_match('//u', $this->string)) {
@@ -381,19 +449,28 @@ class ByteString extends \RectorPrefix20210705\Symfony\Component\String\Abstract
         $u->string = \mb_convert_encoding($this->string, 'UTF-8', $fromEncoding ?? 'Windows-1252');
         return $u;
     }
-    public function trim(string $chars = " \t\n\r\0\v\f")
+    /**
+     * @param string $chars
+     */
+    public function trim($chars = " \t\n\r\0\v\f")
     {
         $str = clone $this;
         $str->string = \trim($str->string, $chars);
         return $str;
     }
-    public function trimEnd(string $chars = " \t\n\r\0\v\f")
+    /**
+     * @param string $chars
+     */
+    public function trimEnd($chars = " \t\n\r\0\v\f")
     {
         $str = clone $this;
         $str->string = \rtrim($str->string, $chars);
         return $str;
     }
-    public function trimStart(string $chars = " \t\n\r\0\v\f")
+    /**
+     * @param string $chars
+     */
+    public function trimStart($chars = " \t\n\r\0\v\f")
     {
         $str = clone $this;
         $str->string = \ltrim($str->string, $chars);
@@ -405,7 +482,10 @@ class ByteString extends \RectorPrefix20210705\Symfony\Component\String\Abstract
         $str->string = \strtoupper($str->string);
         return $str;
     }
-    public function width(bool $ignoreAnsiDecoration = \true) : int
+    /**
+     * @param bool $ignoreAnsiDecoration
+     */
+    public function width($ignoreAnsiDecoration = \true) : int
     {
         $string = \preg_match('//u', $this->string) ? $this->string : \preg_replace('/[\\x80-\\xFF]/', '?', $this->string);
         return (new \RectorPrefix20210705\Symfony\Component\String\CodePointString($string))->width($ignoreAnsiDecoration);

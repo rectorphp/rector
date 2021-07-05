@@ -11,7 +11,10 @@ final class CompatVersionConditionMatcher implements \Ssch\TYPO3Rector\Contract\
      * @var string
      */
     private const TYPE = 'compatVersion';
-    public function change(string $condition) : ?string
+    /**
+     * @param string $condition
+     */
+    public function change($condition) : ?string
     {
         \preg_match('#' . self::TYPE . self::ZERO_ONE_OR_MORE_WHITESPACES . '=' . self::ZERO_ONE_OR_MORE_WHITESPACES . '(?<value>.*)$#iUm', $condition, $matches);
         if (!\is_string($matches['value'])) {
@@ -19,7 +22,10 @@ final class CompatVersionConditionMatcher implements \Ssch\TYPO3Rector\Contract\
         }
         return \sprintf('compatVersion("%s")', \trim($matches['value']));
     }
-    public function shouldApply(string $condition) : bool
+    /**
+     * @param string $condition
+     */
+    public function shouldApply($condition) : bool
     {
         return \RectorPrefix20210705\Nette\Utils\Strings::startsWith($condition, self::TYPE);
     }

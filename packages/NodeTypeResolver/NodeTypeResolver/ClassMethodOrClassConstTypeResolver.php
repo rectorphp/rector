@@ -22,8 +22,9 @@ final class ClassMethodOrClassConstTypeResolver implements \Rector\NodeTypeResol
     private $nodeTypeResolver;
     /**
      * @required
+     * @param \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver
      */
-    public function autowireClassMethodOrClassConstTypeResolver(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver) : void
+    public function autowireClassMethodOrClassConstTypeResolver($nodeTypeResolver) : void
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
@@ -37,7 +38,7 @@ final class ClassMethodOrClassConstTypeResolver implements \Rector\NodeTypeResol
     /**
      * @param ClassMethod|ClassConst $node
      */
-    public function resolve(\PhpParser\Node $node) : \PHPStan\Type\Type
+    public function resolve($node) : \PHPStan\Type\Type
     {
         $classLike = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
         if (!$classLike instanceof \PhpParser\Node\Stmt\ClassLike) {

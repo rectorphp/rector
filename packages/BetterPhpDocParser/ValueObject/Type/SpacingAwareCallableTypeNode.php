@@ -38,7 +38,11 @@ final class SpacingAwareCallableTypeNode extends \PHPStan\PhpDocParser\Ast\Type\
         $parameterTypeString = \implode(', ', $parameterTypeStrings);
         return \trim($parameterTypeString);
     }
-    private function normalizeParameterType(string $parameterTypeString, string $returnTypeAsString) : string
+    /**
+     * @param string $parameterTypeString
+     * @param string $returnTypeAsString
+     */
+    private function normalizeParameterType($parameterTypeString, $returnTypeAsString) : string
     {
         if ($parameterTypeString !== '') {
             return '(' . $parameterTypeString . ')';
@@ -51,7 +55,11 @@ final class SpacingAwareCallableTypeNode extends \PHPStan\PhpDocParser\Ast\Type\
         }
         return '()';
     }
-    private function normalizeReturnType(string $parameterTypeString, string $returnTypeAsString) : string
+    /**
+     * @param string $parameterTypeString
+     * @param string $returnTypeAsString
+     */
+    private function normalizeReturnType($parameterTypeString, $returnTypeAsString) : string
     {
         if ($returnTypeAsString !== 'mixed') {
             return ':' . $returnTypeAsString;

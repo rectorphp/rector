@@ -28,7 +28,10 @@ interface TokenInterface
     const TYPE_EMPTY_LINE = 'NOP';
     public function getType() : string;
     public function getValue() : string;
-    public function getSubMatch(string $name) : ?string;
+    /**
+     * @param string $name
+     */
+    public function getSubMatch($name) : ?string;
     public function getLine() : int;
     public function getColumn() : int;
 }

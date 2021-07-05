@@ -90,7 +90,10 @@ final class SourceContextProvider implements \RectorPrefix20210705\Symfony\Compo
         }
         return $context;
     }
-    private function htmlEncode(string $s) : string
+    /**
+     * @param string $s
+     */
+    private function htmlEncode($s) : string
     {
         $html = '';
         $dumper = new \RectorPrefix20210705\Symfony\Component\VarDumper\Dumper\HtmlDumper(function ($line) use(&$html) {

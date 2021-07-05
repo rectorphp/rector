@@ -14,12 +14,19 @@ use RectorPrefix20210705\Symfony\Component\Yaml\Yaml;
  */
 final class YamlFileFormatter implements \Rector\FileFormatter\Contract\Formatter\FileFormatterInterface
 {
-    public function supports(\Rector\Core\ValueObject\Application\File $file) : bool
+    /**
+     * @param \Rector\Core\ValueObject\Application\File $file
+     */
+    public function supports($file) : bool
     {
         $smartFileInfo = $file->getSmartFileInfo();
         return \in_array($smartFileInfo->getExtension(), ['yaml', 'yml'], \true);
     }
-    public function format(\Rector\Core\ValueObject\Application\File $file, \Rector\FileFormatter\ValueObject\EditorConfigConfiguration $editorConfigConfiguration) : void
+    /**
+     * @param \Rector\Core\ValueObject\Application\File $file
+     * @param \Rector\FileFormatter\ValueObject\EditorConfigConfiguration $editorConfigConfiguration
+     */
+    public function format($file, $editorConfigConfiguration) : void
     {
         $yaml = \RectorPrefix20210705\Symfony\Component\Yaml\Yaml::parse($file->getFileContent());
         $newFileContent = \RectorPrefix20210705\Symfony\Component\Yaml\Yaml::dump($yaml, 99, $editorConfigConfiguration->getIndentSize());

@@ -17,7 +17,10 @@ namespace RectorPrefix20210705\Symfony\Component\HttpKernel\CacheWarmer;
  */
 abstract class CacheWarmer implements \RectorPrefix20210705\Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerInterface
 {
-    protected function writeCacheFile(string $file, $content)
+    /**
+     * @param string $file
+     */
+    protected function writeCacheFile($file, $content)
     {
         $tmpFile = @\tempnam(\dirname($file), \basename($file));
         if (\false !== @\file_put_contents($tmpFile, $content) && @\rename($tmpFile, $file)) {

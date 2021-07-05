@@ -29,8 +29,10 @@ class LazyLoadingFragmentHandler extends \RectorPrefix20210705\Symfony\Component
     }
     /**
      * {@inheritdoc}
+     * @param string $renderer
+     * @param mixed[] $options
      */
-    public function render($uri, string $renderer = 'inline', array $options = [])
+    public function render($uri, $renderer = 'inline', $options = [])
     {
         if (!isset($this->initialized[$renderer]) && $this->container->has($renderer)) {
             $this->addRenderer($this->container->get($renderer));

@@ -26,8 +26,9 @@ class ParserState
     }
     /**
      * @return $this
+     * @param \Helmich\TypoScriptParser\Parser\AST\ObjectPath $context
      */
-    public function withContext(\RectorPrefix20210705\Helmich\TypoScriptParser\Parser\AST\ObjectPath $context)
+    public function withContext($context)
     {
         $clone = clone $this;
         $clone->context = $context;
@@ -35,8 +36,9 @@ class ParserState
     }
     /**
      * @return $this
+     * @param \ArrayObject $statements
      */
-    public function withStatements(\ArrayObject $statements)
+    public function withStatements($statements)
     {
         $clone = clone $this;
         $clone->statements = $statements;
@@ -46,7 +48,7 @@ class ParserState
      * @param int $lookAhead
      * @return TokenInterface
      */
-    public function token(int $lookAhead = 0) : \RectorPrefix20210705\Helmich\TypoScriptParser\Tokenizer\TokenInterface
+    public function token($lookAhead = 0) : \RectorPrefix20210705\Helmich\TypoScriptParser\Tokenizer\TokenInterface
     {
         return $this->tokens->current($lookAhead);
     }
@@ -54,7 +56,7 @@ class ParserState
      * @param int $increment
      * @return void
      */
-    public function next(int $increment = 1) : void
+    public function next($increment = 1) : void
     {
         $this->tokens->next($increment);
     }

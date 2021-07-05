@@ -47,10 +47,7 @@ TYPO3:
 CODE_SAMPLE
 )]);
     }
-    /**
-     * @param mixed[] $yaml
-     */
-    public function refactor($yaml) : array
+    public function refactor(array $yaml) : array
     {
         return $this->refactorTranslationFile($yaml);
     }

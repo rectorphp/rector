@@ -44,8 +44,9 @@ class FragmentHandler
     }
     /**
      * Adds a renderer.
+     * @param \Symfony\Component\HttpKernel\Fragment\FragmentRendererInterface $renderer
      */
-    public function addRenderer(\RectorPrefix20210705\Symfony\Component\HttpKernel\Fragment\FragmentRendererInterface $renderer)
+    public function addRenderer($renderer)
     {
         $this->renderers[$renderer->getName()] = $renderer;
     }
@@ -62,8 +63,10 @@ class FragmentHandler
      *
      * @throws \InvalidArgumentException when the renderer does not exist
      * @throws \LogicException           when no main request is being handled
+     * @param string $renderer
+     * @param mixed[] $options
      */
-    public function render($uri, string $renderer = 'inline', array $options = [])
+    public function render($uri, $renderer = 'inline', $options = [])
     {
         if (!isset($options['ignore_errors'])) {
             $options['ignore_errors'] = !$this->debug;
@@ -85,8 +88,9 @@ class FragmentHandler
      * @return string|null The Response content or null when the Response is streamed
      *
      * @throws \RuntimeException when the Response is not successful
+     * @param \Symfony\Component\HttpFoundation\Response $response
      */
-    protected function deliver(\RectorPrefix20210705\Symfony\Component\HttpFoundation\Response $response)
+    protected function deliver($response)
     {
         if (!$response->isSuccessful()) {
             $responseStatusCode = $response->getStatusCode();

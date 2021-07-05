@@ -37,8 +37,9 @@ class ResponseCacheStrategy implements \RectorPrefix20210705\Symfony\Component\H
     private $ageDirectives = ['max-age' => null, 's-maxage' => null, 'expires' => null];
     /**
      * {@inheritdoc}
+     * @param \Symfony\Component\HttpFoundation\Response $response
      */
-    public function add(\RectorPrefix20210705\Symfony\Component\HttpFoundation\Response $response)
+    public function add($response)
     {
         ++$this->embeddedResponses;
         foreach (self::OVERRIDE_DIRECTIVES as $directive) {
@@ -68,8 +69,9 @@ class ResponseCacheStrategy implements \RectorPrefix20210705\Symfony\Component\H
     }
     /**
      * {@inheritdoc}
+     * @param \Symfony\Component\HttpFoundation\Response $response
      */
-    public function update(\RectorPrefix20210705\Symfony\Component\HttpFoundation\Response $response)
+    public function update($response)
     {
         // if we have no embedded Response, do nothing
         if (0 === $this->embeddedResponses) {
@@ -116,8 +118,9 @@ class ResponseCacheStrategy implements \RectorPrefix20210705\Symfony\Component\H
      * RFC2616, Section 13.4.
      *
      * @see https://www.w3.org/Protocols/rfc2616/rfc2616-sec13.html#sec13.4
+     * @param \Symfony\Component\HttpFoundation\Response $response
      */
-    private function willMakeFinalResponseUncacheable(\RectorPrefix20210705\Symfony\Component\HttpFoundation\Response $response) : bool
+    private function willMakeFinalResponseUncacheable($response) : bool
     {
         // RFC2616: A response received with a status code of 200, 203, 300, 301 or 410
         // MAY be stored by a cache […] unless a cache-control directive prohibits caching.
@@ -160,8 +163,12 @@ class ResponseCacheStrategy implements \RectorPrefix20210705\Symfony\Component\H
      * If the isHeuristicallyCacheable parameter is true, however, the current response has been marked
      * as cacheable in a public (shared) cache, but did not provide an explicit lifetime that would serve
      * as an upper bound. In this case, we can proceed and possibly keep the directive on the final response.
+     * @param string $directive
+     * @param int|null $value
+     * @param int $age
+     * @param bool $isHeuristicallyCacheable
      */
-    private function storeRelativeAgeDirective(string $directive, ?int $value, int $age, bool $isHeuristicallyCacheable)
+    private function storeRelativeAgeDirective($directive, $value, $age, $isHeuristicallyCacheable)
     {
         if (null === $value) {
             if ($isHeuristicallyCacheable) {

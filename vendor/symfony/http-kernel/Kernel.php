@@ -118,8 +118,9 @@ abstract class Kernel implements \RectorPrefix20210705\Symfony\Component\HttpKer
     }
     /**
      * {@inheritdoc}
+     * @param string|null $warmupDir
      */
-    public function reboot(?string $warmupDir)
+    public function reboot($warmupDir)
     {
         $this->shutdown();
         $this->warmupDir = $warmupDir;
@@ -127,8 +128,10 @@ abstract class Kernel implements \RectorPrefix20210705\Symfony\Component\HttpKer
     }
     /**
      * {@inheritdoc}
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \Symfony\Component\HttpFoundation\Response $response
      */
-    public function terminate(\RectorPrefix20210705\Symfony\Component\HttpFoundation\Request $request, \RectorPrefix20210705\Symfony\Component\HttpFoundation\Response $response)
+    public function terminate($request, $response)
     {
         if (\false === $this->booted) {
             return;
@@ -156,8 +159,11 @@ abstract class Kernel implements \RectorPrefix20210705\Symfony\Component\HttpKer
     }
     /**
      * {@inheritdoc}
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param int $type
+     * @param bool $catch
      */
-    public function handle(\RectorPrefix20210705\Symfony\Component\HttpFoundation\Request $request, int $type = \RectorPrefix20210705\Symfony\Component\HttpKernel\HttpKernelInterface::MAIN_REQUEST, bool $catch = \true)
+    public function handle($request, $type = \RectorPrefix20210705\Symfony\Component\HttpKernel\HttpKernelInterface::MAIN_REQUEST, $catch = \true)
     {
         if (!$this->booted) {
             $container = $this->container ?? $this->preBoot();
@@ -192,8 +198,9 @@ abstract class Kernel implements \RectorPrefix20210705\Symfony\Component\HttpKer
     }
     /**
      * {@inheritdoc}
+     * @param string $name
      */
-    public function getBundle(string $name)
+    public function getBundle($name)
     {
         if (!isset($this->bundles[$name])) {
             throw new \InvalidArgumentException(\sprintf('Bundle "%s" does not exist or it is not enabled. Maybe you forgot to add it in the "registerBundles()" method of your "%s.php" file?', $name, \get_debug_type($this)));
@@ -202,8 +209,9 @@ abstract class Kernel implements \RectorPrefix20210705\Symfony\Component\HttpKer
     }
     /**
      * {@inheritdoc}
+     * @param string $name
      */
-    public function locateResource(string $name)
+    public function locateResource($name)
     {
         if ('@' !== $name[0]) {
             throw new \InvalidArgumentException(\sprintf('A resource name must start with @ ("%s" given).', $name));
@@ -271,8 +279,9 @@ abstract class Kernel implements \RectorPrefix20210705\Symfony\Component\HttpKer
     }
     /**
      * @internal
+     * @param mixed[] $annotatedClasses
      */
-    public function setAnnotatedClassCache(array $annotatedClasses)
+    public function setAnnotatedClassCache($annotatedClasses)
     {
         \file_put_contents(($this->warmupDir ?: $this->getBuildDir()) . '/annotations.map', \sprintf('<?php return %s;', \var_export($annotatedClasses, \true)));
     }
@@ -340,8 +349,9 @@ abstract class Kernel implements \RectorPrefix20210705\Symfony\Component\HttpKer
      * The extension point similar to the Bundle::build() method.
      *
      * Use this method to register compiler passes and manipulate the container during the building process.
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      */
-    protected function build(\RectorPrefix20210705\Symfony\Component\DependencyInjection\ContainerBuilder $container)
+    protected function build($container)
     {
     }
     /**
@@ -541,8 +551,9 @@ abstract class Kernel implements \RectorPrefix20210705\Symfony\Component\HttpKer
     }
     /**
      * Prepares the ContainerBuilder before it is compiled.
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      */
-    protected function prepareContainer(\RectorPrefix20210705\Symfony\Component\DependencyInjection\ContainerBuilder $container)
+    protected function prepareContainer($container)
     {
         $extensions = [];
         foreach ($this->bundles as $bundle) {
@@ -588,8 +599,10 @@ abstract class Kernel implements \RectorPrefix20210705\Symfony\Component\HttpKer
      *
      * @param string $class     The name of the class to generate
      * @param string $baseClass The name of the container's base class
+     * @param \Symfony\Component\Config\ConfigCache $cache
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      */
-    protected function dumpContainer(\RectorPrefix20210705\Symfony\Component\Config\ConfigCache $cache, \RectorPrefix20210705\Symfony\Component\DependencyInjection\ContainerBuilder $container, string $class, string $baseClass)
+    protected function dumpContainer($cache, $container, $class, $baseClass)
     {
         // cache the container
         $dumper = new \RectorPrefix20210705\Symfony\Component\DependencyInjection\Dumper\PhpDumper($container);
@@ -614,8 +627,9 @@ abstract class Kernel implements \RectorPrefix20210705\Symfony\Component\HttpKer
      * Returns a loader for the container.
      *
      * @return DelegatingLoader The loader
+     * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
      */
-    protected function getContainerLoader(\RectorPrefix20210705\Symfony\Component\DependencyInjection\ContainerInterface $container)
+    protected function getContainerLoader($container)
     {
         $env = $this->getEnvironment();
         $locator = new \RectorPrefix20210705\Symfony\Component\HttpKernel\Config\FileLocator($this);
@@ -650,8 +664,9 @@ abstract class Kernel implements \RectorPrefix20210705\Symfony\Component\HttpKer
      * as we want the content to be readable and well-formatted.
      *
      * @return string The PHP string with the comments removed
+     * @param string $source
      */
-    public static function stripComments(string $source)
+    public static function stripComments($source)
     {
         if (!\function_exists('token_get_all')) {
             return $source;

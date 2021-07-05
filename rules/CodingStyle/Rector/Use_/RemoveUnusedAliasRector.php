@@ -147,10 +147,7 @@ CODE_SAMPLE
     {
         return \array_map('strtolower', $values);
     }
-    /**
-     * @param \PhpParser\Node\Stmt\Use_ $use
-     */
-    private function shouldSkip($use, \PhpParser\Node\Name $name, string $lastName, string $aliasName) : bool
+    private function shouldSkip(\PhpParser\Node\Stmt\Use_ $use, \PhpParser\Node\Name $name, string $lastName, string $aliasName) : bool
     {
         // PHP is case insensitive
         $loweredLastName = \strtolower($lastName);

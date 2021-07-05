@@ -21,8 +21,10 @@ class Bar
     /**
      * Add custom panel.
      * @return static
+     * @param \Tracy\IBarPanel $panel
+     * @param string|null $id
      */
-    public function addPanel(\RectorPrefix20210705\Tracy\IBarPanel $panel, string $id = null)
+    public function addPanel($panel, $id = null)
     {
         if ($id === null) {
             $c = 0;
@@ -35,8 +37,9 @@ class Bar
     }
     /**
      * Returns panel with given id
+     * @param string $id
      */
-    public function getPanel(string $id) : ?\RectorPrefix20210705\Tracy\IBarPanel
+    public function getPanel($id) : ?\RectorPrefix20210705\Tracy\IBarPanel
     {
         return $this->panels[$id] ?? null;
     }
@@ -96,7 +99,11 @@ class Bar
             }
         }
     }
-    private function renderHtml(string $type, string $suffix = '') : array
+    /**
+     * @param string $type
+     * @param string $suffix
+     */
+    private function renderHtml($type, $suffix = '') : array
     {
         $panels = $this->renderPanels($suffix);
         return ['bar' => \RectorPrefix20210705\Tracy\Helpers::capture(function () use($type, $panels) {
@@ -105,7 +112,10 @@ class Bar
             require __DIR__ . '/assets/panels.phtml';
         })];
     }
-    private function renderPanels(string $suffix = '') : array
+    /**
+     * @param string $suffix
+     */
+    private function renderPanels($suffix = '') : array
     {
         \set_error_handler(function (int $severity, string $message, string $file, int $line) {
             if (\error_reporting() & $severity) {

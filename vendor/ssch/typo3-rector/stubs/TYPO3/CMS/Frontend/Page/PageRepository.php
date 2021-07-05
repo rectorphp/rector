@@ -30,8 +30,9 @@ class PageRepository
      * @param int $itera
      * @param bool $disableGroupCheck
      * @return mixed[]
+     * @param mixed[] $pageLog
      */
-    public function getPageShortcut($SC, $mode, $thisUid, $itera, array $pageLog, $disableGroupCheck)
+    public function getPageShortcut($SC, $mode, $thisUid, $itera, $pageLog, $disableGroupCheck)
     {
         $itera = (int) $itera;
         $disableGroupCheck = (bool) $disableGroupCheck;

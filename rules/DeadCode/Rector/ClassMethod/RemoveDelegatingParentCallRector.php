@@ -55,9 +55,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Stmt\ClassMethod::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param ClassMethod $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $classLike = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
         if ($this->shouldSkipClass($classLike)) {
@@ -85,10 +85,7 @@ CODE_SAMPLE
         $this->removeNode($node);
         return null;
     }
-    /**
-     * @param \PhpParser\Node\Stmt\ClassLike|null $classLike
-     */
-    private function shouldSkipClass($classLike) : bool
+    private function shouldSkipClass(?\PhpParser\Node\Stmt\ClassLike $classLike) : bool
     {
         if (!$classLike instanceof \PhpParser\Node\Stmt\Class_) {
             return \true;

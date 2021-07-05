@@ -27,9 +27,9 @@ final class NameNameResolver implements \Rector\NodeNameResolver\Contract\NodeNa
         return \PhpParser\Node\Name::class;
     }
     /**
-     * @param Name $node
+     * @param \PhpParser\Node $node
      */
-    public function resolve(\PhpParser\Node $node) : ?string
+    public function resolve($node) : ?string
     {
         // possible function parent
         $parent = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);

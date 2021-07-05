@@ -66,7 +66,7 @@ class Tokenizer implements \RectorPrefix20210705\Helmich\TypoScriptParser\Tokeni
      * @throws TokenizerException
      * @return TokenInterface[]
      */
-    public function tokenizeString(string $inputString) : array
+    public function tokenizeString($inputString) : array
     {
         $inputString = $this->preprocessor->preprocess($inputString);
         $tokens = new \RectorPrefix20210705\Helmich\TypoScriptParser\Tokenizer\TokenStreamBuilder();
@@ -109,7 +109,7 @@ class Tokenizer implements \RectorPrefix20210705\Helmich\TypoScriptParser\Tokeni
      * @param string $inputStream
      * @return TokenInterface[]
      */
-    public function tokenizeStream(string $inputStream) : array
+    public function tokenizeStream($inputStream) : array
     {
         $content = \file_get_contents($inputStream);
         if ($content === \false) {
@@ -122,7 +122,7 @@ class Tokenizer implements \RectorPrefix20210705\Helmich\TypoScriptParser\Tokeni
      * @return string
      * @throws UnknownOperatorException
      */
-    private function getTokenTypeForBinaryOperator(string $operator) : string
+    private function getTokenTypeForBinaryOperator($operator) : string
     {
         switch ($operator) {
             case '=':
@@ -147,7 +147,7 @@ class Tokenizer implements \RectorPrefix20210705\Helmich\TypoScriptParser\Tokeni
      * @param $currentLine
      * @throws UnknownOperatorException
      */
-    private function tokenizeBinaryObjectOperation(\RectorPrefix20210705\Helmich\TypoScriptParser\Tokenizer\TokenStreamBuilder $tokens, array $matches, int $currentLine) : void
+    private function tokenizeBinaryObjectOperation($tokens, $matches, $currentLine) : void
     {
         $tokens->append($this->getTokenTypeForBinaryOperator($matches[3]), $matches[3], $currentLine);
         if ($matches[4]) {
@@ -180,7 +180,7 @@ class Tokenizer implements \RectorPrefix20210705\Helmich\TypoScriptParser\Tokeni
      * @param ScannerLine           $line
      * @return bool
      */
-    private function tokenizeMultilineToken(\RectorPrefix20210705\Helmich\TypoScriptParser\Tokenizer\TokenStreamBuilder $tokens, \RectorPrefix20210705\Helmich\TypoScriptParser\Tokenizer\MultilineTokenBuilder $state, \RectorPrefix20210705\Helmich\TypoScriptParser\Tokenizer\ScannerLine $line) : bool
+    private function tokenizeMultilineToken($tokens, $state, $line) : bool
     {
         if ($state->currentTokenType() === \RectorPrefix20210705\Helmich\TypoScriptParser\Tokenizer\TokenInterface::TYPE_COMMENT_MULTILINE) {
             $this->tokenizeMultilineComment($tokens, $state, $line);
@@ -198,7 +198,7 @@ class Tokenizer implements \RectorPrefix20210705\Helmich\TypoScriptParser\Tokeni
      * @param ScannerLine           $line
      * @return void
      */
-    private function tokenizeMultilineComment(\RectorPrefix20210705\Helmich\TypoScriptParser\Tokenizer\TokenStreamBuilder $tokens, \RectorPrefix20210705\Helmich\TypoScriptParser\Tokenizer\MultilineTokenBuilder $state, \RectorPrefix20210705\Helmich\TypoScriptParser\Tokenizer\ScannerLine $line) : void
+    private function tokenizeMultilineComment($tokens, $state, $line) : void
     {
         if ($matches = $line->scan(self::TOKEN_WHITESPACE)) {
             $state->appendToToken($matches[0]);
@@ -215,7 +215,7 @@ class Tokenizer implements \RectorPrefix20210705\Helmich\TypoScriptParser\Tokeni
      * @param $state
      * @param $line
      */
-    private function tokenizeMultilineAssignment(\RectorPrefix20210705\Helmich\TypoScriptParser\Tokenizer\TokenStreamBuilder $tokens, \RectorPrefix20210705\Helmich\TypoScriptParser\Tokenizer\MultilineTokenBuilder $state, \RectorPrefix20210705\Helmich\TypoScriptParser\Tokenizer\ScannerLine $line) : void
+    private function tokenizeMultilineAssignment($tokens, $state, $line) : void
     {
         if ($line->peek(',^\\s*\\),')) {
             $token = $state->endMultilineToken();
@@ -229,7 +229,7 @@ class Tokenizer implements \RectorPrefix20210705\Helmich\TypoScriptParser\Tokeni
      * @param ScannerLine        $line
      * @return bool
      */
-    private function tokenizeSimpleStatements(\RectorPrefix20210705\Helmich\TypoScriptParser\Tokenizer\TokenStreamBuilder $tokens, \RectorPrefix20210705\Helmich\TypoScriptParser\Tokenizer\ScannerLine $line) : bool
+    private function tokenizeSimpleStatements($tokens, $line) : bool
     {
         $simpleTokens = [self::TOKEN_COMMENT_ONELINE => \RectorPrefix20210705\Helmich\TypoScriptParser\Tokenizer\TokenInterface::TYPE_COMMENT_ONELINE, self::TOKEN_NESTING_END => \RectorPrefix20210705\Helmich\TypoScriptParser\Tokenizer\TokenInterface::TYPE_BRACE_CLOSE, self::TOKEN_CONDITION_ELSE => \RectorPrefix20210705\Helmich\TypoScriptParser\Tokenizer\TokenInterface::TYPE_CONDITION_ELSE, self::TOKEN_CONDITION_END => \RectorPrefix20210705\Helmich\TypoScriptParser\Tokenizer\TokenInterface::TYPE_CONDITION_END, self::TOKEN_CONDITION => \RectorPrefix20210705\Helmich\TypoScriptParser\Tokenizer\TokenInterface::TYPE_CONDITION, self::TOKEN_INCLUDE_STATEMENT => \RectorPrefix20210705\Helmich\TypoScriptParser\Tokenizer\TokenInterface::TYPE_INCLUDE, self::TOKEN_INCLUDE_NEW_STATEMENT => \RectorPrefix20210705\Helmich\TypoScriptParser\Tokenizer\TokenInterface::TYPE_INCLUDE_NEW];
         foreach ($simpleTokens as $pattern => $type) {
@@ -246,7 +246,7 @@ class Tokenizer implements \RectorPrefix20210705\Helmich\TypoScriptParser\Tokeni
      * @param $line
      * @return bool
      */
-    private function tokenizeObjectOperation(\RectorPrefix20210705\Helmich\TypoScriptParser\Tokenizer\TokenStreamBuilder $tokens, \RectorPrefix20210705\Helmich\TypoScriptParser\Tokenizer\MultilineTokenBuilder $state, \RectorPrefix20210705\Helmich\TypoScriptParser\Tokenizer\ScannerLine $line) : bool
+    private function tokenizeObjectOperation($tokens, $state, $line) : bool
     {
         if ($matches = $line->scan(self::TOKEN_OPERATOR_LINE)) {
             $tokens->append(\RectorPrefix20210705\Helmich\TypoScriptParser\Tokenizer\TokenInterface::TYPE_OBJECT_IDENTIFIER, $matches[1], $line->index());

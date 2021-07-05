@@ -26,9 +26,9 @@ final class IdentifierNodeMapper implements \Rector\StaticTypeMapper\Contract\Ph
         return \PhpParser\Node\Identifier::class;
     }
     /**
-     * @param Identifier $node
+     * @param \PhpParser\Node $node
      */
-    public function mapToPHPStan(\PhpParser\Node $node) : \PHPStan\Type\Type
+    public function mapToPHPStan($node) : \PHPStan\Type\Type
     {
         return $this->scalarStringToTypeMapper->mapScalarStringToType($node->name);
     }

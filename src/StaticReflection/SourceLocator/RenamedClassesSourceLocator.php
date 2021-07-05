@@ -26,7 +26,11 @@ final class RenamedClassesSourceLocator implements \PHPStan\BetterReflection\Sou
     {
         $this->renamedClassesDataCollector = $renamedClassesDataCollector;
     }
-    public function locateIdentifier(\PHPStan\BetterReflection\Reflector\Reflector $reflector, \PHPStan\BetterReflection\Identifier\Identifier $identifier) : ?\PHPStan\BetterReflection\Reflection\Reflection
+    /**
+     * @param \PHPStan\BetterReflection\Reflector\Reflector $reflector
+     * @param \PHPStan\BetterReflection\Identifier\Identifier $identifier
+     */
+    public function locateIdentifier($reflector, $identifier) : ?\PHPStan\BetterReflection\Reflection\Reflection
     {
         foreach ($this->renamedClassesDataCollector->getOldToNewClasses() as $oldClass => $newClass) {
             if ($identifier->getName() !== $oldClass) {
@@ -37,11 +41,18 @@ final class RenamedClassesSourceLocator implements \PHPStan\BetterReflection\Sou
         }
         return null;
     }
-    public function locateIdentifiersByType(\PHPStan\BetterReflection\Reflector\Reflector $reflector, \PHPStan\BetterReflection\Identifier\IdentifierType $identifierType) : array
+    /**
+     * @param \PHPStan\BetterReflection\Reflector\Reflector $reflector
+     * @param \PHPStan\BetterReflection\Identifier\IdentifierType $identifierType
+     */
+    public function locateIdentifiersByType($reflector, $identifierType) : array
     {
         return [];
     }
-    private function createFakeReflectionClassFromClassName(string $oldClass) : \PHPStan\BetterReflection\Reflection\ReflectionClass
+    /**
+     * @param string $oldClass
+     */
+    private function createFakeReflectionClassFromClassName($oldClass) : \PHPStan\BetterReflection\Reflection\ReflectionClass
     {
         $classBuilder = new \RectorPrefix20210705\Symplify\Astral\ValueObject\NodeBuilder\ClassBuilder($oldClass);
         $class = $classBuilder->getNode();

@@ -73,7 +73,7 @@ CODE_SAMPLE
     /**
      * @param FileWithoutNamespace|Namespace_ $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         /** @var Function_[] $functions */
         $functions = $this->betterNodeFinder->findInstanceOf($node, \PhpParser\Node\Stmt\Function_::class);

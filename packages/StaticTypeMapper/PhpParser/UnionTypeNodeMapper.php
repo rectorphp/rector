@@ -26,8 +26,9 @@ final class UnionTypeNodeMapper implements \Rector\StaticTypeMapper\Contract\Php
     }
     /**
      * @required
+     * @param \Rector\StaticTypeMapper\Mapper\PhpParserNodeMapper $phpParserNodeMapper
      */
-    public function autowireUnionTypeNodeMapper(\Rector\StaticTypeMapper\Mapper\PhpParserNodeMapper $phpParserNodeMapper) : void
+    public function autowireUnionTypeNodeMapper($phpParserNodeMapper) : void
     {
         $this->phpParserNodeMapper = $phpParserNodeMapper;
     }
@@ -39,9 +40,9 @@ final class UnionTypeNodeMapper implements \Rector\StaticTypeMapper\Contract\Php
         return \PhpParser\Node\UnionType::class;
     }
     /**
-     * @param UnionType $node
+     * @param \PhpParser\Node $node
      */
-    public function mapToPHPStan(\PhpParser\Node $node) : \PHPStan\Type\Type
+    public function mapToPHPStan($node) : \PHPStan\Type\Type
     {
         $types = [];
         foreach ($node->types as $unionedType) {

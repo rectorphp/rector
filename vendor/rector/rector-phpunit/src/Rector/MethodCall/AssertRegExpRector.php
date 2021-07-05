@@ -94,9 +94,8 @@ final class AssertRegExpRector extends \Rector\Core\Rector\AbstractRector
     }
     /**
      * @param MethodCall|StaticCall $node
-     * @param string $oldMethodName
      */
-    private function renameMethod(\PhpParser\Node $node, $oldMethodName, int $oldCondition) : void
+    private function renameMethod(\PhpParser\Node $node, string $oldMethodName, int $oldCondition) : void
     {
         if (\in_array($oldMethodName, [self::ASSERT_SAME, self::ASSERT_EQUALS], \true) && $oldCondition === 1 || \in_array($oldMethodName, [self::ASSERT_NOT_SAME, self::ASSERT_NOT_EQUALS], \true) && $oldCondition === 0) {
             $node->name = new \PhpParser\Node\Identifier('assertRegExp');

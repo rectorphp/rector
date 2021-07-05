@@ -97,7 +97,7 @@ class Debugger
      * @param  string  $logDirectory  error log directory
      * @param  string|array  $email  administrator email; enables email sending in production mode
      */
-    public static function enable($mode = null, string $logDirectory = null, $email = null) : void
+    public static function enable($mode = null, $logDirectory = null, $email = null) : void
     {
         if ($mode !== null || self::$productionMode === null) {
             self::$productionMode = \is_bool($mode) ? $mode : !self::detectDebugMode($mode);
@@ -205,8 +205,9 @@ class Debugger
     /**
      * Handler to catch uncaught exception.
      * @internal
+     * @param \Throwable $exception
      */
-    public static function exceptionHandler(\Throwable $exception) : void
+    public static function exceptionHandler($exception) : void
     {
         $firstTime = (bool) self::$reserved;
         self::$reserved = null;
@@ -266,8 +267,13 @@ class Debugger
      * @return bool|null   false to call normal error handler, null otherwise
      * @throws ErrorException
      * @internal
+     * @param int $severity
+     * @param string $message
+     * @param string $file
+     * @param int $line
+     * @param mixed[]|null $context
      */
-    public static function errorHandler(int $severity, string $message, string $file, int $line, array $context = null) : ?bool
+    public static function errorHandler($severity, $message, $file, $line, $context = null) : ?bool
     {
         $error = \error_get_last();
         if (($error['type'] ?? null) === \E_COMPILE_WARNING) {
@@ -328,7 +334,10 @@ class Debugger
         return \false;
         // calls normal error handler to fill-in error_get_last()
     }
-    private static function removeOutputBuffers(bool $errorOccurred) : void
+    /**
+     * @param bool $errorOccurred
+     */
+    private static function removeOutputBuffers($errorOccurred) : void
     {
         while (\ob_get_level() > self::$obLevel) {
             $status = \ob_get_status();
@@ -362,7 +371,10 @@ class Debugger
         }
         return self::$bar;
     }
-    public static function setLogger(\RectorPrefix20210705\Tracy\ILogger $logger) : void
+    /**
+     * @param \Tracy\ILogger $logger
+     */
+    public static function setLogger($logger) : void
     {
         self::$logger = $logger;
     }
@@ -391,7 +403,7 @@ class Debugger
      * @param  bool   $return  return output instead of printing it? (bypasses $productionMode)
      * @return mixed  variable itself or dump
      */
-    public static function dump($var, bool $return = \false)
+    public static function dump($var, $return = \false)
     {
         if ($return) {
             $options = [\RectorPrefix20210705\Tracy\Dumper::DEPTH => self::$maxDepth, \RectorPrefix20210705\Tracy\Dumper::TRUNCATE => self::$maxLength];
@@ -406,8 +418,9 @@ class Debugger
     /**
      * Starts/stops stopwatch.
      * @return float   elapsed seconds
+     * @param string|null $name
      */
-    public static function timer(string $name = null) : float
+    public static function timer($name = null) : float
     {
         static $time = [];
         $now = \microtime(\true);
@@ -420,8 +433,10 @@ class Debugger
      * @tracySkipLocation
      * @param  mixed  $var
      * @return mixed  variable itself
+     * @param string|null $title
+     * @param mixed[] $options
      */
-    public static function barDump($var, string $title = null, array $options = [])
+    public static function barDump($var, $title = null, $options = [])
     {
         if (!self::$productionMode) {
             static $panel;
@@ -436,8 +451,9 @@ class Debugger
      * Logs message or exception.
      * @param  mixed  $message
      * @return mixed
+     * @param string $level
      */
-    public static function log($message, string $level = \RectorPrefix20210705\Tracy\ILogger::INFO)
+    public static function log($message, $level = \RectorPrefix20210705\Tracy\ILogger::INFO)
     {
         return self::getLogger()->log($message, $level);
     }

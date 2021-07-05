@@ -19,11 +19,19 @@ final class ValidatorResolverDynamicReturnTypeExtension implements \PHPStan\Type
     {
         return 'TYPO3\\CMS\\Extbase\\Validation\\ValidatorResolver\\ValidatorResolver';
     }
-    public function isMethodSupported(\PHPStan\Reflection\MethodReflection $methodReflection) : bool
+    /**
+     * @param \PHPStan\Reflection\MethodReflection $methodReflection
+     */
+    public function isMethodSupported($methodReflection) : bool
     {
         return 'createValidator' === $methodReflection->getName();
     }
-    public function getTypeFromMethodCall(\PHPStan\Reflection\MethodReflection $methodReflection, \PhpParser\Node\Expr\MethodCall $methodCall, \PHPStan\Analyser\Scope $scope) : \PHPStan\Type\Type
+    /**
+     * @param \PHPStan\Reflection\MethodReflection $methodReflection
+     * @param \PhpParser\Node\Expr\MethodCall $methodCall
+     * @param \PHPStan\Analyser\Scope $scope
+     */
+    public function getTypeFromMethodCall($methodReflection, $methodCall, $scope) : \PHPStan\Type\Type
     {
         $arg = $methodCall->args[0]->value;
         if (!$arg instanceof \PhpParser\Node\Expr\ClassConstFetch) {

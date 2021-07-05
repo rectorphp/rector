@@ -21,15 +21,20 @@ final class ConfigurableCallValuesCollectingPhpFileLoader extends \RectorPrefix2
     }
     /**
      * @param mixed $resource
+     * @param string|null $type
      */
-    public function load($resource, string $type = null) : void
+    public function load($resource, $type = null) : void
     {
         // this call collects root values
         $this->collectConfigureCallsFromJustImportedConfigurableRectorDefinitions();
         parent::load($resource, $type);
         $this->collectConfigureCallsFromJustImportedConfigurableRectorDefinitions();
     }
-    public function import($resource, string $type = null, $ignoreErrors = \false, string $sourceResource = null, $exclude = null) : void
+    /**
+     * @param string|null $type
+     * @param string|null $sourceResource
+     */
+    public function import($resource, $type = null, $ignoreErrors = \false, $sourceResource = null, $exclude = null) : void
     {
         // this call collects root values
         $this->collectConfigureCallsFromJustImportedConfigurableRectorDefinitions();
@@ -39,7 +44,9 @@ final class ConfigurableCallValuesCollectingPhpFileLoader extends \RectorPrefix2
     private function collectConfigureCallsFromJustImportedConfigurableRectorDefinitions() : void
     {
         foreach ($this->container->getDefinitions() as $class => $definition) {
-            /** @var string $class */
+            if (!\is_string($class)) {
+                continue;
+            }
             if (!\is_a($class, \Rector\Core\Contract\Rector\ConfigurableRectorInterface::class, \true)) {
                 continue;
             }

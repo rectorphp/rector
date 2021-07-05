@@ -25,7 +25,7 @@ abstract class AbstractTestCase extends \PHPUnit\Framework\TestCase
     /**
      * @param SmartFileInfo[] $configFileInfos
      */
-    protected function bootFromConfigFileInfos(array $configFileInfos) : void
+    protected function bootFromConfigFileInfos($configFileInfos) : void
     {
         $configsHash = $this->createConfigsHash($configFileInfos);
         if (isset(self::$kernelsByHash[$configsHash])) {
@@ -45,7 +45,7 @@ abstract class AbstractTestCase extends \PHPUnit\Framework\TestCase
      * @param class-string<T> $type
      * @return object
      */
-    protected function getService(string $type)
+    protected function getService($type)
     {
         if (self::$currentContainer === null) {
             throw new \Rector\Core\Exception\ShouldNotHappenException('First, create container with "bootWithConfigFileInfos([...])"');
@@ -60,7 +60,7 @@ abstract class AbstractTestCase extends \PHPUnit\Framework\TestCase
     /**
      * @param SmartFileInfo[] $configFileInfos
      */
-    private function createConfigsHash(array $configFileInfos) : string
+    private function createConfigsHash($configFileInfos) : string
     {
         $configHash = '';
         foreach ($configFileInfos as $configFileInfo) {

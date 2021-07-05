@@ -39,9 +39,9 @@ final class ExtbaseControllerActionsMustReturnResponseInterfaceRector extends \R
         return [\PhpParser\Node\Stmt\ClassMethod::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param ClassMethod $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -104,10 +104,7 @@ class MyController extends ActionController
 CODE_SAMPLE
 )]);
     }
-    /**
-     * @param \PhpParser\Node\Stmt\ClassMethod $node
-     */
-    private function shouldSkip($node) : bool
+    private function shouldSkip(\PhpParser\Node\Stmt\ClassMethod $node) : bool
     {
         if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Extbase\\Mvc\\Controller\\ActionController'))) {
             return \true;

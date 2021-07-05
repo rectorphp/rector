@@ -32,8 +32,9 @@ class ResolveParameterPlaceHoldersPass extends \RectorPrefix20210705\Symfony\Com
      * {@inheritdoc}
      *
      * @throws ParameterNotFoundException
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      */
-    public function process(\RectorPrefix20210705\Symfony\Component\DependencyInjection\ContainerBuilder $container)
+    public function process($container)
     {
         $this->bag = $container->getParameterBag();
         try {

@@ -75,9 +75,8 @@ final class AssertTrueFalseToSpecificMethodRector extends \Rector\Core\Rector\Ab
     }
     /**
      * @param MethodCall|StaticCall $node
-     * @param \Rector\PHPUnit\ValueObject\FunctionNameWithAssertMethods $functionNameWithAssertMethods
      */
-    private function renameMethod(\PhpParser\Node $node, $functionNameWithAssertMethods) : void
+    private function renameMethod(\PhpParser\Node $node, \Rector\PHPUnit\ValueObject\FunctionNameWithAssertMethods $functionNameWithAssertMethods) : void
     {
         /** @var Identifier $identifierNode */
         $identifierNode = $node->name;

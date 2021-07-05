@@ -77,7 +77,7 @@ CODE_SAMPLE
     /**
      * @param Namespace_|FileWithoutNamespace $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $this->newNamespace = null;
         if ($node instanceof \Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace) {

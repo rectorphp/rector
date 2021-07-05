@@ -80,9 +80,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Expr\ConstFetch::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param ConstFetch $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$this->isName($node, 'PHP_VERSION_ID')) {
             return null;
@@ -110,12 +110,7 @@ CODE_SAMPLE
         }
         return null;
     }
-    /**
-     * @param \PhpParser\Node\Expr\ConstFetch $constFetch
-     * @param \PhpParser\Node\Stmt\If_|null $if
-     * @param \PhpParser\Node|null $node
-     */
-    private function shouldSkip($constFetch, $if, $node) : bool
+    private function shouldSkip(\PhpParser\Node\Expr\ConstFetch $constFetch, ?\PhpParser\Node\Stmt\If_ $if, ?\PhpParser\Node $node) : bool
     {
         $if = $this->betterNodeFinder->findParentType($constFetch, \PhpParser\Node\Stmt\If_::class);
         if (!$if instanceof \PhpParser\Node\Stmt\If_) {

@@ -41,7 +41,7 @@ final class UseExtensionConfigurationApiRector extends \Rector\Core\Rector\Abstr
     /**
      * @param FuncCall|ArrayDimFetch $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($node instanceof \PhpParser\Node\Expr\FuncCall && !$this->isName($node->name, 'unserialize')) {
             return null;
@@ -92,10 +92,7 @@ $extensionConfiguration2 = GeneralUtility::makeInstance(ExtensionConfiguration::
 CODE_SAMPLE
 )]);
     }
-    /**
-     * @param \PhpParser\Node\Expr\ArrayDimFetch $node
-     */
-    private function shouldSkip($node) : bool
+    private function shouldSkip(\PhpParser\Node\Expr\ArrayDimFetch $node) : bool
     {
         $extConf = $node->var;
         if (!$extConf instanceof \PhpParser\Node\Expr\ArrayDimFetch) {

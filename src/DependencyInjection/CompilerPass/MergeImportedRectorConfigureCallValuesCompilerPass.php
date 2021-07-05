@@ -21,13 +21,20 @@ final class MergeImportedRectorConfigureCallValuesCompilerPass implements \Recto
     {
         $this->configureCallValuesCollector = $configureCallValuesCollector;
     }
-    public function process(\RectorPrefix20210705\Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder) : void
+    /**
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder
+     */
+    public function process($containerBuilder) : void
     {
         foreach ($containerBuilder->getDefinitions() as $id => $definition) {
             $this->completeCollectedArguments($id, $definition);
         }
     }
-    private function completeCollectedArguments(string $serviceClass, \RectorPrefix20210705\Symfony\Component\DependencyInjection\Definition $definition) : void
+    /**
+     * @param string $serviceClass
+     * @param \Symfony\Component\DependencyInjection\Definition $definition
+     */
+    private function completeCollectedArguments($serviceClass, $definition) : void
     {
         $configureCallValues = $this->configureCallValuesCollector->getConfigureCallValues($serviceClass);
         if ($configureCallValues === []) {

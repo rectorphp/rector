@@ -11,7 +11,10 @@ final class UsergroupConditionMatcherMatcher implements \Ssch\TYPO3Rector\Contra
      * @var string
      */
     private const TYPE = 'usergroup';
-    public function change(string $condition) : ?string
+    /**
+     * @param string $condition
+     */
+    public function change($condition) : ?string
     {
         \preg_match('#' . self::TYPE . '\\s*=\\s*(.*)#', $condition, $matches);
         if (!\is_array($matches)) {
@@ -23,7 +26,10 @@ final class UsergroupConditionMatcherMatcher implements \Ssch\TYPO3Rector\Contra
         $values = \Ssch\TYPO3Rector\Helper\ArrayUtility::trimExplode(',', $matches[1], \true);
         return \sprintf('usergroup("%s")', \implode(',', $values));
     }
-    public function shouldApply(string $condition) : bool
+    /**
+     * @param string $condition
+     */
+    public function shouldApply($condition) : bool
     {
         return 1 === \preg_match('#^' . self::TYPE . self::ZERO_ONE_OR_MORE_WHITESPACES . '=[^=]#', $condition);
     }

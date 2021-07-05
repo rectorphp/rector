@@ -63,9 +63,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Expr\Assign::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param Assign $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $this->emptyStringProperties = $this->emptyStringDefaultPropertyFinder->find($node);
         // only array with no explicit key assign, e.g. "$value[] = 5";
@@ -139,10 +139,7 @@ CODE_SAMPLE
         }
         return \false;
     }
-    /**
-     * @param \PhpParser\Node\Expr $expr
-     */
-    private function shouldSkipVariable($expr) : bool
+    private function shouldSkipVariable(\PhpParser\Node\Expr $expr) : bool
     {
         $staticType = $this->getStaticType($expr);
         if ($staticType instanceof \PHPStan\Type\ErrorType) {

@@ -10,11 +10,18 @@ final class CoaleseEqualTokenEmulator extends \PhpParser\Lexer\TokenEmulator\Tok
     {
         return \PhpParser\Lexer\Emulative::PHP_7_4;
     }
-    public function isEmulationNeeded(string $code) : bool
+    /**
+     * @param string $code
+     */
+    public function isEmulationNeeded($code) : bool
     {
         return \strpos($code, '??=') !== \false;
     }
-    public function emulate(string $code, array $tokens) : array
+    /**
+     * @param string $code
+     * @param mixed[] $tokens
+     */
+    public function emulate($code, $tokens) : array
     {
         // We need to manually iterate and manage a count because we'll change
         // the tokens array on the way
@@ -33,7 +40,11 @@ final class CoaleseEqualTokenEmulator extends \PhpParser\Lexer\TokenEmulator\Tok
         }
         return $tokens;
     }
-    public function reverseEmulate(string $code, array $tokens) : array
+    /**
+     * @param string $code
+     * @param mixed[] $tokens
+     */
+    public function reverseEmulate($code, $tokens) : array
     {
         // ??= was not valid code previously, don't bother.
         return $tokens;

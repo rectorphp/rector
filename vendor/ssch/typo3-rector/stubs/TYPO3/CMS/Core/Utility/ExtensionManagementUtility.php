@@ -67,14 +67,15 @@ class ExtensionManagementUtility
      * @param string $disallowedFileExtensions
      * @return array
      */
-    public static function getFileFieldTCAConfig($fieldName, array $customSettingOverride = [], $allowedFileExtensions = '', $disallowedFileExtensions = '')
+    public static function getFileFieldTCAConfig($fieldName, $customSettingOverride = [], $allowedFileExtensions = '', $disallowedFileExtensions = '')
     {
         return [];
     }
     /**
      * @param string $string
+     * @param mixed[] $columns
      */
-    public static function addTCAcolumns($string, array $columns)
+    public static function addTCAcolumns($string, $columns)
     {
     }
 }

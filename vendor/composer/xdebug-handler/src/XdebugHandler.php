@@ -77,7 +77,7 @@ class XdebugHandler
      *
      * @return $this
      */
-    public function setLogger(\RectorPrefix20210705\Psr\Log\LoggerInterface $logger)
+    public function setLogger($logger)
     {
         $this->statusWriter->setLogger($logger);
         return $this;
@@ -233,7 +233,7 @@ class XdebugHandler
      *
      * @param array $command
      */
-    private function doRestart(array $command)
+    private function doRestart($command)
     {
         $this->tryEnableSignals();
         $this->notify(\RectorPrefix20210705\Composer\XdebugHandler\Status::RESTARTING, \implode(' ', $command));
@@ -309,7 +309,7 @@ class XdebugHandler
      *
      * @return bool
      */
-    private function writeTmpIni(array $iniFiles, $tmpDir, &$error)
+    private function writeTmpIni($iniFiles, $tmpDir, &$error)
     {
         if (!($this->tmpIni = @\tempnam($tmpDir, ''))) {
             return \false;
@@ -362,7 +362,7 @@ class XdebugHandler
      *
      * @return bool
      */
-    private function setEnvironment($scannedInis, array $iniFiles)
+    private function setEnvironment($scannedInis, $iniFiles)
     {
         $scanDir = \getenv('PHP_INI_SCAN_DIR');
         $phprc = \getenv('PHPRC');
@@ -398,7 +398,7 @@ class XdebugHandler
      *
      * @return string
      */
-    private function mergeLoadedConfig(array $loadedConfig, array $iniConfig)
+    private function mergeLoadedConfig($loadedConfig, $iniConfig)
     {
         $content = '';
         foreach ($loadedConfig as $name => $value) {
@@ -450,7 +450,7 @@ class XdebugHandler
      *
      * @param array $settings
      */
-    private function syncSettings(array $settings)
+    private function syncSettings($settings)
     {
         if (\false === \getenv($this->envOriginalInis)) {
             // Called by another app, so make original inis available

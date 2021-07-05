@@ -8,14 +8,17 @@ use PhpParser\Node\Attribute;
 use RectorPrefix20210705\Symplify\Astral\Contract\NodeNameResolverInterface;
 final class AttributeNodeNameResolver implements \RectorPrefix20210705\Symplify\Astral\Contract\NodeNameResolverInterface
 {
-    public function match(\PhpParser\Node $node) : bool
+    /**
+     * @param \PhpParser\Node $node
+     */
+    public function match($node) : bool
     {
         return $node instanceof \PhpParser\Node\Attribute;
     }
     /**
-     * @param Attribute $node
+     * @param \PhpParser\Node $node
      */
-    public function resolve(\PhpParser\Node $node) : ?string
+    public function resolve($node) : ?string
     {
         return $node->name->toString();
     }

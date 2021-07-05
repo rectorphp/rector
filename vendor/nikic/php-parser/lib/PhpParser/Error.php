@@ -65,7 +65,7 @@ class Error extends \RuntimeException
      *
      * @param array $attributes
      */
-    public function setAttributes(array $attributes)
+    public function setAttributes($attributes)
     {
         $this->attributes = $attributes;
         $this->updateMessage();
@@ -75,7 +75,7 @@ class Error extends \RuntimeException
      *
      * @param string $message Error message
      */
-    public function setRawMessage(string $message)
+    public function setRawMessage($message)
     {
         $this->rawMessage = $message;
         $this->updateMessage();
@@ -85,7 +85,7 @@ class Error extends \RuntimeException
      *
      * @param int $line Error start line
      */
-    public function setStartLine(int $line)
+    public function setStartLine($line)
     {
         $this->attributes['startLine'] = $line;
         $this->updateMessage();
@@ -107,7 +107,7 @@ class Error extends \RuntimeException
      * @param string $code Source code of the file
      * @return int
      */
-    public function getStartColumn(string $code) : int
+    public function getStartColumn($code) : int
     {
         if (!$this->hasColumnInfo()) {
             throw new \RuntimeException('Error does not have column information');
@@ -120,7 +120,7 @@ class Error extends \RuntimeException
      * @param string $code Source code of the file
      * @return int
      */
-    public function getEndColumn(string $code) : int
+    public function getEndColumn($code) : int
     {
         if (!$this->hasColumnInfo()) {
             throw new \RuntimeException('Error does not have column information');
@@ -134,7 +134,7 @@ class Error extends \RuntimeException
      *
      * @return string Formatted message
      */
-    public function getMessageWithColumnInfo(string $code) : string
+    public function getMessageWithColumnInfo($code) : string
     {
         return \sprintf('%s from %d:%d to %d:%d', $this->getRawMessage(), $this->getStartLine(), $this->getStartColumn($code), $this->getEndLine(), $this->getEndColumn($code));
     }
@@ -146,7 +146,7 @@ class Error extends \RuntimeException
      *
      * @return int 1-based column (relative to start of line)
      */
-    private function toColumn(string $code, int $pos) : int
+    private function toColumn($code, $pos) : int
     {
         if ($pos > \strlen($code)) {
             throw new \RuntimeException('Invalid position information');

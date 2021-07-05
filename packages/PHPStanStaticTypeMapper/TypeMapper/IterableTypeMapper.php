@@ -27,8 +27,9 @@ final class IterableTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contra
     private $phpStanStaticTypeMapper;
     /**
      * @required
+     * @param \Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper $phpStanStaticTypeMapper
      */
-    public function autowireIterableTypeMapper(\Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper $phpStanStaticTypeMapper) : void
+    public function autowireIterableTypeMapper($phpStanStaticTypeMapper) : void
     {
         $this->phpStanStaticTypeMapper = $phpStanStaticTypeMapper;
     }
@@ -40,9 +41,10 @@ final class IterableTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contra
         return \PHPStan\Type\IterableType::class;
     }
     /**
-     * @param IterableType $type
+     * @param \PHPStan\Type\Type $type
+     * @param \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind $typeKind
      */
-    public function mapToPHPStanPhpDocTypeNode(\PHPStan\Type\Type $type, \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind $typeKind) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
+    public function mapToPHPStanPhpDocTypeNode($type, $typeKind) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
     {
         $itemTypeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($type->getItemType(), $typeKind);
         if ($itemTypeNode instanceof \PHPStan\PhpDocParser\Ast\Type\UnionTypeNode) {
@@ -51,13 +53,17 @@ final class IterableTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contra
         return new \Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareArrayTypeNode($itemTypeNode);
     }
     /**
-     * @param IterableType $type
+     * @param \PHPStan\Type\Type $type
+     * @param \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind $typeKind
      */
-    public function mapToPhpParserNode(\PHPStan\Type\Type $type, \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind $typeKind) : ?\PhpParser\Node
+    public function mapToPhpParserNode($type, $typeKind) : ?\PhpParser\Node
     {
         return new \PhpParser\Node\Name('iterable');
     }
-    private function convertUnionArrayTypeNodesToArrayTypeOfUnionTypeNodes(\PHPStan\PhpDocParser\Ast\Type\UnionTypeNode $unionTypeNode) : \Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareUnionTypeNode
+    /**
+     * @param \PHPStan\PhpDocParser\Ast\Type\UnionTypeNode $unionTypeNode
+     */
+    private function convertUnionArrayTypeNodesToArrayTypeOfUnionTypeNodes($unionTypeNode) : \Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareUnionTypeNode
     {
         $unionedArrayType = [];
         foreach ($unionTypeNode->types as $unionedType) {

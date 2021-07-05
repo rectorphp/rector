@@ -81,7 +81,7 @@ CODE_SAMPLE
     /**
      * @param Class_|ClassMethod|Property|Interface_|Param|Function_  $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         foreach ($node->attrGroups as $attrGroup) {

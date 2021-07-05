@@ -22,7 +22,10 @@ class RulesetInflector implements \RectorPrefix20210705\Doctrine\Inflector\WordI
     {
         $this->rulesets = \array_merge([$ruleset], $rulesets);
     }
-    public function inflect(string $word) : string
+    /**
+     * @param string $word
+     */
+    public function inflect($word) : string
     {
         if ($word === '') {
             return '';

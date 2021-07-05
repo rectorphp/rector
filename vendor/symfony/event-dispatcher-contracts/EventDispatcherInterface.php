@@ -25,5 +25,5 @@ interface EventDispatcherInterface extends \RectorPrefix20210705\Psr\EventDispat
      *
      * @return object The passed $event MUST be returned
      */
-    public function dispatch($event, string $eventName = null);
+    public function dispatch($event, $eventName = null);
 }

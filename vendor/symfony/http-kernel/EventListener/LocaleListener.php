@@ -36,17 +36,26 @@ class LocaleListener implements \RectorPrefix20210705\Symfony\Component\EventDis
         $this->requestStack = $requestStack;
         $this->router = $router;
     }
-    public function setDefaultLocale(\RectorPrefix20210705\Symfony\Component\HttpKernel\Event\KernelEvent $event)
+    /**
+     * @param \Symfony\Component\HttpKernel\Event\KernelEvent $event
+     */
+    public function setDefaultLocale($event)
     {
         $event->getRequest()->setDefaultLocale($this->defaultLocale);
     }
-    public function onKernelRequest(\RectorPrefix20210705\Symfony\Component\HttpKernel\Event\RequestEvent $event)
+    /**
+     * @param \Symfony\Component\HttpKernel\Event\RequestEvent $event
+     */
+    public function onKernelRequest($event)
     {
         $request = $event->getRequest();
         $this->setLocale($request);
         $this->setRouterContext($request);
     }
-    public function onKernelFinishRequest(\RectorPrefix20210705\Symfony\Component\HttpKernel\Event\FinishRequestEvent $event)
+    /**
+     * @param \Symfony\Component\HttpKernel\Event\FinishRequestEvent $event
+     */
+    public function onKernelFinishRequest($event)
     {
         if (null !== ($parentRequest = $this->requestStack->getParentRequest())) {
             $this->setRouterContext($parentRequest);
@@ -61,7 +70,10 @@ class LocaleListener implements \RectorPrefix20210705\Symfony\Component\EventDis
             $request->setLocale($locale);
         }
     }
-    private function setRouterContext(\RectorPrefix20210705\Symfony\Component\HttpFoundation\Request $request)
+    /**
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     */
+    private function setRouterContext($request)
     {
         if (null !== $this->router) {
             $this->router->getContext()->setParameter('_locale', $request->getLocale());

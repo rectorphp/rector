@@ -23,8 +23,9 @@ final class PropertyTypeResolver implements \Rector\NodeTypeResolver\Contract\No
     private $nodeTypeResolver;
     /**
      * @required
+     * @param \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver
      */
-    public function autowirePropertyTypeResolver(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver) : void
+    public function autowirePropertyTypeResolver($nodeTypeResolver) : void
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
@@ -36,9 +37,9 @@ final class PropertyTypeResolver implements \Rector\NodeTypeResolver\Contract\No
         return [\PhpParser\Node\Stmt\Property::class];
     }
     /**
-     * @param Property $propertyNode
+     * @param \PhpParser\Node $propertyNode
      */
-    public function resolve(\PhpParser\Node $propertyNode) : \PHPStan\Type\Type
+    public function resolve($propertyNode) : \PHPStan\Type\Type
     {
         // fake property to local PropertyFetch → PHPStan understands that
         $propertyFetch = new \PhpParser\Node\Expr\PropertyFetch(new \PhpParser\Node\Expr\Variable('this'), (string) $propertyNode->props[0]->name);

@@ -12,8 +12,9 @@ class SiteFinder
      * @param int $pageId
      * @param string $mountPointParameter
      * @return \TYPO3\CMS\Core\Site\Entity\Site
+     * @param mixed[]|null $rootLine
      */
-    public function getSiteByPageId($pageId, array $rootLine = null, $mountPointParameter = null)
+    public function getSiteByPageId($pageId, $rootLine = null, $mountPointParameter = null)
     {
         $pageId = (int) $pageId;
         $mountPointParameter = (string) $mountPointParameter;

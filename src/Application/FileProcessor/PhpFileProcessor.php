@@ -69,7 +69,11 @@ final class PhpFileProcessor implements \Rector\Core\Contract\Processor\FileProc
         $this->postFileProcessor = $postFileProcessor;
         $this->errorFactory = $errorFactory;
     }
-    public function process(\Rector\Core\ValueObject\Application\File $file, \Rector\Core\ValueObject\Configuration $configuration) : void
+    /**
+     * @param \Rector\Core\ValueObject\Application\File $file
+     * @param \Rector\Core\ValueObject\Configuration $configuration
+     */
+    public function process($file, $configuration) : void
     {
         // 1. parse files to nodes
         $this->tryCatchWrapper($file, function (\Rector\Core\ValueObject\Application\File $file) : void {
@@ -94,7 +98,11 @@ final class PhpFileProcessor implements \Rector\Core\Contract\Processor\FileProc
             $this->printFile($file, $configuration);
         }, \Rector\Core\Enum\ApplicationPhase::PRINT());
     }
-    public function supports(\Rector\Core\ValueObject\Application\File $file, \Rector\Core\ValueObject\Configuration $configuration) : bool
+    /**
+     * @param \Rector\Core\ValueObject\Application\File $file
+     * @param \Rector\Core\ValueObject\Configuration $configuration
+     */
+    public function supports($file, $configuration) : bool
     {
         $smartFileInfo = $file->getSmartFileInfo();
         return $smartFileInfo->hasSuffixes($configuration->getFileExtensions());
@@ -106,14 +114,22 @@ final class PhpFileProcessor implements \Rector\Core\Contract\Processor\FileProc
     {
         return ['php'];
     }
-    private function refactorNodesWithRectors(\Rector\Core\ValueObject\Application\File $file) : void
+    /**
+     * @param \Rector\Core\ValueObject\Application\File $file
+     */
+    private function refactorNodesWithRectors($file) : void
     {
         $this->currentFileProvider->setFile($file);
         $this->tryCatchWrapper($file, function (\Rector\Core\ValueObject\Application\File $file) : void {
             $this->fileProcessor->refactor($file);
         }, \Rector\Core\Enum\ApplicationPhase::REFACTORING());
     }
-    private function tryCatchWrapper(\Rector\Core\ValueObject\Application\File $file, callable $callback, \Rector\Core\Enum\ApplicationPhase $applicationPhase) : void
+    /**
+     * @param \Rector\Core\ValueObject\Application\File $file
+     * @param callable $callback
+     * @param \Rector\Core\Enum\ApplicationPhase $applicationPhase
+     */
+    private function tryCatchWrapper($file, $callback, $applicationPhase) : void
     {
         $this->currentFileProvider->setFile($file);
         $this->notifyPhase($file, $applicationPhase);
@@ -141,7 +157,11 @@ final class PhpFileProcessor implements \Rector\Core\Contract\Processor\FileProc
             $file->addRectorError($rectorError);
         }
     }
-    private function printFile(\Rector\Core\ValueObject\Application\File $file, \Rector\Core\ValueObject\Configuration $configuration) : void
+    /**
+     * @param \Rector\Core\ValueObject\Application\File $file
+     * @param \Rector\Core\ValueObject\Configuration $configuration
+     */
+    private function printFile($file, $configuration) : void
     {
         $smartFileInfo = $file->getSmartFileInfo();
         if ($this->removedAndAddedFilesCollector->isFileRemoved($smartFileInfo)) {
@@ -152,7 +172,11 @@ final class PhpFileProcessor implements \Rector\Core\Contract\Processor\FileProc
         $file->changeFileContent($newContent);
         $this->fileDiffFileDecorator->decorate([$file]);
     }
-    private function notifyPhase(\Rector\Core\ValueObject\Application\File $file, \Rector\Core\Enum\ApplicationPhase $applicationPhase) : void
+    /**
+     * @param \Rector\Core\ValueObject\Application\File $file
+     * @param \Rector\Core\Enum\ApplicationPhase $applicationPhase
+     */
+    private function notifyPhase($file, $applicationPhase) : void
     {
         if (!$this->symfonyStyle->isVerbose()) {
             return;

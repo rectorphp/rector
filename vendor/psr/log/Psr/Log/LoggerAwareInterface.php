@@ -14,5 +14,5 @@ interface LoggerAwareInterface
      *
      * @return void
      */
-    public function setLogger(\RectorPrefix20210705\Psr\Log\LoggerInterface $logger);
+    public function setLogger($logger);
 }

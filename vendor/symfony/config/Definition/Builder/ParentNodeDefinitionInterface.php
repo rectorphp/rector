@@ -37,8 +37,9 @@ interface ParentNodeDefinitionInterface extends \RectorPrefix20210705\Symfony\Co
      *     ;
      *
      * @return $this
+     * @param \Symfony\Component\Config\Definition\Builder\NodeDefinition $node
      */
-    public function append(\RectorPrefix20210705\Symfony\Component\Config\Definition\Builder\NodeDefinition $node);
+    public function append($node);
     /**
      * Gets the child node definitions.
      *

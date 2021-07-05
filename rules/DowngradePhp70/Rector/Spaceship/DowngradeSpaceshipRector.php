@@ -60,9 +60,9 @@ CODE_SAMPLE
 )]);
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param Spaceship $node
      */
-    public function refactor($node) : \PhpParser\Node\Expr\FuncCall
+    public function refactor(\PhpParser\Node $node) : \PhpParser\Node\Expr\FuncCall
     {
         $leftVariableParam = new \PhpParser\Node\Expr\Variable('left');
         $rightVariableParam = new \PhpParser\Node\Expr\Variable('right');
@@ -87,11 +87,7 @@ CODE_SAMPLE
     {
         return new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign($variable, $closure));
     }
-    /**
-     * @param \PhpParser\Node\Stmt $stmt
-     * @param string $variableName
-     */
-    private function getVariableAssign($stmt, $variableName = 'battleShipcompare') : \PhpParser\Node\Expr\Variable
+    private function getVariableAssign(\PhpParser\Node\Stmt $stmt, string $variableName = 'battleShipcompare') : \PhpParser\Node\Expr\Variable
     {
         $variable = new \PhpParser\Node\Expr\Variable($variableName);
         $isFoundPrevious = (bool) $this->betterNodeFinder->findFirstPreviousOfNode($stmt, function (\PhpParser\Node $node) use($variable) : bool {

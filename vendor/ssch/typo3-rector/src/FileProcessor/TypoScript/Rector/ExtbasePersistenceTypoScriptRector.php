@@ -46,10 +46,7 @@ final class ExtbasePersistenceTypoScriptRector extends \Ssch\TYPO3Rector\FilePro
         $this->filename = \getcwd() . '/Configuration_Extbase_Persistence_Classes.php';
         $this->fileTemplate = $templateFinder->getExtbasePersistenceConfiguration();
     }
-    /**
-     * @param \Helmich\TypoScriptParser\Parser\AST\Statement $statement
-     */
-    public function enterNode($statement) : void
+    public function enterNode(\RectorPrefix20210705\Helmich\TypoScriptParser\Parser\AST\Statement $statement) : void
     {
         if (!$statement instanceof \RectorPrefix20210705\Helmich\TypoScriptParser\Parser\AST\Operator\Assignment) {
             return;

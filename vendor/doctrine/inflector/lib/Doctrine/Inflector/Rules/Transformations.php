@@ -12,7 +12,10 @@ class Transformations implements \RectorPrefix20210705\Doctrine\Inflector\WordIn
     {
         $this->transformations = $transformations;
     }
-    public function inflect(string $word) : string
+    /**
+     * @param string $word
+     */
+    public function inflect($word) : string
     {
         foreach ($this->transformations as $transformation) {
             if ($transformation->getPattern()->matches($word)) {

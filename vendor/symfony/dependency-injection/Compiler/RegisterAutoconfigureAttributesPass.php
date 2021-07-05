@@ -25,8 +25,9 @@ final class RegisterAutoconfigureAttributesPass implements \RectorPrefix20210705
     private static $registerForAutoconfiguration;
     /**
      * {@inheritdoc}
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      */
-    public function process(\RectorPrefix20210705\Symfony\Component\DependencyInjection\ContainerBuilder $container)
+    public function process($container)
     {
         if (80000 > \PHP_VERSION_ID) {
             return;
@@ -37,17 +38,29 @@ final class RegisterAutoconfigureAttributesPass implements \RectorPrefix20210705
             }
         }
     }
-    public function accept(\RectorPrefix20210705\Symfony\Component\DependencyInjection\Definition $definition) : bool
+    /**
+     * @param \Symfony\Component\DependencyInjection\Definition $definition
+     */
+    public function accept($definition) : bool
     {
         return 80000 <= \PHP_VERSION_ID && $definition->isAutoconfigured() && !$definition->hasTag('container.ignore_attributes');
     }
-    public function processClass(\RectorPrefix20210705\Symfony\Component\DependencyInjection\ContainerBuilder $container, \ReflectionClass $class)
+    /**
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     * @param \ReflectionClass $class
+     */
+    public function processClass($container, $class)
     {
         foreach ($class->getAttributes(\RectorPrefix20210705\Symfony\Component\DependencyInjection\Attribute\Autoconfigure::class, \ReflectionAttribute::IS_INSTANCEOF) as $attribute) {
             self::registerForAutoconfiguration($container, $class, $attribute);
         }
     }
-    private static function registerForAutoconfiguration(\RectorPrefix20210705\Symfony\Component\DependencyInjection\ContainerBuilder $container, \ReflectionClass $class, \ReflectionAttribute $attribute)
+    /**
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     * @param \ReflectionClass $class
+     * @param \ReflectionAttribute $attribute
+     */
+    private static function registerForAutoconfiguration($container, $class, $attribute)
     {
         if (self::$registerForAutoconfiguration) {
             return (self::$registerForAutoconfiguration)($container, $class, $attribute);

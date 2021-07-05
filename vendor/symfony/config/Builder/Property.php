@@ -37,7 +37,10 @@ class Property
     {
         return $this->originalName;
     }
-    public function setType(string $type) : void
+    /**
+     * @param string $type
+     */
+    public function setType($type) : void
     {
         $this->array = \false;
         $this->type = $type;
@@ -54,7 +57,10 @@ class Property
     {
         return $this->content;
     }
-    public function setContent(string $content) : void
+    /**
+     * @param string $content
+     */
+    public function setContent($content) : void
     {
         $this->content = $content;
     }

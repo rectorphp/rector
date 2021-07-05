@@ -116,10 +116,7 @@ CODE_SAMPLE
         $this->removedAndAddedFilesCollector->addAddedFile($addedFileWithNodes);
         return $node;
     }
-    /**
-     * @param \PhpParser\Node\Expr\MethodCall $methodCall
-     */
-    private function shouldSkip($methodCall) : bool
+    private function shouldSkip(\PhpParser\Node\Expr\MethodCall $methodCall) : bool
     {
         if (!$this->isObjectType($methodCall->var, new \PHPStan\Type\ObjectType('Kdyby\\Events\\EventManager'))) {
             return \true;

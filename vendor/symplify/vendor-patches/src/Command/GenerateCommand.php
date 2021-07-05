@@ -53,7 +53,11 @@ final class GenerateCommand extends \RectorPrefix20210705\Symplify\PackageBuilde
     {
         $this->setDescription('Generate patches from /vendor directory');
     }
-    protected function execute(\RectorPrefix20210705\Symfony\Component\Console\Input\InputInterface $input, \RectorPrefix20210705\Symfony\Component\Console\Output\OutputInterface $output) : int
+    /**
+     * @param \Symfony\Component\Console\Input\InputInterface $input
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     */
+    protected function execute($input, $output) : int
     {
         $vendorDirectory = $this->vendorDirProvider->provide();
         $oldAndNewFileInfos = $this->oldToNewFilesFinder->find($vendorDirectory);

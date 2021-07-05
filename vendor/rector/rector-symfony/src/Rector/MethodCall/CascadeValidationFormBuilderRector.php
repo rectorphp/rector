@@ -91,10 +91,7 @@ CODE_SAMPLE
         $this->addConstraintsOptionToFollowingAddMethodCalls($node);
         return $node;
     }
-    /**
-     * @param \PhpParser\Node\Expr\MethodCall $methodCall
-     */
-    private function shouldSkip($methodCall) : bool
+    private function shouldSkip(\PhpParser\Node\Expr\MethodCall $methodCall) : bool
     {
         if (!$this->isName($methodCall->name, 'createFormBuilder')) {
             return \true;

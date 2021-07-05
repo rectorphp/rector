@@ -73,7 +73,7 @@ CODE_SAMPLE
     /**
      * @param MethodCall|StaticCall $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $args = $node->args;
         if ($this->shouldSkip($args)) {
@@ -104,7 +104,7 @@ CODE_SAMPLE
     /**
      * @param Arg[] $args
      */
-    private function shouldSkip($args) : bool
+    private function shouldSkip(array $args) : bool
     {
         foreach ($args as $arg) {
             if ($arg->name instanceof \PhpParser\Node\Identifier) {

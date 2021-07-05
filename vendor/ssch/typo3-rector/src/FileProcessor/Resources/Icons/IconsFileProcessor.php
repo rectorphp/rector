@@ -38,13 +38,21 @@ final class IconsFileProcessor implements \Rector\Core\Contract\Processor\FilePr
         $this->smartFileSystem = $smartFileSystem;
         $this->iconsRector = $iconsRector;
     }
-    public function process(\Rector\Core\ValueObject\Application\File $file, \Rector\Core\ValueObject\Configuration $configuration) : void
+    /**
+     * @param \Rector\Core\ValueObject\Application\File $file
+     * @param \Rector\Core\ValueObject\Configuration $configuration
+     */
+    public function process($file, $configuration) : void
     {
         foreach ($this->iconsRector as $iconRector) {
             $iconRector->refactorFile($file);
         }
     }
-    public function supports(\Rector\Core\ValueObject\Application\File $file, \Rector\Core\ValueObject\Configuration $configuration) : bool
+    /**
+     * @param \Rector\Core\ValueObject\Application\File $file
+     * @param \Rector\Core\ValueObject\Configuration $configuration
+     */
+    public function supports($file, $configuration) : bool
     {
         $smartFileInfo = $file->getSmartFileInfo();
         if (!\RectorPrefix20210705\Nette\Utils\Strings::contains($smartFileInfo->getFilename(), 'ext_icon')) {
@@ -63,7 +71,10 @@ final class IconsFileProcessor implements \Rector\Core\Contract\Processor\FilePr
     {
         return ['png', 'gif', 'svg'];
     }
-    private function createIconPath(\Rector\Core\ValueObject\Application\File $file) : string
+    /**
+     * @param \Rector\Core\ValueObject\Application\File $file
+     */
+    private function createIconPath($file) : string
     {
         $smartFileInfo = $file->getSmartFileInfo();
         $realPath = $smartFileInfo->getRealPathDirectory();

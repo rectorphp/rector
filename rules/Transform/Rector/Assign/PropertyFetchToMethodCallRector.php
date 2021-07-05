@@ -57,7 +57,7 @@ CODE_SAMPLE
     /**
      * @param PropertyFetch|Assign $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($node instanceof \PhpParser\Node\Expr\Assign && $node->var instanceof \PhpParser\Node\Expr\PropertyFetch) {
             return $this->processSetter($node);

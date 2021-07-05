@@ -27,8 +27,9 @@ class DelegatingLoader extends \RectorPrefix20210705\Symfony\Component\Config\Lo
     }
     /**
      * {@inheritdoc}
+     * @param string|null $type
      */
-    public function load($resource, string $type = null)
+    public function load($resource, $type = null)
     {
         if (\false === ($loader = $this->resolver->resolve($resource, $type))) {
             throw new \RectorPrefix20210705\Symfony\Component\Config\Exception\LoaderLoadException($resource, null, 0, null, $type);
@@ -37,8 +38,9 @@ class DelegatingLoader extends \RectorPrefix20210705\Symfony\Component\Config\Lo
     }
     /**
      * {@inheritdoc}
+     * @param string|null $type
      */
-    public function supports($resource, string $type = null)
+    public function supports($resource, $type = null)
     {
         return \false !== $this->resolver->resolve($resource, $type);
     }

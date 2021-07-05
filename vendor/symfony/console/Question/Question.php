@@ -67,8 +67,9 @@ class Question
      * Sets whether the user response should accept newline characters.
      *
      * @return $this
+     * @param bool $multiline
      */
-    public function setMultiline(bool $multiline)
+    public function setMultiline($multiline)
     {
         $this->multiline = $multiline;
         return $this;
@@ -88,8 +89,9 @@ class Question
      * @return $this
      *
      * @throws LogicException In case the autocompleter is also used
+     * @param bool $hidden
      */
-    public function setHidden(bool $hidden)
+    public function setHidden($hidden)
     {
         if ($this->autocompleterCallback) {
             throw new \RectorPrefix20210705\Symfony\Component\Console\Exception\LogicException('A hidden question cannot use the autocompleter.');
@@ -110,8 +112,9 @@ class Question
      * Sets whether to fallback on non-hidden question if the response can not be hidden.
      *
      * @return $this
+     * @param bool $fallback
      */
-    public function setHiddenFallback(bool $fallback)
+    public function setHiddenFallback($fallback)
     {
         $this->hiddenFallback = (bool) $fallback;
         return $this;
@@ -132,8 +135,9 @@ class Question
      * @return $this
      *
      * @throws LogicException
+     * @param mixed[]|null $values
      */
-    public function setAutocompleterValues(?iterable $values)
+    public function setAutocompleterValues($values)
     {
         if (\is_array($values)) {
             $values = $this->isAssoc($values) ? \array_merge(\array_keys($values), \array_values($values)) : \array_values($values);
@@ -163,8 +167,9 @@ class Question
      * The callback is passed the user input as argument and should return an iterable of corresponding suggestions.
      *
      * @return $this
+     * @param callable|null $callback
      */
-    public function setAutocompleterCallback(callable $callback = null)
+    public function setAutocompleterCallback($callback = null)
     {
         if ($this->hidden && null !== $callback) {
             throw new \RectorPrefix20210705\Symfony\Component\Console\Exception\LogicException('A hidden question cannot use the autocompleter.');
@@ -176,8 +181,9 @@ class Question
      * Sets a validator for the question.
      *
      * @return $this
+     * @param callable|null $validator
      */
-    public function setValidator(callable $validator = null)
+    public function setValidator($validator = null)
     {
         $this->validator = $validator;
         return $this;
@@ -199,8 +205,9 @@ class Question
      * @return $this
      *
      * @throws InvalidArgumentException in case the number of attempts is invalid
+     * @param int|null $attempts
      */
-    public function setMaxAttempts(?int $attempts)
+    public function setMaxAttempts($attempts)
     {
         if (null !== $attempts) {
             $attempts = (int) $attempts;
@@ -225,11 +232,12 @@ class Question
     /**
      * Sets a normalizer for the response.
      *
-     * The normalizer can be a callable (a string), a closure or a class implementing __invoke.
+     * The normalizer can be a callable(a string), a closure or a class implementing __invoke.
      *
      * @return $this
+     * @param callable $normalizer
      */
-    public function setNormalizer(callable $normalizer)
+    public function setNormalizer($normalizer)
     {
         $this->normalizer = $normalizer;
         return $this;
@@ -245,7 +253,10 @@ class Question
     {
         return $this->normalizer;
     }
-    protected function isAssoc(array $array)
+    /**
+     * @param mixed[] $array
+     */
+    protected function isAssoc($array)
     {
         return (bool) \count(\array_filter(\array_keys($array), 'is_string'));
     }
@@ -255,8 +266,9 @@ class Question
     }
     /**
      * @return $this
+     * @param bool $trimmable
      */
-    public function setTrimmable(bool $trimmable)
+    public function setTrimmable($trimmable)
     {
         $this->trimmable = $trimmable;
         return $this;

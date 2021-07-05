@@ -34,8 +34,9 @@ interface KernelInterface extends \RectorPrefix20210705\Symfony\Component\HttpKe
     public function registerBundles();
     /**
      * Loads the container configuration.
+     * @param \Symfony\Component\Config\Loader\LoaderInterface $loader
      */
-    public function registerContainerConfiguration(\RectorPrefix20210705\Symfony\Component\Config\Loader\LoaderInterface $loader);
+    public function registerContainerConfiguration($loader);
     /**
      * Boots the current kernel.
      */
@@ -58,8 +59,9 @@ interface KernelInterface extends \RectorPrefix20210705\Symfony\Component\HttpKe
      * @return BundleInterface A BundleInterface instance
      *
      * @throws \InvalidArgumentException when the bundle is not enabled
+     * @param string $name
      */
-    public function getBundle(string $name);
+    public function getBundle($name);
     /**
      * Returns the file path for a given bundle resource.
      *
@@ -76,8 +78,9 @@ interface KernelInterface extends \RectorPrefix20210705\Symfony\Component\HttpKe
      *
      * @throws \InvalidArgumentException if the file cannot be found or the name is not valid
      * @throws \RuntimeException         if the name contains invalid/unsafe characters
+     * @param string $name
      */
-    public function locateResource(string $name);
+    public function locateResource($name);
     /**
      * Gets the environment.
      *

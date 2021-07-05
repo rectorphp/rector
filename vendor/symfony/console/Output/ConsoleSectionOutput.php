@@ -39,7 +39,7 @@ class ConsoleSectionOutput extends \RectorPrefix20210705\Symfony\Component\Conso
      *
      * @param int $lines Number of lines to clear. If null, then the entire output of this section is cleared
      */
-    public function clear(int $lines = null)
+    public function clear($lines = null)
     {
         if (empty($this->content) || !$this->isDecorated()) {
             return;
@@ -70,8 +70,9 @@ class ConsoleSectionOutput extends \RectorPrefix20210705\Symfony\Component\Conso
     }
     /**
      * @internal
+     * @param string $input
      */
-    public function addContent(string $input)
+    public function addContent($input)
     {
         foreach (\explode(\PHP_EOL, $input) as $lineContent) {
             $this->lines += \ceil($this->getDisplayLength($lineContent) / $this->terminal->getWidth()) ?: 1;
@@ -81,8 +82,10 @@ class ConsoleSectionOutput extends \RectorPrefix20210705\Symfony\Component\Conso
     }
     /**
      * {@inheritdoc}
+     * @param string $message
+     * @param bool $newline
      */
-    protected function doWrite(string $message, bool $newline)
+    protected function doWrite($message, $newline)
     {
         if (!$this->isDecorated()) {
             parent::doWrite($message, $newline);
@@ -96,8 +99,9 @@ class ConsoleSectionOutput extends \RectorPrefix20210705\Symfony\Component\Conso
     /**
      * At initial stage, cursor is at the end of stream output. This method makes cursor crawl upwards until it hits
      * current section. Then it erases content it crawled through. Optionally, it erases part of current section too.
+     * @param int $numberOfLinesToClearFromCurrentSection
      */
-    private function popStreamContentUntilCurrentSection(int $numberOfLinesToClearFromCurrentSection = 0) : string
+    private function popStreamContentUntilCurrentSection($numberOfLinesToClearFromCurrentSection = 0) : string
     {
         $numberOfLinesToClear = $numberOfLinesToClearFromCurrentSection;
         $erasedContent = [];
@@ -116,7 +120,10 @@ class ConsoleSectionOutput extends \RectorPrefix20210705\Symfony\Component\Conso
         }
         return \implode('', \array_reverse($erasedContent));
     }
-    private function getDisplayLength(string $text) : int
+    /**
+     * @param string $text
+     */
+    private function getDisplayLength($text) : int
     {
         return \RectorPrefix20210705\Symfony\Component\Console\Helper\Helper::width(\RectorPrefix20210705\Symfony\Component\Console\Helper\Helper::removeDecoration($this->getFormatter(), \str_replace("\t", '        ', $text)));
     }

@@ -23,7 +23,10 @@ use RectorPrefix20210705\Symfony\Component\DependencyInjection\Reference;
  */
 class CheckReferenceValidityPass extends \RectorPrefix20210705\Symfony\Component\DependencyInjection\Compiler\AbstractRecursivePass
 {
-    protected function processValue($value, bool $isRoot = \false)
+    /**
+     * @param bool $isRoot
+     */
+    protected function processValue($value, $isRoot = \false)
     {
         if ($isRoot && $value instanceof \RectorPrefix20210705\Symfony\Component\DependencyInjection\Definition && ($value->isSynthetic() || $value->isAbstract())) {
             return $value;

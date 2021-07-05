@@ -24,7 +24,10 @@ use RectorPrefix20210705\Symfony\Component\Console\Input\InputOption;
  */
 class XmlDescriptor extends \RectorPrefix20210705\Symfony\Component\Console\Descriptor\Descriptor
 {
-    public function getInputDefinitionDocument(\RectorPrefix20210705\Symfony\Component\Console\Input\InputDefinition $definition) : \DOMDocument
+    /**
+     * @param \Symfony\Component\Console\Input\InputDefinition $definition
+     */
+    public function getInputDefinitionDocument($definition) : \DOMDocument
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
         $dom->appendChild($definitionXML = $dom->createElement('definition'));
@@ -38,7 +41,11 @@ class XmlDescriptor extends \RectorPrefix20210705\Symfony\Component\Console\Desc
         }
         return $dom;
     }
-    public function getCommandDocument(\RectorPrefix20210705\Symfony\Component\Console\Command\Command $command, bool $short = \false) : \DOMDocument
+    /**
+     * @param \Symfony\Component\Console\Command\Command $command
+     * @param bool $short
+     */
+    public function getCommandDocument($command, $short = \false) : \DOMDocument
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
         $dom->appendChild($commandXML = $dom->createElement('command'));
@@ -64,7 +71,12 @@ class XmlDescriptor extends \RectorPrefix20210705\Symfony\Component\Console\Desc
         }
         return $dom;
     }
-    public function getApplicationDocument(\RectorPrefix20210705\Symfony\Component\Console\Application $application, string $namespace = null, bool $short = \false) : \DOMDocument
+    /**
+     * @param \Symfony\Component\Console\Application $application
+     * @param string|null $namespace
+     * @param bool $short
+     */
+    public function getApplicationDocument($application, $namespace = null, $short = \false) : \DOMDocument
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
         $dom->appendChild($rootXml = $dom->createElement('symfony'));
@@ -97,43 +109,55 @@ class XmlDescriptor extends \RectorPrefix20210705\Symfony\Component\Console\Desc
     }
     /**
      * {@inheritdoc}
+     * @param \Symfony\Component\Console\Input\InputArgument $argument
+     * @param mixed[] $options
      */
-    protected function describeInputArgument(\RectorPrefix20210705\Symfony\Component\Console\Input\InputArgument $argument, array $options = [])
+    protected function describeInputArgument($argument, $options = [])
     {
         $this->writeDocument($this->getInputArgumentDocument($argument));
     }
     /**
      * {@inheritdoc}
+     * @param \Symfony\Component\Console\Input\InputOption $option
+     * @param mixed[] $options
      */
-    protected function describeInputOption(\RectorPrefix20210705\Symfony\Component\Console\Input\InputOption $option, array $options = [])
+    protected function describeInputOption($option, $options = [])
     {
         $this->writeDocument($this->getInputOptionDocument($option));
     }
     /**
      * {@inheritdoc}
+     * @param \Symfony\Component\Console\Input\InputDefinition $definition
+     * @param mixed[] $options
      */
-    protected function describeInputDefinition(\RectorPrefix20210705\Symfony\Component\Console\Input\InputDefinition $definition, array $options = [])
+    protected function describeInputDefinition($definition, $options = [])
     {
         $this->writeDocument($this->getInputDefinitionDocument($definition));
     }
     /**
      * {@inheritdoc}
+     * @param \Symfony\Component\Console\Command\Command $command
+     * @param mixed[] $options
      */
-    protected function describeCommand(\RectorPrefix20210705\Symfony\Component\Console\Command\Command $command, array $options = [])
+    protected function describeCommand($command, $options = [])
     {
         $this->writeDocument($this->getCommandDocument($command, $options['short'] ?? \false));
     }
     /**
      * {@inheritdoc}
+     * @param \Symfony\Component\Console\Application $application
+     * @param mixed[] $options
      */
-    protected function describeApplication(\RectorPrefix20210705\Symfony\Component\Console\Application $application, array $options = [])
+    protected function describeApplication($application, $options = [])
     {
         $this->writeDocument($this->getApplicationDocument($application, $options['namespace'] ?? null, $options['short'] ?? \false));
     }
     /**
      * Appends document children to parent node.
+     * @param \DOMNode $parentNode
+     * @param \DOMNode $importedParent
      */
-    private function appendDocument(\DOMNode $parentNode, \DOMNode $importedParent)
+    private function appendDocument($parentNode, $importedParent)
     {
         foreach ($importedParent->childNodes as $childNode) {
             $parentNode->appendChild($parentNode->ownerDocument->importNode($childNode, \true));
@@ -141,13 +165,17 @@ class XmlDescriptor extends \RectorPrefix20210705\Symfony\Component\Console\Desc
     }
     /**
      * Writes DOM document.
+     * @param \DOMDocument $dom
      */
-    private function writeDocument(\DOMDocument $dom)
+    private function writeDocument($dom)
     {
         $dom->formatOutput = \true;
         $this->write($dom->saveXML());
     }
-    private function getInputArgumentDocument(\RectorPrefix20210705\Symfony\Component\Console\Input\InputArgument $argument) : \DOMDocument
+    /**
+     * @param \Symfony\Component\Console\Input\InputArgument $argument
+     */
+    private function getInputArgumentDocument($argument) : \DOMDocument
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
         $dom->appendChild($objectXML = $dom->createElement('argument'));
@@ -164,7 +192,10 @@ class XmlDescriptor extends \RectorPrefix20210705\Symfony\Component\Console\Desc
         }
         return $dom;
     }
-    private function getInputOptionDocument(\RectorPrefix20210705\Symfony\Component\Console\Input\InputOption $option) : \DOMDocument
+    /**
+     * @param \Symfony\Component\Console\Input\InputOption $option
+     */
+    private function getInputOptionDocument($option) : \DOMDocument
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
         $dom->appendChild($objectXML = $dom->createElement('option'));

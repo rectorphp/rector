@@ -28,8 +28,9 @@ abstract class RoutableFragmentRenderer implements \RectorPrefix20210705\Symfony
      * Sets the fragment path that triggers the fragment listener.
      *
      * @see FragmentListener
+     * @param string $path
      */
-    public function setFragmentPath(string $path)
+    public function setFragmentPath($path)
     {
         $this->fragmentPath = $path;
     }
@@ -40,8 +41,10 @@ abstract class RoutableFragmentRenderer implements \RectorPrefix20210705\Symfony
      * @param bool $strict   Whether to allow non-scalar attributes or not
      *
      * @return string A fragment URI
+     * @param \Symfony\Component\HttpKernel\Controller\ControllerReference $reference
+     * @param \Symfony\Component\HttpFoundation\Request $request
      */
-    protected function generateFragmentUri(\RectorPrefix20210705\Symfony\Component\HttpKernel\Controller\ControllerReference $reference, \RectorPrefix20210705\Symfony\Component\HttpFoundation\Request $request, bool $absolute = \false, bool $strict = \true)
+    protected function generateFragmentUri($reference, $request, $absolute = \false, $strict = \true)
     {
         return (new \RectorPrefix20210705\Symfony\Component\HttpKernel\Fragment\FragmentUriGenerator($this->fragmentPath))->generate($reference, $request, $absolute, $strict, \false);
     }

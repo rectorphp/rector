@@ -19,38 +19,59 @@ final class RectorOutputStyle implements \Rector\Core\Contract\Console\OutputSty
     {
         $this->symfonyStyle = $symfonyStyle;
     }
-    public function error(string $message) : void
+    /**
+     * @param string $message
+     */
+    public function error($message) : void
     {
         $this->symfonyStyle->error($message);
     }
-    public function warning(string $message) : void
+    /**
+     * @param string $message
+     */
+    public function warning($message) : void
     {
         $this->symfonyStyle->warning($message);
     }
-    public function success(string $message) : void
+    /**
+     * @param string $message
+     */
+    public function success($message) : void
     {
         $this->symfonyStyle->success($message);
     }
-    public function note(string $message) : void
+    /**
+     * @param string $message
+     */
+    public function note($message) : void
     {
         $this->symfonyStyle->note($message);
     }
-    public function title(string $message) : void
+    /**
+     * @param string $message
+     */
+    public function title($message) : void
     {
         $this->symfonyStyle->title($message);
     }
-    public function writeln(string $message) : void
+    /**
+     * @param string $message
+     */
+    public function writeln($message) : void
     {
         $this->symfonyStyle->writeln($message);
     }
-    public function newline(int $count = 1) : void
+    /**
+     * @param int $count
+     */
+    public function newline($count = 1) : void
     {
         $this->symfonyStyle->newLine($count);
     }
     /**
      * @param string[] $elements
      */
-    public function listing(array $elements) : void
+    public function listing($elements) : void
     {
         $this->symfonyStyle->listing($elements);
     }

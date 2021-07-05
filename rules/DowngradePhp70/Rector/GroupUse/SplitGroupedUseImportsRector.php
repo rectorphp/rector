@@ -39,10 +39,10 @@ CODE_SAMPLE
         return [\PhpParser\Node\Stmt\GroupUse::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param GroupUse $node
      * @return Use_[]
      */
-    public function refactor($node) : array
+    public function refactor(\PhpParser\Node $node) : array
     {
         $prefix = $this->getName($node->prefix);
         $uses = [];

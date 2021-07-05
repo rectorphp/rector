@@ -42,8 +42,9 @@ class CacheWarmerAggregate implements \RectorPrefix20210705\Symfony\Component\Ht
      * Warms up the cache.
      *
      * @return string[] A list of classes or files to preload on PHP 7.4+
+     * @param string $cacheDir
      */
-    public function warmUp(string $cacheDir)
+    public function warmUp($cacheDir)
     {
         if ($collectDeprecations = $this->debug && !\defined('PHPUNIT_COMPOSER_INSTALL')) {
             $collectedLogs = [];

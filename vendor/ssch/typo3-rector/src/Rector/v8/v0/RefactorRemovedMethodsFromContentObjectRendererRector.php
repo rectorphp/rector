@@ -36,9 +36,9 @@ final class RefactorRemovedMethodsFromContentObjectRendererRector extends \Recto
         return [\PhpParser\Node\Expr\MethodCall::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param MethodCall $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -69,10 +69,7 @@ $cObj->cObjGetSingle('RECORDS', ['tables' => 'tt_content', 'source' => '1,2,3'])
 CODE_SAMPLE
 )]);
     }
-    /**
-     * @param \PhpParser\Node\Expr\MethodCall $node
-     */
-    private function shouldSkip($node) : bool
+    private function shouldSkip(\PhpParser\Node\Expr\MethodCall $node) : bool
     {
         $staticType = $this->getStaticType($node->var);
         if ($staticType instanceof \PHPStan\Type\TypeWithClassName && 'TYPO3\\CMS\\Frontend\\ContentObject\\ContentObjectRenderer' === $staticType->getClassName()) {

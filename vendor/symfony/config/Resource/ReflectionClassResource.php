@@ -33,8 +33,9 @@ class ReflectionClassResource implements \RectorPrefix20210705\Symfony\Component
     }
     /**
      * {@inheritdoc}
+     * @param int $timestamp
      */
-    public function isFresh(int $timestamp) : bool
+    public function isFresh($timestamp) : bool
     {
         if (null === $this->hash) {
             $this->hash = $this->computeHash();
@@ -65,7 +66,10 @@ class ReflectionClassResource implements \RectorPrefix20210705\Symfony\Component
         }
         return ['files', 'className', 'hash'];
     }
-    private function loadFiles(\ReflectionClass $class)
+    /**
+     * @param \ReflectionClass $class
+     */
+    private function loadFiles($class)
     {
         foreach ($class->getInterfaces() as $v) {
             $this->loadFiles($v);
@@ -104,7 +108,10 @@ class ReflectionClassResource implements \RectorPrefix20210705\Symfony\Component
         }
         return \hash_final($hash);
     }
-    private function generateSignature(\ReflectionClass $class) : iterable
+    /**
+     * @param \ReflectionClass $class
+     */
+    private function generateSignature($class) : iterable
     {
         if (\PHP_VERSION_ID >= 80000) {
             $attributes = [];

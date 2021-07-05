@@ -53,7 +53,7 @@ CODE_SAMPLE
     /**
      * @param Class_|Trait_ $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $this->classHasChanged = \false;
         foreach ($node->getTraitUses() as $traitUse) {

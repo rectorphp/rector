@@ -55,7 +55,7 @@ CODE_SAMPLE
     /**
      * @param Identical|NotIdentical $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $funcCall = $this->matchIdenticalOrNotIdenticalToFalse($node);
         if (!$funcCall instanceof \PhpParser\Node\Expr\FuncCall) {

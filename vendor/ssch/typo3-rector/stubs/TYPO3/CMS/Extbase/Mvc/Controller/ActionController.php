@@ -28,14 +28,16 @@ class ActionController extends \RectorPrefix20210705\TYPO3\CMS\Extbase\Mvc\Contr
      * @param string $actionName
      * @param string $controllerName
      * @param string $extensionName
+     * @param mixed[]|null $arguments
      */
-    public function forward($actionName, $controllerName = null, $extensionName = null, array $arguments = null)
+    public function forward($actionName, $controllerName = null, $extensionName = null, $arguments = null)
     {
     }
     /**
      * @return void
+     * @param mixed[]|null $arguments
      */
-    protected function redirect($actionName, $controllerName = null, $extensionName = null, array $arguments = null, $pageUid = null, $delay = 0, $statusCode = 303)
+    protected function redirect($actionName, $controllerName = null, $extensionName = null, $arguments = null, $pageUid = null, $delay = 0, $statusCode = 303)
     {
     }
     /**

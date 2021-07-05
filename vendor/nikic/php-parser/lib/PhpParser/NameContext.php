@@ -32,7 +32,7 @@ class NameContext
      *
      * @param Name|null $namespace Null is the global namespace
      */
-    public function startNamespace(\PhpParser\Node\Name $namespace = null)
+    public function startNamespace($namespace = null)
     {
         $this->namespace = $namespace;
         $this->origAliases = $this->aliases = [\PhpParser\Node\Stmt\Use_::TYPE_NORMAL => [], \PhpParser\Node\Stmt\Use_::TYPE_FUNCTION => [], \PhpParser\Node\Stmt\Use_::TYPE_CONSTANT => []];
@@ -45,7 +45,7 @@ class NameContext
      * @param int    $type        One of Stmt\Use_::TYPE_*
      * @param array  $errorAttrs Attributes to use to report an error
      */
-    public function addAlias(\PhpParser\Node\Name $name, string $aliasName, int $type, array $errorAttrs = [])
+    public function addAlias($name, $aliasName, $type, $errorAttrs = [])
     {
         // Constant names are case sensitive, everything else case insensitive
         if ($type === \PhpParser\Node\Stmt\Use_::TYPE_CONSTANT) {
@@ -78,7 +78,7 @@ class NameContext
      *
      * @return null|Name Resolved name, or null if static resolution is not possible
      */
-    public function getResolvedName(\PhpParser\Node\Name $name, int $type)
+    public function getResolvedName($name, $type)
     {
         // don't resolve special class names
         if ($type === \PhpParser\Node\Stmt\Use_::TYPE_NORMAL && $name->isSpecialClassName()) {
@@ -113,7 +113,7 @@ class NameContext
      *
      * @return Name Resolved name
      */
-    public function getResolvedClassName(\PhpParser\Node\Name $name) : \PhpParser\Node\Name
+    public function getResolvedClassName($name) : \PhpParser\Node\Name
     {
         return $this->getResolvedName($name, \PhpParser\Node\Stmt\Use_::TYPE_NORMAL);
     }
@@ -125,7 +125,7 @@ class NameContext
      *
      * @return Name[] Possible representations of the name
      */
-    public function getPossibleNames(string $name, int $type) : array
+    public function getPossibleNames($name, $type) : array
     {
         $lcName = \strtolower($name);
         if ($type === \PhpParser\Node\Stmt\Use_::TYPE_NORMAL) {
@@ -175,7 +175,7 @@ class NameContext
      *
      * @return Name Shortest representation
      */
-    public function getShortName(string $name, int $type) : \PhpParser\Node\Name
+    public function getShortName($name, $type) : \PhpParser\Node\Name
     {
         $possibleNames = $this->getPossibleNames($name, $type);
         // Find shortest name
@@ -190,7 +190,10 @@ class NameContext
         }
         return $shortestName;
     }
-    private function resolveAlias(\PhpParser\Node\Name $name, $type)
+    /**
+     * @param \PhpParser\Node\Name $name
+     */
+    private function resolveAlias($name, $type)
     {
         $firstPart = $name->getFirst();
         if ($name->isQualified()) {
@@ -211,7 +214,12 @@ class NameContext
         // No applicable aliases
         return null;
     }
-    private function getNamespaceRelativeName(string $name, string $lcName, int $type)
+    /**
+     * @param string $name
+     * @param string $lcName
+     * @param int $type
+     */
+    private function getNamespaceRelativeName($name, $lcName, $type)
     {
         if (null === $this->namespace) {
             return new \PhpParser\Node\Name($name);
@@ -229,7 +237,10 @@ class NameContext
         }
         return null;
     }
-    private function normalizeConstName(string $name)
+    /**
+     * @param string $name
+     */
+    private function normalizeConstName($name)
     {
         $nsSep = \strrpos($name, '\\');
         if (\false === $nsSep) {

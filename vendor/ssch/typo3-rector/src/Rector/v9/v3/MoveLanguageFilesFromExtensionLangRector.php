@@ -27,9 +27,9 @@ final class MoveLanguageFilesFromExtensionLangRector extends \Rector\Core\Rector
         return [\PhpParser\Node\Scalar\String_::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param String_ $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $value = $this->valueResolver->getValue($node);
         if (null === $value || !\is_string($value)) {

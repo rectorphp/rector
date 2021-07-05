@@ -353,7 +353,7 @@ class Assert
      *
      * @throws InvalidArgumentException
      */
-    public static function isInstanceOfAny($value, array $classes, $message = '')
+    public static function isInstanceOfAny($value, $classes, $message = '')
     {
         foreach ($classes as $class) {
             if ($value instanceof $class) {
@@ -411,7 +411,7 @@ class Assert
      *
      * @throws InvalidArgumentException
      */
-    public static function isAnyOf($value, array $classes, $message = '')
+    public static function isAnyOf($value, $classes, $message = '')
     {
         foreach ($classes as $class) {
             static::string($class, 'Expected class as a string. Got: %s');
@@ -582,7 +582,7 @@ class Assert
      *
      * @throws InvalidArgumentException
      */
-    public static function uniqueValues(array $values, $message = '')
+    public static function uniqueValues($values, $message = '')
     {
         $allValues = \count($values);
         $uniqueValues = \count(\array_unique($values));
@@ -736,7 +736,7 @@ class Assert
      *
      * @throws InvalidArgumentException
      */
-    public static function oneOf($value, array $values, $message = '')
+    public static function oneOf($value, $values, $message = '')
     {
         static::inArray($value, $values, $message);
     }
@@ -751,7 +751,7 @@ class Assert
      *
      * @throws InvalidArgumentException
      */
-    public static function inArray($value, array $values, $message = '')
+    public static function inArray($value, $values, $message = '')
     {
         if (!\in_array($value, $values, \true)) {
             static::reportInvalidArgument(\sprintf($message ?: 'Expected one of: %2$s. Got: %s', static::valueToString($value), \implode(', ', \array_map(array('static', 'valueToString'), $values))));
@@ -1481,7 +1481,7 @@ class Assert
      *
      * @throws InvalidArgumentException
      */
-    public static function throws(\Closure $expression, $class = 'Exception', $message = '')
+    public static function throws($expression, $class = 'Exception', $message = '')
     {
         static::string($class);
         $actual = 'none';

@@ -9,7 +9,10 @@ use RectorPrefix20210705\Symplify\Astral\DependencyInjection\Extension\AstralExt
 use RectorPrefix20210705\Symplify\AutowireArrayParameter\DependencyInjection\CompilerPass\AutowireArrayParameterCompilerPass;
 final class AstralBundle extends \RectorPrefix20210705\Symfony\Component\HttpKernel\Bundle\Bundle
 {
-    public function build(\RectorPrefix20210705\Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder) : void
+    /**
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder
+     */
+    public function build($containerBuilder) : void
     {
         $containerBuilder->addCompilerPass(new \RectorPrefix20210705\Symplify\AutowireArrayParameter\DependencyInjection\CompilerPass\AutowireArrayParameterCompilerPass());
     }

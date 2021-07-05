@@ -36,9 +36,9 @@ final class RenameFunctionRector extends \Rector\Core\Rector\AbstractRector impl
         return [\PhpParser\Node\Expr\FuncCall::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param FuncCall $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         foreach ($this->oldFunctionToNewFunction as $oldFunction => $newFunction) {
             if (!$this->isName($node, $oldFunction)) {

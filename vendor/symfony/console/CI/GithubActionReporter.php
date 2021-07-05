@@ -39,8 +39,12 @@ class GithubActionReporter
      * Output an error using the Github annotations format.
      *
      * @see https://docs.github.com/en/free-pro-team@latest/actions/reference/workflow-commands-for-github-actions#setting-an-error-message
+     * @param string $message
+     * @param string|null $file
+     * @param int|null $line
+     * @param int|null $col
      */
-    public function error(string $message, string $file = null, int $line = null, int $col = null) : void
+    public function error($message, $file = null, $line = null, $col = null) : void
     {
         $this->log('error', $message, $file, $line, $col);
     }
@@ -48,8 +52,12 @@ class GithubActionReporter
      * Output a warning using the Github annotations format.
      *
      * @see https://docs.github.com/en/free-pro-team@latest/actions/reference/workflow-commands-for-github-actions#setting-a-warning-message
+     * @param string $message
+     * @param string|null $file
+     * @param int|null $line
+     * @param int|null $col
      */
-    public function warning(string $message, string $file = null, int $line = null, int $col = null) : void
+    public function warning($message, $file = null, $line = null, $col = null) : void
     {
         $this->log('warning', $message, $file, $line, $col);
     }
@@ -57,12 +65,23 @@ class GithubActionReporter
      * Output a debug log using the Github annotations format.
      *
      * @see https://docs.github.com/en/free-pro-team@latest/actions/reference/workflow-commands-for-github-actions#setting-a-debug-message
+     * @param string $message
+     * @param string|null $file
+     * @param int|null $line
+     * @param int|null $col
      */
-    public function debug(string $message, string $file = null, int $line = null, int $col = null) : void
+    public function debug($message, $file = null, $line = null, $col = null) : void
     {
         $this->log('debug', $message, $file, $line, $col);
     }
-    private function log(string $type, string $message, string $file = null, int $line = null, int $col = null) : void
+    /**
+     * @param string $type
+     * @param string $message
+     * @param string|null $file
+     * @param int|null $line
+     * @param int|null $col
+     */
+    private function log($type, $message, $file = null, $line = null, $col = null) : void
     {
         // Some values must be encoded.
         $message = \strtr($message, self::ESCAPED_DATA);

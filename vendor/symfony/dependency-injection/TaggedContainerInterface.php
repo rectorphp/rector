@@ -24,5 +24,5 @@ interface TaggedContainerInterface extends \RectorPrefix20210705\Symfony\Compone
      *
      * @return array An array of tags
      */
-    public function findTaggedServiceIds(string $name);
+    public function findTaggedServiceIds($name);
 }

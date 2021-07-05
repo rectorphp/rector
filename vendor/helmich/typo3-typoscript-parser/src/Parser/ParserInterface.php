@@ -14,19 +14,19 @@ interface ParserInterface
      * @param string $stream The stream resource.
      * @return Statement[] The syntax tree.
      */
-    public function parseStream(string $stream) : array;
+    public function parseStream($stream) : array;
     /**
      * Parses a TypoScript string.
      *
      * @param string $string The string to parse.
      * @return Statement[] The syntax tree.
      */
-    public function parseString(string $string) : array;
+    public function parseString($string) : array;
     /**
      * Parses a token stream.
      *
      * @param \Helmich\TypoScriptParser\Tokenizer\TokenInterface[] $tokens The token stream to parse.
      * @return Statement[] The syntax tree.
      */
-    public function parseTokens(array $tokens) : array;
+    public function parseTokens($tokens) : array;
 }

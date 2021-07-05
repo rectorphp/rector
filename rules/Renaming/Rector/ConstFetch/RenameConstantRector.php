@@ -53,9 +53,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Expr\ConstFetch::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param ConstFetch $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         foreach ($this->oldToNewConstants as $oldConstant => $newConstant) {
             if (!$this->isName($node->name, $oldConstant)) {

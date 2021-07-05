@@ -11,8 +11,9 @@ final class ConsoleColorDiffExtension extends \RectorPrefix20210705\Symfony\Comp
 {
     /**
      * @param string[] $configs
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder
      */
-    public function load(array $configs, \RectorPrefix20210705\Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder) : void
+    public function load($configs, $containerBuilder) : void
     {
         $phpFileLoader = new \RectorPrefix20210705\Symfony\Component\DependencyInjection\Loader\PhpFileLoader($containerBuilder, new \RectorPrefix20210705\Symfony\Component\Config\FileLocator(__DIR__ . '/../../../config'));
         $phpFileLoader->load('config.php');

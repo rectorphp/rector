@@ -24,7 +24,10 @@ final class Transformation implements \RectorPrefix20210705\Doctrine\Inflector\W
     {
         return $this->replacement;
     }
-    public function inflect(string $word) : string
+    /**
+     * @param string $word
+     */
+    public function inflect($word) : string
     {
         return (string) \preg_replace($this->pattern->getRegex(), $this->replacement, $word);
     }

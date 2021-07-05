@@ -7,6 +7,9 @@ if (\interface_exists('TYPO3\\CMS\\Core\\Cache\\Frontend\\FrontendInterface')) {
 }
 interface FrontendInterface
 {
-    public function set($entryIdentifier, $data, array $tags = [], $lifetime = null);
+    /**
+     * @param mixed[] $tags
+     */
+    public function set($entryIdentifier, $data, $tags = [], $lifetime = null);
     public function get($entryIdentifier);
 }

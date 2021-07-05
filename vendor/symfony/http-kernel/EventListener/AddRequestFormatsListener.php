@@ -29,8 +29,9 @@ class AddRequestFormatsListener implements \RectorPrefix20210705\Symfony\Compone
     }
     /**
      * Adds request formats.
+     * @param \Symfony\Component\HttpKernel\Event\RequestEvent $event
      */
-    public function onKernelRequest(\RectorPrefix20210705\Symfony\Component\HttpKernel\Event\RequestEvent $event)
+    public function onKernelRequest($event)
     {
         $request = $event->getRequest();
         foreach ($this->formats as $format => $mimeTypes) {

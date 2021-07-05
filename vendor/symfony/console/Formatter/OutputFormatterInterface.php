@@ -19,8 +19,9 @@ interface OutputFormatterInterface
 {
     /**
      * Sets the decorated flag.
+     * @param bool $decorated
      */
-    public function setDecorated(bool $decorated);
+    public function setDecorated($decorated);
     /**
      * Gets the decorated flag.
      *
@@ -29,24 +30,29 @@ interface OutputFormatterInterface
     public function isDecorated();
     /**
      * Sets a new style.
+     * @param string $name
+     * @param \Symfony\Component\Console\Formatter\OutputFormatterStyleInterface $style
      */
-    public function setStyle(string $name, \RectorPrefix20210705\Symfony\Component\Console\Formatter\OutputFormatterStyleInterface $style);
+    public function setStyle($name, $style);
     /**
      * Checks if output formatter has style with specified name.
      *
      * @return bool
+     * @param string $name
      */
-    public function hasStyle(string $name);
+    public function hasStyle($name);
     /**
      * Gets style options from style with specified name.
      *
      * @return OutputFormatterStyleInterface
      *
      * @throws \InvalidArgumentException When style isn't defined
+     * @param string $name
      */
-    public function getStyle(string $name);
+    public function getStyle($name);
     /**
      * Formats a message according to the given styles.
+     * @param string|null $message
      */
-    public function format(?string $message);
+    public function format($message);
 }

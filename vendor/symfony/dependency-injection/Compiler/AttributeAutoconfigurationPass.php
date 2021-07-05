@@ -18,14 +18,20 @@ use RectorPrefix20210705\Symfony\Component\DependencyInjection\Definition;
  */
 final class AttributeAutoconfigurationPass extends \RectorPrefix20210705\Symfony\Component\DependencyInjection\Compiler\AbstractRecursivePass
 {
-    public function process(\RectorPrefix20210705\Symfony\Component\DependencyInjection\ContainerBuilder $container) : void
+    /**
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     */
+    public function process($container) : void
     {
         if (80000 > \PHP_VERSION_ID || !$container->getAutoconfiguredAttributes()) {
             return;
         }
         parent::process($container);
     }
-    protected function processValue($value, bool $isRoot = \false)
+    /**
+     * @param bool $isRoot
+     */
+    protected function processValue($value, $isRoot = \false)
     {
         if (!$value instanceof \RectorPrefix20210705\Symfony\Component\DependencyInjection\Definition || !$value->isAutoconfigured() || $value->isAbstract() || $value->hasTag('container.ignore_attributes') || !($reflector = $this->container->getReflectionClass($value->getClass(), \false))) {
             return parent::processValue($value, $isRoot);

@@ -83,7 +83,7 @@ CODE_SAMPLE
     /**
      * @param FunctionLike|Name|ClassLike|Expression|Namespace_|Property|FileWithoutNamespace $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $oldToNewClasses = $this->renamedClassesDataCollector->getOldToNewClasses();
         return $this->classRenamer->renameNode($node, $oldToNewClasses);

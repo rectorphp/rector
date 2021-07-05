@@ -51,7 +51,7 @@ CODE_SAMPLE
     /**
      * @param Isset_|Unset_ $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         foreach ($node->vars as $arrayDimFetch) {
             if (!$arrayDimFetch instanceof \PhpParser\Node\Expr\ArrayDimFetch) {

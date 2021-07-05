@@ -20,7 +20,11 @@ abstract class GenericLanguageInflectorFactory implements \RectorPrefix20210705\
     {
         return new \RectorPrefix20210705\Doctrine\Inflector\Inflector(new \RectorPrefix20210705\Doctrine\Inflector\CachedWordInflector(new \RectorPrefix20210705\Doctrine\Inflector\RulesetInflector(...$this->singularRulesets)), new \RectorPrefix20210705\Doctrine\Inflector\CachedWordInflector(new \RectorPrefix20210705\Doctrine\Inflector\RulesetInflector(...$this->pluralRulesets)));
     }
-    public final function withSingularRules(?\RectorPrefix20210705\Doctrine\Inflector\Rules\Ruleset $singularRules, bool $reset = \false) : self
+    /**
+     * @param \Doctrine\Inflector\Rules\Ruleset|null $singularRules
+     * @param bool $reset
+     */
+    public final function withSingularRules($singularRules, $reset = \false) : self
     {
         if ($reset) {
             $this->singularRulesets = [];
@@ -30,7 +34,11 @@ abstract class GenericLanguageInflectorFactory implements \RectorPrefix20210705\
         }
         return $this;
     }
-    public final function withPluralRules(?\RectorPrefix20210705\Doctrine\Inflector\Rules\Ruleset $pluralRules, bool $reset = \false) : self
+    /**
+     * @param \Doctrine\Inflector\Rules\Ruleset|null $pluralRules
+     * @param bool $reset
+     */
+    public final function withPluralRules($pluralRules, $reset = \false) : self
     {
         if ($reset) {
             $this->pluralRulesets = [];

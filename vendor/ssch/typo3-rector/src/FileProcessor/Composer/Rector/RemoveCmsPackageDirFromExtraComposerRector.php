@@ -18,10 +18,7 @@ final class RemoveCmsPackageDirFromExtraComposerRector implements \Rector\Compos
      * @var string
      */
     private const TYPO3_CMS = 'typo3/cms';
-    /**
-     * @param \Symplify\ComposerJsonManipulator\ValueObject\ComposerJson $composerJson
-     */
-    public function refactor($composerJson) : void
+    public function refactor(\RectorPrefix20210705\Symplify\ComposerJsonManipulator\ValueObject\ComposerJson $composerJson) : void
     {
         $extra = $composerJson->getExtra();
         if (!isset($extra[self::TYPO3_CMS])) {

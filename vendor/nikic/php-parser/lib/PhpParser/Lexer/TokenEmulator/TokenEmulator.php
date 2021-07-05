@@ -7,16 +7,27 @@ namespace PhpParser\Lexer\TokenEmulator;
 abstract class TokenEmulator
 {
     public abstract function getPhpVersion() : string;
-    public abstract function isEmulationNeeded(string $code) : bool;
+    /**
+     * @param string $code
+     */
+    public abstract function isEmulationNeeded($code) : bool;
     /**
      * @return array Modified Tokens
+     * @param string $code
+     * @param mixed[] $tokens
      */
-    public abstract function emulate(string $code, array $tokens) : array;
+    public abstract function emulate($code, $tokens) : array;
     /**
      * @return array Modified Tokens
+     * @param string $code
+     * @param mixed[] $tokens
      */
-    public abstract function reverseEmulate(string $code, array $tokens) : array;
-    public function preprocessCode(string $code, array &$patches) : string
+    public abstract function reverseEmulate($code, $tokens) : array;
+    /**
+     * @param string $code
+     * @param mixed[] $patches
+     */
+    public function preprocessCode($code, &$patches) : string
     {
         return $code;
     }

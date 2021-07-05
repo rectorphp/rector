@@ -72,7 +72,7 @@ CODE_SAMPLE
     /**
      * @param FileWithoutNamespace|Namespace_ $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $expectedNamespace = $this->psr4AutoloadNamespaceMatcher->getExpectedNamespace($this->file, $node);
         if ($expectedNamespace === null) {

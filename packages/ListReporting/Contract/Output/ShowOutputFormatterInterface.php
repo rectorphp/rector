@@ -9,6 +9,6 @@ interface ShowOutputFormatterInterface
     /**
      * @param RectorInterface[] $rectors
      */
-    public function list(array $rectors) : void;
+    public function list($rectors) : void;
     public function getName() : string;
 }

@@ -97,10 +97,7 @@ CODE_SAMPLE
         }
         return \false;
     }
-    /**
-     * @param \PhpParser\Node\Stmt\Return_ $return
-     */
-    private function shouldSkip($return) : bool
+    private function shouldSkip(\PhpParser\Node\Stmt\Return_ $return) : bool
     {
         if (!$return->expr instanceof \PhpParser\Node\Expr\Variable) {
             return \true;

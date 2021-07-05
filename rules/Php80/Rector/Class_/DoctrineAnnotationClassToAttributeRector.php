@@ -110,9 +110,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Stmt\Class_::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param Class_ $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNode($node);
         if (!$phpDocInfo instanceof \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo) {
@@ -197,10 +197,7 @@ CODE_SAMPLE
         }
         $attributeGroup->attrs[0]->args[] = new \PhpParser\Node\Arg($flagCollection);
     }
-    /**
-     * @param \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo
-     */
-    private function shouldSkipClass($phpDocInfo, \PhpParser\Node\Stmt\Class_ $class) : bool
+    private function shouldSkipClass(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo, \PhpParser\Node\Stmt\Class_ $class) : bool
     {
         if (!$phpDocInfo->hasByNames(['Annotation', 'annotation'])) {
             return \true;

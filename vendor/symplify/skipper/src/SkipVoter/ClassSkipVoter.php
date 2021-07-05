@@ -53,8 +53,9 @@ final class ClassSkipVoter implements \RectorPrefix20210705\Symplify\Skipper\Con
     }
     /**
      * @param string|object $element
+     * @param \Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo
      */
-    public function shouldSkip($element, \Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo) : bool
+    public function shouldSkip($element, $smartFileInfo) : bool
     {
         $only = $this->parameterProvider->provideArrayParameter(\RectorPrefix20210705\Symplify\Skipper\ValueObject\Option::ONLY);
         $doesMatchOnly = $this->onlySkipper->doesMatchOnly($element, $smartFileInfo, $only);

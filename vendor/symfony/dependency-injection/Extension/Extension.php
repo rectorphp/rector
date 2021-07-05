@@ -70,8 +70,10 @@ abstract class Extension implements \RectorPrefix20210705\Symfony\Component\Depe
     }
     /**
      * {@inheritdoc}
+     * @param mixed[] $config
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      */
-    public function getConfiguration(array $config, \RectorPrefix20210705\Symfony\Component\DependencyInjection\ContainerBuilder $container)
+    public function getConfiguration($config, $container)
     {
         $class = static::class;
         if (\false !== \strpos($class, "\0")) {
@@ -91,7 +93,11 @@ abstract class Extension implements \RectorPrefix20210705\Symfony\Component\Depe
         }
         return null;
     }
-    protected final function processConfiguration(\RectorPrefix20210705\Symfony\Component\Config\Definition\ConfigurationInterface $configuration, array $configs) : array
+    /**
+     * @param \Symfony\Component\Config\Definition\ConfigurationInterface $configuration
+     * @param mixed[] $configs
+     */
+    protected final function processConfiguration($configuration, $configs) : array
     {
         $processor = new \RectorPrefix20210705\Symfony\Component\Config\Definition\Processor();
         return $this->processedConfigs[] = $processor->processConfiguration($configuration, $configs);
@@ -111,8 +117,10 @@ abstract class Extension implements \RectorPrefix20210705\Symfony\Component\Depe
      * @return bool Whether the configuration is enabled
      *
      * @throws InvalidArgumentException When the config is not enableable
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     * @param mixed[] $config
      */
-    protected function isConfigEnabled(\RectorPrefix20210705\Symfony\Component\DependencyInjection\ContainerBuilder $container, array $config)
+    protected function isConfigEnabled($container, $config)
     {
         if (!\array_key_exists('enabled', $config)) {
             throw new \RectorPrefix20210705\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException("The config array has no 'enabled' key.");

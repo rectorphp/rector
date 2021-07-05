@@ -50,9 +50,9 @@ final class EregToPregMatchRector extends \Rector\Core\Rector\AbstractRector
         return [\PhpParser\Node\Expr\FuncCall::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param FuncCall $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $functionName = $this->getName($node);
         if ($functionName === null) {

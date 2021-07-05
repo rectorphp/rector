@@ -33,7 +33,7 @@ abstract class Extension extends \RectorPrefix20210705\Symfony\Component\Depende
      *
      * @param array $annotatedClasses An array of class patterns
      */
-    public function addAnnotatedClassesToCompile(array $annotatedClasses)
+    public function addAnnotatedClassesToCompile($annotatedClasses)
     {
         $this->annotatedClasses = \array_merge($this->annotatedClasses, $annotatedClasses);
     }

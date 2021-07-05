@@ -72,8 +72,9 @@ class PageRenderer
      * @param string $type
      * @param string $name
      * @param string $content
+     * @param mixed[] $subProperties
      */
-    public function setMetaTag($type, $name, $content, array $subProperties = [], $replace = \true)
+    public function setMetaTag($type, $name, $content, $subProperties = [], $replace = \true)
     {
     }
     /**

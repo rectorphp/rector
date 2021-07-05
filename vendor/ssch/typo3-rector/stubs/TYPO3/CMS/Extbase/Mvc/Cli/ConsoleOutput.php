@@ -15,8 +15,9 @@ class ConsoleOutput
     }
     /**
      * @return void
+     * @param mixed[]|null $autocomplete
      */
-    public function askAndValidate($question, $validator, $attempts = null, $default = null, array $autocomplete = null)
+    public function askAndValidate($question, $validator, $attempts = null, $default = null, $autocomplete = null)
     {
     }
 }

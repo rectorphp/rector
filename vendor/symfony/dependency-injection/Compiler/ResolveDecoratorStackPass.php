@@ -30,7 +30,10 @@ class ResolveDecoratorStackPass implements \RectorPrefix20210705\Symfony\Compone
         }
         $this->tag = $tag;
     }
-    public function process(\RectorPrefix20210705\Symfony\Component\DependencyInjection\ContainerBuilder $container)
+    /**
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     */
+    public function process($container)
     {
         $stacks = [];
         foreach ($container->findTaggedServiceIds($this->tag) as $id => $tags) {
@@ -65,7 +68,11 @@ class ResolveDecoratorStackPass implements \RectorPrefix20210705\Symfony\Compone
         }
         $container->setDefinitions($resolvedDefinitions);
     }
-    private function resolveStack(array $stacks, array $path) : array
+    /**
+     * @param mixed[] $stacks
+     * @param mixed[] $path
+     */
+    private function resolveStack($stacks, $path) : array
     {
         $definitions = [];
         $id = \end($path);

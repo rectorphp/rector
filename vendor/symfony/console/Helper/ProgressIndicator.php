@@ -53,16 +53,18 @@ class ProgressIndicator
     }
     /**
      * Sets the current indicator message.
+     * @param string|null $message
      */
-    public function setMessage(?string $message)
+    public function setMessage($message)
     {
         $this->message = $message;
         $this->display();
     }
     /**
      * Starts the indicator output.
+     * @param string $message
      */
-    public function start(string $message)
+    public function start($message)
     {
         if ($this->started) {
             throw new \RectorPrefix20210705\Symfony\Component\Console\Exception\LogicException('Progress indicator already started.');
@@ -98,7 +100,7 @@ class ProgressIndicator
      *
      * @param $message
      */
-    public function finish(string $message)
+    public function finish($message)
     {
         if (!$this->started) {
             throw new \RectorPrefix20210705\Symfony\Component\Console\Exception\LogicException('Progress indicator has not yet been started.');
@@ -112,8 +114,9 @@ class ProgressIndicator
      * Gets the format for a given name.
      *
      * @return string|null A format string
+     * @param string $name
      */
-    public static function getFormatDefinition(string $name)
+    public static function getFormatDefinition($name)
     {
         if (!self::$formats) {
             self::$formats = self::initFormats();
@@ -124,8 +127,10 @@ class ProgressIndicator
      * Sets a placeholder formatter for a given name.
      *
      * This method also allow you to override an existing placeholder.
+     * @param string $name
+     * @param callable $callable
      */
-    public static function setPlaceholderFormatterDefinition(string $name, callable $callable)
+    public static function setPlaceholderFormatterDefinition($name, $callable)
     {
         if (!self::$formatters) {
             self::$formatters = self::initPlaceholderFormatters();
@@ -136,8 +141,9 @@ class ProgressIndicator
      * Gets the placeholder formatter for a given name (including the delimiter char like %).
      *
      * @return callable|null A PHP callable
+     * @param string $name
      */
-    public static function getPlaceholderFormatterDefinition(string $name)
+    public static function getPlaceholderFormatterDefinition($name)
     {
         if (!self::$formatters) {
             self::$formatters = self::initPlaceholderFormatters();
@@ -171,8 +177,9 @@ class ProgressIndicator
     }
     /**
      * Overwrites a previous message to the output.
+     * @param string $message
      */
-    private function overwrite(string $message)
+    private function overwrite($message)
     {
         if ($this->output->isDecorated()) {
             $this->output->write("\r\33[2K");

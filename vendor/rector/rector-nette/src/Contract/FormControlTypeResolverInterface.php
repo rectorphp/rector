@@ -8,6 +8,7 @@ interface FormControlTypeResolverInterface
 {
     /**
      * @return array<string, class-string>
+     * @param \PhpParser\Node $node
      */
-    public function resolve(\PhpParser\Node $node) : array;
+    public function resolve($node) : array;
 }

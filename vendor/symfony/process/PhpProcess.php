@@ -48,15 +48,21 @@ class PhpProcess extends \RectorPrefix20210705\Symfony\Component\Process\Process
     }
     /**
      * {@inheritdoc}
+     * @param string $command
+     * @param string|null $cwd
+     * @param mixed[]|null $env
+     * @param float|null $timeout
      */
-    public static function fromShellCommandline(string $command, string $cwd = null, array $env = null, $input = null, ?float $timeout = 60)
+    public static function fromShellCommandline($command, $cwd = null, $env = null, $input = null, $timeout = 60)
     {
         throw new \RectorPrefix20210705\Symfony\Component\Process\Exception\LogicException(\sprintf('The "%s()" method cannot be called when using "%s".', __METHOD__, self::class));
     }
     /**
      * {@inheritdoc}
+     * @param callable|null $callback
+     * @param mixed[] $env
      */
-    public function start(callable $callback = null, array $env = [])
+    public function start($callback = null, $env = [])
     {
         if (null === $this->getCommandLine()) {
             throw new \RectorPrefix20210705\Symfony\Component\Process\Exception\RuntimeException('Unable to find the PHP executable.');

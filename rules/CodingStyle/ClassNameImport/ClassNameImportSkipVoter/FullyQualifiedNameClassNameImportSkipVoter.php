@@ -32,7 +32,11 @@ final class FullyQualifiedNameClassNameImportSkipVoter implements \Rector\Coding
         $this->shortNameResolver = $shortNameResolver;
         $this->currentFileProvider = $currentFileProvider;
     }
-    public function shouldSkip(\Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType $fullyQualifiedObjectType, \PhpParser\Node $node) : bool
+    /**
+     * @param \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType $fullyQualifiedObjectType
+     * @param \PhpParser\Node $node
+     */
+    public function shouldSkip($fullyQualifiedObjectType, $node) : bool
     {
         // "new X" or "X::static()"
         $file = $this->currentFileProvider->getFile();

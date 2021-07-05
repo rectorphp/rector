@@ -37,7 +37,10 @@ class VarDumper
         }
         return (self::$handler)($var);
     }
-    public static function setHandler(callable $callable = null)
+    /**
+     * @param callable|null $callable
+     */
+    public static function setHandler($callable = null)
     {
         $prevHandler = self::$handler;
         // Prevent replacing the handler with expected format as soon as the env var was set:

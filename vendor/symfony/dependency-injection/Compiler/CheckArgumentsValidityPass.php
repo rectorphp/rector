@@ -27,8 +27,9 @@ class CheckArgumentsValidityPass extends \RectorPrefix20210705\Symfony\Component
     }
     /**
      * {@inheritdoc}
+     * @param bool $isRoot
      */
-    protected function processValue($value, bool $isRoot = \false)
+    protected function processValue($value, $isRoot = \false)
     {
         if (!$value instanceof \RectorPrefix20210705\Symfony\Component\DependencyInjection\Definition) {
             return parent::processValue($value, $isRoot);

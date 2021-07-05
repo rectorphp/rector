@@ -35,8 +35,9 @@ class Dumper
     /**
      * Dumps variable to the output.
      * @return mixed  variable
+     * @param mixed[] $options
      */
-    public static function dump($var, array $options = [])
+    public static function dump($var, $options = [])
     {
         if (\PHP_SAPI === 'cli' || \PHP_SAPI === 'phpdbg') {
             $useColors = self::$terminalColors && \RectorPrefix20210705\Tracy\Helpers::detectColors();
@@ -55,22 +56,25 @@ class Dumper
     }
     /**
      * Dumps variable to HTML.
+     * @param mixed[] $options
      */
-    public static function toHtml($var, array $options = [], $key = null) : string
+    public static function toHtml($var, $options = [], $key = null) : string
     {
         return (new self($options))->asHtml($var, $key);
     }
     /**
      * Dumps variable to plain text.
+     * @param mixed[] $options
      */
-    public static function toText($var, array $options = []) : string
+    public static function toText($var, $options = []) : string
     {
         return (new self($options))->asTerminal($var);
     }
     /**
      * Dumps variable to x-terminal.
+     * @param mixed[] $options
      */
-    public static function toTerminal($var, array $options = []) : string
+    public static function toTerminal($var, $options = []) : string
     {
         return (new self($options))->asTerminal($var, self::$terminalColors);
     }
@@ -142,13 +146,17 @@ class Dumper
     }
     /**
      * Dumps variable to x-terminal.
+     * @param mixed[] $colors
      */
-    private function asTerminal($var, array $colors = []) : string
+    private function asTerminal($var, $colors = []) : string
     {
         $model = $this->describer->describe($var);
         return $this->renderer->renderAsText($model, $colors);
     }
-    public static function formatSnapshotAttribute(array &$snapshot) : string
+    /**
+     * @param mixed[] $snapshot
+     */
+    public static function formatSnapshotAttribute(&$snapshot) : string
     {
         $res = "'" . \RectorPrefix20210705\Tracy\Dumper\Renderer::jsonEncode($snapshot[0] ?? []) . "'";
         $snapshot = [];

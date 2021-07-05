@@ -16,8 +16,9 @@ final class ClassConstFetchNameResolver implements \Rector\NodeNameResolver\Cont
     private $nodeNameResolver;
     /**
      * @required
+     * @param \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver
      */
-    public function autowireClassConstFetchNameResolver(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver) : void
+    public function autowireClassConstFetchNameResolver($nodeNameResolver) : void
     {
         $this->nodeNameResolver = $nodeNameResolver;
     }
@@ -29,9 +30,9 @@ final class ClassConstFetchNameResolver implements \Rector\NodeNameResolver\Cont
         return \PhpParser\Node\Expr\ClassConstFetch::class;
     }
     /**
-     * @param ClassConstFetch $node
+     * @param \PhpParser\Node $node
      */
-    public function resolve(\PhpParser\Node $node) : ?string
+    public function resolve($node) : ?string
     {
         $class = $this->nodeNameResolver->getName($node->class);
         $name = $this->nodeNameResolver->getName($node->name);

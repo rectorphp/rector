@@ -22,12 +22,19 @@ final class JsonFileFormatter implements \Rector\FileFormatter\Contract\Formatte
     {
         $this->jsonPrinter = $jsonPrinter;
     }
-    public function supports(\Rector\Core\ValueObject\Application\File $file) : bool
+    /**
+     * @param \Rector\Core\ValueObject\Application\File $file
+     */
+    public function supports($file) : bool
     {
         $smartFileInfo = $file->getSmartFileInfo();
         return $smartFileInfo->getExtension() === 'json';
     }
-    public function format(\Rector\Core\ValueObject\Application\File $file, \Rector\FileFormatter\ValueObject\EditorConfigConfiguration $editorConfigConfiguration) : void
+    /**
+     * @param \Rector\Core\ValueObject\Application\File $file
+     * @param \Rector\FileFormatter\ValueObject\EditorConfigConfiguration $editorConfigConfiguration
+     */
+    public function format($file, $editorConfigConfiguration) : void
     {
         $newFileContent = $this->jsonPrinter->print($file->getFileContent(), $editorConfigConfiguration->getIndent(), $editorConfigConfiguration->getNewLine());
         $newFileContent .= $editorConfigConfiguration->getFinalNewline();

@@ -48,15 +48,20 @@ class FlattenException
     private $asString;
     /**
      * @return static
+     * @param \Exception $exception
+     * @param mixed[] $headers
      */
-    public static function create(\Exception $exception, $statusCode = null, array $headers = [])
+    public static function create($exception, $statusCode = null, $headers = [])
     {
         return static::createFromThrowable($exception, $statusCode, $headers);
     }
     /**
      * @return static
+     * @param \Throwable $exception
+     * @param int|null $statusCode
+     * @param mixed[] $headers
      */
-    public static function createFromThrowable(\Throwable $exception, int $statusCode = null, array $headers = [])
+    public static function createFromThrowable($exception, $statusCode = null, $headers = [])
     {
         $e = new static();
         $e->setMessage($exception->getMessage());
@@ -116,8 +121,9 @@ class FlattenException
     }
     /**
      * @return $this
+     * @param mixed[] $headers
      */
-    public function setHeaders(array $headers)
+    public function setHeaders($headers)
     {
         $this->headers = $headers;
         return $this;
@@ -170,8 +176,9 @@ class FlattenException
     }
     /**
      * @return $this
+     * @param string $statusText
      */
-    public function setStatusText(string $statusText)
+    public function setStatusText($statusText)
     {
         $this->statusText = $statusText;
         return $this;
@@ -246,8 +253,9 @@ class FlattenException
     }
     /**
      * @return $this
+     * @param \Throwable $throwable
      */
-    public function setTraceFromThrowable(\Throwable $throwable)
+    public function setTraceFromThrowable($throwable)
     {
         $this->traceAsString = $throwable->getTraceAsString();
         return $this->setTrace($throwable->getTrace(), $throwable->getFile(), $throwable->getLine());
@@ -275,7 +283,12 @@ class FlattenException
         }
         return $this;
     }
-    private function flattenArgs(array $args, int $level = 0, int &$count = 0) : array
+    /**
+     * @param mixed[] $args
+     * @param int $level
+     * @param int $count
+     */
+    private function flattenArgs($args, $level = 0, &$count = 0) : array
     {
         $result = [];
         foreach ($args as $key => $value) {
@@ -308,7 +321,10 @@ class FlattenException
         }
         return $result;
     }
-    private function getClassNameFromIncomplete(\__PHP_Incomplete_Class $value) : string
+    /**
+     * @param \__PHP_Incomplete_Class $value
+     */
+    private function getClassNameFromIncomplete($value) : string
     {
         $array = new \ArrayObject($value);
         return $array['__PHP_Incomplete_Class_Name'];
@@ -319,8 +335,9 @@ class FlattenException
     }
     /**
      * @return $this
+     * @param string|null $asString
      */
-    public function setAsString(?string $asString)
+    public function setAsString($asString)
     {
         $this->asString = $asString;
         return $this;

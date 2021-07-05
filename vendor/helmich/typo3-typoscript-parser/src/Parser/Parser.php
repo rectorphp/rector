@@ -39,7 +39,7 @@ class Parser implements \RectorPrefix20210705\Helmich\TypoScriptParser\Parser\Pa
      * @param string $stream The stream resource.
      * @return Statement[] The syntax tree.
      */
-    public function parseStream(string $stream) : array
+    public function parseStream($stream) : array
     {
         $content = \file_get_contents($stream);
         if ($content === \false) {
@@ -53,7 +53,7 @@ class Parser implements \RectorPrefix20210705\Helmich\TypoScriptParser\Parser\Pa
      * @param string $content The string to parse.
      * @return Statement[] The syntax tree.
      */
-    public function parseString(string $content) : array
+    public function parseString($content) : array
     {
         $tokens = $this->tokenizer->tokenizeString($content);
         return $this->parseTokens($tokens);
@@ -64,7 +64,7 @@ class Parser implements \RectorPrefix20210705\Helmich\TypoScriptParser\Parser\Pa
      * @param TokenInterface[] $tokens The token stream to parse.
      * @return Statement[] The syntax tree.
      */
-    public function parseTokens(array $tokens) : array
+    public function parseTokens($tokens) : array
     {
         $stream = (new \RectorPrefix20210705\Helmich\TypoScriptParser\Parser\TokenStream($tokens))->normalized();
         $state = new \RectorPrefix20210705\Helmich\TypoScriptParser\Parser\ParserState($stream);
@@ -85,7 +85,7 @@ class Parser implements \RectorPrefix20210705\Helmich\TypoScriptParser\Parser\Pa
      * @return void
      * @throws ParseError
      */
-    private function parseToken(\RectorPrefix20210705\Helmich\TypoScriptParser\Parser\ParserState $state) : void
+    private function parseToken($state) : void
     {
         switch ($state->token()->getType()) {
             case \RectorPrefix20210705\Helmich\TypoScriptParser\Tokenizer\TokenInterface::TYPE_OBJECT_IDENTIFIER:
@@ -117,7 +117,13 @@ class Parser implements \RectorPrefix20210705\Helmich\TypoScriptParser\Parser\Pa
                 throw new \RectorPrefix20210705\Helmich\TypoScriptParser\Parser\ParseError(\sprintf('Unexpected token %s in line %d.', $state->token()->getType(), $state->token()->getLine()), 1403011202, $state->token()->getLine());
         }
     }
-    private function triggerParseErrorIf(bool $condition, string $message, int $code, int $line) : void
+    /**
+     * @param bool $condition
+     * @param string $message
+     * @param int $code
+     * @param int $line
+     */
+    private function triggerParseErrorIf($condition, $message, $code, $line) : void
     {
         if ($condition) {
             throw new \RectorPrefix20210705\Helmich\TypoScriptParser\Parser\ParseError($message, $code, $line);
@@ -129,7 +135,7 @@ class Parser implements \RectorPrefix20210705\Helmich\TypoScriptParser\Parser\Pa
      * @return void
      * @throws ParseError
      */
-    private function parseNestedStatements(\RectorPrefix20210705\Helmich\TypoScriptParser\Parser\ParserState $state, ?int $startLine = null) : void
+    private function parseNestedStatements($state, $startLine = null) : void
     {
         $startLine = $startLine ?: $state->token()->getLine();
         $statements = new \ArrayObject();
@@ -156,7 +162,7 @@ class Parser implements \RectorPrefix20210705\Helmich\TypoScriptParser\Parser\Pa
      * @param ParserState $state
      * @throws ParseError
      */
-    private function parseCondition(\RectorPrefix20210705\Helmich\TypoScriptParser\Parser\ParserState $state) : void
+    private function parseCondition($state) : void
     {
         if ($state->context()->depth() !== 0) {
             throw new \RectorPrefix20210705\Helmich\TypoScriptParser\Parser\ParseError('Found condition statement inside nested assignment.', 1403011203, $state->token()->getLine());
@@ -196,7 +202,7 @@ class Parser implements \RectorPrefix20210705\Helmich\TypoScriptParser\Parser\Pa
     /**
      * @param ParserState $state
      */
-    private function parseInclude(\RectorPrefix20210705\Helmich\TypoScriptParser\Parser\ParserState $state) : void
+    private function parseInclude($state) : void
     {
         $token = $state->token();
         $extensions = null;
@@ -219,7 +225,7 @@ class Parser implements \RectorPrefix20210705\Helmich\TypoScriptParser\Parser\Pa
      * @return array
      * @throws ParseError
      */
-    private function parseIncludeOptionals(string $optional, \RectorPrefix20210705\Helmich\TypoScriptParser\Tokenizer\TokenInterface $token) : array
+    private function parseIncludeOptionals($optional, $token) : array
     {
         if (!\preg_match_all('/((?<key>[a-z]+)="(?<value>[^"]*)\\s*)+"/', $optional, $matches)) {
             return [null, null];
@@ -249,7 +255,7 @@ class Parser implements \RectorPrefix20210705\Helmich\TypoScriptParser\Parser\Pa
      * @param ParserState $state
      * @throws ParseError
      */
-    private function parseValueOperation(\RectorPrefix20210705\Helmich\TypoScriptParser\Parser\ParserState $state) : void
+    private function parseValueOperation($state) : void
     {
         switch ($state->token(1)->getType()) {
             case \RectorPrefix20210705\Helmich\TypoScriptParser\Tokenizer\TokenInterface::TYPE_OPERATOR_ASSIGNMENT:
@@ -273,7 +279,7 @@ class Parser implements \RectorPrefix20210705\Helmich\TypoScriptParser\Parser\Pa
     /**
      * @param ParserState $state
      */
-    private function parseAssignment(\RectorPrefix20210705\Helmich\TypoScriptParser\Parser\ParserState $state) : void
+    private function parseAssignment($state) : void
     {
         switch ($state->token(2)->getType()) {
             case \RectorPrefix20210705\Helmich\TypoScriptParser\Tokenizer\TokenInterface::TYPE_OBJECT_CONSTRUCTOR:
@@ -295,7 +301,7 @@ class Parser implements \RectorPrefix20210705\Helmich\TypoScriptParser\Parser\Pa
      * @param ParserState $state
      * @throws ParseError
      */
-    private function parseCopyOrReference(\RectorPrefix20210705\Helmich\TypoScriptParser\Parser\ParserState $state) : void
+    private function parseCopyOrReference($state) : void
     {
         $targetToken = $state->token(2);
         $this->validateCopyOperatorRightValue($targetToken);
@@ -309,7 +315,7 @@ class Parser implements \RectorPrefix20210705\Helmich\TypoScriptParser\Parser\Pa
      * @param ParserState $state
      * @throws ParseError
      */
-    private function parseModification(\RectorPrefix20210705\Helmich\TypoScriptParser\Parser\ParserState $state) : void
+    private function parseModification($state) : void
     {
         $token = $state->token(2);
         $this->validateModifyOperatorRightValue($token);
@@ -322,7 +328,7 @@ class Parser implements \RectorPrefix20210705\Helmich\TypoScriptParser\Parser\Pa
      * @param ParserState $state
      * @throws ParseError
      */
-    private function parseDeletion(\RectorPrefix20210705\Helmich\TypoScriptParser\Parser\ParserState $state) : void
+    private function parseDeletion($state) : void
     {
         $allowedTypesInDeletion = [\RectorPrefix20210705\Helmich\TypoScriptParser\Tokenizer\TokenInterface::TYPE_WHITESPACE, \RectorPrefix20210705\Helmich\TypoScriptParser\Tokenizer\TokenInterface::TYPE_EMPTY_LINE, \RectorPrefix20210705\Helmich\TypoScriptParser\Tokenizer\TokenInterface::TYPE_COMMENT_ONELINE];
         if (!\in_array($state->token(2)->getType(), $allowedTypesInDeletion, \true)) {
@@ -334,7 +340,7 @@ class Parser implements \RectorPrefix20210705\Helmich\TypoScriptParser\Parser\Pa
     /**
      * @param ParserState $state
      */
-    private function parseMultilineAssigment(\RectorPrefix20210705\Helmich\TypoScriptParser\Parser\ParserState $state) : void
+    private function parseMultilineAssigment($state) : void
     {
         $state->statements()->append($this->builder->op()->assignment($state->context(), $this->builder->scalar($state->token(1)->getValue()), $state->token(1)->getLine()));
         $state->next();
@@ -343,7 +349,7 @@ class Parser implements \RectorPrefix20210705\Helmich\TypoScriptParser\Parser\Pa
      * @param TokenInterface $token
      * @throws ParseError
      */
-    private function validateModifyOperatorRightValue(\RectorPrefix20210705\Helmich\TypoScriptParser\Tokenizer\TokenInterface $token) : void
+    private function validateModifyOperatorRightValue($token) : void
     {
         if ($token->getType() !== \RectorPrefix20210705\Helmich\TypoScriptParser\Tokenizer\TokenInterface::TYPE_OBJECT_MODIFIER) {
             throw new \RectorPrefix20210705\Helmich\TypoScriptParser\Parser\ParseError('Unexpected token ' . $token->getType() . ' after modify operator.', 1403010294, $token->getLine());
@@ -353,7 +359,7 @@ class Parser implements \RectorPrefix20210705\Helmich\TypoScriptParser\Parser\Pa
      * @param TokenInterface $token
      * @throws ParseError
      */
-    private function validateCopyOperatorRightValue(\RectorPrefix20210705\Helmich\TypoScriptParser\Tokenizer\TokenInterface $token) : void
+    private function validateCopyOperatorRightValue($token) : void
     {
         if ($token->getType() !== \RectorPrefix20210705\Helmich\TypoScriptParser\Tokenizer\TokenInterface::TYPE_OBJECT_IDENTIFIER) {
             throw new \RectorPrefix20210705\Helmich\TypoScriptParser\Parser\ParseError('Unexpected token ' . $token->getType() . ' after copy operator.', 1403010294, $token->getLine());
