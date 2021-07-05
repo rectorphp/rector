@@ -79,9 +79,8 @@ class PrototypedArrayNode extends \RectorPrefix20210705\Symfony\Component\Config
     }
     /**
      * Sets the default value of this node.
-     * @param mixed[] $value
      */
-    public function setDefaultValue($value)
+    public function setDefaultValue(array $value)
     {
         $this->defaultValue = $value;
     }

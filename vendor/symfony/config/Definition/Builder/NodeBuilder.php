@@ -27,9 +27,8 @@ class NodeBuilder implements \RectorPrefix20210705\Symfony\Component\Config\Defi
      * Set the parent node.
      *
      * @return $this
-     * @param \Symfony\Component\Config\Definition\Builder\ParentNodeDefinitionInterface|null $parent
      */
-    public function setParent($parent = null)
+    public function setParent(\RectorPrefix20210705\Symfony\Component\Config\Definition\Builder\ParentNodeDefinitionInterface $parent = null)
     {
         $this->parent = $parent;
         return $this;

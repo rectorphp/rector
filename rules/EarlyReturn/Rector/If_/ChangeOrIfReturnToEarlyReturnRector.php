@@ -109,9 +109,8 @@ CODE_SAMPLE
     /**
      * @param If_[] $ifs
      * @return If_[]
-     * @param \PhpParser\Node\Stmt\Return_ $return
      */
-    private function collectLeftBooleanOrToIfs(\PhpParser\Node\Expr\BinaryOp\BooleanOr $booleanOr, $return, array $ifs) : array
+    private function collectLeftBooleanOrToIfs(\PhpParser\Node\Expr\BinaryOp\BooleanOr $booleanOr, \PhpParser\Node\Stmt\Return_ $return, array $ifs) : array
     {
         $left = $booleanOr->left;
         if (!$left instanceof \PhpParser\Node\Expr\BinaryOp\BooleanOr) {

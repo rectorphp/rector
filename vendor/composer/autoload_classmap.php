@@ -1472,6 +1472,7 @@ return array(
     'RectorPrefix20210705\\Symplify\\VendorPatches\\Console\\GenerateCommandReporter' => $vendorDir . '/symplify/vendor-patches/src/Console/GenerateCommandReporter.php',
     'RectorPrefix20210705\\Symplify\\VendorPatches\\Console\\VendorPatchesConsoleApplication' => $vendorDir . '/symplify/vendor-patches/src/Console/VendorPatchesConsoleApplication.php',
     'RectorPrefix20210705\\Symplify\\VendorPatches\\Differ\\PatchDiffer' => $vendorDir . '/symplify/vendor-patches/src/Differ/PatchDiffer.php',
+    'RectorPrefix20210705\\Symplify\\VendorPatches\\Exception\\ShouldNotHappenException' => $vendorDir . '/symplify/vendor-patches/src/Exception/ShouldNotHappenException.php',
     'RectorPrefix20210705\\Symplify\\VendorPatches\\FileSystem\\PathResolver' => $vendorDir . '/symplify/vendor-patches/src/FileSystem/PathResolver.php',
     'RectorPrefix20210705\\Symplify\\VendorPatches\\Finder\\OldToNewFilesFinder' => $vendorDir . '/symplify/vendor-patches/src/Finder/OldToNewFilesFinder.php',
     'RectorPrefix20210705\\Symplify\\VendorPatches\\HttpKernel\\VendorPatchesKernel' => $vendorDir . '/symplify/vendor-patches/src/HttpKernel/VendorPatchesKernel.php',

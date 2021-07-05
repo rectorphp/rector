@@ -164,9 +164,7 @@ class InputDefinition
         return $this->requiredCount;
     }
     /**
-     * Gets the default values.
-     *
-     * @return array An array of default values
+     * @return array<string|bool|int|float|array|null>
      */
     public function getArgumentDefaults()
     {
@@ -292,9 +290,7 @@ class InputDefinition
         return $this->getOption($this->shortcutToName($shortcut));
     }
     /**
-     * Gets an array of default values.
-     *
-     * @return array An array of all default values
+     * @return array<string|bool|int|float|array|null>
      */
     public function getOptionDefaults()
     {

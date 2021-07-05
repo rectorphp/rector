@@ -17,6 +17,7 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
+use PHPStan\Type\TypeTraverser;
 use PHPStan\Type\TypeUtils;
 use PHPStan\Type\VerbosityLevel;
 use Rector\StaticTypeMapper\TypeFactory\UnionTypeFactory;
@@ -62,13 +63,8 @@ final class TypeFactory
             if (!$keepConstant) {
                 $type = $this->removeValueFromConstantType($type);
             }
-            if ($type instanceof \Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType) {
-                $type = new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType($type->getFullyQualifiedName());
-            }
-            if ($type instanceof \PHPStan\Type\ObjectType && !$type instanceof \PHPStan\Type\Generic\GenericObjectType && !$type instanceof \Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType && $type->getClassName() !== 'Iterator') {
-                $type = new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType($type->getClassName());
-            }
-            $typeHash = \md5($type->describe(\PHPStan\Type\VerbosityLevel::cache()));
+            $type = $this->normalizeObjectTypes($type);
+            $typeHash = $type->describe(\PHPStan\Type\VerbosityLevel::cache());
             $uniqueTypes[$typeHash] = $type;
         }
         // re-index
@@ -141,5 +137,17 @@ final class TypeFactory
             $unwrappedTypes[] = new \PHPStan\Type\ArrayType($nestedFlattenKeyType, $nestedFlattenItemType);
         }
         return $unwrappedTypes;
+    }
+    private function normalizeObjectTypes(\PHPStan\Type\Type $type) : \PHPStan\Type\Type
+    {
+        return \PHPStan\Type\TypeTraverser::map($type, function (\PHPStan\Type\Type $traversedType, callable $traverseCallback) : Type {
+            if ($traversedType instanceof \Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType) {
+                return new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType($traversedType->getFullyQualifiedName());
+            }
+            if ($traversedType instanceof \PHPStan\Type\ObjectType && !$traversedType instanceof \PHPStan\Type\Generic\GenericObjectType && !$traversedType instanceof \Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType && $traversedType->getClassName() !== 'Iterator') {
+                return new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType($traversedType->getClassName());
+            }
+            return $traverseCallback($traversedType);
+        });
     }
 }

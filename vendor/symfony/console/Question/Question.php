@@ -30,8 +30,8 @@ class Question
     private $trimmable = \true;
     private $multiline = \false;
     /**
-     * @param string $question The question to ask to the user
-     * @param mixed  $default  The default answer to return if the user enters nothing
+     * @param string                     $question The question to ask to the user
+     * @param string|bool|int|float|null $default  The default answer to return if the user enters nothing
      */
     public function __construct(string $question, $default = null)
     {
@@ -50,7 +50,7 @@ class Question
     /**
      * Returns the default answer.
      *
-     * @return mixed
+     * @return string|bool|int|float|null
      */
     public function getDefault()
     {

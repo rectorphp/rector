@@ -93,9 +93,8 @@ class HeaderBag implements \IteratorAggregate, \Countable
      * Returns a header value by name.
      *
      * @return string|null The first header value or default value
-     * @param string|null $default
      */
-    public function get(string $key, $default = null)
+    public function get(string $key, string $default = null)
     {
         $headers = $this->all($key);
         if (!$headers) {

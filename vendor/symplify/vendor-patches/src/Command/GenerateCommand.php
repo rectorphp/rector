@@ -80,7 +80,7 @@ final class GenerateCommand extends \RectorPrefix20210705\Symplify\PackageBuilde
             $this->smartFileSystem->dumpFile($patchFileAbsolutePath, $patchDiff);
             $addedPatchFilesByPackageName[$oldAndNewFileInfo->getPackageName()][] = $patchFileRelativePath;
         }
-        $this->composerPatchesConfigurationUpdater->updateComposerJson($composerExtraPatches);
+        $this->composerPatchesConfigurationUpdater->updateComposerJsonAndPrint(\getcwd() . '/composer.json', $composerExtraPatches);
         if ($addedPatchFilesByPackageName !== []) {
             $message = \sprintf('Great! %d new patch files added', \count($addedPatchFilesByPackageName));
             $this->symfonyStyle->success($message);

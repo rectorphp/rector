@@ -22,14 +22,14 @@ final class GenericClassStringTypeCorrector
     public function correct(\PHPStan\Type\Type $mainType) : \PHPStan\Type\Type
     {
         // inspired from https://github.com/phpstan/phpstan-src/blob/94e3443b2d21404a821e05b901dd4b57fcbd4e7f/src/Type/Generic/TemplateTypeHelper.php#L18
-        return \PHPStan\Type\TypeTraverser::map($mainType, function (\PHPStan\Type\Type $type, callable $traverse) : Type {
-            if (!$type instanceof \PHPStan\Type\Constant\ConstantStringType) {
-                return $traverse($type);
+        return \PHPStan\Type\TypeTraverser::map($mainType, function (\PHPStan\Type\Type $traversedType, callable $traverseCallback) : Type {
+            if (!$traversedType instanceof \PHPStan\Type\Constant\ConstantStringType) {
+                return $traverseCallback($traversedType);
             }
-            if (!$this->reflectionProvider->hasClass($type->getValue())) {
-                return $traverse($type);
+            if (!$this->reflectionProvider->hasClass($traversedType->getValue())) {
+                return $traverseCallback($traversedType);
             }
-            return new \PHPStan\Type\Generic\GenericClassStringType(new \PHPStan\Type\ObjectType($type->getValue()));
+            return new \PHPStan\Type\Generic\GenericClassStringType(new \PHPStan\Type\ObjectType($traversedType->getValue()));
         });
     }
 }
