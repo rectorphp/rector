@@ -1976,6 +1976,11 @@
             },
             "time": "2021-06-24T08:13:00+00:00",
             "type": "library",
+            "extra": {
+                "patches_applied": [
+                    "patches\/symfony-dependency-injection-servicelocator-php.patch"
+                ]
+            },
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
