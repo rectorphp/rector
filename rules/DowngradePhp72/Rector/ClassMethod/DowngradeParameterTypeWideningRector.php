@@ -116,6 +116,10 @@ CODE_SAMPLE
             }
         }
 
+        if ($node->isPrivate()) {
+            return null;
+        }
+
         if ($this->skipClassMethod($node)) {
             return null;
         }

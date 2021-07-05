@@ -2,13 +2,16 @@
 
 declare(strict_types=1);
 
+use PHPStan\PhpDocParser\Ast\Node;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\Stubs\PHPStanStubLoader;
 use Rector\DowngradePhp72\Rector\ClassMethod\DowngradeParameterTypeWideningRector;
+use Rector\NodeNameResolver\Contract\NodeNameResolverInterface;
 use Rector\Set\ValueObject\DowngradeSetList;
 use Symfony\Component\Console\Style\StyleInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symplify\SimplePhpDocParser\Contract\PhpDocNodeVisitorInterface;
 
 $phpStanStubLoader = new PHPStanStubLoader();
 $phpStanStubLoader->loadStubs();
@@ -32,6 +35,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             DowngradeParameterTypeWideningRector::SAFE_TYPES => [
                 RectorInterface::class,
                 StyleInterface::class,
+                PhpDocNodeVisitorInterface::class,
+                Node::class,
+                NodeNameResolverInterface::class,
             ]
         ]]);
 };
