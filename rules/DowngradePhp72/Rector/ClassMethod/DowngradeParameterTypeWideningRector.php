@@ -114,6 +114,11 @@ CODE_SAMPLE
             if ($classReflection->isSubclassOf($safeType)) {
                 return null;
             }
+
+            // skip self too
+            if ($classReflection->getName() === $safeType) {
+                return null;
+            }
         }
 
         if ($node->isPrivate()) {
