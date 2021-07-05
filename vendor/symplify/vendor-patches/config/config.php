@@ -9,6 +9,7 @@ use RectorPrefix20210705\Symfony\Component\Console\Application;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use RectorPrefix20210705\Symplify\PackageBuilder\Composer\VendorDirProvider;
 use RectorPrefix20210705\Symplify\PackageBuilder\Console\Command\CommandNaming;
+use RectorPrefix20210705\Symplify\PackageBuilder\Yaml\ParametersMerger;
 use RectorPrefix20210705\Symplify\SmartFileSystem\Json\JsonFileSystem;
 use RectorPrefix20210705\Symplify\VendorPatches\Console\VendorPatchesConsoleApplication;
 use function RectorPrefix20210705\Symfony\Component\DependencyInjection\Loader\Configurator\service;
@@ -22,4 +23,5 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
     $services->set(\RectorPrefix20210705\Symplify\SmartFileSystem\Json\JsonFileSystem::class);
     $services->alias(\RectorPrefix20210705\Symfony\Component\Console\Application::class, \RectorPrefix20210705\Symplify\VendorPatches\Console\VendorPatchesConsoleApplication::class);
     $services->set(\RectorPrefix20210705\Symplify\PackageBuilder\Console\Command\CommandNaming::class);
+    $services->set(\RectorPrefix20210705\Symplify\PackageBuilder\Yaml\ParametersMerger::class);
 };

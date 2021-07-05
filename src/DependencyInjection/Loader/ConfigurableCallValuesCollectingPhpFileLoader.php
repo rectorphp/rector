@@ -29,7 +29,7 @@ final class ConfigurableCallValuesCollectingPhpFileLoader extends \RectorPrefix2
         parent::load($resource, $type);
         $this->collectConfigureCallsFromJustImportedConfigurableRectorDefinitions();
     }
-    public function import($resource, string $type = null, $ignoreErrors = \false, $sourceResource = null, $exclude = null) : void
+    public function import($resource, string $type = null, $ignoreErrors = \false, string $sourceResource = null, $exclude = null) : void
     {
         // this call collects root values
         $this->collectConfigureCallsFromJustImportedConfigurableRectorDefinitions();

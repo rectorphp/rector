@@ -3,11 +3,11 @@
 declare (strict_types=1);
 namespace RectorPrefix20210705\Symplify\VendorPatches\Composer;
 
-use RectorPrefix20210705\Nette\Utils\Arrays;
 use RectorPrefix20210705\Symplify\Astral\Exception\ShouldNotHappenException;
 use RectorPrefix20210705\Symplify\ComposerJsonManipulator\ComposerJsonFactory;
 use RectorPrefix20210705\Symplify\ComposerJsonManipulator\FileSystem\JsonFileManager;
 use RectorPrefix20210705\Symplify\ComposerJsonManipulator\ValueObject\ComposerJson;
+use RectorPrefix20210705\Symplify\PackageBuilder\Yaml\ParametersMerger;
 use Symplify\SmartFileSystem\SmartFileInfo;
 /**
  * @see \Symplify\VendorPatches\Tests\Composer\ComposerPatchesConfigurationUpdater\ComposerPatchesConfigurationUpdaterTest
@@ -22,10 +22,15 @@ final class ComposerPatchesConfigurationUpdater
      * @var \Symplify\ComposerJsonManipulator\FileSystem\JsonFileManager
      */
     private $jsonFileManager;
-    public function __construct(\RectorPrefix20210705\Symplify\ComposerJsonManipulator\ComposerJsonFactory $composerJsonFactory, \RectorPrefix20210705\Symplify\ComposerJsonManipulator\FileSystem\JsonFileManager $jsonFileManager)
+    /**
+     * @var \Symplify\PackageBuilder\Yaml\ParametersMerger
+     */
+    private $parametersMerger;
+    public function __construct(\RectorPrefix20210705\Symplify\ComposerJsonManipulator\ComposerJsonFactory $composerJsonFactory, \RectorPrefix20210705\Symplify\ComposerJsonManipulator\FileSystem\JsonFileManager $jsonFileManager, \RectorPrefix20210705\Symplify\PackageBuilder\Yaml\ParametersMerger $parametersMerger)
     {
         $this->composerJsonFactory = $composerJsonFactory;
         $this->jsonFileManager = $jsonFileManager;
+        $this->parametersMerger = $parametersMerger;
     }
     /**
      * @param mixed[] $composerExtraPatches
@@ -35,7 +40,7 @@ final class ComposerPatchesConfigurationUpdater
         $extra = ['patches' => $composerExtraPatches];
         $composerJson = $this->composerJsonFactory->createFromFilePath($composerJsonFilePath);
         // merge "extra" section - deep merge is needed, so original patches are included
-        $newExtra = \RectorPrefix20210705\Nette\Utils\Arrays::mergeTree($composerJson->getExtra(), $extra);
+        $newExtra = $this->parametersMerger->merge($composerJson->getExtra(), $extra);
         $composerJson->setExtra($newExtra);
         return $composerJson;
     }
