@@ -9,9 +9,11 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\ClosureUse;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
@@ -38,8 +40,6 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
-use PhpParser\Node\Expr\ClassConstFetch;
-use PhpParser\Node\Expr\StaticCall;
 
 final class AnonymousFunctionFactory
 {
@@ -95,7 +95,10 @@ final class AnonymousFunctionFactory
 
         $anonymousFunction->params = $newParams;
 
-        if ($expr instanceof ClassConstFetch && $expr->name instanceof Identifier && $this->nodeNameResolver->isName($expr->name, 'class')) {
+        if ($expr instanceof ClassConstFetch && $expr->name instanceof Identifier && $this->nodeNameResolver->isName(
+            $expr->name,
+            'class'
+        )) {
             /** @var Expr $expr */
             $expr = $expr->class;
         }
