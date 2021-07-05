@@ -24,7 +24,7 @@ final class DowngradePathsCommand extends Command
         foreach ($downgradePaths as $key => $downgradePath) {
             if (in_array(
                 $downgradePath,
-                ['vendor/symplify', 'vendor/symfony', 'vendor/nikic', 'vendor/psr', 'vendor/phpstan', 'vendor/ssch'],
+                ['vendor/symplify', 'vendor/rector', 'vendor/symfony', 'vendor/nikic', 'vendor/psr', 'vendor/phpstan', 'vendor/ssch'],
                 true
             )) {
                 unset($downgradePaths[$key]);
@@ -34,6 +34,7 @@ final class DowngradePathsCommand extends Command
         $downgradePaths = array_merge([
             // must be separated to cover container get() trait + psr container contract get()
             'config',
+            'vendor/rector',
             'vendor/phpstan/phpdoc-parser/src',
             'vendor/symfony/error-handler',
             'vendor/symfony/dependency-injection',
