@@ -73,7 +73,7 @@ class YamlFileLoader extends \RectorPrefix20210705\Symfony\Component\DependencyI
             }
         }
     }
-    private function loadContent($content, $path)
+    private function loadContent(array $content, string $path)
     {
         // imports
         $this->parseImports($content, $path);
@@ -555,13 +555,11 @@ class YamlFileLoader extends \RectorPrefix20210705\Symfony\Component\DependencyI
     /**
      * Loads a YAML file.
      *
-     * @param string $file
-     *
      * @return array The file content
      *
      * @throws InvalidArgumentException when the given file is not a local file or when it does not exist
      */
-    protected function loadFile($file)
+    protected function loadFile(string $file)
     {
         if (!\class_exists(\RectorPrefix20210705\Symfony\Component\Yaml\Parser::class)) {
             throw new \RectorPrefix20210705\Symfony\Component\DependencyInjection\Exception\RuntimeException('Unable to load YAML config files as the Symfony Yaml Component is not installed.');
@@ -716,7 +714,6 @@ class YamlFileLoader extends \RectorPrefix20210705\Symfony\Component\DependencyI
         return $value;
     }
     /**
-     * Loads from Extensions.
      * @param mixed[] $content
      */
     private function loadFromExtensions($content)
@@ -731,9 +728,6 @@ class YamlFileLoader extends \RectorPrefix20210705\Symfony\Component\DependencyI
             $this->container->loadFromExtension($namespace, $values);
         }
     }
-    /**
-     * Checks the keywords used to define a service.
-     */
     private function checkDefinition(string $id, array $definition, string $file)
     {
         if ($this->isLoadingInstanceof) {

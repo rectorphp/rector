@@ -16,7 +16,6 @@ use RectorPrefix20210705\Symfony\Component\DependencyInjection\Definition;
  */
 class InlineServiceConfigurator extends \RectorPrefix20210705\Symfony\Component\DependencyInjection\Loader\Configurator\AbstractConfigurator
 {
-    public const FACTORY = 'service';
     use Traits\ArgumentTrait;
     use Traits\AutowireTrait;
     use Traits\BindTrait;
@@ -28,6 +27,7 @@ class InlineServiceConfigurator extends \RectorPrefix20210705\Symfony\Component\
     use Traits\ParentTrait;
     use Traits\PropertyTrait;
     use Traits\TagTrait;
+    public const FACTORY = 'service';
     private $id = '[inline]';
     private $allowParent = \true;
     private $path = null;

@@ -22,24 +22,19 @@ class ParameterBag implements \RectorPrefix20210705\Symfony\Component\Dependency
 {
     protected $parameters = [];
     protected $resolved = \false;
-    /**
-     * @param array $parameters An array of parameters
-     */
     public function __construct(array $parameters = [])
     {
         $this->add($parameters);
     }
     /**
-     * Clears all parameters.
+     * {@inheritdoc}
      */
     public function clear()
     {
         $this->parameters = [];
     }
     /**
-     * Adds parameters to the service container parameters.
-     *
-     * @param array $parameters An array of parameters
+     * {@inheritdoc}
      */
     public function add(array $parameters)
     {
@@ -56,9 +51,8 @@ class ParameterBag implements \RectorPrefix20210705\Symfony\Component\Dependency
     }
     /**
      * {@inheritdoc}
-     * @param string $name
      */
-    public function get($name)
+    public function get(string $name)
     {
         if (!\array_key_exists($name, $this->parameters)) {
             if (!$name) {
@@ -90,10 +84,7 @@ class ParameterBag implements \RectorPrefix20210705\Symfony\Component\Dependency
         return $this->parameters[$name];
     }
     /**
-     * Sets a service container parameter.
-     *
-     * @param string $name  The parameter name
-     * @param mixed  $value The parameter value
+     * {@inheritdoc}
      */
     public function set(string $name, $value)
     {
@@ -101,16 +92,13 @@ class ParameterBag implements \RectorPrefix20210705\Symfony\Component\Dependency
     }
     /**
      * {@inheritdoc}
-     * @param string $name
      */
-    public function has($name)
+    public function has(string $name)
     {
         return \array_key_exists((string) $name, $this->parameters);
     }
     /**
-     * Removes a parameter.
-     *
-     * @param string $name The parameter name
+     * {@inheritdoc}
      */
     public function remove(string $name)
     {

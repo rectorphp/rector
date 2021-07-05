@@ -33,7 +33,7 @@ class PhpFileLoader extends \RectorPrefix20210705\Symfony\Component\DependencyIn
 {
     protected $autoRegisterAliasesForSinglyImplementedInterfaces = \false;
     private $generator;
-    public function __construct(\RectorPrefix20210705\Symfony\Component\DependencyInjection\ContainerBuilder $container, \RectorPrefix20210705\Symfony\Component\Config\FileLocatorInterface $locator, string $env = null, ?\RectorPrefix20210705\Symfony\Component\Config\Builder\ConfigBuilderGeneratorInterface $generator = null)
+    public function __construct(\RectorPrefix20210705\Symfony\Component\DependencyInjection\ContainerBuilder $container, \RectorPrefix20210705\Symfony\Component\Config\FileLocatorInterface $locator, string $env = null, \RectorPrefix20210705\Symfony\Component\Config\Builder\ConfigBuilderGeneratorInterface $generator = null)
     {
         parent::__construct($container, $locator, $env);
         $this->generator = $generator;

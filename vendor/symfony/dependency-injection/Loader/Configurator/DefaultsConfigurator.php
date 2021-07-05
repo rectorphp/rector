@@ -17,11 +17,11 @@ use RectorPrefix20210705\Symfony\Component\DependencyInjection\Exception\Invalid
  */
 class DefaultsConfigurator extends \RectorPrefix20210705\Symfony\Component\DependencyInjection\Loader\Configurator\AbstractServiceConfigurator
 {
-    public const FACTORY = 'defaults';
     use Traits\AutoconfigureTrait;
     use Traits\AutowireTrait;
     use Traits\BindTrait;
     use Traits\PublicTrait;
+    public const FACTORY = 'defaults';
     private $path;
     public function __construct(\RectorPrefix20210705\Symfony\Component\DependencyInjection\Loader\Configurator\ServicesConfigurator $parent, \RectorPrefix20210705\Symfony\Component\DependencyInjection\Definition $definition, string $path = null)
     {

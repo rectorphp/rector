@@ -11,6 +11,7 @@
 namespace RectorPrefix20210705\Symfony\Component\DependencyInjection\Compiler;
 
 use RectorPrefix20210705\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
+use RectorPrefix20210705\Symfony\Component\DependencyInjection\Reference;
 /**
  * This is a directed graph of your services.
  *
@@ -65,7 +66,7 @@ class ServiceReferenceGraph
     /**
      * Connects 2 nodes together in the Graph.
      */
-    public function connect(?string $sourceId, $sourceValue, ?string $destId, $destValue = null, $reference = null, bool $lazy = \false, bool $weak = \false, bool $byConstructor = \false)
+    public function connect(?string $sourceId, $sourceValue, ?string $destId, $destValue = null, \RectorPrefix20210705\Symfony\Component\DependencyInjection\Reference $reference = null, bool $lazy = \false, bool $weak = \false, bool $byConstructor = \false)
     {
         if (null === $sourceId || null === $destId) {
             return;

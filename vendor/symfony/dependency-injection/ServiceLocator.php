@@ -33,9 +33,8 @@ class ServiceLocator implements \RectorPrefix20210705\Symfony\Contracts\Service\
      * {@inheritdoc}
      *
      * @return mixed
-     * @param string $id
      */
-    public function get($id)
+    public function get(string $id)
     {
         if (!$this->externalId) {
             return $this->doGet($id);

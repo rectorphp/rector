@@ -1931,17 +1931,17 @@
         },
         {
             "name": "symfony\/dependency-injection",
-            "version": "v5.3.3",
-            "version_normalized": "5.3.3.0",
+            "version": "5.3.x-dev",
+            "version_normalized": "5.3.9999999.9999999-dev",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/dependency-injection.git",
-                "reference": "e421c4f161848740ad1fcf09b12391ddca168d95"
+                "reference": "df7196e244f49abc194ae77a01d806e2dfa619a0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/dependency-injection\/zipball\/e421c4f161848740ad1fcf09b12391ddca168d95",
-                "reference": "e421c4f161848740ad1fcf09b12391ddca168d95",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/dependency-injection\/zipball\/df7196e244f49abc194ae77a01d806e2dfa619a0",
+                "reference": "df7196e244f49abc194ae77a01d806e2dfa619a0",
                 "shasum": ""
             },
             "require": {
@@ -1974,14 +1974,9 @@
                 "symfony\/proxy-manager-bridge": "Generate service proxies to lazy load them",
                 "symfony\/yaml": ""
             },
-            "time": "2021-06-24T08:13:00+00:00",
+            "time": "2021-07-05T13:29:16+00:00",
+            "default-branch": true,
             "type": "library",
-            "extra": {
-                "patches_applied": [
-                    "patches\/symfony-dependency-injection-servicelocator-php.patch",
-                    "patches\/symfony-dependency-injection-argument-servicelocator-php.patch"
-                ]
-            },
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
@@ -2008,7 +2003,7 @@
             "description": "Allows you to standardize and centralize the way objects are constructed in your application",
             "homepage": "https:\/\/symfony.com",
             "support": {
-                "source": "https:\/\/github.com\/symfony\/dependency-injection\/tree\/v5.3.3"
+                "source": "https:\/\/github.com\/symfony\/dependency-injection\/tree\/5.3"
             },
             "funding": [
                 {

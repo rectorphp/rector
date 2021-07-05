@@ -96,9 +96,7 @@ class Container implements \RectorPrefix20210705\Symfony\Component\DependencyInj
     /**
      * Gets a parameter.
      *
-     * @param string $name The parameter name
-     *
-     * @return array|bool|float|int|string|null The parameter value
+     * @return array|bool|string|int|float|null
      *
      * @throws InvalidArgumentException if the parameter is not defined
      */
@@ -107,10 +105,6 @@ class Container implements \RectorPrefix20210705\Symfony\Component\DependencyInj
         return $this->parameterBag->get($name);
     }
     /**
-     * Checks if a parameter exists.
-     *
-     * @param string $name The parameter name
-     *
      * @return bool The presence of parameter in container
      */
     public function hasParameter(string $name)
@@ -120,8 +114,8 @@ class Container implements \RectorPrefix20210705\Symfony\Component\DependencyInj
     /**
      * Sets a parameter.
      *
-     * @param string $name  The parameter name
-     * @param mixed  $value The parameter value
+     * @param string                           $name  The parameter name
+     * @param array|bool|string|int|float|null $value The parameter value
      */
     public function setParameter(string $name, $value)
     {
@@ -188,9 +182,6 @@ class Container implements \RectorPrefix20210705\Symfony\Component\DependencyInj
     /**
      * Gets a service.
      *
-     * @param string $id              The service identifier
-     * @param int    $invalidBehavior The behavior when the service does not exist
-     *
      * @return object|null The associated service
      *
      * @throws ServiceCircularReferenceException When a circular reference is detected
@@ -253,8 +244,6 @@ class Container implements \RectorPrefix20210705\Symfony\Component\DependencyInj
     /**
      * Returns true if the given service has actually been initialized.
      *
-     * @param string $id The service identifier
-     *
      * @return bool true if service has already been initialized, false otherwise
      */
     public function initialized(string $id)
@@ -305,42 +294,36 @@ class Container implements \RectorPrefix20210705\Symfony\Component\DependencyInj
     /**
      * Camelizes a string.
      *
-     * @param string $id A string to camelize
-     *
      * @return string The camelized string
      */
-    public static function camelize($id)
+    public static function camelize(string $id)
     {
         return \strtr(\ucwords(\strtr($id, ['_' => ' ', '.' => '_ ', '\\' => '_ '])), [' ' => '']);
     }
     /**
      * A string to underscore.
      *
-     * @param string $id The string to underscore
-     *
      * @return string The underscored string
      */
-    public static function underscore($id)
+    public static function underscore(string $id)
     {
         return \strtolower(\preg_replace(['/([A-Z]+)([A-Z][a-z])/', '/([a-z\\d])([A-Z])/'], ['\\1_\\2', '\\1_\\2'], \str_replace('_', '.', $id)));
     }
     /**
      * Creates a service by requiring its factory file.
      */
-    protected function load($file)
+    protected function load(string $file)
     {
         return require $file;
     }
     /**
      * Fetches a variable from the environment.
      *
-     * @param string $name The name of the environment variable
-     *
      * @return mixed The value to use for the provided environment variable name
      *
      * @throws EnvNotFoundException When the environment variable is not found and has no default value
      */
-    protected function getEnv($name)
+    protected function getEnv(string $name)
     {
         if (isset($this->resolving[$envName = "env({$name})"])) {
             throw new \RectorPrefix20210705\Symfony\Component\DependencyInjection\Exception\ParameterCircularReferenceException(\array_keys($this->resolving));
@@ -352,9 +335,7 @@ class Container implements \RectorPrefix20210705\Symfony\Component\DependencyInj
             $this->set($id, new \RectorPrefix20210705\Symfony\Component\DependencyInjection\ServiceLocator([]));
         }
         if (!$this->getEnv) {
-            $this->getEnv = new \ReflectionMethod($this, __FUNCTION__);
-            $this->getEnv->setAccessible(\true);
-            $this->getEnv = $this->getEnv->getClosure($this);
+            $this->getEnv = \Closure::fromCallable([$this, 'getEnv']);
         }
         $processors = $this->get($id);
         if (\false !== ($i = \strpos($name, ':'))) {

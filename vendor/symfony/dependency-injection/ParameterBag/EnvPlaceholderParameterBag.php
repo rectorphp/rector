@@ -24,9 +24,8 @@ class EnvPlaceholderParameterBag extends \RectorPrefix20210705\Symfony\Component
     private static $counter = 0;
     /**
      * {@inheritdoc}
-     * @param string $name
      */
-    public function get($name)
+    public function get(string $name)
     {
         if (0 === \strpos($name, 'env(') && ')' === \substr($name, -1) && 'env()' !== $name) {
             $env = \substr($name, 4, -1);

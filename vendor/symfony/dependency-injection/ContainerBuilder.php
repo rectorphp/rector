@@ -438,11 +438,6 @@ class ContainerBuilder extends \RectorPrefix20210705\Symfony\Component\Dependenc
         return isset($this->definitions[$id]) || isset($this->aliasDefinitions[$id]) || parent::has($id);
     }
     /**
-     * Gets a service.
-     *
-     * @param string $id              The service identifier
-     * @param int    $invalidBehavior The behavior when the service does not exist
-     *
      * @return object|null The associated service
      *
      * @throws InvalidArgumentException          when no definitions are available
@@ -712,11 +707,6 @@ class ContainerBuilder extends \RectorPrefix20210705\Symfony\Component\Dependenc
         unset($this->definitions[$alias], $this->removedIds[$alias]);
         return $this->aliasDefinitions[$alias] = $id;
     }
-    /**
-     * Removes an alias.
-     *
-     * @param string $alias The alias to remove
-     */
     public function removeAlias(string $alias)
     {
         if (isset($this->aliasDefinitions[$alias])) {
@@ -725,8 +715,6 @@ class ContainerBuilder extends \RectorPrefix20210705\Symfony\Component\Dependenc
         }
     }
     /**
-     * Returns true if an alias exists under the given identifier.
-     *
      * @return bool true if the alias exists, false otherwise
      */
     public function hasAlias(string $id)
@@ -734,8 +722,6 @@ class ContainerBuilder extends \RectorPrefix20210705\Symfony\Component\Dependenc
         return isset($this->aliasDefinitions[$id]);
     }
     /**
-     * Gets all defined aliases.
-     *
      * @return Alias[] An array of aliases
      */
     public function getAliases()
@@ -743,8 +729,6 @@ class ContainerBuilder extends \RectorPrefix20210705\Symfony\Component\Dependenc
         return $this->aliasDefinitions;
     }
     /**
-     * Gets an alias.
-     *
      * @return Alias An Alias instance
      *
      * @throws InvalidArgumentException if the alias does not exist
@@ -1354,7 +1338,7 @@ class ContainerBuilder extends \RectorPrefix20210705\Symfony\Component\Dependenc
     /**
      * {@inheritdoc}
      */
-    protected function getEnv($name)
+    protected function getEnv(string $name)
     {
         $value = parent::getEnv($name);
         $bag = $this->getParameterBag();
@@ -1378,6 +1362,9 @@ class ContainerBuilder extends \RectorPrefix20210705\Symfony\Component\Dependenc
             unset($this->resolving["env({$name})"]);
         }
     }
+    /**
+     * @param object $service
+     */
     private function callMethod($service, array $call, array &$inlineServices)
     {
         foreach (self::getServiceConditionals($call[1]) as $s) {
