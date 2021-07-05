@@ -7,6 +7,7 @@ use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\Stubs\PHPStanStubLoader;
 use Rector\DowngradePhp72\Rector\ClassMethod\DowngradeParameterTypeWideningRector;
 use Rector\Set\ValueObject\DowngradeSetList;
+use Symfony\Component\Console\Style\StyleInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 $phpStanStubLoader = new PHPStanStubLoader();
@@ -30,6 +31,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->call('configure', [[
             DowngradeParameterTypeWideningRector::SAFE_TYPES => [
                 RectorInterface::class,
+                StyleInterface::class,
             ]
         ]]);
 };
