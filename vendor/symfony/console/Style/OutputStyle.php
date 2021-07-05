@@ -28,42 +28,36 @@ abstract class OutputStyle implements \RectorPrefix20210705\Symfony\Component\Co
     }
     /**
      * {@inheritdoc}
-     * @param int $count
      */
-    public function newLine($count = 1)
+    public function newLine(int $count = 1)
     {
         $this->output->write(\str_repeat(\PHP_EOL, $count));
     }
     /**
      * @return ProgressBar
-     * @param int $max
      */
-    public function createProgressBar($max = 0)
+    public function createProgressBar(int $max = 0)
     {
         return new \RectorPrefix20210705\Symfony\Component\Console\Helper\ProgressBar($this->output, $max);
     }
     /**
      * {@inheritdoc}
-     * @param bool $newline
-     * @param int $type
      */
-    public function write($messages, $newline = \false, $type = self::OUTPUT_NORMAL)
+    public function write($messages, bool $newline = \false, int $type = self::OUTPUT_NORMAL)
     {
         $this->output->write($messages, $newline, $type);
     }
     /**
      * {@inheritdoc}
-     * @param int $type
      */
-    public function writeln($messages, $type = self::OUTPUT_NORMAL)
+    public function writeln($messages, int $type = self::OUTPUT_NORMAL)
     {
         $this->output->writeln($messages, $type);
     }
     /**
      * {@inheritdoc}
-     * @param int $level
      */
-    public function setVerbosity($level)
+    public function setVerbosity(int $level)
     {
         $this->output->setVerbosity($level);
     }
@@ -76,9 +70,8 @@ abstract class OutputStyle implements \RectorPrefix20210705\Symfony\Component\Co
     }
     /**
      * {@inheritdoc}
-     * @param bool $decorated
      */
-    public function setDecorated($decorated)
+    public function setDecorated(bool $decorated)
     {
         $this->output->setDecorated($decorated);
     }
@@ -91,9 +84,8 @@ abstract class OutputStyle implements \RectorPrefix20210705\Symfony\Component\Co
     }
     /**
      * {@inheritdoc}
-     * @param \Symfony\Component\Console\Formatter\OutputFormatterInterface $formatter
      */
-    public function setFormatter($formatter)
+    public function setFormatter(\RectorPrefix20210705\Symfony\Component\Console\Formatter\OutputFormatterInterface $formatter)
     {
         $this->output->setFormatter($formatter);
     }
