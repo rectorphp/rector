@@ -13,7 +13,7 @@ use Rector\Transform\NodeFactory\UnwrapClosureFactory;
 use Rector\Transform\ValueObject\CallableInMethodCallToVariable;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20210704\Webmozart\Assert\Assert;
+use RectorPrefix20210705\Webmozart\Assert\Assert;
 /**
  * @changelog https://github.com/nette/caching/commit/5ffe263752af5ccf3866a28305e7b2669ab4da82
  *
@@ -72,9 +72,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Expr\MethodCall::class];
     }
     /**
-     * @param MethodCall $node
+     * @param \PhpParser\Node $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node\Expr\MethodCall
+    public function refactor($node) : ?\PhpParser\Node\Expr\MethodCall
     {
         foreach ($this->callableInMethodCallToVariable as $singleCallableInMethodCallToVariable) {
             if (!$this->isObjectType($node->var, $singleCallableInMethodCallToVariable->getObjectType())) {
@@ -102,7 +102,7 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $callableInMethodCallToVariable = $configuration[self::CALLABLE_IN_METHOD_CALL_TO_VARIABLE] ?? [];
-        \RectorPrefix20210704\Webmozart\Assert\Assert::allIsInstanceOf($callableInMethodCallToVariable, \Rector\Transform\ValueObject\CallableInMethodCallToVariable::class);
+        \RectorPrefix20210705\Webmozart\Assert\Assert::allIsInstanceOf($callableInMethodCallToVariable, \Rector\Transform\ValueObject\CallableInMethodCallToVariable::class);
         $this->callableInMethodCallToVariable = $callableInMethodCallToVariable;
     }
 }

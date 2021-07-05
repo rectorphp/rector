@@ -10,7 +10,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Transform\ValueObject\ReplaceParentCallByPropertyCall;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20210704\Webmozart\Assert\Assert;
+use RectorPrefix20210705\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Transform\Rector\MethodCall\ReplaceParentCallByPropertyCallRector\ReplaceParentCallByPropertyCallRectorTest
  */
@@ -54,9 +54,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Expr\MethodCall::class];
     }
     /**
-     * @param MethodCall $node
+     * @param \PhpParser\Node $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         foreach ($this->parentCallToProperties as $parentCallToProperty) {
             if (!$this->isObjectType($node->var, $parentCallToProperty->getObjectType())) {
@@ -76,7 +76,7 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $parentCallToProperties = $configuration[self::PARENT_CALLS_TO_PROPERTIES] ?? [];
-        \RectorPrefix20210704\Webmozart\Assert\Assert::allIsInstanceOf($parentCallToProperties, \Rector\Transform\ValueObject\ReplaceParentCallByPropertyCall::class);
+        \RectorPrefix20210705\Webmozart\Assert\Assert::allIsInstanceOf($parentCallToProperties, \Rector\Transform\ValueObject\ReplaceParentCallByPropertyCall::class);
         $this->parentCallToProperties = $parentCallToProperties;
     }
 }

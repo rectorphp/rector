@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Ssch\TYPO3Rector\Rector\v9\v0;
 
-use RectorPrefix20210704\Nette\Utils\Strings;
+use RectorPrefix20210705\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
@@ -53,7 +53,7 @@ final class ReplaceAnnotationRector extends \Rector\Core\Rector\AbstractRector i
     /**
      * @param Property|ClassMethod $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         $annotationChanged = \false;
@@ -104,7 +104,7 @@ CODE_SAMPLE
     private function prepareNewAnnotation(string $newAnnotation) : string
     {
         $newAnnotation = '@' . \ltrim($newAnnotation, '@');
-        if (\RectorPrefix20210704\Nette\Utils\Strings::startsWith($newAnnotation, '@TYPO3\\CMS\\Extbase\\Annotation')) {
+        if (\RectorPrefix20210705\Nette\Utils\Strings::startsWith($newAnnotation, '@TYPO3\\CMS\\Extbase\\Annotation')) {
             $newAnnotation = \str_replace('TYPO3\\CMS\\Extbase\\Annotation', 'Extbase', $newAnnotation);
         }
         return '@' . \ltrim($newAnnotation, '@');

@@ -13,7 +13,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Ssch\TYPO3Rector\Helper\Typo3NodeResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20210704\TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
+use RectorPrefix20210705\TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 /**
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/9.4/Deprecation-85666-TypoScriptFrontendController-initTemplate.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v9\v4\RemoveInitTemplateMethodCallRector\RemoveInitTemplateMethodCallRectorTest
@@ -38,7 +38,7 @@ final class RemoveInitTemplateMethodCallRector extends \Rector\Core\Rector\Abstr
     /**
      * @param Expression|MethodCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         if ($this->typo3NodeResolver->isMethodCallOnGlobals($node, 'initTemplate', \Ssch\TYPO3Rector\Helper\Typo3NodeResolver::TYPO_SCRIPT_FRONTEND_CONTROLLER)) {
             $this->removeNode($node);

@@ -11,7 +11,7 @@ use Rector\Core\Rector\AbstractRector;
 use Ssch\TYPO3Rector\Helper\Typo3NodeResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20210704\TYPO3\CMS\Core\TypoScript\TemplateService;
+use RectorPrefix20210705\TYPO3\CMS\Core\TypoScript\TemplateService;
 /**
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/8.3/Deprecation-77477-TemplateService-fileContent.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v8\v3\RefactorMethodFileContentRector\RefactorMethodFileContentRectorTest
@@ -34,9 +34,9 @@ final class RefactorMethodFileContentRector extends \Rector\Core\Rector\Abstract
         return [\PhpParser\Node\Expr\MethodCall::class];
     }
     /**
-     * @param MethodCall $node
+     * @param \PhpParser\Node $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -59,7 +59,10 @@ $content = $GLOBALS['TSFE']->tmpl->getFileName('foo.txt') ? file_get_contents('f
 CODE_SAMPLE
 )]);
     }
-    private function shouldSkip(\PhpParser\Node\Expr\MethodCall $node) : bool
+    /**
+     * @param \PhpParser\Node\Expr\MethodCall $node
+     */
+    private function shouldSkip($node) : bool
     {
         if ($this->isObjectType($node->var, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\TypoScript\\TemplateService'))) {
             return \false;

@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Ssch\TYPO3Rector\Rector\v8\v6;
 
-use RectorPrefix20210704\Nette\Utils\Strings;
+use RectorPrefix20210705\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
@@ -96,9 +96,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Stmt\Return_::class];
     }
     /**
-     * @param Return_ $node
+     * @param \PhpParser\Node $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         if (!$this->isFullTca($node)) {
             return null;
@@ -171,7 +171,7 @@ CODE_SAMPLE
                         /** @var Expr $wizardItemValueKey */
                         $wizardItemValueKey = $wizardItemValue->key;
                         $validWizard = $this->isValidWizard($wizardItemValue);
-                        if ($validWizard || \RectorPrefix20210704\Nette\Utils\Strings::startsWith($this->valueResolver->getValue($wizardItemValueKey), '_')) {
+                        if ($validWizard || \RectorPrefix20210705\Nette\Utils\Strings::startsWith($this->valueResolver->getValue($wizardItemValueKey), '_')) {
                             --$remainingWizards;
                         }
                         if (!$validWizard) {

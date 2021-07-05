@@ -51,7 +51,7 @@ CODE_SAMPLE
     /**
      * @param NullsafeMethodCall|NullsafePropertyFetch $node
      */
-    public function refactor(\PhpParser\Node $node) : \PhpParser\Node\Expr\Ternary
+    public function refactor($node) : \PhpParser\Node\Expr\Ternary
     {
         $tempVarName = $this->variableNaming->resolveFromNodeWithScopeCountAndFallbackName($node->var, $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE), '_');
         $variable = new \PhpParser\Node\Expr\Variable($tempVarName);

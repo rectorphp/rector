@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210704\Symfony\Component\HttpFoundation;
+namespace RectorPrefix20210705\Symfony\Component\HttpFoundation;
 
-use RectorPrefix20210704\Symfony\Component\HttpFoundation\Exception\BadRequestException;
+use RectorPrefix20210705\Symfony\Component\HttpFoundation\Exception\BadRequestException;
 /**
  * ParameterBag is a container for key/value pairs.
  *
@@ -40,7 +40,7 @@ class ParameterBag implements \IteratorAggregate, \Countable
             return $this->parameters;
         }
         if (!\is_array($value = $this->parameters[$key] ?? [])) {
-            throw new \RectorPrefix20210704\Symfony\Component\HttpFoundation\Exception\BadRequestException(\sprintf('Unexpected value for parameter "%s": expecting "array", got "%s".', $key, \get_debug_type($value)));
+            throw new \RectorPrefix20210705\Symfony\Component\HttpFoundation\Exception\BadRequestException(\sprintf('Unexpected value for parameter "%s": expecting "array", got "%s".', $key, \get_debug_type($value)));
         }
         return $value;
     }
@@ -82,8 +82,9 @@ class ParameterBag implements \IteratorAggregate, \Countable
      * Sets a parameter by name.
      *
      * @param mixed $value The value
+     * @param string $key
      */
-    public function set(string $key, $value)
+    public function set($key, $value)
     {
         $this->parameters[$key] = $value;
     }
@@ -159,8 +160,9 @@ class ParameterBag implements \IteratorAggregate, \Countable
      * @see https://php.net/filter-var
      *
      * @return mixed
+     * @param string $key
      */
-    public function filter(string $key, $default = null, int $filter = \FILTER_DEFAULT, $options = [])
+    public function filter($key, $default = null, int $filter = \FILTER_DEFAULT, $options = [])
     {
         $value = $this->get($key, $default);
         // Always turn $options into an array - this allows filter_var option shortcuts.

@@ -20,7 +20,7 @@ use Rector\Core\NodeManipulator\ClassMethodAssignManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PostRector\Collector\PropertyToAddCollector;
-use RectorPrefix20210704\Stringy\Stringy;
+use RectorPrefix20210705\Stringy\Stringy;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -91,9 +91,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Stmt\Class_::class];
     }
     /**
-     * @param Class_ $node
+     * @param \PhpParser\Node $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         $readOnlyVariableAssigns = $this->collectReadOnlyVariableAssigns($node);
         $readOnlyVariableAssigns = $this->filterOutUniqueNames($readOnlyVariableAssigns);
@@ -162,8 +162,9 @@ CODE_SAMPLE
     }
     /**
      * @param Assign[] $readOnlyVariableAssigns
+     * @param \PhpParser\Node\Stmt\Class_ $class
      */
-    private function refactorClassMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod, \PhpParser\Node\Stmt\Class_ $class, array $readOnlyVariableAssigns) : void
+    private function refactorClassMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod, $class, array $readOnlyVariableAssigns) : void
     {
         foreach ($readOnlyVariableAssigns as $readOnlyVariableAssign) {
             $this->removeNode($readOnlyVariableAssign);
@@ -230,7 +231,7 @@ CODE_SAMPLE
         if ($variableName === null) {
             throw new \Rector\Core\Exception\ShouldNotHappenException();
         }
-        $stringy = new \RectorPrefix20210704\Stringy\Stringy($variableName);
+        $stringy = new \RectorPrefix20210705\Stringy\Stringy($variableName);
         return (string) $stringy->underscored()->toUpperCase();
     }
 }

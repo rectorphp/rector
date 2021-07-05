@@ -84,8 +84,9 @@ final class SimplifyConditionsRector extends \Rector\Core\Rector\AbstractRector
     }
     /**
      * Skip too nested binary || binary > binary combinations
+     * @param \PhpParser\Node\Expr\BinaryOp $binaryOp
      */
-    private function shouldSkip(\PhpParser\Node\Expr\BinaryOp $binaryOp) : bool
+    private function shouldSkip($binaryOp) : bool
     {
         if ($binaryOp instanceof \PhpParser\Node\Expr\BinaryOp\BooleanOr) {
             return \true;

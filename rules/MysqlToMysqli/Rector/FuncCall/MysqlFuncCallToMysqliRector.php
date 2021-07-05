@@ -42,9 +42,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Expr\FuncCall::class];
     }
     /**
-     * @param FuncCall $node
+     * @param \PhpParser\Node $node
      */
-    public function refactor(\PhpParser\Node $node) : \PhpParser\Node\Expr\FuncCall
+    public function refactor($node) : \PhpParser\Node\Expr\FuncCall
     {
         if ($this->isName($node, 'mysql_create_db')) {
             return $this->processMysqlCreateDb($node);

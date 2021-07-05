@@ -39,9 +39,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Expr\Variable::class];
     }
     /**
-     * @param Variable $node
+     * @param \PhpParser\Node $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         $nodeName = $node->name;
         if (!$nodeName instanceof \PhpParser\Node\Expr\PropertyFetch && !$nodeName instanceof \PhpParser\Node\Expr\Variable) {

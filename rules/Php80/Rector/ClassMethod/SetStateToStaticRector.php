@@ -42,9 +42,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Stmt\ClassMethod::class];
     }
     /**
-     * @param ClassMethod $node
+     * @param \PhpParser\Node $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -52,7 +52,10 @@ CODE_SAMPLE
         $this->visibilityManipulator->makeStatic($node);
         return $node;
     }
-    private function shouldSkip(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
+    /**
+     * @param \PhpParser\Node\Stmt\ClassMethod $classMethod
+     */
+    private function shouldSkip($classMethod) : bool
     {
         if (!$this->isName($classMethod, \Rector\Core\ValueObject\MethodName::SET_STATE)) {
             return \true;

@@ -69,9 +69,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Expr\FuncCall::class];
     }
     /**
-     * @param FuncCall $node
+     * @param \PhpParser\Node $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -98,7 +98,10 @@ CODE_SAMPLE
         $this->removeNode($node);
         return $node;
     }
-    private function shouldSkip(\PhpParser\Node\Expr\FuncCall $funcCall) : bool
+    /**
+     * @param \PhpParser\Node\Expr\FuncCall $funcCall
+     */
+    private function shouldSkip($funcCall) : bool
     {
         if (!$this->isNames($funcCall, ['reset', 'end'])) {
             return \true;
@@ -111,7 +114,10 @@ CODE_SAMPLE
         }
         return !$this->reflectionProvider->hasFunction(new \PhpParser\Node\Name(self::ARRAY_KEY_LAST), null);
     }
-    private function getNextExpression(\PhpParser\Node\Expr\FuncCall $funcCall) : ?\PhpParser\Node
+    /**
+     * @param \PhpParser\Node\Expr\FuncCall $funcCall
+     */
+    private function getNextExpression($funcCall) : ?\PhpParser\Node
     {
         $currentExpression = $funcCall->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CURRENT_STATEMENT);
         if (!$currentExpression instanceof \PhpParser\Node\Stmt\Expression) {

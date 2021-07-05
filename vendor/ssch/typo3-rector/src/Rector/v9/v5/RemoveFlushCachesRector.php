@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Ssch\TYPO3Rector\Rector\v9\v5;
 
-use RectorPrefix20210704\Nette\Utils\Strings;
+use RectorPrefix20210705\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
@@ -32,13 +32,13 @@ final class RemoveFlushCachesRector extends \Rector\Core\Rector\AbstractRector
         return [\PhpParser\Node\Stmt\ClassMethod::class];
     }
     /**
-     * @param ClassMethod $node
+     * @param \PhpParser\Node $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         /** @var string $name */
         $name = $this->getName($node);
-        if (!\RectorPrefix20210704\Nette\Utils\Strings::endsWith($name, 'Command')) {
+        if (!\RectorPrefix20210705\Nette\Utils\Strings::endsWith($name, 'Command')) {
             return null;
         }
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);

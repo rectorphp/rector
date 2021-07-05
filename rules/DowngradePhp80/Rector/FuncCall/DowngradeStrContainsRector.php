@@ -51,7 +51,7 @@ CODE_SAMPLE
      * @param FuncCall|BooleanNot $node
      * @return Identical|NotIdentical|null The refactored node.
      */
-    public function refactor(\PhpParser\Node $node)
+    public function refactor($node)
     {
         $funcCall = $this->matchStrContainsOrNotStrContains($node);
         if (!$funcCall instanceof \PhpParser\Node\Expr\FuncCall) {

@@ -65,9 +65,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Stmt\Class_::class];
     }
     /**
-     * @param Class_ $node
+     * @param \PhpParser\Node $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         if ($this->shouldSkipClass($node)) {
             return null;
@@ -100,7 +100,10 @@ CODE_SAMPLE
         }
         return \false;
     }
-    private function shouldSkipClass(\PhpParser\Node\Stmt\Class_ $class) : bool
+    /**
+     * @param \PhpParser\Node\Stmt\Class_ $class
+     */
+    private function shouldSkipClass($class) : bool
     {
         if ($class->isFinal()) {
             return \true;

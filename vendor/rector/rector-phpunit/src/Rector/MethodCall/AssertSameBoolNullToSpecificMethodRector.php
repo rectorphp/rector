@@ -77,8 +77,9 @@ final class AssertSameBoolNullToSpecificMethodRector extends \Rector\Core\Rector
     }
     /**
      * @param MethodCall|StaticCall $node
+     * @param \Rector\PHPUnit\ValueObject\ConstantWithAssertMethods $constantWithAssertMethods
      */
-    private function renameMethod(\PhpParser\Node $node, \Rector\PHPUnit\ValueObject\ConstantWithAssertMethods $constantWithAssertMethods) : void
+    private function renameMethod(\PhpParser\Node $node, $constantWithAssertMethods) : void
     {
         $this->identifierManipulator->renameNodeWithMap($node, ['assertSame' => $constantWithAssertMethods->getAssetMethodName(), 'assertNotSame' => $constantWithAssertMethods->getNotAssertMethodName()]);
     }

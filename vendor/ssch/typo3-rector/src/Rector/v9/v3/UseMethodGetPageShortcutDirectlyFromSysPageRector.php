@@ -34,9 +34,9 @@ final class UseMethodGetPageShortcutDirectlyFromSysPageRector extends \Rector\Co
         return [\PhpParser\Node\Expr\MethodCall::class];
     }
     /**
-     * @param MethodCall $node
+     * @param \PhpParser\Node $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -59,7 +59,10 @@ $GLOBALS['TSFE']->sys_page->getPageShortcut('shortcut', 1, 1);
 CODE_SAMPLE
 )]);
     }
-    private function shouldSkip(\PhpParser\Node\Expr\MethodCall $node) : bool
+    /**
+     * @param \PhpParser\Node\Expr\MethodCall $node
+     */
+    private function shouldSkip($node) : bool
     {
         if ($this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Frontend\\Controller\\TypoScriptFrontendController'))) {
             return \false;

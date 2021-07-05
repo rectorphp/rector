@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210704;
+namespace RectorPrefix20210705;
 
 if (\class_exists('tx_felogin_pi1')) {
     return;

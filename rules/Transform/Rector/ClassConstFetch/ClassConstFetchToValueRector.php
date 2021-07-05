@@ -11,7 +11,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Transform\ValueObject\ClassConstFetchToValue;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20210704\Webmozart\Assert\Assert;
+use RectorPrefix20210705\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Transform\Rector\ClassConstFetch\ClassConstFetchToValueRector\ClassConstFetchToValueRectorTest
  */
@@ -38,9 +38,9 @@ final class ClassConstFetchToValueRector extends \Rector\Core\Rector\AbstractRec
         return [\PhpParser\Node\Expr\ClassConstFetch::class];
     }
     /**
-     * @param ClassConstFetch $node
+     * @param \PhpParser\Node $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         foreach ($this->classConstFetchesToValues as $classConstFetchToValue) {
             if (!$this->isObjectType($node->class, $classConstFetchToValue->getObjectType())) {
@@ -59,7 +59,7 @@ final class ClassConstFetchToValueRector extends \Rector\Core\Rector\AbstractRec
     public function configure(array $configuration) : void
     {
         $classConstFetchesToValues = $configuration[self::CLASS_CONST_FETCHES_TO_VALUES] ?? [];
-        \RectorPrefix20210704\Webmozart\Assert\Assert::allIsInstanceOf($classConstFetchesToValues, \Rector\Transform\ValueObject\ClassConstFetchToValue::class);
+        \RectorPrefix20210705\Webmozart\Assert\Assert::allIsInstanceOf($classConstFetchesToValues, \Rector\Transform\ValueObject\ClassConstFetchToValue::class);
         $this->classConstFetchesToValues = $classConstFetchesToValues;
     }
 }

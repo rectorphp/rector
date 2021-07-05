@@ -73,7 +73,10 @@ CODE_SAMPLE
         $this->commentsMerger->keepComments($node, [$subIf]);
         return $node;
     }
-    private function shouldSkip(\PhpParser\Node\Stmt\If_ $if) : bool
+    /**
+     * @param \PhpParser\Node\Stmt\If_ $if
+     */
+    private function shouldSkip($if) : bool
     {
         if ($if->else !== null) {
             return \true;

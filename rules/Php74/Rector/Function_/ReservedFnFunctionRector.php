@@ -69,7 +69,7 @@ CODE_SAMPLE
     /**
      * @param Function_|FuncCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         foreach ($this->reservedNamesToNewOnes as $reservedName => $newName) {
             if (!$this->isName($node->name, $reservedName)) {

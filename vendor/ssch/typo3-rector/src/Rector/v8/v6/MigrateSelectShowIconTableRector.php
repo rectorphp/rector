@@ -31,9 +31,9 @@ final class MigrateSelectShowIconTableRector extends \Rector\Core\Rector\Abstrac
         return [\PhpParser\Node\Stmt\Return_::class];
     }
     /**
-     * @param Return_ $node
+     * @param \PhpParser\Node $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         if (!$this->isFullTca($node)) {
             return null;

@@ -3,9 +3,9 @@
 declare (strict_types=1);
 namespace Ssch\TYPO3Rector\FileProcessor\TypoScript\Rector;
 
-use RectorPrefix20210704\Helmich\TypoScriptParser\Parser\AST\Operator\Assignment;
-use RectorPrefix20210704\Helmich\TypoScriptParser\Parser\AST\Statement;
-use RectorPrefix20210704\Nette\Utils\Strings;
+use RectorPrefix20210705\Helmich\TypoScriptParser\Parser\AST\Operator\Assignment;
+use RectorPrefix20210705\Helmich\TypoScriptParser\Parser\AST\Statement;
+use RectorPrefix20210705\Nette\Utils\Strings;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -13,12 +13,15 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class AdditionalHeadersToArrayTypoScriptRector extends \Ssch\TYPO3Rector\FileProcessor\TypoScript\Rector\AbstractTypoScriptRector
 {
-    public function enterNode(\RectorPrefix20210704\Helmich\TypoScriptParser\Parser\AST\Statement $statement) : void
+    /**
+     * @param \Helmich\TypoScriptParser\Parser\AST\Statement $statement
+     */
+    public function enterNode($statement) : void
     {
-        if (!$statement instanceof \RectorPrefix20210704\Helmich\TypoScriptParser\Parser\AST\Operator\Assignment) {
+        if (!$statement instanceof \RectorPrefix20210705\Helmich\TypoScriptParser\Parser\AST\Operator\Assignment) {
             return;
         }
-        if (!\RectorPrefix20210704\Nette\Utils\Strings::startsWith($statement->object->relativeName, 'additionalHeaders')) {
+        if (!\RectorPrefix20210705\Nette\Utils\Strings::startsWith($statement->object->relativeName, 'additionalHeaders')) {
             return;
         }
         $this->hasChanged = \true;

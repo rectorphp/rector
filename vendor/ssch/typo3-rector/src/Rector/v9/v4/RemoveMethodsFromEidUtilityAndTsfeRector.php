@@ -36,7 +36,7 @@ final class RemoveMethodsFromEidUtilityAndTsfeRector extends \Rector\Core\Rector
     /**
      * @param MethodCall|StaticCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -79,7 +79,7 @@ CODE_SAMPLE
     /**
      * @param StaticCall|MethodCall $node
      */
-    private function shouldSkip(\PhpParser\Node $node) : bool
+    private function shouldSkip($node) : bool
     {
         if ($this->isEidUtilityMethodCall($node)) {
             return \false;

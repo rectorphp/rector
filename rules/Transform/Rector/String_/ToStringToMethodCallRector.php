@@ -50,7 +50,7 @@ CODE_SAMPLE
     /**
      * @param String_|MethodCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         if ($node instanceof \PhpParser\Node\Expr\Cast\String_) {
             return $this->processStringNode($node);

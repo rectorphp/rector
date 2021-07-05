@@ -61,9 +61,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Stmt\While_::class];
     }
     /**
-     * @param While_ $node
+     * @param \PhpParser\Node $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         if (!$node->cond instanceof \PhpParser\Node\Expr\Assign) {
             return null;

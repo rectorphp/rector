@@ -13,7 +13,7 @@ use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20210704\TYPO3\CMS\Core\Utility\PhpOptionsUtility;
+use RectorPrefix20210705\TYPO3\CMS\Core\Utility\PhpOptionsUtility;
 /**
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/9.3/Deprecation-85102-PhpOptionsUtility.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v9\v3\PhpOptionsUtilityRector\PhpOptionsUtilityRectorTest
@@ -28,9 +28,9 @@ final class PhpOptionsUtilityRector extends \Rector\Core\Rector\AbstractRector
         return [\PhpParser\Node\Expr\StaticCall::class];
     }
     /**
-     * @param StaticCall $node
+     * @param \PhpParser\Node $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Utility\\PhpOptionsUtility'))) {
             return null;

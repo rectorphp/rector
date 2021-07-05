@@ -83,9 +83,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Expr\FuncCall::class];
     }
     /**
-     * @param FuncCall $node
+     * @param \PhpParser\Node $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         if (!$this->shouldRefactor($node)) {
             return null;
@@ -112,7 +112,10 @@ CODE_SAMPLE
         \array_splice($node->args, 1, 1, [new \PhpParser\Node\Arg($newExpr)]);
         return $node;
     }
-    private function shouldRefactor(\PhpParser\Node\Expr\FuncCall $funcCall) : bool
+    /**
+     * @param \PhpParser\Node\Expr\FuncCall $funcCall
+     */
+    private function shouldRefactor($funcCall) : bool
     {
         if (!$this->isName($funcCall, 'strip_tags')) {
             return \false;

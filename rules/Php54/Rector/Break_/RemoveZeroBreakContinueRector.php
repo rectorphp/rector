@@ -64,7 +64,7 @@ CODE_SAMPLE
     /**
      * @param Break_|Continue_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         if ($node->num === null) {
             return null;

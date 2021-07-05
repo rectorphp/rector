@@ -96,7 +96,7 @@ CODE_SAMPLE
     /**
      * @param Name|FunctionLike|Property|Name|Expression|String_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         if ($node instanceof \PhpParser\Node\Scalar\String_) {
             return $this->stringClassNameToClassConstantRectorIfPossible($node);

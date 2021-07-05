@@ -10,7 +10,7 @@ use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20210704\TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
+use RectorPrefix20210705\TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 /**
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/9.3/Deprecation-84981-BackendUserAuthentication-simplelogDeprecated.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v9\v3\BackendUserAuthenticationSimplelogRector\BackendUserAuthenticationSimplelogRectorTest
@@ -18,9 +18,9 @@ use RectorPrefix20210704\TYPO3\CMS\Core\Authentication\BackendUserAuthentication
 final class BackendUserAuthenticationSimplelogRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @param MethodCall $node
+     * @param \PhpParser\Node $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Authentication\\BackendUserAuthentication'))) {
             return null;

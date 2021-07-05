@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210704;
+namespace RectorPrefix20210705;
 
 if (\class_exists('tslib_cObj_getImgResourceHook')) {
     return;

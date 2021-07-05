@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Php74\Rector\LNumber;
 
-use RectorPrefix20210704\Nette\Utils\Strings;
+use RectorPrefix20210705\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Scalar\DNumber;
 use PhpParser\Node\Scalar\LNumber;
@@ -14,7 +14,7 @@ use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20210704\Webmozart\Assert\Assert;
+use RectorPrefix20210705\Webmozart\Assert\Assert;
 /**
  * @changelog https://wiki.php.net/rfc/numeric_literal_separator
  * @changelog https://github.com/nikic/PHP-Parser/pull/615
@@ -45,7 +45,7 @@ final class AddLiteralSeparatorToNumberRector extends \Rector\Core\Rector\Abstra
     public function configure(array $configuration) : void
     {
         $limitValue = $configuration[self::LIMIT_VALUE] ?? 1000000;
-        \RectorPrefix20210704\Webmozart\Assert\Assert::integer($limitValue);
+        \RectorPrefix20210705\Webmozart\Assert\Assert::integer($limitValue);
         $this->limitValue = $limitValue;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
@@ -82,7 +82,7 @@ CODE_SAMPLE
     /**
      * @param LNumber|DNumber $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         if (!$this->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::LITERAL_SEPARATOR)) {
             return null;
@@ -108,8 +108,9 @@ CODE_SAMPLE
     }
     /**
      * @param \PhpParser\Node\Scalar\LNumber|\PhpParser\Node\Scalar\DNumber $node
+     * @param string $numericValueAsString
      */
-    private function shouldSkip($node, string $numericValueAsString) : bool
+    private function shouldSkip($node, $numericValueAsString) : bool
     {
         /** @var int $startToken */
         $startToken = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::START_TOKEN_POSITION);
@@ -140,11 +141,11 @@ CODE_SAMPLE
             return \true;
         }
         // e+/e-
-        if (\RectorPrefix20210704\Nette\Utils\Strings::match($numericValueAsString, '#e#i')) {
+        if (\RectorPrefix20210705\Nette\Utils\Strings::match($numericValueAsString, '#e#i')) {
             return \true;
         }
         // too short
-        return \RectorPrefix20210704\Nette\Utils\Strings::length($numericValueAsString) <= self::GROUP_SIZE;
+        return \RectorPrefix20210705\Nette\Utils\Strings::length($numericValueAsString) <= self::GROUP_SIZE;
     }
     /**
      * @return string[]

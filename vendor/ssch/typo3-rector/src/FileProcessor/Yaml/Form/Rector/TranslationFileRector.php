@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Ssch\TYPO3Rector\FileProcessor\Yaml\Form\Rector;
 
-use RectorPrefix20210704\Nette\Utils\Strings;
+use RectorPrefix20210705\Nette\Utils\Strings;
 use Ssch\TYPO3Rector\Contract\FileProcessor\Yaml\Form\FormYamlRectorInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -47,7 +47,10 @@ TYPO3:
 CODE_SAMPLE
 )]);
     }
-    public function refactor(array $yaml) : array
+    /**
+     * @param mixed[] $yaml
+     */
+    public function refactor($yaml) : array
     {
         return $this->refactorTranslationFile($yaml);
     }
@@ -79,7 +82,7 @@ CODE_SAMPLE
     {
         $newTranslations = [];
         foreach ($oldTranslations as $oldTranslationFileKey => $oldTranslationFile) {
-            if (!\RectorPrefix20210704\Nette\Utils\Strings::startsWith($oldTranslationFile, 'EXT:form')) {
+            if (!\RectorPrefix20210705\Nette\Utils\Strings::startsWith($oldTranslationFile, 'EXT:form')) {
                 $newTranslations[$oldTranslationFileKey] = $oldTranslationFile;
             }
         }

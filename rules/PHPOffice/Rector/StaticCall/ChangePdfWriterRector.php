@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\PHPOffice\Rector\StaticCall;
 
-use RectorPrefix20210704\Nette\Utils\Strings;
+use RectorPrefix20210705\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
@@ -52,9 +52,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Expr\StaticCall::class];
     }
     /**
-     * @param StaticCall $node
+     * @param \PhpParser\Node $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         $callerType = $this->nodeTypeResolver->resolve($node->class);
         if ($this->isSettingsPdfRendererStaticCall($callerType, $node)) {
@@ -69,7 +69,7 @@ CODE_SAMPLE
             if (!\is_string($secondArgValue)) {
                 return null;
             }
-            if (\RectorPrefix20210704\Nette\Utils\Strings::match($secondArgValue, '#pdf#i')) {
+            if (\RectorPrefix20210705\Nette\Utils\Strings::match($secondArgValue, '#pdf#i')) {
                 return new \PhpParser\Node\Expr\New_(new \PhpParser\Node\Name\FullyQualified('PhpOffice\\PhpSpreadsheet\\Writer\\Pdf\\Mpdf'), [$node->args[0]]);
             }
         }

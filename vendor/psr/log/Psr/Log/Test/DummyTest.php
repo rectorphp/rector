@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210704\Psr\Log\Test;
+namespace RectorPrefix20210705\Psr\Log\Test;
 
 /**
  * This class is internal and does not follow the BC promise.

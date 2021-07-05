@@ -88,9 +88,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Stmt\Property::class];
     }
     /**
-     * @param Property $node
+     * @param \PhpParser\Node $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -113,7 +113,10 @@ CODE_SAMPLE
         $this->propertyFetchWithConstFetchReplacer->replace($classLike, $node);
         return $this->classConstantFactory->createFromProperty($node);
     }
-    private function shouldSkip(\PhpParser\Node\Stmt\Property $property) : bool
+    /**
+     * @param \PhpParser\Node\Stmt\Property $property
+     */
+    private function shouldSkip($property) : bool
     {
         if (\count($property->props) !== 1) {
             return \true;

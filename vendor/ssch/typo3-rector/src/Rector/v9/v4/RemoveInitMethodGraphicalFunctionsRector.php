@@ -9,7 +9,7 @@ use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20210704\TYPO3\CMS\Core\Imaging\GraphicalFunctions;
+use RectorPrefix20210705\TYPO3\CMS\Core\Imaging\GraphicalFunctions;
 /**
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/9.4/Deprecation-85978-GraphicalFunctions-init.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v9\v4\RemoveInitMethodGraphicalFunctionsRector\RemoveInitMethodGraphicalFunctionsRectorTest
@@ -24,9 +24,9 @@ final class RemoveInitMethodGraphicalFunctionsRector extends \Rector\Core\Rector
         return [\PhpParser\Node\Expr\MethodCall::class];
     }
     /**
-     * @param MethodCall $node
+     * @param \PhpParser\Node $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Imaging\\GraphicalFunctions'))) {
             return null;

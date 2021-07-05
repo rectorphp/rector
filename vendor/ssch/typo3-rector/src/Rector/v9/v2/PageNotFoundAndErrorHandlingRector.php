@@ -87,9 +87,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Expr\MethodCall::class];
     }
     /**
-     * @param MethodCall $node
+     * @param \PhpParser\Node $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -119,7 +119,10 @@ CODE_SAMPLE
         $this->removeNodeOrParentNode($node);
         return $node;
     }
-    private function shouldSkip(\PhpParser\Node\Expr\MethodCall $node) : bool
+    /**
+     * @param \PhpParser\Node\Expr\MethodCall $node
+     */
+    private function shouldSkip($node) : bool
     {
         if ($this->typo3NodeResolver->isAnyMethodCallOnGlobals($node, \Ssch\TYPO3Rector\Helper\Typo3NodeResolver::TYPO_SCRIPT_FRONTEND_CONTROLLER)) {
             return \false;

@@ -40,9 +40,9 @@ final class UseGetMenuInsteadOfGetFirstWebPageRector extends \Rector\Core\Rector
         return [\PhpParser\Node\Expr\MethodCall::class];
     }
     /**
-     * @param MethodCall $node
+     * @param \PhpParser\Node $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -85,7 +85,10 @@ if (!empty($rootLevelPages)) {
 CODE_SAMPLE
 )]);
     }
-    private function shouldSkip(\PhpParser\Node\Expr\MethodCall $node) : bool
+    /**
+     * @param \PhpParser\Node\Expr\MethodCall $node
+     */
+    private function shouldSkip($node) : bool
     {
         if ($this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Frontend\\Page\\PageRepository'))) {
             return \false;

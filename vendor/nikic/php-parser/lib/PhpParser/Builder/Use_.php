@@ -30,7 +30,7 @@ class Use_ implements \PhpParser\Builder
      *
      * @return $this The builder instance (for fluid interface)
      */
-    public function as(string $alias)
+    public function as($alias)
     {
         $this->alias = $alias;
         return $this;

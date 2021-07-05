@@ -93,7 +93,7 @@ CODE_SAMPLE
     /**
      * @param StaticCall|FuncCall $node
      */
-    private function shouldSkip(\PhpParser\Node $node) : bool
+    private function shouldSkip($node) : bool
     {
         if ($node instanceof \PhpParser\Node\Expr\StaticCall) {
             return !$this->nodeTypeResolver->isObjectTypes($node->class, $this->requestObjectTypes);

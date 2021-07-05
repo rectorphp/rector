@@ -74,7 +74,7 @@ CODE_SAMPLE
     /**
      * @param Function_|ClassMethod $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         $recastAssigns = [];
         foreach ($node->params as $param) {

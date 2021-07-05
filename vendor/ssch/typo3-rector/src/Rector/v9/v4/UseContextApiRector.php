@@ -39,9 +39,9 @@ final class UseContextApiRector extends \Rector\Core\Rector\AbstractRector
         return [\PhpParser\Node\Expr\PropertyFetch::class];
     }
     /**
-     * @param PropertyFetch $node
+     * @param \PhpParser\Node $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -92,7 +92,10 @@ $showHiddenRecords = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3
 CODE_SAMPLE
 )]);
     }
-    private function shouldSkip(\PhpParser\Node\Expr\PropertyFetch $node) : bool
+    /**
+     * @param \PhpParser\Node\Expr\PropertyFetch $node
+     */
+    private function shouldSkip($node) : bool
     {
         $parentNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
         // Check if we have an assigment to the property, if so do not change it

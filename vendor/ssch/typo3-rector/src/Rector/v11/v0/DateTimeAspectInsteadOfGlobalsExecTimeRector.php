@@ -31,9 +31,9 @@ final class DateTimeAspectInsteadOfGlobalsExecTimeRector extends \Rector\Core\Re
         return [\PhpParser\Node\Expr\ArrayDimFetch::class];
     }
     /**
-     * @param ArrayDimFetch $node
+     * @param \PhpParser\Node $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         if (!$this->typo3NodeResolver->isTypo3Globals($node, [\Ssch\TYPO3Rector\Helper\Typo3NodeResolver::EXEC_TIME, \Ssch\TYPO3Rector\Helper\Typo3NodeResolver::SIM_ACCESS_TIME, \Ssch\TYPO3Rector\Helper\Typo3NodeResolver::SIM_EXEC_TIME, \Ssch\TYPO3Rector\Helper\Typo3NodeResolver::ACCESS_TIME])) {
             return null;

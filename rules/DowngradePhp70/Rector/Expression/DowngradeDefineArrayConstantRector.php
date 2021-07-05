@@ -45,9 +45,9 @@ CODE_SAMPLE
 )]);
     }
     /**
-     * @param Expression $node
+     * @param \PhpParser\Node $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         if (!$node->expr instanceof \PhpParser\Node\Expr\FuncCall) {
             return null;
@@ -63,7 +63,10 @@ CODE_SAMPLE
         $arg1Value = $funcCall->args[1]->value;
         return new \PhpParser\Node\Stmt\Const_([new \PhpParser\Node\Const_($arg0Value, $arg1Value)]);
     }
-    private function shouldSkip(\PhpParser\Node\Expr\FuncCall $funcCall) : bool
+    /**
+     * @param \PhpParser\Node\Expr\FuncCall $funcCall
+     */
+    private function shouldSkip($funcCall) : bool
     {
         if (!$this->isName($funcCall, 'define')) {
             return \true;

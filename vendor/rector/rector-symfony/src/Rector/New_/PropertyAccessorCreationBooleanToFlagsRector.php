@@ -58,7 +58,10 @@ CODE_SAMPLE
         $node->args[0] = $this->nodeFactory->createArg($bitwiseOr);
         return $node;
     }
-    private function shouldSkip(\PhpParser\Node\Expr\New_ $new) : bool
+    /**
+     * @param \PhpParser\Node\Expr\New_ $new
+     */
+    private function shouldSkip($new) : bool
     {
         if (!$new->class instanceof \PhpParser\Node\Name) {
             return \true;

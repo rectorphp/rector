@@ -62,12 +62,15 @@ final class NodeRepository
     }
     /**
      * @return Class_[]|Interface_[]
+     * @deprecated Use static reflection instead
      */
     public function findClassesAndInterfacesByType(string $type) : array
     {
         return \array_merge($this->findChildrenOfClass($type), $this->findImplementersOfInterface($type));
     }
     /**
+     * @deprecated Use static reflection instead
+     *
      * @param class-string $class
      * @return Class_[]
      */
@@ -84,6 +87,8 @@ final class NodeRepository
         return $childrenClasses;
     }
     /**
+     * @deprecated Use static reflection instead
+     *
      * @param class-string $class
      */
     public function findInterface(string $class) : ?\PhpParser\Node\Stmt\Interface_
@@ -91,6 +96,8 @@ final class NodeRepository
         return $this->parsedNodeCollector->findInterface($class);
     }
     /**
+     * @deprecated Use static reflection instead
+     *
      * @param class-string $name
      */
     public function findClass(string $name) : ?\PhpParser\Node\Stmt\Class_
@@ -98,15 +105,13 @@ final class NodeRepository
         return $this->parsedNodeCollector->findClass($name);
     }
     /**
+     * @deprecated Use static reflection instead
+     *
      * @param class-string $name
      */
     public function findTrait(string $name) : ?\PhpParser\Node\Stmt\Trait_
     {
         return $this->parsedNodeCollector->findTrait($name);
-    }
-    public function findClassLike(string $classLikeName) : ?\PhpParser\Node\Stmt\ClassLike
-    {
-        return $this->findClass($classLikeName) ?? $this->findInterface($classLikeName) ?? $this->findTrait($classLikeName);
     }
     private function isChildOrEqualClassLike(string $desiredClass, ?string $currentClassName) : bool
     {

@@ -37,7 +37,7 @@ final class DowngradeStrEndsWithRector extends \Rector\Core\Rector\AbstractRecto
     /**
      * @param FuncCall|BooleanNot $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         if ($node instanceof \PhpParser\Node\Expr\FuncCall && $this->isName($node->name, 'str_ends_with')) {
             return new \PhpParser\Node\Expr\BinaryOp\Identical($this->createSubstrCompareFuncCall($node), new \PhpParser\Node\Scalar\LNumber(0));

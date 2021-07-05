@@ -67,7 +67,7 @@ CODE_SAMPLE
     /**
      * @param Identical|NotIdentical $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         return $this->refactorSubstr($node) ?? $this->refactorSubstrCompare($node);
     }

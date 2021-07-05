@@ -57,9 +57,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Expr\MethodCall::class];
     }
     /**
-     * @param MethodCall $node
+     * @param \PhpParser\Node $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         if (!$this->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::NULL_COALESCE)) {
             return null;
@@ -93,9 +93,9 @@ CODE_SAMPLE
         return new \PhpParser\Node\Expr\BinaryOp\Coalesce($newNode, $defaultValueNode);
     }
     /**
-     * @param MethodCall $node
+     * @param \PhpParser\Node $node
      */
-    private function shouldSkip(\PhpParser\Node $node) : bool
+    private function shouldSkip($node) : bool
     {
         if ($this->typo3NodeResolver->isMethodCallOnBackendUser($node)) {
             return \false;

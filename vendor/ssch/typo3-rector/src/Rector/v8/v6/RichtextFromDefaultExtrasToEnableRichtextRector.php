@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Ssch\TYPO3Rector\Rector\v8\v6;
 
-use RectorPrefix20210704\Nette\Utils\Strings;
+use RectorPrefix20210705\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
@@ -63,9 +63,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Stmt\Return_::class];
     }
     /**
-     * @param Return_ $node
+     * @param \PhpParser\Node $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         $this->hasAstBeenChanged = \false;
         if (!$this->isFullTca($node)) {
@@ -128,7 +128,7 @@ CODE_SAMPLE
         if (!\is_string($defaultExtras)) {
             return \false;
         }
-        return \RectorPrefix20210704\Nette\Utils\Strings::startsWith($defaultExtras, 'richtext');
+        return \RectorPrefix20210705\Nette\Utils\Strings::startsWith($defaultExtras, 'richtext');
     }
     private function refactorRichtextColumns(\PhpParser\Node\Expr\Array_ $columnItems) : void
     {

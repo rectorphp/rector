@@ -20,7 +20,7 @@ use Rector\Php80\NodeFactory\AttributeFlagFactory;
 use Rector\PhpAttribute\Printer\PhpAttributeGroupFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20210704\Webmozart\Assert\Assert;
+use RectorPrefix20210705\Webmozart\Assert\Assert;
 /**
  * @changelog https://php.watch/articles/php-attributes#syntax
  *
@@ -110,9 +110,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Stmt\Class_::class];
     }
     /**
-     * @param Class_ $node
+     * @param \PhpParser\Node $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNode($node);
         if (!$phpDocInfo instanceof \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo) {
@@ -155,7 +155,7 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $shouldRemoveAnnotations = $configuration[self::REMOVE_ANNOTATIONS] ?? \true;
-        \RectorPrefix20210704\Webmozart\Assert\Assert::boolean($shouldRemoveAnnotations);
+        \RectorPrefix20210705\Webmozart\Assert\Assert::boolean($shouldRemoveAnnotations);
         $this->shouldRemoveAnnotations = $shouldRemoveAnnotations;
     }
     /**
@@ -197,7 +197,10 @@ CODE_SAMPLE
         }
         $attributeGroup->attrs[0]->args[] = new \PhpParser\Node\Arg($flagCollection);
     }
-    private function shouldSkipClass(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo, \PhpParser\Node\Stmt\Class_ $class) : bool
+    /**
+     * @param \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo
+     */
+    private function shouldSkipClass($phpDocInfo, \PhpParser\Node\Stmt\Class_ $class) : bool
     {
         if (!$phpDocInfo->hasByNames(['Annotation', 'annotation'])) {
             return \true;

@@ -46,10 +46,10 @@ CODE_SAMPLE
         return [\PhpParser\Node\Stmt\Return_::class];
     }
     /**
-     * @param Return_ $node
+     * @param \PhpParser\Node $node
      * @return null|Expression[]|Return_[]
      */
-    public function refactor(\PhpParser\Node $node) : ?array
+    public function refactor($node) : ?array
     {
         if (!$node->expr instanceof \PhpParser\Node\Expr\MethodCall) {
             return null;

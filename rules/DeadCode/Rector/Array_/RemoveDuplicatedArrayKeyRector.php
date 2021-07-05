@@ -38,9 +38,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Expr\Array_::class];
     }
     /**
-     * @param Array_ $node
+     * @param \PhpParser\Node $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         $arrayItemsWithDuplicatedKey = $this->getArrayItemsWithDuplicatedKey($node);
         if ($arrayItemsWithDuplicatedKey === []) {

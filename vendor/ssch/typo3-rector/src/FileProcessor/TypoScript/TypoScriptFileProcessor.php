@@ -3,13 +3,13 @@
 declare (strict_types=1);
 namespace Ssch\TYPO3Rector\FileProcessor\TypoScript;
 
-use RectorPrefix20210704\Helmich\TypoScriptParser\Parser\ParseError;
-use RectorPrefix20210704\Helmich\TypoScriptParser\Parser\ParserInterface;
-use RectorPrefix20210704\Helmich\TypoScriptParser\Parser\Printer\ASTPrinterInterface;
-use RectorPrefix20210704\Helmich\TypoScriptParser\Parser\Printer\PrettyPrinterConfiguration;
-use RectorPrefix20210704\Helmich\TypoScriptParser\Parser\Traverser\Traverser;
-use RectorPrefix20210704\Helmich\TypoScriptParser\Parser\Traverser\Visitor;
-use RectorPrefix20210704\Helmich\TypoScriptParser\Tokenizer\TokenizerException;
+use RectorPrefix20210705\Helmich\TypoScriptParser\Parser\ParseError;
+use RectorPrefix20210705\Helmich\TypoScriptParser\Parser\ParserInterface;
+use RectorPrefix20210705\Helmich\TypoScriptParser\Parser\Printer\ASTPrinterInterface;
+use RectorPrefix20210705\Helmich\TypoScriptParser\Parser\Printer\PrettyPrinterConfiguration;
+use RectorPrefix20210705\Helmich\TypoScriptParser\Parser\Traverser\Traverser;
+use RectorPrefix20210705\Helmich\TypoScriptParser\Parser\Traverser\Visitor;
+use RectorPrefix20210705\Helmich\TypoScriptParser\Tokenizer\TokenizerException;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\Console\Output\RectorOutputStyle;
 use Rector\Core\Provider\CurrentFileProvider;
@@ -22,7 +22,7 @@ use Ssch\TYPO3Rector\Contract\FileProcessor\TypoScript\ConvertToPhpFileInterface
 use Ssch\TYPO3Rector\Contract\FileProcessor\TypoScript\TypoScriptRectorInterface;
 use Ssch\TYPO3Rector\Contract\Processor\ConfigurableProcessorInterface;
 use Ssch\TYPO3Rector\FileProcessor\TypoScript\Rector\AbstractTypoScriptRector;
-use RectorPrefix20210704\Symfony\Component\Console\Output\BufferedOutput;
+use RectorPrefix20210705\Symfony\Component\Console\Output\BufferedOutput;
 /**
  * @see \Ssch\TYPO3Rector\Tests\FileProcessor\TypoScript\TypoScriptProcessorTest
  */
@@ -71,7 +71,7 @@ final class TypoScriptFileProcessor implements \Ssch\TYPO3Rector\Contract\Proces
     /**
      * @param TypoScriptRectorInterface[] $typoScriptRectors
      */
-    public function __construct(\RectorPrefix20210704\Helmich\TypoScriptParser\Parser\ParserInterface $typoscriptParser, \RectorPrefix20210704\Symfony\Component\Console\Output\BufferedOutput $output, \RectorPrefix20210704\Helmich\TypoScriptParser\Parser\Printer\ASTPrinterInterface $typoscriptPrinter, \Rector\Core\Provider\CurrentFileProvider $currentFileProvider, \Rector\FileFormatter\EditorConfig\EditorConfigParser $editorConfigParser, \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector $removedAndAddedFilesCollector, \Rector\Core\Console\Output\RectorOutputStyle $rectorOutputStyle, array $typoScriptRectors = [])
+    public function __construct(\RectorPrefix20210705\Helmich\TypoScriptParser\Parser\ParserInterface $typoscriptParser, \RectorPrefix20210705\Symfony\Component\Console\Output\BufferedOutput $output, \RectorPrefix20210705\Helmich\TypoScriptParser\Parser\Printer\ASTPrinterInterface $typoscriptPrinter, \Rector\Core\Provider\CurrentFileProvider $currentFileProvider, \Rector\FileFormatter\EditorConfig\EditorConfigParser $editorConfigParser, \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector $removedAndAddedFilesCollector, \Rector\Core\Console\Output\RectorOutputStyle $rectorOutputStyle, array $typoScriptRectors = [])
     {
         $this->typoscriptParser = $typoscriptParser;
         $this->output = $output;
@@ -112,7 +112,7 @@ final class TypoScriptFileProcessor implements \Ssch\TYPO3Rector\Contract\Proces
             $this->currentFileProvider->setFile($file);
             $smartFileInfo = $file->getSmartFileInfo();
             $originalStatements = $this->typoscriptParser->parseString($smartFileInfo->getContents());
-            $traverser = new \RectorPrefix20210704\Helmich\TypoScriptParser\Parser\Traverser\Traverser($originalStatements);
+            $traverser = new \RectorPrefix20210705\Helmich\TypoScriptParser\Parser\Traverser\Traverser($originalStatements);
             foreach ($this->typoScriptRectors as $visitor) {
                 $traverser->addVisitor($visitor);
             }
@@ -126,7 +126,7 @@ final class TypoScriptFileProcessor implements \Ssch\TYPO3Rector\Contract\Proces
             $editorConfigConfigurationBuilder = \Rector\FileFormatter\ValueObjectFactory\EditorConfigConfigurationBuilder::create();
             $editorConfigConfigurationBuilder->withIndent(\Rector\FileFormatter\ValueObject\Indent::createSpaceWithSize(4));
             $editorConfiguration = $this->editorConfigParser->extractConfigurationForFile($file, $editorConfigConfigurationBuilder);
-            $prettyPrinterConfiguration = \RectorPrefix20210704\Helmich\TypoScriptParser\Parser\Printer\PrettyPrinterConfiguration::create();
+            $prettyPrinterConfiguration = \RectorPrefix20210705\Helmich\TypoScriptParser\Parser\Printer\PrettyPrinterConfiguration::create();
             $prettyPrinterConfiguration = $prettyPrinterConfiguration->withEmptyLineBreaks();
             if ('tab' === $editorConfiguration->getIndentStyle()) {
                 $prettyPrinterConfiguration = $prettyPrinterConfiguration->withTabs();
@@ -138,9 +138,9 @@ final class TypoScriptFileProcessor implements \Ssch\TYPO3Rector\Contract\Proces
             $this->typoscriptPrinter->printStatements($originalStatements, $this->output);
             $typoScriptContent = \rtrim($this->output->fetch()) . $editorConfiguration->getNewLine();
             $file->changeFileContent($typoScriptContent);
-        } catch (\RectorPrefix20210704\Helmich\TypoScriptParser\Tokenizer\TokenizerException $tokenizerException) {
+        } catch (\RectorPrefix20210705\Helmich\TypoScriptParser\Tokenizer\TokenizerException $tokenizerException) {
             return;
-        } catch (\RectorPrefix20210704\Helmich\TypoScriptParser\Parser\ParseError $parseError) {
+        } catch (\RectorPrefix20210705\Helmich\TypoScriptParser\Parser\ParseError $parseError) {
             $smartFileInfo = $file->getSmartFileInfo();
             $errorFile = $smartFileInfo->getRelativeFilePath();
             $this->rectorOutputStyle->warning(\sprintf('TypoScriptParser Error in: %s. File skipped.', $errorFile));
@@ -152,7 +152,7 @@ final class TypoScriptFileProcessor implements \Ssch\TYPO3Rector\Contract\Proces
      */
     private function convertToPhpFileRectors() : array
     {
-        return \array_filter($this->typoScriptRectors, function (\RectorPrefix20210704\Helmich\TypoScriptParser\Parser\Traverser\Visitor $visitor) : bool {
+        return \array_filter($this->typoScriptRectors, function (\RectorPrefix20210705\Helmich\TypoScriptParser\Parser\Traverser\Visitor $visitor) : bool {
             return \is_a($visitor, \Ssch\TYPO3Rector\Contract\FileProcessor\TypoScript\ConvertToPhpFileInterface::class, \true);
         });
     }

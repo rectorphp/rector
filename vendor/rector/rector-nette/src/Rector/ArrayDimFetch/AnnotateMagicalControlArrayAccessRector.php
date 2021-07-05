@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Nette\Rector\ArrayDimFetch;
 
-use RectorPrefix20210704\Nette\Utils\Strings;
+use RectorPrefix20210705\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Isset_;
@@ -121,7 +121,7 @@ CODE_SAMPLE
             return null;
         }
         // probably multiplier factory, nothing we can do... yet
-        if (\RectorPrefix20210704\Nette\Utils\Strings::contains($controlName, '-')) {
+        if (\RectorPrefix20210705\Nette\Utils\Strings::contains($controlName, '-')) {
             return null;
         }
         $variableName = $this->netteControlNaming->createVariableName($controlName);
@@ -136,7 +136,10 @@ CODE_SAMPLE
         }
         return new \PhpParser\Node\Expr\Variable($variableName);
     }
-    private function shouldSkip(\PhpParser\Node\Expr\ArrayDimFetch $arrayDimFetch) : bool
+    /**
+     * @param \PhpParser\Node\Expr\ArrayDimFetch $arrayDimFetch
+     */
+    private function shouldSkip($arrayDimFetch) : bool
     {
         if ($this->arrayDimFetchAnalyzer->isBeingAssignedOrInitialized($arrayDimFetch)) {
             return \true;

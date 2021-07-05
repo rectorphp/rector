@@ -80,7 +80,7 @@ CODE_SAMPLE
     /**
      * @param MethodCall|String_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         if ($node instanceof \PhpParser\Node\Expr\MethodCall) {
             return $this->refactorMethodCall($node);
@@ -96,7 +96,10 @@ CODE_SAMPLE
         }
         return $this->nodeFactory->createMethodCall($node->expr, self::GET_NAME);
     }
-    private function refactorMethodCall(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\PhpParser\Node
+    /**
+     * @param \PhpParser\Node\Expr\MethodCall $methodCall
+     */
+    private function refactorMethodCall($methodCall) : ?\PhpParser\Node
     {
         $this->collectCallByVariable($methodCall);
         if ($this->shouldSkipMethodCall($methodCall)) {

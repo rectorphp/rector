@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210704;
+namespace RectorPrefix20210705;
 
 if (\class_exists('t3lib_matchCondition_abstract')) {
     return;

@@ -47,9 +47,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Expr\ArrayDimFetch::class];
     }
     /**
-     * @param ArrayDimFetch $node
+     * @param \PhpParser\Node $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         if ($node->var instanceof \PhpParser\Node\Expr\MethodCall) {
             return null;

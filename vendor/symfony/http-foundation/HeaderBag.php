@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210704\Symfony\Component\HttpFoundation;
+namespace RectorPrefix20210705\Symfony\Component\HttpFoundation;
 
 /**
  * HeaderBag is a container for HTTP headers.
@@ -81,8 +81,9 @@ class HeaderBag implements \IteratorAggregate, \Countable
     }
     /**
      * Adds new headers the current HTTP headers set.
+     * @param mixed[] $headers
      */
-    public function add(array $headers)
+    public function add($headers)
     {
         foreach ($headers as $key => $values) {
             $this->set($key, $values);
@@ -92,8 +93,9 @@ class HeaderBag implements \IteratorAggregate, \Countable
      * Returns a header value by name.
      *
      * @return string|null The first header value or default value
+     * @param string|null $default
      */
-    public function get(string $key, string $default = null)
+    public function get(string $key, $default = null)
     {
         $headers = $this->all($key);
         if (!$headers) {
@@ -109,8 +111,9 @@ class HeaderBag implements \IteratorAggregate, \Countable
      *
      * @param string|string[] $values  The value or an array of values
      * @param bool            $replace Whether to replace the actual value or not (true by default)
+     * @param string $key
      */
-    public function set(string $key, $values, bool $replace = \true)
+    public function set($key, $values, bool $replace = \true)
     {
         $key = \strtr($key, self::UPPER, self::LOWER);
         if (\is_array($values)) {
@@ -144,8 +147,9 @@ class HeaderBag implements \IteratorAggregate, \Countable
      * Returns true if the given HTTP header contains the given value.
      *
      * @return bool true if the value is contained in the header, false otherwise
+     * @param string $key
      */
-    public function contains(string $key, string $value)
+    public function contains($key, string $value)
     {
         return \in_array($value, $this->all($key));
     }
@@ -234,7 +238,7 @@ class HeaderBag implements \IteratorAggregate, \Countable
     protected function getCacheControlHeader()
     {
         \ksort($this->cacheControl);
-        return \RectorPrefix20210704\Symfony\Component\HttpFoundation\HeaderUtils::toString($this->cacheControl, ',');
+        return \RectorPrefix20210705\Symfony\Component\HttpFoundation\HeaderUtils::toString($this->cacheControl, ',');
     }
     /**
      * Parses a Cache-Control HTTP header.
@@ -243,7 +247,7 @@ class HeaderBag implements \IteratorAggregate, \Countable
      */
     protected function parseCacheControl(string $header)
     {
-        $parts = \RectorPrefix20210704\Symfony\Component\HttpFoundation\HeaderUtils::split($header, ',=');
-        return \RectorPrefix20210704\Symfony\Component\HttpFoundation\HeaderUtils::combine($parts);
+        $parts = \RectorPrefix20210705\Symfony\Component\HttpFoundation\HeaderUtils::split($header, ',=');
+        return \RectorPrefix20210705\Symfony\Component\HttpFoundation\HeaderUtils::combine($parts);
     }
 }

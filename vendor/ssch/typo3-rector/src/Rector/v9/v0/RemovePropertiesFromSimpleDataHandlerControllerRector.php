@@ -26,9 +26,9 @@ final class RemovePropertiesFromSimpleDataHandlerControllerRector extends \Recto
         return [\PhpParser\Node\Expr\Assign::class];
     }
     /**
-     * @param Assign $node
+     * @param \PhpParser\Node $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         if ($node->var instanceof \PhpParser\Node\Expr\Variable) {
             $this->removeVariableNode($node);

@@ -32,9 +32,9 @@ final class PropertyUserTsToMethodGetTsConfigOfBackendUserAuthenticationRector e
         return [\PhpParser\Node\Expr\PropertyFetch::class];
     }
     /**
-     * @param PropertyFetch $node
+     * @param \PhpParser\Node $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -61,7 +61,10 @@ if(is_array($GLOBALS['BE_USER']->getTSConfig()['tx_news.']) && $GLOBALS['BE_USER
 CODE_SAMPLE
 )]);
     }
-    private function shouldSkip(\PhpParser\Node\Expr\PropertyFetch $node) : bool
+    /**
+     * @param \PhpParser\Node\Expr\PropertyFetch $node
+     */
+    private function shouldSkip($node) : bool
     {
         if ($this->typo3NodeResolver->isPropertyFetchOnAnyPropertyOfGlobals($node, \Ssch\TYPO3Rector\Helper\Typo3NodeResolver::BACKEND_USER)) {
             return \false;

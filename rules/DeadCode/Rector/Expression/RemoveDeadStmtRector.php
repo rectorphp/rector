@@ -43,10 +43,10 @@ CODE_SAMPLE
         return [\PhpParser\Node\Stmt\Expression::class];
     }
     /**
-     * @param Expression $node
+     * @param \PhpParser\Node $node
      * @return Node[]|Node|null
      */
-    public function refactor(\PhpParser\Node $node)
+    public function refactor($node)
     {
         $livingCode = $this->livingCodeManipulator->keepLivingCodeFromExpr($node->expr);
         if ($livingCode === []) {

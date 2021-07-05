@@ -58,9 +58,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Stmt\ClassConst::class];
     }
     /**
-     * @param ClassConst $node
+     * @param \PhpParser\Node $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -73,7 +73,7 @@ CODE_SAMPLE
         if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
             return null;
         }
-        $classLike = $this->nodeRepository->findClassLike($classReflection->getName());
+        $classLike = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
         if (!$classLike instanceof \PhpParser\Node\Stmt\ClassLike) {
             return null;
         }
@@ -93,7 +93,10 @@ CODE_SAMPLE
         $this->removeNode($node);
         return null;
     }
-    private function shouldSkip(\PhpParser\Node\Stmt\ClassConst $classConst) : bool
+    /**
+     * @param \PhpParser\Node\Stmt\ClassConst $classConst
+     */
+    private function shouldSkip($classConst) : bool
     {
         if (!$classConst->isPrivate()) {
             return \true;

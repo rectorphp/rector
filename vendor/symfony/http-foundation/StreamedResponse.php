@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210704\Symfony\Component\HttpFoundation;
+namespace RectorPrefix20210705\Symfony\Component\HttpFoundation;
 
 /**
  * StreamedResponse represents a streamed HTTP response.
@@ -23,7 +23,7 @@ namespace RectorPrefix20210704\Symfony\Component\HttpFoundation;
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class StreamedResponse extends \RectorPrefix20210704\Symfony\Component\HttpFoundation\Response
+class StreamedResponse extends \RectorPrefix20210705\Symfony\Component\HttpFoundation\Response
 {
     protected $callback;
     protected $streamed;
@@ -55,8 +55,9 @@ class StreamedResponse extends \RectorPrefix20210704\Symfony\Component\HttpFound
      * Sets the PHP callback associated with this Response.
      *
      * @return $this
+     * @param callable $callback
      */
-    public function setCallback(callable $callback)
+    public function setCallback($callback)
     {
         $this->callback = $callback;
         return $this;

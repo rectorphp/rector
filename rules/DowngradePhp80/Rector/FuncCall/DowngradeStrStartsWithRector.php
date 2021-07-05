@@ -35,7 +35,7 @@ final class DowngradeStrStartsWithRector extends \Rector\Core\Rector\AbstractRec
     /**
      * @param FuncCall|BooleanNot $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         if ($node instanceof \PhpParser\Node\Expr\FuncCall && $this->isName($node, 'str_starts_with')) {
             return $this->createIdentical($node);
@@ -60,7 +60,10 @@ final class DowngradeStrStartsWithRector extends \Rector\Core\Rector\AbstractRec
         $strncmpFuncCall = $this->createStrncmpFuncCall($funcCall, $strlenFuncCall);
         return new \PhpParser\Node\Expr\BinaryOp\NotIdentical($strncmpFuncCall, new \PhpParser\Node\Scalar\LNumber(0));
     }
-    private function createStrlenFuncCall(\PhpParser\Node\Expr\FuncCall $funcCall) : \PhpParser\Node\Expr\FuncCall
+    /**
+     * @param \PhpParser\Node\Expr\FuncCall $funcCall
+     */
+    private function createStrlenFuncCall($funcCall) : \PhpParser\Node\Expr\FuncCall
     {
         return new \PhpParser\Node\Expr\FuncCall(new \PhpParser\Node\Name('strlen'), [$funcCall->args[1]]);
     }

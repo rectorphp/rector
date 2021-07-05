@@ -51,7 +51,7 @@ CODE_SAMPLE
     /**
      * @param Identifier|Name $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         if ($node instanceof \PhpParser\Node\Identifier) {
             return $this->processIdentifier($node);

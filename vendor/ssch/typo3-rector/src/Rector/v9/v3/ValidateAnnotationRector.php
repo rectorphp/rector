@@ -46,7 +46,7 @@ final class ValidateAnnotationRector extends \Rector\Core\Rector\AbstractRector
     /**
      * @param Property|ClassMethod $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         if (!$phpDocInfo->hasByName(self::OLD_ANNOTATION)) {

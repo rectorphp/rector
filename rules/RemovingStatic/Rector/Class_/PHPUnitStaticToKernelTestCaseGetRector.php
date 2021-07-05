@@ -124,7 +124,7 @@ CODE_SAMPLE
     /**
      * @param StaticCall|Class_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         // skip yourself
         $this->newPropertyObjectTypes = [];

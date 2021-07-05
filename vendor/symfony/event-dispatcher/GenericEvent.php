@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210704\Symfony\Component\EventDispatcher;
+namespace RectorPrefix20210705\Symfony\Component\EventDispatcher;
 
-use RectorPrefix20210704\Symfony\Contracts\EventDispatcher\Event;
+use RectorPrefix20210705\Symfony\Contracts\EventDispatcher\Event;
 /**
  * Event encapsulation class.
  *
@@ -18,7 +18,7 @@ use RectorPrefix20210704\Symfony\Contracts\EventDispatcher\Event;
  *
  * @author Drak <drak@zikula.org>
  */
-class GenericEvent extends \RectorPrefix20210704\Symfony\Contracts\EventDispatcher\Event implements \ArrayAccess, \IteratorAggregate
+class GenericEvent extends \RectorPrefix20210705\Symfony\Contracts\EventDispatcher\Event implements \ArrayAccess, \IteratorAggregate
 {
     protected $subject;
     protected $arguments;

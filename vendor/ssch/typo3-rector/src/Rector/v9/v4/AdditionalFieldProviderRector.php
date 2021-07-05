@@ -29,7 +29,7 @@ final class AdditionalFieldProviderRector extends \Rector\Core\Rector\AbstractRe
     /**
      * @param Class_|PropertyFetch|MethodCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         if ($node instanceof \PhpParser\Node\Stmt\Class_) {
             return $this->refactorClass($node);
@@ -83,7 +83,10 @@ class FileCleanupTaskAdditionalFields extends AbstractAdditionalFieldProvider
 CODE_SAMPLE
 )]);
     }
-    private function shouldSkip(\PhpParser\Node\Stmt\Class_ $node) : bool
+    /**
+     * @param \PhpParser\Node\Stmt\Class_ $node
+     */
+    private function shouldSkip($node) : bool
     {
         foreach ($node->implements as $implement) {
             if ($this->isName($implement, 'TYPO3\\CMS\\Scheduler\\AdditionalFieldProviderInterface')) {

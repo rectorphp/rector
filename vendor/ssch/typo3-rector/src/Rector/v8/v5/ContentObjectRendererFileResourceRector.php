@@ -46,9 +46,9 @@ final class ContentObjectRendererFileResourceRector extends \Rector\Core\Rector\
         return [\PhpParser\Node\Expr\MethodCall::class];
     }
     /**
-     * @param MethodCall $node
+     * @param \PhpParser\Node $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -83,7 +83,10 @@ if ($path !== null && file_exists($path)) {
 CODE_SAMPLE
 )]);
     }
-    private function shouldSkip(\PhpParser\Node\Expr\MethodCall $node) : bool
+    /**
+     * @param \PhpParser\Node\Expr\MethodCall $node
+     */
+    private function shouldSkip($node) : bool
     {
         if ($this->isObjectType($node->var, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Frontend\\ContentObject\\ContentObjectRenderer'))) {
             return \false;

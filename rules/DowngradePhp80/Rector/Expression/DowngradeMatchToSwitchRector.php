@@ -71,7 +71,7 @@ CODE_SAMPLE
     /**
      * @param Expression|Return_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         if ($node instanceof \PhpParser\Node\Stmt\Expression) {
             if (!$node->expr instanceof \PhpParser\Node\Expr\Assign) {

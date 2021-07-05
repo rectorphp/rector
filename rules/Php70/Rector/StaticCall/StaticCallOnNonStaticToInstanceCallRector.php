@@ -86,9 +86,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Expr\StaticCall::class];
     }
     /**
-     * @param StaticCall $node
+     * @param \PhpParser\Node $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         if ($node->name instanceof \PhpParser\Node\Expr) {
             return null;
@@ -120,7 +120,12 @@ CODE_SAMPLE
         }
         return $this->getName($staticCall->class);
     }
-    private function shouldSkip(string $methodName, string $className, \PhpParser\Node\Expr\StaticCall $staticCall) : bool
+    /**
+     * @param string $methodName
+     * @param string $className
+     * @param \PhpParser\Node\Expr\StaticCall $staticCall
+     */
+    private function shouldSkip($methodName, $className, $staticCall) : bool
     {
         $isStaticMethod = $this->staticAnalyzer->isStaticMethod($methodName, $className);
         if ($isStaticMethod) {

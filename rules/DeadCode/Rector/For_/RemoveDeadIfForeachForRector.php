@@ -73,7 +73,7 @@ CODE_SAMPLE
     /**
      * @param For_|If_|Foreach_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         if ($node instanceof \PhpParser\Node\Stmt\If_) {
             $this->processIf($node);

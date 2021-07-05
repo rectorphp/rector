@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210704;
+namespace RectorPrefix20210705;
 
 if (\class_exists('tx_form_Domain_Model_JSON_Checkbox')) {
     return;

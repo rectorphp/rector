@@ -30,9 +30,9 @@ CODE_SAMPLE
 )]);
     }
     /**
-     * @param Declare_ $node
+     * @param \PhpParser\Node $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -40,7 +40,10 @@ CODE_SAMPLE
         $this->removeNode($node);
         return $node;
     }
-    private function shouldSkip(\PhpParser\Node\Stmt\Declare_ $declare) : bool
+    /**
+     * @param \PhpParser\Node\Stmt\Declare_ $declare
+     */
+    private function shouldSkip($declare) : bool
     {
         $declares = $declare->declares;
         foreach ($declares as $declare) {

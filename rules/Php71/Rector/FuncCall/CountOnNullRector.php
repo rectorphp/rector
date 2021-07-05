@@ -69,9 +69,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Expr\FuncCall::class];
     }
     /**
-     * @param FuncCall $node
+     * @param \PhpParser\Node $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -108,7 +108,10 @@ CODE_SAMPLE
         $node->setAttribute(self::ALREADY_CHANGED_ON_COUNT, \true);
         return new \PhpParser\Node\Expr\Ternary($conditionNode, $node, new \PhpParser\Node\Scalar\LNumber(0));
     }
-    private function shouldSkip(\PhpParser\Node\Expr\FuncCall $funcCall) : bool
+    /**
+     * @param \PhpParser\Node\Expr\FuncCall $funcCall
+     */
+    private function shouldSkip($funcCall) : bool
     {
         if (!$this->isName($funcCall, 'count')) {
             return \true;

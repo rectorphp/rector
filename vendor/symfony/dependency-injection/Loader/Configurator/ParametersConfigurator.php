@@ -8,17 +8,17 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210704\Symfony\Component\DependencyInjection\Loader\Configurator;
+namespace RectorPrefix20210705\Symfony\Component\DependencyInjection\Loader\Configurator;
 
-use RectorPrefix20210704\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix20210705\Symfony\Component\DependencyInjection\ContainerBuilder;
 /**
  * @author Nicolas Grekas <p@tchwork.com>
  */
-class ParametersConfigurator extends \RectorPrefix20210704\Symfony\Component\DependencyInjection\Loader\Configurator\AbstractConfigurator
+class ParametersConfigurator extends \RectorPrefix20210705\Symfony\Component\DependencyInjection\Loader\Configurator\AbstractConfigurator
 {
     public const FACTORY = 'parameters';
     private $container;
-    public function __construct(\RectorPrefix20210704\Symfony\Component\DependencyInjection\ContainerBuilder $container)
+    public function __construct(\RectorPrefix20210705\Symfony\Component\DependencyInjection\ContainerBuilder $container)
     {
         $this->container = $container;
     }
@@ -26,8 +26,9 @@ class ParametersConfigurator extends \RectorPrefix20210704\Symfony\Component\Dep
      * Creates a parameter.
      *
      * @return $this
+     * @param string $name
      */
-    public final function set(string $name, $value)
+    public final function set($name, $value)
     {
         $this->container->setParameter($name, static::processValue($value, \true));
         return $this;

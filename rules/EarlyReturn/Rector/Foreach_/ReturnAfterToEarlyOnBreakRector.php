@@ -64,9 +64,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Stmt\Foreach_::class];
     }
     /**
-     * @param Foreach_ $node
+     * @param \PhpParser\Node $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         /** @var Break_[] $breaks */
         $breaks = $this->betterNodeFinder->findInstanceOf($node->stmts, \PhpParser\Node\Stmt\Break_::class);
@@ -121,7 +121,13 @@ CODE_SAMPLE
         $this->removeNode($assignPreviousVariable);
         return $foreach;
     }
-    private function shouldSkip(\PhpParser\Node\Stmt\Return_ $return, \PhpParser\Node\Stmt\Foreach_ $foreach, \PhpParser\Node\Expr $assignVariable, ?\PhpParser\Node\Expr $expr = null) : bool
+    /**
+     * @param \PhpParser\Node\Stmt\Return_ $return
+     * @param \PhpParser\Node\Stmt\Foreach_ $foreach
+     * @param \PhpParser\Node\Expr $assignVariable
+     * @param \PhpParser\Node\Expr|null $expr
+     */
+    private function shouldSkip($return, $foreach, $assignVariable, $expr = null) : bool
     {
         if (!$expr instanceof \PhpParser\Node\Expr) {
             return \true;

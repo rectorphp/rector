@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210704\Symfony\Component\HttpFoundation;
+namespace RectorPrefix20210705\Symfony\Component\HttpFoundation;
 
 // Help opcache.preload discover always-needed symbols
-\class_exists(\RectorPrefix20210704\Symfony\Component\HttpFoundation\ResponseHeaderBag::class);
+\class_exists(\RectorPrefix20210705\Symfony\Component\HttpFoundation\ResponseHeaderBag::class);
 /**
  * Response represents an HTTP response.
  *
@@ -231,7 +231,7 @@ class Response
      */
     public function __construct(?string $content = '', int $status = 200, array $headers = [])
     {
-        $this->headers = new \RectorPrefix20210704\Symfony\Component\HttpFoundation\ResponseHeaderBag($headers);
+        $this->headers = new \RectorPrefix20210705\Symfony\Component\HttpFoundation\ResponseHeaderBag($headers);
         $this->setContent($content);
         $this->setStatusCode($status);
         $this->setProtocolVersion('1.0');
@@ -248,8 +248,10 @@ class Response
      *
      * @deprecated since Symfony 5.1, use __construct() instead.
      * @param string|null $content
+     * @param int $status
+     * @param mixed[] $headers
      */
-    public static function create($content = '', int $status = 200, array $headers = [])
+    public static function create($content = '', $status = 200, $headers = [])
     {
         trigger_deprecation('symfony/http-foundation', '5.1', 'The "%s()" method is deprecated, use "new %s()" instead.', __METHOD__, static::class);
         return new static($content, $status, $headers);
@@ -285,7 +287,7 @@ class Response
      *
      * @return $this
      */
-    public function prepare(\RectorPrefix20210704\Symfony\Component\HttpFoundation\Request $request)
+    public function prepare(\RectorPrefix20210705\Symfony\Component\HttpFoundation\Request $request)
     {
         $headers = $this->headers;
         if ($this->isInformational() || $this->isEmpty()) {
@@ -984,7 +986,7 @@ class Response
      *
      * @final
      */
-    public function isNotModified(\RectorPrefix20210704\Symfony\Component\HttpFoundation\Request $request) : bool
+    public function isNotModified(\RectorPrefix20210705\Symfony\Component\HttpFoundation\Request $request) : bool
     {
         if (!$request->isMethodCacheable()) {
             return \false;
@@ -1145,7 +1147,7 @@ class Response
      *
      * @final
      */
-    protected function ensureIEOverSSLCompatibility(\RectorPrefix20210704\Symfony\Component\HttpFoundation\Request $request) : void
+    protected function ensureIEOverSSLCompatibility(\RectorPrefix20210705\Symfony\Component\HttpFoundation\Request $request) : void
     {
         if (\false !== \stripos($this->headers->get('Content-Disposition') ?? '', 'attachment') && 1 == \preg_match('/MSIE (.*?);/i', $request->server->get('HTTP_USER_AGENT') ?? '', $match) && \true === $request->isSecure()) {
             if ((int) \preg_replace('/(MSIE )(.*?);/', '$2', $match[0]) < 9) {

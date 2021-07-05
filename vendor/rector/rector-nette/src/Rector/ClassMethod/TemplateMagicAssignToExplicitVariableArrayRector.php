@@ -119,7 +119,10 @@ CODE_SAMPLE
         }
         return $this->refactorForSingleRenderMethodCall($node, $renderMethodCalls[0]);
     }
-    private function shouldSkip(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
+    /**
+     * @param \PhpParser\Node\Stmt\ClassMethod $classMethod
+     */
+    private function shouldSkip($classMethod) : bool
     {
         if (!$this->isNames($classMethod, ['render', 'render*'])) {
             return \true;

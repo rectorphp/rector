@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Ssch\TYPO3Rector\Rector\v11\v0;
 
-use RectorPrefix20210704\Nette\Utils\Strings;
+use RectorPrefix20210705\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Exit_;
 use PhpParser\Node\Expr\FuncCall;
@@ -39,9 +39,9 @@ final class ExtbaseControllerActionsMustReturnResponseInterfaceRector extends \R
         return [\PhpParser\Node\Stmt\ClassMethod::class];
     }
     /**
-     * @param ClassMethod $node
+     * @param \PhpParser\Node $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -104,7 +104,10 @@ class MyController extends ActionController
 CODE_SAMPLE
 )]);
     }
-    private function shouldSkip(\PhpParser\Node\Stmt\ClassMethod $node) : bool
+    /**
+     * @param \PhpParser\Node\Stmt\ClassMethod $node
+     */
+    private function shouldSkip($node) : bool
     {
         if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Extbase\\Mvc\\Controller\\ActionController'))) {
             return \true;
@@ -116,10 +119,10 @@ CODE_SAMPLE
         if (null === $methodName) {
             return \true;
         }
-        if (!\RectorPrefix20210704\Nette\Utils\Strings::endsWith($methodName, 'Action')) {
+        if (!\RectorPrefix20210705\Nette\Utils\Strings::endsWith($methodName, 'Action')) {
             return \true;
         }
-        if (\RectorPrefix20210704\Nette\Utils\Strings::startsWith($methodName, 'initialize')) {
+        if (\RectorPrefix20210705\Nette\Utils\Strings::startsWith($methodName, 'initialize')) {
             return \true;
         }
         if ($this->hasExitCall($node)) {

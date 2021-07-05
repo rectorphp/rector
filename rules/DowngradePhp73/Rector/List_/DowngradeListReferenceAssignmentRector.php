@@ -78,7 +78,7 @@ CODE_SAMPLE
     /**
      * @param List_|Array_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         if (!$this->shouldRefactor($node)) {
             return null;

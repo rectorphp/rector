@@ -41,9 +41,9 @@ CODE_SAMPLE
 )]);
     }
     /**
-     * @param FuncCall $node
+     * @param \PhpParser\Node $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -69,7 +69,10 @@ CODE_SAMPLE
         unset($node->args[0]);
         return $node;
     }
-    private function shouldSkip(\PhpParser\Node\Expr\FuncCall $funcCall) : bool
+    /**
+     * @param \PhpParser\Node\Expr\FuncCall $funcCall
+     */
+    private function shouldSkip($funcCall) : bool
     {
         if (!$this->isName($funcCall, 'session_start')) {
             return \true;

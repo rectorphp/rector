@@ -9,7 +9,7 @@ use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20210704\TYPO3\CMS\Core\TypoScript\TemplateService;
+use RectorPrefix20210705\TYPO3\CMS\Core\TypoScript\TemplateService;
 /**
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/8.7/Deprecation-78650-TemplateService-splitConfArray.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v8\v7\TemplateServiceSplitConfArrayRector\TemplateServiceSplitConfArrayRectorTest
@@ -24,9 +24,9 @@ final class TemplateServiceSplitConfArrayRector extends \Rector\Core\Rector\Abst
         return [\PhpParser\Node\Expr\MethodCall::class];
     }
     /**
-     * @param MethodCall $node
+     * @param \PhpParser\Node $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\TypoScript\\TemplateService'))) {
             return null;

@@ -15,7 +15,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Naming\Naming\PropertyNaming;
 use Rector\RemovingStatic\NodeAnalyzer\StaticCallPresenceAnalyzer;
-use RectorPrefix20210704\Symplify\PackageBuilder\Parameter\ParameterProvider;
+use RectorPrefix20210705\Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -35,7 +35,7 @@ final class DesiredClassTypeToDynamicRector extends \Rector\Core\Rector\Abstract
      * @var \Rector\RemovingStatic\NodeAnalyzer\StaticCallPresenceAnalyzer
      */
     private $staticCallPresenceAnalyzer;
-    public function __construct(\Rector\Naming\Naming\PropertyNaming $propertyNaming, \Rector\RemovingStatic\NodeAnalyzer\StaticCallPresenceAnalyzer $staticCallPresenceAnalyzer, \RectorPrefix20210704\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider)
+    public function __construct(\Rector\Naming\Naming\PropertyNaming $propertyNaming, \Rector\RemovingStatic\NodeAnalyzer\StaticCallPresenceAnalyzer $staticCallPresenceAnalyzer, \RectorPrefix20210705\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider)
     {
         $this->propertyNaming = $propertyNaming;
         $this->staticCallPresenceAnalyzer = $staticCallPresenceAnalyzer;
@@ -108,9 +108,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Stmt\Class_::class];
     }
     /**
-     * @param Class_ $node
+     * @param \PhpParser\Node $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         foreach ($this->staticObjectTypes as $staticObjectType) {
             // do not any dependencies to class itself

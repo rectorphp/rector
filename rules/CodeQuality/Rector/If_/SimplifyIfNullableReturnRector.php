@@ -189,7 +189,10 @@ CODE_SAMPLE
         $this->mirrorComments($return, $expression);
         return $return;
     }
-    private function shouldSkip(\PhpParser\Node\Stmt\If_ $if) : bool
+    /**
+     * @param \PhpParser\Node\Stmt\If_ $if
+     */
+    private function shouldSkip($if) : bool
     {
         if (!$this->ifManipulator->isIfWithOnly($if, \PhpParser\Node\Stmt\Return_::class)) {
             return \true;

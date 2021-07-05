@@ -82,7 +82,7 @@ CODE_SAMPLE
     /**
      * @param Class_|Trait_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         $sortedAndOriginalClassMethods = $this->getSortedAndOriginalClassMethods($node);
         // order is correct, nothing to change

@@ -1,18 +1,18 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210704\Doctrine\Inflector\Rules\NorwegianBokmal;
+namespace RectorPrefix20210705\Doctrine\Inflector\Rules\NorwegianBokmal;
 
-use RectorPrefix20210704\Doctrine\Inflector\GenericLanguageInflectorFactory;
-use RectorPrefix20210704\Doctrine\Inflector\Rules\Ruleset;
-final class InflectorFactory extends \RectorPrefix20210704\Doctrine\Inflector\GenericLanguageInflectorFactory
+use RectorPrefix20210705\Doctrine\Inflector\GenericLanguageInflectorFactory;
+use RectorPrefix20210705\Doctrine\Inflector\Rules\Ruleset;
+final class InflectorFactory extends \RectorPrefix20210705\Doctrine\Inflector\GenericLanguageInflectorFactory
 {
-    protected function getSingularRuleset() : \RectorPrefix20210704\Doctrine\Inflector\Rules\Ruleset
+    protected function getSingularRuleset() : \RectorPrefix20210705\Doctrine\Inflector\Rules\Ruleset
     {
-        return \RectorPrefix20210704\Doctrine\Inflector\Rules\NorwegianBokmal\Rules::getSingularRuleset();
+        return \RectorPrefix20210705\Doctrine\Inflector\Rules\NorwegianBokmal\Rules::getSingularRuleset();
     }
-    protected function getPluralRuleset() : \RectorPrefix20210704\Doctrine\Inflector\Rules\Ruleset
+    protected function getPluralRuleset() : \RectorPrefix20210705\Doctrine\Inflector\Rules\Ruleset
     {
-        return \RectorPrefix20210704\Doctrine\Inflector\Rules\NorwegianBokmal\Rules::getPluralRuleset();
+        return \RectorPrefix20210705\Doctrine\Inflector\Rules\NorwegianBokmal\Rules::getPluralRuleset();
     }
 }
