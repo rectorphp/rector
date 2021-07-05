@@ -26,7 +26,6 @@ final class DowngradePathsCommand extends Command
                 $downgradePath,
                 [
                     'vendor/symplify',
-                    'vendor/rector',
                     'vendor/symfony',
                     'vendor/nikic',
                     'vendor/psr',
@@ -42,7 +41,6 @@ final class DowngradePathsCommand extends Command
         $downgradePaths = array_merge([
             // must be separated to cover container get() trait + psr container contract get()
             'config',
-            'vendor/rector',
             'vendor/phpstan/phpdoc-parser/src',
             'vendor/symfony/error-handler',
             'vendor/symfony/dependency-injection',
