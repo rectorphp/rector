@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit72b2647cd4535e261f0ad028fa7a67f7
+class ComposerStaticInit02f563bea0ec3b7d8e26905b54626524
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -44,7 +44,9 @@ class ComposerStaticInit72b2647cd4535e261f0ad028fa7a67f7
             'Rector\\Compiler\\' => 16,
             'Rector\\CakePHP\\' => 15,
             'Rector\\' => 7,
+            'RectorPrefix20210705\\cweagans\\Composer\\' => 39,
             'RectorPrefix20210705\\Webmozart\\Assert\\' => 38,
+            'RectorPrefix20210705\\Symplify\\VendorPatches\\' => 44,
             'RectorPrefix20210705\\Symplify\\SymplifyKernel\\' => 45,
             'RectorPrefix20210705\\Symplify\\SmartFileSystem\\' => 46,
             'RectorPrefix20210705\\Symplify\\Skipper\\' => 38,
@@ -158,9 +160,17 @@ class ComposerStaticInit72b2647cd4535e261f0ad028fa7a67f7
             0 => __DIR__ . '/../..' . '/packages',
             1 => __DIR__ . '/../..' . '/rules',
         ),
+        'RectorPrefix20210705\\cweagans\\Composer\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/cweagans/composer-patches/src',
+        ),
         'RectorPrefix20210705\\Webmozart\\Assert\\' => 
         array (
             0 => __DIR__ . '/..' . '/webmozart/assert/src',
+        ),
+        'RectorPrefix20210705\\Symplify\\VendorPatches\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symplify/vendor-patches/src',
         ),
         'RectorPrefix20210705\\Symplify\\SymplifyKernel\\' => 
         array (
@@ -1821,6 +1831,17 @@ class ComposerStaticInit72b2647cd4535e261f0ad028fa7a67f7
         'RectorPrefix20210705\\Symplify\\SymplifyKernel\\Strings\\KernelUniqueHasher' => __DIR__ . '/..' . '/symplify/symplify-kernel/src/Strings/KernelUniqueHasher.php',
         'RectorPrefix20210705\\Symplify\\SymplifyKernel\\Strings\\StringsConverter' => __DIR__ . '/..' . '/symplify/symplify-kernel/src/Strings/StringsConverter.php',
         'RectorPrefix20210705\\Symplify\\SymplifyKernel\\ValueObject\\KernelBootAndApplicationRun' => __DIR__ . '/..' . '/symplify/symplify-kernel/src/ValueObject/KernelBootAndApplicationRun.php',
+        'RectorPrefix20210705\\Symplify\\VendorPatches\\Command\\GenerateCommand' => __DIR__ . '/..' . '/symplify/vendor-patches/src/Command/GenerateCommand.php',
+        'RectorPrefix20210705\\Symplify\\VendorPatches\\Composer\\ComposerPatchesConfigurationUpdater' => __DIR__ . '/..' . '/symplify/vendor-patches/src/Composer/ComposerPatchesConfigurationUpdater.php',
+        'RectorPrefix20210705\\Symplify\\VendorPatches\\Composer\\PackageNameResolver' => __DIR__ . '/..' . '/symplify/vendor-patches/src/Composer/PackageNameResolver.php',
+        'RectorPrefix20210705\\Symplify\\VendorPatches\\Console\\GenerateCommandReporter' => __DIR__ . '/..' . '/symplify/vendor-patches/src/Console/GenerateCommandReporter.php',
+        'RectorPrefix20210705\\Symplify\\VendorPatches\\Console\\VendorPatchesConsoleApplication' => __DIR__ . '/..' . '/symplify/vendor-patches/src/Console/VendorPatchesConsoleApplication.php',
+        'RectorPrefix20210705\\Symplify\\VendorPatches\\Differ\\PatchDiffer' => __DIR__ . '/..' . '/symplify/vendor-patches/src/Differ/PatchDiffer.php',
+        'RectorPrefix20210705\\Symplify\\VendorPatches\\FileSystem\\PathResolver' => __DIR__ . '/..' . '/symplify/vendor-patches/src/FileSystem/PathResolver.php',
+        'RectorPrefix20210705\\Symplify\\VendorPatches\\Finder\\OldToNewFilesFinder' => __DIR__ . '/..' . '/symplify/vendor-patches/src/Finder/OldToNewFilesFinder.php',
+        'RectorPrefix20210705\\Symplify\\VendorPatches\\HttpKernel\\VendorPatchesKernel' => __DIR__ . '/..' . '/symplify/vendor-patches/src/HttpKernel/VendorPatchesKernel.php',
+        'RectorPrefix20210705\\Symplify\\VendorPatches\\PatchFileFactory' => __DIR__ . '/..' . '/symplify/vendor-patches/src/PatchFileFactory.php',
+        'RectorPrefix20210705\\Symplify\\VendorPatches\\ValueObject\\OldAndNewFileInfo' => __DIR__ . '/..' . '/symplify/vendor-patches/src/ValueObject/OldAndNewFileInfo.php',
         'RectorPrefix20210705\\Tracy\\Bar' => __DIR__ . '/..' . '/tracy/tracy/src/Tracy/Bar/Bar.php',
         'RectorPrefix20210705\\Tracy\\BlueScreen' => __DIR__ . '/..' . '/tracy/tracy/src/Tracy/BlueScreen/BlueScreen.php',
         'RectorPrefix20210705\\Tracy\\Bridges\\Nette\\Bridge' => __DIR__ . '/..' . '/tracy/tracy/src/Bridges/Nette/Bridge.php',
@@ -1844,6 +1865,9 @@ class ComposerStaticInit72b2647cd4535e261f0ad028fa7a67f7
         'RectorPrefix20210705\\Webmozart\\Assert\\Assert' => __DIR__ . '/..' . '/webmozart/assert/src/Assert.php',
         'RectorPrefix20210705\\Webmozart\\Assert\\InvalidArgumentException' => __DIR__ . '/..' . '/webmozart/assert/src/InvalidArgumentException.php',
         'RectorPrefix20210705\\Webmozart\\Assert\\Mixin' => __DIR__ . '/..' . '/webmozart/assert/src/Mixin.php',
+        'RectorPrefix20210705\\cweagans\\Composer\\PatchEvent' => __DIR__ . '/..' . '/cweagans/composer-patches/src/PatchEvent.php',
+        'RectorPrefix20210705\\cweagans\\Composer\\PatchEvents' => __DIR__ . '/..' . '/cweagans/composer-patches/src/PatchEvents.php',
+        'RectorPrefix20210705\\cweagans\\Composer\\Patches' => __DIR__ . '/..' . '/cweagans/composer-patches/src/Patches.php',
         'Rector\\Arguments\\ArgumentDefaultValueReplacer' => __DIR__ . '/../..' . '/rules/Arguments/ArgumentDefaultValueReplacer.php',
         'Rector\\Arguments\\Contract\\ReplaceArgumentDefaultValueInterface' => __DIR__ . '/../..' . '/rules/Arguments/Contract/ReplaceArgumentDefaultValueInterface.php',
         'Rector\\Arguments\\NodeAnalyzer\\ArgumentAddingScope' => __DIR__ . '/../..' . '/rules/Arguments/NodeAnalyzer/ArgumentAddingScope.php',
@@ -2405,7 +2429,6 @@ class ComposerStaticInit72b2647cd4535e261f0ad028fa7a67f7
         'Rector\\DependencyInjection\\NodeRemover\\ClassMethodNodeRemover' => __DIR__ . '/../..' . '/rules/DependencyInjection/NodeRemover/ClassMethodNodeRemover.php',
         'Rector\\DependencyInjection\\Rector\\ClassMethod\\AddMethodParentCallRector' => __DIR__ . '/../..' . '/rules/DependencyInjection/Rector/ClassMethod/AddMethodParentCallRector.php',
         'Rector\\DependencyInjection\\Rector\\Class_\\ActionInjectionToConstructorInjectionRector' => __DIR__ . '/../..' . '/rules/DependencyInjection/Rector/Class_/ActionInjectionToConstructorInjectionRector.php',
-        'Rector\\DependencyInjection\\Rector\\Class_\\MultiParentingToAbstractDependencyRector' => __DIR__ . '/../..' . '/rules/DependencyInjection/Rector/Class_/MultiParentingToAbstractDependencyRector.php',
         'Rector\\DependencyInjection\\Rector\\Variable\\ReplaceVariableByPropertyFetchRector' => __DIR__ . '/../..' . '/rules/DependencyInjection/Rector/Variable/ReplaceVariableByPropertyFetchRector.php',
         'Rector\\Doctrine\\Contract\\PhpDoc\\Node\\DoctrineTagNodeInterface' => __DIR__ . '/..' . '/rector/rector-doctrine/src/Contract/PhpDoc/Node/DoctrineTagNodeInterface.php',
         'Rector\\Doctrine\\Contract\\PhpDoc\\Node\\InversedByNodeInterface' => __DIR__ . '/..' . '/rector/rector-doctrine/src/Contract/PhpDoc/Node/InversedByNodeInterface.php',
@@ -2487,7 +2510,6 @@ class ComposerStaticInit72b2647cd4535e261f0ad028fa7a67f7
         'Rector\\DowngradePhp71\\Rector\\TryCatch\\DowngradePipeToMultiCatchExceptionRector' => __DIR__ . '/../..' . '/rules/DowngradePhp71/Rector/TryCatch/DowngradePipeToMultiCatchExceptionRector.php',
         'Rector\\DowngradePhp71\\TypeDeclaration\\PhpDocFromTypeDeclarationDecorator' => __DIR__ . '/../..' . '/rules/DowngradePhp71/TypeDeclaration/PhpDocFromTypeDeclarationDecorator.php',
         'Rector\\DowngradePhp72\\Contract\\Rector\\DowngradeTypeRectorInterface' => __DIR__ . '/../..' . '/rules/DowngradePhp72/Contract/Rector/DowngradeTypeRectorInterface.php',
-        'Rector\\DowngradePhp72\\NodeAnalyzer\\ClassLikeParentResolver' => __DIR__ . '/../..' . '/rules/DowngradePhp72/NodeAnalyzer/ClassLikeParentResolver.php',
         'Rector\\DowngradePhp72\\NodeAnalyzer\\NativeTypeClassTreeResolver' => __DIR__ . '/../..' . '/rules/DowngradePhp72/NodeAnalyzer/NativeTypeClassTreeResolver.php',
         'Rector\\DowngradePhp72\\NodeAnalyzer\\ParentChildClassMethodTypeResolver' => __DIR__ . '/../..' . '/rules/DowngradePhp72/NodeAnalyzer/ParentChildClassMethodTypeResolver.php',
         'Rector\\DowngradePhp72\\PHPStan\\ClassLikeScopeResolver' => __DIR__ . '/../..' . '/rules/DowngradePhp72/PHPStan/ClassLikeScopeResolver.php',
@@ -3845,9 +3867,9 @@ class ComposerStaticInit72b2647cd4535e261f0ad028fa7a67f7
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit72b2647cd4535e261f0ad028fa7a67f7::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit72b2647cd4535e261f0ad028fa7a67f7::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit72b2647cd4535e261f0ad028fa7a67f7::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit02f563bea0ec3b7d8e26905b54626524::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit02f563bea0ec3b7d8e26905b54626524::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit02f563bea0ec3b7d8e26905b54626524::$classMap;
 
         }, null, ClassLoader::class);
     }

@@ -104,15 +104,6 @@ final class NodeRepository
     {
         return $this->parsedNodeCollector->findClass($name);
     }
-    /**
-     * @deprecated Use static reflection instead
-     *
-     * @param class-string $name
-     */
-    public function findTrait(string $name) : ?\PhpParser\Node\Stmt\Trait_
-    {
-        return $this->parsedNodeCollector->findTrait($name);
-    }
     private function isChildOrEqualClassLike(string $desiredClass, ?string $currentClassName) : bool
     {
         if ($currentClassName === null) {

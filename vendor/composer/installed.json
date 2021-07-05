@@ -152,6 +152,57 @@
             "install-path": ".\/xdebug-handler"
         },
         {
+            "name": "cweagans\/composer-patches",
+            "version": "1.7.1",
+            "version_normalized": "1.7.1.0",
+            "source": {
+                "type": "git",
+                "url": "https:\/\/github.com\/cweagans\/composer-patches.git",
+                "reference": "9888dcc74993c030b75f3dd548bb5e20cdbd740c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https:\/\/api.github.com\/repos\/cweagans\/composer-patches\/zipball\/9888dcc74993c030b75f3dd548bb5e20cdbd740c",
+                "reference": "9888dcc74993c030b75f3dd548bb5e20cdbd740c",
+                "shasum": ""
+            },
+            "require": {
+                "composer-plugin-api": "^1.0 || ^2.0",
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "composer\/composer": "~1.0 || ~2.0",
+                "phpunit\/phpunit": "~4.6"
+            },
+            "time": "2021-06-08T15:12:46+00:00",
+            "type": "composer-plugin",
+            "extra": {
+                "class": "cweagans\\Composer\\Patches"
+            },
+            "installation-source": "dist",
+            "autoload": {
+                "psr-4": {
+                    "RectorPrefix20210705\\cweagans\\Composer\\": "src"
+                }
+            },
+            "notification-url": "https:\/\/packagist.org\/downloads\/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Cameron Eagans",
+                    "email": "me@cweagans.net"
+                }
+            ],
+            "description": "Provides a way to patch Composer packages.",
+            "support": {
+                "issues": "https:\/\/github.com\/cweagans\/composer-patches\/issues",
+                "source": "https:\/\/github.com\/cweagans\/composer-patches\/tree\/1.7.1"
+            },
+            "install-path": "..\/cweagans\/composer-patches"
+        },
+        {
             "name": "danielstjules\/stringy",
             "version": "3.1.0",
             "version_normalized": "3.1.0.0",
@@ -1823,6 +1874,11 @@
             "time": "2021-07-04T09:35:31+00:00",
             "default-branch": true,
             "type": "library",
+            "extra": {
+                "patches_applied": [
+                    "patches\/symfony-console-style-symfonystyle-php.patch"
+                ]
+            },
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
@@ -4490,6 +4546,61 @@
                 "source": "https:\/\/github.com\/symplify\/symplify-kernel\/tree\/9.4.8"
             },
             "install-path": "..\/symplify\/symplify-kernel"
+        },
+        {
+            "name": "symplify\/vendor-patches",
+            "version": "9.4.8",
+            "version_normalized": "9.4.8.0",
+            "source": {
+                "type": "git",
+                "url": "https:\/\/github.com\/symplify\/vendor-patches.git",
+                "reference": "74186ac46a5c3c884eec9e38bd1efd1419d1f14f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https:\/\/api.github.com\/repos\/symplify\/vendor-patches\/zipball\/74186ac46a5c3c884eec9e38bd1efd1419d1f14f",
+                "reference": "74186ac46a5c3c884eec9e38bd1efd1419d1f14f",
+                "shasum": ""
+            },
+            "require": {
+                "cweagans\/composer-patches": "^1.7",
+                "nette\/utils": "^3.2",
+                "php": ">=8.0",
+                "sebastian\/diff": "^4.0",
+                "symfony\/console": "^5.3",
+                "symfony\/dependency-injection": "^5.3",
+                "symfony\/http-kernel": "^5.3",
+                "symplify\/composer-json-manipulator": "^9.4.8",
+                "symplify\/symplify-kernel": "^9.4.8"
+            },
+            "require-dev": {
+                "phpunit\/phpunit": "^9.5"
+            },
+            "time": "2021-07-03T14:18:43+00:00",
+            "bin": [
+                "bin\/vendor-patches"
+            ],
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-main": "9.5-dev"
+                }
+            },
+            "installation-source": "dist",
+            "autoload": {
+                "psr-4": {
+                    "RectorPrefix20210705\\Symplify\\VendorPatches\\": "src"
+                }
+            },
+            "notification-url": "https:\/\/packagist.org\/downloads\/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Generate vendor patches for packages with single command",
+            "support": {
+                "source": "https:\/\/github.com\/symplify\/vendor-patches\/tree\/9.4.8"
+            },
+            "install-path": "..\/symplify\/vendor-patches"
         },
         {
             "name": "tracy\/tracy",

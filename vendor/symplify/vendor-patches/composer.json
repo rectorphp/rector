@@ -1,0 +1,39 @@
+{
+    "name": "symplify\/vendor-patches",
+    "description": "Generate vendor patches for packages with single command",
+    "license": "MIT",
+    "bin": [
+        "bin\/vendor-patches"
+    ],
+    "require": {
+        "php": ">=8.0",
+        "nette\/utils": "^3.2",
+        "symfony\/console": "^5.3",
+        "symfony\/dependency-injection": "^5.3",
+        "symfony\/http-kernel": "^5.3",
+        "sebastian\/diff": "^4.0",
+        "cweagans\/composer-patches": "^1.7",
+        "symplify\/composer-json-manipulator": "^9.4.8",
+        "symplify\/symplify-kernel": "^9.4.8"
+    },
+    "require-dev": {
+        "phpunit\/phpunit": "^9.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "RectorPrefix20210705\\Symplify\\VendorPatches\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "RectorPrefix20210705\\Symplify\\VendorPatches\\Tests\\": "tests"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-main": "9.5-dev"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
