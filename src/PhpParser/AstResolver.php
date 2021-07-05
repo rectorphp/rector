@@ -8,15 +8,17 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
+use PhpParser\Node\Stmt\Interface_;
+use PhpParser\Node\Stmt\Trait_;
 use PhpParser\NodeFinder;
 use PhpParser\Parser;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\Php\PhpFunctionReflection;
 use PHPStan\Reflection\ReflectionProvider;
-use PHPStan\Type\ObjectType;
 use PHPStan\Type\TypeWithClassName;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\Reflection\ReflectionResolver;
@@ -53,9 +55,9 @@ final class AstResolver
      * Parsing files is very heavy performance, so this will help to leverage it
      * The value can be also null, as the method might not exist in the class.
      *
-     * @var array<class-string, Class_|null>
+     * @var array<class-string, Class_|Trait_|Interface_|null>
      */
-    private array $classesByName = [];
+    private array $classLikesByName = [];
 
     public function __construct(
         private Parser $parser,
@@ -70,14 +72,15 @@ final class AstResolver
     ) {
     }
 
-    public function resolveClassFromObjectType(ObjectType $objectType): ?Class_
-    {
-        if (! $this->reflectionProvider->hasClass($objectType->getClassName())) {
+    public function resolveClassFromObjectType(
+        TypeWithClassName $typeWithClassName
+    ): Class_ | Trait_ | Interface_ | null {
+        if (! $this->reflectionProvider->hasClass($typeWithClassName->getClassName())) {
             return null;
         }
 
-        $classReflection = $this->reflectionProvider->getClass($objectType->getClassName());
-        return $this->resolveClassFromClassReflection($classReflection, $objectType->getClassName());
+        $classReflection = $this->reflectionProvider->getClass($typeWithClassName->getClassName());
+        return $this->resolveClassFromClassReflection($classReflection, $typeWithClassName->getClassName());
     }
 
     public function resolveClassMethodFromMethodReflection(MethodReflection $methodReflection): ?ClassMethod
@@ -204,14 +207,16 @@ final class AstResolver
         return $this->resolveClassMethod($callerStaticType->getClassName(), $methodName);
     }
 
-    public function resolveClassFromClassReflection(ClassReflection $classReflection, string $className): ?Class_
-    {
+    public function resolveClassFromClassReflection(
+        ClassReflection $classReflection,
+        string $className
+    ): Trait_ | Class_ | Interface_ | null {
         if ($classReflection->isBuiltin()) {
             return null;
         }
 
-        if (isset($this->classesByName[$classReflection->getName()])) {
-            return $this->classesByName[$classReflection->getName()];
+        if (isset($this->classLikesByName[$classReflection->getName()])) {
+            return $this->classLikesByName[$classReflection->getName()];
         }
 
         $fileName = $classReflection->getFileName();
@@ -219,7 +224,7 @@ final class AstResolver
         // probably internal class
         if ($fileName === false) {
             // avoid parsing falsy-file again
-            $this->classesByName[$classReflection->getName()] = null;
+            $this->classLikesByName[$classReflection->getName()] = null;
             return null;
         }
 
@@ -228,24 +233,24 @@ final class AstResolver
         $nodes = $this->parser->parse($fileContent);
         if ($nodes === null) {
             // avoid parsing falsy-file again
-            $this->classesByName[$classReflection->getName()] = null;
+            $this->classLikesByName[$classReflection->getName()] = null;
             return null;
         }
 
-        /** @var Class_[] $classes */
-        $classes = $this->betterNodeFinder->findInstanceOf($nodes, Class_::class);
+        /** @var array<Class_|Trait_|Interface_> $classLikes */
+        $classLikes = $this->betterNodeFinder->findInstanceOf($nodes, ClassLike::class);
 
         $reflectionClassName = $classReflection->getName();
-        foreach ($classes as $class) {
+        foreach ($classLikes as $classLike) {
             if ($reflectionClassName !== $className) {
                 continue;
             }
 
-            $this->classesByName[$classReflection->getName()] = $class;
-            return $class;
+            $this->classLikesByName[$classReflection->getName()] = $classLike;
+            return $classLike;
         }
 
-        $this->classesByName[$classReflection->getName()] = null;
+        $this->classLikesByName[$classReflection->getName()] = null;
         return null;
     }
 }

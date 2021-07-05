@@ -13,9 +13,10 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
+use PhpParser\Node\Stmt\Interface_;
+use PhpParser\Node\Stmt\Trait_;
 use PHPStan\Analyser\Scope;
-use PHPStan\Type\ObjectType;
-use PHPStan\Type\ThisType;
+use PHPStan\Type\TypeWithClassName;
 use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -81,16 +82,16 @@ CODE_SAMPLE
         }
 
         $type = $scope->getType($node->var);
-        if ($type instanceof ThisType) {
-            $type = $type->getStaticObjectType();
-        }
-
-        if (! $type instanceof ObjectType) {
+        if (! $type instanceof TypeWithClassName) {
             return null;
         }
 
-        $class = $this->reflectionAstResolver->resolveClassFromObjectType($type);
-        if ($this->shouldSkipClassMethod($class, $node)) {
+        $classLike = $this->reflectionAstResolver->resolveClassFromObjectType($type);
+        if ($classLike === null) {
+            return null;
+        }
+
+        if ($this->shouldSkipClassMethod($classLike, $node)) {
             return null;
         }
 
@@ -113,9 +114,9 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function shouldSkipClassMethod(?Class_ $class, MethodCall $methodCall): bool
+    private function shouldSkipClassMethod(Class_ | Trait_ | Interface_ $classLike, MethodCall $methodCall): bool
     {
-        if (! $class instanceof Class_) {
+        if (! $classLike instanceof Class_) {
             return true;
         }
 
@@ -124,7 +125,7 @@ CODE_SAMPLE
             return true;
         }
 
-        $classMethod = $class->getMethod($methodName);
+        $classMethod = $classLike->getMethod($methodName);
         if (! $classMethod instanceof ClassMethod) {
             return true;
         }

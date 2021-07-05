@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Rector\Tests\Removing\Rector\Class_\RemoveTraitRector;
+namespace Rector\Tests\Removing\Rector\Class_\RemoveTraitUseRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class RemoveTraitRectorTest extends AbstractRectorTestCase
+final class RemoveTraitUseRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
