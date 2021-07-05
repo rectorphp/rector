@@ -4,19 +4,17 @@ declare (strict_types=1);
 namespace Rector\Removing\Rector\Class_;
 
 use PhpParser\Node;
-use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Trait_;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
-use Rector\Core\NodeManipulator\ClassManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @see \Rector\Tests\Removing\Rector\Class_\RemoveTraitRector\RemoveTraitRectorTest
+ * @see \Rector\Tests\Removing\Rector\Class_\RemoveTraitUseRector\RemoveTraitUseRectorTest
  */
-final class RemoveTraitRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
+final class RemoveTraitUseRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
      * @var string
@@ -30,14 +28,6 @@ final class RemoveTraitRector extends \Rector\Core\Rector\AbstractRector impleme
      * @var string[]
      */
     private $traitsToRemove = [];
-    /**
-     * @var \Rector\Core\NodeManipulator\ClassManipulator
-     */
-    private $classManipulator;
-    public function __construct(\Rector\Core\NodeManipulator\ClassManipulator $classManipulator)
-    {
-        $this->classManipulator = $classManipulator;
-    }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
         return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove specific traits from code', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
@@ -65,12 +55,16 @@ CODE_SAMPLE
      */
     public function refactor($node) : ?\PhpParser\Node
     {
-        $usedTraits = $this->classManipulator->getUsedTraits($node);
-        if ($usedTraits === []) {
-            return null;
-        }
         $this->classHasChanged = \false;
-        $this->removeTraits($usedTraits);
+        foreach ($node->getTraitUses() as $traitUse) {
+            foreach ($traitUse->traits as $trait) {
+                if (!$this->isNames($trait, $this->traitsToRemove)) {
+                    continue;
+                }
+                $this->removeNode($traitUse);
+                $this->classHasChanged = \true;
+            }
+        }
         // invoke re-print
         if ($this->classHasChanged) {
             $node->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NODE, null);
@@ -84,21 +78,5 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $this->traitsToRemove = $configuration[self::TRAITS_TO_REMOVE] ?? [];
-    }
-    /**
-     * @param Name[] $usedTraits
-     */
-    private function removeTraits(array $usedTraits) : void
-    {
-        foreach ($usedTraits as $usedTrait) {
-            foreach ($this->traitsToRemove as $traitToRemove) {
-                if (!$this->isName($usedTrait, $traitToRemove)) {
-                    continue;
-                }
-                $this->removeNode($usedTrait);
-                $this->classHasChanged = \true;
-                continue 2;
-            }
-        }
     }
 }

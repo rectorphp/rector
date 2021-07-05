@@ -3,12 +3,10 @@
 declare (strict_types=1);
 namespace Rector\Core\NodeManipulator;
 
-use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Property;
-use PhpParser\Node\Stmt\Trait_;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -32,23 +30,6 @@ final class ClassManipulator
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodesToRemoveCollector = $nodesToRemoveCollector;
         $this->reflectionProvider = $reflectionProvider;
-    }
-    /**
-     * @deprecated
-     * @return array<string, Name>
-     * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Trait_ $classLike
-     */
-    public function getUsedTraits($classLike) : array
-    {
-        $usedTraits = [];
-        foreach ($classLike->getTraitUses() as $traitUse) {
-            foreach ($traitUse->traits as $trait) {
-                /** @var string $traitName */
-                $traitName = $this->nodeNameResolver->getName($trait);
-                $usedTraits[$traitName] = $trait;
-            }
-        }
-        return $usedTraits;
     }
     public function hasParentMethodOrInterface(\PHPStan\Type\ObjectType $objectType, string $methodName) : bool
     {

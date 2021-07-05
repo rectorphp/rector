@@ -7,10 +7,10 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
-use PhpParser\Node\Stmt\Trait_;
-use Rector\Core\PhpParser\Comparing\NodeComparator;
+use PhpParser\Node\Stmt\ClassLike;
+use PHPStan\Reflection\ClassReflection;
+use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 final class ClassConstManipulator
@@ -20,69 +20,43 @@ final class ClassConstManipulator
      */
     private $betterNodeFinder;
     /**
-     * @var \Rector\Core\NodeManipulator\ClassManipulator
-     */
-    private $classManipulator;
-    /**
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     /**
-     * @var \Rector\NodeCollector\NodeCollector\NodeRepository
+     * @var \Rector\Core\PhpParser\AstResolver
      */
-    private $nodeRepository;
-    /**
-     * @var \Rector\Core\PhpParser\Comparing\NodeComparator
-     */
-    private $nodeComparator;
-    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Core\NodeManipulator\ClassManipulator $classManipulator, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeCollector\NodeCollector\NodeRepository $nodeRepository, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator)
+    private $astResolver;
+    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\AstResolver $astResolver)
     {
         $this->betterNodeFinder = $betterNodeFinder;
-        $this->classManipulator = $classManipulator;
         $this->nodeNameResolver = $nodeNameResolver;
-        $this->nodeRepository = $nodeRepository;
-        $this->nodeComparator = $nodeComparator;
+        $this->astResolver = $astResolver;
     }
-    public function hasClassConstFetch(\PhpParser\Node\Stmt\ClassConst $classConst) : bool
+    public function hasClassConstFetch(\PhpParser\Node\Stmt\ClassConst $classConst, \PHPStan\Reflection\ClassReflection $classReflection) : bool
     {
         $classLike = $classConst->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
         if (!$classLike instanceof \PhpParser\Node\Stmt\Class_) {
             return \false;
         }
-        $searchInNodes = [$classLike];
-        $usedTraitNames = $this->classManipulator->getUsedTraits($classLike);
-        foreach ($usedTraitNames as $usedTraitName) {
-            $usedTraitName = $this->nodeRepository->findTrait((string) $usedTraitName);
-            if (!$usedTraitName instanceof \PhpParser\Node\Stmt\Trait_) {
+        foreach ($classReflection->getAncestors() as $ancestorClassReflection) {
+            $ancestorClass = $this->astResolver->resolveClassFromClassReflection($ancestorClassReflection, $ancestorClassReflection->getName());
+            if (!$ancestorClass instanceof \PhpParser\Node\Stmt\ClassLike) {
                 continue;
             }
-            $searchInNodes[] = $usedTraitName;
-        }
-        return (bool) $this->betterNodeFinder->find($searchInNodes, function (\PhpParser\Node $node) use($classConst) : bool {
-            // itself
-            if ($this->nodeComparator->areNodesEqual($node, $classConst)) {
-                return \false;
+            // has in class?
+            $isClassConstFetchFound = (bool) $this->betterNodeFinder->find($ancestorClass, function (\PhpParser\Node $node) use($classConst) : bool {
+                // property + static fetch
+                if (!$node instanceof \PhpParser\Node\Expr\ClassConstFetch) {
+                    return \false;
+                }
+                return $this->isNameMatch($node, $classConst);
+            });
+            if ($isClassConstFetchFound) {
+                return \true;
             }
-            // property + static fetch
-            if (!$node instanceof \PhpParser\Node\Expr\ClassConstFetch) {
-                return \false;
-            }
-            return $this->isNameMatch($node, $classConst);
-        });
-    }
-    /**
-     * @see https://github.com/myclabs/php-enum#declaration
-     */
-    public function isEnum(\PhpParser\Node\Stmt\ClassConst $classConst) : bool
-    {
-        $classLike = $classConst->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
-        if (!$classLike instanceof \PhpParser\Node\Stmt\Class_) {
-            return \false;
         }
-        if ($classLike->extends === null) {
-            return \false;
-        }
-        return $this->nodeNameResolver->isName($classLike->extends, '*Enum');
+        return \false;
     }
     private function isNameMatch(\PhpParser\Node\Expr\ClassConstFetch $classConstFetch, \PhpParser\Node\Stmt\ClassConst $classConst) : bool
     {

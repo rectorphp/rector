@@ -12,9 +12,10 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
+use PhpParser\Node\Stmt\Interface_;
+use PhpParser\Node\Stmt\Trait_;
 use PHPStan\Analyser\Scope;
-use PHPStan\Type\ObjectType;
-use PHPStan\Type\ThisType;
+use PHPStan\Type\TypeWithClassName;
 use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -75,14 +76,14 @@ CODE_SAMPLE
             return null;
         }
         $type = $scope->getType($node->var);
-        if ($type instanceof \PHPStan\Type\ThisType) {
-            $type = $type->getStaticObjectType();
-        }
-        if (!$type instanceof \PHPStan\Type\ObjectType) {
+        if (!$type instanceof \PHPStan\Type\TypeWithClassName) {
             return null;
         }
-        $class = $this->reflectionAstResolver->resolveClassFromObjectType($type);
-        if ($this->shouldSkipClassMethod($class, $node)) {
+        $classLike = $this->reflectionAstResolver->resolveClassFromObjectType($type);
+        if ($classLike === null) {
+            return null;
+        }
+        if ($this->shouldSkipClassMethod($classLike, $node)) {
             return null;
         }
         // if->cond cannot removed, it has to be replaced with false, see https://3v4l.org/U9S9i
@@ -100,18 +101,18 @@ CODE_SAMPLE
         return $node;
     }
     /**
-     * @param \PhpParser\Node\Stmt\Class_|null $class
+     * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Trait_|\PhpParser\Node\Stmt\Interface_ $classLike
      */
-    private function shouldSkipClassMethod($class, \PhpParser\Node\Expr\MethodCall $methodCall) : bool
+    private function shouldSkipClassMethod($classLike, \PhpParser\Node\Expr\MethodCall $methodCall) : bool
     {
-        if (!$class instanceof \PhpParser\Node\Stmt\Class_) {
+        if (!$classLike instanceof \PhpParser\Node\Stmt\Class_) {
             return \true;
         }
         $methodName = $this->getName($methodCall->name);
         if ($methodName === null) {
             return \true;
         }
-        $classMethod = $class->getMethod($methodName);
+        $classMethod = $classLike->getMethod($methodName);
         if (!$classMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
             return \true;
         }

@@ -9264,15 +9264,15 @@ Remove specific traits from code
 - class: [`Rector\Removing\Rector\Class_\RemoveTraitRector`](../rules/Removing/Rector/Class_/RemoveTraitRector.php)
 
 ```php
-use Rector\Removing\Rector\Class_\RemoveTraitRector;
+use Rector\Removing\Rector\Class_\RemoveTraitUseRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
-    $services->set(RemoveTraitRector::class)
+    $services->set(RemoveTraitUseRector::class)
         ->call('configure', [[
-            RemoveTraitRector::TRAITS_TO_REMOVE => ['TraitNameToRemove'],
+            RemoveTraitUseRector::TRAITS_TO_REMOVE => ['TraitNameToRemove'],
         ]]);
 };
 ```
