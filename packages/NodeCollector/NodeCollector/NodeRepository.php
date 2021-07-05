@@ -15,6 +15,8 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 /**
  * This service contains all the parsed nodes. E.g. all the functions, method call, classes, static calls etc. It's
  * useful in case of context analysis, e.g. find all the usage of class method to detect, if the method is used.
+ *
+ * @deprecated
  */
 final class NodeRepository
 {

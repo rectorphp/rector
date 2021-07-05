@@ -18,6 +18,7 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
+use PHPStan\Type\TypeTraverser;
 use PHPStan\Type\TypeUtils;
 use PHPStan\Type\VerbosityLevel;
 use Rector\StaticTypeMapper\TypeFactory\UnionTypeFactory;
@@ -66,15 +67,9 @@ final class TypeFactory
                 $type = $this->removeValueFromConstantType($type);
             }
 
-            if ($type instanceof ShortenedObjectType) {
-                $type = new FullyQualifiedObjectType($type->getFullyQualifiedName());
-            }
+            $type = $this->normalizeObjectTypes($type);
 
-            if ($type instanceof ObjectType && ! $type instanceof GenericObjectType && ! $type instanceof AliasedObjectType && $type->getClassName() !== 'Iterator') {
-                $type = new FullyQualifiedObjectType($type->getClassName());
-            }
-
-            $typeHash = md5($type->describe(VerbosityLevel::cache()));
+            $typeHash = $type->describe(VerbosityLevel::cache());
             $uniqueTypes[$typeHash] = $type;
         }
 
@@ -164,5 +159,20 @@ final class TypeFactory
         }
 
         return $unwrappedTypes;
+    }
+
+    private function normalizeObjectTypes(Type $type): Type
+    {
+        return TypeTraverser::map($type, function (Type $traversedType, callable $traverseCallback): Type {
+            if ($traversedType instanceof ShortenedObjectType) {
+                return new FullyQualifiedObjectType($traversedType->getFullyQualifiedName());
+            }
+
+            if ($traversedType instanceof ObjectType && ! $traversedType instanceof GenericObjectType && ! $traversedType instanceof AliasedObjectType && $traversedType->getClassName() !== 'Iterator') {
+                return new FullyQualifiedObjectType($traversedType->getClassName());
+            }
+
+            return $traverseCallback($traversedType);
+        });
     }
 }

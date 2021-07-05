@@ -79,7 +79,7 @@ CODE_SAMPLE
     /**
      * @param MethodCall|StaticCall|ClassMethod $node
      */
-    public function refactor(Node $node): ?Node
+    public function refactor(Node $node): MethodCall | StaticCall | ClassMethod
     {
         foreach ($this->replacedArguments as $replacedArgument) {
             if (! $this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType(

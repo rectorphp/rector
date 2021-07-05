@@ -24,7 +24,15 @@ final class DowngradePathsCommand extends Command
         foreach ($downgradePaths as $key => $downgradePath) {
             if (in_array(
                 $downgradePath,
-                ['vendor/symplify', 'vendor/rector', 'vendor/symfony', 'vendor/nikic', 'vendor/psr', 'vendor/phpstan', 'vendor/ssch'],
+                [
+                    'vendor/symplify',
+                    'vendor/rector',
+                    'vendor/symfony',
+                    'vendor/nikic',
+                    'vendor/psr',
+                    'vendor/phpstan',
+                    'vendor/ssch',
+                ],
                 true
             )) {
                 unset($downgradePaths[$key]);

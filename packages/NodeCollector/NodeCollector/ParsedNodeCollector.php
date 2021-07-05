@@ -18,6 +18,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
  * @see https://phpstan.org/blog/generics-in-php-using-phpdocs
  *
  * @internal To be used only in NodeRepository
+ * @deprecated
  */
 final class ParsedNodeCollector
 {

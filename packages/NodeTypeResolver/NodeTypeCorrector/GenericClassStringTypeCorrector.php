@@ -21,16 +21,16 @@ final class GenericClassStringTypeCorrector
     public function correct(Type $mainType): Type
     {
         // inspired from https://github.com/phpstan/phpstan-src/blob/94e3443b2d21404a821e05b901dd4b57fcbd4e7f/src/Type/Generic/TemplateTypeHelper.php#L18
-        return TypeTraverser::map($mainType, function (Type $type, callable $traverse): Type {
-            if (! $type instanceof ConstantStringType) {
-                return $traverse($type);
+        return TypeTraverser::map($mainType, function (Type $traversedType, callable $traverseCallback): Type {
+            if (! $traversedType instanceof ConstantStringType) {
+                return $traverseCallback($traversedType);
             }
 
-            if (! $this->reflectionProvider->hasClass($type->getValue())) {
-                return $traverse($type);
+            if (! $this->reflectionProvider->hasClass($traversedType->getValue())) {
+                return $traverseCallback($traversedType);
             }
 
-            return new GenericClassStringType(new ObjectType($type->getValue()));
+            return new GenericClassStringType(new ObjectType($traversedType->getValue()));
         });
     }
 }
