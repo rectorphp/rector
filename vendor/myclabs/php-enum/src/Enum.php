@@ -86,7 +86,6 @@ abstract class Enum implements \JsonSerializable
     }
     /**
      * @param mixed $value
-     * @psalm-param T $value
      * @return static
      */
     public static function from($value)

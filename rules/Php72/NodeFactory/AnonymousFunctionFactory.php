@@ -37,6 +37,8 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use RectorPrefix20210705\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
+use PhpParser\Node\Expr\ClassConstFetch;
+use PhpParser\Node\Expr\StaticCall;
 final class AnonymousFunctionFactory
 {
     /**
@@ -103,7 +105,11 @@ final class AnonymousFunctionFactory
         $anonymousFunction = new \PhpParser\Node\Expr\Closure();
         $newParams = $this->createParams($functionVariantWithPhpDoc->getParameters());
         $anonymousFunction->params = $newParams;
-        $innerMethodCall = new \PhpParser\Node\Expr\MethodCall($expr, $phpMethodReflection->getName());
+        if ($expr instanceof \PhpParser\Node\Expr\ClassConstFetch && $expr->name instanceof \PhpParser\Node\Identifier && $this->nodeNameResolver->isName($expr->name, 'class')) {
+            /** @var Expr $expr */
+            $expr = $expr->class;
+        }
+        $innerMethodCall = $phpMethodReflection->isStatic() ? new \PhpParser\Node\Expr\StaticCall($expr, $phpMethodReflection->getName()) : new \PhpParser\Node\Expr\MethodCall($expr, $phpMethodReflection->getName());
         $innerMethodCall->args = $this->nodeFactory->createArgsFromParams($newParams);
         if (!$functionVariantWithPhpDoc->getReturnType() instanceof \PHPStan\Type\MixedType) {
             $returnType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($functionVariantWithPhpDoc->getReturnType(), \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind::RETURN());
