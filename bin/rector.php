@@ -2,7 +2,10 @@
 
 declare(strict_types=1);
 
+use Nette\Utils\Json;
+use Rector\ChangesReporting\Output\JsonOutputFormatter;
 use Rector\Core\Bootstrap\RectorConfigsResolver;
+use Rector\Core\Configuration\Option;
 use Rector\Core\Console\ConsoleApplication;
 use Rector\Core\Console\Style\SymfonyStyleFactory;
 use Rector\Core\DependencyInjection\RectorContainerFactory;
@@ -41,9 +44,6 @@ $autoloadIncluder->loadIfExistsAndNotLoadedYet(__DIR__ . '/../vendor/scoper-auto
 $autoloadIncluder->autoloadProjectAutoloaderFile();
 $autoloadIncluder->autoloadFromCommandLine();
 
-$symfonyStyleFactory = new SymfonyStyleFactory(new PrivatesCaller());
-$symfonyStyle = $symfonyStyleFactory->create();
-
 $rectorConfigsResolver = new RectorConfigsResolver();
 
 try {
@@ -51,7 +51,22 @@ try {
     $rectorContainerFactory = new RectorContainerFactory();
     $container = $rectorContainerFactory->createFromBootstrapConfigs($bootstrapConfigs);
 } catch (Throwable $throwable) {
-    $symfonyStyle->error($throwable->getMessage());
+    // for json output
+    $argvInput = new \Symfony\Component\Console\Input\ArgvInput();
+    $outputFormat = $argvInput->getParameterOption('--' . Option::OUTPUT_FORMAT);
+
+    // report fatal error in json format
+    if ($outputFormat === JsonOutputFormatter::NAME) {
+        echo Json::encode([
+            'fatal_errors' => [$throwable->getMessage()],
+        ]);
+    } else {
+        // report fatal errors in console format
+        $symfonyStyleFactory = new SymfonyStyleFactory(new PrivatesCaller());
+        $symfonyStyle = $symfonyStyleFactory->create();
+        $symfonyStyle->error($throwable->getMessage());
+    }
+
     exit(ShellCode::ERROR);
 }
 
