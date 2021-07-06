@@ -12,10 +12,10 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeTraverser;
 use PHPStan\Type\ObjectType;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Core\ValueObject\MethodName;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\TypeDeclaration\Matcher\PropertyAssignMatcher;
+use Rector\TypeDeclaration\NodeAnalyzer\AutowiredClassMethodAnalyzer;
 use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
 final class ConstructorAssignDetector
@@ -29,7 +29,7 @@ final class ConstructorAssignDetector
         private NodeTypeResolver $nodeTypeResolver,
         private PropertyAssignMatcher $propertyAssignMatcher,
         private SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
-        private PhpDocInfoFactory $phpDocInfoFactory
+        private AutowiredClassMethodAnalyzer $autowiredClassMethodAnalyzer
     ) {
     }
 
@@ -122,10 +122,7 @@ final class ConstructorAssignDetector
         }
 
         foreach ($classLike->getMethods() as $classMethod) {
-            $classMethodPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
-
-            // @todo add support for PHP 8 attributes
-            if (! $classMethodPhpDocInfo->hasByNames(['required', 'inject'])) {
+            if (! $this->autowiredClassMethodAnalyzer->detect($classMethod)) {
                 continue;
             }
 

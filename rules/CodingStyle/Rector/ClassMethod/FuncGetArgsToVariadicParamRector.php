@@ -90,8 +90,11 @@ CODE_SAMPLE
         return $this->applyVariadicParams($node, $assign, $variableName);
     }
 
-    private function applyVariadicParams(ClassMethod|Function_|Closure $node, Assign $assign, string $variableName): ?Node
-    {
+    private function applyVariadicParams(
+        ClassMethod | Function_ | Closure $node,
+        Assign $assign,
+        string $variableName
+    ): ?Node {
         $param = $this->createVariadicParam($variableName);
         $variableParam = $param->var;
         if ($variableParam instanceof Variable && $this->hasFunctionOrClosureInside($node, $variableParam)) {
@@ -102,8 +105,11 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function removeOrChangeAssignToVariable(ClassMethod|Function_|Closure $node, Assign $assign, string $variableName): ?Node
-    {
+    private function removeOrChangeAssignToVariable(
+        ClassMethod | Function_ | Closure $node,
+        Assign $assign,
+        string $variableName
+    ): ?Node {
         $parent = $assign->getAttribute(AttributeKey::PARENT_NODE);
         if ($parent instanceof Expression) {
             $this->removeNode($assign);
