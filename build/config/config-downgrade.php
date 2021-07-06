@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use PhpParser\NodeVisitor;
+use PhpParser\NodeVisitorAbstract;
 use PHPStan\PhpDocParser\Ast\Node;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
@@ -10,6 +12,7 @@ use Rector\Core\Stubs\PHPStanStubLoader;
 use Rector\DowngradePhp72\Rector\ClassMethod\DowngradeParameterTypeWideningRector;
 use Rector\NodeNameResolver\Contract\NodeNameResolverInterface;
 use Rector\Set\ValueObject\DowngradeSetList;
+use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\StyleInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SimplePhpDocParser\Contract\PhpDocNodeVisitorInterface;
@@ -35,8 +38,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->call('configure', [[
             DowngradeParameterTypeWideningRector::SAFE_TYPES => [
                 RectorInterface::class,
+                NodeVisitorAbstract::class,
+                NodeVisitor::class,
                 ConfigurableRectorInterface::class,
-                \Symfony\Component\Console\Output\OutputInterface::class,
+                OutputInterface::class,
                 StyleInterface::class,
                 PhpDocNodeVisitorInterface::class,
                 Node::class,
