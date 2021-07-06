@@ -101,7 +101,8 @@ final class ArrayCallableMethodMatcher
             $classConstantReference = $classConstFetch->getAttribute(AttributeKey::CLASS_NAME);
         }
 
-        if ($classConstantReference === null) {
+        // non-class value
+        if (! is_string($classConstantReference)) {
             return new MixedType();
         }
 
