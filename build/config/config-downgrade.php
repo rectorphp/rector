@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use PhpParser\NodeVisitor;
 use PhpParser\NodeVisitorAbstract;
+use PHPStan\BetterReflection\SourceLocator\Type\SourceLocator;
 use PHPStan\PhpDocParser\Ast\Node;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
@@ -47,7 +48,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 Node::class,
                 NodeNameResolverInterface::class,
                 // phpstan
-                \PHPStan\BetterReflection\SourceLocator\Type\SourceLocator::class,
+                SourceLocator::class,
+                \PHPStan\PhpDocParser\Ast\Node::class,
             ]
         ]]);
 };
