@@ -5,15 +5,20 @@ declare(strict_types=1);
 namespace Rector\CodingStyle\Rector\ClassMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Param;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Function_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -77,12 +82,16 @@ CODE_SAMPLE
                 return null;
             }
 
-            $this->removeNode($assign);
-        } else {
-            $variableName = 'args';
-            $assign->expr = new Variable('args');
+            return $this->removeOrChangeAssignToVariable($node, $assign, $variableName);
         }
 
+        $variableName = 'args';
+        $assign->expr = new Variable('args');
+        return $this->applyVariadicParams($node, $assign, $variableName);
+    }
+
+    private function applyVariadicParams(ClassMethod|Function_|Closure $node, Assign $assign, string $variableName): ?Node
+    {
         $param = $this->createVariadicParam($variableName);
         $variableParam = $param->var;
         if ($variableParam instanceof Variable && $this->hasFunctionOrClosureInside($node, $variableParam)) {
@@ -90,6 +99,31 @@ CODE_SAMPLE
         }
 
         $node->params[] = $param;
+        return $node;
+    }
+
+    private function removeOrChangeAssignToVariable(ClassMethod|Function_|Closure $node, Assign $assign, string $variableName): ?Node
+    {
+        $parent = $assign->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parent instanceof Expression) {
+            $this->removeNode($assign);
+            return $this->applyVariadicParams($node, $assign, $variableName);
+        }
+
+        $variable = $assign->var;
+        /** @var ClassMethod|Function_|Closure $functionLike */
+        $functionLike = $this->betterNodeFinder->findParentType($parent, FunctionLike::class);
+        /** @var Stmt[] $stmts */
+        $stmts = $functionLike->getStmts();
+        $this->traverseNodesWithCallable($stmts, function (Node $node) use ($assign, $variable): ?Expr {
+            if (! $this->nodeComparator->areNodesEqual($node, $assign)) {
+                return null;
+            }
+
+            return $variable;
+        });
+
+        $this->applyVariadicParams($functionLike, $assign, $variableName);
         return $node;
     }
 
