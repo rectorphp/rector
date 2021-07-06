@@ -22,11 +22,7 @@ final class IntermediateSourceLocator implements \PHPStan\BetterReflection\Sourc
     {
         $this->sourceLocatorProviders = $sourceLocatorProviders;
     }
-    /**
-     * @param \PHPStan\BetterReflection\Reflector\Reflector $reflector
-     * @param \PHPStan\BetterReflection\Identifier\Identifier $identifier
-     */
-    public function locateIdentifier($reflector, $identifier) : ?\PHPStan\BetterReflection\Reflection\Reflection
+    public function locateIdentifier(\PHPStan\BetterReflection\Reflector\Reflector $reflector, \PHPStan\BetterReflection\Identifier\Identifier $identifier) : ?\PHPStan\BetterReflection\Reflection\Reflection
     {
         foreach ($this->sourceLocatorProviders as $sourceLocatorProvider) {
             $sourceLocator = $sourceLocatorProvider->provide();
@@ -40,10 +36,8 @@ final class IntermediateSourceLocator implements \PHPStan\BetterReflection\Sourc
     /**
      * Find all identifiers of a type
      * @return Reflection[]
-     * @param \PHPStan\BetterReflection\Reflector\Reflector $reflector
-     * @param \PHPStan\BetterReflection\Identifier\IdentifierType $identifierType
      */
-    public function locateIdentifiersByType($reflector, $identifierType) : array
+    public function locateIdentifiersByType(\PHPStan\BetterReflection\Reflector\Reflector $reflector, \PHPStan\BetterReflection\Identifier\IdentifierType $identifierType) : array
     {
         foreach ($this->sourceLocatorProviders as $sourceLocatorProvider) {
             $sourceLocator = $sourceLocatorProvider->provide();
