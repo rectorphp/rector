@@ -23,11 +23,7 @@ class Multiple implements \PhpParser\Parser
     {
         $this->parsers = $parsers;
     }
-    /**
-     * @param string $code
-     * @param \PhpParser\ErrorHandler|null $errorHandler
-     */
-    public function parse($code, $errorHandler = null)
+    public function parse(string $code, \PhpParser\ErrorHandler $errorHandler = null)
     {
         if (null === $errorHandler) {
             $errorHandler = new \PhpParser\ErrorHandler\Throwing();
