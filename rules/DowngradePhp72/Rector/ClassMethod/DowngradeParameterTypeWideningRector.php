@@ -32,9 +32,19 @@ final class DowngradeParameterTypeWideningRector extends AbstractRector implemen
     public const SAFE_TYPES = 'safe_types';
 
     /**
+     * @var string
+     */
+    public const SAFE_TYPES_TO_METHODS = 'safe_types_to_methods';
+
+    /**
      * @var class-string[]
      */
     private array $safeTypes = [];
+
+    /**
+     * @var array<class-string, string[]>
+     */
+    private array $safeTypesToMethods = [];
 
     public function __construct(
         private NativeParamToPhpDocDecorator $nativeParamToPhpDocDecorator,
@@ -80,6 +90,7 @@ CODE_SAMPLE
             ,
                 [
                     self::SAFE_TYPES => [],
+                    self::SAFE_TYPES_TO_METHODS => [],
                 ]
             ),
         ]);
@@ -117,7 +128,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($this->skipSafeType($classReflection)) {
+        if ($this->skipSafeType($classReflection, $node)) {
             return null;
         }
 
@@ -145,6 +156,15 @@ CODE_SAMPLE
         $safeTypes = $configuration[self::SAFE_TYPES] ?? [];
         Assert::allString($safeTypes);
         $this->safeTypes = $safeTypes;
+
+        $safeTypesToMethods = $configuration[self::SAFE_TYPES_TO_METHODS] ?? [];
+        Assert::isArray($safeTypesToMethods);
+        foreach ($safeTypesToMethods as $key => $value) {
+            Assert::string($key);
+            Assert::allString($value);
+        }
+
+        $this->safeTypesToMethods = $safeTypesToMethods;
     }
 
     private function removeParamTypeFromMethod(ClassMethod $classMethod, int $paramPosition): void
@@ -203,9 +223,24 @@ CODE_SAMPLE
         return count($classReflection->getAncestors()) === 1;
     }
 
-    private function skipSafeType(ClassReflection $classReflection): bool
+    private function skipSafeType(ClassReflection $classReflection, ClassMethod $classMethod): bool
     {
         foreach ($this->safeTypes as $safeType) {
+            if ($classReflection->isSubclassOf($safeType)) {
+                return true;
+            }
+
+            // skip self too
+            if ($classReflection->getName() === $safeType) {
+                return true;
+            }
+        }
+
+        foreach ($this->safeTypesToMethods as $safeType => $safeMethods) {
+            if (! $this->isNames($classMethod, $safeMethods)) {
+                continue;
+            }
+
             if ($classReflection->isSubclassOf($safeType)) {
                 return true;
             }

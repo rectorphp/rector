@@ -15,6 +15,7 @@ use Rector\NodeNameResolver\Contract\NodeNameResolverInterface;
 use Rector\Set\ValueObject\DowngradeSetList;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\StyleInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SimplePhpDocParser\Contract\PhpDocNodeVisitorInterface;
 
@@ -52,7 +53,14 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 \PHPStan\PhpDocParser\Ast\Node::class,
                 \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode::class,
                 \PHPStan\PhpDocParser\Ast\NodeAttributes::class,
-            ]
+            ],
+            DowngradeParameterTypeWideningRector::SAFE_TYPES_TO_METHODS => [
+                ContainerInterface::class => [
+                    'setParameter',
+                    'getParameter',
+                    'hasParameter',
+                ],
+            ],
         ]]);
 };
 
