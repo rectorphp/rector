@@ -16,10 +16,7 @@ final class NodeCollectorNodeVisitor extends \PhpParser\NodeVisitorAbstract
     {
         $this->parsedNodeCollector = $parsedNodeCollector;
     }
-    /**
-     * @param \PhpParser\Node $node
-     */
-    public function enterNode($node)
+    public function enterNode(\PhpParser\Node $node)
     {
         $this->parsedNodeCollector->collect($node);
         return null;

@@ -12,10 +12,7 @@ use PhpParser\NodeVisitorAbstract;
  */
 class CloningVisitor extends \PhpParser\NodeVisitorAbstract
 {
-    /**
-     * @param \PhpParser\Node $origNode
-     */
-    public function enterNode($origNode)
+    public function enterNode(\PhpParser\Node $origNode)
     {
         $node = clone $origNode;
         $node->setAttribute('origNode', $origNode);

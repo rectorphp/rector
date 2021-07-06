@@ -24,18 +24,12 @@ final class NodeConnectingVisitor extends \PhpParser\NodeVisitorAbstract
      * @var ?Node
      */
     private $previous;
-    /**
-     * @param mixed[] $nodes
-     */
-    public function beforeTraverse($nodes)
+    public function beforeTraverse(array $nodes)
     {
         $this->stack = [];
         $this->previous = null;
     }
-    /**
-     * @param \PhpParser\Node $node
-     */
-    public function enterNode($node)
+    public function enterNode(\PhpParser\Node $node)
     {
         if (!empty($this->stack)) {
             $node->setAttribute('parent', $this->stack[\count($this->stack) - 1]);
@@ -46,10 +40,7 @@ final class NodeConnectingVisitor extends \PhpParser\NodeVisitorAbstract
         }
         $this->stack[] = $node;
     }
-    /**
-     * @param \PhpParser\Node $node
-     */
-    public function leaveNode($node)
+    public function leaveNode(\PhpParser\Node $node)
     {
         $this->previous = $node;
         \array_pop($this->stack);

@@ -34,26 +34,20 @@ final class FunctionMethodAndClassNodeVisitor extends \PhpParser\NodeVisitorAbst
      * @param Node[] $nodes
      * @return Node[]|null
      */
-    public function beforeTraverse($nodes) : ?array
+    public function beforeTraverse(array $nodes) : ?array
     {
         $this->classLike = null;
         $this->className = null;
         $this->classMethod = null;
         return null;
     }
-    /**
-     * @param \PhpParser\Node $node
-     */
-    public function enterNode($node) : ?\PhpParser\Node
+    public function enterNode(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $this->processClass($node);
         $this->processMethod($node);
         return $node;
     }
-    /**
-     * @param \PhpParser\Node $node
-     */
-    public function leaveNode($node)
+    public function leaveNode(\PhpParser\Node $node)
     {
         if ($node instanceof \PhpParser\Node\Stmt\ClassLike) {
             $classLike = \array_pop($this->classStack);
