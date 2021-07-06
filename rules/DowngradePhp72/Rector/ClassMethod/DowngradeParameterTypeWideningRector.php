@@ -29,9 +29,17 @@ final class DowngradeParameterTypeWideningRector extends \Rector\Core\Rector\Abs
      */
     public const SAFE_TYPES = 'safe_types';
     /**
+     * @var string
+     */
+    public const SAFE_TYPES_TO_METHODS = 'safe_types_to_methods';
+    /**
      * @var class-string[]
      */
     private $safeTypes = [];
+    /**
+     * @var array<class-string, string[]>
+     */
+    private $safeTypesToMethods = [];
     /**
      * @var \Rector\DowngradePhp72\PhpDoc\NativeParamToPhpDocDecorator
      */
@@ -81,7 +89,7 @@ final class SomeClass implements SomeInterface
     }
 }
 CODE_SAMPLE
-, [self::SAFE_TYPES => []])]);
+, [self::SAFE_TYPES => [], self::SAFE_TYPES_TO_METHODS => []])]);
     }
     /**
      * @return array<class-string<Node>>
@@ -110,7 +118,7 @@ CODE_SAMPLE
         if ($this->isSealedClass($classReflection)) {
             return null;
         }
-        if ($this->skipSafeType($classReflection)) {
+        if ($this->skipSafeType($classReflection, $node)) {
             return null;
         }
         if ($node->isPrivate()) {
@@ -133,6 +141,13 @@ CODE_SAMPLE
         $safeTypes = $configuration[self::SAFE_TYPES] ?? [];
         \RectorPrefix20210706\Webmozart\Assert\Assert::allString($safeTypes);
         $this->safeTypes = $safeTypes;
+        $safeTypesToMethods = $configuration[self::SAFE_TYPES_TO_METHODS] ?? [];
+        \RectorPrefix20210706\Webmozart\Assert\Assert::isArray($safeTypesToMethods);
+        foreach ($safeTypesToMethods as $key => $value) {
+            \RectorPrefix20210706\Webmozart\Assert\Assert::string($key);
+            \RectorPrefix20210706\Webmozart\Assert\Assert::allString($value);
+        }
+        $this->safeTypesToMethods = $safeTypesToMethods;
     }
     private function removeParamTypeFromMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod, int $paramPosition) : void
     {
@@ -179,9 +194,21 @@ CODE_SAMPLE
         }
         return \count($classReflection->getAncestors()) === 1;
     }
-    private function skipSafeType(\PHPStan\Reflection\ClassReflection $classReflection) : bool
+    private function skipSafeType(\PHPStan\Reflection\ClassReflection $classReflection, \PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
     {
         foreach ($this->safeTypes as $safeType) {
+            if ($classReflection->isSubclassOf($safeType)) {
+                return \true;
+            }
+            // skip self too
+            if ($classReflection->getName() === $safeType) {
+                return \true;
+            }
+        }
+        foreach ($this->safeTypesToMethods as $safeType => $safeMethods) {
+            if (!$this->isNames($classMethod, $safeMethods)) {
+                continue;
+            }
             if ($classReflection->isSubclassOf($safeType)) {
                 return \true;
             }
