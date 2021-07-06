@@ -53,6 +53,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 \PHPStan\PhpDocParser\Ast\Node::class,
                 \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode::class,
                 \PHPStan\PhpDocParser\Ast\NodeAttributes::class,
+                \PhpParser\Parser::class,
             ],
             DowngradeParameterTypeWideningRector::SAFE_TYPES_TO_METHODS => [
                 ContainerInterface::class => [
