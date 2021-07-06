@@ -4,15 +4,20 @@ declare (strict_types=1);
 namespace Rector\CodingStyle\Rector\ClassMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Param;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Function_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -64,17 +69,47 @@ CODE_SAMPLE
             if ($variableName === null) {
                 return null;
             }
-            $this->removeNode($assign);
-        } else {
-            $variableName = 'args';
-            $assign->expr = new \PhpParser\Node\Expr\Variable('args');
+            return $this->removeOrChangeAssignToVariable($node, $assign, $variableName);
         }
+        $variableName = 'args';
+        $assign->expr = new \PhpParser\Node\Expr\Variable('args');
+        return $this->applyVariadicParams($node, $assign, $variableName);
+    }
+    /**
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $node
+     */
+    private function applyVariadicParams($node, \PhpParser\Node\Expr\Assign $assign, string $variableName) : ?\PhpParser\Node
+    {
         $param = $this->createVariadicParam($variableName);
         $variableParam = $param->var;
         if ($variableParam instanceof \PhpParser\Node\Expr\Variable && $this->hasFunctionOrClosureInside($node, $variableParam)) {
             return null;
         }
         $node->params[] = $param;
+        return $node;
+    }
+    /**
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $node
+     */
+    private function removeOrChangeAssignToVariable($node, \PhpParser\Node\Expr\Assign $assign, string $variableName) : ?\PhpParser\Node
+    {
+        $parent = $assign->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        if ($parent instanceof \PhpParser\Node\Stmt\Expression) {
+            $this->removeNode($assign);
+            return $this->applyVariadicParams($node, $assign, $variableName);
+        }
+        $variable = $assign->var;
+        /** @var ClassMethod|Function_|Closure $functionLike */
+        $functionLike = $this->betterNodeFinder->findParentType($parent, \PhpParser\Node\FunctionLike::class);
+        /** @var Stmt[] $stmts */
+        $stmts = $functionLike->getStmts();
+        $this->traverseNodesWithCallable($stmts, function (\PhpParser\Node $node) use($assign, $variable) : ?Expr {
+            if (!$this->nodeComparator->areNodesEqual($node, $assign)) {
+                return null;
+            }
+            return $variable;
+        });
+        $this->applyVariadicParams($functionLike, $assign, $variableName);
         return $node;
     }
     /**
