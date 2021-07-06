@@ -29,7 +29,7 @@ final class AutowiredClassMethodAnalyzer
             return \true;
         }
         foreach ($classMethod->attrGroups as $attrGroup) {
-            foreach ($attrGroup->getAttributes() as $attribute) {
+            foreach ($attrGroup->attrs as $attribute) {
                 if ($this->nodeNameResolver->isNames($attribute->name, [\RectorPrefix20210706\Symfony\Contracts\Service\Attribute\Required::class, 'Nette\\DI\\Attributes\\Inject'])) {
                     return \true;
                 }
