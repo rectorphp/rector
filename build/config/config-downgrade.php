@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use PHPStan\PhpDocParser\Ast\Node;
 use Rector\Core\Configuration\Option;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\Stubs\PHPStanStubLoader;
 use Rector\DowngradePhp72\Rector\ClassMethod\DowngradeParameterTypeWideningRector;
@@ -34,6 +35,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->call('configure', [[
             DowngradeParameterTypeWideningRector::SAFE_TYPES => [
                 RectorInterface::class,
+                ConfigurableRectorInterface::class,
                 \Symfony\Component\Console\Output\OutputInterface::class,
                 StyleInterface::class,
                 PhpDocNodeVisitorInterface::class,
