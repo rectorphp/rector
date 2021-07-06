@@ -12,6 +12,7 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DowngradePhp72\PhpDoc\NativeParamToPhpDocDecorator;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\TypeDeclaration\NodeAnalyzer\AutowiredClassMethodAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use RectorPrefix20210706\Webmozart\Assert\Assert;
@@ -39,10 +40,15 @@ final class DowngradeParameterTypeWideningRector extends \Rector\Core\Rector\Abs
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(\Rector\DowngradePhp72\PhpDoc\NativeParamToPhpDocDecorator $nativeParamToPhpDocDecorator, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
+    /**
+     * @var \Rector\TypeDeclaration\NodeAnalyzer\AutowiredClassMethodAnalyzer
+     */
+    private $autowiredClassMethodAnalyzer;
+    public function __construct(\Rector\DowngradePhp72\PhpDoc\NativeParamToPhpDocDecorator $nativeParamToPhpDocDecorator, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\TypeDeclaration\NodeAnalyzer\AutowiredClassMethodAnalyzer $autowiredClassMethodAnalyzer)
     {
         $this->nativeParamToPhpDocDecorator = $nativeParamToPhpDocDecorator;
         $this->reflectionProvider = $reflectionProvider;
+        $this->autowiredClassMethodAnalyzer = $autowiredClassMethodAnalyzer;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -147,7 +153,18 @@ CODE_SAMPLE
         if ($classMethod->isMagic()) {
             return \true;
         }
-        return $classMethod->params === [];
+        if ($classMethod->params === []) {
+            return \true;
+        }
+        if ($this->autowiredClassMethodAnalyzer->detect($classMethod)) {
+            return \true;
+        }
+        foreach ($classMethod->params as $param) {
+            if ($param->type !== null) {
+                return \false;
+            }
+        }
+        return \true;
     }
     /**
      * This method is perfectly sealed, nothing to downgrade here

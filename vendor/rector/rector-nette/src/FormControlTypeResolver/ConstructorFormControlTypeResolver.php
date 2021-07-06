@@ -32,9 +32,8 @@ final class ConstructorFormControlTypeResolver implements \Rector\Nette\Contract
     }
     /**
      * @required
-     * @param \Rector\Nette\NodeResolver\MethodNamesByInputNamesResolver $methodNamesByInputNamesResolver
      */
-    public function autowireConstructorFormControlTypeResolver($methodNamesByInputNamesResolver) : void
+    public function autowireConstructorFormControlTypeResolver(\Rector\Nette\NodeResolver\MethodNamesByInputNamesResolver $methodNamesByInputNamesResolver) : void
     {
         $this->methodNamesByInputNamesResolver = $methodNamesByInputNamesResolver;
     }

@@ -18,9 +18,8 @@ final class ReturnTypeResolver implements \Rector\NodeTypeResolver\Contract\Node
     private $nodeTypeResolver;
     /**
      * @required
-     * @param \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver
      */
-    public function autowireReturnTypeResolver($nodeTypeResolver) : void
+    public function autowireReturnTypeResolver(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver) : void
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
     }

@@ -70,9 +70,8 @@ final class ObjectWithoutClassTypeMapper implements \Rector\PHPStanStaticTypeMap
     }
     /**
      * @required
-     * @param \Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper $phpStanStaticTypeMapper
      */
-    public function autowireObjectWithoutClassTypeMapper($phpStanStaticTypeMapper) : void
+    public function autowireObjectWithoutClassTypeMapper(\Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper $phpStanStaticTypeMapper) : void
     {
         $this->phpStanStaticTypeMapper = $phpStanStaticTypeMapper;
     }

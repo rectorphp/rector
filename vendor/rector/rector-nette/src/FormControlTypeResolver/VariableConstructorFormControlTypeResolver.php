@@ -71,9 +71,8 @@ final class VariableConstructorFormControlTypeResolver implements \Rector\Nette\
     }
     /**
      * @required
-     * @param \Rector\Nette\NodeResolver\MethodNamesByInputNamesResolver $methodNamesByInputNamesResolver
      */
-    public function autowireVariableConstructorFormControlTypeResolver($methodNamesByInputNamesResolver) : void
+    public function autowireVariableConstructorFormControlTypeResolver(\Rector\Nette\NodeResolver\MethodNamesByInputNamesResolver $methodNamesByInputNamesResolver) : void
     {
         $this->methodNamesByInputNamesResolver = $methodNamesByInputNamesResolver;
     }

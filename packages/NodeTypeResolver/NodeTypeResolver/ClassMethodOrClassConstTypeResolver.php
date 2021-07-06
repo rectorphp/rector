@@ -22,9 +22,8 @@ final class ClassMethodOrClassConstTypeResolver implements \Rector\NodeTypeResol
     private $nodeTypeResolver;
     /**
      * @required
-     * @param \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver
      */
-    public function autowireClassMethodOrClassConstTypeResolver($nodeTypeResolver) : void
+    public function autowireClassMethodOrClassConstTypeResolver(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver) : void
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
     }

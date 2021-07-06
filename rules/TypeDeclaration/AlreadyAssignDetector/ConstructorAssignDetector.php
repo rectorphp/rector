@@ -11,10 +11,10 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeTraverser;
 use PHPStan\Type\ObjectType;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Core\ValueObject\MethodName;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\TypeDeclaration\Matcher\PropertyAssignMatcher;
+use Rector\TypeDeclaration\NodeAnalyzer\AutowiredClassMethodAnalyzer;
 use RectorPrefix20210706\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 final class ConstructorAssignDetector
 {
@@ -35,15 +35,15 @@ final class ConstructorAssignDetector
      */
     private $simpleCallableNodeTraverser;
     /**
-     * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
+     * @var \Rector\TypeDeclaration\NodeAnalyzer\AutowiredClassMethodAnalyzer
      */
-    private $phpDocInfoFactory;
-    public function __construct(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\TypeDeclaration\Matcher\PropertyAssignMatcher $propertyAssignMatcher, \RectorPrefix20210706\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory)
+    private $autowiredClassMethodAnalyzer;
+    public function __construct(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\TypeDeclaration\Matcher\PropertyAssignMatcher $propertyAssignMatcher, \RectorPrefix20210706\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\TypeDeclaration\NodeAnalyzer\AutowiredClassMethodAnalyzer $autowiredClassMethodAnalyzer)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->propertyAssignMatcher = $propertyAssignMatcher;
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
-        $this->phpDocInfoFactory = $phpDocInfoFactory;
+        $this->autowiredClassMethodAnalyzer = $autowiredClassMethodAnalyzer;
     }
     public function isPropertyAssigned(\PhpParser\Node\Stmt\ClassLike $classLike, string $propertyName) : bool
     {
@@ -115,9 +115,7 @@ final class ConstructorAssignDetector
             }
         }
         foreach ($classLike->getMethods() as $classMethod) {
-            $classMethodPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
-            // @todo add support for PHP 8 attributes
-            if (!$classMethodPhpDocInfo->hasByNames(['required', 'inject'])) {
+            if (!$this->autowiredClassMethodAnalyzer->detect($classMethod)) {
                 continue;
             }
             $initializingClassMethods[] = $classMethod;

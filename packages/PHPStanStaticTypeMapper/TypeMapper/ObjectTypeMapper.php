@@ -89,9 +89,8 @@ final class ObjectTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract
     }
     /**
      * @required
-     * @param \Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper $phpStanStaticTypeMapper
      */
-    public function autowireObjectTypeMapper($phpStanStaticTypeMapper) : void
+    public function autowireObjectTypeMapper(\Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper $phpStanStaticTypeMapper) : void
     {
         $this->phpStanStaticTypeMapper = $phpStanStaticTypeMapper;
     }

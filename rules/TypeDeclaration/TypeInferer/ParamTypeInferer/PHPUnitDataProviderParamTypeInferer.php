@@ -58,9 +58,8 @@ final class PHPUnitDataProviderParamTypeInferer implements \Rector\TypeDeclarati
     // Prevents circular reference
     /**
      * @required
-     * @param \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver
      */
-    public function autowirePHPUnitDataProviderParamTypeInferer($nodeTypeResolver) : void
+    public function autowirePHPUnitDataProviderParamTypeInferer(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver) : void
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
     }

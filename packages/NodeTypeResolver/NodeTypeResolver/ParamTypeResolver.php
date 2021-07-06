@@ -55,10 +55,8 @@ final class ParamTypeResolver implements \Rector\NodeTypeResolver\Contract\NodeT
     }
     /**
      * @required
-     * @param \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver
-     * @param \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper
      */
-    public function autowireParamTypeResolver($nodeTypeResolver, $staticTypeMapper) : void
+    public function autowireParamTypeResolver(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper) : void
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->staticTypeMapper = $staticTypeMapper;

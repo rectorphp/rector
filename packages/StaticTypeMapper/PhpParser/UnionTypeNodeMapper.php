@@ -26,9 +26,8 @@ final class UnionTypeNodeMapper implements \Rector\StaticTypeMapper\Contract\Php
     }
     /**
      * @required
-     * @param \Rector\StaticTypeMapper\Mapper\PhpParserNodeMapper $phpParserNodeMapper
      */
-    public function autowireUnionTypeNodeMapper($phpParserNodeMapper) : void
+    public function autowireUnionTypeNodeMapper(\Rector\StaticTypeMapper\Mapper\PhpParserNodeMapper $phpParserNodeMapper) : void
     {
         $this->phpParserNodeMapper = $phpParserNodeMapper;
     }

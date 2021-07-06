@@ -3130,6 +3130,7 @@ return array(
     'Rector\\TypeDeclaration\\Exception\\ConflictingPriorityException' => $baseDir . '/rules/TypeDeclaration/Exception/ConflictingPriorityException.php',
     'Rector\\TypeDeclaration\\FunctionLikeReturnTypeResolver' => $baseDir . '/rules/TypeDeclaration/FunctionLikeReturnTypeResolver.php',
     'Rector\\TypeDeclaration\\Matcher\\PropertyAssignMatcher' => $baseDir . '/rules/TypeDeclaration/Matcher/PropertyAssignMatcher.php',
+    'Rector\\TypeDeclaration\\NodeAnalyzer\\AutowiredClassMethodAnalyzer' => $baseDir . '/rules/TypeDeclaration/NodeAnalyzer/AutowiredClassMethodAnalyzer.php',
     'Rector\\TypeDeclaration\\NodeAnalyzer\\CallTypesResolver' => $baseDir . '/rules/TypeDeclaration/NodeAnalyzer/CallTypesResolver.php',
     'Rector\\TypeDeclaration\\NodeAnalyzer\\ClassMethodAndPropertyAnalyzer' => $baseDir . '/rules/TypeDeclaration/NodeAnalyzer/ClassMethodAndPropertyAnalyzer.php',
     'Rector\\TypeDeclaration\\NodeAnalyzer\\ClassMethodParamTypeCompleter' => $baseDir . '/rules/TypeDeclaration/NodeAnalyzer/ClassMethodParamTypeCompleter.php',

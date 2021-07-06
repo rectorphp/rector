@@ -43,9 +43,8 @@ trait ServiceSubscriberTrait
     }
     /**
      * @required
-     * @param \Psr\Container\ContainerInterface $container
      */
-    public function setContainer($container)
+    public function setContainer(\RectorPrefix20210706\Psr\Container\ContainerInterface $container)
     {
         $this->container = $container;
         if (\is_callable(['parent', __FUNCTION__])) {

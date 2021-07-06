@@ -61,9 +61,8 @@ final class ClassStringTypeMapper implements \Rector\PHPStanStaticTypeMapper\Con
     }
     /**
      * @required
-     * @param \Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper $phpStanStaticTypeMapper
      */
-    public function autowireClassStringTypeMapper($phpStanStaticTypeMapper) : void
+    public function autowireClassStringTypeMapper(\Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper $phpStanStaticTypeMapper) : void
     {
         $this->phpStanStaticTypeMapper = $phpStanStaticTypeMapper;
     }

@@ -45,9 +45,8 @@ final class MagicNetteFactoryInterfaceFormControlTypeResolver implements \Rector
     }
     /**
      * @required
-     * @param \Rector\Nette\NodeResolver\MethodNamesByInputNamesResolver $methodNamesByInputNamesResolver
      */
-    public function autowireMagicNetteFactoryInterfaceFormControlTypeResolver($methodNamesByInputNamesResolver) : void
+    public function autowireMagicNetteFactoryInterfaceFormControlTypeResolver(\Rector\Nette\NodeResolver\MethodNamesByInputNamesResolver $methodNamesByInputNamesResolver) : void
     {
         $this->methodNamesByInputNamesResolver = $methodNamesByInputNamesResolver;
     }

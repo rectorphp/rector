@@ -51,9 +51,8 @@ final class GetComponentMethodCallFormControlTypeResolver implements \Rector\Net
     }
     /**
      * @required
-     * @param \Rector\Nette\NodeResolver\MethodNamesByInputNamesResolver $methodNamesByInputNamesResolver
      */
-    public function autowireGetComponentMethodCallFormControlTypeResolver($methodNamesByInputNamesResolver) : void
+    public function autowireGetComponentMethodCallFormControlTypeResolver(\Rector\Nette\NodeResolver\MethodNamesByInputNamesResolver $methodNamesByInputNamesResolver) : void
     {
         $this->methodNamesByInputNamesResolver = $methodNamesByInputNamesResolver;
     }

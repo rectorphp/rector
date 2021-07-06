@@ -53,9 +53,8 @@ final class ClosureTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contrac
     }
     /**
      * @required
-     * @param \Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper $phpStanStaticTypeMapper
      */
-    public function autowireClosureTypeMapper($phpStanStaticTypeMapper) : void
+    public function autowireClosureTypeMapper(\Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper $phpStanStaticTypeMapper) : void
     {
         $this->phpStanStaticTypeMapper = $phpStanStaticTypeMapper;
     }

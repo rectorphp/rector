@@ -52,11 +52,8 @@ final class ArrayTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\
     // To avoid circular dependency
     /**
      * @required
-     * @param \Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper $phpStanStaticTypeMapper
-     * @param \Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeCommonTypeNarrower $unionTypeCommonTypeNarrower
-     * @param \PHPStan\Reflection\ReflectionProvider $reflectionProvider
      */
-    public function autowireArrayTypeMapper($phpStanStaticTypeMapper, $unionTypeCommonTypeNarrower, $reflectionProvider) : void
+    public function autowireArrayTypeMapper(\Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper $phpStanStaticTypeMapper, \Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeCommonTypeNarrower $unionTypeCommonTypeNarrower, \PHPStan\Reflection\ReflectionProvider $reflectionProvider) : void
     {
         $this->phpStanStaticTypeMapper = $phpStanStaticTypeMapper;
         $this->unionTypeCommonTypeNarrower = $unionTypeCommonTypeNarrower;
