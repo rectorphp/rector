@@ -46,6 +46,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 PhpDocNodeVisitorInterface::class,
                 Node::class,
                 NodeNameResolverInterface::class,
+                // phpstan
+                \PHPStan\BetterReflection\SourceLocator\Type\SourceLocator::class,
             ]
         ]]);
 };
