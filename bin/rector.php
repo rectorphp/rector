@@ -3,7 +3,10 @@
 declare (strict_types=1);
 namespace RectorPrefix20210706;
 
+use RectorPrefix20210706\Nette\Utils\Json;
+use Rector\ChangesReporting\Output\JsonOutputFormatter;
 use Rector\Core\Bootstrap\RectorConfigsResolver;
+use Rector\Core\Configuration\Option;
 use Rector\Core\Console\ConsoleApplication;
 use Rector\Core\Console\Style\SymfonyStyleFactory;
 use Rector\Core\DependencyInjection\RectorContainerFactory;
@@ -31,15 +34,24 @@ require_once __DIR__ . '/../src/constants.php';
 $autoloadIncluder->loadIfExistsAndNotLoadedYet(__DIR__ . '/../vendor/scoper-autoload.php');
 $autoloadIncluder->autoloadProjectAutoloaderFile();
 $autoloadIncluder->autoloadFromCommandLine();
-$symfonyStyleFactory = new \Rector\Core\Console\Style\SymfonyStyleFactory(new \RectorPrefix20210706\Symplify\PackageBuilder\Reflection\PrivatesCaller());
-$symfonyStyle = $symfonyStyleFactory->create();
 $rectorConfigsResolver = new \Rector\Core\Bootstrap\RectorConfigsResolver();
 try {
     $bootstrapConfigs = $rectorConfigsResolver->provide();
     $rectorContainerFactory = new \Rector\Core\DependencyInjection\RectorContainerFactory();
     $container = $rectorContainerFactory->createFromBootstrapConfigs($bootstrapConfigs);
 } catch (\Throwable $throwable) {
-    $symfonyStyle->error($throwable->getMessage());
+    // for json output
+    $argvInput = new \RectorPrefix20210706\Symfony\Component\Console\Input\ArgvInput();
+    $outputFormat = $argvInput->getParameterOption('--' . \Rector\Core\Configuration\Option::OUTPUT_FORMAT);
+    // report fatal error in json format
+    if ($outputFormat === \Rector\ChangesReporting\Output\JsonOutputFormatter::NAME) {
+        echo \RectorPrefix20210706\Nette\Utils\Json::encode(['fatal_errors' => [$throwable->getMessage()]]);
+    } else {
+        // report fatal errors in console format
+        $symfonyStyleFactory = new \Rector\Core\Console\Style\SymfonyStyleFactory(new \RectorPrefix20210706\Symplify\PackageBuilder\Reflection\PrivatesCaller());
+        $symfonyStyle = $symfonyStyleFactory->create();
+        $symfonyStyle->error($throwable->getMessage());
+    }
     exit(\RectorPrefix20210706\Symplify\PackageBuilder\Console\ShellCode::ERROR);
 }
 /** @var ConsoleApplication $application */
