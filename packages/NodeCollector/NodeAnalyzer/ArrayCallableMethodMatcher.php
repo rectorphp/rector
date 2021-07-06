@@ -103,7 +103,8 @@ final class ArrayCallableMethodMatcher
         if ($classConstantReference === 'static') {
             $classConstantReference = $classConstFetch->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);
         }
-        if ($classConstantReference === null) {
+        // non-class value
+        if (!\is_string($classConstantReference)) {
             return new \PHPStan\Type\MixedType();
         }
         if (!$this->reflectionProvider->hasClass($classConstantReference)) {
