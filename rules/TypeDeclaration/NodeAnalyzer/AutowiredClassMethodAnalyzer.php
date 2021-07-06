@@ -25,7 +25,7 @@ final class AutowiredClassMethodAnalyzer
         }
 
         foreach ($classMethod->attrGroups as $attrGroup) {
-            foreach ($attrGroup->getAttributes() as $attribute) {
+            foreach ($attrGroup->attrs as $attribute) {
                 if ($this->nodeNameResolver->isNames(
                     $attribute->name,
                     [Required::class, 'Nette\DI\Attributes\Inject']

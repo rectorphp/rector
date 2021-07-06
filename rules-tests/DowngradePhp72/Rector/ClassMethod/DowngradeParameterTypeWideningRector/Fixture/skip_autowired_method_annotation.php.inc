@@ -3,11 +3,12 @@
 namespace Rector\Tests\DowngradePhp72\Rector\ClassMethod\DowngradeParameterTypeWideningRector\Fixture;
 
 use Rector\NodeNameResolver\NodeNameResolver;
-use Symfony\Contracts\Service\Attribute\Required;
 
-class SkipAutowiredMethod
+class SkipAutowiredMethodAnnotation
 {
-    #[Required]
+    /**
+     * @required
+     */
     public function autowireSomeMethod(NodeNameResolver $nodeNameResolver)
     {
     }
