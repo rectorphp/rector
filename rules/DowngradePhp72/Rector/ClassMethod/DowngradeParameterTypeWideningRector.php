@@ -6,15 +6,15 @@ namespace Rector\DowngradePhp72\Rector\ClassMethod;
 use PhpParser\Node;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
-use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
+use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DowngradePhp72\PhpDoc\NativeParamToPhpDocDecorator;
-use Rector\DowngradePhp72\PHPStan\ClassLikeScopeResolver;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20210705\Webmozart\Assert\Assert;
+use RectorPrefix20210706\Webmozart\Assert\Assert;
 /**
  * @changelog https://www.php.net/manual/en/migration72.new-features.php#migration72.new-features.param-type-widening
  * @see https://3v4l.org/fOgSE
@@ -36,13 +36,13 @@ final class DowngradeParameterTypeWideningRector extends \Rector\Core\Rector\Abs
      */
     private $nativeParamToPhpDocDecorator;
     /**
-     * @var \Rector\DowngradePhp72\PHPStan\ClassLikeScopeResolver
+     * @var \PHPStan\Reflection\ReflectionProvider
      */
-    private $classLikeScopeResolver;
-    public function __construct(\Rector\DowngradePhp72\PhpDoc\NativeParamToPhpDocDecorator $nativeParamToPhpDocDecorator, \Rector\DowngradePhp72\PHPStan\ClassLikeScopeResolver $classLikeScopeResolver)
+    private $reflectionProvider;
+    public function __construct(\Rector\DowngradePhp72\PhpDoc\NativeParamToPhpDocDecorator $nativeParamToPhpDocDecorator, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
     {
         $this->nativeParamToPhpDocDecorator = $nativeParamToPhpDocDecorator;
-        $this->classLikeScopeResolver = $classLikeScopeResolver;
+        $this->reflectionProvider = $reflectionProvider;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -89,14 +89,18 @@ CODE_SAMPLE
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        $scope = $this->classLikeScopeResolver->resolveScope($node);
-        if (!$scope instanceof \PHPStan\Analyser\Scope) {
+        $classLike = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
+        if ($classLike === null) {
             return null;
         }
-        $classReflection = $scope->getClassReflection();
-        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
+        $className = $this->nodeNameResolver->getName($classLike);
+        if ($className === null) {
             return null;
         }
+        if (!$this->reflectionProvider->hasClass($className)) {
+            return null;
+        }
+        $classReflection = $this->reflectionProvider->getClass($className);
         if ($this->isSealedClass($classReflection)) {
             return null;
         }
@@ -121,7 +125,7 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $safeTypes = $configuration[self::SAFE_TYPES] ?? [];
-        \RectorPrefix20210705\Webmozart\Assert\Assert::allString($safeTypes);
+        \RectorPrefix20210706\Webmozart\Assert\Assert::allString($safeTypes);
         $this->safeTypes = $safeTypes;
     }
     private function removeParamTypeFromMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod, int $paramPosition) : void

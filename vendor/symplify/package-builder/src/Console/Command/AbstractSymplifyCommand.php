@@ -1,17 +1,17 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210705\Symplify\PackageBuilder\Console\Command;
+namespace RectorPrefix20210706\Symplify\PackageBuilder\Console\Command;
 
-use RectorPrefix20210705\Symfony\Component\Console\Command\Command;
-use RectorPrefix20210705\Symfony\Component\Console\Input\InputOption;
-use RectorPrefix20210705\Symfony\Component\Console\Style\SymfonyStyle;
-use RectorPrefix20210705\Symfony\Contracts\Service\Attribute\Required;
-use RectorPrefix20210705\Symplify\PackageBuilder\ValueObject\Option;
-use RectorPrefix20210705\Symplify\SmartFileSystem\FileSystemGuard;
-use RectorPrefix20210705\Symplify\SmartFileSystem\Finder\SmartFinder;
-use RectorPrefix20210705\Symplify\SmartFileSystem\SmartFileSystem;
-abstract class AbstractSymplifyCommand extends \RectorPrefix20210705\Symfony\Component\Console\Command\Command
+use RectorPrefix20210706\Symfony\Component\Console\Command\Command;
+use RectorPrefix20210706\Symfony\Component\Console\Input\InputOption;
+use RectorPrefix20210706\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix20210706\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix20210706\Symplify\PackageBuilder\ValueObject\Option;
+use RectorPrefix20210706\Symplify\SmartFileSystem\FileSystemGuard;
+use RectorPrefix20210706\Symplify\SmartFileSystem\Finder\SmartFinder;
+use RectorPrefix20210706\Symplify\SmartFileSystem\SmartFileSystem;
+abstract class AbstractSymplifyCommand extends \RectorPrefix20210706\Symfony\Component\Console\Command\Command
 {
     /**
      * @var \Symfony\Component\Console\Style\SymfonyStyle
@@ -32,7 +32,7 @@ abstract class AbstractSymplifyCommand extends \RectorPrefix20210705\Symfony\Com
     public function __construct()
     {
         parent::__construct();
-        $this->addOption(\RectorPrefix20210705\Symplify\PackageBuilder\ValueObject\Option::CONFIG, 'c', \RectorPrefix20210705\Symfony\Component\Console\Input\InputOption::VALUE_REQUIRED, 'Path to config file');
+        $this->addOption(\RectorPrefix20210706\Symplify\PackageBuilder\ValueObject\Option::CONFIG, 'c', \RectorPrefix20210706\Symfony\Component\Console\Input\InputOption::VALUE_REQUIRED, 'Path to config file');
     }
     /**
      * @required

@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210705;
+namespace RectorPrefix20210706;
 
 use Rector\Order\Rector\Class_\OrderPrivateMethodsByUseRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;

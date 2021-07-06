@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210705\Psr\Log;
+namespace RectorPrefix20210706\Psr\Log;
 
 /**
  * Basic Implementation of LoggerAwareInterface.
@@ -16,9 +16,9 @@ trait LoggerAwareTrait
     /**
      * Sets a logger.
      *
-     * @param LoggerInterface $logger
+     * @param \Psr\Log\LoggerInterface $logger
      */
-    public function setLogger(\RectorPrefix20210705\Psr\Log\LoggerInterface $logger)
+    public function setLogger($logger)
     {
         $this->logger = $logger;
     }

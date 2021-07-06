@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210705;
+namespace RectorPrefix20210706;
 
 if (\class_exists('t3lib_spritemanager_SpriteGenerator')) {
     return;

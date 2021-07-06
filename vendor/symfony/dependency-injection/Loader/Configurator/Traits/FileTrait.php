@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210705\Symfony\Component\DependencyInjection\Loader\Configurator\Traits;
+namespace RectorPrefix20210706\Symfony\Component\DependencyInjection\Loader\Configurator\Traits;
 
 trait FileTrait
 {
@@ -16,8 +16,9 @@ trait FileTrait
      * Sets a file to require before creating the service.
      *
      * @return $this
+     * @param string $file
      */
-    public final function file(string $file)
+    public final function file($file)
     {
         $this->definition->setFile($file);
         return $this;

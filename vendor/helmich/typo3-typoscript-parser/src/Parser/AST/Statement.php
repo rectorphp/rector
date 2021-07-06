@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210705\Helmich\TypoScriptParser\Parser\AST;
+namespace RectorPrefix20210706\Helmich\TypoScriptParser\Parser\AST;
 
 /**
  * Abstract TypoScript statement.

@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210705;
+namespace RectorPrefix20210706;
 
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Ssch\TYPO3Rector\Rector\v9\v2\GeneralUtilityGetUrlRequestHeadersRector;

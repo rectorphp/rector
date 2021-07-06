@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210705\Symplify\Astral\NodeTraverser;
+namespace RectorPrefix20210706\Symplify\Astral\NodeTraverser;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
@@ -45,9 +45,8 @@ final class SimpleCallableNodeTraverser
             }
             /**
              * @return int|Node|null
-             * @param \PhpParser\Node $node
              */
-            public function enterNode($node)
+            public function enterNode(\PhpParser\Node $node)
             {
                 $originalNode = $node;
                 $callable = $this->callable;

@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210705\TYPO3\CMS\IndexedSearch\Utility;
+namespace RectorPrefix20210706\TYPO3\CMS\IndexedSearch\Utility;
 
 if (\class_exists('TYPO3\\CMS\\IndexedSearch\\Utility\\LikeWildcard')) {
     return;

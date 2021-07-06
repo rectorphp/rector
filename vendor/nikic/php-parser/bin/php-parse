@@ -1,6 +1,6 @@
 #!/usr/bin/env php
 <?php 
-namespace RectorPrefix20210705;
+namespace RectorPrefix20210706;
 
 foreach ([__DIR__ . '/../../../autoload.php', __DIR__ . '/../vendor/autoload.php'] as $file) {
     if (\file_exists($file)) {
@@ -13,13 +13,13 @@ foreach ([__DIR__ . '/../../../autoload.php', __DIR__ . '/../vendor/autoload.php
 \ini_set('xdebug.var_display_max_children', -1);
 \ini_set('xdebug.var_display_max_data', -1);
 \ini_set('xdebug.var_display_max_depth', -1);
-list($operations, $files, $attributes) = \RectorPrefix20210705\parseArgs($argv);
+list($operations, $files, $attributes) = \RectorPrefix20210706\parseArgs($argv);
 /* Dump nodes by default */
 if (empty($operations)) {
     $operations[] = 'dump';
 }
 if (empty($files)) {
-    \RectorPrefix20210705\showHelp("Must specify at least one file.");
+    \RectorPrefix20210706\showHelp("Must specify at least one file.");
 }
 $lexer = new \PhpParser\Lexer\Emulative(['usedAttributes' => ['startLine', 'endLine', 'startFilePos', 'endFilePos', 'comments']]);
 $parser = (new \PhpParser\ParserFactory())->create(\PhpParser\ParserFactory::PREFER_PHP7, $lexer);
@@ -43,7 +43,7 @@ foreach ($files as $file) {
         $errorHandler = new \PhpParser\ErrorHandler\Collecting();
         $stmts = $parser->parse($code, $errorHandler);
         foreach ($errorHandler->getErrors() as $error) {
-            $message = \RectorPrefix20210705\formatErrorMessage($error, $code, $attributes['with-column-info']);
+            $message = \RectorPrefix20210706\formatErrorMessage($error, $code, $attributes['with-column-info']);
             \fwrite(\STDERR, $message . "\n");
         }
         if (null === $stmts) {
@@ -53,7 +53,7 @@ foreach ($files as $file) {
         try {
             $stmts = $parser->parse($code);
         } catch (\PhpParser\Error $error) {
-            $message = \RectorPrefix20210705\formatErrorMessage($error, $code, $attributes['with-column-info']);
+            $message = \RectorPrefix20210706\formatErrorMessage($error, $code, $attributes['with-column-info']);
             \fwrite(\STDERR, $message . "\n");
             exit(1);
         }
@@ -163,14 +163,14 @@ function parseArgs($args)
                 break;
             case '--help':
             case '-h':
-                \RectorPrefix20210705\showHelp();
+                \RectorPrefix20210706\showHelp();
                 break;
             case '--':
                 $parseOptions = \false;
                 break;
             default:
                 if ($arg[0] === '-') {
-                    \RectorPrefix20210705\showHelp("Invalid operation {$arg}.");
+                    \RectorPrefix20210706\showHelp("Invalid operation {$arg}.");
                 } else {
                     $files[] = $arg;
                 }

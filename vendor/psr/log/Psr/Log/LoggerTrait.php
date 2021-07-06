@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210705\Psr\Log;
+namespace RectorPrefix20210706\Psr\Log;
 
 /**
  * This is a simple Logger trait that classes unable to extend AbstractLogger
@@ -20,9 +20,9 @@ trait LoggerTrait
      *
      * @return void
      */
-    public function emergency($message, array $context = array())
+    public function emergency($message, $context = array())
     {
-        $this->log(\RectorPrefix20210705\Psr\Log\LogLevel::EMERGENCY, $message, $context);
+        $this->log(\RectorPrefix20210706\Psr\Log\LogLevel::EMERGENCY, $message, $context);
     }
     /**
      * Action must be taken immediately.
@@ -35,9 +35,9 @@ trait LoggerTrait
      *
      * @return void
      */
-    public function alert($message, array $context = array())
+    public function alert($message, $context = array())
     {
-        $this->log(\RectorPrefix20210705\Psr\Log\LogLevel::ALERT, $message, $context);
+        $this->log(\RectorPrefix20210706\Psr\Log\LogLevel::ALERT, $message, $context);
     }
     /**
      * Critical conditions.
@@ -49,9 +49,9 @@ trait LoggerTrait
      *
      * @return void
      */
-    public function critical($message, array $context = array())
+    public function critical($message, $context = array())
     {
-        $this->log(\RectorPrefix20210705\Psr\Log\LogLevel::CRITICAL, $message, $context);
+        $this->log(\RectorPrefix20210706\Psr\Log\LogLevel::CRITICAL, $message, $context);
     }
     /**
      * Runtime errors that do not require immediate action but should typically
@@ -62,9 +62,9 @@ trait LoggerTrait
      *
      * @return void
      */
-    public function error($message, array $context = array())
+    public function error($message, $context = array())
     {
-        $this->log(\RectorPrefix20210705\Psr\Log\LogLevel::ERROR, $message, $context);
+        $this->log(\RectorPrefix20210706\Psr\Log\LogLevel::ERROR, $message, $context);
     }
     /**
      * Exceptional occurrences that are not errors.
@@ -77,9 +77,9 @@ trait LoggerTrait
      *
      * @return void
      */
-    public function warning($message, array $context = array())
+    public function warning($message, $context = array())
     {
-        $this->log(\RectorPrefix20210705\Psr\Log\LogLevel::WARNING, $message, $context);
+        $this->log(\RectorPrefix20210706\Psr\Log\LogLevel::WARNING, $message, $context);
     }
     /**
      * Normal but significant events.
@@ -89,9 +89,9 @@ trait LoggerTrait
      *
      * @return void
      */
-    public function notice($message, array $context = array())
+    public function notice($message, $context = array())
     {
-        $this->log(\RectorPrefix20210705\Psr\Log\LogLevel::NOTICE, $message, $context);
+        $this->log(\RectorPrefix20210706\Psr\Log\LogLevel::NOTICE, $message, $context);
     }
     /**
      * Interesting events.
@@ -103,9 +103,9 @@ trait LoggerTrait
      *
      * @return void
      */
-    public function info($message, array $context = array())
+    public function info($message, $context = array())
     {
-        $this->log(\RectorPrefix20210705\Psr\Log\LogLevel::INFO, $message, $context);
+        $this->log(\RectorPrefix20210706\Psr\Log\LogLevel::INFO, $message, $context);
     }
     /**
      * Detailed debug information.
@@ -115,9 +115,9 @@ trait LoggerTrait
      *
      * @return void
      */
-    public function debug($message, array $context = array())
+    public function debug($message, $context = array())
     {
-        $this->log(\RectorPrefix20210705\Psr\Log\LogLevel::DEBUG, $message, $context);
+        $this->log(\RectorPrefix20210706\Psr\Log\LogLevel::DEBUG, $message, $context);
     }
     /**
      * Logs with an arbitrary level.
@@ -130,5 +130,5 @@ trait LoggerTrait
      *
      * @throws \Psr\Log\InvalidArgumentException
      */
-    public abstract function log($level, $message, array $context = array());
+    public abstract function log($level, $message, $context = array());
 }

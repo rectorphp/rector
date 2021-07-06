@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210705;
+namespace RectorPrefix20210706;
 
 if (\class_exists('Tx_Fluid_Core_Parser_Interceptor_Escape')) {
     return;

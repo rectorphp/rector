@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210705\TYPO3\CMS\Backend\Template;
+namespace RectorPrefix20210706\TYPO3\CMS\Backend\Template;
 
 if (\class_exists('TYPO3\\CMS\\Backend\\Template\\BigDocumentTemplate')) {
     return;

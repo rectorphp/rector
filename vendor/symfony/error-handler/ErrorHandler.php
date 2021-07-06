@@ -8,19 +8,19 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210705\Symfony\Component\ErrorHandler;
+namespace RectorPrefix20210706\Symfony\Component\ErrorHandler;
 
-use RectorPrefix20210705\Psr\Log\LoggerInterface;
-use RectorPrefix20210705\Psr\Log\LogLevel;
-use RectorPrefix20210705\Symfony\Component\ErrorHandler\Error\FatalError;
-use RectorPrefix20210705\Symfony\Component\ErrorHandler\Error\OutOfMemoryError;
-use RectorPrefix20210705\Symfony\Component\ErrorHandler\ErrorEnhancer\ClassNotFoundErrorEnhancer;
-use RectorPrefix20210705\Symfony\Component\ErrorHandler\ErrorEnhancer\ErrorEnhancerInterface;
-use RectorPrefix20210705\Symfony\Component\ErrorHandler\ErrorEnhancer\UndefinedFunctionErrorEnhancer;
-use RectorPrefix20210705\Symfony\Component\ErrorHandler\ErrorEnhancer\UndefinedMethodErrorEnhancer;
-use RectorPrefix20210705\Symfony\Component\ErrorHandler\ErrorRenderer\CliErrorRenderer;
-use RectorPrefix20210705\Symfony\Component\ErrorHandler\ErrorRenderer\HtmlErrorRenderer;
-use RectorPrefix20210705\Symfony\Component\ErrorHandler\Exception\SilencedErrorContext;
+use RectorPrefix20210706\Psr\Log\LoggerInterface;
+use RectorPrefix20210706\Psr\Log\LogLevel;
+use RectorPrefix20210706\Symfony\Component\ErrorHandler\Error\FatalError;
+use RectorPrefix20210706\Symfony\Component\ErrorHandler\Error\OutOfMemoryError;
+use RectorPrefix20210706\Symfony\Component\ErrorHandler\ErrorEnhancer\ClassNotFoundErrorEnhancer;
+use RectorPrefix20210706\Symfony\Component\ErrorHandler\ErrorEnhancer\ErrorEnhancerInterface;
+use RectorPrefix20210706\Symfony\Component\ErrorHandler\ErrorEnhancer\UndefinedFunctionErrorEnhancer;
+use RectorPrefix20210706\Symfony\Component\ErrorHandler\ErrorEnhancer\UndefinedMethodErrorEnhancer;
+use RectorPrefix20210706\Symfony\Component\ErrorHandler\ErrorRenderer\CliErrorRenderer;
+use RectorPrefix20210706\Symfony\Component\ErrorHandler\ErrorRenderer\HtmlErrorRenderer;
+use RectorPrefix20210706\Symfony\Component\ErrorHandler\Exception\SilencedErrorContext;
 /**
  * A generic ErrorHandler for the PHP engine.
  *
@@ -49,7 +49,7 @@ use RectorPrefix20210705\Symfony\Component\ErrorHandler\Exception\SilencedErrorC
 class ErrorHandler
 {
     private $levels = [\E_DEPRECATED => 'Deprecated', \E_USER_DEPRECATED => 'User Deprecated', \E_NOTICE => 'Notice', \E_USER_NOTICE => 'User Notice', \E_STRICT => 'Runtime Notice', \E_WARNING => 'Warning', \E_USER_WARNING => 'User Warning', \E_COMPILE_WARNING => 'Compile Warning', \E_CORE_WARNING => 'Core Warning', \E_USER_ERROR => 'User Error', \E_RECOVERABLE_ERROR => 'Catchable Fatal Error', \E_COMPILE_ERROR => 'Compile Error', \E_PARSE => 'Parse Error', \E_ERROR => 'Error', \E_CORE_ERROR => 'Core Error'];
-    private $loggers = [\E_DEPRECATED => [null, \RectorPrefix20210705\Psr\Log\LogLevel::INFO], \E_USER_DEPRECATED => [null, \RectorPrefix20210705\Psr\Log\LogLevel::INFO], \E_NOTICE => [null, \RectorPrefix20210705\Psr\Log\LogLevel::WARNING], \E_USER_NOTICE => [null, \RectorPrefix20210705\Psr\Log\LogLevel::WARNING], \E_STRICT => [null, \RectorPrefix20210705\Psr\Log\LogLevel::WARNING], \E_WARNING => [null, \RectorPrefix20210705\Psr\Log\LogLevel::WARNING], \E_USER_WARNING => [null, \RectorPrefix20210705\Psr\Log\LogLevel::WARNING], \E_COMPILE_WARNING => [null, \RectorPrefix20210705\Psr\Log\LogLevel::WARNING], \E_CORE_WARNING => [null, \RectorPrefix20210705\Psr\Log\LogLevel::WARNING], \E_USER_ERROR => [null, \RectorPrefix20210705\Psr\Log\LogLevel::CRITICAL], \E_RECOVERABLE_ERROR => [null, \RectorPrefix20210705\Psr\Log\LogLevel::CRITICAL], \E_COMPILE_ERROR => [null, \RectorPrefix20210705\Psr\Log\LogLevel::CRITICAL], \E_PARSE => [null, \RectorPrefix20210705\Psr\Log\LogLevel::CRITICAL], \E_ERROR => [null, \RectorPrefix20210705\Psr\Log\LogLevel::CRITICAL], \E_CORE_ERROR => [null, \RectorPrefix20210705\Psr\Log\LogLevel::CRITICAL]];
+    private $loggers = [\E_DEPRECATED => [null, \RectorPrefix20210706\Psr\Log\LogLevel::INFO], \E_USER_DEPRECATED => [null, \RectorPrefix20210706\Psr\Log\LogLevel::INFO], \E_NOTICE => [null, \RectorPrefix20210706\Psr\Log\LogLevel::WARNING], \E_USER_NOTICE => [null, \RectorPrefix20210706\Psr\Log\LogLevel::WARNING], \E_STRICT => [null, \RectorPrefix20210706\Psr\Log\LogLevel::WARNING], \E_WARNING => [null, \RectorPrefix20210706\Psr\Log\LogLevel::WARNING], \E_USER_WARNING => [null, \RectorPrefix20210706\Psr\Log\LogLevel::WARNING], \E_COMPILE_WARNING => [null, \RectorPrefix20210706\Psr\Log\LogLevel::WARNING], \E_CORE_WARNING => [null, \RectorPrefix20210706\Psr\Log\LogLevel::WARNING], \E_USER_ERROR => [null, \RectorPrefix20210706\Psr\Log\LogLevel::CRITICAL], \E_RECOVERABLE_ERROR => [null, \RectorPrefix20210706\Psr\Log\LogLevel::CRITICAL], \E_COMPILE_ERROR => [null, \RectorPrefix20210706\Psr\Log\LogLevel::CRITICAL], \E_PARSE => [null, \RectorPrefix20210706\Psr\Log\LogLevel::CRITICAL], \E_ERROR => [null, \RectorPrefix20210706\Psr\Log\LogLevel::CRITICAL], \E_CORE_ERROR => [null, \RectorPrefix20210706\Psr\Log\LogLevel::CRITICAL]];
     private $thrownErrors = 0x1fff;
     // E_ALL - E_DEPRECATED - E_USER_DEPRECATED
     private $scopedErrors = 0x1fff;
@@ -139,7 +139,7 @@ class ErrorHandler
             \restore_error_handler();
         }
     }
-    public function __construct(\RectorPrefix20210705\Symfony\Component\ErrorHandler\BufferingLogger $bootstrappingLogger = null, bool $debug = \false)
+    public function __construct(\RectorPrefix20210706\Symfony\Component\ErrorHandler\BufferingLogger $bootstrappingLogger = null, bool $debug = \false)
     {
         if ($bootstrappingLogger) {
             $this->bootstrappingLogger = $bootstrappingLogger;
@@ -163,7 +163,7 @@ class ErrorHandler
      * @param array|int       $levels  An array map of E_* to LogLevel::* or an integer bit field of E_* constants
      * @param bool            $replace Whether to replace or not any existing logger
      */
-    public function setDefaultLogger(\RectorPrefix20210705\Psr\Log\LoggerInterface $logger, $levels = \E_ALL, bool $replace = \false) : void
+    public function setDefaultLogger(\RectorPrefix20210706\Psr\Log\LoggerInterface $logger, $levels = \E_ALL, bool $replace = \false) : void
     {
         $loggers = [];
         if (\is_array($levels)) {
@@ -210,7 +210,7 @@ class ErrorHandler
             }
             if (null === $log[0]) {
                 $this->loggedErrors &= ~$type;
-            } elseif ($log[0] instanceof \RectorPrefix20210705\Psr\Log\LoggerInterface) {
+            } elseif ($log[0] instanceof \RectorPrefix20210706\Psr\Log\LoggerInterface) {
                 $this->loggedErrors |= $type;
             } else {
                 throw new \InvalidArgumentException('Invalid logger provided.');
@@ -223,7 +223,7 @@ class ErrorHandler
         $this->reRegister($prevLogged | $this->thrownErrors);
         if ($flush) {
             foreach ($this->bootstrappingLogger->cleanLogs() as $log) {
-                $type = \RectorPrefix20210705\Symfony\Component\ErrorHandler\ThrowableUtils::getSeverity($log[2]['exception']);
+                $type = \RectorPrefix20210706\Symfony\Component\ErrorHandler\ThrowableUtils::getSeverity($log[2]['exception']);
                 if (!isset($flush[$type])) {
                     $this->bootstrappingLogger->log($log[0], $log[1], $log[2]);
                 } elseif ($this->loggers[$type][0]) {
@@ -370,7 +370,7 @@ class ErrorHandler
         } elseif (!$throw && !($type & $level)) {
             if (!isset(self::$silencedErrorCache[$id = $file . ':' . $line])) {
                 $lightTrace = $this->tracedErrors & $type ? $this->cleanTrace(\debug_backtrace(\DEBUG_BACKTRACE_IGNORE_ARGS, 5), $type, $file, $line, \false) : [];
-                $errorAsException = new \RectorPrefix20210705\Symfony\Component\ErrorHandler\Exception\SilencedErrorContext($type, $file, $line, isset($lightTrace[1]) ? [$lightTrace[0]] : $lightTrace);
+                $errorAsException = new \RectorPrefix20210706\Symfony\Component\ErrorHandler\Exception\SilencedErrorContext($type, $file, $line, isset($lightTrace[1]) ? [$lightTrace[0]] : $lightTrace);
             } elseif (isset(self::$silencedErrorCache[$id][$message])) {
                 $lightTrace = null;
                 $errorAsException = self::$silencedErrorCache[$id][$message];
@@ -447,7 +447,7 @@ class ErrorHandler
             }
             try {
                 $this->isRecursive = \true;
-                $level = $type & $level ? $this->loggers[$type][1] : \RectorPrefix20210705\Psr\Log\LogLevel::DEBUG;
+                $level = $type & $level ? $this->loggers[$type][1] : \RectorPrefix20210706\Psr\Log\LogLevel::DEBUG;
                 $this->loggers[$type][0]->log($level, $logMessage, $errorAsException ? ['exception' => $errorAsException] : []);
             } finally {
                 $this->isRecursive = \false;
@@ -466,9 +466,9 @@ class ErrorHandler
     public function handleException(\Throwable $exception)
     {
         $handlerException = null;
-        if (!$exception instanceof \RectorPrefix20210705\Symfony\Component\ErrorHandler\Error\FatalError) {
+        if (!$exception instanceof \RectorPrefix20210706\Symfony\Component\ErrorHandler\Error\FatalError) {
             self::$exitCode = 255;
-            $type = \RectorPrefix20210705\Symfony\Component\ErrorHandler\ThrowableUtils::getSeverity($exception);
+            $type = \RectorPrefix20210706\Symfony\Component\ErrorHandler\ThrowableUtils::getSeverity($exception);
         } else {
             $type = $exception->getError()['type'];
         }
@@ -476,7 +476,7 @@ class ErrorHandler
             if (\false !== \strpos($message = $exception->getMessage(), "@anonymous\0")) {
                 $message = $this->parseAnonymousClass($message);
             }
-            if ($exception instanceof \RectorPrefix20210705\Symfony\Component\ErrorHandler\Error\FatalError) {
+            if ($exception instanceof \RectorPrefix20210706\Symfony\Component\ErrorHandler\Error\FatalError) {
                 $message = 'Fatal ' . $message;
             } elseif ($exception instanceof \Error) {
                 $message = 'Uncaught Error: ' . $message;
@@ -490,7 +490,7 @@ class ErrorHandler
             } catch (\Throwable $handlerException) {
             }
         }
-        if (!$exception instanceof \RectorPrefix20210705\Symfony\Component\ErrorHandler\Error\OutOfMemoryError) {
+        if (!$exception instanceof \RectorPrefix20210706\Symfony\Component\ErrorHandler\Error\OutOfMemoryError) {
             foreach ($this->getErrorEnhancers() as $errorEnhancer) {
                 if ($e = $errorEnhancer->enhance($exception)) {
                     $exception = $e;
@@ -574,9 +574,9 @@ class ErrorHandler
             $handler->throwAt(0, \true);
             $trace = $error['backtrace'] ?? null;
             if (0 === \strpos($error['message'], 'Allowed memory') || 0 === \strpos($error['message'], 'Out of memory')) {
-                $fatalError = new \RectorPrefix20210705\Symfony\Component\ErrorHandler\Error\OutOfMemoryError($handler->levels[$error['type']] . ': ' . $error['message'], 0, $error, 2, \false, $trace);
+                $fatalError = new \RectorPrefix20210706\Symfony\Component\ErrorHandler\Error\OutOfMemoryError($handler->levels[$error['type']] . ': ' . $error['message'], 0, $error, 2, \false, $trace);
             } else {
-                $fatalError = new \RectorPrefix20210705\Symfony\Component\ErrorHandler\Error\FatalError($handler->levels[$error['type']] . ': ' . $error['message'], 0, $error, 2, \true, $trace);
+                $fatalError = new \RectorPrefix20210706\Symfony\Component\ErrorHandler\Error\FatalError($handler->levels[$error['type']] . ': ' . $error['message'], 0, $error, 2, \true, $trace);
             }
         } else {
             $fatalError = null;
@@ -586,7 +586,7 @@ class ErrorHandler
                 self::$exitCode = 255;
                 $handler->handleException($fatalError);
             }
-        } catch (\RectorPrefix20210705\Symfony\Component\ErrorHandler\Error\FatalError $e) {
+        } catch (\RectorPrefix20210706\Symfony\Component\ErrorHandler\Error\FatalError $e) {
             // Ignore this re-throw
         }
         if ($exit && self::$exitCode) {
@@ -604,7 +604,7 @@ class ErrorHandler
      */
     private function renderException(\Throwable $exception) : void
     {
-        $renderer = \in_array(\PHP_SAPI, ['cli', 'phpdbg'], \true) ? new \RectorPrefix20210705\Symfony\Component\ErrorHandler\ErrorRenderer\CliErrorRenderer() : new \RectorPrefix20210705\Symfony\Component\ErrorHandler\ErrorRenderer\HtmlErrorRenderer($this->debug);
+        $renderer = \in_array(\PHP_SAPI, ['cli', 'phpdbg'], \true) ? new \RectorPrefix20210706\Symfony\Component\ErrorHandler\ErrorRenderer\CliErrorRenderer() : new \RectorPrefix20210706\Symfony\Component\ErrorHandler\ErrorRenderer\HtmlErrorRenderer($this->debug);
         $exception = $renderer->render($exception);
         if (!\headers_sent()) {
             \http_response_code($exception->getStatusCode());
@@ -621,7 +621,7 @@ class ErrorHandler
      */
     protected function getErrorEnhancers() : iterable
     {
-        return [new \RectorPrefix20210705\Symfony\Component\ErrorHandler\ErrorEnhancer\UndefinedFunctionErrorEnhancer(), new \RectorPrefix20210705\Symfony\Component\ErrorHandler\ErrorEnhancer\UndefinedMethodErrorEnhancer(), new \RectorPrefix20210705\Symfony\Component\ErrorHandler\ErrorEnhancer\ClassNotFoundErrorEnhancer()];
+        return [new \RectorPrefix20210706\Symfony\Component\ErrorHandler\ErrorEnhancer\UndefinedFunctionErrorEnhancer(), new \RectorPrefix20210706\Symfony\Component\ErrorHandler\ErrorEnhancer\UndefinedMethodErrorEnhancer(), new \RectorPrefix20210706\Symfony\Component\ErrorHandler\ErrorEnhancer\ClassNotFoundErrorEnhancer()];
     }
     /**
      * Cleans the trace by removing function arguments and the frames added by the error handler and DebugClassLoader.
@@ -648,9 +648,9 @@ class ErrorHandler
                 }
             }
         }
-        if (\class_exists(\RectorPrefix20210705\Symfony\Component\ErrorHandler\DebugClassLoader::class, \false)) {
+        if (\class_exists(\RectorPrefix20210706\Symfony\Component\ErrorHandler\DebugClassLoader::class, \false)) {
             for ($i = \count($lightTrace) - 2; 0 < $i; --$i) {
-                if (\RectorPrefix20210705\Symfony\Component\ErrorHandler\DebugClassLoader::class === ($lightTrace[$i]['class'] ?? null)) {
+                if (\RectorPrefix20210706\Symfony\Component\ErrorHandler\DebugClassLoader::class === ($lightTrace[$i]['class'] ?? null)) {
                     \array_splice($lightTrace, --$i, 2);
                 }
             }

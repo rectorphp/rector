@@ -7,22 +7,31 @@ use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\PhpParser\Printer\NodesWithFileDestinationPrinter;
 use Rector\FileSystemRector\ValueObject\AddedFileWithContent;
 use Symplify\SmartFileSystem\SmartFileInfo;
-use RectorPrefix20210705\Webmozart\Assert\Assert;
+use RectorPrefix20210706\Webmozart\Assert\Assert;
 /**
  * @property-read RemovedAndAddedFilesCollector $removedAndAddedFilesCollector
  */
 trait MovingFilesTrait
 {
-    protected function assertFileWasNotChanged(\Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo) : void
+    /**
+     * @param \Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo
+     */
+    protected function assertFileWasNotChanged($smartFileInfo) : void
     {
         $hasFileInfo = $this->removedAndAddedFilesCollector->isFileRemoved($smartFileInfo);
         $this->assertFalse($hasFileInfo);
     }
-    protected function assertFileWasAdded(\Rector\FileSystemRector\ValueObject\AddedFileWithContent $addedFileWithContent) : void
+    /**
+     * @param \Rector\FileSystemRector\ValueObject\AddedFileWithContent $addedFileWithContent
+     */
+    protected function assertFileWasAdded($addedFileWithContent) : void
     {
         $this->assertFilesWereAdded([$addedFileWithContent]);
     }
-    protected function assertFileWasRemoved(\Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo) : void
+    /**
+     * @param \Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo
+     */
+    protected function assertFileWasRemoved($smartFileInfo) : void
     {
         $isFileRemoved = $this->removedAndAddedFilesCollector->isFileRemoved($smartFileInfo);
         $this->assertTrue($isFileRemoved);
@@ -30,14 +39,14 @@ trait MovingFilesTrait
     /**
      * @param AddedFileWithContent[] $expectedAddedFileWithContents
      */
-    protected function assertFilesWereAdded(array $expectedAddedFileWithContents) : void
+    protected function assertFilesWereAdded($expectedAddedFileWithContents) : void
     {
-        \RectorPrefix20210705\Webmozart\Assert\Assert::allIsAOf($expectedAddedFileWithContents, \Rector\FileSystemRector\ValueObject\AddedFileWithContent::class);
+        \RectorPrefix20210706\Webmozart\Assert\Assert::allIsAOf($expectedAddedFileWithContents, \Rector\FileSystemRector\ValueObject\AddedFileWithContent::class);
         \sort($expectedAddedFileWithContents);
         $addedFilePathsWithContents = $this->resolveAddedFilePathsWithContents();
         \sort($addedFilePathsWithContents);
         // there should be at least some added files
-        \RectorPrefix20210705\Webmozart\Assert\Assert::notEmpty($addedFilePathsWithContents);
+        \RectorPrefix20210706\Webmozart\Assert\Assert::notEmpty($addedFilePathsWithContents);
         foreach ($addedFilePathsWithContents as $key => $addedFilePathWithContent) {
             $expectedFilePathWithContent = $expectedAddedFileWithContents[$key];
             /**

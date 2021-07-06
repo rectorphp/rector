@@ -8,12 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210705\Symfony\Component\Console\Tester;
+namespace RectorPrefix20210706\Symfony\Component\Console\Tester;
 
-use RectorPrefix20210705\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix20210705\Symfony\Component\Console\Output\ConsoleOutput;
-use RectorPrefix20210705\Symfony\Component\Console\Output\OutputInterface;
-use RectorPrefix20210705\Symfony\Component\Console\Output\StreamOutput;
+use RectorPrefix20210706\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix20210706\Symfony\Component\Console\Output\ConsoleOutput;
+use RectorPrefix20210706\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix20210706\Symfony\Component\Console\Output\StreamOutput;
 /**
  * @author Amrouche Hamza <hamza.simperfit@gmail.com>
  */
@@ -29,8 +29,9 @@ trait TesterTrait
      * @throws \RuntimeException If it's called before the execute method
      *
      * @return string The display
+     * @param bool $normalize
      */
-    public function getDisplay(bool $normalize = \false)
+    public function getDisplay($normalize = \false)
     {
         if (null === $this->output) {
             throw new \RuntimeException('Output not initialized, did you execute the command before requesting the display?');
@@ -49,7 +50,7 @@ trait TesterTrait
      *
      * @return string
      */
-    public function getErrorOutput(bool $normalize = \false)
+    public function getErrorOutput($normalize = \false)
     {
         if (!$this->captureStreamsIndependently) {
             throw new \LogicException('The error output is not available when the tester is run without "capture_stderr_separately" option set.');
@@ -101,7 +102,7 @@ trait TesterTrait
      *
      * @return $this
      */
-    public function setInputs(array $inputs)
+    public function setInputs($inputs)
     {
         $this->inputs = $inputs;
         return $this;
@@ -119,7 +120,7 @@ trait TesterTrait
     {
         $this->captureStreamsIndependently = \array_key_exists('capture_stderr_separately', $options) && $options['capture_stderr_separately'];
         if (!$this->captureStreamsIndependently) {
-            $this->output = new \RectorPrefix20210705\Symfony\Component\Console\Output\StreamOutput(\fopen('php://memory', 'w', \false));
+            $this->output = new \RectorPrefix20210706\Symfony\Component\Console\Output\StreamOutput(\fopen('php://memory', 'w', \false));
             if (isset($options['decorated'])) {
                 $this->output->setDecorated($options['decorated']);
             }
@@ -127,8 +128,8 @@ trait TesterTrait
                 $this->output->setVerbosity($options['verbosity']);
             }
         } else {
-            $this->output = new \RectorPrefix20210705\Symfony\Component\Console\Output\ConsoleOutput($options['verbosity'] ?? \RectorPrefix20210705\Symfony\Component\Console\Output\ConsoleOutput::VERBOSITY_NORMAL, $options['decorated'] ?? null);
-            $errorOutput = new \RectorPrefix20210705\Symfony\Component\Console\Output\StreamOutput(\fopen('php://memory', 'w', \false));
+            $this->output = new \RectorPrefix20210706\Symfony\Component\Console\Output\ConsoleOutput($options['verbosity'] ?? \RectorPrefix20210706\Symfony\Component\Console\Output\ConsoleOutput::VERBOSITY_NORMAL, $options['decorated'] ?? null);
+            $errorOutput = new \RectorPrefix20210706\Symfony\Component\Console\Output\StreamOutput(\fopen('php://memory', 'w', \false));
             $errorOutput->setFormatter($this->output->getFormatter());
             $errorOutput->setVerbosity($this->output->getVerbosity());
             $errorOutput->setDecorated($this->output->isDecorated());

@@ -1,19 +1,19 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210705\Symplify\VendorPatches\Command;
+namespace RectorPrefix20210706\Symplify\VendorPatches\Command;
 
-use RectorPrefix20210705\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix20210705\Symfony\Component\Console\Output\OutputInterface;
-use RectorPrefix20210705\Symplify\PackageBuilder\Composer\VendorDirProvider;
-use RectorPrefix20210705\Symplify\PackageBuilder\Console\Command\AbstractSymplifyCommand;
-use RectorPrefix20210705\Symplify\PackageBuilder\Console\ShellCode;
-use RectorPrefix20210705\Symplify\VendorPatches\Composer\ComposerPatchesConfigurationUpdater;
-use RectorPrefix20210705\Symplify\VendorPatches\Console\GenerateCommandReporter;
-use RectorPrefix20210705\Symplify\VendorPatches\Differ\PatchDiffer;
-use RectorPrefix20210705\Symplify\VendorPatches\Finder\OldToNewFilesFinder;
-use RectorPrefix20210705\Symplify\VendorPatches\PatchFileFactory;
-final class GenerateCommand extends \RectorPrefix20210705\Symplify\PackageBuilder\Console\Command\AbstractSymplifyCommand
+use RectorPrefix20210706\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix20210706\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix20210706\Symplify\PackageBuilder\Composer\VendorDirProvider;
+use RectorPrefix20210706\Symplify\PackageBuilder\Console\Command\AbstractSymplifyCommand;
+use RectorPrefix20210706\Symplify\PackageBuilder\Console\ShellCode;
+use RectorPrefix20210706\Symplify\VendorPatches\Composer\ComposerPatchesConfigurationUpdater;
+use RectorPrefix20210706\Symplify\VendorPatches\Console\GenerateCommandReporter;
+use RectorPrefix20210706\Symplify\VendorPatches\Differ\PatchDiffer;
+use RectorPrefix20210706\Symplify\VendorPatches\Finder\OldToNewFilesFinder;
+use RectorPrefix20210706\Symplify\VendorPatches\PatchFileFactory;
+final class GenerateCommand extends \RectorPrefix20210706\Symplify\PackageBuilder\Console\Command\AbstractSymplifyCommand
 {
     /**
      * @var \Symplify\VendorPatches\Finder\OldToNewFilesFinder
@@ -39,7 +39,7 @@ final class GenerateCommand extends \RectorPrefix20210705\Symplify\PackageBuilde
      * @var \Symplify\VendorPatches\Console\GenerateCommandReporter
      */
     private $generateCommandReporter;
-    public function __construct(\RectorPrefix20210705\Symplify\VendorPatches\Finder\OldToNewFilesFinder $oldToNewFilesFinder, \RectorPrefix20210705\Symplify\VendorPatches\Differ\PatchDiffer $patchDiffer, \RectorPrefix20210705\Symplify\VendorPatches\Composer\ComposerPatchesConfigurationUpdater $composerPatchesConfigurationUpdater, \RectorPrefix20210705\Symplify\PackageBuilder\Composer\VendorDirProvider $vendorDirProvider, \RectorPrefix20210705\Symplify\VendorPatches\PatchFileFactory $patchFileFactory, \RectorPrefix20210705\Symplify\VendorPatches\Console\GenerateCommandReporter $generateCommandReporter)
+    public function __construct(\RectorPrefix20210706\Symplify\VendorPatches\Finder\OldToNewFilesFinder $oldToNewFilesFinder, \RectorPrefix20210706\Symplify\VendorPatches\Differ\PatchDiffer $patchDiffer, \RectorPrefix20210706\Symplify\VendorPatches\Composer\ComposerPatchesConfigurationUpdater $composerPatchesConfigurationUpdater, \RectorPrefix20210706\Symplify\PackageBuilder\Composer\VendorDirProvider $vendorDirProvider, \RectorPrefix20210706\Symplify\VendorPatches\PatchFileFactory $patchFileFactory, \RectorPrefix20210706\Symplify\VendorPatches\Console\GenerateCommandReporter $generateCommandReporter)
     {
         $this->oldToNewFilesFinder = $oldToNewFilesFinder;
         $this->patchDiffer = $patchDiffer;
@@ -91,6 +91,6 @@ final class GenerateCommand extends \RectorPrefix20210705\Symplify\PackageBuilde
         } else {
             $this->symfonyStyle->success('No new patches were added');
         }
-        return \RectorPrefix20210705\Symplify\PackageBuilder\Console\ShellCode::SUCCESS;
+        return \RectorPrefix20210706\Symplify\PackageBuilder\Console\ShellCode::SUCCESS;
     }
 }

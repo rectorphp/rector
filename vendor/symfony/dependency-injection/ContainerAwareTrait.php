@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210705\Symfony\Component\DependencyInjection;
+namespace RectorPrefix20210706\Symfony\Component\DependencyInjection;
 
 /**
  * ContainerAware trait.
@@ -21,7 +21,10 @@ trait ContainerAwareTrait
      * @var ContainerInterface
      */
     protected $container;
-    public function setContainer(\RectorPrefix20210705\Symfony\Component\DependencyInjection\ContainerInterface $container = null)
+    /**
+     * @param \Symfony\Component\DependencyInjection\ContainerInterface|null $container
+     */
+    public function setContainer($container = null)
     {
         $this->container = $container;
     }
