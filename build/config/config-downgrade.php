@@ -50,6 +50,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 // phpstan
                 SourceLocator::class,
                 \PHPStan\PhpDocParser\Ast\Node::class,
+                \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode::class,
+                \PHPStan\PhpDocParser\Ast\NodeAttributes::class,
             ]
         ]]);
 };
