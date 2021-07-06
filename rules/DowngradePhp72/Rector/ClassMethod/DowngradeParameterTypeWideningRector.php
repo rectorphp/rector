@@ -7,12 +7,12 @@ namespace Rector\DowngradePhp72\Rector\ClassMethod;
 use PhpParser\Node;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
-use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
+use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DowngradePhp72\PhpDoc\NativeParamToPhpDocDecorator;
-use Rector\DowngradePhp72\PHPStan\ClassLikeScopeResolver;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Webmozart\Assert\Assert;
@@ -37,7 +37,7 @@ final class DowngradeParameterTypeWideningRector extends AbstractRector implemen
 
     public function __construct(
         private NativeParamToPhpDocDecorator $nativeParamToPhpDocDecorator,
-        private ClassLikeScopeResolver $classLikeScopeResolver
+        private ReflectionProvider $reflectionProvider
     ) {
     }
 
@@ -96,16 +96,21 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $scope = $this->classLikeScopeResolver->resolveScope($node);
-        if (! $scope instanceof Scope) {
+        $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
+        if ($classLike === null) {
             return null;
         }
 
-        $classReflection = $scope->getClassReflection();
-        if (! $classReflection instanceof ClassReflection) {
+        $className = $this->nodeNameResolver->getName($classLike);
+        if ($className === null) {
             return null;
         }
 
+        if (! $this->reflectionProvider->hasClass($className)) {
+            return null;
+        }
+
+        $classReflection = $this->reflectionProvider->getClass($className);
         if ($this->isSealedClass($classReflection)) {
             return null;
         }
