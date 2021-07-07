@@ -23,6 +23,21 @@ class SkipMixedUnionNeverArrayType
     }
 
     /**
+     * @return stdClass[]|DateTime[]
+     */
+    public function provideForVendor2(array $items): array
+    {
+        if (rand(0,1)) {
+            /** @var stdClass[]|DateTime[] $value */
+            $value = $this->getData();
+
+            return $value;
+        }
+
+        return [];
+    }
+
+    /**
      * @return \stdClass[]|\DateTime[]
      */
     private function getData()
