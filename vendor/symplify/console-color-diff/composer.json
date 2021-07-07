@@ -9,19 +9,19 @@
         "sebastian\/diff": "^4.0",
         "symfony\/dependency-injection": "^5.3",
         "symfony\/http-kernel": "^5.3",
-        "symplify\/package-builder": "^9.4.11"
+        "symplify\/package-builder": "^9.4.12"
     },
     "require-dev": {
         "phpunit\/phpunit": "^9.5"
     },
     "autoload": {
         "psr-4": {
-            "RectorPrefix20210706\\Symplify\\ConsoleColorDiff\\": "src"
+            "RectorPrefix20210707\\Symplify\\ConsoleColorDiff\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "RectorPrefix20210706\\Symplify\\ConsoleColorDiff\\Tests\\": "tests"
+            "RectorPrefix20210707\\Symplify\\ConsoleColorDiff\\Tests\\": "tests"
         }
     },
     "extra": {

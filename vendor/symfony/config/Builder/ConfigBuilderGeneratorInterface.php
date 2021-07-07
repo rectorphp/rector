@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210706\Symfony\Component\Config\Builder;
+namespace RectorPrefix20210707\Symfony\Component\Config\Builder;
 
-use RectorPrefix20210706\Symfony\Component\Config\Definition\ConfigurationInterface;
+use RectorPrefix20210707\Symfony\Component\Config\Definition\ConfigurationInterface;
 /**
  * Generates ConfigBuilders to help create valid config.
  *

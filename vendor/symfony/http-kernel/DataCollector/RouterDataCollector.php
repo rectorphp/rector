@@ -8,16 +8,16 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210706\Symfony\Component\HttpKernel\DataCollector;
+namespace RectorPrefix20210707\Symfony\Component\HttpKernel\DataCollector;
 
-use RectorPrefix20210706\Symfony\Component\HttpFoundation\RedirectResponse;
-use RectorPrefix20210706\Symfony\Component\HttpFoundation\Request;
-use RectorPrefix20210706\Symfony\Component\HttpFoundation\Response;
-use RectorPrefix20210706\Symfony\Component\HttpKernel\Event\ControllerEvent;
+use RectorPrefix20210707\Symfony\Component\HttpFoundation\RedirectResponse;
+use RectorPrefix20210707\Symfony\Component\HttpFoundation\Request;
+use RectorPrefix20210707\Symfony\Component\HttpFoundation\Response;
+use RectorPrefix20210707\Symfony\Component\HttpKernel\Event\ControllerEvent;
 /**
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class RouterDataCollector extends \RectorPrefix20210706\Symfony\Component\HttpKernel\DataCollector\DataCollector
+class RouterDataCollector extends \RectorPrefix20210707\Symfony\Component\HttpKernel\DataCollector\DataCollector
 {
     /**
      * @var \SplObjectStorage
@@ -37,7 +37,7 @@ class RouterDataCollector extends \RectorPrefix20210706\Symfony\Component\HttpKe
      */
     public function collect($request, $response, $exception = null)
     {
-        if ($response instanceof \RectorPrefix20210706\Symfony\Component\HttpFoundation\RedirectResponse) {
+        if ($response instanceof \RectorPrefix20210707\Symfony\Component\HttpFoundation\RedirectResponse) {
             $this->data['redirect'] = \true;
             $this->data['url'] = $response->getTargetUrl();
             if ($this->controllers->contains($request)) {

@@ -16,8 +16,8 @@ use PHPStan\Type\UnionType;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\StaticTypeMapper\TypeFactory\UnionTypeFactory;
 use Rector\TypeDeclaration\ValueObject\NestedArrayType;
-use RectorPrefix20210706\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
-use RectorPrefix20210706\Symplify\SimplePhpDocParser\PhpDocNodeTraverser;
+use RectorPrefix20210707\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
+use RectorPrefix20210707\Symplify\SimplePhpDocParser\PhpDocNodeTraverser;
 /**
  * @see \Rector\Tests\TypeDeclaration\TypeNormalizerTest
  */
@@ -43,7 +43,7 @@ final class TypeNormalizer
         \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory $typeFactory,
         \Rector\StaticTypeMapper\TypeFactory\UnionTypeFactory $unionTypeFactory,
         //        private PhpDocNodeTraverser $phpDocNodeTraverser,
-        \RectorPrefix20210706\Symplify\PackageBuilder\Reflection\PrivatesAccessor $privatesAccessor
+        \RectorPrefix20210707\Symplify\PackageBuilder\Reflection\PrivatesAccessor $privatesAccessor
     )
     {
         $this->typeFactory = $typeFactory;
@@ -102,23 +102,22 @@ final class TypeNormalizer
     public function normalizeArrayTypeAndArrayNever(\PHPStan\Type\Type $type) : \PHPStan\Type\Type
     {
         return \PHPStan\Type\TypeTraverser::map($type, function (\PHPStan\Type\Type $traversedType, callable $traverserCallable) : Type {
-            if ($traversedType instanceof \PHPStan\Type\Constant\ConstantArrayType && $traversedType->getKeyType() instanceof \PHPStan\Type\NeverType && $traversedType->getItemType() instanceof \PHPStan\Type\NeverType) {
+            if ($this->isConstantArrayNever($traversedType)) {
                 // not sure why, but with direct new node everything gets nulled to MixedType
                 $this->privatesAccessor->setPrivateProperty($traversedType, 'keyType', new \PHPStan\Type\MixedType());
                 $this->privatesAccessor->setPrivateProperty($traversedType, 'itemType', new \PHPStan\Type\MixedType());
                 return $traversedType;
             }
             if ($traversedType instanceof \PHPStan\Type\UnionType) {
-                $collectedTypes = [];
-                foreach ($traversedType->getTypes() as $unionedType) {
-                    // basically an empty array - not useful at all
-                    if ($this->isArrayNeverType($unionedType)) {
-                        continue;
-                    }
-                    $collectedTypes[] = $unionedType;
+                $traversedTypeTypes = $traversedType->getTypes();
+                $countTraversedTypes = \count($traversedTypeTypes);
+                if ($this->isUnionMixedArrayNeverType($countTraversedTypes, $traversedTypeTypes)) {
+                    return new \PHPStan\Type\MixedType();
                 }
+                $collectedTypes = $this->getCollectedTypes($traversedTypeTypes);
+                $countCollectedTypes = \count($collectedTypes);
                 // re-create new union types
-                if (\count($traversedType->getTypes()) !== \count($collectedTypes)) {
+                if ($countTraversedTypes !== $countCollectedTypes && $countTraversedTypes > 2) {
                     return $this->typeFactory->createMixedPassedOrUnionType($collectedTypes);
                 }
             }
@@ -127,6 +126,33 @@ final class TypeNormalizer
             }
             return $traverserCallable($traversedType, $traverserCallable);
         });
+    }
+    private function isConstantArrayNever(\PHPStan\Type\Type $type) : bool
+    {
+        return $type instanceof \PHPStan\Type\Constant\ConstantArrayType && $type->getKeyType() instanceof \PHPStan\Type\NeverType && $type->getItemType() instanceof \PHPStan\Type\NeverType;
+    }
+    /**
+     * @param Type[] $traversedTypeTypes
+     * @return Type[]
+     */
+    private function getCollectedTypes(array $traversedTypeTypes) : array
+    {
+        $collectedTypes = [];
+        foreach ($traversedTypeTypes as $traversedTypeType) {
+            // basically an empty array - not useful at all
+            if ($this->isArrayNeverType($traversedTypeType)) {
+                continue;
+            }
+            $collectedTypes[] = $traversedTypeType;
+        }
+        return $collectedTypes;
+    }
+    /**
+     * @param Type[] $traversedTypeTypes
+     */
+    private function isUnionMixedArrayNeverType(int $countTraversedTypes, array $traversedTypeTypes) : bool
+    {
+        return $countTraversedTypes === 2 && ($this->isArrayNeverType($traversedTypeTypes[0]) || $this->isArrayNeverType($traversedTypeTypes[0]));
     }
     /**
      * @param array<string|int, Type> $nonConstantValueTypes

@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210706;
+namespace RectorPrefix20210707;
 
 if (\class_exists('Tx_Extbase_Object_Container_Exception_TooManyRecursionLevelsException')) {
     return;

@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210706\Symplify\SimplePhpDocParser;
+namespace RectorPrefix20210707\Symplify\SimplePhpDocParser;
 
 use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
-use RectorPrefix20210706\Symplify\SimplePhpDocParser\Contract\PhpDocNodeVisitorInterface;
-use RectorPrefix20210706\Symplify\SimplePhpDocParser\Exception\InvalidTraverseException;
-use RectorPrefix20210706\Symplify\SimplePhpDocParser\PhpDocNodeVisitor\CallablePhpDocNodeVisitor;
+use RectorPrefix20210707\Symplify\SimplePhpDocParser\Contract\PhpDocNodeVisitorInterface;
+use RectorPrefix20210707\Symplify\SimplePhpDocParser\Exception\InvalidTraverseException;
+use RectorPrefix20210707\Symplify\SimplePhpDocParser\PhpDocNodeVisitor\CallablePhpDocNodeVisitor;
 /**
  * Mimics
  * https://github.com/nikic/PHP-Parser/blob/4abdcde5f16269959a834e4e58ea0ba0938ab133/lib/PhpParser/NodeTraverser.php
@@ -26,7 +26,7 @@ final class PhpDocNodeTraverser
      * @var PhpDocNodeVisitorInterface[]
      */
     private $phpDocNodeVisitors = [];
-    public function addPhpDocNodeVisitor(\RectorPrefix20210706\Symplify\SimplePhpDocParser\Contract\PhpDocNodeVisitorInterface $phpDocNodeVisitor) : void
+    public function addPhpDocNodeVisitor(\RectorPrefix20210707\Symplify\SimplePhpDocParser\Contract\PhpDocNodeVisitorInterface $phpDocNodeVisitor) : void
     {
         $this->phpDocNodeVisitors[] = $phpDocNodeVisitor;
     }
@@ -37,7 +37,7 @@ final class PhpDocNodeTraverser
         }
         $node = $this->traverseNode($node);
         if (\is_int($node)) {
-            throw new \RectorPrefix20210706\Symplify\SimplePhpDocParser\Exception\InvalidTraverseException();
+            throw new \RectorPrefix20210707\Symplify\SimplePhpDocParser\Exception\InvalidTraverseException();
         }
         foreach ($this->phpDocNodeVisitors as $phpDocNodeVisitor) {
             $phpDocNodeVisitor->afterTraverse($node);
@@ -45,7 +45,7 @@ final class PhpDocNodeTraverser
     }
     public function traverseWithCallable(\PHPStan\PhpDocParser\Ast\Node $node, string $docContent, callable $callable) : \PHPStan\PhpDocParser\Ast\Node
     {
-        $callablePhpDocNodeVisitor = new \RectorPrefix20210706\Symplify\SimplePhpDocParser\PhpDocNodeVisitor\CallablePhpDocNodeVisitor($callable, $docContent);
+        $callablePhpDocNodeVisitor = new \RectorPrefix20210707\Symplify\SimplePhpDocParser\PhpDocNodeVisitor\CallablePhpDocNodeVisitor($callable, $docContent);
         $this->addPhpDocNodeVisitor($callablePhpDocNodeVisitor);
         $this->traverse($node);
         return $node;
@@ -78,7 +78,7 @@ final class PhpDocNodeTraverser
                 }
                 $subNode = $this->traverseNode($subNode);
                 if (\is_int($subNode)) {
-                    throw new \RectorPrefix20210706\Symplify\SimplePhpDocParser\Exception\InvalidTraverseException();
+                    throw new \RectorPrefix20210707\Symplify\SimplePhpDocParser\Exception\InvalidTraverseException();
                 }
                 foreach ($this->phpDocNodeVisitors as $phpDocNodeVisitor) {
                     $phpDocNodeVisitor->leaveNode($subNode);
@@ -115,7 +115,7 @@ final class PhpDocNodeTraverser
                 continue;
             }
             if (\is_int($return)) {
-                throw new \RectorPrefix20210706\Symplify\SimplePhpDocParser\Exception\InvalidTraverseException();
+                throw new \RectorPrefix20210707\Symplify\SimplePhpDocParser\Exception\InvalidTraverseException();
             }
             $node = $return;
             foreach ($this->phpDocNodeVisitors as $phpDocNodeVisitor) {

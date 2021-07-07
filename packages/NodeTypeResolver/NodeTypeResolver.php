@@ -48,7 +48,7 @@ use Rector\NodeTypeResolver\NodeTypeResolver\IdentifierTypeResolver;
 use Rector\NodeTypeResolver\TypeAnalyzer\ArrayTypeAnalyzer;
 use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
 use Rector\TypeDeclaration\PHPStan\Type\ObjectTypeSpecifier;
-use RectorPrefix20210706\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix20210707\Symfony\Contracts\Service\Attribute\Required;
 final class NodeTypeResolver
 {
     /**

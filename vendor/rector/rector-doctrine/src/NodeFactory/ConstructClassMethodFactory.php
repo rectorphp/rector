@@ -14,9 +14,9 @@ use PhpParser\Node\Stmt\Property;
 use Rector\Core\ValueObject\MethodName;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
-use Rector\StaticTypeMapper\StaticTypeMapper;
-use RectorPrefix20210706\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
 use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
+use Rector\StaticTypeMapper\StaticTypeMapper;
+use RectorPrefix20210707\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
 final class ConstructClassMethodFactory
 {
     /**
@@ -51,7 +51,7 @@ final class ConstructClassMethodFactory
             $params[] = $this->createParam($publicProperty, $propertyName);
             $assigns[] = $this->createAssign($propertyName);
         }
-        $methodBuilder = new \RectorPrefix20210706\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder(\Rector\Core\ValueObject\MethodName::CONSTRUCT);
+        $methodBuilder = new \RectorPrefix20210707\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder(\Rector\Core\ValueObject\MethodName::CONSTRUCT);
         $methodBuilder->makePublic();
         $methodBuilder->addParams($params);
         $methodBuilder->addStmts($assigns);

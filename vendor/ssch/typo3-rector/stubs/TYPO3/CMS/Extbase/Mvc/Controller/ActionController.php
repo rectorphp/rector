@@ -1,15 +1,15 @@
 <?php
 
-namespace RectorPrefix20210706\TYPO3\CMS\Extbase\Mvc\Controller;
+namespace RectorPrefix20210707\TYPO3\CMS\Extbase\Mvc\Controller;
 
-use RectorPrefix20210706\Psr\Http\Message\ResponseInterface;
-use RectorPrefix20210706\TYPO3\CMS\Core\Http\ResponseFactoryInterface;
-use RectorPrefix20210706\TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
-use RectorPrefix20210706\TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
+use RectorPrefix20210707\Psr\Http\Message\ResponseInterface;
+use RectorPrefix20210707\TYPO3\CMS\Core\Http\ResponseFactoryInterface;
+use RectorPrefix20210707\TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
+use RectorPrefix20210707\TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
 if (\class_exists('TYPO3\\CMS\\Extbase\\Mvc\\Controller\\ActionController')) {
     return;
 }
-class ActionController extends \RectorPrefix20210706\TYPO3\CMS\Extbase\Mvc\Controller\AbstractController
+class ActionController extends \RectorPrefix20210707\TYPO3\CMS\Extbase\Mvc\Controller\AbstractController
 {
     /**
      * @var ResponseFactoryInterface

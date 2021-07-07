@@ -8,20 +8,20 @@
         "symfony\/dependency-injection": "^5.3",
         "symfony\/config": "^5.3",
         "symfony\/http-kernel": "^5.3",
-        "symplify\/package-builder": "^9.4.11"
+        "symplify\/package-builder": "^9.4.12"
     },
     "require-dev": {
         "phpunit\/phpunit": "^9.5",
-        "symplify\/easy-testing": "^9.4.11"
+        "symplify\/easy-testing": "^9.4.12"
     },
     "autoload": {
         "psr-4": {
-            "RectorPrefix20210706\\Symplify\\SimplePhpDocParser\\": "src"
+            "RectorPrefix20210707\\Symplify\\SimplePhpDocParser\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "RectorPrefix20210706\\Symplify\\SimplePhpDocParser\\Tests\\": "tests"
+            "RectorPrefix20210707\\Symplify\\SimplePhpDocParser\\Tests\\": "tests"
         }
     },
     "extra": {

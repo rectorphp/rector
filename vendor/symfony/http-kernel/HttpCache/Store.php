@@ -11,16 +11,16 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210706\Symfony\Component\HttpKernel\HttpCache;
+namespace RectorPrefix20210707\Symfony\Component\HttpKernel\HttpCache;
 
-use RectorPrefix20210706\Symfony\Component\HttpFoundation\Request;
-use RectorPrefix20210706\Symfony\Component\HttpFoundation\Response;
+use RectorPrefix20210707\Symfony\Component\HttpFoundation\Request;
+use RectorPrefix20210707\Symfony\Component\HttpFoundation\Response;
 /**
  * Store implements all the logic for storing cache metadata (Request and Response headers).
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class Store implements \RectorPrefix20210706\Symfony\Component\HttpKernel\HttpCache\StoreInterface
+class Store implements \RectorPrefix20210707\Symfony\Component\HttpKernel\HttpCache\StoreInterface
 {
     protected $root;
     private $keyCache;
@@ -287,7 +287,7 @@ class Store implements \RectorPrefix20210706\Symfony\Component\HttpKernel\HttpCa
      */
     private function doPurge(string $url) : bool
     {
-        $key = $this->getCacheKey(\RectorPrefix20210706\Symfony\Component\HttpFoundation\Request::create($url));
+        $key = $this->getCacheKey(\RectorPrefix20210707\Symfony\Component\HttpFoundation\Request::create($url));
         if (isset($this->locks[$key])) {
             \flock($this->locks[$key], \LOCK_UN);
             \fclose($this->locks[$key]);
@@ -375,7 +375,7 @@ class Store implements \RectorPrefix20210706\Symfony\Component\HttpKernel\HttpCa
     /**
      * Returns a cache key for the given Request.
      */
-    private function getCacheKey(\RectorPrefix20210706\Symfony\Component\HttpFoundation\Request $request) : string
+    private function getCacheKey(\RectorPrefix20210707\Symfony\Component\HttpFoundation\Request $request) : string
     {
         if (isset($this->keyCache[$request])) {
             return $this->keyCache[$request];
@@ -385,14 +385,14 @@ class Store implements \RectorPrefix20210706\Symfony\Component\HttpKernel\HttpCa
     /**
      * Persists the Request HTTP headers.
      */
-    private function persistRequest(\RectorPrefix20210706\Symfony\Component\HttpFoundation\Request $request) : array
+    private function persistRequest(\RectorPrefix20210707\Symfony\Component\HttpFoundation\Request $request) : array
     {
         return $request->headers->all();
     }
     /**
      * Persists the Response HTTP headers.
      */
-    private function persistResponse(\RectorPrefix20210706\Symfony\Component\HttpFoundation\Response $response) : array
+    private function persistResponse(\RectorPrefix20210707\Symfony\Component\HttpFoundation\Response $response) : array
     {
         $headers = $response->headers->all();
         $headers['X-Status'] = [$response->getStatusCode()];
@@ -401,13 +401,13 @@ class Store implements \RectorPrefix20210706\Symfony\Component\HttpKernel\HttpCa
     /**
      * Restores a Response from the HTTP headers and body.
      */
-    private function restoreResponse(array $headers, string $path = null) : \RectorPrefix20210706\Symfony\Component\HttpFoundation\Response
+    private function restoreResponse(array $headers, string $path = null) : \RectorPrefix20210707\Symfony\Component\HttpFoundation\Response
     {
         $status = $headers['X-Status'][0];
         unset($headers['X-Status']);
         if (null !== $path) {
             $headers['X-Body-File'] = [$path];
         }
-        return new \RectorPrefix20210706\Symfony\Component\HttpFoundation\Response($path, $status, $headers);
+        return new \RectorPrefix20210707\Symfony\Component\HttpFoundation\Response($path, $status, $headers);
     }
 }

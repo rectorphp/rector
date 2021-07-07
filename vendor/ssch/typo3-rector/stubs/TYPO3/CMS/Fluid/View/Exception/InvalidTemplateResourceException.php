@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210706\TYPO3\CMS\Fluid\View\Exception;
+namespace RectorPrefix20210707\TYPO3\CMS\Fluid\View\Exception;
 
 if (\class_exists('TYPO3\\CMS\\Fluid\\View\\Exception\\InvalidTemplateResourceException')) {
     return;
