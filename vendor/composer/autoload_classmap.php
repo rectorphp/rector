@@ -2802,6 +2802,7 @@ return array(
     'Rector\\PostRector\\Collector\\PropertyToAddCollector' => $baseDir . '/packages/PostRector/Collector/PropertyToAddCollector.php',
     'Rector\\PostRector\\Collector\\UseNodesToAddCollector' => $baseDir . '/packages/PostRector/Collector/UseNodesToAddCollector.php',
     'Rector\\PostRector\\Contract\\Collector\\NodeCollectorInterface' => $baseDir . '/packages/PostRector/Contract/Collector/NodeCollectorInterface.php',
+    'Rector\\PostRector\\Contract\\Rector\\ComplementaryRectorInterface' => $baseDir . '/packages/PostRector/Contract/Rector/ComplementaryRectorInterface.php',
     'Rector\\PostRector\\Contract\\Rector\\PostRectorInterface' => $baseDir . '/packages/PostRector/Contract/Rector/PostRectorInterface.php',
     'Rector\\PostRector\\DependencyInjection\\PropertyAdder' => $baseDir . '/packages/PostRector/DependencyInjection/PropertyAdder.php',
     'Rector\\PostRector\\NodeAnalyzer\\NetteInjectDetector' => $baseDir . '/packages/PostRector/NodeAnalyzer/NetteInjectDetector.php',

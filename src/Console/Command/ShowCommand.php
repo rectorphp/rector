@@ -8,6 +8,7 @@ use Rector\Core\Configuration\Option;
 use Rector\Core\Console\Output\ShowOutputFormatterCollector;
 use Rector\Core\Contract\Console\OutputStyleInterface;
 use Rector\Core\Contract\Rector\RectorInterface;
+use Rector\PostRector\Contract\Rector\ComplementaryRectorInterface;
 use Rector\PostRector\Contract\Rector\PostRectorInterface;
 use RectorPrefix20210707\Symfony\Component\Console\Command\Command;
 use RectorPrefix20210707\Symfony\Component\Console\Input\InputInterface;
@@ -58,7 +59,10 @@ final class ShowCommand extends \RectorPrefix20210707\Symfony\Component\Console\
     private function reportLoadedRectors(string $outputFormat) : void
     {
         $rectors = \array_filter($this->rectors, function (\Rector\Core\Contract\Rector\RectorInterface $rector) : bool {
-            return !$rector instanceof \Rector\PostRector\Contract\Rector\PostRectorInterface;
+            if ($rector instanceof \Rector\PostRector\Contract\Rector\PostRectorInterface) {
+                return \false;
+            }
+            return !$rector instanceof \Rector\PostRector\Contract\Rector\ComplementaryRectorInterface;
         });
         $rectorCount = \count($rectors);
         if ($rectorCount === 0) {
