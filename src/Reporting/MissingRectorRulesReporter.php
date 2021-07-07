@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Core\Reporting;
 
 use Rector\Core\Contract\Rector\RectorInterface;
+use Rector\PostRector\Contract\Rector\ComplementaryRectorInterface;
 use Rector\PostRector\Contract\Rector\PostRectorInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\PackageBuilder\Console\ShellCode;
@@ -24,7 +25,13 @@ final class MissingRectorRulesReporter
     {
         $activeRectors = array_filter(
             $this->rectors,
-            fn (RectorInterface $rector): bool => ! $rector instanceof PostRectorInterface
+            function (RectorInterface $rector): bool {
+                if ($rector instanceof PostRectorInterface) {
+                    return false;
+                }
+
+                return ! $rector instanceof ComplementaryRectorInterface;
+            }
         );
 
         if ($activeRectors !== []) {
