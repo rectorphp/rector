@@ -9,6 +9,7 @@ use Rector\Core\Configuration\Option;
 use Rector\Core\Console\Output\ShowOutputFormatterCollector;
 use Rector\Core\Contract\Console\OutputStyleInterface;
 use Rector\Core\Contract\Rector\RectorInterface;
+use Rector\PostRector\Contract\Rector\ComplementaryRectorInterface;
 use Rector\PostRector\Contract\Rector\PostRectorInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -58,7 +59,13 @@ final class ShowCommand extends Command
     {
         $rectors = array_filter(
             $this->rectors,
-            fn (RectorInterface $rector): bool => ! $rector instanceof PostRectorInterface
+            function (RectorInterface $rector): bool {
+                if ($rector instanceof PostRectorInterface) {
+                    return false;
+                }
+
+                return ! $rector instanceof ComplementaryRectorInterface;
+            }
         );
 
         $rectorCount = count($rectors);
