@@ -13,10 +13,10 @@
         "symfony\/http-kernel": "^5.3",
         "symfony\/console": "^5.3",
         "symfony\/dependency-injection": "^5.3",
-        "symplify\/package-builder": "^9.4.12",
-        "symplify\/console-package-builder": "^9.4.12",
-        "symplify\/smart-file-system": "^9.4.12",
-        "symplify\/symplify-kernel": "^9.4.12"
+        "symplify\/package-builder": "^9.4.13",
+        "symplify\/console-package-builder": "^9.4.13",
+        "symplify\/smart-file-system": "^9.4.13",
+        "symplify\/symplify-kernel": "^9.4.13"
     },
     "require-dev": {
         "phpunit\/phpunit": "^9.5"
