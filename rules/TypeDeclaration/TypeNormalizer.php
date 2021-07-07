@@ -152,7 +152,7 @@ final class TypeNormalizer
      */
     private function isUnionMixedArrayNeverType(int $countTraversedTypes, array $traversedTypeTypes) : bool
     {
-        return $countTraversedTypes === 2 && ($this->isArrayNeverType($traversedTypeTypes[0]) || $this->isArrayNeverType($traversedTypeTypes[0]));
+        return $countTraversedTypes === 2 && ($this->isArrayNeverType($traversedTypeTypes[0]) || $this->isArrayNeverType($traversedTypeTypes[1]));
     }
     /**
      * @param array<string|int, Type> $nonConstantValueTypes
