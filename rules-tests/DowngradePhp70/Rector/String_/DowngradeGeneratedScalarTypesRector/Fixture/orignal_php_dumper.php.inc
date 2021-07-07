@@ -81,7 +81,6 @@ public function hasParameter($name)
     if (isset($this->buildParameters[$name])) {
         return true;
     }
-
     return isset($this->parameters[$name]) || isset($this->loadedDynamicParameters[$name]) || \array_key_exists($name, $this->parameters);
 }
 /**

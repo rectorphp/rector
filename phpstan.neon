@@ -546,5 +546,3 @@ parameters:
 
 
         - '#Callable callable\(PHPStan\\Type\\Type\)\: PHPStan\\Type\\Type invoked with 2 parameters, 1 required#'
-        # leave for now
-        - '#Cognitive complexity for "Rector\\TypeDeclaration\\TypeNormalizer\:\:normalizeArrayTypeAndArrayNever\(\)" is 14, keep it under 9#'
