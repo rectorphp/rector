@@ -8,6 +8,7 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\Closure;
+use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Expr\Yield_;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
@@ -361,6 +362,17 @@ final class BetterStandardPrinter extends Standard
         $declareString = parent::pStmt_Declare($declare);
 
         return Strings::replace($declareString, '#\s+#', '');
+    }
+
+    protected function pExpr_Ternary(Ternary $ternary): string
+    {
+        $kind = $ternary->getAttribute(AttributeKey::KIND);
+        if ($kind === 'wrapped_with_brackets') {
+            $pExprTernary = parent::pExpr_Ternary($ternary);
+            return '(' . $pExprTernary . ')';
+        }
+
+        return parent::pExpr_Ternary($ternary);
     }
 
     /**
