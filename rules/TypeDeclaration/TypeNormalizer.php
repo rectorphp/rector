@@ -166,7 +166,7 @@ final class TypeNormalizer
         return $countTraversedTypes === 2 && ($this->isArrayNeverType(
             $traversedTypeTypes[0]
         ) || $this->isArrayNeverType(
-            $traversedTypeTypes[0]
+            $traversedTypeTypes[1]
         ));
     }
 
