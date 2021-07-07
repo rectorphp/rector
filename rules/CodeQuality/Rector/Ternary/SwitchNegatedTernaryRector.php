@@ -6,6 +6,7 @@ namespace Rector\CodeQuality\Rector\Ternary;
 use PhpParser\Node;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\Ternary;
+use Rector\Core\PhpParser\Node\Value\TernaryBracketWrapper;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -14,6 +15,14 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class SwitchNegatedTernaryRector extends \Rector\Core\Rector\AbstractRector
 {
+    /**
+     * @var \Rector\Core\PhpParser\Node\Value\TernaryBracketWrapper
+     */
+    private $ternaryBracketWrapper;
+    public function __construct(\Rector\Core\PhpParser\Node\Value\TernaryBracketWrapper $ternaryBracketWrapper)
+    {
+        $this->ternaryBracketWrapper = $ternaryBracketWrapper;
+    }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
         return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Switch negated ternary condition rector', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
@@ -60,6 +69,9 @@ CODE_SAMPLE
         }
         $node->cond = $node->cond->expr;
         [$node->if, $node->else] = [$node->else, $node->if];
+        if ($node->if instanceof \PhpParser\Node\Expr\Ternary) {
+            $this->ternaryBracketWrapper->wrapWithBracket($node->if);
+        }
         return $node;
     }
 }

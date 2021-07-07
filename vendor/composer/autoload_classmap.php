@@ -1901,6 +1901,7 @@ return array(
     'Rector\\Core\\PhpParser\\Node\\BetterNodeFinder' => $baseDir . '/src/PhpParser/Node/BetterNodeFinder.php',
     'Rector\\Core\\PhpParser\\Node\\CustomNode\\FileWithoutNamespace' => $baseDir . '/src/PhpParser/Node/CustomNode/FileWithoutNamespace.php',
     'Rector\\Core\\PhpParser\\Node\\NodeFactory' => $baseDir . '/src/PhpParser/Node/NodeFactory.php',
+    'Rector\\Core\\PhpParser\\Node\\Value\\TernaryBracketWrapper' => $baseDir . '/src/PhpParser/Node/Value/TernaryBracketWrapper.php',
     'Rector\\Core\\PhpParser\\Node\\Value\\ValueResolver' => $baseDir . '/src/PhpParser/Node/Value/ValueResolver.php',
     'Rector\\Core\\PhpParser\\Parser\\InlineCodeParser' => $baseDir . '/src/PhpParser/Parser/InlineCodeParser.php',
     'Rector\\Core\\PhpParser\\Parser\\NikicPhpParserFactory' => $baseDir . '/src/PhpParser/Parser/NikicPhpParserFactory.php',
