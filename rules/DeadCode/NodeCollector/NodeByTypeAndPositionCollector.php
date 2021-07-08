@@ -34,8 +34,10 @@ final class NodeByTypeAndPositionCollector
     {
         $nodesByTypeAndPosition = [];
         foreach ($assignedVariables as $assignedVariable) {
-            /** @var int $startTokenPos */
             $startTokenPos = $assignedVariable->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::START_TOKEN_POSITION);
+            if ($startTokenPos === null) {
+                continue;
+            }
             // not in different scope, than previous one - e.g. if/while/else...
             // get nesting level to $classMethodNode
             /** @var Assign $assign */
