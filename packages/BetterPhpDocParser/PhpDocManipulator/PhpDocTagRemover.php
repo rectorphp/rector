@@ -34,9 +34,13 @@ final class PhpDocTagRemover
     {
         $phpDocNode = $phpDocInfo->getPhpDocNode();
         $phpDocNodeTraverser = new \RectorPrefix20210708\Symplify\SimplePhpDocParser\PhpDocNodeTraverser();
-        $phpDocNodeTraverser->traverseWithCallable($phpDocNode, '', function ($node) use($desiredNode, $phpDocInfo) {
+        $phpDocNodeTraverser->traverseWithCallable($phpDocNode, '', function ($node) use($desiredNode, $phpDocInfo) : ?int {
+            if ($node instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode && $node->value === $desiredNode) {
+                $phpDocInfo->markAsChanged();
+                return \RectorPrefix20210708\Symplify\SimplePhpDocParser\PhpDocNodeTraverser::NODE_REMOVE;
+            }
             if ($node !== $desiredNode) {
-                return $node;
+                return null;
             }
             $phpDocInfo->markAsChanged();
             return \RectorPrefix20210708\Symplify\SimplePhpDocParser\PhpDocNodeTraverser::NODE_REMOVE;

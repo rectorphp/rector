@@ -1010,7 +1010,7 @@ class Application implements \RectorPrefix20210708\Symfony\Contracts\Service\Res
      */
     public function setDefaultCommand($commandName, $isSingleCommand = \false)
     {
-        $this->defaultCommand = $commandName;
+        $this->defaultCommand = \explode('|', \ltrim($commandName, '|'))[0];
         if ($isSingleCommand) {
             // Ensure the command exist
             $this->find($commandName);

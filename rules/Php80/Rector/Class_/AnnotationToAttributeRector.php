@@ -13,6 +13,7 @@ use PhpParser\Node\Stmt\Property;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
+use Rector\BetterPhpDocParser\PhpDoc\SpacelessPhpDocTagNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
@@ -177,20 +178,24 @@ CODE_SAMPLE
         }
         $doctrineTagAndAnnotationToAttributes = [];
         $phpDocNodeTraverser = new \RectorPrefix20210708\Symplify\SimplePhpDocParser\PhpDocNodeTraverser();
-        $phpDocNodeTraverser->traverseWithCallable($phpDocInfo->getPhpDocNode(), '', function ($node) use(&$doctrineTagAndAnnotationToAttributes, $phpDocInfo) {
-            if (!$node instanceof \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode) {
-                return $node;
+        $phpDocNodeTraverser->traverseWithCallable($phpDocInfo->getPhpDocNode(), '', function ($node) use(&$doctrineTagAndAnnotationToAttributes, $phpDocInfo) : ?int {
+            if ($node instanceof \Rector\BetterPhpDocParser\PhpDoc\SpacelessPhpDocTagNode && $node->value instanceof \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode) {
+                $doctrineAnnotationTagValueNode = $node->value;
+            } elseif ($node instanceof \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode) {
+                $doctrineAnnotationTagValueNode = $node;
+            } else {
+                return null;
             }
             foreach ($this->annotationsToAttributes as $annotationToAttribute) {
-                if (!$node->hasClassName($annotationToAttribute->getTag())) {
+                if (!$doctrineAnnotationTagValueNode->hasClassName($annotationToAttribute->getTag())) {
                     continue;
                 }
-                $doctrineTagAndAnnotationToAttributes[] = new \Rector\Php80\ValueObject\DoctrineTagAndAnnotationToAttribute($node, $annotationToAttribute);
+                $doctrineTagAndAnnotationToAttributes[] = new \Rector\Php80\ValueObject\DoctrineTagAndAnnotationToAttribute($doctrineAnnotationTagValueNode, $annotationToAttribute);
                 $phpDocInfo->markAsChanged();
                 // remove the original doctrine annotation, it becomes an attribute
                 return \RectorPrefix20210708\Symplify\SimplePhpDocParser\PhpDocNodeTraverser::NODE_REMOVE;
             }
-            return $node;
+            return null;
         });
         $attrGroups = $this->attrGroupsFactory->create($doctrineTagAndAnnotationToAttributes);
         if ($attrGroups === []) {

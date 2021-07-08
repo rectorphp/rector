@@ -94,12 +94,11 @@ final class PhpDocInfoFactory
                 return null;
             }
             // create empty node
-            $content = '';
             $tokenIterator = new \Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator([]);
             $phpDocNode = new \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode([]);
         } else {
-            $content = $docComment->getText();
-            $tokens = $this->lexer->tokenize($content);
+            $text = $docComment->getText();
+            $tokens = $this->lexer->tokenize($text);
             $tokenIterator = new \Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator($tokens);
             $phpDocNode = $this->betterPhpDocParser->parse($tokenIterator);
             $this->setPositionOfLastToken($phpDocNode);

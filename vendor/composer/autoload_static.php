@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitec1756b7016cb728d5c640c220314df9
+class ComposerStaticInitfea99aed40b8b9b57974b89e41cb0f3c
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -44,9 +44,7 @@ class ComposerStaticInitec1756b7016cb728d5c640c220314df9
             'Rector\\Compiler\\' => 16,
             'Rector\\CakePHP\\' => 15,
             'Rector\\' => 7,
-            'RectorPrefix20210708\\cweagans\\Composer\\' => 39,
             'RectorPrefix20210708\\Webmozart\\Assert\\' => 38,
-            'RectorPrefix20210708\\Symplify\\VendorPatches\\' => 44,
             'RectorPrefix20210708\\Symplify\\SymplifyKernel\\' => 45,
             'RectorPrefix20210708\\Symplify\\SmartFileSystem\\' => 46,
             'RectorPrefix20210708\\Symplify\\Skipper\\' => 38,
@@ -160,17 +158,9 @@ class ComposerStaticInitec1756b7016cb728d5c640c220314df9
             0 => __DIR__ . '/../..' . '/packages',
             1 => __DIR__ . '/../..' . '/rules',
         ),
-        'RectorPrefix20210708\\cweagans\\Composer\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/cweagans/composer-patches/src',
-        ),
         'RectorPrefix20210708\\Webmozart\\Assert\\' => 
         array (
             0 => __DIR__ . '/..' . '/webmozart/assert/src',
-        ),
-        'RectorPrefix20210708\\Symplify\\VendorPatches\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symplify/vendor-patches/src',
         ),
         'RectorPrefix20210708\\Symplify\\SymplifyKernel\\' => 
         array (
@@ -1831,18 +1821,6 @@ class ComposerStaticInitec1756b7016cb728d5c640c220314df9
         'RectorPrefix20210708\\Symplify\\SymplifyKernel\\Strings\\KernelUniqueHasher' => __DIR__ . '/..' . '/symplify/symplify-kernel/src/Strings/KernelUniqueHasher.php',
         'RectorPrefix20210708\\Symplify\\SymplifyKernel\\Strings\\StringsConverter' => __DIR__ . '/..' . '/symplify/symplify-kernel/src/Strings/StringsConverter.php',
         'RectorPrefix20210708\\Symplify\\SymplifyKernel\\ValueObject\\KernelBootAndApplicationRun' => __DIR__ . '/..' . '/symplify/symplify-kernel/src/ValueObject/KernelBootAndApplicationRun.php',
-        'RectorPrefix20210708\\Symplify\\VendorPatches\\Command\\GenerateCommand' => __DIR__ . '/..' . '/symplify/vendor-patches/src/Command/GenerateCommand.php',
-        'RectorPrefix20210708\\Symplify\\VendorPatches\\Composer\\ComposerPatchesConfigurationUpdater' => __DIR__ . '/..' . '/symplify/vendor-patches/src/Composer/ComposerPatchesConfigurationUpdater.php',
-        'RectorPrefix20210708\\Symplify\\VendorPatches\\Composer\\PackageNameResolver' => __DIR__ . '/..' . '/symplify/vendor-patches/src/Composer/PackageNameResolver.php',
-        'RectorPrefix20210708\\Symplify\\VendorPatches\\Console\\GenerateCommandReporter' => __DIR__ . '/..' . '/symplify/vendor-patches/src/Console/GenerateCommandReporter.php',
-        'RectorPrefix20210708\\Symplify\\VendorPatches\\Console\\VendorPatchesConsoleApplication' => __DIR__ . '/..' . '/symplify/vendor-patches/src/Console/VendorPatchesConsoleApplication.php',
-        'RectorPrefix20210708\\Symplify\\VendorPatches\\Differ\\PatchDiffer' => __DIR__ . '/..' . '/symplify/vendor-patches/src/Differ/PatchDiffer.php',
-        'RectorPrefix20210708\\Symplify\\VendorPatches\\Exception\\ShouldNotHappenException' => __DIR__ . '/..' . '/symplify/vendor-patches/src/Exception/ShouldNotHappenException.php',
-        'RectorPrefix20210708\\Symplify\\VendorPatches\\FileSystem\\PathResolver' => __DIR__ . '/..' . '/symplify/vendor-patches/src/FileSystem/PathResolver.php',
-        'RectorPrefix20210708\\Symplify\\VendorPatches\\Finder\\OldToNewFilesFinder' => __DIR__ . '/..' . '/symplify/vendor-patches/src/Finder/OldToNewFilesFinder.php',
-        'RectorPrefix20210708\\Symplify\\VendorPatches\\HttpKernel\\VendorPatchesKernel' => __DIR__ . '/..' . '/symplify/vendor-patches/src/HttpKernel/VendorPatchesKernel.php',
-        'RectorPrefix20210708\\Symplify\\VendorPatches\\PatchFileFactory' => __DIR__ . '/..' . '/symplify/vendor-patches/src/PatchFileFactory.php',
-        'RectorPrefix20210708\\Symplify\\VendorPatches\\ValueObject\\OldAndNewFileInfo' => __DIR__ . '/..' . '/symplify/vendor-patches/src/ValueObject/OldAndNewFileInfo.php',
         'RectorPrefix20210708\\Tracy\\Bar' => __DIR__ . '/..' . '/tracy/tracy/src/Tracy/Bar/Bar.php',
         'RectorPrefix20210708\\Tracy\\BlueScreen' => __DIR__ . '/..' . '/tracy/tracy/src/Tracy/BlueScreen/BlueScreen.php',
         'RectorPrefix20210708\\Tracy\\Bridges\\Nette\\Bridge' => __DIR__ . '/..' . '/tracy/tracy/src/Bridges/Nette/Bridge.php',
@@ -1866,9 +1844,6 @@ class ComposerStaticInitec1756b7016cb728d5c640c220314df9
         'RectorPrefix20210708\\Webmozart\\Assert\\Assert' => __DIR__ . '/..' . '/webmozart/assert/src/Assert.php',
         'RectorPrefix20210708\\Webmozart\\Assert\\InvalidArgumentException' => __DIR__ . '/..' . '/webmozart/assert/src/InvalidArgumentException.php',
         'RectorPrefix20210708\\Webmozart\\Assert\\Mixin' => __DIR__ . '/..' . '/webmozart/assert/src/Mixin.php',
-        'RectorPrefix20210708\\cweagans\\Composer\\PatchEvent' => __DIR__ . '/..' . '/cweagans/composer-patches/src/PatchEvent.php',
-        'RectorPrefix20210708\\cweagans\\Composer\\PatchEvents' => __DIR__ . '/..' . '/cweagans/composer-patches/src/PatchEvents.php',
-        'RectorPrefix20210708\\cweagans\\Composer\\Patches' => __DIR__ . '/..' . '/cweagans/composer-patches/src/Patches.php',
         'Rector\\Arguments\\ArgumentDefaultValueReplacer' => __DIR__ . '/../..' . '/rules/Arguments/ArgumentDefaultValueReplacer.php',
         'Rector\\Arguments\\Contract\\ReplaceArgumentDefaultValueInterface' => __DIR__ . '/../..' . '/rules/Arguments/Contract/ReplaceArgumentDefaultValueInterface.php',
         'Rector\\Arguments\\NodeAnalyzer\\ArgumentAddingScope' => __DIR__ . '/../..' . '/rules/Arguments/NodeAnalyzer/ArgumentAddingScope.php',
@@ -3870,9 +3845,9 @@ class ComposerStaticInitec1756b7016cb728d5c640c220314df9
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitec1756b7016cb728d5c640c220314df9::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitec1756b7016cb728d5c640c220314df9::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitec1756b7016cb728d5c640c220314df9::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitfea99aed40b8b9b57974b89e41cb0f3c::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitfea99aed40b8b9b57974b89e41cb0f3c::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitfea99aed40b8b9b57974b89e41cb0f3c::$classMap;
 
         }, null, ClassLoader::class);
     }

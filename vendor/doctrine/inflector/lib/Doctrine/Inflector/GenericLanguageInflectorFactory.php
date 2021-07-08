@@ -21,7 +21,6 @@ abstract class GenericLanguageInflectorFactory implements \RectorPrefix20210708\
         return new \RectorPrefix20210708\Doctrine\Inflector\Inflector(new \RectorPrefix20210708\Doctrine\Inflector\CachedWordInflector(new \RectorPrefix20210708\Doctrine\Inflector\RulesetInflector(...$this->singularRulesets)), new \RectorPrefix20210708\Doctrine\Inflector\CachedWordInflector(new \RectorPrefix20210708\Doctrine\Inflector\RulesetInflector(...$this->pluralRulesets)));
     }
     /**
-     * @return
      * @param \Doctrine\Inflector\Rules\Ruleset|null $singularRules
      * @param bool $reset
      */
@@ -36,7 +35,6 @@ abstract class GenericLanguageInflectorFactory implements \RectorPrefix20210708\
         return $this;
     }
     /**
-     * @return
      * @param \Doctrine\Inflector\Rules\Ruleset|null $pluralRules
      * @param bool $reset
      */
