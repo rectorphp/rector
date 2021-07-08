@@ -5,38 +5,46 @@ declare(strict_types=1);
 namespace Rector\DeadCode\PhpDoc\TagRemover;
 
 use PhpParser\Node\FunctionLike;
+use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
 use Rector\DeadCode\PhpDoc\DeadParamTagValueNodeAnalyzer;
+use Symplify\SimplePhpDocParser\PhpDocNodeTraverser;
 
 final class ParamTagRemover
 {
     public function __construct(
-        private DeadParamTagValueNodeAnalyzer $deadParamTagValueNodeAnalyzer,
-        private PhpDocTagRemover $phpDocTagRemover
+        private DeadParamTagValueNodeAnalyzer $deadParamTagValueNodeAnalyzer
     ) {
     }
 
     public function removeParamTagsIfUseless(PhpDocInfo $phpDocInfo, FunctionLike $functionLike): void
     {
-        foreach ($phpDocInfo->getParamTagValueNodes() as $paramTagValueNode) {
-            $paramName = $paramTagValueNode->parameterName;
-
-            // remove existing type
-
-            $paramTagValueNode = $phpDocInfo->getParamTagValueByName($paramName);
-
-            if (! $paramTagValueNode instanceof ParamTagValueNode) {
-                continue;
+        $phpDocNodeTraverser = new PhpDocNodeTraverser();
+        $phpDocNodeTraverser->traverseWithCallable($phpDocInfo->getPhpDocNode(), '', function (Node $docNode) use (
+            $functionLike,
+            $phpDocInfo
+        ): ?int {
+            if (! $docNode instanceof PhpDocTagNode) {
+                return null;
             }
 
-            $isParamTagValueDead = $this->deadParamTagValueNodeAnalyzer->isDead($paramTagValueNode, $functionLike);
-            if (! $isParamTagValueDead) {
-                continue;
+            if (! $docNode->value instanceof ParamTagValueNode) {
+                return null;
             }
 
-            $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $paramTagValueNode);
-        }
+            // handle only basic types, keep phpstan/psalm helper ones
+            if ($docNode->name !== '@param') {
+                return null;
+            }
+
+            if (! $this->deadParamTagValueNodeAnalyzer->isDead($docNode->value, $functionLike)) {
+                return null;
+            }
+
+            $phpDocInfo->markAsChanged();
+            return PhpDocNodeTraverser::NODE_REMOVE;
+        });
     }
 }

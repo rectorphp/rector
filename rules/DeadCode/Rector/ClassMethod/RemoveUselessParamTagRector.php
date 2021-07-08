@@ -6,9 +6,9 @@ namespace Rector\DeadCode\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Rector\AbstractRector;
-use Rector\DeadCode\PhpDoc\DeadParamTagValueNodeAnalyzer;
+use Rector\DeadCode\PhpDoc\TagRemover\ParamTagRemover;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -19,8 +19,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveUselessParamTagRector extends AbstractRector
 {
     public function __construct(
-        private DeadParamTagValueNodeAnalyzer $deadParamTagValueNodeAnalyzer,
-        private PhpDocTagRemover $phpDocTagRemover
+        private ParamTagRemover $paramTagRemover
     ) {
     }
 
@@ -72,15 +71,12 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
-
-        foreach ($phpDocInfo->getParamTagValueNodes() as $paramTagValueNode) {
-            if (! $this->deadParamTagValueNodeAnalyzer->isDead($paramTagValueNode, $node)) {
-                continue;
-            }
-
-            $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $paramTagValueNode);
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNode($node);
+        if (! $phpDocInfo instanceof PhpDocInfo) {
+            return null;
         }
+
+        $this->paramTagRemover->removeParamTagsIfUseless($phpDocInfo, $node);
 
         if ($phpDocInfo->hasChanged()) {
             $node->setAttribute(AttributeKey::HAS_PHP_DOC_INFO_JUST_CHANGED, true);
