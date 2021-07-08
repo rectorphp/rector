@@ -6,6 +6,7 @@ namespace Rector\Php80\PhpDocCleaner;
 
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
+use Rector\BetterPhpDocParser\PhpDoc\SpacelessPhpDocTagNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode;
 use Rector\Php80\ValueObject\AnnotationToAttribute;
 use Symplify\SimplePhpDocParser\PhpDocNodeTraverser;
@@ -19,17 +20,23 @@ final class ConvertedAnnotationToAttributeParentRemover
     {
         $phpDocNodeTraverser = new PhpDocNodeTraverser();
 
-        $phpDocNodeTraverser->traverseWithCallable($phpDocNode, '', function ($node) use ($annotationsToAttributes) {
-            if (! $node instanceof DoctrineAnnotationTagValueNode) {
-                return $node;
+        $phpDocNodeTraverser->traverseWithCallable($phpDocNode, '', function ($node) use (
+            $annotationsToAttributes
+        ): ?int {
+            if (! $node instanceof SpacelessPhpDocTagNode) {
+                return null;
+            }
+
+            if (! $node->value instanceof DoctrineAnnotationTagValueNode) {
+                return null;
             }
 
             // has only children of annotation to attribute? it will be removed
-            if ($this->detect($node, $annotationsToAttributes)) {
+            if ($this->detect($node->value, $annotationsToAttributes)) {
                 return PhpDocNodeTraverser::NODE_REMOVE;
             }
 
-            return $node;
+            return null;
         });
     }
 

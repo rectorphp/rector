@@ -72,12 +72,11 @@ final class PhpDocInfoFactory
             }
 
             // create empty node
-            $content = '';
             $tokenIterator = new BetterTokenIterator([]);
             $phpDocNode = new PhpDocNode([]);
         } else {
-            $content = $docComment->getText();
-            $tokens = $this->lexer->tokenize($content);
+            $text = $docComment->getText();
+            $tokens = $this->lexer->tokenize($text);
             $tokenIterator = new BetterTokenIterator($tokens);
 
             $phpDocNode = $this->betterPhpDocParser->parse($tokenIterator);

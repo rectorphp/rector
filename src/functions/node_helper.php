@@ -18,7 +18,7 @@ if (! function_exists('dump_node')) {
     /**
      * @param Node|Node[] $node
      */
-    function dump_node(Node | array $node, int $depth = 2): void
+    function dump_node(\PhpParser\Node | array $node, int $depth = 2): void
     {
         $nodes = is_array($node) ? $node : [$node];
 
@@ -35,7 +35,7 @@ if (! function_exists('print_node')) {
     /**
      * @param Node|Node[] $node
      */
-    function print_node(Node | array $node): void
+    function print_node(\PhpParser\Node | array $node): void
     {
         $standard = new Standard();
 

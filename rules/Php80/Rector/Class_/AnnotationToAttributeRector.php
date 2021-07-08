@@ -14,6 +14,7 @@ use PhpParser\Node\Stmt\Property;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
+use Rector\BetterPhpDocParser\PhpDoc\SpacelessPhpDocTagNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
@@ -213,18 +214,22 @@ CODE_SAMPLE
         $phpDocNodeTraverser->traverseWithCallable($phpDocInfo->getPhpDocNode(), '', function ($node) use (
             &$doctrineTagAndAnnotationToAttributes,
             $phpDocInfo
-        ) {
-            if (! $node instanceof DoctrineAnnotationTagValueNode) {
-                return $node;
+        ): ?int {
+            if ($node instanceof SpacelessPhpDocTagNode && $node->value instanceof DoctrineAnnotationTagValueNode) {
+                $doctrineAnnotationTagValueNode = $node->value;
+            } elseif ($node instanceof DoctrineAnnotationTagValueNode) {
+                $doctrineAnnotationTagValueNode = $node;
+            } else {
+                return null;
             }
 
             foreach ($this->annotationsToAttributes as $annotationToAttribute) {
-                if (! $node->hasClassName($annotationToAttribute->getTag())) {
+                if (! $doctrineAnnotationTagValueNode->hasClassName($annotationToAttribute->getTag())) {
                     continue;
                 }
 
                 $doctrineTagAndAnnotationToAttributes[] = new DoctrineTagAndAnnotationToAttribute(
-                    $node,
+                    $doctrineAnnotationTagValueNode,
                     $annotationToAttribute
                 );
 
@@ -234,7 +239,7 @@ CODE_SAMPLE
                 return PhpDocNodeTraverser::NODE_REMOVE;
             }
 
-            return $node;
+            return null;
         });
 
         $attrGroups = $this->attrGroupsFactory->create($doctrineTagAndAnnotationToAttributes);
@@ -243,6 +248,7 @@ CODE_SAMPLE
         }
 
         $node->attrGroups = $attrGroups;
+
         $this->convertedAnnotationToAttributeParentRemover->processPhpDocNode(
             $phpDocInfo->getPhpDocNode(),
             $this->annotationsToAttributes

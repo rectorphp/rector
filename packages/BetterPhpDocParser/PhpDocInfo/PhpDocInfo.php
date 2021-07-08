@@ -297,12 +297,16 @@ final class PhpDocInfo
         $phpDocNodeTraverser->traverseWithCallable($this->phpDocNode, '', function (Node $node) use (
             $typeToRemove
         ): ?int {
+            if ($node instanceof PhpDocTagNode && is_a($node->value, $typeToRemove, true)) {
+                $this->markAsChanged();
+                return PhpDocNodeTraverser::NODE_REMOVE;
+            }
+
             if (! is_a($node, $typeToRemove, true)) {
                 return null;
             }
 
             $this->markAsChanged();
-
             return PhpDocNodeTraverser::NODE_REMOVE;
         });
     }

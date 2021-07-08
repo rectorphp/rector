@@ -12,7 +12,6 @@
         "ext-json": "*",
         "composer/semver": "^3.2",
         "composer/xdebug-handler": "^2.0",
-        "cweagans/composer-patches": "^1.7",
         "danielstjules/stringy": "^3.1",
         "doctrine/inflector": "^2.0",
         "ergebnis/json-printer": "^3.1",
@@ -48,7 +47,6 @@
         "symplify/skipper": "^9.4.14",
         "symplify/smart-file-system": "^9.4.14",
         "symplify/symfony-php-config": "^9.4.14",
-        "symplify/vendor-patches": "^9.4",
         "tracy/tracy": "^2.8",
         "webmozart/assert": "^1.10"
     },
@@ -138,11 +136,6 @@
     "extra": {
         "branch-alias": {
             "dev-main": "0.11-dev"
-        },
-        "patches": {
-            "symfony/console": [
-                "patches/symfony-console-style-symfonystyle-php.patch"
-            ]
         }
     },
     "config": {
