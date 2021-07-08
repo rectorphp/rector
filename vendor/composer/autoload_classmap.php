@@ -1704,6 +1704,7 @@ return array(
     'Rector\\CodingStyle\\Naming\\NameRenamer' => $baseDir . '/rules/CodingStyle/Naming/NameRenamer.php',
     'Rector\\CodingStyle\\NodeAnalyzer\\ImplodeAnalyzer' => $baseDir . '/rules/CodingStyle/NodeAnalyzer/ImplodeAnalyzer.php',
     'Rector\\CodingStyle\\NodeAnalyzer\\SpreadVariablesCollector' => $baseDir . '/rules/CodingStyle/NodeAnalyzer/SpreadVariablesCollector.php',
+    'Rector\\CodingStyle\\NodeAnalyzer\\UseImportNameMatcher' => $baseDir . '/rules/CodingStyle/NodeAnalyzer/UseImportNameMatcher.php',
     'Rector\\CodingStyle\\NodeFactory\\ArrayCallableToMethodCallFactory' => $baseDir . '/rules/CodingStyle/NodeFactory/ArrayCallableToMethodCallFactory.php',
     'Rector\\CodingStyle\\NodeFactory\\JsonArrayFactory' => $baseDir . '/rules/CodingStyle/NodeFactory/JsonArrayFactory.php',
     'Rector\\CodingStyle\\NodeFactory\\JsonEncodeStaticCallFactory' => $baseDir . '/rules/CodingStyle/NodeFactory/JsonEncodeStaticCallFactory.php',

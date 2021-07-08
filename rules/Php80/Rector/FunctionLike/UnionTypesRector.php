@@ -131,6 +131,9 @@ CODE_SAMPLE
             if (!$phpParserUnionType instanceof \PhpParser\Node\UnionType) {
                 continue;
             }
+            if ($param->type instanceof \PhpParser\Node\UnionType) {
+                continue;
+            }
             $param->type = $phpParserUnionType;
         }
     }

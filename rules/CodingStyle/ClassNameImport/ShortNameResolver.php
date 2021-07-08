@@ -8,6 +8,7 @@ use RectorPrefix20210708\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\NodeFinder;
@@ -16,6 +17,7 @@ use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use Rector\CodingStyle\NodeAnalyzer\UseImportNameMatcher;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\ValueObject\Application\File;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -59,13 +61,18 @@ final class ShortNameResolver
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
-    public function __construct(\RectorPrefix20210708\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \PhpParser\NodeFinder $nodeFinder, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
+    /**
+     * @var \Rector\CodingStyle\NodeAnalyzer\UseImportNameMatcher
+     */
+    private $useImportNameMatcher;
+    public function __construct(\RectorPrefix20210708\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \PhpParser\NodeFinder $nodeFinder, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\CodingStyle\NodeAnalyzer\UseImportNameMatcher $useImportNameMatcher)
     {
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeFinder = $nodeFinder;
         $this->reflectionProvider = $reflectionProvider;
         $this->betterNodeFinder = $betterNodeFinder;
+        $this->useImportNameMatcher = $useImportNameMatcher;
     }
     // Avoids circular reference
     /**
@@ -109,7 +116,7 @@ final class ShortNameResolver
         return \array_unique($shortClassLikeNames);
     }
     /**
-     * @param Node[] $stmts
+     * @param Stmt[] $stmts
      * @return array<string, string>
      */
     private function resolveForStmts(array $stmts) : array
@@ -143,7 +150,7 @@ final class ShortNameResolver
         return \array_merge($shortNamesToFullyQualifiedNames, $docBlockShortNamesToFullyQualifiedNames);
     }
     /**
-     * @param Node[] $stmts
+     * @param Stmt[] $stmts
      * @return array<string, string>
      */
     private function resolveFromStmtsDocBlocks(array $stmts) : array
@@ -171,7 +178,7 @@ final class ShortNameResolver
                 return null;
             });
         });
-        return $this->fqnizeShortNames($shortNames, $reflectionClass);
+        return $this->fqnizeShortNames($shortNames, $reflectionClass, $stmts);
     }
     /**
      * @param Node[] $stmts
@@ -194,16 +201,17 @@ final class ShortNameResolver
     }
     /**
      * @param string[] $shortNames
+     * @param Stmt[] $stmts
      * @return array<string, string>
      */
-    private function fqnizeShortNames(array $shortNames, ?\ReflectionClass $reflectionClass) : array
+    private function fqnizeShortNames(array $shortNames, ?\ReflectionClass $reflectionClass, array $stmts) : array
     {
         $shortNamesToFullyQualifiedNames = [];
         foreach ($shortNames as $shortName) {
             if ($reflectionClass instanceof \ReflectionClass) {
                 $fullyQualifiedName = \RectorPrefix20210708\Nette\Utils\Reflection::expandClassName($shortName, $reflectionClass);
             } else {
-                $fullyQualifiedName = $shortName;
+                $fullyQualifiedName = $this->useImportNameMatcher->matchNameWithStmts($shortName, $stmts) ?: $shortName;
             }
             $shortNamesToFullyQualifiedNames[$shortName] = $fullyQualifiedName;
         }
