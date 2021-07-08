@@ -10,7 +10,7 @@ require __DIR__ . '/../vendor/autoload.php';
 /**
  * @param Node|Node[] $node
  */
-function print_node(\PhpParser\Node | array $node): void
+function print_node(Node | array $node): void
 {
     $standard = new Standard();
 

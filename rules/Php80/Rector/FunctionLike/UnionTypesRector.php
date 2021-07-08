@@ -133,7 +133,12 @@ CODE_SAMPLE
                 $uniqueatedParamType,
                 TypeKind::PARAM()
             );
+
             if (! $phpParserUnionType instanceof PhpParserUnionType) {
+                continue;
+            }
+
+            if ($param->type instanceof PhpParserUnionType) {
                 continue;
             }
 

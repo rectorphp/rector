@@ -9,6 +9,7 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\NodeFinder;
@@ -17,6 +18,7 @@ use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use Rector\CodingStyle\NodeAnalyzer\UseImportNameMatcher;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\ValueObject\Application\File;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -46,7 +48,8 @@ final class ShortNameResolver
         private NodeNameResolver $nodeNameResolver,
         private NodeFinder $nodeFinder,
         private ReflectionProvider $reflectionProvider,
-        private BetterNodeFinder $betterNodeFinder
+        private BetterNodeFinder $betterNodeFinder,
+        private UseImportNameMatcher $useImportNameMatcher,
     ) {
     }
 
@@ -100,7 +103,7 @@ final class ShortNameResolver
     }
 
     /**
-     * @param Node[] $stmts
+     * @param Stmt[] $stmts
      * @return array<string, string>
      */
     private function resolveForStmts(array $stmts): array
@@ -144,7 +147,7 @@ final class ShortNameResolver
     }
 
     /**
-     * @param Node[] $stmts
+     * @param Stmt[] $stmts
      * @return array<string, string>
      */
     private function resolveFromStmtsDocBlocks(array $stmts): array
@@ -184,7 +187,7 @@ final class ShortNameResolver
             );
         });
 
-        return $this->fqnizeShortNames($shortNames, $reflectionClass);
+        return $this->fqnizeShortNames($shortNames, $reflectionClass, $stmts);
     }
 
     /**
@@ -212,9 +215,10 @@ final class ShortNameResolver
 
     /**
      * @param string[] $shortNames
+     * @param Stmt[] $stmts
      * @return array<string, string>
      */
-    private function fqnizeShortNames(array $shortNames, ?ReflectionClass $reflectionClass): array
+    private function fqnizeShortNames(array $shortNames, ?ReflectionClass $reflectionClass, array $stmts): array
     {
         $shortNamesToFullyQualifiedNames = [];
 
@@ -222,7 +226,7 @@ final class ShortNameResolver
             if ($reflectionClass instanceof ReflectionClass) {
                 $fullyQualifiedName = Reflection::expandClassName($shortName, $reflectionClass);
             } else {
-                $fullyQualifiedName = $shortName;
+                $fullyQualifiedName = $this->useImportNameMatcher->matchNameWithStmts($shortName, $stmts) ?: $shortName;
             }
 
             $shortNamesToFullyQualifiedNames[$shortName] = $fullyQualifiedName;
