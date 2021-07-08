@@ -5,6 +5,8 @@ namespace Rector\Defluent\NodeAnalyzer;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\Clone_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
@@ -17,6 +19,8 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\Core\PhpParser\AstResolver;
+use Rector\Core\PhpParser\Comparing\NodeComparator;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -49,12 +53,22 @@ final class FluentChainMethodCallNodeAnalyzer
      * @var \Rector\Core\PhpParser\AstResolver
      */
     private $astResolver;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \PhpParser\NodeFinder $nodeFinder, \Rector\Core\PhpParser\AstResolver $astResolver)
+    /**
+     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
+     */
+    private $betterNodeFinder;
+    /**
+     * @var \Rector\Core\PhpParser\Comparing\NodeComparator
+     */
+    private $nodeComparator;
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \PhpParser\NodeFinder $nodeFinder, \Rector\Core\PhpParser\AstResolver $astResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->nodeFinder = $nodeFinder;
         $this->astResolver = $astResolver;
+        $this->betterNodeFinder = $betterNodeFinder;
+        $this->nodeComparator = $nodeComparator;
     }
     /**
      * Checks that in:
@@ -210,14 +224,30 @@ final class FluentChainMethodCallNodeAnalyzer
         /** @var Return_[] $returns */
         $returns = $this->nodeFinder->findInstanceOf($classMethod, \PhpParser\Node\Stmt\Return_::class);
         foreach ($returns as $return) {
-            if (!$return->expr instanceof \PhpParser\Node\Expr\New_) {
+            $expr = $return->expr;
+            if (!$expr instanceof \PhpParser\Node\Expr) {
                 continue;
             }
-            $new = $return->expr;
-            if ($this->nodeNameResolver->isName($new->class, 'self')) {
-                return \true;
+            if (!$this->isNewInstance($expr)) {
+                continue;
             }
+            return \true;
         }
         return \false;
+    }
+    private function isNewInstance(\PhpParser\Node\Expr $expr) : bool
+    {
+        if ($expr instanceof \PhpParser\Node\Expr\Clone_ || $expr instanceof \PhpParser\Node\Expr\New_) {
+            return \true;
+        }
+        return (bool) $this->betterNodeFinder->findFirstPreviousOfNode($expr, function (\PhpParser\Node $node) use($expr) : bool {
+            if (!$node instanceof \PhpParser\Node\Expr\Assign) {
+                return \false;
+            }
+            if (!$this->nodeComparator->areNodesEqual($node->var, $expr)) {
+                return \false;
+            }
+            return $node->expr instanceof \PhpParser\Node\Expr\Clone_ || $node->expr instanceof \PhpParser\Node\Expr\New_;
+        });
     }
 }
