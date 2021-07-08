@@ -4,18 +4,19 @@ declare (strict_types=1);
 namespace Rector\Php80\Rector\Class_;
 
 use PhpParser\Node;
+use PhpParser\Node\AttributeGroup;
 use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Property;
+use PHPStan\PhpDocParser\Ast\Node as DocNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDoc\SpacelessPhpDocTagNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
@@ -53,10 +54,6 @@ final class AnnotationToAttributeRector extends \Rector\Core\Rector\AbstractRect
      */
     private $phpAttributeGroupFactory;
     /**
-     * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover
-     */
-    private $phpDocTagRemover;
-    /**
      * @var \Rector\Php80\PhpDocCleaner\ConvertedAnnotationToAttributeParentRemover
      */
     private $convertedAnnotationToAttributeParentRemover;
@@ -64,10 +61,9 @@ final class AnnotationToAttributeRector extends \Rector\Core\Rector\AbstractRect
      * @var \Rector\Php80\NodeFactory\AttrGroupsFactory
      */
     private $attrGroupsFactory;
-    public function __construct(\Rector\PhpAttribute\Printer\PhpAttributeGroupFactory $phpAttributeGroupFactory, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover $phpDocTagRemover, \Rector\Php80\PhpDocCleaner\ConvertedAnnotationToAttributeParentRemover $convertedAnnotationToAttributeParentRemover, \Rector\Php80\NodeFactory\AttrGroupsFactory $attrGroupsFactory)
+    public function __construct(\Rector\PhpAttribute\Printer\PhpAttributeGroupFactory $phpAttributeGroupFactory, \Rector\Php80\PhpDocCleaner\ConvertedAnnotationToAttributeParentRemover $convertedAnnotationToAttributeParentRemover, \Rector\Php80\NodeFactory\AttrGroupsFactory $attrGroupsFactory)
     {
         $this->phpAttributeGroupFactory = $phpAttributeGroupFactory;
-        $this->phpDocTagRemover = $phpDocTagRemover;
         $this->convertedAnnotationToAttributeParentRemover = $convertedAnnotationToAttributeParentRemover;
         $this->attrGroupsFactory = $attrGroupsFactory;
     }
@@ -118,17 +114,17 @@ CODE_SAMPLE
         if (!$phpDocInfo instanceof \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo) {
             return null;
         }
-        $originalAttrGroupsCount = \count($node->attrGroups);
         // 1. generic tags
-        $this->processGenericTags($phpDocInfo, $node);
+        $genericAttributeGroups = $this->processGenericTags($phpDocInfo);
         // 2. Doctrine annotation classes
-        $this->processDoctrineAnnotationClasses($phpDocInfo, $node);
-        $currentAttrGroupsCount = \count($node->attrGroups);
-        // something has changed
-        if ($originalAttrGroupsCount !== $currentAttrGroupsCount) {
-            return $node;
+        $annotationAttributeGroups = $this->processDoctrineAnnotationClasses($phpDocInfo);
+        $attributeGroups = \array_merge($genericAttributeGroups, $annotationAttributeGroups);
+        if ($attributeGroups === []) {
+            return null;
         }
-        return null;
+        $node->attrGroups = \array_merge($node->attrGroups, $attributeGroups);
+        $this->convertedAnnotationToAttributeParentRemover->processPhpDocNode($phpDocInfo->getPhpDocNode(), $this->annotationsToAttributes, self::SKIP_UNWRAP_ANNOTATIONS);
+        return $node;
     }
     /**
      * @param array<string, AnnotationToAttribute[]> $configuration
@@ -139,43 +135,43 @@ CODE_SAMPLE
         \RectorPrefix20210708\Webmozart\Assert\Assert::allIsInstanceOf($annotationsToAttributes, \Rector\Php80\ValueObject\AnnotationToAttribute::class);
         $this->annotationsToAttributes = $annotationsToAttributes;
     }
-    private function isFoundGenericTag(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo, \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode $phpDocTagValueNode, string $annotationToAttributeTag) : bool
-    {
-        if (!$phpDocInfo->hasByName($annotationToAttributeTag)) {
-            return \false;
-        }
-        return $phpDocTagValueNode instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
-    }
     /**
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Expr\ArrowFunction|\PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\Class_ $node
+     * @return AttributeGroup[]
      */
-    private function processGenericTags(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo, $node) : void
+    private function processGenericTags(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo) : array
     {
-        foreach ($phpDocInfo->getAllTags() as $phpDocTagNode) {
+        $attributeGroups = [];
+        $phpDocNodeTraverser = new \RectorPrefix20210708\Symplify\SimplePhpDocParser\PhpDocNodeTraverser();
+        $phpDocNodeTraverser->traverseWithCallable($phpDocInfo->getPhpDocNode(), '', function (\PHPStan\PhpDocParser\Ast\Node $docNode) use(&$attributeGroups, $phpDocInfo) : ?int {
+            if (!$docNode instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode) {
+                return null;
+            }
+            if (!$docNode->value instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode) {
+                return null;
+            }
+            $tag = \trim($docNode->name, '@');
+            // not a basic one
+            if (\strpos($tag, '\\') !== \false) {
+                return null;
+            }
             foreach ($this->annotationsToAttributes as $annotationToAttribute) {
                 $desiredTag = $annotationToAttribute->getTag();
-                // not a basic one
-                if (\strpos($desiredTag, '\\') !== \false) {
+                if ($desiredTag !== $tag) {
                     continue;
                 }
-                if (!$this->isFoundGenericTag($phpDocInfo, $phpDocTagNode->value, $desiredTag)) {
-                    continue;
-                }
-                // 1. remove php-doc tag
-                $this->phpDocTagRemover->removeByName($phpDocInfo, $desiredTag);
-                // 2. add attributes
-                $node->attrGroups[] = $this->phpAttributeGroupFactory->createFromSimpleTag($annotationToAttribute);
+                $attributeGroups[] = $this->phpAttributeGroupFactory->createFromSimpleTag($annotationToAttribute);
+                $phpDocInfo->markAsChanged();
+                return \RectorPrefix20210708\Symplify\SimplePhpDocParser\PhpDocNodeTraverser::NODE_REMOVE;
             }
-        }
+            return null;
+        });
+        return $attributeGroups;
     }
     /**
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Expr\ArrowFunction|\PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\Class_ $node
+     * @return AttributeGroup[]
      */
-    private function processDoctrineAnnotationClasses(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo, $node) : void
+    private function processDoctrineAnnotationClasses(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo) : array
     {
-        if ($this->shouldSkip($phpDocInfo)) {
-            return;
-        }
         $doctrineTagAndAnnotationToAttributes = [];
         $phpDocNodeTraverser = new \RectorPrefix20210708\Symplify\SimplePhpDocParser\PhpDocNodeTraverser();
         $phpDocNodeTraverser->traverseWithCallable($phpDocInfo->getPhpDocNode(), '', function ($node) use(&$doctrineTagAndAnnotationToAttributes, $phpDocInfo) : ?int {
@@ -185,6 +181,9 @@ CODE_SAMPLE
                 $doctrineAnnotationTagValueNode = $node;
             } else {
                 return null;
+            }
+            if ($doctrineAnnotationTagValueNode->hasClassNames(self::SKIP_UNWRAP_ANNOTATIONS)) {
+                return \RectorPrefix20210708\Symplify\SimplePhpDocParser\PhpDocNodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
             }
             foreach ($this->annotationsToAttributes as $annotationToAttribute) {
                 if (!$doctrineAnnotationTagValueNode->hasClassName($annotationToAttribute->getTag())) {
@@ -197,15 +196,6 @@ CODE_SAMPLE
             }
             return null;
         });
-        $attrGroups = $this->attrGroupsFactory->create($doctrineTagAndAnnotationToAttributes);
-        if ($attrGroups === []) {
-            return;
-        }
-        $node->attrGroups = $attrGroups;
-        $this->convertedAnnotationToAttributeParentRemover->processPhpDocNode($phpDocInfo->getPhpDocNode(), $this->annotationsToAttributes);
-    }
-    private function shouldSkip(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo) : bool
-    {
-        return $phpDocInfo->hasByAnnotationClasses(self::SKIP_UNWRAP_ANNOTATIONS);
+        return $this->attrGroupsFactory->create($doctrineTagAndAnnotationToAttributes);
     }
 }

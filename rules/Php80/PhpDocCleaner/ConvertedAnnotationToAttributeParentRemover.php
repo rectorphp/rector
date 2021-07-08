@@ -12,17 +12,22 @@ use RectorPrefix20210708\Symplify\SimplePhpDocParser\PhpDocNodeTraverser;
 final class ConvertedAnnotationToAttributeParentRemover
 {
     /**
+     * @param string[] $skippedUnwrapAnnotations
      * @param AnnotationToAttribute[] $annotationsToAttributes
      */
-    public function processPhpDocNode(\PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode $phpDocNode, array $annotationsToAttributes) : void
+    public function processPhpDocNode(\PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode $phpDocNode, array $annotationsToAttributes, array $skippedUnwrapAnnotations) : void
     {
         $phpDocNodeTraverser = new \RectorPrefix20210708\Symplify\SimplePhpDocParser\PhpDocNodeTraverser();
-        $phpDocNodeTraverser->traverseWithCallable($phpDocNode, '', function ($node) use($annotationsToAttributes) : ?int {
+        $phpDocNodeTraverser->traverseWithCallable($phpDocNode, '', function ($node) use($annotationsToAttributes, $skippedUnwrapAnnotations) : ?int {
             if (!$node instanceof \Rector\BetterPhpDocParser\PhpDoc\SpacelessPhpDocTagNode) {
                 return null;
             }
             if (!$node->value instanceof \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode) {
                 return null;
+            }
+            $doctrineAnnotationTagValueNode = $node->value;
+            if ($doctrineAnnotationTagValueNode->hasClassNames($skippedUnwrapAnnotations)) {
+                return \RectorPrefix20210708\Symplify\SimplePhpDocParser\PhpDocNodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
             }
             // has only children of annotation to attribute? it will be removed
             if ($this->detect($node->value, $annotationsToAttributes)) {
