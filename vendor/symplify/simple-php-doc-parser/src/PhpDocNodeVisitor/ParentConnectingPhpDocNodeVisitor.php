@@ -32,8 +32,12 @@ final class ParentConnectingPhpDocNodeVisitor extends \RectorPrefix20210708\Symp
         $this->stack[] = $node;
         return $node;
     }
-    public function leaveNode(\PHPStan\PhpDocParser\Ast\Node $node) : void
+    /**
+     * @return null|int|\PhpParser\Node|Node[] Replacement node (or special return
+     */
+    public function leaveNode(\PHPStan\PhpDocParser\Ast\Node $node)
     {
         \array_pop($this->stack);
+        return null;
     }
 }

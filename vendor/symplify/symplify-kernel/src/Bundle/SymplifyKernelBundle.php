@@ -16,6 +16,9 @@ final class SymplifyKernelBundle extends \RectorPrefix20210708\Symfony\Component
     {
         $containerBuilder->addCompilerPass(new \RectorPrefix20210708\Symplify\AutowireArrayParameter\DependencyInjection\CompilerPass\AutowireArrayParameterCompilerPass());
     }
+    /**
+     * @return
+     */
     protected function createContainerExtension() : ?\RectorPrefix20210708\Symfony\Component\DependencyInjection\Extension\ExtensionInterface
     {
         return new \RectorPrefix20210708\Symplify\SymplifyKernel\DependencyInjection\Extension\SymplifyKernelExtension();

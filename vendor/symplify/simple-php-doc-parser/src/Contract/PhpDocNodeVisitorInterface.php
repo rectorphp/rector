@@ -14,6 +14,9 @@ interface PhpDocNodeVisitorInterface
      * @return int|Node|null
      */
     public function enterNode(\PHPStan\PhpDocParser\Ast\Node $node);
-    public function leaveNode(\PHPStan\PhpDocParser\Ast\Node $node) : void;
+    /**
+     * @return null|int|\PhpParser\Node|Node[] Replacement node (or special return)
+     */
+    public function leaveNode(\PHPStan\PhpDocParser\Ast\Node $node);
     public function afterTraverse(\PHPStan\PhpDocParser\Ast\Node $node) : void;
 }

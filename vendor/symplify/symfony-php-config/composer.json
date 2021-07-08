@@ -5,8 +5,8 @@
     "require": {
         "php": ">=8.0",
         "symfony\/dependency-injection": "^5.3",
-        "symplify\/symplify-kernel": "^9.4.14",
-        "symplify\/package-builder": "^9.4.14"
+        "symplify\/symplify-kernel": "^9.4.15",
+        "symplify\/package-builder": "^9.4.15"
     },
     "require-dev": {
         "symfony\/http-kernel": "^5.3",

@@ -7,6 +7,9 @@ use RectorPrefix20210708\Symfony\Component\HttpKernel\Bundle\Bundle;
 use RectorPrefix20210708\Symplify\Skipper\DependencyInjection\Extension\SkipperExtension;
 final class SkipperBundle extends \RectorPrefix20210708\Symfony\Component\HttpKernel\Bundle\Bundle
 {
+    /**
+     * @return
+     */
     protected function createContainerExtension() : ?\RectorPrefix20210708\Symfony\Component\DependencyInjection\Extension\ExtensionInterface
     {
         return new \RectorPrefix20210708\Symplify\Skipper\DependencyInjection\Extension\SkipperExtension();

@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit8b4cd83fbe1cbaded6914d06ef308b75
+class ComposerStaticInitec1756b7016cb728d5c640c220314df9
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -3105,6 +3105,7 @@ class ComposerStaticInit8b4cd83fbe1cbaded6914d06ef308b75
         'Rector\\Php80\\NodeAnalyzer\\PromotedPropertyCandidateResolver' => __DIR__ . '/../..' . '/rules/Php80/NodeAnalyzer/PromotedPropertyCandidateResolver.php',
         'Rector\\Php80\\NodeAnalyzer\\PromotedPropertyResolver' => __DIR__ . '/../..' . '/rules/Php80/NodeAnalyzer/PromotedPropertyResolver.php',
         'Rector\\Php80\\NodeAnalyzer\\SwitchAnalyzer' => __DIR__ . '/../..' . '/rules/Php80/NodeAnalyzer/SwitchAnalyzer.php',
+        'Rector\\Php80\\NodeFactory\\AttrGroupsFactory' => __DIR__ . '/../..' . '/rules/Php80/NodeFactory/AttrGroupsFactory.php',
         'Rector\\Php80\\NodeFactory\\AttributeFlagFactory' => __DIR__ . '/../..' . '/rules/Php80/NodeFactory/AttributeFlagFactory.php',
         'Rector\\Php80\\NodeFactory\\MatchArmsFactory' => __DIR__ . '/../..' . '/rules/Php80/NodeFactory/MatchArmsFactory.php',
         'Rector\\Php80\\NodeFactory\\MatchFactory' => __DIR__ . '/../..' . '/rules/Php80/NodeFactory/MatchFactory.php',
@@ -3113,6 +3114,7 @@ class ComposerStaticInit8b4cd83fbe1cbaded6914d06ef308b75
         'Rector\\Php80\\NodeResolver\\ArgumentSorter' => __DIR__ . '/../..' . '/rules/Php80/NodeResolver/ArgumentSorter.php',
         'Rector\\Php80\\NodeResolver\\RequireOptionalParamResolver' => __DIR__ . '/../..' . '/rules/Php80/NodeResolver/RequireOptionalParamResolver.php',
         'Rector\\Php80\\NodeResolver\\SwitchExprsResolver' => __DIR__ . '/../..' . '/rules/Php80/NodeResolver/SwitchExprsResolver.php',
+        'Rector\\Php80\\PhpDocCleaner\\ConvertedAnnotationToAttributeParentRemover' => __DIR__ . '/../..' . '/rules/Php80/PhpDocCleaner/ConvertedAnnotationToAttributeParentRemover.php',
         'Rector\\Php80\\Rector\\Catch_\\RemoveUnusedVariableInCatchRector' => __DIR__ . '/../..' . '/rules/Php80/Rector/Catch_/RemoveUnusedVariableInCatchRector.php',
         'Rector\\Php80\\Rector\\ClassMethod\\FinalPrivateToPrivateVisibilityRector' => __DIR__ . '/../..' . '/rules/Php80/Rector/ClassMethod/FinalPrivateToPrivateVisibilityRector.php',
         'Rector\\Php80\\Rector\\ClassMethod\\OptionalParametersAfterRequiredRector' => __DIR__ . '/../..' . '/rules/Php80/Rector/ClassMethod/OptionalParametersAfterRequiredRector.php',
@@ -3868,9 +3870,9 @@ class ComposerStaticInit8b4cd83fbe1cbaded6914d06ef308b75
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit8b4cd83fbe1cbaded6914d06ef308b75::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit8b4cd83fbe1cbaded6914d06ef308b75::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit8b4cd83fbe1cbaded6914d06ef308b75::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitec1756b7016cb728d5c640c220314df9::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitec1756b7016cb728d5c640c220314df9::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitec1756b7016cb728d5c640c220314df9::$classMap;
 
         }, null, ClassLoader::class);
     }

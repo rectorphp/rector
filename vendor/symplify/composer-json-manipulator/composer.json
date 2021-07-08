@@ -10,8 +10,8 @@
         "symfony\/dependency-injection": "^5.3",
         "symfony\/filesystem": "^5.3",
         "symfony\/http-kernel": "^5.3",
-        "symplify\/package-builder": "^9.4.14",
-        "symplify\/smart-file-system": "^9.4.14"
+        "symplify\/package-builder": "^9.4.15",
+        "symplify\/smart-file-system": "^9.4.15"
     },
     "require-dev": {
         "phpunit\/phpunit": "^9.5"

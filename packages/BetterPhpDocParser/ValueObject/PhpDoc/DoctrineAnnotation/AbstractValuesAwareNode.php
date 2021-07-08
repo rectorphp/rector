@@ -23,6 +23,10 @@ abstract class AbstractValuesAwareNode implements \PHPStan\PhpDocParser\Ast\PhpD
     /**
      * @var mixed[]
      */
+    private $originalValues = [];
+    /**
+     * @var mixed[]
+     */
     public $values = [];
     /**
      * @var string|null
@@ -40,6 +44,7 @@ abstract class AbstractValuesAwareNode implements \PHPStan\PhpDocParser\Ast\PhpD
         $this->values = $values;
         $this->originalContent = $originalContent;
         $this->silentKey = $silentKey;
+        $this->originalValues = $values;
     }
     public function removeValue(string $key) : void
     {
@@ -146,6 +151,13 @@ abstract class AbstractValuesAwareNode implements \PHPStan\PhpDocParser\Ast\PhpD
     public function markAsChanged() : void
     {
         $this->hasChanged = \true;
+    }
+    /**
+     * @return mixed[]
+     */
+    public function getOriginalValues() : array
+    {
+        return $this->originalValues;
     }
     /**
      * @param mixed|string $value

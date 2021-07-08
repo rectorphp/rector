@@ -20,8 +20,12 @@ abstract class AbstractPhpDocNodeVisitor implements \RectorPrefix20210708\Sympli
     {
         return null;
     }
-    public function leaveNode(\PHPStan\PhpDocParser\Ast\Node $node) : void
+    /**
+     * @return null|int|\PhpParser\Node|Node[] Replacement node (or special return)
+     */
+    public function leaveNode(\PHPStan\PhpDocParser\Ast\Node $node)
     {
+        return null;
     }
     public function afterTraverse(\PHPStan\PhpDocParser\Ast\Node $node) : void
     {

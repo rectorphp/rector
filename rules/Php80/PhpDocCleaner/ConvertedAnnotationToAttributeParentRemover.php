@@ -1,0 +1,64 @@
+<?php
+
+declare (strict_types=1);
+namespace Rector\Php80\PhpDocCleaner;
+
+use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
+use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
+use Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode;
+use Rector\Php80\ValueObject\AnnotationToAttribute;
+use RectorPrefix20210708\Symplify\SimplePhpDocParser\PhpDocNodeTraverser;
+final class ConvertedAnnotationToAttributeParentRemover
+{
+    /**
+     * @param AnnotationToAttribute[] $annotationsToAttributes
+     */
+    public function processPhpDocNode(\PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode $phpDocNode, array $annotationsToAttributes) : void
+    {
+        $phpDocNodeTraverser = new \RectorPrefix20210708\Symplify\SimplePhpDocParser\PhpDocNodeTraverser();
+        $phpDocNodeTraverser->traverseWithCallable($phpDocNode, '', function ($node) use($annotationsToAttributes) {
+            if (!$node instanceof \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode) {
+                return $node;
+            }
+            // has only children of annotation to attribute? it will be removed
+            if ($this->detect($node, $annotationsToAttributes)) {
+                return \RectorPrefix20210708\Symplify\SimplePhpDocParser\PhpDocNodeTraverser::NODE_REMOVE;
+            }
+            return $node;
+        });
+    }
+    /**
+     * @param AnnotationToAttribute[] $annotationsToAttributes
+     */
+    private function detect(\Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode, array $annotationsToAttributes) : bool
+    {
+        foreach ($doctrineAnnotationTagValueNode->getValues() as $nodeValue) {
+            if (!$nodeValue instanceof \Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode) {
+                return \false;
+            }
+            if (!$this->isCurlyListOfDoctrineAnnotationTagValueNodes($nodeValue, $annotationsToAttributes)) {
+                return \false;
+            }
+        }
+        return \true;
+    }
+    /**
+     * @param AnnotationToAttribute[] $annotationsToAttributes
+     */
+    private function isCurlyListOfDoctrineAnnotationTagValueNodes(\Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode $curlyListNode, array $annotationsToAttributes) : bool
+    {
+        foreach ($curlyListNode->getOriginalValues() as $nodeValueValue) {
+            foreach ($annotationsToAttributes as $annotationToAttribute) {
+                if (!$nodeValueValue instanceof \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode) {
+                    return \false;
+                }
+                // found it
+                if ($nodeValueValue->hasClassName($annotationToAttribute->getTag())) {
+                    continue 2;
+                }
+            }
+            return \false;
+        }
+        return \true;
+    }
+}
