@@ -5,9 +5,9 @@ namespace Rector\DeadCode\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Rector\AbstractRector;
-use Rector\DeadCode\PhpDoc\DeadParamTagValueNodeAnalyzer;
+use Rector\DeadCode\PhpDoc\TagRemover\ParamTagRemover;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -17,17 +17,12 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveUselessParamTagRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var \Rector\DeadCode\PhpDoc\DeadParamTagValueNodeAnalyzer
+     * @var \Rector\DeadCode\PhpDoc\TagRemover\ParamTagRemover
      */
-    private $deadParamTagValueNodeAnalyzer;
-    /**
-     * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover
-     */
-    private $phpDocTagRemover;
-    public function __construct(\Rector\DeadCode\PhpDoc\DeadParamTagValueNodeAnalyzer $deadParamTagValueNodeAnalyzer, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover $phpDocTagRemover)
+    private $paramTagRemover;
+    public function __construct(\Rector\DeadCode\PhpDoc\TagRemover\ParamTagRemover $paramTagRemover)
     {
-        $this->deadParamTagValueNodeAnalyzer = $deadParamTagValueNodeAnalyzer;
-        $this->phpDocTagRemover = $phpDocTagRemover;
+        $this->paramTagRemover = $paramTagRemover;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -68,13 +63,11 @@ CODE_SAMPLE
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
-        foreach ($phpDocInfo->getParamTagValueNodes() as $paramTagValueNode) {
-            if (!$this->deadParamTagValueNodeAnalyzer->isDead($paramTagValueNode, $node)) {
-                continue;
-            }
-            $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $paramTagValueNode);
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNode($node);
+        if (!$phpDocInfo instanceof \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo) {
+            return null;
         }
+        $this->paramTagRemover->removeParamTagsIfUseless($phpDocInfo, $node);
         if ($phpDocInfo->hasChanged()) {
             $node->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::HAS_PHP_DOC_INFO_JUST_CHANGED, \true);
             return $node;
