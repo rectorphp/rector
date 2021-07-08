@@ -1010,7 +1010,7 @@ class Standard extends \PhpParser\PrettyPrinterAbstract
      */
     protected function pStmt_Enum($node)
     {
-        return $this->pAttrGroups($node->attrGroups) . 'enum ' . $node->name . (!empty($node->implements) ? ' implements ' . $this->pCommaSeparated($node->implements) : '') . $this->nl . '{' . $this->pStmts($node->stmts) . $this->nl . '}';
+        return $this->pAttrGroups($node->attrGroups) . 'enum ' . $node->name . ($node->scalarType ? " : {$node->scalarType}" : '') . (!empty($node->implements) ? ' implements ' . $this->pCommaSeparated($node->implements) : '') . $this->nl . '{' . $this->pStmts($node->stmts) . $this->nl . '}';
     }
     /**
      * @param \PhpParser\Node\Stmt\Class_ $node

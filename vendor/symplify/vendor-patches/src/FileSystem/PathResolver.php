@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210707\Symplify\VendorPatches\FileSystem;
+namespace RectorPrefix20210708\Symplify\VendorPatches\FileSystem;
 
-use RectorPrefix20210707\Nette\Utils\Strings;
+use RectorPrefix20210708\Nette\Utils\Strings;
 use Symplify\SmartFileSystem\SmartFileInfo;
-use RectorPrefix20210707\Symplify\SymplifyKernel\Exception\ShouldNotHappenException;
+use RectorPrefix20210708\Symplify\SymplifyKernel\Exception\ShouldNotHappenException;
 final class PathResolver
 {
     /**
@@ -15,9 +15,9 @@ final class PathResolver
     private const VENDOR_PACKAGE_DIRECTORY_REGEX = '#^(?<vendor_package_directory>.*?vendor\\/(\\w|\\.|\\-)+\\/(\\w|\\.|\\-)+)\\/#si';
     public function resolveVendorDirectory(\Symplify\SmartFileSystem\SmartFileInfo $fileInfo) : string
     {
-        $match = \RectorPrefix20210707\Nette\Utils\Strings::match($fileInfo->getRealPath(), self::VENDOR_PACKAGE_DIRECTORY_REGEX);
+        $match = \RectorPrefix20210708\Nette\Utils\Strings::match($fileInfo->getRealPath(), self::VENDOR_PACKAGE_DIRECTORY_REGEX);
         if (!isset($match['vendor_package_directory'])) {
-            throw new \RectorPrefix20210707\Symplify\SymplifyKernel\Exception\ShouldNotHappenException('Could not resolve vendor package directory');
+            throw new \RectorPrefix20210708\Symplify\SymplifyKernel\Exception\ShouldNotHappenException('Could not resolve vendor package directory');
         }
         return $match['vendor_package_directory'];
     }

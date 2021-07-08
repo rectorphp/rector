@@ -28,7 +28,8 @@ final class BuilderHelpers
     {
         if ($node instanceof \PhpParser\Builder) {
             return $node->getNode();
-        } elseif ($node instanceof \PhpParser\Node) {
+        }
+        if ($node instanceof \PhpParser\Node) {
             return $node;
         }
         throw new \LogicException('Expected node or builder object');
@@ -68,7 +69,7 @@ final class BuilderHelpers
         if (\is_string($name)) {
             return new \PhpParser\Node\Identifier($name);
         }
-        throw new \LogicException('RectorPrefix20210707\\Expected string or instance of Node\\Identifier');
+        throw new \LogicException('RectorPrefix20210708\\Expected string or instance of Node\\Identifier');
     }
     /**
      * Normalizes strings to Identifier, also allowing expressions.
@@ -85,7 +86,7 @@ final class BuilderHelpers
         if (\is_string($name)) {
             return new \PhpParser\Node\Identifier($name);
         }
-        throw new \LogicException('RectorPrefix20210707\\Expected string or instance of Node\\Identifier or Node\\Expr');
+        throw new \LogicException('RectorPrefix20210708\\Expected string or instance of Node\\Identifier or Node\\Expr');
     }
     /**
      * Normalizes a name: Converts string names to Name nodes.
@@ -121,26 +122,26 @@ final class BuilderHelpers
     {
         if ($name instanceof \PhpParser\Node\Name) {
             return $name;
-        } elseif (\is_string($name)) {
+        }
+        if (\is_string($name)) {
             if (!$name) {
                 throw new \LogicException('Name cannot be empty');
             }
             if ($name[0] === '\\') {
                 return new \PhpParser\Node\Name\FullyQualified(\substr($name, 1));
-            } elseif (0 === \strpos($name, 'namespace\\')) {
-                return new \PhpParser\Node\Name\Relative(\substr($name, \strlen('namespace\\')));
-            } else {
-                return new \PhpParser\Node\Name($name);
             }
+            if (0 === \strpos($name, 'namespace\\')) {
+                return new \PhpParser\Node\Name\Relative(\substr($name, \strlen('namespace\\')));
+            }
+            return new \PhpParser\Node\Name($name);
         }
         if ($allowExpr) {
             if ($name instanceof \PhpParser\Node\Expr) {
                 return $name;
             }
-            throw new \LogicException('RectorPrefix20210707\\Name must be a string or an instance of Node\\Name or Node\\Expr');
-        } else {
-            throw new \LogicException('RectorPrefix20210707\\Name must be a string or an instance of Node\\Name');
+            throw new \LogicException('RectorPrefix20210708\\Name must be a string or an instance of Node\\Name or Node\\Expr');
         }
+        throw new \LogicException('RectorPrefix20210708\\Name must be a string or an instance of Node\\Name');
     }
     /**
      * Normalizes a type: Converts plain-text type names into proper AST representation.
@@ -165,18 +166,16 @@ final class BuilderHelpers
             $nullable = \true;
             $type = \substr($type, 1);
         }
-        $builtinTypes = ['array', 'callable', 'string', 'int', 'float', 'bool', 'iterable', 'void', 'object', 'mixed'];
+        $builtinTypes = ['array', 'callable', 'string', 'int', 'float', 'bool', 'iterable', 'void', 'object', 'mixed', 'never'];
         $lowerType = \strtolower($type);
         if (\in_array($lowerType, $builtinTypes)) {
             $type = new \PhpParser\Node\Identifier($lowerType);
         } else {
             $type = self::normalizeName($type);
         }
-        if ($nullable && (string) $type === 'void') {
-            throw new \LogicException('void type cannot be nullable');
-        }
-        if ($nullable && (string) $type === 'mixed') {
-            throw new \LogicException('mixed type cannot be nullable');
+        $notNullableTypes = ['void', 'mixed', 'never'];
+        if ($nullable && \in_array((string) $type, $notNullableTypes)) {
+            throw new \LogicException(\sprintf('%s type cannot be nullable', $type));
         }
         return $nullable ? new \PhpParser\Node\NullableType($type) : $type;
     }
@@ -192,17 +191,23 @@ final class BuilderHelpers
     {
         if ($value instanceof \PhpParser\Node\Expr) {
             return $value;
-        } elseif (\is_null($value)) {
+        }
+        if (\is_null($value)) {
             return new \PhpParser\Node\Expr\ConstFetch(new \PhpParser\Node\Name('null'));
-        } elseif (\is_bool($value)) {
+        }
+        if (\is_bool($value)) {
             return new \PhpParser\Node\Expr\ConstFetch(new \PhpParser\Node\Name($value ? 'true' : 'false'));
-        } elseif (\is_int($value)) {
+        }
+        if (\is_int($value)) {
             return new \PhpParser\Node\Scalar\LNumber($value);
-        } elseif (\is_float($value)) {
+        }
+        if (\is_float($value)) {
             return new \PhpParser\Node\Scalar\DNumber($value);
-        } elseif (\is_string($value)) {
+        }
+        if (\is_string($value)) {
             return new \PhpParser\Node\Scalar\String_($value);
-        } elseif (\is_array($value)) {
+        }
+        if (\is_array($value)) {
             $items = [];
             $lastKey = -1;
             foreach ($value as $itemKey => $itemValue) {
@@ -215,9 +220,8 @@ final class BuilderHelpers
                 }
             }
             return new \PhpParser\Node\Expr\Array_($items);
-        } else {
-            throw new \LogicException('Invalid value');
         }
+        throw new \LogicException('Invalid value');
     }
     /**
      * Normalizes a doc comment: Converts plain strings to PhpParser\Comment\Doc.
@@ -230,11 +234,28 @@ final class BuilderHelpers
     {
         if ($docComment instanceof \PhpParser\Comment\Doc) {
             return $docComment;
-        } elseif (\is_string($docComment)) {
-            return new \PhpParser\Comment\Doc($docComment);
-        } else {
-            throw new \LogicException('RectorPrefix20210707\\Doc comment must be a string or an instance of PhpParser\\Comment\\Doc');
         }
+        if (\is_string($docComment)) {
+            return new \PhpParser\Comment\Doc($docComment);
+        }
+        throw new \LogicException('RectorPrefix20210708\\Doc comment must be a string or an instance of PhpParser\\Comment\\Doc');
+    }
+    /**
+     * Normalizes a attribute: Converts attribute to the Attribute Group if needed.
+     *
+     * @param Node\Attribute|Node\AttributeGroup $attribute
+     *
+     * @return Node\AttributeGroup The Attribute Group
+     */
+    public static function normalizeAttribute($attribute) : \PhpParser\Node\AttributeGroup
+    {
+        if ($attribute instanceof \PhpParser\Node\AttributeGroup) {
+            return $attribute;
+        }
+        if (!$attribute instanceof \PhpParser\Node\Attribute) {
+            throw new \LogicException('RectorPrefix20210708\\Attribute must be an instance of PhpParser\\Node\\Attribute or PhpParser\\Node\\AttributeGroup');
+        }
+        return new \PhpParser\Node\AttributeGroup([$attribute]);
     }
     /**
      * Adds a modifier and returns new modifier bitmask.

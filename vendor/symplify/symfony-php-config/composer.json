@@ -5,13 +5,13 @@
     "require": {
         "php": ">=8.0",
         "symfony\/dependency-injection": "^5.3",
-        "symplify\/symplify-kernel": "^9.4.4",
-        "symplify\/package-builder": "^9.4.4"
+        "symplify\/symplify-kernel": "^9.4.14",
+        "symplify\/package-builder": "^9.4.14"
     },
     "require-dev": {
         "symfony\/http-kernel": "^5.3",
         "phpunit\/phpunit": "^9.5",
-        "phpstan\/phpstan": "^0.12.90"
+        "phpstan\/phpstan": "^0.12.91"
     },
     "autoload": {
         "psr-4": {

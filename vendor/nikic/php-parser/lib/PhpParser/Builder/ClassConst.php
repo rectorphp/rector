@@ -3,8 +3,9 @@
 declare (strict_types=1);
 namespace PhpParser\Builder;
 
-use RectorPrefix20210707\PhpParser;
+use RectorPrefix20210708\PhpParser;
 use PhpParser\BuilderHelpers;
+use PhpParser\Node;
 use PhpParser\Node\Const_;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt;
@@ -13,6 +14,8 @@ class ClassConst implements \PhpParser\Builder
     protected $flags = 0;
     protected $attributes = [];
     protected $constants = [];
+    /** @var Node\AttributeGroup[] */
+    protected $attributeGroups = [];
     /**
      * Creates a class constant builder
      *
@@ -79,12 +82,24 @@ class ClassConst implements \PhpParser\Builder
         return $this;
     }
     /**
+     * Adds an attribute group.
+     *
+     * @param Node\Attribute|Node\AttributeGroup $attribute
+     *
+     * @return $this The builder instance (for fluid interface)
+     */
+    public function addAttribute($attribute)
+    {
+        $this->attributeGroups[] = \PhpParser\BuilderHelpers::normalizeAttribute($attribute);
+        return $this;
+    }
+    /**
      * Returns the built class node.
      *
      * @return Stmt\ClassConst The built constant node
      */
     public function getNode() : \PhpParser\Node
     {
-        return new \PhpParser\Node\Stmt\ClassConst($this->constants, $this->flags, $this->attributes);
+        return new \PhpParser\Node\Stmt\ClassConst($this->constants, $this->flags, $this->attributes, $this->attributeGroups);
     }
 }

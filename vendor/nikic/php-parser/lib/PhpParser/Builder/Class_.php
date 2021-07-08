@@ -3,8 +3,9 @@
 declare (strict_types=1);
 namespace PhpParser\Builder;
 
-use RectorPrefix20210707\PhpParser;
+use RectorPrefix20210708\PhpParser;
 use PhpParser\BuilderHelpers;
+use PhpParser\Node;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt;
 class Class_ extends \PhpParser\Builder\Declaration
@@ -17,6 +18,8 @@ class Class_ extends \PhpParser\Builder\Declaration
     protected $constants = [];
     protected $properties = [];
     protected $methods = [];
+    /** @var Node\AttributeGroup[] */
+    protected $attributeGroups = [];
     /**
      * Creates a class builder.
      *
@@ -91,12 +94,24 @@ class Class_ extends \PhpParser\Builder\Declaration
         return $this;
     }
     /**
+     * Adds an attribute group.
+     *
+     * @param Node\Attribute|Node\AttributeGroup $attribute
+     *
+     * @return $this The builder instance (for fluid interface)
+     */
+    public function addAttribute($attribute)
+    {
+        $this->attributeGroups[] = \PhpParser\BuilderHelpers::normalizeAttribute($attribute);
+        return $this;
+    }
+    /**
      * Returns the built class node.
      *
      * @return Stmt\Class_ The built class node
      */
     public function getNode() : \PhpParser\Node
     {
-        return new \PhpParser\Node\Stmt\Class_($this->name, ['flags' => $this->flags, 'extends' => $this->extends, 'implements' => $this->implements, 'stmts' => \array_merge($this->uses, $this->constants, $this->properties, $this->methods)], $this->attributes);
+        return new \PhpParser\Node\Stmt\Class_($this->name, ['flags' => $this->flags, 'extends' => $this->extends, 'implements' => $this->implements, 'stmts' => \array_merge($this->uses, $this->constants, $this->properties, $this->methods), 'attrGroups' => $this->attributeGroups], $this->attributes);
     }
 }

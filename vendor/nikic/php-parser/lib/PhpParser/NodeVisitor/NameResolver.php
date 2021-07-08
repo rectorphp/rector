@@ -81,6 +81,14 @@ class NameResolver extends \PhpParser\NodeVisitorAbstract
             }
             $this->resolveAttrGroups($node);
             $this->addNamespacedName($node);
+        } elseif ($node instanceof \PhpParser\Node\Stmt\Enum_) {
+            foreach ($node->implements as &$interface) {
+                $interface = $this->resolveClassName($interface);
+            }
+            $this->resolveAttrGroups($node);
+            if (null !== $node->name) {
+                $this->addNamespacedName($node);
+            }
         } elseif ($node instanceof \PhpParser\Node\Stmt\Trait_) {
             $this->resolveAttrGroups($node);
             $this->addNamespacedName($node);
@@ -103,31 +111,35 @@ class NameResolver extends \PhpParser\NodeVisitorAbstract
         } else {
             if ($node instanceof \PhpParser\Node\Stmt\ClassConst) {
                 $this->resolveAttrGroups($node);
-            } elseif ($node instanceof \PhpParser\Node\Expr\StaticCall || $node instanceof \PhpParser\Node\Expr\StaticPropertyFetch || $node instanceof \PhpParser\Node\Expr\ClassConstFetch || $node instanceof \PhpParser\Node\Expr\New_ || $node instanceof \PhpParser\Node\Expr\Instanceof_) {
-                if ($node->class instanceof \PhpParser\Node\Name) {
-                    $node->class = $this->resolveClassName($node->class);
-                }
-            } elseif ($node instanceof \PhpParser\Node\Stmt\Catch_) {
-                foreach ($node->types as &$type) {
-                    $type = $this->resolveClassName($type);
-                }
-            } elseif ($node instanceof \PhpParser\Node\Expr\FuncCall) {
-                if ($node->name instanceof \PhpParser\Node\Name) {
-                    $node->name = $this->resolveName($node->name, \PhpParser\Node\Stmt\Use_::TYPE_FUNCTION);
-                }
-            } elseif ($node instanceof \PhpParser\Node\Expr\ConstFetch) {
-                $node->name = $this->resolveName($node->name, \PhpParser\Node\Stmt\Use_::TYPE_CONSTANT);
-            } elseif ($node instanceof \PhpParser\Node\Stmt\TraitUse) {
-                foreach ($node->traits as &$trait) {
-                    $trait = $this->resolveClassName($trait);
-                }
-                foreach ($node->adaptations as $adaptation) {
-                    if (null !== $adaptation->trait) {
-                        $adaptation->trait = $this->resolveClassName($adaptation->trait);
+            } else {
+                if ($node instanceof \PhpParser\Node\Stmt\EnumCase) {
+                    $this->resolveAttrGroups($node);
+                } elseif ($node instanceof \PhpParser\Node\Expr\StaticCall || $node instanceof \PhpParser\Node\Expr\StaticPropertyFetch || $node instanceof \PhpParser\Node\Expr\ClassConstFetch || $node instanceof \PhpParser\Node\Expr\New_ || $node instanceof \PhpParser\Node\Expr\Instanceof_) {
+                    if ($node->class instanceof \PhpParser\Node\Name) {
+                        $node->class = $this->resolveClassName($node->class);
                     }
-                    if ($adaptation instanceof \PhpParser\Node\Stmt\TraitUseAdaptation\Precedence) {
-                        foreach ($adaptation->insteadof as &$insteadof) {
-                            $insteadof = $this->resolveClassName($insteadof);
+                } elseif ($node instanceof \PhpParser\Node\Stmt\Catch_) {
+                    foreach ($node->types as &$type) {
+                        $type = $this->resolveClassName($type);
+                    }
+                } elseif ($node instanceof \PhpParser\Node\Expr\FuncCall) {
+                    if ($node->name instanceof \PhpParser\Node\Name) {
+                        $node->name = $this->resolveName($node->name, \PhpParser\Node\Stmt\Use_::TYPE_FUNCTION);
+                    }
+                } elseif ($node instanceof \PhpParser\Node\Expr\ConstFetch) {
+                    $node->name = $this->resolveName($node->name, \PhpParser\Node\Stmt\Use_::TYPE_CONSTANT);
+                } elseif ($node instanceof \PhpParser\Node\Stmt\TraitUse) {
+                    foreach ($node->traits as &$trait) {
+                        $trait = $this->resolveClassName($trait);
+                    }
+                    foreach ($node->adaptations as $adaptation) {
+                        if (null !== $adaptation->trait) {
+                            $adaptation->trait = $this->resolveClassName($adaptation->trait);
+                        }
+                        if ($adaptation instanceof \PhpParser\Node\Stmt\TraitUseAdaptation\Precedence) {
+                            foreach ($adaptation->insteadof as &$insteadof) {
+                                $insteadof = $this->resolveClassName($insteadof);
+                            }
                         }
                     }
                 }

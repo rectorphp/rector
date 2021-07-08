@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210707\TYPO3\CMS\Core\Resource;
+namespace RectorPrefix20210708\TYPO3\CMS\Core\Resource;
 
 if (\class_exists('TYPO3\\CMS\\Core\\Resource\\ProcessedFile')) {
     return;

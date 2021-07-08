@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210707\Psr\Log;
+namespace RectorPrefix20210708\Psr\Log;
 
 /**
  * This is a simple Logger trait that classes unable to extend AbstractLogger
@@ -22,7 +22,7 @@ trait LoggerTrait
      */
     public function emergency($message, $context = array())
     {
-        $this->log(\RectorPrefix20210707\Psr\Log\LogLevel::EMERGENCY, $message, $context);
+        $this->log(\RectorPrefix20210708\Psr\Log\LogLevel::EMERGENCY, $message, $context);
     }
     /**
      * Action must be taken immediately.
@@ -37,7 +37,7 @@ trait LoggerTrait
      */
     public function alert($message, $context = array())
     {
-        $this->log(\RectorPrefix20210707\Psr\Log\LogLevel::ALERT, $message, $context);
+        $this->log(\RectorPrefix20210708\Psr\Log\LogLevel::ALERT, $message, $context);
     }
     /**
      * Critical conditions.
@@ -51,7 +51,7 @@ trait LoggerTrait
      */
     public function critical($message, $context = array())
     {
-        $this->log(\RectorPrefix20210707\Psr\Log\LogLevel::CRITICAL, $message, $context);
+        $this->log(\RectorPrefix20210708\Psr\Log\LogLevel::CRITICAL, $message, $context);
     }
     /**
      * Runtime errors that do not require immediate action but should typically
@@ -64,7 +64,7 @@ trait LoggerTrait
      */
     public function error($message, $context = array())
     {
-        $this->log(\RectorPrefix20210707\Psr\Log\LogLevel::ERROR, $message, $context);
+        $this->log(\RectorPrefix20210708\Psr\Log\LogLevel::ERROR, $message, $context);
     }
     /**
      * Exceptional occurrences that are not errors.
@@ -79,7 +79,7 @@ trait LoggerTrait
      */
     public function warning($message, $context = array())
     {
-        $this->log(\RectorPrefix20210707\Psr\Log\LogLevel::WARNING, $message, $context);
+        $this->log(\RectorPrefix20210708\Psr\Log\LogLevel::WARNING, $message, $context);
     }
     /**
      * Normal but significant events.
@@ -91,7 +91,7 @@ trait LoggerTrait
      */
     public function notice($message, $context = array())
     {
-        $this->log(\RectorPrefix20210707\Psr\Log\LogLevel::NOTICE, $message, $context);
+        $this->log(\RectorPrefix20210708\Psr\Log\LogLevel::NOTICE, $message, $context);
     }
     /**
      * Interesting events.
@@ -105,7 +105,7 @@ trait LoggerTrait
      */
     public function info($message, $context = array())
     {
-        $this->log(\RectorPrefix20210707\Psr\Log\LogLevel::INFO, $message, $context);
+        $this->log(\RectorPrefix20210708\Psr\Log\LogLevel::INFO, $message, $context);
     }
     /**
      * Detailed debug information.
@@ -117,7 +117,7 @@ trait LoggerTrait
      */
     public function debug($message, $context = array())
     {
-        $this->log(\RectorPrefix20210707\Psr\Log\LogLevel::DEBUG, $message, $context);
+        $this->log(\RectorPrefix20210708\Psr\Log\LogLevel::DEBUG, $message, $context);
     }
     /**
      * Logs with an arbitrary level.

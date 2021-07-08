@@ -1,6 +1,6 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210707;
+namespace RectorPrefix20210708;
 
 $this = 2;

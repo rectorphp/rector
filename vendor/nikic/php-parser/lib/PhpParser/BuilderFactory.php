@@ -13,6 +13,18 @@ use PhpParser\Node\Stmt\Use_;
 class BuilderFactory
 {
     /**
+     * Creates an attribute node.
+     *
+     * @param string|Name $name Name of the attribute
+     * @param array       $args Attribute named arguments
+     *
+     * @return Node\Attribute
+     */
+    public function attribute($name, $args = []) : \PhpParser\Node\Attribute
+    {
+        return new \PhpParser\Node\Attribute(\PhpParser\BuilderHelpers::normalizeName($name), $this->args($args));
+    }
+    /**
      * Creates a namespace builder.
      *
      * @param null|string|Node\Name $name Name of the namespace
@@ -209,12 +221,14 @@ class BuilderFactory
     public function args($args) : array
     {
         $normalizedArgs = [];
-        foreach ($args as $arg) {
-            if ($arg instanceof \PhpParser\Node\Arg) {
-                $normalizedArgs[] = $arg;
-            } else {
-                $normalizedArgs[] = new \PhpParser\Node\Arg(\PhpParser\BuilderHelpers::normalizeValue($arg));
+        foreach ($args as $key => $arg) {
+            if (!$arg instanceof \PhpParser\Node\Arg) {
+                $arg = new \PhpParser\Node\Arg(\PhpParser\BuilderHelpers::normalizeValue($arg));
             }
+            if (\is_string($key)) {
+                $arg->name = \PhpParser\BuilderHelpers::normalizeIdentifier($key);
+            }
+            $normalizedArgs[] = $arg;
         }
         return $normalizedArgs;
     }

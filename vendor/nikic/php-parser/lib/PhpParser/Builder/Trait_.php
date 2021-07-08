@@ -3,8 +3,9 @@
 declare (strict_types=1);
 namespace PhpParser\Builder;
 
-use RectorPrefix20210707\PhpParser;
+use RectorPrefix20210708\PhpParser;
 use PhpParser\BuilderHelpers;
+use PhpParser\Node;
 use PhpParser\Node\Stmt;
 class Trait_ extends \PhpParser\Builder\Declaration
 {
@@ -12,6 +13,8 @@ class Trait_ extends \PhpParser\Builder\Declaration
     protected $uses = [];
     protected $properties = [];
     protected $methods = [];
+    /** @var Node\AttributeGroup[] */
+    protected $attributeGroups = [];
     /**
      * Creates an interface builder.
      *
@@ -43,12 +46,24 @@ class Trait_ extends \PhpParser\Builder\Declaration
         return $this;
     }
     /**
+     * Adds an attribute group.
+     *
+     * @param Node\Attribute|Node\AttributeGroup $attribute
+     *
+     * @return $this The builder instance (for fluid interface)
+     */
+    public function addAttribute($attribute)
+    {
+        $this->attributeGroups[] = \PhpParser\BuilderHelpers::normalizeAttribute($attribute);
+        return $this;
+    }
+    /**
      * Returns the built trait node.
      *
      * @return Stmt\Trait_ The built interface node
      */
     public function getNode() : \PhpParser\Node
     {
-        return new \PhpParser\Node\Stmt\Trait_($this->name, ['stmts' => \array_merge($this->uses, $this->properties, $this->methods)], $this->attributes);
+        return new \PhpParser\Node\Stmt\Trait_($this->name, ['stmts' => \array_merge($this->uses, $this->properties, $this->methods), 'attrGroups' => $this->attributeGroups], $this->attributes);
     }
 }

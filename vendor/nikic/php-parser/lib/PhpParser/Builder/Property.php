@@ -3,8 +3,9 @@
 declare (strict_types=1);
 namespace PhpParser\Builder;
 
-use RectorPrefix20210707\PhpParser;
+use RectorPrefix20210708\PhpParser;
 use PhpParser\BuilderHelpers;
+use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\NullableType;
@@ -17,6 +18,8 @@ class Property implements \PhpParser\Builder
     protected $attributes = [];
     /** @var null|Identifier|Name|NullableType */
     protected $type;
+    /** @var Node\AttributeGroup[] */
+    protected $attributeGroups = [];
     /**
      * Creates a property builder.
      *
@@ -103,12 +106,24 @@ class Property implements \PhpParser\Builder
         return $this;
     }
     /**
+     * Adds an attribute group.
+     *
+     * @param Node\Attribute|Node\AttributeGroup $attribute
+     *
+     * @return $this The builder instance (for fluid interface)
+     */
+    public function addAttribute($attribute)
+    {
+        $this->attributeGroups[] = \PhpParser\BuilderHelpers::normalizeAttribute($attribute);
+        return $this;
+    }
+    /**
      * Returns the built class node.
      *
      * @return Stmt\Property The built property node
      */
     public function getNode() : \PhpParser\Node
     {
-        return new \PhpParser\Node\Stmt\Property($this->flags !== 0 ? $this->flags : \PhpParser\Node\Stmt\Class_::MODIFIER_PUBLIC, [new \PhpParser\Node\Stmt\PropertyProperty($this->name, $this->default)], $this->attributes, $this->type);
+        return new \PhpParser\Node\Stmt\Property($this->flags !== 0 ? $this->flags : \PhpParser\Node\Stmt\Class_::MODIFIER_PUBLIC, [new \PhpParser\Node\Stmt\PropertyProperty($this->name, $this->default)], $this->attributes, $this->type, $this->attributeGroups);
     }
 }

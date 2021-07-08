@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210707;
+namespace RectorPrefix20210708;
 
 if (\class_exists('tx_version_tasks_AutoPublish')) {
     return;

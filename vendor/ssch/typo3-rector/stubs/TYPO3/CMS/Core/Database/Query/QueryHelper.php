@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210707\TYPO3\CMS\Core\Database\Query;
+namespace RectorPrefix20210708\TYPO3\CMS\Core\Database\Query;
 
 if (\class_exists('TYPO3\\CMS\\Core\\Database\\Query\\QueryHelper')) {
     return;
