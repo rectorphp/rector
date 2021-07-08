@@ -5,8 +5,6 @@ namespace Rector\CodeQuality\Rector\Expression;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\AssignOp;
 use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use PhpParser\Node\Expr\BinaryOp\BooleanOr;
 use PhpParser\Node\Stmt\Expression;
@@ -85,9 +83,6 @@ CODE_SAMPLE
         $booleanExpr = $expression->expr;
         $leftStaticType = $this->getStaticType($booleanExpr->left);
         if (!$leftStaticType instanceof \PHPStan\Type\BooleanType) {
-            return null;
-        }
-        if (!$booleanExpr->right instanceof \PhpParser\Node\Expr\Assign && !$booleanExpr->right instanceof \PhpParser\Node\Expr\AssignOp) {
             return null;
         }
         /** @var Expr $expr */
