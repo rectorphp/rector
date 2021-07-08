@@ -111,14 +111,6 @@ final class PhpDocInfo
     /**
      * @return array<PhpDocTagNode>
      */
-    public function getAllTags(): array
-    {
-        return $this->phpDocNode->getTags();
-    }
-
-    /**
-     * @return array<PhpDocTagNode>
-     */
     public function getTagsByName(string $name): array
     {
         // for simple tag names only
