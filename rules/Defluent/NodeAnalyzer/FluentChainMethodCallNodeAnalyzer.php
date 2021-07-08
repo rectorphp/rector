@@ -6,6 +6,8 @@ namespace Rector\Defluent\NodeAnalyzer;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\Clone_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
@@ -18,6 +20,8 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\Core\PhpParser\AstResolver;
+use Rector\Core\PhpParser\Comparing\NodeComparator;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -40,7 +44,9 @@ final class FluentChainMethodCallNodeAnalyzer
         private NodeNameResolver $nodeNameResolver,
         private NodeTypeResolver $nodeTypeResolver,
         private NodeFinder $nodeFinder,
-        private AstResolver $astResolver
+        private AstResolver $astResolver,
+        private BetterNodeFinder $betterNodeFinder,
+        private NodeComparator $nodeComparator
     ) {
     }
 
@@ -233,16 +239,38 @@ final class FluentChainMethodCallNodeAnalyzer
         $returns = $this->nodeFinder->findInstanceOf($classMethod, Return_::class);
 
         foreach ($returns as $return) {
-            if (! $return->expr instanceof New_) {
+            $expr = $return->expr;
+
+            if (! $expr instanceof Expr) {
                 continue;
             }
 
-            $new = $return->expr;
-            if ($this->nodeNameResolver->isName($new->class, 'self')) {
-                return true;
+            if (! $this->isNewInstance($expr)) {
+                continue;
             }
+
+            return true;
         }
 
         return false;
+    }
+
+    private function isNewInstance(Expr $expr): bool
+    {
+        if ($expr instanceof Clone_ || $expr instanceof New_) {
+            return true;
+        }
+
+        return (bool) $this->betterNodeFinder->findFirstPreviousOfNode($expr, function (Node $node) use ($expr): bool {
+            if (! $node instanceof Assign) {
+                return false;
+            }
+
+            if (! $this->nodeComparator->areNodesEqual($node->var, $expr)) {
+                return false;
+            }
+
+            return $node->expr instanceof Clone_ || $node->expr instanceof New_;
+        });
     }
 }
