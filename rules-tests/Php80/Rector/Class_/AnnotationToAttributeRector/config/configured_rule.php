@@ -22,9 +22,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
                 new AnnotationToAttribute(Response::class),
                 new AnnotationToAttribute('Symfony\Component\Routing\Annotation\Route'),
-                new AnnotationToAttribute(
-                    'Rector\Tests\Php80\Rector\Class_\AnnotationToAttributeRector\Source\Attribute\Path'
-                ),
             ]),
         ]]);
 };

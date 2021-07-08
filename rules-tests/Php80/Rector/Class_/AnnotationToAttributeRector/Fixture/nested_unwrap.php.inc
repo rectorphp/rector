@@ -28,11 +28,6 @@ use Rector\Tests\Php80\Rector\Class_\AnnotationToAttributeRector\Source\Response
 
 final class NestedUnwrap
 {
-    /**
-     * @Responses({
-     *     @Response(code="200", description="Contests", entity=ContestListView::class),
-     * })
-     */
     #[\Rector\Tests\Php80\Rector\Class_\AnnotationToAttributeRector\Source\Response(code: '200', description: 'Contests', entity: ContestListView::class)]
     public function action()
     {

@@ -23,6 +23,11 @@ abstract class AbstractValuesAwareNode implements PhpDocTagValueNode
     protected bool $hasChanged = false;
 
     /**
+     * @var mixed[]
+     */
+    private array $originalValues = [];
+
+    /**
      * @param mixed[] $values Must be public so node traverser can go through them
      */
     public function __construct(
@@ -30,6 +35,7 @@ abstract class AbstractValuesAwareNode implements PhpDocTagValueNode
         protected ?string $originalContent = null,
         protected ?string $silentKey = null
     ) {
+        $this->originalValues = $values;
     }
 
     public function removeValue(string $key): void
@@ -156,6 +162,14 @@ abstract class AbstractValuesAwareNode implements PhpDocTagValueNode
     public function markAsChanged(): void
     {
         $this->hasChanged = true;
+    }
+
+    /**
+     * @return mixed[]
+     */
+    public function getOriginalValues(): array
+    {
+        return $this->originalValues;
     }
 
     /**

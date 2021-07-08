@@ -10,4 +10,7 @@ namespace Rector\Tests\Php80\Rector\Class_\AnnotationToAttributeRector\Source;
  */
 final class GenericAnnotation
 {
+    public function __construct($some)
+    {
+    }
 }
