@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\CodeQuality\Rector\Foreach_;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\FuncCall;
@@ -83,8 +84,7 @@ CODE_SAMPLE
         } else {
             return null;
         }
-        $exprType = $this->getStaticType($node->expr);
-        if ($exprType instanceof \PHPStan\Type\ObjectType) {
+        if (!$this->isArrayType($node->expr)) {
             return null;
         }
         $this->removeForeachValueAndUseArrayKeys($node);
@@ -126,5 +126,13 @@ CODE_SAMPLE
         $foreach->valueVar = $foreach->keyVar;
         $foreach->keyVar = null;
         $foreach->expr = $this->nodeFactory->createFuncCall('array_keys', [$foreach->expr]);
+    }
+    private function isArrayType(\PhpParser\Node\Expr $expr) : bool
+    {
+        $exprType = $this->getStaticType($expr);
+        if ($exprType instanceof \PHPStan\Type\ObjectType) {
+            return \false;
+        }
+        return $exprType->isArray()->yes();
     }
 }
