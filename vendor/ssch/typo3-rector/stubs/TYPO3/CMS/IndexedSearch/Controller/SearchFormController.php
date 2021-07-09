@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210708\TYPO3\CMS\IndexedSearch\Controller;
+namespace RectorPrefix20210709\TYPO3\CMS\IndexedSearch\Controller;
 
 if (\class_exists('TYPO3\\CMS\\IndexedSearch\\Controller\\SearchFormController')) {
     return;

@@ -1,9 +1,9 @@
 <?php
 
-namespace RectorPrefix20210708\TYPO3\CMS\Core\Http;
+namespace RectorPrefix20210709\TYPO3\CMS\Core\Http;
 
-use RectorPrefix20210708\Psr\Http\Message\ServerRequestInterface;
-use RectorPrefix20210708\TYPO3\CMS\Core\Core\SystemEnvironmentBuilder;
+use RectorPrefix20210709\Psr\Http\Message\ServerRequestInterface;
+use RectorPrefix20210709\TYPO3\CMS\Core\Core\SystemEnvironmentBuilder;
 if (\class_exists('TYPO3\\CMS\\Core\\Http\\ApplicationType')) {
     return;
 }
