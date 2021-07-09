@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\DowngradePhp80\Rector\Class_;
 
+use PhpParser\Comment;
 use PhpParser\Node;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
@@ -13,6 +14,7 @@ use PhpParser\Node\Stmt\Property;
 use Rector\Core\NodeManipulator\ClassInsertManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -70,6 +72,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        $oldComments = $this->getOldComments($node);
         $promotedParams = $this->resolvePromotedParams($node);
         if ($promotedParams === []) {
             return null;
@@ -77,13 +80,31 @@ CODE_SAMPLE
 
         $properties = $this->resolvePropertiesFromPromotedParams($promotedParams, $node);
 
-        $this->addPropertyAssignsToConstructorClassMethod($properties, $node);
+        $this->addPropertyAssignsToConstructorClassMethod($properties, $node, $oldComments);
 
         foreach ($promotedParams as $promotedParam) {
             $promotedParam->flags = 0;
         }
 
         return $node;
+    }
+
+    /**
+     * @return array<string, Comment|null>
+     */
+    private function getOldComments(Class_ $class): array
+    {
+        $constructorClassMethod = $class->getMethod(MethodName::CONSTRUCT);
+        if (! $constructorClassMethod instanceof ClassMethod) {
+            return [];
+        }
+
+        $oldComments = [];
+        foreach ($constructorClassMethod->params as $param) {
+            $oldComments[$this->getName($param->var)] = $param->getAttribute(AttributeKey::COMMENTS);
+        }
+
+        return $oldComments;
     }
 
     /**
@@ -103,10 +124,30 @@ CODE_SAMPLE
                 continue;
             }
 
+            $this->setParamAttrGroupAsComment($param);
             $promotedParams[] = $param;
         }
 
         return $promotedParams;
+    }
+
+    private function setParamAttrGroupAsComment(Param $param): void
+    {
+        $attrGroupsPrint = $this->betterStandardPrinter->print($param->attrGroups);
+
+        $comments = $param->getAttribute(AttributeKey::COMMENTS);
+        if (is_array($comments)) {
+            foreach ($comments as $comment) {
+                $attrGroupsPrint = str_replace($comment->getText(), '', $attrGroupsPrint);
+            }
+        }
+
+        $comments = $param->attrGroups !== []
+            ? [new Comment($attrGroupsPrint)]
+            : null;
+
+        $param->attrGroups = [];
+        $param->setAttribute(AttributeKey::COMMENTS, $comments);
     }
 
     /**
@@ -123,15 +164,21 @@ CODE_SAMPLE
 
     /**
      * @param Property[] $properties
+     * @param array<string, Comment|null> $oldComments
      */
-    private function addPropertyAssignsToConstructorClassMethod(array $properties, Class_ $class): void
-    {
+    private function addPropertyAssignsToConstructorClassMethod(
+        array $properties,
+        Class_ $class,
+        array $oldComments
+    ): void {
         $assigns = [];
 
         foreach ($properties as $property) {
             $propertyName = $this->getName($property);
             $assign = $this->nodeFactory->createPropertyAssignment($propertyName);
-            $assigns[] = new Expression($assign);
+            $expression = new Expression($assign);
+            $expression->setAttribute(AttributeKey::COMMENTS, $oldComments[$propertyName]);
+            $assigns[] = $expression;
         }
 
         /** @var ClassMethod $constructorClassMethod */
