@@ -56,7 +56,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 \PhpParser\Parser::class,
                 \Rector\Naming\Contract\RenameParamValueObjectInterface::class,
                 \Symplify\RuleDocGenerator\Contract\RuleCodeSamplePrinterInterface::class,
-                \Symplify\RuleDocGenerator\Contract\Category\CategoryInfererInterface::class
+                \Symplify\RuleDocGenerator\Contract\Category\CategoryInfererInterface::class,
+                \PhpParser\PrettyPrinter\Standard::class
             ],
             DowngradeParameterTypeWideningRector::SAFE_TYPES_TO_METHODS => [
                 ContainerInterface::class => [

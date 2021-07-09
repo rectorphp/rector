@@ -160,6 +160,7 @@ CODE_SAMPLE
             return false;
         }
 
-        return $exprType->isArray()->yes();
+        return $exprType->isArray()
+            ->yes();
     }
 }
