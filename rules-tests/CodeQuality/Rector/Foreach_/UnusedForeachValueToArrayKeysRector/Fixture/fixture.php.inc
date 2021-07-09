@@ -4,7 +4,7 @@ namespace Rector\Tests\CodeQuality\Rector\Foreach_\UnusedForeachValueToArrayKeys
 
 class Fixture
 {
-    public function run($values)
+    public function run(array $values)
     {
         $items = [];
         foreach ($values as $key => $value) {
@@ -21,7 +21,7 @@ namespace Rector\Tests\CodeQuality\Rector\Foreach_\UnusedForeachValueToArrayKeys
 
 class Fixture
 {
-    public function run($values)
+    public function run(array $values)
     {
         $items = [];
         foreach (array_keys($values) as $key) {
