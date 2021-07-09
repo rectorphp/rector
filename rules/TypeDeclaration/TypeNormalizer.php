@@ -39,15 +39,11 @@ final class TypeNormalizer
      * @var \Symplify\PackageBuilder\Reflection\PrivatesAccessor
      */
     private $privatesAccessor;
-    public function __construct(
-        \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory $typeFactory,
-        \Rector\StaticTypeMapper\TypeFactory\UnionTypeFactory $unionTypeFactory,
-        //        private PhpDocNodeTraverser $phpDocNodeTraverser,
-        \RectorPrefix20210709\Symplify\PackageBuilder\Reflection\PrivatesAccessor $privatesAccessor
-    )
+    public function __construct(\Rector\NodeTypeResolver\PHPStan\Type\TypeFactory $typeFactory, \Rector\StaticTypeMapper\TypeFactory\UnionTypeFactory $unionTypeFactory, \RectorPrefix20210709\Symplify\PackageBuilder\Reflection\PrivatesAccessor $privatesAccessor)
     {
         $this->typeFactory = $typeFactory;
         $this->unionTypeFactory = $unionTypeFactory;
+        //        private PhpDocNodeTraverser $phpDocNodeTraverser,
         $this->privatesAccessor = $privatesAccessor;
     }
     public function convertConstantArrayTypeToArrayType(\PHPStan\Type\Constant\ConstantArrayType $constantArrayType) : ?\PHPStan\Type\ArrayType
