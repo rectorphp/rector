@@ -47,7 +47,7 @@ jobs:
 
             # test with current commit in a pull-request
             -
-                run: composer require "rector/rector-src:dev-skip-possibly-not-return-this as 0.11.15" --no-install --dev
+                run: composer require rector/rector-src dev-main#${{github.event.pull_request.head.sha}} --no-install
                 if: ${{ github.event_name == 'pull_request' }}
 
             -   run: composer install --ansi
