@@ -79,10 +79,11 @@ final class PlainValueParser
             return $this->parseNestedDoctrineAnnotationTagValueNode($currentTokenValue, $tokenIterator);
         }
         $start = $tokenIterator->currentPosition();
-        if ($tokenIterator->isCurrentTokenType(\PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_PHPDOC_EOL)) {
-            while ($tokenIterator->isCurrentTokenTypes([\PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_PHPDOC_EOL, \PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_IDENTIFIER, \PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_COLON, \PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_SINGLE_QUOTED_STRING])) {
+        // from "quote to quote"
+        if ($currentTokenValue === '"') {
+            do {
                 $tokenIterator->next();
-            }
+            } while (\strpos($tokenIterator->currentTokenValue(), '"') === \false);
         }
         $end = $tokenIterator->currentPosition();
         if ($start + 1 < $end) {
