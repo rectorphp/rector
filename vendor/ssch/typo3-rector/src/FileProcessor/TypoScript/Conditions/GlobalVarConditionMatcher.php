@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Ssch\TYPO3Rector\FileProcessor\TypoScript\Conditions;
 
-use RectorPrefix20210709\Nette\Utils\Strings;
+use RectorPrefix20210710\Nette\Utils\Strings;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Ssch\TYPO3Rector\Helper\ArrayUtility;
 final class GlobalVarConditionMatcher extends \Ssch\TYPO3Rector\FileProcessor\TypoScript\Conditions\AbstractGlobalConditionMatcher
@@ -40,18 +40,28 @@ final class GlobalVarConditionMatcher extends \Ssch\TYPO3Rector\FileProcessor\Ty
             if (!isset($conditions[$key])) {
                 $conditions[$key] = [];
             }
-            if ('TSFE' === $type) {
-                $conditions[$key][] = $this->refactorTsfe($property, $operator, $value);
-            } elseif ('GP' === $type) {
-                $conditions[$key][] = $this->refactorGetPost($property, $operator, $value);
-            } elseif ('LIT' === $type) {
-                $conditions[$key][] = \sprintf('"%s" %s "%s"', $value, self::OPERATOR_MAPPING[$operator], $property);
-            } elseif ('ENV' === $type) {
-                $conditions[$key][] = $this->createEnvCondition($property, $operator, $value);
-            } elseif ('IENV' === $type) {
-                $conditions[$key][] = $this->createIndependentCondition($property, $operator, $value);
-            } elseif ('BE_USER' === $type) {
-                $conditions[$key][] = $this->createBackendUserCondition($property, $operator, $value);
+            switch ($type) {
+                case 'TSFE':
+                    $conditions[$key][] = $this->refactorTsfe($property, $operator, $value);
+                    break;
+                case 'GP':
+                    $conditions[$key][] = $this->refactorGetPost($property, $operator, $value);
+                    break;
+                case 'LIT':
+                    $conditions[$key][] = \sprintf('"%s" %s "%s"', $value, self::OPERATOR_MAPPING[$operator], $property);
+                    break;
+                case 'ENV':
+                    $conditions[$key][] = $this->createEnvCondition($property, $operator, $value);
+                    break;
+                case 'IENV':
+                    $conditions[$key][] = $this->createIndependentCondition($property, $operator, $value);
+                    break;
+                case 'BE_USER':
+                    $conditions[$key][] = $this->createBackendUserCondition($property, $operator, $value);
+                    break;
+                default:
+                    $conditions[$key][] = '';
+                    break;
             }
         }
         $keys = \array_keys($conditions);
@@ -81,7 +91,7 @@ final class GlobalVarConditionMatcher extends \Ssch\TYPO3Rector\FileProcessor\Ty
      */
     public function shouldApply($condition) : bool
     {
-        return \RectorPrefix20210709\Nette\Utils\Strings::startsWith($condition, self::TYPE);
+        return \RectorPrefix20210710\Nette\Utils\Strings::startsWith($condition, self::TYPE);
     }
     private function refactorGetPost(string $property, string $operator, string $value) : string
     {
@@ -99,7 +109,7 @@ final class GlobalVarConditionMatcher extends \Ssch\TYPO3Rector\FileProcessor\Ty
     }
     private function createBackendUserCondition(string $property, string $operator, string $value) : string
     {
-        $delimiter = \RectorPrefix20210709\Nette\Utils\Strings::contains($property, ':') ? ':' : '|';
+        $delimiter = \RectorPrefix20210710\Nette\Utils\Strings::contains($property, ':') ? ':' : '|';
         [, $property] = \Ssch\TYPO3Rector\Helper\ArrayUtility::trimExplode($delimiter, $property, \true, 2);
         if (!\array_key_exists($property, self::USER_PROPERTY_MAPPING)) {
             $message = \sprintf('The property "%s" can not be mapped for condition BE_USER', $property);

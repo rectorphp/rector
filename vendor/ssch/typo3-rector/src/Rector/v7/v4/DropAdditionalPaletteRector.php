@@ -61,11 +61,11 @@ CODE_SAMPLE
             return;
         }
         $showItemNode = $this->extractArrayItemByKey($typeConfig, 'showitem');
-        if (null === $showItemNode || null === $showItemNode->value) {
+        if (null === (($showItemNode2 = $showItemNode) ? $showItemNode2->value : null)) {
             return;
         }
         $showItemValue = $this->valueResolver->getValue($showItemNode->value);
-        if (null === $showItemValue || !\is_string($showItemValue) || \false === \strpos($showItemValue, ';')) {
+        if (null === $showItemValue || !\is_string($showItemValue) || \strpos($showItemValue, ';') === \false) {
             return;
         }
         $itemList = \Ssch\TYPO3Rector\Helper\ArrayUtility::trimExplode(',', $showItemValue, \true);

@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Ssch\TYPO3Rector\FileProcessor\TypoScript\Conditions;
 
-use RectorPrefix20210709\Nette\Utils\Strings;
+use RectorPrefix20210710\Nette\Utils\Strings;
 use Ssch\TYPO3Rector\Helper\ArrayUtility;
 final class GlobalStringConditionMatcher extends \Ssch\TYPO3Rector\FileProcessor\TypoScript\Conditions\AbstractGlobalConditionMatcher
 {
@@ -28,16 +28,25 @@ final class GlobalStringConditionMatcher extends \Ssch\TYPO3Rector\FileProcessor
             $property = \trim($matches['property']);
             $operator = \trim($matches['operator']);
             $value = \trim($matches['value']);
-            if ('ENV' === $type) {
-                $newConditions[] = $this->createEnvCondition($property, $operator, $value);
-            } elseif ('IENV' === $type) {
-                $newConditions[] = $this->createIndependentCondition($property, $operator, $value);
-            } elseif ('TSFE' === $type) {
-                $newConditions[] = $this->refactorTsfe($property, $operator, $value);
-            } elseif ('GP' === $type) {
-                $newConditions[] = $this->refactorGetPost($property, $operator, $value);
-            } elseif ('LIT' === $type) {
-                $newConditions[] = \sprintf('"%s" %s "%s"', $value, self::OPERATOR_MAPPING[$operator], $property);
+            switch ($type) {
+                case 'ENV':
+                    $newConditions[] = $this->createEnvCondition($property, $operator, $value);
+                    break;
+                case 'IENV':
+                    $newConditions[] = $this->createIndependentCondition($property, $operator, $value);
+                    break;
+                case 'TSFE':
+                    $newConditions[] = $this->refactorTsfe($property, $operator, $value);
+                    break;
+                case 'GP':
+                    $newConditions[] = $this->refactorGetPost($property, $operator, $value);
+                    break;
+                case 'LIT':
+                    $newConditions[] = \sprintf('"%s" %s "%s"', $value, self::OPERATOR_MAPPING[$operator], $property);
+                    break;
+                default:
+                    $newConditions[] = '';
+                    break;
             }
         }
         return \implode(' || ', $newConditions);
@@ -47,10 +56,10 @@ final class GlobalStringConditionMatcher extends \Ssch\TYPO3Rector\FileProcessor
      */
     public function shouldApply($condition) : bool
     {
-        if (\RectorPrefix20210709\Nette\Utils\Strings::contains($condition, self::CONTAINS_CONSTANT)) {
+        if (\RectorPrefix20210710\Nette\Utils\Strings::contains($condition, self::CONTAINS_CONSTANT)) {
             return \false;
         }
-        return \RectorPrefix20210709\Nette\Utils\Strings::startsWith($condition, self::TYPE);
+        return \RectorPrefix20210710\Nette\Utils\Strings::startsWith($condition, self::TYPE);
     }
     private function refactorGetPost(string $property, string $operator, string $value) : string
     {

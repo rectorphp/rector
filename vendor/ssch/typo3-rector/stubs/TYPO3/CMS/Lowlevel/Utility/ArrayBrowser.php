@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210709\TYPO3\CMS\Lowlevel\Utility;
+namespace RectorPrefix20210710\TYPO3\CMS\Lowlevel\Utility;
 
 if (\class_exists('TYPO3\\CMS\\Lowlevel\\Utility\\ArrayBrowser')) {
     return;

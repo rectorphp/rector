@@ -71,11 +71,7 @@ trait TcaHelperTrait
      */
     protected function extractArrayValueByKey($node, $key) : ?\PhpParser\Node\Expr
     {
-        $item = $this->extractArrayItemByKey($node, $key);
-        if (null === $item || null === $item->value) {
-            return null;
-        }
-        return $item->value;
+        return ($extractArrayItemByKey = $this->extractArrayItemByKey($node, $key)) ? $extractArrayItemByKey->value : null;
     }
     /**
      * @param \PhpParser\Node\Expr\Array_ $configValue
@@ -174,7 +170,7 @@ trait TcaHelperTrait
             }
             // search the config sub-array for this field
             foreach ($columnConfig->value->items as $configValue) {
-                if (null === $configValue || null === $configValue->key) {
+                if (null === (($configValue = $configValue) ? $configValue->key : null)) {
                     continue;
                 }
                 if (!$this->isValue($configValue->key, $keyName)) {

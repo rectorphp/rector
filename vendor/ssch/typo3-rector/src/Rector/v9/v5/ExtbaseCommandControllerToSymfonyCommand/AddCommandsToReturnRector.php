@@ -62,13 +62,10 @@ CODE_SAMPLE
             return null;
         }
         $existingCommands = $this->valueResolver->getValue($node->expr) ?? [];
-        $commands = \array_filter($this->commands, function (string $command) use($existingCommands) {
-            foreach ($existingCommands as $existingCommand) {
-                if ($existingCommand['class'] === $command) {
-                    return \false;
-                }
-            }
-            return \true;
+        $commands = \array_filter($this->commands, function (string $command) use($existingCommands, $carry, $existingCommand) {
+            return \array_reduce($existingCommands, function ($carry, $existingCommand) use($command) {
+                return $existingCommand['class'] !== $command && $carry;
+            }, \true);
         });
         foreach ($commands as $commandName => $command) {
             $node->expr->items[] = new \PhpParser\Node\Expr\ArrayItem($this->nodeFactory->createArray(['class' => $this->nodeFactory->createClassConstReference($command)]), new \PhpParser\Node\Scalar\String_($commandName));

@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Nette\Kdyby\Rector\MethodCall;
 
-use RectorPrefix20210709\Nette\Utils\Strings;
+use RectorPrefix20210710\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\MethodCall;
@@ -93,7 +93,7 @@ CODE_SAMPLE
             if (!$arrayItem->key instanceof \PhpParser\Node\Scalar\String_) {
                 continue;
             }
-            if (\RectorPrefix20210709\Nette\Utils\Strings::match($arrayItem->key->value, self::BETWEEN_PERCENT_CHARS_REGEX)) {
+            if (\RectorPrefix20210710\Nette\Utils\Strings::match($arrayItem->key->value, self::BETWEEN_PERCENT_CHARS_REGEX)) {
                 continue;
             }
             $arrayItem->key = new \PhpParser\Node\Scalar\String_('%' . $arrayItem->key->value . '%');

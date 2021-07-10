@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Ssch\TYPO3Rector\FileProcessor\TypoScript\Rector;
 
-use RectorPrefix20210709\Helmich\TypoScriptParser\Parser\AST\ConditionalStatement;
-use RectorPrefix20210709\Helmich\TypoScriptParser\Parser\AST\Statement;
+use RectorPrefix20210710\Helmich\TypoScriptParser\Parser\AST\ConditionalStatement;
+use RectorPrefix20210710\Helmich\TypoScriptParser\Parser\AST\Statement;
 use LogicException;
 use Rector\ChangesReporting\ValueObject\RectorWithLineChange;
 use Rector\Core\Provider\CurrentFileProvider;
@@ -34,9 +34,9 @@ final class OldConditionToExpressionLanguageTypoScriptRector extends \Ssch\TYPO3
         $this->currentFileProvider = $currentFileProvider;
         $this->conditionMatchers = $conditionMatchers;
     }
-    public function enterNode(\RectorPrefix20210709\Helmich\TypoScriptParser\Parser\AST\Statement $statement) : void
+    public function enterNode(\RectorPrefix20210710\Helmich\TypoScriptParser\Parser\AST\Statement $statement) : void
     {
-        if (!$statement instanceof \RectorPrefix20210709\Helmich\TypoScriptParser\Parser\AST\ConditionalStatement) {
+        if (!$statement instanceof \RectorPrefix20210710\Helmich\TypoScriptParser\Parser\AST\ConditionalStatement) {
             return;
         }
         \preg_match_all('#\\[(.*)]#imU', $statement->condition, $conditions, \PREG_SET_ORDER);
@@ -51,18 +51,19 @@ final class OldConditionToExpressionLanguageTypoScriptRector extends \Ssch\TYPO3
         }, $conditions);
         $newConditions = [];
         $applied = \false;
-        if (\is_array($conditions)) {
-            foreach ($conditions as $condition) {
-                foreach ($this->conditionMatchers as $conditionMatcher) {
-                    $condition = \trim($condition);
-                    if (!$conditionMatcher->shouldApply($condition)) {
-                        continue;
-                    }
-                    $changedCondition = $conditionMatcher->change($condition);
-                    $applied = \true;
-                    if (null !== $changedCondition) {
-                        $newConditions[] = $changedCondition;
-                    }
+        if (!\is_array($conditions)) {
+            return;
+        }
+        foreach ($conditions as $condition) {
+            foreach ($this->conditionMatchers as $conditionMatcher) {
+                $condition = \trim($condition);
+                if (!$conditionMatcher->shouldApply($condition)) {
+                    continue;
+                }
+                $changedCondition = $conditionMatcher->change($condition);
+                $applied = \true;
+                if (null !== $changedCondition) {
+                    $newConditions[] = $changedCondition;
                 }
             }
         }

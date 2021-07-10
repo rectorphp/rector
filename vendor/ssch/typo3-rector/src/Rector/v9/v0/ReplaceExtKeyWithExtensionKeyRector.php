@@ -4,9 +4,11 @@ declare (strict_types=1);
 namespace Ssch\TYPO3Rector\Rector\v9\v0;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\Rector\AbstractRector;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Ssch\TYPO3Rector\Helper\FilesFinder;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -73,6 +75,9 @@ CODE_SAMPLE
         if (null === $extEmConf) {
             return null;
         }
+        if ($this->isAssignment($node)) {
+            return null;
+        }
         $extensionKey = \basename($extEmConf->getRealPathDirectory());
         return new \PhpParser\Node\Scalar\String_($extensionKey);
     }
@@ -83,5 +88,11 @@ CODE_SAMPLE
     private function createExtensionKeyFromFolder(\Symplify\SmartFileSystem\SmartFileInfo $fileInfo) : ?\Symplify\SmartFileSystem\SmartFileInfo
     {
         return $this->filesFinder->findExtEmConfRelativeFromGivenFileInfo($fileInfo);
+    }
+    private function isAssignment(\PhpParser\Node\Expr\Variable $node) : bool
+    {
+        $parentNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        // Check if we have an assigment to the property, if so do not change it
+        return $parentNode instanceof \PhpParser\Node\Expr\Assign && $parentNode->var === $node;
     }
 }

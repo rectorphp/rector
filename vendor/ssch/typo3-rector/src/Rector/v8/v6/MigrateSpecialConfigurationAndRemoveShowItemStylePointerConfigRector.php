@@ -95,7 +95,7 @@ CODE_SAMPLE
         if (!\is_string($showitem)) {
             return;
         }
-        if (\false === \strpos($showitem, ';')) {
+        if (\strpos($showitem, ';') === \false) {
             // Continue directly if no semicolon is found
             return;
         }

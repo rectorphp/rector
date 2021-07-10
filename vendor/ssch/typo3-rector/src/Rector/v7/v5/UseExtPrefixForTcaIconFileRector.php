@@ -120,7 +120,7 @@ CODE_SAMPLE
         if (null === $pathToFile) {
             return;
         }
-        if (\false !== \strpos($pathToFile, '/')) {
+        if (\strpos($pathToFile, '/') !== \false) {
             return;
         }
         $fieldValue->value = new \PhpParser\Node\Scalar\String_(\sprintf('EXT:t3skin/icons/gfx/i/%s', $pathToFile));

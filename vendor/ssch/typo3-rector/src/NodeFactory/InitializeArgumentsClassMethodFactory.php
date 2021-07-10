@@ -38,7 +38,7 @@ use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
 use Rector\TypeDeclaration\TypeInferer\ParamTypeInferer;
-use RectorPrefix20210709\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
+use RectorPrefix20210710\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
 final class InitializeArgumentsClassMethodFactory
 {
     /**
@@ -121,7 +121,7 @@ final class InitializeArgumentsClassMethodFactory
     }
     private function createNewClassMethod() : \PhpParser\Node\Stmt\ClassMethod
     {
-        $methodBuilder = new \RectorPrefix20210709\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder(self::METHOD_NAME);
+        $methodBuilder = new \RectorPrefix20210710\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder(self::METHOD_NAME);
         $methodBuilder->makePublic();
         $methodBuilder->setReturnType('void');
         return $methodBuilder->getNode();
@@ -145,7 +145,7 @@ final class InitializeArgumentsClassMethodFactory
             if ($param->default instanceof \PhpParser\Node\Expr) {
                 $args[] = new \PhpParser\Node\Expr\ConstFetch(new \PhpParser\Node\Name('false'));
                 $defaultValue = $this->valueResolver->getValue($param->default);
-                if (null !== $defaultValue) {
+                if (null !== $defaultValue && 'null' !== $defaultValue) {
                     $args[] = $defaultValue;
                 }
             } else {

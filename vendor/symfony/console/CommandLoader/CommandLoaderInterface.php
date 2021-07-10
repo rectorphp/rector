@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210709\Symfony\Component\Console\CommandLoader;
+namespace RectorPrefix20210710\Symfony\Component\Console\CommandLoader;
 
-use RectorPrefix20210709\Symfony\Component\Console\Command\Command;
-use RectorPrefix20210709\Symfony\Component\Console\Exception\CommandNotFoundException;
+use RectorPrefix20210710\Symfony\Component\Console\Command\Command;
+use RectorPrefix20210710\Symfony\Component\Console\Exception\CommandNotFoundException;
 /**
  * @author Robin Chalas <robin.chalas@gmail.com>
  */

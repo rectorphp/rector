@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210709;
+namespace RectorPrefix20210710;
 
 use Rector\Php54\Rector\Break_\RemoveZeroBreakContinueRector;
 use Rector\Php54\Rector\FuncCall\RemoveReferenceFromCallRector;

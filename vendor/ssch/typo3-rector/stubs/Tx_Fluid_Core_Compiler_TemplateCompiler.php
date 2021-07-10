@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210709;
+namespace RectorPrefix20210710;
 
 if (\class_exists('Tx_Fluid_Core_Compiler_TemplateCompiler')) {
     return;

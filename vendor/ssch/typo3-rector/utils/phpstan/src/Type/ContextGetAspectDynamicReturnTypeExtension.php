@@ -39,31 +39,22 @@ final class ContextGetAspectDynamicReturnTypeExtension implements \PHPStan\Type\
         if (!($string = $argument->value ?? null) instanceof \PhpParser\Node\Scalar\String_) {
             return $defaultObjectType;
         }
-        /** @var String_ $string */
         switch ($string->value) {
             case 'date':
-                $type = new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Context\\DateTimeAspect');
-                break;
+                return new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Context\\DateTimeAspect');
             case 'visibility':
-                $type = new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Context\\VisibilityAspect');
-                break;
+                return new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Context\\VisibilityAspect');
             case 'frontend.user':
             case 'backend.user':
-                $type = new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Context\\UserAspect');
-                break;
+                return new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Context\\UserAspect');
             case 'workspace':
-                $type = new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Context\\WorkspaceAspect');
-                break;
+                return new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Context\\WorkspaceAspect');
             case 'language':
-                $type = new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Context\\LanguageAspect');
-                break;
+                return new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Context\\LanguageAspect');
             case 'typoscript':
-                $type = new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Context\\TypoScriptAspect');
-                break;
+                return new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Context\\TypoScriptAspect');
             default:
-                $type = $defaultObjectType;
-                break;
+                return $defaultObjectType;
         }
-        return $type;
     }
 }

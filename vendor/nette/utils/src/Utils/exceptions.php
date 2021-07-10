@@ -5,7 +5,7 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix20210709\Nette\Utils;
+namespace RectorPrefix20210710\Nette\Utils;
 
 /**
  * The exception that is thrown when an image error occurs.
@@ -16,7 +16,7 @@ class ImageException extends \Exception
 /**
  * The exception that indicates invalid image file.
  */
-class UnknownImageFileException extends \RectorPrefix20210709\Nette\Utils\ImageException
+class UnknownImageFileException extends \RectorPrefix20210710\Nette\Utils\ImageException
 {
 }
 /**

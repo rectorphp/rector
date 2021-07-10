@@ -34,7 +34,7 @@
     },
     "autoload": {
         "psr-4": {
-            "RectorPrefix20210709\\Stringy\\": "src\/"
+            "RectorPrefix20210710\\Stringy\\": "src\/"
         },
         "files": [
             "src\/Create.php"

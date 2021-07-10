@@ -20,7 +20,8 @@
         "phpunit\/phpunit": "^9.5",
         "rector\/rector-generator": "^0.1.7",
         "rector\/rector-phpstan-rules": "^0.3.4",
-        "rector\/rector-src": "dev-main#d807e48",
+        "rector\/rector-src": "dev-main",
+        "symfony\/console": "^5.3.x-dev",
         "symplify\/coding-standard": "^9.3",
         "symplify\/easy-coding-standard": "^9.3",
         "symplify\/phpstan-extensions": "^9.3",
@@ -85,5 +86,7 @@
     },
     "conflict": {
         "rector\/rector": "<0.11"
-    }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }

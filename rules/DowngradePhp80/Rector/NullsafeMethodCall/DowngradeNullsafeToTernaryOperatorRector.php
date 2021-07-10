@@ -53,7 +53,8 @@ CODE_SAMPLE
      */
     public function refactor(\PhpParser\Node $node) : \PhpParser\Node\Expr\Ternary
     {
-        $tempVarName = $this->variableNaming->resolveFromNodeWithScopeCountAndFallbackName($node->var, $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE), '_');
+        $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
+        $tempVarName = $this->variableNaming->resolveFromNodeWithScopeCountAndFallbackName($node->var, $scope, '_');
         $variable = new \PhpParser\Node\Expr\Variable($tempVarName);
         $called = $node instanceof \PhpParser\Node\Expr\NullsafeMethodCall ? new \PhpParser\Node\Expr\MethodCall($variable, $node->name, $node->args) : new \PhpParser\Node\Expr\PropertyFetch($variable, $node->name);
         $assign = new \PhpParser\Node\Expr\Assign($variable, $node->var);

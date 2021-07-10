@@ -46,7 +46,7 @@ final class RefactorIdnaEncodeMethodToNativeFunctionRector extends \Rector\Core\
         if (!\is_string($firstArgumentValue)) {
             return null;
         }
-        if (\false === \strpos($firstArgumentValue, '@')) {
+        if (\strpos($firstArgumentValue, '@') === \false) {
             return $this->refactorToNativeFunction($firstArgumentValue);
         }
         return $this->refactorToEmailConcatWithNativeFunction($firstArgumentValue);

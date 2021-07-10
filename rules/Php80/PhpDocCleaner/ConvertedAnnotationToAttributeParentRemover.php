@@ -8,7 +8,7 @@ use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDoc\SpacelessPhpDocTagNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode;
 use Rector\Php80\ValueObject\AnnotationToAttribute;
-use RectorPrefix20210709\Symplify\SimplePhpDocParser\PhpDocNodeTraverser;
+use RectorPrefix20210710\Symplify\SimplePhpDocParser\PhpDocNodeTraverser;
 final class ConvertedAnnotationToAttributeParentRemover
 {
     /**
@@ -17,7 +17,7 @@ final class ConvertedAnnotationToAttributeParentRemover
      */
     public function processPhpDocNode(\PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode $phpDocNode, array $annotationsToAttributes, array $skippedUnwrapAnnotations) : void
     {
-        $phpDocNodeTraverser = new \RectorPrefix20210709\Symplify\SimplePhpDocParser\PhpDocNodeTraverser();
+        $phpDocNodeTraverser = new \RectorPrefix20210710\Symplify\SimplePhpDocParser\PhpDocNodeTraverser();
         $phpDocNodeTraverser->traverseWithCallable($phpDocNode, '', function ($node) use($annotationsToAttributes, $skippedUnwrapAnnotations) : ?int {
             if (!$node instanceof \Rector\BetterPhpDocParser\PhpDoc\SpacelessPhpDocTagNode) {
                 return null;
@@ -27,11 +27,11 @@ final class ConvertedAnnotationToAttributeParentRemover
             }
             $doctrineAnnotationTagValueNode = $node->value;
             if ($doctrineAnnotationTagValueNode->hasClassNames($skippedUnwrapAnnotations)) {
-                return \RectorPrefix20210709\Symplify\SimplePhpDocParser\PhpDocNodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
+                return \RectorPrefix20210710\Symplify\SimplePhpDocParser\PhpDocNodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
             }
             // has only children of annotation to attribute? it will be removed
             if ($this->detect($node->value, $annotationsToAttributes)) {
-                return \RectorPrefix20210709\Symplify\SimplePhpDocParser\PhpDocNodeTraverser::NODE_REMOVE;
+                return \RectorPrefix20210710\Symplify\SimplePhpDocParser\PhpDocNodeTraverser::NODE_REMOVE;
             }
             return null;
         });
