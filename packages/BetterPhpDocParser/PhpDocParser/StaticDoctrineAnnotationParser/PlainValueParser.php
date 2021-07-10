@@ -82,21 +82,14 @@ final class PlainValueParser
 
         $start = $tokenIterator->currentPosition();
 
-        if ($tokenIterator->isCurrentTokenType(Lexer::TOKEN_PHPDOC_EOL)) {
-            while ($tokenIterator->isCurrentTokenTypes(
-                [
-                    Lexer::TOKEN_PHPDOC_EOL,
-                    Lexer::TOKEN_IDENTIFIER,
-                    Lexer::TOKEN_COLON,
-                    Lexer::TOKEN_SINGLE_QUOTED_STRING,
-                ]
-            )) {
+        // from "quote to quote"
+        if ($currentTokenValue === '"') {
+            do {
                 $tokenIterator->next();
-            }
+            } while (! str_contains($tokenIterator->currentTokenValue(), '"'));
         }
 
         $end = $tokenIterator->currentPosition();
-
         if ($start + 1 < $end) {
             return $tokenIterator->printFromTo($start, $end);
         }
