@@ -6,6 +6,7 @@ namespace Rector\PSR4\Rector\FileWithoutNamespace;
 use PhpParser\Node;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Declare_;
+use PhpParser\Node\Stmt\InlineHTML;
 use PhpParser\Node\Stmt\Namespace_;
 use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\Core\Rector\AbstractRector;
@@ -74,6 +75,9 @@ CODE_SAMPLE
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
+        if ($this->shouldSkip($node)) {
+            return null;
+        }
         $expectedNamespace = $this->psr4AutoloadNamespaceMatcher->getExpectedNamespace($this->file, $node);
         if ($expectedNamespace === null) {
             return null;
@@ -89,6 +93,10 @@ CODE_SAMPLE
         $node->name = new \PhpParser\Node\Name($expectedNamespace);
         $this->fullyQualifyStmtsAnalyzer->process($node->stmts);
         return $node;
+    }
+    private function shouldSkip(\PhpParser\Node $node) : bool
+    {
+        return (bool) $this->betterNodeFinder->findFirstInstanceOf($node, \PhpParser\Node\Stmt\InlineHTML::class);
     }
     private function refactorFileWithoutNamespace(\Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace $fileWithoutNamespace, string $expectedNamespace) : \Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace
     {
