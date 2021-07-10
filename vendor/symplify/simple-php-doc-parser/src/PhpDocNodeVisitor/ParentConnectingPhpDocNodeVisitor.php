@@ -20,10 +20,7 @@ final class ParentConnectingPhpDocNodeVisitor extends \RectorPrefix20210710\Symp
     {
         $this->stack = [$node];
     }
-    /**
-     * @return int|Node|null
-     */
-    public function enterNode(\PHPStan\PhpDocParser\Ast\Node $node)
+    public function enterNode(\PHPStan\PhpDocParser\Ast\Node $node) : \PHPStan\PhpDocParser\Ast\Node
     {
         if ($this->stack !== []) {
             $parentNode = $this->stack[\count($this->stack) - 1];

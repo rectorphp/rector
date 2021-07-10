@@ -10,7 +10,9 @@ use PhpParser\Node\Expr\Clone_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeFinder;
@@ -214,6 +216,26 @@ final class FluentChainMethodCallNodeAnalyzer
             return \true;
         }
         return $expr instanceof \PhpParser\Node\Expr\StaticCall;
+    }
+    public function isMethodCallReturnThis(\PhpParser\Node\Expr\MethodCall $methodCall) : bool
+    {
+        $classMethod = $this->astResolver->resolveClassMethodFromMethodCall($methodCall);
+        if (!$classMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
+            return \false;
+        }
+        /** @var Return_[] $returns */
+        $returns = $this->nodeFinder->findInstanceOf($classMethod, \PhpParser\Node\Stmt\Return_::class);
+        foreach ($returns as $return) {
+            $expr = $return->expr;
+            if (!$expr instanceof \PhpParser\Node\Expr) {
+                return \false;
+            }
+            if (!$expr instanceof \PhpParser\Node\Expr\Variable) {
+                return \false;
+            }
+            return $this->nodeNameResolver->isName($expr, 'this');
+        }
+        return \false;
     }
     private function isMethodCallCreatingNewInstance(\PhpParser\Node\Expr\MethodCall $methodCall) : bool
     {

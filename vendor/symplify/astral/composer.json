@@ -5,14 +5,14 @@
     "require": {
         "php": ">=8.0",
         "nette\/utils": "^3.2",
-        "symfony\/dependency-injection": "^5.3",
-        "symplify\/autowire-array-parameter": "^9.4.15",
+        "symfony\/dependency-injection": "^5.3.x-dev",
+        "symplify\/autowire-array-parameter": "^9.4.20",
         "symfony\/http-kernel": "^5.3",
         "nikic\/php-parser": "^4.11",
-        "symplify\/package-builder": "^9.4.15"
+        "symplify\/package-builder": "^9.4.20"
     },
     "require-dev": {
-        "symplify\/easy-testing": "^9.4.15",
+        "symplify\/easy-testing": "^9.4.20",
         "phpunit\/phpunit": "^9.5"
     },
     "autoload": {

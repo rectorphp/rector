@@ -6,12 +6,12 @@
         "php": ">=8.0",
         "nette\/utils": "^3.2",
         "symfony\/config": "^5.3",
-        "symfony\/console": "^5.3",
-        "symfony\/dependency-injection": "^5.3",
+        "symfony\/console": "^5.3.x-dev",
+        "symfony\/dependency-injection": "^5.3.x-dev",
         "symfony\/finder": "^5.3",
         "symfony\/http-kernel": "^5.3",
-        "symplify\/symplify-kernel": "^9.4.15",
-        "symplify\/easy-testing": "^9.4.15",
+        "symplify\/symplify-kernel": "^9.4.20",
+        "symplify\/easy-testing": "^9.4.20",
         "nette\/neon": "^3.2"
     },
     "require-dev": {

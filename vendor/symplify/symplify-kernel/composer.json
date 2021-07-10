@@ -4,13 +4,13 @@
     "license": "MIT",
     "require": {
         "php": ">=8.0",
-        "symfony\/console": "^5.3",
+        "symfony\/console": "^5.3.x-dev",
         "symfony\/http-kernel": "^5.3",
-        "symfony\/dependency-injection": "^5.3",
-        "symplify\/smart-file-system": "^9.4.15",
-        "symplify\/composer-json-manipulator": "^9.4.15",
-        "symplify\/autowire-array-parameter": "^9.4.15",
-        "symplify\/package-builder": "^9.4.15"
+        "symfony\/dependency-injection": "^5.3.x-dev",
+        "symplify\/smart-file-system": "^9.4.20",
+        "symplify\/composer-json-manipulator": "^9.4.20",
+        "symplify\/autowire-array-parameter": "^9.4.20",
+        "symplify\/package-builder": "^9.4.20"
     },
     "require-dev": {
         "phpunit\/phpunit": "^9.5"

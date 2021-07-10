@@ -29,4 +29,8 @@ final class MethodCallSkipAnalyzer
         $chainRootExpr = $this->fluentChainMethodCallNodeAnalyzer->resolveRootExpr($methodCall);
         return $chainRootExpr instanceof \PhpParser\Node\Expr\New_;
     }
+    public function shouldSkipLastCallNotReturnThis(\PhpParser\Node\Expr\MethodCall $methodCall) : bool
+    {
+        return !$this->fluentChainMethodCallNodeAnalyzer->isMethodCallReturnThis($methodCall);
+    }
 }
