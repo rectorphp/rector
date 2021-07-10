@@ -123,8 +123,12 @@ final class PhpAttributeGroupFactory
         if (! $expr instanceof String_) {
             return;
         }
-        // avoid escaping quotes
+        // avoid escaping quotes + preserve newlines
         if (! str_contains($expr->value, "'")) {
+            return;
+        }
+
+        if (str_contains($expr->value, "\n")) {
             return;
         }
 
