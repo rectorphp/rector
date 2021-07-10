@@ -80,6 +80,10 @@ CODE_SAMPLE
             return null;
         }
 
+        if ($this->methodCallSkipAnalyzer->shouldSkipLastCallNotReturnThis($methodCall)) {
+            return null;
+        }
+
         $nodesToAdd = $this->createStandaloneNodesToAddFromReturnFluentMethodCalls($methodCall);
         if ($nodesToAdd === []) {
             return null;

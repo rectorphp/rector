@@ -21,6 +21,11 @@ final class FluentInterfaceClass extends InterFluentInterfaceClass
         return $this;
     }
 
+    public function paginate(): array
+    {
+        return [];
+    }
+
     public function voidReturningMethod()
     {
         $this->value = 100;

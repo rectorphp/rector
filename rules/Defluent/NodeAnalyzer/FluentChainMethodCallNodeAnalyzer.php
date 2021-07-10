@@ -11,7 +11,9 @@ use PhpParser\Node\Expr\Clone_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeFinder;
@@ -226,6 +228,31 @@ final class FluentChainMethodCallNodeAnalyzer
         }
 
         return $expr instanceof StaticCall;
+    }
+
+    public function isMethodCallReturnThis(MethodCall $methodCall): bool
+    {
+        $classMethod = $this->astResolver->resolveClassMethodFromMethodCall($methodCall);
+        if (! $classMethod instanceof ClassMethod) {
+            return false;
+        }
+
+        /** @var Return_[] $returns */
+        $returns = $this->nodeFinder->findInstanceOf($classMethod, Return_::class);
+        foreach ($returns as $return) {
+            $expr = $return->expr;
+            if (! $expr instanceof Expr) {
+                return false;
+            }
+
+            if (! $expr instanceof Variable) {
+                return false;
+            }
+
+            return $this->nodeNameResolver->isName($expr, 'this');
+        }
+
+        return false;
     }
 
     private function isMethodCallCreatingNewInstance(MethodCall $methodCall): bool
