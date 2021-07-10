@@ -34,6 +34,10 @@ final class PSR4NamespaceMatcher implements PSR4AutoloadNamespaceMatcherInterfac
 
                 $expectedNamespace = $namespace . $this->resolveExtraNamespace($smartFileInfo, $path);
 
+                if (str_contains($expectedNamespace, '-')) {
+                    return null;
+                }
+
                 return rtrim($expectedNamespace, '\\');
             }
         }
