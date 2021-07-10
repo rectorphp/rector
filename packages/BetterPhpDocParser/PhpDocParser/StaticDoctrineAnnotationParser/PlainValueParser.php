@@ -80,7 +80,7 @@ final class PlainValueParser
         }
         $start = $tokenIterator->currentPosition();
         if ($tokenIterator->isCurrentTokenType(\PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_PHPDOC_EOL)) {
-            while ($tokenIterator->isCurrentTokenTypes([\PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_PHPDOC_EOL, \PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_IDENTIFIER, \PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_COLON])) {
+            while ($tokenIterator->isCurrentTokenTypes([\PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_PHPDOC_EOL, \PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_IDENTIFIER, \PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_COLON, \PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_SINGLE_QUOTED_STRING])) {
                 $tokenIterator->next();
             }
         }

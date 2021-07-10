@@ -105,8 +105,11 @@ final class PhpAttributeGroupFactory
         if (!$expr instanceof \PhpParser\Node\Scalar\String_) {
             return;
         }
-        // avoid escaping quotes
+        // avoid escaping quotes + preserve newlines
         if (\strpos($expr->value, "'") === \false) {
+            return;
+        }
+        if (\strpos($expr->value, "\n") !== \false) {
             return;
         }
         $expr->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::KIND, \PhpParser\Node\Scalar\String_::KIND_DOUBLE_QUOTED);
