@@ -7,6 +7,7 @@ namespace Rector\Defluent\Rector\ClassMethod;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
@@ -145,6 +146,11 @@ CODE_SAMPLE
             throw new ShouldNotHappenException();
         }
 
-        return false;
+        $class = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
+        if (! $class instanceof ClassLike) {
+            return false;
+        }
+
+        return $class->getMethod('__call') instanceof ClassMethod;
     }
 }
