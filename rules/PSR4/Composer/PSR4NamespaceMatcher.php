@@ -35,6 +35,9 @@ final class PSR4NamespaceMatcher implements \Rector\PSR4\Contract\PSR4AutoloadNa
                     continue;
                 }
                 $expectedNamespace = $namespace . $this->resolveExtraNamespace($smartFileInfo, $path);
+                if (\strpos($expectedNamespace, '-') !== \false) {
+                    return null;
+                }
                 return \rtrim($expectedNamespace, '\\');
             }
         }
