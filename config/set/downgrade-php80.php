@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 use Rector\Core\Configuration\Option;
 use Rector\Core\ValueObject\PhpVersion;
-
 use Rector\DowngradePhp80\Rector\Catch_\DowngradeNonCapturingCatchesRector;
 use Rector\DowngradePhp80\Rector\Class_\DowngradeAttributeToAnnotationRector;
 use Rector\DowngradePhp80\Rector\Class_\DowngradePropertyPromotionRector;
@@ -39,6 +38,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ]]);
 
     $services->set(DowngradeNamedArgumentRector::class);
+
     $services->set(DowngradeAttributeToAnnotationRector::class)
         ->call('configure', [[
             DowngradeAttributeToAnnotationRector::ATTRIBUTE_TO_ANNOTATION => ValueObjectInliner::inline([

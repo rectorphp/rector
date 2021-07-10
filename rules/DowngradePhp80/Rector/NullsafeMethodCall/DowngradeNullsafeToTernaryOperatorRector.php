@@ -58,9 +58,11 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): Ternary
     {
+        $scope = $node->getAttribute(AttributeKey::SCOPE);
+
         $tempVarName = $this->variableNaming->resolveFromNodeWithScopeCountAndFallbackName(
             $node->var,
-            $node->getAttribute(AttributeKey::SCOPE),
+            $scope,
             '_'
         );
 
