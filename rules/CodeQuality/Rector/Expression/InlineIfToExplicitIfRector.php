@@ -8,6 +8,8 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use PhpParser\Node\Expr\BinaryOp\BooleanOr;
+use PhpParser\Node\Expr\BooleanNot;
+use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
 use PHPStan\Type\BooleanType;
@@ -90,6 +92,14 @@ CODE_SAMPLE
 
         $leftStaticType = $this->getStaticType($booleanExpr->left);
         if (! $leftStaticType instanceof BooleanType) {
+            return null;
+        }
+
+        $exprLeft = $booleanExpr->left instanceof BooleanNot
+            ? $booleanExpr->left->expr
+            : $booleanExpr->left;
+
+        if ($exprLeft instanceof FuncCall && $this->isName($exprLeft, 'defined')) {
             return null;
         }
 
