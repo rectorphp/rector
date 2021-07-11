@@ -2172,6 +2172,7 @@ return array(
     'Rector\\DowngradePhp80\\Rector\\MethodCall\\DowngradeNamedArgumentRector' => $baseDir . '/rules/DowngradePhp80/Rector/MethodCall/DowngradeNamedArgumentRector.php',
     'Rector\\DowngradePhp80\\Rector\\NullsafeMethodCall\\DowngradeNullsafeToTernaryOperatorRector' => $baseDir . '/rules/DowngradePhp80/Rector/NullsafeMethodCall/DowngradeNullsafeToTernaryOperatorRector.php',
     'Rector\\DowngradePhp80\\Rector\\Property\\DowngradeUnionTypeTypedPropertyRector' => $baseDir . '/rules/DowngradePhp80/Rector/Property/DowngradeUnionTypeTypedPropertyRector.php',
+    'Rector\\DowngradePhp80\\Rector\\StaticCall\\DowngradePhpTokenRector' => $baseDir . '/rules/DowngradePhp80/Rector/StaticCall/DowngradePhpTokenRector.php',
     'Rector\\DowngradePhp80\\Reflection\\DefaultParameterValueResolver' => $baseDir . '/rules/DowngradePhp80/Reflection/DefaultParameterValueResolver.php',
     'Rector\\DowngradePhp80\\ValueObject\\DowngradeAttributeToAnnotation' => $baseDir . '/rules/DowngradePhp80/ValueObject/DowngradeAttributeToAnnotation.php',
     'Rector\\EarlyReturn\\NodeFactory\\InvertedIfFactory' => $baseDir . '/rules/EarlyReturn/NodeFactory/InvertedIfFactory.php',
