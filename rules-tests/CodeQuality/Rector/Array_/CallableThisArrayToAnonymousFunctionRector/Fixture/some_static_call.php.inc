@@ -2,11 +2,11 @@
 
 namespace Rector\Tests\CodeQuality\Rector\Array_\CallableThisArrayToAnonymousFunctionRector\Fixture;
 
-final class StaticCall
+final class SomeStaticCall
 {
     public function run(array $values)
     {
-        usort($values, [StaticCall::class, 'compareSize']);
+        usort($values, [SomeStaticCall::class, 'compareSize']);
 
         return $values;
     }
@@ -23,12 +23,12 @@ final class StaticCall
 
 namespace Rector\Tests\CodeQuality\Rector\Array_\CallableThisArrayToAnonymousFunctionRector\Fixture;
 
-final class StaticCall
+final class SomeStaticCall
 {
     public function run(array $values)
     {
         usort($values, function (int $first, $second) : bool {
-            return StaticCall::compareSize($first, $second);
+            return SomeStaticCall::compareSize($first, $second);
         });
 
         return $values;
