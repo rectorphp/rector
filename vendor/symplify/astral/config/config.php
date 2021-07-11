@@ -1,17 +1,17 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210710;
+namespace RectorPrefix20210711;
 
 use PhpParser\ConstExprEvaluator;
 use PhpParser\NodeFinder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use RectorPrefix20210710\Symplify\PackageBuilder\Php\TypeChecker;
+use RectorPrefix20210711\Symplify\PackageBuilder\Php\TypeChecker;
 return static function (\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->defaults()->autowire()->autoconfigure()->public();
-    $services->load('RectorPrefix20210710\Symplify\\Astral\\', __DIR__ . '/../src')->exclude([__DIR__ . '/../src/HttpKernel', __DIR__ . '/../src/StaticFactory', __DIR__ . '/../src/ValueObject']);
+    $services->load('RectorPrefix20210711\Symplify\\Astral\\', __DIR__ . '/../src')->exclude([__DIR__ . '/../src/HttpKernel', __DIR__ . '/../src/StaticFactory', __DIR__ . '/../src/ValueObject']);
     $services->set(\PhpParser\ConstExprEvaluator::class);
-    $services->set(\RectorPrefix20210710\Symplify\PackageBuilder\Php\TypeChecker::class);
+    $services->set(\RectorPrefix20210711\Symplify\PackageBuilder\Php\TypeChecker::class);
     $services->set(\PhpParser\NodeFinder::class);
 };

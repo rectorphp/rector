@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210710;
+namespace RectorPrefix20210711;
 
 use PHPStan\Type\ObjectWithoutClassType;
 use PHPStan\Type\StringType;

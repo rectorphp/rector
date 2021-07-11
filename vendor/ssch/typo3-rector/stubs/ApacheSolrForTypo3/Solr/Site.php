@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210710\ApacheSolrForTypo3\Solr;
+namespace RectorPrefix20210711\ApacheSolrForTypo3\Solr;
 
 if (\class_exists('ApacheSolrForTypo3\\Solr\\Site')) {
     return;

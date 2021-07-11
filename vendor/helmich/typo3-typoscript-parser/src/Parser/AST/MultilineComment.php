@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210710\Helmich\TypoScriptParser\Parser\AST;
+namespace RectorPrefix20210711\Helmich\TypoScriptParser\Parser\AST;
 
-final class MultilineComment extends \RectorPrefix20210710\Helmich\TypoScriptParser\Parser\AST\Statement
+final class MultilineComment extends \RectorPrefix20210711\Helmich\TypoScriptParser\Parser\AST\Statement
 {
     /**
      * @var string
