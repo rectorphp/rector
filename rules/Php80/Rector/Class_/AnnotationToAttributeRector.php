@@ -7,6 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\AttributeGroup;
 use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Closure;
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
@@ -27,8 +28,8 @@ use Rector\Php80\ValueObject\DoctrineTagAndAnnotationToAttribute;
 use Rector\PhpAttribute\Printer\PhpAttributeGroupFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20210711\Symplify\SimplePhpDocParser\PhpDocNodeTraverser;
-use RectorPrefix20210711\Webmozart\Assert\Assert;
+use RectorPrefix20210712\Symplify\SimplePhpDocParser\PhpDocNodeTraverser;
+use RectorPrefix20210712\Webmozart\Assert\Assert;
 /**
  * @changelog https://wiki.php.net/rfc/attributes_v2
  *
@@ -100,10 +101,10 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Class_::class, \PhpParser\Node\Stmt\Property::class, \PhpParser\Node\Stmt\ClassMethod::class, \PhpParser\Node\Stmt\Function_::class, \PhpParser\Node\Expr\Closure::class, \PhpParser\Node\Expr\ArrowFunction::class];
+        return [\PhpParser\Node\Stmt\Class_::class, \PhpParser\Node\Stmt\Property::class, \PhpParser\Node\Param::class, \PhpParser\Node\Stmt\ClassMethod::class, \PhpParser\Node\Stmt\Function_::class, \PhpParser\Node\Expr\Closure::class, \PhpParser\Node\Expr\ArrowFunction::class];
     }
     /**
-     * @param Class_|Property|ClassMethod|Function_|Closure|ArrowFunction $node
+     * @param Class_|Property|Param|ClassMethod|Function_|Closure|ArrowFunction $node
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
@@ -132,7 +133,7 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $annotationsToAttributes = $configuration[self::ANNOTATION_TO_ATTRIBUTE] ?? [];
-        \RectorPrefix20210711\Webmozart\Assert\Assert::allIsInstanceOf($annotationsToAttributes, \Rector\Php80\ValueObject\AnnotationToAttribute::class);
+        \RectorPrefix20210712\Webmozart\Assert\Assert::allIsInstanceOf($annotationsToAttributes, \Rector\Php80\ValueObject\AnnotationToAttribute::class);
         $this->annotationsToAttributes = $annotationsToAttributes;
     }
     /**
@@ -141,7 +142,7 @@ CODE_SAMPLE
     private function processGenericTags(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo) : array
     {
         $attributeGroups = [];
-        $phpDocNodeTraverser = new \RectorPrefix20210711\Symplify\SimplePhpDocParser\PhpDocNodeTraverser();
+        $phpDocNodeTraverser = new \RectorPrefix20210712\Symplify\SimplePhpDocParser\PhpDocNodeTraverser();
         $phpDocNodeTraverser->traverseWithCallable($phpDocInfo->getPhpDocNode(), '', function (\PHPStan\PhpDocParser\Ast\Node $docNode) use(&$attributeGroups, $phpDocInfo) : ?int {
             if (!$docNode instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode) {
                 return null;
@@ -161,7 +162,7 @@ CODE_SAMPLE
                 }
                 $attributeGroups[] = $this->phpAttributeGroupFactory->createFromSimpleTag($annotationToAttribute);
                 $phpDocInfo->markAsChanged();
-                return \RectorPrefix20210711\Symplify\SimplePhpDocParser\PhpDocNodeTraverser::NODE_REMOVE;
+                return \RectorPrefix20210712\Symplify\SimplePhpDocParser\PhpDocNodeTraverser::NODE_REMOVE;
             }
             return null;
         });
@@ -173,7 +174,7 @@ CODE_SAMPLE
     private function processDoctrineAnnotationClasses(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo) : array
     {
         $doctrineTagAndAnnotationToAttributes = [];
-        $phpDocNodeTraverser = new \RectorPrefix20210711\Symplify\SimplePhpDocParser\PhpDocNodeTraverser();
+        $phpDocNodeTraverser = new \RectorPrefix20210712\Symplify\SimplePhpDocParser\PhpDocNodeTraverser();
         $phpDocNodeTraverser->traverseWithCallable($phpDocInfo->getPhpDocNode(), '', function ($node) use(&$doctrineTagAndAnnotationToAttributes, $phpDocInfo) : ?int {
             if ($node instanceof \Rector\BetterPhpDocParser\PhpDoc\SpacelessPhpDocTagNode && $node->value instanceof \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode) {
                 $doctrineAnnotationTagValueNode = $node->value;
@@ -183,7 +184,7 @@ CODE_SAMPLE
                 return null;
             }
             if ($doctrineAnnotationTagValueNode->hasClassNames(self::SKIP_UNWRAP_ANNOTATIONS)) {
-                return \RectorPrefix20210711\Symplify\SimplePhpDocParser\PhpDocNodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
+                return \RectorPrefix20210712\Symplify\SimplePhpDocParser\PhpDocNodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
             }
             foreach ($this->annotationsToAttributes as $annotationToAttribute) {
                 if (!$doctrineAnnotationTagValueNode->hasClassName($annotationToAttribute->getTag())) {
@@ -192,7 +193,7 @@ CODE_SAMPLE
                 $doctrineTagAndAnnotationToAttributes[] = new \Rector\Php80\ValueObject\DoctrineTagAndAnnotationToAttribute($doctrineAnnotationTagValueNode, $annotationToAttribute);
                 $phpDocInfo->markAsChanged();
                 // remove the original doctrine annotation, it becomes an attribute
-                return \RectorPrefix20210711\Symplify\SimplePhpDocParser\PhpDocNodeTraverser::NODE_REMOVE;
+                return \RectorPrefix20210712\Symplify\SimplePhpDocParser\PhpDocNodeTraverser::NODE_REMOVE;
             }
             return null;
         });

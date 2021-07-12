@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210711;
+namespace RectorPrefix20210712;
 
 if (\interface_exists('Tx_Extbase_Validation_Validator_ValidatorInterface')) {
     return;

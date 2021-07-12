@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210711;
+namespace RectorPrefix20210712;
 
 if (\class_exists('tx_form_Controller_Form')) {
     return;

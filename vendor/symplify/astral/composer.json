@@ -6,23 +6,23 @@
         "php": ">=8.0",
         "nette\/utils": "^3.2",
         "symfony\/dependency-injection": "^5.3.x-dev",
-        "symplify\/autowire-array-parameter": "^9.4.20",
+        "symplify\/autowire-array-parameter": "^9.4.21",
         "symfony\/http-kernel": "^5.3",
         "nikic\/php-parser": "^4.11",
-        "symplify\/package-builder": "^9.4.20"
+        "symplify\/package-builder": "^9.4.21"
     },
     "require-dev": {
-        "symplify\/easy-testing": "^9.4.20",
+        "symplify\/easy-testing": "^9.4.21",
         "phpunit\/phpunit": "^9.5"
     },
     "autoload": {
         "psr-4": {
-            "RectorPrefix20210711\\Symplify\\Astral\\": "src"
+            "RectorPrefix20210712\\Symplify\\Astral\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "RectorPrefix20210711\\Symplify\\Astral\\Tests\\": "tests"
+            "RectorPrefix20210712\\Symplify\\Astral\\Tests\\": "tests"
         }
     },
     "extra": {

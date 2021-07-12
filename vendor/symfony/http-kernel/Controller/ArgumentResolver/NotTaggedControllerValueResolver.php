@@ -8,22 +8,22 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210711\Symfony\Component\HttpKernel\Controller\ArgumentResolver;
+namespace RectorPrefix20210712\Symfony\Component\HttpKernel\Controller\ArgumentResolver;
 
-use RectorPrefix20210711\Psr\Container\ContainerInterface;
-use RectorPrefix20210711\Symfony\Component\DependencyInjection\Exception\RuntimeException;
-use RectorPrefix20210711\Symfony\Component\HttpFoundation\Request;
-use RectorPrefix20210711\Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface;
-use RectorPrefix20210711\Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
+use RectorPrefix20210712\Psr\Container\ContainerInterface;
+use RectorPrefix20210712\Symfony\Component\DependencyInjection\Exception\RuntimeException;
+use RectorPrefix20210712\Symfony\Component\HttpFoundation\Request;
+use RectorPrefix20210712\Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface;
+use RectorPrefix20210712\Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 /**
  * Provides an intuitive error message when controller fails because it is not registered as a service.
  *
  * @author Simeon Kolev <simeon.kolev9@gmail.com>
  */
-final class NotTaggedControllerValueResolver implements \RectorPrefix20210711\Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface
+final class NotTaggedControllerValueResolver implements \RectorPrefix20210712\Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface
 {
     private $container;
-    public function __construct(\RectorPrefix20210711\Psr\Container\ContainerInterface $container)
+    public function __construct(\RectorPrefix20210712\Psr\Container\ContainerInterface $container)
     {
         $this->container = $container;
     }
@@ -67,6 +67,6 @@ final class NotTaggedControllerValueResolver implements \RectorPrefix20210711\Sy
         }
         $what = \sprintf('argument $%s of "%s()"', $argument->getName(), $controller);
         $message = \sprintf('Could not resolve %s, maybe you forgot to register the controller as a service or missed tagging it with the "controller.service_arguments"?', $what);
-        throw new \RectorPrefix20210711\Symfony\Component\DependencyInjection\Exception\RuntimeException($message);
+        throw new \RectorPrefix20210712\Symfony\Component\DependencyInjection\Exception\RuntimeException($message);
     }
 }

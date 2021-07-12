@@ -25,7 +25,7 @@ use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Core\Reflection\ReflectionResolver;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use RectorPrefix20210711\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
+use RectorPrefix20210712\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 final class ClassMethodAssignManipulator
 {
     /**
@@ -64,7 +64,7 @@ final class ClassMethodAssignManipulator
      * @var \Rector\Core\NodeManipulator\ArrayDestructVariableFilter
      */
     private $arrayDestructVariableFilter;
-    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \RectorPrefix20210711\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\NodeManipulator\VariableManipulator $variableManipulator, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver, \Rector\Core\NodeManipulator\ArrayDestructVariableFilter $arrayDestructVariableFilter)
+    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \RectorPrefix20210712\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\NodeManipulator\VariableManipulator $variableManipulator, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver, \Rector\Core\NodeManipulator\ArrayDestructVariableFilter $arrayDestructVariableFilter)
     {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;

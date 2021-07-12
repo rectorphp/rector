@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210711;
+namespace RectorPrefix20210712;
 
 use Rector\CodeQuality\Rector\Identical\FlipTypeControlToUseExclusiveTypeRector;
 use Rector\CodeQualityStrict\Rector\If_\MoveOutMethodCallInsideIfConditionRector;

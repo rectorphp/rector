@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210711;
+namespace RectorPrefix20210712;
 
 use Rector\Renaming\Rector\FuncCall\RenameFunctionRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;

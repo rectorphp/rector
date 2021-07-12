@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210711;
+namespace RectorPrefix20210712;
 
 use Rector\Core\Configuration\Option;
 use Rector\Core\ValueObject\PhpVersion;
@@ -20,6 +20,7 @@ use Rector\DowngradePhp80\Rector\FunctionLike\DowngradeUnionTypeDeclarationRecto
 use Rector\DowngradePhp80\Rector\MethodCall\DowngradeNamedArgumentRector;
 use Rector\DowngradePhp80\Rector\NullsafeMethodCall\DowngradeNullsafeToTernaryOperatorRector;
 use Rector\DowngradePhp80\Rector\Property\DowngradeUnionTypeTypedPropertyRector;
+use Rector\DowngradePhp80\Rector\StaticCall\DowngradePhpTokenRector;
 use Rector\DowngradePhp80\ValueObject\DowngradeAttributeToAnnotation;
 use Rector\Removing\Rector\Class_\RemoveInterfacesRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -52,4 +53,5 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
     $services->set(\Rector\DowngradePhp80\Rector\ClassMethod\DowngradeTrailingCommasInParamUseRector::class);
     $services->set(\Rector\DowngradePhp80\Rector\FuncCall\DowngradeStrStartsWithRector::class);
     $services->set(\Rector\DowngradePhp80\Rector\FuncCall\DowngradeStrEndsWithRector::class);
+    $services->set(\Rector\DowngradePhp80\Rector\StaticCall\DowngradePhpTokenRector::class);
 };

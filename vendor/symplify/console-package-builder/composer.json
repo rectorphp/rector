@@ -6,21 +6,21 @@
         "php": ">=8.0",
         "symfony\/dependency-injection": "^5.3.x-dev",
         "symfony\/console": "^5.3.x-dev",
-        "symplify\/symplify-kernel": "^9.4.20"
+        "symplify\/symplify-kernel": "^9.4.21"
     },
     "require-dev": {
         "symfony\/http-kernel": "^5.3",
-        "symplify\/package-builder": "^9.4.20",
+        "symplify\/package-builder": "^9.4.21",
         "phpunit\/phpunit": "^9.5"
     },
     "autoload": {
         "psr-4": {
-            "RectorPrefix20210711\\Symplify\\ConsolePackageBuilder\\": "src"
+            "RectorPrefix20210712\\Symplify\\ConsolePackageBuilder\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "RectorPrefix20210711\\Symplify\\ConsolePackageBuilder\\Tests\\": "tests"
+            "RectorPrefix20210712\\Symplify\\ConsolePackageBuilder\\Tests\\": "tests"
         }
     },
     "extra": {
