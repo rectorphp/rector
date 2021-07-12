@@ -125,6 +125,12 @@ CODE_SAMPLE
         if (!$prevInitializedAssign instanceof \PhpParser\Node\Expr\Assign) {
             return $assign;
         }
+        if ($this->matchSwitchAnalyzer->hasDefaultValue($match)) {
+            $default = $match->arms[\count($match->arms) - 1]->body;
+            if ($this->nodeComparator->areNodesEqual($default, $prevInitializedAssign->var)) {
+                return $assign;
+            }
+        }
         $parentAssign = $prevInitializedAssign->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
         if ($parentAssign instanceof \PhpParser\Node\Stmt\Expression) {
             $this->removeNode($parentAssign);
@@ -161,7 +167,10 @@ CODE_SAMPLE
         if ($this->matchSwitchAnalyzer->hasDefaultValue($match)) {
             return $match;
         }
-        $this->removeNode($nextNode);
+        $assignExpr = $this->resolveAssignExpr($condAndExprs);
+        if (!$assignExpr instanceof \PhpParser\Node\Expr) {
+            $this->removeNode($nextNode);
+        }
         $condAndExprs[] = new \Rector\Php80\ValueObject\CondAndExpr([], $returnedExpr, \Rector\Php80\Enum\MatchKind::RETURN());
         return $this->matchFactory->createFromCondAndExprs($switch->cond, $condAndExprs);
     }
