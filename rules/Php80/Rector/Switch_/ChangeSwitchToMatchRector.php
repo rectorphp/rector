@@ -140,6 +140,13 @@ CODE_SAMPLE
             return $assign;
         }
 
+        if ($this->matchSwitchAnalyzer->hasDefaultValue($match)) {
+            $default = $match->arms[count($match->arms) - 1]->body;
+            if ($this->nodeComparator->areNodesEqual($default, $prevInitializedAssign->var)) {
+                return $assign;
+            }
+        }
+
         $parentAssign = $prevInitializedAssign->getAttribute(AttributeKey::PARENT_NODE);
         if ($parentAssign instanceof Expression) {
             $this->removeNode($parentAssign);
@@ -184,7 +191,11 @@ CODE_SAMPLE
             return $match;
         }
 
-        $this->removeNode($nextNode);
+        $assignExpr = $this->resolveAssignExpr($condAndExprs);
+
+        if (! $assignExpr instanceof Expr) {
+            $this->removeNode($nextNode);
+        }
 
         $condAndExprs[] = new CondAndExpr([], $returnedExpr, MatchKind::RETURN());
         return $this->matchFactory->createFromCondAndExprs($switch->cond, $condAndExprs);
