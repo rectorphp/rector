@@ -19,6 +19,7 @@ use Rector\DowngradePhp80\Rector\FunctionLike\DowngradeUnionTypeDeclarationRecto
 use Rector\DowngradePhp80\Rector\MethodCall\DowngradeNamedArgumentRector;
 use Rector\DowngradePhp80\Rector\NullsafeMethodCall\DowngradeNullsafeToTernaryOperatorRector;
 use Rector\DowngradePhp80\Rector\Property\DowngradeUnionTypeTypedPropertyRector;
+use Rector\DowngradePhp80\Rector\StaticCall\DowngradePhpTokenRector;
 use Rector\DowngradePhp80\ValueObject\DowngradeAttributeToAnnotation;
 use Rector\Removing\Rector\Class_\RemoveInterfacesRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -62,4 +63,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(DowngradeTrailingCommasInParamUseRector::class);
     $services->set(DowngradeStrStartsWithRector::class);
     $services->set(DowngradeStrEndsWithRector::class);
+    $services->set(DowngradePhpTokenRector::class);
 };
