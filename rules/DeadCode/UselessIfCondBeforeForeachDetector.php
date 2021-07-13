@@ -65,12 +65,7 @@ final class UselessIfCondBeforeForeachDetector
         if (!$previousParam instanceof \PhpParser\Node\Param) {
             return \true;
         }
-        return $this->isNullableParam($previousParam);
-    }
-    public function isNullableParam(\PhpParser\Node\Param $param) : bool
-    {
-        $type = $this->nodeTypeResolver->resolve($param->var);
-        return $type instanceof \PhpParser\Node\NullableType;
+        return !$previousParam->type instanceof \PhpParser\Node\NullableType;
     }
     /**
      * Matches:

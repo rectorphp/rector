@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210712;
+namespace RectorPrefix20210713;
 
 if (\class_exists('Tx_IndexedSearch_ViewHelpers_PageBrowsingViewHelper')) {
     return;

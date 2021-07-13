@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Ssch\TYPO3Rector\FileProcessor\TypoScript\Conditions;
 
-use RectorPrefix20210712\Nette\Utils\Strings;
+use RectorPrefix20210713\Nette\Utils\Strings;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Ssch\TYPO3Rector\Helper\ArrayUtility;
 final class GlobalVarConditionMatcher extends \Ssch\TYPO3Rector\FileProcessor\TypoScript\Conditions\AbstractGlobalConditionMatcher
@@ -91,7 +91,7 @@ final class GlobalVarConditionMatcher extends \Ssch\TYPO3Rector\FileProcessor\Ty
      */
     public function shouldApply($condition) : bool
     {
-        return \RectorPrefix20210712\Nette\Utils\Strings::startsWith($condition, self::TYPE);
+        return \RectorPrefix20210713\Nette\Utils\Strings::startsWith($condition, self::TYPE);
     }
     private function refactorGetPost(string $property, string $operator, string $value) : string
     {
@@ -109,7 +109,7 @@ final class GlobalVarConditionMatcher extends \Ssch\TYPO3Rector\FileProcessor\Ty
     }
     private function createBackendUserCondition(string $property, string $operator, string $value) : string
     {
-        $delimiter = \RectorPrefix20210712\Nette\Utils\Strings::contains($property, ':') ? ':' : '|';
+        $delimiter = \RectorPrefix20210713\Nette\Utils\Strings::contains($property, ':') ? ':' : '|';
         [, $property] = \Ssch\TYPO3Rector\Helper\ArrayUtility::trimExplode($delimiter, $property, \true, 2);
         if (!\array_key_exists($property, self::USER_PROPERTY_MAPPING)) {
             $message = \sprintf('The property "%s" can not be mapped for condition BE_USER', $property);

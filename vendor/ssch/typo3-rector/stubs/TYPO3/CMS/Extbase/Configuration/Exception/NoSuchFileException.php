@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210712\TYPO3\CMS\Extbase\Configuration\Exception;
+namespace RectorPrefix20210713\TYPO3\CMS\Extbase\Configuration\Exception;
 
 if (\class_exists('TYPO3\\CMS\\Extbase\\Configuration\\Exception\\NoSuchFileException')) {
     return;
