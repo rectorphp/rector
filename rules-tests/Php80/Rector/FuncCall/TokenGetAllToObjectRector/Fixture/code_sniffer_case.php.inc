@@ -31,7 +31,7 @@ final class CodeSnifferCase
     {
         $code = '<?php echo 1;';
 
-        $stringTokens = \PhpToken::getAll($code);
+        $stringTokens = \PhpToken::tokenize($code);
         foreach ($stringTokens as $token) {
             if ($token->is(T_VARIABLE)) {
                 $error = 'Variable "%s" not allowed in double quoted string; use concatenation instead';

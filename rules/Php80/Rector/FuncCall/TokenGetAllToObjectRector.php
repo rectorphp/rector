@@ -34,7 +34,7 @@ final class TokenGetAllToObjectRector extends AbstractRector
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
-            'Convert `token_get_all` to `PhpToken::getAll`',
+            'Convert `token_get_all` to `PhpToken::tokenize`',
             [
                 new CodeSample(
                     <<<'CODE_SAMPLE'
@@ -61,7 +61,7 @@ final class SomeClass
 {
     public function run()
     {
-        $tokens = \PhpToken::getAll($code);
+        $tokens = \PhpToken::tokenize($code);
         foreach ($tokens as $phpToken) {
            $name = $phpToken->getTokenName();
            $text = $phpToken->text;
@@ -93,7 +93,7 @@ CODE_SAMPLE
 
         $this->refactorTokensVariable($node);
 
-        return $this->nodeFactory->createStaticCall('PhpToken', 'getAll', $node->args);
+        return $this->nodeFactory->createStaticCall('PhpToken', 'tokenize', $node->args);
     }
 
     private function refactorTokensVariable(FuncCall $funcCall): void

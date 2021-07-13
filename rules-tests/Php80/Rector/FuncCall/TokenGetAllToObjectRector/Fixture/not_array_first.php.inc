@@ -34,7 +34,7 @@ final class NotArrayFirst
     {
         $code = '<?php echo 1;';
 
-        $tokens = \PhpToken::getAll($code);
+        $tokens = \PhpToken::tokenize($code);
         foreach ($tokens as $token) {
             $name = $token->getTokenName();
             $text = $token->text;

@@ -33,7 +33,7 @@ final class ProcessTokenGetAllButKeepNonTokenArray
     {
         $code = '<?php echo 1;';
 
-        $stringTokens = \PhpToken::getAll($code);
+        $stringTokens = \PhpToken::tokenize($code);
 
         $nonToken = 'blaaa';
         foreach ($stringTokens as $token) {
