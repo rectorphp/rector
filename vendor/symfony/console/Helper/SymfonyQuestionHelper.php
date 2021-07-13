@@ -81,7 +81,7 @@ class SymfonyQuestionHelper extends \RectorPrefix20210713\Symfony\Component\Cons
     }
     private function getEofShortcut() : string
     {
-        if (\false !== \strpos(\PHP_OS, 'WIN')) {
+        if ('Windows' === \PHP_OS_FAMILY) {
             return '<comment>Ctrl+Z</comment> then <comment>Enter</comment>';
         }
         return '<comment>Ctrl+D</comment>';

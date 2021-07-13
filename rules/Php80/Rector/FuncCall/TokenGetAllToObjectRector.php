@@ -34,7 +34,7 @@ final class TokenGetAllToObjectRector extends \Rector\Core\Rector\AbstractRector
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Convert `token_get_all` to `PhpToken::getAll`', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Convert `token_get_all` to `PhpToken::tokenize`', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run()
@@ -57,7 +57,7 @@ final class SomeClass
 {
     public function run()
     {
-        $tokens = \PhpToken::getAll($code);
+        $tokens = \PhpToken::tokenize($code);
         foreach ($tokens as $phpToken) {
            $name = $phpToken->getTokenName();
            $text = $phpToken->text;
@@ -83,7 +83,7 @@ CODE_SAMPLE
             return null;
         }
         $this->refactorTokensVariable($node);
-        return $this->nodeFactory->createStaticCall('PhpToken', 'getAll', $node->args);
+        return $this->nodeFactory->createStaticCall('PhpToken', 'tokenize', $node->args);
     }
     private function refactorTokensVariable(\PhpParser\Node\Expr\FuncCall $funcCall) : void
     {
