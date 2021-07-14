@@ -12,6 +12,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\NodeAnalyzer\ParamAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DowngradePhp71\TypeDeclaration\PhpDocFromTypeDeclarationDecorator;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -24,7 +25,8 @@ final class DowngradeNullableTypeDeclarationRector extends AbstractRector
 {
     public function __construct(
         private PhpDocTypeChanger $phpDocTypeChanger,
-        private PhpDocFromTypeDeclarationDecorator $phpDocFromTypeDeclarationDecorator
+        private PhpDocFromTypeDeclarationDecorator $phpDocFromTypeDeclarationDecorator,
+        private ParamAnalyzer $paramAnalyzer
     ) {
     }
 
@@ -90,23 +92,9 @@ CODE_SAMPLE
         return null;
     }
 
-    private function isNullableParam(Param $param): bool
-    {
-        if ($param->variadic) {
-            return false;
-        }
-
-        if ($param->type === null) {
-            return false;
-        }
-
-        // Check it is the union type
-        return $param->type instanceof NullableType;
-    }
-
     private function refactorParamType(Param $param, ClassMethod | Function_ | Closure $functionLike): bool
     {
-        if (! $this->isNullableParam($param)) {
+        if (! $this->paramAnalyzer->isNullable($param)) {
             return false;
         }
 

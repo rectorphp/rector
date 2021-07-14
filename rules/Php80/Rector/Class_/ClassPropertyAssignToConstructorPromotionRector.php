@@ -13,6 +13,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
+use Rector\Core\NodeAnalyzer\ParamAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
@@ -34,7 +35,8 @@ final class ClassPropertyAssignToConstructorPromotionRector extends AbstractRect
     public function __construct(
         private PromotedPropertyCandidateResolver $promotedPropertyCandidateResolver,
         private VariableRenamer $variableRenamer,
-        private VarTagRemover $varTagRemover
+        private VarTagRemover $varTagRemover,
+        private ParamAnalyzer $paramAnalyzer
     ) {
     }
 
@@ -166,9 +168,13 @@ CODE_SAMPLE
             return true;
         }
 
-        $type = $param->type instanceof NullableType
-            ? $param->type->type
-            : $param->type;
+        if ($this->paramAnalyzer->isNullable($param)) {
+            /** @var NullableType $type */
+            $type = $param->type;
+            $type = $type->type;
+        } else {
+            $type = $param->type;
+        }
 
         return $type instanceof Identifier && $this->isName($type, 'callable');
     }

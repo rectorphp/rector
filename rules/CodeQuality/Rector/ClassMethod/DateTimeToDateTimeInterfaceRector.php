@@ -19,6 +19,7 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\NodeAnalyzer\ParamAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
@@ -39,7 +40,8 @@ final class DateTimeToDateTimeInterfaceRector extends AbstractRector
     ];
 
     public function __construct(
-        private PhpDocTypeChanger $phpDocTypeChanger
+        private PhpDocTypeChanger $phpDocTypeChanger,
+        private ParamAnalyzer $paramAnalyzer
     ) {
     }
 
@@ -110,7 +112,7 @@ CODE_SAMPLE
     private function refactorParamTypeHint(Param $param): void
     {
         $fullyQualified = new FullyQualified('DateTimeInterface');
-        if ($param->type instanceof NullableType) {
+        if ($this->paramAnalyzer->isNullable($param)) {
             $param->type = new NullableType($fullyQualified);
             return;
         }
@@ -121,7 +123,7 @@ CODE_SAMPLE
     private function refactorParamDocBlock(Param $param, ClassMethod $classMethod): void
     {
         $types = [new ObjectType('DateTime'), new ObjectType('DateTimeImmutable')];
-        if ($param->type instanceof NullableType) {
+        if ($this->paramAnalyzer->isNullable($param)) {
             $types[] = new NullType();
         }
 

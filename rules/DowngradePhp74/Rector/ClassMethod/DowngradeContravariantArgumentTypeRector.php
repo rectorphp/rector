@@ -14,6 +14,7 @@ use PhpParser\Node\UnionType;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
+use Rector\Core\NodeAnalyzer\ParamAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -31,7 +32,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradeContravariantArgumentTypeRector extends AbstractRector
 {
     public function __construct(
-        private PhpDocTypeChanger $phpDocTypeChanger
+        private PhpDocTypeChanger $phpDocTypeChanger,
+        private ParamAnalyzer $paramAnalyzer
     ) {
     }
 
@@ -150,7 +152,7 @@ CODE_SAMPLE
         /** @var Node $paramType */
         $paramType = $param->type;
 
-        if ($param->type instanceof NullableType) {
+        if ($this->paramAnalyzer->isNullable($param)) {
             /** @var NullableType $nullableType */
             $nullableType = $paramType;
             $paramTypeName = $this->getName($nullableType->type);

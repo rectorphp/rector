@@ -19,6 +19,7 @@ use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
+use Rector\Core\NodeAnalyzer\ParamAnalyzer;
 use Rector\Core\NodeManipulator\ClassMethodPropertyFetchManipulator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\ValueObject\MethodName;
@@ -42,7 +43,8 @@ final class ConstructorPropertyTypeInferer implements PropertyTypeInfererInterfa
         private TypeFactory $typeFactory,
         private StaticTypeMapper $staticTypeMapper,
         private NodeTypeResolver $nodeTypeResolver,
-        private BetterNodeFinder $betterNodeFinder
+        private BetterNodeFinder $betterNodeFinder,
+        private ParamAnalyzer $paramAnalyzer
     ) {
     }
 
@@ -107,10 +109,13 @@ final class ConstructorPropertyTypeInferer implements PropertyTypeInfererInterfa
             return new MixedType();
         }
 
-        if ($param->type instanceof NullableType) {
+        if ($this->paramAnalyzer->isNullable($param)) {
+            /** @var NullableType $type */
+            $type = $param->type;
+
             $types = [];
             $types[] = new NullType();
-            $types[] = $this->staticTypeMapper->mapPhpParserNodePHPStanType($param->type->type);
+            $types[] = $this->staticTypeMapper->mapPhpParserNodePHPStanType($type->type);
 
             return $this->typeFactory->createMixedPassedOrUnionType($types);
         }
@@ -152,7 +157,7 @@ final class ConstructorPropertyTypeInferer implements PropertyTypeInfererInterfa
 
     private function isParamNullable(Param $param): bool
     {
-        if ($param->type instanceof NullableType) {
+        if ($this->paramAnalyzer->isNullable($param)) {
             return true;
         }
 
