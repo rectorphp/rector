@@ -9446,6 +9446,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
  class SomeClass
  {
 +    public function __construct(AnotherClassFactory $anotherClassFactory)
++    {c function __construct(AnotherClassFactory $anotherClassFactory)
 +    {
 +        $this->anotherClassFactory = $anotherClassFactory;
 +    }
