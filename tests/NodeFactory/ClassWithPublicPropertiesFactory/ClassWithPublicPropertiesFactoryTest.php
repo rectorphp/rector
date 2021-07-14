@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Core\Tests\NodeFactory\ClassWithPublicPropertiesFactory;
 
 use Iterator;
+use Nette\Utils\Json;
 use Rector\Core\NodeFactory\ClassWithPublicPropertiesFactory;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Testing\PHPUnit\AbstractTestCase;
@@ -32,10 +33,11 @@ final class ClassWithPublicPropertiesFactoryTest extends AbstractTestCase
      */
     public function test(SmartFileInfo $fixtureFileInfo): void
     {
-        $fixtureContent = $fixtureFileInfo->getContents();
-        [$content, $expected] = explode("-----\n", $fixtureContent, 2);
+        $contents = $fixtureFileInfo->getContents();
+        [$content, $expected] = explode("-----\n", $contents, 2);
 
-        $classSettings = json_decode($content, true);
+        $classSettings = Json::decode($content, Json::FORCE_ARRAY);
+
         $node = $this->classWithPublicPropertiesFactory->createNode(
             $classSettings['fullyQualifiedName'],
             $classSettings['properties'],

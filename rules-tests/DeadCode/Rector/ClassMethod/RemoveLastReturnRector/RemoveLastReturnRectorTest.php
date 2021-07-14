@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Rector\Tests\CodeQualityStrict\Rector\If_\MoveOutMethodCallInsideIfConditionRector;
+namespace Rector\Tests\DeadCode\Rector\ClassMethod\RemoveLastReturnRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class MoveOutMethodCallInsideIfConditionRectorTest extends AbstractRectorTestCase
+final class RemoveLastReturnRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
