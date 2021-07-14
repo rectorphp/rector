@@ -11,10 +11,10 @@ use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\Empty_;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\If_;
 use PHPStan\Type\ArrayType;
+use Rector\Core\NodeAnalyzer\ParamAnalyzer;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -32,11 +32,16 @@ final class UselessIfCondBeforeForeachDetector
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
-    public function __construct(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
+    /**
+     * @var \Rector\Core\NodeAnalyzer\ParamAnalyzer
+     */
+    private $paramAnalyzer;
+    public function __construct(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Core\NodeAnalyzer\ParamAnalyzer $paramAnalyzer)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->nodeComparator = $nodeComparator;
         $this->betterNodeFinder = $betterNodeFinder;
+        $this->paramAnalyzer = $paramAnalyzer;
     }
     /**
      * Matches:
@@ -65,7 +70,10 @@ final class UselessIfCondBeforeForeachDetector
         if (!$previousParam instanceof \PhpParser\Node\Param) {
             return \true;
         }
-        return !$previousParam->type instanceof \PhpParser\Node\NullableType;
+        if ($this->paramAnalyzer->isNullable($previousParam)) {
+            return \false;
+        }
+        return !$this->paramAnalyzer->hasDefaultNull($previousParam);
     }
     /**
      * Matches:

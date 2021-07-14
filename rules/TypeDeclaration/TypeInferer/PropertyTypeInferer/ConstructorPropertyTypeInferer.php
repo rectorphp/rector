@@ -18,6 +18,7 @@ use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
+use Rector\Core\NodeAnalyzer\ParamAnalyzer;
 use Rector\Core\NodeManipulator\ClassMethodPropertyFetchManipulator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\ValueObject\MethodName;
@@ -29,7 +30,7 @@ use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\TypeDeclaration\Contract\TypeInferer\PropertyTypeInfererInterface;
-use RectorPrefix20210713\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
+use RectorPrefix20210714\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 final class ConstructorPropertyTypeInferer implements \Rector\TypeDeclaration\Contract\TypeInferer\PropertyTypeInfererInterface
 {
     /**
@@ -64,7 +65,11 @@ final class ConstructorPropertyTypeInferer implements \Rector\TypeDeclaration\Co
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
-    public function __construct(\Rector\Core\NodeManipulator\ClassMethodPropertyFetchManipulator $classMethodPropertyFetchManipulator, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \RectorPrefix20210713\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory $typeFactory, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
+    /**
+     * @var \Rector\Core\NodeAnalyzer\ParamAnalyzer
+     */
+    private $paramAnalyzer;
+    public function __construct(\Rector\Core\NodeManipulator\ClassMethodPropertyFetchManipulator $classMethodPropertyFetchManipulator, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \RectorPrefix20210714\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory $typeFactory, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Core\NodeAnalyzer\ParamAnalyzer $paramAnalyzer)
     {
         $this->classMethodPropertyFetchManipulator = $classMethodPropertyFetchManipulator;
         $this->reflectionProvider = $reflectionProvider;
@@ -74,6 +79,7 @@ final class ConstructorPropertyTypeInferer implements \Rector\TypeDeclaration\Co
         $this->staticTypeMapper = $staticTypeMapper;
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->betterNodeFinder = $betterNodeFinder;
+        $this->paramAnalyzer = $paramAnalyzer;
     }
     /**
      * @param \PhpParser\Node\Stmt\Property $property
@@ -126,10 +132,12 @@ final class ConstructorPropertyTypeInferer implements \Rector\TypeDeclaration\Co
         if ($param->type === null) {
             return new \PHPStan\Type\MixedType();
         }
-        if ($param->type instanceof \PhpParser\Node\NullableType) {
+        if ($this->paramAnalyzer->isNullable($param)) {
+            /** @var NullableType $type */
+            $type = $param->type;
             $types = [];
             $types[] = new \PHPStan\Type\NullType();
-            $types[] = $this->staticTypeMapper->mapPhpParserNodePHPStanType($param->type->type);
+            $types[] = $this->staticTypeMapper->mapPhpParserNodePHPStanType($type->type);
             return $this->typeFactory->createMixedPassedOrUnionType($types);
         }
         // special case for alias
@@ -158,7 +166,7 @@ final class ConstructorPropertyTypeInferer implements \Rector\TypeDeclaration\Co
     }
     private function isParamNullable(\PhpParser\Node\Param $param) : bool
     {
-        if ($param->type instanceof \PhpParser\Node\NullableType) {
+        if ($this->paramAnalyzer->isNullable($param)) {
             return \true;
         }
         if ($param->default !== null) {

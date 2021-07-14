@@ -18,6 +18,7 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\NodeAnalyzer\ParamAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
@@ -37,9 +38,14 @@ final class DateTimeToDateTimeInterfaceRector extends \Rector\Core\Rector\Abstra
      * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger
      */
     private $phpDocTypeChanger;
-    public function __construct(\Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger)
+    /**
+     * @var \Rector\Core\NodeAnalyzer\ParamAnalyzer
+     */
+    private $paramAnalyzer;
+    public function __construct(\Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger, \Rector\Core\NodeAnalyzer\ParamAnalyzer $paramAnalyzer)
     {
         $this->phpDocTypeChanger = $phpDocTypeChanger;
+        $this->paramAnalyzer = $paramAnalyzer;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -97,7 +103,7 @@ CODE_SAMPLE
     private function refactorParamTypeHint(\PhpParser\Node\Param $param) : void
     {
         $fullyQualified = new \PhpParser\Node\Name\FullyQualified('DateTimeInterface');
-        if ($param->type instanceof \PhpParser\Node\NullableType) {
+        if ($this->paramAnalyzer->isNullable($param)) {
             $param->type = new \PhpParser\Node\NullableType($fullyQualified);
             return;
         }
@@ -106,7 +112,7 @@ CODE_SAMPLE
     private function refactorParamDocBlock(\PhpParser\Node\Param $param, \PhpParser\Node\Stmt\ClassMethod $classMethod) : void
     {
         $types = [new \PHPStan\Type\ObjectType('DateTime'), new \PHPStan\Type\ObjectType('DateTimeImmutable')];
-        if ($param->type instanceof \PhpParser\Node\NullableType) {
+        if ($this->paramAnalyzer->isNullable($param)) {
             $types[] = new \PHPStan\Type\NullType();
         }
         $paramName = $this->getName($param->var);

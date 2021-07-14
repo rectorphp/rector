@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Rector\Core\Configuration;
 
-use RectorPrefix20210713\JetBrains\PhpStorm\Immutable;
-use RectorPrefix20210713\Symplify\Skipper\ValueObject\Option as SkipperOption;
+use RectorPrefix20210714\JetBrains\PhpStorm\Immutable;
+use RectorPrefix20210714\Symplify\Skipper\ValueObject\Option as SkipperOption;
 #[Immutable]
 final class Option
 {
@@ -76,7 +76,7 @@ final class Option
     /**
      * @var string
      */
-    public const SKIP = \RectorPrefix20210713\Symplify\Skipper\ValueObject\Option::SKIP;
+    public const SKIP = \RectorPrefix20210714\Symplify\Skipper\ValueObject\Option::SKIP;
     /**
      * @var string
      */

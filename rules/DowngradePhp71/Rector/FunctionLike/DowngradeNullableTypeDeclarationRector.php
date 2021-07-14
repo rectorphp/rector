@@ -11,6 +11,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\NodeAnalyzer\ParamAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DowngradePhp71\TypeDeclaration\PhpDocFromTypeDeclarationDecorator;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -28,10 +29,15 @@ final class DowngradeNullableTypeDeclarationRector extends \Rector\Core\Rector\A
      * @var \Rector\DowngradePhp71\TypeDeclaration\PhpDocFromTypeDeclarationDecorator
      */
     private $phpDocFromTypeDeclarationDecorator;
-    public function __construct(\Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger, \Rector\DowngradePhp71\TypeDeclaration\PhpDocFromTypeDeclarationDecorator $phpDocFromTypeDeclarationDecorator)
+    /**
+     * @var \Rector\Core\NodeAnalyzer\ParamAnalyzer
+     */
+    private $paramAnalyzer;
+    public function __construct(\Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger, \Rector\DowngradePhp71\TypeDeclaration\PhpDocFromTypeDeclarationDecorator $phpDocFromTypeDeclarationDecorator, \Rector\Core\NodeAnalyzer\ParamAnalyzer $paramAnalyzer)
     {
         $this->phpDocTypeChanger = $phpDocTypeChanger;
         $this->phpDocFromTypeDeclarationDecorator = $phpDocFromTypeDeclarationDecorator;
+        $this->paramAnalyzer = $paramAnalyzer;
     }
     /**
      * @return array<class-string<Node>>
@@ -83,23 +89,12 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function isNullableParam(\PhpParser\Node\Param $param) : bool
-    {
-        if ($param->variadic) {
-            return \false;
-        }
-        if ($param->type === null) {
-            return \false;
-        }
-        // Check it is the union type
-        return $param->type instanceof \PhpParser\Node\NullableType;
-    }
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
      */
     private function refactorParamType(\PhpParser\Node\Param $param, $functionLike) : bool
     {
-        if (!$this->isNullableParam($param)) {
+        if (!$this->paramAnalyzer->isNullable($param)) {
             return \false;
         }
         $this->decorateWithDocBlock($functionLike, $param);

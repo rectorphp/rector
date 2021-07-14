@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210713;
+namespace RectorPrefix20210714;
 
 if (\class_exists('Tx_Extbase_Security_Cryptography_HashService')) {
     return;

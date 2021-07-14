@@ -13,6 +13,7 @@ use PhpParser\Node\UnionType;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
+use Rector\Core\NodeAnalyzer\ParamAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -32,9 +33,14 @@ final class DowngradeContravariantArgumentTypeRector extends \Rector\Core\Rector
      * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger
      */
     private $phpDocTypeChanger;
-    public function __construct(\Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger)
+    /**
+     * @var \Rector\Core\NodeAnalyzer\ParamAnalyzer
+     */
+    private $paramAnalyzer;
+    public function __construct(\Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger, \Rector\Core\NodeAnalyzer\ParamAnalyzer $paramAnalyzer)
     {
         $this->phpDocTypeChanger = $phpDocTypeChanger;
+        $this->paramAnalyzer = $paramAnalyzer;
     }
     /**
      * @return array<class-string<Node>>
@@ -133,7 +139,7 @@ CODE_SAMPLE
         // If it is the NullableType, extract the name from its inner type
         /** @var Node $paramType */
         $paramType = $param->type;
-        if ($param->type instanceof \PhpParser\Node\NullableType) {
+        if ($this->paramAnalyzer->isNullable($param)) {
             /** @var NullableType $nullableType */
             $nullableType = $paramType;
             $paramTypeName = $this->getName($nullableType->type);
