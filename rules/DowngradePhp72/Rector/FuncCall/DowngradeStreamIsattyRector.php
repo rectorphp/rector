@@ -13,6 +13,7 @@ use PhpParser\Node\Stmt\Expression;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Parser\InlineCodeParser;
 use Rector\Core\Rector\AbstractRector;
+use Rector\DowngradePhp72\NodeAnalyzer\FunctionExistsFunCallAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -24,7 +25,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradeStreamIsattyRector extends AbstractRector
 {
     public function __construct(
-        private InlineCodeParser $inlineCodeParser
+        private InlineCodeParser $inlineCodeParser,
+        private FunctionExistsFunCallAnalyzer $functionExistsFunCallAnalyzer
     ) {
     }
 
@@ -89,6 +91,10 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         if (! $this->isName($node, 'stream_isatty')) {
+            return null;
+        }
+
+        if ($this->functionExistsFunCallAnalyzer->detect($node, 'stream_isatty')) {
             return null;
         }
 

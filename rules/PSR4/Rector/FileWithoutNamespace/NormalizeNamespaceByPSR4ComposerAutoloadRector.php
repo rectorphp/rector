@@ -114,7 +114,7 @@ CODE_SAMPLE
     private function refactorFileWithoutNamespace(
         FileWithoutNamespace $fileWithoutNamespace,
         string $expectedNamespace
-    ): FileWithoutNamespace {
+    ): Namespace_ {
         $nodes = $fileWithoutNamespace->stmts;
 
         $nodesWithStrictTypesThenNamespace = [];
@@ -130,7 +130,6 @@ CODE_SAMPLE
 
         $this->fullyQualifyStmtsAnalyzer->process($nodes);
 
-        // @todo update to a new class node, like FileWithNamespace
-        return new FileWithoutNamespace($nodesWithStrictTypesThenNamespace);
+        return $namespace;
     }
 }

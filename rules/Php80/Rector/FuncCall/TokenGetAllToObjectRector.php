@@ -14,6 +14,7 @@ use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\If_;
 use Rector\Core\Rector\AbstractRector;
+use Rector\NodeNestingScope\ParentFinder;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php80\NodeManipulator\TokenManipulator;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -27,7 +28,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class TokenGetAllToObjectRector extends AbstractRector
 {
     public function __construct(
-        private TokenManipulator $tokenManipulator
+        private TokenManipulator $tokenManipulator,
+        private ParentFinder $parentFinder
     ) {
     }
 
@@ -104,7 +106,7 @@ CODE_SAMPLE
         }
 
         /** @var ClassMethod|Function_|null $classMethodOrFunction */
-        $classMethodOrFunction = $this->betterNodeFinder->findParentTypes(
+        $classMethodOrFunction = $this->parentFinder->findByTypes(
             $funcCall,
             [ClassMethod::class, Function_::class]
         );

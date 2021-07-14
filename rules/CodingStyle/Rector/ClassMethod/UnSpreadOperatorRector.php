@@ -6,6 +6,7 @@ namespace Rector\CodingStyle\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -115,6 +116,7 @@ CODE_SAMPLE
         $spreadParameterReflections = $this->spreadVariablesCollector->resolveFromMethodReflection(
             $methodReflection
         );
+
         if ($spreadParameterReflections === []) {
             return null;
         }
@@ -122,25 +124,32 @@ CODE_SAMPLE
         $firstSpreadParamPosition = array_key_first($spreadParameterReflections);
         $variadicArgs = $this->resolveVariadicArgsByVariadicParams($methodCall, $firstSpreadParamPosition);
 
-        $hasUnpacked = false;
-
-        foreach ($variadicArgs as $position => $variadicArg) {
-            if ($variadicArg->unpack) {
-                $variadicArg->unpack = false;
-                $hasUnpacked = true;
-                $methodCall->args[$position] = $variadicArg;
-            }
-        }
-
+        $hasUnpacked = $this->changeArgToPacked($variadicArgs, $methodCall);
         if ($hasUnpacked) {
             return $methodCall;
         }
 
         if ($variadicArgs !== []) {
-            $methodCall->args[$firstSpreadParamPosition] = new Arg($this->nodeFactory->createArray($variadicArgs));
+            $array = $this->nodeFactory->createArray($variadicArgs);
+
+            $spreadArg = $methodCall->args[$firstSpreadParamPosition] ?? null;
+
+            // already set value
+            if ($spreadArg instanceof Arg && $spreadArg->value instanceof Array_) {
+                return null;
+            }
+
+            if (count($variadicArgs) === 1) {
+                return null;
+            }
+
+            $methodCall->args[$firstSpreadParamPosition] = new Arg($array);
+            $this->removeLaterArguments($methodCall, $firstSpreadParamPosition);
+
+            return $methodCall;
         }
 
-        return $methodCall;
+        return null;
     }
 
     /**
@@ -156,8 +165,6 @@ CODE_SAMPLE
             }
 
             $variadicArgs[] = $arg;
-
-            $this->nodeRemover->removeArg($methodCall, $position);
         }
 
         return $variadicArgs;
@@ -180,5 +187,31 @@ CODE_SAMPLE
         }
 
         return str_contains($fileName, '/vendor/');
+    }
+
+    private function removeLaterArguments(MethodCall $methodCall, int $argumentPosition): void
+    {
+        $argCount = count($methodCall->args);
+        for ($i = $argumentPosition + 1; $i < $argCount; ++$i) {
+            unset($methodCall->args[$i]);
+        }
+    }
+
+    /**
+     * @param Arg[] $variadicArgs
+     */
+    private function changeArgToPacked(array $variadicArgs, MethodCall $methodCall): bool
+    {
+        $hasUnpacked = false;
+
+        foreach ($variadicArgs as $position => $variadicArg) {
+            if ($variadicArg->unpack) {
+                $variadicArg->unpack = false;
+                $hasUnpacked = true;
+                $methodCall->args[$position] = $variadicArg;
+            }
+        }
+
+        return $hasUnpacked;
     }
 }

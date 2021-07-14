@@ -31,6 +31,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class DowngradeCovariantReturnTypeRector extends AbstractRector
 {
+    /**
+     * @var string
+     */
+    private const ALREADY_DOWNGRADED = 'already_downgraded';
+
     public function __construct(
         private PhpDocTypeChanger $phpDocTypeChanger,
         private PrivatesCaller $privatesCaller,
@@ -103,6 +108,11 @@ CODE_SAMPLE
             return null;
         }
 
+        $isAlreadyDowngraded = $node->getAttribute(self::ALREADY_DOWNGRADED);
+        if ($isAlreadyDowngraded) {
+            return null;
+        }
+
         $parentReturnType = $this->resolveDifferentAncestorReturnType($node, $node->returnType);
         if ($parentReturnType instanceof MixedType) {
             return null;
@@ -128,6 +138,8 @@ CODE_SAMPLE
         if ($this->nodeComparator->areNodesEqual($parentReturnTypeNode, $node->returnType)) {
             return null;
         }
+
+        $node->setAttribute(self::ALREADY_DOWNGRADED, true);
 
         // Add the docblock before changing the type
         $this->addDocBlockReturn($node);

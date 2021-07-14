@@ -23,13 +23,14 @@ final class ScopeNestingComparator
 
     public function __construct(
         private BetterNodeFinder $betterNodeFinder,
-        private NodeComparator $nodeComparator
+        private NodeComparator $nodeComparator,
+        private ParentFinder $parentFinder
     ) {
     }
 
     public function areReturnScopeNested(Return_ $return, Node $secondNodeScopeNode): bool
     {
-        $firstNodeScopeNode = $this->betterNodeFinder->findParentTypes(
+        $firstNodeScopeNode = $this->parentFinder->findByTypes(
             $return,
             ControlStructure::RETURN_ISOLATING_SCOPE_NODE_TYPES
         );
@@ -47,7 +48,7 @@ final class ScopeNestingComparator
 
     public function isNodeConditionallyScoped(Expr $expr): bool
     {
-        $foundParent = $this->betterNodeFinder->findParentTypes(
+        $foundParent = $this->parentFinder->findByTypes(
             $expr,
             ControlStructure::CONDITIONAL_NODE_SCOPE_TYPES + [FunctionLike::class]
         );
@@ -103,6 +104,6 @@ final class ScopeNestingComparator
 
     private function findParentControlStructure(Node $node): ?Node
     {
-        return $this->betterNodeFinder->findParentTypes($node, ControlStructure::BREAKING_SCOPE_NODE_TYPES);
+        return $this->parentFinder->findByTypes($node, ControlStructure::BREAKING_SCOPE_NODE_TYPES);
     }
 }

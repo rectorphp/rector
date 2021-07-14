@@ -13,13 +13,15 @@ use PhpParser\Node\Stmt\Function_;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Naming\ValueObject\VariableAndCallAssign;
 use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\NodeNestingScope\ParentFinder;
 
 final class VariableAndCallAssignMatcher
 {
     public function __construct(
         private CallMatcher $callMatcher,
         private NodeNameResolver $nodeNameResolver,
-        private BetterNodeFinder $betterNodeFinder
+        private BetterNodeFinder $betterNodeFinder,
+        private ParentFinder $parentFinder
     ) {
     }
 
@@ -49,9 +51,6 @@ final class VariableAndCallAssignMatcher
 
     private function getFunctionLike(Assign $assign): ClassMethod | Function_ | Closure | null
     {
-        return $this->betterNodeFinder->findParentTypes(
-            $assign,
-            [Closure::class, ClassMethod::class, Function_::class]
-        );
+        return $this->parentFinder->findByTypes($assign, [Closure::class, ClassMethod::class, Function_::class]);
     }
 }

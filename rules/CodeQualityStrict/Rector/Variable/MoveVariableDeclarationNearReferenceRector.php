@@ -32,6 +32,7 @@ use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DeadCode\SideEffect\PureFunctionDetector;
 use Rector\NodeNestingScope\NodeFinder\ScopeAwareNodeFinder;
+use Rector\NodeNestingScope\ParentFinder;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -44,7 +45,8 @@ final class MoveVariableDeclarationNearReferenceRector extends AbstractRector
     public function __construct(
         private ScopeAwareNodeFinder $scopeAwareNodeFinder,
         private PureFunctionDetector $pureFunctionDetector,
-        private ReflectionProvider $reflectionProvider
+        private ReflectionProvider $reflectionProvider,
+        private ParentFinder $parentFinder
     ) {
     }
 
@@ -190,7 +192,7 @@ CODE_SAMPLE
 
     private function isInsideLoopStmts(Node $node): bool
     {
-        $loopNode = $this->betterNodeFinder->findParentTypes(
+        $loopNode = $this->parentFinder->findByTypes(
             $node,
             [For_::class, While_::class, Foreach_::class, Do_::class]
         );

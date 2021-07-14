@@ -49,24 +49,32 @@ final class PhpFileProcessor implements FileProcessorInterface
         }, ApplicationPhase::PARSING());
 
         // 2. change nodes with Rectors
-        $this->refactorNodesWithRectors($file);
+        do {
+            $file->changeHasChanged(false);
+            $this->refactorNodesWithRectors($file);
 
-        // 3. apply post rectors
-        $this->tryCatchWrapper($file, function (File $file): void {
-            $newStmts = $this->postFileProcessor->traverse($file->getNewStmts());
+            // 3. apply post rectors
+            $this->tryCatchWrapper($file, function (File $file): void {
+                $newStmts = $this->postFileProcessor->traverse($file->getNewStmts());
 
-            // this is needed for new tokens added in "afterTraverse()"
-            $file->changeNewStmts($newStmts);
-        }, ApplicationPhase::POST_RECTORS());
+                // this is needed for new tokens added in "afterTraverse()"
+                $file->changeNewStmts($newStmts);
+            }, ApplicationPhase::POST_RECTORS());
 
-        // 4. print to file or string
-        $this->currentFileProvider->setFile($file);
+            // 4. print to file or string
+            $this->currentFileProvider->setFile($file);
 
-        if ($file->hasErrors()) {
-            // cannot print file with errors, as print would b
-            $this->notifyPhase($file, ApplicationPhase::PRINT_SKIP());
-            return;
-        }
+            // cannot print file with errors, as print would break everything to original nodes
+            if ($file->hasErrors()) {
+                // cannot print file with errors, as print would b
+                $this->notifyPhase($file, ApplicationPhase::PRINT_SKIP());
+                continue;
+            }
+
+            $this->tryCatchWrapper($file, function (File $file) use ($configuration): void {
+                $this->printFile($file, $configuration);
+            }, ApplicationPhase::PRINT());
+        } while ($file->hasChanged());
 
         $this->tryCatchWrapper($file, function (File $file) use ($configuration): void {
             $this->printFile($file, $configuration);

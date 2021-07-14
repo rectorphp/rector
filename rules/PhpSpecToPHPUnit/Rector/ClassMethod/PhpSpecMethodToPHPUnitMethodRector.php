@@ -48,8 +48,10 @@ final class PhpSpecMethodToPHPUnitMethodRector extends AbstractPhpSpecToPHPUnitR
             $node->name = new Identifier(MethodName::SET_UP);
             $this->visibilityManipulator->makeProtected($node);
             $this->phpUnitTypeDeclarationDecorator->decorate($node);
-        } else {
+        } elseif ($node->isPublic()) {
             $this->processTestMethod($node);
+        } else {
+            return null;
         }
 
         return $node;

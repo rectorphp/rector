@@ -68,8 +68,12 @@ final class NodeNameResolver
         return false;
     }
 
-    public function getName(Node $node): ?string
+    public function getName(Node | string $node): ?string
     {
+        if (is_string($node)) {
+            return $node;
+        }
+
         if ($node instanceof MethodCall || $node instanceof StaticCall) {
             if ($this->isCallOrIdentifier($node->name)) {
                 return null;

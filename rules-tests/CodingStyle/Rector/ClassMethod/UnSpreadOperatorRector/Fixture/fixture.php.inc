@@ -4,13 +4,13 @@ namespace Rector\Tests\CodingStyle\Rector\ClassMethod\UnSpreadOperatorRector\Fix
 
 final class Fixture
 {
-    public function run(...$args)
-    {
-    }
-
     public function execute(array $data)
     {
         $this->run(...$data);
+    }
+
+    private function run(...$args)
+    {
     }
 }
 
@@ -22,13 +22,13 @@ namespace Rector\Tests\CodingStyle\Rector\ClassMethod\UnSpreadOperatorRector\Fix
 
 final class Fixture
 {
-    public function run(array $args = [])
-    {
-    }
-
     public function execute(array $data)
     {
         $this->run($data);
+    }
+
+    private function run(array $args = [])
+    {
     }
 }
 

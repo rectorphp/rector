@@ -95,7 +95,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->shouldRefactor($node)) {
+        if ($this->shouldSkipFuncCall($node)) {
             return null;
         }
 
@@ -130,15 +130,15 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function shouldRefactor(FuncCall $funcCall): bool
+    private function shouldSkipFuncCall(FuncCall $funcCall): bool
     {
         if (! $this->isName($funcCall, 'strip_tags')) {
-            return false;
+            return true;
         }
 
         // If param not provided, do nothing
         if (count($funcCall->args) < 2) {
-            return false;
+            return true;
         }
 
         // Process anything other than String and null (eg: variables, function calls)
@@ -146,11 +146,21 @@ CODE_SAMPLE
 
         // Skip for string
         if ($allowableTagsParam instanceof String_) {
-            return false;
+            return true;
         }
+
+        // already refactored
+        if ($allowableTagsParam instanceof Ternary && $allowableTagsParam->if !== null) {
+            return true;
+        }
+
+        if ($allowableTagsParam instanceof Concat) {
+            return true;
+        }
+
         // Skip for null
         // Allow for everything else (Array_, Variable, PropertyFetch, ConstFetch, ClassConstFetch, FuncCall, MethodCall, Coalesce, Ternary, others?)
-        return ! $this->valueResolver->isNull($allowableTagsParam);
+        return $this->valueResolver->isNull($allowableTagsParam);
     }
 
     private function createArrayFromString(

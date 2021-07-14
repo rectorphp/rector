@@ -10,18 +10,17 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Namespace_;
-use Rector\Core\PhpParser\Node\BetterNodeFinder;
 
 final class ParentScopeFinder
 {
     public function __construct(
-        private BetterNodeFinder $betterNodeFinder
+        private ParentFinder $parentFinder
     ) {
     }
 
     public function find(Node $node): ClassMethod | Function_ | Class_ | Namespace_ | Closure | null
     {
-        return $this->betterNodeFinder->findParentTypes($node, [
+        return $this->parentFinder->findByTypes($node, [
             Closure::class,
             Function_::class,
             ClassMethod::class,

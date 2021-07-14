@@ -14,6 +14,7 @@ use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\NodeNestingScope\ParentFinder;
 use Rector\TypeDeclaration\Contract\TypeInferer\ParamTypeInfererInterface;
 
 final class FunctionLikeDocParamTypeInferer implements ParamTypeInfererInterface
@@ -21,7 +22,8 @@ final class FunctionLikeDocParamTypeInferer implements ParamTypeInfererInterface
     public function __construct(
         private NodeNameResolver $nodeNameResolver,
         private PhpDocInfoFactory $phpDocInfoFactory,
-        private BetterNodeFinder $betterNodeFinder
+        private BetterNodeFinder $betterNodeFinder,
+        private ParentFinder $parentFinder
     ) {
     }
 
@@ -47,7 +49,7 @@ final class FunctionLikeDocParamTypeInferer implements ParamTypeInfererInterface
      */
     private function resolveScopeNode(Param $param): ?Node
     {
-        return $this->betterNodeFinder->findParentTypes($param, [ClassMethod::class, Function_::class]);
+        return $this->parentFinder->findByTypes($param, [ClassMethod::class, Function_::class]);
     }
 
     /**

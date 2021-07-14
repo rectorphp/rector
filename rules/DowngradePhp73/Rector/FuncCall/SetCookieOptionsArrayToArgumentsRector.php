@@ -97,6 +97,11 @@ CODE_SAMPLE
         if ($argsCount <= 2) {
             return true;
         }
+
+        if (! isset($funcCall->args[2])) {
+            return true;
+        }
+
         return ! ($funcCall->args[2]->value instanceof Array_);
     }
 
@@ -117,8 +122,8 @@ CODE_SAMPLE
                 continue;
             }
 
-            /** @var Arg $value */
             $value = $arrayItem->value;
+
             /** @var String_ $key */
             $key = $arrayItem->key;
             $name = $key->value;
@@ -132,7 +137,7 @@ CODE_SAMPLE
                 $this->highestIndex = $order;
             }
 
-            $newArgs[$order] = $value;
+            $newArgs[$order] = new Arg($value);
         }
 
         $newArgs = $this->fillMissingArgumentsWithDefaultValues($newArgs);

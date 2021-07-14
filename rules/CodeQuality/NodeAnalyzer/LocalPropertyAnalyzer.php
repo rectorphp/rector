@@ -21,6 +21,7 @@ use Rector\Core\NodeAnalyzer\ClassAnalyzer;
 use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\NodeNestingScope\ParentFinder;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
@@ -41,7 +42,8 @@ final class LocalPropertyAnalyzer
         private ArrayDimFetchTypeResolver $arrayDimFetchTypeResolver,
         private NodeTypeResolver $nodeTypeResolver,
         private PropertyFetchAnalyzer $propertyFetchAnalyzer,
-        private TypeFactory $typeFactory
+        private TypeFactory $typeFactory,
+        private ParentFinder $parentFinder
     ) {
     }
 
@@ -134,7 +136,7 @@ final class LocalPropertyAnalyzer
 
     private function shouldSkipForLaravelCollection(PropertyFetch $propertyFetch): bool
     {
-        $staticCallOrClassMethod = $this->betterNodeFinder-> findParentTypes(
+        $staticCallOrClassMethod = $this->parentFinder->findByTypes(
             $propertyFetch,
             [ClassMethod::class, StaticCall::class]
         );

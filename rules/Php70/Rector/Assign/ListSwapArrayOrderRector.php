@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\List_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
@@ -41,16 +42,15 @@ final class ListSwapArrayOrderRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isAtLeastPhpVersion(PhpVersionFeature::LIST_SWAP_ORDER)) {
+        if ($this->shouldSkipAssign($node)) {
             return null;
         }
 
-        if (! $node->var instanceof List_) {
-            return null;
-        }
+        /** @var List_ $list */
+        $list = $node->var;
 
         $printedVariables = [];
-        foreach ($node->var->items as $arrayItem) {
+        foreach ($list->items as $arrayItem) {
             if (! $arrayItem instanceof ArrayItem) {
                 continue;
             }
@@ -72,5 +72,19 @@ final class ListSwapArrayOrderRector extends AbstractRector
         $node->expr = $this->nodeFactory->createFuncCall('array_reverse', [$node->expr]);
 
         return $node;
+    }
+
+    private function shouldSkipAssign(Assign $assign): bool
+    {
+        if (! $this->isAtLeastPhpVersion(PhpVersionFeature::LIST_SWAP_ORDER)) {
+            return true;
+        }
+
+        if (! $assign->var instanceof List_) {
+            return true;
+        }
+
+        // already converted
+        return $assign->expr instanceof FuncCall && $this->isName($assign->expr, 'array_reverse');
     }
 }

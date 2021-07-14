@@ -77,6 +77,7 @@ final class PhpSpecRenaming
     public function renameClass(Class_ $class): void
     {
         $classShortName = $this->nodeNameResolver->getShortName($class);
+
         // anonymous class?
         if ($classShortName === '') {
             throw new ShouldNotHappenException();

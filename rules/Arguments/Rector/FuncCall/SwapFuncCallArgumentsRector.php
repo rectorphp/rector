@@ -24,6 +24,11 @@ final class SwapFuncCallArgumentsRector extends AbstractRector implements Config
     public const FUNCTION_ARGUMENT_SWAPS = 'new_argument_positions_by_function_name';
 
     /**
+     * @var string
+     */
+    private const JUST_SWAPPED = 'just_swapped';
+
+    /**
      * @var SwapFuncCallArguments[]
      */
     private array $functionArgumentSwaps = [];
@@ -70,30 +75,33 @@ CODE_SAMPLE
     /**
      * @param FuncCall $node
      */
-    public function refactor(Node $node): FuncCall
+    public function refactor(Node $node): ?FuncCall
     {
+        $isJustSwapped = $node->getAttribute(self::JUST_SWAPPED);
+        if ($isJustSwapped) {
+            return null;
+        }
+
         foreach ($this->functionArgumentSwaps as $functionArgumentSwap) {
             if (! $this->isName($node, $functionArgumentSwap->getFunction())) {
                 continue;
             }
 
-            $newArguments = [];
-            foreach ($functionArgumentSwap->getOrder() as $oldPosition => $newPosition) {
-                if (! isset($node->args[$oldPosition])) {
-                    continue;
-                }
-                if (! isset($node->args[$newPosition])) {
-                    continue;
-                }
-                $newArguments[$newPosition] = $node->args[$oldPosition];
+            $newArguments = $this->resolveNewArguments($functionArgumentSwap, $node);
+            if ($newArguments === []) {
+                return null;
             }
 
             foreach ($newArguments as $newPosition => $argument) {
                 $node->args[$newPosition] = $argument;
             }
+
+            $node->setAttribute(self::JUST_SWAPPED, true);
+
+            return $node;
         }
 
-        return $node;
+        return null;
     }
 
     /**
@@ -104,5 +112,24 @@ CODE_SAMPLE
         $functionArgumentSwaps = $configuration[self::FUNCTION_ARGUMENT_SWAPS] ?? [];
         Assert::allIsInstanceOf($functionArgumentSwaps, SwapFuncCallArguments::class);
         $this->functionArgumentSwaps = $functionArgumentSwaps;
+    }
+
+    /**
+     * @return array<int, Node\Arg>
+     */
+    private function resolveNewArguments(SwapFuncCallArguments $functionArgumentSwap, FuncCall $funcCall): array
+    {
+        $newArguments = [];
+        foreach ($functionArgumentSwap->getOrder() as $oldPosition => $newPosition) {
+            if (! isset($funcCall->args[$oldPosition])) {
+                continue;
+            }
+            if (! isset($funcCall->args[$newPosition])) {
+                continue;
+            }
+            $newArguments[$newPosition] = $funcCall->args[$oldPosition];
+        }
+
+        return $newArguments;
     }
 }

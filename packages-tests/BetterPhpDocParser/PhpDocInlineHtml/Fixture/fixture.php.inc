@@ -2,7 +2,6 @@
 <?php
 // some php
 ?>
-<h2><?php echo $hello2; ?></h2>
 <?php
 // some more php
 ?>
@@ -16,12 +15,6 @@
 <?php
 // some php
 ?>
-<?php
-/**
- * @var string $hello2
- */
-?>
-<h2><?php echo $hello2; ?></h2>
 <?php
 // some more php
 ?>

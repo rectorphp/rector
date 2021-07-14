@@ -6,6 +6,7 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\InlineHTML;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
+use PHPStan\Type\MixedType;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -23,19 +24,24 @@ final class InlineHtmlRector extends AbstractRector
     }
 
     /**
-     * @param InlineHTML $inlineHtml
+     * @param InlineHTML $node
      */
-    public function refactor(Node $inlineHtml): ?Node
+    public function refactor(Node $node): ?Node
     {
-        if (strpos($inlineHtml->value, '<h1>') !== false) {
-            $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($inlineHtml);
-            $phpDocInfo->addTagValueNode(new VarTagValueNode(new IdentifierTypeNode('string'), '$hello1', ''));
-        }
-        if (strpos($inlineHtml->value, '<h2>') !== false) {
-            $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($inlineHtml);
-            $phpDocInfo->addTagValueNode(new VarTagValueNode(new IdentifierTypeNode('string'), '$hello2', ''));
+        if (! str_contains($node->value, '<h1>')) {
+            return null;
         }
 
-        return null;
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
+
+        $currentVarTagValueNode = $phpDocInfo->getVarTagValueNode();
+        if ($currentVarTagValueNode !== null) {
+            return null;
+        }
+
+        $varTagValueNode = new VarTagValueNode(new IdentifierTypeNode('string'), '$hello1', '');
+        $phpDocInfo->addTagValueNode($varTagValueNode);
+
+        return $node;
     }
 }

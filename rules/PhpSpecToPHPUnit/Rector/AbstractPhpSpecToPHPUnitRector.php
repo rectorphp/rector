@@ -23,7 +23,6 @@ abstract class AbstractPhpSpecToPHPUnitRector extends AbstractRector
         return new RuleDefinition('Migrate PhpSpec behavior to PHPUnit test', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
-
 namespace spec\SomeNamespaceForThisTest;
 
 use PhpSpec\ObjectBehavior;

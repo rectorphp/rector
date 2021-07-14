@@ -6,13 +6,9 @@ class Fixture3
 {
     public $someString = '';
 
-    public $anotherString = '';
-
     public function run()
     {
         $this->someString[] = 1;
-
-        $this->anotherString[1] = 1;
     }
 }
 
@@ -26,13 +22,9 @@ class Fixture3
 {
     public $someString = [];
 
-    public $anotherString = '';
-
     public function run()
     {
         $this->someString[] = 1;
-
-        $this->anotherString[1] = 1;
     }
 }
 

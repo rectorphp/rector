@@ -18,6 +18,7 @@ use PhpParser\Node\Stmt\Unset_;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\NodeManipulator\AssignManipulator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\NodeNestingScope\ParentFinder;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\ReadWrite\Guard\VariableToConstantGuard;
 
@@ -27,7 +28,8 @@ final class ReadWritePropertyAnalyzer
         private VariableToConstantGuard $variableToConstantGuard,
         private AssignManipulator $assignManipulator,
         private ReadExprAnalyzer $readExprAnalyzer,
-        private BetterNodeFinder $betterNodeFinder
+        private BetterNodeFinder $betterNodeFinder,
+        private ParentFinder $parentFinder
     ) {
     }
 
@@ -68,7 +70,7 @@ final class ReadWritePropertyAnalyzer
 
     private function isNotInsideIssetUnset(ArrayDimFetch $arrayDimFetch): bool
     {
-        return ! (bool) $this->betterNodeFinder->findParentTypes($arrayDimFetch, [Isset_::class, Unset_::class]);
+        return ! (bool) $this->parentFinder->findByTypes($arrayDimFetch, [Isset_::class, Unset_::class]);
     }
 
     private function isArrayDimFetchRead(ArrayDimFetch $arrayDimFetch): bool

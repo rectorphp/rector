@@ -7,17 +7,22 @@ namespace Rector\Core\PhpParser\Node;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeFinder;
+use Rector\Core\Exception\NotImplementedYetException;
 use Rector\Core\NodeAnalyzer\ClassAnalyzer;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\NodeNestingScope\ParentScopeFinder;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\PackageBuilder\Php\TypeChecker;
 use Webmozart\Assert\Assert;
@@ -32,7 +37,8 @@ final class BetterNodeFinder
         private NodeNameResolver $nodeNameResolver,
         private TypeChecker $typeChecker,
         private NodeComparator $nodeComparator,
-        private ClassAnalyzer $classAnalyzer
+        private ClassAnalyzer $classAnalyzer,
+        private ParentScopeFinder $parentScopeFinder
     ) {
     }
 
@@ -56,35 +62,6 @@ final class BetterNodeFinder
             }
 
             if (! $parent instanceof Node) {
-                return null;
-            }
-        } while ($parent = $parent->getAttribute(AttributeKey::PARENT_NODE));
-
-        return null;
-    }
-
-    /**
-     * @template T of \PhpParser\Node
-     * @param array<class-string<T>> $types
-     * @return T|null
-     */
-    public function findParentTypes(Node $node, array $types): ?Node
-    {
-        Assert::allIsAOf($types, Node::class);
-
-        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if (! $parent instanceof Node) {
-            return null;
-        }
-
-        do {
-            foreach ($types as $type) {
-                if (is_a($parent, $type, true)) {
-                    return $parent;
-                }
-            }
-
-            if ($parent === null) {
                 return null;
             }
         } while ($parent = $parent->getAttribute(AttributeKey::PARENT_NODE));
@@ -117,7 +94,6 @@ final class BetterNodeFinder
      */
     public function findInstanceOf(Node | array $nodes, string $type): array
     {
-        Assert::isAOf($type, Node::class);
         return $this->nodeFinder->findInstanceOf($nodes, $type);
     }
 
@@ -150,6 +126,28 @@ final class BetterNodeFinder
     {
         return (bool) $this->findVariableOfName($nodes, $name);
     }
+
+//    /**
+//     * @param Node|Stmt[] $nodes
+//     * @return Variable[]
+//     */
+//    public function findVariablesOfName(Node | array $nodes, string $variableName): array
+//    {
+//        /** @var Variable[] $variables */
+//        $variables = $this->findInstanceOf($nodes, Variable::class);
+//
+//        $variablesOfName = [];
+//
+//        foreach ($variables as $variable) {
+//            if (! $this->nodeNameResolver->isName($variable, $variableName)) {
+//                continue;
+//            }
+//
+//            $variablesOfName[] = $variable;
+//        }
+//
+//        return $variablesOfName;
+//    }
 
     /**
      * @param Node|Node[] $nodes
@@ -355,6 +353,55 @@ final class BetterNodeFinder
         }
 
         return null;
+    }
+
+    /**
+     * @return Expr[]
+     */
+    public function findSameNamedExprs(Expr | Variable | Property | PropertyFetch | StaticPropertyFetch $expr): array
+    {
+        // assign of empty string to something
+        $scopeNode = $this->parentScopeFinder->find($expr);
+        if ($scopeNode === null) {
+            return [];
+        }
+
+        if ($expr instanceof Variable) {
+            $exprName = $this->nodeNameResolver->getName($expr);
+            if ($exprName === null) {
+                return [];
+            }
+
+            $variables = $this->findInstancesOf($scopeNode, [Variable::class]);
+            $foundVariables = array_filter(
+                $variables,
+                fn (Variable $variable) => $this->nodeNameResolver->isName($variable, $exprName)
+            );
+
+            return $foundVariables;
+        }
+
+        if ($expr instanceof Property) {
+            $singleProperty = $expr->props[0];
+            $exprName = $this->nodeNameResolver->getName($singleProperty->name);
+        } elseif ($expr instanceof StaticPropertyFetch || $expr instanceof PropertyFetch) {
+            $exprName = $this->nodeNameResolver->getName($expr->name);
+        } else {
+            throw new NotImplementedYetException();
+        }
+
+        if ($exprName === null) {
+            return [];
+        }
+
+        $propertyFetches = $this->findInstancesOf($scopeNode, [PropertyFetch::class, StaticPropertyFetch::class]);
+        $foundProperties = array_filter(
+            $propertyFetches,
+            fn (PropertyFetch | StaticPropertyFetch $propertyFetch) =>
+                $this->nodeNameResolver->isName($propertyFetch->name, $exprName)
+        );
+
+        return $foundProperties;
     }
 
     /**

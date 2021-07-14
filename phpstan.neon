@@ -344,7 +344,8 @@ parameters:
         - '#Property PhpParser\\Node\\Scalar\\DNumber\:\:\$value \(float\|int\) does not accept string#'
 
 
-        - '#Unable to resolve the template type T in call to method Rector\\Core\\PhpParser\\Node\\BetterNodeFinder\:\:findParentTypes\(\)#'
+        - '#Unable to resolve the template type T in call to method Rector\\Core\\PhpParser\\Node\\ParentFinder\:\:(.*?)#'
+        - '#Unable to resolve the template type T in call to method Rector\\NodeNestingScope\\ParentFinder\:\:findByTypes\(\)#'
 
         # mimics original doctrine/annotations parser, improve later when finished
         -
@@ -542,8 +543,10 @@ parameters:
         # should be allowed, as continue check - fix in symplify
         -
             message: '#foreach\(\.\.\.\), while\(\), for\(\) or if\(\.\.\.\) cannot contains a complex expression\. Extract it to a new variable assign on line before#'
-            path: src/Application/ApplicationFileProcessor.php
-
+            paths:
+                 - src/Application/ApplicationFileProcessor.php
+                 - packages/NodeNestingScope/ParentFinder.php
 
         - '#Callable callable\(PHPStan\\Type\\Type\)\: PHPStan\\Type\\Type invoked with 2 parameters, 1 required#'
         - '#Cognitive complexity for "Rector\\Php80\\Rector\\Class_\\AnnotationToAttributeRector\:\:processDoctrineAnnotationClasses\(\)" is 11, keep it under 9#'
+        - '#Method Rector\\NodeNestingScope\\ParentFinder\:\:findByTypes\(\) should return T of PhpParser\\Node\|null but returns class\-string<T of PhpParser\\Node\>\|T of PhpParser\\Node#'

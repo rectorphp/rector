@@ -12,13 +12,15 @@ use PhpParser\Node\Stmt\Function_;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Naming\ValueObject\VariableAndCallForeach;
 use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\NodeNestingScope\ParentFinder;
 
 final class ForeachMatcher
 {
     public function __construct(
         private NodeNameResolver $nodeNameResolver,
         private CallMatcher $callMatcher,
-        private BetterNodeFinder $betterNodeFinder
+        private BetterNodeFinder $betterNodeFinder,
+        private ParentFinder $parentFinder
     ) {
     }
 
@@ -48,9 +50,6 @@ final class ForeachMatcher
 
     private function getFunctionLike(Foreach_ $foreach): ClassMethod | Function_ | Closure | null
     {
-        return $this->betterNodeFinder->findParentTypes(
-            $foreach,
-            [Closure::class, ClassMethod::class, Function_::class]
-        );
+        return $this->parentFinder->findByTypes($foreach, [Closure::class, ClassMethod::class, Function_::class]);
     }
 }

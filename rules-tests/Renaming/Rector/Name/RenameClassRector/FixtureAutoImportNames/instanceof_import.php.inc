@@ -23,7 +23,6 @@ final class InstanceofImport
 namespace Rector\Tests\Renaming\Rector\Name\RenameClassRector\FixtureAutoImportNames;
 
 use Rector\Tests\Renaming\Rector\Name\RenameClassRector\Source\NewClass;
-use Rector\Tests\Renaming\Rector\Name\RenameClassRector\Source\OldClass;
 
 final class InstanceofImport
 {

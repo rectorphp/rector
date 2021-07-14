@@ -98,14 +98,18 @@ CODE_SAMPLE
             return $name;
         }
 
-        $currentUses = $this->betterNodeFinder->findInstanceOf($file->getOldStmts(), Use_::class);
+        // @todo test if old stmts or new stmts! or both? :)
+        /** @var Use_[] $currentUses */
+        $currentUses = $this->betterNodeFinder->findInstanceOf($file->getNewStmts(), Use_::class);
 
         if (substr_count($name->toCodeString(), '\\') <= 1) {
             return $this->nameImporter->importName($name, $currentUses);
         }
+
         if (! $this->classNameImportSkipper->isFoundInUse($name, $currentUses)) {
             return $this->nameImporter->importName($name, $currentUses);
         }
+
         if ($this->classNameImportSkipper->isAlreadyImported($name, $currentUses)) {
             return $this->nameImporter->importName($name, $currentUses);
         }

@@ -25,6 +25,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class OptionalParametersAfterRequiredRector extends AbstractRector
 {
+    /**
+     * @var string
+     */
+    private const ALREADY_SORTED = 'already_sorted';
+
     public function __construct(
         private RequireOptionalParamResolver $requireOptionalParamResolver,
         private ArgumentSorter $argumentSorter,
@@ -71,6 +76,11 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        $isAlreadySorted = $node->getAttribute(self::ALREADY_SORTED);
+        if ($isAlreadySorted) {
+            return null;
+        }
+
         if ($node instanceof ClassMethod) {
             return $this->refactorClassMethod($node);
         }
@@ -109,6 +119,7 @@ CODE_SAMPLE
         );
 
         $classMethod->params = $newParams;
+        $classMethod->setAttribute(self::ALREADY_SORTED, true);
 
         return $classMethod;
     }
@@ -130,6 +141,7 @@ CODE_SAMPLE
         }
 
         $new->args = $this->argumentSorter->sortArgsByExpectedParamOrder($new->args, $expectedArgOrParamOrder);
+        $new->setAttribute(self::ALREADY_SORTED, true);
 
         return $new;
     }
@@ -156,6 +168,7 @@ CODE_SAMPLE
         }
 
         $methodCall->args = $newArgs;
+        $methodCall->setAttribute(self::ALREADY_SORTED, true);
 
         return $methodCall;
     }

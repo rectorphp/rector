@@ -33,9 +33,8 @@ function assignArrayToString()
     $string2[] = 1;
 
     $string3 = $string;
-    $string = '';
+    $string = [];
     $string3 = $string;
-    $string3 = (array) $string3;
     $string3[] = 1;
 }
 

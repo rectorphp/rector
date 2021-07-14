@@ -19,7 +19,6 @@ class ClassToNewWithPostImport
 namespace Rector\Tests\Renaming\Rector\Name\RenameClassRector\FixtureAutoImportNames;
 
 use Rector\Tests\Renaming\Rector\Name\RenameClassRector\Source\NewClass;
-use Rector\Tests\Renaming\Rector\Name\RenameClassRector\Source\OldClass;
 
 class ClassToNewWithPostImport
 {
