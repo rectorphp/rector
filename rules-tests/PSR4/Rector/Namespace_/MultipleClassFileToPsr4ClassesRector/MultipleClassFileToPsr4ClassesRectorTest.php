@@ -59,19 +59,6 @@ final class MultipleClassFileToPsr4ClassesRectorTest extends AbstractRectorTestC
 
         $filePathsWithContents = [
             new AddedFileWithContent(
-                $this->getFixtureTempDirectory() . '/SkipWithoutNamespace.php',
-                $smartFileSystem->readFile(__DIR__ . '/Expected/SkipWithoutNamespace.php')
-            ),
-            new AddedFileWithContent(
-                $this->getFixtureTempDirectory() . '/JustTwoExceptionWithoutNamespace.php',
-                $smartFileSystem->readFile(__DIR__ . '/Expected/JustTwoExceptionWithoutNamespace.php')
-            ),
-        ];
-
-        yield [new SmartFileInfo(__DIR__ . '/Fixture/skip_without_namespace.php.inc'), $filePathsWithContents];
-
-        $filePathsWithContents = [
-            new AddedFileWithContent(
                 $this->getFixtureTempDirectory() . '/MyTrait.php',
                 $smartFileSystem->readFile(__DIR__ . '/Expected/MyTrait.php')
             ),

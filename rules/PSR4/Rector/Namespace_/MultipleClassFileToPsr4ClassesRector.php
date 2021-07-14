@@ -107,6 +107,7 @@ CODE_SAMPLE
 
         // 2. nothing to return - remove the file
         $this->removedAndAddedFilesCollector->removeFile($smartFileInfo);
+
         return null;
     }
 
