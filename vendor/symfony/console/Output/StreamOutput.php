@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210714\Symfony\Component\Console\Output;
+namespace RectorPrefix20210715\Symfony\Component\Console\Output;
 
-use RectorPrefix20210714\Symfony\Component\Console\Exception\InvalidArgumentException;
-use RectorPrefix20210714\Symfony\Component\Console\Formatter\OutputFormatterInterface;
+use RectorPrefix20210715\Symfony\Component\Console\Exception\InvalidArgumentException;
+use RectorPrefix20210715\Symfony\Component\Console\Formatter\OutputFormatterInterface;
 /**
  * StreamOutput writes the output to a given stream.
  *
@@ -25,7 +25,7 @@ use RectorPrefix20210714\Symfony\Component\Console\Formatter\OutputFormatterInte
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class StreamOutput extends \RectorPrefix20210714\Symfony\Component\Console\Output\Output
+class StreamOutput extends \RectorPrefix20210715\Symfony\Component\Console\Output\Output
 {
     private $stream;
     /**
@@ -36,10 +36,10 @@ class StreamOutput extends \RectorPrefix20210714\Symfony\Component\Console\Outpu
      *
      * @throws InvalidArgumentException When first argument is not a real stream
      */
-    public function __construct($stream, int $verbosity = self::VERBOSITY_NORMAL, bool $decorated = null, \RectorPrefix20210714\Symfony\Component\Console\Formatter\OutputFormatterInterface $formatter = null)
+    public function __construct($stream, int $verbosity = self::VERBOSITY_NORMAL, bool $decorated = null, \RectorPrefix20210715\Symfony\Component\Console\Formatter\OutputFormatterInterface $formatter = null)
     {
         if (!\is_resource($stream) || 'stream' !== \get_resource_type($stream)) {
-            throw new \RectorPrefix20210714\Symfony\Component\Console\Exception\InvalidArgumentException('The StreamOutput class needs a stream as its first argument.');
+            throw new \RectorPrefix20210715\Symfony\Component\Console\Exception\InvalidArgumentException('The StreamOutput class needs a stream as its first argument.');
         }
         $this->stream = $stream;
         if (null === $decorated) {
@@ -94,22 +94,7 @@ class StreamOutput extends \RectorPrefix20210714\Symfony\Component\Console\Outpu
         }
         $streamIsatty = function ($stream) {
             if (\function_exists('stream_isatty')) {
-                $streamIsatty = function ($stream) {
-                    if (\function_exists('stream_isatty')) {
-                        return \stream_isatty($stream);
-                    }
-                    if (!\is_resource($stream)) {
-                        \trigger_error('stream_isatty() expects parameter 1 to be resource, ' . \gettype($stream) . ' given', \E_USER_WARNING);
-                        return \false;
-                    }
-                    if ('\\' === \DIRECTORY_SEPARATOR) {
-                        $stat = @\fstat($stream);
-                        // Check if formatted mode is S_IFCHR
-                        return $stat ? 020000 === ($stat['mode'] & 0170000) : \false;
-                    }
-                    return \function_exists('posix_isatty') && @\posix_isatty($stream);
-                };
-                return $streamIsatty($stream);
+                return \stream_isatty($stream);
             }
             if (!\is_resource($stream)) {
                 \trigger_error('stream_isatty() expects parameter 1 to be resource, ' . \gettype($stream) . ' given', \E_USER_WARNING);

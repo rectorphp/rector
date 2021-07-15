@@ -7,6 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PHPStan\Reflection\ReflectionProvider;
+use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
@@ -42,6 +43,9 @@ final class NameTypeResolver implements \Rector\NodeTypeResolver\Contract\NodeTy
             return $this->resolveParent($node);
         }
         $fullyQualifiedName = $this->resolveFullyQualifiedName($node);
+        if ($node->toString() === 'array') {
+            return new \PHPStan\Type\ArrayType(new \PHPStan\Type\MixedType(), new \PHPStan\Type\MixedType());
+        }
         return new \PHPStan\Type\ObjectType($fullyQualifiedName);
     }
     /**

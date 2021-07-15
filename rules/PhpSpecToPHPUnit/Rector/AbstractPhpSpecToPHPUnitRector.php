@@ -19,7 +19,6 @@ abstract class AbstractPhpSpecToPHPUnitRector extends \Rector\Core\Rector\Abstra
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
         return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Migrate PhpSpec behavior to PHPUnit test', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
-
 namespace spec\SomeNamespaceForThisTest;
 
 use PhpSpec\ObjectBehavior;

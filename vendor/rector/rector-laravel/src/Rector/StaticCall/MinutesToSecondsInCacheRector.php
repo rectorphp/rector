@@ -26,10 +26,6 @@ final class MinutesToSecondsInCacheRector extends \Rector\Core\Rector\AbstractRe
     /**
      * @var string
      */
-    private const ATTRIBUTE_KEY_ALREADY_MULTIPLIED = 'already_multiplied';
-    /**
-     * @var string
-     */
     private const PUT = 'put';
     /**
      * @var string
@@ -110,15 +106,12 @@ CODE_SAMPLE
         if (!$this->nodeTypeResolver->isNumberType($argExpr)) {
             return null;
         }
-        $mul = $this->mulByNumber($argExpr, 60);
+        // already multiplied
+        if ($argExpr instanceof \PhpParser\Node\Expr\BinaryOp\Mul) {
+            return null;
+        }
+        $mul = new \PhpParser\Node\Expr\BinaryOp\Mul($argExpr, new \PhpParser\Node\Scalar\LNumber(60));
         $node->args[$argumentPosition] = new \PhpParser\Node\Arg($mul);
         return $node;
-    }
-    private function mulByNumber(\PhpParser\Node\Expr $argExpr, int $value) : \PhpParser\Node\Expr
-    {
-        if ($this->valueResolver->isValue($argExpr, 1)) {
-            return new \PhpParser\Node\Scalar\LNumber($value);
-        }
-        return new \PhpParser\Node\Expr\BinaryOp\Mul($argExpr, new \PhpParser\Node\Scalar\LNumber($value));
     }
 }

@@ -24,6 +24,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class OptionalParametersAfterRequiredRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
+     * @var string
+     */
+    private const ALREADY_SORTED = 'already_sorted';
+    /**
      * @var \Rector\Php80\NodeResolver\RequireOptionalParamResolver
      */
     private $requireOptionalParamResolver;
@@ -73,6 +77,10 @@ CODE_SAMPLE
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
+        $isAlreadySorted = $node->getAttribute(self::ALREADY_SORTED);
+        if ($isAlreadySorted) {
+            return null;
+        }
         if ($node instanceof \PhpParser\Node\Stmt\ClassMethod) {
             return $this->refactorClassMethod($node);
         }
@@ -97,6 +105,7 @@ CODE_SAMPLE
         }
         $newParams = $this->argumentSorter->sortArgsByExpectedParamOrder($classMethod->params, $expectedArgOrParamOrder);
         $classMethod->params = $newParams;
+        $classMethod->setAttribute(self::ALREADY_SORTED, \true);
         return $classMethod;
     }
     private function refactorNew(\PhpParser\Node\Expr\New_ $new) : ?\PhpParser\Node\Expr\New_
@@ -113,6 +122,7 @@ CODE_SAMPLE
             return null;
         }
         $new->args = $this->argumentSorter->sortArgsByExpectedParamOrder($new->args, $expectedArgOrParamOrder);
+        $new->setAttribute(self::ALREADY_SORTED, \true);
         return $new;
     }
     private function refactorMethodCall(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\PhpParser\Node\Expr\MethodCall
@@ -130,6 +140,7 @@ CODE_SAMPLE
             return null;
         }
         $methodCall->args = $newArgs;
+        $methodCall->setAttribute(self::ALREADY_SORTED, \true);
         return $methodCall;
     }
     /**

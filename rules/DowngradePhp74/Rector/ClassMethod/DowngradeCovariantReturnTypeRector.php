@@ -19,7 +19,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\DeadCode\PhpDoc\TagRemover\ReturnTagRemover;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
-use RectorPrefix20210714\Symplify\PackageBuilder\Reflection\PrivatesCaller;
+use RectorPrefix20210715\Symplify\PackageBuilder\Reflection\PrivatesCaller;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -29,6 +29,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class DowngradeCovariantReturnTypeRector extends \Rector\Core\Rector\AbstractRector
 {
+    /**
+     * @var string
+     */
+    private const ALREADY_DOWNGRADED = 'already_downgraded';
     /**
      * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger
      */
@@ -41,7 +45,7 @@ final class DowngradeCovariantReturnTypeRector extends \Rector\Core\Rector\Abstr
      * @var \Rector\DeadCode\PhpDoc\TagRemover\ReturnTagRemover
      */
     private $returnTagRemover;
-    public function __construct(\Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger, \RectorPrefix20210714\Symplify\PackageBuilder\Reflection\PrivatesCaller $privatesCaller, \Rector\DeadCode\PhpDoc\TagRemover\ReturnTagRemover $returnTagRemover)
+    public function __construct(\Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger, \RectorPrefix20210715\Symplify\PackageBuilder\Reflection\PrivatesCaller $privatesCaller, \Rector\DeadCode\PhpDoc\TagRemover\ReturnTagRemover $returnTagRemover)
     {
         $this->phpDocTypeChanger = $phpDocTypeChanger;
         $this->privatesCaller = $privatesCaller;
@@ -105,6 +109,10 @@ CODE_SAMPLE
         if ($node->returnType === null) {
             return null;
         }
+        $isAlreadyDowngraded = $node->getAttribute(self::ALREADY_DOWNGRADED);
+        if ($isAlreadyDowngraded) {
+            return null;
+        }
         $parentReturnType = $this->resolveDifferentAncestorReturnType($node, $node->returnType);
         if ($parentReturnType instanceof \PHPStan\Type\MixedType) {
             return null;
@@ -124,6 +132,7 @@ CODE_SAMPLE
         if ($this->nodeComparator->areNodesEqual($parentReturnTypeNode, $node->returnType)) {
             return null;
         }
+        $node->setAttribute(self::ALREADY_DOWNGRADED, \true);
         // Add the docblock before changing the type
         $this->addDocBlockReturn($node);
         $node->returnType = $parentReturnTypeNode;

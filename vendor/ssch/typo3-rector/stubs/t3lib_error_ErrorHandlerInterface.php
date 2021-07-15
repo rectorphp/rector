@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210714;
+namespace RectorPrefix20210715;
 
 if (\interface_exists('t3lib_error_ErrorHandlerInterface')) {
     return;

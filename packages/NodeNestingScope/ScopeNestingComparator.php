@@ -26,14 +26,19 @@ final class ScopeNestingComparator
      * @var \Rector\Core\PhpParser\Comparing\NodeComparator
      */
     private $nodeComparator;
-    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator)
+    /**
+     * @var \Rector\NodeNestingScope\ParentFinder
+     */
+    private $parentFinder;
+    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator, \Rector\NodeNestingScope\ParentFinder $parentFinder)
     {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->nodeComparator = $nodeComparator;
+        $this->parentFinder = $parentFinder;
     }
     public function areReturnScopeNested(\PhpParser\Node\Stmt\Return_ $return, \PhpParser\Node $secondNodeScopeNode) : bool
     {
-        $firstNodeScopeNode = $this->betterNodeFinder->findParentTypes($return, \Rector\NodeNestingScope\ValueObject\ControlStructure::RETURN_ISOLATING_SCOPE_NODE_TYPES);
+        $firstNodeScopeNode = $this->parentFinder->findByTypes($return, \Rector\NodeNestingScope\ValueObject\ControlStructure::RETURN_ISOLATING_SCOPE_NODE_TYPES);
         return $this->nodeComparator->areNodesEqual($firstNodeScopeNode, $secondNodeScopeNode);
     }
     public function areScopeNestingEqual(\PhpParser\Node $firstNode, \PhpParser\Node $secondNode) : bool
@@ -44,7 +49,7 @@ final class ScopeNestingComparator
     }
     public function isNodeConditionallyScoped(\PhpParser\Node\Expr $expr) : bool
     {
-        $foundParent = $this->betterNodeFinder->findParentTypes($expr, \Rector\NodeNestingScope\ValueObject\ControlStructure::CONDITIONAL_NODE_SCOPE_TYPES + [\PhpParser\Node\FunctionLike::class]);
+        $foundParent = $this->parentFinder->findByTypes($expr, \Rector\NodeNestingScope\ValueObject\ControlStructure::CONDITIONAL_NODE_SCOPE_TYPES + [\PhpParser\Node\FunctionLike::class]);
         if (!$foundParent instanceof \PhpParser\Node) {
             return \false;
         }
@@ -85,6 +90,6 @@ final class ScopeNestingComparator
     }
     private function findParentControlStructure(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        return $this->betterNodeFinder->findParentTypes($node, \Rector\NodeNestingScope\ValueObject\ControlStructure::BREAKING_SCOPE_NODE_TYPES);
+        return $this->parentFinder->findByTypes($node, \Rector\NodeNestingScope\ValueObject\ControlStructure::BREAKING_SCOPE_NODE_TYPES);
     }
 }

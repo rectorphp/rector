@@ -22,6 +22,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class IncreaseColumnIndexRector extends \Rector\Core\Rector\AbstractRector
 {
+    public const ALREADY_CHANGED = 'already_changed';
     /**
      * @var ObjectType[]
      */
@@ -72,6 +73,11 @@ CODE_SAMPLE
         if (!$this->isName($node->name, '*ByColumnAndRow')) {
             return null;
         }
+        $hasAlreadyChanged = $node->getAttribute(self::ALREADY_CHANGED);
+        if ($hasAlreadyChanged) {
+            return null;
+        }
+        $node->setAttribute(self::ALREADY_CHANGED, \true);
         // increase column value
         $firstArgumentValue = $node->args[0]->value;
         if ($firstArgumentValue instanceof \PhpParser\Node\Scalar\LNumber) {

@@ -7,6 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\List_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
@@ -34,14 +35,13 @@ final class ListSwapArrayOrderRector extends \Rector\Core\Rector\AbstractRector
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if (!$this->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::LIST_SWAP_ORDER)) {
+        if ($this->shouldSkipAssign($node)) {
             return null;
         }
-        if (!$node->var instanceof \PhpParser\Node\Expr\List_) {
-            return null;
-        }
+        /** @var List_ $list */
+        $list = $node->var;
         $printedVariables = [];
-        foreach ($node->var->items as $arrayItem) {
+        foreach ($list->items as $arrayItem) {
             if (!$arrayItem instanceof \PhpParser\Node\Expr\ArrayItem) {
                 continue;
             }
@@ -59,5 +59,16 @@ final class ListSwapArrayOrderRector extends \Rector\Core\Rector\AbstractRector
         // wrap with array_reverse, to reflect reverse assign order in left
         $node->expr = $this->nodeFactory->createFuncCall('array_reverse', [$node->expr]);
         return $node;
+    }
+    private function shouldSkipAssign(\PhpParser\Node\Expr\Assign $assign) : bool
+    {
+        if (!$this->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::LIST_SWAP_ORDER)) {
+            return \true;
+        }
+        if (!$assign->var instanceof \PhpParser\Node\Expr\List_) {
+            return \true;
+        }
+        // already converted
+        return $assign->expr instanceof \PhpParser\Node\Expr\FuncCall && $this->isName($assign->expr, 'array_reverse');
     }
 }

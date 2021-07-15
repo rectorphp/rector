@@ -51,8 +51,10 @@ final class PhpSpecMethodToPHPUnitMethodRector extends \Rector\PhpSpecToPHPUnit\
             $node->name = new \PhpParser\Node\Identifier(\Rector\Core\ValueObject\MethodName::SET_UP);
             $this->visibilityManipulator->makeProtected($node);
             $this->phpUnitTypeDeclarationDecorator->decorate($node);
-        } else {
+        } elseif ($node->isPublic()) {
             $this->processTestMethod($node);
+        } else {
+            return null;
         }
         return $node;
     }

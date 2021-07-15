@@ -10,7 +10,7 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20210714\Webmozart\Assert\Assert;
+use RectorPrefix20210715\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Arguments\Rector\FuncCall\SwapFuncCallArgumentsRector\SwapFuncCallArgumentsRectorTest
  */
@@ -20,6 +20,10 @@ final class SwapFuncCallArgumentsRector extends \Rector\Core\Rector\AbstractRect
      * @var string
      */
     public const FUNCTION_ARGUMENT_SWAPS = 'new_argument_positions_by_function_name';
+    /**
+     * @var string
+     */
+    private const JUST_SWAPPED = 'just_swapped';
     /**
      * @var SwapFuncCallArguments[]
      */
@@ -56,27 +60,27 @@ CODE_SAMPLE
     /**
      * @param FuncCall $node
      */
-    public function refactor(\PhpParser\Node $node) : \PhpParser\Node\Expr\FuncCall
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node\Expr\FuncCall
     {
+        $isJustSwapped = $node->getAttribute(self::JUST_SWAPPED);
+        if ($isJustSwapped) {
+            return null;
+        }
         foreach ($this->functionArgumentSwaps as $functionArgumentSwap) {
             if (!$this->isName($node, $functionArgumentSwap->getFunction())) {
                 continue;
             }
-            $newArguments = [];
-            foreach ($functionArgumentSwap->getOrder() as $oldPosition => $newPosition) {
-                if (!isset($node->args[$oldPosition])) {
-                    continue;
-                }
-                if (!isset($node->args[$newPosition])) {
-                    continue;
-                }
-                $newArguments[$newPosition] = $node->args[$oldPosition];
+            $newArguments = $this->resolveNewArguments($functionArgumentSwap, $node);
+            if ($newArguments === []) {
+                return null;
             }
             foreach ($newArguments as $newPosition => $argument) {
                 $node->args[$newPosition] = $argument;
             }
+            $node->setAttribute(self::JUST_SWAPPED, \true);
+            return $node;
         }
-        return $node;
+        return null;
     }
     /**
      * @param array<string, SwapFuncCallArguments[]> $configuration
@@ -84,7 +88,24 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $functionArgumentSwaps = $configuration[self::FUNCTION_ARGUMENT_SWAPS] ?? [];
-        \RectorPrefix20210714\Webmozart\Assert\Assert::allIsInstanceOf($functionArgumentSwaps, \Rector\Arguments\ValueObject\SwapFuncCallArguments::class);
+        \RectorPrefix20210715\Webmozart\Assert\Assert::allIsInstanceOf($functionArgumentSwaps, \Rector\Arguments\ValueObject\SwapFuncCallArguments::class);
         $this->functionArgumentSwaps = $functionArgumentSwaps;
+    }
+    /**
+     * @return array<int, Node\Arg>
+     */
+    private function resolveNewArguments(\Rector\Arguments\ValueObject\SwapFuncCallArguments $functionArgumentSwap, \PhpParser\Node\Expr\FuncCall $funcCall) : array
+    {
+        $newArguments = [];
+        foreach ($functionArgumentSwap->getOrder() as $oldPosition => $newPosition) {
+            if (!isset($funcCall->args[$oldPosition])) {
+                continue;
+            }
+            if (!isset($funcCall->args[$newPosition])) {
+                continue;
+            }
+            $newArguments[$newPosition] = $funcCall->args[$oldPosition];
+        }
+        return $newArguments;
     }
 }

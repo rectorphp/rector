@@ -17,7 +17,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Renaming\NodeManipulator\ClassRenamer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20210714\Webmozart\Assert\Assert;
+use RectorPrefix20210715\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Renaming\Rector\Name\RenameClassRector\RenameClassRectorTest
  */
@@ -95,9 +95,9 @@ CODE_SAMPLE
     {
         $this->addOldToNewClasses($configuration[self::OLD_TO_NEW_CLASSES] ?? []);
         $classMapFiles = $configuration[self::CLASS_MAP_FILES] ?? [];
-        \RectorPrefix20210714\Webmozart\Assert\Assert::allString($classMapFiles);
+        \RectorPrefix20210715\Webmozart\Assert\Assert::allString($classMapFiles);
         foreach ($classMapFiles as $classMapFile) {
-            \RectorPrefix20210714\Webmozart\Assert\Assert::fileExists($classMapFile);
+            \RectorPrefix20210715\Webmozart\Assert\Assert::fileExists($classMapFile);
             $oldToNewClasses = (require_once $classMapFile);
             $this->addOldToNewClasses($oldToNewClasses);
         }
@@ -107,8 +107,8 @@ CODE_SAMPLE
      */
     private function addOldToNewClasses(array $oldToNewClasses) : void
     {
-        \RectorPrefix20210714\Webmozart\Assert\Assert::allString(\array_keys($oldToNewClasses));
-        \RectorPrefix20210714\Webmozart\Assert\Assert::allString($oldToNewClasses);
+        \RectorPrefix20210715\Webmozart\Assert\Assert::allString(\array_keys($oldToNewClasses));
+        \RectorPrefix20210715\Webmozart\Assert\Assert::allString($oldToNewClasses);
         $this->renamedClassesDataCollector->addOldToNewClasses($oldToNewClasses);
     }
 }

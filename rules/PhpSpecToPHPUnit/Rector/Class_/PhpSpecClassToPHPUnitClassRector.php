@@ -28,6 +28,10 @@ use Rector\PHPUnit\NodeFactory\SetUpClassMethodFactory;
 final class PhpSpecClassToPHPUnitClassRector extends \Rector\PhpSpecToPHPUnit\Rector\AbstractPhpSpecToPHPUnitRector
 {
     /**
+     * @var string
+     */
+    private const ALREADY_RENAMED_TO_TEST = 'already_renamed_to_test';
+    /**
      * @var \Rector\Core\NodeManipulator\ClassInsertManipulator
      */
     private $classInsertManipulator;
@@ -65,9 +69,14 @@ final class PhpSpecClassToPHPUnitClassRector extends \Rector\PhpSpecToPHPUnit\Re
         if (!$this->isInPhpSpecBehavior($node)) {
             return null;
         }
+        $isAlreadyRenamedToTest = $node->getAttribute(self::ALREADY_RENAMED_TO_TEST);
+        if ($isAlreadyRenamedToTest) {
+            return null;
+        }
         // 1. change namespace name to PHPUnit-like
         $this->phpSpecRenaming->renameNamespace($node);
         $propertyName = $this->phpSpecRenaming->resolveObjectPropertyName($node);
+        $node->setAttribute(self::ALREADY_RENAMED_TO_TEST, \true);
         $this->phpSpecRenaming->renameClass($node);
         $this->phpSpecRenaming->renameExtends($node);
         $testedClass = $this->phpSpecRenaming->resolveTestedClass($node);

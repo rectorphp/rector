@@ -85,6 +85,10 @@ final class NodeRemover
         if ($classMethod->params === null) {
             throw new \Rector\Core\Exception\ShouldNotHappenException();
         }
+        // already removed
+        if (!isset($classMethod->params[$key])) {
+            return;
+        }
         // notify about remove node
         $this->rectorChangeCollector->notifyNodeFileInfo($classMethod->params[$key]);
         unset($classMethod->params[$key]);
@@ -96,6 +100,10 @@ final class NodeRemover
     {
         if ($node->args === null) {
             throw new \Rector\Core\Exception\ShouldNotHappenException();
+        }
+        // already removed
+        if (!isset($node->args[$key])) {
+            return;
         }
         // notify about remove node
         $this->rectorChangeCollector->notifyNodeFileInfo($node->args[$key]);

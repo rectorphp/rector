@@ -87,7 +87,7 @@ CODE_SAMPLE
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if (!$this->shouldRefactor($node)) {
+        if ($this->shouldSkipFuncCall($node)) {
             return null;
         }
         $allowableTagsParam = $node->args[1]->value;
@@ -112,24 +112,31 @@ CODE_SAMPLE
         \array_splice($node->args, 1, 1, [new \PhpParser\Node\Arg($newExpr)]);
         return $node;
     }
-    private function shouldRefactor(\PhpParser\Node\Expr\FuncCall $funcCall) : bool
+    private function shouldSkipFuncCall(\PhpParser\Node\Expr\FuncCall $funcCall) : bool
     {
         if (!$this->isName($funcCall, 'strip_tags')) {
-            return \false;
+            return \true;
         }
         // If param not provided, do nothing
         if (\count($funcCall->args) < 2) {
-            return \false;
+            return \true;
         }
         // Process anything other than String and null (eg: variables, function calls)
         $allowableTagsParam = $funcCall->args[1]->value;
         // Skip for string
         if ($allowableTagsParam instanceof \PhpParser\Node\Scalar\String_) {
-            return \false;
+            return \true;
+        }
+        // already refactored
+        if ($allowableTagsParam instanceof \PhpParser\Node\Expr\Ternary && $allowableTagsParam->if !== null) {
+            return \true;
+        }
+        if ($allowableTagsParam instanceof \PhpParser\Node\Expr\BinaryOp\Concat) {
+            return \true;
         }
         // Skip for null
         // Allow for everything else (Array_, Variable, PropertyFetch, ConstFetch, ClassConstFetch, FuncCall, MethodCall, Coalesce, Ternary, others?)
-        return !$this->valueResolver->isNull($allowableTagsParam);
+        return $this->valueResolver->isNull($allowableTagsParam);
     }
     /**
      * @param \PhpParser\Node\Expr\Array_|\PhpParser\Node\Expr\Variable|\PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\ConstFetch|\PhpParser\Node\Expr\ClassConstFetch $expr

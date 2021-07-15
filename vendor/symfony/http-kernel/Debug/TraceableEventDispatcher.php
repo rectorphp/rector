@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210714\Symfony\Component\HttpKernel\Debug;
+namespace RectorPrefix20210715\Symfony\Component\HttpKernel\Debug;
 
-use RectorPrefix20210714\Symfony\Component\EventDispatcher\Debug\TraceableEventDispatcher as BaseTraceableEventDispatcher;
-use RectorPrefix20210714\Symfony\Component\HttpKernel\KernelEvents;
+use RectorPrefix20210715\Symfony\Component\EventDispatcher\Debug\TraceableEventDispatcher as BaseTraceableEventDispatcher;
+use RectorPrefix20210715\Symfony\Component\HttpKernel\KernelEvents;
 /**
  * Collects some data about event listeners.
  *
@@ -19,7 +19,7 @@ use RectorPrefix20210714\Symfony\Component\HttpKernel\KernelEvents;
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class TraceableEventDispatcher extends \RectorPrefix20210714\Symfony\Component\EventDispatcher\Debug\TraceableEventDispatcher
+class TraceableEventDispatcher extends \RectorPrefix20210715\Symfony\Component\EventDispatcher\Debug\TraceableEventDispatcher
 {
     /**
      * {@inheritdoc}
@@ -29,17 +29,17 @@ class TraceableEventDispatcher extends \RectorPrefix20210714\Symfony\Component\E
     protected function beforeDispatch($eventName, $event)
     {
         switch ($eventName) {
-            case \RectorPrefix20210714\Symfony\Component\HttpKernel\KernelEvents::REQUEST:
+            case \RectorPrefix20210715\Symfony\Component\HttpKernel\KernelEvents::REQUEST:
                 $this->stopwatch->openSection();
                 break;
-            case \RectorPrefix20210714\Symfony\Component\HttpKernel\KernelEvents::VIEW:
-            case \RectorPrefix20210714\Symfony\Component\HttpKernel\KernelEvents::RESPONSE:
+            case \RectorPrefix20210715\Symfony\Component\HttpKernel\KernelEvents::VIEW:
+            case \RectorPrefix20210715\Symfony\Component\HttpKernel\KernelEvents::RESPONSE:
                 // stop only if a controller has been executed
                 if ($this->stopwatch->isStarted('controller')) {
                     $this->stopwatch->stop('controller');
                 }
                 break;
-            case \RectorPrefix20210714\Symfony\Component\HttpKernel\KernelEvents::TERMINATE:
+            case \RectorPrefix20210715\Symfony\Component\HttpKernel\KernelEvents::TERMINATE:
                 $token = $event->getResponse()->headers->get('X-Debug-Token');
                 if (null === $token) {
                     break;
@@ -64,17 +64,17 @@ class TraceableEventDispatcher extends \RectorPrefix20210714\Symfony\Component\E
     protected function afterDispatch($eventName, $event)
     {
         switch ($eventName) {
-            case \RectorPrefix20210714\Symfony\Component\HttpKernel\KernelEvents::CONTROLLER_ARGUMENTS:
+            case \RectorPrefix20210715\Symfony\Component\HttpKernel\KernelEvents::CONTROLLER_ARGUMENTS:
                 $this->stopwatch->start('controller', 'section');
                 break;
-            case \RectorPrefix20210714\Symfony\Component\HttpKernel\KernelEvents::RESPONSE:
+            case \RectorPrefix20210715\Symfony\Component\HttpKernel\KernelEvents::RESPONSE:
                 $token = $event->getResponse()->headers->get('X-Debug-Token');
                 if (null === $token) {
                     break;
                 }
                 $this->stopwatch->stopSection($token);
                 break;
-            case \RectorPrefix20210714\Symfony\Component\HttpKernel\KernelEvents::TERMINATE:
+            case \RectorPrefix20210715\Symfony\Component\HttpKernel\KernelEvents::TERMINATE:
                 // In the special case described in the `preDispatch` method above, the `$token` section
                 // does not exist, then closing it throws an exception which must be caught.
                 $token = $event->getResponse()->headers->get('X-Debug-Token');

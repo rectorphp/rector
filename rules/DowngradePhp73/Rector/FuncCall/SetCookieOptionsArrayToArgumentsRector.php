@@ -70,6 +70,9 @@ CODE_SAMPLE
         if ($argsCount <= 2) {
             return \true;
         }
+        if (!isset($funcCall->args[2])) {
+            return \true;
+        }
         return !$funcCall->args[2]->value instanceof \PhpParser\Node\Expr\Array_;
     }
     /**
@@ -86,7 +89,6 @@ CODE_SAMPLE
             if ($arrayItem === null) {
                 continue;
             }
-            /** @var Arg $value */
             $value = $arrayItem->value;
             /** @var String_ $key */
             $key = $arrayItem->key;
@@ -98,7 +100,7 @@ CODE_SAMPLE
             if ($order > $this->highestIndex) {
                 $this->highestIndex = $order;
             }
-            $newArgs[$order] = $value;
+            $newArgs[$order] = new \PhpParser\Node\Arg($value);
         }
         $newArgs = $this->fillMissingArgumentsWithDefaultValues($newArgs);
         \ksort($newArgs);

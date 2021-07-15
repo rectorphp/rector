@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210714\TYPO3\CMS\Frontend\View;
+namespace RectorPrefix20210715\TYPO3\CMS\Frontend\View;
 
 if (\class_exists('TYPO3\\CMS\\Frontend\\View\\AdminPanelView')) {
     return;

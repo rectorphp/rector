@@ -6,27 +6,15 @@ namespace Rector\Php56\Rector\FunctionLike;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayDimFetch;
-use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\AssignRef;
-use PhpParser\Node\Expr\Cast\Unset_ as UnsetCast;
 use PhpParser\Node\Expr\Closure;
-use PhpParser\Node\Expr\List_;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
-use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\Function_;
-use PhpParser\Node\Stmt\Global_;
-use PhpParser\Node\Stmt\Static_;
-use PhpParser\Node\Stmt\StaticVar;
-use PhpParser\Node\Stmt\Unset_;
-use PhpParser\NodeTraverser;
-use PHPStan\Analyser\Scope;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Php56\NodeAnalyzer\UndefinedVariableResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -38,9 +26,17 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class AddDefaultValueForUndefinedVariableRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var string[]
+     * @var string
      */
-    private $definedVariables = [];
+    private const ALREADY_ADDED_VARIABLE_NAMES = 'already_added_variable_names';
+    /**
+     * @var \Rector\Php56\NodeAnalyzer\UndefinedVariableResolver
+     */
+    private $undefinedVariableResolver;
+    public function __construct(\Rector\Php56\NodeAnalyzer\UndefinedVariableResolver $undefinedVariableResolver)
+    {
+        $this->undefinedVariableResolver = $undefinedVariableResolver;
+    }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
         return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Adds default value for undefined variable', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
@@ -82,57 +78,22 @@ CODE_SAMPLE
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        $this->definedVariables = [];
-        $undefinedVariables = $this->collectUndefinedVariableScope($node);
-        if ($undefinedVariables === []) {
+        $undefinedVariableNames = $this->undefinedVariableResolver->resolve($node);
+        // avoids adding same variable multiple tiemes
+        $alreadyAddedVariableNames = (array) $node->getAttribute(self::ALREADY_ADDED_VARIABLE_NAMES);
+        $undefinedVariableNames = \array_diff($undefinedVariableNames, $alreadyAddedVariableNames);
+        if ($undefinedVariableNames === []) {
             return null;
         }
         $variablesInitiation = [];
-        foreach ($undefinedVariables as $undefinedVariable) {
-            if (\in_array($undefinedVariable, $this->definedVariables, \true)) {
-                continue;
-            }
-            $value = $this->isArray($undefinedVariable, (array) $node->stmts) ? new \PhpParser\Node\Expr\Array_([]) : $this->nodeFactory->createNull();
-            $variablesInitiation[] = new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable($undefinedVariable), $value));
+        foreach ($undefinedVariableNames as $undefinedVariableName) {
+            $value = $this->isArray($undefinedVariableName, (array) $node->stmts) ? new \PhpParser\Node\Expr\Array_([]) : $this->nodeFactory->createNull();
+            $assign = new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable($undefinedVariableName), $value);
+            $variablesInitiation[] = new \PhpParser\Node\Stmt\Expression($assign);
         }
+        $node->setAttribute(self::ALREADY_ADDED_VARIABLE_NAMES, $undefinedVariableNames);
         $node->stmts = \array_merge($variablesInitiation, (array) $node->stmts);
         return $node;
-    }
-    /**
-     * @return string[]
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $node
-     */
-    private function collectUndefinedVariableScope($node) : array
-    {
-        $undefinedVariables = [];
-        $this->traverseNodesWithCallable((array) $node->stmts, function (\PhpParser\Node $node) use(&$undefinedVariables) : ?int {
-            // entering new scope - break!
-            if ($node instanceof \PhpParser\Node\FunctionLike && !$node instanceof \PhpParser\Node\Expr\ArrowFunction) {
-                return \PhpParser\NodeTraverser::STOP_TRAVERSAL;
-            }
-            if ($node instanceof \PhpParser\Node\Stmt\Foreach_) {
-                // handled above
-                $this->collectDefinedVariablesFromForeach($node);
-                return \PhpParser\NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
-            }
-            if (!$node instanceof \PhpParser\Node\Expr\Variable) {
-                return null;
-            }
-            if ($this->shouldSkipVariable($node)) {
-                return null;
-            }
-            /** @var string $variableName */
-            $variableName = $this->getName($node);
-            // defined 100 %
-            /** @var Scope $scope */
-            $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
-            if ($scope->hasVariableType($variableName)->yes()) {
-                return null;
-            }
-            $undefinedVariables[] = $variableName;
-            return null;
-        });
-        return \array_unique($undefinedVariables);
     }
     /**
      * @param Stmt[] $stmts
@@ -145,69 +106,5 @@ CODE_SAMPLE
             }
             return $this->isName($node->var, $undefinedVariable);
         });
-    }
-    private function collectDefinedVariablesFromForeach(\PhpParser\Node\Stmt\Foreach_ $foreach) : void
-    {
-        $this->traverseNodesWithCallable($foreach->stmts, function (\PhpParser\Node $node) : void {
-            if ($node instanceof \PhpParser\Node\Expr\Assign || $node instanceof \PhpParser\Node\Expr\AssignRef) {
-                if (!$node->var instanceof \PhpParser\Node\Expr\Variable) {
-                    return;
-                }
-                $variableName = $this->getName($node->var);
-                if ($variableName === null) {
-                    return;
-                }
-                $this->definedVariables[] = $variableName;
-            }
-        });
-    }
-    private function shouldSkipVariable(\PhpParser\Node\Expr\Variable $variable) : bool
-    {
-        $parentNode = $variable->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-        if (!$parentNode instanceof \PhpParser\Node) {
-            return \true;
-        }
-        if ($parentNode instanceof \PhpParser\Node\Stmt\Global_) {
-            return \true;
-        }
-        if ($parentNode instanceof \PhpParser\Node && ($parentNode instanceof \PhpParser\Node\Expr\Assign || $parentNode instanceof \PhpParser\Node\Expr\AssignRef || $this->isStaticVariable($parentNode))) {
-            return \true;
-        }
-        if ($parentNode instanceof \PhpParser\Node\Stmt\Unset_ || $parentNode instanceof \PhpParser\Node\Expr\Cast\Unset_) {
-            return \true;
-        }
-        // list() = | [$values] = defines variables as null
-        if ($this->isListAssign($parentNode)) {
-            return \true;
-        }
-        $nodeScope = $variable->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
-        if (!$nodeScope instanceof \PHPStan\Analyser\Scope) {
-            return \true;
-        }
-        $variableName = $this->getName($variable);
-        // skip $this, as probably in outer scope
-        if ($variableName === 'this') {
-            return \true;
-        }
-        return $variableName === null;
-    }
-    private function isStaticVariable(\PhpParser\Node $parentNode) : bool
-    {
-        // definition of static variable
-        if ($parentNode instanceof \PhpParser\Node\Stmt\StaticVar) {
-            $parentParentNode = $parentNode->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-            if ($parentParentNode instanceof \PhpParser\Node\Stmt\Static_) {
-                return \true;
-            }
-        }
-        return \false;
-    }
-    private function isListAssign(\PhpParser\Node $node) : bool
-    {
-        $parentNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-        if ($parentNode instanceof \PhpParser\Node\Expr\List_) {
-            return \true;
-        }
-        return $parentNode instanceof \PhpParser\Node\Expr\Array_;
     }
 }

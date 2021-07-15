@@ -144,7 +144,8 @@ final class PhpSpecPromisesToPHPUnitAssertRector extends \Rector\PhpSpecToPHPUni
         if ($this->isName($node->name, 'duringInstantiation')) {
             return $this->processDuringInstantiation($node);
         }
-        if ($this->isName($node->name, 'getMatchers')) {
+        // skip reserved names
+        if ($this->isNames($node->name, ['getMatchers', 'expectException', 'assert*'])) {
             return null;
         }
         $this->prepareMethodCall($node);

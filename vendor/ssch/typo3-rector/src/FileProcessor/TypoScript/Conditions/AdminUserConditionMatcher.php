@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Ssch\TYPO3Rector\FileProcessor\TypoScript\Conditions;
 
-use RectorPrefix20210714\Nette\Utils\Strings;
+use RectorPrefix20210715\Nette\Utils\Strings;
 use Ssch\TYPO3Rector\Contract\FileProcessor\TypoScript\Conditions\TyposcriptConditionMatcher;
 final class AdminUserConditionMatcher implements \Ssch\TYPO3Rector\Contract\FileProcessor\TypoScript\Conditions\TyposcriptConditionMatcher
 {
@@ -31,6 +31,6 @@ final class AdminUserConditionMatcher implements \Ssch\TYPO3Rector\Contract\File
      */
     public function shouldApply($condition) : bool
     {
-        return \RectorPrefix20210714\Nette\Utils\Strings::startsWith($condition, self::TYPE);
+        return \RectorPrefix20210715\Nette\Utils\Strings::startsWith($condition, self::TYPE);
     }
 }

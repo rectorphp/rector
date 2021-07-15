@@ -18,7 +18,7 @@ use Rector\Core\ValueObject\Application\RectorError;
 use Rector\Core\ValueObject\Configuration;
 use Rector\PostRector\Application\PostFileProcessor;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
-use RectorPrefix20210714\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix20210715\Symfony\Component\Console\Style\SymfonyStyle;
 use Throwable;
 final class PhpFileProcessor implements \Rector\Core\Contract\Processor\FileProcessorInterface
 {
@@ -58,7 +58,7 @@ final class PhpFileProcessor implements \Rector\Core\Contract\Processor\FileProc
      * @var \Rector\ChangesReporting\ValueObjectFactory\ErrorFactory
      */
     private $errorFactory;
-    public function __construct(\Rector\Core\PhpParser\Printer\FormatPerservingPrinter $formatPerservingPrinter, \Rector\Core\Application\FileProcessor $fileProcessor, \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector $removedAndAddedFilesCollector, \RectorPrefix20210714\Symfony\Component\Console\Style\SymfonyStyle $symfonyStyle, \Rector\Core\Application\FileDecorator\FileDiffFileDecorator $fileDiffFileDecorator, \Rector\Core\Provider\CurrentFileProvider $currentFileProvider, \Rector\PostRector\Application\PostFileProcessor $postFileProcessor, \Rector\ChangesReporting\ValueObjectFactory\ErrorFactory $errorFactory)
+    public function __construct(\Rector\Core\PhpParser\Printer\FormatPerservingPrinter $formatPerservingPrinter, \Rector\Core\Application\FileProcessor $fileProcessor, \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector $removedAndAddedFilesCollector, \RectorPrefix20210715\Symfony\Component\Console\Style\SymfonyStyle $symfonyStyle, \Rector\Core\Application\FileDecorator\FileDiffFileDecorator $fileDiffFileDecorator, \Rector\Core\Provider\CurrentFileProvider $currentFileProvider, \Rector\PostRector\Application\PostFileProcessor $postFileProcessor, \Rector\ChangesReporting\ValueObjectFactory\ErrorFactory $errorFactory)
     {
         $this->formatPerservingPrinter = $formatPerservingPrinter;
         $this->fileProcessor = $fileProcessor;
@@ -80,20 +80,27 @@ final class PhpFileProcessor implements \Rector\Core\Contract\Processor\FileProc
             $this->fileProcessor->parseFileInfoToLocalCache($file);
         }, \Rector\Core\Enum\ApplicationPhase::PARSING());
         // 2. change nodes with Rectors
-        $this->refactorNodesWithRectors($file);
-        // 3. apply post rectors
-        $this->tryCatchWrapper($file, function (\Rector\Core\ValueObject\Application\File $file) : void {
-            $newStmts = $this->postFileProcessor->traverse($file->getNewStmts());
-            // this is needed for new tokens added in "afterTraverse()"
-            $file->changeNewStmts($newStmts);
-        }, \Rector\Core\Enum\ApplicationPhase::POST_RECTORS());
-        // 4. print to file or string
-        $this->currentFileProvider->setFile($file);
-        if ($file->hasErrors()) {
-            // cannot print file with errors, as print would b
-            $this->notifyPhase($file, \Rector\Core\Enum\ApplicationPhase::PRINT_SKIP());
-            return;
-        }
+        do {
+            $file->changeHasChanged(\false);
+            $this->refactorNodesWithRectors($file);
+            // 3. apply post rectors
+            $this->tryCatchWrapper($file, function (\Rector\Core\ValueObject\Application\File $file) : void {
+                $newStmts = $this->postFileProcessor->traverse($file->getNewStmts());
+                // this is needed for new tokens added in "afterTraverse()"
+                $file->changeNewStmts($newStmts);
+            }, \Rector\Core\Enum\ApplicationPhase::POST_RECTORS());
+            // 4. print to file or string
+            $this->currentFileProvider->setFile($file);
+            // cannot print file with errors, as print would break everything to original nodes
+            if ($file->hasErrors()) {
+                // cannot print file with errors, as print would b
+                $this->notifyPhase($file, \Rector\Core\Enum\ApplicationPhase::PRINT_SKIP());
+                continue;
+            }
+            $this->tryCatchWrapper($file, function (\Rector\Core\ValueObject\Application\File $file) use($configuration) : void {
+                $this->printFile($file, $configuration);
+            }, \Rector\Core\Enum\ApplicationPhase::PRINT());
+        } while ($file->hasChanged());
         $this->tryCatchWrapper($file, function (\Rector\Core\ValueObject\Application\File $file) use($configuration) : void {
             $this->printFile($file, $configuration);
         }, \Rector\Core\Enum\ApplicationPhase::PRINT());

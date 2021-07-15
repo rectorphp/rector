@@ -98,7 +98,7 @@ CODE_SAMPLE
     {
         return (bool) $this->betterNodeFinder->findFirstInstanceOf($node, \PhpParser\Node\Stmt\InlineHTML::class);
     }
-    private function refactorFileWithoutNamespace(\Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace $fileWithoutNamespace, string $expectedNamespace) : \Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace
+    private function refactorFileWithoutNamespace(\Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace $fileWithoutNamespace, string $expectedNamespace) : \PhpParser\Node\Stmt\Namespace_
     {
         $nodes = $fileWithoutNamespace->stmts;
         $nodesWithStrictTypesThenNamespace = [];
@@ -111,7 +111,6 @@ CODE_SAMPLE
         $namespace = new \PhpParser\Node\Stmt\Namespace_(new \PhpParser\Node\Name($expectedNamespace), $nodes);
         $nodesWithStrictTypesThenNamespace[] = $namespace;
         $this->fullyQualifyStmtsAnalyzer->process($nodes);
-        // @todo update to a new class node, like FileWithNamespace
-        return new \Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace($nodesWithStrictTypesThenNamespace);
+        return $namespace;
     }
 }
