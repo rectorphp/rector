@@ -22,7 +22,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class IncreaseColumnIndexRector extends \Rector\Core\Rector\AbstractRector
 {
-    public const ALREADY_CHANGED = 'already_changed';
+    /**
+     * @var string
+     */
+    private const ALREADY_CHANGED = 'already_changed';
     /**
      * @var ObjectType[]
      */
@@ -105,7 +108,6 @@ CODE_SAMPLE
         }
         if ($binaryOp->right instanceof \PhpParser\Node\Scalar\LNumber) {
             ++$binaryOp->right->value;
-            return;
         }
     }
     private function findPreviousForWithVariable(\PhpParser\Node\Expr\Variable $variable) : ?\PhpParser\Node\Scalar\LNumber
