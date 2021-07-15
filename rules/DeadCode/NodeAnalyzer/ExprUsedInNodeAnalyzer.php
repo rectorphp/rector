@@ -11,7 +11,6 @@ use PhpParser\Node\Expr\Include_;
 use PhpParser\Node\Expr\Variable;
 use Rector\Core\NodeAnalyzer\CompactFuncCallAnalyzer;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
-use Rector\Core\PhpParser\Node\BetterNodeFinder;
 
 final class ExprUsedInNodeAnalyzer
 {

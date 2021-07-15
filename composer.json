@@ -56,7 +56,6 @@
         "phpunit/phpunit": "^9.5",
         "rector/phpstan-rules": "^0.3.3",
         "rector/rector-generator": "^0.3",
-
         "symplify/coding-standard": "^9.4.14",
         "symplify/easy-ci": "^9.4.14",
         "symplify/easy-coding-standard": "^9.4.7",
