@@ -28,7 +28,7 @@ final class ExprUsedInNodeAnalyzer
             return true;
         }
 
-        if ($node instanceof FuncCall) {
+        if ($node instanceof FuncCall && $expr instanceof Variable) {
             return $this->compactFuncCallAnalyzer->isInCompact($node, $expr);
         }
 
