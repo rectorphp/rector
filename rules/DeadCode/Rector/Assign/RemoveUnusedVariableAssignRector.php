@@ -7,7 +7,6 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\Include_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\NullsafeMethodCall;
@@ -20,6 +19,7 @@ use Rector\Core\NodeAnalyzer\CompactFuncCallAnalyzer;
 use Rector\Core\Php\ReservedKeywordAnalyzer;
 use Rector\Core\PhpParser\Comparing\ConditionSearcher;
 use Rector\Core\Rector\AbstractRector;
+use Rector\DeadCode\NodeAnalyzer\ExprUsedInNextNodeAnalyzer;
 use Rector\DeadCode\NodeAnalyzer\UsedVariableNameAnalyzer;
 use Rector\DeadCode\SideEffect\PureFunctionDetector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -50,13 +50,18 @@ final class RemoveUnusedVariableAssignRector extends \Rector\Core\Rector\Abstrac
      * @var \Rector\DeadCode\SideEffect\PureFunctionDetector
      */
     private $pureFunctionDetector;
-    public function __construct(\Rector\Core\Php\ReservedKeywordAnalyzer $reservedKeywordAnalyzer, \Rector\Core\NodeAnalyzer\CompactFuncCallAnalyzer $compactFuncCallAnalyzer, \Rector\Core\PhpParser\Comparing\ConditionSearcher $conditionSearcher, \Rector\DeadCode\NodeAnalyzer\UsedVariableNameAnalyzer $usedVariableNameAnalyzer, \Rector\DeadCode\SideEffect\PureFunctionDetector $pureFunctionDetector)
+    /**
+     * @var \Rector\DeadCode\NodeAnalyzer\ExprUsedInNextNodeAnalyzer
+     */
+    private $exprUsedInNextNodeAnalyzer;
+    public function __construct(\Rector\Core\Php\ReservedKeywordAnalyzer $reservedKeywordAnalyzer, \Rector\Core\NodeAnalyzer\CompactFuncCallAnalyzer $compactFuncCallAnalyzer, \Rector\Core\PhpParser\Comparing\ConditionSearcher $conditionSearcher, \Rector\DeadCode\NodeAnalyzer\UsedVariableNameAnalyzer $usedVariableNameAnalyzer, \Rector\DeadCode\SideEffect\PureFunctionDetector $pureFunctionDetector, \Rector\DeadCode\NodeAnalyzer\ExprUsedInNextNodeAnalyzer $exprUsedInNextNodeAnalyzer)
     {
         $this->reservedKeywordAnalyzer = $reservedKeywordAnalyzer;
         $this->compactFuncCallAnalyzer = $compactFuncCallAnalyzer;
         $this->conditionSearcher = $conditionSearcher;
         $this->usedVariableNameAnalyzer = $usedVariableNameAnalyzer;
         $this->pureFunctionDetector = $pureFunctionDetector;
+        $this->exprUsedInNextNodeAnalyzer = $exprUsedInNextNodeAnalyzer;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -146,7 +151,7 @@ CODE_SAMPLE
         if ($isUsedPrev) {
             return \true;
         }
-        if ($this->isUsedNext($variable)) {
+        if ($this->exprUsedInNextNodeAnalyzer->isUsed($variable)) {
             return \true;
         }
         /** @var FuncCall|MethodCall|New_|NullsafeMethodCall|StaticCall $expr */
@@ -155,18 +160,6 @@ CODE_SAMPLE
             return \false;
         }
         return $this->isUsedInAssignExpr($expr, $assign);
-    }
-    private function isUsedNext(\PhpParser\Node\Expr\Variable $variable) : bool
-    {
-        return (bool) $this->betterNodeFinder->findFirstNext($variable, function (\PhpParser\Node $node) use($variable) : bool {
-            if ($this->usedVariableNameAnalyzer->isVariableNamed($node, $variable)) {
-                return \true;
-            }
-            if ($node instanceof \PhpParser\Node\Expr\FuncCall) {
-                return $this->compactFuncCallAnalyzer->isInCompact($node, $variable);
-            }
-            return $node instanceof \PhpParser\Node\Expr\Include_;
-        });
     }
     /**
      * @param \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\New_|\PhpParser\Node\Expr\NullsafeMethodCall|\PhpParser\Node\Expr\StaticCall $expr

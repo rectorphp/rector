@@ -1932,6 +1932,8 @@ return array(
     'Rector\\DeadCode\\ConditionResolver' => $baseDir . '/rules/DeadCode/ConditionResolver.php',
     'Rector\\DeadCode\\Contract\\ConditionInterface' => $baseDir . '/rules/DeadCode/Contract/ConditionInterface.php',
     'Rector\\DeadCode\\FeatureSupport\\FunctionSupportResolver' => $baseDir . '/rules/DeadCode/FeatureSupport/FunctionSupportResolver.php',
+    'Rector\\DeadCode\\NodeAnalyzer\\ExprUsedInNextNodeAnalyzer' => $baseDir . '/rules/DeadCode/NodeAnalyzer/ExprUsedInNextNodeAnalyzer.php',
+    'Rector\\DeadCode\\NodeAnalyzer\\ExprUsedInNodeAnalyzer' => $baseDir . '/rules/DeadCode/NodeAnalyzer/ExprUsedInNodeAnalyzer.php',
     'Rector\\DeadCode\\NodeAnalyzer\\InstanceOfUniqueKeyResolver' => $baseDir . '/rules/DeadCode/NodeAnalyzer/InstanceOfUniqueKeyResolver.php',
     'Rector\\DeadCode\\NodeAnalyzer\\UsedVariableNameAnalyzer' => $baseDir . '/rules/DeadCode/NodeAnalyzer/UsedVariableNameAnalyzer.php',
     'Rector\\DeadCode\\NodeCollector\\ModifiedVariableNamesCollector' => $baseDir . '/rules/DeadCode/NodeCollector/ModifiedVariableNamesCollector.php',

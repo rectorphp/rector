@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PHPStan\Type\VoidType;
 use Rector\Core\Rector\AbstractRector;
+use Rector\DeadCode\NodeAnalyzer\ExprUsedInNextNodeAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -17,6 +18,14 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class RemoveAssignOfVoidReturnFunctionRector extends \Rector\Core\Rector\AbstractRector
 {
+    /**
+     * @var \Rector\DeadCode\NodeAnalyzer\ExprUsedInNextNodeAnalyzer
+     */
+    private $exprUsedInNextNodeAnalyzer;
+    public function __construct(\Rector\DeadCode\NodeAnalyzer\ExprUsedInNextNodeAnalyzer $exprUsedInNextNodeAnalyzer)
+    {
+        $this->exprUsedInNextNodeAnalyzer = $exprUsedInNextNodeAnalyzer;
+    }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
         return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove assign of void function/method to variable', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
@@ -64,6 +73,9 @@ CODE_SAMPLE
         }
         $exprType = $this->nodeTypeResolver->resolve($node->expr);
         if (!$exprType instanceof \PHPStan\Type\VoidType) {
+            return null;
+        }
+        if ($this->exprUsedInNextNodeAnalyzer->isUsed($node->var)) {
             return null;
         }
         return $node->expr;

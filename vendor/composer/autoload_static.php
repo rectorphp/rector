@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitc3f7a47dcc1e46bd4612e40ad4cb6787
+class ComposerStaticInit923b43634c4cd63d999ecb78b541a1d0
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -2287,6 +2287,8 @@ class ComposerStaticInitc3f7a47dcc1e46bd4612e40ad4cb6787
         'Rector\\DeadCode\\ConditionResolver' => __DIR__ . '/../..' . '/rules/DeadCode/ConditionResolver.php',
         'Rector\\DeadCode\\Contract\\ConditionInterface' => __DIR__ . '/../..' . '/rules/DeadCode/Contract/ConditionInterface.php',
         'Rector\\DeadCode\\FeatureSupport\\FunctionSupportResolver' => __DIR__ . '/../..' . '/rules/DeadCode/FeatureSupport/FunctionSupportResolver.php',
+        'Rector\\DeadCode\\NodeAnalyzer\\ExprUsedInNextNodeAnalyzer' => __DIR__ . '/../..' . '/rules/DeadCode/NodeAnalyzer/ExprUsedInNextNodeAnalyzer.php',
+        'Rector\\DeadCode\\NodeAnalyzer\\ExprUsedInNodeAnalyzer' => __DIR__ . '/../..' . '/rules/DeadCode/NodeAnalyzer/ExprUsedInNodeAnalyzer.php',
         'Rector\\DeadCode\\NodeAnalyzer\\InstanceOfUniqueKeyResolver' => __DIR__ . '/../..' . '/rules/DeadCode/NodeAnalyzer/InstanceOfUniqueKeyResolver.php',
         'Rector\\DeadCode\\NodeAnalyzer\\UsedVariableNameAnalyzer' => __DIR__ . '/../..' . '/rules/DeadCode/NodeAnalyzer/UsedVariableNameAnalyzer.php',
         'Rector\\DeadCode\\NodeCollector\\ModifiedVariableNamesCollector' => __DIR__ . '/../..' . '/rules/DeadCode/NodeCollector/ModifiedVariableNamesCollector.php',
@@ -3845,9 +3847,9 @@ class ComposerStaticInitc3f7a47dcc1e46bd4612e40ad4cb6787
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitc3f7a47dcc1e46bd4612e40ad4cb6787::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitc3f7a47dcc1e46bd4612e40ad4cb6787::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitc3f7a47dcc1e46bd4612e40ad4cb6787::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit923b43634c4cd63d999ecb78b541a1d0::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit923b43634c4cd63d999ecb78b541a1d0::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit923b43634c4cd63d999ecb78b541a1d0::$classMap;
 
         }, null, ClassLoader::class);
     }
