@@ -1840,6 +1840,7 @@ return array(
     'Rector\\Core\\NodeAnalyzer\\PropertyFetchAnalyzer' => $baseDir . '/src/NodeAnalyzer/PropertyFetchAnalyzer.php',
     'Rector\\Core\\NodeAnalyzer\\PropertyPresenceChecker' => $baseDir . '/src/NodeAnalyzer/PropertyPresenceChecker.php',
     'Rector\\Core\\NodeAnalyzer\\VariadicAnalyzer' => $baseDir . '/src/NodeAnalyzer/VariadicAnalyzer.php',
+    'Rector\\Core\\NodeFactory\\ClassWithPublicPropertiesFactory' => $baseDir . '/src/NodeFactory/ClassWithPublicPropertiesFactory.php',
     'Rector\\Core\\NodeManipulator\\ArrayDestructVariableFilter' => $baseDir . '/src/NodeManipulator/ArrayDestructVariableFilter.php',
     'Rector\\Core\\NodeManipulator\\ArrayManipulator' => $baseDir . '/src/NodeManipulator/ArrayManipulator.php',
     'Rector\\Core\\NodeManipulator\\AssignManipulator' => $baseDir . '/src/NodeManipulator/AssignManipulator.php',
