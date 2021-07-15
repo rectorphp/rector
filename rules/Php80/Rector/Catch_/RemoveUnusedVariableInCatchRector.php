@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Catch_;
 use Rector\Core\Rector\AbstractRector;
+use Rector\DeadCode\NodeAnalyzer\ExprUsedInNodeAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -18,6 +19,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class RemoveUnusedVariableInCatchRector extends AbstractRector
 {
+    public function __construct(
+        private ExprUsedInNodeAnalyzer $exprUsedInNodeAnalyzer
+    ) {
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove unused variable in catch()', [
@@ -86,11 +92,7 @@ CODE_SAMPLE
     private function isVariableUsedInStmts(array $nodes, Variable $variable): bool
     {
         return (bool) $this->betterNodeFinder->findFirst($nodes, function (Node $node) use ($variable): bool {
-            if (! $node instanceof Variable) {
-                return false;
-            }
-
-            return $this->nodeComparator->areNodesEqual($node, $variable);
+            return $this->exprUsedInNodeAnalyzer->isUsed($node, $variable);
         });
     }
 
@@ -98,7 +100,7 @@ CODE_SAMPLE
     {
         return (bool) $this->betterNodeFinder->findFirstNext(
             $catch,
-            fn (Node $node): bool => $this->nodeComparator->areNodesEqual($node, $variable)
+            fn (Node $node): bool => $this->exprUsedInNodeAnalyzer->isUsed($node, $variable)
         );
     }
 }

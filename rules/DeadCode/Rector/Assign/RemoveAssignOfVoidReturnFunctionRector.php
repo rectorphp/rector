@@ -11,6 +11,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PHPStan\Type\VoidType;
 use Rector\Core\Rector\AbstractRector;
+use Rector\DeadCode\NodeAnalyzer\ExprUsedInNextNodeAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -19,6 +20,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class RemoveAssignOfVoidReturnFunctionRector extends AbstractRector
 {
+    public function __construct(
+        private ExprUsedInNextNodeAnalyzer $exprUsedInNextNodeAnalyzer
+    ) {
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
@@ -76,6 +82,10 @@ CODE_SAMPLE
 
         $exprType = $this->nodeTypeResolver->resolve($node->expr);
         if (! $exprType instanceof VoidType) {
+            return null;
+        }
+
+        if ($this->exprUsedInNextNodeAnalyzer->isUsed($node->var)) {
             return null;
         }
 

@@ -8,7 +8,6 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\Include_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\NullsafeMethodCall;
@@ -21,6 +20,7 @@ use Rector\Core\NodeAnalyzer\CompactFuncCallAnalyzer;
 use Rector\Core\Php\ReservedKeywordAnalyzer;
 use Rector\Core\PhpParser\Comparing\ConditionSearcher;
 use Rector\Core\Rector\AbstractRector;
+use Rector\DeadCode\NodeAnalyzer\ExprUsedInNextNodeAnalyzer;
 use Rector\DeadCode\NodeAnalyzer\UsedVariableNameAnalyzer;
 use Rector\DeadCode\SideEffect\PureFunctionDetector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -37,7 +37,8 @@ final class RemoveUnusedVariableAssignRector extends AbstractRector
         private CompactFuncCallAnalyzer $compactFuncCallAnalyzer,
         private ConditionSearcher $conditionSearcher,
         private UsedVariableNameAnalyzer $usedVariableNameAnalyzer,
-        private PureFunctionDetector $pureFunctionDetector
+        private PureFunctionDetector $pureFunctionDetector,
+        private ExprUsedInNextNodeAnalyzer $exprUsedInNextNodeAnalyzer
     ) {
     }
 
@@ -153,7 +154,7 @@ CODE_SAMPLE
             return true;
         }
 
-        if ($this->isUsedNext($variable)) {
+        if ($this->exprUsedInNextNodeAnalyzer->isUsed($variable)) {
             return true;
         }
 
@@ -164,23 +165,6 @@ CODE_SAMPLE
         }
 
         return $this->isUsedInAssignExpr($expr, $assign);
-    }
-
-    private function isUsedNext(Variable $variable): bool
-    {
-        return (bool) $this->betterNodeFinder->findFirstNext($variable, function (Node $node) use (
-            $variable
-        ): bool {
-            if ($this->usedVariableNameAnalyzer->isVariableNamed($node, $variable)) {
-                return true;
-            }
-
-            if ($node instanceof FuncCall) {
-                return $this->compactFuncCallAnalyzer->isInCompact($node, $variable);
-            }
-
-            return $node instanceof Include_;
-        });
     }
 
     private function isUsedInAssignExpr(
