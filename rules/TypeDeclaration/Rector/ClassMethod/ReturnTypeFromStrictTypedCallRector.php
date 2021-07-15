@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
@@ -95,7 +96,25 @@ CODE_SAMPLE
         }
 
         /** @var Return_[] $returns */
-        $returns = $this->betterNodeFinder->findInstanceOf((array) $node->stmts, Return_::class);
+        $returns = $this->betterNodeFinder->find((array) $node->stmts, function (Node $n) use ($node) {
+            $currentFunctionLike = $this->betterNodeFinder->findParentType($n, FunctionLike::class);
+
+            if ($currentFunctionLike === $node) {
+                return $n instanceof Return_;
+            }
+
+            $currentReturn = $this->betterNodeFinder->findParentType($n, Return_::class);
+            if (! $currentReturn instanceof Return_) {
+                return false;
+            }
+
+            $currentFunctionLike = $this->betterNodeFinder->findParentType($currentReturn, FunctionLike::class);
+            if ($currentFunctionLike !== $node) {
+                return false;
+            }
+
+            return $n instanceof Return_;
+        });
 
         $returnedStrictTypes = $this->collectStrictReturnTypes($returns);
         if ($returnedStrictTypes === []) {
