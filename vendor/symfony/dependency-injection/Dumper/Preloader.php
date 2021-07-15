@@ -96,7 +96,7 @@ final class Preloader
         if (!$t) {
             return;
         }
-        foreach ($t instanceof \ReflectionUnionType ? $t->getTypes() : [$t] as $t) {
+        foreach ($t instanceof \ReflectionUnionType || $t instanceof \RectorPrefix20210715\ReflectionIntersectionType ? $t->getTypes() : [$t] as $t) {
             if (!$t->isBuiltin()) {
                 self::doPreload($t instanceof \ReflectionNamedType ? $t->getName() : $t, $preloaded);
             }

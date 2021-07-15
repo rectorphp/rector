@@ -34,18 +34,28 @@ class ProxyHelper
             return null;
         }
         $types = [];
-        foreach ($type instanceof \ReflectionUnionType ? $type->getTypes() : [$type] as $type) {
-            $name = $type instanceof \ReflectionNamedType ? $type->getName() : (string) $type;
+        $glue = '|';
+        if ($type instanceof \ReflectionUnionType) {
+            $reflectionTypes = $type->getTypes();
+        } elseif ($type instanceof \RectorPrefix20210715\ReflectionIntersectionType) {
+            $reflectionTypes = $type->getTypes();
+            $glue = '&';
+        } elseif ($type instanceof \ReflectionNamedType) {
+            $reflectionTypes = [$type];
+        } else {
+            return null;
+        }
+        foreach ($reflectionTypes as $type) {
             if ($type->isBuiltin()) {
                 if (!$noBuiltin) {
-                    $types[] = $name;
+                    $types[] = $type->getName();
                 }
                 continue;
             }
-            $lcName = \strtolower($name);
+            $lcName = \strtolower($type->getName());
             $prefix = $noBuiltin ? '' : '\\';
             if ('self' !== $lcName && 'parent' !== $lcName) {
-                $types[] = '' !== $prefix ? $prefix . $name : $name;
+                $types[] = $prefix . $type->getName();
                 continue;
             }
             if (!$r instanceof \ReflectionMethod) {
@@ -57,6 +67,6 @@ class ProxyHelper
                 $types[] = ($parent = $r->getDeclaringClass()->getParentClass()) ? $prefix . $parent->name : null;
             }
         }
-        return $types ? \implode('|', $types) : null;
+        return $types ? \implode($glue, $types) : null;
     }
 }

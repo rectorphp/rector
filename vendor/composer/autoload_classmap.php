@@ -2897,7 +2897,6 @@ return array(
     'Rector\\Restoration\\Rector\\ClassMethod\\InferParamFromClassMethodReturnRector' => $baseDir . '/rules/Restoration/Rector/ClassMethod/InferParamFromClassMethodReturnRector.php',
     'Rector\\Restoration\\Rector\\Class_\\RemoveFinalFromEntityRector' => $baseDir . '/rules/Restoration/Rector/Class_/RemoveFinalFromEntityRector.php',
     'Rector\\Restoration\\Rector\\Namespace_\\CompleteImportForPartialAnnotationRector' => $baseDir . '/rules/Restoration/Rector/Namespace_/CompleteImportForPartialAnnotationRector.php',
-    'Rector\\Restoration\\Rector\\New_\\CompleteMissingDependencyInNewRector' => $baseDir . '/rules/Restoration/Rector/New_/CompleteMissingDependencyInNewRector.php',
     'Rector\\Restoration\\Rector\\Property\\MakeTypedPropertyNullableIfCheckedRector' => $baseDir . '/rules/Restoration/Rector/Property/MakeTypedPropertyNullableIfCheckedRector.php',
     'Rector\\Restoration\\Type\\ConstantReturnToParamTypeConverter' => $baseDir . '/rules/Restoration/Type/ConstantReturnToParamTypeConverter.php',
     'Rector\\Restoration\\ValueObject\\CompleteImportForPartialAnnotation' => $baseDir . '/rules/Restoration/ValueObject/CompleteImportForPartialAnnotation.php',

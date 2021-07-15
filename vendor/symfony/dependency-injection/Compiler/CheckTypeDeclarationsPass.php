@@ -134,6 +134,12 @@ final class CheckTypeDeclarationsPass extends \RectorPrefix20210715\Symfony\Comp
             }
             throw new \RectorPrefix20210715\Symfony\Component\DependencyInjection\Exception\InvalidParameterTypeException($this->currentId, $e->getCode(), $parameter);
         }
+        if ($reflectionType instanceof \RectorPrefix20210715\ReflectionIntersectionType) {
+            foreach ($reflectionType->getTypes() as $t) {
+                $this->checkType($checkedDefinition, $value, $parameter, $envPlaceholderUniquePrefix, $t);
+            }
+            return;
+        }
         if (!$reflectionType instanceof \ReflectionNamedType) {
             return;
         }

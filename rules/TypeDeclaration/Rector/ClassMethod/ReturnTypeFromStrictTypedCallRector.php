@@ -8,6 +8,7 @@ use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
@@ -93,7 +94,21 @@ CODE_SAMPLE
             return null;
         }
         /** @var Return_[] $returns */
-        $returns = $this->betterNodeFinder->findInstanceOf((array) $node->stmts, \PhpParser\Node\Stmt\Return_::class);
+        $returns = $this->betterNodeFinder->find((array) $node->stmts, function (\PhpParser\Node $n) use($node) {
+            $currentFunctionLike = $this->betterNodeFinder->findParentType($n, \PhpParser\Node\FunctionLike::class);
+            if ($currentFunctionLike === $node) {
+                return $n instanceof \PhpParser\Node\Stmt\Return_;
+            }
+            $currentReturn = $this->betterNodeFinder->findParentType($n, \PhpParser\Node\Stmt\Return_::class);
+            if (!$currentReturn instanceof \PhpParser\Node\Stmt\Return_) {
+                return \false;
+            }
+            $currentFunctionLike = $this->betterNodeFinder->findParentType($currentReturn, \PhpParser\Node\FunctionLike::class);
+            if ($currentFunctionLike !== $node) {
+                return \false;
+            }
+            return $n instanceof \PhpParser\Node\Stmt\Return_;
+        });
         $returnedStrictTypes = $this->collectStrictReturnTypes($returns);
         if ($returnedStrictTypes === []) {
             return null;

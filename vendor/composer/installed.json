@@ -1884,12 +1884,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/dependency-injection.git",
-                "reference": "64833ac4f2a6dcc5c08fe705e4d1d6e4c38a09f8"
+                "reference": "006f585b01f51188a8b30be06df64d1a489d5dec"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/dependency-injection\/zipball\/64833ac4f2a6dcc5c08fe705e4d1d6e4c38a09f8",
-                "reference": "64833ac4f2a6dcc5c08fe705e4d1d6e4c38a09f8",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/dependency-injection\/zipball\/006f585b01f51188a8b30be06df64d1a489d5dec",
+                "reference": "006f585b01f51188a8b30be06df64d1a489d5dec",
                 "shasum": ""
             },
             "require": {
@@ -1922,7 +1922,7 @@
                 "symfony\/proxy-manager-bridge": "Generate service proxies to lazy load them",
                 "symfony\/yaml": ""
             },
-            "time": "2021-07-07T15:10:28+00:00",
+            "time": "2021-07-15T12:19:54+00:00",
             "default-branch": true,
             "type": "library",
             "installation-source": "dist",

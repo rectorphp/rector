@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit2043d736b2ca689d52e4bedb374f5ad6
+class ComposerStaticInitc3f7a47dcc1e46bd4612e40ad4cb6787
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -3252,7 +3252,6 @@ class ComposerStaticInit2043d736b2ca689d52e4bedb374f5ad6
         'Rector\\Restoration\\Rector\\ClassMethod\\InferParamFromClassMethodReturnRector' => __DIR__ . '/../..' . '/rules/Restoration/Rector/ClassMethod/InferParamFromClassMethodReturnRector.php',
         'Rector\\Restoration\\Rector\\Class_\\RemoveFinalFromEntityRector' => __DIR__ . '/../..' . '/rules/Restoration/Rector/Class_/RemoveFinalFromEntityRector.php',
         'Rector\\Restoration\\Rector\\Namespace_\\CompleteImportForPartialAnnotationRector' => __DIR__ . '/../..' . '/rules/Restoration/Rector/Namespace_/CompleteImportForPartialAnnotationRector.php',
-        'Rector\\Restoration\\Rector\\New_\\CompleteMissingDependencyInNewRector' => __DIR__ . '/../..' . '/rules/Restoration/Rector/New_/CompleteMissingDependencyInNewRector.php',
         'Rector\\Restoration\\Rector\\Property\\MakeTypedPropertyNullableIfCheckedRector' => __DIR__ . '/../..' . '/rules/Restoration/Rector/Property/MakeTypedPropertyNullableIfCheckedRector.php',
         'Rector\\Restoration\\Type\\ConstantReturnToParamTypeConverter' => __DIR__ . '/../..' . '/rules/Restoration/Type/ConstantReturnToParamTypeConverter.php',
         'Rector\\Restoration\\ValueObject\\CompleteImportForPartialAnnotation' => __DIR__ . '/../..' . '/rules/Restoration/ValueObject/CompleteImportForPartialAnnotation.php',
@@ -3846,9 +3845,9 @@ class ComposerStaticInit2043d736b2ca689d52e4bedb374f5ad6
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit2043d736b2ca689d52e4bedb374f5ad6::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit2043d736b2ca689d52e4bedb374f5ad6::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit2043d736b2ca689d52e4bedb374f5ad6::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitc3f7a47dcc1e46bd4612e40ad4cb6787::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitc3f7a47dcc1e46bd4612e40ad4cb6787::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitc3f7a47dcc1e46bd4612e40ad4cb6787::$classMap;
 
         }, null, ClassLoader::class);
     }
