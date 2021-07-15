@@ -19,7 +19,6 @@ final class ClassWithPublicPropertiesFactory
      * @param array<string, array{type: string, nullable?: bool}> $properties
      * @param string|null $parent fully qualified name of parent class
      * @param string[] $traits list of fully qualified names of traits used in class
-     * @return Node
      */
     public function createNode(string $fullyQualifiedName, array $properties, ?string $parent = null, array $traits = []) : \PhpParser\Node
     {
