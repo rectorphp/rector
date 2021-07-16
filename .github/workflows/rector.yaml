@@ -29,6 +29,8 @@ jobs:
                     - rules
 
         runs-on: ubuntu-latest
+        timeout-minutes: 30
+
         steps:
             # workaround for missing secret in fork PRs - see https://github.com/actions/checkout/issues/298
             # see https://github.com/rectorphp/rector/commit/d395e1c28b8e6a56711dcc2e10490a82965850e4
