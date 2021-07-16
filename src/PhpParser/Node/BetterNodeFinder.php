@@ -45,7 +45,6 @@ final class BetterNodeFinder
     /**
      * @template T of Node
      * @param class-string<T> $type
-     * @return T|null
      */
     public function findParentType(Node $node, string $type): ?Node
     {
@@ -101,7 +100,6 @@ final class BetterNodeFinder
      * @template T of Node
      * @param class-string<T> $type
      * @param Node|Node[] $nodes
-     * @return T|null
      */
     public function findFirstInstanceOf(Node | array $nodes, string $type): ?Node
     {
@@ -182,7 +180,6 @@ final class BetterNodeFinder
      * @template T of Node
      * @param class-string<T> $type
      * @param Node|Node[] $nodes
-     * @return T|null
      */
     public function findLastInstanceOf(Node | array $nodes, string $type): ?Node
     {
@@ -317,7 +314,6 @@ final class BetterNodeFinder
     /**
      * @template T of Node
      * @param array<class-string<T>> $types
-     * @return T|null
      */
     public function findFirstPreviousOfTypes(Node $mainNode, array $types): ?Node
     {
@@ -373,12 +369,11 @@ final class BetterNodeFinder
             }
 
             $variables = $this->findInstancesOf($scopeNode, [Variable::class]);
-            $foundVariables = array_filter(
+
+            return array_filter(
                 $variables,
                 fn (Variable $variable) => $this->nodeNameResolver->isName($variable, $exprName)
             );
-
-            return $foundVariables;
         }
 
         if ($expr instanceof Property) {
@@ -395,20 +390,18 @@ final class BetterNodeFinder
         }
 
         $propertyFetches = $this->findInstancesOf($scopeNode, [PropertyFetch::class, StaticPropertyFetch::class]);
-        $foundProperties = array_filter(
+
+        return array_filter(
             $propertyFetches,
             fn (PropertyFetch | StaticPropertyFetch $propertyFetch) =>
                 $this->nodeNameResolver->isName($propertyFetch->name, $exprName)
         );
-
-        return $foundProperties;
     }
 
     /**
      * @template T of Node
      * @param Node|Node[] $nodes
      * @param class-string<T> $type
-     * @return T|null
      */
     private function findInstanceOfName(Node | array $nodes, string $type, string $name): ?Node
     {

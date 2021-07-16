@@ -17,7 +17,6 @@ use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Stmt\Unset_;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\NodeManipulator\AssignManipulator;
-use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNestingScope\ParentFinder;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\ReadWrite\Guard\VariableToConstantGuard;
@@ -28,7 +27,6 @@ final class ReadWritePropertyAnalyzer
         private VariableToConstantGuard $variableToConstantGuard,
         private AssignManipulator $assignManipulator,
         private ReadExprAnalyzer $readExprAnalyzer,
-        private BetterNodeFinder $betterNodeFinder,
         private ParentFinder $parentFinder
     ) {
     }

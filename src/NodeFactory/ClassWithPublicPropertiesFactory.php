@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace Rector\Core\NodeFactory;
 
-use PhpParser\Node;
 use PhpParser\Node\NullableType;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\Namespace_;
 use Symplify\Astral\ValueObject\NodeBuilder\ClassBuilder;
 use Symplify\Astral\ValueObject\NodeBuilder\NamespaceBuilder;
 use Symplify\Astral\ValueObject\NodeBuilder\PropertyBuilder;
@@ -27,7 +28,7 @@ final class ClassWithPublicPropertiesFactory
         array $properties,
         ?string $parent = null,
         array $traits = []
-    ): Node {
+    ): Namespace_ | Class_ {
         $namespaceParts = explode('\\', ltrim($fullyQualifiedName, '\\'));
         $className = array_pop($namespaceParts);
         $namespace = implode('\\', $namespaceParts);

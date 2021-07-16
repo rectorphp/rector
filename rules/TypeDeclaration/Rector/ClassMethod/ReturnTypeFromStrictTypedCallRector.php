@@ -22,11 +22,13 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\UnionType;
+use PHPStan\Type\VoidType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
 use Rector\TypeDeclaration\NodeAnalyzer\TypeNodeUnwrapper;
+use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -37,7 +39,8 @@ final class ReturnTypeFromStrictTypedCallRector extends AbstractRector
 {
     public function __construct(
         private TypeNodeUnwrapper $typeNodeUnwrapper,
-        private ReflectionResolver $reflectionResolver
+        private ReflectionResolver $reflectionResolver,
+        private ReturnTypeInferer $returnTypeInferer
     ) {
     }
 
@@ -95,6 +98,10 @@ CODE_SAMPLE
             return null;
         }
 
+        if ($this->isUnionPossibleReturnsVoid($node)) {
+            return null;
+        }
+
         /** @var Return_[] $returns */
         $returns = $this->betterNodeFinder->find((array) $node->stmts, function (Node $n) use ($node) {
             $currentFunctionLike = $this->betterNodeFinder->findParentType($n, FunctionLike::class);
@@ -134,6 +141,20 @@ CODE_SAMPLE
         }
 
         return null;
+    }
+
+    private function isUnionPossibleReturnsVoid(ClassMethod | Function_ | Closure $node): bool
+    {
+        $inferReturnType = $this->returnTypeInferer->inferFunctionLike($node);
+        if ($inferReturnType instanceof UnionType) {
+            foreach ($inferReturnType->getTypes() as $type) {
+                if ($type instanceof VoidType) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     private function processSingleUnionType(
