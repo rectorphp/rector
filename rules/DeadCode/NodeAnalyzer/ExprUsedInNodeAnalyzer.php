@@ -36,7 +36,7 @@ final class ExprUsedInNodeAnalyzer
         if ($node instanceof \PhpParser\Node\Expr\Include_) {
             return \true;
         }
-        if ($node instanceof \PhpParser\Node\Expr\FuncCall) {
+        if ($node instanceof \PhpParser\Node\Expr\FuncCall && $expr instanceof \PhpParser\Node\Expr\Variable) {
             return $this->compactFuncCallAnalyzer->isInCompact($node, $expr);
         }
         if ($expr instanceof \PhpParser\Node\Expr\Variable) {
