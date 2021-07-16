@@ -45,7 +45,7 @@ final class ApplicationFileProcessor
      */
     private function processFiles(array $files, Configuration $configuration): void
     {
-        if ($configuration->shouldShowDiffs()) {
+        if ($configuration->shouldShowProgressBar()) {
             $fileCount = count($files);
             $this->symfonyStyle->progressStart($fileCount);
         }
