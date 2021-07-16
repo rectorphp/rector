@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Core\NodeAnalyzer;
 
+use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
@@ -26,12 +27,27 @@ final class CompactFuncCallAnalyzer
         if (!\is_string($variableName)) {
             return \false;
         }
-        $args = $funcCall->args;
-        foreach ($args as $arg) {
-            if (!$arg->value instanceof \PhpParser\Node\Scalar\String_) {
+        return $this->isInArgOrArrayItemNodes($funcCall->args, $variableName);
+    }
+    /**
+     * @param array<int, \PhpParser\Node\Arg|\PhpParser\Node\Expr\ArrayItem|null> $nodes
+     */
+    private function isInArgOrArrayItemNodes(array $nodes, string $variableName) : bool
+    {
+        foreach ($nodes as $node) {
+            if ($node === null) {
                 continue;
             }
-            if ($arg->value->value === $variableName) {
+            if ($node->value instanceof \PhpParser\Node\Expr\Array_) {
+                if ($this->isInArgOrArrayItemNodes($node->value->items, $variableName)) {
+                    return \true;
+                }
+                continue;
+            }
+            if (!$node->value instanceof \PhpParser\Node\Scalar\String_) {
+                continue;
+            }
+            if ($node->value->value === $variableName) {
                 return \true;
             }
         }
