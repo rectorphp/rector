@@ -382,7 +382,7 @@ final class BetterNodeFinder
         } elseif ($expr instanceof StaticPropertyFetch || $expr instanceof PropertyFetch) {
             $exprName = $this->nodeNameResolver->getName($expr->name);
         } else {
-            throw new NotImplementedYetException();
+            return [];
         }
 
         if ($exprName === null) {
