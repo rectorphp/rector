@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210715;
+namespace RectorPrefix20210716;
 
 if (\class_exists('t3lib_cache_backend_PdoBackend')) {
     return;

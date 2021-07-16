@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210715;
+namespace RectorPrefix20210716;
 
 if (\class_exists('ext_posMap_pages')) {
     return;

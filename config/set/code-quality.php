@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210715;
+namespace RectorPrefix20210716;
 
 use Rector\CodeQuality\Rector\Array_\ArrayThisCallToThisMethodCallRector;
 use Rector\CodeQuality\Rector\Array_\CallableThisArrayToAnonymousFunctionRector;

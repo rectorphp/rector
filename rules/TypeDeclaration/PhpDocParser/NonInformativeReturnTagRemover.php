@@ -27,7 +27,7 @@ use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\ParentStaticType;
 use Rector\StaticTypeMapper\ValueObject\Type\SelfObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
-use RectorPrefix20210715\Symplify\PackageBuilder\Php\TypeChecker;
+use RectorPrefix20210716\Symplify\PackageBuilder\Php\TypeChecker;
 final class NonInformativeReturnTagRemover
 {
     /**
@@ -42,7 +42,7 @@ final class NonInformativeReturnTagRemover
      * @var \Symplify\PackageBuilder\Php\TypeChecker
      */
     private $typeChecker;
-    public function __construct(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \RectorPrefix20210715\Symplify\PackageBuilder\Php\TypeChecker $typeChecker)
+    public function __construct(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \RectorPrefix20210716\Symplify\PackageBuilder\Php\TypeChecker $typeChecker)
     {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->typeChecker = $typeChecker;

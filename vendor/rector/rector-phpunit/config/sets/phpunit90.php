@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210715;
+namespace RectorPrefix20210716;
 
 use Rector\PHPUnit\Rector\Class_\TestListenerToHooksRector;
 use Rector\PHPUnit\Rector\MethodCall\ExplicitPhpErrorApiRector;

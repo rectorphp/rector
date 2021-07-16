@@ -10,7 +10,7 @@ use PhpParser\Node\Expr\List_;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\NodeNameResolver\NodeNameResolver;
-use RectorPrefix20210715\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
+use RectorPrefix20210716\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 final class ArrayDestructVariableFilter
 {
     /**
@@ -21,7 +21,7 @@ final class ArrayDestructVariableFilter
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(\RectorPrefix20210715\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
+    public function __construct(\RectorPrefix20210716\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
     {
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->nodeNameResolver = $nodeNameResolver;

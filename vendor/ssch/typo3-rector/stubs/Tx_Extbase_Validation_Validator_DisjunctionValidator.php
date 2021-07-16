@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210715;
+namespace RectorPrefix20210716;
 
 if (\class_exists('Tx_Extbase_Validation_Validator_DisjunctionValidator')) {
     return;

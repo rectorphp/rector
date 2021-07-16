@@ -5,7 +5,7 @@ namespace Rector\BetterPhpDocParser\PhpDocNodeFinder;
 
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
-use RectorPrefix20210715\Symplify\SimplePhpDocParser\PhpDocNodeTraverser;
+use RectorPrefix20210716\Symplify\SimplePhpDocParser\PhpDocNodeTraverser;
 /**
  * @template TNode as \PHPStan\PhpDocParser\Ast\Node
  */
@@ -17,7 +17,7 @@ final class PhpDocNodeByTypeFinder
      */
     public function findByType(\PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode $phpDocNode, string $desiredType) : array
     {
-        $phpDocNodeTraverser = new \RectorPrefix20210715\Symplify\SimplePhpDocParser\PhpDocNodeTraverser();
+        $phpDocNodeTraverser = new \RectorPrefix20210716\Symplify\SimplePhpDocParser\PhpDocNodeTraverser();
         $foundNodes = [];
         $phpDocNodeTraverser->traverseWithCallable($phpDocNode, '', function ($node) use(&$foundNodes, $desiredType) {
             if (!\is_a($node, $desiredType, \true)) {

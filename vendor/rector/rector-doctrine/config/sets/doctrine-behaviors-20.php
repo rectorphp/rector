@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210715;
+namespace RectorPrefix20210716;
 
 use Rector\Doctrine\Rector\Class_\AddEntityIdByConditionRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;

@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210715;
+namespace RectorPrefix20210716;
 
 if (\class_exists('Tx_Extbase_Object_Exception_WrongScope')) {
     return;

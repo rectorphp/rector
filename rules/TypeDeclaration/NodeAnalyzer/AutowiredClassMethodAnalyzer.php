@@ -6,7 +6,7 @@ namespace Rector\TypeDeclaration\NodeAnalyzer;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\NodeNameResolver\NodeNameResolver;
-use RectorPrefix20210715\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix20210716\Symfony\Contracts\Service\Attribute\Required;
 final class AutowiredClassMethodAnalyzer
 {
     /**
@@ -30,7 +30,7 @@ final class AutowiredClassMethodAnalyzer
         }
         foreach ($classMethod->attrGroups as $attrGroup) {
             foreach ($attrGroup->attrs as $attribute) {
-                if ($this->nodeNameResolver->isNames($attribute->name, [\RectorPrefix20210715\Symfony\Contracts\Service\Attribute\Required::class, 'Nette\\DI\\Attributes\\Inject'])) {
+                if ($this->nodeNameResolver->isNames($attribute->name, [\RectorPrefix20210716\Symfony\Contracts\Service\Attribute\Required::class, 'Nette\\DI\\Attributes\\Inject'])) {
                     return \true;
                 }
             }

@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\Privatization\Rector\ClassMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
@@ -85,7 +86,7 @@ CODE_SAMPLE
         if (!$classLike instanceof \PhpParser\Node\Stmt\Class_) {
             return null;
         }
-        $this->collectGlobalVariableNamesAndRefactorToPropertyFetch($node);
+        $this->collectGlobalVariableNamesAndRefactorToPropertyFetch($classLike, $node);
         if ($this->globalVariableNames === []) {
             return null;
         }
@@ -94,12 +95,12 @@ CODE_SAMPLE
         }
         return $node;
     }
-    private function collectGlobalVariableNamesAndRefactorToPropertyFetch(\PhpParser\Node\Stmt\ClassMethod $classMethod) : void
+    private function collectGlobalVariableNamesAndRefactorToPropertyFetch(\PhpParser\Node\Stmt\Class_ $class, \PhpParser\Node\Stmt\ClassMethod $classMethod) : void
     {
         $this->globalVariableNames = [];
-        $this->traverseNodesWithCallable($classMethod, function (\PhpParser\Node $node) : ?PropertyFetch {
+        $this->traverseNodesWithCallable($classMethod, function (\PhpParser\Node $node) use($class) : ?PropertyFetch {
             if ($node instanceof \PhpParser\Node\Stmt\Global_) {
-                $this->refactorGlobal($node);
+                $this->refactorGlobal($class, $node);
                 return null;
             }
             if ($node instanceof \PhpParser\Node\Expr\Variable) {
@@ -108,11 +109,14 @@ CODE_SAMPLE
             return null;
         });
     }
-    private function refactorGlobal(\PhpParser\Node\Stmt\Global_ $global) : void
+    private function refactorGlobal(\PhpParser\Node\Stmt\Class_ $class, \PhpParser\Node\Stmt\Global_ $global) : void
     {
         foreach ($global->vars as $var) {
             $varName = $this->getName($var);
             if ($varName === null) {
+                return;
+            }
+            if ($this->isReadOnly($class, $varName)) {
                 return;
             }
             $this->globalVariableNames[] = $varName;
@@ -130,5 +134,28 @@ CODE_SAMPLE
             return null;
         }
         return $this->nodeFactory->createPropertyFetch('this', $variableName);
+    }
+    private function isReadOnly(\PhpParser\Node\Stmt\Class_ $class, string $globalVariableName) : bool
+    {
+        /** @var ClassMethod[] $classMethods */
+        $classMethods = $this->betterNodeFinder->findInstanceOf($class, \PhpParser\Node\Stmt\ClassMethod::class);
+        foreach ($classMethods as $classMethod) {
+            $isReAssign = (bool) $this->betterNodeFinder->findFirst((array) $classMethod->stmts, function (\PhpParser\Node $node) use($globalVariableName) : bool {
+                if (!$node instanceof \PhpParser\Node\Expr\Assign) {
+                    return \false;
+                }
+                if ($node->var instanceof \PhpParser\Node\Expr\Variable) {
+                    return $this->nodeNameResolver->isName($node->var, $globalVariableName);
+                }
+                if ($node->var instanceof \PhpParser\Node\Expr\PropertyFetch) {
+                    return $this->nodeNameResolver->isName($node->var, $globalVariableName);
+                }
+                return \false;
+            });
+            if ($isReAssign) {
+                return \false;
+            }
+        }
+        return \true;
     }
 }

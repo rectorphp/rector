@@ -1,25 +1,25 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210715\Idiosyncratic\EditorConfig\Declaration;
+namespace RectorPrefix20210716\Idiosyncratic\EditorConfig\Declaration;
 
 use DomainException;
-use RectorPrefix20210715\PHPUnit\Framework\TestCase;
+use RectorPrefix20210716\PHPUnit\Framework\TestCase;
 use RuntimeException;
-class EndOfLineTest extends \RectorPrefix20210715\PHPUnit\Framework\TestCase
+class EndOfLineTest extends \RectorPrefix20210716\PHPUnit\Framework\TestCase
 {
     public function testValidValues()
     {
-        foreach (\RectorPrefix20210715\Idiosyncratic\EditorConfig\Declaration\EndOfLine::LINE_ENDINGS as $eol) {
-            $declaration = new \RectorPrefix20210715\Idiosyncratic\EditorConfig\Declaration\EndOfLine($eol);
+        foreach (\RectorPrefix20210716\Idiosyncratic\EditorConfig\Declaration\EndOfLine::LINE_ENDINGS as $eol) {
+            $declaration = new \RectorPrefix20210716\Idiosyncratic\EditorConfig\Declaration\EndOfLine($eol);
             $this->assertEquals(\sprintf('end_of_line=%s', $eol), (string) $declaration);
         }
     }
     public function testInvalidValues()
     {
         $this->expectException(\DomainException::class);
-        $declaration = new \RectorPrefix20210715\Idiosyncratic\EditorConfig\Declaration\EndOfLine('true');
+        $declaration = new \RectorPrefix20210716\Idiosyncratic\EditorConfig\Declaration\EndOfLine('true');
         $this->expectException(\DomainException::class);
-        $declaration = new \RectorPrefix20210715\Idiosyncratic\EditorConfig\Declaration\EndOfLine('spaces');
+        $declaration = new \RectorPrefix20210716\Idiosyncratic\EditorConfig\Declaration\EndOfLine('spaces');
     }
 }
