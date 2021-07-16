@@ -20,7 +20,7 @@ final class FileWithoutNamespaceTest extends AbstractRectorTestCase
     public function test(
         SmartFileInfo $originalFileInfo,
         array $expectedFilePathsWithContents,
-        bool $expectedOriginalFileWasRemoved
+        bool $expectedOriginalFileWasRemoved = true
     ): void {
         $this->doTestFileInfo($originalFileInfo);
 
