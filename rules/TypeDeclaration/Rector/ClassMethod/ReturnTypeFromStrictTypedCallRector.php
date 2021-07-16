@@ -21,11 +21,13 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\UnionType;
+use PHPStan\Type\VoidType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
 use Rector\TypeDeclaration\NodeAnalyzer\TypeNodeUnwrapper;
+use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -41,10 +43,15 @@ final class ReturnTypeFromStrictTypedCallRector extends \Rector\Core\Rector\Abst
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
-    public function __construct(\Rector\TypeDeclaration\NodeAnalyzer\TypeNodeUnwrapper $typeNodeUnwrapper, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver)
+    /**
+     * @var \Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer
+     */
+    private $returnTypeInferer;
+    public function __construct(\Rector\TypeDeclaration\NodeAnalyzer\TypeNodeUnwrapper $typeNodeUnwrapper, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver, \Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer $returnTypeInferer)
     {
         $this->typeNodeUnwrapper = $typeNodeUnwrapper;
         $this->reflectionResolver = $reflectionResolver;
+        $this->returnTypeInferer = $returnTypeInferer;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -93,6 +100,9 @@ CODE_SAMPLE
         if ($this->isSkipped($node)) {
             return null;
         }
+        if ($this->isUnionPossibleReturnsVoid($node)) {
+            return null;
+        }
         /** @var Return_[] $returns */
         $returns = $this->betterNodeFinder->find((array) $node->stmts, function (\PhpParser\Node $n) use($node) {
             $currentFunctionLike = $this->betterNodeFinder->findParentType($n, \PhpParser\Node\FunctionLike::class);
@@ -124,6 +134,21 @@ CODE_SAMPLE
             return $node;
         }
         return null;
+    }
+    /**
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $node
+     */
+    private function isUnionPossibleReturnsVoid($node) : bool
+    {
+        $inferReturnType = $this->returnTypeInferer->inferFunctionLike($node);
+        if ($inferReturnType instanceof \PHPStan\Type\UnionType) {
+            foreach ($inferReturnType->getTypes() as $type) {
+                if ($type instanceof \PHPStan\Type\VoidType) {
+                    return \true;
+                }
+            }
+        }
+        return \false;
     }
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $node

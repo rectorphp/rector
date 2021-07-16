@@ -66,7 +66,6 @@ final class BetterNodeFinder
     /**
      * @template T of Node
      * @param class-string<T> $type
-     * @return T|null
      */
     public function findParentType(\PhpParser\Node $node, string $type) : ?\PhpParser\Node
     {
@@ -114,7 +113,6 @@ final class BetterNodeFinder
      * @template T of Node
      * @param class-string<T> $type
      * @param Node|Node[] $nodes
-     * @return T|null
      */
     public function findFirstInstanceOf($nodes, string $type) : ?\PhpParser\Node
     {
@@ -186,7 +184,6 @@ final class BetterNodeFinder
      * @template T of Node
      * @param class-string<T> $type
      * @param Node|Node[] $nodes
-     * @return T|null
      */
     public function findLastInstanceOf($nodes, string $type) : ?\PhpParser\Node
     {
@@ -302,7 +299,6 @@ final class BetterNodeFinder
     /**
      * @template T of Node
      * @param array<class-string<T>> $types
-     * @return T|null
      */
     public function findFirstPreviousOfTypes(\PhpParser\Node $mainNode, array $types) : ?\PhpParser\Node
     {
@@ -349,10 +345,9 @@ final class BetterNodeFinder
                 return [];
             }
             $variables = $this->findInstancesOf($scopeNode, [\PhpParser\Node\Expr\Variable::class]);
-            $foundVariables = \array_filter($variables, function (\PhpParser\Node\Expr\Variable $variable) use($exprName) {
+            return \array_filter($variables, function (\PhpParser\Node\Expr\Variable $variable) use($exprName) {
                 return $this->nodeNameResolver->isName($variable, $exprName);
             });
-            return $foundVariables;
         }
         if ($expr instanceof \PhpParser\Node\Stmt\Property) {
             $singleProperty = $expr->props[0];
@@ -366,16 +361,14 @@ final class BetterNodeFinder
             return [];
         }
         $propertyFetches = $this->findInstancesOf($scopeNode, [\PhpParser\Node\Expr\PropertyFetch::class, \PhpParser\Node\Expr\StaticPropertyFetch::class]);
-        $foundProperties = \array_filter($propertyFetches, function ($propertyFetch) use($exprName) {
+        return \array_filter($propertyFetches, function ($propertyFetch) use($exprName) {
             return $this->nodeNameResolver->isName($propertyFetch->name, $exprName);
         });
-        return $foundProperties;
     }
     /**
      * @template T of Node
      * @param Node|Node[] $nodes
      * @param class-string<T> $type
-     * @return T|null
      */
     private function findInstanceOfName($nodes, string $type, string $name) : ?\PhpParser\Node
     {
