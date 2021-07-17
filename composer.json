@@ -24,7 +24,7 @@
         "phpstan/phpstan-phpunit": "^0.12.20",
         "rector/extension-installer": "^0.10.2",
         "rector/rector-cakephp": "^0.11.3",
-        "rector/rector-doctrine": "^0.11.9",
+        "rector/rector-doctrine": "^0.11.13",
         "rector/rector-laravel": "dev-main",
         "rector/rector-nette": "dev-main",
         "rector/rector-phpunit": "dev-main",
