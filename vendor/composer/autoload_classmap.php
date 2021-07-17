@@ -3115,6 +3115,7 @@ return array(
     'Rector\\TypeDeclaration\\NodeAnalyzer\\CallTypesResolver' => $baseDir . '/rules/TypeDeclaration/NodeAnalyzer/CallTypesResolver.php',
     'Rector\\TypeDeclaration\\NodeAnalyzer\\ClassMethodAndPropertyAnalyzer' => $baseDir . '/rules/TypeDeclaration/NodeAnalyzer/ClassMethodAndPropertyAnalyzer.php',
     'Rector\\TypeDeclaration\\NodeAnalyzer\\ClassMethodParamTypeCompleter' => $baseDir . '/rules/TypeDeclaration/NodeAnalyzer/ClassMethodParamTypeCompleter.php',
+    'Rector\\TypeDeclaration\\NodeAnalyzer\\ReturnStrictTypeAnalyzer' => $baseDir . '/rules/TypeDeclaration/NodeAnalyzer/ReturnStrictTypeAnalyzer.php',
     'Rector\\TypeDeclaration\\NodeAnalyzer\\TypeNodeUnwrapper' => $baseDir . '/rules/TypeDeclaration/NodeAnalyzer/TypeNodeUnwrapper.php',
     'Rector\\TypeDeclaration\\NodeTypeAnalyzer\\CallTypeAnalyzer' => $baseDir . '/rules/TypeDeclaration/NodeTypeAnalyzer/CallTypeAnalyzer.php',
     'Rector\\TypeDeclaration\\NodeTypeAnalyzer\\ChildTypeResolver' => $baseDir . '/rules/TypeDeclaration/NodeTypeAnalyzer/ChildTypeResolver.php',

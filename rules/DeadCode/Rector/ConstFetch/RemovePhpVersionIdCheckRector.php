@@ -94,11 +94,13 @@ CODE_SAMPLE
         // ensure cast to (string) first to allow string like "8.0" value to be converted to the int value
         $this->phpVersionConstraint = $this->phpVersionFactory->createIntVersion((string) $phpVersionConstraint);
         $if = $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Stmt\If_::class);
+        if (!$if instanceof \PhpParser\Node\Stmt\If_) {
+            return null;
+        }
         $parent = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
         if ($this->shouldSkip($node, $if, $parent)) {
             return null;
         }
-        /** @var If_ $if */
         if ($parent instanceof \PhpParser\Node\Expr\BinaryOp\Smaller) {
             return $this->processSmaller($node, $parent, $if);
         }

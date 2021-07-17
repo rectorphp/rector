@@ -26,6 +26,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
+use Rector\TypeDeclaration\NodeAnalyzer\ReturnStrictTypeAnalyzer;
 use Rector\TypeDeclaration\NodeAnalyzer\TypeNodeUnwrapper;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -40,17 +41,17 @@ final class ReturnTypeFromStrictTypedCallRector extends \Rector\Core\Rector\Abst
      */
     private $typeNodeUnwrapper;
     /**
-     * @var \Rector\Core\Reflection\ReflectionResolver
+     * @var \Rector\TypeDeclaration\NodeAnalyzer\ReturnStrictTypeAnalyzer
      */
-    private $reflectionResolver;
+    private $returnStrictTypeAnalyzer;
     /**
      * @var \Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer
      */
     private $returnTypeInferer;
-    public function __construct(\Rector\TypeDeclaration\NodeAnalyzer\TypeNodeUnwrapper $typeNodeUnwrapper, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver, \Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer $returnTypeInferer)
+    public function __construct(\Rector\TypeDeclaration\NodeAnalyzer\TypeNodeUnwrapper $typeNodeUnwrapper, \Rector\TypeDeclaration\NodeAnalyzer\ReturnStrictTypeAnalyzer $returnStrictTypeAnalyzer, \Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer $returnTypeInferer)
     {
         $this->typeNodeUnwrapper = $typeNodeUnwrapper;
-        $this->reflectionResolver = $reflectionResolver;
+        $this->returnStrictTypeAnalyzer = $returnStrictTypeAnalyzer;
         $this->returnTypeInferer = $returnTypeInferer;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
@@ -119,7 +120,7 @@ CODE_SAMPLE
             }
             return $n instanceof \PhpParser\Node\Stmt\Return_;
         });
-        $returnedStrictTypes = $this->collectStrictReturnTypes($returns);
+        $returnedStrictTypes = $this->returnStrictTypeAnalyzer->collectStrictReturnTypes($returns);
         if ($returnedStrictTypes === []) {
             return null;
         }
@@ -173,46 +174,6 @@ CODE_SAMPLE
             return \true;
         }
         return $node instanceof \PhpParser\Node\Stmt\ClassMethod && $node->isMagic();
-    }
-    /**
-     * @param Return_[] $returns
-     * @return array<Identifier|Name|NullableType|PhpParserUnionType>
-     */
-    private function collectStrictReturnTypes(array $returns) : array
-    {
-        $returnedStrictTypeNodes = [];
-        foreach ($returns as $return) {
-            if ($return->expr === null) {
-                return [];
-            }
-            $returnedExpr = $return->expr;
-            if ($returnedExpr instanceof \PhpParser\Node\Expr\MethodCall || $returnedExpr instanceof \PhpParser\Node\Expr\StaticCall || $returnedExpr instanceof \PhpParser\Node\Expr\FuncCall) {
-                $returnNode = $this->resolveMethodCallReturnNode($returnedExpr);
-            } else {
-                return [];
-            }
-            if (!$returnNode instanceof \PhpParser\Node) {
-                return [];
-            }
-            $returnedStrictTypeNodes[] = $returnNode;
-        }
-        return $this->typeNodeUnwrapper->uniquateNodes($returnedStrictTypeNodes);
-    }
-    /**
-     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\FuncCall $call
-     */
-    private function resolveMethodCallReturnNode($call) : ?\PhpParser\Node
-    {
-        $methodReflection = $this->reflectionResolver->resolveFunctionLikeReflectionFromCall($call);
-        if ($methodReflection === null) {
-            return null;
-        }
-        $parametersAcceptor = $methodReflection->getVariants()[0];
-        $returnType = $parametersAcceptor->getReturnType();
-        if ($returnType instanceof \PHPStan\Type\MixedType) {
-            return null;
-        }
-        return $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($returnType, \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind::RETURN());
     }
     /**
      * @param \PhpParser\Node\Identifier|\PhpParser\Node\Name|\PhpParser\Node\NullableType|PhpParserUnionType $returnedStrictTypeNode
