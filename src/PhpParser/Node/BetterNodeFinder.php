@@ -355,7 +355,7 @@ final class BetterNodeFinder
         } elseif ($expr instanceof \PhpParser\Node\Expr\StaticPropertyFetch || $expr instanceof \PhpParser\Node\Expr\PropertyFetch) {
             $exprName = $this->nodeNameResolver->getName($expr->name);
         } else {
-            throw new \Rector\Core\Exception\NotImplementedYetException();
+            return [];
         }
         if ($exprName === null) {
             return [];
