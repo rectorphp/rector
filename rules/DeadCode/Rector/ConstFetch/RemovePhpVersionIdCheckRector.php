@@ -109,12 +109,15 @@ CODE_SAMPLE
         $this->phpVersionConstraint = $this->phpVersionFactory->createIntVersion((string) $phpVersionConstraint);
 
         $if = $this->betterNodeFinder->findParentType($node, If_::class);
+        if (! $if instanceof If_) {
+            return null;
+        }
+
         $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
         if ($this->shouldSkip($node, $if, $parent)) {
             return null;
         }
 
-        /** @var If_ $if */
         if ($parent instanceof Smaller) {
             return $this->processSmaller($node, $parent, $if);
         }

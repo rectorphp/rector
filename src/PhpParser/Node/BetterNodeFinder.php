@@ -44,6 +44,7 @@ final class BetterNodeFinder
     /**
      * @template T of Node
      * @param class-string<T> $type
+     * @return T|null
      */
     public function findParentType(Node $node, string $type): ?Node
     {

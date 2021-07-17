@@ -27,6 +27,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
+use Rector\TypeDeclaration\NodeAnalyzer\ReturnStrictTypeAnalyzer;
 use Rector\TypeDeclaration\NodeAnalyzer\TypeNodeUnwrapper;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -39,7 +40,7 @@ final class ReturnTypeFromStrictTypedCallRector extends AbstractRector
 {
     public function __construct(
         private TypeNodeUnwrapper $typeNodeUnwrapper,
-        private ReflectionResolver $reflectionResolver,
+        private ReturnStrictTypeAnalyzer $returnStrictTypeAnalyzer,
         private ReturnTypeInferer $returnTypeInferer
     ) {
     }
@@ -123,7 +124,7 @@ CODE_SAMPLE
             return $n instanceof Return_;
         });
 
-        $returnedStrictTypes = $this->collectStrictReturnTypes($returns);
+        $returnedStrictTypes = $this->returnStrictTypeAnalyzer->collectStrictReturnTypes($returns);
         if ($returnedStrictTypes === []) {
             return null;
         }
@@ -184,52 +185,7 @@ CODE_SAMPLE
         return $node instanceof ClassMethod && $node->isMagic();
     }
 
-    /**
-     * @param Return_[] $returns
-     * @return array<Identifier|Name|NullableType|PhpParserUnionType>
-     */
-    private function collectStrictReturnTypes(array $returns): array
-    {
-        $returnedStrictTypeNodes = [];
 
-        foreach ($returns as $return) {
-            if ($return->expr === null) {
-                return [];
-            }
-
-            $returnedExpr = $return->expr;
-
-            if ($returnedExpr instanceof MethodCall || $returnedExpr instanceof StaticCall || $returnedExpr instanceof FuncCall) {
-                $returnNode = $this->resolveMethodCallReturnNode($returnedExpr);
-            } else {
-                return [];
-            }
-
-            if (! $returnNode instanceof Node) {
-                return [];
-            }
-
-            $returnedStrictTypeNodes[] = $returnNode;
-        }
-
-        return $this->typeNodeUnwrapper->uniquateNodes($returnedStrictTypeNodes);
-    }
-
-    private function resolveMethodCallReturnNode(MethodCall | StaticCall | FuncCall $call): ?Node
-    {
-        $methodReflection = $this->reflectionResolver->resolveFunctionLikeReflectionFromCall($call);
-        if ($methodReflection === null) {
-            return null;
-        }
-
-        $parametersAcceptor = $methodReflection->getVariants()[0];
-        $returnType = $parametersAcceptor->getReturnType();
-        if ($returnType instanceof MixedType) {
-            return null;
-        }
-
-        return $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($returnType, TypeKind::RETURN());
-    }
 
     private function refactorSingleReturnType(
         Return_ $return,
