@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210716;
+namespace RectorPrefix20210717;
 
 if (\class_exists('tx_form_Domain_Model_JSON_Button')) {
     return;

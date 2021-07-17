@@ -9,8 +9,8 @@ use Rector\Core\Contract\Processor\FileProcessorInterface;
 use Rector\Core\ValueObject\Application\File;
 use Rector\Core\ValueObject\Configuration;
 use Rector\FileFormatter\FileFormatter;
-use RectorPrefix20210716\Symfony\Component\Console\Style\SymfonyStyle;
-use RectorPrefix20210716\Symplify\SmartFileSystem\SmartFileSystem;
+use RectorPrefix20210717\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix20210717\Symplify\SmartFileSystem\SmartFileSystem;
 final class ApplicationFileProcessor
 {
     /**
@@ -40,7 +40,7 @@ final class ApplicationFileProcessor
     /**
      * @param FileProcessorInterface[] $fileProcessors
      */
-    public function __construct(\RectorPrefix20210716\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \Rector\Core\Application\FileDecorator\FileDiffFileDecorator $fileDiffFileDecorator, \Rector\FileFormatter\FileFormatter $fileFormatter, \Rector\Core\Application\FileSystem\RemovedAndAddedFilesProcessor $removedAndAddedFilesProcessor, \RectorPrefix20210716\Symfony\Component\Console\Style\SymfonyStyle $symfonyStyle, array $fileProcessors = [])
+    public function __construct(\RectorPrefix20210717\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \Rector\Core\Application\FileDecorator\FileDiffFileDecorator $fileDiffFileDecorator, \Rector\FileFormatter\FileFormatter $fileFormatter, \Rector\Core\Application\FileSystem\RemovedAndAddedFilesProcessor $removedAndAddedFilesProcessor, \RectorPrefix20210717\Symfony\Component\Console\Style\SymfonyStyle $symfonyStyle, array $fileProcessors = [])
     {
         $this->smartFileSystem = $smartFileSystem;
         $this->fileDiffFileDecorator = $fileDiffFileDecorator;
@@ -64,7 +64,7 @@ final class ApplicationFileProcessor
      */
     private function processFiles(array $files, \Rector\Core\ValueObject\Configuration $configuration) : void
     {
-        if ($configuration->shouldShowDiffs()) {
+        if ($configuration->shouldShowProgressBar()) {
             $fileCount = \count($files);
             $this->symfonyStyle->progressStart($fileCount);
         }

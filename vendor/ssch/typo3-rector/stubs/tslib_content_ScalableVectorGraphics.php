@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210716;
+namespace RectorPrefix20210717;
 
 if (\class_exists('tslib_content_ScalableVectorGraphics')) {
     return;

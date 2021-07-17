@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210716\ApacheSolrForTypo3\Solr\System\Solr;
+namespace RectorPrefix20210717\ApacheSolrForTypo3\Solr\System\Solr;
 
 if (\class_exists('ApacheSolrForTypo3\\Solr\\System\\Solr\\ResponseAdapter')) {
     return;
