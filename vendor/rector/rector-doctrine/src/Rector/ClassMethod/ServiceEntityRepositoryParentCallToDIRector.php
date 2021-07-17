@@ -10,7 +10,6 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\ObjectType;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\NodeManipulator\ClassDependencyManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
@@ -113,10 +112,13 @@ CODE_SAMPLE
         if (!$classLike instanceof \PhpParser\Node\Stmt\Class_) {
             return null;
         }
-        // 1. remove params
-        $node->params = [];
-        // 2. remove parent::__construct()
+        // 1. remove parent::__construct()
         $entityReferenceExpr = $this->removeParentConstructAndCollectEntityReference($node);
+        if ($entityReferenceExpr === null) {
+            return null;
+        }
+        // 2. remove params
+        $node->params = [];
         // 3. add $entityManager->getRepository() fetch assign
         $repositoryAssign = $this->repositoryNodeFactory->createRepositoryAssign($entityReferenceExpr);
         $entityManagerObjectType = new \PHPStan\Type\ObjectType('Doctrine\\ORM\\EntityManagerInterface');
@@ -143,7 +145,7 @@ CODE_SAMPLE
         }
         return !$classReflection->isSubclassOf('Doctrine\\Bundle\\DoctrineBundle\\Repository\\ServiceEntityRepository');
     }
-    private function removeParentConstructAndCollectEntityReference(\PhpParser\Node\Stmt\ClassMethod $classMethod) : \PhpParser\Node\Expr
+    private function removeParentConstructAndCollectEntityReference(\PhpParser\Node\Stmt\ClassMethod $classMethod) : ?\PhpParser\Node\Expr
     {
         $entityReferenceExpr = null;
         $this->traverseNodesWithCallable((array) $classMethod->stmts, function (\PhpParser\Node $node) use(&$entityReferenceExpr) {
@@ -157,7 +159,7 @@ CODE_SAMPLE
             $this->removeNode($node);
         });
         if ($entityReferenceExpr === null) {
-            throw new \Rector\Core\Exception\ShouldNotHappenException();
+            return null;
         }
         return $entityReferenceExpr;
     }

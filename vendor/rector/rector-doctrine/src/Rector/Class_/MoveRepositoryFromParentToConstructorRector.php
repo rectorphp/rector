@@ -90,6 +90,9 @@ CODE_SAMPLE
         if (!$this->isObjectType($node, new \PHPStan\Type\ObjectType('Doctrine\\ORM\\EntityRepository'))) {
             return null;
         }
+        if ($node->extends === null) {
+            return null;
+        }
         // remove parent class
         $node->extends = null;
         $entityObjectType = $this->entityObjectTypeResolver->resolveFromRepositoryClass($node);

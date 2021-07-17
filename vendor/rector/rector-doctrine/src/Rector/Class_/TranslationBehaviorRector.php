@@ -133,6 +133,9 @@ CODE_SAMPLE
         if (!$translatableObjectType->isSuperTypeOf($classType)->yes()) {
             return null;
         }
+        if (!$this->hasImplements($node)) {
+            return null;
+        }
         $this->classManipulator->removeInterface($node, 'Gedmo\\Translatable\\Translatable');
         $this->classInsertManipulator->addAsFirstTrait($node, 'Knp\\DoctrineBehaviors\\Model\\Translatable\\TranslatableTrait');
         $node->implements[] = new \PhpParser\Node\Name\FullyQualified('Knp\\DoctrineBehaviors\\Contract\\Entity\\TranslatableInterface');
@@ -179,5 +182,14 @@ CODE_SAMPLE
         $namespace->stmts[] = $class;
         $addedFileWithNodes = new \Rector\FileSystemRector\ValueObject\AddedFileWithNodes($filePath, [$namespace]);
         $this->removedAndAddedFilesCollector->addAddedFile($addedFileWithNodes);
+    }
+    private function hasImplements(\PhpParser\Node\Stmt\Class_ $class) : bool
+    {
+        foreach ($class->implements as $implement) {
+            if ($this->isName($implement, 'Gedmo\\Translatable\\Translatable')) {
+                return \true;
+            }
+        }
+        return \false;
     }
 }
