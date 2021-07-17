@@ -1481,8 +1481,8 @@
         },
         {
             "name": "rector\/rector-symfony",
-            "version": "0.11.8",
-            "version_normalized": "0.11.8.0",
+            "version": "0.11.9",
+            "version_normalized": "0.11.9.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-symfony.git",
@@ -1539,7 +1539,7 @@
             "description": "Rector upgrades rules for Symfony Framework",
             "support": {
                 "issues": "https:\/\/github.com\/rectorphp\/rector-symfony\/issues",
-                "source": "https:\/\/github.com\/rectorphp\/rector-symfony\/tree\/0.11.8"
+                "source": "https:\/\/github.com\/rectorphp\/rector-symfony\/tree\/0.11.9"
             },
             "install-path": "..\/rector\/rector-symfony"
         },
