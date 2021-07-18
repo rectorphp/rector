@@ -15,7 +15,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\TypeDeclaration\NodeAnalyzer\AutowiredClassMethodAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20210717\Webmozart\Assert\Assert;
+use RectorPrefix20210718\Webmozart\Assert\Assert;
 /**
  * @changelog https://www.php.net/manual/en/migration72.new-features.php#migration72.new-features.param-type-widening
  * @see https://3v4l.org/fOgSE
@@ -139,13 +139,13 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $safeTypes = $configuration[self::SAFE_TYPES] ?? [];
-        \RectorPrefix20210717\Webmozart\Assert\Assert::allString($safeTypes);
+        \RectorPrefix20210718\Webmozart\Assert\Assert::allString($safeTypes);
         $this->safeTypes = $safeTypes;
         $safeTypesToMethods = $configuration[self::SAFE_TYPES_TO_METHODS] ?? [];
-        \RectorPrefix20210717\Webmozart\Assert\Assert::isArray($safeTypesToMethods);
+        \RectorPrefix20210718\Webmozart\Assert\Assert::isArray($safeTypesToMethods);
         foreach ($safeTypesToMethods as $key => $value) {
-            \RectorPrefix20210717\Webmozart\Assert\Assert::string($key);
-            \RectorPrefix20210717\Webmozart\Assert\Assert::allString($value);
+            \RectorPrefix20210718\Webmozart\Assert\Assert::string($key);
+            \RectorPrefix20210718\Webmozart\Assert\Assert::allString($value);
         }
         $this->safeTypesToMethods = $safeTypesToMethods;
     }

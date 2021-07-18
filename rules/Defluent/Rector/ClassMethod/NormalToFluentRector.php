@@ -14,7 +14,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Defluent\ValueObject\NormalToFluent;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20210717\Webmozart\Assert\Assert;
+use RectorPrefix20210718\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Defluent\Rector\ClassMethod\NormalToFluentRector\NormalToFluentRectorTest
  */
@@ -100,7 +100,7 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $callsToFluent = $configuration[self::CALLS_TO_FLUENT] ?? [];
-        \RectorPrefix20210717\Webmozart\Assert\Assert::allIsInstanceOf($callsToFluent, \Rector\Defluent\ValueObject\NormalToFluent::class);
+        \RectorPrefix20210718\Webmozart\Assert\Assert::allIsInstanceOf($callsToFluent, \Rector\Defluent\ValueObject\NormalToFluent::class);
         $this->callsToFluent = $callsToFluent;
     }
     private function shouldSkipPreviousStmt(\PhpParser\Node\Stmt\ClassMethod $classMethod, int $i) : bool

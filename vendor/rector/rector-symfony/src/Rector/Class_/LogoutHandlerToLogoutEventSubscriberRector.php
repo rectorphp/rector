@@ -95,6 +95,9 @@ CODE_SAMPLE
         if (!$this->isObjectType($node, $this->logoutHandlerObjectType)) {
             return null;
         }
+        if (!$this->hasImplements($node)) {
+            return null;
+        }
         $this->refactorImplements($node);
         // 2. refactor logout() class method to onLogout()
         $logoutClassMethod = $node->getMethod('logout');
@@ -119,5 +122,14 @@ CODE_SAMPLE
             }
             unset($class->implements[$key]);
         }
+    }
+    private function hasImplements(\PhpParser\Node\Stmt\Class_ $class) : bool
+    {
+        foreach ($class->implements as $implement) {
+            if ($this->isName($implement, 'Symfony\\Component\\Security\\Http\\Logout\\LogoutHandlerInterface')) {
+                return \true;
+            }
+        }
+        return \false;
     }
 }

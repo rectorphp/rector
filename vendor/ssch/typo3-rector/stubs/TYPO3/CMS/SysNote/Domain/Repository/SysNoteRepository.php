@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210717\TYPO3\CMS\SysNote\Domain\Repository;
+namespace RectorPrefix20210718\TYPO3\CMS\SysNote\Domain\Repository;
 
 if (\class_exists('TYPO3\\CMS\\SysNote\\Domain\\Repository\\SysNoteRepository')) {
     return;

@@ -99,7 +99,7 @@ CODE_SAMPLE
             return null;
         }
         /** @var Return_[] $returns */
-        $returns = $this->betterNodeFinder->find((array) $node->stmts, function (\PhpParser\Node $n) use($node) {
+        $returns = $this->betterNodeFinder->find((array) $node->stmts, function (\PhpParser\Node $n) use($node) : bool {
             $currentFunctionLike = $this->betterNodeFinder->findParentType($n, \PhpParser\Node\FunctionLike::class);
             if ($currentFunctionLike === $node) {
                 return $n instanceof \PhpParser\Node\Stmt\Return_;

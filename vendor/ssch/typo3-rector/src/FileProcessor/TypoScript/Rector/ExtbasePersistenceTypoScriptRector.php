@@ -3,15 +3,15 @@
 declare (strict_types=1);
 namespace Ssch\TYPO3Rector\FileProcessor\TypoScript\Rector;
 
-use RectorPrefix20210717\Helmich\TypoScriptParser\Parser\AST\Operator\Assignment;
-use RectorPrefix20210717\Helmich\TypoScriptParser\Parser\AST\Scalar as ScalarValue;
-use RectorPrefix20210717\Helmich\TypoScriptParser\Parser\AST\Statement;
-use RectorPrefix20210717\Nette\Utils\Strings;
+use RectorPrefix20210718\Helmich\TypoScriptParser\Parser\AST\Operator\Assignment;
+use RectorPrefix20210718\Helmich\TypoScriptParser\Parser\AST\Scalar as ScalarValue;
+use RectorPrefix20210718\Helmich\TypoScriptParser\Parser\AST\Statement;
+use RectorPrefix20210718\Nette\Utils\Strings;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\FileSystemRector\ValueObject\AddedFileWithContent;
 use Ssch\TYPO3Rector\Contract\FileProcessor\TypoScript\ConvertToPhpFileInterface;
 use Ssch\TYPO3Rector\Template\TemplateFinder;
-use RectorPrefix20210717\Symfony\Component\VarExporter\VarExporter;
+use RectorPrefix20210718\Symfony\Component\VarExporter\VarExporter;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -46,12 +46,12 @@ final class ExtbasePersistenceTypoScriptRector extends \Ssch\TYPO3Rector\FilePro
         $this->filename = \getcwd() . '/Configuration_Extbase_Persistence_Classes.php';
         $this->fileTemplate = $templateFinder->getExtbasePersistenceConfiguration();
     }
-    public function enterNode(\RectorPrefix20210717\Helmich\TypoScriptParser\Parser\AST\Statement $statement) : void
+    public function enterNode(\RectorPrefix20210718\Helmich\TypoScriptParser\Parser\AST\Statement $statement) : void
     {
-        if (!$statement instanceof \RectorPrefix20210717\Helmich\TypoScriptParser\Parser\AST\Operator\Assignment) {
+        if (!$statement instanceof \RectorPrefix20210718\Helmich\TypoScriptParser\Parser\AST\Operator\Assignment) {
             return;
         }
-        if (!\RectorPrefix20210717\Nette\Utils\Strings::contains($statement->object->absoluteName, 'persistence.classes')) {
+        if (!\RectorPrefix20210718\Nette\Utils\Strings::contains($statement->object->absoluteName, 'persistence.classes')) {
             return;
         }
         $paths = \explode('.', $statement->object->absoluteName);
@@ -87,8 +87,8 @@ CODE_SAMPLE
         if ([] === self::$persistenceArray) {
             return null;
         }
-        $content = \str_replace('__PERSISTENCE_ARRAY__', \RectorPrefix20210717\Symfony\Component\VarExporter\VarExporter::export(self::$persistenceArray), $this->fileTemplate->getContents());
-        $content = \RectorPrefix20210717\Nette\Utils\Strings::replace($content, "#'(.*\\\\.*)'#mU", function (array $match) : string {
+        $content = \str_replace('__PERSISTENCE_ARRAY__', \RectorPrefix20210718\Symfony\Component\VarExporter\VarExporter::export(self::$persistenceArray), $this->fileTemplate->getContents());
+        $content = \RectorPrefix20210718\Nette\Utils\Strings::replace($content, "#'(.*\\\\.*)'#mU", function (array $match) : string {
             $string = \str_replace('\\\\', '\\', $match[1]);
             return \sprintf('\\%s::class', $string);
         });
@@ -108,7 +108,7 @@ CODE_SAMPLE
     /**
      * @param string[] $paths
      */
-    private function extractSubClasses(array $paths, \RectorPrefix20210717\Helmich\TypoScriptParser\Parser\AST\Operator\Assignment $statement) : void
+    private function extractSubClasses(array $paths, \RectorPrefix20210718\Helmich\TypoScriptParser\Parser\AST\Operator\Assignment $statement) : void
     {
         if (!\in_array(self::SUBCLASSES, $paths, \true)) {
             return;
@@ -124,7 +124,7 @@ CODE_SAMPLE
     /**
      * @param string[] $paths
      */
-    private function extractMapping(string $name, array $paths, \RectorPrefix20210717\Helmich\TypoScriptParser\Parser\AST\Operator\Assignment $statement) : void
+    private function extractMapping(string $name, array $paths, \RectorPrefix20210718\Helmich\TypoScriptParser\Parser\AST\Operator\Assignment $statement) : void
     {
         if (!\in_array($name, $paths, \true)) {
             return;
@@ -140,7 +140,7 @@ CODE_SAMPLE
     /**
      * @param string[] $paths
      */
-    private function extractColumns(array $paths, \RectorPrefix20210717\Helmich\TypoScriptParser\Parser\AST\Operator\Assignment $statement) : void
+    private function extractColumns(array $paths, \RectorPrefix20210718\Helmich\TypoScriptParser\Parser\AST\Operator\Assignment $statement) : void
     {
         if (!\in_array('columns', $paths, \true)) {
             return;

@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210717\Symfony\Component\DependencyInjection\Extension;
+namespace RectorPrefix20210718\Symfony\Component\DependencyInjection\Extension;
 
-use RectorPrefix20210717\Symfony\Component\Config\Definition\ConfigurationInterface;
-use RectorPrefix20210717\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix20210718\Symfony\Component\Config\Definition\ConfigurationInterface;
+use RectorPrefix20210718\Symfony\Component\DependencyInjection\ContainerBuilder;
 /**
  * ConfigurationExtensionInterface is the interface implemented by container extension classes.
  *

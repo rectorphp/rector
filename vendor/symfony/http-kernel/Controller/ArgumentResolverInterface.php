@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210717\Symfony\Component\HttpKernel\Controller;
+namespace RectorPrefix20210718\Symfony\Component\HttpKernel\Controller;
 
-use RectorPrefix20210717\Symfony\Component\HttpFoundation\Request;
+use RectorPrefix20210718\Symfony\Component\HttpFoundation\Request;
 /**
  * An ArgumentResolverInterface instance knows how to determine the
  * arguments for a specific action.

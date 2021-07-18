@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210717\Symplify\SimplePhpDocParser\Exception;
+namespace RectorPrefix20210718\Symplify\SimplePhpDocParser\Exception;
 
 use Exception;
 final class InvalidTraverseException extends \Exception

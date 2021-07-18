@@ -13,7 +13,6 @@ use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Property;
-use PhpParser\Node\Stmt\PropertyProperty;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -25,10 +24,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class AssignArrayToStringRector extends \Rector\Core\Rector\AbstractRector
 {
-    /**
-     * @var PropertyProperty[]
-     */
-    private $emptyStringProperties = [];
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
         return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('String cannot be turned into array by assignment anymore', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
@@ -54,7 +49,7 @@ CODE_SAMPLE
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $defaultExpr = $this->resolveDefaultValueExpr($node);
-        if ($defaultExpr === null) {
+        if (!$defaultExpr instanceof \PhpParser\Node\Expr) {
             return null;
         }
         if (!$this->isEmptyString($defaultExpr)) {
@@ -111,7 +106,7 @@ CODE_SAMPLE
     }
     /**
      * @param \PhpParser\Node\Expr\Assign|\PhpParser\Node\Stmt\Property $node
-     * @return \PhpParser\Node\Stmt\Property|\PhpParser\Node\Expr|\PhpParser\Node\Expr\Assign
+     * @return \PhpParser\Node\Expr|\PhpParser\Node\Stmt\Property
      */
     private function resolveAssignedVar($node)
     {

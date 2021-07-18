@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210717\Symplify\PackageBuilder\Php;
+namespace RectorPrefix20210718\Symplify\PackageBuilder\Php;
 
 final class TypeChecker
 {

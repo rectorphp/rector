@@ -15,7 +15,6 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
-use Rector\Core\NodeAnalyzer\CompactFuncCallAnalyzer;
 use Rector\Core\Php\ReservedKeywordAnalyzer;
 use Rector\Core\PhpParser\Comparing\ConditionSearcher;
 use Rector\Core\Rector\AbstractRector;
@@ -35,10 +34,6 @@ final class RemoveUnusedVariableAssignRector extends \Rector\Core\Rector\Abstrac
      */
     private $reservedKeywordAnalyzer;
     /**
-     * @var \Rector\Core\NodeAnalyzer\CompactFuncCallAnalyzer
-     */
-    private $compactFuncCallAnalyzer;
-    /**
      * @var \Rector\Core\PhpParser\Comparing\ConditionSearcher
      */
     private $conditionSearcher;
@@ -54,10 +49,9 @@ final class RemoveUnusedVariableAssignRector extends \Rector\Core\Rector\Abstrac
      * @var \Rector\DeadCode\NodeAnalyzer\ExprUsedInNextNodeAnalyzer
      */
     private $exprUsedInNextNodeAnalyzer;
-    public function __construct(\Rector\Core\Php\ReservedKeywordAnalyzer $reservedKeywordAnalyzer, \Rector\Core\NodeAnalyzer\CompactFuncCallAnalyzer $compactFuncCallAnalyzer, \Rector\Core\PhpParser\Comparing\ConditionSearcher $conditionSearcher, \Rector\DeadCode\NodeAnalyzer\UsedVariableNameAnalyzer $usedVariableNameAnalyzer, \Rector\DeadCode\SideEffect\PureFunctionDetector $pureFunctionDetector, \Rector\DeadCode\NodeAnalyzer\ExprUsedInNextNodeAnalyzer $exprUsedInNextNodeAnalyzer)
+    public function __construct(\Rector\Core\Php\ReservedKeywordAnalyzer $reservedKeywordAnalyzer, \Rector\Core\PhpParser\Comparing\ConditionSearcher $conditionSearcher, \Rector\DeadCode\NodeAnalyzer\UsedVariableNameAnalyzer $usedVariableNameAnalyzer, \Rector\DeadCode\SideEffect\PureFunctionDetector $pureFunctionDetector, \Rector\DeadCode\NodeAnalyzer\ExprUsedInNextNodeAnalyzer $exprUsedInNextNodeAnalyzer)
     {
         $this->reservedKeywordAnalyzer = $reservedKeywordAnalyzer;
-        $this->compactFuncCallAnalyzer = $compactFuncCallAnalyzer;
         $this->conditionSearcher = $conditionSearcher;
         $this->usedVariableNameAnalyzer = $usedVariableNameAnalyzer;
         $this->pureFunctionDetector = $pureFunctionDetector;

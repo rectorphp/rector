@@ -8,6 +8,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\Rector\AbstractRector;
+use Rector\NodeNestingScope\ContextAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -51,7 +52,7 @@ CODE_SAMPLE
 )]);
     }
     /**
-     * @return array<class-string<\PhpParser\Node>>
+     * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
@@ -68,7 +69,7 @@ CODE_SAMPLE
         if (!$lastReturn instanceof \PhpParser\Node\Stmt\Return_) {
             return null;
         }
-        if ($lastNode === null) {
+        if (!$lastNode instanceof \PhpParser\Node) {
             return null;
         }
         if ($lastNode !== $lastReturn) {

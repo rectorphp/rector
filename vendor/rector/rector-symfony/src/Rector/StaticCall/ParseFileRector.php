@@ -3,14 +3,13 @@
 declare (strict_types=1);
 namespace Rector\Symfony\Rector\StaticCall;
 
-use RectorPrefix20210717\Nette\Utils\Strings;
+use RectorPrefix20210718\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\StaticCall;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\ObjectType;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -71,22 +70,22 @@ final class ParseFileRector extends \Rector\Core\Rector\AbstractRector
         $possibleFileNode = $staticCall->args[0]->value;
         $possibleFileNodeAsString = $this->print($possibleFileNode);
         // is yml/yaml file
-        if (\RectorPrefix20210717\Nette\Utils\Strings::match($possibleFileNodeAsString, self::YAML_SUFFIX_IN_QUOTE_REGEX)) {
+        if (\RectorPrefix20210718\Nette\Utils\Strings::match($possibleFileNodeAsString, self::YAML_SUFFIX_IN_QUOTE_REGEX)) {
             return \true;
         }
         // is probably a file variable
-        if (\RectorPrefix20210717\Nette\Utils\Strings::match($possibleFileNodeAsString, self::FILE_SUFFIX_REGEX)) {
+        if (\RectorPrefix20210718\Nette\Utils\Strings::match($possibleFileNodeAsString, self::FILE_SUFFIX_REGEX)) {
             return \true;
         }
         // try to detect current value
         $nodeScope = $possibleFileNode->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
         if (!$nodeScope instanceof \PHPStan\Analyser\Scope) {
-            throw new \Rector\Core\Exception\ShouldNotHappenException();
+            return \false;
         }
         $nodeType = $nodeScope->getType($possibleFileNode);
         if (!$nodeType instanceof \PHPStan\Type\Constant\ConstantStringType) {
             return \false;
         }
-        return (bool) \RectorPrefix20210717\Nette\Utils\Strings::match($nodeType->getValue(), self::YAML_SUFFIX_REGEX);
+        return (bool) \RectorPrefix20210718\Nette\Utils\Strings::match($nodeType->getValue(), self::YAML_SUFFIX_REGEX);
     }
 }

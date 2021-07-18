@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210717\Symplify\EasyTesting\PHPUnit\Behavior;
+namespace RectorPrefix20210718\Symplify\EasyTesting\PHPUnit\Behavior;
 
-use RectorPrefix20210717\Symfony\Component\Finder\Finder;
-use RectorPrefix20210717\Symplify\EasyTesting\ValueObject\ExpectedAndOutputFileInfoPair;
-use RectorPrefix20210717\Symplify\SmartFileSystem\Finder\FinderSanitizer;
+use RectorPrefix20210718\Symfony\Component\Finder\Finder;
+use RectorPrefix20210718\Symplify\EasyTesting\ValueObject\ExpectedAndOutputFileInfoPair;
+use RectorPrefix20210718\Symplify\SmartFileSystem\Finder\FinderSanitizer;
 use Symplify\SmartFileSystem\SmartFileInfo;
 /**
  * Use only in "\PHPUnit\Framework\TestCase"
@@ -40,9 +40,9 @@ trait DirectoryAssertableTrait
      */
     private function findFileInfosInDirectory(string $directory) : array
     {
-        $firstDirectoryFinder = new \RectorPrefix20210717\Symfony\Component\Finder\Finder();
+        $firstDirectoryFinder = new \RectorPrefix20210718\Symfony\Component\Finder\Finder();
         $firstDirectoryFinder->files()->in($directory);
-        $finderSanitizer = new \RectorPrefix20210717\Symplify\SmartFileSystem\Finder\FinderSanitizer();
+        $finderSanitizer = new \RectorPrefix20210718\Symplify\SmartFileSystem\Finder\FinderSanitizer();
         return $finderSanitizer->sanitize($firstDirectoryFinder);
     }
     /**
@@ -57,7 +57,7 @@ trait DirectoryAssertableTrait
             $relativeFilePath = $expectedFileInfo->getRelativeFilePathFromDirectory($expectedDirectory);
             // match output file info
             $outputFileInfo = $this->resolveFileInfoByRelativeFilePath($outputFileInfos, $outputDirectory, $relativeFilePath);
-            $fileInfosByRelativeFilePath[$relativeFilePath] = new \RectorPrefix20210717\Symplify\EasyTesting\ValueObject\ExpectedAndOutputFileInfoPair($expectedFileInfo, $outputFileInfo);
+            $fileInfosByRelativeFilePath[$relativeFilePath] = new \RectorPrefix20210718\Symplify\EasyTesting\ValueObject\ExpectedAndOutputFileInfoPair($expectedFileInfo, $outputFileInfo);
         }
         return $fileInfosByRelativeFilePath;
     }
