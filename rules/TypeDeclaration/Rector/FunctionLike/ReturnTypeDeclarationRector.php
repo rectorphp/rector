@@ -13,6 +13,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\UnionType as PhpParserUnionType;
 use PHPStan\Type\MixedType;
+use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\Core\Rector\AbstractRector;
@@ -119,7 +120,24 @@ CODE_SAMPLE
             return null;
         }
 
+        if ($this->isNotSupportedStaticType($inferedReturnType)) {
+            return null;
+        }
+
         return $this->processType($node, $inferedReturnType);
+    }
+
+    private function isNotSupportedStaticType(Type $inferedReturnType): bool
+    {
+        if ($this->isAtLeastPhpVersion(PhpVersionFeature::STATIC_RETURN_TYPE)) {
+            return false;
+        }
+
+        if (! $inferedReturnType instanceof ThisType) {
+            return false;
+        }
+
+        return $inferedReturnType->getClassName() === 'static';
     }
 
     private function processType(ClassMethod | Function_ $node, Type $inferedType): ?Node

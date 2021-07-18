@@ -11,6 +11,11 @@ class Static_
     {
         return $this;
     }
+
+    public function getStatic()
+    {
+        return new static();
+    }
 }
 
 ?>
@@ -27,6 +32,11 @@ class Static_
     public function getSelf(): static
     {
         return $this;
+    }
+
+    public function getStatic(): static
+    {
+        return new static();
     }
 }
 
