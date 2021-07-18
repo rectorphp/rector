@@ -1650,7 +1650,7 @@
                 "symplify\/rule-doc-generator": "^9.4.22",
                 "tracy\/tracy": "^2.8"
             },
-            "time": "2021-07-17T17:04:11+00:00",
+            "time": "2021-07-18T06:46:11+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -1683,7 +1683,7 @@
             "description": "Instant fixes for your TYPO3 code by using Rector.",
             "support": {
                 "issues": "https:\/\/github.com\/sabbelasichon\/typo3-rector\/issues",
-                "source": "https:\/\/github.com\/sabbelasichon\/typo3-rector\/tree\/v0.11.22"
+                "source": "https:\/\/github.com\/sabbelasichon\/typo3-rector\/tree\/main"
             },
             "funding": [
                 {

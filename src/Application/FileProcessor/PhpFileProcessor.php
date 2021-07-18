@@ -146,13 +146,13 @@ final class PhpFileProcessor implements \Rector\Core\Contract\Processor\FileProc
                 throw $analysedCodeException;
             }
             $this->notParsedFiles[] = $file;
-            $error = $this->errorFactory->createAutoloadError($analysedCodeException);
+            $error = $this->errorFactory->createAutoloadError($analysedCodeException, $file->getSmartFileInfo());
             $file->addRectorError($error);
         } catch (\Throwable $throwable) {
             if ($this->symfonyStyle->isVerbose() || \Rector\Testing\PHPUnit\StaticPHPUnitEnvironment::isPHPUnitRun()) {
                 throw $throwable;
             }
-            $rectorError = new \Rector\Core\ValueObject\Application\RectorError($throwable->getMessage(), $throwable->getLine());
+            $rectorError = new \Rector\Core\ValueObject\Application\RectorError($throwable->getMessage(), $file->getSmartFileInfo(), $throwable->getLine());
             $file->addRectorError($rectorError);
         }
     }
