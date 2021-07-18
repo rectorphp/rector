@@ -131,20 +131,7 @@ CODE_SAMPLE
         if ($this->returnTypeAlreadyAddedChecker->isSameOrBetterReturnTypeAlreadyAdded($node, $inferedReturnType)) {
             return null;
         }
-        if ($this->isNotSupportedStaticType($inferedReturnType)) {
-            return null;
-        }
         return $this->processType($node, $inferedReturnType);
-    }
-    private function isNotSupportedStaticType(\PHPStan\Type\Type $inferedReturnType) : bool
-    {
-        if ($this->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::STATIC_RETURN_TYPE)) {
-            return \false;
-        }
-        if (!$inferedReturnType instanceof \PHPStan\Type\ThisType) {
-            return \false;
-        }
-        return $inferedReturnType->getClassName() === 'static';
     }
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $node
