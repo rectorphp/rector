@@ -16,6 +16,15 @@ class Static_
     {
         return new static();
     }
+
+    public function getNullableStatic()
+    {
+        if (rand(0,1)) {
+            return new static();
+        }
+
+        return null;
+    }
 }
 
 ?>
@@ -37,6 +46,15 @@ class Static_
     public function getStatic(): static
     {
         return new static();
+    }
+
+    public function getNullableStatic(): ?static
+    {
+        if (rand(0,1)) {
+            return new static();
+        }
+
+        return null;
     }
 }
 

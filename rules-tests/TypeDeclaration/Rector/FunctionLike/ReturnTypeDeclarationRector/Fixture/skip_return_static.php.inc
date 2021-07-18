@@ -8,4 +8,13 @@ final class SkipReturnStatic
     {
         return new static();
     }
+
+    public function run2()
+    {
+        if (rand(0, 1)) {
+            return new static();
+        }
+
+        return null;
+    }
 }

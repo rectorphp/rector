@@ -8,6 +8,9 @@ use PhpParser\Node\FunctionLike;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
+use PHPStan\Type\UnionType;
+use Rector\Core\Php\PhpVersionProvider;
+use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\TypeDeclaration\Contract\TypeInferer\ReturnTypeInfererInterface;
 use Rector\TypeDeclaration\Sorter\TypeInfererSorter;
@@ -28,7 +31,8 @@ final class ReturnTypeInferer
         array $returnTypeInferers,
         private TypeNormalizer $typeNormalizer,
         TypeInfererSorter $typeInfererSorter,
-        private GenericClassStringTypeNormalizer $genericClassStringTypeNormalizer
+        private GenericClassStringTypeNormalizer $genericClassStringTypeNormalizer,
+        private PhpVersionProvider $phpVersionProvider
     ) {
         $this->returnTypeInferers = $typeInfererSorter->sort($returnTypeInferers);
     }
@@ -43,6 +47,8 @@ final class ReturnTypeInferer
      */
     public function inferFunctionLikeWithExcludedInferers(FunctionLike $functionLike, array $excludedInferers): Type
     {
+        $isSupportedStaticReturnType = $this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::STATIC_RETURN_TYPE);
+
         foreach ($this->returnTypeInferers as $returnTypeInferer) {
             if ($this->shouldSkipExcludedTypeInferer($returnTypeInferer, $excludedInferers)) {
                 continue;
@@ -60,8 +66,9 @@ final class ReturnTypeInferer
                 continue;
             }
 
-            if ($type instanceof FullyQualifiedObjectType && $type->getClassName() === 'static') {
-                $type = new ThisType($type->getClassName());
+            $type = $this->verifyStaticType($type, $isSupportedStaticReturnType);
+            if (! $type instanceof Type) {
+                continue;
             }
 
             // normalize ConstStringType to ClassStringType
@@ -69,6 +76,51 @@ final class ReturnTypeInferer
         }
 
         return new MixedType();
+    }
+
+    private function isStaticType(Type $type): bool
+    {
+        return $type instanceof FullyQualifiedObjectType && $type->getClassName() === 'static';
+    }
+
+    public function verifyStaticType(Type $type, bool $isSupportedStaticReturnType): ?Type
+    {
+        if ($this->isStaticType($type)) {
+            if (! $isSupportedStaticReturnType) {
+                return null;
+            }
+
+            /** @var FullyQualifiedObjectType $type */
+            return new ThisType($type->getClassName());
+        }
+
+        if (! $type instanceof UnionType) {
+            return $type;
+        }
+
+        $returnTypes = $type->getTypes();
+        $types = [];
+        $hasStatic = false;
+        foreach ($returnTypes as $returnType) {
+            if ($this->isStaticType($returnType)) {
+                /** @var FullyQualifiedObjectType $returnType */
+                $types[] = new ThisType($returnType->getClassName());
+                $hasStatic = true;
+                continue;
+            }
+
+            $types[] = $returnType;
+        }
+
+        if (! $hasStatic) {
+            return $type;
+        }
+
+        if (! $isSupportedStaticReturnType) {
+            return null;
+        }
+
+        return new UnionType($types);
     }
 
     /**
