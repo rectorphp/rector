@@ -12,6 +12,7 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
+use Rector\Core\NodeAnalyzer\ParamAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DeadCode\PhpDoc\TagRemover\ParamTagRemover;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -27,7 +28,8 @@ final class AddArrayParamDocTypeRector extends AbstractRector
     public function __construct(
         private ParamTypeInferer $paramTypeInferer,
         private PhpDocTypeChanger $phpDocTypeChanger,
-        private ParamTagRemover $paramTagRemover
+        private ParamTagRemover $paramTagRemover,
+        private ParamAnalyzer $paramAnalyzer
     ) {
     }
 
@@ -121,6 +123,10 @@ CODE_SAMPLE
     {
         // type missing at all
         if ($param->type === null) {
+            return true;
+        }
+
+        if ($this->paramAnalyzer->isNullable($param)) {
             return true;
         }
 
