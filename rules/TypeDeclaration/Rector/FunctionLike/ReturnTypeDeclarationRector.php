@@ -12,6 +12,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\UnionType as PhpParserUnionType;
 use PHPStan\Type\MixedType;
+use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\Core\Rector\AbstractRector;
@@ -130,7 +131,20 @@ CODE_SAMPLE
         if ($this->returnTypeAlreadyAddedChecker->isSameOrBetterReturnTypeAlreadyAdded($node, $inferedReturnType)) {
             return null;
         }
+        if ($this->isNotSupportedStaticType($inferedReturnType)) {
+            return null;
+        }
         return $this->processType($node, $inferedReturnType);
+    }
+    private function isNotSupportedStaticType(\PHPStan\Type\Type $inferedReturnType) : bool
+    {
+        if ($this->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::STATIC_RETURN_TYPE)) {
+            return \false;
+        }
+        if (!$inferedReturnType instanceof \PHPStan\Type\ThisType) {
+            return \false;
+        }
+        return $inferedReturnType->getClassName() === 'static';
     }
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $node
