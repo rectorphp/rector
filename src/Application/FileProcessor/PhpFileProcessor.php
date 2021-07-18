@@ -125,14 +125,14 @@ final class PhpFileProcessor implements FileProcessorInterface
             }
 
             $this->notParsedFiles[] = $file;
-            $error = $this->errorFactory->createAutoloadError($analysedCodeException);
+            $error = $this->errorFactory->createAutoloadError($analysedCodeException, $file->getSmartFileInfo());
             $file->addRectorError($error);
         } catch (Throwable $throwable) {
             if ($this->symfonyStyle->isVerbose() || StaticPHPUnitEnvironment::isPHPUnitRun()) {
                 throw $throwable;
             }
 
-            $rectorError = new RectorError($throwable->getMessage(), $throwable->getLine());
+            $rectorError = new RectorError($throwable->getMessage(), $file->getSmartFileInfo(), $throwable->getLine());
             $file->addRectorError($rectorError);
         }
     }
