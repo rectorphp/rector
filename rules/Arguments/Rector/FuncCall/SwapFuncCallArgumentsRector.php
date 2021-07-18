@@ -117,10 +117,10 @@ CODE_SAMPLE
     /**
      * @return array<int, Node\Arg>
      */
-    private function resolveNewArguments(SwapFuncCallArguments $functionArgumentSwap, FuncCall $funcCall): array
+    private function resolveNewArguments(SwapFuncCallArguments $swapFuncCallArguments, FuncCall $funcCall): array
     {
         $newArguments = [];
-        foreach ($functionArgumentSwap->getOrder() as $oldPosition => $newPosition) {
+        foreach ($swapFuncCallArguments->getOrder() as $oldPosition => $newPosition) {
             if (! isset($funcCall->args[$oldPosition])) {
                 continue;
             }

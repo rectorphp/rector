@@ -14,7 +14,6 @@ use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Property;
-use PhpParser\Node\Stmt\PropertyProperty;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -27,11 +26,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class AssignArrayToStringRector extends AbstractRector
 {
-    /**
-     * @var PropertyProperty[]
-     */
-    private array $emptyStringProperties = [];
-
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
@@ -64,7 +58,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         $defaultExpr = $this->resolveDefaultValueExpr($node);
-        if ($defaultExpr === null) {
+        if (! $defaultExpr instanceof Expr) {
             return null;
         }
 
@@ -132,7 +126,7 @@ CODE_SAMPLE
         return $expr->value === '';
     }
 
-    private function resolveAssignedVar(Assign | Property $node): Property | Expr | Assign
+    private function resolveAssignedVar(Assign | Property $node): Expr | Property
     {
         if ($node instanceof Assign) {
             return $node->var;

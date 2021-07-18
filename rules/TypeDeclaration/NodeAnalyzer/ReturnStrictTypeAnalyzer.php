@@ -12,7 +12,6 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt\Return_;
-use PhpParser\Node\UnionType as PhpParserUnionType;
 use PHPStan\Type\MixedType;
 use Rector\Core\Reflection\ReflectionResolver;
 use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
@@ -29,7 +28,7 @@ final class ReturnStrictTypeAnalyzer
 
     /**
      * @param Return_[] $returns
-     * @return array<Identifier|Name|NullableType|PhpParserUnionType>
+     * @return array<Identifier|Name|NullableType>
      */
     public function collectStrictReturnTypes(array $returns): array
     {

@@ -98,7 +98,7 @@ CODE_SAMPLE
         }
 
         /** @var Return_[] $returns */
-        $returns = $this->betterNodeFinder->find((array) $node->stmts, function (Node $n) use ($node) {
+        $returns = $this->betterNodeFinder->find((array) $node->stmts, function (Node $n) use ($node): bool {
             $currentFunctionLike = $this->betterNodeFinder->findParentType($n, FunctionLike::class);
 
             if ($currentFunctionLike === $node) {

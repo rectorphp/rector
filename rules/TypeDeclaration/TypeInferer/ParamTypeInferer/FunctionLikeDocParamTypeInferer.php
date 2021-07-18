@@ -12,7 +12,6 @@ use PhpParser\Node\Stmt\Function_;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
-use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeNestingScope\ParentFinder;
 use Rector\TypeDeclaration\Contract\TypeInferer\ParamTypeInfererInterface;
@@ -22,7 +21,6 @@ final class FunctionLikeDocParamTypeInferer implements ParamTypeInfererInterface
     public function __construct(
         private NodeNameResolver $nodeNameResolver,
         private PhpDocInfoFactory $phpDocInfoFactory,
-        private BetterNodeFinder $betterNodeFinder,
         private ParentFinder $parentFinder
     ) {
     }

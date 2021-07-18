@@ -194,7 +194,6 @@ CODE_SAMPLE
 
         if ($reflectionMethod->isPrivate()) {
             $this->visibilityManipulator->makePrivate($classMethod);
-            return;
         }
     }
 

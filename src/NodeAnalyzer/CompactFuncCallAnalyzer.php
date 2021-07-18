@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Rector\Core\NodeAnalyzer;
 
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
@@ -32,7 +34,7 @@ final class CompactFuncCallAnalyzer
     }
 
     /**
-     * @param array<int, \PhpParser\Node\Arg|\PhpParser\Node\Expr\ArrayItem|null> $nodes
+     * @param array<int, Arg|ArrayItem|null> $nodes
      */
     private function isInArgOrArrayItemNodes(array $nodes, string $variableName): bool
     {

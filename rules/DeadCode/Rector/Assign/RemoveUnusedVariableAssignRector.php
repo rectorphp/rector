@@ -16,7 +16,6 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
-use Rector\Core\NodeAnalyzer\CompactFuncCallAnalyzer;
 use Rector\Core\Php\ReservedKeywordAnalyzer;
 use Rector\Core\PhpParser\Comparing\ConditionSearcher;
 use Rector\Core\Rector\AbstractRector;
@@ -34,7 +33,6 @@ final class RemoveUnusedVariableAssignRector extends AbstractRector
 {
     public function __construct(
         private ReservedKeywordAnalyzer $reservedKeywordAnalyzer,
-        private CompactFuncCallAnalyzer $compactFuncCallAnalyzer,
         private ConditionSearcher $conditionSearcher,
         private UsedVariableNameAnalyzer $usedVariableNameAnalyzer,
         private PureFunctionDetector $pureFunctionDetector,
