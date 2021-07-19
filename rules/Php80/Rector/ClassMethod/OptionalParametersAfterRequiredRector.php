@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ParametersAcceptorSelector;
+use Rector\CodingStyle\Reflection\VendorLocationDetector;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Reflection\ReflectionResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -33,7 +34,8 @@ final class OptionalParametersAfterRequiredRector extends AbstractRector
     public function __construct(
         private RequireOptionalParamResolver $requireOptionalParamResolver,
         private ArgumentSorter $argumentSorter,
-        private ReflectionResolver $reflectionResolver
+        private ReflectionResolver $reflectionResolver,
+        private VendorLocationDetector $vendorLocationDetector
     ) {
     }
 
@@ -181,20 +183,11 @@ CODE_SAMPLE
         MethodReflection $methodReflection,
         array $argsOrParams
     ): ?array {
-        $classReflection = $methodReflection->getDeclaringClass();
-        $fileName = $classReflection->getFileName();
-
-        // probably internal class
-        if ($fileName === false) {
-            return null;
-        }
-
-        if (str_contains($fileName, '/vendor/')) {
+        if ($this->vendorLocationDetector->detectFunctionLikeReflection($methodReflection)) {
             return null;
         }
 
         $parametersAcceptor = ParametersAcceptorSelector::selectSingle($methodReflection->getVariants());
-
         $expectedParameterReflections = $this->requireOptionalParamResolver->resolveFromReflection(
             $methodReflection
         );

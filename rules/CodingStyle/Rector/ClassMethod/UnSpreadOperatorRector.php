@@ -10,10 +10,9 @@ use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
-use PHPStan\Reflection\FunctionReflection;
 use PHPStan\Reflection\MethodReflection;
-use PHPStan\Reflection\Php\PhpFunctionReflection;
 use Rector\CodingStyle\NodeAnalyzer\SpreadVariablesCollector;
+use Rector\CodingStyle\Reflection\VendorLocationDetector;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Reflection\ReflectionResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -26,7 +25,8 @@ final class UnSpreadOperatorRector extends AbstractRector
 {
     public function __construct(
         private SpreadVariablesCollector $spreadVariablesCollector,
-        private ReflectionResolver $reflectionResolver
+        private ReflectionResolver $reflectionResolver,
+        private VendorLocationDetector $vendorLocationDetector
     ) {
     }
 
@@ -109,7 +109,7 @@ CODE_SAMPLE
         }
 
         // skip those in vendor
-        if ($this->skipForVendor($methodReflection)) {
+        if ($this->vendorLocationDetector->detectFunctionLikeReflection($methodReflection)) {
             return null;
         }
 
@@ -168,25 +168,6 @@ CODE_SAMPLE
         }
 
         return $variadicArgs;
-    }
-
-    private function skipForVendor(MethodReflection | FunctionReflection $functionLikeReflection): bool
-    {
-        if ($functionLikeReflection instanceof PhpFunctionReflection) {
-            $fileName = $functionLikeReflection->getFileName();
-        } elseif ($functionLikeReflection instanceof MethodReflection) {
-            $declaringClassReflection = $functionLikeReflection->getDeclaringClass();
-            $fileName = $declaringClassReflection->getFileName();
-        } else {
-            return false;
-        }
-
-        // probably internal
-        if ($fileName === false) {
-            return true;
-        }
-
-        return str_contains($fileName, '/vendor/');
     }
 
     private function removeLaterArguments(MethodCall $methodCall, int $argumentPosition): void
