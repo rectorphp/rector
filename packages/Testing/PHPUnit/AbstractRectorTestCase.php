@@ -79,6 +79,11 @@ abstract class AbstractRectorTestCase extends AbstractTestCase implements Rector
         return StaticFixtureFinder::yieldDirectoryExclusively($directory, $suffix);
     }
 
+    protected function isWindows(): bool
+    {
+        return strncasecmp(PHP_OS, 'WIN', 3) === 0;
+    }
+
     protected function doTestFileInfo(SmartFileInfo $fixtureFileInfo, bool $allowMatches = true): void
     {
         $inputFileInfoAndExpectedFileInfo = StaticFixtureSplitter::splitFileInfoToLocalInputAndExpectedFileInfos(

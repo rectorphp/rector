@@ -18,6 +18,10 @@ final class DowngradeFlexibleHeredocSyntaxRectorTest extends AbstractRectorTestC
      */
     public function test(SmartFileInfo $fileInfo): void
     {
+        if ($this->isWindows()) {
+            $this->markTestSkipped('minor differences on windows, see https://github.com/rectorphp/rector/issues/6571');
+        }
+
         $this->doTestFileInfo($fileInfo);
     }
 

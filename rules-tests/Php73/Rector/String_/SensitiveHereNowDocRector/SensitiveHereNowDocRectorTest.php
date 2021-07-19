@@ -15,7 +15,7 @@ final class SensitiveHereNowDocRectorTest extends AbstractRectorTestCase
      */
     public function test(SmartFileInfo $fileInfo): void
     {
-        if (strncasecmp(PHP_OS, 'WIN', 3) === 0) {
+        if ($this->isWindows()) {
             $this->markTestSkipped('minor differences on windows, see https://github.com/rectorphp/rector/issues/6571');
         }
 

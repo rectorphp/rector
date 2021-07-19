@@ -15,6 +15,10 @@ final class NewlineBeforeNewAssignSetRectorTest extends AbstractRectorTestCase
      */
     public function test(SmartFileInfo $fileInfo): void
     {
+        if ($this->isWindows()) {
+            $this->markTestSkipped('doesnt work on windows, see https://github.com/rectorphp/rector/issues/6572');
+        }
+
         $this->doTestFileInfo($fileInfo);
     }
 
