@@ -27,9 +27,9 @@ final class OrderAttributesRector extends \Rector\Core\Rector\AbstractRector imp
      */
     public const ATTRIBUTES_ORDER = 'attributes_order';
     /**
-     * @var string[]
+     * @var array<string, int>
      */
-    private $attributesOrder = [];
+    private $attributesOrderByName = [];
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
         return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Order attributes by desired names', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
@@ -63,15 +63,11 @@ CODE_SAMPLE
         if ($node->attrGroups === []) {
             return null;
         }
-        $attributesOrderByName = \array_flip($this->attributesOrder);
         $originalAttrGroups = $node->attrGroups;
         $currentAttrGroups = $originalAttrGroups;
-        \usort($currentAttrGroups, function (\PhpParser\Node\AttributeGroup $firstAttributeGroup, \PhpParser\Node\AttributeGroup $secondAttributeGroup) use($attributesOrderByName) : int {
-            $firstAttrName = $this->getName($firstAttributeGroup->attrs[0]->name);
-            $secondAttrName = $this->getName($secondAttributeGroup->attrs[0]->name);
-            // 1000 makes the attribute last, as positioned attributes have a priority
-            $firstAttributePosition = $attributesOrderByName[$firstAttrName] ?? 1000;
-            $secondAttributePosition = $attributesOrderByName[$secondAttrName] ?? 1000;
+        \usort($currentAttrGroups, function (\PhpParser\Node\AttributeGroup $firstAttributeGroup, \PhpParser\Node\AttributeGroup $secondAttributeGroup) : int {
+            $firstAttributePosition = $this->resolveAttributeGroupPosition($firstAttributeGroup);
+            $secondAttributePosition = $this->resolveAttributeGroupPosition($secondAttributeGroup);
             return $firstAttributePosition <=> $secondAttributePosition;
         });
         if ($currentAttrGroups === $originalAttrGroups) {
@@ -87,6 +83,12 @@ CODE_SAMPLE
     {
         $attributesOrder = $configuration[self::ATTRIBUTES_ORDER] ?? [];
         \RectorPrefix20210719\Webmozart\Assert\Assert::allString($attributesOrder);
-        $this->attributesOrder = $attributesOrder;
+        $this->attributesOrderByName = \array_flip($attributesOrder);
+    }
+    private function resolveAttributeGroupPosition(\PhpParser\Node\AttributeGroup $attributeGroup) : int
+    {
+        $attrName = $this->getName($attributeGroup->attrs[0]->name);
+        // 1000 makes the attribute last, as positioned attributes have a higher priority
+        return $this->attributesOrderByName[$attrName] ?? 1000;
     }
 }
