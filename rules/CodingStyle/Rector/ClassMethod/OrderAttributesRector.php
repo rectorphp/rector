@@ -30,9 +30,9 @@ final class OrderAttributesRector extends AbstractRector implements Configurable
     public const ATTRIBUTES_ORDER = 'attributes_order';
 
     /**
-     * @var string[]
+     * @var array<string, int>
      */
-    private array $attributesOrder = [];
+    private array $attributesOrderByName = [];
 
     public function getRuleDefinition(): RuleDefinition
     {
@@ -86,21 +86,15 @@ CODE_SAMPLE
             return null;
         }
 
-        $attributesOrderByName = array_flip($this->attributesOrder);
-
         $originalAttrGroups = $node->attrGroups;
         $currentAttrGroups = $originalAttrGroups;
 
         usort($currentAttrGroups, function (
             AttributeGroup $firstAttributeGroup,
             AttributeGroup $secondAttributeGroup,
-        ) use ($attributesOrderByName): int {
-            $firstAttrName = $this->getName($firstAttributeGroup->attrs[0]->name);
-            $secondAttrName = $this->getName($secondAttributeGroup->attrs[0]->name);
-
-            // 1000 makes the attribute last, as positioned attributes have a priority
-            $firstAttributePosition = $attributesOrderByName[$firstAttrName] ?? 1000;
-            $secondAttributePosition = $attributesOrderByName[$secondAttrName] ?? 1000;
+        ): int {
+            $firstAttributePosition = $this->resolveAttributeGroupPosition($firstAttributeGroup);
+            $secondAttributePosition = $this->resolveAttributeGroupPosition($secondAttributeGroup);
 
             return $firstAttributePosition <=> $secondAttributePosition;
         });
@@ -121,6 +115,14 @@ CODE_SAMPLE
         $attributesOrder = $configuration[self::ATTRIBUTES_ORDER] ?? [];
         Assert::allString($attributesOrder);
 
-        $this->attributesOrder = $attributesOrder;
+        $this->attributesOrderByName = array_flip($attributesOrder);
+    }
+
+    private function resolveAttributeGroupPosition(AttributeGroup $attributeGroup): int
+    {
+        $attrName = $this->getName($attributeGroup->attrs[0]->name);
+
+        // 1000 makes the attribute last, as positioned attributes have a higher priority
+        return $this->attributesOrderByName[$attrName] ?? 1000;
     }
 }
