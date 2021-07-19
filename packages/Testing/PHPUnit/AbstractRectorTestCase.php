@@ -81,6 +81,10 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractTe
     {
         return \RectorPrefix20210719\Symplify\EasyTesting\DataProvider\StaticFixtureFinder::yieldDirectoryExclusively($directory, $suffix);
     }
+    protected function isWindows() : bool
+    {
+        return \strncasecmp(\PHP_OS, 'WIN', 3) === 0;
+    }
     /**
      * @param \Symplify\SmartFileSystem\SmartFileInfo $fixtureFileInfo
      * @param bool $allowMatches
