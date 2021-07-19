@@ -47,7 +47,9 @@ final class ReturnTypeInferer
      */
     public function inferFunctionLikeWithExcludedInferers(FunctionLike $functionLike, array $excludedInferers): Type
     {
-        $isSupportedStaticReturnType = $this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::STATIC_RETURN_TYPE);
+        $isSupportedStaticReturnType = $this->phpVersionProvider->isAtLeastPhpVersion(
+            PhpVersionFeature::STATIC_RETURN_TYPE
+        );
 
         foreach ($this->returnTypeInferers as $returnTypeInferer) {
             if ($this->shouldSkipExcludedTypeInferer($returnTypeInferer, $excludedInferers)) {
@@ -76,11 +78,6 @@ final class ReturnTypeInferer
         }
 
         return new MixedType();
-    }
-
-    private function isStaticType(Type $type): bool
-    {
-        return $type instanceof FullyQualifiedObjectType && $type->getClassName() === 'static';
     }
 
     public function verifyStaticType(Type $type, bool $isSupportedStaticReturnType): ?Type
@@ -121,6 +118,11 @@ final class ReturnTypeInferer
         }
 
         return new UnionType($types);
+    }
+
+    private function isStaticType(Type $type): bool
+    {
+        return $type instanceof FullyQualifiedObjectType && $type->getClassName() === 'static';
     }
 
     /**

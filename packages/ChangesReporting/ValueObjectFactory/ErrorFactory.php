@@ -16,8 +16,10 @@ final class ErrorFactory
     ) {
     }
 
-    public function createAutoloadError(AnalysedCodeException $analysedCodeException, SmartFileInfo $smartFileInfo): RectorError
-    {
+    public function createAutoloadError(
+        AnalysedCodeException $analysedCodeException,
+        SmartFileInfo $smartFileInfo
+    ): RectorError {
         $message = $this->exceptionCorrector->getAutoloadExceptionMessageAndAddLocation($analysedCodeException);
         return new RectorError($message, $smartFileInfo);
     }
