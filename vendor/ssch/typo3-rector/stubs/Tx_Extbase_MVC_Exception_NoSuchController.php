@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210718;
+namespace RectorPrefix20210719;
 
 if (\class_exists('Tx_Extbase_MVC_Exception_NoSuchController')) {
     return;

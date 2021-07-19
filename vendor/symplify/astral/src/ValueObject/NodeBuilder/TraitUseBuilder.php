@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210718\Symplify\Astral\ValueObject\NodeBuilder;
+namespace RectorPrefix20210719\Symplify\Astral\ValueObject\NodeBuilder;
 
 use PhpParser\Builder\TraitUse;
 /**

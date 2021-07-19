@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210718\Symplify\Astral\NodeNameResolver;
+namespace RectorPrefix20210719\Symplify\Astral\NodeNameResolver;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Param;
-use RectorPrefix20210718\Symplify\Astral\Contract\NodeNameResolverInterface;
-final class ParamNodeNameResolver implements \RectorPrefix20210718\Symplify\Astral\Contract\NodeNameResolverInterface
+use RectorPrefix20210719\Symplify\Astral\Contract\NodeNameResolverInterface;
+final class ParamNodeNameResolver implements \RectorPrefix20210719\Symplify\Astral\Contract\NodeNameResolverInterface
 {
     /**
      * @param \PhpParser\Node $node

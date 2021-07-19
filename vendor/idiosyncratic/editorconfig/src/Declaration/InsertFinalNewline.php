@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210718\Idiosyncratic\EditorConfig\Declaration;
+namespace RectorPrefix20210719\Idiosyncratic\EditorConfig\Declaration;
 
-final class InsertFinalNewline extends \RectorPrefix20210718\Idiosyncratic\EditorConfig\Declaration\BooleanDeclaration
+final class InsertFinalNewline extends \RectorPrefix20210719\Idiosyncratic\EditorConfig\Declaration\BooleanDeclaration
 {
     public function getName() : string
     {

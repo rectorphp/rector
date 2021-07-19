@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Ssch\TYPO3Rector\FileProcessor\Fluid\Rector;
 
-use RectorPrefix20210718\Nette\Utils\Strings;
+use RectorPrefix20210719\Nette\Utils\Strings;
 use Rector\Core\ValueObject\Application\File;
 use Ssch\TYPO3Rector\Contract\FileProcessor\Fluid\Rector\FluidRectorInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -24,7 +24,7 @@ final class DefaultSwitchFluidRector implements \Ssch\TYPO3Rector\Contract\FileP
     public function transform(\Rector\Core\ValueObject\Application\File $file) : void
     {
         $content = $file->getFileContent();
-        $content = \RectorPrefix20210718\Nette\Utils\Strings::replace($content, self::PATTERN, self::REPLACEMENT);
+        $content = \RectorPrefix20210719\Nette\Utils\Strings::replace($content, self::PATTERN, self::REPLACEMENT);
         $file->changeFileContent($content);
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition

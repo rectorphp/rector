@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210718\Symfony\Contracts\EventDispatcher;
+namespace RectorPrefix20210719\Symfony\Contracts\EventDispatcher;
 
-use RectorPrefix20210718\Psr\EventDispatcher\StoppableEventInterface;
+use RectorPrefix20210719\Psr\EventDispatcher\StoppableEventInterface;
 /**
  * Event is the base class for classes containing event data.
  *
@@ -26,7 +26,7 @@ use RectorPrefix20210718\Psr\EventDispatcher\StoppableEventInterface;
  * @author Bernhard Schussek <bschussek@gmail.com>
  * @author Nicolas Grekas <p@tchwork.com>
  */
-class Event implements \RectorPrefix20210718\Psr\EventDispatcher\StoppableEventInterface
+class Event implements \RectorPrefix20210719\Psr\EventDispatcher\StoppableEventInterface
 {
     private $propagationStopped = \false;
     /**

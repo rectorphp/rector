@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\NodeCollector;
 
-use RectorPrefix20210718\Nette\Utils\Strings;
+use RectorPrefix20210719\Nette\Utils\Strings;
 use PHPStan\PhpDoc\ResolvedPhpDocBlock;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
@@ -39,6 +39,7 @@ final class StaticAnalyzer
         if (!$resolvedPhpDocBlock instanceof \PHPStan\PhpDoc\ResolvedPhpDocBlock) {
             return \false;
         }
-        return (bool) \RectorPrefix20210718\Nette\Utils\Strings::match($resolvedPhpDocBlock->getPhpDocString(), '#@method\\s*static\\s*(.*?)\\b' . $methodName . '\\b#');
+        // @see https://regex101.com/r/7Zkej2/1
+        return (bool) \RectorPrefix20210719\Nette\Utils\Strings::match($resolvedPhpDocBlock->getPhpDocString(), '#@method\\s*static\\s*((([\\w\\|\\\\]+)|\\$this)*+(\\[\\])*)*\\s+\\b' . $methodName . '\\b#');
     }
 }

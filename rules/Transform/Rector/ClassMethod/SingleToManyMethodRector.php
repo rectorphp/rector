@@ -17,7 +17,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Transform\ValueObject\SingleToManyMethod;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20210718\Webmozart\Assert\Assert;
+use RectorPrefix20210719\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Transform\Rector\ClassMethod\SingleToManyMethodRector\SingleToManyMethodRectorTest
  */
@@ -102,7 +102,7 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $singleToManyMethods = $configuration[self::SINGLES_TO_MANY_METHODS] ?? [];
-        \RectorPrefix20210718\Webmozart\Assert\Assert::allIsInstanceOf($singleToManyMethods, \Rector\Transform\ValueObject\SingleToManyMethod::class);
+        \RectorPrefix20210719\Webmozart\Assert\Assert::allIsInstanceOf($singleToManyMethods, \Rector\Transform\ValueObject\SingleToManyMethod::class);
         $this->singleToManyMethods = $singleToManyMethods;
     }
     private function keepOldReturnTypeInDocBlock(\PhpParser\Node\Stmt\ClassMethod $classMethod) : void
