@@ -75,10 +75,6 @@ final class ReturnTypeInferer
         }
         return new \PHPStan\Type\MixedType();
     }
-    private function isStaticType(\PHPStan\Type\Type $type) : bool
-    {
-        return $type instanceof \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType && $type->getClassName() === 'static';
-    }
     public function verifyStaticType(\PHPStan\Type\Type $type, bool $isSupportedStaticReturnType) : ?\PHPStan\Type\Type
     {
         if ($this->isStaticType($type)) {
@@ -110,6 +106,10 @@ final class ReturnTypeInferer
             return null;
         }
         return new \PHPStan\Type\UnionType($types);
+    }
+    private function isStaticType(\PHPStan\Type\Type $type) : bool
+    {
+        return $type instanceof \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType && $type->getClassName() === 'static';
     }
     /**
      * @param array<class-string<ReturnTypeInfererInterface>> $excludedInferers
