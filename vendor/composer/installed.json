@@ -1650,7 +1650,7 @@
                 "symplify\/rule-doc-generator": "^9.4.22",
                 "tracy\/tracy": "^2.8"
             },
-            "time": "2021-07-18T06:46:11+00:00",
+            "time": "2021-07-19T09:12:50+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
