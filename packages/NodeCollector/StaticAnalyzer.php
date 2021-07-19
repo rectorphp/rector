@@ -43,9 +43,10 @@ final class StaticAnalyzer
             return false;
         }
 
+        // @see https://regex101.com/r/7Zkej2/1
         return (bool) Strings::match(
             $resolvedPhpDocBlock->getPhpDocString(),
-            '#@method\s*static\s*(.*?)\b' . $methodName . '\b#'
+            '#@method\s*static\s*((([\w\|\\\\]+)|\$this)*+(\[\])*)*\s+\b' . $methodName . '\b#'
         );
     }
 }
