@@ -9,10 +9,9 @@ use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
-use PHPStan\Reflection\FunctionReflection;
 use PHPStan\Reflection\MethodReflection;
-use PHPStan\Reflection\Php\PhpFunctionReflection;
 use Rector\CodingStyle\NodeAnalyzer\SpreadVariablesCollector;
+use Rector\CodingStyle\Reflection\VendorLocationDetector;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Reflection\ReflectionResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -30,10 +29,15 @@ final class UnSpreadOperatorRector extends \Rector\Core\Rector\AbstractRector
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
-    public function __construct(\Rector\CodingStyle\NodeAnalyzer\SpreadVariablesCollector $spreadVariablesCollector, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver)
+    /**
+     * @var \Rector\CodingStyle\Reflection\VendorLocationDetector
+     */
+    private $vendorLocationDetector;
+    public function __construct(\Rector\CodingStyle\NodeAnalyzer\SpreadVariablesCollector $spreadVariablesCollector, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver, \Rector\CodingStyle\Reflection\VendorLocationDetector $vendorLocationDetector)
     {
         $this->spreadVariablesCollector = $spreadVariablesCollector;
         $this->reflectionResolver = $reflectionResolver;
+        $this->vendorLocationDetector = $vendorLocationDetector;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -102,7 +106,7 @@ CODE_SAMPLE
             return null;
         }
         // skip those in vendor
-        if ($this->skipForVendor($methodReflection)) {
+        if ($this->vendorLocationDetector->detectFunctionLikeReflection($methodReflection)) {
             return null;
         }
         $spreadParameterReflections = $this->spreadVariablesCollector->resolveFromMethodReflection($methodReflection);
@@ -145,25 +149,6 @@ CODE_SAMPLE
             $variadicArgs[] = $arg;
         }
         return $variadicArgs;
-    }
-    /**
-     * @param \PHPStan\Reflection\MethodReflection|\PHPStan\Reflection\FunctionReflection $functionLikeReflection
-     */
-    private function skipForVendor($functionLikeReflection) : bool
-    {
-        if ($functionLikeReflection instanceof \PHPStan\Reflection\Php\PhpFunctionReflection) {
-            $fileName = $functionLikeReflection->getFileName();
-        } elseif ($functionLikeReflection instanceof \PHPStan\Reflection\MethodReflection) {
-            $declaringClassReflection = $functionLikeReflection->getDeclaringClass();
-            $fileName = $declaringClassReflection->getFileName();
-        } else {
-            return \false;
-        }
-        // probably internal
-        if ($fileName === \false) {
-            return \true;
-        }
-        return \strpos($fileName, '/vendor/') !== \false;
     }
     private function removeLaterArguments(\PhpParser\Node\Expr\MethodCall $methodCall, int $argumentPosition) : void
     {

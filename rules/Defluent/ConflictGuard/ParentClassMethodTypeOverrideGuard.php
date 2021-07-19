@@ -7,6 +7,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\MethodReflection;
+use Rector\CodingStyle\Reflection\VendorLocationDetector;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 final class ParentClassMethodTypeOverrideGuard
@@ -15,9 +16,14 @@ final class ParentClassMethodTypeOverrideGuard
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
+    /**
+     * @var \Rector\CodingStyle\Reflection\VendorLocationDetector
+     */
+    private $vendorLocationDetector;
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\CodingStyle\Reflection\VendorLocationDetector $vendorLocationDetector)
     {
         $this->nodeNameResolver = $nodeNameResolver;
+        $this->vendorLocationDetector = $vendorLocationDetector;
     }
     public function hasParentMethodOutsideVendor(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
     {
@@ -37,12 +43,7 @@ final class ParentClassMethodTypeOverrideGuard
             if (!$ancestorClassReflection->hasMethod($methodName)) {
                 continue;
             }
-            $fileName = $ancestorClassReflection->getFileName();
-            // PHP internal class
-            if ($fileName === \false) {
-                continue;
-            }
-            if (\strpos($fileName, '/vendor/') !== \false) {
+            if ($this->vendorLocationDetector->detectFunctionLikeReflection($ancestorClassReflection)) {
                 return \true;
             }
         }

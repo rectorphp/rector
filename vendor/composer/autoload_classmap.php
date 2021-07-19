@@ -1747,6 +1747,7 @@ return array(
     'Rector\\CodingStyle\\Rector\\Ternary\\TernaryConditionVariableAssignmentRector' => $baseDir . '/rules/CodingStyle/Rector/Ternary/TernaryConditionVariableAssignmentRector.php',
     'Rector\\CodingStyle\\Rector\\Use_\\RemoveUnusedAliasRector' => $baseDir . '/rules/CodingStyle/Rector/Use_/RemoveUnusedAliasRector.php',
     'Rector\\CodingStyle\\Rector\\Use_\\SeparateMultiUseImportsRector' => $baseDir . '/rules/CodingStyle/Rector/Use_/SeparateMultiUseImportsRector.php',
+    'Rector\\CodingStyle\\Reflection\\VendorLocationDetector' => $baseDir . '/rules/CodingStyle/Reflection/VendorLocationDetector.php',
     'Rector\\CodingStyle\\TypeAnalyzer\\IterableTypeAnalyzer' => $baseDir . '/rules/CodingStyle/TypeAnalyzer/IterableTypeAnalyzer.php',
     'Rector\\CodingStyle\\ValueObject\\ConcatExpressionJoinData' => $baseDir . '/rules/CodingStyle/ValueObject/ConcatExpressionJoinData.php',
     'Rector\\CodingStyle\\ValueObject\\ConcatStringAndPlaceholders' => $baseDir . '/rules/CodingStyle/ValueObject/ConcatStringAndPlaceholders.php',

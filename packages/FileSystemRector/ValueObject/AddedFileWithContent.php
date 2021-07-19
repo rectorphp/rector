@@ -23,6 +23,14 @@ final class AddedFileWithContent implements \Rector\FileSystemRector\Contract\Ad
             throw new \Rector\Core\Exception\ShouldNotHappenException('File path and content are the same, probably a bug');
         }
     }
+    public function getRealPath() : string
+    {
+        $realpath = \realpath($this->filePath);
+        if ($realpath === \false) {
+            throw new \Rector\Core\Exception\ShouldNotHappenException();
+        }
+        return $realpath;
+    }
     public function getFilePath() : string
     {
         return $this->filePath;

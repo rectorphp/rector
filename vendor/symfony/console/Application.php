@@ -844,7 +844,7 @@ class Application implements \RectorPrefix20210719\Symfony\Contracts\Service\Res
                 $helper->setInput($input);
             }
         }
-        if ($command instanceof \RectorPrefix20210719\Symfony\Component\Console\Command\SignalableCommandInterface) {
+        if ($command instanceof \RectorPrefix20210719\Symfony\Component\Console\Command\SignalableCommandInterface && ($this->signalsToDispatchEvent || $command->getSubscribedSignals())) {
             if (!$this->signalRegistry) {
                 throw new \RectorPrefix20210719\Symfony\Component\Console\Exception\RuntimeException('Unable to subscribe to signal events. Make sure that the `pcntl` extension is installed and that "pcntl_*" functions are not disabled by your php.ini\'s "disable_functions" directive.');
             }

@@ -1782,12 +1782,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/console.git",
-                "reference": "a8106e7f386e11944242a624a7a6f6af0cc61e16"
+                "reference": "4f90ccd5ef32a0c1bd5f7b75cf27f94d12bfab04"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/console\/zipball\/a8106e7f386e11944242a624a7a6f6af0cc61e16",
-                "reference": "a8106e7f386e11944242a624a7a6f6af0cc61e16",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/console\/zipball\/4f90ccd5ef32a0c1bd5f7b75cf27f94d12bfab04",
+                "reference": "4f90ccd5ef32a0c1bd5f7b75cf27f94d12bfab04",
                 "shasum": ""
             },
             "require": {
@@ -1825,7 +1825,7 @@
                 "symfony\/lock": "",
                 "symfony\/process": ""
             },
-            "time": "2021-07-18T16:30:56+00:00",
+            "time": "2021-07-19T09:57:30+00:00",
             "default-branch": true,
             "type": "library",
             "installation-source": "dist",

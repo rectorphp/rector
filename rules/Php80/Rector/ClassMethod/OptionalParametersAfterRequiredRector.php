@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ParametersAcceptorSelector;
+use Rector\CodingStyle\Reflection\VendorLocationDetector;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Reflection\ReflectionResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -39,11 +40,16 @@ final class OptionalParametersAfterRequiredRector extends \Rector\Core\Rector\Ab
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
-    public function __construct(\Rector\Php80\NodeResolver\RequireOptionalParamResolver $requireOptionalParamResolver, \Rector\Php80\NodeResolver\ArgumentSorter $argumentSorter, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver)
+    /**
+     * @var \Rector\CodingStyle\Reflection\VendorLocationDetector
+     */
+    private $vendorLocationDetector;
+    public function __construct(\Rector\Php80\NodeResolver\RequireOptionalParamResolver $requireOptionalParamResolver, \Rector\Php80\NodeResolver\ArgumentSorter $argumentSorter, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver, \Rector\CodingStyle\Reflection\VendorLocationDetector $vendorLocationDetector)
     {
         $this->requireOptionalParamResolver = $requireOptionalParamResolver;
         $this->argumentSorter = $argumentSorter;
         $this->reflectionResolver = $reflectionResolver;
+        $this->vendorLocationDetector = $vendorLocationDetector;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -149,13 +155,7 @@ CODE_SAMPLE
      */
     private function resolveExpectedArgParamOrderIfDifferent(\PHPStan\Reflection\MethodReflection $methodReflection, array $argsOrParams) : ?array
     {
-        $classReflection = $methodReflection->getDeclaringClass();
-        $fileName = $classReflection->getFileName();
-        // probably internal class
-        if ($fileName === \false) {
-            return null;
-        }
-        if (\strpos($fileName, '/vendor/') !== \false) {
+        if ($this->vendorLocationDetector->detectFunctionLikeReflection($methodReflection)) {
             return null;
         }
         $parametersAcceptor = \PHPStan\Reflection\ParametersAcceptorSelector::selectSingle($methodReflection->getVariants());
