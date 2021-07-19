@@ -12,6 +12,12 @@ There 3 rules will highly increase changes to get your PR merged:
     composer complete-check
     ```
 
+- If the previous command fails due to insufficient memory, execute the following
+
+    ```bash
+    composer phpstan
+    ```
+
 - Do you need to fix coding standards?
 
     ```bash
