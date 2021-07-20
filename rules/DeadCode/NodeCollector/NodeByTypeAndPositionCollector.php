@@ -58,8 +58,12 @@ final class NodeByTypeAndPositionCollector
         }
 
         foreach ($assignedVariablesUse as $assignedVariableUse) {
-            /** @var int $startTokenPos */
+            /** @var int|null $startTokenPos */
             $startTokenPos = $assignedVariableUse->getAttribute(AttributeKey::START_TOKEN_POSITION);
+
+            if ($startTokenPos === null) {
+                continue;
+            }
 
             /** @var string $variableName */
             $variableName = $this->nodeNameResolver->getName($assignedVariableUse);
