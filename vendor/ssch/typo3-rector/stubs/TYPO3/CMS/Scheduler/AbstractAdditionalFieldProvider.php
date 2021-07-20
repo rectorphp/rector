@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210719\TYPO3\CMS\Scheduler;
+namespace RectorPrefix20210720\TYPO3\CMS\Scheduler;
 
 if (\class_exists('TYPO3\\CMS\\Scheduler\\AbstractAdditionalFieldProvider')) {
     return;

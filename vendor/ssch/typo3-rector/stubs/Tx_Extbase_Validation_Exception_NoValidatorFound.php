@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210719;
+namespace RectorPrefix20210720;
 
 if (\class_exists('Tx_Extbase_Validation_Exception_NoValidatorFound')) {
     return;

@@ -8,13 +8,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210719\Symfony\Component\DependencyInjection\Loader\Configurator;
+namespace RectorPrefix20210720\Symfony\Component\DependencyInjection\Loader\Configurator;
 
-use RectorPrefix20210719\Symfony\Component\DependencyInjection\Definition;
+use RectorPrefix20210720\Symfony\Component\DependencyInjection\Definition;
 /**
  * @author Nicolas Grekas <p@tchwork.com>
  */
-class InlineServiceConfigurator extends \RectorPrefix20210719\Symfony\Component\DependencyInjection\Loader\Configurator\AbstractConfigurator
+class InlineServiceConfigurator extends \RectorPrefix20210720\Symfony\Component\DependencyInjection\Loader\Configurator\AbstractConfigurator
 {
     use Traits\ArgumentTrait;
     use Traits\AutowireTrait;
@@ -31,7 +31,7 @@ class InlineServiceConfigurator extends \RectorPrefix20210719\Symfony\Component\
     private $id = '[inline]';
     private $allowParent = \true;
     private $path = null;
-    public function __construct(\RectorPrefix20210719\Symfony\Component\DependencyInjection\Definition $definition)
+    public function __construct(\RectorPrefix20210720\Symfony\Component\DependencyInjection\Definition $definition)
     {
         $this->definition = $definition;
     }

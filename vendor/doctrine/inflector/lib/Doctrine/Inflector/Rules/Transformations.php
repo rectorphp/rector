@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210719\Doctrine\Inflector\Rules;
+namespace RectorPrefix20210720\Doctrine\Inflector\Rules;
 
-use RectorPrefix20210719\Doctrine\Inflector\WordInflector;
-class Transformations implements \RectorPrefix20210719\Doctrine\Inflector\WordInflector
+use RectorPrefix20210720\Doctrine\Inflector\WordInflector;
+class Transformations implements \RectorPrefix20210720\Doctrine\Inflector\WordInflector
 {
     /** @var Transformation[] */
     private $transformations;
-    public function __construct(\RectorPrefix20210719\Doctrine\Inflector\Rules\Transformation ...$transformations)
+    public function __construct(\RectorPrefix20210720\Doctrine\Inflector\Rules\Transformation ...$transformations)
     {
         $this->transformations = $transformations;
     }

@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210719\TYPO3\CMS\Fluid\Core\ViewHelper;
+namespace RectorPrefix20210720\TYPO3\CMS\Fluid\Core\ViewHelper;
 
 if (\class_exists('TYPO3\\CMS\\Fluid\\Core\\ViewHelper\\ViewHelperVariableContainer')) {
     return;

@@ -3,13 +3,13 @@
 declare (strict_types=1);
 namespace Rector\TypeDeclaration\Enum;
 
-use RectorPrefix20210719\MyCLabs\Enum\Enum;
+use RectorPrefix20210720\MyCLabs\Enum\Enum;
 /**
  * @enum
  * @method static TypeStrictness STRICTNESS_TYPE_DECLARATION()
  * @method static TypeStrictness STRICTNESS_DOCBLOCK()
  */
-final class TypeStrictness extends \RectorPrefix20210719\MyCLabs\Enum\Enum
+final class TypeStrictness extends \RectorPrefix20210720\MyCLabs\Enum\Enum
 {
     /**
      * @var string

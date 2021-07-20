@@ -8,17 +8,17 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210719\Symfony\Component\Config\Definition;
+namespace RectorPrefix20210720\Symfony\Component\Config\Definition;
 
-use RectorPrefix20210719\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
-use RectorPrefix20210719\Symfony\Component\Config\Definition\Exception\InvalidTypeException;
-use RectorPrefix20210719\Symfony\Component\Config\Definition\Exception\UnsetKeyException;
+use RectorPrefix20210720\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
+use RectorPrefix20210720\Symfony\Component\Config\Definition\Exception\InvalidTypeException;
+use RectorPrefix20210720\Symfony\Component\Config\Definition\Exception\UnsetKeyException;
 /**
  * Represents an Array node in the config tree.
  *
  * @author Johannes M. Schmitt <schmittjoh@gmail.com>
  */
-class ArrayNode extends \RectorPrefix20210719\Symfony\Component\Config\Definition\BaseNode implements \RectorPrefix20210719\Symfony\Component\Config\Definition\PrototypeNodeInterface
+class ArrayNode extends \RectorPrefix20210720\Symfony\Component\Config\Definition\BaseNode implements \RectorPrefix20210720\Symfony\Component\Config\Definition\PrototypeNodeInterface
 {
     protected $xmlRemappings = [];
     protected $children = [];
@@ -186,7 +186,7 @@ class ArrayNode extends \RectorPrefix20210719\Symfony\Component\Config\Definitio
     protected function finalizeValue($value)
     {
         if (\false === $value) {
-            throw new \RectorPrefix20210719\Symfony\Component\Config\Definition\Exception\UnsetKeyException(\sprintf('Unsetting key for path "%s", value: %s.', $this->getPath(), \json_encode($value)));
+            throw new \RectorPrefix20210720\Symfony\Component\Config\Definition\Exception\UnsetKeyException(\sprintf('Unsetting key for path "%s", value: %s.', $this->getPath(), \json_encode($value)));
         }
         foreach ($this->children as $name => $child) {
             if (!\array_key_exists($name, $value)) {
@@ -197,7 +197,7 @@ class ArrayNode extends \RectorPrefix20210719\Symfony\Component\Config\Definitio
                     } else {
                         $message .= '.';
                     }
-                    $ex = new \RectorPrefix20210719\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException($message);
+                    $ex = new \RectorPrefix20210720\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException($message);
                     $ex->setPath($this->getPath());
                     throw $ex;
                 }
@@ -212,7 +212,7 @@ class ArrayNode extends \RectorPrefix20210719\Symfony\Component\Config\Definitio
             }
             try {
                 $value[$name] = $child->finalize($value[$name]);
-            } catch (\RectorPrefix20210719\Symfony\Component\Config\Definition\Exception\UnsetKeyException $e) {
+            } catch (\RectorPrefix20210720\Symfony\Component\Config\Definition\Exception\UnsetKeyException $e) {
                 unset($value[$name]);
             }
         }
@@ -224,7 +224,7 @@ class ArrayNode extends \RectorPrefix20210719\Symfony\Component\Config\Definitio
     protected function validateType($value)
     {
         if (!\is_array($value) && (!$this->allowFalse || \false !== $value)) {
-            $ex = new \RectorPrefix20210719\Symfony\Component\Config\Definition\Exception\InvalidTypeException(\sprintf('Invalid type for path "%s". Expected "array", but got "%s"', $this->getPath(), \get_debug_type($value)));
+            $ex = new \RectorPrefix20210720\Symfony\Component\Config\Definition\Exception\InvalidTypeException(\sprintf('Invalid type for path "%s". Expected "array", but got "%s"', $this->getPath(), \get_debug_type($value)));
             if ($hint = $this->getInfo()) {
                 $ex->addHint($hint);
             }
@@ -248,7 +248,7 @@ class ArrayNode extends \RectorPrefix20210719\Symfony\Component\Config\Definitio
             if (isset($this->children[$name])) {
                 try {
                     $normalized[$name] = $this->children[$name]->normalize($val);
-                } catch (\RectorPrefix20210719\Symfony\Component\Config\Definition\Exception\UnsetKeyException $e) {
+                } catch (\RectorPrefix20210720\Symfony\Component\Config\Definition\Exception\UnsetKeyException $e) {
                 }
                 unset($value[$name]);
             } elseif (!$this->removeExtraKeys) {
@@ -277,7 +277,7 @@ class ArrayNode extends \RectorPrefix20210719\Symfony\Component\Config\Definitio
             } else {
                 $msg .= \sprintf('. Available option%s %s "%s".', 1 === \count($proposals) ? '' : 's', 1 === \count($proposals) ? 'is' : 'are', \implode('", "', $proposals));
             }
-            $ex = new \RectorPrefix20210719\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException($msg);
+            $ex = new \RectorPrefix20210720\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException($msg);
             $ex->setPath($this->getPath());
             throw $ex;
         }
@@ -295,7 +295,7 @@ class ArrayNode extends \RectorPrefix20210719\Symfony\Component\Config\Definitio
             if (!isset($value[$singular])) {
                 continue;
             }
-            $value[$plural] = \RectorPrefix20210719\Symfony\Component\Config\Definition\Processor::normalizeConfig($value, $singular, $plural);
+            $value[$plural] = \RectorPrefix20210720\Symfony\Component\Config\Definition\Processor::normalizeConfig($value, $singular, $plural);
             unset($value[$singular]);
         }
         return $value;
@@ -320,7 +320,7 @@ class ArrayNode extends \RectorPrefix20210719\Symfony\Component\Config\Definitio
             // no conflict
             if (!\array_key_exists($k, $leftSide)) {
                 if (!$this->allowNewKeys) {
-                    $ex = new \RectorPrefix20210719\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException(\sprintf('You are not allowed to define new elements for path "%s". Please define all elements for this path in one config file. If you are trying to overwrite an element, make sure you redefine it with the same name.', $this->getPath()));
+                    $ex = new \RectorPrefix20210720\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException(\sprintf('You are not allowed to define new elements for path "%s". Please define all elements for this path in one config file. If you are trying to overwrite an element, make sure you redefine it with the same name.', $this->getPath()));
                     $ex->setPath($this->getPath());
                     throw $ex;
                 }

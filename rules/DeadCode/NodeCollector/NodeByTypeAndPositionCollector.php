@@ -48,8 +48,11 @@ final class NodeByTypeAndPositionCollector
             $nodesByTypeAndPosition[] = new \Rector\DeadCode\ValueObject\VariableNodeUse($startTokenPos, $variableName, \Rector\DeadCode\ValueObject\VariableNodeUse::TYPE_ASSIGN, $assignedVariable, $nestingHash);
         }
         foreach ($assignedVariablesUse as $assignedVariableUse) {
-            /** @var int $startTokenPos */
+            /** @var int|null $startTokenPos */
             $startTokenPos = $assignedVariableUse->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::START_TOKEN_POSITION);
+            if ($startTokenPos === null) {
+                continue;
+            }
             /** @var string $variableName */
             $variableName = $this->nodeNameResolver->getName($assignedVariableUse);
             $nodesByTypeAndPosition[] = new \Rector\DeadCode\ValueObject\VariableNodeUse($startTokenPos, $variableName, \Rector\DeadCode\ValueObject\VariableNodeUse::TYPE_USE, $assignedVariableUse);

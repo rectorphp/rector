@@ -8,15 +8,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210719\Symfony\Component\HttpFoundation\Session\Storage;
+namespace RectorPrefix20210720\Symfony\Component\HttpFoundation\Session\Storage;
 
-use RectorPrefix20210719\Symfony\Component\HttpFoundation\Request;
+use RectorPrefix20210720\Symfony\Component\HttpFoundation\Request;
 // Help opcache.preload discover always-needed symbols
-\class_exists(\RectorPrefix20210719\Symfony\Component\HttpFoundation\Session\Storage\PhpBridgeSessionStorage::class);
+\class_exists(\RectorPrefix20210720\Symfony\Component\HttpFoundation\Session\Storage\PhpBridgeSessionStorage::class);
 /**
  * @author Jérémy Derussé <jeremy@derusse.com>
  */
-class PhpBridgeSessionStorageFactory implements \RectorPrefix20210719\Symfony\Component\HttpFoundation\Session\Storage\SessionStorageFactoryInterface
+class PhpBridgeSessionStorageFactory implements \RectorPrefix20210720\Symfony\Component\HttpFoundation\Session\Storage\SessionStorageFactoryInterface
 {
     private $handler;
     private $metaBag;
@@ -24,15 +24,15 @@ class PhpBridgeSessionStorageFactory implements \RectorPrefix20210719\Symfony\Co
     /**
      * @see PhpBridgeSessionStorage constructor.
      */
-    public function __construct($handler = null, \RectorPrefix20210719\Symfony\Component\HttpFoundation\Session\Storage\MetadataBag $metaBag = null, bool $secure = \false)
+    public function __construct($handler = null, \RectorPrefix20210720\Symfony\Component\HttpFoundation\Session\Storage\MetadataBag $metaBag = null, bool $secure = \false)
     {
         $this->handler = $handler;
         $this->metaBag = $metaBag;
         $this->secure = $secure;
     }
-    public function createStorage(?\RectorPrefix20210719\Symfony\Component\HttpFoundation\Request $request) : \RectorPrefix20210719\Symfony\Component\HttpFoundation\Session\Storage\SessionStorageInterface
+    public function createStorage(?\RectorPrefix20210720\Symfony\Component\HttpFoundation\Request $request) : \RectorPrefix20210720\Symfony\Component\HttpFoundation\Session\Storage\SessionStorageInterface
     {
-        $storage = new \RectorPrefix20210719\Symfony\Component\HttpFoundation\Session\Storage\PhpBridgeSessionStorage($this->handler, $this->metaBag);
+        $storage = new \RectorPrefix20210720\Symfony\Component\HttpFoundation\Session\Storage\PhpBridgeSessionStorage($this->handler, $this->metaBag);
         if ($this->secure && $request && $request->isSecure()) {
             $storage->setOptions(['cookie_secure' => \true]);
         }

@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210719;
+namespace RectorPrefix20210720;
 
 if (\class_exists('t3lib_TSparser_TSconfig')) {
     return;
