@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\Nette\NodeAnalyzer;
 
-use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\FunctionLike;
@@ -19,10 +18,6 @@ use Rector\NodeNestingScope\ScopeNestingComparator;
 use Rector\NodeNestingScope\ValueObject\ControlStructure;
 final class TemplatePropertyAssignCollector
 {
-    /**
-     * @var array<class-string<\PhpParser\Node>>
-     */
-    private const NODE_TYPES = \Rector\NodeNestingScope\ValueObject\ControlStructure::CONDITIONAL_NODE_SCOPE_TYPES + [\PhpParser\Node\FunctionLike::class];
     /**
      * @var \PhpParser\Node\Stmt\Return_|null
      */
@@ -70,21 +65,6 @@ final class TemplatePropertyAssignCollector
         }
         return new \Rector\Nette\ValueObject\TemplateParametersAssigns($this->alwaysTemplateParameterAssigns, $this->conditionalTemplateParameterAssigns);
     }
-    /**
-     * @return Node[]
-     */
-    private function getFoundParents(\PhpParser\Node\Expr\PropertyFetch $propertyFetch) : array
-    {
-        $foundParents = [];
-        /** @var class-string<Node> $nodeType */
-        foreach (self::NODE_TYPES as $nodeType) {
-            $parentType = $this->betterNodeFinder->findParentType($propertyFetch->var, $nodeType);
-            if ($parentType instanceof \PhpParser\Node) {
-                $foundParents[] = $parentType;
-            }
-        }
-        return $foundParents;
-    }
     private function collectVariableFromAssign(\PhpParser\Node\Expr\Assign $assign) : void
     {
         if (!$assign->var instanceof \PhpParser\Node\Expr\PropertyFetch) {
@@ -95,18 +75,18 @@ final class TemplatePropertyAssignCollector
             return;
         }
         $propertyFetch = $assign->var;
-        $foundParents = $this->getFoundParents($propertyFetch);
-        foreach ($foundParents as $foundParent) {
-            if ($this->scopeNestingComparator->isInBothIfElseBranch($foundParent, $propertyFetch)) {
-                $this->conditionalTemplateParameterAssigns[] = new \Rector\Nette\ValueObject\ConditionalTemplateParameterAssign($assign, $parameterName);
-                return;
-            }
-            if ($foundParent instanceof \PhpParser\Node\Stmt\If_) {
-                return;
-            }
-            if ($foundParent instanceof \PhpParser\Node\Stmt\Else_) {
-                return;
-            }
+        /** @var array<class-string<\PhpParser\Node>> $nodeTypes */
+        $nodeTypes = \Rector\NodeNestingScope\ValueObject\ControlStructure::CONDITIONAL_NODE_SCOPE_TYPES + [\PhpParser\Node\FunctionLike::class];
+        $foundParent = $this->betterNodeFinder->findParentTypes($propertyFetch->var, $nodeTypes);
+        if ($foundParent && $this->scopeNestingComparator->isInBothIfElseBranch($foundParent, $propertyFetch)) {
+            $this->conditionalTemplateParameterAssigns[] = new \Rector\Nette\ValueObject\ConditionalTemplateParameterAssign($assign, $parameterName);
+            return;
+        }
+        if ($foundParent instanceof \PhpParser\Node\Stmt\If_) {
+            return;
+        }
+        if ($foundParent instanceof \PhpParser\Node\Stmt\Else_) {
+            return;
         }
         // there is a return before this assign, to do not remove it and keep ti
         if (!$this->returnAnalyzer->isBeforeLastReturn($assign, $this->lastReturn)) {

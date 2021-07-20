@@ -14,6 +14,7 @@ use PhpParser\Node\Expr\PreInc;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\StaticPropertyFetch;
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Reflection\ParametersAcceptorSelector;
@@ -25,9 +26,6 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\ReadWrite\Guard\VariableToConstantGuard;
 use Rector\ReadWrite\NodeAnalyzer\ReadWritePropertyAnalyzer;
 use RectorPrefix20210720\Symplify\PackageBuilder\Php\TypeChecker;
-/**
- * "private $property"
- */
 final class PropertyManipulator
 {
     /**
@@ -73,13 +71,17 @@ final class PropertyManipulator
         $this->propertyFetchFinder = $propertyFetchFinder;
         $this->reflectionResolver = $reflectionResolver;
     }
-    public function isPropertyUsedInReadContext(\PhpParser\Node\Stmt\Property $property) : bool
+    /**
+     * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $propertyOrPromotedParam
+     */
+    public function isPropertyUsedInReadContext($propertyOrPromotedParam) : bool
     {
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($propertyOrPromotedParam);
+        // @todo attributes too
         if ($phpDocInfo->hasByAnnotationClasses(['Doctrine\\ORM\\Mapping\\Id', 'Doctrine\\ORM\\Mapping\\Column', 'Doctrine\\ORM\\Mapping\\OneToMany', 'Doctrine\\ORM\\Mapping\\ManyToMany', 'Doctrine\\ORM\\Mapping\\ManyToOne', 'Doctrine\\ORM\\Mapping\\OneToOne', 'JMS\\Serializer\\Annotation\\Type'])) {
             return \true;
         }
-        $privatePropertyFetches = $this->propertyFetchFinder->findPrivatePropertyFetches($property);
+        $privatePropertyFetches = $this->propertyFetchFinder->findPrivatePropertyFetches($propertyOrPromotedParam);
         foreach ($privatePropertyFetches as $privatePropertyFetch) {
             if ($this->readWritePropertyAnalyzer->isRead($privatePropertyFetch)) {
                 return \true;
@@ -87,7 +89,7 @@ final class PropertyManipulator
         }
         // has classLike $this->$variable call?
         /** @var ClassLike $classLike */
-        $classLike = $property->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
+        $classLike = $propertyOrPromotedParam->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
         return (bool) $this->betterNodeFinder->findFirst($classLike->stmts, function (\PhpParser\Node $node) : bool {
             if (!$node instanceof \PhpParser\Node\Expr\PropertyFetch) {
                 return \false;

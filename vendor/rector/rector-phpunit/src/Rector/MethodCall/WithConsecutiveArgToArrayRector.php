@@ -5,7 +5,6 @@ namespace Rector\PHPUnit\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
-use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
@@ -98,7 +97,7 @@ CODE_SAMPLE
         if (!$this->isName($node->name, 'withConsecutive')) {
             return null;
         }
-        if ($this->hasArrayArgType($node)) {
+        if ($this->areAllArgArrayTypes($node)) {
             return null;
         }
         // is a mock?
@@ -113,10 +112,12 @@ CODE_SAMPLE
         if (!$this->reflectionProvider->hasClass($mockClass)) {
             return null;
         }
-        $numberOfParameters = $this->resolveNumberOfRequiredParameters($mockClass, $mockMethod);
+        $classReflection = $this->reflectionProvider->getClass($mockClass);
+        $classReflection = $classReflection->getNativeReflection();
+        $reflectionMethod = $classReflection->getMethod($mockMethod);
+        $numberOfParameters = $reflectionMethod->getNumberOfParameters();
         $values = [];
         foreach ($node->args as $arg) {
-            // already an array
             $values[] = $arg->value;
         }
         // simple check argument count fits to method required args
@@ -131,18 +132,16 @@ CODE_SAMPLE
         }
         return $node;
     }
-    private function hasArrayArgType(\PhpParser\Node\Expr\MethodCall $methodCall) : bool
+    private function areAllArgArrayTypes(\PhpParser\Node\Expr\MethodCall $methodCall) : bool
     {
         foreach ($methodCall->args as $arg) {
-            if ($arg->value instanceof \PhpParser\Node\Expr\Array_) {
-                return \true;
-            }
             $argumentStaticType = $this->getStaticType($arg->value);
             if ($argumentStaticType instanceof \PHPStan\Type\ArrayType) {
-                return \true;
+                continue;
             }
+            return \false;
         }
-        return \false;
+        return \true;
     }
     private function inferMockedClassName(\PhpParser\Node\Expr\MethodCall $methodCall) : ?string
     {
@@ -187,12 +186,5 @@ CODE_SAMPLE
             $currentMethodCallee = $currentMethodCallee->var;
         }
         return $currentMethodCallee;
-    }
-    private function resolveNumberOfRequiredParameters(string $mockClass, string $mockMethod) : int
-    {
-        $classReflection = $this->reflectionProvider->getClass($mockClass);
-        $nativeClassReflection = $classReflection->getNativeReflection();
-        $reflectionMethod = $nativeClassReflection->getMethod($mockMethod);
-        return $reflectionMethod->getNumberOfParameters();
     }
 }

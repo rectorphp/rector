@@ -70,8 +70,6 @@ final class AssignAnalyzer
         $variable = new \PhpParser\Node\Expr\Variable($variableName);
         $assignedArrayDimFetch = clone $arrayDimFetch;
         $assign = new \PhpParser\Node\Expr\Assign($variable, $assignedArrayDimFetch);
-        $variable->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE, $assign);
-        $assignedArrayDimFetch->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE, $assign);
         return new \PhpParser\Node\Stmt\Expression($assign);
     }
 }

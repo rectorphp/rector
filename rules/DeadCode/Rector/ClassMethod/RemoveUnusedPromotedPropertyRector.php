@@ -6,6 +6,7 @@ namespace Rector\DeadCode\Rector\ClassMethod;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use Rector\Core\NodeManipulator\PropertyManipulator;
 use Rector\Core\PhpParser\NodeFinder\PropertyFetchFinder;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
@@ -22,9 +23,14 @@ final class RemoveUnusedPromotedPropertyRector extends \Rector\Core\Rector\Abstr
      * @var \Rector\Core\PhpParser\NodeFinder\PropertyFetchFinder
      */
     private $propertyFetchFinder;
-    public function __construct(\Rector\Core\PhpParser\NodeFinder\PropertyFetchFinder $propertyFetchFinder)
+    /**
+     * @var \Rector\Core\NodeManipulator\PropertyManipulator
+     */
+    private $propertyManipulator;
+    public function __construct(\Rector\Core\PhpParser\NodeFinder\PropertyFetchFinder $propertyFetchFinder, \Rector\Core\NodeManipulator\PropertyManipulator $propertyManipulator)
     {
         $this->propertyFetchFinder = $propertyFetchFinder;
+        $this->propertyManipulator = $propertyManipulator;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -74,16 +80,16 @@ CODE_SAMPLE
         if (!$this->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::PROPERTY_PROMOTION)) {
             return null;
         }
-        if (!$this->isName($node, \Rector\Core\ValueObject\MethodName::CONSTRUCT)) {
-            return null;
-        }
         $class = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
-        if (!$class instanceof \PhpParser\Node\Stmt\Class_) {
+        if (!$this->isName($node, \Rector\Core\ValueObject\MethodName::CONSTRUCT)) {
             return null;
         }
         foreach ($node->getParams() as $param) {
             if ($param->flags === 0) {
                 continue;
+            }
+            if ($this->propertyManipulator->isPropertyUsedInReadContext($param)) {
+                return null;
             }
             // only private local scope; removing public property might be dangerous
             if ($param->flags !== \PhpParser\Node\Stmt\Class_::MODIFIER_PRIVATE) {

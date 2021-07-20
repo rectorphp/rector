@@ -6,6 +6,7 @@ namespace Rector\Core\PhpParser\NodeFinder;
 use PhpParser\Node;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticPropertyFetch;
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
@@ -34,24 +35,28 @@ final class PropertyFetchFinder
     }
     /**
      * @return PropertyFetch[]|StaticPropertyFetch[]
+     * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $propertyOrPromotedParam
      */
-    public function findPrivatePropertyFetches(\PhpParser\Node\Stmt\Property $property) : array
+    public function findPrivatePropertyFetches($propertyOrPromotedParam) : array
     {
-        $classLike = $property->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
+        $classLike = $propertyOrPromotedParam->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
         if (!$classLike instanceof \PhpParser\Node\Stmt\Class_) {
             return [];
         }
         $classLikesToSearch = $this->nodeRepository->findUsedTraitsInClass($classLike);
         $classLikesToSearch[] = $classLike;
-        $singleProperty = $property->props[0];
+        $propertyName = $this->resolvePropertyName($propertyOrPromotedParam);
+        if ($propertyName === null) {
+            return [];
+        }
         /** @var PropertyFetch[]|StaticPropertyFetch[] $propertyFetches */
-        $propertyFetches = $this->betterNodeFinder->find($classLikesToSearch, function (\PhpParser\Node $node) use($singleProperty, $classLikesToSearch) : bool {
+        $propertyFetches = $this->betterNodeFinder->find($classLikesToSearch, function (\PhpParser\Node $node) use($propertyName, $classLikesToSearch) : bool {
             // property + static fetch
             if (!$node instanceof \PhpParser\Node\Expr\PropertyFetch && !$node instanceof \PhpParser\Node\Expr\StaticPropertyFetch) {
                 return \false;
             }
             // is it the name match?
-            if (!$this->nodeNameResolver->areNamesEqual($node, $singleProperty)) {
+            if (!$this->nodeNameResolver->isName($node, $propertyName)) {
                 return \false;
             }
             $currentClassLike = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
@@ -77,5 +82,15 @@ final class PropertyFetchFinder
             $foundPropertyFetches[] = $propertyFetch;
         }
         return $foundPropertyFetches;
+    }
+    /**
+     * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $propertyOrPromotedParam
+     */
+    private function resolvePropertyName($propertyOrPromotedParam) : ?string
+    {
+        if ($propertyOrPromotedParam instanceof \PhpParser\Node\Stmt\Property) {
+            return $this->nodeNameResolver->getName($propertyOrPromotedParam->props[0]);
+        }
+        return $this->nodeNameResolver->getName($propertyOrPromotedParam->var);
     }
 }
