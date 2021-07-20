@@ -15,6 +15,7 @@ use PhpParser\Node\Expr\PreInc;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\StaticPropertyFetch;
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Reflection\ParametersAcceptorSelector;
@@ -27,9 +28,6 @@ use Rector\ReadWrite\Guard\VariableToConstantGuard;
 use Rector\ReadWrite\NodeAnalyzer\ReadWritePropertyAnalyzer;
 use Symplify\PackageBuilder\Php\TypeChecker;
 
-/**
- * "private $property"
- */
 final class PropertyManipulator
 {
     public function __construct(
@@ -44,9 +42,11 @@ final class PropertyManipulator
     ) {
     }
 
-    public function isPropertyUsedInReadContext(Property $property): bool
+    public function isPropertyUsedInReadContext(Property | Param $propertyOrPromotedParam): bool
     {
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($propertyOrPromotedParam);
+
+        // @todo attributes too
         if ($phpDocInfo->hasByAnnotationClasses([
             'Doctrine\ORM\Mapping\Id',
             'Doctrine\ORM\Mapping\Column',
@@ -59,7 +59,7 @@ final class PropertyManipulator
             return true;
         }
 
-        $privatePropertyFetches = $this->propertyFetchFinder->findPrivatePropertyFetches($property);
+        $privatePropertyFetches = $this->propertyFetchFinder->findPrivatePropertyFetches($propertyOrPromotedParam);
         foreach ($privatePropertyFetches as $privatePropertyFetch) {
             if ($this->readWritePropertyAnalyzer->isRead($privatePropertyFetch)) {
                 return true;
@@ -68,7 +68,7 @@ final class PropertyManipulator
 
         // has classLike $this->$variable call?
         /** @var ClassLike $classLike */
-        $classLike = $property->getAttribute(AttributeKey::CLASS_NODE);
+        $classLike = $propertyOrPromotedParam->getAttribute(AttributeKey::CLASS_NODE);
 
         return (bool) $this->betterNodeFinder->findFirst($classLike->stmts, function (Node $node): bool {
             if (! $node instanceof PropertyFetch) {

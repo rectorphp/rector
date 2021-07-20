@@ -7,6 +7,7 @@ namespace Rector\Core\PhpParser\NodeFinder;
 use PhpParser\Node;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticPropertyFetch;
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
@@ -26,9 +27,9 @@ final class PropertyFetchFinder
     /**
      * @return PropertyFetch[]|StaticPropertyFetch[]
      */
-    public function findPrivatePropertyFetches(Property $property): array
+    public function findPrivatePropertyFetches(Property | Param $propertyOrPromotedParam): array
     {
-        $classLike = $property->getAttribute(AttributeKey::CLASS_NODE);
+        $classLike = $propertyOrPromotedParam->getAttribute(AttributeKey::CLASS_NODE);
         if (! $classLike instanceof Class_) {
             return [];
         }
@@ -36,11 +37,14 @@ final class PropertyFetchFinder
         $classLikesToSearch = $this->nodeRepository->findUsedTraitsInClass($classLike);
         $classLikesToSearch[] = $classLike;
 
-        $singleProperty = $property->props[0];
+        $propertyName = $this->resolvePropertyName($propertyOrPromotedParam);
+        if ($propertyName === null) {
+            return [];
+        }
 
         /** @var PropertyFetch[]|StaticPropertyFetch[] $propertyFetches */
         $propertyFetches = $this->betterNodeFinder->find($classLikesToSearch, function (Node $node) use (
-            $singleProperty,
+            $propertyName,
             $classLikesToSearch
         ): bool {
             // property + static fetch
@@ -49,7 +53,7 @@ final class PropertyFetchFinder
             }
 
             // is it the name match?
-            if (! $this->nodeNameResolver->areNamesEqual($node, $singleProperty)) {
+            if (! $this->nodeNameResolver->isName($node, $propertyName)) {
                 return false;
             }
 
@@ -83,5 +87,14 @@ final class PropertyFetchFinder
         }
 
         return $foundPropertyFetches;
+    }
+
+    private function resolvePropertyName(Property | Param $propertyOrPromotedParam): ?string
+    {
+        if ($propertyOrPromotedParam instanceof Property) {
+            return $this->nodeNameResolver->getName($propertyOrPromotedParam->props[0]);
+        }
+
+        return $this->nodeNameResolver->getName($propertyOrPromotedParam->var);
     }
 }

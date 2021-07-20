@@ -7,6 +7,7 @@ namespace Rector\DeadCode\Rector\ClassMethod;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use Rector\Core\NodeManipulator\PropertyManipulator;
 use Rector\Core\PhpParser\NodeFinder\PropertyFetchFinder;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
@@ -21,7 +22,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveUnusedPromotedPropertyRector extends AbstractRector
 {
     public function __construct(
-        private PropertyFetchFinder $propertyFetchFinder
+        private PropertyFetchFinder $propertyFetchFinder,
+        private PropertyManipulator $propertyManipulator,
     ) {
     }
 
@@ -81,18 +83,18 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->isName($node, MethodName::CONSTRUCT)) {
-            return null;
-        }
-
         $class = $node->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $class instanceof Class_) {
+        if (! $this->isName($node, MethodName::CONSTRUCT)) {
             return null;
         }
 
         foreach ($node->getParams() as $param) {
             if ($param->flags === 0) {
                 continue;
+            }
+
+            if ($this->propertyManipulator->isPropertyUsedInReadContext($param)) {
+                return null;
             }
 
             // only private local scope; removing public property might be dangerous
