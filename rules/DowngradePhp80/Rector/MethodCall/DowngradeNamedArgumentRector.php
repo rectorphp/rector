@@ -6,6 +6,7 @@ namespace Rector\DowngradePhp80\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
@@ -16,6 +17,7 @@ use Rector\Core\Reflection\ReflectionResolver;
 use Rector\DowngradePhp80\NodeAnalyzer\UnnamedArgumentResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PHPStan\Reflection\FunctionReflection;
 
 /**
  * @see \Rector\Tests\DowngradePhp80\Rector\MethodCall\DowngradeNamedArgumentRector\DowngradeNamedArgumentRectorTest
@@ -33,7 +35,7 @@ final class DowngradeNamedArgumentRector extends AbstractRector
      */
     public function getNodeTypes(): array
     {
-        return [MethodCall::class, StaticCall::class, New_::class];
+        return [MethodCall::class, StaticCall::class, New_::class, FuncCall::class];
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -75,7 +77,7 @@ CODE_SAMPLE
     }
 
     /**
-     * @param MethodCall|StaticCall $node
+     * @param MethodCall|StaticCall|New_|FuncCall $node
      */
     public function refactor(Node $node): ?Node
     {
@@ -91,7 +93,7 @@ CODE_SAMPLE
     /**
      * @param Arg[] $args
      */
-    private function removeNamedArguments(MethodCall | StaticCall | New_ $node, array $args): ?Node
+    private function removeNamedArguments(MethodCall | StaticCall | New_ | FuncCall $node, array $args): ?Node
     {
         if ($node instanceof New_) {
             $functionLikeReflection = $this->reflectionResolver->resolveMethodReflectionFromNew($node);
@@ -99,10 +101,10 @@ CODE_SAMPLE
             $functionLikeReflection = $this->reflectionResolver->resolveFunctionLikeReflectionFromCall($node);
         }
 
-        if (! $functionLikeReflection instanceof MethodReflection) {
+        if (! $functionLikeReflection instanceof MethodReflection && ! $functionLikeReflection instanceof FunctionReflection) {
             return null;
         }
-//
+
         $unnamedArgs = $this->unnamedArgumentResolver->resolveFromReflection($functionLikeReflection, $args);
         $node->args = $unnamedArgs;
 

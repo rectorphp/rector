@@ -555,3 +555,8 @@ parameters:
 #             message: src/PhpParser/Node/BetterNodeFinder.php
 #             paths:
 #                 -
+
+        -
+            message: '#Instead of "ReflectionFunction" class/interface use "PHPStan\\Reflection\\FunctionReflection"#'
+            paths:
+                 - rules/DowngradePhp80/NodeAnalyzer/UnnamedArgumentResolver.php #45
