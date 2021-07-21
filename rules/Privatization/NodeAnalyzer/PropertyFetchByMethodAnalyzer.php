@@ -13,6 +13,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Do_;
 use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\If_;
+use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\While_;
 use PhpParser\NodeTraverser;
 use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
@@ -44,17 +45,24 @@ final class PropertyFetchByMethodAnalyzer
         $propertyUsageByMethods = [];
 
         foreach ($propertyNames as $propertyName) {
+            if ($this->isPropertyHasDefaultValue($class, $propertyName)) {
+                continue;
+            }
+
             foreach ($class->getMethods() as $classMethod) {
                 // assigned in constructor injection → skip
-                if ($this->nodeNameResolver->isName($classMethod, MethodName::CONSTRUCT)) {
+                if ($this->isInConstructWithPropertyChanging($classMethod, $propertyName)) {
                     return [];
                 }
 
-                if (! $this->propertyFetchAnalyzer->containsLocalPropertyFetchName($classMethod, $propertyName)) {
+                if ($this->isContainsLocalPropertyFetchNameOrPropertyChangingInMultipleMethodCalls(
+                    $classMethod,
+                    $propertyName
+                )) {
                     continue;
                 }
 
-                if ($this->isPropertyChangingInMultipleMethodCalls($classMethod, $propertyName)) {
+                if (! $this->isPropertyChanging($classMethod, $propertyName)) {
                     continue;
                 }
 
@@ -64,6 +72,32 @@ final class PropertyFetchByMethodAnalyzer
         }
 
         return $propertyUsageByMethods;
+    }
+
+    private function isContainsLocalPropertyFetchNameOrPropertyChangingInMultipleMethodCalls(
+        ClassMethod $classMethod,
+        string $propertyName
+    ): bool
+    {
+        if (! $this->propertyFetchAnalyzer->containsLocalPropertyFetchName($classMethod, $propertyName)) {
+            return true;
+        }
+
+        return $this->isPropertyChangingInMultipleMethodCalls($classMethod, $propertyName);
+    }
+
+    private function isPropertyHasDefaultValue(Class_ $class, string $propertyName): bool
+    {
+        $property = $class->getProperty($propertyName);
+        return $property instanceof Property && $property->props[0]->default;
+    }
+
+    private function isInConstructWithPropertyChanging(ClassMethod $classMethod, string $propertyName): bool
+    {
+        if (! $this->nodeNameResolver->isName($classMethod, MethodName::CONSTRUCT)) {
+            return false;
+        }
+        return $this->isPropertyChanging($classMethod, $propertyName);
     }
 
     /**
@@ -98,11 +132,9 @@ final class PropertyFetchByMethodAnalyzer
                     return null;
                 }
 
-                if ($node instanceof If_) {
-                    $isPropertyReadInIf = $this->refactorIf($node, $propertyName);
-                }
-
+                $isPropertyReadInIf = $this->verifyPropertyReadInIf($isPropertyReadInIf, $node, $propertyName);
                 $isPropertyChanging = $this->isPropertyChanging($node, $propertyName);
+
                 if (! $isPropertyChanging) {
                     return null;
                 }
@@ -112,6 +144,15 @@ final class PropertyFetchByMethodAnalyzer
         );
 
         return $isPropertyChanging || $isIfFollowedByAssign || $isPropertyReadInIf;
+    }
+
+    private function verifyPropertyReadInIf(?bool $isPropertyReadInIf, Node $node, string $propertyName): ?bool
+    {
+        if ($node instanceof If_) {
+            $isPropertyReadInIf = $this->refactorIf($node, $propertyName);
+        }
+
+        return $isPropertyReadInIf;
     }
 
     private function isScopeChangingNode(Node $node): bool
