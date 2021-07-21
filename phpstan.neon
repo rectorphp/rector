@@ -49,6 +49,9 @@ parameters:
         - packages-tests/NodeVisitor/FunctionMethodAndClassNodeVisitor/FunctionMethodAndClassNodeVisitorTest.php
         - rules/DowngradePhp70/Rector/FunctionLike/AbstractDowngradeParamDeclarationRector.php
 
+        # demo rule
+        - tests/Issues/AliasedImportDouble/Rector/ClassMethod/AddAliasImportRector.php
+
         - "*/Expected/*"
         # complex printer
         - '*tests/Rector/MethodCall/RenameMethodRector/**/SomeClass.php'

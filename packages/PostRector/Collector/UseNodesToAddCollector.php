@@ -66,10 +66,10 @@ final class UseNodesToAddCollector implements NodeCollectorInterface
         $useNodes = (array) $node->getAttribute(AttributeKey::USE_NODES);
         foreach ($useNodes as $useNode) {
             foreach ($useNode->uses as $useUse) {
-                if ($useUse->alias === null) {
-                    $objectTypes[] = new FullyQualifiedObjectType((string) $useUse->name);
-                } else {
+                if ($useUse->alias !== null) {
                     $objectTypes[] = new AliasedObjectType($useUse->alias->toString(), (string) $useUse->name);
+                } else {
+                    $objectTypes[] = new FullyQualifiedObjectType((string) $useUse->name);
                 }
             }
         }

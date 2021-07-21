@@ -11,6 +11,7 @@ use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\UseUse;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 
 final class UsedImportsResolver
@@ -23,7 +24,7 @@ final class UsedImportsResolver
     }
 
     /**
-     * @return FullyQualifiedObjectType[]
+     * @return array<FullyQualifiedObjectType|AliasedObjectType>
      */
     public function resolveForNode(Node $node): array
     {
@@ -42,7 +43,7 @@ final class UsedImportsResolver
 
     /**
      * @param Stmt[] $stmts
-     * @return FullyQualifiedObjectType[]
+     * @return array<FullyQualifiedObjectType|AliasedObjectType>
      */
     public function resolveForStmts(array $stmts): array
     {
@@ -63,7 +64,11 @@ final class UsedImportsResolver
             UseUse $useUse,
             string $name
         ) use (&$usedImports): void {
-            $usedImports[] = new FullyQualifiedObjectType($name);
+            if ($useUse->alias !== null) {
+                $usedImports[] = new AliasedObjectType($useUse->alias->toString(), $name);
+            } else {
+                $usedImports[] = new FullyQualifiedObjectType($name);
+            }
         });
 
         return $usedImports;
@@ -88,7 +93,7 @@ final class UsedImportsResolver
     }
 
     /**
-     * @return FullyQualifiedObjectType[]
+     * @return array<FullyQualifiedObjectType|AliasedObjectType>
      */
     private function resolveForNamespace(Namespace_ $namespace): array
     {

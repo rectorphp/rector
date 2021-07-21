@@ -77,8 +77,7 @@ final class PropertyFetchByMethodAnalyzer
     private function isContainsLocalPropertyFetchNameOrPropertyChangingInMultipleMethodCalls(
         ClassMethod $classMethod,
         string $propertyName
-    ): bool
-    {
+    ): bool {
         if (! $this->propertyFetchAnalyzer->containsLocalPropertyFetchName($classMethod, $propertyName)) {
             return true;
         }
