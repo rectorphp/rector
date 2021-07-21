@@ -10,6 +10,7 @@ use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\UseUse;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 final class UsedImportsResolver
 {
@@ -32,7 +33,7 @@ final class UsedImportsResolver
         $this->useImportsTraverser = $useImportsTraverser;
     }
     /**
-     * @return FullyQualifiedObjectType[]
+     * @return array<FullyQualifiedObjectType|AliasedObjectType>
      */
     public function resolveForNode(\PhpParser\Node $node) : array
     {
@@ -48,7 +49,7 @@ final class UsedImportsResolver
     }
     /**
      * @param Stmt[] $stmts
-     * @return FullyQualifiedObjectType[]
+     * @return array<FullyQualifiedObjectType|AliasedObjectType>
      */
     public function resolveForStmts(array $stmts) : array
     {
@@ -63,7 +64,11 @@ final class UsedImportsResolver
             }
         }
         $this->useImportsTraverser->traverserStmts($stmts, function (\PhpParser\Node\Stmt\UseUse $useUse, string $name) use(&$usedImports) : void {
-            $usedImports[] = new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType($name);
+            if ($useUse->alias !== null) {
+                $usedImports[] = new \Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType($useUse->alias->toString(), $name);
+            } else {
+                $usedImports[] = new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType($name);
+            }
         });
         return $usedImports;
     }
@@ -80,7 +85,7 @@ final class UsedImportsResolver
         return $usedFunctionImports;
     }
     /**
-     * @return FullyQualifiedObjectType[]
+     * @return array<FullyQualifiedObjectType|AliasedObjectType>
      */
     private function resolveForNamespace(\PhpParser\Node\Stmt\Namespace_ $namespace) : array
     {

@@ -67,10 +67,10 @@ final class UseNodesToAddCollector implements \Rector\PostRector\Contract\Collec
         $useNodes = (array) $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::USE_NODES);
         foreach ($useNodes as $useNode) {
             foreach ($useNode->uses as $useUse) {
-                if ($useUse->alias === null) {
-                    $objectTypes[] = new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType((string) $useUse->name);
-                } else {
+                if ($useUse->alias !== null) {
                     $objectTypes[] = new \Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType($useUse->alias->toString(), (string) $useUse->name);
+                } else {
+                    $objectTypes[] = new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType((string) $useUse->name);
                 }
             }
         }
