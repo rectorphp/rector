@@ -17,6 +17,7 @@ use Rector\Core\NodeManipulator\ForeachManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -25,7 +26,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\CodeQuality\Rector\Foreach_\SimplifyForeachToCoalescingRector\SimplifyForeachToCoalescingRectorTest
  */
-final class SimplifyForeachToCoalescingRector extends AbstractRector
+final class SimplifyForeachToCoalescingRector extends AbstractRector implements MinPhpVersionInterface
 {
     private ?Return_ $return = null;
 
@@ -71,10 +72,6 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isAtLeastPhpVersion(PhpVersionFeature::NULL_COALESCE)) {
-            return null;
-        }
-
         $this->return = null;
 
         if ($node->keyVar === null) {
@@ -98,6 +95,11 @@ CODE_SAMPLE
         }
 
         return $this->processForeachNodeWithAssignInside($node, $returnOrAssignNode);
+    }
+
+    public function provideMinPhpVersion(): int
+    {
+        return PhpVersionFeature::NULL_COALESCE;
     }
 
     /**

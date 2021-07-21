@@ -363,6 +363,10 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         return $this->betterStandardPrinter->print($node);
     }
 
+    /**
+     * @deprecated Use FQN PhpVersionProvider service directly instead or implements provideMinPhpVersion, this method will be removed soon
+     * Or implement \Rector\VersionBonding\Contract\MinPhpVersionInterface
+     */
     protected function isAtLeastPhpVersion(int $version): bool
     {
         return $this->phpVersionProvider->isAtLeastPhpVersion($version);

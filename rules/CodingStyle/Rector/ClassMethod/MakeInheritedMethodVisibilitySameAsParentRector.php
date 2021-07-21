@@ -144,7 +144,7 @@ CODE_SAMPLE
      */
     private function isConstructorWithStaticFactory(ClassMethod $classMethod, string $methodName): bool
     {
-        if (! $this->isAtLeastPhpVersion(PhpVersionFeature::PARENT_VISIBILITY_OVERRIDE)) {
+        if (! $this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::PARENT_VISIBILITY_OVERRIDE)) {
             return false;
         }
 

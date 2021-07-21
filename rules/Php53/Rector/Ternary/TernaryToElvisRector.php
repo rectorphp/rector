@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\Ternary;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -17,7 +18,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php53\Rector\Ternary\TernaryToElvisRector\TernaryToElvisRectorTest
  */
-final class TernaryToElvisRector extends AbstractRector
+final class TernaryToElvisRector extends AbstractRector implements MinPhpVersionInterface
 {
     public function getRuleDefinition(): RuleDefinition
     {
@@ -53,10 +54,6 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isAtLeastPhpVersion(PhpVersionFeature::ELVIS_OPERATOR)) {
-            return null;
-        }
-
         if (! $this->nodeComparator->areNodesEqual($node->cond, $node->if)) {
             return null;
         }
@@ -65,5 +62,10 @@ CODE_SAMPLE
         $node->if = null;
 
         return $node;
+    }
+
+    public function provideMinPhpVersion(): int
+    {
+        return PhpVersionFeature::ELVIS_OPERATOR;
     }
 }

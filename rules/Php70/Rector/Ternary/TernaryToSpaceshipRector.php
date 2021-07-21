@@ -12,6 +12,7 @@ use PhpParser\Node\Expr\BinaryOp\Spaceship;
 use PhpParser\Node\Expr\Ternary;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -19,7 +20,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://wiki.php.net/rfc/combined-comparison-operator
  * @see \Rector\Tests\Php70\Rector\Ternary\TernaryToSpaceshipRector\TernaryToSpaceshipRectorTest
  */
-final class TernaryToSpaceshipRector extends AbstractRector
+final class TernaryToSpaceshipRector extends AbstractRector implements MinPhpVersionInterface
 {
     public function getRuleDefinition(): RuleDefinition
     {
@@ -56,10 +57,6 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isAtLeastPhpVersion(PhpVersionFeature::SPACESHIP)) {
-            return null;
-        }
-
         if ($this->shouldSkip($node)) {
             return null;
         }
@@ -73,6 +70,11 @@ CODE_SAMPLE
         }
 
         return $this->processGreaterThanTernary($node, $nestedTernary);
+    }
+
+    public function provideMinPhpVersion(): int
+    {
+        return PhpVersionFeature::SPACESHIP;
     }
 
     private function shouldSkip(Ternary $ternary): bool

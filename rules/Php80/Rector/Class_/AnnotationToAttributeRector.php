@@ -27,6 +27,7 @@ use Rector\Php80\PhpDocCleaner\ConvertedAnnotationToAttributeParentRemover;
 use Rector\Php80\ValueObject\AnnotationToAttribute;
 use Rector\Php80\ValueObject\DoctrineTagAndAnnotationToAttribute;
 use Rector\PhpAttribute\Printer\PhpAttributeGroupFactory;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Symplify\SimplePhpDocParser\PhpDocNodeTraverser;
@@ -37,7 +38,7 @@ use Webmozart\Assert\Assert;
  *
  * @see \Rector\Tests\Php80\Rector\Class_\AnnotationToAttributeRector\AnnotationToAttributeRectorTest
  */
-final class AnnotationToAttributeRector extends AbstractRector implements ConfigurableRectorInterface
+final class AnnotationToAttributeRector extends AbstractRector implements ConfigurableRectorInterface, MinPhpVersionInterface
 {
     /**
      * @var string
@@ -127,10 +128,6 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isAtLeastPhpVersion(PhpVersionFeature::ATTRIBUTES)) {
-            return null;
-        }
-
         $phpDocInfo = $this->phpDocInfoFactory->createFromNode($node);
         if (! $phpDocInfo instanceof PhpDocInfo) {
             return null;
@@ -165,6 +162,11 @@ CODE_SAMPLE
         $annotationsToAttributes = $configuration[self::ANNOTATION_TO_ATTRIBUTE] ?? [];
         Assert::allIsInstanceOf($annotationsToAttributes, AnnotationToAttribute::class);
         $this->annotationsToAttributes = $annotationsToAttributes;
+    }
+
+    public function provideMinPhpVersion(): int
+    {
+        return PhpVersionFeature::ATTRIBUTES;
     }
 
     /**

@@ -10,13 +10,14 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Scalar\LNumber;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\Tests\Php70\Rector\FuncCall\MultiDirnameRector\MultiDirnameRectorTest
  */
-final class MultiDirnameRector extends AbstractRector
+final class MultiDirnameRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
      * @var string
@@ -46,10 +47,6 @@ final class MultiDirnameRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isAtLeastPhpVersion(PhpVersionFeature::DIRNAME_LEVELS)) {
-            return null;
-        }
-
         $this->nestingLevel = 0;
 
         if (! $this->isName($node, self::DIRNAME)) {
@@ -72,6 +69,11 @@ final class MultiDirnameRector extends AbstractRector
         $node->args[1] = new Arg(new LNumber($this->nestingLevel));
 
         return $node;
+    }
+
+    public function provideMinPhpVersion(): int
+    {
+        return PhpVersionFeature::DIRNAME_LEVELS;
     }
 
     private function matchNestedDirnameFuncCall(FuncCall $funcCall): ?FuncCall

@@ -13,13 +13,14 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\Tests\DeadCode\Rector\ClassMethod\RemoveUnusedPromotedPropertyRector\RemoveUnusedPromotedPropertyRectorTest
  */
-final class RemoveUnusedPromotedPropertyRector extends AbstractRector
+final class RemoveUnusedPromotedPropertyRector extends AbstractRector implements MinPhpVersionInterface
 {
     public function __construct(
         private PropertyFetchFinder $propertyFetchFinder,
@@ -79,12 +80,12 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isAtLeastPhpVersion(PhpVersionFeature::PROPERTY_PROMOTION)) {
+        if (! $this->isName($node, MethodName::CONSTRUCT)) {
             return null;
         }
 
         $class = $node->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $this->isName($node, MethodName::CONSTRUCT)) {
+        if (! $class instanceof Class_) {
             return null;
         }
 
@@ -114,5 +115,10 @@ CODE_SAMPLE
         }
 
         return $node;
+    }
+
+    public function provideMinPhpVersion(): int
+    {
+        return PhpVersionFeature::PROPERTY_PROMOTION;
     }
 }

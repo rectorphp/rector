@@ -110,7 +110,7 @@ CODE_SAMPLE
             return $ternary;
         }
 
-        if ($this->isAtLeastPhpVersion(PhpVersionFeature::IS_COUNTABLE)) {
+        if ($this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::IS_COUNTABLE)) {
             $conditionNode = new FuncCall(new Name('is_countable'), [new Arg($countedNode)]);
         } else {
             $instanceof = new Instanceof_($countedNode, new FullyQualified('Countable'));

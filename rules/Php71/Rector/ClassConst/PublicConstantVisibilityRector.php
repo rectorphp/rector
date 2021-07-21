@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassConst;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -16,7 +17,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php71\Rector\ClassConst\PublicConstantVisibilityRector\PublicConstantVisibilityRectorTest
  */
-final class PublicConstantVisibilityRector extends AbstractRector
+final class PublicConstantVisibilityRector extends AbstractRector implements MinPhpVersionInterface
 {
     public function getRuleDefinition(): RuleDefinition
     {
@@ -55,10 +56,6 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isAtLeastPhpVersion(PhpVersionFeature::CONSTANT_VISIBILITY)) {
-            return null;
-        }
-
         // already non-public
         if (! $node->isPublic()) {
             return null;
@@ -72,5 +69,10 @@ CODE_SAMPLE
         $this->visibilityManipulator->makePublic($node);
 
         return $node;
+    }
+
+    public function provideMinPhpVersion(): int
+    {
+        return PhpVersionFeature::CONSTANT_VISIBILITY;
     }
 }

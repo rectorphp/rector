@@ -20,13 +20,14 @@ use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\Tests\TypeDeclaration\Rector\Param\ParamTypeFromStrictTypedPropertyRector\ParamTypeFromStrictTypedPropertyRectorTest
  */
-final class ParamTypeFromStrictTypedPropertyRector extends AbstractRector
+final class ParamTypeFromStrictTypedPropertyRector extends AbstractRector implements MinPhpVersionInterface
 {
     public function __construct(
         private ReflectionResolver $reflectionResolver
@@ -78,10 +79,6 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isAtLeastPhpVersion(PhpVersionFeature::TYPED_PROPERTIES)) {
-            return null;
-        }
-
         $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
         if (! $parent instanceof FunctionLike) {
             return null;
@@ -125,6 +122,11 @@ CODE_SAMPLE
         }
 
         return null;
+    }
+
+    public function provideMinPhpVersion(): int
+    {
+        return PhpVersionFeature::TYPED_PROPERTIES;
     }
 
     /**

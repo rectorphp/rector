@@ -11,6 +11,7 @@ use PhpParser\Node\Expr\Closure;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Php74\NodeAnalyzer\ClosureArrowFunctionAnalyzer;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -19,7 +20,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php74\Rector\Closure\ClosureToArrowFunctionRector\ClosureToArrowFunctionRectorTest
  */
-final class ClosureToArrowFunctionRector extends AbstractRector
+final class ClosureToArrowFunctionRector extends AbstractRector implements MinPhpVersionInterface
 {
     public function __construct(
         private ClosureArrowFunctionAnalyzer $closureArrowFunctionAnalyzer
@@ -68,10 +69,6 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isAtLeastPhpVersion(PhpVersionFeature::ARROW_FUNCTION)) {
-            return null;
-        }
-
         $returnExpr = $this->closureArrowFunctionAnalyzer->matchArrowFunctionExpr($node);
         if (! $returnExpr instanceof Expr) {
             return null;
@@ -89,5 +86,10 @@ CODE_SAMPLE
         }
 
         return $arrowFunction;
+    }
+
+    public function provideMinPhpVersion(): int
+    {
+        return PhpVersionFeature::ARROW_FUNCTION;
     }
 }

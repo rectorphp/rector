@@ -14,6 +14,7 @@ use PhpParser\Node\Scalar\String_;
 use Rector\CodingStyle\NodeFactory\ArrayCallableToMethodCallFactory;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -23,7 +24,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\CodingStyle\Rector\FuncCall\CallUserFuncArrayToVariadicRector\CallUserFuncArrayToVariadicRectorTest
  */
-final class CallUserFuncArrayToVariadicRector extends AbstractRector
+final class CallUserFuncArrayToVariadicRector extends AbstractRector implements MinPhpVersionInterface
 {
     public function __construct(
         private ArrayCallableToMethodCallFactory $arrayCallableToMethodCallFactory
@@ -70,10 +71,6 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isAtLeastPhpVersion(PhpVersionFeature::ARRAY_SPREAD)) {
-            return null;
-        }
-
         if (! $this->isName($node, 'call_user_func_array')) {
             return null;
         }
@@ -92,6 +89,11 @@ CODE_SAMPLE
         }
 
         return null;
+    }
+
+    public function provideMinPhpVersion(): int
+    {
+        return PhpVersionFeature::ARRAY_SPREAD;
     }
 
     private function createFuncCall(Expr $expr, string $functionName): FuncCall

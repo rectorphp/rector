@@ -15,13 +15,14 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\Tests\Php74\Rector\Property\RestoreDefaultNullToNullableTypePropertyRector\RestoreDefaultNullToNullableTypePropertyRectorTest
  */
-final class RestoreDefaultNullToNullableTypePropertyRector extends AbstractRector
+final class RestoreDefaultNullToNullableTypePropertyRector extends AbstractRector implements MinPhpVersionInterface
 {
     public function getRuleDefinition(): RuleDefinition
     {
@@ -70,12 +71,13 @@ CODE_SAMPLE
         return $node;
     }
 
+    public function provideMinPhpVersion(): int
+    {
+        return PhpVersionFeature::TYPED_PROPERTIES;
+    }
+
     private function shouldSkip(Property $property): bool
     {
-        if (! $this->isAtLeastPhpVersion(PhpVersionFeature::TYPED_PROPERTIES)) {
-            return true;
-        }
-
         if (! $property->type instanceof NullableType) {
             return true;
         }

@@ -13,13 +13,14 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\TypeDeclaration\TypeInferer\SilentVoidResolver;
 use Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnVendorLockResolver;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\Tests\TypeDeclaration\Rector\ClassMethod\AddVoidReturnTypeWhereNoReturnRector\AddVoidReturnTypeWhereNoReturnRectorTest
  */
-final class AddVoidReturnTypeWhereNoReturnRector extends AbstractRector
+final class AddVoidReturnTypeWhereNoReturnRector extends AbstractRector implements MinPhpVersionInterface
 {
     public function __construct(
         private SilentVoidResolver $silentVoidResolver,
@@ -70,10 +71,6 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isAtLeastPhpVersion(PhpVersionFeature::VOID_TYPE)) {
-            return null;
-        }
-
         if ($node->returnType !== null) {
             return null;
         }
@@ -92,5 +89,10 @@ CODE_SAMPLE
 
         $node->returnType = new Identifier('void');
         return $node;
+    }
+
+    public function provideMinPhpVersion(): int
+    {
+        return PhpVersionFeature::VOID_TYPE;
     }
 }

@@ -12,6 +12,7 @@ use PhpParser\Node\Stmt\Foreach_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -20,7 +21,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php71\Rector\List_\ListToArrayDestructRector\ListToArrayDestructRectorTest
  */
-final class ListToArrayDestructRector extends AbstractRector
+final class ListToArrayDestructRector extends AbstractRector implements MinPhpVersionInterface
 {
     public function getRuleDefinition(): RuleDefinition
     {
@@ -68,10 +69,6 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isAtLeastPhpVersion(PhpVersionFeature::ARRAY_DESTRUCT)) {
-            return null;
-        }
-
         $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
 
         if ($parentNode instanceof Assign && $parentNode->var === $node) {
@@ -84,5 +81,10 @@ CODE_SAMPLE
             return null;
         }
         return new Array_($node->items);
+    }
+
+    public function provideMinPhpVersion(): int
+    {
+        return PhpVersionFeature::ARRAY_DESTRUCT;
     }
 }

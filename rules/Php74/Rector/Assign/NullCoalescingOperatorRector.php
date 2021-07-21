@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\AssignOp\Coalesce as AssignCoalesce;
 use PhpParser\Node\Expr\BinaryOp\Coalesce;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -17,7 +18,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://wiki.php.net/rfc/null_coalesce_equal_operator
  * @see \Rector\Tests\Php74\Rector\Assign\NullCoalescingOperatorRector\NullCoalescingOperatorRectorTest
  */
-final class NullCoalescingOperatorRector extends AbstractRector
+final class NullCoalescingOperatorRector extends AbstractRector implements MinPhpVersionInterface
 {
     public function getRuleDefinition(): RuleDefinition
     {
@@ -49,10 +50,6 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isAtLeastPhpVersion(PhpVersionFeature::NULL_COALESCE_ASSIGN)) {
-            return null;
-        }
-
         if (! $node->expr instanceof Coalesce) {
             return null;
         }
@@ -62,5 +59,10 @@ CODE_SAMPLE
         }
 
         return new AssignCoalesce($node->var, $node->expr->right);
+    }
+
+    public function provideMinPhpVersion(): int
+    {
+        return PhpVersionFeature::NULL_COALESCE_ASSIGN;
     }
 }

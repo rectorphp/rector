@@ -19,6 +19,7 @@ use PHPStan\Type\Type;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\TypeAnalyzer\ArrayTypeAnalyzer;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -27,7 +28,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php74\Rector\FuncCall\ArraySpreadInsteadOfArrayMergeRector\ArraySpreadInsteadOfArrayMergeRectorTest
  */
-final class ArraySpreadInsteadOfArrayMergeRector extends AbstractRector
+final class ArraySpreadInsteadOfArrayMergeRector extends AbstractRector implements MinPhpVersionInterface
 {
     public function __construct(
         private ArrayTypeAnalyzer $arrayTypeAnalyzer
@@ -86,15 +87,16 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isAtLeastPhpVersion(PhpVersionFeature::ARRAY_SPREAD)) {
-            return null;
-        }
-
         if ($this->isName($node, 'array_merge')) {
             return $this->refactorArray($node);
         }
 
         return null;
+    }
+
+    public function provideMinPhpVersion(): int
+    {
+        return PhpVersionFeature::ARRAY_SPREAD;
     }
 
     private function refactorArray(FuncCall $funcCall): ?Array_

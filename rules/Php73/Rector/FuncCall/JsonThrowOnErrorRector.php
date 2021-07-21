@@ -12,6 +12,7 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\LNumber;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -20,7 +21,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @see https://3v4l.org/5HMVE
  * @see \Rector\Tests\Php73\Rector\FuncCall\JsonThrowOnErrorRector\JsonThrowOnErrorRectorTest
  */
-final class JsonThrowOnErrorRector extends AbstractRector
+final class JsonThrowOnErrorRector extends AbstractRector implements MinPhpVersionInterface
 {
     public function getRuleDefinition(): RuleDefinition
     {
@@ -55,10 +56,6 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isAtLeastPhpVersion(PhpVersionFeature::JSON_EXCEPTION)) {
-            return null;
-        }
-
         if ($this->shouldSkip($node)) {
             return null;
         }
@@ -72,6 +69,11 @@ CODE_SAMPLE
         }
 
         return null;
+    }
+
+    public function provideMinPhpVersion(): int
+    {
+        return PhpVersionFeature::JSON_EXCEPTION;
     }
 
     private function shouldSkip(FuncCall $funcCall): bool

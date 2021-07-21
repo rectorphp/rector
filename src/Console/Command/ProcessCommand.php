@@ -13,6 +13,7 @@ use Rector\Core\Autoloading\BootstrapFilesIncluder;
 use Rector\Core\Configuration\ConfigurationFactory;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Console\Output\OutputFormatterCollector;
+use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Reporting\MissingRectorRulesReporter;
 use Rector\Core\StaticReflection\DynamicSourceLocatorDecorator;
@@ -21,6 +22,7 @@ use Rector\Core\ValueObject\Configuration;
 use Rector\Core\ValueObject\ProcessResult;
 use Rector\Core\ValueObjectFactory\Application\FileFactory;
 use Rector\Core\ValueObjectFactory\ProcessResultFactory;
+use Rector\VersionBonding\Application\MissedRectorDueVersionChecker;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -31,6 +33,9 @@ use Symplify\PackageBuilder\Console\ShellCode;
 
 final class ProcessCommand extends Command
 {
+    /**
+     * @param RectorInterface[] $rectors
+     */
     public function __construct(
         private AdditionalAutoloader $additionalAutoloader,
         private ChangedFilesDetector $changedFilesDetector,
@@ -42,14 +47,16 @@ final class ProcessCommand extends Command
         private ProcessResultFactory $processResultFactory,
         private NodeScopeResolver $nodeScopeResolver,
         private DynamicSourceLocatorDecorator $dynamicSourceLocatorDecorator,
-        private ConfigurationFactory $configurationFactory
+        private ConfigurationFactory $configurationFactory,
+        private MissedRectorDueVersionChecker $missedRectorDueVersionChecker,
+        private array $rectors
     ) {
         parent::__construct();
     }
 
     protected function configure(): void
     {
-        $this->setDescription('Upgrade or refactor source code with provided rectors');
+        $this->setDescription('Upgrades or refactors source code with provided rectors');
 
         $this->addArgument(
             Option::SOURCE,
@@ -61,14 +68,14 @@ final class ProcessCommand extends Command
             Option::DRY_RUN,
             Option::DRY_RUN_SHORT,
             InputOption::VALUE_NONE,
-            'See diff of changes, do not save them to files.'
+            'Only see the diff of changes, do not save them to files.'
         );
 
         $this->addOption(
             Option::AUTOLOAD_FILE,
             Option::AUTOLOAD_FILE_SHORT,
             InputOption::VALUE_REQUIRED,
-            'File with extra autoload'
+            'Path to file with extra autoload (will be included)'
         );
 
         $names = $this->outputFormatterCollector->getNames();
@@ -119,16 +126,23 @@ final class ProcessCommand extends Command
         // 0. add files and directories to static locator
         $this->dynamicSourceLocatorDecorator->addPaths($paths);
 
+        // 1. inform user about non-runnable rules
+        $this->missedRectorDueVersionChecker->check($this->rectors);
+
+        // 2. collect all files from files+dirs provided paths
         $files = $this->fileFactory->createFromPaths($paths, $configuration);
 
-        // PHPStan has to know about all files!
+        // 3. PHPStan has to know about all files too
         $this->configurePHPStanNodeScopeResolver($files);
 
+        // MAIN PHASE
+        // 4. run Rector
         $this->applicationFileProcessor->run($files, $configuration);
 
+        // REPORTING PHASE
+        // 5. reporting phase
         // report diffs and errors
-        $outputFormat = (string) $input->getOption(Option::OUTPUT_FORMAT);
-
+        $outputFormat = $configuration->getOutputFormat();
         $outputFormatter = $this->outputFormatterCollector->getByName($outputFormat);
 
         // here should be value obect factory
@@ -151,15 +165,11 @@ final class ProcessCommand extends Command
         $optionDebug = (bool) $input->getOption(Option::DEBUG);
         if ($optionDebug) {
             $application->setCatchExceptions(false);
-
-            // clear cache
-            $this->changedFilesDetector->clear();
-            return;
         }
 
         // clear cache
         $optionClearCache = (bool) $input->getOption(Option::CLEAR_CACHE);
-        if ($optionClearCache) {
+        if ($optionDebug || $optionClearCache) {
             $this->changedFilesDetector->clear();
         }
     }

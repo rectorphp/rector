@@ -127,7 +127,7 @@ CODE_SAMPLE
             return $this->refactorSingleReturnType($returns[0], $returnedStrictTypes[0], $node);
         }
 
-        if ($this->isAtLeastPhpVersion(PhpVersionFeature::UNION_TYPES)) {
+        if ($this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::UNION_TYPES)) {
             /** @var PhpParserUnionType[] $returnedStrictTypes */
             $unwrappedTypes = $this->typeNodeUnwrapper->unwrapNullableUnionTypes($returnedStrictTypes);
             $returnType = new PhpParserUnionType($unwrappedTypes);

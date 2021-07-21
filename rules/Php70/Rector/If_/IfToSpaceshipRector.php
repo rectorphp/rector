@@ -19,6 +19,7 @@ use PhpParser\Node\Stmt\Return_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -27,7 +28,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php70\Rector\If_\IfToSpaceshipRector\IfToSpaceshipRectorTest
  */
-final class IfToSpaceshipRector extends AbstractRector
+final class IfToSpaceshipRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
      * @var int|null
@@ -104,10 +105,6 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isAtLeastPhpVersion(PhpVersionFeature::SPACESHIP)) {
-            return null;
-        }
-
         if (! $node->cond instanceof Equal && ! $node->cond instanceof Identical) {
             return null;
         }
@@ -142,6 +139,11 @@ CODE_SAMPLE
         $spaceship = new Spaceship($this->secondValue, $this->firstValue);
 
         return new Return_($spaceship);
+    }
+
+    public function provideMinPhpVersion(): int
+    {
+        return PhpVersionFeature::SPACESHIP;
     }
 
     private function reset(): void

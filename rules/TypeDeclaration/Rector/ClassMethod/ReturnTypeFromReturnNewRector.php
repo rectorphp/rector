@@ -14,13 +14,14 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\Tests\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromReturnNewRector\ReturnTypeFromReturnNewRectorTest
  */
-final class ReturnTypeFromReturnNewRector extends AbstractRector
+final class ReturnTypeFromReturnNewRector extends AbstractRector implements MinPhpVersionInterface
 {
     public function __construct(
         private TypeFactory $typeFactory
@@ -67,10 +68,6 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isAtLeastPhpVersion(PhpVersionFeature::SCALAR_TYPES)) {
-            return null;
-        }
-
         if ($node->returnType !== null) {
             return null;
         }
@@ -101,5 +98,10 @@ CODE_SAMPLE
         $node->returnType = $returnTypeNode;
 
         return $node;
+    }
+
+    public function provideMinPhpVersion(): int
+    {
+        return PhpVersionFeature::SCALAR_TYPES;
     }
 }

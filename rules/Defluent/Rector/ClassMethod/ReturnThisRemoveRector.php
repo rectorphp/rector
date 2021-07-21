@@ -96,7 +96,7 @@ CODE_SAMPLE
             throw new ShouldNotHappenException();
         }
 
-        if ($this->isAtLeastPhpVersion(PhpVersionFeature::VOID_TYPE)) {
+        if ($this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::VOID_TYPE)) {
             $classMethod->returnType = new Identifier('void');
         }
 

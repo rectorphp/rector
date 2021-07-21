@@ -24,13 +24,14 @@ use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeAnalyzer;
 use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
 use Rector\VendorLocker\NodeVendorLocker\ClassMethodParamVendorLockResolver;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\Tests\Php80\Rector\FunctionLike\UnionTypesRector\UnionTypesRectorTest
  */
-final class UnionTypesRector extends AbstractRector
+final class UnionTypesRector extends AbstractRector implements MinPhpVersionInterface
 {
     public function __construct(
         private ReturnTagRemover $returnTagRemover,
@@ -86,10 +87,6 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isAtLeastPhpVersion(PhpVersionFeature::UNION_TYPES)) {
-            return null;
-        }
-
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
 
         $this->refactorParamTypes($node, $phpDocInfo);
@@ -99,6 +96,11 @@ CODE_SAMPLE
         $this->returnTagRemover->removeReturnTagIfUseless($phpDocInfo, $node);
 
         return $node;
+    }
+
+    public function provideMinPhpVersion(): int
+    {
+        return PhpVersionFeature::UNION_TYPES;
     }
 
     private function refactorParamTypes(

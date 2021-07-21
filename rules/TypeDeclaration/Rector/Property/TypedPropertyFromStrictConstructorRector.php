@@ -13,13 +13,14 @@ use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover;
 use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
 use Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer\ConstructorPropertyTypeInferer;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\Tests\TypeDeclaration\Rector\Property\TypedPropertyFromStrictConstructorRector\TypedPropertyFromStrictConstructorRectorTest
  */
-final class TypedPropertyFromStrictConstructorRector extends AbstractRector
+final class TypedPropertyFromStrictConstructorRector extends AbstractRector implements MinPhpVersionInterface
 {
     public function __construct(
         private ConstructorPropertyTypeInferer $constructorPropertyTypeInferer,
@@ -72,10 +73,6 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isAtLeastPhpVersion(PhpVersionFeature::TYPED_PROPERTIES)) {
-            return null;
-        }
-
         if ($node->type !== null) {
             return null;
         }
@@ -100,5 +97,10 @@ CODE_SAMPLE
         $this->varTagRemover->removeVarTagIfUseless($phpDocInfo, $node);
 
         return $node;
+    }
+
+    public function provideMinPhpVersion(): int
+    {
+        return PhpVersionFeature::TYPED_PROPERTIES;
     }
 }

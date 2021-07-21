@@ -10,13 +10,14 @@ use PhpParser\Node\Scalar\MagicConst\Dir;
 use PhpParser\Node\Scalar\MagicConst\File;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\Tests\Php53\Rector\FuncCall\DirNameFileConstantToDirConstantRector\DirNameFileConstantToDirConstantRectorTest
  */
-final class DirNameFileConstantToDirConstantRector extends AbstractRector
+final class DirNameFileConstantToDirConstantRector extends AbstractRector implements MinPhpVersionInterface
 {
     public function getRuleDefinition(): RuleDefinition
     {
@@ -58,10 +59,6 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isAtLeastPhpVersion(PhpVersionFeature::DIR_CONSTANT)) {
-            return null;
-        }
-
         if (! $this->isName($node, 'dirname')) {
             return null;
         }
@@ -76,5 +73,10 @@ CODE_SAMPLE
         }
 
         return new Dir();
+    }
+
+    public function provideMinPhpVersion(): int
+    {
+        return PhpVersionFeature::DIR_CONSTANT;
     }
 }

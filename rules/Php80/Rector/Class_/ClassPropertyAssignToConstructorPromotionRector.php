@@ -22,6 +22,7 @@ use Rector\Naming\VariableRenamer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php80\NodeAnalyzer\PromotedPropertyCandidateResolver;
 use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -30,7 +31,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector\ClassPropertyAssignToConstructorPromotionRectorTest
  */
-final class ClassPropertyAssignToConstructorPromotionRector extends AbstractRector
+final class ClassPropertyAssignToConstructorPromotionRector extends AbstractRector implements MinPhpVersionInterface
 {
     public function __construct(
         private PromotedPropertyCandidateResolver $promotedPropertyCandidateResolver,
@@ -84,10 +85,6 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isAtLeastPhpVersion(PhpVersionFeature::PROPERTY_PROMOTION)) {
-            return null;
-        }
-
         $promotionCandidates = $this->promotedPropertyCandidateResolver->resolveFromClass($node);
         if ($promotionCandidates === []) {
             return null;
@@ -136,6 +133,11 @@ CODE_SAMPLE
         }
 
         return $node;
+    }
+
+    public function provideMinPhpVersion(): int
+    {
+        return PhpVersionFeature::PROPERTY_PROMOTION;
     }
 
     private function processNullableType(Property $property, Param $param): void

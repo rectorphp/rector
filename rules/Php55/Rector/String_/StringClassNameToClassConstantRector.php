@@ -16,6 +16,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Util\StaticRectorStrings;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -25,7 +26,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php55\Rector\String_\StringClassNameToClassConstantRector\StringClassNameToClassConstantRectorTest
  */
-final class StringClassNameToClassConstantRector extends AbstractRector implements ConfigurableRectorInterface
+final class StringClassNameToClassConstantRector extends AbstractRector implements ConfigurableRectorInterface, MinPhpVersionInterface
 {
     /**
      * @api
@@ -99,10 +100,6 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isAtLeastPhpVersion(PhpVersionFeature::CLASSNAME_CONSTANT)) {
-            return null;
-        }
-
         $classLikeName = $node->value;
 
         // remove leading slash
@@ -129,6 +126,11 @@ CODE_SAMPLE
         }
 
         $this->classesToSkip = $configuration[self::CLASSES_TO_SKIP];
+    }
+
+    public function provideMinPhpVersion(): int
+    {
+        return PhpVersionFeature::CLASSNAME_CONSTANT;
     }
 
     private function isPartOfIsAFuncCall(String_ $string): bool

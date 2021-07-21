@@ -13,6 +13,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\Application\File;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Webmozart\Assert\Assert;
@@ -26,7 +27,7 @@ use Webmozart\Assert\Assert;
  * Taking the most generic use case to the account: https://wiki.php.net/rfc/numeric_literal_separator#should_it_be_the_role_of_an_ide_to_group_digits
  * The final check should be done manually
  */
-final class AddLiteralSeparatorToNumberRector extends AbstractRector implements ConfigurableRectorInterface
+final class AddLiteralSeparatorToNumberRector extends AbstractRector implements ConfigurableRectorInterface, MinPhpVersionInterface
 {
     /**
      * @api
@@ -101,10 +102,6 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isAtLeastPhpVersion(PhpVersionFeature::LITERAL_SEPARATOR)) {
-            return null;
-        }
-
         $numericValueAsString = (string) $node->value;
         if ($this->shouldSkip($node, $numericValueAsString)) {
             return null;
@@ -128,6 +125,11 @@ CODE_SAMPLE
         $node->value = $literalSeparatedNumber;
 
         return $node;
+    }
+
+    public function provideMinPhpVersion(): int
+    {
+        return PhpVersionFeature::LITERAL_SEPARATOR;
     }
 
     private function shouldSkip(LNumber | DNumber $node, string $numericValueAsString): bool

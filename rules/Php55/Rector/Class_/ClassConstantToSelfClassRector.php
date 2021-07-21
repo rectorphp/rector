@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace Rector\Php55\Rector\Class_;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Scalar\MagicConst\Class_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -16,7 +18,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @see https://3v4l.org/INd7o
  * @see \Rector\Tests\Php55\Rector\Class_\ClassConstantToSelfClassRector\ClassConstantToSelfClassRectorTest
  */
-final class ClassConstantToSelfClassRector extends AbstractRector
+final class ClassConstantToSelfClassRector extends AbstractRector implements MinPhpVersionInterface
 {
     public function getRuleDefinition(): RuleDefinition
     {
@@ -56,12 +58,13 @@ CODE_SAMPLE
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node): ?Node
+    public function refactor(Node $node): ClassConstFetch
     {
-        if (! $this->isAtLeastPhpVersion(PhpVersionFeature::CLASSNAME_CONSTANT)) {
-            return null;
-        }
-
         return $this->nodeFactory->createSelfFetchConstant('class', $node);
+    }
+
+    public function provideMinPhpVersion(): int
+    {
+        return PhpVersionFeature::CLASSNAME_CONSTANT;
     }
 }

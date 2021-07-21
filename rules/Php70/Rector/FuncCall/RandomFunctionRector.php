@@ -11,13 +11,14 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\LNumber;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\Tests\Php70\Rector\FuncCall\RandomFunctionRector\RandomFunctionRectorTest
  */
-final class RandomFunctionRector extends AbstractRector
+final class RandomFunctionRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
      * @var array<string, string>
@@ -48,12 +49,8 @@ final class RandomFunctionRector extends AbstractRector
     /**
      * @param FuncCall $node
      */
-    public function refactor(Node $node): ?Node
+    public function refactor(Node $node): FuncCall
     {
-        if (! $this->isAtLeastPhpVersion(PhpVersionFeature::CSPRNG_FUNCTIONS)) {
-            return null;
-        }
-
         foreach (self::OLD_TO_NEW_FUNCTION_NAMES as $oldFunctionName => $newFunctionName) {
             if ($this->isName($node, $oldFunctionName)) {
                 $node->name = new Name($newFunctionName);
@@ -69,5 +66,10 @@ final class RandomFunctionRector extends AbstractRector
         }
 
         return $node;
+    }
+
+    public function provideMinPhpVersion(): int
+    {
+        return PhpVersionFeature::CSPRNG_FUNCTIONS;
     }
 }

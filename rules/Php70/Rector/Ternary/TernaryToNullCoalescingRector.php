@@ -13,13 +13,14 @@ use PhpParser\Node\Expr\Isset_;
 use PhpParser\Node\Expr\Ternary;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\Tests\Php70\Rector\Ternary\TernaryToNullCoalescingRector\TernaryToNullCoalescingRectorTest
  */
-final class TernaryToNullCoalescingRector extends AbstractRector
+final class TernaryToNullCoalescingRector extends AbstractRector implements MinPhpVersionInterface
 {
     public function getRuleDefinition(): RuleDefinition
     {
@@ -45,10 +46,6 @@ final class TernaryToNullCoalescingRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isAtLeastPhpVersion(PhpVersionFeature::NULL_COALESCE)) {
-            return null;
-        }
-
         if ($node->cond instanceof Isset_) {
             return $this->processTernaryWithIsset($node);
         }
@@ -80,6 +77,11 @@ final class TernaryToNullCoalescingRector extends AbstractRector
         }
 
         return null;
+    }
+
+    public function provideMinPhpVersion(): int
+    {
+        return PhpVersionFeature::NULL_COALESCE;
     }
 
     private function processTernaryWithIsset(Ternary $ternary): ?Coalesce

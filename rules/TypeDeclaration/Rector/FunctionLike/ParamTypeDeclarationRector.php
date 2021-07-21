@@ -21,6 +21,7 @@ use Rector\TypeDeclaration\NodeTypeAnalyzer\TraitTypeAnalyzer;
 use Rector\TypeDeclaration\TypeInferer\ParamTypeInferer;
 use Rector\TypeDeclaration\ValueObject\NewType;
 use Rector\VendorLocker\VendorLockResolver;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -32,7 +33,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\TypeDeclaration\Rector\FunctionLike\ParamTypeDeclarationRector\ParamTypeDeclarationRectorTest
  */
-final class ParamTypeDeclarationRector extends AbstractRector
+final class ParamTypeDeclarationRector extends AbstractRector implements MinPhpVersionInterface
 {
     public function __construct(
         private VendorLockResolver $vendorLockResolver,
@@ -121,10 +122,6 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isAtLeastPhpVersion(PhpVersionFeature::SCALAR_TYPES)) {
-            return null;
-        }
-
         if ($node->params === []) {
             return null;
         }
@@ -134,6 +131,11 @@ CODE_SAMPLE
         }
 
         return null;
+    }
+
+    public function provideMinPhpVersion(): int
+    {
+        return PhpVersionFeature::SCALAR_TYPES;
     }
 
     private function refactorParam(Param $param, ClassMethod | Function_ $functionLike, int $position): void
