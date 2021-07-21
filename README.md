@@ -105,6 +105,8 @@ vendor/bin/rector process src
 
 *Note: `rector.php` is loaded by default. For different location, use `--config` option.*
 
+*Note: Rector will only update legacy code to utilize new features which are supported by the PHP version defined in your `composer.json` file.  For instance, if require.php is `>=7.2.5`, Rector will not make changes which are only available for PHP versions after 7.2.5.*
+
 <br>
 
 ## Configuration
