@@ -56,6 +56,6 @@ final class IsIterableRector extends \Rector\Core\Rector\AbstractRector
         if ($this->reflectionProvider->hasFunction(new \PhpParser\Node\Name('is_iterable'), null)) {
             return \false;
         }
-        return !$this->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::IS_ITERABLE);
+        return !$this->phpVersionProvider->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::IS_ITERABLE);
     }
 }
