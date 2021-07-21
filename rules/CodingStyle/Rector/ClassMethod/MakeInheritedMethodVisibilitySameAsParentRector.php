@@ -121,7 +121,7 @@ CODE_SAMPLE
      */
     private function isConstructorWithStaticFactory(\PhpParser\Node\Stmt\ClassMethod $classMethod, string $methodName) : bool
     {
-        if (!$this->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::PARENT_VISIBILITY_OVERRIDE)) {
+        if (!$this->phpVersionProvider->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::PARENT_VISIBILITY_OVERRIDE)) {
             return \false;
         }
         if ($methodName !== \Rector\Core\ValueObject\MethodName::CONSTRUCT) {

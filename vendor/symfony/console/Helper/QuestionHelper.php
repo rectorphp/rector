@@ -420,7 +420,7 @@ class QuestionHelper extends \RectorPrefix20210721\Symfony\Component\Console\Hel
      * @param resource $inputStream The handler resource
      * @param Question $question    The question being asked
      *
-     * @return string|bool The input received, false in case input could not be read
+     * @return string|false The input received, false in case input could not be read
      */
     private function readInput($inputStream, \RectorPrefix20210721\Symfony\Component\Console\Question\Question $question)
     {

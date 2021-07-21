@@ -9,6 +9,7 @@ use PhpParser\NodeFinder;
 use PhpParser\NodeTraverser;
 use Rector\Core\Contract\Rector\PhpRectorInterface;
 use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
+use Rector\VersionBonding\PhpVersionedFilter;
 final class RectorNodeTraverser extends \PhpParser\NodeTraverser
 {
     /**
@@ -24,12 +25,17 @@ final class RectorNodeTraverser extends \PhpParser\NodeTraverser
      */
     private $nodeFinder;
     /**
+     * @var \Rector\VersionBonding\PhpVersionedFilter
+     */
+    private $phpVersionedFilter;
+    /**
      * @param PhpRectorInterface[] $phpRectors
      */
-    public function __construct(array $phpRectors, \PhpParser\NodeFinder $nodeFinder)
+    public function __construct(array $phpRectors, \PhpParser\NodeFinder $nodeFinder, \Rector\VersionBonding\PhpVersionedFilter $phpVersionedFilter)
     {
         $this->phpRectors = $phpRectors;
         $this->nodeFinder = $nodeFinder;
+        $this->phpVersionedFilter = $phpVersionedFilter;
     }
     /**
      * @param Stmt[] $nodes
@@ -56,8 +62,10 @@ final class RectorNodeTraverser extends \PhpParser\NodeTraverser
         if ($this->areNodeVisitorsPrepared) {
             return;
         }
-        foreach ($this->phpRectors as $phpRector) {
-            $this->addVisitor($phpRector);
+        // filer out by version
+        $activePhpRectors = $this->phpVersionedFilter->filter($this->phpRectors);
+        foreach ($activePhpRectors as $activePhpRector) {
+            $this->addVisitor($activePhpRector);
         }
         $this->areNodeVisitorsPrepared = \true;
     }

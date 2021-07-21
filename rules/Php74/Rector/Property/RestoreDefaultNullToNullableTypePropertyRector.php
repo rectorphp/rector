@@ -14,12 +14,13 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\Php74\Rector\Property\RestoreDefaultNullToNullableTypePropertyRector\RestoreDefaultNullToNullableTypePropertyRectorTest
  */
-final class RestoreDefaultNullToNullableTypePropertyRector extends \Rector\Core\Rector\AbstractRector
+final class RestoreDefaultNullToNullableTypePropertyRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
 {
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -56,11 +57,12 @@ CODE_SAMPLE
         $onlyProperty->default = $this->nodeFactory->createNull();
         return $node;
     }
+    public function provideMinPhpVersion() : int
+    {
+        return \Rector\Core\ValueObject\PhpVersionFeature::TYPED_PROPERTIES;
+    }
     private function shouldSkip(\PhpParser\Node\Stmt\Property $property) : bool
     {
-        if (!$this->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::TYPED_PROPERTIES)) {
-            return \true;
-        }
         if (!$property->type instanceof \PhpParser\Node\NullableType) {
             return \true;
         }

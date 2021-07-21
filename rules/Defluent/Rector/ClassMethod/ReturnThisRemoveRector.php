@@ -84,7 +84,7 @@ CODE_SAMPLE
         if (!$classMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
             throw new \Rector\Core\Exception\ShouldNotHappenException();
         }
-        if ($this->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::VOID_TYPE)) {
+        if ($this->phpVersionProvider->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::VOID_TYPE)) {
             $classMethod->returnType = new \PhpParser\Node\Identifier('void');
         }
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);

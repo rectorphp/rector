@@ -23,12 +23,13 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\CodeQuality\Rector\ClassMethod\DateTimeToDateTimeInterfaceRector\DateTimeToDateTimeInterfaceRectorTest
  */
-final class DateTimeToDateTimeInterfaceRector extends \Rector\Core\Rector\AbstractRector
+final class DateTimeToDateTimeInterfaceRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
 {
     /**
      * @var string[]
@@ -82,9 +83,6 @@ CODE_SAMPLE
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if (!$this->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::DATE_TIME_INTERFACE)) {
-            return null;
-        }
         $isModifiedNode = \false;
         foreach ($node->getParams() as $param) {
             if (!$this->isObjectType($param, new \PHPStan\Type\ObjectType('DateTime'))) {
@@ -99,6 +97,10 @@ CODE_SAMPLE
             return null;
         }
         return $node;
+    }
+    public function provideMinPhpVersion() : int
+    {
+        return \Rector\Core\ValueObject\PhpVersionFeature::DATE_TIME_INTERFACE;
     }
     private function refactorParamTypeHint(\PhpParser\Node\Param $param) : void
     {

@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInita8d0a8b90e75c2db128be55f184dad8c
+class ComposerStaticInitd53601aec753121a954eb0997aec8f0e
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -3545,6 +3545,9 @@ class ComposerStaticInita8d0a8b90e75c2db128be55f184dad8c
         'Rector\\VendorLocker\\NodeVendorLocker\\PropertyTypeVendorLockResolver' => __DIR__ . '/../..' . '/packages/VendorLocker/NodeVendorLocker/PropertyTypeVendorLockResolver.php',
         'Rector\\VendorLocker\\NodeVendorLocker\\PropertyVisibilityVendorLockResolver' => __DIR__ . '/../..' . '/packages/VendorLocker/NodeVendorLocker/PropertyVisibilityVendorLockResolver.php',
         'Rector\\VendorLocker\\VendorLockResolver' => __DIR__ . '/../..' . '/packages/VendorLocker/VendorLockResolver.php',
+        'Rector\\VersionBonding\\Application\\MissedRectorDueVersionChecker' => __DIR__ . '/../..' . '/packages/VersionBonding/Application/MissedRectorDueVersionChecker.php',
+        'Rector\\VersionBonding\\Contract\\MinPhpVersionInterface' => __DIR__ . '/../..' . '/packages/VersionBonding/Contract/MinPhpVersionInterface.php',
+        'Rector\\VersionBonding\\PhpVersionedFilter' => __DIR__ . '/../..' . '/packages/VersionBonding/PhpVersionedFilter.php',
         'Rector\\Visibility\\Rector\\ClassConst\\ChangeConstantVisibilityRector' => __DIR__ . '/../..' . '/rules/Visibility/Rector/ClassConst/ChangeConstantVisibilityRector.php',
         'Rector\\Visibility\\Rector\\ClassMethod\\ChangeMethodVisibilityRector' => __DIR__ . '/../..' . '/rules/Visibility/Rector/ClassMethod/ChangeMethodVisibilityRector.php',
         'Rector\\Visibility\\ValueObject\\ChangeConstantVisibility' => __DIR__ . '/../..' . '/rules/Visibility/ValueObject/ChangeConstantVisibility.php',
@@ -3841,9 +3844,9 @@ class ComposerStaticInita8d0a8b90e75c2db128be55f184dad8c
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInita8d0a8b90e75c2db128be55f184dad8c::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInita8d0a8b90e75c2db128be55f184dad8c::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInita8d0a8b90e75c2db128be55f184dad8c::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitd53601aec753121a954eb0997aec8f0e::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitd53601aec753121a954eb0997aec8f0e::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitd53601aec753121a954eb0997aec8f0e::$classMap;
 
         }, null, ClassLoader::class);
     }

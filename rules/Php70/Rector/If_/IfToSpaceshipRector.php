@@ -18,6 +18,7 @@ use PhpParser\Node\Stmt\Return_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -25,7 +26,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php70\Rector\If_\IfToSpaceshipRector\IfToSpaceshipRectorTest
  */
-final class IfToSpaceshipRector extends \Rector\Core\Rector\AbstractRector
+final class IfToSpaceshipRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
 {
     /**
      * @var int|null
@@ -93,9 +94,6 @@ CODE_SAMPLE
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if (!$this->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::SPACESHIP)) {
-            return null;
-        }
         if (!$node->cond instanceof \PhpParser\Node\Expr\BinaryOp\Equal && !$node->cond instanceof \PhpParser\Node\Expr\BinaryOp\Identical) {
             return null;
         }
@@ -122,6 +120,10 @@ CODE_SAMPLE
         // spaceship ready!
         $spaceship = new \PhpParser\Node\Expr\BinaryOp\Spaceship($this->secondValue, $this->firstValue);
         return new \PhpParser\Node\Stmt\Return_($spaceship);
+    }
+    public function provideMinPhpVersion() : int
+    {
+        return \Rector\Core\ValueObject\PhpVersionFeature::SPACESHIP;
     }
     private function reset() : void
     {

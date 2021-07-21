@@ -12,12 +12,13 @@ use PhpParser\Node\Expr\Isset_;
 use PhpParser\Node\Expr\Ternary;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\Php70\Rector\Ternary\TernaryToNullCoalescingRector\TernaryToNullCoalescingRectorTest
  */
-final class TernaryToNullCoalescingRector extends \Rector\Core\Rector\AbstractRector
+final class TernaryToNullCoalescingRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
 {
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -35,9 +36,6 @@ final class TernaryToNullCoalescingRector extends \Rector\Core\Rector\AbstractRe
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if (!$this->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::NULL_COALESCE)) {
-            return null;
-        }
         if ($node->cond instanceof \PhpParser\Node\Expr\Isset_) {
             return $this->processTernaryWithIsset($node);
         }
@@ -66,6 +64,10 @@ final class TernaryToNullCoalescingRector extends \Rector\Core\Rector\AbstractRe
             return new \PhpParser\Node\Expr\BinaryOp\Coalesce($checkedNode, $fallbackNode);
         }
         return null;
+    }
+    public function provideMinPhpVersion() : int
+    {
+        return \Rector\Core\ValueObject\PhpVersionFeature::NULL_COALESCE;
     }
     private function processTernaryWithIsset(\PhpParser\Node\Expr\Ternary $ternary) : ?\PhpParser\Node\Expr\BinaryOp\Coalesce
     {

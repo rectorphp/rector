@@ -12,12 +12,13 @@ use Rector\Core\NodeManipulator\IfManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\CodeQuality\Rector\If_\ConsecutiveNullCompareReturnsToNullCoalesceQueueRector\ConsecutiveNullCompareReturnsToNullCoalesceQueueRectorTest
  */
-final class ConsecutiveNullCompareReturnsToNullCoalesceQueueRector extends \Rector\Core\Rector\AbstractRector
+final class ConsecutiveNullCompareReturnsToNullCoalesceQueueRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
 {
     /**
      * @var Node[]
@@ -77,9 +78,6 @@ CODE_SAMPLE
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if (!$this->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::NULL_COALESCE)) {
-            return null;
-        }
         $this->reset();
         $currentNode = $node;
         while ($currentNode !== null) {
@@ -105,6 +103,10 @@ CODE_SAMPLE
         }
         $this->removeNodes($this->nodesToRemove);
         return $this->createReturnCoalesceNode($this->coalescingNodes);
+    }
+    public function provideMinPhpVersion() : int
+    {
+        return \Rector\Core\ValueObject\PhpVersionFeature::NULL_COALESCE;
     }
     private function reset() : void
     {
