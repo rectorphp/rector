@@ -31,6 +31,21 @@ $filePathsToRemoveNamespace = [
 $dateTime = DateTime::from('now');
 $timestamp = $dateTime->format('Ymd');
 
+/**
+ * @var array<string, string[]>
+ */
+const UNPREFIX_CLASSES_BY_FILE = [
+    // make UT=1 in tests work
+    'packages/Testing/PHPUnit/AbstractRectorTestCase.php' => [
+        'PHPUnit\Framework\ExpectationFailedException',
+        'PHPUnit\Framework\TestCase',
+    ],
+
+    // unprefixed ComposerJson as part of public API in ComposerRectorInterface
+    'rules/Composer/Contract/Rector/ComposerRectorInterface.php' => ['Symplify\ComposerJsonManipulator\ValueObject\ComposerJson'],
+    'packages/Testing/PHPUnit/AbstractTestCase.php' => ['PHPUnit\Framework\TestCase'],
+];
+
 // see https://github.com/humbug/php-scoper
 return [
     ScoperOption::PREFIX => 'RectorPrefix' . $timestamp,
@@ -52,6 +67,25 @@ return [
             return $content;
         },
 
+        function (string $filePath, string $prefix, string $content): string {
+            foreach (UNPREFIX_CLASSES_BY_FILE as $endFilePath => $unprefixClasses) {
+                if (! Strings::endsWith($filePath, $endFilePath)) {
+                    continue;
+                }
+
+                foreach ($unprefixClasses as $unprefixClass) {
+                    $doubleQuotedClass = preg_quote('\\' . $unprefixClass);
+                    $content = Strings::replace(
+                        $content,
+                        '#' . $prefix . $doubleQuotedClass . '#',
+                        $unprefixClass
+                    );
+                }
+            }
+
+            return $content;
+        },
+
         // unprefixed SmartFileInfo
         function (string $filePath, string $prefix, string $content): string {
             return Strings::replace(
@@ -61,26 +95,19 @@ return [
             );
         },
 
+        // unprefixed ContainerConfigurator
         function (string $filePath, string $prefix, string $content): string {
-            if (! Strings::contains($filePath, 'vendor/')) {
+            // keep vendor prefixed the prefixed file loading; not part of public API
+            // except @see https://github.com/symfony/symfony/commit/460b46f7302ec7319b8334a43809523363bfef39#diff-1cd56b329433fc34d950d6eeab9600752aa84a76cbe0693d3fab57fed0f547d3R110
+            if (str_contains($filePath, 'vendor/symfony') && ! str_ends_with($filePath, 'vendor/symfony/dependency-injection/Loader/PhpFileLoader.php')) {
                 return $content;
             }
 
-            // see https://regex101.com/r/PDGN3K/1
-            $content = Strings::replace(
-                $content, '
-                #: \?\\\\.*#',
-                ''
+            return Strings::replace(
+                $content,
+                '#' . $prefix . '\\\\Symfony\\\\Component\\\\DependencyInjection\\\\Loader\\\\Configurator\\\\ContainerConfigurator#',
+                'Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator'
             );
-
-            // see https://regex101.com/r/P7nbpU/1
-            $content = Strings::replace(
-                $content, '
-                #\(\?\\.*\s+#',
-                '('
-            );
-
-            return $content;
         },
 
         // get version for prefixed version
@@ -91,8 +118,8 @@ return [
 
             // @see https://regex101.com/r/gLefQk/1
             return Strings::replace(
-                $content, '#\(\'rector\/rector\'\)#',
-                "('rector/rector-prefixed')"
+                $content, '#\(\'rector\/rector-src\'\)#',
+                "('rector/rector')"
             );
         },
 
@@ -104,6 +131,16 @@ return [
 
             // see https://regex101.com/r/v8zRMm/1
             return Strings::replace($content, '#' . $prefix . '\\\\Composer\\\\#', 'Composer\\');
+        },
+
+        // un-prefix phpstan-extracted Composer\Autoload\ClassLoader
+        function (string $filePath, string $prefix, string $content): string {
+            if (! Strings::contains($filePath, 'vendor/phpstan/phpstan-extracted/')) {
+                return $content;
+            }
+
+            // see https://regex101.com/r/1l9oxm/1
+            return Strings::replace($content, '#' . $prefix . '\\\\Composer\\\\Autoload\\\\\ClassLoader#', 'Composer\\Autoload\\ClassLoader');
         },
 
         // fixes https://github.com/rectorphp/rector/issues/6007
@@ -127,23 +164,6 @@ return [
             return $content;
         },
 
-
-        function (string $filePath, string $prefix, string $content): string {
-            if (
-                ! Strings::endsWith($filePath, 'packages/Testing/PHPUnit/AbstractTestCase.php')
-                && ! Strings::endsWith($filePath, 'packages/Testing/PHPUnit/AbstractRectorTestCase.php')
-            ) {
-                return $content;
-            }
-
-            // un-prefix
-            return Strings::replace(
-                $content,
-                '#' . $prefix . '\\\\PHPUnit\\\\Framework\\\\TestCase#',
-                'PHPUnit\Framework\TestCase'
-            );
-        },
-
         // fixes https://github.com/rectorphp/rector/issues/6010 + test case prefix
         function (string $filePath, string $prefix, string $content): string {
             // @see https://regex101.com/r/bA1nQa/1
@@ -154,30 +174,6 @@ return [
             // @see https://regex101.com/r/x5Ukrx/1
             $namespace = sprintf('#namespace %s;#m', $prefix);
             return Strings::replace($content, $namespace);
-        },
-
-        function (string $filePath, string $prefix, string $content): string {
-            if (! Strings::contains($filePath, 'vendor/')) {
-                return $content;
-            }
-
-            // @see https://regex101.com/r/wcAbLf/1
-            return Strings::replace(
-                $content, '#((private|public|protected)\s+const)#',
-                "const"
-            );
-        },
-
-        function (string $filePath, string $prefix, string $content): string {
-            if (! Strings::contains($filePath, 'vendor/')) {
-                return $content;
-            }
-
-            // @see https://regex101.com/r/r3AJFl/1
-            return Strings::replace(
-                $content, '#\)\s{0,}:\s{0,}void#',
-                ")"
-            );
         },
 
         // unprefix string classes, as they're string on purpose - they have to be checked in original form, not prefixed
@@ -204,6 +200,11 @@ return [
 
             // skip "Rector\\" namespace
             if (Strings::contains($content, '$services->load(\'Rector')) {
+                return $content;
+            }
+
+            // skip "Ssch\\" namespace
+            if (Strings::contains($content, '$services->load(\'Ssch')) {
                 return $content;
             }
 

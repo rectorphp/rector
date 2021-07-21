@@ -1,5 +1,5 @@
 {
-    "name": "rector/rector-php70",
+    "name": "rector/rector",
     "description": "Prefixed and PHP 7.0 downgraded version of rector/rector",
     "license": "MIT",
     "bin": [
@@ -12,5 +12,16 @@
         "branch-alias": {
             "dev-main": "0.10-dev"
         }
+    },
+    "conflict": {
+        "phpstan/phpdoc-parser": "<=0.5.3",
+        "phpstan/phpstan": "<=0.12.82",
+        "rector/rector-prefixed": "*",
+        "rector/rector-phpunit": "*",
+        "rector/rector-symfony": "*",
+        "rector/rector-doctrine": "*",
+        "rector/rector-nette": "*",
+        "rector/rector-nette-to-symfony": "*",
+        "rector/rector-cakephp": "*"
     }
 }

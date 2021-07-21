@@ -1,0 +1,42 @@
+# This workflow runs system tests: Use the Rector application from the source
+# checkout to process "fixture" projects in tests/system-tests
+# to see if those can be processed successfully
+name: End to End tests
+
+on:
+    pull_request: null
+    push:
+        branches:
+            - main
+
+jobs:
+    end_to_end:
+        runs-on: ubuntu-latest
+        strategy:
+            fail-fast: false
+            matrix:
+                php_version: ['7.0', '7.1', '7.2', '7.3', '7.4', '8.0']
+                directory:
+                    - 'e2e/attributes'
+                    - 'e2e/dont-execute-code'
+                    - 'e2e/finalize'
+                    - 'e2e/parse-php7-code'
+                    - 'e2e/parse-php8-code'
+
+        name: End to end test - ${{ matrix.directory }}
+
+        steps:
+            -   uses: actions/checkout@v2
+
+            -   uses: shivammathur/setup-php@v2
+                with:
+                    php-version: ${{ matrix.php_version }}
+                    coverage: none
+
+            -
+                run: composer install --ansi
+                working-directory: ${{ matrix.directory }}
+
+            -
+                run: ../../bin/rector process --dry-run --ansi
+                working-directory: ${{ matrix.directory }}

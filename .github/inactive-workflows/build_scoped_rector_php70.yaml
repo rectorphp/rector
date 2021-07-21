@@ -1,0 +1,155 @@
+# builds the content of https://github.com/rectorphp/rector-prefixed-php70
+# inspiration from https://github.com/phpstan/phpstan-src/blob/master/.github/workflows/phar.yml
+name: Build Scoped Rector PHP 7.0
+
+on:
+    push:
+        branches:
+            - php70
+#        tags:
+#            - '*'
+    pull_request:
+        branches:
+            - php70
+
+env:
+    # see https://github.com/composer/composer/issues/9368#issuecomment-718112361
+    COMPOSER_ROOT_VERSION: "dev-main"
+
+jobs:
+    build_scoped_rector_php70:
+        runs-on: ubuntu-latest
+        timeout-minutes: 30
+
+        steps:
+            -
+                uses: actions/checkout@v2
+                with:
+                    fetch-depth: 0
+
+            -
+                uses: shivammathur/setup-php@v2
+                with:
+                    php-version: 8.0
+                    coverage: none
+
+                # fixes https://github.com/rectorphp/rector/pull/4559/checks?check_run_id=1359814403, see https://github.com/shivammathur/setup-php#composer-github-oauth
+                env:
+                    COMPOSER_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+
+            # install only prod dependencies - do not use ramsey, it uses cache including "dev", we want to avoid it here
+            -   run: |
+                    composer remove --dev symplify/easy-coding-standard
+                    composer remove --dev symplify/coding-standard
+                    composer remove composer/xdebug-handler
+                    composer require composer/composer
+                    composer require composer/xdebug-handler:"2.0.1 as 1.4.6"
+                    composer install --no-dev --ansi
+
+            # early downgrade individual functions and files of symfony Attribute classes
+            -   run: bin/rector process src/functions -c build/config/config-downgrade.php --ansi
+            -   run: bin/rector process vendor/symfony/dependency-injection/Attribute/Autoconfigure.php -c build/config/config-downgrade.php --ansi
+            -   run: bin/rector process vendor/symfony/dependency-injection/Attribute/AutoconfigureTag.php -c build/config/config-downgrade.php --ansi
+            -   run: bin/rector process vendor/symfony/console/Event/ConsoleCommandEvent.php -c build/config/config-downgrade-php70.php --ansi
+            -   run: bin/rector process vendor/symfony/console/EventListener/ErrorListener.php -c build/config/config-downgrade-php70.php --ansi
+
+            -   run: wget https://github.com/box-project/box/releases/download/3.12.2/box.phar -N --no-verbose
+
+            # extra content of phpstan.phar to vendor/phpstan/phpstan-extracted and copy downgraded classes early
+            -   run: |
+                    php box.phar extract vendor/phpstan/phpstan/phpstan.phar vendor/phpstan/phpstan-extracted
+                    mv vendor/phpstan/phpstan-extracted/vendor/scoper-autoload.php vendor/phpstan/phpstan-extracted/vendor/phpstan-autoload.php
+                    cp vendor/symfony/console/Event/ConsoleCommandEvent.php vendor/phpstan/phpstan-extracted/vendor/symfony/console/Event/ConsoleCommandEvent.php
+                    cp vendor/symfony/console/EventListener/ErrorListener.php vendor/phpstan/phpstan-extracted/vendor/symfony/console/EventListener/ErrorListener.php
+
+            # "composer remove phpstan/phpstan" original phpstan/phpstan is now duplicated, we don't need it now -required by phpstan extensions, cannot be removed like this
+
+            # to avoid double packing the same code
+            -   run: rm -rf vendor/bin/phpstan vendor/phpstan/phpstan/bootstrap.php
+            # the vendor/phpstan/phpstan/bootstrap.php is statically included by composer, so better add empty file
+            -   run: echo "<?php " > vendor/phpstan/phpstan/bootstrap.php
+            -   run: echo "require_once __DIR__ . '/vendor/phpstan/phpstan-extracted/preload.php';" >> preload.php
+            -   run: rm -rf vendor/phpstan/phpstan/phpstan.phar
+            -   run: rm -rf phpstan-for-rector.neon
+
+            # 1. copy files to $NESTED_DIRECTORY directory Exclude the scoped/nested directories to prevent rsync from copying in a loop
+            -  run: rsync --exclude rector-build-php70 -av * rector-build-php70 --quiet
+            -  run: rm -rf rector-build-php70/packages-tests rector-build-php70/rules-tests rector-build-php70/tests
+
+            # this must run
+            -  run: bin/rector list --debug
+
+            # 2. downgrade rector
+            -   run: sh build/downgrade-rector-php70.sh rector-build-php70
+
+            # 3. prefix classes and manual downgrade after prefixed for individual IgnoredRegexValidator.php
+            -   run: |
+                    sh build/build-rector-scoped-php70.sh rector-build-php70 rector-prefixed-downgraded-php70
+                    bin/rector process rector-prefixed-downgraded-php70/vendor/phpstan/phpstan-extracted/src/Command/IgnoredRegexValidator.php -c build/config/config-downgrade-php70.php --ansi
+                    bin/rector process build/target-repository-php70/bootstrap.php -c build/config/config-downgrade-php70.php --ansi
+
+            # 4. lint the code for PHP 7.0 - this must happen here, as setup-php allows only one PHP version switch: https://github.com/shivammathur/setup-php/issues/434
+            -
+                uses: shivammathur/setup-php@v2
+                with:
+                    php-version: 7.0
+                    coverage: none
+            -   run: |
+                    rm -rf vendor
+                    composer create-project php-parallel-lint/php-parallel-lint php-parallel-lint --ansi
+
+            -   run: php-parallel-lint/parallel-lint rector-prefixed-downgraded-php70 --exclude rector-prefixed-downgraded-php70/stubs --exclude rector-prefixed-downgraded-php70/vendor/symfony/error-handler/Resources --exclude rector-prefixed-downgraded-php70/vendor/symfony/http-kernel/Resources --exclude rector-prefixed-downgraded-php70/vendor/rector/rector-nette/tests --exclude rector-prefixed-downgraded-php70/vendor/symfony/polyfill-mbstring/bootstrap80.php --exclude rector-prefixed-downgraded-php70/vendor/tracy/tracy/examples --exclude rector-prefixed-downgraded-php70/vendor/rector/rector-installer/tests --exclude rector-prefixed-downgraded-php70/vendor/symplify/smart-file-system/tests --exclude rector-prefixed-downgraded-php70/vendor/symfony/http-foundation/Session --exclude rector-prefixed-downgraded-php70/vendor/symfony/var-dumper --exclude rector-prefixed-downgraded-php70/vendor/nette/caching --exclude rector-prefixed-downgraded-php70/vendor/rector/rector-nette/src/Rector/LNumber --exclude rector-prefixed-downgraded-php70/vendor/symfony/http-foundation/Test --exclude rector-prefixed-downgraded-php70/vendor/symplify/simple-php-doc-parser/tests --exclude rector-prefixed-downgraded-php70/vendor/tracy/tracy/src/Tracy/Bar/panels/info.panel.phtml --exclude rector-prefixed-downgraded-php70/vendor/rector/extension-installer/tests --exclude rector-prefixed-downgraded-php70/vendor/symfony/string/Slugger/AsciiSlugger.php --exclude rector-prefixed-downgraded-php70/vendor/ssch/typo3-rector/templates/maker
+
+            # 5. downgrade bootstrap.php and copy repository meta files
+            -   run: |
+                    cp -R build/target-repository-php70/. rector-prefixed-downgraded-php70
+                    cp -R templates rector-prefixed-downgraded-php70/
+                    cp CONTRIBUTING.md rector-prefixed-downgraded-php70/
+                    cp -R preload.php rector-prefixed-downgraded-php70/
+
+            # 6. clone remote repository, so we can push it
+            -
+                uses: "actions/checkout@v2"
+                with:
+                    repository: rectorphp/rector-prefixed-php70
+                    path: remote-repository-php70
+                    token: ${{ secrets.ACCESS_TOKEN }}
+
+            # remove remote files, to avoid piling up dead code in remote repository
+            -   run: rm -rf remote-repository-php70/config remote-repository-php70/src remote-repository-php70/rules remote-repository-php70/packages remote-repository-php70/vendor
+            -   run: cp -a rector-prefixed-downgraded-php70/. remote-repository-php70
+
+            # 7. setup git
+            -
+                working-directory: remote-repository-php70
+                run: |
+                    git config user.email "tomas.vot@gmail.com"
+                    git config user.name "Tomas Votruba"
+
+            # commit metadata
+            -
+                name: "Get Git log"
+                id: git-log
+                run: echo ::set-output name=log::$(git log ${{ github.event.before }}..${{ github.event.after }} --reverse --pretty='%H %s' | sed -e 's/^/https:\/\/github.com\/rectorphp\/rector-src\/commit\//')
+
+            # 8.A publish it to remote repository without tag
+            -
+                name: "Commit Prefixed - main"
+                working-directory: remote-repository-php70
+                if: "!startsWith(github.ref, 'refs/tags/')"
+                run: |
+                    git add --all
+                    git commit -m "Updated Rector to commit ${{ github.event.after }}" -m "${{ steps.git-log.outputs.log }}"
+                    git push --quiet origin main
+
+            # 8.B publish it to remote repository with tag
+            -
+                name: "Commit Prefixed - tag"
+                working-directory: remote-repository-php70
+                if: "startsWith(github.ref, 'refs/tags/')"
+                run: |
+                    git add --all
+                    git commit -m "Rector ${GITHUB_REF#refs/tags/}" -m "${{ steps.git-log.outputs.log }}"
+                    git push --quiet origin main
+                    git tag ${GITHUB_REF#refs/tags/} -m "${GITHUB_REF#refs/tags/}"
+                    git push --quiet origin ${GITHUB_REF#refs/tags/}

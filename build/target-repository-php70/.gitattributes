@@ -1,0 +1,29 @@
+# Denote all files that are truly binary and should not be modified.
+*.png binary
+*.jpg binary
+
+# Set syntax highlight on GitHub
+# https://github.com/github/linguist/blob/master/lib/linguist/languages.yml
+*.neon linguist-language=YAML
+
+# Remove files for archives generated using `git archive`
+.editorconfig export-ignore
+.gitattributes export-ignore
+
+CONTRIBUTING.md export-ignore
+CHANGELOG.md export-ignore
+CODE_OF_CONDUCT.md export-ignore
+
+# exclude only root dirs, otherwise nette/utils is removed - see https://github.com/TomasVotruba/tomasvotruba.com/pull/1197/checks?check_run_id=2577329283
+/stubs export-ignore
+
+Dockerfile export-ignore
+docs/images export-ignore
+.docker export-ignore
+.github export-ignore
+e2e export-ignore
+.dockerignore export-ignore
+
+# testing Windows spaces - https://help.github.com/en/github/using-git/configuring-git-to-handle-line-endings
+packages/better-php-doc-parser/tests/PhpDocInfo/PhpDocInfoPrinter/FixtureBasic/with_spac.txt text eol=crlf
+

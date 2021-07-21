@@ -61,9 +61,15 @@ final class DowngradePathsCommand extends Command
             $downgradePaths[] = 'vendor/phpstan/phpstan-extracted/vendor/nette/schema/src';
             $downgradePaths[] = 'vendor/phpstan/phpstan-extracted/vendor/nette/finder/src';
             $downgradePaths[] = 'vendor/phpstan/phpstan-extracted/vendor/nette/robot-loader/src';
+            $downgradePaths[] = 'vendor/phpstan/phpstan-extracted/vendor/nette/bootstrap/src';
             $downgradePaths[] = 'vendor/phpstan/phpstan-extracted/vendor/ondram/ci-detector/src';
             $downgradePaths[] = 'vendor/phpstan/phpstan-extracted/vendor/symfony/finder';
+            $downgradePaths[] = 'vendor/phpstan/phpstan-extracted/vendor/symfony/console/Output/OutputInterface.php';
+            $downgradePaths[] = 'vendor/phpstan/phpstan-extracted/vendor/symfony/console/Output/TrimmedBufferOutput.php';
+            $downgradePaths[] = 'vendor/phpstan/phpstan-extracted/vendor/symfony/console/Logger/ConsoleLogger.php';
+            $downgradePaths[] = 'vendor/phpstan/phpstan-extracted/vendor/symfony/console/Style/SymfonyStyle.php';
             $downgradePaths[] = 'vendor/phpstan/phpstan-extracted/vendor/symfony/console';
+            $downgradePaths[] = 'vendor/phpstan/phpstan-phpunit/src';
         }
 
         // bash format
