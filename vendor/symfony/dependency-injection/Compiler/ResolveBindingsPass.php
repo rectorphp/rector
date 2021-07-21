@@ -40,7 +40,7 @@ class ResolveBindingsPass extends \RectorPrefix20210721\Symfony\Component\Depend
             parent::process($container);
             foreach ($this->unusedBindings as [$key, $serviceId, $bindingType, $file]) {
                 $argumentType = $argumentName = $message = null;
-                if (\false !== \strpos($key, ' ')) {
+                if (\strpos($key, ' ') !== \false) {
                     [$argumentType, $argumentName] = \explode(' ', $key, 2);
                 } elseif ('$' === $key[0]) {
                     $argumentName = $key;

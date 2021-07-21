@@ -97,7 +97,7 @@ class Alias
             if (\preg_match('#[\\r\\n]|\\*/#', $message)) {
                 throw new \RectorPrefix20210721\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException('Invalid characters found in deprecation template.');
             }
-            if (\false === \strpos($message, '%alias_id%')) {
+            if (\strpos($message, '%alias_id%') === \false) {
                 throw new \RectorPrefix20210721\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException('The deprecation template must contain the "%alias_id%" placeholder.');
             }
         }

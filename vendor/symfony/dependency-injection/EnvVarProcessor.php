@@ -96,7 +96,7 @@ class EnvVarProcessor implements \RectorPrefix20210721\Symfony\Component\Depende
             $env = $getEnv($name);
         } elseif (isset($_ENV[$name])) {
             $env = $_ENV[$name];
-        } elseif (isset($_SERVER[$name]) && 0 !== \strpos($name, 'HTTP_')) {
+        } elseif (isset($_SERVER[$name]) && \strncmp($name, 'HTTP_', \strlen('HTTP_')) !== 0) {
             $env = $_SERVER[$name];
         } elseif (\false === ($env = \getenv($name)) || null === $env) {
             // null is a possible value because of thread safety issues

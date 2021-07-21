@@ -67,7 +67,7 @@ class ArgvInput extends \RectorPrefix20210721\Symfony\Component\Console\Input\In
                 $this->parseArgument($token);
             } elseif ($parseOptions && '--' == $token) {
                 $parseOptions = \false;
-            } elseif ($parseOptions && 0 === \strpos($token, '--')) {
+            } elseif ($parseOptions && \strncmp($token, '--', \strlen('--')) === 0) {
                 $this->parseLongOption($token);
             } elseif ($parseOptions && '-' === $token[0] && '-' !== $token) {
                 $this->parseShortOption($token);
@@ -235,7 +235,7 @@ class ArgvInput extends \RectorPrefix20210721\Symfony\Component\Console\Input\In
         $isOption = \false;
         foreach ($this->tokens as $i => $token) {
             if ($token && '-' === $token[0]) {
-                if (\false !== \strpos($token, '=') || !isset($this->tokens[$i + 1])) {
+                if (\strpos($token, '=') !== \false || !isset($this->tokens[$i + 1])) {
                     continue;
                 }
                 // If it's a long option, consider that everything after "--" is the option name.
@@ -271,8 +271,8 @@ class ArgvInput extends \RectorPrefix20210721\Symfony\Component\Console\Input\In
                 // Options with values:
                 //   For long options, test for '--option=' at beginning
                 //   For short options, test for '-o' at beginning
-                $leading = 0 === \strpos($value, '--') ? $value . '=' : $value;
-                if ($token === $value || '' !== $leading && 0 === \strpos($token, $leading)) {
+                $leading = \strncmp($value, '--', \strlen('--')) === 0 ? $value . '=' : $value;
+                if ($token === $value || '' !== $leading && \strncmp($token, $leading, \strlen($leading)) === 0) {
                     return \true;
                 }
             }
@@ -299,8 +299,8 @@ class ArgvInput extends \RectorPrefix20210721\Symfony\Component\Console\Input\In
                 // Options with values:
                 //   For long options, test for '--option=' at beginning
                 //   For short options, test for '-o' at beginning
-                $leading = 0 === \strpos($value, '--') ? $value . '=' : $value;
-                if ('' !== $leading && 0 === \strpos($token, $leading)) {
+                $leading = \strncmp($value, '--', \strlen('--')) === 0 ? $value . '=' : $value;
+                if ('' !== $leading && \strncmp($token, $leading, \strlen($leading)) === 0) {
                     return \substr($token, \strlen($leading));
                 }
             }

@@ -63,12 +63,12 @@ class ParameterBag implements \RectorPrefix20210721\Symfony\Component\Dependency
             $alternatives = [];
             foreach ($this->parameters as $key => $parameterValue) {
                 $lev = \levenshtein($name, $key);
-                if ($lev <= \strlen($name) / 3 || \false !== \strpos($key, $name)) {
+                if ($lev <= \strlen($name) / 3 || \strpos($key, $name) !== \false) {
                     $alternatives[] = $key;
                 }
             }
             $nonNestedAlternative = null;
-            if (!\count($alternatives) && \false !== \strpos($name, '.')) {
+            if (!\count($alternatives) && \strpos($name, '.') !== \false) {
                 $namePartsLength = \array_map('strlen', \explode('.', $name));
                 $key = \substr($name, 0, -1 * (1 + \array_pop($namePartsLength)));
                 while (\count($namePartsLength)) {

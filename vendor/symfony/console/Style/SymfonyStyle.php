@@ -383,7 +383,7 @@ class SymfonyStyle extends \RectorPrefix20210721\Symfony\Component\Console\Style
     {
         $fetched = $this->bufferedOutput->fetch();
         //Prepend new line if last char isn't EOL:
-        if ("\n" !== \substr($fetched, -1)) {
+        if (\substr_compare($fetched, "\n", -\strlen("\n")) !== 0) {
             $this->newLine();
         }
     }

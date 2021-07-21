@@ -6,6 +6,7 @@ namespace Rector\CodingStyle\ClassNameImport\ClassNameImportSkipVoter;
 use PhpParser\Node;
 use Rector\CodingStyle\Contract\ClassNameImport\ClassNameImportSkipVoterInterface;
 use Rector\Core\Configuration\RenamedClassesDataCollector;
+use Rector\Core\ValueObject\Application\File;
 use Rector\PostRector\Collector\UseNodesToAddCollector;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 /**
@@ -31,12 +32,13 @@ final class UsesClassNameImportSkipVoter implements \Rector\CodingStyle\Contract
         $this->renamedClassesDataCollector = $renamedClassesDataCollector;
     }
     /**
+     * @param \Rector\Core\ValueObject\Application\File $file
      * @param \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType $fullyQualifiedObjectType
      * @param \PhpParser\Node $node
      */
-    public function shouldSkip($fullyQualifiedObjectType, $node) : bool
+    public function shouldSkip($file, $fullyQualifiedObjectType, $node) : bool
     {
-        $useImportTypes = $this->useNodesToAddCollector->getUseImportTypesByNode($node);
+        $useImportTypes = $this->useNodesToAddCollector->getUseImportTypesByNode($file, $node);
         foreach ($useImportTypes as $useImportType) {
             // if the class is renamed, the use import is no longer blocker
             if ($this->renamedClassesDataCollector->hasOldClass($useImportType->getClassName())) {

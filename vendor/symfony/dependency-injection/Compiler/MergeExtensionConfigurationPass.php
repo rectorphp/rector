@@ -194,7 +194,7 @@ class MergeExtensionConfigurationContainerBuilder extends \RectorPrefix20210721\
             return parent::resolveEnvPlaceholders($value, $format, $usedEnvs);
         }
         foreach ($bag->getEnvPlaceholders() as $env => $placeholders) {
-            if (\false === \strpos($env, ':')) {
+            if (\strpos($env, ':') === \false) {
                 continue;
             }
             foreach ($placeholders as $placeholder) {

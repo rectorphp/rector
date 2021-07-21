@@ -265,7 +265,7 @@ class QuestionHelper extends \RectorPrefix20210721\Symfony\Component\Console\Hel
                         $fullChoice .= $remainingCharacters;
                         $i = \false === ($encoding = \mb_detect_encoding($fullChoice, null, \true)) ? \strlen($fullChoice) : \mb_strlen($fullChoice, $encoding);
                         $matches = \array_filter($autocomplete($ret), function ($match) use($ret) {
-                            return '' === $ret || 0 === \strpos($match, $ret);
+                            return '' === $ret || \strncmp($match, $ret, \strlen($ret)) === 0;
                         });
                         $numMatches = \count($matches);
                         $ofs = -1;
@@ -293,7 +293,7 @@ class QuestionHelper extends \RectorPrefix20210721\Symfony\Component\Console\Hel
                 $ofs = 0;
                 foreach ($autocomplete($ret) as $value) {
                     // If typed characters match the beginning chunk of value (e.g. [AcmeDe]moBundle)
-                    if (0 === \strpos($value, $tempRet)) {
+                    if (\strncmp($value, $tempRet, \strlen($tempRet)) === 0) {
                         $matches[$numMatches++] = $value;
                     }
                 }
@@ -314,7 +314,7 @@ class QuestionHelper extends \RectorPrefix20210721\Symfony\Component\Console\Hel
     private function mostRecentlyEnteredValue(string $entered) : string
     {
         // Determine the most recent value that the user entered
-        if (\false === \strpos($entered, ',')) {
+        if (\strpos($entered, ',') === \false) {
             return $entered;
         }
         $choices = \explode(',', $entered);

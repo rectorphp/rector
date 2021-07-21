@@ -14,6 +14,7 @@ use PHPStan\Reflection\ReflectionProvider;
 use Rector\CodingStyle\ClassNameImport\AliasUsesResolver;
 use Rector\CodingStyle\ClassNameImport\ClassNameImportSkipper;
 use Rector\Core\Configuration\Option;
+use Rector\Core\ValueObject\Application\File;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PostRector\Collector\UseNodesToAddCollector;
@@ -67,7 +68,7 @@ final class NameImporter
     /**
      * @param Use_[] $uses
      */
-    public function importName(\PhpParser\Node\Name $name, array $uses) : ?\PhpParser\Node\Name
+    public function importName(\PhpParser\Node\Name $name, \Rector\Core\ValueObject\Application\File $file, array $uses) : ?\PhpParser\Node\Name
     {
         if ($this->shouldSkipName($name)) {
             return null;
@@ -80,7 +81,7 @@ final class NameImporter
             return null;
         }
         $this->aliasedUses = $this->aliasUsesResolver->resolveForNode($name);
-        return $this->importNameAndCollectNewUseStatement($name, $staticType);
+        return $this->importNameAndCollectNewUseStatement($file, $name, $staticType);
     }
     private function shouldSkipName(\PhpParser\Node\Name $name) : bool
     {
@@ -109,19 +110,19 @@ final class NameImporter
         }
         return \false;
     }
-    private function importNameAndCollectNewUseStatement(\PhpParser\Node\Name $name, \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType $fullyQualifiedObjectType) : ?\PhpParser\Node\Name
+    private function importNameAndCollectNewUseStatement(\Rector\Core\ValueObject\Application\File $file, \PhpParser\Node\Name $name, \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType $fullyQualifiedObjectType) : ?\PhpParser\Node\Name
     {
         // the same end is already imported → skip
-        if ($this->classNameImportSkipper->shouldSkipNameForFullyQualifiedObjectType($name, $fullyQualifiedObjectType)) {
+        if ($this->classNameImportSkipper->shouldSkipNameForFullyQualifiedObjectType($file, $name, $fullyQualifiedObjectType)) {
             return null;
         }
-        if ($this->useNodesToAddCollector->isShortImported($name, $fullyQualifiedObjectType)) {
-            if ($this->useNodesToAddCollector->isImportShortable($name, $fullyQualifiedObjectType)) {
+        if ($this->useNodesToAddCollector->isShortImported($file, $fullyQualifiedObjectType)) {
+            if ($this->useNodesToAddCollector->isImportShortable($file, $fullyQualifiedObjectType)) {
                 return $fullyQualifiedObjectType->getShortNameNode();
             }
             return null;
         }
-        $this->addUseImport($name, $fullyQualifiedObjectType);
+        $this->addUseImport($file, $name, $fullyQualifiedObjectType);
         // possibly aliased
         foreach ($this->aliasedUses as $aliasedUse) {
             if ($fullyQualifiedObjectType->getClassName() === $aliasedUse) {
@@ -159,9 +160,9 @@ final class NameImporter
         }
         return \false;
     }
-    private function addUseImport(\PhpParser\Node\Name $name, \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType $fullyQualifiedObjectType) : void
+    private function addUseImport(\Rector\Core\ValueObject\Application\File $file, \PhpParser\Node\Name $name, \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType $fullyQualifiedObjectType) : void
     {
-        if ($this->useNodesToAddCollector->hasImport($name, $fullyQualifiedObjectType)) {
+        if ($this->useNodesToAddCollector->hasImport($file, $name, $fullyQualifiedObjectType)) {
             return;
         }
         $parentNode = $name->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);

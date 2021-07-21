@@ -62,7 +62,7 @@ abstract class Extension implements \RectorPrefix20210721\Symfony\Component\Depe
     public function getAlias()
     {
         $className = static::class;
-        if ('Extension' != \substr($className, -9)) {
+        if (\substr_compare($className, 'Extension', -\strlen('Extension')) !== 0) {
             throw new \RectorPrefix20210721\Symfony\Component\DependencyInjection\Exception\BadMethodCallException('This extension does not follow the naming convention; you must overwrite the getAlias() method.');
         }
         $classBaseName = \substr(\strrchr($className, '\\'), 1, -9);
@@ -76,7 +76,7 @@ abstract class Extension implements \RectorPrefix20210721\Symfony\Component\Depe
     public function getConfiguration($config, $container)
     {
         $class = static::class;
-        if (\false !== \strpos($class, "\0")) {
+        if (\strpos($class, "\0") !== \false) {
             return null;
             // ignore anonymous classes
         }

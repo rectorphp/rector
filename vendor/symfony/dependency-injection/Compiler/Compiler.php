@@ -62,7 +62,7 @@ class Compiler
      */
     public function log($pass, $message)
     {
-        if (\false !== \strpos($message, "\n")) {
+        if (\strpos($message, "\n") !== \false) {
             $message = \str_replace("\n", "\n" . \get_class($pass) . ': ', \trim($message));
         }
         $this->log[] = \get_class($pass) . ': ' . $message;

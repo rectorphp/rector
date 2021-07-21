@@ -53,7 +53,7 @@ class InputOption
      */
     public function __construct(string $name, $shortcut = null, int $mode = null, string $description = '', $default = null)
     {
-        if (0 === \strpos($name, '--')) {
+        if (\strncmp($name, '--', \strlen('--')) === 0) {
             $name = \substr($name, 2);
         }
         if (empty($name)) {

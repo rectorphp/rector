@@ -152,7 +152,7 @@ class ResolveChildDefinitionsPass extends \RectorPrefix20210721\Symfony\Componen
         foreach ($definition->getArguments() as $k => $v) {
             if (\is_numeric($k)) {
                 $def->addArgument($v);
-            } elseif (0 === \strpos($k, 'index_')) {
+            } elseif (\strncmp($k, 'index_', \strlen('index_')) === 0) {
                 $def->replaceArgument((int) \substr($k, \strlen('index_')), $v);
             } else {
                 $def->setArgument($k, $v);

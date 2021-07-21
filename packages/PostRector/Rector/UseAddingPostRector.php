@@ -70,20 +70,18 @@ final class UseAddingPostRector extends \Rector\PostRector\Rector\AbstractPostRe
         $smartFileInfo = $file->getSmartFileInfo();
         $useImportTypes = $this->useNodesToAddCollector->getObjectImportsByFileInfo($smartFileInfo);
         $functionUseImportTypes = $this->useNodesToAddCollector->getFunctionImportsByFileInfo($smartFileInfo);
-        $removedShortUses = $this->useNodesToAddCollector->getShortUsesByFileInfo($smartFileInfo);
         $oldToNewClasses = $this->renamedClassesDataCollector->getOldToNewClasses();
         // nothing to import or remove
-        if ($useImportTypes === [] && $functionUseImportTypes === [] && $removedShortUses === [] && $oldToNewClasses === []) {
+        if ($useImportTypes === [] && $functionUseImportTypes === [] && $oldToNewClasses === []) {
             return $nodes;
         }
         /** @var FullyQualifiedObjectType[] $useImportTypes */
         $useImportTypes = $this->typeFactory->uniquateTypes($useImportTypes);
-        $this->useNodesToAddCollector->clear($smartFileInfo);
         // A. has namespace? add under it
         $namespace = $this->betterNodeFinder->findFirstInstanceOf($nodes, \PhpParser\Node\Stmt\Namespace_::class);
         if ($namespace instanceof \PhpParser\Node\Stmt\Namespace_) {
             // first clean
-            $this->useImportsRemover->removeImportsFromNamespace($namespace, $removedShortUses);
+            //$this->useImportsRemover->removeImportsFromNamespace($namespace, $removedShortUses);
             // then add, to prevent adding + removing false positive of same short use
             $this->useImportsAdder->addImportsToNamespace($namespace, $useImportTypes, $functionUseImportTypes);
             return $nodes;
@@ -92,7 +90,7 @@ final class UseAddingPostRector extends \Rector\PostRector\Rector\AbstractPostRe
         if ($firstNode instanceof \Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace) {
             $nodes = $firstNode->stmts;
         }
-        $removedShortUses = \array_merge($removedShortUses, $this->renamedClassesDataCollector->getOldClasses());
+        $removedShortUses = $this->renamedClassesDataCollector->getOldClasses();
         // B. no namespace? add in the top
         // first clean
         $nodes = $this->useImportsRemover->removeImportsFromStmts($nodes, $removedShortUses);

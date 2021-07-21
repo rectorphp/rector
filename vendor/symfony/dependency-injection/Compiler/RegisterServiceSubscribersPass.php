@@ -94,7 +94,7 @@ class RegisterServiceSubscribersPass extends \RectorPrefix20210721\Symfony\Compo
             if ($name) {
                 if (\false !== ($i = \strpos($name, '::get'))) {
                     $name = \lcfirst(\substr($name, 5 + $i));
-                } elseif (\false !== \strpos($name, '::')) {
+                } elseif (\strpos($name, '::') !== \false) {
                     $name = null;
                 }
             }

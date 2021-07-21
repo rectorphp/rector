@@ -138,7 +138,7 @@ class PhpDumper extends \RectorPrefix20210721\Symfony\Component\DependencyInject
         $this->inlineFactories = $this->asFiles && $options['inline_factories_parameter'] && $this->container->hasParameter($options['inline_factories_parameter']) && $this->container->getParameter($options['inline_factories_parameter']);
         $this->inlineRequires = $options['inline_class_loader_parameter'] && ($this->container->hasParameter($options['inline_class_loader_parameter']) ? $this->container->getParameter($options['inline_class_loader_parameter']) : \PHP_VERSION_ID < 70400 || $options['debug']);
         $this->serviceLocatorTag = $options['service_locator_tag'];
-        if (0 !== \strpos($baseClass = $options['base_class'], '\\') && 'Container' !== $baseClass) {
+        if (\strncmp($baseClass = $options['base_class'], '\\', \strlen('\\')) !== 0 && 'Container' !== $baseClass) {
             $baseClass = \sprintf('%s\\%s', $options['namespace'] ? '\\' . $options['namespace'] : '', $baseClass);
             $this->baseClass = $baseClass;
         } elseif ('Container' === $baseClass) {
@@ -273,7 +273,7 @@ require __DIR__.'/{$preloadedFiles}';
 
 EOF;
                 foreach ($this->preload as $class) {
-                    if (!$class || \false !== \strpos($class, '$') || \in_array($class, ['int', 'float', 'string', 'bool', 'resource', 'object', 'array', 'null', 'callable', 'iterable', 'mixed', 'void'], \true)) {
+                    if (!$class || \strpos($class, '$') !== \false || \in_array($class, ['int', 'float', 'string', 'bool', 'resource', 'object', 'array', 'null', 'callable', 'iterable', 'mixed', 'void'], \true)) {
                         continue;
                     }
                     if (!(\class_exists($class, \false) || \interface_exists($class, \false) || \trait_exists($class, \false)) || (new \ReflectionClass($class))->isUserDefined()) {
@@ -447,7 +447,7 @@ EOF;
             return;
         }
         $file = $r->getFileName();
-        if (') : eval()\'d code' === \substr($file, -17)) {
+        if (\substr_compare($file, ') : eval()\'d code', -\strlen(') : eval()\'d code')) === 0) {
             $file = \substr($file, 0, \strrpos($file, '(', -17));
         }
         if (!$file || $this->doExport($file) === ($exportedFile = $this->export($file))) {
@@ -553,7 +553,7 @@ EOF;
     private function addServiceInstance(string $id, \RectorPrefix20210721\Symfony\Component\DependencyInjection\Definition $definition, bool $isSimpleInstance) : string
     {
         $class = $this->dumpValue($definition->getClass());
-        if (0 === \strpos($class, "'") && \false === \strpos($class, '$') && !\preg_match('/^\'(?:\\\\{2})?[a-zA-Z_\\x7f-\\xff][a-zA-Z0-9_\\x7f-\\xff]*(?:\\\\{2}[a-zA-Z_\\x7f-\\xff][a-zA-Z0-9_\\x7f-\\xff]*)*\'$/', $class)) {
+        if (\strncmp($class, "'", \strlen("'")) === 0 && \strpos($class, '$') === \false && !\preg_match('/^\'(?:\\\\{2})?[a-zA-Z_\\x7f-\\xff][a-zA-Z0-9_\\x7f-\\xff]*(?:\\\\{2}[a-zA-Z_\\x7f-\\xff][a-zA-Z0-9_\\x7f-\\xff]*)*\'$/', $class)) {
             throw new \RectorPrefix20210721\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException(\sprintf('"%s" is not a valid class name for the "%s" service.', $class, $id));
         }
         $isProxyCandidate = $this->getProxyDumper()->isProxyCandidate($definition);
@@ -659,10 +659,10 @@ EOF;
             }
             $class = $this->dumpValue($callable[0]);
             // If the class is a string we can optimize away
-            if (0 === \strpos($class, "'") && \false === \strpos($class, '$')) {
+            if (\strncmp($class, "'", \strlen("'")) === 0 && \strpos($class, '$') === \false) {
                 return \sprintf("        %s::%s(\$%s);\n", $this->dumpLiteralClass($class), $callable[1], $variableName);
             }
-            if (0 === \strpos($class, 'new ')) {
+            if (\strncmp($class, 'new ', \strlen('new ')) === 0) {
                 return \sprintf("        (%s)->%s(\$%s);\n", $this->dumpValue($callable[0]), $callable[1], $variableName);
             }
             return \sprintf("        [%s, '%s'](\$%s);\n", $this->dumpValue($callable[0]), $callable[1], $variableName);
@@ -678,7 +678,7 @@ EOF;
         $return = [];
         if ($class = $definition->getClass()) {
             $class = $class instanceof \RectorPrefix20210721\Symfony\Component\DependencyInjection\Parameter ? '%' . $class . '%' : $this->container->resolveEnvPlaceholders($class);
-            $return[] = \sprintf(0 === \strpos($class, '%') ? '@return object A %1$s instance' : '@return \\%s', \ltrim($class, '\\'));
+            $return[] = \sprintf(\strncmp($class, '%', \strlen('%')) === 0 ? '@return object A %1$s instance' : '@return \\%s', \ltrim($class, '\\'));
         } elseif ($definition->getFactory()) {
             $factory = $definition->getFactory();
             if (\is_string($factory)) {
@@ -690,7 +690,7 @@ EOF;
             }
         }
         if ($definition->isDeprecated()) {
-            if ($return && 0 === \strpos($return[\count($return) - 1], '@return')) {
+            if ($return && \strncmp($return[\count($return) - 1], '@return', \strlen('@return')) === 0) {
                 $return[] = '';
             }
             $deprecation = $definition->getDeprecation($id);
@@ -956,13 +956,13 @@ EOTXT
                 }
                 $class = $this->dumpValue($callable[0]);
                 // If the class is a string we can optimize away
-                if (0 === \strpos($class, "'") && \false === \strpos($class, '$')) {
+                if (\strncmp($class, "'", \strlen("'")) === 0 && \strpos($class, '$') === \false) {
                     if ("''" === $class) {
                         throw new \RectorPrefix20210721\Symfony\Component\DependencyInjection\Exception\RuntimeException(\sprintf('Cannot dump definition: "%s" service is defined to be created by a factory but is missing the service reference, did you forget to define the factory service id or class?', $id ? 'The "' . $id . '"' : 'inline'));
                     }
                     return $return . \sprintf('%s::%s(%s)', $this->dumpLiteralClass($class), $callable[1], $arguments ? \implode(', ', $arguments) : '') . $tail;
                 }
-                if (0 === \strpos($class, 'new ')) {
+                if (\strncmp($class, 'new ', \strlen('new ')) === 0) {
                     return $return . \sprintf('(%s)->%s(%s)', $class, $callable[1], $arguments ? \implode(', ', $arguments) : '') . $tail;
                 }
                 return $return . \sprintf("[%s, '%s'](%s)", $class, $callable[1], $arguments ? \implode(', ', $arguments) : '') . $tail;
@@ -1595,14 +1595,14 @@ EOF;
      */
     private function dumpLiteralClass(string $class) : string
     {
-        if (\false !== \strpos($class, '$')) {
+        if (\strpos($class, '$') !== \false) {
             return \sprintf('${($_ = %s) && false ?: "_"}', $class);
         }
-        if (0 !== \strpos($class, "'") || !\preg_match('/^\'(?:\\\\{2})?[a-zA-Z_\\x7f-\\xff][a-zA-Z0-9_\\x7f-\\xff]*(?:\\\\{2}[a-zA-Z_\\x7f-\\xff][a-zA-Z0-9_\\x7f-\\xff]*)*\'$/', $class)) {
+        if (\strncmp($class, "'", \strlen("'")) !== 0 || !\preg_match('/^\'(?:\\\\{2})?[a-zA-Z_\\x7f-\\xff][a-zA-Z0-9_\\x7f-\\xff]*(?:\\\\{2}[a-zA-Z_\\x7f-\\xff][a-zA-Z0-9_\\x7f-\\xff]*)*\'$/', $class)) {
             throw new \RectorPrefix20210721\Symfony\Component\DependencyInjection\Exception\RuntimeException(\sprintf('Cannot dump definition because of invalid class name (%s).', $class ?: 'n/a'));
         }
         $class = \substr(\str_replace('\\\\', '\\', $class), 1, -1);
-        return 0 === \strpos($class, '\\') ? $class : '\\' . $class;
+        return \strncmp($class, '\\', \strlen('\\')) === 0 ? $class : '\\' . $class;
     }
     private function dumpParameter(string $name) : string
     {
@@ -1810,7 +1810,7 @@ EOF;
         if ($shouldCacheValue && isset($this->exportedVariables[$value])) {
             return $this->exportedVariables[$value];
         }
-        if (\is_string($value) && \false !== \strpos($value, "\n")) {
+        if (\is_string($value) && \strpos($value, "\n") !== \false) {
             $cleanParts = \explode("\n", $value);
             $cleanParts = \array_map(function ($part) {
                 return \var_export($part, \true);
@@ -1829,7 +1829,7 @@ EOF;
         }
         if ($resolveEnv && "'" === $export[0] && $export !== ($resolvedExport = $this->container->resolveEnvPlaceholders($export, "'.\$this->getEnv('string:%s').'"))) {
             $export = $resolvedExport;
-            if (".''" === \substr($export, -3)) {
+            if (\substr_compare($export, ".''", -\strlen(".''")) === 0) {
                 $export = \substr($export, 0, -3);
                 if ("'" === $export[1]) {
                     $export = \substr_replace($export, '', 18, 7);
@@ -1858,7 +1858,7 @@ EOF;
                 continue;
             }
             foreach (\get_declared_classes() as $class) {
-                if (0 === \strpos($class, 'ComposerAutoloaderInit') && $class::getLoader() === $autoloader[0]) {
+                if (\strncmp($class, 'ComposerAutoloaderInit', \strlen('ComposerAutoloaderInit')) === 0 && $class::getLoader() === $autoloader[0]) {
                     $file = \dirname((new \ReflectionClass($class))->getFileName(), 2) . '/autoload.php';
                     if (null !== $this->targetDirRegex && \preg_match($this->targetDirRegex . 'A', $file)) {
                         return $file;

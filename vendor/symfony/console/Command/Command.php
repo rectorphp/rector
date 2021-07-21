@@ -586,7 +586,7 @@ class Command
      */
     public function addUsage($usage)
     {
-        if (0 !== \strpos($usage, $this->name)) {
+        if (\strncmp($usage, $this->name, \strlen($this->name)) !== 0) {
             $usage = \sprintf('%s %s', $this->name, $usage);
         }
         $this->usages[] = $usage;

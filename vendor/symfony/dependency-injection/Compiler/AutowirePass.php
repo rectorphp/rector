@@ -274,7 +274,7 @@ class AutowirePass extends \RectorPrefix20210721\Symfony\Component\DependencyInj
             }
             if ($this->container->has($name) && !$this->container->findDefinition($name)->isAbstract()) {
                 foreach ($this->container->getAliases() as $id => $alias) {
-                    if ($name === (string) $alias && 0 === \strpos($id, $type . ' $')) {
+                    if ($name === (string) $alias && \strncmp($id, $type . ' $', \strlen($type . ' $')) === 0) {
                         return new \RectorPrefix20210721\Symfony\Component\DependencyInjection\TypedReference($name, $type, $reference->getInvalidBehavior());
                     }
                 }

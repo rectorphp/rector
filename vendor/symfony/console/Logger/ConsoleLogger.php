@@ -77,7 +77,7 @@ class ConsoleLogger extends \RectorPrefix20210721\Psr\Log\AbstractLogger
      */
     private function interpolate(string $message, array $context) : string
     {
-        if (\false === \strpos($message, '{')) {
+        if (\strpos($message, '{') === \false) {
             return $message;
         }
         $replacements = [];

@@ -335,6 +335,7 @@ class Table
         $this->calculateColumnsWidth($rows);
         $isHeader = !$this->horizontal;
         $isFirstRow = $this->horizontal;
+        $hasTitle = (bool) $this->headerTitle;
         foreach ($rows as $row) {
             if ($divider === $row) {
                 $isHeader = \false;
@@ -349,12 +350,9 @@ class Table
                 continue;
             }
             if ($isHeader || $isFirstRow) {
-                if ($isFirstRow) {
-                    $this->renderRowSeparator(self::SEPARATOR_TOP_BOTTOM);
-                    $isFirstRow = \false;
-                } else {
-                    $this->renderRowSeparator(self::SEPARATOR_TOP, $this->headerTitle, $this->style->getHeaderTitleFormat());
-                }
+                $this->renderRowSeparator($isHeader ? self::SEPARATOR_TOP : self::SEPARATOR_TOP_BOTTOM, $hasTitle ? $this->headerTitle : null, $hasTitle ? $this->style->getHeaderTitleFormat() : null);
+                $isFirstRow = \false;
+                $hasTitle = \false;
             }
             if ($this->horizontal) {
                 $this->renderRow($row, $this->style->getCellRowFormat(), $this->style->getCellHeaderFormat());

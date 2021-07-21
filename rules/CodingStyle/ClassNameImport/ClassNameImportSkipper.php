@@ -9,6 +9,7 @@ use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
 use Rector\CodingStyle\Contract\ClassNameImport\ClassNameImportSkipVoterInterface;
 use Rector\Core\Configuration\RenamedClassesDataCollector;
+use Rector\Core\ValueObject\Application\File;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 final class ClassNameImportSkipper
 {
@@ -28,10 +29,10 @@ final class ClassNameImportSkipper
         $this->classNameImportSkipVoters = $classNameImportSkipVoters;
         $this->renamedClassesDataCollector = $renamedClassesDataCollector;
     }
-    public function shouldSkipNameForFullyQualifiedObjectType(\PhpParser\Node $node, \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType $fullyQualifiedObjectType) : bool
+    public function shouldSkipNameForFullyQualifiedObjectType(\Rector\Core\ValueObject\Application\File $file, \PhpParser\Node $node, \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType $fullyQualifiedObjectType) : bool
     {
         foreach ($this->classNameImportSkipVoters as $classNameImportSkipVoter) {
-            if ($classNameImportSkipVoter->shouldSkip($fullyQualifiedObjectType, $node)) {
+            if ($classNameImportSkipVoter->shouldSkip($file, $fullyQualifiedObjectType, $node)) {
                 return \true;
             }
         }

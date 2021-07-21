@@ -282,7 +282,7 @@ class XmlFileLoader extends \RectorPrefix20210721\Symfony\Component\DependencyIn
                 if ('name' === $name && '' === $tagName) {
                     continue;
                 }
-                if (\false !== \strpos($name, '-') && \false === \strpos($name, '_') && !\array_key_exists($normalizedName = \str_replace('-', '_', $name), $parameters)) {
+                if (\strpos($name, '-') !== \false && \strpos($name, '_') === \false && !\array_key_exists($normalizedName = \str_replace('-', '_', $name), $parameters)) {
                     $parameters[$normalizedName] = \RectorPrefix20210721\Symfony\Component\Config\Util\XmlUtils::phpize($node->nodeValue);
                 }
                 // keep not normalized key
@@ -533,7 +533,7 @@ class XmlFileLoader extends \RectorPrefix20210721\Symfony\Component\DependencyIn
                     \array_shift($parts);
                     $locationstart = 'phar:///';
                 }
-            } elseif ('\\' === \DIRECTORY_SEPARATOR && 0 === \strpos($location, '\\\\')) {
+            } elseif ('\\' === \DIRECTORY_SEPARATOR && \strncmp($location, '\\\\', \strlen('\\\\')) === 0) {
                 $locationstart = '';
             }
             $drive = '\\' === \DIRECTORY_SEPARATOR ? \array_shift($parts) . '/' : '';

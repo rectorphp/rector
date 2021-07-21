@@ -92,7 +92,7 @@ class Definition
     public function setFactory($factory)
     {
         $this->changes['factory'] = \true;
-        if (\is_string($factory) && \false !== \strpos($factory, '::')) {
+        if (\is_string($factory) && \strpos($factory, '::') !== \false) {
             $factory = \explode('::', $factory, 2);
         } elseif ($factory instanceof \RectorPrefix20210721\Symfony\Component\DependencyInjection\Reference) {
             $factory = [$factory, '__invoke'];
@@ -656,7 +656,7 @@ class Definition
             if (\preg_match('#[\\r\\n]|\\*/#', $message)) {
                 throw new \RectorPrefix20210721\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException('Invalid characters found in deprecation template.');
             }
-            if (\false === \strpos($message, '%service_id%')) {
+            if (\strpos($message, '%service_id%') === \false) {
                 throw new \RectorPrefix20210721\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException('The deprecation template must contain the "%service_id%" placeholder.');
             }
         }
@@ -705,7 +705,7 @@ class Definition
     public function setConfigurator($configurator)
     {
         $this->changes['configurator'] = \true;
-        if (\is_string($configurator) && \false !== \strpos($configurator, '::')) {
+        if (\is_string($configurator) && \strpos($configurator, '::') !== \false) {
             $configurator = \explode('::', $configurator, 2);
         } elseif ($configurator instanceof \RectorPrefix20210721\Symfony\Component\DependencyInjection\Reference) {
             $configurator = [$configurator, '__invoke'];

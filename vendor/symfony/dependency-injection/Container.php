@@ -236,7 +236,7 @@ class Container implements \RectorPrefix20210721\Symfony\Component\DependencyInj
                     continue;
                 }
                 $lev = \levenshtein($id, $knownId);
-                if ($lev <= \strlen($id) / 3 || \false !== \strpos($knownId, $id)) {
+                if ($lev <= \strlen($id) / 3 || \strpos($knownId, $id) !== \false) {
                     $alternatives[] = $knownId;
                 }
             }

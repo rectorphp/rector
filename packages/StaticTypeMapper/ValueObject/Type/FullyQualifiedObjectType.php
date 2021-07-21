@@ -45,9 +45,11 @@ final class FullyQualifiedObjectType extends \PHPStan\Type\ObjectType
     public function getFunctionUseNode() : \PhpParser\Node\Stmt\Use_
     {
         $name = new \PhpParser\Node\Name($this->getClassName());
-        $useUse = new \PhpParser\Node\Stmt\UseUse($name, null, \PhpParser\Node\Stmt\Use_::TYPE_FUNCTION);
+        $useUse = new \PhpParser\Node\Stmt\UseUse($name, null);
         $name->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE, $useUse);
-        return new \PhpParser\Node\Stmt\Use_([$useUse]);
+        $use = new \PhpParser\Node\Stmt\Use_([$useUse]);
+        $use->type = \PhpParser\Node\Stmt\Use_::TYPE_FUNCTION;
+        return $use;
     }
     public function getShortNameLowered() : string
     {
