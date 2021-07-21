@@ -80,7 +80,13 @@ final class PhpFileProcessor implements \Rector\Core\Contract\Processor\FileProc
             $this->fileProcessor->parseFileInfoToLocalCache($file);
         }, \Rector\Core\Enum\ApplicationPhase::PARSING());
         // 2. change nodes with Rectors
+        $loopCounter = 0;
         do {
+            ++$loopCounter;
+            if ($loopCounter === 10) {
+                // ensure no infinite loop
+                break;
+            }
             $file->changeHasChanged(\false);
             $this->refactorNodesWithRectors($file);
             // 3. apply post rectors
