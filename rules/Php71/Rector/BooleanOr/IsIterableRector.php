@@ -59,6 +59,6 @@ final class IsIterableRector extends AbstractRector
             return false;
         }
 
-        return ! $this->isAtLeastPhpVersion(PhpVersionFeature::IS_ITERABLE);
+        return ! $this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::IS_ITERABLE);
     }
 }
