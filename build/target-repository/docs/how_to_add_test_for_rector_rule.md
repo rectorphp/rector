@@ -1,11 +1,52 @@
 # How to Add Test for Rector Rule
 
-## 1. Detect the Rector Rule
+## 1. Create an environment for testing
+
+When using Rector to update your own code, you will typically be using release repository installed by composer, however, when adding tests, you will need to use the development repository as shown:
+
+- Fork https://github.com/rectorphp/rector-src
+- Clone it locally
+- Install dependencies by executing `composer install`
+- Tests your installation by executing `composer fix-cs` and `composer phpstan`
+- Create a new branch for your test
+- Add your test as described below.  Note that the rector binary is located at `bin/rector` instead of the typical `vendor/bin/rector`
+- Push the branch and create a new pull request to https://github.com/rectorphp/rector-src
+
+Alternatively, the above may be performed on the CLI
+
+```bash
+# Authenticate
+gh auth login
+
+# Fork and clone the repository
+gh repo fork https://github.com/rectorphp/rector-src
+
+# Install dependencies
+cd rector-src
+composer install
+
+# Test installation
+composer fix-cs
+composer phpstan
+
+# Create and checkout a branch
+git checkout -b your_branch_name
+
+# Create test as described below
+
+# Push the branch
+git push -u origin your_branch_name
+
+# create new pull request to https://github.com/rectorphp/rector-src
+gh pr create --title "Your title text" --body "Your body text"
+```
+
+## 2. Detect the Rector Rule
 
 Run Rector only on 1 directory, or better 1 file.
 
 ```bash
-vendor/bin/rector process /some-file.php
+bin/rector process /some-file.php
 ```
 
 See "Applied rules" under the diff:
@@ -16,7 +57,7 @@ Our rule in this example is: `Rector\Privatization\Rector\Class_\FinalizeClasses
 
 This rule's job is to add `final` to every class that has no children and is not a Doctrine entity = everywhere it can without breaking our code.
 
-## 2. Detect the Minimal File
+## 3. Detect the Minimal File
 
 Usually, the Rector diff output is long and contains many other errors related to other rules. It's a mess; we can't use that for a test fixture. We need to find **1 responsible line**.
 
@@ -33,12 +74,12 @@ class StaticEasyPrefixer
 Then rerun Rector to confirm:
 
 ```bash
-vendor/bin/rector process app/SomeFile.php
+bin/rector process app/SomeFile.php
 ```
 
 Do we have the same diff? Great!
 
-## 3. Find the Rector Test Case
+## 4. Find the Rector Test Case
 
 Now we need to find the test case. The test case name is rule + `Test` suffix.
 
@@ -56,7 +97,7 @@ Right here:
 
 ![Rule Test Case](/docs/images/docs_rule_test_case.png)
 
-## 4. Add Change or No-Change Test Fixture File
+## 5. Add Change or No-Change Test Fixture File
 
 Next to the test case, there is `/Fixture` directory. It contains many test fixture files that verified the Rector rule work correctly in all possible cases.
 
