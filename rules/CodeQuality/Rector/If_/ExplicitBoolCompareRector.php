@@ -22,6 +22,7 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ElseIf_;
 use PhpParser\Node\Stmt\If_;
 use PHPStan\Type\BooleanType;
+use PHPStan\Type\Constant\ConstantIntegerType;
 use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\ObjectType;
@@ -107,7 +108,7 @@ CODE_SAMPLE
         }
 
         $conditionStaticType = $this->getStaticType($conditionNode);
-        if ($conditionStaticType instanceof BooleanType) {
+        if ($conditionStaticType instanceof BooleanType || $conditionStaticType instanceof ConstantIntegerType) {
             return null;
         }
 
