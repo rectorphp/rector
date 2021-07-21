@@ -15,6 +15,7 @@ use PHPStan\Reflection\ReflectionProvider;
 use Rector\CodingStyle\ClassNameImport\AliasUsesResolver;
 use Rector\CodingStyle\ClassNameImport\ClassNameImportSkipper;
 use Rector\Core\Configuration\Option;
+use Rector\Core\ValueObject\Application\File;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PostRector\Collector\UseNodesToAddCollector;
@@ -43,7 +44,7 @@ final class NameImporter
     /**
      * @param Use_[] $uses
      */
-    public function importName(Name $name, array $uses): ?Name
+    public function importName(Name $name, File $file, array $uses): ?Name
     {
         if ($this->shouldSkipName($name)) {
             return null;
@@ -60,7 +61,7 @@ final class NameImporter
 
         $this->aliasedUses = $this->aliasUsesResolver->resolveForNode($name);
 
-        return $this->importNameAndCollectNewUseStatement($name, $staticType);
+        return $this->importNameAndCollectNewUseStatement($file, $name, $staticType);
     }
 
     private function shouldSkipName(Name $name): bool
@@ -97,26 +98,28 @@ final class NameImporter
     }
 
     private function importNameAndCollectNewUseStatement(
+        File $file,
         Name $name,
         FullyQualifiedObjectType $fullyQualifiedObjectType
     ): ?Name {
         // the same end is already imported → skip
         if ($this->classNameImportSkipper->shouldSkipNameForFullyQualifiedObjectType(
+            $file,
             $name,
             $fullyQualifiedObjectType
         )) {
             return null;
         }
 
-        if ($this->useNodesToAddCollector->isShortImported($name, $fullyQualifiedObjectType)) {
-            if ($this->useNodesToAddCollector->isImportShortable($name, $fullyQualifiedObjectType)) {
+        if ($this->useNodesToAddCollector->isShortImported($file, $fullyQualifiedObjectType)) {
+            if ($this->useNodesToAddCollector->isImportShortable($file, $fullyQualifiedObjectType)) {
                 return $fullyQualifiedObjectType->getShortNameNode();
             }
 
             return null;
         }
 
-        $this->addUseImport($name, $fullyQualifiedObjectType);
+        $this->addUseImport($file, $name, $fullyQualifiedObjectType);
 
         // possibly aliased
         foreach ($this->aliasedUses as $aliasedUse) {
@@ -168,9 +171,9 @@ final class NameImporter
         return false;
     }
 
-    private function addUseImport(Name $name, FullyQualifiedObjectType $fullyQualifiedObjectType): void
+    private function addUseImport(File $file, Name $name, FullyQualifiedObjectType $fullyQualifiedObjectType): void
     {
-        if ($this->useNodesToAddCollector->hasImport($name, $fullyQualifiedObjectType)) {
+        if ($this->useNodesToAddCollector->hasImport($file, $name, $fullyQualifiedObjectType)) {
             return;
         }
 

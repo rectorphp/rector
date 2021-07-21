@@ -56,8 +56,9 @@ final class TypeFactory
     }
 
     /**
-     * @param Type[] $types
-     * @return Type[]
+     * @template TType as Type
+     * @param array<TType> $types
+     * @return array<TType>
      */
     public function uniquateTypes(array $types, bool $keepConstant = false): array
     {

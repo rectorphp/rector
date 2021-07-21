@@ -7,6 +7,7 @@ namespace Rector\CodingStyle\ClassNameImport\ClassNameImportSkipVoter;
 use PhpParser\Node;
 use Rector\CodingStyle\ClassNameImport\AliasUsesResolver;
 use Rector\CodingStyle\Contract\ClassNameImport\ClassNameImportSkipVoterInterface;
+use Rector\Core\ValueObject\Application\File;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 
 /**
@@ -25,7 +26,7 @@ final class AliasClassNameImportSkipVoter implements ClassNameImportSkipVoterInt
     ) {
     }
 
-    public function shouldSkip(FullyQualifiedObjectType $fullyQualifiedObjectType, Node $node): bool
+    public function shouldSkip(File $file, FullyQualifiedObjectType $fullyQualifiedObjectType, Node $node): bool
     {
         $aliasedUses = $this->aliasUsesResolver->resolveForNode($node);
 

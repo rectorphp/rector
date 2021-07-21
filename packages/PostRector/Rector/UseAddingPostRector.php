@@ -27,7 +27,7 @@ final class UseAddingPostRector extends AbstractPostRector
         private UseImportsRemover $useImportsRemover,
         private UseNodesToAddCollector $useNodesToAddCollector,
         private CurrentFileProvider $currentFileProvider,
-        private RenamedClassesDataCollector $renamedClassesDataCollector
+        private RenamedClassesDataCollector $renamedClassesDataCollector,
     ) {
     }
 
@@ -47,25 +47,22 @@ final class UseAddingPostRector extends AbstractPostRector
 
         $useImportTypes = $this->useNodesToAddCollector->getObjectImportsByFileInfo($smartFileInfo);
         $functionUseImportTypes = $this->useNodesToAddCollector->getFunctionImportsByFileInfo($smartFileInfo);
-        $removedShortUses = $this->useNodesToAddCollector->getShortUsesByFileInfo($smartFileInfo);
 
         $oldToNewClasses = $this->renamedClassesDataCollector->getOldToNewClasses();
 
         // nothing to import or remove
-        if ($useImportTypes === [] && $functionUseImportTypes === [] && $removedShortUses === [] && $oldToNewClasses === []) {
+        if ($useImportTypes === [] && $functionUseImportTypes === [] && $oldToNewClasses === []) {
             return $nodes;
         }
 
         /** @var FullyQualifiedObjectType[] $useImportTypes */
         $useImportTypes = $this->typeFactory->uniquateTypes($useImportTypes);
 
-        $this->useNodesToAddCollector->clear($smartFileInfo);
-
         // A. has namespace? add under it
         $namespace = $this->betterNodeFinder->findFirstInstanceOf($nodes, Namespace_::class);
         if ($namespace instanceof Namespace_) {
             // first clean
-            $this->useImportsRemover->removeImportsFromNamespace($namespace, $removedShortUses);
+            //$this->useImportsRemover->removeImportsFromNamespace($namespace, $removedShortUses);
             // then add, to prevent adding + removing false positive of same short use
             $this->useImportsAdder->addImportsToNamespace($namespace, $useImportTypes, $functionUseImportTypes);
 
@@ -77,7 +74,7 @@ final class UseAddingPostRector extends AbstractPostRector
             $nodes = $firstNode->stmts;
         }
 
-        $removedShortUses = array_merge($removedShortUses, $this->renamedClassesDataCollector->getOldClasses());
+        $removedShortUses = $this->renamedClassesDataCollector->getOldClasses();
 
         // B. no namespace? add in the top
         // first clean

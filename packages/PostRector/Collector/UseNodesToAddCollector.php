@@ -17,11 +17,6 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class UseNodesToAddCollector implements NodeCollectorInterface
 {
     /**
-     * @var string[][]
-     */
-    private array $removedShortUsesInFilePath = [];
-
-    /**
      * @var array<string, FullyQualifiedObjectType[]>
      */
     private array $functionUseImportTypesInFilePath = [];
@@ -57,30 +52,13 @@ final class UseNodesToAddCollector implements NodeCollectorInterface
         $this->functionUseImportTypesInFilePath[$smartFileInfo->getRealPath()][] = $fullyQualifiedObjectType;
     }
 
-    public function removeShortUse(Node $node, string $shortUse): void
-    {
-        $file = $this->currentFileProvider->getFile();
-        if (! $file instanceof File) {
-            return;
-        }
-
-        $smartFileInfo = $file->getSmartFileInfo();
-
-        $this->removedShortUsesInFilePath[$smartFileInfo->getRealPath()][] = $shortUse;
-    }
-
-    public function clear(SmartFileInfo $smartFileInfo): void
-    {
-        // clear applied imports, so isActive() doesn't return any false positives
-        unset($this->useImportTypesInFilePath[$smartFileInfo->getRealPath()], $this->functionUseImportTypesInFilePath[$smartFileInfo->getRealPath()]);
-    }
-
     /**
      * @return AliasedObjectType[]|FullyQualifiedObjectType[]
      */
-    public function getUseImportTypesByNode(Node $node): array
+    public function getUseImportTypesByNode(File $file, Node $node): array
     {
-        $filePath = $this->getRealPathFromNode();
+        $fileInfo = $file->getSmartFileInfo();
+        $filePath = $fileInfo->getRealPath();
 
         $objectTypes = $this->useImportTypesInFilePath[$filePath] ?? [];
 
@@ -99,9 +77,9 @@ final class UseNodesToAddCollector implements NodeCollectorInterface
         return $objectTypes;
     }
 
-    public function hasImport(Node $node, FullyQualifiedObjectType $fullyQualifiedObjectType): bool
+    public function hasImport(File $file, Node $node, FullyQualifiedObjectType $fullyQualifiedObjectType): bool
     {
-        $useImports = $this->getUseImportTypesByNode($node);
+        $useImports = $this->getUseImportTypesByNode($file, $node);
 
         foreach ($useImports as $useImport) {
             if ($useImport->equals($fullyQualifiedObjectType)) {
@@ -112,16 +90,14 @@ final class UseNodesToAddCollector implements NodeCollectorInterface
         return false;
     }
 
-    public function isShortImported(Node $node, FullyQualifiedObjectType $fullyQualifiedObjectType): bool
+    public function isShortImported(File $file, FullyQualifiedObjectType $fullyQualifiedObjectType): bool
     {
-        $filePath = $this->getRealPathFromNode();
-        if ($filePath === null) {
-            return false;
-        }
+        $fileInfo = $file->getSmartFileInfo();
+        $filePath = $fileInfo->getRealPath();
 
         $shortName = $fullyQualifiedObjectType->getShortName();
 
-        if ($this->isShortClassImported($filePath, $shortName)) {
+        if ($this->isShortClassImported($file, $shortName)) {
             return true;
         }
 
@@ -135,9 +111,10 @@ final class UseNodesToAddCollector implements NodeCollectorInterface
         return false;
     }
 
-    public function isImportShortable(Node $node, FullyQualifiedObjectType $fullyQualifiedObjectType): bool
+    public function isImportShortable(File $file, FullyQualifiedObjectType $fullyQualifiedObjectType): bool
     {
-        $filePath = $this->getRealPathFromNode();
+        $fileInfo = $file->getSmartFileInfo();
+        $filePath = $fileInfo->getRealPath();
 
         $fileUseImportTypes = $this->useImportTypesInFilePath[$filePath] ?? [];
 
@@ -173,29 +150,12 @@ final class UseNodesToAddCollector implements NodeCollectorInterface
         return $this->functionUseImportTypesInFilePath[$smartFileInfo->getRealPath()] ?? [];
     }
 
-    /**
-     * @return string[]
-     */
-    public function getShortUsesByFileInfo(SmartFileInfo $smartFileInfo): array
+    private function isShortClassImported(File $file, string $shortName): bool
     {
-        return $this->removedShortUsesInFilePath[$smartFileInfo->getRealPath()] ?? [];
-    }
+        $fileInfo = $file->getSmartFileInfo();
+        $realPath = $fileInfo->getRealPath();
 
-    private function getRealPathFromNode(): ?string
-    {
-        $file = $this->currentFileProvider->getFile();
-        if (! $file instanceof File) {
-            return null;
-        }
-
-        $smartFileInfo = $file->getSmartFileInfo();
-
-        return $smartFileInfo->getRealPath();
-    }
-
-    private function isShortClassImported(string $filePath, string $shortName): bool
-    {
-        $fileUseImports = $this->useImportTypesInFilePath[$filePath] ?? [];
+        $fileUseImports = $this->useImportTypesInFilePath[$realPath] ?? [];
 
         foreach ($fileUseImports as $fileUseImport) {
             if ($fileUseImport->getShortName() === $shortName) {

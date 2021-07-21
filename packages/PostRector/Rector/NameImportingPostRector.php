@@ -102,22 +102,30 @@ CODE_SAMPLE
         /** @var Use_[] $currentUses */
         $currentUses = $this->betterNodeFinder->findInstanceOf($file->getNewStmts(), Use_::class);
 
-        if (substr_count($name->toCodeString(), '\\') <= 1) {
-            return $this->nameImporter->importName($name, $currentUses);
-        }
-
-        if (! $this->classNameImportSkipper->isFoundInUse($name, $currentUses)) {
-            return $this->nameImporter->importName($name, $currentUses);
-        }
-
-        if ($this->classNameImportSkipper->isAlreadyImported($name, $currentUses)) {
-            return $this->nameImporter->importName($name, $currentUses);
-        }
-
-        if ($this->reflectionProvider->hasFunction(new Name($name->getLast()), null)) {
-            return $this->nameImporter->importName($name, $currentUses);
+        if ($this->shouldImportName($name, $file, $currentUses)) {
+            return $this->nameImporter->importName($name, $file, $currentUses);
         }
 
         return null;
+    }
+
+    /**
+     * @param Use_[] $currentUses
+     */
+    private function shouldImportName(Name $name, File $file, array $currentUses): bool
+    {
+        if (substr_count($name->toCodeString(), '\\') <= 1) {
+            return true;
+        }
+
+        if (! $this->classNameImportSkipper->isFoundInUse($name, $currentUses)) {
+            return true;
+        }
+
+        if ($this->classNameImportSkipper->isAlreadyImported($name, $currentUses)) {
+            return true;
+        }
+
+        return $this->reflectionProvider->hasFunction(new Name($name->getLast()), null);
     }
 }

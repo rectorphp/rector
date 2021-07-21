@@ -12,13 +12,15 @@ use PhpParser\Node\Stmt\Nop;
 use PhpParser\Node\Stmt\Use_;
 use PHPStan\Type\ObjectType;
 use Rector\CodingStyle\ClassNameImport\UsedImportsResolver;
+use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 
 final class UseImportsAdder
 {
     public function __construct(
-        private UsedImportsResolver $usedImportsResolver
+        private UsedImportsResolver $usedImportsResolver,
+        private TypeFactory $typeFactory
     ) {
     }
 

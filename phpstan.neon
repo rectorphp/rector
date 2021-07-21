@@ -551,12 +551,10 @@ parameters:
         - '#Cognitive complexity for "Rector\\Php80\\Rector\\Class_\\AnnotationToAttributeRector\:\:processDoctrineAnnotationClasses\(\)" is 11, keep it under 9#'
         - '#Method Rector\\NodeNestingScope\\ParentFinder\:\:findByTypes\(\) should return T of PhpParser\\Node\|null but returns class\-string<T of PhpParser\\Node\>\|T of PhpParser\\Node#'
 
-#        -
-#             message: src/PhpParser/Node/BetterNodeFinder.php
-#             paths:
-#                 -
-
         -
             message: '#Instead of "ReflectionFunction" class/interface use "PHPStan\\Reflection\\FunctionReflection"#'
             paths:
                  - rules/DowngradePhp80/NodeAnalyzer/UnnamedArgumentResolver.php #45
+
+        # array_index on generic types
+        - '#Method Rector\\NodeTypeResolver\\PHPStan\\Type\\TypeFactory\:\:uniquateTypes\(\) should return array<TType of PHPStan\\Type\\Type\> but returns array<int, PHPStan\\Type\\Type\>#'
