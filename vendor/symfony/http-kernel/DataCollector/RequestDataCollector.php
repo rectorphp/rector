@@ -8,30 +8,30 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210720\Symfony\Component\HttpKernel\DataCollector;
+namespace RectorPrefix20210721\Symfony\Component\HttpKernel\DataCollector;
 
-use RectorPrefix20210720\Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use RectorPrefix20210720\Symfony\Component\HttpFoundation\Cookie;
-use RectorPrefix20210720\Symfony\Component\HttpFoundation\ParameterBag;
-use RectorPrefix20210720\Symfony\Component\HttpFoundation\Request;
-use RectorPrefix20210720\Symfony\Component\HttpFoundation\RequestStack;
-use RectorPrefix20210720\Symfony\Component\HttpFoundation\Response;
-use RectorPrefix20210720\Symfony\Component\HttpFoundation\Session\SessionBagInterface;
-use RectorPrefix20210720\Symfony\Component\HttpFoundation\Session\SessionInterface;
-use RectorPrefix20210720\Symfony\Component\HttpKernel\Event\ControllerEvent;
-use RectorPrefix20210720\Symfony\Component\HttpKernel\Event\ResponseEvent;
-use RectorPrefix20210720\Symfony\Component\HttpKernel\KernelEvents;
+use RectorPrefix20210721\Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use RectorPrefix20210721\Symfony\Component\HttpFoundation\Cookie;
+use RectorPrefix20210721\Symfony\Component\HttpFoundation\ParameterBag;
+use RectorPrefix20210721\Symfony\Component\HttpFoundation\Request;
+use RectorPrefix20210721\Symfony\Component\HttpFoundation\RequestStack;
+use RectorPrefix20210721\Symfony\Component\HttpFoundation\Response;
+use RectorPrefix20210721\Symfony\Component\HttpFoundation\Session\SessionBagInterface;
+use RectorPrefix20210721\Symfony\Component\HttpFoundation\Session\SessionInterface;
+use RectorPrefix20210721\Symfony\Component\HttpKernel\Event\ControllerEvent;
+use RectorPrefix20210721\Symfony\Component\HttpKernel\Event\ResponseEvent;
+use RectorPrefix20210721\Symfony\Component\HttpKernel\KernelEvents;
 /**
  * @author Fabien Potencier <fabien@symfony.com>
  *
  * @final
  */
-class RequestDataCollector extends \RectorPrefix20210720\Symfony\Component\HttpKernel\DataCollector\DataCollector implements \RectorPrefix20210720\Symfony\Component\EventDispatcher\EventSubscriberInterface, \RectorPrefix20210720\Symfony\Component\HttpKernel\DataCollector\LateDataCollectorInterface
+class RequestDataCollector extends \RectorPrefix20210721\Symfony\Component\HttpKernel\DataCollector\DataCollector implements \RectorPrefix20210721\Symfony\Component\EventDispatcher\EventSubscriberInterface, \RectorPrefix20210721\Symfony\Component\HttpKernel\DataCollector\LateDataCollectorInterface
 {
     protected $controllers;
     private $sessionUsages = [];
     private $requestStack;
-    public function __construct(?\RectorPrefix20210720\Symfony\Component\HttpFoundation\RequestStack $requestStack = null)
+    public function __construct(?\RectorPrefix20210721\Symfony\Component\HttpFoundation\RequestStack $requestStack = null)
     {
         $this->controllers = new \SplObjectStorage();
         $this->requestStack = $requestStack;
@@ -80,7 +80,7 @@ class RequestDataCollector extends \RectorPrefix20210720\Symfony\Component\HttpK
                 $dotenvVars[$name] = $_ENV[$name];
             }
         }
-        $this->data = ['method' => $request->getMethod(), 'format' => $request->getRequestFormat(), 'content_type' => $response->headers->get('Content-Type', 'text/html'), 'status_text' => \RectorPrefix20210720\Symfony\Component\HttpFoundation\Response::$statusTexts[$statusCode] ?? '', 'status_code' => $statusCode, 'request_query' => $request->query->all(), 'request_request' => $request->request->all(), 'request_files' => $request->files->all(), 'request_headers' => $request->headers->all(), 'request_server' => $request->server->all(), 'request_cookies' => $request->cookies->all(), 'request_attributes' => $attributes, 'route' => $route, 'response_headers' => $response->headers->all(), 'response_cookies' => $responseCookies, 'session_metadata' => $sessionMetadata, 'session_attributes' => $sessionAttributes, 'session_usages' => \array_values($this->sessionUsages), 'stateless_check' => $this->requestStack && $this->requestStack->getMainRequest()->attributes->get('_stateless', \false), 'flashes' => $flashes, 'path_info' => $request->getPathInfo(), 'controller' => 'n/a', 'locale' => $request->getLocale(), 'dotenv_vars' => $dotenvVars];
+        $this->data = ['method' => $request->getMethod(), 'format' => $request->getRequestFormat(), 'content_type' => $response->headers->get('Content-Type', 'text/html'), 'status_text' => \RectorPrefix20210721\Symfony\Component\HttpFoundation\Response::$statusTexts[$statusCode] ?? '', 'status_code' => $statusCode, 'request_query' => $request->query->all(), 'request_request' => $request->request->all(), 'request_files' => $request->files->all(), 'request_headers' => $request->headers->all(), 'request_server' => $request->server->all(), 'request_cookies' => $request->cookies->all(), 'request_attributes' => $attributes, 'route' => $route, 'response_headers' => $response->headers->all(), 'response_cookies' => $responseCookies, 'session_metadata' => $sessionMetadata, 'session_attributes' => $sessionAttributes, 'session_usages' => \array_values($this->sessionUsages), 'stateless_check' => $this->requestStack && $this->requestStack->getMainRequest()->attributes->get('_stateless', \false), 'flashes' => $flashes, 'path_info' => $request->getPathInfo(), 'controller' => 'n/a', 'locale' => $request->getLocale(), 'dotenv_vars' => $dotenvVars];
         if (isset($this->data['request_headers']['php-auth-pw'])) {
             $this->data['request_headers']['php-auth-pw'] = '******';
         }
@@ -112,7 +112,7 @@ class RequestDataCollector extends \RectorPrefix20210720\Symfony\Component\HttpK
             $response->headers->clearCookie('sf_redirect');
         }
         if ($response->isRedirect()) {
-            $response->headers->setCookie(new \RectorPrefix20210720\Symfony\Component\HttpFoundation\Cookie('sf_redirect', \json_encode(['token' => $response->headers->get('x-debug-token'), 'route' => $request->attributes->get('_route', 'n/a'), 'method' => $request->getMethod(), 'controller' => $this->parseController($request->attributes->get('_controller')), 'status_code' => $statusCode, 'status_text' => \RectorPrefix20210720\Symfony\Component\HttpFoundation\Response::$statusTexts[(int) $statusCode]]), 0, '/', null, $request->isSecure(), \true, \false, 'lax'));
+            $response->headers->setCookie(new \RectorPrefix20210721\Symfony\Component\HttpFoundation\Cookie('sf_redirect', \json_encode(['token' => $response->headers->get('x-debug-token'), 'route' => $request->attributes->get('_route', 'n/a'), 'method' => $request->getMethod(), 'controller' => $this->parseController($request->attributes->get('_controller')), 'status_code' => $statusCode, 'status_text' => \RectorPrefix20210721\Symfony\Component\HttpFoundation\Response::$statusTexts[(int) $statusCode]]), 0, '/', null, $request->isSecure(), \true, \false, 'lax'));
         }
         $this->data['identifier'] = $this->data['route'] ?: (\is_array($this->data['controller']) ? $this->data['controller']['class'] . '::' . $this->data['controller']['method'] . '()' : $this->data['controller']);
         if ($response->headers->has('x-previous-debug-token')) {
@@ -139,39 +139,39 @@ class RequestDataCollector extends \RectorPrefix20210720\Symfony\Component\HttpK
     }
     public function getRequestRequest()
     {
-        return new \RectorPrefix20210720\Symfony\Component\HttpFoundation\ParameterBag($this->data['request_request']->getValue());
+        return new \RectorPrefix20210721\Symfony\Component\HttpFoundation\ParameterBag($this->data['request_request']->getValue());
     }
     public function getRequestQuery()
     {
-        return new \RectorPrefix20210720\Symfony\Component\HttpFoundation\ParameterBag($this->data['request_query']->getValue());
+        return new \RectorPrefix20210721\Symfony\Component\HttpFoundation\ParameterBag($this->data['request_query']->getValue());
     }
     public function getRequestFiles()
     {
-        return new \RectorPrefix20210720\Symfony\Component\HttpFoundation\ParameterBag($this->data['request_files']->getValue());
+        return new \RectorPrefix20210721\Symfony\Component\HttpFoundation\ParameterBag($this->data['request_files']->getValue());
     }
     public function getRequestHeaders()
     {
-        return new \RectorPrefix20210720\Symfony\Component\HttpFoundation\ParameterBag($this->data['request_headers']->getValue());
+        return new \RectorPrefix20210721\Symfony\Component\HttpFoundation\ParameterBag($this->data['request_headers']->getValue());
     }
     public function getRequestServer($raw = \false)
     {
-        return new \RectorPrefix20210720\Symfony\Component\HttpFoundation\ParameterBag($this->data['request_server']->getValue($raw));
+        return new \RectorPrefix20210721\Symfony\Component\HttpFoundation\ParameterBag($this->data['request_server']->getValue($raw));
     }
     public function getRequestCookies($raw = \false)
     {
-        return new \RectorPrefix20210720\Symfony\Component\HttpFoundation\ParameterBag($this->data['request_cookies']->getValue($raw));
+        return new \RectorPrefix20210721\Symfony\Component\HttpFoundation\ParameterBag($this->data['request_cookies']->getValue($raw));
     }
     public function getRequestAttributes()
     {
-        return new \RectorPrefix20210720\Symfony\Component\HttpFoundation\ParameterBag($this->data['request_attributes']->getValue());
+        return new \RectorPrefix20210721\Symfony\Component\HttpFoundation\ParameterBag($this->data['request_attributes']->getValue());
     }
     public function getResponseHeaders()
     {
-        return new \RectorPrefix20210720\Symfony\Component\HttpFoundation\ParameterBag($this->data['response_headers']->getValue());
+        return new \RectorPrefix20210721\Symfony\Component\HttpFoundation\ParameterBag($this->data['response_headers']->getValue());
     }
     public function getResponseCookies()
     {
-        return new \RectorPrefix20210720\Symfony\Component\HttpFoundation\ParameterBag($this->data['response_cookies']->getValue());
+        return new \RectorPrefix20210721\Symfony\Component\HttpFoundation\ParameterBag($this->data['response_cookies']->getValue());
     }
     public function getSessionMetadata()
     {
@@ -228,7 +228,7 @@ class RequestDataCollector extends \RectorPrefix20210720\Symfony\Component\HttpK
     }
     public function getDotenvVars()
     {
-        return new \RectorPrefix20210720\Symfony\Component\HttpFoundation\ParameterBag($this->data['dotenv_vars']->getValue());
+        return new \RectorPrefix20210721\Symfony\Component\HttpFoundation\ParameterBag($this->data['dotenv_vars']->getValue());
     }
     /**
      * Gets the route name.
@@ -301,7 +301,7 @@ class RequestDataCollector extends \RectorPrefix20210720\Symfony\Component\HttpK
     }
     public static function getSubscribedEvents()
     {
-        return [\RectorPrefix20210720\Symfony\Component\HttpKernel\KernelEvents::CONTROLLER => 'onKernelController', \RectorPrefix20210720\Symfony\Component\HttpKernel\KernelEvents::RESPONSE => 'onKernelResponse'];
+        return [\RectorPrefix20210721\Symfony\Component\HttpKernel\KernelEvents::CONTROLLER => 'onKernelController', \RectorPrefix20210721\Symfony\Component\HttpKernel\KernelEvents::RESPONSE => 'onKernelResponse'];
     }
     /**
      * {@inheritdoc}
@@ -315,7 +315,7 @@ class RequestDataCollector extends \RectorPrefix20210720\Symfony\Component\HttpK
         $trace = \debug_backtrace(\DEBUG_BACKTRACE_IGNORE_ARGS);
         $traceEndIndex = \count($trace) - 1;
         for ($i = $traceEndIndex; $i > 0; --$i) {
-            if (null !== ($class = $trace[$i]['class'] ?? null) && (\is_subclass_of($class, \RectorPrefix20210720\Symfony\Component\HttpFoundation\Session\SessionInterface::class) || \is_subclass_of($class, \RectorPrefix20210720\Symfony\Component\HttpFoundation\Session\SessionBagInterface::class))) {
+            if (null !== ($class = $trace[$i]['class'] ?? null) && (\is_subclass_of($class, \RectorPrefix20210721\Symfony\Component\HttpFoundation\Session\SessionInterface::class) || \is_subclass_of($class, \RectorPrefix20210721\Symfony\Component\HttpFoundation\Session\SessionBagInterface::class))) {
                 $traceEndIndex = $i;
                 break;
             }

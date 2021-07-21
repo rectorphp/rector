@@ -1,5 +1,5 @@
 <?php
 
-namespace RectorPrefix20210720;
+namespace RectorPrefix20210721;
 
 return ['TYPO3\\CMS\\Frontend\\View\\AdminPanelView' => 'TYPO3\\CMS\\Adminpanel\\View\\AdminPanelView', 'TYPO3\\CMS\\Frontend\\View\\AdminPanelViewHookInterface' => 'TYPO3\\CMS\\Adminpanel\\View\\AdminPanelViewHookInterface'];

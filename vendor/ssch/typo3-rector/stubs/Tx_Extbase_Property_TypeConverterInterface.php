@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210720;
+namespace RectorPrefix20210721;
 
 if (\interface_exists('Tx_Extbase_Property_TypeConverterInterface')) {
     return;

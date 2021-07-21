@@ -13,7 +13,7 @@ use PHPStan\Type\TypeTraverser;
 use PHPStan\Type\UnionType;
 use Rector\Core\Configuration\Option;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
-use RectorPrefix20210720\Symplify\PackageBuilder\Parameter\ParameterProvider;
+use RectorPrefix20210721\Symplify\PackageBuilder\Parameter\ParameterProvider;
 final class GenericClassStringTypeNormalizer
 {
     /**
@@ -24,7 +24,7 @@ final class GenericClassStringTypeNormalizer
      * @var \Symplify\PackageBuilder\Parameter\ParameterProvider
      */
     private $parameterProvider;
-    public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider, \RectorPrefix20210720\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider)
+    public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider, \RectorPrefix20210721\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider)
     {
         $this->reflectionProvider = $reflectionProvider;
         $this->parameterProvider = $parameterProvider;
