@@ -82,7 +82,8 @@
             "src/constants.php"
         ],
         "classmap": [
-            "stubs/Composer"
+            "stubs/Composer",
+            "stubs/Nette"
         ]
     },
     "autoload-dev": {
