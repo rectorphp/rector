@@ -16,7 +16,7 @@ use PHPStan\BetterReflection\SourceLocator\Located\LocatedSource;
 use PHPStan\BetterReflection\SourceLocator\Type\SourceLocator;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\PhpParser\AstResolver;
-use RectorPrefix20210721\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix20210722\Symfony\Contracts\Service\Attribute\Required;
 /**
  * This mimics classes that PHPStan fails to find in scope, but actually has an access in static reflection.
  * Some weird bug, that crashes on parent classes.

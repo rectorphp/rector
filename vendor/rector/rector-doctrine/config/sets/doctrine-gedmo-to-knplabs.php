@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210721;
+namespace RectorPrefix20210722;
 
 use Rector\Doctrine\Rector\Class_\BlameableBehaviorRector;
 use Rector\Doctrine\Rector\Class_\LoggableBehaviorRector;

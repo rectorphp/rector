@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210721\Symfony\Component\HttpKernel;
+namespace RectorPrefix20210722\Symfony\Component\HttpKernel;
 
-use RectorPrefix20210721\Symfony\Component\HttpFoundation\Request;
+use RectorPrefix20210722\Symfony\Component\HttpFoundation\Request;
 /**
  * Signs URIs.
  *

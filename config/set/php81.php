@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210721;
+namespace RectorPrefix20210722;
 
 use Rector\Php81\Rector\Class_\MyCLabsClassToEnumRector;
 use Rector\Php81\Rector\MethodCall\MyCLabsMethodCallToEnumConstRector;

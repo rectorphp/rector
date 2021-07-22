@@ -8,17 +8,17 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210721\Symfony\Component\Console\Command;
+namespace RectorPrefix20210722\Symfony\Component\Console\Command;
 
-use RectorPrefix20210721\Symfony\Component\Console\Application;
-use RectorPrefix20210721\Symfony\Component\Console\Helper\HelperSet;
-use RectorPrefix20210721\Symfony\Component\Console\Input\InputDefinition;
-use RectorPrefix20210721\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix20210721\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix20210722\Symfony\Component\Console\Application;
+use RectorPrefix20210722\Symfony\Component\Console\Helper\HelperSet;
+use RectorPrefix20210722\Symfony\Component\Console\Input\InputDefinition;
+use RectorPrefix20210722\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix20210722\Symfony\Component\Console\Output\OutputInterface;
 /**
  * @author Nicolas Grekas <p@tchwork.com>
  */
-final class LazyCommand extends \RectorPrefix20210721\Symfony\Component\Console\Command\Command
+final class LazyCommand extends \RectorPrefix20210722\Symfony\Component\Console\Command\Command
 {
     private $command;
     private $isEnabled;
@@ -89,11 +89,11 @@ final class LazyCommand extends \RectorPrefix20210721\Symfony\Component\Console\
         $this->getCommand()->setDefinition($definition);
         return $this;
     }
-    public function getDefinition() : \RectorPrefix20210721\Symfony\Component\Console\Input\InputDefinition
+    public function getDefinition() : \RectorPrefix20210722\Symfony\Component\Console\Input\InputDefinition
     {
         return $this->getCommand()->getDefinition();
     }
-    public function getNativeDefinition() : \RectorPrefix20210721\Symfony\Component\Console\Input\InputDefinition
+    public function getNativeDefinition() : \RectorPrefix20210722\Symfony\Component\Console\Input\InputDefinition
     {
         return $this->getCommand()->getNativeDefinition();
     }

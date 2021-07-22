@@ -3,13 +3,13 @@
 declare (strict_types=1);
 namespace Ssch\TYPO3Rector\FileProcessor\Yaml\Form;
 
-use RectorPrefix20210721\Nette\Utils\Strings;
+use RectorPrefix20210722\Nette\Utils\Strings;
 use Rector\Core\Contract\Processor\FileProcessorInterface;
 use Rector\Core\Provider\CurrentFileProvider;
 use Rector\Core\ValueObject\Application\File;
 use Rector\Core\ValueObject\Configuration;
 use Ssch\TYPO3Rector\Contract\FileProcessor\Yaml\Form\FormYamlRectorInterface;
-use RectorPrefix20210721\Symfony\Component\Yaml\Yaml;
+use RectorPrefix20210722\Symfony\Component\Yaml\Yaml;
 /**
  * @see \Ssch\TYPO3Rector\Tests\FileProcessor\Yaml\Form\FormYamlProcessorTest
  */
@@ -47,7 +47,7 @@ final class FormYamlFileProcessor implements \Rector\Core\Contract\Processor\Fil
         }
         $this->currentFileProvider->setFile($file);
         $smartFileInfo = $file->getSmartFileInfo();
-        $yaml = \RectorPrefix20210721\Symfony\Component\Yaml\Yaml::parseFile($smartFileInfo->getRealPath());
+        $yaml = \RectorPrefix20210722\Symfony\Component\Yaml\Yaml::parseFile($smartFileInfo->getRealPath());
         if (!\is_array($yaml)) {
             return;
         }
@@ -59,7 +59,7 @@ final class FormYamlFileProcessor implements \Rector\Core\Contract\Processor\Fil
         if ($newYaml === $yaml) {
             return;
         }
-        $newFileContent = \RectorPrefix20210721\Symfony\Component\Yaml\Yaml::dump($newYaml, 99);
+        $newFileContent = \RectorPrefix20210722\Symfony\Component\Yaml\Yaml::dump($newYaml, 99);
         $file->changeFileContent($newFileContent);
     }
     /**
@@ -69,7 +69,7 @@ final class FormYamlFileProcessor implements \Rector\Core\Contract\Processor\Fil
     public function supports($file, $configuration) : bool
     {
         $smartFileInfo = $file->getSmartFileInfo();
-        return \RectorPrefix20210721\Nette\Utils\Strings::endsWith($smartFileInfo->getFilename(), 'yaml');
+        return \RectorPrefix20210722\Nette\Utils\Strings::endsWith($smartFileInfo->getFilename(), 'yaml');
     }
     /**
      * @return string[]
