@@ -80,6 +80,9 @@
         "files": [
             "src/functions/node_helper.php",
             "src/constants.php"
+        ],
+        "classmap": [
+            "stubs/Composer"
         ]
     },
     "autoload-dev": {
