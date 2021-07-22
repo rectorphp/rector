@@ -47,7 +47,7 @@ abstract class AbstractRectorTestCase extends AbstractTestCase implements Rector
         @ini_set('memory_limit', '-1');
 
         // include local files
-        if (file_exists(__DIR__ . '/../../../preload.php')) {
+        if (file_exists(__DIR__ . '/../../../preload.php') && file_exists(__DIR__ . '/../../../vendor')) {
             require_once __DIR__ . '/../../../preload.php';
         }
 

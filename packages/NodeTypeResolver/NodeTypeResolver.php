@@ -43,6 +43,7 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\NodeAnalyzer\ClassAnalyzer;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\NodeTypeResolver\NodeTypeCorrector\AccessoryNonEmptyStringTypeCorrector;
 use Rector\NodeTypeResolver\NodeTypeCorrector\GenericClassStringTypeCorrector;
 use Rector\NodeTypeResolver\NodeTypeCorrector\HasOffsetTypeCorrector;
 use Rector\NodeTypeResolver\NodeTypeResolver\IdentifierTypeResolver;
@@ -69,6 +70,7 @@ final class NodeTypeResolver
         private GenericClassStringTypeCorrector $genericClassStringTypeCorrector,
         private ReflectionProvider $reflectionProvider,
         private HasOffsetTypeCorrector $hasOffsetTypeCorrector,
+        private AccessoryNonEmptyStringTypeCorrector $accessoryNonEmptyStringTypeCorrector,
         private IdentifierTypeResolver $identifierTypeResolver,
         private RenamedClassesDataCollector $renamedClassesDataCollector,
         array $nodeTypeResolvers
@@ -126,6 +128,7 @@ final class NodeTypeResolver
     {
         $type = $this->resolveByNodeTypeResolvers($node);
         if ($type !== null) {
+            $type = $this->accessoryNonEmptyStringTypeCorrector->correct($type);
             return $this->hasOffsetTypeCorrector->correct($type);
         }
 
@@ -157,6 +160,7 @@ final class NodeTypeResolver
         }
 
         $type = $scope->getType($node);
+        $type = $this->accessoryNonEmptyStringTypeCorrector->correct($type);
 
         // hot fix for phpstan not resolving chain method calls
         if (! $node instanceof MethodCall) {
@@ -229,7 +233,7 @@ final class NodeTypeResolver
             return $this->objectTypeSpecifier->narrowToFullyQualifiedOrAliasedObjectType($node, $staticType);
         }
 
-        return $staticType;
+        return $this->accessoryNonEmptyStringTypeCorrector->correct($staticType);
     }
 
     public function isNumberType(Node $node): bool

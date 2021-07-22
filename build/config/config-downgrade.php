@@ -103,5 +103,7 @@ final class DowngradeRectorConfig
         'vendor/symfony/dependency-injection/ExpressionLanguage.php',
         'vendor/symfony/dependency-injection/ExpressionLanguageProvider.php',
         'vendor/symfony/var-dumper/Caster/*',
+        // depends on PHPUnit, that is only in dev deps
+        'vendor/myclabs/php-enum/src/PHPUnit/Comparator.php',
     ];
 }

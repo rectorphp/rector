@@ -561,3 +561,6 @@ parameters:
 
         # array_index on generic types
         - '#Method Rector\\NodeTypeResolver\\PHPStan\\Type\\TypeFactory\:\:uniquateTypes\(\) should return array<TType of PHPStan\\Type\\Type\> but returns array<int, PHPStan\\Type\\Type\>#'
+
+        # phsptan waits for php-parser 4.12 release
+        - '#Call to an undefined method PhpParser\\Node\:\:isFinal\(\)#'
