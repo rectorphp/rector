@@ -11,13 +11,17 @@ use PhpParser\Node\Expr\Include_;
 use PhpParser\Node\Expr\Variable;
 use Rector\Core\NodeAnalyzer\CompactFuncCallAnalyzer;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
+use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
+use Rector\NodeNameResolver\NodeNameResolver;
 
 final class ExprUsedInNodeAnalyzer
 {
     public function __construct(
         private NodeComparator $nodeComparator,
         private UsedVariableNameAnalyzer $usedVariableNameAnalyzer,
-        private CompactFuncCallAnalyzer $compactFuncCallAnalyzer
+        private CompactFuncCallAnalyzer $compactFuncCallAnalyzer,
+        private NodeNameResolver $nodeNameResolver,
+        private BetterStandardPrinter $betterStandardPrinter
     ) {
     }
 
@@ -25,6 +29,14 @@ final class ExprUsedInNodeAnalyzer
     {
         if ($node instanceof Include_) {
             return true;
+        }
+
+        // variable as variable variable need mark as used
+        if ($node instanceof Variable && $expr instanceof Variable) {
+            $print = $this->betterStandardPrinter->print($node);
+            if (\str_starts_with($print, '${$')) {
+                return true;
+            }
         }
 
         if ($node instanceof FuncCall && $expr instanceof Variable) {
