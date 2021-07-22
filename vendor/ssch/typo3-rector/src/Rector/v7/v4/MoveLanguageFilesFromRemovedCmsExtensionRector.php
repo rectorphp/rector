@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Ssch\TYPO3Rector\Rector\v7\v4;
 
-use RectorPrefix20210722\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\Rector\AbstractRector;
@@ -54,7 +53,7 @@ CODE_SAMPLE
         }
         foreach (self::MAPPING_OLD_TO_NEW_PATHS as $oldPath => $newPath) {
             $oldPathPrefixed = \sprintf('LLL:EXT:%s', $oldPath);
-            if (\RectorPrefix20210722\Nette\Utils\Strings::contains($value, $oldPathPrefixed)) {
+            if (\strpos($value, $oldPathPrefixed) !== \false) {
                 $newPathPrefixed = \sprintf('LLL:EXT:%s', $newPath);
                 return new \PhpParser\Node\Scalar\String_(\str_replace($oldPathPrefixed, $newPathPrefixed, $value));
             }

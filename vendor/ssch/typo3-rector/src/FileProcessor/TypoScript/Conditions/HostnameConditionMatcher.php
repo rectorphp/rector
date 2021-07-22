@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Ssch\TYPO3Rector\FileProcessor\TypoScript\Conditions;
 
-use RectorPrefix20210722\Nette\Utils\Strings;
 use Ssch\TYPO3Rector\Contract\FileProcessor\TypoScript\Conditions\TyposcriptConditionMatcher;
 use Ssch\TYPO3Rector\Helper\ArrayUtility;
 final class HostnameConditionMatcher implements \Ssch\TYPO3Rector\Contract\FileProcessor\TypoScript\Conditions\TyposcriptConditionMatcher
@@ -24,7 +23,7 @@ final class HostnameConditionMatcher implements \Ssch\TYPO3Rector\Contract\FileP
         $values = \Ssch\TYPO3Rector\Helper\ArrayUtility::trimExplode(',', $matches[1], \true);
         $newConditions = [];
         foreach ($values as $value) {
-            if (\RectorPrefix20210722\Nette\Utils\Strings::contains($value, '*')) {
+            if (\strpos($value, '*') !== \false) {
                 $newConditions[] = \sprintf('like(request.getNormalizedParams().getHttpHost(), "%s")', $value);
             } else {
                 $newConditions[] = \sprintf('request.getNormalizedParams().getHttpHost() == "%s"', $value);
@@ -37,7 +36,7 @@ final class HostnameConditionMatcher implements \Ssch\TYPO3Rector\Contract\FileP
      */
     public function shouldApply($condition) : bool
     {
-        if (\RectorPrefix20210722\Nette\Utils\Strings::contains($condition, self::CONTAINS_CONSTANT)) {
+        if (\strpos($condition, self::CONTAINS_CONSTANT) !== \false) {
             return \false;
         }
         return 1 === \preg_match('#^' . self::TYPE . self::ZERO_ONE_OR_MORE_WHITESPACES . '=[^=]#', $condition);

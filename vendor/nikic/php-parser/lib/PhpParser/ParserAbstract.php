@@ -798,6 +798,9 @@ abstract class ParserAbstract implements \PhpParser\Parser
                     break;
             }
         }
+        if ($node->flags & \PhpParser\Node\Stmt\Class_::MODIFIER_READONLY) {
+            $this->emitError(new \PhpParser\Error(\sprintf('Method %s() cannot be readonly', $node->name), $this->getAttributesAt($modifierPos)));
+        }
     }
     protected function checkClassConst(\PhpParser\Node\Stmt\ClassConst $node, $modifierPos)
     {
@@ -807,8 +810,8 @@ abstract class ParserAbstract implements \PhpParser\Parser
         if ($node->flags & \PhpParser\Node\Stmt\Class_::MODIFIER_ABSTRACT) {
             $this->emitError(new \PhpParser\Error("Cannot use 'abstract' as constant modifier", $this->getAttributesAt($modifierPos)));
         }
-        if ($node->flags & \PhpParser\Node\Stmt\Class_::MODIFIER_FINAL) {
-            $this->emitError(new \PhpParser\Error("Cannot use 'final' as constant modifier", $this->getAttributesAt($modifierPos)));
+        if ($node->flags & \PhpParser\Node\Stmt\Class_::MODIFIER_READONLY) {
+            $this->emitError(new \PhpParser\Error("Cannot use 'readonly' as constant modifier", $this->getAttributesAt($modifierPos)));
         }
     }
     protected function checkProperty(\PhpParser\Node\Stmt\Property $node, $modifierPos)

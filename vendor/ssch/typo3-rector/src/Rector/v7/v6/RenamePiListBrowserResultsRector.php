@@ -46,18 +46,17 @@ final class RenamePiListBrowserResultsRector extends \Rector\Core\Rector\Abstrac
         return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Rename pi_list_browseresults calls to renderPagination', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample('$this->pi_list_browseresults', '$this->renderPagination')]);
     }
     /**
-     * @param string|mixed[] $newMethod
-     *
-     * @return MethodCall|ArrayDimFetch
+     * @param string|string[] $newMethodNames
+     * @return \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\ArrayDimFetch
      */
-    private function process(\PhpParser\Node\Expr\MethodCall $node, $newMethod) : \PhpParser\Node
+    private function process(\PhpParser\Node\Expr\MethodCall $methodCall, $newMethodNames)
     {
-        if (\is_string($newMethod)) {
-            $node->name = new \PhpParser\Node\Identifier($newMethod);
-            return $node;
+        if (\is_string($newMethodNames)) {
+            $methodCall->name = new \PhpParser\Node\Identifier($newMethodNames);
+            return $methodCall;
         }
         // special case for array dim fetch
-        $node->name = new \PhpParser\Node\Identifier($newMethod['name']);
-        return new \PhpParser\Node\Expr\ArrayDimFetch($node, \PhpParser\BuilderHelpers::normalizeValue($newMethod['array_key']));
+        $methodCall->name = new \PhpParser\Node\Identifier($newMethodNames['name']);
+        return new \PhpParser\Node\Expr\ArrayDimFetch($methodCall, \PhpParser\BuilderHelpers::normalizeValue($newMethodNames['array_key']));
     }
 }

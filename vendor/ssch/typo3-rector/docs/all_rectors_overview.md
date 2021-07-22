@@ -2284,7 +2284,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 ## RemoveColPosParameterRector
 
-Remove parameter colPos from methods.
+Remove parameter `$colPos` from methods.
 
 - class: [`Ssch\TYPO3Rector\Rector\v9\v3\RemoveColPosParameterRector`](../src/Rector/v9/v3/RemoveColPosParameterRector.php)
 

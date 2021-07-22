@@ -221,6 +221,7 @@ require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Lexer/TokenEmulat
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Lexer/TokenEmulator/MatchTokenEmulator.php';
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Lexer/TokenEmulator/AttributeEmulator.php';
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Lexer/TokenEmulator/NumericLiteralSeparatorEmulator.php';
+require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Lexer/TokenEmulator/ReadonlyTokenEmulator.php';
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Lexer/TokenEmulator/KeywordEmulator.php';
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Lexer/TokenEmulator/CoaleseEqualTokenEmulator.php';
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Lexer/TokenEmulator/NullsafeTokenEmulator.php';

@@ -35,7 +35,10 @@ class TracyExtension extends \RectorPrefix20210722\Nette\DI\CompilerExtension
         $builder->addDefinition($this->prefix('blueScreen'))->setFactory([\RectorPrefix20210722\Tracy\Debugger::class, 'getBlueScreen']);
         $builder->addDefinition($this->prefix('bar'))->setFactory([\RectorPrefix20210722\Tracy\Debugger::class, 'getBar']);
     }
-    public function afterCompile(\RectorPrefix20210722\Nette\PhpGenerator\ClassType $class)
+    /**
+     * @param \Nette\PhpGenerator\ClassType $class
+     */
+    public function afterCompile($class)
     {
         $initialize = $this->initialization ?? new \RectorPrefix20210722\Nette\PhpGenerator\Closure();
         $initialize->addBody('if (!Tracy\\Debugger::isEnabled()) { return; }');

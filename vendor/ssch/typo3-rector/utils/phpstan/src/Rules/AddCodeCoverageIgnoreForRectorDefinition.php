@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Ssch\TYPO3Rector\PHPStan\Rules;
 
-use RectorPrefix20210722\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
@@ -62,7 +61,7 @@ final class AddCodeCoverageIgnoreForRectorDefinition implements \PHPStan\Rules\R
         }
         $resolvedPhpDoc = $this->fileTypeMapper->getResolvedPhpDoc($scope->getFile(), $classReflection->getName(), null, $methodName, $docComment->getText());
         $phpDocString = $resolvedPhpDoc->getPhpDocString();
-        if (\RectorPrefix20210722\Nette\Utils\Strings::contains($phpDocString, '@codeCoverageIgnore')) {
+        if (\strpos($phpDocString, '@codeCoverageIgnore') !== \false) {
             return [];
         }
         return [\sprintf(self::ERROR_MESSAGE, $className)];

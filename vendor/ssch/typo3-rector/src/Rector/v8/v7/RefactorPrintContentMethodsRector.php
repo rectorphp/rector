@@ -43,7 +43,7 @@ final class RefactorPrintContentMethodsRector extends \Rector\Core\Rector\Abstra
         }
         try {
             $this->removeNode($node);
-        } catch (\Rector\Core\Exception\ShouldNotHappenException $shouldNotHappenException) {
+        } catch (\Rector\Core\Exception\ShouldNotHappenException $exception) {
             $parentNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
             $this->removeNode($parentNode);
         }

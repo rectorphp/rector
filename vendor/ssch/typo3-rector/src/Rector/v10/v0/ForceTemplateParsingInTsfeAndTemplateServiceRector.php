@@ -59,7 +59,7 @@ final class ForceTemplateParsingInTsfeAndTemplateServiceRector extends \Rector\C
             $this->addNodeAfterNode($contextCall, $node);
             try {
                 $this->removeNode($node);
-            } catch (\Rector\Core\Exception\ShouldNotHappenException $shouldNotHappenException) {
+            } catch (\Rector\Core\Exception\ShouldNotHappenException $exception) {
                 $parentNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
                 $this->removeNode($parentNode);
             }

@@ -30,10 +30,10 @@ final class ProcessResultFactory
         $fileDiffs = [];
         $errors = [];
         foreach ($files as $file) {
+            $errors = \array_merge($errors, $file->getErrors());
             if ($file->getFileDiff() === null) {
                 continue;
             }
-            $errors = \array_merge($errors, $file->getErrors());
             $fileDiffs[] = $file->getFileDiff();
         }
         return new \Rector\Core\ValueObject\ProcessResult($fileDiffs, $errors, $this->removedAndAddedFilesCollector->getAddedFileCount(), $this->removedAndAddedFilesCollector->getRemovedFilesCount(), $this->nodesToRemoveCollector->getCount());

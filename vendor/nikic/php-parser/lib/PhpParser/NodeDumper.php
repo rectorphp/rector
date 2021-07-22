@@ -121,6 +121,9 @@ class NodeDumper
         if ($flags & \PhpParser\Node\Stmt\Class_::MODIFIER_FINAL) {
             $strs[] = 'MODIFIER_FINAL';
         }
+        if ($flags & \PhpParser\Node\Stmt\Class_::MODIFIER_READONLY) {
+            $strs[] = 'MODIFIER_READONLY';
+        }
         if ($strs) {
             return \implode(' | ', $strs) . ' (' . $flags . ')';
         } else {

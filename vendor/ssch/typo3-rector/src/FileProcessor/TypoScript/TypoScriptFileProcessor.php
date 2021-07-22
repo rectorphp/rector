@@ -149,9 +149,9 @@ final class TypoScriptFileProcessor implements \Ssch\TYPO3Rector\Contract\Proces
             $this->typoscriptPrinter->printStatements($originalStatements, $this->output);
             $typoScriptContent = \rtrim($this->output->fetch()) . $editorConfiguration->getNewLine();
             $file->changeFileContent($typoScriptContent);
-        } catch (\RectorPrefix20210722\Helmich\TypoScriptParser\Tokenizer\TokenizerException $tokenizerException) {
+        } catch (\RectorPrefix20210722\Helmich\TypoScriptParser\Tokenizer\TokenizerException $exception) {
             return;
-        } catch (\RectorPrefix20210722\Helmich\TypoScriptParser\Parser\ParseError $parseError) {
+        } catch (\RectorPrefix20210722\Helmich\TypoScriptParser\Parser\ParseError $exception) {
             $smartFileInfo = $file->getSmartFileInfo();
             $errorFile = $smartFileInfo->getRelativeFilePath();
             $this->rectorOutputStyle->warning(\sprintf('TypoScriptParser Error in: %s. File skipped.', $errorFile));

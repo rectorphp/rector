@@ -16,16 +16,23 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassLike;
+use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Reflection\ParametersAcceptorSelector;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\NodeFinder\PropertyFetchFinder;
 use Rector\Core\Reflection\ReflectionResolver;
+use Rector\Core\ValueObject\MethodName;
+use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\ReadWrite\Guard\VariableToConstantGuard;
 use Rector\ReadWrite\NodeAnalyzer\ReadWritePropertyAnalyzer;
 use RectorPrefix20210722\Symplify\PackageBuilder\Php\TypeChecker;
+/**
+ * For inspiration to improve this service,
+ * @see examples of variable modifications in https://wiki.php.net/rfc/readonly_properties_v2#proposal
+ */
 final class PropertyManipulator
 {
     /**
@@ -60,7 +67,11 @@ final class PropertyManipulator
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
-    public function __construct(\Rector\Core\NodeManipulator\AssignManipulator $assignManipulator, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\ReadWrite\Guard\VariableToConstantGuard $variableToConstantGuard, \Rector\ReadWrite\NodeAnalyzer\ReadWritePropertyAnalyzer $readWritePropertyAnalyzer, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \RectorPrefix20210722\Symplify\PackageBuilder\Php\TypeChecker $typeChecker, \Rector\Core\PhpParser\NodeFinder\PropertyFetchFinder $propertyFetchFinder, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver)
+    /**
+     * @var \Rector\NodeNameResolver\NodeNameResolver
+     */
+    private $nodeNameResolver;
+    public function __construct(\Rector\Core\NodeManipulator\AssignManipulator $assignManipulator, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\ReadWrite\Guard\VariableToConstantGuard $variableToConstantGuard, \Rector\ReadWrite\NodeAnalyzer\ReadWritePropertyAnalyzer $readWritePropertyAnalyzer, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \RectorPrefix20210722\Symplify\PackageBuilder\Php\TypeChecker $typeChecker, \Rector\Core\PhpParser\NodeFinder\PropertyFetchFinder $propertyFetchFinder, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
     {
         $this->assignManipulator = $assignManipulator;
         $this->betterNodeFinder = $betterNodeFinder;
@@ -70,6 +81,7 @@ final class PropertyManipulator
         $this->typeChecker = $typeChecker;
         $this->propertyFetchFinder = $propertyFetchFinder;
         $this->reflectionResolver = $reflectionResolver;
+        $this->nodeNameResolver = $nodeNameResolver;
     }
     /**
      * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $propertyOrPromotedParam
@@ -81,6 +93,7 @@ final class PropertyManipulator
         if ($phpDocInfo->hasByAnnotationClasses(['Doctrine\\ORM\\Mapping\\Id', 'Doctrine\\ORM\\Mapping\\Column', 'Doctrine\\ORM\\Mapping\\OneToMany', 'Doctrine\\ORM\\Mapping\\ManyToMany', 'Doctrine\\ORM\\Mapping\\ManyToOne', 'Doctrine\\ORM\\Mapping\\OneToOne', 'JMS\\Serializer\\Annotation\\Type'])) {
             return \true;
         }
+        // $propertyOrPromotedParam->attrGroups
         $privatePropertyFetches = $this->propertyFetchFinder->findPrivatePropertyFetches($propertyOrPromotedParam);
         foreach ($privatePropertyFetches as $privatePropertyFetch) {
             if ($this->readWritePropertyAnalyzer->isRead($privatePropertyFetch)) {
@@ -100,6 +113,27 @@ final class PropertyManipulator
             return $node->name instanceof \PhpParser\Node\Expr;
         });
     }
+    /**
+     * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $propertyOrParam
+     */
+    public function isPropertyChangeableExceptConstructor($propertyOrParam) : bool
+    {
+        $propertyFetches = $this->propertyFetchFinder->findPrivatePropertyFetches($propertyOrParam);
+        foreach ($propertyFetches as $propertyFetch) {
+            if ($this->isChangeableContext($propertyFetch)) {
+                return \true;
+            }
+            // skip for constructor? it is allowed to set value in constructor method
+            $classMethod = $propertyFetch->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::METHOD_NODE);
+            if ($classMethod instanceof \PhpParser\Node\Stmt\ClassMethod && $this->nodeNameResolver->isName($classMethod->name, \Rector\Core\ValueObject\MethodName::CONSTRUCT)) {
+                continue;
+            }
+            if ($this->assignManipulator->isLeftPartOfAssign($propertyFetch)) {
+                return \true;
+            }
+        }
+        return \false;
+    }
     public function isPropertyChangeable(\PhpParser\Node\Stmt\Property $property) : bool
     {
         $propertyFetches = $this->propertyFetchFinder->findPrivatePropertyFetches($property);
@@ -107,15 +141,18 @@ final class PropertyManipulator
             if ($this->isChangeableContext($propertyFetch)) {
                 return \true;
             }
+            if ($this->assignManipulator->isLeftPartOfAssign($propertyFetch)) {
+                return \true;
+            }
         }
         return \false;
     }
     /**
-     * @param \PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\StaticPropertyFetch $expr
+     * @param \PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\StaticPropertyFetch $propertyFetch
      */
-    private function isChangeableContext($expr) : bool
+    private function isChangeableContext($propertyFetch) : bool
     {
-        $parent = $expr->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        $parent = $propertyFetch->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
         if (!$parent instanceof \PhpParser\Node) {
             return \false;
         }
@@ -135,7 +172,7 @@ final class PropertyManipulator
                 return $this->isFoundByRefParam($caller);
             }
         }
-        return $this->assignManipulator->isLeftPartOfAssign($expr);
+        return \false;
     }
     /**
      * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node

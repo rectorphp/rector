@@ -51,6 +51,7 @@ final class DependencyResolver
             if ($mutatingScope->getFile() === $dependencyFile) {
                 continue;
             }
+            // only work with files that we've analysed
             if (!\in_array($dependencyFile, $analysedFileAbsolutesPaths, \true)) {
                 continue;
             }

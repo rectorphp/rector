@@ -58,6 +58,15 @@ class ClassConst extends \PhpParser\Node\Stmt
     {
         return (bool) ($this->flags & \PhpParser\Node\Stmt\Class_::MODIFIER_PRIVATE);
     }
+    /**
+     * Whether constant is final.
+     *
+     * @return bool
+     */
+    public function isFinal() : bool
+    {
+        return (bool) ($this->flags & \PhpParser\Node\Stmt\Class_::MODIFIER_FINAL);
+    }
     public function getType() : string
     {
         return 'Stmt_ClassConst';

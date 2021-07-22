@@ -7,6 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Nop;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\ObjectType;
@@ -34,6 +35,11 @@ final class ConfigurationManagerAddControllerConfigurationMethodRector extends \
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$this->isObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Extbase\\Configuration\\AbstractConfigurationManager'))) {
+            return null;
+        }
+        // already checked
+        $classMethod = $node->getMethod('getControllerConfiguration');
+        if ($classMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
             return null;
         }
         $this->addMethodGetControllerConfiguration($node);

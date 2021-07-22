@@ -116,10 +116,11 @@ class Lexer
         // detected by finding "gaps" in the token array. Unterminated comments are detected
         // by checking if a trailing comment has a "*/" at the end.
         //
-        // Additionally, we canonicalize to the PHP 8 comment format here, which does not include
-        // the trailing whitespace anymore.
-        //
-        // We also canonicalize to the PHP 8 T_NAME_* tokens.
+        // Additionally, we perform a number of canonicalizations here:
+        //  * Use the PHP 8.0 comment format, which does not include trailing whitespace anymore.
+        //  * Use PHP 8.0 T_NAME_* tokens.
+        //  * Use PHP 8.1 T_AMPERSAND_NOT_FOLLOWED_BY_VAR_OR_VARARG and
+        //    T_AMPERSAND_FOLLOWED_BY_VAR_OR_VARARG tokens used to disambiguate intersection types.
         $filePos = 0;
         $line = 1;
         $numTokens = \count($this->tokens);
@@ -182,6 +183,14 @@ class Lexer
                     \array_splice($this->tokens, $i, $j - $i, [$token]);
                     $numTokens -= $j - $i - 1;
                 }
+            }
+            if ($token === '&') {
+                $next = $i + 1;
+                while (isset($this->tokens[$next]) && $this->tokens[$next][0] === \T_WHITESPACE) {
+                    $next++;
+                }
+                $followedByVarOrVarArg = isset($this->tokens[$next]) && ($this->tokens[$next][0] === \T_VARIABLE || $this->tokens[$next][0] === \T_ELLIPSIS);
+                $this->tokens[$i] = $token = [$followedByVarOrVarArg ? \T_AMPERSAND_FOLLOWED_BY_VAR_OR_VARARG : \T_AMPERSAND_NOT_FOLLOWED_BY_VAR_OR_VARARG, '&', $line];
             }
             $tokenValue = \is_string($token) ? $token : $token[1];
             $tokenLen = \strlen($tokenValue);
@@ -362,6 +371,9 @@ class Lexer
             'T_ATTRIBUTE',
             // PHP 8.1
             'T_ENUM',
+            'T_AMPERSAND_NOT_FOLLOWED_BY_VAR_OR_VARARG',
+            'T_AMPERSAND_FOLLOWED_BY_VAR_OR_VARARG',
+            'T_READONLY',
         ];
         // PHP-Parser might be used together with another library that also emulates some or all
         // of these tokens. Perform a sanity-check that all already defined tokens have been
@@ -442,12 +454,15 @@ class Lexer
         $tokenMap[\T_MATCH] = \PhpParser\Parser\Tokens::T_MATCH;
         $tokenMap[\T_NULLSAFE_OBJECT_OPERATOR] = \PhpParser\Parser\Tokens::T_NULLSAFE_OBJECT_OPERATOR;
         $tokenMap[\T_ATTRIBUTE] = \PhpParser\Parser\Tokens::T_ATTRIBUTE;
+        $tokenMap[\T_AMPERSAND_NOT_FOLLOWED_BY_VAR_OR_VARARG] = \PhpParser\Parser\Tokens::T_AMPERSAND_NOT_FOLLOWED_BY_VAR_OR_VARARG;
+        $tokenMap[\T_AMPERSAND_FOLLOWED_BY_VAR_OR_VARARG] = \PhpParser\Parser\Tokens::T_AMPERSAND_FOLLOWED_BY_VAR_OR_VARARG;
         $tokenMap[\T_ENUM] = \PhpParser\Parser\Tokens::T_ENUM;
+        $tokenMap[\T_READONLY] = \PhpParser\Parser\Tokens::T_READONLY;
         return $tokenMap;
     }
     private function createIdentifierTokenMap() : array
     {
         // Based on semi_reserved production.
-        return \array_fill_keys([\T_STRING, \T_STATIC, \T_ABSTRACT, \T_FINAL, \T_PRIVATE, \T_PROTECTED, \T_PUBLIC, \T_INCLUDE, \T_INCLUDE_ONCE, \T_EVAL, \T_REQUIRE, \T_REQUIRE_ONCE, \T_LOGICAL_OR, \T_LOGICAL_XOR, \T_LOGICAL_AND, \T_INSTANCEOF, \T_NEW, \T_CLONE, \T_EXIT, \T_IF, \T_ELSEIF, \T_ELSE, \T_ENDIF, \T_ECHO, \T_DO, \T_WHILE, \T_ENDWHILE, \T_FOR, \T_ENDFOR, \T_FOREACH, \T_ENDFOREACH, \T_DECLARE, \T_ENDDECLARE, \T_AS, \T_TRY, \T_CATCH, \T_FINALLY, \T_THROW, \T_USE, \T_INSTEADOF, \T_GLOBAL, \T_VAR, \T_UNSET, \T_ISSET, \T_EMPTY, \T_CONTINUE, \T_GOTO, \T_FUNCTION, \T_CONST, \T_RETURN, \T_PRINT, \T_YIELD, \T_LIST, \T_SWITCH, \T_ENDSWITCH, \T_CASE, \T_DEFAULT, \T_BREAK, \T_ARRAY, \T_CALLABLE, \T_EXTENDS, \T_IMPLEMENTS, \T_NAMESPACE, \T_TRAIT, \T_INTERFACE, \T_CLASS, \T_CLASS_C, \T_TRAIT_C, \T_FUNC_C, \T_METHOD_C, \T_LINE, \T_FILE, \T_DIR, \T_NS_C, \T_HALT_COMPILER, \T_FN, \T_MATCH], \true);
+        return \array_fill_keys([\T_STRING, \T_STATIC, \T_ABSTRACT, \T_FINAL, \T_PRIVATE, \T_PROTECTED, \T_PUBLIC, \T_READONLY, \T_INCLUDE, \T_INCLUDE_ONCE, \T_EVAL, \T_REQUIRE, \T_REQUIRE_ONCE, \T_LOGICAL_OR, \T_LOGICAL_XOR, \T_LOGICAL_AND, \T_INSTANCEOF, \T_NEW, \T_CLONE, \T_EXIT, \T_IF, \T_ELSEIF, \T_ELSE, \T_ENDIF, \T_ECHO, \T_DO, \T_WHILE, \T_ENDWHILE, \T_FOR, \T_ENDFOR, \T_FOREACH, \T_ENDFOREACH, \T_DECLARE, \T_ENDDECLARE, \T_AS, \T_TRY, \T_CATCH, \T_FINALLY, \T_THROW, \T_USE, \T_INSTEADOF, \T_GLOBAL, \T_VAR, \T_UNSET, \T_ISSET, \T_EMPTY, \T_CONTINUE, \T_GOTO, \T_FUNCTION, \T_CONST, \T_RETURN, \T_PRINT, \T_YIELD, \T_LIST, \T_SWITCH, \T_ENDSWITCH, \T_CASE, \T_DEFAULT, \T_BREAK, \T_ARRAY, \T_CALLABLE, \T_EXTENDS, \T_IMPLEMENTS, \T_NAMESPACE, \T_TRAIT, \T_INTERFACE, \T_CLASS, \T_CLASS_C, \T_TRAIT_C, \T_FUNC_C, \T_METHOD_C, \T_LINE, \T_FILE, \T_DIR, \T_NS_C, \T_HALT_COMPILER, \T_FN, \T_MATCH], \true);
     }
 }

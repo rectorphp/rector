@@ -44,7 +44,7 @@ final class RemoveMethodsFromEidUtilityAndTsfeRector extends \Rector\Core\Rector
         if ($this->isEidUtilityMethodCall($node)) {
             try {
                 $this->removeNode($node);
-            } catch (\Rector\Core\Exception\ShouldNotHappenException $shouldNotHappenException) {
+            } catch (\Rector\Core\Exception\ShouldNotHappenException $exception) {
                 return null;
             }
             return null;
@@ -54,7 +54,7 @@ final class RemoveMethodsFromEidUtilityAndTsfeRector extends \Rector\Core\Rector
         }
         try {
             $this->removeNode($node);
-        } catch (\Rector\Core\Exception\ShouldNotHappenException $shouldNotHappenException) {
+        } catch (\Rector\Core\Exception\ShouldNotHappenException $exception) {
             return null;
         }
         return null;
@@ -77,9 +77,9 @@ CODE_SAMPLE
 )]);
     }
     /**
-     * @param StaticCall|MethodCall $node
+     * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $node
      */
-    private function shouldSkip(\PhpParser\Node $node) : bool
+    private function shouldSkip($node) : bool
     {
         if ($this->isEidUtilityMethodCall($node)) {
             return \false;
@@ -87,9 +87,9 @@ CODE_SAMPLE
         return !$this->isMethodCallOnTsfe($node);
     }
     /**
-     * @param StaticCall|MethodCall $node
+     * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $node
      */
-    private function isEidUtilityMethodCall(\PhpParser\Node $node) : bool
+    private function isEidUtilityMethodCall($node) : bool
     {
         return $this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Frontend\\Utility\\EidUtility'));
     }

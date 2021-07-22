@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Scalar\String_;
+use PHPStan\Type\TypeWithClassName;
 use Rector\Core\Rector\AbstractRector;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\Renaming\NodeManipulator\IdentifierManipulator;
@@ -73,35 +74,53 @@ final class AssertIssetToSpecificMethodRector extends \Rector\Core\Rector\Abstra
         $issetNode = $node->args[0]->value;
         $issetNodeArg = $issetNode->vars[0];
         if ($issetNodeArg instanceof \PhpParser\Node\Expr\PropertyFetch) {
-            $this->refactorPropertyFetchNode($node, $issetNodeArg);
-        } elseif ($issetNodeArg instanceof \PhpParser\Node\Expr\ArrayDimFetch) {
-            $this->refactorArrayDimFetchNode($node, $issetNodeArg);
+            if ($this->hasMagicIsset($issetNodeArg->var)) {
+                return null;
+            }
+            return $this->refactorPropertyFetchNode($node, $issetNodeArg);
+        }
+        if ($issetNodeArg instanceof \PhpParser\Node\Expr\ArrayDimFetch) {
+            return $this->refactorArrayDimFetchNode($node, $issetNodeArg);
         }
         return $node;
+    }
+    private function hasMagicIsset(\PhpParser\Node $node) : bool
+    {
+        $resolved = $this->nodeTypeResolver->resolve($node);
+        if (!$resolved instanceof \PHPStan\Type\TypeWithClassName) {
+            return \false;
+        }
+        $reflection = $resolved->getClassReflection();
+        if ($reflection === null) {
+            return \false;
+        }
+        return $reflection->hasMethod('__isset');
     }
     /**
      * @param MethodCall|StaticCall $node
      */
-    private function refactorPropertyFetchNode(\PhpParser\Node $node, \PhpParser\Node\Expr\PropertyFetch $propertyFetch) : void
+    private function refactorPropertyFetchNode(\PhpParser\Node $node, \PhpParser\Node\Expr\PropertyFetch $propertyFetch) : ?\PhpParser\Node
     {
         $name = $this->getName($propertyFetch);
         if ($name === null) {
-            return;
+            return null;
         }
         $this->identifierManipulator->renameNodeWithMap($node, [self::ASSERT_TRUE => 'assertObjectHasAttribute', self::ASSERT_FALSE => 'assertObjectNotHasAttribute']);
         $oldArgs = $node->args;
         unset($oldArgs[0]);
         $newArgs = $this->nodeFactory->createArgs([new \PhpParser\Node\Scalar\String_($name), $propertyFetch->var]);
         $node->args = $this->appendArgs($newArgs, $oldArgs);
+        return $node;
     }
     /**
      * @param MethodCall|StaticCall $node
      */
-    private function refactorArrayDimFetchNode(\PhpParser\Node $node, \PhpParser\Node\Expr\ArrayDimFetch $arrayDimFetch) : void
+    private function refactorArrayDimFetchNode(\PhpParser\Node $node, \PhpParser\Node\Expr\ArrayDimFetch $arrayDimFetch) : \PhpParser\Node
     {
         $this->identifierManipulator->renameNodeWithMap($node, [self::ASSERT_TRUE => 'assertArrayHasKey', self::ASSERT_FALSE => 'assertArrayNotHasKey']);
         $oldArgs = $node->args;
         unset($oldArgs[0]);
         $node->args = \array_merge($this->nodeFactory->createArgs([$arrayDimFetch->dim, $arrayDimFetch->var]), $oldArgs);
+        return $node;
     }
 }

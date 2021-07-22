@@ -13,6 +13,7 @@ class Class_ extends \PhpParser\Node\Stmt\ClassLike
     const MODIFIER_STATIC = 8;
     const MODIFIER_ABSTRACT = 16;
     const MODIFIER_FINAL = 32;
+    const MODIFIER_READONLY = 64;
     const VISIBILITY_MODIFIER_MASK = 7;
     // 1 | 2 | 4
     /** @var int Type */
@@ -90,6 +91,9 @@ class Class_ extends \PhpParser\Node\Stmt\ClassLike
         }
         if ($a & self::MODIFIER_FINAL && $b & self::MODIFIER_FINAL) {
             throw new \PhpParser\Error('Multiple final modifiers are not allowed');
+        }
+        if ($a & self::MODIFIER_READONLY && $b & self::MODIFIER_READONLY) {
+            throw new \PhpParser\Error('Multiple readonly modifiers are not allowed');
         }
         if ($a & 48 && $b & 48) {
             throw new \PhpParser\Error('Cannot use the final modifier on an abstract class member');

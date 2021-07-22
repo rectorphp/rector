@@ -185,7 +185,7 @@ CODE_SAMPLE
     {
         try {
             $this->removeNode($node);
-        } catch (\Rector\Core\Exception\ShouldNotHappenException $shouldNotHappenException) {
+        } catch (\Rector\Core\Exception\ShouldNotHappenException $exception) {
             $this->removeNode($node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE));
         }
     }

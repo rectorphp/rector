@@ -14,6 +14,7 @@ use PhpParser\Lexer\TokenEmulator\FnTokenEmulator;
 use PhpParser\Lexer\TokenEmulator\MatchTokenEmulator;
 use PhpParser\Lexer\TokenEmulator\NullsafeTokenEmulator;
 use PhpParser\Lexer\TokenEmulator\NumericLiteralSeparatorEmulator;
+use PhpParser\Lexer\TokenEmulator\ReadonlyTokenEmulator;
 use PhpParser\Lexer\TokenEmulator\ReverseEmulator;
 use PhpParser\Lexer\TokenEmulator\TokenEmulator;
 class Emulative extends \PhpParser\Lexer
@@ -38,7 +39,7 @@ class Emulative extends \PhpParser\Lexer
         $this->targetPhpVersion = $options['phpVersion'] ?? \PhpParser\Lexer\Emulative::PHP_8_1;
         unset($options['phpVersion']);
         parent::__construct($options);
-        $emulators = [new \PhpParser\Lexer\TokenEmulator\FlexibleDocStringEmulator(), new \PhpParser\Lexer\TokenEmulator\FnTokenEmulator(), new \PhpParser\Lexer\TokenEmulator\MatchTokenEmulator(), new \PhpParser\Lexer\TokenEmulator\CoaleseEqualTokenEmulator(), new \PhpParser\Lexer\TokenEmulator\NumericLiteralSeparatorEmulator(), new \PhpParser\Lexer\TokenEmulator\NullsafeTokenEmulator(), new \PhpParser\Lexer\TokenEmulator\AttributeEmulator(), new \PhpParser\Lexer\TokenEmulator\EnumTokenEmulator()];
+        $emulators = [new \PhpParser\Lexer\TokenEmulator\FlexibleDocStringEmulator(), new \PhpParser\Lexer\TokenEmulator\FnTokenEmulator(), new \PhpParser\Lexer\TokenEmulator\MatchTokenEmulator(), new \PhpParser\Lexer\TokenEmulator\CoaleseEqualTokenEmulator(), new \PhpParser\Lexer\TokenEmulator\NumericLiteralSeparatorEmulator(), new \PhpParser\Lexer\TokenEmulator\NullsafeTokenEmulator(), new \PhpParser\Lexer\TokenEmulator\AttributeEmulator(), new \PhpParser\Lexer\TokenEmulator\EnumTokenEmulator(), new \PhpParser\Lexer\TokenEmulator\ReadonlyTokenEmulator()];
         // Collect emulators that are relevant for the PHP version we're running
         // and the PHP version we're targeting for emulation.
         foreach ($emulators as $emulator) {

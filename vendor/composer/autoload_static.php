@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit735eb307678b1bf985488aa190e180a2
+class ComposerStaticInitb51d21490f998eb5d663e8d169cd873c
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -472,6 +472,7 @@ class ComposerStaticInit735eb307678b1bf985488aa190e180a2
         'PhpParser\\Lexer\\TokenEmulator\\MatchTokenEmulator' => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser/Lexer/TokenEmulator/MatchTokenEmulator.php',
         'PhpParser\\Lexer\\TokenEmulator\\NullsafeTokenEmulator' => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser/Lexer/TokenEmulator/NullsafeTokenEmulator.php',
         'PhpParser\\Lexer\\TokenEmulator\\NumericLiteralSeparatorEmulator' => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser/Lexer/TokenEmulator/NumericLiteralSeparatorEmulator.php',
+        'PhpParser\\Lexer\\TokenEmulator\\ReadonlyTokenEmulator' => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser/Lexer/TokenEmulator/ReadonlyTokenEmulator.php',
         'PhpParser\\Lexer\\TokenEmulator\\ReverseEmulator' => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser/Lexer/TokenEmulator/ReverseEmulator.php',
         'PhpParser\\Lexer\\TokenEmulator\\TokenEmulator' => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser/Lexer/TokenEmulator/TokenEmulator.php',
         'PhpParser\\NameContext' => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser/NameContext.php',
@@ -2532,6 +2533,7 @@ class ComposerStaticInit735eb307678b1bf985488aa190e180a2
         'Rector\\DowngradePhp80\\Rector\\StaticCall\\DowngradePhpTokenRector' => __DIR__ . '/../..' . '/rules/DowngradePhp80/Rector/StaticCall/DowngradePhpTokenRector.php',
         'Rector\\DowngradePhp80\\Reflection\\DefaultParameterValueResolver' => __DIR__ . '/../..' . '/rules/DowngradePhp80/Reflection/DefaultParameterValueResolver.php',
         'Rector\\DowngradePhp80\\ValueObject\\DowngradeAttributeToAnnotation' => __DIR__ . '/../..' . '/rules/DowngradePhp80/ValueObject/DowngradeAttributeToAnnotation.php',
+        'Rector\\DowngradePhp81\\Rector\\ClassConst\\DowngradeFinalizePublicClassConstantRector' => __DIR__ . '/../..' . '/rules/DowngradePhp81/Rector/ClassConst/DowngradeFinalizePublicClassConstantRector.php',
         'Rector\\EarlyReturn\\NodeFactory\\InvertedIfFactory' => __DIR__ . '/../..' . '/rules/EarlyReturn/NodeFactory/InvertedIfFactory.php',
         'Rector\\EarlyReturn\\NodeTransformer\\ConditionInverter' => __DIR__ . '/../..' . '/rules/EarlyReturn/NodeTransformer/ConditionInverter.php',
         'Rector\\EarlyReturn\\Rector\\Foreach_\\ChangeNestedForeachIfsToEarlyContinueRector' => __DIR__ . '/../..' . '/rules/EarlyReturn/Rector/Foreach_/ChangeNestedForeachIfsToEarlyContinueRector.php',
@@ -2794,6 +2796,7 @@ class ComposerStaticInit735eb307678b1bf985488aa190e180a2
         'Rector\\NodeTypeResolver\\Exception\\MissingTagException' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/Exception/MissingTagException.php',
         'Rector\\NodeTypeResolver\\MethodParameterTypeResolver' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/MethodParameterTypeResolver.php',
         'Rector\\NodeTypeResolver\\NodeScopeAndMetadataDecorator' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/NodeScopeAndMetadataDecorator.php',
+        'Rector\\NodeTypeResolver\\NodeTypeCorrector\\AccessoryNonEmptyStringTypeCorrector' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/NodeTypeCorrector/AccessoryNonEmptyStringTypeCorrector.php',
         'Rector\\NodeTypeResolver\\NodeTypeCorrector\\GenericClassStringTypeCorrector' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/NodeTypeCorrector/GenericClassStringTypeCorrector.php',
         'Rector\\NodeTypeResolver\\NodeTypeCorrector\\HasOffsetTypeCorrector' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/NodeTypeCorrector/HasOffsetTypeCorrector.php',
         'Rector\\NodeTypeResolver\\NodeTypeCorrector\\PregMatchTypeCorrector' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/NodeTypeCorrector/PregMatchTypeCorrector.php',
@@ -2876,6 +2879,7 @@ class ComposerStaticInit735eb307678b1bf985488aa190e180a2
         'Rector\\PHPStanStaticTypeMapper\\TypeAnalyzer\\BoolUnionTypeAnalyzer' => __DIR__ . '/../..' . '/packages/PHPStanStaticTypeMapper/TypeAnalyzer/BoolUnionTypeAnalyzer.php',
         'Rector\\PHPStanStaticTypeMapper\\TypeAnalyzer\\UnionTypeAnalyzer' => __DIR__ . '/../..' . '/packages/PHPStanStaticTypeMapper/TypeAnalyzer/UnionTypeAnalyzer.php',
         'Rector\\PHPStanStaticTypeMapper\\TypeAnalyzer\\UnionTypeCommonTypeNarrower' => __DIR__ . '/../..' . '/packages/PHPStanStaticTypeMapper/TypeAnalyzer/UnionTypeCommonTypeNarrower.php',
+        'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\AccessoryNonEmptyStringTypeMapper' => __DIR__ . '/../..' . '/packages/PHPStanStaticTypeMapper/TypeMapper/AccessoryNonEmptyStringTypeMapper.php',
         'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\ArrayTypeMapper' => __DIR__ . '/../..' . '/packages/PHPStanStaticTypeMapper/TypeMapper/ArrayTypeMapper.php',
         'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\BooleanTypeMapper' => __DIR__ . '/../..' . '/packages/PHPStanStaticTypeMapper/TypeMapper/BooleanTypeMapper.php',
         'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\CallableTypeMapper' => __DIR__ . '/../..' . '/packages/PHPStanStaticTypeMapper/TypeMapper/CallableTypeMapper.php',
@@ -3111,8 +3115,10 @@ class ComposerStaticInit735eb307678b1bf985488aa190e180a2
         'Rector\\Php80\\ValueObject\\PropertyPromotionCandidate' => __DIR__ . '/../..' . '/rules/Php80/ValueObject/PropertyPromotionCandidate.php',
         'Rector\\Php80\\ValueObject\\StrStartsWith' => __DIR__ . '/../..' . '/rules/Php80/ValueObject/StrStartsWith.php',
         'Rector\\Php81\\NodeFactory\\EnumFactory' => __DIR__ . '/../..' . '/rules/Php81/NodeFactory/EnumFactory.php',
+        'Rector\\Php81\\Rector\\ClassConst\\FinalizePublicClassConstantRector' => __DIR__ . '/../..' . '/rules/Php81/Rector/ClassConst/FinalizePublicClassConstantRector.php',
         'Rector\\Php81\\Rector\\Class_\\MyCLabsClassToEnumRector' => __DIR__ . '/../..' . '/rules/Php81/Rector/Class_/MyCLabsClassToEnumRector.php',
         'Rector\\Php81\\Rector\\MethodCall\\MyCLabsMethodCallToEnumConstRector' => __DIR__ . '/../..' . '/rules/Php81/Rector/MethodCall/MyCLabsMethodCallToEnumConstRector.php',
+        'Rector\\Php81\\Rector\\Property\\ReadOnlyPropertyRector' => __DIR__ . '/../..' . '/rules/Php81/Rector/Property/ReadOnlyPropertyRector.php',
         'Rector\\PhpAttribute\\NodeAnalyzer\\NamedArgumentsResolver' => __DIR__ . '/../..' . '/packages/PhpAttribute/NodeAnalyzer/NamedArgumentsResolver.php',
         'Rector\\PhpAttribute\\Printer\\DoctrineAnnotationFactory' => __DIR__ . '/../..' . '/packages/PhpAttribute/Printer/DoctrineAnnotationFactory.php',
         'Rector\\PhpAttribute\\Printer\\PhpAttributeGroupFactory' => __DIR__ . '/../..' . '/packages/PhpAttribute/Printer/PhpAttributeGroupFactory.php',
@@ -3844,9 +3850,9 @@ class ComposerStaticInit735eb307678b1bf985488aa190e180a2
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit735eb307678b1bf985488aa190e180a2::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit735eb307678b1bf985488aa190e180a2::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit735eb307678b1bf985488aa190e180a2::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitb51d21490f998eb5d663e8d169cd873c::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitb51d21490f998eb5d663e8d169cd873c::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitb51d21490f998eb5d663e8d169cd873c::$classMap;
 
         }, null, ClassLoader::class);
     }

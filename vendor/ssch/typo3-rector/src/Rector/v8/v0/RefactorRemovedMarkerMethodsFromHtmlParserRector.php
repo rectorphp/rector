@@ -118,16 +118,16 @@ CODE_SAMPLE
 )]);
     }
     /**
-     * @param StaticCall|MethodCall $node
+     * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $node
      */
-    public function removeMethods(\PhpParser\Node $node) : void
+    public function removeMethods($node) : void
     {
         if ($this->isNames($node->name, self::REMOVED_METHODS)) {
             $methodName = $this->getName($node->name);
             if (null !== $methodName) {
                 try {
                     $this->removeNode($node);
-                } catch (\Rector\Core\Exception\ShouldNotHappenException $shouldNotHappenException) {
+                } catch (\Rector\Core\Exception\ShouldNotHappenException $exception) {
                     $parentNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
                     $this->removeNode($parentNode);
                 }
@@ -135,9 +135,9 @@ CODE_SAMPLE
         }
     }
     /**
-     * @param StaticCall|MethodCall $node
+     * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $node
      */
-    public function renameMethod(\PhpParser\Node $node) : void
+    public function renameMethod($node) : void
     {
         if ($this->isName($node->name, self::RENAMED_METHOD)) {
             $methodName = $this->getName($node->name);
@@ -147,9 +147,9 @@ CODE_SAMPLE
         }
     }
     /**
-     * @param StaticCall|MethodCall $node
+     * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $node
      */
-    private function migrateMethodsToMarkerBasedTemplateService(\PhpParser\Node $node) : ?\PhpParser\Node
+    private function migrateMethodsToMarkerBasedTemplateService($node) : ?\PhpParser\Node
     {
         if ($this->isNames($node->name, self::MOVED_METHODS_TO_MARKER_BASED_TEMPLATES)) {
             $methodName = $this->getName($node->name);
@@ -162,9 +162,9 @@ CODE_SAMPLE
         return null;
     }
     /**
-     * @param StaticCall|MethodCall $node
+     * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $node
      */
-    private function shouldSkip(\PhpParser\Node $node) : bool
+    private function shouldSkip($node) : bool
     {
         $skip = \false;
         if (!$this->isNames($node->name, self::MOVED_METHODS_TO_MARKER_BASED_TEMPLATES) && !$this->isNames($node->name, self::REMOVED_METHODS) && !$this->isName($node->name, self::RENAMED_METHOD)) {

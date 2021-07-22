@@ -68,7 +68,7 @@ CODE_SAMPLE
 )]);
     }
     /**
-     * @param MethodCall|PropertyFetch $node
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\PropertyFetch $node
      */
     private function shouldSkip($node) : bool
     {

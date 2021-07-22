@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Ssch\TYPO3Rector\FileProcessor\TypoScript\Conditions;
 
-use RectorPrefix20210722\Nette\Utils\Strings;
 use Ssch\TYPO3Rector\Helper\ArrayUtility;
 final class GlobalStringConditionMatcher extends \Ssch\TYPO3Rector\FileProcessor\TypoScript\Conditions\AbstractGlobalConditionMatcher
 {
@@ -56,10 +55,10 @@ final class GlobalStringConditionMatcher extends \Ssch\TYPO3Rector\FileProcessor
      */
     public function shouldApply($condition) : bool
     {
-        if (\RectorPrefix20210722\Nette\Utils\Strings::contains($condition, self::CONTAINS_CONSTANT)) {
+        if (\strpos($condition, self::CONTAINS_CONSTANT) !== \false) {
             return \false;
         }
-        return \RectorPrefix20210722\Nette\Utils\Strings::startsWith($condition, self::TYPE);
+        return \strncmp($condition, self::TYPE, \strlen(self::TYPE)) === 0;
     }
     private function refactorGetPost(string $property, string $operator, string $value) : string
     {

@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Ssch\TYPO3Rector\FileProcessor\Resources\Icons;
 
-use RectorPrefix20210722\Nette\Utils\Strings;
 use Rector\Core\Contract\Processor\FileProcessorInterface;
 use Rector\Core\ValueObject\Application\File;
 use Rector\Core\ValueObject\Configuration;
@@ -55,7 +54,7 @@ final class IconsFileProcessor implements \Rector\Core\Contract\Processor\FilePr
     public function supports($file, $configuration) : bool
     {
         $smartFileInfo = $file->getSmartFileInfo();
-        if (!\RectorPrefix20210722\Nette\Utils\Strings::contains($smartFileInfo->getFilename(), 'ext_icon')) {
+        if (\strpos($smartFileInfo->getFilename(), 'ext_icon') === \false) {
             return \false;
         }
         $extEmConfSmartFileInfo = $this->filesFinder->findExtEmConfRelativeFromGivenFileInfo($smartFileInfo);

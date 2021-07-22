@@ -63,7 +63,7 @@ final class UseGetMenuInsteadOfGetFirstWebPageRector extends \Rector\Core\Rector
         $this->addNodeBeforeNode($ifNode, $node);
         try {
             $this->removeNode($node);
-        } catch (\Rector\Core\Exception\ShouldNotHappenException $shouldNotHappenException) {
+        } catch (\Rector\Core\Exception\ShouldNotHappenException $exception) {
             $parentNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
             $this->removeNode($parentNode);
         }

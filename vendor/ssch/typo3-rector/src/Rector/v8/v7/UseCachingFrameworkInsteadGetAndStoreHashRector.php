@@ -79,9 +79,9 @@ CODE_SAMPLE
         return $this->nodeFactory->createMethodCall($this->createCacheManager(), 'set', [$hash, $data, $this->nodeFactory->createArray([$this->nodeFactory->createConcat([new \PhpParser\Node\Scalar\String_('ident_'), $ident])]), $lifetime]);
     }
     /**
-     * @param MethodCall|StaticCall $node
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
      */
-    private function shouldSkip(\PhpParser\Node $node) : bool
+    private function shouldSkip($node) : bool
     {
         if ($this->typo3NodeResolver->isMethodCallOnSysPageOfTSFE($node)) {
             return \false;

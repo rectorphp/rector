@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Ssch\TYPO3Rector\FileProcessor\Yaml\Form;
 
-use RectorPrefix20210722\Nette\Utils\Strings;
 use Rector\Core\Contract\Processor\FileProcessorInterface;
 use Rector\Core\Provider\CurrentFileProvider;
 use Rector\Core\ValueObject\Application\File;
@@ -69,7 +68,7 @@ final class FormYamlFileProcessor implements \Rector\Core\Contract\Processor\Fil
     public function supports($file, $configuration) : bool
     {
         $smartFileInfo = $file->getSmartFileInfo();
-        return \RectorPrefix20210722\Nette\Utils\Strings::endsWith($smartFileInfo->getFilename(), 'yaml');
+        return \substr_compare($smartFileInfo->getFilename(), 'yaml', -\strlen('yaml')) === 0;
     }
     /**
      * @return string[]

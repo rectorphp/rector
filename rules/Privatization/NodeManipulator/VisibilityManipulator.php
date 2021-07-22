@@ -3,21 +3,22 @@
 declare (strict_types=1);
 namespace Rector\Privatization\NodeManipulator;
 
-use PhpParser\Node;
-use PhpParser\Node\Stmt;
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
-use Rector\Core\Exception\InvalidNodeTypeException;
 use Rector\Core\ValueObject\Visibility;
 use RectorPrefix20210722\Webmozart\Assert\Assert;
 final class VisibilityManipulator
 {
     /**
-     * @var array<class-string<Stmt>>
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\ClassConst|\PhpParser\Node\Param $node
      */
-    private const ALLOWED_NODE_TYPES = [\PhpParser\Node\Stmt\ClassMethod::class, \PhpParser\Node\Stmt\Property::class, \PhpParser\Node\Stmt\ClassConst::class, \PhpParser\Node\Stmt\Class_::class];
+    public function hasVisibility($node, int $visibility) : bool
+    {
+        return (bool) ($node->flags & $visibility);
+    }
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\ClassConst $node
      */
@@ -43,7 +44,7 @@ final class VisibilityManipulator
         $node->flags -= \PhpParser\Node\Stmt\Class_::MODIFIER_STATIC;
     }
     /**
-     * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\ClassMethod $node
+     * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\ClassConst $node
      */
     public function makeFinal($node) : void
     {
@@ -65,7 +66,6 @@ final class VisibilityManipulator
      */
     public function removeVisibility($node) : void
     {
-        $this->ensureIsClassMethodOrProperty($node, __METHOD__);
         // no modifier
         if ($node->flags === 0) {
             return;
@@ -109,26 +109,26 @@ final class VisibilityManipulator
     {
         $this->replaceVisibilityFlag($node, \Rector\Core\ValueObject\Visibility::PRIVATE);
     }
-    public function removeFinal(\PhpParser\Node\Stmt\Class_ $class) : void
+    /**
+     * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\ClassConst $node
+     */
+    public function removeFinal($node) : void
     {
-        $class->flags -= \PhpParser\Node\Stmt\Class_::MODIFIER_FINAL;
+        $node->flags -= \PhpParser\Node\Stmt\Class_::MODIFIER_FINAL;
     }
     /**
-     * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\ClassConst $node
+     * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $node
+     */
+    public function makeReadonly($node) : void
+    {
+        $this->addVisibilityFlag($node, \PhpParser\Node\Stmt\Class_::MODIFIER_READONLY);
+    }
+    /**
+     * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\ClassConst|\PhpParser\Node\Param $node
      */
     private function addVisibilityFlag($node, int $visibility) : void
     {
-        $this->ensureIsClassMethodOrProperty($node, __METHOD__);
         $node->flags |= $visibility;
-    }
-    private function ensureIsClassMethodOrProperty(\PhpParser\Node $node, string $location) : void
-    {
-        foreach (self::ALLOWED_NODE_TYPES as $allowedNodeType) {
-            if (\is_a($node, $allowedNodeType, \true)) {
-                return;
-            }
-        }
-        throw new \Rector\Core\Exception\InvalidNodeTypeException(\sprintf('"%s" only accepts "%s" types. "%s" given.', $location, \implode('", "', self::ALLOWED_NODE_TYPES), \get_class($node)));
     }
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\ClassConst $node

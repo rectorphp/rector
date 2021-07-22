@@ -11,6 +11,7 @@ use RectorPrefix20210722\Helmich\TypoScriptParser\Parser\Printer\PrettyPrinter;
 use RectorPrefix20210722\Helmich\TypoScriptParser\Parser\Traverser\Traverser;
 use RectorPrefix20210722\Helmich\TypoScriptParser\Tokenizer\Tokenizer;
 use RectorPrefix20210722\Helmich\TypoScriptParser\Tokenizer\TokenizerInterface;
+use Rector\RectorGenerator\FileSystem\ConfigFilesystem;
 use Ssch\TYPO3Rector\FileProcessor\TypoScript\TypoScriptFileProcessor;
 use RectorPrefix20210722\Symfony\Component\Console\Output\BufferedOutput;
 use RectorPrefix20210722\Symfony\Component\Console\Output\OutputInterface;
@@ -31,4 +32,8 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
     $services->alias(\RectorPrefix20210722\Symfony\Component\Console\Output\OutputInterface::class, \RectorPrefix20210722\Symfony\Component\Console\Output\BufferedOutput::class);
     $services->set(\RectorPrefix20210722\Helmich\TypoScriptParser\Parser\AST\Builder::class);
     $services->set(\Ssch\TYPO3Rector\FileProcessor\TypoScript\TypoScriptFileProcessor::class)->call('configure', [[\Ssch\TYPO3Rector\FileProcessor\TypoScript\TypoScriptFileProcessor::ALLOWED_FILE_EXTENSIONS => ['typoscript', 'ts', 'txt', 'pagets', 'constantsts', 'setupts', 'tsconfig', 't3s', 't3c', 'typoscriptconstants', 'typoscriptsetupts']]]);
+    // custom generator
+    $services->set(\Rector\RectorGenerator\FileSystem\ConfigFilesystem::class);
+    $services->set(\Rector\RectorGenerator\TemplateFactory::class);
+    $services->set(\PhpParser\PrettyPrinter\Standard::class);
 };

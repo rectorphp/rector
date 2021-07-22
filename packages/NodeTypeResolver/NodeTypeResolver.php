@@ -42,6 +42,7 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\NodeAnalyzer\ClassAnalyzer;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\NodeTypeResolver\NodeTypeCorrector\AccessoryNonEmptyStringTypeCorrector;
 use Rector\NodeTypeResolver\NodeTypeCorrector\GenericClassStringTypeCorrector;
 use Rector\NodeTypeResolver\NodeTypeCorrector\HasOffsetTypeCorrector;
 use Rector\NodeTypeResolver\NodeTypeResolver\IdentifierTypeResolver;
@@ -80,6 +81,10 @@ final class NodeTypeResolver
      */
     private $hasOffsetTypeCorrector;
     /**
+     * @var \Rector\NodeTypeResolver\NodeTypeCorrector\AccessoryNonEmptyStringTypeCorrector
+     */
+    private $accessoryNonEmptyStringTypeCorrector;
+    /**
      * @var \Rector\NodeTypeResolver\NodeTypeResolver\IdentifierTypeResolver
      */
     private $identifierTypeResolver;
@@ -90,13 +95,14 @@ final class NodeTypeResolver
     /**
      * @param NodeTypeResolverInterface[] $nodeTypeResolvers
      */
-    public function __construct(\Rector\TypeDeclaration\PHPStan\Type\ObjectTypeSpecifier $objectTypeSpecifier, \Rector\Core\NodeAnalyzer\ClassAnalyzer $classAnalyzer, \Rector\NodeTypeResolver\NodeTypeCorrector\GenericClassStringTypeCorrector $genericClassStringTypeCorrector, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\NodeTypeResolver\NodeTypeCorrector\HasOffsetTypeCorrector $hasOffsetTypeCorrector, \Rector\NodeTypeResolver\NodeTypeResolver\IdentifierTypeResolver $identifierTypeResolver, \Rector\Core\Configuration\RenamedClassesDataCollector $renamedClassesDataCollector, array $nodeTypeResolvers)
+    public function __construct(\Rector\TypeDeclaration\PHPStan\Type\ObjectTypeSpecifier $objectTypeSpecifier, \Rector\Core\NodeAnalyzer\ClassAnalyzer $classAnalyzer, \Rector\NodeTypeResolver\NodeTypeCorrector\GenericClassStringTypeCorrector $genericClassStringTypeCorrector, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\NodeTypeResolver\NodeTypeCorrector\HasOffsetTypeCorrector $hasOffsetTypeCorrector, \Rector\NodeTypeResolver\NodeTypeCorrector\AccessoryNonEmptyStringTypeCorrector $accessoryNonEmptyStringTypeCorrector, \Rector\NodeTypeResolver\NodeTypeResolver\IdentifierTypeResolver $identifierTypeResolver, \Rector\Core\Configuration\RenamedClassesDataCollector $renamedClassesDataCollector, array $nodeTypeResolvers)
     {
         $this->objectTypeSpecifier = $objectTypeSpecifier;
         $this->classAnalyzer = $classAnalyzer;
         $this->genericClassStringTypeCorrector = $genericClassStringTypeCorrector;
         $this->reflectionProvider = $reflectionProvider;
         $this->hasOffsetTypeCorrector = $hasOffsetTypeCorrector;
+        $this->accessoryNonEmptyStringTypeCorrector = $accessoryNonEmptyStringTypeCorrector;
         $this->identifierTypeResolver = $identifierTypeResolver;
         $this->renamedClassesDataCollector = $renamedClassesDataCollector;
         foreach ($nodeTypeResolvers as $nodeTypeResolver) {
@@ -144,6 +150,7 @@ final class NodeTypeResolver
     {
         $type = $this->resolveByNodeTypeResolvers($node);
         if ($type !== null) {
+            $type = $this->accessoryNonEmptyStringTypeCorrector->correct($type);
             return $this->hasOffsetTypeCorrector->correct($type);
         }
         $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
@@ -168,6 +175,7 @@ final class NodeTypeResolver
             return new \PHPStan\Type\ObjectWithoutClassType();
         }
         $type = $scope->getType($node);
+        $type = $this->accessoryNonEmptyStringTypeCorrector->correct($type);
         // hot fix for phpstan not resolving chain method calls
         if (!$node instanceof \PhpParser\Node\Expr\MethodCall) {
             return $type;
@@ -224,7 +232,7 @@ final class NodeTypeResolver
         if ($staticType instanceof \PHPStan\Type\ObjectType) {
             return $this->objectTypeSpecifier->narrowToFullyQualifiedOrAliasedObjectType($node, $staticType);
         }
-        return $staticType;
+        return $this->accessoryNonEmptyStringTypeCorrector->correct($staticType);
     }
     public function isNumberType(\PhpParser\Node $node) : bool
     {

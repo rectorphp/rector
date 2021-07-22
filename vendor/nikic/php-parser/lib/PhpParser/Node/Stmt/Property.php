@@ -75,6 +75,15 @@ class Property extends \PhpParser\Node\Stmt
     {
         return (bool) ($this->flags & \PhpParser\Node\Stmt\Class_::MODIFIER_STATIC);
     }
+    /**
+     * Whether the property is readonly.
+     *
+     * @return bool
+     */
+    public function isReadonly() : bool
+    {
+        return (bool) ($this->flags & \PhpParser\Node\Stmt\Class_::MODIFIER_READONLY);
+    }
     public function getType() : string
     {
         return 'Stmt_Property';

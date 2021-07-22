@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Ssch\TYPO3Rector\Rector\v11\v0;
 
-use RectorPrefix20210722\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Exit_;
 use PhpParser\Node\Expr\FuncCall;
@@ -12,7 +11,6 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\ObjectType;
-use PHPStan\Type\TypeWithClassName;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -46,21 +44,19 @@ final class ExtbaseControllerActionsMustReturnResponseInterfaceRector extends \R
         if ($this->shouldSkip($node)) {
             return null;
         }
-        foreach ($this->extractReturnCalls($node) as $returnCall) {
-            if (!$returnCall instanceof \PhpParser\Node\Stmt\Return_) {
-                continue;
-            }
-            $returnCallExpression = $returnCall->expr;
+        $returns = $this->findReturns($node);
+        foreach ($returns as $return) {
+            $returnCallExpression = $return->expr;
             if ($returnCallExpression instanceof \PhpParser\Node\Expr\FuncCall && $this->isName($returnCallExpression->name, 'json_encode')) {
-                $returnCall->expr = $this->nodeFactory->createMethodCall($this->nodeFactory->createPropertyFetch(self::THIS, 'responseFactory'), 'createJsonResponse', [$returnCall->expr]);
+                $return->expr = $this->nodeFactory->createMethodCall($this->nodeFactory->createPropertyFetch(self::THIS, 'responseFactory'), 'createJsonResponse', [$return->expr]);
             } else {
                 // avoid duplication
-                if ($returnCall->expr instanceof \PhpParser\Node\Expr\MethodCall && $this->isName($returnCall->expr->name, self::HTML_RESPONSE)) {
+                if ($return->expr instanceof \PhpParser\Node\Expr\MethodCall && $this->isName($return->expr->name, self::HTML_RESPONSE)) {
                     $args = [];
                 } else {
-                    $args = [$returnCall->expr];
+                    $args = [$return->expr];
                 }
-                $returnCall->expr = $this->nodeFactory->createMethodCall(self::THIS, self::HTML_RESPONSE, $args);
+                $return->expr = $this->nodeFactory->createMethodCall(self::THIS, self::HTML_RESPONSE, $args);
             }
         }
         $node->returnType = new \PhpParser\Node\Name\FullyQualified('Psr\\Http\\Message\\ResponseInterface');
@@ -116,10 +112,10 @@ CODE_SAMPLE
         if (null === $methodName) {
             return \true;
         }
-        if (!\RectorPrefix20210722\Nette\Utils\Strings::endsWith($methodName, 'Action')) {
+        if (\substr_compare($methodName, 'Action', -\strlen('Action')) !== 0) {
             return \true;
         }
-        if (\RectorPrefix20210722\Nette\Utils\Strings::startsWith($methodName, 'initialize')) {
+        if (\strncmp($methodName, 'initialize', \strlen('initialize')) === 0) {
             return \true;
         }
         if ($this->hasExitCall($node)) {
@@ -131,13 +127,11 @@ CODE_SAMPLE
         return $this->alreadyResponseReturnType($node);
     }
     /**
-     * @return Return_[]|Node[]
+     * @return Return_[]
      */
-    private function extractReturnCalls(\PhpParser\Node\Stmt\ClassMethod $node) : array
+    private function findReturns(\PhpParser\Node\Stmt\ClassMethod $classMethod) : array
     {
-        return $this->betterNodeFinder->find((array) $node->stmts, function (\PhpParser\Node $node) : bool {
-            return $node instanceof \PhpParser\Node\Stmt\Return_;
-        });
+        return $this->betterNodeFinder->findInstanceOf((array) $classMethod->stmts, \PhpParser\Node\Stmt\Return_::class);
     }
     private function hasRedirectCall(\PhpParser\Node\Stmt\ClassMethod $node) : bool
     {
@@ -159,18 +153,14 @@ CODE_SAMPLE
     }
     private function alreadyResponseReturnType(\PhpParser\Node\Stmt\ClassMethod $node) : bool
     {
-        foreach ($this->extractReturnCalls($node) as $returnCall) {
-            if (!$returnCall instanceof \PhpParser\Node\Stmt\Return_) {
+        $returns = $this->findReturns($node);
+        $responseObjectType = new \PHPStan\Type\ObjectType('Psr\\Http\\Message\\ResponseInterface');
+        foreach ($returns as $return) {
+            if (null === $return->expr) {
                 continue;
             }
-            if (null === $returnCall->expr) {
-                continue;
-            }
-            $returnType = $this->nodeTypeResolver->getStaticType($returnCall->expr);
-            if (!$returnType instanceof \PHPStan\Type\TypeWithClassName) {
-                continue;
-            }
-            if ($returnType->isSuperTypeOf(new \PHPStan\Type\ObjectType('Psr\\Http\\Message\\ResponseInterface'))->yes()) {
+            $returnType = $this->nodeTypeResolver->getStaticType($return->expr);
+            if ($returnType->isSuperTypeOf($responseObjectType)->yes()) {
                 return \true;
             }
         }

@@ -74,7 +74,7 @@ CODE_SAMPLE
             // If it is the only method call, we can safely delete the node here.
             $this->removeNode($node);
             return $node;
-        } catch (\Rector\Core\Exception\ShouldNotHappenException $shouldNotHappenException) {
+        } catch (\Rector\Core\Exception\ShouldNotHappenException $exception) {
             $chainMethodCalls = $this->fluentChainMethodCallNodeAnalyzer->collectAllMethodCallsInChain($node);
             if (!$this->sameClassMethodCallAnalyzer->haveSingleClass($chainMethodCalls)) {
                 return null;

@@ -51,7 +51,7 @@ final class ExtbasePersistenceTypoScriptRector extends \Ssch\TYPO3Rector\FilePro
         if (!$statement instanceof \RectorPrefix20210722\Helmich\TypoScriptParser\Parser\AST\Operator\Assignment) {
             return;
         }
-        if (!\RectorPrefix20210722\Nette\Utils\Strings::contains($statement->object->absoluteName, 'persistence.classes')) {
+        if (\strpos($statement->object->absoluteName, 'persistence.classes') === \false) {
             return;
         }
         $paths = \explode('.', $statement->object->absoluteName);

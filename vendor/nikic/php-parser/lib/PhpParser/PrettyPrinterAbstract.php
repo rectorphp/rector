@@ -936,7 +936,7 @@ abstract class PrettyPrinterAbstract
      */
     protected function pModifiers(int $modifiers)
     {
-        return ($modifiers & \PhpParser\Node\Stmt\Class_::MODIFIER_PUBLIC ? 'public ' : '') . ($modifiers & \PhpParser\Node\Stmt\Class_::MODIFIER_PROTECTED ? 'protected ' : '') . ($modifiers & \PhpParser\Node\Stmt\Class_::MODIFIER_PRIVATE ? 'private ' : '') . ($modifiers & \PhpParser\Node\Stmt\Class_::MODIFIER_STATIC ? 'static ' : '') . ($modifiers & \PhpParser\Node\Stmt\Class_::MODIFIER_ABSTRACT ? 'abstract ' : '') . ($modifiers & \PhpParser\Node\Stmt\Class_::MODIFIER_FINAL ? 'final ' : '');
+        return ($modifiers & \PhpParser\Node\Stmt\Class_::MODIFIER_PUBLIC ? 'public ' : '') . ($modifiers & \PhpParser\Node\Stmt\Class_::MODIFIER_PROTECTED ? 'protected ' : '') . ($modifiers & \PhpParser\Node\Stmt\Class_::MODIFIER_PRIVATE ? 'private ' : '') . ($modifiers & \PhpParser\Node\Stmt\Class_::MODIFIER_STATIC ? 'static ' : '') . ($modifiers & \PhpParser\Node\Stmt\Class_::MODIFIER_ABSTRACT ? 'abstract ' : '') . ($modifiers & \PhpParser\Node\Stmt\Class_::MODIFIER_FINAL ? 'final ' : '') . ($modifiers & \PhpParser\Node\Stmt\Class_::MODIFIER_READONLY ? 'readonly ' : '');
     }
     /**
      * Determine whether a list of nodes uses multiline formatting.
@@ -983,7 +983,8 @@ abstract class PrettyPrinterAbstract
         for ($i = 0; $i < 256; $i++) {
             // Since PHP 7.1 The lower range is 0x80. However, we also want to support code for
             // older versions.
-            $this->labelCharMap[\chr($i)] = $i >= 0x7f || \ctype_alnum($i);
+            $chr = \chr($i);
+            $this->labelCharMap[$chr] = $i >= 0x7f || \ctype_alnum($chr);
         }
     }
     /**

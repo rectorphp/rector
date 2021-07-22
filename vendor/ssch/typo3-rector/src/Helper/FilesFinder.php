@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Ssch\TYPO3Rector\Helper;
 
-use RectorPrefix20210722\Nette\Utils\Strings;
 use RectorPrefix20210722\Symplify\EasyTesting\PHPUnit\StaticPHPUnitEnvironment;
 use Symplify\SmartFileSystem\SmartFileInfo;
 final class FilesFinder
@@ -67,6 +66,6 @@ final class FilesFinder
     }
     private function endsWith(\Symplify\SmartFileSystem\SmartFileInfo $fileInfo, string $needle) : bool
     {
-        return \RectorPrefix20210722\Nette\Utils\Strings::endsWith($fileInfo->getFilename(), $needle);
+        return \substr_compare($fileInfo->getFilename(), $needle, -\strlen($needle)) === 0;
     }
 }

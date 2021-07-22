@@ -218,7 +218,7 @@ CODE_SAMPLE
             if (null === $methodName) {
                 return null;
             }
-            return \RectorPrefix20210722\Nette\Utils\Strings::endsWith($methodName, 'Command');
+            return \substr_compare($methodName, 'Command', -\strlen('Command')) === 0;
         });
     }
     /**

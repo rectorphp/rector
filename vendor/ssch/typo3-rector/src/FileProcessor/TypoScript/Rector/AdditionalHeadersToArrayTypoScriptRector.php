@@ -5,7 +5,6 @@ namespace Ssch\TYPO3Rector\FileProcessor\TypoScript\Rector;
 
 use RectorPrefix20210722\Helmich\TypoScriptParser\Parser\AST\Operator\Assignment;
 use RectorPrefix20210722\Helmich\TypoScriptParser\Parser\AST\Statement;
-use RectorPrefix20210722\Nette\Utils\Strings;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -18,7 +17,7 @@ final class AdditionalHeadersToArrayTypoScriptRector extends \Ssch\TYPO3Rector\F
         if (!$statement instanceof \RectorPrefix20210722\Helmich\TypoScriptParser\Parser\AST\Operator\Assignment) {
             return;
         }
-        if (!\RectorPrefix20210722\Nette\Utils\Strings::startsWith($statement->object->relativeName, 'additionalHeaders')) {
+        if (\strncmp($statement->object->relativeName, 'additionalHeaders', \strlen('additionalHeaders')) !== 0) {
             return;
         }
         $this->hasChanged = \true;
