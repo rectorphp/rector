@@ -83,7 +83,7 @@
         ],
         "classmap": [
             "stubs/Composer",
-            "stubs/Nette"
+            "stubs/Nette/DI"
         ]
     },
     "autoload-dev": {
