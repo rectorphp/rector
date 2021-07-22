@@ -10,4 +10,10 @@ if (class_exists('Nette\DI\CompilerExtension')) {
 
 class CompilerExtension
 {
+    /**
+     * @return ContainerBuilder
+     */
+    public function getContainerBuilder()
+    {
+    }
 }
