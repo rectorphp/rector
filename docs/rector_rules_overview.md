@@ -1,10 +1,10 @@
-# 494 Rules Overview
+# 488 Rules Overview
 
 <br>
 
 ## Categories
 
-- [Arguments](#arguments) (5)
+- [Arguments](#arguments) (4)
 
 - [Autodiscovery](#autodiscovery) (4)
 
@@ -12,17 +12,17 @@
 
 - [CodeQuality](#codequality) (68)
 
-- [CodeQualityStrict](#codequalitystrict) (4)
+- [CodeQualityStrict](#codequalitystrict) (1)
 
-- [CodingStyle](#codingstyle) (38)
+- [CodingStyle](#codingstyle) (39)
 
 - [Composer](#composer) (6)
 
-- [DeadCode](#deadcode) (48)
+- [DeadCode](#deadcode) (49)
 
 - [Defluent](#defluent) (9)
 
-- [DependencyInjection](#dependencyinjection) (4)
+- [DependencyInjection](#dependencyinjection) (3)
 
 - [DowngradePhp53](#downgradephp53) (1)
 
@@ -36,11 +36,9 @@
 
 - [DowngradePhp74](#downgradephp74) (11)
 
-- [DowngradePhp80](#downgradephp80) (15)
+- [DowngradePhp80](#downgradephp80) (16)
 
 - [EarlyReturn](#earlyreturn) (11)
-
-- [Generics](#generics) (1)
 
 - [LeagueEvent](#leagueevent) (1)
 
@@ -84,7 +82,7 @@
 
 - [PostRector](#postrector) (7)
 
-- [Privatization](#privatization) (11)
+- [Privatization](#privatization) (10)
 
 - [Removing](#removing) (6)
 
@@ -92,13 +90,13 @@
 
 - [Renaming](#renaming) (11)
 
-- [Restoration](#restoration) (7)
+- [Restoration](#restoration) (6)
 
 - [Transform](#transform) (36)
 
 - [TypeDeclaration](#typedeclaration) (18)
 
-- [Visibility](#visibility) (3)
+- [Visibility](#visibility) (2)
 
 <br>
 
@@ -278,47 +276,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
      {
 -        return some_function($one, $two);
 +        return some_function($two, $one);
-     }
- }
-```
-
-<br>
-
-### ValueObjectWrapArgRector
-
-Wrap argument with value object, if not yet the type
-
-:wrench: **configure it!**
-
-- class: [`Rector\Arguments\Rector\MethodCall\ValueObjectWrapArgRector`](../rules/Arguments/Rector/MethodCall/ValueObjectWrapArgRector.php)
-
-```php
-use Rector\Arguments\Rector\MethodCall\ValueObjectWrapArgRector;
-use Rector\Arguments\ValueObject\ValueObjectWrapArg;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Symplify\SymfonyPhpConfig\ValueObjectInliner;
-
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(ValueObjectWrapArgRector::class)
-        ->call('configure', [[
-            ValueObjectWrapArgRector::VALUE_OBJECT_WRAP_ARGS => ValueObjectInliner::inline([
-                new ValueObjectWrapArg('SomeClass', 'someMethod', 0, 'Number'),
-            ]),
-        ]]);
-};
-```
-
-↓
-
-```diff
- class SomeClass
- {
-     public function run()
-     {
--        $this->someMethod(1000);
-+        $this->someMethod(new Number(1000));
      }
  }
 ```
@@ -1530,7 +1487,7 @@ Changes redundant null check to instant return
 - class: [`Rector\CodeQuality\Rector\If_\SimplifyIfNotNullReturnRector`](../rules/CodeQuality/Rector/If_/SimplifyIfNotNullReturnRector.php)
 
 ```diff
- $newNode = 'something ;
+ $newNode = 'something';
 -if ($newNode !== null) {
 -    return $newNode;
 -}
@@ -1622,8 +1579,8 @@ Simplify `strpos(strtolower()`, "...") calls
 - class: [`Rector\CodeQuality\Rector\FuncCall\SimplifyStrposLowerRector`](../rules/CodeQuality/Rector/FuncCall/SimplifyStrposLowerRector.php)
 
 ```diff
--strpos(strtolower($var), "...")"
-+stripos($var, "...")"
+-strpos(strtolower($var), "...")
++stripos($var, "...")
 ```
 
 <br>
@@ -1859,22 +1816,6 @@ Use ===/!== over ==/!=, it values have the same type
 
 ## CodeQualityStrict
 
-### MoveOutMethodCallInsideIfConditionRector
-
-Move out method call inside If condition
-
-- class: [`Rector\CodeQualityStrict\Rector\If_\MoveOutMethodCallInsideIfConditionRector`](../rules/CodeQualityStrict/Rector/If_/MoveOutMethodCallInsideIfConditionRector.php)
-
-```diff
--if ($obj->run($arg) === 1) {
-+$objRun = $obj->run($arg);
-+if ($objRun === 1) {
-
- }
-```
-
-<br>
-
 ### MoveVariableDeclarationNearReferenceRector
 
 Move variable declaration near its reference
@@ -1886,48 +1827,6 @@ Move variable declaration near its reference
  if ($condition === null) {
 +    $var = 1;
      return $var;
- }
-```
-
-<br>
-
-### ParamTypeToAssertTypeRector
-
-Turn `@param` type to assert type
-
-- class: [`Rector\CodeQualityStrict\Rector\ClassMethod\ParamTypeToAssertTypeRector`](../rules/CodeQualityStrict/Rector/ClassMethod/ParamTypeToAssertTypeRector.php)
-
-```diff
- class SomeClass
- {
-     /**
-      * @param \A|\B $arg
-      */
-     public function run($arg)
-     {
--
-+        \Webmozart\Assert\Assert::isAnyOf($arg, [\A::class, \B::class]);
-     }
- }
-```
-
-<br>
-
-### VarInlineAnnotationToAssertRector
-
-Turn `@var` inline checks above code to `assert()` of the type
-
-- class: [`Rector\CodeQualityStrict\Rector\Stmt\VarInlineAnnotationToAssertRector`](../rules/CodeQualityStrict/Rector/Stmt/VarInlineAnnotationToAssertRector.php)
-
-```diff
- class SomeClass
- {
-     public function run()
-     {
-         /** @var SpecificClass $value */
-+        assert($value instanceof SpecificClass);
-         $value->call();
-     }
  }
 ```
 
@@ -2288,6 +2187,41 @@ Changes negate of empty comparison of nullable value to explicit === or !== comp
 
 <br>
 
+### OrderAttributesRector
+
+Order attributes by desired names
+
+:wrench: **configure it!**
+
+- class: [`Rector\CodingStyle\Rector\ClassMethod\OrderAttributesRector`](../rules/CodingStyle/Rector/ClassMethod/OrderAttributesRector.php)
+
+```php
+use Rector\CodingStyle\Rector\ClassMethod\OrderAttributesRector;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+
+    $services->set(OrderAttributesRector::class)
+        ->call('configure', [[
+            OrderAttributesRector::ATTRIBUTES_ORDER => ['First', 'Second'],
+        ]]);
+};
+```
+
+↓
+
+```diff
++#[First]
+ #[Second]
+-#[First]
+ class Someclass
+ {
+ }
+```
+
+<br>
+
 ### PHPStormVarAnnotationRector
 
 Change various `@var` annotation formats to one PHPStorm understands
@@ -2333,19 +2267,20 @@ Changes `$this->...` and static:: to self:: or vise versa for given types
 - class: [`Rector\CodingStyle\Rector\MethodCall\PreferThisOrSelfMethodCallRector`](../rules/CodingStyle/Rector/MethodCall/PreferThisOrSelfMethodCallRector.php)
 
 ```php
-use PHPUnit\Framework\TestCase;
+use Rector\CodingStyle\Enum\PreferenceSelfThis;
 use Rector\CodingStyle\Rector\MethodCall\PreferThisOrSelfMethodCallRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->set(PreferThisOrSelfMethodCallRector::class)
         ->call('configure', [[
-            PreferThisOrSelfMethodCallRector::TYPE_TO_PREFERENCE => [
-                TestCase::class => 'prefer_self',
-
-            ], ]]);
+            PreferThisOrSelfMethodCallRector::TYPE_TO_PREFERENCE => ValueObjectInliner::inline([
+                PreferenceSelfThis::PREFER_SELF(),
+            ]),
+        ]]);
 };
 ```
 
@@ -2729,8 +2664,8 @@ Wrap encapsed variables in curly braces
 ```diff
  function run($world)
  {
--    echo "Hello $world!"
-+    echo "Hello {$world}!"
+-    echo "Hello $world!";
++    echo "Hello {$world}!";
  }
 ```
 
@@ -3513,6 +3448,27 @@ Remove empty method call
 
 <br>
 
+### RemoveLastReturnRector
+
+Remove very last `return` that has no meaning
+
+- class: [`Rector\DeadCode\Rector\ClassMethod\RemoveLastReturnRector`](../rules/DeadCode/Rector/ClassMethod/RemoveLastReturnRector.php)
+
+```diff
+ function some_function($value)
+ {
+     if ($value === 1000) {
+         return;
+     }
+
+     if ($value) {
+-        return;
+     }
+ }
+```
+
+<br>
+
 ### RemoveNonExistingVarAnnotationRector
 
 Removes non-existing `@var` annotations above the code
@@ -4279,65 +4235,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 <br>
 
-### MultiParentingToAbstractDependencyRector
-
-Move dependency passed to all children to parent as `@inject/@required` dependency
-
-:wrench: **configure it!**
-
-- class: [`Rector\DependencyInjection\Rector\Class_\MultiParentingToAbstractDependencyRector`](../rules/DependencyInjection/Rector/Class_/MultiParentingToAbstractDependencyRector.php)
-
-```php
-use Rector\DependencyInjection\Rector\Class_\MultiParentingToAbstractDependencyRector;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(MultiParentingToAbstractDependencyRector::class)
-        ->call('configure', [[
-            MultiParentingToAbstractDependencyRector::FRAMEWORK => 'nette',
-        ]]);
-};
-```
-
-↓
-
-```diff
- abstract class AbstractParentClass
- {
--    private $someDependency;
--
--    public function __construct(SomeDependency $someDependency)
--    {
--        $this->someDependency = $someDependency;
--    }
-+    /**
-+     * @inject
-+     * @var SomeDependency
-+     */
-+    public $someDependency;
- }
-
- class FirstChild extends AbstractParentClass
- {
--    public function __construct(SomeDependency $someDependency)
--    {
--        parent::__construct($someDependency);
--    }
- }
-
- class SecondChild extends AbstractParentClass
- {
--    public function __construct(SomeDependency $someDependency)
--    {
--        parent::__construct($someDependency);
--    }
- }
-```
-
-<br>
-
 ### ReplaceVariableByPropertyFetchRector
 
 Turns variable in controller action to property fetch, as follow up to action injection variable to property change.
@@ -4766,7 +4663,26 @@ Remove the "object" param and return type, add a `@param` and `@return` tags ins
 
 Change param type to match the lowest type in whole family tree
 
-- class: [`Rector\DowngradePhp72\Rector\ClassMethod\DowngradeParameterTypeWideningRector`](../rules/DowngradePhp72/Rector/Class_/DowngradeParameterTypeWideningRector.php)
+:wrench: **configure it!**
+
+- class: [`Rector\DowngradePhp72\Rector\ClassMethod\DowngradeParameterTypeWideningRector`](../rules/DowngradePhp72/Rector/ClassMethod/DowngradeParameterTypeWideningRector.php)
+
+```php
+use Rector\DowngradePhp72\Rector\ClassMethod\DowngradeParameterTypeWideningRector;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+
+    $services->set(DowngradeParameterTypeWideningRector::class)
+        ->call('configure', [[
+            DowngradeParameterTypeWideningRector::SAFE_TYPES => [],
+            DowngradeParameterTypeWideningRector::SAFE_TYPES_TO_METHODS => [],
+        ]]);
+};
+```
+
+↓
 
 ```diff
  interface SomeInterface
@@ -5355,14 +5271,14 @@ Remove named argument
 ```diff
  class SomeClass
  {
-     private function execute(?array $a = null, ?array $b = null)
+     public function run()
      {
+-        $this->execute(b: 100);
++        $this->execute(null,  100);
      }
 
-     public function run(string $name = null, array $attributes = [])
+     private function execute($a = null, $b = null)
      {
--        $this->execute(a: [[$name ?? 0 => $attributes]]);
-+        $this->execute([[$name ?? 0 => $attributes]]);
      }
  }
 ```
@@ -5403,6 +5319,27 @@ Change nullsafe operator to ternary operator rector
 -$dateAsString = $booking->startDate?->dateTimeString;
 +$dateAsString = ($bookingGetStartDate = $booking->getStartDate()) ? $bookingGetStartDate->asDateTimeString() : null;
 +$dateAsString = ($bookingGetStartDate = $booking->startDate) ? $bookingGetStartDate->dateTimeString : null;
+```
+
+<br>
+
+### DowngradePhpTokenRector
+
+`"something()"` will be renamed to `"somethingElse()"`
+
+- class: [`Rector\DowngradePhp80\Rector\StaticCall\DowngradePhpTokenRector`](../rules/DowngradePhp80/Rector/StaticCall/DowngradePhpTokenRector.php)
+
+```diff
+-$tokens = \PhpToken::tokenize($code);
++$tokens = token_get_all($code);
+
+-foreach ($tokens as $phpToken) {
+-   $name = $phpToken->getTokenName();
+-   $text = $phpToken->text;
++foreach ($tokens as $token) {
++    $name = is_array($token) ? token_name($token[0]) : null;
++    $text = is_array($token) ? $token[1] : $token;
+ }
 ```
 
 <br>
@@ -5865,40 +5802,6 @@ Changes Single return of || to early returns
 +        }
 +        return (bool) $this->somethingElse();
      }
- }
-```
-
-<br>
-
-## Generics
-
-### GenericsPHPStormMethodAnnotationRector
-
-Complete PHPStorm `@method` annotations, to make it understand the PHPStan/Psalm generics
-
-- class: [`Rector\Generics\Rector\Class_\GenericsPHPStormMethodAnnotationRector`](../rules/Generics/Rector/Class_/GenericsPHPStormMethodAnnotationRector.php)
-
-```diff
- /**
-  * @template TEntity as object
-  */
- abstract class AbstractRepository
- {
-     /**
-      * @return TEntity
-      */
-     public function find($id)
-     {
-     }
- }
-
- /**
-  * @template TEntity as SomeObject
-  * @extends AbstractRepository<TEntity>
-+ * @method SomeObject find($id)
-  */
- final class AndroidDeviceRepository extends AbstractRepository
- {
  }
 ```
 
@@ -7992,8 +7895,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 -    /**
 -     * @var int
 -     */
--    private count;
-+    private int count;
+-    private $count;
++    private int $count;
  }
 ```
 
@@ -8302,6 +8205,25 @@ Change helper functions to `str_ends_with()`
      {
 -        $isMatch = substr($haystack, -strlen($needle)) === $needle;
 +        $isMatch = str_ends_with($haystack, $needle);
+
+-        $isNotMatch = substr($haystack, -strlen($needle)) !== $needle;
++        $isNotMatch = !str_ends_with($haystack, $needle);
+     }
+ }
+```
+
+<br>
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        $isMatch = substr($haystack, -9) === 'hardcoded;
++        $isMatch = str_ends_with($haystack, 'hardcoded');
+
+-        $isNotMatch = substr($haystack, -9) !== 'hardcoded';
++        $isNotMatch = !str_ends_with($haystack, 'hardcoded');
      }
  }
 ```
@@ -8352,7 +8274,7 @@ Add `Stringable` interface to classes with `__toString()` method
 
 ### TokenGetAllToObjectRector
 
-Convert `token_get_all` to `PhpToken::getAll`
+Convert `token_get_all` to `PhpToken::tokenize`
 
 - class: [`Rector\Php80\Rector\FuncCall\TokenGetAllToObjectRector`](../rules/Php80/Rector/FuncCall/TokenGetAllToObjectRector.php)
 
@@ -8370,7 +8292,7 @@ Convert `token_get_all` to `PhpToken::getAll`
 -               $name = null;
 -               $text = $token;
 -            }
-+        $tokens = \PhpToken::getAll($code);
++        $tokens = \PhpToken::tokenize($code);
 +        foreach ($tokens as $phpToken) {
 +           $name = $phpToken->getTokenName();
 +           $text = $phpToken->text;
@@ -8993,27 +8915,6 @@ Privatize getter of local property to property
 
 <br>
 
-### PrivatizeLocalPropertyToPrivatePropertyRector
-
-Privatize local-only property to private property
-
-- class: [`Rector\Privatization\Rector\Property\PrivatizeLocalPropertyToPrivatePropertyRector`](../rules/Privatization/Rector/Property/PrivatizeLocalPropertyToPrivatePropertyRector.php)
-
-```diff
- class SomeClass
- {
--    public $value;
-+    private $value;
-
-     public function run()
-     {
-         return $this->value;
-     }
- }
-```
-
-<br>
-
 ### RepeatedLiteralToClassConstantRector
 
 Replace repeated strings with constant
@@ -9255,13 +9156,13 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 <br>
 
-### RemoveTraitRector
+### RemoveTraitUseRector
 
 Remove specific traits from code
 
 :wrench: **configure it!**
 
-- class: [`Rector\Removing\Rector\Class_\RemoveTraitRector`](../rules/Removing/Rector/Class_/RemoveTraitRector.php)
+- class: [`Rector\Removing\Rector\Class_\RemoveTraitUseRector`](../rules/Removing/Rector/Class_/RemoveTraitUseRector.php)
 
 ```php
 use Rector\Removing\Rector\Class_\RemoveTraitUseRector;
@@ -9441,12 +9342,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 ↓
 
 ```diff
--<?php
--
  class SomeClass
  {
 +    public function __construct(AnotherClassFactory $anotherClassFactory)
-+    {c function __construct(AnotherClassFactory $anotherClassFactory)
 +    {
 +        $this->anotherClassFactory = $anotherClassFactory;
 +    }
@@ -9494,19 +9392,17 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 ↓
 
 ```diff
--<?php
+-use PHPUnit\Framework\TestCase;
 +use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
--use PHPUnit\Framework\TestCase;
+-final class SomeTestCase extends TestCase
 +final class SomeTestCase extends KernelTestCase
-+{
+ {
 +    /**
 +     * @var EntityFactory
 +     */
 +    private $entityFactory;
-
--final class SomeTestCase extends TestCase
--{
++
 +    protected function setUp(): void
 +    {
 +        parent::setUp();
@@ -9548,8 +9444,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 ↓
 
 ```diff
--<?php
--
  class SomeClass
  {
 +    public function __construct(AnotherClassFactory $anotherClassFactory)
@@ -9624,8 +9518,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 ↓
 
 ```diff
- <?php
-
  final class CheckoutEntityFactory
  {
 +    /**
@@ -10132,52 +10024,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
       * @ORM\Id
       */
      public $id;
- }
-```
-
-<br>
-
-### CompleteMissingDependencyInNewRector
-
-Complete missing constructor dependency instance by type
-
-:wrench: **configure it!**
-
-- class: [`Rector\Restoration\Rector\New_\CompleteMissingDependencyInNewRector`](../rules/Restoration/Rector/New_/CompleteMissingDependencyInNewRector.php)
-
-```php
-use Rector\Restoration\Rector\New_\CompleteMissingDependencyInNewRector;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(CompleteMissingDependencyInNewRector::class)
-        ->call('configure', [[
-            CompleteMissingDependencyInNewRector::CLASS_TO_INSTANTIATE_BY_TYPE => [
-                'RandomDependency' => 'RandomDependency',
-
-            ], ]]);
-};
-```
-
-↓
-
-```diff
- final class SomeClass
- {
-     public function run()
-     {
--        $valueObject = new RandomValueObject();
-+        $valueObject = new RandomValueObject(new RandomDependency());
-     }
- }
-
- class RandomValueObject
- {
-     public function __construct(RandomDependency $randomDependency)
-     {
-     }
  }
 ```
 
@@ -12038,8 +11884,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 ```diff
  class SomeClass
  {
--    public getData()
-+    public getData(): array
+-    public function getData()
++    public function getData(): array
      {
      }
  }
@@ -12197,15 +12043,17 @@ Add `@var` to properties that are missing it
 
 ### ReturnNeverTypeRector
 
-Add "never" type for methods that never return anything
+Add "never" return-type for methods that never return anything
 
 - class: [`Rector\TypeDeclaration\Rector\ClassMethod\ReturnNeverTypeRector`](../rules/TypeDeclaration/Rector/ClassMethod/ReturnNeverTypeRector.php)
 
 ```diff
  final class SomeClass
  {
--    public function run()
-+    public function run(): never
++    /**
++     * @return never
++     */
+     public function run()
      {
          throw new InvalidException();
      }
@@ -12396,59 +12244,17 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 ```diff
  class FrameworkClass
  {
-     protected someMethod()
+     protected function someMethod()
      {
      }
  }
 
  class MyClass extends FrameworkClass
  {
--    public someMethod()
-+    protected someMethod()
+-    public function someMethod()
++    protected function someMethod()
      {
      }
- }
-```
-
-<br>
-
-### ChangePropertyVisibilityRector
-
-Change visibility of property from parent class.
-
-:wrench: **configure it!**
-
-- class: [`Rector\Visibility\Rector\Property\ChangePropertyVisibilityRector`](../rules/Visibility/Rector/Property/ChangePropertyVisibilityRector.php)
-
-```php
-use Rector\Visibility\Rector\Property\ChangePropertyVisibilityRector;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(ChangePropertyVisibilityRector::class)
-        ->call('configure', [[
-            ChangePropertyVisibilityRector::PROPERTY_TO_VISIBILITY_BY_CLASS => [
-                'FrameworkClass' => [
-                    'someProperty' => 2,
-
-                ], ], ]]);
-};
-```
-
-↓
-
-```diff
- class FrameworkClass
- {
-     protected $someProperty;
- }
-
- class MyClass extends FrameworkClass
- {
--    public $someProperty;
-+    protected $someProperty;
  }
 ```
 
