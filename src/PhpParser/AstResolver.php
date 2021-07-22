@@ -7,6 +7,7 @@ namespace Rector\Core\PhpParser;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -252,5 +253,45 @@ final class AstResolver
 
         $this->classLikesByName[$classReflection->getName()] = null;
         return null;
+    }
+
+    /**
+     * @return Trait_[]
+     */
+    public function parseClassReflectionTraits(ClassReflection $classReflection): array
+    {
+        $classLikes = $classReflection->getTraits(true);
+        $traits = [];
+        foreach ($classLikes as $classLike) {
+            $fileName = $classLike->getFileName();
+            if (! $fileName) {
+                continue;
+            }
+
+            $fileContent = $this->smartFileSystem->readFile($fileName);
+            /** @var Stmt[] $parsedNodes */
+            $parsedNodes = $this->parser->parse($fileContent);
+
+            $smartFileInfo = new SmartFileInfo($fileName);
+            $file = new File($smartFileInfo, $smartFileInfo->getContents());
+
+            /** @var Stmt[] $allNodes */
+            $allNodes = $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile($file, $parsedNodes);
+            $traitName = $classLike->getName();
+
+            /** @var Trait_|null $trait */
+            $trait = $this->betterNodeFinder->findFirst(
+                $allNodes,
+                fn (Node $node): bool => $node instanceof Trait_ && $this->nodeNameResolver->isName($node, $traitName)
+            );
+
+            if (! $trait instanceof Trait_) {
+                continue;
+            }
+
+            $traits[] = $trait;
+        }
+
+        return $traits;
     }
 }
