@@ -26,11 +26,12 @@ final class ProcessResultFactory
         $errors = [];
 
         foreach ($files as $file) {
+            $errors = array_merge($errors, $file->getErrors());
+
             if ($file->getFileDiff() === null) {
                 continue;
             }
 
-            $errors = array_merge($errors, $file->getErrors());
             $fileDiffs[] = $file->getFileDiff();
         }
 

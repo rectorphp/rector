@@ -45,6 +45,7 @@ final class DependencyResolver
                 continue;
             }
 
+            // only work with files that we've analysed
             if (! in_array($dependencyFile, $analysedFileAbsolutesPaths, true)) {
                 continue;
             }
