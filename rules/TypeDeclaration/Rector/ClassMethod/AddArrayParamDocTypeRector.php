@@ -8,8 +8,10 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;
+use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
+use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\NodeAnalyzer\ParamAnalyzer;
 use Rector\Core\Rector\AbstractRector;
@@ -105,6 +107,9 @@ CODE_SAMPLE
             if ($paramType instanceof \PHPStan\Type\MixedType) {
                 continue;
             }
+            if ($this->paramAnalyzer->isNullable($param) && !$paramType instanceof \PHPStan\Type\UnionType) {
+                $paramType = new \PHPStan\Type\UnionType([$paramType, new \PHPStan\Type\NullType()]);
+            }
             $paramName = $this->getName($param);
             $this->phpDocTypeChanger->changeParamType($phpDocInfo, $paramType, $param, $paramName);
         }
@@ -119,9 +124,6 @@ CODE_SAMPLE
     {
         // type missing at all
         if ($param->type === null) {
-            return \true;
-        }
-        if ($this->paramAnalyzer->isNullable($param)) {
             return \true;
         }
         // not an array type
