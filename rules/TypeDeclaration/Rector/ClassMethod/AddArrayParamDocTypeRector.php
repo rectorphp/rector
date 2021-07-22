@@ -9,8 +9,10 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;
+use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
+use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\NodeAnalyzer\ParamAnalyzer;
 use Rector\Core\Rector\AbstractRector;
@@ -105,6 +107,10 @@ CODE_SAMPLE
                 continue;
             }
 
+            if ($this->paramAnalyzer->isNullable($param) && ! $paramType instanceof UnionType) {
+                $paramType = new UnionType([$paramType, new NullType()]);
+            }
+
             $paramName = $this->getName($param);
 
             $this->phpDocTypeChanger->changeParamType($phpDocInfo, $paramType, $param, $paramName);
@@ -123,10 +129,6 @@ CODE_SAMPLE
     {
         // type missing at all
         if ($param->type === null) {
-            return true;
-        }
-
-        if ($this->paramAnalyzer->isNullable($param)) {
             return true;
         }
 
