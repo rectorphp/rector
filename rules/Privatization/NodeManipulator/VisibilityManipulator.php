@@ -4,22 +4,20 @@ declare(strict_types=1);
 
 namespace Rector\Privatization\NodeManipulator;
 
-use PhpParser\Node;
-use PhpParser\Node\Stmt;
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
-use Rector\Core\Exception\InvalidNodeTypeException;
 use Rector\Core\ValueObject\Visibility;
 use Webmozart\Assert\Assert;
 
 final class VisibilityManipulator
 {
-    /**
-     * @var array<class-string<Stmt>>
-     */
-    private const ALLOWED_NODE_TYPES = [ClassMethod::class, Property::class, ClassConst::class, Class_::class];
+    public function hasVisibility(ClassMethod | Property | ClassConst | Param $node, int $visibility): bool
+    {
+        return (bool) ($node->flags & $visibility);
+    }
 
     public function makeStatic(ClassMethod | Property | ClassConst $node): void
     {
@@ -59,8 +57,6 @@ final class VisibilityManipulator
      */
     public function removeVisibility(ClassMethod | Property | ClassConst $node): void
     {
-        $this->ensureIsClassMethodOrProperty($node, __METHOD__);
-
         // no modifier
         if ($node->flags === 0) {
             return;
@@ -113,26 +109,16 @@ final class VisibilityManipulator
         $node->flags -= Class_::MODIFIER_FINAL;
     }
 
-    private function addVisibilityFlag(Class_ | ClassMethod | Property | ClassConst $node, int $visibility): void
+    public function makeReadonly(Property | Param $node): void
     {
-        $this->ensureIsClassMethodOrProperty($node, __METHOD__);
-        $node->flags |= $visibility;
+        $this->addVisibilityFlag($node, Class_::MODIFIER_READONLY);
     }
 
-    private function ensureIsClassMethodOrProperty(Node $node, string $location): void
-    {
-        foreach (self::ALLOWED_NODE_TYPES as $allowedNodeType) {
-            if (is_a($node, $allowedNodeType, true)) {
-                return;
-            }
-        }
-
-        throw new InvalidNodeTypeException(sprintf(
-            '"%s" only accepts "%s" types. "%s" given.',
-            $location,
-            implode('", "', self::ALLOWED_NODE_TYPES),
-            $node::class
-        ));
+    private function addVisibilityFlag(
+        Class_ | ClassMethod | Property | ClassConst | Param $node,
+        int $visibility
+    ): void {
+        $node->flags |= $visibility;
     }
 
     private function replaceVisibilityFlag(ClassMethod | Property | ClassConst $node, int $visibility): void
