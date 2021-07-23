@@ -51,7 +51,7 @@ CODE_SAMPLE
     /**
      * @param ClassConstFetch $node
      */
-    public function refactor(\PhpParser\Node $node) : \PhpParser\Node\Expr\ClassConstFetch
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node\Expr\ClassConstFetch
     {
         foreach ($this->renameClassConstFetches as $renameClassConstFetch) {
             if (!$this->isObjectType($node->class, $renameClassConstFetch->getOldObjectType())) {
@@ -66,7 +66,7 @@ CODE_SAMPLE
             $node->name = new \PhpParser\Node\Identifier($renameClassConstFetch->getNewConstant());
             return $node;
         }
-        return $node;
+        return null;
     }
     /**
      * @param array<string, RenameClassConstFetchInterface[]> $configuration

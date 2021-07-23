@@ -71,10 +71,12 @@ final class ClassManipulator
     public function hasTrait(\PhpParser\Node\Stmt\Class_ $class, string $desiredTrait) : bool
     {
         foreach ($class->getTraitUses() as $traitUse) {
-            if (!$this->nodeNameResolver->isName($traitUse->traits, $desiredTrait)) {
-                continue;
+            foreach ($traitUse->traits as $traitName) {
+                if (!$this->nodeNameResolver->isName($traitName, $desiredTrait)) {
+                    continue;
+                }
+                return \true;
             }
-            return \true;
         }
         return \false;
     }
