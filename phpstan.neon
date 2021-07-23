@@ -564,3 +564,6 @@ parameters:
 
         # phsptan waits for php-parser 4.12 release
         - '#Call to an undefined method PhpParser\\Node\:\:isFinal\(\)#'
+
+        # complex
+        - '#Cognitive complexity for "Rector\\NodeNameResolver\\NodeNameResolver\:\:getName\(\)" is 10, keep it under 9#'

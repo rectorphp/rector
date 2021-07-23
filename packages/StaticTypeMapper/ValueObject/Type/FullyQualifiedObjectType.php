@@ -36,7 +36,11 @@ final class FullyQualifiedObjectType extends ObjectType
     public function getShortNameNode(): Name
     {
         $name = new Name($this->getShortName());
+
+        // to avoid processing short name twice
         $name->setAttribute(AttributeKey::VIRTUAL_NODE, true);
+        // keep original to avoid loss on while importing
+        $name->setAttribute(AttributeKey::NAMESPACED_NAME, $this->getClassName());
 
         return $name;
     }

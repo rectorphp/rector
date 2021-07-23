@@ -78,6 +78,7 @@ final class PhpFileProcessor implements FileProcessorInterface
                 continue;
             }
 
+            // important to detect if file has changed
             $this->tryCatchWrapper($file, function (File $file) use ($configuration): void {
                 $this->printFile($file, $configuration);
             }, ApplicationPhase::PRINT());
