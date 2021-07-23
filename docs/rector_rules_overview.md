@@ -1,4 +1,4 @@
-# 488 Rules Overview
+# 491 Rules Overview
 
 <br>
 
@@ -38,6 +38,8 @@
 
 - [DowngradePhp80](#downgradephp80) (16)
 
+- [DowngradePhp81](#downgradephp81) (1)
+
 - [EarlyReturn](#earlyreturn) (11)
 
 - [LeagueEvent](#leagueevent) (1)
@@ -76,7 +78,7 @@
 
 - [Php80](#php80) (17)
 
-- [Php81](#php81) (2)
+- [Php81](#php81) (4)
 
 - [PhpSpecToPHPUnit](#phpspectophpunit) (7)
 
@@ -5504,6 +5506,24 @@ Removes union type property type definition, adding `@var` annotations instead.
 
 <br>
 
+## DowngradePhp81
+
+### DowngradeFinalizePublicClassConstantRector
+
+Remove final from class constants
+
+- class: [`Rector\DowngradePhp81\Rector\ClassConst\DowngradeFinalizePublicClassConstantRector`](../rules/DowngradePhp81/Rector/ClassConst/DowngradeFinalizePublicClassConstantRector.php)
+
+```diff
+ class SomeClass
+ {
+-    final public const NAME = 'value';
++    public const NAME = 'value';
+ }
+```
+
+<br>
+
 ## EarlyReturn
 
 ### ChangeAndIfToEarlyReturnRector
@@ -8327,6 +8347,22 @@ Change docs types to union types, where possible (properties are covered by Type
 
 ## Php81
 
+### FinalizePublicClassConstantRector
+
+Add final to constants that
+
+- class: [`Rector\Php81\Rector\ClassConst\FinalizePublicClassConstantRector`](../rules/Php81/Rector/ClassConst/FinalizePublicClassConstantRector.php)
+
+```diff
+ class SomeClass
+ {
+-    public const NAME = 'value';
++    public final const NAME = 'value';
+ }
+```
+
+<br>
+
 ### MyCLabsClassToEnumRector
 
 Refactor MyCLabs enum class to native Enum
@@ -8357,6 +8393,30 @@ Refactor MyCLabs enum fetch to Enum const
 ```diff
 -$name = SomeEnum::VALUE()->getKey();
 +$name = SomeEnum::VALUE;
+```
+
+<br>
+
+### ReadOnlyPropertyRector
+
+Decorate read-only property with `readonly` attribute
+
+- class: [`Rector\Php81\Rector\Property\ReadOnlyPropertyRector`](../rules/Php81/Rector/Property/ReadOnlyPropertyRector.php)
+
+```diff
+ class SomeClass
+ {
+     public function __construct(
+-        private string $name
++        private readonly string $name
+     ) {
+     }
+
+     public function getName()
+     {
+         return $this->name;
+     }
+ }
 ```
 
 <br>

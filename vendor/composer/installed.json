@@ -851,7 +851,7 @@
             "conflict": {
                 "phpstan\/phpstan-shim": "*"
             },
-            "time": "2021-07-22T16:20:09+00:00",
+            "time": "2021-07-23T16:16:21+00:00",
             "default-branch": true,
             "bin": [
                 "phpstan",
@@ -1878,12 +1878,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/dependency-injection.git",
-                "reference": "6b12d5bcd1e2f1cc9507cea6181787d642ec46b5"
+                "reference": "5a825e4b386066167a8b55487091cb62beec74c2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/dependency-injection\/zipball\/6b12d5bcd1e2f1cc9507cea6181787d642ec46b5",
-                "reference": "6b12d5bcd1e2f1cc9507cea6181787d642ec46b5",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/dependency-injection\/zipball\/5a825e4b386066167a8b55487091cb62beec74c2",
+                "reference": "5a825e4b386066167a8b55487091cb62beec74c2",
                 "shasum": ""
             },
             "require": {
@@ -1916,7 +1916,7 @@
                 "symfony\/proxy-manager-bridge": "Generate service proxies to lazy load them",
                 "symfony\/yaml": ""
             },
-            "time": "2021-07-21T12:40:44+00:00",
+            "time": "2021-07-23T15:55:36+00:00",
             "default-branch": true,
             "type": "library",
             "installation-source": "dist",
