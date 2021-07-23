@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210722\Symfony\Component\HttpFoundation;
+namespace RectorPrefix20210723\Symfony\Component\HttpFoundation;
 
 /**
  * Http utility functions.

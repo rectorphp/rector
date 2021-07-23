@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210722\TYPO3\CMS\ContextHelp\Controller;
+namespace RectorPrefix20210723\TYPO3\CMS\ContextHelp\Controller;
 
 if (\class_exists('TYPO3\\CMS\\ContextHelp\\Controller\\ContextHelpAjaxController')) {
     return;

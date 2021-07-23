@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210722;
+namespace RectorPrefix20210723;
 
 if (\class_exists('t3lib_l10n_Store')) {
     return;

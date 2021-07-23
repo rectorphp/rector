@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210722\TYPO3\CMS\Saltedpasswords\Salt;
+namespace RectorPrefix20210723\TYPO3\CMS\Saltedpasswords\Salt;
 
 if (\class_exists('TYPO3\\CMS\\Saltedpasswords\\Salt\\AbstractComposedSalt')) {
     return;

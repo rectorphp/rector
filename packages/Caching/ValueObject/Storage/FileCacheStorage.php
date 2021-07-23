@@ -3,12 +3,12 @@
 declare (strict_types=1);
 namespace Rector\Caching\ValueObject\Storage;
 
-use RectorPrefix20210722\Nette\Utils\Random;
-use RectorPrefix20210722\Nette\Utils\Strings;
+use RectorPrefix20210723\Nette\Utils\Random;
+use RectorPrefix20210723\Nette\Utils\Strings;
 use Rector\Caching\ValueObject\CacheFilePaths;
 use Rector\Caching\ValueObject\CacheItem;
-use RectorPrefix20210722\Symplify\EasyCodingStandard\Caching\Exception\CachingException;
-use RectorPrefix20210722\Symplify\SmartFileSystem\SmartFileSystem;
+use RectorPrefix20210723\Symplify\EasyCodingStandard\Caching\Exception\CachingException;
+use RectorPrefix20210723\Symplify\SmartFileSystem\SmartFileSystem;
 /**
  * Inspired by
  * https://github.com/phpstan/phpstan-src/commit/4df7342f3a0aaef4bcd85456dd20ca88d38dd90d#diff-6dc14f6222bf150e6840ca44a7126653052a1cedc6a149b4e5c1e1a2c80eacdc
@@ -23,7 +23,7 @@ final class FileCacheStorage
      * @var \Symplify\SmartFileSystem\SmartFileSystem
      */
     private $smartFileSystem;
-    public function __construct(string $directory, \RectorPrefix20210722\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem)
+    public function __construct(string $directory, \RectorPrefix20210723\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem)
     {
         $this->directory = $directory;
         $this->smartFileSystem = $smartFileSystem;
@@ -55,13 +55,13 @@ final class FileCacheStorage
         $cacheFilePaths = $this->getCacheFilePaths($key);
         $this->smartFileSystem->mkdir($cacheFilePaths->getFirstDirectory());
         $this->smartFileSystem->mkdir($cacheFilePaths->getSecondDirectory());
-        $tmpPath = \sprintf('%s/%s.tmp', $this->directory, \RectorPrefix20210722\Nette\Utils\Random::generate());
+        $tmpPath = \sprintf('%s/%s.tmp', $this->directory, \RectorPrefix20210723\Nette\Utils\Random::generate());
         $errorBefore = \error_get_last();
         $exported = @\var_export(new \Rector\Caching\ValueObject\CacheItem($variableKey, $data), \true);
         $errorAfter = \error_get_last();
         if ($errorAfter !== null && $errorBefore !== $errorAfter) {
             $errorMessage = \sprintf('Error occurred while saving item "%s" ("%s") to cache: "%s"', $key, $variableKey, $errorAfter['message']);
-            throw new \RectorPrefix20210722\Symplify\EasyCodingStandard\Caching\Exception\CachingException($errorMessage);
+            throw new \RectorPrefix20210723\Symplify\EasyCodingStandard\Caching\Exception\CachingException($errorMessage);
         }
         $variableFileContent = \sprintf("<?php declare(strict_types = 1);\n\nreturn %s;", $exported);
         $this->smartFileSystem->dumpFile($tmpPath, $variableFileContent);
@@ -80,8 +80,8 @@ final class FileCacheStorage
     private function getCacheFilePaths(string $key) : \Rector\Caching\ValueObject\CacheFilePaths
     {
         $keyHash = \sha1($key);
-        $firstDirectory = \sprintf('%s/%s', $this->directory, \RectorPrefix20210722\Nette\Utils\Strings::substring($keyHash, 0, 2));
-        $secondDirectory = \sprintf('%s/%s', $firstDirectory, \RectorPrefix20210722\Nette\Utils\Strings::substring($keyHash, 2, 2));
+        $firstDirectory = \sprintf('%s/%s', $this->directory, \RectorPrefix20210723\Nette\Utils\Strings::substring($keyHash, 0, 2));
+        $secondDirectory = \sprintf('%s/%s', $firstDirectory, \RectorPrefix20210723\Nette\Utils\Strings::substring($keyHash, 2, 2));
         $filePath = \sprintf('%s/%s.php', $secondDirectory, $keyHash);
         return new \Rector\Caching\ValueObject\CacheFilePaths($firstDirectory, $secondDirectory, $filePath);
     }

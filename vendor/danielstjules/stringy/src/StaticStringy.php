@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210722\Stringy;
+namespace RectorPrefix20210723\Stringy;
 
 use BadMethodCallException;
 use ReflectionClass;
@@ -118,7 +118,7 @@ class StaticStringy
     public static function __callStatic($name, $arguments)
     {
         if (!static::$methodArgs) {
-            $stringyClass = new \ReflectionClass('RectorPrefix20210722\\Stringy\\Stringy');
+            $stringyClass = new \ReflectionClass('RectorPrefix20210723\\Stringy\\Stringy');
             $methods = $stringyClass->getMethods(\ReflectionMethod::IS_PUBLIC);
             foreach ($methods as $method) {
                 $params = $method->getNumberOfParameters() + 2;
@@ -137,10 +137,10 @@ class StaticStringy
             $args = \array_slice($arguments, 1);
             $encoding = null;
         }
-        $stringy = \RectorPrefix20210722\Stringy\Stringy::create($str, $encoding);
+        $stringy = \RectorPrefix20210723\Stringy\Stringy::create($str, $encoding);
         $result = \call_user_func_array([$stringy, $name], $args);
         $cast = function ($val) {
-            if (\is_object($val) && $val instanceof \RectorPrefix20210722\Stringy\Stringy) {
+            if (\is_object($val) && $val instanceof \RectorPrefix20210723\Stringy\Stringy) {
                 return (string) $val;
             } else {
                 return $val;

@@ -1,5 +1,5 @@
 <?php
 
-namespace RectorPrefix20210722;
+namespace RectorPrefix20210723;
 
 return ['TYPO3\\CMS\\Frontend\\Controller\\PageInformationController' => 'TYPO3\\CMS\\Info\\Controller\\PageInformationController', 'TYPO3\\CMS\\Frontend\\Controller\\TranslationStatusController' => 'TYPO3\\CMS\\Info\\Controller\\TranslationStatusController', 'TYPO3\\CMS\\InfoPagetsconfig\\Controller\\InfoPageTyposcriptConfigController' => 'TYPO3\\CMS\\Info\\Controller\\InfoPageTyposcriptConfigController'];

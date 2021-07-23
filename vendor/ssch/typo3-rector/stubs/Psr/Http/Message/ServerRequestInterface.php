@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210722\Psr\Http\Message;
+namespace RectorPrefix20210723\Psr\Http\Message;
 
 if (\interface_exists('Psr\\Http\\Message\\ServerRequestInterface')) {
     return;
