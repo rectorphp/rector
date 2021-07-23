@@ -103,6 +103,7 @@ final class PhpFileProcessor implements \Rector\Core\Contract\Processor\FileProc
                 $this->notifyPhase($file, \Rector\Core\Enum\ApplicationPhase::PRINT_SKIP());
                 continue;
             }
+            // important to detect if file has changed
             $this->tryCatchWrapper($file, function (\Rector\Core\ValueObject\Application\File $file) use($configuration) : void {
                 $this->printFile($file, $configuration);
             }, \Rector\Core\Enum\ApplicationPhase::PRINT());

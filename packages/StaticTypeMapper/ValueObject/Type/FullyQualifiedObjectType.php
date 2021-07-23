@@ -32,7 +32,10 @@ final class FullyQualifiedObjectType extends \PHPStan\Type\ObjectType
     public function getShortNameNode() : \PhpParser\Node\Name
     {
         $name = new \PhpParser\Node\Name($this->getShortName());
+        // to avoid processing short name twice
         $name->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::VIRTUAL_NODE, \true);
+        // keep original to avoid loss on while importing
+        $name->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::NAMESPACED_NAME, $this->getClassName());
         return $name;
     }
     public function getUseNode() : \PhpParser\Node\Stmt\Use_

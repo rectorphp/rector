@@ -17,6 +17,7 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\NodeNameResolver\Contract\NodeNameResolverInterface;
 use Rector\NodeNameResolver\Error\InvalidNameNodeReporter;
 use Rector\NodeNameResolver\Regex\RegexPatternDetector;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 final class NodeNameResolver
 {
     /**
@@ -83,6 +84,11 @@ final class NodeNameResolver
     {
         if (\is_string($node)) {
             return $node;
+        }
+        // useful for looped imported names
+        $namespacedName = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::NAMESPACED_NAME);
+        if (\is_string($namespacedName)) {
+            return $namespacedName;
         }
         if ($node instanceof \PhpParser\Node\Expr\MethodCall || $node instanceof \PhpParser\Node\Expr\StaticCall) {
             if ($this->isCallOrIdentifier($node->name)) {
