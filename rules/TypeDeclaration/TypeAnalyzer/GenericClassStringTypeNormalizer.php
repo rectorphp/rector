@@ -8,12 +8,13 @@ use PHPStan\Type\ArrayType;
 use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\Generic\GenericClassStringType;
 use PHPStan\Type\ObjectType;
+use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeTraverser;
 use PHPStan\Type\UnionType;
 use Rector\Core\Configuration\Option;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
-use RectorPrefix20210723\Symplify\PackageBuilder\Parameter\ParameterProvider;
+use RectorPrefix20210724\Symplify\PackageBuilder\Parameter\ParameterProvider;
 final class GenericClassStringTypeNormalizer
 {
     /**
@@ -24,7 +25,7 @@ final class GenericClassStringTypeNormalizer
      * @var \Symplify\PackageBuilder\Parameter\ParameterProvider
      */
     private $parameterProvider;
-    public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider, \RectorPrefix20210723\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider)
+    public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider, \RectorPrefix20210724\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider)
     {
         $this->reflectionProvider = $reflectionProvider;
         $this->parameterProvider = $parameterProvider;
@@ -44,15 +45,30 @@ final class GenericClassStringTypeNormalizer
                 }
                 return $callbackType;
             }
+            $value = $type->getValue();
             // skip string that look like classe
-            if ($type->getValue() === 'error') {
+            if ($value === 'error') {
                 return $callback($type);
             }
-            if (!$this->reflectionProvider->hasClass($type->getValue())) {
+            if (!$this->reflectionProvider->hasClass($value)) {
                 return $callback($type);
             }
-            return new \PHPStan\Type\Generic\GenericClassStringType(new \PHPStan\Type\ObjectType($type->getValue()));
+            return $this->resolveStringType($value);
         });
+    }
+    /**
+     * @return \PHPStan\Type\Generic\GenericClassStringType|\PHPStan\Type\StringType
+     */
+    private function resolveStringType(string $value)
+    {
+        $classReflection = $this->reflectionProvider->getClass($value);
+        if ($classReflection->isBuiltIn()) {
+            return new \PHPStan\Type\Generic\GenericClassStringType(new \PHPStan\Type\ObjectType($value));
+        }
+        if (\strpos($value, '\\') !== \false) {
+            return new \PHPStan\Type\Generic\GenericClassStringType(new \PHPStan\Type\ObjectType($value));
+        }
+        return new \PHPStan\Type\StringType();
     }
     private function verifyAutoImportedFullyQualifiedType(\PHPStan\Type\Type $type, bool $isAutoImport) : ?\PHPStan\Type\Type
     {

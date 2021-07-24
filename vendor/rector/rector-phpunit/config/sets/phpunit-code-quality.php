@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210723;
+namespace RectorPrefix20210724;
 
 use Rector\CodingStyle\Rector\ClassMethod\ReturnArrayClassMethodToYieldRector;
 use Rector\PHPUnit\Rector\Class_\AddSeeTestAnnotationRector;
