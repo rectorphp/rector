@@ -8,7 +8,6 @@ use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
-use Rector\ChangesReporting\Collector\RectorChangeCollector;
 use Rector\Naming\Naming\PropertyNaming;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -30,25 +29,20 @@ final class PropertyAdder
      */
     private $propertyToAddCollector;
     /**
-     * @var \Rector\ChangesReporting\Collector\RectorChangeCollector
-     */
-    private $rectorChangeCollector;
-    /**
      * @var \Rector\Naming\Naming\PropertyNaming
      */
     private $propertyNaming;
-    public function __construct(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\PostRector\Collector\PropertyToAddCollector $propertyToAddCollector, \Rector\ChangesReporting\Collector\RectorChangeCollector $rectorChangeCollector, \Rector\Naming\Naming\PropertyNaming $propertyNaming)
+    public function __construct(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\PostRector\Collector\PropertyToAddCollector $propertyToAddCollector, \Rector\Naming\Naming\PropertyNaming $propertyNaming)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->propertyToAddCollector = $propertyToAddCollector;
-        $this->rectorChangeCollector = $rectorChangeCollector;
         $this->propertyNaming = $propertyNaming;
     }
     public function addPropertyToCollector(\PhpParser\Node\Stmt\Property $property) : void
     {
-        $classNode = $property->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
-        if (!$classNode instanceof \PhpParser\Node\Stmt\Class_) {
+        $class = $property->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
+        if (!$class instanceof \PhpParser\Node\Stmt\Class_) {
             return;
         }
         $propertyType = $this->nodeTypeResolver->resolve($property);
@@ -57,7 +51,8 @@ final class PropertyAdder
             $propertyType = $propertyType->getTypes()[0];
         }
         $propertyName = $this->nodeNameResolver->getName($property);
-        $this->addConstructorDependencyToClass($classNode, $propertyType, $propertyName, $property->flags);
+        $propertyMetadata = new \Rector\PostRector\ValueObject\PropertyMetadata($propertyName, $propertyType, $property->flags);
+        $this->propertyToAddCollector->addPropertyToClass($class, $propertyMetadata);
     }
     /**
      * @deprecated
@@ -67,11 +62,11 @@ final class PropertyAdder
     {
         $propertyMetadata = new \Rector\PostRector\ValueObject\PropertyMetadata($propertyName, $propertyType, $propertyFlags);
         $this->propertyToAddCollector->addPropertyToClass($class, $propertyMetadata);
-        $this->rectorChangeCollector->notifyNodeFileInfo($class);
     }
     public function addServiceConstructorDependencyToClass(\PhpParser\Node\Stmt\Class_ $class, \PHPStan\Type\ObjectType $objectType) : void
     {
         $propertyName = $this->propertyNaming->fqnToVariableName($objectType);
-        $this->addConstructorDependencyToClass($class, $objectType, $propertyName);
+        $propertyMetadata = new \Rector\PostRector\ValueObject\PropertyMetadata($propertyName, $objectType, \PhpParser\Node\Stmt\Class_::MODIFIER_PRIVATE);
+        $this->propertyToAddCollector->addPropertyToClass($class, $propertyMetadata);
     }
 }

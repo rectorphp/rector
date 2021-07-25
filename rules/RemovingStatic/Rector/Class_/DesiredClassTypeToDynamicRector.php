@@ -14,6 +14,8 @@ use Rector\Core\Configuration\Option;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Naming\Naming\PropertyNaming;
+use Rector\PostRector\Collector\PropertyToAddCollector;
+use Rector\PostRector\ValueObject\PropertyMetadata;
 use Rector\RemovingStatic\NodeAnalyzer\StaticCallPresenceAnalyzer;
 use RectorPrefix20210725\Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -35,10 +37,15 @@ final class DesiredClassTypeToDynamicRector extends \Rector\Core\Rector\Abstract
      * @var \Rector\RemovingStatic\NodeAnalyzer\StaticCallPresenceAnalyzer
      */
     private $staticCallPresenceAnalyzer;
-    public function __construct(\Rector\Naming\Naming\PropertyNaming $propertyNaming, \Rector\RemovingStatic\NodeAnalyzer\StaticCallPresenceAnalyzer $staticCallPresenceAnalyzer, \RectorPrefix20210725\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider)
+    /**
+     * @var \Rector\PostRector\Collector\PropertyToAddCollector
+     */
+    private $propertyToAddCollector;
+    public function __construct(\Rector\Naming\Naming\PropertyNaming $propertyNaming, \Rector\RemovingStatic\NodeAnalyzer\StaticCallPresenceAnalyzer $staticCallPresenceAnalyzer, \Rector\PostRector\Collector\PropertyToAddCollector $propertyToAddCollector, \RectorPrefix20210725\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider)
     {
         $this->propertyNaming = $propertyNaming;
         $this->staticCallPresenceAnalyzer = $staticCallPresenceAnalyzer;
+        $this->propertyToAddCollector = $propertyToAddCollector;
         $typesToRemoveStaticFrom = $parameterProvider->provideArrayParameter(\Rector\Core\Configuration\Option::TYPES_TO_REMOVE_STATIC_FROM);
         foreach ($typesToRemoveStaticFrom as $typeToRemoveStaticFrom) {
             $this->staticObjectTypes[] = new \PHPStan\Type\ObjectType($typeToRemoveStaticFrom);
@@ -120,7 +127,8 @@ CODE_SAMPLE
             $this->completeDependencyToConstructorOnly($node, $staticObjectType);
             if ($this->staticCallPresenceAnalyzer->hasClassAnyMethodWithStaticCallOnType($node, $staticObjectType)) {
                 $propertyExpectedName = $this->propertyNaming->fqnToVariableName($staticObjectType);
-                $this->addConstructorDependencyToClass($node, $staticObjectType, $propertyExpectedName);
+                $propertyMetadata = new \Rector\PostRector\ValueObject\PropertyMetadata($propertyExpectedName, $staticObjectType, \PhpParser\Node\Stmt\Class_::MODIFIER_PRIVATE);
+                $this->propertyToAddCollector->addPropertyToClass($node, $propertyMetadata);
                 return $node;
             }
         }

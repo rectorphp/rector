@@ -21,6 +21,8 @@ use Rector\Core\ValueObject\MethodName;
 use Rector\Naming\Naming\PropertyNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPUnit\NodeFactory\SetUpClassMethodFactory;
+use Rector\PostRector\Collector\PropertyToAddCollector;
+use Rector\PostRector\ValueObject\PropertyMetadata;
 use Rector\RemovingStatic\NodeAnalyzer\SetUpClassMethodUpdater;
 use Rector\RemovingStatic\NodeFactory\SelfContainerFactory;
 use Rector\RemovingStatic\NodeFactory\SetUpFactory;
@@ -68,7 +70,11 @@ final class PHPUnitStaticToKernelTestCaseGetRector extends \Rector\Core\Rector\A
      * @var \Rector\RemovingStatic\NodeAnalyzer\SetUpClassMethodUpdater
      */
     private $setUpClassMethodUpdater;
-    public function __construct(\Rector\Naming\Naming\PropertyNaming $propertyNaming, \Rector\Core\NodeManipulator\ClassInsertManipulator $classInsertManipulator, \Rector\PHPUnit\NodeFactory\SetUpClassMethodFactory $setUpClassMethodFactory, \Rector\RemovingStatic\NodeFactory\SetUpFactory $setUpFactory, \Rector\RemovingStatic\NodeFactory\SelfContainerFactory $selfContainerFactory, \Rector\RemovingStatic\NodeAnalyzer\SetUpClassMethodUpdater $setUpClassMethodUpdater)
+    /**
+     * @var \Rector\PostRector\Collector\PropertyToAddCollector
+     */
+    private $propertyToAddCollector;
+    public function __construct(\Rector\Naming\Naming\PropertyNaming $propertyNaming, \Rector\Core\NodeManipulator\ClassInsertManipulator $classInsertManipulator, \Rector\PHPUnit\NodeFactory\SetUpClassMethodFactory $setUpClassMethodFactory, \Rector\RemovingStatic\NodeFactory\SetUpFactory $setUpFactory, \Rector\RemovingStatic\NodeFactory\SelfContainerFactory $selfContainerFactory, \Rector\RemovingStatic\NodeAnalyzer\SetUpClassMethodUpdater $setUpClassMethodUpdater, \Rector\PostRector\Collector\PropertyToAddCollector $propertyToAddCollector)
     {
         $this->propertyNaming = $propertyNaming;
         $this->classInsertManipulator = $classInsertManipulator;
@@ -76,6 +82,7 @@ final class PHPUnitStaticToKernelTestCaseGetRector extends \Rector\Core\Rector\A
         $this->setUpFactory = $setUpFactory;
         $this->selfContainerFactory = $selfContainerFactory;
         $this->setUpClassMethodUpdater = $setUpClassMethodUpdater;
+        $this->propertyToAddCollector = $propertyToAddCollector;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -159,7 +166,8 @@ CODE_SAMPLE
         // add via constructor
         foreach ($newPropertyObjectTypes as $newPropertyObjectType) {
             $newPropertyName = $this->propertyNaming->fqnToVariableName($newPropertyObjectType);
-            $this->addConstructorDependencyToClass($class, $newPropertyObjectType, $newPropertyName);
+            $propertyMetadata = new \Rector\PostRector\ValueObject\PropertyMetadata($newPropertyName, $newPropertyObjectType, \PhpParser\Node\Stmt\Class_::MODIFIER_PRIVATE);
+            $this->propertyToAddCollector->addPropertyToClass($class, $propertyMetadata);
         }
         return $class;
     }

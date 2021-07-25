@@ -16,6 +16,8 @@ use Rector\Naming\Naming\PropertyNaming;
 use Rector\Naming\ValueObject\ExpectedName;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\TypeAnalyzer\ArrayTypeAnalyzer;
+use Rector\PostRector\Collector\PropertyToAddCollector;
+use Rector\PostRector\ValueObject\PropertyMetadata;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\Transform\ValueObject\ArgumentFuncCallToMethodCall;
 use Rector\Transform\ValueObject\ArrayFuncCallToMethodCall;
@@ -51,10 +53,15 @@ final class ArgumentFuncCallToMethodCallRector extends \Rector\Core\Rector\Abstr
      * @var \Rector\Naming\Naming\PropertyNaming
      */
     private $propertyNaming;
-    public function __construct(\Rector\NodeTypeResolver\TypeAnalyzer\ArrayTypeAnalyzer $arrayTypeAnalyzer, \Rector\Naming\Naming\PropertyNaming $propertyNaming)
+    /**
+     * @var \Rector\PostRector\Collector\PropertyToAddCollector
+     */
+    private $propertyToAddCollector;
+    public function __construct(\Rector\NodeTypeResolver\TypeAnalyzer\ArrayTypeAnalyzer $arrayTypeAnalyzer, \Rector\Naming\Naming\PropertyNaming $propertyNaming, \Rector\PostRector\Collector\PropertyToAddCollector $propertyToAddCollector)
     {
         $this->arrayTypeAnalyzer = $arrayTypeAnalyzer;
         $this->propertyNaming = $propertyNaming;
+        $this->propertyToAddCollector = $propertyToAddCollector;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -154,7 +161,8 @@ CODE_SAMPLE
         if (!$expectedName instanceof \Rector\Naming\ValueObject\ExpectedName) {
             throw new \Rector\Core\Exception\ShouldNotHappenException();
         }
-        $this->addConstructorDependencyToClass($class, $fullyQualifiedObjectType, $expectedName->getName());
+        $propertyMetadata = new \Rector\PostRector\ValueObject\PropertyMetadata($expectedName->getName(), $fullyQualifiedObjectType, \PhpParser\Node\Stmt\Class_::MODIFIER_PRIVATE);
+        $this->propertyToAddCollector->addPropertyToClass($class, $propertyMetadata);
         $propertyFetchNode = $this->nodeFactory->createPropertyFetch('this', $expectedName->getName());
         if ($funcCall->args === []) {
             return $this->refactorEmptyFuncCallArgs($argumentFuncCallToMethodCall, $propertyFetchNode);
@@ -176,7 +184,8 @@ CODE_SAMPLE
         $propertyName = $this->propertyNaming->fqnToVariableName($arrayFuncCallToMethodCall->getClass());
         $propertyFetch = $this->nodeFactory->createPropertyFetch('this', $propertyName);
         $fullyQualifiedObjectType = new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType($arrayFuncCallToMethodCall->getClass());
-        $this->addConstructorDependencyToClass($class, $fullyQualifiedObjectType, $propertyName);
+        $propertyMetadata = new \Rector\PostRector\ValueObject\PropertyMetadata($propertyName, $fullyQualifiedObjectType, \PhpParser\Node\Stmt\Class_::MODIFIER_PRIVATE);
+        $this->propertyToAddCollector->addPropertyToClass($class, $propertyMetadata);
         return $this->createMethodCallArrayFunctionToMethodCall($funcCall, $arrayFuncCallToMethodCall, $propertyFetch);
     }
     /**

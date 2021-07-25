@@ -9,13 +9,14 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassLike;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\NodeAnalyzer\ClassAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Naming\Naming\PropertyNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PostRector\Collector\PropertyToAddCollector;
+use Rector\PostRector\ValueObject\PropertyMetadata;
 use Rector\Transform\ValueObject\ServiceGetterToConstructorInjection;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -41,10 +42,15 @@ final class ServiceGetterToConstructorInjectionRector extends \Rector\Core\Recto
      * @var \Rector\Core\NodeAnalyzer\ClassAnalyzer
      */
     private $classAnalyzer;
-    public function __construct(\Rector\Naming\Naming\PropertyNaming $propertyNaming, \Rector\Core\NodeAnalyzer\ClassAnalyzer $classAnalyzer)
+    /**
+     * @var \Rector\PostRector\Collector\PropertyToAddCollector
+     */
+    private $propertyToAddCollector;
+    public function __construct(\Rector\Naming\Naming\PropertyNaming $propertyNaming, \Rector\Core\NodeAnalyzer\ClassAnalyzer $classAnalyzer, \Rector\PostRector\Collector\PropertyToAddCollector $propertyToAddCollector)
     {
         $this->propertyNaming = $propertyNaming;
         $this->classAnalyzer = $classAnalyzer;
+        $this->propertyToAddCollector = $propertyToAddCollector;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -127,7 +133,7 @@ CODE_SAMPLE
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $classLike = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
-        if (!$classLike instanceof \PhpParser\Node\Stmt\ClassLike) {
+        if (!$classLike instanceof \PhpParser\Node\Stmt\Class_) {
             return null;
         }
         if ($this->classAnalyzer->isAnonymousClass($classLike)) {
@@ -142,8 +148,8 @@ CODE_SAMPLE
             }
             $serviceObjectType = new \PHPStan\Type\ObjectType($methodCallToService->getServiceType());
             $propertyName = $this->propertyNaming->fqnToVariableName($serviceObjectType);
-            /** @var Class_ $classLike */
-            $this->addConstructorDependencyToClass($classLike, $serviceObjectType, $propertyName);
+            $propertyMetadata = new \Rector\PostRector\ValueObject\PropertyMetadata($propertyName, $serviceObjectType, \PhpParser\Node\Stmt\Class_::MODIFIER_PRIVATE);
+            $this->propertyToAddCollector->addPropertyToClass($classLike, $propertyMetadata);
             return new \PhpParser\Node\Expr\PropertyFetch(new \PhpParser\Node\Expr\Variable('this'), new \PhpParser\Node\Identifier($propertyName));
         }
         return $node;

@@ -14,6 +14,8 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Naming\Naming\PropertyNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PostRector\Collector\PropertyToAddCollector;
+use Rector\PostRector\ValueObject\PropertyMetadata;
 use Rector\Transform\ValueObject\VariableMethodCallToServiceCall;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -34,9 +36,14 @@ final class VariableMethodCallToServiceCallRector extends \Rector\Core\Rector\Ab
      * @var \Rector\Naming\Naming\PropertyNaming
      */
     private $propertyNaming;
-    public function __construct(\Rector\Naming\Naming\PropertyNaming $propertyNaming)
+    /**
+     * @var \Rector\PostRector\Collector\PropertyToAddCollector
+     */
+    private $propertyToAddCollector;
+    public function __construct(\Rector\Naming\Naming\PropertyNaming $propertyNaming, \Rector\PostRector\Collector\PropertyToAddCollector $propertyToAddCollector)
     {
         $this->propertyNaming = $propertyNaming;
+        $this->propertyToAddCollector = $propertyToAddCollector;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -100,7 +107,9 @@ CODE_SAMPLE
                 continue;
             }
             $serviceObjectType = new \PHPStan\Type\ObjectType($variableMethodCallToServiceCall->getServiceType());
-            $this->addConstructorDependency($serviceObjectType, $classLike);
+            $propertyName = $this->propertyNaming->fqnToVariableName($serviceObjectType);
+            $propertyMetadata = new \Rector\PostRector\ValueObject\PropertyMetadata($propertyName, $serviceObjectType, \PhpParser\Node\Stmt\Class_::MODIFIER_PRIVATE);
+            $this->propertyToAddCollector->addPropertyToClass($classLike, $propertyMetadata);
             return $this->createServiceMethodCall($serviceObjectType, $variableMethodCallToServiceCall->getServiceMethodName(), $node);
         }
         return null;
@@ -111,11 +120,6 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $this->variableMethodCallsToServiceCalls = $configuration[self::VARIABLE_METHOD_CALLS_TO_SERVICE_CALLS] ?? [];
-    }
-    private function addConstructorDependency(\PHPStan\Type\ObjectType $objectType, \PhpParser\Node\Stmt\Class_ $class) : void
-    {
-        $propertyName = $this->propertyNaming->fqnToVariableName($objectType);
-        $this->addConstructorDependencyToClass($class, $objectType, $propertyName);
     }
     private function createServiceMethodCall(\PHPStan\Type\ObjectType $objectType, string $methodName, \PhpParser\Node\Expr\MethodCall $node) : \PhpParser\Node\Expr\MethodCall
     {

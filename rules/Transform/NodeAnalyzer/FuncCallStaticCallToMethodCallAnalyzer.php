@@ -13,7 +13,8 @@ use PHPStan\Type\ObjectType;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Naming\Naming\PropertyNaming;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\PostRector\DependencyInjection\PropertyAdder;
+use Rector\PostRector\Collector\PropertyToAddCollector;
+use Rector\PostRector\ValueObject\PropertyMetadata;
 use Rector\Transform\NodeFactory\PropertyFetchFactory;
 use Rector\Transform\NodeTypeAnalyzer\TypeProvidingExprFromClassResolver;
 final class FuncCallStaticCallToMethodCallAnalyzer
@@ -39,17 +40,17 @@ final class FuncCallStaticCallToMethodCallAnalyzer
      */
     private $propertyFetchFactory;
     /**
-     * @var \Rector\PostRector\DependencyInjection\PropertyAdder
+     * @var \Rector\PostRector\Collector\PropertyToAddCollector
      */
-    private $propertyAdder;
-    public function __construct(\Rector\Transform\NodeTypeAnalyzer\TypeProvidingExprFromClassResolver $typeProvidingExprFromClassResolver, \Rector\Naming\Naming\PropertyNaming $propertyNaming, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\Transform\NodeFactory\PropertyFetchFactory $propertyFetchFactory, \Rector\PostRector\DependencyInjection\PropertyAdder $propertyAdder)
+    private $propertyToAddCollector;
+    public function __construct(\Rector\Transform\NodeTypeAnalyzer\TypeProvidingExprFromClassResolver $typeProvidingExprFromClassResolver, \Rector\Naming\Naming\PropertyNaming $propertyNaming, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\Transform\NodeFactory\PropertyFetchFactory $propertyFetchFactory, \Rector\PostRector\Collector\PropertyToAddCollector $propertyToAddCollector)
     {
         $this->typeProvidingExprFromClassResolver = $typeProvidingExprFromClassResolver;
         $this->propertyNaming = $propertyNaming;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeFactory = $nodeFactory;
         $this->propertyFetchFactory = $propertyFetchFactory;
-        $this->propertyAdder = $propertyAdder;
+        $this->propertyToAddCollector = $propertyToAddCollector;
     }
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
@@ -65,7 +66,8 @@ final class FuncCallStaticCallToMethodCallAnalyzer
             return $expr;
         }
         $propertyName = $this->propertyNaming->fqnToVariableName($objectType);
-        $this->propertyAdder->addConstructorDependencyToClass($class, $objectType, $propertyName);
+        $propertyMetadata = new \Rector\PostRector\ValueObject\PropertyMetadata($propertyName, $objectType, \PhpParser\Node\Stmt\Class_::MODIFIER_PRIVATE);
+        $this->propertyToAddCollector->addPropertyToClass($class, $propertyMetadata);
         return $this->propertyFetchFactory->createFromType($objectType);
     }
     /**

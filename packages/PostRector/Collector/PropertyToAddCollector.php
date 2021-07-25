@@ -55,6 +55,7 @@ final class PropertyToAddCollector implements \Rector\PostRector\Contract\Collec
     {
         $uniqueHash = \spl_object_hash($class);
         $this->propertiesByClass[$uniqueHash][] = $propertyMetadata;
+        $this->rectorChangeCollector->notifyNodeFileInfo($class);
     }
     /**
      * @param \PhpParser\Node\Stmt\Class_ $class

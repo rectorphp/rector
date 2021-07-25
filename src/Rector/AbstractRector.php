@@ -429,10 +429,6 @@ abstract class AbstractRector extends \PhpParser\NodeVisitorAbstract implements 
     {
         $this->nodesToAddCollector->addNodeBeforeNode($newNode, $positionNode);
     }
-    protected function addConstructorDependencyToClass(\PhpParser\Node\Stmt\Class_ $class, \PHPStan\Type\Type $propertyType, string $propertyName, int $propertyFlags = 0) : void
-    {
-        $this->propertyAdder->addConstructorDependencyToClass($class, $propertyType, $propertyName, $propertyFlags);
-    }
     protected function removeNode(\PhpParser\Node $node) : void
     {
         $this->nodeRemover->removeNode($node);

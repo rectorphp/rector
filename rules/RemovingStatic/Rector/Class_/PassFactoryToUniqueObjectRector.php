@@ -13,6 +13,8 @@ use PHPStan\Type\ObjectType;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Naming\Naming\PropertyNaming;
+use Rector\PostRector\Collector\PropertyToAddCollector;
+use Rector\PostRector\ValueObject\PropertyMetadata;
 use Rector\RemovingStatic\Printer\FactoryClassPrinter;
 use Rector\RemovingStatic\StaticTypesInClassResolver;
 use Rector\RemovingStatic\UniqueObjectFactoryFactory;
@@ -53,13 +55,18 @@ final class PassFactoryToUniqueObjectRector extends \Rector\Core\Rector\Abstract
      * @var \Rector\RemovingStatic\Printer\FactoryClassPrinter
      */
     private $factoryClassPrinter;
-    public function __construct(\Rector\RemovingStatic\StaticTypesInClassResolver $staticTypesInClassResolver, \Rector\Naming\Naming\PropertyNaming $propertyNaming, \Rector\RemovingStatic\UniqueObjectOrServiceDetector $uniqueObjectOrServiceDetector, \Rector\RemovingStatic\UniqueObjectFactoryFactory $uniqueObjectFactoryFactory, \Rector\RemovingStatic\Printer\FactoryClassPrinter $factoryClassPrinter)
+    /**
+     * @var \Rector\PostRector\Collector\PropertyToAddCollector
+     */
+    private $propertyToAddCollector;
+    public function __construct(\Rector\RemovingStatic\StaticTypesInClassResolver $staticTypesInClassResolver, \Rector\Naming\Naming\PropertyNaming $propertyNaming, \Rector\RemovingStatic\UniqueObjectOrServiceDetector $uniqueObjectOrServiceDetector, \Rector\RemovingStatic\UniqueObjectFactoryFactory $uniqueObjectFactoryFactory, \Rector\RemovingStatic\Printer\FactoryClassPrinter $factoryClassPrinter, \Rector\PostRector\Collector\PropertyToAddCollector $propertyToAddCollector)
     {
         $this->staticTypesInClassResolver = $staticTypesInClassResolver;
         $this->propertyNaming = $propertyNaming;
         $this->uniqueObjectOrServiceDetector = $uniqueObjectOrServiceDetector;
         $this->uniqueObjectFactoryFactory = $uniqueObjectFactoryFactory;
         $this->factoryClassPrinter = $factoryClassPrinter;
+        $this->propertyToAddCollector = $propertyToAddCollector;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -168,7 +175,8 @@ CODE_SAMPLE
         $staticTypesInClass = $this->staticTypesInClassResolver->collectStaticCallTypeInClass($class, $this->serviceObjectTypes);
         foreach ($staticTypesInClass as $staticTypeInClass) {
             $variableName = $this->propertyNaming->fqnToVariableName($staticTypeInClass);
-            $this->addConstructorDependencyToClass($class, $staticTypeInClass, $variableName);
+            $propertyMetadata = new \Rector\PostRector\ValueObject\PropertyMetadata($variableName, $staticTypeInClass, \PhpParser\Node\Stmt\Class_::MODIFIER_PRIVATE);
+            $this->propertyToAddCollector->addPropertyToClass($class, $propertyMetadata);
             // is this an object? create factory for it next to this :)
             if ($this->uniqueObjectOrServiceDetector->isUniqueObject()) {
                 $factoryClass = $this->uniqueObjectFactoryFactory->createFactoryClass($class, $staticTypeInClass);

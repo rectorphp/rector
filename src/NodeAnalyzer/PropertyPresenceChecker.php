@@ -114,9 +114,11 @@ final class PropertyPresenceChecker
         if ($propertyObjectTypeClassName !== (string) $reflectionProperty->getType()) {
             return null;
         }
-        //        dump($reflectionProperty);
-        //        dump($this->astResolver->resolvePropertyFromPropertyReflection($reflectionProperty));
-        //        die;
+        $propertyObjectType = $propertyMetadata->getType();
+        $propertyObjectTypeClassName = $propertyObjectType->getClassName();
+        if ($propertyObjectTypeClassName !== (string) $reflectionProperty->getType()) {
+            return null;
+        }
         return $this->astResolver->resolvePropertyFromPropertyReflection($reflectionProperty);
     }
     /**

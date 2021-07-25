@@ -15,6 +15,8 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Naming\Naming\PropertyNaming;
 use Rector\Naming\ValueObject\ExpectedName;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PostRector\Collector\PropertyToAddCollector;
+use Rector\PostRector\ValueObject\PropertyMetadata;
 use Rector\Transform\NodeFactory\PropertyFetchFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -39,10 +41,15 @@ final class NewToConstructorInjectionRector extends \Rector\Core\Rector\Abstract
      * @var \Rector\Naming\Naming\PropertyNaming
      */
     private $propertyNaming;
-    public function __construct(\Rector\Transform\NodeFactory\PropertyFetchFactory $propertyFetchFactory, \Rector\Naming\Naming\PropertyNaming $propertyNaming)
+    /**
+     * @var \Rector\PostRector\Collector\PropertyToAddCollector
+     */
+    private $propertyToAddCollector;
+    public function __construct(\Rector\Transform\NodeFactory\PropertyFetchFactory $propertyFetchFactory, \Rector\Naming\Naming\PropertyNaming $propertyNaming, \Rector\PostRector\Collector\PropertyToAddCollector $propertyToAddCollector)
     {
         $this->propertyFetchFactory = $propertyFetchFactory;
         $this->propertyNaming = $propertyNaming;
+        $this->propertyToAddCollector = $propertyToAddCollector;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -153,7 +160,8 @@ CODE_SAMPLE
             if (!$expectedPropertyName instanceof \Rector\Naming\ValueObject\ExpectedName) {
                 continue;
             }
-            $this->addConstructorDependencyToClass($classLike, $constructorInjectionObjectType, $expectedPropertyName->getName());
+            $propertyMetadata = new \Rector\PostRector\ValueObject\PropertyMetadata($expectedPropertyName->getName(), $constructorInjectionObjectType, \PhpParser\Node\Stmt\Class_::MODIFIER_PRIVATE);
+            $this->propertyToAddCollector->addPropertyToClass($classLike, $propertyMetadata);
         }
     }
 }

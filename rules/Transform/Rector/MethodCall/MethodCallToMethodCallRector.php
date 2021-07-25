@@ -14,6 +14,7 @@ use Rector\Core\NodeAnalyzer\PropertyPresenceChecker;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Naming\Naming\PropertyNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PostRector\Collector\PropertyToAddCollector;
 use Rector\PostRector\ValueObject\PropertyMetadata;
 use Rector\Transform\ValueObject\MethodCallToMethodCall;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
@@ -40,10 +41,15 @@ final class MethodCallToMethodCallRector extends \Rector\Core\Rector\AbstractRec
      * @var \Rector\Core\NodeAnalyzer\PropertyPresenceChecker
      */
     private $propertyPresenceChecker;
-    public function __construct(\Rector\Naming\Naming\PropertyNaming $propertyNaming, \Rector\Core\NodeAnalyzer\PropertyPresenceChecker $propertyPresenceChecker)
+    /**
+     * @var \Rector\PostRector\Collector\PropertyToAddCollector
+     */
+    private $propertyToAddCollector;
+    public function __construct(\Rector\Naming\Naming\PropertyNaming $propertyNaming, \Rector\Core\NodeAnalyzer\PropertyPresenceChecker $propertyPresenceChecker, \Rector\PostRector\Collector\PropertyToAddCollector $propertyToAddCollector)
     {
         $this->propertyNaming = $propertyNaming;
         $this->propertyPresenceChecker = $propertyPresenceChecker;
+        $this->propertyToAddCollector = $propertyToAddCollector;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -103,7 +109,8 @@ CODE_SAMPLE
             if ($newPropertyName === null) {
                 continue;
             }
-            $this->addConstructorDependencyToClass($class, $newObjectType, $newPropertyName);
+            $propertyMetadata = new \Rector\PostRector\ValueObject\PropertyMetadata($newPropertyName, $newObjectType, \PhpParser\Node\Stmt\Class_::MODIFIER_PRIVATE);
+            $this->propertyToAddCollector->addPropertyToClass($class, $propertyMetadata);
             // rename property
             $node->var = new \PhpParser\Node\Expr\PropertyFetch($propertyFetch->var, $newPropertyName);
             // rename method

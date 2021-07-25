@@ -14,6 +14,8 @@ use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PostRector\Collector\PropertyToAddCollector;
+use Rector\PostRector\ValueObject\PropertyMetadata;
 use Rector\Transform\ValueObject\NewToMethodCall;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -35,9 +37,14 @@ final class NewToMethodCallRector extends \Rector\Core\Rector\AbstractRector imp
      * @var \Rector\CodingStyle\Naming\ClassNaming
      */
     private $classNaming;
-    public function __construct(\Rector\CodingStyle\Naming\ClassNaming $classNaming)
+    /**
+     * @var \Rector\PostRector\Collector\PropertyToAddCollector
+     */
+    private $propertyToAddCollector;
+    public function __construct(\Rector\CodingStyle\Naming\ClassNaming $classNaming, \Rector\PostRector\Collector\PropertyToAddCollector $propertyToAddCollector)
     {
         $this->classNaming = $classNaming;
+        $this->propertyToAddCollector = $propertyToAddCollector;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -85,14 +92,15 @@ CODE_SAMPLE
             if ($className === $serviceObjectType->getClassName()) {
                 continue;
             }
-            /** @var Class_ $classNode */
-            $classNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
-            $propertyName = $this->getExistingFactoryPropertyName($classNode, $newsToMethodCall->getServiceObjectType());
+            /** @var Class_ $class */
+            $class = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
+            $propertyName = $this->getExistingFactoryPropertyName($class, $newsToMethodCall->getServiceObjectType());
             if ($propertyName === null) {
                 $serviceObjectType = $newsToMethodCall->getServiceObjectType();
                 $propertyName = $this->classNaming->getShortName($serviceObjectType->getClassName());
                 $propertyName = \lcfirst($propertyName);
-                $this->addConstructorDependencyToClass($classNode, $newsToMethodCall->getServiceObjectType(), $propertyName);
+                $propertyMetadata = new \Rector\PostRector\ValueObject\PropertyMetadata($propertyName, $newsToMethodCall->getServiceObjectType(), \PhpParser\Node\Stmt\Class_::MODIFIER_PRIVATE);
+                $this->propertyToAddCollector->addPropertyToClass($class, $propertyMetadata);
             }
             $propertyFetch = new \PhpParser\Node\Expr\PropertyFetch(new \PhpParser\Node\Expr\Variable('this'), $propertyName);
             return new \PhpParser\Node\Expr\MethodCall($propertyFetch, $newsToMethodCall->getServiceMethod(), $node->args);

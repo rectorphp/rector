@@ -10,6 +10,8 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DependencyInjection\Collector\VariablesToPropertyFetchCollection;
+use Rector\PostRector\Collector\PropertyToAddCollector;
+use Rector\PostRector\ValueObject\PropertyMetadata;
 use Rector\Symfony\DataProvider\ServiceMapProvider;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -26,10 +28,15 @@ final class ActionInjectionToConstructorInjectionRector extends \Rector\Core\Rec
      * @var \Rector\DependencyInjection\Collector\VariablesToPropertyFetchCollection
      */
     private $variablesToPropertyFetchCollection;
-    public function __construct(\Rector\Symfony\DataProvider\ServiceMapProvider $applicationServiceMapProvider, \Rector\DependencyInjection\Collector\VariablesToPropertyFetchCollection $variablesToPropertyFetchCollection)
+    /**
+     * @var \Rector\PostRector\Collector\PropertyToAddCollector
+     */
+    private $propertyToAddCollector;
+    public function __construct(\Rector\Symfony\DataProvider\ServiceMapProvider $applicationServiceMapProvider, \Rector\DependencyInjection\Collector\VariablesToPropertyFetchCollection $variablesToPropertyFetchCollection, \Rector\PostRector\Collector\PropertyToAddCollector $propertyToAddCollector)
     {
         $this->applicationServiceMapProvider = $applicationServiceMapProvider;
         $this->variablesToPropertyFetchCollection = $variablesToPropertyFetchCollection;
+        $this->propertyToAddCollector = $propertyToAddCollector;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -88,12 +95,13 @@ CODE_SAMPLE
             if (!$this->isActionInjectedParamNode($paramNode)) {
                 continue;
             }
-            $paramNodeType = $this->getObjectType($paramNode);
+            $paramType = $this->getObjectType($paramNode);
             /** @var string $paramName */
             $paramName = $this->getName($paramNode->var);
-            $this->addConstructorDependencyToClass($class, $paramNodeType, $paramName);
+            $propertyMetadata = new \Rector\PostRector\ValueObject\PropertyMetadata($paramName, $paramType, \PhpParser\Node\Stmt\Class_::MODIFIER_PRIVATE);
+            $this->propertyToAddCollector->addPropertyToClass($class, $propertyMetadata);
             $this->nodeRemover->removeParam($classMethod, $key);
-            $this->variablesToPropertyFetchCollection->addVariableNameAndType($paramName, $paramNodeType);
+            $this->variablesToPropertyFetchCollection->addVariableNameAndType($paramName, $paramType);
         }
     }
     private function isActionInjectedParamNode(\PhpParser\Node\Param $param) : bool
