@@ -15,7 +15,7 @@ use PHPStan\Type\ObjectType;
 use Rector\Core\ValueObject\MethodName;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\TypeDeclaration\Matcher\PropertyAssignMatcher;
-use Rector\TypeDeclaration\NodeAnalyzer\AutowiredClassMethodAnalyzer;
+use Rector\TypeDeclaration\NodeAnalyzer\AutowiredClassMethodOrPropertyAnalyzer;
 use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
 final class ConstructorAssignDetector
@@ -29,7 +29,7 @@ final class ConstructorAssignDetector
         private NodeTypeResolver $nodeTypeResolver,
         private PropertyAssignMatcher $propertyAssignMatcher,
         private SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
-        private AutowiredClassMethodAnalyzer $autowiredClassMethodAnalyzer
+        private AutowiredClassMethodOrPropertyAnalyzer $autowiredClassMethodAnalyzer
     ) {
     }
 

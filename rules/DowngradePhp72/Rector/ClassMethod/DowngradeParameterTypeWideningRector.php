@@ -13,7 +13,7 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DowngradePhp72\PhpDoc\NativeParamToPhpDocDecorator;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\TypeDeclaration\NodeAnalyzer\AutowiredClassMethodAnalyzer;
+use Rector\TypeDeclaration\NodeAnalyzer\AutowiredClassMethodOrPropertyAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Webmozart\Assert\Assert;
@@ -49,7 +49,7 @@ final class DowngradeParameterTypeWideningRector extends AbstractRector implemen
     public function __construct(
         private NativeParamToPhpDocDecorator $nativeParamToPhpDocDecorator,
         private ReflectionProvider $reflectionProvider,
-        private AutowiredClassMethodAnalyzer $autowiredClassMethodAnalyzer
+        private AutowiredClassMethodOrPropertyAnalyzer $autowiredClassMethodAnalyzer
     ) {
     }
 
