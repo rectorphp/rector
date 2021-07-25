@@ -100,7 +100,7 @@ CODE_SAMPLE
             return null;
         }
         $this->propertyConstructorInjectionManipulator->refactor($node, $serviceType, $injectTagNode);
-        if ($this->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::PROPERTY_PROMOTION)) {
+        if ($this->phpVersionProvider->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::PROPERTY_PROMOTION)) {
             $this->removeNode($node);
             return null;
         }

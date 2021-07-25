@@ -11,7 +11,8 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Naming\Naming\PropertyNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PostRector\DependencyInjection\PropertyAdder;
+use Rector\PostRector\Collector\PropertyToAddCollector;
+use Rector\PostRector\ValueObject\PropertyMetadata;
 final class DependencyInjectionMethodCallAnalyzer
 {
     /**
@@ -27,15 +28,15 @@ final class DependencyInjectionMethodCallAnalyzer
      */
     private $nodeFactory;
     /**
-     * @var \Rector\PostRector\DependencyInjection\PropertyAdder
+     * @var \Rector\PostRector\Collector\PropertyToAddCollector
      */
-    private $propertyAdder;
-    public function __construct(\Rector\Naming\Naming\PropertyNaming $propertyNaming, \Rector\Symfony\NodeAnalyzer\ServiceTypeMethodCallResolver $serviceTypeMethodCallResolver, \Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\PostRector\DependencyInjection\PropertyAdder $propertyAdder)
+    private $propertyToAddCollector;
+    public function __construct(\Rector\Naming\Naming\PropertyNaming $propertyNaming, \Rector\Symfony\NodeAnalyzer\ServiceTypeMethodCallResolver $serviceTypeMethodCallResolver, \Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\PostRector\Collector\PropertyToAddCollector $propertyToAddCollector)
     {
         $this->propertyNaming = $propertyNaming;
         $this->serviceTypeMethodCallResolver = $serviceTypeMethodCallResolver;
         $this->nodeFactory = $nodeFactory;
-        $this->propertyAdder = $propertyAdder;
+        $this->propertyToAddCollector = $propertyToAddCollector;
     }
     public function replaceMethodCallWithPropertyFetchAndDependency(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\PhpParser\Node
     {
@@ -48,7 +49,8 @@ final class DependencyInjectionMethodCallAnalyzer
             throw new \Rector\Core\Exception\ShouldNotHappenException();
         }
         $propertyName = $this->propertyNaming->fqnToVariableName($serviceType);
-        $this->propertyAdder->addConstructorDependencyToClass($classLike, $serviceType, $propertyName);
+        $propertyMetadata = new \Rector\PostRector\ValueObject\PropertyMetadata($propertyName, $serviceType, \PhpParser\Node\Stmt\Class_::MODIFIER_PRIVATE);
+        $this->propertyToAddCollector->addPropertyToClass($classLike, $propertyMetadata);
         return $this->nodeFactory->createPropertyFetch('this', $propertyName);
     }
 }

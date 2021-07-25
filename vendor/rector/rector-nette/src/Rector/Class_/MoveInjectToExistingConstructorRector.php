@@ -12,6 +12,9 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\FamilyTree\NodeAnalyzer\PropertyUsageAnalyzer;
+use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PostRector\Collector\PropertyToAddCollector;
+use Rector\PostRector\ValueObject\PropertyMetadata;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -27,10 +30,15 @@ final class MoveInjectToExistingConstructorRector extends \Rector\Core\Rector\Ab
      * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover
      */
     private $phpDocTagRemover;
-    public function __construct(\Rector\FamilyTree\NodeAnalyzer\PropertyUsageAnalyzer $propertyUsageAnalyzer, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover $phpDocTagRemover)
+    /**
+     * @var \Rector\PostRector\Collector\PropertyToAddCollector
+     */
+    private $propertyToAddCollector;
+    public function __construct(\Rector\FamilyTree\NodeAnalyzer\PropertyUsageAnalyzer $propertyUsageAnalyzer, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover $phpDocTagRemover, \Rector\PostRector\Collector\PropertyToAddCollector $propertyToAddCollector)
     {
         $this->propertyUsageAnalyzer = $propertyUsageAnalyzer;
         $this->phpDocTagRemover = $phpDocTagRemover;
+        $this->propertyToAddCollector = $propertyToAddCollector;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -96,11 +104,15 @@ CODE_SAMPLE
         if (!$constructClassMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
             return null;
         }
+        $class = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
         foreach ($injectProperties as $injectProperty) {
             $this->removeInjectAnnotation($injectProperty);
             $this->changePropertyVisibility($injectProperty);
-            $this->propertyAdder->addPropertyToCollector($injectProperty);
-            if ($this->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::PROPERTY_PROMOTION)) {
+            $propertyName = $this->nodeNameResolver->getName($injectProperty);
+            $propertyType = $this->nodeTypeResolver->resolve($injectProperty);
+            $propertyMetadata = new \Rector\PostRector\ValueObject\PropertyMetadata($propertyName, $propertyType, $injectProperty->flags);
+            $this->propertyToAddCollector->addPropertyToClass($class, $propertyMetadata);
+            if ($this->phpVersionProvider->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::PROPERTY_PROMOTION)) {
                 $this->removeNode($injectProperty);
             }
         }
