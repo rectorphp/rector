@@ -11,6 +11,7 @@ use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Expr\Variable;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\ObjectType;
+use PHPStan\Type\UnionType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -94,7 +95,27 @@ CODE_SAMPLE
         if (!$this->isObjectType($node->expr, new \PHPStan\Type\ObjectType('ReflectionType'))) {
             return null;
         }
-        return $this->nodeFactory->createMethodCall($node->expr, self::GET_NAME);
+        $type = $this->nodeTypeResolver->resolve($node->expr);
+        if (!$type instanceof \PHPStan\Type\UnionType) {
+            return $this->nodeFactory->createMethodCall($node->expr, self::GET_NAME);
+        }
+        if (!$this->isWithReflectionType($type)) {
+            return $this->nodeFactory->createMethodCall($node->expr, self::GET_NAME);
+        }
+        return null;
+    }
+    private function isWithReflectionType(\PHPStan\Type\UnionType $unionType) : bool
+    {
+        foreach ($unionType->getTypes() as $type) {
+            if (!$type instanceof \PHPStan\Type\ObjectType) {
+                continue;
+            }
+            if ($type->getClassName() !== 'ReflectionType') {
+                continue;
+            }
+            return \true;
+        }
+        return \false;
     }
     private function refactorMethodCall(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\PhpParser\Node
     {
@@ -172,7 +193,10 @@ CODE_SAMPLE
         }
         return $this->isName($methodCall->name, 'getReturnType');
     }
-    private function refactorReflectionFunctionGetReturnType(\PhpParser\Node\Expr\MethodCall $methodCall) : \PhpParser\Node
+    /**
+     * @return \PhpParser\Node|\PhpParser\Node\Expr\Ternary
+     */
+    private function refactorReflectionFunctionGetReturnType(\PhpParser\Node\Expr\MethodCall $methodCall)
     {
         $refactoredMethodCall = $this->refactorIfHasReturnTypeWasCalled($methodCall);
         if ($refactoredMethodCall !== null) {
