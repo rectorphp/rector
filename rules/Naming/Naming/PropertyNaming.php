@@ -5,11 +5,6 @@ declare(strict_types=1);
 namespace Rector\Naming\Naming;
 
 use Nette\Utils\Strings;
-use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Stmt\ClassLike;
-use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Property;
-use PhpParser\Node\Stmt\Return_;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StaticType;
@@ -19,7 +14,6 @@ use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Naming\RectorNamingInflector;
 use Rector\Naming\ValueObject\ExpectedName;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
 use Rector\StaticTypeMapper\ValueObject\Type\SelfObjectType;
@@ -41,12 +35,6 @@ final class PropertyNaming
      * @var string
      */
     private const INTERFACE = 'Interface';
-
-    /**
-     * @see https://regex101.com/r/RDhBNR/1
-     * @var string
-     */
-    private const PREFIXED_CLASS_METHODS_REGEX = '#^(is|are|was|were|has|have|had|can)[A-Z].+#';
 
     /**
      * @var string
@@ -142,22 +130,6 @@ final class PropertyNaming
         $pascalCaseName = str_replace('_', '', $uppercaseWords);
 
         return lcfirst($pascalCaseName);
-    }
-
-    public function getExpectedNameFromBooleanPropertyType(Property $property): ?string
-    {
-        $prefixedClassMethods = $this->getPrefixedClassMethods($property);
-        if ($prefixedClassMethods === []) {
-            return null;
-        }
-
-        $classMethods = $this->filterClassMethodsWithPropertyFetchReturnOnly($prefixedClassMethods, $property);
-        if (count($classMethods) !== 1) {
-            return null;
-        }
-
-        $classMethod = reset($classMethods);
-        return $this->nodeNameResolver->getName($classMethod);
     }
 
     private function resolveShortClassName(string $className): string
@@ -258,42 +230,6 @@ final class PropertyNaming
         return $shortName;
     }
 
-    /**
-     * @return ClassMethod[]
-     */
-    private function getPrefixedClassMethods(Property $property): array
-    {
-        $classLike = $property->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $classLike instanceof ClassLike) {
-            return [];
-        }
-
-        $classMethods = $this->betterNodeFinder->findInstanceOf($classLike, ClassMethod::class);
-        return array_filter(
-            $classMethods,
-            fn (ClassMethod $classMethod): bool => $this->isBoolishMethodName($classMethod)
-        );
-    }
-
-    /**
-     * @param ClassMethod[] $prefixedClassMethods
-     * @return ClassMethod[]
-     */
-    private function filterClassMethodsWithPropertyFetchReturnOnly(
-        array $prefixedClassMethods,
-        Property $property
-    ): array {
-        $classMethodName = $this->nodeNameResolver->getName($property);
-
-        return array_filter(
-            $prefixedClassMethods,
-            fn (ClassMethod $classMethod): bool => $this->doesClassMethodMatchReturnPropertyFetch(
-                $classMethod,
-                $classMethodName
-            )
-        );
-    }
-
     private function isPrefixedInterface(string $shortClassName): bool
     {
         if (strlen($shortClassName) <= 3) {
@@ -316,28 +252,5 @@ final class PropertyNaming
         }
 
         return ctype_digit($char);
-    }
-
-    private function isBoolishMethodName(ClassMethod $classMethod): bool
-    {
-        $classMethodName = $this->nodeNameResolver->getName($classMethod);
-        return (bool) Strings::match($classMethodName, self::PREFIXED_CLASS_METHODS_REGEX);
-    }
-
-    private function doesClassMethodMatchReturnPropertyFetch(
-        ClassMethod $classMethod,
-        string $currentClassMethodName
-    ): bool {
-        $possibleReturn = $classMethod->stmts[0] ?? null;
-        if (! $possibleReturn instanceof Return_) {
-            return false;
-        }
-
-        $node = $possibleReturn->expr;
-        if (! $node instanceof PropertyFetch) {
-            return false;
-        }
-
-        return $this->nodeNameResolver->isName($node->name, $currentClassMethodName);
     }
 }

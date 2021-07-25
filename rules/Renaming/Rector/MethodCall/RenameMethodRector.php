@@ -101,7 +101,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            if ($this->skipClassMethod($node, $methodCallRename)) {
+            if ($this->shouldSkipClassMethod($node, $methodCallRename)) {
                 continue;
             }
 
@@ -129,7 +129,7 @@ CODE_SAMPLE
         $this->methodCallRenameCollector->addMethodCallRenames($methodCallRenames);
     }
 
-    private function skipClassMethod(
+    private function shouldSkipClassMethod(
         MethodCall | StaticCall | ClassMethod $node,
         MethodCallRenameInterface $methodCallRename
     ): bool {

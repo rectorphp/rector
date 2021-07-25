@@ -10,7 +10,6 @@ use Rector\Core\Configuration\Option;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Nette\Set\NetteSetList;
 use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
-use Rector\Php74\Rector\MethodCall\ChangeReflectionTypeToStringToGetNameRector;
 use Rector\PHPUnit\Rector\Class_\AddSeeTestAnnotationRector;
 use Rector\PHPUnit\Set\PHPUnitSetList;
 use Rector\Restoration\Rector\ClassMethod\InferParamFromClassMethodReturnRector;

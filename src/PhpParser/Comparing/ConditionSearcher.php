@@ -21,7 +21,7 @@ final class ConditionSearcher
     ) {
     }
 
-    public function searchIfAndElseForVariableRedeclaration(Assign $assign, If_ $if): bool
+    public function hasIfAndElseForVariableRedeclaration(Assign $assign, If_ $if): bool
     {
         $elseNode = $if->else;
 
@@ -32,29 +32,29 @@ final class ConditionSearcher
         /** @var Variable $varNode */
         $varNode = $assign->var;
 
-        if (! $this->searchForVariableRedeclaration($varNode, $if->stmts)) {
+        if (! $this->hasVariableRedeclaration($varNode, $if->stmts)) {
             return false;
         }
 
         foreach ($if->elseifs as $elseifNode) {
-            if (! $this->searchForVariableRedeclaration($varNode, $elseifNode->stmts)) {
+            if (! $this->hasVariableRedeclaration($varNode, $elseifNode->stmts)) {
                 return false;
             }
         }
-        return $this->searchForVariableRedeclaration($varNode, $elseNode->stmts);
+        return $this->hasVariableRedeclaration($varNode, $elseNode->stmts);
     }
 
     /**
      * @param Stmt[] $stmts
      */
-    private function searchForVariableRedeclaration(Variable $variable, array $stmts): bool
+    private function hasVariableRedeclaration(Variable $variable, array $stmts): bool
     {
         foreach ($stmts as $stmt) {
-            if ($this->checkIfVariableUsedInExpression($variable, $stmt)) {
+            if ($this->hasVariableUsedInExpression($variable, $stmt)) {
                 return false;
             }
 
-            if ($this->checkForVariableRedeclaration($variable, $stmt)) {
+            if ($this->hasVariableDeclaration($variable, $stmt)) {
                 return true;
             }
         }
@@ -62,7 +62,7 @@ final class ConditionSearcher
         return false;
     }
 
-    private function checkIfVariableUsedInExpression(Variable $variable, Stmt $stmt): bool
+    private function hasVariableUsedInExpression(Variable $variable, Stmt $stmt): bool
     {
         if ($stmt instanceof Expression) {
             $node = $stmt->expr instanceof Assign ? $stmt->expr->expr : $stmt->expr;
@@ -76,7 +76,7 @@ final class ConditionSearcher
         );
     }
 
-    private function checkForVariableRedeclaration(Variable $variable, Stmt $stmt): bool
+    private function hasVariableDeclaration(Variable $variable, Stmt $stmt): bool
     {
         if (! $stmt instanceof Expression) {
             return false;

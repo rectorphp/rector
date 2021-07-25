@@ -85,9 +85,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->phpDocFromTypeDeclarationDecorator->decorate($node)) {
-            return null;
-        }
+        $this->phpDocFromTypeDeclarationDecorator->decorate($node);
 
         return $node;
     }

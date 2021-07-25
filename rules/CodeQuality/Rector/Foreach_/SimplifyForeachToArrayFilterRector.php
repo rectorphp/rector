@@ -102,7 +102,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->forLoopFillsAnotherArray($node, $arrayDimFetch)) {
+        if (! $this->isArrayDimFetchInForLoop($node, $arrayDimFetch)) {
             return null;
         }
 
@@ -143,12 +143,13 @@ CODE_SAMPLE
         return new Assign($arrayDimFetch->var, $arrayFilterFuncCall);
     }
 
-    private function forLoopFillsAnotherArray(Foreach_ $foreach, ArrayDimFetch $arrayDimFetch): bool
+    private function isArrayDimFetchInForLoop(Foreach_ $foreach, ArrayDimFetch $arrayDimFetch): bool
     {
         $loopVar = $foreach->expr;
         if (! $loopVar instanceof Variable) {
             return false;
         }
+
         $varThatIsModified = $arrayDimFetch->var;
         if (! $varThatIsModified instanceof Variable) {
             return false;

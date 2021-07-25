@@ -108,7 +108,7 @@ CODE_SAMPLE
 
         $neverNodes = $this->betterNodeFinder->findInstancesOf($node, [Node\Expr\Throw_::class, Throw_::class]);
 
-        $hasNeverFuncCall = $this->resolveHasNeverFuncCall($node);
+        $hasNeverFuncCall = $this->hasNeverFuncCall($node);
         if ($neverNodes === [] && ! $hasNeverFuncCall) {
             return true;
         }
@@ -122,7 +122,7 @@ CODE_SAMPLE
         return $node->returnType && $this->isName($node->returnType, 'never');
     }
 
-    private function resolveHasNeverFuncCall(ClassMethod | Function_ $functionLike): bool
+    private function hasNeverFuncCall(ClassMethod | Function_ $functionLike): bool
     {
         $hasNeverType = false;
 

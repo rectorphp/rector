@@ -202,10 +202,11 @@ CODE_SAMPLE
                 $parent->var,
                 $variable
             ) && $this->nodeNameResolver->isName($parent->var, $oldVariableName)
-            && ! $this->nodeComparator->areNodesEqual($parent->expr, $variable)
+                && ! $this->nodeComparator->areNodesEqual($parent->expr, $variable)
             ) {
                 return false;
             }
+
             $variable->name = $newVariableName;
         }
 

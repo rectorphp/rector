@@ -16,14 +16,12 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Param;
 use PhpParser\Node\Scalar;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\Accessory\NonEmptyArrayType;
 use PHPStan\Type\ArrayType;
-use PHPStan\Type\BooleanType;
 use PHPStan\Type\Constant\ConstantBooleanType;
 use PHPStan\Type\FloatType;
 use PHPStan\Type\Generic\GenericObjectType;
@@ -287,20 +285,6 @@ final class NodeTypeResolver
         }
 
         return false;
-    }
-
-    public function isPropertyBoolean(Property $property): bool
-    {
-        if ($this->isStaticType($property, BooleanType::class)) {
-            return true;
-        }
-
-        $defaultNodeValue = $property->props[0]->default;
-        if (! $defaultNodeValue instanceof Expr) {
-            return false;
-        }
-
-        return $this->isStaticType($defaultNodeValue, BooleanType::class);
     }
 
     /**

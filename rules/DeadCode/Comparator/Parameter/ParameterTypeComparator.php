@@ -15,7 +15,7 @@ final class ParameterTypeComparator
     ) {
     }
 
-    public function compareCurrentClassMethodAndParentStaticCall(
+    public function isClassMethodIdenticalToParentStaticCall(
         ClassMethod $classMethod,
         StaticCall $staticCall
     ): bool {

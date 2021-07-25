@@ -58,11 +58,11 @@ final class BreakingVariableRenameGuard
             return true;
         }
 
-        if ($this->conflictingNameResolver->checkNameIsInFunctionLike($expectedName, $functionLike)) {
+        if ($this->conflictingNameResolver->hasNameIsInFunctionLike($expectedName, $functionLike)) {
             return true;
         }
 
-        if ($this->overridenExistingNamesResolver->checkNameInClassMethodForNew($currentName, $functionLike)) {
+        if ($this->overridenExistingNamesResolver->hasNameInClassMethodForNew($currentName, $functionLike)) {
             return true;
         }
 
@@ -70,7 +70,7 @@ final class BreakingVariableRenameGuard
             return true;
         }
 
-        if ($this->skipOnConflictOtherVariable($functionLike, $expectedName)) {
+        if ($this->hasConflictVariable($functionLike, $expectedName)) {
             return true;
         }
 
@@ -102,11 +102,11 @@ final class BreakingVariableRenameGuard
             return true;
         }
 
-        if ($this->conflictingNameResolver->checkNameIsInFunctionLike($expectedName, $classMethod)) {
+        if ($this->conflictingNameResolver->hasNameIsInFunctionLike($expectedName, $classMethod)) {
             return true;
         }
 
-        if ($this->overridenExistingNamesResolver->checkNameInClassMethodForParam($expectedName, $classMethod)) {
+        if ($this->overridenExistingNamesResolver->hasNameInClassMethodForParam($expectedName, $classMethod)) {
             return true;
         }
 
@@ -148,7 +148,7 @@ final class BreakingVariableRenameGuard
         return $trinaryLogic->maybe();
     }
 
-    private function skipOnConflictOtherVariable(ClassMethod | Function_ | Closure $functionLike, string $newName): bool
+    private function hasConflictVariable(ClassMethod | Function_ | Closure $functionLike, string $newName): bool
     {
         return $this->betterNodeFinder->hasInstanceOfName((array) $functionLike->stmts, Variable::class, $newName);
     }

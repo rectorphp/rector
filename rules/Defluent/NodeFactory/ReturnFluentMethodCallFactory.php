@@ -29,7 +29,7 @@ final class ReturnFluentMethodCallFactory
 
         // this means the 1st method creates different object then it runs on
         // e.g. $sheet->getRow(), creates a "Row" object
-        $isFirstMethodCallFactory = $this->fluentChainMethodCallRootExtractor->resolveIsFirstMethodCallFactory(
+        $isFirstMethodCallFactory = $this->fluentChainMethodCallRootExtractor->isFirstMethodCallFactory(
             $rootMethodCall
         );
 

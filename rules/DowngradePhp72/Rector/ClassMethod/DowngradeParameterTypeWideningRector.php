@@ -128,7 +128,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($this->skipSafeType($classReflection, $node)) {
+        if ($this->isSafeType($classReflection, $node)) {
             return null;
         }
 
@@ -136,7 +136,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($this->skipClassMethod($node)) {
+        if ($this->shouldSkipClassMethod($node)) {
             return null;
         }
 
@@ -184,7 +184,7 @@ CODE_SAMPLE
         $param->type = null;
     }
 
-    private function skipClassMethod(ClassMethod $classMethod): bool
+    private function shouldSkipClassMethod(ClassMethod $classMethod): bool
     {
         if ($classMethod->isMagic()) {
             return true;
@@ -223,7 +223,7 @@ CODE_SAMPLE
         return count($classReflection->getAncestors()) === 1;
     }
 
-    private function skipSafeType(ClassReflection $classReflection, ClassMethod $classMethod): bool
+    private function isSafeType(ClassReflection $classReflection, ClassMethod $classMethod): bool
     {
         foreach ($this->safeTypes as $safeType) {
             if ($classReflection->isSubclassOf($safeType)) {

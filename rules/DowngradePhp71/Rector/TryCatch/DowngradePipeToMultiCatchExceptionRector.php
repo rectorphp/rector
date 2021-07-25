@@ -25,9 +25,9 @@ final class DowngradePipeToMultiCatchExceptionRector extends AbstractRector
                     <<<'CODE_SAMPLE'
 try {
     // Some code...
- } catch (ExceptionType1 | ExceptionType2 $exception) {
+} catch (ExceptionType1 | ExceptionType2 $exception) {
     $sameCode;
- }
+}
 CODE_SAMPLE
                     ,
                     <<<'CODE_SAMPLE'

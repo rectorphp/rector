@@ -102,14 +102,16 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function returnsByRef(Return_ $return): bool
+    private function hasByRefReturn(Return_ $return): bool
     {
         $node = $return;
+
         while ($node = $node->getAttribute(AttributeKey::PARENT_NODE)) {
             if ($node instanceof FunctionLike) {
                 return $node->returnsByRef();
             }
         }
+
         return false;
     }
 
@@ -119,7 +121,7 @@ CODE_SAMPLE
             return true;
         }
 
-        if ($this->returnsByRef($return)) {
+        if ($this->hasByRefReturn($return)) {
             return true;
         }
 

@@ -39,7 +39,7 @@ final class CurrentAndParentClassMethodComparator
             return false;
         }
 
-        if (! $this->parameterTypeComparator->compareCurrentClassMethodAndParentStaticCall($classMethod, $staticCall)) {
+        if (! $this->parameterTypeComparator->isClassMethodIdenticalToParentStaticCall($classMethod, $staticCall)) {
             return false;
         }
 
@@ -112,11 +112,11 @@ final class CurrentAndParentClassMethodComparator
             $nativeParentClassMethodReflection = $nativeParentClassReflection->getMethod($methodName);
 
             if (! $nativeParentClassMethodReflection->isProtected()) {
-                return $this->checkOverrideUsingReflection($classMethod, $parentClassReflection, $methodName);
+                return $this->isOverridingParentParameters($classMethod, $parentClassReflection, $methodName);
             }
 
             if (! $nativeParentClassMethodReflection->isPublic()) {
-                return $this->checkOverrideUsingReflection($classMethod, $parentClassReflection, $methodName);
+                return $this->isOverridingParentParameters($classMethod, $parentClassReflection, $methodName);
             }
 
             return true;
@@ -125,7 +125,7 @@ final class CurrentAndParentClassMethodComparator
         return false;
     }
 
-    private function checkOverrideUsingReflection(
+    private function isOverridingParentParameters(
         ClassMethod $classMethod,
         ClassReflection $classReflection,
         string $methodName
@@ -138,7 +138,6 @@ final class CurrentAndParentClassMethodComparator
         $parentMethodReflection = $classReflection->getMethod($methodName, $scope);
 
         // 3rd party code
-//        if ($parentMethodReflection !== null) {
         if (! $parentMethodReflection->isPrivate() && ! $parentMethodReflection->isPublic() && $classMethod->isPublic()) {
             return true;
         }

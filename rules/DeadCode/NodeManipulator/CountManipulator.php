@@ -27,28 +27,28 @@ final class CountManipulator
     {
         // e.g. count($values) > 0
         if ($node instanceof Greater) {
-            return $this->processGreater($node, $expr);
+            return $this->isGreater($node, $expr);
         }
 
         // e.g. count($values) >= 1
         if ($node instanceof GreaterOrEqual) {
-            return $this->processGreaterOrEqual($node, $expr);
+            return $this->isGreaterOrEqual($node, $expr);
         }
 
         // e.g. 0 < count($values)
         if ($node instanceof Smaller) {
-            return $this->processSmaller($node, $expr);
+            return $this->isSmaller($node, $expr);
         }
 
         // e.g. 1 <= count($values)
         if ($node instanceof SmallerOrEqual) {
-            return $this->processSmallerOrEqual($node, $expr);
+            return $this->isSmallerOrEqual($node, $expr);
         }
 
         return false;
     }
 
-    private function processGreater(Greater $greater, Expr $expr): bool
+    private function isGreater(Greater $greater, Expr $expr): bool
     {
         if (! $this->isNumber($greater->right, 0)) {
             return false;
@@ -57,7 +57,7 @@ final class CountManipulator
         return $this->isCountWithExpression($greater->left, $expr);
     }
 
-    private function processGreaterOrEqual(GreaterOrEqual $greaterOrEqual, Expr $expr): bool
+    private function isGreaterOrEqual(GreaterOrEqual $greaterOrEqual, Expr $expr): bool
     {
         if (! $this->isNumber($greaterOrEqual->right, 1)) {
             return false;
@@ -66,7 +66,7 @@ final class CountManipulator
         return $this->isCountWithExpression($greaterOrEqual->left, $expr);
     }
 
-    private function processSmaller(Smaller $smaller, Expr $expr): bool
+    private function isSmaller(Smaller $smaller, Expr $expr): bool
     {
         if (! $this->isNumber($smaller->left, 0)) {
             return false;
@@ -75,7 +75,7 @@ final class CountManipulator
         return $this->isCountWithExpression($smaller->right, $expr);
     }
 
-    private function processSmallerOrEqual(SmallerOrEqual $smallerOrEqual, Expr $expr): bool
+    private function isSmallerOrEqual(SmallerOrEqual $smallerOrEqual, Expr $expr): bool
     {
         if (! $this->isNumber($smallerOrEqual->left, 1)) {
             return false;

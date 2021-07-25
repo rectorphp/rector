@@ -46,7 +46,7 @@ final class ValueObjectClassAnalyzer
         $constructClassMethod = $class->getMethod(MethodName::CONSTRUCT);
 
         if (! $constructClassMethod instanceof ClassMethod) {
-            return $this->analyseWithoutConstructor($class, $className);
+            return $this->hasExlusivelySerializeProperties($class, $className);
         }
 
         // resolve constructor types
@@ -75,7 +75,7 @@ final class ValueObjectClassAnalyzer
         return true;
     }
 
-    private function analyseWithoutConstructor(Class_ $class, string $className): bool
+    private function hasExlusivelySerializeProperties(Class_ $class, string $className): bool
     {
         // A. has all properties with serialize?
         if ($this->hasAllPropertiesWithSerialize($class)) {

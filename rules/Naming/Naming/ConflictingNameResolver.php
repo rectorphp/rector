@@ -47,7 +47,7 @@ final class ConflictingNameResolver
         return $this->arrayFilter->filterWithAtLeastTwoOccurences($expectedNames);
     }
 
-    public function checkNameIsInFunctionLike(
+    public function hasNameIsInFunctionLike(
         string $variableName,
         ClassMethod | Function_ | Closure $functionLike
     ): bool {
