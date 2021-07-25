@@ -10,12 +10,14 @@ use PhpParser\Node\Expr\Cast\Array_;
 use PhpParser\Node\Expr\Cast\Bool_;
 use PhpParser\Node\Expr\Cast\Double;
 use PhpParser\Node\Expr\Cast\Int_;
+use PhpParser\Node\Expr\Cast\Object_;
 use PhpParser\Node\Expr\Cast\String_;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\BooleanType;
 use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\MixedType;
+use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use Rector\Core\Exception\NotImplementedYetException;
@@ -54,6 +56,10 @@ final class CastTypeResolver implements NodeTypeResolverInterface
 
         if ($node instanceof Array_) {
             return new ArrayType(new MixedType(), new MixedType());
+        }
+
+        if ($node instanceof Object_) {
+            return new ObjectType('stdClass');
         }
 
         throw new NotImplementedYetException($node::class);
