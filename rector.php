@@ -74,8 +74,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters->set(Option::SKIP, [
         // buggy in refactoring
         AddSeeTestAnnotationRector::class,
-        // buggy in check ReflectionNamedType
-        ChangeReflectionTypeToStringToGetNameRector::class,
 
         StringClassNameToClassConstantRector::class,
         // some classes in config might not exist without dev dependencies

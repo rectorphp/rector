@@ -12,6 +12,7 @@ use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Expr\Variable;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\ObjectType;
+use PHPStan\Type\UnionType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -105,7 +106,32 @@ CODE_SAMPLE
         if (! $this->isObjectType($node->expr, new ObjectType('ReflectionType'))) {
             return null;
         }
-        return $this->nodeFactory->createMethodCall($node->expr, self::GET_NAME);
+
+        $type = $this->nodeTypeResolver->resolve($node->expr);
+        if (! $type instanceof UnionType) {
+            return $this->nodeFactory->createMethodCall($node->expr, self::GET_NAME);
+        }
+
+        if (! $this->isWithReflectionType($type)) {
+            return $this->nodeFactory->createMethodCall($node->expr, self::GET_NAME);
+        }
+
+        return null;
+    }
+
+    private function isWithReflectionType(UnionType $unionType): bool
+    {
+        foreach ($unionType->getTypes() as $type) {
+            if (! $type instanceof ObjectType) {
+                continue;
+            }
+            if ($type->getClassName() !== 'ReflectionType') {
+                continue;
+            }
+            return true;
+        }
+
+        return false;
     }
 
     private function refactorMethodCall(MethodCall $methodCall): ?Node
@@ -203,7 +229,7 @@ CODE_SAMPLE
         return $this->isName($methodCall->name, 'getReturnType');
     }
 
-    private function refactorReflectionFunctionGetReturnType(MethodCall $methodCall): Node
+    private function refactorReflectionFunctionGetReturnType(MethodCall $methodCall): Node | Ternary
     {
         $refactoredMethodCall = $this->refactorIfHasReturnTypeWasCalled($methodCall);
         if ($refactoredMethodCall !== null) {
