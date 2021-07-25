@@ -52,6 +52,8 @@ final class PropertyToAddCollector implements NodeCollectorInterface
     {
         $uniqueHash = spl_object_hash($class);
         $this->propertiesByClass[$uniqueHash][] = $propertyMetadata;
+
+        $this->rectorChangeCollector->notifyNodeFileInfo($class);
     }
 
     public function addConstantToClass(Class_ $class, ClassConst $classConst): void

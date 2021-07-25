@@ -456,15 +456,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         $this->nodesToAddCollector->addNodeBeforeNode($newNode, $positionNode);
     }
 
-    protected function addConstructorDependencyToClass(
-        Class_ $class,
-        Type $propertyType,
-        string $propertyName,
-        int $propertyFlags = 0
-    ): void {
-        $this->propertyAdder->addConstructorDependencyToClass($class, $propertyType, $propertyName, $propertyFlags);
-    }
-
     protected function removeNode(Node $node): void
     {
         $this->nodeRemover->removeNode($node);

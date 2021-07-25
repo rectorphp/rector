@@ -17,6 +17,8 @@ use Rector\Naming\Naming\PropertyNaming;
 use Rector\Naming\ValueObject\ExpectedName;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\TypeAnalyzer\ArrayTypeAnalyzer;
+use Rector\PostRector\Collector\PropertyToAddCollector;
+use Rector\PostRector\ValueObject\PropertyMetadata;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\Transform\ValueObject\ArgumentFuncCallToMethodCall;
 use Rector\Transform\ValueObject\ArrayFuncCallToMethodCall;
@@ -51,7 +53,8 @@ final class ArgumentFuncCallToMethodCallRector extends AbstractRector implements
 
     public function __construct(
         private ArrayTypeAnalyzer $arrayTypeAnalyzer,
-        private PropertyNaming $propertyNaming
+        private PropertyNaming $propertyNaming,
+        private PropertyToAddCollector $propertyToAddCollector
     ) {
     }
 
@@ -181,7 +184,12 @@ CODE_SAMPLE
             throw new ShouldNotHappenException();
         }
 
-        $this->addConstructorDependencyToClass($class, $fullyQualifiedObjectType, $expectedName->getName());
+        $propertyMetadata = new PropertyMetadata(
+            $expectedName->getName(),
+            $fullyQualifiedObjectType,
+            Class_::MODIFIER_PRIVATE
+        );
+        $this->propertyToAddCollector->addPropertyToClass($class, $propertyMetadata);
 
         $propertyFetchNode = $this->nodeFactory->createPropertyFetch('this', $expectedName->getName());
 
@@ -214,7 +222,8 @@ CODE_SAMPLE
 
         $fullyQualifiedObjectType = new FullyQualifiedObjectType($arrayFuncCallToMethodCall->getClass());
 
-        $this->addConstructorDependencyToClass($class, $fullyQualifiedObjectType, $propertyName);
+        $propertyMetadata = new PropertyMetadata($propertyName, $fullyQualifiedObjectType, Class_::MODIFIER_PRIVATE);
+        $this->propertyToAddCollector->addPropertyToClass($class, $propertyMetadata);
 
         return $this->createMethodCallArrayFunctionToMethodCall(
             $funcCall,

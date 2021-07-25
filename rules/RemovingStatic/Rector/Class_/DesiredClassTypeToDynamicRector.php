@@ -15,6 +15,8 @@ use Rector\Core\Configuration\Option;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Naming\Naming\PropertyNaming;
+use Rector\PostRector\Collector\PropertyToAddCollector;
+use Rector\PostRector\ValueObject\PropertyMetadata;
 use Rector\RemovingStatic\NodeAnalyzer\StaticCallPresenceAnalyzer;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -33,6 +35,7 @@ final class DesiredClassTypeToDynamicRector extends AbstractRector
     public function __construct(
         private PropertyNaming $propertyNaming,
         private StaticCallPresenceAnalyzer $staticCallPresenceAnalyzer,
+        private PropertyToAddCollector $propertyToAddCollector,
         ParameterProvider $parameterProvider
     ) {
         $typesToRemoveStaticFrom = $parameterProvider->provideArrayParameter(Option::TYPES_TO_REMOVE_STATIC_FROM);
@@ -125,7 +128,13 @@ CODE_SAMPLE
 
             if ($this->staticCallPresenceAnalyzer->hasClassAnyMethodWithStaticCallOnType($node, $staticObjectType)) {
                 $propertyExpectedName = $this->propertyNaming->fqnToVariableName($staticObjectType);
-                $this->addConstructorDependencyToClass($node, $staticObjectType, $propertyExpectedName);
+
+                $propertyMetadata = new PropertyMetadata(
+                    $propertyExpectedName,
+                    $staticObjectType,
+                    Class_::MODIFIER_PRIVATE
+                );
+                $this->propertyToAddCollector->addPropertyToClass($node, $propertyMetadata);
 
                 return $node;
             }

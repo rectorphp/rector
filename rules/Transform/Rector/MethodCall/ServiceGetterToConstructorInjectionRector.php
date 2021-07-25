@@ -10,13 +10,14 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassLike;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\NodeAnalyzer\ClassAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Naming\Naming\PropertyNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PostRector\Collector\PropertyToAddCollector;
+use Rector\PostRector\ValueObject\PropertyMetadata;
 use Rector\Transform\ValueObject\ServiceGetterToConstructorInjection;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -39,7 +40,8 @@ final class ServiceGetterToConstructorInjectionRector extends AbstractRector imp
 
     public function __construct(
         private PropertyNaming $propertyNaming,
-        private ClassAnalyzer $classAnalyzer
+        private ClassAnalyzer $classAnalyzer,
+        private PropertyToAddCollector $propertyToAddCollector
     ) {
     }
 
@@ -136,7 +138,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $classLike instanceof ClassLike) {
+        if (! $classLike instanceof Class_) {
             return null;
         }
 
@@ -157,8 +159,8 @@ CODE_SAMPLE
 
             $propertyName = $this->propertyNaming->fqnToVariableName($serviceObjectType);
 
-            /** @var Class_ $classLike */
-            $this->addConstructorDependencyToClass($classLike, $serviceObjectType, $propertyName);
+            $propertyMetadata = new PropertyMetadata($propertyName, $serviceObjectType, Class_::MODIFIER_PRIVATE);
+            $this->propertyToAddCollector->addPropertyToClass($classLike, $propertyMetadata);
 
             return new PropertyFetch(new Variable('this'), new Identifier($propertyName));
         }

@@ -22,6 +22,8 @@ use Rector\Core\ValueObject\MethodName;
 use Rector\Naming\Naming\PropertyNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPUnit\NodeFactory\SetUpClassMethodFactory;
+use Rector\PostRector\Collector\PropertyToAddCollector;
+use Rector\PostRector\ValueObject\PropertyMetadata;
 use Rector\RemovingStatic\NodeAnalyzer\SetUpClassMethodUpdater;
 use Rector\RemovingStatic\NodeFactory\SelfContainerFactory;
 use Rector\RemovingStatic\NodeFactory\SetUpFactory;
@@ -55,7 +57,8 @@ final class PHPUnitStaticToKernelTestCaseGetRector extends AbstractRector implem
         private SetUpClassMethodFactory $setUpClassMethodFactory,
         private SetUpFactory $setUpFactory,
         private SelfContainerFactory $selfContainerFactory,
-        private SetUpClassMethodUpdater $setUpClassMethodUpdater
+        private SetUpClassMethodUpdater $setUpClassMethodUpdater,
+        private PropertyToAddCollector $propertyToAddCollector
     ) {
     }
 
@@ -158,7 +161,13 @@ CODE_SAMPLE
         // add via constructor
         foreach ($newPropertyObjectTypes as $newPropertyObjectType) {
             $newPropertyName = $this->propertyNaming->fqnToVariableName($newPropertyObjectType);
-            $this->addConstructorDependencyToClass($class, $newPropertyObjectType, $newPropertyName);
+
+            $propertyMetadata = new PropertyMetadata(
+                $newPropertyName,
+                $newPropertyObjectType,
+                Class_::MODIFIER_PRIVATE
+            );
+            $this->propertyToAddCollector->addPropertyToClass($class, $propertyMetadata);
         }
 
         return $class;

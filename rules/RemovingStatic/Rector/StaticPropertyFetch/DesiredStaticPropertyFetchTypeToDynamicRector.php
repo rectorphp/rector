@@ -16,6 +16,8 @@ use Rector\Core\Configuration\Option;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Naming\Naming\PropertyNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PostRector\Collector\PropertyToAddCollector;
+use Rector\PostRector\ValueObject\PropertyMetadata;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -32,6 +34,7 @@ final class DesiredStaticPropertyFetchTypeToDynamicRector extends AbstractRector
 
     public function __construct(
         private PropertyNaming $propertyNaming,
+        private PropertyToAddCollector $propertyToAddCollector,
         ParameterProvider $parameterProvider
     ) {
         $typesToRemoveStaticFrom = $parameterProvider->provideArrayParameter(Option::TYPES_TO_REMOVE_STATIC_FROM);
@@ -109,7 +112,9 @@ CODE_SAMPLE
 
             /** @var Class_ $class */
             $class = $node->getAttribute(AttributeKey::CLASS_NODE);
-            $this->addConstructorDependencyToClass($class, $staticObjectType, $propertyName);
+
+            $propertyMetadata = new PropertyMetadata($propertyName, $staticObjectType, Class_::MODIFIER_PRIVATE);
+            $this->propertyToAddCollector->addPropertyToClass($class, $propertyMetadata);
 
             $objectPropertyFetch = new PropertyFetch(new Variable('this'), $propertyName);
             return new PropertyFetch($objectPropertyFetch, $node->name);

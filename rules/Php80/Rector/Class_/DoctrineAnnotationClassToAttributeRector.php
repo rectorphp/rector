@@ -19,6 +19,8 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
 use Rector\Php80\NodeFactory\AttributeFlagFactory;
 use Rector\PhpAttribute\Printer\PhpAttributeGroupFactory;
+use Rector\PostRector\Collector\PropertyToAddCollector;
+use Rector\PostRector\ValueObject\PropertyMetadata;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Webmozart\Assert\Assert;
@@ -63,7 +65,8 @@ final class DoctrineAnnotationClassToAttributeRector extends AbstractRector impl
         private PhpDocTagRemover $phpDocTagRemover,
         private AttributeFlagFactory $attributeFlagFactory,
         private PhpAttributeGroupFactory $phpAttributeGroupFactory,
-        private PhpAttributeAnalyzer $phpAttributeAnalyzer
+        private PhpAttributeAnalyzer $phpAttributeAnalyzer,
+        private PropertyToAddCollector $propertyToAddCollector
     ) {
     }
 
@@ -152,7 +155,9 @@ CODE_SAMPLE
 
             // require in constructor
             $propertyName = $this->getName($property);
-            $this->addConstructorDependencyToClass($node, new MixedType(), $propertyName, Class_::MODIFIER_PUBLIC);
+
+            $propertyMetadata = new PropertyMetadata($propertyName, new MixedType(), Class_::MODIFIER_PUBLIC);
+            $this->propertyToAddCollector->addPropertyToClass($node, $propertyMetadata);
 
             if ($this->shouldRemoveAnnotations) {
                 $this->removeNode($property);

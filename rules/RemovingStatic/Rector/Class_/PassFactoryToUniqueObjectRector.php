@@ -14,6 +14,8 @@ use PHPStan\Type\ObjectType;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Naming\Naming\PropertyNaming;
+use Rector\PostRector\Collector\PropertyToAddCollector;
+use Rector\PostRector\ValueObject\PropertyMetadata;
 use Rector\RemovingStatic\Printer\FactoryClassPrinter;
 use Rector\RemovingStatic\StaticTypesInClassResolver;
 use Rector\RemovingStatic\UniqueObjectFactoryFactory;
@@ -42,7 +44,8 @@ final class PassFactoryToUniqueObjectRector extends AbstractRector implements Co
         private PropertyNaming $propertyNaming,
         private UniqueObjectOrServiceDetector $uniqueObjectOrServiceDetector,
         private UniqueObjectFactoryFactory $uniqueObjectFactoryFactory,
-        private FactoryClassPrinter $factoryClassPrinter
+        private FactoryClassPrinter $factoryClassPrinter,
+        private PropertyToAddCollector $propertyToAddCollector
     ) {
     }
 
@@ -175,7 +178,9 @@ CODE_SAMPLE
 
         foreach ($staticTypesInClass as $staticTypeInClass) {
             $variableName = $this->propertyNaming->fqnToVariableName($staticTypeInClass);
-            $this->addConstructorDependencyToClass($class, $staticTypeInClass, $variableName);
+
+            $propertyMetadata = new PropertyMetadata($variableName, $staticTypeInClass, Class_::MODIFIER_PRIVATE);
+            $this->propertyToAddCollector->addPropertyToClass($class, $propertyMetadata);
 
             // is this an object? create factory for it next to this :)
             if ($this->uniqueObjectOrServiceDetector->isUniqueObject()) {

@@ -14,6 +14,8 @@ use PHPStan\Type\ObjectType;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Naming\Naming\PropertyNaming;
+use Rector\PostRector\Collector\PropertyToAddCollector;
+use Rector\PostRector\ValueObject\PropertyMetadata;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -47,6 +49,7 @@ final class NewUniqueObjectToEntityFactoryRector extends AbstractRector implemen
 
     public function __construct(
         private PropertyNaming $propertyNaming,
+        private PropertyToAddCollector $propertyToAddCollector
     ) {
     }
 
@@ -145,7 +148,8 @@ CODE_SAMPLE
             $propertyName = $this->propertyNaming->fqnToVariableName($matchedObjectType) . self::FACTORY;
             $propertyType = new FullyQualifiedObjectType($matchedObjectType->getClassName() . self::FACTORY);
 
-            $this->addConstructorDependencyToClass($node, $propertyType, $propertyName);
+            $propertyMetadata = new PropertyMetadata($propertyName, $propertyType, Class_::MODIFIER_PRIVATE);
+            $this->propertyToAddCollector->addPropertyToClass($node, $propertyMetadata);
         }
 
         return $node;

@@ -15,6 +15,8 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Naming\Naming\PropertyNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PostRector\Collector\PropertyToAddCollector;
+use Rector\PostRector\ValueObject\PropertyMetadata;
 use Rector\Transform\ValueObject\VariableMethodCallToServiceCall;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -35,7 +37,8 @@ final class VariableMethodCallToServiceCallRector extends AbstractRector impleme
     private array $variableMethodCallsToServiceCalls = [];
 
     public function __construct(
-        private PropertyNaming $propertyNaming
+        private PropertyNaming $propertyNaming,
+        private PropertyToAddCollector $propertyToAddCollector
     ) {
     }
 
@@ -128,7 +131,10 @@ CODE_SAMPLE
 
             $serviceObjectType = new ObjectType($variableMethodCallToServiceCall->getServiceType());
 
-            $this->addConstructorDependency($serviceObjectType, $classLike);
+            $propertyName = $this->propertyNaming->fqnToVariableName($serviceObjectType);
+            $propertyMetadata = new PropertyMetadata($propertyName, $serviceObjectType, Class_::MODIFIER_PRIVATE);
+            $this->propertyToAddCollector->addPropertyToClass($classLike, $propertyMetadata);
+
             return $this->createServiceMethodCall(
                 $serviceObjectType,
                 $variableMethodCallToServiceCall->getServiceMethodName(),
@@ -145,12 +151,6 @@ CODE_SAMPLE
     public function configure(array $configuration): void
     {
         $this->variableMethodCallsToServiceCalls = $configuration[self::VARIABLE_METHOD_CALLS_TO_SERVICE_CALLS] ?? [];
-    }
-
-    private function addConstructorDependency(ObjectType $objectType, Class_ $class): void
-    {
-        $propertyName = $this->propertyNaming->fqnToVariableName($objectType);
-        $this->addConstructorDependencyToClass($class, $objectType, $propertyName);
     }
 
     private function createServiceMethodCall(ObjectType $objectType, string $methodName, MethodCall $node): MethodCall

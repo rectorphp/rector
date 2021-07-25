@@ -14,7 +14,8 @@ use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PostRector\DependencyInjection\PropertyAdder;
+use Rector\PostRector\Collector\PropertyToAddCollector;
+use Rector\PostRector\ValueObject\PropertyMetadata;
 
 final class PropertyConstructorInjectionManipulator
 {
@@ -23,7 +24,7 @@ final class PropertyConstructorInjectionManipulator
         private PhpDocInfoFactory $phpDocInfoFactory,
         private PhpDocTypeChanger $phpDocTypeChanger,
         private PhpDocTagRemover $phpDocTagRemover,
-        private PropertyAdder $propertyAdder
+        private PropertyToAddCollector $propertyToAddCollector
     ) {
     }
 
@@ -43,6 +44,7 @@ final class PropertyConstructorInjectionManipulator
             throw new ShouldNotHappenException();
         }
 
-        $this->propertyAdder->addConstructorDependencyToClass($classLike, $type, $propertyName, $property->flags);
+        $propertyMetadata = new PropertyMetadata($propertyName, $type, $property->flags);
+        $this->propertyToAddCollector->addPropertyToClass($classLike, $propertyMetadata);
     }
 }

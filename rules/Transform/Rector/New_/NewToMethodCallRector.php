@@ -15,6 +15,8 @@ use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PostRector\Collector\PropertyToAddCollector;
+use Rector\PostRector\ValueObject\PropertyMetadata;
 use Rector\Transform\ValueObject\NewToMethodCall;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -36,7 +38,8 @@ final class NewToMethodCallRector extends AbstractRector implements Configurable
     private array $newsToMethodCalls = [];
 
     public function __construct(
-        private ClassNaming $classNaming
+        private ClassNaming $classNaming,
+        private PropertyToAddCollector $propertyToAddCollector
     ) {
     }
 
@@ -98,11 +101,11 @@ CODE_SAMPLE
                 continue;
             }
 
-            /** @var Class_ $classNode */
-            $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
+            /** @var Class_ $class */
+            $class = $node->getAttribute(AttributeKey::CLASS_NODE);
 
             $propertyName = $this->getExistingFactoryPropertyName(
-                $classNode,
+                $class,
                 $newsToMethodCall->getServiceObjectType()
             );
 
@@ -111,11 +114,12 @@ CODE_SAMPLE
                 $propertyName = $this->classNaming->getShortName($serviceObjectType->getClassName());
                 $propertyName = lcfirst($propertyName);
 
-                $this->addConstructorDependencyToClass(
-                    $classNode,
+                $propertyMetadata = new PropertyMetadata(
+                    $propertyName,
                     $newsToMethodCall->getServiceObjectType(),
-                    $propertyName
+                    Class_::MODIFIER_PRIVATE
                 );
+                $this->propertyToAddCollector->addPropertyToClass($class, $propertyMetadata);
             }
 
             $propertyFetch = new PropertyFetch(new Variable('this'), $propertyName);

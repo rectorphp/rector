@@ -16,6 +16,8 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Naming\Naming\PropertyNaming;
 use Rector\Naming\ValueObject\ExpectedName;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PostRector\Collector\PropertyToAddCollector;
+use Rector\PostRector\ValueObject\PropertyMetadata;
 use Rector\Transform\NodeFactory\PropertyFetchFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -37,7 +39,8 @@ final class NewToConstructorInjectionRector extends AbstractRector implements Co
 
     public function __construct(
         private PropertyFetchFactory $propertyFetchFactory,
-        private PropertyNaming $propertyNaming
+        private PropertyNaming $propertyNaming,
+        private PropertyToAddCollector $propertyToAddCollector
     ) {
     }
 
@@ -176,11 +179,12 @@ CODE_SAMPLE
                 continue;
             }
 
-            $this->addConstructorDependencyToClass(
-                $classLike,
+            $propertyMetadata = new PropertyMetadata(
+                $expectedPropertyName->getName(),
                 $constructorInjectionObjectType,
-                $expectedPropertyName->getName()
+                Class_::MODIFIER_PRIVATE
             );
+            $this->propertyToAddCollector->addPropertyToClass($classLike, $propertyMetadata);
         }
     }
 }

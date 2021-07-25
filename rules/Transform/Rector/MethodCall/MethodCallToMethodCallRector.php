@@ -15,6 +15,7 @@ use Rector\Core\NodeAnalyzer\PropertyPresenceChecker;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Naming\Naming\PropertyNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PostRector\Collector\PropertyToAddCollector;
 use Rector\PostRector\ValueObject\PropertyMetadata;
 use Rector\Transform\ValueObject\MethodCallToMethodCall;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
@@ -38,7 +39,8 @@ final class MethodCallToMethodCallRector extends AbstractRector implements Confi
 
     public function __construct(
         private PropertyNaming $propertyNaming,
-        private PropertyPresenceChecker $propertyPresenceChecker
+        private PropertyPresenceChecker $propertyPresenceChecker,
+        private PropertyToAddCollector $propertyToAddCollector
     ) {
     }
 
@@ -118,7 +120,8 @@ CODE_SAMPLE
                 continue;
             }
 
-            $this->addConstructorDependencyToClass($class, $newObjectType, $newPropertyName);
+            $propertyMetadata = new PropertyMetadata($newPropertyName, $newObjectType, Class_::MODIFIER_PRIVATE);
+            $this->propertyToAddCollector->addPropertyToClass($class, $propertyMetadata);
 
             // rename property
             $node->var = new PropertyFetch($propertyFetch->var, $newPropertyName);

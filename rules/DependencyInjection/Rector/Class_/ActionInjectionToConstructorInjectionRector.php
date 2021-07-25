@@ -11,6 +11,8 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DependencyInjection\Collector\VariablesToPropertyFetchCollection;
+use Rector\PostRector\Collector\PropertyToAddCollector;
+use Rector\PostRector\ValueObject\PropertyMetadata;
 use Rector\Symfony\DataProvider\ServiceMapProvider;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -22,7 +24,8 @@ final class ActionInjectionToConstructorInjectionRector extends AbstractRector
 {
     public function __construct(
         private ServiceMapProvider $applicationServiceMapProvider,
-        private VariablesToPropertyFetchCollection $variablesToPropertyFetchCollection
+        private VariablesToPropertyFetchCollection $variablesToPropertyFetchCollection,
+        private PropertyToAddCollector $propertyToAddCollector
     ) {
     }
 
@@ -96,15 +99,17 @@ CODE_SAMPLE
                 continue;
             }
 
-            $paramNodeType = $this->getObjectType($paramNode);
+            $paramType = $this->getObjectType($paramNode);
 
             /** @var string $paramName */
             $paramName = $this->getName($paramNode->var);
-            $this->addConstructorDependencyToClass($class, $paramNodeType, $paramName);
+
+            $propertyMetadata = new PropertyMetadata($paramName, $paramType, Class_::MODIFIER_PRIVATE);
+            $this->propertyToAddCollector->addPropertyToClass($class, $propertyMetadata);
 
             $this->nodeRemover->removeParam($classMethod, $key);
 
-            $this->variablesToPropertyFetchCollection->addVariableNameAndType($paramName, $paramNodeType);
+            $this->variablesToPropertyFetchCollection->addVariableNameAndType($paramName, $paramType);
         }
     }
 
