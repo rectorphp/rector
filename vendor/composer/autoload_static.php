@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit34631dccfaf2f8104c896102e9d8bb26
+class ComposerStaticInit3a1a27275c314b6d117fed2a2514ddaf
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -3148,7 +3148,6 @@ class ComposerStaticInit34631dccfaf2f8104c896102e9d8bb26
         'Rector\\PostRector\\Contract\\Collector\\NodeCollectorInterface' => __DIR__ . '/../..' . '/packages/PostRector/Contract/Collector/NodeCollectorInterface.php',
         'Rector\\PostRector\\Contract\\Rector\\ComplementaryRectorInterface' => __DIR__ . '/../..' . '/packages/PostRector/Contract/Rector/ComplementaryRectorInterface.php',
         'Rector\\PostRector\\Contract\\Rector\\PostRectorInterface' => __DIR__ . '/../..' . '/packages/PostRector/Contract/Rector/PostRectorInterface.php',
-        'Rector\\PostRector\\DependencyInjection\\PropertyAdder' => __DIR__ . '/../..' . '/packages/PostRector/DependencyInjection/PropertyAdder.php',
         'Rector\\PostRector\\NodeAnalyzer\\NetteInjectDetector' => __DIR__ . '/../..' . '/packages/PostRector/NodeAnalyzer/NetteInjectDetector.php',
         'Rector\\PostRector\\Rector\\AbstractPostRector' => __DIR__ . '/../..' . '/packages/PostRector/Rector/AbstractPostRector.php',
         'Rector\\PostRector\\Rector\\ClassRenamingPostRector' => __DIR__ . '/../..' . '/packages/PostRector/Rector/ClassRenamingPostRector.php',
@@ -3852,9 +3851,9 @@ class ComposerStaticInit34631dccfaf2f8104c896102e9d8bb26
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit34631dccfaf2f8104c896102e9d8bb26::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit34631dccfaf2f8104c896102e9d8bb26::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit34631dccfaf2f8104c896102e9d8bb26::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit3a1a27275c314b6d117fed2a2514ddaf::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit3a1a27275c314b6d117fed2a2514ddaf::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit3a1a27275c314b6d117fed2a2514ddaf::$classMap;
 
         }, null, ClassLoader::class);
     }

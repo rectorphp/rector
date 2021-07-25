@@ -18,6 +18,8 @@ use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Doctrine\NodeAnalyzer\MethodCallNameOnTypeResolver;
 use Rector\Doctrine\NodeManipulator\DependencyRemover;
+use Rector\PostRector\Collector\PropertyToAddCollector;
+use Rector\PostRector\ValueObject\PropertyMetadata;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -42,10 +44,15 @@ final class ManagerRegistryGetManagerToEntityManagerRector extends \Rector\Core\
      * @var \Rector\Doctrine\NodeManipulator\DependencyRemover
      */
     private $dependencyRemover;
-    public function __construct(\Rector\Doctrine\NodeAnalyzer\MethodCallNameOnTypeResolver $methodCallNameOnTypeResolver, \Rector\Doctrine\NodeManipulator\DependencyRemover $dependencyRemover)
+    /**
+     * @var \Rector\PostRector\Collector\PropertyToAddCollector
+     */
+    private $propertyToAddCollector;
+    public function __construct(\Rector\Doctrine\NodeAnalyzer\MethodCallNameOnTypeResolver $methodCallNameOnTypeResolver, \Rector\Doctrine\NodeManipulator\DependencyRemover $dependencyRemover, \Rector\PostRector\Collector\PropertyToAddCollector $propertyToAddCollector)
     {
         $this->methodCallNameOnTypeResolver = $methodCallNameOnTypeResolver;
         $this->dependencyRemover = $dependencyRemover;
+        $this->propertyToAddCollector = $propertyToAddCollector;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -192,7 +199,8 @@ CODE_SAMPLE
             $assign = $this->nodeFactory->createPropertyAssignment($name);
             $classMethod->stmts[] = new \PhpParser\Node\Stmt\Expression($assign);
         }
-        $this->addConstructorDependencyToClass($class, $fullyQualifiedObjectType, $name);
+        $propertyMetadata = new \Rector\PostRector\ValueObject\PropertyMetadata($name, $fullyQualifiedObjectType, \PhpParser\Node\Stmt\Class_::MODIFIER_PRIVATE);
+        $this->propertyToAddCollector->addPropertyToClass($class, $propertyMetadata);
     }
     private function isRegistryGetManagerMethodCall(\PhpParser\Node\Expr\Assign $assign) : bool
     {

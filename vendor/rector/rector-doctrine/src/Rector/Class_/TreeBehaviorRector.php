@@ -127,20 +127,20 @@ CODE_SAMPLE
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
-        $doctrineAnnotationTagValueNode = $phpDocInfo->getByAnnotationClass('Gedmo\\Mapping\\Annotation\\Tree');
+        $propertyPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
+        $doctrineAnnotationTagValueNode = $propertyPhpDocInfo->getByAnnotationClass('Gedmo\\Mapping\\Annotation\\Tree');
         if (!$doctrineAnnotationTagValueNode instanceof \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode) {
             return null;
         }
         // we're in a tree entity
-        $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $doctrineAnnotationTagValueNode);
+        $this->phpDocTagRemover->removeTagValueFromNode($propertyPhpDocInfo, $doctrineAnnotationTagValueNode);
         $node->implements[] = new \PhpParser\Node\Name\FullyQualified('Knp\\DoctrineBehaviors\\Contract\\Entity\\TreeNodeInterface');
         $this->classInsertManipulator->addAsFirstTrait($node, 'Knp\\DoctrineBehaviors\\Model\\Tree\\TreeNodeTrait');
         // remove all tree-related properties and their getters and setters - it's handled by behavior trait
         $removedPropertyNames = [];
         foreach ($node->getProperties() as $property) {
             $propertyPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
-            if (!$this->shouldRemoveProperty($propertyPhpDocInfo)) {
+            if (!$propertyPhpDocInfo->hasByAnnotationClasses(['Gedmo\\Mapping\\Annotation\\TreeLeft', 'Gedmo\\Mapping\\Annotation\\TreeRight', 'Gedmo\\Mapping\\Annotation\\TreeRoot', 'Gedmo\\Mapping\\Annotation\\TreeParent', 'Gedmo\\Mapping\\Annotation\\TreeLevel'])) {
                 continue;
             }
             /** @var string $propertyName */

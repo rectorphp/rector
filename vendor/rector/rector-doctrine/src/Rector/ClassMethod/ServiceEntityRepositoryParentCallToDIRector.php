@@ -15,8 +15,10 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Doctrine\NodeFactory\RepositoryNodeFactory;
 use Rector\Doctrine\Type\RepositoryTypeFactory;
+use Rector\Naming\Naming\PropertyNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PostRector\Collector\PropertyToAddCollector;
+use Rector\PostRector\ValueObject\PropertyMetadata;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -43,12 +45,17 @@ final class ServiceEntityRepositoryParentCallToDIRector extends \Rector\Core\Rec
      * @var \Rector\Core\NodeManipulator\ClassDependencyManipulator
      */
     private $classDependencyManipulator;
-    public function __construct(\Rector\Doctrine\NodeFactory\RepositoryNodeFactory $repositoryNodeFactory, \Rector\Doctrine\Type\RepositoryTypeFactory $repositoryTypeFactory, \Rector\PostRector\Collector\PropertyToAddCollector $propertyToAddCollector, \Rector\Core\NodeManipulator\ClassDependencyManipulator $classDependencyManipulator)
+    /**
+     * @var \Rector\Naming\Naming\PropertyNaming
+     */
+    private $propertyNaming;
+    public function __construct(\Rector\Doctrine\NodeFactory\RepositoryNodeFactory $repositoryNodeFactory, \Rector\Doctrine\Type\RepositoryTypeFactory $repositoryTypeFactory, \Rector\PostRector\Collector\PropertyToAddCollector $propertyToAddCollector, \Rector\Core\NodeManipulator\ClassDependencyManipulator $classDependencyManipulator, \Rector\Naming\Naming\PropertyNaming $propertyNaming)
     {
         $this->repositoryNodeFactory = $repositoryNodeFactory;
         $this->repositoryTypeFactory = $repositoryTypeFactory;
         $this->propertyToAddCollector = $propertyToAddCollector;
         $this->classDependencyManipulator = $classDependencyManipulator;
+        $this->propertyNaming = $propertyNaming;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -125,7 +132,9 @@ CODE_SAMPLE
         $this->classDependencyManipulator->addConstructorDependencyWithCustomAssign($classLike, 'entityManager', $entityManagerObjectType, $repositoryAssign);
         $this->addRepositoryProperty($classLike, $entityReferenceExpr);
         // 5. add param + add property, dependency
-        $this->propertyAdder->addServiceConstructorDependencyToClass($classLike, $entityManagerObjectType);
+        $propertyName = $this->propertyNaming->fqnToVariableName($entityManagerObjectType);
+        $propertyMetadata = new \Rector\PostRector\ValueObject\PropertyMetadata($propertyName, $entityManagerObjectType, \PhpParser\Node\Stmt\Class_::MODIFIER_PRIVATE);
+        $this->propertyToAddCollector->addPropertyToClass($classLike, $propertyMetadata);
         return $node;
     }
     private function shouldSkipClassMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
