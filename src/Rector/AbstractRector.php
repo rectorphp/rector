@@ -44,7 +44,6 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PostRector\Collector\NodesToAddCollector;
 use Rector\PostRector\Collector\NodesToRemoveCollector;
-use Rector\PostRector\DependencyInjection\PropertyAdder;
 use Rector\Privatization\NodeManipulator\VisibilityManipulator;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -105,8 +104,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
 
     protected NodeComparator $nodeComparator;
 
-    protected PropertyAdder $propertyAdder;
-
     protected NodesToRemoveCollector $nodesToRemoveCollector;
 
     protected File $file;
@@ -147,7 +144,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         NodesToAddCollector $nodesToAddCollector,
         RectorChangeCollector $rectorChangeCollector,
         NodeRemover $nodeRemover,
-        PropertyAdder $propertyAdder,
         RemovedAndAddedFilesCollector $removedAndAddedFilesCollector,
         BetterStandardPrinter $betterStandardPrinter,
         NodeNameResolver $nodeNameResolver,
@@ -176,7 +172,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         $this->nodesToAddCollector = $nodesToAddCollector;
         $this->rectorChangeCollector = $rectorChangeCollector;
         $this->nodeRemover = $nodeRemover;
-        $this->propertyAdder = $propertyAdder;
         $this->removedAndAddedFilesCollector = $removedAndAddedFilesCollector;
         $this->betterStandardPrinter = $betterStandardPrinter;
         $this->nodeNameResolver = $nodeNameResolver;
