@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210724;
+namespace RectorPrefix20210725;
 
 if (\interface_exists('Tx_Extbase_DomainObject_DomainObjectInterface')) {
     return;

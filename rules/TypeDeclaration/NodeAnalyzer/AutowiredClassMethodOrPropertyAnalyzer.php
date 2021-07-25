@@ -4,10 +4,11 @@ declare (strict_types=1);
 namespace Rector\TypeDeclaration\NodeAnalyzer;
 
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Property;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\NodeNameResolver\NodeNameResolver;
-use RectorPrefix20210724\Symfony\Contracts\Service\Attribute\Required;
-final class AutowiredClassMethodAnalyzer
+use RectorPrefix20210725\Symfony\Contracts\Service\Attribute\Required;
+final class AutowiredClassMethodOrPropertyAnalyzer
 {
     /**
      * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
@@ -22,15 +23,18 @@ final class AutowiredClassMethodAnalyzer
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->nodeNameResolver = $nodeNameResolver;
     }
-    public function detect(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
+    /**
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property $node
+     */
+    public function detect($node) : bool
     {
-        $classMethodPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
-        if ($classMethodPhpDocInfo->hasByNames(['required', 'inject'])) {
+        $nodePhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
+        if ($nodePhpDocInfo->hasByNames(['required', 'inject'])) {
             return \true;
         }
-        foreach ($classMethod->attrGroups as $attrGroup) {
+        foreach ($node->attrGroups as $attrGroup) {
             foreach ($attrGroup->attrs as $attribute) {
-                if ($this->nodeNameResolver->isNames($attribute->name, [\RectorPrefix20210724\Symfony\Contracts\Service\Attribute\Required::class, 'Nette\\DI\\Attributes\\Inject'])) {
+                if ($this->nodeNameResolver->isNames($attribute->name, [\RectorPrefix20210725\Symfony\Contracts\Service\Attribute\Required::class, 'Nette\\DI\\Attributes\\Inject'])) {
                     return \true;
                 }
             }

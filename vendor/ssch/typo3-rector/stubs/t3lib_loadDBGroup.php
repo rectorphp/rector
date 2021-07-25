@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210724;
+namespace RectorPrefix20210725;
 
 if (\class_exists('t3lib_loadDBGroup')) {
     return;

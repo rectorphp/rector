@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210724;
+namespace RectorPrefix20210725;
 
 if (\class_exists('Tx_Extbase_Persistence_Exception')) {
     return;

@@ -5,7 +5,7 @@ namespace Rector\Core\Autoloading;
 
 use Rector\Core\Configuration\Option;
 use Rector\Core\Exception\ShouldNotHappenException;
-use RectorPrefix20210724\Symplify\PackageBuilder\Parameter\ParameterProvider;
+use RectorPrefix20210725\Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Throwable;
 final class BootstrapFilesIncluder
 {
@@ -13,7 +13,7 @@ final class BootstrapFilesIncluder
      * @var \Symplify\PackageBuilder\Parameter\ParameterProvider
      */
     private $parameterProvider;
-    public function __construct(\RectorPrefix20210724\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider)
+    public function __construct(\RectorPrefix20210725\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider)
     {
         $this->parameterProvider = $parameterProvider;
     }
