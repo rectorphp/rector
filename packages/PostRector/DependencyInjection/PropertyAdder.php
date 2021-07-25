@@ -14,6 +14,7 @@ use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PostRector\Collector\PropertyToAddCollector;
+use Rector\PostRector\ValueObject\PropertyMetadata;
 final class PropertyAdder
 {
     /**
@@ -58,9 +59,14 @@ final class PropertyAdder
         $propertyName = $this->nodeNameResolver->getName($property);
         $this->addConstructorDependencyToClass($classNode, $propertyType, $propertyName, $property->flags);
     }
+    /**
+     * @deprecated
+     * Use directly @see PropertyToAddCollector::addPropertyToClass() directly with PropertyMetadata object
+     */
     public function addConstructorDependencyToClass(\PhpParser\Node\Stmt\Class_ $class, \PHPStan\Type\Type $propertyType, string $propertyName, int $propertyFlags = 0) : void
     {
-        $this->propertyToAddCollector->addPropertyToClass($class, $propertyName, $propertyType, $propertyFlags);
+        $propertyMetadata = new \Rector\PostRector\ValueObject\PropertyMetadata($propertyName, $propertyType, $propertyFlags);
+        $this->propertyToAddCollector->addPropertyToClass($class, $propertyMetadata);
         $this->rectorChangeCollector->notifyNodeFileInfo($class);
     }
     public function addServiceConstructorDependencyToClass(\PhpParser\Node\Stmt\Class_ $class, \PHPStan\Type\ObjectType $objectType) : void

@@ -1,0 +1,142 @@
+<?php
+
+declare (strict_types=1);
+namespace Rector\Transform\Rector\MethodCall;
+
+use PhpParser\Node;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Identifier;
+use PhpParser\Node\Stmt\Class_;
+use PHPStan\Type\ObjectType;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
+use Rector\Core\NodeAnalyzer\PropertyPresenceChecker;
+use Rector\Core\Rector\AbstractRector;
+use Rector\Naming\Naming\PropertyNaming;
+use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PostRector\ValueObject\PropertyMetadata;
+use Rector\Transform\ValueObject\MethodCallToMethodCall;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20210725\Webmozart\Assert\Assert;
+/**
+ * @see \Rector\Tests\Transform\Rector\MethodCall\MethodCallToMethodCallRector\MethodCallToMethodCallRectorTest
+ */
+final class MethodCallToMethodCallRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
+{
+    /**
+     * @var string
+     */
+    public const METHOD_CALLS_TO_METHOD_CALLS = 'method_calls_to_method_calls';
+    /**
+     * @var MethodCallToMethodCall[]
+     */
+    private $methodCallsToMethodsCalls = [];
+    /**
+     * @var \Rector\Naming\Naming\PropertyNaming
+     */
+    private $propertyNaming;
+    /**
+     * @var \Rector\Core\NodeAnalyzer\PropertyPresenceChecker
+     */
+    private $propertyPresenceChecker;
+    public function __construct(\Rector\Naming\Naming\PropertyNaming $propertyNaming, \Rector\Core\NodeAnalyzer\PropertyPresenceChecker $propertyPresenceChecker)
+    {
+        $this->propertyNaming = $propertyNaming;
+        $this->propertyPresenceChecker = $propertyPresenceChecker;
+    }
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    {
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change method one method from one service to a method call to in another service', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
+class SomeClass
+{
+    public function __construct(
+        private FirstDependency $firstDependency
+    ) {
+    }
+
+    public function run()
+    {
+        $this->firstDependency->go();
+    }
+}
+CODE_SAMPLE
+, <<<'CODE_SAMPLE'
+class SomeClass
+{
+    public function __construct(
+        private SecondDependency $secondDependency
+    ) {
+    }
+
+    public function run()
+    {
+        $this->secondDependency->away();
+    }
+}
+CODE_SAMPLE
+, [self::METHOD_CALLS_TO_METHOD_CALLS => [new \Rector\Transform\ValueObject\MethodCallToMethodCall('FirstDependency', 'go', 'SecondDependency', 'away')]])]);
+    }
+    /**
+     * @return array<class-string<Node>>
+     */
+    public function getNodeTypes() : array
+    {
+        return [\PhpParser\Node\Expr\MethodCall::class];
+    }
+    /**
+     * @param MethodCall $node
+     */
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    {
+        foreach ($this->methodCallsToMethodsCalls as $methodCallToMethodCall) {
+            if (!$node->var instanceof \PhpParser\Node\Expr\PropertyFetch) {
+                continue;
+            }
+            if (!$this->isMatch($node, $methodCallToMethodCall)) {
+                continue;
+            }
+            $propertyFetch = $node->var;
+            $class = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
+            $newObjectType = new \PHPStan\Type\ObjectType($methodCallToMethodCall->getNewType());
+            $newPropertyName = $this->matchNewPropertyName($methodCallToMethodCall, $class);
+            if ($newPropertyName === null) {
+                continue;
+            }
+            $this->addConstructorDependencyToClass($class, $newObjectType, $newPropertyName);
+            // rename property
+            $node->var = new \PhpParser\Node\Expr\PropertyFetch($propertyFetch->var, $newPropertyName);
+            // rename method
+            $node->name = new \PhpParser\Node\Identifier($methodCallToMethodCall->getNewMethod());
+            return $node;
+        }
+        return null;
+    }
+    /**
+     * @param array<string, MethodCallToMethodCall[]> $configuration
+     */
+    public function configure(array $configuration) : void
+    {
+        $methodCallsToMethodsCalls = $configuration[self::METHOD_CALLS_TO_METHOD_CALLS] ?? [];
+        \RectorPrefix20210725\Webmozart\Assert\Assert::allIsAOf($methodCallsToMethodsCalls, \Rector\Transform\ValueObject\MethodCallToMethodCall::class);
+        $this->methodCallsToMethodsCalls = $methodCallsToMethodsCalls;
+    }
+    private function isMatch(\PhpParser\Node\Expr\MethodCall $methodCall, \Rector\Transform\ValueObject\MethodCallToMethodCall $methodCallToMethodCall) : bool
+    {
+        if (!$this->isObjectType($methodCall->var, new \PHPStan\Type\ObjectType($methodCallToMethodCall->getOldType()))) {
+            return \false;
+        }
+        return $this->isName($methodCall->name, $methodCallToMethodCall->getOldMethod());
+    }
+    private function matchNewPropertyName(\Rector\Transform\ValueObject\MethodCallToMethodCall $methodCallToMethodCall, \PhpParser\Node\Stmt\Class_ $class) : ?string
+    {
+        $newPropertyName = $this->propertyNaming->fqnToVariableName($methodCallToMethodCall->getNewType());
+        $propertyMetadata = new \Rector\PostRector\ValueObject\PropertyMetadata($newPropertyName, new \PHPStan\Type\ObjectType($methodCallToMethodCall->getNewType()), \PhpParser\Node\Stmt\Class_::MODIFIER_PRIVATE);
+        $classContextProperty = $this->propertyPresenceChecker->getClassContextProperty($class, $propertyMetadata);
+        if ($classContextProperty === null) {
+            return $newPropertyName;
+        }
+        // re-use existing proeprty name
+        return $this->getName($classContextProperty);
+    }
+}

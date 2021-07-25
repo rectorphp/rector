@@ -1,4 +1,4 @@
-# 491 Rules Overview
+# 492 Rules Overview
 
 <br>
 
@@ -94,7 +94,7 @@
 
 - [Restoration](#restoration) (6)
 
-- [Transform](#transform) (36)
+- [Transform](#transform) (37)
 
 - [TypeDeclaration](#typedeclaration) (18)
 
@@ -10788,6 +10788,53 @@ return static function (ContainerConfigurator $containerConfigurator): void {
  $serviceDefinition = new Nette\DI\ServiceDefinition;
 -$serviceDefinition->setInject();
 +$serviceDefinition->addTag('inject');
+```
+
+<br>
+
+### MethodCallToMethodCallRector
+
+Change method one method from one service to a method call to in another service
+
+:wrench: **configure it!**
+
+- class: [`Rector\Transform\Rector\MethodCall\MethodCallToMethodCallRector`](../rules/Transform/Rector/MethodCall/MethodCallToMethodCallRector.php)
+
+```php
+use Rector\Transform\Rector\MethodCall\MethodCallToMethodCallRector;
+use Rector\Transform\ValueObject\MethodCallToMethodCall;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symplify\SymfonyPhpConfig\ValueObjectInliner;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+
+    $services->set(MethodCallToMethodCallRector::class)
+        ->call('configure', [[
+            MethodCallToMethodCallRector::METHOD_CALLS_TO_METHOD_CALLS => ValueObjectInliner::inline([
+                new MethodCallToMethodCall('FirstDependency', 'go', 'SecondDependency', 'away'),
+            ]),
+        ]]);
+};
+```
+
+↓
+
+```diff
+ class SomeClass
+ {
+     public function __construct(
+-        private FirstDependency $firstDependency
++        private SecondDependency $secondDependency
+     ) {
+     }
+
+     public function run()
+     {
+-        $this->firstDependency->go();
++        $this->secondDependency->away();
+     }
+ }
 ```
 
 <br>

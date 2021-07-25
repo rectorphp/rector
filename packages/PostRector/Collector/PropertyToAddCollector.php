@@ -49,14 +49,12 @@ final class PropertyToAddCollector implements \Rector\PostRector\Contract\Collec
     }
     /**
      * @param \PhpParser\Node\Stmt\Class_ $class
-     * @param string $propertyName
-     * @param \PHPStan\Type\Type|null $propertyType
-     * @param int $propertyFlags
+     * @param \Rector\PostRector\ValueObject\PropertyMetadata $propertyMetadata
      */
-    public function addPropertyToClass($class, $propertyName, $propertyType, $propertyFlags) : void
+    public function addPropertyToClass($class, $propertyMetadata) : void
     {
         $uniqueHash = \spl_object_hash($class);
-        $this->propertiesByClass[$uniqueHash][] = new \Rector\PostRector\ValueObject\PropertyMetadata($propertyName, $propertyType, $propertyFlags);
+        $this->propertiesByClass[$uniqueHash][] = $propertyMetadata;
     }
     /**
      * @param \PhpParser\Node\Stmt\Class_ $class

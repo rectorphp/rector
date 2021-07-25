@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\TypeDeclaration\NodeAnalyzer;
 
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
@@ -24,7 +25,7 @@ final class AutowiredClassMethodOrPropertyAnalyzer
         $this->nodeNameResolver = $nodeNameResolver;
     }
     /**
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property $node
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Param|\PhpParser\Node\Stmt\Property $node
      */
     public function detect($node) : bool
     {

@@ -6,12 +6,14 @@ namespace Rector\Core\PhpParser;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Interface_;
+use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Trait_;
 use PhpParser\NodeFinder;
 use PhpParser\Parser;
@@ -23,9 +25,11 @@ use PHPStan\Type\TypeWithClassName;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Core\ValueObject\Application\File;
+use Rector\Core\ValueObject\MethodName;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
 use Rector\NodeTypeResolver\NodeTypeResolver;
+use ReflectionProperty;
 use Symplify\SmartFileSystem\SmartFileInfo;
 use RectorPrefix20210725\Symplify\SmartFileSystem\SmartFileSystem;
 /**
@@ -131,10 +135,10 @@ final class AstResolver
             $this->classMethodsByClassAndMethod[$classReflection->getName()][$methodReflection->getName()] = null;
             return null;
         }
-        $nodes = (array) $this->parser->parse($fileContent);
-        $smartFileInfo = new \Symplify\SmartFileSystem\SmartFileInfo($fileName);
-        $file = new \Rector\Core\ValueObject\Application\File($smartFileInfo, $smartFileInfo->getContents());
-        $nodes = $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile($file, $nodes);
+        $nodes = $this->parseFileNameToDecoratedNodes($fileName);
+        if ($nodes === null) {
+            return null;
+        }
         $class = $this->nodeFinder->findFirstInstanceOf($nodes, \PhpParser\Node\Stmt\Class_::class);
         if (!$class instanceof \PhpParser\Node\Stmt\Class_) {
             // avoids looking for a class in a file where is not present
@@ -160,10 +164,10 @@ final class AstResolver
             $this->functionsByName[$phpFunctionReflection->getName()] = null;
             return null;
         }
-        $nodes = (array) $this->parser->parse($fileContent);
-        $smartFileInfo = new \Symplify\SmartFileSystem\SmartFileInfo($fileName);
-        $file = new \Rector\Core\ValueObject\Application\File($smartFileInfo, $smartFileInfo->getContents());
-        $nodes = $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile($file, $nodes);
+        $nodes = $this->parseFileNameToDecoratedNodes($fileName);
+        if ($nodes === null) {
+            return null;
+        }
         /** @var Function_[] $functions */
         $functions = $this->nodeFinder->findInstanceOf($nodes, \PhpParser\Node\Stmt\Function_::class);
         foreach ($functions as $function) {
@@ -262,17 +266,13 @@ final class AstResolver
             if (!$fileName) {
                 continue;
             }
-            $fileContent = $this->smartFileSystem->readFile($fileName);
-            /** @var Stmt[] $parsedNodes */
-            $parsedNodes = $this->parser->parse($fileContent);
-            $smartFileInfo = new \Symplify\SmartFileSystem\SmartFileInfo($fileName);
-            $file = new \Rector\Core\ValueObject\Application\File($smartFileInfo, $smartFileInfo->getContents());
-            /** @var Stmt[] $allNodes */
-            $allNodes = $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile($file, $parsedNodes);
-            $traitName = $classLike->getName();
+            $nodes = $this->parseFileNameToDecoratedNodes($fileName);
+            if ($nodes === null) {
+                continue;
+            }
             /** @var Trait_|null $trait */
-            $trait = $this->betterNodeFinder->findFirst($allNodes, function (\PhpParser\Node $node) use($traitName) : bool {
-                return $node instanceof \PhpParser\Node\Stmt\Trait_ && $this->nodeNameResolver->isName($node, $traitName);
+            $trait = $this->betterNodeFinder->findFirst($nodes, function (\PhpParser\Node $node) use($classLike) : bool {
+                return $node instanceof \PhpParser\Node\Stmt\Trait_ && $this->nodeNameResolver->isName($node, $classLike->getName());
             });
             if (!$trait instanceof \PhpParser\Node\Stmt\Trait_) {
                 continue;
@@ -280,5 +280,67 @@ final class AstResolver
             $traits[] = $trait;
         }
         return $traits;
+    }
+    /**
+     * @return \PhpParser\Node\Stmt\Property|\PhpParser\Node\Param|null
+     */
+    public function resolvePropertyFromPropertyReflection(\ReflectionProperty $reflectionProperty)
+    {
+        $reflectionClass = $reflectionProperty->getDeclaringClass();
+        $fileName = $reflectionClass->getFileName();
+        if ($fileName === \false) {
+            return null;
+        }
+        $nodes = $this->parseFileNameToDecoratedNodes($fileName);
+        if ($nodes === null) {
+            return null;
+        }
+        $desiredPropertyName = $reflectionProperty->name;
+        /** @var Property[] $properties */
+        $properties = $this->betterNodeFinder->findInstanceOf($nodes, \PhpParser\Node\Stmt\Property::class);
+        foreach ($properties as $property) {
+            if ($this->nodeNameResolver->isName($property, $desiredPropertyName)) {
+                return $property;
+            }
+        }
+        // promoted property
+        return $this->findPromotedPropertyByName($nodes, $desiredPropertyName);
+    }
+    /**
+     * @return Stmt[]|null
+     */
+    private function parseFileNameToDecoratedNodes(string $fileName) : ?array
+    {
+        $fileContent = $this->smartFileSystem->readFile($fileName);
+        $nodes = $this->parser->parse($fileContent);
+        if ($nodes === null) {
+            return null;
+        }
+        $smartFileInfo = new \Symplify\SmartFileSystem\SmartFileInfo($fileName);
+        $file = new \Rector\Core\ValueObject\Application\File($smartFileInfo, $smartFileInfo->getContents());
+        return $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile($file, $nodes);
+    }
+    /**
+     * @param Stmt[] $nodes
+     */
+    private function findPromotedPropertyByName(array $nodes, string $desiredPropertyName) : ?\PhpParser\Node\Param
+    {
+        $class = $this->betterNodeFinder->findFirstInstanceOf($nodes, \PhpParser\Node\Stmt\Class_::class);
+        if (!$class instanceof \PhpParser\Node\Stmt\Class_) {
+            return null;
+        }
+        $constructClassMethod = $class->getMethod(\Rector\Core\ValueObject\MethodName::CONSTRUCT);
+        if (!$constructClassMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
+            return null;
+        }
+        foreach ($constructClassMethod->getParams() as $param) {
+            if ($param->flags === 0) {
+                continue;
+            }
+            if ($this->nodeNameResolver->isName($param, $desiredPropertyName)) {
+                return $param;
+            }
+        }
+        return null;
     }
 }

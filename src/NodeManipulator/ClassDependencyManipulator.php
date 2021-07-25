@@ -133,7 +133,7 @@ final class ClassDependencyManipulator
     }
     public function addInjectProperty(\PhpParser\Node\Stmt\Class_ $class, \Rector\PostRector\ValueObject\PropertyMetadata $propertyMetadata) : void
     {
-        if ($this->propertyPresenceChecker->hasClassContextPropertyByName($class, $propertyMetadata->getName())) {
+        if ($this->propertyPresenceChecker->hasClassContextProperty($class, $propertyMetadata)) {
             return;
         }
         $this->classInsertManipulator->addInjectPropertyToClass($class, $propertyMetadata);
@@ -193,17 +193,15 @@ final class ClassDependencyManipulator
     }
     private function hasClassPropertyAndDependency(\PhpParser\Node\Stmt\Class_ $class, \Rector\PostRector\ValueObject\PropertyMetadata $propertyMetadata) : bool
     {
-        if (!$this->propertyPresenceChecker->hasClassContextPropertyByName($class, $propertyMetadata->getName())) {
+        $property = $this->propertyPresenceChecker->getClassContextProperty($class, $propertyMetadata);
+        if ($property === null) {
             return \false;
-        }
-        $property = $class->getProperty($propertyMetadata->getName());
-        if (!$property instanceof \PhpParser\Node\Stmt\Property) {
-            return $this->isParamInConstructor($class, $propertyMetadata->getName());
         }
         if (!$this->autowiredClassMethodOrPropertyAnalyzer->detect($property)) {
             return $this->isParamInConstructor($class, $propertyMetadata->getName());
         }
-        return \true;
+        // is inject/autowired property?
+        return $property instanceof \PhpParser\Node\Stmt\Property && $this->autowiredClassMethodOrPropertyAnalyzer->detect($property);
     }
     private function hasMethodParameter(\PhpParser\Node\Stmt\ClassMethod $classMethod, string $name) : bool
     {
