@@ -87,7 +87,7 @@ final class FluentChainMethodCallRootExtractor
      * A. FLUENT: $cook->bake()->serve() // only "Cook"
      * B. FACTORY: $food = $cook->bake()->warmUp(); // only "Food"
      */
-    public function resolveIsFirstMethodCallFactory(\PhpParser\Node\Expr\MethodCall $methodCall) : bool
+    public function isFirstMethodCallFactory(\PhpParser\Node\Expr\MethodCall $methodCall) : bool
     {
         $variableStaticType = $this->exprStringTypeResolver->resolve($methodCall->var);
         $calledMethodStaticType = $this->exprStringTypeResolver->resolve($methodCall);
@@ -107,7 +107,7 @@ final class FluentChainMethodCallRootExtractor
     }
     private function createAssignAndRootExprForVariableOrPropertyFetch(\PhpParser\Node\Expr\MethodCall $methodCall) : \Rector\Defluent\ValueObject\AssignAndRootExpr
     {
-        $isFirstCallFactory = $this->resolveIsFirstMethodCallFactory($methodCall);
+        $isFirstCallFactory = $this->isFirstMethodCallFactory($methodCall);
         // the method call, does not belong to the
         $staticType = $this->nodeTypeResolver->getStaticType($methodCall);
         $parentNode = $methodCall->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);

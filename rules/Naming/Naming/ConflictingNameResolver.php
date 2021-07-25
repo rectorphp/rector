@@ -63,7 +63,7 @@ final class ConflictingNameResolver
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
      */
-    public function checkNameIsInFunctionLike(string $variableName, $functionLike) : bool
+    public function hasNameIsInFunctionLike(string $variableName, $functionLike) : bool
     {
         $conflictingVariableNames = $this->resolveConflictingVariableNamesForNew($functionLike);
         return \in_array($variableName, $conflictingVariableNames, \true);

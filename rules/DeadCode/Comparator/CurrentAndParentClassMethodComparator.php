@@ -50,7 +50,7 @@ final class CurrentAndParentClassMethodComparator
         if (!$this->areArgsAndParamsEqual($staticCall->args, $classMethod->params)) {
             return \false;
         }
-        if (!$this->parameterTypeComparator->compareCurrentClassMethodAndParentStaticCall($classMethod, $staticCall)) {
+        if (!$this->parameterTypeComparator->isClassMethodIdenticalToParentStaticCall($classMethod, $staticCall)) {
             return \false;
         }
         return !$this->isParentClassMethodVisibilityOrDefaultOverride($classMethod, $staticCall);
@@ -107,16 +107,16 @@ final class CurrentAndParentClassMethodComparator
             $nativeParentClassReflection = $parentClassReflection->getNativeReflection();
             $nativeParentClassMethodReflection = $nativeParentClassReflection->getMethod($methodName);
             if (!$nativeParentClassMethodReflection->isProtected()) {
-                return $this->checkOverrideUsingReflection($classMethod, $parentClassReflection, $methodName);
+                return $this->isOverridingParentParameters($classMethod, $parentClassReflection, $methodName);
             }
             if (!$nativeParentClassMethodReflection->isPublic()) {
-                return $this->checkOverrideUsingReflection($classMethod, $parentClassReflection, $methodName);
+                return $this->isOverridingParentParameters($classMethod, $parentClassReflection, $methodName);
             }
             return \true;
         }
         return \false;
     }
-    private function checkOverrideUsingReflection(\PhpParser\Node\Stmt\ClassMethod $classMethod, \PHPStan\Reflection\ClassReflection $classReflection, string $methodName) : bool
+    private function isOverridingParentParameters(\PhpParser\Node\Stmt\ClassMethod $classMethod, \PHPStan\Reflection\ClassReflection $classReflection, string $methodName) : bool
     {
         $scope = $classMethod->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
         if (!$scope instanceof \PHPStan\Analyser\Scope) {
@@ -124,7 +124,6 @@ final class CurrentAndParentClassMethodComparator
         }
         $parentMethodReflection = $classReflection->getMethod($methodName, $scope);
         // 3rd party code
-        //        if ($parentMethodReflection !== null) {
         if (!$parentMethodReflection->isPrivate() && !$parentMethodReflection->isPublic() && $classMethod->isPublic()) {
             return \true;
         }

@@ -38,12 +38,12 @@ final class OverridenExistingNamesResolver
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
      */
-    public function checkNameInClassMethodForNew(string $variableName, $functionLike) : bool
+    public function hasNameInClassMethodForNew(string $variableName, $functionLike) : bool
     {
         $overridenVariableNames = $this->resolveOveriddenNamesForNew($functionLike);
         return \in_array($variableName, $overridenVariableNames, \true);
     }
-    public function checkNameInClassMethodForParam(string $expectedName, \PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
+    public function hasNameInClassMethodForParam(string $expectedName, \PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
     {
         /** @var Assign[] $assigns */
         $assigns = $this->betterNodeFinder->findInstanceOf((array) $classMethod->stmts, \PhpParser\Node\Expr\Assign::class);

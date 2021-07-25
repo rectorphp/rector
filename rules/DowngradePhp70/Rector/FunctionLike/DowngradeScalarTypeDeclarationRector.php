@@ -90,9 +90,10 @@ CODE_SAMPLE
         if ($recastAssigns !== []) {
             $node->stmts = \array_merge($recastAssigns, (array) $node->stmts);
         }
-        if (!$this->phpDocFromTypeDeclarationDecorator->decorate($node)) {
+        if ($node->returnType === null) {
             return null;
         }
+        $this->phpDocFromTypeDeclarationDecorator->decorate($node);
         return $node;
     }
     /**

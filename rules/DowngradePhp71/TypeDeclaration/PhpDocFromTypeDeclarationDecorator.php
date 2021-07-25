@@ -46,19 +46,17 @@ final class PhpDocFromTypeDeclarationDecorator
         $this->typeUnwrapper = $typeUnwrapper;
     }
     /**
-     * @return bool True if node was changed
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
      */
-    public function decorate($functionLike) : bool
+    public function decorate($functionLike) : void
     {
         if ($functionLike->returnType === null) {
-            return \false;
+            return;
         }
         $type = $this->staticTypeMapper->mapPhpParserNodePHPStanType($functionLike->returnType);
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($functionLike);
         $this->phpDocTypeChanger->changeReturnType($phpDocInfo, $type);
         $functionLike->returnType = null;
-        return \true;
     }
     /**
      * @param array<class-string<Type>> $requiredTypes
@@ -101,7 +99,8 @@ final class PhpDocFromTypeDeclarationDecorator
         if (!$this->isTypeMatchOrSubType($functionLike->returnType, $requireType)) {
             return \false;
         }
-        return $this->decorate($functionLike);
+        $this->decorate($functionLike);
+        return \true;
     }
     private function isTypeMatchOrSubType(\PhpParser\Node $typeNode, \PHPStan\Type\Type $requireType) : bool
     {

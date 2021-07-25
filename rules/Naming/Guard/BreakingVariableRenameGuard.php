@@ -76,16 +76,16 @@ final class BreakingVariableRenameGuard
         if (\substr_compare($currentName, $expectedNameCamelCase, -\strlen($expectedNameCamelCase)) === 0) {
             return \true;
         }
-        if ($this->conflictingNameResolver->checkNameIsInFunctionLike($expectedName, $functionLike)) {
+        if ($this->conflictingNameResolver->hasNameIsInFunctionLike($expectedName, $functionLike)) {
             return \true;
         }
-        if ($this->overridenExistingNamesResolver->checkNameInClassMethodForNew($currentName, $functionLike)) {
+        if ($this->overridenExistingNamesResolver->hasNameInClassMethodForNew($currentName, $functionLike)) {
             return \true;
         }
         if ($this->isVariableAlreadyDefined($variable, $currentName)) {
             return \true;
         }
-        if ($this->skipOnConflictOtherVariable($functionLike, $expectedName)) {
+        if ($this->hasConflictVariable($functionLike, $expectedName)) {
             return \true;
         }
         if ($this->isUsedInClosureUsesName($expectedName, $functionLike)) {
@@ -107,10 +107,10 @@ final class BreakingVariableRenameGuard
         if (\in_array($expectedName, $conflictingNames, \true)) {
             return \true;
         }
-        if ($this->conflictingNameResolver->checkNameIsInFunctionLike($expectedName, $classMethod)) {
+        if ($this->conflictingNameResolver->hasNameIsInFunctionLike($expectedName, $classMethod)) {
             return \true;
         }
-        if ($this->overridenExistingNamesResolver->checkNameInClassMethodForParam($expectedName, $classMethod)) {
+        if ($this->overridenExistingNamesResolver->hasNameInClassMethodForParam($expectedName, $classMethod)) {
             return \true;
         }
         if ($this->isVariableAlreadyDefined($param->var, $currentName)) {
@@ -144,7 +144,7 @@ final class BreakingVariableRenameGuard
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
      */
-    private function skipOnConflictOtherVariable($functionLike, string $newName) : bool
+    private function hasConflictVariable($functionLike, string $newName) : bool
     {
         return $this->betterNodeFinder->hasInstanceOfName((array) $functionLike->stmts, \PhpParser\Node\Expr\Variable::class, $newName);
     }

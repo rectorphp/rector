@@ -83,7 +83,7 @@ CODE_SAMPLE
             if (!$this->isName($node->name, $methodCallRename->getOldMethod())) {
                 continue;
             }
-            if ($this->skipClassMethod($node, $methodCallRename)) {
+            if ($this->shouldSkipClassMethod($node, $methodCallRename)) {
                 continue;
             }
             $node->name = new \PhpParser\Node\Identifier($methodCallRename->getNewMethod());
@@ -107,7 +107,7 @@ CODE_SAMPLE
     /**
      * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Stmt\ClassMethod $node
      */
-    private function skipClassMethod($node, \Rector\Renaming\Contract\MethodCallRenameInterface $methodCallRename) : bool
+    private function shouldSkipClassMethod($node, \Rector\Renaming\Contract\MethodCallRenameInterface $methodCallRename) : bool
     {
         if (!$node instanceof \PhpParser\Node\Stmt\ClassMethod) {
             return \false;

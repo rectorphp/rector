@@ -16,7 +16,7 @@ final class ParameterTypeComparator
     {
         $this->methodParameterTypeResolver = $methodParameterTypeResolver;
     }
-    public function compareCurrentClassMethodAndParentStaticCall(\PhpParser\Node\Stmt\ClassMethod $classMethod, \PhpParser\Node\Expr\StaticCall $staticCall) : bool
+    public function isClassMethodIdenticalToParentStaticCall(\PhpParser\Node\Stmt\ClassMethod $classMethod, \PhpParser\Node\Expr\StaticCall $staticCall) : bool
     {
         $currentParameterTypes = $this->methodParameterTypeResolver->provideParameterTypesByClassMethod($classMethod);
         $parentParameterTypes = $this->methodParameterTypeResolver->provideParameterTypesByStaticCall($staticCall);

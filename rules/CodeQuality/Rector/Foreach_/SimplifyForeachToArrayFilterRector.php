@@ -82,7 +82,7 @@ CODE_SAMPLE
         if ($name === null) {
             return null;
         }
-        if (!$this->forLoopFillsAnotherArray($node, $arrayDimFetch)) {
+        if (!$this->isArrayDimFetchInForLoop($node, $arrayDimFetch)) {
             return null;
         }
         return $this->createAssignNode($node, $name, $arrayDimFetch);
@@ -112,7 +112,7 @@ CODE_SAMPLE
         $arrayFilterFuncCall = new \PhpParser\Node\Expr\FuncCall(new \PhpParser\Node\Name('array_filter'), $args);
         return new \PhpParser\Node\Expr\Assign($arrayDimFetch->var, $arrayFilterFuncCall);
     }
-    private function forLoopFillsAnotherArray(\PhpParser\Node\Stmt\Foreach_ $foreach, \PhpParser\Node\Expr\ArrayDimFetch $arrayDimFetch) : bool
+    private function isArrayDimFetchInForLoop(\PhpParser\Node\Stmt\Foreach_ $foreach, \PhpParser\Node\Expr\ArrayDimFetch $arrayDimFetch) : bool
     {
         $loopVar = $foreach->expr;
         if (!$loopVar instanceof \PhpParser\Node\Expr\Variable) {

@@ -58,7 +58,7 @@ final class ValueObjectClassAnalyzer
         }
         $constructClassMethod = $class->getMethod(\Rector\Core\ValueObject\MethodName::CONSTRUCT);
         if (!$constructClassMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
-            return $this->analyseWithoutConstructor($class, $className);
+            return $this->hasExlusivelySerializeProperties($class, $className);
         }
         // resolve constructor types
         foreach ($constructClassMethod->params as $param) {
@@ -81,7 +81,7 @@ final class ValueObjectClassAnalyzer
         $this->valueObjectStatusByClassName[$className] = \true;
         return \true;
     }
-    private function analyseWithoutConstructor(\PhpParser\Node\Stmt\Class_ $class, string $className) : bool
+    private function hasExlusivelySerializeProperties(\PhpParser\Node\Stmt\Class_ $class, string $className) : bool
     {
         // A. has all properties with serialize?
         if ($this->hasAllPropertiesWithSerialize($class)) {

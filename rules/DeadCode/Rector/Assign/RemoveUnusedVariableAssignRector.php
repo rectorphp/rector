@@ -186,7 +186,7 @@ CODE_SAMPLE
         if (!$if instanceof \PhpParser\Node\Stmt\If_) {
             return null;
         }
-        if ($this->conditionSearcher->searchIfAndElseForVariableRedeclaration($assign, $if)) {
+        if ($this->conditionSearcher->hasIfAndElseForVariableRedeclaration($assign, $if)) {
             $this->removeNode($assign);
             return $assign;
         }

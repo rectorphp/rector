@@ -22,7 +22,7 @@ final class ConditionEvaluator
             return $this->evaluateVersionCompareCondition($condition);
         }
         if ($condition instanceof \Rector\DeadCode\ValueObject\BinaryToVersionCompareCondition) {
-            return $this->evaluateBinaryToVersionCompareCondition($condition);
+            return $this->isEvaluedAsTrue($condition);
         }
         return null;
     }
@@ -37,7 +37,7 @@ final class ConditionEvaluator
         }
         return \version_compare((string) $versionCompareCondition->getFirstVersion(), (string) $versionCompareCondition->getSecondVersion());
     }
-    private function evaluateBinaryToVersionCompareCondition(\Rector\DeadCode\ValueObject\BinaryToVersionCompareCondition $binaryToVersionCompareCondition) : bool
+    private function isEvaluedAsTrue(\Rector\DeadCode\ValueObject\BinaryToVersionCompareCondition $binaryToVersionCompareCondition) : bool
     {
         $versionCompareResult = $this->evaluateVersionCompareCondition($binaryToVersionCompareCondition->getVersionCompareCondition());
         if ($binaryToVersionCompareCondition->getBinaryClass() === \PhpParser\Node\Expr\BinaryOp\Identical::class) {

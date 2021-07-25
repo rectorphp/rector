@@ -87,7 +87,7 @@ CODE_SAMPLE
         $this->removeNode($previousNode);
         return $node;
     }
-    private function returnsByRef(\PhpParser\Node\Stmt\Return_ $return) : bool
+    private function hasByRefReturn(\PhpParser\Node\Stmt\Return_ $return) : bool
     {
         $node = $return;
         while ($node = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE)) {
@@ -102,7 +102,7 @@ CODE_SAMPLE
         if (!$return->expr instanceof \PhpParser\Node\Expr\Variable) {
             return \true;
         }
-        if ($this->returnsByRef($return)) {
+        if ($this->hasByRefReturn($return)) {
             return \true;
         }
         $variableNode = $return->expr;

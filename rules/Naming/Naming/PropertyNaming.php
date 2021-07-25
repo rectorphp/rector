@@ -4,11 +4,6 @@ declare (strict_types=1);
 namespace Rector\Naming\Naming;
 
 use RectorPrefix20210725\Nette\Utils\Strings;
-use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Stmt\ClassLike;
-use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Property;
-use PhpParser\Node\Stmt\Return_;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StaticType;
@@ -18,7 +13,6 @@ use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Naming\RectorNamingInflector;
 use Rector\Naming\ValueObject\ExpectedName;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
 use Rector\StaticTypeMapper\ValueObject\Type\SelfObjectType;
@@ -38,11 +32,6 @@ final class PropertyNaming
      * @var string
      */
     private const INTERFACE = 'Interface';
-    /**
-     * @see https://regex101.com/r/RDhBNR/1
-     * @var string
-     */
-    private const PREFIXED_CLASS_METHODS_REGEX = '#^(is|are|was|were|has|have|had|can)[A-Z].+#';
     /**
      * @var string
      * @see https://regex101.com/r/U78rUF/1
@@ -146,19 +135,6 @@ final class PropertyNaming
         $pascalCaseName = \str_replace('_', '', $uppercaseWords);
         return \lcfirst($pascalCaseName);
     }
-    public function getExpectedNameFromBooleanPropertyType(\PhpParser\Node\Stmt\Property $property) : ?string
-    {
-        $prefixedClassMethods = $this->getPrefixedClassMethods($property);
-        if ($prefixedClassMethods === []) {
-            return null;
-        }
-        $classMethods = $this->filterClassMethodsWithPropertyFetchReturnOnly($prefixedClassMethods, $property);
-        if (\count($classMethods) !== 1) {
-            return null;
-        }
-        $classMethod = \reset($classMethods);
-        return $this->nodeNameResolver->getName($classMethod);
-    }
     private function resolveShortClassName(string $className) : string
     {
         if (\strpos($className, '\\') !== \false) {
@@ -240,31 +216,6 @@ final class PropertyNaming
         }
         return $shortName;
     }
-    /**
-     * @return ClassMethod[]
-     */
-    private function getPrefixedClassMethods(\PhpParser\Node\Stmt\Property $property) : array
-    {
-        $classLike = $property->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
-        if (!$classLike instanceof \PhpParser\Node\Stmt\ClassLike) {
-            return [];
-        }
-        $classMethods = $this->betterNodeFinder->findInstanceOf($classLike, \PhpParser\Node\Stmt\ClassMethod::class);
-        return \array_filter($classMethods, function (\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool {
-            return $this->isBoolishMethodName($classMethod);
-        });
-    }
-    /**
-     * @param ClassMethod[] $prefixedClassMethods
-     * @return ClassMethod[]
-     */
-    private function filterClassMethodsWithPropertyFetchReturnOnly(array $prefixedClassMethods, \PhpParser\Node\Stmt\Property $property) : array
-    {
-        $classMethodName = $this->nodeNameResolver->getName($property);
-        return \array_filter($prefixedClassMethods, function (\PhpParser\Node\Stmt\ClassMethod $classMethod) use($classMethodName) : bool {
-            return $this->doesClassMethodMatchReturnPropertyFetch($classMethod, $classMethodName);
-        });
-    }
     private function isPrefixedInterface(string $shortClassName) : bool
     {
         if (\strlen($shortClassName) <= 3) {
@@ -284,22 +235,5 @@ final class PropertyNaming
             return \true;
         }
         return \ctype_digit($char);
-    }
-    private function isBoolishMethodName(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
-    {
-        $classMethodName = $this->nodeNameResolver->getName($classMethod);
-        return (bool) \RectorPrefix20210725\Nette\Utils\Strings::match($classMethodName, self::PREFIXED_CLASS_METHODS_REGEX);
-    }
-    private function doesClassMethodMatchReturnPropertyFetch(\PhpParser\Node\Stmt\ClassMethod $classMethod, string $currentClassMethodName) : bool
-    {
-        $possibleReturn = $classMethod->stmts[0] ?? null;
-        if (!$possibleReturn instanceof \PhpParser\Node\Stmt\Return_) {
-            return \false;
-        }
-        $node = $possibleReturn->expr;
-        if (!$node instanceof \PhpParser\Node\Expr\PropertyFetch) {
-            return \false;
-        }
-        return $this->nodeNameResolver->isName($node->name, $currentClassMethodName);
     }
 }

@@ -103,7 +103,7 @@ CODE_SAMPLE
             return \true;
         }
         $neverNodes = $this->betterNodeFinder->findInstancesOf($node, [\PhpParser\Node\Expr\Throw_::class, \PhpParser\Node\Stmt\Throw_::class]);
-        $hasNeverFuncCall = $this->resolveHasNeverFuncCall($node);
+        $hasNeverFuncCall = $this->hasNeverFuncCall($node);
         if ($neverNodes === [] && !$hasNeverFuncCall) {
             return \true;
         }
@@ -115,7 +115,7 @@ CODE_SAMPLE
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
      */
-    private function resolveHasNeverFuncCall($functionLike) : bool
+    private function hasNeverFuncCall($functionLike) : bool
     {
         $hasNeverType = \false;
         foreach ((array) $functionLike->stmts as $stmt) {

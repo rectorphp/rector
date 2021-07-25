@@ -32,44 +32,44 @@ final class CountManipulator
     {
         // e.g. count($values) > 0
         if ($node instanceof \PhpParser\Node\Expr\BinaryOp\Greater) {
-            return $this->processGreater($node, $expr);
+            return $this->isGreater($node, $expr);
         }
         // e.g. count($values) >= 1
         if ($node instanceof \PhpParser\Node\Expr\BinaryOp\GreaterOrEqual) {
-            return $this->processGreaterOrEqual($node, $expr);
+            return $this->isGreaterOrEqual($node, $expr);
         }
         // e.g. 0 < count($values)
         if ($node instanceof \PhpParser\Node\Expr\BinaryOp\Smaller) {
-            return $this->processSmaller($node, $expr);
+            return $this->isSmaller($node, $expr);
         }
         // e.g. 1 <= count($values)
         if ($node instanceof \PhpParser\Node\Expr\BinaryOp\SmallerOrEqual) {
-            return $this->processSmallerOrEqual($node, $expr);
+            return $this->isSmallerOrEqual($node, $expr);
         }
         return \false;
     }
-    private function processGreater(\PhpParser\Node\Expr\BinaryOp\Greater $greater, \PhpParser\Node\Expr $expr) : bool
+    private function isGreater(\PhpParser\Node\Expr\BinaryOp\Greater $greater, \PhpParser\Node\Expr $expr) : bool
     {
         if (!$this->isNumber($greater->right, 0)) {
             return \false;
         }
         return $this->isCountWithExpression($greater->left, $expr);
     }
-    private function processGreaterOrEqual(\PhpParser\Node\Expr\BinaryOp\GreaterOrEqual $greaterOrEqual, \PhpParser\Node\Expr $expr) : bool
+    private function isGreaterOrEqual(\PhpParser\Node\Expr\BinaryOp\GreaterOrEqual $greaterOrEqual, \PhpParser\Node\Expr $expr) : bool
     {
         if (!$this->isNumber($greaterOrEqual->right, 1)) {
             return \false;
         }
         return $this->isCountWithExpression($greaterOrEqual->left, $expr);
     }
-    private function processSmaller(\PhpParser\Node\Expr\BinaryOp\Smaller $smaller, \PhpParser\Node\Expr $expr) : bool
+    private function isSmaller(\PhpParser\Node\Expr\BinaryOp\Smaller $smaller, \PhpParser\Node\Expr $expr) : bool
     {
         if (!$this->isNumber($smaller->left, 0)) {
             return \false;
         }
         return $this->isCountWithExpression($smaller->right, $expr);
     }
-    private function processSmallerOrEqual(\PhpParser\Node\Expr\BinaryOp\SmallerOrEqual $smallerOrEqual, \PhpParser\Node\Expr $expr) : bool
+    private function isSmallerOrEqual(\PhpParser\Node\Expr\BinaryOp\SmallerOrEqual $smallerOrEqual, \PhpParser\Node\Expr $expr) : bool
     {
         if (!$this->isNumber($smallerOrEqual->left, 1)) {
             return \false;

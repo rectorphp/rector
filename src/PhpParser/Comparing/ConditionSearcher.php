@@ -26,7 +26,7 @@ final class ConditionSearcher
         $this->betterNodeFinder = $betterNodeFinder;
         $this->nodeComparator = $nodeComparator;
     }
-    public function searchIfAndElseForVariableRedeclaration(\PhpParser\Node\Expr\Assign $assign, \PhpParser\Node\Stmt\If_ $if) : bool
+    public function hasIfAndElseForVariableRedeclaration(\PhpParser\Node\Expr\Assign $assign, \PhpParser\Node\Stmt\If_ $if) : bool
     {
         $elseNode = $if->else;
         if (!$elseNode instanceof \PhpParser\Node\Stmt\Else_) {
@@ -34,32 +34,32 @@ final class ConditionSearcher
         }
         /** @var Variable $varNode */
         $varNode = $assign->var;
-        if (!$this->searchForVariableRedeclaration($varNode, $if->stmts)) {
+        if (!$this->hasVariableRedeclaration($varNode, $if->stmts)) {
             return \false;
         }
         foreach ($if->elseifs as $elseifNode) {
-            if (!$this->searchForVariableRedeclaration($varNode, $elseifNode->stmts)) {
+            if (!$this->hasVariableRedeclaration($varNode, $elseifNode->stmts)) {
                 return \false;
             }
         }
-        return $this->searchForVariableRedeclaration($varNode, $elseNode->stmts);
+        return $this->hasVariableRedeclaration($varNode, $elseNode->stmts);
     }
     /**
      * @param Stmt[] $stmts
      */
-    private function searchForVariableRedeclaration(\PhpParser\Node\Expr\Variable $variable, array $stmts) : bool
+    private function hasVariableRedeclaration(\PhpParser\Node\Expr\Variable $variable, array $stmts) : bool
     {
         foreach ($stmts as $stmt) {
-            if ($this->checkIfVariableUsedInExpression($variable, $stmt)) {
+            if ($this->hasVariableUsedInExpression($variable, $stmt)) {
                 return \false;
             }
-            if ($this->checkForVariableRedeclaration($variable, $stmt)) {
+            if ($this->hasVariableDeclaration($variable, $stmt)) {
                 return \true;
             }
         }
         return \false;
     }
-    private function checkIfVariableUsedInExpression(\PhpParser\Node\Expr\Variable $variable, \PhpParser\Node\Stmt $stmt) : bool
+    private function hasVariableUsedInExpression(\PhpParser\Node\Expr\Variable $variable, \PhpParser\Node\Stmt $stmt) : bool
     {
         if ($stmt instanceof \PhpParser\Node\Stmt\Expression) {
             $node = $stmt->expr instanceof \PhpParser\Node\Expr\Assign ? $stmt->expr->expr : $stmt->expr;
@@ -70,7 +70,7 @@ final class ConditionSearcher
             return $this->nodeComparator->areNodesEqual($variable, $subNode);
         });
     }
-    private function checkForVariableRedeclaration(\PhpParser\Node\Expr\Variable $variable, \PhpParser\Node\Stmt $stmt) : bool
+    private function hasVariableDeclaration(\PhpParser\Node\Expr\Variable $variable, \PhpParser\Node\Stmt $stmt) : bool
     {
         if (!$stmt instanceof \PhpParser\Node\Stmt\Expression) {
             return \false;

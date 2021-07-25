@@ -116,8 +116,8 @@ CODE_SAMPLE
         \reset($spreadParameterReflections);
         $firstSpreadParamPosition = \key($spreadParameterReflections);
         $variadicArgs = $this->resolveVariadicArgsByVariadicParams($methodCall, $firstSpreadParamPosition);
-        $hasUnpacked = $this->changeArgToPacked($variadicArgs, $methodCall);
-        if ($hasUnpacked) {
+        if ($this->hasUnpackedArgs($variadicArgs)) {
+            $this->changeArgToPacked($variadicArgs, $methodCall);
             return $methodCall;
         }
         if ($variadicArgs !== []) {
@@ -160,16 +160,25 @@ CODE_SAMPLE
     /**
      * @param Arg[] $variadicArgs
      */
-    private function changeArgToPacked(array $variadicArgs, \PhpParser\Node\Expr\MethodCall $methodCall) : bool
+    private function changeArgToPacked(array $variadicArgs, \PhpParser\Node\Expr\MethodCall $methodCall) : void
     {
-        $hasUnpacked = \false;
         foreach ($variadicArgs as $position => $variadicArg) {
             if ($variadicArg->unpack) {
                 $variadicArg->unpack = \false;
-                $hasUnpacked = \true;
                 $methodCall->args[$position] = $variadicArg;
             }
         }
-        return $hasUnpacked;
+    }
+    /**
+     * @param Arg[] $args
+     */
+    private function hasUnpackedArgs(array $args) : bool
+    {
+        foreach ($args as $arg) {
+            if ($arg->unpack) {
+                return \true;
+            }
+        }
+        return \false;
     }
 }

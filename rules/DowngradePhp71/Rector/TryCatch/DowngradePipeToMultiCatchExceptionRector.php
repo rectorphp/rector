@@ -19,9 +19,9 @@ final class DowngradePipeToMultiCatchExceptionRector extends \Rector\Core\Rector
         return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Downgrade single one | separated to multi catch exception', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 try {
     // Some code...
- } catch (ExceptionType1 | ExceptionType2 $exception) {
+} catch (ExceptionType1 | ExceptionType2 $exception) {
     $sameCode;
- }
+}
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
 try {

@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInited32ffbef127b08ce336dd22c8996252
+class ComposerStaticInit595577a3a0cd140574e8109172d96163
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -2604,7 +2604,6 @@ class ComposerStaticInited32ffbef127b08ce336dd22c8996252
         'Rector\\Naming\\Contract\\RenameParamValueObjectInterface' => __DIR__ . '/../..' . '/rules/Naming/Contract/RenameParamValueObjectInterface.php',
         'Rector\\Naming\\Contract\\RenamePropertyValueObjectInterface' => __DIR__ . '/../..' . '/rules/Naming/Contract/RenamePropertyValueObjectInterface.php',
         'Rector\\Naming\\Contract\\RenameValueObjectInterface' => __DIR__ . '/../..' . '/rules/Naming/Contract/RenameValueObjectInterface.php',
-        'Rector\\Naming\\ExpectedNameResolver\\BoolPropertyExpectedNameResolver' => __DIR__ . '/../..' . '/rules/Naming/ExpectedNameResolver/BoolPropertyExpectedNameResolver.php',
         'Rector\\Naming\\ExpectedNameResolver\\InflectorSingularResolver' => __DIR__ . '/../..' . '/rules/Naming/ExpectedNameResolver/InflectorSingularResolver.php',
         'Rector\\Naming\\ExpectedNameResolver\\MatchParamTypeExpectedNameResolver' => __DIR__ . '/../..' . '/rules/Naming/ExpectedNameResolver/MatchParamTypeExpectedNameResolver.php',
         'Rector\\Naming\\ExpectedNameResolver\\MatchPropertyTypeExpectedNameResolver' => __DIR__ . '/../..' . '/rules/Naming/ExpectedNameResolver/MatchPropertyTypeExpectedNameResolver.php',
@@ -2612,7 +2611,6 @@ class ComposerStaticInited32ffbef127b08ce336dd22c8996252
         'Rector\\Naming\\Guard\\DateTimeAtNamingConventionGuard' => __DIR__ . '/../..' . '/rules/Naming/Guard/DateTimeAtNamingConventionGuard.php',
         'Rector\\Naming\\Guard\\HasMagicGetSetGuard' => __DIR__ . '/../..' . '/rules/Naming/Guard/HasMagicGetSetGuard.php',
         'Rector\\Naming\\Guard\\NotPrivatePropertyGuard' => __DIR__ . '/../..' . '/rules/Naming/Guard/NotPrivatePropertyGuard.php',
-        'Rector\\Naming\\Guard\\PropertyConflictingNameGuard\\BoolPropertyConflictingNameGuard' => __DIR__ . '/../..' . '/rules/Naming/Guard/PropertyConflictingNameGuard/BoolPropertyConflictingNameGuard.php',
         'Rector\\Naming\\Guard\\PropertyConflictingNameGuard\\MatchPropertyTypeConflictingNameGuard' => __DIR__ . '/../..' . '/rules/Naming/Guard/PropertyConflictingNameGuard/MatchPropertyTypeConflictingNameGuard.php',
         'Rector\\Naming\\Guard\\RamseyUuidInterfaceGuard' => __DIR__ . '/../..' . '/rules/Naming/Guard/RamseyUuidInterfaceGuard.php',
         'Rector\\Naming\\Matcher\\CallMatcher' => __DIR__ . '/../..' . '/rules/Naming/Matcher/CallMatcher.php',
@@ -2629,7 +2627,6 @@ class ComposerStaticInited32ffbef127b08ce336dd22c8996252
         'Rector\\Naming\\ParamRenamer\\ParamRenamer' => __DIR__ . '/../..' . '/rules/Naming/ParamRenamer/ParamRenamer.php',
         'Rector\\Naming\\PhpArray\\ArrayFilter' => __DIR__ . '/../..' . '/rules/Naming/PhpArray/ArrayFilter.php',
         'Rector\\Naming\\PhpDoc\\VarTagValueNodeRenamer' => __DIR__ . '/../..' . '/rules/Naming/PhpDoc/VarTagValueNodeRenamer.php',
-        'Rector\\Naming\\PropertyRenamer\\BoolPropertyRenamer' => __DIR__ . '/../..' . '/rules/Naming/PropertyRenamer/BoolPropertyRenamer.php',
         'Rector\\Naming\\PropertyRenamer\\MatchTypePropertyRenamer' => __DIR__ . '/../..' . '/rules/Naming/PropertyRenamer/MatchTypePropertyRenamer.php',
         'Rector\\Naming\\PropertyRenamer\\PropertyFetchRenamer' => __DIR__ . '/../..' . '/rules/Naming/PropertyRenamer/PropertyFetchRenamer.php',
         'Rector\\Naming\\PropertyRenamer\\PropertyPromotionRenamer' => __DIR__ . '/../..' . '/rules/Naming/PropertyRenamer/PropertyPromotionRenamer.php',
@@ -2641,7 +2638,6 @@ class ComposerStaticInited32ffbef127b08ce336dd22c8996252
         'Rector\\Naming\\Rector\\Class_\\RenamePropertyToMatchTypeRector' => __DIR__ . '/../..' . '/rules/Naming/Rector/Class_/RenamePropertyToMatchTypeRector.php',
         'Rector\\Naming\\Rector\\Foreach_\\RenameForeachValueVariableToMatchExprVariableRector' => __DIR__ . '/../..' . '/rules/Naming/Rector/Foreach_/RenameForeachValueVariableToMatchExprVariableRector.php',
         'Rector\\Naming\\Rector\\Foreach_\\RenameForeachValueVariableToMatchMethodCallReturnTypeRector' => __DIR__ . '/../..' . '/rules/Naming/Rector/Foreach_/RenameForeachValueVariableToMatchMethodCallReturnTypeRector.php',
-        'Rector\\Naming\\Rector\\Property\\MakeBoolPropertyRespectIsHasWasMethodNamingRector' => __DIR__ . '/../..' . '/rules/Naming/Rector/Property/MakeBoolPropertyRespectIsHasWasMethodNamingRector.php',
         'Rector\\Naming\\RenameGuard\\PropertyRenameGuard' => __DIR__ . '/../..' . '/rules/Naming/RenameGuard/PropertyRenameGuard.php',
         'Rector\\Naming\\ValueObjectFactory\\ParamRenameFactory' => __DIR__ . '/../..' . '/rules/Naming/ValueObjectFactory/ParamRenameFactory.php',
         'Rector\\Naming\\ValueObjectFactory\\PropertyRenameFactory' => __DIR__ . '/../..' . '/rules/Naming/ValueObjectFactory/PropertyRenameFactory.php',
@@ -3178,7 +3174,6 @@ class ComposerStaticInited32ffbef127b08ce336dd22c8996252
         'Rector\\Privatization\\Rector\\Property\\PrivatizeFinalClassPropertyRector' => __DIR__ . '/../..' . '/rules/Privatization/Rector/Property/PrivatizeFinalClassPropertyRector.php',
         'Rector\\Privatization\\Reflection\\ClassConstantsResolver' => __DIR__ . '/../..' . '/rules/Privatization/Reflection/ClassConstantsResolver.php',
         'Rector\\Privatization\\TypeManipulator\\NormalizeTypeToRespectArrayScalarType' => __DIR__ . '/../..' . '/rules/Privatization/TypeManipulator/NormalizeTypeToRespectArrayScalarType.php',
-        'Rector\\Privatization\\ValueObject\\ConstantVisibility' => __DIR__ . '/../..' . '/rules/Privatization/ValueObject/ConstantVisibility.php',
         'Rector\\Privatization\\ValueObject\\ReplaceStringWithClassConstant' => __DIR__ . '/../..' . '/rules/Privatization/ValueObject/ReplaceStringWithClassConstant.php',
         'Rector\\Privatization\\VisibilityGuard\\ClassMethodVisibilityGuard' => __DIR__ . '/../..' . '/rules/Privatization/VisibilityGuard/ClassMethodVisibilityGuard.php',
         'Rector\\ReadWrite\\Contract\\ReadNodeAnalyzerInterface' => __DIR__ . '/../..' . '/packages/ReadWrite/Contract/ReadNodeAnalyzerInterface.php',
@@ -3851,9 +3846,9 @@ class ComposerStaticInited32ffbef127b08ce336dd22c8996252
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInited32ffbef127b08ce336dd22c8996252::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInited32ffbef127b08ce336dd22c8996252::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInited32ffbef127b08ce336dd22c8996252::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit595577a3a0cd140574e8109172d96163::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit595577a3a0cd140574e8109172d96163::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit595577a3a0cd140574e8109172d96163::$classMap;
 
         }, null, ClassLoader::class);
     }

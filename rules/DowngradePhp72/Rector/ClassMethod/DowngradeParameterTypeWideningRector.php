@@ -118,13 +118,13 @@ CODE_SAMPLE
         if ($this->isSealedClass($classReflection)) {
             return null;
         }
-        if ($this->skipSafeType($classReflection, $node)) {
+        if ($this->isSafeType($classReflection, $node)) {
             return null;
         }
         if ($node->isPrivate()) {
             return null;
         }
-        if ($this->skipClassMethod($node)) {
+        if ($this->shouldSkipClassMethod($node)) {
             return null;
         }
         // Downgrade every scalar parameter, just to be sure
@@ -163,7 +163,7 @@ CODE_SAMPLE
         $this->nativeParamToPhpDocDecorator->decorate($classMethod, $param);
         $param->type = null;
     }
-    private function skipClassMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
+    private function shouldSkipClassMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
     {
         if ($classMethod->isMagic()) {
             return \true;
@@ -194,7 +194,7 @@ CODE_SAMPLE
         }
         return \count($classReflection->getAncestors()) === 1;
     }
-    private function skipSafeType(\PHPStan\Reflection\ClassReflection $classReflection, \PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
+    private function isSafeType(\PHPStan\Reflection\ClassReflection $classReflection, \PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
     {
         foreach ($this->safeTypes as $safeType) {
             if ($classReflection->isSubclassOf($safeType)) {

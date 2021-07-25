@@ -37,7 +37,7 @@ final class ReturnFluentMethodCallFactory
         $rootMethodCall = $fluentMethodCalls->getRootMethodCall();
         // this means the 1st method creates different object then it runs on
         // e.g. $sheet->getRow(), creates a "Row" object
-        $isFirstMethodCallFactory = $this->fluentChainMethodCallRootExtractor->resolveIsFirstMethodCallFactory($rootMethodCall);
+        $isFirstMethodCallFactory = $this->fluentChainMethodCallRootExtractor->isFirstMethodCallFactory($rootMethodCall);
         $lastMethodCall = $fluentMethodCalls->getRootMethodCall();
         if ($lastMethodCall->var instanceof \PhpParser\Node\Expr\PropertyFetch) {
             $assignExpr = $lastMethodCall->var;
