@@ -5,7 +5,6 @@ namespace Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer;
 
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\Type;
-use Rector\Core\Exception\NotImplementedYetException;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\TypeDeclaration\Contract\TypeInferer\PropertyTypeInfererInterface;
@@ -33,7 +32,7 @@ final class AllAssignNodePropertyTypeInferer implements \Rector\TypeDeclaration\
         $classLike = $property->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
         if ($classLike === null) {
             // anonymous class possibly?
-            throw new \Rector\Core\Exception\NotImplementedYetException();
+            return null;
         }
         $propertyName = $this->nodeNameResolver->getName($property);
         return $this->assignToPropertyTypeInferer->inferPropertyInClassLike($propertyName, $classLike);

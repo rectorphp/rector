@@ -51,12 +51,12 @@ final class DowngradeParameterTypeWideningRector extends \Rector\Core\Rector\Abs
     /**
      * @var \Rector\TypeDeclaration\NodeAnalyzer\AutowiredClassMethodOrPropertyAnalyzer
      */
-    private $autowiredClassMethodAnalyzer;
-    public function __construct(\Rector\DowngradePhp72\PhpDoc\NativeParamToPhpDocDecorator $nativeParamToPhpDocDecorator, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\TypeDeclaration\NodeAnalyzer\AutowiredClassMethodOrPropertyAnalyzer $autowiredClassMethodAnalyzer)
+    private $autowiredClassMethodOrPropertyAnalyzer;
+    public function __construct(\Rector\DowngradePhp72\PhpDoc\NativeParamToPhpDocDecorator $nativeParamToPhpDocDecorator, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\TypeDeclaration\NodeAnalyzer\AutowiredClassMethodOrPropertyAnalyzer $autowiredClassMethodOrPropertyAnalyzer)
     {
         $this->nativeParamToPhpDocDecorator = $nativeParamToPhpDocDecorator;
         $this->reflectionProvider = $reflectionProvider;
-        $this->autowiredClassMethodAnalyzer = $autowiredClassMethodAnalyzer;
+        $this->autowiredClassMethodOrPropertyAnalyzer = $autowiredClassMethodOrPropertyAnalyzer;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -171,7 +171,7 @@ CODE_SAMPLE
         if ($classMethod->params === []) {
             return \true;
         }
-        if ($this->autowiredClassMethodAnalyzer->detect($classMethod)) {
+        if ($this->autowiredClassMethodOrPropertyAnalyzer->detect($classMethod)) {
             return \true;
         }
         foreach ($classMethod->params as $param) {

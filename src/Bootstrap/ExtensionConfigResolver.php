@@ -23,7 +23,10 @@ final class ExtensionConfigResolver
         }
         $generatedConfigDirectory = \dirname($generatedConfigReflectionClass->getFileName());
         foreach (\Rector\RectorInstaller\GeneratedConfig::EXTENSIONS as $extensionConfig) {
-            foreach ($extensionConfig['extra']['includes'] ?? [] as $includedFile) {
+            if (!isset($extensionConfig['extra']['includes'])) {
+                continue;
+            }
+            foreach ($extensionConfig['extra']['includes'] as $includedFile) {
                 $includedFilePath = $this->resolveIncludeFilePath($extensionConfig, $generatedConfigDirectory, $includedFile);
                 if ($includedFilePath === null) {
                     $includedFilePath = \sprintf('%s/%s', $extensionConfig['install_path'], $includedFile);

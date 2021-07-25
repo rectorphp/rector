@@ -197,10 +197,13 @@ final class ClassDependencyManipulator
             return \false;
         }
         $property = $class->getProperty($propertyMetadata->getName());
-        if ($property instanceof \PhpParser\Node\Stmt\Property && $this->autowiredClassMethodOrPropertyAnalyzer->detect($property)) {
-            return \true;
+        if (!$property instanceof \PhpParser\Node\Stmt\Property) {
+            return $this->isParamInConstructor($class, $propertyMetadata->getName());
         }
-        return $this->isParamInConstructor($class, $propertyMetadata->getName());
+        if (!$this->autowiredClassMethodOrPropertyAnalyzer->detect($property)) {
+            return $this->isParamInConstructor($class, $propertyMetadata->getName());
+        }
+        return \true;
     }
     private function hasMethodParameter(\PhpParser\Node\Stmt\ClassMethod $classMethod, string $name) : bool
     {
