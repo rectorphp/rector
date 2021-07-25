@@ -48,14 +48,10 @@ final class PropertyToAddCollector implements NodeCollectorInterface
         return $this->constantsByClass !== [];
     }
 
-    public function addPropertyToClass(
-        Class_ $class,
-        string $propertyName,
-        ?Type $propertyType,
-        int $propertyFlags
-    ): void {
+    public function addPropertyToClass(Class_ $class, PropertyMetadata $propertyMetadata): void
+    {
         $uniqueHash = spl_object_hash($class);
-        $this->propertiesByClass[$uniqueHash][] = new PropertyMetadata($propertyName, $propertyType, $propertyFlags);
+        $this->propertiesByClass[$uniqueHash][] = $propertyMetadata;
     }
 
     public function addConstantToClass(Class_ $class, ClassConst $classConst): void

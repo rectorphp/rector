@@ -131,7 +131,7 @@ final class ClassDependencyManipulator
 
     public function addInjectProperty(Class_ $class, PropertyMetadata $propertyMetadata): void
     {
-        if ($this->propertyPresenceChecker->hasClassContextPropertyByName($class, $propertyMetadata->getName())) {
+        if ($this->propertyPresenceChecker->hasClassContextProperty($class, $propertyMetadata)) {
             return;
         }
 
@@ -206,18 +206,17 @@ final class ClassDependencyManipulator
 
     private function hasClassPropertyAndDependency(Class_ $class, PropertyMetadata $propertyMetadata): bool
     {
-        if (! $this->propertyPresenceChecker->hasClassContextPropertyByName($class, $propertyMetadata->getName())) {
+        $property = $this->propertyPresenceChecker->getClassContextProperty($class, $propertyMetadata);
+        if ($property === null) {
             return false;
         }
 
-        $property = $class->getProperty($propertyMetadata->getName());
-        if (! $property instanceof Property) {
-            return $this->isParamInConstructor($class, $propertyMetadata->getName());
-        }
         if (! $this->autowiredClassMethodOrPropertyAnalyzer->detect($property)) {
             return $this->isParamInConstructor($class, $propertyMetadata->getName());
         }
-        return true;
+
+        // is inject/autowired property?
+        return $property instanceof Property && $this->autowiredClassMethodOrPropertyAnalyzer->detect($property);
     }
 
     private function hasMethodParameter(ClassMethod $classMethod, string $name): bool

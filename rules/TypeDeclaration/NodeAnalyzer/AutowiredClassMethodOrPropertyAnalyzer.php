@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\TypeDeclaration\NodeAnalyzer;
 
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
@@ -18,7 +19,7 @@ final class AutowiredClassMethodOrPropertyAnalyzer
     ) {
     }
 
-    public function detect(ClassMethod | Property $node): bool
+    public function detect(ClassMethod | Param | Property $node): bool
     {
         $nodePhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         if ($nodePhpDocInfo->hasByNames(['required', 'inject'])) {
