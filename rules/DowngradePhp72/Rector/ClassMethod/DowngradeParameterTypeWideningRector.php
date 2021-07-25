@@ -49,7 +49,7 @@ final class DowngradeParameterTypeWideningRector extends AbstractRector implemen
     public function __construct(
         private NativeParamToPhpDocDecorator $nativeParamToPhpDocDecorator,
         private ReflectionProvider $reflectionProvider,
-        private AutowiredClassMethodOrPropertyAnalyzer $autowiredClassMethodAnalyzer
+        private AutowiredClassMethodOrPropertyAnalyzer $autowiredClassMethodOrPropertyAnalyzer
     ) {
     }
 
@@ -194,7 +194,7 @@ CODE_SAMPLE
             return true;
         }
 
-        if ($this->autowiredClassMethodAnalyzer->detect($classMethod)) {
+        if ($this->autowiredClassMethodOrPropertyAnalyzer->detect($classMethod)) {
             return true;
         }
 

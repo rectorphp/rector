@@ -211,11 +211,13 @@ final class ClassDependencyManipulator
         }
 
         $property = $class->getProperty($propertyMetadata->getName());
-        if ($property instanceof Property && $this->autowiredClassMethodOrPropertyAnalyzer->detect($property)) {
-            return true;
+        if (! $property instanceof Property) {
+            return $this->isParamInConstructor($class, $propertyMetadata->getName());
         }
-
-        return $this->isParamInConstructor($class, $propertyMetadata->getName());
+        if (! $this->autowiredClassMethodOrPropertyAnalyzer->detect($property)) {
+            return $this->isParamInConstructor($class, $propertyMetadata->getName());
+        }
+        return true;
     }
 
     private function hasMethodParameter(ClassMethod $classMethod, string $name): bool

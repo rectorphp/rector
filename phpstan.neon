@@ -567,3 +567,5 @@ parameters:
 
         # complex
         - '#Cognitive complexity for "Rector\\NodeNameResolver\\NodeNameResolver\:\:getName\(\)" is 10, keep it under 9#'
+
+        - '#Method ".*\(\)" only calling another method call and has no added value\. Use the inlined call instead#'

@@ -28,7 +28,11 @@ final class ExtensionConfigResolver
 
         $generatedConfigDirectory = dirname($generatedConfigReflectionClass->getFileName());
         foreach (GeneratedConfig::EXTENSIONS as $extensionConfig) {
-            foreach ($extensionConfig['extra']['includes'] ?? [] as $includedFile) {
+            if (! isset($extensionConfig['extra']['includes'])) {
+                continue;
+            }
+
+            foreach ($extensionConfig['extra']['includes'] as $includedFile) {
                 $includedFilePath = $this->resolveIncludeFilePath(
                     $extensionConfig,
                     $generatedConfigDirectory,

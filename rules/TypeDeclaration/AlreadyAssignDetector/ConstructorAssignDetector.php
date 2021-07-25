@@ -29,7 +29,7 @@ final class ConstructorAssignDetector
         private NodeTypeResolver $nodeTypeResolver,
         private PropertyAssignMatcher $propertyAssignMatcher,
         private SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
-        private AutowiredClassMethodOrPropertyAnalyzer $autowiredClassMethodAnalyzer
+        private AutowiredClassMethodOrPropertyAnalyzer $autowiredClassMethodOrPropertyAnalyzer
     ) {
     }
 
@@ -122,7 +122,7 @@ final class ConstructorAssignDetector
         }
 
         foreach ($classLike->getMethods() as $classMethod) {
-            if (! $this->autowiredClassMethodAnalyzer->detect($classMethod)) {
+            if (! $this->autowiredClassMethodOrPropertyAnalyzer->detect($classMethod)) {
                 continue;
             }
 
