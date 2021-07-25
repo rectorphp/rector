@@ -9,12 +9,14 @@ use PhpParser\Node\Expr\Cast\Array_;
 use PhpParser\Node\Expr\Cast\Bool_;
 use PhpParser\Node\Expr\Cast\Double;
 use PhpParser\Node\Expr\Cast\Int_;
+use PhpParser\Node\Expr\Cast\Object_;
 use PhpParser\Node\Expr\Cast\String_;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\BooleanType;
 use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\MixedType;
+use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use Rector\Core\Exception\NotImplementedYetException;
@@ -44,6 +46,9 @@ final class CastTypeResolver implements \Rector\NodeTypeResolver\Contract\NodeTy
         }
         if ($node instanceof \PhpParser\Node\Expr\Cast\Array_) {
             return new \PHPStan\Type\ArrayType(new \PHPStan\Type\MixedType(), new \PHPStan\Type\MixedType());
+        }
+        if ($node instanceof \PhpParser\Node\Expr\Cast\Object_) {
+            return new \PHPStan\Type\ObjectType('stdClass');
         }
         throw new \Rector\Core\Exception\NotImplementedYetException(\get_class($node));
     }
