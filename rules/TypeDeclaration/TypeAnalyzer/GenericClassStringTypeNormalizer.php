@@ -4,12 +4,17 @@ declare (strict_types=1);
 namespace Rector\TypeDeclaration\TypeAnalyzer;
 
 use PHPStan\Reflection\ReflectionProvider;
+use PHPStan\Type\ArrayType;
+use PHPStan\Type\ClassStringType;
+use PHPStan\Type\Constant\ConstantIntegerType;
 use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\Generic\GenericClassStringType;
+use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeTraverser;
+use PHPStan\Type\UnionType;
 use RectorPrefix20210726\Symplify\PackageBuilder\Parameter\ParameterProvider;
 final class GenericClassStringTypeNormalizer
 {
@@ -28,7 +33,7 @@ final class GenericClassStringTypeNormalizer
     }
     public function normalize(\PHPStan\Type\Type $type) : \PHPStan\Type\Type
     {
-        return \PHPStan\Type\TypeTraverser::map($type, function (\PHPStan\Type\Type $type, $callback) : Type {
+        $type = \PHPStan\Type\TypeTraverser::map($type, function (\PHPStan\Type\Type $type, $callback) : Type {
             if (!$type instanceof \PHPStan\Type\Constant\ConstantStringType) {
                 return $callback($type);
             }
@@ -42,6 +47,28 @@ final class GenericClassStringTypeNormalizer
             }
             return $this->resolveStringType($value);
         });
+        if ($type instanceof \PHPStan\Type\UnionType) {
+            return $this->resolveClassStringInUnionType($type);
+        }
+        return $type;
+    }
+    private function resolveClassStringInUnionType(\PHPStan\Type\UnionType $type) : \PHPStan\Type\Type
+    {
+        $unionTypes = $type->getTypes();
+        foreach ($unionTypes as $unionType) {
+            if (!$unionType instanceof \PHPStan\Type\ArrayType) {
+                return $type;
+            }
+            $keyType = $unionType->getKeyType();
+            $itemType = $unionType->getItemType();
+            if (!$keyType instanceof \PHPStan\Type\MixedType && !$keyType instanceof \PHPStan\Type\Constant\ConstantIntegerType) {
+                return $type;
+            }
+            if (!$itemType instanceof \PHPStan\Type\ClassStringType) {
+                return $type;
+            }
+        }
+        return new \PHPStan\Type\ArrayType(new \PHPStan\Type\MixedType(), new \PHPStan\Type\ClassStringType());
     }
     /**
      * @return \PHPStan\Type\Generic\GenericClassStringType|\PHPStan\Type\StringType
