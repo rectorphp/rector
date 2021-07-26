@@ -5,12 +5,17 @@ declare(strict_types=1);
 namespace Rector\TypeDeclaration\TypeAnalyzer;
 
 use PHPStan\Reflection\ReflectionProvider;
+use PHPStan\Type\ArrayType;
+use PHPStan\Type\ClassStringType;
+use PHPStan\Type\Constant\ConstantIntegerType;
 use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\Generic\GenericClassStringType;
+use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeTraverser;
+use PHPStan\Type\UnionType;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 
 final class GenericClassStringTypeNormalizer
@@ -23,7 +28,7 @@ final class GenericClassStringTypeNormalizer
 
     public function normalize(Type $type): Type
     {
-        return TypeTraverser::map($type, function (Type $type, $callback): Type {
+        $type = TypeTraverser::map($type, function (Type $type, $callback): Type {
             if (! $type instanceof ConstantStringType) {
                 return $callback($type);
             }
@@ -41,6 +46,36 @@ final class GenericClassStringTypeNormalizer
 
             return $this->resolveStringType($value);
         });
+
+        if ($type instanceof UnionType) {
+            return $this->resolveClassStringInUnionType($type);
+        }
+
+        return $type;
+    }
+
+    private function resolveClassStringInUnionType(UnionType $type): Type
+    {
+        $unionTypes = $type->getTypes();
+
+        foreach ($unionTypes as $unionType) {
+            if (! $unionType instanceof ArrayType) {
+                return $type;
+            }
+
+            $keyType = $unionType->getKeyType();
+            $itemType = $unionType->getItemType();
+
+            if (! $keyType instanceof MixedType && ! $keyType instanceof ConstantIntegerType) {
+                return $type;
+            }
+
+            if (! $itemType instanceof ClassStringType) {
+                return $type;
+            }
+        }
+
+        return new ArrayType(new MixedType(), new ClassStringType());
     }
 
     private function resolveStringType(string $value): GenericClassStringType | StringType
