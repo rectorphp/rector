@@ -5,15 +5,14 @@ declare(strict_types=1);
 namespace Rector\Caching\ValueObject\Storage;
 
 use Nette\Utils\Random;
-use Nette\Utils\Strings;
 use Rector\Caching\ValueObject\CacheFilePaths;
 use Rector\Caching\ValueObject\CacheItem;
-use Symplify\EasyCodingStandard\Caching\Exception\CachingException;
+use PHPStan\File\FileWriter;
 use Symplify\SmartFileSystem\SmartFileSystem;
+use Symplify\EasyCodingStandard\Caching\Exception\CachingException;
 
 /**
- * Inspired by
- * https://github.com/phpstan/phpstan-src/commit/4df7342f3a0aaef4bcd85456dd20ca88d38dd90d#diff-6dc14f6222bf150e6840ca44a7126653052a1cedc6a149b4e5c1e1a2c80eacdc
+ * Inspired by https://github.com/phpstan/phpstan-src/blob/1e7ceae933f07e5a250b61ed94799e6c2ea8daa2/src/Cache/FileCacheStorage.php
  */
 final class FileCacheStorage
 {
@@ -24,59 +23,60 @@ final class FileCacheStorage
     }
 
     /**
+     * @param string $key
+     * @param string $variableKey
      * @return mixed|null
      */
     public function load(string $key, string $variableKey)
     {
-        $cacheFilePaths = $this->getCacheFilePaths($key);
+        return (function (string $key, string $variableKey) {
+            $cacheFilePaths = $this->getCacheFilePaths($key);
 
-        $filePath = $cacheFilePaths->getFilePath();
-        if (! is_file($filePath)) {
-            return null;
-        }
-
-        $cacheItem = require $filePath;
-        if (! $cacheItem instanceof CacheItem) {
-            return null;
-        }
-
-        if (! $cacheItem->isVariableKeyValid($variableKey)) {
-            return null;
-        }
-
-        return $cacheItem->getData();
+            $filePath = $cacheFilePaths->getFilePath();
+            if (!\is_file($filePath)) {
+                return null;
+            }
+            $cacheItem = (require $filePath);
+            if (!$cacheItem instanceof CacheItem) {
+                return null;
+            }
+            if (!$cacheItem->isVariableKeyValid($variableKey)) {
+                return null;
+            }
+            return $cacheItem->getData();
+        })($key, $variableKey);
     }
 
     /**
+     * @param string $key
+     * @param string $variableKey
      * @param mixed $data
+     * @return void
      */
-    public function save(string $key, string $variableKey, $data): void
+    public function save(string $key, string $variableKey, $data) : void
     {
         $cacheFilePaths = $this->getCacheFilePaths($key);
-
         $this->smartFileSystem->mkdir($cacheFilePaths->getFirstDirectory());
         $this->smartFileSystem->mkdir($cacheFilePaths->getSecondDirectory());
+        $path = $cacheFilePaths->getFilePath();
 
-        $tmpPath = sprintf('%s/%s.tmp', $this->directory, Random::generate());
-        $errorBefore = error_get_last();
-        $exported = @var_export(new CacheItem($variableKey, $data), true);
-        $errorAfter = error_get_last();
-
+        $tmpPath = \sprintf('%s/%s.tmp', $this->directory, Random::generate());
+        $errorBefore = \error_get_last();
+        $exported = @\var_export(new CacheItem($variableKey, $data), true);
+        $errorAfter = \error_get_last();
         if ($errorAfter !== null && $errorBefore !== $errorAfter) {
-            $errorMessage = sprintf(
-                'Error occurred while saving item "%s" ("%s") to cache: "%s"',
-                $key,
-                $variableKey,
-                $errorAfter['message']
-            );
-            throw new CachingException($errorMessage);
+            throw new CachingException(\sprintf('Error occurred while saving item %s (%s) to cache: %s', $key, $variableKey, $errorAfter['message']));
         }
-
-        $variableFileContent = sprintf("<?php declare(strict_types = 1);\n\nreturn %s;", $exported);
-        $this->smartFileSystem->dumpFile($tmpPath, $variableFileContent);
-
-        $this->smartFileSystem->rename($tmpPath, $cacheFilePaths->getFilePath(), true);
-        $this->smartFileSystem->remove($tmpPath);
+        // for performance reasons we don't use SmartFileSystem
+        FileWriter::write($tmpPath, \sprintf("<?php declare(strict_types = 1);\n\nreturn %s;", $exported));
+        $renameSuccess = @\rename($tmpPath, $path);
+        if ($renameSuccess) {
+            return;
+        }
+        @\unlink($tmpPath);
+        if (\DIRECTORY_SEPARATOR === '/' || !\file_exists($path)) {
+            throw new CachingException(\sprintf('Could not write data to cache file %s.', $path));
+        }
     }
 
     public function clean(string $cacheKey): void
@@ -98,8 +98,8 @@ final class FileCacheStorage
     private function getCacheFilePaths(string $key): CacheFilePaths
     {
         $keyHash = sha1($key);
-        $firstDirectory = sprintf('%s/%s', $this->directory, Strings::substring($keyHash, 0, 2));
-        $secondDirectory = sprintf('%s/%s', $firstDirectory, Strings::substring($keyHash, 2, 2));
+        $firstDirectory = sprintf('%s/%s', $this->directory, substr($keyHash, 0, 2));
+        $secondDirectory = sprintf('%s/%s', $firstDirectory, substr($keyHash, 2, 2));
         $filePath = sprintf('%s/%s.php', $secondDirectory, $keyHash);
 
         return new CacheFilePaths($firstDirectory, $secondDirectory, $filePath);

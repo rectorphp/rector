@@ -459,8 +459,6 @@ parameters:
             message: '#Access to an undefined property PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocChildNode\:\:\$value#'
             path: packages/BetterPhpDocParser/PhpDocInfo/PhpDocInfo.php #348
 
-        - '#"@var_export\(new \\Rector\\Caching\\ValueObject\\CacheItem\(\$variableKey, \$data\), true\)" is forbidden to use#'
-
         -
             message: '#Class with base "StaticTypeMapper" name is already used in "Rector\\PHPStanStaticTypeMapper\\TypeMapper\\StaticTypeMapper", "Rector\\StaticTypeMapper\\StaticTypeMapper"\. Use unique name to make classes easy to recognize#'
             path: packages/StaticTypeMapper/StaticTypeMapper.php #31
@@ -528,3 +526,27 @@ parameters:
         - '#Method "refactorParamType\(\)" returns bool type, so the name should start with is/has/was#'
         - '#Method "decorateReturnWithSpecificType\(\)" returns bool type, so the name should start with is/has/was#'
         - '#Method "resolveObjectType\(\)" returns bool type, so the name should start with is/has/was#'
+
+        # resolve later
+        -
+            message: '#Use explicit names over dynamic ones#'
+            paths:
+                - packages/Caching/ValueObject/Storage/FileCacheStorage.php
+
+        # native filesystem calls, required for performance reasons
+        -
+            message: '#"@\\unlink\(\$tmpPath\)" is forbidden to use#'
+            paths:
+                - packages/Caching/ValueObject/Storage/FileCacheStorage.php
+        -
+            message: '#"@\\rename\(\$tmpPath, \$path\)" is forbidden to use#'
+            paths:
+                - packages/Caching/ValueObject/Storage/FileCacheStorage.php
+        -
+            message: '#"%s" in sprintf\(\) format must be quoted#'
+            paths:
+                - packages/Caching/ValueObject/Storage/FileCacheStorage.php
+        -
+            message: '#"@\\var_export\(new \\Rector\\Caching\\ValueObject\\CacheItem\(\$variableKey, \$data\), true\)" is forbidden to use#'
+            paths:
+                - packages/Caching/ValueObject/Storage/FileCacheStorage.php
