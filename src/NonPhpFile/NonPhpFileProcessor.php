@@ -10,9 +10,6 @@ use Rector\Core\ValueObject\Application\File;
 use Rector\Core\ValueObject\Configuration;
 use Rector\Core\ValueObject\StaticNonPhpFileSuffixes;
 
-/**
- * @see \Rector\Tests\Renaming\Rector\Name\RenameClassRector\RenameNonPhpTest
- */
 final class NonPhpFileProcessor implements FileProcessorInterface
 {
     /**
