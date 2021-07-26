@@ -4,11 +4,11 @@ declare (strict_types=1);
 namespace Rector\Caching\ValueObject\Storage;
 
 use RectorPrefix20210726\Nette\Utils\Random;
+use PHPStan\File\FileWriter;
 use Rector\Caching\ValueObject\CacheFilePaths;
 use Rector\Caching\ValueObject\CacheItem;
-use PHPStan\File\FileWriter;
-use RectorPrefix20210726\Symplify\SmartFileSystem\SmartFileSystem;
 use RectorPrefix20210726\Symplify\EasyCodingStandard\Caching\Exception\CachingException;
+use RectorPrefix20210726\Symplify\SmartFileSystem\SmartFileSystem;
 /**
  * Inspired by https://github.com/phpstan/phpstan-src/blob/1e7ceae933f07e5a250b61ed94799e6c2ea8daa2/src/Cache/FileCacheStorage.php
  */
@@ -28,8 +28,6 @@ final class FileCacheStorage
         $this->smartFileSystem = $smartFileSystem;
     }
     /**
-     * @param string $key
-     * @param string $variableKey
      * @return mixed|null
      */
     public function load(string $key, string $variableKey)
@@ -51,10 +49,7 @@ final class FileCacheStorage
         })($key, $variableKey);
     }
     /**
-     * @param string $key
-     * @param string $variableKey
      * @param mixed $data
-     * @return void
      */
     public function save(string $key, string $variableKey, $data) : void
     {
