@@ -4,7 +4,7 @@
  * @link    http://github.com/myclabs/php-enum
  * @license http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
  */
-namespace RectorPrefix20210725\MyCLabs\Enum;
+namespace RectorPrefix20210726\MyCLabs\Enum;
 
 /**
  * Base Enum class

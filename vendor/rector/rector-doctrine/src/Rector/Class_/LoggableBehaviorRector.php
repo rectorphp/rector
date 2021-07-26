@@ -13,7 +13,7 @@ use Rector\Core\NodeManipulator\ClassInsertManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20210725\Symplify\SimplePhpDocParser\PhpDocNodeTraverser;
+use RectorPrefix20210726\Symplify\SimplePhpDocParser\PhpDocNodeTraverser;
 /**
  * @see https://github.com/Atlantic18/DoctrineExtensions/blob/v2.4.x/doc/loggable.md
  * @see https://github.com/KnpLabs/DoctrineBehaviors/blob/4e0677379dd4adf84178f662d08454a9627781a8/docs/loggable.md
@@ -94,7 +94,7 @@ CODE_SAMPLE
         // change the node
         $classPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($class);
         $hasLoggableAnnotation = \false;
-        $phpDocNodeTraverser = new \RectorPrefix20210725\Symplify\SimplePhpDocParser\PhpDocNodeTraverser();
+        $phpDocNodeTraverser = new \RectorPrefix20210726\Symplify\SimplePhpDocParser\PhpDocNodeTraverser();
         $phpDocNodeTraverser->traverseWithCallable($classPhpDocInfo->getPhpDocNode(), '', function ($node) use(&$hasLoggableAnnotation) {
             if (!$node instanceof \Rector\BetterPhpDocParser\PhpDoc\SpacelessPhpDocTagNode) {
                 return null;
@@ -107,7 +107,7 @@ CODE_SAMPLE
                 return null;
             }
             $hasLoggableAnnotation = \true;
-            return \RectorPrefix20210725\Symplify\SimplePhpDocParser\PhpDocNodeTraverser::NODE_REMOVE;
+            return \RectorPrefix20210726\Symplify\SimplePhpDocParser\PhpDocNodeTraverser::NODE_REMOVE;
         });
         if ($hasLoggableAnnotation === \false) {
             return null;
@@ -123,7 +123,7 @@ CODE_SAMPLE
         // remove tag from properties
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
         $hasChanged = \false;
-        $phpDocNodeTraverser = new \RectorPrefix20210725\Symplify\SimplePhpDocParser\PhpDocNodeTraverser();
+        $phpDocNodeTraverser = new \RectorPrefix20210726\Symplify\SimplePhpDocParser\PhpDocNodeTraverser();
         $phpDocNodeTraverser->traverseWithCallable($phpDocInfo->getPhpDocNode(), '', function ($node) use($phpDocInfo, &$hasChanged) {
             if (!$node instanceof \Rector\BetterPhpDocParser\PhpDoc\SpacelessPhpDocTagNode) {
                 return null;
@@ -136,7 +136,7 @@ CODE_SAMPLE
             }
             $phpDocInfo->markAsChanged();
             $hasChanged = \true;
-            return \RectorPrefix20210725\Symplify\SimplePhpDocParser\PhpDocNodeTraverser::NODE_REMOVE;
+            return \RectorPrefix20210726\Symplify\SimplePhpDocParser\PhpDocNodeTraverser::NODE_REMOVE;
         });
         if ($hasChanged === \false) {
             return null;

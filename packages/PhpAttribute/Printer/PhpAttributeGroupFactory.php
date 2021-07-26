@@ -17,6 +17,9 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php80\ValueObject\AnnotationToAttribute;
 use Rector\PhpAttribute\NodeAnalyzer\NamedArgumentsResolver;
 use Rector\PhpAttribute\Value\ValueNormalizer;
+/**
+ * @see \Rector\Tests\PhpAttribute\Printer\PhpAttributeGroupFactoryTest
+ */
 final class PhpAttributeGroupFactory
 {
     /**
