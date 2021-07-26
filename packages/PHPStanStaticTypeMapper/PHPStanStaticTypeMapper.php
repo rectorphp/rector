@@ -6,7 +6,9 @@ namespace Rector\PHPStanStaticTypeMapper;
 use PhpParser\Node\Name;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\UnionType;
+use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
+use PHPStan\Type\Accessory\AccessoryNumericStringType;
 use PHPStan\Type\Type;
 use Rector\Core\Exception\NotImplementedYetException;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
@@ -31,6 +33,9 @@ final class PHPStanStaticTypeMapper
                 continue;
             }
             return $typeMapper->mapToPHPStanPhpDocTypeNode($type, $typeKind);
+        }
+        if ($type instanceof \PHPStan\Type\Accessory\AccessoryNumericStringType) {
+            return new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode('string');
         }
         throw new \Rector\Core\Exception\NotImplementedYetException(__METHOD__ . ' for ' . \get_class($type));
     }
