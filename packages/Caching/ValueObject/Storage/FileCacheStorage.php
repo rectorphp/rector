@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Rector\Caching\ValueObject\Storage;
 
 use Nette\Utils\Random;
+use PHPStan\File\FileWriter;
 use Rector\Caching\ValueObject\CacheFilePaths;
 use Rector\Caching\ValueObject\CacheItem;
-use PHPStan\File\FileWriter;
-use Symplify\SmartFileSystem\SmartFileSystem;
 use Symplify\EasyCodingStandard\Caching\Exception\CachingException;
+use Symplify\SmartFileSystem\SmartFileSystem;
 
 /**
  * Inspired by https://github.com/phpstan/phpstan-src/blob/1e7ceae933f07e5a250b61ed94799e6c2ea8daa2/src/Cache/FileCacheStorage.php
@@ -23,8 +23,6 @@ final class FileCacheStorage
     }
 
     /**
-     * @param string $key
-     * @param string $variableKey
      * @return mixed|null
      */
     public function load(string $key, string $variableKey)
@@ -33,14 +31,14 @@ final class FileCacheStorage
             $cacheFilePaths = $this->getCacheFilePaths($key);
 
             $filePath = $cacheFilePaths->getFilePath();
-            if (!\is_file($filePath)) {
+            if (! \is_file($filePath)) {
                 return null;
             }
             $cacheItem = (require $filePath);
-            if (!$cacheItem instanceof CacheItem) {
+            if (! $cacheItem instanceof CacheItem) {
                 return null;
             }
-            if (!$cacheItem->isVariableKeyValid($variableKey)) {
+            if (! $cacheItem->isVariableKeyValid($variableKey)) {
                 return null;
             }
             return $cacheItem->getData();
@@ -48,12 +46,9 @@ final class FileCacheStorage
     }
 
     /**
-     * @param string $key
-     * @param string $variableKey
      * @param mixed $data
-     * @return void
      */
-    public function save(string $key, string $variableKey, $data) : void
+    public function save(string $key, string $variableKey, $data): void
     {
         $cacheFilePaths = $this->getCacheFilePaths($key);
         $this->smartFileSystem->mkdir($cacheFilePaths->getFirstDirectory());
@@ -65,7 +60,12 @@ final class FileCacheStorage
         $exported = @\var_export(new CacheItem($variableKey, $data), true);
         $errorAfter = \error_get_last();
         if ($errorAfter !== null && $errorBefore !== $errorAfter) {
-            throw new CachingException(\sprintf('Error occurred while saving item %s (%s) to cache: %s', $key, $variableKey, $errorAfter['message']));
+            throw new CachingException(\sprintf(
+                'Error occurred while saving item %s (%s) to cache: %s',
+                $key,
+                $variableKey,
+                $errorAfter['message']
+            ));
         }
         // for performance reasons we don't use SmartFileSystem
         FileWriter::write($tmpPath, \sprintf("<?php declare(strict_types = 1);\n\nreturn %s;", $exported));
@@ -74,7 +74,7 @@ final class FileCacheStorage
             return;
         }
         @\unlink($tmpPath);
-        if (\DIRECTORY_SEPARATOR === '/' || !\file_exists($path)) {
+        if (\DIRECTORY_SEPARATOR === '/' || ! \file_exists($path)) {
             throw new CachingException(\sprintf('Could not write data to cache file %s.', $path));
         }
     }

@@ -81,6 +81,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         '*/Source*/*',
         '*/Expected/*',
         '*/Expected*/*',
+
+        // to keep original API from PHPStan untouched
+        __DIR__ . '/packages/Caching/ValueObject/Storage/FileCacheStorage.php',
     ]);
 
     $parameters->set(Option::PHPSTAN_FOR_RECTOR_PATH, __DIR__ . '/phpstan-for-rector.neon');
