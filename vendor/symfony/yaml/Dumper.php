@@ -59,7 +59,7 @@ class Dumper
                 if ('' !== $output && "\n" !== $output[-1]) {
                     $output .= "\n";
                 }
-                if (\RectorPrefix20210726\Symfony\Component\Yaml\Yaml::DUMP_MULTI_LINE_LITERAL_BLOCK & $flags && \is_string($value) && \false !== \strpos($value, "\n") && \false === \strpos($value, "\r")) {
+                if (\RectorPrefix20210726\Symfony\Component\Yaml\Yaml::DUMP_MULTI_LINE_LITERAL_BLOCK & $flags && \is_string($value) && \strpos($value, "\n") !== \false && \strpos($value, "\r") === \false) {
                     // If the first line starts with a space character, the spec requires a blockIndicationIndicator
                     // http://www.yaml.org/spec/1.2/spec.html#id2793979
                     $blockIndentationIndicator = ' ' === \substr($value, 0, 1) ? (string) $this->indentation : '';
@@ -82,7 +82,7 @@ class Dumper
                 }
                 if ($value instanceof \RectorPrefix20210726\Symfony\Component\Yaml\Tag\TaggedValue) {
                     $output .= \sprintf('%s%s !%s', $prefix, $dumpAsMap ? \RectorPrefix20210726\Symfony\Component\Yaml\Inline::dump($key, $flags) . ':' : '-', $value->getTag());
-                    if (\RectorPrefix20210726\Symfony\Component\Yaml\Yaml::DUMP_MULTI_LINE_LITERAL_BLOCK & $flags && \is_string($value->getValue()) && \false !== \strpos($value->getValue(), "\n") && \false === \strpos($value->getValue(), "\r\n")) {
+                    if (\RectorPrefix20210726\Symfony\Component\Yaml\Yaml::DUMP_MULTI_LINE_LITERAL_BLOCK & $flags && \is_string($value->getValue()) && \strpos($value->getValue(), "\n") !== \false && \strpos($value->getValue(), "\r\n") === \false) {
                         // If the first line starts with a space character, the spec requires a blockIndicationIndicator
                         // http://www.yaml.org/spec/1.2/spec.html#id2793979
                         $blockIndentationIndicator = ' ' === \substr($value->getValue(), 0, 1) ? (string) $this->indentation : '';

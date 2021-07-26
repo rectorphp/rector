@@ -90,6 +90,7 @@ class InlineFragmentRenderer extends \RectorPrefix20210726\Symfony\Component\Htt
         }
     }
     /**
+     * @param string $uri
      * @param \Symfony\Component\HttpFoundation\Request $request
      */
     protected function createSubRequest($uri, $request)

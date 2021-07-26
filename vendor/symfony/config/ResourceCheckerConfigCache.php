@@ -159,6 +159,7 @@ class ResourceCheckerConfigCache implements \RectorPrefix20210726\Symfony\Compon
     }
     /**
      * @internal
+     * @param string $class
      */
     public static function handleUnserializeCallback($class)
     {

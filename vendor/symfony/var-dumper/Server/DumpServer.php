@@ -27,7 +27,7 @@ class DumpServer
     private $logger;
     public function __construct(string $host, \RectorPrefix20210726\Psr\Log\LoggerInterface $logger = null)
     {
-        if (\false === \strpos($host, '://')) {
+        if (\strpos($host, '://') === \false) {
             $host = 'tcp://' . $host;
         }
         $this->host = $host;

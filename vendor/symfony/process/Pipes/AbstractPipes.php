@@ -150,6 +150,8 @@ abstract class AbstractPipes implements \RectorPrefix20210726\Symfony\Component\
     }
     /**
      * @internal
+     * @param int $type
+     * @param string $msg
      */
     public function handleError($type, $msg)
     {

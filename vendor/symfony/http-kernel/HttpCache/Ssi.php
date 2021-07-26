@@ -32,7 +32,7 @@ class Ssi extends \RectorPrefix20210726\Symfony\Component\HttpKernel\HttpCache\A
      */
     public function addSurrogateControl($response)
     {
-        if (\false !== \strpos($response->getContent(), '<!--#include')) {
+        if (\strpos($response->getContent(), '<!--#include') !== \false) {
             $response->headers->set('Surrogate-Control', 'content="SSI/1.0"');
         }
     }

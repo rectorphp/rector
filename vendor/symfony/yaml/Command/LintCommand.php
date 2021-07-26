@@ -148,7 +148,7 @@ EOF
                 ++$erroredFiles;
                 $io->text('<error> ERROR </error>' . ($info['file'] ? \sprintf(' in %s', $info['file']) : ''));
                 $io->text(\sprintf('<error> >> %s</error>', $info['message']));
-                if (\false !== \strpos($info['message'], 'PARSE_CUSTOM_TAGS')) {
+                if (\strpos($info['message'], 'PARSE_CUSTOM_TAGS') !== \false) {
                     $suggestTagOption = \true;
                 }
                 if ($errorAsGithubAnnotations) {
@@ -171,7 +171,7 @@ EOF
             if (!$v['valid']) {
                 ++$errors;
             }
-            if (isset($v['message']) && \false !== \strpos($v['message'], 'PARSE_CUSTOM_TAGS')) {
+            if (isset($v['message']) && \strpos($v['message'], 'PARSE_CUSTOM_TAGS') !== \false) {
                 $v['message'] .= ' Use the --parse-tags option if you want parse custom tags.';
             }
         });

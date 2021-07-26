@@ -138,7 +138,7 @@ class JsonResponse extends \RectorPrefix20210726\Symfony\Component\HttpFoundatio
         try {
             $data = \json_encode($data, $this->encodingOptions);
         } catch (\Exception $e) {
-            if ('Exception' === \get_class($e) && 0 === \strpos($e->getMessage(), 'Failed calling ')) {
+            if ('Exception' === \get_class($e) && \strncmp($e->getMessage(), 'Failed calling ', \strlen('Failed calling ')) === 0) {
                 throw $e->getPrevious() ?: $e;
             }
             throw $e;

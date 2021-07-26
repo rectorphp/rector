@@ -65,7 +65,7 @@ abstract class FileLoader extends \RectorPrefix20210726\Symfony\Component\Config
      */
     public function import($resource, $type = null, $ignoreErrors = \false, $sourceResource = null, $exclude = null)
     {
-        if (\is_string($resource) && \strlen($resource) !== ($i = \strcspn($resource, '*?{[')) && \false === \strpos($resource, "\n")) {
+        if (\is_string($resource) && \strlen($resource) !== ($i = \strcspn($resource, '*?{[')) && \strpos($resource, "\n") === \false) {
             $excluded = [];
             foreach ((array) $exclude as $pattern) {
                 foreach ($this->glob($pattern, \true, $_, \false, \true) as $path => $info) {
@@ -74,7 +74,7 @@ abstract class FileLoader extends \RectorPrefix20210726\Symfony\Component\Config
                 }
             }
             $ret = [];
-            $isSubpath = 0 !== $i && \false !== \strpos(\substr($resource, 0, $i), '/');
+            $isSubpath = 0 !== $i && \strpos(\substr($resource, 0, $i), '/') !== \false;
             foreach ($this->glob($resource, \false, $_, $ignoreErrors || !$isSubpath, \false, $excluded) as $path => $info) {
                 if (null !== ($res = $this->doImport($path, 'glob' === $type ? null : $type, $ignoreErrors, $sourceResource))) {
                     $ret[] = $res;
@@ -100,7 +100,7 @@ abstract class FileLoader extends \RectorPrefix20210726\Symfony\Component\Config
         if (\strlen($pattern) === ($i = \strcspn($pattern, '*?{['))) {
             $prefix = $pattern;
             $pattern = '';
-        } elseif (0 === $i || \false === \strpos(\substr($pattern, 0, $i), '/')) {
+        } elseif (0 === $i || \strpos(\substr($pattern, 0, $i), '/') === \false) {
             $prefix = '.';
             $pattern = '/' . $pattern;
         } else {

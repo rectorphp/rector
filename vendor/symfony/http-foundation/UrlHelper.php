@@ -27,7 +27,7 @@ final class UrlHelper
     }
     public function getAbsoluteUrl(string $path) : string
     {
-        if (\false !== \strpos($path, '://') || '//' === \substr($path, 0, 2)) {
+        if (\strpos($path, '://') !== \false || '//' === \substr($path, 0, 2)) {
             return $path;
         }
         if (null === ($request = $this->requestStack->getMainRequest())) {
@@ -50,7 +50,7 @@ final class UrlHelper
     }
     public function getRelativePath(string $path) : string
     {
-        if (\false !== \strpos($path, '://') || '//' === \substr($path, 0, 2)) {
+        if (\strpos($path, '://') !== \false || '//' === \substr($path, 0, 2)) {
             return $path;
         }
         if (null === ($request = $this->requestStack->getMainRequest())) {

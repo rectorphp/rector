@@ -121,7 +121,7 @@ class CliDumper extends \RectorPrefix20210726\Symfony\Component\VarDumper\Dumper
                         break;
                     default:
                         $value = (string) $value;
-                        if (\false === \strpos($value, $this->decimalPoint)) {
+                        if (\strpos($value, $this->decimalPoint) === \false) {
                             $value .= $this->decimalPoint . '0';
                         }
                         break;
@@ -392,7 +392,7 @@ class CliDumper extends \RectorPrefix20210726\Symfony\Component\VarDumper\Dumper
         }
         if (isset($attr['ellipsis'], $attr['ellipsis-type'])) {
             $prefix = \substr($value, 0, -$attr['ellipsis']);
-            if ('cli' === \PHP_SAPI && 'path' === $attr['ellipsis-type'] && isset($_SERVER[$pwd = '\\' === \DIRECTORY_SEPARATOR ? 'CD' : 'PWD']) && 0 === \strpos($prefix, $_SERVER[$pwd])) {
+            if ('cli' === \PHP_SAPI && 'path' === $attr['ellipsis-type'] && isset($_SERVER[$pwd = '\\' === \DIRECTORY_SEPARATOR ? 'CD' : 'PWD']) && \strncmp($prefix, $_SERVER[$pwd], \strlen($_SERVER[$pwd])) === 0) {
                 $prefix = '.' . \substr($prefix, \strlen($_SERVER[$pwd]));
             }
             if (!empty($attr['ellipsis-tail'])) {
@@ -421,7 +421,7 @@ class CliDumper extends \RectorPrefix20210726\Symfony\Component\VarDumper\Dumper
             } else {
                 $value = "\33[{$this->styles[$style]}m" . $value;
             }
-            if ($cchrCount && $endCchr === \substr($value, -\strlen($endCchr))) {
+            if ($cchrCount && \substr_compare($value, $endCchr, -\strlen($endCchr)) === 0) {
                 $value = \substr($value, 0, -\strlen($endCchr));
             } else {
                 $value .= "\33[{$this->styles['default']}m";

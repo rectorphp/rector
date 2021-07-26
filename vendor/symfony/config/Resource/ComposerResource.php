@@ -30,9 +30,6 @@ class ComposerResource implements \RectorPrefix20210726\Symfony\Component\Config
     {
         return \array_keys($this->vendors);
     }
-    /**
-     * {@inheritdoc}
-     */
     public function __toString() : string
     {
         return __CLASS__;
@@ -50,7 +47,7 @@ class ComposerResource implements \RectorPrefix20210726\Symfony\Component\Config
     {
         self::$runtimeVendors = [];
         foreach (\get_declared_classes() as $class) {
-            if ('C' === $class[0] && 0 === \strpos($class, 'ComposerAutoloaderInit')) {
+            if ('C' === $class[0] && \strncmp($class, 'ComposerAutoloaderInit', \strlen('ComposerAutoloaderInit')) === 0) {
                 $r = new \ReflectionClass($class);
                 $v = \dirname($r->getFileName(), 2);
                 if (\is_file($v . '/composer/installed.json')) {

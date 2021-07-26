@@ -55,7 +55,7 @@ class AddAnnotatedClassesToCachePass implements \RectorPrefix20210726\Symfony\Co
         $expanded = [];
         // Explicit classes declared in the patterns are returned directly
         foreach ($patterns as $key => $pattern) {
-            if ('\\' !== \substr($pattern, -1) && \false === \strpos($pattern, '*')) {
+            if (\substr_compare($pattern, '\\', -\strlen('\\')) !== 0 && \strpos($pattern, '*') === \false) {
                 unset($patterns[$key]);
                 $expanded[] = \ltrim($pattern, '\\');
             }
@@ -104,9 +104,9 @@ class AddAnnotatedClassesToCachePass implements \RectorPrefix20210726\Symfony\Co
     }
     private function matchAnyRegexps(string $class, array $regexps) : bool
     {
-        $isTest = \false !== \strpos($class, 'Test');
+        $isTest = \strpos($class, 'Test') !== \false;
         foreach ($regexps as $regex) {
-            if ($isTest && \false === \strpos($regex, 'Test')) {
+            if ($isTest && \strpos($regex, 'Test') === \false) {
                 continue;
             }
             if (\preg_match($regex, '\\' . $class)) {

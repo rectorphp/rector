@@ -41,7 +41,7 @@ abstract class BaseNode implements \RectorPrefix20210726\Symfony\Component\Confi
      */
     public function __construct(?string $name, \RectorPrefix20210726\Symfony\Component\Config\Definition\NodeInterface $parent = null, string $pathSeparator = self::DEFAULT_PATH_SEPARATOR)
     {
-        if (\false !== \strpos($name = (string) $name, $pathSeparator)) {
+        if (\strpos($name = (string) $name, $pathSeparator) !== \false) {
             throw new \InvalidArgumentException('The name must not contain ".' . $pathSeparator . '".');
         }
         $this->name = $name;
@@ -179,8 +179,7 @@ abstract class BaseNode implements \RectorPrefix20210726\Symfony\Component\Confi
     }
     /**
      * Set this node as required.
-     *
-     * @param bool $boolean Required node
+     * @param bool $boolean
      */
     public function setRequired($boolean)
     {
@@ -479,7 +478,7 @@ abstract class BaseNode implements \RectorPrefix20210726\Symfony\Component\Confi
                 return self::$placeholders[$value];
             }
             foreach (self::$placeholderUniquePrefixes as $placeholderUniquePrefix) {
-                if (0 === \strpos($value, $placeholderUniquePrefix)) {
+                if (\strncmp($value, $placeholderUniquePrefix, \strlen($placeholderUniquePrefix)) === 0) {
                     return [];
                 }
             }

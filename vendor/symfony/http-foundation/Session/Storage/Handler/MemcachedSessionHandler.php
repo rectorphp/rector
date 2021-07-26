@@ -85,12 +85,13 @@ class MemcachedSessionHandler extends \RectorPrefix20210726\Symfony\Component\Ht
         return $result || \Memcached::RES_NOTFOUND == $this->memcached->getResultCode();
     }
     /**
-     * @return bool
+     * @return int|false
      */
+    #[\ReturnTypeWillChange]
     public function gc($maxlifetime)
     {
         // not required here because memcached will auto expire the records anyhow.
-        return \true;
+        return 0;
     }
     /**
      * Return a Memcached instance.

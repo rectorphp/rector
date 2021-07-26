@@ -32,9 +32,6 @@ class FileExistenceResource implements \RectorPrefix20210726\Symfony\Component\C
         $this->resource = $resource;
         $this->exists = \file_exists($resource);
     }
-    /**
-     * {@inheritdoc}
-     */
     public function __toString() : string
     {
         return $this->resource;

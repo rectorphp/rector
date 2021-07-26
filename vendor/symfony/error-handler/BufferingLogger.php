@@ -32,6 +32,9 @@ class BufferingLogger extends \RectorPrefix20210726\Psr\Log\AbstractLogger
         $this->logs = [];
         return $logs;
     }
+    /**
+     * @return array
+     */
     public function __sleep()
     {
         throw new \BadMethodCallException('Cannot serialize ' . __CLASS__);

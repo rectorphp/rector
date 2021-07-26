@@ -6,6 +6,7 @@ namespace Rector\TypeDeclaration\TypeAnalyzer;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\ClassStringType;
+use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\Constant\ConstantIntegerType;
 use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\Generic\GenericClassStringType;
@@ -52,7 +53,10 @@ final class GenericClassStringTypeNormalizer
         }
         return $type;
     }
-    private function resolveClassStringInUnionType(\PHPStan\Type\UnionType $type) : \PHPStan\Type\Type
+    /**
+     * @return \PHPStan\Type\UnionType|\PHPStan\Type\ArrayType
+     */
+    private function resolveClassStringInUnionType(\PHPStan\Type\UnionType $type)
     {
         $unionTypes = $type->getTypes();
         foreach ($unionTypes as $unionType) {
@@ -61,6 +65,10 @@ final class GenericClassStringTypeNormalizer
             }
             $keyType = $unionType->getKeyType();
             $itemType = $unionType->getItemType();
+            if ($itemType instanceof \PHPStan\Type\Constant\ConstantArrayType) {
+                $arrayType = new \PHPStan\Type\ArrayType(new \PHPStan\Type\MixedType(), new \PHPStan\Type\MixedType());
+                return new \PHPStan\Type\ArrayType($keyType, $arrayType);
+            }
             if (!$keyType instanceof \PHPStan\Type\MixedType && !$keyType instanceof \PHPStan\Type\Constant\ConstantIntegerType) {
                 return $type;
             }

@@ -57,7 +57,7 @@ abstract class AbstractDumper implements \RectorPrefix20210726\Symfony\Component
      */
     public function setOutput($output)
     {
-        $prev = null !== $this->outputStream ? $this->outputStream : $this->lineDumper;
+        $prev = $this->outputStream ?? $this->lineDumper;
         if (\is_callable($output)) {
             $this->outputStream = null;
             $this->lineDumper = $output;

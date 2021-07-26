@@ -213,16 +213,16 @@ class UploadedFile extends \RectorPrefix20210726\Symfony\Component\HttpFoundatio
      *
      * @return int|float Returns float if size > PHP_INT_MAX
      */
-    private static function parseFilesize($size)
+    private static function parseFilesize(string $size)
     {
         if ('' === $size) {
             return 0;
         }
         $size = \strtolower($size);
         $max = \ltrim($size, '+');
-        if (0 === \strpos($max, '0x')) {
+        if (\strncmp($max, '0x', \strlen('0x')) === 0) {
             $max = \intval($max, 16);
-        } elseif (0 === \strpos($max, '0')) {
+        } elseif (\strncmp($max, '0', \strlen('0')) === 0) {
             $max = \intval($max, 8);
         } else {
             $max = (int) $max;

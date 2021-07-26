@@ -50,15 +50,6 @@ if (\class_exists(\RectorPrefix20210726\Symfony\Component\HttpKernel\Kernel::cla
                             <span class="hidden-xs-down">Symfony</span> Docs
                         </a>
                     </div>
-
-                    <div class="help-link">
-                        <a href="https://symfony.com/support">
-                            <span class="icon"><?php 
-    echo $this->include('assets/images/icon-support.svg');
-    ?></span>
-                            <span class="hidden-xs-down">Symfony</span> Support
-                        </a>
-                    </div>
                 </div>
             </header>
         <?php 

@@ -264,7 +264,7 @@ class Store implements \RectorPrefix20210726\Symfony\Component\HttpKernel\HttpCa
         if (!($entries = $this->load($key))) {
             return [];
         }
-        return \unserialize($entries);
+        return \unserialize($entries) ?: [];
     }
     /**
      * Purges data for the given URL.

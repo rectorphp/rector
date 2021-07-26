@@ -101,8 +101,8 @@ class DumpDataCollector extends \RectorPrefix20210726\Symfony\Component\HttpKern
             return;
         }
         // In all other conditions that remove the web debug toolbar, dumps are written on the output.
-        if (!$this->requestStack || !$response->headers->has('X-Debug-Token') || $response->isRedirection() || $response->headers->has('Content-Type') && \false === \strpos($response->headers->get('Content-Type'), 'html') || 'html' !== $request->getRequestFormat() || \false === \strripos($response->getContent(), '</body>')) {
-            if ($response->headers->has('Content-Type') && \false !== \strpos($response->headers->get('Content-Type'), 'html')) {
+        if (!$this->requestStack || !$response->headers->has('X-Debug-Token') || $response->isRedirection() || $response->headers->has('Content-Type') && \strpos($response->headers->get('Content-Type'), 'html') === \false || 'html' !== $request->getRequestFormat() || \false === \strripos($response->getContent(), '</body>')) {
+            if ($response->headers->has('Content-Type') && \strpos($response->headers->get('Content-Type'), 'html') !== \false) {
                 $dumper = new \RectorPrefix20210726\Symfony\Component\VarDumper\Dumper\HtmlDumper('php://output', $this->charset);
                 $dumper->setDisplayOptions(['fileLinkFormat' => $this->fileLinkFormat]);
             } else {
@@ -164,6 +164,11 @@ class DumpDataCollector extends \RectorPrefix20210726\Symfony\Component\HttpKern
     {
         return $this->dataCount;
     }
+    /**
+     * @param string $format
+     * @param int $maxDepthLimit
+     * @param int $maxItemsPerDepth
+     */
     public function getDumps($format, $maxDepthLimit = -1, $maxItemsPerDepth = -1) : array
     {
         $data = \fopen('php://memory', 'r+');

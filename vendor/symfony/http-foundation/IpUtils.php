@@ -63,7 +63,7 @@ class IpUtils
         if (!\filter_var($requestIp, \FILTER_VALIDATE_IP, \FILTER_FLAG_IPV4)) {
             return self::$checkedIps[$cacheKey] = \false;
         }
-        if (\false !== \strpos($ip, '/')) {
+        if (\strpos($ip, '/') !== \false) {
             [$address, $netmask] = \explode('/', $ip, 2);
             if ('0' === $netmask) {
                 return self::$checkedIps[$cacheKey] = \filter_var($address, \FILTER_VALIDATE_IP, \FILTER_FLAG_IPV4);
@@ -104,7 +104,7 @@ class IpUtils
         if (!(\extension_loaded('sockets') && \defined('AF_INET6') || @\inet_pton('::1'))) {
             throw new \RuntimeException('Unable to check Ipv6. Check that PHP was not compiled with option "disable-ipv6".');
         }
-        if (\false !== \strpos($ip, '/')) {
+        if (\strpos($ip, '/') !== \false) {
             [$address, $netmask] = \explode('/', $ip, 2);
             if ('0' === $netmask) {
                 return (bool) \unpack('n*', @\inet_pton($address));

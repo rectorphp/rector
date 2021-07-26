@@ -29,7 +29,7 @@ class ControllerDoesNotReturnResponseException extends \LogicException
     }
     private function parseControllerDefinition(callable $controller) : ?array
     {
-        if (\is_string($controller) && \false !== \strpos($controller, '::')) {
+        if (\is_string($controller) && \strpos($controller, '::') !== \false) {
             $controller = \explode('::', $controller);
         }
         if (\is_array($controller)) {

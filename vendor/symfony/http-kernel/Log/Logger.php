@@ -77,7 +77,7 @@ class Logger extends \RectorPrefix20210726\Psr\Log\AbstractLogger
     }
     private function format(string $level, string $message, array $context, bool $prefixDate = \true) : string
     {
-        if (\false !== \strpos($message, '{')) {
+        if (\strpos($message, '{') !== \false) {
             $replacements = [];
             foreach ($context as $key => $val) {
                 if (null === $val || \is_scalar($val) || \is_object($val) && \method_exists($val, '__toString')) {

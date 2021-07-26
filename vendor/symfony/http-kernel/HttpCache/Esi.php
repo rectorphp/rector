@@ -35,7 +35,7 @@ class Esi extends \RectorPrefix20210726\Symfony\Component\HttpKernel\HttpCache\A
      */
     public function addSurrogateControl($response)
     {
-        if (\false !== \strpos($response->getContent(), '<esi:include')) {
+        if (\strpos($response->getContent(), '<esi:include') !== \false) {
             $response->headers->set('Surrogate-Control', 'content="ESI/1.0"');
         }
     }

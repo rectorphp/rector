@@ -35,9 +35,6 @@ class DirectoryResource implements \RectorPrefix20210726\Symfony\Component\Confi
             throw new \InvalidArgumentException(\sprintf('The directory "%s" does not exist.', $resource));
         }
     }
-    /**
-     * {@inheritdoc}
-     */
     public function __toString() : string
     {
         return \md5(\serialize([$this->resource, $this->pattern]));
@@ -75,7 +72,7 @@ class DirectoryResource implements \RectorPrefix20210726\Symfony\Component\Confi
             }
             // always monitor directories for changes, except the .. entries
             // (otherwise deleted files wouldn't get detected)
-            if ($file->isDir() && '/..' === \substr($file, -3)) {
+            if ($file->isDir() && \substr_compare($file, '/..', -\strlen('/..')) === 0) {
                 continue;
             }
             // for broken links

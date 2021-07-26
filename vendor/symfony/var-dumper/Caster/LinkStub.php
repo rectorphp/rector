@@ -20,7 +20,7 @@ class LinkStub extends \RectorPrefix20210726\Symfony\Component\VarDumper\Caster\
     public $inVendor = \false;
     private static $vendorRoots;
     private static $composerRoots;
-    public function __construct($label, int $line = 0, $href = null)
+    public function __construct(string $label, int $line = 0, string $href = null)
     {
         $this->value = $label;
         if (null === $href) {
@@ -29,12 +29,12 @@ class LinkStub extends \RectorPrefix20210726\Symfony\Component\VarDumper\Caster\
         if (!\is_string($href)) {
             return;
         }
-        if (0 === \strpos($href, 'file://')) {
+        if (\str_starts_with($href, 'file://')) {
             if ($href === $label) {
                 $label = \substr($label, 7);
             }
             $href = \substr($href, 7);
-        } elseif (\false !== \strpos($href, '://')) {
+        } elseif (\str_contains($href, '://')) {
             $this->attr['href'] = $href;
             return;
         }
@@ -62,7 +62,7 @@ class LinkStub extends \RectorPrefix20210726\Symfony\Component\VarDumper\Caster\
         if (null === self::$vendorRoots) {
             self::$vendorRoots = [];
             foreach (\get_declared_classes() as $class) {
-                if ('C' === $class[0] && 0 === \strpos($class, 'ComposerAutoloaderInit')) {
+                if ('C' === $class[0] && \str_starts_with($class, 'ComposerAutoloaderInit')) {
                     $r = new \ReflectionClass($class);
                     $v = \dirname($r->getFileName(), 2);
                     if (\is_file($v . '/composer/installed.json')) {
@@ -76,7 +76,7 @@ class LinkStub extends \RectorPrefix20210726\Symfony\Component\VarDumper\Caster\
             return self::$composerRoots[$dir];
         }
         foreach (self::$vendorRoots as $root) {
-            if ($inVendor = 0 === \strpos($file, $root)) {
+            if ($inVendor = \str_starts_with($file, $root)) {
                 return $root;
             }
         }

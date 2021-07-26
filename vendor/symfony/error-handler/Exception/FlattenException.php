@@ -49,6 +49,7 @@ class FlattenException
     /**
      * @return static
      * @param \Exception $exception
+     * @param int|null $statusCode
      * @param mixed[] $headers
      */
     public static function create($exception, $statusCode = null, $headers = [])
@@ -84,7 +85,7 @@ class FlattenException
         $e->setStatusCode($statusCode);
         $e->setHeaders($headers);
         $e->setTraceFromThrowable($exception);
-        $e->setClass(\get_debug_type($exception));
+        $e->setClass(\get_class($exception));
         $e->setFile($exception->getFile());
         $e->setLine($exception->getLine());
         $previous = $exception->getPrevious();
@@ -106,9 +107,8 @@ class FlattenException
         return $this->statusCode;
     }
     /**
-     * @param int $code
-     *
      * @return $this
+     * @param int $code
      */
     public function setStatusCode($code)
     {
@@ -133,9 +133,8 @@ class FlattenException
         return $this->class;
     }
     /**
-     * @param string $class
-     *
      * @return $this
+     * @param string $class
      */
     public function setClass($class)
     {
@@ -147,9 +146,8 @@ class FlattenException
         return $this->file;
     }
     /**
-     * @param string $file
-     *
      * @return $this
+     * @param string $file
      */
     public function setFile($file)
     {
@@ -161,9 +159,8 @@ class FlattenException
         return $this->line;
     }
     /**
-     * @param int $line
-     *
      * @return $this
+     * @param int $line
      */
     public function setLine($line)
     {
@@ -188,9 +185,8 @@ class FlattenException
         return $this->message;
     }
     /**
-     * @param string $message
-     *
      * @return $this
+     * @param string $message
      */
     public function setMessage($message)
     {
@@ -261,11 +257,11 @@ class FlattenException
         return $this->setTrace($throwable->getTrace(), $throwable->getFile(), $throwable->getLine());
     }
     /**
-     * @param array       $trace
-     * @param string|null $file
-     * @param int|null    $line
      *
      * @return $this
+     * @param mixed[] $trace
+     * @param string|null $file
+     * @param int|null $line
      */
     public function setTrace($trace, $file, $line)
     {

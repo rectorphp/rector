@@ -91,9 +91,9 @@ class MemoryDataCollector extends \RectorPrefix20210726\Symfony\Component\HttpKe
         }
         $memoryLimit = \strtolower($memoryLimit);
         $max = \strtolower(\ltrim($memoryLimit, '+'));
-        if (0 === \strpos($max, '0x')) {
+        if (\strncmp($max, '0x', \strlen('0x')) === 0) {
             $max = \intval($max, 16);
-        } elseif (0 === \strpos($max, '0')) {
+        } elseif (\strncmp($max, '0', \strlen('0')) === 0) {
             $max = \intval($max, 8);
         } else {
             $max = (int) $max;

@@ -118,6 +118,8 @@ class GenericEvent extends \RectorPrefix20210726\Symfony\Contracts\EventDispatch
      *
      * @param string $key   Array key to set
      * @param mixed  $value Value
+     *
+     * @return void
      */
     public function offsetSet($key, $value)
     {
@@ -127,6 +129,8 @@ class GenericEvent extends \RectorPrefix20210726\Symfony\Contracts\EventDispatch
      * ArrayAccess for unset argument.
      *
      * @param string $key Array key
+     *
+     * @return void
      */
     public function offsetUnset($key)
     {

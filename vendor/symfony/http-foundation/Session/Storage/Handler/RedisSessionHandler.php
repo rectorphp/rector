@@ -93,10 +93,13 @@ class RedisSessionHandler extends \RectorPrefix20210726\Symfony\Component\HttpFo
     }
     /**
      * {@inheritdoc}
+     *
+     * @return int|false
      */
-    public function gc($maxlifetime) : bool
+    #[\ReturnTypeWillChange]
+    public function gc($maxlifetime)
     {
-        return \true;
+        return 0;
     }
     /**
      * @return bool

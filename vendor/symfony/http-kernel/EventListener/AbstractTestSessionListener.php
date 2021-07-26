@@ -74,7 +74,7 @@ abstract class AbstractTestSessionListener implements \RectorPrefix20210726\Symf
         if ($session instanceof \RectorPrefix20210726\Symfony\Component\HttpFoundation\Session\Session ? !$session->isEmpty() || null !== $this->sessionId && $session->getId() !== $this->sessionId : $wasStarted) {
             $params = \session_get_cookie_params() + ['samesite' => null];
             foreach ($this->sessionOptions as $k => $v) {
-                if (0 === \strpos($k, 'cookie_')) {
+                if (\strncmp($k, 'cookie_', \strlen('cookie_')) === 0) {
                     $params[\substr($k, 7)] = $v;
                 }
             }

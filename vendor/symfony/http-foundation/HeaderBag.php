@@ -111,8 +111,8 @@ class HeaderBag implements \IteratorAggregate, \Countable
     /**
      * Sets a header by name.
      *
-     * @param string|string[] $values  The value or an array of values
-     * @param bool            $replace Whether to replace the actual value or not (true by default)
+     * @param string|string[]|null $values  The value or an array of values
+     * @param bool                 $replace Whether to replace the actual value or not (true by default)
      * @param string $key
      */
     public function set($key, $values, $replace = \true)
@@ -191,7 +191,7 @@ class HeaderBag implements \IteratorAggregate, \Countable
     /**
      * Adds a custom Cache-Control directive.
      *
-     * @param mixed $value The Cache-Control directive value
+     * @param bool|string $value The Cache-Control directive value
      * @param string $key
      */
     public function addCacheControlDirective($key, $value = \true)
@@ -212,12 +212,12 @@ class HeaderBag implements \IteratorAggregate, \Countable
     /**
      * Returns a Cache-Control directive value by name.
      *
-     * @return mixed The directive value if defined, null otherwise
+     * @return bool|string|null The directive value if defined, null otherwise
      * @param string $key
      */
     public function getCacheControlDirective($key)
     {
-        return \array_key_exists($key, $this->cacheControl) ? $this->cacheControl[$key] : null;
+        return $this->cacheControl[$key] ?? null;
     }
     /**
      * Removes a Cache-Control directive.

@@ -141,7 +141,7 @@ class BinaryFileResponse extends \RectorPrefix20210726\Symfony\Component\HttpFou
         if ('' === $filename) {
             $filename = $this->file->getFilename();
         }
-        if ('' === $filenameFallback && (!\preg_match('/^[\\x20-\\x7e]*$/', $filename) || \false !== \strpos($filename, '%'))) {
+        if ('' === $filenameFallback && (!\preg_match('/^[\\x20-\\x7e]*$/', $filename) || \strpos($filename, '%') !== \false)) {
             $encoding = \mb_detect_encoding($filename, null, \true) ?: '8bit';
             for ($i = 0, $filenameLength = \mb_strlen($filename, $encoding); $i < $filenameLength; ++$i) {
                 $char = \mb_substr($filename, $i, 1, $encoding);
@@ -210,7 +210,7 @@ class BinaryFileResponse extends \RectorPrefix20210726\Symfony\Component\HttpFou
             // Process the range headers.
             if (!$request->headers->has('If-Range') || $this->hasValidIfRangeHeader($request->headers->get('If-Range'))) {
                 $range = $request->headers->get('Range');
-                if (0 === \strpos($range, 'bytes=')) {
+                if (\strncmp($range, 'bytes=', \strlen('bytes=')) === 0) {
                     [$start, $end] = \explode('-', \substr($range, 6), 2) + [0];
                     $end = '' === $end ? $fileSize - 1 : (int) $end;
                     if ('' === $start) {

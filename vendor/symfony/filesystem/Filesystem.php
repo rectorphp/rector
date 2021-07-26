@@ -176,7 +176,7 @@ class Filesystem
                     }
                     throw new \RectorPrefix20210726\Symfony\Component\Filesystem\Exception\IOException(\sprintf('Failed to remove directory "%s": ', $file) . $lastError);
                 }
-            } elseif (!self::box('unlink', $file) && (\false !== \strpos(self::$lastError, 'Permission denied') || \file_exists($file))) {
+            } elseif (!self::box('unlink', $file) && (\strpos(self::$lastError, 'Permission denied') !== \false || \file_exists($file))) {
                 throw new \RectorPrefix20210726\Symfony\Component\Filesystem\Exception\IOException(\sprintf('Failed to remove file "%s": ', $file) . self::$lastError);
             }
         }
@@ -356,7 +356,7 @@ class Filesystem
     private function linkException(string $origin, string $target, string $linkType)
     {
         if (self::$lastError) {
-            if ('\\' === \DIRECTORY_SEPARATOR && \false !== \strpos(self::$lastError, 'error code(1314)')) {
+            if ('\\' === \DIRECTORY_SEPARATOR && \strpos(self::$lastError, 'error code(1314)') !== \false) {
                 throw new \RectorPrefix20210726\Symfony\Component\Filesystem\Exception\IOException(\sprintf('Unable to create "%s" link due to error code 1314: \'A required privilege is not held by the client\'. Do you have the required Administrator-rights?', $linkType), 0, null, $target);
             }
         }
@@ -627,7 +627,7 @@ class Filesystem
     }
     private function toIterable($files) : iterable
     {
-        return \is_array($files) || $files instanceof \Traversable ? $files : [$files];
+        return \is_iterable($files) ? $files : [$files];
     }
     /**
      * Gets a 2-tuple of scheme (may be null) and hierarchical part of a filename (e.g. file:///tmp -> [file, tmp]).
@@ -657,6 +657,8 @@ class Filesystem
     }
     /**
      * @internal
+     * @param int $type
+     * @param string $msg
      */
     public static function handleError($type, $msg)
     {

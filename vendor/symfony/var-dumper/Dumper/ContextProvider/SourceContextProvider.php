@@ -46,7 +46,7 @@ final class SourceContextProvider implements \RectorPrefix20210726\Symfony\Compo
                 $file = $trace[$i]['file'] ?? $file;
                 $line = $trace[$i]['line'] ?? $line;
                 while (++$i < $this->limit) {
-                    if (isset($trace[$i]['function'], $trace[$i]['file']) && empty($trace[$i]['class']) && 0 !== \strpos($trace[$i]['function'], 'call_user_func')) {
+                    if (isset($trace[$i]['function'], $trace[$i]['file']) && empty($trace[$i]['class']) && \strncmp($trace[$i]['function'], 'call_user_func', \strlen('call_user_func')) !== 0) {
                         $file = $trace[$i]['file'];
                         $line = $trace[$i]['line'];
                         break;
@@ -81,7 +81,7 @@ final class SourceContextProvider implements \RectorPrefix20210726\Symfony\Compo
         $context['file_excerpt'] = $fileExcerpt;
         if (null !== $this->projectDir) {
             $context['project_dir'] = $this->projectDir;
-            if (0 === \strpos($file, $this->projectDir)) {
+            if (\strncmp($file, $this->projectDir, \strlen($this->projectDir)) === 0) {
                 $context['file_relative'] = \ltrim(\substr($file, \strlen($this->projectDir)), \DIRECTORY_SEPARATOR);
             }
         }

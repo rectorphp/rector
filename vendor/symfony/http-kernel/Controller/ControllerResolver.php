@@ -90,7 +90,7 @@ class ControllerResolver implements \RectorPrefix20210726\Symfony\Component\Http
      */
     protected function createController($controller)
     {
-        if (\false === \strpos($controller, '::')) {
+        if (\strpos($controller, '::') === \false) {
             $controller = $this->instantiateController($controller);
             if (!\is_callable($controller)) {
                 throw new \InvalidArgumentException($this->getControllerError($controller));
@@ -128,7 +128,7 @@ class ControllerResolver implements \RectorPrefix20210726\Symfony\Component\Http
     private function getControllerError($callable) : string
     {
         if (\is_string($callable)) {
-            if (\false !== \strpos($callable, '::')) {
+            if (\strpos($callable, '::') !== \false) {
                 $callable = \explode('::', $callable, 2);
             } else {
                 return \sprintf('Function "%s" does not exist.', $callable);
@@ -157,7 +157,7 @@ class ControllerResolver implements \RectorPrefix20210726\Symfony\Component\Http
         $alternatives = [];
         foreach ($collection as $item) {
             $lev = \levenshtein($method, $item);
-            if ($lev <= \strlen($method) / 3 || \false !== \strpos($item, $method)) {
+            if ($lev <= \strlen($method) / 3 || \strpos($item, $method) !== \false) {
                 $alternatives[] = $item;
             }
         }

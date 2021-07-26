@@ -76,6 +76,9 @@ class WindowsPipes extends \RectorPrefix20210726\Symfony\Component\Process\Pipes
         }
         parent::__construct($input);
     }
+    /**
+     * @return array
+     */
     public function __sleep()
     {
         throw new \BadMethodCallException('Cannot serialize ' . __CLASS__);

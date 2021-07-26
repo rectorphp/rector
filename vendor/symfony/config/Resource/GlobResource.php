@@ -54,9 +54,6 @@ class GlobResource implements \IteratorAggregate, \RectorPrefix20210726\Symfony\
     {
         return $this->prefix;
     }
-    /**
-     * {@inheritdoc}
-     */
     public function __toString() : string
     {
         return 'glob.' . $this->prefix . (int) $this->recursive . $this->pattern . (int) $this->forExclusion . \implode("\0", $this->excludedPrefixes);
@@ -97,10 +94,10 @@ class GlobResource implements \IteratorAggregate, \RectorPrefix20210726\Symfony\
         }
         $prefix = \str_replace('\\', '/', $this->prefix);
         $paths = null;
-        if (0 !== \strpos($this->prefix, 'phar://') && \false === \strpos($this->pattern, '/**/')) {
-            if ($this->globBrace || \false === \strpos($this->pattern, '{')) {
+        if (\strncmp($this->prefix, 'phar://', \strlen('phar://')) !== 0 && \strpos($this->pattern, '/**/') === \false) {
+            if ($this->globBrace || \strpos($this->pattern, '{') === \false) {
                 $paths = \glob($this->prefix . $this->pattern, \GLOB_NOSORT | $this->globBrace);
-            } elseif (\false === \strpos($this->pattern, '\\') || !\preg_match('/\\\\[,{}]/', $this->pattern)) {
+            } elseif (\strpos($this->pattern, '\\') === \false || !\preg_match('/\\\\[,{}]/', $this->pattern)) {
                 foreach ($this->expandGlob($this->pattern) as $p) {
                     $paths[] = \glob($this->prefix . $p, \GLOB_NOSORT);
                 }
@@ -191,7 +188,7 @@ class GlobResource implements \IteratorAggregate, \RectorPrefix20210726\Symfony\
         }
         $j = 0;
         foreach ($patterns as $i => $p) {
-            if (\false !== \strpos($p, '{')) {
+            if (\strpos($p, '{') !== \false) {
                 $p = $this->expandGlob($p);
                 \array_splice($paths, $i + $j, 1, $p);
                 $j += \count($p) - 1;

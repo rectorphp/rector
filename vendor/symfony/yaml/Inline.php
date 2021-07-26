@@ -144,9 +144,9 @@ class Inline
                 return 'true';
             case \false === $value:
                 return 'false';
-            case \ctype_digit($value):
-                return \is_string($value) ? "'{$value}'" : (int) $value;
-            case \is_numeric($value) && \false === \strpos($value, "\f") && \false === \strpos($value, "\n") && \false === \strpos($value, "\r") && \false === \strpos($value, "\t") && \false === \strpos($value, "\v"):
+            case \is_int($value):
+                return $value;
+            case \is_numeric($value) && \false === \strpbrk($value, "\f\n\r\t\v"):
                 $locale = \setlocale(\LC_NUMERIC, 0);
                 if (\false !== $locale) {
                     \setlocale(\LC_NUMERIC, 'C');
@@ -339,7 +339,7 @@ class Inline
                     $isQuoted = \in_array($sequence[$i], ['"', "'"], \true);
                     $value = self::parseScalar($sequence, $flags, [',', ']'], $i, null === $tag, $references);
                     // the value can be an array if a reference has been resolved to an array var
-                    if (\is_string($value) && !$isQuoted && \false !== \strpos($value, ': ')) {
+                    if (\is_string($value) && !$isQuoted && \strpos($value, ': ') !== \false) {
                         // embedded mapping?
                         try {
                             $pos = 0;
@@ -501,7 +501,7 @@ class Inline
     private static function evaluateScalar(string $scalar, int $flags, array &$references = [])
     {
         $scalar = \trim($scalar);
-        if ('*' === ($scalar[0] ?? '')) {
+        if (\strncmp($scalar, '*', \strlen('*')) === 0) {
             if (\false !== ($pos = \strpos($scalar, '#'))) {
                 $value = \substr($scalar, 1, $pos - 2);
             } else {
@@ -528,11 +528,11 @@ class Inline
                 return \false;
             case '!' === $scalar[0]:
                 switch (\true) {
-                    case 0 === \strncmp($scalar, '!!str ', 6):
+                    case \strncmp($scalar, '!!str ', \strlen('!!str ')) === 0:
                         return (string) \substr($scalar, 6);
-                    case 0 === \strncmp($scalar, '! ', 2):
+                    case \strncmp($scalar, '! ', \strlen('! ')) === 0:
                         return \substr($scalar, 2);
-                    case 0 === \strncmp($scalar, '!php/object', 11):
+                    case \strncmp($scalar, '!php/object', \strlen('!php/object')) === 0:
                         if (self::$objectSupport) {
                             if (!isset($scalar[12])) {
                                 trigger_deprecation('symfony/yaml', '5.1', 'Using the !php/object tag without a value is deprecated.');
@@ -544,7 +544,7 @@ class Inline
                             throw new \RectorPrefix20210726\Symfony\Component\Yaml\Exception\ParseException('Object support when parsing a YAML file has been disabled.', self::$parsedLineNumber + 1, $scalar, self::$parsedFilename);
                         }
                         return null;
-                    case 0 === \strncmp($scalar, '!php/const', 10):
+                    case \strncmp($scalar, '!php/const', \strlen('!php/const')) === 0:
                         if (self::$constantSupport) {
                             if (!isset($scalar[11])) {
                                 trigger_deprecation('symfony/yaml', '5.1', 'Using the !php/const tag without a value is deprecated.');
@@ -560,9 +560,9 @@ class Inline
                             throw new \RectorPrefix20210726\Symfony\Component\Yaml\Exception\ParseException(\sprintf('The string "%s" could not be parsed as a constant. Did you forget to pass the "Yaml::PARSE_CONSTANT" flag to the parser?', $scalar), self::$parsedLineNumber + 1, $scalar, self::$parsedFilename);
                         }
                         return null;
-                    case 0 === \strncmp($scalar, '!!float ', 8):
+                    case \strncmp($scalar, '!!float ', \strlen('!!float ')) === 0:
                         return (float) \substr($scalar, 8);
-                    case 0 === \strncmp($scalar, '!!binary ', 9):
+                    case \strncmp($scalar, '!!binary ', \strlen('!!binary ')) === 0:
                         return self::evaluateBinaryScalar(\substr($scalar, 9));
                     default:
                         throw new \RectorPrefix20210726\Symfony\Component\Yaml\Exception\ParseException(\sprintf('The string "%s" could not be parsed as it uses an unsupported built-in tag.', $scalar), self::$parsedLineNumber, $scalar, self::$parsedFilename);
@@ -635,7 +635,7 @@ class Inline
         $nextOffset = $i + $tagLength + 1;
         $nextOffset += \strspn($value, ' ', $nextOffset);
         if ('' === $tag && (!isset($value[$nextOffset]) || \in_array($value[$nextOffset], [']', '}', ','], \true))) {
-            throw new \RectorPrefix20210726\Symfony\Component\Yaml\Exception\ParseException(\sprintf('Using the unquoted scalar value "!" is not supported. You must quote it.', $value), self::$parsedLineNumber + 1, $value, self::$parsedFilename);
+            throw new \RectorPrefix20210726\Symfony\Component\Yaml\Exception\ParseException('Using the unquoted scalar value "!" is not supported. You must quote it.', self::$parsedLineNumber + 1, $value, self::$parsedFilename);
         }
         // Is followed by a scalar and is a built-in tag
         if ('' !== $tag && (!isset($value[$nextOffset]) || !\in_array($value[$nextOffset], ['[', '{'], \true)) && ('!' === $tag[0] || 'str' === $tag || 'php/const' === $tag || 'php/object' === $tag)) {

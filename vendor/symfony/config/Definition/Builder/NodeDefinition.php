@@ -97,9 +97,8 @@ abstract class NodeDefinition implements \RectorPrefix20210726\Symfony\Component
     /**
      * Creates the node.
      *
-     * @param bool $forceRootNode Whether to force this node as the root node
-     *
      * @return NodeInterface
+     * @param bool $forceRootNode
      */
     public function getNode($forceRootNode = \false)
     {

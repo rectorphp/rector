@@ -68,11 +68,11 @@ abstract class Kernel implements \RectorPrefix20210726\Symfony\Component\HttpKer
     private $requestStackSize = 0;
     private $resetServices = \false;
     private static $freshCache = [];
-    public const VERSION = '5.3.3';
-    public const VERSION_ID = 50303;
+    public const VERSION = '5.3.4';
+    public const VERSION_ID = 50304;
     public const MAJOR_VERSION = 5;
     public const MINOR_VERSION = 3;
-    public const RELEASE_VERSION = 3;
+    public const RELEASE_VERSION = 4;
     public const EXTRA_VERSION = '';
     public const END_OF_MAINTENANCE = '01/2022';
     public const END_OF_LIFE = '01/2022';
@@ -216,12 +216,12 @@ abstract class Kernel implements \RectorPrefix20210726\Symfony\Component\HttpKer
         if ('@' !== $name[0]) {
             throw new \InvalidArgumentException(\sprintf('A resource name must start with @ ("%s" given).', $name));
         }
-        if (\false !== \strpos($name, '..')) {
+        if (\strpos($name, '..') !== \false) {
             throw new \RuntimeException(\sprintf('File name "%s" contains invalid characters (..).', $name));
         }
         $bundleName = \substr($name, 1);
         $path = '';
-        if (\false !== \strpos($bundleName, '/')) {
+        if (\strpos($bundleName, '/') !== \false) {
             [$bundleName, $path] = \explode('/', $bundleName, 2);
         }
         $bundle = $this->getBundle($bundleName);
@@ -364,7 +364,7 @@ abstract class Kernel implements \RectorPrefix20210726\Symfony\Component\HttpKer
     protected function getContainerClass()
     {
         $class = static::class;
-        $class = \false !== \strpos($class, "@anonymous\0") ? \get_parent_class($class) . \str_replace('.', '_', \RectorPrefix20210726\Symfony\Component\DependencyInjection\ContainerBuilder::hash($class)) : $class;
+        $class = \strpos($class, "@anonymous\0") !== \false ? \get_parent_class($class) . \str_replace('.', '_', \RectorPrefix20210726\Symfony\Component\DependencyInjection\ContainerBuilder::hash($class)) : $class;
         $class = \str_replace('\\', '_', $class) . \ucfirst($this->environment) . ($this->debug ? 'Debug' : '') . 'Container';
         if (!\preg_match('/^[a-zA-Z_\\x7f-\\xff][a-zA-Z0-9_\\x7f-\\xff]*$/', $class)) {
             throw new \InvalidArgumentException(\sprintf('The environment "%s" contains invalid characters, it can only contain characters allowed in PHP class names.', $this->environment));

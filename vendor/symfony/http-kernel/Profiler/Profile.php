@@ -135,10 +135,7 @@ class Profile
      */
     public function getTime()
     {
-        if (null === $this->time) {
-            return 0;
-        }
-        return $this->time;
+        return $this->time ?? 0;
     }
     /**
      * @param int $time

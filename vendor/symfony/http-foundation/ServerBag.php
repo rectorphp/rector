@@ -28,7 +28,7 @@ class ServerBag extends \RectorPrefix20210726\Symfony\Component\HttpFoundation\P
     {
         $headers = [];
         foreach ($this->parameters as $key => $value) {
-            if (0 === \strpos($key, 'HTTP_')) {
+            if (\strncmp($key, 'HTTP_', \strlen('HTTP_')) === 0) {
                 $headers[\substr($key, 5)] = $value;
             } elseif (\in_array($key, ['CONTENT_TYPE', 'CONTENT_LENGTH', 'CONTENT_MD5'], \true)) {
                 $headers[$key] = $value;

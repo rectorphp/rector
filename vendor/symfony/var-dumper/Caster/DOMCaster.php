@@ -35,7 +35,7 @@ class DOMCaster
         $a += ['length' => $dom->length];
         return $a;
     }
-    public static function castImplementation($dom, array $a, \RectorPrefix20210726\Symfony\Component\VarDumper\Cloner\Stub $stub, bool $isNested)
+    public static function castImplementation(\DOMImplementation $dom, array $a, \RectorPrefix20210726\Symfony\Component\VarDumper\Cloner\Stub $stub, bool $isNested)
     {
         $a += [\RectorPrefix20210726\Symfony\Component\VarDumper\Caster\Caster::PREFIX_VIRTUAL . 'Core' => '1.0', \RectorPrefix20210726\Symfony\Component\VarDumper\Caster\Caster::PREFIX_VIRTUAL . 'XML' => '2.0'];
         return $a;

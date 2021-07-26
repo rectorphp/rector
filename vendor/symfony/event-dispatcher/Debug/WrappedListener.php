@@ -43,7 +43,7 @@ final class WrappedListener
             $this->pretty = $this->name . '::' . $listener[1];
         } elseif ($listener instanceof \Closure) {
             $r = new \ReflectionFunction($listener);
-            if (\false !== \strpos($r->name, '{closure}')) {
+            if (\strpos($r->name, '{closure}') !== \false) {
                 $this->pretty = $this->name = 'closure';
             } elseif ($class = $r->getClosureScopeClass()) {
                 $this->name = $class->name;

@@ -63,11 +63,11 @@ class NullSessionHandler extends \RectorPrefix20210726\Symfony\Component\HttpFou
         return \true;
     }
     /**
-     * @return bool
+     * @return int|false
      */
     #[\ReturnTypeWillChange]
     public function gc($maxlifetime)
     {
-        return \true;
+        return 0;
     }
 }

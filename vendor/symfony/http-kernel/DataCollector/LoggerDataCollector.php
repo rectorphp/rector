@@ -16,8 +16,6 @@ use RectorPrefix20210726\Symfony\Component\HttpFoundation\RequestStack;
 use RectorPrefix20210726\Symfony\Component\HttpFoundation\Response;
 use RectorPrefix20210726\Symfony\Component\HttpKernel\Log\DebugLoggerInterface;
 /**
- * LogDataCollector.
- *
  * @author Fabien Potencier <fabien@symfony.com>
  *
  * @final
@@ -28,6 +26,9 @@ class LoggerDataCollector extends \RectorPrefix20210726\Symfony\Component\HttpKe
     private $containerPathPrefix;
     private $currentRequest;
     private $requestStack;
+    /**
+     * @param object $logger
+     */
     public function __construct($logger = null, string $containerPathPrefix = null, \RectorPrefix20210726\Symfony\Component\HttpFoundation\RequestStack $requestStack = null)
     {
         if (null !== $logger && $logger instanceof \RectorPrefix20210726\Symfony\Component\HttpKernel\Log\DebugLoggerInterface) {

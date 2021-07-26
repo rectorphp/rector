@@ -42,7 +42,7 @@ class ResourceCaster
     public static function castStream($stream, array $a, \RectorPrefix20210726\Symfony\Component\VarDumper\Cloner\Stub $stub, bool $isNested)
     {
         $a = \stream_get_meta_data($stream) + static::castStreamContext($stream, $a, $stub, $isNested);
-        if (isset($a['uri'])) {
+        if ($a['uri'] ?? \false) {
             $a['uri'] = new \RectorPrefix20210726\Symfony\Component\VarDumper\Caster\LinkStub($a['uri']);
         }
         return $a;
@@ -51,7 +51,7 @@ class ResourceCaster
     {
         return @\stream_context_get_params($stream) ?: $a;
     }
-    public static function castGd($gd, array $a, \RectorPrefix20210726\Symfony\Component\VarDumper\Cloner\Stub $stub, $isNested)
+    public static function castGd($gd, array $a, \RectorPrefix20210726\Symfony\Component\VarDumper\Cloner\Stub $stub, bool $isNested)
     {
         $a['size'] = \imagesx($gd) . 'x' . \imagesy($gd);
         $a['trueColor'] = \imageistruecolor($gd);

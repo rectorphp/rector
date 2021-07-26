@@ -75,7 +75,7 @@ class ReflectionClassResource implements \RectorPrefix20210726\Symfony\Component
             $file = $class->getFileName();
             if (\false !== $file && \is_file($file)) {
                 foreach ($this->excludedVendors as $vendor) {
-                    if (0 === \strpos($file, $vendor) && \false !== \strpbrk(\substr($file, \strlen($vendor), 1), '/' . \DIRECTORY_SEPARATOR)) {
+                    if (\strncmp($file, $vendor, \strlen($vendor)) === 0 && \false !== \strpbrk(\substr($file, \strlen($vendor), 1), '/' . \DIRECTORY_SEPARATOR)) {
                         $file = \false;
                         break;
                     }

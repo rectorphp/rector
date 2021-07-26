@@ -18,7 +18,7 @@ namespace RectorPrefix20210726\Symfony\Component\HttpKernel\ControllerMetadata;
 interface ArgumentMetadataFactoryInterface
 {
     /**
-     * @param mixed $controller The controller to resolve the arguments for
+     * @param string|object|array $controller The controller to resolve the arguments for
      *
      * @return ArgumentMetadata[]
      */

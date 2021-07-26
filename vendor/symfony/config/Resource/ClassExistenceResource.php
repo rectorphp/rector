@@ -38,9 +38,6 @@ class ClassExistenceResource implements \RectorPrefix20210726\Symfony\Component\
             $this->exists = [(bool) $exists, null];
         }
     }
-    /**
-     * {@inheritdoc}
-     */
     public function __toString() : string
     {
         return $this->resource;

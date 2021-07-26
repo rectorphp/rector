@@ -23,10 +23,10 @@ interface EventDispatcherInterface extends \RectorPrefix20210726\Symfony\Contrac
     /**
      * Adds an event listener that listens on the specified events.
      *
-     * @param callable $listener The listener
-     * @param int      $priority The higher this value, the earlier an event
-     *                           listener will be triggered in the chain (defaults to 0)
+     * @param int $priority The higher this value, the earlier an event
+     *                      listener will be triggered in the chain (defaults to 0)
      * @param string $eventName
+     * @param callable $listener
      */
     public function addListener($eventName, $listener, $priority = 0);
     /**
@@ -39,9 +39,8 @@ interface EventDispatcherInterface extends \RectorPrefix20210726\Symfony\Contrac
     public function addSubscriber($subscriber);
     /**
      * Removes an event listener from the specified events.
-     *
-     * @param callable $listener The listener to remove
      * @param string $eventName
+     * @param callable $listener
      */
     public function removeListener($eventName, $listener);
     /**
@@ -60,10 +59,9 @@ interface EventDispatcherInterface extends \RectorPrefix20210726\Symfony\Contrac
      *
      * Returns null if the event or the listener does not exist.
      *
-     * @param callable $listener The listener
-     *
      * @return int|null The event listener priority
      * @param string $eventName
+     * @param callable $listener
      */
     public function getListenerPriority($eventName, $listener);
     /**

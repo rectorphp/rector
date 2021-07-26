@@ -31,7 +31,7 @@ class RequestDataCollector extends \RectorPrefix20210726\Symfony\Component\HttpK
     protected $controllers;
     private $sessionUsages = [];
     private $requestStack;
-    public function __construct(?\RectorPrefix20210726\Symfony\Component\HttpFoundation\RequestStack $requestStack = null)
+    public function __construct(\RectorPrefix20210726\Symfony\Component\HttpFoundation\RequestStack $requestStack = null)
     {
         $this->controllers = new \SplObjectStorage();
         $this->requestStack = $requestStack;
@@ -153,10 +153,16 @@ class RequestDataCollector extends \RectorPrefix20210726\Symfony\Component\HttpK
     {
         return new \RectorPrefix20210726\Symfony\Component\HttpFoundation\ParameterBag($this->data['request_headers']->getValue());
     }
+    /**
+     * @param bool $raw
+     */
     public function getRequestServer($raw = \false)
     {
         return new \RectorPrefix20210726\Symfony\Component\HttpFoundation\ParameterBag($this->data['request_server']->getValue($raw));
     }
+    /**
+     * @param bool $raw
+     */
     public function getRequestCookies($raw = \false)
     {
         return new \RectorPrefix20210726\Symfony\Component\HttpFoundation\ParameterBag($this->data['request_cookies']->getValue($raw));
@@ -334,13 +340,13 @@ class RequestDataCollector extends \RectorPrefix20210726\Symfony\Component\HttpK
     /**
      * Parse a controller.
      *
-     * @param mixed $controller The controller to parse
+     * @param string|object|array|null $controller The controller to parse
      *
      * @return array|string An array of controller data or a simple string
      */
     protected function parseController($controller)
     {
-        if (\is_string($controller) && \false !== \strpos($controller, '::')) {
+        if (\is_string($controller) && \strpos($controller, '::') !== \false) {
             $controller = \explode('::', $controller);
         }
         if (\is_array($controller)) {
@@ -357,7 +363,7 @@ class RequestDataCollector extends \RectorPrefix20210726\Symfony\Component\HttpK
         if ($controller instanceof \Closure) {
             $r = new \ReflectionFunction($controller);
             $controller = ['class' => $r->getName(), 'method' => null, 'file' => $r->getFileName(), 'line' => $r->getStartLine()];
-            if (\false !== \strpos($r->name, '{closure}')) {
+            if (\strpos($r->name, '{closure}') !== \false) {
                 return $controller;
             }
             $controller['method'] = $r->name;

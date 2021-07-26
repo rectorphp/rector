@@ -29,7 +29,7 @@ class SplCaster
     {
         return self::castSplArray($c, $a, $stub, $isNested);
     }
-    public static function castHeap(\Iterator $c, array $a, \RectorPrefix20210726\Symfony\Component\VarDumper\Cloner\Stub $stub, $isNested)
+    public static function castHeap(\Iterator $c, array $a, \RectorPrefix20210726\Symfony\Component\VarDumper\Cloner\Stub $stub, bool $isNested)
     {
         $a += [\RectorPrefix20210726\Symfony\Component\VarDumper\Caster\Caster::PREFIX_VIRTUAL . 'heap' => \iterator_to_array(clone $c)];
         return $a;
@@ -77,7 +77,7 @@ class SplCaster
             } catch (\Exception $e) {
             }
         }
-        if (isset($a[$prefix . 'realPath'])) {
+        if ($a[$prefix . 'realPath'] ?? \false) {
             $a[$prefix . 'realPath'] = new \RectorPrefix20210726\Symfony\Component\VarDumper\Caster\LinkStub($a[$prefix . 'realPath']);
         }
         if (isset($a[$prefix . 'perms'])) {

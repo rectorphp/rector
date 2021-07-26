@@ -37,9 +37,6 @@ class FileResource implements \RectorPrefix20210726\Symfony\Component\Config\Res
             throw new \InvalidArgumentException(\sprintf('The file "%s" does not exist.', $resource));
         }
     }
-    /**
-     * {@inheritdoc}
-     */
     public function __toString() : string
     {
         return $this->resource;

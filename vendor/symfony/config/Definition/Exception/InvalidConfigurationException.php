@@ -20,6 +20,9 @@ class InvalidConfigurationException extends \RectorPrefix20210726\Symfony\Compon
 {
     private $path;
     private $containsHints = \false;
+    /**
+     * @param string $path
+     */
     public function setPath($path)
     {
         $this->path = $path;

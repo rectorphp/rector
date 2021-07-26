@@ -49,7 +49,7 @@ abstract class AbstractSurrogate implements \RectorPrefix20210726\Symfony\Compon
         if (null === ($value = $request->headers->get('Surrogate-Capability'))) {
             return \false;
         }
-        return \false !== \strpos($value, \sprintf('%s/1.0', \strtoupper($this->getName())));
+        return \strpos($value, \sprintf('%s/1.0', \strtoupper($this->getName()))) !== \false;
     }
     /**
      * {@inheritdoc}

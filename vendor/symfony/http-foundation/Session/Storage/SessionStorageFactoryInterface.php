@@ -17,7 +17,7 @@ use RectorPrefix20210726\Symfony\Component\HttpFoundation\Request;
 interface SessionStorageFactoryInterface
 {
     /**
-     * Creates a new instance of SessionStorageInterface
+     * Creates a new instance of SessionStorageInterface.
      */
     public function createStorage(?\RectorPrefix20210726\Symfony\Component\HttpFoundation\Request $request) : \RectorPrefix20210726\Symfony\Component\HttpFoundation\Session\Storage\SessionStorageInterface;
 }

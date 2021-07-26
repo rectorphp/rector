@@ -89,7 +89,7 @@ class DebugClassLoader
             } elseif (\substr($test, -\strlen($file)) === $file) {
                 // filesystem is case insensitive and realpath() normalizes the case of characters
                 self::$caseCheck = 1;
-            } elseif (\false !== \stripos(\PHP_OS, 'darwin')) {
+            } elseif ('Darwin' === \PHP_OS_FAMILY) {
                 // on MacOSX, HFS+ is case insensitive but realpath() doesn't normalize the case of characters
                 self::$caseCheck = 2;
             } else {
@@ -414,7 +414,7 @@ class DebugClassLoader
                 }
                 $canAddReturnType = \false !== \strpos($refl->getFileName(), \DIRECTORY_SEPARATOR . 'Tests' . \DIRECTORY_SEPARATOR) || $refl->isFinal() || $method->isFinal() || $method->isPrivate() || '' === (self::$internal[$class] ?? null) && !$refl->isAbstract() || '' === (self::$final[$class] ?? null) || \preg_match('/@(final|internal)$/m', $doc);
             }
-            if (null !== ($returnType = self::$returnTypes[$class][$method->name] ?? self::MAGIC_METHODS[$method->name] ?? null) && !$method->hasReturnType() && !($doc && \preg_match('/\\n\\s+\\* @return +(\\S+)/', $doc))) {
+            if (null !== ($returnType = self::$returnTypes[$class][$method->name] ?? self::MAGIC_METHODS[$method->name] ?? null) && !$method->hasReturnType() && !($doc && \preg_match('/\\n\\s+\\* @return +([^\\s<(]+)/', $doc))) {
                 [$normalizedType, $returnType, $declaringClass, $declaringFile] = \is_string($returnType) ? [$returnType, $returnType, '', ''] : $returnType;
                 if ('void' === $normalizedType) {
                     $canAddReturnType = \false;
@@ -435,7 +435,7 @@ class DebugClassLoader
                 continue;
             }
             $matches = [];
-            if (!$method->hasReturnType() && (\false !== \strpos($doc, '@return') && \preg_match('/\\n\\s+\\* @return +(\\S+)/', $doc, $matches) || 'void' !== (self::MAGIC_METHODS[$method->name] ?? 'void'))) {
+            if (!$method->hasReturnType() && (\false !== \strpos($doc, '@return') && \preg_match('/\\n\\s+\\* @return +([^\\s<(]+)/', $doc, $matches) || 'void' !== (self::MAGIC_METHODS[$method->name] ?? 'void'))) {
                 $matches = $matches ?: [1 => self::MAGIC_METHODS[$method->name]];
                 $this->setReturnType($matches[1], $method, $parent);
                 if (isset(self::$returnTypes[$class][$method->name][0]) && $canAddReturnType) {

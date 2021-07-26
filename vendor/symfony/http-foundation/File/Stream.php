@@ -19,6 +19,8 @@ class Stream extends \RectorPrefix20210726\Symfony\Component\HttpFoundation\File
 {
     /**
      * {@inheritdoc}
+     *
+     * @return int|false
      */
     public function getSize()
     {

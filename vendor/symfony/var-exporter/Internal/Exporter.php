@@ -210,7 +210,7 @@ class Exporter
                 }
                 return $m[1] . $m[2];
             }, $code, -1, $count);
-            if ($count && 0 === \strpos($code, "''.")) {
+            if ($count && \strncmp($code, "''.", \strlen("''.")) === 0) {
                 $code = \substr($code, 3);
             }
             return $code;

@@ -48,7 +48,9 @@ class HttpKernelBrowser extends \RectorPrefix20210726\Symfony\Component\BrowserK
         $this->catchExceptions = $catchExceptions;
     }
     /**
-     * Makes a request.
+     * {@inheritdoc}
+     *
+     * @param Request $request
      *
      * @return Response A Response instance
      */
@@ -61,7 +63,9 @@ class HttpKernelBrowser extends \RectorPrefix20210726\Symfony\Component\BrowserK
         return $response;
     }
     /**
-     * Returns the script to execute when the request must be insulated.
+     * {@inheritdoc}
+     *
+     * @param Request $request
      *
      * @return string
      */
@@ -108,7 +112,7 @@ echo serialize($response);
 EOF;
     }
     /**
-     * Converts the BrowserKit request to a HttpKernel request.
+     * {@inheritdoc}
      *
      * @return Request A Request instance
      */
@@ -153,7 +157,9 @@ EOF;
         return $filtered;
     }
     /**
-     * Converts the HttpKernel response to a BrowserKit response.
+     * {@inheritdoc}
+     *
+     * @param Request $request
      *
      * @return DomResponse A DomResponse instance
      */

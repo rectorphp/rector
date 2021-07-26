@@ -22,10 +22,10 @@ class ParseException extends \RectorPrefix20210726\Symfony\Component\Yaml\Except
     private $snippet;
     private $rawMessage;
     /**
-     * @param string          $message    The error message
-     * @param int             $parsedLine The line where the error occurred
-     * @param string|null     $snippet    The snippet of code near the problem
-     * @param string|null     $parsedFile The file name where the error occurred
+     * @param string      $message    The error message
+     * @param int         $parsedLine The line where the error occurred
+     * @param string|null $snippet    The snippet of code near the problem
+     * @param string|null $parsedFile The file name where the error occurred
      */
     public function __construct(string $message, int $parsedLine = -1, string $snippet = null, string $parsedFile = null, \Throwable $previous = null)
     {
@@ -96,7 +96,7 @@ class ParseException extends \RectorPrefix20210726\Symfony\Component\Yaml\Except
     {
         $this->message = $this->rawMessage;
         $dot = \false;
-        if ('.' === \substr($this->message, -1)) {
+        if (\substr_compare($this->message, '.', -\strlen('.')) === 0) {
             $this->message = \substr($this->message, 0, -1);
             $dot = \true;
         }

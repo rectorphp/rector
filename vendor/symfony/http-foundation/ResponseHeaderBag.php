@@ -148,7 +148,7 @@ class ResponseHeaderBag extends \RectorPrefix20210726\Symfony\Component\HttpFoun
      */
     public function getCacheControlDirective($key)
     {
-        return \array_key_exists($key, $this->computedCacheControl) ? $this->computedCacheControl[$key] : null;
+        return $this->computedCacheControl[$key] ?? null;
     }
     /**
      * @param \Symfony\Component\HttpFoundation\Cookie $cookie
