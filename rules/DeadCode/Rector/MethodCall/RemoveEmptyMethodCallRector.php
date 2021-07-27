@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
@@ -117,7 +118,7 @@ CODE_SAMPLE
 
     private function getScope(MethodCall $methodCall): ?Scope
     {
-        if ($methodCall->var instanceof MethodCall) {
+        if ($methodCall->var instanceof MethodCall || $methodCall->var instanceof StaticCall) {
             return null;
         }
 
