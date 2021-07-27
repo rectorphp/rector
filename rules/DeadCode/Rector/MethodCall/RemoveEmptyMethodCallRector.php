@@ -8,6 +8,7 @@ use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
@@ -102,7 +103,7 @@ CODE_SAMPLE
     }
     private function getScope(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\PHPStan\Analyser\Scope
     {
-        if ($methodCall->var instanceof \PhpParser\Node\Expr\MethodCall) {
+        if ($methodCall->var instanceof \PhpParser\Node\Expr\MethodCall || $methodCall->var instanceof \PhpParser\Node\Expr\StaticCall) {
             return null;
         }
         $scope = $methodCall->var->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
