@@ -76,7 +76,8 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $scope = $node->var->getAttribute(AttributeKey::SCOPE);
+        $scope = $this->getScope($node);
+
         if (! $scope instanceof Scope) {
             return null;
         }
@@ -112,6 +113,20 @@ CODE_SAMPLE
         $this->removeNode($node);
 
         return $node;
+    }
+
+    private function getScope(MethodCall $methodCall): ?Scope
+    {
+        if ($methodCall->var instanceof MethodCall) {
+            return null;
+        }
+
+        $scope = $methodCall->var->getAttribute(AttributeKey::SCOPE);
+        if (! $scope instanceof Scope) {
+            return null;
+        }
+
+        return $scope;
     }
 
     private function shouldSkipClassMethod(Class_ | Trait_ | Interface_ $classLike, MethodCall $methodCall): bool
