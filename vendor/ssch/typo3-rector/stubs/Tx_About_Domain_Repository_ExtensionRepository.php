@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210726;
+namespace RectorPrefix20210727;
 
 if (\class_exists('Tx_About_Domain_Repository_ExtensionRepository')) {
     return;

@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210726\Symplify\Astral\ValueObject\NodeFinder;
+namespace RectorPrefix20210727\Symplify\Astral\ValueObject\NodeFinder;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Closure;

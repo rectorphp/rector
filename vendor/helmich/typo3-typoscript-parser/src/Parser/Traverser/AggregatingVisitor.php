@@ -1,16 +1,16 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210726\Helmich\TypoScriptParser\Parser\Traverser;
+namespace RectorPrefix20210727\Helmich\TypoScriptParser\Parser\Traverser;
 
-use RectorPrefix20210726\Helmich\TypoScriptParser\Parser\AST\Statement;
+use RectorPrefix20210727\Helmich\TypoScriptParser\Parser\AST\Statement;
 /**
  * Class AggregatingVisitor
  *
  * @package    Helmich\TypoScriptParser
  * @subpackage Parser\Traverser
  */
-class AggregatingVisitor implements \RectorPrefix20210726\Helmich\TypoScriptParser\Parser\Traverser\Visitor
+class AggregatingVisitor implements \RectorPrefix20210727\Helmich\TypoScriptParser\Parser\Traverser\Visitor
 {
     /** @var Visitor[] */
     private $visitors = [];

@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210726\TYPO3\CMS\Core\Database;
+namespace RectorPrefix20210727\TYPO3\CMS\Core\Database;
 
 if (\class_exists('TYPO3\\CMS\\Core\\Database\\QueryView')) {
     return;

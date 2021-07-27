@@ -71,7 +71,7 @@ CODE_SAMPLE
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        $scope = $node->var->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
+        $scope = $this->getScope($node);
         if (!$scope instanceof \PHPStan\Analyser\Scope) {
             return null;
         }
@@ -99,6 +99,17 @@ CODE_SAMPLE
         }
         $this->removeNode($node);
         return $node;
+    }
+    private function getScope(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\PHPStan\Analyser\Scope
+    {
+        if ($methodCall->var instanceof \PhpParser\Node\Expr\MethodCall) {
+            return null;
+        }
+        $scope = $methodCall->var->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
+        if (!$scope instanceof \PHPStan\Analyser\Scope) {
+            return null;
+        }
+        return $scope;
     }
     /**
      * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Trait_|\PhpParser\Node\Stmt\Interface_ $classLike

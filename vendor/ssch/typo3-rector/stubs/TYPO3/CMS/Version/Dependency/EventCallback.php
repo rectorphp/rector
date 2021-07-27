@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210726\TYPO3\CMS\Version\Dependency;
+namespace RectorPrefix20210727\TYPO3\CMS\Version\Dependency;
 
 if (\class_exists('TYPO3\\CMS\\Version\\Dependency\\EventCallback')) {
     return;
