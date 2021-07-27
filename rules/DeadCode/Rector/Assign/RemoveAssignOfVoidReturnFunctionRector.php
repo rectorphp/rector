@@ -8,6 +8,7 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Expr\Variable;
 use PHPStan\Type\VoidType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DeadCode\NodeAnalyzer\ExprUsedInNextNodeAnalyzer;
@@ -69,6 +70,9 @@ CODE_SAMPLE
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$node->expr instanceof \PhpParser\Node\Expr\FuncCall && !$node->expr instanceof \PhpParser\Node\Expr\MethodCall && !$node->expr instanceof \PhpParser\Node\Expr\StaticCall) {
+            return null;
+        }
+        if (!$node->var instanceof \PhpParser\Node\Expr\Variable) {
             return null;
         }
         $exprType = $this->nodeTypeResolver->resolve($node->expr);
