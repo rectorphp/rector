@@ -49,7 +49,7 @@ final class MoveServicesBySuffixToDirectoryRector extends \Rector\Core\Rector\Ab
         return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Move classes by their suffix to their own group/directory', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
 // file: app/Entity/ProductRepository.php
 
-namespace App/Entity;
+namespace App\Entity;
 
 class ProductRepository
 {
@@ -58,7 +58,7 @@ CODE_SAMPLE
 , <<<'CODE_SAMPLE'
 // file: app/Repository/ProductRepository.php
 
-namespace App/Repository;
+namespace App\Repository;
 
 class ProductRepository
 {

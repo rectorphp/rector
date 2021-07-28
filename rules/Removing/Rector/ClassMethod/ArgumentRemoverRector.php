@@ -35,7 +35,7 @@ $someObject->someMethod(true);
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
 $someObject = new SomeClass;
-$someObject->someMethod();'
+$someObject->someMethod();
 CODE_SAMPLE
 , [self::REMOVED_ARGUMENTS => [new \Rector\Removing\ValueObject\ArgumentRemover('ExampleClass', 'someMethod', 0, 'true')]])]);
     }

@@ -40,7 +40,7 @@ class SomeClass
 public function run()
 {
     $array = [];
-    foreach ($variables as $foo) {
+    foreach ($variables as $property) {
         $array[] = $property;
     }
 }

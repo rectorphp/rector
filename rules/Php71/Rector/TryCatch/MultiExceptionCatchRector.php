@@ -32,9 +32,9 @@ try {
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
 try {
-   // Some code...
+    // Some code...
 } catch (ExceptionType1 | ExceptionType2 $exception) {
-   $sameCode;
+    $sameCode;
 }
 CODE_SAMPLE
 )]);

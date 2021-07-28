@@ -56,7 +56,7 @@ class SomeClass
     use Nette\SmartObject;
 }
 CODE_SAMPLE
-, [self::PARENT_CLASS_TO_TRAITS => ['Nette\\Object' => ['Nette\\SmartObject']]])]);
+, [self::PARENT_CLASS_TO_TRAITS => [new \Rector\Transform\ValueObject\ParentClassToTraits('Nette\\Object', ['Nette\\SmartObject'])]])]);
     }
     /**
      * @return array<class-string<Node>>

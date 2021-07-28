@@ -43,9 +43,9 @@ $someObject->someMethod(SomeClass::OLD_CONSTANT);
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
 $someObject = new SomeClass;
-$someObject->someMethod(false);'
+$someObject->someMethod(false);
 CODE_SAMPLE
-, [self::REPLACED_ARGUMENTS => [new \Rector\Arguments\ValueObject\ReplaceArgumentDefaultValue('SomeExampleClass', 'someMethod', 0, 'SomeClass::OLD_CONSTANT', \false)]])]);
+, [self::REPLACED_ARGUMENTS => [new \Rector\Arguments\ValueObject\ReplaceArgumentDefaultValue('SomeClass', 'someMethod', 0, 'SomeClass::OLD_CONSTANT', \false)]])]);
     }
     /**
      * @return array<class-string<Node>>

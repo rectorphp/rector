@@ -57,7 +57,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, [self::METHOD_CALL_WRAPS => ['SomeClass' => ['deny']]])]);
+, [self::METHOD_CALL_WRAPS => [new \Rector\Transform\ValueObject\MethodCallToReturn('SomeClass', 'deny')]])]);
     }
     /**
      * @return array<class-string<Node>>
