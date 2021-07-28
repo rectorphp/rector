@@ -45,7 +45,7 @@ final class PropertyAssignMatcher
         return null;
     }
 
-    private function isPropertyFetch(Node $node): bool
+    public function isPropertyFetch(Node $node): bool
     {
         if ($node instanceof PropertyFetch) {
             return true;
