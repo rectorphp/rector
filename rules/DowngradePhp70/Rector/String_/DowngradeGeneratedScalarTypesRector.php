@@ -69,7 +69,7 @@ CODE_SAMPLE
                     <<<'CODE_SAMPLE'
 $code = <<<'EOF'
     /**
-     * @param string
+     * @param string $name
      */
     public function getParameter($name)
     {

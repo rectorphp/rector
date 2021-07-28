@@ -48,7 +48,7 @@ final class MoveServicesBySuffixToDirectoryRector extends AbstractRector impleme
                 <<<'CODE_SAMPLE'
 // file: app/Entity/ProductRepository.php
 
-namespace App/Entity;
+namespace App\Entity;
 
 class ProductRepository
 {
@@ -58,7 +58,7 @@ CODE_SAMPLE
                 <<<'CODE_SAMPLE'
 // file: app/Repository/ProductRepository.php
 
-namespace App/Repository;
+namespace App\Repository;
 
 class ProductRepository
 {

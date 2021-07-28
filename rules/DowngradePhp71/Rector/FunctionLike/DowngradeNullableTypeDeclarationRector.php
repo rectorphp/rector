@@ -56,7 +56,7 @@ class SomeClass
 {
     /**
      * @param string|null $input
-     * @return string|null $input
+     * @return string|null
      */
     public function run($input)
     {

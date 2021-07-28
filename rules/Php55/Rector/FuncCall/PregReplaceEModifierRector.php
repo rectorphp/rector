@@ -51,7 +51,7 @@ class SomeClass
     {
         $comment = preg_replace_callback('~\b(\w)(\w+)~', function ($matches) {
               return($matches[1].strtolower($matches[2]));
-        }, , $comment);
+        }, $comment);
     }
 }
 CODE_SAMPLE

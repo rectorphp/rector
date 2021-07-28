@@ -45,8 +45,8 @@ CODE_SAMPLE
 class SomeClass
 {
     /**
-    * @var string
-    */
+     * @var string
+     */
     private $property;
 }
 CODE_SAMPLE

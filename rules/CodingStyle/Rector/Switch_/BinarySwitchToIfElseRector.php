@@ -44,7 +44,7 @@ CODE_SAMPLE
                 ,
                 <<<'CODE_SAMPLE'
 if ($foo == 'my string') {
-    $result = 'ok;
+    $result = 'ok';
 } else {
     $result = 'not ok';
 }

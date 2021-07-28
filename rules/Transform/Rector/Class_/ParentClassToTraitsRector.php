@@ -59,7 +59,7 @@ CODE_SAMPLE
                 ,
                 [
                     self::PARENT_CLASS_TO_TRAITS => [
-                        'Nette\Object' => ['Nette\SmartObject'],
+                        new ParentClassToTraits('Nette\Object', ['Nette\SmartObject']),
                     ],
                 ]
             ),

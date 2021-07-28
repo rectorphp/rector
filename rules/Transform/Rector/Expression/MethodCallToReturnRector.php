@@ -68,8 +68,8 @@ CODE_SAMPLE
             ,
                 [
                     self::METHOD_CALL_WRAPS => [
-                        'SomeClass' => ['deny'],
-                    ],
+                        new MethodCallToReturn('SomeClass', 'deny'),
+                    ]
                 ]
             ),
         ]);

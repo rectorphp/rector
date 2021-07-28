@@ -63,7 +63,7 @@ CODE_SAMPLE
                 <<<'CODE_SAMPLE'
 class SomeClass
 {
-    public function run(array $items)
+    public function run($foo)
     {
         $foo = (string) $foo;
 

@@ -44,7 +44,7 @@ CODE_SAMPLE
                     ,
                     <<<'CODE_SAMPLE'
 $someObject = new SomeClass;
-$someObject->someMethod();'
+$someObject->someMethod();
 CODE_SAMPLE
                     ,
                     [

@@ -49,13 +49,13 @@ CODE_SAMPLE
                     ,
                     <<<'CODE_SAMPLE'
 $someObject = new SomeClass;
-$someObject->someMethod(false);'
+$someObject->someMethod(false);
 CODE_SAMPLE
                     ,
                     [
                         self::REPLACED_ARGUMENTS => [
                             new ReplaceArgumentDefaultValue(
-                                'SomeExampleClass',
+                                'SomeClass',
                                 'someMethod',
                                 0,
                                 'SomeClass::OLD_CONSTANT',

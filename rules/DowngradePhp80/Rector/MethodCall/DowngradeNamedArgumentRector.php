@@ -63,7 +63,7 @@ class SomeClass
 {
     public function run()
     {
-        $this->execute(null,  100);
+        $this->execute(null, 100);
     }
 
     private function execute($a = null, $b = null)
