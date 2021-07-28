@@ -7,6 +7,7 @@
     ],
     "require": {
         "php": "^7.1|^8.0",
+        "ext-intl": "*",
         "phpstan/phpstan": "0.12.93"
     },
     "autoload": {
