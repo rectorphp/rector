@@ -19,6 +19,7 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
+use Rector\Core\NodeAnalyzer\CallAnalyzer;
 use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
@@ -67,7 +68,11 @@ final class FluentChainMethodCallNodeAnalyzer
      * @var \Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer
      */
     private $returnTypeInferer;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \PhpParser\NodeFinder $nodeFinder, \Rector\Core\PhpParser\AstResolver $astResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator, \Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer $returnTypeInferer)
+    /**
+     * @var \Rector\Core\NodeAnalyzer\CallAnalyzer
+     */
+    private $callAnalyzer;
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \PhpParser\NodeFinder $nodeFinder, \Rector\Core\PhpParser\AstResolver $astResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator, \Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer $returnTypeInferer, \Rector\Core\NodeAnalyzer\CallAnalyzer $callAnalyzer)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
@@ -76,6 +81,7 @@ final class FluentChainMethodCallNodeAnalyzer
         $this->betterNodeFinder = $betterNodeFinder;
         $this->nodeComparator = $nodeComparator;
         $this->returnTypeInferer = $returnTypeInferer;
+        $this->callAnalyzer = $callAnalyzer;
     }
     /**
      * Checks that in:
@@ -89,7 +95,7 @@ final class FluentChainMethodCallNodeAnalyzer
      */
     public function isFluentClassMethodOfMethodCall(\PhpParser\Node\Expr\MethodCall $methodCall) : bool
     {
-        if ($this->isCall($methodCall->var)) {
+        if ($this->callAnalyzer->isObjectCall($methodCall->var)) {
             return \false;
         }
         $calleeStaticType = $this->nodeTypeResolver->getStaticType($methodCall->var);
@@ -223,13 +229,6 @@ final class FluentChainMethodCallNodeAnalyzer
         }
         $inferFunctionLike = $this->returnTypeInferer->inferFunctionLike($classMethod);
         return $inferFunctionLike instanceof \PHPStan\Type\ThisType;
-    }
-    private function isCall(\PhpParser\Node\Expr $expr) : bool
-    {
-        if ($expr instanceof \PhpParser\Node\Expr\MethodCall) {
-            return \true;
-        }
-        return $expr instanceof \PhpParser\Node\Expr\StaticCall;
     }
     private function isMethodCallCreatingNewInstance(\PhpParser\Node\Expr\MethodCall $methodCall) : bool
     {

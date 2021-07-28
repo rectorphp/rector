@@ -14,6 +14,7 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\ClassLike;
 use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\NodeAnalyzer\CallAnalyzer;
 use Rector\NodeNameResolver\Contract\NodeNameResolverInterface;
 use Rector\NodeNameResolver\Error\InvalidNameNodeReporter;
 use Rector\NodeNameResolver\Regex\RegexPatternDetector;
@@ -33,17 +34,22 @@ final class NodeNameResolver
      */
     private $invalidNameNodeReporter;
     /**
+     * @var \Rector\Core\NodeAnalyzer\CallAnalyzer
+     */
+    private $callAnalyzer;
+    /**
      * @var mixed[]
      */
     private $nodeNameResolvers = [];
     /**
      * @param NodeNameResolverInterface[] $nodeNameResolvers
      */
-    public function __construct(\Rector\NodeNameResolver\Regex\RegexPatternDetector $regexPatternDetector, \Rector\CodingStyle\Naming\ClassNaming $classNaming, \Rector\NodeNameResolver\Error\InvalidNameNodeReporter $invalidNameNodeReporter, array $nodeNameResolvers = [])
+    public function __construct(\Rector\NodeNameResolver\Regex\RegexPatternDetector $regexPatternDetector, \Rector\CodingStyle\Naming\ClassNaming $classNaming, \Rector\NodeNameResolver\Error\InvalidNameNodeReporter $invalidNameNodeReporter, \Rector\Core\NodeAnalyzer\CallAnalyzer $callAnalyzer, array $nodeNameResolvers = [])
     {
         $this->regexPatternDetector = $regexPatternDetector;
         $this->classNaming = $classNaming;
         $this->invalidNameNodeReporter = $invalidNameNodeReporter;
+        $this->callAnalyzer = $callAnalyzer;
         $this->nodeNameResolvers = $nodeNameResolvers;
     }
     /**
@@ -178,13 +184,10 @@ final class NodeNameResolver
     }
     private function isCallOrIdentifier(\PhpParser\Node $node) : bool
     {
-        if ($node instanceof \PhpParser\Node\Expr\MethodCall) {
-            return \true;
+        if (!$node instanceof \PhpParser\Node\Expr) {
+            return $node instanceof \PhpParser\Node\Identifier;
         }
-        if ($node instanceof \PhpParser\Node\Expr\StaticCall) {
-            return \true;
-        }
-        return $node instanceof \PhpParser\Node\Identifier;
+        return $this->callAnalyzer->isObjectCall($node);
     }
     private function isSingleName(\PhpParser\Node $node, string $name) : bool
     {

@@ -8,7 +8,6 @@ use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
@@ -17,6 +16,7 @@ use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Trait_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\TypeWithClassName;
+use Rector\Core\NodeAnalyzer\CallAnalyzer;
 use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -31,9 +31,14 @@ final class RemoveEmptyMethodCallRector extends \Rector\Core\Rector\AbstractRect
      * @var \Rector\Core\PhpParser\AstResolver
      */
     private $reflectionAstResolver;
-    public function __construct(\Rector\Core\PhpParser\AstResolver $reflectionAstResolver)
+    /**
+     * @var \Rector\Core\NodeAnalyzer\CallAnalyzer
+     */
+    private $callAnalyzer;
+    public function __construct(\Rector\Core\PhpParser\AstResolver $reflectionAstResolver, \Rector\Core\NodeAnalyzer\CallAnalyzer $callAnalyzer)
     {
         $this->reflectionAstResolver = $reflectionAstResolver;
+        $this->callAnalyzer = $callAnalyzer;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -103,7 +108,7 @@ CODE_SAMPLE
     }
     private function getScope(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\PHPStan\Analyser\Scope
     {
-        if ($methodCall->var instanceof \PhpParser\Node\Expr\MethodCall || $methodCall->var instanceof \PhpParser\Node\Expr\StaticCall) {
+        if ($this->callAnalyzer->isObjectCall($methodCall->var)) {
             return null;
         }
         $scope = $methodCall->var->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
