@@ -41,7 +41,7 @@ final class PropertyAssignMatcher
         }
         return null;
     }
-    private function isPropertyFetch(\PhpParser\Node $node) : bool
+    public function isPropertyFetch(\PhpParser\Node $node) : bool
     {
         if ($node instanceof \PhpParser\Node\Expr\PropertyFetch) {
             return \true;
