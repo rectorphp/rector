@@ -7,6 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
+use Rector\Core\Php\ReservedKeywordAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DeadCode\NodeCollector\NodeByTypeAndPositionCollector;
 use Rector\DeadCode\NodeFinder\VariableUseFinder;
@@ -32,11 +33,16 @@ final class RemoveOverriddenValuesRector extends \Rector\Core\Rector\AbstractRec
      * @var \Rector\DeadCode\NodeFinder\VariableUseFinder
      */
     private $variableUseFinder;
-    public function __construct(\Rector\NodeNestingScope\ContextAnalyzer $contextAnalyzer, \Rector\DeadCode\NodeCollector\NodeByTypeAndPositionCollector $nodeByTypeAndPositionCollector, \Rector\DeadCode\NodeFinder\VariableUseFinder $variableUseFinder)
+    /**
+     * @var \Rector\Core\Php\ReservedKeywordAnalyzer
+     */
+    private $reservedKeywordAnalyzer;
+    public function __construct(\Rector\NodeNestingScope\ContextAnalyzer $contextAnalyzer, \Rector\DeadCode\NodeCollector\NodeByTypeAndPositionCollector $nodeByTypeAndPositionCollector, \Rector\DeadCode\NodeFinder\VariableUseFinder $variableUseFinder, \Rector\Core\Php\ReservedKeywordAnalyzer $reservedKeywordAnalyzer)
     {
         $this->contextAnalyzer = $contextAnalyzer;
         $this->nodeByTypeAndPositionCollector = $nodeByTypeAndPositionCollector;
         $this->variableUseFinder = $variableUseFinder;
+        $this->reservedKeywordAnalyzer = $reservedKeywordAnalyzer;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -112,7 +118,10 @@ CODE_SAMPLE
                 return \false;
             }
             // simple variable only
-            return \is_string($node->name);
+            if (!\is_string($node->name)) {
+                return \false;
+            }
+            return !$this->reservedKeywordAnalyzer->isNativeVariable($node->name);
         });
     }
     /**
