@@ -9,7 +9,6 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Renaming\ValueObject\MethodCallRenameWithArrayKey;
 use Rector\Transform\ValueObject\MethodCallToAnotherMethodCallWithArguments;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -46,7 +45,12 @@ CODE_SAMPLE
                 ,
                 [
                     self::METHOD_CALL_RENAMES_WITH_ADDED_ARGUMENTS => [
-                        new MethodCallToAnotherMethodCallWithArguments('Nette\DI\ServiceDefinition', 'setInject', 'addTag', ['inject']),
+                        new MethodCallToAnotherMethodCallWithArguments(
+                            'Nette\DI\ServiceDefinition',
+                            'setInject',
+                            'addTag',
+                            ['inject']
+                        ),
                     ],
                 ]
             ),

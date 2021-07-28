@@ -67,9 +67,7 @@ CODE_SAMPLE
 
             ,
                 [
-                    self::METHOD_CALL_WRAPS => [
-                        new MethodCallToReturn('SomeClass', 'deny'),
-                    ]
+                    self::METHOD_CALL_WRAPS => [new MethodCallToReturn('SomeClass', 'deny')],
                 ]
             ),
         ]);

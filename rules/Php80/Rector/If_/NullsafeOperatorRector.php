@@ -14,7 +14,6 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\NodeManipulator\IfManipulator;
 use Rector\Core\NodeManipulator\NullsafeManipulator;
 use Rector\Core\Rector\AbstractRector;

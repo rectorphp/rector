@@ -20,4 +20,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(AddArrayParamDocTypeRector::class);
     $services->set(AddArrayReturnDocTypeRector::class);
     // $services->set(AddParamTypeFromCallersRector::class);
+    $services->set(\Rector\TypeDeclaration\Rector\ClassMethod\ParamTypeByParentCallTypeRector::class);
 };
