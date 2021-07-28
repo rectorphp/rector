@@ -26,7 +26,6 @@ use PhpParser\Node\Stmt\InlineHTML;
 use PhpParser\Node\Stmt\Switch_;
 use PhpParser\Node\Stmt\TryCatch;
 use PhpParser\Node\Stmt\While_;
-use PHPStan\Reflection\Native\NativeFunctionReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
@@ -295,21 +294,6 @@ CODE_SAMPLE
 
             if (! $n instanceof FuncCall) {
                 return false;
-            }
-
-            $funcName = $this->getName($n);
-            if ($funcName === null) {
-                return false;
-            }
-
-            $functionName = new Name($funcName);
-            if (! $this->reflectionProvider->hasFunction($functionName, null)) {
-                return true;
-            }
-
-            $function = $this->reflectionProvider->getFunction($functionName, null);
-            if (! $function instanceof NativeFunctionReflection) {
-                return true;
             }
 
             return ! $this->pureFunctionDetector->detect($n);

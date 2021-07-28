@@ -5,7 +5,11 @@ declare(strict_types=1);
 namespace Rector\DeadCode\SideEffect;
 
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Name;
+use PHPStan\Reflection\Native\NativeFunctionReflection;
+use PHPStan\Reflection\ReflectionProvider;
 use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class PureFunctionDetector
 {
@@ -109,12 +113,31 @@ final class PureFunctionDetector
     ];
 
     public function __construct(
-        private NodeNameResolver $nodeNameResolver
+        private NodeNameResolver $nodeNameResolver,
+        private ReflectionProvider $reflectionProvider
     ) {
     }
 
     public function detect(FuncCall $funcCall): bool
     {
+        $funcCallName = $this->nodeNameResolver->getName($funcCall);
+        if ($funcCallName === null) {
+            return false;
+        }
+
+        $scope = $funcCall->getAttribute(AttributeKey::SCOPE);
+        $name = new Name($funcCallName);
+
+        $hasFunction = $this->reflectionProvider->hasFunction($name, $scope);
+        if (! $hasFunction) {
+            return false;
+        }
+
+        $function = $this->reflectionProvider->getFunction($name, $scope);
+        if (! $function instanceof NativeFunctionReflection) {
+            return false;
+        }
+
         return ! $this->nodeNameResolver->isNames($funcCall, self::IMPURE_FUNCTIONS);
     }
 }
