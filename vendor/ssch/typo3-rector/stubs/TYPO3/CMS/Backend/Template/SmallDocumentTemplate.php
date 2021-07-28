@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210727\TYPO3\CMS\Backend\Template;
+namespace RectorPrefix20210728\TYPO3\CMS\Backend\Template;
 
 if (\class_exists('TYPO3\\CMS\\Backend\\Template\\SmallDocumentTemplate')) {
     return;

@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210727\TYPO3\CMS\Core\Crypto;
+namespace RectorPrefix20210728\TYPO3\CMS\Core\Crypto;
 
 if (\class_exists('TYPO3\\CMS\\Core\\Crypto\\Random')) {
     return;

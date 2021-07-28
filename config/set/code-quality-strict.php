@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210727;
+namespace RectorPrefix20210728;
 
 use Rector\CodeQuality\Rector\Identical\FlipTypeControlToUseExclusiveTypeRector;
 use Rector\CodeQualityStrict\Rector\Variable\MoveVariableDeclarationNearReferenceRector;

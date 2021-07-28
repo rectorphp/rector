@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210727;
+namespace RectorPrefix20210728;
 
 if (\class_exists('tslib_content_ImageText')) {
     return;

@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210727;
+namespace RectorPrefix20210728;
 
 if (\class_exists('t3lib_tree_ExtDirect_AbstractExtJsTree')) {
     return;
