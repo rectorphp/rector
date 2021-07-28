@@ -209,10 +209,6 @@ parameters:
             path: rules/PhpSpecToPHPUnit/NodeFactory/AssertMethodCallFactory.php
 
         -
-            message: '#Call to function in_array\(\) with arguments string, array\(\) and true will always evaluate to false#'
-            path: rules/Php56/Rector/FunctionLike/AddDefaultValueForUndefinedVariableRector.php
-
-        -
             message: '#Parameter \#1 \$left of class PhpParser\\Node\\Expr\\BinaryOp\\Spaceship constructor expects PhpParser\\Node\\Expr, PhpParser\\Node\\Expr\|null given#'
             path: rules/Php70/Rector/If_/IfToSpaceshipRector.php
 
@@ -448,14 +444,6 @@ parameters:
         - '#Cognitive complexity for "Rector\\CodingStyle\\Naming\\NameRenamer\:\:renameNameNode\(\)" is 10, keep it under 9#'
 
         -
-            message: '#Removing parent param type is forbidden#'
-            path: src/DependencyInjection/Loader/ConfigurableCallValuesCollectingPhpFileLoader.php #39
-
-        -
-            message: '#Method parameters must be compatible with its parent#'
-            path: src/DependencyInjection/Loader/ConfigurableCallValuesCollectingPhpFileLoader.php #39
-
-        -
             message: '#Access to an undefined property PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocChildNode\:\:\$value#'
             path: packages/BetterPhpDocParser/PhpDocInfo/PhpDocInfo.php #348
 
@@ -465,10 +453,6 @@ parameters:
 
         # false positive
         - '#Attribute class JetBrains\\PhpStorm\\Immutable does not exist#'
-
-        -
-             message: '#Assign in loop is not allowed#'
-             path: rules/RemovingStatic/Rector/ClassMethod/LocallyCalledStaticMethodToNonStaticRector.php
 
         # generics single place
         - '#Method Rector\\Php80\\NodeResolver\\ArgumentSorter\:\:sortArgsByExpectedParamOrder\(\) should return array<T of PhpParser\\Node\\Arg\|PhpParser\\Node\\Param\> but returns array<PhpParser\\Node\\Arg\|PhpParser\\Node\\Param\>#'
