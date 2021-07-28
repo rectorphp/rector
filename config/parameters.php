@@ -34,7 +34,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     // use faster in-memory cache in CI.
     // CI always starts from scratch, therefore IO intensive caching is not worth it
     $runsInGithubAction = getenv('GITHUB_ACTION');
-    if (false !== $runsInGithubAction) {
+    if ($runsInGithubAction !== false) {
         $parameters->set(Option::CACHE_CLASS, MemoryCacheStorage::class);
     }
 };

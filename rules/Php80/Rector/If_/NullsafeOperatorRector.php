@@ -14,6 +14,7 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\NodeManipulator\IfManipulator;
 use Rector\Core\NodeManipulator\NullsafeManipulator;
 use Rector\Core\Rector\AbstractRector;
@@ -144,13 +145,17 @@ CODE_SAMPLE
             return null;
         }
 
-        /** @var Expression $expression */
         $expression = $assign->getAttribute(AttributeKey::PARENT_NODE);
+        if (! $expression instanceof Expression) {
+            return null;
+        }
 
         $nextNode = $expression->getAttribute(AttributeKey::NEXT_NODE);
-
-        /** @var NullsafeMethodCall|NullsafePropertyFetch $nullSafe */
         $nullSafe = $this->nullsafeManipulator->processNullSafeExpr($assignExpr);
+        if ($nullSafe === null) {
+            return null;
+        }
+
         if ($expr !== null) {
             /** @var Identifier $nullSafeIdentifier */
             $nullSafeIdentifier = $nullSafe->name;

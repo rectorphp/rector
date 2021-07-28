@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Caching;
 
-use Rector\Caching\ValueObject\Storage\CacheStorageInterface;
 use Rector\Caching\ValueObject\Storage\FileCacheStorage;
 use Rector\Caching\ValueObject\Storage\MemoryCacheStorage;
 use Rector\Core\Configuration\Option;
