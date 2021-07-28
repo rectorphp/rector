@@ -9,8 +9,8 @@ $loader = require_once __DIR__.'/autoload.php';
 if (!class_exists('AutoloadIncluder', false) && !interface_exists('AutoloadIncluder', false) && !trait_exists('AutoloadIncluder', false)) {
     spl_autoload_call('RectorPrefix20210728\AutoloadIncluder');
 }
-if (!class_exists('ComposerAutoloaderInit9a77828ad50afe3db29fd893063d0754', false) && !interface_exists('ComposerAutoloaderInit9a77828ad50afe3db29fd893063d0754', false) && !trait_exists('ComposerAutoloaderInit9a77828ad50afe3db29fd893063d0754', false)) {
-    spl_autoload_call('RectorPrefix20210728\ComposerAutoloaderInit9a77828ad50afe3db29fd893063d0754');
+if (!class_exists('ComposerAutoloaderInit53af53968d20f851057919c47a557839', false) && !interface_exists('ComposerAutoloaderInit53af53968d20f851057919c47a557839', false) && !trait_exists('ComposerAutoloaderInit53af53968d20f851057919c47a557839', false)) {
+    spl_autoload_call('RectorPrefix20210728\ComposerAutoloaderInit53af53968d20f851057919c47a557839');
 }
 if (!class_exists('Doctrine\Inflector\Inflector', false) && !interface_exists('Doctrine\Inflector\Inflector', false) && !trait_exists('Doctrine\Inflector\Inflector', false)) {
     spl_autoload_call('RectorPrefix20210728\Doctrine\Inflector\Inflector');
@@ -3308,9 +3308,9 @@ if (!function_exists('print_node')) {
         return \RectorPrefix20210728\print_node(...func_get_args());
     }
 }
-if (!function_exists('composerRequire9a77828ad50afe3db29fd893063d0754')) {
-    function composerRequire9a77828ad50afe3db29fd893063d0754() {
-        return \RectorPrefix20210728\composerRequire9a77828ad50afe3db29fd893063d0754(...func_get_args());
+if (!function_exists('composerRequire53af53968d20f851057919c47a557839')) {
+    function composerRequire53af53968d20f851057919c47a557839() {
+        return \RectorPrefix20210728\composerRequire53af53968d20f851057919c47a557839(...func_get_args());
     }
 }
 if (!function_exists('parseArgs')) {
