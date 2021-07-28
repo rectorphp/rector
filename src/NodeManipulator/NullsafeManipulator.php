@@ -12,7 +12,10 @@ use PhpParser\Node\Identifier;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 final class NullsafeManipulator
 {
-    public function processNullSafeExpr(\PhpParser\Node\Expr $expr) : ?\PhpParser\Node\Expr
+    /**
+     * @return \PhpParser\Node\Expr\NullsafeMethodCall|\PhpParser\Node\Expr\NullsafePropertyFetch|null
+     */
+    public function processNullSafeExpr(\PhpParser\Node\Expr $expr)
     {
         if ($expr instanceof \PhpParser\Node\Expr\MethodCall) {
             return new \PhpParser\Node\Expr\NullsafeMethodCall($expr->var, $expr->name);

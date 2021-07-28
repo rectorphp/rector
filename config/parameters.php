@@ -27,7 +27,7 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
     // use faster in-memory cache in CI.
     // CI always starts from scratch, therefore IO intensive caching is not worth it
     $runsInGithubAction = \getenv('GITHUB_ACTION');
-    if (\false !== $runsInGithubAction) {
+    if ($runsInGithubAction !== \false) {
         $parameters->set(\Rector\Core\Configuration\Option::CACHE_CLASS, \Rector\Caching\ValueObject\Storage\MemoryCacheStorage::class);
     }
 };
