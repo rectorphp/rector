@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit4f76720e260d13b441cf5fb5b5f30789
+class ComposerStaticInitce07743fbc1642af6a1e16cdbe684ff5
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -1927,7 +1927,9 @@ class ComposerStaticInit4f76720e260d13b441cf5fb5b5f30789
         'Rector\\Caching\\UnchangedFilesFilter' => __DIR__ . '/../..' . '/packages/Caching/UnchangedFilesFilter.php',
         'Rector\\Caching\\ValueObject\\CacheFilePaths' => __DIR__ . '/../..' . '/packages/Caching/ValueObject/CacheFilePaths.php',
         'Rector\\Caching\\ValueObject\\CacheItem' => __DIR__ . '/../..' . '/packages/Caching/ValueObject/CacheItem.php',
+        'Rector\\Caching\\ValueObject\\Storage\\CacheStorageInterface' => __DIR__ . '/../..' . '/packages/Caching/ValueObject/Storage/CacheStorageInterface.php',
         'Rector\\Caching\\ValueObject\\Storage\\FileCacheStorage' => __DIR__ . '/../..' . '/packages/Caching/ValueObject/Storage/FileCacheStorage.php',
+        'Rector\\Caching\\ValueObject\\Storage\\MemoryCacheStorage' => __DIR__ . '/../..' . '/packages/Caching/ValueObject/Storage/MemoryCacheStorage.php',
         'Rector\\CakePHP\\ImplicitNameResolver' => __DIR__ . '/..' . '/rector/rector-cakephp/src/ImplicitNameResolver.php',
         'Rector\\CakePHP\\Naming\\CakePHPFullyQualifiedClassNameResolver' => __DIR__ . '/..' . '/rector/rector-cakephp/src/Naming/CakePHPFullyQualifiedClassNameResolver.php',
         'Rector\\CakePHP\\Rector\\MethodCall\\ArrayToFluentCallRector' => __DIR__ . '/..' . '/rector/rector-cakephp/src/Rector/MethodCall/ArrayToFluentCallRector.php',
@@ -3846,9 +3848,9 @@ class ComposerStaticInit4f76720e260d13b441cf5fb5b5f30789
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit4f76720e260d13b441cf5fb5b5f30789::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit4f76720e260d13b441cf5fb5b5f30789::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit4f76720e260d13b441cf5fb5b5f30789::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitce07743fbc1642af6a1e16cdbe684ff5::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitce07743fbc1642af6a1e16cdbe684ff5::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitce07743fbc1642af6a1e16cdbe684ff5::$classMap;
 
         }, null, ClassLoader::class);
     }

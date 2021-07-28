@@ -12,7 +12,7 @@ use RectorPrefix20210728\Symplify\SmartFileSystem\SmartFileSystem;
 /**
  * Inspired by https://github.com/phpstan/phpstan-src/blob/1e7ceae933f07e5a250b61ed94799e6c2ea8daa2/src/Cache/FileCacheStorage.php
  */
-final class FileCacheStorage
+final class FileCacheStorage implements \Rector\Caching\ValueObject\Storage\CacheStorageInterface
 {
     /**
      * @var string
@@ -28,9 +28,10 @@ final class FileCacheStorage
         $this->smartFileSystem = $smartFileSystem;
     }
     /**
-     * @return mixed|null
+     * @param string $key
+     * @param string $variableKey
      */
-    public function load(string $key, string $variableKey)
+    public function load($key, $variableKey)
     {
         return (function (string $key, string $variableKey) {
             $cacheFilePaths = $this->getCacheFilePaths($key);
@@ -49,9 +50,10 @@ final class FileCacheStorage
         })($key, $variableKey);
     }
     /**
-     * @param mixed $data
+     * @param string $key
+     * @param string $variableKey
      */
-    public function save(string $key, string $variableKey, $data) : void
+    public function save($key, $variableKey, $data) : void
     {
         $cacheFilePaths = $this->getCacheFilePaths($key);
         $this->smartFileSystem->mkdir($cacheFilePaths->getFirstDirectory());
@@ -75,9 +77,12 @@ final class FileCacheStorage
             throw new \RectorPrefix20210728\Symplify\EasyCodingStandard\Caching\Exception\CachingException(\sprintf('Could not write data to cache file %s.', $path));
         }
     }
-    public function clean(string $cacheKey) : void
+    /**
+     * @param string $key
+     */
+    public function clean($key) : void
     {
-        $cacheFilePaths = $this->getCacheFilePaths($cacheKey);
+        $cacheFilePaths = $this->getCacheFilePaths($key);
         $this->smartFileSystem->remove([$cacheFilePaths->getFirstDirectory(), $cacheFilePaths->getSecondDirectory(), $cacheFilePaths->getFilePath()]);
     }
     public function clear() : void

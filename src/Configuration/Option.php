@@ -4,6 +4,8 @@ declare (strict_types=1);
 namespace Rector\Core\Configuration;
 
 use RectorPrefix20210728\JetBrains\PhpStorm\Immutable;
+use Rector\Caching\ValueObject\Storage\CacheStorageInterface;
+use Rector\Caching\ValueObject\Storage\FileCacheStorage;
 use RectorPrefix20210728\Symplify\Skipper\ValueObject\Option as SkipperOption;
 #[Immutable]
 final class Option
@@ -89,6 +91,13 @@ final class Option
      * @var string
      */
     public const CACHE_DIR = 'cache_dir';
+    /**
+     * Cache backend. Most of the time we cache in files, but in ephemeral environment (e.g. CI), a faster `MemoryCacheStorage` can be usefull.
+     *
+     * @var class-string<CacheStorageInterface>
+     * @internal
+     */
+    public const CACHE_CLASS = \Rector\Caching\ValueObject\Storage\FileCacheStorage::class;
     /**
      * @var string
      */

@@ -3,37 +3,37 @@
 declare (strict_types=1);
 namespace Rector\Caching;
 
-use Rector\Caching\ValueObject\Storage\FileCacheStorage;
+use Rector\Caching\ValueObject\Storage\CacheStorageInterface;
 final class Cache
 {
     /**
-     * @var \Rector\Caching\ValueObject\Storage\FileCacheStorage
+     * @var \Rector\Caching\ValueObject\Storage\CacheStorageInterface
      */
-    private $fileCacheStorage;
-    public function __construct(\Rector\Caching\ValueObject\Storage\FileCacheStorage $fileCacheStorage)
+    private $cacheStorage;
+    public function __construct(\Rector\Caching\ValueObject\Storage\CacheStorageInterface $cacheStorage)
     {
-        $this->fileCacheStorage = $fileCacheStorage;
+        $this->cacheStorage = $cacheStorage;
     }
     /**
      * @return mixed|null
      */
     public function load(string $key, string $variableKey)
     {
-        return $this->fileCacheStorage->load($key, $variableKey);
+        return $this->cacheStorage->load($key, $variableKey);
     }
     /**
      * @param mixed $data
      */
     public function save(string $key, string $variableKey, $data) : void
     {
-        $this->fileCacheStorage->save($key, $variableKey, $data);
+        $this->cacheStorage->save($key, $variableKey, $data);
     }
     public function clear() : void
     {
-        $this->fileCacheStorage->clear();
+        $this->cacheStorage->clear();
     }
     public function clean(string $cacheKey) : void
     {
-        $this->fileCacheStorage->clean($cacheKey);
+        $this->cacheStorage->clean($cacheKey);
     }
 }
