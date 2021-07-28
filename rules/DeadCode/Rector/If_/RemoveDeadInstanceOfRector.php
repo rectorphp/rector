@@ -11,6 +11,7 @@ use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Property;
@@ -107,6 +108,10 @@ CODE_SAMPLE
 
     private function processMayDeadInstanceOf(If_ $if, Instanceof_ $instanceof): ?If_
     {
+        if (! $instanceof->class instanceof Name) {
+            return null;
+        }
+
         $classType = $this->nodeTypeResolver->resolve($instanceof->class);
         $exprType = $this->nodeTypeResolver->resolve($instanceof->expr);
 
