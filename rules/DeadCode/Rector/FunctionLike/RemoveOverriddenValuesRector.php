@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
+use Rector\Core\Php\ReservedKeywordAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DeadCode\NodeCollector\NodeByTypeAndPositionCollector;
 use Rector\DeadCode\NodeFinder\VariableUseFinder;
@@ -25,7 +26,8 @@ final class RemoveOverriddenValuesRector extends AbstractRector
     public function __construct(
         private ContextAnalyzer $contextAnalyzer,
         private NodeByTypeAndPositionCollector $nodeByTypeAndPositionCollector,
-        private VariableUseFinder $variableUseFinder
+        private VariableUseFinder $variableUseFinder,
+        private ReservedKeywordAnalyzer $reservedKeywordAnalyzer
     ) {
     }
 
@@ -124,8 +126,13 @@ CODE_SAMPLE
             if ($assignNode->var !== $node) {
                 return false;
             }
+
             // simple variable only
-            return is_string($node->name);
+            if (! is_string($node->name)) {
+                return false;
+            }
+
+            return ! $this->reservedKeywordAnalyzer->isNativeVariable($node->name);
         });
     }
 
