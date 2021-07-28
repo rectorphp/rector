@@ -15,6 +15,7 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\ClassLike;
 use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\NodeAnalyzer\CallAnalyzer;
 use Rector\NodeNameResolver\Contract\NodeNameResolverInterface;
 use Rector\NodeNameResolver\Error\InvalidNameNodeReporter;
 use Rector\NodeNameResolver\Regex\RegexPatternDetector;
@@ -29,6 +30,7 @@ final class NodeNameResolver
         private RegexPatternDetector $regexPatternDetector,
         private ClassNaming $classNaming,
         private InvalidNameNodeReporter $invalidNameNodeReporter,
+        private CallAnalyzer $callAnalyzer,
         private array $nodeNameResolvers = []
     ) {
     }
@@ -186,15 +188,11 @@ final class NodeNameResolver
 
     private function isCallOrIdentifier(Node $node): bool
     {
-        if ($node instanceof MethodCall) {
-            return true;
+        if (! $node instanceof Expr) {
+            return $node instanceof Identifier;
         }
 
-        if ($node instanceof StaticCall) {
-            return true;
-        }
-
-        return $node instanceof Identifier;
+        return $this->callAnalyzer->isObjectCall($node);
     }
 
     private function isSingleName(Node $node, string $name): bool

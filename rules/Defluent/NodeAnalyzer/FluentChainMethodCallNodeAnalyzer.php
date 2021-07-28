@@ -20,6 +20,7 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
+use Rector\Core\NodeAnalyzer\CallAnalyzer;
 use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
@@ -49,7 +50,8 @@ final class FluentChainMethodCallNodeAnalyzer
         private AstResolver $astResolver,
         private BetterNodeFinder $betterNodeFinder,
         private NodeComparator $nodeComparator,
-        private ReturnTypeInferer $returnTypeInferer
+        private ReturnTypeInferer $returnTypeInferer,
+        private CallAnalyzer $callAnalyzer
     ) {
     }
 
@@ -65,7 +67,7 @@ final class FluentChainMethodCallNodeAnalyzer
      */
     public function isFluentClassMethodOfMethodCall(MethodCall $methodCall): bool
     {
-        if ($this->isCall($methodCall->var)) {
+        if ($this->callAnalyzer->isObjectCall($methodCall->var)) {
             return false;
         }
 
@@ -231,15 +233,6 @@ final class FluentChainMethodCallNodeAnalyzer
 
         $inferFunctionLike = $this->returnTypeInferer->inferFunctionLike($classMethod);
         return $inferFunctionLike instanceof ThisType;
-    }
-
-    private function isCall(Expr $expr): bool
-    {
-        if ($expr instanceof MethodCall) {
-            return true;
-        }
-
-        return $expr instanceof StaticCall;
     }
 
     private function isMethodCallCreatingNewInstance(MethodCall $methodCall): bool
