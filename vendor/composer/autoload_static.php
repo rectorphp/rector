@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit5f5984635b44005fd2612b74457aaa39
+class ComposerStaticInit74210497f277e2d89843d04f204b168f
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -3478,6 +3478,7 @@ class ComposerStaticInit5f5984635b44005fd2612b74457aaa39
         'Rector\\TypeDeclaration\\NodeAnalyzer\\CallTypesResolver' => __DIR__ . '/../..' . '/rules/TypeDeclaration/NodeAnalyzer/CallTypesResolver.php',
         'Rector\\TypeDeclaration\\NodeAnalyzer\\ClassMethodAndPropertyAnalyzer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/NodeAnalyzer/ClassMethodAndPropertyAnalyzer.php',
         'Rector\\TypeDeclaration\\NodeAnalyzer\\ClassMethodParamTypeCompleter' => __DIR__ . '/../..' . '/rules/TypeDeclaration/NodeAnalyzer/ClassMethodParamTypeCompleter.php',
+        'Rector\\TypeDeclaration\\NodeAnalyzer\\ParentParamMatcher' => __DIR__ . '/../..' . '/rules/TypeDeclaration/NodeAnalyzer/ParentParamMatcher.php',
         'Rector\\TypeDeclaration\\NodeAnalyzer\\ReturnStrictTypeAnalyzer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/NodeAnalyzer/ReturnStrictTypeAnalyzer.php',
         'Rector\\TypeDeclaration\\NodeAnalyzer\\TypeNodeUnwrapper' => __DIR__ . '/../..' . '/rules/TypeDeclaration/NodeAnalyzer/TypeNodeUnwrapper.php',
         'Rector\\TypeDeclaration\\NodeTypeAnalyzer\\CallTypeAnalyzer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/NodeTypeAnalyzer/CallTypeAnalyzer.php',
@@ -3495,6 +3496,7 @@ class ComposerStaticInit5f5984635b44005fd2612b74457aaa39
         'Rector\\TypeDeclaration\\Rector\\ClassMethod\\AddParamTypeDeclarationRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/AddParamTypeDeclarationRector.php',
         'Rector\\TypeDeclaration\\Rector\\ClassMethod\\AddReturnTypeDeclarationRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/AddReturnTypeDeclarationRector.php',
         'Rector\\TypeDeclaration\\Rector\\ClassMethod\\AddVoidReturnTypeWhereNoReturnRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/AddVoidReturnTypeWhereNoReturnRector.php',
+        'Rector\\TypeDeclaration\\Rector\\ClassMethod\\ParamTypeByParentCallTypeRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/ParamTypeByParentCallTypeRector.php',
         'Rector\\TypeDeclaration\\Rector\\ClassMethod\\ReturnNeverTypeRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/ReturnNeverTypeRector.php',
         'Rector\\TypeDeclaration\\Rector\\ClassMethod\\ReturnTypeFromReturnNewRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/ReturnTypeFromReturnNewRector.php',
         'Rector\\TypeDeclaration\\Rector\\ClassMethod\\ReturnTypeFromStrictTypedCallRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/ReturnTypeFromStrictTypedCallRector.php',
@@ -3849,9 +3851,9 @@ class ComposerStaticInit5f5984635b44005fd2612b74457aaa39
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit5f5984635b44005fd2612b74457aaa39::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit5f5984635b44005fd2612b74457aaa39::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit5f5984635b44005fd2612b74457aaa39::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit74210497f277e2d89843d04f204b168f::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit74210497f277e2d89843d04f204b168f::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit74210497f277e2d89843d04f204b168f::$classMap;
 
         }, null, ClassLoader::class);
     }
