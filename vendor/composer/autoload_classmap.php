@@ -2169,6 +2169,7 @@ return array(
     'Rector\\DowngradePhp80\\Rector\\Class_\\DowngradeAttributeToAnnotationRector' => $baseDir . '/rules/DowngradePhp80/Rector/Class_/DowngradeAttributeToAnnotationRector.php',
     'Rector\\DowngradePhp80\\Rector\\Class_\\DowngradePropertyPromotionRector' => $baseDir . '/rules/DowngradePhp80/Rector/Class_/DowngradePropertyPromotionRector.php',
     'Rector\\DowngradePhp80\\Rector\\Expression\\DowngradeMatchToSwitchRector' => $baseDir . '/rules/DowngradePhp80/Rector/Expression/DowngradeMatchToSwitchRector.php',
+    'Rector\\DowngradePhp80\\Rector\\Expression\\DowngradeThrowExprRector' => $baseDir . '/rules/DowngradePhp80/Rector/Expression/DowngradeThrowExprRector.php',
     'Rector\\DowngradePhp80\\Rector\\FuncCall\\DowngradeStrContainsRector' => $baseDir . '/rules/DowngradePhp80/Rector/FuncCall/DowngradeStrContainsRector.php',
     'Rector\\DowngradePhp80\\Rector\\FuncCall\\DowngradeStrEndsWithRector' => $baseDir . '/rules/DowngradePhp80/Rector/FuncCall/DowngradeStrEndsWithRector.php',
     'Rector\\DowngradePhp80\\Rector\\FuncCall\\DowngradeStrStartsWithRector' => $baseDir . '/rules/DowngradePhp80/Rector/FuncCall/DowngradeStrStartsWithRector.php',
