@@ -14,7 +14,7 @@ use Symplify\SmartFileSystem\SmartFileSystem;
 /**
  * Inspired by https://github.com/phpstan/phpstan-src/blob/1e7ceae933f07e5a250b61ed94799e6c2ea8daa2/src/Cache/FileCacheStorage.php
  */
-final class FileCacheStorage
+final class FileCacheStorage implements CacheStorageInterface
 {
     public function __construct(
         private string $directory,
@@ -22,9 +22,6 @@ final class FileCacheStorage
     ) {
     }
 
-    /**
-     * @return mixed|null
-     */
     public function load(string $key, string $variableKey)
     {
         return (function (string $key, string $variableKey) {
@@ -45,9 +42,6 @@ final class FileCacheStorage
         })($key, $variableKey);
     }
 
-    /**
-     * @param mixed $data
-     */
     public function save(string $key, string $variableKey, $data): void
     {
         $cacheFilePaths = $this->getCacheFilePaths($key);
@@ -79,9 +73,9 @@ final class FileCacheStorage
         }
     }
 
-    public function clean(string $cacheKey): void
+    public function clean(string $key): void
     {
-        $cacheFilePaths = $this->getCacheFilePaths($cacheKey);
+        $cacheFilePaths = $this->getCacheFilePaths($key);
 
         $this->smartFileSystem->remove([
             $cacheFilePaths->getFirstDirectory(),

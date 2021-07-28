@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Rector\Caching\ValueObject\Storage\MemoryCacheStorage;
 use Rector\Core\Configuration\Option;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
@@ -29,4 +30,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     // cache
     $parameters->set(Option::CACHE_DIR, sys_get_temp_dir() . '/rector_cached_files');
+
+    // use faster in-memory cache in CI.
+    // CI always starts from scratch, therefore IO intensive caching is not worth it
+    $runsInGithubAction = getenv('GITHUB_ACTION');
+    if (false !== $runsInGithubAction) {
+        $parameters->set(Option::CACHE_CLASS, MemoryCacheStorage::class);
+    }
 };

@@ -511,6 +511,12 @@ parameters:
         - '#Method "decorateReturnWithSpecificType\(\)" returns bool type, so the name should start with is/has/was#'
         - '#Method "resolveObjectType\(\)" returns bool type, so the name should start with is/has/was#'
 
+        # internal contract, not meant for re-use at rector consumer level
+        -
+            message: '#Interface must be located in "Contract" namespace#'
+            paths:
+                - packages/Caching/ValueObject/Storage/CacheStorageInterface.php
+
         # resolve later
         -
             message: '#Use explicit names over dynamic ones#'
