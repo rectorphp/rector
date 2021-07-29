@@ -10,7 +10,9 @@ use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Name;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\UnionType as PhpParserUnionType;
 use PhpParser\Parser;
@@ -20,6 +22,7 @@ use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
+use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\FamilyTree\ValueObject\PropertyType;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -55,10 +58,14 @@ final class FamilyRelationsAnalyzer
      */
     private $staticTypeMapper;
     /**
+     * @var \Rector\Core\PhpParser\AstResolver
+     */
+    private $astResolver;
+    /**
      * @var \PhpParser\Parser
      */
     private $parser;
-    public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider, \RectorPrefix20210729\Symplify\PackageBuilder\Reflection\PrivatesAccessor $privatesAccessor, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \RectorPrefix20210729\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \PhpParser\Parser $parser)
+    public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider, \RectorPrefix20210729\Symplify\PackageBuilder\Reflection\PrivatesAccessor $privatesAccessor, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \RectorPrefix20210729\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \Rector\Core\PhpParser\AstResolver $astResolver, \PhpParser\Parser $parser)
     {
         $this->reflectionProvider = $reflectionProvider;
         $this->privatesAccessor = $privatesAccessor;
@@ -66,6 +73,7 @@ final class FamilyRelationsAnalyzer
         $this->smartFileSystem = $smartFileSystem;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->staticTypeMapper = $staticTypeMapper;
+        $this->astResolver = $astResolver;
         $this->parser = $parser;
     }
     /**
@@ -126,6 +134,38 @@ final class FamilyRelationsAnalyzer
             return new \Rector\FamilyTree\ValueObject\PropertyType($varType, $propertyTypeNode);
         }
         return new \Rector\FamilyTree\ValueObject\PropertyType($varType, $propertyTypeNode);
+    }
+    /**
+     * @return string[]
+     * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Interface_|\PhpParser\Node\Name $classOrName
+     */
+    public function getClassLikeAncestorNames($classOrName) : array
+    {
+        $ancestorNames = [];
+        if ($classOrName instanceof \PhpParser\Node\Name) {
+            $fullName = $this->nodeNameResolver->getName($classOrName);
+            $classLike = $this->astResolver->resolveClassFromName($fullName);
+        } else {
+            $classLike = $classOrName;
+        }
+        if ($classLike instanceof \PhpParser\Node\Stmt\Interface_) {
+            foreach ($classLike->extends as $extendInterfaceName) {
+                $ancestorNames[] = $this->nodeNameResolver->getName($extendInterfaceName);
+                $ancestorNames = \array_merge($ancestorNames, $this->getClassLikeAncestorNames($extendInterfaceName));
+            }
+        }
+        if ($classLike instanceof \PhpParser\Node\Stmt\Class_) {
+            if ($classLike->extends instanceof \PhpParser\Node\Name) {
+                $extendName = $classLike->extends;
+                $ancestorNames[] = $this->nodeNameResolver->getName($extendName);
+                $ancestorNames = \array_merge($ancestorNames, $this->getClassLikeAncestorNames($extendName));
+            }
+            foreach ($classLike->implements as $implement) {
+                $ancestorNames[] = $this->nodeNameResolver->getName($implement);
+                $ancestorNames = \array_merge($ancestorNames, $this->getClassLikeAncestorNames($implement));
+            }
+        }
+        return $ancestorNames;
     }
     private function getKindPropertyFetch(\PhpParser\Node\Stmt\Property $property) : string
     {

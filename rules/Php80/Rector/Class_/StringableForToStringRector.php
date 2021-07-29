@@ -8,9 +8,9 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use PHPStan\Type\ObjectType;
-use Rector\Core\NodeManipulator\ClassManipulator;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\MethodName;
+use Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -25,12 +25,12 @@ final class StringableForToStringRector extends \Rector\Core\Rector\AbstractRect
      */
     private const STRINGABLE = 'Stringable';
     /**
-     * @var \Rector\Core\NodeManipulator\ClassManipulator
+     * @var \Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer
      */
-    private $classManipulator;
-    public function __construct(\Rector\Core\NodeManipulator\ClassManipulator $classManipulator)
+    private $familyRelationsAnalyzer;
+    public function __construct(\Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer $familyRelationsAnalyzer)
     {
-        $this->classManipulator = $classManipulator;
+        $this->familyRelationsAnalyzer = $familyRelationsAnalyzer;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -66,11 +66,14 @@ CODE_SAMPLE
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        $toStringClassMethod = $node->getMethod('__toString');
+        $toStringClassMethod = $node->getMethod(\Rector\Core\ValueObject\MethodName::TO_STRING);
         if (!$toStringClassMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
             return null;
         }
-        if ($this->classManipulator->hasInterface($node, new \PHPStan\Type\ObjectType(self::STRINGABLE))) {
+        // warning, classes that implements __toString() will return Stringable interface even if they don't implemen it
+        // reflection cannot be used for real detection
+        $classLikeAncestorNames = $this->familyRelationsAnalyzer->getClassLikeAncestorNames($node);
+        if (\in_array(self::STRINGABLE, $classLikeAncestorNames, \true)) {
             return null;
         }
         // add interface

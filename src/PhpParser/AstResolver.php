@@ -110,13 +110,20 @@ final class AstResolver
     /**
      * @return \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Trait_|\PhpParser\Node\Stmt\Interface_|null
      */
-    public function resolveClassFromObjectType(\PHPStan\Type\TypeWithClassName $typeWithClassName)
+    public function resolveClassFromName(string $className)
     {
-        if (!$this->reflectionProvider->hasClass($typeWithClassName->getClassName())) {
+        if (!$this->reflectionProvider->hasClass($className)) {
             return null;
         }
-        $classReflection = $this->reflectionProvider->getClass($typeWithClassName->getClassName());
-        return $this->resolveClassFromClassReflection($classReflection, $typeWithClassName->getClassName());
+        $classReflection = $this->reflectionProvider->getClass($className);
+        return $this->resolveClassFromClassReflection($classReflection, $className);
+    }
+    /**
+     * @return \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Trait_|\PhpParser\Node\Stmt\Interface_|null
+     */
+    public function resolveClassFromObjectType(\PHPStan\Type\TypeWithClassName $typeWithClassName)
+    {
+        return $this->resolveClassFromName($typeWithClassName->getClassName());
     }
     public function resolveClassMethodFromMethodReflection(\PHPStan\Reflection\MethodReflection $methodReflection) : ?\PhpParser\Node\Stmt\ClassMethod
     {

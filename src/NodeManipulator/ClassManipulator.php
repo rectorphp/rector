@@ -57,17 +57,6 @@ final class ClassManipulator
         });
         return $this->nodeNameResolver->getNames($privateProperties);
     }
-    /**
-     * @return string[]
-     */
-    public function getImplementedInterfaceNames(\PhpParser\Node\Stmt\Class_ $class) : array
-    {
-        return $this->nodeNameResolver->getNames($class->implements);
-    }
-    public function hasInterface(\PhpParser\Node\Stmt\Class_ $class, \PHPStan\Type\ObjectType $interfaceObjectType) : bool
-    {
-        return $this->nodeNameResolver->isName($class->implements, $interfaceObjectType->getClassName());
-    }
     public function hasTrait(\PhpParser\Node\Stmt\Class_ $class, string $desiredTrait) : bool
     {
         foreach ($class->getTraitUses() as $traitUse) {

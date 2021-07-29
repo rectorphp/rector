@@ -851,7 +851,7 @@
             "conflict": {
                 "phpstan\/phpstan-shim": "*"
             },
-            "time": "2021-07-29T14:17:31+00:00",
+            "time": "2021-07-29T15:17:55+00:00",
             "default-branch": true,
             "bin": [
                 "phpstan",
