@@ -7,13 +7,9 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Do_;
 use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\ElseIf_;
@@ -26,9 +22,8 @@ use PhpParser\Node\Stmt\Switch_;
 use PhpParser\Node\Stmt\TryCatch;
 use PhpParser\Node\Stmt\While_;
 use PHPStan\Reflection\ReflectionProvider;
-use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
-use Rector\DeadCode\SideEffect\PureFunctionDetector;
+use Rector\DeadCode\SideEffect\SideEffectNodeDetector;
 use Rector\NodeNestingScope\NodeFinder\ScopeAwareNodeFinder;
 use Rector\NodeNestingScope\ParentFinder;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -44,9 +39,9 @@ final class MoveVariableDeclarationNearReferenceRector extends \Rector\Core\Rect
      */
     private $scopeAwareNodeFinder;
     /**
-     * @var \Rector\DeadCode\SideEffect\PureFunctionDetector
+     * @var \Rector\DeadCode\SideEffect\SideEffectNodeDetector
      */
-    private $pureFunctionDetector;
+    private $sideEffectNodeDetector;
     /**
      * @var \PHPStan\Reflection\ReflectionProvider
      */
@@ -55,10 +50,10 @@ final class MoveVariableDeclarationNearReferenceRector extends \Rector\Core\Rect
      * @var \Rector\NodeNestingScope\ParentFinder
      */
     private $parentFinder;
-    public function __construct(\Rector\NodeNestingScope\NodeFinder\ScopeAwareNodeFinder $scopeAwareNodeFinder, \Rector\DeadCode\SideEffect\PureFunctionDetector $pureFunctionDetector, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\NodeNestingScope\ParentFinder $parentFinder)
+    public function __construct(\Rector\NodeNestingScope\NodeFinder\ScopeAwareNodeFinder $scopeAwareNodeFinder, \Rector\DeadCode\SideEffect\SideEffectNodeDetector $sideEffectNodeDetector, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\NodeNestingScope\ParentFinder $parentFinder)
     {
         $this->scopeAwareNodeFinder = $scopeAwareNodeFinder;
-        $this->pureFunctionDetector = $pureFunctionDetector;
+        $this->sideEffectNodeDetector = $sideEffectNodeDetector;
         $this->reflectionProvider = $reflectionProvider;
         $this->parentFinder = $parentFinder;
     }
@@ -229,29 +224,10 @@ CODE_SAMPLE
         }
         return \false;
     }
-    private function isClassCallerThrowable(\PhpParser\Node\Expr\StaticCall $staticCall) : bool
-    {
-        $class = $staticCall->class;
-        if (!$class instanceof \PhpParser\Node\Name) {
-            return \false;
-        }
-        $throwableType = new \PHPStan\Type\ObjectType('Throwable');
-        $type = new \PHPStan\Type\ObjectType($class->toString());
-        return $throwableType->isSuperTypeOf($type)->yes();
-    }
     private function hasCall(\PhpParser\Node $node) : bool
     {
         return (bool) $this->betterNodeFinder->findFirst($node, function (\PhpParser\Node $n) : bool {
-            if ($n instanceof \PhpParser\Node\Expr\StaticCall && !$this->isClassCallerThrowable($n)) {
-                return \true;
-            }
-            if ($n instanceof \PhpParser\Node\Expr\MethodCall) {
-                return \true;
-            }
-            if (!$n instanceof \PhpParser\Node\Expr\FuncCall) {
-                return \false;
-            }
-            return !$this->pureFunctionDetector->detect($n);
+            return $this->sideEffectNodeDetector->detectCallExpr($n);
         });
     }
     private function getCountFound(\PhpParser\Node $node, \PhpParser\Node\Expr\Variable $variable) : int

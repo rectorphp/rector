@@ -3,16 +3,22 @@
 declare (strict_types=1);
 namespace Rector\DeadCode\SideEffect;
 
+use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Expr\NullsafeMethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\Encapsed;
 use PHPStan\Type\ConstantType;
+use PHPStan\Type\ObjectType;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 final class SideEffectNodeDetector
 {
@@ -20,6 +26,10 @@ final class SideEffectNodeDetector
      * @var array<class-string<Expr>>
      */
     private const SIDE_EFFECT_NODE_TYPES = [\PhpParser\Node\Scalar\Encapsed::class, \PhpParser\Node\Expr\New_::class, \PhpParser\Node\Expr\BinaryOp\Concat::class, \PhpParser\Node\Expr\PropertyFetch::class];
+    /**
+     * @var array<class-string<Expr>>
+     */
+    private const CALL_EXPR_SIDE_EFFECT_NODE_TYPES = [\PhpParser\Node\Expr\MethodCall::class, \PhpParser\Node\Expr\NullsafeMethodCall::class, \PhpParser\Node\Expr\StaticCall::class];
     /**
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
@@ -56,6 +66,33 @@ final class SideEffectNodeDetector
             return !$variable instanceof \PhpParser\Node\Expr\Variable;
         }
         return \true;
+    }
+    public function detectCallExpr(\PhpParser\Node $node) : bool
+    {
+        if (!$node instanceof \PhpParser\Node\Expr) {
+            return \false;
+        }
+        if ($node instanceof \PhpParser\Node\Expr\StaticCall && $this->isClassCallerThrowable($node)) {
+            return \false;
+        }
+        $exprClass = \get_class($node);
+        if (\in_array($exprClass, self::CALL_EXPR_SIDE_EFFECT_NODE_TYPES, \true)) {
+            return \true;
+        }
+        if ($node instanceof \PhpParser\Node\Expr\FuncCall) {
+            return !$this->pureFunctionDetector->detect($node);
+        }
+        return \false;
+    }
+    private function isClassCallerThrowable(\PhpParser\Node\Expr\StaticCall $staticCall) : bool
+    {
+        $class = $staticCall->class;
+        if (!$class instanceof \PhpParser\Node\Name) {
+            return \false;
+        }
+        $throwableType = new \PHPStan\Type\ObjectType('Throwable');
+        $type = new \PHPStan\Type\ObjectType($class->toString());
+        return $throwableType->isSuperTypeOf($type)->yes();
     }
     private function resolveVariable(\PhpParser\Node\Expr $expr) : ?\PhpParser\Node\Expr\Variable
     {
