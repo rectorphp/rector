@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210728;
+namespace RectorPrefix20210729;
 
 if (\class_exists('Tx_Extbase_Reflection_DocCommentParser')) {
     return;

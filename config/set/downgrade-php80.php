@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210728;
+namespace RectorPrefix20210729;
 
 use Rector\Core\Configuration\Option;
 use Rector\Core\ValueObject\PhpVersion;
@@ -12,6 +12,7 @@ use Rector\DowngradePhp80\Rector\ClassConstFetch\DowngradeClassOnObjectToGetClas
 use Rector\DowngradePhp80\Rector\ClassMethod\DowngradeStaticTypeDeclarationRector;
 use Rector\DowngradePhp80\Rector\ClassMethod\DowngradeTrailingCommasInParamUseRector;
 use Rector\DowngradePhp80\Rector\Expression\DowngradeMatchToSwitchRector;
+use Rector\DowngradePhp80\Rector\Expression\DowngradeThrowExprRector;
 use Rector\DowngradePhp80\Rector\FuncCall\DowngradeStrContainsRector;
 use Rector\DowngradePhp80\Rector\FuncCall\DowngradeStrEndsWithRector;
 use Rector\DowngradePhp80\Rector\FuncCall\DowngradeStrStartsWithRector;
@@ -54,4 +55,5 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
     $services->set(\Rector\DowngradePhp80\Rector\FuncCall\DowngradeStrStartsWithRector::class);
     $services->set(\Rector\DowngradePhp80\Rector\FuncCall\DowngradeStrEndsWithRector::class);
     $services->set(\Rector\DowngradePhp80\Rector\StaticCall\DowngradePhpTokenRector::class);
+    $services->set(\Rector\DowngradePhp80\Rector\Expression\DowngradeThrowExprRector::class);
 };

@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210728\TYPO3\CMS\Extbase\Service;
+namespace RectorPrefix20210729\TYPO3\CMS\Extbase\Service;
 
 if (\class_exists('TYPO3\\CMS\\Extbase\\Service\\ImageService')) {
     return;
