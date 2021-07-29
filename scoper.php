@@ -17,9 +17,13 @@ $filePathsToRemoveNamespace = [
     'vendor/symfony/deprecation-contracts/function.php',
     // it would make polyfill function work only with namespace = brokes
     'vendor/symfony/polyfill-ctype/bootstrap.php',
+    'vendor/symfony/polyfill-ctype/bootstrap80.php',
     'vendor/symfony/polyfill-intl-normalizer/bootstrap.php',
+    'vendor/symfony/polyfill-intl-normalizer/bootstrap80.php',
     'vendor/symfony/polyfill-intl-grapheme/bootstrap.php',
+    'vendor/symfony/polyfill-intl-grapheme/bootstrap80.php',
     'vendor/symfony/polyfill-mbstring/bootstrap.php',
+    'vendor/symfony/polyfill-mbstring/bootstrap80.php',
     'vendor/symfony/polyfill-php80/bootstrap.php',
     'vendor/symfony/polyfill-php74/bootstrap.php',
     'vendor/symfony/polyfill-php73/bootstrap.php',
