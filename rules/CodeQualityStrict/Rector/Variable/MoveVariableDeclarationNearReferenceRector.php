@@ -8,13 +8,9 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Do_;
 use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\ElseIf_;
@@ -27,9 +23,8 @@ use PhpParser\Node\Stmt\Switch_;
 use PhpParser\Node\Stmt\TryCatch;
 use PhpParser\Node\Stmt\While_;
 use PHPStan\Reflection\ReflectionProvider;
-use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
-use Rector\DeadCode\SideEffect\PureFunctionDetector;
+use Rector\DeadCode\SideEffect\SideEffectNodeDetector;
 use Rector\NodeNestingScope\NodeFinder\ScopeAwareNodeFinder;
 use Rector\NodeNestingScope\ParentFinder;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -43,7 +38,7 @@ final class MoveVariableDeclarationNearReferenceRector extends AbstractRector
 {
     public function __construct(
         private ScopeAwareNodeFinder $scopeAwareNodeFinder,
-        private PureFunctionDetector $pureFunctionDetector,
+        private SideEffectNodeDetector $sideEffectNodeDetector,
         private ReflectionProvider $reflectionProvider,
         private ParentFinder $parentFinder
     ) {
@@ -267,37 +262,12 @@ CODE_SAMPLE
         return false;
     }
 
-    private function isClassCallerThrowable(StaticCall $staticCall): bool
-    {
-        $class = $staticCall->class;
-        if (! $class instanceof Name) {
-            return false;
-        }
-
-        $throwableType = new ObjectType('Throwable');
-        $type = new ObjectType($class->toString());
-
-        return $throwableType->isSuperTypeOf($type)
-            ->yes();
-    }
-
     private function hasCall(Node $node): bool
     {
-        return (bool) $this->betterNodeFinder->findFirst($node, function (Node $n): bool {
-            if ($n instanceof StaticCall && ! $this->isClassCallerThrowable($n)) {
-                return true;
-            }
-
-            if ($n instanceof MethodCall) {
-                return true;
-            }
-
-            if (! $n instanceof FuncCall) {
-                return false;
-            }
-
-            return ! $this->pureFunctionDetector->detect($n);
-        });
+        return (bool) $this->betterNodeFinder->findFirst(
+            $node,
+            fn (Node $n): bool => $this->sideEffectNodeDetector->detectCallExpr($n)
+        );
     }
 
     private function getCountFound(Node $node, Variable $variable): int
