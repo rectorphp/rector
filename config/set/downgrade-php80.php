@@ -11,6 +11,7 @@ use Rector\DowngradePhp80\Rector\ClassConstFetch\DowngradeClassOnObjectToGetClas
 use Rector\DowngradePhp80\Rector\ClassMethod\DowngradeStaticTypeDeclarationRector;
 use Rector\DowngradePhp80\Rector\ClassMethod\DowngradeTrailingCommasInParamUseRector;
 use Rector\DowngradePhp80\Rector\Expression\DowngradeMatchToSwitchRector;
+use Rector\DowngradePhp80\Rector\Expression\DowngradeThrowExprRector;
 use Rector\DowngradePhp80\Rector\FuncCall\DowngradeStrContainsRector;
 use Rector\DowngradePhp80\Rector\FuncCall\DowngradeStrEndsWithRector;
 use Rector\DowngradePhp80\Rector\FuncCall\DowngradeStrStartsWithRector;
@@ -64,4 +65,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(DowngradeStrStartsWithRector::class);
     $services->set(DowngradeStrEndsWithRector::class);
     $services->set(DowngradePhpTokenRector::class);
+    $services->set(DowngradeThrowExprRector::class);
 };
