@@ -4,14 +4,17 @@ declare (strict_types=1);
 namespace Rector\DowngradePhp80\Rector\Expression;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp\Coalesce;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\Isset_;
+use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Expr\Throw_;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
 use Rector\Core\NodeAnalyzer\CoalesceAnalyzer;
+use Rector\Core\NodeManipulator\BinaryOpManipulator;
 use Rector\Core\NodeManipulator\IfManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -31,10 +34,15 @@ final class DowngradeThrowExprRector extends \Rector\Core\Rector\AbstractRector
      * @var \Rector\Core\NodeAnalyzer\CoalesceAnalyzer
      */
     private $coalesceAnalyzer;
-    public function __construct(\Rector\Core\NodeManipulator\IfManipulator $ifManipulator, \Rector\Core\NodeAnalyzer\CoalesceAnalyzer $coalesceAnalyzer)
+    /**
+     * @var \Rector\Core\NodeManipulator\BinaryOpManipulator
+     */
+    private $binaryOpManipulator;
+    public function __construct(\Rector\Core\NodeManipulator\IfManipulator $ifManipulator, \Rector\Core\NodeAnalyzer\CoalesceAnalyzer $coalesceAnalyzer, \Rector\Core\NodeManipulator\BinaryOpManipulator $binaryOpManipulator)
     {
         $this->ifManipulator = $ifManipulator;
         $this->coalesceAnalyzer = $coalesceAnalyzer;
+        $this->binaryOpManipulator = $binaryOpManipulator;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -95,7 +103,24 @@ CODE_SAMPLE
         if ($assign->expr instanceof \PhpParser\Node\Expr\Throw_) {
             return new \PhpParser\Node\Stmt\Expression($assign->expr);
         }
+        if ($assign->expr instanceof \PhpParser\Node\Expr\Ternary) {
+            return $this->processTernary($assign, $assign->expr);
+        }
         return $expression;
+    }
+    private function processTernary(\PhpParser\Node\Expr\Assign $assign, \PhpParser\Node\Expr\Ternary $ternary) : ?\PhpParser\Node\Stmt\If_
+    {
+        if (!$ternary->else instanceof \PhpParser\Node\Expr\Throw_) {
+            return null;
+        }
+        $inversedTernaryCond = $this->binaryOpManipulator->inverseNode($ternary->cond);
+        if (!$inversedTernaryCond instanceof \PhpParser\Node\Expr) {
+            return null;
+        }
+        $if = $this->ifManipulator->createIfExpr($inversedTernaryCond, new \PhpParser\Node\Stmt\Expression($ternary->else));
+        $assign->expr = $ternary->if === null ? $ternary->cond : $ternary->if;
+        $this->addNodeAfterNode(new \PhpParser\Node\Stmt\Expression($assign), $if);
+        return $if;
     }
     private function processCoalesce(\PhpParser\Node\Expr\Assign $assign, \PhpParser\Node\Expr\BinaryOp\Coalesce $coalesce) : ?\PhpParser\Node\Stmt\If_
     {
