@@ -339,7 +339,7 @@ class Inline
                     $isQuoted = \in_array($sequence[$i], ['"', "'"], \true);
                     $value = self::parseScalar($sequence, $flags, [',', ']'], $i, null === $tag, $references);
                     // the value can be an array if a reference has been resolved to an array var
-                    if (\is_string($value) && !$isQuoted && \strpos($value, ': ') !== \false) {
+                    if (\is_string($value) && !$isQuoted && \false !== \strpos($value, ': ')) {
                         // embedded mapping?
                         try {
                             $pos = 0;
@@ -501,7 +501,7 @@ class Inline
     private static function evaluateScalar(string $scalar, int $flags, array &$references = [])
     {
         $scalar = \trim($scalar);
-        if (\strncmp($scalar, '*', \strlen('*')) === 0) {
+        if (0 === \strpos($scalar, '*')) {
             if (\false !== ($pos = \strpos($scalar, '#'))) {
                 $value = \substr($scalar, 1, $pos - 2);
             } else {
@@ -528,11 +528,11 @@ class Inline
                 return \false;
             case '!' === $scalar[0]:
                 switch (\true) {
-                    case \strncmp($scalar, '!!str ', \strlen('!!str ')) === 0:
+                    case 0 === \strpos($scalar, '!!str '):
                         return (string) \substr($scalar, 6);
-                    case \strncmp($scalar, '! ', \strlen('! ')) === 0:
+                    case 0 === \strpos($scalar, '! '):
                         return \substr($scalar, 2);
-                    case \strncmp($scalar, '!php/object', \strlen('!php/object')) === 0:
+                    case 0 === \strpos($scalar, '!php/object'):
                         if (self::$objectSupport) {
                             if (!isset($scalar[12])) {
                                 trigger_deprecation('symfony/yaml', '5.1', 'Using the !php/object tag without a value is deprecated.');
@@ -544,7 +544,7 @@ class Inline
                             throw new \RectorPrefix20210729\Symfony\Component\Yaml\Exception\ParseException('Object support when parsing a YAML file has been disabled.', self::$parsedLineNumber + 1, $scalar, self::$parsedFilename);
                         }
                         return null;
-                    case \strncmp($scalar, '!php/const', \strlen('!php/const')) === 0:
+                    case 0 === \strpos($scalar, '!php/const'):
                         if (self::$constantSupport) {
                             if (!isset($scalar[11])) {
                                 trigger_deprecation('symfony/yaml', '5.1', 'Using the !php/const tag without a value is deprecated.');
@@ -560,9 +560,9 @@ class Inline
                             throw new \RectorPrefix20210729\Symfony\Component\Yaml\Exception\ParseException(\sprintf('The string "%s" could not be parsed as a constant. Did you forget to pass the "Yaml::PARSE_CONSTANT" flag to the parser?', $scalar), self::$parsedLineNumber + 1, $scalar, self::$parsedFilename);
                         }
                         return null;
-                    case \strncmp($scalar, '!!float ', \strlen('!!float ')) === 0:
+                    case 0 === \strpos($scalar, '!!float '):
                         return (float) \substr($scalar, 8);
-                    case \strncmp($scalar, '!!binary ', \strlen('!!binary ')) === 0:
+                    case 0 === \strpos($scalar, '!!binary '):
                         return self::evaluateBinaryScalar(\substr($scalar, 9));
                     default:
                         throw new \RectorPrefix20210729\Symfony\Component\Yaml\Exception\ParseException(\sprintf('The string "%s" could not be parsed as it uses an unsupported built-in tag.', $scalar), self::$parsedLineNumber, $scalar, self::$parsedFilename);

@@ -1835,6 +1835,7 @@ return array(
     'Rector\\Core\\NodeAnalyzer\\CallAnalyzer' => $baseDir . '/src/NodeAnalyzer/CallAnalyzer.php',
     'Rector\\Core\\NodeAnalyzer\\ChangedNodeAnalyzer' => $baseDir . '/src/NodeAnalyzer/ChangedNodeAnalyzer.php',
     'Rector\\Core\\NodeAnalyzer\\ClassAnalyzer' => $baseDir . '/src/NodeAnalyzer/ClassAnalyzer.php',
+    'Rector\\Core\\NodeAnalyzer\\CoalesceAnalyzer' => $baseDir . '/src/NodeAnalyzer/CoalesceAnalyzer.php',
     'Rector\\Core\\NodeAnalyzer\\CompactFuncCallAnalyzer' => $baseDir . '/src/NodeAnalyzer/CompactFuncCallAnalyzer.php',
     'Rector\\Core\\NodeAnalyzer\\ConstFetchAnalyzer' => $baseDir . '/src/NodeAnalyzer/ConstFetchAnalyzer.php',
     'Rector\\Core\\NodeAnalyzer\\EnumAnalyzer' => $baseDir . '/src/NodeAnalyzer/EnumAnalyzer.php',

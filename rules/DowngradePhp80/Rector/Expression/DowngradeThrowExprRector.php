@@ -8,12 +8,10 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp\Coalesce;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\Isset_;
-use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Throw_;
-use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
+use Rector\Core\NodeAnalyzer\CoalesceAnalyzer;
 use Rector\Core\NodeManipulator\IfManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -29,9 +27,14 @@ final class DowngradeThrowExprRector extends \Rector\Core\Rector\AbstractRector
      * @var \Rector\Core\NodeManipulator\IfManipulator
      */
     private $ifManipulator;
-    public function __construct(\Rector\Core\NodeManipulator\IfManipulator $ifManipulator)
+    /**
+     * @var \Rector\Core\NodeAnalyzer\CoalesceAnalyzer
+     */
+    private $coalesceAnalyzer;
+    public function __construct(\Rector\Core\NodeManipulator\IfManipulator $ifManipulator, \Rector\Core\NodeAnalyzer\CoalesceAnalyzer $coalesceAnalyzer)
     {
         $this->ifManipulator = $ifManipulator;
+        $this->coalesceAnalyzer = $coalesceAnalyzer;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -99,7 +102,7 @@ CODE_SAMPLE
         if (!$coalesce->right instanceof \PhpParser\Node\Expr\Throw_) {
             return null;
         }
-        if (!$coalesce->left instanceof \PhpParser\Node\Expr\Variable && !$coalesce->left instanceof \PhpParser\Node\Expr\PropertyFetch && !$coalesce->left instanceof \PhpParser\Node\Expr\StaticPropertyFetch) {
+        if (!$this->coalesceAnalyzer->hasIssetableLeft($coalesce)) {
             return null;
         }
         $booleanNot = new \PhpParser\Node\Expr\BooleanNot(new \PhpParser\Node\Expr\Isset_([$coalesce->left]));

@@ -331,7 +331,7 @@ class Response
             $this->setProtocolVersion('1.1');
         }
         // Check if we need to send extra expire info headers
-        if ('1.0' == $this->getProtocolVersion() && \strpos($headers->get('Cache-Control'), 'no-cache') !== \false) {
+        if ('1.0' == $this->getProtocolVersion() && \strpos($headers->get('Cache-Control', ''), 'no-cache') !== \false) {
             $headers->set('pragma', 'no-cache');
             $headers->set('expires', -1);
         }

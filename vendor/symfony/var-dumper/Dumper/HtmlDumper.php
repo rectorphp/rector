@@ -72,7 +72,7 @@ class HtmlDumper extends \RectorPrefix20210729\Symfony\Component\VarDumper\Dumpe
     }
     /**
      * Sets an HTML header that will be dumped once in the output stream.
-     * @param string $header
+     * @param string|null $header
      */
     public function setDumpHeader($header)
     {

@@ -30,21 +30,21 @@ if (!\function_exists('preg_last_error_msg')) {
     }
 }
 if (!\function_exists('str_contains')) {
-    function str_contains(string $haystack, string $needle) : bool
+    function str_contains(?string $haystack, ?string $needle) : bool
     {
-        return \RectorPrefix20210729\Symfony\Polyfill\Php80\Php80::str_contains($haystack, $needle);
+        return \RectorPrefix20210729\Symfony\Polyfill\Php80\Php80::str_contains($haystack ?? '', $needle ?? '');
     }
 }
 if (!\function_exists('str_starts_with')) {
-    function str_starts_with(string $haystack, string $needle) : bool
+    function str_starts_with(?string $haystack, ?string $needle) : bool
     {
-        return \RectorPrefix20210729\Symfony\Polyfill\Php80\Php80::str_starts_with($haystack, $needle);
+        return \RectorPrefix20210729\Symfony\Polyfill\Php80\Php80::str_starts_with($haystack ?? '', $needle ?? '');
     }
 }
 if (!\function_exists('str_ends_with')) {
-    function str_ends_with(string $haystack, string $needle) : bool
+    function str_ends_with(?string $haystack, ?string $needle) : bool
     {
-        return \RectorPrefix20210729\Symfony\Polyfill\Php80\Php80::str_ends_with($haystack, $needle);
+        return \RectorPrefix20210729\Symfony\Polyfill\Php80\Php80::str_ends_with($haystack ?? '', $needle ?? '');
     }
 }
 if (!\function_exists('get_debug_type')) {
