@@ -5,14 +5,17 @@ declare(strict_types=1);
 namespace Rector\DowngradePhp80\Rector\Expression;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp\Coalesce;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\Isset_;
+use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Expr\Throw_;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
 use Rector\Core\NodeAnalyzer\CoalesceAnalyzer;
+use Rector\Core\NodeManipulator\BinaryOpManipulator;
 use Rector\Core\NodeManipulator\IfManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -27,7 +30,8 @@ final class DowngradeThrowExprRector extends AbstractRector
 {
     public function __construct(
         private IfManipulator $ifManipulator,
-        private CoalesceAnalyzer $coalesceAnalyzer
+        private CoalesceAnalyzer $coalesceAnalyzer,
+        private BinaryOpManipulator $binaryOpManipulator
     ) {
     }
 
@@ -100,7 +104,31 @@ CODE_SAMPLE
             return new Expression(($assign->expr));
         }
 
+        if ($assign->expr instanceof Ternary) {
+            return $this->processTernary($assign, $assign->expr);
+        }
+
         return $expression;
+    }
+
+    private function processTernary(Assign $assign, Ternary $ternary): ?If_
+    {
+        if (! $ternary->else instanceof Throw_) {
+            return null;
+        }
+
+        $inversedTernaryCond = $this->binaryOpManipulator->inverseNode($ternary->cond);
+        if (! $inversedTernaryCond instanceof Expr) {
+            return null;
+        }
+
+        $if = $this->ifManipulator->createIfExpr($inversedTernaryCond, new Expression($ternary->else));
+        $assign->expr = $ternary->if === null
+            ? $ternary->cond
+            : $ternary->if;
+
+        $this->addNodeAfterNode(new Expression($assign), $if);
+        return $if;
     }
 
     private function processCoalesce(Assign $assign, Coalesce $coalesce): ?If_
