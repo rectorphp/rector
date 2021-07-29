@@ -5,12 +5,11 @@ declare(strict_types=1);
 namespace Rector\DowngradePhp70\Rector\Coalesce;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\BinaryOp\Coalesce;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\Isset_;
 use PhpParser\Node\Expr\Ternary;
-use PhpParser\Node\Expr\Variable;
+use Rector\Core\NodeAnalyzer\CoalesceAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -22,6 +21,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class DowngradeNullCoalesceRector extends AbstractRector
 {
+    public function __construct(private CoalesceAnalyzer $coalesceAnalyzer)
+    {
+    }
+
     /**
      * @return array<class-string<Node>>
      */
@@ -56,7 +59,7 @@ CODE_SAMPLE
         $if = $node->left;
         $else = $node->right;
 
-        if ($if instanceof Variable || $if instanceof ArrayDimFetch) {
+        if ($this->coalesceAnalyzer->hasIssetableLeft($node)) {
             $cond = new Isset_([$if]);
         } else {
             $cond = new NotIdentical($if, $this->nodeFactory->createNull());

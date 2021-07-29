@@ -9,12 +9,10 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp\Coalesce;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\Isset_;
-use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Throw_;
-use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
+use Rector\Core\NodeAnalyzer\CoalesceAnalyzer;
 use Rector\Core\NodeManipulator\IfManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -28,7 +26,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradeThrowExprRector extends AbstractRector
 {
     public function __construct(
-        private IfManipulator $ifManipulator
+        private IfManipulator $ifManipulator,
+        private CoalesceAnalyzer $coalesceAnalyzer
     ) {
     }
 
@@ -110,7 +109,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $coalesce->left instanceof Variable && ! $coalesce->left instanceof PropertyFetch && ! $coalesce->left instanceof StaticPropertyFetch) {
+        if (! $this->coalesceAnalyzer->hasIssetableLeft($coalesce)) {
             return null;
         }
 
