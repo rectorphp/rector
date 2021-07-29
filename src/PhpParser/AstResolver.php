@@ -77,15 +77,20 @@ final class AstResolver
     ) {
     }
 
-    public function resolveClassFromObjectType(
-        TypeWithClassName $typeWithClassName
-    ): Class_ | Trait_ | Interface_ | null {
-        if (! $this->reflectionProvider->hasClass($typeWithClassName->getClassName())) {
+    public function resolveClassFromName(string $className): Class_ | Trait_ | Interface_ | null
+    {
+        if (! $this->reflectionProvider->hasClass($className)) {
             return null;
         }
 
-        $classReflection = $this->reflectionProvider->getClass($typeWithClassName->getClassName());
-        return $this->resolveClassFromClassReflection($classReflection, $typeWithClassName->getClassName());
+        $classReflection = $this->reflectionProvider->getClass($className);
+        return $this->resolveClassFromClassReflection($classReflection, $className);
+    }
+
+    public function resolveClassFromObjectType(
+        TypeWithClassName $typeWithClassName
+    ): Class_ | Trait_ | Interface_ | null {
+        return $this->resolveClassFromName($typeWithClassName->getClassName());
     }
 
     public function resolveClassMethodFromMethodReflection(MethodReflection $methodReflection): ?ClassMethod

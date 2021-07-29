@@ -11,7 +11,9 @@ use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Name;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\UnionType as PhpParserUnionType;
 use PhpParser\Parser;
@@ -21,6 +23,7 @@ use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
+use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\FamilyTree\ValueObject\PropertyType;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -39,6 +42,7 @@ final class FamilyRelationsAnalyzer
         private SmartFileSystem $smartFileSystem,
         private BetterNodeFinder $betterNodeFinder,
         private StaticTypeMapper $staticTypeMapper,
+        private AstResolver $astResolver,
         private Parser $parser
     ) {
     }
@@ -118,6 +122,44 @@ final class FamilyRelationsAnalyzer
         }
 
         return new PropertyType($varType, $propertyTypeNode);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getClassLikeAncestorNames(Class_ | Interface_ | Name $classOrName): array
+    {
+        $ancestorNames = [];
+
+        if ($classOrName instanceof Name) {
+            $fullName = $this->nodeNameResolver->getName($classOrName);
+            $classLike = $this->astResolver->resolveClassFromName($fullName);
+        } else {
+            $classLike = $classOrName;
+        }
+
+        if ($classLike instanceof Interface_) {
+            foreach ($classLike->extends as $extendInterfaceName) {
+                $ancestorNames[] = $this->nodeNameResolver->getName($extendInterfaceName);
+                $ancestorNames = array_merge($ancestorNames, $this->getClassLikeAncestorNames($extendInterfaceName));
+            }
+        }
+
+        if ($classLike instanceof Class_) {
+            if ($classLike->extends instanceof Name) {
+                $extendName = $classLike->extends;
+
+                $ancestorNames[] = $this->nodeNameResolver->getName($extendName);
+                $ancestorNames = array_merge($ancestorNames, $this->getClassLikeAncestorNames($extendName));
+            }
+
+            foreach ($classLike->implements as $implement) {
+                $ancestorNames[] = $this->nodeNameResolver->getName($implement);
+                $ancestorNames = array_merge($ancestorNames, $this->getClassLikeAncestorNames($implement));
+            }
+        }
+
+        return $ancestorNames;
     }
 
     private function getKindPropertyFetch(Property $property): string

@@ -55,19 +55,6 @@ final class ClassManipulator
         return $this->nodeNameResolver->getNames($privateProperties);
     }
 
-    /**
-     * @return string[]
-     */
-    public function getImplementedInterfaceNames(Class_ $class): array
-    {
-        return $this->nodeNameResolver->getNames($class->implements);
-    }
-
-    public function hasInterface(Class_ $class, ObjectType $interfaceObjectType): bool
-    {
-        return $this->nodeNameResolver->isName($class->implements, $interfaceObjectType->getClassName());
-    }
-
     public function hasTrait(Class_ $class, string $desiredTrait): bool
     {
         foreach ($class->getTraitUses() as $traitUse) {

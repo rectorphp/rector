@@ -9,9 +9,9 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use PHPStan\Type\ObjectType;
-use Rector\Core\NodeManipulator\ClassManipulator;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\MethodName;
+use Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -28,7 +28,7 @@ final class StringableForToStringRector extends AbstractRector
     private const STRINGABLE = 'Stringable';
 
     public function __construct(
-        private ClassManipulator $classManipulator
+        private FamilyRelationsAnalyzer $familyRelationsAnalyzer
     ) {
     }
 
@@ -75,12 +75,17 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $toStringClassMethod = $node->getMethod('__toString');
+        $toStringClassMethod = $node->getMethod(MethodName::TO_STRING);
         if (! $toStringClassMethod instanceof ClassMethod) {
             return null;
         }
 
-        if ($this->classManipulator->hasInterface($node, new ObjectType(self::STRINGABLE))) {
+        // warning, classes that implements __toString() will return Stringable interface even if they don't implemen it
+        // reflection cannot be used for real detection
+        $classLikeAncestorNames = $this->familyRelationsAnalyzer->getClassLikeAncestorNames($node);
+
+
+        if (in_array(self::STRINGABLE, $classLikeAncestorNames, true)) {
             return null;
         }
 

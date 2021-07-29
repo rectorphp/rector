@@ -49,4 +49,9 @@ final class MethodName
      * @var string
      */
     public const CALL = '__call';
+
+    /**
+     * @var string
+     */
+    public const TO_STRING = '__toString';
 }

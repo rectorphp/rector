@@ -21,8 +21,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class DowngradeNullCoalesceRector extends AbstractRector
 {
-    public function __construct(private CoalesceAnalyzer $coalesceAnalyzer)
-    {
+    public function __construct(
+        private CoalesceAnalyzer $coalesceAnalyzer
+    ) {
     }
 
     /**
