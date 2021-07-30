@@ -12,7 +12,7 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\TypeDeclaration\NodeAnalyzer\ParentParamMatcher;
+use Rector\TypeDeclaration\NodeAnalyzer\CallerParamMatcher;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -22,7 +22,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ParamTypeByParentCallTypeRector extends AbstractRector
 {
     public function __construct(
-        private ParentParamMatcher $parentParamMatcher
+        private CallerParamMatcher $callerParamMatcher
     ) {
     }
 
@@ -90,8 +90,10 @@ CODE_SAMPLE
             return null;
         }
 
-        /** @var Scope $scope */
         $scope = $node->getAttribute(AttributeKey::SCOPE);
+        if (! $scope instanceof Scope) {
+            return null;
+        }
 
         $hasChanged = false;
 
@@ -101,7 +103,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            $parentParam = $this->parentParamMatcher->matchParentParam($parentStaticCall, $param, $scope);
+            $parentParam = $this->callerParamMatcher->matchParentParam($parentStaticCall, $param, $scope);
             if (! $parentParam instanceof Param) {
                 continue;
             }

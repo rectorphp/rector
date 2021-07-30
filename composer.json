@@ -106,7 +106,8 @@
             "stubs/Doctrine/Common/Persistence/ObjectManager.php",
             "rules-tests/Transform/Rector/FuncCall/FuncCallToMethodCallRector/Source/some_view_function.php",
             "rules-tests/TypeDeclaration/Rector/FunctionLike/ReturnTypeDeclarationRector/Source/MyBar.php",
-            "rules-tests/TypeDeclaration/Rector/Property/CompleteVarDocTypePropertyRector/Source/EventDispatcher.php"
+            "rules-tests/TypeDeclaration/Rector/Property/CompleteVarDocTypePropertyRector/Source/EventDispatcher.php",
+            "rules-tests/TypeDeclaration/Rector/ClassMethod/ParamTypeByMethodCallTypeRector/Source/FunctionTyped.php"
         ]
     },
     "scripts": {

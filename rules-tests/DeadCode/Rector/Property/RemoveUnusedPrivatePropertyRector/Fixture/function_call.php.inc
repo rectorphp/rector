@@ -2,7 +2,7 @@
 
 namespace Rector\Tests\DeadCode\Rector\Property\RemoveUnusedPrivatePropertyRector\Fixture;
 
-class FunctionCall
+final class SomeFunctionCall
 {
     private $prop;
 
@@ -22,7 +22,7 @@ class FunctionCall
 
 namespace Rector\Tests\DeadCode\Rector\Property\RemoveUnusedPrivatePropertyRector\Fixture;
 
-class FunctionCall
+final class SomeFunctionCall
 {
     public function doThing()
     {

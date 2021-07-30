@@ -341,14 +341,6 @@ final class NodeFactory
         return $property;
     }
 
-    /**
-     * @param mixed $value
-     */
-    public function createClassConst(string $name, $value, int $modifier): ClassConst
-    {
-        return $this->createClassConstant($name, $value, $modifier);
-    }
-
     public function createGetterClassMethod(string $propertyName, Type $type): ClassMethod
     {
         $methodBuilder = new MethodBuilder('get' . ucfirst($propertyName));
@@ -571,19 +563,16 @@ final class NodeFactory
         return $this->createBooleanAndFromNodes($newNodes);
     }
 
-    /**
-     * @param mixed $value
-     */
-    public function createClassConstant(string $name, $value, int $modifier): ClassConst
+    public function createClassConstant(string $name, Expr $expr, int $modifier): ClassConst
     {
-        $value = BuilderHelpers::normalizeValue($value);
+        $expr = BuilderHelpers::normalizeValue($expr);
 
-        $const = new Const_($name, $value);
+        $const = new Const_($name, $expr);
         $classConst = new ClassConst([$const]);
         $classConst->flags |= $modifier;
 
         // add @var type by default
-        $staticType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($value);
+        $staticType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($expr);
 
         if (! $staticType instanceof MixedType) {
             $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classConst);
