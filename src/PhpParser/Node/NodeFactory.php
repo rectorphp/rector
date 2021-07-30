@@ -435,19 +435,6 @@ final class NodeFactory
      */
     public function createStaticCall(string $class, string $method, array $args = []): StaticCall
     {
-//
-//        $args = $this->wrapToArg($args);
-//
-//        if (in_array($class, ['self', 'parent', 'static'], true)) {
-//            $class = new Name($class);
-//        } else {
-//            $class = new FullyQualified($class);
-//        }
-//
-//        return new StaticCall($class, $method, $args);
-
-
-
         $class = $this->createClassPart($class);
         $staticCall = new StaticCall($class, $method);
         $staticCall->args = $this->createArgs($args);
