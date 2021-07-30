@@ -315,13 +315,6 @@ final class NodeFactory
         $this->phpDocInfoFactory->createFromNode($property);
         return $property;
     }
-    /**
-     * @param mixed $value
-     */
-    public function createClassConst(string $name, $value, int $modifier) : \PhpParser\Node\Stmt\ClassConst
-    {
-        return $this->createClassConstant($name, $value, $modifier);
-    }
     public function createGetterClassMethod(string $propertyName, \PHPStan\Type\Type $type) : \PhpParser\Node\Stmt\ClassMethod
     {
         $methodBuilder = new \RectorPrefix20210730\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder('get' . \ucfirst($propertyName));
@@ -498,17 +491,14 @@ final class NodeFactory
         }
         return $this->createBooleanAndFromNodes($newNodes);
     }
-    /**
-     * @param mixed $value
-     */
-    public function createClassConstant(string $name, $value, int $modifier) : \PhpParser\Node\Stmt\ClassConst
+    public function createClassConstant(string $name, \PhpParser\Node\Expr $expr, int $modifier) : \PhpParser\Node\Stmt\ClassConst
     {
-        $value = \PhpParser\BuilderHelpers::normalizeValue($value);
-        $const = new \PhpParser\Node\Const_($name, $value);
+        $expr = \PhpParser\BuilderHelpers::normalizeValue($expr);
+        $const = new \PhpParser\Node\Const_($name, $expr);
         $classConst = new \PhpParser\Node\Stmt\ClassConst([$const]);
         $classConst->flags |= $modifier;
         // add @var type by default
-        $staticType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($value);
+        $staticType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($expr);
         if (!$staticType instanceof \PHPStan\Type\MixedType) {
             $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classConst);
             $this->phpDocTypeChanger->changeVarType($phpDocInfo, $staticType);

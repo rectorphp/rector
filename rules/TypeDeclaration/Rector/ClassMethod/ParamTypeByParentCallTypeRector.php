@@ -11,7 +11,7 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\TypeDeclaration\NodeAnalyzer\ParentParamMatcher;
+use Rector\TypeDeclaration\NodeAnalyzer\CallerParamMatcher;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -20,12 +20,12 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ParamTypeByParentCallTypeRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var \Rector\TypeDeclaration\NodeAnalyzer\ParentParamMatcher
+     * @var \Rector\TypeDeclaration\NodeAnalyzer\CallerParamMatcher
      */
-    private $parentParamMatcher;
-    public function __construct(\Rector\TypeDeclaration\NodeAnalyzer\ParentParamMatcher $parentParamMatcher)
+    private $callerParamMatcher;
+    public function __construct(\Rector\TypeDeclaration\NodeAnalyzer\CallerParamMatcher $callerParamMatcher)
     {
-        $this->parentParamMatcher = $parentParamMatcher;
+        $this->callerParamMatcher = $callerParamMatcher;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -82,15 +82,17 @@ CODE_SAMPLE
         if (!$parentStaticCall instanceof \PhpParser\Node\Expr\StaticCall) {
             return null;
         }
-        /** @var Scope $scope */
         $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
+        if (!$scope instanceof \PHPStan\Analyser\Scope) {
+            return null;
+        }
         $hasChanged = \false;
         foreach ($node->params as $param) {
             // already has type, skip
             if ($param->type !== null) {
                 continue;
             }
-            $parentParam = $this->parentParamMatcher->matchParentParam($parentStaticCall, $param, $scope);
+            $parentParam = $this->callerParamMatcher->matchParentParam($parentStaticCall, $param, $scope);
             if (!$parentParam instanceof \PhpParser\Node\Param) {
                 continue;
             }

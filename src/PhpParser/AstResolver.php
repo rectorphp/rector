@@ -4,6 +4,8 @@ declare (strict_types=1);
 namespace Rector\Core\PhpParser;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Param;
@@ -17,6 +19,7 @@ use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Trait_;
 use PhpParser\NodeFinder;
 use PhpParser\Parser;
+use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\Php\PhpFunctionReflection;
@@ -155,6 +158,17 @@ final class AstResolver
         $classMethod = $class->getMethod($methodReflection->getName());
         $this->classMethodsByClassAndMethod[$classReflection->getName()][$methodReflection->getName()] = $classMethod;
         return $classMethod;
+    }
+    /**
+     * @param \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $call
+     * @return \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|null
+     */
+    public function resolveClassMethodOrFunctionFromCall($call, \PHPStan\Analyser\Scope $scope)
+    {
+        if ($call instanceof \PhpParser\Node\Expr\FuncCall) {
+            return $this->resolveFunctionFromFuncCall($call, $scope);
+        }
+        return $this->resolveClassMethodFromCall($call);
     }
     public function resolveFunctionFromFunctionReflection(\PHPStan\Reflection\Php\PhpFunctionReflection $phpFunctionReflection) : ?\PhpParser\Node\Stmt\Function_
     {
@@ -349,5 +363,19 @@ final class AstResolver
             }
         }
         return null;
+    }
+    private function resolveFunctionFromFuncCall(\PhpParser\Node\Expr\FuncCall $funcCall, \PHPStan\Analyser\Scope $scope) : ?\PhpParser\Node\Stmt\Function_
+    {
+        if ($funcCall->name instanceof \PhpParser\Node\Expr) {
+            return null;
+        }
+        if (!$this->reflectionProvider->hasFunction($funcCall->name, $scope)) {
+            return null;
+        }
+        $reflectionFunction = $this->reflectionProvider->getFunction($funcCall->name, $scope);
+        if (!$reflectionFunction instanceof \PHPStan\Reflection\Php\PhpFunctionReflection) {
+            return null;
+        }
+        return $this->resolveFunctionFromFunctionReflection($reflectionFunction);
     }
 }
