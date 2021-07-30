@@ -4,6 +4,13 @@ namespace Rector\Tests\CodingStyle\Rector\FuncCall\CallUserFuncToMethodCallRecto
 
 final class SomeClass
 {
+    private $property;
+
+    public function __construct(\stdClass $property)
+    {
+        $this->property = $property;
+    }
+
     public function run()
     {
         $result = \call_user_func([$this->property, 'method'], $args);
@@ -18,6 +25,13 @@ namespace Rector\Tests\CodingStyle\Rector\FuncCall\CallUserFuncToMethodCallRecto
 
 final class SomeClass
 {
+    private $property;
+
+    public function __construct(\stdClass $property)
+    {
+        $this->property = $property;
+    }
+
     public function run()
     {
         $result = $this->property->method($args);
