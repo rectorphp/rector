@@ -36,8 +36,8 @@ final class PathNormalizer
             $scheme = self::SCHEME_UNDEFINED;
             $path = $originalPath;
         }
-        $path = \str_replace('\\', '/', $path);
-        $path = \RectorPrefix20210730\Nette\Utils\Strings::replace($path, self::TWO_AND_MORE_SLASHES_REGEX, '/');
+        $normalizedPath = \str_replace('\\', '/', $path);
+        $path = \RectorPrefix20210730\Nette\Utils\Strings::replace($normalizedPath, self::TWO_AND_MORE_SLASHES_REGEX, '/');
         $pathRoot = \strncmp($path, '/', \strlen('/')) === 0 ? $directorySeparator : '';
         $pathParts = \explode('/', \trim($path, '/'));
         $normalizedPathParts = $this->normalizePathParts($pathParts, $scheme);

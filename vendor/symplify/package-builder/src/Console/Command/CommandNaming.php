@@ -43,8 +43,8 @@ final class CommandNaming
                 break;
             }
         }
-        $rawCommandName = \lcfirst($rawCommandName);
-        return \RectorPrefix20210730\Nette\Utils\Strings::replace($rawCommandName, self::BIG_LETTER_REGEX, function (array $matches) : string {
+        $lowercasedRawCommandName = \lcfirst($rawCommandName);
+        return \RectorPrefix20210730\Nette\Utils\Strings::replace($lowercasedRawCommandName, self::BIG_LETTER_REGEX, function (array $matches) : string {
             return '-' . \strtolower($matches[0]);
         });
     }

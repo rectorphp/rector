@@ -7,10 +7,10 @@
         "symfony\/console": "^5.3.x-dev",
         "symfony\/http-kernel": "^5.3",
         "symfony\/dependency-injection": "^5.3.x-dev",
-        "symplify\/smart-file-system": "^9.4.23",
-        "symplify\/composer-json-manipulator": "^9.4.23",
-        "symplify\/autowire-array-parameter": "^9.4.23",
-        "symplify\/package-builder": "^9.4.23"
+        "symplify\/smart-file-system": "^9.5",
+        "symplify\/composer-json-manipulator": "^9.5",
+        "symplify\/autowire-array-parameter": "^9.5",
+        "symplify\/package-builder": "^9.5"
     },
     "require-dev": {
         "phpunit\/phpunit": "^9.5"

@@ -67,7 +67,7 @@ final class SmartFileSystem extends \RectorPrefix20210730\Symfony\Component\File
     private function getLastError() : string
     {
         $message = \error_get_last()['message'] ?? '';
-        $message = \ini_get('html_errors') ? $this->htmlToText($message) : $message;
-        return \RectorPrefix20210730\Nette\Utils\Strings::replace($message, self::BEFORE_COLLON_REGEX, '');
+        $htmlMessage = \ini_get('html_errors') ? $this->htmlToText($message) : $message;
+        return \RectorPrefix20210730\Nette\Utils\Strings::replace($htmlMessage, self::BEFORE_COLLON_REGEX, '');
     }
 }
