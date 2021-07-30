@@ -178,9 +178,10 @@ CODE_SAMPLE
         foreach ($stringsToReplace as $stringToReplace) {
             $constantName = $this->createConstName($stringToReplace);
 
-            $classConst = $this->nodeFactory->createPrivateClassConst(
+            $classConst = $this->nodeFactory->createClassConstant(
                 $constantName,
-                new String_($stringToReplace)
+                new String_($stringToReplace),
+                Class_::MODIFIER_PRIVATE
             );
 
             $this->classInsertManipulator->addConstantToClass($class, $stringToReplace, $classConst);
