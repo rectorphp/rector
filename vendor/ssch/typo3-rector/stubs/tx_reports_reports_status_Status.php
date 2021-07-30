@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210729;
+namespace RectorPrefix20210730;
 
 if (\class_exists('tx_reports_reports_status_Status')) {
     return;

@@ -8,17 +8,17 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210729\Symfony\Component\HttpKernel\Controller\ArgumentResolver;
+namespace RectorPrefix20210730\Symfony\Component\HttpKernel\Controller\ArgumentResolver;
 
-use RectorPrefix20210729\Symfony\Component\HttpFoundation\Request;
-use RectorPrefix20210729\Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface;
-use RectorPrefix20210729\Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
+use RectorPrefix20210730\Symfony\Component\HttpFoundation\Request;
+use RectorPrefix20210730\Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface;
+use RectorPrefix20210730\Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 /**
  * Yields the same instance as the request object passed along.
  *
  * @author Iltar van der Berg <kjarli@gmail.com>
  */
-final class RequestValueResolver implements \RectorPrefix20210729\Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface
+final class RequestValueResolver implements \RectorPrefix20210730\Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface
 {
     /**
      * {@inheritdoc}
@@ -27,7 +27,7 @@ final class RequestValueResolver implements \RectorPrefix20210729\Symfony\Compon
      */
     public function supports($request, $argument) : bool
     {
-        return \RectorPrefix20210729\Symfony\Component\HttpFoundation\Request::class === $argument->getType() || \is_subclass_of($argument->getType(), \RectorPrefix20210729\Symfony\Component\HttpFoundation\Request::class);
+        return \RectorPrefix20210730\Symfony\Component\HttpFoundation\Request::class === $argument->getType() || \is_subclass_of($argument->getType(), \RectorPrefix20210730\Symfony\Component\HttpFoundation\Request::class);
     }
     /**
      * {@inheritdoc}

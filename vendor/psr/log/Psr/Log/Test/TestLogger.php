@@ -1,8 +1,8 @@
 <?php
 
-namespace RectorPrefix20210729\Psr\Log\Test;
+namespace RectorPrefix20210730\Psr\Log\Test;
 
-use RectorPrefix20210729\Psr\Log\AbstractLogger;
+use RectorPrefix20210730\Psr\Log\AbstractLogger;
 /**
  * Used for testing purposes.
  *
@@ -53,7 +53,7 @@ use RectorPrefix20210729\Psr\Log\AbstractLogger;
  * @method bool hasInfoThatPasses($message)
  * @method bool hasDebugThatPasses($message)
  */
-class TestLogger extends \RectorPrefix20210729\Psr\Log\AbstractLogger
+class TestLogger extends \RectorPrefix20210730\Psr\Log\AbstractLogger
 {
     /**
      * @var array

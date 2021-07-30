@@ -59,9 +59,9 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
 use Rector\PostRector\ValueObject\PropertyMetadata;
 use Rector\StaticTypeMapper\StaticTypeMapper;
-use RectorPrefix20210729\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
-use RectorPrefix20210729\Symplify\Astral\ValueObject\NodeBuilder\ParamBuilder;
-use RectorPrefix20210729\Symplify\Astral\ValueObject\NodeBuilder\PropertyBuilder;
+use RectorPrefix20210730\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
+use RectorPrefix20210730\Symplify\Astral\ValueObject\NodeBuilder\ParamBuilder;
+use RectorPrefix20210730\Symplify\Astral\ValueObject\NodeBuilder\PropertyBuilder;
 /**
  * @see \Rector\Core\Tests\PhpParser\Node\NodeFactoryTest
  */
@@ -205,13 +205,13 @@ final class NodeFactory
     }
     public function createPublicMethod(string $name) : \PhpParser\Node\Stmt\ClassMethod
     {
-        $methodBuilder = new \RectorPrefix20210729\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder($name);
+        $methodBuilder = new \RectorPrefix20210730\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder($name);
         $methodBuilder->makePublic();
         return $methodBuilder->getNode();
     }
     public function createParamFromNameAndType(string $name, ?\PHPStan\Type\Type $type) : \PhpParser\Node\Param
     {
-        $paramBuilder = new \RectorPrefix20210729\Symplify\Astral\ValueObject\NodeBuilder\ParamBuilder($name);
+        $paramBuilder = new \RectorPrefix20210730\Symplify\Astral\ValueObject\NodeBuilder\ParamBuilder($name);
         if ($type !== null) {
             $typeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type, \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind::PARAM());
             if ($typeNode !== null) {
@@ -222,7 +222,7 @@ final class NodeFactory
     }
     public function createPublicInjectPropertyFromNameAndType(string $name, ?\PHPStan\Type\Type $type) : \PhpParser\Node\Stmt\Property
     {
-        $propertyBuilder = new \RectorPrefix20210729\Symplify\Astral\ValueObject\NodeBuilder\PropertyBuilder($name);
+        $propertyBuilder = new \RectorPrefix20210730\Symplify\Astral\ValueObject\NodeBuilder\PropertyBuilder($name);
         $propertyBuilder->makePublic();
         $property = $propertyBuilder->getNode();
         $this->addPropertyType($property, $type);
@@ -233,7 +233,7 @@ final class NodeFactory
     }
     public function createPrivatePropertyFromNameAndType(string $name, ?\PHPStan\Type\Type $type) : \PhpParser\Node\Stmt\Property
     {
-        $propertyBuilder = new \RectorPrefix20210729\Symplify\Astral\ValueObject\NodeBuilder\PropertyBuilder($name);
+        $propertyBuilder = new \RectorPrefix20210730\Symplify\Astral\ValueObject\NodeBuilder\PropertyBuilder($name);
         $propertyBuilder->makePrivate();
         $property = $propertyBuilder->getNode();
         $this->addPropertyType($property, $type);
@@ -286,7 +286,7 @@ final class NodeFactory
     }
     public function createStaticProtectedPropertyWithDefault(string $name, \PhpParser\Node $node) : \PhpParser\Node\Stmt\Property
     {
-        $propertyBuilder = new \RectorPrefix20210729\Symplify\Astral\ValueObject\NodeBuilder\PropertyBuilder($name);
+        $propertyBuilder = new \RectorPrefix20210730\Symplify\Astral\ValueObject\NodeBuilder\PropertyBuilder($name);
         $propertyBuilder->makeProtected();
         $propertyBuilder->makeStatic();
         $propertyBuilder->setDefault($node);
@@ -294,14 +294,14 @@ final class NodeFactory
     }
     public function createProperty(string $name) : \PhpParser\Node\Stmt\Property
     {
-        $propertyBuilder = new \RectorPrefix20210729\Symplify\Astral\ValueObject\NodeBuilder\PropertyBuilder($name);
+        $propertyBuilder = new \RectorPrefix20210730\Symplify\Astral\ValueObject\NodeBuilder\PropertyBuilder($name);
         $property = $propertyBuilder->getNode();
         $this->phpDocInfoFactory->createFromNode($property);
         return $property;
     }
     public function createPrivateProperty(string $name) : \PhpParser\Node\Stmt\Property
     {
-        $propertyBuilder = new \RectorPrefix20210729\Symplify\Astral\ValueObject\NodeBuilder\PropertyBuilder($name);
+        $propertyBuilder = new \RectorPrefix20210730\Symplify\Astral\ValueObject\NodeBuilder\PropertyBuilder($name);
         $propertyBuilder->makePrivate();
         $property = $propertyBuilder->getNode();
         $this->phpDocInfoFactory->createFromNode($property);
@@ -309,7 +309,7 @@ final class NodeFactory
     }
     public function createPublicProperty(string $name) : \PhpParser\Node\Stmt\Property
     {
-        $propertyBuilder = new \RectorPrefix20210729\Symplify\Astral\ValueObject\NodeBuilder\PropertyBuilder($name);
+        $propertyBuilder = new \RectorPrefix20210730\Symplify\Astral\ValueObject\NodeBuilder\PropertyBuilder($name);
         $propertyBuilder->makePublic();
         $property = $propertyBuilder->getNode();
         $this->phpDocInfoFactory->createFromNode($property);
@@ -318,20 +318,13 @@ final class NodeFactory
     /**
      * @param mixed $value
      */
-    public function createPrivateClassConst(string $name, $value) : \PhpParser\Node\Stmt\ClassConst
+    public function createClassConst(string $name, $value, int $modifier) : \PhpParser\Node\Stmt\ClassConst
     {
-        return $this->createClassConstant($name, $value, \PhpParser\Node\Stmt\Class_::MODIFIER_PRIVATE);
-    }
-    /**
-     * @param mixed $value
-     */
-    public function createPublicClassConst(string $name, $value) : \PhpParser\Node\Stmt\ClassConst
-    {
-        return $this->createClassConstant($name, $value, \PhpParser\Node\Stmt\Class_::MODIFIER_PUBLIC);
+        return $this->createClassConstant($name, $value, $modifier);
     }
     public function createGetterClassMethod(string $propertyName, \PHPStan\Type\Type $type) : \PhpParser\Node\Stmt\ClassMethod
     {
-        $methodBuilder = new \RectorPrefix20210729\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder('get' . \ucfirst($propertyName));
+        $methodBuilder = new \RectorPrefix20210730\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder('get' . \ucfirst($propertyName));
         $methodBuilder->makePublic();
         $propertyFetch = new \PhpParser\Node\Expr\PropertyFetch(new \PhpParser\Node\Expr\Variable(self::THIS), $propertyName);
         $return = new \PhpParser\Node\Stmt\Return_($propertyFetch);
@@ -344,7 +337,7 @@ final class NodeFactory
     }
     public function createSetterClassMethod(string $propertyName, \PHPStan\Type\Type $type) : \PhpParser\Node\Stmt\ClassMethod
     {
-        $methodBuilder = new \RectorPrefix20210729\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder('set' . \ucfirst($propertyName));
+        $methodBuilder = new \RectorPrefix20210730\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder('set' . \ucfirst($propertyName));
         $methodBuilder->makePublic();
         $variable = new \PhpParser\Node\Expr\Variable($propertyName);
         $param = $this->createParamWithType($variable, $type);
@@ -447,7 +440,7 @@ final class NodeFactory
     }
     public function createPromotedPropertyParam(\Rector\PostRector\ValueObject\PropertyMetadata $propertyMetadata) : \PhpParser\Node\Param
     {
-        $paramBuilder = new \RectorPrefix20210729\Symplify\Astral\ValueObject\NodeBuilder\ParamBuilder($propertyMetadata->getName());
+        $paramBuilder = new \RectorPrefix20210730\Symplify\Astral\ValueObject\NodeBuilder\ParamBuilder($propertyMetadata->getName());
         $propertyType = $propertyMetadata->getType();
         if ($propertyType !== null) {
             $typeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($propertyType, \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind::PROPERTY());
@@ -504,6 +497,23 @@ final class NodeFactory
             return $newNodes[0];
         }
         return $this->createBooleanAndFromNodes($newNodes);
+    }
+    /**
+     * @param mixed $value
+     */
+    public function createClassConstant(string $name, $value, int $modifier) : \PhpParser\Node\Stmt\ClassConst
+    {
+        $value = \PhpParser\BuilderHelpers::normalizeValue($value);
+        $const = new \PhpParser\Node\Const_($name, $value);
+        $classConst = new \PhpParser\Node\Stmt\ClassConst([$const]);
+        $classConst->flags |= $modifier;
+        // add @var type by default
+        $staticType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($value);
+        if (!$staticType instanceof \PHPStan\Type\MixedType) {
+            $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classConst);
+            $this->phpDocTypeChanger->changeVarType($phpDocInfo, $staticType);
+        }
+        return $classConst;
     }
     /**
      * @param mixed $item
@@ -567,23 +577,9 @@ final class NodeFactory
         $this->phpDocTypeChanger->changeVarType($phpDocInfo, $type);
     }
     /**
-     * @param mixed $value
+     * @return \PhpParser\Node\Name|\PhpParser\Node\Name\FullyQualified
      */
-    private function createClassConstant(string $name, $value, int $modifier) : \PhpParser\Node\Stmt\ClassConst
-    {
-        $value = \PhpParser\BuilderHelpers::normalizeValue($value);
-        $const = new \PhpParser\Node\Const_($name, $value);
-        $classConst = new \PhpParser\Node\Stmt\ClassConst([$const]);
-        $classConst->flags |= $modifier;
-        // add @var type by default
-        $staticType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($value);
-        if (!$staticType instanceof \PHPStan\Type\MixedType) {
-            $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classConst);
-            $this->phpDocTypeChanger->changeVarType($phpDocInfo, $staticType);
-        }
-        return $classConst;
-    }
-    private function createClassPart(string $class) : \PhpParser\Node\Name
+    private function createClassPart(string $class)
     {
         if (\in_array($class, self::REFERENCES, \true)) {
             return new \PhpParser\Node\Name($class);

@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210729;
+namespace RectorPrefix20210730;
 
 if (\class_exists('Tx_Extbase_Property_TypeConverter_BooleanConverter')) {
     return;

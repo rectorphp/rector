@@ -6,8 +6,8 @@ namespace Rector\Caching;
 use Rector\Caching\ValueObject\Storage\FileCacheStorage;
 use Rector\Caching\ValueObject\Storage\MemoryCacheStorage;
 use Rector\Core\Configuration\Option;
-use RectorPrefix20210729\Symplify\PackageBuilder\Parameter\ParameterProvider;
-use RectorPrefix20210729\Symplify\SmartFileSystem\SmartFileSystem;
+use RectorPrefix20210730\Symplify\PackageBuilder\Parameter\ParameterProvider;
+use RectorPrefix20210730\Symplify\SmartFileSystem\SmartFileSystem;
 final class CacheFactory
 {
     /**
@@ -18,7 +18,7 @@ final class CacheFactory
      * @var \Symplify\SmartFileSystem\SmartFileSystem
      */
     private $smartFileSystem;
-    public function __construct(\RectorPrefix20210729\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \RectorPrefix20210729\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem)
+    public function __construct(\RectorPrefix20210730\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \RectorPrefix20210730\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem)
     {
         $this->parameterProvider = $parameterProvider;
         $this->smartFileSystem = $smartFileSystem;

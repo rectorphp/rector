@@ -22,7 +22,7 @@ use Rector\PostRector\Collector\PropertyToAddCollector;
 use Rector\PostRector\ValueObject\PropertyMetadata;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20210729\Webmozart\Assert\Assert;
+use RectorPrefix20210730\Webmozart\Assert\Assert;
 /**
  * @changelog https://php.watch/articles/php-attributes#syntax
  *
@@ -163,7 +163,7 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $shouldRemoveAnnotations = $configuration[self::REMOVE_ANNOTATIONS] ?? \true;
-        \RectorPrefix20210729\Webmozart\Assert\Assert::boolean($shouldRemoveAnnotations);
+        \RectorPrefix20210730\Webmozart\Assert\Assert::boolean($shouldRemoveAnnotations);
         $this->shouldRemoveAnnotations = $shouldRemoveAnnotations;
     }
     /**
