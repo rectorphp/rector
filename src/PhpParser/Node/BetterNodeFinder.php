@@ -372,7 +372,7 @@ final class BetterNodeFinder
 
             return array_filter(
                 $variables,
-                fn (Variable $variable) => $this->nodeNameResolver->isName($variable, $exprName)
+                fn (Variable $variable): bool => $this->nodeNameResolver->isName($variable, $exprName)
             );
         }
 
@@ -393,7 +393,7 @@ final class BetterNodeFinder
 
         return array_filter(
             $propertyFetches,
-            fn (PropertyFetch | StaticPropertyFetch $propertyFetch) =>
+            fn (PropertyFetch | StaticPropertyFetch $propertyFetch): bool =>
                 $this->nodeNameResolver->isName($propertyFetch->name, $exprName)
         );
     }

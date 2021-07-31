@@ -121,7 +121,7 @@ final class PhpDocInfo
         $tags = $this->phpDocNode->getTags();
         $name = $this->annotationNaming->normalizeName($name);
 
-        $tags = array_filter($tags, fn (PhpDocTagNode $tag) => $tag->name === $name);
+        $tags = array_filter($tags, fn (PhpDocTagNode $tag): bool => $tag->name === $name);
 
         $tags = array_values($tags);
         return array_values($tags);
@@ -472,7 +472,7 @@ final class PhpDocInfo
         return $this->node;
     }
 
-    private function getTypeOrMixed(?PhpDocTagValueNode $phpDocTagValueNode): Type
+    private function getTypeOrMixed(?PhpDocTagValueNode $phpDocTagValueNode): MixedType | Type
     {
         if ($phpDocTagValueNode === null) {
             return new MixedType();

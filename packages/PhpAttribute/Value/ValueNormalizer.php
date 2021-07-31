@@ -41,7 +41,7 @@ final class ValueNormalizer
 
         if ($value instanceof CurlyListNode) {
             return array_map(
-                fn ($node) => $this->normalize($node),
+                fn ($node): array | bool | float | int | Expr | string => $this->normalize($node),
                 $value->getValuesWithExplicitSilentAndWithoutQuotes()
             );
         }
@@ -57,7 +57,7 @@ final class ValueNormalizer
         }
 
         if (\is_array($value)) {
-            return array_map(fn ($item) => $this->normalize($item), $value);
+            return array_map(fn ($item): array | bool | float | int | Expr | string => $this->normalize($item), $value);
         }
 
         return $value;

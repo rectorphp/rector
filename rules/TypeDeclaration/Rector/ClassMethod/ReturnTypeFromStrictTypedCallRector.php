@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\TypeDeclaration\Rector\ClassMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Identifier;
@@ -21,6 +22,7 @@ use PHPStan\Type\UnionType;
 use PHPStan\Type\VoidType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
 use Rector\TypeDeclaration\NodeAnalyzer\ReturnStrictTypeAnalyzer;
 use Rector\TypeDeclaration\NodeAnalyzer\TypeNodeUnwrapper;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
@@ -81,11 +83,11 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [ClassMethod::class, Function_::class, Closure::class];
+        return [ClassMethod::class, Function_::class, Closure::class, ArrowFunction::class];
     }
 
     /**
-     * @param ClassMethod|Function_|Closure $node
+     * @param ClassMethod|Function_|Closure|ArrowFunction $node
      */
     public function refactor(Node $node): ?Node
     {
@@ -93,8 +95,8 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($this->isUnionPossibleReturnsVoid($node)) {
-            return null;
+        if ($node instanceof ArrowFunction) {
+            return $this->processArrowFunction($node);
         }
 
         /** @var Return_[] $returns */
@@ -138,7 +140,20 @@ CODE_SAMPLE
         return null;
     }
 
-    private function isUnionPossibleReturnsVoid(ClassMethod | Function_ | Closure $node): bool
+    private function processArrowFunction(ArrowFunction $arrowFunction): ?ArrowFunction
+    {
+        $resolvedType = $this->nodeTypeResolver->resolve($arrowFunction->expr);
+        $returnType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($resolvedType, TypeKind::RETURN());
+
+        if (! $returnType instanceof Node) {
+            return null;
+        }
+
+        $arrowFunction->returnType = $returnType;
+        return $arrowFunction;
+    }
+
+    private function isUnionPossibleReturnsVoid(ClassMethod | Function_ | Closure | ArrowFunction $node): bool
     {
         $inferReturnType = $this->returnTypeInferer->inferFunctionLike($node);
         if ($inferReturnType instanceof UnionType) {
@@ -166,7 +181,7 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function isSkipped(ClassMethod | Function_ | Closure $node): bool
+    private function isSkipped(ClassMethod | Function_ | Closure | ArrowFunction $node): bool
     {
         if (! $this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::SCALAR_TYPES)) {
             return true;
@@ -175,8 +190,13 @@ CODE_SAMPLE
         if ($node->returnType !== null) {
             return true;
         }
-
-        return $node instanceof ClassMethod && $node->isMagic();
+        if (! $node instanceof ClassMethod) {
+            return $this->isUnionPossibleReturnsVoid($node);
+        }
+        if (! $node->isMagic()) {
+            return $this->isUnionPossibleReturnsVoid($node);
+        }
+        return true;
     }
 
     private function refactorSingleReturnType(

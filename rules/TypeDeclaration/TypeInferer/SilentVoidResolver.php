@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\TypeDeclaration\TypeInferer;
 
+use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Yield_;
 use PhpParser\Node\Stmt;
@@ -56,8 +57,12 @@ final class SilentVoidResolver
         return true;
     }
 
-    public function hasSilentVoid(ClassMethod | Closure | Function_ $functionLike): bool
+    public function hasSilentVoid(ClassMethod | Closure | Function_ | ArrowFunction $functionLike): bool
     {
+        if ($functionLike instanceof ArrowFunction) {
+            return false;
+        }
+
         if ($this->hasStmtsAlwaysReturn((array) $functionLike->stmts)) {
             return false;
         }
