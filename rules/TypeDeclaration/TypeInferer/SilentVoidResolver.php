@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\TypeDeclaration\TypeInferer;
 
+use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Yield_;
 use PhpParser\Node\Stmt;
@@ -55,10 +56,13 @@ final class SilentVoidResolver
         return \true;
     }
     /**
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\Function_ $functionLike
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\ArrowFunction $functionLike
      */
     public function hasSilentVoid($functionLike) : bool
     {
+        if ($functionLike instanceof \PhpParser\Node\Expr\ArrowFunction) {
+            return \false;
+        }
         if ($this->hasStmtsAlwaysReturn((array) $functionLike->stmts)) {
             return \false;
         }

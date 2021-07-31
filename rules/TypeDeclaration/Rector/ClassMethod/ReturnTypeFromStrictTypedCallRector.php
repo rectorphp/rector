@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\TypeDeclaration\Rector\ClassMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Identifier;
@@ -20,6 +21,7 @@ use PHPStan\Type\UnionType;
 use PHPStan\Type\VoidType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
 use Rector\TypeDeclaration\NodeAnalyzer\ReturnStrictTypeAnalyzer;
 use Rector\TypeDeclaration\NodeAnalyzer\TypeNodeUnwrapper;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
@@ -85,18 +87,18 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\ClassMethod::class, \PhpParser\Node\Stmt\Function_::class, \PhpParser\Node\Expr\Closure::class];
+        return [\PhpParser\Node\Stmt\ClassMethod::class, \PhpParser\Node\Stmt\Function_::class, \PhpParser\Node\Expr\Closure::class, \PhpParser\Node\Expr\ArrowFunction::class];
     }
     /**
-     * @param ClassMethod|Function_|Closure $node
+     * @param ClassMethod|Function_|Closure|ArrowFunction $node
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($this->isSkipped($node)) {
             return null;
         }
-        if ($this->isUnionPossibleReturnsVoid($node)) {
-            return null;
+        if ($node instanceof \PhpParser\Node\Expr\ArrowFunction) {
+            return $this->processArrowFunction($node);
         }
         /** @var Return_[] $returns */
         $returns = $this->betterNodeFinder->find((array) $node->stmts, function (\PhpParser\Node $n) use($node) : bool {
@@ -130,8 +132,18 @@ CODE_SAMPLE
         }
         return null;
     }
+    private function processArrowFunction(\PhpParser\Node\Expr\ArrowFunction $arrowFunction) : ?\PhpParser\Node\Expr\ArrowFunction
+    {
+        $resolvedType = $this->nodeTypeResolver->resolve($arrowFunction->expr);
+        $returnType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($resolvedType, \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind::RETURN());
+        if (!$returnType instanceof \PhpParser\Node) {
+            return null;
+        }
+        $arrowFunction->returnType = $returnType;
+        return $arrowFunction;
+    }
     /**
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $node
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Expr\ArrowFunction $node
      */
     private function isUnionPossibleReturnsVoid($node) : bool
     {
@@ -157,7 +169,7 @@ CODE_SAMPLE
         return $node;
     }
     /**
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $node
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Expr\ArrowFunction $node
      */
     private function isSkipped($node) : bool
     {
@@ -167,7 +179,13 @@ CODE_SAMPLE
         if ($node->returnType !== null) {
             return \true;
         }
-        return $node instanceof \PhpParser\Node\Stmt\ClassMethod && $node->isMagic();
+        if (!$node instanceof \PhpParser\Node\Stmt\ClassMethod) {
+            return $this->isUnionPossibleReturnsVoid($node);
+        }
+        if (!$node->isMagic()) {
+            return $this->isUnionPossibleReturnsVoid($node);
+        }
+        return \true;
     }
     /**
      * @param \PhpParser\Node\Identifier|\PhpParser\Node\Name|\PhpParser\Node\NullableType|PhpParserUnionType $returnedStrictTypeNode

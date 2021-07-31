@@ -345,7 +345,7 @@ final class BetterNodeFinder
                 return [];
             }
             $variables = $this->findInstancesOf($scopeNode, [\PhpParser\Node\Expr\Variable::class]);
-            return \array_filter($variables, function (\PhpParser\Node\Expr\Variable $variable) use($exprName) {
+            return \array_filter($variables, function (\PhpParser\Node\Expr\Variable $variable) use($exprName) : bool {
                 return $this->nodeNameResolver->isName($variable, $exprName);
             });
         }
@@ -361,7 +361,7 @@ final class BetterNodeFinder
             return [];
         }
         $propertyFetches = $this->findInstancesOf($scopeNode, [\PhpParser\Node\Expr\PropertyFetch::class, \PhpParser\Node\Expr\StaticPropertyFetch::class]);
-        return \array_filter($propertyFetches, function ($propertyFetch) use($exprName) {
+        return \array_filter($propertyFetches, function ($propertyFetch) use($exprName) : bool {
             return $this->nodeNameResolver->isName($propertyFetch->name, $exprName);
         });
     }
