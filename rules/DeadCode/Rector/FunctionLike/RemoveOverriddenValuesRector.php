@@ -12,6 +12,7 @@ use Rector\Core\Php\ReservedKeywordAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DeadCode\NodeCollector\NodeByTypeAndPositionCollector;
 use Rector\DeadCode\NodeFinder\VariableUseFinder;
+use Rector\DeadCode\SideEffect\SideEffectNodeDetector;
 use Rector\DeadCode\ValueObject\VariableNodeUse;
 use Rector\NodeNestingScope\ContextAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -27,7 +28,8 @@ final class RemoveOverriddenValuesRector extends AbstractRector
         private ContextAnalyzer $contextAnalyzer,
         private NodeByTypeAndPositionCollector $nodeByTypeAndPositionCollector,
         private VariableUseFinder $variableUseFinder,
-        private ReservedKeywordAnalyzer $reservedKeywordAnalyzer
+        private ReservedKeywordAnalyzer $reservedKeywordAnalyzer,
+        private SideEffectNodeDetector $sideEffectNodeDetector
     ) {
     }
 
@@ -124,6 +126,10 @@ CODE_SAMPLE
             /** @var Assign $assignNode */
             $assignNode = $node->getAttribute(AttributeKey::PARENT_NODE);
             if ($assignNode->var !== $node) {
+                return false;
+            }
+
+            if ($this->sideEffectNodeDetector->detectCallExpr($assignNode->expr)) {
                 return false;
             }
 
