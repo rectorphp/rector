@@ -28,7 +28,7 @@ final class SomeStaticCall
     public function run(array $values)
     {
         usort($values, function (int $first, $second) : bool {
-            return SomeStaticCall::compareSize($first, $second);
+            return \Rector\Tests\CodeQuality\Rector\Array_\CallableThisArrayToAnonymousFunctionRector\Fixture\SomeStaticCall::compareSize($first, $second);
         });
 
         return $values;
