@@ -12,10 +12,12 @@ use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\ClosureUse;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\LNumber;
@@ -98,19 +100,17 @@ final class AnonymousFunctionFactory
         $anonymousFunctionNode->stmts = $stmts;
         return $anonymousFunctionNode;
     }
-    public function createFromPhpMethodReflection(\PHPStan\Reflection\Php\PhpMethodReflection $phpMethodReflection, \PhpParser\Node\Expr $expr) : \PhpParser\Node\Expr\Closure
+    public function createFromPhpMethodReflection(\PHPStan\Reflection\Php\PhpMethodReflection $phpMethodReflection, \PhpParser\Node\Expr $expr) : ?\PhpParser\Node\Expr\Closure
     {
         /** @var FunctionVariantWithPhpDocs $functionVariantWithPhpDoc */
         $functionVariantWithPhpDoc = \PHPStan\Reflection\ParametersAcceptorSelector::selectSingle($phpMethodReflection->getVariants());
         $anonymousFunction = new \PhpParser\Node\Expr\Closure();
         $newParams = $this->createParams($functionVariantWithPhpDoc->getParameters());
         $anonymousFunction->params = $newParams;
-        if ($expr instanceof \PhpParser\Node\Expr\ClassConstFetch && $expr->name instanceof \PhpParser\Node\Identifier && $this->nodeNameResolver->isName($expr->name, 'class')) {
-            /** @var Expr $expr */
-            $expr = $expr->class;
+        $innerMethodCall = $this->createInnerMethodCall($phpMethodReflection, $expr, $newParams);
+        if ($innerMethodCall === null) {
+            return null;
         }
-        $innerMethodCall = $phpMethodReflection->isStatic() ? new \PhpParser\Node\Expr\StaticCall($expr, $phpMethodReflection->getName()) : new \PhpParser\Node\Expr\MethodCall($expr, $phpMethodReflection->getName());
-        $innerMethodCall->args = $this->nodeFactory->createArgsFromParams($newParams);
         if (!$functionVariantWithPhpDoc->getReturnType() instanceof \PHPStan\Type\MixedType) {
             $returnType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($functionVariantWithPhpDoc->getReturnType(), \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind::RETURN());
             $anonymousFunction->returnType = $returnType;
@@ -208,5 +208,63 @@ final class AnonymousFunctionFactory
             $params[] = $param;
         }
         return $params;
+    }
+    /**
+     * @param Param[] $params
+     * @return \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|null
+     */
+    private function createInnerMethodCall(\PHPStan\Reflection\Php\PhpMethodReflection $phpMethodReflection, \PhpParser\Node\Expr $expr, array $params)
+    {
+        if ($phpMethodReflection->isStatic()) {
+            $expr = $this->normalizeClassConstFetchForStatic($expr);
+            if ($expr === null) {
+                return null;
+            }
+            $innerMethodCall = new \PhpParser\Node\Expr\StaticCall($expr, $phpMethodReflection->getName());
+        } else {
+            $expr = $this->resolveExpr($expr);
+            if (!$expr instanceof \PhpParser\Node\Expr) {
+                return null;
+            }
+            $innerMethodCall = new \PhpParser\Node\Expr\MethodCall($expr, $phpMethodReflection->getName());
+        }
+        $innerMethodCall->args = $this->nodeFactory->createArgsFromParams($params);
+        return $innerMethodCall;
+    }
+    /**
+     * @return null|\PhpParser\Node\Name\FullyQualified|\PhpParser\Node\Expr
+     */
+    private function normalizeClassConstFetchForStatic(\PhpParser\Node\Expr $expr)
+    {
+        if (!$expr instanceof \PhpParser\Node\Expr\ClassConstFetch) {
+            return $expr;
+        }
+        if (!$this->nodeNameResolver->isName($expr->name, 'class')) {
+            return $expr;
+        }
+        // dynamic name, nothing we can do
+        $className = $this->nodeNameResolver->getName($expr->class);
+        if ($className === null) {
+            return null;
+        }
+        return new \PhpParser\Node\Name\FullyQualified($className);
+    }
+    /**
+     * @return \PhpParser\Node\Expr\New_|\PhpParser\Node\Expr|null
+     */
+    private function resolveExpr(\PhpParser\Node\Expr $expr)
+    {
+        if (!$expr instanceof \PhpParser\Node\Expr\ClassConstFetch) {
+            return $expr;
+        }
+        if (!$this->nodeNameResolver->isName($expr->name, 'class')) {
+            return $expr;
+        }
+        // dynamic name, nothing we can do
+        $className = $this->nodeNameResolver->getName($expr->class);
+        if ($className === null) {
+            return null;
+        }
+        return new \PhpParser\Node\Expr\New_(new \PhpParser\Node\Name\FullyQualified($className));
     }
 }
