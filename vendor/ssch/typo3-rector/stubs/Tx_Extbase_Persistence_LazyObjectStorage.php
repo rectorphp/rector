@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210730;
+namespace RectorPrefix20210731;
 
 if (\class_exists('Tx_Extbase_Persistence_LazyObjectStorage')) {
     return;

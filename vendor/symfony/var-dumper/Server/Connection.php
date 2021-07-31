@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210730\Symfony\Component\VarDumper\Server;
+namespace RectorPrefix20210731\Symfony\Component\VarDumper\Server;
 
-use RectorPrefix20210730\Symfony\Component\VarDumper\Cloner\Data;
-use RectorPrefix20210730\Symfony\Component\VarDumper\Dumper\ContextProvider\ContextProviderInterface;
+use RectorPrefix20210731\Symfony\Component\VarDumper\Cloner\Data;
+use RectorPrefix20210731\Symfony\Component\VarDumper\Dumper\ContextProvider\ContextProviderInterface;
 /**
  * Forwards serialized Data clones to a server.
  *

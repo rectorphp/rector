@@ -11,6 +11,7 @@ use Rector\Core\Php\ReservedKeywordAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DeadCode\NodeCollector\NodeByTypeAndPositionCollector;
 use Rector\DeadCode\NodeFinder\VariableUseFinder;
+use Rector\DeadCode\SideEffect\SideEffectNodeDetector;
 use Rector\DeadCode\ValueObject\VariableNodeUse;
 use Rector\NodeNestingScope\ContextAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -37,12 +38,17 @@ final class RemoveOverriddenValuesRector extends \Rector\Core\Rector\AbstractRec
      * @var \Rector\Core\Php\ReservedKeywordAnalyzer
      */
     private $reservedKeywordAnalyzer;
-    public function __construct(\Rector\NodeNestingScope\ContextAnalyzer $contextAnalyzer, \Rector\DeadCode\NodeCollector\NodeByTypeAndPositionCollector $nodeByTypeAndPositionCollector, \Rector\DeadCode\NodeFinder\VariableUseFinder $variableUseFinder, \Rector\Core\Php\ReservedKeywordAnalyzer $reservedKeywordAnalyzer)
+    /**
+     * @var \Rector\DeadCode\SideEffect\SideEffectNodeDetector
+     */
+    private $sideEffectNodeDetector;
+    public function __construct(\Rector\NodeNestingScope\ContextAnalyzer $contextAnalyzer, \Rector\DeadCode\NodeCollector\NodeByTypeAndPositionCollector $nodeByTypeAndPositionCollector, \Rector\DeadCode\NodeFinder\VariableUseFinder $variableUseFinder, \Rector\Core\Php\ReservedKeywordAnalyzer $reservedKeywordAnalyzer, \Rector\DeadCode\SideEffect\SideEffectNodeDetector $sideEffectNodeDetector)
     {
         $this->contextAnalyzer = $contextAnalyzer;
         $this->nodeByTypeAndPositionCollector = $nodeByTypeAndPositionCollector;
         $this->variableUseFinder = $variableUseFinder;
         $this->reservedKeywordAnalyzer = $reservedKeywordAnalyzer;
+        $this->sideEffectNodeDetector = $sideEffectNodeDetector;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -115,6 +121,9 @@ CODE_SAMPLE
             /** @var Assign $assignNode */
             $assignNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
             if ($assignNode->var !== $node) {
+                return \false;
+            }
+            if ($this->sideEffectNodeDetector->detectCallExpr($assignNode->expr)) {
                 return \false;
             }
             // simple variable only

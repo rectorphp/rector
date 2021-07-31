@@ -20,7 +20,7 @@ use Rector\Core\PhpParser\Comparing\ConditionSearcher;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DeadCode\NodeAnalyzer\ExprUsedInNextNodeAnalyzer;
 use Rector\DeadCode\NodeAnalyzer\UsedVariableNameAnalyzer;
-use Rector\DeadCode\SideEffect\PureFunctionDetector;
+use Rector\DeadCode\SideEffect\SideEffectNodeDetector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -42,19 +42,19 @@ final class RemoveUnusedVariableAssignRector extends \Rector\Core\Rector\Abstrac
      */
     private $usedVariableNameAnalyzer;
     /**
-     * @var \Rector\DeadCode\SideEffect\PureFunctionDetector
+     * @var \Rector\DeadCode\SideEffect\SideEffectNodeDetector
      */
-    private $pureFunctionDetector;
+    private $sideEffectNodeDetector;
     /**
      * @var \Rector\DeadCode\NodeAnalyzer\ExprUsedInNextNodeAnalyzer
      */
     private $exprUsedInNextNodeAnalyzer;
-    public function __construct(\Rector\Core\Php\ReservedKeywordAnalyzer $reservedKeywordAnalyzer, \Rector\Core\PhpParser\Comparing\ConditionSearcher $conditionSearcher, \Rector\DeadCode\NodeAnalyzer\UsedVariableNameAnalyzer $usedVariableNameAnalyzer, \Rector\DeadCode\SideEffect\PureFunctionDetector $pureFunctionDetector, \Rector\DeadCode\NodeAnalyzer\ExprUsedInNextNodeAnalyzer $exprUsedInNextNodeAnalyzer)
+    public function __construct(\Rector\Core\Php\ReservedKeywordAnalyzer $reservedKeywordAnalyzer, \Rector\Core\PhpParser\Comparing\ConditionSearcher $conditionSearcher, \Rector\DeadCode\NodeAnalyzer\UsedVariableNameAnalyzer $usedVariableNameAnalyzer, \Rector\DeadCode\SideEffect\SideEffectNodeDetector $sideEffectNodeDetector, \Rector\DeadCode\NodeAnalyzer\ExprUsedInNextNodeAnalyzer $exprUsedInNextNodeAnalyzer)
     {
         $this->reservedKeywordAnalyzer = $reservedKeywordAnalyzer;
         $this->conditionSearcher = $conditionSearcher;
         $this->usedVariableNameAnalyzer = $usedVariableNameAnalyzer;
-        $this->pureFunctionDetector = $pureFunctionDetector;
+        $this->sideEffectNodeDetector = $sideEffectNodeDetector;
         $this->exprUsedInNextNodeAnalyzer = $exprUsedInNextNodeAnalyzer;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
@@ -109,19 +109,12 @@ CODE_SAMPLE
         if (!$parentNode instanceof \PhpParser\Node\Stmt\Expression) {
             return null;
         }
-        if ($node->expr instanceof \PhpParser\Node\Expr\MethodCall || $node->expr instanceof \PhpParser\Node\Expr\StaticCall || $this->isImpureFunction($node->expr)) {
+        if ($this->sideEffectNodeDetector->detectCallExpr($node->expr)) {
             // keep the expr, can have side effect
             return $node->expr;
         }
         $this->removeNode($node);
         return $node;
-    }
-    private function isImpureFunction(\PhpParser\Node\Expr $expr) : bool
-    {
-        if (!$expr instanceof \PhpParser\Node\Expr\FuncCall) {
-            return \false;
-        }
-        return !$this->pureFunctionDetector->detect($expr);
     }
     private function shouldSkip(\PhpParser\Node\Expr\Assign $assign) : bool
     {

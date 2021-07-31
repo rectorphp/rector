@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210730;
+namespace RectorPrefix20210731;
 
 if (\class_exists('Tx_Extbase_MVC_Web_Routing_UriBuilder')) {
     return;

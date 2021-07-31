@@ -8,16 +8,16 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210730\Symfony\Component\HttpKernel;
+namespace RectorPrefix20210731\Symfony\Component\HttpKernel;
 
-use RectorPrefix20210730\Symfony\Component\BrowserKit\AbstractBrowser;
-use RectorPrefix20210730\Symfony\Component\BrowserKit\CookieJar;
-use RectorPrefix20210730\Symfony\Component\BrowserKit\History;
-use RectorPrefix20210730\Symfony\Component\BrowserKit\Request as DomRequest;
-use RectorPrefix20210730\Symfony\Component\BrowserKit\Response as DomResponse;
-use RectorPrefix20210730\Symfony\Component\HttpFoundation\File\UploadedFile;
-use RectorPrefix20210730\Symfony\Component\HttpFoundation\Request;
-use RectorPrefix20210730\Symfony\Component\HttpFoundation\Response;
+use RectorPrefix20210731\Symfony\Component\BrowserKit\AbstractBrowser;
+use RectorPrefix20210731\Symfony\Component\BrowserKit\CookieJar;
+use RectorPrefix20210731\Symfony\Component\BrowserKit\History;
+use RectorPrefix20210731\Symfony\Component\BrowserKit\Request as DomRequest;
+use RectorPrefix20210731\Symfony\Component\BrowserKit\Response as DomResponse;
+use RectorPrefix20210731\Symfony\Component\HttpFoundation\File\UploadedFile;
+use RectorPrefix20210731\Symfony\Component\HttpFoundation\Request;
+use RectorPrefix20210731\Symfony\Component\HttpFoundation\Response;
 /**
  * Simulates a browser and makes requests to an HttpKernel instance.
  *
@@ -26,14 +26,14 @@ use RectorPrefix20210730\Symfony\Component\HttpFoundation\Response;
  * @method Request  getRequest()  A Request instance
  * @method Response getResponse() A Response instance
  */
-class HttpKernelBrowser extends \RectorPrefix20210730\Symfony\Component\BrowserKit\AbstractBrowser
+class HttpKernelBrowser extends \RectorPrefix20210731\Symfony\Component\BrowserKit\AbstractBrowser
 {
     protected $kernel;
     private $catchExceptions = \true;
     /**
      * @param array $server The server parameters (equivalent of $_SERVER)
      */
-    public function __construct(\RectorPrefix20210730\Symfony\Component\HttpKernel\HttpKernelInterface $kernel, array $server = [], \RectorPrefix20210730\Symfony\Component\BrowserKit\History $history = null, \RectorPrefix20210730\Symfony\Component\BrowserKit\CookieJar $cookieJar = null)
+    public function __construct(\RectorPrefix20210731\Symfony\Component\HttpKernel\HttpKernelInterface $kernel, array $server = [], \RectorPrefix20210731\Symfony\Component\BrowserKit\History $history = null, \RectorPrefix20210731\Symfony\Component\BrowserKit\CookieJar $cookieJar = null)
     {
         // These class properties must be set before calling the parent constructor, as it may depend on it.
         $this->kernel = $kernel;
@@ -56,8 +56,8 @@ class HttpKernelBrowser extends \RectorPrefix20210730\Symfony\Component\BrowserK
      */
     protected function doRequest($request)
     {
-        $response = $this->kernel->handle($request, \RectorPrefix20210730\Symfony\Component\HttpKernel\HttpKernelInterface::MAIN_REQUEST, $this->catchExceptions);
-        if ($this->kernel instanceof \RectorPrefix20210730\Symfony\Component\HttpKernel\TerminableInterface) {
+        $response = $this->kernel->handle($request, \RectorPrefix20210731\Symfony\Component\HttpKernel\HttpKernelInterface::MAIN_REQUEST, $this->catchExceptions);
+        if ($this->kernel instanceof \RectorPrefix20210731\Symfony\Component\HttpKernel\TerminableInterface) {
             $this->kernel->terminate($request, $response);
         }
         return $response;
@@ -116,9 +116,9 @@ EOF;
      *
      * @return Request A Request instance
      */
-    protected function filterRequest(\RectorPrefix20210730\Symfony\Component\BrowserKit\Request $request)
+    protected function filterRequest(\RectorPrefix20210731\Symfony\Component\BrowserKit\Request $request)
     {
-        $httpRequest = \RectorPrefix20210730\Symfony\Component\HttpFoundation\Request::create($request->getUri(), $request->getMethod(), $request->getParameters(), $request->getCookies(), $request->getFiles(), $server = $request->getServer(), $request->getContent());
+        $httpRequest = \RectorPrefix20210731\Symfony\Component\HttpFoundation\Request::create($request->getUri(), $request->getMethod(), $request->getParameters(), $request->getCookies(), $request->getFiles(), $server = $request->getServer(), $request->getContent());
         if (!isset($server['HTTP_ACCEPT'])) {
             $httpRequest->headers->remove('Accept');
         }
@@ -146,11 +146,11 @@ EOF;
         foreach ($files as $key => $value) {
             if (\is_array($value)) {
                 $filtered[$key] = $this->filterFiles($value);
-            } elseif ($value instanceof \RectorPrefix20210730\Symfony\Component\HttpFoundation\File\UploadedFile) {
-                if ($value->isValid() && $value->getSize() > \RectorPrefix20210730\Symfony\Component\HttpFoundation\File\UploadedFile::getMaxFilesize()) {
-                    $filtered[$key] = new \RectorPrefix20210730\Symfony\Component\HttpFoundation\File\UploadedFile('', $value->getClientOriginalName(), $value->getClientMimeType(), \UPLOAD_ERR_INI_SIZE, \true);
+            } elseif ($value instanceof \RectorPrefix20210731\Symfony\Component\HttpFoundation\File\UploadedFile) {
+                if ($value->isValid() && $value->getSize() > \RectorPrefix20210731\Symfony\Component\HttpFoundation\File\UploadedFile::getMaxFilesize()) {
+                    $filtered[$key] = new \RectorPrefix20210731\Symfony\Component\HttpFoundation\File\UploadedFile('', $value->getClientOriginalName(), $value->getClientMimeType(), \UPLOAD_ERR_INI_SIZE, \true);
                 } else {
-                    $filtered[$key] = new \RectorPrefix20210730\Symfony\Component\HttpFoundation\File\UploadedFile($value->getPathname(), $value->getClientOriginalName(), $value->getClientMimeType(), $value->getError(), \true);
+                    $filtered[$key] = new \RectorPrefix20210731\Symfony\Component\HttpFoundation\File\UploadedFile($value->getPathname(), $value->getClientOriginalName(), $value->getClientMimeType(), $value->getError(), \true);
                 }
             }
         }
@@ -169,6 +169,6 @@ EOF;
         \ob_start();
         $response->sendContent();
         $content = \ob_get_clean();
-        return new \RectorPrefix20210730\Symfony\Component\BrowserKit\Response($content, $response->getStatusCode(), $response->headers->all());
+        return new \RectorPrefix20210731\Symfony\Component\BrowserKit\Response($content, $response->getStatusCode(), $response->headers->all());
     }
 }
