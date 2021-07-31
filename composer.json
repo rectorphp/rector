@@ -51,6 +51,7 @@
         "webmozart/assert": "^1.10"
     },
     "require-dev": {
+        "brianium/paratest": "^6.3",
         "phpstan/extension-installer": "^1.1",
         "phpstan/phpstan-nette": "^0.12.19",
         "phpunit/phpunit": "^9.5",
