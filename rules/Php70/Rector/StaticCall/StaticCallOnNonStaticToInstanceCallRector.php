@@ -9,9 +9,11 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
+use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Reflection\ReflectionResolver;
 use Rector\NodeCollector\ScopeResolver\ParentClassScopeResolver;
 use Rector\NodeCollector\StaticAnalyzer;
 use ReflectionMethod;
@@ -33,13 +35,18 @@ final class StaticCallOnNonStaticToInstanceCallRector extends \Rector\Core\Recto
      */
     private $reflectionProvider;
     /**
+     * @var \Rector\Core\Reflection\ReflectionResolver
+     */
+    private $reflectionResolver;
+    /**
      * @var \Rector\NodeCollector\ScopeResolver\ParentClassScopeResolver
      */
     private $parentClassScopeResolver;
-    public function __construct(\Rector\NodeCollector\StaticAnalyzer $staticAnalyzer, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\NodeCollector\ScopeResolver\ParentClassScopeResolver $parentClassScopeResolver)
+    public function __construct(\Rector\NodeCollector\StaticAnalyzer $staticAnalyzer, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver, \Rector\NodeCollector\ScopeResolver\ParentClassScopeResolver $parentClassScopeResolver)
     {
         $this->staticAnalyzer = $staticAnalyzer;
         $this->reflectionProvider = $reflectionProvider;
+        $this->reflectionResolver = $reflectionResolver;
         $this->parentClassScopeResolver = $parentClassScopeResolver;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
@@ -135,6 +142,10 @@ CODE_SAMPLE
     private function isInstantiable(string $className) : bool
     {
         if (!$this->reflectionProvider->hasClass($className)) {
+            return \false;
+        }
+        $methodReflection = $this->reflectionResolver->resolveMethodReflection($className, '__callStatic', null);
+        if ($methodReflection instanceof \PHPStan\Reflection\MethodReflection) {
             return \false;
         }
         $classReflection = $this->reflectionProvider->getClass($className);
