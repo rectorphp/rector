@@ -10,9 +10,11 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
+use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Reflection\ReflectionResolver;
 use Rector\NodeCollector\ScopeResolver\ParentClassScopeResolver;
 use Rector\NodeCollector\StaticAnalyzer;
 use ReflectionMethod;
@@ -29,6 +31,7 @@ final class StaticCallOnNonStaticToInstanceCallRector extends AbstractRector
     public function __construct(
         private StaticAnalyzer $staticAnalyzer,
         private ReflectionProvider $reflectionProvider,
+        private ReflectionResolver $reflectionResolver,
         private ParentClassScopeResolver $parentClassScopeResolver
     ) {
     }
@@ -146,6 +149,11 @@ CODE_SAMPLE
     private function isInstantiable(string $className): bool
     {
         if (! $this->reflectionProvider->hasClass($className)) {
+            return false;
+        }
+
+        $methodReflection = $this->reflectionResolver->resolveMethodReflection($className, '__callStatic', null);
+        if ($methodReflection instanceof MethodReflection) {
             return false;
         }
 
