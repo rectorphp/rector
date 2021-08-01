@@ -16,11 +16,11 @@ use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\LNumber;
-use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\NodeManipulator\IfManipulator;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Naming\Naming\VariableNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -31,7 +31,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradeSpaceshipRector extends AbstractRector
 {
     public function __construct(
-        private IfManipulator $ifManipulator
+        private IfManipulator $ifManipulator,
+        private VariableNaming $variableNaming
     ) {
     }
 
@@ -93,7 +94,10 @@ CODE_SAMPLE
         $anonymousFunction->stmts[1] = new Return_($ternary);
 
         $currentStatement = $node->getAttribute(AttributeKey::CURRENT_STATEMENT);
-        $variableAssign = $this->getVariableAssign($currentStatement);
+        $scope = $currentStatement->getAttribute(AttributeKey::SCOPE);
+
+        $variableAssignName = $this->variableNaming->createCountedValueName('battleShipcompare', $scope);
+        $variableAssign = new Variable($variableAssignName);
         $assignExpression = $this->getAssignExpression($anonymousFunction, $variableAssign);
         $this->addNodeBeforeNode($assignExpression, $currentStatement);
 
@@ -103,24 +107,5 @@ CODE_SAMPLE
     private function getAssignExpression(Closure $closure, Variable $variable): Expression
     {
         return new Expression(new Assign($variable, $closure));
-    }
-
-    private function getVariableAssign(Stmt $stmt, string $variableName = 'battleShipcompare'): Variable
-    {
-        $variable = new Variable($variableName);
-
-        $isFoundPrevious = (bool) $this->betterNodeFinder->findFirstPreviousOfNode(
-            $stmt,
-            fn (Node $node): bool => $node instanceof Variable && $this->nodeComparator->areNodesEqual($node, $variable)
-        );
-
-        $count = 0;
-        if ($isFoundPrevious) {
-            ++$count;
-            $variableName .= (string) $count;
-            return $this->getVariableAssign($stmt, $variableName);
-        }
-
-        return $variable;
     }
 }
