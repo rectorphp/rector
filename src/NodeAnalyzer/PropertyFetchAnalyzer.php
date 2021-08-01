@@ -94,6 +94,15 @@ final class PropertyFetchAnalyzer
         return false;
     }
 
+    public function isPropertyFetch(Node $node): bool
+    {
+        if ($node instanceof PropertyFetch) {
+            return true;
+        }
+
+        return $node instanceof StaticPropertyFetch;
+    }
+
     /**
      * Matches:
      * "$this->someValue = $<variableName>;"
