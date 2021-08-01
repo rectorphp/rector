@@ -10,9 +10,9 @@ use PhpParser\Node\Stmt\Property;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer;
-use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
@@ -22,7 +22,7 @@ final class PropertyUsageAnalyzer
         private BetterNodeFinder $betterNodeFinder,
         private FamilyRelationsAnalyzer $familyRelationsAnalyzer,
         private NodeNameResolver $nodeNameResolver,
-        private NodeRepository $nodeRepository
+        private AstResolver $astResolver
     ) {
     }
 
@@ -52,7 +52,7 @@ final class PropertyUsageAnalyzer
         $childrenClassReflections = $this->familyRelationsAnalyzer->getChildrenOfClassReflection($classReflection);
 
         foreach ($childrenClassReflections as $childClassReflection) {
-            $childClass = $this->nodeRepository->findClass($childClassReflection->getName());
+            $childClass = $this->astResolver->resolveClassFromName($childClassReflection->getName());
             if (! $childClass instanceof Class_) {
                 continue;
             }
