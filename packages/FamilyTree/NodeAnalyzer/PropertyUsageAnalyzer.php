@@ -9,9 +9,9 @@ use PhpParser\Node\Stmt\Property;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer;
-use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 final class PropertyUsageAnalyzer
@@ -29,15 +29,15 @@ final class PropertyUsageAnalyzer
      */
     private $nodeNameResolver;
     /**
-     * @var \Rector\NodeCollector\NodeCollector\NodeRepository
+     * @var \Rector\Core\PhpParser\AstResolver
      */
-    private $nodeRepository;
-    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer $familyRelationsAnalyzer, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeCollector\NodeCollector\NodeRepository $nodeRepository)
+    private $astResolver;
+    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer $familyRelationsAnalyzer, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\AstResolver $astResolver)
     {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->familyRelationsAnalyzer = $familyRelationsAnalyzer;
         $this->nodeNameResolver = $nodeNameResolver;
-        $this->nodeRepository = $nodeRepository;
+        $this->astResolver = $astResolver;
     }
     public function isPropertyFetchedInChildClass(\PhpParser\Node\Stmt\Property $property) : bool
     {
@@ -59,7 +59,7 @@ final class PropertyUsageAnalyzer
         $propertyName = $this->nodeNameResolver->getName($property);
         $childrenClassReflections = $this->familyRelationsAnalyzer->getChildrenOfClassReflection($classReflection);
         foreach ($childrenClassReflections as $childClassReflection) {
-            $childClass = $this->nodeRepository->findClass($childClassReflection->getName());
+            $childClass = $this->astResolver->resolveClassFromName($childClassReflection->getName());
             if (!$childClass instanceof \PhpParser\Node\Stmt\Class_) {
                 continue;
             }

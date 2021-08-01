@@ -212,7 +212,11 @@ final class AstResolver
         if (!$methodReflection instanceof \PHPStan\Reflection\MethodReflection) {
             return null;
         }
-        return $this->resolveClassMethodFromMethodReflection($methodReflection);
+        $classMethod = $this->resolveClassMethodFromMethodReflection($methodReflection);
+        if (!$classMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
+            return $this->locateClassMethodInTrait($methodName, $methodReflection);
+        }
+        return $classMethod;
     }
     public function resolveClassMethodFromMethodCall(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\PhpParser\Node\Stmt\ClassMethod
     {
@@ -326,6 +330,17 @@ final class AstResolver
         }
         // promoted property
         return $this->findPromotedPropertyByName($nodes, $desiredPropertyName);
+    }
+    private function locateClassMethodInTrait(string $methodName, \PHPStan\Reflection\MethodReflection $methodReflection) : ?\PhpParser\Node\Stmt\ClassMethod
+    {
+        $classReflection = $methodReflection->getDeclaringClass();
+        $traits = $this->parseClassReflectionTraits($classReflection);
+        /** @var ClassMethod|null $classMethod */
+        $classMethod = $this->betterNodeFinder->findFirst($traits, function (\PhpParser\Node $node) use($methodName) : bool {
+            return $node instanceof \PhpParser\Node\Stmt\ClassMethod && $this->nodeNameResolver->isName($node, $methodName);
+        });
+        $this->classMethodsByClassAndMethod[$classReflection->getName()][$methodName] = $classMethod;
+        return $classMethod;
     }
     /**
      * @return Stmt[]|null
