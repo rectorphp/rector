@@ -19,7 +19,7 @@
     },
     "require": {
         "php": "^5.3.2 || ^7.0 || ^8.0",
-        "psr\/log": "^1.0"
+        "psr\/log": "^1 || ^2 || ^3"
     },
     "require-dev": {
         "symfony\/phpunit-bridge": "^4.2 || ^5",
@@ -27,12 +27,12 @@
     },
     "autoload": {
         "psr-4": {
-            "RectorPrefix20210731\\Composer\\XdebugHandler\\": "src"
+            "RectorPrefix20210801\\Composer\\XdebugHandler\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "RectorPrefix20210731\\Composer\\XdebugHandler\\": "tests"
+            "RectorPrefix20210801\\Composer\\XdebugHandler\\": "tests"
         }
     },
     "scripts": {

@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210731;
+namespace RectorPrefix20210801;
 
 if (\class_exists('Tx_Extbase_Object_Exception_CannotBuildObject')) {
     return;

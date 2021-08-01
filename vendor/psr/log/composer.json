@@ -15,16 +15,16 @@
         }
     ],
     "require": {
-        "php": ">=5.3.0"
+        "php": ">=8.0.0"
     },
     "autoload": {
         "psr-4": {
-            "RectorPrefix20210731\\Psr\\Log\\": "Psr\/Log\/"
+            "RectorPrefix20210801\\Psr\\Log\\": "src"
         }
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "1.1.x-dev"
+            "dev-master": "2.0.x-dev"
         }
     }
 }

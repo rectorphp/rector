@@ -9,8 +9,8 @@ use Rector\Core\Stubs\PHPStanStubLoader;
 use Rector\Core\ValueObject\Bootstrap\BootstrapConfigs;
 use Rector\Core\ValueObject\Configuration;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
-use RectorPrefix20210731\Symfony\Component\DependencyInjection\ContainerInterface;
-use RectorPrefix20210731\Symplify\PackageBuilder\Console\Input\StaticInputDetector;
+use RectorPrefix20210801\Symfony\Component\DependencyInjection\ContainerInterface;
+use RectorPrefix20210801\Symplify\PackageBuilder\Console\Input\StaticInputDetector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 final class RectorContainerFactory
 {
@@ -18,10 +18,10 @@ final class RectorContainerFactory
      * @param SmartFileInfo[] $configFileInfos
      * @api
      */
-    public function createFromConfigs(array $configFileInfos) : \RectorPrefix20210731\Symfony\Component\DependencyInjection\ContainerInterface
+    public function createFromConfigs(array $configFileInfos) : \RectorPrefix20210801\Symfony\Component\DependencyInjection\ContainerInterface
     {
         // to override the configs without clearing cache
-        $isDebug = \RectorPrefix20210731\Symplify\PackageBuilder\Console\Input\StaticInputDetector::isDebug();
+        $isDebug = \RectorPrefix20210801\Symplify\PackageBuilder\Console\Input\StaticInputDetector::isDebug();
         $environment = $this->createEnvironment($configFileInfos);
         // mt_rand is needed to invalidate container cache in case of class changes to be registered as services
         $isPHPUnitRun = \Rector\Testing\PHPUnit\StaticPHPUnitEnvironment::isPHPUnitRun();
@@ -34,7 +34,7 @@ final class RectorContainerFactory
         $rectorKernel->boot();
         return $rectorKernel->getContainer();
     }
-    public function createFromBootstrapConfigs(\Rector\Core\ValueObject\Bootstrap\BootstrapConfigs $bootstrapConfigs) : \RectorPrefix20210731\Symfony\Component\DependencyInjection\ContainerInterface
+    public function createFromBootstrapConfigs(\Rector\Core\ValueObject\Bootstrap\BootstrapConfigs $bootstrapConfigs) : \RectorPrefix20210801\Symfony\Component\DependencyInjection\ContainerInterface
     {
         $container = $this->createFromConfigs($bootstrapConfigs->getConfigFileInfos());
         $mainConfigFileInfo = $bootstrapConfigs->getMainConfigFileInfo();
