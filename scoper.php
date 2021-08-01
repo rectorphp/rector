@@ -1,16 +1,13 @@
 <?php
 
 declare(strict_types=1);
-
 use Nette\Utils\DateTime;
 use Nette\Utils\Strings;
 use Rector\Compiler\PhpScoper\StaticEasyPrefixer;
 use Rector\Compiler\Unprefixer;
 use Rector\Compiler\ValueObject\ScoperOption;
 use Rector\Core\Application\VersionResolver;
-
 require_once __DIR__ . '/vendor/autoload.php';
-
 // [BEWARE] this path is relative to the root and location of this file
 $filePathsToRemoveNamespace = [
     // @see https://github.com/rectorphp/rector/issues/2852#issuecomment-586315588
@@ -30,12 +27,9 @@ $filePathsToRemoveNamespace = [
     'vendor/symfony/polyfill-php72/bootstrap.php',
     'vendor/symfony/polyfill-uuid/bootstrap.php',
 ];
-
 // remove phpstan, because it is already prefixed in its own scope
-
 $dateTime = DateTime::from('now');
 $timestamp = $dateTime->format('Ymd');
-
 /**
  * @var array<string, string[]>
  */
@@ -50,7 +44,6 @@ const UNPREFIX_CLASSES_BY_FILE = [
     'rules/Composer/Contract/Rector/ComposerRectorInterface.php' => ['Symplify\ComposerJsonManipulator\ValueObject\ComposerJson'],
     'packages/Testing/PHPUnit/AbstractTestCase.php' => ['PHPUnit\Framework\TestCase'],
 ];
-
 // see https://github.com/humbug/php-scoper
 return [
     ScoperOption::PREFIX => 'RectorPrefix' . $timestamp,
@@ -64,7 +57,7 @@ return [
             $prefixedNamespacePattern = '#^namespace (.*?);$#m';
 
             foreach ($filePathsToRemoveNamespace as $filePathToRemoveNamespace) {
-                if (Strings::endsWith($filePath, $filePathToRemoveNamespace)) {
+                if (\str_ends_with($filePath, $filePathToRemoveNamespace)) {
                     return Strings::replace($content, $prefixedNamespacePattern, '');
                 }
             }
@@ -74,7 +67,7 @@ return [
 
         function (string $filePath, string $prefix, string $content): string {
             foreach (UNPREFIX_CLASSES_BY_FILE as $endFilePath => $unprefixClasses) {
-                if (! Strings::endsWith($filePath, $endFilePath)) {
+                if (! \str_ends_with($filePath, $endFilePath)) {
                     continue;
                 }
 
@@ -93,7 +86,7 @@ return [
 
 
         function (string $filePath, string $prefix, string $content): string {
-            if (! Strings::endsWith($filePath, 'src/Application/VersionResolver.php')) {
+            if (! \str_ends_with($filePath, 'src/Application/VersionResolver.php')) {
                 return $content;
             }
 
@@ -109,13 +102,11 @@ return [
         },
 
         // unprefixed SmartFileInfo
-        function (string $filePath, string $prefix, string $content): string {
-            return Strings::replace(
-                $content,
-                '#' . $prefix . '\\\\Symplify\\\\SmartFileSystem\\\\SmartFileInfo#',
-                'Symplify\SmartFileSystem\SmartFileInfo'
-            );
-        },
+        fn(string $filePath, string $prefix, string $content): string => Strings::replace(
+            $content,
+            '#' . $prefix . '\\\\Symplify\\\\SmartFileSystem\\\\SmartFileInfo#',
+            'Symplify\SmartFileSystem\SmartFileInfo'
+        ),
 
         // unprefixed ContainerConfigurator
         function (string $filePath, string $prefix, string $content): string {
@@ -134,7 +125,7 @@ return [
 
         // get version for prefixed version
         function (string $filePath, string $prefix, string $content): string {
-            if (! Strings::endsWith($filePath, 'src/Configuration/Configuration.php')) {
+            if (! \str_ends_with($filePath, 'src/Configuration/Configuration.php')) {
                 return $content;
             }
 
@@ -147,7 +138,7 @@ return [
 
         // un-prefix composer plugin
         function (string $filePath, string $prefix, string $content): string {
-            if (! Strings::endsWith($filePath, 'vendor/rector/extension-installer/src/Plugin.php')) {
+            if (! \str_ends_with($filePath, 'vendor/rector/extension-installer/src/Plugin.php')) {
                 return $content;
             }
 
@@ -157,7 +148,7 @@ return [
 
         // fixes https://github.com/rectorphp/rector/issues/6007
         function (string $filePath, string $prefix, string $content): string {
-            if (! Strings::contains($filePath, 'vendor/')) {
+            if (! \str_contains($filePath, 'vendor/')) {
                 return $content;
             }
 
@@ -165,7 +156,7 @@ return [
             $fqcnReservedPattern = sprintf('#(\\\\)?%s\\\\(parent|self|static)#m', $prefix);
             $matches             = Strings::matchAll($content, $fqcnReservedPattern);
 
-            if (! $matches) {
+            if ($matches === []) {
                 return $content;
             }
 
@@ -191,12 +182,12 @@ return [
         // unprefix string classes, as they're string on purpose - they have to be checked in original form, not prefixed
         function (string $filePath, string $prefix, string $content): string {
             // skip vendor, expect rector packages
-            if (Strings::contains($filePath, 'vendor/') && ! Strings::contains($filePath, 'vendor/rector') && ! Strings::contains($filePath, 'vendor/ssch/typo3-rector')) {
+            if (\str_contains($filePath, 'vendor/') && ! \str_contains($filePath, 'vendor/rector') && ! \str_contains($filePath, 'vendor/ssch/typo3-rector')) {
                 return $content;
             }
 
             // skip bin/rector.php for composer autoload class
-            if (Strings::endsWith($filePath, 'bin/rector.php')) {
+            if (\str_ends_with($filePath, 'bin/rector.php')) {
                 return $content;
             }
 
@@ -206,21 +197,21 @@ return [
         // scoper missed PSR-4 autodiscovery in Symfony
         function (string $filePath, string $prefix, string $content): string {
             // scoper missed PSR-4 autodiscovery in Symfony
-            if (! Strings::endsWith($filePath, 'config.php') && ! Strings::endsWith($filePath, 'services.php')) {
+            if (! \str_ends_with($filePath, 'config.php') && ! \str_ends_with($filePath, 'services.php')) {
                 return $content;
             }
 
             // skip "Rector\\" namespace
-            if (Strings::contains($content, '$services->load(\'Rector')) {
+            if (\str_contains($content, '$services->load(\'Rector')) {
                 return $content;
             }
 
             // skip "Ssch\\" namespace
-            if (Strings::contains($content, '$services->load(\'Ssch')) {
+            if (\str_contains($content, '$services->load(\'Ssch')) {
                 return $content;
             }
 
-            return Strings::replace($content, '#services\->load\(\'#', 'services->load(\'' . $prefix . '\\');
+            return Strings::replace($content, '#services\->load\(\'#', "services->load('" . $prefix . '\\');
         },
     ],
 ];

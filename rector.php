@@ -65,6 +65,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         __DIR__ . '/tests',
         __DIR__ . '/utils',
         __DIR__ . '/config/set',
+        __DIR__ . '/scoper.php',
     ]);
 
     $parameters->set(Option::AUTO_IMPORT_NAMES, true);

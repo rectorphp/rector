@@ -24,9 +24,10 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                directories:
+                paths:
                     - src tests rules-tests packages packages-tests
                     - rules
+                    - scoper.php
 
         runs-on: ubuntu-latest
         timeout-minutes: 30
@@ -56,7 +57,7 @@ jobs:
             -   run: composer install --no-progress --ansi
 
             ## First run Rector - here can't be --dry-run !!! it would stop the job with it and not commit anything in the future
-            -   run: bin/rector process ${{ matrix.directories }} --ansi --no-progress-bar
+            -   run: bin/rector process ${{ matrix.paths }} --ansi --no-progress-bar
 
             -   run: vendor/bin/ecs check --match-git-diff --fix --ansi
 
