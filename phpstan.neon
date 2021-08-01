@@ -444,10 +444,6 @@ parameters:
         - '#Cognitive complexity for "Rector\\CodingStyle\\Naming\\NameRenamer\:\:renameNameNode\(\)" is 10, keep it under 9#'
 
         -
-            message: '#Access to an undefined property PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocChildNode\:\:\$value#'
-            path: packages/BetterPhpDocParser/PhpDocInfo/PhpDocInfo.php #348
-
-        -
             message: '#Class with base "StaticTypeMapper" name is already used in "Rector\\PHPStanStaticTypeMapper\\TypeMapper\\StaticTypeMapper", "Rector\\StaticTypeMapper\\StaticTypeMapper"\. Use unique name to make classes easy to recognize#'
             path: packages/StaticTypeMapper/StaticTypeMapper.php #31
 
