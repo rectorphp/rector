@@ -87,6 +87,12 @@ CODE_SAMPLE
         if ($node->expr instanceof \PhpParser\Node\Expr\Assign) {
             return $this->processAssign($node, $node->expr);
         }
+        if ($node->expr instanceof \PhpParser\Node\Expr\BinaryOp\Coalesce) {
+            return $this->processCoalesce($node->expr, null);
+        }
+        if ($node->expr instanceof \PhpParser\Node\Expr\Ternary) {
+            return $this->processTernary($node->expr, null);
+        }
         return $node;
     }
     /**
@@ -98,17 +104,17 @@ CODE_SAMPLE
             return null;
         }
         if ($assign->expr instanceof \PhpParser\Node\Expr\BinaryOp\Coalesce) {
-            return $this->processCoalesce($assign, $assign->expr);
+            return $this->processCoalesce($assign->expr, $assign);
         }
         if ($assign->expr instanceof \PhpParser\Node\Expr\Throw_) {
             return new \PhpParser\Node\Stmt\Expression($assign->expr);
         }
         if ($assign->expr instanceof \PhpParser\Node\Expr\Ternary) {
-            return $this->processTernary($assign, $assign->expr);
+            return $this->processTernary($assign->expr, $assign);
         }
         return $expression;
     }
-    private function processTernary(\PhpParser\Node\Expr\Assign $assign, \PhpParser\Node\Expr\Ternary $ternary) : ?\PhpParser\Node\Stmt\If_
+    private function processTernary(\PhpParser\Node\Expr\Ternary $ternary, ?\PhpParser\Node\Expr\Assign $assign) : ?\PhpParser\Node\Stmt\If_
     {
         if (!$ternary->else instanceof \PhpParser\Node\Expr\Throw_) {
             return null;
@@ -118,11 +124,14 @@ CODE_SAMPLE
             return null;
         }
         $if = $this->ifManipulator->createIfExpr($inversedTernaryCond, new \PhpParser\Node\Stmt\Expression($ternary->else));
+        if (!$assign instanceof \PhpParser\Node\Expr\Assign) {
+            return $if;
+        }
         $assign->expr = $ternary->if === null ? $ternary->cond : $ternary->if;
         $this->addNodeAfterNode(new \PhpParser\Node\Stmt\Expression($assign), $if);
         return $if;
     }
-    private function processCoalesce(\PhpParser\Node\Expr\Assign $assign, \PhpParser\Node\Expr\BinaryOp\Coalesce $coalesce) : ?\PhpParser\Node\Stmt\If_
+    private function processCoalesce(\PhpParser\Node\Expr\BinaryOp\Coalesce $coalesce, ?\PhpParser\Node\Expr\Assign $assign) : ?\PhpParser\Node\Stmt\If_
     {
         if (!$coalesce->right instanceof \PhpParser\Node\Expr\Throw_) {
             return null;
@@ -131,8 +140,11 @@ CODE_SAMPLE
             return null;
         }
         $booleanNot = new \PhpParser\Node\Expr\BooleanNot(new \PhpParser\Node\Expr\Isset_([$coalesce->left]));
-        $assign->expr = $coalesce->left;
         $if = $this->ifManipulator->createIfExpr($booleanNot, new \PhpParser\Node\Stmt\Expression($coalesce->right));
+        if (!$assign instanceof \PhpParser\Node\Expr\Assign) {
+            return $if;
+        }
+        $assign->expr = $coalesce->left;
         $this->addNodeAfterNode(new \PhpParser\Node\Stmt\Expression($assign), $if);
         return $if;
     }
