@@ -87,6 +87,14 @@ CODE_SAMPLE
             return $this->processAssign($node, $node->expr);
         }
 
+        if ($node->expr instanceof Coalesce) {
+            return $this->processCoalesce($node->expr, null);
+        }
+
+        if ($node->expr instanceof Ternary) {
+            return $this->processTernary($node->expr, null);
+        }
+
         return $node;
     }
 
@@ -97,7 +105,7 @@ CODE_SAMPLE
         }
 
         if ($assign->expr instanceof Coalesce) {
-            return $this->processCoalesce($assign, $assign->expr);
+            return $this->processCoalesce($assign->expr, $assign);
         }
 
         if ($assign->expr instanceof Throw_) {
@@ -105,13 +113,13 @@ CODE_SAMPLE
         }
 
         if ($assign->expr instanceof Ternary) {
-            return $this->processTernary($assign, $assign->expr);
+            return $this->processTernary($assign->expr, $assign);
         }
 
         return $expression;
     }
 
-    private function processTernary(Assign $assign, Ternary $ternary): ?If_
+    private function processTernary(Ternary $ternary, ?Assign $assign): ?If_
     {
         if (! $ternary->else instanceof Throw_) {
             return null;
@@ -123,6 +131,10 @@ CODE_SAMPLE
         }
 
         $if = $this->ifManipulator->createIfExpr($inversedTernaryCond, new Expression($ternary->else));
+        if (! $assign instanceof Assign) {
+            return $if;
+        }
+
         $assign->expr = $ternary->if === null
             ? $ternary->cond
             : $ternary->if;
@@ -131,7 +143,7 @@ CODE_SAMPLE
         return $if;
     }
 
-    private function processCoalesce(Assign $assign, Coalesce $coalesce): ?If_
+    private function processCoalesce(Coalesce $coalesce, ?Assign $assign): ?If_
     {
         if (! $coalesce->right instanceof Throw_) {
             return null;
@@ -142,10 +154,12 @@ CODE_SAMPLE
         }
 
         $booleanNot = new BooleanNot(new Isset_([$coalesce->left]));
-        $assign->expr = $coalesce->left;
-
         $if = $this->ifManipulator->createIfExpr($booleanNot, new Expression($coalesce->right));
+        if (! $assign instanceof Assign) {
+            return $if;
+        }
 
+        $assign->expr = $coalesce->left;
         $this->addNodeAfterNode(new Expression($assign), $if);
         return $if;
     }
