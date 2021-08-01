@@ -21,7 +21,6 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php80\NodeAnalyzer\PromotedPropertyResolver;
 use Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector;
-use Rector\TypeDeclaration\Matcher\PropertyAssignMatcher;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -45,17 +44,12 @@ final class RemoveDeadInstanceOfRector extends \Rector\Core\Rector\AbstractRecto
      * @var \Rector\Php80\NodeAnalyzer\PromotedPropertyResolver
      */
     private $promotedPropertyResolver;
-    /**
-     * @var \Rector\TypeDeclaration\Matcher\PropertyAssignMatcher
-     */
-    private $propertyAssignMatcher;
-    public function __construct(\Rector\Core\NodeManipulator\IfManipulator $ifManipulator, \Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer $propertyFetchAnalyzer, \Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector $constructorAssignDetector, \Rector\Php80\NodeAnalyzer\PromotedPropertyResolver $promotedPropertyResolver, \Rector\TypeDeclaration\Matcher\PropertyAssignMatcher $propertyAssignMatcher)
+    public function __construct(\Rector\Core\NodeManipulator\IfManipulator $ifManipulator, \Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer $propertyFetchAnalyzer, \Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector $constructorAssignDetector, \Rector\Php80\NodeAnalyzer\PromotedPropertyResolver $promotedPropertyResolver)
     {
         $this->ifManipulator = $ifManipulator;
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
         $this->constructorAssignDetector = $constructorAssignDetector;
         $this->promotedPropertyResolver = $promotedPropertyResolver;
-        $this->propertyAssignMatcher = $propertyAssignMatcher;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -133,7 +127,7 @@ CODE_SAMPLE
     }
     private function isSkippedPropertyFetch(\PhpParser\Node\Expr $expr) : bool
     {
-        if (!$this->propertyAssignMatcher->isPropertyFetch($expr)) {
+        if (!$this->propertyFetchAnalyzer->isPropertyFetch($expr)) {
             return \true;
         }
         /** @var PropertyFetch|StaticPropertyFetch $propertyFetch */

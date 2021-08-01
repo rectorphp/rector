@@ -3,12 +3,10 @@
 declare (strict_types=1);
 namespace Rector\TypeDeclaration\Matcher;
 
-use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Expr\StaticPropertyFetch;
+use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\NodeNameResolver\NodeNameResolver;
 final class PropertyAssignMatcher
 {
@@ -16,9 +14,14 @@ final class PropertyAssignMatcher
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
+    /**
+     * @var \Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer
+     */
+    private $propertyFetchAnalyzer;
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer $propertyFetchAnalyzer)
     {
         $this->nodeNameResolver = $nodeNameResolver;
+        $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
     }
     /**
      * Covers:
@@ -27,25 +30,18 @@ final class PropertyAssignMatcher
      */
     public function matchPropertyAssignExpr(\PhpParser\Node\Expr\Assign $assign, string $propertyName) : ?\PhpParser\Node\Expr
     {
-        if ($this->isPropertyFetch($assign->var)) {
+        if ($this->propertyFetchAnalyzer->isPropertyFetch($assign->var)) {
             if (!$this->nodeNameResolver->isName($assign->var, $propertyName)) {
                 return null;
             }
             return $assign->expr;
         }
-        if ($assign->var instanceof \PhpParser\Node\Expr\ArrayDimFetch && $this->isPropertyFetch($assign->var->var)) {
+        if ($assign->var instanceof \PhpParser\Node\Expr\ArrayDimFetch && $this->propertyFetchAnalyzer->isPropertyFetch($assign->var->var)) {
             if (!$this->nodeNameResolver->isName($assign->var->var, $propertyName)) {
                 return null;
             }
             return $assign->expr;
         }
         return null;
-    }
-    public function isPropertyFetch(\PhpParser\Node $node) : bool
-    {
-        if ($node instanceof \PhpParser\Node\Expr\PropertyFetch) {
-            return \true;
-        }
-        return $node instanceof \PhpParser\Node\Expr\StaticPropertyFetch;
     }
 }

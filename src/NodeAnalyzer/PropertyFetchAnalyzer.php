@@ -92,6 +92,13 @@ final class PropertyFetchAnalyzer
         }
         return \false;
     }
+    public function isPropertyFetch(\PhpParser\Node $node) : bool
+    {
+        if ($node instanceof \PhpParser\Node\Expr\PropertyFetch) {
+            return \true;
+        }
+        return $node instanceof \PhpParser\Node\Expr\StaticPropertyFetch;
+    }
     /**
      * Matches:
      * "$this->someValue = $<variableName>;"
