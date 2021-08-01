@@ -1,4 +1,4 @@
-# 492 Rules Overview
+# 494 Rules Overview
 
 <br>
 
@@ -36,7 +36,7 @@
 
 - [DowngradePhp74](#downgradephp74) (11)
 
-- [DowngradePhp80](#downgradephp80) (16)
+- [DowngradePhp80](#downgradephp80) (17)
 
 - [DowngradePhp81](#downgradephp81) (1)
 
@@ -48,7 +48,7 @@
 
 - [MysqlToMysqli](#mysqltomysqli) (4)
 
-- [Naming](#naming) (7)
+- [Naming](#naming) (6)
 
 - [Order](#order) (1)
 
@@ -96,7 +96,7 @@
 
 - [Transform](#transform) (37)
 
-- [TypeDeclaration](#typedeclaration) (18)
+- [TypeDeclaration](#typedeclaration) (20)
 
 - [Visibility](#visibility) (2)
 
@@ -227,7 +227,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ReplaceArgumentDefaultValueRector::class)
         ->call('configure', [[
             ReplaceArgumentDefaultValueRector::REPLACED_ARGUMENTS => ValueObjectInliner::inline([
-                new ReplaceArgumentDefaultValue('SomeExampleClass', 'someMethod', 0, 'SomeClass::OLD_CONSTANT', false),
+                new ReplaceArgumentDefaultValue('SomeClass', 'someMethod', 0, 'SomeClass::OLD_CONSTANT', false),
             ]),
         ]]);
 };
@@ -238,7 +238,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 ```diff
  $someObject = new SomeClass;
 -$someObject->someMethod(SomeClass::OLD_CONSTANT);
-+$someObject->someMethod(false);'
++$someObject->someMethod(false);
 ```
 
 <br>
@@ -359,8 +359,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 -// file: app/Entity/ProductRepository.php
 +// file: app/Repository/ProductRepository.php
 
--namespace App/Entity;
-+namespace App/Repository;
+-namespace App\Entity;
++namespace App\Repository;
 
  class ProductRepository
  {
@@ -1243,8 +1243,7 @@ Changes `settype()` to (type) where possible
 ```diff
  class SomeClass
  {
--    public function run($foo)
-+    public function run(array $items)
+     public function run($foo)
      {
 -        settype($foo, 'string');
 +        $foo = (string) $foo;
@@ -1895,7 +1894,7 @@ Changes switch with 2 options to if-else
 -    default:
 -        $result = 'not ok';
 +if ($foo == 'my string') {
-+    $result = 'ok;
++    $result = 'ok';
 +} else {
 +    $result = 'not ok';
  }
@@ -4346,7 +4345,7 @@ Refactor scalar types in PHP code in string snippets, e.g. generated container c
  $code = <<<'EOF'
 -    public function getParameter(string $name)
 +    /**
-+     * @param string
++     * @param string $name
 +     */
 +    public function getParameter($name)
      {
@@ -4573,7 +4572,7 @@ Remove the nullable type params, add `@param` tags instead
 -    public function run(?string $input): ?string
 +    /**
 +     * @param string|null $input
-+     * @return string|null $input
++     * @return string|null
 +     */
 +    public function run($input)
      {
@@ -4592,13 +4591,12 @@ Downgrade single one | separated to multi catch exception
 ```diff
  try {
      // Some code...
-- } catch (ExceptionType1 | ExceptionType2 $exception) {
+-} catch (ExceptionType1 | ExceptionType2 $exception) {
 +} catch (ExceptionType1 $exception) {
-     $sameCode;
-- }
-+} catch (ExceptionType2 $exception) {
 +    $sameCode;
-+}
++} catch (ExceptionType2 $exception) {
+     $sameCode;
+ }
 ```
 
 <br>
@@ -5134,8 +5132,8 @@ Changes property type definition from type definitions to `@var` annotations.
  {
 -    private string $property;
 +    /**
-+    * @var string
-+    */
++     * @var string
++     */
 +    private $property;
  }
 ```
@@ -5276,7 +5274,7 @@ Remove named argument
      public function run()
      {
 -        $this->execute(b: 100);
-+        $this->execute(null,  100);
++        $this->execute(null, 100);
      }
 
      private function execute($a = null, $b = null)
@@ -5434,6 +5432,28 @@ Downgrade `str_starts_with()` to `strncmp()` version
 
 <br>
 
+### DowngradeThrowExprRector
+
+Downgrade throw as expr
+
+- class: [`Rector\DowngradePhp80\Rector\Expression\DowngradeThrowExprRector`](../rules/DowngradePhp80/Rector/Expression/DowngradeThrowExprRector.php)
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        $id = $somethingNonexistent ?? throw new RuntimeException();
++        if (!isset($somethingNonexistent)) {
++            throw new RuntimeException();
++        }
++        $id = $somethingNonexistent;
+     }
+ }
+```
+
+<br>
+
 ### DowngradeTrailingCommasInParamUseRector
 
 Remove trailing commas in param or use list
@@ -5498,8 +5518,8 @@ Removes union type property type definition, adding `@var` annotations instead.
  {
 -    private string|int $property;
 +    /**
-+    * @var string|int
-+    */
++     * @var string|int
++     */
 +    private $property;
  }
 ```
@@ -5967,29 +5987,6 @@ Add mysql_query and mysql_error with connection
 
 ## Naming
 
-### MakeBoolPropertyRespectIsHasWasMethodNamingRector
-
-Renames property to respect is/has/was method naming
-
-- class: [`Rector\Naming\Rector\Property\MakeBoolPropertyRespectIsHasWasMethodNamingRector`](../rules/Naming/Rector/Property/MakeBoolPropertyRespectIsHasWasMethodNamingRector.php)
-
-```diff
- class SomeClass
- {
--private $full = false;
-+private $isFull = false;
-
- public function isFull()
- {
--    return $this->full;
-+    return $this->isFull;
- }
-+
- }
-```
-
-<br>
-
 ### RenameForeachValueVariableToMatchExprVariableRector
 
 Renames value variable name in foreach loop to match expression variable
@@ -6002,7 +5999,7 @@ Renames value variable name in foreach loop to match expression variable
  public function run()
  {
      $array = [];
--    foreach ($variables as $foo) {
+-    foreach ($variables as $property) {
 -        $array[] = $property;
 +    foreach ($variables as $variable) {
 +        $array[] = $variable;
@@ -6685,7 +6682,7 @@ The /e modifier is no longer supported, use preg_replace_callback instead
 -        $comment = preg_replace('~\b(\w)(\w+)~e', '"$1".strtolower("$2")', $comment);
 +        $comment = preg_replace_callback('~\b(\w)(\w+)~', function ($matches) {
 +              return($matches[1].strtolower($matches[2]));
-+        }, , $comment);
++        }, $comment);
      }
  }
 ```
@@ -7125,7 +7122,7 @@ Change binary operation between some number + string to PHP 7.1 compatible versi
 -        $value = 5 + '';
 -        $value = 5.0 + 'hi';
 +        $value = 5 + 0;
-+        $value = 5.0 + 0
++        $value = 5.0 + 0;
      }
  }
 ```
@@ -7190,14 +7187,12 @@ Changes multi catch of same exception to single one | separated.
 
 ```diff
  try {
--    // Some code...
+     // Some code...
 -} catch (ExceptionType1 $exception) {
 -    $sameCode;
 -} catch (ExceptionType2 $exception) {
--    $sameCode;
-+   // Some code...
 +} catch (ExceptionType1 | ExceptionType2 $exception) {
-+   $sameCode;
+     $sameCode;
  }
 ```
 
@@ -9075,7 +9070,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 ```diff
  $someObject = new SomeClass;
 -$someObject->someMethod(true);
-+$someObject->someMethod();'
++$someObject->someMethod();
 ```
 
 <br>
@@ -10765,8 +10760,8 @@ Turns old method call with specific types to new one with arguments
 - class: [`Rector\Transform\Rector\MethodCall\MethodCallToAnotherMethodCallWithArgumentsRector`](../rules/Transform/Rector/MethodCall/MethodCallToAnotherMethodCallWithArgumentsRector.php)
 
 ```php
-use Rector\Renaming\ValueObject\MethodCallRenameWithArrayKey;
 use Rector\Transform\Rector\MethodCall\MethodCallToAnotherMethodCallWithArgumentsRector;
+use Rector\Transform\ValueObject\MethodCallToAnotherMethodCallWithArguments;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
@@ -10776,8 +10771,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(MethodCallToAnotherMethodCallWithArgumentsRector::class)
         ->call('configure', [[
             MethodCallToAnotherMethodCallWithArgumentsRector::METHOD_CALL_RENAMES_WITH_ADDED_ARGUMENTS => ValueObjectInliner::inline([
-                new MethodCallRenameWithArrayKey('Nette\DI\ServiceDefinition', 'setInject', 'addTag', 'inject'),
-            ]),
+                new MethodCallToAnotherMethodCallWithArguments('Nette\DI\ServiceDefinition', 'setInject', 'addTag', [
+                    'inject',
+                ]), ]
+            ),
         ]]);
 };
 ```
@@ -10888,17 +10885,19 @@ Wrap method call to return
 
 ```php
 use Rector\Transform\Rector\Expression\MethodCallToReturnRector;
+use Rector\Transform\ValueObject\MethodCallToReturn;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->set(MethodCallToReturnRector::class)
         ->call('configure', [[
-            MethodCallToReturnRector::METHOD_CALL_WRAPS => [
-                'SomeClass' => ['deny'],
-
-            ], ]]);
+            MethodCallToReturnRector::METHOD_CALL_WRAPS => ValueObjectInliner::inline([
+                new MethodCallToReturn('SomeClass', 'deny'),
+            ]),
+        ]]);
 };
 ```
 
@@ -11156,17 +11155,19 @@ Replaces parent class to specific traits
 
 ```php
 use Rector\Transform\Rector\Class_\ParentClassToTraitsRector;
+use Rector\Transform\ValueObject\ParentClassToTraits;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->set(ParentClassToTraitsRector::class)
         ->call('configure', [[
-            ParentClassToTraitsRector::PARENT_CLASS_TO_TRAITS => [
-                'Nette\Object' => ['Nette\SmartObject'],
-
-            ], ]]);
+            ParentClassToTraitsRector::PARENT_CLASS_TO_TRAITS => ValueObjectInliner::inline([
+                new ParentClassToTraits('Nette\Object', ['Nette\SmartObject']), ]
+            ),
+        ]]);
 };
 ```
 
@@ -12060,6 +12061,63 @@ Change null in argument, that is now not nullable anymore
 
      public function setValue(string $value)
      {
+     }
+ }
+```
+
+<br>
+
+### ParamTypeByMethodCallTypeRector
+
+Change param type based on passed method call type
+
+- class: [`Rector\TypeDeclaration\Rector\ClassMethod\ParamTypeByMethodCallTypeRector`](../rules/TypeDeclaration/Rector/ClassMethod/ParamTypeByMethodCallTypeRector.php)
+
+```diff
+ class SomeTypedService
+ {
+     public function run(string $name)
+     {
+     }
+ }
+
+ final class UseDependency
+ {
+     public function __construct(
+         private SomeTypedService $someTypedService
+     ) {
+     }
+
+-    public function go($value)
++    public function go(string $value)
+     {
+         $this->someTypedService->run($value);
+     }
+ }
+```
+
+<br>
+
+### ParamTypeByParentCallTypeRector
+
+Change param type based on parent param type
+
+- class: [`Rector\TypeDeclaration\Rector\ClassMethod\ParamTypeByParentCallTypeRector`](../rules/TypeDeclaration/Rector/ClassMethod/ParamTypeByParentCallTypeRector.php)
+
+```diff
+ class SomeControl
+ {
+     public function __construct(string $name)
+     {
+     }
+ }
+
+ class VideoControl extends SomeControl
+ {
+-    public function __construct($name)
++    public function __construct(string $name)
+     {
+         parent::__construct($name);
      }
  }
 ```
