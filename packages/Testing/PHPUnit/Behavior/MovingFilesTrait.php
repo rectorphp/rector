@@ -80,9 +80,12 @@ trait MovingFilesTrait
         $addedFilePathsWithContents = $this->removedAndAddedFilesCollector->getAddedFilesWithContent();
 
         $addedFilesWithNodes = $this->removedAndAddedFilesCollector->getAddedFilesWithNodes();
+        if ($addedFilesWithNodes === []) {
+            return $addedFilePathsWithContents;
+        }
 
+        $nodesWithFileDestinationPrinter = $this->getService(NodesWithFileDestinationPrinter::class);
         foreach ($addedFilesWithNodes as $addedFileWithNode) {
-            $nodesWithFileDestinationPrinter = $this->getService(NodesWithFileDestinationPrinter::class);
             $fileContent = $nodesWithFileDestinationPrinter->printNodesWithFileDestination($addedFileWithNode);
             $addedFilePathsWithContents[] = new AddedFileWithContent($addedFileWithNode->getFilePath(), $fileContent);
         }
