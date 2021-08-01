@@ -16,6 +16,7 @@ use PhpParser\Node\Stmt\Foreach_;
 use Rector\CodeQuality\NodeAnalyzer\ForeachAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Naming\ExpectedNameResolver\InflectorSingularResolver;
+use Rector\Naming\Naming\VariableNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -32,10 +33,15 @@ final class DowngradeKeysInListRector extends \Rector\Core\Rector\AbstractRector
      * @var \Rector\CodeQuality\NodeAnalyzer\ForeachAnalyzer
      */
     private $foreachAnalyzer;
-    public function __construct(\Rector\Naming\ExpectedNameResolver\InflectorSingularResolver $inflectorSingularResolver, \Rector\CodeQuality\NodeAnalyzer\ForeachAnalyzer $foreachAnalyzer)
+    /**
+     * @var \Rector\Naming\Naming\VariableNaming
+     */
+    private $variableNaming;
+    public function __construct(\Rector\Naming\ExpectedNameResolver\InflectorSingularResolver $inflectorSingularResolver, \Rector\CodeQuality\NodeAnalyzer\ForeachAnalyzer $foreachAnalyzer, \Rector\Naming\Naming\VariableNaming $variableNaming)
     {
         $this->inflectorSingularResolver = $inflectorSingularResolver;
         $this->foreachAnalyzer = $foreachAnalyzer;
+        $this->variableNaming = $variableNaming;
     }
     /**
      * @return array<class-string<Node>>
@@ -99,7 +105,9 @@ CODE_SAMPLE
             return $node;
         }
         if ($parent instanceof \PhpParser\Node\Stmt\Foreach_) {
-            $newValueVar = $this->getNewValueVar($parent);
+            $defaultValueVar = $this->inflectorSingularResolver->resolve((string) $this->getName($parent->expr));
+            $scope = $parent->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
+            $newValueVar = $this->variableNaming->createCountedValueName($defaultValueVar, $scope);
             $parent->valueVar = new \PhpParser\Node\Expr\Variable($newValueVar);
             $stmts = $parent->stmts;
             if ($stmts === []) {
@@ -142,20 +150,10 @@ CODE_SAMPLE
     }
     private function getExpressionFromForeachValue(\PhpParser\Node\Stmt\Foreach_ $foreach, \PhpParser\Node\Expr\ArrayItem $arrayItem) : \PhpParser\Node\Stmt\Expression
     {
-        $newValueVar = $this->getNewValueVar($foreach);
+        $defaultValueVar = $this->inflectorSingularResolver->resolve((string) $this->getName($foreach->expr));
+        $scope = $foreach->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
+        $newValueVar = $this->variableNaming->createCountedValueName($defaultValueVar, $scope);
         $assign = new \PhpParser\Node\Expr\Assign($arrayItem->value, new \PhpParser\Node\Expr\ArrayDimFetch(new \PhpParser\Node\Expr\Variable($newValueVar), $arrayItem->key));
         return new \PhpParser\Node\Stmt\Expression($assign);
-    }
-    private function getNewValueVar(\PhpParser\Node\Stmt\Foreach_ $foreach, ?string $newValueVar = null) : string
-    {
-        if ($newValueVar === null) {
-            $newValueVar = $this->inflectorSingularResolver->resolve((string) $this->getName($foreach->expr));
-        }
-        $count = 0;
-        if ($this->foreachAnalyzer->isValueVarUsed($foreach, $newValueVar)) {
-            $newValueVar .= (string) ++$count;
-            return $this->getNewValueVar($foreach, $newValueVar);
-        }
-        return $newValueVar;
     }
 }

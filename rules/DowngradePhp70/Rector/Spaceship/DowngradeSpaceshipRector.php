@@ -15,11 +15,11 @@ use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\LNumber;
-use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\NodeManipulator\IfManipulator;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Naming\Naming\VariableNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -32,9 +32,14 @@ final class DowngradeSpaceshipRector extends \Rector\Core\Rector\AbstractRector
      * @var \Rector\Core\NodeManipulator\IfManipulator
      */
     private $ifManipulator;
-    public function __construct(\Rector\Core\NodeManipulator\IfManipulator $ifManipulator)
+    /**
+     * @var \Rector\Naming\Naming\VariableNaming
+     */
+    private $variableNaming;
+    public function __construct(\Rector\Core\NodeManipulator\IfManipulator $ifManipulator, \Rector\Naming\Naming\VariableNaming $variableNaming)
     {
         $this->ifManipulator = $ifManipulator;
+        $this->variableNaming = $variableNaming;
     }
     /**
      * @return array<class-string<Node>>
@@ -78,7 +83,9 @@ CODE_SAMPLE
         $ternary = new \PhpParser\Node\Expr\Ternary($smaller, $ternaryIf, $ternaryElse);
         $anonymousFunction->stmts[1] = new \PhpParser\Node\Stmt\Return_($ternary);
         $currentStatement = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CURRENT_STATEMENT);
-        $variableAssign = $this->getVariableAssign($currentStatement);
+        $scope = $currentStatement->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
+        $variableAssignName = $this->variableNaming->createCountedValueName('battleShipcompare', $scope);
+        $variableAssign = new \PhpParser\Node\Expr\Variable($variableAssignName);
         $assignExpression = $this->getAssignExpression($anonymousFunction, $variableAssign);
         $this->addNodeBeforeNode($assignExpression, $currentStatement);
         return new \PhpParser\Node\Expr\FuncCall($variableAssign, [new \PhpParser\Node\Arg($node->left), new \PhpParser\Node\Arg($node->right)]);
@@ -86,19 +93,5 @@ CODE_SAMPLE
     private function getAssignExpression(\PhpParser\Node\Expr\Closure $closure, \PhpParser\Node\Expr\Variable $variable) : \PhpParser\Node\Stmt\Expression
     {
         return new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign($variable, $closure));
-    }
-    private function getVariableAssign(\PhpParser\Node\Stmt $stmt, string $variableName = 'battleShipcompare') : \PhpParser\Node\Expr\Variable
-    {
-        $variable = new \PhpParser\Node\Expr\Variable($variableName);
-        $isFoundPrevious = (bool) $this->betterNodeFinder->findFirstPreviousOfNode($stmt, function (\PhpParser\Node $node) use($variable) : bool {
-            return $node instanceof \PhpParser\Node\Expr\Variable && $this->nodeComparator->areNodesEqual($node, $variable);
-        });
-        $count = 0;
-        if ($isFoundPrevious) {
-            ++$count;
-            $variableName .= (string) $count;
-            return $this->getVariableAssign($stmt, $variableName);
-        }
-        return $variable;
     }
 }
