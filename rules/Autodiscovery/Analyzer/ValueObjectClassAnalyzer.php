@@ -8,8 +8,8 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\ObjectType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Core\NodeAnalyzer\ClassAnalyzer;
+use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\ValueObject\MethodName;
-use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 final class ValueObjectClassAnalyzer
@@ -31,19 +31,19 @@ final class ValueObjectClassAnalyzer
      */
     private $phpDocInfoFactory;
     /**
-     * @var \Rector\NodeCollector\NodeCollector\NodeRepository
+     * @var \Rector\Core\PhpParser\AstResolver
      */
-    private $nodeRepository;
+    private $astResolver;
     /**
      * @var \Rector\Core\NodeAnalyzer\ClassAnalyzer
      */
     private $classAnalyzer;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \Rector\NodeCollector\NodeCollector\NodeRepository $nodeRepository, \Rector\Core\NodeAnalyzer\ClassAnalyzer $classAnalyzer)
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \Rector\Core\PhpParser\AstResolver $astResolver, \Rector\Core\NodeAnalyzer\ClassAnalyzer $classAnalyzer)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
-        $this->nodeRepository = $nodeRepository;
+        $this->astResolver = $astResolver;
         $this->classAnalyzer = $classAnalyzer;
     }
     public function isValueObjectClass(\PhpParser\Node\Stmt\Class_ $class) : bool
@@ -68,7 +68,7 @@ final class ValueObjectClassAnalyzer
             }
             // awesome!
             // is it services or value object?
-            $paramTypeClass = $this->nodeRepository->findClass($paramType->getClassName());
+            $paramTypeClass = $this->astResolver->resolveClassFromName($paramType->getClassName());
             if (!$paramTypeClass instanceof \PhpParser\Node\Stmt\Class_) {
                 // not sure :/
                 continue;
