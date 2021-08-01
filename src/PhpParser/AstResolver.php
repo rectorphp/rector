@@ -199,7 +199,13 @@ final class AstResolver
             return null;
         }
 
-        return $this->resolveClassMethodFromMethodReflection($methodReflection);
+        $classMethod = $this->resolveClassMethodFromMethodReflection($methodReflection);
+
+        if (! $classMethod instanceof ClassMethod) {
+            return $this->locateClassMethodInTrait($methodName, $methodReflection);
+        }
+
+        return $classMethod;
     }
 
     public function resolveClassMethodFromMethodCall(MethodCall $methodCall): ?ClassMethod
@@ -338,6 +344,21 @@ final class AstResolver
 
         // promoted property
         return $this->findPromotedPropertyByName($nodes, $desiredPropertyName);
+    }
+
+    private function locateClassMethodInTrait(string $methodName, MethodReflection $methodReflection): ?ClassMethod
+    {
+        $classReflection = $methodReflection->getDeclaringClass();
+        $traits = $this->parseClassReflectionTraits($classReflection);
+
+        /** @var ClassMethod|null $classMethod */
+        $classMethod = $this->betterNodeFinder->findFirst(
+            $traits,
+            fn (Node $node): bool => $node instanceof ClassMethod && $this->nodeNameResolver->isName($node, $methodName)
+        );
+        $this->classMethodsByClassAndMethod[$classReflection->getName()][$methodName] = $classMethod;
+
+        return $classMethod;
     }
 
     /**
