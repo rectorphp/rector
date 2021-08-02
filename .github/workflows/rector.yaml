@@ -27,7 +27,7 @@ jobs:
                 paths:
                     - src tests rules-tests packages packages-tests
                     - rules
-                    - scoper.php
+                    - config utils scoper.php
 
         runs-on: ubuntu-latest
         timeout-minutes: 30

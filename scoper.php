@@ -1,12 +1,14 @@
 <?php
 
 declare(strict_types=1);
+
 use Nette\Utils\DateTime;
 use Nette\Utils\Strings;
 use Rector\Compiler\PhpScoper\StaticEasyPrefixer;
 use Rector\Compiler\Unprefixer;
 use Rector\Compiler\ValueObject\ScoperOption;
 use Rector\Core\Application\VersionResolver;
+
 require_once __DIR__ . '/vendor/autoload.php';
 // [BEWARE] this path is relative to the root and location of this file
 $filePathsToRemoveNamespace = [
@@ -41,7 +43,9 @@ const UNPREFIX_CLASSES_BY_FILE = [
     ],
 
     // unprefixed ComposerJson as part of public API in ComposerRectorInterface
-    'rules/Composer/Contract/Rector/ComposerRectorInterface.php' => ['Symplify\ComposerJsonManipulator\ValueObject\ComposerJson'],
+    'rules/Composer/Contract/Rector/ComposerRectorInterface.php' => [
+        'Symplify\ComposerJsonManipulator\ValueObject\ComposerJson',
+    ],
     'packages/Testing/PHPUnit/AbstractTestCase.php' => ['PHPUnit\Framework\TestCase'],
 ];
 // see https://github.com/humbug/php-scoper
@@ -73,11 +77,7 @@ return [
 
                 foreach ($unprefixClasses as $unprefixClass) {
                     $doubleQuotedClass = preg_quote('\\' . $unprefixClass);
-                    $content = Strings::replace(
-                        $content,
-                        '#' . $prefix . $doubleQuotedClass . '#',
-                        $unprefixClass
-                    );
+                    $content = Strings::replace($content, '#' . $prefix . $doubleQuotedClass . '#', $unprefixClass);
                 }
             }
 
@@ -102,7 +102,7 @@ return [
         },
 
         // unprefixed SmartFileInfo
-        fn(string $filePath, string $prefix, string $content): string => Strings::replace(
+        fn (string $filePath, string $prefix, string $content): string => Strings::replace(
             $content,
             '#' . $prefix . '\\\\Symplify\\\\SmartFileSystem\\\\SmartFileInfo#',
             'Symplify\SmartFileSystem\SmartFileInfo'
@@ -112,7 +112,10 @@ return [
         function (string $filePath, string $prefix, string $content): string {
             // keep vendor prefixed the prefixed file loading; not part of public API
             // except @see https://github.com/symfony/symfony/commit/460b46f7302ec7319b8334a43809523363bfef39#diff-1cd56b329433fc34d950d6eeab9600752aa84a76cbe0693d3fab57fed0f547d3R110
-            if (str_contains($filePath, 'vendor/symfony') && ! str_ends_with($filePath, 'vendor/symfony/dependency-injection/Loader/PhpFileLoader.php')) {
+            if (str_contains($filePath, 'vendor/symfony') && ! str_ends_with(
+                $filePath,
+                'vendor/symfony/dependency-injection/Loader/PhpFileLoader.php'
+            )) {
                 return $content;
             }
 
@@ -130,10 +133,7 @@ return [
             }
 
             // @see https://regex101.com/r/gLefQk/1
-            return Strings::replace(
-                $content, '#\(\'rector\/rector-src\'\)#',
-                "('rector/rector')"
-            );
+            return Strings::replace($content, '#\(\'rector\/rector-src\'\)#', "('rector/rector')");
         },
 
         // un-prefix composer plugin
@@ -154,7 +154,7 @@ return [
 
             // @see https://regex101.com/r/lBV8IO/2
             $fqcnReservedPattern = sprintf('#(\\\\)?%s\\\\(parent|self|static)#m', $prefix);
-            $matches             = Strings::matchAll($content, $fqcnReservedPattern);
+            $matches = Strings::matchAll($content, $fqcnReservedPattern);
 
             if ($matches === []) {
                 return $content;
@@ -182,7 +182,10 @@ return [
         // unprefix string classes, as they're string on purpose - they have to be checked in original form, not prefixed
         function (string $filePath, string $prefix, string $content): string {
             // skip vendor, expect rector packages
-            if (\str_contains($filePath, 'vendor/') && ! \str_contains($filePath, 'vendor/rector') && ! \str_contains($filePath, 'vendor/ssch/typo3-rector')) {
+            if (\str_contains($filePath, 'vendor/') && ! \str_contains($filePath, 'vendor/rector') && ! \str_contains(
+                $filePath,
+                'vendor/ssch/typo3-rector'
+            )) {
                 return $content;
             }
 

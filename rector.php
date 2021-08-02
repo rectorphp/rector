@@ -64,7 +64,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         __DIR__ . '/packages-tests',
         __DIR__ . '/tests',
         __DIR__ . '/utils',
-        __DIR__ . '/config/set',
+        __DIR__ . '/config',
         __DIR__ . '/scoper.php',
     ]);
 
