@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace Rector\Core\Configuration;
 
 use RectorPrefix20210802\JetBrains\PhpStorm\Immutable;
-use Rector\Caching\ValueObject\Storage\CacheStorageInterface;
+use Rector\Caching\Contract\ValueObject\Storage\CacheStorageInterface;
 use Rector\Caching\ValueObject\Storage\FileCacheStorage;
 use RectorPrefix20210802\Symplify\Skipper\ValueObject\Option as SkipperOption;
 #[Immutable]

@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit9d1c3a2b12d28540451b5b97491e8b4f
+class ComposerStaticInitd8a9aaa2b52fb9b102bd3cacf27931d6
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -1923,13 +1923,13 @@ class ComposerStaticInit9d1c3a2b12d28540451b5b97491e8b4f
         'Rector\\Caching\\Cache' => __DIR__ . '/../..' . '/packages/Caching/Cache.php',
         'Rector\\Caching\\CacheFactory' => __DIR__ . '/../..' . '/packages/Caching/CacheFactory.php',
         'Rector\\Caching\\Config\\FileHashComputer' => __DIR__ . '/../..' . '/packages/Caching/Config/FileHashComputer.php',
+        'Rector\\Caching\\Contract\\ValueObject\\Storage\\CacheStorageInterface' => __DIR__ . '/../..' . '/packages/Caching/Contract/ValueObject/Storage/CacheStorageInterface.php',
         'Rector\\Caching\\Detector\\ChangedFilesDetector' => __DIR__ . '/../..' . '/packages/Caching/Detector/ChangedFilesDetector.php',
         'Rector\\Caching\\Enum\\CacheKey' => __DIR__ . '/../..' . '/packages/Caching/Enum/CacheKey.php',
         'Rector\\Caching\\FileSystem\\DependencyResolver' => __DIR__ . '/../..' . '/packages/Caching/FileSystem/DependencyResolver.php',
         'Rector\\Caching\\UnchangedFilesFilter' => __DIR__ . '/../..' . '/packages/Caching/UnchangedFilesFilter.php',
         'Rector\\Caching\\ValueObject\\CacheFilePaths' => __DIR__ . '/../..' . '/packages/Caching/ValueObject/CacheFilePaths.php',
         'Rector\\Caching\\ValueObject\\CacheItem' => __DIR__ . '/../..' . '/packages/Caching/ValueObject/CacheItem.php',
-        'Rector\\Caching\\ValueObject\\Storage\\CacheStorageInterface' => __DIR__ . '/../..' . '/packages/Caching/ValueObject/Storage/CacheStorageInterface.php',
         'Rector\\Caching\\ValueObject\\Storage\\FileCacheStorage' => __DIR__ . '/../..' . '/packages/Caching/ValueObject/Storage/FileCacheStorage.php',
         'Rector\\Caching\\ValueObject\\Storage\\MemoryCacheStorage' => __DIR__ . '/../..' . '/packages/Caching/ValueObject/Storage/MemoryCacheStorage.php',
         'Rector\\CakePHP\\ImplicitNameResolver' => __DIR__ . '/..' . '/rector/rector-cakephp/src/ImplicitNameResolver.php',
@@ -3847,9 +3847,9 @@ class ComposerStaticInit9d1c3a2b12d28540451b5b97491e8b4f
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit9d1c3a2b12d28540451b5b97491e8b4f::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit9d1c3a2b12d28540451b5b97491e8b4f::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit9d1c3a2b12d28540451b5b97491e8b4f::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitd8a9aaa2b52fb9b102bd3cacf27931d6::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitd8a9aaa2b52fb9b102bd3cacf27931d6::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitd8a9aaa2b52fb9b102bd3cacf27931d6::$classMap;
 
         }, null, ClassLoader::class);
     }

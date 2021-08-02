@@ -5,6 +5,7 @@ namespace Rector\Caching\ValueObject\Storage;
 
 use RectorPrefix20210802\Nette\Utils\Random;
 use PHPStan\File\FileWriter;
+use Rector\Caching\Contract\ValueObject\Storage\CacheStorageInterface;
 use Rector\Caching\ValueObject\CacheFilePaths;
 use Rector\Caching\ValueObject\CacheItem;
 use RectorPrefix20210802\Symplify\EasyCodingStandard\Caching\Exception\CachingException;
@@ -12,7 +13,7 @@ use RectorPrefix20210802\Symplify\SmartFileSystem\SmartFileSystem;
 /**
  * Inspired by https://github.com/phpstan/phpstan-src/blob/1e7ceae933f07e5a250b61ed94799e6c2ea8daa2/src/Cache/FileCacheStorage.php
  */
-final class FileCacheStorage implements \Rector\Caching\ValueObject\Storage\CacheStorageInterface
+final class FileCacheStorage implements \Rector\Caching\Contract\ValueObject\Storage\CacheStorageInterface
 {
     /**
      * @var string

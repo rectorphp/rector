@@ -3,14 +3,14 @@
 declare (strict_types=1);
 namespace Rector\Caching;
 
-use Rector\Caching\ValueObject\Storage\CacheStorageInterface;
+use Rector\Caching\Contract\ValueObject\Storage\CacheStorageInterface;
 final class Cache
 {
     /**
-     * @var \Rector\Caching\ValueObject\Storage\CacheStorageInterface
+     * @var \Rector\Caching\Contract\ValueObject\Storage\CacheStorageInterface
      */
     private $cacheStorage;
-    public function __construct(\Rector\Caching\ValueObject\Storage\CacheStorageInterface $cacheStorage)
+    public function __construct(\Rector\Caching\Contract\ValueObject\Storage\CacheStorageInterface $cacheStorage)
     {
         $this->cacheStorage = $cacheStorage;
     }
