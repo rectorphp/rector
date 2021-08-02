@@ -19,6 +19,7 @@ use PhpParser\Node\UnionType;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Defluent\ConflictGuard\ParentClassMethodTypeOverrideGuard;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\TypeDeclaration\NodeAnalyzer\CallerParamMatcher;
 use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
@@ -32,7 +33,8 @@ final class ParamTypeByMethodCallTypeRector extends AbstractRector
 {
     public function __construct(
         private CallerParamMatcher $callerParamMatcher,
-        private SimpleCallableNodeTraverser $simpleCallableNodeTraverser
+        private SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
+        private ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard
     ) {
     }
 
@@ -139,6 +141,10 @@ CODE_SAMPLE
     private function shouldSkipClassMethod(ClassMethod $classMethod): bool
     {
         if ($classMethod->params === []) {
+            return true;
+        }
+
+        if ($this->parentClassMethodTypeOverrideGuard->hasParentClassMethod($classMethod)) {
             return true;
         }
 
