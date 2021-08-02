@@ -98,10 +98,6 @@ CODE_SAMPLE
         while ($changedNode !== null && ! $this->nodeComparator->areNodesEqual($previousNode, $changedNode)) {
             $previousNode = $changedNode;
 
-            if ($changedNode instanceof BinaryOp || $changedNode instanceof AssignOp) {
-                $changedNode = $this->refactor($changedNode);
-            }
-
             // nothing more to change, return last node
             if (! $changedNode instanceof Node) {
                 return $previousNode;
