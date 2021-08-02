@@ -82,29 +82,15 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $changedNode = null;
-        $previousNode = $node;
+//        $changedNode = null;
+//        $previousNode = $node;
 
         if ($node instanceof AssignOp) {
-            $changedNode = $this->processAssignOp($node);
+            return $this->processAssignOp($node);
         }
 
         // -, +
-        if ($node instanceof BinaryOp) {
-            $changedNode = $this->processBinaryOp($node);
-        }
-
-        // recurse nested combinations
-        while ($changedNode !== null && ! $this->nodeComparator->areNodesEqual($previousNode, $changedNode)) {
-            $previousNode = $changedNode;
-
-            // nothing more to change, return last node
-            if (! $changedNode instanceof Node) {
-                return $previousNode;
-            }
-        }
-
-        return $changedNode;
+        return $this->processBinaryOp($node);
     }
 
     private function processAssignOp(Node $node): ?Expr
