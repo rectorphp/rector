@@ -10,7 +10,6 @@ use PhpParser\Node\Expr\AssignOp\Div as AssignDiv;
 use PhpParser\Node\Expr\AssignOp\Minus as AssignMinus;
 use PhpParser\Node\Expr\AssignOp\Mul as AssignMul;
 use PhpParser\Node\Expr\AssignOp\Plus as AssignPlus;
-use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\BinaryOp\Div;
 use PhpParser\Node\Expr\BinaryOp\Minus;
 use PhpParser\Node\Expr\BinaryOp\Mul;
@@ -62,27 +61,13 @@ CODE_SAMPLE
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        $changedNode = null;
-        $previousNode = $node;
+        //        $changedNode = null;
+        //        $previousNode = $node;
         if ($node instanceof \PhpParser\Node\Expr\AssignOp) {
-            $changedNode = $this->processAssignOp($node);
+            return $this->processAssignOp($node);
         }
         // -, +
-        if ($node instanceof \PhpParser\Node\Expr\BinaryOp) {
-            $changedNode = $this->processBinaryOp($node);
-        }
-        // recurse nested combinations
-        while ($changedNode !== null && !$this->nodeComparator->areNodesEqual($previousNode, $changedNode)) {
-            $previousNode = $changedNode;
-            if ($changedNode instanceof \PhpParser\Node\Expr\BinaryOp || $changedNode instanceof \PhpParser\Node\Expr\AssignOp) {
-                $changedNode = $this->refactor($changedNode);
-            }
-            // nothing more to change, return last node
-            if (!$changedNode instanceof \PhpParser\Node) {
-                return $previousNode;
-            }
-        }
-        return $changedNode;
+        return $this->processBinaryOp($node);
     }
     private function processAssignOp(\PhpParser\Node $node) : ?\PhpParser\Node\Expr
     {
