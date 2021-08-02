@@ -54,7 +54,7 @@ final class SomeClass
 {
     public function run()
     {
-        $this->someStaticMethod::someStatic();
+        $this->someStaticMethod->someStatic();
     }
 }
 CODE_SAMPLE
