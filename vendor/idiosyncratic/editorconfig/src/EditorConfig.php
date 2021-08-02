@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210801\Idiosyncratic\EditorConfig;
+namespace RectorPrefix20210802\Idiosyncratic\EditorConfig;
 
 use function array_merge;
 use function array_pop;
@@ -64,8 +64,8 @@ final class EditorConfig
         }
         return $files;
     }
-    private function getConfigFile(string $path) : \RectorPrefix20210801\Idiosyncratic\EditorConfig\EditorConfigFile
+    private function getConfigFile(string $path) : \RectorPrefix20210802\Idiosyncratic\EditorConfig\EditorConfigFile
     {
-        return $this->configFiles[$path] ?? ($this->configFiles[$path] = new \RectorPrefix20210801\Idiosyncratic\EditorConfig\EditorConfigFile($path));
+        return $this->configFiles[$path] ?? ($this->configFiles[$path] = new \RectorPrefix20210802\Idiosyncratic\EditorConfig\EditorConfigFile($path));
     }
 }

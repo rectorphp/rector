@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210801;
+namespace RectorPrefix20210802;
 
 if (\class_exists('tx_cms_webinfo_lang')) {
     return;

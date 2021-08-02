@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210801;
+namespace RectorPrefix20210802;
 
 if (\class_exists('Tx_Fluid_Compatibility_DocbookGeneratorService')) {
     return;

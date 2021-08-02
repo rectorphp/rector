@@ -16,7 +16,7 @@ use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeTraverser;
 use PHPStan\Type\UnionType;
-use RectorPrefix20210801\Symplify\PackageBuilder\Parameter\ParameterProvider;
+use RectorPrefix20210802\Symplify\PackageBuilder\Parameter\ParameterProvider;
 final class GenericClassStringTypeNormalizer
 {
     /**
@@ -27,7 +27,7 @@ final class GenericClassStringTypeNormalizer
      * @var \Symplify\PackageBuilder\Parameter\ParameterProvider
      */
     private $parameterProvider;
-    public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider, \RectorPrefix20210801\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider)
+    public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider, \RectorPrefix20210802\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider)
     {
         $this->reflectionProvider = $reflectionProvider;
         $this->parameterProvider = $parameterProvider;

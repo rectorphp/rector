@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210801\Helmich\TypoScriptParser\Parser;
+namespace RectorPrefix20210802\Helmich\TypoScriptParser\Parser;
 
 use ArrayObject;
-use RectorPrefix20210801\Helmich\TypoScriptParser\Parser\AST\ObjectPath;
-use RectorPrefix20210801\Helmich\TypoScriptParser\Parser\AST\RootObjectPath;
-use RectorPrefix20210801\Helmich\TypoScriptParser\Tokenizer\TokenInterface;
+use RectorPrefix20210802\Helmich\TypoScriptParser\Parser\AST\ObjectPath;
+use RectorPrefix20210802\Helmich\TypoScriptParser\Parser\AST\RootObjectPath;
+use RectorPrefix20210802\Helmich\TypoScriptParser\Tokenizer\TokenInterface;
 class ParserState
 {
     /** @var ObjectPath */
@@ -15,14 +15,14 @@ class ParserState
     private $statements;
     /** @var TokenStream */
     private $tokens;
-    public function __construct(\RectorPrefix20210801\Helmich\TypoScriptParser\Parser\TokenStream $tokens, \ArrayObject $statements = null)
+    public function __construct(\RectorPrefix20210802\Helmich\TypoScriptParser\Parser\TokenStream $tokens, \ArrayObject $statements = null)
     {
         if ($statements === null) {
             $statements = new \ArrayObject();
         }
         $this->statements = $statements;
         $this->tokens = $tokens;
-        $this->context = new \RectorPrefix20210801\Helmich\TypoScriptParser\Parser\AST\RootObjectPath();
+        $this->context = new \RectorPrefix20210802\Helmich\TypoScriptParser\Parser\AST\RootObjectPath();
     }
     /**
      * @return $this
@@ -48,7 +48,7 @@ class ParserState
      * @param int $lookAhead
      * @return TokenInterface
      */
-    public function token($lookAhead = 0) : \RectorPrefix20210801\Helmich\TypoScriptParser\Tokenizer\TokenInterface
+    public function token($lookAhead = 0) : \RectorPrefix20210802\Helmich\TypoScriptParser\Tokenizer\TokenInterface
     {
         return $this->tokens->current($lookAhead);
     }
@@ -70,7 +70,7 @@ class ParserState
     /**
      * @return ObjectPath
      */
-    public function context() : \RectorPrefix20210801\Helmich\TypoScriptParser\Parser\AST\ObjectPath
+    public function context() : \RectorPrefix20210802\Helmich\TypoScriptParser\Parser\AST\ObjectPath
     {
         return $this->context;
     }

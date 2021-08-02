@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210801\TYPO3\CMS\Frontend\Page;
+namespace RectorPrefix20210802\TYPO3\CMS\Frontend\Page;
 
 if (\interface_exists('TYPO3\\CMS\\Frontend\\Page\\PageRepositoryInitHookInterface')) {
     return;

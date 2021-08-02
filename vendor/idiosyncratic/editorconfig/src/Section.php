@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210801\Idiosyncratic\EditorConfig;
+namespace RectorPrefix20210802\Idiosyncratic\EditorConfig;
 
 use ErrorException;
-use RectorPrefix20210801\Idiosyncratic\EditorConfig\Declaration\Factory;
+use RectorPrefix20210802\Idiosyncratic\EditorConfig\Declaration\Factory;
 use function array_key_exists;
 use function debug_backtrace;
 use function explode;
@@ -28,7 +28,7 @@ final class Section
     /**
      * @param array<string, mixed> $declarations
      */
-    public function __construct(string $globPrefix, string $glob, array $declarations, \RectorPrefix20210801\Idiosyncratic\EditorConfig\Declaration\Factory $declarationFactory)
+    public function __construct(string $globPrefix, string $glob, array $declarations, \RectorPrefix20210802\Idiosyncratic\EditorConfig\Declaration\Factory $declarationFactory)
     {
         $this->globPrefix = $globPrefix;
         $this->glob = $glob;
