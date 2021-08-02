@@ -11,7 +11,6 @@ use PhpParser\Node\Expr\AssignOp\Div as AssignDiv;
 use PhpParser\Node\Expr\AssignOp\Minus as AssignMinus;
 use PhpParser\Node\Expr\AssignOp\Mul as AssignMul;
 use PhpParser\Node\Expr\AssignOp\Plus as AssignPlus;
-use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\BinaryOp\Div;
 use PhpParser\Node\Expr\BinaryOp\Minus;
 use PhpParser\Node\Expr\BinaryOp\Mul;
