@@ -1,4 +1,4 @@
-# 494 Rules Overview
+# 490 Rules Overview
 
 <br>
 
@@ -88,13 +88,13 @@
 
 - [Removing](#removing) (6)
 
-- [RemovingStatic](#removingstatic) (9)
+- [RemovingStatic](#removingstatic) (8)
 
 - [Renaming](#renaming) (11)
 
 - [Restoration](#restoration) (6)
 
-- [Transform](#transform) (37)
+- [Transform](#transform) (34)
 
 - [TypeDeclaration](#typedeclaration) (20)
 
@@ -9322,7 +9322,7 @@ Change defined static service to dynamic one
      public function run()
      {
 -        SomeStaticMethod::someStatic();
-+        $this->someStaticMethod::someStatic();
++        $this->someStaticMethod->someStatic();
      }
  }
 ```
@@ -9341,7 +9341,7 @@ Change defined static service to dynamic one
      public function run()
      {
 -        SomeStaticMethod::$someStatic;
-+        $this->someStaticMethod::$someStatic;
++        $this->someStaticMethod->someStatic;
      }
  }
 ```
@@ -9416,58 +9416,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
      public function someFun()
      {
          return StaticClass::staticMethod();
-     }
- }
-```
-
-<br>
-
-### PHPUnitStaticToKernelTestCaseGetRector
-
-Convert static calls in PHPUnit test cases, to `get()` from the container of KernelTestCase
-
-:wrench: **configure it!**
-
-- class: [`Rector\RemovingStatic\Rector\Class_\PHPUnitStaticToKernelTestCaseGetRector`](../rules/RemovingStatic/Rector/Class_/PHPUnitStaticToKernelTestCaseGetRector.php)
-
-```php
-use Rector\RemovingStatic\Rector\Class_\PHPUnitStaticToKernelTestCaseGetRector;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(PHPUnitStaticToKernelTestCaseGetRector::class)
-        ->call('configure', [[
-            PHPUnitStaticToKernelTestCaseGetRector::STATIC_CLASS_TYPES => ['EntityFactory'],
-        ]]);
-};
-```
-
-↓
-
-```diff
--use PHPUnit\Framework\TestCase;
-+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-
--final class SomeTestCase extends TestCase
-+final class SomeTestCase extends KernelTestCase
- {
-+    /**
-+     * @var EntityFactory
-+     */
-+    private $entityFactory;
-+
-+    protected function setUp(): void
-+    {
-+        parent::setUp();
-+        $this->entityFactory = $this->getService(EntityFactory::class);
-+    }
-+
-     public function test()
-     {
--        $product = EntityFactory::create('product');
-+        $product = $this->entityFactory->create('product');
      }
  }
 ```
@@ -10659,27 +10607,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 <br>
 
-### FunctionToStaticMethodRector
-
-Change functions to static calls, so composer can autoload them
-
-- class: [`Rector\Transform\Rector\FileWithoutNamespace\FunctionToStaticMethodRector`](../rules/Transform/Rector/FileWithoutNamespace/FunctionToStaticMethodRector.php)
-
-```diff
--function some_function()
-+class SomeUtilsClass
- {
-+    public static function someFunction()
-+    {
-+    }
- }
-
--some_function('lol');
-+SomeUtilsClass::someFunction('lol');
-```
-
-<br>
-
 ### GetAndSetToMethodCallRector
 
 Turns defined `__get`/`__set` to specific method calls.
@@ -10869,52 +10796,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
      {
 -        $this->someMethod();
 +        $this->someProperty;
-     }
- }
-```
-
-<br>
-
-### MethodCallToReturnRector
-
-Wrap method call to return
-
-:wrench: **configure it!**
-
-- class: [`Rector\Transform\Rector\Expression\MethodCallToReturnRector`](../rules/Transform/Rector/Expression/MethodCallToReturnRector.php)
-
-```php
-use Rector\Transform\Rector\Expression\MethodCallToReturnRector;
-use Rector\Transform\ValueObject\MethodCallToReturn;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Symplify\SymfonyPhpConfig\ValueObjectInliner;
-
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(MethodCallToReturnRector::class)
-        ->call('configure', [[
-            MethodCallToReturnRector::METHOD_CALL_WRAPS => ValueObjectInliner::inline([
-                new MethodCallToReturn('SomeClass', 'deny'),
-            ]),
-        ]]);
-};
-```
-
-↓
-
-```diff
- class SomeClass
- {
-     public function run()
-     {
--        $this->deny();
-+        return $this->deny();
-     }
-
-     public function deny()
-     {
-         return 1;
      }
  }
 ```
@@ -11689,60 +11570,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 -unset($container["someKey"]);
 +$container->hasService("someKey");
 +$container->removeService("someKey");
-```
-
-<br>
-
-### VariableMethodCallToServiceCallRector
-
-Replace variable method call to a service one
-
-:wrench: **configure it!**
-
-- class: [`Rector\Transform\Rector\MethodCall\VariableMethodCallToServiceCallRector`](../rules/Transform/Rector/MethodCall/VariableMethodCallToServiceCallRector.php)
-
-```php
-use Rector\Transform\Rector\MethodCall\VariableMethodCallToServiceCallRector;
-use Rector\Transform\ValueObject\VariableMethodCallToServiceCall;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Symplify\SymfonyPhpConfig\ValueObjectInliner;
-
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(VariableMethodCallToServiceCallRector::class)
-        ->call('configure', [[
-            VariableMethodCallToServiceCallRector::VARIABLE_METHOD_CALLS_TO_SERVICE_CALLS => ValueObjectInliner::inline([
-                new VariableMethodCallToServiceCall(
-                    'PhpParser\Node',
-                    'getAttribute',
-                    'php_doc_info',
-                    'Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory',
-                    'createFromNodeOrEmpty'
-                ),
-            ]),
-        ]]);
-};
-```
-
-↓
-
-```diff
-+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
- use PhpParser\Node;
-
- class SomeClass
- {
-+    public function __construct(PhpDocInfoFactory $phpDocInfoFactory)
-+    {
-+        $this->phpDocInfoFactory = $phpDocInfoFactory;
-+    }
-     public function run(Node $node)
-     {
--        $phpDocInfo = $node->getAttribute('php_doc_info');
-+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
-     }
- }
 ```
 
 <br>
