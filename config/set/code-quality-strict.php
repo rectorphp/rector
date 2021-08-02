@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use Rector\CodeQuality\Rector\Identical\FlipTypeControlToUseExclusiveTypeRector;
-use Rector\CodeQualityStrict\Rector\Variable\MoveVariableDeclarationNearReferenceRector;
+use Rector\CodeQuality\Rector\Variable\MoveVariableDeclarationNearReferenceRector;
 use Rector\CodingStyle\Rector\FuncCall\CountArrayToEmptyArrayComparisonRector;
 use Rector\CodingStyle\Rector\MethodCall\UseMessageVariableForSprintfInSymfonyStyleRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;

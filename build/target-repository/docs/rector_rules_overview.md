@@ -1,4 +1,4 @@
-# 476 Rules Overview
+# 475 Rules Overview
 
 <br>
 
@@ -14,7 +14,7 @@
 
 - [CodeQualityStrict](#codequalitystrict) (1)
 
-- [CodingStyle](#codingstyle) (39)
+- [CodingStyle](#codingstyle) (38)
 
 - [Composer](#composer) (6)
 
@@ -2375,7 +2375,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ReturnArrayClassMethodToYieldRector::class)
         ->call('configure', [[
             ReturnArrayClassMethodToYieldRector::METHODS_TO_YIELDS => ValueObjectInliner::inline([
-                new ReturnArrayClassMethodToYield('EventSubscriberInterface', 'getSubscribedEvents'),
+                new ReturnArrayClassMethodToYield('PHPUnit\Framework\TestCase', '*provide*'),
             ]),
         ]]);
 };
@@ -2384,12 +2384,14 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 ↓
 
 ```diff
- class SomeEventSubscriber implements EventSubscriberInterface
+ use PHPUnit\Framework\TestCase;
+
+ final class SomeTest implements TestCase
  {
-     public static function getSubscribedEvents()
+     public static function provideData()
      {
--        return ['event' => 'callback'];
-+        yield 'event' => 'callback';
+-        return [['some text']];
++        yield ['some text'];
      }
  }
 ```
@@ -2665,45 +2667,6 @@ Wrap encapsed variables in curly braces
  {
 -    echo "Hello $world!";
 +    echo "Hello {$world}!";
- }
-```
-
-<br>
-
-### YieldClassMethodToArrayClassMethodRector
-
-Turns yield return to array return in specific type and method
-
-:wrench: **configure it!**
-
-- class: [`Rector\CodingStyle\Rector\ClassMethod\YieldClassMethodToArrayClassMethodRector`](../rules/CodingStyle/Rector/ClassMethod/YieldClassMethodToArrayClassMethodRector.php)
-
-```php
-use Rector\CodingStyle\Rector\ClassMethod\YieldClassMethodToArrayClassMethodRector;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(YieldClassMethodToArrayClassMethodRector::class)
-        ->call('configure', [[
-            YieldClassMethodToArrayClassMethodRector::METHODS_BY_TYPE => [
-                'EventSubscriberInterface' => ['getSubscribedEvents'],
-
-            ], ]]);
-};
-```
-
-↓
-
-```diff
- class SomeEventSubscriber implements EventSubscriberInterface
- {
-     public static function getSubscribedEvents()
-     {
--        yield 'event' => 'callback';
-+        return ['event' => 'callback'];
-     }
  }
 ```
 

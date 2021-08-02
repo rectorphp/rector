@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
 use Rector\CodingStyle\Enum\PreferenceSelfThis;
+use Rector\CodingStyle\Rector\ClassMethod\ReturnArrayClassMethodToYieldRector;
 use Rector\CodingStyle\Rector\MethodCall\PreferThisOrSelfMethodCallRector;
 use Rector\CodingStyle\Rector\String_\SplitStringClassConstantToClassConstFetchRector;
+use Rector\CodingStyle\ValueObject\ReturnArrayClassMethodToYield;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Nette\Set\NetteSetList;
@@ -41,17 +43,24 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     ]);
 
     $services = $containerConfigurator->services();
-
     $services->set(InferParamFromClassMethodReturnRector::class)
         ->call('configure', [[
             InferParamFromClassMethodReturnRector::INFER_PARAMS_FROM_CLASS_METHOD_RETURNS => $configuration,
         ]]);
 
+    // phpunit
     $services->set(PreferThisOrSelfMethodCallRector::class)
         ->call('configure', [[
             PreferThisOrSelfMethodCallRector::TYPE_TO_PREFERENCE => [
                 TestCase::class => ValueObjectInliner::inline(PreferenceSelfThis::PREFER_THIS()),
             ],
+        ]]);
+
+    $services->set(ReturnArrayClassMethodToYieldRector::class)
+        ->call('configure', [[
+            ReturnArrayClassMethodToYieldRector::METHODS_TO_YIELDS => ValueObjectInliner::inline([
+                new ReturnArrayClassMethodToYield('PHPUnit\Framework\TestCase', '*provide*'),
+            ]),
         ]]);
 
     $parameters = $containerConfigurator->parameters();

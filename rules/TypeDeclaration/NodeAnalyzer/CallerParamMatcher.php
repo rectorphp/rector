@@ -17,15 +17,13 @@ use PhpParser\Node\UnionType;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use Rector\Core\PhpParser\AstResolver;
-use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
 
 final class CallerParamMatcher
 {
     public function __construct(
         private NodeNameResolver $nodeNameResolver,
-        private AstResolver $astResolver,
-        private BetterNodeFinder $betterNodeFinder
+        private AstResolver $astResolver
     ) {
     }
 

@@ -10,10 +10,8 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\StaticType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
-use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Naming\RectorNamingInflector;
 use Rector\Naming\ValueObject\ExpectedName;
-use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
 use Rector\StaticTypeMapper\ValueObject\Type\SelfObjectType;
@@ -51,8 +49,6 @@ final class PropertyNaming
     public function __construct(
         private TypeUnwrapper $typeUnwrapper,
         private RectorNamingInflector $rectorNamingInflector,
-        private BetterNodeFinder $betterNodeFinder,
-        private NodeNameResolver $nodeNameResolver,
         private NodeTypeResolver $nodeTypeResolver,
         private ReflectionProvider $reflectionProvider
     ) {

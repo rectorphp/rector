@@ -31,5 +31,5 @@ interface TypeMapperInterface
      * @param T $type
      * @return Name|NullableType|UnionType|null
      */
-    public function mapToPhpParserNode(Type $type, TypeKind $typeTypeKind): ?Node;
+    public function mapToPhpParserNode(Type $type, TypeKind $typeKind): ?Node;
 }

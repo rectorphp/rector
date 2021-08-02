@@ -32,7 +32,7 @@ final class PreferThisOrSelfMethodCallRector extends AbstractRector implements C
     private const SELF = 'self';
 
     /**
-     * @var array<class-string, PreferenceSelfThis>
+     * @var array<PreferenceSelfThis>
      */
     private array $typeToPreference = [];
 
@@ -99,7 +99,7 @@ CODE_SAMPLE
     }
 
     /**
-     * @param array<string, array<class-string, PreferenceSelfThis>> $configuration
+     * @param array<string, PreferenceSelfThis[]> $configuration
      */
     public function configure(array $configuration): void
     {

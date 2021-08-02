@@ -12,7 +12,6 @@ use PhpParser\Node\Expr\Variable;
 use Rector\Core\NodeAnalyzer\CompactFuncCallAnalyzer;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
-use Rector\NodeNameResolver\NodeNameResolver;
 
 final class ExprUsedInNodeAnalyzer
 {
@@ -20,7 +19,6 @@ final class ExprUsedInNodeAnalyzer
         private NodeComparator $nodeComparator,
         private UsedVariableNameAnalyzer $usedVariableNameAnalyzer,
         private CompactFuncCallAnalyzer $compactFuncCallAnalyzer,
-        private NodeNameResolver $nodeNameResolver,
         private BetterStandardPrinter $betterStandardPrinter
     ) {
     }

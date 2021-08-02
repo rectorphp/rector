@@ -32,11 +32,11 @@ final class TraitTypeResolver implements NodeTypeResolverInterface
     }
 
     /**
-     * @param Trait_ $traitNode
+     * @param Trait_ $node
      */
-    public function resolve(Node $traitNode): Type
+    public function resolve(Node $node): Type
     {
-        $traitName = (string) $traitNode->namespacedName;
+        $traitName = (string) $node->namespacedName;
         if (! $this->reflectionProvider->hasClass($traitName)) {
             return new MixedType();
         }

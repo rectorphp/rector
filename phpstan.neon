@@ -88,7 +88,6 @@ parameters:
             paths:
                 - rules/Php70/EregToPcreTransformer.php
                 - packages/NodeTypeResolver/NodeTypeResolver.php
-                - rules/CodeQualityStrict/Rector/Variable/MoveVariableDeclarationNearReferenceRector.php
                 - rules/Php80/Rector/If_/NullsafeOperatorRector.php
                 - rules/Renaming/NodeManipulator/ClassRenamer.php
                 - rules/DowngradePhp72/Rector/FuncCall/DowngradePregUnmatchedAsNullConstantRector.php
@@ -536,3 +535,13 @@ parameters:
             message: '#"@\\var_export\(new \\Rector\\Caching\\ValueObject\\CacheItem\(\$variableKey, \$data\), true\)" is forbidden to use#'
             paths:
                 - packages/Caching/ValueObject/Storage/FileCacheStorage.php
+
+        -
+            message: '#Arguments names conflicts with parent class method\: "\$(.*?)" should be "\$(.*?)"\. This will break named arguments#'
+            paths:
+                - src/PhpParser/Printer/BetterStandardPrinter.php
+                - packages/BetterPhpDocParser/PhpDocParser/BetterPhpDocParser.php
+                - packages/BetterPhpDocParser/PhpDocParser/BetterTypeParser.php
+
+        # resolve later
+        -  '#Variables "\$(.*?)" are overridden\. This can lead to unwanted bugs, please pick a different name to avoid it#'

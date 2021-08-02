@@ -17,17 +17,15 @@ use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeTraverser;
 use PHPStan\Type\UnionType;
-use Symplify\PackageBuilder\Parameter\ParameterProvider;
 
 final class GenericClassStringTypeNormalizer
 {
     public function __construct(
-        private ReflectionProvider $reflectionProvider,
-        private ParameterProvider $parameterProvider
+        private ReflectionProvider $reflectionProvider
     ) {
     }
 
-    public function normalize(Type $type): Type
+    public function normalize(Type $type): ArrayType | UnionType | Type
     {
         $type = TypeTraverser::map($type, function (Type $type, $callback): Type {
             if (! $type instanceof ConstantStringType) {

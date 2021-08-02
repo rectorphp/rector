@@ -11,16 +11,12 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
-use PhpParser\Parser;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\NodeAnalyzer\ClassAnalyzer;
 use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\Core\Reflection\ReflectionResolver;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
-use Symplify\SmartFileSystem\SmartFileSystem;
 
 final class PropertyFetchFinder
 {
@@ -28,10 +24,6 @@ final class PropertyFetchFinder
         private BetterNodeFinder $betterNodeFinder,
         private NodeNameResolver $nodeNameResolver,
         private ReflectionProvider $reflectionProvider,
-        private ReflectionResolver $reflectionResolver,
-        private SmartFileSystem $smartFileSystem,
-        private Parser $parser,
-        private NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator,
         private AstResolver $astResolver,
         private ClassAnalyzer $classAnalyzer
     ) {

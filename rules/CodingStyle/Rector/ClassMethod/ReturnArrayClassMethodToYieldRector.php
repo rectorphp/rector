@@ -43,13 +43,6 @@ final class ReturnArrayClassMethodToYieldRector extends AbstractRector implement
         private NodeTransformer $nodeTransformer,
         private CommentsMerger $commentsMerger
     ) {
-        // default values
-        $this->methodsToYields = [
-            new ReturnArrayClassMethodToYield('PHPUnit\Framework\TestCase', 'provideData'),
-            new ReturnArrayClassMethodToYield('PHPUnit\Framework\TestCase', 'provideData*'),
-            new ReturnArrayClassMethodToYield('PHPUnit\Framework\TestCase', 'dataProvider'),
-            new ReturnArrayClassMethodToYield('PHPUnit\Framework\TestCase', 'dataProvider*'),
-        ];
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -57,28 +50,32 @@ final class ReturnArrayClassMethodToYieldRector extends AbstractRector implement
         return new RuleDefinition('Turns array return to yield return in specific type and method', [
             new ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
-class SomeEventSubscriber implements EventSubscriberInterface
+use PHPUnit\Framework\TestCase;
+
+final class SomeTest implements TestCase
 {
-    public static function getSubscribedEvents()
+    public static function provideData()
     {
-        return ['event' => 'callback'];
+        return [['some text']];
     }
 }
 CODE_SAMPLE
                 ,
                 <<<'CODE_SAMPLE'
-class SomeEventSubscriber implements EventSubscriberInterface
+use PHPUnit\Framework\TestCase;
+
+final class SomeTest implements TestCase
 {
-    public static function getSubscribedEvents()
+    public static function provideData()
     {
-        yield 'event' => 'callback';
+        yield ['some text'];
     }
 }
 CODE_SAMPLE
                 ,
                 [
                     self::METHODS_TO_YIELDS => [
-                        new ReturnArrayClassMethodToYield('EventSubscriberInterface', 'getSubscribedEvents'),
+                        new ReturnArrayClassMethodToYield('PHPUnit\Framework\TestCase', '*provide*'),
                     ],
                 ]
             ),

@@ -60,31 +60,6 @@ final class NodeTransformer
     }
 
     /**
-     * @param Yield_[]|Expression[] $yieldNodes
-     */
-    public function transformYieldsToArray(array $yieldNodes): Array_
-    {
-        $arrayItems = [];
-        foreach ($yieldNodes as $yieldNode) {
-            if ($yieldNode instanceof Expression) {
-                $yieldNode = $yieldNode->expr;
-            }
-
-            if (! $yieldNode instanceof Yield_) {
-                continue;
-            }
-
-            if ($yieldNode->value === null) {
-                continue;
-            }
-
-            $arrayItems[] = new ArrayItem($yieldNode->value, $yieldNode->key);
-        }
-
-        return new Array_($arrayItems);
-    }
-
-    /**
      * @return Expression[]
      */
     public function transformArrayToYields(Array_ $array): array

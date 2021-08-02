@@ -95,7 +95,7 @@ CODE_SAMPLE
             }
 
             if ($this->propertyManipulator->isPropertyUsedInReadContext($param)) {
-                return null;
+                continue;
             }
 
             // only private local scope; removing public property might be dangerous
