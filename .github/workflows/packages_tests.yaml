@@ -28,6 +28,7 @@ jobs:
                     - rectorphp/rector-laravel
                     - rectorphp/rector-nette
                     - rectorphp/rector-cakephp
+                    - rectorphp/rector-phpoffice
                     - sabbelasichon/typo3-rector
 
         steps:

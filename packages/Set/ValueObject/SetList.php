@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Set\ValueObject;
 
+use Rector\PHPOffice\Set\PHPOfficeSetList;
 use Rector\Set\Contract\SetListInterface;
 
 final class SetList implements SetListInterface
@@ -90,8 +91,9 @@ final class SetList implements SetListInterface
 
     /**
      * @var string
+     * @deprecated Use PHPOfficeSetList class instead
      */
-    public const PHPEXCEL_TO_PHPSPREADSHEET = __DIR__ . '/../../../config/set/phpexcel-to-phpspreadsheet.php';
+    public const PHPEXCEL_TO_PHPSPREADSHEET = PHPOfficeSetList::PHPEXCEL_TO_PHPSPREADSHEET;
 
     /**
      * @var string
