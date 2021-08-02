@@ -65,6 +65,10 @@ final class ParentClassMethodTypeOverrideGuard
         }
         return \strpos($fileName, '/vendor/') === \false;
     }
+    public function hasParentClassMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
+    {
+        return $this->getParentClassMethod($classMethod) instanceof \PHPStan\Reflection\MethodReflection;
+    }
     private function getParentClassMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod) : ?\PHPStan\Reflection\MethodReflection
     {
         $scope = $classMethod->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
