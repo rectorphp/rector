@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Caching;
 
-use Rector\Caching\ValueObject\Storage\CacheStorageInterface;
+use Rector\Caching\Contract\ValueObject\Storage\CacheStorageInterface;
 
 final class Cache
 {

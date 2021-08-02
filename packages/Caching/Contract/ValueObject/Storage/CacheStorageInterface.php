@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Rector\Caching\ValueObject\Storage;
+namespace Rector\Caching\Contract\ValueObject\Storage;
 
 /**
  * inspired by https://github.com/phpstan/phpstan-src/blob/560652088406d7461c2c4ad4897784e33f8ab312/src/Cache/CacheStorage.php
+ * @internal
  */
 interface CacheStorageInterface
 {

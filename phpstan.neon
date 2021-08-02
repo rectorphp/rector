@@ -181,9 +181,6 @@ parameters:
             paths:
                 - rules/Php80/Rector/If_/NullsafeOperatorRector.php
 
-        # covered in symplify main
-        - '#Method "(equal|match)(.*?)\(\)" returns bool type, so the name should start with is/has/was#'
-
         -
             message: '#Comparison operation "<" between 0 and 2 is always true#'
             paths:
@@ -387,13 +384,6 @@ parameters:
 
         - '#Method Rector\\Core\\Tests\\DependencyInjection\\ConfigurableRectorImportConfigCallsMergeTest\:\:provideData\(\) return type has no value type specified in iterable type Iterator#'
 
-        # fixed in dev-main
-        -
-            message: '#Use dependency injection instead of dependency juggling#'
-            paths:
-                 # better reflection static design
-                 - packages/NodeTypeResolver/Reflection/BetterReflection/SourceLocatorProvider/DynamicSourceLocatorProvider.php
-
         -
             message: '#Use value object over return of values#'
             paths:
@@ -506,11 +496,12 @@ parameters:
         - '#Method "decorateReturnWithSpecificType\(\)" returns bool type, so the name should start with is/has/was#'
         - '#Method "resolveObjectType\(\)" returns bool type, so the name should start with is/has/was#'
 
-        # internal contract, not meant for re-use at rector consumer level
+        - '#Method "(equal|match)(.*?)\(\)" returns bool type, so the name should start with is/has/was#'
+
         -
-            message: '#Interface must be located in "Contract" namespace#'
+            message: '#Use dependency injection instead of dependency juggling#'
             paths:
-                - packages/Caching/ValueObject/Storage/CacheStorageInterface.php
+                - packages/NodeTypeResolver/Reflection/BetterReflection/SourceLocatorProvider
 
         # resolve later
         -
