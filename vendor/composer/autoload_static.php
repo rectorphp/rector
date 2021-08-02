@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInite884cc48de6e7e624cac6e13afe63ddf
+class ComposerStaticInit7a605ef554a9e3e46d85e12cdfbd1d3e
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -3190,15 +3190,12 @@ class ComposerStaticInite884cc48de6e7e624cac6e13afe63ddf
         'Rector\\RectorInstaller\\LocalFilesystem' => __DIR__ . '/..' . '/rector/extension-installer/src/LocalFilesystem.php',
         'Rector\\RectorInstaller\\Plugin' => __DIR__ . '/..' . '/rector/extension-installer/src/Plugin.php',
         'Rector\\RectorInstaller\\PluginInstaller' => __DIR__ . '/..' . '/rector/extension-installer/src/PluginInstaller.php',
-        'Rector\\RemovingStatic\\NodeAnalyzer\\SetUpClassMethodUpdater' => __DIR__ . '/../..' . '/rules/RemovingStatic/NodeAnalyzer/SetUpClassMethodUpdater.php',
         'Rector\\RemovingStatic\\NodeAnalyzer\\StaticCallPresenceAnalyzer' => __DIR__ . '/../..' . '/rules/RemovingStatic/NodeAnalyzer/StaticCallPresenceAnalyzer.php',
-        'Rector\\RemovingStatic\\NodeFactory\\SelfContainerFactory' => __DIR__ . '/../..' . '/rules/RemovingStatic/NodeFactory/SelfContainerFactory.php',
         'Rector\\RemovingStatic\\NodeFactory\\SetUpFactory' => __DIR__ . '/../..' . '/rules/RemovingStatic/NodeFactory/SetUpFactory.php',
         'Rector\\RemovingStatic\\Printer\\FactoryClassPrinter' => __DIR__ . '/../..' . '/rules/RemovingStatic/Printer/FactoryClassPrinter.php',
         'Rector\\RemovingStatic\\Rector\\ClassMethod\\LocallyCalledStaticMethodToNonStaticRector' => __DIR__ . '/../..' . '/rules/RemovingStatic/Rector/ClassMethod/LocallyCalledStaticMethodToNonStaticRector.php',
         'Rector\\RemovingStatic\\Rector\\Class_\\DesiredClassTypeToDynamicRector' => __DIR__ . '/../..' . '/rules/RemovingStatic/Rector/Class_/DesiredClassTypeToDynamicRector.php',
         'Rector\\RemovingStatic\\Rector\\Class_\\NewUniqueObjectToEntityFactoryRector' => __DIR__ . '/../..' . '/rules/RemovingStatic/Rector/Class_/NewUniqueObjectToEntityFactoryRector.php',
-        'Rector\\RemovingStatic\\Rector\\Class_\\PHPUnitStaticToKernelTestCaseGetRector' => __DIR__ . '/../..' . '/rules/RemovingStatic/Rector/Class_/PHPUnitStaticToKernelTestCaseGetRector.php',
         'Rector\\RemovingStatic\\Rector\\Class_\\PassFactoryToUniqueObjectRector' => __DIR__ . '/../..' . '/rules/RemovingStatic/Rector/Class_/PassFactoryToUniqueObjectRector.php',
         'Rector\\RemovingStatic\\Rector\\Class_\\StaticTypeToSetterInjectionRector' => __DIR__ . '/../..' . '/rules/RemovingStatic/Rector/Class_/StaticTypeToSetterInjectionRector.php',
         'Rector\\RemovingStatic\\Rector\\Property\\DesiredPropertyClassMethodTypeToDynamicRector' => __DIR__ . '/../..' . '/rules/RemovingStatic/Rector/Property/DesiredPropertyClassMethodTypeToDynamicRector.php',
@@ -3383,13 +3380,11 @@ class ComposerStaticInite884cc48de6e7e624cac6e13afe63ddf
         'Rector\\Testing\\PHPUnit\\StaticPHPUnitEnvironment' => __DIR__ . '/../..' . '/packages/Testing/PHPUnit/StaticPHPUnitEnvironment.php',
         'Rector\\Testing\\TestingParser\\TestingParser' => __DIR__ . '/../..' . '/packages/Testing/TestingParser/TestingParser.php',
         'Rector\\Testing\\ValueObject\\InputFilePathWithExpectedFile' => __DIR__ . '/../..' . '/packages/Testing/ValueObject/InputFilePathWithExpectedFile.php',
-        'Rector\\Transform\\Naming\\FullyQualifiedNameResolver' => __DIR__ . '/../..' . '/rules/Transform/Naming/FullyQualifiedNameResolver.php',
         'Rector\\Transform\\NodeAnalyzer\\FuncCallStaticCallToMethodCallAnalyzer' => __DIR__ . '/../..' . '/rules/Transform/NodeAnalyzer/FuncCallStaticCallToMethodCallAnalyzer.php',
         'Rector\\Transform\\NodeAnalyzer\\SingletonClassMethodAnalyzer' => __DIR__ . '/../..' . '/rules/Transform/NodeAnalyzer/SingletonClassMethodAnalyzer.php',
         'Rector\\Transform\\NodeFactory\\ClassMethodFactory' => __DIR__ . '/../..' . '/rules/Transform/NodeFactory/ClassMethodFactory.php',
         'Rector\\Transform\\NodeFactory\\PropertyFetchFactory' => __DIR__ . '/../..' . '/rules/Transform/NodeFactory/PropertyFetchFactory.php',
         'Rector\\Transform\\NodeFactory\\ProvideConfigFilePathClassMethodFactory' => __DIR__ . '/../..' . '/rules/Transform/NodeFactory/ProvideConfigFilePathClassMethodFactory.php',
-        'Rector\\Transform\\NodeFactory\\StaticMethodClassFactory' => __DIR__ . '/../..' . '/rules/Transform/NodeFactory/StaticMethodClassFactory.php',
         'Rector\\Transform\\NodeFactory\\UnwrapClosureFactory' => __DIR__ . '/../..' . '/rules/Transform/NodeFactory/UnwrapClosureFactory.php',
         'Rector\\Transform\\NodeTypeAnalyzer\\TypeProvidingExprFromClassResolver' => __DIR__ . '/../..' . '/rules/Transform/NodeTypeAnalyzer/TypeProvidingExprFromClassResolver.php',
         'Rector\\Transform\\Rector\\Assign\\DimFetchAssignToMethodCallRector' => __DIR__ . '/../..' . '/rules/Transform/Rector/Assign/DimFetchAssignToMethodCallRector.php',
@@ -3404,8 +3399,6 @@ class ComposerStaticInite884cc48de6e7e624cac6e13afe63ddf
         'Rector\\Transform\\Rector\\Class_\\ChangeSingletonToServiceRector' => __DIR__ . '/../..' . '/rules/Transform/Rector/Class_/ChangeSingletonToServiceRector.php',
         'Rector\\Transform\\Rector\\Class_\\MergeInterfacesRector' => __DIR__ . '/../..' . '/rules/Transform/Rector/Class_/MergeInterfacesRector.php',
         'Rector\\Transform\\Rector\\Class_\\ParentClassToTraitsRector' => __DIR__ . '/../..' . '/rules/Transform/Rector/Class_/ParentClassToTraitsRector.php',
-        'Rector\\Transform\\Rector\\Expression\\MethodCallToReturnRector' => __DIR__ . '/../..' . '/rules/Transform/Rector/Expression/MethodCallToReturnRector.php',
-        'Rector\\Transform\\Rector\\FileWithoutNamespace\\FunctionToStaticMethodRector' => __DIR__ . '/../..' . '/rules/Transform/Rector/FileWithoutNamespace/FunctionToStaticMethodRector.php',
         'Rector\\Transform\\Rector\\FuncCall\\ArgumentFuncCallToMethodCallRector' => __DIR__ . '/../..' . '/rules/Transform/Rector/FuncCall/ArgumentFuncCallToMethodCallRector.php',
         'Rector\\Transform\\Rector\\FuncCall\\FuncCallToConstFetchRector' => __DIR__ . '/../..' . '/rules/Transform/Rector/FuncCall/FuncCallToConstFetchRector.php',
         'Rector\\Transform\\Rector\\FuncCall\\FuncCallToMethodCallRector' => __DIR__ . '/../..' . '/rules/Transform/Rector/FuncCall/FuncCallToMethodCallRector.php',
@@ -3419,7 +3412,6 @@ class ComposerStaticInite884cc48de6e7e624cac6e13afe63ddf
         'Rector\\Transform\\Rector\\MethodCall\\MethodCallToStaticCallRector' => __DIR__ . '/../..' . '/rules/Transform/Rector/MethodCall/MethodCallToStaticCallRector.php',
         'Rector\\Transform\\Rector\\MethodCall\\ReplaceParentCallByPropertyCallRector' => __DIR__ . '/../..' . '/rules/Transform/Rector/MethodCall/ReplaceParentCallByPropertyCallRector.php',
         'Rector\\Transform\\Rector\\MethodCall\\ServiceGetterToConstructorInjectionRector' => __DIR__ . '/../..' . '/rules/Transform/Rector/MethodCall/ServiceGetterToConstructorInjectionRector.php',
-        'Rector\\Transform\\Rector\\MethodCall\\VariableMethodCallToServiceCallRector' => __DIR__ . '/../..' . '/rules/Transform/Rector/MethodCall/VariableMethodCallToServiceCallRector.php',
         'Rector\\Transform\\Rector\\New_\\NewArgToMethodCallRector' => __DIR__ . '/../..' . '/rules/Transform/Rector/New_/NewArgToMethodCallRector.php',
         'Rector\\Transform\\Rector\\New_\\NewToConstructorInjectionRector' => __DIR__ . '/../..' . '/rules/Transform/Rector/New_/NewToConstructorInjectionRector.php',
         'Rector\\Transform\\Rector\\New_\\NewToMethodCallRector' => __DIR__ . '/../..' . '/rules/Transform/Rector/New_/NewToMethodCallRector.php',
@@ -3440,7 +3432,6 @@ class ComposerStaticInite884cc48de6e7e624cac6e13afe63ddf
         'Rector\\Transform\\ValueObject\\GetAndSetToMethodCall' => __DIR__ . '/../..' . '/rules/Transform/ValueObject/GetAndSetToMethodCall.php',
         'Rector\\Transform\\ValueObject\\MethodCallToAnotherMethodCallWithArguments' => __DIR__ . '/../..' . '/rules/Transform/ValueObject/MethodCallToAnotherMethodCallWithArguments.php',
         'Rector\\Transform\\ValueObject\\MethodCallToMethodCall' => __DIR__ . '/../..' . '/rules/Transform/ValueObject/MethodCallToMethodCall.php',
-        'Rector\\Transform\\ValueObject\\MethodCallToReturn' => __DIR__ . '/../..' . '/rules/Transform/ValueObject/MethodCallToReturn.php',
         'Rector\\Transform\\ValueObject\\MethodCallToStaticCall' => __DIR__ . '/../..' . '/rules/Transform/ValueObject/MethodCallToStaticCall.php',
         'Rector\\Transform\\ValueObject\\NewArgToMethodCall' => __DIR__ . '/../..' . '/rules/Transform/ValueObject/NewArgToMethodCall.php',
         'Rector\\Transform\\ValueObject\\NewToMethodCall' => __DIR__ . '/../..' . '/rules/Transform/ValueObject/NewToMethodCall.php',
@@ -3850,9 +3841,9 @@ class ComposerStaticInite884cc48de6e7e624cac6e13afe63ddf
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInite884cc48de6e7e624cac6e13afe63ddf::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInite884cc48de6e7e624cac6e13afe63ddf::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInite884cc48de6e7e624cac6e13afe63ddf::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit7a605ef554a9e3e46d85e12cdfbd1d3e::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit7a605ef554a9e3e46d85e12cdfbd1d3e::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit7a605ef554a9e3e46d85e12cdfbd1d3e::$classMap;
 
         }, null, ClassLoader::class);
     }
