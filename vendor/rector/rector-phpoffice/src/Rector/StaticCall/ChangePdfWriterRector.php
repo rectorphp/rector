@@ -16,7 +16,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://github.com/PHPOffice/PhpSpreadsheet/blob/master/docs/topics/migration-from-PHPExcel.md#writing-pdf
  *
- * @see \Rector\Tests\PHPOffice\Rector\StaticCall\ChangePdfWriterRector\ChangePdfWriterRectorTest
+ * @see \Rector\PHPOffice\Tests\Rector\StaticCall\ChangePdfWriterRector\ChangePdfWriterRectorTest
  */
 final class ChangePdfWriterRector extends \Rector\Core\Rector\AbstractRector
 {

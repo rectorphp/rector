@@ -13,7 +13,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://github.com/PHPOffice/PhpSpreadsheet/blob/master/docs/topics/migration-from-PHPExcel.md#dedicated-class-to-manipulate-coordinates
  *
- * @see \Rector\Tests\PHPOffice\Rector\StaticCall\CellStaticToCoordinateRector\CellStaticToCoordinateRectorTest
+ * @see \Rector\PHPOffice\Tests\Rector\StaticCall\CellStaticToCoordinateRector\CellStaticToCoordinateRectorTest
  */
 final class CellStaticToCoordinateRector extends \Rector\Core\Rector\AbstractRector
 {

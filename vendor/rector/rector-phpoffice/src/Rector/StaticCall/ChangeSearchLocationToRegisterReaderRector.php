@@ -14,7 +14,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://github.com/PHPOffice/PhpSpreadsheet/blob/master/docs/topics/migration-from-PHPExcel.md#simplified-iofactory
  *
- * @see \Rector\Tests\PHPOffice\Rector\StaticCall\ChangeSearchLocationToRegisterReaderRector\ChangeSearchLocationToRegisterReaderRectorTest
+ * @see \Rector\PHPOffice\Tests\Rector\StaticCall\ChangeSearchLocationToRegisterReaderRector\ChangeSearchLocationToRegisterReaderRectorTest
  */
 final class ChangeSearchLocationToRegisterReaderRector extends \Rector\Core\Rector\AbstractRector
 {

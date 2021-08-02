@@ -1,0 +1,54 @@
+{
+    "name": "rector\/rector-phpoffice",
+    "type": "rector-extension",
+    "license": "MIT",
+    "description": "Rector upgrades rules for PHP Office",
+    "require": {
+        "php": ">=8.0"
+    },
+    "require-dev": {
+        "phpstan\/extension-installer": "^1.1",
+        "rector\/phpstan-rules": "^0.3.2",
+        "phpunit\/phpunit": "^9.5",
+        "symplify\/phpstan-rules": "^9.4",
+        "symplify\/phpstan-extensions": "^9.4",
+        "symplify\/easy-coding-standard": "^9.4",
+        "symplify\/rule-doc-generator": "^9.4",
+        "rector\/rector-src": "dev-main",
+        "rector\/rector-generator": "^0.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "Rector\\PHPOffice\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Rector\\PHPOffice\\Tests\\": "tests"
+        }
+    },
+    "scripts": {
+        "phpstan": "vendor\/bin\/phpstan analyse --ansi --error-format symplify",
+        "check-cs": "vendor\/bin\/ecs check --ansi",
+        "fix-cs": "vendor\/bin\/ecs check --fix --ansi",
+        "docs": [
+            "vendor\/bin\/rule-doc-generator generate src --output-file docs\/rector_rules_overview.md --ansi",
+            "vendor\/bin\/ecs check-markdown docs\/rector_rules_overview.md --ansi --fix"
+        ]
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-main": "0.11-dev"
+        },
+        "rector": {
+            "includes": [
+                "config\/config.php"
+            ]
+        }
+    },
+    "conflict": {
+        "rector\/rector": "<0.11"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

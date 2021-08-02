@@ -13,7 +13,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://github.com/PHPOffice/PhpSpreadsheet/blob/master/docs/topics/migration-from-PHPExcel.md#datatypedatatypeforvalue
  *
- * @see \Rector\Tests\PHPOffice\Rector\StaticCall\ChangeDataTypeForValueRector\ChangeDataTypeForValueRectorTest
+ * @see \Rector\PHPOffice\Tests\Rector\StaticCall\ChangeDataTypeForValueRector\ChangeDataTypeForValueRectorTest
  */
 final class ChangeDataTypeForValueRector extends \Rector\Core\Rector\AbstractRector
 {

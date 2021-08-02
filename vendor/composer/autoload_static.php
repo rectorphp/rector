@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit507e2fbcb0a2d677ee90c77a41079463
+class ComposerStaticInit42b79f7d00222661bde0f680f91ca686
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -37,6 +37,7 @@ class ComposerStaticInit507e2fbcb0a2d677ee90c77a41079463
             'Rector\\Symfony\\' => 15,
             'Rector\\RectorInstaller\\' => 23,
             'Rector\\PHPUnit\\' => 15,
+            'Rector\\PHPOffice\\' => 17,
             'Rector\\Nette\\' => 13,
             'Rector\\Laravel\\' => 15,
             'Rector\\Doctrine\\' => 16,
@@ -128,6 +129,10 @@ class ComposerStaticInit507e2fbcb0a2d677ee90c77a41079463
         'Rector\\PHPUnit\\' => 
         array (
             0 => __DIR__ . '/..' . '/rector/rector-phpunit/src',
+        ),
+        'Rector\\PHPOffice\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/rector/rector-phpoffice/src',
         ),
         'Rector\\Nette\\' => 
         array (
@@ -2854,22 +2859,23 @@ class ComposerStaticInit507e2fbcb0a2d677ee90c77a41079463
         'Rector\\Order\\ValueObject\\ClassMethodRankeable' => __DIR__ . '/../..' . '/rules/Order/ValueObject/ClassMethodRankeable.php',
         'Rector\\Order\\ValueObject\\PropertyRankeable' => __DIR__ . '/../..' . '/rules/Order/ValueObject/PropertyRankeable.php',
         'Rector\\Order\\ValueObject\\SortedClassMethodsAndOriginalClassMethods' => __DIR__ . '/../..' . '/rules/Order/ValueObject/SortedClassMethodsAndOriginalClassMethods.php',
-        'Rector\\PHPOffice\\Rector\\MethodCall\\ChangeConditionalGetConditionRector' => __DIR__ . '/../..' . '/rules/PHPOffice/Rector/MethodCall/ChangeConditionalGetConditionRector.php',
-        'Rector\\PHPOffice\\Rector\\MethodCall\\ChangeConditionalReturnedCellRector' => __DIR__ . '/../..' . '/rules/PHPOffice/Rector/MethodCall/ChangeConditionalReturnedCellRector.php',
-        'Rector\\PHPOffice\\Rector\\MethodCall\\ChangeConditionalSetConditionRector' => __DIR__ . '/../..' . '/rules/PHPOffice/Rector/MethodCall/ChangeConditionalSetConditionRector.php',
-        'Rector\\PHPOffice\\Rector\\MethodCall\\ChangeDuplicateStyleArrayToApplyFromArrayRector' => __DIR__ . '/../..' . '/rules/PHPOffice/Rector/MethodCall/ChangeDuplicateStyleArrayToApplyFromArrayRector.php',
-        'Rector\\PHPOffice\\Rector\\MethodCall\\GetDefaultStyleToGetParentRector' => __DIR__ . '/../..' . '/rules/PHPOffice/Rector/MethodCall/GetDefaultStyleToGetParentRector.php',
-        'Rector\\PHPOffice\\Rector\\MethodCall\\IncreaseColumnIndexRector' => __DIR__ . '/../..' . '/rules/PHPOffice/Rector/MethodCall/IncreaseColumnIndexRector.php',
-        'Rector\\PHPOffice\\Rector\\MethodCall\\RemoveSetTempDirOnExcelWriterRector' => __DIR__ . '/../..' . '/rules/PHPOffice/Rector/MethodCall/RemoveSetTempDirOnExcelWriterRector.php',
-        'Rector\\PHPOffice\\Rector\\StaticCall\\AddRemovedDefaultValuesRector' => __DIR__ . '/../..' . '/rules/PHPOffice/Rector/StaticCall/AddRemovedDefaultValuesRector.php',
-        'Rector\\PHPOffice\\Rector\\StaticCall\\CellStaticToCoordinateRector' => __DIR__ . '/../..' . '/rules/PHPOffice/Rector/StaticCall/CellStaticToCoordinateRector.php',
-        'Rector\\PHPOffice\\Rector\\StaticCall\\ChangeChartRendererRector' => __DIR__ . '/../..' . '/rules/PHPOffice/Rector/StaticCall/ChangeChartRendererRector.php',
-        'Rector\\PHPOffice\\Rector\\StaticCall\\ChangeDataTypeForValueRector' => __DIR__ . '/../..' . '/rules/PHPOffice/Rector/StaticCall/ChangeDataTypeForValueRector.php',
-        'Rector\\PHPOffice\\Rector\\StaticCall\\ChangeIOFactoryArgumentRector' => __DIR__ . '/../..' . '/rules/PHPOffice/Rector/StaticCall/ChangeIOFactoryArgumentRector.php',
-        'Rector\\PHPOffice\\Rector\\StaticCall\\ChangePdfWriterRector' => __DIR__ . '/../..' . '/rules/PHPOffice/Rector/StaticCall/ChangePdfWriterRector.php',
-        'Rector\\PHPOffice\\Rector\\StaticCall\\ChangeSearchLocationToRegisterReaderRector' => __DIR__ . '/../..' . '/rules/PHPOffice/Rector/StaticCall/ChangeSearchLocationToRegisterReaderRector.php',
-        'Rector\\PHPOffice\\ValueObject\\ConditionalSetValue' => __DIR__ . '/../..' . '/rules/PHPOffice/ValueObject/ConditionalSetValue.php',
-        'Rector\\PHPOffice\\ValueObject\\PHPExcelMethodDefaultValues' => __DIR__ . '/../..' . '/rules/PHPOffice/ValueObject/PHPExcelMethodDefaultValues.php',
+        'Rector\\PHPOffice\\Rector\\MethodCall\\ChangeConditionalGetConditionRector' => __DIR__ . '/..' . '/rector/rector-phpoffice/src/Rector/MethodCall/ChangeConditionalGetConditionRector.php',
+        'Rector\\PHPOffice\\Rector\\MethodCall\\ChangeConditionalReturnedCellRector' => __DIR__ . '/..' . '/rector/rector-phpoffice/src/Rector/MethodCall/ChangeConditionalReturnedCellRector.php',
+        'Rector\\PHPOffice\\Rector\\MethodCall\\ChangeConditionalSetConditionRector' => __DIR__ . '/..' . '/rector/rector-phpoffice/src/Rector/MethodCall/ChangeConditionalSetConditionRector.php',
+        'Rector\\PHPOffice\\Rector\\MethodCall\\ChangeDuplicateStyleArrayToApplyFromArrayRector' => __DIR__ . '/..' . '/rector/rector-phpoffice/src/Rector/MethodCall/ChangeDuplicateStyleArrayToApplyFromArrayRector.php',
+        'Rector\\PHPOffice\\Rector\\MethodCall\\GetDefaultStyleToGetParentRector' => __DIR__ . '/..' . '/rector/rector-phpoffice/src/Rector/MethodCall/GetDefaultStyleToGetParentRector.php',
+        'Rector\\PHPOffice\\Rector\\MethodCall\\IncreaseColumnIndexRector' => __DIR__ . '/..' . '/rector/rector-phpoffice/src/Rector/MethodCall/IncreaseColumnIndexRector.php',
+        'Rector\\PHPOffice\\Rector\\MethodCall\\RemoveSetTempDirOnExcelWriterRector' => __DIR__ . '/..' . '/rector/rector-phpoffice/src/Rector/MethodCall/RemoveSetTempDirOnExcelWriterRector.php',
+        'Rector\\PHPOffice\\Rector\\StaticCall\\AddRemovedDefaultValuesRector' => __DIR__ . '/..' . '/rector/rector-phpoffice/src/Rector/StaticCall/AddRemovedDefaultValuesRector.php',
+        'Rector\\PHPOffice\\Rector\\StaticCall\\CellStaticToCoordinateRector' => __DIR__ . '/..' . '/rector/rector-phpoffice/src/Rector/StaticCall/CellStaticToCoordinateRector.php',
+        'Rector\\PHPOffice\\Rector\\StaticCall\\ChangeChartRendererRector' => __DIR__ . '/..' . '/rector/rector-phpoffice/src/Rector/StaticCall/ChangeChartRendererRector.php',
+        'Rector\\PHPOffice\\Rector\\StaticCall\\ChangeDataTypeForValueRector' => __DIR__ . '/..' . '/rector/rector-phpoffice/src/Rector/StaticCall/ChangeDataTypeForValueRector.php',
+        'Rector\\PHPOffice\\Rector\\StaticCall\\ChangeIOFactoryArgumentRector' => __DIR__ . '/..' . '/rector/rector-phpoffice/src/Rector/StaticCall/ChangeIOFactoryArgumentRector.php',
+        'Rector\\PHPOffice\\Rector\\StaticCall\\ChangePdfWriterRector' => __DIR__ . '/..' . '/rector/rector-phpoffice/src/Rector/StaticCall/ChangePdfWriterRector.php',
+        'Rector\\PHPOffice\\Rector\\StaticCall\\ChangeSearchLocationToRegisterReaderRector' => __DIR__ . '/..' . '/rector/rector-phpoffice/src/Rector/StaticCall/ChangeSearchLocationToRegisterReaderRector.php',
+        'Rector\\PHPOffice\\Set\\PHPOfficeSetList' => __DIR__ . '/..' . '/rector/rector-phpoffice/src/Set/PHPOfficeSetList.php',
+        'Rector\\PHPOffice\\ValueObject\\ConditionalSetValue' => __DIR__ . '/..' . '/rector/rector-phpoffice/src/ValueObject/ConditionalSetValue.php',
+        'Rector\\PHPOffice\\ValueObject\\PHPExcelMethodDefaultValues' => __DIR__ . '/..' . '/rector/rector-phpoffice/src/ValueObject/PHPExcelMethodDefaultValues.php',
         'Rector\\PHPStanStaticTypeMapper\\Contract\\TypeMapperInterface' => __DIR__ . '/../..' . '/packages/PHPStanStaticTypeMapper/Contract/TypeMapperInterface.php',
         'Rector\\PHPStanStaticTypeMapper\\DoctrineTypeAnalyzer' => __DIR__ . '/../..' . '/packages/PHPStanStaticTypeMapper/DoctrineTypeAnalyzer.php',
         'Rector\\PHPStanStaticTypeMapper\\PHPStanStaticTypeMapper' => __DIR__ . '/../..' . '/packages/PHPStanStaticTypeMapper/PHPStanStaticTypeMapper.php',
@@ -3841,9 +3847,9 @@ class ComposerStaticInit507e2fbcb0a2d677ee90c77a41079463
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit507e2fbcb0a2d677ee90c77a41079463::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit507e2fbcb0a2d677ee90c77a41079463::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit507e2fbcb0a2d677ee90c77a41079463::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit42b79f7d00222661bde0f680f91ca686::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit42b79f7d00222661bde0f680f91ca686::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit42b79f7d00222661bde0f680f91ca686::$classMap;
 
         }, null, ClassLoader::class);
     }

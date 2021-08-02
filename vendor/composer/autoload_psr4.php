@@ -13,6 +13,7 @@ return array(
     'Rector\\Symfony\\' => array($vendorDir . '/rector/rector-symfony/src'),
     'Rector\\RectorInstaller\\' => array($vendorDir . '/rector/extension-installer/src'),
     'Rector\\PHPUnit\\' => array($vendorDir . '/rector/rector-phpunit/src'),
+    'Rector\\PHPOffice\\' => array($vendorDir . '/rector/rector-phpoffice/src'),
     'Rector\\Nette\\' => array($vendorDir . '/rector/rector-nette/src'),
     'Rector\\Laravel\\' => array($vendorDir . '/rector/rector-laravel/src'),
     'Rector\\Doctrine\\' => array($vendorDir . '/rector/rector-doctrine/src'),

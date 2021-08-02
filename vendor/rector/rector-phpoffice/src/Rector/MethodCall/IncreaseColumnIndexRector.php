@@ -18,7 +18,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://github.com/PHPOffice/PhpSpreadsheet/blob/master/docs/topics/migration-from-PHPExcel.md#column-index-based-on-1
  *
- * @see \Rector\Tests\PHPOffice\Rector\MethodCall\IncreaseColumnIndexRector\IncreaseColumnIndexRectorTest
+ * @see \Rector\PHPOffice\Tests\Rector\MethodCall\IncreaseColumnIndexRector\IncreaseColumnIndexRectorTest
  */
 final class IncreaseColumnIndexRector extends \Rector\Core\Rector\AbstractRector
 {

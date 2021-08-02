@@ -1414,6 +1414,67 @@
             "install-path": "..\/rector\/rector-nette"
         },
         {
+            "name": "rector\/rector-phpoffice",
+            "version": "0.11.2",
+            "version_normalized": "0.11.2.0",
+            "source": {
+                "type": "git",
+                "url": "https:\/\/github.com\/rectorphp\/rector-phpoffice.git",
+                "reference": "b69f880e0b162cff0a95dffe9130f3a3360a1e9e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpoffice\/zipball\/b69f880e0b162cff0a95dffe9130f3a3360a1e9e",
+                "reference": "b69f880e0b162cff0a95dffe9130f3a3360a1e9e",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.0"
+            },
+            "conflict": {
+                "rector\/rector": "<0.11"
+            },
+            "require-dev": {
+                "phpstan\/extension-installer": "^1.1",
+                "phpunit\/phpunit": "^9.5",
+                "rector\/phpstan-rules": "^0.3.2",
+                "rector\/rector-generator": "^0.2",
+                "rector\/rector-src": "dev-main",
+                "symplify\/easy-coding-standard": "^9.4",
+                "symplify\/phpstan-extensions": "^9.4",
+                "symplify\/phpstan-rules": "^9.4",
+                "symplify\/rule-doc-generator": "^9.4"
+            },
+            "time": "2021-08-02T15:42:58+00:00",
+            "type": "rector-extension",
+            "extra": {
+                "branch-alias": {
+                    "dev-main": "0.11-dev"
+                },
+                "rector": {
+                    "includes": [
+                        "config\/config.php"
+                    ]
+                }
+            },
+            "installation-source": "dist",
+            "autoload": {
+                "psr-4": {
+                    "Rector\\PHPOffice\\": "src"
+                }
+            },
+            "notification-url": "https:\/\/packagist.org\/downloads\/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Rector upgrades rules for PHP Office",
+            "support": {
+                "issues": "https:\/\/github.com\/rectorphp\/rector-phpoffice\/issues",
+                "source": "https:\/\/github.com\/rectorphp\/rector-phpoffice\/tree\/0.11.2"
+            },
+            "install-path": "..\/rector\/rector-phpoffice"
+        },
+        {
             "name": "rector\/rector-phpunit",
             "version": "0.11.7",
             "version_normalized": "0.11.7.0",
