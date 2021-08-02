@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitefdcc4d5a886384f0eaef8357453d143
+class ComposerStaticInit515a7719282ef2aa9111616aa962f8f2
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -1958,7 +1958,6 @@ class ComposerStaticInitefdcc4d5a886384f0eaef8357453d143
         'Rector\\ChangesReporting\\ValueObjectFactory\\FileDiffFactory' => __DIR__ . '/../..' . '/packages/ChangesReporting/ValueObjectFactory/FileDiffFactory.php',
         'Rector\\ChangesReporting\\ValueObject\\RectorWithLineChange' => __DIR__ . '/../..' . '/packages/ChangesReporting/ValueObject/RectorWithLineChange.php',
         'Rector\\CodeQualityStrict\\NodeFactory\\ClassConstFetchFactory' => __DIR__ . '/../..' . '/rules/CodeQualityStrict/NodeFactory/ClassConstFetchFactory.php',
-        'Rector\\CodeQualityStrict\\Rector\\Variable\\MoveVariableDeclarationNearReferenceRector' => __DIR__ . '/../..' . '/rules/CodeQualityStrict/Rector/Variable/MoveVariableDeclarationNearReferenceRector.php',
         'Rector\\CodeQualityStrict\\TypeAnalyzer\\SubTypeAnalyzer' => __DIR__ . '/../..' . '/rules/CodeQualityStrict/TypeAnalyzer/SubTypeAnalyzer.php',
         'Rector\\CodeQuality\\CompactConverter' => __DIR__ . '/../..' . '/rules/CodeQuality/CompactConverter.php',
         'Rector\\CodeQuality\\NodeAnalyzer\\ArrayCompacter' => __DIR__ . '/../..' . '/rules/CodeQuality/NodeAnalyzer/ArrayCompacter.php',
@@ -2039,8 +2038,10 @@ class ComposerStaticInitefdcc4d5a886384f0eaef8357453d143
         'Rector\\CodeQuality\\Rector\\Ternary\\SimplifyTautologyTernaryRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Ternary/SimplifyTautologyTernaryRector.php',
         'Rector\\CodeQuality\\Rector\\Ternary\\SwitchNegatedTernaryRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Ternary/SwitchNegatedTernaryRector.php',
         'Rector\\CodeQuality\\Rector\\Ternary\\UnnecessaryTernaryExpressionRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Ternary/UnnecessaryTernaryExpressionRector.php',
+        'Rector\\CodeQuality\\Rector\\Variable\\MoveVariableDeclarationNearReferenceRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Variable/MoveVariableDeclarationNearReferenceRector.php',
         'Rector\\CodeQuality\\TypeResolver\\ArrayDimFetchTypeResolver' => __DIR__ . '/../..' . '/rules/CodeQuality/TypeResolver/ArrayDimFetchTypeResolver.php',
         'Rector\\CodeQuality\\TypeResolver\\AssignVariableTypeResolver' => __DIR__ . '/../..' . '/rules/CodeQuality/TypeResolver/AssignVariableTypeResolver.php',
+        'Rector\\CodeQuality\\UsageFinder\\UsageInNextStmtFinder' => __DIR__ . '/../..' . '/rules/CodeQuality/UsageFinder/UsageInNextStmtFinder.php',
         'Rector\\CodingStyle\\Application\\UseImportsAdder' => __DIR__ . '/../..' . '/rules/CodingStyle/Application/UseImportsAdder.php',
         'Rector\\CodingStyle\\Application\\UseImportsRemover' => __DIR__ . '/../..' . '/rules/CodingStyle/Application/UseImportsRemover.php',
         'Rector\\CodingStyle\\ClassNameImport\\AliasUsesResolver' => __DIR__ . '/../..' . '/rules/CodingStyle/ClassNameImport/AliasUsesResolver.php',
@@ -2081,7 +2082,6 @@ class ComposerStaticInitefdcc4d5a886384f0eaef8357453d143
         'Rector\\CodingStyle\\Rector\\ClassMethod\\RemoveDoubleUnderscoreInMethodNameRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/ClassMethod/RemoveDoubleUnderscoreInMethodNameRector.php',
         'Rector\\CodingStyle\\Rector\\ClassMethod\\ReturnArrayClassMethodToYieldRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/ClassMethod/ReturnArrayClassMethodToYieldRector.php',
         'Rector\\CodingStyle\\Rector\\ClassMethod\\UnSpreadOperatorRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/ClassMethod/UnSpreadOperatorRector.php',
-        'Rector\\CodingStyle\\Rector\\ClassMethod\\YieldClassMethodToArrayClassMethodRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/ClassMethod/YieldClassMethodToArrayClassMethodRector.php',
         'Rector\\CodingStyle\\Rector\\Class_\\AddArrayDefaultToArrayPropertyRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/Class_/AddArrayDefaultToArrayPropertyRector.php',
         'Rector\\CodingStyle\\Rector\\Encapsed\\EncapsedStringsToSprintfRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/Encapsed/EncapsedStringsToSprintfRector.php',
         'Rector\\CodingStyle\\Rector\\Encapsed\\WrapEncapsedVariableInCurlyBracesRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/Encapsed/WrapEncapsedVariableInCurlyBracesRector.php',
@@ -3847,9 +3847,9 @@ class ComposerStaticInitefdcc4d5a886384f0eaef8357453d143
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitefdcc4d5a886384f0eaef8357453d143::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitefdcc4d5a886384f0eaef8357453d143::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitefdcc4d5a886384f0eaef8357453d143::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit515a7719282ef2aa9111616aa962f8f2::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit515a7719282ef2aa9111616aa962f8f2::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit515a7719282ef2aa9111616aa962f8f2::$classMap;
 
         }, null, ClassLoader::class);
     }

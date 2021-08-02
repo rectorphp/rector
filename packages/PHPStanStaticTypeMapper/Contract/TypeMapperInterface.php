@@ -27,7 +27,7 @@ interface TypeMapperInterface
     /**
      * @param \PHPStan\Type\Type $type
      * @return Name|NullableType|UnionType|null
-     * @param \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind $typeTypeKind
+     * @param \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind $typeKind
      */
-    public function mapToPhpParserNode($type, $typeTypeKind) : ?\PhpParser\Node;
+    public function mapToPhpParserNode($type, $typeKind) : ?\PhpParser\Node;
 }

@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\CodeQualityStrict\Rector\Variable;
+namespace Rector\CodeQuality\Rector\Variable;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
@@ -17,20 +17,16 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\For_;
 use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\If_;
-use PhpParser\Node\Stmt\InlineHTML;
-use PhpParser\Node\Stmt\Switch_;
-use PhpParser\Node\Stmt\TryCatch;
 use PhpParser\Node\Stmt\While_;
-use PHPStan\Reflection\ReflectionProvider;
+use Rector\CodeQuality\UsageFinder\UsageInNextStmtFinder;
 use Rector\Core\Rector\AbstractRector;
-use Rector\DeadCode\SideEffect\SideEffectNodeDetector;
 use Rector\NodeNestingScope\NodeFinder\ScopeAwareNodeFinder;
 use Rector\NodeNestingScope\ParentFinder;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @see \Rector\Tests\CodeQualityStrict\Rector\Variable\MoveVariableDeclarationNearReferenceRector\MoveVariableDeclarationNearReferenceRectorTest
+ * @see \Rector\Tests\CodeQuality\Rector\Variable\MoveVariableDeclarationNearReferenceRector\MoveVariableDeclarationNearReferenceRectorTest
  */
 final class MoveVariableDeclarationNearReferenceRector extends \Rector\Core\Rector\AbstractRector
 {
@@ -39,23 +35,18 @@ final class MoveVariableDeclarationNearReferenceRector extends \Rector\Core\Rect
      */
     private $scopeAwareNodeFinder;
     /**
-     * @var \Rector\DeadCode\SideEffect\SideEffectNodeDetector
-     */
-    private $sideEffectNodeDetector;
-    /**
-     * @var \PHPStan\Reflection\ReflectionProvider
-     */
-    private $reflectionProvider;
-    /**
      * @var \Rector\NodeNestingScope\ParentFinder
      */
     private $parentFinder;
-    public function __construct(\Rector\NodeNestingScope\NodeFinder\ScopeAwareNodeFinder $scopeAwareNodeFinder, \Rector\DeadCode\SideEffect\SideEffectNodeDetector $sideEffectNodeDetector, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\NodeNestingScope\ParentFinder $parentFinder)
+    /**
+     * @var \Rector\CodeQuality\UsageFinder\UsageInNextStmtFinder
+     */
+    private $usageInNextStmtFinder;
+    public function __construct(\Rector\NodeNestingScope\NodeFinder\ScopeAwareNodeFinder $scopeAwareNodeFinder, \Rector\NodeNestingScope\ParentFinder $parentFinder, \Rector\CodeQuality\UsageFinder\UsageInNextStmtFinder $usageInNextStmtFinder)
     {
         $this->scopeAwareNodeFinder = $scopeAwareNodeFinder;
-        $this->sideEffectNodeDetector = $sideEffectNodeDetector;
-        $this->reflectionProvider = $reflectionProvider;
         $this->parentFinder = $parentFinder;
+        $this->usageInNextStmtFinder = $usageInNextStmtFinder;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -99,18 +90,16 @@ CODE_SAMPLE
         if ($this->isUsedAsArraykeyOrInsideIfCondition($expression, $node)) {
             return null;
         }
-        if ($this->hasPropertyInExpr($expression, $parent->expr)) {
+        if ($this->hasPropertyInExpr($parent->expr)) {
             return null;
         }
         if ($this->shouldSkipReAssign($expression, $parent)) {
             return null;
         }
-        $variable = $this->getUsageInNextStmts($expression, $node);
-        if (!$variable instanceof \PhpParser\Node\Expr\Variable) {
+        $usageStmt = $this->findUsageStmt($expression, $node);
+        if (!$usageStmt instanceof \PhpParser\Node) {
             return null;
         }
-        /** @var Node $usageStmt */
-        $usageStmt = $variable->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CURRENT_STATEMENT);
         if ($this->isInsideLoopStmts($usageStmt)) {
             return null;
         }
@@ -126,7 +115,7 @@ CODE_SAMPLE
         }
         return $this->isInsideCondition($expression);
     }
-    private function hasPropertyInExpr(\PhpParser\Node\Stmt\Expression $expression, \PhpParser\Node\Expr $expr) : bool
+    private function hasPropertyInExpr(\PhpParser\Node\Expr $expr) : bool
     {
         return (bool) $this->betterNodeFinder->findFirst($expr, function (\PhpParser\Node $node) : bool {
             return $node instanceof \PhpParser\Node\Expr\PropertyFetch || $node instanceof \PhpParser\Node\Expr\StaticPropertyFetch;
@@ -138,32 +127,6 @@ CODE_SAMPLE
             return \true;
         }
         return $this->hasReAssign($expression, $assign->expr);
-    }
-    private function getUsageInNextStmts(\PhpParser\Node\Stmt\Expression $expression, \PhpParser\Node\Expr\Variable $variable) : ?\PhpParser\Node\Expr\Variable
-    {
-        /** @var Node|null $next */
-        $next = $expression->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::NEXT_NODE);
-        if (!$next instanceof \PhpParser\Node) {
-            return null;
-        }
-        if ($next instanceof \PhpParser\Node\Stmt\InlineHTML) {
-            return null;
-        }
-        if ($this->hasCall($next)) {
-            return null;
-        }
-        $countFound = $this->getCountFound($next, $variable);
-        if ($countFound === 0) {
-            return null;
-        }
-        if ($countFound >= 2) {
-            return null;
-        }
-        $nextVariable = $this->getSameVarName([$next], $variable);
-        if ($nextVariable instanceof \PhpParser\Node\Expr\Variable) {
-            return $nextVariable;
-        }
-        return $this->getSameVarNameInNexts($next, $variable);
     }
     private function isInsideLoopStmts(\PhpParser\Node $node) : bool
     {
@@ -224,63 +187,6 @@ CODE_SAMPLE
         }
         return \false;
     }
-    private function hasCall(\PhpParser\Node $node) : bool
-    {
-        return (bool) $this->betterNodeFinder->findFirst($node, function (\PhpParser\Node $n) : bool {
-            return $this->sideEffectNodeDetector->detectCallExpr($n);
-        });
-    }
-    private function getCountFound(\PhpParser\Node $node, \PhpParser\Node\Expr\Variable $variable) : int
-    {
-        $countFound = 0;
-        while ($node) {
-            $isFound = (bool) $this->getSameVarName([$node], $variable);
-            if ($isFound) {
-                ++$countFound;
-            }
-            $countFound = $this->countWithElseIf($node, $variable, $countFound);
-            $countFound = $this->countWithTryCatch($node, $variable, $countFound);
-            $countFound = $this->countWithSwitchCase($node, $variable, $countFound);
-            /** @var Node|null $node */
-            $node = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::NEXT_NODE);
-        }
-        return $countFound;
-    }
-    /**
-     * @param array<int, Node|null> $multiNodes
-     */
-    private function getSameVarName(array $multiNodes, \PhpParser\Node\Expr\Variable $variable) : ?\PhpParser\Node\Expr\Variable
-    {
-        foreach ($multiNodes as $multiNode) {
-            if ($multiNode === null) {
-                continue;
-            }
-            /** @var Variable|null $found */
-            $found = $this->betterNodeFinder->findFirst($multiNode, function (\PhpParser\Node $n) use($variable) : bool {
-                $n = $this->mayBeArrayDimFetch($n);
-                if (!$n instanceof \PhpParser\Node\Expr\Variable) {
-                    return \false;
-                }
-                return $this->isName($n, (string) $this->getName($variable));
-            });
-            if ($found !== null) {
-                return $found;
-            }
-        }
-        return null;
-    }
-    private function getSameVarNameInNexts(\PhpParser\Node $node, \PhpParser\Node\Expr\Variable $variable) : ?\PhpParser\Node\Expr\Variable
-    {
-        while ($node) {
-            $found = $this->getSameVarName([$node], $variable);
-            if ($found instanceof \PhpParser\Node\Expr\Variable) {
-                return $found;
-            }
-            /** @var Node|null $node */
-            $node = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::NEXT_NODE);
-        }
-        return null;
-    }
     private function mayBeArrayDimFetch(\PhpParser\Node $node) : \PhpParser\Node
     {
         $parent = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
@@ -289,39 +195,15 @@ CODE_SAMPLE
         }
         return $node;
     }
-    private function countWithElseIf(\PhpParser\Node $node, \PhpParser\Node\Expr\Variable $variable, int $countFound) : int
+    /**
+     * @return \PhpParser\Node|null
+     */
+    private function findUsageStmt(\PhpParser\Node\Stmt\Expression $expression, \PhpParser\Node\Expr\Variable $variable)
     {
-        if (!$node instanceof \PhpParser\Node\Stmt\If_) {
-            return $countFound;
+        $nextVariable = $this->usageInNextStmtFinder->getUsageInNextStmts($expression, $variable);
+        if (!$nextVariable instanceof \PhpParser\Node\Expr\Variable) {
+            return null;
         }
-        $isFoundElseIf = (bool) $this->getSameVarName($node->elseifs, $variable);
-        $isFoundElse = (bool) $this->getSameVarName([$node->else], $variable);
-        if ($isFoundElseIf || $isFoundElse) {
-            ++$countFound;
-        }
-        return $countFound;
-    }
-    private function countWithTryCatch(\PhpParser\Node $node, \PhpParser\Node\Expr\Variable $variable, int $countFound) : int
-    {
-        if (!$node instanceof \PhpParser\Node\Stmt\TryCatch) {
-            return $countFound;
-        }
-        $isFoundInCatch = (bool) $this->getSameVarName($node->catches, $variable);
-        $isFoundInFinally = (bool) $this->getSameVarName([$node->finally], $variable);
-        if ($isFoundInCatch || $isFoundInFinally) {
-            ++$countFound;
-        }
-        return $countFound;
-    }
-    private function countWithSwitchCase(\PhpParser\Node $node, \PhpParser\Node\Expr\Variable $variable, int $countFound) : int
-    {
-        if (!$node instanceof \PhpParser\Node\Stmt\Switch_) {
-            return $countFound;
-        }
-        $isFoundInCases = (bool) $this->getSameVarName($node->cases, $variable);
-        if ($isFoundInCases) {
-            ++$countFound;
-        }
-        return $countFound;
+        return $nextVariable->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CURRENT_STATEMENT);
     }
 }

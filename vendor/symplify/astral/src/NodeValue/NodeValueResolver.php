@@ -92,6 +92,9 @@ final class NodeValueResolver
         if ($constantName === 'class') {
             return $className;
         }
+        if (!\class_exists($className) && !\interface_exists($className)) {
+            return null;
+        }
         $reflectionClassConstant = new \ReflectionClassConstant($className, $constantName);
         return $reflectionClassConstant->getValue();
     }

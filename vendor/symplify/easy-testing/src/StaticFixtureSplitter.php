@@ -50,8 +50,12 @@ final class StaticFixtureSplitter
     public static function createTemporaryFileInfo(\Symplify\SmartFileSystem\SmartFileInfo $fixtureSmartFileInfo, string $prefix, string $fileContent) : \Symplify\SmartFileSystem\SmartFileInfo
     {
         $temporaryFilePath = self::createTemporaryPathWithPrefix($fixtureSmartFileInfo, $prefix);
-        $smartFileSystem = new \RectorPrefix20210802\Symplify\SmartFileSystem\SmartFileSystem();
-        $smartFileSystem->dumpFile($temporaryFilePath, $fileContent);
+        $dir = \dirname($temporaryFilePath);
+        if (!\is_dir($dir)) {
+            \mkdir($dir, 0777, \true);
+        }
+        /** @phpstan-ignore-next-line we don't use SmartFileSystem->dump() for performance reasons */
+        \file_put_contents($temporaryFilePath, $fileContent);
         return new \Symplify\SmartFileSystem\SmartFileInfo($temporaryFilePath);
     }
     public static function splitFileInfoToLocalInputAndExpected(\Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo, bool $autoloadTestFixture = \false) : \RectorPrefix20210802\Symplify\EasyTesting\ValueObject\InputFileInfoAndExpected

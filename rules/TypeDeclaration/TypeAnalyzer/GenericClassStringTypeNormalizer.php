@@ -16,23 +16,20 @@ use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeTraverser;
 use PHPStan\Type\UnionType;
-use RectorPrefix20210802\Symplify\PackageBuilder\Parameter\ParameterProvider;
 final class GenericClassStringTypeNormalizer
 {
     /**
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
-    /**
-     * @var \Symplify\PackageBuilder\Parameter\ParameterProvider
-     */
-    private $parameterProvider;
-    public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider, \RectorPrefix20210802\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider)
+    public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider)
     {
         $this->reflectionProvider = $reflectionProvider;
-        $this->parameterProvider = $parameterProvider;
     }
-    public function normalize(\PHPStan\Type\Type $type) : \PHPStan\Type\Type
+    /**
+     * @return \PHPStan\Type\ArrayType|\PHPStan\Type\UnionType|\PHPStan\Type\Type
+     */
+    public function normalize(\PHPStan\Type\Type $type)
     {
         $type = \PHPStan\Type\TypeTraverser::map($type, function (\PHPStan\Type\Type $type, $callback) : Type {
             if (!$type instanceof \PHPStan\Type\Constant\ConstantStringType) {

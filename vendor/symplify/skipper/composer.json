@@ -9,9 +9,9 @@
         "symfony\/dependency-injection": "^5.3.x-dev",
         "symfony\/finder": "^5.3",
         "symfony\/filesystem": "^5.3",
-        "symplify\/package-builder": "^9.4.23",
-        "symplify\/symplify-kernel": "^9.4.23",
-        "symplify\/smart-file-system": "^9.4.23"
+        "symplify\/package-builder": "^9.4.24",
+        "symplify\/symplify-kernel": "^9.4.24",
+        "symplify\/smart-file-system": "^9.4.24"
     },
     "require-dev": {
         "phpunit\/phpunit": "^9.5"

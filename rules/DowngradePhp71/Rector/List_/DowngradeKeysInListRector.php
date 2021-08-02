@@ -13,7 +13,6 @@ use PhpParser\Node\Expr\List_;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Foreach_;
-use Rector\CodeQuality\NodeAnalyzer\ForeachAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Naming\ExpectedNameResolver\InflectorSingularResolver;
 use Rector\Naming\Naming\VariableNaming;
@@ -30,17 +29,12 @@ final class DowngradeKeysInListRector extends \Rector\Core\Rector\AbstractRector
      */
     private $inflectorSingularResolver;
     /**
-     * @var \Rector\CodeQuality\NodeAnalyzer\ForeachAnalyzer
-     */
-    private $foreachAnalyzer;
-    /**
      * @var \Rector\Naming\Naming\VariableNaming
      */
     private $variableNaming;
-    public function __construct(\Rector\Naming\ExpectedNameResolver\InflectorSingularResolver $inflectorSingularResolver, \Rector\CodeQuality\NodeAnalyzer\ForeachAnalyzer $foreachAnalyzer, \Rector\Naming\Naming\VariableNaming $variableNaming)
+    public function __construct(\Rector\Naming\ExpectedNameResolver\InflectorSingularResolver $inflectorSingularResolver, \Rector\Naming\Naming\VariableNaming $variableNaming)
     {
         $this->inflectorSingularResolver = $inflectorSingularResolver;
-        $this->foreachAnalyzer = $foreachAnalyzer;
         $this->variableNaming = $variableNaming;
     }
     /**

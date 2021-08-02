@@ -90,7 +90,7 @@ CODE_SAMPLE
                 continue;
             }
             if ($this->propertyManipulator->isPropertyUsedInReadContext($param)) {
-                return null;
+                continue;
             }
             // only private local scope; removing public property might be dangerous
             if ($param->flags !== \PhpParser\Node\Stmt\Class_::MODIFIER_PRIVATE) {

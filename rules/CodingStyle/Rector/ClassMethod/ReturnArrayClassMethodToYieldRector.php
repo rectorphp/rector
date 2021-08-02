@@ -47,30 +47,32 @@ final class ReturnArrayClassMethodToYieldRector extends \Rector\Core\Rector\Abst
     {
         $this->nodeTransformer = $nodeTransformer;
         $this->commentsMerger = $commentsMerger;
-        // default values
-        $this->methodsToYields = [new \Rector\CodingStyle\ValueObject\ReturnArrayClassMethodToYield('PHPUnit\\Framework\\TestCase', 'provideData'), new \Rector\CodingStyle\ValueObject\ReturnArrayClassMethodToYield('PHPUnit\\Framework\\TestCase', 'provideData*'), new \Rector\CodingStyle\ValueObject\ReturnArrayClassMethodToYield('PHPUnit\\Framework\\TestCase', 'dataProvider'), new \Rector\CodingStyle\ValueObject\ReturnArrayClassMethodToYield('PHPUnit\\Framework\\TestCase', 'dataProvider*')];
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
         return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Turns array return to yield return in specific type and method', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
-class SomeEventSubscriber implements EventSubscriberInterface
+use PHPUnit\Framework\TestCase;
+
+final class SomeTest implements TestCase
 {
-    public static function getSubscribedEvents()
+    public static function provideData()
     {
-        return ['event' => 'callback'];
+        return [['some text']];
     }
 }
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
-class SomeEventSubscriber implements EventSubscriberInterface
+use PHPUnit\Framework\TestCase;
+
+final class SomeTest implements TestCase
 {
-    public static function getSubscribedEvents()
+    public static function provideData()
     {
-        yield 'event' => 'callback';
+        yield ['some text'];
     }
 }
 CODE_SAMPLE
-, [self::METHODS_TO_YIELDS => [new \Rector\CodingStyle\ValueObject\ReturnArrayClassMethodToYield('EventSubscriberInterface', 'getSubscribedEvents')]])]);
+, [self::METHODS_TO_YIELDS => [new \Rector\CodingStyle\ValueObject\ReturnArrayClassMethodToYield('PHPUnit\\Framework\\TestCase', '*provide*')]])]);
     }
     /**
      * @return array<class-string<Node>>

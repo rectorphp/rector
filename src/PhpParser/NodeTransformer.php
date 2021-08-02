@@ -50,26 +50,6 @@ final class NodeTransformer
         return new \PhpParser\Node\Expr\Array_($arrayMessageParts);
     }
     /**
-     * @param Yield_[]|Expression[] $yieldNodes
-     */
-    public function transformYieldsToArray(array $yieldNodes) : \PhpParser\Node\Expr\Array_
-    {
-        $arrayItems = [];
-        foreach ($yieldNodes as $yieldNode) {
-            if ($yieldNode instanceof \PhpParser\Node\Stmt\Expression) {
-                $yieldNode = $yieldNode->expr;
-            }
-            if (!$yieldNode instanceof \PhpParser\Node\Expr\Yield_) {
-                continue;
-            }
-            if ($yieldNode->value === null) {
-                continue;
-            }
-            $arrayItems[] = new \PhpParser\Node\Expr\ArrayItem($yieldNode->value, $yieldNode->key);
-        }
-        return new \PhpParser\Node\Expr\Array_($arrayItems);
-    }
-    /**
      * @return Expression[]
      */
     public function transformArrayToYields(\PhpParser\Node\Expr\Array_ $array) : array
