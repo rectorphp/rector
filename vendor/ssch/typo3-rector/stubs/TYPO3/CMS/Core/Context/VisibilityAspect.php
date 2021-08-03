@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210802\TYPO3\CMS\Core\Context;
+namespace RectorPrefix20210803\TYPO3\CMS\Core\Context;
 
 if (\class_exists('TYPO3\\CMS\\Core\\Context\\VisibilityAspect')) {
     return;

@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210802\Symfony\Component\HttpKernel\DataCollector;
+namespace RectorPrefix20210803\Symfony\Component\HttpKernel\DataCollector;
 
 /**
  * LateDataCollectorInterface.

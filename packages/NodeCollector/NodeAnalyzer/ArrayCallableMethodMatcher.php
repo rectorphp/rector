@@ -8,11 +8,13 @@ use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Scalar\String_;
+use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\TypeWithClassName;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
+use Rector\Core\ValueObject\MethodName;
 use Rector\NodeCollector\ValueObject\ArrayCallable;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -57,12 +59,12 @@ final class ArrayCallableMethodMatcher
         if ($array->items[1] === null) {
             return null;
         }
-        // $this, self, static, FQN
-        $firstItemValue = $array->items[0]->value;
         $secondItemValue = $array->items[1]->value;
         if (!$secondItemValue instanceof \PhpParser\Node\Scalar\String_) {
             return null;
         }
+        // $this, self, static, FQN
+        $firstItemValue = $array->items[0]->value;
         // static ::class reference?
         if ($firstItemValue instanceof \PhpParser\Node\Expr\ClassConstFetch) {
             $calleeType = $this->resolveClassConstFetchType($firstItemValue);
@@ -72,11 +74,11 @@ final class ArrayCallableMethodMatcher
         if (!$calleeType instanceof \PHPStan\Type\TypeWithClassName) {
             return null;
         }
-        $className = $calleeType->getClassName();
-        $methodName = $secondItemValue->value;
         if ($this->isCallbackAtFunctionNames($array, ['register_shutdown_function', 'forward_static_call'])) {
             return null;
         }
+        $className = $calleeType->getClassName();
+        $methodName = $secondItemValue->value;
         return new \Rector\NodeCollector\ValueObject\ArrayCallable($firstItemValue, $className, $methodName);
     }
     /**
@@ -111,6 +113,17 @@ final class ArrayCallableMethodMatcher
             return new \PHPStan\Type\MixedType();
         }
         $classReflection = $this->reflectionProvider->getClass($classConstantReference);
+        $scope = $classConstFetch->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
+        $hasConstruct = $classReflection->hasMethod(\Rector\Core\ValueObject\MethodName::CONSTRUCT);
+        if ($hasConstruct) {
+            $methodReflection = $classReflection->getMethod(\Rector\Core\ValueObject\MethodName::CONSTRUCT, $scope);
+            $parametersAcceptor = \PHPStan\Reflection\ParametersAcceptorSelector::selectSingle($methodReflection->getVariants());
+            foreach ($parametersAcceptor->getParameters() as $parameterReflection) {
+                if ($parameterReflection->getDefaultValue() === null) {
+                    return new \PHPStan\Type\MixedType();
+                }
+            }
+        }
         return new \PHPStan\Type\ObjectType($classConstantReference, null, $classReflection);
     }
 }
