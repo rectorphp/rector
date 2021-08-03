@@ -9,11 +9,8 @@ $loader = require_once __DIR__.'/autoload.php';
 if (!class_exists('AutoloadIncluder', false) && !interface_exists('AutoloadIncluder', false) && !trait_exists('AutoloadIncluder', false)) {
     spl_autoload_call('RectorPrefix20210803\AutoloadIncluder');
 }
-if (!class_exists('ComposerAutoloaderInit5560b0ba64af3ca3325a1eb957a2411b', false) && !interface_exists('ComposerAutoloaderInit5560b0ba64af3ca3325a1eb957a2411b', false) && !trait_exists('ComposerAutoloaderInit5560b0ba64af3ca3325a1eb957a2411b', false)) {
-    spl_autoload_call('RectorPrefix20210803\ComposerAutoloaderInit5560b0ba64af3ca3325a1eb957a2411b');
-}
-if (!class_exists('Doctrine\Inflector\Inflector', false) && !interface_exists('Doctrine\Inflector\Inflector', false) && !trait_exists('Doctrine\Inflector\Inflector', false)) {
-    spl_autoload_call('RectorPrefix20210803\Doctrine\Inflector\Inflector');
+if (!class_exists('ComposerAutoloaderInit32c29e43a9fe8c7d3b9861a866762717', false) && !interface_exists('ComposerAutoloaderInit32c29e43a9fe8c7d3b9861a866762717', false) && !trait_exists('ComposerAutoloaderInit32c29e43a9fe8c7d3b9861a866762717', false)) {
+    spl_autoload_call('RectorPrefix20210803\ComposerAutoloaderInit32c29e43a9fe8c7d3b9861a866762717');
 }
 if (!class_exists('AjaxLogin', false) && !interface_exists('AjaxLogin', false) && !trait_exists('AjaxLogin', false)) {
     spl_autoload_call('RectorPrefix20210803\AjaxLogin');
@@ -3308,9 +3305,9 @@ if (!function_exists('print_node')) {
         return \RectorPrefix20210803\print_node(...func_get_args());
     }
 }
-if (!function_exists('composerRequire5560b0ba64af3ca3325a1eb957a2411b')) {
-    function composerRequire5560b0ba64af3ca3325a1eb957a2411b() {
-        return \RectorPrefix20210803\composerRequire5560b0ba64af3ca3325a1eb957a2411b(...func_get_args());
+if (!function_exists('composerRequire32c29e43a9fe8c7d3b9861a866762717')) {
+    function composerRequire32c29e43a9fe8c7d3b9861a866762717() {
+        return \RectorPrefix20210803\composerRequire32c29e43a9fe8c7d3b9861a866762717(...func_get_args());
     }
 }
 if (!function_exists('parseArgs')) {

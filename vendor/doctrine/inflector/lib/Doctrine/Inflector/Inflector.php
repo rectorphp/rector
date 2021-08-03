@@ -205,4 +205,3 @@ class Inflector
         return $this->pluralizer->inflect($word);
     }
 }
-\class_alias('RectorPrefix20210803\\Doctrine\\Inflector\\Inflector', 'Doctrine\\Inflector\\Inflector', \false);
