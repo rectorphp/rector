@@ -13,6 +13,7 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeFinder;
 use PHPStan\Analyser\MutatingScope;
@@ -85,12 +86,18 @@ final class FluentChainMethodCallNodeAnalyzer
             return false;
         }
 
-        if ($calleeStaticType instanceof ObjectType) {
-            foreach (self::KNOWN_FACTORY_FLUENT_TYPES as $knownFactoryFluentType) {
-                if ($calleeStaticType->isInstanceOf($knownFactoryFluentType)->yes()) {
-                    return false;
-                }
+        if (! $calleeStaticType instanceof ObjectType) {
+            return false;
+        }
+
+        foreach (self::KNOWN_FACTORY_FLUENT_TYPES as $knownFactoryFluentType) {
+            if ($calleeStaticType->isInstanceOf($knownFactoryFluentType)->yes()) {
+                return false;
             }
+        }
+
+        if ($this->isInterface($calleeStaticType)) {
+            return false;
         }
 
         return ! $this->isMethodCallCreatingNewInstance($methodCall);
@@ -233,6 +240,12 @@ final class FluentChainMethodCallNodeAnalyzer
 
         $inferFunctionLike = $this->returnTypeInferer->inferFunctionLike($classMethod);
         return $inferFunctionLike instanceof ThisType;
+    }
+
+    private function isInterface(ObjectType $objectType): bool
+    {
+        $classLike = $this->astResolver->resolveClassFromObjectType($objectType);
+        return $classLike instanceof Interface_;
     }
 
     private function isMethodCallCreatingNewInstance(MethodCall $methodCall): bool
