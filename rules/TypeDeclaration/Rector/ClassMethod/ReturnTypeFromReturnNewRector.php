@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace Rector\TypeDeclaration\Rector\ClassMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
@@ -60,11 +62,11 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [ClassMethod::class];
+        return [ClassMethod::class, Function_::class, ArrowFunction::class];
     }
 
     /**
-     * @param ClassMethod $node
+     * @param ClassMethod|Function_|ArrowFunction $node
      */
     public function refactor(Node $node): ?Node
     {
@@ -72,8 +74,13 @@ CODE_SAMPLE
             return null;
         }
 
-        /** @var Return_[] $returns */
-        $returns = $this->betterNodeFinder->findInstanceOf((array) $node->stmts, Return_::class);
+        if ($node instanceof ArrowFunction) {
+            $returns = [new Return_($node->expr)];
+        } else {
+            /** @var Return_[] $returns */
+            $returns = $this->betterNodeFinder->findInstanceOf((array) $node->stmts, Return_::class);
+        }
+
         if ($returns === []) {
             return null;
         }
