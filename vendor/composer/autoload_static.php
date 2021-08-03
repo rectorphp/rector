@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit32c29e43a9fe8c7d3b9861a866762717
+class ComposerStaticInit9f1ed2c5f6463d5bc2ac8ae6b3efdcc6
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -2038,10 +2038,8 @@ class ComposerStaticInit32c29e43a9fe8c7d3b9861a866762717
         'Rector\\CodeQuality\\Rector\\Ternary\\SimplifyTautologyTernaryRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Ternary/SimplifyTautologyTernaryRector.php',
         'Rector\\CodeQuality\\Rector\\Ternary\\SwitchNegatedTernaryRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Ternary/SwitchNegatedTernaryRector.php',
         'Rector\\CodeQuality\\Rector\\Ternary\\UnnecessaryTernaryExpressionRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Ternary/UnnecessaryTernaryExpressionRector.php',
-        'Rector\\CodeQuality\\Rector\\Variable\\MoveVariableDeclarationNearReferenceRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Variable/MoveVariableDeclarationNearReferenceRector.php',
         'Rector\\CodeQuality\\TypeResolver\\ArrayDimFetchTypeResolver' => __DIR__ . '/../..' . '/rules/CodeQuality/TypeResolver/ArrayDimFetchTypeResolver.php',
         'Rector\\CodeQuality\\TypeResolver\\AssignVariableTypeResolver' => __DIR__ . '/../..' . '/rules/CodeQuality/TypeResolver/AssignVariableTypeResolver.php',
-        'Rector\\CodeQuality\\UsageFinder\\UsageInNextStmtFinder' => __DIR__ . '/../..' . '/rules/CodeQuality/UsageFinder/UsageInNextStmtFinder.php',
         'Rector\\CodingStyle\\Application\\UseImportsAdder' => __DIR__ . '/../..' . '/rules/CodingStyle/Application/UseImportsAdder.php',
         'Rector\\CodingStyle\\Application\\UseImportsRemover' => __DIR__ . '/../..' . '/rules/CodingStyle/Application/UseImportsRemover.php',
         'Rector\\CodingStyle\\ClassNameImport\\AliasUsesResolver' => __DIR__ . '/../..' . '/rules/CodingStyle/ClassNameImport/AliasUsesResolver.php',
@@ -3847,9 +3845,9 @@ class ComposerStaticInit32c29e43a9fe8c7d3b9861a866762717
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit32c29e43a9fe8c7d3b9861a866762717::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit32c29e43a9fe8c7d3b9861a866762717::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit32c29e43a9fe8c7d3b9861a866762717::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit9f1ed2c5f6463d5bc2ac8ae6b3efdcc6::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit9f1ed2c5f6463d5bc2ac8ae6b3efdcc6::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit9f1ed2c5f6463d5bc2ac8ae6b3efdcc6::$classMap;
 
         }, null, ClassLoader::class);
     }
