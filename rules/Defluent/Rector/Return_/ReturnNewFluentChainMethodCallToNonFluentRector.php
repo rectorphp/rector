@@ -78,9 +78,18 @@ CODE_SAMPLE
         if (!$assignAndRootExprAndNodesToAdd instanceof \Rector\Defluent\ValueObject\AssignAndRootExprAndNodesToAdd) {
             return null;
         }
+        $nodesToAdd = $assignAndRootExprAndNodesToAdd->getNodesToAdd();
+        $lastNodeToAdd = \end($nodesToAdd);
+        if (!$lastNodeToAdd) {
+            return null;
+        }
+        if (!$lastNodeToAdd instanceof \PhpParser\Node\Stmt\Return_) {
+            \end($nodesToAdd);
+            $nodesToAdd[\key($nodesToAdd)] = new \PhpParser\Node\Stmt\Return_($lastNodeToAdd);
+        }
         $this->fluentNodeRemover->removeCurrentNode($node);
-        $this->addNodesAfterNode($assignAndRootExprAndNodesToAdd->getNodesToAdd(), $node);
-        return null;
+        $this->addNodesAfterNode($nodesToAdd, $node);
+        return $node;
     }
     private function matchReturnMethodCall(\PhpParser\Node\Stmt\Return_ $return) : ?\PhpParser\Node\Expr
     {
