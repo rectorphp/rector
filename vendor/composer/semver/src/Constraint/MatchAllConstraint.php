@@ -8,14 +8,14 @@
  * For the full copyright and license information, please view
  * the LICENSE file that was distributed with this source code.
  */
-namespace RectorPrefix20210803\Composer\Semver\Constraint;
+namespace RectorPrefix20210804\Composer\Semver\Constraint;
 
 /**
  * Defines the absence of a constraint.
  *
  * This constraint matches everything.
  */
-class MatchAllConstraint implements \RectorPrefix20210803\Composer\Semver\Constraint\ConstraintInterface
+class MatchAllConstraint implements \RectorPrefix20210804\Composer\Semver\Constraint\ConstraintInterface
 {
     /** @var string|null */
     protected $prettyString;
@@ -64,13 +64,13 @@ class MatchAllConstraint implements \RectorPrefix20210803\Composer\Semver\Constr
      */
     public function getUpperBound()
     {
-        return \RectorPrefix20210803\Composer\Semver\Constraint\Bound::positiveInfinity();
+        return \RectorPrefix20210804\Composer\Semver\Constraint\Bound::positiveInfinity();
     }
     /**
      * {@inheritDoc}
      */
     public function getLowerBound()
     {
-        return \RectorPrefix20210803\Composer\Semver\Constraint\Bound::zero();
+        return \RectorPrefix20210804\Composer\Semver\Constraint\Bound::zero();
     }
 }

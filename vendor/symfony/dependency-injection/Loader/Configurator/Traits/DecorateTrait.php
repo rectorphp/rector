@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210803\Symfony\Component\DependencyInjection\Loader\Configurator\Traits;
+namespace RectorPrefix20210804\Symfony\Component\DependencyInjection\Loader\Configurator\Traits;
 
-use RectorPrefix20210803\Symfony\Component\DependencyInjection\ContainerInterface;
-use RectorPrefix20210803\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
+use RectorPrefix20210804\Symfony\Component\DependencyInjection\ContainerInterface;
+use RectorPrefix20210804\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
 trait DecorateTrait
 {
     /**
@@ -26,7 +26,7 @@ trait DecorateTrait
      * @param int $priority
      * @param int $invalidBehavior
      */
-    public final function decorate($id, $renamedId = null, $priority = 0, $invalidBehavior = \RectorPrefix20210803\Symfony\Component\DependencyInjection\ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE)
+    public final function decorate($id, $renamedId = null, $priority = 0, $invalidBehavior = \RectorPrefix20210804\Symfony\Component\DependencyInjection\ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE)
     {
         $this->definition->setDecoratedService($id, $renamedId, $priority, $invalidBehavior);
         return $this;

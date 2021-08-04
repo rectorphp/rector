@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210803\Symfony\Component\HttpKernel;
+namespace RectorPrefix20210804\Symfony\Component\HttpKernel;
 
-use RectorPrefix20210803\Symfony\Component\Config\Loader\LoaderInterface;
-use RectorPrefix20210803\Symfony\Component\DependencyInjection\ContainerInterface;
-use RectorPrefix20210803\Symfony\Component\HttpKernel\Bundle\BundleInterface;
+use RectorPrefix20210804\Symfony\Component\Config\Loader\LoaderInterface;
+use RectorPrefix20210804\Symfony\Component\DependencyInjection\ContainerInterface;
+use RectorPrefix20210804\Symfony\Component\HttpKernel\Bundle\BundleInterface;
 /**
  * The Kernel is the heart of the Symfony system.
  *
@@ -24,7 +24,7 @@ use RectorPrefix20210803\Symfony\Component\HttpKernel\Bundle\BundleInterface;
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-interface KernelInterface extends \RectorPrefix20210803\Symfony\Component\HttpKernel\HttpKernelInterface
+interface KernelInterface extends \RectorPrefix20210804\Symfony\Component\HttpKernel\HttpKernelInterface
 {
     /**
      * Returns an array of bundles to register.

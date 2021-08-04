@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210803\TYPO3\CMS\Frontend\Page;
+namespace RectorPrefix20210804\TYPO3\CMS\Frontend\Page;
 
 if (\interface_exists('TYPO3\\CMS\\Frontend\\Page\\PageRepositoryGetRecordOverlayHookInterface')) {
     return;

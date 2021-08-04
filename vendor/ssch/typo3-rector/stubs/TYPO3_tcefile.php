@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210803;
+namespace RectorPrefix20210804;
 
 if (\class_exists('TYPO3_tcefile')) {
     return;

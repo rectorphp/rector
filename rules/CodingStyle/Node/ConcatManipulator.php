@@ -7,7 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\Concat;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
-use RectorPrefix20210803\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
+use RectorPrefix20210804\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 final class ConcatManipulator
 {
     /**
@@ -18,7 +18,7 @@ final class ConcatManipulator
      * @var \Rector\Core\PhpParser\Comparing\NodeComparator
      */
     private $nodeComparator;
-    public function __construct(\RectorPrefix20210803\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator)
+    public function __construct(\RectorPrefix20210804\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator)
     {
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->nodeComparator = $nodeComparator;

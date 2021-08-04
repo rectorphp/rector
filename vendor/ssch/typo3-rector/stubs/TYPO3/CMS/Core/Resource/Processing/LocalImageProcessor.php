@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210803\TYPO3\CMS\Core\Resource\Processing;
+namespace RectorPrefix20210804\TYPO3\CMS\Core\Resource\Processing;
 
 if (\class_exists('TYPO3\\CMS\\Core\\Resource\\Processing\\LocalImageProcessor')) {
     return;

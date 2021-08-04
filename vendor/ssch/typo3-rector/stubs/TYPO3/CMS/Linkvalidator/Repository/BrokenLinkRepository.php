@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210803\TYPO3\CMS\Linkvalidator\Repository;
+namespace RectorPrefix20210804\TYPO3\CMS\Linkvalidator\Repository;
 
 if (\class_exists('TYPO3\\CMS\\Linkvalidator\\Repository\\BrokenLinkRepository')) {
     return;
