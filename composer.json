@@ -134,7 +134,8 @@
             "mv build/rector_rules_overview.md build/target-repository/docs/rector_rules_overview.md",
             "vendor/bin/ecs check-markdown build/target-repository/docs/rector_rules_overview.md --ansi --fix"
         ],
-        "rector": "bin/rector process --ansi"
+        "rector": "bin/rector process --ansi",
+        "preload": "php build/build-preload.php ."
     },
     "extra": {
         "branch-alias": {

@@ -25,6 +25,11 @@ jobs:
                         run: "composer fix-cs"
                         branch: 'automated-apply-coding-standards'
 
+                    -
+                        name: 'Re-Generate preload.php'
+                        run: "composer preload"
+                        branch: 'automated-regenerated-preload'
+
         name: ${{ matrix.actions.name }}
         runs-on: ubuntu-latest
         timeout-minutes: 30

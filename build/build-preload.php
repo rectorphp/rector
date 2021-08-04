@@ -23,7 +23,7 @@ function buildPreloadScript(string $buildDirectory): void
     $preloadFileContent = <<<'php'
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 
 php;
