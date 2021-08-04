@@ -6,9 +6,12 @@ namespace Rector\StaticTypeMapper\Mapper;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
 use PHPStan\Type\Type;
 use Rector\Core\Exception\NotImplementedYetException;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\StaticTypeMapper\Contract\PhpParser\PhpParserNodeMapperInterface;
 
 final class PhpParserNodeMapper
@@ -23,6 +26,10 @@ final class PhpParserNodeMapper
 
     public function mapToPHPStanType(Node $node): Type
     {
+        if ($node::class === Name::class && $node->hasAttribute(AttributeKey::NAMESPACED_NAME)) {
+            $node = new FullyQualified($node->getAttribute(AttributeKey::NAMESPACED_NAME));
+        }
+
         foreach ($this->phpParserNodeMappers as $phpParserNodeMapper) {
             if (! is_a($node, $phpParserNodeMapper->getNodeType())) {
                 continue;
