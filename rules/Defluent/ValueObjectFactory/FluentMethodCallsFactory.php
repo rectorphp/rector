@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Defluent\ValueObjectFactory;
 
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\PropertyFetch;
 use Rector\Defluent\NodeAnalyzer\FluentChainMethodCallNodeAnalyzer;
 use Rector\Defluent\NodeAnalyzer\SameClassMethodCallAnalyzer;
 use Rector\Defluent\ValueObject\FluentMethodCalls;
@@ -30,6 +31,10 @@ final class FluentMethodCallsFactory
         }
 
         $rootMethodCall = $this->resolveRootMethodCall($chainMethodCalls);
+
+        if (! $rootMethodCall->var instanceof PropertyFetch) {
+            return null;
+        }
 
         return new FluentMethodCalls($rootMethodCall, $chainMethodCalls, $lastMethodCall);
     }
