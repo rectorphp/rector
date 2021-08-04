@@ -85,10 +85,21 @@ CODE_SAMPLE
             return null;
         }
 
-        $this->fluentNodeRemover->removeCurrentNode($node);
-        $this->addNodesAfterNode($assignAndRootExprAndNodesToAdd->getNodesToAdd(), $node);
+        $nodesToAdd = $assignAndRootExprAndNodesToAdd->getNodesToAdd();
+        $lastNodeToAdd = end($nodesToAdd);
 
-        return null;
+        if (! $lastNodeToAdd) {
+            return null;
+        }
+
+        if (! $lastNodeToAdd instanceof Return_) {
+            $nodesToAdd[array_key_last($nodesToAdd)] = new Return_($lastNodeToAdd);
+        }
+
+        $this->fluentNodeRemover->removeCurrentNode($node);
+        $this->addNodesAfterNode($nodesToAdd, $node);
+
+        return $node;
     }
 
     private function matchReturnMethodCall(Return_ $return): ?Expr
