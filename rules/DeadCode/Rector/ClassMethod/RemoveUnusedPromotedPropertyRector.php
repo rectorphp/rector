@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\DeadCode\Rector\ClassMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\NodeManipulator\PropertyManipulator;
@@ -90,7 +91,8 @@ CODE_SAMPLE
         }
 
         foreach ($node->getParams() as $param) {
-            if ($param->flags === 0) {
+            // only private local scope; removing public property might be dangerous
+            if ($param->flags !== Class_::MODIFIER_PRIVATE) {
                 continue;
             }
 
@@ -98,15 +100,17 @@ CODE_SAMPLE
                 continue;
             }
 
-            // only private local scope; removing public property might be dangerous
-            if ($param->flags !== Class_::MODIFIER_PRIVATE) {
-                continue;
-            }
-
             $paramName = $this->getName($param);
 
             $propertyFetches = $this->propertyFetchFinder->findLocalPropertyFetchesByName($class, $paramName);
             if ($propertyFetches !== []) {
+                continue;
+            }
+
+            // is variable used? only remove property, keep param
+            $variable = $this->betterNodeFinder->findVariableOfName((array) $node->stmts, $paramName);
+            if ($variable instanceof Variable) {
+                $param->flags = 0;
                 continue;
             }
 

@@ -90,10 +90,6 @@ CODE_SAMPLE
         }
 
         // both: list($key, $value) = each($values);
-        // ↓
-        // $key = key($values);
-        // $value = current($values);
-        // next($values);
         $currentFuncCall = $this->nodeFactory->createFuncCall('current', $eachFuncCall->args);
 
         $secondArrayItem = $listNode->items[1];

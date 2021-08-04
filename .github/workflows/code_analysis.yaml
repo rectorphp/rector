@@ -29,6 +29,11 @@ jobs:
                         name: 'PHPStan for config'
                         run: composer phpstan-config
 
+                    -
+                        name: Commented Code
+                        run: vendor/bin/easy-ci check-commented-code src packages rules tests packages-tests rules-tests --line-limit 5 --ansi
+
+
                     # see https://github.com/rectorphp/rector-generator
                     -
                         name: 'Rector Generate From Recipe'
