@@ -613,7 +613,7 @@ final class NodeFactory
         throw new NotImplementedYetException(sprintf(
             'Not implemented yet. Go to "%s()" and add check for "%s" node.',
             __METHOD__,
-            $nodeClass
+            (string) $nodeClass
         ));
     }
 

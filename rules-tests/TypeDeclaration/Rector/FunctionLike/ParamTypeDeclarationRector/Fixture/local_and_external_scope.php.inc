@@ -2,7 +2,7 @@
 
 namespace Rector\Tests\TypeDeclaration\Rector\FunctionLike\ParamTypeDeclarationRector\Fixture;
 
-use Rector\Tests\TypeDeclaration\Rector\FunctionLike\ParamTypeDeclarationRector\Source\AbstractParentClass;
+use Rector\Tests\TypeDeclaration\Rector\FunctionLike\ParamTypeDeclarationRector\Source\vendor\AbstractParentClass;
 
 final class ChildClass extends AbstractParentClass
 {
@@ -27,7 +27,7 @@ final class ChildClass extends AbstractParentClass
 
 namespace Rector\Tests\TypeDeclaration\Rector\FunctionLike\ParamTypeDeclarationRector\Fixture;
 
-use Rector\Tests\TypeDeclaration\Rector\FunctionLike\ParamTypeDeclarationRector\Source\AbstractParentClass;
+use Rector\Tests\TypeDeclaration\Rector\FunctionLike\ParamTypeDeclarationRector\Source\vendor\AbstractParentClass;
 
 final class ChildClass extends AbstractParentClass
 {

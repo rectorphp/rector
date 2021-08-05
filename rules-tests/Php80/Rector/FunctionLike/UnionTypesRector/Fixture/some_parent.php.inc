@@ -2,7 +2,7 @@
 
 namespace Rector\Tests\Php80\Rector\FunctionLike\UnionTypesRector\Fixture;
 
-use Rector\Tests\Php80\Rector\FunctionLike\UnionTypesRector\Source\ParentClassWithMethod;
+use Rector\Tests\Php80\Rector\FunctionLike\UnionTypesRector\Source\vendor\ParentClassWithMethod;
 
 final class Child extends ParentClassWithMethod
 {

@@ -92,7 +92,7 @@ final class ConsoleApplication extends Application
     private function getNewWorkingDir(InputInterface $input): string
     {
         $workingDir = $input->getParameterOption('--working-dir');
-        if ($workingDir !== false && ! is_dir($workingDir)) {
+        if (is_string($workingDir) && ! is_dir($workingDir)) {
             $errorMessage = sprintf('Invalid working directory specified, "%s" does not exist.', $workingDir);
             throw new InvalidConfigurationException($errorMessage);
         }

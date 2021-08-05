@@ -6,7 +6,6 @@ namespace Rector\NodeCollector\NodeCollector;
 
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
-use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Trait_;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -59,15 +58,6 @@ final class NodeRepository
     }
 
     /**
-     * @return Class_[]|Interface_[]
-     * @deprecated Use static reflection instead
-     */
-    public function findClassesAndInterfacesByType(string $type): array
-    {
-        return array_merge($this->findChildrenOfClass($type), $this->findImplementersOfInterface($type));
-    }
-
-    /**
      * @deprecated Use static reflection instead
      *
      * @param class-string $class
@@ -87,16 +77,6 @@ final class NodeRepository
         }
 
         return $childrenClasses;
-    }
-
-    /**
-     * @deprecated Use static reflection instead
-     *
-     * @param class-string $class
-     */
-    public function findInterface(string $class): ?Interface_
-    {
-        return $this->parsedNodeCollector->findInterface($class);
     }
 
     /**
@@ -131,25 +111,5 @@ final class NodeRepository
         }
 
         return $currentClassName !== $desiredClass;
-    }
-
-    /**
-     * @return Interface_[]
-     */
-    private function findImplementersOfInterface(string $interface): array
-    {
-        $implementerInterfaces = [];
-
-        foreach ($this->parsedNodeCollector->getInterfaces() as $interfaceNode) {
-            $className = $interfaceNode->getAttribute(AttributeKey::CLASS_NAME);
-
-            if (! $this->isChildOrEqualClassLike($interface, $className)) {
-                continue;
-            }
-
-            $implementerInterfaces[] = $interfaceNode;
-        }
-
-        return $implementerInterfaces;
     }
 }

@@ -8,6 +8,7 @@ use Rector\Core\Configuration\Option;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Throwable;
+use Webmozart\Assert\Assert;
 
 final class BootstrapFilesIncluder
 {
@@ -24,6 +25,9 @@ final class BootstrapFilesIncluder
     {
         $bootstrapFiles = $this->parameterProvider->provideArrayParameter(Option::BOOTSTRAP_FILES);
 
+        Assert::allString($bootstrapFiles);
+
+        /** @var string[] $bootstrapFiles */
         foreach ($bootstrapFiles as $bootstrapFile) {
             if (! is_file($bootstrapFile)) {
                 throw new ShouldNotHappenException(sprintf('Bootstrap file "%s" does not exist.', $bootstrapFile));

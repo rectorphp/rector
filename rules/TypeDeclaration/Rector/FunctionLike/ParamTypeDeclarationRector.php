@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\TypeDeclaration\Rector\FunctionLike;
 
 use PhpParser\Node;
-use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
@@ -16,7 +15,6 @@ use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\DeadCode\PhpDoc\TagRemover\ParamTagRemover;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
-use Rector\TypeDeclaration\ChildPopulator\ChildParamPopulator;
 use Rector\TypeDeclaration\NodeTypeAnalyzer\TraitTypeAnalyzer;
 use Rector\TypeDeclaration\TypeInferer\ParamTypeInferer;
 use Rector\TypeDeclaration\ValueObject\NewType;
@@ -37,7 +35,7 @@ final class ParamTypeDeclarationRector extends AbstractRector implements MinPhpV
 {
     public function __construct(
         private VendorLockResolver $vendorLockResolver,
-        private ChildParamPopulator $childParamPopulator,
+        //private ChildParamPopulator $childParamPopulator,
         private ParamTypeInferer $paramTypeInferer,
         private TraitTypeAnalyzer $traitTypeAnalyzer,
         private ParamTagRemover $paramTagRemover
@@ -59,7 +57,7 @@ final class ParamTypeDeclarationRector extends AbstractRector implements MinPhpV
             [
                 new CodeSample(
                     <<<'CODE_SAMPLE'
-class ParentClass
+abstract class VendorParentClass
 {
     /**
      * @param int $number
@@ -69,7 +67,7 @@ class ParentClass
     }
 }
 
-final class ChildClass extends ParentClass
+final class ChildClass extends VendorParentClass
 {
     /**
      * @param int $number
@@ -88,7 +86,7 @@ final class ChildClass extends ParentClass
 CODE_SAMPLE
                     ,
                     <<<'CODE_SAMPLE'
-class ParentClass
+abstract class VendorParentClass
 {
     /**
      * @param int $number
@@ -98,7 +96,7 @@ class ParentClass
     }
 }
 
-final class ChildClass extends ParentClass
+final class ChildClass extends VendorParentClass
 {
     /**
      * @param int $number
@@ -126,8 +124,10 @@ CODE_SAMPLE
             return null;
         }
 
-        foreach ($node->params as $position => $param) {
-            $this->refactorParam($param, $node, (int) $position);
+        // @todo subscribe to Param node directly? narrow scope the better, right?
+
+        foreach ($node->params as $param) {
+            $this->refactorParam($param, $node);
         }
 
         return null;
@@ -138,7 +138,7 @@ CODE_SAMPLE
         return PhpVersionFeature::SCALAR_TYPES;
     }
 
-    private function refactorParam(Param $param, ClassMethod | Function_ $functionLike, int $position): void
+    private function refactorParam(Param $param, ClassMethod | Function_ $functionLike): void
     {
         if ($this->shouldSkipParam($param, $functionLike)) {
             return;
@@ -154,7 +154,6 @@ CODE_SAMPLE
         }
 
         $paramTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($inferedType, TypeKind::PARAM());
-
         if (! $paramTypeNode instanceof Node) {
             return;
         }
@@ -168,11 +167,9 @@ CODE_SAMPLE
 
         $functionLikePhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($functionLike);
         $this->paramTagRemover->removeParamTagsIfUseless($functionLikePhpDocInfo, $functionLike);
-
-        $this->childParamPopulator->populateChildClassMethod($functionLike, $position, $inferedType);
     }
 
-    private function shouldSkipParam(Param $param, FunctionLike $functionLike): bool
+    private function shouldSkipParam(Param $param, ClassMethod | Function_ $functionLike): bool
     {
         if ($param->variadic) {
             return true;
