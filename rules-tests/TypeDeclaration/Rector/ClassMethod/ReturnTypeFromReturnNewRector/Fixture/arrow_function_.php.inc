@@ -28,7 +28,7 @@ final class SomeArrowFunction
 {
     public function action()
     {
-        return fn() : \Rector\Tests\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromReturnNewRector\Source\SomeResponse => new SomeResponse();
+        return fn(): \Rector\Tests\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromReturnNewRector\Source\SomeResponse => new SomeResponse();
     }
 }
 

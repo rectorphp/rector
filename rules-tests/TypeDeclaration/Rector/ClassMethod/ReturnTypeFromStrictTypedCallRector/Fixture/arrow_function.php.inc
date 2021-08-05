@@ -32,7 +32,7 @@ class App
 
 function () {
 
-    fn() : \Rector\Tests\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictTypedCallRector\Fixture\App => App::init();
+    fn(): \Rector\Tests\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictTypedCallRector\Fixture\App => App::init();
 
 };
 

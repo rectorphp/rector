@@ -84,6 +84,7 @@ final class BetterStandardPrinter extends Standard
         $this->insertionMap['Stmt_ClassMethod->returnType'] = [')', false, ': ', null];
         $this->insertionMap['Stmt_Function->returnType'] = [')', false, ': ', null];
         $this->insertionMap['Expr_Closure->returnType'] = [')', false, ': ', null];
+        $this->insertionMap['Expr_ArrowFunction->returnType'] = [')', false, ': ', null];
     }
 
     /**
