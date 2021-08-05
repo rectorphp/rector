@@ -11,6 +11,7 @@ use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Do_;
 use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\If_;
@@ -29,6 +30,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class RemoveUnreachableStatementRector extends AbstractRector
 {
+    /**
+     * @var array<class-string<Node>>
+     */
+    private const STMTS_WITH_IS_UNREACHABLE = [If_::class, While_::class, Do_::class];
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove unreachable statements', [
@@ -77,14 +83,11 @@ CODE_SAMPLE
 
         // might be PHPStan false positive, better skip
         $previousStatement = $node->getAttribute(AttributeKey::PREVIOUS_STATEMENT);
-        if ($previousStatement instanceof If_) {
-            $node->setAttribute(
-                AttributeKey::IS_UNREACHABLE,
-                $previousStatement->getAttribute(AttributeKey::IS_UNREACHABLE)
-            );
-        }
-
-        if ($previousStatement instanceof While_) {
+        if ($previousStatement instanceof Stmt && in_array(
+            $previousStatement::class,
+            self::STMTS_WITH_IS_UNREACHABLE,
+            true
+        )) {
             $node->setAttribute(
                 AttributeKey::IS_UNREACHABLE,
                 $previousStatement->getAttribute(AttributeKey::IS_UNREACHABLE)
