@@ -16,13 +16,17 @@ use PHPStan\Type\IntegerType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
+use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeTraverser;
 use PHPStan\Type\TypeUtils;
 use PHPStan\Type\VerbosityLevel;
+use Rector\Core\Php\PhpVersionProvider;
+use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\StaticTypeMapper\TypeFactory\UnionTypeFactory;
 use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
+use Rector\StaticTypeMapper\ValueObject\Type\SelfObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
 final class TypeFactory
 {
@@ -30,9 +34,14 @@ final class TypeFactory
      * @var \Rector\StaticTypeMapper\TypeFactory\UnionTypeFactory
      */
     private $unionTypeFactory;
-    public function __construct(\Rector\StaticTypeMapper\TypeFactory\UnionTypeFactory $unionTypeFactory)
+    /**
+     * @var \Rector\Core\Php\PhpVersionProvider
+     */
+    private $phpVersionProvider;
+    public function __construct(\Rector\StaticTypeMapper\TypeFactory\UnionTypeFactory $unionTypeFactory, \Rector\Core\Php\PhpVersionProvider $phpVersionProvider)
     {
         $this->unionTypeFactory = $unionTypeFactory;
+        $this->phpVersionProvider = $phpVersionProvider;
     }
     /**
      * @param Type[] $types
@@ -142,6 +151,17 @@ final class TypeFactory
     private function normalizeObjectTypes(\PHPStan\Type\Type $type) : \PHPStan\Type\Type
     {
         return \PHPStan\Type\TypeTraverser::map($type, function (\PHPStan\Type\Type $traversedType, callable $traverseCallback) : Type {
+            if ($this->isStatic($traversedType) && $this->phpVersionProvider->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::STATIC_RETURN_TYPE)) {
+                /** @var ObjectType $traversedType */
+                return new \PHPStan\Type\ThisType($traversedType->getClassName());
+            }
+            if ($this->isStatic($traversedType)) {
+                return new \PHPStan\Type\MixedType();
+            }
+            if ($this->isSelf($traversedType)) {
+                /** @var ObjectType $traversedType */
+                return new \Rector\StaticTypeMapper\ValueObject\Type\SelfObjectType($traversedType->getClassName());
+            }
             if ($traversedType instanceof \Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType) {
                 return new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType($traversedType->getFullyQualifiedName());
             }
@@ -150,5 +170,13 @@ final class TypeFactory
             }
             return $traverseCallback($traversedType);
         });
+    }
+    private function isStatic(\PHPStan\Type\Type $type) : bool
+    {
+        return $type instanceof \PHPStan\Type\ObjectType && $type->getClassName() === 'static';
+    }
+    private function isSelf(\PHPStan\Type\Type $type) : bool
+    {
+        return $type instanceof \PHPStan\Type\ObjectType && $type->getClassName() === 'self';
     }
 }
