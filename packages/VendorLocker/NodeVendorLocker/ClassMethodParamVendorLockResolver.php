@@ -116,7 +116,7 @@ final class ClassMethodParamVendorLockResolver
         return false;
     }
 
-    private function resolveClassReflection(ClassMethod $classMethod): ClassReflection|null
+    private function resolveClassReflection(ClassMethod $classMethod): ClassReflection | null
     {
         $scope = $classMethod->getAttribute(AttributeKey::SCOPE);
         if (! $scope instanceof Scope) {
