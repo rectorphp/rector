@@ -4,10 +4,9 @@ declare (strict_types=1);
 namespace Rector\NodeCollector\NodeCollector;
 
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassLike;
-use PhpParser\Node\Stmt\Trait_;
 use PHPStan\Reflection\ReflectionProvider;
-use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\NodeAnalyzer\ClassAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 /**
  * This service contains all the parsed nodes. E.g. all the functions, method call, classes, static calls etc. It's
@@ -18,81 +17,57 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class NodeRepository
 {
     /**
-     * @var \Rector\NodeNameResolver\NodeNameResolver
+     * @deprecated Not reliable, as only works with so-far parsed classes
+     * @var Class_[]
      */
-    private $nodeNameResolver;
+    private $classes = [];
     /**
-     * @var \Rector\NodeCollector\NodeCollector\ParsedNodeCollector
+     * @var \Rector\Core\NodeAnalyzer\ClassAnalyzer
      */
-    private $parsedNodeCollector;
+    private $classAnalyzer;
     /**
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeCollector\NodeCollector\ParsedNodeCollector $parsedNodeCollector, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
+    public function __construct(\Rector\Core\NodeAnalyzer\ClassAnalyzer $classAnalyzer, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
     {
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->parsedNodeCollector = $parsedNodeCollector;
+        $this->classAnalyzer = $classAnalyzer;
         $this->reflectionProvider = $reflectionProvider;
     }
-    public function hasClassChildren(\PhpParser\Node\Stmt\Class_ $desiredClass) : bool
+    public function collectClass(\PhpParser\Node\Stmt\Class_ $class) : void
     {
-        $desiredClassName = $this->nodeNameResolver->getName($desiredClass);
-        if ($desiredClassName === null) {
-            return \false;
+        if ($this->classAnalyzer->isAnonymousClass($class)) {
+            return;
         }
-        return $this->findChildrenOfClass($desiredClassName) !== [];
+        $className = $class->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);
+        if ($className === null) {
+            throw new \Rector\Core\Exception\ShouldNotHappenException();
+        }
+        $this->classes[$className] = $class;
     }
     /**
-     * @deprecated Use ReflectionProvider instead to resolve all the traits
-     * @return Trait_[]
-     */
-    public function findUsedTraitsInClass(\PhpParser\Node\Stmt\ClassLike $classLike) : array
-    {
-        $traits = [];
-        foreach ($classLike->getTraitUses() as $traitUse) {
-            foreach ($traitUse->traits as $trait) {
-                $traitName = $this->nodeNameResolver->getName($trait);
-                $foundTrait = $this->parsedNodeCollector->findTrait($traitName);
-                if ($foundTrait !== null) {
-                    $traits[] = $foundTrait;
-                }
-            }
-        }
-        return $traits;
-    }
-    /**
-     * @deprecated Use static reflection instead
-     *
-     * @param class-string $class
+     * @param class-string $className
      * @return Class_[]
+     * @deprecated Use static reflection instead
      */
-    public function findChildrenOfClass(string $class) : array
+    public function findChildrenOfClass(string $className) : array
     {
         $childrenClasses = [];
-        foreach ($this->parsedNodeCollector->getClasses() as $classNode) {
-            $currentClassName = $classNode->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);
-            if (!$this->isChildOrEqualClassLike($class, $currentClassName)) {
+        // @todo refactor to reflection
+        foreach ($this->classes as $class) {
+            $currentClassName = $class->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);
+            if ($currentClassName === null) {
                 continue;
             }
-            $childrenClasses[] = $classNode;
+            if (!$this->isChildOrEqualClassLike($className, $currentClassName)) {
+                continue;
+            }
+            $childrenClasses[] = $class;
         }
         return $childrenClasses;
     }
-    /**
-     * @deprecated Use static reflection instead
-     *
-     * @param class-string $name
-     */
-    public function findClass(string $name) : ?\PhpParser\Node\Stmt\Class_
+    private function isChildOrEqualClassLike(string $desiredClass, string $currentClassName) : bool
     {
-        return $this->parsedNodeCollector->findClass($name);
-    }
-    private function isChildOrEqualClassLike(string $desiredClass, ?string $currentClassName) : bool
-    {
-        if ($currentClassName === null) {
-            return \false;
-        }
         if (!$this->reflectionProvider->hasClass($desiredClass)) {
             return \false;
         }

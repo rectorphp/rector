@@ -1347,17 +1347,17 @@
         },
         {
             "name": "rector\/rector-nette",
-            "version": "0.11.20",
-            "version_normalized": "0.11.20.0",
+            "version": "0.11.21",
+            "version_normalized": "0.11.21.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-nette.git",
-                "reference": "91163c5055afb9d5405eb44dba1dcb037c545035"
+                "reference": "dc35ce0cd59b86e5d8e1612f1fd991d1b40f8253"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-nette\/zipball\/91163c5055afb9d5405eb44dba1dcb037c545035",
-                "reference": "91163c5055afb9d5405eb44dba1dcb037c545035",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-nette\/zipball\/dc35ce0cd59b86e5d8e1612f1fd991d1b40f8253",
+                "reference": "dc35ce0cd59b86e5d8e1612f1fd991d1b40f8253",
                 "shasum": ""
             },
             "require": {
@@ -1383,7 +1383,7 @@
                 "symplify\/phpstan-rules": "^9.4",
                 "symplify\/rule-doc-generator": "^9.4"
             },
-            "time": "2021-08-05T12:27:39+00:00",
+            "time": "2021-08-05T12:33:15+00:00",
             "type": "rector-extension",
             "extra": {
                 "branch-alias": {
@@ -1408,7 +1408,7 @@
             "description": "Rector upgrades rules for Nette Framework",
             "support": {
                 "issues": "https:\/\/github.com\/rectorphp\/rector-nette\/issues",
-                "source": "https:\/\/github.com\/rectorphp\/rector-nette\/tree\/0.11.20"
+                "source": "https:\/\/github.com\/rectorphp\/rector-nette\/tree\/0.11.21"
             },
             "install-path": "..\/rector\/rector-nette"
         },

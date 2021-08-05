@@ -50,7 +50,6 @@ final class ParamTypeDeclarationRector extends \Rector\Core\Rector\AbstractRecto
     public function __construct(\Rector\VendorLocker\VendorLockResolver $vendorLockResolver, \Rector\TypeDeclaration\TypeInferer\ParamTypeInferer $paramTypeInferer, \Rector\TypeDeclaration\NodeTypeAnalyzer\TraitTypeAnalyzer $traitTypeAnalyzer, \Rector\DeadCode\PhpDoc\TagRemover\ParamTagRemover $paramTagRemover)
     {
         $this->vendorLockResolver = $vendorLockResolver;
-        //private ChildParamPopulator $childParamPopulator,
         $this->paramTypeInferer = $paramTypeInferer;
         $this->traitTypeAnalyzer = $traitTypeAnalyzer;
         $this->paramTagRemover = $paramTagRemover;
@@ -60,6 +59,7 @@ final class ParamTypeDeclarationRector extends \Rector\Core\Rector\AbstractRecto
      */
     public function getNodeTypes() : array
     {
+        // why not on Param node? because class like docblock is edited too for @param tags
         return [\PhpParser\Node\Stmt\Function_::class, \PhpParser\Node\Stmt\ClassMethod::class];
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
@@ -127,7 +127,6 @@ CODE_SAMPLE
         if ($node->params === []) {
             return null;
         }
-        // @todo subscribe to Param node directly? narrow scope the better, right?
         foreach ($node->params as $param) {
             $this->refactorParam($param, $node);
         }

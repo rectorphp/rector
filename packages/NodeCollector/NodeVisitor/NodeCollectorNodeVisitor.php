@@ -4,21 +4,24 @@ declare (strict_types=1);
 namespace Rector\NodeCollector\NodeVisitor;
 
 use PhpParser\Node;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\NodeVisitorAbstract;
-use Rector\NodeCollector\NodeCollector\ParsedNodeCollector;
+use Rector\NodeCollector\NodeCollector\NodeRepository;
 final class NodeCollectorNodeVisitor extends \PhpParser\NodeVisitorAbstract
 {
     /**
-     * @var \Rector\NodeCollector\NodeCollector\ParsedNodeCollector
+     * @var \Rector\NodeCollector\NodeCollector\NodeRepository
      */
-    private $parsedNodeCollector;
-    public function __construct(\Rector\NodeCollector\NodeCollector\ParsedNodeCollector $parsedNodeCollector)
+    private $nodeRepository;
+    public function __construct(\Rector\NodeCollector\NodeCollector\NodeRepository $nodeRepository)
     {
-        $this->parsedNodeCollector = $parsedNodeCollector;
+        $this->nodeRepository = $nodeRepository;
     }
     public function enterNode(\PhpParser\Node $node)
     {
-        $this->parsedNodeCollector->collect($node);
+        if ($node instanceof \PhpParser\Node\Stmt\Class_) {
+            $this->nodeRepository->collectClass($node);
+        }
         return null;
     }
 }

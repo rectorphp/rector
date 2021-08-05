@@ -5,12 +5,10 @@ namespace Rector\VendorLocker\NodeVendorLocker;
 
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
-use PHPStan\BetterReflection\Reflection\ReflectionClass;
 use PHPStan\Reflection\ClassReflection;
-use PHPStan\Reflection\ReflectionProvider;
+use Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use RectorPrefix20210805\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 use RectorPrefix20210805\Symplify\SmartFileSystem\Normalizer\PathNormalizer;
 final class ClassMethodParamVendorLockResolver
 {
@@ -23,19 +21,14 @@ final class ClassMethodParamVendorLockResolver
      */
     private $pathNormalizer;
     /**
-     * @var \PHPStan\Reflection\ReflectionProvider
+     * @var \Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer
      */
-    private $reflectionProvider;
-    /**
-     * @var \Symplify\PackageBuilder\Reflection\PrivatesAccessor
-     */
-    private $privatesAccessor;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \RectorPrefix20210805\Symplify\SmartFileSystem\Normalizer\PathNormalizer $pathNormalizer, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \RectorPrefix20210805\Symplify\PackageBuilder\Reflection\PrivatesAccessor $privatesAccessor)
+    private $familyRelationsAnalyzer;
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \RectorPrefix20210805\Symplify\SmartFileSystem\Normalizer\PathNormalizer $pathNormalizer, \Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer $familyRelationsAnalyzer)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->pathNormalizer = $pathNormalizer;
-        $this->reflectionProvider = $reflectionProvider;
-        $this->privatesAccessor = $privatesAccessor;
+        $this->familyRelationsAnalyzer = $familyRelationsAnalyzer;
     }
     public function isVendorLocked(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
     {
@@ -76,30 +69,9 @@ final class ClassMethodParamVendorLockResolver
         }
         return \false;
     }
-    /**
-     * @return ReflectionClass[]
-     */
-    private function findRelatedClassReflections(\PHPStan\Reflection\ClassReflection $classReflection) : array
-    {
-        // @todo decouple to some reflection family finder?
-        /** @var ReflectionClass[] $reflectionClasses */
-        $reflectionClasses = $this->privatesAccessor->getPrivateProperty($this->reflectionProvider, 'classes');
-        $relatedClassReflections = [];
-        foreach ($reflectionClasses as $reflectionClass) {
-            if ($reflectionClass->getName() === $classReflection->getName()) {
-                continue;
-            }
-            // is related?
-            if (!$reflectionClass->isSubclassOf($classReflection->getName())) {
-                continue;
-            }
-            $relatedClassReflections[] = $reflectionClass;
-        }
-        return $relatedClassReflections;
-    }
     private function hasTraitMethodVendorLock(\PHPStan\Reflection\ClassReflection $classReflection, string $methodName) : bool
     {
-        $relatedReflectionClasses = $this->findRelatedClassReflections($classReflection);
+        $relatedReflectionClasses = $this->familyRelationsAnalyzer->getChildrenOfClassReflection($classReflection);
         foreach ($relatedReflectionClasses as $relatedReflectionClass) {
             foreach ($relatedReflectionClass->getTraits() as $traitReflectionClass) {
                 /** @var ClassReflection $traitReflectionClass */

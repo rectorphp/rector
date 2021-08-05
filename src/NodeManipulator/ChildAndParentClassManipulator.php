@@ -3,16 +3,20 @@
 declare (strict_types=1);
 namespace Rector\Core\NodeManipulator;
 
+use PhpParser\Node;
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
+use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\NodeAnalyzer\PromotedPropertyParamCleaner;
+use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Core\ValueObject\MethodName;
 use Rector\NodeCollector\NodeCollector\NodeRepository;
-use Rector\NodeCollector\ScopeResolver\ParentClassScopeResolver;
 use Rector\NodeNameResolver\NodeNameResolver;
+use RectorPrefix20210805\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 final class ChildAndParentClassManipulator
 {
     /**
@@ -36,22 +40,27 @@ final class ChildAndParentClassManipulator
      */
     private $reflectionProvider;
     /**
-     * @var \Rector\NodeCollector\ScopeResolver\ParentClassScopeResolver
+     * @var \Rector\Core\PhpParser\AstResolver
      */
-    private $parentClassScopeResolver;
-    public function __construct(\Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeCollector\NodeCollector\NodeRepository $nodeRepository, \Rector\Core\NodeAnalyzer\PromotedPropertyParamCleaner $promotedPropertyParamCleaner, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\NodeCollector\ScopeResolver\ParentClassScopeResolver $parentClassScopeResolver)
+    private $astResolver;
+    /**
+     * @var \Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser
+     */
+    private $simpleCallableNodeTraverser;
+    public function __construct(\Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeCollector\NodeCollector\NodeRepository $nodeRepository, \Rector\Core\NodeAnalyzer\PromotedPropertyParamCleaner $promotedPropertyParamCleaner, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\Core\PhpParser\AstResolver $astResolver, \RectorPrefix20210805\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser)
     {
         $this->nodeFactory = $nodeFactory;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeRepository = $nodeRepository;
         $this->promotedPropertyParamCleaner = $promotedPropertyParamCleaner;
         $this->reflectionProvider = $reflectionProvider;
-        $this->parentClassScopeResolver = $parentClassScopeResolver;
+        $this->astResolver = $astResolver;
+        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
     }
     /**
-     * Add "parent::__construct()" where needed
+     * Add "parent::__construct(X, Y, Z)" where needed
      */
-    public function completeParentConstructor(\PhpParser\Node\Stmt\Class_ $class, \PhpParser\Node\Stmt\ClassMethod $classMethod) : void
+    public function completeParentConstructor(\PhpParser\Node\Stmt\Class_ $class, \PhpParser\Node\Stmt\ClassMethod $classMethod, \PHPStan\Analyser\Scope $scope) : void
     {
         $className = $this->nodeNameResolver->getName($class);
         if ($className === null) {
@@ -61,20 +70,17 @@ final class ChildAndParentClassManipulator
             return;
         }
         $classReflection = $this->reflectionProvider->getClass($className);
-        $parentClassReflection = $classReflection->getParentClass();
-        if ($parentClassReflection === \false) {
-            return;
-        }
-        // not in analyzed scope, nothing we can do
-        $parentClassNode = $this->nodeRepository->findClass($parentClassReflection->getName());
-        if ($parentClassNode instanceof \PhpParser\Node\Stmt\Class_) {
-            $this->completeParentConstructorBasedOnParentNode($parentClassNode, $classMethod);
-            return;
-        }
-        // complete parent call for __construct()
-        if ($parentClassReflection->hasMethod(\Rector\Core\ValueObject\MethodName::CONSTRUCT)) {
-            $staticCall = $this->nodeFactory->createParentConstructWithParams([]);
-            $classMethod->stmts[] = new \PhpParser\Node\Stmt\Expression($staticCall);
+        foreach ($classReflection->getParents() as $parentClassReflection) {
+            if (!$parentClassReflection->hasMethod(\Rector\Core\ValueObject\MethodName::CONSTRUCT)) {
+                continue;
+            }
+            $constructorMethodReflection = $parentClassReflection->getMethod(\Rector\Core\ValueObject\MethodName::CONSTRUCT, $scope);
+            $parentConstructorClassMethod = $this->astResolver->resolveClassMethodFromMethodReflection($constructorMethodReflection);
+            if (!$parentConstructorClassMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
+                continue;
+            }
+            $this->completeParentConstructorBasedOnParentNode($classMethod, $parentConstructorClassMethod);
+            break;
         }
     }
     public function completeChildConstructors(\PhpParser\Node\Stmt\Class_ $class, \PhpParser\Node\Stmt\ClassMethod $constructorClassMethod) : void
@@ -95,31 +101,34 @@ final class ChildAndParentClassManipulator
             $childConstructorClassMethod->stmts = \array_merge([new \PhpParser\Node\Stmt\Expression($parentConstructCallNode)], (array) $childConstructorClassMethod->stmts);
         }
     }
-    private function completeParentConstructorBasedOnParentNode(\PhpParser\Node\Stmt\Class_ $parentClassNode, \PhpParser\Node\Stmt\ClassMethod $classMethod) : void
+    private function completeParentConstructorBasedOnParentNode(\PhpParser\Node\Stmt\ClassMethod $classMethod, \PhpParser\Node\Stmt\ClassMethod $parentClassMethod) : void
     {
-        $firstParentConstructMethodNode = $this->findFirstParentConstructor($parentClassNode);
-        if (!$firstParentConstructMethodNode instanceof \PhpParser\Node\Stmt\ClassMethod) {
-            return;
+        $paramsWithoutDefaultValue = [];
+        foreach ($parentClassMethod->params as $param) {
+            if ($param->default !== null) {
+                break;
+            }
+            $paramsWithoutDefaultValue[] = $param;
         }
-        $cleanParams = $this->promotedPropertyParamCleaner->cleanFromFlags($firstParentConstructMethodNode->params);
+        $cleanParams = $this->cleanParamsFromVisibilityAndAttributes($paramsWithoutDefaultValue);
         // replicate parent parameters
-        $classMethod->params = \array_merge($cleanParams, $classMethod->params);
-        $staticCall = $this->nodeFactory->createParentConstructWithParams($firstParentConstructMethodNode->params);
+        if ($cleanParams !== []) {
+            $classMethod->params = \array_merge($cleanParams, $classMethod->params);
+        }
+        $staticCall = $this->nodeFactory->createParentConstructWithParams($cleanParams);
         $classMethod->stmts[] = new \PhpParser\Node\Stmt\Expression($staticCall);
     }
-    private function findFirstParentConstructor(\PhpParser\Node\Stmt\Class_ $class) : ?\PhpParser\Node\Stmt\ClassMethod
+    /**
+     * @param Param[] $params
+     * @return Param[]
+     */
+    private function cleanParamsFromVisibilityAndAttributes(array $params) : array
     {
-        while ($class !== null) {
-            $constructMethodNode = $class->getMethod(\Rector\Core\ValueObject\MethodName::CONSTRUCT);
-            if ($constructMethodNode !== null) {
-                return $constructMethodNode;
-            }
-            $parentClassName = $this->parentClassScopeResolver->resolveParentClassName($class);
-            if ($parentClassName === null) {
-                return null;
-            }
-            $class = $this->nodeRepository->findClass($parentClassName);
-        }
-        return null;
+        $cleanParams = $this->promotedPropertyParamCleaner->cleanFromFlags($params);
+        // remove deep attributes to avoid bugs with nested tokens re-print
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($cleanParams, function (\PhpParser\Node $node) : void {
+            $node->setAttributes([]);
+        });
+        return $cleanParams;
     }
 }
