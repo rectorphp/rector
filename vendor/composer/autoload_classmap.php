@@ -2951,7 +2951,6 @@ return array(
     'Rector\\Symfony\\NodeFactory\\GetSubscribedEventsClassMethodFactory' => $vendorDir . '/rector/rector-symfony/src/NodeFactory/GetSubscribedEventsClassMethodFactory.php',
     'Rector\\Symfony\\NodeFactory\\OnLogoutClassMethodFactory' => $vendorDir . '/rector/rector-symfony/src/NodeFactory/OnLogoutClassMethodFactory.php',
     'Rector\\Symfony\\NodeFactory\\OnSuccessLogoutClassMethodFactory' => $vendorDir . '/rector/rector-symfony/src/NodeFactory/OnSuccessLogoutClassMethodFactory.php',
-    'Rector\\Symfony\\NodeFactory\\RouteNameClassFactory' => $vendorDir . '/rector/rector-symfony/src/NodeFactory/RouteNameClassFactory.php',
     'Rector\\Symfony\\NodeFactory\\ThisRenderFactory' => $vendorDir . '/rector/rector-symfony/src/NodeFactory/ThisRenderFactory.php',
     'Rector\\Symfony\\Rector\\BinaryOp\\ResponseStatusCodeRector' => $vendorDir . '/rector/rector-symfony/src/Rector/BinaryOp/ResponseStatusCodeRector.php',
     'Rector\\Symfony\\Rector\\ClassConstFetch\\ConsoleExceptionToErrorEventConstantRector' => $vendorDir . '/rector/rector-symfony/src/Rector/ClassConstFetch/ConsoleExceptionToErrorEventConstantRector.php',

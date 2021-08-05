@@ -16,7 +16,6 @@ use PHPStan\Type\SubtractableType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Doctrine\TypeAnalyzer\TypeFinder;
-use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeNameResolver\NodeNameResolver;
 final class EntityObjectTypeResolver
 {
@@ -29,18 +28,13 @@ final class EntityObjectTypeResolver
      */
     private $typeFinder;
     /**
-     * @var \Rector\NodeCollector\NodeCollector\NodeRepository
-     */
-    private $nodeRepository;
-    /**
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \Rector\Doctrine\TypeAnalyzer\TypeFinder $typeFinder, \Rector\NodeCollector\NodeCollector\NodeRepository $nodeRepository, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
+    public function __construct(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \Rector\Doctrine\TypeAnalyzer\TypeFinder $typeFinder, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
     {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->typeFinder = $typeFinder;
-        $this->nodeRepository = $nodeRepository;
         $this->nodeNameResolver = $nodeNameResolver;
     }
     public function resolveFromRepositoryClass(\PhpParser\Node\Stmt\Class_ $repositoryClass) : \PHPStan\Type\SubtractableType

@@ -7,7 +7,6 @@ use PhpParser\Node;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
 use Rector\Core\NodeManipulator\ClassInsertManipulator;
 use Rector\Core\Rector\AbstractRector;
@@ -139,8 +138,7 @@ CODE_SAMPLE
         // remove all tree-related properties and their getters and setters - it's handled by behavior trait
         $removedPropertyNames = [];
         foreach ($node->getProperties() as $property) {
-            $propertyPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
-            if (!$propertyPhpDocInfo->hasByAnnotationClasses(['Gedmo\\Mapping\\Annotation\\TreeLeft', 'Gedmo\\Mapping\\Annotation\\TreeRight', 'Gedmo\\Mapping\\Annotation\\TreeRoot', 'Gedmo\\Mapping\\Annotation\\TreeParent', 'Gedmo\\Mapping\\Annotation\\TreeLevel'])) {
+            if (!$this->shouldRemoveProperty($property)) {
                 continue;
             }
             /** @var string $propertyName */
@@ -151,8 +149,9 @@ CODE_SAMPLE
         $this->removeClassMethodsForProperties($node, $removedPropertyNames);
         return $node;
     }
-    private function shouldRemoveProperty(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo) : bool
+    private function shouldRemoveProperty(\PhpParser\Node\Stmt\Property $property) : bool
     {
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
         return $phpDocInfo->hasByAnnotationClasses(['Gedmo\\Mapping\\Annotation\\TreeLeft', 'Gedmo\\Mapping\\Annotation\\TreeRight', 'Gedmo\\Mapping\\Annotation\\TreeRoot', 'Gedmo\\Mapping\\Annotation\\TreeParent', 'Gedmo\\Mapping\\Annotation\\TreeLevel']);
     }
     /**

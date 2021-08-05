@@ -15,7 +15,6 @@ use PhpParser\Node\Stmt\Property;
 use PHPStan\Reflection\Php\PhpPropertyReflection;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Reflection\ReflectionResolver;
-use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -30,18 +29,13 @@ final class SetterClassMethodAnalyzer
      */
     private $nodeNameResolver;
     /**
-     * @var \Rector\NodeCollector\NodeCollector\NodeRepository
-     */
-    private $nodeRepository;
-    /**
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
-    public function __construct(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeCollector\NodeCollector\NodeRepository $nodeRepository, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver)
+    public function __construct(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->nodeNameResolver = $nodeNameResolver;
-        $this->nodeRepository = $nodeRepository;
         $this->reflectionResolver = $reflectionResolver;
     }
     public function matchNullalbeClassMethodProperty(\PhpParser\Node\Stmt\ClassMethod $classMethod) : ?\PhpParser\Node\Stmt\Property

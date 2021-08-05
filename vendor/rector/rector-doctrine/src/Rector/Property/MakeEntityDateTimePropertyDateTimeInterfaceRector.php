@@ -9,7 +9,6 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\TypeCombinator;
 use PHPStan\Type\UnionType;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Doctrine\NodeAnalyzer\SetterClassMethodAnalyzer;
 use Rector\Doctrine\NodeManipulator\PropertyTypeManipulator;
 use Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -22,10 +21,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class MakeEntityDateTimePropertyDateTimeInterfaceRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var \Rector\Doctrine\NodeAnalyzer\SetterClassMethodAnalyzer
-     */
-    private $setterClassMethodAnalyzer;
-    /**
      * @var \Rector\Doctrine\NodeManipulator\PropertyTypeManipulator
      */
     private $propertyTypeManipulator;
@@ -33,9 +28,8 @@ final class MakeEntityDateTimePropertyDateTimeInterfaceRector extends \Rector\Co
      * @var \Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer
      */
     private $propertyTypeInferer;
-    public function __construct(\Rector\Doctrine\NodeAnalyzer\SetterClassMethodAnalyzer $setterClassMethodAnalyzer, \Rector\Doctrine\NodeManipulator\PropertyTypeManipulator $propertyTypeManipulator, \Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer $propertyTypeInferer)
+    public function __construct(\Rector\Doctrine\NodeManipulator\PropertyTypeManipulator $propertyTypeManipulator, \Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer $propertyTypeInferer)
     {
-        $this->setterClassMethodAnalyzer = $setterClassMethodAnalyzer;
         $this->propertyTypeManipulator = $propertyTypeManipulator;
         $this->propertyTypeInferer = $propertyTypeInferer;
     }

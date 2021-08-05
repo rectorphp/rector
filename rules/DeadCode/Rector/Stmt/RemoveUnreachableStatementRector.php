@@ -10,6 +10,7 @@ use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Do_;
 use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\If_;
@@ -27,6 +28,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class RemoveUnreachableStatementRector extends \Rector\Core\Rector\AbstractRector
 {
+    /**
+     * @var array<class-string<Node>>
+     */
+    private const STMTS_WITH_IS_UNREACHABLE = [\PhpParser\Node\Stmt\If_::class, \PhpParser\Node\Stmt\While_::class, \PhpParser\Node\Stmt\Do_::class];
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
         return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove unreachable statements', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
@@ -68,10 +73,7 @@ CODE_SAMPLE
         }
         // might be PHPStan false positive, better skip
         $previousStatement = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PREVIOUS_STATEMENT);
-        if ($previousStatement instanceof \PhpParser\Node\Stmt\If_) {
-            $node->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::IS_UNREACHABLE, $previousStatement->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::IS_UNREACHABLE));
-        }
-        if ($previousStatement instanceof \PhpParser\Node\Stmt\While_) {
+        if ($previousStatement instanceof \PhpParser\Node\Stmt && \in_array(\get_class($previousStatement), self::STMTS_WITH_IS_UNREACHABLE, \true)) {
             $node->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::IS_UNREACHABLE, $previousStatement->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::IS_UNREACHABLE));
         }
         if (!$this->isUnreachable($node)) {

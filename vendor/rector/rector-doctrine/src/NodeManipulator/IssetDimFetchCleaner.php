@@ -59,7 +59,6 @@ final class IssetDimFetchCleaner
             if (!$isset instanceof \PhpParser\Node\Expr\Isset_) {
                 continue;
             }
-            $issetParent = $isset->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
             foreach ($isset->vars as $var) {
                 $dimFetchValue = $this->matchArrayDimFetchValue($var, $paramVariable);
                 if (!\is_string($dimFetchValue)) {

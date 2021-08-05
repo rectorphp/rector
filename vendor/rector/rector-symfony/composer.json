@@ -18,7 +18,7 @@
         "symplify\/easy-coding-standard": "^9.4",
         "symplify\/rule-doc-generator": "^9.4",
         "phpstan\/extension-installer": "^1.1",
-        "rector\/rector-phpstan-rules": "^0.3.3"
+        "rector\/phpstan-rules": "^0.3.4"
     },
     "autoload": {
         "psr-4": {

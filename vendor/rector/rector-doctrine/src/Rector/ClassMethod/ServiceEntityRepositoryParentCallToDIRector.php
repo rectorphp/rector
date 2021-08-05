@@ -167,9 +167,6 @@ CODE_SAMPLE
             $entityReferenceExpr = $node->args[1]->value;
             $this->removeNode($node);
         });
-        if ($entityReferenceExpr === null) {
-            return null;
-        }
         return $entityReferenceExpr;
     }
     private function addRepositoryProperty(\PhpParser\Node\Stmt\Class_ $class, \PhpParser\Node\Expr $entityReferenceExpr) : void
