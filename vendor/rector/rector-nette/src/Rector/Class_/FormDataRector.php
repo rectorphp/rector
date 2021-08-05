@@ -1,0 +1,160 @@
+<?php
+
+declare (strict_types=1);
+namespace Rector\Nette\Rector\Class_;
+
+use PhpParser\Node;
+use PhpParser\Node\Identifier;
+use PhpParser\Node\Stmt\Class_;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
+use Rector\Core\NodeFactory\ClassWithPublicPropertiesFactory;
+use Rector\Core\Rector\AbstractRector;
+use Rector\FileSystemRector\ValueObject\AddedFileWithContent;
+use Rector\Nette\NodeFinder\FormFieldsFinder;
+use Rector\Nette\NodeFinder\FormOnSuccessCallbackFinder;
+use Rector\Nette\NodeFinder\FormOnSuccessCallbackValuesParamFinder;
+use Rector\Nette\NodeFinder\FormVariableFinder;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20210805\Webmozart\Assert\Assert;
+/**
+ * @see https://doc.nette.org/en/3.1/form-presenter#toc-mapping-to-classes
+ * @see \Rector\Nette\Tests\Rector\Class_\FormDataRector\FormDataRectorTest
+ */
+final class FormDataRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
+{
+    public const FORM_DATA_CLASS_PARENT = 'form_data_class_parent';
+    public const FORM_DATA_CLASS_TRAITS = 'form_data_class_traits';
+    /**
+     * @var string
+     */
+    private $formDataClassParent = 'Nette\\Utils\\ArrayHash';
+    /**
+     * @var string[]
+     */
+    private $formDataClassTraits = ['Nette\\SmartObject'];
+    /**
+     * @var \Rector\Nette\NodeFinder\FormVariableFinder
+     */
+    private $formVariableFinder;
+    /**
+     * @var \Rector\Nette\NodeFinder\FormFieldsFinder
+     */
+    private $formFieldsFinder;
+    /**
+     * @var \Rector\Nette\NodeFinder\FormOnSuccessCallbackFinder
+     */
+    private $formOnSuccessCallbackFinder;
+    /**
+     * @var \Rector\Nette\NodeFinder\FormOnSuccessCallbackValuesParamFinder
+     */
+    private $formOnSuccessCallbackValuesParamFinder;
+    /**
+     * @var \Rector\Core\NodeFactory\ClassWithPublicPropertiesFactory
+     */
+    private $classWithPublicPropertiesFactory;
+    public function __construct(\Rector\Nette\NodeFinder\FormVariableFinder $formVariableFinder, \Rector\Nette\NodeFinder\FormFieldsFinder $formFieldsFinder, \Rector\Nette\NodeFinder\FormOnSuccessCallbackFinder $formOnSuccessCallbackFinder, \Rector\Nette\NodeFinder\FormOnSuccessCallbackValuesParamFinder $formOnSuccessCallbackValuesParamFinder, \Rector\Core\NodeFactory\ClassWithPublicPropertiesFactory $classWithPublicPropertiesFactory)
+    {
+        $this->formVariableFinder = $formVariableFinder;
+        $this->formFieldsFinder = $formFieldsFinder;
+        $this->formOnSuccessCallbackFinder = $formOnSuccessCallbackFinder;
+        $this->formOnSuccessCallbackValuesParamFinder = $formOnSuccessCallbackValuesParamFinder;
+        $this->classWithPublicPropertiesFactory = $classWithPublicPropertiesFactory;
+    }
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    {
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Create form data class with all fields of Form', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
+class MyFormFactory
+{
+    public function create()
+    {
+        $form = new Form();
+
+        $form->addText('foo', 'Foo');
+        $form->addText('bar', 'Bar')->setRequired();
+        $form->onSuccess[] = function (Form $form, ArrayHash $values) {
+            // do something
+        }
+    }
+}
+CODE_SAMPLE
+, <<<'CODE_SAMPLE'
+class MyFormFactoryFormData
+{
+    public string $foo;
+    public string $bar;
+}
+
+class MyFormFactory
+{
+    public function create()
+    {
+        $form = new Form();
+
+        $form->addText('foo', 'Foo');
+        $form->addText('bar', 'Bar')->setRequired();
+        $form->onSuccess[] = function (Form $form, MyFormFactoryFormData $values) {
+            // do something
+        }
+    }
+}
+CODE_SAMPLE
+, [self::FORM_DATA_CLASS_PARENT => '', self::FORM_DATA_CLASS_TRAITS => []])]);
+    }
+    public function getNodeTypes() : array
+    {
+        return [\PhpParser\Node\Stmt\Class_::class];
+    }
+    public function configure(array $configuration) : void
+    {
+        if (isset($configuration[self::FORM_DATA_CLASS_PARENT])) {
+            \RectorPrefix20210805\Webmozart\Assert\Assert::string($configuration[self::FORM_DATA_CLASS_PARENT]);
+            $this->formDataClassParent = $configuration[self::FORM_DATA_CLASS_PARENT];
+        }
+        if (isset($configuration[self::FORM_DATA_CLASS_TRAITS])) {
+            \RectorPrefix20210805\Webmozart\Assert\Assert::isArray($configuration[self::FORM_DATA_CLASS_TRAITS]);
+            $this->formDataClassTraits = $configuration[self::FORM_DATA_CLASS_TRAITS];
+        }
+    }
+    /**
+     * @param Class_ $node
+     */
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    {
+        if ($node->name === null) {
+            return null;
+        }
+        $shortClassName = $this->nodeNameResolver->getShortName($node);
+        $fullClassName = $this->getName($node);
+        $form = $this->formVariableFinder->find($node);
+        if ($form === null) {
+            return null;
+        }
+        $formFields = $this->formFieldsFinder->find($node, $form);
+        if ($formFields === []) {
+            return null;
+        }
+        $properties = [];
+        foreach ($formFields as $formField) {
+            $properties[$formField->getName()] = ['type' => $formField->getType(), 'nullable' => $formField->getType() === 'int' && $formField->isRequired() === \false];
+        }
+        $formDataClassName = $shortClassName . 'FormData';
+        $fullFormDataClassName = '\\' . $fullClassName . 'FormData';
+        $formDataClass = $this->classWithPublicPropertiesFactory->createNode($fullFormDataClassName, $properties, $this->formDataClassParent, $this->formDataClassTraits);
+        $printedClassContent = "<?php\n\n" . $this->betterStandardPrinter->print($formDataClass) . "\n";
+        $smartFileInfo = $this->file->getSmartFileInfo();
+        $targetFilePath = $smartFileInfo->getRealPathDirectory() . '/' . $formDataClassName . '.php';
+        $addedFileWithContent = new \Rector\FileSystemRector\ValueObject\AddedFileWithContent($targetFilePath, $printedClassContent);
+        $this->removedAndAddedFilesCollector->addAddedFile($addedFileWithContent);
+        $onSuccessCallback = $this->formOnSuccessCallbackFinder->find($node, $form);
+        if ($onSuccessCallback === null) {
+            return null;
+        }
+        $valuesParam = $this->formOnSuccessCallbackValuesParamFinder->find($node, $onSuccessCallback);
+        if ($valuesParam === null) {
+            return null;
+        }
+        $valuesParam->type = new \PhpParser\Node\Identifier($fullFormDataClassName);
+        return $node;
+    }
+}

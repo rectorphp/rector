@@ -89,10 +89,10 @@ CODE_SAMPLE
         if (!$phpDocInfo->hasByName('inject')) {
             return null;
         }
-        if ($this->netteInjectPropertyAnalyzer->canBeRefactored($node, $phpDocInfo)) {
-            return $this->refactorNetteInjectProperty($phpDocInfo, $node);
+        if (!$this->netteInjectPropertyAnalyzer->canBeRefactored($node, $phpDocInfo)) {
+            return null;
         }
-        return null;
+        return $this->refactorNetteInjectProperty($phpDocInfo, $node);
     }
     private function refactorNetteInjectProperty(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo, \PhpParser\Node\Stmt\Property $property) : ?\PhpParser\Node\Stmt\Property
     {

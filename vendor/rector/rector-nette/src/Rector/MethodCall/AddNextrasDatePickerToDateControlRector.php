@@ -102,7 +102,6 @@ CODE_SAMPLE
             return $new;
         }
         $arrayDimFetch = new \PhpParser\Node\Expr\ArrayDimFetch($methodCall->var, $key);
-        $new = $this->createDateTimeControlNew($methodCall);
         $formAssign = new \PhpParser\Node\Expr\Assign($arrayDimFetch, $new);
         if ($parent !== null) {
             $methodCalls = $this->betterNodeFinder->findInstanceOf($parent, \PhpParser\Node\Expr\MethodCall::class);

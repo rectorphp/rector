@@ -117,32 +117,6 @@ Change `containerBuilder->expand()` to static call with parameters
 
 <br>
 
-## ChangeFormArrayAccessToAnnotatedControlVariableRector
-
-Change array access magic on `$form` to explicit standalone typed variable
-
-- class: [`Rector\Nette\Rector\ArrayDimFetch\ChangeFormArrayAccessToAnnotatedControlVariableRector`](../src/Rector/ArrayDimFetch/ChangeFormArrayAccessToAnnotatedControlVariableRector.php)
-
-```diff
- use Nette\Application\UI\Form;
-
- class SomePresenter
- {
-     public function run()
-     {
-         $form = new Form();
-         $this->addText('email', 'Email');
-
--        $form['email']->value = 'hey@hi.hello';
-+        /** @var \Nette\Forms\Controls\TextInput $emailControl */
-+        $emailControl = $form['email'];
-+        $emailControl->value = 'hey@hi.hello';
-     }
- }
-```
-
-<br>
-
 ## ChangeNetteEventNamesInGetSubscribedEventsRector
 
 Change EventSubscriber from Kdyby to Contributte
@@ -264,6 +238,56 @@ Change `file_put_contents()` to `FileSystem::write()`
 
 <br>
 
+## FormDataRector
+
+Create form data class with all fields of Form
+
+:wrench: **configure it!**
+
+- class: [`Rector\Nette\Rector\Class_\FormDataRector`](../src/Rector/Class_/FormDataRector.php)
+
+```php
+use Rector\Nette\Rector\Class_\FormDataRector;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+
+    $services->set(FormDataRector::class)
+        ->call('configure', [[
+            FormDataRector::FORM_DATA_CLASS_PARENT => '',
+            FormDataRector::FORM_DATA_CLASS_TRAITS => [],
+        ]]);
+};
+```
+
+↓
+
+```diff
++class MyFormFactoryFormData
++{
++    public string $foo;
++    public string $bar;
++}
++
+ class MyFormFactory
+ {
+     public function create()
+     {
+         $form = new Form();
+
+         $form->addText('foo', 'Foo');
+         $form->addText('bar', 'Bar')->setRequired();
+-        $form->onSuccess[] = function (Form $form, ArrayHash $values) {
++        $form->onSuccess[] = function (Form $form, MyFormFactoryFormData $values) {
+             // do something
+         }
+     }
+ }
+```
+
+<br>
+
 ## JsonDecodeEncodeToNetteUtilsJsonDecodeEncodeRector
 
 Changes `json_encode()/json_decode()` to safer and more verbose `Nette\Utils\Json::encode()/decode()` calls
@@ -293,6 +317,37 @@ Changes `json_encode()/json_decode()` to safer and more verbose `Nette\Utils\Jso
 +        $prettyJsonString = \Nette\Utils\Json::encode($data, \Nette\Utils\Json::PRETTY);
      }
  }
+```
+
+<br>
+
+## LatteVarTypesBasedOnPresenterTemplateParametersRector
+
+Adds latte {varType}s based on presenter `$this->template` parameters
+
+- class: [`Rector\Nette\Rector\Class_\LatteVarTypesBasedOnPresenterTemplateParametersRector`](../src/Rector/Class_/LatteVarTypesBasedOnPresenterTemplateParametersRector.php)
+
+```diff
+ // presenters/SomePresenter.php
+ <?php
+
+ use Nette\Application\UI\Presenter;
+
+ class SomePresenter extends Presenter
+ {
+     public function renderDefault(): void
+     {
+         $this->template->title = 'My title';
+         $this->template->count = 123;
+     }
+ }
+
+ // templates/Some/default.latte
++{varType string $title}
++{varType int $count}
++
+ <h1>{$title}</h1>
+ <span class="count">{$count}</span>
 ```
 
 <br>
@@ -610,64 +665,6 @@ Change Kdyby EventManager to EventDispatcher
 
 <br>
 
-## ReplaceMagicPropertyEventWithEventClassRector
-
-Change `$onProperty` magic call with event disptacher and class dispatch
-
-- class: [`Rector\Nette\Kdyby\Rector\MethodCall\ReplaceMagicPropertyEventWithEventClassRector`](../src/Kdyby/Rector/MethodCall/ReplaceMagicPropertyEventWithEventClassRector.php)
-
-```diff
- final class FileManager
- {
--    public $onUpload;
-+    use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
-
-+    public function __construct(EventDispatcherInterface $eventDispatcher)
-+    {
-+        $this->eventDispatcher = $eventDispatcher;
-+    }
-+
-     public function run(User $user)
-     {
--        $this->onUpload($user);
-+        $onFileManagerUploadEvent = new FileManagerUploadEvent($user);
-+        $this->eventDispatcher->dispatch($onFileManagerUploadEvent);
-     }
- }
-```
-
-<br>
-
-## ReplaceMagicPropertyWithEventClassRector
-
-Change `getSubscribedEvents()` from on magic property, to Event class
-
-- class: [`Rector\Nette\Kdyby\Rector\ClassMethod\ReplaceMagicPropertyWithEventClassRector`](../src/Kdyby/Rector/ClassMethod/ReplaceMagicPropertyWithEventClassRector.php)
-
-```diff
- use Kdyby\Events\Subscriber;
-
- final class ActionLogEventSubscriber implements Subscriber
- {
-     public function getSubscribedEvents(): array
-     {
-         return [
--            AlbumService::class . '::onApprove' => 'onAlbumApprove',
-+            AlbumServiceApproveEvent::class => 'onAlbumApprove',
-         ];
-     }
-
--    public function onAlbumApprove(Album $album, int $adminId): void
-+    public function onAlbumApprove(AlbumServiceApproveEventAlbum $albumServiceApproveEventAlbum): void
-     {
-+        $album = $albumServiceApproveEventAlbum->getAlbum();
-         $album->play();
-     }
- }
-```
-
-<br>
-
 ## ReplaceTimeNumberWithDateTimeConstantRector
 
 Replace time numbers with `Nette\Utils\DateTime` constants
@@ -844,6 +841,31 @@ Change `translate()` method call 2nd arg to variadic
      {
 +        $count = $parameters[0] ?? null;
          return [$message, $count];
+     }
+ }
+```
+
+<br>
+
+## WrapTransParameterNameRector
+
+Adds %% to placeholder name of `trans()` method if missing
+
+- class: [`Rector\Nette\Kdyby\Rector\MethodCall\WrapTransParameterNameRector`](../src/Kdyby/Rector/MethodCall/WrapTransParameterNameRector.php)
+
+```diff
+ use Symfony\Component\Translation\Translator;
+
+ final class SomeController
+ {
+     public function run()
+     {
+         $translator = new Translator('');
+         $translated = $translator->trans(
+             'Hello %name%',
+-            ['name' => $name]
++            ['%name%' => $name]
+         );
      }
  }
 ```
