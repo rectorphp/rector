@@ -7,8 +7,12 @@ namespace Rector\Privatization\Rector\Class_;
 use PhpParser\Node;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
+use PHPStan\Analyser\Scope;
+use PHPStan\Reflection\ClassReflection;
 use Rector\Core\NodeAnalyzer\ClassAnalyzer;
 use Rector\Core\Rector\AbstractRector;
+use Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -26,7 +30,8 @@ final class FinalizeClassesWithoutChildrenRector extends AbstractRector
     ];
 
     public function __construct(
-        private ClassAnalyzer $classAnalyzer
+        private ClassAnalyzer $classAnalyzer,
+        private FamilyRelationsAnalyzer $familyRelationsAnalyzer
     ) {
     }
 
@@ -87,7 +92,18 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($this->nodeRepository->hasClassChildren($node)) {
+        $scope = $node->getAttribute(AttributeKey::SCOPE);
+        if (! $scope instanceof Scope) {
+            return null;
+        }
+
+        $classReflection = $scope->getClassReflection();
+        if (! $classReflection instanceof ClassReflection) {
+            return null;
+        }
+
+        $childrenClassReflections = $this->familyRelationsAnalyzer->getChildrenOfClassReflection($classReflection);
+        if ($childrenClassReflections !== []) {
             return null;
         }
 

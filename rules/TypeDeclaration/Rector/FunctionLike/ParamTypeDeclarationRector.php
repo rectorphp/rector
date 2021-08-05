@@ -35,7 +35,6 @@ final class ParamTypeDeclarationRector extends AbstractRector implements MinPhpV
 {
     public function __construct(
         private VendorLockResolver $vendorLockResolver,
-        //private ChildParamPopulator $childParamPopulator,
         private ParamTypeInferer $paramTypeInferer,
         private TraitTypeAnalyzer $traitTypeAnalyzer,
         private ParamTagRemover $paramTagRemover
@@ -47,6 +46,7 @@ final class ParamTypeDeclarationRector extends AbstractRector implements MinPhpV
      */
     public function getNodeTypes(): array
     {
+        // why not on Param node? because class like docblock is edited too for @param tags
         return [Function_::class, ClassMethod::class];
     }
 
@@ -123,8 +123,6 @@ CODE_SAMPLE
         if ($node->params === []) {
             return null;
         }
-
-        // @todo subscribe to Param node directly? narrow scope the better, right?
 
         foreach ($node->params as $param) {
             $this->refactorParam($param, $node);

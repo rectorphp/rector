@@ -19,7 +19,6 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
-use Rector\TypeDeclaration\ChildPopulator\ChildReturnPopulator;
 use Rector\TypeDeclaration\PhpDocParser\NonInformativeReturnTagRemover;
 use Rector\TypeDeclaration\PhpParserTypeAnalyzer;
 use Rector\TypeDeclaration\TypeAlreadyAddedChecker\ReturnTypeAlreadyAddedChecker;
@@ -41,7 +40,6 @@ final class ReturnTypeDeclarationRector extends AbstractRector implements MinPhp
 {
     public function __construct(
         private ReturnTypeInferer $returnTypeInferer,
-        private ChildReturnPopulator $childReturnPopulator,
         private ReturnTypeAlreadyAddedChecker $returnTypeAlreadyAddedChecker,
         private NonInformativeReturnTagRemover $nonInformativeReturnTagRemover,
         private ClassMethodReturnTypeOverrideGuard $classMethodReturnTypeOverrideGuard,
@@ -147,12 +145,7 @@ CODE_SAMPLE
 
         /** @var Name|NullableType|PhpParserUnionType $inferredReturnNode */
         $this->addReturnType($node, $inferredReturnNode);
-
         $this->nonInformativeReturnTagRemover->removeReturnTagIfNotUseful($node);
-
-        if ($node instanceof ClassMethod) {
-            $this->childReturnPopulator->populateChildren($node, $inferedType);
-        }
 
         return $node;
     }

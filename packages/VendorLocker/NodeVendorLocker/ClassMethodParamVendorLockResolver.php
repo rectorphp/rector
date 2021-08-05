@@ -6,12 +6,10 @@ namespace Rector\VendorLocker\NodeVendorLocker;
 
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
-use PHPStan\BetterReflection\Reflection\ReflectionClass;
 use PHPStan\Reflection\ClassReflection;
-use PHPStan\Reflection\ReflectionProvider;
+use Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 use Symplify\SmartFileSystem\Normalizer\PathNormalizer;
 
 final class ClassMethodParamVendorLockResolver
@@ -19,8 +17,7 @@ final class ClassMethodParamVendorLockResolver
     public function __construct(
         private NodeNameResolver $nodeNameResolver,
         private PathNormalizer $pathNormalizer,
-        private ReflectionProvider $reflectionProvider,
-        private PrivatesAccessor $privatesAccessor
+        private FamilyRelationsAnalyzer $familyRelationsAnalyzer
     ) {
     }
 
@@ -73,36 +70,9 @@ final class ClassMethodParamVendorLockResolver
         return false;
     }
 
-    /**
-     * @return ReflectionClass[]
-     */
-    private function findRelatedClassReflections(ClassReflection $classReflection): array
-    {
-        // @todo decouple to some reflection family finder?
-
-        /** @var ReflectionClass[] $reflectionClasses */
-        $reflectionClasses = $this->privatesAccessor->getPrivateProperty($this->reflectionProvider, 'classes');
-
-        $relatedClassReflections = [];
-        foreach ($reflectionClasses as $reflectionClass) {
-            if ($reflectionClass->getName() === $classReflection->getName()) {
-                continue;
-            }
-
-            // is related?
-            if (! $reflectionClass->isSubclassOf($classReflection->getName())) {
-                continue;
-            }
-
-            $relatedClassReflections[] = $reflectionClass;
-        }
-
-        return $relatedClassReflections;
-    }
-
     private function hasTraitMethodVendorLock(ClassReflection $classReflection, string $methodName): bool
     {
-        $relatedReflectionClasses = $this->findRelatedClassReflections($classReflection);
+        $relatedReflectionClasses = $this->familyRelationsAnalyzer->getChildrenOfClassReflection($classReflection);
 
         foreach ($relatedReflectionClasses as $relatedReflectionClass) {
             foreach ($relatedReflectionClass->getTraits() as $traitReflectionClass) {

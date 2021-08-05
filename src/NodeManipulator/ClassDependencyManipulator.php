@@ -94,7 +94,10 @@ final class ClassDependencyManipulator
         $this->classMethodAssignManipulator->addParameterAndAssignToMethod($constructorMethod, $name, $type, $assign);
         $this->classInsertManipulator->addAsFirstMethod($class, $constructorMethod);
 
-        $this->childAndParentClassManipulator->completeParentConstructor($class, $constructorMethod);
+        /** @var Scope $scope */
+        $scope = $class->getAttribute(AttributeKey::SCOPE);
+
+        $this->childAndParentClassManipulator->completeParentConstructor($class, $constructorMethod, $scope);
         $this->childAndParentClassManipulator->completeChildConstructors($class, $constructorMethod);
     }
 
@@ -156,7 +159,10 @@ final class ClassDependencyManipulator
             $this->classInsertManipulator->addAsFirstMethod($class, $constructClassMethod);
         }
 
-        $this->childAndParentClassManipulator->completeParentConstructor($class, $constructClassMethod);
+        /** @var Scope $scope */
+        $scope = $class->getAttribute(AttributeKey::SCOPE);
+
+        $this->childAndParentClassManipulator->completeParentConstructor($class, $constructClassMethod, $scope);
         $this->childAndParentClassManipulator->completeChildConstructors($class, $constructClassMethod);
     }
 

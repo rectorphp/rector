@@ -5,10 +5,9 @@ declare(strict_types=1);
 namespace Rector\NodeCollector\NodeCollector;
 
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassLike;
-use PhpParser\Node\Stmt\Trait_;
 use PHPStan\Reflection\ReflectionProvider;
-use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\NodeAnalyzer\ClassAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
@@ -19,82 +18,60 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
  */
 final class NodeRepository
 {
+    /**
+     * @deprecated Not reliable, as only works with so-far parsed classes
+     * @var Class_[]
+     */
+    private array $classes = [];
+
     public function __construct(
-        private NodeNameResolver $nodeNameResolver,
-        private ParsedNodeCollector $parsedNodeCollector,
+        private ClassAnalyzer $classAnalyzer,
         private ReflectionProvider $reflectionProvider,
     ) {
     }
 
-    public function hasClassChildren(Class_ $desiredClass): bool
+    public function collectClass(Class_ $class): void
     {
-        $desiredClassName = $this->nodeNameResolver->getName($desiredClass);
-        if ($desiredClassName === null) {
-            return false;
+        if ($this->classAnalyzer->isAnonymousClass($class)) {
+            return;
         }
 
-        return $this->findChildrenOfClass($desiredClassName) !== [];
+        $className = $class->getAttribute(AttributeKey::CLASS_NAME);
+        if ($className === null) {
+            throw new ShouldNotHappenException();
+        }
+
+        $this->classes[$className] = $class;
     }
 
     /**
-     * @deprecated Use ReflectionProvider instead to resolve all the traits
-     * @return Trait_[]
-     */
-    public function findUsedTraitsInClass(ClassLike $classLike): array
-    {
-        $traits = [];
-
-        foreach ($classLike->getTraitUses() as $traitUse) {
-            foreach ($traitUse->traits as $trait) {
-                $traitName = $this->nodeNameResolver->getName($trait);
-                $foundTrait = $this->parsedNodeCollector->findTrait($traitName);
-                if ($foundTrait !== null) {
-                    $traits[] = $foundTrait;
-                }
-            }
-        }
-
-        return $traits;
-    }
-
-    /**
-     * @deprecated Use static reflection instead
-     *
-     * @param class-string $class
+     * @param class-string $className
      * @return Class_[]
+     * @deprecated Use static reflection instead
      */
-    public function findChildrenOfClass(string $class): array
+    public function findChildrenOfClass(string $className): array
     {
         $childrenClasses = [];
 
-        foreach ($this->parsedNodeCollector->getClasses() as $classNode) {
-            $currentClassName = $classNode->getAttribute(AttributeKey::CLASS_NAME);
-            if (! $this->isChildOrEqualClassLike($class, $currentClassName)) {
+        // @todo refactor to reflection
+        foreach ($this->classes as $class) {
+            $currentClassName = $class->getAttribute(AttributeKey::CLASS_NAME);
+            if ($currentClassName === null) {
                 continue;
             }
 
-            $childrenClasses[] = $classNode;
+            if (! $this->isChildOrEqualClassLike($className, $currentClassName)) {
+                continue;
+            }
+
+            $childrenClasses[] = $class;
         }
 
         return $childrenClasses;
     }
 
-    /**
-     * @deprecated Use static reflection instead
-     *
-     * @param class-string $name
-     */
-    public function findClass(string $name): ?Class_
+    private function isChildOrEqualClassLike(string $desiredClass, string $currentClassName): bool
     {
-        return $this->parsedNodeCollector->findClass($name);
-    }
-
-    private function isChildOrEqualClassLike(string $desiredClass, ?string $currentClassName): bool
-    {
-        if ($currentClassName === null) {
-            return false;
-        }
-
         if (! $this->reflectionProvider->hasClass($desiredClass)) {
             return false;
         }

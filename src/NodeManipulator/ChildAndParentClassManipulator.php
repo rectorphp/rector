@@ -4,16 +4,20 @@ declare(strict_types=1);
 
 namespace Rector\Core\NodeManipulator;
 
+use PhpParser\Node;
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
+use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\NodeAnalyzer\PromotedPropertyParamCleaner;
+use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Core\ValueObject\MethodName;
 use Rector\NodeCollector\NodeCollector\NodeRepository;
-use Rector\NodeCollector\ScopeResolver\ParentClassScopeResolver;
 use Rector\NodeNameResolver\NodeNameResolver;
+use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
 final class ChildAndParentClassManipulator
 {
@@ -23,14 +27,15 @@ final class ChildAndParentClassManipulator
         private NodeRepository $nodeRepository,
         private PromotedPropertyParamCleaner $promotedPropertyParamCleaner,
         private ReflectionProvider $reflectionProvider,
-        private ParentClassScopeResolver $parentClassScopeResolver
+        private AstResolver $astResolver,
+        private SimpleCallableNodeTraverser $simpleCallableNodeTraverser
     ) {
     }
 
     /**
-     * Add "parent::__construct()" where needed
+     * Add "parent::__construct(X, Y, Z)" where needed
      */
-    public function completeParentConstructor(Class_ $class, ClassMethod $classMethod): void
+    public function completeParentConstructor(Class_ $class, ClassMethod $classMethod, Scope $scope): void
     {
         $className = $this->nodeNameResolver->getName($class);
         if ($className === null) {
@@ -42,22 +47,24 @@ final class ChildAndParentClassManipulator
         }
 
         $classReflection = $this->reflectionProvider->getClass($className);
-        $parentClassReflection = $classReflection->getParentClass();
-        if ($parentClassReflection === false) {
-            return;
-        }
 
-        // not in analyzed scope, nothing we can do
-        $parentClassNode = $this->nodeRepository->findClass($parentClassReflection->getName());
-        if ($parentClassNode instanceof Class_) {
-            $this->completeParentConstructorBasedOnParentNode($parentClassNode, $classMethod);
-            return;
-        }
+        foreach ($classReflection->getParents() as $parentClassReflection) {
+            if (! $parentClassReflection->hasMethod(MethodName::CONSTRUCT)) {
+                continue;
+            }
 
-        // complete parent call for __construct()
-        if ($parentClassReflection->hasMethod(MethodName::CONSTRUCT)) {
-            $staticCall = $this->nodeFactory->createParentConstructWithParams([]);
-            $classMethod->stmts[] = new Expression($staticCall);
+            $constructorMethodReflection = $parentClassReflection->getMethod(MethodName::CONSTRUCT, $scope);
+            $parentConstructorClassMethod = $this->astResolver->resolveClassMethodFromMethodReflection(
+                $constructorMethodReflection
+            );
+
+            if (! $parentConstructorClassMethod instanceof ClassMethod) {
+                continue;
+            }
+
+            $this->completeParentConstructorBasedOnParentNode($classMethod, $parentConstructorClassMethod);
+
+            break;
         }
     }
 
@@ -93,39 +100,43 @@ final class ChildAndParentClassManipulator
         }
     }
 
-    private function completeParentConstructorBasedOnParentNode(Class_ $parentClassNode, ClassMethod $classMethod): void
-    {
-        $firstParentConstructMethodNode = $this->findFirstParentConstructor($parentClassNode);
-        if (! $firstParentConstructMethodNode instanceof ClassMethod) {
-            return;
+    private function completeParentConstructorBasedOnParentNode(
+        ClassMethod $classMethod,
+        ClassMethod $parentClassMethod
+    ): void {
+        $paramsWithoutDefaultValue = [];
+        foreach ($parentClassMethod->params as $param) {
+            if ($param->default !== null) {
+                break;
+            }
+
+            $paramsWithoutDefaultValue[] = $param;
         }
 
-        $cleanParams = $this->promotedPropertyParamCleaner->cleanFromFlags($firstParentConstructMethodNode->params);
+        $cleanParams = $this->cleanParamsFromVisibilityAndAttributes($paramsWithoutDefaultValue);
 
         // replicate parent parameters
-        $classMethod->params = array_merge($cleanParams, $classMethod->params);
+        if ($cleanParams !== []) {
+            $classMethod->params = array_merge($cleanParams, $classMethod->params);
+        }
 
-        $staticCall = $this->nodeFactory->createParentConstructWithParams($firstParentConstructMethodNode->params);
-
+        $staticCall = $this->nodeFactory->createParentConstructWithParams($cleanParams);
         $classMethod->stmts[] = new Expression($staticCall);
     }
 
-    private function findFirstParentConstructor(Class_ $class): ?ClassMethod
+    /**
+     * @param Param[] $params
+     * @return Param[]
+     */
+    private function cleanParamsFromVisibilityAndAttributes(array $params): array
     {
-        while ($class !== null) {
-            $constructMethodNode = $class->getMethod(MethodName::CONSTRUCT);
-            if ($constructMethodNode !== null) {
-                return $constructMethodNode;
-            }
+        $cleanParams = $this->promotedPropertyParamCleaner->cleanFromFlags($params);
 
-            $parentClassName = $this->parentClassScopeResolver->resolveParentClassName($class);
-            if ($parentClassName === null) {
-                return null;
-            }
+        // remove deep attributes to avoid bugs with nested tokens re-print
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($cleanParams, function (Node $node): void {
+            $node->setAttributes([]);
+        });
 
-            $class = $this->nodeRepository->findClass($parentClassName);
-        }
-
-        return null;
+        return $cleanParams;
     }
 }
