@@ -80,7 +80,7 @@ final class ConsoleApplication extends \RectorPrefix20210805\Symfony\Component\C
     private function getNewWorkingDir(\RectorPrefix20210805\Symfony\Component\Console\Input\InputInterface $input) : string
     {
         $workingDir = $input->getParameterOption('--working-dir');
-        if ($workingDir !== \false && !\is_dir($workingDir)) {
+        if (\is_string($workingDir) && !\is_dir($workingDir)) {
             $errorMessage = \sprintf('Invalid working directory specified, "%s" does not exist.', $workingDir);
             throw new \Rector\Core\Exception\Configuration\InvalidConfigurationException($errorMessage);
         }

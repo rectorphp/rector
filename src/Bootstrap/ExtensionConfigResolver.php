@@ -42,7 +42,7 @@ final class ExtensionConfigResolver
         if (!isset($extensionConfig['relative_install_path'])) {
             return null;
         }
-        $includedFilePath = \sprintf('%s/%s/%s', $generatedConfigDirectory, $extensionConfig['relative_install_path'], $includedFile);
+        $includedFilePath = \sprintf('%s/%s/%s', $generatedConfigDirectory, (string) $extensionConfig['relative_install_path'], $includedFile);
         if (!\file_exists($includedFilePath)) {
             return null;
         }

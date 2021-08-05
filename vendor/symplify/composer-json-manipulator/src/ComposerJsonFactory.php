@@ -102,6 +102,9 @@ final class ComposerJsonFactory
         if (isset($jsonArray[\RectorPrefix20210805\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::SCRIPTS_DESCRIPTIONS])) {
             $composerJson->setScriptsDescriptions($jsonArray[\RectorPrefix20210805\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::SCRIPTS_DESCRIPTIONS]);
         }
+        if (isset($jsonArray[\RectorPrefix20210805\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::SUGGEST])) {
+            $composerJson->setSuggest($jsonArray[\RectorPrefix20210805\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::SUGGEST]);
+        }
         if (isset($jsonArray[\RectorPrefix20210805\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::MINIMUM_STABILITY])) {
             $composerJson->setMinimumStability($jsonArray[\RectorPrefix20210805\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::MINIMUM_STABILITY]);
         }

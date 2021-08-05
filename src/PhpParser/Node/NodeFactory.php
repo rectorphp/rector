@@ -525,7 +525,7 @@ final class NodeFactory
             return $arrayItem;
         }
         $nodeClass = \is_object($item) ? \get_class($item) : $item;
-        throw new \Rector\Core\Exception\NotImplementedYetException(\sprintf('Not implemented yet. Go to "%s()" and add check for "%s" node.', __METHOD__, $nodeClass));
+        throw new \Rector\Core\Exception\NotImplementedYetException(\sprintf('Not implemented yet. Go to "%s()" and add check for "%s" node.', __METHOD__, (string) $nodeClass));
     }
     /**
      * @param mixed $value

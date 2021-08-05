@@ -119,6 +119,10 @@ final class ComposerJson
      */
     private $scriptsDescriptions = [];
     /**
+     * @var array<string, string>
+     */
+    private $suggest = [];
+    /**
      * @var string|null
      */
     private $version;
@@ -346,7 +350,7 @@ final class ComposerJson
      */
     public function getJsonArray() : array
     {
-        $array = \array_filter([\RectorPrefix20210805\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::NAME => $this->name, \RectorPrefix20210805\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::DESCRIPTION => $this->description, \RectorPrefix20210805\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::KEYWORDS => $this->keywords, \RectorPrefix20210805\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::HOMEPAGE => $this->homepage, \RectorPrefix20210805\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::LICENSE => $this->license, \RectorPrefix20210805\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::AUTHORS => $this->authors, \RectorPrefix20210805\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::TYPE => $this->type, \RectorPrefix20210805\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::REQUIRE => $this->require, \RectorPrefix20210805\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::REQUIRE_DEV => $this->requireDev, \RectorPrefix20210805\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::AUTOLOAD => $this->autoload, \RectorPrefix20210805\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::AUTOLOAD_DEV => $this->autoloadDev, \RectorPrefix20210805\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::REPOSITORIES => $this->repositories, \RectorPrefix20210805\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::EXTRA => $this->extra, \RectorPrefix20210805\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::BIN => $this->bin, \RectorPrefix20210805\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::SCRIPTS => $this->scripts, \RectorPrefix20210805\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::SCRIPTS_DESCRIPTIONS => $this->scriptsDescriptions, \RectorPrefix20210805\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::CONFIG => $this->config, \RectorPrefix20210805\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::REPLACE => $this->replace, \RectorPrefix20210805\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::CONFLICT => $this->conflicts, \RectorPrefix20210805\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::VERSION => $this->version]);
+        $array = \array_filter([\RectorPrefix20210805\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::NAME => $this->name, \RectorPrefix20210805\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::DESCRIPTION => $this->description, \RectorPrefix20210805\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::KEYWORDS => $this->keywords, \RectorPrefix20210805\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::HOMEPAGE => $this->homepage, \RectorPrefix20210805\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::LICENSE => $this->license, \RectorPrefix20210805\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::AUTHORS => $this->authors, \RectorPrefix20210805\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::TYPE => $this->type, \RectorPrefix20210805\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::REQUIRE => $this->require, \RectorPrefix20210805\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::REQUIRE_DEV => $this->requireDev, \RectorPrefix20210805\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::AUTOLOAD => $this->autoload, \RectorPrefix20210805\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::AUTOLOAD_DEV => $this->autoloadDev, \RectorPrefix20210805\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::REPOSITORIES => $this->repositories, \RectorPrefix20210805\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::EXTRA => $this->extra, \RectorPrefix20210805\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::BIN => $this->bin, \RectorPrefix20210805\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::SCRIPTS => $this->scripts, \RectorPrefix20210805\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::SCRIPTS_DESCRIPTIONS => $this->scriptsDescriptions, \RectorPrefix20210805\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::SUGGEST => $this->suggest, \RectorPrefix20210805\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::CONFIG => $this->config, \RectorPrefix20210805\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::REPLACE => $this->replace, \RectorPrefix20210805\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::CONFLICT => $this->conflicts, \RectorPrefix20210805\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::VERSION => $this->version]);
         if ($this->minimumStability !== null) {
             $array[\RectorPrefix20210805\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::MINIMUM_STABILITY] = $this->minimumStability;
             $this->moveValueToBack(\RectorPrefix20210805\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::MINIMUM_STABILITY);
@@ -556,6 +560,13 @@ final class ComposerJson
         return $this->scriptsDescriptions;
     }
     /**
+     * @return array<string, string>
+     */
+    public function getSuggest() : array
+    {
+        return $this->suggest;
+    }
+    /**
      * @return string[]
      */
     public function getAllClassmaps() : array
@@ -601,6 +612,13 @@ final class ComposerJson
     public function setScriptsDescriptions(array $scriptsDescriptions) : void
     {
         $this->scriptsDescriptions = $scriptsDescriptions;
+    }
+    /**
+     * @param array<string, string> $suggest
+     */
+    public function setSuggest(array $suggest) : void
+    {
+        $this->suggest = $suggest;
     }
     /**
      * @return string[]

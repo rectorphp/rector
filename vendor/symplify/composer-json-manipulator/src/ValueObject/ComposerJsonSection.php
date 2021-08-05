@@ -100,7 +100,7 @@ final class ComposerJsonSection
     /**
      * @var string
      */
-    public const SUGGESTS = 'suggests';
+    public const SUGGEST = 'suggest';
     /**
      * @var string
      */

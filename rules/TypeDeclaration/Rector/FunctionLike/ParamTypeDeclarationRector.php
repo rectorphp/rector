@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace Rector\TypeDeclaration\Rector\FunctionLike;
 
 use PhpParser\Node;
-use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
@@ -15,7 +14,6 @@ use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\DeadCode\PhpDoc\TagRemover\ParamTagRemover;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
-use Rector\TypeDeclaration\ChildPopulator\ChildParamPopulator;
 use Rector\TypeDeclaration\NodeTypeAnalyzer\TraitTypeAnalyzer;
 use Rector\TypeDeclaration\TypeInferer\ParamTypeInferer;
 use Rector\TypeDeclaration\ValueObject\NewType;
@@ -38,10 +36,6 @@ final class ParamTypeDeclarationRector extends \Rector\Core\Rector\AbstractRecto
      */
     private $vendorLockResolver;
     /**
-     * @var \Rector\TypeDeclaration\ChildPopulator\ChildParamPopulator
-     */
-    private $childParamPopulator;
-    /**
      * @var \Rector\TypeDeclaration\TypeInferer\ParamTypeInferer
      */
     private $paramTypeInferer;
@@ -53,10 +47,10 @@ final class ParamTypeDeclarationRector extends \Rector\Core\Rector\AbstractRecto
      * @var \Rector\DeadCode\PhpDoc\TagRemover\ParamTagRemover
      */
     private $paramTagRemover;
-    public function __construct(\Rector\VendorLocker\VendorLockResolver $vendorLockResolver, \Rector\TypeDeclaration\ChildPopulator\ChildParamPopulator $childParamPopulator, \Rector\TypeDeclaration\TypeInferer\ParamTypeInferer $paramTypeInferer, \Rector\TypeDeclaration\NodeTypeAnalyzer\TraitTypeAnalyzer $traitTypeAnalyzer, \Rector\DeadCode\PhpDoc\TagRemover\ParamTagRemover $paramTagRemover)
+    public function __construct(\Rector\VendorLocker\VendorLockResolver $vendorLockResolver, \Rector\TypeDeclaration\TypeInferer\ParamTypeInferer $paramTypeInferer, \Rector\TypeDeclaration\NodeTypeAnalyzer\TraitTypeAnalyzer $traitTypeAnalyzer, \Rector\DeadCode\PhpDoc\TagRemover\ParamTagRemover $paramTagRemover)
     {
         $this->vendorLockResolver = $vendorLockResolver;
-        $this->childParamPopulator = $childParamPopulator;
+        //private ChildParamPopulator $childParamPopulator,
         $this->paramTypeInferer = $paramTypeInferer;
         $this->traitTypeAnalyzer = $traitTypeAnalyzer;
         $this->paramTagRemover = $paramTagRemover;
@@ -71,7 +65,7 @@ final class ParamTypeDeclarationRector extends \Rector\Core\Rector\AbstractRecto
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
         return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change @param types to type declarations if not a BC-break', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
-class ParentClass
+abstract class VendorParentClass
 {
     /**
      * @param int $number
@@ -81,7 +75,7 @@ class ParentClass
     }
 }
 
-final class ChildClass extends ParentClass
+final class ChildClass extends VendorParentClass
 {
     /**
      * @param int $number
@@ -99,7 +93,7 @@ final class ChildClass extends ParentClass
 }
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
-class ParentClass
+abstract class VendorParentClass
 {
     /**
      * @param int $number
@@ -109,7 +103,7 @@ class ParentClass
     }
 }
 
-final class ChildClass extends ParentClass
+final class ChildClass extends VendorParentClass
 {
     /**
      * @param int $number
@@ -133,8 +127,9 @@ CODE_SAMPLE
         if ($node->params === []) {
             return null;
         }
-        foreach ($node->params as $position => $param) {
-            $this->refactorParam($param, $node, (int) $position);
+        // @todo subscribe to Param node directly? narrow scope the better, right?
+        foreach ($node->params as $param) {
+            $this->refactorParam($param, $node);
         }
         return null;
     }
@@ -145,7 +140,7 @@ CODE_SAMPLE
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
      */
-    private function refactorParam(\PhpParser\Node\Param $param, $functionLike, int $position) : void
+    private function refactorParam(\PhpParser\Node\Param $param, $functionLike) : void
     {
         if ($this->shouldSkipParam($param, $functionLike)) {
             return;
@@ -168,9 +163,11 @@ CODE_SAMPLE
         $param->type = $paramTypeNode;
         $functionLikePhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($functionLike);
         $this->paramTagRemover->removeParamTagsIfUseless($functionLikePhpDocInfo, $functionLike);
-        $this->childParamPopulator->populateChildClassMethod($functionLike, $position, $inferedType);
     }
-    private function shouldSkipParam(\PhpParser\Node\Param $param, \PhpParser\Node\FunctionLike $functionLike) : bool
+    /**
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
+     */
+    private function shouldSkipParam(\PhpParser\Node\Param $param, $functionLike) : bool
     {
         if ($param->variadic) {
             return \true;

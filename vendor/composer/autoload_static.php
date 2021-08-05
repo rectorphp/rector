@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit10226193c60cf9bf8f40c1d65fbd431c
+class ComposerStaticInit533369b6f1bebfefbae9ed468dbeb83c
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -3457,7 +3457,6 @@ class ComposerStaticInit10226193c60cf9bf8f40c1d65fbd431c
         'Rector\\TypeDeclaration\\AlreadyAssignDetector\\ConstructorAssignDetector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/AlreadyAssignDetector/ConstructorAssignDetector.php',
         'Rector\\TypeDeclaration\\AlreadyAssignDetector\\NullTypeAssignDetector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/AlreadyAssignDetector/NullTypeAssignDetector.php',
         'Rector\\TypeDeclaration\\AlreadyAssignDetector\\PropertyDefaultAssignDetector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/AlreadyAssignDetector/PropertyDefaultAssignDetector.php',
-        'Rector\\TypeDeclaration\\ChildPopulator\\ChildParamPopulator' => __DIR__ . '/../..' . '/rules/TypeDeclaration/ChildPopulator/ChildParamPopulator.php',
         'Rector\\TypeDeclaration\\ChildPopulator\\ChildReturnPopulator' => __DIR__ . '/../..' . '/rules/TypeDeclaration/ChildPopulator/ChildReturnPopulator.php',
         'Rector\\TypeDeclaration\\Contract\\TypeInferer\\ParamTypeInfererInterface' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Contract/TypeInferer/ParamTypeInfererInterface.php',
         'Rector\\TypeDeclaration\\Contract\\TypeInferer\\PriorityAwareTypeInfererInterface' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Contract/TypeInferer/PriorityAwareTypeInfererInterface.php',
@@ -3845,9 +3844,9 @@ class ComposerStaticInit10226193c60cf9bf8f40c1d65fbd431c
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit10226193c60cf9bf8f40c1d65fbd431c::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit10226193c60cf9bf8f40c1d65fbd431c::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit10226193c60cf9bf8f40c1d65fbd431c::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit533369b6f1bebfefbae9ed468dbeb83c::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit533369b6f1bebfefbae9ed468dbeb83c::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit533369b6f1bebfefbae9ed468dbeb83c::$classMap;
 
         }, null, ClassLoader::class);
     }

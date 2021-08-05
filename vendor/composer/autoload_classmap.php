@@ -3097,7 +3097,6 @@ return array(
     'Rector\\TypeDeclaration\\AlreadyAssignDetector\\ConstructorAssignDetector' => $baseDir . '/rules/TypeDeclaration/AlreadyAssignDetector/ConstructorAssignDetector.php',
     'Rector\\TypeDeclaration\\AlreadyAssignDetector\\NullTypeAssignDetector' => $baseDir . '/rules/TypeDeclaration/AlreadyAssignDetector/NullTypeAssignDetector.php',
     'Rector\\TypeDeclaration\\AlreadyAssignDetector\\PropertyDefaultAssignDetector' => $baseDir . '/rules/TypeDeclaration/AlreadyAssignDetector/PropertyDefaultAssignDetector.php',
-    'Rector\\TypeDeclaration\\ChildPopulator\\ChildParamPopulator' => $baseDir . '/rules/TypeDeclaration/ChildPopulator/ChildParamPopulator.php',
     'Rector\\TypeDeclaration\\ChildPopulator\\ChildReturnPopulator' => $baseDir . '/rules/TypeDeclaration/ChildPopulator/ChildReturnPopulator.php',
     'Rector\\TypeDeclaration\\Contract\\TypeInferer\\ParamTypeInfererInterface' => $baseDir . '/rules/TypeDeclaration/Contract/TypeInferer/ParamTypeInfererInterface.php',
     'Rector\\TypeDeclaration\\Contract\\TypeInferer\\PriorityAwareTypeInfererInterface' => $baseDir . '/rules/TypeDeclaration/Contract/TypeInferer/PriorityAwareTypeInfererInterface.php',

@@ -63,10 +63,6 @@ final class ParsedNodeCollector
     {
         return $this->classes[$name] ?? null;
     }
-    public function findInterface(string $name) : ?\PhpParser\Node\Stmt\Interface_
-    {
-        return $this->interfaces[$name] ?? null;
-    }
     public function findTrait(string $name) : ?\PhpParser\Node\Stmt\Trait_
     {
         return $this->traits[$name] ?? null;
